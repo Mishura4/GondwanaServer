@@ -307,6 +307,7 @@ namespace DOL.GS.PacketHandler.Client.v168
 			ch.Piety = pdata.Piety;
 			ch.Empathy = pdata.Empathy;
 			ch.Charisma = pdata.Charisma;
+			ch.IsRenaissance = false;
 
 			// defaults
 			ch.CreationDate = DateTime.Now;

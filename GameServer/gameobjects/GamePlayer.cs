@@ -134,7 +134,7 @@ namespace DOL.GS
 		{
 			get { return m_targetInView; }
 			set { m_targetInView = value; }
-		}
+        } 
 
 		/// <summary>
 		/// Holds the ground target visibility flag
@@ -4821,6 +4821,11 @@ namespace DOL.GS
 			get { return 50; }
 		}
 
+		public byte SpellMaxLevel
+		{
+			get { return 55; }
+		}
+
 		/// <summary>
 		/// How much experience is needed for a given level?
 		/// </summary>
@@ -5058,6 +5063,23 @@ namespace DOL.GS
 
 			}
 
+			int bonusRenaissance = 0;
+
+			if (this.IsRenaissance)
+			{
+				if (this.Level < 40)
+				{
+					bonusRenaissance = (int)Math.Round(expTotal * 1.5D);
+				}
+				else
+				{
+					//Remove 50% points from levl > 40
+					bonusRenaissance = (int)Math.Round(expTotal / 2D) * -1;
+				}
+
+				expTotal += bonusRenaissance; 
+			}
+
 			// Get Champion Experience too
 			GainChampionExperience(expTotal);
 
@@ -5119,7 +5141,16 @@ namespace DOL.GS
 				}
 
 				Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GamePlayer.GainExperience.YouGet", totalExpStr) + expCampBonusStr + expGroupBonusStr, eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-			}
+
+				if (bonusRenaissance > 0)
+				{
+					Out.SendMessage(string.Format("dont {0} points bonus de Renaissance", bonusRenaissance), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+				}
+                if (bonusRenaissance > 0)
+                {
+                    Out.SendMessage(string.Format("dont {0} points bonus de Renaissance", bonusRenaissance), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                }
+            }
 
 			Experience += expTotal;
 
@@ -5376,6 +5407,131 @@ namespace DOL.GS
 								if (DOL.GS.ServerProperties.Properties.PET_SCALE_SPELL_MAX_LEVEL > 0)
 									subPet.SortSpells();
 			}
+
+			// save player to database
+			SaveIntoDatabase();
+		}
+
+
+		public void ApplyRenaissance()
+		{
+			IsLevelSecondStage = false;
+
+			IsRenaissance = true;
+			Experience = 0;
+
+			Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.OnRenaissance"), eChatType.CT_ScreenCenter, eChatLoc.CL_SystemWindow);
+			//Out.SendPlayerFreeLevelUpdate();	
+
+			// stat increases start at level 6
+			byte previouslevel = Level;
+			this.RealmPoints = 0;
+			Level = 1;
+			this.TotalConstitutionLostAtDeath = 0;
+
+			for (int i = previouslevel; i > 5; i--)
+			{
+				if (CharacterClass.PrimaryStat != eStat.UNDEFINED)
+				{
+					ChangeBaseStat(CharacterClass.PrimaryStat, -1);
+				}
+				if (CharacterClass.SecondaryStat != eStat.UNDEFINED && ((i - 6) % 2 == 0))
+				{ // base level to start adding stats is 6
+					ChangeBaseStat(CharacterClass.SecondaryStat, -1);
+				}
+				if (CharacterClass.TertiaryStat != eStat.UNDEFINED && ((i - 6) % 3 == 0))
+				{ // base level to start adding stats is 6
+					ChangeBaseStat(CharacterClass.TertiaryStat, -1);
+				}
+			}
+
+			RemoveAllStyles();
+			RemoveAllSpecs();
+			RemoveAllSpellLines();
+
+			foreach(byte resist in Enum.GetValues(typeof(eResist)))
+			{
+				this.AbilityBonus[resist] = 0;
+			}
+
+			this.GetModified(eProperty.Strength);
+
+			//CharacterClass.OnLevelUp(this, previouslevel);
+			//GameServer.ServerRules.OnPlayerLevelUp(this, previouslevel);
+			RefreshSpecDependantSkills(true);
+
+			// Echostorm - Code for display of new title on level up
+			// Get old and current rank titles
+			string currenttitle = CharacterClass.GetTitle(this, Level);
+
+			// check for difference
+			if (CharacterClass.GetTitle(this, previouslevel) != currenttitle)
+			{
+				// Inform player of new title.
+				Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.OnLevelUp.AttainedRank", currenttitle), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+			}
+
+			// spec points
+			int specpoints = 0;
+			for (int i = Level; i < previouslevel; i++)
+			{
+				if (i <= 5) specpoints += i; //start levels
+				else specpoints += CharacterClass.SpecPointsMultiplier * i / 10; //spec levels
+			}
+
+			if (IsAlive)
+			{
+				// workaround for starting regeneration
+				StartHealthRegeneration();
+				StartPowerRegeneration();
+			}
+
+
+			this.RealmLevel = 0;
+
+			DeathCount = 0;
+
+			if (Group != null)
+			{
+				Group.UpdateGroupWindow();
+			}
+			Out.SendUpdatePlayer(); // Update player level
+			Out.SendCharStatsUpdate(); // Update Stats and MaxHitpoints
+			Out.SendCharResistsUpdate();
+			Out.SendUpdatePlayerSkills();
+			Out.SendUpdatePoints();
+			UpdatePlayerStatus();
+			Out.SendUpdateWeaponAndArmorStats();
+			Out.SendStatusUpdate();
+
+			// not sure what package this is, but it triggers the mob color update
+			Out.SendLevelUpSound();
+
+			// update color on levelup
+			if (ObjectState == eObjectState.Active)
+			{
+				foreach (GamePlayer player in GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+				{
+					if (player == null) continue;
+					player.Out.SendEmoteAnimation(this, eEmote.LvlUp);
+				}
+			}
+
+			// Expire Running Task
+			if (Task != null)
+			{
+				Task.ExpireTask();
+				Task.DeleteFromDatabase();
+			}
+
+			//Expire running Mission
+			if (Mission != null)
+			{
+				Mission.ExpireMission();
+			}
+
+			//Abort all Quests
+			this.QuestList.ForEach(q => q.AbortQuest());
 
 			// save player to database
 			SaveIntoDatabase();
@@ -6791,7 +6947,7 @@ namespace DOL.GS
 
 					if (reactiveEffectLine != null)
 					{
-						if (reactiveItem.ProcSpellID != 0)
+						if (reactiveItem.ProcSpellID != 0 && ((GameInventoryItem)reactiveItem).IsBonusAllowed(nameof(reactiveItem.ProcSpellID), this))
 						{
 							Spell spell = SkillBase.FindSpell(reactiveItem.ProcSpellID, reactiveEffectLine);
 
@@ -6810,7 +6966,7 @@ namespace DOL.GS
 							}
 						}
 
-						if (reactiveItem.ProcSpellID1 != 0)
+						if (reactiveItem.ProcSpellID1 != 0 && ((GameInventoryItem)reactiveItem).IsBonusAllowed(nameof(reactiveItem.ProcSpellID1), this))
 						{
 							Spell spell = SkillBase.FindSpell(reactiveItem.ProcSpellID1, reactiveEffectLine);
 
@@ -9475,13 +9631,13 @@ namespace DOL.GS
 			//Eden
 			if (IsMezzed || (IsStunned && !(Steed != null && Steed.Name == "Forceful Zephyr")) || !IsAlive)
 			{
-				Out.SendMessage("You can't use anything in your state.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+				Out.SendMessage("Vous ne pouvez rien utiliser dans votre �tat.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
 				return false;
 			}
 
 			if (m_runningSpellHandler != null)
 			{
-				Out.SendMessage("You are already casting a spell.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+				Out.SendMessage("Vous etes d�j� en train de lancer un sort.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
 				return false;
 			}
 
@@ -9500,11 +9656,11 @@ namespace DOL.GS
 
 					if (requiredLevel > Level)
 					{
-						Out.SendMessage("You are not powerful enough to use this item's spell.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+						Out.SendMessage("Vous n'�tes pas assez puissant pour utiliser le sort de cet objet.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
 						return false;
 					}
 
-					Out.SendMessage(String.Format("You use {0}.", item.GetName(0, false)), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
+					Out.SendMessage(String.Format("Vous utilisez {0}.", item.GetName(0, false)), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
 
 					ISpellHandler spellHandler = ScriptMgr.CreateSpellHandler(this, spell, itemSpellLine);
 					if (spellHandler == null)
@@ -11692,6 +11848,7 @@ namespace DOL.GS
 					continue;
 				// skip weapons. only active weapons should fire equip event, done in player.SwitchWeapon
 				bool add = true;
+
 				if (slotToLoad != "")
 				{
 					switch (item.SlotPosition)
@@ -11728,56 +11885,56 @@ namespace DOL.GS
 				}
 
 				if (!add) continue;
-				if (item is IGameInventoryItem)
-				{
-					(item as IGameInventoryItem).CheckValid(this);
-				}
+				if (item is GameInventoryItem gameItem)
+				{					
+					gameItem.CheckValid(this);
 
-				if (item.IsMagical)
-				{
-					if (item.Bonus1 != 0)
+					if (item.IsMagical)
 					{
-						ItemBonus[item.Bonus1Type] += item.Bonus1;
-					}
-					if (item.Bonus2 != 0)
-					{
-						ItemBonus[item.Bonus2Type] += item.Bonus2;
-					}
-					if (item.Bonus3 != 0)
-					{
-						ItemBonus[item.Bonus3Type] += item.Bonus3;
-					}
-					if (item.Bonus4 != 0)
-					{
-						ItemBonus[item.Bonus4Type] += item.Bonus4;
-					}
-					if (item.Bonus5 != 0)
-					{
-						ItemBonus[item.Bonus5Type] += item.Bonus5;
-					}
-					if (item.Bonus6 != 0)
-					{
-						ItemBonus[item.Bonus6Type] += item.Bonus6;
-					}
-					if (item.Bonus7 != 0)
-					{
-						ItemBonus[item.Bonus7Type] += item.Bonus7;
-					}
-					if (item.Bonus8 != 0)
-					{
-						ItemBonus[item.Bonus8Type] += item.Bonus8;
-					}
-					if (item.Bonus9 != 0)
-					{
-						ItemBonus[item.Bonus9Type] += item.Bonus9;
-					}
-					if (item.Bonus10 != 0)
-					{
-						ItemBonus[item.Bonus10Type] += item.Bonus10;
-					}
-					if (item.ExtraBonus != 0)
-					{
-						ItemBonus[item.ExtraBonusType] += item.ExtraBonus;
+						if (item.Bonus1 != 0 && gameItem.IsBonusAllowed(nameof(item.Bonus1), this))
+						{
+							ItemBonus[item.Bonus1Type] += item.Bonus1;
+						}
+						if (item.Bonus2 != 0 && gameItem.IsBonusAllowed(nameof(item.Bonus2), this))
+						{
+							ItemBonus[item.Bonus2Type] += item.Bonus2;
+						}
+						if (item.Bonus3 != 0 && gameItem.IsBonusAllowed(nameof(item.Bonus3), this))
+						{
+							ItemBonus[item.Bonus3Type] += item.Bonus3;
+						}
+						if (item.Bonus4 != 0 && gameItem.IsBonusAllowed(nameof(item.Bonus4), this))
+						{
+							ItemBonus[item.Bonus4Type] += item.Bonus4;
+						}
+						if (item.Bonus5 != 0 && gameItem.IsBonusAllowed(nameof(item.Bonus5), this))
+						{
+							ItemBonus[item.Bonus5Type] += item.Bonus5;
+						}
+						if (item.Bonus6 != 0 && gameItem.IsBonusAllowed(nameof(item.Bonus6), this))
+						{
+							ItemBonus[item.Bonus6Type] += item.Bonus6;
+						}
+						if (item.Bonus7 != 0 && gameItem.IsBonusAllowed(nameof(item.Bonus7), this))
+						{
+							ItemBonus[item.Bonus7Type] += item.Bonus7;
+						}
+						if (item.Bonus8 != 0 && gameItem.IsBonusAllowed(nameof(item.Bonus8), this))
+						{
+							ItemBonus[item.Bonus8Type] += item.Bonus8;
+						}
+						if (item.Bonus9 != 0 && gameItem.IsBonusAllowed(nameof(item.Bonus9), this))
+						{
+							ItemBonus[item.Bonus9Type] += item.Bonus9;
+						}
+						if (item.Bonus10 != 0 && gameItem.IsBonusAllowed(nameof(item.Bonus10), this))
+						{
+							ItemBonus[item.Bonus10Type] += item.Bonus10;
+						}
+						if (item.ExtraBonus != 0 && gameItem.IsBonusAllowed(nameof(item.ExtraBonus), this))
+						{
+							ItemBonus[item.ExtraBonusType] += item.ExtraBonus;
+						}
 					}
 				}
 			}
@@ -12608,6 +12765,7 @@ namespace DOL.GS
 			m_Mithril = DBCharacter.Mithril;
 			
 			Model = (ushort)DBCharacter.CurrentModel;
+			IsRenaissance = DBCharacter.IsRenaissance;
 
 			m_customFaceAttributes[(int)eCharFacePart.EyeSize] = DBCharacter.EyeSize;
 			m_customFaceAttributes[(int)eCharFacePart.LipSize] = DBCharacter.LipSize;
@@ -12645,6 +12803,7 @@ namespace DOL.GS
 			#region setting world-init-position (delegate to PlayerCharacter dont make sense)
 			Position = new Vector3(DBCharacter.Xpos, DBCharacter.Ypos, DBCharacter.Zpos);
 			m_Heading = (ushort)DBCharacter.Direction;
+
 			//important, use CurrentRegion property
 			//instead because it sets the Region too
 			CurrentRegionID = (ushort)DBCharacter.Region;
@@ -12706,6 +12865,7 @@ namespace DOL.GS
 
 			if (RealmLevel == 0)
 				RealmLevel = CalculateRealmLevelFromRPs(RealmPoints);
+
 
 			//Need to load the skills at the end, so the stored values modify the
 			//existing skill levels for this player
@@ -12786,6 +12946,7 @@ namespace DOL.GS
 				SaveCraftingSkills();
 				DBCharacter.PlayedTime = PlayedTime;  //We have to set the PlayedTime on the character before setting the LastPlayed
 				DBCharacter.LastPlayed = DateTime.Now;
+				DBCharacter.IsRenaissance = IsRenaissance;
 
 				DBCharacter.ActiveWeaponSlot = (byte)((byte)ActiveWeaponSlot | (byte)ActiveQuiverSlot);
 				if (m_stuckFlag)
@@ -14299,6 +14460,12 @@ namespace DOL.GS
 			}
 		}
 
+        public bool IsRenaissance
+        {
+            get;
+            set;
+        }
+
 		/// <summary>
 		/// Create a shade effect for this player.
 		/// </summary>
@@ -15309,7 +15476,7 @@ namespace DOL.GS
 			}
 
 			System.Globalization.NumberFormatInfo format = System.Globalization.NumberFormatInfo.InvariantInfo;
-			Out.SendMessage("You get " + experience.ToString("F0", format) + " champion experience points.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+			Out.SendMessage("Vous gagnez " + experience.ToString("N0", format) + " points d'experience champion", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
 
 			ChampionExperience += experience;
 			Out.SendUpdatePoints();

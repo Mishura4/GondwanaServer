@@ -1,0 +1,4 @@
+﻿# RENAISSANCE NPC
+RenaissanceNPC.AskForRenaissance:			Souaitez-vous Renaitre plus puissant ? Apportez moi donc la pierre philosophale.
+RenaissanceNPC.RenaissanceDone:             Ah.. vous avez donc choisi le chemin de la renaissance... Allez donc redécouvrir le monde maintenant..
+RenaissanceNPC.DeniedRenaissance:           Vous avez deja accompli votre renaissance, je ne peux plus rien pour vous.

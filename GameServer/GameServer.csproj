@@ -51,6 +51,15 @@
     <EmbeddedResource Include="..\GameServer\config\*" />
     <TranslationFiles Include="..\GameServer\language\**\*.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="language\FR\CustomNPC\RenaissanceNPC.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <TranslationFiles Remove="language\FR\CustomNPC\RenaissanceNPC.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="language\FR\CustomNPC\RenaissanceNPC.txt" />
+  </ItemGroup>
   <Target Name="CopyFiles" AfterTargets="AfterBuild">
     <Copy SourceFiles="@(TranslationFiles)" DestinationFiles="@(TranslationFiles->'$(MSBuildProjectDirectory)\..\$(Configuration)\languages\%(RecursiveDir)%(Filename)%(Extension)')" />
   </Target>

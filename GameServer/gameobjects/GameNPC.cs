@@ -198,6 +198,12 @@ namespace DOL.GS
 			}
 		}
 
+		public bool IsRenaissance
+		{
+			get;
+			set;
+		}
+
 		/// <summary>
 		/// Gets or sets the heading of this NPC
 		/// </summary>
@@ -2177,6 +2183,7 @@ namespace DOL.GS
 			Size = dbMob.Size;
 			Flags = (eFlags)dbMob.Flags;
 			m_packageID = dbMob.PackageID;
+			IsRenaissance = dbMob.IsRenaissance;
 
 			// Skip Level.set calling AutoSetStats() so it doesn't load the DB entry we already have
 			m_level = dbMob.Level;
@@ -2353,6 +2360,7 @@ namespace DOL.GS
 			mob.Model = Model;
 			mob.Size = Size;
 			mob.Level = Level;
+			mob.IsRenaissance = IsRenaissance;
 
 			// Stats
 			mob.Constitution = Constitution;
@@ -3623,6 +3631,14 @@ namespace DOL.GS
 				Notify(GameObjectEvent.InteractFailed, this, new InteractEventArgs(player));
 				return false;
 			}
+
+			//NPC Renaissance don't talk to not renaissance players
+			if (this.IsRenaissance && !player.IsRenaissance)
+			{
+				player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameNPC.Interact.NotRenaissance"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+				return false;
+			}
+
 			if (MAX_PASSENGERS > 1)
 			{
 				string name = "";

@@ -358,6 +358,7 @@ namespace DOL.GS
 			merchant.PathID = PathID;
 			merchant.PackageID = PackageID;
 			merchant.OwnerID = OwnerID;
+			merchant.IsRenaissance = IsRenaissance;
 
 			IOldAggressiveBrain aggroBrain = Brain as IOldAggressiveBrain;
 			if (aggroBrain != null)

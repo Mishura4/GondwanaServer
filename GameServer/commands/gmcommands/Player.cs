@@ -68,6 +68,7 @@ namespace DOL.GS.Commands
         "/player allchars <PlayerName>",
         "/player class <list|classID> - view a list of classes, or change the targets class.",
         "/player areas - list all the areas the player is currently inside of ",
+        "/player isRenaissance <true|false> - set player isRenaissance",
         "/player quest [remove <quest name>] - Manage the player's quests"
 		)]
 	public class PlayerCommandHandler : AbstractCommandHandler, ICommandHandler
@@ -2188,6 +2189,38 @@ namespace DOL.GS.Commands
                         client.Player.Out.SendCustomTextWindow(targetPlayer.Name + " - Current Areas", areaList);
                     }
                     break;
+
+                case "isRenaissance":
+                    if (args.Length < 3)
+                    {
+                        DisplaySyntax(client);
+                    }
+                    else
+                    {
+                        if (client.Player.TargetObject == null)
+                        {
+                            client.Out.SendMessage("Vous devez selectionner une cible pour set IsRenaissance", eChatType.CT_Say, eChatLoc.CL_SystemWindow);
+                            break;
+                        }
+
+                        if (!bool.TryParse(args[2], out bool isRenaissance))
+                        {
+                            DisplaySyntax(client);
+                        }
+                        else
+                        {
+                            if ((client.Player.TargetObject is GamePlayer targetPlayer))
+                            {
+                                this.SetIsRenaissance(targetPlayer, isRenaissance);
+                                client.Out.SendMessage(client.Player.Name + " isRenaissance est maintenant: " + isRenaissance, eChatType.CT_Say, eChatLoc.CL_SystemWindow);
+                            }
+                            else
+                            {
+                                client.Out.SendMessage("Vous devez selectionner un joueur", eChatType.CT_Say, eChatLoc.CL_SystemWindow);
+                            }                         
+                        }
+                    }          
+                    break;
                 #endregion
 
                 #region quest
@@ -2237,6 +2270,11 @@ namespace DOL.GS.Commands
                 #endregion
             }
 		}
+
+        private void SetIsRenaissance(GamePlayer player, bool isRenaissance)
+        {
+            player.IsRenaissance = isRenaissance;
+        }
 
 		private void SendResistEffect(GamePlayer target)
 		{
@@ -2418,6 +2456,8 @@ namespace DOL.GS.Commands
 			{
 				text.Add("  - Master Levels :  Not Started");
 			}
+
+            text.Add("  - IsRenaissance: " + player.IsRenaissance);
 			text.Add("  - Craftingskill : " + player.CraftingPrimarySkill + "");
 			text.Add("  - Money : " + Money.GetString(player.GetCurrentMoney()) + "");
 			text.Add("  - Model ID : " + player.Model);

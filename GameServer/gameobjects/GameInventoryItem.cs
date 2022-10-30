@@ -27,6 +27,8 @@ using DOL.GS.Spells;
 
 using log4net;
 using System.Numerics;
+using DOL.Bonus;
+using System.Linq;
 
 namespace DOL.GS
 {
@@ -39,19 +41,23 @@ namespace DOL.GS
 
 		protected GamePlayer m_owner = null;
 
+
 		public GameInventoryItem()
 			: base()
 		{
+			this.BonusConditions = new List<BonusCondition>();
 		}
 
 		public GameInventoryItem(ItemTemplate template)
 			: base(template)
 		{
+			this.BonusConditions = BonusCondition.LoadFromString(template.BonusConditions)?.ToList();
 		}
 
 		public GameInventoryItem(ItemUnique template)
 			: base(template)
 		{
+			this.BonusConditions = BonusCondition.LoadFromString(template.BonusConditions)?.ToList();
 		}
 
 		public GameInventoryItem(InventoryItem item)
@@ -59,11 +65,18 @@ namespace DOL.GS
 		{
 			OwnerID = item.OwnerID;
 			ObjectId = item.ObjectId;
+			this.BonusConditions = BonusCondition.LoadFromString(item.Template?.BonusConditions)?.ToList();
 		}
 
 		public virtual LanguageDataObject.eTranslationIdentifier TranslationIdentifier
 		{
 			get { return LanguageDataObject.eTranslationIdentifier.eItem; }
+		}
+
+		public List<BonusCondition> BonusConditions
+		{
+			get;
+			protected set;
 		}
 
 		/// <summary>
@@ -129,7 +142,43 @@ namespace DOL.GS
 		{
 			return Create(item);
 		}
-		
+
+
+
+		private BonusCondition GetBonusCondition(string bonusName)
+		{
+			return this.BonusConditions?.FirstOrDefault(b => b.BonusName.Equals(bonusName));
+		}
+
+
+		public bool IsBonusAllowed(string bonusName, GamePlayer player)
+		{
+			var bonusCondition = this.GetBonusCondition(bonusName);
+
+			//If bonus not present, it is allowed
+			if (bonusCondition == null)
+			{
+				return true;
+			}
+
+			if (bonusCondition.ChampionLevel > 0 && player.ChampionLevel < bonusCondition.ChampionLevel)
+			{
+				return false;
+			}
+
+			if (bonusCondition.MlLevel > 0 && player.MLLevel < bonusCondition.MlLevel)
+			{
+				return false;
+			}
+
+			if (bonusCondition.IsRenaissanceRequired && !player.IsRenaissance)
+			{
+				return false;
+			}
+
+			return true;
+		}
+
 		/// <summary>
 		/// This is used to create a PlayerInventoryItem
 		/// template.ClassType will be checked and the approrpiate GameInventoryItem created
@@ -553,6 +602,20 @@ namespace DOL.GS
             WriteBonusLine(output, client, Bonus10Type, Bonus10);
             WriteBonusLine(output, client, ExtraBonusType, ExtraBonus);
 
+
+			output.Add(" ");
+
+			/* BONUS REQUIREMENTS */
+			if (this.BonusConditions?.Any(b => b.ChampionLevel > 0 || b.MlLevel > 0 || b.IsRenaissanceRequired) == true)
+			{
+				output.Add(" CONDITIONS DE BONUS: ");
+				foreach (var condition in this.BonusConditions.Where(b => b.BonusName != nameof(this.ProcSpellID) || b.BonusName != nameof(this.ProcSpellID1)).OrderBy(b => b.BonusName))
+				{
+					if (condition.ChampionLevel > 0 || condition.MlLevel > 0 || condition.IsRenaissanceRequired)
+						output.Add(condition.BonusName + "( " + this.GetBonusTypeFromBonusName(condition.BonusName) + " ): Level Champion: " + condition.ChampionLevel + " | ML Level: " + condition.MlLevel + " | Renaissance: " + (condition.IsRenaissanceRequired ? "Oui" : "Non"));
+				}
+			}
+
 			if (output.Count > oldCount)
 			{
 				output.Add(" ");
@@ -645,6 +708,15 @@ namespace DOL.GS
 					}
 
 					output.Add(" ");
+
+					var procCondition = this.BonusConditions.FirstOrDefault(b => b.BonusName.Equals(nameof(this.ProcSpellID)));
+
+					if (procCondition != null)
+					{
+						output.Add(" ProcSpellID proc Conditions: ");
+						output.Add(procCondition.BonusName + "( " + this.GetBonusTypeFromBonusName(procCondition.BonusName)  + " ) : Level Champion: " + procCondition.ChampionLevel + " | ML Level: " + procCondition.MlLevel + " | Renaissance: " + (procCondition.IsRenaissanceRequired ? "Oui" : "Non"));
+						output.Add(" ");
+					}
 				}
 				#endregion
 				#region Proc2
@@ -692,6 +764,16 @@ namespace DOL.GS
 					}
 
 					output.Add(" ");
+
+
+					var procCondition = this.BonusConditions.FirstOrDefault(b => b.BonusName.Equals(nameof(this.ProcSpellID1)));
+
+					if (procCondition != null)
+					{
+						output.Add(" ProcSpellID1 2 proc Conditions: ");
+						output.Add(procCondition.BonusName + "( " + this.GetBonusTypeFromBonusName(procCondition.BonusName) + " ) : Level Champion: " + procCondition.ChampionLevel + " | ML Level: " + procCondition.MlLevel + " | Renaissance: " + (procCondition.IsRenaissanceRequired ? "Oui" : "Non"));
+						output.Add(" ");
+					}
 				}
 				#endregion
 				#region Charge1
@@ -1709,6 +1791,51 @@ namespace DOL.GS
             return totalUti;
         }
 
+		private string GetBonusTypeFromBonusName(string bonusName)
+		{
+			switch (bonusName)
+			{
+				case nameof(Bonus1):
+					return SkillBase.GetPropertyName((eProperty)Bonus1Type);
+
+				case nameof(Bonus2):
+					return SkillBase.GetPropertyName((eProperty)Bonus2Type);
+
+				case nameof(Bonus3):
+					return SkillBase.GetPropertyName((eProperty)Bonus3Type);
+
+				case nameof(Bonus4):
+					return SkillBase.GetPropertyName((eProperty)Bonus4Type);
+
+				case nameof(Bonus5):
+					return SkillBase.GetPropertyName((eProperty)Bonus5Type);
+
+				case nameof(Bonus6):
+					return SkillBase.GetPropertyName((eProperty)Bonus6Type);
+
+				case nameof(Bonus7):
+					return SkillBase.GetPropertyName((eProperty)Bonus7Type);
+
+				case nameof(Bonus8):
+					return SkillBase.GetPropertyName((eProperty)Bonus8Type);
+
+				case nameof(Bonus9):
+					return SkillBase.GetPropertyName((eProperty)Bonus9Type);
+
+				case nameof(Bonus10):
+					return SkillBase.GetPropertyName((eProperty)Bonus10Type);
+
+				case nameof(ProcSpellID):
+					return SkillBase.GetPropertyName((eProperty)ProcSpellID);
+
+				case nameof(ProcSpellID1):
+					return SkillBase.GetPropertyName((eProperty)ProcSpellID1);
+
+				default:
+					return string.Empty;
+			}
+		}
+
         protected virtual void WriteBonusLine(IList<string> list, GameClient client, int bonusCat, int bonusValue)
 		{
 			if (bonusCat != 0 && bonusValue != 0 && !SkillBase.CheckPropertyType((eProperty)bonusCat, ePropertyType.Focus))
@@ -2156,7 +2283,7 @@ namespace DOL.GS
 			delve.Add("");
 			delve.Add("AllowedClasses: " + AllowedClasses);
 			delve.Add(" LevelRequired: " + LevelRequirement);
-			delve.Add("    BonusLevel: " + BonusLevel);
+			delve.Add("    BonusLevel: " + BonusLevel);	
 			delve.Add(" ");
 			delve.Add("              Flags: " + Flags);
 			delve.Add("     SalvageYieldID: " + SalvageYieldID);

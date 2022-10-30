@@ -16,7 +16,10 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
+using log4net;
 using System;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace DOL.GS.PropertyCalc
 {
@@ -26,6 +29,7 @@ namespace DOL.GS.PropertyCalc
 	/// </summary>
 	public sealed class PropertyIndexer : IPropertyIndexer
 	{
+		private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 		private readonly ReaderWriterDictionary<int, int> m_propDict;
 		
 		public PropertyIndexer()
@@ -44,7 +48,7 @@ namespace DOL.GS.PropertyCalc
 			{
 				int val;
 				if (m_propDict.TryGetValue(index, out val))
-					return val;
+                   return val;
 				return 0;
 			}
 			set

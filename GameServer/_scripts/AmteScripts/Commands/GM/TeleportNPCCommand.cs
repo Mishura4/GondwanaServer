@@ -8,8 +8,8 @@ namespace DOL.GS.Scripts
 		 "&teleportnpc",
 		 ePrivLevel.GM,
 		 "Gestions des TeleportNPC",
-		 "'/teleportnpc create' créé un nouveau TeleportNPC",
-         "'/teleportnpc create douanier <gold>' gold étant le montant du cout du jump",
+		 "'/teleportnpc create [isRenaissance]' créé un nouveau TeleportNPC [isRenaissance] définit si ce npc a besoin de la renaissance du joueur pour interagir",
+         "'/teleportnpc create douanier <gold> [isRenaissance]' gold étant le montant du cout du jump, [isRenaissance] définit si ce npc  a besoin de la renaissance du joueur pour interagir",
          "'/teleportnpc text <texte>' texte affiché lorsque le joueur peut se téléporter, le texte doit contenir {5}",
 		 "'/teleportnpc refuse <texte>' texte affiché lorsque le joueur ne peut pas être téléporté",
 		 "'/teleportnpc radius <0 - 500>' rayon dans lequel les joueurs seront téléportés (pas de texte)",
@@ -41,19 +41,31 @@ namespace DOL.GS.Scripts
 			{
 				#region create - text - refuse
 				case "create":
-                    ///npc = new TeleportNPC
+                    bool isRenaissance = false;
                     if (args.Length > 2 && args[2] == "douanier")
 						  {
-                        if (args.Length != 4)
+                        if (args.Length < 4)
                         {
                             DisplaySyntax(client);
                             break;
                         }
 
-                        if (!int.TryParse(args[3], out int price))
+                        int price = 0;
+
+                        if (!int.TryParse(args[3], out price))
                         {
                             DisplaySyntax(client);
                             break;
+                        }
+
+                        if (args.Length == 5)
+                        {
+                            if(!bool.TryParse(args[4], out isRenaissance))
+                            {
+                                DisplaySyntax(client);
+                                player.Out.SendMessage("Le parametre IsRenaissance(true ou false) n'est pas correct" + text, eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                                return;
+                            }
                         }
 
                         npc = new Douanier()
@@ -65,11 +77,23 @@ namespace DOL.GS.Scripts
                             GuildName = "Douanier",
                             Realm = 0,
                             Model = 40,
-                            Price = Money.GetMoney(0, 0, price, 0, 0)
+                            Price = Money.GetMoney(0, 0, price, 0, 0),
+                            IsRenaissance = isRenaissance
+
                         };
                     }
                     else
                     {
+                        if (args.Length == 3)
+                        {
+                            if (!bool.TryParse(args[2], out isRenaissance))
+                            {
+                                DisplaySyntax(client);
+                                player.Out.SendMessage("Le parametre IsRenaissance(true ou false) n'est pas correct" + text, eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                                return;
+                            }
+                        }
+
                         npc = new TeleportNPC
                         {
                             Position = player.Position,
@@ -78,7 +102,8 @@ namespace DOL.GS.Scripts
                             Name = "Nouveau téléporteur",
                             Realm = 0,
                             Model = 40,
-                            Text = "Texte à définir.{5}"
+                            Text = "Texte à définir.{5}",
+                            IsRenaissance = isRenaissance
                         };
                     }
 

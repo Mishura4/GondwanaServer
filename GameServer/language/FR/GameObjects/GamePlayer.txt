@@ -154,6 +154,7 @@ GamePlayer.OnLevelUp.StatRaise:				Vos statistiques augmentent !
 GamePlayer.OnLevelUp.YouAchieved:			Vous avez achevé le niveau {0}!
 GamePlayer.OnLevelUp.YouGetSpec:			Vous obtenez {0} points de spécialisation à dépenser pour ce niveau!
 GamePlayer.OnLevelUp.YouRaise:				Vous avez atteint le niveau {0}!
+GameObjects.GamePlayer.OnRenaissance:				    Vous venez d'accomplir votre renaissance ! 
 GamePlayer.OnLinkdeath.Linkdead:			{0} a été deconnecté(e) par le serveur !
 GamePlayer.OnPlayerMove.CannotCallMount:	Vous bougez et ne pouvez pas appeler votre monture !
 GamePlayer.OnPlayerMove.InterruptCrafting:	Vous bougez, et interrompé votre fabrication.

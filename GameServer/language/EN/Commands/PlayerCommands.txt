@@ -6,3 +6,6 @@ PLCommands.FreeLevel.FreeLevelIn2:	You will be eligible for a free level after y
 PLCommands.FreeLevel.FreeLevelSoon:	You will be eligible for a free level as soon as you obtain a level.
 PLCommands.FreeLevel.NoFreeLevel:	You don't have any FreeLevel !
 PLCommands.FreeLevel.Removed:		Your FreeLevel has been removed.
+
+#respect
+Commands.Players.Respec.NotAvailable.Gold:		You don't have enough money! You need {0} gold!

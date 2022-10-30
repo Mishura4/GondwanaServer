@@ -70,7 +70,8 @@ namespace DOL.GS.PacketHandler.Client.v168
 			19		Reward Quest
 			 */
 
-			ChatUtil.SendDebugMessage(client, $"Delve objectType={objectType}, objectID={objectId}, extraID={extraId}");
+            if (client.Account.PrivLevel > 1)
+			    ChatUtil.SendDebugMessage(client, string.Format("Delve objectType={0}, objectID={1}, extraID={2}", objectType, objectId, extraId));
 
 			ItemTemplate item = null;
 			InventoryItem invItem = null;

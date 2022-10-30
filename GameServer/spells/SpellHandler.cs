@@ -3690,9 +3690,9 @@ namespace DOL.GS.Spells
 
 			if (playerCaster != null)
 			{
-				if (spellLevel > playerCaster.MaxLevel)
+				if (spellLevel > playerCaster.SpellMaxLevel)
 				{
-					spellLevel = playerCaster.MaxLevel;
+					spellLevel = playerCaster.SpellMaxLevel;
 				}
 			}
 
@@ -3704,7 +3704,7 @@ namespace DOL.GS.Spells
 
 			if (playerCaster != null && (m_spellLine.KeyName == GlobalSpellsLines.Combat_Styles_Effect || m_spellLine.KeyName.StartsWith(GlobalSpellsLines.Champion_Lines_StartWith)))
 			{
-				spellLevel = Math.Min(playerCaster.MaxLevel, target.Level);
+				spellLevel = Math.Min(playerCaster.SpellMaxLevel, target.Level);
 			}
 
 			int bonustohit = m_caster.GetModified(eProperty.ToHitBonus);

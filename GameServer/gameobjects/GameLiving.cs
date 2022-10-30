@@ -3075,17 +3075,34 @@ namespace DOL.GS
                         log.ErrorFormat("- Proc1 ID {0} Not Found on item: {1} ", weapon.ProcSpellID1, weapon.Template.Id_nb);
                     }
                 }
-            }
 
-            // Proc #1
-            if (procSpell != null && Util.Chance(procChance))
+				if (weapon is GameInventoryItem gameItem)
+				{
+					if (gameItem.IsBonusAllowed(nameof(weapon.ProcSpellID), (GamePlayer)this))
+					{
+						// Proc #1
+						if (procSpell != null && Util.Chance(procChance))
+							StartWeaponMagicalEffect(weapon, ad, SkillBase.GetSpellLine(GlobalSpellsLines.Item_Effects), weapon.ProcSpellID, false);
+					}
 
-                StartWeaponMagicalEffect(weapon, ad, SkillBase.GetSpellLine(GlobalSpellsLines.Item_Effects), weapon.ProcSpellID, false);
+					if (gameItem.IsBonusAllowed(nameof(weapon.ProcSpellID1), (GamePlayer)this))
+					{
+						// Proc #2
+						if (procSpell1 != null && Util.Chance(procChance))
+							StartWeaponMagicalEffect(weapon, ad, SkillBase.GetSpellLine(GlobalSpellsLines.Item_Effects), weapon.ProcSpellID1, false);
+					}
+				}
+			}
+			else
+			{
+				// Proc #1
+				if (procSpell != null && Util.Chance(procChance))
+					StartWeaponMagicalEffect(weapon, ad, SkillBase.GetSpellLine(GlobalSpellsLines.Item_Effects), weapon.ProcSpellID, false);
 
-            // Proc #2
-            if (procSpell1 != null && Util.Chance(procChance))
-
-                StartWeaponMagicalEffect(weapon, ad, SkillBase.GetSpellLine(GlobalSpellsLines.Item_Effects), weapon.ProcSpellID1, false);
+				// Proc #2
+				if (procSpell1 != null && Util.Chance(procChance))
+					StartWeaponMagicalEffect(weapon, ad, SkillBase.GetSpellLine(GlobalSpellsLines.Item_Effects), weapon.ProcSpellID1, false);
+			}
 
 			// Poison
 
@@ -5110,7 +5127,7 @@ namespace DOL.GS
 		/// <returns>the resist value</returns>
 		public virtual int GetDamageResist(eProperty property)
 		{
-			return SkillBase.GetRaceResist( m_race, (eResist)property );
+			return SkillBase.GetRaceResist( m_race, (eResist)property, this as GamePlayer);
 		}
 
 		/// <summary>

@@ -18,4 +18,5 @@ GameNPC.Interact.DirtyLook:						{0} vous jete un regard étrange.
 GameNPC.Interact.IsFull:						Ce {0} est plein.
 GameNPC.SayTo.Says:								{0} dit, "{1}"
 GameNPC.SayTo.SpeaksTo:							{0} parle avec {1}
+GameNPC.Interact.NotRenaissance:                Désolé, je ne parle qu'avec ceux qui ont fait leur renaissance.
 

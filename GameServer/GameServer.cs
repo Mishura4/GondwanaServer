@@ -46,6 +46,7 @@ using DOL.Network;
 using log4net;
 using log4net.Config;
 using log4net.Core;
+using GameServerScripts.Utils;
 
 namespace DOL.GS
 {
@@ -697,6 +698,13 @@ namespace DOL.GS
 				//Load behaviour manager
 				if (!InitComponent(BehaviourMgr.Init(), "Behaviour Manager"))
 					return false;
+
+				//---------------------------------------------------------------
+                //Load Firecamp manager
+                if (!InitComponent(FeuxCampMgr.Instance.Init(), "FeuDeCamp Manager"))
+                {
+                    return false;
+                }
 
 				//---------------------------------------------------------------
 				//Notify our scripts that everything went fine!

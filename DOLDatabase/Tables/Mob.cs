@@ -76,6 +76,7 @@ namespace DOL.Database
 		private bool m_isCloakHoodUp;
 		private string m_packageID;
 		private byte m_visibleWeaponSlots;
+		private bool m_isRenaissance;
 
 		public static readonly string DEFAULT_NPC_CLASSTYPE = "DOL.GS.GameNPC";
         #endregion Variables
@@ -787,6 +788,21 @@ namespace DOL.Database
 				Dirty = true;
 			}
 		}
+
+        /// <summary>
+        /// Is Renaissance Mob
+        /// </summary>
+        [DataElement(AllowDbNull = false)]
+        public bool IsRenaissance
+        {
+            get { return m_isRenaissance; }
+
+            set
+            {
+                m_isRenaissance = value;
+                Dirty = true;
+            }
+        }
 
 		private byte m_gender = 0;
 

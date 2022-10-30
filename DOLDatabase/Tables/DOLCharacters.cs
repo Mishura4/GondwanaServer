@@ -59,6 +59,7 @@ namespace DOL.Database
 		private long m_bntyPts;
 		private long m_realmPts;
 		private int m_realmLevel;
+        private bool m_isRenaissance;
 		//0x00					//01 byte
 		//int mUnk2;			//04 byte
 		//int mStr;				//01 byte
@@ -228,6 +229,7 @@ namespace DOL.Database
 			m_showGuildLogins = false;
 			m_roleplay = false;
 			m_ignoreStatistics = false;
+			m_isRenaissance = false;
 		}
 
 		/// <summary>
@@ -263,6 +265,21 @@ namespace DOL.Database
 				Dirty = true;
 			}
 		}
+
+        [DataElement(AllowDbNull = true)]
+        public bool IsRenaissance
+        {
+            get
+            {
+                return m_isRenaissance;
+            }
+
+            set
+            {
+                m_isRenaissance = value;
+                Dirty = true;
+            }
+        }
 
 		/// <summary>
 		/// Gets/sets character constitution

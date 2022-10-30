@@ -11,10 +11,10 @@ namespace DOL.GS.Scripts
 		 "&textnpc",
 		 ePrivLevel.GM,
 		 "Gestions des TextNPC",
-		 "'/textnpc create' créé un nouveau pnj",
-         "'/textnpc createmerchant' créé un nouveau marchand qui parle",
+		 "'/textnpc create [isRenaissance]' créé un nouveau pnj. [isRenaissance] définit si ce marchand a besoin de la renaissance du joueur pour interagir ",
+         "'/textnpc createmerchant [isRenaissance]' créé un nouveau marchand qui parle",
+         "'/textnpc createguard [isRenaissance]' créé un garde qui parle",
 		 "'/textnpc createitemmerchant' créé un nouveau marchand qui prend des items comme monnaie",
-         "'/textnpc createguard' créé un garde qui parle",
 		 "'/textnpc reponse' affiche les réponses du pnj (les 20 premières lettres de la réponse)",
 
 		 //text
@@ -77,6 +77,7 @@ namespace DOL.GS.Scripts
 			ITextNPC npc = player.TargetObject as ITextNPC;
 			string text = "";
 			string reponse = "";
+			bool isRenaissance = false;
 			IList<string> lines;
 			switch(args[1].ToLower())
 			{
@@ -90,6 +91,11 @@ namespace DOL.GS.Scripts
                     else if (args[1].ToLower() == "createitemmerchant") npc = new TextNPCItemMerchant();
                     else if (args[1].ToLower() == "createguard") npc = new GuardTextNPC();
 
+                    if (args.Length > 2)
+                    {
+                        bool.TryParse(args[2], out isRenaissance);
+                    }
+
                     if(npc == null) npc = new TextNPC();
                     ((GameNPC)npc).LoadedFromScript = false;
 					((GameNPC)npc).Position = player.Position;
@@ -100,6 +106,7 @@ namespace DOL.GS.Scripts
 					if ((((GameNPC)npc).Flags & GameNPC.eFlags.PEACE) == 0)
 						((GameNPC) npc).Flags ^= GameNPC.eFlags.PEACE;
                     ((GameNPC)npc).Model = 40;
+                    ((GameNPC)npc).IsRenaissance = isRenaissance;
 					npc.TextNPCData.Interact_Text = "Texte à définir.";
                     ((GameNPC)npc).AddToWorld();
 					((GameNPC)npc).SaveIntoDatabase();
