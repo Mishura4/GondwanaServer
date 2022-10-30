@@ -1,9 +1,7 @@
-using System;
 using log4net;
 using System.Reflection;
 using DOL.GS;
 using DOL.GS.Keeps;
-using DOL.GS.Movement;
 
 namespace DOL.AI.Brain
 {
@@ -115,10 +113,7 @@ namespace DOL.AI.Brain
 		/// </summary>
 		protected override void CheckPlayerAggro()
 		{
-			if (Body.AttackState || Body.CurrentSpellHandler != null)
-			{
-				return;
-			}
+			if (HasAggro || Body.CurrentSpellHandler != null) return;
 
 			foreach (GamePlayer player in Body.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
 			{
@@ -139,7 +134,7 @@ namespace DOL.AI.Brain
 						Body.Say("Want to attack player " + player.Name);
 					}
 
-					AddToAggroList(player, player.EffectiveLevel << 1);
+					AddToAggroList(player, 1);
 					return;
 				}
 			}
@@ -150,8 +145,7 @@ namespace DOL.AI.Brain
 		/// </summary>
 		protected override void CheckNPCAggro()
 		{
-			if (Body.AttackState || Body.CurrentSpellHandler != null)
-				return;
+			if (HasAggro || Body.CurrentSpellHandler != null) return;
 
 			foreach (GameNPC npc in Body.GetNPCsInRadius((ushort)AggroRange))
 			{
@@ -177,7 +171,7 @@ namespace DOL.AI.Brain
 						Body.Say("Want to attack player " + player.Name + " pet " + npc.Name);
 					}
 
-					AddToAggroList(npc, (npc.Level + 1) << 1);
+					AddToAggroList(npc, 1);
 					return;
 				}
 			}

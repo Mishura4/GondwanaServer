@@ -45,6 +45,7 @@ namespace DOL.GS
 
                 m_MobXDB.Add(obj.MobName, obj);
                 m_MobNameXLootChangerTemplates.Add(obj.MobName, dico);
+
             }
             log.Info("[LOOT CHANGER] " + m_MobNameXLootChangerTemplates.Count + " mobs drops");
         }
@@ -72,6 +73,16 @@ namespace DOL.GS
                         var itemRecv = GameServer.Database.FindObjectByKey<ItemTemplate>(args[2]);
                         if (itemRecv == null)
                             return SendMsg(client, "L'item '" + args[2] + "' n'existe pas.");
+                        string familyName = "";
+                        short order = 0;
+                        if (args.Length > 4)
+                            if (args.Length < 6)
+                                return -1;
+                            else
+                            {
+                                familyName = args[4];
+                                short.TryParse(args[5], out order);
+                            }
 
                         #region template DB
                         //template DB
@@ -79,6 +90,8 @@ namespace DOL.GS
                         {
                             template.ItemsTemplatesRecvs = itemRecv.Id_nb;
                             template.ItemsTemplatesGives = itemGive.Id_nb;
+                            template.Order = order;
+                            template.FamilyName = familyName;
                             GameServer.Database.SaveObject(template);
                         }
                         else
@@ -87,7 +100,9 @@ namespace DOL.GS
                                            {
                                                LootChangerTemplateName = lootTemplate,
                                                ItemsTemplatesRecvs = itemRecv.Id_nb,
-                                               ItemsTemplatesGives = itemGive.Id_nb
+                                               ItemsTemplatesGives = itemGive.Id_nb,
+                                               Order = order,
+                                               FamilyName = familyName
                                            };
                             GameServer.Database.AddObject(template);
                         }
@@ -96,17 +111,19 @@ namespace DOL.GS
                         #region mobXloot
                         if (m_MobNameXLootChangerTemplates.ContainsKey(npc.Name))
                         {
-                            if (m_MobNameXLootChangerTemplates[npc.Name].Values.Any(tmpl => tmpl.ItemsTemplatesRecvs == template.ItemsTemplatesRecvs))
+                            if (m_MobNameXLootChangerTemplates[npc.Name].ContainsKey(template.ItemsTemplatesRecvs))
                                 m_MobNameXLootChangerTemplates[npc.Name][template.ItemsTemplatesRecvs] = template;
                             else
                                 m_MobNameXLootChangerTemplates[npc.Name].Add(template.ItemsTemplatesRecvs, template);
+                            GameServer.Database.SaveObject(m_MobXDB[npc.Name]);
                         }
                         else
                         {
+                            // Fix 2nd point : add instantanly the loot changer without reload the server
                             //cache
                             var dic = new Dictionary<string, DBLootChangerTemplate>
                                           {
-                                              {template.LootChangerTemplateName, template}
+                                              {template.ItemsTemplatesRecvs, template}
                                           };
                             m_MobNameXLootChangerTemplates.Add(npc.Name, dic);
 
@@ -118,7 +135,6 @@ namespace DOL.GS
                                                DropCount = 1
                                            };
                             GameServer.Database.AddObject(mXlc);
-
                             m_MobXDB.Add(npc.Name, mXlc);
                         }
                         #endregion
@@ -140,6 +156,7 @@ namespace DOL.GS
                             m_MobNameXLootChangerTemplates.Remove(npc.Name);
                             GameServer.Database.DeleteObject(m_MobXDB[npc.Name]);
                             m_MobXDB.Remove(npc.Name);
+
                             return SendMsg(client, "Les loots de " + npc.Name + " ont été supprimés.");
                         }
                     	return SendMsg(client, "TODO, use \"/lootchanger remove all\"");
@@ -177,15 +194,24 @@ namespace DOL.GS
             var pl = killer as GamePlayer;
 
             var randLoot = new Dictionary<DBLootChangerTemplate, InventoryItem>();
-            foreach (var tmp in m_MobNameXLootChangerTemplates[mob.Name].Where(kvp => !string.IsNullOrEmpty(kvp.Value.ItemsTemplatesRecvs)))
+
+            // Add LootChanger's families to fix the issue when there are several receiver for one LootChanger's family
+            Dictionary<string, KeyValuePair<DBLootChangerTemplate, InventoryItem>> familiesLootChanger = new Dictionary<string, KeyValuePair<DBLootChangerTemplate, InventoryItem>>();
+            foreach (var tmp in m_MobNameXLootChangerTemplates[mob.Name])
             {
-                var tmp1 = tmp;
-                foreach (var item in pl.Inventory.GetItemRange(eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack).Where(item => tmp1.Key == item.Id_nb))
+                var obj = pl.Inventory.GetItemRange(eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack).Where(item => tmp.Key == item.Id_nb).FirstOrDefault();
+                if(obj != null)
                 {
-                    randLoot.Add(tmp.Value, item);
-                    break;
+                    if (string.IsNullOrEmpty(tmp.Value.FamilyName))
+                        randLoot.Add(tmp.Value, obj);
+                    else if (!familiesLootChanger.ContainsKey(tmp.Value.FamilyName))
+                        familiesLootChanger.Add(tmp.Value.FamilyName, new KeyValuePair<DBLootChangerTemplate, InventoryItem>(tmp.Value, obj));
+                    else if (familiesLootChanger[tmp.Value.FamilyName].Key.Order < tmp.Value.Order)
+                        familiesLootChanger[tmp.Value.FamilyName] = new KeyValuePair<DBLootChangerTemplate, InventoryItem>(tmp.Value, obj);
                 }
             }
+            foreach (KeyValuePair<DBLootChangerTemplate, InventoryItem> familyLootChanger in familiesLootChanger.Values)
+                randLoot.Add(familyLootChanger.Key, familyLootChanger.Value);
 
             foreach (var tmp in randLoot)
             {

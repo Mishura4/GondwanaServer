@@ -58,6 +58,8 @@ namespace DOL.GS
 
 		private readonly object m_LockObject = new object();
 
+        private bool stayStealth = false;
+
 		#region Client/Character/VariousFlags
 
 		/// <summary>
@@ -1486,26 +1488,28 @@ namespace DOL.GS
 					{
 						if (Realm == eRealm.Hibernia)
 						{
-							relRegion = 201; // Tir Na Nog
-							relX = 8192 + 15780;
-							relY = 8192 + 22727;
-							relZ = 7060;
+							relRegion = 51; // Hibernia
+							relX = 426733;
+							relY = 416856;
+							relZ = 5712;
+							relHeading = 2605;
 						}
 						else if (Realm == eRealm.Midgard)
 						{
-							relRegion = 101; // Jordheim
-							relX = 8192 + 24664;
-							relY = 8192 + 21402;
-							relZ = 8759;
+							relRegion = 51; // Midgard
+							relX = 403717;
+							relY = 503227;
+							relZ = 4680;
+							relHeading = 434;
 						}
 						else
 						{
-							relRegion = 10; // City of Camelot
-							relX = 8192 + 26315;
-							relY = 8192 + 21177;
-							relZ = 8256;
+							relRegion = 51; // Albion
+							relX = 526529;
+							relY = 541975;
+							relZ = 3168;
+							relHeading = 1861;
 						}
-						relHeading = 2048;
 						break;
 					}
 				case eReleaseType.RvR:
@@ -3714,7 +3718,37 @@ namespace DOL.GS
 		{
 			AddSpellLine(line, true);
 		}
-		
+
+        /// <summary>
+        /// updates the levels of all spell lines
+        /// specialized spell lines depend from spec levels
+        /// base lines depend from player level
+        /// </summary>
+        /// <param name="sendMessages">sends "You gain power" messages if true</param>
+        public virtual void UpdateSpellLineLevels(bool sendMessages)
+        {
+            lock (lockSpellLinesList)
+            {
+                foreach (SpellLine line in m_spellLines)
+                {
+                    if (line.IsBaseLine)
+                    {
+                        line.Level = Level;
+                    }
+                    else
+                    {
+                        int newSpec = GetBaseSpecLevel(line.Spec);
+                        if (newSpec > 0)
+                        {
+                            if (sendMessages && line.Level < newSpec)
+                                Out.SendMessage(LanguageMgr.GetTranslation(Client, "GamePlayer.UpdateSpellLine.GainPower", line.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            line.Level = newSpec;
+                        }
+                    }
+                }
+            }
+        }
+
 		/// <summary>
 		/// Adds a spell line to the player
 		/// </summary>
@@ -4160,6 +4194,33 @@ namespace DOL.GS
 					- GetRealmAbilities().Where(ab => !(ab is RR5RealmAbility))
 					.Sum(ab => Enumerable.Range(0, ab.Level).Sum(i => ab.CostForUpgrade(i))); }
 		}
+
+        /// <summary>
+        /// Retrieves a specific specialization by key name
+        /// </summary>
+        /// <param name="keyName">the key name</param>
+        /// <returns>the found specialization or null</returns>
+        public virtual Specialization GetSpecialization(string keyName)
+        {
+            Specialization spec = null;
+
+            m_specialization.TryGetValue(keyName, out spec);
+
+            if (spec == null)
+            {
+                // try case insensitive search
+                foreach (Specialization sp in m_specialization.Values)
+                {
+                    if (sp.KeyName.ToLower() == keyName.ToLower())
+                    {
+                        spec = sp;
+                        break;
+                    }
+                }
+            }
+
+            return spec;
+        }
 
 		/// <summary>
 		/// Gets/sets player realm rank
@@ -8819,7 +8880,23 @@ namespace DOL.GS
 									StopWhistleTimers();
 									return;
 								}
-								Out.SendTimerWindow("Summoning Mount", 5);
+                                if(IsAttacking)
+                                {
+                                    Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.UseSlot.CantMountCombat"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    StopWhistleTimers();
+                                    return;
+                                }
+                                if (IsCasting)
+                                {
+                                    Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.UseSlot.CantMountSpell"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    StopWhistleTimers();
+                                    return;
+                                }
+
+                                if (HasEnabledAPulseSpell)
+                                    PulseSpell.CancelPulsingSpell(this, PulseSpell.Spell.SpellType);
+
+                                Out.SendTimerWindow("Summoning Mount", 5);
 								foreach (GamePlayer plr in GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
 								{
 									if (plr == null) continue;
@@ -14767,6 +14844,16 @@ namespace DOL.GS
 			get { return m_whistleMountTimer != null && m_whistleMountTimer.IsAlive; }
 		}
 
+        private SpellHandler m_pulseSpell;
+
+        public bool HasEnabledAPulseSpell
+        {
+            get
+            {
+                return m_pulseSpell != null;
+            }
+        }
+
 		protected bool m_isOnHorse;
 		public virtual bool IsOnHorse
 		{
@@ -14806,7 +14893,9 @@ namespace DOL.GS
 		{
 			StopWhistleTimers();
 			IsOnHorse = true;
-			return 0;
+            if (IsSitting)
+                IsSitting = false;
+            return 0;
 		}
 
 		public enum eHorseSaddleBag : byte
@@ -15799,6 +15888,13 @@ namespace DOL.GS
 					: null;
 			}
 		}
+
+        /// <summary>
+        /// This property is use for the assassinate RA
+        /// </summary>
+        public bool StayStealth { get => stayStealth; set => stayStealth = value; }
+        public SpellHandler PulseSpell { get => m_pulseSpell; set => m_pulseSpell = value; }
 		#endregion
+
 	}
 }

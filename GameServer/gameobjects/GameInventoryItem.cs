@@ -409,11 +409,15 @@ namespace DOL.GS
 			}
 
 			WriteUsableClasses(delve, player.Client);
-			if ((Object_Type >= (int)eObjectType.GenericWeapon) && (Object_Type <= (int)eObjectType._LastWeapon) ||
-			    Object_Type == (int)eObjectType.Instrument)
+			if ((Object_Type >= (int)eObjectType.GenericWeapon) && (Object_Type <= (int)eObjectType._LastWeapon))
 			{
 				WriteMagicalBonuses(delve, player.Client, false);
 				DelveWeaponStats(delve, player);
+			}
+
+			if( Object_Type == (int)eObjectType.Instrument )
+			{
+				WriteMagicalBonuses(delve, player.Client, false);
 			}
 
 			if (Object_Type >= (int)eObjectType.Cloth && Object_Type <= (int)eObjectType.Scale)
@@ -430,6 +434,7 @@ namespace DOL.GS
 
             if (Object_Type == (int)eObjectType.Magical || Object_Type == (int)eObjectType.AlchemyTincture || Object_Type == (int)eObjectType.SpellcraftGem)
             {
+            	WriteUsableClasses(delve, player.Client);
                 WriteMagicalBonuses(delve, player.Client, false);
             }
 
@@ -532,6 +537,9 @@ namespace DOL.GS
 		protected virtual void WriteMagicalBonuses(IList<string> output, GameClient client, bool shortInfo)
 		{
 			int oldCount = output.Count;
+
+            output.Add("Total utility: " + String.Format("{0:0.00}", GetTotalUtility()));
+            output.Add(" ");
 
             WriteBonusLine(output, client, Bonus1Type, Bonus1);
             WriteBonusLine(output, client, Bonus2Type, Bonus2);
@@ -857,6 +865,849 @@ namespace DOL.GS
 			}
 		}
 
+         public double GetTotalUtility()
+        {
+            double totalUti = 0;
+            //based off of eProperty
+            //1-8 == stats = *.6667
+            //9 == power cap = *2
+            //10 == maxHP =  *.25
+            //11-19 == resists = *2
+            //59 == Crafting skill gain = *2
+            //71 == Robbery resist chance = *2
+            //20-115 == skill = *5
+            //116 == Crafting speed = *2
+            //117 == Secondary style spell chance = *2
+            //118 == Mythical regeneration = *5
+            //119 == Tension gain = *2
+            //145 == MaxSpeed = *2
+            //146 == SpellReflectionChance = *2
+            //147 == MaxConcentration = *2
+            //148 == ArmorFactor = *1
+            //149 == ArmorAbsorption = *2
+            //150-155 Regeneration/Range = *5
+            //156 == acuity = *.6667
+            //163 == all magic = *5
+            //164 == all melee = *5
+            //167 == all dual weild = *5
+            //168 == all archery = *5
+            //169-172	evade/parry chance/fatigue consumption	*2
+            //173	TOA Melee damage	*5
+            //174	TOA Ranged damage	*5
+            //175-186	TOA spell duration reduction *2
+            //187	TOA Hit point Bonus	*0.25
+            //188	TOA Archery speed	*5
+            //189-190	TOA Arrow recover/Debuff	*2
+            //191	TOA Casting speed	*5
+            //192-195	TOA Debuff/Fatigue/healing	*2
+            //196	TOA Power pool	*2
+            //197	TOA Resist Pierce	*5
+            //198	TOA Spell Damage	*5
+            //199	TOA Spell Duration	*2
+            //200	TOA Style Damage	*5
+            //201-209	TOA Skill Cap	*2
+            //210	TOA Hit point Cap	*0.25
+            //211	TOA Power pool cap	*2
+            //212 == weapon skills = *5
+            //213 == all skills = *5
+            //214-217 Critical Hit/waterspeed = *5
+            //217-220	TOA Spell Level/Miss hit/Keep	*2
+            //221-229	Mythical Resist and Cap	*4
+            //230-231	TOA DPS/Magic Absorption	*2
+            //232-235 Critical Heal/Mythical fall/Coin/Discumbering = *5
+            //236-245	Mythical Stat and Cap Increase	*4
+            //247-250 BP/XP/Natural/Extra HP = *5
+            //251-252 Conversion/Style Absorb = *2
+            //253-255 RP/Arcane = *5
+            if (Bonus1Type != 0 &&
+                Bonus1 != 0)
+            {
+                if (Bonus1Type < 9 || Bonus1Type == 156)
+                {
+                    totalUti += Bonus1 * .6667;
+                }
+                else if (Bonus1Type == 9 || Bonus1Type == 148)
+                {
+                    totalUti += Bonus1;
+                }
+                else if (Bonus1Type == 10 || Bonus1Type == 187 || Bonus1Type == 210)
+                {
+                    totalUti += Bonus1 * .25;
+                }
+                else if (Bonus1Type < 20
+                	|| Bonus1Type == 59
+                	|| Bonus1Type == 71
+                	|| Bonus1Type == 116
+                	|| Bonus1Type == 117
+                	|| Bonus1Type == 119
+                	|| Bonus1Type >= 145 && Bonus1Type <= 149
+                	|| Bonus1Type >= 169 && Bonus1Type <= 172
+                	|| Bonus1Type >= 175 && Bonus1Type <= 186
+                	|| Bonus1Type == 189
+                	|| Bonus1Type == 190
+                	|| Bonus1Type >= 192 && Bonus1Type <= 196
+                	|| Bonus1Type == 199
+                	|| Bonus1Type >= 201 && Bonus1Type <= 209
+                	|| Bonus1Type == 211
+                	|| Bonus1Type >= 217 && Bonus1Type <= 220
+                	|| Bonus1Type == 230
+                	|| Bonus1Type == 231
+                	|| Bonus1Type == 251
+                	|| Bonus1Type == 252)
+                {
+                    totalUti += Bonus1 * 2;
+                }
+                else if (Bonus1Type >= 221 && Bonus1Type <= 229 || Bonus1Type >= 236 && Bonus1Type <= 245)
+                {
+                    totalUti += Bonus1 * 4;
+                }
+                else if (Bonus1Type >= 20 && Bonus1Type <= 58 || Bonus1Type >= 60 && Bonus1Type <= 70 || Bonus1Type >= 72 && Bonus1Type <= 115)
+                {
+                    totalUti += Bonus1 * 5;
+                }
+                else if (Bonus1Type == 118
+                  || Bonus1Type >= 150 && Bonus1Type <= 155
+                  || Bonus1Type >= 163 && Bonus1Type <= 168
+                  || Bonus1Type == 173
+                  || Bonus1Type == 174
+                  || Bonus1Type == 188
+                  || Bonus1Type == 191
+                  || Bonus1Type == 197
+                  || Bonus1Type == 198
+                  || Bonus1Type == 200
+                  || Bonus1Type >= 212 && Bonus1Type <= 217
+                  || Bonus1Type >= 232 && Bonus1Type <= 235
+                  || Bonus1Type >= 247 && Bonus1Type <= 250
+                  || Bonus1Type >= 253 && Bonus1Type <= 255)
+                {
+                    totalUti += Bonus1 *5;
+                }
+            }
+
+            if (Bonus2Type != 0 &&
+                Bonus2 != 0)
+            {
+                if (Bonus2Type < 9 || Bonus2Type == 156)
+                {
+                    totalUti += Bonus2 * .6667;
+                }
+                else if (Bonus2Type == 9 || Bonus2Type == 148)
+                {
+                    totalUti += Bonus2;
+                }
+                else if (Bonus2Type == 10 || Bonus2Type == 187 || Bonus2Type == 210)
+                {
+                    totalUti += Bonus2 * .25;
+                }
+                else if (Bonus2Type < 20
+                	|| Bonus2Type == 59
+                	|| Bonus2Type == 71
+                	|| Bonus2Type == 116
+                	|| Bonus2Type == 117
+                	|| Bonus2Type == 119
+                	|| Bonus2Type >= 145 && Bonus2Type <= 149
+                	|| Bonus2Type >= 169 && Bonus2Type <= 172
+                	|| Bonus2Type >= 175 && Bonus2Type <= 186
+                	|| Bonus2Type == 189
+                	|| Bonus2Type == 190
+                	|| Bonus2Type >= 192 && Bonus2Type <= 196
+                	|| Bonus2Type == 199
+                	|| Bonus2Type >= 201 && Bonus2Type <= 209
+                	|| Bonus2Type == 211
+                	|| Bonus2Type >= 217 && Bonus2Type <= 220
+                	|| Bonus2Type == 230
+                	|| Bonus2Type == 231
+                	|| Bonus2Type == 251
+                	|| Bonus2Type == 252)
+                {
+                    totalUti += Bonus2 * 2;
+                }
+                else if (Bonus2Type >= 221 && Bonus2Type <= 229 || Bonus2Type >= 236 && Bonus2Type <= 245)
+                {
+                    totalUti += Bonus2 * 4;
+                }
+                else if (Bonus2Type >= 20 && Bonus2Type <= 58 || Bonus2Type >= 60 && Bonus2Type <= 70 || Bonus2Type >= 72 && Bonus2Type <= 115)
+                {
+                    totalUti += Bonus2 * 5;
+                }
+                else if (Bonus2Type == 118
+                  || Bonus2Type >= 150 && Bonus2Type <= 155
+                  || Bonus2Type >= 163 && Bonus2Type <= 168
+                  || Bonus2Type == 173
+                  || Bonus2Type == 174
+                  || Bonus2Type == 188
+                  || Bonus2Type == 191
+                  || Bonus2Type == 197
+                  || Bonus2Type == 198
+                  || Bonus2Type == 200
+                  || Bonus2Type >= 212 && Bonus2Type <= 217
+                  || Bonus2Type >= 232 && Bonus2Type <= 235
+                  || Bonus2Type >= 247 && Bonus2Type <= 250
+                  || Bonus2Type >= 253 && Bonus2Type <= 255)
+                {
+                    totalUti += Bonus2 * 5;
+                }
+            }
+
+            if (Bonus3Type != 0 &&
+                Bonus3 != 0)
+            {
+                if (Bonus3Type < 9 || Bonus3Type == 156)
+                {
+                    totalUti += Bonus3 * .6667;
+                }
+                else if (Bonus3Type == 9 || Bonus3Type == 148)
+                {
+                    totalUti += Bonus3;
+                }
+                else if (Bonus3Type == 10 || Bonus3Type == 187 || Bonus3Type == 210)
+                {
+                    totalUti += Bonus3 * .25;
+                }
+                else if (Bonus3Type < 20
+                	|| Bonus3Type == 59
+                	|| Bonus3Type == 71
+                	|| Bonus3Type == 116
+                	|| Bonus3Type == 117
+                	|| Bonus3Type == 119
+                	|| Bonus3Type >= 145 && Bonus3Type <= 149
+                	|| Bonus3Type >= 169 && Bonus3Type <= 172
+                	|| Bonus3Type >= 175 && Bonus3Type <= 186
+                	|| Bonus3Type == 189
+                	|| Bonus3Type == 190
+                	|| Bonus3Type >= 192 && Bonus3Type <= 196
+                	|| Bonus3Type == 199
+                	|| Bonus3Type >= 201 && Bonus3Type <= 209
+                	|| Bonus3Type == 211
+                	|| Bonus3Type >= 217 && Bonus3Type <= 220
+                	|| Bonus3Type == 230
+                	|| Bonus3Type == 231
+                	|| Bonus3Type == 251
+                	|| Bonus3Type == 252)
+                {
+                    totalUti += Bonus3 * 2;
+                }
+                else if (Bonus3Type >= 221 && Bonus3Type <= 229 || Bonus3Type >= 236 && Bonus3Type <= 245)
+                {
+                    totalUti += Bonus3 * 4;
+                }
+                else if (Bonus3Type >= 20 && Bonus3Type <= 58 || Bonus3Type >= 60 && Bonus3Type <= 70 || Bonus3Type >= 72 && Bonus3Type <= 115)
+                {
+                    totalUti += Bonus3 * 5;
+                }
+                else if (Bonus3Type == 118
+                  || Bonus3Type >= 150 && Bonus3Type <= 155
+                  || Bonus3Type >= 163 && Bonus3Type <= 168
+                  || Bonus3Type == 173
+                  || Bonus3Type == 174
+                  || Bonus3Type == 188
+                  || Bonus3Type == 191
+                  || Bonus3Type == 197
+                  || Bonus3Type == 198
+                  || Bonus3Type == 200
+                  || Bonus3Type >= 212 && Bonus3Type <= 217
+                  || Bonus3Type >= 232 && Bonus3Type <= 235
+                  || Bonus3Type >= 247 && Bonus3Type <= 250
+                  || Bonus3Type >= 253 && Bonus3Type <= 255)
+                {
+                    totalUti += Bonus3 * 5;
+                }
+
+            }
+
+            if (Bonus4Type != 0 &&
+                Bonus4 != 0)
+            {
+                if (Bonus4Type < 9 || Bonus4Type == 156)
+                {
+                    totalUti += Bonus4 * .6667;
+                }
+                else if (Bonus4Type == 9 || Bonus4Type == 148)
+                {
+                    totalUti += Bonus4;
+                }
+                else if (Bonus4Type == 10 || Bonus4Type == 187 || Bonus4Type == 210)
+                {
+                    totalUti += Bonus4 * .25;
+                }
+                else if (Bonus4Type < 20
+                	|| Bonus4Type == 59
+                	|| Bonus4Type == 71
+                	|| Bonus4Type == 116
+                	|| Bonus4Type == 117
+                	|| Bonus4Type == 119
+                	|| Bonus4Type >= 145 && Bonus4Type <= 149
+                	|| Bonus4Type >= 169 && Bonus4Type <= 172
+                	|| Bonus4Type >= 175 && Bonus4Type <= 186
+                	|| Bonus4Type == 189
+                	|| Bonus4Type == 190
+                	|| Bonus4Type >= 192 && Bonus4Type <= 196
+                	|| Bonus4Type == 199
+                	|| Bonus4Type >= 201 && Bonus4Type <= 209
+                	|| Bonus4Type == 211
+                	|| Bonus4Type >= 217 && Bonus4Type <= 220
+                	|| Bonus4Type == 230
+                	|| Bonus4Type == 231
+                	|| Bonus4Type == 251
+                	|| Bonus4Type == 252)
+                {
+                    totalUti += Bonus4 * 2;
+                }
+                else if (Bonus4Type >= 221 && Bonus4Type <= 229 || Bonus4Type >= 236 && Bonus4Type <= 245)
+                {
+                    totalUti += Bonus4 * 4;
+                }
+                else if (Bonus4Type >= 20 && Bonus4Type <= 58 || Bonus4Type >= 60 && Bonus4Type <= 70 || Bonus4Type >= 72 && Bonus4Type <= 115)
+                {
+                    totalUti += Bonus4 * 5;
+                }
+                else if (Bonus4Type == 118
+                  || Bonus4Type >= 150 && Bonus4Type <= 155
+                  || Bonus4Type >= 163 && Bonus4Type <= 168
+                  || Bonus4Type == 173
+                  || Bonus4Type == 174
+                  || Bonus4Type == 188
+                  || Bonus4Type == 191
+                  || Bonus4Type == 197
+                  || Bonus4Type == 198
+                  || Bonus4Type == 200
+                  || Bonus4Type >= 212 && Bonus4Type <= 217
+                  || Bonus4Type >= 232 && Bonus4Type <= 235
+                  || Bonus4Type >= 247 && Bonus4Type <= 250
+                  || Bonus4Type >= 253 && Bonus4Type <= 255)
+                {
+                    totalUti += Bonus4 * 5;
+                }
+
+            }
+
+            if (Bonus5Type != 0 &&
+                Bonus5 != 0)
+            {
+                if (Bonus5Type < 9 || Bonus5Type == 156)
+                {
+                    totalUti += Bonus5 * .6667;
+                }
+                else if (Bonus5Type == 9 || Bonus5Type == 148)
+                {
+                    totalUti += Bonus5;
+                }
+                else if (Bonus5Type == 10 || Bonus5Type == 187 || Bonus5Type == 210)
+                {
+                    totalUti += Bonus5 * .25;
+                }
+                else if (Bonus5Type < 20
+                	|| Bonus5Type == 59
+                	|| Bonus5Type == 71
+                	|| Bonus5Type == 116
+                	|| Bonus5Type == 117
+                	|| Bonus5Type == 119
+                	|| Bonus5Type >= 145 && Bonus5Type <= 149
+                	|| Bonus5Type >= 169 && Bonus5Type <= 172
+                	|| Bonus5Type >= 175 && Bonus5Type <= 186
+                	|| Bonus5Type == 189
+                	|| Bonus5Type == 190
+                	|| Bonus5Type >= 192 && Bonus5Type <= 196
+                	|| Bonus5Type == 199
+                	|| Bonus5Type >= 201 && Bonus5Type <= 209
+                	|| Bonus5Type == 211
+                	|| Bonus5Type >= 217 && Bonus5Type <= 220
+                	|| Bonus5Type == 230
+                	|| Bonus5Type == 231
+                	|| Bonus5Type == 251
+                	|| Bonus5Type == 252)
+                {
+                    totalUti += Bonus5 * 2;
+                }
+                else if (Bonus5Type >= 221 && Bonus5Type <= 229 || Bonus5Type >= 236 && Bonus5Type <= 245)
+                {
+                    totalUti += Bonus5 * 4;
+                }
+                else if (Bonus5Type >= 20 && Bonus5Type <= 58 || Bonus5Type >= 60 && Bonus5Type <= 70 || Bonus5Type >= 72 && Bonus5Type <= 115)
+                {
+                    totalUti += Bonus5 * 5;
+                }
+                else if (Bonus5Type == 118
+                  || Bonus5Type >= 150 && Bonus5Type <= 155
+                  || Bonus5Type >= 163 && Bonus5Type <= 168
+                  || Bonus5Type == 173
+                  || Bonus5Type == 174
+                  || Bonus5Type == 188
+                  || Bonus5Type == 191
+                  || Bonus5Type == 197
+                  || Bonus5Type == 198
+                  || Bonus5Type == 200
+                  || Bonus5Type >= 212 && Bonus5Type <= 217
+                  || Bonus5Type >= 232 && Bonus5Type <= 235
+                  || Bonus5Type >= 247 && Bonus5Type <= 250
+                  || Bonus5Type >= 253 && Bonus5Type <= 255)
+                {
+                    totalUti += Bonus5 * 5;
+                }
+
+            }
+
+            if (Bonus6Type != 0 &&
+                Bonus6 != 0)
+            {
+                if (Bonus6Type < 9 || Bonus6Type == 156)
+                {
+                    totalUti += Bonus6 * .6667;
+                }
+                else if (Bonus6Type == 9 || Bonus6Type == 148)
+                {
+                    totalUti += Bonus6;
+                }
+                else if (Bonus6Type == 10 || Bonus6Type == 187 || Bonus6Type == 210)
+                {
+                    totalUti += Bonus6 * .25;
+                }
+                else if (Bonus6Type < 20
+                	|| Bonus6Type == 59
+                	|| Bonus6Type == 71
+                	|| Bonus6Type == 116
+                	|| Bonus6Type == 117
+                	|| Bonus6Type == 119
+                	|| Bonus6Type >= 145 && Bonus6Type <= 149
+                	|| Bonus6Type >= 169 && Bonus6Type <= 172
+                	|| Bonus6Type >= 175 && Bonus6Type <= 186
+                	|| Bonus6Type == 189
+                	|| Bonus6Type == 190
+                	|| Bonus6Type >= 192 && Bonus6Type <= 196
+                	|| Bonus6Type == 199
+                	|| Bonus6Type >= 201 && Bonus6Type <= 209
+                	|| Bonus6Type == 211
+                	|| Bonus6Type >= 217 && Bonus6Type <= 220
+                	|| Bonus6Type == 230
+                	|| Bonus6Type == 231
+                	|| Bonus6Type == 251
+                	|| Bonus6Type == 252)
+                {
+                    totalUti += Bonus6 * 2;
+                }
+                else if (Bonus6Type >= 221 && Bonus6Type <= 229 || Bonus6Type >= 236 && Bonus6Type <= 245)
+                {
+                    totalUti += Bonus6 * 4;
+                }
+                else if (Bonus6Type >= 20 && Bonus6Type <= 58 || Bonus6Type >= 60 && Bonus6Type <= 70 || Bonus6Type >= 72 && Bonus6Type <= 115)
+                {
+                    totalUti += Bonus6 * 5;
+                }
+                else if (Bonus6Type == 118
+                  || Bonus6Type >= 150 && Bonus6Type <= 155
+                  || Bonus6Type >= 163 && Bonus6Type <= 168
+                  || Bonus6Type == 173
+                  || Bonus6Type == 174
+                  || Bonus6Type == 188
+                  || Bonus6Type == 191
+                  || Bonus6Type == 197
+                  || Bonus6Type == 198
+                  || Bonus6Type == 200
+                  || Bonus6Type >= 212 && Bonus6Type <= 217
+                  || Bonus6Type >= 232 && Bonus6Type <= 235
+                  || Bonus6Type >= 247 && Bonus6Type <= 250
+                  || Bonus6Type >= 253 && Bonus6Type <= 255)
+                {
+                    totalUti += Bonus6 * 5;
+                }
+            }
+
+            if (Bonus7Type != 0 &&
+                Bonus7 != 0)
+            {
+                if (Bonus7Type < 9 || Bonus7Type == 156)
+                {
+                    totalUti += Bonus7 * .6667;
+                }
+                else if (Bonus7Type == 9 || Bonus7Type == 148)
+                {
+                    totalUti += Bonus7;
+                }
+                else if (Bonus7Type == 10 || Bonus7Type == 187 || Bonus7Type == 210)
+                {
+                    totalUti += Bonus7 * .25;
+                }
+                else if (Bonus7Type < 20
+                	|| Bonus7Type == 59
+                	|| Bonus7Type == 71
+                	|| Bonus7Type == 116
+                	|| Bonus7Type == 117
+                	|| Bonus7Type == 119
+                	|| Bonus7Type >= 145 && Bonus7Type <= 149
+                	|| Bonus7Type >= 169 && Bonus7Type <= 172
+                	|| Bonus7Type >= 175 && Bonus7Type <= 186
+                	|| Bonus7Type == 189
+                	|| Bonus7Type == 190
+                	|| Bonus7Type >= 192 && Bonus7Type <= 196
+                	|| Bonus7Type == 199
+                	|| Bonus7Type >= 201 && Bonus7Type <= 209
+                	|| Bonus7Type == 211
+                	|| Bonus7Type >= 217 && Bonus7Type <= 220
+                	|| Bonus7Type == 230
+                	|| Bonus7Type == 231
+                	|| Bonus7Type == 251
+                	|| Bonus7Type == 252)
+                {
+                    totalUti += Bonus7 * 2;
+                }
+                else if (Bonus7Type >= 221 && Bonus7Type <= 229 || Bonus7Type >= 236 && Bonus7Type <= 245)
+                {
+                    totalUti += Bonus7 * 4;
+                }
+                else if (Bonus7Type >= 20 && Bonus7Type <= 58 || Bonus7Type >= 60 && Bonus7Type <= 70 || Bonus7Type >= 72 && Bonus7Type <= 115)
+                {
+                    totalUti += Bonus7 * 5;
+                }
+                else if (Bonus7Type == 118
+                  || Bonus7Type >= 150 && Bonus7Type <= 155
+                  || Bonus7Type >= 163 && Bonus7Type <= 168
+                  || Bonus7Type == 173
+                  || Bonus7Type == 174
+                  || Bonus7Type == 188
+                  || Bonus7Type == 191
+                  || Bonus7Type == 197
+                  || Bonus7Type == 198
+                  || Bonus7Type == 200
+                  || Bonus7Type >= 212 && Bonus7Type <= 217
+                  || Bonus7Type >= 232 && Bonus7Type <= 235
+                  || Bonus7Type >= 247 && Bonus7Type <= 250
+                  || Bonus7Type >= 253 && Bonus7Type <= 255)
+                {
+                    totalUti += Bonus7 * 5;
+                }
+            }
+            if (Bonus8Type != 0 &&
+                Bonus8 != 0)
+            {
+                if (Bonus8Type < 9 || Bonus8Type == 156)
+                {
+                    totalUti += Bonus8 * .6667;
+                }
+                else if (Bonus8Type == 9 || Bonus8Type == 148)
+                {
+                    totalUti += Bonus8;
+                }
+                else if (Bonus8Type == 10 || Bonus8Type == 187 || Bonus8Type == 210)
+                {
+                    totalUti += Bonus8 * .25;
+                }
+                else if (Bonus8Type < 20
+                	|| Bonus8Type == 59
+                	|| Bonus8Type == 71
+                	|| Bonus8Type == 116
+                	|| Bonus8Type == 117
+                	|| Bonus8Type == 119
+                	|| Bonus8Type >= 145 && Bonus8Type <= 149
+                	|| Bonus8Type >= 169 && Bonus8Type <= 172
+                	|| Bonus8Type >= 175 && Bonus8Type <= 186
+                	|| Bonus8Type == 189
+                	|| Bonus8Type == 190
+                	|| Bonus8Type >= 192 && Bonus8Type <= 196
+                	|| Bonus8Type == 199
+                	|| Bonus8Type >= 201 && Bonus8Type <= 209
+                	|| Bonus8Type == 211
+                	|| Bonus8Type >= 217 && Bonus8Type <= 220
+                	|| Bonus8Type == 230
+                	|| Bonus8Type == 231
+                	|| Bonus8Type == 251
+                	|| Bonus8Type == 252)
+                {
+                    totalUti += Bonus8 * 2;
+                }
+                else if (Bonus8Type >= 221 && Bonus8Type <= 229 || Bonus8Type >= 236 && Bonus8Type <= 245)
+                {
+                    totalUti += Bonus8 * 4;
+                }
+                else if (Bonus8Type >= 20 && Bonus8Type <= 58 || Bonus8Type >= 60 && Bonus8Type <= 70 || Bonus8Type >= 72 && Bonus8Type <= 115)
+                {
+                    totalUti += Bonus8 * 5;
+                }
+                else if (Bonus8Type == 118
+                  || Bonus8Type >= 150 && Bonus8Type <= 155
+                  || Bonus8Type >= 163 && Bonus8Type <= 168
+                  || Bonus8Type == 173
+                  || Bonus8Type == 174
+                  || Bonus8Type == 188
+                  || Bonus8Type == 191
+                  || Bonus8Type == 197
+                  || Bonus8Type == 198
+                  || Bonus8Type == 200
+                  || Bonus8Type >= 212 && Bonus8Type <= 217
+                  || Bonus8Type >= 232 && Bonus8Type <= 235
+                  || Bonus8Type >= 247 && Bonus8Type <= 250
+                  || Bonus8Type >= 253 && Bonus8Type <= 255)
+                {
+                    totalUti += Bonus8 * 5;
+                }
+            }
+            if (Bonus9Type != 0 &&
+                Bonus9 != 0)
+            {
+                if (Bonus9Type < 9 || Bonus9Type == 156)
+                {
+                    totalUti += Bonus9 * .6667;
+                }
+                else if (Bonus9Type == 9 || Bonus9Type == 148)
+                {
+                    totalUti += Bonus9;
+                }
+                else if (Bonus9Type == 10 || Bonus9Type == 187 || Bonus9Type == 210)
+                {
+                    totalUti += Bonus9 * .25;
+                }
+                else if (Bonus9Type < 20
+                	|| Bonus9Type == 59
+                	|| Bonus9Type == 71
+                	|| Bonus9Type == 116
+                	|| Bonus9Type == 117
+                	|| Bonus9Type == 119
+                	|| Bonus9Type >= 145 && Bonus9Type <= 149
+                	|| Bonus9Type >= 169 && Bonus9Type <= 172
+                	|| Bonus9Type >= 175 && Bonus9Type <= 186
+                	|| Bonus9Type == 189
+                	|| Bonus9Type == 190
+                	|| Bonus9Type >= 192 && Bonus9Type <= 196
+                	|| Bonus9Type == 199
+                	|| Bonus9Type >= 201 && Bonus9Type <= 209
+                	|| Bonus9Type == 211
+                	|| Bonus9Type >= 217 && Bonus9Type <= 220
+                	|| Bonus9Type == 230
+                	|| Bonus9Type == 231
+                	|| Bonus9Type == 251
+                	|| Bonus9Type == 252)
+                {
+                    totalUti += Bonus9 * 2;
+                }
+                else if (Bonus9Type >= 221 && Bonus9Type <= 229 || Bonus9Type >= 236 && Bonus9Type <= 245)
+                {
+                    totalUti += Bonus9 * 4;
+                }
+                else if (Bonus9Type >= 20 && Bonus9Type <= 58 || Bonus9Type >= 60 && Bonus9Type <= 70 || Bonus9Type >= 72 && Bonus9Type <= 115)
+                {
+                    totalUti += Bonus9 * 5;
+                }
+                else if (Bonus9Type == 118
+                  || Bonus9Type >= 150 && Bonus9Type <= 155
+                  || Bonus9Type >= 163 && Bonus9Type <= 168
+                  || Bonus9Type == 173
+                  || Bonus9Type == 174
+                  || Bonus9Type == 188
+                  || Bonus9Type == 191
+                  || Bonus9Type == 197
+                  || Bonus9Type == 198
+                  || Bonus9Type == 200
+                  || Bonus9Type >= 212 && Bonus9Type <= 217
+                  || Bonus9Type >= 232 && Bonus9Type <= 235
+                  || Bonus9Type >= 247 && Bonus9Type <= 250
+                  || Bonus9Type >= 253 && Bonus9Type <= 255)
+                {
+                    totalUti += Bonus9 * 5;
+                }
+            }
+            if (Bonus10Type != 0 &&
+                Bonus10 != 0)
+            {
+                if (Bonus10Type < 9 || Bonus10Type == 156)
+                {
+                    totalUti += Bonus10 * .6667;
+                }
+                else if (Bonus10Type == 9 || Bonus10Type == 148)
+                {
+                    totalUti += Bonus10;
+                }
+                else if (Bonus10Type == 10 || Bonus10Type == 187 || Bonus10Type == 210)
+                {
+                    totalUti += Bonus10 * .25;
+                }
+                else if (Bonus10Type < 20
+                	|| Bonus10Type == 59
+                	|| Bonus10Type == 71
+                	|| Bonus10Type == 116
+                	|| Bonus10Type == 117
+                	|| Bonus10Type == 119
+                	|| Bonus10Type >= 145 && Bonus10Type <= 149
+                	|| Bonus10Type >= 169 && Bonus10Type <= 172
+                	|| Bonus10Type >= 175 && Bonus10Type <= 186
+                	|| Bonus10Type == 189
+                	|| Bonus10Type == 190
+                	|| Bonus10Type >= 192 && Bonus10Type <= 196
+                	|| Bonus10Type == 199
+                	|| Bonus10Type >= 201 && Bonus10Type <= 209
+                	|| Bonus10Type == 211
+                	|| Bonus10Type >= 217 && Bonus10Type <= 220
+                	|| Bonus10Type == 230
+                	|| Bonus10Type == 231
+                	|| Bonus10Type == 251
+                	|| Bonus10Type == 252)
+                {
+                    totalUti += Bonus10 * 2;
+                }
+                else if (Bonus10Type >= 221 && Bonus10Type <= 229 || Bonus10Type >= 236 && Bonus10Type <= 245)
+                {
+                    totalUti += Bonus10 * 4;
+                }
+                else if (Bonus10Type >= 20 && Bonus10Type <= 58 || Bonus10Type >= 60 && Bonus10Type <= 70 || Bonus10Type >= 72 && Bonus10Type <= 115)
+                {
+                    totalUti += Bonus10 * 5;
+                }
+                else if (Bonus10Type == 118
+                  || Bonus10Type >= 150 && Bonus10Type <= 155
+                  || Bonus10Type >= 163 && Bonus10Type <= 168
+                  || Bonus10Type == 173
+                  || Bonus10Type == 174
+                  || Bonus10Type == 188
+                  || Bonus10Type == 191
+                  || Bonus10Type == 197
+                  || Bonus10Type == 198
+                  || Bonus10Type == 200
+                  || Bonus10Type >= 212 && Bonus10Type <= 217
+                  || Bonus10Type >= 232 && Bonus10Type <= 235
+                  || Bonus10Type >= 247 && Bonus10Type <= 250
+                  || Bonus10Type >= 253 && Bonus10Type <= 255)
+                {
+                    totalUti += Bonus10 * 5;
+                }
+            }
+            if (ExtraBonusType != 0 &&
+                ExtraBonus != 0)
+            {
+                if (ExtraBonusType < 9 || Bonus1Type == 156)
+                {
+                    totalUti += ExtraBonus * .6667;
+                }
+                else if (ExtraBonusType == 9 || ExtraBonusType == 148)
+                {
+                    totalUti += ExtraBonus;
+                }
+                else if (ExtraBonusType == 10 || ExtraBonusType == 187 || ExtraBonusType == 210)
+                {
+                    totalUti += ExtraBonus * .25;
+                }
+                else if (ExtraBonusType < 20
+                	|| ExtraBonusType == 59
+                	|| ExtraBonusType == 71
+                	|| ExtraBonusType == 116
+                	|| ExtraBonusType == 117
+                	|| ExtraBonusType == 119
+                	|| ExtraBonusType >= 145 && ExtraBonusType <= 149
+                	|| ExtraBonusType >= 169 && ExtraBonusType <= 172
+                	|| ExtraBonusType >= 175 && ExtraBonusType <= 186
+                	|| ExtraBonusType == 189
+                	|| ExtraBonusType == 190
+                	|| ExtraBonusType >= 192 && ExtraBonusType <= 196
+                	|| ExtraBonusType == 199
+                	|| ExtraBonusType >= 201 && ExtraBonusType <= 209
+                	|| ExtraBonusType == 211
+                	|| ExtraBonusType >= 217 && ExtraBonusType <= 220
+                	|| ExtraBonusType == 230
+                	|| ExtraBonusType == 231
+                	|| ExtraBonusType == 251
+                	|| ExtraBonusType == 252)
+                {
+                    totalUti += ExtraBonus * 2;
+                }
+                else if (ExtraBonusType >= 221 && ExtraBonusType <= 229 || ExtraBonusType >= 236 && ExtraBonusType <= 245)
+                {
+                    totalUti += ExtraBonus * 4;
+                }
+                else if (ExtraBonusType >= 20 && ExtraBonusType <= 58 || ExtraBonusType >= 60 && ExtraBonusType <= 70 || ExtraBonusType >= 72 && ExtraBonusType <= 115)
+                {
+                    totalUti += ExtraBonus * 5;
+                }
+                else if (ExtraBonusType == 118
+                  || ExtraBonusType >= 150 && ExtraBonusType <= 155
+                  || ExtraBonusType >= 163 && ExtraBonusType <= 168
+                  || ExtraBonusType == 173
+                  || ExtraBonusType == 174
+                  || ExtraBonusType == 188
+                  || ExtraBonusType == 191
+                  || ExtraBonusType == 197
+                  || ExtraBonusType == 198
+                  || ExtraBonusType == 200
+                  || ExtraBonusType >= 212 && ExtraBonusType <= 217
+                  || ExtraBonusType >= 232 && ExtraBonusType <= 235
+                  || ExtraBonusType >= 247 && ExtraBonusType <= 250
+                  || ExtraBonusType >= 253 && ExtraBonusType <= 255)
+                {
+                    totalUti += ExtraBonus * 10;
+                }
+            }
+
+            return totalUti;
+        }
+
+        private double GetSingleUtility(int BonusType, int Bonus)
+        {
+            double totalUti = 0;
+
+            if (BonusType != 0 &&
+                Bonus != 0)
+            {
+                if (BonusType < 9 || BonusType == 156)
+                {
+                    totalUti += Bonus * .6667;
+                }
+                else if (BonusType == 9 || BonusType == 148)
+                {
+                    totalUti += Bonus;
+                }
+                else if (BonusType == 10 || BonusType == 187 || BonusType == 210)
+                {
+                    totalUti += Bonus * .25;
+                }
+                else if (BonusType < 20
+                	|| BonusType == 59
+                	|| BonusType == 71
+                	|| BonusType == 116
+                	|| BonusType == 117
+                	|| BonusType == 119
+                	|| BonusType >= 145 && BonusType <= 149
+                	|| BonusType >= 169 && BonusType <= 172
+                	|| BonusType >= 175 && BonusType <= 186
+                	|| BonusType == 189
+                	|| BonusType == 190
+                	|| BonusType >= 192 && BonusType <= 196
+                	|| BonusType == 199
+                	|| BonusType >= 201 && BonusType <= 209
+                	|| BonusType == 211
+                	|| BonusType >= 217 && BonusType <= 220
+                	|| BonusType == 230
+                	|| BonusType == 231
+                	|| BonusType == 251
+                	|| BonusType == 252)
+                {
+                    totalUti += Bonus * 2;
+                }
+                else if (BonusType >= 221 && BonusType <= 229 || BonusType >= 236 && BonusType <= 245)
+                {
+                    totalUti += Bonus * 4;
+                }
+                else if (BonusType >= 20 && BonusType <= 58 || BonusType >= 60 && BonusType <= 70 || BonusType >= 72 && BonusType <= 115)
+                {
+                    totalUti += Bonus * 5;
+                }
+                else if (BonusType == 118
+                  || BonusType >= 150 && BonusType <= 155
+                  || BonusType >= 163 && BonusType <= 168
+                  || BonusType == 173
+                  || BonusType == 174
+                  || BonusType == 188
+                  || BonusType == 191
+                  || BonusType == 197
+                  || BonusType == 198
+                  || BonusType == 200
+                  || BonusType >= 212 && BonusType <= 217
+                  || BonusType >= 232 && BonusType <= 235
+                  || BonusType >= 247 && BonusType <= 250
+                  || BonusType >= 253 && BonusType <= 255)
+                {
+                    totalUti += Bonus * 5;
+                }
+            }
+
+
+            return totalUti;
+        }
 
         protected virtual void WriteBonusLine(IList<string> list, GameClient client, int bonusCat, int bonusValue)
 		{
@@ -869,6 +1720,7 @@ namespace DOL.GS
 				}
 				else
 				{
+                    string singleUti = String.Format("{0:0.00}", GetSingleUtility(bonusCat, bonusValue));
 					//- Axe: 5 pts
 					//- Strength: 15 pts
 					//- Constitution: 15 pts
@@ -878,10 +1730,10 @@ namespace DOL.GS
 					//Bonus to casting speed: 2%
 					//Bonus to armor factor (AF): 18
 					//Power: 6 % of power pool.
-					list.Add(string.Format(
-						"- {0}: {1}{2}",
+                    list.Add(singleUti + string.Format(
+                        " | {0}: {1}{2}",
 						SkillBase.GetPropertyName((eProperty)bonusCat),
-						bonusValue.ToString("+0 ;-0 ;0 "), //Eden
+						bonusValue.ToString("0 ;-0 ;0 "), //Eden
 						((bonusCat == (int)eProperty.PowerPool)
 						 || (bonusCat >= (int)eProperty.Resist_First && bonusCat <= (int)eProperty.Resist_Last)
 						 || (bonusCat >= (int)eProperty.ResCapBonus_First && bonusCat <= (int)eProperty.ResCapBonus_Last)
@@ -891,7 +1743,11 @@ namespace DOL.GS
 						 || bonusCat == (int)eProperty.StyleAbsorb
 						 || bonusCat == (int)eProperty.ArcaneSyphon
 						 || bonusCat == (int)eProperty.BountyPoints
-						 || bonusCat == (int)eProperty.XpPoints)
+						 || bonusCat == (int)eProperty.XpPoints
+                         || (bonusCat >= 145 && bonusCat <= 156)
+                         || (bonusCat >= 169 && bonusCat <= 200)
+                         || (bonusCat >= 231 && bonusCat <= 235)
+                         || (bonusCat >= 247 && bonusCat <= 254))
                         ? ((bonusCat == (int)eProperty.PowerPool) ? LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.WriteBonusLine.PowerPool") : "%")
                         : LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.WriteBonusLine.Points")
 					));

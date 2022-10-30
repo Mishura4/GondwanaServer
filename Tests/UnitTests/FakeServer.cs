@@ -26,8 +26,10 @@ namespace DOL.UnitTests.Gameserver
     {
         public FakePacketLib() : base(null) { }
 
+#pragma warning disable CS0672
         [Obsolete]
         public override void SendCheckLOS(GameObject Checker, GameObject Target, CheckLOSResponse callback) { }
+#pragma warning restore CS0672
         public override void SendMessage(string msg, eChatType type, eChatLoc loc) { }
         public override void SendUpdateIcons(System.Collections.IList changedEffects, ref int lastUpdateEffectsCount) { }
         public override void SendConcentrationList() { }

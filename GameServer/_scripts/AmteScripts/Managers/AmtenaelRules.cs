@@ -12,6 +12,7 @@ using DOL.GS.Scripts;
 using log4net;
 using System.Reflection;
 using DOL.Events;
+using DOL.GS.PlayerClass;
 
 namespace DOL.GS.ServerRules
 {
@@ -384,7 +385,12 @@ namespace DOL.GS.ServerRules
 		}
 
 		public override bool IsAllowedToCastSpell(GameLiving caster, GameLiving target, Spell spell, SpellLine spellLine)
+
 		{
+            var plc2 = caster as GamePlayer;
+            // player on horse cant heal, cure or cast a pet spell
+            if (plc2 != null && plc2.IsOnHorse && (spell.SpellType.Contains("Heal") || spell.SpellType.Contains("Cure") || spell.SpellType.Contains("Summon") || (plc2.CharacterClass is ClassHeretic && spell.Pulse != 0)))
+                return false;
 			if ((caster is GamePlayer plc && JailMgr.IsPrisoner(plc)) || (target is GamePlayer plt && JailMgr.IsPrisoner(plt)))
 				return false;
 			return base.IsAllowedToCastSpell(caster, target, spell, spellLine);

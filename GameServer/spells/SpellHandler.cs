@@ -34,6 +34,7 @@ using DOL.Language;
 
 using log4net;
 using System.Numerics;
+using static DOL.GS.GameTimer;
 
 namespace DOL.GS.Spells
 {
@@ -301,7 +302,9 @@ namespace DOL.GS.Spells
 						continue;
 					if (effect.SpellHandler.Spell.SpellType == spellType)
 					{
-						effect.Cancel(false);
+                        if (Caster is GamePlayer player)
+                            player.PulseSpell = null;
+                        effect.Cancel(false);
 						return true;
 					}
 				}
@@ -465,7 +468,18 @@ namespace DOL.GS.Spells
 						(m_caster as GamePlayer).IsOnHorse = false;
 					}
 
-					if (!Spell.IsInstantCast)
+                    if (m_caster is GamePlayer && (m_caster as GamePlayer).IsSummoningMount)
+                    {
+                        (m_caster as GamePlayer).Out.SendMessage(LanguageMgr.GetTranslation((m_caster as GamePlayer).Client.Account.Language, "GameObjects.GamePlayer.UseSlot.CantMountSpell"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        (m_caster as GamePlayer).IsOnHorse = false;
+                    }
+
+                    if(Spell.Pulse != 0 && m_caster is GamePlayer player)
+                    {
+                        player.PulseSpell = this;
+                    }
+
+                    if (!Spell.IsInstantCast)
 					{
 						StartCastTimer(m_spellTarget);
 
@@ -1862,8 +1876,15 @@ namespace DOL.GS.Spells
 			if (Caster is GamePlayer && ((GamePlayer)Caster).IsOnHorse && !HasPositiveEffect)
 				((GamePlayer)Caster).IsOnHorse = false;
 
-			//[Stryve]: Do not break stealth if spell never breaks stealth.
-			if ((Caster is GamePlayer) && UnstealthCasterOnFinish)
+
+            if (m_caster is GamePlayer && (m_caster as GamePlayer).IsSummoningMount)
+            {
+                (m_caster as GamePlayer).Out.SendMessage(LanguageMgr.GetTranslation((m_caster as GamePlayer).Client.Account.Language, "GameObjects.GamePlayer.UseSlot.CantMountSpell"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                (m_caster as GamePlayer).IsOnHorse = false;
+            }
+
+            //[Stryve]: Do not break stealth if spell never breaks stealth.
+            if ((Caster is GamePlayer) && UnstealthCasterOnFinish )
 				((GamePlayer)Caster).Stealth(false);
 
 			if (Caster is GamePlayer && !HasPositiveEffect)
@@ -2398,11 +2419,29 @@ namespace DOL.GS.Spells
 			return list;
 		}
 
-		/// <summary>
-		/// Cast all subspell recursively
-		/// </summary>
-		/// <param name="target"></param>
-		public virtual void CastSubSpells(GameLiving target)
+        private class SubSpellTimer : GameTimer
+        {
+            private ISpellHandler m_subspellhandler;
+            private GameLiving m_target;
+
+            public SubSpellTimer(GameLiving actionSource, ISpellHandler spellhandler, GameLiving target) : base(actionSource.CurrentRegion.TimeManager)
+            {
+                m_subspellhandler = spellhandler;
+                m_target = target;
+            }
+
+            protected override void OnTick()
+            {
+                m_subspellhandler.StartSpell(m_target);
+                Stop();
+            }
+        }
+
+        /// <summary>
+        /// Cast all subspell recursively
+        /// </summary>
+        /// <param name="target"></param>
+        public virtual void CastSubSpells(GameLiving target)
 		{
 			List<int> subSpellList = new List<int>();
 			if (m_spell.SubSpellID > 0)
@@ -2412,14 +2451,19 @@ namespace DOL.GS.Spells
 			{
 				Spell spell = SkillBase.GetSpellByID(spellID);
 				//we need subspell ID to be 0, we don't want spells linking off the subspell
-				if (target != null && spell != null && spell.SubSpellID == 0)
+				if (target != null && spell != null)
 				{
 					// We have to scale pet subspells when cast
 					if (Caster is GamePet pet && !(Caster is NecromancerPet))
 						pet.ScalePetSpell(spell);
 
 					ISpellHandler spellhandler = ScriptMgr.CreateSpellHandler(m_caster, spell, SkillBase.GetSpellLine(GlobalSpellsLines.Reserved_Spells));
-					spellhandler.StartSpell(target);
+                    if (m_spell.SubSpellDelay > 0)
+                    {
+                        new SubSpellTimer(Caster, spellhandler, target).Start(m_spell.SubSpellDelay * 1000);
+                    }
+                    else
+                        spellhandler.StartSpell(target);
 				}
 			}
 		}

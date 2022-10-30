@@ -119,6 +119,14 @@ namespace DOL.GS.Spells
 			region = Caster.CurrentRegion;
 		}
 
-		public override void CastSubSpells(GameLiving target) { }
+        /// <summary>
+        /// Do not trigger SubSpells
+        /// </summary>
+        /// <param name="target"></param>
+        public override void CastSubSpells(GameLiving target)
+        {
+            if (ServerProperties.Properties.ENABLE_SUB_SPELL_ALL_CLASS)
+                base.CastSubSpells(target);
+        }
 	}
 }

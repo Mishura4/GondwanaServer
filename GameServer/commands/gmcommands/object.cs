@@ -150,6 +150,7 @@ namespace DOL.GS.Commands
 						{
 							obj.Name = objName;
 							obj.Model = modelID;
+							obj.SaveIntoDatabase();
 							DisplayMessage( client, "Object created: OID = " + obj.ObjectID );
 						}
 
@@ -177,7 +178,7 @@ namespace DOL.GS.Commands
 						ushort model = targetObject.Model;
 						try
 						{
-							if (model < 4249)
+							if (model < 8000)
 							{
 							model++;
 							targetObject.Model = model;

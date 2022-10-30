@@ -28,6 +28,7 @@ namespace DOL.Database
         private string m_JumpPos;
         private int m_Range;
         private byte m_Level;
+        private long m_price;
 
         [DataElement(AllowDbNull = false)]
         public string MobID
@@ -92,6 +93,17 @@ namespace DOL.Database
             {
                 Dirty = true;
                 m_Range = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = true)]
+        public long Price
+        {
+            get { return m_price; }
+            set
+            {
+                Dirty = true;
+                m_price = value;
             }
         }
     }

@@ -82,7 +82,7 @@ namespace DOL.GS.RealmAbilities
 					i_player.MessageFromArea(caster, caster.Name + " casts a spell!", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
 				}
 
-				i_player.Out.SendSpellCastAnimation(caster, 7028, 20);
+                i_player.Out.SendSpellCastAnimation(caster, 7028, 10);
 			}
 
 			if (caster.RealmAbilityCastTimer != null)
@@ -94,7 +94,7 @@ namespace DOL.GS.RealmAbilities
 
 			caster.RealmAbilityCastTimer = new RegionTimer(caster);
 			caster.RealmAbilityCastTimer.Callback = new RegionTimerCallback(EndCast);
-			caster.RealmAbilityCastTimer.Start(2000);
+			caster.RealmAbilityCastTimer.Start(1);
 		}
 
 		protected virtual int EndCast(RegionTimer timer)

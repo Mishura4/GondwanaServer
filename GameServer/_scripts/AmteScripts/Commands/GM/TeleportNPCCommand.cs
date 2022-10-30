@@ -9,7 +9,8 @@ namespace DOL.GS.Scripts
 		 ePrivLevel.GM,
 		 "Gestions des TeleportNPC",
 		 "'/teleportnpc create' créé un nouveau TeleportNPC",
-		 "'/teleportnpc text <texte>' texte affiché lorsque le joueur peut se téléporter, le texte doit contenir {5}",
+         "'/teleportnpc create douanier <gold>' gold étant le montant du cout du jump",
+         "'/teleportnpc text <texte>' texte affiché lorsque le joueur peut se téléporter, le texte doit contenir {5}",
 		 "'/teleportnpc refuse <texte>' texte affiché lorsque le joueur ne peut pas être téléporté",
 		 "'/teleportnpc radius <0 - 500>' rayon dans lequel les joueurs seront téléportés (pas de texte)",
 		 "'/teleportnpc level <min level>' règle le niveau minimum pour être téléporter",
@@ -40,17 +41,48 @@ namespace DOL.GS.Scripts
 			{
 				#region create - text - refuse
 				case "create":
-					npc = new TeleportNPC
+                    ///npc = new TeleportNPC
+                    if (args.Length > 2 && args[2] == "douanier")
 						  {
-							  Position = player.Position,
-							  Heading = player.Heading,
-							  CurrentRegion = player.CurrentRegion,
-							  Name = "Nouveau téléporteur",
-							  Realm = 0,
-							  Model = 40,
-							  Text = "Texte à définir.{5}"
-						  };
-					if ((npc.Flags & GameNPC.eFlags.PEACE) == 0)
+                        if (args.Length != 4)
+                        {
+                            DisplaySyntax(client);
+                            break;
+                        }
+
+                        if (!int.TryParse(args[3], out int price))
+                        {
+                            DisplaySyntax(client);
+                            break;
+                        }
+
+                        npc = new Douanier()
+                        {
+                            Position = player.Position,
+                            Heading = player.Heading,
+                            CurrentRegion = player.CurrentRegion,
+                            Name = "Maitre Douanier",
+                            GuildName = "Douanier",
+                            Realm = 0,
+                            Model = 40,
+                            Price = Money.GetMoney(0, 0, price, 0, 0)
+                        };
+                    }
+                    else
+                    {
+                        npc = new TeleportNPC
+                        {
+                            Position = player.Position,
+                            Heading = player.Heading,
+                            CurrentRegion = player.CurrentRegion,
+                            Name = "Nouveau téléporteur",
+                            Realm = 0,
+                            Model = 40,
+                            Text = "Texte à définir.{5}"
+                        };
+                    }
+
+                    if ((npc.Flags & GameNPC.eFlags.PEACE) == 0)
 						npc.Flags ^= GameNPC.eFlags.PEACE;
                     npc.LoadedFromScript = false;
 					npc.AddToWorld();

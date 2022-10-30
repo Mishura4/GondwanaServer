@@ -1,6 +1,7 @@
 ﻿
 # GAMENPC
 GameNPC.DropLoot.AdditionalMoney:				Vous ramassez {0} grâce aux forts controlés par votre royaume!
+GameNPC.DropLoot.ItemAdditionalMoney:			Vous ramassez {0} grâce à votre monaie "Mythical"!
 GameNPC.DropLoot.Drops:						{0} laisse {1}.
 GameNPC.GetAggroLevelString.Aggressive1:		agressif
 GameNPC.GetAggroLevelString.Aggressive2:		Agressive

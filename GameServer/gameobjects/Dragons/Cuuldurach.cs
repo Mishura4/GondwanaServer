@@ -25,6 +25,7 @@ using System.Reflection;
 using System.Collections;
 using DOL.AI.Brain;
 using System.Numerics;
+using System;
 
 namespace DOL.GS
 {
@@ -51,12 +52,13 @@ namespace DOL.GS
 			bool isMessenger;
 			m_messengerList.Clear();
 
+            int numAdds = Math.Max(1, PlayersInLair * 2 + 1);
 			// Spawn glimmer mobs, in most cases (75% chance) these mobs will be around
 			// level 60 and con red to purple, in some cases (25%) they will be
 			// messengers, who will try to get out of the lair and, if successful,
 			// cause Cuuldurach to spawn a couple of deep purple adds.
 
-			for (int glimmer = 1; glimmer <= 10; ++glimmer)
+			for (int glimmer = 1; glimmer <= numAdds; ++glimmer)
 			{
 				isMessenger = Util.Chance(25);
 				glimmerSpawn = SpawnTimedAdd((isMessenger) ? 620 : 621+Util.Random(2),

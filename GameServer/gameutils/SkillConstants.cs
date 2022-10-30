@@ -367,6 +367,16 @@ namespace DOL.GS
         // [StephenxPimentel] Added as a level 50 ability as of patch 1.108
         public const string Remedy = "Remedy";
 
+        /// <summary>
+        /// Shadow Strike
+        /// </summary>
+        public const string ShadowStrike = "Shadow Strike";
+
+        /// <summary>
+        /// Assassinate
+        /// </summary>
+        public const string Assassinate = "Assassinate";
+
 		public const string DefensiveCombatPowerRegeneration = "Defensive Combat Power Regeneration";
 		//NPC only abilities
 		/// <summary>

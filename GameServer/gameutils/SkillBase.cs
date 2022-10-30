@@ -1966,6 +1966,10 @@ namespace DOL.GS
 			m_propertyNames.Add(eProperty.CriticalMeleeHitChance, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE, "SkillBase.RegisterPropertyNames.CriticalMeleeHit"));
 			m_propertyNames.Add(eProperty.CriticalSpellHitChance, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE, "SkillBase.RegisterPropertyNames.CriticalSpellHit"));
 			m_propertyNames.Add(eProperty.CriticalHealHitChance, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE, "SkillBase.RegisterPropertyNames.CriticalHealHit"));
+			m_propertyNames.Add(eProperty.KeepDamage, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE, "SkillBase.RegisterPropertyNames.KeepDamage"));
+
+            m_propertyNames.Add(eProperty.DPS, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE, "SkillBase.RegisterPropertyNames.DPS"));
+            m_propertyNames.Add(eProperty.MagicAbsorption, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE, "SkillBase.RegisterPropertyNames.MagicAbsorption"));
 			
             //Forsaken Worlds: Mythical Stat Cap
             m_propertyNames.Add(eProperty.MythicalStrCapBonus, "Mythical Stat Cap (Strength)");

@@ -25,6 +25,7 @@ using System.Reflection;
 using System.Collections;
 using DOL.AI.Brain;
 using System.Numerics;
+using System;
 
 namespace DOL.GS
 {
@@ -52,13 +53,14 @@ namespace DOL.GS
 			GameNPC dogSpawn;
 			bool isRetriever = false;
 			m_retrieverList.Clear();
+            int numAdds = Math.Max(1, PlayersInLair * 2 + 1);
 
 			// Spawn dogs, in most cases (75% chance) these dogs will be level 
 			// 37 and con green (decoys), in some cases (25%) they will be
 			// retrievers, who will try to get out of the lair and, if successful,
 			// cause Gjalpinulva to spawn a couple of deep purple adds.
 
-			for (int dog = 1; dog <= 10; ++dog)
+			for (int dog = 1; dog <= numAdds; ++dog)
 			{
 				isRetriever = Util.Chance(25);
 				dogSpawn = SpawnTimedAdd(

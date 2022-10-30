@@ -47,7 +47,7 @@ namespace DOL.GS
 		{
 			base.CheckAddSpawns();	// In order to reset HealthPercentOld.
 
-			int numAdds = Math.Max(1, PlayersInLair / 2);
+			int numAdds = Math.Max(1, PlayersInLair * 2 + 1);
 			for (int add = 1; add <= numAdds; ++add)
 			{
 				SpawnTimedAdd(600, Util.Random(57, 60),	Position.X + Util.Random(300, 600), Position.Y + Util.Random(300, 600), 30, false);	// granite giant pounder lvl 57-60

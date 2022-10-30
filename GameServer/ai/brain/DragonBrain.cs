@@ -112,8 +112,7 @@ namespace DOL.AI.Brain
 
 		protected override void CheckNPCAggro()
 		{
-			if (Body.AttackState)
-				return;
+			if (HasAggro) return;
 
 			foreach (GameNPC npc in Body.GetNPCsInRadius((ushort)AggroRange))
 			{
@@ -130,7 +129,7 @@ namespace DOL.AI.Brain
 				{
 					if (CalculateAggroLevelToTarget(npc) > 0)
 					{
-						AddToAggroList(npc, (npc.Level + 1) << 1);
+						AddToAggroList(npc, 1);
 					}
 				}
 			}

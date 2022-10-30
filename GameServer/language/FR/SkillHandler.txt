@@ -205,3 +205,6 @@ SkillBase.RegisterPropertyNames.WindMagic:            Voie de l'Air
 SkillBase.RegisterPropertyNames.WindMagicFocus:         Focus : Voie de l'Air
 SkillBase.RegisterPropertyNames.Witchcraft:            Artifices
 SkillBase.RegisterPropertyNames.WitchcraftFocus:      Focus : Artifices
+SkillBase.RegisterPropertyNames.KeepDamage:				Keep Damage
+SkillBase.RegisterPropertyNames.DPS:					Augmentation du DPS
+SkillBase.RegisterPropertyNames.MagicAbsorption:		Absorption Magique

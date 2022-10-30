@@ -10,6 +10,7 @@ GamePlayer.ApplyPoison.CantPoisonWeapon:		Vous ne pouvez pas utiliser du poison 
 GamePlayer.ApplyPoison.CantUsePoison:			Vous ne pouvez pas utiliser ce poison.
 GamePlayer.ApplyPoison.CantUsePoisons:			Vous ne pouvez pas utiliser ces poisons.
 GamePlayer.ApplyPoison.PoisonsAppliedWeapons:	Les poisons ne peuvent être appliqués que sur des armes.
+GameObjects.GamePlayer.ApplyPoison.CantReapplyPoison:	Vous ne pouvez pas réappliquer du poison sur cette arme.
 GamePlayer.Attack.AlreadyDead:				{0} est déjà mort(e).
 GamePlayer.Attack.Blocked:					{0} bloque votre attaque.
 GamePlayer.Attack.CantBeAttacked:			Ceci ne peut pas être attaqué.
@@ -297,6 +298,7 @@ GamePlayer.UseSlot.AutoReleaseShotReload:	Vous allez maintenant tirer et recharg
 GamePlayer.UseSlot.CantCallMountSeated:		Vous ne pouvez pas appeler votre monture si vous êtes assis(e).
 GamePlayer.UseSlot.CantFire:				Vous ne pouvez pas lancer ou utiliser cet objet.
 GamePlayer.UseSlot.CantMountCombat:			Vous êtes en combat, et ne pouvez pas appeler votre monture.
+GameObjects.GamePlayer.UseSlot.CantMountSpell:				Vous devez terminer votre sort pour pouvoir appeler votre monture.
 GamePlayer.UseSlot.CantMountInDungeon:			You cannot summon a mount in a dungeon!
 GamePlayer.UseSlot.CantMountMoving:			Vous ne pouvez pas monter sur un cheval lorsque vous bougez.
 GamePlayer.UseSlot.CantMountSteath:			Vous ne pouvez pas monter sur un cheval si vous êtes en furtivité.

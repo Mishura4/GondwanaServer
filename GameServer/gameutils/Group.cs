@@ -162,7 +162,7 @@ namespace DOL.GS
 		{
 			return m_groupMembers.ToArray();
 		}
-		
+
 		/// <summary>
 		/// Gets all players of the group
 		/// </summary>
@@ -171,7 +171,7 @@ namespace DOL.GS
 		{
 			return m_groupMembers.OfType<GamePlayer>().ToArray();
 		}
-		
+
 		/// <summary>
 		/// Adds a living to the group
 		/// </summary>
@@ -206,7 +206,7 @@ namespace DOL.GS
 			GameEventMgr.Notify(GroupEvent.MemberJoined, this, new MemberJoinedEventArgs(living));
 			return true;
 		}
-		
+
 		/// <summary>
 		/// Removes a living from the group
 		/// </summary>
@@ -239,8 +239,7 @@ namespace DOL.GS
             }
             
             SendMessageToGroupMembers(string.Format("{0} has left the group.", living.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-			
-            
+
             // only one member left?
 			if (MemberCount == 1)
 			{
@@ -264,13 +263,13 @@ namespace DOL.GS
 					LivingLeader = m_groupMembers.First();
 				}
 			}
-			
+
 			UpdateGroupIndexes();
 			GameEventMgr.Notify(GroupEvent.MemberDisbanded, this, new MemberDisbandedEventArgs(living));
 
 			return true;
 		}
-		
+
 		/// <summary>
 		/// Clear this group
 		/// </summary>

@@ -231,8 +231,7 @@ namespace DOL.AI.Brain
 		/// </summary>
 		protected virtual void CheckNPCAggro()
 		{
-			if (Body.AttackState)
-				return;
+			if (HasAggro) return;
 
 			foreach (GameNPC npc in Body.GetNPCsInRadius((ushort)AggroRange, Body.CurrentRegion.IsDungeon ? false : true))
 			{
@@ -247,9 +246,9 @@ namespace DOL.AI.Brain
 				if (CalculateAggroLevelToTarget(npc) > 0)
 				{
 					if (npc.Brain is ControlledNpcBrain) // This is a pet or charmed creature, checkLOS
-						AddToAggroList(npc, (npc.Level + 1) << 1, true);
+						AddToAggroList(npc, 1, true);
 					else
-						AddToAggroList(npc, (npc.Level + 1) << 1);
+						AddToAggroList(npc, 1);
 				}
 			}
 		}
@@ -259,9 +258,7 @@ namespace DOL.AI.Brain
 		/// </summary>
 		protected virtual void CheckPlayerAggro()
 		{
-			//Check if we are already attacking, return if yes
-			if (Body.AttackState)
-				return;
+			if (HasAggro) return;
 
 			foreach (GamePlayer player in Body.GetPlayersInRadius((ushort)AggroRange, Body.CurrentZone.IsDungeon ? false : true))
 			{
@@ -292,7 +289,7 @@ namespace DOL.AI.Brain
 
 				if (CalculateAggroLevelToTarget(player) > 0)
 				{
-					AddToAggroList(player, player.EffectiveLevel << 1, true);
+					AddToAggroList(player, 1, true);
 				}
 			}
 		}
@@ -372,17 +369,7 @@ namespace DOL.AI.Brain
 		/// Checks whether living has someone on its aggrolist
 		/// </summary>
 		public virtual bool HasAggro
-		{
-			get
-			{
-				bool hasAggro = false;
-				lock ((m_aggroTable as ICollection).SyncRoot)
-				{
-					hasAggro = (m_aggroTable.Count > 0);
-				}
-				return hasAggro;
-			}
-		}
+			=> AggroTable.Count > 0;
 
 		/// <summary>
 		/// Add aggro table of this brain to that of another living.

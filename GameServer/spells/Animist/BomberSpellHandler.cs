@@ -113,7 +113,15 @@ namespace DOL.GS.Spells
             bomber.Delete();
         }
 
-        public override void CastSubSpells(GameLiving target) { }
+        /// <summary>
+        /// Do not trigger SubSpells
+        /// </summary>
+        /// <param name="target"></param>
+        public override void CastSubSpells(GameLiving target)
+        {
+            if (ServerProperties.Properties.ENABLE_SUB_SPELL_ALL_CLASS)
+                base.CastSubSpells(target);
+        }
 
         public override string ShortDescription
             => "Summons an elemental spirit to attack the target.";

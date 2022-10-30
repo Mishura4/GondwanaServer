@@ -167,7 +167,11 @@ namespace DOL.GS.Spells
 			m_pet.CurrentSpeed = 0;
 			m_pet.Realm = Caster.Realm;
 
-			if (m_isSilent)
+            // Fix owner pet issue
+            if (Caster is GameNPC mob && mob.Faction != null)
+                m_pet.Faction = mob.Faction;
+
+            if (m_isSilent)
 				m_pet.IsSilent = true;
 
 			m_pet.AddToWorld();

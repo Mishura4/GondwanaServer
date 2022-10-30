@@ -59,7 +59,12 @@ namespace DOL.GS.Styles
 			//several different threads at the same time!
 			lock (living)
 			{
-				GameLiving target = living.TargetObject as GameLiving;
+                if (style.StealthRequirement && living is GamePlayer && ((GamePlayer)living).StayStealth)
+                {
+                    return true;
+                }
+
+                GameLiving target = living.TargetObject as GameLiving;
 				if (target == null) return false;
 
 				//Required attack result
@@ -402,7 +407,8 @@ namespace DOL.GS.Styles
 					//Growth * Style Spec * Effective Speed / Unstyled Damage Cap
 
 					bool staticGrowth = attackData.Style.StealthRequirement;  //static growth is not a function of (effective) weapon speed
-					double absorbRatio = attackData.Damage / living.UnstyledDamageCap(weapon); //scaling factor for style damage
+					double absorbRatio = 0;
+					if (weapon.DPS_AF >= 15) absorbRatio = attackData.Damage / living.UnstyledDamageCap(weapon);
 					double effectiveWeaponSpeed = living.AttackSpeed(weapon) * 0.001;
 					double styleDamageBonus = living.GetModified(eProperty.StyleDamage) * 0.01 - 1;
 
@@ -411,8 +417,7 @@ namespace DOL.GS.Styles
 
 					if (staticGrowth)
 						attackData.StyleDamage = (int)(absorbRatio * styleGrowth * ServerProperties.Properties.CS_OPENING_EFFECTIVENESS);
-					else
-						attackData.StyleDamage = (int)(absorbRatio * styleGrowth * effectiveWeaponSpeed);
+					else attackData.StyleDamage = (int)(absorbRatio * styleGrowth * effectiveWeaponSpeed);
 
 					attackData.StyleDamage += (int)(attackData.Damage * styleDamageBonus);
 

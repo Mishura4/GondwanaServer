@@ -903,9 +903,7 @@ public class MLBrain : GuardBrain
 	}
 	protected override void CheckNPCAggro()
 	{
-		//Check if we are already attacking, return if yes
-		if (Body.AttackState)
-			return;
+		if (HasAggro) return;
 
 		foreach (GameNPC npc in Body.GetNPCsInRadius((ushort)AggroRange))
 		{
@@ -921,7 +919,7 @@ public class MLBrain : GuardBrain
 			if (!(npc.Brain is IControlledBrain || npc is GameGuard))
 				continue;
 
-			AddToAggroList(npc, npc.Level << 1);
+			AddToAggroList(npc, 1);
 			return;
 		}
 	}

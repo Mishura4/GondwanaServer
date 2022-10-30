@@ -1016,7 +1016,8 @@ namespace DOL.GS
 		Lesson = 0x04,
 		Lore = 0x08,
 		Pending = 0x10, // patch 0031
-	}
+        New = 0x11
+    }
 
 	/// <summary>
 	/// strong name constants of spell line used in the world (poison, proc ect ...)

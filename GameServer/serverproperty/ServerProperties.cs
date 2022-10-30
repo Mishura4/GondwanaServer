@@ -79,6 +79,12 @@ namespace DOL.GS.ServerProperties
 		[ServerProperty("system", "enable_debug", "Enable Debug mode? Used to alter some features during server startup to make debugging easier", false)]
 		public static bool ENABLE_DEBUG;
 
+        /// <summary>
+        /// Enable sub spells for Archery, Summon Animist Pet, Summon Animist Fnf, Bomber spell and Battle Master
+        /// </summary>
+        [ServerProperty("system", "enable_sub_spell_all_class", "Enable sub spells for Archery, Summon Animist Pet, Summon Animist Fnf, Bomber spell and Battle Master", false)]
+        public static bool ENABLE_SUB_SPELL_ALL_CLASS;
+
 		/// <summary>
 		/// Whether to use the sync timer utility or not
 		/// </summary>
@@ -221,6 +227,12 @@ namespace DOL.GS.ServerProperties
 		/// </summary>
 		[ServerProperty("system", "statsave_interval", "Interval between each DB Stats store in minutes. -1 for deactivated.", -1)]
 		public static int STATSAVE_INTERVAL;
+
+        /// <summary>
+        /// max level interval in group between highest player
+        /// </summary>
+        [ServerProperty("system", "group_xp_max_level_interval", "max level interval in group between highest player", 9)]
+        public static int GROUP_XP_MAX_LEVEL_INTERVAL;
 
 		/// <summary>
 		/// Bug Report Email Addresses
@@ -1178,7 +1190,25 @@ namespace DOL.GS.ServerProperties
 		[ServerProperty("npc", "pet_2h_bonus_damage", "If true, pets that use a 2H weapon and have a block chance get bonus damage equal to their block chance to compensate for not being able to block. ", true)]
 		public static bool PET_2H_BONUS_DAMAGE;
 
+		/// <summary>
+		/// New property to resolve the damages for hand to hand weapon.
+		/// </summary>
+		[ServerProperty("npc", "handtohand_resolve_domages", "New property to resolve the damages for hand to hand weapon.", 0.30)]
+		public static double HANDTOHAND_RESOLVE_DAMAGES;
+
+		/// <summary>
+		/// New property to resolve the damages for spear weapon.
+		/// </summary>
+		[ServerProperty("npc", "spears_resolve_domages", "New property to resolve the damages for spear weapon.", 0.17)]
+		public static double SPEARS_RESOLVE_DAMAGES;
+
 		// Necro pet stat properties
+
+        /// <summary>
+        /// New property to resolve the damages for necromancer pets.
+        /// </summary>
+        [ServerProperty("npc", "necro_pet_resolve_damages", "New property to resolve the damages for necromancer pets.", 0.30)]
+        public static double NECRO_PET_RESOLVE_DAMAGES;
 
 		/// <summary>
 		/// Base value to use when setting strength for most necromancer pets.
@@ -1306,6 +1336,12 @@ namespace DOL.GS.ServerProperties
 		/// </summary>
 		[ServerProperty("npc", "mob_damage_increase_startlevel", "What level to start increasing mob damage.", 30)]
 		public static int MOB_DAMAGE_INCREASE_STARTLEVEL;
+
+        /// <summary>
+        /// What level to start increasing mob damage
+        /// </summary>
+        [ServerProperty("npc", "mob_strength_increase_lowlevel", "Increase strength in domage calculator for mlob level 0 and 1.", 350)]
+        public static int MOB_STRENGTH_INCREASE_LOWLEVEL;
 
 		/// <summary>
 		/// How much damage to increase per level

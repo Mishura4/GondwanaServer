@@ -37,6 +37,8 @@ using DOL.GS.Utils;
 using DOL.Language;
 using DOL.GS.RealmAbilities;
 using System.Numerics;
+using DOL.GS.PlayerClass;
+using DOL.GS.ServerProperties;
 
 namespace DOL.GS
 {
@@ -1015,6 +1017,8 @@ namespace DOL.GS
 		/// <returns></returns>
 		public virtual int GetWeaponStat(InventoryItem weapon)
 		{
+			if (this is GameNPC && this.Level <= 1)
+				return GetModifiedStrengthForLowLevel();
 			return GetModified(eProperty.Strength);
 		}
 
@@ -1789,7 +1793,12 @@ namespace DOL.GS
 				var player = this as GamePlayer;
 				double factor = player != null ? player.CharacterClass.WeaponSkillFactor((eObjectType)weapon.Object_Type) : 20;
 				double dmg_stat = GetWeaponStat(weapon);
-				double wp_spec = player != null ? GetModifiedSpecLevel(player.GetWeaponSpec(weapon)) : Level * 1.2;
+				double levelFake = Level;
+				if (this is GameNPC && levelFake == 0)
+					levelFake = 1;
+				else if (this is GameNPC && levelFake == 1)
+					levelFake = 1.1;
+				double wp_spec = player != null ? GetModifiedSpecLevel(player.GetWeaponSpec(weapon)) : levelFake * 1.2;
 				double enemy_armor = ad.Target.GetArmorAF(ad.ArmorHitLocation);
 				if (ad.Attacker.EffectList.GetOfType<BadgeOfValorEffect>() != null)
 					enemy_armor = enemy_armor / (1 + ad.Target.GetArmorAbsorb(ad.ArmorHitLocation));
@@ -1801,7 +1810,7 @@ namespace DOL.GS
 				int minVariance = WeaponSpecLevel(weaponTypeToUse).Clamp(0, 70) * 49 / 166; // x*0.6*49/100 => x * 49 / 166
 				int maxVariance = 49 - minVariance;
 
-				double dmg_mod = Level
+				double dmg_mod = levelFake
 					* factor / 10.0
 					* (1 + 0.01 * dmg_stat)
 					* (0.75 + 0.5 * Math.Min(ad.Target.Level + 1.0, wp_spec) / (ad.Target.Level + 1.0) + 0.01 * Util.Random(minVariance, maxVariance))
@@ -1810,7 +1819,20 @@ namespace DOL.GS
 				dmg_mod = dmg_mod.Clamp(0.01, 3);
 
 
-				double weapon_dps = WeaponDamage(weapon);
+                double weapon_dps = WeaponDamage(weapon);
+                if(player != null && style != null && ((player.CharacterClass is ClassSavage && style.Spec == "Hand to Hand") || (style.Spec == "Spear" && (player.CharacterClass is ClassHunter || player.CharacterClass is ClassValkyrie))))
+                if(player != null && style != null)
+                {
+					if (player.CharacterClass is ClassSavage && style.Spec == "Hand to Hand")
+						weapon_dps = AttackDamage(weapon) * Properties.HANDTOHAND_RESOLVE_DAMAGES;
+					else if (style.Spec == "Spear" && (player.CharacterClass is ClassHunter || player.CharacterClass is ClassValkyrie))
+						weapon_dps = AttackDamage(weapon) * Properties.SPEARS_RESOLVE_DAMAGES;
+					else
+						weapon_dps = WeaponDamage(weapon);
+				}
+
+                else
+                    weapon_dps = WeaponDamage(weapon);
 				double base_dmg = dmg_mod * weapon_dps;
 
 				// double damage = AttackDamage(weapon) * effectiveness;
@@ -1825,7 +1847,7 @@ namespace DOL.GS
 				ad.weaponStat = Math.Round(dmg_stat, 3);
 
 
-				if (Level > ServerProperties.Properties.MOB_DAMAGE_INCREASE_STARTLEVEL &&
+				if ((ServerProperties.Properties.MOB_DAMAGE_INCREASE_STARTLEVEL == 0 || Level > ServerProperties.Properties.MOB_DAMAGE_INCREASE_STARTLEVEL) &&
 				    ServerProperties.Properties.MOB_DAMAGE_INCREASE_PERLEVEL > 0 &&
 				    damage > 0 &&
 				    this is GameNPC && (this as GameNPC).Brain is IControlledBrain == false)
@@ -2954,7 +2976,14 @@ namespace DOL.GS
 
 				// unstealth before attack animation
 				if (owner is GamePlayer)
-					((GamePlayer)owner).Stealth(false);
+                    if(((GamePlayer)owner).StayStealth)
+                    {
+                        ((GamePlayer)owner).StayStealth = false;
+                    }
+                    else
+                    {
+                        ((GamePlayer)owner).Stealth(false);
+                    }
 
 				//Show the animation
 				if (mainHandAD.AttackResult != eAttackResult.HitUnstyled && mainHandAD.AttackResult != eAttackResult.HitStyle && leftHandAD != null)
@@ -3338,13 +3367,13 @@ namespace DOL.GS
 			AttackData lastAD = TempProperties.getProperty<AttackData>(LAST_ATTACK_DATA, null);
 			bool defenseDisabled = ad.Target.IsMezzed | ad.Target.IsStunned | ad.Target.IsSitting;
 
-			// If berserk is on, no defensive skills may be used: evade, parry, ...
-			// unfortunately this as to be check for every action itself to kepp oder of actions the same.
-			// Intercept and guard can still be used on berserked
-			//			BerserkEffect berserk = null;
+            // If berserk is on, no defensive skills may be used: evade, parry, ...
+            // unfortunately this as to be check for every action itself to kepp oder of actions the same.
+            // Intercept and guard can still be used on berserked
+            //			BerserkEffect berserk = null;
 
-			// get all needed effects in one loop
-			lock (EffectList)
+            // get all needed effects in one loop
+            lock (EffectList)
 			{
 				foreach (IGameEffect effect in EffectList)
 				{
@@ -4124,9 +4153,9 @@ namespace DOL.GS
 				if (attackerGroup != null)
 				{
 					List<GameLiving> xpGainers = new List<GameLiving>(8);
-					// collect "helping" group players in range
-					foreach (GameLiving living in attackerGroup.GetMembersInTheGroup())
-					{
+                    // collect "helping" group players in range
+                    foreach (GameLiving living in attackerGroup.GetMembersInTheGroup().GetElligibleXPGainers())
+                    {
 						if (this.IsWithinRadius(living, WorldMgr.MAX_EXPFORKILL_DISTANCE) && living.IsAlive && living.ObjectState == eObjectState.Active)
 							xpGainers.Add(living);
 					}
@@ -4426,8 +4455,8 @@ namespace DOL.GS
 			lock (Attackers)
 			{
 				m_attackers.Remove(attacker);
-                // If GM use viewloot, need remove the attacker from the xpGainers, else if he deco/reco
-                // and redo the action, he apears twice in the list and the bug is happen
+			// If GM use viewloot, need remove the attacker from the xpGainers, else if he deco/reco
+			// and redo the action, he apears twice in the list and the bug is happen
                 lock (m_xpGainers)
                     if (m_xpGainers.Contains(attacker) && Health == MaxHealth)
                         m_xpGainers.Remove(attacker);
@@ -4905,6 +4934,13 @@ namespace DOL.GS
 			}
 			return 0;
 		}
+
+		public int GetModifiedStrengthForLowLevel()
+		{
+			return (m_propertyCalc[(int)eProperty.Strength] as StatCalculator).CalcStrengthValueForMobLowLevel(this);
+		}
+
+
 
 		//Eden : secondary resists, such AoM, vampiir magic resistance etc, should not apply in CC duration, disease, debuff etc, using a new function
 		public virtual int GetModifiedBase(eProperty property)

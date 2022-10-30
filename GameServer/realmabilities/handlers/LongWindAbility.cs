@@ -15,6 +15,14 @@ namespace DOL.GS.RealmAbilities
 
         protected override string ValueUnit { get { return "%"; } }
 
+        public override int MaxLevel
+        {
+            get
+            {
+                return 5;
+            }
+        }
+
 		public override int GetAmountForLevel(int level)
 		{
             switch (level)

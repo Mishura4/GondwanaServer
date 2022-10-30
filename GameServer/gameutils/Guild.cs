@@ -334,11 +334,6 @@ namespace DOL.GS
 		{
 			get
 			{
-				if (m_DBguild.GuildBannerLostTime == null)
-				{
-					return new DateTime(2010, 1, 1);
-				}
-
 				return m_DBguild.GuildBannerLostTime;
 			}
 			set
@@ -915,11 +910,6 @@ namespace DOL.GS
 		{
 			get 
 			{
-				if (m_DBguild.BonusStartTime == null)
-				{
-					return new DateTime(2010, 1, 1);
-				}
-
 				return this.m_DBguild.BonusStartTime; 
 			}
 			set 

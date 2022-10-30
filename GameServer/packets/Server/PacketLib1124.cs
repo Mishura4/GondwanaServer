@@ -244,8 +244,9 @@ namespace DOL.GS.PacketHandler
 					flags3 |= 0x01;
 				if (questIndicator == eQuestIndicator.Lore)
 					flags3 |= 0x02;
-				if (questIndicator == eQuestIndicator.Pending) // new? patch 0031
-					flags3 |= 0x20;
+				if (questIndicator == eQuestIndicator.Pending || questIndicator == eQuestIndicator.New) // new? patch 0031
+					flags3 |= 0x20;	
+
 				pak.WriteByte(flags3); // new in 1.71 (region instance ID from StoC_0x20) OR flags 3?
 				pak.WriteShort(0x00); // new in 1.71 unknown
 
@@ -579,7 +580,8 @@ namespace DOL.GS.PacketHandler
 				if (q == null || q.Status == eQuestStatus.NotDoing)
 				{
 					pak.WriteByte(0); // name length
-					pak.WriteShort(0); // status
+					pak.WriteByte(0); // unknown
+					pak.WriteByte(0); // status
 					pak.WriteByte(0); // goal count
 					pak.WriteByte(0); // level
 					SendTCP(pak);
@@ -591,7 +593,8 @@ namespace DOL.GS.PacketHandler
 					name = name.Substring(0, 256);
 
 				pak.WriteByte((byte) name.Length);
-				pak.WriteShort((ushort)(q.Status == eQuestStatus.InProgress ? 0 : 1));
+				pak.WriteByte(0); // unknown
+				pak.WriteByte((byte) (q.Status == eQuestStatus.InProgress ? 0 : 1));
 				pak.WriteByte((byte) (q.Status == eQuestStatus.Done ? 0 : q.VisibleGoals.Count));
 				pak.WriteByte(q.Quest.MinLevel);
 				pak.WriteStringBytes(name);

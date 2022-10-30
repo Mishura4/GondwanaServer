@@ -96,6 +96,39 @@ namespace DOL.GS.PropertyCalc
 			return Math.Max(1, stat);
         }
 
+        public int CalcStrengthValueForMobLowLevel(GameLiving living)
+        {
+            eProperty property = eProperty.Strength;
+            int propertyIndex = (int)property;
+
+            // Base stats/abilities/debuffs/death.
+
+            int baseStat = living.GetBaseStat((eStat)property)<ServerProperties.Properties.MOB_STRENGTH_INCREASE_LOWLEVEL? ServerProperties.Properties.MOB_STRENGTH_INCREASE_LOWLEVEL : living.GetBaseStat((eStat)property);
+            int abilityBonus = living.AbilityBonus[propertyIndex];
+            int debuff = living.DebuffCategory[propertyIndex];
+
+
+            int itemBonus = CalcValueFromItems(living, property);
+            int buffBonus = CalcValueFromBuffs(living, property);
+
+
+
+            // Apply debuffs, 100% effectiveness for player buffs, 50% effectiveness
+            // for item and base stats
+
+            int unbuffedBonus = baseStat + itemBonus;
+            buffBonus -= Math.Abs(debuff);
+
+
+
+            // Add up and apply any multiplicators.
+
+            int stat = unbuffedBonus + buffBonus + abilityBonus;
+            stat = (int)(stat * living.BuffBonusMultCategory1.Get((int)property));
+
+            return Math.Max(1, stat);
+        }
+
         /// <summary>
         /// Calculate modified bonuses from buffs only.
         /// </summary>
