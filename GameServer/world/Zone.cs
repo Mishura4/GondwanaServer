@@ -220,7 +220,7 @@ namespace DOL.GS
 		/// <param name="width">the Width of this zone</param>
 		/// <param name="height">the Height of this zone</param>
 		/// <param name="zoneskinID">For clientside positioning in instances: The 'fake' zoneid we send to clients.</param>
-		public Zone(Region region, ushort id, string desc, int xoff, int yoff, int width, int height, ushort zoneskinID, bool isDivingEnabled, int waterlevel, bool islava, int xpBonus, int rpBonus, int bpBonus, int coinBonus, byte realm)
+		public Zone(Region region, ushort id, string desc, int xoff, int yoff, int width, int height, ushort zoneskinID, bool isDivingEnabled, int waterlevel, bool islava, int xpBonus, int rpBonus, int bpBonus, int coinBonus, byte realm, bool allowMagicalItem)
 		{
 			m_Region = region;
 			m_ID = id;
@@ -238,6 +238,7 @@ namespace DOL.GS
 			m_bonusRP = rpBonus;
 			m_bonusBP = bpBonus;
 			m_bonusCoin = coinBonus;
+			AllowMagicalItem = allowMagicalItem;
 
 			// initialise subzone objects and counters
 			m_subZoneElements = new SubNodeElement[SUBZONE_NBR][];
@@ -429,6 +430,8 @@ namespace DOL.GS
 			get { return m_waterlevel; }
 			set { m_waterlevel = value; }
 		}
+
+        public bool AllowMagicalItem { get; set; }
 
 		public bool IsDivingEnabled
 		{
@@ -1318,7 +1321,7 @@ namespace DOL.GS
 
 		#region Zone Bonuses
 		/// <summary>
-		/// Bonus XP Gained (%)
+		/// Bonus XP Factor
 		/// </summary>
 		public int BonusExperience
 		{

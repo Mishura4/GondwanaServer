@@ -392,6 +392,8 @@ namespace DOL.GS
 		
 		public const string StunImmunity = "StunImmunity";
 
+        public const string Vol = "Vol";
+
 		public static eObjectType AbilityToWeapon( string abilityKeyName )
 		{
 			eObjectType type = eObjectType.GenericItem;

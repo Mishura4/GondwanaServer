@@ -44,8 +44,9 @@ namespace DOL
 			private int m_bonusBP;
 			private int m_bonusCoin;
             private byte m_realm;
+            private bool m_allowMagicalItem;
 
-			public Zones()
+            public Zones()
 			{
 				m_zoneID = 0;
 				m_zoneName = string.Empty;
@@ -262,6 +263,21 @@ namespace DOL
                 {
                     Dirty = true;
                     m_realm = value;
+                }
+            }
+
+            [DataElement(AllowDbNull = false)]
+            public bool AllowMagicalItem
+            {
+                get
+                {
+                    return m_allowMagicalItem;
+                }
+
+                set
+                {
+                    m_allowMagicalItem = value;
+                    Dirty = true;
                 }
             }
         }

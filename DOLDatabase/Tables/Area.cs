@@ -19,10 +19,12 @@ namespace DOL.Database
 		private byte m_sound;
 		private bool m_checkLOS;
 		private string m_points;
+        private bool m_allowVol;
 
-		public DBArea()
+        public DBArea()
 		{
-		}
+            this.m_allowVol = true;
+        }
 
         [DataElement(AllowDbNull = true)]
         public string TranslationId
@@ -147,7 +149,22 @@ namespace DOL.Database
 			}
 		}
 
-		[DataElement(AllowDbNull = false)]
+        [DataElement(AllowDbNull = false)]
+        public bool AllowVol
+        {
+            get
+            {
+                return m_allowVol;
+            }
+
+            set
+            {
+                Dirty = true;
+                m_allowVol = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false)]
 		public byte Sound
 		{
 			get

@@ -27,6 +27,7 @@ using System.Text;
 
 using DOL.AI;
 using DOL.AI.Brain;
+using System.Timers;
 using DOL.Database;
 using DOL.Events;
 using DOL.GS.Effects;
@@ -52,11 +53,17 @@ namespace DOL.GS
 	/// <summary>
 	/// This class represents a player inside the game
 	/// </summary>
-	public class GamePlayer : GameLiving
+	public class GamePlayer : GameLiving, IGamePlayer
 	{
 		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
 		private readonly object m_LockObject = new object();
+
+        private Timer afkXpTimer;
+
+        private Timer kickoutTimer;
+
+        private Timer afkDelayTimer;
 
         private bool stayStealth = false;
 
@@ -135,6 +142,27 @@ namespace DOL.GS
 			get { return m_targetInView; }
 			set { m_targetInView = value; }
         } 
+
+        public Timer AfkXpTimer
+        {
+            get => this.afkXpTimer ?? (this.afkXpTimer = new Timer());
+        }
+
+		public Timer AfkDelayTimer
+		{
+			get => this.afkDelayTimer ?? (this.afkDelayTimer = new Timer());
+		}
+
+		public Timer KickoutTimer
+        {
+            get => this.kickoutTimer ?? (this.kickoutTimer = new Timer());
+        }
+
+		public bool IsAfkDelayElapsed
+        {
+			get;
+			private set;
+        }
 
 		/// <summary>
 		/// Holds the ground target visibility flag
@@ -264,8 +292,14 @@ namespace DOL.GS
 			get { return m_canFly; }
 			set { m_canFly = value; }
 		}
-		
-		private bool m_statsAnon = false;
+
+        public bool IsAllowToVolInThisArea
+        {
+            get;
+            set;
+        }
+
+        private bool m_statsAnon = false;
 
 		/// <summary>
 		/// Gets or sets the stats anon flag for the command /statsanon
@@ -276,6 +310,12 @@ namespace DOL.GS
 			get { return m_statsAnon; }
 			set { m_statsAnon = value; }
 		}
+
+        public string PlayerAfkMessage
+        {
+            get;
+            set;
+        }
 		
 		#region DoorCache
 		protected Dictionary<int, eDoorState> m_doorUpdateList = null;
@@ -1004,7 +1044,7 @@ namespace DOL.GS
 		public virtual bool Quit(bool forced)
 		{
 			if (!forced)
-			{
+			{	
 				if (!IsAlive)
 				{
 					Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GamePlayer.Quit.CantQuitDead"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
@@ -1057,7 +1097,7 @@ namespace DOL.GS
 					{
 						Out.SendMessage(stats, eChatType.CT_System, eChatLoc.CL_SystemWindow);
 					}
-				}
+				}			
 
 				if (!IsSitting)
 				{
@@ -1087,6 +1127,12 @@ namespace DOL.GS
 				//Cleanup stuff
 				Delete();
 			}
+
+			if (PlayerAfkMessage != null)
+			{
+				ResetAFK(true);
+			}
+
 			return true;
 		}
 
@@ -5948,6 +5994,11 @@ namespace DOL.GS
 				return;
 			}
 
+			if (this.PlayerAfkMessage != null)
+            {
+				this.ResetAFK(false);
+            }
+
 			if (IsStunned)
 			{
 				Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GamePlayer.StartAttack.CantAttackStunned"), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
@@ -8982,7 +9033,12 @@ namespace DOL.GS
 			{
 				Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GamePlayer.UseSlot.CantFire"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 				return;
-			}
+			}			
+
+			if (PlayerAfkMessage != null)
+            {
+				this.ResetAFK(false);
+            }
 
 			lock (Inventory)
 			{
@@ -9020,6 +9076,16 @@ namespace DOL.GS
 				if (useItem.Item_Type != Slot.RANGED && (slot != Slot.HORSE || type != 0))
 				{
 					Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GamePlayer.UseSlot.AttemptToUse", useItem.GetName(0, false)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+				}
+
+				//prevent magical item use in not authorized zones
+				if (useItem.Object_Type == (int)eObjectType.Magical)
+                {
+					if (this.isInBG || this.CurrentRegion.IsRvR || !this.CurrentZone.AllowMagicalItem)
+                    {
+						Out.SendMessage("Vous ne pouvez pas utiliser cela ici !", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+						return;
+					}
 				}
 
 				#region Non-backpack/vault slots
@@ -9639,19 +9705,26 @@ namespace DOL.GS
 			{
 				int minutes = cooldown / 60;
 				int seconds = cooldown % 60;
-				Out.SendMessage(String.Format("You must wait {0} to discharge this item!",
-				                              (minutes <= 0)
-				                              ? String.Format("{0} more seconds", seconds)
-				                              : String.Format("{0} more minutes and {1} seconds",
-				                                              minutes, seconds)),
+                Out.SendMessage(String.Format("Vous devez attendre {0} pour utiliser cet objet !",
+                                              (minutes <= 0)
+                                              ? String.Format("encore {0} secondes", seconds)
+                                              : String.Format("ecnore {0} minutes et {1} secondes",
+                                                              minutes, seconds)),
 				                eChatType.CT_System, eChatLoc.CL_SystemWindow);
 
 				return false;
 			}
 
+            //Check if Zone allows to use Magical Item
+            //For Example, Magical Item Should be diable in PvP
+            if (!this.CurrentZone.AllowMagicalItem)
+            {
+                Out.SendMessage("L'utilisation d'objets magiques n'est pas permise dans cette zone.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return false;
+            }
 
-			//Eden
-			if (IsMezzed || (IsStunned && !(Steed != null && Steed.Name == "Forceful Zephyr")) || !IsAlive)
+            //Eden
+            if (IsMezzed || (IsStunned && !(Steed != null && Steed.Name == "Forceful Zephyr")) || !IsAlive)
 			{
 				Out.SendMessage("Vous ne pouvez rien utiliser dans votre �tat.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
 				return false;
@@ -12071,9 +12144,9 @@ namespace DOL.GS
 				lock (Inventory)
 				{
 					InventoryItem item = Inventory.GetItem(slot_pos);
-					if (!item.IsDropable)
+					if (!item.IsDropable || !CurrentZone.AllowMagicalItem || this.CurrentRegion.IsRvR || this.isInBG)
 					{
-						Out.SendMessage(item.GetName(0, true) + " can not be dropped!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+						Out.SendMessage(item.GetName(0, true) + " ne peux pas etre d�pos� ici !", eChatType.CT_System, eChatLoc.CL_SystemWindow);
 						return false;
 					}
 
@@ -14256,6 +14329,82 @@ namespace DOL.GS
 				return true;
 			}
 		}
+
+		/// <summary>
+		/// Internal Method use ResetAFK Instead
+		/// </summary>
+        private void ResetAfkTimers()
+        {
+            AfkXpTimer.Stop();
+            AfkXpTimer.Elapsed -= (object sender, ElapsedEventArgs e) => this.OnAfkXpTick();
+            AfkXpTimer.Close();
+            KickoutTimer.Elapsed -= (object sender, ElapsedEventArgs e) => this.OnAfkTimerTimeout();
+            KickoutTimer.Close();
+        }
+
+		public void ResetAFK(bool isSilent)
+        {
+			this.PlayerAfkMessage = null;
+			this.ResetAfkTimers();
+
+			if (!isSilent)
+				this.Out.SendMessage("Vous n'etes désormais plus afk", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+		}
+
+        public void InitAfkTimers()		
+		{
+			//Delay Timer
+			this.AfkDelayTimer.AutoReset = true;
+			this.AfkDelayTimer.Interval = 30 * 1000; //30s
+			this.AfkDelayTimer.Stop();
+			this.AfkDelayTimer.Elapsed += (object send, ElapsedEventArgs e) => this.IsAfkDelayElapsed = true;
+			this.AfkDelayTimer.Start();
+			this.IsAfkDelayElapsed = false;
+
+			//Kickout timer
+			int kickoutMilliseconds = Properties.AFK_TIMEOUT * 60 * 1000;
+
+			if (kickoutMilliseconds < 0)
+			{
+				kickoutMilliseconds = int.MaxValue;
+			}
+
+			KickoutTimer.AutoReset = false;
+			kickoutTimer.Stop();
+			KickoutTimer.Interval = kickoutMilliseconds;
+			KickoutTimer.Elapsed += (object sender, ElapsedEventArgs e) => this.OnAfkTimerTimeout();
+			KickoutTimer.Start();
+
+			//xp timer
+			int experienceMilliseconds = Properties.AFK_XP_INTERVAL * 60 * 1000;
+
+			if (experienceMilliseconds < 0)
+			{
+				experienceMilliseconds = int.MaxValue;
+			}
+			AfkXpTimer.Stop();
+			AfkXpTimer.Interval = experienceMilliseconds;
+			AfkXpTimer.Elapsed += (object sender, ElapsedEventArgs e) => OnAfkXpTick();
+			AfkXpTimer.Start();			
+        }
+
+        public void OnAfkXpTick()
+        {
+            long bonusXP = Experience * Properties.AFK_XP_PERCENTAGE / 100;
+            GainExperience(GameLiving.eXPSource.Other, bonusXP, 0, 0, 0, false);
+
+            if (bonusXP > 0)
+            {
+                Out.SendMessage("Vous gagnez " + bonusXP + " points d'experiences grâce à votre statut AFK!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+            }
+        }
+
+
+        private void OnAfkTimerTimeout()
+        {
+            this.Client.Out.SendPlayerQuit(true);
+            this.Client.Disconnect();
+        }
 
 		#endregion
 

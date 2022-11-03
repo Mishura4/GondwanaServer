@@ -33,7 +33,8 @@ namespace DOL.GS.Commands
 		"/zone info",
 		"/zone divingflag <0 = use region, 1 = on, 2 = off>",
 		"/zone waterlevel <#>",
-		"/zone bonus <zoneID|current> <xpBonus> <rpBonus> <bpBonus> <coinBonus> <Save? (true/false)>")]
+        "/zone bonus <zoneID|current> <xpBonus> <rpBonus> <bpBonus> <coinBonus> <Save? (true/false)>",
+        "/zone allowMagicalItem <true|false> Should Players use Magical items in this zone")]
     public class ZoneCommandHandler : AbstractCommandHandler, ICommandHandler
     {
         public void OnCommand(GameClient client, string[] args)
@@ -65,8 +66,9 @@ namespace DOL.GS.Commands
 					info.Add(" Zone Height: " + client.Player.CurrentZone.Height);
 					info.Add(" Zone DivingEnabled: " + client.Player.CurrentZone.IsDivingEnabled);
 					info.Add(" Zone Waterlevel: " + client.Player.CurrentZone.Waterlevel);
+                    info.Add(" Zone AllowMagical Items: " + client.Player.CurrentZone.AllowMagicalItem);
 
-					zone = WorldMgr.GetZone(client.Player.CurrentZone.ID);
+                    zone = WorldMgr.GetZone(client.Player.CurrentZone.ID);
 					var dbZone = DOLDB<Zones>.SelectObject(DB.Column(nameof(Zones.ZoneID)).IsEqualTo(zone.ID).And(DB.Column(nameof(Zones.RegionID)).IsEqualTo(zone.ZoneRegion.ID)));
 
 					if (dbZone != null)
@@ -137,10 +139,37 @@ namespace DOL.GS.Commands
 					return;
 				}
 
-				// otherwise set zone bonuses
+                if (args.Length == 3 && args[1].ToLowerInvariant() == "allowmagicalitem" && bool.TryParse(args[2], out bool allowMagicalItem))
+                {
+                    client.Player.CurrentZone.AllowMagicalItem = allowMagicalItem;
 
-				//make sure that only numbers are used to avoid errors.
-				foreach (char c in string.Join(" ", args, 2, 4))
+                    //update current players
+                    foreach (var cl in WorldMgr.GetAllPlayingClients().Where(c => c.Player.CurrentZone.ID == client.Player.CurrentZone.ID))
+                    {
+                        cl.Player.CurrentZone.AllowMagicalItem = allowMagicalItem;
+                    }
+
+                    //update db
+                    if (WorldMgr.Zones.ContainsKey(client.Player.CurrentZone.ID))
+                    {
+                        WorldMgr.Zones[client.Player.CurrentZone.ID].AllowMagicalItem = allowMagicalItem;
+                        var zoneDb = GameServer.Database.FindObjectByKey<Zones>(client.Player.CurrentZone.ID);
+
+                        if (zoneDb != null)
+                        {
+                            zoneDb.AllowMagicalItem = allowMagicalItem;
+                            GameServer.Database.SaveObject(zoneDb);
+                            client.Out.SendMessage("Zone saved with AllowMagicalItem : " + allowMagicalItem, eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        }
+                    }
+
+                    return;
+                }
+
+                // otherwise set zone bonuses
+
+                //make sure that only numbers are used to avoid errors.
+                foreach (char c in string.Join(" ", args, 2, 4))
 				{
 					if (char.IsLetter(c))
 					{

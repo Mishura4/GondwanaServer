@@ -116,8 +116,9 @@ namespace DOL.GS.Commands
 						{
 							if ((target is GamePlayer) && (target != client.Player) && (spell.Target.ToLower() != "self"))
 							{
-								DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Cast.Spell.CastOnLiving", spell.Name, target.Name));
-								DisplayMessage(((GamePlayer)target).Client, LanguageMgr.GetTranslation(((GamePlayer)target).Client, "GMCommands.Cast.Spell.GMCastOnYou", ((client.Account.PrivLevel == 2) ? "GM" : "Admin"), client.Player.Name));
+								DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Cast.Spell.CastOnLiving", spell.Name, target.Name), args);
+                                string gmCastOnYou = LanguageMgr.GetTranslation(((GamePlayer)target).Client, "GMCommands.Cast.Spell.GMCastOnYou", (client.Account.PrivLevel == 2) ? "GM" : "Admin", client.Player.Name);
+                                DisplayMessage(((GamePlayer)target).Client, gmCastOnYou, args);
 							}
 							else if ((target == client.Player) || (spell.Target.ToLower() == "self"))
 								DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Cast.Spell.CastOnSelf", spell.Name));

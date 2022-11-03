@@ -453,8 +453,10 @@ namespace DOL.GS
 				zoneData.WaterLevel = dbZone.WaterLevel;
 				zoneData.DivingFlag = dbZone.DivingFlag;
 				zoneData.IsLava = dbZone.IsLava;
+				zoneData.AllowMagicalItem = dbZone.AllowMagicalItem;
+
 				RegisterZone(zoneData, zoneData.ZoneID, zoneData.RegionID, zoneData.Description,
-							 dbZone.Experience, dbZone.Realmpoints, dbZone.Bountypoints, dbZone.Coin, dbZone.Realm);
+							 dbZone.Experience, dbZone.Realmpoints, dbZone.Bountypoints, dbZone.Coin, dbZone.Realm, dbZone.AllowMagicalItem);
 
 				//Save the zonedata.
 				if (!m_zonesData.ContainsKey(zoneData.RegionID))
@@ -877,7 +879,7 @@ namespace DOL.GS
 		/// <summary>
 		/// Registers a Zone into a Region
 		/// </summary>
-		public static void RegisterZone(ZoneData zoneData, ushort zoneID, ushort regionID, string zoneName, int xpBonus, int rpBonus, int bpBonus, int coinBonus, byte realm)
+		public static void RegisterZone(ZoneData zoneData, ushort zoneID, ushort regionID, string zoneName, int xpBonus, int rpBonus, int bpBonus, int coinBonus, byte realm, bool allowMagicalItem)
 		{
 			Region region = GetRegion(regionID);
 			if (region == null)
@@ -902,22 +904,24 @@ namespace DOL.GS
 			else if (zoneData.DivingFlag == 2)
 				isDivingEnabled = false;
 			
-			Zone zone = new Zone(region,
-			                     zoneID,
-			                     zoneName,
-			                     zoneData.OffX * 8192,
-			                     zoneData.OffY * 8192,
-			                     zoneData.Width * 8192,
-			                     zoneData.Height * 8192,
-			                     zoneData.ZoneID,
-			                     isDivingEnabled,
-			                     zoneData.WaterLevel,
-			                     zoneData.IsLava,
-			                     xpBonus,
-			                     rpBonus,
-			                     bpBonus,
-			                     coinBonus,
-			                     realm);
+            Zone zone = new Zone(
+                region,
+                zoneID,
+                zoneName,
+                zoneData.OffX * 8192,
+                zoneData.OffY * 8192,
+                zoneData.Width * 8192,
+                zoneData.Height * 8192,
+                zoneData.ZoneID,
+                isDivingEnabled,
+                zoneData.WaterLevel,
+                zoneData.IsLava,
+                xpBonus,
+                rpBonus,
+                bpBonus,
+                coinBonus,
+                realm,
+                allowMagicalItem);
 
 			//Dinberg:Instances
 			//ZoneID will always be constant as last parameter, because ZoneSkinID will effectively be a bluff, to remember
@@ -2098,7 +2102,7 @@ namespace DOL.GS
 				                              	return true;
 				                              }))
 				{
-	            	RegisterZone(dat, (ushort)zoneID, ID, string.Format("{0} (Instance)", dat.Description), 0, 0, 0, 0, 0);
+	            	RegisterZone(dat, (ushort)zoneID, ID, $"{dat.Description} (Instance)", 0, 0, 0, 0, 0, dat.AllowMagicalItem);
 				}
 			}
 

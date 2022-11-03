@@ -403,6 +403,12 @@ namespace DOL.GS.Spells
 
 		public virtual bool CastSpell(GameLiving targetObject)
 		{
+			//Disactivate AFK
+			if (Caster is GamePlayer pl && pl.PlayerAfkMessage != null)
+            {
+				pl.ResetAFK(false);
+			}
+
 			bool success = true;
 
 			if (Properties.AUTOSELECT_CASTER)

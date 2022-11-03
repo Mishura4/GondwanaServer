@@ -991,6 +991,9 @@ namespace DOL.GS.ServerProperties
 		[ServerProperty("rates", "rp_worth_seconds", "Realm Points Worth Seconds - Edit this to change how many seconds until a player is worth RPs again after being killed ", 300)]
 		public static int RP_WORTH_SECONDS;
 
+        [ServerProperty("vol", "vol_delay", "Define Delay in minutes between each Vol.", 4)]
+        public static int VOL_DELAY;
+
 		/// <summary>
 		/// Health Regen Rate
 		/// </summary>
@@ -2340,6 +2343,24 @@ namespace DOL.GS.ServerProperties
 		/// </summary>
 		[ServerProperty("guild", "alliance_max", "Max Guilds In Alliance - Edit this to change the maximum number of guilds in an alliance -1 = unlimited, 0=disable alliances", -1)]
 		public static int ALLIANCE_MAX;
+
+        /// <summary>
+        /// AFK Timeout Logout in Minutes
+        /// </summary>
+        [ServerProperty("system", "afk_timeout", "Define AFK Timeout in Minutes", 180)]
+        public static int AFK_TIMEOUT;
+
+        /// <summary>
+        /// Define XP Interval Minutes
+        /// </summary>
+        [ServerProperty("system", "afk_xp_interval", "Define XP Interval Minutes", 5)]
+        public static int AFK_XP_INTERVAL;
+
+        /// <summary>
+        /// Define XP Percentage a player gets every AFK_XP_INTERVAL
+        /// </summary>
+        [ServerProperty("system", "afk_xp_percentage", "Define XP Percentage a player gets every AFK_XP_INTERVAL", 5)]
+        public static int AFK_XP_PERCENTAGE;
 
 		/// <summary>
 		/// The number of players needed to form a guild

@@ -53,8 +53,8 @@ namespace DOL.Integration.Managers
 			DOL.GS.ServerProperties.Properties.DISABLED_REGIONS = string.Empty;
 			DOL.GS.ServerProperties.Properties.DISABLED_EXPANSIONS = string.Empty;
 			var region = Region.Create(new GameTimer.TimeManager("TestWeather"), new RegionData { Id = 1 });
-			region.Zones.Add(new Zone(region, 1, string.Empty, 0, 0, 65535, 65535, 1, false, 0, false, 0, 0, 0, 0, 1));
-			return region;
+            region.Zones.Add(new Zone(region, 1, string.Empty, 0, 0, 65535, 65535, 1, false, 0, false, 0, 0, 0, 0, 1, true));
+            return region;
 		}
 		
 		[Test]

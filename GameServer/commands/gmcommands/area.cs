@@ -44,8 +44,8 @@ namespace DOL.GS.Commands
 				#region Create
 				case "create":
 					{
-						if (args.Length != 7)
-						{
+                        if (!(args.Length != 7 || args.Length != 8))
+                        {
 							DisplaySyntax(client);
 							return;
 						}
@@ -81,11 +81,16 @@ namespace DOL.GS.Commands
 						area.Y = (int)client.Player.Position.Y;
 						area.Z = (int)client.Player.Position.Z;
 
-						Assembly gasm = Assembly.GetAssembly(typeof(GameServer));
-						AbstractArea newArea = (AbstractArea)gasm.CreateInstance(area.ClassType, false);
-						newArea.LoadFromDatabase(area);
+                        if (args.Length == 8 && bool.TryParse(args[7], out bool canVol))
+                        {
+                            area.AllowVol = canVol;
+                        }
 
-						newArea.Sound = area.Sound;
+                        Assembly gasm = Assembly.GetAssembly(typeof(GameServer));
+						AbstractArea newArea = (AbstractArea)gasm.CreateInstance(area.ClassType, false);
+                        newArea.LoadFromDatabase(area);
+
+                        newArea.Sound = area.Sound;
 						newArea.CanBroadcast = area.CanBroadcast;
 						WorldMgr.GetRegion(client.Player.CurrentRegionID).AddArea(newArea);
 						GameServer.Database.AddObject(area);
