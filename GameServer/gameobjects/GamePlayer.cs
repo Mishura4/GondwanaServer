@@ -1032,7 +1032,25 @@ namespace DOL.GS
 					return false;
 				}
 
-				if (Statistics != null)
+                if (SpellHandler.FindEffectOnTarget(this, "Damnation") != null)
+                {
+                    Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Quit.CanTQuitDamned"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    return false;
+                }
+
+                if (IsStunned)
+                {
+                    Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Quit.CanTQuitStunned"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    return false;
+                }
+
+                if (IsMezzed)
+                {
+                    Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Quit.CanTQuitMezzed"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    return false;
+                }
+
+                if (Statistics != null)
 				{
 					string stats = Statistics.GetStatisticsMessage();
 					if (stats != "")
@@ -8688,6 +8706,7 @@ namespace DOL.GS
 		public const string LAST_CHARGED_ITEM_USE_TICK = "LastChargedItemUsedTick";
 		public const string ITEM_USE_DELAY = "ItemUseDelay";
 		public const string NEXT_POTION_AVAIL_TIME = "LastPotionItemUsedTick";
+		public const string NEXT_PARCH_AVAIL_TIME = "LastParchItemUsedTick";
 		public const string NEXT_SPELL_AVAIL_TIME_BECAUSE_USE_POTION = "SpellAvailableTime";
 
 		/// <summary>
@@ -9027,7 +9046,8 @@ namespace DOL.GS
 								if (!String.IsNullOrEmpty(reason))
 								{
 									Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, reason), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-									return;
+                                    StopWhistleTimers();
+                                    return;
 								}
 								
 								if (IsSummoningMount)
@@ -9166,8 +9186,9 @@ namespace DOL.GS
 
 					// Item with a non-charge ability.
 
-					if (useItem.Object_Type == (int)eObjectType.Magical
-					    && useItem.Item_Type == (int)eInventorySlot.FirstBackpack
+					if (((useItem.Object_Type == (int)eObjectType.Magical
+					    && useItem.Item_Type == (int)eInventorySlot.FirstBackpack)
+						|| (useItem.Object_Type == (int)eObjectType.GenericItem && useItem.SpellID == 666999))
 					    && useItem.SpellID > 0
 					    && useItem.MaxCharges == 0)
 					{
@@ -9215,7 +9236,7 @@ namespace DOL.GS
 								// For potions most can be used by any player level except a few higher level ones.
 								// So for the case of potions we will only restrict the level of usage if LevelRequirement is >0 for the item
 
-								long nextPotionAvailTime = TempProperties.getProperty<long>(NEXT_POTION_AVAIL_TIME + "_Type" + (spell.SharedTimerGroup));
+								long nextPotionAvailTime = !useItem.Id_nb.ToUpper().Contains("PARCH") ? TempProperties.getProperty<long>(NEXT_POTION_AVAIL_TIME + "_Type" + (spell.SharedTimerGroup)): TempProperties.getProperty<long>(NEXT_PARCH_AVAIL_TIME + "_Type" + (spell.SharedTimerGroup));
 
 								if (Client.Account.PrivLevel == 1 && nextPotionAvailTime > CurrentRegion.Time)
 								{
@@ -9264,7 +9285,7 @@ namespace DOL.GS
 
 													Stealth(false);
 
-													if (useItem.Item_Type == (int)eInventorySlot.FirstBackpack)
+													if (useItem.Item_Type == (int)eInventorySlot.FirstBackpack && !useItem.Id_nb.ToUpper().Contains("PARCH"))
 													{
 														Emote(eEmote.Drink);
 
@@ -9272,8 +9293,12 @@ namespace DOL.GS
 															TempProperties.setProperty(NEXT_SPELL_AVAIL_TIME_BECAUSE_USE_POTION, 6 * 1000 + CurrentRegion.Time);
 													}
 
-													//Spell
-													if (spellHandler.StartSpell(target, useItem))
+													bool test = false;
+													if (useItem.Id_nb.ToUpper().Contains("PARCH"))
+														test = spellHandler.CastSpell(target, useItem);
+													else
+														test = spellHandler.StartSpell(target, useItem);
+													if (test)
 													{
 														if (useItem.Count > 1)
 														{
@@ -9291,7 +9316,10 @@ namespace DOL.GS
 														}
 														Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GamePlayer.UseSlot.Used", useItem.GetName(0, false)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 
-														TempProperties.setProperty(NEXT_POTION_AVAIL_TIME + "_Type" + (spell.SharedTimerGroup), useItem.CanUseEvery * 1000 + CurrentRegion.Time);
+														if(!useItem.Id_nb.ToUpper().Contains("PARCH"))
+															TempProperties.setProperty(NEXT_POTION_AVAIL_TIME + "_Type" + (spell.SharedTimerGroup), useItem.CanUseEvery * 1000 + CurrentRegion.Time);
+														else
+															TempProperties.setProperty(NEXT_PARCH_AVAIL_TIME + "_Type" + (spell.SharedTimerGroup), useItem.CanUseEvery * 1000 + CurrentRegion.Time);
 													}
 													else
 													{
@@ -9328,9 +9356,9 @@ namespace DOL.GS
 							}
 							else
 							{
-								long lastChargedItemUseTick = TempProperties.getProperty<long>(LAST_CHARGED_ITEM_USE_TICK);
+								long lastChargedItemUseTick = TempProperties.getProperty<long>(LAST_CHARGED_ITEM_USE_TICK + useItem.Id_nb);
 								long changeTime = CurrentRegion.Time - lastChargedItemUseTick;
-								long delay = TempProperties.getProperty<long>(ITEM_USE_DELAY, 0L);
+								//long delay = TempProperties.getProperty<long>(ITEM_USE_DELAY, 0L);
 								long itemdelay = TempProperties.getProperty<long>("ITEMREUSEDELAY" + useItem.Id_nb);
 								long itemreuse = (long)useItem.CanUseEvery * 1000;
 								if (itemdelay == 0) itemdelay = CurrentRegion.Time - itemreuse;
@@ -9339,16 +9367,10 @@ namespace DOL.GS
 								{
 									Out.SendMessage("In your state you can't discharge any object.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								}
-								else if (Client.Account.PrivLevel == 1 && (changeTime < delay || (CurrentRegion.Time - itemdelay) < itemreuse)) //2 minutes reuse timer
+								else if (Client.Account.PrivLevel == 1 && (CurrentRegion.Time - itemdelay) < itemreuse) //2 minutes reuse timer
 								{
-									if ((CurrentRegion.Time - itemdelay) < itemreuse)
-									{
-										Out.SendMessage("You must wait " + (itemreuse - (CurrentRegion.Time - itemdelay)) / 1000 + " more second before discharge " + useItem.Name + "!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-									}
-									else
-									{
-										Out.SendMessage("You must wait " + (delay - changeTime) / 1000 + " more second before discharge another object!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-									}
+									Out.SendMessage("You must wait " + (itemreuse - (CurrentRegion.Time - itemdelay)) / 1000 + " more second before discharge " + useItem.Name + "!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+
 									return;
 								}
 								else
@@ -9577,8 +9599,8 @@ namespace DOL.GS
 
 						if (castOk)
 						{
-							TempProperties.setProperty(LAST_CHARGED_ITEM_USE_TICK, CurrentRegion.Time);
-							TempProperties.setProperty(ITEM_USE_DELAY, (long)(60000 * 2));
+							TempProperties.setProperty(LAST_CHARGED_ITEM_USE_TICK + useItem.Id_nb, CurrentRegion.Time);
+							//TempProperties.setProperty(ITEM_USE_DELAY, (long)(60000 * 2));
 							TempProperties.setProperty("ITEMREUSEDELAY" + useItem.Id_nb, CurrentRegion.Time);
 						}
 					}

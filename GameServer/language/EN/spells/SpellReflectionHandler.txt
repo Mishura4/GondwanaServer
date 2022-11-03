@@ -1,0 +1,3 @@
+﻿SpellReflection.Self.Message:		You cast a spell reflect at the target.
+SpellReflection.Self.Absorb:		You absorb {0} damages before return the spell.
+SpellReflection.Target.Absorbs:		The target absorbs {0} damage before return the spell.

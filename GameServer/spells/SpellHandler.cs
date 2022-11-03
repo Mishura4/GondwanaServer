@@ -642,7 +642,7 @@ namespace DOL.GS.Spells
 
 				if (nextSpellAvailTime > m_caster.CurrentRegion.Time)
 				{
-					((GamePlayer)m_caster).Out.SendMessage(LanguageMgr.GetTranslation(((GamePlayer)m_caster).Client, "GamePlayer.CastSpell.MustWaitBeforeCast", (nextSpellAvailTime - m_caster.CurrentRegion.Time) / 1000), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+					((GamePlayer)m_caster).Out.SendMessage(LanguageMgr.GetTranslation(((GamePlayer)m_caster).Client, "GameObjects.GamePlayer.CastSpell.MustWaitBeforeCast", (nextSpellAvailTime - m_caster.CurrentRegion.Time) / 1000), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 					return false;
 				}
 				if (((GamePlayer)m_caster).Steed != null && ((GamePlayer)m_caster).Steed is GameSiegeRam)
@@ -2640,6 +2640,11 @@ namespace DOL.GS.Spells
 			return new GameSpellEffect(this, CalculateEffectDuration(target, effectiveness), freq, effectiveness);
 		}
 
+        public virtual bool HasPositiveOrSpeedEffect()
+        {
+            return Spell.SpellType != "Unpetrify" && (HasPositiveEffect || Spell.SpellType == "Stun" || Spell.SpellType == "Stylestun" || Spell.SpellType == "Mesmerize" || Spell.SpellType == "SpeedDecrease" || Spell.SpellType == "Slow" || Spell.SpellType == "StyleSpeedDecrease" || Spell.SpellType == "VampSpeedDecrease");
+        }
+
 		/// <summary>
 		/// Apply effect on target or do spell action if non duration spell
 		/// </summary>
@@ -2658,7 +2663,15 @@ namespace DOL.GS.Spells
 				}
 			}
 
-			if ((target is Keeps.GameKeepDoor || target is Keeps.GameKeepComponent))
+            GameSpellEffect pertrifyEffect = SpellHandler.FindEffectOnTarget(target, "Petrify");
+            if (pertrifyEffect != null && (HasPositiveOrSpeedEffect() || Spell.Pulse > 0 || Spell.SpellType == "Petrify" || Spell.SpellType == "Damnation"))
+            {
+                if (Caster is GamePlayer player)
+                    MessageToCaster(LanguageMgr.GetTranslation(player.Client, "Petrify.Target.Resist", target.Name), eChatType.CT_SpellResisted);
+                return;
+            }
+
+            if ((target is Keeps.GameKeepDoor || target is Keeps.GameKeepComponent))
 			{
 				bool isAllowed = false;
 				bool isSilent = false;
@@ -2700,7 +2713,7 @@ namespace DOL.GS.Spells
 					return;
 				}
 			}
-			if (m_spellLine.KeyName == GlobalSpellsLines.Item_Effects || m_spellLine.KeyName == GlobalSpellsLines.Combat_Styles_Effect || m_spellLine.KeyName == GlobalSpellsLines.Potions_Effects || m_spellLine.KeyName == Specs.Savagery || m_spellLine.KeyName == GlobalSpellsLines.Character_Abilities || m_spellLine.KeyName == "OffensiveProc")
+			if (m_spellLine.KeyName == GlobalSpellsLines.Item_Effects || m_spellLine.KeyName == GlobalSpellsLines.Combat_Styles_Effect || m_spellLine.KeyName == GlobalSpellsLines.Potions_Effects || m_spellLine.KeyName == Specs.Savagery || m_spellLine.KeyName == GlobalSpellsLines.Character_Abilities || m_spellLine.KeyName == "OffensiveProc" || m_spellLine.KeyName == "GMCast")
 				effectiveness = 1.0; // TODO player.PlayerEffectiveness
 			if (effectiveness <= 0)
 				return; // no effect
@@ -3324,6 +3337,8 @@ namespace DOL.GS.Spells
 			if (player != null) return LanguageMgr.GetTranslation(player.Client, translationId, args);
 			else return LanguageMgr.GetTranslation(Properties.SERV_LANGUAGE, translationId, args);
 		}
+
+        public ISpellHandler Parent { get ; set; }
 
 		// warlock add
 		public static GameSpellEffect FindEffectOnTarget(GameLiving target, string spellType, string spellName)

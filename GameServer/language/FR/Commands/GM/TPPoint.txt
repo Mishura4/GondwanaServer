@@ -1,0 +1,16 @@
+﻿Commands.GM.TPPoint.Description:			Commandes pour la création de TP Points:
+Commands.GM.TPPoint.Usage.Create:		/tppoint create - Pour créer un nouveau tppoint temporaire, cela supprimera tout tppoint TEMPORAIRE existant ailleurs
+Commands.GM.TPPoint.Usage.Load:		/tppoint load <tppointname> - Charger un tppoint depuis la base de données
+Commands.GM.TPPoint.Usage.Save:			/tppoint save <tppointname> - Enregistrer un tppoint dans la base de données
+Commands.GM.TPPoint.Usage.Hide:			/tppoint hide - Pour cacher tous les marqueurs (sacs) du tppoint du monde sans supprimer le tppoint
+Commands.GM.TPPoint.Usage.Add:			/tppoint add - Pour ajouter un marqueur/point afin de compléter le tppoint actuel
+Commands.GM.TPPoint.Usage.Remove:			/tppoint delete - Supprime le tppoint temporaire
+Commands.GM.TPPoint.Usage.Type:			/tppoint type - Pour changer le type du tppoint (1:aléatoire, 2:boucle, 3:intelligent)
+
+Commands.GM.TPPoint.Create.Result: 	La création du TPPoint a débuté ! Vous pouvez désormais ajouter de nouveau marqueurs/points via la commande /tppoint add !
+Commands.GM.TPPoint.Cant: 			Aucun TPPoint n'a été créé ! Tapez d'abord '/tppoint create' ou '/tppoint load' !!
+Commands.GM.TPPoint.Add.Result: 	TPPointpoint ajouté. Nombre de marqueurs/point actuellement présents dans le tppoint = {0}
+Commands.GM.TPPoint.Type.Result: 	TPPoint actuel configuré sur '{0}'
+Commands.GM.TPPoint.Save.Result: 	TPPoint enregistré sous '{0}'
+Commands.GM.TPPoint.Load.Result: 	TPPoint '{0}' chargé.
+Commands.GM.TPPoint.Load.NotFound: 	TPPoint '{0}' n'a pas été trouvé !

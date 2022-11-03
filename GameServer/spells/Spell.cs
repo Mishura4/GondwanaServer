@@ -44,8 +44,8 @@ namespace DOL.GS
 		protected readonly int m_frequency = 0;
 		protected readonly int m_pulse = 0;
 		protected readonly int m_pulse_power = 0;
-		protected readonly int m_power = 0;
-		protected readonly int m_casttime = 0;
+		protected int m_power = 0;
+		protected int m_casttime = 0;
 		protected readonly int m_recastdelay = 0;
 		protected readonly int m_reshealth = 0;
 		protected readonly int m_resmana = 0;
@@ -55,7 +55,7 @@ namespace DOL.GS
 		protected readonly string m_message2 = "";
 		protected readonly string m_message3 = "";
 		protected readonly string m_message4 = "";
-		protected readonly ushort m_effectID = 0;
+		protected ushort m_effectID = 0;
 		protected readonly int m_instrumentRequirement = 0;
 		protected readonly int m_spellGroup = 0;
 		protected readonly int m_effectGroup = 0;
@@ -123,6 +123,7 @@ namespace DOL.GS
 		public ushort ClientEffect
 		{
 			get { return m_effectID; }
+			set { m_effectID = value; }
 		}
 
 		public string Description
@@ -160,6 +161,10 @@ namespace DOL.GS
 				else
 					return m_power;
 			}
+			set
+            {
+				m_power = value;
+			}
 		}
 
 		public int CastTime
@@ -171,6 +176,10 @@ namespace DOL.GS
 				else
 					return m_casttime;
 			}
+			set
+            {
+				m_casttime = value;
+            }
 		}
 
 		public double Damage

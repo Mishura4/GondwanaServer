@@ -104,7 +104,10 @@ namespace DOL.GS.Spells
             subspell.Level = m_spell.Level;
             if (living.IsWithinRadius(bomber, 350))
             {
+                if (ReduceSubSpellDamage > 0)
+                    subspell.Damage = subspell.Damage * ReduceSubSpellDamage / 100;
 				ISpellHandler spellhandler = ScriptMgr.CreateSpellHandler(Caster, subspell, SkillBase.GetSpellLine(SpellLine.KeyName));
+                spellhandler.Parent = this;
                 spellhandler.StartSpell(living);
             }
 
@@ -122,6 +125,8 @@ namespace DOL.GS.Spells
             if (ServerProperties.Properties.ENABLE_SUB_SPELL_ALL_CLASS)
                 base.CastSubSpells(target);
         }
+
+        public int ReduceSubSpellDamage { get; set; }
 
         public override string ShortDescription
             => "Summons an elemental spirit to attack the target.";

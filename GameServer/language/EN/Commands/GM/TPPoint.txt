@@ -1,0 +1,16 @@
+﻿Commands.GM.TPPoint.Description:			There are several tppoint functions
+Commands.GM.TPPoint.Usage.Create:		/tppoint create - creates a new temporary tppoint, deleting any existing temporary tppoint
+Commands.GM.TPPoint.Usage.Load:		/tppoint load <tppointname> - loads a tppoint from db
+Commands.GM.TPPoint.Usage.Save:			/tppoint save <tppointname> - saves a tppoint to db
+Commands.GM.TPPoint.Usage.Hide:			/tppoint hide - hides all tppoint markers but does not delete the tppoint
+Commands.GM.TPPoint.Usage.Add:			/tppoint add - adds a point at the end of the current tppoint
+Commands.GM.TPPoint.Usage.Remove:			/tppoint delete - deletes the temporary tppoint
+Commands.GM.TPPoint.Usage.Type:			/tppoint type - changes the tppoints type (1:random, 2:loop, 3:smart)
+
+Commands.GM.TPPoint.Create.Result: 	TPPoint creation started! You can add new tppointpoints via /tppoint add now!
+Commands.GM.TPPoint.Cant: 			No tppoint created yet! Use /tppoint create or /tppoint load first!!
+Commands.GM.TPPoint.Add.Result: 	TPPointpoint added. Current tppoint length = {0}
+Commands.GM.TPPoint.Type.Result: 	Current tppoint type set to '{0}'
+Commands.GM.TPPoint.Save.Result: 	TPPoint saved as '{0}'
+Commands.GM.TPPoint.Load.Result: 	TPPoint '{0}' loaded.
+Commands.GM.TPPoint.Load.NotFound: 	TPPoint '{0}' not found!

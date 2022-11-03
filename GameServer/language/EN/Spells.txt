@@ -121,3 +121,13 @@ AblativeArmor.Attacker:	A barrier absorbs {0} damage of your attack!
 #Amnesia
 Amnesia.MessageToTarget:	Your mind goes blank and you forget what you were doing!
 
+# Petrify
+Petrify.Target.Absorbs:  The target is petrify and absorbs {0} damage!
+Petrify.Target.Resist:   is petrify and can't be effected by this Spell!
+Petrify.Self.Message:	The target is petrify.
+Petrify.Self.Absorb:		You're petrify and absorb {0} damage!
+Petrify.Self.Unpetrify:		You're unpetrify.
+
+# Damnation
+Damnation.Self.Message:  The target is damned
+Damnation.Self.Message2: You're damned

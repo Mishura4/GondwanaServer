@@ -1,0 +1,3 @@
+﻿SpellReflection.Self.Message:		Vous lancer un sort de reflection sur la cible.
+SpellReflection.Self.Absorb:		Vous absorbez {0} domages avant de retourner le sort.
+SpellReflection.Target.Absorbs:		La cible absorbe {0} domages avant de retourner le sort.

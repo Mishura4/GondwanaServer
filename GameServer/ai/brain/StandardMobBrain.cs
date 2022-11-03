@@ -1217,6 +1217,8 @@ namespace DOL.AI.Brain
                 case "OFFENSIVEPROC":
                 case "DEFENSIVEPROC":
                 case "DAMAGESHIELD":
+				case "SPELLREFLECTION":
+				case "ALLSTATBUFF":
                     {
 						// Buff self, if not in melee, but not each and every mob
 						// at the same time, because it looks silly.
@@ -1245,7 +1247,7 @@ namespace DOL.AI.Brain
 					}
 					#endregion Buffs
 
-					#region Disease Cure/Poison Cure/Summon
+				#region Disease Cure/Poison Cure/Summon
 				case "CUREDISEASE":
 					if (Body.IsDiseased)
 					{

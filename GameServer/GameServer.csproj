@@ -52,13 +52,25 @@
     <TranslationFiles Include="..\GameServer\language\**\*.txt" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="language\EN\Commands\GM\TPPoint.txt" />
+    <None Remove="language\EN\spells\SpellReflectionHandler.txt" />
+    <None Remove="language\FR\Commands\GM\TPPoint.txt" />
     <None Remove="language\FR\CustomNPC\RenaissanceNPC.txt" />
+    <None Remove="language\FR\spells\SpellReflectionHandler.txt" />
   </ItemGroup>
   <ItemGroup>
+    <TranslationFiles Remove="language\EN\Commands\GM\TPPoint.txt" />
+    <TranslationFiles Remove="language\EN\spells\SpellReflectionHandler.txt" />
+    <TranslationFiles Remove="language\FR\Commands\GM\TPPoint.txt" />
     <TranslationFiles Remove="language\FR\CustomNPC\RenaissanceNPC.txt" />
+    <TranslationFiles Remove="language\FR\spells\SpellReflectionHandler.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="language\EN\Commands\GM\TPPoint.txt" />
+    <Content Include="language\EN\spells\SpellReflectionHandler.txt" />
+    <Content Include="language\FR\Commands\GM\TPPoint.txt" />
     <Content Include="language\FR\CustomNPC\RenaissanceNPC.txt" />
+    <Content Include="language\FR\spells\SpellReflectionHandler.txt" />
   </ItemGroup>
   <Target Name="CopyFiles" AfterTargets="AfterBuild">
     <Copy SourceFiles="@(TranslationFiles)" DestinationFiles="@(TranslationFiles->'$(MSBuildProjectDirectory)\..\$(Configuration)\languages\%(RecursiveDir)%(Filename)%(Extension)')" />

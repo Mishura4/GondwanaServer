@@ -110,3 +110,22 @@ AblativeArmor.Attacker:	Un bouclier absorbe {0} points de dégats de votre attaq
 
 #Amnesia
 Amnesia.MessageToTarget:	Votre esprit s'emmêle et vous oubliez ce que vous étiez en train de faire!
+
+# AblativeArmor
+AblativeArmor.DelveInfo.Function:			    Fonction: tampon de points de mélée
+AblativeArmor.DelveInfo.Absorption1:			Absorption: {0}%
+AblativeArmor.DelveInfo.Absorption2:			Absorption: 100%
+AblativeArmor.DelveInfo.Absorption3:			Absorption: 25%
+AblativeArmor.DelveInfo.CastingTime:			Instantanné
+AblativeArmor.DelveInfo.CastingTime:			Instantanné
+
+# Petrify
+Petrify.Target.Absorbs:  Votre cible est pétrifiée et absorbe {0} domages.
+Petrify.Target.Resist:   Votre cible est pétrifiée et est insensible à ce sort.
+Petrify.Self.Message:	La cible est pétrifiée.
+Petrify.Self.Absorb:		Vous êtes pétrifié(e) et absorbez {0} domages.
+Petrify.Self.Unpetrify:		Vous êtes libéré(e) de Petrify.
+
+# Damnation
+Damnation.Self.Message: Votre cible est damnée
+Damnation.Self.Message2: Tu ne le sais pas encore, mais tu es déjà mort !

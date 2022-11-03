@@ -39,6 +39,7 @@ using DOL.GS.RealmAbilities;
 using System.Numerics;
 using DOL.GS.PlayerClass;
 using DOL.GS.ServerProperties;
+using static DOL.GS.ScriptMgr;
 
 namespace DOL.GS
 {
@@ -506,6 +507,8 @@ namespace DOL.GS
 			get { return false; }
 			set { }
 		}
+
+        private bool isDamned = false;
 
 		/// <summary>
 		/// Holds disease counter
@@ -5538,6 +5541,30 @@ namespace DOL.GS
 				{
 					StartHealthRegeneration();
 				}
+
+				int triggerSpellValue = TempProperties.getProperty("TriggerSpell", -1);
+				int spellLevel = TempProperties.getProperty("TriggerSpellLevel", -1);
+				if (triggerSpellValue > 0)
+                {
+					if(m_health < triggerSpellValue)
+                    {
+						int triggerSubSpell = TempProperties.getProperty("TriggerSubSpell", -1);
+						if(triggerSubSpell > 0)
+                        {
+							DBSpell dbspell = GameServer.Database.SelectObject<DBSpell>("SpellID = " + triggerSubSpell);
+							if (dbspell != null)
+							{
+								Spell spell = new Spell(dbspell, spellLevel);
+								ISpellHandler dd = CreateSpellHandler(this, spell, SkillBase.GetSpellLine(GlobalSpellsLines.Item_Effects));
+								dd.IgnoreDamageCap = true;
+							}
+						}
+						else
+                        {
+							log.Warn("A triggerSpell haven't subspell id ! Plz check in DB");
+                        }
+					}
+                }
 			}
 		}
 
@@ -6960,14 +6987,16 @@ namespace DOL.GS
 			set { m_groupIndex = value; }
 		}
 		#endregion
-		
-		/// <summary>
-		/// Handle event notifications.
-		/// </summary>
-		/// <param name="e"></param>
-		/// <param name="sender"></param>
-		/// <param name="args"></param>
-		public override void Notify(DOLEvent e, object sender, EventArgs args)
+
+        public bool IsDamned { get => isDamned; set => isDamned = value; }
+
+        /// <summary>
+        /// Handle event notifications.
+        /// </summary>
+        /// <param name="e"></param>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        public override void Notify(DOLEvent e, object sender, EventArgs args)
 		{
 			if (e == GameLivingEvent.Interrupted && args != null)
 			{

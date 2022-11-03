@@ -909,7 +909,8 @@ namespace DOL.GS
 
 							foreach (SpellHandlerAttribute attrib in objs)
 							{
-								if (attrib.SpellType == spell.SpellType)
+								char[] spaceToTrim = { ' ' };
+                                if (attrib.SpellType == spell.SpellType.Trim(spaceToTrim))
 								{
 									handlerConstructor = type.GetConstructor(constructorParams);
 									if (log.IsDebugEnabled)
