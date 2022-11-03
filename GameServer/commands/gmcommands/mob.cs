@@ -122,6 +122,7 @@ namespace DOL.GS.Commands
 	     "'/mob select' select the mob within 100 radius (used for selection of non-targettable GameNPC).",
 	     "'/mob load <Mob_ID>' load the Mob_ID from the DB and update the Mob cache.",
 	     "'/mob reload <name>' reload the targetted or named mob(s) from the database.",
+	     "'/mob reload radius <number>' reload the mobs in radius from the database.",
 	     "'/mob findname <name> <#>' search for a mob with a name like <name> with maximum <#> (def. 10) matches.",
 	     "'/mob trigger <type> <chance> <emote> <text>' adds a trigger to targeted mob class.  Use '/mob trigger help' for more info.",
 	     "'/mob trigger info' Give trigger informations.",
@@ -2970,10 +2971,24 @@ namespace DOL.GS.Commands
 			if (args.Length > 2)
 			{
 				// Reload the mob(s)
-				for (eRealm i = eRealm._First; i <= eRealm._Last; i++)
+				if (args[2] == "radius" && args.Length == 4 && ushort.TryParse(args[3], out ushort radius))
 				{
-					mobs.Add(WorldMgr.GetNPCsByName(args[2], i));
+					mobs.Add(client.Player.GetNPCsInRadius(radius).Cast<GameNPC>().ToArray());
 				}
+                else if (args.Length == 3)
+                {
+                    // Reload the mob(s)
+                    for (eRealm i = eRealm._First; i <= eRealm._Last; i++)
+                    {
+                        mobs.Add(WorldMgr.GetObjectsByName<GameNPC>(args[2], i));
+                    }
+                }
+                else
+                {
+                    trigger_help(client);
+                    return;
+                }
+
 				foreach (GameNPC[] ma in mobs)
 				{
 					foreach (GameNPC n in ma)

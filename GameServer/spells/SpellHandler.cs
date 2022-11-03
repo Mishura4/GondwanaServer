@@ -2464,6 +2464,7 @@ namespace DOL.GS.Spells
 						pet.ScalePetSpell(spell);
 
 					ISpellHandler spellhandler = ScriptMgr.CreateSpellHandler(m_caster, spell, SkillBase.GetSpellLine(GlobalSpellsLines.Reserved_Spells));
+					spellhandler.Parent = this;
                     if (m_spell.SubSpellDelay > 0)
                     {
                         new SubSpellTimer(Caster, spellhandler, target).Start(m_spell.SubSpellDelay * 1000);
@@ -3692,6 +3693,9 @@ namespace DOL.GS.Spells
 		/// <returns>chance that the spell lands on target</returns>
 		public virtual int CalculateToHitChance(GameLiving target)
 		{
+			if (Parent != null && Parent is EarthquakeSpellHandler earthquake)
+				return earthquake.CalculateToHitChance(target);
+
 			int spellLevel = Spell.Level;
 
 			GameLiving caster = null;
