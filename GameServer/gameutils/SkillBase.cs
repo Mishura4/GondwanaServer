@@ -2731,8 +2731,14 @@ namespace DOL.GS
 			m_syncLockUpdates.EnterReadLock();
 			try
 			{
-				if (m_specsByName.ContainsKey(keyname))
-					spec = GetNewSpecializationInstance(keyname, m_specsByName[keyname]);
+                if (m_specsByName.ContainsKey(keyname))
+                {
+                    spec = GetNewSpecializationInstance(keyname, m_specsByName[keyname]);
+                }
+                else if (!create)
+                {
+                    log.Error("Missing Spec: " + keyname);
+                }
 			}
 			finally
 			{
