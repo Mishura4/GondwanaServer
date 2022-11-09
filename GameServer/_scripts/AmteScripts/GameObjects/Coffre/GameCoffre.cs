@@ -410,226 +410,228 @@ namespace DOL.GS.Scripts
 						player.Out.SendSpellCastAnimation(player, (ushort)TpEffect, 20);
 					}
 				}
+			}
+		}
 
-				private int Teleportation(RegionTimer timer)
+		private int Teleportation(RegionTimer timer)
+		{
+			GameLocation pos = timer.Properties.getProperty<GameLocation>("TP", null);
+			GamePlayer player = timer.Properties.getProperty<GamePlayer>("player", null);
+
+			player.MoveTo(pos.RegionID, pos.Position.X, pos.Position.Y, pos.Position.Z, pos.Heading);
+
+			return 0;
+		}
+
+			private void HandlePopMob()
+			{
+				if (TrapRate > 0 && NpctemplateId != null)
 				{
-					GameLocation pos = timer.Properties.getProperty<GameLocation>("TP", null);
-					GamePlayer player = timer.Properties.getProperty<GamePlayer>("player", null);
-
-					player.MoveTo(pos.RegionID, pos.X, pos.Y, pos.Z, pos.Heading);
-
-					return 0;
-				}
-
-				private void HandlePopMob()
-				{
-					if (TrapRate > 0 && NpctemplateId != null)
+					var rand = new Random(DateTime.Now.Millisecond);
+					if (rand.Next(1, TrapRate + 1) <= TrapRate)
 					{
-						var rand = new Random(DateTime.Now.Millisecond);
-						if (rand.Next(1, TrapRate + 1) <= TrapRate)
+						var template = GameServer.Database.SelectObject<DBNpcTemplate>("TemplateId = " + NpctemplateId);
+						if (template != null)
 						{
-							var template = GameServer.Database.SelectObject<DBNpcTemplate>("TemplateId = " + NpctemplateId);
-							if (template != null)
+							var mob = new AmteMob(new NpcTemplate(template))
 							{
-								var mob = new AmteMob(new NpcTemplate(template))
-								{
-									X = X,
-									Y = Y,
-									Z = Z,
-									Heading = Heading,
-									CurrentRegionID = CurrentRegionID,
-									CurrentRegion = CurrentRegion,
-									Size = 50,
-									Name = "Gardien du Coffre"
-								};
+								X = X,
+								Y = Y,
+								Z = Z,
+								Heading = Heading,
+								CurrentRegionID = CurrentRegionID,
+								CurrentRegion = CurrentRegion,
+								Size = 50,
+								Name = "Gardien du Coffre"
+							};
 
-								mob.RespawnInterval = -1;
-								mob.AddToWorld();
-							}
+							mob.RespawnInterval = -1;
+							mob.AddToWorld();
 						}
 					}
 				}
+			}
 
-				private void Repop_Elapsed(object sender, ElapsedEventArgs e)
-				{
-					AddToWorld();
-				}
-				#endregion
+			private void Repop_Elapsed(object sender, ElapsedEventArgs e)
+			{
+				AddToWorld();
+			}
+			#endregion
 
-				#region Serrure
-				private void Unlock(GamePlayer player, byte response)
-				{
-					if (response == 0x00)
-					{
-						m_interactPlayer = null;
-						return;
-					}
-
-					RegionTimer timer = new RegionTimer(player, UnlockCallback);
-					timer.Properties.setProperty("X", player.Position.X);
-					timer.Properties.setProperty("Y", player.Position.Y);
-					timer.Properties.setProperty("Z", player.Position.Z);
-					timer.Properties.setProperty("Head", (int)player.Heading);
-					timer.Properties.setProperty("player", player);
-					timer.Start(500);
-					player.Out.SendTimerWindow("Crochetage", UNLOCK_TIME);
-				}
-
-				private int UnlockCallback(RegionTimer timer)
+			#region Serrure
+			private void Unlock(GamePlayer player, byte response)
+			{
+				if (response == 0x00)
 				{
 					m_interactPlayer = null;
-					GamePlayer player = timer.Properties.getProperty<GamePlayer>("player", null);
-					int Xpos = timer.Properties.getProperty("X", 0);
-					int Ypos = timer.Properties.getProperty("Y", 0);
-					int Zpos = timer.Properties.getProperty("Z", 0);
-					int Head = timer.Properties.getProperty("Head", 0);
-					if (player == null)
-						return 0;
-					if (Xpos != (int)player.Position.X || Ypos != (int)player.Position.Y || Zpos != (int)player.Position.Z || Head != player.Heading || player.InCombat)
-					{
-						player.Out.SendCloseTimerWindow();
-						return 0;
-					}
+					return;
+				}
 
-					int time = timer.Properties.getProperty("time", 0) + 500;
-					timer.Properties.setProperty("time", time);
-					if (time < UNLOCK_TIME * 1000)
-						return 500;
+				RegionTimer timer = new RegionTimer(player, UnlockCallback);
+				timer.Properties.setProperty("X", player.Position.X);
+				timer.Properties.setProperty("Y", player.Position.Y);
+				timer.Properties.setProperty("Z", player.Position.Z);
+				timer.Properties.setProperty("Head", (int)player.Heading);
+				timer.Properties.setProperty("player", player);
+				timer.Start(500);
+				player.Out.SendTimerWindow("Crochetage", UNLOCK_TIME);
+			}
+
+			private int UnlockCallback(RegionTimer timer)
+			{
+				m_interactPlayer = null;
+				GamePlayer player = timer.Properties.getProperty<GamePlayer>("player", null);
+				int Xpos = timer.Properties.getProperty("X", 0);
+				int Ypos = timer.Properties.getProperty("Y", 0);
+				int Zpos = timer.Properties.getProperty("Z", 0);
+				int Head = timer.Properties.getProperty("Head", 0);
+				if (player == null)
+					return 0;
+				if (Xpos != (int)player.Position.X || Ypos != (int)player.Position.Y || Zpos != (int)player.Position.Z || Head != player.Heading || player.InCombat)
+				{
 					player.Out.SendCloseTimerWindow();
-
-					int Chance = 100 - LockDifficult;
-
-					//Dexterité
-					float dextChance = (float)(player.Dexterity) / 125;
-					if (dextChance > 1.0f)
-						dextChance = 1.0f;
-					if (dextChance < 0.1f)
-						dextChance = 0.1f;
-					Chance = (int)(dextChance * Chance);
-
-					//Races
-					switch (player.RaceName)
-					{
-						case "Half Ogre":
-						case "Troll":
-							Chance -= 2;
-							break;
-
-						case "Highlander":
-						case "Firbolg":
-						case "Dwarf":
-						case "Norseman":
-							Chance -= 1;
-							break;
-
-						case "Elf":
-							Chance += 1;
-							break;
-					}
-
-					//Classes
-					switch (player.CharacterClass.ID)
-					{
-						case (int)eCharacterClass.AlbionRogue:
-						case (int)eCharacterClass.Stalker:
-						case (int)eCharacterClass.MidgardRogue:
-							Chance += 1;
-							break;
-
-						case (int)eCharacterClass.Infiltrator:
-						case (int)eCharacterClass.Minstrel:
-						case (int)eCharacterClass.Scout:
-						case (int)eCharacterClass.Hunter:
-						case (int)eCharacterClass.Shadowblade:
-						case (int)eCharacterClass.Nightshade:
-						case (int)eCharacterClass.Ranger:
-							Chance += 2;
-							break;
-					}
-
-					if (Chance >= 100)
-						Chance = 99;
-
-					if (player.Client.Account.PrivLevel >= 2)
-						player.Out.SendMessage("Chance de votre personnage: " + Chance + "/100", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-
-					if (Chance > 0 && Util.Chance(Chance))
-					{
-						player.Out.SendMessage("Vous crochetez le coffre avec succès !", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-						InteractEnd(player);
-					}
-					else
-					{
-						player.Out.SendMessage("Vous n'avez pas réussi à crocheter le coffre et vous cassez un crochet !", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-						player.Inventory.RemoveTemplate(CROCHET, 1, eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack);
-					}
 					return 0;
 				}
-				#endregion
 
-				#region Item aléatoire
-				private CoffreItem GetRandomItem()
+				int time = timer.Properties.getProperty("time", 0) + 500;
+				timer.Properties.setProperty("time", time);
+				if (time < UNLOCK_TIME * 1000)
+					return 500;
+				player.Out.SendCloseTimerWindow();
+
+				int Chance = 100 - LockDifficult;
+
+				//Dexterité
+				float dextChance = (float)(player.Dexterity) / 125;
+				if (dextChance > 1.0f)
+					dextChance = 1.0f;
+				if (dextChance < 0.1f)
+					dextChance = 0.1f;
+				Chance = (int)(dextChance * Chance);
+
+				//Races
+				switch (player.RaceName)
 				{
-					if (!Util.Chance(ItemChance))
-						return new CoffreItem("", 0);
+					case "Half Ogre":
+					case "Troll":
+						Chance -= 2;
+						break;
 
-					int num = Util.Random(1, AllChance);
-					int i = 0;
-					foreach (CoffreItem item in m_Items)
-					{
-						i += item.Chance;
-						if (i >= num)
-							return item;
-					}
+					case "Highlander":
+					case "Firbolg":
+					case "Dwarf":
+					case "Norseman":
+						Chance -= 1;
+						break;
+
+					case "Elf":
+						Chance += 1;
+						break;
+				}
+
+				//Classes
+				switch (player.CharacterClass.ID)
+				{
+					case (int)eCharacterClass.AlbionRogue:
+					case (int)eCharacterClass.Stalker:
+					case (int)eCharacterClass.MidgardRogue:
+						Chance += 1;
+						break;
+
+					case (int)eCharacterClass.Infiltrator:
+					case (int)eCharacterClass.Minstrel:
+					case (int)eCharacterClass.Scout:
+					case (int)eCharacterClass.Hunter:
+					case (int)eCharacterClass.Shadowblade:
+					case (int)eCharacterClass.Nightshade:
+					case (int)eCharacterClass.Ranger:
+						Chance += 2;
+						break;
+				}
+
+				if (Chance >= 100)
+					Chance = 99;
+
+				if (player.Client.Account.PrivLevel >= 2)
+					player.Out.SendMessage("Chance de votre personnage: " + Chance + "/100", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+
+				if (Chance > 0 && Util.Chance(Chance))
+				{
+					player.Out.SendMessage("Vous crochetez le coffre avec succès !", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+					InteractEnd(player);
+				}
+				else
+				{
+					player.Out.SendMessage("Vous n'avez pas réussi à crocheter le coffre et vous cassez un crochet !", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+					player.Inventory.RemoveTemplate(CROCHET, 1, eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack);
+				}
+				return 0;
+			}
+			#endregion
+
+			#region Item aléatoire
+			private CoffreItem GetRandomItem()
+			{
+				if (!Util.Chance(ItemChance))
 					return new CoffreItem("", 0);
-				}
-				#endregion
 
-				#region Gestion des items
-				/// <summary>
-				/// Ajoute ou modifie la chance d'apparition d'un item
-				/// </summary>
-				/// <param name="Id_nb">Id_nb de l'item à modifier ou ajouter</param>
-				/// <param name="chance">Nombre de chance d'apparition de l'item</param>
-				/// <returns>Retourne false si l'item n'existe pas dans la base de donné ItemTemplate</returns>
-				public bool ModifyItemList(string Id_nb, int chance)
+				int num = Util.Random(1, AllChance);
+				int i = 0;
+				foreach (CoffreItem item in m_Items)
 				{
-					ItemTemplate item = GameServer.Database.SelectObject<ItemTemplate>("Id_nb = '" + GameServer.Database.Escape(Id_nb) + "'");
-					if (item == null)
-						return false;
-
-					foreach (CoffreItem it in m_Items)
-					{
-						if (it.Id_nb == Id_nb)
-						{
-							it.Chance = chance;
-							return true;
-						}
-					}
-
-					m_Items.Add(new CoffreItem(Id_nb, chance));
-					return true;
+					i += item.Chance;
+					if (i >= num)
+						return item;
 				}
+				return new CoffreItem("", 0);
+			}
+			#endregion
 
-				/// <summary>
-				/// Supprime un item de la liste des items
-				/// </summary>
-				/// <param name="Id_nb">item à supprimer</param>
-				/// <returns>Retourne true si l'item est supprimé</returns>
-				public bool DeleteItemFromItemList(string Id_nb)
-				{
-					foreach (CoffreItem item in m_Items)
-					{
-						if (item.Id_nb == Id_nb)
-						{
-							m_Items.Remove(item);
-							return true;
-						}
-					}
+			#region Gestion des items
+			/// <summary>
+			/// Ajoute ou modifie la chance d'apparition d'un item
+			/// </summary>
+			/// <param name="Id_nb">Id_nb de l'item à modifier ou ajouter</param>
+			/// <param name="chance">Nombre de chance d'apparition de l'item</param>
+			/// <returns>Retourne false si l'item n'existe pas dans la base de donné ItemTemplate</returns>
+			public bool ModifyItemList(string Id_nb, int chance)
+			{
+				ItemTemplate item = GameServer.Database.SelectObject<ItemTemplate>("Id_nb = '" + GameServer.Database.Escape(Id_nb) + "'");
+				if (item == null)
 					return false;
+
+				foreach (CoffreItem it in m_Items)
+				{
+					if (it.Id_nb == Id_nb)
+					{
+						it.Chance = chance;
+						return true;
+					}
 				}
 
-		#endregion
+				m_Items.Add(new CoffreItem(Id_nb, chance));
+				return true;
+			}
+
+			/// <summary>
+			/// Supprime un item de la liste des items
+			/// </summary>
+			/// <param name="Id_nb">item à supprimer</param>
+			/// <returns>Retourne true si l'item est supprimé</returns>
+			public bool DeleteItemFromItemList(string Id_nb)
+			{
+				foreach (CoffreItem item in m_Items)
+				{
+					if (item.Id_nb == Id_nb)
+					{
+						m_Items.Remove(item);
+						return true;
+					}
+				}
+				return false;
+			}
+
+	#endregion
 
 		#region Database
         public override void LoadFromDatabase(DataObject obj)
