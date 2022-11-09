@@ -20,6 +20,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using DOL.Database;
+using DOL.Geometry;
 
 namespace DOL.GS
 {
@@ -39,7 +40,9 @@ namespace DOL.GS
 
         public TPPoint(TPPoint pp) : this(pp, pp.Type) { }
 
-        public TPPoint(Point3D p, eTPPointType type) : this(0, p.X, p.Y, p.Z, type, new DBTPPoint(0, p.X, p.Y, p.Z)) { }
+        public TPPoint(System.Numerics.Vector3 p, eTPPointType type) : this(0, (int)p.X, (int)p.Y, (int)p.Z, type, new DBTPPoint(0, (int)p.X, (int)p.Y, (int)p.Z)) { }
+
+        public TPPoint(Point3D p, eTPPointType type) : this(0, (int)p.Position.X, (int)p.Position.Y, (int)p.Position.Z, type, new DBTPPoint(0, (int)p.Position.X, (int)p.Position.Y, (int)p.Position.Z)) { }
 
         public TPPoint(ushort region, int x, int y, int z, eTPPointType type, DBTPPoint bTPPoint) : base(x, y, z)
         {
@@ -128,7 +131,7 @@ namespace DOL.GS
             {
                 if (pp != this)
                 {
-                    int newCount = WorldMgr.GetPlayersCloseToSpot(pp.Region, pp.X, pp.Y, pp.Z, PLAYERS_RADIUS).OfType<GamePlayer>().Count();
+                    int newCount = WorldMgr.GetPlayersCloseToSpot(pp.Region, (float)pp.Position.X, (float)pp.Position.Y, (float)pp.Position.Z, PLAYERS_RADIUS).OfType<GamePlayer>().Count();
                     if (newCount > countPlayer)
                     {
                         nearest = pp;
