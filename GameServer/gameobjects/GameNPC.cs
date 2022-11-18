@@ -3093,6 +3093,31 @@ namespace DOL.GS
 			return true;
 		}
 
+        public virtual bool Spawn()
+        {
+            int dummy;
+            CurrentRegion.MobsRespawning.TryRemove(this, out dummy);
+
+            lock (m_respawnTimerLock)
+            {
+                if (m_respawnTimer != null)
+                {
+                    m_respawnTimer.Stop();
+                    m_respawnTimer = null;
+                }
+            }
+
+            if (IsAlive || ObjectState == eObjectState.Active) return false;
+
+            Health = MaxHealth;
+            Mana = MaxMana;
+            Endurance = MaxEndurance;
+            Position = m_spawnPoint;
+			Heading = m_spawnHeading;
+
+            return AddToWorld();
+        }
+
 		/// <summary>
 		/// Fill the ambient text list for this NPC
 		/// </summary>
@@ -4476,44 +4501,11 @@ namespace DOL.GS
 				}
 			}
 		}
-		/// <summary>
-		/// The callback that will respawn this mob
-		/// </summary>
-		/// <param name="respawnTimer">the timer calling this callback</param>
-		/// <returns>the new interval</returns>
-		protected virtual int RespawnTimerCallback(RegionTimer respawnTimer)
-		{
-			int dummy;
-			// remove Mob from "respawning"
-			CurrentRegion.MobsRespawning.TryRemove(this, out dummy);
-
-			lock (m_respawnTimerLock)
-			{
-				if (m_respawnTimer != null)
-				{
-					m_respawnTimer.Stop();
-					m_respawnTimer = null;
-				}
-			}
-
-			//DOLConsole.WriteLine("respawn");
-			//TODO some real respawn handling
-			if (IsAlive) return 0;
-			if (ObjectState == eObjectState.Active) return 0;
-
-			//Heal this mob, move it to the spawnlocation
-			Health = MaxHealth;
-			Mana = MaxMana;
-			Endurance = MaxEndurance;
-			var origSpawn = m_spawnPoint;
-			//X=(m_spawnX+Random(750)-350); //new SpawnX = oldSpawn +- 350 coords
-			//Y=(m_spawnY+Random(750)-350);	//new SpawnX = oldSpawn +- 350 coords
-			Position = m_spawnPoint;
-			Heading = m_spawnHeading;
-			AddToWorld();
-			m_spawnPoint = origSpawn;
-			return 0;
-		}
+        protected virtual int RespawnTimerCallback(RegionTimer respawnTimer)
+        {
+            Spawn();
+            return 0;
+        }
 
 		/// <summary>
 		/// Callback timer for health regeneration
