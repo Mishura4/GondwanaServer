@@ -673,7 +673,8 @@ namespace DOL.GS
 								}
 								else
 								{
-									if (log.IsWarnEnabled)
+									var isNoChampionStyle = !entry.Item1.IsSubclassOf(typeof(LiveChampionsLineSpec));
+									if (log.IsWarnEnabled && isNoChampionStyle)
 										log.WarnFormat("Specialization {0} - Duplicate Style Key, StyleID {1} : ClassID {2}, Ignored...", spec.KeyName, newStyle.ID, specStyle.ClassId);
 								}
 								
@@ -2731,8 +2732,14 @@ namespace DOL.GS
 			m_syncLockUpdates.EnterReadLock();
 			try
 			{
-				if (m_specsByName.ContainsKey(keyname))
-					spec = GetNewSpecializationInstance(keyname, m_specsByName[keyname]);
+                if (m_specsByName.ContainsKey(keyname))
+                {
+                    spec = GetNewSpecializationInstance(keyname, m_specsByName[keyname]);
+                }
+                else if (!create)
+                {
+                    log.Error("Missing Spec: " + keyname);
+                }
 			}
 			finally
 			{

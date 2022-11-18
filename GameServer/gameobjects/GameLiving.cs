@@ -5557,7 +5557,8 @@ namespace DOL.GS
 								Spell spell = new Spell(dbspell, spellLevel);
 								ISpellHandler dd = CreateSpellHandler(this, spell, SkillBase.GetSpellLine(GlobalSpellsLines.Item_Effects));
 								dd.IgnoreDamageCap = true;
-							}
+                                dd.StartSpell(this);
+                            }
 						}
 						else
                         {

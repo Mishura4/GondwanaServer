@@ -56,6 +56,21 @@ namespace DOL.Database
 		private int			m_itemChance;
 		private int			m_lockDifficult;
 		private string		m_keyItem;
+		private int			m_trapRate;
+		private string m_npctemplateId;
+		private int m_tpY;
+		private int m_tpX;
+		private int m_tpZ;
+		private bool m_isTeleporter;
+		private int m_tpLevelRequirement;
+		private bool m_tpIsRenaissance;
+		private int m_tpEffect;
+		private int m_tpRegion;
+		private bool m_isOpeningRenaissanceType;
+		private int m_punishSpellId;
+		private int m_tpHeading;
+		private bool m_hasPickableAnim;
+		private int m_coffreOpeningInterval;
 
 		[DataElement(AllowDbNull=false)]
 		public string Name
@@ -113,6 +128,20 @@ namespace DOL.Database
 			}
 		}
 
+		[DataElement(AllowDbNull = false)]
+		public int TPHeading
+		{
+			get
+			{
+				return m_tpHeading;
+			}
+			set
+			{
+				Dirty = true;
+				m_tpHeading = value;
+			}
+		}
+
 		[DataElement(AllowDbNull=false)]
 		public ushort Heading
 		{
@@ -154,7 +183,30 @@ namespace DOL.Database
 				m_model = value;
 			}
 		}
-		
+
+
+		[DataElement(AllowDbNull = false)]
+		public int CoffreOpeningInterval
+		{
+			get
+			{
+				return m_coffreOpeningInterval;
+			}
+
+			set
+			{
+				m_coffreOpeningInterval = value;
+				Dirty = true;
+			}
+		}
+
+		[DataElement(AllowDbNull = false)]
+		public bool IsLargeCoffre
+		{
+			get;
+			set;
+		}
+
 		/// <summary>
 		/// Temps en minutes avant la réapparition d'un item
 		/// </summary>
@@ -186,6 +238,38 @@ namespace DOL.Database
 			{
 				Dirty = true;
 				m_itemChance = value;
+			}
+		}
+
+		/// <summary>
+		/// Pourcentage de chance de voir pop un mob
+		/// </summary>
+		[DataElement(AllowDbNull = true)]
+		public int TrapRate
+		{
+			get
+			{
+				return m_trapRate;
+			}
+			set
+			{
+				Dirty = true;
+				m_trapRate = value;
+			}
+		}
+
+		[DataElement(AllowDbNull = true)]
+		public string NpctemplateId
+		{
+			get
+			{
+				return m_npctemplateId;
+			}
+
+			set
+			{
+				Dirty = true;
+				m_npctemplateId = value;
 			}
 		}
 
@@ -248,6 +332,157 @@ namespace DOL.Database
 			{
 				Dirty = true;
 				m_keyItem = value;
+			}
+		}
+
+		[DataElement(AllowDbNull = true)]
+		public int TpX
+		{
+			get
+			{
+				return m_tpX;
+			}
+			set
+			{
+				Dirty = true;
+				m_tpX = value;
+			}
+		}
+		[DataElement(AllowDbNull = true)]
+		public int TpY
+		{
+			get
+			{
+				return m_tpY;
+			}
+			set
+			{
+				Dirty = true;
+				m_tpY = value;
+			}
+		}
+		[DataElement(AllowDbNull = true)]
+		public int TpZ
+		{
+			get
+			{
+				return m_tpZ;
+			}
+			set
+			{
+				Dirty = true;
+				m_tpZ = value;
+			}
+		}
+		[DataElement(AllowDbNull = true)]
+		public bool IsTeleporter
+		{
+			get
+			{
+				return m_isTeleporter;
+			}
+			set
+			{
+				Dirty = true;
+				m_isTeleporter = value;
+			}
+		}
+		[DataElement(AllowDbNull = true)]
+		public int TpLevelRequirement
+		{
+			get
+			{
+				return m_tpLevelRequirement;
+			}
+			set
+			{
+				Dirty = true;
+				m_tpLevelRequirement = value;
+			}
+		}
+		[DataElement(AllowDbNull = true)]
+		public bool TpIsRenaissance
+		{
+			get
+			{
+				return m_tpIsRenaissance;
+			}
+			set
+			{
+				Dirty = true;
+				m_tpIsRenaissance = value;
+			}
+		}
+
+		[DataElement(AllowDbNull = false)]
+		public bool HasPickableAnim
+		{
+			get
+			{
+				return m_hasPickableAnim;
+			}
+
+			set
+			{
+				Dirty = true;
+				m_hasPickableAnim = value;
+			}
+		}
+
+		[DataElement(AllowDbNull = true)]
+		public int PunishSpellId
+		{
+			get
+			{
+				return m_punishSpellId;
+			}
+
+			set
+			{
+				Dirty = true;
+				m_punishSpellId = value;
+			}
+		}
+
+		[DataElement(AllowDbNull = true)]
+		public bool IsOpeningRenaissanceType
+		{
+			get
+			{
+				return m_isOpeningRenaissanceType;
+			}
+
+			set
+			{
+				Dirty = true;
+				m_isOpeningRenaissanceType = value;
+			}
+		}
+
+		[DataElement(AllowDbNull = true)]
+		public int TpEffect
+		{
+			get
+			{
+				return m_tpEffect;
+			}
+			set
+			{
+				Dirty = true;
+				m_tpEffect = value;
+			}
+		}
+		[DataElement(AllowDbNull = true)]
+		public int TpRegion
+		{
+			get
+			{
+				return m_tpRegion;
+			}
+			set
+			{
+				Dirty = true;
+				m_tpRegion = value;
 			}
 		}
 	}

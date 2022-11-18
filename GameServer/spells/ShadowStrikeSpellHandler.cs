@@ -25,7 +25,7 @@ namespace DOL.GS.Spells
             int xrange = 0;
             int yrange = 0;
             double angle = 0.00153248422;
-            m_caster.MoveTo(target.CurrentRegionID, (int)(target.X - ((xrange + 10) * Math.Sin(angle * target.Heading))), (int)(target.Y + ((yrange + 10) * Math.Cos(angle * target.Heading))), target.Z, m_caster.Heading);
+            m_caster.MoveTo(target.CurrentRegionID, (int)(target.Position.X - ((xrange + 10) * Math.Sin(angle * target.Heading))), (int)(target.Position.Y + ((yrange + 10) * Math.Cos(angle * target.Heading))), target.Position.Z, m_caster.Heading);
 
             // use style
             Style style = new Style(GameServer.Database.SelectObjects<DBStyle>("`StyleID` = @StyleID", new QueryParameter("@StyleID", 968))[0]);

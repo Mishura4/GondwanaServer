@@ -58,9 +58,7 @@ namespace DOL.GS.Scripts
         }
         public void SetVariables(GameNPC mob)
         {
-            mob.X = this.X + 10;
-            mob.Y = this.Y + 10;
-            mob.Z = this.Z;
+            mob.Position = new System.Numerics.Vector3(this.Position.X + 10, this.Position.Y + 10, this.Position.Z);
             mob.CurrentRegion = this.CurrentRegion;
             mob.Heading = this.Heading;
             mob.Level = this.Level;
