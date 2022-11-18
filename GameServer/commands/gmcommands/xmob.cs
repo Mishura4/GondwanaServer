@@ -200,7 +200,7 @@ namespace DOL.GS.Commands
 
                         IList<GameNPC> setupmobs = new List<GameNPC>();
                         GameNPC mob;
-                        GameNPC merchant;
+                        //GameNPC merchant;
 
                         #region load list
                         //base 
@@ -232,15 +232,15 @@ namespace DOL.GS.Commands
                         for (int i = 0; i < setupmobs.Count / 2; i++)
                         {
                             ushort h = (ushort)(4096 / (setupmobs.Count / 2) * i);
-                            Point2D loc = client.Player.GetPointFromHeading(h, 150);
-                            spawnsetupmob(client, setupmobs[i], realm, loc.X, loc.Y, h);
+                            System.Numerics.Vector2 loc = client.Player.GetPointFromHeading(h, 150);
+                            spawnsetupmob(client, setupmobs[i], realm, (int)loc.X, (int)loc.Y, h);
 
                         }
                         for (int i = setupmobs.Count / 2; i < setupmobs.Count; i++)
                         {
                             ushort h = (ushort)(4096 / (setupmobs.Count - setupmobs.Count / 2) * i);
-                            Point2D loc = client.Player.GetPointFromHeading(h, 250);
-                            spawnsetupmob(client, setupmobs[i], realm, loc.X, loc.Y, h);
+                            System.Numerics.Vector2 loc = client.Player.GetPointFromHeading(h, 250);
+                            spawnsetupmob(client, setupmobs[i], realm, (int)loc.X, (int)loc.Y, h);
                         }
                         client.Out.SendMessage(setupmobs.Count + " setup mob spawned!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
 
@@ -295,9 +295,7 @@ namespace DOL.GS.Commands
                             mob.LoadTemplate(targetMob.NPCTemplate);
 
                             //Fill the object variables
-                            mob.X = Util.Random(client.Player.X - 250 / 2, client.Player.X + 250 / 2);
-                            mob.Y = Util.Random(client.Player.Y - 250 / 2, client.Player.Y + 250 / 2);
-                            mob.Z = client.Player.Z;
+                            mob.Position = new System.Numerics.Vector3(Util.Random((int)client.Player.Position.X - 250 / 2, (int)client.Player.Position.X + 250 / 2), Util.Random((int)client.Player.Position.Y - 250 / 2, (int)client.Player.Position.Y + 250 / 2), client.Player.Position.Z);
                             mob.CurrentRegion = client.Player.CurrentRegion;
                             mob.Heading = (ushort)Util.Random(1, 4100);
                             mob.Level = targetMob.Level;
@@ -525,9 +523,7 @@ namespace DOL.GS.Commands
         private void spawnsetupmob(GameClient client, GameNPC mob, eRealm realm, int x, int y, ushort h)
         {
             //Fill the object variables
-            mob.X = x;
-            mob.Y = y;
-            mob.Z = client.Player.Z;
+            mob.Position = new System.Numerics.Vector3(x, y, client.Player.Position.Z);
             mob.Heading = h;
 
             mob.CurrentRegion = client.Player.CurrentRegion;
@@ -573,9 +569,7 @@ namespace DOL.GS.Commands
             mob.LoadTemplate(targetMob.NPCTemplate);
 
             //Fill the object variables
-            mob.X = Util.Random(client.Player.X - radius, client.Player.X + radius);
-            mob.Y = Util.Random(client.Player.Y - radius, client.Player.Y + radius);
-            mob.Z = client.Player.Z;
+            mob.Position = new System.Numerics.Vector3(Util.Random((int)client.Player.Position.X - radius, (int)client.Player.Position.X + radius), Util.Random((int)client.Player.Position.Y - radius, (int)client.Player.Position.Y + radius), client.Player.Position.Z);
             mob.CurrentRegion = client.Player.CurrentRegion;
             mob.Heading = (ushort)Util.Random(1, 4100);
             mob.Level = targetMob.Level;
@@ -665,9 +659,9 @@ namespace DOL.GS.Commands
         private void move(GameClient client, GameNPC targetMob, ushort radius)
         {
 
-            int X = Util.Random(client.Player.X - radius / 2, client.Player.X + radius / 2);
-            int Y = Util.Random(client.Player.Y - radius / 2, client.Player.Y + radius / 2);
-            targetMob.MoveTo(client.Player.CurrentRegionID, X, Y, client.Player.Z, (ushort)Util.Random(1, 4100));
+            int X = Util.Random((int)client.Player.Position.X - radius / 2, (int)client.Player.Position.X + radius / 2);
+            int Y = Util.Random((int)client.Player.Position.Y - radius / 2, (int)client.Player.Position.Y + radius / 2);
+            targetMob.MoveTo(client.Player.CurrentRegionID, X, Y, client.Player.Position.Z, (ushort)Util.Random(1, 4100));
             targetMob.SaveIntoDatabase();
         }
 

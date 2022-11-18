@@ -435,9 +435,7 @@ namespace DOL.GS.Scripts
 						{
 							var mob = new AmteMob(new NpcTemplate(template))
 							{
-								X = X,
-								Y = Y,
-								Z = Z,
+								Position = new Vector3(Position.X, Position.Y, Position.Z),
 								Heading = Heading,
 								CurrentRegionID = CurrentRegionID,
 								CurrentRegion = CurrentRegion,

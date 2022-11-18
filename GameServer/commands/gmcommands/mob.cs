@@ -2980,7 +2980,7 @@ namespace DOL.GS.Commands
                     // Reload the mob(s)
                     for (eRealm i = eRealm._First; i <= eRealm._Last; i++)
                     {
-                        mobs.Add(WorldMgr.GetObjectsByName<GameNPC>(args[2], i));
+                        mobs.Add(WorldMgr.GetObjectsByName(args[2], i, typeof(GameNPC)));
                     }
                 }
                 else

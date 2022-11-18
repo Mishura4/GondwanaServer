@@ -1,4 +1,5 @@
-﻿using DOL.GS.Effects;
+﻿using DOL.Geometry;
+using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
 using DOL.GS.PlayerClass;
 using System;
@@ -28,14 +29,14 @@ namespace DOL.GS.Spells
             }
             if (Caster.GroundTarget == null)
             {
-                x = Caster.X;
-                y = Caster.Y;
+                x = (int)Caster.Position.X;
+                y = (int)Caster.Position.Y;
             }
             else
             {
-                x = Caster.X;
-                y = Caster.Y;
-                z = Caster.Z;
+                x = (int)Caster.Position.X;
+                y = (int)Caster.Position.Y;
+                z = (int)Caster.Position.Z;
             }
             /*if (args.Length > 1)
             {
@@ -80,7 +81,7 @@ namespace DOL.GS.Spells
 
             if (Caster is GamePlayer player)
             {
-                int distance = player.GetDistance(new Point2D(x, y));
+                int distance = (int)System.Numerics.Vector3.Distance(player.Position, new System.Numerics.Vector3(x, y, player.Position.Z));
                 float newIntensity = intensity * (1 - distance / radius);
                 GSTCPPacketOut pak = new GSTCPPacketOut(0x47);
                 pak.WriteIntLowEndian(unk1);
@@ -129,7 +130,7 @@ namespace DOL.GS.Spells
 
                 if (Caster is GamePlayer player)
                 {
-                    int distance = player.GetDistance(new Point2D(x, y));
+                    int distance = (int)System.Numerics.Vector3.Distance(player.Position, new System.Numerics.Vector3(x, y, player.Position.Z));
                     float newIntensity = intensity * (1 - distance / radius);
                     GSTCPPacketOut pak = new GSTCPPacketOut(0x47);
                     pak.WriteIntLowEndian(unk1);
@@ -157,7 +158,7 @@ namespace DOL.GS.Spells
 
         public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
-            int distance = target.GetDistance(new Point2D(x, y));
+            int distance = (int)System.Numerics.Vector3.Distance(target.Position, new System.Numerics.Vector3(x, y, target.Position.Z));
             if (distance > radius)
             {
                 CancelPulsingSpell(target, Spell.SpellType);

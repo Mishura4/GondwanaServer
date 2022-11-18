@@ -52,7 +52,7 @@ namespace DOL.AI.Brain
                 if (player.Client.Account.PrivLevel != 3)
                 {
                     double angle = 0.00153248422;
-                    player.MoveTo(player.CurrentRegionID, (int)(Body.X - ((AggroRange + 10) * Math.Sin(angle * Body.Heading))), (int)(Body.Y + ((AggroRange + 10) * Math.Cos(angle * Body.Heading))), Body.Z, player.Heading);
+                    player.MoveTo(player.CurrentRegionID, (int)(Body.Position.X - ((AggroRange + 10) * Math.Sin(angle * Body.Heading))), (int)(Body.Position.Y + ((AggroRange + 10) * Math.Cos(angle * Body.Heading))), Body.Position.Z, player.Heading);
                 }
             }
         }

@@ -148,9 +148,8 @@ namespace DOL.GS
             int count = 0;
             lock (this.XPGainers)
             {
-                foreach (var de in this.XPGainers)
+                foreach (var obj in this.XPGainers.Keys)
                 {
-                    GameObject obj = de.Key;
                     if (obj is GamePlayer)
                     {
                         GamePlayer player = obj as GamePlayer;
@@ -186,7 +185,7 @@ namespace DOL.GS
             base.TakeDamage(source, damageType, damageAmount, criticalAmount);
             if (ObjectState != eObjectState.Active) return;
             GameLiving t = (GameLiving)source;
-            int range = this.GetDistanceTo(t);
+            float range = this.GetDistanceTo(t);
             if (range >= 1000) //�vite la technique du serpent
             {
                 m_hiruleTarget = t;
@@ -211,7 +210,7 @@ namespace DOL.GS
             if (healSource is GameLiving)
             {
                 GameLiving t = (GameLiving)healSource;
-                int range = this.GetDistanceTo(t);
+                float range = this.GetDistanceTo(t);
                 if (range >= ((StandardMobBrain)Brain).AggroRange)
                 {
                     m_hiruleTarget = t;
@@ -301,9 +300,9 @@ namespace DOL.GS
             if ((int)Realm == 5) return; // I don't want event dragons causing XP deaths
             HiruleBroadcast(Name + " jette " + m_hiruleTarget.Name + " dans les airs !");
             m_hiruleTarget.MoveTo(m_hiruleTarget.CurrentRegionID,
-                m_hiruleTarget.X,
-                m_hiruleTarget.Y,
-                m_hiruleTarget.Z + 750,
+                m_hiruleTarget.Position.X,
+                m_hiruleTarget.Position.Y,
+                m_hiruleTarget.Position.Z + 750,
                 m_hiruleTarget.Heading);
         }
 

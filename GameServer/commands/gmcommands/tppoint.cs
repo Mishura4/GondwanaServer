@@ -47,9 +47,7 @@ namespace DOL.GS.Commands
             GameStaticItem obj = new GameStaticItem();
 
             // Fill the object variables
-            obj.X = pp.X;
-            obj.Y = pp.Y;
-            obj.Z = pp.Z + 1; // raise a bit off of ground level
+            obj.Position = new System.Numerics.Vector3((float)pp.Position.X, (float)pp.Position.Y, (float)pp.Position.Z + 1);// raise a bit off of ground level
             obj.CurrentRegion = client.Player.CurrentRegion;
             obj.Heading = client.Player.Heading;
             obj.Name = name;
@@ -110,7 +108,7 @@ namespace DOL.GS.Commands
             // Remove old temp objects
             RemoveAllTempTPPointObjects(client);
 
-            TPPoint startpoint = new TPPoint(client.Player.CurrentRegionID, client.Player.X, client.Player.Y, client.Player.Z, eTPPointType.Random, new DBTPPoint(client.Player.CurrentRegionID, client.Player.X, client.Player.Y, client.Player.Z));
+            TPPoint startpoint = new TPPoint(client.Player.CurrentRegionID, (int)client.Player.Position.X, (int)client.Player.Position.Y, (int)client.Player.Position.Z, eTPPointType.Random, new DBTPPoint(client.Player.CurrentRegionID, (int)client.Player.Position.X, (int)client.Player.Position.Y, (int)client.Player.Position.Z));
             client.Player.TempProperties.setProperty(TEMP_TPPOINT_FIRST, startpoint);
             client.Player.TempProperties.setProperty(TEMP_TPPOINT_LAST, startpoint);
             client.Player.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.TPPoint.Create.Result"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
@@ -126,7 +124,7 @@ namespace DOL.GS.Commands
                 return;
             }
 
-            TPPoint newpp = new TPPoint(client.Player.CurrentRegionID, client.Player.X, client.Player.Y, client.Player.Z, tppoint.Type, new DBTPPoint(client.Player.CurrentRegionID, client.Player.X, client.Player.Y, client.Player.Z));
+            TPPoint newpp = new TPPoint(client.Player.CurrentRegionID, (int)client.Player.Position.X, (int)client.Player.Position.Y, (int)client.Player.Position.Z, tppoint.Type, new DBTPPoint(client.Player.CurrentRegionID, (int)client.Player.Position.X, (int)client.Player.Position.Y, (int)client.Player.Position.Z));
             tppoint.Next = newpp;
             newpp.Prev = tppoint;
             client.Player.TempProperties.setProperty(TEMP_TPPOINT_LAST, newpp);

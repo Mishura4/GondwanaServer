@@ -208,7 +208,7 @@ namespace DOL.GS
             int i = 1;
             do
             {
-                DBTPPoint dbpp = new DBTPPoint(tppoint.Region, tppoint.X, tppoint.Y, tppoint.Z);
+                DBTPPoint dbpp = new DBTPPoint(tppoint.Region, (int)tppoint.Position.X, (int)tppoint.Position.Y, (int)tppoint.Position.Z);
                 dbpp.Step = i++;
                 dbpp.TPID = tpID;
                 GameServer.Database.AddObject(dbpp);
