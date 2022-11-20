@@ -24,6 +24,10 @@ namespace DOL.Database
 		private int m_changedItemCount;
 
 		private ItemTemplate m_GiveTemplate;
+		private long m_moneyPrice;
+		private string m_priceRessource1;
+		private string m_priceRessource2;
+		private string m_priceRessource3;
 
 		public ItemTemplate GiveTemplate
 		{
@@ -154,6 +158,66 @@ namespace DOL.Database
 			{
 				Dirty = true;
 				m_changedItemCount = value;
+			}
+		}
+
+		[DataElement(AllowDbNull = false)]
+		public long MoneyPrice
+		{
+			get
+			{
+				return m_moneyPrice;
+			}
+
+			set
+			{
+				m_moneyPrice = value;
+				Dirty = true;
+			}
+		}
+
+		[DataElement(AllowDbNull = true, Varchar = 255)]
+		public string PriceRessource1
+		{
+			get
+			{
+				return m_priceRessource1;
+			}
+
+			set
+			{
+				m_priceRessource1 = value;
+				Dirty = true;
+			}
+		}
+
+		[DataElement(AllowDbNull = true, Varchar = 255)]
+		public string PriceRessource2
+		{
+			get
+			{
+				return m_priceRessource2;
+			}
+
+			set
+			{
+				m_priceRessource2 = value;
+				Dirty = true;
+			}
+		}
+
+		[DataElement(AllowDbNull = true, Varchar = 255)]
+		public string PriceRessource3
+		{
+			get
+			{
+				return m_priceRessource3;
+			}
+
+			set
+			{
+				m_priceRessource3 = value;
+				Dirty = true;
 			}
 		}
 	}

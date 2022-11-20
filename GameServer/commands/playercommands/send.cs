@@ -17,6 +17,7 @@
  *
  */
 using DOL.GS.PacketHandler;
+using DOL.Language;
 
 namespace DOL.GS.Commands
 {
@@ -43,6 +44,9 @@ namespace DOL.GS.Commands
 			}
 
 			string targetName = args[1];
+            // if target name is You (en) or Vous (fr), replace it by the good one
+            if (targetName == LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Send.Target.You"))
+                client.TemporallyValues.TryGetValue("LastPlayerToRespond", out targetName);
 			string message = string.Join(" ", args, 2, args.Length - 2);
 
 			int result = 0;
@@ -88,7 +92,13 @@ namespace DOL.GS.Commands
 					}
 					else
 					{
-						client.Player.SendPrivateMessage(targetClient.Player, message);
+                        // Stock the player name to the temporally values of the targeted player in case where he use the shorten twice to match the good player name
+                        if (!targetClient.TemporallyValues.ContainsKey("LastPlayerToRespond"))
+                            targetClient.TemporallyValues.Add("LastPlayerToRespond", client.Player.Name);
+                        else
+                            targetClient.TemporallyValues["LastPlayerToRespond"] =  client.Player.Name;
+
+                        client.Player.SendPrivateMessage(targetClient.Player, message);
 					}
 					return;
 			}

@@ -12,7 +12,7 @@ namespace DOL.GS.Scripts
 	{
 		public const string CROCHET = "Crochet"; //Id_nb des crochets
 		public const int	UNLOCK_TIME = 10; //Temps pour crocheter une serrure en secondes
-		public readonly int LARGE_ITEM_DIST = 320;
+		public readonly int LARGE_ITEM_DIST = 500;
 	    private GamePlayer m_interactPlayer;
 	    private DateTime m_lastInteract;
 

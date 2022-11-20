@@ -307,9 +307,26 @@ namespace DOL.GS
 		{
 			int savePosition = item.SlotPosition;
 			string saveOwnerID = item.OwnerID;
+            string saveItemNB = item.Id_nb;
+            string saveItemName = item.Name;
 
 			if (!base.AddItem(slot, item))
 				return false;
+
+            // if it's an artifact, need find it in m_items to assign the ownerID
+            if (ArtifactMgr.IsArtifact(item))
+            {
+                InventoryItem artifact = null;
+                if (m_items.TryGetValue((eInventorySlot)item.SlotPosition, out artifact))
+                {
+                    artifact.OwnerID = m_player.InternalID;
+                }
+                else
+                {
+                    m_player.Out.SendMessage("Error adding artifact to the inventory, item may be lost!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                    Log.ErrorFormat("Error adding item {0}:{1} for player {2} into the inventory during AddItem!", saveItemNB, saveItemName, m_player.Name);
+                }
+            }
 
 			item.OwnerID = m_player.InternalID;
 

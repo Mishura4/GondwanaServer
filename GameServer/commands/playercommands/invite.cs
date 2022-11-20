@@ -17,6 +17,7 @@
  *
  */
 using DOL.GS.PacketHandler;
+using DOL.Language;
 
 namespace DOL.GS.Commands
 {
@@ -91,33 +92,62 @@ namespace DOL.GS.Commands
 				return;
 			}
 
-			if (client.Account.PrivLevel > target.Client.Account.PrivLevel)
-			{
-				// you have no choice!
+			//if (client.Account.PrivLevel > target.Client.Account.PrivLevel)
+			//{
+			//	// you have no choice!
 
-				if (client.Player.Group == null)
-				{
-					Group group = new Group(client.Player);
-					GroupMgr.AddGroup(group);
-					group.AddMember(client.Player);
-					group.AddMember(target);
-					group.UpdateGroupWindow();
-				}
-				else
-				{
-					client.Player.Group.AddMember(target);
-					client.Player.Group.UpdateGroupWindow();
-				}
+			//	if (client.Player.Group == null)
+			//	{
+			//		Group group = new Group(client.Player);
+			//		GroupMgr.AddGroup(group);
+			//		group.AddMember(client.Player);
+			//		group.AddMember(target);
+			//	}
+			//	else
+			//	{
+			//		client.Player.Group.AddMember(target);
+			//	}
 
-				client.Out.SendMessage("(GM) You have added " + target.Name + " to your group.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-				target.Out.SendMessage("GM " + client.Player.Name + " has added you to " + client.Player.GetPronoun(1, false) + " group.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-			}
-			else
-			{
-				client.Out.SendMessage("You have invited " + target.Name + " to join your group.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-				target.Out.SendGroupInviteCommand(client.Player, client.Player.Name + " has invited you to join\n" + client.Player.GetPronoun(1, false) + " group. Do you wish to join?");
-				target.Out.SendMessage(client.Player.Name + " has invited you to join " + client.Player.GetPronoun(1, false) + " group.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-			}
+			//	client.Out.SendMessage(
+			//		LanguageMgr.GetTranslation(
+			//			client.Account.Language,
+			//			"Commands.Players.Invite.GM.Added",
+			//			target.Name),
+			//		eChatType.CT_System, eChatLoc.CL_SystemWindow);
+			//	target.Out.SendMessage(
+			//		LanguageMgr.GetTranslation(
+			//			client.Account.Language,
+			//			"Commands.Players.Invite.GM.You",
+			//			 client.Player.Name,
+			//			 client.Player.GetPronoun(1, false)),
+			//		eChatType.CT_System, eChatLoc.CL_SystemWindow);
+			//}
+			//else
+			//
+
+			GameClient targetNewClient = target?.Client ?? WorldMgr.GetClientByPlayerNameAndRealm(targetName, 0, true);
+
+			client.Out.SendMessage(
+					LanguageMgr.GetTranslation(
+						client.Account.Language,
+						"Commands.Players.Invite.YouInvite",
+						target.Name),
+					eChatType.CT_System, eChatLoc.CL_SystemWindow);
+				target.Out.SendGroupInviteCommand(
+					client.Player,
+					LanguageMgr.GetTranslation(
+						targetNewClient.Account.Language,
+						"Commands.Players.Invite.InvitedYouTo",
+						client.Player.Name,
+						client.Player.GetPronoun(1, false)));
+				target.Out.SendMessage(
+					LanguageMgr.GetTranslation(
+						targetNewClient.Account.Language,
+						"Commands.Players.Invite.InvitedYou",
+						client.Player.Name,
+						client.Player.GetPronoun(1, false)),
+					eChatType.CT_System, eChatLoc.CL_SystemWindow);
+
 		}
 	}
 }

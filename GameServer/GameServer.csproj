@@ -55,6 +55,8 @@
     <None Remove="language\EN\Commands\GM\TPPoint.txt" />
     <None Remove="language\EN\spells\SpellReflectionHandler.txt" />
     <None Remove="language\FR\Commands\GM\TPPoint.txt" />
+    <None Remove="language\FR\Commands\Player\Invite.txt" />
+    <None Remove="language\FR\Commands\Player\send.txt" />
     <None Remove="language\FR\CustomNPC\RenaissanceNPC.txt" />
     <None Remove="language\FR\spells\SpellReflectionHandler.txt" />
   </ItemGroup>
@@ -62,6 +64,8 @@
     <TranslationFiles Remove="language\EN\Commands\GM\TPPoint.txt" />
     <TranslationFiles Remove="language\EN\spells\SpellReflectionHandler.txt" />
     <TranslationFiles Remove="language\FR\Commands\GM\TPPoint.txt" />
+    <TranslationFiles Remove="language\FR\Commands\Player\Invite.txt" />
+    <TranslationFiles Remove="language\FR\Commands\Player\send.txt" />
     <TranslationFiles Remove="language\FR\CustomNPC\RenaissanceNPC.txt" />
     <TranslationFiles Remove="language\FR\spells\SpellReflectionHandler.txt" />
   </ItemGroup>
@@ -69,6 +73,8 @@
     <Content Include="language\EN\Commands\GM\TPPoint.txt" />
     <Content Include="language\EN\spells\SpellReflectionHandler.txt" />
     <Content Include="language\FR\Commands\GM\TPPoint.txt" />
+    <Content Include="language\FR\Commands\Player\Invite.txt" />
+    <Content Include="language\FR\Commands\Player\send.txt" />
     <Content Include="language\FR\CustomNPC\RenaissanceNPC.txt" />
     <Content Include="language\FR\spells\SpellReflectionHandler.txt" />
   </ItemGroup>

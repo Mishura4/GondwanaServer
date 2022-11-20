@@ -20,6 +20,7 @@ namespace DOL.Database
 		private bool m_checkLOS;
 		private string m_points;
         private bool m_allowVol;
+        private int realmPoints;
 
         public DBArea()
 		{
@@ -205,5 +206,20 @@ namespace DOL.Database
 				m_points = value;
 			}
 		}
+
+        [DataElement(AllowDbNull = false)]
+        public int RealmPoints
+        {
+            get
+            {
+                return this.realmPoints;
+            }
+
+            set 
+            {
+                this.Dirty = true;
+                this.realmPoints = value; 
+            }
+        }
 	}
 }

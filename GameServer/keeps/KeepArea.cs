@@ -40,8 +40,8 @@ namespace DOL.GS.Keeps
 			//setting radius to default
 			if (newRadius == 0 && m_Radius != 0)
 			{
-				if (m_dbArea != null)
-					GameServer.Database.DeleteObject(m_dbArea);
+				if (DbArea != null)
+					GameServer.Database.DeleteObject(DbArea);
 				m_Radius = Keep is GameKeep ? (Keep.IsPortalKeep ? PK_RADIUS : KEEP_RADIUS) : TOWER_RADIUS;
 				return;
 			}
@@ -50,26 +50,26 @@ namespace DOL.GS.Keeps
 			if (newRadius > 0 && m_Radius >= 0)
 			{
 				m_Radius = newRadius;
-				if (m_dbArea != null)
+				if (DbArea != null)
 				{
-					m_dbArea.Radius = m_Radius;
-					GameServer.Database.SaveObject(m_dbArea);
+					DbArea.Radius = m_Radius;
+					GameServer.Database.SaveObject(DbArea);
 				}
 				else
 				{
-					m_dbArea = new DBArea();
-					m_dbArea.CanBroadcast = this.CanBroadcast;
-					m_dbArea.CheckLOS = this.CheckLOS;
-					m_dbArea.ClassType = this.GetType().ToString();
-					m_dbArea.Description = this.Description;
-					m_dbArea.Radius = this.Radius;
-					m_dbArea.Region = (ushort)this.Keep.Region;
-					m_dbArea.Sound = this.Sound;
-					m_dbArea.X = (int)Position.X;
-					m_dbArea.Y = (int)Position.Y;
-					m_dbArea.Z = (int)Position.Z;
+					DbArea = new DBArea();
+					DbArea.CanBroadcast = this.CanBroadcast;
+					DbArea.CheckLOS = this.CheckLOS;
+					DbArea.ClassType = this.GetType().ToString();
+					DbArea.Description = this.Description;
+					DbArea.Radius = this.Radius;
+					DbArea.Region = (ushort)this.Keep.Region;
+					DbArea.Sound = this.Sound;
+					DbArea.X = (int)Position.X;
+					DbArea.Y = (int)Position.Y;
+					DbArea.Z = (int)Position.Z;
 
-					GameServer.Database.AddObject(m_dbArea);
+					GameServer.Database.AddObject(DbArea);
 				}
 			}
 		}

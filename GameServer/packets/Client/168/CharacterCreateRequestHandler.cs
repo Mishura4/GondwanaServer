@@ -315,6 +315,21 @@ namespace DOL.GS.PacketHandler.Client.v168
 			ch.Endurance = 100;
 			ch.MaxEndurance = 100;
 			ch.Concentration = 100;
+            switch (ch.Class)
+            {
+                case 6:
+                case 26:
+                case 47:
+                    ch.Concentration = (int)(ch.Concentration * 1.25);
+                    break;
+                case 4:
+                case 28:
+                case 48:
+                    ch.Concentration = (int)(ch.Concentration * 1.1);
+                    break;
+                default:
+                    break;
+            }
 			ch.MaxSpeed = GamePlayer.PLAYER_BASE_SPEED;
 
 			if (log.IsDebugEnabled)

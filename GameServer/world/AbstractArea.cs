@@ -32,7 +32,7 @@ namespace DOL.GS
 	/// </summary>
 	public abstract class AbstractArea : IArea, ITranslatableObject
 	{
-		protected DBArea m_dbArea = null;
+		protected DBArea dbArea = null;
 		protected bool m_canBroadcast = false;
 		/// <summary>
 		/// Variable holding whether or not players can broadcast in this area
@@ -110,7 +110,7 @@ namespace DOL.GS
 
 		public AbstractArea()
 			: base()
-		{
+		{    
 		}
 
 		/// <summary>
@@ -121,6 +121,8 @@ namespace DOL.GS
 			get { return m_ID; }
 			set { m_ID = value; }
 		}
+
+        public int RealmPoints { get; set; }
 
         public virtual LanguageDataObject.eTranslationIdentifier TranslationIdentifier
         {
@@ -203,7 +205,9 @@ namespace DOL.GS
 		{
 			return IsContaining(new Vector3(x, y, z), true);
 		}
+        public bool CanVol { get; protected set; }
 
+        public DBArea DbArea { get => dbArea; set => dbArea = value; }
 
 		/// <summary>
 		/// Called whenever a player leaves the given area
@@ -214,6 +218,8 @@ namespace DOL.GS
             if (m_displayMessage && Description != null && Description != "")
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AbstractArea.Left", Description),
                     eChatType.CT_System, eChatLoc.CL_SystemWindow);
+
+            player.IsAllowToVolInThisArea = true;
 
 			player.Notify(AreaEvent.PlayerLeave, this, new AreaEventArgs(this, player));
 		}
@@ -250,6 +256,9 @@ namespace DOL.GS
 			{
 				player.Out.SendRegionEnterSound(Sound);
 			}
+
+            player.IsAllowToVolInThisArea = this.CanVol;
+
 			player.Notify(AreaEvent.PlayerEnter, this, new AreaEventArgs(this, player));
 		}
 

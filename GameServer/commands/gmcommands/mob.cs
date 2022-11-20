@@ -2565,6 +2565,7 @@ namespace DOL.GS.Commands
 			mob.GuildName = targetMob.GuildName;
 			mob.Size = targetMob.Size;
 			mob.Race = targetMob.Race;
+			mob.Faction = targetMob.Faction;
 
 			mob.Inventory = targetMob.Inventory;
 			if (mob.Inventory != null)

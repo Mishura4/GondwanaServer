@@ -3232,7 +3232,25 @@ namespace DOL.GS
 			Experience = 0;
 			RespecAllLines();
 
-			if (Level < originalLevel && originalLevel > 5)
+            // Increase the concentration for class: Cleric, Minstrel, Healer, Shaman, Druid and Bard
+            DBCharacter.Concentration = 100;
+            switch (DBCharacter.Class)
+            {
+                case 6:
+                case 26:
+                case 47:
+                    DBCharacter.Concentration = (int)(DBCharacter.Concentration * 1.25);
+                    break;
+                case 4:
+                case 28:
+                case 48:
+                    DBCharacter.Concentration = (int)(DBCharacter.Concentration * 1.1);
+                    break;
+                default:
+                    break;
+            }
+
+            if (Level < originalLevel && originalLevel > 5)
 			{
 				for (int i = 6; i <= originalLevel; i++)
 				{
@@ -4410,8 +4428,8 @@ namespace DOL.GS
 				if (modifier != -1)
 					amount = (long)(amount * modifier);
 
-				//[StephenxPimente]: Zone Bonus Support
-				if (ServerProperties.Properties.ENABLE_ZONE_BONUSES)
+				//Zone Bonus Support
+				if (Properties.ENABLE_ZONE_BONUSES)
 				{
 					int zoneBonus = (((int)amount * ZoneBonus.GetRPBonus(this)) / 100);
 					if (zoneBonus > 0)
@@ -4421,6 +4439,26 @@ namespace DOL.GS
 						GainRealmPoints((long)(zoneBonus * ServerProperties.Properties.RP_RATE), false, false, false);
 					}
 				}
+
+				//Zone Bonus Support factor
+				if (Properties.ENABLE_AREA_BONUSES)
+                {
+					//Area RP Bonus
+					int areapoints = 0;
+					foreach (var area in this.CurrentAreas)
+					{
+						areapoints += area.RealmPoints;
+					}
+
+					int areaBonus = (int)(amount * areapoints * ServerProperties.Properties.RP_RATE);
+					if (areaBonus > 0)
+					{
+						Out.SendMessage(string.Format("Vous obtenez {0} points de royaume de bonus gr�ce aux bonus d'area", areaBonus),
+										eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+						GainRealmPoints((long)(areaBonus), false, false, false);
+					}
+				}	
+
 
 				//[Freya] Nidel: ToA Rp Bonus
 				long rpBonus = GetModified(eProperty.RealmPoints);
@@ -9264,8 +9302,8 @@ namespace DOL.GS
 
 					// Artifacts don't require charges.
 
-					if ((type < 2 && useItem.SpellID > 0 && useItem.Charges < 1 && useItem.MaxCharges > -1) ||
-					    (type == 2 && useItem.SpellID1 > 0 && useItem.Charges1 < 1 && useItem.MaxCharges1 > -1) ||
+					if ((type < 2 && useItem.SpellID > 0 && useItem.Charges < 1 && useItem.MaxCharges > -1 && !(useItem is InventoryArtifact)) ||
+					    (type == 2 && useItem.SpellID1 > 0 && useItem.Charges1 < 1 && useItem.MaxCharges1 > -1 && !(useItem is InventoryArtifact)) ||
 					    (useItem.PoisonSpellID > 0 && useItem.PoisonCharges < 1))
 					{
 						Out.SendMessage("The " + useItem.Name + " is out of charges.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
@@ -10303,7 +10341,8 @@ namespace DOL.GS
 
 			IsJumping = false;
 			m_invulnerabilityTick = 0;
-			m_healthRegenerationTimer = new RegionTimer(this);
+			m_pve_invulnerabilityTick = 0;
+            m_healthRegenerationTimer = new RegionTimer(this);
 			m_powerRegenerationTimer = new RegionTimer(this);
 			m_enduRegenerationTimer = new RegionTimer(this);
 			m_healthRegenerationTimer.Callback = new RegionTimerCallback(HealthRegenerationTimerCallback);
@@ -14758,7 +14797,7 @@ namespace DOL.GS
             {
                 //throw new ArgumentOutOfRangeException("duration", duration, "Immunity duration cannot be less than 1ms"); This causes problems down the road, just log it instead.
                 if (log.IsWarnEnabled)
-                    	log.Warn("GamePlayer.StartInvulnerabilityTimer(): Immunity duration cannot be less than 1ms");
+                    log.Warn("GameObjects.GamePlayer.StartInvulnerabilityTimer(): Immunity duration cannot be less than 1ms");
                 return false;
             }
 
@@ -14783,18 +14822,74 @@ namespace DOL.GS
 			return true;
 		}
 
-		/// <summary>
-		/// True if player is invulnerable to any attack
+        /// <summary>
+        /// Holds the pve invulnerability timer
+        /// </summary>
+        protected InvulnerabilityTimer m_pveinvulnerabilityTimer;
+        /// <summary>
+		/// Holds the pve invulnerability expiration tick
 		/// </summary>
-		public virtual bool IsInvulnerableToAttack
+		protected long m_pve_invulnerabilityTick;
+
+        /// <summary>
+        /// Starts the PVE Invulnerability Timer
+        /// </summary>
+        /// <param name="duration">The invulnerability duration in milliseconds</param>
+        /// <param name="callback">
+        /// The callback for when invulnerability expires;
+        /// not guaranteed to be called if overwriten by another invulnerability
+        /// </param>
+        /// <returns>true if invulnerability was set (smaller than old invulnerability)</returns>
+        public virtual bool StartPVEInvulnerabilityTimer(int duration, InvulnerabilityExpiredCallback callback)
+        {
+            if (duration < 1)
+            {
+                if (log.IsWarnEnabled)
+                    log.Warn("GameObjects.GamePlayer.StartPVEInvulnerabilityTimer(): Immunity duration cannot be less than 1ms");
+                return false;
+            }
+
+            long newTick = CurrentRegion.Time + duration;
+            if (newTick < m_pve_invulnerabilityTick)
+                return false;
+
+            m_pve_invulnerabilityTick = newTick;
+            if (m_pveinvulnerabilityTimer != null)
+                m_pveinvulnerabilityTimer.Stop();
+
+            if (callback != null)
+            {
+                m_pveinvulnerabilityTimer = new InvulnerabilityTimer(this, callback);
+                m_pveinvulnerabilityTimer.Start(duration);
+            }
+            else
+            {
+                m_pveinvulnerabilityTimer = null;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// True if player is invulnerable to any attack
+        /// </summary>
+        public virtual bool IsInvulnerableToAttack
 		{
 			get { return m_invulnerabilityTick > CurrentRegion.Time; }
 		}
 
-		/// <summary>
-		/// The timer to call invulnerability expired callbacks
-		/// </summary>
-		protected class InvulnerabilityTimer : RegionAction
+        /// <summary>
+        /// True if player is invulnerable to pve attack
+        /// </summary>
+        public virtual bool IsInvulnerableToPVEAttack
+        {
+            get { return m_pve_invulnerabilityTick > CurrentRegion.Time; }
+        }
+
+        /// <summary>
+        /// The timer to call invulnerability expired callbacks
+        /// </summary>
+        protected class InvulnerabilityTimer : RegionAction
 		{
 			/// <summary>
 			/// Defines a logger for this class.
@@ -15966,6 +16061,25 @@ namespace DOL.GS
 			get { return m_minoRelic; }
 			set { m_minoRelic = value; }
 		}
+		#endregion
+
+		#region Artifacts
+
+		/// <summary>
+		/// Checks if the player's class has at least one version of the artifact specified available to them.
+		/// </summary>
+		/// <param name="artifactID"></param>
+		/// <returns>True when at least one version exists, false when no versions are available.</returns>
+		public bool CanReceiveArtifact(string artifactID)
+		{
+			Dictionary<String, ItemTemplate> possibleVersions = ArtifactMgr.GetArtifactVersions(artifactID, (eCharacterClass)CharacterClass.ID, Realm);
+
+			if (possibleVersions.Count == 0)
+				return false;
+
+			return true;
+		}
+
 		#endregion
 
 		#region Constructors

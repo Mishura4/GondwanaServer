@@ -22,9 +22,14 @@ namespace DOL.GS.ServerRules
 		public static ushort HousingRegionID = 202;
 		public static ushort[] UnsafeRegions = new ushort[] { 181 };
 
-		public override string RulesDescription()
+        /// <summary>
+		/// Holds the delegate called when PvE invulnerability is expired
+		/// </summary>
+		protected GamePlayer.InvulnerabilityExpiredCallback m_pveinvExpiredCallback;
+
+        public override string RulesDescription()
 		{
-			return "Règles d'Amtenaël (PvP + RvR)";
+			return "Règles de Gondwana (PvP + RvR)";
 		}
 
 		public override void OnReleased(DOLEvent e, object sender, EventArgs args)
@@ -67,7 +72,81 @@ namespace DOL.GS.ServerRules
 			return true;
 		}
 
-		public override bool IsAllowedToAttack(GameLiving attacker, GameLiving defender, bool quiet)
+        public override void Initialize()
+        {
+            m_pveinvExpiredCallback = new GamePlayer.InvulnerabilityExpiredCallback(PVEImmunityExpiredCallback);
+            base.Initialize();
+        }
+
+        /// <summary>
+		/// Removes immunity from the players
+		/// </summary>
+		/// <player></player>
+		public void PVEImmunityExpiredCallback(GamePlayer player)
+        {
+            if (player.ObjectState != GameObject.eObjectState.Active) return;
+            if (player.Client.IsPlaying == false) return;
+
+            player.Out.SendMessage("Your pve temporary invulnerability timer has expired.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+
+            return;
+        }
+
+        /// <summary>
+		/// Starts the immunity timer for a player
+		/// </summary>
+		/// <param name="player">player that gets immunity</param>
+		/// <param name="duration">amount of milliseconds when immunity ends</param>
+		public void StartPVEImmunityTimer(GamePlayer player, int duration)
+        {
+            if (duration > 0)
+            {
+                player.StartPVEInvulnerabilityTimer(duration, m_pveinvExpiredCallback);
+            }
+        }
+
+        /// <summary>
+		/// Called when player has changed the region
+		/// </summary>
+		/// <param name="e">event</param>
+		/// <param name="sender">GamePlayer object that has changed the region</param>
+		/// <param name="args"></param>
+		public override void OnRegionChanged(DOLEvent e, object sender, EventArgs args)
+        {
+            StartPVEImmunityTimer((GamePlayer)sender, Properties.TIMER_PVE_REGION_CHANGED * 1000);
+            base.OnRegionChanged(e, sender, args);
+        }
+
+        /// <summary>
+		/// Should be called whenever a player teleports to a new location
+		/// </summary>
+		/// <param name="player"></param>
+		/// <param name="source"></param>
+		/// <param name="destination"></param>
+		public override void OnPlayerTeleport(GamePlayer player, GameLocation source, Teleport destination)
+        {
+            // Since region change already starts an immunity timer we only want to do this if a player
+            // is teleporting within the same region
+            if (source.RegionID == destination.RegionID)
+            {
+                StartPVEImmunityTimer(player, Properties.TIMER_PVE_TELEPORT * 1000);
+            }
+            base.OnPlayerTeleport(player, source, destination);
+        }
+
+        /// <summary>
+		/// Called when player enters the game for first time
+		/// </summary>
+		/// <param name="e">event</param>
+		/// <param name="sender">GamePlayer object that has entered the game</param>
+		/// <param name="args"></param>
+		public override void OnGameEntered(DOLEvent e, object sender, EventArgs args)
+        {
+            StartPVEImmunityTimer((GamePlayer)sender, Properties.TIMER_GAME_ENTERED * 1000);
+            base.OnGameEntered(e, sender, args);
+        }
+
+        public override bool IsAllowedToAttack(GameLiving attacker, GameLiving defender, bool quiet)
 		{
 			if (attacker == null || defender == null)
 				return false;
@@ -116,6 +195,17 @@ namespace DOL.GS.ServerRules
 
 			if (!_IsAllowedToAttack_PvpImmunity(attacker, playerAttacker, playerDefender, quiet))
 				return false;
+
+            // PVE Timer
+            if (playerDefender.IsInvulnerableToPVEAttack)
+                return false;
+
+            // PVE Timer
+            if(playerAttacker.IsInvulnerableToPVEAttack)
+            {
+                if (quiet == false) MessageToLiving(attacker, "You can't attack mobs until your PvE invulnerability timer wears off!");
+                return false;
+            }
 
 			// Your pet can only attack stealthed players you have selected
 			if (defender.IsStealthed && attacker is GameNPC)

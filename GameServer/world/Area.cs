@@ -147,13 +147,15 @@ namespace DOL.GS
 
 			public override void LoadFromDatabase(DBArea area)
 			{
-				m_dbArea = area;
+				DbArea = area;
                 m_translationId = area.TranslationId;
 				m_Description = area.Description;
 				m_X = area.X;
 				m_Y = area.Y;
 				m_Width = area.Radius;
 				m_Height = area.Radius;
+				this.CanVol = area.AllowVol;
+				RealmPoints = area.RealmPoints;
 			}
 		}
 
@@ -237,11 +239,14 @@ namespace DOL.GS
 
 			public override void LoadFromDatabase(DBArea area)
 			{
+				DbArea = area;
                 m_translationId = area.TranslationId;
 				m_Description = area.Description;
 				Position = new Vector3(area.X, area.Y, area.Z);
 				m_Radius = area.Radius;
 				m_RadiusRadius = area.Radius * area.Radius;
+				this.CanVol = area.AllowVol;
+				RealmPoints = area.RealmPoints;
 			}
 		}
 
@@ -384,12 +389,15 @@ namespace DOL.GS
 
             public override void LoadFromDatabase(DBArea area)
             {
+            	DbArea = area;
                 m_translationId = area.TranslationId;
                 m_Description = area.Description;
                 m_X = area.X;
                 m_Y = area.Y;
                 m_Radius = area.Radius;
                 StringPoints = area.Points;
+                this.CanVol = area.AllowVol;
+                RealmPoints = area.RealmPoints;
             }
         }
 

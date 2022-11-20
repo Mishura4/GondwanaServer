@@ -85,6 +85,12 @@ namespace DOL.GS.ServerProperties
         [ServerProperty("system", "enable_sub_spell_all_class", "Enable sub spells for Archery, Summon Animist Pet, Summon Animist Fnf, Bomber spell and Battle Master", false)]
         public static bool ENABLE_SUB_SPELL_ALL_CLASS;
 
+        /// <summary>
+        /// Timer when player is recruited by a guild to leave, or to enter after leave it (default 1H)
+        /// </summary>
+        [ServerProperty("system", "recruitment_timer_option", "Timer when player is recruited by a guild to leave, or to enter after leave it", 60)]
+        public static int RECRUITMENT_TIMER_OPTION;
+
 		/// <summary>
 		/// Whether to use the sync timer utility or not
 		/// </summary>
@@ -706,6 +712,12 @@ namespace DOL.GS.ServerProperties
 		/// </summary>
 		[ServerProperty("world", "enable_zone_bonuses", "Are Zone Bonuses Enabled?", false)]
 		public static bool ENABLE_ZONE_BONUSES;
+
+        /// <summary>
+        /// Should we enable Area Bonuses?
+        /// </summary>
+        [ServerProperty("world", "enable_area_bonuses", "Are Area Bonuses Enabled?", false)]
+        public static bool ENABLE_AREA_BONUSES;
 
 		/// <summary>
 		/// List of ZoneId where personnal mount is allowed
@@ -1450,6 +1462,12 @@ namespace DOL.GS.ServerProperties
 		[ServerProperty("pvp", "Timer_Region_Changed", "Immunity Timer when player changes regions, in seconds", 30)] //30 seconds default
 		public static int TIMER_REGION_CHANGED;
 
+        /// <summary>
+        /// PvE Immunity Timer - Region Changed
+        /// </summary>
+        [ServerProperty("pve", "Timer_PVE_Region_Changed", "PVE Immunity Timer when player changes regions, in seconds", 30)] // 30 seconds default
+        public static int TIMER_PVE_REGION_CHANGED;
+
 		/// <summary>
 		/// PvP Immunity Timer - Game Entered
 		/// </summary>
@@ -1461,6 +1479,12 @@ namespace DOL.GS.ServerProperties
 		/// </summary>
 		[ServerProperty("pvp", "Timer_PvP_Teleport", "Immunity Timer when player teleports within the same region, in seconds", 30)] //30 seconds default
 		public static int TIMER_PVP_TELEPORT;
+
+        /// <summary>
+        /// PvE Immunity Timer - Teleport
+        /// </summary>
+        [ServerProperty("pve", "Timer_PVE_Teleport", "PVE Immunity Timer when player teleports within the same region, in seconds", 30)] // 30 seconds default
+        public static int TIMER_PVE_TELEPORT;
 
 		/// <summary>
 		/// Time after a relic lost in nature is returning to his ReturnRelicPad pad

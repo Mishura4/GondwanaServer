@@ -305,6 +305,7 @@ namespace DOL.GS
 			m_activeCharIndex = -1; //No character loaded yet!
 			m_GameObjectUpdateArray = new ReaderWriterDictionary<Tuple<ushort, ushort>, long>();
 			m_HouseUpdateArray = new ReaderWriterDictionary<Tuple<ushort, ushort>, long>();
+			TemporallyValues = new Dictionary<string, string>();
 		}
 
 		/// <summary>
@@ -518,10 +519,18 @@ namespace DOL.GS
 			}
 		}
 		
-		/// <summary>
-		/// Get the Game Object Update Array (Read/Write)
+        /// <summary>
+		/// Get the temporally values from this Game Client
 		/// </summary>
-		public ReaderWriterDictionary<Tuple<ushort, ushort>, long> GameObjectUpdateArray
+		public Dictionary<string, string> TemporallyValues
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// Get the Game Object Update Array (Read/Write)
+        /// </summary>
+        public ReaderWriterDictionary<Tuple<ushort, ushort>, long> GameObjectUpdateArray
 		{
 			get { return m_GameObjectUpdateArray; }
 		}
