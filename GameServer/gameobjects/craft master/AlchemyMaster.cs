@@ -64,5 +64,7 @@ namespace DOL.GS
                 return LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AlchemistsMaster.InitialEntersentence");
             }
 		}
+
+        public override string Crafters_Profession => LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "CraftersProfession.Alchemist");
 	}
 }

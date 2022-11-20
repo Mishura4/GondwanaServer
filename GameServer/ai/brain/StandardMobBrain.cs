@@ -30,6 +30,7 @@ using DOL.GS.Keeps;
 using DOL.Language;
 using log4net;
 using System.Numerics;
+using DOL.gameobjects.CustomNPC;
 
 namespace DOL.AI.Brain
 {
@@ -878,7 +879,7 @@ namespace DOL.AI.Brain
 		/// </summary>
 		protected virtual ushort BAFInitialRange
 		{
-			get { return 250; }
+			get { return DOL.GS.ServerProperties.Properties.INITIAL_BAF_RANGE; }
 		}
 
 		/// <summary>
@@ -887,7 +888,10 @@ namespace DOL.AI.Brain
 		/// </summary>
 		protected virtual ushort BAFMaxRange
 		{
-			get { return 2000; }
+            get
+            {
+                return DOL.GS.ServerProperties.Properties.MAX_BAF_RANGE;
+            }
 		}
 
 		/// <summary>
@@ -896,7 +900,10 @@ namespace DOL.AI.Brain
 		/// </summary>
 		protected virtual ushort BAFPlayerRange
 		{
-			get { return 5000; }
+            get
+            {
+                return 5000;
+            }
 		}
 
 		/// <summary>
@@ -998,8 +1005,13 @@ namespace DOL.AI.Brain
 				// Player is alone
 				numAttackers = 1;
 
-			int percentBAF = DOL.GS.ServerProperties.Properties.BAF_INITIAL_CHANCE
-				+ ((numAttackers - 1) * DOL.GS.ServerProperties.Properties.BAF_ADDITIONAL_CHANCE);
+            int additionalChance = DOL.GS.ServerProperties.Properties.BAF_ADDITIONAL_CHANCE;
+
+            if (attacker.ControlledBrain is TurretFNFBrain && DOL.GS.ServerProperties.Properties.LIMIT_BAF_ADDITIONAL_CHANCE_TURRET > 0)
+                // in dungeon LIMIT_BAF_ADDITIONAL_CHANCE_TURRET / 2
+                    additionalChance = (int)(additionalChance / DOL.GS.ServerProperties.Properties.LIMIT_BAF_ADDITIONAL_CHANCE_TURRET);
+
+            int percentBAF = DOL.GS.ServerProperties.Properties.BAF_INITIAL_CHANCE + ((numAttackers - 1) * additionalChance);
 
 			int maxAdds = percentBAF / 100; // Multiple of 100 are guaranteed BAFs
 
@@ -1367,7 +1379,7 @@ namespace DOL.AI.Brain
 					break;
 			}
 
-			if (Body.TargetObject != null && (spell.Duration == 0 || (Body.TargetObject is GameLiving living && LivingHasEffect(living, spell) == false)))
+			if (Body.TargetObject != null && (spell.Duration == 0 || (Body.TargetObject is GameLiving living && !(living is ShadowNPC) && LivingHasEffect(living, spell) == false)))
             {
 				casted = Body.CastSpell(spell, m_mobSpellLine);
 
@@ -1396,7 +1408,7 @@ namespace DOL.AI.Brain
 
 			bool casted = false;
 
-			if (Body.TargetObject is GameLiving living && (spell.Duration == 0 || (!living.HasEffect(spell) || spell.SpellType.ToUpper() == "DIRECTDAMAGEWITHDEBUFF")))
+			if (Body.TargetObject is GameLiving living && !(living is ShadowNPC) && (spell.Duration == 0 || !living.HasEffect(spell) || spell.SpellType.ToUpper() == "DIRECTDAMAGEWITHDEBUFF"))
             {
 				// Offensive spells require the caster to be facing the target
 				if (Body.TargetObject != Body)

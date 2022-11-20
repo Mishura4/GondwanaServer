@@ -68,5 +68,6 @@ namespace DOL.GS
 				return null; 
 			}
 		}
+		public override string Crafters_Profession => LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "CraftersProfession.BasicCrafter");
 	}
 }

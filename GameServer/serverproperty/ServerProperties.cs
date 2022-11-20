@@ -1948,14 +1948,38 @@ namespace DOL.GS.ServerProperties
 		/// <summary>
 		/// Initial percent chance of a mob BAFing for a single attacker
 		/// </summary>
-		[ServerProperty("pve", "baf_initial_chance", "Percent chance for a mob to bring a friend when attacked by a single attacker.  Each multiples of 100 guarantee an add, so a cumulative chance of 250% guarantees two adds with a 50% chance of a third.", 0)]
+		[ServerProperty("pve", "baf_initial_chance", "Percent chance for a mob to bring a friend when attacked by a single attacker. Each multiples of 100 guarantee an add, so a cumulative chance of 250% guarantees two adds with a 50% chance of a third.", 0)]
 		public static int BAF_INITIAL_CHANCE;
 
 		/// <summary>
 		/// Added percent chance of a mob BAFing for each attacker past the first
 		/// </summary>
-		[ServerProperty("pve", "baf_additional_chance", "Percent chance for a mob to bring a friend for each additional attacker.  Each multiples of 100 guarantee an add, so a cumulative chance of 250% guarantees two adds with a 50% chance of a third.", 50)]
+		[ServerProperty("pve", "baf_additional_chance", "Percent chance for a mob to bring a friend for each additional attacker. Each multiples of 100 guarantee an add, so a cumulative chance of 250% guarantees two adds with a 50% chance of a third.", 50)]
 		public static int BAF_ADDITIONAL_CHANCE;
+
+        /// <summary>
+        /// Initial range to BAF
+        /// </summary>
+        [ServerProperty("pve", "INITIAL_BAF_RANGE", "Initial range to BAF", 250)]
+        public static ushort INITIAL_BAF_RANGE;
+
+        /// <summary>
+        /// Max range to BAF
+        /// </summary>
+        [ServerProperty("pve", "MAX_BAF_RANGE", "Max range to BAF", 1500)]
+        public static ushort MAX_BAF_RANGE;
+
+        /// <summary>
+        /// Max range to BAF (Dungeon)
+        /// </summary>
+        [ServerProperty("pve", "MAX_BAF_RANGE_DUNGEON", "Max range to BAF (Dungeon)", 1200)]
+        public static ushort MAX_BAF_RANGE_DUNGEON;
+
+        /// <summary>
+        /// Limit the additional chance for the turret (additional chance / LIMIT_BAF_ADDITIONAL_CHANCE_TURRET)
+        /// </summary>
+        [ServerProperty("pve", "limit_baf_additional_chance_turret", "Limit the additional chance for the turret (additional chance / LIMIT_BAF_ADDITIONAL_CHANCE_TURRET)", 6)]
+        public static int LIMIT_BAF_ADDITIONAL_CHANCE_TURRET;
 
 		/// <summary>
 		/// Do BAF mobs attack the player who pulled?

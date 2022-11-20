@@ -33,6 +33,7 @@ using DOL.GS.Utils;
 using DOL.Language;
 
 using log4net;
+using DOL.gameobjects.CustomNPC;
 using System.Numerics;
 using static DOL.GS.GameTimer;
 
@@ -2659,6 +2660,9 @@ namespace DOL.GS.Spells
 		/// <param name="effectiveness">factor from 0..1 (0%-100%)</param>
 		public virtual void ApplyEffectOnTarget(GameLiving target, double effectiveness)
 		{
+            if (target is ShadowNPC)
+                return;
+
 			if (target is GamePlayer)
 			{
 				GameSpellEffect effect1;

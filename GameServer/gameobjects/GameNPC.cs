@@ -1492,7 +1492,10 @@ namespace DOL.GS
 
 			IsReturningHome = true;
 			IsReturningToSpawnPoint = true;
-			PathTo(SpawnPoint, speed);
+            if (TPPoint != null)
+                PathTo(TPPoint, speed);
+            else
+			    PathTo(SpawnPoint, speed);
 		}
 
 		/// <summary>

@@ -165,5 +165,20 @@ namespace DOL.GS
 			}
 			return item.Quality - 92;
 		}
+
+        /// <summary>
+        /// Reduce time for craft potions
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="recipe"></param>
+        /// <param name="rawMaterials"></param>
+        /// <returns></returns>
+        public override int GetCraftingTime(GamePlayer player, DBCraftedItem recipe, IList<DBCraftedXItem> rawMaterials)
+        {
+            int time = (int)Math.Round(0.75*base.GetCraftingTime(player, recipe, rawMaterials));
+            if (time < 1)
+                time = 1;
+            return time;
+        }
 	}
 }

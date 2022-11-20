@@ -351,6 +351,11 @@ namespace DOL.GS
 			get { return false; }
 		}
 
+		public TPPoint TPPoint
+		{
+			get;
+			set;
+		}
 
 		/// <summary>
 		/// Chance to fumble an attack.

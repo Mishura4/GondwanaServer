@@ -141,6 +141,8 @@ namespace DOL.GS.PacketHandler.Client.v168
 					return;
 				}
 
+                player.ShadowNPC.MoveToPlayer();
+
 				// this is bind stuff
 				// make sure that players doesnt start dead when coming in
 				// thats important since if client moves the player it requests player creation

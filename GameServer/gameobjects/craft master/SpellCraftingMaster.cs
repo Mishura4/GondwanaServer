@@ -69,5 +69,6 @@ namespace DOL.GS
                 return LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "SpellCraftingMaster.InitialEntersentence");
             }
 		}
+		public override string Crafters_Profession => LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "CraftersProfession.Spellcrafter");
 	}
 }

@@ -377,6 +377,17 @@ namespace DOL.spells
             GameEventMgr.RemoveHandler(Caster, GameLivingEvent.Moving, new DOLEventHandler(EventManager));
             GameEventMgr.RemoveHandler(Caster, GameLivingEvent.AttackedByEnemy, new DOLEventHandler(EventManager));
             player.Out.SendCloseTimerWindow();
+
+            if (!string.IsNullOrEmpty(match.CombinationId))
+            {
+                CharacterXCombineItem characterXCombineItem = GameServer.Database.SelectObject<CharacterXCombineItem>(string.Format("CombinationId='{1}' AND Character_ID='{0}'", player.InternalID, match.CombinationId));
+                if (characterXCombineItem == null)
+                {
+                    characterXCombineItem = new CharacterXCombineItem(player.InternalID, match.CombinationId);
+                    GameServer.Database.AddObject(characterXCombineItem);
+                }
+            }
+
             // Check if player fail to combine
             if (Util.Chance(match.ChanceFailCombine))
             {

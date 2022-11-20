@@ -27,6 +27,7 @@ using System.Reflection;
 using DOL.Events;
 using DOL.GS.ServerProperties;
 using DOL.AI.Brain;
+using DOL.gameobjects.CustomNPC;
 using System.Numerics;
 using System.Threading.Tasks;
 
@@ -586,7 +587,7 @@ namespace DOL.GS
 		/// <returns>Whether or not the spell was cast.</returns>
 		public bool CheckGlare(GameLiving target)
 		{
-			if (target == null || GlareTarget != null) return false;
+			if (target == null || target is ShadowNPC || GlareTarget != null) return false;
 			bool success = Util.Chance(GlareChance);
 			if (success)
 				GlareTarget = target;
@@ -741,7 +742,7 @@ namespace DOL.GS
 		/// <returns>Whether or not the target was thrown.</returns>
 		public bool CheckThrow(GameLiving target)
 		{
-			if (target == null || !target.IsAlive || target.IsStunned)
+			if (target == null || !target.IsAlive || target.IsStunned || target is ShadowNPC)
 				return false;
 
 			bool success = Util.Chance(ThrowChance);

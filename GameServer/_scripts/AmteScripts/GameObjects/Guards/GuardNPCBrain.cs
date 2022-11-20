@@ -1,5 +1,6 @@
 using System;
 using AmteScripts.Managers;
+using DOL.gameobjects.CustomNPC;
 using DOL.GS;
 using DOL.GS.Scripts;
 
@@ -49,6 +50,8 @@ namespace DOL.AI.Brain
                 return;
             foreach (GameNPC npc in Body.GetNPCsInRadius((ushort)AggroRange, Body.CurrentRegion.IsDungeon ? false : true))
             {
+                if (npc is ShadowNPC)
+                    continue;
 				if (npc.Realm != 0 || (npc.Flags & GameNPC.eFlags.PEACE) != 0 ||
 					!npc.IsAlive || npc.ObjectState != GameObject.eObjectState.Active ||
 					npc is GameTaxi ||

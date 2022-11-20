@@ -30,6 +30,7 @@ using DOL.AI.Brain;
 using System.Timers;
 using DOL.Database;
 using DOL.Events;
+using DOL.gameobjects.CustomNPC;
 using DOL.GS.Effects;
 using DOL.GS.Housing;
 using DOL.GS.Keeps;
@@ -66,6 +67,8 @@ namespace DOL.GS
         private Timer afkDelayTimer;
 
         private bool stayStealth = false;
+
+        private ShadowNPC shadowNPC;
 
 		#region Client/Character/VariousFlags
 
@@ -945,6 +948,9 @@ namespace DOL.GS
 
 			if (InHouse)
 				LeaveHouse();
+
+            if(ShadowNPC != null)
+                ShadowNPC.Delete();
 
 			// Dinberg: this will eventually need to be changed so that it moves them to the location they TP'ed in.
 			// DamienOphyr: Overwrite current position with Bind position in database, MoveTo() is inoperant
@@ -6408,12 +6414,12 @@ namespace DOL.GS
 			set { m_rangeAttackTarget.Target = value; }
 		}
 
-		/// <summary>
-		/// Check the range attack state and decides what to do
-		/// Called inside the AttackTimerCallback
-		/// </summary>
-		/// <returns></returns>
-		protected override eCheckRangeAttackStateResult CheckRangeAttackState(GameObject target)
+        /// <summary>
+        /// Check the range attack state and decides what to do
+        /// Called inside the AttackTimerCallback
+        /// </summary>
+        /// <returns></returns>
+        protected override eCheckRangeAttackStateResult CheckRangeAttackState(GameObject target)
 		{
 			long holdStart = TempProperties.getProperty<long>(RANGE_ATTACK_HOLD_START);
 			if (holdStart == 0)
@@ -10614,8 +10620,10 @@ namespace DOL.GS
 						}
 					}
 				}
-			}
-			return true;
+                shadowNPC.MoveToPlayer();
+            }
+
+            return true;
 		}
 
 		/// <summary>
@@ -13927,32 +13935,68 @@ namespace DOL.GS
 		/// <param name="skill">Crafting skill to increase</param>
 		/// <param name="count">How much increase or decrase</param>
 		/// <returns>true if the skill is valid and -1 if not</returns>
-		public virtual bool GainCraftingSkill(eCraftingSkill skill, int count)
+		public virtual bool GainCraftingSkill(eCraftingSkill skill, int count, bool fromMaster = false)
 		{
 			if (skill == eCraftingSkill.NoCrafting) return false;
 
-			lock (CraftingLock)
-			{
-				AbstractCraftingSkill craftingSkill = CraftingMgr.getSkillbyEnum(skill);
-				if (craftingSkill != null && count >0)
-				{
-					m_craftingSkills[skill] = count + m_craftingSkills[skill];
-					Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GamePlayer.GainCraftingSkill.GainSkill", craftingSkill.Name, m_craftingSkills[skill]), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-					int currentSkillLevel = GetCraftingSkillValue(skill);
-					if (HasPlayerReachedNewCraftingTitle(currentSkillLevel))
-					{
-						GameEventMgr.Notify(GamePlayerEvent.NextCraftingTierReached, this,new NextCraftingTierReachedEventArgs(skill,currentSkillLevel) );
-					}
-					if (CanGenerateNews && currentSkillLevel >= 1000 && currentSkillLevel - count < 1000)
-					{
-						string message = string.Format(LanguageMgr.GetTranslation(Client.Account.Language, "GamePlayer.GainCraftingSkill.ReachedSkill", Name, craftingSkill.Name));
-						NewsMgr.CreateNews(message, Realm, eNewsType.PvE, true);
-					}
-				}
-				return true;
-			}
-		}
+            lock (CraftingLock)
+            {
+                AbstractCraftingSkill craftingSkill = CraftingMgr.getSkillbyEnum(skill);
+                count = CalculGainCraftingSkill(skill, count, fromMaster);
+                if (craftingSkill != null && count > 0)
+                {
+                    m_craftingSkills[skill] = count + m_craftingSkills[skill];
+                    Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.GainCraftingSkill.GainSkill", craftingSkill.Name, m_craftingSkills[skill]), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                    int currentSkillLevel = GetCraftingSkillValue(skill);
+                    if (HasPlayerReachedNewCraftingTitle(currentSkillLevel))
+                    {
+                        GameEventMgr.Notify(GamePlayerEvent.NextCraftingTierReached, this, new NextCraftingTierReachedEventArgs(skill, currentSkillLevel));
+                    }
+                    if (CanGenerateNews && currentSkillLevel >= 1000 && currentSkillLevel - count < 1000)
+                    {
+                        string message = string.Format(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.GainCraftingSkill.ReachedSkill", Name, craftingSkill.Name));
+                        NewsMgr.CreateNews(message, Realm, eNewsType.PvE, true);
+                    }
+                }
+                return true;
+            }
+        }
 
+        private int CalculGainCraftingSkill(eCraftingSkill skill, int count, bool fromMaster)
+        {
+            if (fromMaster)
+                return 1;
+            if (skill != CraftingPrimarySkill && (m_craftingSkills[skill] + count) > m_craftingSkills[CraftingPrimarySkill])
+                count = m_craftingSkills[CraftingPrimarySkill] - m_craftingSkills[skill];
+            if(CraftingPrimarySkill == eCraftingSkill.BasicCrafting && skill != eCraftingSkill.BasicCrafting && (m_craftingSkills[skill]+count)>99)
+                return 99 - m_craftingSkills[skill];
+            if (skill != CraftingPrimarySkill)
+            {
+                if (CraftingPrimarySkill == eCraftingSkill.WeaponCrafting && new List<eCraftingSkill>(new eCraftingSkill[] { eCraftingSkill.ArmorCrafting, eCraftingSkill.Tailoring, eCraftingSkill.Alchemy, eCraftingSkill.Fletching, eCraftingSkill.SpellCrafting }).Contains(skill) && (m_craftingSkills[skill] + count) > 1050)
+                    return 1050 - m_craftingSkills[skill];
+                if (CraftingPrimarySkill == eCraftingSkill.ArmorCrafting && new List<eCraftingSkill>(new eCraftingSkill[] { eCraftingSkill.WeaponCrafting, eCraftingSkill.Tailoring, eCraftingSkill.Alchemy, eCraftingSkill.Fletching, eCraftingSkill.SpellCrafting }).Contains(skill) && (m_craftingSkills[skill] + count) > 1050)
+                    return 1050 - m_craftingSkills[skill];
+                if (CraftingPrimarySkill == eCraftingSkill.Tailoring && new List<eCraftingSkill>(new eCraftingSkill[] { eCraftingSkill.WeaponCrafting, eCraftingSkill.ArmorCrafting, eCraftingSkill.Alchemy, eCraftingSkill.Fletching, eCraftingSkill.SpellCrafting }).Contains(skill) && (m_craftingSkills[skill] + count) > 1050)
+                    return 1050 - m_craftingSkills[skill];
+                if (CraftingPrimarySkill == eCraftingSkill.Fletching && new List<eCraftingSkill>(new eCraftingSkill[] { eCraftingSkill.WeaponCrafting, eCraftingSkill.Tailoring, eCraftingSkill.Alchemy, eCraftingSkill.ArmorCrafting, eCraftingSkill.SpellCrafting }).Contains(skill) && (m_craftingSkills[skill] + count) > 1050)
+                    return 1050 - m_craftingSkills[skill];
+                if (CraftingPrimarySkill == eCraftingSkill.Alchemy && new List<eCraftingSkill>(new eCraftingSkill[] { eCraftingSkill.WeaponCrafting, eCraftingSkill.Tailoring, eCraftingSkill.ArmorCrafting, eCraftingSkill.Fletching, eCraftingSkill.SpellCrafting }).Contains(skill) && (m_craftingSkills[skill] + count) > 1050)
+                    return 1050 - m_craftingSkills[skill];
+                if (CraftingPrimarySkill == eCraftingSkill.SpellCrafting && new List<eCraftingSkill>(new eCraftingSkill[] { eCraftingSkill.WeaponCrafting, eCraftingSkill.Tailoring, eCraftingSkill.Alchemy, eCraftingSkill.Fletching, eCraftingSkill.ArmorCrafting }).Contains(skill) && (m_craftingSkills[skill] + count) > 1050)
+                    return 1050 - m_craftingSkills[skill];
+                return count;
+            }
+            else if (m_craftingSkills[CraftingPrimarySkill] > 1099)
+                return count;
+            else
+            {
+                int rest = m_craftingSkills[CraftingPrimarySkill] % 100;
+                if (rest + count > 99)
+                    return 99 - rest;
+                else
+                    return count;
+            }
+        }
 
 		protected bool m_isEligibleToGiveMeritPoints = true;
 
@@ -14031,9 +14075,9 @@ namespace DOL.GS
 		protected virtual bool HasPlayerReachedNewCraftingTitle(int skillLevel)
 		{
 			// no titles after 1000 any more, checked in 1.97
-			if (skillLevel <= 1000)
+			if (skillLevel <= 1100)
 			{
-				if (skillLevel % 100 == 0)
+				if (skillLevel % 100 == 99)
 				{
 					return true;
 				}
@@ -14057,7 +14101,8 @@ namespace DOL.GS
 
 			lock (CraftingLock)
 			{
-				if (m_craftingSkills.ContainsKey(skill))
+                // fix error when the player already contains the skill
+				if (!m_craftingSkills.ContainsKey(skill))
 				{
 					AbstractCraftingSkill craftingSkill = CraftingMgr.getSkillbyEnum(skill);
 					if (craftingSkill != null)
@@ -16144,12 +16189,13 @@ namespace DOL.GS
 			LoadFromDatabase(dbChar);
 
 			CreateStatistics();
+			shadowNPC = new ShadowNPC(this);
 		}
 
-		/// <summary>
-		/// Create this players inventory
-		/// </summary>
-		protected virtual void CreateInventory()
+        /// <summary>
+        /// Create this players inventory
+        /// </summary>
+        protected virtual void CreateInventory()
 		{
 			m_inventory = new GamePlayerInventory(this);
 		}
@@ -16346,6 +16392,7 @@ namespace DOL.GS
         /// </summary>
         public bool StayStealth { get => stayStealth; set => stayStealth = value; }
         public SpellHandler PulseSpell { get => m_pulseSpell; set => m_pulseSpell = value; }
+        public ShadowNPC ShadowNPC { get => shadowNPC; set => shadowNPC = value; }
 		#endregion
 
 	}
