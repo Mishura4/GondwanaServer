@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using System.Xml.Linq;
 using AmteScripts.Managers;
 using DOL.Events;
 using DOL.GS.PacketHandler;
@@ -95,9 +97,9 @@ namespace DOL.GS.Scripts
             _playerIDs.Add(player.InternalID);
 
             RegionTimer timer = new RegionTimer(player, TimerTicks);
-            timer.Properties.setProperty("X", player.Position.X);
-            timer.Properties.setProperty("Y", player.Position.Y);
-            timer.Properties.setProperty("Z", player.Position.Z);
+            timer.Properties.setProperty("X", (int)player.Position.X);
+            timer.Properties.setProperty("Y", (int)player.Position.Y);
+            timer.Properties.setProperty("Z", (int)player.Position.Z);
             player.TempProperties.setProperty(RING_IS_AMULETTE, (arg.Item.Id_nb == "guarks_amulette"));
             player.TempProperties.setProperty(RING_TIMER, timer);
             timer.Start(1000);
@@ -146,11 +148,12 @@ namespace DOL.GS.Scripts
             int x = timer.Properties.getProperty("X", 0);
             int y = timer.Properties.getProperty("Y", 0);
             int z = timer.Properties.getProperty("Z", 0);
-            if (stop || player.InCombat || player.Position.X != x || player.Position.Y != y || player.Position.Z != z)
+            if (stop || player.InCombat || (int)player.Position.X != x || (int)player.Position.Y != y || (int)player.Position.Z != z)
             {
+                Console.WriteLine("params overall : " + stop + "  " + player.InCombat + "  " + (player.Position.X != x) + "  " + (player.Position.Y != y) + "  " + (player.Position.Z != z));
                 timer.Stop();
                 player.TempProperties.removeProperty(RING_TARGET);
-                if (!stop)
+                if (stop)
                     player.Out.SendMessage("Vous avez bougé, la téléportation est annulée.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                 else if (!_playerIDs.Contains(player.InternalID) && !player.TempProperties.getProperty(RING_IS_AMULETTE, false))
                     player.Out.SendMessage("Vous avez retiré l'anneau de votre doigt, la téléportation est annulée.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);

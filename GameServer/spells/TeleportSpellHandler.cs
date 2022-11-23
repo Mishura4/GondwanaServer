@@ -35,7 +35,7 @@ namespace DOL.GS.Spells
                     }
                 }
                 target.TPPoint = tPPoint;
-                target.MoveTo(tPPoint.Region, tPPoint.X, tPPoint.Y, tPPoint.Z, tPPoint.GetHeading(tPPoint));
+                target.MoveTo(tPPoint.Region, (float)tPPoint.Position.X, (float)tPPoint.Position.Y, (float)tPPoint.Position.Z, target.GetHeading(target));
             }
         }
     }

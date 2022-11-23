@@ -1,6 +1,7 @@
 ﻿using DOL.Database;
 using DOL.GS.PacketHandler;
 using DOL.Language;
+using System;
 
 namespace DOL.GS
 {
@@ -56,11 +57,11 @@ namespace DOL.GS
 
         public override eQuestIndicator GetQuestIndicator(GamePlayer player)
         {
+            Console.WriteLine("GetQuestIndicator has been called");
             if (player.Level >= 50 && !player.IsRenaissance)
             {
                 return eQuestIndicator.Lore;
             }
-
             return base.GetQuestIndicator(player);
         }
     }

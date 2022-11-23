@@ -151,8 +151,8 @@ namespace DOL.GS.PacketHandler
 
 		public override void SendNPCCreate(GameNPC npc)
 		{
-
-			if (m_gameClient.Player == null || npc.IsVisibleTo(m_gameClient.Player) == false)
+            Console.WriteLine("SendNPCCreate1124 begin has been called");
+            if (m_gameClient.Player == null || npc.IsVisibleTo(m_gameClient.Player) == false)
 				return;
 
 			//Added by Suncheck - Mines are not shown to enemy players
@@ -226,8 +226,10 @@ namespace DOL.GS.PacketHandler
 				if ((npc.Flags & GameNPC.eFlags.STEALTH) > 0)
 					flags2 |= 0x04;
 
-				eQuestIndicator questIndicator = npc.GetQuestIndicator(m_gameClient.Player);
+                Console.WriteLine("SendNPCCreate1124 has been called");
+                eQuestIndicator questIndicator = npc.GetQuestIndicator(m_gameClient.Player);
 
+				//When Renaissance is available, it triggers this (0x08)
 				if (questIndicator == eQuestIndicator.Available)
 					flags2 |= 0x08;//hex 8 - quest available
 				if (questIndicator == eQuestIndicator.Finish)

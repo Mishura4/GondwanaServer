@@ -222,8 +222,9 @@ namespace DOL.GS.PacketHandler
 	
 				if( ( npc.Flags & GameNPC.eFlags.STEALTH ) > 0 )
 					flags2 |= 0x04;
-	
-				eQuestIndicator questIndicator = npc.GetQuestIndicator(m_gameClient.Player);
+
+                Console.WriteLine("SendNPCCreate171 has been called");
+                eQuestIndicator questIndicator = npc.GetQuestIndicator(m_gameClient.Player);
 	
 				if (questIndicator == eQuestIndicator.Available)
 					flags2 |= 0x08;//hex 8 - quest available

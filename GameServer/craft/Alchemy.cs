@@ -171,11 +171,11 @@ namespace DOL.GS
         /// </summary>
         /// <param name="player"></param>
         /// <param name="recipe"></param>
-        /// <param name="rawMaterials"></param>
         /// <returns></returns>
-        public override int GetCraftingTime(GamePlayer player, DBCraftedItem recipe, IList<DBCraftedXItem> rawMaterials)
+        public override int GetCraftingTime(GamePlayer player, Recipe recipe)
         {
-            int time = (int)Math.Round(0.75*base.GetCraftingTime(player, recipe, rawMaterials));
+            //int time = (int)Math.Round(0.75*base.GetCraftingTime(player, recipe, rawMaterials)); -> 
+            int time = (int)Math.Round(0.75*base.GetCraftingTime(player, recipe));
             if (time < 1)
                 time = 1;
             return time;

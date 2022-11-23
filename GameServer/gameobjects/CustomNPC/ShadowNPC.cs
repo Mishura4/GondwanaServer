@@ -10,6 +10,7 @@ using DOLDatabase.Tables;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -246,10 +247,10 @@ namespace DOL.gameobjects.CustomNPC
 
         protected virtual void GetPlayerLocation(out int x, out int y, out int z, out ushort heading, out Region region)
         {
-            Point2D point = player.GetPointFromHeading(player.Heading, 64);
-            x = point.X;
-            y = point.Y;
-            z = player.Z;
+            Vector2 point = player.GetPointFromHeading(player.Heading, 64);
+            x = (int)point.X;
+            y = (int)point.Y;
+            z = (int)player.Position.Z;
             heading = (ushort)((player.Heading + 2048) % 4096);
             region = player.CurrentRegion;
         }

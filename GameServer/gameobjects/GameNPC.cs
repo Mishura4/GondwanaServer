@@ -1493,7 +1493,7 @@ namespace DOL.GS
 			IsReturningHome = true;
 			IsReturningToSpawnPoint = true;
             if (TPPoint != null)
-                PathTo(TPPoint, speed);
+                PathTo(new Vector3((float)TPPoint.Position.X, (float)TPPoint.Position.Y, (float)TPPoint.Position.Z), speed);
             else
 			    PathTo(SpawnPoint, speed);
 		}
