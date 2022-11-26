@@ -93,7 +93,16 @@ namespace DOL.GS.Commands
                         newArea.Sound = area.Sound;
 						newArea.CanBroadcast = area.CanBroadcast;
 						WorldMgr.GetRegion(client.Player.CurrentRegionID).AddArea(newArea);
-						GameServer.Database.AddObject(area);
+						try
+						{
+							GameServer.Database.AddObject(area);
+						}
+						catch
+						{
+							client.Out.SendMessage("Le nom de cet Area doit etre unique", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+							break;
+						}
+	
 						DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Area.AreaCreated", area.Description, area.X, area.Y, area.Z, area.Radius, area.CanBroadcast.ToString(), area.Sound));
 						break;
 					}

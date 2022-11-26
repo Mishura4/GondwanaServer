@@ -41,6 +41,9 @@ using DOL.GS.ServerProperties;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Numerics;
+using DOL.GameEvents;
+using System.Threading.Tasks;
+using DOL.MobGroups;
 
 namespace DOL.GS
 {
@@ -179,6 +182,63 @@ namespace DOL.GS
 		{
 			get { return m_translationId; }
 			set { m_translationId = (value == null ? "" : value); }
+		}
+
+		public string EventID
+		{
+			get;
+			set;
+		}
+
+		public int ExperienceEventFactor
+		{
+			get;
+			set;
+		} = 1;
+
+		/// <summary>
+		/// Original Race from Database
+		/// </summary>
+		public int RaceDb
+        {
+			get;
+			set;
+        }
+
+		/// <summary>
+		/// Original Model from Database
+		/// </summary>
+		public ushort ModelDb
+        {
+			get;
+			set;
+        }
+
+		/// <summary>
+		/// Original VisibleWeapons from Database
+		/// </summary>
+		public byte VisibleWeaponsDb
+        {
+			get;
+			set;
+        }
+
+		/// <summary>
+		/// Original Flags from Database
+		/// </summary>
+		public uint FlagsDb
+        {
+			get;
+			set;
+        }
+
+		/// <summary>
+		/// If this mob is a Member of GroupMob
+		/// </summary>
+		public MobGroup CurrentGroupMob
+		{
+			get;
+			set;
 		}
 
 		/// <summary>
@@ -2187,6 +2247,12 @@ namespace DOL.GS
 			Flags = (eFlags)dbMob.Flags;
 			m_packageID = dbMob.PackageID;
 			IsRenaissance = dbMob.IsRenaissance;
+			EventID = dbMob.EventID;
+
+			ModelDb = dbMob.Model;
+			RaceDb = dbMob.Race;
+			VisibleWeaponsDb = dbMob.VisibleWeaponSlots;
+			FlagsDb = dbMob.Flags;
 
 			// Skip Level.set calling AutoSetStats() so it doesn't load the DB entry we already have
 			m_level = dbMob.Level;
@@ -2360,10 +2426,27 @@ namespace DOL.GS
 			mob.Speed = MaxSpeedBase;
 			mob.Region = CurrentRegionID;
 			mob.Realm = (byte)Realm;
-			mob.Model = Model;
+
+			//If mob is part of GroupMob we need to save the changing properties from PropertyDb which contains original value from db or new values from Commands
+			if (this.CurrentGroupMob == null)
+            {
+				mob.Model = Model;
+				mob.Race = Race;
+				mob.Flags = (uint)Flags;
+				mob.VisibleWeaponSlots = this.m_visibleActiveWeaponSlots;
+			}
+            else
+            {
+				mob.Model = this.ModelDb;
+				mob.Flags = this.FlagsDb;
+				mob.Race = this.RaceDb;
+				mob.VisibleWeaponSlots = this.VisibleWeaponsDb;
+			}
+
 			mob.Size = Size;
 			mob.Level = Level;
 			mob.IsRenaissance = IsRenaissance;
+			mob.EventID = EventID;
 
 			// Stats
 			mob.Constitution = Constitution;
@@ -2375,8 +2458,7 @@ namespace DOL.GS
 			mob.Empathy = Empathy;
 			mob.Charisma = Charisma;
 
-			mob.ClassType = this.GetType().ToString();
-			mob.Flags = (uint)Flags;
+			mob.ClassType = this.GetType().ToString();	
 			mob.Speed = MaxSpeedBase;
 			mob.RespawnInterval = m_respawnInterval / 1000;
 			mob.HouseNumber = HouseNumber;
@@ -2405,13 +2487,11 @@ namespace DOL.GS
 				mob.NPCTemplateID = -1;
 			}
 
-			mob.Race = Race;
 			mob.BodyType = BodyType;
 			mob.PathID = PathID;
 			mob.MaxDistance = m_maxdistance;
 			mob.IsCloakHoodUp = m_isCloakHoodUp;
 			mob.Gender = (byte)Gender;
-			mob.VisibleWeaponSlots = this.m_visibleActiveWeaponSlots;
 			mob.PackageID = PackageID;
 			mob.OwnerID = OwnerID;
 
@@ -4192,12 +4272,55 @@ namespace DOL.GS
 				base.Die(killer);
 			}
 
+			bool isStoppingEvent = false;
+			if (this.EventID != null)
+			{
+				var ev = GameEventManager.Instance.Events.FirstOrDefault(e => e.ID.Equals(this.EventID));
+
+				if (ev != null)
+				{
+					//Check if mob is a mob to kill in event
+					if (ev.Mobs.Contains(this) && ev.IsKillingEvent && ev.MobNamesToKill?.Contains(this.Name) == true)
+					{
+						ev.WantedMobsCount--;
+
+						if (ev.WantedMobsCount == 0)
+						{
+							GamePlayer player = killer as GamePlayer;
+                            GamePlayer controller = null;
+                            if(killer is GameLiving living && living.ControlledBrain != null && living.ControlledBrain.Owner is GamePlayer)
+                                controller = living.ControlledBrain.Owner as GamePlayer;
+                            if (player != null || controller != null)
+                                ev.Owner = player ?? controller;
+                            isStoppingEvent = true;
+							Task.Run(() => GameEventManager.Instance.StopEvent(ev, EndingConditionType.Kill));
+						}
+					}
+				}
+			}
+
+			//Check if killed mob starts event
+			if (this.CurrentGroupMob != null)
+			{
+				bool isAllOthersGroupMobDead = MobGroupManager.Instance.IsAllOthersGroupMobDead(this);
+				var mobGroupEvent = GameEventManager.Instance.Events.FirstOrDefault(e => 
+				e.KillStartingGroupMobId?.Equals(this.CurrentGroupMob.GroupId) == true && 
+			   !e.StartedTime.HasValue && 
+			    e.Status == EventStatus.NotOver &&
+				e.StartConditionType == StartingConditionType.Kill);
+
+				if (isAllOthersGroupMobDead && mobGroupEvent != null)
+                {
+					Task.Run(() => GameEventManager.Instance.StartEvent(mobGroupEvent));				
+				}
+			}
+
 			Delete();
 
 			// remove temp properties
 			TempProperties.removeAllProperties();
 
-			if (!(this is GamePet))
+			if (!(this is GamePet) && (this.EventID == null || (CanRespawnWithinEvent && !isStoppingEvent)))
 				StartRespawn();
 		}
 

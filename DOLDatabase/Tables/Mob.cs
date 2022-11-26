@@ -77,6 +77,8 @@ namespace DOL.Database
 		private string m_packageID;
 		private byte m_visibleWeaponSlots;
 		private bool m_isRenaissance;
+		private byte m_gender = 0;
+        private string m_eventID;
 
 		public static readonly string DEFAULT_NPC_CLASSTYPE = "DOL.GS.GameNPC";
         #endregion Variables
@@ -318,7 +320,7 @@ namespace DOL.Database
 		/// <summary>
 		/// The Mob's Region ID
 		/// </summary>
-		[DataElement(AllowDbNull = false)]
+		[DataElement(AllowDbNull = false, Index = true)]
 		public ushort Region
 		{
 			get
@@ -804,7 +806,6 @@ namespace DOL.Database
             }
         }
 
-		private byte m_gender = 0;
 
 		/// <summary>
 		/// Gender of this mob.
@@ -849,6 +850,22 @@ namespace DOL.Database
 				this.m_visibleWeaponSlots = value;
 				this.Dirty = true;
 			}
+        }
+
+
+        [DataElement(AllowDbNull = true, Index = true)]
+        public string EventID
+        {
+            get
+            {
+                return m_eventID;
+            }
+
+            set
+            {
+                Dirty = true;
+                m_eventID = value;
+            }
         }
         #endregion Properties
     }

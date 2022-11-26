@@ -1325,8 +1325,10 @@ namespace DOL.GS.ServerRules
 						if (!living.IsAlive)//Dead living gets 25% exp only
 							xpReward = (long)(xpReward * 0.25);
 
+						GameLiving.eXPSource src = killedNPC.EventID != null ? GameLiving.eXPSource.EventNPC : GameLiving.eXPSource.NPC;
+
 						//XP Rate is handled in GainExperience
-						living.GainExperience(GameLiving.eXPSource.NPC, xpReward, campBonus, groupExp, outpostXP, true, true, true);
+						living.GainExperience(src, xpReward, campBonus, groupExp, outpostXP, true, true, true, killedNPC.ExperienceEventFactor);
 					}
 				}
 			}

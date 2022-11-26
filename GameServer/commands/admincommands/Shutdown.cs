@@ -204,13 +204,22 @@ namespace DOL.GS.Commands
 					{
 						client.Out.SendMessage(sendMessage, eChatType.CT_Staff, eChatLoc.CL_ChatWindow);
 					}
+					if (Properties.DISCORD_ACTIVE)
+                    {
+                        var hook = new DolWebHook(Properties.DISCORD_WEBHOOK_ID);
+                        hook.SendMessage(sendMessage);
+                    }
 				}
 
 				if (mins <= 2 && GameServer.Instance.ServerStatus != eGameServerStatus.GSS_Closed) // 2 mins remaining
 				{
 					GameServer.Instance.Close();
-					string msg = "Server is now closed (restart in " + mins + " mins)";
-
+					if(Properties.DISCORD_ACTIVE)
+                    {
+                        string msg = "Server is now closed (restart in " + mins + " mins)";
+                        var hook = new DolWebHook(Properties.DISCORD_WEBHOOK_ID);
+                        hook.SendMessage(msg);
+                    }
 					// You have an IRC Bot
 					//if (ServerIRC.IRCBot != null) ServerIRC.IRCBot.SendMessage(ServerIRC.CHANNEL, msg);
 				}

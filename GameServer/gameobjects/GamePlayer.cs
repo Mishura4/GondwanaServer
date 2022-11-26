@@ -5093,9 +5093,9 @@ namespace DOL.GS
 		/// <param name="expGroupBonus"></param>
 		/// <param name="expOutpostBonus"></param>
 		/// <param name="sendMessage"></param>
-		public void GainExperience(eXPSource xpSource, long expTotal, long expCampBonus, long expGroupBonus, long expOutpostBonus, bool sendMessage)
+		public void GainExperience(eXPSource xpSource, long expTotal, long expCampBonus, long expGroupBonus, long expOutpostBonus, bool sendMessage, int eventMultiplicator)
 		{
-			GainExperience(xpSource, expTotal, expCampBonus, expGroupBonus, expOutpostBonus, sendMessage, true);
+			GainExperience(xpSource, expTotal, expCampBonus, expGroupBonus, expOutpostBonus, sendMessage, true, eventMultiplicator);
 		}
 
 		/// <summary>
@@ -5107,9 +5107,9 @@ namespace DOL.GS
 		/// <param name="expOutpostBonus"></param>
 		/// <param name="sendMessage"></param>
 		/// <param name="allowMultiply"></param>
-		public void GainExperience(eXPSource xpSource, long expTotal, long expCampBonus, long expGroupBonus, long expOutpostBonus, bool sendMessage, bool allowMultiply)
+		public void GainExperience(eXPSource xpSource, long expTotal, long expCampBonus, long expGroupBonus, long expOutpostBonus, bool sendMessage, bool allowMultiply, int eventMultiplicator)
 		{
-			GainExperience(xpSource, expTotal, expCampBonus, expGroupBonus, expOutpostBonus, sendMessage, allowMultiply, true);
+			GainExperience(xpSource, expTotal, expCampBonus, expGroupBonus, expOutpostBonus, sendMessage, allowMultiply, true, eventMultiplicator);
 		}
 
 		/// <summary>
@@ -5122,7 +5122,7 @@ namespace DOL.GS
 		/// <param name="sendMessage"></param>
 		/// <param name="allowMultiply"></param>
 		/// <param name="notify"></param>
-		public override void GainExperience(eXPSource xpSource, long expTotal, long expCampBonus, long expGroupBonus, long expOutpostBonus, bool sendMessage, bool allowMultiply, bool notify)
+		public override void GainExperience(eXPSource xpSource, long expTotal, long expCampBonus, long expGroupBonus, long expOutpostBonus, bool sendMessage, bool allowMultiply, bool notify, int eventMultiplicator)
 		{
 			if (!GainXP && expTotal > 0)
 				return;
@@ -5143,7 +5143,7 @@ namespace DOL.GS
 					{
 						Out.SendMessage(ZoneBonus.GetBonusMessage(this, (int)(zoneBonus * ServerProperties.Properties.XP_RATE), ZoneBonus.eZoneBonusType.XP),
 						                eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-						GainExperience(eXPSource.Other, (long)(zoneBonus * ServerProperties.Properties.XP_RATE), 0, 0, 0, false, false, false);
+						GainExperience(eXPSource.Other, (long)(zoneBonus * ServerProperties.Properties.XP_RATE), 0, 0, 0, false, false, false, 1);
 					}
 				}
 
@@ -5188,6 +5188,13 @@ namespace DOL.GS
 				expTotal += bonusRenaissance; 
 			}
 
+			int eventBonus = 0;
+			if (eventMultiplicator > 1)
+            {
+				eventBonus = (int)expTotal * eventMultiplicator;
+				expTotal += eventBonus;
+            }
+
 			// Get Champion Experience too
 			GainChampionExperience(expTotal);
 
@@ -5213,7 +5220,7 @@ namespace DOL.GS
 					}
 			}
 
-			base.GainExperience(xpSource, expTotal, expCampBonus, expGroupBonus, expOutpostBonus, sendMessage, allowMultiply, notify);
+			base.GainExperience(xpSource, expTotal, expCampBonus, expGroupBonus, expOutpostBonus, sendMessage, allowMultiply, notify, eventMultiplicator);
 
 			if (IsLevelSecondStage)
 			{
@@ -5254,10 +5261,11 @@ namespace DOL.GS
 				{
 					Out.SendMessage(string.Format("dont {0} points bonus de Renaissance", bonusRenaissance), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
 				}
-                if (bonusRenaissance > 0)
-                {
-                    Out.SendMessage(string.Format("dont {0} points bonus de Renaissance", bonusRenaissance), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                }
+
+				if (eventBonus > 0)
+				{
+					Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.GainExperience.BonusGameEvent", eventBonus), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+				}
             }
 
 			Experience += expTotal;
@@ -8077,7 +8085,7 @@ namespace DOL.GS
                         DeathCount++;
                         m_deathtype = eDeathType.PvE;
                         long xpLoss = (ExperienceForNextLevel - ExperienceForCurrentLevel) * xpLossPercent / 1000;
-                        GainExperience(eXPSource.Other, -xpLoss, 0, 0, 0, false, true);
+                        GainExperience(eXPSource.Other, -xpLoss, 0, 0, 0, false, true, 1);
                         TempProperties.setProperty(DEATH_EXP_LOSS_PROPERTY, xpLoss);
                     }
 
@@ -14475,7 +14483,7 @@ namespace DOL.GS
         public void OnAfkXpTick()
         {
             long bonusXP = Experience * Properties.AFK_XP_PERCENTAGE / 100;
-            GainExperience(GameLiving.eXPSource.Other, bonusXP, 0, 0, 0, false);
+            GainExperience(GameLiving.eXPSource.Other, bonusXP, 0, 0, 0, false, 1);
 
             if (bonusXP > 0)
             {

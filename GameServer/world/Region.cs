@@ -32,6 +32,7 @@ using DOL.GS.Utils;
 using DOL.GS.ServerProperties;
 using log4net;
 using System.Numerics;
+using DOL.GameEvents;
 
 namespace DOL.GS
 {
@@ -58,7 +59,7 @@ namespace DOL.GS
         /// <summary>
         /// This holds all objects inside this region. Their index = their id!
         /// </summary>
-        protected GameObject[] m_objects;
+        protected GameObject[] m_objects;        
 
 
         /// <summary>
@@ -893,7 +894,8 @@ namespace DOL.GS
                     {
                         try
                         {
-                            myMob.LoadFromDatabase(mob);
+                            if (mob.EventID == null)
+                                myMob.LoadFromDatabase(mob);
 
                             if (myMob is GameMerchant)
                             {
@@ -911,7 +913,16 @@ namespace DOL.GS
                             throw;
                         }
 
-                        myMob.AddToWorld();
+                        //Add mob to world only if not part in any game event
+                        if (mob.EventID == null)
+                        {
+                            myMob.AddToWorld();
+                        }
+                        else
+                        {
+                            myMob.InternalID = mob.ObjectId;
+                            GameEventManager.Instance.PreloadedMobs.Add(myMob);
+                        }
                     }
                 }
             }

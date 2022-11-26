@@ -47,6 +47,8 @@ using log4net;
 using log4net.Config;
 using log4net.Core;
 using GameServerScripts.Utils;
+using DOL.GameEvents;
+using DOL.events.server;
 
 namespace DOL.GS
 {
@@ -710,6 +712,20 @@ namespace DOL.GS
                     return false;
                 }
 
+                //---------------------------------------------------------------
+                // Try to initialize the MobGroup Manager
+                if (!InitComponent(MobGroups.MobGroupManager.Instance.LoadFromDatabase(), "MobGroup Manager"))
+                {
+                    return false;
+                }
+
+                //---------------------------------------------------------------
+                // Try to initialize the Game Events
+                if (!InitComponent(GameEventManager.Instance.Init(), "Game Events"))
+                {
+                    return false;
+                }
+
 				//---------------------------------------------------------------
 				//Notify our scripts that everything went fine!
 				GameEventMgr.Notify(ScriptEvent.Loaded);
@@ -862,14 +878,17 @@ namespace DOL.GS
 				if (log.IsInfoEnabled)
 					log.Info("Loading skills: true");
 
+                GameEventMgr.RegisterGlobalEvents(Assembly.GetExecutingAssembly(), typeof(GameServerCoffreLoadedAttribute), GameServerEvent.CoffreLoaded);
+                GameEventMgr.RegisterGlobalEvents(Assembly.GetExecutingAssembly(), typeof(GameEventLoadedAttribute), GameServerEvent.GameEventLoaded);
+
 				//---------------------------------------------------------------
 				//Register all event handlers
 				foreach (Assembly asm in ScriptMgr.GameServerScripts)
 				{
-					GameEventMgr.RegisterGlobalEvents(asm, typeof (GameServerStartedEventAttribute), GameServerEvent.Started);
-					GameEventMgr.RegisterGlobalEvents(asm, typeof (GameServerStoppedEventAttribute), GameServerEvent.Stopped);
-					GameEventMgr.RegisterGlobalEvents(asm, typeof (ScriptLoadedEventAttribute), ScriptEvent.Loaded);
-					GameEventMgr.RegisterGlobalEvents(asm, typeof (ScriptUnloadedEventAttribute), ScriptEvent.Unloaded);
+					GameEventMgr.RegisterGlobalEvents(asm, typeof(GameServerStartedEventAttribute), GameServerEvent.Started);
+					GameEventMgr.RegisterGlobalEvents(asm, typeof(GameServerStoppedEventAttribute), GameServerEvent.Stopped);
+					GameEventMgr.RegisterGlobalEvents(asm, typeof(ScriptLoadedEventAttribute), ScriptEvent.Loaded);
+					GameEventMgr.RegisterGlobalEvents(asm, typeof(ScriptUnloadedEventAttribute), ScriptEvent.Unloaded);
 				}
 				if (log.IsInfoEnabled)
 					log.Info("Registering global event handlers: true");

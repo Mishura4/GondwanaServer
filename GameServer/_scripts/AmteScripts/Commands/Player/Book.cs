@@ -57,7 +57,7 @@ namespace DOL.GS.Scripts
 						ScrollTitle = String.Join(" ", args, 2, args.Length - 2);
 						var item = player.Inventory.GetItem(eInventorySlot.LastBackpack);
 
-						if ((item.Id_nb != "scroll") || (item.Name != "Parchemin vierge"))
+						if (item == null || (item.Id_nb != "scroll") || (item.Name != "Parchemin vierge"))
 						{
 							player.Out.SendMessage("Vous devez posseder un parchemin vierge dans le dernier emplacement de votre inventaire pour créer un livre.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
 							return;

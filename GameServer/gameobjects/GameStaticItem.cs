@@ -18,6 +18,7 @@
  */
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Numerics;
 using DOL.Database;
 using DOL.Events;
@@ -107,6 +108,15 @@ namespace DOL.GS
             get { return m_translationId; }
             set { m_translationId = (value == null ? "" : value); }
         }
+
+        public string EventID
+        {
+            get;
+            set;
+        }
+
+        public virtual bool IsCoffre => false;
+
 
 		/// <summary>
 		/// Gets or sets the name of this item
@@ -341,6 +351,16 @@ namespace DOL.GS
 		{
 			return RemoveFromWorld(RespawnInterval);
 		}
+
+
+        /// <summary>
+        /// Get Coffres and their new EventIds from Db
+        /// </summary>
+        /// <returns></returns>
+        public virtual IEnumerable<Tuple<GameStaticItem, string>> GetCoffresUsedInEventsInDb(ushort region)
+        {
+            return null;
+        }
 
 
 		/// <summary>

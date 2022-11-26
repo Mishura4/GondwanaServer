@@ -4,6 +4,7 @@ using System.Linq;
 using System.Timers;
 using System.Numerics;
 using DOL.Database;
+using DOL.GameEvents;
 using DOL.GS.PacketHandler;
 
 namespace DOL.GS.Scripts
@@ -49,6 +50,14 @@ namespace DOL.GS.Scripts
 					m_ItemChance = 0;
 				else
 					m_ItemChance = value;
+			}
+		}
+
+		public override bool IsCoffre
+		{
+			get
+			{
+				return true;
 			}
 		}
 
@@ -200,6 +209,41 @@ namespace DOL.GS.Scripts
 			Coffres.Add(this);
 
 			return true;
+		}
+
+		public override bool RemoveFromWorld()
+		{
+			Coffres.Remove(this);
+			return base.RemoveFromWorld();
+		}
+
+
+		/// <summary>
+		///  Get Coffres and their new EventIds from Db
+		/// </summary>
+		/// <returns></returns>
+		public override IEnumerable<Tuple<GameStaticItem, string>> GetCoffresUsedInEventsInDb(ushort region)
+		{
+			var coffres = GameServer.Database.SelectObjects<DBCoffre>("`EventID` IS NOT NULL AND `Region` = @Region", new QueryParameter("Region", region));
+
+			if (coffres == null)
+			{
+				return null;
+			}
+
+			List<Tuple<GameStaticItem, string>> values = new List<Tuple<GameStaticItem, string>>();
+
+			foreach (var dbCoffre in coffres)
+			{
+				GameCoffre coffreInRegion = WorldMgr.Regions[region].Objects.FirstOrDefault(o => o != null && o as GameCoffre != null && o.InternalID.Equals(dbCoffre.ObjectId)) as GameCoffre;
+
+				if (coffreInRegion != null)
+				{		
+					values.Add(new Tuple<GameStaticItem, string>(coffreInRegion, dbCoffre.EventID));				
+				}
+			}
+
+			return values;
 		}
 
 		public void RespawnCoffre()
@@ -371,7 +415,10 @@ namespace DOL.GS.Scripts
 				m_lastInteract = DateTime.MinValue;
 				LastOpen = DateTime.Now;
 				RemoveFromWorld(ItemInterval * 60);
-				RespawnTimer.Start();
+				if (this.EventID == null || (CanRespawnWithinEvent))
+				{
+					RespawnTimer.Start();
+				}
 				SaveIntoDatabase();
 			}
 
@@ -662,6 +709,7 @@ namespace DOL.GS.Scripts
 			IsTeleporter = coffre.IsTeleporter;
 			TpEffect = coffre.TpEffect;
 			TpRegion = coffre.TpRegion;
+			EventID = coffre.EventID;
 			CoffreOpeningInterval = coffre.CoffreOpeningInterval;
 			IsLargeCoffre = coffre.IsLargeCoffre;
 
@@ -721,6 +769,7 @@ namespace DOL.GS.Scripts
 			Coffre.TpEffect = TpEffect;
 			Coffre.TpRegion = TpRegion;
 			Coffre.IsOpeningRenaissanceType = IsOpeningRenaissanceType;
+			Coffre.EventID = EventID;
 			Coffre.CoffreOpeningInterval = CoffreOpeningInterval;
 			Coffre.IsLargeCoffre = IsLargeCoffre;
 
@@ -792,6 +841,7 @@ namespace DOL.GS.Scripts
 					" + Position: " + Position + " Heading=" + Heading,
 					" + Realm: " + Realm,
 					" + Model: " + Model,
+					" + EventID: " + EventID,
 					"",
 					"-- Coffre --",
 					" + Chance d'apparition d'un item: " + ItemChance + "%",

@@ -32,7 +32,7 @@ namespace DOL.GS.PacketHandler.Client.v168
 	{
 		private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-		public void HandlePacket(GameClient client, GSPacketIn packet)
+		public async void HandlePacket(GameClient client, GSPacketIn packet)
 		{
 			if (client.Player == null)
 				return;

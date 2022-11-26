@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using DOL.Database;
 using DOL.GS.PacketHandler;
 
@@ -37,12 +38,13 @@ namespace DOL.GS.Scripts
 					{
 						p.Out.SendMessage("\"Il vous faut 5 piece d'or pour dupliquer un livre.\"", eChatType.CT_System, eChatLoc.CL_PopupWindow);
 						return false;
-					}
-					//p.Inventory.AddItem(eInventorySlot.FirstEmptyBackpack, GameInventoryItem.Create(item.Template));
-					var iu = new ItemUnique(item.ITWrapper) {Id_nb = "scroll" + Guid.NewGuid()};
+					}	
+
+					var iu = new ItemUnique(item.IUWrapper) { Id_nb = "scroll" + Guid.NewGuid() };
 					GameServer.Database.AddObject(iu);
 					p.Inventory.AddItem(eInventorySlot.FirstEmptyBackpack, GameInventoryItem.Create(iu));
-					p.Out.SendMessage("\"Voilà la copie de votre livre sir " + p.Name + ".\"", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+					p.Out.SendMessage("\"Voilà la copie de votre livre sir " + p.Name + ".\"", eChatType.CT_System, eChatLoc.CL_PopupWindow);					
+
 				}
 				else
 					p.Out.SendMessage("\"Désolé, ce livre n'existe plus.\"", eChatType.CT_System, eChatLoc.CL_PopupWindow);

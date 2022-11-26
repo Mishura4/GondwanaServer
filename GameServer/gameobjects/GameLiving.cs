@@ -40,6 +40,7 @@ using System.Numerics;
 using DOL.GS.PlayerClass;
 using DOL.GS.ServerProperties;
 using static DOL.GS.ScriptMgr;
+using System.Threading.Tasks;
 
 namespace DOL.GS
 {
@@ -338,7 +339,8 @@ namespace DOL.GS
 			Task,
 			Praying,
 			GM,
-			Other
+			Other,
+			EventNPC
 		}
 
 		#endregion
@@ -1703,6 +1705,17 @@ namespace DOL.GS
 				ad.AttackResult = eAttackResult.TargetNotVisible;
 				return ad;
 			}
+
+			//Check if target is npc and is invicible
+			if (ad.Target is GameNPC npc && npc.CurrentGroupMob != null)
+            {
+				if (npc.CurrentGroupMob.GroupInfos.IsInvincible == true)
+				{
+					ad.AttackResult = eAttackResult.HitUnstyled;
+					ad.Damage = 0;
+					return ad;
+				}
+            }
 
 			//Target is dead already
 			if (!ad.Target.IsAlive)
@@ -4608,7 +4621,7 @@ namespace DOL.GS
 		/// <param name="expOutpostBonus">outpost bonux to display</param>
 		/// <param name="sendMessage">should exp gain message be sent</param>
 		/// <param name="allowMultiply">should the xp amount be multiplied</param>
-		public virtual void GainExperience(eXPSource xpSource, long expTotal, long expCampBonus, long expGroupBonus, long expOutpostBonus, bool sendMessage, bool allowMultiply, bool notify)
+		public virtual void GainExperience(eXPSource xpSource, long expTotal, long expCampBonus, long expGroupBonus, long expOutpostBonus, bool sendMessage, bool allowMultiply, bool notify, int eventMultiplicator)
 		{
 			if (expTotal > 0 && notify) Notify(GameLivingEvent.GainedExperience, this, new GainedExperienceEventArgs(expTotal, expCampBonus, expGroupBonus, expOutpostBonus, sendMessage, allowMultiply, xpSource));
 		}
@@ -4634,7 +4647,7 @@ namespace DOL.GS
 		/// <param name="exp">base amount of xp to gain</param>
 		public void GainExperience(eXPSource xpSource, long exp)
 		{
-			GainExperience(xpSource, exp, 0, 0, 0, true, false, true);
+			GainExperience(xpSource, exp, 0, 0, 0, true, false, true, 1);
 		}
 
 		/// <summary>
@@ -4644,7 +4657,7 @@ namespace DOL.GS
 		/// <param name="allowMultiply">Do we allow the xp to be multiplied</param>
 		public void GainExperience(eXPSource xpSource, long exp, bool allowMultiply)
 		{
-			GainExperience(xpSource, exp, 0, 0, 0, true, allowMultiply, true);
+			GainExperience(xpSource, exp, 0, 0, 0, true, allowMultiply, true, 1);
 		}
 
 		/// <summary>

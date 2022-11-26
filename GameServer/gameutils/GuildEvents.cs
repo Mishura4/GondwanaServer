@@ -212,7 +212,7 @@ namespace DOL.GS
 			if (player.Guild != null && player.Guild.BonusType == Guild.eBonusType.Experience && xpArgs.XPSource == GameLiving.eXPSource.NPC)
 			{
 				long bonusXP = (long)Math.Ceiling((double)xpArgs.ExpBase * ServerProperties.Properties.GUILD_BUFF_XP / 100);
-				player.GainExperience(GameLiving.eXPSource.Other, bonusXP, 0, 0, 0, false);
+				player.GainExperience(GameLiving.eXPSource.Other, bonusXP, 0, 0, 0, false, 1);
 				player.Out.SendMessage("You gain an additional " + bonusXP + " experience due to your guild's buff!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
 				player.Guild.UpdateGuildWindow();
 			}

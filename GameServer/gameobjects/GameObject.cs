@@ -29,6 +29,7 @@ using DOL.Language;
 using DOL.GS.Quests;
 using DOL.GS.Housing;
 using DOL.GS.PacketHandler;
+using System.Threading.Tasks;
 using DOL.GS.Utils;
 
 using log4net;
@@ -166,6 +167,11 @@ namespace DOL.GS
 			}
 		}
 
+        public bool CanRespawnWithinEvent
+        {
+            get;
+            set;
+        }
 
 		/// <summary>
 		/// Get's or sets the current Region by the ID
