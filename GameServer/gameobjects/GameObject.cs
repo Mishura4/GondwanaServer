@@ -1379,5 +1379,10 @@ namespace DOL.GS
 			else
 				return m_boat_ownerid;
 		}
+
+        public virtual void CustomCopy(GameObject source)
+        {
+
+        }
 	}
 }

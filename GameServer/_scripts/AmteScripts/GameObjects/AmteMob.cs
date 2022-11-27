@@ -47,72 +47,81 @@ public class AmteMob : GameNPC, IAmteNPC
 	{
 		base.LoadFromDatabase(obj);
 
-		DBBrainsParam[] data;
-		if (!DBBrainsParam.MobXDBBrains.TryGetValue(obj.ObjectId, out data))
-			data = new DBBrainsParam[0];
-		for (var cp = GetCustomParam(); cp != null; cp = cp.next)
-		{
-			var cp1 = cp;
-			var param = data.Where(o => o.Param == cp1.name).FirstOrDefault();
-			if (param == null)
-				continue;
-			if (_nameXcp.ContainsKey(cp.name))
-			{
-				GameServer.Database.DeleteObject(param);
-				continue;
-			}
-			try
-			{
-				cp.Value = param.Value;
-			}
-			catch (Exception)
-			{
-			}
-			_nameXcp.Add(cp.name, param);
-		}
+        LoadDbBrainParam(obj.ObjectId);
+        // load some stats from the npctemplate
+        if (NPCTemplate != null && !NPCTemplate.ReplaceMobValues)
+        {
+            if (NPCTemplate.Spells != null) this.Spells = NPCTemplate.Spells;
+            if (NPCTemplate.Styles != null) this.Styles = NPCTemplate.Styles;
+            if (NPCTemplate.Abilities != null)
+            {
+                lock (m_lockAbilities)
+                {
+                    foreach (Ability ab in NPCTemplate.Abilities)
+                        m_abilities[ab.KeyName] = ab;
+                }
+            }
+        }
+    }
 
-		// load some stats from the npctemplate
-		if (NPCTemplate != null && !NPCTemplate.ReplaceMobValues)
-		{
-			if (NPCTemplate.Spells != null) this.Spells = NPCTemplate.Spells;
-			if (NPCTemplate.Styles != null) this.Styles = NPCTemplate.Styles;
-			if (NPCTemplate.Abilities != null)
-			{
-				lock (m_lockAbilities)
-				{
-					foreach (Ability ab in NPCTemplate.Abilities)
-						m_abilities[ab.KeyName] = ab;
-				}
-			}
-		}
-	}
+    private void LoadDbBrainParam(string dataid)
+    {
+        var data = GameServer.Database.SelectObjects<DBBrainsParam>("MobID = @MobId", new QueryParameter("@MobId", dataid));
+        for (var cp = GetCustomParam(); cp != null; cp = cp.next)
+        {
+            var cp1 = cp;
+            var param = data.Where(o => o.Param == cp1.name).FirstOrDefault();
+            if (param == null)
+            {
+                continue;
+            }
+            cp.Value = param.Value;
+            if (_nameXcp.ContainsKey(cp.name))
+            {
+                _nameXcp[cp.name] = param;
+            }
+            else
+            {
+                _nameXcp.Add(cp.name, param);
+            }
+        }
+    }
 
-	public override void SaveIntoDatabase()
+    public override void SaveIntoDatabase()
 	{
 		base.SaveIntoDatabase();
 
 		DBBrainsParam param;
 		for (var cp = GetCustomParam(); cp != null; cp = cp.next)
-			if (_nameXcp.TryGetValue(cp.name, out param))
-			{
-				param.Value = cp.Value;
-				GameServer.Database.SaveObject(param);
-				
-			}
-			else if (cp.defaultValue != cp.Value)
-			{
-				param = new DBBrainsParam
-				{
-					MobID = InternalID,
-					Param = cp.name,
-					Value = cp.Value,
-				};
-				_nameXcp.Add(cp.name, param);
-				GameServer.Database.AddObject(param);
-			}
+        {
+            if (_nameXcp.TryGetValue(cp.name, out param) && param.MobID == InternalID)
+            {
+                param.Value = cp.Value;
+                GameServer.Database.SaveObject(param);
+
+            }
+            else if (cp.defaultValue != cp.Value)
+            {
+                param = new DBBrainsParam
+                {
+                    MobID = InternalID,
+                    Param = cp.name,
+                    Value = cp.Value
+                };
+                if(_nameXcp.ContainsKey(cp.name))
+                {
+                    _nameXcp[cp.name] = param;
+                }
+                else
+                {
+                    _nameXcp.Add(cp.name, param);
+                }
+                GameServer.Database.AddObject(param);
+            }
+        }
 	}
 
-	public override void DeleteFromDatabase()
+    public override void DeleteFromDatabase()
 	{
 		base.DeleteFromDatabase();
 		_nameXcp.Values.Foreach(o => GameServer.Database.DeleteObject(o));
@@ -130,6 +139,12 @@ public class AmteMob : GameNPC, IAmteNPC
 			list.Add(" - " + cp.name + ": " + cp.Value);
 		return list;
 	}
+
+    public override void CustomCopy(GameObject source)
+    {
+        base.CustomCopy(source);
+        LoadDbBrainParam(source.InternalID);
+    }
 
 	public override eQuestIndicator GetQuestIndicator(GamePlayer player)
 	{

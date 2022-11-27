@@ -43,11 +43,88 @@ namespace DOL.GS.Commands
 				  "'/object respawn <seconds>' to set a respawn time if this object is removed from the world",
 				  "'/object remove' to remove the targeted object",
 	              "'/object copy' to copy the targeted object",
+	              "'/object class' to change the class of the targeted object",
 	              "'/object save' to save the object",
 	              "'/object target' to automatically target the nearest object",
 				  "'/object quests' to load any dataquests associated with the target object")]
 	public class ObjectCommandHandler : AbstractCommandHandler, ICommandHandler
 	{
+        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
+        void setClass(GameClient client, GameStaticItem targetObj, string[] args)
+        {
+            if (args.Length < 3)
+            {
+                DisplaySyntax(client, args[1]);
+                return;
+            }
+
+            GameStaticItem obj = null;
+
+            try
+            {
+                foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+                {
+                    obj = assembly.CreateInstance(args[2], true) as GameStaticItem;
+
+                    if (obj != null)
+                    {
+                        break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error("/obj class - obj", ex);
+            }
+
+            if (obj == null)
+            {
+                try
+                {
+                    foreach (Assembly assembly in ScriptMgr.Scripts)
+                    {
+                        obj = assembly.CreateInstance(args[2], true) as GameStaticItem;
+
+                        if (obj != null)
+                        {
+                            break;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.Error("/obj class - obj", ex);
+                }
+            }
+
+            if (obj == null)
+            {
+                client.Out.SendMessage("There was an error creating an instance of " + args[2] + ".", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return;
+            }
+
+            obj.Position = client.Player.Position;
+            obj.CurrentRegion = client.Player.CurrentRegion;
+            obj.Heading = client.Player.Heading;
+            obj.Level = targetObj.Level;
+            obj.Name = targetObj.Name;
+            obj.Model = targetObj.Model;
+            obj.Realm = targetObj.Realm;
+            obj.Emblem = targetObj.Emblem;
+            obj.LoadedFromScript = false;
+            obj.CustomCopy(targetObj);
+
+            obj.AddToWorld();
+            obj.SaveIntoDatabase();
+
+            // delete old obj
+            targetObj.DeleteFromDatabase();
+            targetObj.Delete();
+
+            client.Out.SendMessage("obj class changed: OID=" + obj.ObjectID, eChatType.CT_System, eChatLoc.CL_SystemWindow);
+        }
+
 		public void OnCommand(GameClient client, string[] args)
 		{
 			if (args.Length == 1)
@@ -285,11 +362,19 @@ namespace DOL.GS.Commands
 						item.Realm = targetObject.Realm;
 						item.Emblem = targetObject.Emblem;
 						item.LoadedFromScript = targetObject.LoadedFromScript;
+						item.CustomCopy(targetObject);
 						item.AddToWorld();
 						item.SaveIntoDatabase();
 						DisplayMessage(client, "Obj created: OID=" + item.ObjectID);
 						break;
 					}
+
+                case "class":
+                    {
+                        setClass(client, targetObject, args);
+                        break;
+                    }
+
 				case "save":
 					{
 						targetObject.LoadedFromScript = false;

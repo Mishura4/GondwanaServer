@@ -37,9 +37,16 @@ namespace DOL.Database
 		private int m_Radius;
 		private int m_MissChance;
 		private string m_Message;
+		private int spellID;
+        private bool m_Group_Mob_Turn;
+        private string m_Group_Mob_Id;
+        private ushort m_Family;
+        private ushort m_OrderInFamily;
+        private bool disable;
+        private bool oneUse;
 
-		#region Init
-		private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        #region Init
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 		private static bool Loaded = false;
 
 	    [ScriptLoadedEvent]
@@ -159,5 +166,86 @@ namespace DOL.Database
 				m_Message = value;
 			}
 		}
-	}
+
+        [DataElement(AllowDbNull = true)]
+        public int SpellID
+        {
+            get { return spellID; }
+            set
+            {
+                Dirty = true;
+                spellID = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = true)]
+        public string Group_Mob_Id
+        {
+            get { return m_Group_Mob_Id; }
+            set
+            {
+                Dirty = true;
+                m_Group_Mob_Id = value;
+            }
+        }
+
+        /// <summary>
+        /// Turn on/turn off
+        /// </summary>
+        [DataElement(AllowDbNull = true)]
+        public bool Group_Mob_Turn
+        {
+            get { return m_Group_Mob_Turn; }
+            set
+            {
+                Dirty = true;
+                m_Group_Mob_Turn = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = true)]
+        public ushort AreaEffectFamily
+        {
+            get { return m_Family; }
+            set
+            {
+                Dirty = true;
+                m_Family = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = true)]
+        public ushort OrderInFamily
+        {
+            get { return m_OrderInFamily; }
+            set
+            {
+                Dirty = true;
+                m_OrderInFamily = value;
+            }
+        }
+
+
+        [DataElement(AllowDbNull = true)]
+        public bool Disable
+        {
+            get { return disable; }
+            set
+            {
+                Dirty = true;
+                disable = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = true)]
+        public bool OnuUse
+        {
+            get { return oneUse; }
+            set
+            {
+                Dirty = true;
+                oneUse = value;
+            }
+        }
+    }
 }

@@ -32,6 +32,8 @@ public class MobXAmbientBehaviour : DataObject
 	private string m_text;
 	private ushort m_chance;
 	private string m_voice;
+	private int m_spell;
+    private ushort m_hp;
 
 	/// <summary>
 	/// Constructor
@@ -49,9 +51,11 @@ public class MobXAmbientBehaviour : DataObject
 		m_text = string.Empty;
 		m_chance = 0;
 		m_voice = string.Empty;
+		m_spell = 0;
+        m_hp = 0;
 	}
 
-	public MobXAmbientBehaviour(string name, string trigger, ushort emote, string text, ushort chance, string voice)
+	public MobXAmbientBehaviour(string name, string trigger, ushort emote, string text, ushort chance, string voice, int spell, ushort hp)
 	{
 		m_source = name;
 		m_trigger = trigger;
@@ -59,6 +63,8 @@ public class MobXAmbientBehaviour : DataObject
 		m_text = text;
 		m_chance = chance;
 		m_voice = voice;
+		m_spell = spell;
+        m_hp = hp;
 	}
 
 	[DataElement(AllowDbNull = false, Index = true)]
@@ -102,4 +108,18 @@ public class MobXAmbientBehaviour : DataObject
 		get { return m_voice; }
 		set { m_voice = value; }
 	}
+
+    [DataElement(AllowDbNull = true)]
+    public int Spell
+    {
+        get { return m_spell; }
+        set { m_spell = value; }
+    }
+
+    [DataElement(AllowDbNull = true)]
+    public ushort HP
+    {
+        get { return m_hp; }
+        set { m_hp = value; }
+    }
 }

@@ -38,10 +38,15 @@ namespace DOL.Database
 		private byte m_realm;
 		private string m_guild;
 		private uint m_flags;
+		private string m_group_mob_id;
 		// private int m_constitution;
 		private int m_locked;
 		private int m_health;
 		private int m_maxHealth;
+		private string m_key;
+        private short m_key_Chance;
+        private bool m_isRenaissance;
+        private int m_punishSpell;
 		
 		/// <summary>
 		/// Create a door row
@@ -281,5 +286,95 @@ namespace DOL.Database
 				m_maxHealth = value;
 			}
 		}
+
+        /// <summary>
+        /// Link a group mob at the door
+        /// </summary>
+        [DataElement(AllowDbNull = true)]
+        public string Group_Mob_Id
+        {
+            get
+            {
+                return m_group_mob_id;
+            }
+
+            set
+            {
+                Dirty = true;
+                m_group_mob_id = value;
+            }
+        }
+
+        /// <summary>
+        /// Itemtemplate id to open the door
+        /// </summary>
+        [DataElement(AllowDbNull = true)]
+        public string Key
+        {
+            get
+            {
+                return m_key;
+            }
+
+            set
+            {
+                Dirty = true;
+                m_key = value;
+            }
+        }
+
+        /// <summary>
+        /// Chance of fail to open the door
+        /// </summary>
+        [DataElement(AllowDbNull = true)]
+        public short Key_Chance
+        {
+            get
+            {
+                return m_key_Chance;
+            }
+
+            set
+            {
+                Dirty = true;
+                m_key_Chance = value;
+            }
+        }
+
+        /// <summary>
+        /// If need the Renaissance state
+        /// </summary>
+        [DataElement(AllowDbNull = true)]
+        public bool IsRenaissance
+        {
+            get
+            {
+                return m_isRenaissance;
+            }
+
+            set
+            {
+                Dirty = true;
+                m_isRenaissance = value;
+            }
+        }
+
+        /// <summary>
+        /// Spell Id to punish the opener
+        /// </summary>
+        [DataElement(AllowDbNull = true)]
+        public int PunishSpell
+        {
+            get
+            {
+                return m_punishSpell;
+            }
+
+            set
+            {
+                Dirty = true;
+                m_punishSpell = value;
+            }
+        }
 	}
 }

@@ -1,0 +1,29 @@
+﻿Commands.GM.AreaEffect.Description:		Areaeffects management:
+Commands.GM.AreaEffect.Usage.Create:		'/areaeffect create <radius> <ID of the effect>' Create an Areaeffect with specified radius and ClientEffectID
+Commands.GM.AreaEffect.Usage.Spell:		'/areaeffect spell <spellid>' AreaEffect cast a spell in place to apply an effect
+Commands.GM.AreaEffect.Usage.HealHarm:		'/areaeffect <heal/harm> <value>' Configure heal/harm value per tick of an areaeffect
+Commands.GM.AreaEffect.Usage.Mana:			'/areaeffect <mana> <value>' Configure mana addition/removal value per tick of an areaeffect
+Commands.GM.AreaEffect.Usage.Endurance:	'/areaeffect <endurance> <value>' Configure endurance addition/removal value per tick of an areaeffect
+Commands.GM.AreaEffect.Usage.Radius:		'/areaeffect radius <newRadius>' To change the radius of an areaeffect
+Commands.GM.AreaEffect.Usage.GroupMob:		'/areaeffect groupmob <group mob id> ON/OFF' Add a 'GroupMob' to the areaefect (ON: active when the group is alive, OFF: active when the group is dead (default))
+Commands.GM.AreaEffect.Usage.Enable:		'/areaeffect enable' Enable the areaeffect
+Commands.GM.AreaEffect.Usage.Disable:		'/areaeffect disable' Disable the areaeffect
+Commands.GM.AreaEffect.Usage.Family:		'/areaeffect family <family id> <order>' Associates an areaeffect with a chain and defines its execution order in the chain
+Commands.GM.AreaEffect.Usage.CallAreaEffect:		'/areaeffect callareaeffect <family id>' Activate an areaeffect family starting with the first
+Commands.GM.AreaEffect.Usage.OneUse:		'/areaeffect oneuse' Activate or deactivate the application only once on the areaeffect
+Commands.GM.AreaEffect.Usage.Effect:		'/areaeffect effect <newEffect>' To change the ClientEffectID of an areaeffect
+Commands.GM.AreaEffect.Usage.Interval:		'/areaeffect interval <min> [max]' To change the tick interval of an areaeffect with MIN value and MAX value
+Commands.GM.AreaEffect.Usage.MissChance:	'/areaeffect missChance <chance %>' To add a MISS chance to an areaeffect
+Commands.GM.AreaEffect.Usage.Message:		'/areaeffect message <message>' {0} = HP points have increased/decreased, {1} = mana has increased/decreased, {2} = endurance has increased/decreased.
+Commands.GM.AreaEffect.Usage.Info:			'/areaeffect info' Gives informations about the selected Areaeffect.
+
+Commands.GM.AreaEffect.Result.Spell: 	{0} cast the spell with the id {1}
+Commands.GM.AreaEffect.GroupMob.NotFound: 	The group {0} does not exist.
+Commands.GM.AreaEffect.Result.OneUse:		The 'OneUse' property of areaeffect {0} is set to {1}
+Commands.GM.AreaEffect.Result.Family:		The areaeffect {0} is associated with the family {1}, its order is {2}
+Commands.GM.AreaEffect.Result.Enable:		AreaEffect {0} is enabled
+Commands.GM.AreaEffect.Result.Disable:		AreaEffect {0} is disabled
+Commands.GM.AreaEffect.CallAreaEffect.NotFound:		No areaeffect found for family {0}
+Commands.GM.AreaEffect.Result.CallAreaEffect: 		Trigger the {0} areaeffect family
+Commands.GM.AreaEffect.Result.GroupMob:		The groupmob {1} is defined at the areaeffect {0}, the area snaps if the group is {2}
+Commands.GM.AreaEffect.NeedTarget:		This command needs to target an AreaEffect

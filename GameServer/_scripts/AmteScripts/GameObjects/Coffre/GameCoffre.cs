@@ -896,5 +896,34 @@ namespace DOL.GS.Scripts
 			text.Add("PunishSpellId: " + this.PunishSpellId);
 			return text;
 		}
-	}
+
+        public override void CustomCopy(GameObject source)
+        {
+            base.CustomCopy(source);
+            GameCoffre coffre = source as GameCoffre;
+            if(coffre != null)
+            {
+                m_Items = coffre.Items;
+                Name = coffre.Name + "_cpy";
+                ItemInterval = coffre.ItemInterval;
+                TpEffect = coffre.TpEffect;
+                TpIsRenaissance = coffre.TpIsRenaissance;
+                TpLevelRequirement = coffre.TpLevelRequirement;
+                TpX = coffre.TpX;
+                TpY = coffre.TpY;
+                TpZ = coffre.TpZ;
+                TpRegion = coffre.TpRegion;
+                TrapRate = coffre.TrapRate;
+                NpctemplateId = coffre.NpctemplateId;
+                PunishSpellId = coffre.PunishSpellId;
+                IsOpeningRenaissanceType = coffre.IsOpeningRenaissanceType;
+                IsTeleporter = coffre.IsTeleporter;
+                CoffreOpeningInterval = coffre.CoffreOpeningInterval;
+                IsLargeCoffre = coffre.IsLargeCoffre;
+                ItemChance = coffre.ItemChance;
+				KeyItem = coffre.KeyItem;
+                InitTimer();
+            }
+        }
+    }
 }

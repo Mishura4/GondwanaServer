@@ -31,7 +31,7 @@ namespace DOL.GS
         /// <summary>
         /// Mob X Ambient Behaviour Cache indexed by Mob Name
         /// </summary>
-        private Dictionary<string, MobXAmbientBehaviour[]> AmbientBehaviour { get; }
+        private List<MobXAmbientBehaviour> ambientBehaviour;
 
         /// <summary>
         /// Retrieve MobXambiemtBehaviour Objects from Mob Name
@@ -45,11 +45,23 @@ namespace DOL.GS
                     return Array.Empty<MobXAmbientBehaviour>();
                 }
 
-                var lower = index.ToLower();
-                return AmbientBehaviour.ContainsKey(lower)
-                    ? AmbientBehaviour[lower]
-                    : Array.Empty<MobXAmbientBehaviour>();
+                return ambientBehaviour
+                    .Where(x => x.Source.Equals(index, StringComparison.InvariantCultureIgnoreCase))
+                    .ToArray();
             }
+        }
+
+        /// <summary>
+        /// Call it after delete or add a trigger
+        /// </summary>
+        public void Reload(IObjectDatabase database)
+        {
+            if (database == null)
+            {
+                throw new ArgumentNullException(nameof(database));
+            }
+
+            ambientBehaviour = database.SelectAllObjects<MobXAmbientBehaviour>().ToList();
         }
 
         /// <summary>
@@ -57,14 +69,7 @@ namespace DOL.GS
         /// </summary>
         public MobAmbientBehaviourManager(IObjectDatabase database)
         {
-            if (database == null)
-            {
-                throw new ArgumentNullException(nameof(database));
-            }
-
-            AmbientBehaviour = database.SelectAllObjects<MobXAmbientBehaviour>()
-                .GroupBy(x => x.Source)
-                .ToDictionary(key => key.Key.ToLower(), value => value.ToArray());
+            Reload(database);
         }
     }
 }

@@ -1,0 +1,29 @@
+﻿Commands.GM.AreaEffect.Description:		Gestion d'AreaEffect:
+Commands.GM.AreaEffect.Usage.Create:		'/areaeffect create <radius> <ID de l'effet>'
+Commands.GM.AreaEffect.Usage.Spell:		'/areaeffect spell <spellid>' AreaEffect lance un sort à la place d'appliquer un effet
+Commands.GM.AreaEffect.Usage.HealHarm:		'/areaeffect <heal/harm> <valeur>' Configure la valeur soin/dommages par tick d'un areaeffect
+Commands.GM.AreaEffect.Usage.Mana:			'/areaeffect <mana> <valeur>' Configure l'ajout ou le retrait de mana par tick d'un areaeffect
+Commands.GM.AreaEffect.Usage.Endurance:	'/areaeffect <endurance> <valeur>' Configure l'ajout ou le retrait d'endurance par tick d'un areaeffect
+Commands.GM.AreaEffect.Usage.Radius:		'/areaeffect radius <newRadius>' Pour changer le rayon d'effet d'un areaeffect
+Commands.GM.AreaEffect.Usage.GroupMob:		'/areaeffect groupmob <group mob id> ON/OFF' Ajouter un 'GroupMob' à l'areaefect (ON: active quand le groupe est vivant, OFF: active quand le groupe est mort (par défaut))
+Commands.GM.AreaEffect.Usage.Enable:		'/areaeffect enable' Active l'areaeffect
+Commands.GM.AreaEffect.Usage.Disable:		'/areaeffect disable' Désactive l'areaeffect
+Commands.GM.AreaEffect.Usage.Family:		'/areaeffect family <family id> <order>' Associe un areaeffect a une chaine et définie son ordre d'execution dans la chaine
+Commands.GM.AreaEffect.Usage.CallAreaEffect:		'/areaeffect callareaeffect <family id>' Active une chaine d'areaeffect en commençant par la première
+Commands.GM.AreaEffect.Usage.OneUse:		'/areaeffect oneuse' Active ou désactive appliqer qu'une seule fois l'areaeffect
+Commands.GM.AreaEffect.Usage.Effect:		'/areaeffect effect <newEffect>' Pour changer l'effet visuel (ClientEffectID) d'un areaeffect
+Commands.GM.AreaEffect.Usage.Interval:		'/areaeffect interval <min> [max]' Pour changer l'intervalle de chaque tick entre une valeur MIN et une valeur MAX pour un areaeffect
+Commands.GM.AreaEffect.Usage.MissChance:	'/areaeffect missChance <chance %>' Pour ajouter un taux d'échec dommage/soin sur un areaeffect
+Commands.GM.AreaEffect.Usage.Message:		'/areaeffect message <message>' {0} = les points de vie ajoutés/retirés, {1} = mana ajoutée/retirée, {2} = endu ajoutée/retirée.
+Commands.GM.AreaEffect.Usage.Info:			'/areaeffect info' Donne les informations sur l'areaeffect sélectionné
+
+Commands.GM.AreaEffect.Result.Spell: 		{0} lance le sort {1} à la place de son effet
+Commands.GM.AreaEffect.GroupMob.NotFound: 	Le groupe {0} n'existe pas.
+Commands.GM.AreaEffect.Result.OneUse:		La propriété 'OneUse' de l'areaeffect {0} est définie à {1}
+Commands.GM.AreaEffect.Result.Family:		L'areaeffect {0} est associé à la chaine {1}, son ordre est {2}
+Commands.GM.AreaEffect.Result.Enable:		L'areaeffect {0} est activée
+Commands.GM.AreaEffect.Result.Disable:		L'areaeffect {0} est désactivé
+Commands.GM.AreaEffect.CallAreaEffect.NotFound:		Pas d'areaeffect trouvé pour la chaine {0}
+Commands.GM.AreaEffect.Result.CallAreaEffect: 		Enclenche la chaine {0} d'areaeffect
+Commands.GM.AreaEffect.Result.GroupMob:		Le groupe mob {1} est définie à l'areaeffect {0}, l'area s'enclenche si le groupe est {2}
+Commands.GM.AreaEffect.NeedTarget:		Cette commande a besoin d'une cible de type AreaEffect

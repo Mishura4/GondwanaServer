@@ -28,6 +28,7 @@ using System.Collections.Generic;
 using DOL.Database;
 using DOL.GS.PacketHandler;
 using DOL.GS.PacketHandler.Client.v168;
+using DOL.MobGroups;
 
 namespace DOL.GS.Commands
 {
@@ -36,18 +37,23 @@ namespace DOL.GS.Commands
 		ePrivLevel.GM,
 		"GMCommands.door.Description",
 		"'/door show' toggle enable/disable add dialog when targeting doors",
-		"GMCommands.door.Add",
-		"GMCommands.door.Update",
-		"GMCommands.door.Delete",
-		"GMCommands.door.Name",
-		"GMCommands.door.Level",
-		"GMCommands.door.Realm",
-		"GMCommands.door.Guild",
+		"Commands.GM.door.Add",
+		"Commands.GM.door.Update",
+		"Commands.GM.door.Delete",
+		"Commands.GM.door.Name",
+		"Commands.GM.door.Level",
+		"Commands.GM.door.Realm",
+		"Commands.GM.door.Guild",
 		"'/door sound <soundid>'",
-		"GMCommands.door.Info",
-		"GMCommands.door.Heal",
-		"GMCommands.door.Locked",
-		"GMCommands.door.Unlocked")]
+    "'/door groupmob <Group Mob Id>'",
+    "'/door key <itemid>'",
+    "'/door key_chance <number between 0 and 100>'",
+    "'/door isrenaissance' toggle enable/disable IsRenaissance",
+    "'/door punishspell <spell Id>'",
+    "Commands.GM.door.Info",
+		"Commands.GM.door.Heal",
+		"Commands.GM.door.Locked",
+		"Commands.GM.door.Unlocked")]
 	public class NewDoorCommandHandler : AbstractCommandHandler, ICommandHandler
 	{
 		private int DoorID;
@@ -153,15 +159,108 @@ namespace DOL.GS.Commands
 					sound(client, targetDoor, args);
 					break;
 
+        case "groupmob":
+          GroupMob(client, targetDoor, args);
+          break;
+        case "key":
+          Key(client, targetDoor, args);
+          break;
+        case "key_chance":
+          Key_Chance(client, targetDoor, args);
+          break;
+        case "isrenaissance":
+          IsRenaissance(client, targetDoor, args);
+          break;
+        case "punishspell":
+          PunishSpell(client, targetDoor, args);
+          break;
+
 				default:
 					DisplaySyntax(client);
 					return;
 			}
 		}
 
-		#endregion
+    #endregion
 
-		private void add(GameClient client, GameDoor targetDoor)
+    /// <summary>
+    /// Method to add a groopmob to a door
+    /// </summary>
+    /// <param name="client"></param>
+    /// <param name="targetDoor"></param>
+    /// <param name="args"></param>
+    private void GroupMob(GameClient client, GameDoor targetDoor, string[] args)
+    {
+        string groupId = null;
+            if (args.Length > 2)
+                groupId = args[2];
+            if (!string.IsNullOrEmpty(groupId) && !MobGroupManager.Instance.Groups.ContainsKey(groupId))
+        {
+            client.Out.SendMessage($"Le groupe {groupId} n'existe pas.", eChatType.CT_System, eChatLoc.CL_ChatWindow);
+            return;
+        }
+        targetDoor.Group_Mob_Id = groupId;
+        targetDoor.SaveIntoDatabase();
+    }
+
+        /// <summary>
+        /// Add a itemtemplate id to open the door
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="targetDoor"></param>
+        /// <param name="args"></param>
+        private void Key(GameClient client, GameDoor targetDoor, string[] args)
+        {
+            if (args.Length == 2)
+                targetDoor.Key = null;
+            else
+                targetDoor.Key = args[2];
+            targetDoor.SaveIntoDatabase();
+        }
+
+        /// <summary>
+        /// Add a chance to fail to open the door
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="targetDoor"></param>
+        /// <param name="args"></param>
+        private void Key_Chance(GameClient client, GameDoor targetDoor, string[] args)
+        {
+            if (args.Length == 2)
+                targetDoor.Key_Chance = 0;
+            else
+                targetDoor.Key_Chance = short.Parse(args[2]);
+            targetDoor.SaveIntoDatabase();
+        }
+
+        /// <summary>
+        /// Toggle enable/disable Renaissance requirment 
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="targetDoor"></param>
+        /// <param name="args"></param>
+        private void IsRenaissance(GameClient client, GameDoor targetDoor, string[] args)
+        {
+            targetDoor.IsRenaissance = !targetDoor.IsRenaissance;
+            targetDoor.SaveIntoDatabase();
+        }
+
+        /// <summary>
+        /// Add a spell id to punish the opener
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="targetDoor"></param>
+        /// <param name="args"></param>
+        private void PunishSpell(GameClient client, GameDoor targetDoor, string[] args)
+        {
+            if (args.Length == 2)
+                targetDoor.PunishSpell = 0;
+            else
+                targetDoor.PunishSpell = int.Parse(args[2]);
+            targetDoor.SaveIntoDatabase();
+        }
+
+    private void add(GameClient client, GameDoor targetDoor)
 		{
 			var DOOR = DOLDB<DBDoor>.SelectObject(DB.Column(nameof(DBDoor.InternalID)).IsEqualTo(DoorID));
 
@@ -393,6 +492,11 @@ namespace DOL.GS.Commands
 			info.Add(" + Y : " + targetDoor.Position.Y.ToString("F0"));
 			info.Add(" + Z : " + targetDoor.Position.Z.ToString("F0"));
 			info.Add(" + Heading : " + targetDoor.Heading);
+			info.Add(" + Group Mob : " + targetDoor.Group_Mob_Id);
+      info.Add(" + Key : " + targetDoor.Key);
+      info.Add(" + Key Chance : " + targetDoor.Key_Chance);
+      info.Add(" + IsRenaissance : " + targetDoor.IsRenaissance);
+      info.Add(" + Punish Spell : " + targetDoor.PunishSpell);
 
 			client.Out.SendCustomTextWindow("Door Information", info);
 		}

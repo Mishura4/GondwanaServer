@@ -3,6 +3,8 @@ using DOL.AI.Brain;
 using DOL.Database;
 using System.Collections.Generic;
 using DOL.GS.Utils;
+using DOL.AI;
+using DOL.Events;
 
 namespace DOL.GS.Scripts
 {

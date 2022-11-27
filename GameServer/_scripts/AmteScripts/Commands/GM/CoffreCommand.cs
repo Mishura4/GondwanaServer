@@ -7,36 +7,36 @@ using System.Linq;
 namespace DOL.GS.Scripts
 {
 	[CmdAttribute(
-		 "&coffre",
-		 ePrivLevel.GM,
-		 "Gestions des coffres",
-		 "'/coffre create' créé un nouveau coffre (100% chance d'apparition, 1h d'intervalle entre les items)",
-		 "'/coffre model <model>' change le skin du coffre selectionné",
-		 "'/coffre item <chance> <interval>' change le nombre de chance d'apparition d'un item, interval d'apparition d'un item en minutes",
-		 "'/coffre add <id_nb> <chance>' ajoute ou modifie un item (id_nb) avec son taux de chance d'apparition au coffre selectionné",
-		 "'/coffre remove <id_nb>' retire un item (id_nb) du coffre selectionné",
-		 "'/coffre name <name>' change le nom du coffre selectionné",
-		 "'/coffre movehere' déplace le coffre selectionné à votre position",
-		 "'/coffre delete' supprime le coffre selectionné",
-		 "'/coffre reset' remet à zero la derniere fois que le coffre a été ouvert",
-		 "'/coffre info' donne toutes les informations du coffre selectionné",
-		 "'/coffre copy' copie le coffre selectionné à votre position",
-		 "'/coffre randomcopy' copie le coffre selectionné à votre position mais change les valeurs de plus ou moin 10%",
-		 "'/coffre key <id_nb>' Id_nb de la clef necessaire à l'ouverture du coffre (\"nokey\" pour retirer la clé)",
-         "'/coffre difficult <difficulté>' difficulté pour crocheter le coffre (en %) si 0, le coffre ne peut pas être crocheté",
-         "'/coffre traprate <value>' Set la valeur du TrapRate, qui est le pourcentage de faire pop un mob",
-         "'/coffre npctemplate <value>' Set le npctemplate associé au pop mob de ce coffre",
-         "'/coffre respawn <name>' Respawn un coffre en donnant son name (reset du timer a 0)",
-         "'/coffre isteleporter' Alterne l'etat IsTeleporter du coffre",
-         "'/coffre teleporter <X> <Y> <Z> <heading> <RegionID>' Définit la destination du Téléporteur de ce coffre",
-         "'/coffre tprequirement <level>' Definit le Level minimum pour pouvoir utiliser le Téléporteur de ce coffre",
-         "'/coffre tpeffect <SpellID>' Definit l'effect utilisé par la téléportation de ce coffre basé sur son SpellID",
-         "'/coffre tpisrenaissance' Alterne l'état IsRenaissance du coffre",
-         "'/coffre isOpeningRenaissance' Alterne l'état isOpeningRenaissanceType du coffre",
-         "'/coffre punishSpellId <SpellId>' Définit le SpellID pour punir le joueur si il n'est pas Isrenaissance",
-         "'/coffre pickableAnim' Alterne l'état de HasPickableAnim ou Activer ou désactiver l'emote pickup",
-         "'/coffre interval <minutes>' Change l'interval d'ouverture d'un coffre en minutes",
-         "'/coffre longdistance <true|false>' Change la distance d'interraction du coffre. (utile pour les gros coffres)")]
+         "&coffre",
+         ePrivLevel.GM,
+         "Commands.GM.Coffre.Description",
+         "Commands.GM.Coffre.Usage.Create",
+         "Commands.GM.Coffre.Usage.Model",
+         "Commands.GM.Coffre.Usage.Item",
+         "Commands.GM.Coffre.Usage.Add",
+         "Commands.GM.Coffre.Usage.Remove",
+         "Commands.GM.Coffre.Usage.Name",
+         "Commands.GM.Coffre.Usage.Movehere",
+         "Commands.GM.Coffre.Usage.Delete",
+         "Commands.GM.Coffre.Usage.Reset",
+         "Commands.GM.Coffre.Usage.Info",
+         "Commands.GM.Coffre.Usage.Copy",
+         "Commands.GM.Coffre.Usage.RandomCopy",
+         "Commands.GM.Coffre.Usage.Key",
+         "Commands.GM.Coffre.Usage.Difficult",
+         "Commands.GM.Coffre.Usage.traprate",
+         "Commands.GM.Coffre.Usage.NPCTemplate",
+         "Commands.GM.Coffre.Usage.Respawn",
+         "Commands.GM.Coffre.Usage.IsTeleport",
+         "Commands.GM.Coffre.Usage.Teleporter",
+         "Commands.GM.Coffre.Usage.TPrequirement",
+         "Commands.GM.Coffre.Usage.TPEffect",
+         "Commands.GM.Coffre.Usage.TPIsRenaissance",
+         "Commands.GM.Coffre.Usage.IsOpeningRenaissance",
+         "Commands.GM.Coffre.Usage.PunishSpellId",
+         "Commands.GM.Coffre.Usage.PickableAnim",
+         "Commands.GM.Coffre.Usage.InfoInterval",
+         "Commands.GM.Coffre.Usage.LongDistance")]
     public class CoffreCommandHandler : AbstractCommandHandler, ICommandHandler
 	{
 		public void OnCommand(GameClient client, string[] args)
@@ -235,7 +235,20 @@ namespace DOL.GS.Scripts
 						DisplaySyntax(client);
 						break;
 					}
+                    GameCoffre oldCoffre = coffre;
+                    coffre = new GameCoffre();
+                    coffre.Name = "Coffre";
+                    coffre.Model = 1596;
+                    coffre.Position = oldCoffre.Position;
+                    coffre.Heading = oldCoffre.Heading;
+                    coffre.CurrentRegionID = oldCoffre.CurrentRegionID;
+                    coffre.ItemInterval = 60;
+                    coffre.ItemChance = 100;
 					coffre.LastOpen = DateTime.MinValue;
+                    oldCoffre.RemoveFromWorld();
+                    oldCoffre.DeleteFromDatabase();
+                    coffre.AddToWorld();
+
 					coffre.SaveIntoDatabase();
 					ChatUtil.SendSystemMessage(client, "Le coffre selectionné a été remit à zéro.");
 					break;
@@ -297,6 +310,9 @@ namespace DOL.GS.Scripts
                     coffre2.PunishSpellId = coffre.PunishSpellId;
                     coffre2.IsOpeningRenaissanceType = coffre.IsOpeningRenaissanceType;
                     coffre2.IsTeleporter = coffre.IsTeleporter;
+                    coffre2.CoffreOpeningInterval = coffre.CoffreOpeningInterval;
+                    coffre2.IsLargeCoffre = coffre.IsLargeCoffre;
+                    coffre2.KeyItem = coffre.KeyItem;
                     coffre2.InitTimer();    
 
 					coffre2.ItemChance = coffre.ItemChance;
