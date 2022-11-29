@@ -315,7 +315,7 @@ namespace DOL.GS
         public override void LoadFromDatabase(Database.DataObject obj)
         {
             base.LoadFromDatabase(obj);
-            var mob = GameServer.Database.SelectObjects<MoneyNpcDb>("`MobID` = @MobID", new Database.QueryParameter("MobID", obj.ObjectId))?.FirstOrDefault();
+            var mob = GameServer.Database.SelectObjects<MoneyNpcDb>(DB.Column("MobID").IsEqualTo(obj.ObjectId))?.FirstOrDefault();
 
             if (mob != null)
             {

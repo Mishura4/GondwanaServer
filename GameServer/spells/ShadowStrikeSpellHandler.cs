@@ -3,7 +3,10 @@ using DOL.Events;
 using DOL.GS.PacketHandler;
 using DOL.GS.Styles;
 using DOL.Language;
+using DOLDatabase.Tables;
 using System;
+using System.Numerics;
+using System.Text.RegularExpressions;
 
 namespace DOL.GS.Spells
 {
@@ -28,7 +31,8 @@ namespace DOL.GS.Spells
             m_caster.MoveTo(target.CurrentRegionID, (int)(target.Position.X - ((xrange + 10) * Math.Sin(angle * target.Heading))), (int)(target.Position.Y + ((yrange + 10) * Math.Cos(angle * target.Heading))), target.Position.Z, m_caster.Heading);
 
             // use style
-            Style style = new Style(GameServer.Database.SelectObjects<DBStyle>("`StyleID` = @StyleID", new QueryParameter("@StyleID", 968))[0]);
+
+            Style style = new Style(GameServer.Database.SelectObjects<DBStyle>(DB.Column("StyleID").IsEqualTo(968))[0]);
             StyleProcessor.TryToUseStyle(Caster, style);
         }
 

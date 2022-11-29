@@ -380,7 +380,9 @@ namespace DOL.spells
 
             if (!string.IsNullOrEmpty(match.CombinationId))
             {
-                CharacterXCombineItem characterXCombineItem = GameServer.Database.SelectObject<CharacterXCombineItem>(string.Format("CombinationId='{1}' AND Character_ID='{0}'", player.InternalID, match.CombinationId));
+                CharacterXCombineItem characterXCombineItem = (CharacterXCombineItem)GameServer.Database.SelectObjects<CharacterXCombineItem>(
+                    DB.Column("CombinationId").IsEqualTo(player.InternalID)
+                    .And(DB.Column("Character_ID").IsEqualTo(match.CombinationId)));
                 if (characterXCombineItem == null)
                 {
                     characterXCombineItem = new CharacterXCombineItem(player.InternalID, match.CombinationId);
@@ -394,7 +396,7 @@ namespace DOL.spells
                 player.Out.SendMessage("Vous échouez à combiner les objets", eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
                 if (match.PunishSpell != 0)
                 {
-                    var punishSpell = GameServer.Database.SelectObject<DBSpell>("SpellID = " + match.PunishSpell);
+                    var punishSpell = GameServer.Database.SelectObject<DBSpell>(DB.Column("SpellID").IsEqualTo(match.PunishSpell));
 
                     // check if the player is punished
                     if (punishSpell != null)

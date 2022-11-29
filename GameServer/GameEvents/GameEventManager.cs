@@ -118,7 +118,7 @@ namespace DOL.GameEvents
             {
                 GameEvent newEvent = new GameEvent(eventdb);
 
-                var objects = GameServer.Database.SelectObjects<EventsXObjects>("EventID = @ObjectId", new QueryParameter("@ObjectId", eventdb.ObjectId));
+                var objects = GameServer.Database.SelectObjects<EventsXObjects>(DB.Column("EventID").IsEqualTo(eventdb.ObjectId));
 
                 if (objects != null)
                 {
@@ -531,7 +531,7 @@ namespace DOL.GameEvents
             if (ev.StartConditionType == StartingConditionType.Money)
             {
                 //Reset related NPC Money
-                var moneyNpcDb = GameServer.Database.SelectObjects<MoneyNpcDb>("`EventID` = @id", new QueryParameter("id", ev.ID))?.FirstOrDefault();
+                var moneyNpcDb = GameServer.Database.SelectObjects<MoneyNpcDb>(DB.Column("EventID").IsEqualTo(ev.ID))?.FirstOrDefault();
 
                 if (moneyNpcDb != null)
                 {
@@ -595,7 +595,7 @@ namespace DOL.GameEvents
                 var db = GameServer.Database.FindObjectByKey<Mob>(mob.InternalID);
                 mob.LoadFromDatabase(db);
 
-                var groupMob = GameServer.Database.SelectObjects<GroupMobXMobs>("MobID = @mobid", new QueryParameter("mobid", mob.InternalID))?.FirstOrDefault();
+                var groupMob = GameServer.Database.SelectObjects<GroupMobXMobs>(DB.Column("MobID").IsEqualTo(mob.InternalID))?.FirstOrDefault();
 
                 if (groupMob != null)
                 {
@@ -608,8 +608,11 @@ namespace DOL.GameEvents
                         var mobgroupDb = GameServer.Database.FindObjectByKey<GroupMobDb>(groupMob.GroupId);
                         if (mobgroupDb != null)
                         {
-                            var groupInteraction = mobgroupDb.GroupMobInteract_FK_Id != null ? GameServer.Database.SelectObjects<GroupMobStatusDb>("GroupStatusId = @GroupStatusId", new QueryParameter("GroupStatusId", mobgroupDb.GroupMobInteract_FK_Id))?.FirstOrDefault() : null;
-                            var groupOriginStatus = mobgroupDb.GroupMobOrigin_FK_Id != null ? GameServer.Database.SelectObjects<GroupMobStatusDb>("GroupStatusId = @GroupStatusId", new QueryParameter("GroupStatusId", mobgroupDb.GroupMobOrigin_FK_Id))?.FirstOrDefault() : null;
+                            var groupInteraction = mobgroupDb.GroupMobInteract_FK_Id != null ? 
+                            GameServer.Database.SelectObjects<GroupMobStatusDb>(DB.Column("GroupStatusId").IsEqualTo(mobgroupDb.GroupMobInteract_FK_Id))?.FirstOrDefault() : null;
+
+                            var groupOriginStatus = mobgroupDb.GroupMobOrigin_FK_Id != null ?
+                            GameServer.Database.SelectObjects<GroupMobStatusDb>(DB.Column("GroupStatusId").IsEqualTo(mobgroupDb.GroupMobOrigin_FK_Id))?.FirstOrDefault() : null;
                             mob.CurrentGroupMob = new MobGroup(mobgroupDb, groupInteraction, groupOriginStatus);
                             MobGroupManager.Instance.Groups.Add(groupMob.GroupId, mob.CurrentGroupMob);
                         }

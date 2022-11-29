@@ -6,6 +6,7 @@ using DOL.GS.Scripts;
 using DOL.Language;
 using DOL.MobGroups;
 using System.Linq;
+using DOL.GS.Styles;
 
 namespace DOL.GS.Commands
 {
@@ -157,10 +158,10 @@ namespace DOL.GS.Commands
                 client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.GM.AreaEffect.CallAreaEffect.NotFound", familyID), eChatType.CT_System, eChatLoc.CL_ChatWindow);
             else
             {
-                DBAreaEffect areaEffect = GameServer.Database.SelectObjects<DBAreaEffect>("`AreaEffectFamily` = @AreaEffectFamily", new QueryParameter("@AreaEffectFamily", familyID)).OrderBy((area) => area.OrderInFamily).FirstOrDefault();
+                DBAreaEffect areaEffect = GameServer.Database.SelectObjects<DBAreaEffect>(DB.Column("AreaEffectFamily").IsEqualTo(familyID)).OrderBy((area) => area.OrderInFamily).FirstOrDefault();
                 if(areaEffect != null)
                 {
-                    Mob mob = GameServer.Database.SelectObjects<Mob>("`Mob_ID` = @MobID", new QueryParameter("@MobID", areaEffect.MobID)).FirstOrDefault();
+                    Mob mob = GameServer.Database.SelectObjects<Mob>(DB.Column("Mob_ID").IsEqualTo(areaEffect.MobID)).FirstOrDefault();
                     if(mob != null)
                     {
                         AreaEffect areaMob = WorldMgr.GetNPCsByName(mob.Name, (eRealm)mob.Realm).FirstOrDefault((npc) => npc.InternalID == mob.ObjectId) as AreaEffect;

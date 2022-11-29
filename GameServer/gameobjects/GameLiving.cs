@@ -5569,8 +5569,8 @@ namespace DOL.GS
 						int triggerSubSpell = TempProperties.getProperty("TriggerSubSpell", -1);
 						if(triggerSubSpell > 0)
                         {
-							DBSpell dbspell = GameServer.Database.SelectObject<DBSpell>("SpellID = " + triggerSubSpell);
-							if (dbspell != null)
+							DBSpell dbspell = GameServer.Database.SelectObject<DBSpell>(DB.Column("SpellID").IsEqualTo(triggerSubSpell));
+                            if (dbspell != null)
 							{
 								Spell spell = new Spell(dbspell, spellLevel);
 								ISpellHandler dd = CreateSpellHandler(this, spell, SkillBase.GetSpellLine(GlobalSpellsLines.Item_Effects));

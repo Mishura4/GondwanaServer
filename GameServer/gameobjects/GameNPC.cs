@@ -5691,7 +5691,7 @@ namespace DOL.GS
 
             if(chosen.Spell > 0)
             {
-                DBSpell dbspell = GameServer.Database.SelectObject<DBSpell>("SpellID = " + chosen.Spell);
+				DBSpell dbspell = GameServer.Database.SelectObject<DBSpell>(DB.Column("SpellID").IsEqualTo(chosen.Spell));
                 // check if the player is punished
                 if (dbspell != null)
                 {

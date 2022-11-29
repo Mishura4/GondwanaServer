@@ -81,7 +81,7 @@ namespace DOL.GS
         {
             log.DebugFormat("Updating tppoint {0} in tppoint cache.", tpID);
 
-            DBTP dbtppoint = GameServer.Database.SelectObjects<DBTP>("`TPID` = @TPID", new QueryParameter("@TPID", tpID)).FirstOrDefault();
+            DBTP dbtppoint = GameServer.Database.SelectObjects<DBTP>(DB.Column("TPID").IsEqualTo(tpID)).FirstOrDefault();
             if (dbtppoint != null)
             {
                 if (m_tpCache.ContainsKey(tpID))
@@ -94,7 +94,7 @@ namespace DOL.GS
                 }
             }
 
-            IList<DBTPPoint> tpPoints = GameServer.Database.SelectObjects<DBTPPoint>("`TPID` = @TPID", new QueryParameter("@TPID", tpID));
+            IList<DBTPPoint> tpPoints = GameServer.Database.SelectObjects<DBTPPoint>(DB.Column("TPID").IsEqualTo(tpID));
             SortedList<int, DBTPPoint> pList = new SortedList<int, DBTPPoint>();
             if (m_tppointCache.ContainsKey(tpID))
             {
@@ -189,13 +189,13 @@ namespace DOL.GS
             }
 
             // First delete any tppoint with this tpID from the database
-            DBTP dbtp = GameServer.Database.SelectObjects<DBTP>("`TPID` = @TPID", new QueryParameter("@TPID", tpID)).FirstOrDefault();
+            DBTP dbtp = GameServer.Database.SelectObjects<DBTP>(DB.Column("TPID").IsEqualTo(tpID)).FirstOrDefault();
             if (dbtp != null)
             {
                 GameServer.Database.DeleteObject(dbtp);
             }
 
-            GameServer.Database.DeleteObject(GameServer.Database.SelectObjects<DBTPPoint>("`TPID` = @TPID", new QueryParameter("@TPID", tpID)));
+            GameServer.Database.DeleteObject(GameServer.Database.SelectObjects<DBTPPoint>(DB.Column("TPID").IsEqualTo(tpID)));
 
             // Now add this tppoint and iterate through the TPPoint linked list to add all the tppoint points
             TPPoint root = FindFirstTPPoint(tppoint);

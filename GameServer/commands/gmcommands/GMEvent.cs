@@ -6,6 +6,7 @@ using DOL.Language;
 using DOLDatabase.Tables;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -439,7 +440,7 @@ namespace DOL.GS.Commands
             bool hasNewitems = false;
             List<string> ids = new List<string>();
 
-            var mobs = GameServer.Database.SelectObjects<Mob>("`EventID` IS NOT NULL AND `region` = @region", new QueryParameter("region", region));
+            var mobs = GameServer.Database.SelectObjects<Mob>(DB.Column("EventID").IsNotNull().And(DB.Column("region").IsEqualTo(region)));
 
             if (mobs == null)
             {
@@ -573,7 +574,7 @@ namespace DOL.GS.Commands
                 return null;
             }
 
-            var mobDb = GameServer.Database.SelectObjects<EventsXObjects>("`ItemID` = @ItemID", new Database.QueryParameter("ItemID", mob.InternalID))?.FirstOrDefault();
+            var mobDb = GameServer.Database.SelectObjects<EventsXObjects>(DB.Column("ItemID").IsEqualTo(mob.InternalID))?.FirstOrDefault();
 
             if (mobDb == null)
             {
@@ -599,7 +600,7 @@ namespace DOL.GS.Commands
                 return null;
             }
 
-            var coffreDb = GameServer.Database.SelectObjects<EventsXObjects>("`ItemID` = @ItemID", new Database.QueryParameter("ItemID", coffre.InternalID))?.FirstOrDefault();
+            var coffreDb = GameServer.Database.SelectObjects<EventsXObjects>(DB.Column("ItemID").IsEqualTo(coffre.InternalID))?.FirstOrDefault();
 
             if (coffreDb == null)
             {
@@ -747,7 +748,7 @@ namespace DOL.GS.Commands
                     return false;
                 }
 
-                var mobDb = GameServer.Database.SelectObjects<EventsXObjects>("`ItemID` = @ItemID", new Database.QueryParameter("ItemID", mob.InternalID))?.FirstOrDefault();
+                var mobDb = GameServer.Database.SelectObjects<EventsXObjects>(DB.Column("ItemID").IsEqualTo(mob.InternalID))?.FirstOrDefault();
 
 
                 if (mobDb == null)
@@ -769,8 +770,7 @@ namespace DOL.GS.Commands
                     client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Target.NotFound", name), eChatType.CT_System, eChatLoc.CL_SystemWindow); ;
                     return false;
                 }
-
-                var coffreDb = GameServer.Database.SelectObjects<EventsXObjects>("`ItemID` = @ItemID", new Database.QueryParameter("ItemID", coffre.InternalID))?.FirstOrDefault();
+                var coffreDb = GameServer.Database.SelectObjects<EventsXObjects>(DB.Column("ItemID").IsEqualTo(coffre.InternalID))?.FirstOrDefault();
 
                 if (coffreDb == null)
                 {

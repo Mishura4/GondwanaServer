@@ -159,8 +159,8 @@ namespace DOL.MobGroups
 
             this.Groups[groupId].NPCs.Clear();
             this.Groups.Remove(groupId);
+            var db = GameServer.Database.SelectObjects<GroupMobDb>(DB.Column("GroupId").IsEqualTo(groupId))?.FirstOrDefault();
 
-            var db = GameServer.Database.SelectObjects<GroupMobDb>("GroupId = @GroupId", new QueryParameter("GroupId", groupId))?.FirstOrDefault();
 
             if (db != null)
             {
@@ -181,11 +181,13 @@ namespace DOL.MobGroups
                 {
                     if (!this.Groups.ContainsKey(group.GroupId))
                     {
-                        var groupDb = GameServer.Database.SelectObjects<GroupMobDb>("GroupId = @GroupId", new QueryParameter("GroupId", group.GroupId))?.FirstOrDefault();
+                        var groupDb = GameServer.Database.SelectObjects<GroupMobDb>(DB.Column("GroupId").IsEqualTo(group.GroupId))?.FirstOrDefault();
                         if (groupDb != null)
                         {
-                            var groupInteraction = groupDb.GroupMobInteract_FK_Id != null ? GameServer.Database.SelectObjects<GroupMobStatusDb>("GroupStatusId = @GroupStatusId", new QueryParameter("GroupStatusId", groupDb.GroupMobInteract_FK_Id))?.FirstOrDefault() : null;
-                            var originalStatus = groupDb.GroupMobOrigin_FK_Id != null ? GameServer.Database.SelectObjects<GroupMobStatusDb>("GroupStatusId = @GroupStatusId", new QueryParameter("GroupStatusId", groupDb.GroupMobOrigin_FK_Id))?.FirstOrDefault() : null;
+                            var groupInteraction = groupDb.GroupMobInteract_FK_Id != null ?
+                                                    GameServer.Database.SelectObjects<GroupMobStatusDb>(DB.Column("GroupStatusId").IsEqualTo(groupDb.GroupMobInteract_FK_Id))?.FirstOrDefault() : null; 
+                            var originalStatus = groupDb.GroupMobOrigin_FK_Id != null ?
+                                                    GameServer.Database.SelectObjects<GroupMobStatusDb>(DB.Column("GroupStatusId").IsEqualTo(groupDb.GroupMobOrigin_FK_Id))?.FirstOrDefault() : null;
                             this.Groups.Add(group.GroupId, new MobGroup(groupDb, groupInteraction, originalStatus));
                         }
                     }
@@ -255,8 +257,7 @@ namespace DOL.MobGroups
             }
             else if (!isLoadedFromScript)
             {
-                var exists = GameServer.Database.SelectObjects<GroupMobXMobs>("MobID = @mobid", new QueryParameter("mobid", npc.InternalID))?.FirstOrDefault();
-
+                var exists = GameServer.Database.SelectObjects<GroupMobXMobs>(DB.Column("MobID").IsEqualTo(npc.InternalID))?.FirstOrDefault();
                 if (exists != null)
                 {
                     exists.RegionID = npc.CurrentRegionID;
@@ -300,12 +301,7 @@ namespace DOL.MobGroups
                 return false;
             }
 
-            var grp = GameServer.Database.SelectObjects<GroupMobXMobs>("MobID = @mobid AND GroupId = @groupid", new QueryParameter[]
-            {
-                new QueryParameter("mobid", npc.InternalID),
-                new QueryParameter("groupid", groupId)
-
-            })?.FirstOrDefault();
+            var grp = GameServer.Database.SelectObjects<GroupMobXMobs>(DB.Column("Mob_ID").IsEqualTo(npc.InternalID).And(DB.Column("GroupId").IsEqualTo(groupId)))?.FirstOrDefault();
 
             if (grp == null)
             {

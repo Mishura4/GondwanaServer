@@ -109,7 +109,7 @@ namespace DOL.GS.Scripts
             if (!enable) return;
             if (Radius == 0 || SpellID == 0) return;
             if (LastApplyEffectTick > CurrentRegion.Time - Interval) return;
-            DBSpell dbspell = GameServer.Database.SelectObjects<DBSpell>("`SpellID` = @SpellID", new QueryParameter("@SpellID", SpellID)).FirstOrDefault();
+            DBSpell dbspell = GameServer.Database.SelectObjects<DBSpell>(DB.Column("SpellID").IsEqualTo(SpellID)).FirstOrDefault();
             Spell spell = new Spell(dbspell, 0);
 
             foreach (GamePlayer player in GetPlayersInRadius((ushort)Radius))
@@ -160,12 +160,12 @@ namespace DOL.GS.Scripts
         {
             if(enable && AreaEffectFamily != 0)
             {
-                List<DBAreaEffect> areaList = GameServer.Database.SelectObjects<DBAreaEffect>("`AreaEffectFamily` = @AreaEffectFamily", new QueryParameter("@AreaEffectFamily", AreaEffectFamily)).OrderBy((area) => area.OrderInFamily).ToList();
+                List<DBAreaEffect> areaList = GameServer.Database.SelectObjects<DBAreaEffect>(DB.Column("AreaEffectFamily").IsEqualTo(AreaEffectFamily)).OrderBy((area) => area.OrderInFamily).ToList();
                 // search the next 
                 foreach (DBAreaEffect area in areaList)
                     if (area.OrderInFamily > OrderInFamily)
                     {
-                        Mob mob = GameServer.Database.SelectObjects<Mob>("`Mob_ID` = @MobID", new QueryParameter("@MobID", area.MobID)).FirstOrDefault();
+                        Mob mob = GameServer.Database.SelectObjects<Mob>(DB.Column("Mob_ID").IsEqualTo(area.MobID)).FirstOrDefault();
                         if(mob != null)
                         {
                             if (OneUse)
@@ -283,7 +283,7 @@ namespace DOL.GS.Scripts
             AreaEffect areaSource = source as AreaEffect;
             if (areaSource != null)
             {
-                DBAreaEffect lastarea = GameServer.Database.SelectObjects<DBAreaEffect>("`AreaEffectFamily` = @AreaEffectFamily", new QueryParameter("@AreaEffectFamily", areaSource.AreaEffectFamily)).OrderBy((area) => area.OrderInFamily).ToList().LastOrDefault();
+                DBAreaEffect lastarea = GameServer.Database.SelectObjects<DBAreaEffect>(DB.Column("AreaEffectFamily").IsEqualTo(areaSource.AreaEffectFamily)).OrderBy((area) => area.OrderInFamily).ToList().LastOrDefault(); 
                 ushort order = 0;
                 if (lastarea != null)
                     order = (ushort)(lastarea.OrderInFamily + 1);

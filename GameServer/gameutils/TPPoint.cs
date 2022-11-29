@@ -94,8 +94,8 @@ namespace DOL.GS
         public TPPoint GetNextTPPoint()
         {
             TPPoint next = null;
-            IList<DBTPPoint> tpPoints = GameServer.Database.SelectObjects<DBTPPoint>("`TPID` = @TPID", new QueryParameter("@TPID", dbTPPoint.TPID));
-            DBTP dbtp = GameServer.Database.SelectObjects<DBTP>("`TPID` = @TPID", new QueryParameter("@TPID", dbTPPoint.TPID)).FirstOrDefault();
+            IList<DBTPPoint> tpPoints = GameServer.Database.SelectObjects<DBTPPoint>(DB.Column("TPID").IsEqualTo(dbTPPoint.TPID));
+            DBTP dbtp = GameServer.Database.SelectObjects<DBTP>(DB.Column("TPID").IsEqualTo(dbTPPoint.TPID)).FirstOrDefault();
             DBTPPoint randomTPPoint = tpPoints[Util.Random(tpPoints.Count - 1)];
             switch (Type)
             {

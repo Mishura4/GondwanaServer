@@ -223,8 +223,8 @@ namespace DOL.GS.Scripts
 		/// </summary>
 		/// <returns></returns>
 		public override IEnumerable<Tuple<GameStaticItem, string>> GetCoffresUsedInEventsInDb(ushort region)
-		{
-			var coffres = GameServer.Database.SelectObjects<DBCoffre>("`EventID` IS NOT NULL AND `Region` = @Region", new QueryParameter("Region", region));
+        {
+            var coffres = GameServer.Database.SelectObjects<DBCoffre>(DB.Column("EventID").IsNotNull().And(DB.Column("Region").IsEqualTo(region)));
 
 			if (coffres == null)
 			{
@@ -342,8 +342,8 @@ namespace DOL.GS.Scripts
 						player.Out.SendMessage("Vous ne trouvez rien d'intéressant.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
 					else
 					{
-						ItemTemplate item = GameServer.Database.SelectObject<ItemTemplate>("Id_nb = '" + GameServer.Database.Escape(coffre.Id_nb) + "'");
-						if (item == null)
+                        ItemTemplate item = GameServer.Database.SelectObject<ItemTemplate>(DB.Column("Id_nb").IsEqualTo(GameServer.Database.Escape(coffre.Id_nb)));
+                        if (item == null)
 						{
 							player.Out.SendMessage("Vous ne trouvez rien d'intéressant. (Erreur de donnée, veuillez le signaliser à un GameMaster)", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
 							coffre.Chance = 0;
@@ -364,9 +364,9 @@ namespace DOL.GS.Scripts
 								{
 									if (PunishSpellId > 0)
 									{
-										var spell = GameServer.Database.SelectObject<DBSpell>("SpellID = " + PunishSpellId);
+                                        var spell = GameServer.Database.SelectObject<DBSpell>(DB.Column("SpellID").IsEqualTo(PunishSpellId));
 
-										if (spell != null)
+                                        if (spell != null)
 										{
 											foreach (GamePlayer pl in this.GetPlayersInRadius(5000))
 											{
@@ -477,8 +477,8 @@ namespace DOL.GS.Scripts
 					var rand = new Random(DateTime.Now.Millisecond);
 					if (rand.Next(1, TrapRate + 1) <= TrapRate)
 					{
-						var template = GameServer.Database.SelectObject<DBNpcTemplate>("TemplateId = " + NpctemplateId);
-						if (template != null)
+                    var template = GameServer.Database.SelectObject<DBNpcTemplate>(DB.Column("TemplateId").IsEqualTo(NpctemplateId));
+                    if (template != null)
 						{
 							var mob = new AmteMob(new NpcTemplate(template))
 							{
@@ -641,8 +641,8 @@ namespace DOL.GS.Scripts
 			/// <returns>Retourne false si l'item n'existe pas dans la base de donné ItemTemplate</returns>
 			public bool ModifyItemList(string Id_nb, int chance)
 			{
-				ItemTemplate item = GameServer.Database.SelectObject<ItemTemplate>("Id_nb = '" + GameServer.Database.Escape(Id_nb) + "'");
-				if (item == null)
+            ItemTemplate item = GameServer.Database.SelectObject<ItemTemplate>(DB.Column("Id_nb").IsEqualTo(GameServer.Database.Escape(Id_nb)));
+            if (item == null)
 					return false;
 
 				foreach (CoffreItem it in m_Items)

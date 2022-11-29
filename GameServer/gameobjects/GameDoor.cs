@@ -230,7 +230,7 @@ namespace DOL.GS
         {
             if (PunishSpell > 0 && opener != null)
             {
-                DBSpell punishspell = GameServer.Database.SelectObjects<DBSpell>("`SpellID` = @SpellID", new QueryParameter("@SpellID", PunishSpell)).FirstOrDefault();
+                DBSpell punishspell = GameServer.Database.SelectObjects<DBSpell>(DB.Column("SpellID").IsEqualTo(PunishSpell)).FirstOrDefault();
 
                 // check if the player is punished
                 if (punishspell != null)

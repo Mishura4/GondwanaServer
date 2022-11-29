@@ -89,7 +89,7 @@ namespace DOL.GS
         {
             base.LoadFromDatabase(obj);
 
-            var result = GameServer.Database.SelectObjects<SpawnerTemplate>("MobID = @MobID", new QueryParameter("MobID", obj.ObjectId));
+            var result = GameServer.Database.SelectObjects<SpawnerTemplate>(DB.Column("MobID").IsEqualTo(obj.ObjectId));
             if (result != null)
             {
                 var db = result.FirstOrDefault();
@@ -115,8 +115,8 @@ namespace DOL.GS
                         this.addsGroupmobId = db.MasterGroupId;
 
                         //add Spawner to GroupMob for interractions
-                        var spawnerGroup = GameServer.Database.SelectObjects<GroupMobDb>("GroupId = @GroupId", new QueryParameter("GroupId", this.SpawnerGroupId)).FirstOrDefault();
-                        
+                        var spawnerGroup = GameServer.Database.SelectObjects<GroupMobDb>(DB.Column("GroupId").IsEqualTo(this.SpawnerGroupId)).FirstOrDefault();
+
                         if (spawnerGroup == null)
                         {
                             this.AddSpawnerToMobGroup();
@@ -141,7 +141,7 @@ namespace DOL.GS
         {
             base.SaveIntoDatabase();
 
-            var result = GameServer.Database.SelectObjects<SpawnerTemplate>("MobID = @MobID", new QueryParameter("MobID", this.dbId));
+            var result = GameServer.Database.SelectObjects<SpawnerTemplate>(DB.Column("MobID").IsEqualTo(this.dbId));
 
             if (result != null)
             {
@@ -189,7 +189,7 @@ namespace DOL.GS
 
         private void UpdateMasterGroupInDatabase()
         {
-            var masterGroup = GameServer.Database.SelectObjects<GroupMobDb>("GroupId = @GroupId", new QueryParameter("GroupId", this.addsGroupmobId)).FirstOrDefault();
+            var masterGroup = GameServer.Database.SelectObjects<GroupMobDb>(DB.Column("GroupId").IsEqualTo(this.addsGroupmobId)).FirstOrDefault();
             if (masterGroup != null)
             {
                 masterGroup.SlaveGroupId = this.SpawnerGroupId;
@@ -437,7 +437,7 @@ namespace DOL.GS
 
         private GroupMobStatusDb GetInativeStatus()
         {
-            var result = GameServer.Database.SelectObjects<GroupMobStatusDb>("GroupStatusId = @GroupStatusId", new QueryParameter("GroupStatusId", this.InactiveGroupStatusAddsKey));
+            var result = GameServer.Database.SelectObjects<GroupMobStatusDb>(DB.Column("GroupStatusId").IsEqualTo(this.InactiveGroupStatusAddsKey));
 
             if (result != null && result.Any())
             {
@@ -448,7 +448,7 @@ namespace DOL.GS
             {
                 //Default
                 bool insertDefault = false;
-                var inactiveDefaultList = GameServer.Database.SelectObjects<GroupMobStatusDb>("GroupStatusId = @GroupStatusId", new QueryParameter("GroupStatusId", this.inactiveDefaultGroupStatusAddsKey));
+                var inactiveDefaultList = GameServer.Database.SelectObjects<GroupMobStatusDb>(DB.Column("GroupStatusId").IsEqualTo(this.inactiveDefaultGroupStatusAddsKey));
                 GroupMobStatusDb inactiveStatus = null;
 
                 if (inactiveDefaultList != null)
@@ -541,7 +541,7 @@ namespace DOL.GS
 
         private GroupMobStatusDb GetActiveStatus()
         {
-            var result = GameServer.Database.SelectObjects<GroupMobStatusDb>("GroupStatusId = @GroupStatusId", new QueryParameter("GroupStatusId", this.ActiveGroupStatusAddsKey));
+            var result = GameServer.Database.SelectObjects<GroupMobStatusDb>(DB.Column("GroupStatusId").IsEqualTo(this.ActiveGroupStatusAddsKey));
 
             if (result != null && result.Any())
             {
@@ -552,7 +552,7 @@ namespace DOL.GS
 
                 GroupMobStatusDb activeStatus = null;
 
-                var activeDefaultList = GameServer.Database.SelectObjects<GroupMobStatusDb>("GroupStatusId = @GroupStatusId", new QueryParameter("GroupStatusId", this.activeDefaultGroupStatusAddsKey));
+                var activeDefaultList = GameServer.Database.SelectObjects<GroupMobStatusDb>(DB.Column("GroupStatusId").IsEqualTo(this.activeDefaultGroupStatusAddsKey));
 
                 bool insertActive = false;
 

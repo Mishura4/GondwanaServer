@@ -240,7 +240,7 @@ namespace DOL.MobGroups
 
             if (this.GroupInfos.Effect.HasValue)
             {
-                var spell = GameServer.Database.SelectObjects<Database.DBSpell>("SpellID = @SpellID", new Database.QueryParameter("SpellID", this.GroupInfos.Effect.Value))?.FirstOrDefault();
+                var spell = GameServer.Database.SelectObjects<Database.DBSpell>(DB.Column("SpellID").IsEqualTo(this.GroupInfos.Effect.Value))?.FirstOrDefault();
                 ushort effect = (ushort)this.GroupInfos.Effect.Value;
 
                 if (spell != null)

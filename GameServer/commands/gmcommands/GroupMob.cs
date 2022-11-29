@@ -107,8 +107,7 @@ namespace DOL.commands.gmcommands
                             client.Out.SendMessage($"Le SpawnderId doit etre défini.", GS.PacketHandler.eChatType.CT_System, GS.PacketHandler.eChatLoc.CL_ChatWindow);
                             return;
                         }
-
-                        var spawner = GameServer.Database.SelectObjects<SpawnerTemplate>("MobID = @MobID", new QueryParameter("MobID", spawnerId)).FirstOrDefault();
+                        var spawner = GameServer.Database.SelectObjects<SpawnerTemplate>(DB.Column("MobID").IsEqualTo(spawnerId)).FirstOrDefault();
 
                         if (spawner == null)
                         {
@@ -215,7 +214,7 @@ namespace DOL.commands.gmcommands
                                 return;
                             }
 
-                            var status = GameServer.Database.SelectObjects<GroupMobStatusDb>("GroupStatusId = @GroupStatusId", new QueryParameter("GroupStatusId", groupStatusId))?.FirstOrDefault();
+                            var status = GameServer.Database.SelectObjects<GroupMobStatusDb>(DB.Column("GroupStatusId").IsEqualTo(groupStatusId))?.FirstOrDefault();
 
                             if (status == null)
                             {
@@ -241,7 +240,7 @@ namespace DOL.commands.gmcommands
                                 return;
                             }
 
-                            var groupInteract = GameServer.Database.SelectObjects<GroupMobStatusDb>("GroupStatusId = @GroupStatusId", new QueryParameter("GroupStatusId", groupStatusId))?.FirstOrDefault();
+                            var groupInteract = GameServer.Database.SelectObjects<GroupMobStatusDb>(DB.Column("GroupStatusId").IsEqualTo(groupStatusId))?.FirstOrDefault();
 
                             if (groupInteract == null)
                             {

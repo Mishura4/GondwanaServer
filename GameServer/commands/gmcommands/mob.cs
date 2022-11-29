@@ -32,8 +32,10 @@ using DOL.GS.Housing;
 using DOL.GS.Movement;
 using DOL.GS.PacketHandler;
 using DOL.GS.Quests;
+using DOL.GS.Scripts;
 using DOL.GS.Styles;
 using DOL.GS.Utils;
+using DOLDatabase.Tables;
 
 namespace DOL.GS.Commands
 {
@@ -1094,10 +1096,10 @@ namespace DOL.GS.Commands
 
 					DisplayMessage(client, "Removed MobXLootTemplate and LootTemplate entries for " + mobName + " from DB.");
 				}
-			}
+            }
 
-            if (typeOfMob == "DOL.GS.Scripts.AreaEffect")
-                GameServer.Database.ExecuteNonQuery("DELETE FROM `areaeffect` WHERE `MobID` = '"+ targetMob.InternalID+"';");
+			if (typeOfMob == "DOL.GS.Scripts.AreaEffect")
+				GameServer.Database.DeleteObject(GameServer.Database.SelectObjects<DBAreaEffect>(DB.Column("MobID").IsEqualTo(targetMob.InternalID)));
 
 			client.Out.SendMessage("Target Mob removed from DB.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
 		}

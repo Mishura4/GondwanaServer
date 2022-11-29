@@ -188,7 +188,9 @@ namespace DOL.gameobjects.CustomNPC
         {
             string result = title + ":\n\n";
 
-            List<CharacterXCombineItem> characterXCombineItem = new List<CharacterXCombineItem>(GameServer.Database.SelectObjects<CharacterXCombineItem>(string.Format("Character_ID='{0}' AND CombinationId like '{1}%'", player.InternalID, KeyWord)));
+            List<CharacterXCombineItem> characterXCombineItem = new List<CharacterXCombineItem>(
+                GameServer.Database.SelectObjects<CharacterXCombineItem>(DB.Column("Character_ID").IsEqualTo(player.InternalID).And(DB.Column("Character_ID").IsEqualTo(KeyWord))));
+
             characterXCombineItem.Sort(CompareCharacterXCombineItem);
 
             short size = (short)characterXCombineItem.Count;
@@ -208,15 +210,14 @@ namespace DOL.gameobjects.CustomNPC
                 for (short i = 0; i < max; i++)
                 {
                     CharacterXCombineItem cXci = characterXCombineItem[min + i];
-                    CombineItemDb ci = GameServer.Database.SelectObject<CombineItemDb>(string.Format("CombinationId like '{0}%'", cXci.CombinationId));
-
+                    CombineItemDb ci = GameServer.Database.SelectObject<CombineItemDb>(DB.Column("CombinationId").IsEqualTo(cXci.CombinationId));
                     string[] splitresult = ci.ItemTemplateId.Split('|');
-                    ItemTemplate resultTemplate = GameServer.Database.SelectObject<ItemTemplate>(string.Format("Id_nb='{0}'", splitresult[0]));
+                    ItemTemplate resultTemplate = GameServer.Database.SelectObject<ItemTemplate>(DB.Column("Id_nb").IsEqualTo(splitresult[0]));
                     result += resultTemplate.Name + " X" + splitresult[1] + "\n";
 
                     if (!string.IsNullOrEmpty(ci.ToolKit))
                     {
-                        ItemTemplate toolTemplate = GameServer.Database.SelectObject<ItemTemplate>(string.Format("Id_nb='{0}'", ci.ToolKit));
+                        ItemTemplate toolTemplate = GameServer.Database.SelectObject<ItemTemplate>(DB.Column("Id_nb").IsEqualTo(ci.ToolKit));
                         result += LanguageMgr.GetTranslation(player.Client, "Commands.Players.Combine.Tool") + ": " + toolTemplate.Name + "\n";
                     }
 
@@ -225,7 +226,7 @@ namespace DOL.gameobjects.CustomNPC
                     foreach (string ingredient in splitingredients)
                     {
                         string[] splitingredient = ingredient.Split('|');
-                        ItemTemplate ingredientTemplate = GameServer.Database.SelectObject<ItemTemplate>(string.Format("Id_nb='{0}'", splitingredient[0]));
+                        ItemTemplate ingredientTemplate = GameServer.Database.SelectObject<ItemTemplate>(DB.Column("Id_nb").IsEqualTo(splitingredient[0]));
                         result += " - " + ingredientTemplate.Name + " (X" + splitingredient[1] + ")\n";
                     }
                     result += "/////////////////////////////////////\n";
