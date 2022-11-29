@@ -5502,9 +5502,13 @@ namespace DOL.GS
 				Task.TasksDone = 0;
 				Task.SaveIntoDatabase();
 			}
-			
-			// Level up pets and subpets
-			if (DOL.GS.ServerProperties.Properties.PET_LEVELS_WITH_OWNER &&
+            //refresh npc quests according to new level
+            foreach (GameNPC mob in WorldMgr.GetRegion(this.CurrentRegionID)?.Objects?.Where(o => o != null && o is GameNPC))
+            {
+                this.Out.SendNPCsQuestEffect(mob, mob.GetQuestIndicator(this));
+            }
+            // Level up pets and subpets
+            if (DOL.GS.ServerProperties.Properties.PET_LEVELS_WITH_OWNER &&
 				ControlledBrain is ControlledNpcBrain brain && brain.Body is GamePet pet)
 			{
 				if (pet.SetPetLevel())

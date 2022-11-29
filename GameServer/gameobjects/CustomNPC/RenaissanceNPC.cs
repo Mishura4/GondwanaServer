@@ -57,7 +57,7 @@ namespace DOL.GS
 
         public override eQuestIndicator GetQuestIndicator(GamePlayer player)
         {
-            Console.WriteLine("GetQuestIndicator has been called");
+            Console.WriteLine("Renaissance GetQuestIndicator has been called");
             if (player.Level >= 50 && !player.IsRenaissance)
             {
                 return eQuestIndicator.Lore;

@@ -56,7 +56,6 @@ namespace DOL.GS.Quests
 		public override PlayerGoalState ForceStartGoal(PlayerQuest questData)
 		{
 			var res = base.ForceStartGoal(questData);
-            Console.WriteLine("ForceStartGoal has been called");
             if (res.IsActive && GameMath.IsWithinRadius(questData.Owner, Target, WorldMgr.OBJ_UPDATE_DISTANCE))
 				questData.Owner.Out.SendNPCsQuestEffect(Target, Target.GetQuestIndicator(questData.Owner));
 			return res;
