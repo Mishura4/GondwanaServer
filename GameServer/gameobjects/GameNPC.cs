@@ -42,7 +42,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Numerics;
 using DOL.GameEvents;
-using System.Threading.Tasks;
 using DOL.MobGroups;
 
 namespace DOL.GS

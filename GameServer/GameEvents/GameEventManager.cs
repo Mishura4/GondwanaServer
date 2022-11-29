@@ -9,6 +9,7 @@ using DOLDatabase.Tables;
 using log4net;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -441,7 +442,7 @@ namespace DOL.GameEvents
                     infos.Add(" * id: " + mob.InternalID);
                     infos.Add(" * Name: " + mob.Name);
                     infos.Add(" * Brain: " + mob.Brain?.GetType()?.FullName ?? string.Empty);
-                    infos.Add(string.Format(" * X: {0}, Y: {1}, Z: {2}", mob.X, mob.Y, mob.Z));
+                    infos.Add(string.Format(" * X: {0}, Y: {1}, Z: {2}", mob.Position.X, mob.Position.Y, mob.Position.Z));
                     infos.Add(" * Region: " + mob.CurrentRegionID);
                     infos.Add(" * Zone: " + (mob.CurrentZone != null ? mob.CurrentZone.ID.ToString() : "-"));
                     infos.Add(" * Area: " + (mob.CurrentAreas != null ? string.Join(",", mob.CurrentAreas) : string.Empty));
@@ -453,7 +454,7 @@ namespace DOL.GameEvents
                 {
                     infos.Add(" * id: " + coffre.InternalID);
                     infos.Add(" * Name: " + coffre.Name);
-                    infos.Add(string.Format(" * X: {0}, Y: {1}, Z: {2}", coffre.X, coffre.Y, coffre.Z));
+                    infos.Add(string.Format(" * X: {0}, Y: {1}, Z: {2}", coffre.Position.X, coffre.Position.Y, coffre.Position.Z));
                     infos.Add(" * Region: " + coffre.CurrentRegionID);
                     infos.Add(" * Zone: " + (coffre.CurrentZone != null ? coffre.CurrentZone.ID.ToString() : "-"));
                     infos.Add(" * Area: " + (coffre.CurrentAreas != null ? string.Join(",", coffre.CurrentAreas) : string.Empty));

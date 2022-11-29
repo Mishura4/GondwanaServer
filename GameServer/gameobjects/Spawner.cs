@@ -319,9 +319,10 @@ namespace DOL.GS
         private void SetPositionAndLoad(GameNPC npc, bool isXOffset, bool isPositiveOffset)
         {
             npc.LoadedFromScript = true;
-            npc.X = this.X + (isXOffset ? (isPositiveOffset ? WorldMgr.GIVE_ITEM_DISTANCE : WorldMgr.GIVE_ITEM_DISTANCE * -1) : 0);
-            npc.Y = this.Y + (!isXOffset ? (isPositiveOffset ? WorldMgr.GIVE_ITEM_DISTANCE : WorldMgr.GIVE_ITEM_DISTANCE * -1) : 0);
-            npc.Z = this.Z;
+
+            npc.Position = new System.Numerics.Vector3(this.Position.X + (isXOffset ? (isPositiveOffset ? WorldMgr.GIVE_ITEM_DISTANCE : WorldMgr.GIVE_ITEM_DISTANCE * -1) : 0),
+                                                this.Position.Y + (!isXOffset ? (isPositiveOffset ? WorldMgr.GIVE_ITEM_DISTANCE : WorldMgr.GIVE_ITEM_DISTANCE * -1) : 0),
+                                                this.Position.Z);
             npc.Heading = this.Heading;
             npc.RespawnInterval = -1;
             npc.CurrentRegion = WorldMgr.GetRegion(this.CurrentRegionID);

@@ -66,9 +66,7 @@ namespace DOL.gameobjects.CustomNPC
 
             GetPlayerLocation(out x, out y, out z, out heading, out region);
 
-            X = x;
-            Y = y;
-            Z = z;
+            Position = new System.Numerics.Vector3(x, y, z);
             Heading = heading;
             CurrentRegion = region;
             AddToWorld();
