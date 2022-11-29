@@ -66,7 +66,10 @@ public class AmteMob : GameNPC, IAmteNPC
 
     private void LoadDbBrainParam(string dataid)
     {
-        var data = GameServer.Database.SelectObjects<DBBrainsParam>(DB.Column("MobID").IsEqualTo(dataid));
+
+        DBBrainsParam[] data;
+        if (!DBBrainsParam.MobXDBBrains.TryGetValue(dataid, out data))
+            data = new DBBrainsParam[0];
         for (var cp = GetCustomParam(); cp != null; cp = cp.next)
         {
             var cp1 = cp;
