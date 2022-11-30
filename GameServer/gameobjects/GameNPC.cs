@@ -3172,6 +3172,15 @@ namespace DOL.GS
 				m_teleporterIndicator.AddToWorld();
 			}
 
+			//On Groupmob repop handle slave status
+			if (this.CurrentGroupMob?.SlaveGroupId != null)
+            {
+				if (MobGroupManager.Instance.Groups.ContainsKey(this.CurrentGroupMob.SlaveGroupId))
+                {
+					MobGroupManager.Instance.Groups[this.CurrentGroupMob.SlaveGroupId].ResetGroupInfo();
+				}
+            }
+
 			return true;
 		}
 

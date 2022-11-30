@@ -72,5 +72,13 @@ namespace DOL.GS.Scripts
 			          };
 			return cp;
 		}
-	}
+
+        public override void CustomCopy(GameObject source)
+        {
+			NightMob nightMobCopy = source as NightMob;
+			StartHour = nightMobCopy.StartHour;
+			EndHour = nightMobCopy.EndHour;
+            base.CustomCopy(source);
+        }
+    }
 }

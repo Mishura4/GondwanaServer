@@ -3825,7 +3825,12 @@ namespace DOL.GS.Spells
 			ad.Target = target;
 			ad.AttackType = AttackData.eAttackType.Spell;
 			ad.SpellHandler = this;
-			ad.AttackResult = GameLiving.eAttackResult.HitUnstyled;
+			ad.AttackResult = GameLiving.eAttackResult.HitUnstyled;		
+
+			// Attacked living may modify the attack data.  Primarily used for keep doors and components.
+			ad.Target.ModifyAttack(ad);
+
+			m_lastAttackData = ad;
 
 			double minVariance;
 			double maxVariance;
@@ -3987,6 +3992,17 @@ namespace DOL.GS.Spells
 		public virtual void SendDamageMessages(AttackData ad)
 		{
 			string modmessage = "";
+
+			//Update value if npc is Invincible Group
+			if (Caster is GamePlayer && ad.Target is GameNPC npc)
+            {
+				if (npc.CurrentGroupMob != null && npc.CurrentGroupMob.GroupInfos.IsInvincible == true)
+                {
+					ad.Damage = 0;
+					ad.CriticalDamage = 0;
+                }
+            }
+
 			if (ad.Modifier > 0)
 				modmessage = " (+" + ad.Modifier + ")";
 			if (ad.Modifier < 0)
@@ -4030,6 +4046,14 @@ namespace DOL.GS.Spells
 
 			// send animation before dealing damage else dead livings show no animation
 			ad.Target.OnAttackedByEnemy(ad);
+
+			//Check if enemy is invincible by GroupMob
+			if (ad.Target is GameNPC npc && npc.CurrentGroupMob != null && npc.CurrentGroupMob.GroupInfos.IsInvincible == true)
+            {				
+				ad.Damage = 0;
+				ad.CriticalDamage = 0;	
+            }
+
 			ad.Attacker.DealDamage(ad);
 			if (ad.Damage == 0 && ad.Target is GameNPC)
 			{

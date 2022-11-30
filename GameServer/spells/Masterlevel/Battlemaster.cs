@@ -478,7 +478,16 @@ namespace DOL.GS.Spells
 							break;
 					}
 
-					if (hitWeapon.Length > 0)
+                    if (Caster is GamePlayer && ad.Target is GameNPC npc)
+                    {
+                        if (npc.CurrentGroupMob != null && npc.CurrentGroupMob.GroupInfos.IsInvincible == true)
+                        {
+                            ad.Damage = 0;
+                            ad.CriticalDamage = 0;
+                        }
+                    }
+
+                    if (hitWeapon.Length > 0)
 						hitWeapon = " " + LanguageMgr.GetTranslation(player.Client.Account.Language, "GamePlayer.Attack.WithYour") + " " + hitWeapon;
 
 					string attackTypeMsg = LanguageMgr.GetTranslation(player.Client.Account.Language, "GamePlayer.Attack.YouAttack");

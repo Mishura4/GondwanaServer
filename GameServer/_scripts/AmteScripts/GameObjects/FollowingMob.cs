@@ -212,7 +212,13 @@ namespace DOL.GS.Scripts
 			info.Add(" + Mob à suivre: " + MobFollow.Name + " (Realm: " + MobFollow.Realm + ", Guilde: " + MobFollow.GuildName + ")");
 			return info;
 		}
-	}
+
+        public override void CustomCopy(GameObject source)
+        {
+			FollowMobID= (source as FollowingMob).FollowMobID;
+            base.CustomCopy(source);
+        }
+    }
 }
 
 namespace DOL.AI.Brain

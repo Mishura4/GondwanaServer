@@ -114,7 +114,8 @@ namespace DOL.GS.Commands
 							return;
 						}
 						npc.Faction = myfaction;
-						client.Player.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Faction.Assign.MobHasJoinedFact", npc.Name, myfaction.Name), eChatType.CT_Say, eChatLoc.CL_SystemWindow);
+						npc.SaveIntoDatabase();
+                        client.Player.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Faction.Assign.MobHasJoinedFact", npc.Name, myfaction.Name), eChatType.CT_Say, eChatLoc.CL_SystemWindow);
 					}
 					break;
 				#endregion Assign
@@ -153,7 +154,8 @@ namespace DOL.GS.Commands
 						dblinkedfaction.IsFriend = true;
 						GameServer.Database.AddObject(dblinkedfaction);
 						myfaction.AddFriendFaction(linkedfaction);
-					}
+                        client.Player.Out.SendMessage("Faction " + myfaction.ID.ToString() + ": " + myfaction.Name + " is friend with " + linkedfaction.ID.ToString() + ": " + linkedfaction.Name, eChatType.CT_Say, eChatLoc.CL_SystemWindow);
+                    }
 					break;
 				#endregion AddFriend
 				#region AddEnemy
@@ -191,7 +193,8 @@ namespace DOL.GS.Commands
 						dblinkedfaction.IsFriend = false;
 						GameServer.Database.AddObject(dblinkedfaction);
 						myfaction.AddEnemyFaction(linkedfaction);
-					}
+                        client.Player.Out.SendMessage("Faction " + myfaction.ID.ToString() + ": " + myfaction.Name + " is enemy with " + linkedfaction.ID.ToString() + ": " + linkedfaction.Name, eChatType.CT_Say, eChatLoc.CL_SystemWindow);
+                    }
 					break;
 				#endregion AddEnemy
 				#region List
@@ -226,7 +229,8 @@ namespace DOL.GS.Commands
 							client.Player.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Faction.FactionNotLoaded"), eChatType.CT_Say, eChatLoc.CL_SystemWindow);
 							return;
 						}
-						client.Player.TempProperties.setProperty(TEMP_FACTION_LAST, tempfaction);
+                        client.Player.Out.SendMessage("Faction " + tempfaction.ID.ToString() + ": " + tempfaction.Name + " loaded", eChatType.CT_Say, eChatLoc.CL_SystemWindow);
+                        client.Player.TempProperties.setProperty(TEMP_FACTION_LAST, tempfaction);
 					}
 					break;
 				#endregion Select
