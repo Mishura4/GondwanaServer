@@ -165,7 +165,8 @@ namespace DOL.spells
                 }
             }
 
-            if (match.CombinexObjectModel != null && !CheckForTools(player, match.CombinexObjectModel.Split(new char[] { '|' })) && !CheckToolKit(player, match.ToolKit))
+            if (match.CombinexObjectModel != null && !CheckForTools(player, match.CombinexObjectModel.Split(new char[] { '|' }))
+                && (string.IsNullOrEmpty(match.ToolKit) || !CheckToolKit(player, match.ToolKit)))
                 return false;
 
             if (match.Duration > 0)
@@ -464,14 +465,17 @@ namespace DOL.spells
                 player.Out.SendUpdateCraftingSkills();
             }
 
-            if (string.IsNullOrEmpty(match.ToolKit) && match.ToolLoseDur > 0)
+            if (!string.IsNullOrEmpty(match.ToolKit) && match.ToolLoseDur > 0)
             {
-                InventoryItem toolkit = player.Inventory.GetItemRange(eInventorySlot.Min_Inv, eInventorySlot.Max_Inv).Where(item => item.Id_nb == match.ToolKit).FirstOrDefault();
+
+                InventoryItem toolkit = player.Inventory.GetItemRange(eInventorySlot.MinEquipable, eInventorySlot.LastBackpack).Where(item => item.Id_nb == match.ToolKit).FirstOrDefault();
                 if (toolkit != null)
                 {
                     toolkit.Durability -= match.ToolLoseDur;
-                    if (toolkit.Durability < 0)
+                    if (toolkit.Durability <= 0)
                         player.Inventory.RemoveItem(toolkit);
+                    else
+			            player.Out.SendInventoryItemsUpdate(new InventoryItem[] { toolkit });
                 }
             }
 
