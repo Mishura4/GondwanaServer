@@ -116,7 +116,7 @@ namespace DOL.GS
 
 							if (playerItem.CheckValid(m_player))
 							{
-								m_items.Add(itemSlot, playerItem as InventoryItem);
+								AddItem(itemSlot, playerItem as InventoryItem, false);
 							}
 							else
 							{
@@ -126,7 +126,7 @@ namespace DOL.GS
 								invalidItem.OwnerID = item.OwnerID;
 								invalidItem.SlotPosition = item.SlotPosition;
 								invalidItem.AllowAdd = false;
-								m_items.Add(itemSlot, invalidItem);
+								AddItem(itemSlot, invalidItem, false);
 							}
 
 							if (Log.IsWarnEnabled)
