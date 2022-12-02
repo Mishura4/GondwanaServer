@@ -169,7 +169,7 @@ namespace DOL.spells
                 && (string.IsNullOrEmpty(match.ToolKit) || !CheckToolKit(player, match.ToolKit)))
                 return false;
             if (!CheckToolKit(player, match.ToolKit))
-                return false
+                return false;
 
             if (match.Duration > 0)
             {
