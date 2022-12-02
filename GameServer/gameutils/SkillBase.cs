@@ -30,6 +30,7 @@ using DOL.GS.RealmAbilities;
 using DOL.GS.Styles;
 using DOL.Language;
 using log4net;
+using DOL.Territory;
 
 namespace DOL.GS
 {
@@ -3139,6 +3140,9 @@ namespace DOL.GS
                 {
                     resistValue += 3;
                 }
+
+                if (player.Guild != null)
+                    resistValue += player.Guild.GetResistFromTerritories(type);   
             }
 
 			return resistValue;

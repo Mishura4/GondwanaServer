@@ -413,6 +413,13 @@ namespace DOL.GS.ServerProperties
 		/// </summary>
 		[ServerProperty("log", "log_inventory_other", "Enable other logging in inventory log (log_inventory must be enabled)", true)]
 		public static bool LOG_INVENTORY_OTHER;
+
+        /// <summary>
+        /// Allow GM Attack by npc ?
+        /// </summary>
+        [ServerProperty("server", "allow_gm_attack", "Allow GM Attack by npc ?", false)]
+        public static bool ALLOW_GM_ATTACK;
+
 		#endregion
 
 		#region SERVER
@@ -2508,6 +2515,12 @@ namespace DOL.GS.ServerProperties
 		/// </summary>
 		[ServerProperty("craft", "crafting_speed", "Crafting Speed Modifier - Edit this to change the speed at which you craft e.g 1.5 is 50% faster 2.0 is twice as fast (100%) 0.5 is half the speed (50%)", 1.0)]
 		public static double CRAFTING_SPEED;
+
+        [ServerProperty("territory", "daily_tax ", "Territory Daily Gold Tax", 9)]
+        public static int DAILY_TAX;
+
+        [ServerProperty("territory", "daily_merit_points ", "Territory Daily Merit Points", 19)]
+        public static int DAILY_MERIT_POINTS; 
 
 		/// <summary>
 		/// Crafting skill gain bonus in capital cities

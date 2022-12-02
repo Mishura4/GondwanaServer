@@ -19,6 +19,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Reflection;
 
@@ -1175,6 +1176,39 @@ namespace DOL.GS.ServerRules
 					else
 					{
 						bountyPoints = (int)(npcBPValue * damagePercent);
+					}
+
+					if (player != null && player.Guild != null && player.Guild.Territories.Any())
+					{
+						int territoryCount = player.Guild.Territories.Count();
+						int multiplier = 0;
+
+						if (killedNPC.Level < 23)
+						{
+							multiplier = 1;
+						}
+						else if (killedNPC.Level < 46)
+						{
+							multiplier = 2;
+						}
+						else
+						{
+							multiplier = 3;
+						}
+
+						int bonusBP = 0;
+
+						if (territoryCount < 5)
+						{
+							bonusBP = territoryCount * multiplier;
+						}
+						else
+						{
+							bonusBP = 5 * multiplier;
+						}
+
+						bountyPoints += bonusBP;
+						player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameObjects.GamePlayer.GainBountyPoints.TerritoryBonus", bonusBP) , eChatType.CT_Important, eChatLoc.CL_SystemWindow);
 					}
 
 					if (bountyPoints > 0)

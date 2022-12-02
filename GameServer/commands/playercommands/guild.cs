@@ -25,6 +25,7 @@ using DOL.GS.Keeps;
 using DOL.GS.PacketHandler;
 using DOL.GS.ServerProperties;
 using DOL.Language;
+using DOL.Territory;
 
 namespace DOL.GS.Commands
 {
@@ -2411,9 +2412,25 @@ namespace DOL.GS.Commands
 							client.Player.Guild.UpdateGuildWindow();
 							break;
 						}
-						#endregion
-						#region Default
-					default:
+                    #endregion
+
+                    #region territoires
+                    case "territoires":
+						if(client.Player.Guild == null)
+						{
+							client.Out.SendMessage("Vous devez etre dans une guilde pour voir les territoires occupés", eChatType.CT_System, eChatLoc.CL_ChatWindow);
+							break;
+						}
+
+
+						IList<string> infos = TerritoryManager.Instance.GetTerritoriesInformations();
+						client.Out.SendCustomTextWindow("[ TERRITOIRES ]", infos);
+						break;
+                    #endregion
+
+
+                    #region Default
+                    default:
 						{
 							client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Scripts.Player.Guild.UnknownCommand", args[1]), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 							DisplayHelp(client);

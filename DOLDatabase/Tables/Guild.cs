@@ -369,10 +369,26 @@ namespace DOL.Database
 			}
 		}
 
+        [DataElement(AllowDbNull = true)]
+        public string Territories
+        {
+            get
+            {
+                return m_territories;
+            }
+
+            set
+            {
+                m_territories = value;
+                Dirty = true;
+            }
+        }
+
 		/// <summary>
 		/// rank rules
 		/// </summary>
 		[Relation(LocalField = nameof( GuildID ), RemoteField = nameof( DBRank.GuildID ), AutoLoad = true, AutoDelete=true)]
 		public DBRank[] Ranks;
+		private string m_territories;
 	}
 }

@@ -233,9 +233,13 @@ namespace DOL.GS.PropertyCalc
                 buffBonus = 0;
             }
 
-            if (living is GamePlayer player && player.IsRenaissance)
+            if (living is GamePlayer player)
             {
-                abilityBonus += 3;
+                if(player.IsRenaissance)
+                    abilityBonus += 3;
+
+                if (player.Guild != null)
+                    abilityBonus += player.Guild.GetResistFromTerritories(eResist.Natural);
             }
 
 			return (itemBonus + buffBonus + abilityBonus);

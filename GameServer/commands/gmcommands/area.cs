@@ -80,13 +80,14 @@ namespace DOL.GS.Commands
 						area.X = (int)client.Player.Position.X;
 						area.Y = (int)client.Player.Position.Y;
 						area.Z = (int)client.Player.Position.Z;
+						area.ObjectId = area.Description;
 
                         if (args.Length == 8 && bool.TryParse(args[7], out bool canVol))
                         {
                             area.AllowVol = canVol;
                         }
 
-                        Assembly gasm = Assembly.GetAssembly(typeof(GameServer));
+                        Assembly gasm = Assembly.GetAssembly(typeof(GameServer));					
 						AbstractArea newArea = (AbstractArea)gasm.CreateInstance(area.ClassType, false);
                         newArea.LoadFromDatabase(area);
 

@@ -20,6 +20,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Linq;
 
 using DOL.GS.PacketHandler;
 
@@ -307,6 +308,11 @@ namespace DOL.GS.Commands
 							targetObject.Emblem = emblem;
 							targetObject.SaveIntoDatabase();
 							DisplayMessage(client, "Object emblem changed to: " + targetObject.Emblem);
+
+                            foreach (GamePlayer player in targetObject.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+                            {
+                                player.Out.SendObjectCreate(targetObject);
+                            }       
 						}
 						catch (Exception)
 						{

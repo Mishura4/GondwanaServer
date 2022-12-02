@@ -195,7 +195,40 @@ namespace DOL.GS.ServerRules
 
 			//GMs can't be attacked
 			if (playerDefender != null && playerDefender.Client.Account.PrivLevel > 1)
+				return Properties.ALLOW_GM_ATTACK;
+
+			//Territory
+			if (attackerNpc != null && playerDefender != null)
+			{
+				//Check guilds and ally Guilds
+				if (attackerNpc.IsInTerritory && playerDefender.GuildName != null)
+				{
+					if (attackerNpc.GuildName.Equals(playerDefender.GuildName))
+					{
 				return false;
+					}
+
+					var guild = GuildMgr.GetGuildByName(playerDefender.GuildName);
+
+					if (guild != null && guild.alliance != null && guild.alliance.Guilds != null)
+					{
+						foreach (var guildObj in guild.alliance.Guilds)
+						{
+							Guild allyGuild = guildObj as Guild;
+
+							if (allyGuild == null)
+							{
+								continue;
+							}
+
+							if (attacker.GuildName.Equals(allyGuild.Name))
+							{
+								return false;
+							}
+						}
+					}
+				}
+			}
 
 			if (!_IsAllowedToAttack_PvpImmunity(attacker, playerAttacker, playerDefender, quiet))
 				return false;
