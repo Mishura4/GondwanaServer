@@ -899,7 +899,7 @@ namespace DOL.GS
 		/// This living takes damage
 		/// </summary>
 		/// <param name="ad">AttackData containing damage details</param>
-		public void TakeDamage(AttackData ad)
+		public virtual void TakeDamage(AttackData ad)
 		{
 			TakeDamage(ad.Attacker, ad.DamageType, ad.Damage, ad.CriticalDamage);
 		}

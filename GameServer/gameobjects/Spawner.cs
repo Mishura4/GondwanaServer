@@ -351,7 +351,37 @@ namespace DOL.GS
                 } 
             }
         }
+        public override void TakeDamage(AttackData ad)
+        {
+            base.TakeDamage(ad);
 
+            if (!this.isAggroType && IsAlive)
+            {
+                if (npcAddsNextPopupTimeStamp == null || npcAddsNextPopupTimeStamp.Value < DateTime.Now)
+                {
+                    if (!this.hasLoadedAdd)
+                    {
+                        this.LoadAdds();
+                    }
+                }
+            }
+
+            if (addsGroupmobId != null && MobGroupManager.Instance.Groups.ContainsKey(addsGroupmobId))
+            {
+                if (!isAddsActiveStatus && (this.percentLifeAddsActivity == 0 || this.HealthPercent <= this.percentLifeAddsActivity))
+                {
+                    this.isAddsActiveStatus = true;
+                    if (this.isAddsGroupMasterGroup)
+                    {
+                        MobGroupManager.Instance.Groups[this.addsGroupmobId].ResetGroupInfo(true);
+                    }
+                    else
+                    {
+                        MobGroupManager.Instance.Groups[this.addsGroupmobId].SetGroupInfo(this.GetActiveStatus(), false, true);
+                    }
+                }
+            } 
+        }
 
 
         //Load adds if respawn is passed
@@ -373,7 +403,13 @@ namespace DOL.GS
             this.hasLoadedAdd = true;
         }
 
-
+        public override void WalkToSpawn()
+        {
+            base.WalkToSpawn();
+            this.addsRespawnCurrentCount = 0;
+            this.isAddsActiveStatus = false;
+            RemoveAdds();
+        }
         private void RemoveAdds()
         {
             if (addsGroupmobId != null && MobGroupManager.Instance.Groups.ContainsKey(this.addsGroupmobId))

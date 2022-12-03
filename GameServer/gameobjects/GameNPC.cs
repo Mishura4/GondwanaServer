@@ -1517,7 +1517,7 @@ namespace DOL.GS
 		/// <summary>
 		/// Walk to the spawn point
 		/// </summary>
-		public void WalkToSpawn()
+		public virtual void WalkToSpawn()
 		{
 			WalkToSpawn((short)(MaxSpeed / 2.5));
 		}
