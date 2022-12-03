@@ -963,16 +963,19 @@ namespace DOL.GS
 				DBCharacter.Direction = BindHeading;
 			}
 			
-			//check for battleground caps
-			Battleground bg = GameServer.KeepManager.GetBattleground(CurrentRegionID);
-			if (bg != null)
-			{
-				if (Level > bg.MaxLevel || RealmLevel >= bg.MaxRealmLevel)
+			if (!this.CurrentRegion.IsRvR)
+            {
+				//check for battleground caps
+				Battleground bg = GameServer.KeepManager.GetBattleground(CurrentRegionID);
+				if (bg != null)
 				{
-					// Only kick players out
-					if (Client.Account.PrivLevel == (int)ePrivLevel.Player)
+					if (Level > bg.MaxLevel || RealmLevel >= bg.MaxRealmLevel)
 					{
-						GameServer.KeepManager.ExitBattleground(this);
+						// Only kick players out
+						if (Client.Account.PrivLevel == (int)ePrivLevel.Player)
+						{
+							GameServer.KeepManager.ExitBattleground(this);
+						}
 					}
 				}
 			}
@@ -4437,12 +4440,12 @@ namespace DOL.GS
 				//Zone Bonus Support
 				if (Properties.ENABLE_ZONE_BONUSES)
 				{
-					int zoneBonus = (((int)amount * ZoneBonus.GetRPBonus(this)) / 100);
+					int zoneBonus = (int)(amount * ZoneBonus.GetRPBonus(this) * ServerProperties.Properties.RP_RATE);
 					if (zoneBonus > 0)
 					{
-						Out.SendMessage(ZoneBonus.GetBonusMessage(this, (int)(zoneBonus * ServerProperties.Properties.RP_RATE), ZoneBonus.eZoneBonusType.RP),
+						Out.SendMessage(ZoneBonus.GetBonusMessage(this, zoneBonus, ZoneBonus.eZoneBonusType.RP),
 						                eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-						GainRealmPoints((long)(zoneBonus * ServerProperties.Properties.RP_RATE), false, false, false);
+						GainRealmPoints((long)(zoneBonus), false, false, false);
 					}
 				}
 

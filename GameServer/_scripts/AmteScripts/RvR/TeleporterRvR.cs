@@ -11,12 +11,10 @@ namespace DOL.GS.Scripts
 
         private string[] rvrs = new string[]
         {
-            "RvR Novice (Lv 20-26) : Lions’Den",
-            "RvR Débutant (Lv 26-32) : Hills of Claret",
-            "RvR Standard (Lv 32-38) : Leirvik",
-            "RvR Expert (Lv 38-44) : Molvik",
-            "RvR Master (Lv 44-50) : Thidranki",
-            "RvR Divinités (Lv 50-Isrenaissance/Champion) : Wilton"
+            "RvR Débutant (Lv 20-28) : Lion’s Den",
+            "RvR Standard (Lv 29-38) : Hills of Claret",
+            "RvR Expert (Lv 38-45) : Molvik",
+            "RvR Master (Lv 46-50-Isrenaissance/Champion) : Thidranki"
         };
 
         public override bool AddToWorld()

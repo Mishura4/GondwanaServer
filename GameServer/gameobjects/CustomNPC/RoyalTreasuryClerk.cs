@@ -42,11 +42,11 @@ namespace DOL.GS
 
 			if (GlobalConstants.IsExpansionEnabled((int)eClientExpansion.DarknessRising))
 			{
-				SayTo(player, "Let me check to see if you are owed any items ... ");
+				SayTo(player, "Voyons voir si il te manque des objets...");
 
 				if (player.Inventory.CountItemTemplate("Personal_Bind_Recall_Stone", eInventorySlot.Min_Inv, eInventorySlot.Max_Inv) == 0)
 				{
-					SayTo(player, "I see you are missing your Personal Bind Recall Stone.  Would you like [another]?");
+					SayTo(player, "Je vois que tu n'as plus ta pierre de rappel. En veux-tu une [autre]?");
 				}
 
 				return true;
@@ -68,11 +68,11 @@ namespace DOL.GS
 
 			GamePlayer player = source as GamePlayer;
 
-			if (text.ToLower() == "another")
+			if (text.ToLower() == "autre")
 			{
 				if (player.Inventory.CountItemTemplate("Personal_Bind_Recall_Stone", eInventorySlot.Min_Inv, eInventorySlot.Max_Inv) == 0)
 				{
-					SayTo(player, "Very well then, here's your Personal Bind Recall Stone, may it serve you well.");
+					SayTo(player, "Ok pas de soucis, voici ta pierre de rappel. J'espere que tu en feras bon usage.");
 					player.ReceiveItem(this, "Personal_Bind_Recall_Stone");
 				}
 				return true;
