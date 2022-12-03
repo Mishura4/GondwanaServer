@@ -8,13 +8,13 @@ namespace DOL.Territory
 {
     public class AreaCoordinate
     {
-        public int X
+        public float X
         {
             get;
             set;
         }
 
-        public int Y
+        public float Y
         {
             get;
             set;

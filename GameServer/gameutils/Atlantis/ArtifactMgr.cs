@@ -186,7 +186,7 @@ namespace DOL.GS
                 return 0;
             }
 
-            string artifactID = GetArtifactIDFromItemID(item.Id_nb);
+            string artifactID = GetArtifactIDFromItemID(item.Id_nb.Split('#')[0]);
             lock (m_artifacts)
             {
                 if (!m_artifacts.ContainsKey(artifactID))
@@ -222,11 +222,11 @@ namespace DOL.GS
                 foreach (List<ArtifactXItem> versions in m_artifactVersions.Values)
                 {
                     foreach (ArtifactXItem version in versions)
-                    {
-                        if (version.ItemID == item.Id_nb)
+                    {// or split by # and take 1st element
+                        if (version.ItemID == item.Id_nb || version.ItemID == item.Id_nb.Split('#')[0])
                         {
                             return true;
-                        }
+                        } 
                     }
                 }
             }
@@ -691,7 +691,7 @@ namespace DOL.GS
             {
                 foreach (InventoryItem item in player.Inventory.AllItems)
                 {
-                    string artifactID = GetArtifactIDFromItemID(item.Id_nb);
+                    string artifactID = GetArtifactIDFromItemID(item.Id_nb.Split('#')[0]);
                     if (artifactID != null)
                     {
                         artifacts.Add(artifactID);

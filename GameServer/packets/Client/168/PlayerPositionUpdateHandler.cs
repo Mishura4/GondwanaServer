@@ -336,7 +336,7 @@ namespace DOL.GS.PacketHandler.Client.v168
 				// Because we may be in an instance we need to do the area check from the current region
 				// rather than relying on the zone which is in the skinned region.  - Tolakram
 
-				var newAreas = client.Player.CurrentRegion.GetAreasOfZone(newZone, client.Player.Position);
+				var newAreas = client.Player.CurrentRegion.GetAreasOfZone(newZone, client.Player.Position, true);
 
 				// Check for left areas
 				if (oldAreas != null)
@@ -1007,7 +1007,7 @@ namespace DOL.GS.PacketHandler.Client.v168
 				// Because we may be in an instance we need to do the area check from the current region
 				// rather than relying on the zone which is in the skinned region.  - Tolakram
 
-				var newAreas = client.Player.CurrentRegion.GetAreasOfZone(newZone, client.Player.Position);
+				var newAreas = client.Player.CurrentRegion.GetAreasOfZone(newZone, client.Player.Position, true);
 
 				// Check for left areas
 				if (oldAreas != null)

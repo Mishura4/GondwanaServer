@@ -57,7 +57,7 @@ namespace DOL.GS
 
         {
             Template = Template.Clone() as ItemTemplate;
-            ArtifactID = ArtifactMgr.GetArtifactIDFromItemID(template.Id_nb);
+            ArtifactID = ArtifactMgr.GetArtifactIDFromItemID(template.Id_nb.Split('#')[0]);
             ArtifactLevel = 0;
             m_levelRequirements = ArtifactMgr.GetLevelRequirements(ArtifactID);
             
@@ -94,7 +94,7 @@ namespace DOL.GS
                 ObjectId = item.ObjectId;   // This is the key for the 'inventoryitem' table
                 OwnerID = item.OwnerID;
                 CanUseEvery = ArtifactMgr.GetReuseTimer(this);
-                ArtifactID = ArtifactMgr.GetArtifactIDFromItemID(Id_nb);
+                ArtifactID = ArtifactMgr.GetArtifactIDFromItemID(Id_nb.Split('#')[0]);
                 ArtifactLevel = ArtifactMgr.GetCurrentLevel(this);
                 m_levelRequirements = ArtifactMgr.GetLevelRequirements(ArtifactID);
                 UpdateAbilities(template);
@@ -179,7 +179,7 @@ namespace DOL.GS
         /// <returns>True, if artifact gained 1 or more abilities, else false.</returns>
         private bool AddAbilities(GamePlayer player, int artifactLevel)
         {
-            ItemTemplate template = GameServer.Database.FindObjectByKey<ItemTemplate>(Id_nb);
+            ItemTemplate template = GameServer.Database.FindObjectByKey<ItemTemplate>(Id_nb.Split('#')[0]);
 
             if (template == null)
             {
@@ -611,7 +611,7 @@ namespace DOL.GS
             delve.Add(" ");
             delve.Add("--- Artifact/Item technical information ---");
             delve.Add(" ");
-            delve.Add("Item Template: " + Id_nb);
+            delve.Add("Item Template: " + Id_nb.Split('#')[0]);
             delve.Add("         Name: " + Name);
             delve.Add("   Experience: " + Experience);
             delve.Add("       Object: " + GlobalConstants.ObjectTypeToName(Object_Type) + " (" + Object_Type + ")");

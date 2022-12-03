@@ -72,7 +72,7 @@ namespace DOL.Territory
                                 continue;
                             }
 
-                            var area = zone.GetAreasOfSpot(new Point3D(territoryDb.AreaX, territoryDb.AreaY, 0), false)?.FirstOrDefault(a => ((AbstractArea)a).Description.Equals(areaDb.Description));
+                            var area = zone.GetAreasOfSpot(new System.Numerics.Vector3(territoryDb.AreaX, territoryDb.AreaY, 0), false)?.FirstOrDefault(a => ((AbstractArea)a).Description.Equals(areaDb.Description));
 
                             if (area != null)
                             {
@@ -332,12 +332,12 @@ namespace DOL.Territory
 
         public static AreaCoordinate GetCoordinates(IArea area)
         {
-            int x, y;
+            float x, y;
 
-            if (area is Circle circle)
+            if (area is DOL.GS.Area.Circle circle)
             {
-                x = circle.X;
-                y = circle.Y;
+                x = circle.Position.X;
+                y = circle.Position.Y;
             }
             else if (area is Square sq)
             {

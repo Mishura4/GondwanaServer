@@ -17,8 +17,8 @@ namespace DOLDatabase.Tables
         private string m_areaId;
         private string m_bossMobId;
         private string m_groupId;
-        private int m_areaX;
-        private int m_areaY;
+        private float m_areaX;
+        private float m_areaY;
         private string m_bonus;
         private string m_guildOwner;
 
@@ -128,7 +128,7 @@ namespace DOLDatabase.Tables
         }
 
         [DataElement(AllowDbNull = false)]
-        public int AreaX
+        public float AreaX
         {
             get
             {
@@ -143,7 +143,7 @@ namespace DOLDatabase.Tables
         }
 
         [DataElement(AllowDbNull = false)]
-        public int AreaY
+        public float AreaY
         {
             get
             {

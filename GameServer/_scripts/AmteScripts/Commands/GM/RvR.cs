@@ -61,7 +61,7 @@ namespace DOL.GS.Commands
 						DisplayMessage(client, "Le rvr doit être ouvert pour le unforce.");
 						break;
 					}
-					RvrManager.Instance.Open(0, false);
+					RvrManager.Instance.Open(false);
 					DisplayMessage(client, "Le rvr sera fermé automatiquement s'il n'est plus dans les bonnes horaires.");
 					break;
 
@@ -88,7 +88,7 @@ namespace DOL.GS.Commands
 					}
 					var rvr = string.Join(", ", RvrManager.Instance.FindRvRMaps());
 					var pvp = string.Join(", ", PvpManager.Instance.FindPvPMaps());
-					DisplayMessage(client, string.Format("Le rvr utilise les maps: {0}, le pvp utilise les maps: {1}.", regions, pvp));
+					DisplayMessage(client, string.Format("Le rvr utilise les maps: {0}, le pvp utilise les maps: {1}.", rvr, pvp));
 					break;
 			}
 		}

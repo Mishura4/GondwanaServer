@@ -133,7 +133,7 @@ namespace DOL.Mail
 					xmlConfig["SSL"].Set(false);
 					xmlConfig["Enable"].Set(false);
 					file.Refresh();
-					xmlConfig.Save(file);
+					//xmlConfig.Save(file);
 				}
 			}
 			catch (Exception e)

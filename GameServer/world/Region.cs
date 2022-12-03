@@ -1412,7 +1412,7 @@ namespace DOL.GS
         public IList<IArea> GetAreasOfSpot(Vector3 point)
         {
             Zone zone = GetZone(point.X, point.Y);
-            return GetAreasOfZone(zone, point);
+            return GetAreasOfZone(zone, point, true);
         }
 
         /// <summary>
@@ -1427,10 +1427,10 @@ namespace DOL.GS
         {
             Zone zone = GetZone(x, y);
             var p = new Vector3(x, y, z);
-            return GetAreasOfZone(zone, p);
+            return GetAreasOfZone(zone, p, true);
         }
 
-        public virtual IList<IArea> GetAreasOfZone(Zone zone, Vector3 p)
+        public virtual IList<IArea> GetAreasOfZone(Zone zone, Vector3 vector3, Vector3 p)
         {
             return GetAreasOfZone(zone, p, true);
         }

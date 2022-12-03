@@ -143,7 +143,7 @@ namespace DOL.spells
                 removeItems.Add(useItem, match.Items[useItem.Id_nb]);
 
             combined = WorldInventoryItem.CreateFromTemplate(match.TemplateId);
-
+            
             if (combined == null)
             {
                 log.Warn($"Missing item in ItemTemplate table '{match.TemplateId}' for CombineItem spell");
@@ -187,7 +187,7 @@ namespace DOL.spells
         {
             if (string.IsNullOrEmpty(toolKit))
                 return true;
-            List<InventoryItem> items = player.Inventory.GetItemRange(eInventorySlot.Min_Inv, eInventorySlot.Max_Inv).ToList();
+            List<InventoryItem> items = player.Inventory.GetItemRange(eInventorySlot.MinEquipable, eInventorySlot.LastBackpack).ToList();
             foreach (InventoryItem item in items)
             {
                 if (item.Id_nb == toolKit)
@@ -415,7 +415,6 @@ namespace DOL.spells
                 RemoveItems(player, removeItems);
                 return;
             }
-
             InventoryItem newItem = combined.Item;
             if (match.IsUnique)
             {

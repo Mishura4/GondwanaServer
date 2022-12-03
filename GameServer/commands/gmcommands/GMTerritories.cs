@@ -92,7 +92,7 @@ namespace DOL.commands.gmcommands
                             break;
                         }
 
-                        var areas = WorldMgr.Regions[areaDb.Region].GetAreasOfZone(zone, new Point3D(areaDb.X, areaDb.Y, 0), false);
+                        var areas = WorldMgr.Regions[areaDb.Region].GetAreasOfZone(zone, new System.Numerics.Vector3(areaDb.X, areaDb.Y, 0), false);
 
                         if (areas == null)
                         {

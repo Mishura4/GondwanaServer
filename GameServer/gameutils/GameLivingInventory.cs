@@ -540,7 +540,6 @@ namespace DOL.GS
 
 					return false;
 				}
-
                 // Artefact are not consider as such if we don't add them as InventoryArtifact in m_items
                 if (ArtifactMgr.IsArtifact(item))
                 {
