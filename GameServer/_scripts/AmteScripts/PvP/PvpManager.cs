@@ -14,8 +14,8 @@ namespace AmteScripts.Managers
 {
 	public class PvpManager
 	{
-		private static readonly TimeSpan _startTime = new TimeSpan(20, 0, 0);
-		private static readonly TimeSpan _endTime = new TimeSpan(23, 59, 59);
+		private static readonly TimeSpan _startTime = new TimeSpan(14, 0, 0);
+		private static readonly TimeSpan _endTime = _startTime.Add(TimeSpan.FromHours(8));
 		private const int _checkInterval = 30 * 1000; // 30 seconds
 		private static readonly GameLocation _stuckSpawn = new GameLocation("", 51, 434303, 493165, 3088, 1069);
 
@@ -64,6 +64,14 @@ namespace AmteScripts.Managers
 			FindPvPMaps();
 		}
 
+		public IEnumerable<ushort> Maps
+		{
+			get
+			{
+				return _maps.Keys;
+			} 
+		}
+
 		public IEnumerable<ushort> FindPvPMaps()
 		{
 			var npcs = WorldMgr.GetNPCsByGuild("PVP", eRealm.None);
@@ -103,7 +111,7 @@ namespace AmteScripts.Managers
 			if (_isOpen)
 				return true;
 			_isOpen = true;
-			if (region == 0)
+			if (region == 0 && _maps.Any())
 				_region = _maps.Keys.ElementAt(Util.Random(_maps.Count - 1));
 			else if (!_maps.ContainsKey(region))
 				return false;

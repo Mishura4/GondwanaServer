@@ -53,7 +53,8 @@ namespace Amte
 
 		public override bool WhisperReceive(GameLiving source, string text)
 		{
-			if (!base.WhisperReceive(source, text) || !(source is GamePlayer player))
+			var player = source as GamePlayer;
+			if (!base.WhisperReceive(source, text) || player == null)
 				return false;
 			if (text != "prendre le contrôle")
 				return true;
@@ -105,8 +106,11 @@ namespace Amte
 			player.Out.SendTimerWindow("Prise du fort", CLAIM_TIME_SECONDS);
 
 			foreach (var obj in GetPlayersInRadius(ushort.MaxValue - 1))
-				if (obj is GamePlayer pl)
-					pl.Out.SendMessage($"{player.GuildName} commence à prendre le contrôle du fort !", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+				{
+				var pl = obj as GamePlayer;
+				if (pl != null)
+					pl.Out.SendMessage(string.Format("{0} commence à prendre le contrôle du fort !", player.GuildName), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+			}
 
 			return true;
 		}
@@ -116,8 +120,11 @@ namespace Amte
 			lastClaim = DateTime.Now;
 			GuildName = player.GuildName;
 			foreach (var obj in GetPlayersInRadius(ushort.MaxValue - 1))
-				if (obj is GamePlayer pl)
-					pl.Out.SendMessage($"{player.GuildName} a pris le contrôle du fort !", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+				{
+				var pl = obj as GamePlayer;
+				if (pl != null)
+					pl.Out.SendMessage(string.Format("{0} a pris le contrôle du fort !", player.GuildName), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+			}
 		}
 
 		public virtual void StartRvR()

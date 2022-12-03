@@ -1,17 +1,19 @@
 using AmteScripts.Managers;
 using AmteScripts.Utils;
+using System.Linq;
 
 namespace DOL.GS.Commands
 {
 	[CmdAttribute(
 		"&rvr",
 		ePrivLevel.GM,
-		"Gestion du rvr",
-		"'/rvr open [region]' Force l'ouverture du rvr (ne se ferme jamais)",
-		"'/rvr close' Force la fermeture du rvr",
-		"'/rvr unforce' Permet après un '/rvr open' de fermer le rvr s'il n'est pas dans les bonnes horaires",
+		"Gestion du rvr et du PvP",
+        "'/rvr open' Force l'ouverture des rvr (ne se ferme jamais)",
+        "'/rvr close' Force la fermeture des rvr",
+        "'/rvr unforce' Permet après un '/rvr open' de fermer les rvr s'il ne sont pas dans les bonnes horaires",
 		"'/rvr openpvp [region]' Force l'ouverture du pvp (ne se ferme jamais)",
 		"'/rvr closepvp' Force la fermeture du pvp",
+		"'/rvr status' Permet de vérifier le status des rvr (open/close)",
 		"'/rvr unforcepvp' Permet après un '/rvr openpvp' de fermer le pvp s'il n'est pas dans les bonnes horaires",
 		"'/rvr refresh' Permet de rafraichir les maps disponible au rvr et au pvp")]
 	public class RvRCommandHandler : AbstractCommandHandler, ICommandHandler
@@ -28,15 +30,10 @@ namespace DOL.GS.Commands
 			switch (args[1].ToLower())
 			{
 				case "open":
-					if (args.Length >= 3 && !ushort.TryParse(args[2], out region))
-					{
-						DisplaySyntax(client);
-						return;
-					}
-					if (RvrManager.Instance.Open(region, true))
-						DisplayMessage(client, "Le rvr a été ouvert avec la région " + RvrManager.Instance.Region + ".");
+                    if (RvrManager.Instance.Open(true))
+                        DisplayMessage(client, "Les rvr ont été ouverts avec les régions " + string.Join("-",RvrManager.Instance.Regions.OrderBy(r => r)) + ".");
 					else
-						DisplayMessage(client, "Le rvr n'a pas pu être ouvert sur la région " + region + ".");
+						DisplayMessage(client, "Les rvr n'ont pas pu être ouverts.");
 					break;
 				case "openpvp":
 					if (args.Length >= 3 && !ushort.TryParse(args[2], out region))
@@ -78,15 +75,20 @@ namespace DOL.GS.Commands
 					DisplayMessage(client, "Le pvp sera fermé automatiquement s'il n'est plus dans les bonnes horaires.");
 					break;
 
+                case "status":
+					DisplayMessage(client, "Les RvR sont actuellement: " + (RvrManager.Instance.IsOpen ? "open, les regions sont: " + string.Join("-", RvrManager.Instance.Regions) + "." : "close"));
+					DisplayMessage(client, "Les regions PvP sont actuellement: " + (PvpManager.Instance.IsOpen ? "open, les regions sont: " + string.Join(",", PvpManager.Instance.Maps) + "." : "close"));
+					break;	
+
 				case "refresh":
 					if (RvrManager.Instance.IsOpen || PvpManager.Instance.IsOpen)
 					{
-						DisplayMessage(client, "Le rvr et le pvp doivent être fermés pour rafraichir la liste des maps disponibles.");
+						DisplayMessage(client, "Les rvr et le pvp doivent être fermés pour rafraichir la liste des maps disponibles.");
 						break;
 					}
 					var rvr = string.Join(", ", RvrManager.Instance.FindRvRMaps());
 					var pvp = string.Join(", ", PvpManager.Instance.FindPvPMaps());
-					DisplayMessage(client, $"Le rvr utilise les maps: {rvr}, le pvp utilise les maps: {pvp}.");
+					DisplayMessage(client, string.Format("Le rvr utilise les maps: {0}, le pvp utilise les maps: {1}.", regions, pvp));
 					break;
 			}
 		}

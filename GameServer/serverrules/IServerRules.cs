@@ -474,6 +474,6 @@ namespace DOL.GS.ServerRules
 		/// Enable Handling Custom Player Level Up
 		/// </summary>
 		void OnPlayerLevelUp(GamePlayer player, int previousLevel);
-
-	}
+        bool IsAllowedToAttack(GameLiving attacker, GameLiving defender, bool quiet);
+    }
 }

@@ -18,7 +18,7 @@ namespace DOL.GS.Commands
                 return;
             }
 
-            client.Out.SendCustomTextWindow("RvR", RvrManager.Instance.GetStatistics());
+            client.Out.SendCustomTextWindow("RvR", RvrManager.Instance.GetStatistics(client.Player));
         }
 	}
 }

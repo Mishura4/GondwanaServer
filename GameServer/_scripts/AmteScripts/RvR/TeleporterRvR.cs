@@ -1,12 +1,23 @@
 using AmteScripts.Managers;
 using DOL.AI.Brain;
 using DOL.GS.PacketHandler;
+using System;
 
 namespace DOL.GS.Scripts
 {
     public class TeleporterRvR : GameNPC
     {
         private bool _isBusy;
+
+        private string[] rvrs = new string[]
+        {
+            "RvR Novice (Lv 20-26) : Lions’Den",
+            "RvR Débutant (Lv 26-32) : Hills of Claret",
+            "RvR Standard (Lv 32-38) : Leirvik",
+            "RvR Expert (Lv 38-44) : Molvik",
+            "RvR Master (Lv 44-50) : Thidranki",
+            "RvR Divinités (Lv 50-Isrenaissance/Champion) : Wilton"
+        };
 
         public override bool AddToWorld()
         {
@@ -40,21 +51,22 @@ namespace DOL.GS.Scripts
         {
             if (!base.Interact(player)) return false;
 
+            if (_BaseSay(player)) return true;
+
             if (!RvrManager.Instance.IsOpen && RvrManager.Instance.IsRvRRegion(player.CurrentRegionID))
             {
                 _Teleport(player);
                 return true;
             }
 
-            if (_BaseSay(player)) return true;
-
             if (RvrManager.Instance.IsInRvr(player))
                 player.Out.SendMessage(
                     "Pff, tu es trop une poule mouillée pour rester ?!\r\n[Partir]",
                     eChatType.CT_System, eChatLoc.CL_PopupWindow);
             else
-                player.Out.SendMessage(
-                        "Bonjour " + player.Name + ", je peux vous envoyer au combat ! [Prêt] ?!",
+                player.Out.SendMessage(string.Concat(
+                        "Bonjour " + player.Name + ", je peux vous envoyer au combat ! [Prêt] ?!\n\n - ",
+                        string.Join("\n - ", rvrs)),
                         eChatType.CT_System, eChatLoc.CL_PopupWindow);
 
             return true;

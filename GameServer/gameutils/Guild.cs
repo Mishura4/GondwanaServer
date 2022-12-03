@@ -295,7 +295,7 @@ namespace DOL.GS
                 }
             }
 
-            this.m_onlineGuildPlayers.Values.ForEach(p => p.Out.SendCharResistsUpdate());
+            this.m_onlineGuildPlayers.Values.Foreach(p => p.Out.SendCharResistsUpdate());
         }
 
         public void RemoveTerritory(string area)
@@ -318,7 +318,7 @@ namespace DOL.GS
                         }
                     }
 
-                    this.m_onlineGuildPlayers.Values.ForEach(p => p.Out.SendCharResistsUpdate());
+                    this.m_onlineGuildPlayers.Values.Foreach(p => p.Out.SendCharResistsUpdate());
                 }
             }
         }

@@ -180,7 +180,8 @@ namespace DOL.AI.Brain
                     continue;
                 AddToAggroList(pl, aggro);
                 if (pl.Level > Body.Level - 20 || (pl.Group != null && pl.Group.MemberCount > 2))
-                    BringReinforcements(pl);
+                    // Use new BAF system
+                    BringFriends(pl);
             }
         }
 
@@ -203,7 +204,8 @@ namespace DOL.AI.Brain
                     continue;
                 AddToAggroList(npc, aggro);
                 if (npc.Level > Body.Level)
-                    BringReinforcements(npc);
+                    // Use new BAF system
+                    BringFriends(npc);
             }
         }
 
