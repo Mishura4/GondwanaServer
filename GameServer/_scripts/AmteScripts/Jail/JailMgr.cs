@@ -1,8 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using DOL.Database;
+using DOL.events.gameobjects;
 using DOL.Events;
 using DOL.GS.PacketHandler;
+using log4net;
 
 namespace DOL.GS.Scripts
 {
@@ -11,6 +15,7 @@ namespace DOL.GS.Scripts
 	/// </summary>
 	public static class JailMgr
 	{
+		private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         public const ushort Radius = 300; //Taille de la prison
 	    
 		// Réglages prison
@@ -59,9 +64,75 @@ namespace DOL.GS.Scripts
             GameEventMgr.AddHandler(GamePlayerEvent.GameEntered, new DOLEventHandler(PlayerEnter));
             GameEventMgr.AddHandler(prisHRP, AreaEvent.PlayerLeave, PlayerEvade);
             GameEventMgr.AddHandler(prisRP, AreaEvent.PlayerLeave, PlayerEvade);
+            GameEventMgr.AddHandler(GamePlayerEvent.SendToJail, SendToJail);
         }
 
-		private static void PlayerEnter(DOLEvent e, object sender, EventArgs args)
+        private static void SendToJail(DOLEvent e, object sender, EventArgs arguments)
+        {
+            var args = arguments as SendToJailEventArgs;
+            if (args != null)
+            {
+                int cost = 0;
+                TimeSpan time;
+                string reason = null;
+
+                if (args.OriginalReputation == -1)
+                {
+                    cost = 450;
+                    time = TimeSpan.FromHours(24);
+                    reason = "Hors-la-loi";
+                }
+                else if (args.OriginalReputation == -2)
+                {
+                    cost = 900;
+                    time = TimeSpan.FromHours(42);
+                    reason = "Bandit";
+                }
+                else if (args.OriginalReputation == -3)
+                {
+                    cost = 1800;
+                    time = TimeSpan.FromHours(72);
+                    reason = "Bandit-Lieutenant";
+                }
+                else if (args.OriginalReputation == -4)
+                {
+                    cost = 3600;
+                    time = TimeSpan.FromHours(120);
+                    reason = "Consiglière";
+                }
+                else if (args.OriginalReputation <= -5)
+                {
+                    cost = 7200;
+                    time = TimeSpan.FromHours(168);
+                    reason = "Parrain";
+                }
+                else
+                {
+                    log.Warn(string.Format("Cannot send Player {0} from Acount {1} to Jail because reputation is not correct. Value: {2}", args.GamePlayer.Name, args.GamePlayer.AccountName, args.GamePlayer.Reputation));
+                    return;
+                }
+
+                //clear Deathlogs
+                var ids = GameServer.Database.SelectObjects<DBDeathLog>("KillerId = @KillerId", new QueryParameter("KillerId", args.GamePlayer.InternalID));
+
+                if (ids != null)
+                {
+                    foreach (var id in ids.Select(d => d.Id))
+                    {
+                        var log = GameServer.Database.FindObjectByKey<DBDeathLog>(id);
+
+                        if (log != null)
+                        {
+                            GameServer.Database.DeleteObject(log);
+                        }
+                    }
+                }            
+
+                EmprisonnerRP(args.GamePlayer, cost, DateTime.Now + time, "les gardes", reason, true);
+            }
+        }
+
+        private static void PlayerEnter(DOLEvent e, object sender, EventArgs args)
 		{
             GamePlayer player = sender as GamePlayer;
             if (player == null) return;
@@ -74,6 +145,7 @@ namespace DOL.GS.Scripts
             }
             Prisonniers.Add(player);
             PlayerXPrisoner.Add(player, prison);
+            player.Reputation = 0;
 
             if (prison.RP) player.MoveTo(Prison_RegionID, Prison_X, Prison_Y, Prison_Z, Prison_Heading);
             else player.MoveTo(PrisonHRP_RegionID, PrisonHRP_X, PrisonHRP_Y, PrisonHRP_Z, PrisonHRP_Heading);
@@ -163,7 +235,7 @@ namespace DOL.GS.Scripts
 		/// <param name="GM"></param>
 		/// <param name="JailRP"></param>
 		/// <param name="raison"></param>
-		private static void Emprisonner(GamePlayer player, int cost, DateTime sortie, string GM, bool JailRP, string raison)
+		private static void Emprisonner(GamePlayer player, int cost, DateTime sortie, string GM, bool JailRP, string raison, bool isOutLaw)
 		{
             //On vérifie le tps
             long time = (sortie.Ticks - DateTime.Now.Ticks) / 10000;
@@ -176,7 +248,8 @@ namespace DOL.GS.Scripts
 			                              Cost = cost,
 			                              Sortie = sortie,
 			                              RP = JailRP,
-			                              Raison = raison
+			                              Raison = raison,
+                                          IsOutLaw = isOutLaw
 			                      };
 		    GameServer.Database.AddObject(prisoner);
 			if (JailRP)
@@ -186,6 +259,7 @@ namespace DOL.GS.Scripts
 			player.Bind(true);
 			player.MaxSpeedBase = 50;
 			player.Out.SendUpdateMaxSpeed();
+			player.Reputation = 0;
             player.SaveIntoDatabase();
 			Prisonniers.Add(player);
 		    PlayerXPrisoner.Add(player, prisoner);
@@ -267,6 +341,8 @@ namespace DOL.GS.Scripts
                 perso.BindHeading = PrisonHRP_Heading;
                 perso.BindRegion = PrisonHRP_RegionID;
             }
+            perso.Reputation = 0;
+            perso.OutlawTimeStamp = 0;
             perso.MaxSpeed = 50;
             GameServer.Database.SaveObject(perso);
 
@@ -276,16 +352,16 @@ namespace DOL.GS.Scripts
         /// <summary>
         /// Emprisonner un joueur connecté dans la prison RP
         /// </summary>
-        public static void EmprisonnerRP(GamePlayer player, int cost, DateTime sortie, string GM, string raison) 
+        ppublic static void EmprisonnerRP(GamePlayer player, int cost, DateTime sortie, string GM, string raison, bool isOutLaw) 
 		{
-            Emprisonner(player, cost, sortie, GM, true, raison);
+            Emprisonner(player, cost, sortie, GM, true, raison, isOutLaw);
 		}
         /// <summary>
         /// Emprisonner un joueur connecté dans la prison HRP
         /// </summary>
         public static void EmprisonnerHRP(GamePlayer player, DateTime sortie, string GM, string raison) 
 		{
-            Emprisonner(player, 0, sortie, GM, false, raison);
+            Emprisonner(player, 0, sortie, GM, false, raison, false);
 		}
 
         /// <summary>
@@ -317,6 +393,18 @@ namespace DOL.GS.Scripts
 
 			player.MaxSpeedBase = 191;
 			player.Out.SendUpdateMaxSpeed();
+            player.Reputation = 0;
+            var deaths = GameServer.Database.SelectObjects<DBDeathLog>("KilledId = @id AND ExitFromJail = 0 AND IsWanted = 1", new QueryParameter("id", player.InternalID));
+
+            if (deaths != null)
+            {
+                var death = deaths.FirstOrDefault();
+                if (death != null)
+                {
+                    death.ExitFromJail = true;
+                    GameServer.Database.SaveObject(death);
+                }               
+            }
 
             if (Prisonnier.RP) player.MoveTo(Sortie_RegionID, Sortie_X, Sortie_Y, Sortie_Z, Sortie_Heading);
             else player.MoveTo(SortieHRP_RegionID, SortieHRP_X, SortieHRP_Y, SortieHRP_Z, SortieHRP_Heading);
@@ -426,5 +514,7 @@ namespace DOL.GS.Scripts
         {
 			return player.TempProperties.getProperty<Prisoner>("JailMgr", null) != null;
         }
+
+
 	}
 }

@@ -49,19 +49,35 @@ namespace DOL.GS.Scripts
             get { return m_Text_Refuse; }
             set { m_Text_Refuse = value; }
         }
+
+        public bool? IsOutlawFriendly
+        { 
+            get;
+            set;
+        }
+
         #endregion
 
         #region Interaction
         public override bool Interact(GamePlayer player)
         {
-            if (!base.Interact(player)) return false;
+            if (!base.Interact(player)) return false;    
 
             if (m_Occupe)
             {
                 player.Out.SendMessage("Je suis occupé pour le moment.", eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 return true;
             }
+
             string text;
+            if (!this.IsInterractionAuthorized(player))
+            {
+                text = string.Format(m_Text_Refuse, player.Name, player.LastName, player.GuildName, player.CharacterClass.Name, player.RaceName);
+                if (text != "")
+                    player.Out.SendMessage(text, eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                return true;
+            }
+
             if (player.Level < m_MinLevel || m_Range > 0)
             {
                 text = string.Format(m_Text_Refuse, player.Name, player.LastName, player.GuildName, player.CharacterClass.Name, player.RaceName);
@@ -80,6 +96,13 @@ namespace DOL.GS.Scripts
         {
             if (!base.WhisperReceive(source, str) || !(source is GamePlayer)) return false;
             GamePlayer player = source as GamePlayer;
+
+
+            if (!this.IsInterractionAuthorized(player))
+            {
+                player.Out.SendMessage("...", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                return true;
+            }
 
             if (m_Occupe)
             {
@@ -184,8 +207,52 @@ namespace DOL.GS.Scripts
             m_MinLevel = db.Level;
             m_Text = db.Text;
             m_Text_Refuse = db.Text_Refuse;
+
+            //Set this value only when OR Exclusive
+            if (db.IsOutlawFriendly ^ db.IsRegularFriendly)
+            {
+                if (db.IsRegularFriendly)
+                {
+                    IsOutlawFriendly = false;
+                }                
+
+                if (db.IsOutlawFriendly)
+                {
+                    IsOutlawFriendly = true;
+                }
+            }
+            else if (db.IsRegularFriendly && db.IsOutlawFriendly)
+            {
+                log.Error("Cannot load IsOutlawFriendly Status because both values are set. Update database(TeleportNPC) for id: " + this.InternalID + " npc: " + this.Name);
+            }
+
             LoadJumpPos();
         }
+
+        private bool IsInterractionAuthorized(GamePlayer player)
+        {
+            if (this.IsOutlawFriendly.HasValue)
+            {
+                if (this.IsOutlawFriendly.Value)
+                {
+                    if (player.Reputation >= 0 && player.Client.Account.PrivLevel == 1)
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    if (player.Reputation < 0 && player.Client.Account.PrivLevel == 1)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+
         public override void SaveIntoDatabase()
         {
             base.SaveIntoDatabase();
@@ -200,6 +267,18 @@ namespace DOL.GS.Scripts
             db.Range = m_Range;
             db.Text = m_Text;
             db.Text_Refuse = m_Text_Refuse;
+
+            if (IsOutlawFriendly.HasValue)
+            {
+                if (IsOutlawFriendly.Value)
+                {
+                    db.IsOutlawFriendly = true;
+                }
+                else
+                {
+                    db.IsRegularFriendly = true;
+                }
+            }
 
             if (add)
                 GameServer.Database.AddObject(db);

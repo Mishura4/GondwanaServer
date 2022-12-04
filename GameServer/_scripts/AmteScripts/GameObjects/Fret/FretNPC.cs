@@ -47,6 +47,14 @@ namespace DOL.GS.Scripts
 		{
 			if (!base.Interact(player)) return false;
 			TurnTo(player);
+
+			if (player.Reputation < 0)
+			{
+				TurnTo(player, 5000);
+				player.Out.SendMessage("Je ne vends rien aux hors-la-loi", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+				return false;
+			}
+
 			AmteUtils.SendClearPopupWindow(player);
 
 			if (TempItems.ContainsKey(player.InternalID))
@@ -160,6 +168,14 @@ namespace DOL.GS.Scripts
 			if (!(source is GamePlayer)) return false;
 			if (!item.IsTradable || item.IsDeleted) return false;
 			GamePlayer player = source as GamePlayer;
+
+			if (player.Reputation < 0)
+			{
+				TurnTo(player, 5000);
+				player.Out.SendMessage("Je ne reçois rien de la part des hors-la-loi", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+				return false;
+			}
+
 			AmteUtils.SendClearPopupWindow(player);
 			AddRemoveItem(player, item);
 			return false;

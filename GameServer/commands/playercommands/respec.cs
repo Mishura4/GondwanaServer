@@ -121,14 +121,24 @@ namespace DOL.GS.Commands
 						// Buy respec
 						if (client.Player.CanBuyRespec == false || client.Player.RespecCost < 0)
 						{
-							DisplayMessage(client, "You can't buy a respec on this level again.");
+							DisplayMessage(
+								client,
+								LanguageMgr.GetTranslation(
+									client.Account.Language,
+									"Commands.Players.Respec.NotAvailable.Level"));
 							return;
 						}
 
 						long mgold = client.Player.RespecCost;
 						if ((client.Player.Gold + 1000 * client.Player.Platinum) < mgold)
 						{
-							DisplayMessage(client, "You don't have enough money! You need " + mgold + " gold!");
+							DisplayMessage(
+								client,
+								LanguageMgr.GetTranslation(
+									client.Account.Language,
+									"Commands.Players.Respec.NotAvailable.Gold", // No entry for Money, it replace by Gold
+									mgold));
+							return;
 							return;
 						}
 						client.Out.SendCustomDialog("It costs " + mgold + " gold. Want you really buy?", new CustomDialogResponse(RespecDialogResponse));

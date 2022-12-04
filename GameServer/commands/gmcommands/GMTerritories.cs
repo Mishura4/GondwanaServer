@@ -211,7 +211,19 @@ namespace DOL.commands.gmcommands
                     if (action == "add")
                     {
                         territory.Bonus.Add(bonus.Value);
-                        territory.SaveIntoDatabase();
+                        if (territory.GuildOwner != null)
+                        {
+                            var guild = GuildMgr.GetGuildByName(territory.GuildOwner);
+
+                            if (guild != null)
+                            {
+                                guild.RemoveTerritory(territory.AreaId);
+                                guild.AddTerritory(territory.AreaId, true);
+                            }
+                        }
+
+                        territory.SaveIntoDatabase();           
+
                         client.Out.SendMessage("Le Territoire avec AreaId " + areaId + " a désormais un bonus suppmémentaire de " + bonus.Value.ToString(), eChatType.CT_System, eChatLoc.CL_ChatWindow);
                         break;
                     }
@@ -223,7 +235,20 @@ namespace DOL.commands.gmcommands
                         if (index != -1)
                         {
                             territory.Bonus.RemoveAt(index);
-                            territory.SaveIntoDatabase();
+
+                            if (territory.GuildOwner != null)
+                            {
+                                var guild = GuildMgr.GetGuildByName(territory.GuildOwner);
+
+                                if (guild != null)
+                                {
+                                    guild.RemoveTerritory(territory.AreaId);
+                                    guild.AddTerritory(territory.AreaId, true);
+                                }
+                            }
+
+                            territory.SaveIntoDatabase();                            
+
                             client.Out.SendMessage("Le bonus de " + bonus.Value.ToString() + " a été retiré de Territoire avec AreaId " + areaId, eChatType.CT_System, eChatLoc.CL_ChatWindow);
                         }
                     }

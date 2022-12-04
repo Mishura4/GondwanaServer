@@ -52,8 +52,7 @@ namespace DOL.GS.Scripts
 		 "'/textnpc class add <class name>' ajoute une classe à laquelle le pnj ne parle pas",
 		 "'/textnpc class remove <class name>' retire une classe à laquelle le pnj ne parle pas",
 		 "'/textnpc class list' liste les classes disponible",
-		 "'/textnpc hour <hour min> <hour max>' règle l'heure à laquelle le pnj parle (fonctionne aussi pr les phrases aléatoire)",
-		 "'/textnpc reput <reput min> <reput max>' règle la réputation du joueur à laquelle le pnj parle",
+		 "'/textnpc hour <hour min> <hour max>' règle l'heure à laquelle le pnj parle (fonctionne aussi pr les phrases aléatoire)",     
 		 "'/textnpc condition list' liste les conditions du pnj",
 		 "'/textnpc condition help' donne plus d'information sur les conditions",
 
@@ -645,28 +644,6 @@ namespace DOL.GS.Scripts
 					}
 					player.Out.SendMessage("L'heure est maintenant comprise entre "+npc.TextNPCData.Condition.Heure_min+"h et "+npc.TextNPCData.Condition.Heure_max+"h.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
 					break;
-
-				case "reputation":
-				case "reput":
-					if (npc == null || args.Length < 4)
-					{
-						DisplaySyntax(client);
-						return;
-					}
-					try
-					{
-						var min = float.Parse(args[2].Replace('.', ','));
-						var max = float.Parse(args[3].Replace('.', ','));
-						npc.TextNPCData.Condition.Reput_min = min;
-						npc.TextNPCData.Condition.Reput_max = max;
-						npc.TextNPCData.SaveIntoDatabase();
-					}
-					catch
-					{
-						player.Out.SendMessage("La réputation max ou min n'est pas valide.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-					}
-					player.Out.SendMessage("La réputation est maintenant comprise entre " + npc.TextNPCData.Condition.Reput_min + " et " + npc.TextNPCData.Condition.Reput_max + ".", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-					break;
 					#endregion
 
 					#region condition list/help
@@ -682,9 +659,7 @@ namespace DOL.GS.Scripts
 						        {
 						        	"Conditions du pnj " + ((GameNPC) npc).Name + ":",
 						        	"+ Heure      min: " + npc.TextNPCData.Condition.Heure_min + " max:" +
-						        	npc.TextNPCData.Condition.Heure_max,
-						        	"+ Réputation min: " + npc.TextNPCData.Condition.Reput_min + " max:" +
-						        	npc.TextNPCData.Condition.Reput_max
+						        	npc.TextNPCData.Condition.Heure_max                                  
 						        };
 						if (npc.TextNPCData.Condition.Level_min != 1 || npc.TextNPCData.Condition.Level_max != 50)
                             lines.Add("+ Level      min: " + npc.TextNPCData.Condition.Level_min + " max: " + npc.TextNPCData.Condition.Level_max);

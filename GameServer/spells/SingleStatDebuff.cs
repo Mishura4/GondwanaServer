@@ -17,8 +17,10 @@
  *
  */
 using System;
+using System.Collections.Generic;
 using DOL.AI.Brain;
 using DOL.GS.Effects;
+using DOL.GS.PlayerClass;
 
 namespace DOL.GS.Spells
 {
@@ -119,6 +121,27 @@ namespace DOL.GS.Spells
 		public ArmorAbsorptionDebuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) {}
 	}
 
+        /// <summary>
+        /// If Caster is Reaver and Target is NPC Gard and the gard is not aggro,
+        /// dont target it
+        /// </summary>
+        /// <param name="castTarget"></param>
+        /// <returns></returns>
+        public override IList<GameLiving> SelectTargets(GameObject castTarget)
+        {
+            IList<GameLiving> result = base.SelectTargets(castTarget);
+            List<GameLiving> targetToRemove = new List<GameLiving>();
+            result.Foreach((target) =>
+            {
+                long amount;
+                if (Caster is GamePlayer player && player.CharacterClass is ClassReaver && target.GetType().Name == "GuardNPC" && target is GameNPC guard && player.Reputation >= 0 &&
+                !((StandardMobBrain)guard.Brain).AggroTable.TryGetValue(Caster, out amount))
+                    targetToRemove.Add(target);
+            });
+            targetToRemove.Foreach((target) => result.Remove(target));
+            return result;
+        }
+
 	[SpellHandler("CombatSpeedDebuff")]
 	public class CombatSpeedDebuff : SingleStatDebuff
 	{
@@ -142,6 +165,27 @@ namespace DOL.GS.Spells
 
 		public override string ShortDescription => $"The target does {Spell.Value}% less damage with melee attacks.";
 	}
+
+        /// <summary>
+        /// If Caster is Reaver and Target is NPC Gard and the gard is not aggro,
+        /// dont target it
+        /// </summary>
+        /// <param name="castTarget"></param>
+        /// <returns></returns>
+        public override IList<GameLiving> SelectTargets(GameObject castTarget)
+        {
+            IList<GameLiving> result = base.SelectTargets(castTarget);
+            List<GameLiving> targetToRemove = new List<GameLiving>();
+            result.Foreach((target) =>
+            {
+                long amount;
+                if (Caster is GamePlayer player && player.CharacterClass is ClassReaver && target.GetType().Name == "GuardNPC" && target is GameNPC guard && player.Reputation >= 0 &&
+                !((StandardMobBrain)guard.Brain).AggroTable.TryGetValue(Caster, out amount))
+                    targetToRemove.Add(target);
+            });
+            targetToRemove.Foreach((target) => result.Remove(target));
+            return result;
+        }
 
 	[SpellHandler("FatigueConsumptionDebuff")]
 	public class FatigueConsumptionDebuff : SingleStatDebuff

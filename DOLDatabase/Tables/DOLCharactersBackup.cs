@@ -173,6 +173,8 @@ namespace DOL.Database
 			this.Xpos = character.Xpos;
 			this.Ypos = character.Ypos;
 			this.Zpos = character.Zpos;
+			Reputation = character.Reputation;
+			OutlawTimeStamp = character.OutlawTimeStamp;
 			// Copy Custom Params
 			this.CustomParams = character.CustomParams != null
 				? character.CustomParams.Select(param => new DOLCharactersBackupXCustomParam(param.DOLCharactersObjectId, param.KeyName, param.Value)).ToArray()

@@ -29,6 +29,8 @@ namespace DOL.Database
         private int m_Range;
         private byte m_Level;
         private long m_price;
+        private bool m_IsOutlawFriendly;
+        private bool m_IsRegularFriendly;
 
         [DataElement(AllowDbNull = false)]
         public string MobID
@@ -104,6 +106,36 @@ namespace DOL.Database
             {
                 Dirty = true;
                 m_price = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public bool IsOutlawFriendly
+        {
+            get
+            {
+                return m_IsOutlawFriendly;
+            }
+
+            set
+            {
+                Dirty = true;
+                m_IsOutlawFriendly = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public bool IsRegularFriendly
+        {
+            get
+            {
+                return m_IsRegularFriendly;
+            }
+
+            set
+            {
+                Dirty = true;
+                m_IsRegularFriendly = value;
             }
         }
     }

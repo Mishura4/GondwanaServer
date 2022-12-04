@@ -73,6 +73,8 @@ namespace DOL.GS
 			set { m_safeArea = value; }
 		}
 
+        public bool IsPvP { get; set; } = false;
+
 		/// <summary>
 		/// Constant holding max number of areas per zone, increase if more ares are needed,
 		/// this will slightly increase memory usage on server

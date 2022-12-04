@@ -178,7 +178,7 @@ namespace DOL.GS.Scripts
 			{
 				if (RP)
 				{
-					JailMgr.EmprisonnerRP(Prisonnier, cost, sortie, player.Name, raison);
+					JailMgr.EmprisonnerRP(Prisonnier, cost, sortie, player.Name, raison, false);
 					player.Out.SendMessage(Prisonnier.Name + " a été emprisonné avec une amende de " + cost + "po.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
 				}
 				else

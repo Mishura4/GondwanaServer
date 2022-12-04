@@ -40,6 +40,9 @@ namespace DOL.Database
 		[DataElement(AllowDbNull=false)]
 		public string Raison { get; set; }
 
+		[DataElement(AllowDbNull = false)]
+		public bool IsOutLaw { get; set; }
+
         public Prisoner()
         {
             

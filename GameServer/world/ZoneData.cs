@@ -62,6 +62,8 @@ namespace DOL.GS
 
         public bool AllowMagicalItem { get; set; }
 
+        public bool AllowReputation { get; set; }
+
         private byte m_OffX, m_OffY, m_Height, m_Width;
         private ushort m_ZoneID, m_RegionID;
         private string m_description;

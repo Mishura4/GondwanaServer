@@ -61,6 +61,14 @@ namespace DOL.GS
 		{
 			if (!base.Interact(player))
 				return false;
+
+            if (player.Reputation < 0)
+            {
+                TurnTo(player, 5000);
+                player.Out.SendMessage("Je ne vends rien aux hors-la-loi", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return false;
+            }
+
 			TurnTo(player, 10000);
 			SendMerchantWindow(player);
 			return true;

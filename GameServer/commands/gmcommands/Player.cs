@@ -2457,6 +2457,7 @@ namespace DOL.GS.Commands
 				text.Add("  - Master Levels :  Not Started");
 			}
 
+            text.Add("  - Reputation: " + player.Reputation);
             text.Add("  - IsRenaissance: " + player.IsRenaissance);
 			text.Add("  - Craftingskill : " + player.CraftingPrimarySkill + "");
 			text.Add("  - Money : " + Money.GetString(player.GetCurrentMoney()) + "");

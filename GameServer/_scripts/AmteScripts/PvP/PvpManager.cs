@@ -147,6 +147,7 @@ namespace AmteScripts.Managers
 			if (player.Guild != null)
 				player.Guild.RemovePlayer("PVP", player);
 
+			player.IsInPvP = true;
 			player.MoveTo(_maps[_region].Item2);
 			player.Bind(true);
 			return true;
@@ -166,6 +167,7 @@ namespace AmteScripts.Managers
 			var rvr = GameServer.Database.SelectObject<RvrPlayer>(r => r.PlayerID == player.InternalID);
 			if (rvr == null)
 			{
+				player.IsInPvP = false;
 				player.MoveTo(_stuckSpawn);
 				player.SaveIntoDatabase();
 			}
@@ -181,6 +183,7 @@ namespace AmteScripts.Managers
 					if (guild != null)
 						guild.AddPlayer(player, guild.GetRankByID(rvr.GuildRank));
 				}
+				player.IsInPvP = false;
 				player.SaveIntoDatabase();
 				GameServer.Database.DeleteObject(rvr);
 			}

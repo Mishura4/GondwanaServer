@@ -1,8 +1,13 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DOL.AI.Brain;
+using DOL.Database;
 using DOL.GS.PacketHandler;
+using GameserverScripts.Amtescripts.Managers;
+
 
 namespace DOL.GS.Scripts
 {
@@ -20,33 +25,48 @@ namespace DOL.GS.Scripts
 
 		public override bool Interact(GamePlayer player)
 		{
-			if (!base.Interact(player) || BlacklistMgr.IsBlacklisted((AmtePlayer)player))
+			if (!base.Interact(player))
 				return false;
 
-			player.Out.SendMessage("Bonjour, que voulez-vous ?\n\n[Signaler] mon tueur !\n[Voir] la liste noire.",
+			player.Out.SendMessage("Bonjour, que voulez-vous ?\n\n[Signaler] mon tueur !\n\n[Voir] la liste noire.",
 				eChatType.CT_System, eChatLoc.CL_PopupWindow);
 			return true;
 		}
 
 		public override bool WhisperReceive(GameLiving source, string text)
 		{
-			var player = source as AmtePlayer;
-			if (!base.WhisperReceive(source, text) || player == null || BlacklistMgr.IsBlacklisted(player))
+			var player = source as GamePlayer;
+			if (!base.WhisperReceive(source, text) || player == null)  //|| BlacklistMgr.IsBlacklisted(player))
 				return false;
 
 			switch (text)
 			{
 				case "Signaler":
-					if (BlacklistMgr.ReportPlayer(player))
-						player.Out.SendMessage("La personne qui vous a tué a été signalé !", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+
+                    int reported = DeathCheck.Instance.ReportPlayer(player);
+                    //if (BlacklistMgr.ReportPlayer(player)) Old Way not used anymore
+                    if (reported > 0)
+					{
+						string words = reported == 1 ? "La personne qui vous a tué a été signalé !" : "Les " + reported  + " personnes qui vont ont tués ont été signalés !";
+						player.Out.SendMessage(words, eChatType.CT_System, eChatLoc.CL_PopupWindow);
+					}
 					else
 						player.Out.SendMessage("C'est trop tard pour signaler votre tueur !", eChatType.CT_System, eChatLoc.CL_PopupWindow);
 					break;
 
 				case "Voir":
 					StringBuilder sb = new StringBuilder();
+					var names = this.GetOutlawsName();
+
+					if (names == null)
+                    {
+						sb.AppendLine("Personne n'est recherchée actuellement.");
+						player.Out.SendMessage(sb.ToString(), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+						break;
+                    }
+
 					sb.AppendLine("Les personnes suivantes sont sur la liste noire:");
-					BlacklistMgr.GetBlacklistedNames().ForEach(s => sb.AppendLine(s));
+					names.ForEach(s => sb.AppendLine(s));
 					player.Out.SendMessage(sb.ToString(), eChatType.CT_System, eChatLoc.CL_PopupWindow);
 					break;
 			}
@@ -55,9 +75,9 @@ namespace DOL.GS.Scripts
 
 		public override bool ReceiveItem(GameLiving source, Database.InventoryItem item)
 		{
-			if (!(source is AmtePlayer) || item == null || !item.Id_nb.StartsWith(BlacklistMgr.HeadTemplate.Id_nb))
+			var player = source as AmtePlayer;
+			if (player == null || item == null || !item.Id_nb.StartsWith(player.HeadTemplate.Id_nb))
 				return false;
-			var player = (AmtePlayer)source;
 
 			if (!item.CanDropAsLoot)
 			{
@@ -74,8 +94,9 @@ namespace DOL.GS.Scripts
 			if (!player.Inventory.RemoveCountFromStack(item, 1))
 				return false;
 
-			BlacklistMgr.GuardReportBL(player, item.IUWrapper.MessageArticle);
-			player.Out.SendMessage("Merci de votre précieuse aide !", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+			var prime = Money.GetMoney(0,0,ServerProperties.Properties.REWARD_OUTLAW_HEAD_GOLD,0,0);
+			player.AddMoney(prime);
+			player.Out.SendMessage("Merci de votre précieuse aide, voici " + ServerProperties.Properties.REWARD_OUTLAW_HEAD_GOLD + " pièces d'or pour vous !", eChatType.CT_System, eChatLoc.CL_PopupWindow);
 
 			return true;
 		}
@@ -84,9 +105,21 @@ namespace DOL.GS.Scripts
 		{
 			base.WalkToSpawn(MaxSpeed);
 		}
-	}
 
-	public class GuardTextNPC : TextNPC, IGuardNPC
+		public IEnumerable<string> GetOutlawsName()
+		{
+			var outlaws = GameServer.Database.SelectObjects<DOLCharacters>("Reputation < @rep", new QueryParameter("rep", 0));
+
+			if (outlaws == null || !outlaws.Any())
+			{
+				return null;
+			}
+
+			return outlaws.Select(c => c.Name);
+		}   
+    }
+
+    public class GuardTextNPC : TextNPC, IGuardNPC
     {
         public GuardTextNPC()
         {

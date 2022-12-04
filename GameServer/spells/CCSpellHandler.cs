@@ -186,6 +186,7 @@ namespace DOL.GS.Spells
 			effect.Owner.StopAttack();
 			effect.Owner.StopCurrentSpellcast();
 			effect.Owner.DisableTurning(true);
+			effect.Owner.TempProperties.removeProperty(GamePlayer.PLAYER_MEZZED_BY_OTHER_PLAYER_ID);
 			GameEventMgr.AddHandler(effect.Owner, GameLivingEvent.AttackedByEnemy, new DOLEventHandler(OnAttacked));
 			base.OnEffectStart(effect);
 		}
@@ -322,6 +323,16 @@ namespace DOL.GS.Spells
 //				SendEffectAnimation(target, 0, false, 0);
 				return;
 			}
+
+			var targetPlayer = target as GamePlayer;
+			if (Caster is GamePlayer && targetPlayer != null && m_spell.SpellType.ToLowerInvariant().Equals("mesmerize"))
+			{
+				if (!(targetPlayer.isInBG || targetPlayer.CurrentRegion.IsRvR || targetPlayer.IsInPvP || Territory.TerritoryManager.Instance.IsTerritoryArea(targetPlayer.CurrentAreas)))
+				{
+					targetPlayer.TempProperties.setProperty(GamePlayer.PLAYER_MEZZED_BY_OTHER_PLAYER_ID, Caster.InternalID);
+				}
+			}
+
 			GameSpellEffect mezblock = SpellHandler.FindEffectOnTarget(target, "CeremonialBracerMezz");
 			if (mezblock != null)
 			{

@@ -41,6 +41,10 @@ namespace DOL.Database
 		private byte m_maxLevel;
 		private string m_questDependency;
 		private string m_allowedClasses;
+        private string m_allowedRaces;
+        private bool m_isRenaissance;
+        private string m_reputation;
+        private int m_rewardReputation;
 
 		private long m_rewardMoney;
 		private long m_rewardXP;
@@ -247,6 +251,22 @@ namespace DOL.Database
 			set { m_allowedClasses = value; Dirty = true; }
 		}
 
+        [DataElement(AllowDbNull = false)]
+        public bool IsRenaissance
+        {
+            get { return m_isRenaissance; }
+            set { m_isRenaissance = value; Dirty = true; }
+        }
+        /// <summary>
+        /// Player Races that can do this quest.  Null for all.
+        /// </summary>
+        [DataElement(AllowDbNull = true, Varchar = 200)]
+        public string AllowedRaces
+        {
+            get { return m_allowedRaces; }
+            set { m_allowedRaces = value; Dirty = true; }
+        }
+
 		/// <summary>
 		/// The step data serialized as a json object where the key is the goal id
 		/// Each item of the array must have a type property which load the correct code for this step
@@ -258,5 +278,19 @@ namespace DOL.Database
 			get { return m_goalsJson; }
 			set { m_goalsJson = value; Dirty = true; }
 		}
+
+		[DataElement(AllowDbNull = true)]
+		public string Reputation
+        {
+			get { return m_reputation; }
+			set { Dirty = true; m_reputation = value; }
+        }
+
+		[DataElement(AllowDbNull = false)]
+		public int RewardReputation
+        {
+			get { return m_rewardReputation; }
+			set { Dirty = true; m_rewardReputation = value; }
+        }
 	}
 }

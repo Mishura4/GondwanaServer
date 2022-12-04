@@ -21,6 +21,7 @@ namespace DOL.Database
 		private string m_points;
         private bool m_allowVol;
         private int realmPoints;
+        private bool m_isPvp;
 
         public DBArea()
 		{
@@ -219,6 +220,21 @@ namespace DOL.Database
             {
                 this.Dirty = true;
                 this.realmPoints = value; 
+            }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public bool IsPvP
+        {
+            get
+            {
+                return m_isPvp;
+            }
+
+            set
+            {
+                Dirty = true;
+                m_isPvp = value;
             }
         }
 	}

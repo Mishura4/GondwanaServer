@@ -10,13 +10,15 @@ namespace DOL.GS
 	public class AmtePlayer : GamePlayer
 	{
 		public DateTime LastDeath = DateTime.MinValue;
-		public string LastKillerID;
-		public BlacklistPlayer Blacklist;
+		public ItemTemplate HeadTemplate;
 
 		public DateTime LastActivity = DateTime.Now;
 		public Vector3 LastPosition = Vector3.Zero;
 
-		public AmtePlayer(GameClient client, DOLCharacters dbChar) : base(client, dbChar) {}
+		public AmtePlayer(GameClient client, DOLCharacters dbChar) : base(client, dbChar) 
+		{
+			HeadTemplate = GameServer.Database.FindObjectByKey<ItemTemplate>("head_blacklist") ?? new ItemTemplate();
+		}
 
 		public override int BountyPointsValue
 		{
@@ -28,22 +30,17 @@ namespace DOL.GS
 			}
 		}
 
-		public override void Die(GameObject killer)
+        public override void Die(GameObject killer)
 		{
 			base.Die(killer);
 
 			if (RvrManager.Instance.IsInRvr(this))
 				return;
 
-			LastDeath = DateTime.Now;
-			// BlacklistMgr
 			if (killer is AmtePlayer)
 			{
-				LastKillerID = killer.InternalID;
-				BlacklistMgr.PlayerKilledByPlayer(this, (AmtePlayer)killer);
-			}
-			else
-				LastKillerID = null;
+				this.PlayerKilledByPlayer(this, (AmtePlayer)killer);
+			}		
 		}
 
 		public void SendMessage(string message, eChatType type = eChatType.CT_System, eChatLoc loc = eChatLoc.CL_SystemWindow)
@@ -55,25 +52,45 @@ namespace DOL.GS
 		public override void LoadFromDatabase(DataObject obj)
 		{
 			base.LoadFromDatabase(obj);
-
-			Blacklist = GameServer.Database.FindObjectByKey<BlacklistPlayer>(InternalID) ?? new BlacklistPlayer(this);
 		}
 
 		public override void SaveIntoDatabase()
 		{
 			base.SaveIntoDatabase();
+		}
 
-			if (Blacklist.IsPersisted)
-				GameServer.Database.SaveObject(Blacklist);
-			else
-				GameServer.Database.AddObject(Blacklist);
+		public void PlayerKilledByPlayer(AmtePlayer victim, AmtePlayer killer)
+		{
+			if (victim == killer)
+				return;
+			//old system
+			//var inBL = IsBlacklisted(victim);
+
+			if (victim.isInBG || victim.IsInPvP || victim.CurrentRegion.IsRvR || Territory.TerritoryManager.Instance.IsTerritoryArea(victim.CurrentAreas))
+			{
+				return;
+			}
+
+			if (victim.Reputation < 0)
+			{
+				ItemUnique iu = new ItemUnique(HeadTemplate)
+				{
+					Name = "Tête de " + victim.Name,
+					MessageArticle = victim.InternalID,
+					CanDropAsLoot = true,
+					MaxCondition = (int)DateTime.Now.Subtract(new DateTime(2000, 1, 1)).TotalSeconds
+				};
+				GameServer.Database.AddObject(iu);
+				if (killer.Inventory.AddItem(eInventorySlot.FirstEmptyBackpack, GameInventoryItem.Create(iu)))
+					killer.SendMessage("Vous avez récupérer la tête de " + victim.Name + ".", eChatType.CT_Loot);
+				else
+					killer.SendMessage("Vous n'avez pas pu récupérer la tête de " + victim.Name + ", votre inventaire est plein !", eChatType.CT_Loot);
+			}
 		}
 
 		public override void DeleteFromDatabase()
 		{
 			base.DeleteFromDatabase();
-
-			GameServer.Database.DeleteObject(Blacklist);
 		}
 		#endregion
 

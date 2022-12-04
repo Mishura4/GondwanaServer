@@ -172,7 +172,14 @@ namespace DOL.GS.Commands
 						info.Add(" + Abilities: " + target.Abilities.Count);
 						
 					if (target.Spells != null && target.Spells.Count > 0)
+					{
 						info.Add(" + Spells: " + target.Spells.Count);
+
+						foreach (var spell in target.Spells)
+						{
+							info.Add(" ---- SpellId: " + spell.ID + " | Name: " + spell.Name);
+						}
+					}
 						
 					if (target.Styles != null && target.Styles.Count > 0)
 						info.Add(" + Styles: " + target.Styles.Count);

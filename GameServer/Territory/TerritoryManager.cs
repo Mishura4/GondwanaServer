@@ -103,6 +103,20 @@ namespace DOL.Territory
             log.Info(count + " Territoires Chargés");
         }
 
+        public bool IsTerritoryArea(IEnumerable<IArea> areas)
+        {
+            foreach (var item in areas)
+            {
+                bool matched = this.Territories.Any(t => t.Area.ID.Equals(item.ID));
+
+                if (matched)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
 
         public void ChangeGuildOwner(Guild guild, Territory territory)
         {

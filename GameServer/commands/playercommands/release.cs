@@ -17,13 +17,21 @@
  *
  */
 
+using DOL.Database;
+using DOL.events.gameobjects;
+using DOL.Events;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+
 namespace DOL.GS.Commands
 {
 	[CmdAttribute(
 		"&release", new string[] { "&rel" },
 		ePrivLevel.Player,
-		"When you are dead you can '/release'. This will bring you back to your bindpoint!",
-		"/release")]
+		"Commands.Players.Release.Description",
+		"Commands.Players.Release.Usage")]
 	public class ReleaseCommandHandler : AbstractCommandHandler, ICommandHandler
 	{
 		public void OnCommand(GameClient client, string[] args)
@@ -34,7 +42,10 @@ namespace DOL.GS.Commands
 				return;
 			}
 
-            if (args.Length > 1 && args[1].ToLower() == "city")
+            //Check if player should go to jail
+			this.ReleaseOutlawsToJail(client);
+
+			if (args.Length > 1 && args[1].ToLower() == "city")
 			{
 					client.Player.Release(GamePlayer.eReleaseType.City, false);
 					return;
@@ -47,5 +58,47 @@ namespace DOL.GS.Commands
             }
 			client.Player.Release(GamePlayer.eReleaseType.Normal, false);
 		}
-	}
+
+        private void ReleaseOutlawsToJail(GameClient client)
+        {
+			string fulltype = "DOL.Database.DBDeathLog";
+			Type deathType = null;
+
+			foreach (var scriptAss in ScriptMgr.Scripts)
+			{
+				try
+				{
+					deathType = scriptAss.GetType(fulltype);
+					if (deathType != null)
+						break;
+				}
+				catch
+				{
+					continue;
+				}
+			}
+
+			if (deathType != null)
+			{
+				MethodInfo[] methods = GameServer.Database.GetType().GetMethods();
+
+				foreach (var method in methods.Where(m => m.Name.Contains("SelectObjects")))
+				{
+					var parameters = method.GetParameters();
+					if (parameters.Any(p => p.ParameterType == typeof(QueryParameter)) && parameters.Any(p => p.ParameterType == typeof(string)))
+					{
+						MethodInfo generic = method.MakeGenericMethod(deathType);
+						var result = generic.Invoke(GameServer.Database, new object[] { "KilledId = @id AND IsWanted = 1 AND ExitFromJail = 0", new QueryParameter("id", client.Player.InternalID, typeof(string)) }) as IList<object>;
+
+						var matched = result?.FirstOrDefault();
+						if (matched != null)
+						{
+							client.Player.Release(GamePlayer.eReleaseType.Jail, true);
+							return;
+						}
+					}
+				}
+			}
+		}
+    }
 }

@@ -40,8 +40,10 @@ namespace DOL.Database
 		private string	m_RandomPhraseEmote;
 		private int		m_PhraseInterval;
 		private string	m_Condition;
+		private bool m_IsOutlawFriendly;
+        private bool m_IsRegularFriendly;
 
-		[DataElement(AllowDbNull=false)]
+        [DataElement(AllowDbNull=false)]
 		public string MobID
 		{
 			get { return m_mobID; }
@@ -148,6 +150,36 @@ namespace DOL.Database
 			{ 
 				Dirty = true;
 				m_Condition = value; 
+			}
+		}
+
+		[DataElement(AllowDbNull = false)]
+		public bool IsOutlawFriendly
+		{
+			get
+			{
+				return m_IsOutlawFriendly;
+			}
+
+			set
+			{
+				Dirty = true;
+				m_IsOutlawFriendly = value;
+			}
+		}
+
+		[DataElement(AllowDbNull = false)]
+		public bool IsRegularFriendly
+		{
+			get
+			{
+				return m_IsRegularFriendly;
+			}
+
+			set
+			{
+				Dirty = true;
+				m_IsRegularFriendly = value;
 			}
 		}
 	}

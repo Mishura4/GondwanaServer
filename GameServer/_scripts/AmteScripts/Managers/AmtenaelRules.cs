@@ -392,6 +392,12 @@ namespace DOL.GS.ServerRules
 			if (source == null || target == null)
 				return false;
 			if (target is GameNPC)
+			var sourcePlayer = source as GamePlayer;
+				if (source is GuardNPC && targetPlayer != null && targetPlayer.Reputation >= 0)
+				{
+					return true;
+				}
+
 				if ((((GameNPC)target).Flags & GameNPC.eFlags.PEACE) != 0)
 					return true;
 
@@ -567,6 +573,17 @@ namespace DOL.GS.ServerRules
 				return source.Realm == target.Realm;
 			if ((source != null && JailMgr.IsPrisoner(pls)) || (plt != null && JailMgr.IsPrisoner(plt)))
 				return false;
+			//Do not allow Trading from outlaw (but allow trading from outlaw to outlaw)
+			if (pls != null && pls.Reputation < 0 && plt != null && plt.Reputation > 0)
+            {				
+				return false;		
+            }
+			//Do not allow Trading to outlaw
+			if (pls != null && pls.Reputation > 0 && plt != null && plt.Reputation < 0)
+            {
+				return false;
+            }
+
 			return true;
 		}
 

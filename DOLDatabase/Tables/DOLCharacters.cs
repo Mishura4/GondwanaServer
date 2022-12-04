@@ -2263,12 +2263,38 @@ namespace DOL.Database
 				m_activeSaddleBags = value;
 			}
 		}
-		
+	
+        [DataElement(AllowDbNull = false)]
+        public int Reputation
+        {
+            get { return m_reputation; }
+
+            set 
+            { 
+                Dirty = true;
+                m_reputation = value;
+            }
+        }
+
+	    [DataElement(AllowDbNull = false)]
+        public long OutlawTimeStamp
+        {
+            get { return m_outlawTimeStamp;  }
+
+            set 
+            { 
+                Dirty = true;
+                m_outlawTimeStamp = value; 
+            }
+        }
+
 		/// <summary>
 		/// List of Custom Params for this Character
 		/// </summary>
 		[Relation(LocalField = "DOLCharacters_ID", RemoteField = nameof( DOLCharactersXCustomParam.DOLCharactersObjectId ), AutoLoad = true, AutoDelete = true)]
 		public DOLCharactersXCustomParam[] CustomParams;
+		private int m_reputation;
+		private long m_outlawTimeStamp;
 	}
 	
 	/// <summary>

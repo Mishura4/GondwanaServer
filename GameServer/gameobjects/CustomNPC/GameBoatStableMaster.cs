@@ -114,6 +114,13 @@ namespace DOL.GS
 			{
 				GamePlayer player = (GamePlayer)source;
 
+                if (player.Reputation < 0)
+                {
+                    TurnTo(player, 5000);
+                    player.Out.SendMessage("Je ne reçois rien de la part des hors-la-loi", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    return false;
+                }
+
                 if (item.Name.ToLower().StartsWith(LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE, "GameStableMaster.ReceiveItem.TicketTo")) && item.Item_Type == 40)
 				{
 					foreach (GameNPC npc in GetNPCsInRadius(1500))

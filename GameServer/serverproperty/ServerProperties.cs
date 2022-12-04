@@ -169,6 +169,18 @@ namespace DOL.GS.ServerProperties
 		[ServerProperty("system", "load_housing_npc", "Should the server load Housing npc, values True,False", true)]
 		public static bool LOAD_HOUSING_NPC;
 
+        [ServerProperty("system", "reward_outlaw_head_gold", "The price in golds for the head of an outlaw", 50)]
+        public static int REWARD_OUTLAW_HEAD_GOLD;
+
+        [ServerProperty("system", "is_reputation_recovery_activated", "Is Reputation recovery interval activated", true)]
+        public static bool IS_REPUTATION_RECOVERY_ACTIVATED;
+
+        [ServerProperty("system", "reputation_days_interval_recovery", "The Number of days interval before recover reputation points", 5)]
+        public static int REPUTATION_DAYS_INTERVAL;
+
+        [ServerProperty("system", "reputation_points_recovery", "The Number points to recover when days interval is activated", 1)]
+        public static int REPUTATION_POINTS_RECOVERY;
+
 		/// <summary>
 		/// Disable Bug Reports
 		/// </summary>

@@ -29,6 +29,7 @@ using DOL.AI;
 using DOL.AI.Brain;
 using System.Timers;
 using DOL.Database;
+using DOL.events.gameobjects;
 using DOL.Events;
 using DOL.gameobjects.CustomNPC;
 using DOL.GS.Effects;
@@ -46,6 +47,7 @@ using DOL.GS.Spells;
 using DOL.GS.Styles;
 using DOL.GS.Utils;
 using DOL.Language;
+using DOL.Territory;
 using log4net;
 
 namespace DOL.GS
@@ -58,11 +60,15 @@ namespace DOL.GS
 	{
 		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
+		private static long reputationDaysDurationInSeconds = Properties.REPUTATION_DAYS_INTERVAL * 86400;
+
 		private readonly object m_LockObject = new object();
 
-        private Timer afkXpTimer;
+		private Timer afkXpTimer;
 
         private Timer kickoutTimer;
+
+		private Timer reputationRecoveryTimer;
 
         private Timer afkDelayTimer;
 
@@ -190,6 +196,12 @@ namespace DOL.GS
 			get { return m_isInBG; }
 			set { m_isInBG = value; }
 		}
+
+		public bool IsInPvP
+        {
+			get;
+			set;
+        }
 
 		/// <summary>
 		/// Current warmap page
@@ -919,6 +931,12 @@ namespace DOL.GS
 				QuestActionTimer = null;
 			}
 
+			if (reputationRecoveryTimer != null)
+            {
+				reputationRecoveryTimer.Stop();
+				reputationRecoveryTimer = null;
+            }
+
 			if (Group != null)
 				Group.RemoveMember(this);
 
@@ -1437,6 +1455,10 @@ namespace DOL.GS
 			/// Release to players house
 			/// </summary>
 			House,
+			/// <summary>
+			/// Release To Jail
+			/// </summary>
+			Jail
 		}
 
 		/// <summary>
@@ -1813,9 +1835,13 @@ namespace DOL.GS
 			int oldRegion = CurrentRegionID;
 
 			//Call MoveTo after new GameGravestone(this...
-			//or the GraveStone will be located at the player's bindpoint
-			
-			MoveTo(relRegion, relX, relY, relZ, relHeading);
+			//or the GraveStone will be located at the player's bindpoint		
+
+			if (m_releaseType != eReleaseType.Jail)
+            {
+				MoveTo(relRegion, relX, relY, relZ, relHeading);
+			}
+
 			//It is enough if we revive the player on this client only here
 			//because for other players the player will be removed in the MoveTo
 			//method and added back again (if in view) with full health ... so no
@@ -1846,6 +1872,12 @@ namespace DOL.GS
 					loc.Heading = Heading;
 					loc.RegionID = CurrentRegionID;
 				}
+			}
+
+			if (m_releaseType == eReleaseType.Jail)
+            {
+				GameEventMgr.Notify(GamePlayerEvent.SendToJail, new SendToJailEventArgs() { GamePlayer = this, OriginalReputation = this.Reputation });
+				this.Reputation = 0;
 			}
 		}
 
@@ -1952,6 +1984,10 @@ namespace DOL.GS
 		/// Property that saves condition lost on last death
 		/// </summary>
 		public const string DEATH_CONSTITUTION_LOSS_PROPERTY = "death_con_loss";
+		/// <summary>
+		/// Property that save mezzed state from other player to determine if player was mezz
+		/// </summary>
+		public const string PLAYER_MEZZED_BY_OTHER_PLAYER_ID = "player_mezzed_by_other_player";
 		#endregion
 
 		#region Praying
@@ -7885,6 +7921,22 @@ namespace DOL.GS
 			set { m_lastDeathRealmPoints = value; }
 		}
 
+        /// <summary>
+        /// Check if the player lost Constitution
+        /// Player can't lost cons if he is in a territory and the killer is a territory mob
+        /// </summary>
+        /// <param name="killer">The player killer</param>
+        /// <returns></returns>
+        public virtual bool CheckIfLostConstitution(GameObject killer)
+        {
+            GameNPC mob = killer as GameNPC;
+            if (mob == null)
+                return !IsInPvP && !IsInRvR;
+            string classType = killer.GetType().Name;
+            Territory.Territory territory = TerritoryManager.Instance.GetCurrentTerritory(CurrentAreas);
+            return classType != "GuardNPC" && classType != "GuardOutlaw" && territory == null && !mob.IsInTerritory && !IsInPvP && !IsInRvR;
+        }
+
 		/// <summary>
 		/// Called when the player dies
 		/// </summary>
@@ -8077,21 +8129,21 @@ namespace DOL.GS
 					switch (GameServer.Instance.Configuration.ServerType)
 					{
 						case eGameServerType.GST_Normal:
-								Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GamePlayer.Die.DeadRVR"), eChatType.CT_YouDied, eChatLoc.CL_SystemWindow);
-								xpLossPercent = 0;
-								m_deathtype = eDeathType.RvR;
-								break;
+							Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Die.DeadRVR"), eChatType.CT_YouDied, eChatLoc.CL_SystemWindow);
+							xpLossPercent = 0;
+							m_deathtype = eDeathType.RvR;
+							break;
 								
 						case eGameServerType.GST_PvP:
-								Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GamePlayer.Die.DeadRVR"), eChatType.CT_YouDied, eChatLoc.CL_SystemWindow);
-								xpLossPercent = 0;
-								m_deathtype = eDeathType.PvP;
-								if (ServerProperties.Properties.PVP_DEATH_CON_LOSS)
-								{
-									conpenalty = 3;
-									TempProperties.setProperty(DEATH_CONSTITUTION_LOSS_PROPERTY, conpenalty);
-								}
-								break;
+							Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Die.DeadRVR"), eChatType.CT_YouDied, eChatLoc.CL_SystemWindow);
+							xpLossPercent = 0;
+							m_deathtype = eDeathType.PvP;
+                            if (ServerProperties.Properties.PVP_DEATH_CON_LOSS && CheckIfLostConstitution(killer))
+							{
+								conpenalty = 3;
+								TempProperties.setProperty(DEATH_CONSTITUTION_LOSS_PROPERTY, conpenalty);
+							}
+							break;
 				 	}
 					 
 				}
@@ -8120,7 +8172,7 @@ namespace DOL.GS
                         TempProperties.setProperty(DEATH_EXP_LOSS_PROPERTY, xpLoss);
                     }
 
-                    if (Level >= ServerProperties.Properties.PVE_CON_LOSS_LEVEL)
+                    if (Level >= ServerProperties.Properties.PVE_CON_LOSS_LEVEL && CheckIfLostConstitution(killer))
                     {
                         int conLoss = DeathCount;
                         if (conLoss > 3)
@@ -12947,6 +12999,14 @@ namespace DOL.GS
 			
 			Model = (ushort)DBCharacter.CurrentModel;
 			IsRenaissance = DBCharacter.IsRenaissance;
+			OutlawTimeStamp = DBCharacter.OutlawTimeStamp;
+			Reputation = DBCharacter.Reputation;
+
+			//update previous version by setting timestamp
+			if (Reputation < 0 && OutlawTimeStamp == 0)
+            {
+				OutlawTimeStamp = DateTimeOffset.Now.ToUnixTimeSeconds();
+            }			
 
 			m_customFaceAttributes[(int)eCharFacePart.EyeSize] = DBCharacter.EyeSize;
 			m_customFaceAttributes[(int)eCharFacePart.LipSize] = DBCharacter.LipSize;
@@ -13128,6 +13188,7 @@ namespace DOL.GS
 				DBCharacter.PlayedTime = PlayedTime;  //We have to set the PlayedTime on the character before setting the LastPlayed
 				DBCharacter.LastPlayed = DateTime.Now;
 				DBCharacter.IsRenaissance = IsRenaissance;
+				DBCharacter.Reputation = Reputation;
 
 				DBCharacter.ActiveWeaponSlot = (byte)((byte)ActiveWeaponSlot | (byte)ActiveQuiverSlot);
 				if (m_stuckFlag)
@@ -14760,11 +14821,57 @@ namespace DOL.GS
             set;
         }
 
-		/// <summary>
-		/// Create a shade effect for this player.
-		/// </summary>
-		/// <returns></returns>
-		protected virtual ShadeEffect CreateShadeEffect()
+		public long OutlawTimeStamp
+        {
+			get;
+			set;
+        }
+
+
+		public int Reputation
+		{ 
+			get { return m_reputation; }
+
+            set
+            {
+                int oldValue = m_reputation;
+				bool changed = m_reputation != value;
+				m_reputation = value;
+
+				if (m_reputation >= 0)
+                {
+					this.OutlawTimeStamp = 0;
+                }             
+
+				if (this.CurrentRegionID != 0)
+				{       //refresh npc quests according to new reputation
+					foreach (GameNPC mob in WorldMgr.GetRegion(this.CurrentRegionID)?.Objects?.Where(o => o != null && o is GameNPC))
+					{
+						this.Out.SendNPCsQuestEffect(mob, mob.GetQuestIndicator(this));
+					}
+				}
+
+				if (Properties.IS_REPUTATION_RECOVERY_ACTIVATED && m_reputation < 0 && OutlawTimeStamp == 0)
+                    if(oldValue >= 0 && Properties.DISCORD_ACTIVE)
+                    {
+                        var hook = new DolWebHook(Properties.DISCORD_WEBHOOK_ID);
+                        hook.SendMessage(Name + " is now wanted for his crimes and his felony") ;
+                    }
+					OutlawTimeStamp = DateTimeOffset.Now.ToUnixTimeSeconds();
+					this.ConfigureReputationTimer();
+                }
+				if (changed)
+                {
+					this.SaveIntoDatabase();
+				}
+			}
+		}
+
+        /// <summary>
+        /// Create a shade effect for this player.
+        /// </summary>
+        /// <returns></returns>
+        protected virtual ShadeEffect CreateShadeEffect()
 		{
 			return CharacterClass.CreateShadeEffect();
 		}
@@ -16136,6 +16243,7 @@ namespace DOL.GS
 
 		#region Minotaur Relics
 		protected MinotaurRelic m_minoRelic = null;
+		private int m_reputation;
 
 		/// <summary>
 		/// sets or sets the Minotaur Relic of this Player
@@ -16203,6 +16311,8 @@ namespace DOL.GS
 			m_rangeAttackTarget = new WeakRef(null);
 			m_client = client;
 			m_dbCharacter = dbChar;
+			this.IsAfkDelayElapsed = true;
+			this.IsAllowToVolInThisArea = true;
 			m_controlledHorse = new ControlledHorse(this);
 			m_buff1Bonus = new PropertyIndexer((int)eProperty.MaxProperty); // set up a fixed indexer for players
 			m_buff2Bonus = new PropertyIndexer((int)eProperty.MaxProperty);
@@ -16228,6 +16338,7 @@ namespace DOL.GS
 			LoadFromDatabase(dbChar);
 
 			CreateStatistics();
+			this.ConfigureReputationTimer();
 			shadowNPC = new ShadowNPC(this);
 		}
 
@@ -16425,6 +16536,84 @@ namespace DOL.GS
 					: null;
 			}
 		}
+
+
+		public long GetRemainingIntervalReputationTime()
+        {
+			if (this.OutlawTimeStamp == 0)
+            {
+				return reputationDaysDurationInSeconds;
+            }
+
+			long now = DateTimeOffset.Now.ToUnixTimeSeconds();
+			long ellapsed = now - this.OutlawTimeStamp;
+
+			if (ellapsed > 0 && ellapsed >= reputationDaysDurationInSeconds)
+            {
+				//time over
+				return 0;
+            }
+			else if (ellapsed > 0 && ellapsed < reputationDaysDurationInSeconds)
+            {
+				return reputationDaysDurationInSeconds - ellapsed;
+            }
+
+			return reputationDaysDurationInSeconds;
+		}
+
+		private void ConfigureReputationTimer()
+        {
+			if (this.Reputation < 0 && Properties.IS_REPUTATION_RECOVERY_ACTIVATED && Properties.REPUTATION_DAYS_INTERVAL > 0 && Properties.REPUTATION_POINTS_RECOVERY > 0)
+            {
+				long remainingTime = this.GetRemainingIntervalReputationTime();
+
+				if (remainingTime <= 0)
+                {
+					this.RecoverReputation(Properties.REPUTATION_POINTS_RECOVERY);
+					remainingTime = reputationDaysDurationInSeconds;
+				}            
+
+				if (this.reputationRecoveryTimer == null)
+                {
+					//Number of days expressed in ms	
+					this.reputationRecoveryTimer = new Timer(remainingTime * 1000);
+					this.reputationRecoveryTimer.Elapsed += this.HandleReputationTimerElapsed;
+					this.reputationRecoveryTimer.AutoReset = false;
+					this.reputationRecoveryTimer.Start();
+                }
+                else
+                {					
+					this.reputationRecoveryTimer.Stop();
+					this.reputationRecoveryTimer.Interval = remainingTime * 1000;
+					this.reputationRecoveryTimer.Start();
+				}            
+            }			
+		}
+
+        private void HandleReputationTimerElapsed(object sender, ElapsedEventArgs e)
+        {
+            this.RecoverReputation(Properties.REPUTATION_POINTS_RECOVERY);
+            if (Reputation < 0)
+            {
+                this.OutlawTimeStamp = DateTimeOffset.Now.ToUnixTimeSeconds();
+                this.reputationRecoveryTimer.Interval = reputationDaysDurationInSeconds * 1000;
+                this.reputationRecoveryTimer.Start();
+            }
+        }
+
+        public void RecoverReputation(int amount)
+        {
+			if (Reputation + amount >= 0)
+			{
+				Reputation = 0;	
+				Out.SendMessage("Votre r�putation est d�sormais de 0.", eChatType.CT_Staff, eChatLoc.CL_SystemWindow);
+			}
+			else
+			{
+				Reputation += amount;
+				Out.SendMessage(string.Format("Vous gagnez {0} " + (amount > 1 ? "points" : "point") + " de r�putation. Vous avez d�sormais {1} points", amount, Reputation), eChatType.CT_Staff, eChatLoc.CL_SystemWindow);
+			}
+		}	
 
         /// <summary>
         /// This property is use for the assassinate RA
