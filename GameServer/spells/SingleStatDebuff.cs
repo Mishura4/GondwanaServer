@@ -118,8 +118,7 @@ namespace DOL.GS.Spells
 
 		protected override void SendUpdates(GameLiving target) { }
 
-		public ArmorAbsorptionDebuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) {}
-	}
+		public ArmorAbsorptionDebuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
         /// <summary>
         /// If Caster is Reaver and Target is NPC Gard and the gard is not aggro,
@@ -141,6 +140,7 @@ namespace DOL.GS.Spells
             targetToRemove.Foreach((target) => result.Remove(target));
             return result;
         }
+    }
 
 	[SpellHandler("CombatSpeedDebuff")]
 	public class CombatSpeedDebuff : SingleStatDebuff
@@ -164,7 +164,6 @@ namespace DOL.GS.Spells
 		public MeleeDamageDebuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) {}
 
 		public override string ShortDescription => $"The target does {Spell.Value}% less damage with melee attacks.";
-	}
 
         /// <summary>
         /// If Caster is Reaver and Target is NPC Gard and the gard is not aggro,
@@ -187,7 +186,9 @@ namespace DOL.GS.Spells
             return result;
         }
 
-	[SpellHandler("FatigueConsumptionDebuff")]
+    }
+
+    [SpellHandler("FatigueConsumptionDebuff")]
 	public class FatigueConsumptionDebuff : SingleStatDebuff
 	{
 		public override eProperty Property1 { get { return eProperty.FatigueConsumption; } }

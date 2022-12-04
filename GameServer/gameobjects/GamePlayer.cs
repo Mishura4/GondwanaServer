@@ -203,6 +203,12 @@ namespace DOL.GS
 			set;
         }
 
+		public bool IsInRvR
+		{
+			get;
+			set;
+		}
+
 		/// <summary>
 		/// Current warmap page
 		/// </summary>
@@ -14852,6 +14858,7 @@ namespace DOL.GS
 				}
 
 				if (Properties.IS_REPUTATION_RECOVERY_ACTIVATED && m_reputation < 0 && OutlawTimeStamp == 0)
+				{
                     if(oldValue >= 0 && Properties.DISCORD_ACTIVE)
                     {
                         var hook = new DolWebHook(Properties.DISCORD_WEBHOOK_ID);
@@ -16295,7 +16302,11 @@ namespace DOL.GS
 			return player; 
 		}
 
-		private GamePlayer() : base() { }
+		private GamePlayer() : base() { 
+			this.IsAfkDelayElapsed = true;
+			this.IsAllowToVolInThisArea = true;
+			this.ConfigureReputationTimer();
+			}
 
 		/// <summary>
 		/// Creates a new player

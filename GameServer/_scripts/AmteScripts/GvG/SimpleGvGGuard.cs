@@ -73,8 +73,8 @@ namespace DOL.GS.Scripts
 				return true;
 			}
 
-			var cloaks = GameServer.Database.SelectObjects<NPCEquipment>("TemplateID like 'gvg_guard_%' AND Slot = 26");
-			player.Out.SendMessage(
+			var cloaks = GameServer.Database.SelectObjects<NPCEquipment>(DB.Column("TemplateID").IsLike("gvg_guard_%").And(DB.Column("Slot").IsEqualTo(26)));
+            player.Out.SendMessage(
 				string.Format("Bonjour {0}, vous pouvez modifier l'�quippement que je porte, s�lectionner l'ensemble que vous souhaitez :\n", player.Name) +
 				string.Join("\n", cloaks.Select(c => string.Format("[{0}]", c.TemplateID.Substring(10)))),
 				eChatType.CT_System,
@@ -97,8 +97,8 @@ namespace DOL.GS.Scripts
 				return true;
 			}
 
-			var cloaks = GameServer.Database.SelectObjects<NPCEquipment>("TemplateID like 'gvg_guard_%' AND Slot = 26");
-			text = string.Format("gvg_guard_{0}", text);
+			var cloaks = GameServer.Database.SelectObjects<NPCEquipment>(DB.Column("TemplateID").IsLike("gvg_guard_%").And(DB.Column("Slot").IsEqualTo(26)));
+            text = string.Format("gvg_guard_{0}", text);
 			if (cloaks.Any(c => c.TemplateID == text))
 				LoadEquipmentTemplateFromDatabase(text);
 			RefreshEmblem();

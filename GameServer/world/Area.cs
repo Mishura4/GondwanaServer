@@ -58,7 +58,7 @@ namespace DOL.GS
 				: base()
 			{ }
 
-			public Square(string desc, int x, int y, int width, int height): base(desc)
+			public Square(string desc, int x, int y, int width, int height, bool isPvp) : base(desc)
 			{
 				m_X = x;
 				m_Y = y;

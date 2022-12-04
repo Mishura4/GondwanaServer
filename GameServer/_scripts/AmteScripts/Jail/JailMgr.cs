@@ -113,7 +113,7 @@ namespace DOL.GS.Scripts
                 }
 
                 //clear Deathlogs
-                var ids = GameServer.Database.SelectObjects<DBDeathLog>("KillerId = @KillerId", new QueryParameter("KillerId", args.GamePlayer.InternalID));
+                var ids = GameServer.Database.SelectObjects<DBDeathLog>(DB.Column("KillerId").IsEqualTo(args.GamePlayer.InternalID));
 
                 if (ids != null)
                 {
@@ -352,7 +352,7 @@ namespace DOL.GS.Scripts
         /// <summary>
         /// Emprisonner un joueur connecté dans la prison RP
         /// </summary>
-        ppublic static void EmprisonnerRP(GamePlayer player, int cost, DateTime sortie, string GM, string raison, bool isOutLaw) 
+        public static void EmprisonnerRP(GamePlayer player, int cost, DateTime sortie, string GM, string raison, bool isOutLaw) 
 		{
             Emprisonner(player, cost, sortie, GM, true, raison, isOutLaw);
 		}
@@ -394,7 +394,7 @@ namespace DOL.GS.Scripts
 			player.MaxSpeedBase = 191;
 			player.Out.SendUpdateMaxSpeed();
             player.Reputation = 0;
-            var deaths = GameServer.Database.SelectObjects<DBDeathLog>("KilledId = @id AND ExitFromJail = 0 AND IsWanted = 1", new QueryParameter("id", player.InternalID));
+            var deaths = GameServer.Database.SelectObjects<DBDeathLog>(DB.Column("KilledId").IsEqualTo(player.InternalID).And(DB.Column("ExitFromJail").IsEqualTo(0).And(DB.Column("IsWanted").IsEqualTo(1))));
 
             if (deaths != null)
             {

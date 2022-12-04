@@ -30,11 +30,11 @@ namespace DOL.GS
                 HybridDictionary itemsInPage = new HybridDictionary(MAX_ITEM_IN_TRADEWINDOWS);
                 if (m_itemsListID != null && m_itemsListID.Length > 0)
                 {
-                    var itemList = GameServer.Database.SelectObjects<MerchantItem>("`ItemListID` = @ItemListID AND `PageNumber` = @PageNumber", new[] { new QueryParameter("@ItemListID", m_itemsListID), new QueryParameter("@PageNumber", page) });
+                    var itemList = GameServer.Database.SelectObjects<MerchantItem>(DB.Column("ItemListID").IsEqualTo(m_itemsListID).And(DB.Column("PageNumber").IsEqualTo(page)));
                     foreach (MerchantItem merchantitem in itemList)
                     {
                         //Force query to execute without precache
-                        ItemTemplate item = GameServer.Database.SelectObjects<ItemTemplate>("Id_nb = @Id_nb", new QueryParameter("Id_nb", merchantitem.ItemTemplateID))?.FirstOrDefault();
+                        ItemTemplate item = GameServer.Database.SelectObjects<ItemTemplate>(DB.Column("Id_nb").IsEqualTo(merchantitem.ItemTemplateID))?.FirstOrDefault();
                         if (item != null)
                         {
                             ItemTemplate slotItem = (ItemTemplate)itemsInPage[merchantitem.SlotPosition];
@@ -88,10 +88,10 @@ namespace DOL.GS
                 Hashtable allItems = new Hashtable();
                 if (m_itemsListID != null && m_itemsListID.Length > 0)
                 {
-                    var itemList = GameServer.Database.SelectObjects<MerchantItem>("`ItemListID` = @ItemListID", new QueryParameter("@ItemListID", m_itemsListID));
+                    var itemList = GameServer.Database.SelectObjects<MerchantItem>(DB.Column("ItemListID").IsEqualTo(m_itemsListID));
                     foreach (MerchantItem merchantitem in itemList)
                     {
-                        ItemTemplate item = GameServer.Database.SelectObjects<ItemTemplate>("Id_nb = @Id_nb", new QueryParameter("Id_nb", merchantitem.ItemTemplateID))?.FirstOrDefault();
+                        ItemTemplate item = GameServer.Database.SelectObjects<ItemTemplate>(DB.Column("Id_nb").IsEqualTo(merchantitem.ItemTemplateID))?.FirstOrDefault();
                         if (item != null)
                         {
                             ItemTemplate slotItem = (ItemTemplate)allItems[merchantitem.SlotPosition];
@@ -151,13 +151,13 @@ namespace DOL.GS
 
                 if (m_itemsListID != null && m_itemsListID.Length > 0)
                 {
-                    var itemToFind = GameServer.Database.SelectObjects<MerchantItem>(
-                        "`ItemListID` = @ItemListID AND `PageNumber` = @PageNumber AND `SlotPosition` = @SlotPosition",
-                                                                                     new[] { new QueryParameter("@ItemListID", m_itemsListID), new QueryParameter("@PageNumber", page), new QueryParameter("@SlotPosition", (int)slot) }).FirstOrDefault();
+                    var itemToFind = GameServer.Database.SelectObjects<MerchantItem>(DB.Column("ItemListID").IsEqualTo(m_itemsListID)
+                        .And(DB.Column("PageNumber").IsEqualTo(page)
+                        .And(DB.Column("SlotPosition").IsEqualTo((int)slot)))).FirstOrDefault();
                     if (itemToFind != null)
                     {
                         //Prevent precache by calling SelectObjects
-                        item = GameServer.Database.SelectObjects<ItemTemplate>("Id_nb = @Id_nb", new QueryParameter("Id_nb", itemToFind.ItemTemplateID))?.FirstOrDefault();
+                        item = GameServer.Database.SelectObjects<ItemTemplate>(DB.Column("Id_nb").IsEqualTo(itemToFind.ItemTemplateID))?.FirstOrDefault();
 
                         if (item != null)
                         {

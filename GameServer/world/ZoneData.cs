@@ -84,6 +84,8 @@ namespace DOL.GS
 			WaterLevel = z.WaterLevel;
 			DivingFlag = z.DivingFlag;
 			IsLava = z.IsLava;
+            AllowMagicalItem = z.AllowMagicalItem;
+            AllowReputation = z.AllowReputation;
 		}
     }
 }

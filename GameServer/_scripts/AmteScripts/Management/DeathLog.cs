@@ -6,7 +6,7 @@ using DOL.Database;
 using DOL.Events;
 using DOL.GS.PacketHandler;
 using DOL.GS.Scripts;
-using Scripts.Amtescripts.Managers;
+using GameServerScripts.Amtescripts.Managers;
 using log4net;
 
 

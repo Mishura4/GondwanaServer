@@ -175,7 +175,7 @@ namespace DOL.GS.Commands
 					{
 						info.Add(" + Spells: " + target.Spells.Count);
 
-						foreach (var spell in target.Spells)
+						foreach (Spell spell in target.Spells)
 						{
 							info.Add(" ---- SpellId: " + spell.ID + " | Name: " + spell.Name);
 						}

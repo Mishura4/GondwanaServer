@@ -64,7 +64,7 @@ namespace DOL.Territory
 
                         if (zone != null)
                         {
-                            var areaDb = GameServer.Database.SelectObjects<DBArea>("area_id = @id", new QueryParameter("id", territoryDb.AreaId))?.FirstOrDefault();
+                            var areaDb = GameServer.Database.SelectObjects<DBArea>(DB.Column("area_id").IsEqualTo(territoryDb.AreaId))?.FirstOrDefault();
 
                             if (areaDb == null)
                             {
@@ -118,6 +118,20 @@ namespace DOL.Territory
             return false;
         }
 
+        public Territory GetCurrentTerritory(IEnumerable<IArea> areas)
+        {
+            foreach (var item in areas)
+            {
+                var matched = this.Territories.FirstOrDefault(t => t.Area.ID.Equals(item.ID));
+
+                if (matched != null)
+                {
+                    return matched;
+                }
+            }
+
+            return null;
+        }
         public void ChangeGuildOwner(Guild guild, Territory territory)
         {
             if (guild == null || territory == null)

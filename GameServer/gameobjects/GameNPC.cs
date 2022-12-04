@@ -4978,7 +4978,7 @@ namespace DOL.GS
 		#endregion
 
 		#region Spell
-		private List<Spell> m_spells = new List<Spell>(0);
+		private IList m_spells = new List<Spell>(0);
 		/// <summary>
 		/// property of spell array of NPC
 		/// </summary>

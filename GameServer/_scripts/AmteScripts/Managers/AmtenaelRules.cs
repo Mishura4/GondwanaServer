@@ -391,14 +391,15 @@ namespace DOL.GS.ServerRules
 		{
 			if (source == null || target == null)
 				return false;
-			if (target is GameNPC)
-			var sourcePlayer = source as GamePlayer;
-				if (source is GuardNPC && targetPlayer != null && targetPlayer.Reputation >= 0)
-				{
-					return true;
-				}
 
-				if ((((GameNPC)target).Flags & GameNPC.eFlags.PEACE) != 0)
+            var targetPlayer = target as GamePlayer;
+            if (source is GuardNPC && targetPlayer != null && targetPlayer.Reputation >= 0)
+			{
+				return true;
+			}
+
+            if (target is GameNPC)
+                if ((((GameNPC)target).Flags & GameNPC.eFlags.PEACE) != 0)
 					return true;
 
 			if (source is GameNPC)

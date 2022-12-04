@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using DOL.AI.Brain;
 using DOL.Database;
 using DOL.GS.PacketHandler;
-using GameserverScripts.Amtescripts.Managers;
+using GameServerScripts.Amtescripts.Managers;
 
 
 namespace DOL.GS.Scripts
@@ -108,7 +108,7 @@ namespace DOL.GS.Scripts
 
 		public IEnumerable<string> GetOutlawsName()
 		{
-			var outlaws = GameServer.Database.SelectObjects<DOLCharacters>("Reputation < @rep", new QueryParameter("rep", 0));
+			var outlaws = GameServer.Database.SelectObjects<DOLCharacters>(DB.Column("Reputation").IsEqualTo(0));
 
 			if (outlaws == null || !outlaws.Any())
 			{

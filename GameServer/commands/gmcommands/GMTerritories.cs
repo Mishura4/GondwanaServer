@@ -9,6 +9,7 @@ using DOL.Territory;
 using DOLDatabase.Tables;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -64,7 +65,7 @@ namespace DOL.commands.gmcommands
 
                     if (ushort.TryParse(args[3], out zoneId))
                     {
-                        var areaDb = GameServer.Database.SelectObjects<DBArea>("area_Id = @id", new QueryParameter("id", areaId))?.FirstOrDefault();
+                        var areaDb = GameServer.Database.SelectObjects<DBArea>(DB.Column("id").IsEqualTo(areaId))?.FirstOrDefault();
 
                         if (areaDb == null)
                         {

@@ -103,7 +103,7 @@ namespace DOL.GS
 		public static LosTreeType InitializeForTestOnly(string filename)
 		{
 			var reg = WorldMgr.GetAllRegions().FirstOrDefault();
-			var zone = new Zone(reg, 0, "Test zone", 8, 8, 8, 8, 0, false, 0, false, 0, 0, 0, 0, 0, true);
+			var zone = new Zone(reg, 0, "Test zone", 8, 8, 8, 8, 0, false, 0, false, 0, 0, 0, 0, 0, true, true);
 			return _LoadZone(reg, zone, filename);
 		}
 

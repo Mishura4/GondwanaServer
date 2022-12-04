@@ -181,7 +181,6 @@ namespace DOL.Config
 						{
 							var newElement = new ConfigElement(current);
 							current[reader.Name] = newElement;
-							var isNotSingleTag = !reader.IsEmptyElement;
 							current = newElement;
 						}
 						if (reader.IsEmptyElement)

@@ -24,6 +24,7 @@ using DOL.GS.Spells;
 using log4net;
 using System.Collections;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace DOL.GS
 {
@@ -128,7 +129,7 @@ namespace DOL.GS
 			//Time to add Spells/Styles and Abilties to the templates
 			m_abilities = new ArrayList();
 			m_spelllines = new ArrayList();
-			m_spells = new ArrayList();
+			m_spells = new List<Spell>();
 			//Adding the spells to an Arraylist here
 			if (data.Spells != null && data.Spells.Length > 0)
 			{

@@ -55,7 +55,8 @@ namespace DOL.GS.Scripts
                 return true;
             }
 
-            var cloaks = GameServer.Database.SelectObjects<NPCEquipment>("TemplateID like @guard AND Slot = @slot", new QueryParameter[] { new QueryParameter("guard", "gvg_guard_%"), new QueryParameter("slot", 26) });
+            var cloaks = GameServer.Database.SelectObjects<NPCEquipment>(DB.Column("TemplateID").IsLike("gvg_guard_%").And(DB.Column("Slot").IsEqualTo(26)));
+
             if (cloaks != null)
             {
                 player.Out.SendMessage(
@@ -88,7 +89,7 @@ namespace DOL.GS.Scripts
                 return true;
             }
 
-            var cloaks = GameServer.Database.SelectObjects<NPCEquipment>("TemplateID like @guard AND Slot = @slot", new QueryParameter[] { new QueryParameter("guard", "gvg_guard_%"), new QueryParameter("slot", 26) });
+            var cloaks = GameServer.Database.SelectObjects<NPCEquipment>(DB.Column("TemplateID").IsLike("gvg_guard_%").And(DB.Column("Slot").IsEqualTo(26)));
             text = string.Format("gvg_guard_{0}", text);
             if (cloaks != null && cloaks.Any(c => c.TemplateID == text))
                 TerritoryManager.Instance.ChangeGuildOwner(this.InternalID, player.Guild, text);

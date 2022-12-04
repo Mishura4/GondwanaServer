@@ -88,9 +88,6 @@ namespace DOL.AI.Brain
                 if (((TurretPet)Body).TurretSpell.SpellType != "SpeedDecrease" && SpellHandler.FindEffectOnTarget(living, "SpeedDecrease") != null)
                     continue;
 
-                long amount;
-                if ((living.GetType().Name == "GuardNPC" || living.GetType().Name == "GuardOutlaw") && !((StandardMobBrain)living.Brain).AggroTable.TryGetValue(Owner, out amount))
-                    continue;
 
                 if (LivingHasEffect(living, ((TurretPet)Body).TurretSpell))
 				{
@@ -119,7 +116,11 @@ namespace DOL.AI.Brain
                 if (((TurretPet)Body).TurretSpell.SpellType == "SpeedDecrease" && (living.HasAbility(Abilities.RootImmunity) || living.HasAbility(Abilities.DamageImmunity)))
                     continue;
 
-				if (LivingHasEffect(living, ((TurretPet)Body).TurretSpell))
+                long amount;
+                if ((living.GetType().Name == "GuardNPC" || living.GetType().Name == "GuardOutlaw") && !((StandardMobBrain)living.Brain).AggroTable.TryGetValue(Owner, out amount))
+                    continue;
+
+                if (LivingHasEffect(living, ((TurretPet)Body).TurretSpell))
 				{
 					oldTargets.Add(living);
 				}
