@@ -436,7 +436,7 @@ namespace DOL.GS
                 {
                     var territory = TerritoryManager.Instance.Territories.FirstOrDefault(t => t.AreaId.Equals(area));
 
-                    if (territory != null)
+                    if (territory != null && string.IsNullOrEmpty(territory.GuildOwner))
                     {
                         TerritoryManager.Instance.ChangeGuildOwner(this, territory);
                     }
@@ -818,7 +818,8 @@ namespace DOL.GS
 				member.Client.Out.SendCharResistsUpdate();
                 if (remover != null && remover.Account.PrivLevel != 1)
                     return true;
-                m_leave_Players.Add(member, DateTime.Now);
+                if(!m_leave_Players.ContainsKey(member))
+                    m_leave_Players.Add(member, DateTime.Now);
 			}
 			catch (Exception e)
 			{
@@ -1012,6 +1013,26 @@ namespace DOL.GS
 				}
 			}
 		}
+
+        /// <summary>
+		/// Sends a message to all guild members with key to translate
+		/// <param name="msg">message string</param>
+		/// <param name="type">message type</param>
+		/// <param name="loc">message location</param>
+		public void SendMessageToGuildMembersKey(string msg, eChatType type, eChatLoc loc, params object[] args)
+        {
+            lock (m_onlineGuildPlayers)
+            {
+                foreach (GamePlayer pl in m_onlineGuildPlayers.Values)
+                {
+                    if (!HasRank(pl, Guild.eRank.GcHear))
+                    {
+                        continue;
+                    }
+                    pl.Out.SendMessage(LanguageMgr.GetTranslation(pl.Client.Account.Language, msg, args), type, loc);
+                }
+            }
+        }
 
 		/// <summary>
 		/// Called when this guild loose bounty points

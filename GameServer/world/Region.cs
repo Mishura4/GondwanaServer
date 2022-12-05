@@ -895,7 +895,15 @@ namespace DOL.GS
                         try
                         {
                             if (mob.EventID == null)
+                            {
                                 myMob.LoadFromDatabase(mob);
+                            }
+                            else
+                            {
+                                myMob.EventID = mob.EventID;
+                                myMob.Name = mob.Name;
+                                myMob.GuildName = mob.Guild;
+                            }
 
                             if (myMob is GameMerchant)
                             {

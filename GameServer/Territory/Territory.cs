@@ -16,7 +16,7 @@ namespace DOL.Territory
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private string id;
 
-        public Territory(IArea area, string areaId, ushort regionId, ushort zoneId, string groupId, GameNPC boss, string bonus = null, string id = null)
+        public Territory(IArea area, string areaId, ushort regionId, ushort zoneId, string groupId, GameNPC boss, bool IsBannerSummoned, string guild = null, string bonus = null, string id = null)
         {
             this.id = id;
             this.Area = area;
@@ -25,15 +25,18 @@ namespace DOL.Territory
             this.ZoneId = zoneId;
             this.AreaId = areaId;
             this.GroupId = groupId;
-            this.BossId = boss.InternalID;
-            this.Boss = boss;
+            this.BossId = boss?.InternalID;
+            this.Boss = boss;            
             this.Coordinates = TerritoryManager.GetCoordinates(area);
             this.Radius = this.GetRadius();
             this.OriginalGuilds = new Dictionary<string, string>();
             this.Bonus = new List<eResist>();
             this.Mobs = this.GetMobsInTerritory();
+            this.SetBossAndMobsInEventInTerritory();
             this.SaveOriginalGuilds();
             this.LoadBonus(bonus);
+            this.IsBannerSummoned = IsBannerSummoned;
+            GuildOwner = guild;
         }
 
         /// <summary>
@@ -119,6 +122,11 @@ namespace DOL.Territory
             set;
         }
 
+        public bool IsBannerSummoned
+        {
+            get;
+            set;
+        }
 
         private void LoadBonus(string raw)
         {
@@ -139,22 +147,48 @@ namespace DOL.Territory
             return !this.Bonus.Any() ? null : string.Join("|", this.Bonus.Select(b => (byte)b));
         }
 
-        private void SaveOriginalGuilds()
+        private void SetBossAndMobsInEventInTerritory()
+        {           
+            if (this.Boss != null)
+            {
+                this.Boss.IsInTerritory = true;
+                var gameEvent = GameEvents.GameEventManager.Instance.Events.FirstOrDefault(e => e.ID.Equals(this.Boss.EventID));
+
+                if (gameEvent?.Mobs?.Any() == true)
+                {
+                    gameEvent.Mobs.ForEach(m => m.IsInTerritory = true);
+                }
+            }           
+        }
+
+        protected virtual void SaveOriginalGuilds()
         {
             if (this.Mobs != null)
             {
-                foreach (var mob in this.Mobs)
+                this.Mobs.ForEach(m => this.SaveMobOriginalGuildname(m));               
+            }    
+
+            if (this.Boss != null)
+            {
+                var gameEvent = GameEvents.GameEventManager.Instance.Events.FirstOrDefault(e => e.ID.Equals(this.Boss.EventID));
+
+                if (gameEvent?.Mobs?.Any() == true)
                 {
-                    if (!this.OriginalGuilds.ContainsKey(mob.InternalID))
-                    {
-                        this.OriginalGuilds.Add(mob.InternalID, mob.GuildName ?? string.Empty);
-                    }
-                }
+                    gameEvent.Mobs.ForEach(m => this.SaveMobOriginalGuildname(m));
+                }                
+            }
+        }
+
+        protected void SaveMobOriginalGuildname(GameNPC mob)
+        {
+            if (!this.OriginalGuilds.ContainsKey(mob.InternalID))
+            {
+                this.OriginalGuilds.Add(mob.InternalID, mob.GuildName ?? string.Empty);
             }
         }
 
 
-        public IEnumerable<GameNPC> GetMobsInTerritory()
+        private IEnumerable<GameNPC> GetMobsInTerritory()
         {
             List<GameNPC> mobs = new List<GameNPC>();
             if (this.Coordinates == null)
@@ -170,7 +204,7 @@ namespace DOL.Territory
 
             var items = WorldMgr.Regions[this.RegionId].GetNPCsInRadius(this.Coordinates.X, this.Coordinates.Y, 0, this.Radius, false, true);
 
-            foreach (var item in items.Cast<GameObject>())
+            foreach (GameObject item in items.Cast<GameObject>())
             {
                 if (item is GameNPC mob && (mob.Flags & GameNPC.eFlags.CANTTARGET) == 0)
                 {
@@ -233,13 +267,14 @@ namespace DOL.Territory
                 " Bonus: " + (this.Bonus?.Any() == true ? (string.Join(" | ", this.Bonus.Select(b => b.ToString()))) : "-"),
                 "",
                 " Mobs -- Count( " + this.Mobs.Count() + " )",
+                " Is Banner Summoned: " + this.IsBannerSummoned,
                 "",
                  string.Join("\n", this.Mobs.Select(m => " * Name: " + m.Name + " |  Id: " + m.InternalID))
             };
         }
 
 
-        public void SaveIntoDatabase()
+        public virtual void SaveIntoDatabase()
         {
             TerritoryDb db = null;
             bool isNew = false;
@@ -265,6 +300,7 @@ namespace DOL.Territory
                 db.RegionId = this.RegionId;
                 db.ZoneId = this.ZoneId;
                 db.Bonus = this.SaveBonus();
+                db.IsBannerSummoned = this.IsBannerSummoned;
 
                 if (isNew)
                 {

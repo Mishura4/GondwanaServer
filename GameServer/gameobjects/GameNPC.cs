@@ -43,6 +43,7 @@ using System.Threading.Tasks;
 using System.Numerics;
 using DOL.GameEvents;
 using DOL.MobGroups;
+using DOL.Territory;
 
 namespace DOL.GS
 {
@@ -3189,6 +3190,12 @@ namespace DOL.GS
 				}
             }
 
+			var territory = TerritoryManager.Instance.GetCurrentTerritory(this.CurrentAreas);
+			if (territory?.GuildOwner != null)
+            {
+				this.GuildName = territory.GuildOwner;
+            }			
+
 			return true;
 		}
 
@@ -3732,6 +3739,7 @@ namespace DOL.GS
 			moving,
 			interact,
 			seeing,
+			hurting,
 		}
 
 		/// <summary>
@@ -4161,10 +4169,24 @@ namespace DOL.GS
 			return damage;
 		}
 
-		/// <summary>
-		/// Gets/sets the object health
-		/// </summary>
-		public override int Health
+        public override void TakeDamage(GameObject source, eDamageType damageType, int damageAmount, int criticalAmount)
+        {
+            if(source is GameLiving living)
+            {
+                Territory.Territory currentTerritory = TerritoryManager.Instance.GetCurrentTerritory(living.CurrentAreas);
+                if (currentTerritory != null && currentTerritory.GuildOwner == GuildName && ((living is GamePlayer player && player.GuildName != GuildName) || (living.ControlledBrain != null && living.ControlledBrain.Owner.GuildName != GuildName)))
+                    TerritoryManager.Instance.TerritoryAttacked(currentTerritory);
+
+                if(damageAmount > 0)
+                    FireAmbientSentence(eAmbientTrigger.hurting, living);
+            }
+            base.TakeDamage(source, damageType, damageAmount, criticalAmount);
+        }
+
+        /// <summary>
+        /// Gets/sets the object health
+        /// </summary>
+        public override int Health
 		{
 			get
 			{

@@ -2269,6 +2269,7 @@ namespace DOL.GS
 			delve.Add("");
 			delve.Add("   Is dropable: " + (IsDropable ? "yes" : "no"));
 			delve.Add("   Is pickable: " + (IsPickable ? "yes" : "no"));
+			delve.Add("	  CanUseInRvR: " + (CanUseInRvR ? "yes" : "no"));
 			delve.Add("   Is tradable: " + (IsTradable ? "yes" : "no"));
 			delve.Add("  Is alwaysDUR: " + (IsNotLosingDur ? "yes" : "no"));
 			delve.Add(" Is Indestruct: " + (IsIndestructible ? "yes" : "no"));

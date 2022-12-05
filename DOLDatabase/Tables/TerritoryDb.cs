@@ -21,6 +21,7 @@ namespace DOLDatabase.Tables
         private float m_areaY;
         private string m_bonus;
         private string m_guildOwner;
+        private bool m_IsBannerSummoned;
 
         [DataElement(AllowDbNull = false)]
         public ushort RegionId
@@ -153,6 +154,17 @@ namespace DOLDatabase.Tables
             set
             {
                 m_areaY = value;
+                Dirty = true;
+            }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public bool IsBannerSummoned
+        {
+            get => m_IsBannerSummoned;
+            set
+            {
+                m_IsBannerSummoned = value;
                 Dirty = true;
             }
         }

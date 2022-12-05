@@ -196,7 +196,7 @@ namespace DOL.Database
 		{
 			get { return m_charges1; }
 			set { Dirty = true;m_charges1 = value; }
-		}
+		}	
 		
 		private DateTime m_lastUsedDateTime;	// last used DT
 		public virtual int CanUseAgainIn
@@ -246,7 +246,8 @@ namespace DOL.Database
 		}
 
 		protected ItemTemplate m_item;
-		public virtual ItemTemplate Template
+
+        public virtual ItemTemplate Template
 		{
 			get
 			{
@@ -385,7 +386,12 @@ namespace DOL.Database
 				return (( Template.MaxCondition -  Condition) * Template.Price) / Template.MaxCondition;
 			}
 		}
-		
+
+		public bool CanUseInRvR
+        {
+			get => this.Template.CanUseInRvR;
+        }
+
 		/// <summary>
 		/// Whether to save this object or not.
 		/// </summary>

@@ -915,6 +915,24 @@ namespace DOL.GS.ServerProperties
 		public static double RvR_XP_RATE;
 
 		/// <summary>
+		/// RvR RARIUS AREA DEFAULT
+		/// </summary>
+		[ServerProperty("rvr", "rvr_area_radius", "The RvR radius area default value", 6000)]
+		public static int RvR_AREA_RADIUS;
+
+		/// <summary>
+		/// RvR INSIDE AREA RP BONUS PERCENTAGE
+		/// </summary>
+		[ServerProperty("rvr", "rvr_inside_area_rp_bonus", "The RvR RP bonus inside the area in percentage", 30)]
+		public static int RvR_INSIDE_AREA_RP_BONUS;
+
+		/// <summary>
+		/// RvR OUTSIDE AREA RP BONUS PERCENTAGE
+		/// </summary>
+		[ServerProperty("rvr", "rvr_outside_area_rp_bonus", "The RvR RP bonus outside the area in percentage", 5)]
+		public static int RvR_OUTSIDE_AREA_RP_BONUS;
+
+		/// <summary>
 		/// The Realm Points Rate
 		/// </summary>
 		[ServerProperty("rates", "rp_rate", "The Realm Points Rate Modifier - Edit this to change the rate at which you gain realm points e.g 1.5 is 50% more 2.0 is twice the amount (100%) 0.5 is half the amount (50%)", 1.0)]
@@ -1602,6 +1620,12 @@ namespace DOL.GS.ServerProperties
 		/// </summary>
 		[ServerProperty("keeps", "load_keeps", "Load keeps", true)]
 		public static bool LOAD_KEEPS = true;
+
+        /// <summary>
+        /// Notify keep area when players enter/exit area
+        /// </summary>
+        [ServerProperty("keeps", "notify_keep_area_message", "notify keep area when players enter/exit area", false)]
+        public static bool NOTIFY_KEEP_AREA_MESSAGE;
 
 		/// <summary>
 		/// The level keeps start at when not claimed - please note only levels 4 and 5 are supported correctly at this time
@@ -2436,10 +2460,13 @@ namespace DOL.GS.ServerProperties
 		public static int GUILD_NUM;
 
 		/// <summary>
-		/// This enables or disables new guild dues. Live standard is 2% dues
+		/// Guild dues max value in %
 		/// </summary>
-		[ServerProperty("guild", "new_guild_dues", "Guild dues can be set from 1-100% if enabled, or standard 2% if not", false)]
-		public static bool NEW_GUILD_DUES;
+        [ServerProperty("guild", "guild_dues_max_value", "Guild dues max value in %", 50)]
+        public static int GUILD_DUES_MAX_VALUE;
+
+        [ServerProperty("guild", "guild_banner_merit_price","The guild banner price in merit points", 5000)]
+        public static int GUILD_BANNER_MERIT_PRICE;
 
 		/// <summary>
 		/// Do we allow guild members from other realms
@@ -2530,6 +2557,9 @@ namespace DOL.GS.ServerProperties
 
         [ServerProperty("territory", "daily_tax ", "Territory Daily Gold Tax", 9)]
         public static int DAILY_TAX;
+
+        [ServerProperty("territory", "banner_perc_off ", "Territory Percentage off when banner is summon", 30)]
+        public static int TERRITORY_BANNER_PERCENT_OFF;
 
         [ServerProperty("territory", "daily_merit_points ", "Territory Daily Merit Points", 19)]
         public static int DAILY_MERIT_POINTS; 

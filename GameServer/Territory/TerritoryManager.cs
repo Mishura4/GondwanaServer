@@ -5,6 +5,9 @@ using DOL.GameEvents;
 using DOL.Geometry;
 using DOL.GS;
 using DOL.GS.PacketHandler;
+using DOL.GS.PropertyCalc;
+using DOL.GS.ServerProperties;
+using DOL.Language;
 using DOL.MobGroups;
 using DOLDatabase.Tables;
 using log4net;
@@ -14,6 +17,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 using static DOL.GS.Area;
 using static DOL.GS.GameObject;
 
@@ -25,10 +29,10 @@ namespace DOL.Territory
         private static TerritoryManager instance;
         public static readonly ushort NEUTRAL_EMBLEM = 256;
         private readonly string BOSS_CLASS = "DOL.GS.Scripts.TerritoryBoss";
-        private readonly string GUARD_CLASS = "DOL.GS.Scripts.TerritoryGuard";
-        private readonly string GUARD_BASIC_TEMPLATE = "gvg_guard_Basique";
         private static readonly int DAILY_TAX = GS.ServerProperties.Properties.DAILY_TAX;
+        private static readonly int TERRITORY_BANNER_PERCENT_OFF = GS.ServerProperties.Properties.TERRITORY_BANNER_PERCENT_OFF;
         private static readonly int DAILY_MERIT_POINTS = GS.ServerProperties.Properties.DAILY_MERIT_POINTS;
+        private static Dictionary<Timer, Territory> m_TerritoriesAttacked;
 
         public static TerritoryManager Instance => instance ?? (instance = new TerritoryManager());
 
@@ -39,7 +43,8 @@ namespace DOL.Territory
 
         private TerritoryManager()
         {
-            this.Territories = new List<Territory>();
+            Territories = new List<Territory>();
+            m_TerritoriesAttacked = new Dictionary<Timer, Territory>();
         }
 
         public bool Init()
@@ -47,6 +52,25 @@ namespace DOL.Territory
             return true;
         }
 
+        public void TerritoryAttacked(Territory territory)
+        {
+            if(!m_TerritoriesAttacked.ContainsValue(territory))
+            {
+                Timer timer = new Timer(20000);
+                timer.Elapsed += TerritoryAttackedCallback;
+                timer.Enabled = true;
+                m_TerritoriesAttacked.Add(timer, territory);
+                GuildMgr.GetGuildByName(territory.GuildOwner).SendMessageToGuildMembersKey("TerritoryManager.Territory.Attacked", eChatType.CT_YouWereHit, eChatLoc.CL_SystemWindow, territory.Name);
+            }
+        }
+
+        private void TerritoryAttackedCallback(object sender, ElapsedEventArgs e)
+        {
+            Timer timer = sender as Timer;
+            timer.Stop();
+            timer.Dispose();
+            m_TerritoriesAttacked.Remove(timer);
+        }
 
         [GameEventLoaded]
         public static void LoadTerritories(DOLEvent e, object sender, EventArgs arguments)
@@ -85,8 +109,23 @@ namespace DOL.Territory
                                         log.Error($"Boss Id does not match from GroupId {territoryDb.GroupId} and Found Bossid from groupId (event search) {mobinfo.Mob.InternalID} , {territoryDb.BossMobId} identified in database");
                                         continue;
                                     }
+                                    Territory territory = new Territory(area, territoryDb.AreaId, territoryDb.RegionId, territoryDb.ZoneId, territoryDb.GroupId, mobinfo.Mob, territoryDb.IsBannerSummoned, guild: territoryDb.GuidldOwner, bonus: territoryDb.Bonus, id: territoryDb.ObjectId);
 
-                                    Instance.Territories.Add(new Territory(area, territoryDb.AreaId, territoryDb.RegionId, territoryDb.ZoneId, territoryDb.GroupId, mobinfo.Mob, bonus: territoryDb.Bonus, id: territoryDb.ObjectId));
+                                    Instance.Territories.Add(territory);
+
+                                    if (!string.IsNullOrEmpty(territory.GuildOwner) && territory.IsBannerSummoned)
+                                    {
+                                        Guild guild = GuildMgr.GetGuildByName(territory.GuildOwner);
+                                        if(guild != null)
+                                        {
+                                            Instance.ApplyEmblemToTerritory(territory, guild);
+                                        }
+                                        else
+                                        {
+                                            log.Error($"Territory Manager cant find guild { territory.GuildOwner }");
+                                        }
+                                    }
+
                                     count++;
                                 }
                                 else
@@ -110,6 +149,21 @@ namespace DOL.Territory
                 bool matched = this.Territories.Any(t => t.Area.ID.Equals(item.ID));
 
                 if (matched)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public bool DoesPlayerOwnsTerritory(GamePlayer player)
+        {
+            foreach (var item in player.CurrentAreas)
+            {
+                var matched = this.Territories.FirstOrDefault(t => t.Area.ID.Equals(item.ID));
+
+                if (matched != null && matched.GuildOwner != null && matched.GuildOwner.Equals(player.GuildName))
                 {
                     return true;
                 }
@@ -142,49 +196,70 @@ namespace DOL.Territory
             this.ApplyTerritoryChange(guild, territory, false);
         }
 
-        public void ChangeGuildOwner(string mobId, Guild guild, string equipment = null, bool isBoss = false)
+        public void ChangeGuildOwner(GameNPC mob, Guild guild)
         {
-            if (guild == null || string.IsNullOrEmpty(mobId))
+            if (guild == null || mob == null || string.IsNullOrEmpty(mob.InternalID))
             {
                 return;
             }
 
-            Territory territory = null;
+            Territory territory = this.Territories.FirstOrDefault(t => t.BossId.Equals(mob.InternalID));
+            //For Boss change also Guild for Mob linked in same Event
+            if (mob.EventID != null)
+            {
+                var gameEvent = GameEventManager.Instance.Events.FirstOrDefault(e => e.ID.Equals(mob.EventID));
 
-            if (isBoss)
-            {
-                territory = this.Territories.FirstOrDefault(t => t.BossId.Equals(mobId));
-            }
-            else
-            {
-                territory = GetTerritoryFromMobId(mobId);
-            }
+                if (gameEvent?.Mobs?.Any() == true)
+                {
+                    gameEvent.Mobs.ForEach(m => m.GuildName = guild.Name);
+                }
+            }   
 
             if (territory == null || territory.Mobs == null)
             {
-                log.Error("Cannot get Territory from MobId: " + mobId);
+                log.Error("Cannot get Territory from MobId: " + mob.InternalID);
                 return;
             }
 
-            this.ApplyTerritoryChange(guild, territory, true, equipment);
+            this.ApplyTerritoryChange(guild, territory, true); 
         }
 
-        public void ClearTerritory(Territory territory)
+        public void RestoreTerritoryGuildNames(Territory territory)
         {
             if (territory == null || territory.Mobs == null || territory.Boss == null)
-                return;
-
-            var cls = WorldMgr.GetAllPlayingClients().Where(c => c.Player.CurrentZone.ID.Equals(territory.ZoneId));
-
-            foreach (var mob in territory.Mobs.Where(m => m.GetType().FullName.Equals(GUARD_CLASS)))
             {
-                foreach (var item in mob.Inventory.VisibleItems)
-                {
-                    item.Color = NEUTRAL_EMBLEM;
-                    item.Emblem = 0;
-                }
+                log.Error($"Impossible to clear territory. One Value is Null: Territory: {territory == null }, Mobs: {territory?.Mobs == null }, Boss: { territory?.Boss == null }");
+                return;
+            }
 
-                cls.Foreach(c => c.Out.SendLivingEquipmentUpdate(mob));
+            if (territory.Boss != null)
+            {
+                var gameEvents = GameEventManager.Instance.Events.FirstOrDefault(e => e.ID.Equals(territory.Boss.EventID));
+
+                if (gameEvents?.Mobs?.Any() == true)
+                {
+                    gameEvents.Mobs.ForEach(m =>
+                    {
+                        if (territory.OriginalGuilds.ContainsKey(m.InternalID))
+                        {
+                            m.GuildName = territory.OriginalGuilds[m.InternalID];
+                        }
+                        else
+                        {
+                            m.GuildName = null;
+                        }
+                    });
+                }
+            }
+
+            if (territory.GuildOwner != null)
+            {
+                Guild oldOwner = GuildMgr.GetGuildByName(territory.GuildOwner);
+
+                if (oldOwner != null)
+                {
+                    oldOwner.RemoveTerritory(territory.AreaId);
+                }
             }
 
             foreach (var mob in territory.Mobs)
@@ -197,18 +272,64 @@ namespace DOL.Territory
                 {
                     mob.GuildName = null;
                 }
-            }
-
-            Guild oldOwner = GuildMgr.GetGuildByName(territory.GuildOwner);
-
-            if (oldOwner != null)
-            {
-                oldOwner.RemoveTerritory(territory.AreaId);
-            }
+            }       
 
             territory.GuildOwner = null;
             territory.Boss.RestoreOriginalGuildName();
             territory.SaveIntoDatabase();
+        }
+
+        private void ChangeMagicAndPhysicalResistance(GameNPC mob, int value, bool isSubstract)
+        {
+            eProperty Property1 = eProperty.Resist_Heat;
+            eProperty Property2 = eProperty.Resist_Cold;
+            eProperty Property3 = eProperty.Resist_Matter;
+            eProperty Property4 = eProperty.Resist_Body;
+            eProperty Property5 = eProperty.Resist_Spirit;
+            eProperty Property6 = eProperty.Resist_Energy;
+            eProperty Property7 = eProperty.Resist_Crush;
+            eProperty Property8 = eProperty.Resist_Slash;
+            eProperty Property9 = eProperty.Resist_Thrust;
+            ApplyBonus(mob, Property1, value, isSubstract);
+            ApplyBonus(mob, Property2, value, isSubstract);
+            ApplyBonus(mob, Property3, value, isSubstract);
+            ApplyBonus(mob, Property4, value, isSubstract);
+            ApplyBonus(mob, Property5, value, isSubstract);
+            ApplyBonus(mob, Property6, value, isSubstract);
+            ApplyBonus(mob, Property7, value, isSubstract);
+            ApplyBonus(mob, Property8, value, isSubstract);
+            ApplyBonus(mob, Property9, value, isSubstract);
+        }
+
+        public static void ClearEmblem(Territory territory, GameNPC initNpc = null)
+        {
+            bool wasBannerSummoned = territory.IsBannerSummoned;
+
+            territory.IsBannerSummoned = false;
+            foreach (var mob in territory.Mobs)
+            {     
+                RestoreOriginalEmblem(mob);
+                if(wasBannerSummoned)
+                {
+                    // Unapply magic and physical resistance bonus
+                    Instance.ChangeMagicAndPhysicalResistance(mob, 30, true);
+                }
+            }
+
+            if (wasBannerSummoned)
+            {
+                Instance.ChangeMagicAndPhysicalResistance(territory.Boss, 30, true);
+            }
+            RestoreOriginalEmblem(territory.Boss);
+
+            var firstMob = initNpc ?? territory.Mobs.FirstOrDefault() ?? territory.Boss;
+            foreach (GameObject item in firstMob.CurrentZone.GetObjectsInRadius(Zone.eGameObjectType.ITEM, firstMob.X, firstMob.Y, firstMob.Z, WorldMgr.VISIBILITY_DISTANCE, new System.Collections.ArrayList(), true))
+            {
+                if (item is TerritoryBanner ban)
+                {
+                    ban.Emblem = ban.OriginalEmblem;
+                }
+            }
         }
 
         private static void ApplyNewEmblem(string guildName, GameNPC mob)
@@ -218,9 +339,32 @@ namespace DOL.Territory
             var guild = GuildMgr.GetGuildByName(guildName);
             if (guild == null)
                 return;
-            foreach (var item in mob.Inventory.VisibleItems.Where(i => i.SlotPosition == 26))
-                if (item.Emblem != 0 || item.Color == NEUTRAL_EMBLEM)
-                    item.Emblem = guild.Emblem;
+            foreach (var item in mob.Inventory.VisibleItems.Where(i => i.SlotPosition == 26 || i.SlotPosition == 11))
+            {
+                item.Emblem = guild.Emblem;
+            }
+        }
+
+        private static void RestoreOriginalEmblem(GameNPC mob)
+        {
+            if (mob.ObjectState != eObjectState.Active || mob.CurrentRegion == null || mob.Inventory == null || mob.Inventory.VisibleItems == null)
+                return;
+
+            foreach (var item in mob.Inventory.VisibleItems.Where(i => i.SlotPosition == 11 || i.SlotPosition == 26))
+            {
+                var equipment = GameServer.Database.SelectObjects<NPCEquipment>("TemplateID = @TemplateID AND Slot = @Slot",
+                    new QueryParameter[]{
+                        new QueryParameter("TemplateID", mob.EquipmentTemplateID),
+                        new QueryParameter("Slot", item.SlotPosition)
+                    })?.FirstOrDefault();
+
+                if (equipment != null)
+                {
+                    item.Emblem = equipment.Emblem;
+                }               
+            }
+
+            mob.BroadcastLivingEquipmentUpdate();
         }
 
         public MobInfo FindBossFromGroupId(string groupId)
@@ -272,7 +416,8 @@ namespace DOL.Territory
             }
 
             return infos;
-        }
+        }    
+
 
         public static Territory GetTerritoryFromMobId(string mobId)
         {
@@ -306,7 +451,7 @@ namespace DOL.Territory
                 return false;
             }
 
-            var territory = new Territory(area, areaId, regionId, zone.ID, groupId, boss);
+            var territory = new Territory(area, areaId, regionId, zone.ID, groupId, boss, false);
             this.Territories.Add(territory);
 
             try
@@ -322,10 +467,10 @@ namespace DOL.Territory
             return true;
         }
 
-        private void ApplyTerritoryChange(Guild guild, Territory territory, bool saveChange, string equipment = null)
+        private void ApplyTerritoryChange(Guild guild, Territory territory, bool saveChange)
         {
             //remove Territory from old Guild if any
-            if (territory.GuildOwner != null)
+            if (!string.IsNullOrEmpty(territory.GuildOwner) && territory.GuildOwner != guild.Name)
             {
                 var oldGuild = GuildMgr.GetGuildByName(territory.GuildOwner);
 
@@ -333,30 +478,76 @@ namespace DOL.Territory
                 {
                     oldGuild.RemoveTerritory(territory.AreaId);
                 }
+                ClearEmblem(territory);
             }
 
             guild.AddTerritory(territory.AreaId, saveChange);
-            territory.GuildOwner = guild.Name;
+            territory.GuildOwner = guild.Name;         
 
-            if (equipment == null)
-            {
-                equipment = GUARD_BASIC_TEMPLATE;
-            }
-            var cls = WorldMgr.GetAllPlayingClients().Where(c => c.Player.CurrentZone.ID.Equals(territory.ZoneId));
-
-            foreach (var mob in territory.Mobs.Where(m => m.GetType().FullName.Equals(GUARD_CLASS)))
-            {
-                mob.LoadEquipmentTemplateFromDatabase(equipment);
-                ApplyNewEmblem(guild.Name, mob);
-                cls.Foreach(c => c.Out.SendLivingEquipmentUpdate(mob));
-            }
-
-            territory.Mobs.Foreach(m => m.GuildName = guild.Name);
+            territory.Mobs.ForEach(m => m.GuildName = guild.Name);
+            territory.Boss.GuildName = guild.Name;
 
             if (saveChange)
                 territory.SaveIntoDatabase();
         }
 
+        /// <summary>
+        /// Method used to apply bonuses
+        /// </summary>
+        /// <param name="owner"></param>
+        /// <param name="Property"></param>
+        /// <param name="Value"></param>
+        /// <param name="IsSubstracted"></param>
+        private void ApplyBonus(GameLiving owner, eProperty Property, int Value, bool IsSubstracted)
+        {
+            IPropertyIndexer tblBonusCat;
+            if (Property != eProperty.Undefined)
+            {
+                tblBonusCat = owner.BaseBuffBonusCategory;
+                if (IsSubstracted)
+                    tblBonusCat[(int)Property] -= Value;
+                else
+                    tblBonusCat[(int)Property] += Value;
+            }
+        }
+
+        private void ApplyEmblemToTerritory(Territory territory, Guild guild, GameNPC initSearchNPC = null)
+        {
+            territory.IsBannerSummoned = true;
+            var cls = WorldMgr.GetAllPlayingClients().Where(c => c.Player.CurrentZone.ID.Equals(territory.ZoneId));
+
+            foreach (var mob in territory.Mobs)
+            {
+                ApplyNewEmblem(guild.Name, mob);
+
+                // Apply magic and physical resistance bonus
+                ChangeMagicAndPhysicalResistance(mob, 30, false);
+
+                cls.Foreach(c => c.Out.SendLivingEquipmentUpdate(mob));
+            }
+
+            // Apply magic and physical resistance bonus
+            ChangeMagicAndPhysicalResistance(territory.Boss, 30, false);
+            ApplyNewEmblem(guild.Name, territory.Boss);
+
+            var firstMob = initSearchNPC ?? territory.Mobs.FirstOrDefault();
+            foreach (GameObject item in firstMob.CurrentZone.GetObjectsInRadius(Zone.eGameObjectType.ITEM, firstMob.X, firstMob.Y, firstMob.Z, WorldMgr.VISIBILITY_DISTANCE, new System.Collections.ArrayList(), true))
+            {
+                if (item is TerritoryBanner ban)
+                {
+                    ban.Emblem = guild.Emblem;
+                }
+            }
+        }
+
+        public static void ApplyEmblemToTerritory(Territory territory, Guild guild, bool saveterritory, GameNPC initSearchNPC = null)
+        {
+            Instance.ApplyEmblemToTerritory(territory, guild, initSearchNPC);
+            if(saveterritory)
+            {
+                territory.SaveIntoDatabase();
+            }
+        }
 
         public static AreaCoordinate GetCoordinates(IArea area)
         {
@@ -406,7 +597,8 @@ namespace DOL.Territory
 
                         if (count < 6)
                         {
-                            int sum = count * DAILY_TAX;
+                            int sum = guildGroup.Sum(g => g.IsBannerSummoned ? (int)Math.Round((DAILY_TAX - (DAILY_TAX * TERRITORY_BANNER_PERCENT_OFF / 100D))) : DAILY_TAX);
+
                             if (guild.TryPayTerritoryTax(Money.GetMoney(0, 0, sum, 0, 0)))
                             {
                                 players.Foreach(p => p.Out.SendMessage(Language.LanguageMgr.GetTranslation(p.Client.Account.Language, "Commands.Players.Guild.TerritoryPaid", sum),
@@ -421,9 +613,21 @@ namespace DOL.Territory
                         }
                         else
                         {
-                            int over = count - 5;
-                            int baseAmount = 5 * DAILY_TAX;
-                            int total = (over * (DAILY_TAX + 10)) + baseAmount;
+                            int total = 0;
+                            int counter = 0;
+                            foreach (var territory in guildGroup)
+                            {
+                                counter++;
+                                if (counter < 6)
+                                {
+                                    total += territory.IsBannerSummoned ? (int)Math.Round((DAILY_TAX - (DAILY_TAX * TERRITORY_BANNER_PERCENT_OFF / 100D))) : DAILY_TAX;
+                                }
+                                else
+                                {
+                                    int dailyOverCost = DAILY_TAX + 10;
+                                    total += territory.IsBannerSummoned ? (dailyOverCost - (dailyOverCost * TERRITORY_BANNER_PERCENT_OFF / 100)) : dailyOverCost;
+                                }
+                            }
 
                             if (guild.TryPayTerritoryTax(Money.GetMoney(0, 0, total, 0, 0)))
                             {
@@ -443,7 +647,8 @@ namespace DOL.Territory
                         {
                             foreach (var territory in guildGroup)
                             {
-                                this.ClearTerritory(territory);
+                                this.RestoreTerritoryGuildNames(territory);
+                                ClearEmblem(territory);
                             }
                         }
                         else

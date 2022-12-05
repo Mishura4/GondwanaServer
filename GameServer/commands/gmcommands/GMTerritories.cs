@@ -177,7 +177,8 @@ namespace DOL.commands.gmcommands
                             break;
                         }
 
-                        TerritoryManager.Instance.ClearTerritory(territory);
+                        TerritoryManager.Instance.RestoreTerritoryGuildNames(territory);
+                        TerritoryManager.ClearEmblem(territory);
                         client.Out.SendMessage("Le Territoire avec AreaId " + areaId + " est de nouveau neutre.", eChatType.CT_System, eChatLoc.CL_ChatWindow);
                     }
 

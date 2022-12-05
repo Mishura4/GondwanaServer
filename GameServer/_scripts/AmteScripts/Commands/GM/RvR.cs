@@ -86,7 +86,7 @@ namespace DOL.GS.Commands
 						DisplayMessage(client, "Les rvr et le pvp doivent être fermés pour rafraichir la liste des maps disponibles.");
 						break;
 					}
-					var rvr = string.Join(", ", RvrManager.Instance.FindRvRMaps());
+					var rvr = string.Join(", ", RvrManager.Instance.InitMapsAndTerritories());
 					var pvp = string.Join(", ", PvpManager.Instance.FindPvPMaps());
 					DisplayMessage(client, string.Format("Le rvr utilise les maps: {0}, le pvp utilise les maps: {1}.", rvr, pvp));
 					break;

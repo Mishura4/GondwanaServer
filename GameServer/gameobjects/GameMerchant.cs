@@ -26,6 +26,9 @@ using DOL.Database;
 using DOL.Language;
 using DOL.GS.Movement;
 using DOL.GS.PacketHandler;
+using DOL.Events;
+using DOL.GS.Quests;
+using DOL.Territory;
 
 namespace DOL.GS
 {
@@ -65,7 +68,7 @@ namespace DOL.GS
             if (player.Reputation < 0)
             {
                 TurnTo(player, 5000);
-                player.Out.SendMessage("Je ne vends rien aux hors-la-loi", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameMerchant.Interact.Territory.Outlaws"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return false;
             }
 
@@ -513,6 +516,64 @@ namespace DOL.GS
 
 		}
 	}
+
+    /// <summary>
+    /// Game Territory Merchant
+    /// If territory has a guild, can interract only this guild players
+    /// </summary>
+    public class GameTerritoryMerchant : GameMerchant
+    {
+        public override bool Interact(GamePlayer player)
+        {
+            if (player.Client.Account.PrivLevel == 1 && !IsWithinRadius(player, InteractDistance))
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameObject.Interact.TooFarAway", GetName(0, true)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                Notify(GameObjectEvent.InteractFailed, this, new InteractEventArgs(player));
+                return false;
+            }
+
+            Notify(GameObjectEvent.Interact, this, new InteractEventArgs(player));
+            player.Notify(GameObjectEvent.InteractWith, player, new InteractWithEventArgs(this));
+
+            foreach (DataQuest q in DataQuestList)
+            {
+                // Notify all our potential quests of the interaction so we can check for quest offers
+                q.Notify(GameObjectEvent.Interact, this, new InteractEventArgs(player));
+            }
+
+            foreach (DQRewardQ q in DQRewardQList) // patch 0026
+            {
+                // Notify all our potential quests of the interaction so we can check for quest offers
+                q.Notify(GameObjectEvent.Interact, this, new InteractEventArgs(player));
+            }
+
+            if (IsInTerritory)
+            {
+                Territory.Territory territory = TerritoryManager.Instance.GetCurrentTerritory(CurrentAreas);
+                if (!string.IsNullOrEmpty(territory.GuildOwner) && player.GuildName != territory.GuildOwner)
+                {
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameMerchant.Interact.Territory.NotSameGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+
+                    Notify(GameObjectEvent.InteractFailed, this, new InteractEventArgs(player));
+                    return false;
+                }
+                else if (string.IsNullOrEmpty(territory.GuildOwner) && player.Reputation < 0)
+                {
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameMerchant.Interact.Territory.Outlaws"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+
+                    Notify(GameObjectEvent.InteractFailed, this, new InteractEventArgs(player));
+                    return false;
+                }
+            }
+
+            FireAmbientSentence(eAmbientTrigger.interact, player);
+
+            TurnTo(player, 10000);
+            SendMerchantWindow(player);
+
+            return true;
+        }
+    }
 
 	public class GameChampionMerchant : GameMerchant
 	{

@@ -4047,11 +4047,25 @@ namespace DOL.GS.Spells
 			// send animation before dealing damage else dead livings show no animation
 			ad.Target.OnAttackedByEnemy(ad);
 
-			//Check if enemy is invincible by GroupMob
-			if (ad.Target is GameNPC npc && npc.CurrentGroupMob != null && npc.CurrentGroupMob.GroupInfos.IsInvincible == true)
-            {				
-				ad.Damage = 0;
-				ad.CriticalDamage = 0;	
+			if (ad.Target is GameNPC npc)
+            {
+				//Check if enemy is invincible by GroupMob
+				if (npc.CurrentGroupMob != null && npc.CurrentGroupMob.GroupInfos.IsInvincible == true)
+				{
+					ad.Damage = 0;
+					ad.CriticalDamage = 0;
+				}
+				else if (Caster is GamePlayer player)
+                {
+					//Check if is Territory and owns it to cancel dmg
+					bool doesPlayerOwnsTerritory = Territory.TerritoryManager.Instance.DoesPlayerOwnsTerritory(player);
+
+					if (doesPlayerOwnsTerritory)
+					{
+						ad.Damage = 0;
+						ad.CriticalDamage = 0;
+					}
+				}		
             }
 
 			ad.Attacker.DealDamage(ad);

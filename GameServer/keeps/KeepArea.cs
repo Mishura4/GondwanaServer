@@ -13,12 +13,15 @@ namespace DOL.GS.Keeps
 
 		public KeepArea()
 			: base()
-		{ }
+        {
+            DisplayMessage = ServerProperties.Properties.NOTIFY_KEEP_AREA_MESSAGE;
+        }
 
 		public KeepArea(AbstractGameKeep keep)
 			: base(keep.Name, keep.X, keep.Y, 0, keep.IsPortalKeep ? PK_RADIUS : (keep is GameKeepTower ? TOWER_RADIUS : KEEP_RADIUS)
 )		{
 			Keep = keep;
+			DisplayMessage = ServerProperties.Properties.NOTIFY_KEEP_AREA_MESSAGE;
 		}
 
 		public override void OnPlayerEnter(GamePlayer player)

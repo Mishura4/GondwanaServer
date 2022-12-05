@@ -66,7 +66,7 @@ namespace DOL.GS
 			//old system
 			//var inBL = IsBlacklisted(victim);
 
-			if (victim.isInBG || victim.IsInPvP || victim.CurrentRegion.IsRvR || Territory.TerritoryManager.Instance.IsTerritoryArea(victim.CurrentAreas))
+			if (victim.isInBG || victim.IsInPvP || victim.IsInRvR || Territory.TerritoryManager.Instance.IsTerritoryArea(victim.CurrentAreas))
 			{
 				return;
 			}

@@ -165,6 +165,7 @@ namespace DOL.Database
 
 		protected int m_salvageYieldID;
 		private string m_bonusConditions;
+		private bool m_canUseInRvR;
 		#endregion
 
 		#region constructors
@@ -244,6 +245,7 @@ namespace DOL.Database
 			m_packageID = string.Empty;
 			m_classType = string.Empty;
 			m_salvageYieldID = 0;
+			m_canUseInRvR = true;
 		}
 
 		public ItemTemplate(ItemTemplate template)
@@ -327,6 +329,7 @@ namespace DOL.Database
 			PackageID = template.PackageID;
 			ClassType = template.ClassType;
 			SalvageYieldID = template.SalvageYieldID;
+			CanUseInRvR = template.CanUseInRvR;
 		}
 		#endregion
 
@@ -559,6 +562,13 @@ namespace DOL.Database
 			get { return m_bonus7; }
 			set { Dirty = true; m_bonus7 = value; }
 		}
+
+        [DataElement(AllowDbNull = false)]
+        public bool CanUseInRvR
+        {
+            get { return m_canUseInRvR; }
+            set { Dirty = true; m_canUseInRvR = value; }
+        }
 
 		[DataElement(AllowDbNull = false)]
 		public virtual int Bonus8

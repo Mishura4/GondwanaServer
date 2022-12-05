@@ -1,4 +1,7 @@
 ﻿using AmteScripts.Managers;
+using DOL.Database;
+using DOL.Events;
+using DOL.GameEvents;
 using DOL.GS;
 using DOL.GS.PacketHandler;
 using System;
@@ -10,6 +13,7 @@ namespace Amte
 	{
 		public static int CLAIM_TIME_SECONDS = 30;
 		public static int CLAIM_TIME_BETWEEN_SECONDS = 120;
+		public string originalGuildName;
 
 		public DateTime lastClaim = new DateTime(1);
 
@@ -22,6 +26,7 @@ namespace Amte
 			{ eRealm.Midgard, new TimeSpan(0) },
 			{ eRealm.Hibernia, new TimeSpan(0) },
 		};
+
 
 		public double timeBeforeClaim
 		{
@@ -51,7 +56,13 @@ namespace Amte
 			return true;
 		}
 
-		public override bool WhisperReceive(GameLiving source, string text)
+        public override void LoadFromDatabase(DataObject obj)
+        {
+            base.LoadFromDatabase(obj);
+			this.originalGuildName = this.GuildName;
+        }
+
+        public override bool WhisperReceive(GameLiving source, string text)
 		{
 			var player = source as GamePlayer;
 			if (!base.WhisperReceive(source, text) || player == null)
@@ -85,7 +96,7 @@ namespace Amte
 						player.Out.SendMessage("Vous avez été interrompu.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
 						return 0;
 					}
-					if (player.GetDistanceTo(this) > InteractDistance)
+					if (player.GetDistanceTo(this) > WorldMgr.GIVE_ITEM_DISTANCE)
 					{
 						_claimTimer = null;
 						player.Out.SendCloseTimerWindow();
@@ -103,6 +114,7 @@ namespace Amte
 				},
 				500
 			);
+
 			player.Out.SendTimerWindow("Prise du fort", CLAIM_TIME_SECONDS);
 
 			foreach (var obj in GetPlayersInRadius(ushort.MaxValue - 1))
@@ -115,16 +127,30 @@ namespace Amte
 			return true;
 		}
 
-		public virtual void TakeControl(GamePlayer player)
+        public override void RestoreOriginalGuildName()
+        {
+			this.GuildName = this.originalGuildName;
+        }
+
+        public virtual void TakeControl(GamePlayer player)
 		{
 			lastClaim = DateTime.Now;
 			GuildName = player.GuildName;
-			foreach (var obj in GetPlayersInRadius(ushort.MaxValue - 1))
-				{
-				var pl = obj as GamePlayer;
-				if (pl != null)
-					pl.Out.SendMessage(string.Format("{0} a pris le contrôle du fort !", player.GuildName), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+			var rvr = RvrManager.Instance.GetRvRTerritory(this.CurrentRegionID);
+			var defaultAreaName = string.Empty;
+			if (rvr != null)
+            {
+				defaultAreaName = ((AbstractArea)rvr.Area).Description;
 			}
+
+			string fortName = string.IsNullOrEmpty(this.originalGuildName) ? defaultAreaName : this.originalGuildName;
+
+			foreach (GameClient client in WorldMgr.GetAllPlayingClients())
+			{
+				client.Out.SendMessage(string.Format("Le RvR {1} est sous le contrôle du royaume {0}", player.GuildName, fortName), eChatType.CT_Help, eChatLoc.CL_SystemWindow);
+			}
+
+			RvrManager.Instance.OnControlChange(this.InternalID, player.Guild);
 		}
 
 		public virtual void StartRvR()
@@ -132,6 +158,7 @@ namespace Amte
 			var lastTime = DateTime.Now;
 			if (_scoreTimer != null)
 				_scoreTimer.Stop();
+
 			_scoreTimer = new RegionTimer(
 				this,
 				timer => {
@@ -152,7 +179,7 @@ namespace Amte
 		{
 			if (_scoreTimer != null)
 				_scoreTimer.Stop();
-			_scoreTimer = null;
+			_scoreTimer = null;			
 		}
 
 		public virtual string GetScores()
