@@ -1,0 +1,3 @@
+﻿RvrManager.Score.Title:		--- Fin du RvR ---
+RvrManager.Score.NoWinner:	Vainqueur: Aucun - Pas assez de joueur ayant participe !
+RvrManager.Score.Winner:	Vainqueur 

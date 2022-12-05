@@ -932,6 +932,12 @@ namespace DOL.GS.ServerProperties
 		[ServerProperty("rvr", "rvr_outside_area_rp_bonus", "The RvR RP bonus outside the area in percentage", 5)]
 		public static int RvR_OUTSIDE_AREA_RP_BONUS;
 
+        /// <summary>
+        /// The number of needed players to count points in RvR (default 10)
+        /// </summary>
+        [ServerProperty("rvr", "rvr_number_of_needed_players", "The number of needed players to count points in RvR", 10)]
+        public static int RvR_NUMBER_OF_NEEDED_PLAYERS;
+
 		/// <summary>
 		/// The Realm Points Rate
 		/// </summary>

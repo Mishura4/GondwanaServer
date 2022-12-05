@@ -2520,6 +2520,9 @@ namespace DOL.GS.Commands
 			text.Add("  - Maximum Health : " + player.MaxHealth);
 			text.Add("  - Current AF and ABS : " + player.GetModified(eProperty.ArmorFactor) + " AF, " +
 					 player.GetModified(eProperty.ArmorAbsorption) + " ABS");
+            text.Add("  - Coin bonus : " + player.GetModified(eProperty.MythicalCoin));
+            text.Add("  - Realm bonus : " + player.GetModified(eProperty.RealmPoints));
+            text.Add("  - Xp bonus : " + player.GetModified(eProperty.XpPoints));
 			text.Add(" ");
 			text.Add("SPECCING INFORMATIONS ");
 			text.Add("  - Respecs availables : " + player.RespecAmountDOL + " dol, " + player.RespecAmountSingleSkill +

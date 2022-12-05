@@ -19,6 +19,12 @@ namespace DOL.GS
 		{
 			HeadTemplate = GameServer.Database.FindObjectByKey<ItemTemplate>("head_blacklist") ?? new ItemTemplate();
 		}
+            if(RvrManager.WinnerRealm == Realm)
+            {
+                BaseBuffBonusCategory[eProperty.MythicalCoin] += 5;
+                BaseBuffBonusCategory[eProperty.XpPoints] += 10;
+                BaseBuffBonusCategory[eProperty.RealmPoints] += 5;
+            }
 
 		public override int BountyPointsValue
 		{
@@ -35,7 +41,17 @@ namespace DOL.GS
 			base.Die(killer);
 
 			if (RvrManager.Instance.IsInRvr(this))
-				return;
+            {
+                GamePlayer killerAsPlayer = killer as GamePlayer;
+                if (killerAsPlayer != null && killerAsPlayer.IsInRvR)
+                {
+                    if (RvrManager.Instance.Kills.ContainsKey(killerAsPlayer))
+                        RvrManager.Instance.Kills[killerAsPlayer]++;
+                    else
+                        RvrManager.Instance.Kills.Add(killerAsPlayer, 1);
+                }
+                return;
+            }
 
 			if (killer is AmtePlayer)
 			{

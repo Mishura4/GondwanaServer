@@ -789,7 +789,7 @@ namespace DOL.GS.ServerRules
 										//otherwise give small bonus
 										bonus = Properties.RvR_OUTSIDE_AREA_RP_BONUS;
 									}
-killerPlayer.Out.SendMessage(string.Format("Vous obtenez un bonus aux RP de {0}% grâce à votre capture du fort.", bonus), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+									killerPlayer.Out.SendMessage(string.Format("Vous obtenez un bonus aux RP de {0}% grâce à votre capture du fort.", bonus), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 									realmPoints += realmPoints * bonus / 100;
 								}
 							}

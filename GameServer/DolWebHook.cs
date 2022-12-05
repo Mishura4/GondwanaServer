@@ -33,7 +33,7 @@ namespace DOL.GS
 {
 
 
-    class DolWebHook
+    public class DolWebHook
     {
         private HttpClient Client;
         private string Url;
