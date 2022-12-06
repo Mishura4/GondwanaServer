@@ -535,7 +535,9 @@ namespace DOL.GS
             Notify(GameObjectEvent.Interact, this, new InteractEventArgs(player));
             player.Notify(GameObjectEvent.InteractWith, player, new InteractWithEventArgs(this));
 
-            foreach (DataQuest q in DataQuestList)
+
+			/* TODO: change to json quests or remove
+            foreach (DQRewardQ q in QuestIdListToGive)
             {
                 // Notify all our potential quests of the interaction so we can check for quest offers
                 q.Notify(GameObjectEvent.Interact, this, new InteractEventArgs(player));
@@ -546,8 +548,9 @@ namespace DOL.GS
                 // Notify all our potential quests of the interaction so we can check for quest offers
                 q.Notify(GameObjectEvent.Interact, this, new InteractEventArgs(player));
             }
+			*/
 
-            if (IsInTerritory)
+			if (IsInTerritory)
             {
                 Territory.Territory territory = TerritoryManager.Instance.GetCurrentTerritory(CurrentAreas);
                 if (!string.IsNullOrEmpty(territory.GuildOwner) && player.GuildName != territory.GuildOwner)
@@ -589,9 +592,9 @@ namespace DOL.GS
 				return false;
 			}
 			 */
-		}
+        }
 
-	}
+    }
 
 	/// <summary>
 	/// A merchant that uses an item as currency instead of money

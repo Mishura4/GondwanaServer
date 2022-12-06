@@ -358,13 +358,13 @@ namespace AmteScripts.Managers
                 }
 
                 var areaName = string.IsNullOrEmpty(lord.GuildName) ? initNpc.Name : lord.GuildName;
-                var area = new Area.Circle(areaName, lord.X, lord.Y, lord.Z, RVR_RADIUS);
+                var area = new Area.Circle(areaName, lord.Position.X, lord.Position.Y, lord.Position.Z, RVR_RADIUS);
                 rvrTerritory = new RvRTerritory(area, area.Description, lord.CurrentRegionID, lord.CurrentZone.ID, lord);
             }        
 
             return new RvRMap()
             {
-                Location = new GameLocation(initNpc.Name, initNpc.CurrentRegionID, initNpc.X, initNpc.Y, initNpc.Z),
+                Location = new GameLocation(initNpc.Name, initNpc.CurrentRegionID, initNpc.Position.X, initNpc.Position.Y, initNpc.Position.Z),
                 RvRTerritory = rvrTerritory
             };
 		}

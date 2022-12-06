@@ -323,7 +323,7 @@ namespace DOL.Territory
             RestoreOriginalEmblem(territory.Boss);
 
             var firstMob = initNpc ?? territory.Mobs.FirstOrDefault() ?? territory.Boss;
-            foreach (GameObject item in firstMob.CurrentZone.GetObjectsInRadius(Zone.eGameObjectType.ITEM, firstMob.X, firstMob.Y, firstMob.Z, WorldMgr.VISIBILITY_DISTANCE, new System.Collections.ArrayList(), true))
+            foreach (GameObject item in firstMob.CurrentZone.GetObjectsInRadius(Zone.eGameObjectType.ITEM, firstMob.Position.X, firstMob.Position.Y, firstMob.Position.Z, WorldMgr.VISIBILITY_DISTANCE, new System.Collections.ArrayList(), true))
             {
                 if (item is TerritoryBanner ban)
                 {
@@ -352,11 +352,8 @@ namespace DOL.Territory
 
             foreach (var item in mob.Inventory.VisibleItems.Where(i => i.SlotPosition == 11 || i.SlotPosition == 26))
             {
-                var equipment = GameServer.Database.SelectObjects<NPCEquipment>("TemplateID = @TemplateID AND Slot = @Slot",
-                    new QueryParameter[]{
-                        new QueryParameter("TemplateID", mob.EquipmentTemplateID),
-                        new QueryParameter("Slot", item.SlotPosition)
-                    })?.FirstOrDefault();
+                var equipment = GameServer.Database.SelectObjects<NPCEquipment>(DB.Column("TemplateID").IsEqualTo(mob.EquipmentTemplateID)
+                                                    .And(DB.Column("TemplateID").IsEqualTo(item.SlotPosition)))?.FirstOrDefault();
 
                 if (equipment != null)
                 {
@@ -531,7 +528,7 @@ namespace DOL.Territory
             ApplyNewEmblem(guild.Name, territory.Boss);
 
             var firstMob = initSearchNPC ?? territory.Mobs.FirstOrDefault();
-            foreach (GameObject item in firstMob.CurrentZone.GetObjectsInRadius(Zone.eGameObjectType.ITEM, firstMob.X, firstMob.Y, firstMob.Z, WorldMgr.VISIBILITY_DISTANCE, new System.Collections.ArrayList(), true))
+            foreach (GameObject item in firstMob.CurrentZone.GetObjectsInRadius(Zone.eGameObjectType.ITEM, firstMob.Position.X, firstMob.Position.Y, firstMob.Position.Z, WorldMgr.VISIBILITY_DISTANCE, new System.Collections.ArrayList(), true))
             {
                 if (item is TerritoryBanner ban)
                 {
