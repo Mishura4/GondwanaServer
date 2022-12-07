@@ -372,7 +372,6 @@ namespace DOL.GS.Commands
 			mob.Model = 408;
 
 			//Fill the living variables
-			mob.CurrentSpeed = 0;
 			mob.MaxSpeedBase = 200;
 			mob.GuildName = "";
 			mob.Size = 50;
@@ -444,7 +443,6 @@ namespace DOL.GS.Commands
 				((IOldAggressiveBrain)mob.Brain).AggroRange = 500;
 			}
 
-			mob.CurrentSpeed = 0;
 			mob.MaxSpeedBase = 200;
 			mob.GuildName = "";
 			mob.Size = 50;
@@ -523,7 +521,6 @@ namespace DOL.GS.Commands
 					((IOldAggressiveBrain)mob.Brain).AggroRange = 500;
 				}
 
-				mob.CurrentSpeed = 0;
 				mob.MaxSpeedBase = 200;
 				mob.GuildName = "";
 				mob.Size = 50;
@@ -582,7 +579,6 @@ namespace DOL.GS.Commands
 					((IOldAggressiveBrain)mob.Brain).AggroRange = 500;
 				}
 
-				mob.CurrentSpeed = 0;
 				mob.MaxSpeedBase = 200;
 				mob.GuildName = "";
 				mob.Size = 50;
@@ -2449,7 +2445,6 @@ namespace DOL.GS.Commands
 			mob.Empathy = targetMob.Empathy;
 			mob.Piety = targetMob.Piety;
 			mob.Charisma = targetMob.Charisma;
-			mob.CurrentSpeed = 0;
 			mob.MaxSpeedBase = targetMob.MaxSpeedBase;
 			mob.Inventory = targetMob.Inventory;
 			mob.EquipmentTemplateID = targetMob.EquipmentTemplateID;
@@ -2619,7 +2614,6 @@ namespace DOL.GS.Commands
 			mob.Charisma = targetMob.Charisma;
 
 			//Fill the living variables
-			mob.CurrentSpeed = 0;
 			mob.MaxSpeedBase = targetMob.MaxSpeedBase;
 			mob.GuildName = targetMob.GuildName;
 			mob.Size = targetMob.Size;

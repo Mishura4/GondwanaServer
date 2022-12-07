@@ -321,7 +321,6 @@ namespace DOL.GS.Commands
                             mob.Charisma = targetMob.Charisma;
 
                             //Fill the living variables
-                            mob.CurrentSpeed = 0;
                             mob.MaxSpeedBase = targetMob.MaxSpeedBase;
                             mob.GuildName = targetMob.GuildName;
                             mob.Size = targetMob.Size;
@@ -535,7 +534,6 @@ namespace DOL.GS.Commands
                 mob.Realm = realm;
                 mob.Flags |= GameNPC.eFlags.PEACE;
             }
-            mob.CurrentSpeed = 0;
             mob.AddToWorld();
             mob.LoadedFromScript = false; // allow saving
             mob.SaveIntoDatabase();
@@ -595,7 +593,6 @@ namespace DOL.GS.Commands
             mob.Charisma = targetMob.Charisma;
 
             //Fill the living variables
-            mob.CurrentSpeed = 0;
             mob.MaxSpeedBase = targetMob.MaxSpeedBase;
             mob.GuildName = targetMob.GuildName;
             mob.Size = targetMob.Size;

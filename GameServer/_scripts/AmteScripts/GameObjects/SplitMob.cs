@@ -83,7 +83,6 @@ namespace DOL.GS.Scripts
             mob.Charisma = this.Charisma;
 
             //Fill the living variables
-            mob.CurrentSpeed = 0;
 
             mob.MaxSpeedBase = this.MaxSpeedBase;
             mob.Size = this.Size;

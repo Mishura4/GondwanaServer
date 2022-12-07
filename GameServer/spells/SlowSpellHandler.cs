@@ -76,12 +76,6 @@ namespace DOL.GS.Spells
                 player.Out.SendUpdateMaxSpeed();
 
             GameNPC npc = owner as GameNPC;
-            if (npc != null)
-            {
-                short maxSpeed = npc.MaxSpeed;
-                if (npc.CurrentSpeed > maxSpeed)
-                    npc.CurrentSpeed = maxSpeed;
-            }
         }
 
         /// <summary>

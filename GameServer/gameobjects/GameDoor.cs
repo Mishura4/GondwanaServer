@@ -358,10 +358,7 @@ namespace DOL.GS
 				{
 					m_health = maxhealth;
 
-					lock( m_xpGainers.SyncRoot )
-					{
-						m_xpGainers.Clear( );
-					}
+					XPGainers.Clear();
 				}
 				else if( value > 0 )
 				{
@@ -404,7 +401,7 @@ namespace DOL.GS
 		{
 			base.BroadcastUpdate();
 			
-			m_lastUpdateTickCount = (uint)Environment.TickCount;
+			m_lastUpdateTickCount = GameTimer.GetTickCount();
 		}
 		
 		private static long m_healthregentimer = 0;

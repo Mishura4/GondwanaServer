@@ -135,7 +135,7 @@ namespace DOL.GS
 		/// <summary>
 		/// Should be accessed as [(subzone/4)|objectType]
 		/// </summary>
-		private int[] m_subZoneTimestamps;
+		private uint[] m_subZoneTimestamps;
 
 		private int m_objectCount;
 
@@ -286,7 +286,7 @@ namespace DOL.GS
 					m_subZoneElements[i][k] = new SubNodeElement();
 				}
 			}
-			m_subZoneTimestamps = new int[SUBZONE_NBR << 2];
+			m_subZoneTimestamps = new uint[SUBZONE_NBR << 2];
 			m_initialized = true;
 		}
 
@@ -841,7 +841,7 @@ namespace DOL.GS
 				{
 					for (int typeIndex = 0; typeIndex < m_subZoneElements[subZoneIndex].Length; typeIndex++)
 					{
-						if (Environment.TickCount > m_subZoneTimestamps[(subZoneIndex << 2) | typeIndex])
+						if (GameTimer.GetTickCount() > m_subZoneTimestamps[(subZoneIndex << 2) | typeIndex])
 						{
 							// it is time to relocate some elements in this subzone
 							// => perform needed relocations of elements
@@ -908,7 +908,7 @@ namespace DOL.GS
 
 		private void UnsafeUpdateSubZoneTimestamp(int subZoneIndex, int typeIndex)
 		{
-			int nextUpdateTimestamp = Environment.TickCount + Zone.MAX_REFRESH_INTERVAL;
+			var nextUpdateTimestamp = GameTimer.GetTickCount() + Zone.MAX_REFRESH_INTERVAL;
 
 			if (nextUpdateTimestamp < 0)
 			{

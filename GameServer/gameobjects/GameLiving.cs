@@ -18,8 +18,10 @@
  */
 using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 
@@ -576,12 +578,6 @@ namespace DOL.GS
 		}
 
 		/// <summary>
-		/// List of objects that will gain XP after this living dies
-		/// consists of GameObject -> damage(float)
-		/// Damage in float because it might contain small amounts
-		/// </summary>
-		protected readonly HybridDictionary m_xpGainers;
-		/// <summary>
 		/// Holds the weaponslot to be used
 		/// </summary>
 		protected eActiveWeaponSlot m_activeWeaponSlot;
@@ -609,13 +605,7 @@ namespace DOL.GS
 		/// key-value pairs that will define how much
 		/// XP these objects get when this n
 		/// </summary>
-		public virtual HybridDictionary XPGainers
-		{
-			get
-			{
-				return m_xpGainers;
-			}
-		}
+		public ConcurrentDictionary<GameObject, float> XPGainers { get; } = new();
 
 		/// <summary>
 		/// Create a pet for this living
@@ -4241,8 +4231,7 @@ namespace DOL.GS
 				if (wasAlive)
 					Die(source);
 
-				lock (m_xpGainers.SyncRoot)
-					m_xpGainers.Clear();
+				XPGainers.Clear();
 			}
 			else
 			{
@@ -4375,14 +4364,7 @@ namespace DOL.GS
 		/// <param name="damageAmount">the amount of damage, float because for groups it can be split</param>
 		public virtual void AddXPGainer(GameObject xpGainer, float damageAmount)
 		{
-			lock (m_xpGainers.SyncRoot)
-			{
-				if( m_xpGainers.Contains( xpGainer ) == false )
-				{
-					m_xpGainers.Add( xpGainer, 0.0f );
-				}
-				m_xpGainers[xpGainer] = (float)m_xpGainers[xpGainer] + damageAmount;
-			}
+			XPGainers.AddOrUpdate(xpGainer, damageAmount, (o, dmg) => dmg + damageAmount);
 		}
 
 		/// <summary>
@@ -4493,12 +4475,13 @@ namespace DOL.GS
 			lock (Attackers)
 			{
 				m_attackers.Remove(attacker);
+            }
 			// If GM use viewloot, need remove the attacker from the xpGainers, else if he deco/reco
 			// and redo the action, he apears twice in the list and the bug is happen
-                lock (m_xpGainers)
-                    if (m_xpGainers.Contains(attacker) && Health == MaxHealth)
-                        m_xpGainers.Remove(attacker);
-            }
+			//Console print attacker
+			
+       		 if (Health == MaxHealth)
+				XPGainers.TryRemove(attacker, out var dmg);
 		}
 		/// <summary>
 		/// Called when this living dies
@@ -5418,10 +5401,7 @@ namespace DOL.GS
 
 				//We clean all damagedealers if we are fully healed,
 				//no special XP calculations need to be done
-				lock (m_xpGainers.SyncRoot)
-				{
-					m_xpGainers.Clear();
-				}
+				XPGainers.Clear();
 
 				return 0;
 			}
@@ -5540,11 +5520,7 @@ namespace DOL.GS
 
 					//We clean all damagedealers if we are fully healed,
 					//no special XP calculations need to be done
-					lock (m_xpGainers.SyncRoot)
-					{
-						//DOLConsole.WriteLine(this.Name+": Health=100% -> clear xpgainers");
-						m_xpGainers.Clear();
-					}
+					XPGainers.Clear();
 				}
 				else if (value > 0)
 				{
@@ -5751,7 +5727,7 @@ namespace DOL.GS
 		/// <summary>
 		/// The current speed of this living
 		/// </summary>
-		protected short m_currentSpeed;
+		protected short m_currentSpeed = 0;
 		/// <summary>
 		/// The base maximum speed of this living
 		/// </summary>
@@ -5786,13 +5762,10 @@ namespace DOL.GS
 		/// <summary>
 		/// Gets or sets the current speed of this living
 		/// </summary>
-		public virtual short CurrentSpeed
+		public short CurrentSpeed
 		{
-			get
-			{
-				return m_currentSpeed;
-			}
-			set
+			get => m_currentSpeed;
+			protected set
 			{
 				m_currentSpeed = value;
 				UpdateTickSpeed();
@@ -5811,6 +5784,10 @@ namespace DOL.GS
 
 				return (short)GetModified(eProperty.MaxSpeed);
 			}
+		}
+
+		public virtual void UpdateMaxSpeed()
+		{
 		}
 
 		/// <summary>
@@ -5887,19 +5864,9 @@ namespace DOL.GS
 		#endregion
 		#region Movement
 		/// <summary>
-		/// The tick speed in X direction.
+		/// The tick speed
 		/// </summary>
-		public float TickSpeedX { get; protected set; }
-
-		/// <summary>
-		/// The tick speed in Y direction.
-		/// </summary>
-		public float TickSpeedY { get; protected set; }
-
-		/// <summary>
-		/// The tick speed in Z direction.
-		/// </summary>
-		public float TickSpeedZ { get; protected set; }
+		public Vector3 Velocity { get; private set; }
 
 		/// <summary>
 		/// Updates tick speed for this living.
@@ -5909,13 +5876,15 @@ namespace DOL.GS
 			int speed = CurrentSpeed;
 
 			if (speed == 0)
-				SetTickSpeed(0, 0, 0);
+				Velocity = Vector3.Zero;
 			else
 			{
 				// Living will move in the direction it is currently heading.
 
 				var heading = Heading * GameMath.HEADING_TO_RADIAN;
-				SetTickSpeed(-(float)Math.Sin(heading), (float)Math.Cos(heading), 0, speed);
+				var v = new Vector3(-MathF.Sin(heading), MathF.Cos(heading), 0);
+				Debug.Assert(float.IsNormal(v.X) || float.IsNormal(v.Y));
+				Velocity = v * speed * 0.001f;
 			}
 		}
 
@@ -5942,9 +5911,7 @@ namespace DOL.GS
 		/// <param name="dz"></param>
 		protected void SetTickSpeed(float dx, float dy, float dz)
 		{
-			TickSpeedX = dx;
-			TickSpeedY = dy;
-			TickSpeedZ = dz;
+			Velocity = new Vector3(dx, dy, dz);
 		}
 
 		/// <summary>
@@ -5960,36 +5927,24 @@ namespace DOL.GS
 			SetTickSpeed(dx * tickSpeed, dy * tickSpeed, dz * tickSpeed);
 		}
 
+
+		protected void SetTickSpeed(Vector3 velocity) => Velocity = velocity;
+		protected void SetTickSpeed(Vector3 heading, float speed) => Velocity = heading * speed * 0.001f;
+
 		/// <summary>
 		/// The tick at which the movement started.
 		/// </summary>
-		public int MovementStartTick { get; set; }
+		public uint MovementStartTick { get; set; }
 
 		/// <summary>
 		/// Elapsed ticks since movement started.
 		/// </summary>
-		protected int MovementElapsedTicks
-		{
-			get { return Environment.TickCount - MovementStartTick; }
-		}
+		protected uint MovementElapsedTicks => GameTimer.GetTickCount() - MovementStartTick;
 
 		/// <summary>
 		/// True if the living is moving, else false.
 		/// </summary>
-		public virtual bool IsMoving
-		{
-			get { return m_currentSpeed != 0; }
-		}
-
-		public override Vector3 Position
-		{
-			get
-			{
-				return IsMoving
-					? base.Position + MovementElapsedTicks * new Vector3(TickSpeedX, TickSpeedY, TickSpeedZ)
-					: base.Position;
-			}
-			}
+		public virtual bool IsMoving => m_currentSpeed != 0;
 
 		/// <summary>
 		/// Moves the item from one spot to another spot, possible even
@@ -7034,6 +6989,8 @@ namespace DOL.GS
 		public GameLiving()
 			: base()
 		{
+			Velocity = Vector3.Zero;
+
 			m_guildName = string.Empty;
 			m_targetObjectWeakReference = new WeakRef(null);
 
@@ -7042,7 +6999,6 @@ namespace DOL.GS
 			m_activeQuiverSlot = eActiveQuiverSlot.None;
 			m_rangedAttackState = eRangedAttackState.None;
 			m_rangedAttackType = eRangedAttackType.Normal;
-			m_xpGainers = new HybridDictionary();
 			m_effects = CreateEffectsList();
 			m_concEffects = new ConcentrationList(this);
 			m_attackers = new List<GameObject>();

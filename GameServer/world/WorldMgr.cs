@@ -209,12 +209,12 @@ namespace DOL.GS
 		/// <summary>
 		/// This constant defines the day constant
 		/// </summary>
-		private const int DAY = 86400000;
+		private const uint DAY = 86400000;
 
 		/// <summary>
 		/// This holds the tick when the day started
 		/// </summary>
-		private static int m_dayStartTick;
+		private static uint m_dayStartTick;
 
 		/// <summary>
 		/// This holds the speed of our days
@@ -546,7 +546,7 @@ namespace DOL.GS
 				m_WorldUpdateThread.Start();
 
 				m_dayIncrement = Math.Max(0, Math.Min(1000, ServerProperties.Properties.WORLD_DAY_INCREMENT)); // increments > 1000 do not render smoothly on clients
-				m_dayStartTick = Environment.TickCount - (int)(DAY / Math.Max(1, m_dayIncrement) / 2); // set start time to 12pm
+				m_dayStartTick = GameTimer.GetTickCount() - (DAY / Math.Max(1, m_dayIncrement) / 2); // set start time to 12pm
 				m_dayResetTimer = new Timer(new TimerCallback(DayReset), null, DAY / Math.Max(1, m_dayIncrement) / 2, DAY / Math.Max(1, m_dayIncrement));
 
 				m_pingCheckTimer = new Timer(new TimerCallback(PingCheck), null, 10 * 1000, 0); // every 10s a check
@@ -649,7 +649,7 @@ namespace DOL.GS
 				try
 				{
 					Thread.Sleep(200); // check every 200ms for needed relocs
-					int start = Environment.TickCount;
+					var start = GameTimer.GetTickCount();
 
 					var regionsClone = m_regions.Values;
 
@@ -660,7 +660,7 @@ namespace DOL.GS
 							region.Relocate();
 						}
 					}
-					int took = Environment.TickCount - start;
+					var took = GameTimer.GetTickCount() - start;
 					if (took > 500)
 					{
 						if (log.IsWarnEnabled)
@@ -687,7 +687,7 @@ namespace DOL.GS
 		private static void DayReset(object sender)
 		{
 			Territory.TerritoryManager.Instance.ProceedPayments();
-			m_dayStartTick = Environment.TickCount;
+			m_dayStartTick = GameTimer.GetTickCount();
 			foreach (GameClient client in GetAllPlayingClients())
 			{
 				if (client.Player != null && client.Player.CurrentRegion != null && client.Player.CurrentRegion.UseTimeManager)
@@ -710,12 +710,12 @@ namespace DOL.GS
 			if (m_dayIncrement == 0)
 			{
 				// day should stand still so pause the timer
-				m_dayStartTick = (int)(dayStart);
+				m_dayStartTick = dayStart;
 				m_dayResetTimer.Change(Timeout.Infinite, Timeout.Infinite);
 			}
 			else
 			{
-				m_dayStartTick = Environment.TickCount - (int)(dayStart / m_dayIncrement); // set start time to ...
+				m_dayStartTick = GameTimer.GetTickCount() - (dayStart / m_dayIncrement); // set start time to ...
 				m_dayResetTimer.Change((DAY - dayStart) / m_dayIncrement, Timeout.Infinite);
 			}
 
@@ -750,13 +750,13 @@ namespace DOL.GS
 		{
 			if (m_dayIncrement == 0)
 			{
-				return (uint)m_dayStartTick;
+				return m_dayStartTick;
 			}
 			else
 			{
-				long diff = Environment.TickCount - m_dayStartTick;
-				long curTime = diff * m_dayIncrement;
-				return (uint)(curTime % DAY);
+				var diff = GameTimer.GetTickCount() - m_dayStartTick;
+				var curTime = diff * m_dayIncrement;
+				return curTime % DAY;
 			}
 		}
 

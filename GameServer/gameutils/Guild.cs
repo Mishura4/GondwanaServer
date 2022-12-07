@@ -472,10 +472,7 @@ namespace DOL.GS
 
 		public DateTime GuildBannerLostTime
 		{
-			get
-			{
-				return m_DBguild.GuildBannerLostTime;
-			}
+			get => m_DBguild.GuildBannerLostTime;
 			set
 			{
 				this.m_DBguild.GuildBannerLostTime = value;
@@ -1098,10 +1095,7 @@ namespace DOL.GS
 		/// </summary>
 		public DateTime BonusStartTime
 		{
-			get 
-			{
-				return this.m_DBguild.BonusStartTime; 
-			}
+			get => this.m_DBguild.BonusStartTime;
 			set 
 			{
 				this.m_DBguild.BonusStartTime = value;
