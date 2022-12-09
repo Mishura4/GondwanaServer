@@ -3232,7 +3232,9 @@ namespace DOL.GS
 				else
 				{
 					if (m_attackAction.TimeUntilElapsed < 500)
+					{
 						m_attackAction.Start(500);
+					}
 				}
 			}
 		}
@@ -5866,7 +5868,7 @@ namespace DOL.GS
 		/// <summary>
 		/// The tick speed
 		/// </summary>
-		public Vector3 Velocity { get; private set; }
+		public Vector3 Velocity { get; set; }
 
 		/// <summary>
 		/// Updates tick speed for this living.

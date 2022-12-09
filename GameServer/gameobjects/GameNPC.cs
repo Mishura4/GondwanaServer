@@ -1078,7 +1078,9 @@ namespace DOL.GS
 				if (!IsMoving || TargetPosition == Vector3.Zero)
 					return _basePosition;
 				if (MovementElapsedTicks > (Vector3.Distance(_basePosition, TargetPosition) * 1000 / CurrentSpeed))
-					return TargetPosition;
+				{
+				return TargetPosition;}
+				_basePosition.Z = TargetPosition.Z;
 				return _basePosition + MovementElapsedTicks * Velocity;
 			}
 		}
@@ -1331,6 +1333,7 @@ namespace DOL.GS
 
 			if (IsWithinRadius(target, CONST_WALKTOTOLERANCE))
 			{
+				
 				// No need to start walking.
 				TargetPosition = target;
 				Position = target;
@@ -1414,7 +1417,7 @@ namespace DOL.GS
 				return;
 			if (IsTurningDisabled)
 				return;
-
+			
 			short walkSpeed = speed ?? MaxSpeed;
 			if (walkSpeed > MaxSpeed)
 				walkSpeed = MaxSpeed;
@@ -1494,6 +1497,7 @@ namespace DOL.GS
 			MovementStartTick = GameTimer.GetTickCount();
 
 			UpdateTickSpeed();
+			StartArriveAtTargetAction(GetTicksToArriveAt(TargetPosition, speed));
 			BroadcastUpdate();
 		}
 
@@ -1555,13 +1559,13 @@ namespace DOL.GS
 		public void StopMoving()
 		{
 			CancelWalkToSpawn();
+				
 			if (!IsMoving)
 				return;
-			// if (MovementElapsedTicks > (Vector3.Distance(_basePosition, TargetPosition) * 1000 / CurrentSpeed))
-			// 	Position = TargetPosition;
-			// else
-			// 	Position = _basePosition + MovementElapsedTicks * Velocity;
-			Position = TargetPosition;
+			if (MovementElapsedTicks > (Vector3.Distance(_basePosition, TargetPosition) * 1000 / CurrentSpeed)){
+			 	Position = TargetPosition;}
+			else
+			 	Position = _basePosition + MovementElapsedTicks * Velocity;
 			MovementStartTick = GameTimer.GetTickCount();
 			TargetPosition = Vector3.Zero;
 			CurrentSpeed = 0;

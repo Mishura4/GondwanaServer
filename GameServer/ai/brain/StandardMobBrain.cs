@@ -263,12 +263,14 @@ namespace DOL.AI.Brain
 
 			foreach (GamePlayer player in Body.GetPlayersInRadius((ushort)AggroRange, Body.CurrentZone.IsDungeon ? false : true))
 			{
+				Console.WriteLine("Checking player aggro");
 				if (!GameServer.ServerRules.IsAllowedToAttack(Body, player, true)) continue;
 				// Don't aggro on immune players.
 
 				if (player.EffectList.GetOfType<NecromancerShadeEffect>() != null)
 					continue;
 
+				Console.WriteLine("Player: " + player.Name);
 				int aggrolevel = 0;
 
 				if (Body.Faction != null)
@@ -278,8 +280,10 @@ namespace DOL.AI.Brain
 						aggrolevel = 0;
 				}
 
+				Console.WriteLine("Aggro level" + aggrolevel);
 				if (aggrolevel <= 0 && AggroLevel <= 0)
 					return;
+				Console.WriteLine(aggrolevel);
 
 				if (m_aggroTable.ContainsKey(player))
 					continue; // add only new players
@@ -287,6 +291,7 @@ namespace DOL.AI.Brain
 					continue;
 				if (player.Steed != null)
 					continue; //do not attack players on steed
+				Console.WriteLine("Calculatordupa " + CalculateAggroLevelToTarget(player));
 
 				if (CalculateAggroLevelToTarget(player) > 0)
 				{
