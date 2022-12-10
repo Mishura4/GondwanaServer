@@ -44,6 +44,7 @@ using System.Numerics;
 using DOL.GameEvents;
 using DOL.MobGroups;
 using DOL.Territory;
+using static DOL.GS.ScriptMgr;
 
 namespace DOL.GS
 {
@@ -64,6 +65,16 @@ namespace DOL.GS
 		/// </remarks>
 		public const int CONST_WALKTOTOLERANCE = 25;
 
+		public ushort DamageTypeCounter { get; set; }
+		public eDamageType LastDamageType { get; set; }
+		public ushort DamageTypeLimit { get; set; }
+		private RegionTimer ambientTextTimer;
+		private bool hasImunity = false;
+		public eDamageType ImunityDomage = eDamageType.GM;
+		private Dictionary<MobXAmbientBehaviour, short> ambientXNbUse = new Dictionary<MobXAmbientBehaviour, short>();
+		private eFlags tempoarallyFlags = 0;
+		private ABrain temporallyBrain = null;
+		private INpcTemplate temporallyTemplate = null;
 
 		#region Debug
 		private bool m_debugMode = false;
@@ -847,7 +858,12 @@ namespace DOL.GS
 		/// </summary>
 		public virtual eFlags Flags
 		{
-			get { return m_flags; }
+			get 
+			{ 
+				if(tempoarallyFlags != 0)
+					return tempoarallyFlags;
+				return m_flags; 
+			}
 			set
 			{
 				eFlags oldflags = m_flags;
@@ -1998,8 +2014,17 @@ namespace DOL.GS
 		/// </summary>
 		public NpcTemplate NPCTemplate
 		{
-			get { return m_npcTemplate; }
-			set { m_npcTemplate = value; }
+			get 
+			{
+				if (temporallyTemplate != null)
+					return temporallyTemplate as NpcTemplate;
+				return m_npcTemplate; 
+			}
+			set 
+			{
+				if(temporallyTemplate == null)
+					m_npcTemplate = value; 
+			}
 		}
 		/// <summary>
 		/// Loads the equipment template of this npc
@@ -2278,7 +2303,7 @@ namespace DOL.GS
             {
 				mob.Model = Model;
 				mob.Race = Race;
-				mob.Flags = (uint)Flags;
+				mob.Flags = (uint)m_flags;
 				mob.VisibleWeaponSlots = this.m_visibleActiveWeaponSlots;
 			}
             else
@@ -2934,6 +2959,24 @@ namespace DOL.GS
 			if (MAX_PASSENGERS > 0)
 				Riders = new GamePlayer[MAX_PASSENGERS];
 
+			if (temporallyBrain != null)
+			{
+				RemoveBrain(temporallyBrain);
+				temporallyBrain = null;
+			}
+			tempoarallyFlags = 0;
+			if(temporallyTemplate != null)
+            {
+				LoadFromDatabase(GameServer.Database.FindObjectByKey<Mob>(InternalID));
+			}
+			if (hasImunity)
+			{
+				ImunityDomage = eDamageType.GM;
+				DamageTypeCounter = 0;
+				LastDamageType = eDamageType.GM;
+				hasImunity = false;
+			}
+
 			bool anyPlayer = false;
 			foreach (GamePlayer player in GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
 			{
@@ -3058,6 +3101,7 @@ namespace DOL.GS
             Endurance = MaxEndurance;
             Position = m_spawnPoint;
 			Heading = m_spawnHeading;
+			ambientXNbUse = new Dictionary<MobXAmbientBehaviour, short>();
 
             return AddToWorld();
         }
@@ -3578,6 +3622,7 @@ namespace DOL.GS
 			interact,
 			seeing,
 			hurting,
+			immunised,
 		}
 
 		/// <summary>
@@ -4004,6 +4049,82 @@ namespace DOL.GS
 			return damage;
 		}
 
+		private int AmbientTextTypeCallback(RegionTimer regionTimer)
+        {
+			if(hasImunity)
+            {
+				ImunityDomage = eDamageType.GM;
+				DamageTypeCounter = 0;
+				LastDamageType = eDamageType.GM;
+				hasImunity = false;
+			}
+			if(tempoarallyFlags != 0)
+            {
+				tempoarallyFlags = 0;
+				// Send flag update to the players
+				foreach (GamePlayer player in GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+				{
+					player.Out.SendNPCCreate(this);
+					if (m_inventory != null)
+						player.Out.SendLivingEquipmentUpdate(this);
+				}
+			}
+			if(temporallyBrain != null)
+            {
+				RemoveBrain(temporallyBrain);
+				temporallyBrain = null;
+            }
+			if(temporallyTemplate != null)
+            {
+				temporallyTemplate = null;
+				LoadTemplate(NPCTemplate);
+				BroadcastLivingEquipmentUpdate();
+			}
+			ambientTextTimer.Stop();
+			ambientTextTimer = null;
+			return 1000;
+        }
+
+        public override void TakeDamage(AttackData ad)
+        {
+			GamePlayer gamePlayer = ad.Attacker as GamePlayer;
+			GamePet pet = ad.Attacker as GamePet;
+			if ((gamePlayer  != null || (pet != null && pet.Owner is GamePlayer)) && (ad.AttackType != AttackData.eAttackType.MeleeDualWield && ad.AttackType != AttackData.eAttackType.MeleeOneHand && ad.AttackType != AttackData.eAttackType.MeleeTwoHand))
+			{
+				eDamageType damageType = ad.DamageType;
+				MobXAmbientBehaviour ambientText = ambientTexts.Where(mobXAmbient => mobXAmbient.DamageTypeRepeat > 0).FirstOrDefault();
+				if (ambientText != null && (ambientText.Chance == 100 || ambientText.Chance == 0) && (ambientText.HP == 0 || HealthPercent < ambientText.HP))
+				{
+					if (hasImunity && ImunityDomage == damageType)
+					{
+						LastDamageType = damageType;
+						FireAmbientSentence(eAmbientTrigger.immunised, pet != null ? pet.Owner : gamePlayer);
+						ad.CriticalDamage = 0;
+						ad.Damage = 0;
+					}
+					else
+					{
+						if (damageType != LastDamageType)
+						{
+							DamageTypeCounter = 1;
+							LastDamageType = damageType;
+						}
+						else
+						{
+							DamageTypeCounter++;
+						}
+						if (DamageTypeCounter >= ambientText.DamageTypeRepeat)
+						{
+							FireAmbientSentence(eAmbientTrigger.immunised, pet != null ? pet.Owner : gamePlayer);
+							ad.CriticalDamage = 0;
+							ad.Damage = 0;
+						}
+					}
+				}
+			}
+			base.TakeDamage(ad);
+        }
+
         public override void TakeDamage(GameObject source, eDamageType damageType, int damageAmount, int criticalAmount)
         {
             if(source is GameLiving living)
@@ -4029,6 +4150,34 @@ namespace DOL.GS
 			}
 			set
 			{
+				if (value > base.Health)
+				{
+					List<MobXAmbientBehaviour> ambientText = ambientTexts.Where(mobXAmbient => mobXAmbient.HP > 0).ToList();
+					if(ambientText.Count > 0)
+                    {
+						MobXAmbientBehaviour changeBrainAmbient = ambientText.Where(ambient => !string.IsNullOrEmpty(ambient.ChangeBrain)).FirstOrDefault();
+						if(changeBrainAmbient != null && changeBrainAmbient.HP < (byte)(value * 100 / MaxHealth))
+                        {
+							if (temporallyBrain != null)
+							{
+								RemoveBrain(temporallyBrain);
+								temporallyBrain = null;
+							}
+						}
+						MobXAmbientBehaviour changeFlagAmbient = ambientText.Where(ambient => ambient.ChangeFlag > 0).FirstOrDefault();
+						if (changeFlagAmbient != null && changeFlagAmbient.HP < (byte)(value * 100 / MaxHealth))
+						{
+							tempoarallyFlags = 0;
+							// Send flag update to the players
+							foreach (GamePlayer player in GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+							{
+								player.Out.SendNPCCreate(this);
+								if (m_inventory != null)
+									player.Out.SendLivingEquipmentUpdate(this);
+							}
+						}
+					}
+				}
 				base.Health = value;
 				//Slow mobs down when they are hurt!
 				short maxSpeed = MaxSpeed;
@@ -5525,16 +5674,48 @@ namespace DOL.GS
 
 			// grab random sentence
 			var chosen = mxa[Util.Random(mxa.Count - 1)];
-            bool continueProcess = false;
-            if (chosen.HP < 1 && chosen.Chance > 0)
-                if (Util.Chance(chosen.Chance))
-                    continueProcess = true;
-                else
-                    return;
-            else if (!continueProcess && HealthPercent > chosen.HP)
-                return;
-            else if (!continueProcess && chosen.Chance > 0 && !Util.Chance(chosen.Chance))
-                return;
+
+			if (chosen.HP < 1 && chosen.Chance > 0)
+				if (!Util.Chance(chosen.Chance))
+					return;
+			else if (chosen.HP > 0 && HealthPercent > chosen.HP)
+				return;
+			else if (chosen.HP > 0 && chosen.Chance > 0 && !Util.Chance(chosen.Chance))
+				return;
+
+			//NbUse
+			if (chosen.NbUse > 0 && (chosen.Spell == 0 || (chosen.Spell > 0 && !IsCasting)))
+			{
+				if (ambientXNbUse.ContainsKey(chosen))
+				{
+					ambientXNbUse[chosen]++;
+				}
+				else
+				{
+					ambientXNbUse.Add(chosen, 1);
+				}
+				if (ambientXNbUse[chosen] > chosen.NbUse)
+					return;
+			}
+
+			// DamageTypeRepeate
+			if (trigger == eAmbientTrigger.immunised)
+            {
+				hasImunity = true;
+				if(LastDamageType != eDamageType.GM)
+					ImunityDomage = LastDamageType;
+				LastDamageType = eDamageType.GM;
+				DamageTypeCounter = 0;
+			}
+
+			//TriggerTimer
+			if (chosen.TriggerTimer > 0)
+			{
+				if (ambientTextTimer != null)
+					ambientTextTimer.Stop();
+				ambientTextTimer = new RegionTimer(this, new RegionTimerCallback(AmbientTextTypeCallback));
+				ambientTextTimer.Start(chosen.TriggerTimer * 1000);
+			}
 
 			string controller = string.Empty;
 			if (Brain is IControlledBrain)
@@ -5547,19 +5728,129 @@ namespace DOL.GS
             if(chosen.Spell > 0)
             {
 				DBSpell dbspell = GameServer.Database.SelectObject<DBSpell>(DB.Column("SpellID").IsEqualTo(chosen.Spell));
-                // check if the player is punished
                 if (dbspell != null)
                 {
-                    foreach (GamePlayer pl in GetPlayersInRadius(5000))
+                    /*foreach (GamePlayer pl in GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
                     {
-                        pl.Out.SendSpellEffectAnimation(this, this, (ushort)chosen.Spell, 0, false, 5);
+						if(!(living is GamePlayer) || (living as GamePlayer != pl))
+							pl.Out.SendSpellEffectAnimation(this, living, (ushort)dbspell.ClientEffect, 0, false, 1);
                     }
                     if (living is GamePlayer player)
-                        player.Out.SendSpellEffectAnimation(this, this, (ushort)chosen.Spell, 0, false, 5);
-                    living.TakeDamage(this, eDamageType.Energy, (int)dbspell.Damage, 0);
+                        player.Out.SendSpellEffectAnimation(this, player, (ushort)dbspell.ClientEffect, 0, false, 1);
+                    living.TakeDamage(this, eDamageType.Energy, (int)dbspell.Damage, 0);*/
+					Spell spell = new Spell(dbspell, Level);
+					ISpellHandler dd = CreateSpellHandler(this, spell, SkillBase.GetSpellLine(GlobalSpellsLines.Mob_Spells));
+					dd.IgnoreDamageCap = true;
+					dd.StartSpell(living, true);
+				}
+            }
+
+			// ChangeFlag
+			if(chosen.ChangeFlag > 0 && !Flags.HasFlag((eFlags)chosen.ChangeFlag))
+            {
+				tempoarallyFlags = Flags | (eFlags)chosen.ChangeFlag;
+                foreach (GamePlayer player in GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+                {
+                    player.Out.SendNPCCreate(this);
+                    if (m_inventory != null)
+                        player.Out.SendLivingEquipmentUpdate(this);
                 }
             }
 
+			// ChangeBrain
+			if(!string.IsNullOrEmpty(chosen.ChangeBrain))
+            {
+				foreach (Assembly script in ScriptMgr.GameServerScripts)
+				{
+					ABrain newBrain = (ABrain)script.CreateInstance(chosen.ChangeBrain, false);
+					if (newBrain != null && newBrain.GetType() != Brain.GetType())
+					{
+						temporallyBrain = newBrain;
+						AddBrain(temporallyBrain);
+						break;
+					}
+				}
+			}
+
+            // ChangeNPCTemplate
+            if (chosen.ChangeNPCTemplate > 0 && (temporallyTemplate == null || chosen.ChangeNPCTemplate != temporallyTemplate.TemplateId))
+            {
+                foreach (Assembly script in ScriptMgr.GameServerScripts)
+                {
+                    INpcTemplate newTemplate = NpcTemplateMgr.GetTemplate(chosen.ChangeNPCTemplate);
+                    if (newTemplate != null)
+                    {
+                        temporallyTemplate = newTemplate;
+                        if (chosen.ChangeEffect > 0)
+                        {
+                            foreach (GamePlayer player in GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+                                player.Out.SendSpellEffectAnimation(this, this, (ushort)chosen.ChangeEffect, 0, false, 1);
+                        }
+                        LoadTemplate(temporallyTemplate);
+                        BroadcastLivingEquipmentUpdate();
+                        break;
+                    }
+                }
+            }
+
+            // CallAreaeffect
+            if (chosen.CallAreaeffectID > 0)
+            {
+				GameCommand command = ScriptMgr.GuessCommand("&areaeffect");
+				string[] param = new string[]
+				{
+					"/areaeffect",
+					"callareaeffect",
+					chosen.CallAreaeffectID.ToString()
+				};
+				command.m_cmdHandler.OnCommand(null, param);
+			}
+
+			// MobtoTpPoint
+			if (chosen.MobtoTPpoint > 0)
+			{
+				if(chosen.TPeffect > 0)
+					foreach (GamePlayer player in GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+                    {
+						player.Out.SendSpellEffectAnimation(this, this, (ushort)chosen.TPeffect, 0, false, 1);
+					}
+				if (tPPoint != null)
+                {
+					TPPoint newTPPoint = tPPoint.GetNextTPPoint();
+					if(tPPoint.DbTPPoint.ObjectId != newTPPoint.DbTPPoint.ObjectId)
+                    {
+						tPPoint = newTPPoint;
+						MoveTo(tPPoint.Region, tPPoint.X, tPPoint.Y, tPPoint.Z, tPPoint.GetHeading(tPPoint));
+					}
+				}
+				else
+                {
+					tPPoint = TeleportMgr.LoadTP(chosen.MobtoTPpoint);
+					MoveTo(tPPoint.Region, tPPoint.X, tPPoint.Y, tPPoint.Z, tPPoint.GetHeading(tPPoint));
+				}
+			}
+
+			// PlayertoTpPoint
+			if (chosen.PlayertoTPpoint > 0)
+			{
+				if (chosen.TPeffect > 0)
+					foreach (GamePlayer player in GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+						player.Out.SendSpellEffectAnimation(this, player, (ushort)chosen.TPeffect, 0, false, 1);
+				if (tPPoint != null)
+				{
+					TPPoint newTPPoint = tPPoint.GetNextTPPoint();
+					if (tPPoint.DbTPPoint.ObjectId != newTPPoint.DbTPPoint.ObjectId)
+					{
+						tPPoint = newTPPoint;
+						living.MoveTo(tPPoint.Region, tPPoint.X, tPPoint.Y, tPPoint.Z, tPPoint.GetHeading(tPPoint));
+					}
+				}
+				else
+				{
+					tPPoint = TeleportMgr.LoadTP(chosen.PlayertoTPpoint);
+					living.MoveTo(tPPoint.Region, tPPoint.X, tPPoint.Y, tPPoint.Z, tPPoint.GetHeading(tPPoint));
+				}
+			}
 
 			string text = chosen.Text.Replace("{sourcename}", Name).Replace("{targetname}", living == null ? string.Empty : living.Name).Replace("{controller}", controller);
 
