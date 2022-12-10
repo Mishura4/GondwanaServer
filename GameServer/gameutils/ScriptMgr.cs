@@ -932,7 +932,8 @@ namespace DOL.GS
 
 				if (handlerConstructor != null)
 				{
-					m_spellhandlerConstructorCache.Add(spell.SpellType, handlerConstructor);
+					if (!m_spellhandlerConstructorCache.ContainsKey(spell.SpellType))
+						m_spellhandlerConstructorCache.Add(spell.SpellType, handlerConstructor);
 				}
 			}
 

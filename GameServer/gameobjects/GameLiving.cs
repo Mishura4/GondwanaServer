@@ -5868,7 +5868,7 @@ namespace DOL.GS
 		/// <summary>
 		/// The tick speed
 		/// </summary>
-		public Vector3 Velocity { get; set; }
+		public Vector3 Velocity { get; private set; }
 
 		/// <summary>
 		/// Updates tick speed for this living.

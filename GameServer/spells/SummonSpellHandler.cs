@@ -139,7 +139,7 @@ namespace DOL.GS.Spells
 			if (template.ClassType != null && template.ClassType.Length > 0)
 			{
 				Assembly asm = Assembly.GetExecutingAssembly();
-				brain = (IControlledBrain)asm.CreateInstance(template.ClassType, true);
+				brain = ((AmteMob)asm.CreateInstance(template.ClassType, true)).Brain as IControlledBrain;
 
 				if (brain == null && log.IsWarnEnabled)
 					log.Warn($"ApplyEffectOnTarget(): ClassType {template.ClassType} on NPCTemplateID {template.TemplateId} not found, using default ControlledBrain");

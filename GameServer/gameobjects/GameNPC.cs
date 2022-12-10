@@ -1078,8 +1078,7 @@ namespace DOL.GS
 				if (!IsMoving || TargetPosition == Vector3.Zero)
 					return _basePosition;
 				if (MovementElapsedTicks > (Vector3.Distance(_basePosition, TargetPosition) * 1000 / CurrentSpeed))
-				{
-				return TargetPosition;}
+					return TargetPosition;
 				_basePosition.Z = TargetPosition.Z;
 				return _basePosition + MovementElapsedTicks * Velocity;
 			}

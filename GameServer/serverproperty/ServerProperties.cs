@@ -717,7 +717,7 @@ namespace DOL.GS.ServerProperties
 		/// <summary>
 		/// Time player must wait after failed task
 		/// </summary>
-		[ServerProperty("world", "task_pause_ticks", "Time player must wait after failed task check to get new chance for a task, in milliseconds", 5 * 60 * 1000)]
+		[ServerProperty("world", "task_pause_ticks", "Time player must wait after failed task check to get new chance for a task, in milliseconds", (uint)5 * 60 * 1000)]
 		public static uint TASK_PAUSE_TICKS;
 
 		/// <summary>
@@ -2009,19 +2009,19 @@ namespace DOL.GS.ServerProperties
         /// <summary>
         /// Initial range to BAF
         /// </summary>
-        [ServerProperty("pve", "INITIAL_BAF_RANGE", "Initial range to BAF", 250)]
+        [ServerProperty("pve", "INITIAL_BAF_RANGE", "Initial range to BAF", (ushort)250)]
         public static ushort INITIAL_BAF_RANGE;
 
         /// <summary>
         /// Max range to BAF
         /// </summary>
-        [ServerProperty("pve", "MAX_BAF_RANGE", "Max range to BAF", 1500)]
+        [ServerProperty("pve", "MAX_BAF_RANGE", "Max range to BAF", (ushort)1500)]
         public static ushort MAX_BAF_RANGE;
 
         /// <summary>
         /// Max range to BAF (Dungeon)
         /// </summary>
-        [ServerProperty("pve", "MAX_BAF_RANGE_DUNGEON", "Max range to BAF (Dungeon)", 1200)]
+        [ServerProperty("pve", "MAX_BAF_RANGE_DUNGEON", "Max range to BAF (Dungeon)", (ushort)1200)]
         public static ushort MAX_BAF_RANGE_DUNGEON;
 
         /// <summary>
