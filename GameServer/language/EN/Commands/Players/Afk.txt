@@ -1,0 +1,4 @@
+Commands.Players.Afk.Description:	Toggles your status to AFK. It is possible to display a message.
+Commands.Players.Afk.Off:			You are no longer considered to be AFK.
+Commands.Players.Afk.On:			You are now considered as AFK.
+Commands.Players.Afk.Usage:			Usage : '/afk <text>'

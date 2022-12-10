@@ -1,0 +1,2 @@
+Commands.GM.Place.Description:	Command to manage seats:
+Commands.GM.Place.Usage.Create:		'/place create' To create a seat

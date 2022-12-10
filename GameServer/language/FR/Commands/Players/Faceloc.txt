@@ -1,0 +1,4 @@
+Commands.Players.Faceloc.Description:		Tourne et fait face à votre personnage dans la direction des coordonnées X et Y fournies (en utilisant les coordonnées de zone « Mythic »).
+Commands.Players.Faceloc.Error.Coordinates:	Veuillez saisir les coordonnées X et Y.
+Commands.Players.Faceloc.IsTurningDisabled:	Vous ne pouvez pas utiliser cette commande pour l'instant!
+Commands.Players.Faceloc.Usage:				'/faceloc [x] [y]'

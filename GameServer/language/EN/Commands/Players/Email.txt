@@ -1,0 +1,4 @@
+Commands.Players.Email.Description:		Set an email for your account.
+Commands.Players.Email.EmailNotValid:	Please type a valid email.
+Commands.Players.Email.SetTo:			Your contact email is {0}. Thank you!
+Commands.Players.Email.Usage:			Usage: '/email <address>'

@@ -1,0 +1,5 @@
+Commands.Players.CheckAppeal.Description:	Vérifie l'état de votre appel ou l'annule.
+Commands.Players.CheckAppeal.Usage.Appeal:	Faites /appeal pour lancer un appel.
+Commands.Players.CheckAppeal.Usage.Cancel:	/checkappeal cancel - Annulez votre appel et supprimez-le de la file d'attente.
+Commands.Players.CheckAppeal.Usage.View:	/checkappeal view - Affiche l'état de votre appel.
+Commands.Players.Guild.UnknownCommand:		{0} n'est pas une commande valide.

@@ -1,0 +1,4 @@
+Commands.Players.Sit.Description:	Sit down
+Commands.Players.Sit.Usage:			Usage : '/sit'
+Commands.Players.Stand.Description:	Stands up when seated
+Commands.Players.Stand.Usage:		Usage : '/stand'

@@ -1,0 +1,2 @@
+Commands.Players.Shuffle.Description:	Mix # of deck·s, 1 minimum. Must be used before /deal
+Commands.Players.Shuffle.Usage:			Usage: '/shuffle <#>'

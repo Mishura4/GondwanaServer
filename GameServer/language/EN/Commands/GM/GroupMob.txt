@@ -1,0 +1,11 @@
+Commands.GM.GroupMob.Description:	GroupMob related commands:
+Commands.GM.GroupMob.Usage.Add:		'/GroupMob add <GroupId>' Add the targeted mob to a GroupMob <GroupId> (creates the GroupMob if the ID doesn't exist already)
+Commands.GM.GroupMob.Usage.Add.Spawner:		'/GroupMob add <GroupId> spawner' Add the GroupMob <GroupId> to the targeted MobSpawner (creates the SpawnerTemplate if it doesn't exist already)
+Commands.GM.GroupMob.Usage.Remove:		'/GroupMob remove <GroupId>' Removes the targeted mob from its GroupMob <GroupId>
+Commands.GM.GroupMob.Usage.Group:		'/GroupMob group remove <GroupId>' Delete the GroupMob <GroupId> and all its related Mob links
+Commands.GM.GroupMob.Usage.Info:		'/GroupMob info <GroupId>' Displays all informations related to a GroupMob <GroupId>
+Commands.GM.GroupMob.Usage.Status:		'/GroupMob status <GroupId> set <GroupStatusId> <SlaveGroupId> Applies a GroupMobStatus <GroupStatusId> to define a specific action/behavior from a Master group <GroupId> towards a Slave group <SlaveGroupId>'
+Commands.GM.GroupMob.Usage.Status.Origin:		'/GroupMob status origin set <GroupStatusId> <GroupId>' Applies a base status/behavior to a GroupMob by defining its <GroupdId> and the wanted <GroupStatusId>
+Commands.GM.GroupMob.Usage.Status.Create:		'/GroupMob status create <SpellId|null>(Effect) <FlagsValue|null>(Flags) <true|false|null>(IsInvicible) <id|null>(Model) <value|null>(VisibleWeapon) <id|null>(Race)' - Creates a GroupStatus and save it in the Database with a new ID <GroupStatusId>
+Commands.GM.GroupMob.Usage.Status.Quest:		'/GroupMob quest <GroupId> <QuestId> <Count> <true|false>' To associate a specific behavior friendly/agressive of a GroupMob (WillbeFriendly <true|false>) in relation with a quest and its count
+Commands.GM.GroupMob.Usage.Status.Reset:		'/GroupMob status reset <GroupId>'  Reset the GroupMob Status as well as its interactions

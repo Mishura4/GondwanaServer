@@ -1,0 +1,4 @@
+Commands.GM.LootChanger.Description:	LootChanger management:
+Commands.GM.LootChanger.Usage.Add:		'/lootchanger add <receive item> <give item>' Add a lootchanger to a mob by specifying which item (ID_nb) the player will get in exchange of another item taken from the inventory(ID_nb)
+Commands.GM.LootChanger.Usage.Remove:	'/lootchanger remove <receive item/all>' Removes an item within the LootChanger list, or the full list at once
+Commands.GM.LootChanger.Usage.Info:		'/lootchanger info' To display the LootChanger item list on the selected mob

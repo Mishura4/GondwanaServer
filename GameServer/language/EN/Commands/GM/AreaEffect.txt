@@ -1,4 +1,4 @@
-﻿Commands.GM.AreaEffect.Description:		Areaeffects management:
+Commands.GM.AreaEffect.Description:		Areaeffects management:
 Commands.GM.AreaEffect.Usage.Create:		'/areaeffect create <radius> <ID of the effect>' Create an Areaeffect with specified radius and ClientEffectID
 Commands.GM.AreaEffect.Usage.Spell:		'/areaeffect spell <spellid>' AreaEffect cast a spell in place to apply an effect
 Commands.GM.AreaEffect.Usage.HealHarm:		'/areaeffect <heal/harm> <value>' Configure heal/harm value per tick of an areaeffect

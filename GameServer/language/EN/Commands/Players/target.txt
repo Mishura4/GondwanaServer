@@ -1,0 +1,6 @@
+Commands.Players.Target.Description:	Targets a player by name.
+Commands.Players.Target.Found:			You are targetting {0}.
+Commands.Players.Target.GM.Found:		[GM] You are targetting {0}.
+Commands.Players.Target.GM.Help:		Usage : '/target <Player|PNJ>'
+Commands.Players.Target.NotFound:		You cannot find {0} around!
+Commands.Players.Target.Usage:			Usage : '/target <Player>'

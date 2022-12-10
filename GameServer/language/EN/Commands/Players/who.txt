@@ -1,0 +1,30 @@
+Commands.Players.Who.Description:		Shows who is online
+Commands.Players.Who.Help:				Uses '/who help' to display the options related to this command.
+Commands.Players.Who.List.Admin:		<Admin>
+Commands.Players.Who.List.ADV:			<ADV>
+Commands.Players.Who.List.AFK:			<AFK>
+Commands.Players.Who.List.ANON:			<ANON>
+Commands.Players.Who.List.BG:			[BG]
+Commands.Players.Who.List.CG:			[CG]
+Commands.Players.Who.List.GM:			<GM>
+Commands.Players.Who.List.Guild:		« {0} »
+Commands.Players.Who.List.In:			in {0}
+Commands.Players.Who.List.Language:		<{0}>
+Commands.Players.Who.List.Level:		level {0}
+Commands.Players.Who.List.Truncated:	(Too many results ({0}). The list has been truncated.)
+Commands.Players.Who.NoMatch:			No result to display.
+Commands.Players.Who.Player.Online:		{0} player currently connected.
+Commands.Players.Who.Players.Online:	{0} players currently connected.
+Commands.Players.Who.Usage.All:			'/who all'        # Shows all connected players.
+Commands.Players.Who.Usage.Class:		'/who <Class>'   # Displays connected players belonging to a specific class.
+Commands.Players.Who.Usage.CSR:			'/who csr'        # Displays connected client service representatives.
+Commands.Players.Who.Usage.DEV:			'/who dev'        # Shows connected development team members.
+Commands.Players.Who.Usage.GuildName:	'/who <GuildName> # Shows connected guild players.
+Commands.Players.Who.Usage.Language:	'/who <Language>    # Displays players logged in with a specific language.
+Commands.Players.Who.Usage.LevelLevel:	'/who <Level#> <Level#> # Shows connected players included in a level range.
+Commands.Players.Who.Usage.Level:		'/who <Level#>'  # Displays connected players of the indicated level.
+Commands.Players.Who.Usage.Location:	'/who <Region>'   # Shows connected players being in a specific region.
+Commands.Players.Who.Usage.Name:		'/who <Name>'      # Displays all connected players with a name that matches the given name.
+Commands.Players.Who.Usage.NF:			'/who nf'         # Shows all New Frontiers players.
+Commands.Players.Who.Usage.QTA:			'/who qta'        # Displays the connected members of quest assistants.
+Commands.Players.Who.Usage:				Usage: '/who <all|nf|name|guild|class|location|level|language>'

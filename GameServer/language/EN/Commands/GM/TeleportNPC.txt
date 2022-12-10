@@ -1,0 +1,15 @@
+Commands.GM.TeleportNPC.Description:			TeleportNPC management:
+Commands.GM.TeleportNPC.Usage.Create:			'/teleportnpc create [isRenaissance]' Create a new TeleportNPC [isRenaissance] Check if the player is Reborn in order to allow the TeleportNPC to interact
+Commands.GM.TeleportNPC.Usage.Create.Douanier:			'/teleportnpc create douanier <gold> [isRenaissance]' Create a Border Officer where <gold> is the cost of the jump, [isRenaissance] Check if the player is Reborn in order to allow the TeleportNPC to interact
+Commands.GM.TeleportNPC.Usage.Text:			'/teleportnpc text <texte>' Text shown when the player can be teleported, the text has to contain {5}
+Commands.GM.TeleportNPC.Usage.Refuse:			'/teleportnpc refuse <texte>' Text shown when the player cannot be teleported (NPC rejecting player's request)
+Commands.GM.TeleportNPC.Usage.Radius:			'/teleportnpc radius <0 - 500>' Radius in which players can be telepoted (works only if radius > 0, no dialog showing anymore while beeing teleported)
+Commands.GM.TeleportNPC.Usage.Level:			'/teleportnpc level <min level>' Sets the minimum level required for a player to be teleported.
+Commands.GM.TeleportNPC.Usage.AddJump:			'/teleportnpc addjump <X> <Y> <Z> <Heading> <RegionID> <Name>' Add a jump (WARNING Gloc, use \"Area\" as jump name to make an automatic teleporter)
+Commands.GM.TeleportNPC.Usage.Jump:			'/teleportnpc jump' Listed jumps with their conditions
+Commands.GM.TeleportNPC.Usage.RemoveJump:			'/teleportnpc removejump <Name>' Removes a jump from the teleport list
+Commands.GM.TeleportNPC.Usage.Conditions.Visible:		'/teleportnpc conditions <name of the jump> visible <on/off>' Shows if a jump can appear on the list while the player interacts with the NPC
+Commands.GM.TeleportNPC.Usage.Conditions.Item:				'/teleportnpc conditions <name of the jump> item <ItemTemplate>' Required item in player's inventory to be teleported
+Commands.GM.TeleportNPC.Usage.Conditions.Niveaux:		'/teleportnpc conditions <name of the jump> levels <min> <max>' Minimum and maximum player levels allowed for the jump
+Commands.GM.TeleportNPC.Usage.Conditions.Bind:		'/teleportnpc conditions <name of the jump> bind <on/off>' Binds the player after beeing teleported
+Commands.GM.TeleportNPC.Usage.AdditionalDescription:		For every NPC dialog: {0} = Name of the player, {1} = Family name, {2} = Guild name, {3} = Class, {4} = Race, {5} jump list (except refusal)

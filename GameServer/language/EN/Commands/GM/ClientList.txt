@@ -1,0 +1,2 @@
+Commands.GM.ClientList.Description:			Show a list of currently playing clients and their ID's
+Commands.GM.ClientList.Usage:					Usage: /clientlist [full] - full option includes IP's and accounts

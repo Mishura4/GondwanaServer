@@ -1,4 +1,4 @@
-﻿# Language file for DOL
+# Language file for DOL
 # Language used : FRENCH / FRANCAIS
 # Create by DOL
 #
@@ -13,8 +13,8 @@ System.LanguagesName.EN:					Anglais
 System.LanguagesName.FR:					Français
 System.LanguagesName.DE:					Allemand
 System.LanguagesName.ES:					Espagnol
-System.LanguagesName.CZ:						Tchèque
+System.LanguagesName.CZ:					Tchèque
 System.LanguagesName.IT:					Italien 
 
 
-PlayerPickUpRequestHandler.HandlePacket.Target:		Vous devez avoir une cible valide a ramassé.
+PlayerPickUpRequestHandler.HandlePacket.Target:		Vous devez avoir une cible valide à ramasser.

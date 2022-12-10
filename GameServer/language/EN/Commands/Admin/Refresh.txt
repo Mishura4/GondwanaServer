@@ -1,0 +1,9 @@
+Commands.Admin.Refresh.Available:		Available modules :
+Commands.Admin.Refresh.ClassName:		'/refresh <ClassName>.<MethodName> # Refresh a module.
+Commands.Admin.Refresh.Description:		Refresh some specific static data cache stored in scripts or other objects
+Commands.Admin.Refresh.List:			'/refresh list' # Available modules list.
+Commands.Admin.Refresh.ModuleDone:		-.- Module « {0} » is now refreshed.
+Commands.Admin.Refresh.ModuleError:		-!- Error while refreshing module : {0} - {1}
+Commands.Admin.Refresh.Module:			--- Refreshes static data cache of the module « {0} »
+Commands.Admin.Refresh.ModuleRetval:	--- Module's feedback : {0}
+Commands.Admin.Refresh.ModuleWrong:		Wrong module... Please check '/refresh list' !

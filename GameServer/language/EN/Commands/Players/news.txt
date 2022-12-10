@@ -1,0 +1,2 @@
+Commands.Players.News.Description:	Display news on the social panel.
+Commands.Players.News.Usage:		Usage : '/news'

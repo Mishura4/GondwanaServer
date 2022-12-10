@@ -1,0 +1,42 @@
+Commands.Players.Chatgroup.Chat:					[Chat]
+Commands.Players.Chatgroup.Description:				Chat group command:
+Commands.Players.Chatgroup.Help.Help:			/cg help - Shows all commands in the chat group.
+Commands.Players.Chatgroup.Help.Invite:			/cg invite <player's name> - Invites the specified player to join the chat group.
+Commands.Players.Chatgroup.Help.JoinPrivate:		/cg join <moderator> <password> - Join a password protected chat group.	
+Commands.Players.Chatgroup.Help.JoinPublic:		/cg join <moderator> - Join a chat group.
+Commands.Players.Chatgroup.Help.Leader:			/cg leader <name> - Promote another player as the leader of the chat group; This player can invite other players to join the channel and can speak when the channel is in listen mode.
+Commands.Players.Chatgroup.Help.Leave:			/cg leave - Leave the chat group.
+Commands.Players.Chatgroup.Help.Listen:			/cg listen - Set the chat group in listening mode; only moderators and leaders can speak.
+Commands.Players.Chatgroup.Help.PasswordClear:	/cg password clear - Clear current chat group password (moderator only).	
+Commands.Players.Chatgroup.Help.PasswordDisplay:	/cg password - Displays current chat group password (moderator only).	
+Commands.Players.Chatgroup.Help.PasswordNew:		/cg password <new password>	- Change the current chat group password.
+Commands.Players.Chatgroup.Help.Private:			/cg private - Set the chat group as private.
+Commands.Players.Chatgroup.Help.Public:			/cg public - Set the discussion group as public, anyone can join.
+Commands.Players.Chatgroup.Help.Remove:			/cg remove <player's name> - Kicks the specified player from the chat group.
+Commands.Players.Chatgroup.Help.Usage:			/cg usage :
+Commands.Players.Chatgroup.Help.Who:				/cg who - List all members of the chat group.
+Commands.Players.Chatgroup.InChatGroup:			You must be in a chat group to use this command.
+Commands.Players.Chatgroup.InviteYourself:		You cannot invite yourself to a chat group.	
+Commands.Players.Chatgroup.JoinChatGroup:		Do you want to join {0}'s chat group ?	
+Commands.Players.Chatgroup.LeaderCommand:		You must be the chat group moderator to use this command.	
+Commands.Players.Chatgroup.LeaderInvite:			You must be the moderator of the chat group to invite a player to join it.
+Commands.Players.Chatgroup.ListenMode:			Chat group listening mode has changed.
+Commands.Players.Chatgroup.Moderator:			{0} is now the chat group moderator.
+Commands.Players.Chatgroup.NoPlayer:				There is no player by that name.
+Commands.Players.Chatgroup.NotChatGroupLeader:	This player is not moderator of a chat group.	
+Commands.Players.Chatgroup.NotChatGroupMember:	This player is not member of a chat group.	
+Commands.Players.Chatgroup.NotPublic:			This chat group is not public.
+Commands.Players.Chatgroup.OnlyModerator:		Only moderators can speak in this chat group.	
+Commands.Players.Chatgroup.OwnChatGroup:			You cannot join your own chat group.
+Commands.Players.Chatgroup.PasswordChanged:		New chat group password: {0}.	
+Commands.Players.Chatgroup.PasswordClear:			The password for this chatgroup has been cleared.
+Commands.Players.Chatgroup.Password:				The password of this chatgroup is: {0}.
+Commands.Players.Chatgroup.PasswordUnset:			The password to this chat group is currently unset.
+Commands.Players.Chatgroup.PlayerInChatgroup:	{0} is already member of a chat group.	
+Commands.Players.Chatgroup.PrivateAlready:			This is already a private chat group.
+Commands.Players.Chatgroup.Private:				The chat group is now private.
+Commands.Players.Chatgroup.PublicAlready:			This is already a public chat group.
+Commands.Players.Chatgroup.Public:				The chat group is now public.
+Commands.Players.Chatgroup.Usage.CG:				/cg <option>
+Commands.Players.Chatgroup.UsageInvite:			Usage: /cg invite <player's name>"
+Commands.Players.Chatgroup.Usage:				Usage: /c <text>

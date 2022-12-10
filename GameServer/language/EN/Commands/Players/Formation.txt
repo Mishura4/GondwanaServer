@@ -1,0 +1,10 @@
+Commands.Players.Formation.Argument.Error:		Unknown argument: {0}
+Commands.Players.Formation.Commander.Missing:	You don't have any commander.
+Commands.Players.Formation.Description:			Change the formation of your servants.
+Commands.Players.Formation.Minion.Missing:		You don't have any servant.
+Commands.Players.Formation.OnlyBonedancer:		Bonedancers only can use this command.
+Commands.Players.Formation.Usage.Formation:		Commandes de formation :
+Commands.Players.Formation.Usage:				'/formation <type>'
+Commands.Players.Formation.Usage.Line:			'/formation line' # Servants are lining up.
+Commands.Players.Formation.Usage.Protect:		'/formation protect' # The servants place themselves in a protective formation surrounding the commander.
+Commands.Players.Formation.Usage.Triangle:		'/formation triangle' # The servants are standing in a triangle formation.

@@ -1,0 +1,6 @@
+# /Anonymous
+Commands.Players.Anonymous.Description:		Bascule votre statut en mode Anonyme (votre nom n'est plus visible dans /who)
+Commands.Players.Anonymous.Usage:			/anonymous
+Commands.Players.Anonymous.Error:			Le mode anonyme est désactivé.
+Commands.Players.Anonymous.Off:				Vous n'êtes plus anonyme.
+Commands.Players.Anonymous.On:				Vous êtes maintenant anonyme.

@@ -1,0 +1,1 @@
+Spell.CombineItemSpellHandler.Toolkit:	Vous avez besoin de {0} pour combiner cet objet. 

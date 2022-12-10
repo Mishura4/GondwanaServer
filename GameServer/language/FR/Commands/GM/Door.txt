@@ -1,0 +1,19 @@
+Commands.GM.door.Add:			'/door add'    # Ajoute une porte
+Commands.GM.door.Delete:		'/door delete' # Supprime la porte ciblée.
+Commands.GM.door.Description:	Modfication des portes:
+Commands.GM.door.Guild:			'/door guild <texte>' # Change la guilde de la porte.
+Commands.GM.door.Heal:			'/door heal'   # Redonne le maximum de vie a la porte.
+Commands.GM.door.Info:			'/door info'   # Donne les infos de la porte.
+Commands.GM.door.Kill:			'/door kill'   # Met les points de vie à 0 de la porte, ce qui la désactive.
+Commands.GM.door.Level:			'/door level <valeur>' # Change le niveau de la porte. 
+Commands.GM.door.Locked:		'/door locked ' # Verrouille la porte.
+Commands.GM.door.Name:			'/door name <texte>' # Change le nom de la porte.
+Commands.GM.door.Realm:			'/door realm <valeur>' # Change le royaume de la porte. ! Attention si realm 0 la porte ne s'ouvre pas tant qu'elle est pas détruite.
+Commands.GM.door.Unlocked:		'/door unlocked ' # Déverrouille la porte.
+Commands.GM.door.Update:		'/door update ' # MÀJ de la porte avec X Y Z de l'admin.
+Commands.GM.door.Usage.Sound:		'/door sound <soundid>' # Ajoute un effet sonore à la porte.
+Commands.GM.door.Usage.GroupMob:		'/door groupmob <Group Mob Id>' # Connecte un Groupmob à la porte.
+Commands.GM.door.Usage.Key:		'/door key <itemid>' # Ajoute un itemtemplate utilisable comme clé sur la porte.
+Commands.GM.door.Usage.KeyChance:		'/door key_chance <number between 0 and 100>' # Taux de succès de la clé pour ouvrir la porte.
+Commands.GM.door.Usage.IsRenaissance:		'/door isrenaissance' toggle enable/disable IsRenaissance
+Commands.GM.door.Usage.PunishSpell:		'/door punishspell <spell Id>' # Ajoute un sort sur la porte, punissant le joueur qui ne peut pas l'ouvrir.

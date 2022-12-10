@@ -1,0 +1,35 @@
+Commands.GM.MinoRelic.Description:			Diverses commandes pour les reliques du minotaures:
+Commands.GM.MinoRelic.Usage.Create:			'/minorelic create <Name> <Model> <Group/Self/Realm> <SpellID> <Effect / 159 = red, 160 = white, 161 = gold>' Pour créer une nouvelle relique avec les informations associées;
+Commands.GM.MinoRelic.Usage.MoveHere:		'/minorelic movehere' Déplace la relique vers le joueur en position x, y, z et enregistre les coordonnées comme points de Spawn;
+Commands.GM.MinoRelic.Usage.Name:			'/minorelic name <Name>' Change le nom de la relique;
+Commands.GM.MinoRelic.Usage.Spell:			'/minorelic spell <SpellID>' Pour ajouter un sort <SpellID> à la relique;
+Commands.GM.MinoRelic.Usage.Model:			'/minorelic model <Model>' Changes le skin de la relique;
+Commands.GM.MinoRelic.Usage.Effect:			'/minorelic effect <Effect / 159 = red, 160 = white, 161 = gold>' Pour changer l'effet visuel sur le joueur lorsque celui-ci obtient la relique;
+Commands.GM.MinoRelic.Usage.Info:			'/minorelic info' Pour obtenir des informations sur la relique;
+Commands.GM.MinoRelic.Usage.DeSpawn:			'/minorelic despawn' Fais disparaître du monde la relique;
+Commands.GM.MinoRelic.Usage.Remove:			'/minorelic remove' Pour supprimer la relique du jeu et de la base de données;
+Commands.GM.MinoRelic.Usage.XP:				'/minorelic xp <quantité>' Pour ajouter de l'XP à une relique;
+Commands.GM.MinoRelic.Usage.ShowAll:			'/minorelic showall' Montre toutes les reliques;
+Commands.GM.MinoRelic.Usage.Spawn:			'/minorelic spawn <ID>' Génère la relique avec son ID;
+Commands.GM.MinoRelic.Info.RelicInfo:		Informations sur la relique
+Commands.GM.MinoRelic.Info.Name:				- Name: {0}
+Commands.GM.MinoRelic.Info.ID:				- ID: {0}
+Commands.GM.MinoRelic.Info.CurrentXP:		- XP de la relique: {0}
+Commands.GM.MinoRelic.Info.Level:			- Niveau: {0}
+Commands.GM.MinoRelic.Info.Effect:			- Effet: {0}
+Commands.GM.MinoRelic.Info.PositionInfo:		Informations de localisation
+Commands.GM.MinoRelic.Info.SpawnX:			- Spawn X: {0}
+Commands.GM.MinoRelic.Info.SpawnY:			- Spawn Y: {0}
+Commands.GM.MinoRelic.Info.SpawnZ:			- Spawn Z: {0}
+Commands.GM.MinoRelic.Info.SpawnHeading:		- Direction du Spawn {0}
+Commands.GM.MinoRelic.Info.SpawnRegion:		- Région du spawn: {0}
+Commands.GM.MinoRelic.Info.SpellInfo:		Informations sur les sorts	
+Commands.GM.MinoRelic.Info.SpellID:			- ID du sort: {0}
+Commands.GM.MinoRelic.Info.SpellTarget:		- Cible du sort: {0}
+Commands.GM.MinoRelic.Info.SpellName:		- Nom du sort: {0}
+Commands.GM.MinoRelic.Info.SpellType:		- Type de sort: {0}
+Commands.GM.MinoRelic.Info.SpellDuration:	- Durée du sort: {0} seconds
+Commands.GM.MinoRelic.ShowAll.Infos:			Informations globales sur les reliques
+Commands.GM.MinoRelic.ShowAll.Count:			Nombre de reliques: {0}
+Commands.GM.MinoRelic.Spawn.AlreadySpawned:	La relique a déjà été générée.
+

@@ -1,0 +1,2 @@
+Commands.Players.Book.Description:	Créer un livre vierge
+Commands.Players.Book.Usage:			/book <titre>

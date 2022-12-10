@@ -1,0 +1,8 @@
+Commands.Admin.Benchmark.Deaths:		'/benchmark deaths'     # Not implemented.
+Commands.Admin.Benchmark.Description:	Benchmark some aspects of DOL Server.
+Commands.Admin.Benchmark.ListSkills:	'/benchmark listskills' # Returns the computation time of 1000 iterations.
+Commands.Admin.Benchmark.ListSpells:	'/benchmark listspells' # Returns the computation time for 1000 iterations. 
+Commands.Admin.Benchmark.Respawns:		'/benchmark respawns'   # Not implemented.
+Commands.Admin.Benchmark.Styles:		'/benchmark styles'     # Not implemented.
+Commands.Admin.Benchmark.Tooltips:		'/benchmark tooltips'   # Not implemented.
+Commands.Admin.Benchmark.Usage:			/benchmark listskills|listspells|styles|respawns|deaths|tooltips

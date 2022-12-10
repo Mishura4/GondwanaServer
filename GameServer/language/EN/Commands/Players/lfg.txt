@@ -1,0 +1,3 @@
+Commands.Players.LFG.Description:	Broadcasts a LFG (Looking For Group) message type in the player's current region.
+Commands.Players.LFG.Message:		[LFG] {0}: {1}
+Commands.Players.LFG.Usage:			Usage : '/lfg <message>'

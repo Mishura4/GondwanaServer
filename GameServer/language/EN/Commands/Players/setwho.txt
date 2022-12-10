@@ -1,0 +1,6 @@
+Commands.Players.Setwho.Craft.Off:		/who will no longer display your crafting title
+Commands.Players.Setwho.Craft.On:		/who will now display your crafting title
+Commands.Players.Setwho.Description:	Defines your class or craft for the /who command.
+Commands.Players.Setwho.Help:			You must specify if you want to change for your class or your crafting order
+Commands.Players.Setwho.Missing.Prof:	You need a profession to activate it in the messages /who
+Commands.Players.Setwho.Usage:			Usage: '/setwho <class|trade>'

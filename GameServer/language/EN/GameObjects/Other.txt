@@ -1,4 +1,4 @@
-﻿# GAMEOBJECTS/ATLANTIS
+# GAMEOBJECTS/ATLANTIS
 # /Researcher
 Researcher.GetExamineMessages.YouExamine:		You examine {0}. {1} is {2}.
 Researcher.GetExamineMessages.She:			She

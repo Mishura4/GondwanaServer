@@ -1,4 +1,4 @@
-﻿Commands.GM.TPPoint.Description:			Commandes pour la création de TP Points:
+Commands.GM.TPPoint.Description:			Commandes pour la création de TP Points:
 Commands.GM.TPPoint.Usage.Create:		/tppoint create - Pour créer un nouveau tppoint temporaire, cela supprimera tout tppoint TEMPORAIRE existant ailleurs
 Commands.GM.TPPoint.Usage.Load:		/tppoint load <tppointname> - Charger un tppoint depuis la base de données
 Commands.GM.TPPoint.Usage.Save:			/tppoint save <tppointname> - Enregistrer un tppoint dans la base de données

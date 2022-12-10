@@ -1,0 +1,2 @@
+Commands.Admin.Freeze.Description:	Freeze le timer de la région où vous êtes situé (Seulement pour tester)
+Commands.Admin.Freeze.Freeze:		Usage : "/freeze <seconds>" # Freeze la région pour un temps définit.

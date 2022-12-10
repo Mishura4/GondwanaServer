@@ -1,0 +1,11 @@
+Commands.GM.jailrp.Description:			To send a player to jail in a RP way.
+Commands.GM.jailrp.Usage:		/jailrp <name of the player> To release a player from jail (doesn't have to be connected)
+Commands.GM.jailrp.Usage.Free:	/jailrp <name of the player> <reason> <penalty in gold> [hours] [days] To send a player to jail
+Commands.GM.jailhrp.Description:			To send a player to jail in a non-RP way.
+Commands.GM.jailhrp.Usage:			/jailhrp <name of the player> To release a player from jail (doesn't have to be connected)
+Commands.GM.jailhrp.Usage.Free:			/jailhrp <name of the player> <reason> [hours] [days] To send a player to jail
+Commands.GM.jail.Description:			To send a player to jail in a RP way.
+Commands.GM.jail.Usage.Free:			'/jail relache <name of the player> To release a player from jail (RP or HRP)
+Commands.GM.jail.Usage.RP:		'/jail rp <name of the player> <reason> <penalty in gold> [hours] [days] To send a player to RP jail
+Commands.GM.jail.Usage.HRP:			'/jail hrp <name of the player> <reason> [hours] [days] To send a player to non-RP jail
+Commands.GM.jail.Usage.List:			'/jail list [rp/hrp]' To display the prisonner's list (RP, non-RP or ALL)

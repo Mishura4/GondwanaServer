@@ -1,0 +1,4 @@
+Commands.Players.Statsanon.Description:	Hide your statistics.
+Commands.Players.Statsanon.Off:			Your statistics are now visible to other players.
+Commands.Players.Statsanon.On:			Your statistics are no longer visible to other players.
+Commands.Players.Statsanon.Usage:		Usage: '/statsanon'

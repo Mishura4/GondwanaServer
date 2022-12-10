@@ -1,0 +1,10 @@
+# /advice
+Commands.Players.Advice.Advice:			[ADVICE {0}] {1}: "{2}"
+Commands.Players.Advice.Advice.Online:	There is {0} advisor·s online!
+Commands.Players.Advice.Description1:	Advisors reply with `/send`
+Commands.Players.Advice.Description:	Ask for an advice to an advisor.
+Commands.Players.Advice.Message:		/advice <Message>
+Commands.Players.Advice.Muted:			You are muted, so you're not allowed to talk on this channel.
+Commands.Players.Advice.Usage:			In order to reply to advisors, use '/send <Name of the advisor>/
+Commands.Players.Advice.Advice.Online:	There is {0} advisor·s online!
+Commands.Players.Advice.Usage:			Usage : '/advice' # Display all advisors online.

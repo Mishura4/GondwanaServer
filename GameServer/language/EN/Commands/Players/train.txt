@@ -1,0 +1,9 @@
+Commands.Players.Train.CantTrainSpec:	You cannot train this skill at this level!
+Commands.Players.Train.Complete:		Training completed!
+Commands.Players.Train.Cost:			This spec. costs {0} skill points!
+Commands.Players.Train.Description:		Trains a spec. line by the number indicated.
+Commands.Players.Train.Miss.Trainer:	This command only works in the presence of your trainer.
+Commands.Players.Train.NotEnoughPoint:	You don't have enough skill points to be able to train to this level.
+Commands.Players.Train.Skill.Already:	You have already trained at this level.
+Commands.Players.Train.Skill.NotFound:	The skill provided cannot be found.
+Commands.Players.Train.Usage:			Usage : '/train <Line> <Level>' # e.g. '/train Dual Wield 50'

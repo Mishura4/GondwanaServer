@@ -1,0 +1,3 @@
+Commands.Players.Banque.Description:	To do some operations with your banker.
+Commands.Players.Banque.Usage:			/banque <Copper> <Silver> <Gold> <Platinum>' Add money in your bank account
+Commands.Players.Banque.Usage.Cheque:			/banque cheque <Copper> <Silver> <Gold> <Platinum>' Write a check

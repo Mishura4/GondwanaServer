@@ -1,0 +1,11 @@
+Commands.GM.GroupMob.Description:	Commandes GroupMob
+Commands.GM.GroupMob.Usage.Add:		'/GroupMob add <groupId>' Ajoute le mob en cible au groupe donné (créer le groupe si inexistant)
+Commands.GM.GroupMob.Usage.Add.Spawner:		'/GroupMob add <groupId> spawner' Ajoute le groupe <groupId> au Spawner en target (créer le SpawnerTemplate si inexistant)
+Commands.GM.GroupMob.Usage.Remove:		'/GroupMob remove <groupId>' Supprime le mob ciblé de son groupe
+Commands.GM.GroupMob.Usage.Group:		'/GroupMob group remove <groupId>' Supprime le groupe et tous les mobs associés à celui-ci
+Commands.GM.GroupMob.Usage.Info:		'/GroupMob info <GroupId>' Affiche les infos sur un GroupMob en fournissant son <GroupId>
+Commands.GM.GroupMob.Usage.Status:		'/GroupMob status <GroupId> set <StatusId> <SlaveGroupId> Affecte un GroupMobStatus<StatusId> à un <GroupId>(master) envers un <GroupId>(slave)'
+Commands.GM.GroupMob.Usage.Status.Origin:		'/GroupMob status origin set <StatusId> <GroupId>' Attribut un Status d'origine à un GroupMob en donnant son <GroupdId> et le <StatusId> souhaité
+Commands.GM.GroupMob.Usage.Status.Create:		'/GroupMob status create <SpellId|null>(Effect) <FlagsValue|null>(Flags) <true|false|null>(IsInvicible) <id|null>(Model) <value|null>(VisibleWeapon) <id|null>(Race)' - Créer un GroupStatus et renvoie en sortie <StatusId>)
+Commands.GM.GroupMob.Usage.Status.Quest:		'/GroupMob quest <GroupId> <QuestId> <Count> <true|false>' Associer un GroupMob à une Quête en spécifiant le Count(nb de fois) et WillbeFriendly <true|false> pour spécifier son aggressivité
+Commands.GM.GroupMob.Usage.Status.Reset:		'/GroupMob status reset <GroupId>'  Reset le status ainsi que ses interractions

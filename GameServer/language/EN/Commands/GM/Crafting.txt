@@ -1,0 +1,15 @@
+Commands.GM.Crafting.AlreadyHaveSkill:		{0} already have the crafting skill {1}.
+Commands.GM.Crafting.Description:			Change the crafting level of your target.
+Commands.GM.Crafting.InvalidSkill:			You must enter a valid crafting skill id, type /crafting for command overview.
+Commands.GM.Crafting.NoPlayerTarget:		You must target a player to use this command.
+Commands.GM.Crafting.NotHaveSkillAddIt:		{0} does not have the crafting skill {1}, add it first.
+Commands.GM.Crafting.NowHasSkillPoints:		{0} now has {1} in {2}.
+Commands.GM.Crafting.SkillAdded:			Crafting skill {0} correctly added.
+Commands.GM.Crafting.SkillChanged:			Crafting skill {0} correctly changed.
+Commands.GM.Crafting.SkillDescription:		Crafting Skill ID description:
+Commands.GM.Crafting.Usage.Add:				'/crafting add <craftingSkillID> <startLevel>' # To add a new crating skill to your target.
+Commands.GM.Crafting.Usage.Change:			'/crafting change <craftingSkillID> <amount>' # To increase or decrease the crafting skill level of your target.
+Commands.GM.Crafting.Usage.List:			'/crafting list' # To have the list of all crafting skill as well as their id.
+Commands.GM.Crafting.Usage.SalvageAdd:		/crafting salvageadd <SalvageYieldID (0 for next free)> <MaterialId_nb> <Count> [Realm] [PackageID]
+Commands.GM.Crafting.Usage.SalvageUpdate:	/crafting salvageupdate <SalvageYieldID> <MaterialId_nb> <Count> <Realm> [PackageID]
+Commands.GM.Crafting.Usage.SalvageInfo:		/crafting salvageinfo <SalvageYieldID>

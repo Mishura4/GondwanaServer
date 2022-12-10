@@ -40,7 +40,6 @@ GamePlayer.RealmTitle.Albion.RR12.Female:			Baronetess
 GamePlayer.RealmTitle.Albion.RR13.Female:			Baroness
 GamePlayer.RealmTitle.Albion.RR14.Female:			Arch Duchess
 
-
 # Midgard
 # /Male
 GamePlayer.RealmTitle.Midgard.RR0.Male:				Invader

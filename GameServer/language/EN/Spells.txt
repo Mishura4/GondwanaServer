@@ -1,4 +1,4 @@
-﻿SpellHandler.CancelEffect:	You cancel your effect.
+SpellHandler.CancelEffect:	You cancel your effect.
 SpellHandler.CancelPulsingSpell:	You stop playing your song.
 SpellHandler.CasterMove:	You move and interrupt your spellcast!
 GamePlayer.CastSpell.MustWaitBeforeCast:	You need to wait {0} mores secondes for cast a spell!
@@ -123,7 +123,7 @@ Amnesia.MessageToTarget:	Your mind goes blank and you forget what you were doing
 
 # Petrify
 Petrify.Target.Absorbs:  The target is petrify and absorbs {0} damage!
-Petrify.Target.Resist:   is petrify and can't be effected by this Spell!
+Petrify.Target.Resist:   {0} is petrify and can't be effected by this Spell!
 Petrify.Self.Message:	The target is petrify.
 Petrify.Self.Absorb:		You're petrify and absorb {0} damage!
 Petrify.Self.Unpetrify:		You're unpetrify.
@@ -131,3 +131,4 @@ Petrify.Self.Unpetrify:		You're unpetrify.
 # Damnation
 Damnation.Self.Message:  The target is damned
 Damnation.Self.Message2: You're damned
+Damnation.Target.Resist:  {0} is damned and can't be effected by this Spell!

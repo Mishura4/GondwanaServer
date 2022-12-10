@@ -1,0 +1,5 @@
+# /Autoloot
+Commands.Players.Autoloot.Description:	Automatically picks up loot around.
+Commands.Players.Autoloot.Off:			Your autoloot is deactivated. You will no longer automatically pick up nearby loot.
+Commands.Players.Autoloot.On:			Your autoloot is activated. You will now automatically pick up nearby loot.
+Commands.Players.Autoloot.Usage:		Usage : '/autoloot <on|off>'

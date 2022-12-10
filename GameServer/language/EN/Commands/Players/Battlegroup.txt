@@ -1,0 +1,119 @@
+# /Battlegroup
+Commands.Players.Battlegroup.Help.Help:              /bg help - Shows all battlegroup commands.
+Commands.Players.Battlegroup.Help.Invite:			/bg invite <player name> - Invites the specified player to join the battlegroup.
+Commands.Players.Battlegroup.Help.JoinPrivate:		/bg join <moderator> <password> - Join a password protected battlegroup.	
+Commands.Players.Battlegroup.Help.JoinPublic:		/bg join <moderator> - To join a public battlegroup.
+Commands.Players.Battlegroup.Help.Leader:			/bg promote <name> - Promote another player as leader of the battlegroup. This player can invite other players to join the channel and can talk when the channel is in listen mode.
+Commands.Players.Battlegroup.Help.Leave:             /bg leave - To leave the battlegroup.
+Commands.Players.Battlegroup.Help.Listen:            /bg listen - Set the battle group in listen mode. Only moderators and leaders can speak.
+Commands.Players.Battlegroup.Help.PasswordClear:     /bg password clear - Clear current password (moderator only).
+Commands.Players.Battlegroup.Help.PasswordDisplay:   /bg password - Displays current password (moderator only).
+Commands.Players.Battlegroup.Help.PasswordNew:		/bg password [new password]	- To change the current password.
+Commands.Players.Battlegroup.Help.Private:			/bg private - Sets the battlegroup as private.
+Commands.Players.Battlegroup.Help.Public:			/bg public - Sets the battle group as public, anyone can join.
+Commands.Players.Battlegroup.Help.Remove:			/bg remove <player name> - Kicks the specified player out of the battlegroup.
+Commands.Players.Battlegroup.Help.Usage:			    /bg usage :
+Commands.Players.Battlegroup.Help.Who:				/bg who - List of all the battlegroup members.
+Commands.Players.Battlegroup.Help.Count:             /bg count - Counts the number of members in the battlegroup.
+Commands.Players.Battlegroup.Help.Groups:            /bg groups - Displays the members of the battlegroup with their groups.
+Commands.Players.Battlegroup.Help.GroupClass:        /bg groupclass - Displays the class composition for each of the groups in the battlegroup.
+Commands.Players.Battlegroup.Help.Loot:              /bg loot <normal|treasurer> - Sets battlegroup item pickup to normal or treasurer.
+Commands.Players.Battlegroup.Help.LootLevel:         /bg lootlevel <level> - Sets the item level (loot) for your battlegroup.
+Commands.Players.Battlegroup.Help.Treasurer:         /bg treasurer <player name> - Sets the battlegroup's treasurer.
+Commands.Players.Battlegroup.Help.Status:	        /bg status - Shows the number of members of your battlegroup.
+Commands.Players.Battlegroup.Help.Credit:            /bg credit - Lists MasterLevel encounters type your battlegroup has met during the last 10 minutes.
+Commands.Players.Battlegroup.Help.GrantCredit:       /bg grantcredit <masterlevel> <player name> - Allows the battle group leader to grant credits to players for completed MasterLevels.
+Commands.Players.Battlegroup.InBattleGroup:			You must be in a battlegroup to use this command.
+Commands.Players.Battlegroup.InviteYourself:		    You cannot invite yourself to a battlegroup.
+Commands.Players.Battlegroup.JoinBattleGroup:		Do you want to join {0}'s battlegroup?
+Commands.Players.Battlegroup.LeaderCommand:		    You must be the battlegroup moderator to use this command.
+Commands.Players.Battlegroup.LeaderInvite:			You must be the battlegroup moderator to invite a player to join it.
+Commands.Players.Battlegroup.ListenMode:			    The battlegroup's listening mode has changed.
+Commands.Players.Battlegroup.Moderator:			    {0} is now the battlegroup's moderator.
+Commands.Players.Battlegroup.NoPlayer:				There is no player with that name.
+Commands.Players.Battlegroup.NotBattleGroupLeader:	This player is not a battlegroup moderator.
+Commands.Players.Battlegroup.NotBattleGroupMember:	This player is not a battlegroup member.
+Commands.Players.Battlegroup.NotPublic:			    This battlegroup is not public.
+Commands.Players.Battlegroup.OnlyModerator:		    Moderators only can speak in this battlegroup.	
+Commands.Players.Battlegroup.OwnBattleGroup:			You cannot join your own battlegroup.
+Commands.Players.Battlegroup.Password:				Battlegroup password: {0}.
+Commands.Players.Battlegroup.PasswordChanged:		New battlegroup password: {0}.	
+Commands.Players.Battlegroup.PlayerInBattlegroup:	{0} is already a member of a battlegroup.
+Commands.Players.Battlegroup.Private:				The battlegroup is now private.
+Commands.Players.Battlegroup.Public:				    The battlegroup is now public.
+Commands.Players.Battlegroup.Usage:				    Usage: /bc <text>
+Commands.Players.Battlegroup.UsageInvite:			Usage: /bg invite <player name>
+Commands.Players.Battlegroup.BattlegroupLootThresholdOff:    Battlegroup's loot level is currently disabled. 
+Commands.Players.Battlegroup.BattlegroupLootThresholdOn:     Battlegroup's loot level is currently {0}.
+Commands.Players.Battlegroup.BattleGroupLootNormal:          Battlegroup's loot type is set to normal.
+Commands.Players.Battlegroup.BattleGroupLootTreasurer:       Battlegroup's loot type is set to go to the treasurer.
+Commands.Players.Battlegroup.BattlegroupTreasurerOn:         You changed the battlegroup treasurer to: {0}.
+Commands.Players.Battlegroup.BattlegroupTreasurerOff:        The battlegroup has currently no more treasurer.
+Commands.Players.Battlegroup.BattlegroupStatus:              The battlegroup's status is currently: {0}.
+Commands.Players.Battlegroup.BattlegroupCount:               There is currently {0} members in your battlegroup.
+Commands.Players.Battlegroup.BattlegroupTreasurerIsYou:      You have been appointed as the treasurer of your battlegroup.
+Commands.Players.Battlegroup.BattlegroupTreasurerIs:         Your battle group treasurer has been set to {0}.
+
+
+Commands.Players.Battelgroup.CommandNotImplemented:			This command is not implemented.
+Commands.Players.Battlechat.ChatName:						[BattleGroup Chat]
+Commands.Players.Battlechat.Description:					Battlegroup Chat Commands:
+Commands.Players.Battlechat.Usage:							Usage: '/bc <text>' # Send a message to your battlegroup.
+Commands.Players.Battlegroup.AlreadyInBattlegroup:			You are already in a battlegroup.
+Commands.Players.Battlegroup.BattlegroupCount:				There is currently {0} members in your battlegroup.
+Commands.Players.Battlegroup.BattleGroupLootNormal:			Battlegroup's loot type is set to normal.
+Commands.Players.Battlegroup.BattlegroupLootThresholdOff:	Battlegroup's loot level is currently disabled. 
+Commands.Players.Battlegroup.BattlegroupLootThresholdOn:	Battlegroup's loot level is currently {0}.
+Commands.Players.Battlegroup.BattleGroupLootTreasurer:		Battlegroup's loot type is set to go to the treasurer.
+Commands.Players.Battlegroup.BattlegroupStatus:				The battlegroup's status is currently: {0}.
+Commands.Players.Battlegroup.BattlegroupTreasurerIs:		Your battle group treasurer has been set to {0}.
+Commands.Players.Battlegroup.BattlegroupTreasurerIsYou:		You have been appointed as the treasurer of your battlegroup.
+Commands.Players.Battlegroup.BattlegroupTreasurerOff:		The battlegroup has currently no more treasurer.
+Commands.Players.Battlegroup.BattlegroupTreasurerOn:		You changed the battlegroup treasurer to: {0}.
+Commands.Players.Battlegroup.CurrentlyInBattleGroup:		Player participating in this battlegroup:
+Commands.Players.Battlegroup.Description:					Battlegroup management commands:
+Commands.Players.Battlegroup.Help.Count:					'/bg count' # Counts the number of members in the battlegroup.
+Commands.Players.Battlegroup.Help.Credit:					'/bg credit' # Lists MasterLevel encounters type your battlegroup has met during the last 10 minutes.
+Commands.Players.Battlegroup.Help.GrantCredit:				'/bg grantcredit <masterlevel> <player name>' # Allows the battle group leader to grant credits to players for completed MasterLevels.
+Commands.Players.Battlegroup.Help.GroupClass:				'/bg groupclass' # Displays the class composition for each of the groups in the battlegroup.
+Commands.Players.Battlegroup.Help.Groups:					'/bg groups' # Displays the members of the battlegroup with their groups.
+Commands.Players.Battlegroup.Help.Help:						'/bg help' # Shows all battlegroup commands
+Commands.Players.Battlegroup.Help.Invite:					'/bg invite <player name>' # Invites the specified player to join the battlegroup.
+Commands.Players.Battlegroup.Help.JoinPrivate:				'/bg join <moderator> <password>' # Join a password protected battlegroup.
+Commands.Players.Battlegroup.Help.JoinPublic:				'/bg join <moderator>' # To join a public battlegroup.
+Commands.Players.Battlegroup.Help.Leader:					'/bg promote <name>' # Promote another player as leader of the battlegroup. This player can invite other players to join the channel and can talk when the channel is in listen mode.
+Commands.Players.Battlegroup.Help.Leave:					'/bg leave' # To leave the battlegroup.
+Commands.Players.Battlegroup.Help.Listen:					'/bg listen' # Set the battle group in listen mode. Only moderators and leaders can speak.
+Commands.Players.Battlegroup.Help.Loot:						'/bg loot <normal|treasurer>' # Sets battlegroup item pickup to normal or treasurer.
+Commands.Players.Battlegroup.Help.LootLevel:				'/bg lootlevel <level>' # Sets the item level (loot) for your battlegroup.
+Commands.Players.Battlegroup.Help.PasswordClear:			'/bg password clear' # Clear current password (moderator only).
+Commands.Players.Battlegroup.Help.PasswordDisplay:			'/bg password' # Displays current password (moderator only).
+Commands.Players.Battlegroup.Help.PasswordNew:				'/bg password <new password>' # To change the current password.
+Commands.Players.Battlegroup.Help.Private:					'/bg private' # Sets the battlegroup as private.
+Commands.Players.Battlegroup.Help.Public:					'/bg public' # Sets the battle group as public, anyone can join.
+Commands.Players.Battlegroup.Help.Remove:					'/bg remove <player name>' # Kicks the specified player out of the battlegroup.
+Commands.Players.Battlegroup.Help.Status:					'/bg status' # Shows the number of members of your battlegroup.
+Commands.Players.Battlegroup.Help.Treasurer:				'/bg treasurer <player name>' # Sets the battlegroup's treasurer.
+Commands.Players.Battlegroup.Help.Usage:					'/bg usage:
+Commands.Players.Battlegroup.Help.Who:						'/bg who' # List of all the battlegroup members.
+Commands.Players.Battlegroup.InBattleGroup:					You must be in a battlegroup to use this command.
+Commands.Players.Battlegroup.InviteYourself:				You cannot invite yourself to a battlegroup.
+Commands.Players.Battlegroup.JoinBattleGroup:				Do you want to join {0}'s battlegroup?
+Commands.Players.Battlegroup.LeaderCommand:					You must be the battlegroup moderator to use this command.
+Commands.Players.Battlegroup.LeaderInvite:					You must be the battlegroup moderator to invite a player to join it.
+Commands.Players.Battlegroup.Leader:						<Leader>
+Commands.Players.Battlegroup.ListenMode:					The battlegroup's listening mode has changed.
+Commands.Players.Battlegroup.Moderator:						{0} is now the battlegroup's moderator.
+Commands.Players.Battlegroup.NoPlayer:						There is no player with that name.
+Commands.Players.Battlegroup.NotBattleGroupLeader:			This player is not a battlegroup moderator.
+Commands.Players.Battlegroup.NotBattleGroupMember:			This player is not a battlegroup member.
+Commands.Players.Battlegroup.NotPublic:						This battlegroup is not public.
+Commands.Players.Battlegroup.OnlyModerator:					Moderators only can speak in this battlegroup.
+Commands.Players.Battlegroup.OwnBattleGroup:				You cannot join your own battlegroup.
+Commands.Players.Battlegroup.PasswordChanged:				New battlegroup password: {0}.
+Commands.Players.Battlegroup.Password:						Battlegroup password: {0}.
+Commands.Players.Battlegroup.PlayerInBattlegroup:			{0} is already a member of a battlegroup.
+Commands.Players.Battlegroup.Private:						The battlegroup is now private.
+Commands.Players.Battlegroup.Public:						The battlegroup is now public.
+Commands.Players.Battlegroup.UsageInvite:					Usage: '/bg invite <player name>'
+Commands.Players.Battlegroup.Usage:				    		Usage: '/bc <text>'

@@ -1,4 +1,4 @@
-﻿# BaseQuest
+# BaseQuest
 BaseQuest.TeleportTo.Text1:			{0} is being teleported to {1}.
 
 #RewardQuest
@@ -8,7 +8,7 @@ RewardQuest.Description:			Quest Goal : {0} ({1}/{2})
 
 #AbstractQuest
 AbstractQuest.FinishQuest.Completed:		You have completed the {0} quest!
-AbstractQuest.AbortQuest:			Quest cleared!
+AbstractQuest.AbortQuest:			Quest {0} cleared!
 AbstractQuest.OnQuestAssigned.GetQuest:		You have been given the {0} quest.
 
 

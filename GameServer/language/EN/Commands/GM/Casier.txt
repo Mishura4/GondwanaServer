@@ -1,0 +1,6 @@
+Commands.GM.AmteNpc.Description:	Criminal record management:
+Commands.GM.AmteNpc.Casier.Info:	'/casier info [account]' Shows the Criminal record of the player/account
+Commands.GM.AmteNpc.Casier.Add:		'/casier add <account> <raison>' Add a public entry
+Commands.GM.AmteNpc.Casier.Staff:	'/casier staff <account> <raison>' Add a private entry
+Commands.GM.AmteNpc.Casier.Padd:	'/casier padd <player> <raison>' Add a public entry
+Commands.GM.AmteNpc.Casier.Pstaff:	'/casier pstaff <player> <raison>' Add a private entry

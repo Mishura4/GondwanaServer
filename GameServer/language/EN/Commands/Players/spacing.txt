@@ -1,0 +1,10 @@
+Commands.Players.Spacing.Description:		Change spacing between your servants.
+Commands.Players.Spacing.Help.Big:			'/spacing big'    # The spacing between your servants will be large.
+Commands.Players.Spacing.Help.Huge:			'/spacing huge'   # The spacing between your servants will be enormous.
+Commands.Players.Spacing.Help.Normal:		'/spacing normal' # The spacing between your servants will be normal.
+Commands.Players.Spacing.Help:				Spacing management:
+Commands.Players.Spacing.Missing.Commander:	You don't have any Commander!
+Commands.Players.Spacing.Missing.Minion:	You don't have any Servant!
+Commands.Players.Spacing.Only.Bone:			Bonedancers only can use this command.
+Commands.Players.Spacing.UnknownArg:		Unrecognized argument : {0}
+Commands.Players.Spacing.Usage:				Usage : '/spacing <normal|big|huge>'

@@ -1,0 +1,4 @@
+Commands.Players.RP.Description:	Activate / Deactivate realm points reception
+Commands.Players.RP.Off:			Your « RP » option is DEACTIVATED. You will no longer earn Realm Points. Use '/rp on' to receive Realm Points again.
+Commands.Players.RP.On:				Your « RP » option is ACTIVATED. You are currently earning Realm Points. Use '/rp off' to stop receiving Realm Points.
+Commands.Players.RP.Usage:			Usage: '/rp <on|off>'

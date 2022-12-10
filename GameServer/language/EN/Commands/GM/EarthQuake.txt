@@ -1,0 +1,2 @@
+Commands.GM.EarthQuake.Description:	earthquake [unk1] [radius] [intensity] [duration] [delay]
+Commands.GM.EarthQuake.Usage:		/earthquake

@@ -1,0 +1,3 @@
+Commands.GM.Harm.Description:		Blesse votre cible
+Commands.GM.Harm.Usage:				Usage : '/harm <#montant>'
+Commands.GM.Harm.InvalidTarget:		Vous n'avez pas de cible valide.

@@ -1,0 +1,10 @@
+Commands.Players.Rearrange.Description:					Allows you to rearrange your character's slots.
+commands.Players.Rearrange.Slot.Changed:				The slot of character {0} has been updated. (Old slot = {1}, New slot = {2})
+Commands.Players.Rearrange.Slot.DiffRealm:				You cannot change the character's slot to another realm! (Original realm = {0}, Final realm = {1})
+Commands.Players.Rearrange.Slot.Empty:					The given slot ({0}) is.
+Commands.Players.Rearrange.Slot.Invalid:				The character's slot is invalid: {0}
+Commands.Players.Rearrange.Slot.Invalids:				Character slots are invalid: {0}
+commands.Players.Rearrange.Slot.List.characterSlot:		Character slots:
+Commands.Players.Rearrange.Slot.List.slotEmpty:			Empty slot
+Commands.Players.Rearrange.Usage.List:					'/rearrange list' # List all characters on this account and their associated slots.
+Commands.Players.Rearrange.Usage.Setslot:				'/rearrange setslot <Source#> <Target#>' # Set the source slot to the target slot.

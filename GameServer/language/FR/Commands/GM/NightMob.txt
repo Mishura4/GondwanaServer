@@ -1,0 +1,4 @@
+Commands.GM.door.Description:	Gestion des mobs de nuit:
+Commands.GM.door.Usage.Create:		'/nightmob create' - Crée un NightMob
+Commands.GM.door.Usage.Info:	'/nightmob info' - Affiche les infos du NightMob ciblé
+Commands.GM.door.Usage.Time:		'/nightmob time <start> <end>' - Change les heures d'apparition du mob

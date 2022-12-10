@@ -1,0 +1,35 @@
+Commands.GM.TextNPC.Description:			TextNPC Commands:
+Commands.GM.TextNPC.Usage.Create:		'/textnpc create [isRenaissance]' Create a new NPC. [isRenaissance] Check if the player is Reborn in order to allow the NPC to interact
+Commands.GM.TextNPC.Usage.CreateMerchant:	'/textnpc createmerchant [isRenaissance]' Create a new Merchant who can talk to the player. [isRenaissance] Check if the player is Reborn in order to allow the merchant to interact
+Commands.GM.TextNPC.Usage.CreateGuard:	'/textnpc createguard [isRenaissance]' Create a new Guard who can talk to the player. [isRenaissance] Check if the player is Reborn in order to allow the guard to interact
+Commands.GM.TextNPC.Usage.Response:			'/textnpc reponse' Shows NPC's response (the first 20 letters of the response)
+Commands.GM.TextNPC.Usage.Text:			'/textnpc text <text>' Set interact text (right click) (use the character | or ; to skip a line)
+Commands.GM.TextNPC.Usage.Add:			'/textnpc add <response> <text>' Add or change the NPC's 'response' (use the character | or ; to skip a line)
+Commands.GM.TextNPC.Usage.Remove:			'/textnpc remove <response>' Removes the response 'response'
+Commands.GM.TextNPC.Usage.Emote.Add:			'/textnpc emote add <emote> <response>' To add an emote as a response
+Commands.GM.TextNPC.Usage.Emote.Remove:		'/textnpc emote remove <response>' To remove an emote
+Commands.GM.TextNPC.Usage.Emote.Help:			'/textnpc emote help' Display server's emotes list while selecting the NPC
+Commands.GM.TextNPC.Usage.Spell.Add:			'/textnpc spell add <spellID> <reponse>' To add a spell as a response
+Commands.GM.TextNPC.Usage.Spell.Remove:		'/textnpc spell remove <reponse>' To remove a spell
+Commands.GM.TextNPC.Usage.Spell.Help:		'/textnpc spell help' Display spell infos while selecting the NPC
+Commands.GM.TextNPC.Usage.RandomPhrase.Add:		'/textnpc randomphrase add <emote (0=none)> <say/yell/em> <phrase>' To set up a random phrase the NPC will say from time to time with a specific interval, in association with an emote. This phrase can be <say/yell/em>
+Commands.GM.TextNPC.Usage.RandomPhrase.Remove:		'/textnpc randomphrase remove <phrase>' To remove a random phrase
+Commands.GM.TextNPC.Usage.RandomPhrase.interval:		'/textnpc randomphrase interval <interval in seconds>' Interval for the NPC to repeat a random phrase
+Commands.GM.TextNPC.Usage.RandomPhrase.Help:		'/textnpc randomphrase help' Display some infos about random phrases on NPCs
+Commands.GM.TextNPC.Usage.RandomPhrase.View:		'/textnpc randomphrase view' To see the random phrases on a specific NPC
+Commands.GM.TextNPC.Usage.Quest:		'/textnpc quest <on/off>' Shows the quest icon on the NPC
+Commands.GM.TextNPC.Usage.Level:		'/textnpc level <levelmin> <levelmax>' Set minimum and maximum level players can interact with this NPC
+Commands.GM.TextNPC.Usage.Guild.Add:	'/textnpc guild add <guildname>' Add a Guild the NPC cannot interact with (use 'NO GUILD' for non-guilded players)
+Commands.GM.TextNPC.Usage.Guild.Remove:			'/textnpc guild remove <guildname>' Remove a Guild the NPC cannot interact with
+Commands.GM.TextNPC.Usage.GuilAAdd:			'/textnpc guildA add <guildname>' Add a Guild the NPC can interact with (use 'NO GUILD' for non-guilded players and 'ALL' to allow interactions with all guilds)
+Commands.GM.TextNPC.Usage.GuildARemove:			'/textnpc guildA remove <guildname>' Remove a Guild the NPC can interact with
+Commands.GM.TextNPC.Usage.RaceAdd:			'/textnpc race add <race name>' Add a Race the NPC cannot interact with
+Commands.GM.TextNPC.Usage.RaceRemove:			'/textnpc race remove <race name>' Remove a Race the NPC cannot interact with
+Commands.GM.TextNPC.Usage.RaceList:		'/textnpc race list' Display server's Races list while selecting the NPC
+Commands.GM.TextNPC.Usage.ClassAdd:			'/textnpc class add <class name>' Add a Class the NPC cannot interact with
+Commands.GM.TextNPC.Usage.ClassRemove:			'/textnpc class remove <class name>' Remove a Class the NPC cannot interact with
+Commands.GM.TextNPC.Usage.ClassList:		'/textnpc class list' Display server's Classes list while selecting the NPC
+Commands.GM.TextNPC.Usage.Hour:		'/textnpc hour <hour min> <hour max>' Set gameserver's time when a NPC is allowed to interact with a player (works as well for random phrases)
+Commands.GM.TextNPC.Usage.Condition.List:		'/textnpc condition list' Display the Conditions list of the NPC (the NPC has to be selected)
+Commands.GM.TextNPC.Usage.Condition.Help:		'/textnpc condition help' Display more informations about how Conditions works with NPCs (the NPC has to be selected)
+Commands.GM.TextNPC.AdditionalDescription:		For every NPC dialog: {0} = Name of the player, {1} = Family name, {2} = Guild name, {3} = Class, {4} = Race

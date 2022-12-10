@@ -1,0 +1,8 @@
+Commands.Players.Realm.AlbKeeps:		Albion Keeps
+Commands.Players.Realm.DarknessFalls:	Darkness Falls
+Commands.Players.Realm.Description:		Displays the current status of the realm.
+Commands.Players.Realm.HibKeeps:		Hibernia Keeps
+Commands.Players.Realm.MidKeeps:		Midgard Keeps
+Commands.Players.Realm.Title:			Realm's status
+Commands.Players.Realm.Usage:			Usage : '/realm'
+Commands.Players.Realm.UseRelicCommand:	Use '/relic' to display the relic's status.

@@ -1,0 +1,7 @@
+Commands.Players.Boot.Description:		To kick a player out.
+Commands.Players.Boot.InHouseError:		You must be in your home to use this command!
+Commands.Players.Boot.NoHouseError:		You don't have any house!
+Commands.Players.Boot.NoOneOnline:		No player with that name is online!
+Commands.Players.Boot.NoPermission:		You do not have permission to do this action.
+Commands.Players.Boot.Usage:			Usage: '/boot <playername>'
+Commands.Players.Boot.YouRemoved:		You have been kicked out by {0}!

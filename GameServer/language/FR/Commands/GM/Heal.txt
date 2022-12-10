@@ -1,0 +1,2 @@
+Commands.GM.Heal.Description:	Soigne votre cible (health, endu, mana)
+Commands.GM.Heal.Usage:			Usage : '/heal <health|endu|mana>'

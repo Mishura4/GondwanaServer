@@ -1,0 +1,16 @@
+Commands.Players.Lastname.Clear:			Do you want to remove your last name?
+Commands.Players.Lastname.Cost:				Changing your last name costs {0}!
+Commands.Players.Lastname.Declined.Clear:	You refused to remove your last name.
+Commands.Players.Lastname.Declined.Take:	You refused to take {0} as a last name.
+Commands.Players.Lastname.Description:		Set / Change your last name.
+Commands.Players.Lastname.MaxLength:		Last names cannot be longer than {0} characters!
+Commands.Players.Lastname.NeedRegistrar:	Only the competent person can process your request. Ask for the « Name Registrar »
+Commands.Players.Lastname.NoAvailable:		You must be level {0} or {1} in your primary crafting skill to register a last name!
+Commands.Players.Lastname.NotValid:			{0} is not a legal name! Choose another.
+Commands.Players.Lastname.Set.Clear:		Your last name has been removed!
+Commands.Players.Lastname.Set.To:			Your last name has been set to {0}!
+Commands.Players.Lastname.Setup:			Do you want to define « {0} » as the last name?
+Commands.Players.Lastname.TooFarAway:		You are too far away to interact with {0}.
+Commands.Players.Lastname.UpperCase:		Your last name must start with a valid uppercase!
+Commands.Players.Lastname.Usage:			'/lastname <name>'
+Commands.Players.Lastname.ValidCharacters:	Your last name can only contain valid characters!

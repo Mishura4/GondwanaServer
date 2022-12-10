@@ -1,0 +1,9 @@
+Commands.GM.RvR.Description:	Commands to manage RvR et du PvP:
+Commands.GM.RvR.Usage.Open:		'/rvr open' Force RvR opening (RvR won't close anymore)
+Commands.GM.RvR.Usage.Close:		'/rvr close' Force closing RvR
+Commands.GM.RvR.Usage.Unforce:		'/rvr unforce' Re-adjust RvR session hours after '/rvr open' in order to fix eventual RvR hours misadjustments
+Commands.GM.RvR.Usage.OpenPvP:		'/rvr openpvp [region]' Force PvP opening (PvP won't close anymore)
+Commands.GM.RvR.Usage.ClodePvP:		'/rvr closepvp' Force closing PvP
+Commands.GM.RvR.Usage.Status:		'/rvr status' Check RvR status (open/close)
+Commands.GM.RvR.Usage.UnforcePvP:		'/rvr unforcepvp' Re-adjust PvP session hours after '/rvr openpvp' din order to fix eventual PvP hours misadjustments
+Commands.GM.RvR.Usage.Refresh:		'/rvr refresh' To refresh maps available for RvR and PvP sessions

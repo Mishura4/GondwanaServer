@@ -1,0 +1,11 @@
+Commands.GM.jailrp.Description:			Pour emprisonner un joueur de façon RP.
+Commands.GM.jailrp.Usage:		/jailrp <nom du joueur> pour relâcher un joueur (connecté ou non)
+Commands.GM.jailrp.Usage.Free:	/jailrp <nom du joueur> <raison> <amende en or> [heures] [jours] pour emprisonner un joueur
+Commands.GM.jailhrp.Description:			Pour emprisonner un joueur de façon HRP.
+Commands.GM.jailhrp.Usage:			/jailhrp <nom du joueur> pour relâcher un joueur (connecté ou non)
+Commands.GM.jailhrp.Usage.Free:			/jailhrp <nom du joueur> <raison> <heures> [jours] pour emprisonner un joueur
+Commands.GM.jail.Description:			Pour emprisonner un joueur de façon RP.
+Commands.GM.jail.Usage.Free:			'/jail relache <nom du joueur>' Relâche le joueur s'il est en prison (RP ou HRP)
+Commands.GM.jail.Usage.RP:		'/jail rp <nom du joueur> <raison> <caution (en po)> <heure> [jours]' Met le joueur en prison RP
+Commands.GM.jail.Usage.HRP:			'/jail hrp <nom du joueur> <raison> <heure> [jours]' Met le joueur en prison HRP
+Commands.GM.jail.Usage.List:			'/jail list [rp/hrp]' pour lister les prisonniers (RP ou HRP ou tous)

@@ -1,0 +1,12 @@
+Commands.GM.GMAppeal.Description:			Commands for server staff to assist players with their Appeals.
+Commands.GM.GMAppeal.Usage.View:			/gmappeal view <player name> - Views the appeal of a specific player.
+Commands.GM.GMAppeal.Usage.List:			/gmappeal list - Lists all the current Appeals from online players only, in a window.
+Commands.GM.GMAppeal.Usage.ListAll:			/gmappeal listall - Will list Appeals of both offline and online players, in a window.
+Commands.GM.GMAppeal.Usage.Assist:			/gmappeal assist <player name> - Take ownership of the player's appeal and lets other staff know you are helping this player.
+Commands.GM.GMAppeal.Usage.JumpTo:			/gmappeal jumpto - Will jump you to the player you are currently assisting (must use /gmappeal assist first).
+Commands.GM.GMAppeal.Usage.JumpBack:		/gmappeal jumpback - Will jump you back to where you were after you've helped the player (must use /gmappeal jumpto first).
+Commands.GM.GMAppeal.Usage.Close:			/gmappeal close <player name> - Closes the appeal and removes it from the queue.
+Commands.GM.GMAppeal.Usage.CloseOffLine:	/gmappeal closeoffline <player name> - Closes an appeal of a player who is not online.
+Commands.GM.GMAppeal.Usage.Release:			/gmappeal release <player name> - Releases ownership of the player's appeal so someone else can help them.
+Commands.GM.GMAppeal.Usage.Mute:			/gmappeal mute - Toggles receiving appeal notices, for yourself, for this session.
+Commands.GM.GMAppeal.Usage.Commands:		/gmappeal commands - Lists all the commands in a pop up window.

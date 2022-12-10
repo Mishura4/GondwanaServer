@@ -1,0 +1,3 @@
+Commands.Players.Settitle.Cannot:		You cannot change your title.
+Commands.Players.Settitle.Description:	Define player's title.
+Commands.Players.Settitle.Usage:		Usage : '/settitle <#>' # Changes your title to one of the titles available in the list.

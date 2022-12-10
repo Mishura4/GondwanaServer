@@ -1,0 +1,43 @@
+Commands.Players.Boat.AlreadyOnBoat:			This player is already on the boat!
+Commands.Players.Boat.BoardingDenied:			Your request for {0} is rejected.
+Commands.Players.Boat.BoardingGranted:			You have accepted the request to control the boat.
+Commands.Players.Boat.BoardingRequest:			{0} tries to take control of your boat. Do you accept?
+Commands.Players.Boat.BoatTooFar:				{0} is too far from you.
+Commands.Players.Boat.BootedBy:					You just got kicked out of the boat by {0}.
+Commands.Players.Boat.BootedTarget:				You kicked out {0} of the boat.
+Commands.Players.Boat.DeleteConfirmation:		Do you really want to remove your boat {0}?
+Commands.Players.Boat.Description:				Allows you to control your boat.
+Commands.Players.Boat.FullBoat:					The boat is currently full.
+Commands.Players.Boat.Help.Board:				'/boat board' # To face the targeted boat.
+Commands.Players.Boat.Help.Boot:				'/boat boot' # To kick out the selected player of the boat.
+Commands.Players.Boat.Help.Delete:				'/boat delete' # To confirm the removal of your boat!! this action is not reversible!!
+Commands.Players.Boat.Help.Follow:				'/boat follow' # Order your boat to follow your target.
+Commands.Players.Boat.Help.StopFollow:			'/boat stopfollow' # Order your boat to stop following your target.
+Commands.Players.Boat.Help.Summon:				'/boat summon' # Launching your boat.
+Commands.Players.Boat.Help.Unsummon:			'/boat unsummon' # Store your boat.
+Commands.Players.Boat.InviteNoSelf:				You cannot invite yourself on a boat!
+Commands.Players.Boat.InviteRecieved:			{0} is invited to join the cruise.
+Commands.Players.Boat.InviteSent:				You ivited {0} to join the cruise.
+Commands.Players.Boat.MoveFollow:				Your boat is now following {0}.
+Commands.Players.Boat.Name.Atlantean_Ship:		Atlantean ship of {0}
+Commands.Players.Boat.Name.British_Cog:			British Cogue of {0}
+Commands.Players.Boat.Name.Galleon:				Galion of {0}
+Commands.Players.Boat.Name.Longship:			Drakkar of {0}
+Commands.Players.Boat.Name.Scout_Boat:			Scout boat of {0}
+Commands.Players.Boat.Name.Skiff:				Yole of {0}
+Commands.Players.Boat.Name.Stygian_Ship:		Stygian ship of {0}
+Commands.Players.Boat.Name.Viking_Longship:		Viking Drakkar of {0}
+Commands.Players.Boat.Name.Warship:				Warship of {0}
+Commands.Players.Boat.NoBoatSelected:			You have to choose a boat!
+Commands.Players.Boat.NoPlayerSelected:			You must select a player.
+Commands.Players.Boat.NotInWater:				You must be in the water to summon your boat!
+Commands.Players.Boat.NotOwnBoat:				You don't own any boat.
+Commands.Players.Boat.OwnerNotOn:				This boat's owner is not online.
+Commands.Players.Boat.PlayerIsDead:				You cannot do this while your player is dead!
+Commands.Players.Boat.StopFollow:				you stop your boat.
+Commands.Players.Boat.Summoned:					Your {0} has been launched.
+Commands.Players.Boat.TargetNotInBoat:			{0} is not in your boat.
+Commands.Players.Boat.UnknownCommand:			This is not a valid boat command. '/boat' for help.
+Commands.Players.Boat.Unsummoned:				Your {0} has been stored.
+Commands.Players.Boat.Usage:					Usage:
+Commands.Players.Boat.YouBoard:					Your boat the {0}.

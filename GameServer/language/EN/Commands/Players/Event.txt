@@ -1,4 +1,4 @@
-﻿#Game Event
+#Game Event
 Commands.Players.Event.Description:          Informations regarding current events:
 Commands.Players.Event.EventStarted:         The event with id {0} has started 
 Commands.Players.Event.EventNotFound:        The event with id {0} was not found

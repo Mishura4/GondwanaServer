@@ -1,0 +1,9 @@
+Commands.Players.Quest.Completed:		You have completed the following quests:
+Commands.Players.Quest.Description:		Displays player's completed quests.
+Commands.Players.Quest.NoPending:		You don't have any pending quests.
+Commands.Players.Quest.NotComplete:		At the moment, you have not completed any quests.
+Commands.Players.Quest.OnStep:			To step {0} of quest '{1}'
+Commands.Players.Quest.QuestCompleted:	, completed.
+Commands.Players.Quest.Usage:			Usage : '/quest'
+Commands.Players.Quest.WhatToDo:		What to do: {0}
+Commands.Players.Quest.WorkingOn:		You are currently working on the following quests:

@@ -1,7 +1,7 @@
-﻿## Albion
+## Albion
 # /FriarTrainer
 FriarTrainer.Interact.Text1:				{0} says, "Do you desire to [join the Defenders of Albion] and defend our realm as a Friar?"
-FriarTrainer.Interact.Text2:				{0} says, "insert english text"
+FriarTrainer.Interact.Text2:				Would you like to do some training?
 FriarTrainer.Interact.Text3:				{0} says, "insert english text"
 FriarTrainer.Interact.Text4:				{0} says, "insert english text"
 FriarTrainer.ReceiveItem.Text1:				{0} says, "insert english text"
@@ -11,7 +11,7 @@ FriarTrainer.WhisperReceiveCase.Text1:			join the defenders of albion
 ## Hibernia
 # /AnimistTrainer
 AnimistTrainer.Interact.Text1:				{0} says, "Is the [Path of Affinity] the path you desire to walk?"
-AnimistTrainer.Interact.Text2:
+AnimistTrainer.Interact.Text2:				Would you like to do some training?
 AnimistTrainer.Interact.Text3:
 AnimistTrainer.Interact.Text4:
 AnimistTrainer.WhisperReceive.Text1:			You are now an Animist, {0}. Welcome to the Path of Affinity.
@@ -43,7 +43,7 @@ HeroTrainer.WhisperReceiveCase.Text1:			hero
 
 # /MaulerHibTrainer
 MaulerHibTrainer.Interact.Text1:			{0} says, "Do you desire to [join the Temple of the Iron Fist] and fight for the glorious realm of Hibernia?"
-MaulerHibTrainer.Interact.Text2:			
+MaulerHibTrainer.Interact.Text2:			Would you like to do some training?
 MaulerHibTrainer.Interact.Text3:			
 MaulerHibTrainer.Interact.Text4:			
 MaulerHibTrainer.ReceiveItem.Text1:			
@@ -64,7 +64,7 @@ MentalistTrainer.WhisperReceiveCase.Text1:		mentalist
 ## Midgard
 # /BonedancerTrainer
 BonedancerTrainer.Interact.Text1:			{0} says, "Do you desire to [join the House of Bodgar] and defend our realm as a Bonedancer?"
-BonedancerTrainer.Interact.Text2:			
+BonedancerTrainer.Interact.Text2:			Would you like to do some training?
 BonedancerTrainer.Interact.Text3:		
 BonedancerTrainer.Interact.Text4:		
 BonedancerTrainer.ReceiveItem.Text1:		
@@ -73,7 +73,7 @@ BonedancerTrainer.WhisperReceiveCase.Text1:		join the house of bodgar
 
 # /Spiritmaster
 SpiritmasterTrainer.Interact.Text1:			{0} says, "Do you desire to [join the House of Hel] and defend our realm as a Spiritmaster?"	
-SpiritmasterTrainer.Interact.Text2:				
+SpiritmasterTrainer.Interact.Text2:			Would you like to do some training?	
 SpiritmasterTrainer.Interact.Text3:				
 SpiritmasterTrainer.Interact.Text4:				
 SpiritmasterTrainer.ReceiveItem.Text1:			
@@ -82,7 +82,7 @@ SpiritmasterTrainer.WhisperReceiveCase.Text1:		join the house of hel
 
 # /Valkyrie
 ValkyrieTrainer.Interact.Text1:				{0} says, "Do you desire to [join the House of Odin] and defend our realm as a Valkyrie?"
-ValkyrieTrainer.Interact.Text2:				
+ValkyrieTrainer.Interact.Text2:				Would you like to do some training?
 ValkyrieTrainer.Interact.Text3:				
 ValkyrieTrainer.Interact.Text4:				
 ValkyrieTrainer.ReceiveItem.Text1:			

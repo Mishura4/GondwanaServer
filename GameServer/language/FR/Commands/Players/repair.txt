@@ -1,0 +1,18 @@
+Commands.Players.Repair.Component.FullHealth:	L'élément du fort est déjà en parfait état!
+Commands.Players.Repair.Component.InCombat:		Vous ne pouvez pas réparer l'élément du fort pendant qu'il est attaqué!
+Commands.Players.Repair.Component.RaizedTower:	Vous ne pouvez pas réparer une tour qui est attaquée!
+Commands.Players.Repair.Dead:					Vous ne pouvez pas réparer étant mort!
+Commands.Players.Repair.Description:			Vous pouvez réparer un objet lorsque vous êtes déjà artisan
+Commands.Players.Repair.Door.KeepInCombat:		"Vous ne pouvez pas réparer la porte du fort losque le fort est attaqué!"
+Commands.Players.Repair.EndAction:				Vous devez mettre fin à votre action en cours avant de pouvoir réparer quoi que ce soit!
+Commands.Players.Repair.InCombat:				Vous ne pouvez pas réparer en combat.
+Commands.Players.Repair.Moving:					Vous ne pouvez pas réparer pendant un déplacement.
+Commands.Players.Repair.NeedSkills:				Vous avez besoin de compétences en menuiserie pour réparer.
+Commands.Players.Repair.NeedWood:				Vous avez besoin de {0} unités de bois supplémentaires!
+Commands.Players.Repair.Object.InCombat:		Vous ne pouvez pas réparer un objet lorsque vous vous battez!
+Commands.Players.Repair.Repair.Failed:			Vous échouez à réparer l'élément du fort!
+Commands.Players.Repair.Repairing:				En réparation: {0}
+Commands.Players.Repair.Sitting:				Vous ne pouvez pas réparer en étant assis.
+Commands.Players.Repair.Success.15:				Vous avez réussi à réparer l'élément du fort à 15%!
+Commands.Players.Repair.TooFar:					Vous êtes trop loin pour réparer ce composant.
+Commands.Players.Repair.Usage:					Usage : '/usage'

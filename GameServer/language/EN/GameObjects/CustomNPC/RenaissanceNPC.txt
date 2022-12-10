@@ -1,0 +1,4 @@
+# RENAISSANCE NPC
+RenaissanceNPC.AskForRenaissance:			Would you like to be reborn more powerful? So bring me the Philosopher's Stone!
+RenaissanceNPC.RenaissanceDone:             So it is... You have chosen the path of rebirth... You can go rediscover the world now, and achieve new tasks no mortal can ever accomplish...
+RenaissanceNPC.DeniedRenaissance:           You have already fullfilled the path to your rebirth, I cannot do anything for you anymore.

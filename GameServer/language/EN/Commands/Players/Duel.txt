@@ -1,0 +1,32 @@
+Commands.Players.Duel.ChallengesYou:			{0} challenges you for a duel! '/duel accept' to accept, '/duel decline' to refuse.
+Commands.Players.Duel.ConsideringDuel:			You are not challenged for a duel.
+Commands.Players.Duel.Description:				Starts a duel with another player.
+Commands.Players.Duel.DuelOptions:				'/duel <challenge|decline|cancel|surrender|accept> # Duel options
+Commands.Players.Duel.EnemyRealm:				You cannot challenge a member of an enemy realm.
+Commands.Players.Duel.NeedTarget:				You have to target someone want to defy!
+Commands.Players.Duel.NotInDuel:				You are currently not in a duel!
+Commands.Players.Duel.PlayerVsPlayer:			{0} surrenders to {1}!
+Commands.Players.Duel.SafeZone:					You are in a secure area and you cannot fight here!
+Commands.Players.Duel.TargetAccept:				{0} accepts the duel. The fight can begin!
+Commands.Players.Duel.TargetAlreadyChallenging:	{0} has already challenged someone to a duel.
+Commands.Players.Duel.TargetAlreadyConsidering:	{0} is already challenged by someone else.
+Commands.Players.Duel.TargetCancel:				{0} his invitation to the duel.
+Commands.Players.Duel.TargetDeclines:			{0} declines your invitation.
+Commands.Players.Duel.TargetHealth:				Your target must be fully healed.
+Commands.Players.Duel.TargetInCombat:			{0} is currently fighting.
+Commands.Players.Duel.TargetInDuel:				{0} is already in a duel.
+Commands.Players.Duel.TargetInGroup:			{0} is in a group.
+Commands.Players.Duel.TargetSurrender:			{0} surrenders to you!
+Commands.Players.Duel.Usage:					Usage: '/duel'
+Commands.Players.Duel.YouAccept:				You accept the duel. The fight can begin!
+Commands.Players.Duel.YouAlreadyChallenging:	You have already challenged {0} to a duel. Cancel this invitation ('/duel cancel') to challenge someone else.
+Commands.Players.Duel.YouAlreadyConsidering:	You are already challenged for a duel by {0}. Decline his invitation before challenging someone else.
+Commands.Players.Duel.YouCancel:				You cancel your invitation to the duel.
+Commands.Players.Duel.YouChallenge:				You challenge {0} for a duel!
+Commands.Players.Duel.YouDecline:				You refuse the duel challenge of {0}.
+Commands.Players.Duel.YouHaventChallenged:		You didn't challenge anyone in a duel.
+Commands.Players.Duel.YouHealth:				You must be fully healed.
+Commands.Players.Duel.YouInCombat:				You are currently fighting.
+Commands.Players.Duel.YouInDuel:				You are already in a duel.
+Commands.Players.Duel.YouInGroup:				You are in a group.
+Commands.Players.Duel.YouSurrender:				You surrender to {0}!
