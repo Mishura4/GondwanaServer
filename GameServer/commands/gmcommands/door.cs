@@ -35,7 +35,7 @@ namespace DOL.GS.Commands
 	[Cmd(
 		"&door",
 		ePrivLevel.GM,
-		"GMCommands.door.Description",
+		"Commands.GM.door.Description",
 		"'/door show' toggle enable/disable add dialog when targeting doors",
 		"Commands.GM.door.Add",
 		"Commands.GM.door.Update",
@@ -44,13 +44,13 @@ namespace DOL.GS.Commands
 		"Commands.GM.door.Level",
 		"Commands.GM.door.Realm",
 		"Commands.GM.door.Guild",
-		"'/door sound <soundid>'",
-    "'/door groupmob <Group Mob Id>'",
-    "'/door key <itemid>'",
-    "'/door key_chance <number between 0 and 100>'",
-    "'/door isrenaissance' toggle enable/disable IsRenaissance",
-    "'/door punishspell <spell Id>'",
-    "Commands.GM.door.Info",
+        "Commands.GM.door.Usage.Sound",
+        "Commands.GM.door.Usage.GroupMob",
+        "Commands.GM.door.Usage.Key",
+        "Commands.GM.door.Usage.KeyChance",
+        "Commands.GM.door.Usage.IsRenaissance",
+        "Commands.GM.door.Usage.PunishSpell",
+        "Commands.GM.door.Info",
 		"Commands.GM.door.Heal",
 		"Commands.GM.door.Locked",
 		"Commands.GM.door.Unlocked")]
@@ -158,29 +158,27 @@ namespace DOL.GS.Commands
 				case "sound":
 					sound(client, targetDoor, args);
 					break;
+                case "groupmob":
+                    GroupMob(client, targetDoor, args);
+                    break;
+                case "key":
+                    Key(client, targetDoor, args);
+                    break;
+                case "key_chance":
+                    Key_Chance(client, targetDoor, args);
+                    break;
+                case "isrenaissance":
+                    IsRenaissance(client, targetDoor, args);
+                    break;
+                case "punishspell":
+                    PunishSpell(client, targetDoor, args);
+                    break;
 
-        case "groupmob":
-          GroupMob(client, targetDoor, args);
-          break;
-        case "key":
-          Key(client, targetDoor, args);
-          break;
-        case "key_chance":
-          Key_Chance(client, targetDoor, args);
-          break;
-        case "isrenaissance":
-          IsRenaissance(client, targetDoor, args);
-          break;
-        case "punishspell":
-          PunishSpell(client, targetDoor, args);
-          break;
-
-				default:
+                default:
 					DisplaySyntax(client);
 					return;
 			}
 		}
-
     #endregion
 
     /// <summary>

@@ -16,14 +16,15 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
+using DOL.Language;
 
 namespace DOL.GS.Commands
 {
 	[CmdAttribute(
 		"&salvage",
 		ePrivLevel.Player,
-		"You can salvage an item when you are a crafter",
-		"/salvage")]
+		"Commands.Players.Salvage.Description",
+		"Commands.Players.Salvage.Usage")]
 	public class SalvageCommandHandler : AbstractCommandHandler, ICommandHandler
 	{
 		public void OnCommand(GameClient client, string[] args)

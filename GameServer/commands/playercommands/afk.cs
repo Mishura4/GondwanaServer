@@ -24,7 +24,8 @@ namespace DOL.GS.Commands
 	[CmdAttribute(
 		"&afk",
 		ePrivLevel.Player,
-		"Toggle away from keyboard. You may optional set a message to display.", "/afk <text>")]
+		"Commands.Players.Afk.Description",
+		"Commands.Players.Afk.Usage")]
 	public class AFKCommandHandler : AbstractCommandHandler, ICommandHandler
 	{
 		public void OnCommand(GameClient client, string[] args)
@@ -32,7 +33,7 @@ namespace DOL.GS.Commands
 			if (client.Player.TempProperties.getProperty<string>(GamePlayer.AFK_MESSAGE) != null && args.Length == 1)
 			{
 				client.Player.TempProperties.removeProperty(GamePlayer.AFK_MESSAGE);
-				client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Scripts.Players.Afk.Off"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+				client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Afk.Off"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 			}
 			else
 			{
@@ -45,7 +46,7 @@ namespace DOL.GS.Commands
 				{
 					client.Player.TempProperties.setProperty(GamePlayer.AFK_MESSAGE, "");
 				}
-				client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Scripts.Players.Afk.On"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+				client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Afk.On"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 			}
 		}
 	}

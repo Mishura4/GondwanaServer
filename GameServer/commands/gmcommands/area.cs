@@ -27,8 +27,8 @@ namespace DOL.GS.Commands
 	[CmdAttribute(
 		"&area",
 		ePrivLevel.GM,
-		"GMCommands.Area.Description",
-		"GMCommands.Area.Usage.Create")]
+		"Commands.GM.Area.Description",
+		"Commands.GM.Area.Usage.Create")]
 	public class AreaCommandHandler : AbstractCommandHandler, ICommandHandler
 	{
 		public void OnCommand(GameClient client, string[] args)

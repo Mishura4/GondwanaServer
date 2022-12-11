@@ -16,13 +16,15 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
-
+using DOL.Language;
 namespace DOL.GS.Commands
 {
-	[CmdAttribute("&quit", new string[] { "&q" }, //command to handle
+	[CmdAttribute(
+		"&quit",
+		new string[] { "&q" }, //command to handle
 		ePrivLevel.Player, //minimum privelege level
-		"Removes the player from the world", //command description
-		"/quit")] //usage
+		"Commands.Players.Quit.Description", //command description
+		"Commands.Players.Quit.Usage")] //usage
 	public class QuitCommandHandler : AbstractCommandHandler, ICommandHandler
 	{
 		public void OnCommand(GameClient client, string[] args)

@@ -25,11 +25,10 @@ namespace DOL.GS.Commands
 {
 	[CmdAttribute("&cmdhelp", //command to handle
 		ePrivLevel.Player, //minimum privelege level
-		"Displays available commands", //command description
-		//usage
-		"'/cmdhelp' displays a list of all the commands and their descriptions",
-		"'/cmdhelp <plvl>' displays a list of all commands that require at least plvl",
-		"'/cmdhelp <cmd>' displays the usage for cmd")]
+		"Commands.Players.Cmdhelp.Description",
+		"Commands.Players.Cmdhelp.Usage",
+		"Commands.Players.Cmdhelp.Usage.Plvl",
+		"Commands.Players.Cmdhelp.Usage.Cmd")]
 	public class CmdHelpCommandHandler : AbstractCommandHandler, ICommandHandler
 	{
 		public void OnCommand(GameClient client, string[] args)
@@ -55,7 +54,7 @@ namespace DOL.GS.Commands
 			if (isCommand)
 			{
                 String[] commandList = GetCommandList(privilegeLevel);
-				DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Scripts.Players.Cmdhelp.PlvlCommands", privilegeLevel.ToString()));
+				DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Cmdhelp.PlvlCommands", privilegeLevel.ToString()));
 
                 foreach (String command in commandList)
 					DisplayMessage(client, command);
@@ -70,10 +69,10 @@ namespace DOL.GS.Commands
 				ScriptMgr.GameCommand gameCommand = ScriptMgr.GetCommand(command);
 
 				if (gameCommand == null)
-                    DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Scripts.Players.Cmdhelp.NoCommand", command));
+                    DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Cmdhelp.NoCommand", command));
                 else
 				{
-					DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Scripts.Players.Cmdhelp.Usage", command));
+					DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Cmdhelp.Usage", command));
 
 					foreach (String usage in gameCommand.Usage)
 						DisplayMessage(client, usage);

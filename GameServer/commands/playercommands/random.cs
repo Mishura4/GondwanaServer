@@ -28,14 +28,15 @@
 
 using System;
 using DOL.GS.PacketHandler;
+using DOL.Language;
 
 namespace DOL.GS.Commands
 {
 	[CmdAttribute(
 		"&random",
 		ePrivLevel.Player,
-		"prints out a random number between 1 and the number specified.",
-		"/random [#] to get a random number between 1 and the number you specified.")]
+		"Commands.Players.Random.Description",
+		"Commands.Players.Random.Usage")]
 	public class RandomCommandHandler : AbstractCommandHandler, ICommandHandler
 	{
 		// declaring some msg's
@@ -49,14 +50,22 @@ namespace DOL.GS.Commands
 		{
 			if (IsSpammingCommand(client.Player, "random", 500))
 			{
-				DisplayMessage(client, "Slow down!");
+				DisplayMessage(
+					client,
+					LanguageMgr.GetTranslation(
+						client.Account.Language,
+						"Commands.Players.Random.SlowDown"));
 				return;
 			}
 
 			// no args - display usage
 			if (args.Length < 2)
 			{
-				SystemMessage(client, MESSAGE_HELP);
+				SystemMessage(
+					client,
+					LanguageMgr.GetTranslation(
+						client.Account.Language,
+						"Commands.Players.Random.Help"));
 				return;
 			}
 
@@ -73,13 +82,21 @@ namespace DOL.GS.Commands
 			}
 			catch (Exception)
 			{
-				SystemMessage(client, MESSAGE_HELP);
+				SystemMessage(
+					client,
+					LanguageMgr.GetTranslation(
+						client.Account.Language,
+						"Commands.Players.Random.Help"));
 				return;
 			}
 
 			if (thrownMax < 2)
 			{
-				SystemMessage(client, MESSAGE_LOW_NUMBER);
+				SystemMessage(
+					client,
+					LanguageMgr.GetTranslation(
+						client.Account.Language,
+						"Commands.Players.Random.LowNumber"));
 				return;
 			}
 
@@ -87,8 +104,14 @@ namespace DOL.GS.Commands
 			int thrown = Util.Random(1, thrownMax);
 
 			// building result messages
-			string selfMessage = String.Format(MESSAGE_RESULT_SELF, thrownMax, thrown);
-			string otherMessage = String.Format(MESSAGE_RESULT_OTHER, client.Player.Name, thrownMax, thrown);
+			string selfMessage = LanguageMgr.GetTranslation(
+									client.Account.Language,
+									"Commands.Players.Random.Result.Self",
+									thrownMax, thrown);
+			string otherMessage = LanguageMgr.GetTranslation(
+									client.Account.Language,
+									"Commands.Players.Random.Result.Other",
+									client.Player.Name, thrownMax, thrown);
 
 			// sending msg to player
 			EmoteMessage(client, selfMessage);

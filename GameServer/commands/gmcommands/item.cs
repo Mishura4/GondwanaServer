@@ -25,53 +25,54 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[Cmd("&item",
+    [Cmd(
+        "&item",
 	     ePrivLevel.GM,
-	     "GMCommands.Item.Description",
-	     "GMCommands.Item.Information",
-	     "GMCommands.Item.Usage.Blank",
-	     "GMCommands.Item.Usage.Info",
-	     "GMCommands.Item.Usage.Create",
-	     "GMCommands.Item.Usage.Count",
-	     "GMCommands.Item.Usage.MaxCount",
-	     "GMCommands.Item.Usage.PackSize",
-	     "GMCommands.Item.Usage.Model",
-	     "GMCommands.Item.Usage.Extension",
-	     "GMCommands.Item.Usage.Color",
-	     "GMCommands.Item.Usage.Effect",
-	     "GMCommands.Item.Usage.Name",
+         "Commands.GM.Item.Description",
+         "Commands.GM.Item.Information",
+         "Commands.GM.Item.Usage.Blank",
+         "Commands.GM.Item.Usage.Info",
+         "Commands.GM.Item.Usage.Create",
+         "Commands.GM.Item.Usage.Count",
+         "Commands.GM.Item.Usage.MaxCount",
+         "Commands.GM.Item.Usage.PackSize",
+         "Commands.GM.Item.Usage.Model",
+         "Commands.GM.Item.Usage.Extension",
+         "Commands.GM.Item.Usage.Color",
+         "Commands.GM.Item.Usage.Effect",
+         "Commands.GM.Item.Usage.Name",
 	     "/item description <Description> <slot> - set the description of this item",
-	     "GMCommands.Item.Usage.CrafterName",
-	     "GMCommands.Item.Usage.Type",
-	     "GMCommands.Item.Usage.Object",
-	     "GMCommands.Item.Usage.Hand",
-	     "GMCommands.Item.Usage.DamageType",
-	     "GMCommands.Item.Usage.Emblem",
-	     "GMCommands.Item.Usage.Price",
-	     "GMCommands.Item.Usage.Condition",
-	     "GMCommands.Item.Usage.Quality",
-	     "GMCommands.Item.Usage.Durability",
-	     "GMCommands.Item.Usage.isPickable",
-	     "GMCommands.Item.Usage.IsNotLosingDUR",
-	     "GMCommands.Item.Usage.IsIndestructible",
-	     "GMCommands.Item.Usage.isDropable",
-	     "GMCommands.Item.Usage.IsTradable",
-	     "GMCommands.Item.Usage.IsStackable",
-	     "GMCommands.Item.Usage.CanDropAsLoot",
-	     "GMCommands.Item.Usage.Bonus",
-	     "GMCommands.Item.Usage.mBonus",
-	     "GMCommands.Item.Usage.Weight",
-	     "GMCommands.Item.Usage.DPS_AF",
-	     "GMCommands.Item.Usage.SPD_ABS",
-	     "GMCommands.Item.Usage.Material",
-	     "GMCommands.Item.Usage.Scroll",
-	     "GMCommands.Item.Usage.Spell",
-	     "GMCommands.Item.Usage.Spell1",
-	     "GMCommands.Item.Usage.Proc",
-	     "GMCommands.Item.Usage.Proc1",
+         "Commands.GM.Item.Usage.CrafterName",
+         "Commands.GM.Item.Usage.Type",
+         "Commands.GM.Item.Usage.Object",
+         "Commands.GM.Item.Usage.Hand",
+         "Commands.GM.Item.Usage.DamageType",
+         "Commands.GM.Item.Usage.Emblem",
+         "Commands.GM.Item.Usage.Price",
+         "Commands.GM.Item.Usage.Condition",
+         "Commands.GM.Item.Usage.Quality",
+         "Commands.GM.Item.Usage.Durability",
+         "Commands.GM.Item.Usage.isPickable",
+         "Commands.GM.Item.Usage.IsNotLosingDUR",
+         "Commands.GM.Item.Usage.IsIndestructible",
+         "Commands.GM.Item.Usage.isDropable",
+         "Commands.GM.Item.Usage.IsTradable",
+         "Commands.GM.Item.Usage.IsStackable",
+         "Commands.GM.Item.Usage.CanDropAsLoot",
+         "Commands.GM.Item.Usage.Bonus",
+         "Commands.GM.Item.Usage.mBonus",
+         "Commands.GM.Item.Usage.Weight",
+         "Commands.GM.Item.Usage.DPS_AF",
+         "Commands.GM.Item.Usage.SPD_ABS",
+         "Commands.GM.Item.Usage.Material",
+         "Commands.GM.Item.Usage.Scroll",
+         "Commands.GM.Item.Usage.Spell",
+         "Commands.GM.Item.Usage.Spell1",
+         "Commands.GM.Item.Usage.Proc",
+         "Commands.GM.Item.Usage.Proc1",
 	     "/item procchance <chance>",
-	     "GMCommands.Item.Usage.Poison",
-	     "GMCommands.Item.Usage.Realm",
+         "Commands.GM.Item.Usage.Poison",
+         "Commands.GM.Item.Usage.Realm",
 	     "/item classtype <ClassType> <slot> - Set this items ClassType",
 	     "/item packageid <PackageID> <slot> - Set this items PackageID",
 	     "/item levelrequired <level> <slot> - Set the required level needed to use spells and procs on this item",
@@ -84,8 +85,8 @@ namespace DOL.GS.Commands
 	     "/item save <TemplateID> [slot #]' - Create a new template or save an existing one",
 	     "/item addunique <id_nb> <slot> - save item as an unique one",
 	     "/item saveunique <id_nb> <slot> - update a unique item",
-	     "GMCommands.Item.Usage.FindID",
-	     "GMCommands.Item.Usage.FindName",
+         "Commands.GM.Item.Usage.FindID",
+         "Commands.GM.Item.Usage.FindName",
 	     "/item load <id_nb> - Load an item from the DB and replace or add item to the ItemTemplate cache",
 	     "/item loadartifacts - Re-load all the artifact entries from the DB.  ItemTemplates must be loaded separately and prior to loading artifacts.",
 	     "/item loadpackage <packageid> | **all** - Load all the items in a package from the DB and replace or add to the ItemTemplate cache. **all** is loading all items [! SLOW !]",
@@ -117,12 +118,12 @@ namespace DOL.GS.Commands
                             GameInventoryItem item = new GameInventoryItem(newTemplate);
 							if (client.Player.Inventory.AddItem(eInventorySlot.FirstEmptyBackpack, item))
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Blank.ItemCreated"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Blank.ItemCreated"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								InventoryLogging.LogInventoryAction(client.Player, client.Player, eInventoryActionType.Other, item.Template, item.Count);
 							}
 							else
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Blank.CreationError"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Blank.CreationError"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 							}
 							break;
 						}
@@ -133,12 +134,12 @@ namespace DOL.GS.Commands
 							WorldInventoryItem scroll = ArtifactMgr.CreateScroll(args[2], Convert.ToInt16(args[3]));
 							if (scroll == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Scroll.NotFound", args[3], args[2]), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Scroll.NotFound", args[3], args[2]), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
 								return;
 							}
 							if (client.Player.Inventory.AddItem(eInventorySlot.FirstEmptyBackpack, scroll.Item))
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Scroll.Created", scroll.Item.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Scroll.Created", scroll.Item.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								InventoryLogging.LogInventoryAction(client.Player, client.Player, eInventoryActionType.Other, scroll.Item.Template, scroll.Item.Count);
 							}
 							break;
@@ -158,7 +159,7 @@ namespace DOL.GS.Commands
 
 							if (item == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 							
@@ -172,7 +173,7 @@ namespace DOL.GS.Commands
 							ItemTemplate template = GameServer.Database.FindObjectByKey<ItemTemplate>(args[2]);
 							if (template == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Create.NotFound", args[2]), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Create.NotFound", args[2]), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 							else
@@ -198,7 +199,7 @@ namespace DOL.GS.Commands
 								}
 								if (client.Player.Inventory.AddItem(eInventorySlot.FirstEmptyBackpack, item))
 								{
-									client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Create.Created", item.Level, item.GetName(0, false), count), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Create.Created", item.Level, item.GetName(0, false), count), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 									InventoryLogging.LogInventoryAction(client.Player, client.Player, eInventoryActionType.Other, item.Template, item.Count);
 								}
 							}
@@ -219,12 +220,12 @@ namespace DOL.GS.Commands
 
 							if (item == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 							if (!item.IsStackable)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NotStackable", item.GetName(0, true)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NotStackable", item.GetName(0, true)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 							if (Convert.ToInt32(args[2]) < 1)
@@ -255,7 +256,7 @@ namespace DOL.GS.Commands
 
 							if (item == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 							item.MaxCount = Convert.ToInt32(args[2]);
@@ -278,7 +279,7 @@ namespace DOL.GS.Commands
 
 							if (item == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 							item.PackSize = Convert.ToInt32(args[2]);
@@ -293,13 +294,13 @@ namespace DOL.GS.Commands
 							ItemTemplate obj = GameServer.Database.FindObjectByKey<ItemTemplate>(args[2]);
 							if (obj == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Info.ItemTemplateUnknown", args[2]), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Info.ItemTemplateUnknown", args[2]), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 							GameInventoryItem invItem = GameInventoryItem.Create(obj);
 							var objectInfo = new List<string>();
                             invItem.WriteTechnicalInfo(objectInfo, client);
-							client.Out.SendCustomTextWindow(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Info.Informations", obj.Id_nb), objectInfo);
+                            client.Out.SendCustomTextWindow(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Info.Informations", obj.Id_nb), objectInfo);
 							break;
 						}
 						#endregion Info
@@ -321,7 +322,7 @@ namespace DOL.GS.Commands
 							InventoryItem item = client.Player.Inventory.GetItem((eInventorySlot)slot);
 							if (item == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 							item.Model = Convert.ToUInt16(args[2]);
@@ -349,7 +350,7 @@ namespace DOL.GS.Commands
 							InventoryItem item = client.Player.Inventory.GetItem((eInventorySlot)slot);
 							if (item == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 							item.Extension = Convert.ToByte(args[2]);
@@ -383,7 +384,7 @@ namespace DOL.GS.Commands
 							InventoryItem item = client.Player.Inventory.GetItem((eInventorySlot)slot);
 							if (item == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 							item.Color = Convert.ToUInt16(args[2]);
@@ -417,7 +418,7 @@ namespace DOL.GS.Commands
 							InventoryItem item = client.Player.Inventory.GetItem((eInventorySlot)slot);
 							if (item == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 							item.Effect = Convert.ToUInt16(args[2]);
@@ -445,7 +446,7 @@ namespace DOL.GS.Commands
 							InventoryItem item = client.Player.Inventory.GetItem((eInventorySlot)slot);
 							if (item == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 							item.Item_Type = Convert.ToInt32(args[2]);
@@ -471,7 +472,7 @@ namespace DOL.GS.Commands
 							InventoryItem item = client.Player.Inventory.GetItem((eInventorySlot)slot);
 							if (item == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 							item.Object_Type = Convert.ToInt32(args[2]);
@@ -497,7 +498,7 @@ namespace DOL.GS.Commands
 							InventoryItem item = client.Player.Inventory.GetItem((eInventorySlot)slot);
 							if (item == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 							item.Hand = Convert.ToInt32(args[2]);
@@ -523,7 +524,7 @@ namespace DOL.GS.Commands
 							InventoryItem item = client.Player.Inventory.GetItem((eInventorySlot)slot);
 							if (item == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 							item.Type_Damage = Convert.ToInt32(args[2]);
@@ -550,7 +551,7 @@ namespace DOL.GS.Commands
 							InventoryItem item = client.Player.Inventory.GetItem((eInventorySlot)slot);
 							if (item == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 
@@ -578,7 +579,7 @@ namespace DOL.GS.Commands
 							InventoryItem item = client.Player.Inventory.GetItem((eInventorySlot)slot);
 							if (item == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 
@@ -605,7 +606,7 @@ namespace DOL.GS.Commands
 							InventoryItem item = client.Player.Inventory.GetItem((eInventorySlot)slot);
 							if (item == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 							item.IsCrafted = true;
@@ -632,7 +633,7 @@ namespace DOL.GS.Commands
 							InventoryItem item = client.Player.Inventory.GetItem((eInventorySlot)slot);
 							if (item == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 							item.Emblem = Convert.ToInt32(args[2]);
@@ -666,7 +667,7 @@ namespace DOL.GS.Commands
 							InventoryItem item = client.Player.Inventory.GetItem((eInventorySlot)slot);
 							if (item == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 							item.Level = Convert.ToUInt16(args[2]);
@@ -692,7 +693,7 @@ namespace DOL.GS.Commands
 							InventoryItem item = client.Player.Inventory.GetItem((eInventorySlot)slot);
 							if (item == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 							item.Price = Money.GetMoney(0, (int)(Convert.ToInt16(args[2]) % 1000), (int)(Convert.ToInt16(args[3]) % 1000), (int)(Convert.ToByte(args[4]) % 100), (int)(Convert.ToByte(args[5]) % 100));
@@ -718,7 +719,7 @@ namespace DOL.GS.Commands
 							InventoryItem item = client.Player.Inventory.GetItem((eInventorySlot)slot);
 							if (item == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 							
@@ -753,7 +754,7 @@ namespace DOL.GS.Commands
 							InventoryItem item = client.Player.Inventory.GetItem((eInventorySlot)slot);
 							if (item == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 							
@@ -788,7 +789,7 @@ namespace DOL.GS.Commands
 							InventoryItem item = client.Player.Inventory.GetItem((eInventorySlot)slot);
 							if (item == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 							int Qua = Convert.ToInt32(args[2]);
@@ -815,7 +816,7 @@ namespace DOL.GS.Commands
 							InventoryItem item = client.Player.Inventory.GetItem((eInventorySlot)slot);
 							if (item == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 							int Bonus = Convert.ToInt32(args[2]);
@@ -845,7 +846,7 @@ namespace DOL.GS.Commands
 							InventoryItem item = client.Player.Inventory.GetItem((eInventorySlot)slot);
 							if (item == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 							try
@@ -854,20 +855,20 @@ namespace DOL.GS.Commands
 							}
 							catch
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.mBonus.NonSetBonusNumber"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.mBonus.NonSetBonusNumber"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 							}
 							try
 							{
 								bonusType = Convert.ToInt32(args[3]);
 								if (bonusType < 0 || bonusType >= (int)eProperty.MaxProperty)
 								{
-									client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.mBonus.TypeShouldBeInRange", (int)(eProperty.MaxProperty - 1)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.mBonus.TypeShouldBeInRange", (int)(eProperty.MaxProperty - 1)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 									break;
 								}
 							}
 							catch
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.mBonus.NonSetBonusType"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.mBonus.NonSetBonusType"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 							}
 							try
 							{
@@ -941,7 +942,7 @@ namespace DOL.GS.Commands
 											break;
 										}
 									default:
-										client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.mBonus.UnknownBonusNumber", num), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.mBonus.UnknownBonusNumber", num), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 										return;
 								}
 								if (item.SlotPosition < (int)eInventorySlot.FirstBackpack)
@@ -952,7 +953,7 @@ namespace DOL.GS.Commands
 							}
 							catch
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.mBonus.NotSetBonusValue"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.mBonus.NotSetBonusValue"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 							}
 							break;
 						}
@@ -975,7 +976,7 @@ namespace DOL.GS.Commands
 							InventoryItem item = client.Player.Inventory.GetItem((eInventorySlot)slot);
 							if (item == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 							item.Weight = Convert.ToInt32(args[2]);
@@ -1003,7 +1004,7 @@ namespace DOL.GS.Commands
 							InventoryItem item = client.Player.Inventory.GetItem((eInventorySlot)slot);
 							if (item == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 							item.DPS_AF = Convert.ToByte(args[2]);
@@ -1031,7 +1032,7 @@ namespace DOL.GS.Commands
 							InventoryItem item = client.Player.Inventory.GetItem((eInventorySlot)slot);
 							if (item == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 							item.SPD_ABS = Convert.ToByte(args[2]);
@@ -1057,7 +1058,7 @@ namespace DOL.GS.Commands
 							InventoryItem item = client.Player.Inventory.GetItem((eInventorySlot)slot);
 							if (item == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 							item.IsDropable = Convert.ToBoolean(args[2]);
@@ -1082,7 +1083,7 @@ namespace DOL.GS.Commands
 							InventoryItem item = client.Player.Inventory.GetItem((eInventorySlot)slot);
 							if (item == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 							item.IsPickable = Convert.ToBoolean(args[2]);
@@ -1107,7 +1108,7 @@ namespace DOL.GS.Commands
 							InventoryItem item = client.Player.Inventory.GetItem((eInventorySlot)slot);
 							if (item == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 							item.IsNotLosingDur = Convert.ToBoolean(args[2]);
@@ -1132,7 +1133,7 @@ namespace DOL.GS.Commands
 							InventoryItem item = client.Player.Inventory.GetItem((eInventorySlot)slot);
 							if (item == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 							item.IsIndestructible = Convert.ToBoolean(args[2]);
@@ -1157,7 +1158,7 @@ namespace DOL.GS.Commands
 							InventoryItem item = client.Player.Inventory.GetItem((eInventorySlot)slot);
 							if (item == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 							item.IsTradable = Convert.ToBoolean(args[2]);
@@ -1182,7 +1183,7 @@ namespace DOL.GS.Commands
 							InventoryItem item = client.Player.Inventory.GetItem((eInventorySlot)slot);
 							if (item == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 							item.CanDropAsLoot = Convert.ToBoolean(args[2]);
@@ -1207,7 +1208,7 @@ namespace DOL.GS.Commands
 							InventoryItem item = client.Player.Inventory.GetItem((eInventorySlot)slot);
 							if (item == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 							int Charges = Convert.ToInt32(args[2]);
@@ -1243,7 +1244,7 @@ namespace DOL.GS.Commands
 							InventoryItem item = client.Player.Inventory.GetItem((eInventorySlot)slot);
 							if (item == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 							int Charges = Convert.ToInt32(args[2]);
@@ -1279,7 +1280,7 @@ namespace DOL.GS.Commands
 							InventoryItem item = client.Player.Inventory.GetItem((eInventorySlot)slot);
 							if (item == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 							item.ProcSpellID = Convert.ToInt32(args[2]);
@@ -1305,7 +1306,7 @@ namespace DOL.GS.Commands
 							InventoryItem item = client.Player.Inventory.GetItem((eInventorySlot)slot);
 							if (item == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 							item.ProcSpellID1 = Convert.ToInt32(args[2]);
@@ -1331,7 +1332,7 @@ namespace DOL.GS.Commands
 							InventoryItem item = client.Player.Inventory.GetItem((eInventorySlot)slot);
 							if (item == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 							item.ProcChance = Convert.ToByte(args[2]);
@@ -1357,7 +1358,7 @@ namespace DOL.GS.Commands
 							InventoryItem item = client.Player.Inventory.GetItem((eInventorySlot)slot);
 							if (item == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 							int Charges = Convert.ToInt32(args[2]);
@@ -1393,7 +1394,7 @@ namespace DOL.GS.Commands
 							InventoryItem item = client.Player.Inventory.GetItem((eInventorySlot)slot);
 							if (item == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 							item.Realm = int.Parse(args[2]);
@@ -1418,7 +1419,7 @@ namespace DOL.GS.Commands
 							InventoryItem item = client.Player.Inventory.GetItem((eInventorySlot)slot);
 							if (item == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 							int setting = Convert.ToInt32(args[2]);
@@ -1445,7 +1446,7 @@ namespace DOL.GS.Commands
 							InventoryItem item = client.Player.Inventory.GetItem((eInventorySlot)slot);
 							if (item == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 							int setting = Convert.ToInt32(args[2]);
@@ -1468,7 +1469,7 @@ namespace DOL.GS.Commands
 							InventoryItem item = client.Player.Inventory.GetItem((eInventorySlot)slot);
 							if (item == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 
@@ -1491,7 +1492,7 @@ namespace DOL.GS.Commands
 							InventoryItem item = client.Player.Inventory.GetItem((eInventorySlot)slot);
 							if (item == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 
@@ -1514,7 +1515,7 @@ namespace DOL.GS.Commands
 							InventoryItem item = client.Player.Inventory.GetItem((eInventorySlot)slot);
 							if (item == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 
@@ -1537,7 +1538,7 @@ namespace DOL.GS.Commands
 							InventoryItem item = client.Player.Inventory.GetItem((eInventorySlot)slot);
 							if (item == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 
@@ -1557,7 +1558,7 @@ namespace DOL.GS.Commands
 							InventoryItem item = client.Player.Inventory.GetItem((eInventorySlot)slot);
 							if (item == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 
@@ -1667,7 +1668,7 @@ namespace DOL.GS.Commands
 							InventoryItem item = client.Player.Inventory.GetItem((eInventorySlot)slot);
 							if (item == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 
@@ -1714,7 +1715,7 @@ namespace DOL.GS.Commands
 							InventoryItem item = client.Player.Inventory.GetItem((eInventorySlot)slot);
 							if (item == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 
@@ -1773,7 +1774,7 @@ namespace DOL.GS.Commands
 							InventoryItem item = client.Player.Inventory.GetItem((eInventorySlot)slot);
 							if (item == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 
@@ -1873,7 +1874,7 @@ namespace DOL.GS.Commands
 							if (name != "")
 							{
 								var items = DOLDB<ItemTemplate>.SelectObjects(DB.Column(nameof(ItemTemplate.Id_nb)).IsLike($"%{name}%"));
-								DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.FindID.MatchingIDsForX", name, items.Count) );
+                                DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.FindID.MatchingIDsForX", name, items.Count), new object[] { });
 								foreach (ItemTemplate item in items)
 								{
 									DisplayMessage(client, $"{item.Id_nb} ({item.Name})" );
@@ -1889,7 +1890,7 @@ namespace DOL.GS.Commands
 							if (name != "")
 							{
 								var items = DOLDB<ItemTemplate>.SelectObjects(DB.Column(nameof(ItemTemplate.Name)).IsLike($"%{name}%"));
-								DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.FindName.MatchingNamesForX", name, items.Count) );
+                                DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.FindName.MatchingNamesForX", name, items.Count), new object[] { });
 								foreach (ItemTemplate item in items)
 								{
 									DisplayMessage(client, $"{item.Name} ({item.Id_nb})" );
@@ -1971,7 +1972,7 @@ namespace DOL.GS.Commands
 							InventoryItem item = client.Player.Inventory.GetItem((eInventorySlot)slot);
 							if (item == null)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Item.Count.NoItemInSlot", slot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
 

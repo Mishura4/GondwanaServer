@@ -25,8 +25,8 @@ namespace DOL.GS.Commands
 {
 	[CmdAttribute("&freelevel", //command to handle
 	              ePrivLevel.Player, //minimum privelege level
-	              "Display state of FreeLevel", //command description
-	              "/freelevel")] //command usage
+	              "Commands.Players.Freelevel.Description", //command description
+	              "Commands.Players.Freelevel.Usage")] //command usage
 	public class FreelevelCommandHandler : AbstractCommandHandler, ICommandHandler
 	{
 		public void OnCommand(GameClient client, string[] args)
@@ -40,7 +40,7 @@ namespace DOL.GS.Commands
 				if (state == 2)
 				{
 					// NOT SURE FOR THIS MESSAGE
-					message = LanguageMgr.GetTranslation(client.Account.Language, "PLCommands.FreeLevel.Removed");
+					message = LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.FreeLevel.Removed");
 					// we decline THIS ONE, but next level, we will gain another freelevel !!
 					client.Player.LastFreeLevel = client.Player.Level - 1;
 					client.Player.Out.SendPlayerFreeLevelUpdate();
@@ -48,7 +48,7 @@ namespace DOL.GS.Commands
 				else
 				{
 					// NOT SURE FOR THIS MESSAGE
-					message = LanguageMgr.GetTranslation(client.Account.Language, "PLCommands.FreeLevel.NoFreeLevel");
+					message = LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.FreeLevel.NoFreeLevel");
 				}
 				client.Out.SendMessage(message, eChatType.CT_System, eChatLoc.CL_SystemWindow);
 				return;
@@ -73,21 +73,21 @@ namespace DOL.GS.Commands
 			switch (state)
 			{
 				case 1:
-					message = LanguageMgr.GetTranslation(client.Account.Language, "PLCommands.FreeLevel.AboveMaximumLevel");
+					message = LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.FreeLevel.AboveMaximumLevel");
 					break;
 				case 2:
-					message = LanguageMgr.GetTranslation(client.Account.Language, "PLCommands.FreeLevel.EligibleFreeLevel");
+					message = LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.FreeLevel.EligibleFreeLevel");
 					break;
 				case 3:
 					// NOT SURE FOR THIS MESSAGE
-					message = LanguageMgr.GetTranslation(client.Account.Language, "PLCommands.FreeLevel.FreeLevelIn", t.Days, t.Hours, t.Minutes);
+					message = LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.FreeLevel.FreeLevelIn", t.Days, t.Hours, t.Minutes);
 					break;
 				case 4:
 					// NOT SURE FOR THIS MESSAGE
-					message = LanguageMgr.GetTranslation(client.Account.Language, "PLCommands.FreeLevel.FreeLevelIn2", t.Days, t.Hours, t.Minutes);
+					message = LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.FreeLevel.FreeLevelIn2", t.Days, t.Hours, t.Minutes);
 					break;
 				case 5:
-					message = LanguageMgr.GetTranslation(client.Account.Language, "PLCommands.FreeLevel.FreeLevelSoon");
+					message = LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.FreeLevel.FreeLevelSoon");
 					break;
 
 			}

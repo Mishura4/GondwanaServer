@@ -30,8 +30,8 @@ namespace DOL.GS.Commands
 		 "&broadcast",
 		 new string[] { "&b" },
 		 ePrivLevel.Player,
-		 "Broadcast something to other players in the same zone",
-		 "/b <message>")]
+		 "Commands.Players.Broadcast.Description",
+		 "Commands.Players.Broadcast.Usage")]
 	public class BroadcastCommandHandler : AbstractCommandHandler, ICommandHandler
 	{
 		private enum eBroadcastType : int
@@ -49,12 +49,12 @@ namespace DOL.GS.Commands
 			const string BROAD_TICK = "Broad_Tick";
 			if (args.Length < 2)
 			{
-				DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Scripts.Players.Broadcast.NoText"));
+				DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Broadcast.NoText"));
 				return;
 			}
 			if (client.Player.IsMuted)
 			{
-				client.Player.Out.SendMessage("You have been muted. You cannot broadcast.", eChatType.CT_Staff, eChatLoc.CL_SystemWindow);
+				client.Player.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Broadcast.Muted"), eChatType.CT_Staff, eChatLoc.CL_SystemWindow);
 				return;
 			}
 			string message = string.Join(" ", args, 1, args.Length - 1);
@@ -67,7 +67,7 @@ namespace DOL.GS.Commands
 			long changeTime = client.Player.CurrentRegion.Time - BroadTick;
 			if (changeTime < 800 && BroadTick > 0)
 			{
-				client.Player.Out.SendMessage("Slow down! Think before you say each word!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+				client.Player.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Broadcast.SlowDown"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 				client.Player.TempProperties.setProperty(BROAD_TICK, client.Player.CurrentRegion.Time);
 				return;
 			}
@@ -82,7 +82,7 @@ namespace DOL.GS.Commands
 			{
 				if (GameServer.ServerRules.IsAllowedToUnderstand(p, player) || ((eBroadcastType)ServerProperties.Properties.BROADCAST_TYPE == eBroadcastType.Server))
 				{
-					p.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Scripts.Players.Broadcast.Message", player.Name, message), eChatType.CT_Broadcast, eChatLoc.CL_ChatWindow);
+					p.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Commands.Players.Broadcast.Message", player.Name, message), eChatType.CT_Broadcast, eChatLoc.CL_ChatWindow);
 				}
 			}
 
@@ -113,7 +113,7 @@ namespace DOL.GS.Commands
 						}
 						if (!found)
 						{
-							player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Scripts.Players.Broadcast.NoHere"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+							player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Commands.Players.Broadcast.NoHere"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 						}
 						break;
 					}
