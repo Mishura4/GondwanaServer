@@ -1,6 +1,7 @@
 Commands.GM.TextNPC.Description:			TextNPC Commands:
 Commands.GM.TextNPC.Usage.Create:		'/textnpc create [isRenaissance]' Create a new NPC. [isRenaissance] Check if the player is Reborn in order to allow the NPC to interact
 Commands.GM.TextNPC.Usage.CreateMerchant:	'/textnpc createmerchant [isRenaissance]' Create a new Merchant who can talk to the player. [isRenaissance] Check if the player is Reborn in order to allow the merchant to interact
+Commands.GM.TextNPC.Usage.CreateItemMerchant:	'/textnpc createitemmerchant' Create a new Merchant who can take items as exchange currency.
 Commands.GM.TextNPC.Usage.CreateGuard:	'/textnpc createguard [isRenaissance]' Create a new Guard who can talk to the player. [isRenaissance] Check if the player is Reborn in order to allow the guard to interact
 Commands.GM.TextNPC.Usage.Response:			'/textnpc reponse' Shows NPC's response (the first 20 letters of the response)
 Commands.GM.TextNPC.Usage.Text:			'/textnpc text <text>' Set interact text (right click) (use the character | or ; to skip a line)
@@ -17,7 +18,7 @@ Commands.GM.TextNPC.Usage.RandomPhrase.Remove:		'/textnpc randomphrase remove <p
 Commands.GM.TextNPC.Usage.RandomPhrase.interval:		'/textnpc randomphrase interval <interval in seconds>' Interval for the NPC to repeat a random phrase
 Commands.GM.TextNPC.Usage.RandomPhrase.Help:		'/textnpc randomphrase help' Display some infos about random phrases on NPCs
 Commands.GM.TextNPC.Usage.RandomPhrase.View:		'/textnpc randomphrase view' To see the random phrases on a specific NPC
-Commands.GM.TextNPC.Usage.Quest:		'/textnpc quest <on/off>' Shows the quest icon on the NPC
+Commands.GM.TextNPC.Usage.Quest:		'/textnpc quest <None/Available/Lesson/Lore/Finish/Pending>' Shows the quest icon on the NPC
 Commands.GM.TextNPC.Usage.Level:		'/textnpc level <levelmin> <levelmax>' Set minimum and maximum level players can interact with this NPC
 Commands.GM.TextNPC.Usage.Guild.Add:	'/textnpc guild add <guildname>' Add a Guild the NPC cannot interact with (use 'NO GUILD' for non-guilded players)
 Commands.GM.TextNPC.Usage.Guild.Remove:			'/textnpc guild remove <guildname>' Remove a Guild the NPC cannot interact with

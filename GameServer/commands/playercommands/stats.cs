@@ -30,13 +30,14 @@ using DOL;
 using System.Collections;
 using DOL.Database;
 using log4net;
+using DOL.Language;
 
 namespace DOL.GS.Commands
 {
 	[CmdAttribute(
 		"&stats",
 		ePrivLevel.Player,
-		"Displays player statistics")]
+		"Commands.Players.Stats.Description")]
 
 	public class StatsCommandHandler : AbstractCommandHandler, ICommandHandler
 	{

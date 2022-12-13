@@ -149,7 +149,7 @@ namespace DOL.GS
             switch (Util.Random(2))
             {
                 case 0: // Albion
-                    Name = $"Albion {LanguageMgr.GetTranslation(LanguageMgr.DefaultLanguage, "GamePlayer.RealmTitle.Invader")}";
+                    Name = $"Albion {LanguageMgr.GetTranslation(LanguageMgr.DefaultLanguage, "GameObjects.GamePlayer.RealmTitle.Invader")}";
 
                     switch (Util.Random(4))
                     {
@@ -177,7 +177,7 @@ namespace DOL.GS
                     }
                     break;
                 case 1: // Hibernia
-                    Name = $"Hibernia {LanguageMgr.GetTranslation(LanguageMgr.DefaultLanguage, "GamePlayer.RealmTitle.Invader")}";
+                    Name = $"Hibernia {LanguageMgr.GetTranslation(LanguageMgr.DefaultLanguage, "GameObjects.GamePlayer.RealmTitle.Invader")}";
 
                     switch (Util.Random(4))
                     {
@@ -205,7 +205,7 @@ namespace DOL.GS
                     }
                     break;
                 case 2: // Midgard
-                    Name = $"Midgard {LanguageMgr.GetTranslation(LanguageMgr.DefaultLanguage, "GamePlayer.RealmTitle.Invader")}";
+                    Name = $"Midgard {LanguageMgr.GetTranslation(LanguageMgr.DefaultLanguage, "GameObjects.GamePlayer.RealmTitle.Invader")}";
 
                     switch (Util.Random(4))
                     {

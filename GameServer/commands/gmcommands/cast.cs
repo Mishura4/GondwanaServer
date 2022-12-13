@@ -30,7 +30,7 @@ namespace DOL.GS.Commands
 		"&cast",
 		ePrivLevel.GM,
 		"Commands.GM.Cast.Description",
-		"/cast loadspell <spellid> Load a spell from the DB into the global spell cache",
+        "Commands.GM.Cast.Usage.Load",
 		"Commands.GM.Cast.Usage")]
 	public class CastCommandHandler : AbstractCommandHandler, ICommandHandler
 	{

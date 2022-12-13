@@ -30,9 +30,9 @@ namespace DOL.GS.Commands
 		"Commands.GM.Crafting.Description",
 		"Commands.GM.Crafting.Usage.Add",
 		"Commands.GM.Crafting.Usage.Change",
-		"/crafting salvageadd <SalvageYieldID (0 for next free)> <MaterialId_nb> <Count> [Realm] [PackageID]",
-		"/crafting salvageupdate <SalvageYieldID> <MaterialId_nb> <Count> <Realm> [PackageID]",
-		"/crafting salvageinfo <SalvageYieldID>",
+        "Commands.GM.Crafting.Usage.SalvageAdd",
+        "Commands.GM.Crafting.Usage.SalvageUpdate",
+        "Commands.GM.Crafting.Usage.SalvageInfo",
 		"Commands.GM.Crafting.Usage.List")]
 	public class CraftCommandHandler : AbstractCommandHandler, ICommandHandler
 	{

@@ -145,13 +145,13 @@ GameObjects.GamePlayer.ItemBonusName.Bonus3:    Constitution
 GameObjects.GamePlayer.ItemBonusName.Bonus4:    Vivacité
 GameObjects.GamePlayer.ItemBonusName.Bonus5:    Intelligence
 GameObjects.GamePlayer.ItemBonusName.Bonus6:    Piété
-GameObjects.GamePlayer.ItemBonusName.Bonus7:    Empatie
+GameObjects.GamePlayer.ItemBonusName.Bonus7:    Empathie
 GameObjects.GamePlayer.ItemBonusName.Bonus8:    Charisme
 GameObjects.GamePlayer.ItemBonusName.Bonus9:    Mana
 GameObjects.GamePlayer.ItemBonusName.Bonus10:   PdV (points de vie)
 GameObjects.GamePlayer.ItemBonusName.Bonus11:   résistance Corps
 GameObjects.GamePlayer.ItemBonusName.Bonus12:   résistance Froid
-GameObjects.GamePlayer.ItemBonusName.Bonus13:   résistance Contandant
+GameObjects.GamePlayer.ItemBonusName.Bonus13:   résistance Contondant
 GameObjects.GamePlayer.ItemBonusName.Bonus14:   résistance Énergie
 GameObjects.GamePlayer.ItemBonusName.Bonus15:   résistance Chaleur
 GameObjects.GamePlayer.ItemBonusName.Bonus16:   résistance Matière

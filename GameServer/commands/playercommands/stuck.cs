@@ -16,13 +16,14 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
+using DOL.Language;
 
 namespace DOL.GS.Commands
 {
 	[CmdAttribute("&stuck",
 		ePrivLevel.Player, //minimum privelege level
-		"Removes the player from the world and put it to a safe location", //command description
-		"/stuck")] //usage
+		"Commands.Players.Stuck.Description", //command description
+		"Commands.Players.Stuck.Usage")] //usage
 	public class StuckCommandHandler : AbstractCommandHandler, ICommandHandler
 	{
 		public void OnCommand(GameClient client, string[] args)

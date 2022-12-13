@@ -22,17 +22,19 @@ using System.Reflection;
 using System.Collections.Generic;
 
 using DOL.GS;
+using DOL.Language;
 
 namespace DOL.GS.Commands
 {
 	/// <summary>
 	/// Refresh Command Handler to handle resetting Object using Static Cache.
 	/// </summary>
-	[Cmd("&refresh",
+    [Cmd(
+        "&refresh",
 		ePrivLevel.Admin,
-		"Refresh some specific static data cache stored in scripts or other objects",
-		"/refresh list | ClassName 'dot' MethodName"
-		)]
+        "Commands.Admin.Refresh.Description",
+        "Commands.Admin.Refresh.List",
+        "Commands.Admin.Refresh.ClassName")]
 	public class RefreshCommand : AbstractCommandHandler, ICommandHandler
 	{
 		private static readonly Dictionary<string, MethodInfo> m_refreshCommandCache = new Dictionary<string, MethodInfo>();

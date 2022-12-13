@@ -1,12 +1,13 @@
 using System;
+using DOL.Language;
 
 namespace DOL.GS.Commands
 {
 	[CmdAttribute(
 		"&shuffle",
 		ePrivLevel.Player,
-		"Shuffle # of decks, minimum 1. Must be used before /deal.",
-		"/shuffle <#>")]
+		"Commands.Players.Shuffle.Description",
+		"Commands.Players.Shuffle.Usage")]
 	public class ShuffleCommandHandler : AbstractCommandHandler, ICommandHandler
 	{
 		public void OnCommand(GameClient client, string[] args)

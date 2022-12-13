@@ -18,14 +18,15 @@
  */
 using System;
 using DOL.GS.PacketHandler;
+using DOL.Language;
 
 namespace DOL.GS.Commands
 {
 	[CmdAttribute(
 		"&blink",
 		ePrivLevel.GM,
-		"Makes the specified UI Part of your target or yourself blinking.",
-		"/blink <id>: type /blink for a list of possible IDs")]
+        "Commands.GM.Blink.Description",
+        "Commands.GM.Blink.Usage")]
 	public class BlinkCommandHandler : ICommandHandler
 	{
 		public void OnCommand(GameClient client, string[] args)

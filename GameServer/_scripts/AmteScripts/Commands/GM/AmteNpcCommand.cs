@@ -1,15 +1,16 @@
 using System;
 using System.Collections.Generic;
 using DOL.GS.Scripts;
+using DOL.Language;
 
 namespace DOL.GS.Commands
 {
 	[CmdAttribute(
 		"&amtenpc",
 		ePrivLevel.GM,
-		"Gestion des paramètres sur les PNJ",
-		"'/amtenpc info' Affiche les informations du mob sélectionné",
-		"'/amtenpc param <id> <value>' Change la valeur d'un paramètre du mob sélectionné")]
+        "Commands.GM.AmteNpc.Description",
+        "Commands.GM.AmteNpc.Usage.Info",
+        "Commands.GM.AmteNpc.Usage.Param")]
 	public class AmteNpcCommand : AbstractCommandHandler, ICommandHandler
 	{
 		public AmteCustomParam GetCPFromName(IAmteNPC npc, string name)

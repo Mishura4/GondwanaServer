@@ -50,7 +50,7 @@ namespace DOL.GS.Commands
         {
             if (ServerProperties.Properties.DISABLE_APPEALSYSTEM)
             {
-                AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Scripts.Players.Appeal.SystemDisabled"));
+                AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Appeal.SystemDisabled"));
                 return;
             }
 

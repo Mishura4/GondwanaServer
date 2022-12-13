@@ -1,27 +1,28 @@
 using System;
 using DOL.GS.Commands;
 using DOL.GS.PacketHandler;
+using DOL.Language;
 
 namespace DOL.GS.Scripts
 {
 	[CmdAttribute(
 		 "&teleportnpc",
 		 ePrivLevel.GM,
-		 "Gestions des TeleportNPC",
-		 "'/teleportnpc create [isRenaissance]' créé un nouveau TeleportNPC [isRenaissance] définit si ce npc a besoin de la renaissance du joueur pour interagir",
-         "'/teleportnpc create douanier <gold> [isRenaissance]' gold étant le montant du cout du jump, [isRenaissance] définit si ce npc  a besoin de la renaissance du joueur pour interagir",
-         "'/teleportnpc text <texte>' texte affiché lorsque le joueur peut se téléporter, le texte doit contenir {5}",
-		 "'/teleportnpc refuse <texte>' texte affiché lorsque le joueur ne peut pas être téléporté",
-		 "'/teleportnpc radius <0 - 500>' rayon dans lequel les joueurs seront téléportés (pas de texte)",
-		 "'/teleportnpc level <min level>' règle le niveau minimum pour être téléporter",
-		 "'/teleportnpc addjump <X> <Y> <Z> <Heading> <RegionID> <Name>' ajoute un jump (ATTENTION Gloc, \"Area\" comme nom pour un teleporteur automatique)",
-		 "'/teleportnpc jump' liste les jumps avec leurs conditions",
-		 "'/teleportnpc removejump <Name>' supprime un lieu",
-		 "'/teleportnpc conditions <nom du jump> visible <on/off>' Détermine si le jump est dans la liste des jumps lorsqu'on clique sur le PNJ",
-		 "'/teleportnpc conditions <nom du jump> item <template>' Item nécessaire pour être téléporté",
-		 "'/teleportnpc conditions <nom du jump> niveaux <min> [max]' Niveau mini et max du jump",
-		 "'/teleportnpc conditions <nom du jump> bind <on/off>' Bind le joueur après l'avoir jump",
-		 "Dans chaque texte: {0} = nom du joueur, {1} = nom de famille, {2} = nom de sa guilde, {3} = nom de sa classe, {4} = nom de sa race, {5} liste des jumps (sauf refuse)")]
+         "Commands.GM.TeleportNPC.Description",
+         "Commands.GM.TeleportNPC.Usage.Create",
+         "Commands.GM.TeleportNPC.Usage.Create.Douanier",
+         "Commands.GM.TeleportNPC.Usage.Text",
+         "Commands.GM.TeleportNPC.Usage.Refuse",
+         "Commands.GM.TeleportNPC.Usage.Radius",
+         "Commands.GM.TeleportNPC.Usage.Level",
+         "Commands.GM.TeleportNPC.Usage.AddJump",
+         "Commands.GM.TeleportNPC.Usage.Jump",
+         "Commands.GM.TeleportNPC.Usage.RemoveJump",
+         "Commands.GM.TeleportNPC.Usage.Conditions.Visible",
+         "Commands.GM.TeleportNPC.Usage.Conditions.Item",
+         "Commands.GM.TeleportNPC.Usage.Conditions.Niveaux",
+         "Commands.GM.TeleportNPC.Usage.Conditions.Bind",
+         "Commands.GM.TeleportNPC.Usage.AdditionalDescription")]
 	public class TeleportNPCCommandHandler : AbstractCommandHandler, ICommandHandler
 	{
 		public void OnCommand(GameClient client, string[] args)

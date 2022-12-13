@@ -21,15 +21,16 @@ using System.Threading;
 using DOL.Events;
 using DOL.GS.PacketHandler;
 using DOL.GS.ServerProperties;
+using DOL.Language;
 
 namespace DOL.GS.Commands
 {
 	[CmdAttribute(
 		"&shutdown",
 		ePrivLevel.Admin,
-		"Shutdown the server in next minute",
-		"/shutdown on <hour>:<min>  - shutdown on this time",
-		"/shutdown <mins>  - shutdown in minutes")]
+        "Commands.Admin.ShutDown.Description",
+        "Commands.Admin.ShutDown.On",
+        "Commands.Admin.ShutDown")]
 	public class ShutdownCommandHandler : AbstractCommandHandler, ICommandHandler
 	{
 		private static log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);

@@ -1,18 +1,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using DOL.Database;
+using DOL.Language;
 
 namespace DOL.GS.Commands
 {
 	[CmdAttribute(
 		"&casier",
 		ePrivLevel.Player,
-		"Gestion des casiers",
-		"'/casier info [account]' Affiche le casier du joueur selectionné ou du compte indiqué",
-		"'/casier add <account> <raison>' Ajoute une entrée public",
-		"'/casier staff <account> <raison>' Ajoute une entrée privé",
-		"'/casier padd <player> <raison>' Ajoute une entrée public",
-		"'/casier pstaff <player> <raison>' Ajoute une entrée privé")]
+        "Commands.GM.AmteNpc.Description",
+        "Commands.GM.AmteNpc.Casier.Info",
+        "Commands.GM.AmteNpc.Casier.Add",
+        "Commands.GM.AmteNpc.Casier.Staff",
+        "Commands.GM.AmteNpc.Casier.Padd",
+        "Commands.GM.AmteNpc.Casier.Pstaff")]
 	public class CasierCommandHandler : AbstractCommandHandler, ICommandHandler
 	{
         public void OnCommand(GameClient client, string[] args)
