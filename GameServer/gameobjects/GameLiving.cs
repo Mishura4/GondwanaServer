@@ -67,6 +67,8 @@ namespace DOL.GS
 			set { m_lastInterruptMessage = value; }
 		}
 
+		public bool canQuickCast = false;
+		
 		/// <summary>
 		/// Holds the AttackData object of the last left-hand attack
 		/// </summary>
@@ -5432,7 +5434,7 @@ namespace DOL.GS
 
 				if (!InCombat)
 				{
-					if (ManaPercent < 15)
+					if (ManaPercent <= 15)
 					{
 						ChangeMana(this, eManaChangeType.Regenerate, (int)OnePercMana);
 						return 4000;

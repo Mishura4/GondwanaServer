@@ -36,6 +36,10 @@ namespace DOL.GS
 		void Execute(Ability ab, GamePlayer player);
 	}
 
+	interface INPCAbilityActionHandler : IAbilityActionHandler
+	{
+		void Execute(Ability ab, GameLiving player);
+	}
 	/// <summary>
 	/// the ability class
 	/// nontrainable abilities have level 0

@@ -280,15 +280,12 @@ namespace DOL.GS.Spells
 
 			//the quick cast is unallowed whenever you miss the spell
 			//set the time when casting to can not quickcast during a minimum time
-			if (m_caster is GamePlayer)
+			QuickCastEffect quickcast = m_caster.EffectList.GetOfType<QuickCastEffect>();
+			if (quickcast != null && Spell.CastTime > 0)
 			{
-				QuickCastEffect quickcast = m_caster.EffectList.GetOfType<QuickCastEffect>();
-				if (quickcast != null && Spell.CastTime > 0)
-				{
-					m_caster.TempProperties.setProperty(GamePlayer.QUICK_CAST_CHANGE_TICK, m_caster.CurrentRegion.Time);
-					m_caster.DisableSkill(SkillBase.GetAbility(Abilities.Quickcast), QuickCastAbilityHandler.DISABLE_DURATION);
-					quickcast.Cancel(false);
-				}
+				m_caster.TempProperties.setProperty(GamePlayer.QUICK_CAST_CHANGE_TICK, m_caster.CurrentRegion.Time);
+				m_caster.DisableSkill(SkillBase.GetAbility(Abilities.Quickcast), QuickCastAbilityHandler.DISABLE_DURATION);
+				quickcast.Cancel(false);
 			}
 		}
 

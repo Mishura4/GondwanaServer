@@ -1064,7 +1064,7 @@ namespace DOL.AI.Brain
 			Offensive,
 			Defensive
 		}
-
+		public bool waitingForMana = false;
 		/// <summary>
 		/// Checks if any spells need casting
 		/// </summary>
@@ -1083,6 +1083,20 @@ namespace DOL.AI.Brain
 				Spell spellToCast = null;
 				bool needpet = false;
 				bool needheal = false;
+				// Don't cast if mana is too low
+				if (waitingForMana && Body.Mana > Body.MaxMana * 0.4)
+					{
+						waitingForMana = false;
+					}
+					else if (waitingForMana && !Body.canQuickCast)
+					{
+						return false;
+					}
+					else if (Body.Mana < Body.MaxMana * 0.1)
+					{
+						waitingForMana = true;
+						return false;
+					}
 
 				if (type == eCheckSpellType.Defensive)
 				{
@@ -1120,7 +1134,7 @@ namespace DOL.AI.Brain
 						spellToCast = (Spell)spell_rec[Util.Random((spell_rec.Count - 1))];
 						if (!Body.IsReturningToSpawnPoint)
 						{
-							if (spellToCast.Uninterruptible && CheckDefensiveSpells(spellToCast))
+							if ((spellToCast.Uninterruptible || Body.canQuickCast) && CheckDefensiveSpells(spellToCast))
 								casted = true;
 							else
 								if (!Body.IsBeingInterrupted && CheckDefensiveSpells(spellToCast))
@@ -1147,7 +1161,7 @@ namespace DOL.AI.Brain
 						spellToCast = (Spell)spell_rec[Util.Random((spell_rec.Count - 1))];
 
 
-						if (spellToCast.Uninterruptible && CheckOffensiveSpells(spellToCast))
+						if ((spellToCast.Uninterruptible || Body.canQuickCast)&& CheckOffensiveSpells(spellToCast))
 							casted = true;
 						else
 							if (!Body.IsBeingInterrupted && CheckOffensiveSpells(spellToCast))

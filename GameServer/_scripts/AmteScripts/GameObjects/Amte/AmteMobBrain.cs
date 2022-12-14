@@ -87,6 +87,15 @@ namespace DOL.AI.Brain
 
 							break;
 						}
+						case Abilities.Quickcast:
+						{
+								INPCAbilityActionHandler handler = (INPCAbilityActionHandler)SkillBase.GetAbilityActionHandler(ab.KeyName);
+								if (handler != null)
+								{
+									handler.Execute(ab, Body);
+								}
+							break;
+						}
 					}
 				}
 			}

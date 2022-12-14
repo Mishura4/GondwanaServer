@@ -36,6 +36,7 @@ namespace DOL.GS.Effects
 			base.Start(living);
 			if (m_owner is GamePlayer)
 				(m_owner as GamePlayer).Out.SendMessage(LanguageMgr.GetTranslation((m_owner as GamePlayer).Client, "Effects.QuickCastEffect.YouActivatedQC"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+			m_owner.canQuickCast = true;
 			m_owner.TempProperties.removeProperty(Spells.SpellHandler.INTERRUPT_TIMEOUT_PROPERTY);
 		}
 
@@ -45,6 +46,7 @@ namespace DOL.GS.Effects
 		public override void Cancel(bool playerCancel)
 		{
 			base.Cancel(playerCancel);
+			m_owner.canQuickCast = false;
 			if (m_owner is GamePlayer)
 				(m_owner as GamePlayer).Out.SendMessage(LanguageMgr.GetTranslation((m_owner as GamePlayer).Client, "Effects.QuickCastEffect.YourNextSpellNoQCed"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 		}

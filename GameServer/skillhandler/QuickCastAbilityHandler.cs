@@ -27,7 +27,7 @@ namespace DOL.GS.SkillHandler
     /// Handler for Quick Cast Ability clicks
 	/// </summary>
 	[SkillHandlerAttribute(Abilities.Quickcast)]
-	public class QuickCastAbilityHandler : IAbilityActionHandler
+	public class QuickCastAbilityHandler : IAbilityActionHandler, INPCAbilityActionHandler
 	{
 		/// <summary>
 		/// The ability disable duration in milliseconds
@@ -83,6 +83,22 @@ namespace DOL.GS.SkillHandler
 			//player.DisableSkill(ab,DURATION / 10);
 
 			new QuickCastEffect().Start(player);
+		}
+		
+		public void Execute(Ability ab, GameLiving living)
+		{									
+			if(living.CurrentSpellHandler != null)
+			return;
+
+			if(!living.IsAlive)
+			return;
+
+			long quickcastChangeTick = living.TempProperties.getProperty<long>(GamePlayer.QUICK_CAST_CHANGE_TICK);
+			long changeTime = living.CurrentRegion.Time - quickcastChangeTick;
+			if(changeTime < DISABLE_DURATION)
+			return;
+
+			new QuickCastEffect().Start(living);
 		}
 	}
 }
