@@ -1,0 +1,2 @@
+Commands.Players.Namemount.Description:	To give a name to your mount.
+Commands.Players.Namemount.Usage:		Usage : '/namemount'

@@ -1,0 +1,5 @@
+Commands.Players.Say.Description:	Say something to the players around you
+Commands.Players.Say.Muted:			You have been muted, so you cannot talk!
+Commands.Players.Say.SlowDown:		Slow down!
+Commands.Players.Say.Someting:		So? Did you say anything!?
+Commands.Players.Say.Usage:			Usage : '/say <message>'

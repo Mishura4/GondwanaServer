@@ -1,0 +1,14 @@
+Commands.Players.Yell.Description:	Yell something to nearby players.
+Commands.Players.Yell.East:			East
+Commands.Players.Yell.From:			{0} yell for help from « {1} »
+Commands.Players.Yell.Muted:		You have been muted, so you cannot yell for help.
+Commands.Players.Yell.NorthEast:	North East
+Commands.Players.Yell.North:		North
+Commands.Players.Yell.NorthWest:	North West
+Commands.Players.Yell.SlowDown:		Slowly! Think twice before saying something!
+Commands.Players.Yell.SouthEast:	South East
+Commands.Players.Yell.South:		South
+Commands.Players.Yell.SouthWest:	South West
+Commands.Players.Yell.Usage:		Usage : '/yell <message>'
+Commands.Players.Yell.West:			West
+Commands.Players.Yell.You:			You are yelling for help.

@@ -1,0 +1,2 @@
+Commands.Players.Book.Description:	Write a book or scroll
+Commands.Players.Book.Usage:			/book <title>

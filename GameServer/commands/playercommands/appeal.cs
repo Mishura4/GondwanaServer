@@ -28,12 +28,8 @@ namespace DOL.GS.Commands
     [CmdAttribute(
         "&appeal",
         ePrivLevel.Player,
-        "Usage: '/appeal <appeal type> <appeal text>",
-        "Where <appeal type> is one of the following:",
-        "  Harassment, Naming, Conduct, Stuck, Emergency or Other",
-        "and <appeal text> is a description of your issue.",
-        "If you have submitted an appeal, you can check its",
-        "status by typing '/checkappeal'.")]
+        "Commands.Players.Appeal.Description",
+        "Commands.Players.Appeal.Usage")]
     public class AppealCommandHandler : AbstractCommandHandler, ICommandHandler
     {
         public void OnCommand(GameClient client, string[] args)
@@ -43,7 +39,7 @@ namespace DOL.GS.Commands
 
 			if (ServerProperties.Properties.DISABLE_APPEALSYSTEM)
             {
-                AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Scripts.Players.Appeal.SystemDisabled"));
+                AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Appeal.SystemDisabled"));
                 return;
             }
 
@@ -58,7 +54,7 @@ namespace DOL.GS.Commands
                 DisplaySyntax(client);
                 if (client.Account.PrivLevel > (uint)ePrivLevel.Player)
                 {
-                    AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Scripts.Players.Appeal.UseGMappeal"));
+                    AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Appeal.UseGMappeal"));
                 }
             }
 
@@ -76,12 +72,12 @@ namespace DOL.GS.Commands
                 bool HasPendingAppeal = client.Player.TempProperties.getProperty<bool>("HasPendingAppeal");
                 if (HasPendingAppeal)
                 {
-                    AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Scripts.Players.Appeal.AlreadyActiveAppeal", client.Player.Name));
+                    AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Appeal.AlreadyActiveAppeal", client.Player.Name));
                     return;
                 }
                 if (args.Length < 5)
                 {
-                    AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Scripts.Players.Appeal.NeedMoreDetail"));
+                    AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Appeal.NeedMoreDetail"));
                     return;
                 }
                 int severity = 0;
@@ -133,20 +129,20 @@ namespace DOL.GS.Commands
     //handles /reportbug command that is issued from the client /appeal function.
     [CmdAttribute(
     "&reportbug",
-    ePrivLevel.Player, "Use /appeal to file an appeal")]
+    ePrivLevel.Player, "Commands.Players.Appeal.UseAppeal")]
     public class ReportBugCommandHandler : AbstractCommandHandler, ICommandHandler
     {
         public void OnCommand(GameClient client, string[] args)
         {
             if (ServerProperties.Properties.DISABLE_APPEALSYSTEM)
             {
-                AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Scripts.Players.Appeal.SystemDisabled"));
+                AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Appeal.SystemDisabled"));
                 return;
             }
 
             if (args.Length < 5)
             {
-                AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Scripts.Players.Appeal.NeedMoreDetail"));
+                AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Appeal.NeedMoreDetail"));
                 return;
             }
 
@@ -177,25 +173,25 @@ namespace DOL.GS.Commands
     //handles /reportharass command that is issued from the client /appeal function.
     [CmdAttribute(
     "&reportharass",
-    ePrivLevel.Player, "Use /appeal to file an appeal")]
+    ePrivLevel.Player, "Commands.Players.Appeal.UseAppeal")]
     public class ReportHarassCommandHandler : AbstractCommandHandler, ICommandHandler
     {
         public void OnCommand(GameClient client, string[] args)
         {
             if (ServerProperties.Properties.DISABLE_APPEALSYSTEM)
             {
-                AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Scripts.Players.Appeal.SystemDisabled"));
+                AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Appeal.SystemDisabled"));
                 return;
             }
             bool HasPendingAppeal = client.Player.TempProperties.getProperty<bool>("HasPendingAppeal");
             if (HasPendingAppeal)
             {
-                AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Scripts.Players.Appeal.AlreadyActiveAppeal", client.Player.Name));
+                AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Appeal.AlreadyActiveAppeal", client.Player.Name));
                 return;
             }
             if (args.Length < 7)
             {
-                AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Scripts.Players.Appeal.NeedMoreDetail"));
+                AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Appeal.NeedMoreDetail"));
                 return;
             }
             //strip these words if they are the first word in the appeal text
@@ -223,25 +219,25 @@ namespace DOL.GS.Commands
     //handles /reporttos command that is issued from the client /appeal function.
     [CmdAttribute(
     "&reporttos",
-    ePrivLevel.Player, "Use /appeal to file an appeal")]
+    ePrivLevel.Player, "Commands.Players.Appeal.UseAppeal")]
     public class ReportTosCommandHandler : AbstractCommandHandler, ICommandHandler
     {
         public void OnCommand(GameClient client, string[] args)
         {
             if (ServerProperties.Properties.DISABLE_APPEALSYSTEM)
             {
-                AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Scripts.Players.Appeal.SystemDisabled"));
+                AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Appeal.SystemDisabled"));
                 return;
             }
             bool HasPendingAppeal = client.Player.TempProperties.getProperty<bool>("HasPendingAppeal");
             if (HasPendingAppeal)
             {
-                AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Scripts.Players.Appeal.AlreadyActiveAppeal", client.Player.Name));
+                AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Appeal.AlreadyActiveAppeal", client.Player.Name));
                 return;
             }
             if (args.Length < 7)
             {
-                AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Scripts.Players.Appeal.NeedMoreDetail"));
+                AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Appeal.NeedMoreDetail"));
                 return;
             }
             switch (args[1])
@@ -297,25 +293,25 @@ namespace DOL.GS.Commands
     //handles /reportharass command that is issued from the client /appeal function.
     [CmdAttribute(
     "&reportstuck",
-    ePrivLevel.Player, "Use /appeal to file an appeal")]
+    ePrivLevel.Player, "Commands.Players.Appeal.UseAppeal")]
     public class ReportStuckCommandHandler : AbstractCommandHandler, ICommandHandler
     {
         public void OnCommand(GameClient client, string[] args)
         {
             if (ServerProperties.Properties.DISABLE_APPEALSYSTEM)
             {
-                AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Scripts.Players.Appeal.SystemDisabled"));
+                AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Appeal.SystemDisabled"));
                 return;
             }
             bool HasPendingAppeal = client.Player.TempProperties.getProperty<bool>("HasPendingAppeal");
             if (HasPendingAppeal)
             {
-                AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Scripts.Players.Appeal.AlreadyActiveAppeal", client.Player.Name));
+                AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Appeal.AlreadyActiveAppeal", client.Player.Name));
                 return;
             }
             if (args.Length < 5)
             {
-                AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Scripts.Players.Appeal.NeedMoreDetail"));
+                AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Appeal.NeedMoreDetail"));
                 return;
             }
             //strip these words if they are the first word in the appeal text
@@ -343,25 +339,25 @@ namespace DOL.GS.Commands
     //handles /appea command that is issued from the client /appeal function (emergency appeal).
     [CmdAttribute(
     "&appea",
-    ePrivLevel.Player, "Use /appeal to file an appeal")]
+    ePrivLevel.Player, "Commands.Players.Appeal.UseAppeal")]
     public class EmergencyAppealCommandHandler : AbstractCommandHandler, ICommandHandler
     {
         public void OnCommand(GameClient client, string[] args)
         {
             if (ServerProperties.Properties.DISABLE_APPEALSYSTEM)
             {
-                AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Scripts.Players.Appeal.SystemDisabled"));
+                AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Appeal.SystemDisabled"));
                 return;
             }
             bool HasPendingAppeal = client.Player.TempProperties.getProperty<bool>("HasPendingAppeal");
             if (HasPendingAppeal)
             {
-                AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Scripts.Players.Appeal.AlreadyActiveAppeal", client.Player.Name));
+                AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Appeal.AlreadyActiveAppeal", client.Player.Name));
                 return;
             }
             if (args.Length < 5)
             {
-                AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Scripts.Players.Appeal.NeedMoreDetail"));
+                AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Appeal.NeedMoreDetail"));
                 return;
             }
             //strip these words if they are the first word in the appeal text

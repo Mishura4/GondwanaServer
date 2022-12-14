@@ -1,0 +1,6 @@
+Commands.GM.AmteNpc.Description:	Gestion des casiers:
+Commands.GM.AmteNpc.Casier.Info:	'/casier info [account]' Affiche le casier du joueur selectionné ou du compte indiqué
+Commands.GM.AmteNpc.Casier.Add:		'/casier add <account> <raison>' Ajoute une entrée publique
+Commands.GM.AmteNpc.Casier.Staff:	'/casier staff <account> <raison>' Ajoute une entrée privée
+Commands.GM.AmteNpc.Casier.Padd:	'/casier padd <player> <raison>' Ajoute une entrée publique
+Commands.GM.AmteNpc.Casier.Pstaff:	'/casier pstaff <player> <raison>' Ajoute une entrée privée

@@ -1,0 +1,2 @@
+Commands.Players.Release.Description:	When you are dead you can use the '/release' command. This will bring you back to life at your Bind Stone.
+Commands.Players.Release.Usage:			Usage : '/release'

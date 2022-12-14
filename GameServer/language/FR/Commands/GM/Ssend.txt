@@ -1,0 +1,2 @@
+Commands.GM.Ssend.Description:	Répondre aux report
+Commands.GM.Ssend.Usage:		/ssend <nick> <message>

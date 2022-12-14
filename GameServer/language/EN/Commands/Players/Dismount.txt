@@ -1,0 +1,5 @@
+# /Dismount
+Commands.Players.Dismount:				
+Commands.Players.Dismount.Description:	Getting off your mount.
+Commands.Players.Dismount.NotRiding:	You are not on your mount.
+Commands.Players.Dismount.Usage:		Usage : '/dismount' # Once you are on your mount.

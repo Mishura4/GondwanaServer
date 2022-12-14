@@ -1,17 +1,18 @@
 using System;
 using DOL.GS.PacketHandler;
 using System.Collections.Generic;
+using DOL.Language;
 
 namespace DOL.GS.Commands
 {
 	[CmdAttribute(
 		"&amteboat",
 		ePrivLevel.GM,
-		"Boat Commands",
-        "/amteboat create [model] - créé un GameBoatAmte",
-        "/amteboat info - affiche les infos du GameBoatAmte ciblé",
-        "/amteboat speed <newspeed> - change la vitesse du mob pour le trajet",
-        "/amteboat path <path name> - change le nom du trajet que le mob doit suivre")]
+        "Commands.GM.Boat.Description",
+        "Commands.GM.Boat.Usage.Info",
+        "Commands.GM.Boat.Usage.Create",
+        "Commands.GM.Boat.Usage.Speed",
+        "Commands.GM.Boat.Usage.Path")]
 	public class AmteBoatCommandHandler : AbstractCommandHandler, ICommandHandler
 	{
 		public void OnCommand(GameClient client, string[] args)

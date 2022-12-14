@@ -10,19 +10,19 @@ namespace DOL.GS.Scripts
 	[CmdAttribute(
 		"&echangeurnpc",
 		ePrivLevel.GM,
-		"Gestions des echangeurs (TextNPC)",
-		"'/echangeur add <nombre d'item> <ID de l'item a donner>' Ajoute un item que le pnj accepte",
-		"'/echangeur remove <ID de l'item a donner>' Retire un item",
-		"'/echangeur money <ID de l'item a donner> <quantité>' Echange de l'argent",
-		"'/echangeur xp <ID de l'item a donner> <quantité>' Mettre une quantité négative pour un pourmille (xp/1000) suivant le niveau du joueur",
-		"'/echangeur item <ID de l'item a donner> <nombre d'item final> <ID de l'item final>' Echange des objets",
-		"'/echangeur info' affiche les infos de l'échangeur",
-		"'/echangeur pricemoney <ID de l'item a donner> <gold>' Définit la valeur en <gold> pour valider l'échange",
-        "'/echangeur priceressource1 <ID de l'item a donner> <item_id> <nombre>' Définit l'objet requis par son <item_id> et le <nombre> requis pour la ressource 1",
-        "'/echangeur priceressource2 <ID de l'item a donner> <item_id> <nombre>' Définit l'objet requis par son <item_id> et le <nombre> requis pour la ressource 2",
-        "'/echangeur priceressource3 <ID de l'item a donner> <item_id> <nombre>' Définit l'objet requis par son <item_id> et le <nombre> requis pour la ressource 3",
-        "'/echangeur priceressource remove <1|2|3> <ID de l'item a donner>' Supprime la condition de Price Ressource numéro <1|2|3> pour l'item à donner.",
-		"Pour la réponse, ajoutez une réponse avec l'ID de l'item à donner grace aux commandes des textnpc")]
+        "Commands.GM.EchangeurNPC.Description",
+        "Commands.GM.EchangeurNPC.Usage.Add",
+        "Commands.GM.EchangeurNPC.Usage.Remove",
+        "Commands.GM.EchangeurNPC.Usage.Money",
+        "Commands.GM.EchangeurNPC.Usage.XP",
+        "Commands.GM.EchangeurNPC.Usage.Item",
+        "Commands.GM.EchangeurNPC.Usage.Info",
+        "Commands.GM.EchangeurNPC.Usage.Pricemoney",
+        "Commands.GM.EchangeurNPC.Usage.Priceressource1",
+        "Commands.GM.EchangeurNPC.Usage.Priceressource2",
+        "Commands.GM.EchangeurNPC.Usage.Priceressource3",
+        "Commands.GM.EchangeurNPC.Usage.Priceressource",
+        "Commands.GM.EchangeurNPC.Usage.AdditionalDescription")]
 	public class EchangeurNPCCommandHandler : AbstractCommandHandler, ICommandHandler
 	{
 		public void OnCommand(GameClient client, string[] args)

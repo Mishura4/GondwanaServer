@@ -1,0 +1,11 @@
+Commands.Players.Broadcast.Description:	Broadcast a message to players in your zone.
+Commands.Players.Broadcast.Message:		[Broadcast] {0}: {1}
+Commands.Players.Broadcast.Muted:		You cannot broadcast a message while beeing muted.
+Commands.Players.Broadcast.NoHere:		You cannot broadcast in the regional channel from here.
+Commands.Players.Broadcast.NoText:		You have to say something...
+Commands.Players.Broadcast.SlowDown:	Remember to think twice before saying anything...
+Commands.Players.Broadcast.Usage:		Usage : '/b <message>'
+Commands.Players.LFG.Message:			[LFG] {0}: {1}
+Commands.Players.LFG.Message:			[LFG] {0}: {1}
+Commands.Players.Region.Message:		[Region] {0}: {1}
+Commands.Players.Trade.Message:			[Trade] {0}: {1}

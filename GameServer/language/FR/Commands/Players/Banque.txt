@@ -1,0 +1,3 @@
+Commands.Players.Banque.Description:	Pour récupérer de l'argent à la banque.
+Commands.Players.Banque.Usage:			/banque <Cuivre> <Argent> <Or> <Platine>
+Commands.Players.Banque.Usage.Cheque:			/banque cheque <Cuivre> <Argent> <Or> <Platine>

@@ -1,0 +1,4 @@
+Commands.GM.FollowingMob.Description:	FollowMob Commands:
+Commands.GM.FollowingMob.Delete:		/followmob create - create a FollowMob
+Commands.GM.FollowingMob.Description:	/followmob follow <name of the mob to follow> - Configure the targeted mob the FollowMob will follow
+Commands.GM.FollowingMob.Guild:			/followmob copy - Copy the FollowMob with its target already configured

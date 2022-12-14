@@ -1,12 +1,13 @@
 using DOL.GS.Scripts;
+using DOL.Language;
 
 namespace DOL.GS.Commands
 {
 	[CmdAttribute(
 		 "&place",
 		 ePrivLevel.GM,
-		 "Commande pour les places assises",
-		 "'/place create' Pour créer une place assise")]
+         "Commands.GM.Place.Description",
+         "Commands.GM.Place.Usage.Create")]
 	public class PlaceAssiseCommandHandler : AbstractCommandHandler, ICommandHandler
 	{
 		public void OnCommand(GameClient client, string[] args)

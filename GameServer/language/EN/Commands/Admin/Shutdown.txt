@@ -1,0 +1,11 @@
+Commands.Admin.ShutDown.Closed:				The server is closed and will restart in {0} minutes.
+Commands.Admin.ShutDown.Description:		Shutdown the server in next minute
+Commands.Admin.ShutDown.On:					/shutdown on <hour>:<min>  - shutdown on this time
+Commands.Admin.ShutDown.Restart.Auto:		Automatic server restart engaged. The server will restart in {0} minutes! (Expected at {1})
+Commands.Admin.ShutDown.Restart.Hours:		The server will restart in {0} hours !
+Commands.Admin.ShutDown.Restart.Hours.Mins:	The server will restart in {0} hour·s and {1} minute·s !
+Commands.Admin.ShutDown.Restart.Mins:		The server will restart in {1} minutes!
+Commands.Admin.ShutDown.Restart.Mins.Secs:	The server will restart in {1} minutes ! ({2} seconds)
+Commands.Admin.ShutDown.Restart.Secs:		The server will restart in {2} seconds ! Thank you for logging out.
+Commands.Admin.ShutDown.Restart.TZ:			Warning: The server will restart in {0} minutes ! (Expected at {1})
+Commands.Admin.ShutDown:					/shutdown <mins>  - shutdown in minutes

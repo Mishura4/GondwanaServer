@@ -1,0 +1,4 @@
+Commands.GM.nightmob.Description:	NightMob Commands:
+Commands.GM.nightmob.Usage.Create:		'/nightmob create' - Creates a NightMob
+Commands.GM.nightmob.Usage.Info:	'/nightmob info' - Displays informations about the targeted NightMob
+Commands.GM.nightmob.Usage.Time:		'/nightmob time <start> <end>' - To configure the Spawn hours of the mob

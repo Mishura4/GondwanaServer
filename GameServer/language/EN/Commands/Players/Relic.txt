@@ -1,0 +1,9 @@
+Commands.Players.Relic.AlbRelics:		Albion Relics
+Commands.Players.Relic.Description:		Displays the current status of relics.
+Commands.Players.Relic.HibRelics:		Hibernia relics
+Commands.Players.Relic.MidRelics:		Midgard relics
+Commands.Players.Relic.Power:			Mana
+Commands.Players.Relic.Strength:		Strength
+Commands.Players.Relic.Title:			Relics Status
+Commands.Players.Relic.Usage:			Usage : '/relics'
+Commands.Players.Relic.UseRealmCommand:	Use '/realm' to display Realm informations.

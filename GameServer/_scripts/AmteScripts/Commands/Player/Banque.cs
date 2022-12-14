@@ -2,15 +2,17 @@ using System;
 using DOL.Database;
 using DOL.GS.PacketHandler;
 using DOL.GS.Scripts;
+using DOL.Language;
+
 
 namespace DOL.GS.Commands
 {
 	[CmdAttribute(
 		"&banque",
 		ePrivLevel.Player,
-		"Pour récupérer de l'argent à la banque.",
-		"/banque <Cuivre> <Argent> <Or> <Platine>",
-		"/banque cheque <Cuivre> <Argent> <Or> <Platine>")]
+        "Commands.Players.Banque.Description",
+        "Commands.Players.Banque.Usage",
+        "Commands.Players.Banque.Usage.Cheque")]
 	public class BanqueCommandHandler : AbstractCommandHandler, ICommandHandler
 	{
 		public void OnCommand(GameClient client, string[] args)

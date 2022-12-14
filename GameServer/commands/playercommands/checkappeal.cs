@@ -26,11 +26,10 @@ namespace DOL.GS.Commands
 	[CmdAttribute(
 		"&checkappeal",
 		ePrivLevel.Player,
-		"Checks the status of your appeal or cancels it.",
-		"Usage:",
-		"/checkappeal view - View your appeal status.",
-		"/checkappeal cancel - Cancel your appeal and remove it from the queue.",
-		"Use /appeal to file an appeal.")]
+		"Commands.Players.CheckAppeal.Description",
+		"Commands.Players.CheckAppeal.Usage.View",
+		"Commands.Players.CheckAppeal.Usage.Cancel",
+		"Commands.Players.CheckAppeal.Usage.Appeal")]
 
 	public class CheckAppealCommandHandler : AbstractCommandHandler, ICommandHandler
 	{
@@ -41,7 +40,7 @@ namespace DOL.GS.Commands
 
 			if (ServerProperties.Properties.DISABLE_APPEALSYSTEM)
 			{
-				AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Scripts.Players.Appeal.SystemDisabled"));
+				AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Appeal.SystemDisabled"));
 				return;
 			}
 
@@ -68,7 +67,7 @@ namespace DOL.GS.Commands
 						bool HasPendingAppeal = client.Player.TempProperties.getProperty<bool>("HasPendingAppeal");
 						if (!HasPendingAppeal)
 						{
-							AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Scripts.Players.Appeal.DoNotHaveAppeal"));
+							AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Appeal.DoNotHaveAppeal"));
 							return;
 						}
 						DBAppeal appeal = AppealMgr.GetAppealByPlayerName(client.Player.Name);
@@ -76,7 +75,7 @@ namespace DOL.GS.Commands
 						{
 							if (appeal.Status == "Being Helped")
 							{
-								AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Scripts.Players.Appeal.CantCancelWhile"));
+								AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Appeal.CantCancelWhile"));
 								return;
 							}
 							else
@@ -85,7 +84,7 @@ namespace DOL.GS.Commands
 								break;
 							}
 						}
-						AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Scripts.Players.Appeal.DoNotHaveAppeal"));
+						AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Appeal.DoNotHaveAppeal"));
 						break;
 					}
 					#endregion checkappeal cancel
@@ -103,7 +102,7 @@ namespace DOL.GS.Commands
 						bool HasPendingAppeal = client.Player.TempProperties.getProperty<bool>("HasPendingAppeal");
 						if (!HasPendingAppeal)
 						{
-							AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Scripts.Players.Appeal.NoAppealToView"));
+							AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Appeal.NoAppealToView"));
 							return;
 						}
 						DBAppeal appeal = AppealMgr.GetAppealByPlayerName(client.Player.Name);
@@ -114,14 +113,14 @@ namespace DOL.GS.Commands
 							//note: we do not show the player his Appeals priority.
 							msg.Add("[Player]: " + appeal.Name + ", [Status]: " + appeal.Status + ", [Issue]: " + appeal.Text + ", [Time]: " + appeal.Timestamp + ".\n");
 							AppealMgr.GetAllAppeals(); //refresh the total number of appeals.
-							msg.Add(LanguageMgr.GetTranslation(client.Account.Language, "Scripts.Players.Appeal.CurrentStaffAvailable", AppealMgr.StaffList.Count, AppealMgr.TotalAppeals) + "\n");
-							msg.Add(LanguageMgr.GetTranslation(client.Account.Language, "Scripts.Players.Appeal.PleaseBePatient") + "\n");
-							msg.Add(LanguageMgr.GetTranslation(client.Account.Language, "Scripts.Players.Appeal.IfYouLogOut") + "\n");
-							msg.Add(LanguageMgr.GetTranslation(client.Account.Language, "Scripts.Players.Appeal.ToCancelYourAppeal"));
+							msg.Add(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Appeal.CurrentStaffAvailable", AppealMgr.StaffList.Count, AppealMgr.TotalAppeals) + "\n");
+							msg.Add(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Appeal.PleaseBePatient") + "\n");
+							msg.Add(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Appeal.IfYouLogOut") + "\n");
+							msg.Add(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Appeal.ToCancelYourAppeal"));
 							client.Out.SendCustomTextWindow("Your Appeal", msg);
 							return;
 						}
-						AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Scripts.Players.Appeal.NoAppealToView"));
+						AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Appeal.NoAppealToView"));
 						break;
 
 					}

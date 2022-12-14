@@ -1,0 +1,29 @@
+Commands.Players.Vol.Description:			Permet de voler un joueur
+Commands.Players.Vol.Usage: 				'/vol [joueur]'
+Commands.Players.Steal.Description:			Permet de voler un joueur
+Commands.Players.Steal.Usage: 				'/steal [player]'
+Commands.Players.Vol.Move: 					Votre vol a échoué car vous avez bougé !
+Commands.Players.Vol.UnknownCommand: 		Cette commande n'existe pas.
+Commands.Players.Vol.Area: 					Vous ne pouvez pas voler ici...
+Commands.Players.Vol.Distance: 				Vous etes trop loin de la cible pour la voler !
+Commands.Players.Vol.Hypnotized: 			Vous ne pouvez voler étant hypnotisé !
+Commands.Players.Vol.Stunned:				Vous ne pouvez voler étant assomé !
+Commands.Players.Vol.AFK:					Vous ne pouvez voler lorsque vous êtes afk ! Tapez /afk pour le désactiver.
+Commands.Players.Vol.Dead:					Vous ne pouvez voler étant mort !
+Commands.Players.Vol.AlreadyStealing:		Vous êtes déjà en train de voler quelqu'un !
+Commands.Players.Vol.TargetAFK: 			Vous ne pouvez pas voler un joueur afk !
+Commands.Players.Vol.Time: 					Vous devez attendre {0} secondes avant de pouvoir voler à nouveau !
+Commands.Players.Vol.Steal: 				Vous commencez à voler {0}
+Commands.Players.Vol.StealWindow: 			Vous êtes actuellement en train de voler
+Commands.Players.Vol.CantSteal: 			Vous ne pouvez volez ce personnage !
+Commands.Players.Vol.StealSleeping: 		Vous perdez 1 point de réputation pour avoir tenté de voler un joueur endormi.
+Commands.Players.Vol.StealSleapingPartner:	Vous perdez 1 point de réputation pour avoir contribué à un vol en endormant un joueur.
+Commands.Players.Vol.Fail:					Vous n'avez pas réussi à voler ce personnage !
+Commands.Players.Vol.LostRep:				Vous perdez 1 point de réputation pour avoir tenté de voler un joueur.
+Commands.Players.Vol.BeStealed:				Vous venez d'être dérobé de {0}
+Commands.Players.Vol.StealGain: 			Vous venez de voler la somme de {0}
+Commands.Players.Vol.FullInventory: 		Votre inventaire est plein, il va être difficle de voler quelque chose
+Commands.Players.Vol.NothingToSteal: 		Il n'y avait rien à voler !
+Commands.Players.Vol.FullBag: 				Vous avez vos sacs pleins, impossible de voler quoi que ce soit !
+Commands.Players.Vol.StealItem: 			Vous avez volé {0} à {1} !
+Commands.Players.Vol.BeStealedItem: 		{0} vous a volé {1} !

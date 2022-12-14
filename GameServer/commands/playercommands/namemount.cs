@@ -1,9 +1,14 @@
 using System;
 using DOL.GS.PacketHandler;
+using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute("&namemount", ePrivLevel.Player,"Name your hourse","/namemount")]
+	[CmdAttribute(
+		"&namemount",
+		ePrivLevel.Player,
+		"Commands.Players.Namemount.Description",
+		"Commands.Players.Namemount.Usage")]
 	public class NameHorseCommandHandler : AbstractCommandHandler, ICommandHandler
 	{
 		public void OnCommand(GameClient client, string[] args)

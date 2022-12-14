@@ -1984,12 +1984,17 @@ namespace DOL.GS.Spells
 			GameEventMgr.Notify(GameLivingEvent.CastFinished, m_caster, new CastingEventArgs(this, target, m_lastAttackData));
 		}
 
+		public virtual IList<GameLiving> SelectTargets(GameObject castTarget)
+        {
+			return SelectTargets(castTarget, false);
+        }
+
 		/// <summary>
 		/// Select all targets for this spell
 		/// </summary>
 		/// <param name="castTarget"></param>
 		/// <returns></returns>
-		public virtual IList<GameLiving> SelectTargets(GameObject castTarget)
+		public virtual IList<GameLiving> SelectTargets(GameObject castTarget, bool force = false)
 		{
 			var list = new List<GameLiving>(8);
 			GameLiving target = castTarget as GameLiving;
@@ -2077,7 +2082,7 @@ namespace DOL.GS.Spells
 					{
 						foreach (GamePlayer player in WorldMgr.GetPlayersCloseToSpot(Caster.CurrentRegionID, Caster.GroundTarget.Value, modifiedRadius))
 						{
-							if (GameServer.ServerRules.IsAllowedToAttack(Caster, player, true))
+							if (GameServer.ServerRules.IsAllowedToAttack(Caster, player, true) || force)
 							{
 								// Apply Mentalist RA5L
 								SelectiveBlindnessEffect SelectiveBlindness = Caster.EffectList.GetOfType<SelectiveBlindnessEffect>();
@@ -2097,7 +2102,7 @@ namespace DOL.GS.Spells
 						{
 							if (npc is GameStorm)
 								list.Add(npc);
-							else if (GameServer.ServerRules.IsAllowedToAttack(Caster, npc, true))
+							else if (GameServer.ServerRules.IsAllowedToAttack(Caster, npc, true) || force)
 							{
 								if (!npc.HasAbility("DamageImmunity")) list.Add(npc);
 							}
@@ -2182,7 +2187,7 @@ namespace DOL.GS.Spells
 						if (target == null) return null;
 						foreach (GamePlayer player in target.GetPlayersInRadius(modifiedRadius))
 						{
-							if (GameServer.ServerRules.IsAllowedToAttack(Caster, player, true))
+							if (GameServer.ServerRules.IsAllowedToAttack(Caster, player, true) || force)
 							{
 								SelectiveBlindnessEffect SelectiveBlindness = Caster.EffectList.GetOfType<SelectiveBlindnessEffect>();
 								if (SelectiveBlindness != null)
@@ -2199,7 +2204,7 @@ namespace DOL.GS.Spells
 						}
 						foreach (GameNPC npc in target.GetNPCsInRadius(modifiedRadius))
 						{
-							if (GameServer.ServerRules.IsAllowedToAttack(Caster, npc, true))
+							if (GameServer.ServerRules.IsAllowedToAttack(Caster, npc, true) || force)
 							{
 								if (!npc.HasAbility("DamageImmunity")) list.Add(npc);
 							}
@@ -2207,7 +2212,7 @@ namespace DOL.GS.Spells
 					}
 					else
 					{
-						if (target != null && GameServer.ServerRules.IsAllowedToAttack(Caster, target, true))
+						if (target != null && (GameServer.ServerRules.IsAllowedToAttack(Caster, target, true) || force))
 						{
 							// Apply Mentalist RA5L
 							if (Spell.Range > 0)
@@ -2238,22 +2243,22 @@ namespace DOL.GS.Spells
 
 						foreach (GamePlayer player in target.GetPlayersInRadius(modifiedRadius))
 						{
-							if (GameServer.ServerRules.IsAllowedToAttack(Caster, player, true) == false)
+							if (!GameServer.ServerRules.IsAllowedToAttack(Caster, player, true) || force)
 							{
 								list.Add(player);
 							}
 						}
-						foreach (GameNPC npc in target.GetNPCsInRadius(modifiedRadius))
-						{
-							if (GameServer.ServerRules.IsAllowedToAttack(Caster, npc, true) == false)
-							{
+                        foreach (GameNPC npc in target.GetNPCsInRadius(modifiedRadius))
+                        {
+                            if (!GameServer.ServerRules.IsAllowedToAttack(Caster, npc, true) || force)
+                            {
 								list.Add(npc);
 							}
 						}
 					}
 					else
 					{
-						if (target != null && GameServer.ServerRules.IsAllowedToAttack(Caster, target, true) == false)
+						if (target != null && (!GameServer.ServerRules.IsAllowedToAttack(Caster, target, true) || force))
 							list.Add(target);
 					}
 					break;
@@ -2267,14 +2272,14 @@ namespace DOL.GS.Spells
 								target = Caster;
 							foreach (GamePlayer player in target.GetPlayersInRadius(modifiedRadius))
 							{
-								if (GameServer.ServerRules.IsAllowedToAttack(Caster, player, true) == false)
+								if (!GameServer.ServerRules.IsAllowedToAttack(Caster, player, true) || force)
 								{
 									list.Add(player);
 								}
 							}
 							foreach (GameNPC npc in target.GetNPCsInRadius(modifiedRadius))
 							{
-								if (GameServer.ServerRules.IsAllowedToAttack(Caster, npc, true) == false)
+								if (!GameServer.ServerRules.IsAllowedToAttack(Caster, npc, true) || force)
 								{
 									list.Add(npc);
 								}
@@ -2395,7 +2400,7 @@ namespace DOL.GS.Spells
 							if (!m_caster.IsObjectInFront(player, (double)(Spell.Radius != 0 ? Spell.Radius : 100), false))
 								continue;
 
-							if (!GameServer.ServerRules.IsAllowedToAttack(Caster, player, true))
+							if (!GameServer.ServerRules.IsAllowedToAttack(Caster, player, true) || force)
 								continue;
 
 							list.Add(player);
@@ -2409,7 +2414,7 @@ namespace DOL.GS.Spells
 							if (!m_caster.IsObjectInFront(npc, (double)(Spell.Radius != 0 ? Spell.Radius : 100), false))
 								continue;
 
-							if (!GameServer.ServerRules.IsAllowedToAttack(Caster, npc, true))
+							if (!GameServer.ServerRules.IsAllowedToAttack(Caster, npc, true) || force)
 								continue;
 
 							if (!npc.HasAbility("DamageImmunity")) list.Add(npc);
@@ -2486,13 +2491,17 @@ namespace DOL.GS.Spells
 			return StartSpell(target);
 		}
 
+		public virtual bool StartSpell(GameLiving target)
+        {
+			return StartSpell(target, false);
+        }
 
 		/// <summary>
 		/// Called when spell effect has to be started and applied to targets
 		/// This is typically called after calling CheckBeginCast
 		/// </summary>
 		/// <param name="target">The current target object</param>
-		public virtual bool StartSpell(GameLiving target)
+		public virtual bool StartSpell(GameLiving target, bool force = false)
 		{
 			// For PBAOE spells always set the target to the caster
 			if (Spell.SpellType.ToLower() != "TurretPBAoE".ToLower() && (target == null || (Spell.Radius > 0 && Spell.Range == 0)))
@@ -2505,7 +2514,7 @@ namespace DOL.GS.Spells
 
 			if (m_spellTarget == null) return false;
 
-			var targets = SelectTargets(m_spellTarget);
+			var targets = SelectTargets(m_spellTarget, force);
 
 			double effectiveness = Caster.Effectiveness;
 
@@ -3993,10 +4002,12 @@ namespace DOL.GS.Spells
 			//Update value if npc is Invincible Group
 			if (Caster is GamePlayer && ad.Target is GameNPC npc)
             {
-				if (npc.CurrentGroupMob != null && npc.CurrentGroupMob.GroupInfos.IsInvincible == true)
+				if ((npc.CurrentGroupMob != null && npc.CurrentGroupMob.GroupInfos.IsInvincible == true) || (npc.ImunityDomage != eDamageType.GM && ad.DamageType == npc.ImunityDomage))
                 {
 					ad.Damage = 0;
 					ad.CriticalDamage = 0;
+					OnSpellResisted(ad.Target);
+					return;
                 }
             }
 

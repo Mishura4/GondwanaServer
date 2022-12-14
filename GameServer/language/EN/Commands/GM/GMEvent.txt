@@ -1,0 +1,12 @@
+Commands.GM.GMEvent.Description:	Commands.Players.Event.Description
+Commands.GM.GMEvent.Usage.Info:		'/GMEvent info [id]' Displays Event(s) informations, [Event_id] for a specific event. If 0, all events will be displayed.
+Commands.GM.GMEvent.Usage.Infolight:		'/GMEvent infolight' Displays Event(s) basic informations.
+Commands.GM.GMEvent.Usage.Start:		'/GMEvent start <id>' Starts the event with its <Event_id>
+Commands.GM.GMEvent.Usage.Reset:		'/GMEvent reset <id>' Reset the event with its <Event_id>, reset as well previous events connected to the latest
+Commands.GM.GMEvent.Usage.Add.Event:		'/GMEvent add <eventId> <xpFactor>' Add the selected target (mob or chest) to the event as well as server's cache and make it disappear from the world, <xpFactor> optional for specific Event mobs in order to give more xp per kill (1 will be default value)
+Commands.GM.GMEvent.Usage.Add.MobChest:		'/GMEvent add <mob|coffre> <name> <region> <eventId> <xpFactor>'Adds a <mob|chest> by its name and its region to an event, <xpFactor> optional for specific Event mobs in order to give more xp per kill (1 will be default value)
+Commands.GM.GMEvent.Usage.Respawn:		'/GMEvent respawn <mob|coffre> <name> <eventId> <true|false>'Change CanRespawn value of the <mob|chest> by its <name> within an event with its <eventId> <true|false> in order to allow/disallow the <mob|chest> to respawn
+Commands.GM.GMEvent.Usage.StartEffect:		'/GMEvent starteffect <mob name> <eventId> <spellId>'Apply an effect on a mob by its <name> while appearing at the start of an <eventId> by specifying the <spellId> of the effect
+Commands.GM.GMEvent.Usage.EndEffect:		'/GMEvent endeffect <mob name> <eventId> <spellId>'Apply an effect on a mob by its <name> while disappearing at the end of an <eventId> by specifying the <spellId> of the effect
+Commands.GM.GMEvent.Usage.Reresh:		'/GMEvent refresh region <regionid>'Look for mobs and chests in the region <regionid> and make them match with recently added EventID and add them to the event'
+Commands.GM.GMEvent.Usage.Annonce:		'/GMEvent annonce <screen|windowed|send|log|confirm> <id>'To modify the announce type of an event <Event_id>

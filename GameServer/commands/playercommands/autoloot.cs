@@ -24,8 +24,8 @@ namespace DOL.GS.Commands
 	[CmdAttribute(
 		"&autoloot",
 		ePrivLevel.Player,
-		"automaticly pick up any loot that drops in your area",
-		"/autoloot <on/off>")]
+		"Commands.Players.Autoloot.Description",
+		"Commands.Players.Autoloot.Usage")]
 	public class AutolootCommandHandler : AbstractCommandHandler, ICommandHandler
 	{
 		public void OnCommand(GameClient client, string[] args)
@@ -39,12 +39,12 @@ namespace DOL.GS.Commands
 			if (args[1].ToLower().Equals("on"))
 			{
 				client.Player.Autoloot = true;
-				DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Scripts.Players.Autoloot.On"));
+				DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Autoloot.On"));
             }
 			else if (args[1].ToLower().Equals("off"))
 			{
 				client.Player.Autoloot = false;
-				DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Scripts.Players.Autoloot.Off"));
+				DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Autoloot.Off"));
             }
 		}
 	}

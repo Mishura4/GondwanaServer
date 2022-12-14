@@ -1,0 +1,3 @@
+Commands.Players.Gloc.Description:	Displays current coordinates
+Commands.Players.Gloc.Position:		Your position is now X :{0} Y :{1} Z :{2} Heading :{3} Region :{4} {5}
+Commands.Players.Gloc.Usage:		'/gloc'

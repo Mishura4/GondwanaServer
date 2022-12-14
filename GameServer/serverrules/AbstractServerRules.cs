@@ -549,21 +549,21 @@ namespace DOL.GS.ServerRules
 		public virtual string ReasonForDisallowMounting(GamePlayer player)
 		{
 			// pre conditions
-			if (!player.IsAlive) return "GamePlayer.UseSlot.CantMountWhileDead";
-			if (player.Steed != null) return "GamePlayer.UseSlot.MustDismountBefore";
+			if (!player.IsAlive) return "GameObjects.GamePlayer.UseSlot.CantMountWhileDead";
+			if (player.Steed != null) return "GameObjects.GamePlayer.UseSlot.MustDismountBefore";
 
 			// gm/admin overrides the other checks
 			if (player.Client.Account.PrivLevel != (uint)ePrivLevel.Player) return string.Empty;
 
 			// player restrictions
-			if (player.IsMoving) return "GamePlayer.UseSlot.CantMountMoving";
-			if (player.InCombat) return "GamePlayer.UseSlot.CantMountCombat";
-			if (player.IsSitting) return "GamePlayer.UseSlot.CantCallMountSeated";
-			if (player.IsStealthed) return "GamePlayer.UseSlot.CantMountStealthed";
+			if (player.IsMoving) return "GameObjects.GamePlayer.UseSlot.CantMountMoving";
+			if (player.InCombat) return "GameObjects.GamePlayer.UseSlot.CantMountCombat";
+			if (player.IsSitting) return "GameObjects.GamePlayer.UseSlot.CantCallMountSeated";
+			if (player.IsStealthed) return "GameObjects.GamePlayer.UseSlot.CantMountStealthed";
 
 			// You are carrying a relic ? You can't use a mount !
 			if (GameRelic.IsPlayerCarryingRelic(player))
-				return "GamePlayer.UseSlot.CantMountRelicCarrier";
+				return "GameObjects.GamePlayer.UseSlot.CantMountRelicCarrier";
 
 			// zones checks:
 			// white list: always allows
@@ -580,10 +580,10 @@ namespace DOL.GS.ServerRules
 			if (player.CurrentRegion.IsDungeon ||
 				player.CurrentRegion.IsInstance ||
 				player.CurrentRegion.IsCapitalCity)
-				return "GamePlayer.UseSlot.CantMountHere";
+				return "GameObjects.GamePlayer.UseSlot.CantMountHere";
 			// perhaps need to be tweaked for PvPServerRules
 			if (player.CurrentRegion.IsRvR && !player.ActiveHorse.IsSummonRvR)
-				return "GamePlayer.UseSlot.CantSummonRvR";
+				return "GameObjects.GamePlayer.UseSlot.CantSummonRvR";
 
 			// sounds good !
 			return string.Empty;

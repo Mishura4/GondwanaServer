@@ -1,0 +1,3 @@
+Commands.GM.HookPoint.Description:	Ajoute un « hookpoint » sur partie de fort
+Commands.GM.HookPoint.Usage:		Usage : '/addhookpoint <skin> <id>' # Ajoute un « Hookpoint » au « GameKeepComponent » ciblé.
+Commands.GM.HookPoint.NoGKCTarget:	Vous ne ciblez pas un « GameKeepComponent » !

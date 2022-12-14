@@ -16,14 +16,15 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
+using DOL.Language;
 
 namespace DOL.GS.Commands
 {
 	[CmdAttribute(
 		"&pray",
 		ePrivLevel.Player,
-		"You can pray on your gravestones to get some experience back",
-		"/pray")]
+		"Commands.Players.Play.Description",
+		"Commands.Players.Play.Usage")]
 	public class PrayCommandHandler : AbstractCommandHandler, ICommandHandler
 	{
 		public void OnCommand(GameClient client, string[] args)

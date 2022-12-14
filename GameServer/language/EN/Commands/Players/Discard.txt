@@ -1,0 +1,2 @@
+Commands.Players.Discard.Description:	Discard a card from your hand.
+Commands.Players.Discard.Usage:			Usage : '/discard <#|all>' # Discard a card # from your hand. Or discard all the cards.

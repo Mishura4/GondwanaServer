@@ -1,0 +1,3 @@
+Commands.GM.AmteNpc.Description:	NPC's parameters management:
+Commands.GM.AmteNpc.Usage.Info:		'/amtenpc info' Shows special infos of the selected mob.
+Commands.GM.AmteNpc.Usage.Param:		'/amtenpc param <id> <value>' Change the parameter's value of a selected mob.

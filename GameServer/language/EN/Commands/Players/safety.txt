@@ -1,0 +1,7 @@
+Commands.Players.Safety.Description:	Deactive your PvP safety net
+Commands.Players.Safety.Message.1:		Your safety net prevents you from participating in a fight
+Commands.Players.Safety.Message.2:		with non-allied players in dedicated areas when you are under level 10
+Commands.Players.Safety.Message.3:		Use '/safety off' to start participating in PvP battles in these areas. Please note, once deactivated it is no longer possible to reactivate it!
+Commands.Players.Safety.Off.Already:	Your safety net is deactivated.
+Commands.Players.Safety.Off:			Your safety net is now DEACTIVATED! Let's fight!
+Commands.Players.Safety.Usage:			Usage : '/safety off'

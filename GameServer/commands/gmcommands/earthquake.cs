@@ -2,6 +2,7 @@
 using DOL.GS.PacketHandler;
 using DOL.GS.Commands;
 using DOL.Geometry;
+using DOL.Language;
 
 namespace DOL.GS.Scripts
 {

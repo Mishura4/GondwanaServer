@@ -1,0 +1,19 @@
+Commands.GM.door.Add:			'/door add'    # Add a door.
+Commands.GM.door.Delete:		'/door delete' # Delete the targeted door.
+Commands.GM.door.Description:	Doors customisation:
+Commands.GM.door.Guild:			'/door guild <text>' # Change door guild.
+Commands.GM.door.Heal:			'/door heal'   # Set door health to max.
+Commands.GM.door.Info:			'/door info'   # Show informations about the door.
+Commands.GM.door.Kill:			'/door kill'   # Set door health to 0 (door open).
+Commands.GM.door.Level:			'/door level <value>' # To change door level. 
+Commands.GM.door.Locked:		'/door locked ' # Lock the door - Items usage or groupmob killing can unlock it.
+Commands.GM.door.Name:			'/door name <text>' # To change door name.
+Commands.GM.door.Realm:			'/door realm <valeur>' # Change door realm. If realm = 0, the door won't open unless destroyed.
+Commands.GM.door.Unlocked:		'/door unlocked ' # Unlock the door - Items usage or groupmob killing can lock it.
+Commands.GM.door.Update:		'/door update ' # Update door in the database with GM xyz coords.
+Commands.GM.door.Usage.Sound:		'/door sound <soundid>' # Add a sound effect to the door.
+Commands.GM.door.Usage.GroupMob:		'/door groupmob <Group Mob Id>' # Connect a Groupmob to a door.
+Commands.GM.door.Usage.Key:		'/door key <itemid>' # Add an itemtemplate to a door to be used as a key.
+Commands.GM.door.Usage.KeyChance:		'/door key_chance <number between 0 and 100>' # Success rate for a key to unlock a door.
+Commands.GM.door.Usage.IsRenaissance:		'/door isrenaissance' Toggle enable/disable IsRenaissance to allow/disallow a player to open the door if Reborn only.
+Commands.GM.door.Usage.PunishSpell:		'/door punishspell <spell Id>' # Add a spell to a door in order to punish a player who can’t open it (with a key or by beeing Reborn).

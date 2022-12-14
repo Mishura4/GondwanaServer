@@ -126,9 +126,10 @@ namespace DOL.GS.Commands
 	     "'/mob reload <name>' reload the targetted or named mob(s) from the database.",
 	     "'/mob reload radius <number>' reload the mobs in radius from the database.",
 	     "'/mob findname <name> <#>' search for a mob with a name like <name> with maximum <#> (def. 10) matches.",
-	     "'/mob trigger <type> <chance> <emote> <text>' adds a trigger to targeted mob class.  Use '/mob trigger help' for more info.",
+	     "'/mob trigger <type> <param1> <value1> <param2> <value2> text <sentence>' adds a trigger to targeted mob class.  Use '/mob trigger help' for more info.",
 	     "'/mob trigger info' Give trigger informations.",
 	     "'/mob trigger remove <id>' Remove a trigger.",
+	     "'/mob trigger help' More info about '/mob trigger' command",
 	     "'/mob ownerid <id>' Sets and saves the OwnerID for this mob.",
          "'/mob isRenaissance <true|false> - set Mob isRenaissance.",
 	     "'/mob ownerid <id>' Sets and saves the OwnerID for this mob.",
@@ -3233,6 +3234,17 @@ namespace DOL.GS.Commands
 			ushort chance = 0;
 			int spell = 0;
             ushort hp = 0;
+            ushort domagetyperepeate = 0;
+            ushort nbuse = 0;
+            ushort changeflag = 0;
+            string changebrain = "";
+            int changenpctemplate = 0;
+            ushort areaeffectid = 0;
+            ushort playertppoint = 0;
+            ushort mobtppoint = 0;
+            int triggertimer=0;
+            int changeeffect=0;
+            int tpeffect=0;
 			try
 			{
 				string type = args[2].ToLower();
@@ -3260,25 +3272,81 @@ namespace DOL.GS.Commands
 				}
 				catch
 				{
-					client.Out.SendMessage("You must specify a proper type for the trigger <spawning, aggroing, dieing, fighting, moving, roaming, seeing, interact>.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+					client.Out.SendMessage("You must specify a proper type for the trigger <spawning, aggroing, dieing, fighting, moving, roaming, seeing, interact, hurting or immunised>.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
 					client.Out.SendMessage("example: dieing none This is what I will say when I die!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
 					return;
 				}
 
-				try
+                // New way to manage the trigger command
+                int i = 3;
+                while(i<args.Length)
 				{
-					emote = Convert.ToUInt16((args[4]));
-					chance = Convert.ToUInt16((args[3]));
-					spell = Convert.ToUInt16(args[5]);
-                    hp = Convert.ToUInt16(args[6]);
-				}
-				catch
-				{
-					client.Out.SendMessage("You must specify a valid chance percent/emote number", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-				}
-				if (args.Length > 6)
-				{
-					text = string.Join(" ", args, 7, args.Length - 7);
+                    // text must be in the end
+                    if(args[i] == "text")
+                    {
+                        text = string.Join(" ", args, i+1, args.Length - (i+1));
+                        i = args.Length;
+                    }
+                    else
+                    {
+                        try
+                        {
+                            switch (args[i])
+                            {
+                                case "emote":
+                                    emote = Convert.ToUInt16(args[i + 1]);
+                                    break;
+                                case "chance":
+                                    chance = Convert.ToUInt16(args[i + 1]);
+                                    break;
+                                case "spell":
+                                    spell = Convert.ToUInt16(args[i + 1]);
+                                    break;
+                                case "hp":
+                                    hp = Convert.ToUInt16(args[i + 1]);
+                                    break;
+                                case "damagetyperepeate":
+                                    domagetyperepeate = Convert.ToUInt16(args[i + 1]);
+                                    break;
+                                case "triggertimer":
+                                    triggertimer = Convert.ToInt32(args[i + 1]);
+                                    break;
+                                case "nbuse":
+                                    nbuse = Convert.ToUInt16(args[i + 1]);
+                                    break;
+                                case "changeflag":
+                                    changeflag = Convert.ToUInt16(args[i + 1]);
+                                    break;
+                                case "changebrain":
+                                    changebrain = args[i + 1];
+                                    break;
+                                case "changenpctemplate":
+                                    changenpctemplate = Convert.ToInt32(args[i + 1]);
+                                    break;
+                                case "changeeffect":
+                                    changeeffect = Convert.ToInt32(args[i + 1]);
+                                    break;
+                                case "areaeffectid":
+                                    areaeffectid = Convert.ToUInt16(args[i + 1]);
+                                    break;
+                                case "playertppoint":
+                                    playertppoint = Convert.ToUInt16(args[i + 1]);
+                                    break;
+                                case "mobtppoint":
+                                    mobtppoint = Convert.ToUInt16(args[i + 1]);
+                                    break;
+                                case "tpeffect":
+                                    tpeffect = Convert.ToInt32(args[i + 1]);
+                                    break;
+                            }
+                            i += 2;
+                        }
+                        catch
+                        {
+                            client.Out.SendMessage("You must specify a valid chance percent, emote number, spellid, hp percen, damage type number, timer(second), number max of use, flag number, brain id, npctemplateid, effect id, areaa family number, player tp point id, mob tp point id, tp effect id", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            return;
+                        }
+                    }
 				}
 
 				if (text == "")
@@ -3293,8 +3361,9 @@ namespace DOL.GS.Commands
 				if (text.Contains("{y}"))
 					voice = "y";
 				text = text.Replace("{b}", string.Empty).Replace("{y}", string.Empty);
-				GameServer.Database.AddObject(new MobXAmbientBehaviour(targetMob.Name, trig.ToString(), emote, text, chance, voice, spell, hp) { Dirty = true, AllowAdd = true });
+				GameServer.Database.AddObject(new MobXAmbientBehaviour(targetMob.Name, trig.ToString(), emote, text, chance, voice, spell, hp, changebrain, changenpctemplate, areaeffectid, playertppoint, mobtppoint, triggertimer, changeeffect, tpeffect, domagetyperepeate, nbuse, changeflag) { Dirty = true, AllowAdd = true });
 				GameServer.Instance.NpcManager.AmbientBehaviour.Reload(GameServer.Instance.IDatabase);
+				targetMob.DamageTypeLimit = domagetyperepeate;				
                 targetMob.ambientTexts = GameServer.Instance.NpcManager.AmbientBehaviour[targetMob.Name];
 				client.Out.SendMessage(" Trigger added to mobs with name " + targetMob.Name + " when they " + type + ".", eChatType.CT_System, eChatLoc.CL_SystemWindow);
 				return;
@@ -3333,7 +3402,7 @@ namespace DOL.GS.Commands
 			ChatUtil.SendSystemMessage(client, targetMob.Name + "'s triggers:");
 			var i = 0;
 			foreach (var trigger in triggers)
-				ChatUtil.SendSystemMessage(client, ++i + ". " + trigger.Trigger + ", chance: " + trigger.Chance + ", voice: " + trigger.Voice + ", emote: " + trigger.Emote + ", spell: " + trigger.Spell + ", hp: " + trigger.HP + ", text: " + trigger.Text);
+				ChatUtil.SendSystemMessage(client, ++i + ". " + trigger.Trigger + ", chance: " + trigger.Chance + ", voice: " + trigger.Voice + ", emote: " + trigger.Emote + ", spell: " + trigger.Spell + ", hp: " + trigger.HP + ", damge type repeate: " + trigger.DamageTypeRepeat + ", trigger timer: " + trigger.TriggerTimer + ", nb use: " + trigger.NbUse + ", change flag: " + trigger.ChangeFlag + ", change brain: " + trigger.ChangeBrain + ", change npc temmplate: " + trigger.ChangeNPCTemplate + ", change effect: " + trigger.ChangeEffect + ", area effect: " + trigger.CallAreaeffectID + ", playertppoint: " + trigger.PlayertoTPpoint + ", mobtppoint: " + trigger.MobtoTPpoint + ", tp effect: " + trigger.TPeffect + ", text: " + trigger.Text);
 		}
 
 		private void trigger_help(GameClient client)
@@ -3341,12 +3410,13 @@ namespace DOL.GS.Commands
 			client.Out.SendMessage("The trigger command lets you add sentences for the mob to say when he spawns, aggros, fights or dies.", eChatType.CT_System, eChatLoc.CL_PopupWindow);
 			client.Out.SendMessage("Triggers apply to all mobs with the same mob name.  Each mob name can have multiple triggers and trigger types.", eChatType.CT_System, eChatLoc.CL_PopupWindow);
 			client.Out.SendMessage("The aggro and die trigger types allow for keywords of {targetname} (gets replaced with the target name), {class} {race} (gets replaced with the players class/race) and {sourcename} gets replaced with the source name and {controller}, the pet's controller.", eChatType.CT_System, eChatLoc.CL_PopupWindow);
-			client.Out.SendMessage("Ex: /mob trigger aggro 50 10 This is what I'll say 50% time when I aggro!", eChatType.CT_System, eChatLoc.CL_PopupWindow);
-			client.Out.SendMessage("Ex: /mob trigger die 100 5 This is what I'll say when I die!", eChatType.CT_System, eChatLoc.CL_PopupWindow);
-			client.Out.SendMessage("Ex: /mob trigger aggro 100 0 {y}I really hate {class}'s like you!", eChatType.CT_System, eChatLoc.CL_PopupWindow);
-			client.Out.SendMessage("Ex: /mob trigger roam 5 12 Prepare to die {targetname}!", eChatType.CT_System, eChatLoc.CL_PopupWindow);
-			client.Out.SendMessage("Ex: /mob trigger aggro 5 0 {b}I've been waiting for this moment ever since I was a young {sourcename}!", eChatType.CT_System, eChatLoc.CL_PopupWindow);
-			client.Out.SendMessage("Usage: '/mob trigger <type(die,aggro,spawn,fight,kill,roam)> <chance in percent> <emote (0 for no emote)> <sentence(can include {targetname},{sourcename},{class},{race}, {controller})(can also be formatted with {y} for yelled and {b} for broadcasted sentence)>'", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+            client.Out.SendMessage("Ex: /mob trigger aggro chance 50 emote 10 text This is what I'll say 50% time when I aggro!", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+            client.Out.SendMessage("Ex: /mob trigger die chance 100 emote 5 text This is what I'll say when I die!", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+            client.Out.SendMessage("Ex: /mob trigger aggro chance 100 emote 0 {y} text I really hate {class}'s like you!", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+            client.Out.SendMessage("Ex: /mob trigger roam chance 5 emote 12 text Prepare to die {targetname}!", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+            client.Out.SendMessage("Ex: /mob trigger aggro chance 5 emote 0 text {b}I've been waiting for this moment ever since I was a young {sourcename}!", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+            client.Out.SendMessage("Usage: '/mob trigger <type(die,aggro,spawn,fight,kill,roam, hurting, immunised)> <param1> <value1> <param2> <value2> text <sentence(can include {targetname},{sourcename},{class},{race}, {controller})(can also be formatted with {y} for yelled and {b} for broadcasted sentence)>'", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+            client.Out.SendMessage("Avalable params: emote, chance, spell, hp, damagetyperepeate, triggertimer, nbuse, changeflag, changebrain, changenpctemplate, changeeffect, areaeffectid, playertppoint, mobtppoint, tpeffect", eChatType.CT_System, eChatLoc.CL_PopupWindow);
 			client.Out.SendMessage("Usage: '/mob trigger info' Give trigger informations", eChatType.CT_System, eChatLoc.CL_PopupWindow);
 			client.Out.SendMessage("Usage: '/mob trigger remove <id>' Remove a trigger", eChatType.CT_System, eChatLoc.CL_PopupWindow);
 		}

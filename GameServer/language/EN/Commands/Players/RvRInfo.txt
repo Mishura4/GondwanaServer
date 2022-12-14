@@ -1,0 +1,2 @@
+Commands.Players.RvRInfo.Description:	To get informations on the RvR
+Commands.Players.RvRInfo.Usage:			'/rvrinfo' Gives informations about the RvR

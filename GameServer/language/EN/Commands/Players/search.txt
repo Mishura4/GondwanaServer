@@ -1,0 +1,3 @@
+Commands.Players.Search.Description:	Find the current zone
+Commands.Players.Search.NotHere:		You cannot do that here
+Commands.Players.Search.Usage:			Usage: '/search'

@@ -1,0 +1,7 @@
+Commands.GM.GMTerritories.Description:	GM Territoires Cmd
+Commands.GM.GMTerritories.Usage.GroupMob:		'/GMTerritories add <areaId> <zoneId> <name> <groupId>' Ajoute un territoire en spécifant l'<areaId>, la <zoneId>, le <name> et le <groupId> à utiliser et pour ce territoire
+Commands.GM.GMTerritories.Usage.Key:		'/GMTerritories info <areaId>' Donne les infos relatives au territoire par son <areaId>
+Commands.GM.GMTerritories.Usage.KeyChance:		'/GMTerritories clear <areadId>' Remet le territoire sélectionné par <areaId> en état neutre
+Commands.GM.GMTerritories.Usage.IsRenaissance:		'/GMTerritories bonus add <resist> <areaId>' Ajoute un résist pour l'<areaId> sélectionnée (le même résist peut être ajouté plusieurs fois)
+Commands.GM.GMTerritories.Usage.PunishSpell:		'/GMTerritories bonus remove <resist> <areaId>' Supprime un resist pour l'<areaId> sélectionné
+Commands.GM.GMTerritories.Resist:	resist: <nature|crush|slash|thrust|body|cold|energy|heat|matter|spirit>

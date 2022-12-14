@@ -2,6 +2,7 @@
 using DOL.Events;
 using DOL.GS.PacketHandler;
 using DOL.GS.SkillHandler;
+using DOL.Language;
 using log4net;
 using System;
 using System.Collections.Generic;
@@ -15,8 +16,8 @@ namespace DOL.GS.Commands
     [CmdAttribute(
       "&vol",
       ePrivLevel.Player,
-      "Permet de voler un joueur",
-      "/vol [joueur]")]
+      "Commands.Players.Vol.Description",
+      "Commands.Players.Vol.Usage")]
     public class VolCommandHandler : AbstractCommandHandler, ICommandHandler
     {
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
@@ -58,7 +59,7 @@ namespace DOL.GS.Commands
                     RegionTimer Timer = player.TempProperties.getProperty<object>(PLAYER_VOL_TIMER, null) as RegionTimer;
                     if (Timer != null)
                     {
-                        player.Out.SendMessage("Votre vol a échoué car vous avez bougé !",
+						player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Commands.Players.Vol.Move"),
                             eChatType.CT_Important, eChatLoc.CL_SystemWindow);
 
                         Timer.Stop();
@@ -80,6 +81,21 @@ namespace DOL.GS.Commands
             if (stealer == target)
             {
                 return false;
+            }
+
+			if (!stealer.IsStealthed)
+            {
+				return false;
+            }
+
+			if (stealer.GuildID == target.GuildID && stealer.GuildID != string.Empty)
+            {
+				return false;
+            }
+
+			if (stealer.Group != null && stealer.Group.IsInTheGroup(target as GameLiving))
+            {
+				return false;
             }
 
             if (stealer.Level < 25 || target.Level < 20)
@@ -168,55 +184,54 @@ namespace DOL.GS.Commands
             if (!Player.HasAbility(Abilities.Vol))
             {
                 //Les autres classes n'ont pas à savoir l'existance de ceci.
-                Player.Out.SendMessage("Cette commande n'existe pas.",
+				Player.Out.SendMessage(LanguageMgr.GetTranslation(Player.Client.Account.Language, "Commands.Players.Vol.UnknownCommand"),
                                 eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
             }
 
             if (!Player.IsAllowToVolInThisArea)
             {
-                Player.Out.SendMessage("Vous ne pouvez pas voler ici...",
+				Player.Out.SendMessage(LanguageMgr.GetTranslation(Player.Client.Account.Language, "Commands.Players.Vol.Area"),
                 eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
             }
 
-            if (!Player.IsWithinRadius(Player.TargetObject, WorldMgr.GIVE_ITEM_DISTANCE))
+			if(!Player.IsWithinRadius(Player.TargetObject, WorldMgr.GIVE_ITEM_DISTANCE))
             {
-                Player.Out.SendMessage("Vous etes trop loin de la cible pour la voler !",
+				Player.Out.SendMessage(LanguageMgr.GetTranslation(Player.Client.Account.Language, "Commands.Players.Vol.Distance"),
                                 eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
             }
 
             if (Player.IsMezzed)
             {
-                Player.Out.SendMessage("Vous ne pouvez voler étant hypnotisé !",
+				Player.Out.SendMessage(LanguageMgr.GetTranslation(Player.Client.Account.Language, "Commands.Players.Vol.Hypnotized"),
                     eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
             }
 
             if (Player.IsStunned)
             {
-                Player.Out.SendMessage("Vous ne pouvez voler étant assomé !",
+				Player.Out.SendMessage(LanguageMgr.GetTranslation(Player.Client.Account.Language, "Commands.Players.Vol.Stunned"),
                     eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
             }
             if (Player.PlayerAfkMessage != null)
             {
-                Player.Out.SendMessage("Vous ne pouvez voler lorsque vous " +
-                    "êtes afk ! Tapez /afk pour le désactiver.",
+				Player.Out.SendMessage(LanguageMgr.GetTranslation(Player.Client.Account.Language, "Commands.Players.Vol.AFK"),
                     eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
             }
             if (!Player.IsAlive)
             {
-                Player.Out.SendMessage("Vous ne pouvez voler étant mort !",
+				Player.Out.SendMessage(LanguageMgr.GetTranslation(Player.Client.Account.Language, "Commands.Players.Vol.Dead"),
                     eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
             }
 
             if (Player.TempProperties.getProperty<object>(PLAYER_VOL_TIMER, null) != null)
             {
-                Player.Out.SendMessage("Vous êtes déjà en train de voler quelqu'un !",
+				Player.Out.SendMessage(LanguageMgr.GetTranslation(Player.Client.Account.Language, "Commands.Players.Vol.AlreadyStealing"),
                     eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                 return;
             }
@@ -227,7 +242,7 @@ namespace DOL.GS.Commands
             {
                 if (targetPlayer.PlayerAfkMessage != null)
                 {
-                    Player.Out.SendMessage("Vous ne pouvez pas voler un joueur afk !", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+					Player.Out.SendMessage(LanguageMgr.GetTranslation(Player.Client.Account.Language, "Commands.Players.Vol.TargetAFK"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     return;
                 }
             }
@@ -237,9 +252,7 @@ namespace DOL.GS.Commands
             long ChangeTime = Player.CurrentRegion.Time - VolChangeTick;
             if (ChangeTime < VolAbilityHandler.DISABLE_DURATION && Player.Client.Account.PrivLevel < 3) //Allow Admin
             {
-                Player.Out.SendMessage("Vous devez attendre " +
-                    ((VolAbilityHandler.DISABLE_DURATION - ChangeTime) / 1000).ToString() +
-                    " secondes avant de pouvoir voler à nouveau !",
+				Player.Out.SendMessage(LanguageMgr.GetTranslation(Player.Client.Account.Language, "Commands.Players.Vol.Time", ((VolAbilityHandler.DISABLE_DURATION - ChangeTime) / 1000).ToString()),
                     eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
             }
@@ -256,10 +269,9 @@ namespace DOL.GS.Commands
                 int VolTime = Util.Random(MIN_VOL_TIME, MAX_VOL_TIME);
 
                 string TargetRealName = Target.GetName(Target);
-                Player.Out.SendMessage("Vous commencez à voler " + TargetRealName,
+				Player.Out.SendMessage(LanguageMgr.GetTranslation(Player.Client.Account.Language, "Commands.Players.Vol.Steal", TargetRealName),
                     eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                Player.Out.SendTimerWindow("Vous êtes actuellement en train " +
-                        " de voler " + TargetRealName, VolTime);
+				Player.Out.SendTimerWindow(LanguageMgr.GetTranslation(Player.Client.Account.Language, "Commands.Players.Vol.StealWindow", TargetRealName), VolTime);
 
                 RegionTimer Timer = new RegionTimer(Player);
                 Timer.Callback = new RegionTimerCallback(VolTarget);
@@ -276,7 +288,7 @@ namespace DOL.GS.Commands
             }
             else
             {
-                Player.Out.SendMessage("Vous ne pouvez volez ce personnage !",
+				Player.Out.SendMessage(LanguageMgr.GetTranslation(Player.Client.Account.Language, "Commands.Players.Vol.CantSteal"),
                     eChatType.CT_Important, eChatLoc.CL_SystemWindow);
             }
         }
@@ -285,17 +297,37 @@ namespace DOL.GS.Commands
         {
             GamePlayer stealer = (GamePlayer)Timer.Properties.getProperty<object>(PLAYER_STEALER, null);
             GamePlayer target = (GamePlayer)Timer.Properties.getProperty<object>(TARGET_STOLE, null);
+			var mezzerId = target.TempProperties.getProperty<string>(GamePlayer.PLAYER_MEZZED_BY_OTHER_PLAYER_ID, null);
+			if (mezzerId != null)
+			{
+				stealer.Reputation--;
+				stealer.Out.SendMessage(LanguageMgr.GetTranslation(stealer.Client.Account.Language, "Commands.Players.Vol.StealSleeping"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+				stealer.SaveIntoDatabase();
+
+				Random rand = new Random(DateTime.UtcNow.Millisecond);
+				if (rand.Next() > 50)
+                {
+					var mezzerClient = WorldMgr.GetClientByPlayerID(mezzerId, true, true);
+
+					if (mezzerClient != null)
+					{
+						mezzerClient.Player.Reputation--;
+						mezzerClient.Out.SendMessage(LanguageMgr.GetTranslation(mezzerClient.Account.Language, "Commands.Players.Vol.StealSleapingPartner"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+						mezzerClient.Player.SaveIntoDatabase();
+                    }                 
+				}
+			}
 
             VolResult result = Vol(stealer, target);
             if (result.Status == VolResultStatus.STEALTHLOST)
             {
-                stealer.Out.SendMessage("Vous n'avez pas réussi à voler ce personnage !",
+				stealer.Out.SendMessage(LanguageMgr.GetTranslation(stealer.Client.Account.Language, "Commands.Players.Vol.Fail"),
                     eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                 stealer.Stealth(false);
             }
             else if (result.Status == VolResultStatus.FAILED)
             {
-                stealer.Out.SendMessage("Vous n'avez pas réussi à voler ce personnage !",
+				stealer.Out.SendMessage(LanguageMgr.GetTranslation(stealer.Client.Account.Language, "Commands.Players.Vol.Fail"),
                     eChatType.CT_Important, eChatLoc.CL_SystemWindow);
             }
             else
@@ -303,8 +335,15 @@ namespace DOL.GS.Commands
                 PerformVolAction(stealer, target, result);
             }
 
-            CancelVol(stealer, Timer);
+			Random newRand = new Random(DateTime.UtcNow.Millisecond);
+			if (newRand.Next() > 30)
+			{
+				stealer.Reputation--;
+				stealer.Out.SendMessage(LanguageMgr.GetTranslation(stealer.Client.Account.Language, "Commands.Players.Vol.LostRep"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+				stealer.SaveIntoDatabase();
+			}
 
+            CancelVol(stealer, Timer);
 
             return 0;
         }
@@ -315,16 +354,15 @@ namespace DOL.GS.Commands
             {
                 stealer.AddMoney(vol.Money);
                 target.RemoveMoney(vol.Money);
-                target.Out.SendMessage("Vous venez d'etre dérobé de " + Money.GetString(vol.Money), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                stealer.Out.SendMessage("Vous venez de voler la somme de " + Money.GetString(vol.Money), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+				target.Out.SendMessage(LanguageMgr.GetTranslation(target.Client.Account.Language, "Commands.Players.Vol.BeStealed", Money.GetString(vol.Money)), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+				stealer.Out.SendMessage(LanguageMgr.GetTranslation(stealer.Client.Account.Language, "Commands.Players.Vol.StealGain", Money.GetString(vol.Money)), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
 
-            }
-            else if (vol.Status == VolResultStatus.SUSSCES_ITEM)
+			}else if (vol.Status == VolResultStatus.SUSSCES_ITEM)
             {
 
                 if (!stealer.Inventory.IsSlotsFree(1, eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack))
                 {
-                    stealer.Out.SendMessage("Votre inventaire est plein, il va etre difficle de voler quelque chose", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+					stealer.Out.SendMessage(LanguageMgr.GetTranslation(stealer.Client.Account.Language, "Commands.Players.Vol.FullInventory"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                 }
                 else
                 {
@@ -332,7 +370,7 @@ namespace DOL.GS.Commands
                     int stealableItems = items.Count();
                     if (stealableItems < 1)
                     {
-                        stealer.Out.SendMessage("Il n'y avait rien a voler !", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+						stealer.Out.SendMessage(LanguageMgr.GetTranslation(stealer.Client.Account.Language, "Commands.Players.Vol.NothingToSteal"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);					
                     }
                     else
                     {
@@ -340,7 +378,7 @@ namespace DOL.GS.Commands
 
                         if (slot == eInventorySlot.Invalid)
                         {
-                            stealer.Out.SendMessage("Vous avez vos sacs pleins, impossible de voler quoi que ce soit !", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+							stealer.Out.SendMessage(LanguageMgr.GetTranslation(stealer.Client.Account.Language, "Commands.Players.Vol.FullBag"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                         }
                         else
                         {
@@ -349,8 +387,8 @@ namespace DOL.GS.Commands
                             target.Inventory.RemoveItem(item);
                             stealer.Inventory.AddItem(slot, item);
 
-                            stealer.Out.SendMessage("Vous avez volé " + item.Name + " à " + target.Name + " !", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                            target.Out.SendMessage(stealer.Name + " vous avez volé " + item.Name + " !", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+							stealer.Out.SendMessage(LanguageMgr.GetTranslation(stealer.Client.Account.Language, "Commands.Players.Vol.StealItem", item.Name, target.Name), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+							target.Out.SendMessage(LanguageMgr.GetTranslation(target.Client.Account.Language, "Commands.Players.Vol.BeStealedItem", item.Name, target.Name), eChatType.CT_Important, eChatLoc.CL_SystemWindow);				
                         }
                     }
                 }

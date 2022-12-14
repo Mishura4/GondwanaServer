@@ -1,4 +1,4 @@
-﻿#MoneyEventNPC
+#MoneyEventNPC
 
 MoneyEventNPC.NeedMoreMoneyTextDefault:         Thank you! However I may need more money to be able to launch the event...
 MoneyEventNPC.ValidateTextDefault:              Well... Tt seems you were able to raise enough funds to be able to launch the event!

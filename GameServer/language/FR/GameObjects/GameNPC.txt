@@ -1,8 +1,7 @@
-﻿
 # GAMENPC
-GameNPC.DropLoot.AdditionalMoney:				Vous ramassez {0} grâce aux forts controlés par votre royaume!
+GameNPC.DropLoot.AdditionalMoney:				Vous ramassez {0} grâce aux forts controlés par votre royaume !
 GameNPC.DropLoot.ItemAdditionalMoney:			Vous ramassez {0} grâce à votre monaie "Mythical"!
-GameNPC.DropLoot.Drops:						{0} laisse {1}.
+GameNPC.DropLoot.Drops:						    {0} laisse {1}.
 GameNPC.GetAggroLevelString.Aggressive1:		agressif
 GameNPC.GetAggroLevelString.Aggressive2:		Agressive
 GameNPC.GetAggroLevelString.Friendly1:			amical
@@ -13,10 +12,9 @@ GameNPC.GetAggroLevelString.Neutral1:			neutre
 GameNPC.GetAggroLevelString.Neutral2:			Neutre
 GameNPC.GetAggroLevelString.TowardsYou:			{0} envers vous
 GameNPC.GetExamineMessages.YouExamine:			Vous examinez {0}. Il (elle) se trouve être {2}.
-GameNPC.Interact.AlreadyRiding:					Vous montez déja {0}.
-GameNPC.Interact.DirtyLook:						{0} vous jete un regard étrange.
+GameNPC.Interact.AlreadyRiding:					Vous montez déjà {0}.
+GameNPC.Interact.DirtyLook:						{0} vous jette un regard étrange.
 GameNPC.Interact.IsFull:						Ce {0} est plein.
 GameNPC.SayTo.Says:								{0} dit, "{1}"
 GameNPC.SayTo.SpeaksTo:							{0} parle avec {1}
 GameNPC.Interact.NotRenaissance:                Désolé, je ne parle qu'avec ceux qui ont fait leur renaissance.
-

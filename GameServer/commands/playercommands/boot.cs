@@ -6,8 +6,8 @@ namespace DOL.GS.Commands
 	[CmdAttribute(
 	  "&boot",
 	  ePrivLevel.Player,
-	   "Kicks a player out of your house",
-		 "Useage: /boot [playername]")]
+	  "Commands.Players.Boot.Description",
+	  "Commands.Players.Boot.Usage")]
 	public class BootCommandHandler : AbstractCommandHandler, ICommandHandler
 	{
 		public void OnCommand(GameClient client, string[] args)
@@ -18,14 +18,14 @@ namespace DOL.GS.Commands
             House house = client.Player.CurrentHouse;
 			if (house == null)
 			{
-                DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Scripts.Players.Boot.InHouseError"));
+                DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Boot.InHouseError"));
 				return;
 			}
 
 			// no permission to banish, return
 			if (!house.CanBanish(client.Player))
 			{
-				DisplayMessage(client, "You do not have permissions to do that.");
+				DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Boot.NoPermission"));
 				return;
 			}
 
@@ -34,14 +34,14 @@ namespace DOL.GS.Commands
 			{
 				if (player != client.Player && player.Name.ToLower() != args[1].ToLower())
 				{
-					ChatUtil.SendSystemMessage(client, "Scripts.Players.Boot.YouRemoved", client.Player.Name);
+					ChatUtil.SendSystemMessage(client, "Commands.Players.Boot.YouRemoved", client.Player.Name);
 					player.LeaveHouse();
 
 					return;
 				}
 			}
 
-			ChatUtil.SendHelpMessage(client, "Scripts.Players.Boot.NoOneOnline", null);
+			ChatUtil.SendHelpMessage(client, "Commands.Players.Boot.NoOneOnline", null);
 		}
 	}
 }

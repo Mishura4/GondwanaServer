@@ -1,15 +1,16 @@
 using DOL.GS.PacketHandler;
 using DOL.GS.Scripts;
+using DOL.Language;
 
 namespace DOL.GS.Commands
 {
 	[CmdAttribute(
 		"&followmob",
 		ePrivLevel.GM,
-		"FollowMob Commands",
-		"/followmob create - créé un FollowMob",
-        "/followmob follow <nom du mob à suivre> - Regle la cible que le mob doit suivre",
-		"/followmob copy - Copie le mob avec la cible déjà reglée")]
+        "Commands.GM.FollowingMob.Description",
+        "Commands.GM.FollowingMob.Delete",
+        "Commands.GM.FollowingMob.Description",
+        "Commands.GM.FollowingMob.Guild")]
 	public class FollowMobCommandHandler : AbstractCommandHandler, ICommandHandler
 	{
 		public void OnCommand(GameClient client, string[] args)

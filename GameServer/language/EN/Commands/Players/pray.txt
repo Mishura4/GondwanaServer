@@ -1,0 +1,2 @@
+Commands.Players.Play.Description:	You can pray at your grave to recover some of your experience.
+Commands.Players.Play.Usage:		Usage : '/pray'

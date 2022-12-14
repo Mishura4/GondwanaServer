@@ -1,0 +1,6 @@
+# /Anonymous
+Commands.Players.Anonymous.Description:		Toggle anonymous mode (name doesn't show up in /who)
+Commands.Players.Anonymous.Usage:			/anonymous
+Commands.Players.Anonymous.Error:			Anonymous mode is now disabled.
+Commands.Players.Anonymous.Off:				Your are not anonymous anymore.
+Commands.Players.Anonymous.On:				Your are now anonymous.

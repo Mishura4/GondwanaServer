@@ -20,14 +20,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using DOL.GS.PacketHandler;
+using DOL.Language;
 
 namespace DOL.GS.Commands
 {
 	[Cmd(
 		"&clientlist",
 		ePrivLevel.GM,
-        "Usage: /clientlist [full] - full option includes IP's and accounts",
-		"Show a list of currently playing clients and their ID's")]
+        "Commands.GM.ClientList.Usage",
+        "Commands.GM.ClientList.Description")]
 	public class ClientListCommandHandler : AbstractCommandHandler, ICommandHandler
 	{
 		public void OnCommand(GameClient client, string[] args)

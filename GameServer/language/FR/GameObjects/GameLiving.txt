@@ -1,7 +1,6 @@
-﻿
 # GAMELIVING
-GameLiving.ReceiveItem:							{0} ne veut pas de cet item !
-GameLiving.ReceiveMoney:						{0} ne veut pas de votre argent !
+GameLiving.ReceiveItem:						{0} ne veut pas de cet objet !
+GameLiving.ReceiveMoney:					{0} ne veut pas de votre argent !
 GameLiving.Pronoun.Neutral.Objective:		il
 GameLiving.Pronoun.Neutral.Possessive:		son	
 GameLiving.Pronoun.Neutral.Subjective:		il
@@ -11,3 +10,42 @@ GameLiving.Pronoun.Male.Subjective:			il
 GameLiving.Pronoun.Female.Objective:		sa
 GameLiving.Pronoun.Female.Possessive:		sa
 GameLiving.Pronoun.Female.Subjective:		elle
+GameLiving.AttackData.AttacksYou:		{0} vous attaque, vous bloquez l'attaque.
+GameLiving.AttackData.Blocked:			{0} vous attaque votre {1} mais il est bloqué!
+GameLiving.AttackData.BlocksYou:		{0} bloque l'attaque de {1}!
+GameLiving.AttackData.CriticallyHitsForDamage:	{0} porte un coup critique à {1} en faisant {2} points de domages.
+GameLiving.AttackData.Evaded:			{0} attaque {1} mais son coup est évité
+GameLiving.AttackData.Fumbled:			{0} a loupé son attaque!
+GameLiving.AttackData.GainEndurancePoints:	Vous gagnez {0} points d'Endurance.
+GameLiving.AttackData.GainPowerPoints:		Vous gagnez {0} points de Mana
+GameLiving.AttackData.HitsForDamage:		{0} touche votre {1} pour {2}{3} domages.
+GameLiving.AttackData.InvisibleToYou:		{0} est invisible!
+GameLiving.AttackData.Misses:			{0} attaque {1} et le manque !
+GameLiving.AttackData.Parried:			l'attaque de {0} est contrée par {1} 
+GameLiving.AttackData.StepsInFront:		{0} s'est placé devant vous et prends les domages !
+GameLiving.AttackData.YouBlock:			L'attaque de {0} est bloquée par {1} !
+GameLiving.AttackData.YourCriticallyHits:	L'attaque de {0} touche {1} critiquement pour {2} points de domages!
+GameLiving.AttackData.YourHits:			 {1} de {0} touche {2} pour {3}{4} domages!
+GameLiving.AttackData.YouStepInFront:		Vous vous placez en face de {0} et prenez les domages!
+
+GameLiving.CalculateEnemyAttackResult.BlowAbsorbed:		    L'attaque a été absorbée par une barrière magique!
+GameLiving.CalculateEnemyAttackResult.BlowIntercepted:		L'attaque a été intercepté par Brittle Guard!
+GameLiving.CalculateEnemyAttackResult.BlowPenetrated:		L'attaque a penetrée une barriere magique!
+GameLiving.CalculateEnemyAttackResult.StrikeAbsorbed:		Votre attaque a été absorbée par une barrère magique!
+GameLiving.CalculateEnemyAttackResult.StrikeIntercepted:	Votre attaque a été interceptée par Brittle Guard!
+GameLiving.CalculateEnemyAttackResult.YouAttempt:		    Vous essayez d'attaquer {0}, mais {1} a un bodyguard {2}!
+GameLiving.CalculateEnemyAttackResult.YouHaveProtected: 	Vous avez protégé {0} de l'attaque de {1}!
+GameLiving.CalculateEnemyAttackResult.YourPetAttempts:		Votre pet attaque {0}, mais  {1} a un bodyguard {2}!
+GameLiving.CalculateEnemyAttackResult.YouWereProtected:		Vous avez été protégé par {0} de l'attaque de {1}!
+
+
+GameLiving.CheckWeaponMagicalEffect.Protected:		Votre cible est protégée du poison gràce à un effet magique.
+
+GameLiving.ReceiveItem:					{0} ne veux pas de cet objet!
+GameLiving.ReceiveMoney:				{0} ne veux pas de votre argent!
+
+
+GameLiving.StartWeaponMagicalEffect.NotPowerful:	Vous n'etes pas assez puissant pour utiliser le sort de cet objet.
+
+GameLiving.TryBlock.Blocking:			Vous vous concentrez pour bloquer l'attaque!
+GameLiving.TryBlock.Engage:				{0} a été attaqué récement et vous etes dans l'incapacité d'engager le combat.

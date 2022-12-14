@@ -1,0 +1,4 @@
+Commands.Players.Group.Description:	To ay something to other members of your group.
+Commands.Players.Group.NotInGroup:	You are not part of a group.
+Commands.Players.Group.SlowDown:	Slowly!
+Commands.Players.Group.Usage:		Usage : '/g <message>'

@@ -4,60 +4,62 @@ using DOL.GS.Commands;
 using DOL.GS.PacketHandler;
 using System.Reflection;
 using log4net;
+using DOL.Language;
+
 
 namespace DOL.GS.Scripts
 {
 	[CmdAttribute(
 		 "&textnpc",
 		 ePrivLevel.GM,
-		 "Gestions des TextNPC",
-		 "'/textnpc create [isRenaissance]' créé un nouveau pnj. [isRenaissance] définit si ce marchand a besoin de la renaissance du joueur pour interagir ",
-         "'/textnpc createmerchant [isRenaissance]' créé un nouveau marchand qui parle",
-         "'/textnpc createguard [isRenaissance]' créé un garde qui parle",
-		 "'/textnpc createitemmerchant' créé un nouveau marchand qui prend des items comme monnaie",
-		 "'/textnpc reponse' affiche les réponses du pnj (les 20 premières lettres de la réponse)",
+         "Commands.GM.TextNPC.Description",
+         "Commands.GM.TextNPC.Usage.Create",
+         "Commands.GM.TextNPC.Usage.CreateMerchant",
+         "Commands.GM.TextNPC.Usage.CreateGuard",
+		 "Commands.GM.TextNPC.Usage.CreateItemMerchant",
+         "Commands.GM.TextNPC.Usage.Response",
 
 		 //text
-		 "'/textnpc text <texte>' définit le texte d'intéraction (clic droit) (mettez le caractère | ou ; pour les sauts de ligne)",
-		 "'/textnpc add <reponse> <texte>' ajoute ou modifie la réponse 'reponse' (mettez le caractère | ou ; pour les sauts de ligne)",
-		 "'/textnpc remove <reponse>' retire la réponse 'reponse'",
+		 "Commands.GM.TextNPC.Usage.Text",
+         "Commands.GM.TextNPC.Usage.Add",
+         "Commands.GM.TextNPC.Usage.Remove",
 
 		 //emote
-		 "'/textnpc emote add <emote> <reponse>'",
-		 "'/textnpc emote remove <reponse>'",
-		 "'/textnpc emote help'",
+         "Commands.GM.TextNPC.Usage.Emote.Add",
+         "Commands.GM.TextNPC.Usage.Emote.Remove",
+         "Commands.GM.TextNPC.Usage.Emote.Help",
 
 		 //Spell
-		 "'/textnpc spell add <spellID> <reponse>'",
-		 "'/textnpc spell remove <reponse>'",
-		 "'/textnpc spell help'",
+         "Commands.GM.TextNPC.Usage.Spell.Add",
+         "Commands.GM.TextNPC.Usage.Spell.Remove",
+         "Commands.GM.TextNPC.Usage.Spell.Help",
 
 		 //phrase cc general
-		 "'/textnpc randomphrase add <emote (0=aucune)> <say/yell/em> <phrase>'",
-		 "'/textnpc randomphrase remove <phrase>'",
-		 "'/textnpc randomphrase interval <interval en secondes>'",
-		 "'/textnpc randomphrase help'",
-		 "'/textnpc randomphrase view'",
+         "Commands.GM.TextNPC.Usage.RandomPhrase.Add",
+         "Commands.GM.TextNPC.Usage.RandomPhrase.Remove",
+         "Commands.GM.TextNPC.Usage.RandomPhrase.interval",
+         "Commands.GM.TextNPC.Usage.RandomPhrase.Help",
+         "Commands.GM.TextNPC.Usage.RandomPhrase.View",
 
 		 //conditions
-         "'/textnpc quest <None/Availabe/Lesson/Lore/Finish/Pending>' affiche ou non l'icone pour la quête",
-		 "'/textnpc level <levelmin> <levelmax>' règle le niveau minimum et maximum des personnage pouvant parler au pnj",
-		 "'/textnpc guild add <guildname>' ajoute une guilde à laquelle le pnj ne parle pas (mettre 'NO GUILD' pour les non guildé)",
-		 "'/textnpc guild remove <guildname>' retire une guilde à laquelle le pnj ne parle pas",
-         "'/textnpc guildA add <guildname>' ajoute une guilde à laquelle le pnj parle (mettre 'NO GUILD' pour les non guildé et 'ALL' pour toutes les guildes)",
-         "'/textnpc guildA remove <guildname>' retire une guilde à laquelle le pnj parle",
-		 "'/textnpc race add <race name>' ajoute une race à laquelle le pnj ne parle pas",
-		 "'/textnpc race remove <race name>' retire une race à laquelle le pnj ne parle pas",
-		 "'/textnpc race list' liste les races disponible",
-		 "'/textnpc class add <class name>' ajoute une classe à laquelle le pnj ne parle pas",
-		 "'/textnpc class remove <class name>' retire une classe à laquelle le pnj ne parle pas",
-		 "'/textnpc class list' liste les classes disponible",
-		 "'/textnpc hour <hour min> <hour max>' règle l'heure à laquelle le pnj parle (fonctionne aussi pr les phrases aléatoire)",     
-		 "'/textnpc condition list' liste les conditions du pnj",
-		 "'/textnpc condition help' donne plus d'information sur les conditions",
+         "Commands.GM.TextNPC.Usage.Quest",
+         "Commands.GM.TextNPC.Usage.Level",
+         "Commands.GM.TextNPC.Usage.Guild.Add",
+         "Commands.GM.TextNPC.Usage.Guild.Remove",
+         "Commands.GM.TextNPC.Usage.GuilAAdd",
+         "Commands.GM.TextNPC.Usage.GuildARemove",
+         "Commands.GM.TextNPC.Usage.RaceAdd",
+         "Commands.GM.TextNPC.Usage.RaceRemove",
+         "Commands.GM.TextNPC.Usage.RaceList",
+         "Commands.GM.TextNPC.Usage.ClassAdd",
+         "Commands.GM.TextNPC.Usage.ClassRemove",
+         "Commands.GM.TextNPC.Usage.ClassList",
+         "Commands.GM.TextNPC.Usage.Hour",
+         "Commands.GM.TextNPC.Usage.Condition.List",
+         "Commands.GM.TextNPC.Usage.Condition.Help",
 
 
-		 "Dans chaque texte: {0} = nom du joueur, {1} = nom de famille, {2} = guilde, {3} = classe, {4} = race")]
+         "Commands.GM.TextNPC.AdditionalDescription")]
 	public class TextNPCCommandHandler : AbstractCommandHandler, ICommandHandler
 	{
 		private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);

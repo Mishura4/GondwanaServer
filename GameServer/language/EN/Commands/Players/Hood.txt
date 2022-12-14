@@ -1,0 +1,2 @@
+Commands.Players.Hood.Description:	To put on or take off your hood.
+Commands.Players.Hood.Usage:		Usage : '/hood'

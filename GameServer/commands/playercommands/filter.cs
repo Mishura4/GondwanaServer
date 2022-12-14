@@ -16,7 +16,7 @@
 * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 *
 */
-
+using DOL.Language;
 namespace DOL.GS.Commands
 {
     /// <summary>
@@ -25,8 +25,8 @@ namespace DOL.GS.Commands
     [CmdAttribute(
         "&filter",
         ePrivLevel.Player,
-        "Turns off the bad word filter.",
-        "/filter")]
+        "Commands.Players.Filter.Description",
+        "Commands.Players.Filter.Usage")]
     public class FilterCommandHandler : AbstractCommandHandler, ICommandHandler
     {
         /// <summary>

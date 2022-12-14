@@ -26,10 +26,10 @@ namespace DOL.GS.Scripts
 	[CmdAttribute(
 		"&nightmob",
 		ePrivLevel.GM,
-		"NightMob Commands",
-		"'/nightmob create' - créé un NightMob",
-	    "'/nightmob info' - affiche les infos du NightMob ciblé",
-	    "'/nightmob time <start> <end>' - change les heures d'apparition du mob")]
+        "Commands.GM.nightmob.Description",
+        "Commands.GM.nightmob.Usage.Create",
+        "Commands.GM.nightmob.Usage.Info",
+        "Commands.GM.nightmob.Usage.Time")]
 	public class NightMobCommandHandler : AbstractCommandHandler, ICommandHandler
 	{
 		public void OnCommand(GameClient client, string[] args)

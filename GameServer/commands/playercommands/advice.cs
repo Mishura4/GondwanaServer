@@ -24,18 +24,18 @@ namespace DOL.GS.Commands
 	[CmdAttribute(
 		"&advice",
 		ePrivLevel.Player,
-		"Ask for advice from an advisor",
-		"Advisors will reply via /send",
-		"Please answer them via /send <Name of the Advisor>",
-		"/advice - shows all advisors",
-		"/advice <message>")]
+		"Commands.Players.Advice.Description",
+		"Commands.Players.Advice.Description1",
+		"Commands.Players.Advice.Usage",
+		"Commands.Players.Advice.All",
+		"Commands.Players.Advice.Name")]
 	public class AdviceCommandHandler : AbstractCommandHandler, ICommandHandler
 	{
 		public void OnCommand(GameClient client, string[] args)
 		{
 			if (client.Player.IsMuted)
 			{
-				client.Player.Out.SendMessage("You have been muted and are not allowed to speak in this channel.", eChatType.CT_Staff, eChatLoc.CL_SystemWindow);
+				client.Player.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Advice.Muted"), eChatType.CT_Staff, eChatLoc.CL_SystemWindow);
 				return;
 			}
 
@@ -65,7 +65,7 @@ namespace DOL.GS.Commands
 					}
 
 				}
-				client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Scripts.Players.Advice.AdvicersOn", total), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+				client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Advice.AdvicersOn", total), eChatType.CT_System, eChatLoc.CL_PopupWindow);
 				return;
 			}
 			foreach (GameClient playerClient in WorldMgr.GetAllClients())
@@ -74,7 +74,7 @@ namespace DOL.GS.Commands
 				if ((playerClient.Player.Advisor &&
 					playerClient.Player.Realm == client.Player.Realm) ||
 					playerClient.Account.PrivLevel > 1)
-					playerClient.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Scripts.Players.Advice.Advice", getRealmString(client.Player.Realm), client.Player.Name, msg), eChatType.CT_Staff, eChatLoc.CL_ChatWindow);
+					playerClient.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Advice.Advice", getRealmString(client.Player.Realm), client.Player.Name, msg), eChatType.CT_Staff, eChatLoc.CL_ChatWindow);
 
 			}
 		}

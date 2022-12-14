@@ -1,30 +1,30 @@
-﻿
+
 # TRAINER
 # /GameTrainer
-GameTrainer.AddGift.NotEnoughSpace:			Plus de place dans votre inventaire pour recevoir votre cadeau. Faites de la place !
+GameObjects.GameTrainer.AddGift.NotEnoughSpace:			Plus de place dans votre inventaire pour recevoir votre cadeau. Faites de la place !
 
-GameTrainer.GetExamineMessages.RightClick:	[Cliquez-droit pour afficher une fenêtre d'entrainement]
-GameTrainer.GetExamineMessages.YouExamine:	Vous observez {0}. {1} est {2} et instruit les membres de la classe {3}.
-GameTrainer.GetExamineMessages.YouTarget:	Vous ciblez [{0}].
+GameObjects.GameTrainer.GetExamineMessages.RightClick:	[Cliquez-droit pour afficher une fenêtre d'entrainement]
+GameObjects.GameTrainer.GetExamineMessages.YouExamine:	Vous observez {0}. {1} est {2} et instruit les membres de la classe {3}.
+GameObjects.GameTrainer.GetExamineMessages.YouTarget:	Vous ciblez [{0}].
 
-GameTrainer.Interact.CaseRespecialize:			respecialiser
-GameTrainer.Interact.RegainPoints:			Vous obtenez {0} points de specialisations!
-GameTrainer.Interact.Respecialize:			{0} dit, "{1}, if you wish, I can undo the training you've done so far and give you the ability to train again. This would allow you to [respecialize] your skills. If you are interested, you must simply let me know."
+GameObjects.GameTrainer.Interact.CaseRespecialize:			respécialiser
+GameObjects.GameTrainer.Interact.RegainPoints:			Vous obtenez {0} points de specialisations !
+GameObjects.GameTrainer.Interact.Respecialize:			{0} dit, "{1}, if you wish, I can undo the training you've done so far and give you the ability to train again. This would allow you to [respecialize] your skills. If you are interested, you must simply let me know."
 
-GameTrainer.PromotePlayer.Accepted:			Vous avez été accepté(e) par le {0} !
-GameTrainer.PromotePlayer.Says:				{0} dit, "{1}"
-GameTrainer.PromotePlayer.Upgraded:			vous avez été promu(e) à la classe de {0} !
+GameObjects.GameTrainer.PromotePlayer.Accepted:			Vous avez été accepté(e) par le {0} !
+GameObjects.GameTrainer.PromotePlayer.Says:				{0} dit, "{1}"
+GameObjects.GameTrainer.PromotePlayer.Upgraded:			vous avez été promu(e) à la classe de {0} !
 
-GameTrainer.ReceiveItem.RespecFull:			Un superbe {0}! J'ai recu une possibilité de re-spécialisation totale. Pour l'utiliser : /respec all.
-GameTrainer.ReceiveItem.RespecRealm:		Merci, j'ai recu une possibilité de re-spécialisation de royaume. Pour l'utiliser : /respec realm.
-GameTrainer.ReceiveItem.RespecSingle:		Merci, j'ai recu une possibilité de re-spécialisation simple. Pour l'utiliser : /respec <linename>
+GameObjects.GameTrainer.ReceiveItem.RespecFull:			Un superbe {0}! J'ai recu une possibilité de re-spécialisation totale. Pour l'utiliser : /respec all.
+GameObjects.GameTrainer.ReceiveItem.RespecRealm:		Merci, j'ai reçu une possibilité de re-spécialisation de royaume. Pour l'utiliser : /respec realm.
+GameObjects.GameTrainer.ReceiveItem.RespecSingle:		Merci, j'ai reçu une possibilité de re-spécialisation simple. Pour l'utiliser : /respec <linename>
 
-GameTrainer.Train.WouldYouLikeTo:			Voulez-vous vous entrainer ?
-GameTrainer.Train.SeekElsewhere:			"Vous devez allez ailleurs pour votre entraînement."
+GameObjects.GameTrainer.Train.WouldYouLikeTo:			Voulez-vous vous entraîner ?
+GameObjects.GameTrainer.Train.SeekElsewhere:			"Vous devez allez ailleurs pour votre entraînement."
 
 
 # /EnchanterTrainer
-EnchanterTrainer.Interact.Text1:			{0} dit, "Voulez-vous vous devenir un Enchanteur et suivre la voix des magiciens?  La vie d'un [Enchanteur] en vaut la peine mais elle est dangereuse, mais cela est votre demande."
+EnchanterTrainer.Interact.Text1:			{0} dit, "Voulez-vous vous devenir un Enchanteur et suivre la voix des magiciens ? La vie d'un [Enchanteur] en vaut la peine mais elle est dangereuse, mais cela est votre demande."
 EnchanterTrainer.Interact.Text2:			{0} dit, "Vous êtes un bon élève, {1}. Mais ne soyez pas trop rapide dans votre approche du combat. Il y a toujours plus à apprendre."
 EnchanterTrainer.WhisperReceiveCase.Text1:		Enchanteur
 EnchanterTrainer.WhisperReceive.Text1:			Bienvenue, {0}. À partir de ce jour, vous serez connu(e) comme un Enchanteur. Ici {0}. Prenez ce cadeau pour vous aider dans votre aventure.
@@ -38,7 +38,76 @@ HeroTrainer.WhisperReceive.Text1:			Let me welcome you then, {0}. Go, honor us w
 
 # /AnimistTrainer
 AnimistTrainer.Interact.Text1:				{0} dit, "c'est [Path of Affinity] la voix que vous souhaitez suivre?"
-AnimistTrainer.Interact.Text2:			
+AnimistTrainer.Interact.Text2:				Voulez-vous vous entrainer ?
 AnimistTrainer.WhisperReceiveCase.Text1:		Path of Affinity
 AnimistTrainer.WhisperReceive.Text1:			Vous êtes maintenant un Animiste, {0}. bienvenue dans la voix de Affinity.
+
+# /FriarTrainer
+FriarTrainer.Interact.Text1:				{0} says, "Do you desire to [join the Defenders of Albion] and defend our realm as a Friar?"
+FriarTrainer.Interact.Text2:				Voulez-vous vous entrainer ?
+FriarTrainer.Interact.Text3:				{0} says, "insert english text"
+FriarTrainer.Interact.Text4:				{0} says, "insert english text"
+FriarTrainer.ReceiveItem.Text1:				{0} says, "insert english text"
+FriarTrainer.WhisperReceive.Text1:			We welcome you into our society as an equal! We are at your disposal. We will now issue your Robes of the Novice. Wear them always and let it serve to remind you of your faith. When you have reached the title of Lesser Chaplain, return them to me. We shall then see if you require another.
+FriarTrainer.WhisperReceiveCase.Text1:			join the defenders of albion
+
+BainsheeTrainer.Interact.Text1:				{0} says, "Do you wish to train as a [Bainshee] and walk the Path of Affinity?"
+BainsheeTrainer.Interact.Text2:				{0} says, "Our way is a hard one, {1}. I can only train you in skills. You must gain knowledge and wisdom on your own."
+BainsheeTrainer.Interact.Text3:
+BainsheeTrainer.Interact.Text4:
+BainsheeTrainer.WhisperReceive.Text1:			Well met then, {0}. It is a hard road, but I see hardness is no stranger to you. Welcome, Bainshee, welcome. Here, take this. It will aid you in your first encounters as a Bainshee.
+BainsheeTrainer.WhisperReceiveCase.Text1:		bainshee
+
+# /MaulerHibTrainer
+MaulerHibTrainer.Interact.Text1:			{0} says, "Do you desire to [join the Temple of the Iron Fist] and fight for the glorious realm of Hibernia?"
+MaulerHibTrainer.Interact.Text2:			Voulez-vous vous entrainer ?
+MaulerHibTrainer.Interact.Text3:			
+MaulerHibTrainer.Interact.Text4:			
+MaulerHibTrainer.ReceiveItem.Text1:			
+MaulerHibTrainer.WhisperReceive.Text1:			Welcome young Mauler. May your time in Hibernia be rewarding. Would you prefer to fight with a [staff] or with [fist]?
+MaulerHibTrainer.WhisperReceive.Text2:			You get a gift by Laresh.
+MaulerHibTrainer.WhisperReceiveCase.Text1:		join the temple of the iron fist
+MaulerHibTrainer.WhisperReceiveCase.Text2:		staff
+MaulerHibTrainer.WhisperReceiveCase.Text3:		fist
+
+# /MentalistTrainer
+MentalistTrainer.Interact.Text1:			{0} says, "Do you wish to train as a [Mentalist] and walk the Path of Harmony?"
+MentalistTrainer.Interact.Text2:			{0} says, "Our way is a hard one, {1}. I can only train you in skills. You must gain knowledge and wisdom on your own."
+MentalistTrainer.Interact.Text3:
+MentalistTrainer.Interact.Text4:
+MentalistTrainer.WhisperReceive.Text1:			Well met then, {0}. It is a hard road, but I see hardness is no stranger to you. Welcome, Mentalist, welcome. Here, take this. It will aid you in your first encounters as a Mentalist.
+MentalistTrainer.WhisperReceiveCase.Text1:		mentalist
+
+## Midgard
+# /BonedancerTrainer
+BonedancerTrainer.Interact.Text1:			{0} says, "Do you desire to [join the House of Bodgar] and defend our realm as a Bonedancer?"
+BonedancerTrainer.Interact.Text2:			Voulez-vous vous entrainer ?
+BonedancerTrainer.Interact.Text3:		
+BonedancerTrainer.Interact.Text4:		
+BonedancerTrainer.ReceiveItem.Text1:		
+BonedancerTrainer.WhisperReceive.Text1:			Welcome young warrior! May your time in Midgard army be rewarding!
+BonedancerTrainer.WhisperReceiveCase.Text1:		join the house of bodgar
+
+# /Spiritmaster
+SpiritmasterTrainer.Interact.Text1:			{0} says, "Do you desire to [join the House of Hel] and defend our realm as a Spiritmaster?"	
+SpiritmasterTrainer.Interact.Text2:			Voulez-vous vous entrainer ?
+SpiritmasterTrainer.Interact.Text3:				
+SpiritmasterTrainer.Interact.Text4:				
+SpiritmasterTrainer.ReceiveItem.Text1:			
+SpiritmasterTrainer.WhisperReceive.Text1:		Welcome young Spiritmaster! May your time in Midgard army be rewarding!	
+SpiritmasterTrainer.WhisperReceiveCase.Text1:		join the house of hel
+
+# /Valkyrie
+ValkyrieTrainer.Interact.Text1:				{0} says, "Do you desire to [join the House of Odin] and defend our realm as a Valkyrie?"
+ValkyrieTrainer.Interact.Text2:				Voulez-vous vous entrainer ?
+ValkyrieTrainer.Interact.Text3:				
+ValkyrieTrainer.Interact.Text4:				
+ValkyrieTrainer.ReceiveItem.Text1:			
+ValkyrieTrainer.WhisperReceive.Text1:			Welcome young Valkyrie! May your time in Midgard army be rewarding! Would you prefer to fight with a [sword] or with a [spear]?
+ValkyrieTrainer.WhisperReceive.Text2:			You get a gift by Odin.
+ValkyrieTrainer.WhisperReceiveCase.Text1:		join the house of odin
+ValkyrieTrainer.WhisperReceiveCase.Text2:		sword
+ValkyrieTrainer.WhisperReceiveCase.Text3:		spear
+
+
 

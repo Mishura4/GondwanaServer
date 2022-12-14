@@ -1,10 +1,11 @@
+using DOL.Language;
 namespace DOL.GS.Commands
 {
 	[CmdAttribute(
 		"&held",
 		ePrivLevel.Player,
-		"List the cards in your hand. Use 'held g' to display faceup cards held by group members.",
-		"/held <g>")]
+		"Commands.Players.Held.Description",
+		"Commands.Players.Held.Usage")]
 	public class HeldCommandHandler : AbstractCommandHandler, ICommandHandler
 	{
 		public void OnCommand(GameClient client, string[] args)

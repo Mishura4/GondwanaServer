@@ -1,0 +1,2 @@
+Commands.Players.Filter.Description:	Disable the insult filter.
+Commands.Players.Filter.Usage:			'/filter'

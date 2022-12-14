@@ -1,0 +1,12 @@
+Commands.GM.GMEvent.Description:	Commands.Players.Event.Description
+Commands.GM.GMEvent.Usage.Info:		'/GMEvent info [id]' Affiche les informations sur les Events, [id] pour un event sinon tous sont affichés
+Commands.GM.GMEvent.Usage.Infolight:		'/GMEvent infolight' Affiche les informations succintes sur les Events
+Commands.GM.GMEvent.Usage.Start:		'/GMEvent start <id>' Lance l'event avec son <id>
+Commands.GM.GMEvent.Usage.Reset:		'/GMEvent reset <id>' Reset l'event avec son <id>, reset également les events qui ont lancés cet event
+Commands.GM.GMEvent.Usage.Add.Event:		'/GMEvent add <eventId> <xpFactor>' Ajoute la cible (mob ou coffre) à l'event et le fait disparaître du monde, <xpFactor> optionnel pour les mob (1 par défaut si omis)
+Commands.GM.GMEvent.Usage.Add.MobChest:		'/GMEvent add <mob|coffre> <name> <region> <eventId> <xpFactor>'Ajoute un <mob|coffre> par son nom et sa region à un event, <xpFactor> optionnel pour les mob (1 par défaut si omis)
+Commands.GM.GMEvent.Usage.Respawn:		'/GMEvent respawn <mob|coffre> <name> <eventId> <true|false>'Change la valeur de CanRespawn du <mob|coffre> par son <name> dans un event par son <eventId> <true|false>
+Commands.GM.GMEvent.Usage.StartEffect:		'/GMEvent starteffect <mob|coffre> <name> <eventId> <spellId>'Change la valeur starteffectId du <mob|coffre> par son <name> dans un event <eventId> en spécifiant le <spellId>
+Commands.GM.GMEvent.Usage.EndEffect:		'/GMEvent endeffect <mob|coffre> <name> <eventId> <spellId>'Change la valeur endeffectId du <mob|coffre> par son <name> dans un event <eventId> en spécifiant le <spellId>
+Commands.GM.GMEvent.Usage.Reresh:		'/GMEvent refresh region <regionid>'Cherche les mobs et les coffres de la région <regionid> avec des EventID récemment ajoutés et les ajoute à cet évent'
+Commands.GM.GMEvent.Usage.Annonce:		'/GMEvent annonce <screen|windowed|send|log|confirm> <id>'Change le type d'annonce de l'event spécifié par rapport à son <id>

@@ -1,0 +1,8 @@
+Commands.Players.Send.Anon.Received:	You are anonymous but {0} sent you: {1}
+Commands.Players.Send.Description:		Send a message to a player
+Commands.Players.Send.SlowDown:			Slowly! Think twice before sending a message!
+Commands.Players.Send.Target.NotFound:	{0} is not in the game, or is in another realm.
+Commands.Players.Send.Target.NotUnique:	The name provided is not unique.
+Commands.Players.Send.Target.Yourself:	You cannot send a message to yourself!
+Commands.Players.Send.Target.You:		You
+Commands.Players.Send.Usage:			Utilisation: '/send <joueur> <message>'

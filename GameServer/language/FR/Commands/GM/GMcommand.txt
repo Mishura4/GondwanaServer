@@ -1,0 +1,1 @@
+Commands.GM.Error:	Erreur: {0}

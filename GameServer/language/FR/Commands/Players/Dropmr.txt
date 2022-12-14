@@ -1,0 +1,2 @@
+Commands.Players.Dropmr.Description:	Lâche la relique Minotaure.
+Commands.Players.Dropmr.Usage:			Usage : '/dropmr'

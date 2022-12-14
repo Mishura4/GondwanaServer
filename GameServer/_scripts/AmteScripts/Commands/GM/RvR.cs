@@ -1,21 +1,22 @@
 using AmteScripts.Managers;
 using AmteScripts.Utils;
 using System.Linq;
+using DOL.Language;
 
 namespace DOL.GS.Commands
 {
 	[CmdAttribute(
 		"&rvr",
 		ePrivLevel.GM,
-		"Gestion du rvr et du PvP",
-        "'/rvr open' Force l'ouverture des rvr (ne se ferme jamais)",
-        "'/rvr close' Force la fermeture des rvr",
-        "'/rvr unforce' Permet après un '/rvr open' de fermer les rvr s'il ne sont pas dans les bonnes horaires",
-		"'/rvr openpvp [region]' Force l'ouverture du pvp (ne se ferme jamais)",
-		"'/rvr closepvp' Force la fermeture du pvp",
-		"'/rvr status' Permet de vérifier le status des rvr (open/close)",
-		"'/rvr unforcepvp' Permet après un '/rvr openpvp' de fermer le pvp s'il n'est pas dans les bonnes horaires",
-		"'/rvr refresh' Permet de rafraichir les maps disponible au rvr et au pvp")]
+        "Commands.GM.RvR.Description",
+        "Commands.GM.RvR.Usage.Open",
+        "Commands.GM.RvR.Usage.Close",
+        "Commands.GM.RvR.Usage.Unforce",
+        "Commands.GM.RvR.Usage.OpenPvP",
+        "Commands.GM.RvR.Usage.ClodePvP",
+        "Commands.GM.RvR.Usage.Status",
+        "Commands.GM.RvR.Usage.UnforcePvP",
+        "Commands.GM.RvR.Usage.Refresh")]
 	public class RvRCommandHandler : AbstractCommandHandler, ICommandHandler
 	{
 		public void OnCommand(GameClient client, string[] args)

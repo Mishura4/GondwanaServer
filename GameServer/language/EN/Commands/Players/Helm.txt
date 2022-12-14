@@ -1,0 +1,2 @@
+Commands.Players.Helm.Description:	Show / Hide your helm from other people's view.
+Commands.Players.Helm.Usage:		Usage : '/helm'

@@ -1,4 +1,4 @@
-﻿#GameKeepGuard
+#GameKeepGuard
 GameKeepGuard.GetExamineMessages.Balancing:		{0} bénéficie de l'équilibrage de niveau ({1})
 GameKeepGuard.GetExamineMessages.Upgraded:		{0} a une amélioration d'équipement ({1}).
 GameKeepGuard.GetExamineMessages.YouExamine:	Vous examinez {0}.{1} est {2} et est un garde de royaume.
@@ -13,4 +13,3 @@ GameKeepGuard.GuardSpam.Killed: 	{0} a été tué(e) dans {1} avec {2} ennemis d
 
 #GuardCaster
 GuardCaster.SkinsHardens:	Un bouclier de cristal entoure soudainement le {0}.
-

@@ -18,6 +18,7 @@
  */
 
 using DOL.GS.PacketHandler;
+using DOL.Language;
 
 namespace DOL.GS.Commands
 {
@@ -25,21 +26,29 @@ namespace DOL.GS.Commands
 		"&yell",
 		new string[] { "&y" },
 		ePrivLevel.Player,
-		"Yell something to other players around you",
-		"/yell <message>")]
+		"Commands.Players.Yell.Description",
+		"Commands.Players.Yell.Usage")]
 	public class YellCommandHandler : AbstractCommandHandler, ICommandHandler
 	{
 		public void OnCommand(GameClient client, string[] args)
 		{
 			if( IsSpammingCommand( client.Player, "yell", 750 ) )
 			{
-				DisplayMessage( client, "Slow down! Think before you say each word!" );
+				DisplayMessage(
+					client,
+					LanguageMgr.GetTranslation(
+						client.Account.Language,
+						"Commands.Players.Yell.SlowDown"));
 				return;
 			}
 
             if (client.Player.IsMuted)
             {
-                client.Player.Out.SendMessage("You have been muted. You cannot yell.", eChatType.CT_Staff, eChatLoc.CL_SystemWindow);
+                client.Player.Out.SendMessage(
+					LanguageMgr.GetTranslation(
+						client.Account.Language,
+						"Commands.Players.Yell.Muted"),
+					eChatType.CT_Staff, eChatLoc.CL_SystemWindow);
                 return;
             }
 
@@ -63,10 +72,22 @@ namespace DOL.GS.Commands
                         else if( headingtotarget > 2816  && headingtotarget <= 3328 ) direction = "East";
                         else if( headingtotarget > 3328  && headingtotarget <= 3840 ) direction = "South East";
 
-						player.Out.SendMessage( $"{client.Player.Name} yells for help from the {direction}!", eChatType.CT_Help, eChatLoc.CL_SystemWindow );
+						direction = LanguageMgr.GetTranslation(
+							client.Account.Language,
+							"Commands.Players.Yell." + direction);
+						player.Out.SendMessage(
+							LanguageMgr.GetTranslation(
+								player.Client.Account.Language,
+								"Commands.Players.Yell.From",
+								client.Player.Name, direction),
+							eChatType.CT_Help, eChatLoc.CL_SystemWindow);
 					}
 					else
-						client.Out.SendMessage("You yell for help!", eChatType.CT_Help, eChatLoc.CL_SystemWindow);
+						client.Out.SendMessage(
+							LanguageMgr.GetTranslation(
+								client.Account.Language,
+								"Commands.Players.Yell.You"),
+							eChatType.CT_Help, eChatLoc.CL_SystemWindow);
 				}
 				return;
 			}

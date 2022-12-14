@@ -1,0 +1,1 @@
+TerritoryManager.Territory.Attacked:		Votre Territoire {0} est attaqué !

@@ -1,0 +1,30 @@
+Commands.Players.Respec.Available.All.Use:		Ciblez n'importe quel entraîneur et tapez /respec ALL
+Commands.Players.Respec.Available.All:			Vous avez {0} respecs «full skill» disponibles.
+Commands.Players.Respec.Available.Dol.Use:		Ciblez votre entraîneur et tapez /respec DOL
+Commands.Players.Respec.Available.DOL:			Vous avez {0} DOL ( full skill ) respecs disponibles.
+Commands.Players.Respec.Available.Line.Use:		Ciblez n'importe quel entraîneur et tapez /respec <Ligne de Skill>
+Commands.Players.Respec.Available.Line:			Vous avez {0} respecs «Single line» disponibles.
+Commands.Players.Respec.Available.Realm.Use:	Ciblez n'importe quel entraîneur et tapez /respec REALM
+Commands.Players.Respec.Available.Realm:		Vous avez {0} respecs de capacité de royaume disponibles.
+Commands.Players.Respec.Buy.Line:				Vous avez acheté un respec «Single line»!
+Commands.Players.Respec.Caution:				ATTENTION: Tout changement de spécialisation est définitif. Soyez prudent!
+Commands.Players.Respec.Confirm.Buy:			Cela vous coûte {0} Or. Etes-vous sûr de vouloir en acheter?
+Commands.Players.Respec.Description:			Respécialise votre personnage
+Commands.Players.Respec.Help.All:				'/respec <ALL|DOL>' # Pour respécialiser toutes vos lignes d'entraînement
+Commands.Players.Respec.Help.Champion:			'/respec CHAMPION' # Pour respécialiser vos capacités de Champion
+Commands.Players.Respec.Help.Realm:				'/respec REALM' # Pour respécialiser vos capacités de royaume
+Commands.Players.Respec.Help.Trainer:			Ciblez n'importe quel entraîneur et faites:
+Commands.Players.Respec.Line.Low:				Le niveau de la ligne {0} est moins de 2.
+Commands.Players.Respec.Line.NotFound:			Aucune ligne ayant pour nom '{0}' n'a été trouvée.
+Commands.Players.Respec.Missing.All:			Il semble que vous ne disposez d'aucun «full skill» respec.
+Commands.Players.Respec.Missing.DOL:			Il semble que vous ne disposez d'aucun DOL respec.
+Commands.Players.Respec.Missing.Line:			Il semble que vous ne disposez d'aucun «Single line» respec.
+Commands.Players.Respec.Missing.Realm:			Il semble que vous ne disposez d'aucun respec de capacité de royaume.
+Commands.Players.Respec.NeedTrainer:			Vous devez parler à votre entraîneur pour vous respécialiser.
+Commands.Players.Respec.NotAvailable.Buy:		Tapez /respec buy pour acheter un respec «Single line».
+Commands.Players.Respec.NotAvailable.Gold:		Vous n'avez plus assez de sous ! Vous avez besoin de {0} pièces d'or !
+Commands.Players.Respec.NotAvailable.Level:		Vous ne pouvez plus acheter un respec à ce niveau.
+Commands.Players.Respec.NotAvailable:			Il semble que vous ne disposez d'aucun respec.
+Commands.Players.Respec.Regain.Realm:			Vous regagnez {0} points de capacité de royaume!
+Commands.Players.Respec.Regain.Spec:			Vous regagnez {0} points de spécialisation!
+Commands.Players.Respec.Usage:					Usage:	'/respec'

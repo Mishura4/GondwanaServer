@@ -1,4 +1,4 @@
-﻿Commands.GM.TPPoint.Description:			There are several tppoint functions
+Commands.GM.TPPoint.Description:			There are several tppoint functions
 Commands.GM.TPPoint.Usage.Create:		/tppoint create - creates a new temporary tppoint, deleting any existing temporary tppoint
 Commands.GM.TPPoint.Usage.Load:		/tppoint load <tppointname> - loads a tppoint from db
 Commands.GM.TPPoint.Usage.Save:			/tppoint save <tppointname> - saves a tppoint to db

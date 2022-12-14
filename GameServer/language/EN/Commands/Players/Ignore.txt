@@ -1,0 +1,5 @@
+Commands.Players.Ignore.Description:	Add / Remove a player to / from your blacklist!
+Commands.Players.Ignore.NotUnique:		The specified name is not unique.
+Commands.Players.Ignore.NotYourself:	Not you!
+Commands.Players.Ignore.PlayerNotFound:	There is no player with this name.
+Commands.Players.Ignore.Usage:			Usage: '/ignore <Name>'

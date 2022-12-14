@@ -1,4 +1,4 @@
-﻿
+
 
 # /SkillBase
 SkillBase.RegisterPropertyNames.Acuity:					Acuity
@@ -214,6 +214,7 @@ SkillBase.RegisterPropertyNames.WindMagic:				Wind Magic
 SkillBase.RegisterPropertyNames.WindMagicFocus:			Wind Magic Focus
 SkillBase.RegisterPropertyNames.Witchcraft:				Witchcraft
 SkillBase.RegisterPropertyNames.WitchcraftFocus:		Witchcraft Focus
+
 SkillBase.RegisterPropertyNames.KeepDamage:				Keep Damage
 SkillBase.RegisterPropertyNames.DPS:					DPS Increase
 SkillBase.RegisterPropertyNames.MagicAbsorption:		Magic Absorption

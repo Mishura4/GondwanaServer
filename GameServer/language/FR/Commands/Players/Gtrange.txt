@@ -1,0 +1,4 @@
+Commands.Players.Gtrange.Description:			Donne une portée vers une cible au sol.
+Commands.Players.Gtrange.Missing.Groundtarget:	Portée vers la cible : vous n'avez pas de cible au sol.
+Commands.Players.Gtrange.Range:					Portée vers la cible : {0} unités.
+Commands.Players.Gtrange.Usage:					/gtrange

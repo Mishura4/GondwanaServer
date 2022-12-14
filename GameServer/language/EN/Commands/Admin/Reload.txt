@@ -1,0 +1,23 @@
+Commands.Admin.Reload.Command.Failed:			'/reload' has failed. Please check your parameters !
+Commands.Admin.Reload.Description:				Reload various elements
+Commands.Admin.Reload.NotSupported.Console:		Regional reloading is not supported from the console.
+Commands.Admin.Reload.Reloaded.Mobs:			{0} mobs reloaded!
+Commands.Admin.Reload.Reloaded.Specs:			{0} skills added.
+Commands.Admin.Reload.Reloaded.Specs:			{0} skills added.
+Commands.Admin.Reload.Reloaded.Specs:			{0} skills added.
+Commands.Admin.Reload.Reloaded.Spells:			Reloading database’s spells, {0} spells for all lines !
+Commands.Admin.Reload.ReloadingMobs:			NPCs reloading : {0}, {1}. In region : {2}.
+Commands.Admin.Reload.Usage.Mob.Model:			'/reload mob model <MODELE#>' # Reload all region’s NPCs with model: <MODÈLE#> (integer).
+Commands.Admin.Reload.Usage.Mob.Name:			'/reload mob name <NOM>' # Reload all region’s NPCs with name: <NOM>.
+Commands.Admin.Reload.Usage.Mob.Realm:			'/reload mob realm <ROYAUME>' # Reload all region’s NPCs with realm: <ROYAUME>.
+Commands.Admin.Reload.Usage.Mob:				'/reload mob' # Reload all region’s NPCs.
+Commands.Admin.Reload.Usage.Model:				'/reload <object|mob> model <MODÈLE#>' # Reload all region’s objects or NPCs with model: <MODÈLE#>.
+Commands.Admin.Reload.Usage.Name:				'/reload <object|mob> name <NOM> # Reload all region’s objects or NPCs with name: <NOM>.
+Commands.Admin.Reload.Usage.ObjectMob.Realm:	'/reload <object|mob> realm <ROYAUME>' # Reload all region’s objects or NPCs with realm: (0|1|2|3 OU n|a|m|h OU no|alb|mid|hib).
+Commands.Admin.Reload.Usage.Object.Model:		'/reload object model <MODÈLE#>' # Reload all region’s objects with model: <MODÈLE#>
+Commands.Admin.Reload.Usage.Object.Name:		'/reload object name <NOM>' # Reload all region’s objects with name: <NOM>.
+Commands.Admin.Reload.Usage.Object.Realm:		'/reload object realm <ROYAUME>' # Reload all region’s objects with realm: <ROYAUME>.
+Commands.Admin.Reload.Usage.Object:				'/reload object # Reload all region’s static objects.
+Commands.Admin.Reload.Usage.Realm:				It is possible to specify the realm by its number (0|1|2|3), its first letter (n|a|m|h) or its full name (none|albion|midgard|hibernia)
+Commands.Admin.Reload.Usage.Specs:				'/reload specs' # Reload all skills.
+Commands.Admin.Reload.Usage.Spells:				'/reload spells' # Reload all spells.

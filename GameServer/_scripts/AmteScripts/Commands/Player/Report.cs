@@ -1,12 +1,14 @@
 using DOL.GS.PacketHandler;
+using DOL.Language;
+
 
 namespace DOL.GS.Commands
 {
 	[CmdAttribute(
 		"&report",
 		ePrivLevel.Player,
-		"Faire un report au staff",
-		"/report <message>")]
+        "Commands.Players.Report.Description",
+        "Commands.Players.Report.Usage")]
 	public class AmteReportCommandHandler : AbstractCommandHandler, ICommandHandler
 	{
 		public void OnCommand(GameClient client, string[] args)

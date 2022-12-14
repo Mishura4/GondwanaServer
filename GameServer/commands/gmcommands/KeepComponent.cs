@@ -29,15 +29,15 @@ namespace DOL.GS.Commands
 	[CmdAttribute(
 		 "&keepcomponent",
 		 ePrivLevel.GM,
-		 "GMCommands.KeepComponents.Description",
-		 "GMCommands.KeepComponents.Usage.Create.TID",
-		 "GMCommands.KeepComponents.Usage.Create.T",
-		 "GMCommands.KeepComponents.Usage.Skin",
+		 "Commands.GM.KeepComponents.Description",
+		 "Commands.GM.KeepComponents.Usage.Create.TID",
+		 "Commands.GM.KeepComponents.Usage.Create.T",
+		 "Commands.GM.KeepComponents.Usage.Skin",
 		 "/keepcomponent move - move to your position",
 		 "/keepcomponent rotate [0 - 3]",
 		 "/keepcomponent reload",
 		 "'/keepcomponent save' to save the component in the DB",
-		 "GMCommands.KeepComponents.Usage.Delete")]
+		 "Commands.GM.KeepComponents.Usage.Delete")]
 	public class KeepComponentCommandHandler : AbstractCommandHandler, ICommandHandler
 	{
 		private readonly ushort INVISIBLE_MODEL = 150;
@@ -154,7 +154,7 @@ namespace DOL.GS.Commands
 						component.SaveIntoDatabase();
 						client.Out.SendKeepInfo(myKeep);
 						client.Out.SendKeepComponentInfo(component);
-						client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.KeepComponents.Create.KCCreated"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+						client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.KeepComponents.Create.KCCreated"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 					} break;
 				#endregion Create
                 #region Move
@@ -246,7 +246,7 @@ namespace DOL.GS.Commands
                             cli.Out.SendKeepComponentInfo(component);
 							cli.Out.SendKeepComponentDetailUpdate(component);
                         }
-						//client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.KeepComponents.Skin.YChangeSkin"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+						//client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.KeepComponents.Skin.YChangeSkin"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 						client.Out.SendMessage("Component skin updated.  Use /keepcomponent save to save, or reload to reload the original skin.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
 					} break;
 				#endregion Skin
@@ -262,7 +262,7 @@ namespace DOL.GS.Commands
 						component.RemoveFromWorld();
 						component.Delete();
 						component.DeleteFromDatabase();
-						client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GMCommands.KeepComponents.Delete.YDeleteKC"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+						client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.KeepComponents.Delete.YDeleteKC"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 
 					} break;
 				#endregion Delete

@@ -1,4 +1,4 @@
-﻿#MoneyEventNPC
+#MoneyEventNPC
 
 MoneyEventNPC.NeedMoreMoneyTextDefault:         Merci, mais il me faudrait davantage d'argent pour pouvoir lancer l'évènement...
 MoneyEventNPC.ValidateTextDefault:              Bien... vous avez pu réunir la somme convenue pour pouvoir lancer l'évènement!

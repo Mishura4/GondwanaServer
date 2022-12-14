@@ -1,4 +1,4 @@
-﻿
+
 
 GameMerchant.GetExamineMessages.BuyItemsFor:		{0} says, "You can buy items here for {1}."
 GameMerchant.GetExamineMessages.Nothing:		nothing
@@ -22,3 +22,6 @@ GameMerchant.OnPlayerSell.TooFarAway:			{0} is too far away!
 GameMerchant.OnPlayerWithdraw:		You withdraw {0} from your merchant.
 
 
+# GameTerritoryMerchant
+GameMerchant.Interact.Territory.NotSameGuild:	I have nothing to sell you !
+GameMerchant.Interact.Territory.Outlaws:	I don't sell anything to outlaws !

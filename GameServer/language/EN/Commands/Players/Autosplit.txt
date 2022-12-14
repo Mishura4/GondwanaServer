@@ -1,0 +1,19 @@
+Commands.Players.Autosplit.Coins.Off:	The group leader has deactivated the automatic distribution of gold coins.
+Commands.Players.Autosplit.Coins.On:	The group leader has activated the automatic distribution of gold coins.
+Commands.Players.Autosplit.Coins:		The group leader has switched
+Commands.Players.Autosplit.Description:	Manage the distribution of loots and gold coins among group members.
+Commands.Players.Autosplit.InGroup:		You have to be in a group to be able to use this command.
+Commands.Players.Autosplit.Leader:		You must be the group leader to be able to use this command.
+Commands.Players.Autosplit.Loot.Off:	The group leader has disabled the automatic distribution of loots.
+Commands.Players.Autosplit.Loot.On:		The group leader has activated the automatic distribution of loots.
+Commands.Players.Autosplit.Loot:		The group leader has switched
+Commands.Players.Autosplit.Off:			The group leader has completely deactivated automatic distribution.
+Commands.Players.Autosplit.On:			The group leader has just activated automatic distribution.
+Commands.Players.Autosplit.Self:		{0} has switched
+Commands.Players.Autosplit.Self.Off:	{0} has disabled the automatic distribution of loots.
+Commands.Players.Autosplit.Self.On:		{0} has activated the automatic distribution of loots.
+Commands.Players.Autosplit.Usage: 		Usage : '/autosplit <on|off>' # Leader: Switch the distribution of loots and gold coins within the group.
+Commands.Players.Autosplit.Usage.Coin:	'/autosplit coins'    # Leader: If disabled, the member collecting the bags of coins will keep those for himself rather than sharing fairly among other group members.
+Commands.Players.Autosplit.Usage.Loot:	'/autosplit loot'     # Leader: 
+If disabled, the member collecting the loots keeps it for himself. Does not affect the bags of coins.
+Commands.Players.Autosplit.Usage.Self:	'/autosplit self'     # All group members: choose to no longer receive loots from Auto Split. They will still continue to receive the bags of coins.

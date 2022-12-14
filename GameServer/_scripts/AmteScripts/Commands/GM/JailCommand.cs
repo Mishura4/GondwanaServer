@@ -3,29 +3,30 @@ using System.Collections.Generic;
 using DOL.Database;
 using DOL.GS.Commands;
 using DOL.GS.PacketHandler;
+using DOL.Language;
 
 namespace DOL.GS.Scripts
 {
 	[CmdAttribute(
 		 "&jailrp",
 		 ePrivLevel.GM,
-		 "Pour emprisonner un joueur de façon RP.",
-		 "/jailrp <nom du joueur> pour relâcher un joueur (connecté ou non)",
-        "/jailrp <nom du joueur> <raison> <amende en or> [heures] [jours] pour emprisonner un joueur")]
+         "Commands.GM.jailrp.Description",
+         "Commands.GM.jailrp.Usage",
+        "Commands.GM.jailrp.Usage.Free")]
 	[CmdAttribute(
 		 "&jailhrp",
 		 ePrivLevel.GM,
-		 "Pour emprisonner un joueur de façon HRP.",
-		 "/jailhrp <nom du joueur> pour relâcher un joueur (connecté ou non)",
-		 "/jailhrp <nom du joueur> <raison> <heures> [jours] pour emprisonner un joueur")]
+         "Commands.GM.jailhrp.Description",
+         "Commands.GM.jailhrp.Usage",
+         "Commands.GM.jailhrp.Usage.Free")]
 	[CmdAttribute(
 		 "&jail", 
 		 ePrivLevel.GM,
-		 "Pour emprisonner un joueur de façon RP.",
-		 "'/jail relache <nom du joueur>' Relâche le joueur s'il est en prison (RP ou HRP)",
-         "'/jail rp <nom du joueur> <raison> <caution (en po)> <heure> [jours]' Met le joueur en prison RP",
-         "'/jail hrp <nom du joueur> <raison> <heure> [jours]' Met le joueur en prison HRP",
-		 "'/jail list [rp/hrp]' pour lister les prisonniers (RP ou HRP ou tous)")]
+         "Commands.GM.jail.Description",
+         "Commands.GM.jail.Usage.Free",
+         "Commands.GM.jail.Usage.RP",
+         "Commands.GM.jail.Usage.HRP",
+         "Commands.GM.jail.Usage.List")]
 	public class JailCommandHandler : ICommandHandler
 	{
 		public void OnCommand(GameClient client, string[] args)
@@ -254,9 +255,9 @@ namespace DOL.GS.Scripts
 			{
 				if (att.Cmd == args[0])
 				{
-					client.Out.SendMessage(att.Description, eChatType.CT_System, eChatLoc.CL_SystemWindow);
+					client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, att.Description), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 					foreach (string str in att.Usage)
-						client.Out.SendMessage(str, eChatType.CT_System, eChatLoc.CL_SystemWindow);
+						client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, str), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 					return;
 				}
 			}

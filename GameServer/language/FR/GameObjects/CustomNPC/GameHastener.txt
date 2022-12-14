@@ -1,0 +1,7 @@
+# GameHastener
+
+GameHastener.BorderKeepPortOffer:		Je vous transporter vers le [borderkeep] pour que tu puisses assister aux combats. 
+GameHastener.Greeting:					Salutations,
+GameHastener.CityMovementOffer:			Je suis la pour vous aider. Voulez-vous augementer votre taux de [movement] pour voyager dans notre ville ?
+GameHastener.DefaultMovementOffer:		Je suis la pour vous aider pour voyager dans nos contrés. Dis-moi juste [movement] pour augmenter votre taux de mouvement!
+GameHastener.StrengthOffer:				Je peux aussi te donner plus de [strength] pour te sentir plus fort. 

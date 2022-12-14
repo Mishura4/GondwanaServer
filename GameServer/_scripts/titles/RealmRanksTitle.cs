@@ -55,8 +55,8 @@ namespace GameServerScripts.Titles
 				else
 					realm = "Hibernia";
 
-				string male = string.Format("GamePlayer.RealmTitle.{0}.RR{1}.Male", realm, RRLevel);
-				string female = string.Format("GamePlayer.RealmTitle.{0}.RR{1}.Female", realm, RRLevel);;
+				string male = string.Format("GameObjects.GamePlayer.RealmTitle.{0}.RR{1}.Male", realm, RRLevel);
+				string female = string.Format("GameObjects.GamePlayer.RealmTitle.{0}.RR{1}.Female", realm, RRLevel);;
 				return new Tuple<string, string, string, string>(null, male, null, female);
 			}
 		}

@@ -1,0 +1,30 @@
+## Command Usage
+Commands.Players.Combine.Description:	Liste les combinaisons
+Commands.Players.Combine.Usage:		/combine list
+
+## Main page
+Commands.Players.Combine.List:	Catégories de combinaisons
+Commands.Players.Combine.Weaponcrafting:	[Forge]
+Commands.Players.Combine.Armorcrafting:	[Arumerie]
+Commands.Players.Combine.Sieecrafting:	[Ingénierie]
+Commands.Players.Combine.Alchemy:	[Alchimie]
+Commands.Players.Combine.Metalcrafting:	[Metallurgie]
+Commands.Players.Combine.Leathercrafting:	[Maroquinerie]
+Commands.Players.Combine.Clothworking:	[Tissage]
+Commands.Players.Combine.Gemcutting:	[Joaillerie]
+Commands.Players.Combine.Herbalcrafting:	[Herboristerie]
+Commands.Players.Combine.Tailoring:		[Couture]
+Commands.Players.Combine.Spellcrafting:	[Arcanisme]
+Commands.Players.Combine.Woodworking:	[Menuiserie]
+Commands.Players.Combine.Fletching:	[Empennage]
+Commands.Players.Combine.Bountycrafting:	[Epique]
+Commands.Players.Combine.Cooking:	[Cuisine]
+Commands.Players.Combine.Scholar:	[Chercheur]
+
+## Others
+Commands.Players.Combine.Tool:	Outil nécessaire
+Commands.Players.Combine.Ingredients:	Ingrédients
+Commands.Players.Combine.Previous:	[Précédent]
+Commands.Players.Combine.Menu:	[Menu]
+Commands.Players.Combine.Next:	[Suivant]
+Commands.Players.Combine.NoData: 	Aucune recette trouvée.

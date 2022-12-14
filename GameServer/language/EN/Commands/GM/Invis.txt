@@ -1,0 +1,2 @@
+Commands.GM.Invis.Description:			Makes you invisible
+Commands.GM.Invis.Usage:		/invis Makes you invisible to the players

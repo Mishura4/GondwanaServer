@@ -1,4 +1,4 @@
-﻿Commands.GM.Coffre.Description:	Gestion des coffres
+Commands.GM.Coffre.Description:	Gestion des coffres
 Commands.GM.Coffre.Usage.Create:		'/coffre create' crée un nouveau coffre (100% chance d'apparition, 1h d'intervalle entre les items)
 Commands.GM.Coffre.Usage.Model:	'/coffre model <model>' change le skin du coffre selectionné
 Commands.GM.Coffre.Usage.Item:		'/coffre item <chance> <interval>' change le nombre de chances d'apparition d'un item, interval d'apparition d'un item en minutes

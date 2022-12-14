@@ -1,0 +1,8 @@
+Commands.Players.Level.CantUseSlashLevel:	You do not have a level {0} on your account.
+Commands.Players.Level.Description:			Allows you to level up to level 20 instantly, if you already have a level 50 character on your account.
+Commands.Players.Level.Disabled.Class:		Your class cannot use the /level command.
+Commands.Players.Level.Disabled:			/level is deactivated on this server.
+Commands.Players.Level.LevelUpTo:			/level only allows you to access to the level {0}
+Commands.Players.Level.NeedTrainer:			Only your trainer allows you to use this command. Go see him.
+Commands.Players.Level.Rewarded:			You have been rewarded enough Experience to reach level {0} right click on your trainer to gain levels!
+Commands.Players.Level.Usage:				Usage : '/level'

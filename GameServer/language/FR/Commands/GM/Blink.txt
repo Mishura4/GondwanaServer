@@ -1,0 +1,3 @@
+
+Commands.GM.Blink.Description:		Makes the specified UI Part of your target or yourself blinking.
+Commands.GM.Blink.Usage:			/blink <id>: type /blink for a list of possible IDs

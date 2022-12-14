@@ -22,14 +22,19 @@ using System.Reflection;
 using DOL.Database;
 using DOL.GS.PacketHandler;
 using log4net;
+using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[Cmd("&Reload",
-		ePrivLevel.Admin,
-		"Reload various elements",
-		"/reload mob|object|specs|spells"
-		)]
+    [Cmd(
+        "&Reload",
+        ePrivLevel.Admin,
+        "Reload various elements",
+        "Commands.Admin.Reload.Usage.Mob",
+        "Commands.Admin.Reload.Usage.Object",
+        "Commands.Admin.Reload.Usage.Specs",
+        "Commands.Admin.Reload.Usage.Spells",
+        "/reload mob|object|specs|spells")]
 	public class ReloadCommandHandler : ICommandHandler
 	{
 		private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);

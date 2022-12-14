@@ -572,11 +572,11 @@ namespace DOL.GS
 			/// <returns>success</returns>
 			public bool Stop()
 			{
-				if (m_timeThread == null)
-					return false;
-
 				lock (m_lockObject)
 				{
+					if (m_timeThread == null)
+					return false;
+
 					m_running = false;
 
 					if (!m_timeThread.Join(10000))

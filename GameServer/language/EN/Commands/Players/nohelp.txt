@@ -1,0 +1,4 @@
+Commands.Players.Nohelp.Description:	Changes the state of the 'nohelp' function to active or deactivated, whether you want to receive help from your realm or not.
+Commands.Players.Nohelp.Off:			You will no longer receive help from other members of your realm, use again '/nohelp' to activate the function.
+Commands.Players.Nohelp.On:				You will receive help from other members of your realm, use '/nohelp' again to turn it off. 
+Commands.Players.Nohelp.Usage:			Usage : '/nohelp'

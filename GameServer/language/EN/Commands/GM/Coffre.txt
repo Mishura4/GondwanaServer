@@ -1,4 +1,4 @@
-﻿Commands.GM.Coffre.Description:	Chest management:
+Commands.GM.Coffre.Description:	Chest management:
 Commands.GM.Coffre.Usage.Create:		'/coffre create' Create a new chest (100% chance of item drop, 1h interval between each item)
 Commands.GM.Coffre.Usage.Model:	'/coffre model <model>' Change the model of the selected chest
 Commands.GM.Coffre.Usage.Item:		'/coffre item <chance> <interval>' Change item drop chance of a chest, interval for a new item to appear in minutes

@@ -1,0 +1,4 @@
+Commands.Players.Noqueue.Description:	Allows you to activate or deactivate the queue.
+Commands.Players.Noqueue.Off:			You are no longer using your queue! To reactivate it, use '/noqueue'.
+Commands.Players.Noqueue.On:			You are now using your queue! To deactivate it, use '/noqueue'
+Commands.Players.Noqueue.Usage:			Usage : '/noqueue'

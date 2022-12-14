@@ -20,6 +20,7 @@
 using DOL.GS.PacketHandler;
 using DOL.GS.SkillHandler;
 using System.Timers;
+using DOL.Language;
 
 namespace DOL.GS.Commands
 {

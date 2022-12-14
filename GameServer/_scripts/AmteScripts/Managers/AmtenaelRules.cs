@@ -604,7 +604,7 @@ namespace DOL.GS.ServerRules
 
 		public override string ReasonForDisallowMounting(GamePlayer player)
 		{
-			return RvrManager.Instance.IsInRvr(player) ? "Vous ne pouvez pas appeler votre monture ici !" : base.ReasonForDisallowMounting(player);
+			return RvrManager.Instance.IsInRvr(player) ? "GameObjects.GamePlayer.UseSlot.CantCallMountRVR" : base.ReasonForDisallowMounting(player);
 		}
 
 		public override string GetPlayerName(GamePlayer source, GamePlayer target)

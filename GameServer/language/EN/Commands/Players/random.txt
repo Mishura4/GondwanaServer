@@ -1,0 +1,7 @@
+Commands.Players.Random.Description:	Randomly draws a number between 1 and the specified number.
+Commands.Players.Random.Help:			You must select a maximum number to be able to draw lots!
+Commands.Players.Random.LowNumber:		Your maximum number must be greater than 1!
+Commands.Players.Random.Result.Other:	{0} chooses a random number between 1 and {1}. Result: « {2} »
+Commands.Players.Random.Result.Self:	You have chosen a number between 1 and {0}. Result: « {1} »
+Commands.Players.Random.SlowDown:		Slow down!
+Commands.Players.Random.Usage:			Usage: '/random <#>' # To choose a number between 1 and the specified number.

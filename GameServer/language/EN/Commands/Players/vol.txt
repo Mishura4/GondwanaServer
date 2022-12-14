@@ -1,0 +1,29 @@
+Commands.Players.Vol.Description:			Let's steal a player!
+Commands.Players.Vol.Usage: 				'/vol [player]'
+Commands.Players.Steal.Description:			Let's steal a player!
+Commands.Players.Steal.Usage: 				'/steal [player]'
+Commands.Players.Vol.Move: 					Your attempted theft failed because you moved!
+Commands.Players.Vol.UnknownCommand: 		This command does not exist.
+Commands.Players.Vol.Area: 					You cannot steal here...
+Commands.Players.Vol.Distance: 				You are too far from the target to steal it!
+Commands.Players.Vol.Hypnotized: 			You cannot steal while being mesmerized!
+Commands.Players.Vol.Stunned:				You cannot steal while being stunned!
+Commands.Players.Vol.AFK:					You cannot steal while being afk ! Type /afk to disable it.
+Commands.Players.Vol.Dead:					You cannot steal once dead!
+Commands.Players.Vol.AlreadyStealing:		You are already stealing someone!
+Commands.Players.Vol.TargetAFK: 			You cannot steal a player who is afk!
+Commands.Players.Vol.Time: 					You must wait {0} seconds to be able to steal again!
+Commands.Players.Vol.Steal: 				You start a theft attempt {0}
+Commands.Players.Vol.StealWindow: 			You are currently stealing {0}
+Commands.Players.Vol.CantSteal: 			You cannot steal this player!
+Commands.Players.Vol.StealSleeping: 		You lose 1 reputation point for trying to steal a sleeping player.
+Commands.Players.Vol.StealSleapingPartner:	You lose 1 reputation point for contributing to a theft while mesmerizing a player.
+Commands.Players.Vol.Fail:					Your theft attempt has failed on this player!
+Commands.Players.Vol.LostRep:				You lose 1 reputation point for trying to steal a player.
+Commands.Players.Vol.BeStealed:				You have just been stolen from {0}
+Commands.Players.Vol.StealGain: 			You just stole the amount of {0}
+Commands.Players.Vol.FullInventory: 		Your inventory is full, it will be challenging to steal something.
+Commands.Players.Vol.NothingToSteal: 		There is nothing to steal on this player!
+Commands.Players.Vol.FullBag: 				Your bags are full, you can't steal anything!
+Commands.Players.Vol.StealItem: 			You just stole {0} to {1}!
+Commands.Players.Vol.BeStealedItem: 		{0} stole you {1}!

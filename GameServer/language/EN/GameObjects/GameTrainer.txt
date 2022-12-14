@@ -1,4 +1,4 @@
-﻿# /GameTrainer
+# /GameTrainer
 GameTrainer.AddGift.NotEnoughSpace:		Not Space inventory space to receive your gift. Please make room.
 GameTrainer.CheckAbilityToUseItem.Text1:	You no longer have the ability to use {0}.
 GameTrainer.GetExamineMessages.RightClick:	[Right click to display a train window]

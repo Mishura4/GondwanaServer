@@ -1,9 +1,0 @@
-﻿# /respec
-Commands.Players.Respec.NotAvailable.Gold:		You don't have enough money! You need {0} gold!
-
-# /guild
-Commands.Players.Guild.ActiveBuff:			    Your guild already has an improvement spell. You must wait for the spell to expire to re-cast it. Remaining time: {0} hours, {1} minutes.
-Commands.Players.Guild.PromoteHaveToUseDemote:	You cannot demote this player with the command promote. Use '/gc demote joueur <rang#>'.
-Commands.Players.Guild.NotAbleToBeInvited:		You cannot enter this guild for {0} minutes.
-Commands.Players.Guild.NotAbleToLeave:			You cannot leave this guild for {0} minutes.
-Commands.Players.Guild.NotAbleToBeExpelled:		You cannot expel this player for {0} minutes.

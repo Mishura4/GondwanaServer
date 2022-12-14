@@ -1,0 +1,2 @@
+Commands.Players.Bind.Description:	Binds you to a Bind Stone, your new starting point after beeing killed.
+Commands.Players.Bind.Usage:		Usage : '/bind' # To use near a Bind Stone.

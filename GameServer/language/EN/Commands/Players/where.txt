@@ -1,0 +1,12 @@
+Commands.Players.Where.Description:	Ask the guard where a person is.
+Commands.Players.Where.DontKnow:	Sorry, I don't know this person.
+Commands.Players.Where.East:		East
+Commands.Players.Where.NorthEast:	North East
+Commands.Players.Where.North:		North
+Commands.Players.Where.NorthWest:	North West
+Commands.Players.Where.SouthEast:	South West
+Commands.Players.Where.South:		South
+Commands.Players.Where.SouthWest:	South West
+Commands.Players.Where.Tell:		{0} is in this direction. ({1})
+Commands.Players.Where.Usage:		Usage : "/where <NPC Name>"
+Commands.Players.Where.West:		West

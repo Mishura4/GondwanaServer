@@ -23,11 +23,11 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute(
+    [Cmd(
 		"&freeze",
 		ePrivLevel.Admin,
-		"Freeze The region timer you're in. (Test purpose only)",
-		"/freeze {seconds}")]
+        "Commands.Admin.Freeze.Description",
+        "Commands.Admin.Freeze.Freeze")]
 	public class Freeze : AbstractCommandHandler, ICommandHandler
 	{
 		private int delay = 0;

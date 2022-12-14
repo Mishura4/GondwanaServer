@@ -1,0 +1,16 @@
+Commands.Players.Asend.Description:			Send a message to the alliance channel:
+Commands.Players.Asend.Muted:				You have been muted, so you cannot talk.
+Commands.Players.Asend.NoAlliance:			Your guild does not belong to an alliance.
+Commands.Players.Asend.NoPermission:		You cannot talk in the guild channel.
+Commands.Players.Asend.NotGuilded:			You do not belong to a guild.
+Commands.Players.Asend.Usage:				Usage : '/as <text>'
+Commands.Players.Guildchat.Description:		Guild Channel Command:
+Commands.Players.Guildchat.NoPermission:	You are not allowed to talk in this channel.
+Commands.Players.Guildchat.NotGuilded:		You do not belong to a guild.
+Commands.Players.Guildchat.SlowDown:		Slowly!
+Commands.Players.Guildchat.Usage:			Usage : '/gu <text>'
+Commands.Players.Osend.Description:			Send a message in the officers channel (For Guild Officers only)
+Commands.Players.Osend.NoPermission:		You are not allowed to chat in the officers channel.
+Commands.Players.Osend.NotGuilded:			You do not belong to a guild.
+Commands.Players.Osend.SlowDown:			Slowly!
+Commands.Players.Osend.Usage:				usage : '/o <text>'

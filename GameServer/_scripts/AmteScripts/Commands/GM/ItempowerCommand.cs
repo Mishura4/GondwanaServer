@@ -10,8 +10,8 @@ namespace DOL.GS.Scripts
 {
 	[Cmd("&itempower",
 		ePrivLevel.GM,
-		"Donne des informations sur la puissance des items",
-		"'/itempower [slot]' Affiche les informations de l'item")]
+        "Commands.GM.Itempower.Description",
+        "Commands.GM.Itempower.Usage")]
 	public class ItempowerCommand : AbstractCommandHandler, ICommandHandler
 	{
 		public void OnCommand(GameClient client, string[] args)
