@@ -16,6 +16,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
+using System;
 
 namespace DOL.Geometry {
   /// <summary>
@@ -100,6 +101,32 @@ namespace DOL.Geometry {
     public static int GetDistance(IPoint3D p1, IPoint3D p2) {
       return (int) p1.Position.Distance(p2.Position);
     }
+
+		/// <summary>
+		/// The factor to convert radians to a heading value
+		/// </summary>
+		/// <remarks>
+		/// Radians to degrees = radian * (180 / PI)
+		/// Degrees to heading = degrees * (4096 / 360)
+		/// </remarks>
+		public const double RADIAN_TO_HEADING = (180.0/Math.PI)*(4096.0/360.0);
+		/// <summary>
+		/// Get the heading to a point
+		/// </summary>
+		/// <param name="point">Target point</param>
+		/// <returns>Heading to target point</returns>
+		public ushort GetHeading(IPoint3D point)
+		{
+			double dx = point.Position.X - Position.X;
+			double dy = point.Position.Y - Position.Y;
+
+			double heading = Math.Atan2(-dx, dy)*RADIAN_TO_HEADING;
+
+			if (heading < 0)
+				heading += 4096;
+
+			return (ushort) heading;
+		}
 
     /// <summary>
     ///   checks if the given points are in a certain distance.

@@ -1217,7 +1217,7 @@ namespace DOL.GS
 			return Enum.GetName(typeof(eInstrumentType), instrumentTypeID);
 		}
 
-		public static string AmmunitionTypeToDamageName(int ammutype)
+		public static string AmmunitionTypeToDamageName(GameClient client, int ammutype)
 		{
 			ammutype &= 0x3;
 			switch (ammutype)
@@ -1229,7 +1229,7 @@ namespace DOL.GS
 			return "light";
 		}
 
-		public static string AmmunitionTypeToRangeName(int ammutype)
+		public static string AmmunitionTypeToRangeName(GameClient client, int ammutype)
 		{
 			ammutype = (ammutype >> 2) & 0x3;
 			switch (ammutype)
@@ -1241,7 +1241,7 @@ namespace DOL.GS
 			return "short";
 		}
 
-		public static string AmmunitionTypeToAccuracyName(int ammutype)
+		public static string AmmunitionTypeToAccuracyName(GameClient client, int ammutype)
 		{
 			ammutype = (ammutype >> 4) & 0x3;
 			switch (ammutype)
@@ -1317,14 +1317,14 @@ namespace DOL.GS
 			return values[values.Length - 1];
 		}
 
-		public static string ItemHandToName(int handFlag)
+		public static string ItemHandToName(GameClient client, int handFlag)
 		{
 			if (handFlag == 1) return "twohanded";
 			if (handFlag == 2) return "lefthand";
 			return "both";
 		}
 
-		public static string ObjectTypeToName(int objectTypeID)
+		public static string ObjectTypeToName(GameClient client, int objectTypeID)
 		{
 			switch (objectTypeID)
 			{
@@ -1385,7 +1385,7 @@ namespace DOL.GS
 		}
 
 		//This method translates an InventoryTypeID to a string
-		public static string SlotToName(int slotID)
+		public static string SlotToName(GameClient client, int slotID)
 		{
 			switch (slotID)
 			{
@@ -1417,7 +1417,7 @@ namespace DOL.GS
 		}
 
 		//This method translates a string to an InventorySlotID
-		public static byte NameToSlot(string name)
+		public static byte NameToSlot(GameClient client, string name)
 		{
 			switch (name)
 			{
@@ -1598,7 +1598,7 @@ namespace DOL.GS
 			}
 		}
 
-		public static string PropertyToName(eProperty property)
+		public static string PropertyToName(GameClient client, eProperty property)
 		{
 			switch (property)
 			{

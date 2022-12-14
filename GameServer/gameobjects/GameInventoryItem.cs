@@ -2197,8 +2197,8 @@ namespace DOL.GS
 			}
 			delve.Add("");
 			delve.Add("        Level: " + Level);
-			delve.Add("       Object: " + GlobalConstants.ObjectTypeToName(Object_Type) + " (" + Object_Type + ")");
-			delve.Add("         Type: " + GlobalConstants.SlotToName(Item_Type) + " (" + Item_Type + ")");
+			delve.Add("       Object: " + GlobalConstants.ObjectTypeToName(client, Object_Type) + " (" + Object_Type + ")");
+			delve.Add("         Type: " + GlobalConstants.SlotToName(client, Item_Type) + " (" + Item_Type + ")");
 			delve.Add("");
 			delve.Add("        Model: " + Model);
 			delve.Add("    Extension: " + Extension);
@@ -2215,7 +2215,7 @@ namespace DOL.GS
 			if (GlobalConstants.IsWeapon(Object_Type))
 			{
 				delve.Add("");
-				delve.Add("         Hand: " + GlobalConstants.ItemHandToName(Hand) + " (" + Hand + ")");
+				delve.Add("         Hand: " + GlobalConstants.ItemHandToName(client, Hand) + " (" + Hand + ")");
 				delve.Add("Damage/Second: " + (DPS_AF / 10.0f));
 				delve.Add("        Speed: " + (SPD_ABS / 10.0f));
 				delve.Add("  Damage type: " + GlobalConstants.WeaponDamageTypeToName(Type_Damage) + " (" + Type_Damage + ")");
@@ -2240,9 +2240,9 @@ namespace DOL.GS
 			{
 				delve.Add("");
 				delve.Add(" Ammunition #: " + DPS_AF);
-				delve.Add("       Damage: " + GlobalConstants.AmmunitionTypeToDamageName(SPD_ABS));
-				delve.Add("        Range: " + GlobalConstants.AmmunitionTypeToRangeName(SPD_ABS));
-				delve.Add("     Accuracy: " + GlobalConstants.AmmunitionTypeToAccuracyName(SPD_ABS));
+				delve.Add("       Damage: " + GlobalConstants.AmmunitionTypeToDamageName(client, SPD_ABS));
+				delve.Add("        Range: " + GlobalConstants.AmmunitionTypeToRangeName(client, SPD_ABS));
+				delve.Add("     Accuracy: " + GlobalConstants.AmmunitionTypeToAccuracyName(client, SPD_ABS));
 				delve.Add("        Bonus: " + Bonus);
 			}
 			else if (Object_Type == (int)eObjectType.Instrument)

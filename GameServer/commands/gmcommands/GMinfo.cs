@@ -370,7 +370,7 @@ namespace DOL.GS.Commands
 
 					for (eProperty stat = eProperty.Stat_First; stat <= eProperty.Stat_Last; stat++, cnt++)
 					{
-						sTitle += GlobalConstants.PropertyToName(stat);
+						sTitle += GlobalConstants.PropertyToName(client, stat);
                         sCurrent += target.GetModified(stat);
 						
 						info.Add("  - " + sTitle + " : " + sCurrent);
@@ -383,7 +383,7 @@ namespace DOL.GS.Commands
 					cnt = 0;
 					for (eProperty res = eProperty.Resist_First; res <= eProperty.Resist_Last; res++, cnt++)
 					{
-						sTitle += GlobalConstants.PropertyToName(res);
+						sTitle += GlobalConstants.PropertyToName(client, res);
                         sCurrent += target.GetModified(res);
 						info.Add("  - " + sTitle + " : " + sCurrent);
 						sCurrent = "";
@@ -408,7 +408,7 @@ namespace DOL.GS.Commands
 
 					info.Add("  ----- Wearing:");
 					foreach (InventoryItem item in target.Inventory.EquippedItems)
-						info.Add(" [" + GlobalConstants.SlotToName(item.Item_Type) + "] " + item.Name);
+						info.Add(" [" + GlobalConstants.SlotToName(client, item.Item_Type) + "] " + item.Name);
 					info.Add(" ");
 				}
 

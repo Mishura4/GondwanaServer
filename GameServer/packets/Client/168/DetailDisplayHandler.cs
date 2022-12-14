@@ -1001,8 +1001,8 @@ namespace DOL.GS.PacketHandler.Client.v168
 			output.Add("Item Template: " + item.Id_nb);
 			output.Add("         Name: " + item.Name);
 			output.Add("        Level: " + item.Level);
-			output.Add("       Object: " + GlobalConstants.ObjectTypeToName(item.Object_Type) + " (" + item.Object_Type + ")");
-			output.Add("         Type: " + GlobalConstants.SlotToName(item.Item_Type) + " (" + item.Item_Type + ")");
+			output.Add("       Object: " + GlobalConstants.ObjectTypeToName(client, item.Object_Type) + " (" + item.Object_Type + ")");
+			output.Add("         Type: " + GlobalConstants.SlotToName(client, item.Item_Type) + " (" + item.Item_Type + ")");
 			output.Add("    Extension: " + item.Extension);
 			output.Add("        Model: " + item.Model);
 			output.Add("        Color: " + item.Color);
@@ -1028,7 +1028,7 @@ namespace DOL.GS.PacketHandler.Client.v168
 
 			if (GlobalConstants.IsWeapon(item.Object_Type))
 			{
-				output.Add("         Hand: " + GlobalConstants.ItemHandToName(item.Hand) + " (" + item.Hand + ")");
+				output.Add("         Hand: " + GlobalConstants.ItemHandToName(client, item.Hand) + " (" + item.Hand + ")");
 				output.Add("Damage/Second: " + (item.DPS_AF / 10.0f));
 				output.Add("        Speed: " + (item.SPD_ABS / 10.0f));
 				output.Add("  Damage type: " + GlobalConstants.WeaponDamageTypeToName(item.Type_Damage) + " (" + item.Type_Damage + ")");
@@ -1050,9 +1050,9 @@ namespace DOL.GS.PacketHandler.Client.v168
 			else if (item.Object_Type == (int)eObjectType.Arrow || item.Object_Type == (int)eObjectType.Bolt)
 			{
 				output.Add(" Ammunition #: " + item.DPS_AF);
-				output.Add("       Damage: " + GlobalConstants.AmmunitionTypeToDamageName(item.SPD_ABS));
-				output.Add("        Range: " + GlobalConstants.AmmunitionTypeToRangeName(item.SPD_ABS));
-				output.Add("     Accuracy: " + GlobalConstants.AmmunitionTypeToAccuracyName(item.SPD_ABS));
+				output.Add("       Damage: " + GlobalConstants.AmmunitionTypeToDamageName(client, item.SPD_ABS));
+				output.Add("        Range: " + GlobalConstants.AmmunitionTypeToRangeName(client, item.SPD_ABS));
+				output.Add("     Accuracy: " + GlobalConstants.AmmunitionTypeToAccuracyName(client, item.SPD_ABS));
 				output.Add("        Bonus: " + item.Bonus);
 			}
 			else if (item.Object_Type == (int)eObjectType.Instrument)
@@ -1079,7 +1079,7 @@ namespace DOL.GS.PacketHandler.Client.v168
 						ges) health regen Value: 8  Tradeable.".
 			 */
 
-			string str = "- [" + item.Name + "]: " + GlobalConstants.ObjectTypeToName(item.Object_Type);
+			string str = "- [" + item.Name + "]: " + GlobalConstants.ObjectTypeToName(client, item.Object_Type);
 			var objectInfo = new List<string>();
 
 			if ((item.Object_Type >= (int)eObjectType.GenericWeapon) && (item.Object_Type <= (int)eObjectType.MaulerStaff))

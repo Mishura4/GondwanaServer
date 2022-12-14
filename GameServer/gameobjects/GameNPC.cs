@@ -5814,19 +5814,19 @@ namespace DOL.GS
                     {
 						player.Out.SendSpellEffectAnimation(this, this, (ushort)chosen.TPeffect, 0, false, 1);
 					}
-				if (tPPoint != null)
+				if (TPPoint != null)
                 {
-					TPPoint newTPPoint = tPPoint.GetNextTPPoint();
-					if(tPPoint.DbTPPoint.ObjectId != newTPPoint.DbTPPoint.ObjectId)
+					TPPoint newTPPoint = TPPoint.GetNextTPPoint();
+					if(TPPoint.DbTPPoint.ObjectId != newTPPoint.DbTPPoint.ObjectId)
                     {
-						tPPoint = newTPPoint;
-						MoveTo(tPPoint.Region, tPPoint.X, tPPoint.Y, tPPoint.Z, tPPoint.GetHeading(tPPoint));
+						TPPoint = newTPPoint;
+						MoveTo(TPPoint.Region, (float)TPPoint.Position.X, (float)TPPoint.Position.Y, (float)TPPoint.Position.Z, TPPoint.GetHeading(TPPoint));
 					}
 				}
 				else
                 {
-					tPPoint = TeleportMgr.LoadTP(chosen.MobtoTPpoint);
-					MoveTo(tPPoint.Region, tPPoint.X, tPPoint.Y, tPPoint.Z, tPPoint.GetHeading(tPPoint));
+					TPPoint = TeleportMgr.LoadTP(chosen.MobtoTPpoint);
+					MoveTo(TPPoint.Region, (float)TPPoint.Position.X, (float)TPPoint.Position.Y, (float)TPPoint.Position.Z, TPPoint.GetHeading(TPPoint));
 				}
 			}
 
@@ -5836,19 +5836,19 @@ namespace DOL.GS
 				if (chosen.TPeffect > 0)
 					foreach (GamePlayer player in GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
 						player.Out.SendSpellEffectAnimation(this, player, (ushort)chosen.TPeffect, 0, false, 1);
-				if (tPPoint != null)
+				if (TPPoint != null)
 				{
-					TPPoint newTPPoint = tPPoint.GetNextTPPoint();
-					if (tPPoint.DbTPPoint.ObjectId != newTPPoint.DbTPPoint.ObjectId)
+					TPPoint newTPPoint = TPPoint.GetNextTPPoint();
+					if (TPPoint.DbTPPoint.ObjectId != newTPPoint.DbTPPoint.ObjectId)
 					{
-						tPPoint = newTPPoint;
-						living.MoveTo(tPPoint.Region, tPPoint.X, tPPoint.Y, tPPoint.Z, tPPoint.GetHeading(tPPoint));
+						TPPoint = newTPPoint;
+						living.MoveTo(TPPoint.Region, (float)TPPoint.Position.X, (float)TPPoint.Position.Y, (float)TPPoint.Position.Z, TPPoint.GetHeading(TPPoint));
 					}
 				}
 				else
 				{
-					tPPoint = TeleportMgr.LoadTP(chosen.PlayertoTPpoint);
-					living.MoveTo(tPPoint.Region, tPPoint.X, tPPoint.Y, tPPoint.Z, tPPoint.GetHeading(tPPoint));
+					TPPoint = TeleportMgr.LoadTP(chosen.PlayertoTPpoint);
+					living.MoveTo(TPPoint.Region, (float)TPPoint.Position.X, (float)TPPoint.Position.Y, (float)TPPoint.Position.Z, TPPoint.GetHeading(TPPoint));
 				}
 			}
 

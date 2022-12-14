@@ -1508,14 +1508,14 @@ namespace DOL.GS.Commands
 			info.Add("");
 			for (eProperty property = eProperty.Stat_First; property <= eProperty.Stat_Last; ++property)
 				info.Add(String.Format("{0}: {1}",
-				                       GlobalConstants.PropertyToName(property),
+				                       GlobalConstants.PropertyToName(client, property),
 				                       targetMob.GetModified(property)));
 			info.Add("");
 			info.Add("Modified resists:");
 			info.Add("");
 			for (eProperty property = eProperty.Resist_First + 1; property <= eProperty.Resist_Last; ++property)
 				info.Add(String.Format("{0}: {1}",
-				                       GlobalConstants.PropertyToName(property),
+				                       GlobalConstants.PropertyToName(client, property),
 				                       targetMob.GetModified(property)));
 			info.Add("");
 			info.Add("Miscellaneous:");
@@ -1735,9 +1735,9 @@ namespace DOL.GS.Commands
 
 			foreach (InventoryItem item in targetMob.Inventory.AllItems)
 			{
-				client.Out.SendMessage("Slot Description : [" + GlobalConstants.SlotToName(item.SlotPosition) + "]", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+				client.Out.SendMessage("Slot Description : [" + GlobalConstants.SlotToName(client, item.SlotPosition) + "]", eChatType.CT_System, eChatLoc.CL_PopupWindow);
 				client.Out.SendMessage("------------", eChatType.CT_System, eChatLoc.CL_PopupWindow);
-				client.Out.SendMessage("         Slot: " + GlobalConstants.SlotToName(item.Item_Type), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+				client.Out.SendMessage("         Slot: " + GlobalConstants.SlotToName(client, item.Item_Type), eChatType.CT_System, eChatLoc.CL_PopupWindow);
 				client.Out.SendMessage("        Model: " + item.Model, eChatType.CT_System, eChatLoc.CL_PopupWindow);
 				client.Out.SendMessage("        Color: " + item.Color, eChatType.CT_System, eChatLoc.CL_PopupWindow);
 				client.Out.SendMessage("       Effect: " + item.Effect, eChatType.CT_System, eChatLoc.CL_PopupWindow);
@@ -1838,7 +1838,7 @@ namespace DOL.GS.Commands
 						{
 							try
 							{
-								int slot = GlobalConstants.NameToSlot(args[3]);
+								int slot = GlobalConstants.NameToSlot(client, args[3]);
 
 								if (slot == 0)
 								{
@@ -1886,7 +1886,7 @@ namespace DOL.GS.Commands
 						{
 							try
 							{
-								int slot = GlobalConstants.NameToSlot(args[3]);
+								int slot = GlobalConstants.NameToSlot(client, args[3]);
 
 								if (slot == 0)
 								{
@@ -1980,7 +1980,7 @@ namespace DOL.GS.Commands
 		{
 			try
 			{
-				int slot = GlobalConstants.NameToSlot(args[2]);
+				int slot = GlobalConstants.NameToSlot(client, args[2]);
 
 				if (slot == 0)
 				{
@@ -1988,7 +1988,7 @@ namespace DOL.GS.Commands
 					return;
 				}
 
-				string slotname = GlobalConstants.SlotToName(slot);
+				string slotname = GlobalConstants.SlotToName(client, slot);
 
 				switch (slotname)
 				{

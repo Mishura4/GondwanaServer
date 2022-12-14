@@ -2314,7 +2314,7 @@ namespace DOL.GS.Commands
 
 				foreach (InventoryItem item in player.Inventory.EquippedItems)
 				{
-					text.Add("     [" + GlobalConstants.SlotToName(item.Item_Type) + "] " + item.Name + " (" + item.Id_nb + ")");
+					text.Add("     [" + GlobalConstants.SlotToName(client, item.Item_Type) + "] " + item.Name + " (" + item.Id_nb + ")");
 				}
 				text.Add(" ");
 			}
@@ -2484,7 +2484,7 @@ namespace DOL.GS.Commands
 
 			for (eProperty stat = eProperty.Stat_First; stat <= eProperty.Stat_Last; stat++, cnt++)
 			{
-				sTitle += GlobalConstants.PropertyToName(stat) + "/";
+				sTitle += GlobalConstants.PropertyToName(client, stat) + "/";
 				sCurrent += player.GetModified(stat) + "/";
 				if (cnt == 3)
 				{
@@ -2500,7 +2500,7 @@ namespace DOL.GS.Commands
 			cnt = 0;
 			for (eProperty res = eProperty.Resist_First; res <= eProperty.Resist_Last; res++, cnt++)
 			{
-				sTitle += GlobalConstants.PropertyToName(res) + "/";
+				sTitle += GlobalConstants.PropertyToName(client, res) + "/";
 				sCurrent += player.GetModified(res) + "/";
 				if (cnt == 2)
 				{
