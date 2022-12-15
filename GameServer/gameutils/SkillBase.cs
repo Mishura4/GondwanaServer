@@ -1504,46 +1504,46 @@ namespace DOL.GS
 			switch (prop)
 			{
 				case eProperty.Strength:
-					return LanguageMgr.GetTranslation(client, "SkillBase.GetPropertyName.Strength");
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Strength");
 				case eProperty.Dexterity:
-					return LanguageMgr.GetTranslation(client, "SkillBase.GetPropertyName.Dexterity");
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Dexterity");
 				case eProperty.Constitution:
-					return LanguageMgr.GetTranslation(client, "SkillBase.GetPropertyName.Constitution");
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Constitution");
 				case eProperty.Quickness:
-					return LanguageMgr.GetTranslation(client, "SkillBase.GetPropertyName.Quickness");
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Quickness");
 				case eProperty.Intelligence:
-					return LanguageMgr.GetTranslation(client, "SkillBase.GetPropertyName.Intelligence");
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Intelligence");
 				case eProperty.Piety:
-					return LanguageMgr.GetTranslation(client, "SkillBase.GetPropertyName.Piety");
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Piety");
 				case eProperty.Charisma:
-					return LanguageMgr.GetTranslation(client, "SkillBase.GetPropertyName.Charisma");
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Charisma");
 				case eProperty.Empathy:
-					return LanguageMgr.GetTranslation(client, "SkillBase.GetPropertyName.Empathy");
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Empathy");
 				case eProperty.MaxHealth:
-					return LanguageMgr.GetTranslation(client, "SkillBase.GetPropertyName.MaxHealth");
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MaxHealth");
 				case eProperty.MaxMana:
-					return LanguageMgr.GetTranslation(client, "SkillBase.GetPropertyName.MaxMana");
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MaxMana");
 				// resists (does not say "resist" on live server)
 				case eProperty.Resist_Body:
-					return LanguageMgr.GetTranslation(client, "SkillBase.GetPropertyName.Resist_Body");
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Resist_Body");
 				case eProperty.Resist_Natural: 
 					return "Essence";
 				case eProperty.Resist_Cold:
-					return LanguageMgr.GetTranslation(client, "SkillBase.GetPropertyName.Resist_Cold");
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Resist_Cold");
 				case eProperty.Resist_Crush:
-					return LanguageMgr.GetTranslation(client, "SkillBase.GetPropertyName.Resist_Crush");
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Resist_Crush");
 				case eProperty.Resist_Energy:
-					return LanguageMgr.GetTranslation(client, "SkillBase.GetPropertyName.Resist_Energy");
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Resist_Energy");
 				case eProperty.Resist_Heat:
-					return LanguageMgr.GetTranslation(client, "SkillBase.GetPropertyName.Resist_Heat");
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Resist_Heat");
 				case eProperty.Resist_Matter:
-					return LanguageMgr.GetTranslation(client, "SkillBase.GetPropertyName.Resist_Matter");
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Resist_Matter");
 				case eProperty.Resist_Slash:
-					return LanguageMgr.GetTranslation(client, "SkillBase.GetPropertyName.Resist_Slash");
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Resist_Slash");
 				case eProperty.Resist_Spirit:
-					return LanguageMgr.GetTranslation(client, "SkillBase.GetPropertyName.Resist_Spirit");
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Resist_Spirit");
 				case eProperty.Resist_Thrust:
-					return LanguageMgr.GetTranslation(client, "SkillBase.GetPropertyName.Resist_Thrust");
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Resist_Thrust");
 				
 				// Eden - Mythirian bonus
 				case eProperty.BodyResCapBonus:
