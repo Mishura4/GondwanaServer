@@ -52,13 +52,14 @@ namespace DOL.GS.spells
 
 						
 			bool targetIsGameplayer = target is GamePlayer;
+			bool targetIsGameLiving = target is GameLiving;
 			var necroPet = target as NecromancerPet;
 			
-			if (targetIsGameplayer || necroPet != null)
+			if (targetIsGameplayer || targetIsGameLiving || necroPet != null)
 			{
 				int powerRendValue;
 
-				if (targetIsGameplayer)
+				if (necroPet == null)
 				{
 					powerRendValue = (int)(target.MaxMana * Spell.Value * GetVariance());
 					if (powerRendValue > target.Mana)

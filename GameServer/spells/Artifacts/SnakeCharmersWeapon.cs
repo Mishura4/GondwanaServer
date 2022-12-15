@@ -37,7 +37,7 @@ namespace DOL.GS.Spells
         /// <summary>
         /// Uses percent of damage to heal the caster
         /// </summary>
-        public override void StealLife(AttackData ad)
+        public override void StealLife(GameLiving target, AttackData ad)
         {
             if (ad == null) return;
             if (!m_caster.IsAlive) return;

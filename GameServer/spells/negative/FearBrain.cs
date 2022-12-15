@@ -61,7 +61,7 @@ namespace DOL.AI.Brain
 		}
 
 		///<summary>
-		/// Calculate flee target.
+		/// Remove effect.
 		/// </summary>
 		///<param name="target">The target to flee.</param>
 		public virtual void RemoveEffect()

@@ -35,7 +35,7 @@ namespace DOL.spells
             base.OnDirectEffect(target, effectiveness);
         }
 
-        public override void StealLife(AttackData ad)
+        public override void StealLife(GameLiving target, AttackData ad)
         {
             if(ad == null) return;
             GamePlayer player = ((IControlledBrain) ((GamePet) Caster).Brain).GetPlayerOwner();

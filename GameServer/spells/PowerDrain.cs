@@ -32,11 +32,11 @@ namespace DOL.GS.Spells
 			AttackData ad = CalculateDamageToTarget(target, effectiveness);
 			SendDamageMessages(ad);
 			DamageTarget(ad, true);
-			DrainPower(ad);
+			DrainPower(target, ad);
 			target.StartInterruptTimer(target.SpellInterruptDuration, ad.AttackType, Caster);
 		}
 
-		public virtual void DrainPower(AttackData ad)
+		public virtual void DrainPower(GameLiving target, AttackData ad)
 		{
 			if (ad == null || !m_caster.IsAlive)
 				return;
@@ -47,6 +47,9 @@ namespace DOL.GS.Spells
 
 			int powerGain = (ad.Damage + ad.CriticalDamage) * m_spell.LifeDrainReturn / 100;
 			powerGain = owner.ChangeMana(m_caster, GameLiving.eManaChangeType.Spell, powerGain);
+			
+			//remove mana from target
+			target.ChangeMana(m_caster, GameLiving.eManaChangeType.Spell, -powerGain);
 
 			if (powerGain > 0)
 				MessageToOwner(String.Format("Your summon channels {0} power to you!", powerGain), eChatType.CT_Spell);

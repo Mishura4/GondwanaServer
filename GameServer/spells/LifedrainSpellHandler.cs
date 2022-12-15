@@ -33,12 +33,12 @@ namespace DOL.GS.Spells
 				AttackData ad = CalculateDamageToTarget(target, effectiveness);
 				SendDamageMessages(ad);
 				DamageTarget(ad, true);
-				StealLife(ad);
+				StealLife(target, ad);
 				target.StartInterruptTimer(target.SpellInterruptDuration, ad.AttackType, Caster);
 			}
 		}
 
-        public virtual void StealLife(AttackData ad)
+        public virtual void StealLife(GameLiving target, AttackData ad)
         {
             if (ad == null) return;
             if (!m_caster.IsAlive) return;

@@ -31,7 +31,7 @@ namespace DOL.GS.Spells
         /// <summary>
         /// Uses percent of damage to power the caster
         /// </summary>
-        public override void StealLife(AttackData ad)
+        public override void StealLife(GameLiving target, AttackData ad)
         {
             if (ad == null) return;
             if (!m_caster.IsAlive) return;
@@ -42,6 +42,9 @@ namespace DOL.GS.Spells
             
             if (heal <= 0) return;
             heal = m_caster.ChangeMana(m_caster, GameLiving.eManaChangeType.Spell, (int)manareturned);
+
+			//remove mana from target
+			target.ChangeMana(m_caster, GameLiving.eManaChangeType.Spell, -heal);
 
             if (heal > 0)
             {

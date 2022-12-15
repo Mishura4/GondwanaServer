@@ -102,9 +102,9 @@ namespace DOL.GS.Spells
 
 					caster.Mana += power;
 
+					target.Mana -= power;
 					if (target is GamePlayer)
 					{
-						target.Mana -= power;
 						((GamePlayer)target).Out.SendMessage(caster.Name + " takes " + power + " power!", eChatType.CT_YouWereHit, eChatLoc.CL_SystemWindow);
 					}
 

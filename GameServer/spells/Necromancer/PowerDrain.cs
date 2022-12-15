@@ -26,12 +26,12 @@ namespace DOL.GS.Spells
 	[SpellHandlerAttribute("PowerDrainPet")]
 	public class PowerDrainPet : PowerDrain
 	{
-		public override void DrainPower(AttackData ad)
+		public override void DrainPower(GameLiving target, AttackData ad)
 		{
 			if ( !(m_caster is NecromancerPet))
 				return;
 			
-			base.DrainPower(ad);
+			base.DrainPower(target, ad);
 		}
 		
 		/// The power channelled through this spell goes to the owner, not the pet
