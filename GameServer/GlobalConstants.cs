@@ -593,7 +593,7 @@ namespace DOL.GS
 		Skill_Spear = 56,
 		Skill_Mending = 57,
 		Skill_Augmentation = 58,
-		//Skill_Cave_Magic = 59,
+		CraftingSkillGain = 59,
 		Skill_Darkness = 60,
 		Skill_Suppression = 61,
 		Skill_Runecarving = 62,
@@ -605,7 +605,7 @@ namespace DOL.GS
 		Skill_Composite = 68,
 		Skill_Battlesongs = 69,
 		Skill_Enchantments = 70,
-		// 71 Available for a Skill
+		RobberyResist = 71,
 		Skill_Blades = 72,
 		Skill_Blunt = 73,
 		Skill_Piercing = 74,
@@ -655,6 +655,10 @@ namespace DOL.GS
 
 		// 116 - 119 Available
 
+		CraftingSpeed = 116,
+		SecondarySpellChance = 117,
+		MythicalRegen = 118,
+		MythicalTension = 119,
 		Focus_Darkness = 120,
 		Focus_Suppression = 121,
 		Focus_Runecarving = 122,
@@ -666,7 +670,7 @@ namespace DOL.GS
 		Focus_Light = 128,
 		Focus_Body = 129,
 		Focus_Matter = 130,
-		// 131 Available
+		MythicalMaxSpeed = 131,
 		Focus_Mind = 132,
 		Focus_Void = 133,
 		Focus_Mana = 134,
@@ -681,7 +685,7 @@ namespace DOL.GS
 		Focus_CreepingPath = 143,
 		Focus_Arboreal = 144,
 		MaxSpeed = 145,
-		// 146 Available
+		MythicalSpellReflect = 146,
 		MaxConcentration = 147,
 		ArmorFactor = 148,
 		ArmorAbsorption = 149,
@@ -805,6 +809,7 @@ namespace DOL.GS
         MythicalAcuCapBonus = 244,
         MythicalStatCapBonus_Last = 244,
 
+		MythicalCrowdDuration = 245,
 		BountyPoints = 247,
 		XpPoints = 248,
 		Resist_Natural = 249,

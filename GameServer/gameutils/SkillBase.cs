@@ -1527,7 +1527,7 @@ namespace DOL.GS
 				case eProperty.Resist_Body:
 					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Body");
 				case eProperty.Resist_Natural: 
-					return "Essence";
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Essence");
 				case eProperty.Resist_Cold:
 					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Cold");
 				case eProperty.Resist_Crush:
@@ -1546,48 +1546,88 @@ namespace DOL.GS
 					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Thrust");
 				
 				// Eden - Mythirian bonus
+				case eProperty.CraftingSkillGain:
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.CraftingSkillGain");
+				case eProperty.CraftingSpeed:
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.CraftingSpeed");
+				case eProperty.SecondarySpellChance:
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.SecondarySpellChance");
+				case eProperty.RobberyResist:
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.RobberyResist");
+				case eProperty.MythicalStrCapBonus:
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MythicalStrCap");
+				case eProperty.MythicalDexCapBonus:
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MythicalDexCap");
+				case eProperty.MythicalConCapBonus:
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MythicalConCap");
+				case eProperty.MythicalQuiCapBonus:
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MythicalQuiCap");
+				case eProperty.MythicalIntCapBonus:
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MythicalIntCap");
+				case eProperty.MythicalPieCapBonus:
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MythicalPieCap");
+				case eProperty.MythicalEmpCapBonus:
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MythicalEmpCap");
+				case eProperty.MythicalChaCapBonus:
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MythicalChaCap");
+				case eProperty.MythicalAcuCapBonus:
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MythicalAcuCap");
+				case eProperty.MythicalCrowdDuration:
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MythicalCrowdDuration");
+				case eProperty.MythicalRegen:
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MythicalRegen");
+				case eProperty.MythicalTension:
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MythicalTension");
+				case eProperty.MythicalMaxSpeed:
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MythicalMaxSpeed");
+				case eProperty.MythicalSpellReflect:
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MythicalSpellReflect");
 				case eProperty.BodyResCapBonus:
-					return "Body Cap";
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.BodyCap");
 				case eProperty.ColdResCapBonus:
-					return "Cold Cap";
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.ColdCap");
 				case eProperty.CrushResCapBonus:
-					return "Crush Cap";
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.CrushCap");
 				case eProperty.EnergyResCapBonus:
-					return "Energy Cap";
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.EnergyCap");
 				case eProperty.HeatResCapBonus:
-					return "Heat Cap";
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.HeatCap");
 				case eProperty.MatterResCapBonus:
-					return "Matter Cap";
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MatterCap");
 				case eProperty.SlashResCapBonus:
-					return "Slash Cap";
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.SlashCap");
 				case eProperty.SpiritResCapBonus:
-					return "Spirit Cap";
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.SpiritCap");
 				case eProperty.ThrustResCapBonus:
-					return "Thrust Cap";
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.ThrustCap");
 				case eProperty.MythicalSafeFall:
-					return "Mythical Safe Fall";
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MythicalSafeFall");
 				case eProperty.MythicalDiscumbering:
-					return "Mythical Discumbering";
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MythicalDiscumbering");
 				case eProperty.MythicalCoin:
-					return "Mythical Coin";
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MythicalCoin");
 				case eProperty.SpellLevel:
-					return "Spell Level";
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.SpellLevel");
+				case eProperty.MissHit:
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MissHit");
+				case eProperty.WaterSpeed:
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.WaterSpeed");
 				//Eden - special actifacts bonus
 				case eProperty.Conversion:
-					return "Conversion";
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Conversion");
 				case eProperty.ExtraHP:
-					return "Extra HP";
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.ExtraHp");
 				case eProperty.StyleAbsorb:
-					return "Style Absorb";
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.StyleAbsorb");
 				case eProperty.ArcaneSyphon:
-					return "Arcane Syphon";
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.ArcaneSyphon");
 				case eProperty.RealmPoints:
-					return "Realm Points";
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.RealmPoints");
 				//[Freya] Nidel
 				case eProperty.BountyPoints:
-					return "Bounty Points";
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.BountyPoints");
 				case eProperty.XpPoints:
-					return "Experience Points";
+					return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.ExperiencePoints");
 						
 
 				// skills
