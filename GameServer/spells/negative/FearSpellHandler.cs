@@ -101,6 +101,7 @@ namespace DOL.GS.Spells
 			FearBrain fearBrain;
 			if (m_NPCFearBrains.TryRemove(npcTarget, out fearBrain))
 			{
+				fearBrain.RemoveEffect();
 				npcTarget.RemoveBrain(fearBrain);
 			}
 

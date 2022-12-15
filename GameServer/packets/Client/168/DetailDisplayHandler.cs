@@ -1333,17 +1333,17 @@ namespace DOL.GS.PacketHandler.Client.v168
 
 			oldCount = output.Count;
 
-			WriteFocusLine(output, item.Bonus1Type, item.Bonus1);
-			WriteFocusLine(output, item.Bonus2Type, item.Bonus2);
-			WriteFocusLine(output, item.Bonus3Type, item.Bonus3);
-			WriteFocusLine(output, item.Bonus4Type, item.Bonus4);
-			WriteFocusLine(output, item.Bonus5Type, item.Bonus5);
-			WriteFocusLine(output, item.Bonus6Type, item.Bonus6);
-			WriteFocusLine(output, item.Bonus7Type, item.Bonus7);
-			WriteFocusLine(output, item.Bonus8Type, item.Bonus8);
-			WriteFocusLine(output, item.Bonus9Type, item.Bonus9);
-			WriteFocusLine(output, item.Bonus10Type, item.Bonus10);
-			WriteFocusLine(output, item.ExtraBonusType, item.ExtraBonus);
+			WriteFocusLine(client, output, item.Bonus1Type, item.Bonus1);
+			WriteFocusLine(client, output, item.Bonus2Type, item.Bonus2);
+			WriteFocusLine(client, output, item.Bonus3Type, item.Bonus3);
+			WriteFocusLine(client, output, item.Bonus4Type, item.Bonus4);
+			WriteFocusLine(client, output, item.Bonus5Type, item.Bonus5);
+			WriteFocusLine(client, output, item.Bonus6Type, item.Bonus6);
+			WriteFocusLine(client, output, item.Bonus7Type, item.Bonus7);
+			WriteFocusLine(client, output, item.Bonus8Type, item.Bonus8);
+			WriteFocusLine(client, output, item.Bonus9Type, item.Bonus9);
+			WriteFocusLine(client, output, item.Bonus10Type, item.Bonus10);
+			WriteFocusLine(client, output, item.ExtraBonusType, item.ExtraBonus);
 
 			if (output.Count > oldCount)
 			{
@@ -1640,7 +1640,7 @@ namespace DOL.GS.PacketHandler.Client.v168
 				if (IsPvEBonus((eProperty)bonusCat))
 				{
 					// Evade: {0}% (PvE Only)
-					list.Add(string.Format(SkillBase.GetPropertyName((eProperty)bonusCat), bonusValue));
+					list.Add(string.Format(SkillBase.GetPropertyName(client, (eProperty)bonusCat), bonusValue));
 				}
 				else
 				{
@@ -1655,7 +1655,7 @@ namespace DOL.GS.PacketHandler.Client.v168
 					//Power: 6 % of power pool.
 					list.Add(string.Format(
 						"- {0}: {1}{2}",
-						SkillBase.GetPropertyName((eProperty)bonusCat),
+						SkillBase.GetPropertyName(client, (eProperty)bonusCat),
 						bonusValue.ToString("+0 ;-0 ;0 "), //Eden
 						((bonusCat == (int)eProperty.PowerPool)
 						 || (bonusCat >= (int)eProperty.Resist_First && bonusCat <= (int)eProperty.Resist_Last)
@@ -1696,12 +1696,12 @@ namespace DOL.GS.PacketHandler.Client.v168
 			}
 		}
 
-		protected void WriteFocusLine(IList<string> list, int focusCat, int focusLevel)
+		protected void WriteFocusLine(GameClient client, IList<string> list, int focusCat, int focusLevel)
 		{
 			if (SkillBase.CheckPropertyType((eProperty)focusCat, ePropertyType.Focus))
 			{
 				//- Body Magic: 4 lvls
-				list.Add(string.Format("- {0}: {1} lvls", SkillBase.GetPropertyName((eProperty)focusCat), focusLevel));
+				list.Add(string.Format("- {0}: {1} lvls", SkillBase.GetPropertyName(client, (eProperty)focusCat), focusLevel));
 			}
 		}
 

@@ -446,16 +446,16 @@ namespace DOL.GS
 			spellcraftInfos.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "SpellCrafting.ShowSpellCraftingInfos.CurrentBonus", item.Name));
 			if (item.Bonus1Type != 0)
 			{
-				spellcraftInfos.Add("\t" + SkillBase.GetPropertyName((eProperty)item.Bonus1Type) + ": " + item.Bonus1 + " " + ((item.Bonus1Type >= (int)eProperty.Resist_First && item.Bonus1Type <= (int)eProperty.Resist_Last) ? "%" : " pts"));
+				spellcraftInfos.Add("\t" + SkillBase.GetPropertyName(player.Client, (eProperty)item.Bonus1Type) + ": " + item.Bonus1 + " " + ((item.Bonus1Type >= (int)eProperty.Resist_First && item.Bonus1Type <= (int)eProperty.Resist_Last) ? "%" : " pts"));
 				if (item.Bonus2Type != 0)
 				{
-					spellcraftInfos.Add("\t" + SkillBase.GetPropertyName((eProperty)item.Bonus2Type) + ": " + item.Bonus2 + " " + ((item.Bonus2Type >= (int)eProperty.Resist_First && item.Bonus2Type <= (int)eProperty.Resist_Last) ? "%" : "pts"));
+					spellcraftInfos.Add("\t" + SkillBase.GetPropertyName(player.Client, (eProperty)item.Bonus2Type) + ": " + item.Bonus2 + " " + ((item.Bonus2Type >= (int)eProperty.Resist_First && item.Bonus2Type <= (int)eProperty.Resist_Last) ? "%" : "pts"));
 					if (item.Bonus3Type != 0)
 					{
-						spellcraftInfos.Add("\t" + SkillBase.GetPropertyName((eProperty)item.Bonus3Type) + ": " + item.Bonus3 + " " + ((item.Bonus3Type >= (int)eProperty.Resist_First && item.Bonus3Type <= (int)eProperty.Resist_Last) ? "%" : "pts"));
+						spellcraftInfos.Add("\t" + SkillBase.GetPropertyName(player.Client, (eProperty)item.Bonus3Type) + ": " + item.Bonus3 + " " + ((item.Bonus3Type >= (int)eProperty.Resist_First && item.Bonus3Type <= (int)eProperty.Resist_Last) ? "%" : "pts"));
 						if (item.Bonus4Type != 0)
 						{
-							spellcraftInfos.Add("\t" + SkillBase.GetPropertyName((eProperty)item.Bonus4Type) + ": " + item.Bonus4 + " " + ((item.Bonus4Type >= (int)eProperty.Resist_First && item.Bonus4Type <= (int)eProperty.Resist_Last) ? "%" : "pts"));
+							spellcraftInfos.Add("\t" + SkillBase.GetPropertyName(player.Client, (eProperty)item.Bonus4Type) + ": " + item.Bonus4 + " " + ((item.Bonus4Type >= (int)eProperty.Resist_First && item.Bonus4Type <= (int)eProperty.Resist_Last) ? "%" : "pts"));
 						}
 					}
 				}
@@ -466,7 +466,7 @@ namespace DOL.GS
 				for (int i = 0; i < player.TradeWindow.ItemsCount; i++)
 				{
 					InventoryItem currentGem = (InventoryItem)player.TradeWindow.TradeItems[i];
-					spellcraftInfos.Add("\t" + currentGem.Name + " - " + SkillBase.GetPropertyName((eProperty)currentGem.Bonus1Type) + ": (" + GetGemImbuePoints(currentGem.Bonus1Type, currentGem.Bonus1) + ") " + currentGem.Bonus1 + " " + ((currentGem.Bonus1Type >= (int)eProperty.Resist_First && currentGem.Bonus1Type <= (int)eProperty.Resist_Last) ? "%" : "pts"));
+					spellcraftInfos.Add("\t" + currentGem.Name + " - " + SkillBase.GetPropertyName(player.Client, (eProperty)currentGem.Bonus1Type) + ": (" + GetGemImbuePoints(currentGem.Bonus1Type, currentGem.Bonus1) + ") " + currentGem.Bonus1 + " " + ((currentGem.Bonus1Type >= (int)eProperty.Resist_First && currentGem.Bonus1Type <= (int)eProperty.Resist_Last) ? "%" : "pts"));
 				}
 			}
 			spellcraftInfos.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "SpellCrafting.ShowSpellCraftingInfos.ImbueCapacity", totalGemmesCharges, totalItemCharges));

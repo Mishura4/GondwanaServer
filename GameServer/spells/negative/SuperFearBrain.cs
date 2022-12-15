@@ -22,52 +22,30 @@ using DOL.GS;
 
 namespace DOL.AI.Brain
 {
-	public class FearBrain : StandardMobBrain
+	public class SuperFearBrain : FearBrain
 	{
-		/// <summary>
-		/// Fixed thinking Interval for Fleeing
-		/// </summary>
-		public override int ThinkInterval {
-			get {
-				return 3000;
-			}
-		}
-		
-		/// <summary>
-		/// Flee from Players on Brain Think
-		/// </summary>
-		public override void Think()
-		{
-			foreach (GamePlayer player in Body.GetPlayersInRadius((ushort)Math.Max(AggroRange, 750)))
-			{
-				CalculateFleeTarget(player);
-				break;
-			}
-		}
-
+		short m_maxSpeedBuff = 0;
 		///<summary>
 		/// Calculate flee target.
 		/// </summary>
 		///<param name="target">The target to flee.</param>
-		protected virtual async void CalculateFleeTarget(GameLiving target)
+		protected override async void CalculateFleeTarget(GameLiving target)
 		{
 			ushort TargetAngle = (ushort)((Body.GetHeading(target) + 2048) % 4096);
 
-			var fleePoint = Body.GetPointFromHeading(TargetAngle, 300);
+			var fleePoint = Body.GetPointFromHeading(TargetAngle, 450);
 			var point = await PathingMgr.Instance.GetClosestPointAsync(Body.CurrentZone, new Vector3(fleePoint, Body.Position.Z), 128, 128, 256);
 			Body.StopFollowing();
 			Body.StopAttack();
 			Body.PathTo(point.HasValue ? point.Value : new Vector3(fleePoint, Body.Position.Z), Body.MaxSpeed);
+			//set speed to 130%
+			m_maxSpeedBuff = (short)(Body.MaxSpeedBase * 0.3);
+			Body.MaxSpeedBase = (short)(Body.MaxSpeedBase * 1.3);
 		}
-
-		///<summary>
-		/// Calculate flee target.
-		/// </summary>
-		///<param name="target">The target to flee.</param>
-		public virtual void RemoveEffect()
+		//on removal of the brain set speed to normal
+		public override void RemoveEffect()
 		{
-
+			Body.MaxSpeedBase = (short)(Body.MaxSpeedBase - m_maxSpeedBuff);
 		}
-
 	}
 } 

@@ -256,16 +256,16 @@ namespace DOL.GS
 
 			//AbilityBonus[(int)((eProperty)updateResists[i])]
 			info.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "PlayerBonusesListRequestHandler.HandlePacket.Resist"));
-			info.Add(string.Format(" {2}:   {0:+0;-0}%/\t{1:+0;-0}%", player.GetModified(eProperty.Resist_Crush) - player.AbilityBonus[(int)eProperty.Resist_Crush], player.AbilityBonus[(int)eProperty.Resist_Crush], SkillBase.GetPropertyName(eProperty.Resist_Crush)));
-			info.Add(string.Format(" {2}:    {0:+0;-0}%/{1:+0;-0}%", player.GetModified(eProperty.Resist_Slash) - player.AbilityBonus[(int)eProperty.Resist_Slash], player.AbilityBonus[(int)eProperty.Resist_Slash], SkillBase.GetPropertyName(eProperty.Resist_Slash)));
-			info.Add(string.Format(" {2}:  {0:+0;-0}%/{1:+0;-0}%", player.GetModified(eProperty.Resist_Thrust) - player.AbilityBonus[(int)eProperty.Resist_Thrust], player.AbilityBonus[(int)eProperty.Resist_Thrust], SkillBase.GetPropertyName(eProperty.Resist_Thrust)));
-			info.Add(string.Format(" {2}:     {0:+0;-0}%/{1:+0;-0}%", player.GetModified(eProperty.Resist_Heat) - player.AbilityBonus[(int)eProperty.Resist_Heat], player.AbilityBonus[(int)eProperty.Resist_Heat], SkillBase.GetPropertyName(eProperty.Resist_Heat)));
-			info.Add(string.Format(" {2}:      {0:+0;-0}%/{1:+0;-0}%", player.GetModified(eProperty.Resist_Cold) - player.AbilityBonus[(int)eProperty.Resist_Cold], player.AbilityBonus[(int)eProperty.Resist_Cold], SkillBase.GetPropertyName(eProperty.Resist_Cold)));
-			info.Add(string.Format(" {2}:  {0:+0;-0}%/{1:+0;-0}%", player.GetModified(eProperty.Resist_Matter) - player.AbilityBonus[(int)eProperty.Resist_Matter], player.AbilityBonus[(int)eProperty.Resist_Matter], SkillBase.GetPropertyName(eProperty.Resist_Matter)));
-			info.Add(string.Format(" {2}:     {0:+0;-0}%/{1:+0;-0}%", player.GetModified(eProperty.Resist_Body) - player.AbilityBonus[(int)eProperty.Resist_Body], player.AbilityBonus[(int)eProperty.Resist_Body], SkillBase.GetPropertyName(eProperty.Resist_Body)));
-			info.Add(string.Format(" {2}:     {0:+0;-0}%/{1:+0;-0}%", player.GetModified(eProperty.Resist_Spirit) - player.AbilityBonus[(int)eProperty.Resist_Spirit], player.AbilityBonus[(int)eProperty.Resist_Spirit], SkillBase.GetPropertyName(eProperty.Resist_Spirit)));
-			info.Add(string.Format(" {2}:  {0:+0;-0}%/{1:+0;-0}%", player.GetModified(eProperty.Resist_Energy) - player.AbilityBonus[(int)eProperty.Resist_Energy], player.AbilityBonus[(int)eProperty.Resist_Energy], SkillBase.GetPropertyName(eProperty.Resist_Energy)));
-			info.Add(string.Format(" {2}: {0:+0;-0}%/{1:+0;-0}%", player.GetModified(eProperty.Resist_Natural) - player.AbilityBonus[(int)eProperty.Resist_Natural], player.AbilityBonus[(int)eProperty.Resist_Natural], SkillBase.GetPropertyName(eProperty.Resist_Natural)));
+			info.Add(string.Format(" {2}:   {0:+0;-0}%/\t{1:+0;-0}%", player.GetModified(eProperty.Resist_Crush) - player.AbilityBonus[(int)eProperty.Resist_Crush], player.AbilityBonus[(int)eProperty.Resist_Crush], SkillBase.GetPropertyName(player.Client, eProperty.Resist_Crush)));
+			info.Add(string.Format(" {2}:    {0:+0;-0}%/{1:+0;-0}%", player.GetModified(eProperty.Resist_Slash) - player.AbilityBonus[(int)eProperty.Resist_Slash], player.AbilityBonus[(int)eProperty.Resist_Slash], SkillBase.GetPropertyName(player.Client, eProperty.Resist_Slash)));
+			info.Add(string.Format(" {2}:  {0:+0;-0}%/{1:+0;-0}%", player.GetModified(eProperty.Resist_Thrust) - player.AbilityBonus[(int)eProperty.Resist_Thrust], player.AbilityBonus[(int)eProperty.Resist_Thrust], SkillBase.GetPropertyName(player.Client, eProperty.Resist_Thrust)));
+			info.Add(string.Format(" {2}:     {0:+0;-0}%/{1:+0;-0}%", player.GetModified(eProperty.Resist_Heat) - player.AbilityBonus[(int)eProperty.Resist_Heat], player.AbilityBonus[(int)eProperty.Resist_Heat], SkillBase.GetPropertyName(player.Client, eProperty.Resist_Heat)));
+			info.Add(string.Format(" {2}:      {0:+0;-0}%/{1:+0;-0}%", player.GetModified(eProperty.Resist_Cold) - player.AbilityBonus[(int)eProperty.Resist_Cold], player.AbilityBonus[(int)eProperty.Resist_Cold], SkillBase.GetPropertyName(player.Client, eProperty.Resist_Cold)));
+			info.Add(string.Format(" {2}:  {0:+0;-0}%/{1:+0;-0}%", player.GetModified(eProperty.Resist_Matter) - player.AbilityBonus[(int)eProperty.Resist_Matter], player.AbilityBonus[(int)eProperty.Resist_Matter], SkillBase.GetPropertyName(player.Client, eProperty.Resist_Matter)));
+			info.Add(string.Format(" {2}:     {0:+0;-0}%/{1:+0;-0}%", player.GetModified(eProperty.Resist_Body) - player.AbilityBonus[(int)eProperty.Resist_Body], player.AbilityBonus[(int)eProperty.Resist_Body], SkillBase.GetPropertyName(player.Client, eProperty.Resist_Body)));
+			info.Add(string.Format(" {2}:     {0:+0;-0}%/{1:+0;-0}%", player.GetModified(eProperty.Resist_Spirit) - player.AbilityBonus[(int)eProperty.Resist_Spirit], player.AbilityBonus[(int)eProperty.Resist_Spirit], SkillBase.GetPropertyName(player.Client, eProperty.Resist_Spirit)));
+			info.Add(string.Format(" {2}:  {0:+0;-0}%/{1:+0;-0}%", player.GetModified(eProperty.Resist_Energy) - player.AbilityBonus[(int)eProperty.Resist_Energy], player.AbilityBonus[(int)eProperty.Resist_Energy], SkillBase.GetPropertyName(player.Client, eProperty.Resist_Energy)));
+			info.Add(string.Format(" {2}: {0:+0;-0}%/{1:+0;-0}%", player.GetModified(eProperty.Resist_Natural) - player.AbilityBonus[(int)eProperty.Resist_Natural], player.AbilityBonus[(int)eProperty.Resist_Natural], SkillBase.GetPropertyName(player.Client, eProperty.Resist_Natural)));
 
 			info.Add(" ");
 			info.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "PlayerBonusesListRequestHandler.HandlePacket.Special"));
@@ -292,12 +292,12 @@ namespace DOL.GS
 							if (powerpool > powercap + 25)
 							{
 								int tempbonus = powercap + 25;
-								info.Add(ItemBonusDescription(tempbonus, i));
+								info.Add(ItemBonusDescription(player.Client, tempbonus, i));
 							}
 							else
 							{
 								int tempbonus = powerpool;
-								info.Add(ItemBonusDescription(tempbonus, i));
+								info.Add(ItemBonusDescription(player.Client, tempbonus, i));
 							}
 
 
@@ -313,17 +313,17 @@ namespace DOL.GS
 							if (hits > hitscap + 200)
 							{
 								int tempbonus = hitscap + 200;
-								info.Add(ItemBonusDescription(tempbonus, i));
+								info.Add(ItemBonusDescription(player.Client, tempbonus, i));
 							}
 							else
 							{
 								int tempbonus = hits;
-								info.Add(ItemBonusDescription(tempbonus, i));
+								info.Add(ItemBonusDescription(player.Client, tempbonus, i));
 							}
 						}
 						else
 						{
-							info.Add(ItemBonusDescription(player.ItemBonus[i], i));
+							info.Add(ItemBonusDescription(player.Client, player.ItemBonus[i], i));
 						}
 					}
 				}
@@ -357,7 +357,7 @@ namespace DOL.GS
 		/// <param name="iBonus"></param>
 		/// <param name="iBonusType"></param>
 		/// <returns></returns>
-		private static string ItemBonusDescription(int iBonus, int iBonusType)
+		private static string ItemBonusDescription(GameClient client, int iBonus, int iBonusType)
 		{
 			//This displays the bonuses just like the Live servers. there is a check against the pts/% differences
 			string str = ((iBonusType == 150) | (iBonusType == 210) | (iBonusType == 10) | (iBonusType == 151) | (iBonusType == 186)) ? "pts of " : "% to ";  //150(Health Regen) 151(PowerRegen) and 186(Style reductions) need the prefix of "pts of " to be correct
@@ -407,7 +407,7 @@ namespace DOL.GS
 					iBonus = 50;
 			}
 
-			return string.Format("+{0}{1}{2}", iBonus, str, SkillBase.GetPropertyName(((eProperty)iBonusType)));
+			return string.Format("+{0}{1}{2}", iBonus, str, SkillBase.GetPropertyName(client, ((eProperty)iBonusType)));
 		}
 		#endregion
 

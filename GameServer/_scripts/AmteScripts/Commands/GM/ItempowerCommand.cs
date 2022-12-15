@@ -41,17 +41,17 @@ namespace DOL.GS.Scripts
 								"      Qualité: " + item.Quality + "%",
 								" "
 							};
-			gemPoints += GetGemImbuePoints(delve, item.Bonus1Type, item.Bonus1, ref gemMax);
-			gemPoints += GetGemImbuePoints(delve, item.Bonus2Type, item.Bonus2, ref gemMax);
-			gemPoints += GetGemImbuePoints(delve, item.Bonus3Type, item.Bonus3, ref gemMax);
-			gemPoints += GetGemImbuePoints(delve, item.Bonus4Type, item.Bonus4, ref gemMax);
-			gemPoints += GetGemImbuePoints(delve, item.Bonus5Type, item.Bonus5, ref gemMax);
-			gemPoints += GetGemImbuePoints(delve, item.Bonus6Type, item.Bonus6, ref gemMax);
-			gemPoints += GetGemImbuePoints(delve, item.Bonus7Type, item.Bonus7, ref gemMax);
-			gemPoints += GetGemImbuePoints(delve, item.Bonus8Type, item.Bonus8, ref gemMax);
-			gemPoints += GetGemImbuePoints(delve, item.Bonus9Type, item.Bonus9, ref gemMax);
-			gemPoints += GetGemImbuePoints(delve, item.Bonus10Type, item.Bonus10, ref gemMax);
-			gemPoints += GetGemImbuePoints(delve, item.ExtraBonusType, item.ExtraBonus, ref gemMax);
+			gemPoints += GetGemImbuePoints(client, delve, item.Bonus1Type, item.Bonus1, ref gemMax);
+			gemPoints += GetGemImbuePoints(client, delve, item.Bonus2Type, item.Bonus2, ref gemMax);
+			gemPoints += GetGemImbuePoints(client, delve, item.Bonus3Type, item.Bonus3, ref gemMax);
+			gemPoints += GetGemImbuePoints(client, delve, item.Bonus4Type, item.Bonus4, ref gemMax);
+			gemPoints += GetGemImbuePoints(client, delve, item.Bonus5Type, item.Bonus5, ref gemMax);
+			gemPoints += GetGemImbuePoints(client, delve, item.Bonus6Type, item.Bonus6, ref gemMax);
+			gemPoints += GetGemImbuePoints(client, delve, item.Bonus7Type, item.Bonus7, ref gemMax);
+			gemPoints += GetGemImbuePoints(client, delve, item.Bonus8Type, item.Bonus8, ref gemMax);
+			gemPoints += GetGemImbuePoints(client, delve, item.Bonus9Type, item.Bonus9, ref gemMax);
+			gemPoints += GetGemImbuePoints(client, delve, item.Bonus10Type, item.Bonus10, ref gemMax);
+			gemPoints += GetGemImbuePoints(client, delve, item.ExtraBonusType, item.ExtraBonus, ref gemMax);
 			gemPoints = (gemPoints + gemMax) / 2;
 			delve.Add(" ");
 			delve.Add("        Total: " + gemPoints + "/" + GetItemMaxImbuePoints(item.Template));
@@ -61,7 +61,7 @@ namespace DOL.GS.Scripts
 			client.Out.SendCustomTextWindow("Item power", delve);
 		}
 
-		protected static int GetGemImbuePoints(List<string> delve, int bonusType, int bonusValue, ref int max)
+		protected static int GetGemImbuePoints(GameClient client, List<string> delve, int bonusType, int bonusValue, ref int max)
 		{
 			if (bonusType == 0 || bonusValue == 0)
 				return 0;
@@ -160,7 +160,7 @@ namespace DOL.GS.Scripts
 
 			delve.Add(string.Format(
 						"- {0}: {1}{2} - power = {3}",
-						SkillBase.GetPropertyName((eProperty)bonusType),
+						SkillBase.GetPropertyName(client, (eProperty)bonusType),
 						bonusValue.ToString("+0 ;-0 ;0 "),
 						ptsOrPercent,
 						gemBonus

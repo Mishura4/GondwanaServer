@@ -612,7 +612,7 @@ namespace DOL.GS
 				foreach (var condition in this.BonusConditions.Where(b => b.BonusName != nameof(this.ProcSpellID) || b.BonusName != nameof(this.ProcSpellID1)).OrderBy(b => b.BonusName))
 				{
 					if (condition.ChampionLevel > 0 || condition.MlLevel > 0 || condition.IsRenaissanceRequired)
-						output.Add(condition.BonusName + "( " + this.GetBonusTypeFromBonusName(condition.BonusName) + " ): Level Champion: " + condition.ChampionLevel + " | ML Level: " + condition.MlLevel + " | Renaissance: " + (condition.IsRenaissanceRequired ? "Oui" : "Non"));
+						output.Add(condition.BonusName + "( " + this.GetBonusTypeFromBonusName(client, condition.BonusName) + " ): Level Champion: " + condition.ChampionLevel + " | ML Level: " + condition.MlLevel + " | Renaissance: " + (condition.IsRenaissanceRequired ? "Oui" : "Non"));
 				}
 			}
 
@@ -625,17 +625,17 @@ namespace DOL.GS
 
 			oldCount = output.Count;
 
-			WriteFocusLine(output, Bonus1Type, Bonus1);
-			WriteFocusLine(output, Bonus2Type, Bonus2);
-			WriteFocusLine(output, Bonus3Type, Bonus3);
-			WriteFocusLine(output, Bonus4Type, Bonus4);
-			WriteFocusLine(output, Bonus5Type, Bonus5);
-			WriteFocusLine(output, Bonus6Type, Bonus6);
-			WriteFocusLine(output, Bonus7Type, Bonus7);
-			WriteFocusLine(output, Bonus8Type, Bonus8);
-			WriteFocusLine(output, Bonus9Type, Bonus9);
-			WriteFocusLine(output, Bonus10Type, Bonus10);
-			WriteFocusLine(output, ExtraBonusType, ExtraBonus);
+			WriteFocusLine(client, output, Bonus1Type, Bonus1);
+			WriteFocusLine(client, output, Bonus2Type, Bonus2);
+			WriteFocusLine(client, output, Bonus3Type, Bonus3);
+			WriteFocusLine(client, output, Bonus4Type, Bonus4);
+			WriteFocusLine(client, output, Bonus5Type, Bonus5);
+			WriteFocusLine(client, output, Bonus6Type, Bonus6);
+			WriteFocusLine(client, output, Bonus7Type, Bonus7);
+			WriteFocusLine(client, output, Bonus8Type, Bonus8);
+			WriteFocusLine(client, output, Bonus9Type, Bonus9);
+			WriteFocusLine(client, output, Bonus10Type, Bonus10);
+			WriteFocusLine(client, output, ExtraBonusType, ExtraBonus);
 
 			if (output.Count > oldCount)
 			{
@@ -714,7 +714,7 @@ namespace DOL.GS
 					if (procCondition != null)
 					{
 						output.Add(" ProcSpellID proc Conditions: ");
-						output.Add(procCondition.BonusName + "( " + this.GetBonusTypeFromBonusName(procCondition.BonusName)  + " ) : Level Champion: " + procCondition.ChampionLevel + " | ML Level: " + procCondition.MlLevel + " | Renaissance: " + (procCondition.IsRenaissanceRequired ? "Oui" : "Non"));
+						output.Add(procCondition.BonusName + "( " + this.GetBonusTypeFromBonusName(client, procCondition.BonusName)  + " ) : Level Champion: " + procCondition.ChampionLevel + " | ML Level: " + procCondition.MlLevel + " | Renaissance: " + (procCondition.IsRenaissanceRequired ? "Oui" : "Non"));
 						output.Add(" ");
 					}
 				}
@@ -771,7 +771,7 @@ namespace DOL.GS
 					if (procCondition != null)
 					{
 						output.Add(" ProcSpellID1 2 proc Conditions: ");
-						output.Add(procCondition.BonusName + "( " + this.GetBonusTypeFromBonusName(procCondition.BonusName) + " ) : Level Champion: " + procCondition.ChampionLevel + " | ML Level: " + procCondition.MlLevel + " | Renaissance: " + (procCondition.IsRenaissanceRequired ? "Oui" : "Non"));
+						output.Add(procCondition.BonusName + "( " + this.GetBonusTypeFromBonusName(client, procCondition.BonusName) + " ) : Level Champion: " + procCondition.ChampionLevel + " | ML Level: " + procCondition.MlLevel + " | Renaissance: " + (procCondition.IsRenaissanceRequired ? "Oui" : "Non"));
 						output.Add(" ");
 					}
 				}
@@ -1791,45 +1791,45 @@ namespace DOL.GS
             return totalUti;
         }
 
-		private string GetBonusTypeFromBonusName(string bonusName)
+		private string GetBonusTypeFromBonusName(GameClient client, string bonusName)
 		{
 			switch (bonusName)
 			{
 				case nameof(Bonus1):
-					return SkillBase.GetPropertyName((eProperty)Bonus1Type);
+					return SkillBase.GetPropertyName(client, (eProperty)Bonus1Type);
 
 				case nameof(Bonus2):
-					return SkillBase.GetPropertyName((eProperty)Bonus2Type);
+					return SkillBase.GetPropertyName(client, (eProperty)Bonus2Type);
 
 				case nameof(Bonus3):
-					return SkillBase.GetPropertyName((eProperty)Bonus3Type);
+					return SkillBase.GetPropertyName(client, (eProperty)Bonus3Type);
 
 				case nameof(Bonus4):
-					return SkillBase.GetPropertyName((eProperty)Bonus4Type);
+					return SkillBase.GetPropertyName(client, (eProperty)Bonus4Type);
 
 				case nameof(Bonus5):
-					return SkillBase.GetPropertyName((eProperty)Bonus5Type);
+					return SkillBase.GetPropertyName(client, (eProperty)Bonus5Type);
 
 				case nameof(Bonus6):
-					return SkillBase.GetPropertyName((eProperty)Bonus6Type);
+					return SkillBase.GetPropertyName(client, (eProperty)Bonus6Type);
 
 				case nameof(Bonus7):
-					return SkillBase.GetPropertyName((eProperty)Bonus7Type);
+					return SkillBase.GetPropertyName(client, (eProperty)Bonus7Type);
 
 				case nameof(Bonus8):
-					return SkillBase.GetPropertyName((eProperty)Bonus8Type);
+					return SkillBase.GetPropertyName(client, (eProperty)Bonus8Type);
 
 				case nameof(Bonus9):
-					return SkillBase.GetPropertyName((eProperty)Bonus9Type);
+					return SkillBase.GetPropertyName(client, (eProperty)Bonus9Type);
 
 				case nameof(Bonus10):
-					return SkillBase.GetPropertyName((eProperty)Bonus10Type);
+					return SkillBase.GetPropertyName(client, (eProperty)Bonus10Type);
 
 				case nameof(ProcSpellID):
-					return SkillBase.GetPropertyName((eProperty)ProcSpellID);
+					return SkillBase.GetPropertyName(client, (eProperty)ProcSpellID);
 
 				case nameof(ProcSpellID1):
-					return SkillBase.GetPropertyName((eProperty)ProcSpellID1);
+					return SkillBase.GetPropertyName(client, (eProperty)ProcSpellID1);
 
 				default:
 					return string.Empty;
@@ -1843,7 +1843,7 @@ namespace DOL.GS
 				if (IsPvEBonus((eProperty)bonusCat))
 				{
 					// Evade: {0}% (PvE Only)
-					list.Add(string.Format(SkillBase.GetPropertyName((eProperty)bonusCat), bonusValue));
+					list.Add(string.Format(SkillBase.GetPropertyName(client, (eProperty)bonusCat), bonusValue));
 				}
 				else
 				{
@@ -1859,7 +1859,7 @@ namespace DOL.GS
 					//Power: 6 % of power pool.
                     list.Add(singleUti + string.Format(
                         " | {0}: {1}{2}",
-						SkillBase.GetPropertyName((eProperty)bonusCat),
+						SkillBase.GetPropertyName(client, (eProperty)bonusCat),
 						bonusValue.ToString("0 ;-0 ;0 "), //Eden
 						((bonusCat == (int)eProperty.PowerPool)
 						 || (bonusCat >= (int)eProperty.Resist_First && bonusCat <= (int)eProperty.Resist_Last)
@@ -1882,12 +1882,12 @@ namespace DOL.GS
 			}
 		}
 
-		protected virtual void WriteFocusLine(IList<string> list, int focusCat, int focusLevel)
+		protected virtual void WriteFocusLine(GameClient client, IList<string> list, int focusCat, int focusLevel)
 		{
 			if (SkillBase.CheckPropertyType((eProperty)focusCat, ePropertyType.Focus))
 			{
 				//- Body Magic: 4 lvls
-				list.Add(string.Format("- {0}: {1} lvls", SkillBase.GetPropertyName((eProperty)focusCat), focusLevel));
+				list.Add(string.Format("- {0}: {1} lvls", SkillBase.GetPropertyName(client, (eProperty)focusCat), focusLevel));
 			}
 		}
 

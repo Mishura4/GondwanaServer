@@ -109,7 +109,6 @@ namespace DOL.GS
 
 		static SkillBase()
 		{
-			RegisterPropertyNames();
 			InitArmorResists();
 			InitPropertyTypes();
 			InitializeObjectTypeToSpec();
@@ -1012,11 +1011,6 @@ namespace DOL.GS
 		private static readonly ePropertyType[] m_propertyTypes = new ePropertyType[(int)eProperty.MaxProperty+1];
 
 		/// <summary>
-		/// table for property names
-		/// </summary>
-		protected static readonly Dictionary<eProperty, string> m_propertyNames = new Dictionary<eProperty, string>();
-
-		/// <summary>
 		/// Table to hold the race resists
 		/// </summary>
 		protected static readonly Dictionary<int, int[]> m_raceResists = new Dictionary<int, int[]>();
@@ -1498,493 +1492,701 @@ namespace DOL.GS
 			}
 		}
 
-		private static void RegisterPropertyNames()
+
+		/// <summary>
+		/// Get display name of property
+		/// </summary>
+		/// <param name="prop"></param>
+		/// <returns></returns>
+		public static string GetPropertyName(GameClient client, eProperty prop)
 		{
-			#region register...
-			m_propertyNames.Add(eProperty.Strength, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                   "SkillBase.RegisterPropertyNames.Strength"));
-			m_propertyNames.Add(eProperty.Dexterity, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                    "SkillBase.RegisterPropertyNames.Dexterity"));
-			m_propertyNames.Add(eProperty.Constitution, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                       "SkillBase.RegisterPropertyNames.Constitution"));
-			m_propertyNames.Add(eProperty.Quickness, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                    "SkillBase.RegisterPropertyNames.Quickness"));
-			m_propertyNames.Add(eProperty.Intelligence, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                       "SkillBase.RegisterPropertyNames.Intelligence"));
-			m_propertyNames.Add(eProperty.Piety, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                "SkillBase.RegisterPropertyNames.Piety"));
-			m_propertyNames.Add(eProperty.Empathy, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                  "SkillBase.RegisterPropertyNames.Empathy"));
-			m_propertyNames.Add(eProperty.Charisma, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                   "SkillBase.RegisterPropertyNames.Charisma"));
+			//for every property from RegisterPropertyNames() 
+			switch (prop)
+			{
+				case eProperty.Strength:
+					return LanguageMgr.GetTranslation(client, "SkillBase.GetPropertyName.Strength");
+				case eProperty.Dexterity:
+					return LanguageMgr.GetTranslation(client, "SkillBase.GetPropertyName.Dexterity");
+				case eProperty.Constitution:
+					return LanguageMgr.GetTranslation(client, "SkillBase.GetPropertyName.Constitution");
+				case eProperty.Quickness:
+					return LanguageMgr.GetTranslation(client, "SkillBase.GetPropertyName.Quickness");
+				case eProperty.Intelligence:
+					return LanguageMgr.GetTranslation(client, "SkillBase.GetPropertyName.Intelligence");
+				case eProperty.Piety:
+					return LanguageMgr.GetTranslation(client, "SkillBase.GetPropertyName.Piety");
+				case eProperty.Charisma:
+					return LanguageMgr.GetTranslation(client, "SkillBase.GetPropertyName.Charisma");
+				case eProperty.Empathy:
+					return LanguageMgr.GetTranslation(client, "SkillBase.GetPropertyName.Empathy");
+				case eProperty.MaxHealth:
+					return LanguageMgr.GetTranslation(client, "SkillBase.GetPropertyName.MaxHealth");
+				case eProperty.MaxMana:
+					return LanguageMgr.GetTranslation(client, "SkillBase.GetPropertyName.MaxMana");
+				// resists (does not say "resist" on live server)
+				case eProperty.Resist_Body:
+					return LanguageMgr.GetTranslation(client, "SkillBase.GetPropertyName.Resist_Body");
+				case eProperty.Resist_Natural: 
+					return "Essence";
+				case eProperty.Resist_Cold:
+					return LanguageMgr.GetTranslation(client, "SkillBase.GetPropertyName.Resist_Cold");
+				case eProperty.Resist_Crush:
+					return LanguageMgr.GetTranslation(client, "SkillBase.GetPropertyName.Resist_Crush");
+				case eProperty.Resist_Energy:
+					return LanguageMgr.GetTranslation(client, "SkillBase.GetPropertyName.Resist_Energy");
+				case eProperty.Resist_Heat:
+					return LanguageMgr.GetTranslation(client, "SkillBase.GetPropertyName.Resist_Heat");
+				case eProperty.Resist_Matter:
+					return LanguageMgr.GetTranslation(client, "SkillBase.GetPropertyName.Resist_Matter");
+				case eProperty.Resist_Slash:
+					return LanguageMgr.GetTranslation(client, "SkillBase.GetPropertyName.Resist_Slash");
+				case eProperty.Resist_Spirit:
+					return LanguageMgr.GetTranslation(client, "SkillBase.GetPropertyName.Resist_Spirit");
+				case eProperty.Resist_Thrust:
+					return LanguageMgr.GetTranslation(client, "SkillBase.GetPropertyName.Resist_Thrust");
+				
+				// Eden - Mythirian bonus
+				case eProperty.BodyResCapBonus:
+					return "Body Cap";
+				case eProperty.ColdResCapBonus:
+					return "Cold Cap";
+				case eProperty.CrushResCapBonus:
+					return "Crush Cap";
+				case eProperty.EnergyResCapBonus:
+					return "Energy Cap";
+				case eProperty.HeatResCapBonus:
+					return "Heat Cap";
+				case eProperty.MatterResCapBonus:
+					return "Matter Cap";
+				case eProperty.SlashResCapBonus:
+					return "Slash Cap";
+				case eProperty.SpiritResCapBonus:
+					return "Spirit Cap";
+				case eProperty.ThrustResCapBonus:
+					return "Thrust Cap";
+				case eProperty.MythicalSafeFall:
+					return "Mythical Safe Fall";
+				case eProperty.MythicalDiscumbering:
+					return "Mythical Discumbering";
+				case eProperty.MythicalCoin:
+					return "Mythical Coin";
+				case eProperty.SpellLevel:
+					return "Spell Level";
+				//Eden - special actifacts bonus
+				case eProperty.Conversion:
+					return "Conversion";
+				case eProperty.ExtraHP:
+					return "Extra HP";
+				case eProperty.StyleAbsorb:
+					return "Style Absorb";
+				case eProperty.ArcaneSyphon:
+					return "Arcane Syphon";
+				case eProperty.RealmPoints:
+					return "Realm Points";
+				//[Freya] Nidel
+				case eProperty.BountyPoints:
+					return "Bounty Points";
+				case eProperty.XpPoints:
+					return "Experience Points";
+						
 
-			m_propertyNames.Add(eProperty.MaxMana, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                  "SkillBase.RegisterPropertyNames.Power"));
-			m_propertyNames.Add(eProperty.MaxHealth, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                    "SkillBase.RegisterPropertyNames.Hits"));
+				// skills
+				case eProperty.Skill_Two_Handed:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.TwoHanded");
+				case eProperty.Skill_Body:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.BodyMagic");
+				case eProperty.Skill_Chants:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.Chants");
+				case eProperty.Skill_Critical_Strike:
+					return LanguageMgr.GetTranslation(client, 
+																			"SkillBase.RegisterPropertyNames.CriticalStrike");
+				case eProperty.Skill_Cross_Bows:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.Crossbows");
+				case eProperty.Skill_Crushing:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.Crushing");
+				case eProperty.Skill_Death_Servant:
+					return LanguageMgr.GetTranslation(client, 
+																		"SkillBase.RegisterPropertyNames.DeathServant");
+				case eProperty.Skill_DeathSight:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.Deathsight");
+				case eProperty.Skill_Dual_Wield:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.DualWield");
+				case eProperty.Skill_Earth:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.EarthMagic");
+				case eProperty.Skill_Enhancement:
+					return LanguageMgr.GetTranslation(client, 
+																		"SkillBase.RegisterPropertyNames.Enhancement");
+				case eProperty.Skill_Envenom:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.Envenom");
+				case eProperty.Skill_Fire:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.FireMagic");
+				case eProperty.Skill_Flexible_Weapon:
+					return LanguageMgr.GetTranslation(client, 
+																			"SkillBase.RegisterPropertyNames.FlexibleWeapon");
+				case eProperty.Skill_Cold:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.ColdMagic");
+				case eProperty.Skill_Instruments:
+					return LanguageMgr.GetTranslation(client, 
+																		"SkillBase.RegisterPropertyNames.Instruments");
+				case eProperty.Skill_Long_bows:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.Longbows");
+				case eProperty.Skill_Matter:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.MatterMagic");
+				case eProperty.Skill_Mind:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.MindMagic");
+				case eProperty.Skill_Pain_working:
+					return LanguageMgr.GetTranslation(client, 
+																		"SkillBase.RegisterPropertyNames.Painworking");
+				case eProperty.Skill_Parry:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.Parry");
+				case eProperty.Skill_Polearms:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.Polearms");
+				case eProperty.Skill_Rejuvenation:
+					return LanguageMgr.GetTranslation(client, 
+																		"SkillBase.RegisterPropertyNames.Rejuvenation");
+				case eProperty.Skill_Shields:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.Shields");
+				case eProperty.Skill_Slashing:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.Slashing");
+				case eProperty.Skill_Smiting:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.Smiting");
+				case eProperty.Skill_SoulRending:
+					return LanguageMgr.GetTranslation(client, 
+																		"SkillBase.RegisterPropertyNames.Soulrending");
+				case eProperty.Skill_Spirit:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.SpiritMagic");
+				case eProperty.Skill_Staff:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.Staff");
+				case eProperty.Skill_Stealth:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.Stealth");
+				case eProperty.Skill_Thrusting:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.Thrusting");
+				case eProperty.Skill_Wind:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.WindMagic");
+				case eProperty.Skill_Sword:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.Sword");
+				case eProperty.Skill_Hammer:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.Hammer");
+				case eProperty.Skill_Axe:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.Axe");
+				case eProperty.Skill_Left_Axe:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.LeftAxe");
+				case eProperty.Skill_Spear:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.Spear");
+				case eProperty.Skill_Mending:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.Mending");
+				case eProperty.Skill_Augmentation:
+					return LanguageMgr.GetTranslation(client, 
+																		"SkillBase.RegisterPropertyNames.Augmentation");
+				case eProperty.Skill_Darkness:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.Darkness");
+				case eProperty.Skill_Suppression:
+					return LanguageMgr.GetTranslation(client, 
+																		"SkillBase.RegisterPropertyNames.Suppression");
+				case eProperty.Skill_Runecarving:
+					return LanguageMgr.GetTranslation(client, 
+																		"SkillBase.RegisterPropertyNames.Runecarving");
+				case eProperty.Skill_Stormcalling:
+					return LanguageMgr.GetTranslation(client, 
+																		"SkillBase.RegisterPropertyNames.Stormcalling");
+				case eProperty.Skill_BeastCraft:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.BeastCraft");
+				case eProperty.Skill_Light:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.LightMagic");
+				case eProperty.Skill_Void:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.VoidMagic");
+				case eProperty.Skill_Mana:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.ManaMagic");
+				case eProperty.Skill_Composite:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.Composite");
+				case eProperty.Skill_Battlesongs:
+					return LanguageMgr.GetTranslation(client, 
+																		"SkillBase.RegisterPropertyNames.Battlesongs");
+				case eProperty.Skill_Enchantments:
+					return LanguageMgr.GetTranslation(client, 
+																		"SkillBase.RegisterPropertyNames.Enchantment");
 
-			// resists (does not say "resist" on live server)
-			m_propertyNames.Add(eProperty.Resist_Body, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                      "SkillBase.RegisterPropertyNames.Body"));
-			m_propertyNames.Add(eProperty.Resist_Natural, "Essence");
-			m_propertyNames.Add(eProperty.Resist_Cold, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                      "SkillBase.RegisterPropertyNames.Cold"));
-			m_propertyNames.Add(eProperty.Resist_Crush, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                       "SkillBase.RegisterPropertyNames.Crush"));
-			m_propertyNames.Add(eProperty.Resist_Energy, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                        "SkillBase.RegisterPropertyNames.Energy"));
-			m_propertyNames.Add(eProperty.Resist_Heat, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                      "SkillBase.RegisterPropertyNames.Heat"));
-			m_propertyNames.Add(eProperty.Resist_Matter, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                        "SkillBase.RegisterPropertyNames.Matter"));
-			m_propertyNames.Add(eProperty.Resist_Slash, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                       "SkillBase.RegisterPropertyNames.Slash"));
-			m_propertyNames.Add(eProperty.Resist_Spirit, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                        "SkillBase.RegisterPropertyNames.Spirit"));
-			m_propertyNames.Add(eProperty.Resist_Thrust, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                        "SkillBase.RegisterPropertyNames.Thrust"));
+				case eProperty.Skill_Blades:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.Blades");
+				case eProperty.Skill_Blunt:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.Blunt");
+				case eProperty.Skill_Piercing:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.Piercing");
+				case eProperty.Skill_Large_Weapon:
+					return LanguageMgr.GetTranslation(client, 
+																		"SkillBase.RegisterPropertyNames.LargeWeapon");
+				case eProperty.Skill_Mentalism:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.Mentalism");
+				case eProperty.Skill_Regrowth:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.Regrowth");
+				case eProperty.Skill_Nurture:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.Nurture");
+				case eProperty.Skill_Nature:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.Nature");
+				case eProperty.Skill_Music:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.Music");
+				case eProperty.Skill_Celtic_Dual:
+					return LanguageMgr.GetTranslation(client, 
+																		"SkillBase.RegisterPropertyNames.CelticDual");
+				case eProperty.Skill_Celtic_Spear:
+					return LanguageMgr.GetTranslation(client, 
+																		"SkillBase.RegisterPropertyNames.CelticSpear");
+				case eProperty.Skill_RecurvedBow:
+					return LanguageMgr.GetTranslation(client, 
+																		"SkillBase.RegisterPropertyNames.RecurvedBow");
+				case eProperty.Skill_Valor:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.Valor");
+				case eProperty.Skill_Subterranean:
+					return LanguageMgr.GetTranslation(client, 
+																		"SkillBase.RegisterPropertyNames.CaveMagic");
+				case eProperty.Skill_BoneArmy:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.BoneArmy");
+				case eProperty.Skill_Verdant:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.Verdant");
+				case eProperty.Skill_Creeping:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.Creeping");
+				case eProperty.Skill_Arboreal:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.Arboreal");
+				case eProperty.Skill_Scythe:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.Scythe");
+				case eProperty.Skill_Thrown_Weapons:
+					return LanguageMgr.GetTranslation(client, 
+																		"SkillBase.RegisterPropertyNames.ThrownWeapons");
+				case eProperty.Skill_HandToHand:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.HandToHand");
+				case eProperty.Skill_ShortBow:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.ShortBow");
+				case eProperty.Skill_Pacification:
+					return LanguageMgr.GetTranslation(client, 
+																		"SkillBase.RegisterPropertyNames.Pacification");
+				case eProperty.Skill_Savagery:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.Savagery");
+				case eProperty.Skill_Nightshade:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.NightshadeMagic");
+				case eProperty.Skill_Pathfinding:
+					return LanguageMgr.GetTranslation(client, 
+																		"SkillBase.RegisterPropertyNames.Pathfinding");
+				case eProperty.Skill_Summoning:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.Summoning");
+				case eProperty.Skill_Archery:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.Archery");
 
-			// Eden - Mythirian bonus
-			m_propertyNames.Add(eProperty.BodyResCapBonus, "Body cap");
-			m_propertyNames.Add(eProperty.ColdResCapBonus, "Cold cap");
-			m_propertyNames.Add(eProperty.CrushResCapBonus, "Crush cap");
-			m_propertyNames.Add(eProperty.EnergyResCapBonus, "Energy cap");
-			m_propertyNames.Add(eProperty.HeatResCapBonus, "Heat cap");
-			m_propertyNames.Add(eProperty.MatterResCapBonus, "Matter cap");
-			m_propertyNames.Add(eProperty.SlashResCapBonus, "Slash cap");
-			m_propertyNames.Add(eProperty.SpiritResCapBonus, "Spirit cap");
-			m_propertyNames.Add(eProperty.ThrustResCapBonus, "Thrust cap");
-            m_propertyNames.Add(eProperty.MythicalSafeFall, "Mythical Safe Fall");
-            m_propertyNames.Add(eProperty.MythicalDiscumbering, "Mythical Discumbering");
-            m_propertyNames.Add(eProperty.MythicalCoin, "Mythical Coin");
-            m_propertyNames.Add(eProperty.SpellLevel, "Spell Focus");
-			//Eden - special actifacts bonus
-			m_propertyNames.Add(eProperty.Conversion, "Conversion");
-			m_propertyNames.Add(eProperty.ExtraHP, "Extra Health Points");
-			m_propertyNames.Add(eProperty.StyleAbsorb, "Style Absorb");
-			m_propertyNames.Add(eProperty.ArcaneSyphon, "Arcane Syphon");
-			m_propertyNames.Add(eProperty.RealmPoints, "Realm Points");
-			//[Freya] Nidel
-			m_propertyNames.Add(eProperty.BountyPoints, "Bounty Points");
-			m_propertyNames.Add(eProperty.XpPoints, "Experience Points");
-
-			// skills
-			m_propertyNames.Add(eProperty.Skill_Two_Handed, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                           "SkillBase.RegisterPropertyNames.TwoHanded"));
-			m_propertyNames.Add(eProperty.Skill_Body, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                     "SkillBase.RegisterPropertyNames.BodyMagic"));
-			m_propertyNames.Add(eProperty.Skill_Chants, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                       "SkillBase.RegisterPropertyNames.Chants"));
-			m_propertyNames.Add(eProperty.Skill_Critical_Strike, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                                "SkillBase.RegisterPropertyNames.CriticalStrike"));
-			m_propertyNames.Add(eProperty.Skill_Cross_Bows, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                           "SkillBase.RegisterPropertyNames.Crossbows"));
-			m_propertyNames.Add(eProperty.Skill_Crushing, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                         "SkillBase.RegisterPropertyNames.Crushing"));
-			m_propertyNames.Add(eProperty.Skill_Death_Servant, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                              "SkillBase.RegisterPropertyNames.DeathServant"));
-			m_propertyNames.Add(eProperty.Skill_DeathSight, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                           "SkillBase.RegisterPropertyNames.Deathsight"));
-			m_propertyNames.Add(eProperty.Skill_Dual_Wield, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                           "SkillBase.RegisterPropertyNames.DualWield"));
-			m_propertyNames.Add(eProperty.Skill_Earth, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                      "SkillBase.RegisterPropertyNames.EarthMagic"));
-			m_propertyNames.Add(eProperty.Skill_Enhancement, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                            "SkillBase.RegisterPropertyNames.Enhancement"));
-			m_propertyNames.Add(eProperty.Skill_Envenom, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                        "SkillBase.RegisterPropertyNames.Envenom"));
-			m_propertyNames.Add(eProperty.Skill_Fire, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                     "SkillBase.RegisterPropertyNames.FireMagic"));
-			m_propertyNames.Add(eProperty.Skill_Flexible_Weapon, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                                "SkillBase.RegisterPropertyNames.FlexibleWeapon"));
-			m_propertyNames.Add(eProperty.Skill_Cold, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                     "SkillBase.RegisterPropertyNames.ColdMagic"));
-			m_propertyNames.Add(eProperty.Skill_Instruments, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                            "SkillBase.RegisterPropertyNames.Instruments"));
-			m_propertyNames.Add(eProperty.Skill_Long_bows, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                          "SkillBase.RegisterPropertyNames.Longbows"));
-			m_propertyNames.Add(eProperty.Skill_Matter, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                       "SkillBase.RegisterPropertyNames.MatterMagic"));
-			m_propertyNames.Add(eProperty.Skill_Mind, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                     "SkillBase.RegisterPropertyNames.MindMagic"));
-			m_propertyNames.Add(eProperty.Skill_Pain_working, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                             "SkillBase.RegisterPropertyNames.Painworking"));
-			m_propertyNames.Add(eProperty.Skill_Parry, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                      "SkillBase.RegisterPropertyNames.Parry"));
-			m_propertyNames.Add(eProperty.Skill_Polearms, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                         "SkillBase.RegisterPropertyNames.Polearms"));
-			m_propertyNames.Add(eProperty.Skill_Rejuvenation, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                             "SkillBase.RegisterPropertyNames.Rejuvenation"));
-			m_propertyNames.Add(eProperty.Skill_Shields, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                        "SkillBase.RegisterPropertyNames.Shields"));
-			m_propertyNames.Add(eProperty.Skill_Slashing, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                         "SkillBase.RegisterPropertyNames.Slashing"));
-			m_propertyNames.Add(eProperty.Skill_Smiting, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                        "SkillBase.RegisterPropertyNames.Smiting"));
-			m_propertyNames.Add(eProperty.Skill_SoulRending, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                            "SkillBase.RegisterPropertyNames.Soulrending"));
-			m_propertyNames.Add(eProperty.Skill_Spirit, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                       "SkillBase.RegisterPropertyNames.SpiritMagic"));
-			m_propertyNames.Add(eProperty.Skill_Staff, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                      "SkillBase.RegisterPropertyNames.Staff"));
-			m_propertyNames.Add(eProperty.Skill_Stealth, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                        "SkillBase.RegisterPropertyNames.Stealth"));
-			m_propertyNames.Add(eProperty.Skill_Thrusting, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                          "SkillBase.RegisterPropertyNames.Thrusting"));
-			m_propertyNames.Add(eProperty.Skill_Wind, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                     "SkillBase.RegisterPropertyNames.WindMagic"));
-			m_propertyNames.Add(eProperty.Skill_Sword, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                      "SkillBase.RegisterPropertyNames.Sword"));
-			m_propertyNames.Add(eProperty.Skill_Hammer, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                       "SkillBase.RegisterPropertyNames.Hammer"));
-			m_propertyNames.Add(eProperty.Skill_Axe, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                    "SkillBase.RegisterPropertyNames.Axe"));
-			m_propertyNames.Add(eProperty.Skill_Left_Axe, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                         "SkillBase.RegisterPropertyNames.LeftAxe"));
-			m_propertyNames.Add(eProperty.Skill_Spear, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                      "SkillBase.RegisterPropertyNames.Spear"));
-			m_propertyNames.Add(eProperty.Skill_Mending, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                        "SkillBase.RegisterPropertyNames.Mending"));
-			m_propertyNames.Add(eProperty.Skill_Augmentation, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                             "SkillBase.RegisterPropertyNames.Augmentation"));
-			m_propertyNames.Add(eProperty.Skill_Darkness, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                         "SkillBase.RegisterPropertyNames.Darkness"));
-			m_propertyNames.Add(eProperty.Skill_Suppression, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                            "SkillBase.RegisterPropertyNames.Suppression"));
-			m_propertyNames.Add(eProperty.Skill_Runecarving, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                            "SkillBase.RegisterPropertyNames.Runecarving"));
-			m_propertyNames.Add(eProperty.Skill_Stormcalling, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                             "SkillBase.RegisterPropertyNames.Stormcalling"));
-			m_propertyNames.Add(eProperty.Skill_BeastCraft, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                           "SkillBase.RegisterPropertyNames.BeastCraft"));
-			m_propertyNames.Add(eProperty.Skill_Light, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                      "SkillBase.RegisterPropertyNames.LightMagic"));
-			m_propertyNames.Add(eProperty.Skill_Void, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                     "SkillBase.RegisterPropertyNames.VoidMagic"));
-			m_propertyNames.Add(eProperty.Skill_Mana, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                     "SkillBase.RegisterPropertyNames.ManaMagic"));
-			m_propertyNames.Add(eProperty.Skill_Composite, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                          "SkillBase.RegisterPropertyNames.Composite"));
-			m_propertyNames.Add(eProperty.Skill_Battlesongs, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                            "SkillBase.RegisterPropertyNames.Battlesongs"));
-			m_propertyNames.Add(eProperty.Skill_Enchantments, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                             "SkillBase.RegisterPropertyNames.Enchantment"));
-
-			m_propertyNames.Add(eProperty.Skill_Blades, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                       "SkillBase.RegisterPropertyNames.Blades"));
-			m_propertyNames.Add(eProperty.Skill_Blunt, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                      "SkillBase.RegisterPropertyNames.Blunt"));
-			m_propertyNames.Add(eProperty.Skill_Piercing, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                         "SkillBase.RegisterPropertyNames.Piercing"));
-			m_propertyNames.Add(eProperty.Skill_Large_Weapon, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                             "SkillBase.RegisterPropertyNames.LargeWeapon"));
-			m_propertyNames.Add(eProperty.Skill_Mentalism, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                          "SkillBase.RegisterPropertyNames.Mentalism"));
-			m_propertyNames.Add(eProperty.Skill_Regrowth, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                         "SkillBase.RegisterPropertyNames.Regrowth"));
-			m_propertyNames.Add(eProperty.Skill_Nurture, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                        "SkillBase.RegisterPropertyNames.Nurture"));
-			m_propertyNames.Add(eProperty.Skill_Nature, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                       "SkillBase.RegisterPropertyNames.Nature"));
-			m_propertyNames.Add(eProperty.Skill_Music, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                      "SkillBase.RegisterPropertyNames.Music"));
-			m_propertyNames.Add(eProperty.Skill_Celtic_Dual, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                            "SkillBase.RegisterPropertyNames.CelticDual"));
-			m_propertyNames.Add(eProperty.Skill_Celtic_Spear, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                             "SkillBase.RegisterPropertyNames.CelticSpear"));
-			m_propertyNames.Add(eProperty.Skill_RecurvedBow, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                            "SkillBase.RegisterPropertyNames.RecurvedBow"));
-			m_propertyNames.Add(eProperty.Skill_Valor, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                      "SkillBase.RegisterPropertyNames.Valor"));
-			m_propertyNames.Add(eProperty.Skill_Subterranean, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                             "SkillBase.RegisterPropertyNames.CaveMagic"));
-			m_propertyNames.Add(eProperty.Skill_BoneArmy, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                         "SkillBase.RegisterPropertyNames.BoneArmy"));
-			m_propertyNames.Add(eProperty.Skill_Verdant, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                        "SkillBase.RegisterPropertyNames.Verdant"));
-			m_propertyNames.Add(eProperty.Skill_Creeping, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                         "SkillBase.RegisterPropertyNames.Creeping"));
-			m_propertyNames.Add(eProperty.Skill_Arboreal, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                         "SkillBase.RegisterPropertyNames.Arboreal"));
-			m_propertyNames.Add(eProperty.Skill_Scythe, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                       "SkillBase.RegisterPropertyNames.Scythe"));
-			m_propertyNames.Add(eProperty.Skill_Thrown_Weapons, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                               "SkillBase.RegisterPropertyNames.ThrownWeapons"));
-			m_propertyNames.Add(eProperty.Skill_HandToHand, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                           "SkillBase.RegisterPropertyNames.HandToHand"));
-			m_propertyNames.Add(eProperty.Skill_ShortBow, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                         "SkillBase.RegisterPropertyNames.ShortBow"));
-			m_propertyNames.Add(eProperty.Skill_Pacification, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                             "SkillBase.RegisterPropertyNames.Pacification"));
-			m_propertyNames.Add(eProperty.Skill_Savagery, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                         "SkillBase.RegisterPropertyNames.Savagery"));
-			m_propertyNames.Add(eProperty.Skill_Nightshade, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                           "SkillBase.RegisterPropertyNames.NightshadeMagic"));
-			m_propertyNames.Add(eProperty.Skill_Pathfinding, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                            "SkillBase.RegisterPropertyNames.Pathfinding"));
-			m_propertyNames.Add(eProperty.Skill_Summoning, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                          "SkillBase.RegisterPropertyNames.Summoning"));
-			m_propertyNames.Add(eProperty.Skill_Archery, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                        "SkillBase.RegisterPropertyNames.Archery"));
-
-			// Mauler
-			m_propertyNames.Add(eProperty.Skill_FistWraps, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                          "SkillBase.RegisterPropertyNames.FistWraps"));
-			m_propertyNames.Add(eProperty.Skill_MaulerStaff, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                            "SkillBase.RegisterPropertyNames.MaulerStaff"));
-			m_propertyNames.Add(eProperty.Skill_Power_Strikes, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                              "SkillBase.RegisterPropertyNames.PowerStrikes"));
-			m_propertyNames.Add(eProperty.Skill_Magnetism, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                          "SkillBase.RegisterPropertyNames.Magnetism"));
-			m_propertyNames.Add(eProperty.Skill_Aura_Manipulation, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                                  "SkillBase.RegisterPropertyNames.AuraManipulation"));
-
-
-			//Catacombs skills
-			m_propertyNames.Add(eProperty.Skill_Dementia, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                         "SkillBase.RegisterPropertyNames.Dementia"));
-			m_propertyNames.Add(eProperty.Skill_ShadowMastery, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                              "SkillBase.RegisterPropertyNames.ShadowMastery"));
-			m_propertyNames.Add(eProperty.Skill_VampiiricEmbrace, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                                 "SkillBase.RegisterPropertyNames.VampiiricEmbrace"));
-			m_propertyNames.Add(eProperty.Skill_EtherealShriek, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                               "SkillBase.RegisterPropertyNames.EtherealShriek"));
-			m_propertyNames.Add(eProperty.Skill_PhantasmalWail, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                               "SkillBase.RegisterPropertyNames.PhantasmalWail"));
-			m_propertyNames.Add(eProperty.Skill_SpectralForce, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                              "SkillBase.RegisterPropertyNames.SpectralForce"));
-			m_propertyNames.Add(eProperty.Skill_SpectralGuard, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                              "SkillBase.RegisterPropertyNames.SpectralGuard"));
-			m_propertyNames.Add(eProperty.Skill_OdinsWill, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                          "SkillBase.RegisterPropertyNames.OdinsWill"));
-			m_propertyNames.Add(eProperty.Skill_Cursing, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                        "SkillBase.RegisterPropertyNames.Cursing"));
-			m_propertyNames.Add(eProperty.Skill_Hexing, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                       "SkillBase.RegisterPropertyNames.Hexing"));
-			m_propertyNames.Add(eProperty.Skill_Witchcraft, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                           "SkillBase.RegisterPropertyNames.Witchcraft"));
-
-
-			// Classic Focii
-			m_propertyNames.Add(eProperty.Focus_Darkness, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                         "SkillBase.RegisterPropertyNames.DarknessFocus"));
-			m_propertyNames.Add(eProperty.Focus_Suppression, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                            "SkillBase.RegisterPropertyNames.SuppressionFocus"));
-			m_propertyNames.Add(eProperty.Focus_Runecarving, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                            "SkillBase.RegisterPropertyNames.RunecarvingFocus"));
-			m_propertyNames.Add(eProperty.Focus_Spirit, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                       "SkillBase.RegisterPropertyNames.SpiritMagicFocus"));
-			m_propertyNames.Add(eProperty.Focus_Fire, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                     "SkillBase.RegisterPropertyNames.FireMagicFocus"));
-			m_propertyNames.Add(eProperty.Focus_Air, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                    "SkillBase.RegisterPropertyNames.WindMagicFocus"));
-			m_propertyNames.Add(eProperty.Focus_Cold, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                     "SkillBase.RegisterPropertyNames.ColdMagicFocus"));
-			m_propertyNames.Add(eProperty.Focus_Earth, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                      "SkillBase.RegisterPropertyNames.EarthMagicFocus"));
-			m_propertyNames.Add(eProperty.Focus_Light, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                      "SkillBase.RegisterPropertyNames.LightMagicFocus"));
-			m_propertyNames.Add(eProperty.Focus_Body, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                     "SkillBase.RegisterPropertyNames.BodyMagicFocus"));
-			m_propertyNames.Add(eProperty.Focus_Matter, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                       "SkillBase.RegisterPropertyNames.MatterMagicFocus"));
-			m_propertyNames.Add(eProperty.Focus_Mind, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                     "SkillBase.RegisterPropertyNames.MindMagicFocus"));
-			m_propertyNames.Add(eProperty.Focus_Void, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                     "SkillBase.RegisterPropertyNames.VoidMagicFocus"));
-			m_propertyNames.Add(eProperty.Focus_Mana, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                     "SkillBase.RegisterPropertyNames.ManaMagicFocus"));
-			m_propertyNames.Add(eProperty.Focus_Enchantments, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                             "SkillBase.RegisterPropertyNames.EnchantmentFocus"));
-			m_propertyNames.Add(eProperty.Focus_Mentalism, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                          "SkillBase.RegisterPropertyNames.MentalismFocus"));
-			m_propertyNames.Add(eProperty.Focus_Summoning, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                          "SkillBase.RegisterPropertyNames.SummoningFocus"));
-			// SI Focii
-			// Mid
-			m_propertyNames.Add(eProperty.Focus_BoneArmy, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                         "SkillBase.RegisterPropertyNames.BoneArmyFocus"));
-			// Alb
-			m_propertyNames.Add(eProperty.Focus_PainWorking, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                            "SkillBase.RegisterPropertyNames.PainworkingFocus"));
-			m_propertyNames.Add(eProperty.Focus_DeathSight, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                           "SkillBase.RegisterPropertyNames.DeathsightFocus"));
-			m_propertyNames.Add(eProperty.Focus_DeathServant, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                             "SkillBase.RegisterPropertyNames.DeathservantFocus"));
-			// Hib
-			m_propertyNames.Add(eProperty.Focus_Verdant, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                        "SkillBase.RegisterPropertyNames.VerdantFocus"));
-			m_propertyNames.Add(eProperty.Focus_CreepingPath, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                             "SkillBase.RegisterPropertyNames.CreepingPathFocus"));
-			m_propertyNames.Add(eProperty.Focus_Arboreal, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                         "SkillBase.RegisterPropertyNames.ArborealFocus"));
-			// Catacombs Focii
-			m_propertyNames.Add(eProperty.Focus_EtherealShriek, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                               "SkillBase.RegisterPropertyNames.EtherealShriekFocus"));
-			m_propertyNames.Add(eProperty.Focus_PhantasmalWail, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                               "SkillBase.RegisterPropertyNames.PhantasmalWailFocus"));
-			m_propertyNames.Add(eProperty.Focus_SpectralForce, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                              "SkillBase.RegisterPropertyNames.SpectralForceFocus"));
-			m_propertyNames.Add(eProperty.Focus_Cursing, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                        "SkillBase.RegisterPropertyNames.CursingFocus"));
-			m_propertyNames.Add(eProperty.Focus_Hexing, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                       "SkillBase.RegisterPropertyNames.HexingFocus"));
-			m_propertyNames.Add(eProperty.Focus_Witchcraft, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                           "SkillBase.RegisterPropertyNames.WitchcraftFocus"));
-
-			m_propertyNames.Add(eProperty.MaxSpeed, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                   "SkillBase.RegisterPropertyNames.MaximumSpeed"));
-			m_propertyNames.Add(eProperty.MaxConcentration, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                           "SkillBase.RegisterPropertyNames.Concentration"));
-
-			m_propertyNames.Add(eProperty.ArmorFactor, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                      "SkillBase.RegisterPropertyNames.BonusToArmorFactor"));
-			m_propertyNames.Add(eProperty.ArmorAbsorption, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                          "SkillBase.RegisterPropertyNames.BonusToArmorAbsorption"));
-
-			m_propertyNames.Add(eProperty.HealthRegenerationRate, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                                 "SkillBase.RegisterPropertyNames.HealthRegeneration"));
-			m_propertyNames.Add(eProperty.PowerRegenerationRate, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                                "SkillBase.RegisterPropertyNames.PowerRegeneration"));
-			m_propertyNames.Add(eProperty.EnduranceRegenerationRate, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                                    "SkillBase.RegisterPropertyNames.EnduranceRegeneration"));
-			m_propertyNames.Add(eProperty.SpellRange, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                     "SkillBase.RegisterPropertyNames.SpellRange"));
-			m_propertyNames.Add(eProperty.ArcheryRange, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                       "SkillBase.RegisterPropertyNames.ArcheryRange"));
-			m_propertyNames.Add(eProperty.Acuity, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                 "SkillBase.RegisterPropertyNames.Acuity"));
-
-			m_propertyNames.Add(eProperty.AllMagicSkills, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                         "SkillBase.RegisterPropertyNames.AllMagicSkills"));
-			m_propertyNames.Add(eProperty.AllMeleeWeaponSkills, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                               "SkillBase.RegisterPropertyNames.AllMeleeWeaponSkills"));
-			m_propertyNames.Add(eProperty.AllFocusLevels, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                         "SkillBase.RegisterPropertyNames.ALLSpellLines"));
-			m_propertyNames.Add(eProperty.AllDualWieldingSkills, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                                "SkillBase.RegisterPropertyNames.AllDualWieldingSkills"));
-			m_propertyNames.Add(eProperty.AllArcherySkills, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                           "SkillBase.RegisterPropertyNames.AllArcherySkills"));
-
-			m_propertyNames.Add(eProperty.LivingEffectiveLevel, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                               "SkillBase.RegisterPropertyNames.EffectiveLevel"));
+				// Mauler
+				case eProperty.Skill_FistWraps:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.FistWraps");
+				case eProperty.Skill_MaulerStaff:
+					return LanguageMgr.GetTranslation(client, 
+																		"SkillBase.RegisterPropertyNames.MaulerStaff");
+				case eProperty.Skill_Power_Strikes:
+					return LanguageMgr.GetTranslation(client, 
+																		"SkillBase.RegisterPropertyNames.PowerStrikes");
+				case eProperty.Skill_Magnetism:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.Magnetism");
+				case eProperty.Skill_Aura_Manipulation:
+					return LanguageMgr.GetTranslation(client, 
+																			"SkillBase.RegisterPropertyNames.AuraManipulation");
 
 
-			//Added by Fooljam : Missing TOA/Catacomb bonusses names in item properties.
-			//Date : 20-Jan-2005
-			//Missing bonusses begin
-			m_propertyNames.Add(eProperty.EvadeChance, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                      "SkillBase.RegisterPropertyNames.EvadeChance"));
-			m_propertyNames.Add(eProperty.BlockChance, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                      "SkillBase.RegisterPropertyNames.BlockChance"));
-			m_propertyNames.Add(eProperty.ParryChance, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                      "SkillBase.RegisterPropertyNames.ParryChance"));
-			m_propertyNames.Add(eProperty.FumbleChance, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                       "SkillBase.RegisterPropertyNames.FumbleChance"));
-			m_propertyNames.Add(eProperty.MeleeDamage, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                      "SkillBase.RegisterPropertyNames.MeleeDamage"));
-			m_propertyNames.Add(eProperty.RangedDamage, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                       "SkillBase.RegisterPropertyNames.RangedDamage"));
-			m_propertyNames.Add(eProperty.MesmerizeDurationReduction, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                            "SkillBase.RegisterPropertyNames.MesmerizeDuration"));
-			m_propertyNames.Add(eProperty.StunDurationReduction, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                       "SkillBase.RegisterPropertyNames.StunDuration"));
-			m_propertyNames.Add(eProperty.SpeedDecreaseDurationReduction, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                                "SkillBase.RegisterPropertyNames.SpeedDecreaseDuration"));
-			m_propertyNames.Add(eProperty.BladeturnReinforcement, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                                 "SkillBase.RegisterPropertyNames.BladeturnReinforcement"));
-			m_propertyNames.Add(eProperty.DefensiveBonus, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                         "SkillBase.RegisterPropertyNames.DefensiveBonus"));
-			m_propertyNames.Add(eProperty.PieceAblative, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                        "SkillBase.RegisterPropertyNames.PieceAblative"));
-			m_propertyNames.Add(eProperty.NegativeReduction, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                            "SkillBase.RegisterPropertyNames.NegativeReduction"));
-			m_propertyNames.Add(eProperty.ReactionaryStyleDamage, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                                 "SkillBase.RegisterPropertyNames.ReactionaryStyleDamage"));
-			m_propertyNames.Add(eProperty.SpellPowerCost, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                         "SkillBase.RegisterPropertyNames.SpellPowerCost"));
-			m_propertyNames.Add(eProperty.StyleCostReduction, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                             "SkillBase.RegisterPropertyNames.StyleCostReduction"));
-			m_propertyNames.Add(eProperty.ToHitBonus, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                     "SkillBase.RegisterPropertyNames.ToHitBonus"));
-			m_propertyNames.Add(eProperty.ArcherySpeed, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                       "SkillBase.RegisterPropertyNames.ArcherySpeed"));
-			m_propertyNames.Add(eProperty.ArrowRecovery, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                        "SkillBase.RegisterPropertyNames.ArrowRecovery"));
-			m_propertyNames.Add(eProperty.BuffEffectiveness, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                            "SkillBase.RegisterPropertyNames.StatBuffSpells"));
-			m_propertyNames.Add(eProperty.CastingSpeed, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                       "SkillBase.RegisterPropertyNames.CastingSpeed"));
-			m_propertyNames.Add(eProperty.DeathExpLoss, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                       "SkillBase.RegisterPropertyNames.ExperienceLoss"));
-			m_propertyNames.Add(eProperty.DebuffEffectivness, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                             "SkillBase.RegisterPropertyNames.DebuffEffectivness"));
-			m_propertyNames.Add(eProperty.Fatigue, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                  "SkillBase.RegisterPropertyNames.Fatigue"));
-			m_propertyNames.Add(eProperty.HealingEffectiveness, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                               "SkillBase.RegisterPropertyNames.HealingEffectiveness"));
-			m_propertyNames.Add(eProperty.PowerPool, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                    "SkillBase.RegisterPropertyNames.PowerPool"));
-			//Magiekraftvorrat
-			m_propertyNames.Add(eProperty.ResistPierce, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                       "SkillBase.RegisterPropertyNames.ResistPierce"));
-			m_propertyNames.Add(eProperty.SpellDamage, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                      "SkillBase.RegisterPropertyNames.MagicDamageBonus"));
-			m_propertyNames.Add(eProperty.SpellDuration, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                        "SkillBase.RegisterPropertyNames.SpellDuration"));
-			m_propertyNames.Add(eProperty.StyleDamage, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                      "SkillBase.RegisterPropertyNames.StyleDamage"));
-			m_propertyNames.Add(eProperty.MeleeSpeed, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                     "SkillBase.RegisterPropertyNames.MeleeSpeed"));
-			//Missing bonusses end
+				//Catacombs skills
+				case eProperty.Skill_Dementia:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.Dementia");
+				case eProperty.Skill_ShadowMastery:
+					return LanguageMgr.GetTranslation(client, 
+																		"SkillBase.RegisterPropertyNames.ShadowMastery");
+				case eProperty.Skill_VampiiricEmbrace:
+					return LanguageMgr.GetTranslation(client, 
+																			"SkillBase.RegisterPropertyNames.VampiiricEmbrace");
+				case eProperty.Skill_EtherealShriek:
+					return LanguageMgr.GetTranslation(client, 
+																		"SkillBase.RegisterPropertyNames.EtherealShriek");
+				case eProperty.Skill_PhantasmalWail:
+					return LanguageMgr.GetTranslation(client, 
+																		"SkillBase.RegisterPropertyNames.PhantasmalWail");
+				case eProperty.Skill_SpectralForce:
+					return LanguageMgr.GetTranslation(client, 
+																		"SkillBase.RegisterPropertyNames.SpectralForce");
+				case eProperty.Skill_SpectralGuard:
+					return LanguageMgr.GetTranslation(client, 
+																		"SkillBase.RegisterPropertyNames.SpectralGuard");
+				case eProperty.Skill_OdinsWill:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.OdinsWill");
+				case eProperty.Skill_Cursing:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.Cursing");
+				case eProperty.Skill_Hexing:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.Hexing");
+				case eProperty.Skill_Witchcraft:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.Witchcraft");
 
-			m_propertyNames.Add(eProperty.StrCapBonus, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                      "SkillBase.RegisterPropertyNames.StrengthBonusCap"));
-			m_propertyNames.Add(eProperty.DexCapBonus, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                      "SkillBase.RegisterPropertyNames.DexterityBonusCap"));
-			m_propertyNames.Add(eProperty.ConCapBonus, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                      "SkillBase.RegisterPropertyNames.ConstitutionBonusCap"));
-			m_propertyNames.Add(eProperty.QuiCapBonus, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                      "SkillBase.RegisterPropertyNames.QuicknessBonusCap"));
-			m_propertyNames.Add(eProperty.IntCapBonus, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                      "SkillBase.RegisterPropertyNames.IntelligenceBonusCap"));
-			m_propertyNames.Add(eProperty.PieCapBonus, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                      "SkillBase.RegisterPropertyNames.PietyBonusCap"));
-			m_propertyNames.Add(eProperty.ChaCapBonus, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                      "SkillBase.RegisterPropertyNames.CharismaBonusCap"));
-			m_propertyNames.Add(eProperty.EmpCapBonus, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                      "SkillBase.RegisterPropertyNames.EmpathyBonusCap"));
-			m_propertyNames.Add(eProperty.AcuCapBonus, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                      "SkillBase.RegisterPropertyNames.AcuityBonusCap"));
-			m_propertyNames.Add(eProperty.MaxHealthCapBonus, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                            "SkillBase.RegisterPropertyNames.HitPointsBonusCap"));
-			m_propertyNames.Add(eProperty.PowerPoolCapBonus, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                            "SkillBase.RegisterPropertyNames.PowerBonusCap"));
-			m_propertyNames.Add(eProperty.WeaponSkill, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                      "SkillBase.RegisterPropertyNames.WeaponSkill"));
-			m_propertyNames.Add(eProperty.AllSkills, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE,
-			                                                                    "SkillBase.RegisterPropertyNames.AllSkills"));
-			m_propertyNames.Add(eProperty.CriticalArcheryHitChance, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE, "SkillBase.RegisterPropertyNames.CriticalArcheryHit"));
-			m_propertyNames.Add(eProperty.CriticalMeleeHitChance, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE, "SkillBase.RegisterPropertyNames.CriticalMeleeHit"));
-			m_propertyNames.Add(eProperty.CriticalSpellHitChance, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE, "SkillBase.RegisterPropertyNames.CriticalSpellHit"));
-			m_propertyNames.Add(eProperty.CriticalHealHitChance, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE, "SkillBase.RegisterPropertyNames.CriticalHealHit"));
-			m_propertyNames.Add(eProperty.KeepDamage, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE, "SkillBase.RegisterPropertyNames.KeepDamage"));
 
-            m_propertyNames.Add(eProperty.DPS, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE, "SkillBase.RegisterPropertyNames.DPS"));
-            m_propertyNames.Add(eProperty.MagicAbsorption, LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE, "SkillBase.RegisterPropertyNames.MagicAbsorption"));
-			
-            //Forsaken Worlds: Mythical Stat Cap
-            m_propertyNames.Add(eProperty.MythicalStrCapBonus, "Mythical Stat Cap (Strength)");
-			m_propertyNames.Add(eProperty.MythicalDexCapBonus, "Mythical Stat Cap (Dexterity)");
-			m_propertyNames.Add(eProperty.MythicalConCapBonus, "Mythical Stat Cap (Constitution)");
-			m_propertyNames.Add(eProperty.MythicalQuiCapBonus, "Mythical Stat Cap (Quickness)");
-			m_propertyNames.Add(eProperty.MythicalIntCapBonus, "Mythical Stat Cap (Intelligence)");
-			m_propertyNames.Add(eProperty.MythicalPieCapBonus, "Mythical Stat Cap (Piety)");
-			m_propertyNames.Add(eProperty.MythicalChaCapBonus, "Mythical Stat Cap (Charisma)");
-			m_propertyNames.Add(eProperty.MythicalEmpCapBonus, "Mythical Stat Cap (Empathy)");
-			m_propertyNames.Add(eProperty.MythicalAcuCapBonus, "Mythical Stat Cap (Acuity)");
+				// Classic Focii
+				case eProperty.Focus_Darkness:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.DarknessFocus");
+				case eProperty.Focus_Suppression:
+					return LanguageMgr.GetTranslation(client, 
+																		"SkillBase.RegisterPropertyNames.SuppressionFocus");
+				case eProperty.Focus_Runecarving:
+					return LanguageMgr.GetTranslation(client, 
+																		"SkillBase.RegisterPropertyNames.RunecarvingFocus");
+				case eProperty.Focus_Spirit:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.SpiritMagicFocus");
+				case eProperty.Focus_Fire:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.FireMagicFocus");
+				case eProperty.Focus_Air:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.WindMagicFocus");
+				case eProperty.Focus_Cold:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.ColdMagicFocus");
+				case eProperty.Focus_Earth:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.EarthMagicFocus");
+				case eProperty.Focus_Light:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.LightMagicFocus");
+				case eProperty.Focus_Body:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.BodyMagicFocus");
+				case eProperty.Focus_Matter:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.MatterMagicFocus");
+				case eProperty.Focus_Mind:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.MindMagicFocus");
+				case eProperty.Focus_Void:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.VoidMagicFocus");
+				case eProperty.Focus_Mana:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.ManaMagicFocus");
+				case eProperty.Focus_Enchantments:
+					return LanguageMgr.GetTranslation(client, 
+																		"SkillBase.RegisterPropertyNames.EnchantmentFocus");
+				case eProperty.Focus_Mentalism:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.MentalismFocus");
+				case eProperty.Focus_Summoning:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.SummoningFocus");
+				// SI Focii
+				// Mid
+				case eProperty.Focus_BoneArmy:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.BoneArmyFocus");
+				// Alb
+				case eProperty.Focus_PainWorking:
+					return LanguageMgr.GetTranslation(client, 
+																		"SkillBase.RegisterPropertyNames.PainworkingFocus");
+				case eProperty.Focus_DeathSight:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.DeathsightFocus");
+				case eProperty.Focus_DeathServant:
+					return LanguageMgr.GetTranslation(client, 
+																		"SkillBase.RegisterPropertyNames.DeathservantFocus");
+				// Hib
+				case eProperty.Focus_Verdant:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.VerdantFocus");
+				case eProperty.Focus_CreepingPath:
+					return LanguageMgr.GetTranslation(client, 
+																		"SkillBase.RegisterPropertyNames.CreepingPathFocus");
+				case eProperty.Focus_Arboreal:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.ArborealFocus");
+				// Catacombs Focii
+				case eProperty.Focus_EtherealShriek:
+					return LanguageMgr.GetTranslation(client, 
+																		"SkillBase.RegisterPropertyNames.EtherealShriekFocus");
+				case eProperty.Focus_PhantasmalWail:
+					return LanguageMgr.GetTranslation(client, 
+																		"SkillBase.RegisterPropertyNames.PhantasmalWailFocus");
+				case eProperty.Focus_SpectralForce:
+					return LanguageMgr.GetTranslation(client, 
+																		"SkillBase.RegisterPropertyNames.SpectralForceFocus");
+				case eProperty.Focus_Cursing:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.CursingFocus");
+				case eProperty.Focus_Hexing:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.HexingFocus");
+				case eProperty.Focus_Witchcraft:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.WitchcraftFocus");
 
-            #endregion
+				case eProperty.MaxSpeed:
+					return LanguageMgr.GetTranslation(client, 
+															"SkillBase.RegisterPropertyNames.MaximumSpeed");
+				case eProperty.MaxConcentration:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.Concentration");
+
+				case eProperty.ArmorFactor:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.BonusToArmorFactor");
+				case eProperty.ArmorAbsorption:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.BonusToArmorAbsorption");
+
+				case eProperty.HealthRegenerationRate:
+					return LanguageMgr.GetTranslation(client, 
+																			"SkillBase.RegisterPropertyNames.HealthRegeneration");
+				case eProperty.PowerRegenerationRate:
+					return LanguageMgr.GetTranslation(client, 
+																			"SkillBase.RegisterPropertyNames.PowerRegeneration");
+				case eProperty.EnduranceRegenerationRate:
+					return LanguageMgr.GetTranslation(client, 
+																				"SkillBase.RegisterPropertyNames.EnduranceRegeneration");
+				case eProperty.SpellRange:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.SpellRange");
+				case eProperty.ArcheryRange:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.ArcheryRange");
+				case eProperty.Acuity:
+					return LanguageMgr.GetTranslation(client, 
+															"SkillBase.RegisterPropertyNames.Acuity");
+
+				case eProperty.AllMagicSkills:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.AllMagicSkills");
+				case eProperty.AllMeleeWeaponSkills:
+					return LanguageMgr.GetTranslation(client, 
+																		"SkillBase.RegisterPropertyNames.AllMeleeWeaponSkills");
+				case eProperty.AllFocusLevels:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.ALLSpellLines");
+				case eProperty.AllDualWieldingSkills:
+					return LanguageMgr.GetTranslation(client, 
+																			"SkillBase.RegisterPropertyNames.AllDualWieldingSkills");
+				case eProperty.AllArcherySkills:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.AllArcherySkills");
+
+				case eProperty.LivingEffectiveLevel:
+					return LanguageMgr.GetTranslation(client, 
+																		"SkillBase.RegisterPropertyNames.EffectiveLevel");
+
+
+				//Added by Fooljam : Missing TOA/Catacomb bonusses names in item properties.
+				//Date : 20-Jan-2005
+				//Missing bonusses begin
+				case eProperty.EvadeChance:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.EvadeChance");
+				case eProperty.BlockChance:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.BlockChance");
+				case eProperty.ParryChance:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.ParryChance");
+				case eProperty.FumbleChance:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.FumbleChance");
+				case eProperty.MeleeDamage:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.MeleeDamage");
+				case eProperty.RangedDamage:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.RangedDamage");
+				case eProperty.MesmerizeDurationReduction:
+					return LanguageMgr.GetTranslation(client, 
+																		"SkillBase.RegisterPropertyNames.MesmerizeDuration");
+				case eProperty.StunDurationReduction:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.StunDuration");
+				case eProperty.SpeedDecreaseDurationReduction:
+					return LanguageMgr.GetTranslation(client, 
+																			"SkillBase.RegisterPropertyNames.SpeedDecreaseDuration");
+				case eProperty.BladeturnReinforcement:
+					return LanguageMgr.GetTranslation(client, 
+																			"SkillBase.RegisterPropertyNames.BladeturnReinforcement");
+				case eProperty.DefensiveBonus:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.DefensiveBonus");
+				case eProperty.PieceAblative:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.PieceAblative");
+				case eProperty.NegativeReduction:
+					return LanguageMgr.GetTranslation(client, 
+																		"SkillBase.RegisterPropertyNames.NegativeReduction");
+				case eProperty.ReactionaryStyleDamage:
+					return LanguageMgr.GetTranslation(client, 
+																			"SkillBase.RegisterPropertyNames.ReactionaryStyleDamage");
+				case eProperty.SpellPowerCost:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.SpellPowerCost");
+				case eProperty.StyleCostReduction:
+					return LanguageMgr.GetTranslation(client, 
+																		"SkillBase.RegisterPropertyNames.StyleCostReduction");
+				case eProperty.ToHitBonus:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.ToHitBonus");
+				case eProperty.ArcherySpeed:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.ArcherySpeed");
+				case eProperty.ArrowRecovery:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.ArrowRecovery");
+				case eProperty.BuffEffectiveness:
+					return LanguageMgr.GetTranslation(client, 
+																		"SkillBase.RegisterPropertyNames.StatBuffSpells");
+				case eProperty.CastingSpeed:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.CastingSpeed");
+				case eProperty.DeathExpLoss:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.ExperienceLoss");
+				case eProperty.DebuffEffectivness:
+					return LanguageMgr.GetTranslation(client, 
+																		"SkillBase.RegisterPropertyNames.DebuffEffectivness");
+				case eProperty.Fatigue:
+					return LanguageMgr.GetTranslation(client, 
+															"SkillBase.RegisterPropertyNames.Fatigue");
+				case eProperty.HealingEffectiveness:
+					return LanguageMgr.GetTranslation(client, 
+																		"SkillBase.RegisterPropertyNames.HealingEffectiveness");
+				case eProperty.PowerPool:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.PowerPool");
+				//Magiekraftvorrat
+				case eProperty.ResistPierce:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.ResistPierce");
+				case eProperty.SpellDamage:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.MagicDamageBonus");
+				case eProperty.SpellDuration:
+					return LanguageMgr.GetTranslation(client, 
+																	"SkillBase.RegisterPropertyNames.SpellDuration");
+				case eProperty.StyleDamage:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.StyleDamage");
+				case eProperty.MeleeSpeed:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.MeleeSpeed");
+				//Missing bonusses end
+
+				case eProperty.StrCapBonus:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.StrengthBonusCap");
+				case eProperty.DexCapBonus:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.DexterityBonusCap");
+				case eProperty.ConCapBonus:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.ConstitutionBonusCap");
+				case eProperty.QuiCapBonus:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.QuicknessBonusCap");
+				case eProperty.IntCapBonus:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.IntelligenceBonusCap");
+				case eProperty.PieCapBonus:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.PietyBonusCap");
+				case eProperty.ChaCapBonus:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.CharismaBonusCap");
+				case eProperty.EmpCapBonus:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.EmpathyBonusCap");
+				case eProperty.AcuCapBonus:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.AcuityBonusCap");
+				case eProperty.MaxHealthCapBonus:
+					return LanguageMgr.GetTranslation(client, 
+																		"SkillBase.RegisterPropertyNames.HitPointsBonusCap");
+				case eProperty.PowerPoolCapBonus:
+					return LanguageMgr.GetTranslation(client, 
+																		"SkillBase.RegisterPropertyNames.PowerBonusCap");
+				case eProperty.WeaponSkill:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.WeaponSkill");
+				case eProperty.AllSkills:
+					return LanguageMgr.GetTranslation(client, 
+																"SkillBase.RegisterPropertyNames.AllSkills");
+				case eProperty.CriticalArcheryHitChance:
+					return LanguageMgr.GetTranslation(client,  "SkillBase.RegisterPropertyNames.CriticalArcheryHit");
+				case eProperty.CriticalMeleeHitChance:
+					return LanguageMgr.GetTranslation(client,  "SkillBase.RegisterPropertyNames.CriticalMeleeHit");
+				case eProperty.CriticalSpellHitChance:
+					return LanguageMgr.GetTranslation(client,  "SkillBase.RegisterPropertyNames.CriticalSpellHit");
+				case eProperty.CriticalHealHitChance:
+					return LanguageMgr.GetTranslation(client,  "SkillBase.RegisterPropertyNames.CriticalHealHit");
+				case eProperty.KeepDamage:
+					return LanguageMgr.GetTranslation(client,  "SkillBase.RegisterPropertyNames.KeepDamage");
+
+				case eProperty.DPS:
+					return LanguageMgr.GetTranslation(client,  "SkillBase.RegisterPropertyNames.DPS");
+				case eProperty.MagicAbsorption:
+					return LanguageMgr.GetTranslation(client,  "SkillBase.RegisterPropertyNames.MagicAbsorption");
+			}
+			return "";
 		}
 
 		#endregion
@@ -3082,21 +3284,6 @@ namespace DOL.GS
 			return spell;
 		}
 
-
-		/// <summary>
-		/// Get display name of property
-		/// </summary>
-		/// <param name="prop"></param>
-		/// <returns></returns>
-		public static string GetPropertyName(eProperty prop)
-		{
-			string name;
-			if (!m_propertyNames.TryGetValue(prop, out name))
-			{
-				name = "Property" + ((int)prop);
-			}
-			return name;
-		}
 
 		/// <summary>
 		/// determine race-dependent base resist

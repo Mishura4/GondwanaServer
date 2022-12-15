@@ -43,9 +43,9 @@ namespace DOL.GS.Spells
 
                 for (int i = (int)eProperty.Skill_First; i <= (int)eProperty.Skill_Last; i++)
                 {
-                    if (player.GetModifiedSpecLevel(SkillBase.GetPropertyName((eProperty)(i))) != 0)
+                    if (player.GetModifiedSpecLevel(SkillBase.GetPropertyName(player.Client, (eProperty)(i))) != 0)
                     {
-                        player.BaseBuffBonusCategory[i] = -player.GetModifiedSpecLevel(SkillBase.GetPropertyName((eProperty)(i)));
+                        player.BaseBuffBonusCategory[i] = -player.GetModifiedSpecLevel(SkillBase.GetPropertyName(player.Client, (eProperty)(i)));
                     }
                     //					DOLConsole.WriteWarning("Spec " + SkillBase.GetPropertyName((eProperty)(i)) + " " + player.GetModifiedSpecLevel(SkillBase.GetPropertyName((eProperty)(i))));
                 }

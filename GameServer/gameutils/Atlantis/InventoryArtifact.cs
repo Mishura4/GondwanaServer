@@ -244,19 +244,19 @@ namespace DOL.GS
 
             for (ArtifactBonus.ID bonusID = ArtifactBonus.ID.MinStat; bonusID <= ArtifactBonus.ID.MaxStat; ++bonusID)
             {
-                DelveMagicalBonus(delve, Template.GetBonusAmount(bonusID), Template.GetBonusType(bonusID), m_levelRequirements[(int)bonusID]);
+                DelveMagicalBonus(player.Client, delve, Template.GetBonusAmount(bonusID), Template.GetBonusType(bonusID), m_levelRequirements[(int)bonusID]);
             }
 
             for (ArtifactBonus.ID bonusID = ArtifactBonus.ID.MinStat; bonusID <= ArtifactBonus.ID.MaxStat; ++bonusID)
             {
-                DelveFocusBonus(delve, Template.GetBonusAmount(bonusID), Template.GetBonusType(bonusID), m_levelRequirements[(int)bonusID]);
+                DelveFocusBonus(player.Client, delve, Template.GetBonusAmount(bonusID), Template.GetBonusType(bonusID), m_levelRequirements[(int)bonusID]);
             }
 
             delve.Add(string.Empty);
 
             for (ArtifactBonus.ID bonusID = ArtifactBonus.ID.MinStat; bonusID <= ArtifactBonus.ID.MaxStat; ++bonusID)
             {
-                DelveBonus(delve, Template.GetBonusAmount(bonusID), Template.GetBonusType(bonusID), m_levelRequirements[(int)bonusID]);
+                DelveBonus(player.Client, delve, Template.GetBonusAmount(bonusID), Template.GetBonusType(bonusID), m_levelRequirements[(int)bonusID]);
             }
 
             // Spells & Procs
@@ -305,7 +305,7 @@ namespace DOL.GS
         /// <param name="bonusAmount"></param>
         /// <param name="bonusType"></param>
         /// <param name="levelRequirement"></param>
-        protected virtual void DelveMagicalBonus(List<string> delve, int bonusAmount, int bonusType, int levelRequirement)
+        protected virtual void DelveMagicalBonus(GameClient client, List<string> delve, int bonusAmount, int bonusType, int levelRequirement)
         {
             string levelTag = (levelRequirement > 0)
                 ? string.Format("[L{0}]: ", levelRequirement)
@@ -316,7 +316,7 @@ namespace DOL.GS
                 delve.Add(string.Format(
                     "- {0}{1}: {2} pts",
                                         levelTag,
-                                        SkillBase.GetPropertyName((eProperty)bonusType),
+                                        SkillBase.GetPropertyName(client, (eProperty)bonusType),
                                         bonusAmount.ToString("+0;-0;0")));
             }
             else if (IsResistBonus(bonusType))
@@ -324,7 +324,7 @@ namespace DOL.GS
                 delve.Add(string.Format(
                     "- {0}{1}: {2}%",
                                         levelTag,
-                                        SkillBase.GetPropertyName((eProperty)bonusType),
+                                        SkillBase.GetPropertyName(client, (eProperty)bonusType),
                                         bonusAmount.ToString("+0;-0;0")));
             }
             else if (bonusType == (int)eProperty.PowerPool)
@@ -332,12 +332,12 @@ namespace DOL.GS
                 delve.Add(string.Format(
                     "- {0}{1}: {2}% of power pool.",
                                         levelTag,
-                                        SkillBase.GetPropertyName((eProperty)bonusType),
+                                        SkillBase.GetPropertyName(client, (eProperty)bonusType),
                                         bonusAmount.ToString("+0;-0;0")));
             }
         }
 
-        protected virtual void DelveFocusBonus(List<string> delve, int bonusAmount, int bonusType, int levelRequirement)
+        protected virtual void DelveFocusBonus(GameClient client, List<string> delve, int bonusAmount, int bonusType, int levelRequirement)
         {
             string levelTag = (levelRequirement > 0)
                 ? string.Format("[L{0}]: ", levelRequirement)
@@ -357,7 +357,7 @@ namespace DOL.GS
                 delve.Add(string.Format(
                     "- {0}{1}: {2} lvls",
                                         levelTag,
-                                        SkillBase.GetPropertyName((eProperty)bonusType),
+                                        SkillBase.GetPropertyName(client, (eProperty)bonusType),
                                         bonusAmount));
             }
         }
@@ -369,7 +369,7 @@ namespace DOL.GS
         /// <param name="bonusAmount"></param>
         /// <param name="bonusType"></param>
         /// <param name="levelRequirement"></param>
-        protected virtual void DelveBonus(List<string> delve, int bonusAmount, int bonusType,
+        protected virtual void DelveBonus(GameClient client, List<string> delve, int bonusAmount, int bonusType,
                                           int levelRequirement)
         {
             if (!IsToABonus(bonusType))
@@ -386,7 +386,7 @@ namespace DOL.GS
                 delve.Add(string.Format(
                     "{0}{1}: {2}",
                                         levelTag,
-                                        SkillBase.GetPropertyName((eProperty)bonusType),
+                                        SkillBase.GetPropertyName(client, (eProperty)bonusType),
                                         bonusAmount));
             }
             else
@@ -394,7 +394,7 @@ namespace DOL.GS
                 delve.Add(string.Format(
                     "{0}{1}: {2}%",
                                         levelTag,
-                                        SkillBase.GetPropertyName((eProperty)bonusType),
+                                        SkillBase.GetPropertyName(client, (eProperty)bonusType),
                                         bonusAmount));
             }
         }
