@@ -43,8 +43,9 @@ namespace DOL.GS.Spells
             if (heal <= 0) return;
             heal = m_caster.ChangeMana(m_caster, GameLiving.eManaChangeType.Spell, (int)manareturned);
 
-			//remove mana from target
-			target.ChangeMana(m_caster, GameLiving.eManaChangeType.Spell, -heal);
+			//remove mana from target if ts's not a player
+            if (!(target is GamePlayer))
+			    target.ChangeMana(m_caster, GameLiving.eManaChangeType.Spell, -heal);
 
             if (heal > 0)
             {

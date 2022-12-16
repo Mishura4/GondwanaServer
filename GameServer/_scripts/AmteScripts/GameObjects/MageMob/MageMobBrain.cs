@@ -15,7 +15,7 @@ namespace DOL.AI.Brain
 		public override void Think()
 		{
 
-            foreach (GamePlayer player in Body.GetPlayersInRadius((ushort)Math.Max(AggroRange, 350)))
+            foreach (GamePlayer player in Body.GetPlayersInRadius(350))
             {
                 CalculateFleeTarget(player);
                 return;
@@ -23,7 +23,7 @@ namespace DOL.AI.Brain
             
             if (Body.Mana < Body.MaxMana*0.15)
             {
-                foreach (GamePlayer player in Body.GetPlayersInRadius((ushort)Math.Max(AggroRange, 750)))
+                foreach (GamePlayer player in Body.GetPlayersInRadius(750))
                 {
                     CalculateFleeTarget(player);
                     return;
