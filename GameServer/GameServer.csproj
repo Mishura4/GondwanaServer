@@ -60,34 +60,6 @@
     <None Remove="language\FR\CustomNPC\**" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="language\EN\Commands\GM\AreaEffect.txt" />
-    <None Remove="language\EN\Commands\GM\Coffre.txt" />
-    <None Remove="language\EN\Commands\GM\TPPoint.txt" />
-    <None Remove="language\EN\Commands\Players\Combine.txt" />
-    <None Remove="language\EN\Commands\Players\Event.txt" />
-    <None Remove="language\EN\GameObjects\CustomNPC\MoneyEventNPC.txt" />
-    <None Remove="language\EN\spells\SpellReflectionHandler.txt" />
-    <None Remove="language\FR\Commands\GM\AreaEffect.txt" />
-    <None Remove="language\FR\Commands\GM\Coffre.txt" />
-    <None Remove="language\FR\Commands\GM\TPPoint.txt" />
-    <None Remove="language\FR\GameObjects\CustomNPC\MoneyEventNPC.txt" />
-    <None Remove="language\FR\spells\SpellReflectionHandler.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <TranslationFiles Remove="language\EN\Commands\GM\AreaEffect.txt" />
-    <TranslationFiles Remove="language\EN\Commands\GM\Coffre.txt" />
-    <TranslationFiles Remove="language\EN\Commands\GM\TPPoint.txt" />
-    <TranslationFiles Remove="language\EN\Commands\Players\Combine.txt" />
-    <TranslationFiles Remove="language\EN\Commands\Players\Event.txt" />
-    <TranslationFiles Remove="language\EN\GameObjects\CustomNPC\MoneyEventNPC.txt" />
-    <TranslationFiles Remove="language\EN\spells\SpellReflectionHandler.txt" />
-    <TranslationFiles Remove="language\FR\Commands\GM\AreaEffect.txt" />
-    <TranslationFiles Remove="language\FR\Commands\GM\Coffre.txt" />
-    <TranslationFiles Remove="language\FR\Commands\GM\TPPoint.txt" />
-    <TranslationFiles Remove="language\FR\GameObjects\CustomNPC\MoneyEventNPC.txt" />
-    <TranslationFiles Remove="language\FR\spells\SpellReflectionHandler.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="language\EN\Commands\GM\AreaEffect.txt" />
     <Content Include="language\EN\Commands\GM\Coffre.txt" />
     <Content Include="language\EN\Commands\GM\TPPoint.txt" />
