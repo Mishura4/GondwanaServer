@@ -43,7 +43,7 @@ namespace DOL.commands.playercommands
             string message = LanguageMgr.GetTranslation(client, "Commands.Players.Combine.List") + ":\n\n";
             message += LanguageMgr.GetTranslation(client, "Commands.Players.Combine.Weaponcrafting") + "\n";
             message += LanguageMgr.GetTranslation(client, "Commands.Players.Combine.Armorcrafting") + "\n";
-            message += LanguageMgr.GetTranslation(client, "Commands.Players.Combine.Sieecrafting") + "\n";
+            message += LanguageMgr.GetTranslation(client, "Commands.Players.Combine.Siegecrafting") + "\n";
             message += LanguageMgr.GetTranslation(client, "Commands.Players.Combine.Alchemy") + "\n";
             message += LanguageMgr.GetTranslation(client, "Commands.Players.Combine.Metalcrafting") + "\n";
             message += LanguageMgr.GetTranslation(client, "Commands.Players.Combine.Leathercrafting") + "\n";
