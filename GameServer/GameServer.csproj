@@ -52,6 +52,14 @@
     <TranslationFiles Include="..\GameServer\language\**\*.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="language\FR\Commands\Player\**" />
+    <Compile Remove="language\FR\CustomNPC\**" />
+    <EmbeddedResource Remove="language\FR\Commands\Player\**" />
+    <EmbeddedResource Remove="language\FR\CustomNPC\**" />
+    <None Remove="language\FR\Commands\Player\**" />
+    <None Remove="language\FR\CustomNPC\**" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="language\EN\Commands\GM\AreaEffect.txt" />
     <None Remove="language\EN\Commands\GM\Coffre.txt" />
     <None Remove="language\EN\Commands\GM\TPPoint.txt" />
@@ -62,11 +70,6 @@
     <None Remove="language\FR\Commands\GM\AreaEffect.txt" />
     <None Remove="language\FR\Commands\GM\Coffre.txt" />
     <None Remove="language\FR\Commands\GM\TPPoint.txt" />
-    <None Remove="language\FR\Commands\Player\Combine.txt" />
-    <None Remove="language\FR\Commands\Player\Event.txt" />
-    <None Remove="language\FR\Commands\Player\Invite.txt" />
-    <None Remove="language\FR\Commands\Player\send.txt" />
-    <None Remove="language\FR\CustomNPC\RenaissanceNPC.txt" />
     <None Remove="language\FR\GameObjects\CustomNPC\MoneyEventNPC.txt" />
     <None Remove="language\FR\spells\SpellReflectionHandler.txt" />
   </ItemGroup>
@@ -81,11 +84,6 @@
     <TranslationFiles Remove="language\FR\Commands\GM\AreaEffect.txt" />
     <TranslationFiles Remove="language\FR\Commands\GM\Coffre.txt" />
     <TranslationFiles Remove="language\FR\Commands\GM\TPPoint.txt" />
-    <TranslationFiles Remove="language\FR\Commands\Player\Combine.txt" />
-    <TranslationFiles Remove="language\FR\Commands\Player\Event.txt" />
-    <TranslationFiles Remove="language\FR\Commands\Player\Invite.txt" />
-    <TranslationFiles Remove="language\FR\Commands\Player\send.txt" />
-    <TranslationFiles Remove="language\FR\CustomNPC\RenaissanceNPC.txt" />
     <TranslationFiles Remove="language\FR\GameObjects\CustomNPC\MoneyEventNPC.txt" />
     <TranslationFiles Remove="language\FR\spells\SpellReflectionHandler.txt" />
   </ItemGroup>
@@ -100,11 +98,6 @@
     <Content Include="language\FR\Commands\GM\AreaEffect.txt" />
     <Content Include="language\FR\Commands\GM\Coffre.txt" />
     <Content Include="language\FR\Commands\GM\TPPoint.txt" />
-    <Content Include="language\FR\Commands\Player\Combine.txt" />
-    <Content Include="language\FR\Commands\Player\Event.txt" />
-    <Content Include="language\FR\Commands\Player\Invite.txt" />
-    <Content Include="language\FR\Commands\Player\send.txt" />
-    <Content Include="language\FR\CustomNPC\RenaissanceNPC.txt" />
     <Content Include="language\FR\GameObjects\CustomNPC\MoneyEventNPC.txt" />
     <Content Include="language\FR\spells\SpellReflectionHandler.txt" />
   </ItemGroup>

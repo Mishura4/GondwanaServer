@@ -6,7 +6,7 @@ Commands.Players.Combine.Usage:		/combine list
 Commands.Players.Combine.List:	Combinations categories
 Commands.Players.Combine.Weaponcrafting:	[Weaponcrafting]
 Commands.Players.Combine.Armorcrafting:	[Armorcrafting]
-Commands.Players.Combine.Sieecrafting:	[Sieecrafting]
+Commands.Players.Combine.Siegecrafting:	[Siegecrafting]
 Commands.Players.Combine.Alchemy:	[Alchemy]
 Commands.Players.Combine.Metalcrafting:	[Metalcrafting]
 Commands.Players.Combine.Leathercrafting:	[Leathercrafting]

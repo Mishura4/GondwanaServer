@@ -6,7 +6,7 @@ Commands.Players.Combine.Usage:		/combine list
 Commands.Players.Combine.List:	Catégories de combinaisons
 Commands.Players.Combine.Weaponcrafting:	[Forge]
 Commands.Players.Combine.Armorcrafting:	[Arumerie]
-Commands.Players.Combine.Sieecrafting:	[Ingénierie]
+Commands.Players.Combine.Siegecrafting:	[Ingénierie]
 Commands.Players.Combine.Alchemy:	[Alchimie]
 Commands.Players.Combine.Metalcrafting:	[Metallurgie]
 Commands.Players.Combine.Leathercrafting:	[Maroquinerie]
