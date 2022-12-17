@@ -64,7 +64,14 @@
     <Content Include="language\EN\Commands\GM\Coffre.txt" />
     <Content Include="language\EN\Commands\GM\TPPoint.txt" />
     <Content Include="language\EN\Commands\Players\Combine.txt" />
+    <Content Include="language\EN\Commands\Players\Emotes.txt" />
     <Content Include="language\EN\Commands\Players\Event.txt" />
+    <Content Include="language\EN\Commands\Players\House.txt" />
+    <Content Include="language\EN\Commands\Players\Houseface.txt" />
+    <Content Include="language\EN\Commands\Players\Housefriend.txt" />
+    <Content Include="language\EN\Commands\Players\Housepoint.txt" />
+    <Content Include="language\EN\Commands\Players\Knock.txt" />
+    <Content Include="language\EN\Commands\Players\sell.txt" />
     <Content Include="language\EN\GameObjects\CustomNPC\MoneyEventNPC.txt" />
     <Content Include="language\EN\spells\SpellReflectionHandler.txt" />
     <Content Include="language\FR\Commands\GM\AreaEffect.txt" />

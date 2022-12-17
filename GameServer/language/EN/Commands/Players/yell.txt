@@ -12,3 +12,11 @@ Commands.Players.Yell.SouthWest:	South West
 Commands.Players.Yell.Usage:		Usage : '/yell <message>'
 Commands.Players.Yell.West:			West
 Commands.Players.Yell.You:			You are yelling for help.
+Commands.Players.Yell.East:			east
+Commands.Players.Yell.North:		north
+Commands.Players.Yell.NorthEast:	north east
+Commands.Players.Yell.NorthWest:	north west
+Commands.Players.Yell.South:		south
+Commands.Players.Yell.SouthEast:	south east
+Commands.Players.Yell.SouthWest:	south west
+Commands.Players.Yell.West:			west

@@ -1,0 +1,5 @@
+﻿Commands.Players.Sell.Usage2:			Utilisez : /sell <objet> ou /sell <premier> <dernier>
+Commands.Players.Sell.Invalid:			Les numéros d'objet valides doivent être compris entre 1 et 40.
+Commands.Players.Sell.Merchant:			Vous devez cibler un marchand.
+Commands.Players.Sell.Description:		Vendez des objets à un marchand ciblé. Spécifiez un seul article, ou un premier et un dernier article pour vendre plusieurs articles.
+Commands.Players.Sell.Usage1:			Utilisez : /sell 4 pour vendre le 4e objet\n /sell 9 16 pour vendre tous les objets du sac numéro 2

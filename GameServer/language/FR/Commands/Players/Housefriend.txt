@@ -1,0 +1,11 @@
+﻿Commands.Players.Housefriend.NotInHouse:		Vous devez être dans votre maison pour utiliser cette commande.
+Commands.Players.Housefriend.NotOnline:		Aucun joueur en ligne avec ce nom.
+Commands.Players.Housefriend.Added:			Vous avez ajouté {0}.
+Commands.Players.Housefriend.AddedAccount:	Vous avez ajouté le compte de {0}.
+Commands.Players.Housefriend.NoGuild:		Aucune guilde portant ce nom n'a été trouvée. N'oubliez pas de mettre des noms plus longs entre guillemets, par exemple : \"Ma guilde\".
+Commands.Players.Housefriend.AddedAll:		Vous avez ajouté tout le monde !
+Commands.Players.Housefriend.Description:	Invitez un joueur spécifié dans votre maison
+Commands.Players.Housefriend.All:			/housefriend all
+Commands.Players.Housefriend.Player:		/housefriend player <player>
+Commands.Players.Housefriend.Account:		/housefriend account <player>
+Commands.Players.Housepoint.Guild:			/housefriend guild <guild> (S'il y a deux mots ou plus, entourez-les de \" \")

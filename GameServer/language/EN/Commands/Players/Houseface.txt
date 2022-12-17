@@ -1,0 +1,3 @@
+﻿Commands.Players.Houseface.NotFound:		No house found.
+Commands.Players.Houseface.Faced:			You face house {0}.
+Commands.Players.Housepoint.Description:	Points to the specified guildhouse of the guild noted, or the lot number noted in the command. /houseface alone will point to one's personal home.

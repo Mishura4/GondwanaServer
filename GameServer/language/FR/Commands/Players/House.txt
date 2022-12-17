@@ -1,0 +1,14 @@
+﻿Commands.Players.House.NoHouse:		Vous ne possédez pas de maison.
+Commands.Players.House.GMInfo:		GM: info - Afficher les informations sur une maison à proximité
+Commands.Players.House.AdminInfo1:	Admin: modèle <1 - 12> - changer le modèle de la maison
+Commands.Players.House.AdminInfo2:	Admin: redémarrer - redémarrer le gestionnaire de la zone résidentielle
+Commands.Players.House.AdminInfo3:	Admin: addhookpoints - autorise l'ajout de points d'ancrage manquants
+Commands.Players.House.AdminInfo4:	Admin: supprimer <YES> - supprimer cette maison !
+Commands.Players.House.HookPointOff:	Ajout de points d'ancrage désactivé !
+Commands.Players.House.HookPointOn:	Ajout de points d'ancrage activé !
+Commands.Players.House.FarAway:		Vous devez vous rapprocher d'une maison !
+Commands.Players.House.ModelInvalid:	Les modèles de maison valides sont compris entre 1 et 12 !
+Commands.Players.House.ModelChanged:	Le modèle de la maison a été remplacé par {0} !
+Commands.Players.House.ConfirmYES:	Vous devez confirmer cette suppression par 'YES'
+Commands.Players.House.Removed:		Maison supprimée !
+Commands.Players.House.Description:	affiche diverses informations sur la zone résidentielle.

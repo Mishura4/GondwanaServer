@@ -1,0 +1,7 @@
+﻿Commands.Players.Knock.InHouse:			Vous ne pouvez pas frappez à la porte lorsque vous êtes dans une maison !
+Commands.Players.Knock.Wait:				Vous devez attendre encore {0} secondes avant de frappez à nouveau à la porte !
+Commands.Players.Knock.IsKnocking:		{0} est à votre porte !
+Commands.Players.Knock.YouKnock:			Vous frappez à la porte.
+Commands.Players.Knock.GoToDoor:			Vous devez vous rendre vers la maison à laquelle vous souhaitez frapper à la porte !
+Commands.Players.Knock.Description:		Frapper à la porte d'une maison
+Commands.Players.Knock.Usage:			Usage: /knock

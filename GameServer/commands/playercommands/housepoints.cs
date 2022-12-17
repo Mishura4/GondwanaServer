@@ -1,14 +1,15 @@
 using DOL.GS;
 using DOL.GS.Housing;
 using DOL.GS.PacketHandler;
+using DOL.Language;
 
 namespace DOL.GS.Commands
 {
 	[CmdAttribute(
 	  "&housepoints",
 	  ePrivLevel.Player,
-	   "Toggles display of housepoints",
-		 "Useage: /housepoints toggle")]
+        "Commands.Players.Housepoint.Description",
+        "Commands.Players.Housepoint.Usage")]
 	public class HousePointsCommandHandler : AbstractCommandHandler, ICommandHandler
 	{
 		public void OnCommand(GameClient client, string[] args)
@@ -16,13 +17,13 @@ namespace DOL.GS.Commands
             House house = client.Player.CurrentHouse;
 			if (!client.Player.InHouse || house == null)
 			{
-                DisplayMessage(client, "You need to be in a House to use this command!");
+                DisplayMessage(client, LanguageMgr.GetTranslation(client, "Commands.Players.Housepoint.NotInHouse"));
 				return;
 			}
 
             if (!house.HasOwnerPermissions(client.Player))
             {
-                DisplayMessage(client, "You do not have permissions to do that!");
+                DisplayMessage(client, LanguageMgr.GetTranslation(client, "Commands.Players.Housepoint.NoPermission"));
                 return;
             }
 

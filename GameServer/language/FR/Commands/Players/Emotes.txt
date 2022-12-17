@@ -1,0 +1,4 @@
+﻿Commands.Players.Emotes.Dead:		Vous ne pouvez pas faire ça car vous êtes mort !
+Commands.Players.Emotes.Busy:		Vous ne pouvez pas faire ça car vous êtes occupé !
+Commands.Players.Emotes.Muted:		Vous avez été mis en sourdine et ne pouvez pas émettre d'emote !
+Commands.Players.Emotes.Target:		Vous ne voyez pas votre cible par ici.
