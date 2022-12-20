@@ -393,6 +393,7 @@ namespace DOL.GS
 		public const string StunImmunity = "StunImmunity";
 
         public const string Vol = "Vol";
+        public const string Trading = "Trading";
 
 		public static eObjectType AbilityToWeapon( string abilityKeyName )
 		{

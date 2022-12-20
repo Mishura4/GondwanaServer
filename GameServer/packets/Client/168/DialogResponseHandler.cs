@@ -20,6 +20,7 @@
 using DOL.Events;
 using DOL.GS.Housing;
 using DOL.GS.Keeps;
+using System;
 
 namespace DOL.GS.PacketHandler.Client.v168
 {
@@ -99,7 +100,6 @@ namespace DOL.GS.PacketHandler.Client.v168
 					return;
 
 				// log.DebugFormat("Dialog - response: {0}, messageType: {1}, data1: {2}, data2: {3}, data3: {4}", m_response, m_messageType, m_data1, m_data2, m_data3);
-
 				switch ((eDialogCode) m_messageType)
 				{
 					case eDialogCode.CustomDialog:
@@ -350,6 +350,30 @@ namespace DOL.GS.PacketHandler.Client.v168
 
 							// clean up
 							player.TempProperties.removeProperty(HousingConstants.MoneyForHouseRent);
+							break;
+						}
+					case eDialogCode.OpenMarket:
+						{
+							Console.WriteLine("OpenMarket: " + m_response);
+							if (m_response == 0x01)
+							{
+								if(player.TemporaryConsignmentMerchant == null || player.TemporaryConsignmentMerchant.ObjectState == GameObject.eObjectState.Deleted)
+								{
+									TemporaryConsignmentMerchant consignmentMerchant = new TemporaryConsignmentMerchant();
+									consignmentMerchant.playerOwner = player;
+									player.TemporaryConsignmentMerchant = consignmentMerchant;
+									consignmentMerchant.AddToWorld();
+								}
+							}
+							break;
+						}
+					case eDialogCode.CloseMarket:
+						{
+							if (m_response == 0x01)
+							{
+							if (player.TemporaryConsignmentMerchant != null)
+								player.TemporaryConsignmentMerchant.Delete();
+							}
 							break;
 						}
 					case eDialogCode.MasterLevelWindow:

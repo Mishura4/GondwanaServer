@@ -554,6 +554,8 @@ namespace DOL.GS.PacketHandler
 		GroupInvite = 0x05,
 		CustomDialog = 0x06,
 		GuildLeave = 0x08,
+		OpenMarket = 0x09,
+		CloseMarket = 0x10,
 		HousePayRent = 0x14,
 		MasterLevelWindow = 0x19,
 		KeepClaim = 0x1A,

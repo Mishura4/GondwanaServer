@@ -42,6 +42,8 @@ namespace DOL.GS
         protected readonly object m_vaultSync = new object();
         protected long m_totalMoney;
 
+		public bool houseRequired = true;
+		
 		public object LockObject()
 		{
 			return m_vaultSync;
@@ -131,7 +133,7 @@ namespace DOL.GS
 
             if (!player.IsWithinRadius(this, 500))
             {
-                ((GamePlayer)source).Out.SendMessage("You are to far away to give anything to " + this.Name + ".", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                ((GamePlayer)source).Out.SendMessage("You are too far away to give anything to " + this.Name + ".", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return false;
             }
 
@@ -154,7 +156,10 @@ namespace DOL.GS
 
 		public virtual string GetOwner(GamePlayer player)
 		{
-			return CurrentHouse.OwnerID;
+			if(houseRequired)
+				return CurrentHouse.OwnerID;
+			else
+				return OwnerID;
 		}
 
 		public override House CurrentHouse
@@ -181,11 +186,7 @@ namespace DOL.GS
         /// </summary>
 		public virtual IList<InventoryItem> DBItems(GamePlayer player = null)
         {
-            House house = HouseMgr.GetHouse(CurrentRegionID, HouseNumber);
-			if (house == null)
-				return null;
-
-			return MarketCache.Items.Where(item => item.OwnerID == house.OwnerID).ToList();
+			return MarketCache.Items.Where(item => item.OwnerID == OwnerID).ToList();
         }
 
         /// <summary>
@@ -205,8 +206,11 @@ namespace DOL.GS
                 lock (m_moneyLock)
                 {
                     m_totalMoney = value;
-
-                    var merchant = DOLDB<HouseConsignmentMerchant>.SelectObject(DB.Column(nameof(HouseConsignmentMerchant.HouseNumber)).IsEqualTo(HouseNumber));
+					HouseConsignmentMerchant merchant;
+					if(houseRequired)
+                    	merchant = DOLDB<HouseConsignmentMerchant>.SelectObject(DB.Column(nameof(HouseConsignmentMerchant.HouseNumber)).IsEqualTo(HouseNumber));
+                    else
+						merchant = DOLDB<HouseConsignmentMerchant>.SelectObject(DB.Column(nameof(HouseConsignmentMerchant.OwnerID)).IsEqualTo(OwnerID));
                     merchant.Money = m_totalMoney;
                     GameServer.Database.SaveObject(merchant);
                 }
@@ -220,6 +224,9 @@ namespace DOL.GS
         /// <returns></returns>
 		public virtual bool HasPermissionToMove(GamePlayer player)
         {
+			if(!houseRequired && OwnerID == player.ObjectId)
+				return true;
+
             House house = HouseMgr.GetHouse(CurrentRegionID, HouseNumber);
             if (house == null)
                 return false;
@@ -258,7 +265,7 @@ namespace DOL.GS
                 return false;
 
             House house = HouseMgr.GetHouse(HouseNumber);
-            if (house == null)
+            if (house == null && houseRequired)
                 return false;
 
 			if (this.CanHandleRequest(player, fromClientSlot, toClientSlot) == false)
@@ -387,12 +394,12 @@ namespace DOL.GS
 				return false;
 			}
 			House house = HouseMgr.GetHouse(conMerchant.HouseNumber);
-			if (house == null)
+			if (houseRequired && house == null)
 			{
 				return false;
 			}
 
-			if (house.HasOwnerPermissions(player) == false)
+			if ((house != null && house.HasOwnerPermissions(player) == false) || (!houseRequired && OwnerID != player.ObjectId) )
 			{
 				return false;
 			}
@@ -714,11 +721,10 @@ namespace DOL.GS
 
 			AddObserver(player);
 
-            House house = HouseMgr.GetHouse(CurrentRegionID, HouseNumber);
-            if (house == null)
+            House house = HouseMgr.GetHouse(CurrentRegionID, HouseNumber); 
+            if (houseRequired && house == null)
                 return false;
-
-            if (house.CanUseConsignmentMerchant(player, ConsignmentPermissions.Any))
+            if ((!houseRequired && OwnerID == player.ObjectId) || (house != null && house.CanUseConsignmentMerchant(player, ConsignmentPermissions.Any)))
             {
 				player.Out.SendInventoryItemsUpdate(GetClientInventory(player), eInventoryWindowType.ConsignmentOwner);
 
@@ -737,9 +743,16 @@ namespace DOL.GS
 
             return true;
         }
-
         public override bool AddToWorld()
         {
+			if (!houseRequired)
+			{
+				base.AddToWorld();
+				SetEmblem();
+				CheckInventory();
+				return true;
+			}
+			Console.WriteLine("House Required");
 			House house = HouseMgr.GetHouse(HouseNumber);
 
 			if (house == null)

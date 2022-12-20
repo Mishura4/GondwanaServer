@@ -46,11 +46,11 @@ namespace DOL.GS.PacketHandler.Client.v168
 
 			// current house is null, return
             House house = HouseMgr.GetHouse(conMerchant.HouseNumber);
-            if (house == null)
+            if (house == null && conMerchant.houseRequired)
                 return;
 
 			// make sure player has permissions to withdraw from the consignment merchant
-            if (!house.CanUseConsignmentMerchant(client.Player, ConsignmentPermissions.Withdraw))
+            if ((!conMerchant.houseRequired && conMerchant.OwnerID!=client.Player.ObjectId)||(house != null && !house.CanUseConsignmentMerchant(client.Player, ConsignmentPermissions.Withdraw)))
             {
                 client.Player.Out.SendMessage("You don't have permission to withdraw money from this merchant!", eChatType.CT_Important, eChatLoc.CL_ChatWindow);
                 return;

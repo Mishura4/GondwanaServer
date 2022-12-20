@@ -2639,6 +2639,11 @@ namespace DOL.GS.ServerProperties
 		[ServerProperty("account", "backup_deleted_characters", "Should we backup deleted characters and not delete associated content?", true)]
 		public static bool BACKUP_DELETED_CHARACTERS;
 
+		/// <summary>
+		/// Set the tax percentage of trading
+		/// </summary>
+		[ServerProperty("trading", "trading_tax", "Set the tax percentage of trading", 10)]
+		public static int TRADING_TAX;
 
 		#endregion
 

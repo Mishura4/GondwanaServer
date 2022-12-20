@@ -707,6 +707,15 @@ namespace DOL.GS
 			get { return DBCharacter != null ? DBCharacter.DeathCount : (byte)0; }
 			set { if (DBCharacter != null) DBCharacter.DeathCount = value; }
 		}
+		
+		/// <summary>
+		/// Temporary Consignment Merchant for trading ability
+		/// </summary>
+		public TemporaryConsignmentMerchant TemporaryConsignmentMerchant
+		{
+			get; set;
+		}
+
 
 		#endregion
 
@@ -3961,6 +3970,21 @@ namespace DOL.GS
 		/// Second item is for "Parent" Skill if applicable
 		/// </summary>
 		protected ReaderWriterList<Tuple<Skill, Skill>> m_usableSkills = new ReaderWriterList<Tuple<Skill, Skill>>();
+
+		
+		/// <summary>
+		/// Add ability to a list of usable skills
+		/// </summary>
+		public virtual void AddUsableSkill(Ability ab)
+		{
+			if (ab == null)
+				return;
+			
+			m_usableSkills.Add(new Tuple<Skill, Skill>(ab, ab));
+			UpdateAbilities();
+			return;
+		}
+
 		
 		/// <summary>
 		/// List Cast cache, maintained for network order on "spell use" request...
@@ -4093,7 +4117,15 @@ namespace DOL.GS
 				// Abilities order should be saved to db and loaded each time								
 				foreach (Specialization spec in specs)
 				{
-					foreach (Ability abv in spec.GetAbilitiesForLiving(this))
+					List<Ability> abilities = spec.GetAbilitiesForLiving(this);
+					foreach (var ab in innerList)
+					{
+						if (ab.Item1 is Ability && !abilities.Contains(ab.Item1))
+						{
+							abilities.Add((Ability)ab.Item1);
+						}
+					}
+					foreach (Ability abv in abilities)
 					{
 						// We need the Instantiated Ability Object for Displaying Correctly According to Player "Activation" Method (if Available)
 						Ability ab = GetAbility(abv.KeyName);
@@ -4102,7 +4134,6 @@ namespace DOL.GS
 							ab = abv;
 						
 						int index = innerList.FindIndex(k => (k.Item1 is Ability) && ((Ability)k.Item1).KeyName == ab.KeyName);
-						
 						if (index < 0)
 						{
 							// add
@@ -6508,7 +6539,6 @@ namespace DOL.GS
 				holdStart = CurrentRegion.Time;
 				TempProperties.setProperty(RANGE_ATTACK_HOLD_START, holdStart);
 			}
-			//DOLConsole.WriteLine("Holding.... ("+holdStart+") "+(Environment.TickCount - holdStart));
 			if ((CurrentRegion.Time - holdStart) > 15000 && AttackWeapon.Object_Type != (int)eObjectType.Crossbow)
 			{
 				Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Attack.TooTired"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
@@ -10564,6 +10594,8 @@ namespace DOL.GS
 			{
 				log.DebugFormat("({0}) player.Delete()", Name);
 			}
+			if(TemporaryConsignmentMerchant != null)
+				TemporaryConsignmentMerchant.Delete();
 			base.Delete();
 		}
 
@@ -12604,6 +12636,14 @@ namespace DOL.GS
 				floorObject.CurrentHouse.EmptyHookpoint(this, floorObject);
 				return true;
 			}
+			else if (floorObject is GameTradingTable)
+			{
+				GameTradingTable tradingObject = floorObject as GameTradingTable;
+				if(ObjectId == tradingObject.consignmentMerchant.OwnerID)
+					Out.SendDialogBox(eDialogCode.CloseMarket, 0, 0, 0, 0, eDialogType.YesNo, true,
+						LanguageMgr.GetTranslation(Client, "Commands.Players.Market.Confirm.Close"));
+				return true;
+			}
 			else
 			{
 				Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.PickupObject.CantGetThat"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
@@ -12748,7 +12788,6 @@ namespace DOL.GS
 				DBCharacter.DisabledAbilities = disabledAbilities.ToString();
 			}
 		}
-
 		/// <summary>
 		/// Loads the Skills from the Character
 		/// Called after the default skills / level have been set!
@@ -13003,7 +13042,17 @@ namespace DOL.GS
 
 			return allpoints;
 		}
-
+		/// <summary>
+		/// Update abilities 
+		/// </summary>
+		public virtual void UpdateAbilities()
+		{
+			foreach (var ab in m_usableSkills)
+			{
+				if (ab.Item1 is Ability && !HasAbility(ab.Item1.Name))
+					AddAbility(SkillBase.GetAbility(ab.Item1.Name), true);
+			}
+		}
 		/// <summary>
 		/// Loads this player from a character table slot
 		/// </summary>
@@ -13136,6 +13185,7 @@ namespace DOL.GS
 			//Need to load the skills at the end, so the stored values modify the
 			//existing skill levels for this player
 			LoadSkillsFromCharacter();
+			UpdateAbilities();
 			LoadCraftingSkills();
 
 			VerifySpecPoints();
@@ -14277,7 +14327,7 @@ namespace DOL.GS
 				return PlayerTitleMgr.ClearTitle;
 			}
 		}
-
+		
 		/// <summary>
 		/// This function saves all player crafting skill in the db
 		/// </summary>
