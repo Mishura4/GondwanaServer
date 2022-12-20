@@ -1,0 +1,4 @@
+﻿Commands.Players.Housepoint.NotInHouse:		Vous devez être dans une maison pour utiliser cette commande !
+Commands.Players.Housepoint.NoPermission:	Vous n'avez pas les permissions pour faire cela !
+Commands.Players.Housepoint.Description:	Bascule l'affichage des points d'habitation.
+Commands.Players.Housepoint.Usage:			Usage: /housepoints toggle

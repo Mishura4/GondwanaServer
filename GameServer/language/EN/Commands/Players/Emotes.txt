@@ -1,0 +1,4 @@
+﻿Commands.Players.Emotes.Dead:		You can't do that, you're dead!
+Commands.Players.Emotes.Busy:		You can't do that, you're busy!
+Commands.Players.Emotes.Muted:		You have been muted and cannot emote!
+Commands.Players.Emotes.Target:		You don't see your target around here.

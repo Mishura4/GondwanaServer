@@ -1,14 +1,15 @@
 using DOL.GS;
 using DOL.GS.Housing;
 using DOL.GS.PacketHandler;
+using DOL.Language;
 
 namespace DOL.GS.Commands
 {
 	[CmdAttribute(
 	  "&houseface",
 	  ePrivLevel.Player,
-	  "Points to the specified guildhouse of the guild noted, or the lot number noted in the command. /houseface alone will point to one's personal home.")]
-	public class HouseFaceCommandHandler : AbstractCommandHandler, ICommandHandler
+        "Commands.Players.Housepoint.Description")]
+    public class HouseFaceCommandHandler : AbstractCommandHandler, ICommandHandler
 	{
 		public void OnCommand(GameClient client, string[] args)
 		{
@@ -29,7 +30,7 @@ namespace DOL.GS.Commands
 
 			if (housenumber == 0)
 			{
-				DisplayMessage(client, "No house found.");
+				DisplayMessage(client, LanguageMgr.GetTranslation(client, "Commands.Players.Houseface.NotFound"));
 				return;
 			}
 
@@ -38,7 +39,7 @@ namespace DOL.GS.Commands
 			ushort direction = client.Player.GetHeading(house.Position);
 			client.Player.Heading = direction;
 			client.Out.SendPlayerJump(true);
-			DisplayMessage(client, "You face house " + housenumber);
+			DisplayMessage(client, LanguageMgr.GetTranslation(client, "Commands.Players.Houseface.Faced", housenumber));
 		}
 	}
 }

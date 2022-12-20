@@ -1,0 +1,7 @@
+﻿Commands.Players.Knock.InHouse:			You can't knock while your in a house!
+Commands.Players.Knock.Wait:				You must wait {0} more seconds before knocking again!
+Commands.Players.Knock.IsKnocking:		{0} is at your door!
+Commands.Players.Knock.YouKnock:			You knock on the door.
+Commands.Players.Knock.GoToDoor:			You must go to the house you wish to knock on!
+Commands.Players.Knock.Description:		Knock on a house
+Commands.Players.Knock.Usage:			Usage: /knock

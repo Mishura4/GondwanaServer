@@ -1,5 +1,5 @@
 # KING THRONE NPC
-CLWeaponNPC.ReceiveItem.RespecCL:				Thank you, I received an opportunity to re-specialize champion skills. To use it: '/respec cl'.
-KingNPC.WhisperReceive.IsNowChampion:			You are now a Champion of the Realm!
+CLWeaponNPC.ReceiveItem.RespecCL:				Thanks, I added a single champion skill respec to use /respec cl.
+KingNPC.WhisperReceive.IsNowChampion:			You have just embraced on the life of the champions!
 KingNPC.WhisperReceive.AlreadyChampion:			You are already a Champion of the Realm!
-KingNPC.WhisperReceive.AskForChampion:			Would you like to be part of [Champions] of the realm?
+KingNPC.WhisperReceive.AskForChampion:			Would you like to embrace in the life of [Champions]?
