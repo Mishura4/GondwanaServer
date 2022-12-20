@@ -31,8 +31,8 @@ namespace DOL.GS.Commands
 	[CmdAttribute(
 		"&market",
 		ePrivLevel.Player,
-	    "Commands.Player.Market.Description",
-	    "Commands.Player.Market.Usage")]
+	    "Commands.Players.Market.Description",
+	    "Commands.Players.Market.Usage")]
 	public class MarketCommandHandler : AbstractCommandHandler, ICommandHandler
 	{
 		public void OnCommand(GameClient client, string[] args)

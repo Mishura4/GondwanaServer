@@ -1,0 +1,10 @@
+Commands.Players.Market.Description:	Générez un marché temporaire.
+Commands.Players.Market.Usage:		Usage : '/market <commande>'
+Commands.Players.Market.Usage.Open:		Usage : '/market open' # Déploie le marché
+Commands.Players.Market.Usage.Close:		Usage : '/market close' # Ferme le marché
+Commands.Players.Market.Usage.Name:		Usage : '/market name' # Renomme le marché
+Commands.Players.Market.No.Ability:		Vous n'avez pas la capacité "Trading" requise pour effectuer cette commande
+Commands.Players.Market.No.SafeArea:		Vous devez être dans une zone sécurisée ou dans une ville pour pouvoir commercer
+Commands.Players.Market.Confirm.Open:		Vous déployez votre marché
+Commands.Players.Market.Confirm.Close:		Vous fermez votre marché
+Commands.Players.Market.Closed:		        Vous êtes trop loin! Votre marché a été fermé.
