@@ -76,7 +76,7 @@ namespace DOL.GS.Commands
 
 							if(!isInsafeArea)
 							{
-								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Market.No.SafeArea"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+								client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Market.No.SafeArea"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								break;
 							}
 

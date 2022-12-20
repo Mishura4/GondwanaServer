@@ -45,13 +45,12 @@ namespace DOL.GS
 
             if (item.Id_nb.Equals(CHIEF_ITEM_ID) && player.Level >= 20)
             {
-                //player.AddAbility(SkillBase.GetAbility(DOL.GS.Abilities.Trading, 1));
                 player.AddUsableSkill(SkillBase.GetAbility(DOL.GS.Abilities.Trading, 1));
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ChiefMerchant.Done"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 player.Inventory.RemoveItem(item);
                 player.Out.SendNPCsQuestEffect(this, this.GetQuestIndicator(player));
                 player.SaveIntoDatabase();
-                player.Out.SendUpdatePlayer();
+                player.Out.SendUpdatePlayerSkills();
                 return true;
             }
 

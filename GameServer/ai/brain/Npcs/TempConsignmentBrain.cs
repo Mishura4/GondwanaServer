@@ -22,7 +22,7 @@ namespace DOL.AI.Brain
             if (Owner == null || Owner.CurrentRegion != Body.CurrentRegion || Owner.IsWithinRadius(Body, 1000) == false)
             {
                 Body.Delete();
-                Owner.Out.SendMessage(LanguageMgr.GetTranslation(Owner.Client, "Commands.Players.Market.Closed"), eChatType.CT_ScreenCenter, eChatLoc.CL_SystemWindow);
+                Owner.Out.SendMessage(LanguageMgr.GetTranslation(Owner.Client, "Commands.Players.Market.Closed"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
             }
             base.Think();
