@@ -32,7 +32,10 @@ namespace DOL.GS.Commands
 		"&market",
 		ePrivLevel.Player,
 	    "Commands.Players.Market.Description",
-	    "Commands.Players.Market.Usage")]
+	    "Commands.Players.Market.Usage",
+	    "Commands.Players.Market.Usage.Open",
+	    "Commands.Players.Market.Usage.Close",
+	    "Commands.Players.Market.Usage.Name")]
 	public class MarketCommandHandler : AbstractCommandHandler, ICommandHandler
 	{
 		public void OnCommand(GameClient client, string[] args)
