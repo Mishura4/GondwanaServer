@@ -270,7 +270,7 @@ namespace DOL.Database
 		/// <summary>
 		/// The step data serialized as a json object where the key is the goal id
 		/// Each item of the array must have a type property which load the correct code for this step
-		/// Format: [{"id":1,"type":"DOL.GS.Quests.CollectGoal","data":{"collectItemTemplate":"quest1","to":["Guard",1]}},...]
+		/// Format: [{"Id":1,"Type":"DOL.GS.Quests.KillGoal","Data":{"Describtion":"None","TargetName":"Quest82mob"}},...]
 		/// </summary>
 		[DataElement(AllowDbNull = false)]
 		public string GoalsJson

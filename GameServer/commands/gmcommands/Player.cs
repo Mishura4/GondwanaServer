@@ -69,7 +69,8 @@ namespace DOL.GS.Commands
         "/player class <list|classID> - view a list of classes, or change the targets class.",
         "/player areas - list all the areas the player is currently inside of ",
         "/player isRenaissance <true|false> - set player isRenaissance",
-        "/player quest [remove <quest name>] - Manage the player's quests"
+        "/player quest [remove <quest name>] - Manage the player's quests",
+        "/player reputation <newReputation> - Set player's reputation"
 		)]
 	public class PlayerCommandHandler : AbstractCommandHandler, ICommandHandler
 	{
@@ -2267,6 +2268,54 @@ namespace DOL.GS.Commands
                         client.Player.Out.SendCustomTextWindow($"[{targetPlayer.Name}'s quests]", questList);
                         return;
                     }
+                #endregion
+                
+                #region reputation
+
+                case "reputation":
+                    {
+                        var player = client.Player.TargetObject as GamePlayer;
+
+                        try
+                        {
+                            if (args.Length != 3)
+                            {
+                                DisplaySyntax(client);
+                                return;
+                            }
+                            if (player == null)
+                                player = client.Player;
+
+                            int amount = int.Parse(args[2]);
+
+                            if (amount > 0){
+                                player.Reputation = 0;
+                                player.Out.SendMessage(
+                                    client.Player.Name + "(PrivLevel: " + client.Account.PrivLevel + ") has set your reputation to 0" ,
+                                    eChatType.CT_Important, eChatLoc.CL_SystemWindow);}
+                            else 
+                            {
+                                player.Reputation = amount;
+                                player.Out.SendMessage(
+                                    client.Player.Name + "(PrivLevel: " + client.Account.PrivLevel + ") has set your reputation to " +  amount ,
+                                    eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                        }
+                            InventoryLogging.LogInventoryAction(client.Player, player, eInventoryActionType.Other, amount);
+                            client.Out.SendMessage("You set reputation of " + player.Name + " successfully!", eChatType.CT_Important,
+                                                    eChatLoc.CL_SystemWindow);
+
+                            player.Out.SendUpdatePlayer();
+                            player.SaveIntoDatabase();
+                        }
+
+                        catch (Exception)
+                        {
+                            DisplaySyntax(client);
+                            return;
+                        }
+                    }
+                    break;
+
                 #endregion
             }
 		}
