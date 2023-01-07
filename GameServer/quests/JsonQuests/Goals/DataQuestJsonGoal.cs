@@ -13,6 +13,7 @@ namespace DOL.GS.Quests
 		public DataQuestJson Quest => DataQuestJsonMgr.GetQuest(QuestId);
 		public readonly int GoalId;
 
+		public virtual GameNPC Target { get; set; }
 		public string Description { get; set; }
 		public abstract eQuestGoalType Type { get; }
 		public abstract int ProgressTotal { get; }
@@ -21,6 +22,7 @@ namespace DOL.GS.Quests
 		public virtual ItemTemplate QuestItem => null;
 		public virtual bool Visible => true;
 		public ItemTemplate GiveItemTemplate { get; set; }
+		public virtual bool hasInteractIcon { get; set; } = false;
 
 		public string MessageStarted { get; set; }
 		public string MessageAborted { get; set; }
@@ -45,6 +47,8 @@ namespace DOL.GS.Quests
 			if (db.StartGoalsDone != null)
 				foreach (var id in db.StartGoalsDone)
 					StartGoalsDone.Add((int)id);
+			else if(GoalId > 1)
+					StartGoalsDone.Add((int)goalId-1);
 			if (db.EndWhenGoalsDone != null)
 				foreach (var id in db.EndWhenGoalsDone)
 					EndWhenGoalsDone.Add((int)id);
@@ -91,7 +95,6 @@ namespace DOL.GS.Quests
 				return ForceStartGoal(questData);
 			return null;
 		}
-
 		public virtual PlayerGoalState ForceStartGoal(PlayerQuest questData)
 		{
 			var goalData = new PlayerGoalState
@@ -101,6 +104,7 @@ namespace DOL.GS.Quests
 			};
 			questData.GoalStates.Add(goalData);
 			var player = questData.Owner;
+			SetInteractIndicators(questData);
 			if (Visible)
 			{
 				player.Out.SendQuestUpdate(questData);
@@ -109,6 +113,24 @@ namespace DOL.GS.Quests
 			if (!string.IsNullOrWhiteSpace(MessageStarted))
 				ChatUtil.SendImportant(player, $"[Quest {Quest.Name}] " + BehaviourUtils.GetPersonalizedMessage(MessageStarted, player));
 			return goalData;
+		}
+		/// <summary>
+		/// Set NPC Indicators to interact for available goals
+		/// </summary>
+		public void SetInteractIndicators(PlayerQuest questData)
+		{
+			List<GameNPC> targetSetList = new List<GameNPC>();
+			foreach (var goal in Quest.Goals.Values.Where(g => g.hasInteractIcon))
+			{
+				if (targetSetList.Contains(goal.Target))
+					continue;
+				questData.Owner.Out.SendNPCsQuestEffect(goal.Target, eQuestIndicator.None);
+				if (goal.IsActive(questData))
+				{
+            		questData.Owner.Out.SendNPCsQuestEffect(goal.Target, eQuestIndicator.Pending);
+					targetSetList.Add(goal.Target);
+				}
+			}
 		}
 
 		public virtual void AdvanceGoal(PlayerQuest questData, PlayerGoalState goalData)
@@ -151,6 +173,7 @@ namespace DOL.GS.Quests
 		public void EndGoal(PlayerQuest questData, PlayerGoalState goalData)
 		{
 			EndGoal(questData, goalData, null);
+			SetInteractIndicators(questData);
 			questData.SaveIntoDatabase();
 			questData.Owner.Out.SendQuestUpdate(questData);
 		}

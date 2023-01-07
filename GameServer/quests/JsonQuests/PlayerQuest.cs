@@ -108,9 +108,14 @@ namespace DOL.GS.Quests
 			return false;
 		}
 
+		/// <summary>
+		/// Check if last in GoalStates isActive and EndGoal
+		/// </summary>
 		public bool CanFinish()
 		{
-			// TODO
+			foreach (var goal in Quest.Goals.Values.Where(g => g is EndGoal))
+				if (GoalStates.Find(gs => gs.GoalId == goal.GoalId)?.IsActive ?? false)
+					return true;
 			return false;
 		}
 
@@ -136,6 +141,10 @@ namespace DOL.GS.Quests
 			GameServer.Database.DeleteObject(DbQuest);
 
 			Owner.Out.SendQuestListUpdate();
+            foreach (GameNPC mob in WorldMgr.GetRegion(Owner.CurrentRegionID)?.Objects?.Where(o => o != null && o is GameNPC))
+            {
+                Owner.Out.SendNPCsQuestEffect(mob, mob.GetQuestIndicator(Owner));
+            }
 			Owner.Out.SendMessage(LanguageMgr.GetTranslation(Owner.Client, "AbstractQuest.AbortQuest"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 		}
 

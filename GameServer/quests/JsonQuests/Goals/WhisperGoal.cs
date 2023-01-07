@@ -9,12 +9,15 @@ namespace DOL.GS.Quests
 	public class WhisperGoal : DataQuestJsonGoal
 	{
 		private readonly GameNPC m_target;
+		public override GameNPC Target { get => m_target;}
 		private readonly string m_text;
 		private readonly string m_whisperText;
 
 		public override eQuestGoalType Type => eQuestGoalType.Unknown;
 		public override int ProgressTotal => 1;
 		public override bool Visible => false;
+		public override bool hasInteractIcon { get; set; } = true;
+		public override QuestZonePoint PointA => new(m_target);
 
 		public WhisperGoal(DataQuestJson quest, int goalId, dynamic db) : base(quest, goalId, (object)db)
 		{

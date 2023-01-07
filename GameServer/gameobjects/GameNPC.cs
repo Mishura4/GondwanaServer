@@ -2687,7 +2687,7 @@ namespace DOL.GS
 			// Finishing one ?
 			if (CanFinishOneQuest(player))
 				return eQuestIndicator.Finish;
-
+			
 			return eQuestIndicator.None;
 		}
 

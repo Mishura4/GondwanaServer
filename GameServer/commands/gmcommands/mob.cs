@@ -1698,6 +1698,7 @@ namespace DOL.GS.Commands
 		{
 			try
 			{
+				DataQuestJsonMgr.ReloadQuests();
 				foreach (GamePlayer player in targetMob.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
 				{
 					player.Out.SendNPCsQuestEffect(targetMob, targetMob.GetQuestIndicator(player));
