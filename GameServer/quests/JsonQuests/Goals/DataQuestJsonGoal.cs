@@ -156,7 +156,7 @@ namespace DOL.GS.Quests
 			}
 		}
 
-		public void AbortGoal(PlayerQuest questData)
+		public virtual void AbortGoal(PlayerQuest questData)
 		{
 			var goalState = questData.GoalStates.Find(gs => gs.GoalId == GoalId);
 			if (goalState == null)

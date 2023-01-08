@@ -25,7 +25,7 @@ namespace DOL.GS.Quests
 				throw new Exception($"[DataQuestJson] Quest {quest.Id}: can't load the goal id {goalId}, the target npc (name: {db.TargetName}, reg: {db.TargetRegion}) is not found");
 			m_killCount = db.KillCount;
 
-			if( db.AreaRadius != null && db.AreaRegion != null && db.AreaCenter != null)
+			if( db.AreaRadius != null && db.AreaRadius != "" && db.AreaRegion != null &&db.AreaRegion != "" && db.AreaCenter != null)
 			{
 				hasArea = true;
 				m_area = new Area.Circle($"{quest.Name} EnterAreaGoal {goalId}", new Vector3((float)db.AreaCenter.X, (float)db.AreaCenter.Y, (float)db.AreaCenter.Z), (int)db.AreaRadius);

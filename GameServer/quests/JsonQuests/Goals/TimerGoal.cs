@@ -38,6 +38,19 @@ namespace DOL.GS.Quests
 			StartTimer(questData, state);
 			return state;
 		}
+		public override void AbortGoal(PlayerQuest questData)
+		{
+			var tempKey = $"QUEST_TIMER_{Quest.Id}-{GoalId}";
+			var timer = questData.Owner.TempProperties.getProperty<RegionTimer>(tempKey);
+			if (timer != null)
+			{
+				timer.Stop();
+				questData.Owner.TempProperties.removeProperty(tempKey);
+			}
+			if (m_seconds <= 600)
+				questData.Owner.Out.SendCloseTimerWindow();
+			base.AbortGoal(questData);
+		}
 
 		private void StartTimer(PlayerQuest questData, PlayerGoalState goalData)
 		{
@@ -49,6 +62,9 @@ namespace DOL.GS.Quests
 			var timer = new RegionTimer(questData.Owner, _timer =>
 				{
 					AdvanceGoal(questData, goalData);
+					if (m_seconds <= 600)
+						questData.Owner.Out.SendCloseTimerWindow();
+					questData.Owner.TempProperties.removeProperty(tempKey);
 					return 0;
 				});
 			timer.Start(m_seconds * 1000);
