@@ -22,6 +22,7 @@ namespace DOL.GS.Quests
 		public virtual ItemTemplate QuestItem => null;
 		public virtual bool Visible => true;
 		public ItemTemplate GiveItemTemplate { get; set; }
+		public ItemTemplate StartItemTemplate { get; set; }
 		public virtual bool hasInteractIcon { get; set; } = false;
 
 		public string MessageStarted { get; set; }
@@ -44,6 +45,10 @@ namespace DOL.GS.Quests
 			string item = db.GiveItem ?? "";
 			if (!string.IsNullOrWhiteSpace(item))
 				GiveItemTemplate = GameServer.Database.FindObjectByKey<ItemTemplate>(item);
+			if (db.StartGoalsDone != null)
+			item = db.StartItem ?? "";
+			if (!string.IsNullOrWhiteSpace(item))
+				StartItemTemplate = GameServer.Database.FindObjectByKey<ItemTemplate>(item);
 			if (db.StartGoalsDone != null)
 				foreach (var id in db.StartGoalsDone)
 					StartGoalsDone.Add((int)id);
@@ -104,6 +109,8 @@ namespace DOL.GS.Quests
 			};
 			questData.GoalStates.Add(goalData);
 			var player = questData.Owner;
+			if (StartItemTemplate != null)
+				GiveItem(player, StartItemTemplate);
 			SetInteractIndicators(questData);
 			if (Visible)
 			{
@@ -232,6 +239,7 @@ namespace DOL.GS.Quests
 			{
 				{ "Description", Description },
 				{ "GiveItem", GiveItemTemplate?.Id_nb },
+				{ "GiveItem", StartItemTemplate?.Id_nb },
 				{ "MessageStarted", MessageStarted },
 				{ "MessageAborted", MessageAborted },
 				{ "MessageDone", MessageDone },

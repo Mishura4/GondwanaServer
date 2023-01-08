@@ -44,7 +44,9 @@ namespace DOL.Events
 			m_questGiverID = questGiverID;
 			m_questID = questID;
 			m_countChosen = countChosen;
-			m_itemsChosen = itemsChosen;
+			m_itemsChosen = new int[countChosen];
+			for (int i = 0; i < countChosen; i++)
+				m_itemsChosen[i] = itemsChosen[i];
 		}
 
 		/// <summary>

@@ -593,8 +593,8 @@ namespace DOL.GS.PacketHandler
 					name = name.Substring(0, 256);
 
 				pak.WriteByte((byte) name.Length);
-				pak.WriteByte(0); // unknown
-				pak.WriteByte((byte) (q.Status == eQuestStatus.InProgress ? 0 : 1));
+				pak.WriteShort(0x00); // unknown
+				//pak.WriteByte((byte) (q.Status == eQuestStatus.InProgress ? 0 : 1));
 				pak.WriteByte((byte) (q.Status == eQuestStatus.Done ? 0 : q.VisibleGoals.Count));
 				pak.WriteByte(q.Quest.MinLevel);
 				pak.WriteStringBytes(name);
@@ -607,16 +607,17 @@ namespace DOL.GS.PacketHandler
 						var desc = $"{goal.Description} ({goal.Progress} / {goal.ProgressTotal})\r";
 						pak.WriteShortLowEndian((ushort) desc.Length);
 						pak.WriteStringBytes(desc);
-						pak.WriteShortLowEndian(goal.PointA.ZoneId);
-						pak.WriteShortLowEndian(goal.PointA.X);
-						pak.WriteShortLowEndian(goal.PointA.Y);
+						// pak.WriteShortLowEndian(goal.PointB.ZoneId);
+						// pak.WriteShortLowEndian(goal.PointB.X);
+						// pak.WriteShortLowEndian(goal.PointB.Y);;
+						pak.Fill(0, 6);
 						pak.WriteShortLowEndian(0x00); // unknown
 						pak.WriteShortLowEndian((ushort) goal.Type);
 						pak.WriteShortLowEndian(0x00); // unknown
-						pak.WriteShortLowEndian(goal.PointB.ZoneId);
-						pak.WriteShortLowEndian(goal.PointB.X);
-						pak.WriteShortLowEndian(goal.PointB.Y);
-						pak.WriteByte((byte) ((goal.Status & eQuestGoalStatus.FlagDone) != 0 ? 1 : 0));
+						pak.WriteShortLowEndian(goal.PointA.ZoneId);
+						pak.WriteShortLowEndian(goal.PointA.X);
+						pak.WriteShortLowEndian(goal.PointA.Y);
+						pak.WriteByte((byte) ((goal.Status == eQuestGoalStatus.FlagActive) ? 0x00 : 0x01));
 						if (goal.QuestItem == null)
 						{
 							pak.WriteByte(0x00);

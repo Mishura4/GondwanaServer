@@ -10,14 +10,16 @@ namespace DOL.GS.Quests
 	public class CollectGoal : DataQuestJsonGoal
 	{
 		private readonly GameNPC m_target;
+		public override GameNPC Target { get => m_target;}
 		private readonly string m_text;
 		private readonly ItemTemplate m_item;
 		private readonly int m_itemCount = 1;
 
 		public override eQuestGoalType Type => eQuestGoalType.Unknown;
-		public override int ProgressTotal => 1;
+		public override int ProgressTotal => m_itemCount;
 		public override QuestZonePoint PointA => new(m_target);
 		public override ItemTemplate QuestItem => m_item;
+		public override bool hasInteractIcon { get; set; } = true;
 
 		public CollectGoal(DataQuestJson quest, int goalId, dynamic db) : base(quest, goalId, (object)db)
 		{
@@ -59,11 +61,18 @@ namespace DOL.GS.Quests
 			if (quest == null || goal is not {IsActive: true})
 				return;
 
-			if (!player.Inventory.RemoveCountFromStack(interact.Item, m_itemCount))
+			var itemsCountToRemove = m_itemCount-goal.Progress;
+			if(interact.Item.Count < m_itemCount)
+			{
+				itemsCountToRemove = interact.Item.Count;
+			}
+			if (!player.Inventory.RemoveCountFromStack(interact.Item, itemsCountToRemove))
 			{
 				ChatUtil.SendImportant(player, "An error happened, retry in a few seconds");
 				return;
 			}
+
+			goal.Progress += itemsCountToRemove - 1;
 			ChatUtil.SendPopup(player, BehaviourUtils.GetPersonalizedMessage(m_text, player));
 			AdvanceGoal(quest, goal);
 		}

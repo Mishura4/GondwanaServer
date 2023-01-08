@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 
 namespace DOL.GS.Quests
 {
@@ -9,6 +10,9 @@ namespace DOL.GS.Quests
 	{
 		private readonly int m_killCount = 1;
 		private readonly GameNPC m_target;
+		private readonly Area.Circle m_area;
+		private readonly ushort m_areaRegion;
+		private readonly bool hasArea = false;
 
 		public override eQuestGoalType Type => eQuestGoalType.Kill;
 		public override int ProgressTotal => m_killCount;
@@ -20,6 +24,17 @@ namespace DOL.GS.Quests
 			if (m_target == null)
 				throw new Exception($"[DataQuestJson] Quest {quest.Id}: can't load the goal id {goalId}, the target npc (name: {db.TargetName}, reg: {db.TargetRegion}) is not found");
 			m_killCount = db.KillCount;
+
+			if( db.AreaRadius != null && db.AreaRegion != null && db.AreaCenter != null)
+			{
+				hasArea = true;
+				m_area = new Area.Circle($"{quest.Name} EnterAreaGoal {goalId}", new Vector3((float)db.AreaCenter.X, (float)db.AreaCenter.Y, (float)db.AreaCenter.Z), (int)db.AreaRadius);
+				m_area.DisplayMessage = !false;
+				m_areaRegion = db.AreaRegion;
+
+				var reg = WorldMgr.GetRegion(m_areaRegion);
+				reg.AddArea(m_area);
+			}
 		}
 
 		public override Dictionary<string, object> GetDatabaseJsonObject()
@@ -28,6 +43,9 @@ namespace DOL.GS.Quests
 			dict.Add("TargetName", m_target.Name);
 			dict.Add("TargetRegion", m_target.CurrentRegionID);
 			dict.Add("KillCount", m_killCount);
+			dict.Add("AreaCenter", m_area.Position);
+			dict.Add("AreaRadius", m_area.Radius);
+			dict.Add("AreaRegion", m_areaRegion);
 			return dict;
 		}
 
@@ -40,10 +58,16 @@ namespace DOL.GS.Quests
 			if (e == GameLivingEvent.EnemyKilled && args is EnemyKilledEventArgs killedArgs)
 			{
 				var killed = killedArgs.Target;
-				if (killed == null || m_target.Name != killed.Name || m_target.CurrentRegion != killed.CurrentRegion)
+				if (killed == null || m_target.Name != killed.Name || m_target.CurrentRegion != killed.CurrentRegion 
+					|| (hasArea && !m_area.IsContaining(killed.Position, false)))
 					return;
 				AdvanceGoal(quest, goal);
 			}
+		}
+		public override void Unload()
+		{
+			WorldMgr.GetRegion(m_areaRegion)?.RemoveArea(m_area);
+			base.Unload();
 		}
 	}
 }

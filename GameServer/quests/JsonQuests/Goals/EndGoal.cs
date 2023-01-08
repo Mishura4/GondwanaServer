@@ -12,7 +12,7 @@ namespace DOL.GS.Quests
 		public override eQuestGoalType Type => eQuestGoalType.Unknown;
 		public override int ProgressTotal => 1;
 
-		public GameNPC Target { get; }
+		public override GameNPC Target { get; set;}
 
 		public override bool CanInteractWith(PlayerQuest questData, PlayerGoalState state, GameObject target)
 			=> state?.IsActive == true && target.Name == Target.Name && target.CurrentRegion == Target.CurrentRegion;
@@ -48,7 +48,7 @@ namespace DOL.GS.Quests
 					return;
 				}
 
-				var items = quest.Quest.OptionalRewardItemTemplates.Where((item, idx) => rewardArgs.ItemsChosen.Contains(idx + 1)).ToList();
+				var items = quest.Quest.OptionalRewardItemTemplates.Where((item, idx) => rewardArgs.ItemsChosen.Contains(idx)).ToList();
 				quest.Quest.FinishQuest(quest, items);
 			}
 		}
