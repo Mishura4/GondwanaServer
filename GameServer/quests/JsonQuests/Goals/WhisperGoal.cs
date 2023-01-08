@@ -15,7 +15,6 @@ namespace DOL.GS.Quests
 
 		public override eQuestGoalType Type => eQuestGoalType.Unknown;
 		public override int ProgressTotal => 1;
-		public override bool Visible => false;
 		public override bool hasInteractIcon { get; set; } = true;
 		public override QuestZonePoint PointA => new(m_target);
 
