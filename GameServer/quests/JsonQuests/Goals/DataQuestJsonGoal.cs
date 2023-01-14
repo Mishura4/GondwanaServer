@@ -111,7 +111,6 @@ namespace DOL.GS.Quests
 			var player = questData.Owner;
 			if (StartItemTemplate != null)
 				GiveItem(player, StartItemTemplate);
-			SetInteractIndicators(questData);
 			if (Visible)
 			{
 				player.Out.SendQuestUpdate(questData);
@@ -120,24 +119,6 @@ namespace DOL.GS.Quests
 			if (!string.IsNullOrWhiteSpace(MessageStarted))
 				ChatUtil.SendImportant(player, $"[Quest {Quest.Name}] " + BehaviourUtils.GetPersonalizedMessage(MessageStarted, player));
 			return goalData;
-		}
-		/// <summary>
-		/// Set NPC Indicators to interact for available goals
-		/// </summary>
-		public void SetInteractIndicators(PlayerQuest questData)
-		{
-			List<GameNPC> targetSetList = new List<GameNPC>();
-			foreach (var goal in Quest.Goals.Values.Where(g => g.hasInteractIcon))
-			{
-				if (targetSetList.Contains(goal.Target))
-					continue;
-				questData.Owner.Out.SendNPCsQuestEffect(goal.Target, eQuestIndicator.None);
-				if (goal.IsActive(questData))
-				{
-            		questData.Owner.Out.SendNPCsQuestEffect(goal.Target, eQuestIndicator.Pending);
-					targetSetList.Add(goal.Target);
-				}
-			}
 		}
 
 		public virtual void AdvanceGoal(PlayerQuest questData, PlayerGoalState goalData)
@@ -180,7 +161,6 @@ namespace DOL.GS.Quests
 		public void EndGoal(PlayerQuest questData, PlayerGoalState goalData)
 		{
 			EndGoal(questData, goalData, null);
-			SetInteractIndicators(questData);
 			questData.SaveIntoDatabase();
 			questData.Owner.Out.SendQuestUpdate(questData);
 		}
@@ -239,7 +219,7 @@ namespace DOL.GS.Quests
 			{
 				{ "Description", Description },
 				{ "GiveItem", GiveItemTemplate?.Id_nb },
-				{ "GiveItem", StartItemTemplate?.Id_nb },
+				{ "StartItem", StartItemTemplate?.Id_nb },
 				{ "MessageStarted", MessageStarted },
 				{ "MessageAborted", MessageAborted },
 				{ "MessageDone", MessageDone },

@@ -16689,7 +16689,7 @@ namespace DOL.GS
 			else
 			{
 				Reputation += amount;
-				Out.SendMessage(string.Format("Vous gagnez {0} " + (amount > 1 ? "points" : "point") + " de r�putation. Vous avez d�sormais {1} points", amount, Reputation), eChatType.CT_Staff, eChatLoc.CL_SystemWindow);
+				Out.SendMessage(string.Format("Vous gagnez {0} " + (Math.Abs(amount) > 1 ? "points" : "point") + " de r�putation. Vous avez d�sormais {1} points", amount, Reputation), eChatType.CT_Staff, eChatLoc.CL_SystemWindow);
 			}
 		}	
 

@@ -336,8 +336,8 @@ namespace DOL.GS
 			{
 				canPersist = gameItem.CanPersist;
 			}
-
-			if (canPersist)
+			Console.WriteLine("canPersist = " + item.Count);
+			if (canPersist && item.Count > 0)
 			{
 				if (addObject)
 				{

@@ -41,7 +41,8 @@ namespace DOL.GS.Quests
 			var player = quest.Owner;
 			if (e == GameObjectEvent.InteractWith && args is InteractWithEventArgs interact && interact.Target.Name == m_target.Name && interact.Target.CurrentRegion == m_target.CurrentRegion)
 			{
-				ChatUtil.SendPopup(player, BehaviourUtils.GetPersonalizedMessage(m_text, player));
+				if (!string.IsNullOrWhiteSpace(m_text))
+					ChatUtil.SendPopup(player, BehaviourUtils.GetPersonalizedMessage(m_text, player));
 				AdvanceGoal(quest, goal);
 			}
 		}

@@ -31,6 +31,7 @@ namespace DOL.Database
 		private string m_description;
 		private string m_summary;
 		private string m_story;
+		private string m_acceptText;
 		private string m_conclusion;
 
 		private string m_npcName;
@@ -99,6 +100,12 @@ namespace DOL.Database
 		{
 			get { return m_story; }
 			set { m_story = value; Dirty = true; }
+		}
+		[DataElement(AllowDbNull = true)]
+		public string AcceptText
+		{
+			get { return m_acceptText; }
+			set { m_acceptText = value; Dirty = true; }
 		}
 		[DataElement(AllowDbNull = true)]
 		public string Conclusion

@@ -530,6 +530,40 @@ namespace DOL.GS
 
 			lock (m_items) // Mannen 10:56 PM 10/30/2006 - Fixing every lock(this)
 			{
+				if (item.IsStackable)
+				{
+					InventoryItem invItem;
+					//for each item in inventory check amount and add if possible
+					for (eInventorySlot i = eInventorySlot.FirstBackpack; i <= eInventorySlot.LastBackpack; i++)
+					{
+						if (m_items.TryGetValue(i, out invItem))
+						{
+							if (invItem.Id_nb == item.Id_nb)
+							{
+								if (invItem.Count < invItem.MaxCount)
+								{
+									int amount = invItem.MaxCount - invItem.Count;
+									if (amount > item.Count)
+									{
+										amount = item.Count;
+									}
+
+									invItem.Count += amount;
+									item.Count -= amount;
+									if (!m_changedSlots.Contains(i))
+										m_changedSlots.Add(i);
+									if (item.Count == 0)
+									{
+										m_changedSlots.Remove(0);
+										item.Dirty=false;
+										UpdateChangedSlots();
+										return true;
+									}
+								}
+							}
+						}
+					}
+            	}
 				slot = GetValidInventorySlot(slot);
 				if (slot == eInventorySlot.Invalid) return false;
 

@@ -2680,17 +2680,41 @@ namespace DOL.GS
 		/// <returns>True if the NPC should show quest indicator, false otherwise</returns>
 		public virtual eQuestIndicator GetQuestIndicator(GamePlayer player)
 		{
-			// Available one ?
+			// Available one?
 			if (CanShowOneQuest(player))
 				return eQuestIndicator.Available;
 
-			// Finishing one ?
+			// Finishing one?
 			if (CanFinishOneQuest(player))
 				return eQuestIndicator.Finish;
+
+			// Interact one?
+			if (CanInteractOneQuest(player))
+				return eQuestIndicator.Pending;
 			
 			return eQuestIndicator.None;
 		}
 
+		/// <summary>
+		/// Check if the npc can show a quest iteract goal indicator to a player
+		/// Checks both scripted and data quests
+		/// </summary>
+		/// <param name="player">The player to check</param>
+		/// <returns>true if yes, false if the npc can progress any quest by interaction</returns>
+		public bool CanInteractOneQuest(GamePlayer player)
+		{
+			lock (player.QuestList)
+			{
+				foreach (var quest in player.QuestList)
+				{
+					foreach (var goal in quest.Quest.Goals.Values.Where(g => g.hasInteractIcon))
+						if (goal.IsActive(quest))
+							return true;
+				}
+			}
+
+			return false;
+		}
 		/// <summary>
 		/// Check if the npc can show a quest indicator to a player
 		/// Checks both scripted and data quests

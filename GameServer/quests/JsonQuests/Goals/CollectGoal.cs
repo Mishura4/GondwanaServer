@@ -73,7 +73,8 @@ namespace DOL.GS.Quests
 			}
 
 			goal.Progress += itemsCountToRemove - 1;
-			ChatUtil.SendPopup(player, BehaviourUtils.GetPersonalizedMessage(m_text, player));
+			if (!string.IsNullOrWhiteSpace(m_text))
+				ChatUtil.SendPopup(player, BehaviourUtils.GetPersonalizedMessage(m_text, player));
 			AdvanceGoal(quest, goal);
 		}
 

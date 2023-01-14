@@ -26,20 +26,25 @@ namespace DOL.GS.Quests
 		public string Description;
 		public string Summary;
 		public string Story;
+		public string AcceptText;
 		public string Conclusion;
 		public GameNPC Npc;
 
 		public ushort MaxCount;
 		public byte MinLevel;
 		public byte MaxLevel;
+		public int Reputation;
+		public bool IsRenaissance;
 		public int[] QuestDependencyIDs = Array.Empty<int>();
 		public eCharacterClass[] AllowedClasses = Array.Empty<eCharacterClass>();
+		public eRace[] AllowedRaces = Array.Empty<eRace>();
 
 		public long RewardMoney;
 		public long RewardXP;
 		public int RewardCLXP;
 		public int RewardRP;
 		public int RewardBP;
+		public int RewardReputation;
 		public int NbChooseOptionalItems;
 		public List<ItemTemplate> OptionalRewardItemTemplates = new();
 		public List<ItemTemplate> FinalRewardItemTemplates = new();
@@ -76,6 +81,12 @@ namespace DOL.GS.Quests
 			if (MinLevel > player.Level || player.Level > MaxLevel)
 				return false;
 			if (AllowedClasses.Count(id => id > 0) > 0 && !AllowedClasses.Contains((eCharacterClass) player.CharacterClass.ID))
+				return false;
+			if (AllowedRaces.Count(id => id > 0) > 0 && !AllowedRaces.Contains((eRace) player.Race))
+				return false;
+			if (IsRenaissance && !player.IsRenaissance)
+				return false;
+			if (player.Reputation > Reputation)
 				return false;
 
 			lock (player.QuestList)
@@ -118,6 +129,12 @@ namespace DOL.GS.Quests
 			foreach (var item in chosenItems)
 				GiveItem(player, item);
 
+			if (RewardCLXP > 0 && player.Champion)
+				player.GainChampionExperience(RewardCLXP);
+
+			if (RewardReputation > 0)
+				player.RecoverReputation(Reputation);
+
 			data.FinishQuest();
 			player.Out.SendNPCsQuestEffect(Npc, Npc.GetQuestIndicator(player));
 		}
@@ -145,20 +162,25 @@ namespace DOL.GS.Quests
 			_db.Description = Description;
 			_db.Summary = Summary;
 			_db.Story = Story;
+			_db.AcceptText = AcceptText;
 			_db.Conclusion = Conclusion;
 			_db.MaxCount = MaxCount;
 			_db.MinLevel = MinLevel;
 			_db.MaxLevel = MaxLevel;
+			_db.Reputation = Reputation.ToString();
+			_db.IsRenaissance = IsRenaissance;
 			_db.RewardMoney = RewardMoney;
 			_db.RewardXP = RewardXP;
 			_db.RewardCLXP = RewardCLXP;
 			_db.RewardRP = RewardRP;
 			_db.RewardBP = RewardBP;
+			_db.RewardReputation = RewardReputation;
 			_db.NbChooseOptionalItems = NbChooseOptionalItems;
 			_db.OptionalRewardItemTemplates = string.Join("|", OptionalRewardItemTemplates.Select(i => i.Id_nb));
 			_db.FinalRewardItemTemplates = string.Join("|", FinalRewardItemTemplates.Select(i => i.Id_nb));
 			_db.QuestDependency = string.Join("|", QuestDependencyIDs);
 			_db.AllowedClasses = string.Join("|", AllowedClasses.Select(c => (int)c));
+			_db.AllowedRaces = string.Join("|", AllowedRaces.Select(c => (int)c));
 			_db.GoalsJson = JsonConvert.SerializeObject(Goals.Select(kv => new { Id = kv.Key, Type = kv.Value.GetType().FullName, Data = kv.Value.GetDatabaseJsonObject() }).ToArray());
 			if (_db.IsPersisted)
 				GameServer.Database.SaveObject(_db);
@@ -177,6 +199,7 @@ namespace DOL.GS.Quests
 			Description = db.Description;
 			Summary = db.Summary;
 			Story = db.Story;
+			AcceptText = db.AcceptText;
 			Conclusion = db.Conclusion;
 			Npc = WorldMgr.GetNPCsByNameFromRegion(db.NpcName, db.NpcRegion, eRealm.None).FirstOrDefault();
 			if (Npc == null)
@@ -185,14 +208,18 @@ namespace DOL.GS.Quests
 			MaxCount = db.MaxCount;
 			MinLevel = db.MinLevel;
 			MaxLevel = db.MaxLevel;
+			Reputation = int.Parse(db.Reputation == null || db.Reputation == "" ? "0" : db.Reputation);
+			IsRenaissance = db.IsRenaissance;
 			QuestDependencyIDs = (db.QuestDependency ?? "").Split('|').Where(id => !string.IsNullOrWhiteSpace(id)).Select(id => int.Parse(id)).ToArray();
 			AllowedClasses = (db.AllowedClasses ?? "").Split('|').Where(id => !string.IsNullOrWhiteSpace(id)).Select(id => (eCharacterClass)int.Parse(id)).ToArray();
+			AllowedRaces = (db.AllowedRaces ?? "").Split('|').Where(id => !string.IsNullOrWhiteSpace(id)).Select(id => (eRace)int.Parse(id)).ToArray();
 
 			RewardMoney = db.RewardMoney;
 			RewardXP = db.RewardXP;
 			RewardCLXP = db.RewardCLXP;
 			RewardRP = db.RewardRP;
 			RewardBP = db.RewardBP;
+			RewardReputation = db.RewardReputation;
 			NbChooseOptionalItems = db.NbChooseOptionalItems;
 
 			var optionalTemplates = (db.OptionalRewardItemTemplates ?? "").Split('|').Where(id => !string.IsNullOrWhiteSpace(id)).ToArray();

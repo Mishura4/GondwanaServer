@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using DOL.GS.PacketHandler;
 
 namespace DOL.GS.Quests;
 
@@ -118,10 +119,14 @@ public static class DataQuestJsonMgr
 		if (quest == null || arguments.Source != quest.Npc || !quest.CheckQuestQualification(player))
 			return;
 		var npc = quest.Npc;
-
+		//if player has no inventory space and  first quest goal has startitem
+		if (player.Inventory.FindFirstEmptySlot(eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack) == eInventorySlot.Invalid && quest.Goals.Count > 0 && quest.Goals[1].StartItemTemplate != null)
+		{
+			player.Out.SendMessage(string.Format("You don't have enough inventory space to accept this quest. Please make room for {0} and try again.",quest.Goals[1].StartItemTemplate.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+			return;
+		}
 		ChatUtil.SendScreenCenter(player, $"Quest \"{quest.Name}\" accepted!");
 		player.Out.SendSoundEffect(7, 0, 0, 0, 0, 0);
-
 		var dbQuest = new DBQuest
 		{
 			Character_ID = player.InternalID,
@@ -132,6 +137,14 @@ public static class DataQuestJsonMgr
 		var dq = new PlayerQuest(player, dbQuest);
 		if (player.AddQuest(dq))
 		{
+			if (!string.IsNullOrWhiteSpace(dq.Quest.AcceptText))
+			{
+				var formatMsg = dq.Quest.AcceptText.Replace(@"\n", "\n");
+
+				var finalMsg =  Util.SplitCSV(formatMsg,true);
+
+				player.Out.SendCustomTextWindow(npc.Name + " dit", finalMsg);
+			}
 			dq.SaveIntoDatabase();
 			player.Out.SendNPCsQuestEffect(npc, npc.GetQuestIndicator(player));
 			player.Out.SendQuestListUpdate();

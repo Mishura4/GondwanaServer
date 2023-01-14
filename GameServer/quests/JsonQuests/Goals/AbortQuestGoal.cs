@@ -37,7 +37,8 @@ namespace DOL.GS.Quests
 			new RegionTimer(questData.Owner, _timer =>
 			{
 				questData.AbortQuest();
-				ChatUtil.SendPopup(questData.Owner, BehaviourUtils.GetPersonalizedMessage(m_text, questData.Owner));
+				if (!string.IsNullOrWhiteSpace(m_text))
+					ChatUtil.SendPopup(questData.Owner, BehaviourUtils.GetPersonalizedMessage(m_text, questData.Owner));
 				return 0;
 			}).Start(1);
 			return state;

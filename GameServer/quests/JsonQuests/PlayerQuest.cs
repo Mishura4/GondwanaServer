@@ -145,7 +145,7 @@ namespace DOL.GS.Quests
             {
                 Owner.Out.SendNPCsQuestEffect(mob, mob.GetQuestIndicator(Owner));
             }
-			Owner.Out.SendMessage(LanguageMgr.GetTranslation(Owner.Client, "AbstractQuest.AbortQuest"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+			Owner.Out.SendMessage(LanguageMgr.GetTranslation(Owner.Client, "AbstractQuest.AbortQuest", Quest.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 		}
 
 		public class QuestRewards : IQuestRewards

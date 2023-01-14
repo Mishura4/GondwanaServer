@@ -44,7 +44,8 @@ namespace DOL.GS.Quests
 			var player = quest.Owner;
 			if (e == GameLivingEvent.Whisper && args is WhisperEventArgs interact && interact.Target.Name == m_target.Name && interact.Target.CurrentRegion == m_target.CurrentRegion && interact.Text == m_whisperText)
 			{
-				ChatUtil.SendPopup(player, BehaviourUtils.GetPersonalizedMessage(m_text, player));
+				if (!string.IsNullOrWhiteSpace(m_text))
+					ChatUtil.SendPopup(player, BehaviourUtils.GetPersonalizedMessage(m_text, player));
 				AdvanceGoal(quest, goal);
 			}
 		}
