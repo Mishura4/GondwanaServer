@@ -62,7 +62,7 @@ namespace DOL.GS.Quests
 				return;
 
 			var itemsCountToRemove = m_itemCount-goal.Progress;
-			if(interact.Item.Count < m_itemCount)
+			if(interact.Item.Count < itemsCountToRemove)
 			{
 				itemsCountToRemove = interact.Item.Count;
 			}

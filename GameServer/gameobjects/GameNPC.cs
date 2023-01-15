@@ -2707,7 +2707,7 @@ namespace DOL.GS
 			{
 				foreach (var quest in player.QuestList)
 				{
-					foreach (var goal in quest.Quest.Goals.Values.Where(g => g.hasInteractIcon))
+					foreach (var goal in quest.Quest.Goals.Values.Where(g => g.hasInteractIcon && g.Target == this))
 						if (goal.IsActive(quest))
 							return true;
 				}

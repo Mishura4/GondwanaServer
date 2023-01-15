@@ -204,6 +204,10 @@ namespace DOL.GS.Quests
 			goalData.State = eQuestGoalStatus.Completed;
 			if (!string.IsNullOrWhiteSpace(MessageCompleted))
 				ChatUtil.SendImportant(player, $"[Quest {Quest.Name}] " + BehaviourUtils.GetPersonalizedMessage(MessageCompleted, player));
+            foreach (GameNPC mob in WorldMgr.GetRegion(questData.Owner.CurrentRegionID)?.Objects?.Where(o => o != null && o is GameNPC))
+            {
+                questData.Owner.Out.SendNPCsQuestEffect(mob, mob.GetQuestIndicator(questData.Owner));
+            }
 		}
 
 		public virtual IQuestGoal ToQuestGoal(PlayerQuest questData, PlayerGoalState goalData)
