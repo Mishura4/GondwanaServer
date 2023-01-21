@@ -185,7 +185,7 @@ namespace DOL.MobGroups
                         if (groupDb != null)
                         {
                             var groupInteraction = groupDb.GroupMobInteract_FK_Id != null ?
-                                                    GameServer.Database.SelectObjects<GroupMobStatusDb>(DB.Column("GroupStatusId").IsEqualTo(groupDb.GroupMobInteract_FK_Id))?.FirstOrDefault() : null; 
+                                                    GameServer.Database.SelectObjects<GroupMobStatusDb>(DB.Column("GroupStatusId").IsEqualTo(groupDb.GroupMobInteract_FK_Id))?.FirstOrDefault() : null;
                             var originalStatus = groupDb.GroupMobOrigin_FK_Id != null ?
                                                     GameServer.Database.SelectObjects<GroupMobStatusDb>(DB.Column("GroupStatusId").IsEqualTo(groupDb.GroupMobOrigin_FK_Id))?.FirstOrDefault() : null;
                             this.Groups.Add(group.GroupId, new MobGroup(groupDb, groupInteraction, originalStatus));

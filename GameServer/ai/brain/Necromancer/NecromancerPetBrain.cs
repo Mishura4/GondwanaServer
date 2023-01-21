@@ -30,112 +30,112 @@ using DOL.Language;
 
 namespace DOL.AI.Brain
 {
-	/// <summary>
-	/// A brain for the necromancer pets.
-	/// </summary>
-	/// <author>Aredhel</author>
-	public class NecromancerPetBrain : ControlledNpcBrain
-	{
-		/// <summary>
-		/// Defines a logger for this class.
-		/// </summary>
-		private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+    /// <summary>
+    /// A brain for the necromancer pets.
+    /// </summary>
+    /// <author>Aredhel</author>
+    public class NecromancerPetBrain : ControlledNpcBrain
+    {
+        /// <summary>
+        /// Defines a logger for this class.
+        /// </summary>
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-		public NecromancerPetBrain(GameLiving owner) 
-			: base(owner)
-		{
-		}
-
-
-		public override int ThinkInterval
-		{
-			get { return 1000; }
-		}
+        public NecromancerPetBrain(GameLiving owner)
+            : base(owner)
+        {
+        }
 
 
-		public override int CastInterval
-		{
-			get { return 500; }
-			set { }
-		}
+        public override int ThinkInterval
+        {
+            get { return 1000; }
+        }
+
+
+        public override int CastInterval
+        {
+            get { return 500; }
+            set { }
+        }
 
 
         /// <summary>
         /// Brain main loop.
         /// </summary>
 		public override void Think()
-		{
+        {
             CheckTether();
 
-			// Necro pets need there own think as they may need to cast a spell in any state
-			if (IsActive)
-			{
-				GamePlayer playerowner = GetPlayerOwner();
+            // Necro pets need there own think as they may need to cast a spell in any state
+            if (IsActive)
+            {
+                GamePlayer playerowner = GetPlayerOwner();
 
-				if (playerowner != null && (GameTimer.GetTickCount() - playerowner.Client.GameObjectUpdateArray[new Tuple<ushort, ushort>(Body.CurrentRegionID, (ushort)Body.ObjectID)]) > ThinkInterval)
-				{
-					playerowner.Out.SendObjectUpdate(Body);
-				}
+                if (playerowner != null && (GameTimer.GetTickCount() - playerowner.Client.GameObjectUpdateArray[new Tuple<ushort, ushort>(Body.CurrentRegionID, (ushort)Body.ObjectID)]) > ThinkInterval)
+                {
+                    playerowner.Out.SendObjectUpdate(Body);
+                }
 
-				if (SpellsQueued)
-					// if spells are queued then handle them first
-					CheckSpellQueue();
-				else if (AggressionState == eAggressionState.Aggressive)
-				{
-					CheckPlayerAggro();
-					CheckNPCAggro();
-				}
+                if (SpellsQueued)
+                    // if spells are queued then handle them first
+                    CheckSpellQueue();
+                else if (AggressionState == eAggressionState.Aggressive)
+                {
+                    CheckPlayerAggro();
+                    CheckNPCAggro();
+                }
 
-				AttackMostWanted();
+                AttackMostWanted();
 
-				// Do not discover stealthed players
-				if (Body.TargetObject != null)
-				{
-					if (Body.TargetObject is GamePlayer)
-					{
-						if (Body.IsAttacking && (Body.TargetObject as GamePlayer).IsStealthed)
-						{
-							Body.StopAttack();
-							FollowOwner();
-						}
-					}
-				}
-			}
-		}
+                // Do not discover stealthed players
+                if (Body.TargetObject != null)
+                {
+                    if (Body.TargetObject is GamePlayer)
+                    {
+                        if (Body.IsAttacking && (Body.TargetObject as GamePlayer).IsStealthed)
+                        {
+                            Body.StopAttack();
+                            FollowOwner();
+                        }
+                    }
+                }
+            }
+        }
 
-		#region Events
+        #region Events
 
-		/// <summary>
-		/// Process events.
-		/// </summary>
-		/// <param name="e"></param>
-		/// <param name="sender"></param>
-		/// <param name="args"></param>
-		public override void Notify(DOL.Events.DOLEvent e, object sender, EventArgs args)
-		{
-			base.Notify(e, sender, args);
+        /// <summary>
+        /// Process events.
+        /// </summary>
+        /// <param name="e"></param>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        public override void Notify(DOL.Events.DOLEvent e, object sender, EventArgs args)
+        {
+            base.Notify(e, sender, args);
 
-			if (e == GameNPCEvent.PetSpell)
-			{
-				PetSpellEventArgs petSpell = (PetSpellEventArgs)args;
-				bool hadQueuedSpells = false;
+            if (e == GameNPCEvent.PetSpell)
+            {
+                PetSpellEventArgs petSpell = (PetSpellEventArgs)args;
+                bool hadQueuedSpells = false;
 
-				if (SpellsQueued)
-				{
-					MessageToOwner(LanguageMgr.GetTranslation((Owner as GamePlayer).Client.Account.Language, "AI.Brain.Necromancer.CastSpellAfterAction", Body.Name), eChatType.CT_System);
-					hadQueuedSpells = true;
-				}
+                if (SpellsQueued)
+                {
+                    MessageToOwner(LanguageMgr.GetTranslation((Owner as GamePlayer).Client.Account.Language, "AI.Brain.Necromancer.CastSpellAfterAction", Body.Name), eChatType.CT_System);
+                    hadQueuedSpells = true;
+                }
 
-				// Instant spells bypass the queue
-				if (petSpell.Spell.IsInstantCast)
-					CastSpell(petSpell.Spell, petSpell.SpellLine, petSpell.Target);
-				else // Necro pets can always try to cast in combat
-					AddToSpellQueue(petSpell.Spell, petSpell.SpellLine, petSpell.Target);
+                // Instant spells bypass the queue
+                if (petSpell.Spell.IsInstantCast)
+                    CastSpell(petSpell.Spell, petSpell.SpellLine, petSpell.Target);
+                else // Necro pets can always try to cast in combat
+                    AddToSpellQueue(petSpell.Spell, petSpell.SpellLine, petSpell.Target);
 
-				// Immediately cast if this was the first spell added
-				if (hadQueuedSpells == false && !Body.IsCasting)
-					CheckSpellQueue();
-			}
+                // Immediately cast if this was the first spell added
+                if (hadQueuedSpells == false && !Body.IsCasting)
+                    CheckSpellQueue();
+            }
             else if (e == GameLivingEvent.Dying)
             {
                 // At necropet Die, we check DamageRvRMemory for transfer it to owner if necessary.
@@ -148,49 +148,49 @@ namespace DOL.AI.Brain
             }
             else if (e == GameLivingEvent.CastFinished)
             {
-				// Instant cast spells bypass the queue
-				if (args is CastingEventArgs cArgs && !cArgs.SpellHandler.Spell.IsInstantCast)
-				{
-					// Remove the spell that has finished casting from the queue, if
-					// there are more, keep casting.
-					RemoveSpellFromQueue();
-					AttackMostWanted();
+                // Instant cast spells bypass the queue
+                if (args is CastingEventArgs cArgs && !cArgs.SpellHandler.Spell.IsInstantCast)
+                {
+                    // Remove the spell that has finished casting from the queue, if
+                    // there are more, keep casting.
+                    RemoveSpellFromQueue();
+                    AttackMostWanted();
 
-					if (SpellsQueued)
-					{
-						DebugMessageToOwner("+ Cast finished, more spells to cast");
-						CheckSpellQueue();
-					}
-					else
-						DebugMessageToOwner("- Cast finished, no more spells to cast");
-				}
+                    if (SpellsQueued)
+                    {
+                        DebugMessageToOwner("+ Cast finished, more spells to cast");
+                        CheckSpellQueue();
+                    }
+                    else
+                        DebugMessageToOwner("- Cast finished, no more spells to cast");
+                }
 
-				Owner.Notify(GamePlayerEvent.CastFinished, Owner, args);
-			}
-			else if (e == GameLivingEvent.CastFailed)
-			{
-				// Tell owner why cast has failed.
-				switch ((args as CastFailedEventArgs).Reason)
-				{
+                Owner.Notify(GamePlayerEvent.CastFinished, Owner, args);
+            }
+            else if (e == GameLivingEvent.CastFailed)
+            {
+                // Tell owner why cast has failed.
+                switch ((args as CastFailedEventArgs).Reason)
+                {
                     case CastFailedEventArgs.Reasons.TargetTooFarAway:
 
-                        MessageToOwner(LanguageMgr.GetTranslation((Owner as GamePlayer).Client.Account.Language, 
+                        MessageToOwner(LanguageMgr.GetTranslation((Owner as GamePlayer).Client.Account.Language,
                             "AI.Brain.Necromancer.ServantFarAwayToCast"), eChatType.CT_SpellResisted);
                         break;
 
                     case CastFailedEventArgs.Reasons.TargetNotInView:
 
-                        MessageToOwner(LanguageMgr.GetTranslation((Owner as GamePlayer).Client.Account.Language, 
+                        MessageToOwner(LanguageMgr.GetTranslation((Owner as GamePlayer).Client.Account.Language,
                             "AI.Brain.Necromancer.PetCantSeeTarget", Body.Name), eChatType.CT_SpellResisted);
                         break;
 
-					case CastFailedEventArgs.Reasons.NotEnoughPower:
+                    case CastFailedEventArgs.Reasons.NotEnoughPower:
 
-						RemoveSpellFromQueue();
-						MessageToOwner(LanguageMgr.GetTranslation((Owner as GamePlayer).Client.Account.Language,
-							"AI.Brain.Necromancer.NoPower", Body.Name), eChatType.CT_SpellResisted);
+                        RemoveSpellFromQueue();
+                        MessageToOwner(LanguageMgr.GetTranslation((Owner as GamePlayer).Client.Account.Language,
+                            "AI.Brain.Necromancer.NoPower", Body.Name), eChatType.CT_SpellResisted);
 
-						break;
+                        break;
                 }
             }
             else if (e == GameLivingEvent.CastSucceeded)
@@ -201,8 +201,8 @@ namespace DOL.AI.Brain
                 GameLiving target = spellArgs.Target;
                 SpellLine spellLine = spellArgs.SpellLine;
 
-				if (spellArgs != null && spellArgs.Spell != null)
-					DebugMessageToOwner(String.Format("Now casting '{0}'", spellArgs.Spell.Name));
+                if (spellArgs != null && spellArgs.Spell != null)
+                    DebugMessageToOwner(String.Format("Now casting '{0}'", spellArgs.Spell.Name));
 
 
                 // This message is for spells from the spell queue only, so suppress
@@ -236,8 +236,8 @@ namespace DOL.AI.Brain
             {
                 // Target has started attacking someone else.
 
-				if (Body.EffectList.GetOfType<TauntEffect>() != null)
-                    (Body as NecromancerPet).Taunt();            
+                if (Body.EffectList.GetOfType<TauntEffect>() != null)
+                    (Body as NecromancerPet).Taunt();
             }
             else if (e == GameNPCEvent.AttackFinished)
             {
@@ -265,202 +265,202 @@ namespace DOL.AI.Brain
                 MessageToOwner(LanguageMgr.GetTranslation((Owner as GamePlayer).Client.Account.Language,
                     "AI.Brain.Necromancer.HaveLostBondToPet"), eChatType.CT_System);
             }
-		}
+        }
 
-		/// <summary>
-		/// Set the tether timer if pet gets out of range or comes back into range.
-		/// </summary>
-		/// <param name="seconds"></param>
-		public void SetTetherTimer(int seconds)
-		{
-			NecromancerShadeEffect shadeEffect = Owner.EffectList.GetOfType<NecromancerShadeEffect>();
+        /// <summary>
+        /// Set the tether timer if pet gets out of range or comes back into range.
+        /// </summary>
+        /// <param name="seconds"></param>
+        public void SetTetherTimer(int seconds)
+        {
+            NecromancerShadeEffect shadeEffect = Owner.EffectList.GetOfType<NecromancerShadeEffect>();
 
-			if (shadeEffect != null)
-			{
-				lock (shadeEffect)
-					shadeEffect.SetTetherTimer(seconds);
-				ArrayList effectList = new ArrayList(1);
-				effectList.Add(shadeEffect);
-				int effectsCount = 1;
-				if (Owner is GamePlayer)
-				{
-					(Owner as GamePlayer).Out.SendUpdateIcons(effectList, ref effectsCount);
-				}
-			}
-		}
+            if (shadeEffect != null)
+            {
+                lock (shadeEffect)
+                    shadeEffect.SetTetherTimer(seconds);
+                ArrayList effectList = new ArrayList(1);
+                effectList.Add(shadeEffect);
+                int effectsCount = 1;
+                if (Owner is GamePlayer)
+                {
+                    (Owner as GamePlayer).Out.SendUpdateIcons(effectList, ref effectsCount);
+                }
+            }
+        }
 
 
 
-		#endregion
+        #endregion
 
-		#region Spell Queue
-		/// <summary>
+        #region Spell Queue
+        /// <summary>
         /// See if there are any spells queued up and if so, get the first one
         /// and cast it.
         /// </summary>
-		private void CheckSpellQueue()
-		{
-			SpellQueueEntry entry = GetSpellFromQueue();
-			if (entry != null)
-				if (!CastSpell(entry.Spell, entry.SpellLine, entry.Target))
-					// If the spell can't be cast, remove it from the queue
-					RemoveSpellFromQueue();
-		}
+        private void CheckSpellQueue()
+        {
+            SpellQueueEntry entry = GetSpellFromQueue();
+            if (entry != null)
+                if (!CastSpell(entry.Spell, entry.SpellLine, entry.Target))
+                    // If the spell can't be cast, remove it from the queue
+                    RemoveSpellFromQueue();
+        }
 
-		/// <summary>
-		/// Try to cast a spell, returning true if the spell started to cast
-		/// </summary>
-		/// <returns>Whether or not the spell started to cast</returns>
-		private bool CastSpell(Spell spell, SpellLine line, GameObject target)
-		{
-			GameLiving spellTarget = target as GameLiving;
+        /// <summary>
+        /// Try to cast a spell, returning true if the spell started to cast
+        /// </summary>
+        /// <returns>Whether or not the spell started to cast</returns>
+        private bool CastSpell(Spell spell, SpellLine line, GameObject target)
+        {
+            GameLiving spellTarget = target as GameLiving;
 
-			// Cast spell on the target, but don't automatically
-			// make it our new target.
+            // Cast spell on the target, but don't automatically
+            // make it our new target.
 
-			// Target must be alive, or this is a self spell, or this is a pbaoe spell
-			if ((spellTarget != null && spellTarget.IsAlive) || spell.Target.ToLower() == "self" || spell.Range == 0)
-			{
-				GameObject previousTarget = Body.TargetObject;
-				Body.TargetObject = spellTarget;
+            // Target must be alive, or this is a self spell, or this is a pbaoe spell
+            if ((spellTarget != null && spellTarget.IsAlive) || spell.Target.ToLower() == "self" || spell.Range == 0)
+            {
+                GameObject previousTarget = Body.TargetObject;
+                Body.TargetObject = spellTarget;
 
-				if (spellTarget != null && spellTarget != Body)
-					Body.TurnTo(spellTarget);
+                if (spellTarget != null && spellTarget != Body)
+                    Body.TurnTo(spellTarget);
 
-				Body.CastSpell(spell, line);
+                Body.CastSpell(spell, line);
 
-				if (previousTarget != null)
-					Body.TargetObject = previousTarget;
+                if (previousTarget != null)
+                    Body.TargetObject = previousTarget;
 
-				return true;
-			}
-			else
-			{
-				DebugMessageToOwner("Invalid target for spell '" + spell.Name + "'");
-				return false;
-			}
-		}
+                return true;
+            }
+            else
+            {
+                DebugMessageToOwner("Invalid target for spell '" + spell.Name + "'");
+                return false;
+            }
+        }
 
-		/// <summary>
-		/// This class holds a single entry for the spell queue.
-		/// </summary>
-		private class SpellQueueEntry
-		{
-			private Spell m_spell;
-			private SpellLine m_spellLine;
-			private GameLiving m_target;
+        /// <summary>
+        /// This class holds a single entry for the spell queue.
+        /// </summary>
+        private class SpellQueueEntry
+        {
+            private Spell m_spell;
+            private SpellLine m_spellLine;
+            private GameLiving m_target;
 
-			public SpellQueueEntry(Spell spell, SpellLine spellLine, GameLiving target)
-			{
-				m_spell = spell;
-				m_spellLine = spellLine;
-				m_target = target;
-			}
+            public SpellQueueEntry(Spell spell, SpellLine spellLine, GameLiving target)
+            {
+                m_spell = spell;
+                m_spellLine = spellLine;
+                m_target = target;
+            }
 
-			public SpellQueueEntry(SpellQueueEntry entry) : this(entry.Spell, entry.SpellLine, entry.Target)
-			{
-			}
+            public SpellQueueEntry(SpellQueueEntry entry) : this(entry.Spell, entry.SpellLine, entry.Target)
+            {
+            }
 
-			public Spell Spell
-			{
-				get { return m_spell; }
-			}
+            public Spell Spell
+            {
+                get { return m_spell; }
+            }
 
-			public SpellLine SpellLine
-			{
-				get { return m_spellLine; }
-			}
+            public SpellLine SpellLine
+            {
+                get { return m_spellLine; }
+            }
 
-			public GameLiving Target
-			{
-				get { return m_target; }
-			}
-		}
+            public GameLiving Target
+            {
+                get { return m_target; }
+            }
+        }
 
-		private Queue<SpellQueueEntry> m_spellQueue = new Queue<SpellQueueEntry>(2);
+        private Queue<SpellQueueEntry> m_spellQueue = new Queue<SpellQueueEntry>(2);
 
-		/// <summary>
-		/// Clears the spell queue
-		/// </summary>
-		public void ClearSpellQueue()
-		{
-			lock (m_spellQueue)
-				m_spellQueue.Clear();
-		}
+        /// <summary>
+        /// Clears the spell queue
+        /// </summary>
+        public void ClearSpellQueue()
+        {
+            lock (m_spellQueue)
+                m_spellQueue.Clear();
+        }
 
-		/// <summary>
-		/// Fetches a spell from the queue without removing it; the spell is
+        /// <summary>
+        /// Fetches a spell from the queue without removing it; the spell is
         /// removed *after* the spell has finished casting.
-		/// </summary>
-		/// <returns>The next spell or null, if no spell is in the queue.</returns>
-		private SpellQueueEntry GetSpellFromQueue()
-		{
-			lock (m_spellQueue)
-			{
+        /// </summary>
+        /// <returns>The next spell or null, if no spell is in the queue.</returns>
+        private SpellQueueEntry GetSpellFromQueue()
+        {
+            lock (m_spellQueue)
+            {
                 if (m_spellQueue.Count > 0)
                 {
                     DebugMessageToOwner(String.Format("Grabbing spell '{0}' from the start of the queue in order to cast it", m_spellQueue.Peek().Spell.Name));
                     return m_spellQueue.Peek();
                 }
-			}
-			return null;
-		}
+            }
+            return null;
+        }
 
-		/// <summary>
-		/// Whether or not any spells are queued.
-		/// </summary>
-		public bool SpellsQueued
-		{
-			get
-			{
-				lock (m_spellQueue)
-					return (m_spellQueue.Count > 0);
-			}
-		}
+        /// <summary>
+        /// Whether or not any spells are queued.
+        /// </summary>
+        public bool SpellsQueued
+        {
+            get
+            {
+                lock (m_spellQueue)
+                    return (m_spellQueue.Count > 0);
+            }
+        }
 
-		/// <summary>
-		/// Removes the spell that is first in the queue.
-		/// </summary>
-		private void RemoveSpellFromQueue()
-		{
-			lock (m_spellQueue)
-			{
+        /// <summary>
+        /// Removes the spell that is first in the queue.
+        /// </summary>
+        private void RemoveSpellFromQueue()
+        {
+            lock (m_spellQueue)
+            {
                 if (m_spellQueue.Count > 0)
                 {
                     DebugMessageToOwner(String.Format("Removing spell '{0}' from the start of the queue", m_spellQueue.Peek().Spell.Name));
 
                     m_spellQueue.Dequeue();
                 }
-			}
-		}
+            }
+        }
 
-		/// <summary>
-		/// Add a spell to the queue. If there are already 2 spells in the
-		/// queue, remove the spell that the pet would cast next.
-		/// </summary>
-		/// <param name="spell">The spell to add.</param>
-		/// <param name="spellLine">The spell line the spell is in.</param>
-		/// <param name="target">The target to cast the spell on.</param>
-		private void AddToSpellQueue(Spell spell, SpellLine spellLine, GameLiving target)
-		{
-			lock (m_spellQueue)
-			{
-				if (m_spellQueue.Count >= 2)
-                    MessageToOwner(LanguageMgr.GetTranslation((Owner as GamePlayer).Client.Account.Language, 
-                        "AI.Brain.Necromancer.SpellNoLongerInQueue", 
-                        (m_spellQueue.Dequeue()).Spell.Name, Body.Name), 
+        /// <summary>
+        /// Add a spell to the queue. If there are already 2 spells in the
+        /// queue, remove the spell that the pet would cast next.
+        /// </summary>
+        /// <param name="spell">The spell to add.</param>
+        /// <param name="spellLine">The spell line the spell is in.</param>
+        /// <param name="target">The target to cast the spell on.</param>
+        private void AddToSpellQueue(Spell spell, SpellLine spellLine, GameLiving target)
+        {
+            lock (m_spellQueue)
+            {
+                if (m_spellQueue.Count >= 2)
+                    MessageToOwner(LanguageMgr.GetTranslation((Owner as GamePlayer).Client.Account.Language,
+                        "AI.Brain.Necromancer.SpellNoLongerInQueue",
+                        (m_spellQueue.Dequeue()).Spell.Name, Body.Name),
                         eChatType.CT_Spell);
 
                 DebugMessageToOwner(String.Format("Adding spell '{0}' to the end of the queue", spell.Name));
-				m_spellQueue.Enqueue(new SpellQueueEntry(spell, spellLine, target));
-			}
-		}
+                m_spellQueue.Enqueue(new SpellQueueEntry(spell, spellLine, target));
+            }
+        }
 
-		#endregion
+        #endregion
 
-		#region Tether
+        #region Tether
 
-		private const int m_softTether = 2000;    // TODO: Check on Pendragon
+        private const int m_softTether = 2000;    // TODO: Check on Pendragon
         private const int m_hardTether = 2500;
         private TetherTimer m_tetherTimer = null;
 
@@ -471,8 +471,8 @@ namespace DOL.AI.Brain
 
             if (!Body.IsWithinRadius(Owner, m_hardTether))
             {
-				if (m_tetherTimer != null)
-					m_tetherTimer.Stop();
+                if (m_tetherTimer != null)
+                    m_tetherTimer.Stop();
                 (Body as NecromancerPet).CutTether();
                 return;
             }
@@ -511,8 +511,8 @@ namespace DOL.AI.Brain
             private NecromancerPet m_pet;
             private int m_seconds = 10;
 
-            public TetherTimer(NecromancerPet pet) 
-                : base(pet.CurrentRegion.TimeManager) 
+            public TetherTimer(NecromancerPet pet)
+                : base(pet.CurrentRegion.TimeManager)
             {
                 m_pet = pet;
             }
@@ -523,8 +523,8 @@ namespace DOL.AI.Brain
 
                 if (m_seconds > 0)
                 {
-                    m_pet.Brain.Notify(GameNPCEvent.OutOfTetherRange, this, 
-						new TetherEventArgs(m_seconds));
+                    m_pet.Brain.Notify(GameNPCEvent.OutOfTetherRange, this,
+                        new TetherEventArgs(m_seconds));
                     m_seconds -= 1;
                 }
                 else
@@ -536,17 +536,17 @@ namespace DOL.AI.Brain
             }
         }
 
-		/// <summary>
-		/// Send a message to the shade.
-		/// </summary>
-		/// <param name="message"></param>
-		/// <param name="chatType"></param>
-		public void MessageToOwner(String message, eChatType chatType)
-		{
-			GamePlayer owner = Owner as GamePlayer;
-			if ((owner != null) && (message.Length > 0))
-				owner.Out.SendMessage(message, chatType, eChatLoc.CL_SystemWindow);
-		}
+        /// <summary>
+        /// Send a message to the shade.
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="chatType"></param>
+        public void MessageToOwner(String message, eChatType chatType)
+        {
+            GamePlayer owner = Owner as GamePlayer;
+            if ((owner != null) && (message.Length > 0))
+                owner.Out.SendMessage(message, chatType, eChatLoc.CL_SystemWindow);
+        }
 
         /// <summary>
         /// For debugging purposes only.
@@ -554,16 +554,16 @@ namespace DOL.AI.Brain
         /// <param name="message"></param>
         private void DebugMessageToOwner(String message)
         {
-			if (DOL.GS.ServerProperties.Properties.ENABLE_DEBUG)
-			{
-				var tick = GameTimer.GetTickCount();
-				var seconds = tick / 1000;
-				var minutes = seconds / 60;
+            if (DOL.GS.ServerProperties.Properties.ENABLE_DEBUG)
+            {
+                var tick = GameTimer.GetTickCount();
+                var seconds = tick / 1000;
+                var minutes = seconds / 60;
 
-				MessageToOwner(String.Format("[{0:00}:{1:00}.{2:000}] {3}",	minutes % 60, seconds % 60, tick % 1000, message), eChatType.CT_Staff);
-			}
+                MessageToOwner(String.Format("[{0:00}:{1:00}.{2:000}] {3}", minutes % 60, seconds % 60, tick % 1000, message), eChatType.CT_Staff);
+            }
         }
 
-		#endregion
-	}
+        #endregion
+    }
 }

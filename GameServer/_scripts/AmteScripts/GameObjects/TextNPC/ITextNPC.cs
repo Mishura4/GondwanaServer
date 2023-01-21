@@ -61,8 +61,8 @@ namespace DOL.GS.Scripts
         {
             if (string.IsNullOrEmpty(Interact_Text) || !CheckAccess(player))
                 return false;
-                
-            _body.TurnTo(player);        
+
+            _body.TurnTo(player);
 
             if (this.IsOutlawFriendly.HasValue)
             {
@@ -162,43 +162,43 @@ namespace DOL.GS.Scripts
         void HandleQuestInteraction(GamePlayer player, string response)
         {
             var possibleQuests = _body.QuestIdListToGive;
-		    //lock (player.QuestList)
-                if (QuestReponsesValues[response].Item2 == 0 && !player.QuestList.Any(q => possibleQuests.Contains(q.QuestId)))
-                   {
-                    // Quest not in progress
-                    var questName = QuestReponsesValues[response].Item1;
+            //lock (player.QuestList)
+            if (QuestReponsesValues[response].Item2 == 0 && !player.QuestList.Any(q => possibleQuests.Contains(q.QuestId)))
+            {
+                // Quest not in progress
+                var questName = QuestReponsesValues[response].Item1;
 
-                    foreach (var questId in possibleQuests)
+                foreach (var questId in possibleQuests)
+                {
+                    var quest = DataQuestJsonMgr.GetQuest(QuestReponsesValues[response].Item1);
+                    if (quest != null && quest.CheckQuestQualification(player))
                     {
-                        var quest = DataQuestJsonMgr.GetQuest(QuestReponsesValues[response].Item1);
-                        if (quest != null && quest.CheckQuestQualification(player))
+                        player.Out.SendQuestOfferWindow(quest.Npc, player, PlayerQuest.CreateQuestPreview(quest, player));
+                        return;
+                    }
+                }
+            }
+            else if (QuestReponsesValues[response].Item2 != 0)
+            {
+                // Quest in progress
+                var goalId = QuestReponsesValues[response].Item2;
+                var currentQuest = player.QuestList.FirstOrDefault(q => q.VisibleGoals.Any(g => g is GenericDataQuestGoal jgoal && jgoal.Goal.GoalId == goalId));
+                if (currentQuest != null)
+                {
+                    var currentGoal = currentQuest.VisibleGoals.FirstOrDefault(g => g is GenericDataQuestGoal jgoal && jgoal.Goal.GoalId == goalId);
+                    if (currentGoal != null)
+                    {
+                        if (currentQuest.CanFinish())
+                            player.Out.SendQuestRewardWindow(_body, player, currentQuest);
+                        else
                         {
-                            player.Out.SendQuestOfferWindow(quest.Npc, player, PlayerQuest.CreateQuestPreview(quest, player));
-                            return;
+                            var jGoal = currentGoal as GenericDataQuestGoal;
+                            var goalState = currentQuest.GoalStates.Find(gs => gs.GoalId == goalId);
+                            jGoal.Goal.AdvanceGoal(currentQuest, goalState);
                         }
                     }
-                   }
-                else if(QuestReponsesValues[response].Item2 != 0)
-                {
-                        // Quest in progress
-                        var goalId = QuestReponsesValues[response].Item2;
-                        var currentQuest = player.QuestList.FirstOrDefault(q => q.VisibleGoals.Any(g => g is GenericDataQuestGoal jgoal && jgoal.Goal.GoalId == goalId));
-                        if (currentQuest != null)
-                        {
-                            var currentGoal = currentQuest.VisibleGoals.FirstOrDefault(g => g is GenericDataQuestGoal jgoal && jgoal.Goal.GoalId == goalId);
-                            if(currentGoal != null)
-                            {
-                                if(currentQuest.CanFinish())
-                                    player.Out.SendQuestRewardWindow(_body, player, currentQuest);
-                                else 
-                                {
-                                    var jGoal = currentGoal as GenericDataQuestGoal;
-			                        var goalState = currentQuest.GoalStates.Find(gs => gs.GoalId == goalId);
-				                    jGoal.Goal.AdvanceGoal(currentQuest, goalState);
-                                 }
-                            }
-                        }
                 }
+            }
         }
         public bool CheckQuestAvailable(string Name, int goalId = 0)
         {
@@ -241,14 +241,14 @@ namespace DOL.GS.Scripts
                 return false;
             }
 
-            var requireditems = this.GetRequireItems(EchItem);          
+            var requireditems = this.GetRequireItems(EchItem);
 
             if (requireditems.Any())
             {
                 var playerItems = this.GetPlayerRequiredItems(player, requireditems, item.Id_nb);
                 if (playerItems.HasAllRequiredItems)
-                { 
-                    player.Client.Out.SendCustomDialog(string.Format("Afin de procéder à l'échange, il va falloir payer {0} et me donner en plus {1}", 
+                {
+                    player.Client.Out.SendCustomDialog(string.Format("Afin de procéder à l'échange, il va falloir payer {0} et me donner en plus {1}",
                        Money.GetString(EchItem.MoneyPrice),
                        string.Join(", ", requireditems.Select(r => string.Format("{0} {1}", r.Count, r.Name)))
                         ), this.HandleClientResponse);
@@ -274,15 +274,15 @@ namespace DOL.GS.Scripts
             {
                 if (EchItem.MoneyPrice > 0)
                 {
-                //Handle references for callback
-                if (PlayerReferences.ContainsKey(player.InternalID))
-                {
-                    this.PlayerReferences[player.InternalID] = new EchangeurInfo() { requireInfos = requireditems, GiveItem = item as GameInventoryItem };
-                }
-                else
-                {
-                    this.PlayerReferences.Add(player.InternalID, new EchangeurInfo() { requireInfos = requireditems, GiveItem = item as GameInventoryItem });
-                }
+                    //Handle references for callback
+                    if (PlayerReferences.ContainsKey(player.InternalID))
+                    {
+                        this.PlayerReferences[player.InternalID] = new EchangeurInfo() { requireInfos = requireditems, GiveItem = item as GameInventoryItem };
+                    }
+                    else
+                    {
+                        this.PlayerReferences.Add(player.InternalID, new EchangeurInfo() { requireInfos = requireditems, GiveItem = item as GameInventoryItem });
+                    }
 
                     player.Client.Out.SendCustomDialog(string.Format("J'aurais besoin de {0} pour échanger ça. Valider l'échange ?", Money.GetString(EchItem.MoneyPrice)), this.HandleClientResponse);
                     return false;
@@ -290,7 +290,7 @@ namespace DOL.GS.Scripts
                 else
                 {
                     return ProcessExchange(item, player, EchItem, requireditems);
-                }  
+                }
             }
         }
 
@@ -349,7 +349,7 @@ namespace DOL.GS.Scripts
             }
 
             int count = 0;
-            var item =  raw.Split(new char[] { '|' });
+            var item = raw.Split(new char[] { '|' });
 
             if (item.Length == 2 && int.TryParse(item[1], out count))
             {
@@ -431,7 +431,7 @@ namespace DOL.GS.Scripts
             bool hasRemovedgaveItem = false;
 
             foreach (var item in player.Inventory.GetItemRange(eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack))
-            { 
+            {
                 var requireItem = requireItems.FirstOrDefault(i => i.ItemId.Equals(item.Id_nb));
 
                 if (requireItem != null)
@@ -466,7 +466,7 @@ namespace DOL.GS.Scripts
                 }
             }
 
-            return new EchangeurPlayerItemsCount() { HasAllRequiredItems = hasAllRequiredItems, Items = playerItemsCount  };
+            return new EchangeurPlayerItemsCount() { HasAllRequiredItems = hasAllRequiredItems, Items = playerItemsCount };
         }
 
 
@@ -495,7 +495,7 @@ namespace DOL.GS.Scripts
                 player.GainExperience(GameLiving.eXPSource.Quest, echItem.GainXP);
             else if (echItem.GainXP < 0)
             {
-                long xp = (player.ExperienceForNextLevel - player.ExperienceForCurrentLevel ) * echItem.GainXP / -1000;
+                long xp = (player.ExperienceForNextLevel - player.ExperienceForCurrentLevel) * echItem.GainXP / -1000;
                 player.GainExperience(GameLiving.eXPSource.Quest, xp);
             }
 
@@ -503,7 +503,7 @@ namespace DOL.GS.Scripts
                 player.RemoveMoney(echItem.MoneyPrice, "Vous avez payé {0}");
 
             if (requireItems.Any())
-                this.RemoveItemsFromPlayer(player, requireItems, item);  
+                this.RemoveItemsFromPlayer(player, requireItems, item);
 
 
             echItem.ChangedItemCount++;
@@ -785,7 +785,7 @@ namespace DOL.GS.Scripts
                 }
             }
             TextDB.RandomPhraseEmote = reponse;
-            TextDB.PhraseInterval = PhraseInterval;            
+            TextDB.PhraseInterval = PhraseInterval;
 
             //Sauve les conditions
             if (Condition != null)
@@ -822,15 +822,15 @@ namespace DOL.GS.Scripts
         public IList<string> DelveInfo()
         {
             List<string> text = new List<string>
-				{
-					" + OID: " + _body.ObjectID,
-					" + Class: " + _body.GetType(),
-					" + Position: " + _body.Position + " Heading=" + _body.Heading,
-					" + Realm: " + _body.Realm,
-					" + Model: " + _body.Model,
-					"",
-					"-- Echangeur (Items) --"
-				};
+                {
+                    " + OID: " + _body.ObjectID,
+                    " + Class: " + _body.GetType(),
+                    " + Position: " + _body.Position + " Heading=" + _body.Heading,
+                    " + Realm: " + _body.Realm,
+                    " + Model: " + _body.Model,
+                    "",
+                    "-- Echangeur (Items) --"
+                };
             foreach (KeyValuePair<string, DBEchangeur> pair in EchangeurDB)
             {
                 text.Add(" - " + pair.Value.ItemRecvID + " (" + pair.Value.ItemRecvCount + "):");

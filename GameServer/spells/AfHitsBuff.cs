@@ -36,11 +36,11 @@ namespace DOL.GS.Spells
             double bonusAF = 0;
             double bonusHP = 0;
 
-			if (effect == null || effect.Owner == null)
-			{
-				effect.Cancel(false);
-				return;
-			}
+            if (effect == null || effect.Owner == null)
+            {
+                effect.Cancel(false);
+                return;
+            }
 
             foreach (InventoryItem item in effect.Owner.Inventory.EquippedItems)
             {

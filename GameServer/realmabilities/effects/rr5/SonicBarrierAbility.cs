@@ -12,22 +12,22 @@ using DOL.GS.Spells;
 
 namespace DOL.GS.RealmAbilities
 {
-	/// <summary>
-	/// Arms Length Realm Ability
-	/// </summary>
-	public class SonicBarrierAbility : RR5RealmAbility
-	{
-		public SonicBarrierAbility(DBAbility dba, int level) : base(dba, level) { }
+    /// <summary>
+    /// Arms Length Realm Ability
+    /// </summary>
+    public class SonicBarrierAbility : RR5RealmAbility
+    {
+        public SonicBarrierAbility(DBAbility dba, int level) : base(dba, level) { }
 
-		/// <summary>
-		/// Action
-		/// </summary>
-		/// <param></param>
-		public override void Execute(GameLiving living)
-		{
-			if (CheckPreconditions(living, DEAD | SITTING | MEZZED | STUNNED)) return;
+        /// <summary>
+        /// Action
+        /// </summary>
+        /// <param></param>
+        public override void Execute(GameLiving living)
+        {
+            if (CheckPreconditions(living, DEAD | SITTING | MEZZED | STUNNED)) return;
 
-			GamePlayer player = living as GamePlayer;
+            GamePlayer player = living as GamePlayer;
             if (player.Group != null)
             {
                 foreach (GamePlayer member in player.Group.GetPlayersInTheGroup())
@@ -69,22 +69,22 @@ namespace DOL.GS.RealmAbilities
                 player.Out.SendMessage("You need a group for this Ability!", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
                 return;
             }
-			DisableSkill(living);
-		}
+            DisableSkill(living);
+        }
 
-		public override int GetReUseDelay(int level)
-		{
-			return 420;
-		}
+        public override int GetReUseDelay(int level)
+        {
+            return 420;
+        }
 
-		public override void AddEffectsInfo(IList<string> list)
-		{
-			list.Add("Sonic Barrier.");
-			list.Add("");
-			list.Add("Target: Group");
-			list.Add("Duration: 45 sec");
-			list.Add("Casting time: instant");
-		}
+        public override void AddEffectsInfo(IList<string> list)
+        {
+            list.Add("Sonic Barrier.");
+            list.Add("");
+            list.Add("Target: Group");
+            list.Add("Duration: 45 sec");
+            list.Add("Casting time: instant");
+        }
 
-	}
+    }
 }

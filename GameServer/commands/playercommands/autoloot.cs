@@ -21,31 +21,31 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute(
-		"&autoloot",
-		ePrivLevel.Player,
-		"Commands.Players.Autoloot.Description",
-		"Commands.Players.Autoloot.Usage")]
-	public class AutolootCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (args.Length < 2)
-			{
-				DisplaySyntax(client);
-				return;
-			}
+    [CmdAttribute(
+        "&autoloot",
+        ePrivLevel.Player,
+        "Commands.Players.Autoloot.Description",
+        "Commands.Players.Autoloot.Usage")]
+    public class AutolootCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (args.Length < 2)
+            {
+                DisplaySyntax(client);
+                return;
+            }
 
-			if (args[1].ToLower().Equals("on"))
-			{
-				client.Player.Autoloot = true;
-				DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Autoloot.On"));
+            if (args[1].ToLower().Equals("on"))
+            {
+                client.Player.Autoloot = true;
+                DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Autoloot.On"));
             }
-			else if (args[1].ToLower().Equals("off"))
-			{
-				client.Player.Autoloot = false;
-				DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Autoloot.Off"));
+            else if (args[1].ToLower().Equals("off"))
+            {
+                client.Player.Autoloot = false;
+                DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Autoloot.Off"));
             }
-		}
-	}
+        }
+    }
 }

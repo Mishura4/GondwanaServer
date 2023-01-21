@@ -23,7 +23,7 @@ using System.Text;
 namespace DOL.GS.Behaviour.Attributes
 {
     [AttributeUsage(AttributeTargets.Class)]
-    public class TriggerAttribute :Attribute
+    public class TriggerAttribute : Attribute
     {
 
         private bool global;
@@ -36,7 +36,7 @@ namespace DOL.GS.Behaviour.Attributes
             get { return global; }
             set { global = value; }
         }
-	
+
 
         private eTriggerType triggerType;
 
@@ -77,6 +77,6 @@ namespace DOL.GS.Behaviour.Attributes
             get { return defaultValueI; }
             set { defaultValueI = value; }
         }
-	
+
     }
 }

@@ -23,20 +23,20 @@ namespace DOL.GS.Spells
     [SpellHandler("Lifedrain")]
     public class LifedrainSpellHandler : DirectDamageSpellHandler
     {
-		protected override void DealDamage(GameLiving target, double effectiveness)
-		{
-			if (target == null || !target.IsAlive || target.ObjectState != GameLiving.eObjectState.Active) return;
+        protected override void DealDamage(GameLiving target, double effectiveness)
+        {
+            if (target == null || !target.IsAlive || target.ObjectState != GameLiving.eObjectState.Active) return;
 
-			if (target is GamePlayer || target is GameNPC)
-			{
-				// calc damage and healing
-				AttackData ad = CalculateDamageToTarget(target, effectiveness);
-				SendDamageMessages(ad);
-				DamageTarget(ad, true);
-				StealLife(target, ad);
-				target.StartInterruptTimer(target.SpellInterruptDuration, ad.AttackType, Caster);
-			}
-		}
+            if (target is GamePlayer || target is GameNPC)
+            {
+                // calc damage and healing
+                AttackData ad = CalculateDamageToTarget(target, effectiveness);
+                SendDamageMessages(ad);
+                DamageTarget(ad, true);
+                StealLife(target, ad);
+                target.StartInterruptTimer(target.SpellInterruptDuration, ad.AttackType, Caster);
+            }
+        }
 
         public virtual void StealLife(GameLiving target, AttackData ad)
         {

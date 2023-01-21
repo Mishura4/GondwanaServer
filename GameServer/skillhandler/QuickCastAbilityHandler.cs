@@ -23,82 +23,82 @@ using DOL.Language;
 
 namespace DOL.GS.SkillHandler
 {
-	/// <summary>
+    /// <summary>
     /// Handler for Quick Cast Ability clicks
-	/// </summary>
-	[SkillHandlerAttribute(Abilities.Quickcast)]
-	public class QuickCastAbilityHandler : IAbilityActionHandler, INPCAbilityActionHandler
-	{
-		/// <summary>
-		/// The ability disable duration in milliseconds
-		/// </summary>
-		public const int DISABLE_DURATION = 30000;
+    /// </summary>
+    [SkillHandlerAttribute(Abilities.Quickcast)]
+    public class QuickCastAbilityHandler : IAbilityActionHandler, INPCAbilityActionHandler
+    {
+        /// <summary>
+        /// The ability disable duration in milliseconds
+        /// </summary>
+        public const int DISABLE_DURATION = 30000;
 
-		/// <summary>
-		/// Executes the ability
-		/// </summary>
-		/// <param name="ab">The used ability</param>
-		/// <param name="player">The player that used the ability</param>
-		public void Execute(Ability ab, GamePlayer player)
-		{									
-			// Cannot change QC state if already casting a spell (can't turn it off!)
-			if(player.CurrentSpellHandler != null)
-			{
+        /// <summary>
+        /// Executes the ability
+        /// </summary>
+        /// <param name="ab">The used ability</param>
+        /// <param name="player">The player that used the ability</param>
+        public void Execute(Ability ab, GamePlayer player)
+        {
+            // Cannot change QC state if already casting a spell (can't turn it off!)
+            if (player.CurrentSpellHandler != null)
+            {
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Skill.Ability.QuickCast.CannotUseIsCasting"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
-			}
+            }
 
-			QuickCastEffect quickcast = player.EffectList.GetOfType<QuickCastEffect>();
-			if (quickcast!=null)
-			{
-				quickcast.Cancel(false);
-				return;
-			}			
+            QuickCastEffect quickcast = player.EffectList.GetOfType<QuickCastEffect>();
+            if (quickcast != null)
+            {
+                quickcast.Cancel(false);
+                return;
+            }
 
-			// Dead can't quick cast
-			if(!player.IsAlive)
-			{
+            // Dead can't quick cast
+            if (!player.IsAlive)
+            {
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Skill.Ability.QuickCast.CannotUseDead"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
-			}
+            }
 
-			// Can't quick cast if in attack mode
-			if(player.AttackState)
-			{
+            // Can't quick cast if in attack mode
+            if (player.AttackState)
+            {
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Skill.Ability.QuickCast.CannotUseInMeleeCombat"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
-			}
+            }
 
-			long quickcastChangeTick = player.TempProperties.getProperty<long>(GamePlayer.QUICK_CAST_CHANGE_TICK);
-			long changeTime = player.CurrentRegion.Time - quickcastChangeTick;
-			if(changeTime < DISABLE_DURATION)
-			{
+            long quickcastChangeTick = player.TempProperties.getProperty<long>(GamePlayer.QUICK_CAST_CHANGE_TICK);
+            long changeTime = player.CurrentRegion.Time - quickcastChangeTick;
+            if (changeTime < DISABLE_DURATION)
+            {
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Skill.Ability.QuickCast.CannotUseChangeTick", ((DISABLE_DURATION - changeTime) / 1000)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 //30 sec is time between 2 quick cast 
-				return;
-			}
+                return;
+            }
 
-			//TODO: more checks in this order
+            //TODO: more checks in this order
 
-			//player.DisableSkill(ab,DURATION / 10);
+            //player.DisableSkill(ab,DURATION / 10);
 
-			new QuickCastEffect().Start(player);
-		}
-		
-		public void Execute(Ability ab, GameLiving living)
-		{									
-			if(living.CurrentSpellHandler != null)
-			return;
+            new QuickCastEffect().Start(player);
+        }
 
-			if(!living.IsAlive)
-			return;
+        public void Execute(Ability ab, GameLiving living)
+        {
+            if (living.CurrentSpellHandler != null)
+                return;
 
-			long quickcastChangeTick = living.TempProperties.getProperty<long>(GamePlayer.QUICK_CAST_CHANGE_TICK);
-			long changeTime = living.CurrentRegion.Time - quickcastChangeTick;
-			if(changeTime < DISABLE_DURATION)
-			return;
+            if (!living.IsAlive)
+                return;
 
-			new QuickCastEffect().Start(living);
-		}
-	}
+            long quickcastChangeTick = living.TempProperties.getProperty<long>(GamePlayer.QUICK_CAST_CHANGE_TICK);
+            long changeTime = living.CurrentRegion.Time - quickcastChangeTick;
+            if (changeTime < DISABLE_DURATION)
+                return;
+
+            new QuickCastEffect().Start(living);
+        }
+    }
 }

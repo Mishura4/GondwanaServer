@@ -23,26 +23,26 @@ using NUnit.Framework;
 
 namespace DOL.Integration.Server
 {
-	[TestFixture]
-	public class DatabaseTest : ServerTests
-	{				
+    [TestFixture]
+    public class DatabaseTest : ServerTests
+    {
 
-		public DatabaseTest()
-		{
-		}
+        public DatabaseTest()
+        {
+        }
 
-		[Test]
-		public void TestSelect()
-		{
-			Console.WriteLine("TestSelect();");
+        [Test]
+        public void TestSelect()
+        {
+            Console.WriteLine("TestSelect();");
 
-			var obs = GameServer.Database.SelectAllObjects<ItemTemplate>();
-			Console.WriteLine("ItemTemplates Type="+obs.GetType());
+            var obs = GameServer.Database.SelectAllObjects<ItemTemplate>();
+            Console.WriteLine("ItemTemplates Type=" + obs.GetType());
 
-			var items = GameServer.Database.SelectAllObjects<MerchantItem>();
-			Console.WriteLine("MerchantItems Type="+items.GetType());
-			
-		}			
+            var items = GameServer.Database.SelectAllObjects<MerchantItem>();
+            Console.WriteLine("MerchantItems Type=" + items.GetType());
 
-	}
+        }
+
+    }
 }

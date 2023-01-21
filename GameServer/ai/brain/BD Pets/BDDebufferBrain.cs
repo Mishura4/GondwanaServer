@@ -31,60 +31,60 @@ using log4net;
 
 namespace DOL.AI.Brain
 {
-	/// <summary>
-	/// A brain that can be controlled
-	/// </summary>
-	public class BDDebufferBrain : BDPetBrain
-	{
-		/// <summary>
-		/// Defines a logger for this class.
-		/// </summary>
-		private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+    /// <summary>
+    /// A brain that can be controlled
+    /// </summary>
+    public class BDDebufferBrain : BDPetBrain
+    {
+        /// <summary>
+        /// Defines a logger for this class.
+        /// </summary>
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-		/// <summary>
-		/// Constructs new controlled npc brain
-		/// </summary>
-		/// <param name="owner"></param>
-		public BDDebufferBrain(GameLiving owner) : base(owner) { }
+        /// <summary>
+        /// Constructs new controlled npc brain
+        /// </summary>
+        /// <param name="owner"></param>
+        public BDDebufferBrain(GameLiving owner) : base(owner) { }
 
-		#region AI
+        #region AI
 
-		/// <summary>
-		/// Checks the Abilities
-		/// </summary>
-		public override void CheckAbilities() { }
+        /// <summary>
+        /// Checks the Abilities
+        /// </summary>
+        public override void CheckAbilities() { }
 
-		/// <summary>
-		/// Checks the Positive Spells.  Handles buffs, heals, etc.
-		/// </summary>
-		protected override bool CheckDefensiveSpells(Spell spell) { return false; }
+        /// <summary>
+        /// Checks the Positive Spells.  Handles buffs, heals, etc.
+        /// </summary>
+        protected override bool CheckDefensiveSpells(Spell spell) { return false; }
 
-		/// <summary>
-		/// Checks Instant Spells.  Handles Taunts, shouts, stuns, etc.
-		/// </summary>
-		protected override bool CheckInstantSpells(Spell spell)
-		{
-			GameObject lastTarget = Body.TargetObject;
-			Body.TargetObject = null;
-			switch (spell.SpellType)
-			{
-				case "CombatSpeedDebuff":
-					Body.TargetObject = lastTarget;
-					break;
-			}
+        /// <summary>
+        /// Checks Instant Spells.  Handles Taunts, shouts, stuns, etc.
+        /// </summary>
+        protected override bool CheckInstantSpells(Spell spell)
+        {
+            GameObject lastTarget = Body.TargetObject;
+            Body.TargetObject = null;
+            switch (spell.SpellType)
+            {
+                case "CombatSpeedDebuff":
+                    Body.TargetObject = lastTarget;
+                    break;
+            }
 
-			if (Body.TargetObject != null)
-			{
-				if (LivingHasEffect((GameLiving)Body.TargetObject, spell))
-					return false;
-				Body.CastSpell(spell, m_mobSpellLine);
-				Body.TargetObject = lastTarget;
-				return true;
-			}
-			Body.TargetObject = lastTarget;
-			return false;
-		}
+            if (Body.TargetObject != null)
+            {
+                if (LivingHasEffect((GameLiving)Body.TargetObject, spell))
+                    return false;
+                Body.CastSpell(spell, m_mobSpellLine);
+                Body.TargetObject = lastTarget;
+                return true;
+            }
+            Body.TargetObject = lastTarget;
+            return false;
+        }
 
-		#endregion
-	}
+        #endregion
+    }
 }

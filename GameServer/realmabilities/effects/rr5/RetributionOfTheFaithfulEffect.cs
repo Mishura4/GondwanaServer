@@ -13,14 +13,14 @@ namespace DOL.GS.Effects
     /// </summary>
     public class RetributionOfTheFaithfulStunEffect : TimedEffect
     {
-		public RetributionOfTheFaithfulStunEffect()
-			: base(3000)
-		{ }
+        public RetributionOfTheFaithfulStunEffect()
+            : base(3000)
+        { }
 
         private GameLiving owner;
 
         public override void Start(GameLiving target)
-		{
+        {
             base.Start(target);
             owner = target;
             foreach (GamePlayer p in target.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
@@ -101,10 +101,10 @@ namespace DOL.GS.Effects
             if (args == null) return;
             if (args.AttackData == null) return;
             if (!args.AttackData.IsMeleeAttack) return;
-			//FIXME: [WARN] this has been commented out, it should be handled somewhere
-			if (args.AttackData.Attacker.EffectList.GetOfType<ChargeEffect>() != null || args.AttackData.Attacker.TempProperties.getProperty("Charging", false))
-				return;
-            if ( !owner.IsWithinRadius( args.AttackData.Attacker, 300 ) ) return;
+            //FIXME: [WARN] this has been commented out, it should be handled somewhere
+            if (args.AttackData.Attacker.EffectList.GetOfType<ChargeEffect>() != null || args.AttackData.Attacker.TempProperties.getProperty("Charging", false))
+                return;
+            if (!owner.IsWithinRadius(args.AttackData.Attacker, 300)) return;
             if (Util.Chance(50))
             {
                 RetributionOfTheFaithfulStunEffect effect = new RetributionOfTheFaithfulStunEffect();

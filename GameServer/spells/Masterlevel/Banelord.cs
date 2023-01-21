@@ -16,12 +16,12 @@ namespace DOL.GS.Spells
     public class CastingSpeedDebuff : MasterlevelDebuffHandling
     {
         public override eProperty Property1 { get { return eProperty.CastingSpeed; } }
-		
-		public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
-		{
-			base.ApplyEffectOnTarget(target, effectiveness);
-			target.StartInterruptTimer(target.SpellInterruptDuration, AttackData.eAttackType.Spell, Caster);
-		}
+
+        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        {
+            base.ApplyEffectOnTarget(target, effectiveness);
+            target.StartInterruptTimer(target.SpellInterruptDuration, AttackData.eAttackType.Spell, Caster);
+        }
 
         // constructor
         public CastingSpeedDebuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
@@ -104,7 +104,7 @@ namespace DOL.GS.Spells
             return 25;
         }
 
-        public override string ShortDescription 
+        public override string ShortDescription
             => $"Point blank area effect shout that reduces the power/health/fatigue of enemies by {Spell.Value}% of their current value{AgonyTransmissionAddition}.";
 
         private string AgonyTransmissionAddition
@@ -135,7 +135,7 @@ namespace DOL.GS.Spells
             base.OnEffectStart(effect);
             if (effect.Owner is GamePlayer)
                 ((GamePlayer)effect.Owner).UpdateEncumberance();
-			effect.Owner.StartInterruptTimer(effect.Owner.SpellInterruptDuration, AttackData.eAttackType.Spell, Caster);
+            effect.Owner.StartInterruptTimer(effect.Owner.SpellInterruptDuration, AttackData.eAttackType.Spell, Caster);
         }
 
         public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
@@ -154,7 +154,7 @@ namespace DOL.GS.Spells
         }
         public OppressionSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription 
+        public override string ShortDescription
             => "Point blank area effect shout that decreases enemies' max encumbrance.";
     }
     #endregion
@@ -164,7 +164,7 @@ namespace DOL.GS.Spells
     [SpellHandler("MLFatDebuff")]
     public class MLFatDebuffHandler : MasterlevelDebuffHandling
     {
-        public override eProperty Property1 { get { return eProperty.FatigueConsumption; } }	
+        public override eProperty Property1 { get { return eProperty.FatigueConsumption; } }
 
         public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
@@ -179,7 +179,7 @@ namespace DOL.GS.Spells
 
         public override void OnEffectStart(GameSpellEffect effect)
         {
-			effect.Owner.StartInterruptTimer(effect.Owner.SpellInterruptDuration, AttackData.eAttackType.Spell, Caster);
+            effect.Owner.StartInterruptTimer(effect.Owner.SpellInterruptDuration, AttackData.eAttackType.Spell, Caster);
             base.OnEffectStart(effect);
         }
 
@@ -244,7 +244,7 @@ namespace DOL.GS.Spells
 
         public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
-            if (target.HasAbility(Abilities.CCImmunity)||target.HasAbility(Abilities.StunImmunity))
+            if (target.HasAbility(Abilities.CCImmunity) || target.HasAbility(Abilities.StunImmunity))
             {
                 MessageToCaster(target.Name + " is immune to this effect!", eChatType.CT_SpellResisted);
                 return;
@@ -340,7 +340,7 @@ namespace DOL.GS.Spells
         {
         }
 
-        public override string ShortDescription 
+        public override string ShortDescription
             => "Point blank area effect shout that snares nearby enemies, but stuns the user.";
     }
     #endregion
@@ -356,7 +356,7 @@ namespace DOL.GS.Spells
         // constructor
         public BLToHit(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription 
+        public override string ShortDescription
             => "Point blank area effect shout that makes it easier for nearby allies to hit enemies.";
     }
     #endregion
@@ -397,7 +397,7 @@ namespace DOL.GS.Spells
 
         public EffectivenessDeBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription 
+        public override string ShortDescription
             => $"Point blank area effect shout that reduces effective spec of enemies by {Spell.Value}% for determining variance for spell and melee damage.";
     }
     #endregion

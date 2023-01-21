@@ -21,58 +21,58 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute(
-		"&whisper",
-		new string[] {"&whis"}, //Important, don't remove this alias, its used for communication with mobs!
-		ePrivLevel.Player,
-		"Commands.Players.Whisper.Description",
-		"Commands.Players.Whisper.Usage")]
-	public class WhisperCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (args.Length < 2)
-			{
-				DisplaySyntax(client);
-				return;
-			}
+    [CmdAttribute(
+        "&whisper",
+        new string[] { "&whis" }, //Important, don't remove this alias, its used for communication with mobs!
+        ePrivLevel.Player,
+        "Commands.Players.Whisper.Description",
+        "Commands.Players.Whisper.Usage")]
+    public class WhisperCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (args.Length < 2)
+            {
+                DisplaySyntax(client);
+                return;
+            }
 
-			if (IsSpammingCommand(client.Player, "whisper", 500))
-			{
-				DisplayMessage(
-					client,
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Whisper.SlowDown"));
-				return;
-			}
+            if (IsSpammingCommand(client.Player, "whisper", 500))
+            {
+                DisplayMessage(
+                    client,
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Whisper.SlowDown"));
+                return;
+            }
 
-			GameObject obj = client.Player.TargetObject;
-			if (obj == null)
-			{
-				DisplayMessage(client,
-				LanguageMgr.GetTranslation(
-					client.Account.Language,
-					"Commands.Players.Whisper.SelectTarget"));
-				return;
-			}
+            GameObject obj = client.Player.TargetObject;
+            if (obj == null)
+            {
+                DisplayMessage(client,
+                LanguageMgr.GetTranslation(
+                    client.Account.Language,
+                    "Commands.Players.Whisper.SelectTarget"));
+                return;
+            }
 
-			/*if (obj is GameLiving == false)
+            /*if (obj is GameLiving == false)
 			{
 				DisplayMessage(client, "You look pretty silly whispering to " + obj.GetName(0, false) + ".");
 				return;
 			}*/
 
-			if (obj == client.Player)
-			{
-				DisplayMessage(
-					client,
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Whisper.NotYourself"));
-				return;
-			}
-			client.Player.Whisper(obj, string.Join(" ", args, 1, args.Length - 1));
-		}
-	}
+            if (obj == client.Player)
+            {
+                DisplayMessage(
+                    client,
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Whisper.NotYourself"));
+                return;
+            }
+            client.Player.Whisper(obj, string.Join(" ", args, 1, args.Length - 1));
+        }
+    }
 }

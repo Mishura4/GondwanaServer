@@ -26,103 +26,103 @@ using System.Numerics;
 
 namespace DOL.GS
 {
-	/// <summary>
-	/// AbstractArea extend this if you wish to implement e new custom area.
-	/// For examples see Area.Cricle, Area.Square
-	/// </summary>
-	public abstract class AbstractArea : IArea, ITranslatableObject
-	{
-		protected DBArea dbArea = null;
-		protected bool m_canBroadcast = false;
-		/// <summary>
-		/// Variable holding whether or not players can broadcast in this area
-		/// </summary>
-		public bool CanBroadcast
-		{
-			get { return m_canBroadcast; }
-			set { m_canBroadcast = value; }
-		}
+    /// <summary>
+    /// AbstractArea extend this if you wish to implement e new custom area.
+    /// For examples see Area.Cricle, Area.Square
+    /// </summary>
+    public abstract class AbstractArea : IArea, ITranslatableObject
+    {
+        protected DBArea dbArea = null;
+        protected bool m_canBroadcast = false;
+        /// <summary>
+        /// Variable holding whether or not players can broadcast in this area
+        /// </summary>
+        public bool CanBroadcast
+        {
+            get { return m_canBroadcast; }
+            set { m_canBroadcast = value; }
+        }
 
-		protected bool m_checkLOS = false;
-		/// <summary>
-		/// Variable holding whether or not to check for LOS for spells in this area
-		/// </summary>
-		public bool CheckLOS
-		{
-			get { return m_checkLOS; }
-			set { m_checkLOS = value; }
-		}
+        protected bool m_checkLOS = false;
+        /// <summary>
+        /// Variable holding whether or not to check for LOS for spells in this area
+        /// </summary>
+        public bool CheckLOS
+        {
+            get { return m_checkLOS; }
+            set { m_checkLOS = value; }
+        }
 
-		protected bool m_displayMessage = true;
-		/// <summary>
-		/// Display entered message
-		/// </summary>
-		public virtual bool DisplayMessage
-		{
-			get { return m_displayMessage; }
-			set { m_displayMessage = value; }
-		}
+        protected bool m_displayMessage = true;
+        /// <summary>
+        /// Display entered message
+        /// </summary>
+        public virtual bool DisplayMessage
+        {
+            get { return m_displayMessage; }
+            set { m_displayMessage = value; }
+        }
 
-		protected bool m_safeArea = false;
-		/// <summary>
-		/// Can players be attacked by other players in this area
-		/// </summary>
-		public virtual bool IsSafeArea
-		{
-			get { return m_safeArea; }
-			set { m_safeArea = value; }
-		}
+        protected bool m_safeArea = false;
+        /// <summary>
+        /// Can players be attacked by other players in this area
+        /// </summary>
+        public virtual bool IsSafeArea
+        {
+            get { return m_safeArea; }
+            set { m_safeArea = value; }
+        }
 
         public bool IsPvP { get; set; } = false;
 
-		/// <summary>
-		/// Constant holding max number of areas per zone, increase if more ares are needed,
-		/// this will slightly increase memory usage on server
-		/// </summary>
-		public const ushort MAX_AREAS_PER_ZONE = 50;
+        /// <summary>
+        /// Constant holding max number of areas per zone, increase if more ares are needed,
+        /// this will slightly increase memory usage on server
+        /// </summary>
+        public const ushort MAX_AREAS_PER_ZONE = 50;
 
-		/// <summary>
-		/// The ID of the Area eg. 15 ( == index in Region.m_areas array)
-		/// </summary>
-		protected ushort m_ID;
+        /// <summary>
+        /// The ID of the Area eg. 15 ( == index in Region.m_areas array)
+        /// </summary>
+        protected ushort m_ID;
 
         /// <summary>
         /// Holds the translation id
         /// </summary>
         protected string m_translationId;
 
-		/// <summary>
-		/// The description of the Area eg. "Camelot Hills"
-		/// </summary>
-		protected string m_Description;
+        /// <summary>
+        /// The description of the Area eg. "Camelot Hills"
+        /// </summary>
+        protected string m_Description;
 
-		/// <summary>
-		/// The area sound to play on enter/leave events
-		/// </summary>
-		protected byte m_sound;
+        /// <summary>
+        /// The area sound to play on enter/leave events
+        /// </summary>
+        protected byte m_sound;
 
-		/// <summary>
-		/// Constructs a new AbstractArea
-		/// </summary>
-		/// <param name="desc"></param>
-		public AbstractArea(string desc)
-		{
-			m_Description = desc;
-		}
+        /// <summary>
+        /// Constructs a new AbstractArea
+        /// </summary>
+        /// <param name="desc"></param>
+        public AbstractArea(string desc)
+        {
+            m_Description = desc;
+        }
 
-		public AbstractArea()
-			: base()
-		{    
-		}
+        public AbstractArea()
+            : base()
+        {
+        }
 
-		/// <summary>
-		/// Returns the ID of this Area
-		/// </summary>
-		public ushort ID
-		{
-			get { return m_ID; }
-			set { m_ID = value; }
-		}
+        /// <summary>
+        /// Returns the ID of this Area
+        /// </summary>
+        public ushort ID
+        {
+            get { return m_ID; }
+            set { m_ID = value; }
+        }
 
         public int RealmPoints { get; set; }
 
@@ -140,100 +140,100 @@ namespace DOL.GS
             set { m_translationId = (value == null ? "" : value); }
         }
 
-		/// <summary>
-		/// Return the description of this Area
-		/// </summary>
-		public string Description
-		{
-			get { return m_Description; }
-		}
+        /// <summary>
+        /// Return the description of this Area
+        /// </summary>
+        public string Description
+        {
+            get { return m_Description; }
+        }
 
-		/// <summary>
-		/// Gets or sets the area sound
-		/// </summary>
-		public byte Sound
-		{
-			get { return m_sound; }
-			set { m_sound = value; }
-		}
+        /// <summary>
+        /// Gets or sets the area sound
+        /// </summary>
+        public byte Sound
+        {
+            get { return m_sound; }
+            set { m_sound = value; }
+        }
 
-		#region Event handling
+        #region Event handling
 
-		public void UnRegisterPlayerEnter(DOLEventHandler callback)
-		{
-			GameEventMgr.RemoveHandler(this, AreaEvent.PlayerEnter, callback);
-		}
+        public void UnRegisterPlayerEnter(DOLEventHandler callback)
+        {
+            GameEventMgr.RemoveHandler(this, AreaEvent.PlayerEnter, callback);
+        }
 
-		public void UnRegisterPlayerLeave(DOLEventHandler callback)
-		{
-			GameEventMgr.RemoveHandler(this, AreaEvent.PlayerLeave, callback);
-		}
+        public void UnRegisterPlayerLeave(DOLEventHandler callback)
+        {
+            GameEventMgr.RemoveHandler(this, AreaEvent.PlayerLeave, callback);
+        }
 
-		public void RegisterPlayerEnter(DOLEventHandler callback)
-		{
-			GameEventMgr.AddHandler(this, AreaEvent.PlayerEnter, callback);
-		}
+        public void RegisterPlayerEnter(DOLEventHandler callback)
+        {
+            GameEventMgr.AddHandler(this, AreaEvent.PlayerEnter, callback);
+        }
 
-		public void RegisterPlayerLeave(DOLEventHandler callback)
-		{
-			GameEventMgr.AddHandler(this, AreaEvent.PlayerLeave, callback);
-		}
-		#endregion
+        public void RegisterPlayerLeave(DOLEventHandler callback)
+        {
+            GameEventMgr.AddHandler(this, AreaEvent.PlayerLeave, callback);
+        }
+        #endregion
 
-		/// <summary>
-		/// Checks wether area intersects with given zone
-		/// </summary>
-		/// <param name="zone"></param>
-		/// <returns></returns>
-		public abstract bool IsIntersectingZone(Zone zone);
+        /// <summary>
+        /// Checks wether area intersects with given zone
+        /// </summary>
+        /// <param name="zone"></param>
+        /// <returns></returns>
+        public abstract bool IsIntersectingZone(Zone zone);
 
-		/// <summary>
-		/// Checks wether given spot is within areas boundaries or not
-		/// </summary>
-		/// <param name="spot"></param>
-		/// <param name="checkZ"></param>
-		/// <returns></returns>
-		public abstract bool IsContaining(Vector3 spot, bool checkZ);
+        /// <summary>
+        /// Checks wether given spot is within areas boundaries or not
+        /// </summary>
+        /// <param name="spot"></param>
+        /// <param name="checkZ"></param>
+        /// <returns></returns>
+        public abstract bool IsContaining(Vector3 spot, bool checkZ);
 
-		public bool IsContaining(Vector3 spot)
-		{
-			return IsContaining(spot, true);
-		}
-		public bool IsContaining(float x, float y, float z, bool checkZ)
-		{
-			return IsContaining(new Vector3(x, y, z), checkZ);
-		}
-		public bool IsContaining(float x, float y, float z)
-		{
-			return IsContaining(new Vector3(x, y, z), true);
-		}
+        public bool IsContaining(Vector3 spot)
+        {
+            return IsContaining(spot, true);
+        }
+        public bool IsContaining(float x, float y, float z, bool checkZ)
+        {
+            return IsContaining(new Vector3(x, y, z), checkZ);
+        }
+        public bool IsContaining(float x, float y, float z)
+        {
+            return IsContaining(new Vector3(x, y, z), true);
+        }
         public bool CanVol { get; protected set; }
 
         public DBArea DbArea { get => dbArea; set => dbArea = value; }
 
-		/// <summary>
-		/// Called whenever a player leaves the given area
-		/// </summary>
-		/// <param name="player"></param>
-		public virtual void OnPlayerLeave(GamePlayer player)
-		{
+        /// <summary>
+        /// Called whenever a player leaves the given area
+        /// </summary>
+        /// <param name="player"></param>
+        public virtual void OnPlayerLeave(GamePlayer player)
+        {
             if (m_displayMessage && Description != null && Description != "")
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AbstractArea.Left", Description),
                     eChatType.CT_System, eChatLoc.CL_SystemWindow);
 
             player.IsAllowToVolInThisArea = true;
 
-			player.Notify(AreaEvent.PlayerLeave, this, new AreaEventArgs(this, player));
-		}
+            player.Notify(AreaEvent.PlayerLeave, this, new AreaEventArgs(this, player));
+        }
 
-		/// <summary>
-		/// Called whenever a player enters the given area
-		/// </summary>
-		/// <param name="player"></param>
-		public virtual void OnPlayerEnter(GamePlayer player)
-		{
-			if (m_displayMessage && Description != null && Description != "")
-			{
+        /// <summary>
+        /// Called whenever a player enters the given area
+        /// </summary>
+        /// <param name="player"></param>
+        public virtual void OnPlayerEnter(GamePlayer player)
+        {
+            if (m_displayMessage && Description != null && Description != "")
+            {
                 string description = Description;
                 string screenDescription = description;
 
@@ -250,20 +250,20 @@ namespace DOL.GS
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AbstractArea.Entered", description),
                     eChatType.CT_System, eChatLoc.CL_SystemWindow);
 
-				//Changed by Apo 9. August 2010: Areas never send an screen description, but we will support it with an server property
+                //Changed by Apo 9. August 2010: Areas never send an screen description, but we will support it with an server property
                 if (ServerProperties.Properties.DISPLAY_AREA_ENTER_SCREEN_DESC)
                     player.Out.SendMessage(screenDescription, eChatType.CT_ScreenCenterSmaller, eChatLoc.CL_SystemWindow);
-			}
-			if (Sound != 0)
-			{
-				player.Out.SendRegionEnterSound(Sound);
-			}
+            }
+            if (Sound != 0)
+            {
+                player.Out.SendRegionEnterSound(Sound);
+            }
 
             player.IsAllowToVolInThisArea = this.CanVol;
 
-			player.Notify(AreaEvent.PlayerEnter, this, new AreaEventArgs(this, player));
-		}
+            player.Notify(AreaEvent.PlayerEnter, this, new AreaEventArgs(this, player));
+        }
 
-		public abstract void LoadFromDatabase(DBArea area);
-	}
+        public abstract void LoadFromDatabase(DBArea area);
+    }
 }

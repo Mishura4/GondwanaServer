@@ -23,62 +23,62 @@ using System.Numerics;
 
 namespace DOL.GS.Spells
 {
-	[SpellHandler("SummonTheurgistPet")]
-	public class SummonTheurgistPet : SummonSpellHandler
-	{
-		public SummonTheurgistPet(GameLiving caster, Spell spell, SpellLine line) 
-			: base(caster, spell, line) { }
+    [SpellHandler("SummonTheurgistPet")]
+    public class SummonTheurgistPet : SummonSpellHandler
+    {
+        public SummonTheurgistPet(GameLiving caster, Spell spell, SpellLine line)
+            : base(caster, spell, line) { }
 
-		public override bool CheckBeginCast(GameLiving selectedTarget)
-		{
-			if (Caster.PetCount >= ServerProperties.Properties.THEURGIST_PET_CAP)
-			{
-				MessageToCaster("You have too many controlled creatures!", eChatType.CT_SpellResisted);
-				return false;
-			}
+        public override bool CheckBeginCast(GameLiving selectedTarget)
+        {
+            if (Caster.PetCount >= ServerProperties.Properties.THEURGIST_PET_CAP)
+            {
+                MessageToCaster("You have too many controlled creatures!", eChatType.CT_SpellResisted);
+                return false;
+            }
 
-			return base.CheckBeginCast(selectedTarget);
-		}
+            return base.CheckBeginCast(selectedTarget);
+        }
 
-		public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
-		{
-			base.ApplyEffectOnTarget(target, effectiveness);
+        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        {
+            base.ApplyEffectOnTarget(target, effectiveness);
 
             m_pet.TempProperties.setProperty("target", target);
             (m_pet.Brain as IOldAggressiveBrain).AddToAggroList(target, 1);
-			(m_pet.Brain as TheurgistPetBrain).Think();
+            (m_pet.Brain as TheurgistPetBrain).Think();
 
-			Caster.PetCount++;
-		}
+            Caster.PetCount++;
+        }
 
-		public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
-		{
-			if (Caster.PetCount > 0)
-				Caster.PetCount--;
+        public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
+        {
+            if (Caster.PetCount > 0)
+                Caster.PetCount--;
 
-			return base.OnEffectExpires(effect, noMessages);
-		}
+            return base.OnEffectExpires(effect, noMessages);
+        }
 
-		protected override void AddHandlers()
-		{
-		}
+        protected override void AddHandlers()
+        {
+        }
 
-		protected override GamePet GetGamePet(INpcTemplate template)
-		{
-			return new TheurgistPet(template);
-		}
+        protected override GamePet GetGamePet(INpcTemplate template)
+        {
+            return new TheurgistPet(template);
+        }
 
-		protected override IControlledBrain GetPetBrain(GameLiving owner)
-		{
-			return new TheurgistPetBrain(owner);
-		}
+        protected override IControlledBrain GetPetBrain(GameLiving owner)
+        {
+            return new TheurgistPetBrain(owner);
+        }
 
-		protected override void SetBrainToOwner(IControlledBrain brain) { }
+        protected override void SetBrainToOwner(IControlledBrain brain) { }
 
-		protected override void GetPetLocation(out Vector3 pos, out ushort heading, out Region region)
-		{
-			base.GetPetLocation(out pos, out heading, out region);
-			heading = Caster.Heading;
-		}
-	}
+        protected override void GetPetLocation(out Vector3 pos, out ushort heading, out Region region)
+        {
+            base.GetPetLocation(out pos, out heading, out region);
+            heading = Caster.Heading;
+        }
+    }
 }

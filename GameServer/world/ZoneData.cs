@@ -54,8 +54,8 @@ namespace DOL.GS
         public byte DivingFlag
         { get { return m_divingFlag; } set { m_divingFlag = value; } }
 
-		public int WaterLevel
-		{ get { return m_waterLevel; } set { m_waterLevel = value; } }
+        public int WaterLevel
+        { get { return m_waterLevel; } set { m_waterLevel = value; } }
 
         public bool IsLava
         { get { return m_IsLava; } set { m_IsLava = value; } }
@@ -68,24 +68,24 @@ namespace DOL.GS
         private ushort m_ZoneID, m_RegionID;
         private string m_description;
         private int m_waterLevel;
-		private byte m_divingFlag;
+        private byte m_divingFlag;
         private bool m_IsLava;
 
-		public ZoneData() { }
-		public ZoneData(Zones z)
-		{
-			OffX = (byte)z.OffsetX;
-			OffY = (byte)z.OffsetY;
-			Height = (byte)z.Height;
-			Width = (byte)z.Width;
-			ZoneID = (ushort)z.ZoneID;
-			RegionID = z.RegionID;
-			Description = z.Name;
-			WaterLevel = z.WaterLevel;
-			DivingFlag = z.DivingFlag;
-			IsLava = z.IsLava;
+        public ZoneData() { }
+        public ZoneData(Zones z)
+        {
+            OffX = (byte)z.OffsetX;
+            OffY = (byte)z.OffsetY;
+            Height = (byte)z.Height;
+            Width = (byte)z.Width;
+            ZoneID = (ushort)z.ZoneID;
+            RegionID = z.RegionID;
+            Description = z.Name;
+            WaterLevel = z.WaterLevel;
+            DivingFlag = z.DivingFlag;
+            IsLava = z.IsLava;
             AllowMagicalItem = z.AllowMagicalItem;
             AllowReputation = z.AllowReputation;
-		}
+        }
     }
 }

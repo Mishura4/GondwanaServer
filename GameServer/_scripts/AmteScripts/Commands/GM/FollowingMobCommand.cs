@@ -4,28 +4,28 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute(
-		"&followmob",
-		ePrivLevel.GM,
+    [CmdAttribute(
+        "&followmob",
+        ePrivLevel.GM,
         "Commands.GM.FollowingMob.Description",
         "Commands.GM.FollowingMob.Delete",
         "Commands.GM.FollowingMob.Description",
         "Commands.GM.FollowingMob.Guild")]
-	public class FollowMobCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (args.Length < 2)
-			{
-				DisplaySyntax(client);
-				return;
-			}
-			FollowingMob mob = client.Player.TargetObject as FollowingMob;
-			switch (args[1])
-			{
+    public class FollowMobCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (args.Length < 2)
+            {
+                DisplaySyntax(client);
+                return;
+            }
+            FollowingMob mob = client.Player.TargetObject as FollowingMob;
+            switch (args[1])
+            {
                 case "create":
-					mob = new FollowingMob();
-					mob.Position = client.Player.Position;
+                    mob = new FollowingMob();
+                    mob.Position = client.Player.Position;
                     mob.Heading = client.Player.Heading;
                     mob.CurrentRegion = client.Player.CurrentRegion;
                     mob.Name = "New Following Mob";
@@ -42,22 +42,22 @@ namespace DOL.GS.Commands
                         DisplaySyntax(client);
                         return;
                     }
-					mob.FollowMobID = "";
-					mob.MobFollow = null;
-					mob.StopFollowing();
-					foreach (GameNPC npc in mob.GetNPCsInRadius(2000))
-						if (npc.Name == args[2])
-						{
-							mob.MobFollow = npc;
-							mob.FollowMobID = npc.InternalID;
-							mob.Follow(npc, 10, 3000);
-							break;
-						}
-					if(mob.MobFollow == null)
-					{
-						client.Out.SendMessage("Aucun mob '" + mob.MobFollow.Name + "' trouvé.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-						break;
-					}
+                    mob.FollowMobID = "";
+                    mob.MobFollow = null;
+                    mob.StopFollowing();
+                    foreach (GameNPC npc in mob.GetNPCsInRadius(2000))
+                        if (npc.Name == args[2])
+                        {
+                            mob.MobFollow = npc;
+                            mob.FollowMobID = npc.InternalID;
+                            mob.Follow(npc, 10, 3000);
+                            break;
+                        }
+                    if (mob.MobFollow == null)
+                    {
+                        client.Out.SendMessage("Aucun mob '" + mob.MobFollow.Name + "' trouvé.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        break;
+                    }
                     mob.SaveIntoDatabase();
                     client.Out.SendMessage("Le mob suit maintenant '" + mob.MobFollow.Name + "'.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     break;
@@ -68,36 +68,36 @@ namespace DOL.GS.Commands
                         DisplaySyntax(client);
                         return;
                     }
-					FollowingMob oldmob = mob;
-					mob = new FollowingMob();
+                    FollowingMob oldmob = mob;
+                    mob = new FollowingMob();
                     mob.Position = client.Player.Position;
-					mob.Heading = client.Player.Heading;
-					mob.CurrentRegion = client.Player.CurrentRegion;
-					
-					mob.Level = oldmob.Level;
-					mob.Realm = oldmob.Realm;
-					mob.Name = oldmob.Name;
-					mob.Model = oldmob.Model;
-					mob.Flags = oldmob.Flags;
-					mob.MeleeDamageType = oldmob.MeleeDamageType;
-					mob.RespawnInterval = oldmob.RespawnInterval;
-					mob.MaxSpeedBase = oldmob.MaxSpeedBase;
-					mob.GuildName = oldmob.GuildName;
-					mob.Size = oldmob.Size;
-					mob.Inventory = oldmob.Inventory;
-					mob.FollowMobID = oldmob.FollowMobID;
-					mob.MobFollow = oldmob.MobFollow;
-					mob.Follow(mob.MobFollow, 10, 3000);
-					
-					mob.AddToWorld();
-					mob.SaveIntoDatabase();
-					client.Out.SendMessage("Mob created: OID=" + mob.ObjectID, eChatType.CT_System, eChatLoc.CL_SystemWindow);
-					break;
+                    mob.Heading = client.Player.Heading;
+                    mob.CurrentRegion = client.Player.CurrentRegion;
+
+                    mob.Level = oldmob.Level;
+                    mob.Realm = oldmob.Realm;
+                    mob.Name = oldmob.Name;
+                    mob.Model = oldmob.Model;
+                    mob.Flags = oldmob.Flags;
+                    mob.MeleeDamageType = oldmob.MeleeDamageType;
+                    mob.RespawnInterval = oldmob.RespawnInterval;
+                    mob.MaxSpeedBase = oldmob.MaxSpeedBase;
+                    mob.GuildName = oldmob.GuildName;
+                    mob.Size = oldmob.Size;
+                    mob.Inventory = oldmob.Inventory;
+                    mob.FollowMobID = oldmob.FollowMobID;
+                    mob.MobFollow = oldmob.MobFollow;
+                    mob.Follow(mob.MobFollow, 10, 3000);
+
+                    mob.AddToWorld();
+                    mob.SaveIntoDatabase();
+                    client.Out.SendMessage("Mob created: OID=" + mob.ObjectID, eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    break;
 
                 default:
                     DisplaySyntax(client);
                     break;
-			}
-		}
-	}
+            }
+        }
+    }
 }

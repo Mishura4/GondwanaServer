@@ -23,19 +23,19 @@ using System.Linq;
 
 namespace DOL.GS.Delve
 {
-	public class SongDelve : SkillDelve
-	{
-		private ISpellHandler spellHandler;
-		private Spell Spell => spellHandler.Spell;
+    public class SongDelve : SkillDelve
+    {
+        private ISpellHandler spellHandler;
+        private Spell Spell => spellHandler.Spell;
 
-		public SongDelve(int id)
-		{
-			Spell spell = SkillBase.GetSpellByTooltipID((ushort)id);
-			spellHandler = ScriptMgr.CreateSpellHandler(null, spell, SkillBase.GetSpellLine(GlobalSpellsLines.Reserved_Spells));
-			DelveType = "Song";
-			Index = unchecked((short)spellHandler.Spell.InternalID);
-		}
-                
+        public SongDelve(int id)
+        {
+            Spell spell = SkillBase.GetSpellByTooltipID((ushort)id);
+            spellHandler = ScriptMgr.CreateSpellHandler(null, spell, SkillBase.GetSpellLine(GlobalSpellsLines.Reserved_Spells));
+            DelveType = "Song";
+            Index = unchecked((short)spellHandler.Spell.InternalID);
+        }
+
         public SongDelve(int id, GameClient client) : this(id)
         {
             int level = Spell.Level;
@@ -56,20 +56,20 @@ namespace DOL.GS.Delve
 
         public override ClientDelve GetClientDelve()
         {
-			if (spellHandler == null) return NotFoundClientDelve;
+            if (spellHandler == null) return NotFoundClientDelve;
 
-			var clientDelve = new ClientDelve(DelveType);
-			clientDelve.Index = Index;
-			clientDelve.AddElement("effect", Index);
-			clientDelve.AddElement("Name", Spell.Name);
-			return clientDelve;
-		}
+            var clientDelve = new ClientDelve(DelveType);
+            clientDelve.Index = Index;
+            clientDelve.AddElement("effect", Index);
+            clientDelve.AddElement("Name", Spell.Name);
+            return clientDelve;
+        }
 
-		public override IEnumerable<ClientDelve> GetClientDelves()
-		{
-			var result = new List<ClientDelve>() { GetClientDelve() };
-			result.Add(new SpellDelve(Spell).GetClientDelve());
-			return result;
-		}
-	}
+        public override IEnumerable<ClientDelve> GetClientDelves()
+        {
+            var result = new List<ClientDelve>() { GetClientDelve() };
+            result.Add(new SpellDelve(Spell).GetClientDelve());
+            return result;
+        }
+    }
 }

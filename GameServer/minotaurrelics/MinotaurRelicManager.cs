@@ -47,7 +47,7 @@ namespace DOL.GS
         /// <summary>
         /// Holds the minimum respawntime
         /// </summary>
-        public const int MIN_RESPAWN_TIMER =300000;
+        public const int MIN_RESPAWN_TIMER = 300000;
         /// <summary>
         /// Holds the maximum respawntime
         /// </summary>
@@ -56,8 +56,8 @@ namespace DOL.GS
         /// Holds the Value which is removed from the XP per tick
         /// </summary>
         public const double XP_LOSS_PER_TICK = 10;
-		
-		[ScriptLoadedEvent]
+
+        [ScriptLoadedEvent]
         public static void OnScriptCompiled(DOLEvent e, object sender, EventArgs args)
         {
             if (ServerProperties.Properties.ENABLE_MINOTAUR_RELICS)
@@ -67,7 +67,7 @@ namespace DOL.GS
 
                 Init();
             }
-		}
+        }
 
         /// <summary>
         /// Inits the Minotaurrelics
@@ -136,15 +136,15 @@ namespace DOL.GS
                 if (clt == null || clt.Player == null)
                     continue;
 
-                if(relics.ContainsKey(clt.Player.CurrentRegionID))
+                if (relics.ContainsKey(clt.Player.CurrentRegionID))
                 {
-                    foreach(MinotaurRelic relic in relics[clt.Player.CurrentRegionID])
+                    foreach (MinotaurRelic relic in relics[clt.Player.CurrentRegionID])
                     {
                         clt.Player.Out.SendMinotaurRelicMapUpdate((byte)relic.RelicID, relic.CurrentRegionID, (int)relic.Position.X, (int)relic.Position.Y, (int)relic.Position.Z);
                     }
                 }
             }
-        } 
+        }
 
         #region Helpers
         /// <summary>

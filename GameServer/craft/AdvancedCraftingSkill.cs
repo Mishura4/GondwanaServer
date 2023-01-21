@@ -22,83 +22,83 @@ using DOL.GS.PacketHandler;
 
 namespace DOL.GS
 {
-	/// <summary>
-	/// AdvancedCraftingSkill is the skill for alchemy and spellcrafting whitch add all combine system
-	/// </summary>
-	public abstract class AdvancedCraftingSkill : AbstractProfession
+    /// <summary>
+    /// AdvancedCraftingSkill is the skill for alchemy and spellcrafting whitch add all combine system
+    /// </summary>
+    public abstract class AdvancedCraftingSkill : AbstractProfession
     {
-		#region Classic craft function
-		protected override bool CheckForTools(GamePlayer player, Recipe recipe)
-		{
-			foreach (GameStaticItem item in player.GetItemsInRadius(CRAFT_DISTANCE))
-			{
-				if (item.Name.ToLower() == "alchemy table" || item.Model == 820) // Alchemy Table
-				{
-					return true;
-				}
-			}
+        #region Classic craft function
+        protected override bool CheckForTools(GamePlayer player, Recipe recipe)
+        {
+            foreach (GameStaticItem item in player.GetItemsInRadius(CRAFT_DISTANCE))
+            {
+                if (item.Name.ToLower() == "alchemy table" || item.Model == 820) // Alchemy Table
+                {
+                    return true;
+                }
+            }
 
-			player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Crafting.CheckTool.NotHaveTools", recipe.Product.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-			player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Crafting.CheckTool.FindAlchemyTable"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Crafting.CheckTool.NotHaveTools", recipe.Product.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Crafting.CheckTool.FindAlchemyTable"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 
-			if (player.Client.Account.PrivLevel > 1)
-				return true;
+            if (player.Client.Account.PrivLevel > 1)
+                return true;
 
-			return false;
-		}
+            return false;
+        }
 
-		#endregion
+        #endregion
 
-		#region Advanced craft function
+        #region Advanced craft function
 
-		#region First call function
-		
-		/// <summary>
-		/// Called when player accept to combine items
-		/// </summary>
-		/// <param name="player"></param>
-		/// <returns></returns>
-		public virtual bool CombineItems(GamePlayer player)
-		{
-			if(player.TradeWindow.PartnerTradeItems == null || player.TradeWindow.PartnerItemsCount != 1)
-			{
-				player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AdvancedCraftingSkill.CombineItems.OnlyCombine"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-				return false;
-			}
+        #region First call function
 
-			InventoryItem itemToCombine = (InventoryItem)player.TradeWindow.PartnerTradeItems[0];
-			if(!IsAllowedToCombine(player, itemToCombine)) return false;
+        /// <summary>
+        /// Called when player accept to combine items
+        /// </summary>
+        /// <param name="player"></param>
+        /// <returns></returns>
+        public virtual bool CombineItems(GamePlayer player)
+        {
+            if (player.TradeWindow.PartnerTradeItems == null || player.TradeWindow.PartnerItemsCount != 1)
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AdvancedCraftingSkill.CombineItems.OnlyCombine"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return false;
+            }
 
-			ApplyMagicalEffect(player, itemToCombine);
+            InventoryItem itemToCombine = (InventoryItem)player.TradeWindow.PartnerTradeItems[0];
+            if (!IsAllowedToCombine(player, itemToCombine)) return false;
 
-			return true;
-		}
+            ApplyMagicalEffect(player, itemToCombine);
 
-		#endregion
+            return true;
+        }
 
-		#region Requirement check
+        #endregion
 
-		/// <summary>
+        #region Requirement check
+
+        /// <summary>
         /// Check if the player can enchant the item
-		/// </summary>
-		/// <param name="player"></param>
-		/// <param name="item"></param>
-		/// <returns></returns>
-		public virtual bool IsAllowedToCombine(GamePlayer player, InventoryItem item)
-		{
-			if(item == null) return false;
-			
-			if(player.TradeWindow.ItemsCount <= 0)
-			{
-				player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AdvancedCraftingSkill.IsAllowedToCombine.Imbue", item.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-				return false;	
-			}
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public virtual bool IsAllowedToCombine(GamePlayer player, InventoryItem item)
+        {
+            if (item == null) return false;
 
-			if(!item.IsCrafted)
-			{
-				player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AdvancedCraftingSkill.IsAllowedToCombine.CraftedItems"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-				return false;
-			}
+            if (player.TradeWindow.ItemsCount <= 0)
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AdvancedCraftingSkill.IsAllowedToCombine.Imbue", item.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return false;
+            }
+
+            if (!item.IsCrafted)
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AdvancedCraftingSkill.IsAllowedToCombine.CraftedItems"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return false;
+            }
 
 
             InventoryItem itemToCombine = (InventoryItem)player.TradeWindow.TradeItems[0];
@@ -142,28 +142,28 @@ namespace DOL.GS
             }
 
             if (!GlobalConstants.IsArmor(item.Object_Type) && !GlobalConstants.IsWeapon(item.Object_Type) && item.Object_Type != (int)eObjectType.Instrument)
-			{
-				player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AdvancedCraftingSkill.IsAllowedToCombine.NoEnchanted"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-				return false;	
-			}
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AdvancedCraftingSkill.IsAllowedToCombine.NoEnchanted"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return false;
+            }
 
-			return true;
-		}
-		
-		#endregion
-		
-		#region Apply magical effect
+            return true;
+        }
 
-		/// <summary>
+        #endregion
+
+        #region Apply magical effect
+
+        /// <summary>
         /// Apply the magical bonus to the item
-		/// </summary>
-		/// <param name="player"></param>
-		/// <param name="item"></param>
-		protected abstract void ApplyMagicalEffect(GamePlayer player, InventoryItem item);
-		
-		#endregion
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="item"></param>
+        protected abstract void ApplyMagicalEffect(GamePlayer player, InventoryItem item);
 
-		#endregion
+        #endregion
 
-	}
+        #endregion
+
+    }
 }

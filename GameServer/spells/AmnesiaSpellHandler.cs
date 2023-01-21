@@ -25,36 +25,36 @@ using DOL.Language;
 
 namespace DOL.GS.Spells
 {
-	[SpellHandler("Amnesia")]
-	public class AmnesiaSpellHandler : SpellHandler
-	{
-		public override void FinishSpellCast(GameLiving target)
-		{
-			m_caster.Mana -= PowerCost(target);
-			base.FinishSpellCast(target);
-		}
+    [SpellHandler("Amnesia")]
+    public class AmnesiaSpellHandler : SpellHandler
+    {
+        public override void FinishSpellCast(GameLiving target)
+        {
+            m_caster.Mana -= PowerCost(target);
+            base.FinishSpellCast(target);
+        }
 
-		public override void OnDirectEffect(GameLiving target, double effectiveness)
-		{
-			base.OnDirectEffect(target, effectiveness);
-			if (target == null || !target.IsAlive)
-				return;
+        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        {
+            base.OnDirectEffect(target, effectiveness);
+            if (target == null || !target.IsAlive)
+                return;
 
-			if (Caster.EffectList.GetOfType<MasteryofConcentrationEffect>() != null)
-				return;
+            if (Caster.EffectList.GetOfType<MasteryofConcentrationEffect>() != null)
+                return;
 
-			//have to do it here because OnAttackedByEnemy is not called to not get aggro
-			if (target.Realm == 0 || Caster.Realm == 0)
-				target.LastAttackedByEnemyTickPvE = target.CurrentRegion.Time;
-			else target.LastAttackedByEnemyTickPvP = target.CurrentRegion.Time;
-			SendEffectAnimation(target, 0, false, 1);
+            //have to do it here because OnAttackedByEnemy is not called to not get aggro
+            if (target.Realm == 0 || Caster.Realm == 0)
+                target.LastAttackedByEnemyTickPvE = target.CurrentRegion.Time;
+            else target.LastAttackedByEnemyTickPvP = target.CurrentRegion.Time;
+            SendEffectAnimation(target, 0, false, 1);
 
-			if (target is GamePlayer)
-			{
-				((GamePlayer)target).NextCombatStyle = null;
-				((GamePlayer)target).NextCombatBackupStyle = null;
-			}
-			target.StopCurrentSpellcast(); //stop even if MoC or QC
+            if (target is GamePlayer)
+            {
+                ((GamePlayer)target).NextCombatStyle = null;
+                ((GamePlayer)target).NextCombatBackupStyle = null;
+            }
+            target.StopCurrentSpellcast(); //stop even if MoC or QC
 
             if (target is GamePlayer)
                 MessageToLiving(target, LanguageMgr.GetTranslation((target as GamePlayer).Client, "Amnesia.MessageToTarget"), eChatType.CT_Spell);
@@ -67,31 +67,31 @@ namespace DOL.GS.Spells
                 return;
             }
 
-			if (target is GameNPC)
-			{
-				GameNPC npc = (GameNPC)target;
-				IOldAggressiveBrain aggroBrain = npc.Brain as IOldAggressiveBrain;
-				if (aggroBrain != null)
-				{
-					if (Util.Chance(Spell.AmnesiaChance))
-						aggroBrain.ClearAggroList();
-				}
-			}
-		}
+            if (target is GameNPC)
+            {
+                GameNPC npc = (GameNPC)target;
+                IOldAggressiveBrain aggroBrain = npc.Brain as IOldAggressiveBrain;
+                if (aggroBrain != null)
+                {
+                    if (Util.Chance(Spell.AmnesiaChance))
+                        aggroBrain.ClearAggroList();
+                }
+            }
+        }
 
-		protected override void OnSpellResisted(GameLiving target)
-		{
-			base.OnSpellResisted(target);
-			if (Spell.CastTime == 0)
-			{
-				// start interrupt even for resisted instant amnesia
-				target.StartInterruptTimer(target.SpellInterruptDuration, AttackData.eAttackType.Spell, Caster);
-			}
-		}
+        protected override void OnSpellResisted(GameLiving target)
+        {
+            base.OnSpellResisted(target);
+            if (Spell.CastTime == 0)
+            {
+                // start interrupt even for resisted instant amnesia
+                target.StartInterruptTimer(target.SpellInterruptDuration, AttackData.eAttackType.Spell, Caster);
+            }
+        }
 
-		public AmnesiaSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) {}
+        public AmnesiaSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription 
-			=> "Clears the monster's mind, causing it to forget who it was attacking. Negates any spells currently being cast by enemy player targets, but does not interrupt them unless resisted.";
+        public override string ShortDescription
+            => "Clears the monster's mind, causing it to forget who it was attacking. Negates any spells currently being cast by enemy player targets, but does not interrupt them unless resisted.";
     }
 }

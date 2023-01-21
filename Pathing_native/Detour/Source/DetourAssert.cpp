@@ -20,14 +20,14 @@
 
 #ifndef NDEBUG
 
-static dtAssertFailFunc* sAssertFailFunc = 0;
+static dtAssertFailFunc *sAssertFailFunc = 0;
 
 void dtAssertFailSetCustom(dtAssertFailFunc *assertFailFunc)
 {
 	sAssertFailFunc = assertFailFunc;
 }
 
-dtAssertFailFunc* dtAssertFailGetCustom()
+dtAssertFailFunc *dtAssertFailGetCustom()
 {
 	return sAssertFailFunc;
 }

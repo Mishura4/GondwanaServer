@@ -22,103 +22,103 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute(
-		"&webdisplay",
-		ePrivLevel.Player,
-		"Commands.Players.Webdisplay.Description",
-		"Commands.Players.Webdisplay.Usage")]
-	public class WebDisplayCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		private static log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+    [CmdAttribute(
+        "&webdisplay",
+        ePrivLevel.Player,
+        "Commands.Players.Webdisplay.Description",
+        "Commands.Players.Webdisplay.Usage")]
+    public class WebDisplayCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        private static log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (args.Length == 1)
-			{
-				DisplayInformations(client);
-				return;
-			}
-			
-			if (args[1].ToLower() == "position")
-				WdChange(GlobalConstants.eWebDisplay.position, client.Player, args.Length==3?args[2].ToLower():null);
-			if (args[1].ToLower() == "equipment")
-				WdChange(GlobalConstants.eWebDisplay.equipment, client.Player, args.Length==3?args[2].ToLower():null);
-			if (args[1].ToLower() == "template")
-				WdChange(GlobalConstants.eWebDisplay.template, client.Player, args.Length==3?args[2].ToLower():null);
-			if (args[1].ToLower() == "craft")
-				WdChange(GlobalConstants.eWebDisplay.craft, client.Player, args.Length==3?args[2].ToLower():null);
-			
-			DisplayInformations(client);
-		}
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (args.Length == 1)
+            {
+                DisplayInformations(client);
+                return;
+            }
 
-		// Set the eWebDisplay status
-		private void WdChange(GlobalConstants.eWebDisplay category, GamePlayer player, string state)
-		{
-			if (string.IsNullOrEmpty(state))
-				player.NotDisplayedInHerald ^= (byte)category;
-			else
-			{
-				if (state == "off")
-					player.NotDisplayedInHerald |= (byte)category;
-				
-				if (state == "on")
-					player.NotDisplayedInHerald &= (byte)~category;
-			}
-			
-			log.Debug("Player " + player.Name + ": WD = " + player.NotDisplayedInHerald);
-		}
+            if (args[1].ToLower() == "position")
+                WdChange(GlobalConstants.eWebDisplay.position, client.Player, args.Length == 3 ? args[2].ToLower() : null);
+            if (args[1].ToLower() == "equipment")
+                WdChange(GlobalConstants.eWebDisplay.equipment, client.Player, args.Length == 3 ? args[2].ToLower() : null);
+            if (args[1].ToLower() == "template")
+                WdChange(GlobalConstants.eWebDisplay.template, client.Player, args.Length == 3 ? args[2].ToLower() : null);
+            if (args[1].ToLower() == "craft")
+                WdChange(GlobalConstants.eWebDisplay.craft, client.Player, args.Length == 3 ? args[2].ToLower() : null);
 
-		// Display the informations
-		private void DisplayInformations(GameClient client)
-		{
-			byte webDisplay = client.Player.NotDisplayedInHerald;
-			byte webDisplayFlag;
+            DisplayInformations(client);
+        }
 
-			string state = LanguageMgr.GetTranslation(
-								client.Account.Language,
-								"Commands.Players.Webdisplay.Usage") + "\n";
-			
-			webDisplayFlag = (byte)GlobalConstants.eWebDisplay.equipment;
-			if ((webDisplay & webDisplayFlag) == webDisplayFlag)
-				state += LanguageMgr.GetTranslation(
-							client.Account.Language,
-							"Commands.Players.Webdisplay.Equipment.Off") + "\n";
-			else
-				state += LanguageMgr.GetTranslation(
-							client.Account.Language,
-							"Commands.Players.Webdisplay.Equipment.On") + "\n";
-			
-			webDisplayFlag = (byte)GlobalConstants.eWebDisplay.position;
-			if ((webDisplay & webDisplayFlag) == webDisplayFlag)
-				state += LanguageMgr.GetTranslation(
-							client.Account.Language,
-							"Commands.Players.Webdisplay.Position.Off") + "\n";
-			else
-				state += LanguageMgr.GetTranslation(
-							client.Account.Language,
-							"Commands.Players.Webdisplay.Position.On") + "\n";
-			
-			webDisplayFlag = (byte)GlobalConstants.eWebDisplay.template;
-			if ((webDisplay & webDisplayFlag) == webDisplayFlag)
-				state += LanguageMgr.GetTranslation(
-							client.Account.Language,
-							"Commands.Players.Webdisplay.Template.Off") + "\n";
-			else
-				state += LanguageMgr.GetTranslation(
-							client.Account.Language,
-							"Commands.Players.Webdisplay.Template.On") +"\n";
-	
-			webDisplayFlag = (byte)GlobalConstants.eWebDisplay.craft;
-			if ((webDisplay & webDisplayFlag) == webDisplayFlag)
-				state += LanguageMgr.GetTranslation(
-							client.Account.Language,
-							"Commands.Players.Webdisplay.Craft.Off") + "\n";
-			else
-				state += LanguageMgr.GetTranslation(
-							client.Account.Language,
-							"Commands.Players.Webdisplay.Craft.On") + "\n";			
-			
-			DisplayMessage(client, state);
-		}
-	}
+        // Set the eWebDisplay status
+        private void WdChange(GlobalConstants.eWebDisplay category, GamePlayer player, string state)
+        {
+            if (string.IsNullOrEmpty(state))
+                player.NotDisplayedInHerald ^= (byte)category;
+            else
+            {
+                if (state == "off")
+                    player.NotDisplayedInHerald |= (byte)category;
+
+                if (state == "on")
+                    player.NotDisplayedInHerald &= (byte)~category;
+            }
+
+            log.Debug("Player " + player.Name + ": WD = " + player.NotDisplayedInHerald);
+        }
+
+        // Display the informations
+        private void DisplayInformations(GameClient client)
+        {
+            byte webDisplay = client.Player.NotDisplayedInHerald;
+            byte webDisplayFlag;
+
+            string state = LanguageMgr.GetTranslation(
+                                client.Account.Language,
+                                "Commands.Players.Webdisplay.Usage") + "\n";
+
+            webDisplayFlag = (byte)GlobalConstants.eWebDisplay.equipment;
+            if ((webDisplay & webDisplayFlag) == webDisplayFlag)
+                state += LanguageMgr.GetTranslation(
+                            client.Account.Language,
+                            "Commands.Players.Webdisplay.Equipment.Off") + "\n";
+            else
+                state += LanguageMgr.GetTranslation(
+                            client.Account.Language,
+                            "Commands.Players.Webdisplay.Equipment.On") + "\n";
+
+            webDisplayFlag = (byte)GlobalConstants.eWebDisplay.position;
+            if ((webDisplay & webDisplayFlag) == webDisplayFlag)
+                state += LanguageMgr.GetTranslation(
+                            client.Account.Language,
+                            "Commands.Players.Webdisplay.Position.Off") + "\n";
+            else
+                state += LanguageMgr.GetTranslation(
+                            client.Account.Language,
+                            "Commands.Players.Webdisplay.Position.On") + "\n";
+
+            webDisplayFlag = (byte)GlobalConstants.eWebDisplay.template;
+            if ((webDisplay & webDisplayFlag) == webDisplayFlag)
+                state += LanguageMgr.GetTranslation(
+                            client.Account.Language,
+                            "Commands.Players.Webdisplay.Template.Off") + "\n";
+            else
+                state += LanguageMgr.GetTranslation(
+                            client.Account.Language,
+                            "Commands.Players.Webdisplay.Template.On") + "\n";
+
+            webDisplayFlag = (byte)GlobalConstants.eWebDisplay.craft;
+            if ((webDisplay & webDisplayFlag) == webDisplayFlag)
+                state += LanguageMgr.GetTranslation(
+                            client.Account.Language,
+                            "Commands.Players.Webdisplay.Craft.Off") + "\n";
+            else
+                state += LanguageMgr.GetTranslation(
+                            client.Account.Language,
+                            "Commands.Players.Webdisplay.Craft.On") + "\n";
+
+            DisplayMessage(client, state);
+        }
+    }
 }

@@ -51,7 +51,7 @@ namespace DOL.UnitTests.Database
         [Test]
         public void Filter_NameEqualsConstant_And_LevelEqualsConstant()
         {
-            var andExpression = DB.Where<DOLCharacters>(o => o.Name == "Dre"  && o.Level == 2);
+            var andExpression = DB.Where<DOLCharacters>(o => o.Name == "Dre" && o.Level == 2);
 
             var placeHolder1 = andExpression.Parameters[0].Name;
             var placeHolder2 = andExpression.Parameters[1].Name;
@@ -63,7 +63,7 @@ namespace DOL.UnitTests.Database
         [Test]
         public void Filter_LevelInConstantInt32Values()
         {
-            var expr = DB.Where<DOLCharacters>(o => new [] { 1, 2 }.Contains(o.Level));
+            var expr = DB.Where<DOLCharacters>(o => new[] { 1, 2 }.Contains(o.Level));
             var placeHolder1 = expr.Parameters[0].Item1;
             var placeHolder2 = expr.Parameters[1].Item1;
             var actual = expr.ParameterizedText;
@@ -74,7 +74,7 @@ namespace DOL.UnitTests.Database
         [Test]
         public void Filter_LevelInConstantStringValues()
         {
-            var expr = DB.Where<DOLCharacters>(o => new [] { "a", "b" }.Contains(o.Name));
+            var expr = DB.Where<DOLCharacters>(o => new[] { "a", "b" }.Contains(o.Name));
             var placeHolder1 = expr.Parameters[0].Item1;
             var placeHolder2 = expr.Parameters[1].Item1;
             var actual = expr.ParameterizedText;
@@ -118,7 +118,7 @@ namespace DOL.UnitTests.Database
         {
             var dre = "Dre";
             var level = 2;
-            var andExpression = DB.Where<DOLCharacters>(o => o.Name == dre  && o.Level == level);
+            var andExpression = DB.Where<DOLCharacters>(o => o.Name == dre && o.Level == level);
 
             var placeHolder1 = andExpression.Parameters[0].Name;
             var placeHolder2 = andExpression.Parameters[1].Name;
@@ -130,7 +130,7 @@ namespace DOL.UnitTests.Database
         [Test]
         public void Filter_LevelInInt32Values()
         {
-            var levels = new[] {1, 2};
+            var levels = new[] { 1, 2 };
             var expr = DB.Where<DOLCharacters>(o => levels.Contains(o.Level));
             var placeHolder1 = expr.Parameters[0].Item1;
             var placeHolder2 = expr.Parameters[1].Item1;
@@ -142,7 +142,7 @@ namespace DOL.UnitTests.Database
         [Test]
         public void Filter_LevelInStringValues()
         {
-            var names = new List<string> {"a", "b"};
+            var names = new List<string> { "a", "b" };
             var expr = DB.Where<DOLCharacters>(o => names.Contains(o.Name));
             var placeHolder1 = expr.Parameters[0].Item1;
             var placeHolder2 = expr.Parameters[1].Item1;
@@ -164,7 +164,7 @@ namespace DOL.UnitTests.Database
         [Test]
         public void Filter_NameEqualsToComplexExpression()
         {
-            var names = new [] { "Dre " };
+            var names = new[] { "Dre " };
             var expression = DB.Where<DOLCharacters>(o => o.Name == names[0].Trim().ToLower());
             var parameter = expression.Parameters[0];
             var actual = expression.ParameterizedText;

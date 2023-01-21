@@ -22,20 +22,20 @@ using DOL.GS;
 
 namespace DOL.AI.Brain
 {
-	public class OutlawFearBrain : FearBrain
-	{
-		
-		/// <summary>
-		/// Flee from Outlaw Players on Brain Think
-		/// </summary>
-		public override void Think()
-		{
-			foreach (GamePlayer player in Body.GetPlayersInRadius((ushort)Math.Max(AggroRange, 750)))
-			{
-				if (player.Reputation < 0)
-					CalculateFleeTarget(player);
-				break;
-			}
-		}
-	}
-} 
+    public class OutlawFearBrain : FearBrain
+    {
+
+        /// <summary>
+        /// Flee from Outlaw Players on Brain Think
+        /// </summary>
+        public override void Think()
+        {
+            foreach (GamePlayer player in Body.GetPlayersInRadius((ushort)Math.Max(AggroRange, 750)))
+            {
+                if (player.Reputation < 0)
+                    CalculateFleeTarget(player);
+                break;
+            }
+        }
+    }
+}

@@ -21,92 +21,92 @@ using DOL.GS.PacketHandler;
 
 namespace DOL.GS.Spells
 {
-	[SpellHandler("StyleBleeding")]
-	public class StyleBleeding : SpellHandler
-	{
-		protected const string BLEED_VALUE_PROPERTY = "BleedValue";
+    [SpellHandler("StyleBleeding")]
+    public class StyleBleeding : SpellHandler
+    {
+        protected const string BLEED_VALUE_PROPERTY = "BleedValue";
 
-		public override void OnEffectStart(GameSpellEffect effect)
-		{
-			base.OnEffectStart(effect);
-			SendEffectAnimation(effect.Owner, 0, false, 1);
-			effect.Owner.TempProperties.setProperty(BLEED_VALUE_PROPERTY, (int)Spell.Damage + (int)Spell.Damage * Util.Random(25) / 100);  // + random max 25%
-		}
+        public override void OnEffectStart(GameSpellEffect effect)
+        {
+            base.OnEffectStart(effect);
+            SendEffectAnimation(effect.Owner, 0, false, 1);
+            effect.Owner.TempProperties.setProperty(BLEED_VALUE_PROPERTY, (int)Spell.Damage + (int)Spell.Damage * Util.Random(25) / 100);  // + random max 25%
+        }
 
-		public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
-		{
-			base.OnEffectExpires(effect, noMessages);
-			effect.Owner.TempProperties.removeProperty(BLEED_VALUE_PROPERTY);
-			return 0;
-		}
+        public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
+        {
+            base.OnEffectExpires(effect, noMessages);
+            effect.Owner.TempProperties.removeProperty(BLEED_VALUE_PROPERTY);
+            return 0;
+        }
 
-		public override void OnEffectPulse(GameSpellEffect effect)
-		{
-			base.OnEffectPulse(effect);
+        public override void OnEffectPulse(GameSpellEffect effect)
+        {
+            base.OnEffectPulse(effect);
 
-			MessageToLiving(effect.Owner, Spell.Message1, eChatType.CT_YouWereHit);
-			Message.SystemToArea(effect.Owner, Util.MakeSentence(Spell.Message2, effect.Owner.GetName(0, false)), eChatType.CT_YouHit, effect.Owner);
+            MessageToLiving(effect.Owner, Spell.Message1, eChatType.CT_YouWereHit);
+            Message.SystemToArea(effect.Owner, Util.MakeSentence(Spell.Message2, effect.Owner.GetName(0, false)), eChatType.CT_YouHit, effect.Owner);
 
-			int bleedValue = effect.Owner.TempProperties.getProperty<int>(BLEED_VALUE_PROPERTY);
+            int bleedValue = effect.Owner.TempProperties.getProperty<int>(BLEED_VALUE_PROPERTY);
 
-			AttackData ad = CalculateDamageToTarget( effect.Owner, 1.0 );
+            AttackData ad = CalculateDamageToTarget(effect.Owner, 1.0);
 
-			SendDamageMessages(ad);
+            SendDamageMessages(ad);
 
-			// attacker must be null, attack result is 0x0A
-			foreach(GamePlayer player in ad.Target.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE)) 
-			{
-				player.Out.SendCombatAnimation(null, ad.Target, 0, 0, 0, 0, 0x0A, ad.Target.HealthPercent);
-			}
-			// send animation before dealing damage else dead livings show no animation
-			ad.Target.OnAttackedByEnemy(ad);
-			ad.Attacker.DealDamage(ad);
+            // attacker must be null, attack result is 0x0A
+            foreach (GamePlayer player in ad.Target.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+            {
+                player.Out.SendCombatAnimation(null, ad.Target, 0, 0, 0, 0, 0x0A, ad.Target.HealthPercent);
+            }
+            // send animation before dealing damage else dead livings show no animation
+            ad.Target.OnAttackedByEnemy(ad);
+            ad.Attacker.DealDamage(ad);
 
-			if (--bleedValue <= 0 || !effect.Owner.IsAlive)
-				effect.Cancel(false);
-			else effect.Owner.TempProperties.setProperty(BLEED_VALUE_PROPERTY, bleedValue);
-		}
+            if (--bleedValue <= 0 || !effect.Owner.IsAlive)
+                effect.Cancel(false);
+            else effect.Owner.TempProperties.setProperty(BLEED_VALUE_PROPERTY, bleedValue);
+        }
 
-		protected override GameSpellEffect CreateSpellEffect(GameLiving target, double effectiveness)
-		{
-			return new GameSpellEffect(this, CalculateEffectDuration(target, effectiveness), Spell.Frequency, effectiveness);
-		}
+        protected override GameSpellEffect CreateSpellEffect(GameLiving target, double effectiveness)
+        {
+            return new GameSpellEffect(this, CalculateEffectDuration(target, effectiveness), Spell.Frequency, effectiveness);
+        }
 
-		public override AttackData CalculateDamageToTarget( GameLiving target, double effectiveness )
-		{
-			int bleedValue = target.TempProperties.getProperty<int>( BLEED_VALUE_PROPERTY);
+        public override AttackData CalculateDamageToTarget(GameLiving target, double effectiveness)
+        {
+            int bleedValue = target.TempProperties.getProperty<int>(BLEED_VALUE_PROPERTY);
 
-			AttackData ad = new AttackData();
-			ad.Attacker = Caster;
-			ad.Target = target;
-			ad.AttackType = AttackData.eAttackType.Spell;
-			ad.Modifier = bleedValue * ad.Target.GetResist( Spell.DamageType ) / -100;
-			ad.Damage = bleedValue + ad.Modifier;
-			ad.DamageType = Spell.DamageType;
-			ad.AttackResult = GameLiving.eAttackResult.HitUnstyled;
-			ad.SpellHandler = this;
-			ad.CausesCombat = false;
+            AttackData ad = new AttackData();
+            ad.Attacker = Caster;
+            ad.Target = target;
+            ad.AttackType = AttackData.eAttackType.Spell;
+            ad.Modifier = bleedValue * ad.Target.GetResist(Spell.DamageType) / -100;
+            ad.Damage = bleedValue + ad.Modifier;
+            ad.DamageType = Spell.DamageType;
+            ad.AttackResult = GameLiving.eAttackResult.HitUnstyled;
+            ad.SpellHandler = this;
+            ad.CausesCombat = false;
 
-			return ad;
-		}
+            return ad;
+        }
 
-		protected override int CalculateEffectDuration(GameLiving target, double effectiveness)
-		{
-			return Spell.Duration;
-		}
+        protected override int CalculateEffectDuration(GameLiving target, double effectiveness)
+        {
+            return Spell.Duration;
+        }
 
-		public override int CalculateSpellResistChance(GameLiving target)
-		{
-			return 0;
-		}
+        public override int CalculateSpellResistChance(GameLiving target)
+        {
+            return 0;
+        }
 
-		public override bool IsNewEffectBetter(GameSpellEffect oldeffect, GameSpellEffect neweffect)
-		{
-			return oldeffect.Spell.SpellType == neweffect.Spell.SpellType;
-		}
+        public override bool IsNewEffectBetter(GameSpellEffect oldeffect, GameSpellEffect neweffect)
+        {
+            return oldeffect.Spell.SpellType == neweffect.Spell.SpellType;
+        }
 
-		public StyleBleeding(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) {}
+        public StyleBleeding(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-		public override string ShortDescription => $"Target takes {Spell.Damage} {Spell.DamageType} damage every {Spell.Frequency / 1000.0} seconds.";
-	}
+        public override string ShortDescription => $"Target takes {Spell.Damage} {Spell.DamageType} damage every {Spell.Frequency / 1000.0} seconds.";
+    }
 }

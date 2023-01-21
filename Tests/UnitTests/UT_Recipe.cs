@@ -39,7 +39,7 @@ namespace DOL.UnitTests.Gameserver
             var item = new ItemTemplate();
             item.Price = 2;
             var ingredient = new Ingredient(1, item);
-            var recipe = new Recipe(null, new List<Ingredient>() { ingredient});
+            var recipe = new Recipe(null, new List<Ingredient>() { ingredient });
 
             var actual = recipe.CostToCraft;
 

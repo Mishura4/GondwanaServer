@@ -23,51 +23,51 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute(
-		"&quest",
-		new[] {"&quests"},
-		ePrivLevel.Player,
-		"Commands.Players.Quest.Description",
-		"Commands.Players.Quest.Usage")]
-	public class QuestCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (IsSpammingCommand(client.Player, "quest"))
-				return;
+    [CmdAttribute(
+        "&quest",
+        new[] { "&quests" },
+        ePrivLevel.Player,
+        "Commands.Players.Quest.Description",
+        "Commands.Players.Quest.Usage")]
+    public class QuestCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (IsSpammingCommand(client.Player, "quest"))
+                return;
 
-			string message = "\n";
-			if (client.Player.QuestList.Count == 0)
-				message += LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Quest.NoPending") + "\n";
-			else
-			{
-				message += LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Quest.WorkingOn") + "\n";
-				foreach (var quest in client.Player.QuestList)
-				{
-					message += LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Quest.OnStep", quest.Quest.Name) + "\n";
-					message += LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Quest.WhatTodo", quest.Quest.Description);
-				}
-			}
-			if (client.Player.QuestListFinished.Count == 0)
-				message += "\n" + LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Quest.NotComplete") + "\n";
-			else
-			{
-				message += "\n"+ LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Quest.Completed") +"\n";
+            string message = "\n";
+            if (client.Player.QuestList.Count == 0)
+                message += LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Quest.NoPending") + "\n";
+            else
+            {
+                message += LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Quest.WorkingOn") + "\n";
+                foreach (var quest in client.Player.QuestList)
+                {
+                    message += LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Quest.OnStep", quest.Quest.Name) + "\n";
+                    message += LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Quest.WhatTodo", quest.Quest.Description);
+                }
+            }
+            if (client.Player.QuestListFinished.Count == 0)
+                message += "\n" + LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Quest.NotComplete") + "\n";
+            else
+            {
+                message += "\n" + LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Quest.Completed") + "\n";
 
-				// Need to protect from too long a list.  
-				// We'll do an easy sloppy chop at 1500 characters (packet limit is 2048)
-				foreach (var quest in client.Player.QuestListFinished)
-				{
-					message += quest.Quest.Name + LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Quest.QuestCompletedk") +"\n";
+                // Need to protect from too long a list.  
+                // We'll do an easy sloppy chop at 1500 characters (packet limit is 2048)
+                foreach (var quest in client.Player.QuestListFinished)
+                {
+                    message += quest.Quest.Name + LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Quest.QuestCompletedk") + "\n";
 
-					if (message.Length > 1500)
-					{
-						DisplayMessage(client, message);
-						message = "";
-					}
-				}
-			}
-			DisplayMessage(client, message);
-		}
-	}
+                    if (message.Length > 1500)
+                    {
+                        DisplayMessage(client, message);
+                        message = "";
+                    }
+                }
+            }
+            DisplayMessage(client, message);
+        }
+    }
 }

@@ -23,21 +23,21 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute(
-		"&cancelstyle",
-		ePrivLevel.Player,
-		"Commands.Players.Cancelstyle.Description",
-		"Commands.Players.Cancelstyle.Usage")]
-	public class CancelStyleCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (IsSpammingCommand(client.Player, "cancelstyle"))
-				return;
+    [CmdAttribute(
+        "&cancelstyle",
+        ePrivLevel.Player,
+        "Commands.Players.Cancelstyle.Description",
+        "Commands.Players.Cancelstyle.Usage")]
+    public class CancelStyleCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (IsSpammingCommand(client.Player, "cancelstyle"))
+                return;
 
-			client.Player.CancelStyle = !client.Player.CancelStyle;
-			DisplayMessage(client, string.Format(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Cancelstyle.Set",
-				(client.Player.CancelStyle ? LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Cancelstyle.On") : LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Cancelstyle.Off")))));
-		}
-	}
+            client.Player.CancelStyle = !client.Player.CancelStyle;
+            DisplayMessage(client, string.Format(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Cancelstyle.Set",
+                (client.Player.CancelStyle ? LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Cancelstyle.On") : LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Cancelstyle.Off")))));
+        }
+    }
 }

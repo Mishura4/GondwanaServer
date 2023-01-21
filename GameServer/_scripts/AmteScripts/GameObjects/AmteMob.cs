@@ -9,43 +9,43 @@ using DOL.GS.Scripts;
 
 public class AmteMob : GameNPC, IAmteNPC
 {
-	private readonly Dictionary<string, DBBrainsParam> _nameXcp = new Dictionary<string, DBBrainsParam>();
+    private readonly Dictionary<string, DBBrainsParam> _nameXcp = new Dictionary<string, DBBrainsParam>();
 
-	private readonly AmteCustomParam _linkParam;
+    private readonly AmteCustomParam _linkParam;
 
-	public AmteMob()
-	{
-		SetOwnBrain(new AmteMobBrain(Brain));
-		_linkParam = new AmteCustomParam(
-			"link",
-			() => ((AmteMobBrain) Brain).AggroLink.ToString(),
-			v => ((AmteMobBrain) Brain).AggroLink = int.Parse(v),
-			"-1");
-	}
+    public AmteMob()
+    {
+        SetOwnBrain(new AmteMobBrain(Brain));
+        _linkParam = new AmteCustomParam(
+            "link",
+            () => ((AmteMobBrain)Brain).AggroLink.ToString(),
+            v => ((AmteMobBrain)Brain).AggroLink = int.Parse(v),
+            "-1");
+    }
 
-	public AmteMob(INpcTemplate npc)
-		: base(npc)
-	{
-		SetOwnBrain(new AmteMobBrain(Brain));
-		_linkParam = new AmteCustomParam(
-			"link",
-			() => ((AmteMobBrain) Brain).AggroLink.ToString(),
-			v => ((AmteMobBrain) Brain).AggroLink = int.Parse(v),
-			"-1");
-	}
+    public AmteMob(INpcTemplate npc)
+        : base(npc)
+    {
+        SetOwnBrain(new AmteMobBrain(Brain));
+        _linkParam = new AmteCustomParam(
+            "link",
+            () => ((AmteMobBrain)Brain).AggroLink.ToString(),
+            v => ((AmteMobBrain)Brain).AggroLink = int.Parse(v),
+            "-1");
+    }
 
-	public override bool IsFriend(GameNPC npc)
-	{
-		if (npc.Brain is IControlledBrain)
-			return GameServer.ServerRules.IsSameRealm(this, npc, true);
-		if (Faction == null && npc.Faction == null)
-			return npc.Name == Name || (!string.IsNullOrEmpty(npc.GuildName)  && npc.GuildName == GuildName);
-		return base.IsFriend(npc);
-	}
+    public override bool IsFriend(GameNPC npc)
+    {
+        if (npc.Brain is IControlledBrain)
+            return GameServer.ServerRules.IsSameRealm(this, npc, true);
+        if (Faction == null && npc.Faction == null)
+            return npc.Name == Name || (!string.IsNullOrEmpty(npc.GuildName) && npc.GuildName == GuildName);
+        return base.IsFriend(npc);
+    }
 
-	public override void LoadFromDatabase(DataObject obj)
-	{
-		base.LoadFromDatabase(obj);
+    public override void LoadFromDatabase(DataObject obj)
+    {
+        base.LoadFromDatabase(obj);
 
         LoadDbBrainParam(obj.ObjectId);
         // load some stats from the npctemplate
@@ -89,11 +89,11 @@ public class AmteMob : GameNPC, IAmteNPC
     }
 
     public override void SaveIntoDatabase()
-	{
-		base.SaveIntoDatabase();
+    {
+        base.SaveIntoDatabase();
 
-		DBBrainsParam param;
-		for (var cp = GetCustomParam(); cp != null; cp = cp.next)
+        DBBrainsParam param;
+        for (var cp = GetCustomParam(); cp != null; cp = cp.next)
         {
             if (_nameXcp.TryGetValue(cp.name, out param) && param.MobID == InternalID)
             {
@@ -109,7 +109,7 @@ public class AmteMob : GameNPC, IAmteNPC
                     Param = cp.name,
                     Value = cp.Value
                 };
-                if(_nameXcp.ContainsKey(cp.name))
+                if (_nameXcp.ContainsKey(cp.name))
                 {
                     _nameXcp[cp.name] = param;
                 }
@@ -120,26 +120,26 @@ public class AmteMob : GameNPC, IAmteNPC
                 GameServer.Database.AddObject(param);
             }
         }
-	}
+    }
 
     public override void DeleteFromDatabase()
-	{
-		base.DeleteFromDatabase();
-		_nameXcp.Values.Foreach(o => GameServer.Database.DeleteObject(o));
-	}
+    {
+        base.DeleteFromDatabase();
+        _nameXcp.Values.Foreach(o => GameServer.Database.DeleteObject(o));
+    }
 
-	public virtual AmteCustomParam GetCustomParam()
-	{
-		return _linkParam;
-	}
+    public virtual AmteCustomParam GetCustomParam()
+    {
+        return _linkParam;
+    }
 
-	public virtual IList<string> DelveInfo()
-	{
-		var list = new List<string>();
-		for (var cp = GetCustomParam(); cp != null; cp = cp.next)
-			list.Add(" - " + cp.name + ": " + cp.Value);
-		return list;
-	}
+    public virtual IList<string> DelveInfo()
+    {
+        var list = new List<string>();
+        for (var cp = GetCustomParam(); cp != null; cp = cp.next)
+            list.Add(" - " + cp.name + ": " + cp.Value);
+        return list;
+    }
 
     public override void CustomCopy(GameObject source)
     {
@@ -147,21 +147,21 @@ public class AmteMob : GameNPC, IAmteNPC
         LoadDbBrainParam(source.InternalID);
     }
 
-	public override eQuestIndicator GetQuestIndicator(GamePlayer player)
-	{
-		var res = base.GetQuestIndicator(player);
-		if (res != eQuestIndicator.None)
-			return res;
+    public override eQuestIndicator GetQuestIndicator(GamePlayer player)
+    {
+        var res = base.GetQuestIndicator(player);
+        if (res != eQuestIndicator.None)
+            return res;
 
-		foreach (var q in QuestIdListToGive.OfType<PlayerQuest>())
-		{
-			var quest = player.QuestList.OfType<PlayerQuest>().FirstOrDefault(pq => pq.QuestId == q.QuestId);
-			if (quest == null)
-				continue;
-			if (quest.VisibleGoals.OfType<DataQuestJsonGoal.GenericDataQuestGoal>().Any(g => g.Goal is EndGoal end && end.Target == this))
-				return eQuestIndicator.Finish;
-		}
+        foreach (var q in QuestIdListToGive.OfType<PlayerQuest>())
+        {
+            var quest = player.QuestList.OfType<PlayerQuest>().FirstOrDefault(pq => pq.QuestId == q.QuestId);
+            if (quest == null)
+                continue;
+            if (quest.VisibleGoals.OfType<DataQuestJsonGoal.GenericDataQuestGoal>().Any(g => g.Goal is EndGoal end && end.Target == this))
+                return eQuestIndicator.Finish;
+        }
 
-		return eQuestIndicator.None;
-	}
+        return eQuestIndicator.None;
+    }
 }

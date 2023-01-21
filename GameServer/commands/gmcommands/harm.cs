@@ -23,38 +23,38 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute(
-		"&harm",
-		ePrivLevel.GM,
-		"Commands.GM.Harm.Description",
-		"Commands.GM.Harm.Usage")]
-	public class HarmCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (args.Length == 1)
-			{
-				DisplaySyntax(client);
-				return;
-			}
+    [CmdAttribute(
+        "&harm",
+        ePrivLevel.GM,
+        "Commands.GM.Harm.Description",
+        "Commands.GM.Harm.Usage")]
+    public class HarmCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (args.Length == 1)
+            {
+                DisplaySyntax(client);
+                return;
+            }
 
-			int amount;
+            int amount;
 
-			try
-			{
-				amount = Convert.ToInt16(args[1]);
-				GameLiving living = client.Player.TargetObject as GameLiving;
-				if (living != null)
-					living.TakeDamage(client.Player, eDamageType.GM, amount, 0);
-				else
-					DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Harm.InvalidTarget"));
-			}
-			catch (Exception ex)
-			{
-				List<string> list = new List<string>();
-				list.Add(ex.ToString());
-				client.Out.SendCustomTextWindow("Exception", list);
-			}
-		}
-	}
+            try
+            {
+                amount = Convert.ToInt16(args[1]);
+                GameLiving living = client.Player.TargetObject as GameLiving;
+                if (living != null)
+                    living.TakeDamage(client.Player, eDamageType.GM, amount, 0);
+                else
+                    DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Harm.InvalidTarget"));
+            }
+            catch (Exception ex)
+            {
+                List<string> list = new List<string>();
+                list.Add(ex.ToString());
+                client.Out.SendCustomTextWindow("Exception", list);
+            }
+        }
+    }
 }

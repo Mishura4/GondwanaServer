@@ -20,12 +20,12 @@ using NUnit.Framework;
 
 namespace DOL.Integration.Database.MySQL
 {
-	[TestFixture, Explicit]
-	public class MySQLDBCustomParamsTest : CustomParamsTest
-	{
-		public MySQLDBCustomParamsTest()
-		{
-			Database = MySQLDBSetUp.Database;
-		}
-	}
+    [TestFixture, Explicit]
+    public class MySQLDBCustomParamsTest : CustomParamsTest
+    {
+        public MySQLDBCustomParamsTest()
+        {
+            Database = MySQLDBSetUp.Database;
+        }
+    }
 }

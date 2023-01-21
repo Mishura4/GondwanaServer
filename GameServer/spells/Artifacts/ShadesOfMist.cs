@@ -69,14 +69,14 @@ namespace DOL.GS.Spells
             }
             GameEventMgr.RemoveHandler(effect.Owner, GameLivingEvent.AttackedByEnemy, new DOLEventHandler(EventHandler));
             return base.OnEffectExpires(effect, noMessages);
-            
+
         }
 
         public void EventHandler(DOLEvent e, object sender, EventArgs arguments)
         {
             AttackedByEnemyEventArgs args = arguments as AttackedByEnemyEventArgs;
             if (args == null) return;
-            
+
             if (args.AttackData == null) return;
             if (args.AttackData.SpellHandler != null) return;
             if (args.AttackData.AttackResult != GameLiving.eAttackResult.HitUnstyled
@@ -113,9 +113,9 @@ namespace DOL.GS.Spells
 
                 //TODO correct messages
                 MessageToLiving(ad.Target, string.Format("Your ablative absorbs {0} damage!", damageAbsorbed), eChatType.CT_Spell);//since its not always Melee absorbing
-                MessageToLiving(ad.Attacker, string.Format("A barrier absorbs {0} damage of your attack!", damageAbsorbed), eChatType.CT_Spell);  
+                MessageToLiving(ad.Attacker, string.Format("A barrier absorbs {0} damage of your attack!", damageAbsorbed), eChatType.CT_Spell);
             }
-            
+
         }
 
         protected virtual void OnDamageAbsorbed(AttackData ad, int DamageAmount)

@@ -30,53 +30,53 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute(
-		"&facegloc",
-		ePrivLevel.Player,
-		"Commands.Players.Facgloc.Description",
-		"Commands.Players.Facgloc.Usage")]
-	public class GLocFaceCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (IsSpammingCommand(client.Player, "facegloc"))
-				return;
+    [CmdAttribute(
+        "&facegloc",
+        ePrivLevel.Player,
+        "Commands.Players.Facgloc.Description",
+        "Commands.Players.Facgloc.Usage")]
+    public class GLocFaceCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (IsSpammingCommand(client.Player, "facegloc"))
+                return;
 
-			if (args.Length < 3)
-			{
-				client.Out.SendMessage(
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Facegloc.Error.Coordinates"
-					),
-					eChatType.CT_System,
-					eChatLoc.CL_SystemWindow
-				);
-				return;
-			}
+            if (args.Length < 3)
+            {
+                client.Out.SendMessage(
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Facegloc.Error.Coordinates"
+                    ),
+                    eChatType.CT_System,
+                    eChatLoc.CL_SystemWindow
+                );
+                return;
+            }
 
-			int x, y;
-			try
-			{
-				x = Convert.ToInt32(args[1]);
-				y = Convert.ToInt32(args[2]);
-			}
-			catch (Exception)
-			{
-				client.Out.SendMessage(
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Facegloc.Error.Coordinates"
-					),
-					eChatType.CT_System,
-					eChatLoc.CL_SystemWindow
-				);
-				return;
-			}
+            int x, y;
+            try
+            {
+                x = Convert.ToInt32(args[1]);
+                y = Convert.ToInt32(args[2]);
+            }
+            catch (Exception)
+            {
+                client.Out.SendMessage(
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Facegloc.Error.Coordinates"
+                    ),
+                    eChatType.CT_System,
+                    eChatLoc.CL_SystemWindow
+                );
+                return;
+            }
 
-            ushort direction = client.Player.GetHeading( new Vector2( x, y ) );
-			client.Player.Heading = direction;
-			client.Out.SendPlayerJump(true);
-		}
-	}
+            ushort direction = client.Player.GetHeading(new Vector2(x, y));
+            client.Player.Heading = direction;
+            client.Out.SendPlayerJump(true);
+        }
+    }
 }

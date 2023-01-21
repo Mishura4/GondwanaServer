@@ -20,17 +20,17 @@ using System.Collections.Generic;
 
 namespace DOL.GS.Spells
 {
-	[SpellHandler("CureNearsight")]
-	public class CureNearsightSpellHandler : RemoveSpellEffectHandler
-	{
-		public CureNearsightSpellHandler(GameLiving caster, Spell spell, SpellLine line)
-			: base(caster, spell, line)
-		{
-			m_spellTypesToRemove = new List<string>();
-			m_spellTypesToRemove.Add("Nearsight");
+    [SpellHandler("CureNearsight")]
+    public class CureNearsightSpellHandler : RemoveSpellEffectHandler
+    {
+        public CureNearsightSpellHandler(GameLiving caster, Spell spell, SpellLine line)
+            : base(caster, spell, line)
+        {
+            m_spellTypesToRemove = new List<string>();
+            m_spellTypesToRemove.Add("Nearsight");
             m_spellTypesToRemove.Add("Silence");
-		}
+        }
 
-		public override string ShortDescription => "All nearsight effects are removed from the target.";
-	}
+        public override string ShortDescription => "All nearsight effects are removed from the target.";
+    }
 }

@@ -38,27 +38,27 @@ using System.Collections;
 11,Ram Low,0,12,13,80,*/
 namespace DOL.GS
 {
-	/// <summary>
-	/// GameMovingObject is a base class for boats and siege weapons.
-	/// </summary>
-	public class GameSiegeBallista : GameSiegeWeapon
-	{
-		public GameSiegeBallista()
-			: base()
-		{
-			MeleeDamageType = eDamageType.Thrust;
-			Name = "field ballista";
-			AmmoType = 0x18;
-			this.Model = 0x0A55;
-			this.Effect = 0x089A;
-			ActionDelay = new int[]{
-				0,//none
+    /// <summary>
+    /// GameMovingObject is a base class for boats and siege weapons.
+    /// </summary>
+    public class GameSiegeBallista : GameSiegeWeapon
+    {
+        public GameSiegeBallista()
+            : base()
+        {
+            MeleeDamageType = eDamageType.Thrust;
+            Name = "field ballista";
+            AmmoType = 0x18;
+            this.Model = 0x0A55;
+            this.Effect = 0x089A;
+            ActionDelay = new int[]{
+                0,//none
 				5000,//aiming
 				10000,//arming
 				0,//loading
 				1100//fireing
 			};//en ms
-			/*SpellLine siegeWeaponSpellLine = SkillBase.GetSpellLine(GlobalSpellsLines.SiegeWeapon_Spells);
+            /*SpellLine siegeWeaponSpellLine = SkillBase.GetSpellLine(GlobalSpellsLines.SiegeWeapon_Spells);
 			IList spells = SkillBase.GetSpellList(siegeWeaponSpellLine.KeyName);
 			if (spells != null)
 			{
@@ -74,19 +74,19 @@ namespace DOL.GS
 					}
 				}
 			}*/
-		}
+        }
 
-		public override void DoDamage()
-		{
-			//todo remove ammo + spell in db and uncomment
-			//m_spellHandler.StartSpell(player);
-			base.DoDamage();//anim mut be called after damage
-		}
-		public override bool ReceiveItem(GameLiving source, DOL.Database.InventoryItem item)
-		{
-			//todo check if bullet
-			return base.ReceiveItem(source, item);
-		}
+        public override void DoDamage()
+        {
+            //todo remove ammo + spell in db and uncomment
+            //m_spellHandler.StartSpell(player);
+            base.DoDamage();//anim mut be called after damage
+        }
+        public override bool ReceiveItem(GameLiving source, DOL.Database.InventoryItem item)
+        {
+            //todo check if bullet
+            return base.ReceiveItem(source, item);
+        }
 
-	}
+    }
 }

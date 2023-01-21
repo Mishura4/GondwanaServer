@@ -27,10 +27,10 @@ using System.Reflection;
 using System.Collections.Generic;
 
 namespace DOL.GS.Behaviour
-{    
-        			
-	/// <summary>
-	/// BaseQuestParts are the core element of the new questsystem,
+{
+
+    /// <summary>
+    /// BaseQuestParts are the core element of the new questsystem,
     /// you can add as many QuestAction to a quest as you want. 
     /// 
     /// A QuestAction contains basically 3 Things: Trigger, Requirements, Actions 
@@ -47,23 +47,23 @@ namespace DOL.GS.Behaviour
     /// a QuestAction will we executed one after another. Actions can be more or less anything:
     /// at the moment there are: GiveItem, TakeItem, Talk, Give Quest, Increase Quest Step, FinishQuest,
     /// etc....
-	/// </summary>
-	public class BaseBehaviour
-    {        
+    /// </summary>
+    public class BaseBehaviour
+    {
 
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         #region Variables
-                        
-		private GameObject _gameObject;
-		
-		private List<IBehaviourRequirement> requirements;              
-        private List<IBehaviourAction> actions;        
-        private List<IBehaviourTrigger> triggers;       
+
+        private GameObject _gameObject;
+
+        private List<IBehaviourRequirement> requirements;
+        private List<IBehaviourAction> actions;
+        private List<IBehaviourTrigger> triggers;
 
         private DOLEventHandler eventHandler;
 
-        private int id;               
+        private int id;
 
         #endregion
 
@@ -73,7 +73,7 @@ namespace DOL.GS.Behaviour
         {
             get { return id; }
             set { id = value; }
-        }        
+        }
 
         /// <summary>
         /// NPC assigned with behaviour
@@ -83,7 +83,7 @@ namespace DOL.GS.Behaviour
             get { return _gameObject; }
             set { _gameObject = value; }
         }
-        
+
         /// <summary>
         /// List of triggers that can initiate a behaviour
         /// Note: At least one trigger must be fulfilled to fire behaviour
@@ -112,19 +112,19 @@ namespace DOL.GS.Behaviour
         }
 
         public DOLEventHandler NotifyHandler
-	    {
-		    get { return eventHandler;}
-		    set { eventHandler = value;}
-	    }
+        {
+            get { return eventHandler; }
+            set { eventHandler = value; }
+        }
 
         #endregion
-        
+
         /// <summary>
         /// Creates a Behaviour for the given default npc.
         /// </summary>        
         /// <param name="obj">NPC associated with his behaviour typically NPC talking to or mob killing, etc...</param>                
         public BaseBehaviour(GameObject obj)
-        {            
+        {
             this.GameObject = obj;
             NotifyHandler = new DOLEventHandler(this.Notify);
         }
@@ -149,16 +149,16 @@ namespace DOL.GS.Behaviour
         /// <param name="keyword">keyword (K), meaning depends on triggertype</param>
         public void AddTrigger(eTriggerType triggerType, Object keyword)
         {
-            AddTrigger(triggerType, keyword,null);
+            AddTrigger(triggerType, keyword, null);
         }
-        
+
         /// <summary>
         /// Adds a trigger to the questpart for details about parameters look at documentation of used triggertype
         /// </summary>
         /// <param name="triggerType">triggertype</param>
         /// <param name="keyword">keyword (K), meaning depends on triggertype</param>
         /// <param name="var">variable (I), meaning depends on triggertype</param>
-        public void AddTrigger(eTriggerType triggerType, Object keyword , Object var)
+        public void AddTrigger(eTriggerType triggerType, Object keyword, Object var)
         {
             IBehaviourTrigger trigger = null;
 
@@ -172,10 +172,10 @@ namespace DOL.GS.Behaviour
             {
                 if (log.IsErrorEnabled)
                     log.Error("No registered trigger found for TriggerType " + triggerType);
-            }            
+            }
         }
 
-        
+
 
         /// <summary>
         /// Adds a trigger to the questpart for details about parameters look at documentation of used triggertype
@@ -185,10 +185,10 @@ namespace DOL.GS.Behaviour
         {
             if (triggers == null)
                 triggers = new List<IBehaviourTrigger>();
-            
-            triggers.Add(trigger);            
+
+            triggers.Add(trigger);
             trigger.Register();
-        } 
+        }
 
         /// <summary>
         /// Checks the added triggers, this method is called whenever a event associated with this questparts quest
@@ -199,7 +199,7 @@ namespace DOL.GS.Behaviour
         /// <param name="args"></param>
         /// <returns></returns>
         protected virtual bool CheckTriggers(DOLEvent e, object sender, EventArgs args)
-        {            
+        {
             if (triggers != null)
             {
                 foreach (IBehaviourTrigger trigger in triggers)
@@ -231,12 +231,12 @@ namespace DOL.GS.Behaviour
         /// <param name="p">First Action Variable, meaning depends on ActionType</param>
         /// <param name="q">Second Action Variable, meaning depends on ActionType</param>
         public void AddAction(eActionType actionType, Object p, Object q)
-        {            
+        {
             IBehaviourAction action = null;
 
             Type type = BehaviourMgr.GetTypeForActionType(actionType);
             if (type != null)
-            {                
+            {
                 action = (IBehaviourAction)Activator.CreateInstance(type, new object[] { this.GameObject, p, q });
                 AddAction(action);
             }
@@ -245,7 +245,7 @@ namespace DOL.GS.Behaviour
                 if (log.IsErrorEnabled)
                     log.Error("No registered action found for ActionType " + actionType);
             }
-            
+
         }
 
         /// <summary>
@@ -256,9 +256,9 @@ namespace DOL.GS.Behaviour
         {
             if (actions == null)
                 actions = new List<IBehaviourAction>();
-            
+
             actions.Add(action);
-        }               
+        }
 
         #endregion
 
@@ -307,7 +307,7 @@ namespace DOL.GS.Behaviour
         {
             if (requirements == null)
                 requirements = new List<IBehaviourRequirement>();
-            
+
             requirements.Add(requ);
         }
         /// <summary>
@@ -317,13 +317,14 @@ namespace DOL.GS.Behaviour
         /// <param name="requirementN">First Requirement Variable, meaning depends on RequirementType</param>
         /// <param name="requirementV">Second Requirement Variable, meaning depends on RequirementType</param>
         /// <param name="requirementComparator">Comparator used if some values are veeing compared</param>        
-        public void AddRequirement(eRequirementType requirementType, Object requirementN, Object requirementV,eComparator requirementComparator) {
+        public void AddRequirement(eRequirementType requirementType, Object requirementN, Object requirementV, eComparator requirementComparator)
+        {
 
             IBehaviourRequirement requ = null;
 
             Type type = BehaviourMgr.GetTypeForRequirementType(requirementType);
             if (type != null)
-            {                                
+            {
                 requ = (IBehaviourRequirement)Activator.CreateInstance(type, new object[] { this.GameObject, requirementN, requirementV, requirementComparator });
                 AddRequirement(requ);
             }
@@ -333,8 +334,8 @@ namespace DOL.GS.Behaviour
                     log.Error("No registered requirement found for RequirementType " + requirementType);
             }
 
-            
-		}
+
+        }
 
         /// <summary>
         /// Checks the added requirements whenever a trigger associated with this questpart fires.(returns true)
@@ -344,19 +345,19 @@ namespace DOL.GS.Behaviour
         /// <param name="args">EventArgs of notify call</param>        
         /// <returns>true if all Requirements forQuestPart where fullfilled, else false</returns>
         protected virtual bool CheckRequirements(DOLEvent e, object sender, EventArgs args)
-        {			
+        {
             if (requirements != null)
             {
                 foreach (IBehaviourRequirement requirement in requirements)
                 {
                     if (!requirement.Check(e, sender, args))
-                        return false;                    
+                        return false;
                 }
             }
-			return true;
+            return true;
         }
-        
-        #endregion        
+
+        #endregion
 
         /// <summary>
         /// This method is called by the BaseQuest whenever a event associated with the Quest accurs
@@ -374,6 +375,6 @@ namespace DOL.GS.Behaviour
                     action.Perform(e, sender, args);
                 }
             }
-		}
-	}
+        }
+    }
 }

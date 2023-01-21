@@ -44,7 +44,7 @@ namespace DOL.AI.Brain
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         public AggressiveBrain()
-        {           
+        {
         }
 
         /// <summary>
@@ -370,7 +370,7 @@ namespace DOL.AI.Brain
                     return;
                 }
 
-                if (e == GameLivingEvent.CastFinished || e == GameNPCEvent.CastFinished || 
+                if (e == GameLivingEvent.CastFinished || e == GameNPCEvent.CastFinished ||
                     e == GameLivingEvent.CrowdControlExpired ||
                     e == GameLivingEvent.InterruptExpired)
                 {
@@ -401,7 +401,7 @@ namespace DOL.AI.Brain
                 if (args is EnemyHealedEventArgs)
                 {
                     EnemyHealedEventArgs healed = args as EnemyHealedEventArgs;
-                    
+
                     if (IsEnemy(healed.Enemy))
                         OnEnemyHealed(healed.HealSource, healed.HealAmount);
                 }
@@ -476,7 +476,7 @@ namespace DOL.AI.Brain
         #region Aggression management
 
         private InternalAggression m_aggression;
-        
+
         /// <summary>
         /// This brain's aggression towards various targets.
         /// </summary>

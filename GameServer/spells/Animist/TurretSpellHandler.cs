@@ -22,75 +22,75 @@ using DOL.Language;
 
 namespace DOL.GS.Spells
 {
-	[SpellHandler("TurretsRelease")]
-	public class TurretsReleaseSpellHandler : SpellHandler
-	{
-		public TurretsReleaseSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line)
-		{
-		}
+    [SpellHandler("TurretsRelease")]
+    public class TurretsReleaseSpellHandler : SpellHandler
+    {
+        public TurretsReleaseSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line)
+        {
+        }
 
-		public override bool CheckBeginCast(GameLiving selectedTarget)
-		{
-			if(!(Caster is GamePlayer))
-			{
-				return false;
-			}
+        public override bool CheckBeginCast(GameLiving selectedTarget)
+        {
+            if (!(Caster is GamePlayer))
+            {
+                return false;
+            }
 
-			if(selectedTarget == null)
-			{
+            if (selectedTarget == null)
+            {
                 if (Caster is GamePlayer)
                     MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "TurretsRelease.CheckBeginCast.NoSelectedTarget"), eChatType.CT_SpellResisted);
                 return false;
-			}
-			GameNPC target = selectedTarget as GameNPC;
-			if(target == null || !(target.Brain is TurretBrain) || !Caster.IsControlledNPC(target))
-			{
+            }
+            GameNPC target = selectedTarget as GameNPC;
+            if (target == null || !(target.Brain is TurretBrain) || !Caster.IsControlledNPC(target))
+            {
                 if (Caster is GamePlayer)
                     MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "TurretsRelease.CheckBeginCast.NoSelectedTarget"), eChatType.CT_SpellResisted);
                 return false;
-			}
-			if((target.Brain is TurretBrain) && !Caster.IsControlledNPC(target))
-			{
+            }
+            if ((target.Brain is TurretBrain) && !Caster.IsControlledNPC(target))
+            {
                 if (Caster is GamePlayer)
                     MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "TurretsRelease.CheckBeginCast.NoSelectedTarget"), eChatType.CT_SpellResisted);
                 return false;
-			}
-            if ( !Caster.IsWithinRadius( target, Spell.Range ) )
-			{
+            }
+            if (!Caster.IsWithinRadius(target, Spell.Range))
+            {
                 if (Caster is GamePlayer)
                     MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "TurretsRelease.CheckBeginCast.TargetTooFarAway"), eChatType.CT_SpellResisted);
                 return false;
-			}
-			return base.CheckBeginCast(selectedTarget);
-		}
+            }
+            return base.CheckBeginCast(selectedTarget);
+        }
 
-		public override void FinishSpellCast(GameLiving target)
-		{
-			m_caster.Mana -= PowerCost(target);
-			base.FinishSpellCast(target);
-		}
+        public override void FinishSpellCast(GameLiving target)
+        {
+            m_caster.Mana -= PowerCost(target);
+            base.FinishSpellCast(target);
+        }
 
-		public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
-		{
-			if (target != null && target.CurrentRegion != null)
-			{
-				foreach (GameNPC npc in target.CurrentRegion.GetNPCsInRadius(target.Position, (ushort)Spell.Radius, false, true))
-				{
-					if (npc == null || !npc.IsAlive)
-					{
-						continue;
-					}
-					if (!(npc is TurretPet))
-					{
-						continue;
-					}
-					if (Caster.IsControlledNPC(npc))
-					{
-						//PetCounter is decremented when pet die.
-						npc.Die(Caster);
-					}
-				}
-			}
-		}
-	}
+        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        {
+            if (target != null && target.CurrentRegion != null)
+            {
+                foreach (GameNPC npc in target.CurrentRegion.GetNPCsInRadius(target.Position, (ushort)Spell.Radius, false, true))
+                {
+                    if (npc == null || !npc.IsAlive)
+                    {
+                        continue;
+                    }
+                    if (!(npc is TurretPet))
+                    {
+                        continue;
+                    }
+                    if (Caster.IsControlledNPC(npc))
+                    {
+                        //PetCounter is decremented when pet die.
+                        npc.Die(Caster);
+                    }
+                }
+            }
+        }
+    }
 }

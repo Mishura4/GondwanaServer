@@ -7,8 +7,8 @@ using DOL.Language;
 namespace DOL.GS.Commands
 {
     [CmdAttribute(
-		"&lootchanger",
-		ePrivLevel.GM,
+        "&lootchanger",
+        ePrivLevel.GM,
         "Commands.GM.LootChanger.Description",
         "Commands.GM.LootChanger.Usage.Add",
         "Commands.GM.LootChanger.Usage.Remove",

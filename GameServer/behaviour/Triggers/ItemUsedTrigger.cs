@@ -26,25 +26,25 @@ using DOL.GS.Behaviour.Attributes;
 using DOL.GS.Behaviour;
 
 namespace DOL.GS.Behaviour.Triggers
-{	
+{
     /// <summary>
     /// A trigger defines the circumstances under which a certain QuestAction is fired.
     /// This can be eTriggerAction.Interact, eTriggerAction.GiveItem, eTriggerAction.Attack, etc...
     /// Additional there are two variables to add the needed parameters for the triggertype (Item to give for GiveItem, NPC to interact for Interact, etc...). To fire a QuestAction at least one of the added triggers must be fulfilled. 
     /// </summary>
-    [TriggerAttribute(TriggerType=eTriggerType.ItemUsed,DefaultValueI=eDefaultValueConstants.NPC)]
-    public class ItemUsedTrigger : AbstractTrigger<Unused,ItemTemplate>
+    [TriggerAttribute(TriggerType = eTriggerType.ItemUsed, DefaultValueI = eDefaultValueConstants.NPC)]
+    public class ItemUsedTrigger : AbstractTrigger<Unused, ItemTemplate>
     {
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-		/// <summary>
+        /// <summary>
         /// Creates a new questtrigger and does some simple triggertype parameter compatibility checking
-		/// </summary>
-		/// <param name="defaultNPC"></param>
-		/// <param name="notifyHandler"></param>
-		/// <param name="k"></param>
-		/// <param name="i"></param>
-        public ItemUsedTrigger(GameNPC defaultNPC, DOLEventHandler notifyHandler,  Object k, Object i)
+        /// </summary>
+        /// <param name="defaultNPC"></param>
+        /// <param name="notifyHandler"></param>
+        /// <param name="k"></param>
+        /// <param name="i"></param>
+        public ItemUsedTrigger(GameNPC defaultNPC, DOLEventHandler notifyHandler, Object k, Object i)
             : base(defaultNPC, notifyHandler, eTriggerType.ItemUsed, k, i)
         { }
 
@@ -55,7 +55,7 @@ namespace DOL.GS.Behaviour.Triggers
         /// <param name="notifyHandler"></param>
         /// <param name="i"></param>
         public ItemUsedTrigger(GameNPC defaultNPC, DOLEventHandler notifyHandler, ItemTemplate i)
-            : this(defaultNPC,notifyHandler, (object)null,(object) i)
+            : this(defaultNPC, notifyHandler, (object)null, (object)i)
         { }
 
         /// <summary>
@@ -75,33 +75,33 @@ namespace DOL.GS.Behaviour.Triggers
             {
                 UseSlotEventArgs uArgs = (UseSlotEventArgs)args;
                 InventoryItem item = player.Inventory.GetItem((eInventorySlot)uArgs.Slot) as InventoryItem;
-				if (item != null && I != null)
-					result = I.Name == item.Name;
+                if (item != null && I != null)
+                    result = I.Name == item.Name;
             }
-            
+
             return result;
         }
 
-		/// <summary>
-		/// Registers the needed EventHandler for this Trigger
-		/// </summary>
-		/// <remarks>
-		/// This method will be called multiple times, so use AddHandlerUnique to make
-		/// sure only one handler is actually registered
-		/// </remarks>
+        /// <summary>
+        /// Registers the needed EventHandler for this Trigger
+        /// </summary>
+        /// <remarks>
+        /// This method will be called multiple times, so use AddHandlerUnique to make
+        /// sure only one handler is actually registered
+        /// </remarks>
         public override void Register()
         {
         }
 
-		/// <summary>
-		/// Unregisters the needed EventHandler for this Trigger
-		/// </summary>
-		/// <remarks>
-		/// Don't remove handlers that will be used by other triggers etc.
-		/// This is rather difficult since we don't know which events other triggers use.
-		/// </remarks>
+        /// <summary>
+        /// Unregisters the needed EventHandler for this Trigger
+        /// </summary>
+        /// <remarks>
+        /// Don't remove handlers that will be used by other triggers etc.
+        /// This is rather difficult since we don't know which events other triggers use.
+        /// </remarks>
         public override void Unregister()
-        {			            
-        }		
+        {
+        }
     }
 }

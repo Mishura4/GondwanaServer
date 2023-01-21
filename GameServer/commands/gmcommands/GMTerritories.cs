@@ -224,7 +224,7 @@ namespace DOL.commands.gmcommands
                             }
                         }
 
-                        territory.SaveIntoDatabase();           
+                        territory.SaveIntoDatabase();
 
                         client.Out.SendMessage("Le Territoire avec AreaId " + areaId + " a désormais un bonus suppmémentaire de " + bonus.Value.ToString(), eChatType.CT_System, eChatLoc.CL_ChatWindow);
                         break;
@@ -249,7 +249,7 @@ namespace DOL.commands.gmcommands
                                 }
                             }
 
-                            territory.SaveIntoDatabase();                            
+                            territory.SaveIntoDatabase();
 
                             client.Out.SendMessage("Le bonus de " + bonus.Value.ToString() + " a été retiré de Territoire avec AreaId " + areaId, eChatType.CT_System, eChatLoc.CL_ChatWindow);
                         }

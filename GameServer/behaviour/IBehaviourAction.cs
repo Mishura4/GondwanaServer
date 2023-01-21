@@ -49,18 +49,18 @@ namespace DOL.GS.Behaviour
         /// READ : open a description (bracket) windows saying what is written on the item
         /// </summary>
         Read = 0x05,
-		/// <summary>
-		/// NPC says something
-		/// </summary>
-		Say = 0x06,
-		/// <summary>
-		/// NPC yells something
-		/// </summary>
-		Yell = 0x07,
-		/// <summary>
-		/// NPC says something to target
-		/// </summary>
-		SayTo = 0x08,
+        /// <summary>
+        /// NPC says something
+        /// </summary>
+        Say = 0x06,
+        /// <summary>
+        /// NPC yells something
+        /// </summary>
+        Yell = 0x07,
+        /// <summary>
+        /// NPC says something to target
+        /// </summary>
+        SayTo = 0x08,
     }
 
     /// <summary>
@@ -247,20 +247,20 @@ namespace DOL.GS.Behaviour
         /// <remarks>Tested</remarks>
         Timer,
         //TREA : drops treasure index p##        
-		/// <summary>
-		/// Display a trainer window
-		/// </summary>
-		TrainerWindow,
+        /// <summary>
+        /// Display a trainer window
+        /// </summary>
+        TrainerWindow,
         /// <summary>
         /// WHIS : Q:GameLiving(NPC) whispers message P:string to player
         /// </summary>
         Whisper,
         //XFER : changes to talk index p##. MUST be placed in entry 19 ! 
-		/// <summary>
-		/// WHIS: P:ushort(SoundID), Q:eSoundType(SoundType)
-		/// </summary>
-		PlaySound
-    }    
+        /// <summary>
+        /// WHIS: P:ushort(SoundID), Q:eSoundType(SoundType)
+        /// </summary>
+        PlaySound
+    }
 
     /// <summary>
     /// If one trigger and all requirements are fulfilled the corresponding actions of

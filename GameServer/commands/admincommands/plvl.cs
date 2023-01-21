@@ -22,101 +22,101 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute(
-		"&plvl",
-		ePrivLevel.Admin,
-		"AdminCommands.plvl.Description",
-		"AdminCommands.plvl.Usage",
-		"AdminCommands.plvl.Usage.Single",
-		"AdminCommands.plvl.Usage.SingleAccount",
+    [CmdAttribute(
+        "&plvl",
+        ePrivLevel.Admin,
+        "AdminCommands.plvl.Description",
+        "AdminCommands.plvl.Usage",
+        "AdminCommands.plvl.Usage.Single",
+        "AdminCommands.plvl.Usage.SingleAccount",
         "AdminCommands.plvl.Usage.Remove",
         "AdminCommands.plvl.Usage.RemoveAccount")]
-	public class PlvlCommand : AbstractCommandHandler, ICommandHandler
-	{
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (args.Length < 2)
-			{
-				DisplaySyntax(client);
-				return;
-			}
+    public class PlvlCommand : AbstractCommandHandler, ICommandHandler
+    {
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (args.Length < 2)
+            {
+                DisplaySyntax(client);
+                return;
+            }
 
-			GamePlayer target = client.Player;
+            GamePlayer target = client.Player;
 
-			switch (args[1])
-			{
-				#region Single
-				case "single":
-					{
-						if( args.Length < 3 )
-						{
-							DisplaySyntax( client );
-							return;
-						}
+            switch (args[1])
+            {
+                #region Single
+                case "single":
+                    {
+                        if (args.Length < 3)
+                        {
+                            DisplaySyntax(client);
+                            return;
+                        }
 
-						if( args.Length > 3 )
-						{
-							GameClient targetClient = WorldMgr.GetClientByPlayerName( args[3], true, true );
+                        if (args.Length > 3)
+                        {
+                            GameClient targetClient = WorldMgr.GetClientByPlayerName(args[3], true, true);
 
-							if( targetClient != null )
-								target = targetClient.Player;
-						}
+                            if (targetClient != null)
+                                target = targetClient.Player;
+                        }
 
-						SinglePermission.setPermission(target, args[2]);
-						DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "AdminCommands.plvl.AddedSinglePermission", target.Name, args[2]));
+                        SinglePermission.setPermission(target, args[2]);
+                        DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "AdminCommands.plvl.AddedSinglePermission", target.Name, args[2]));
 
-						break;
-					}
-				#endregion Single
+                        break;
+                    }
+                #endregion Single
 
-				#region Single Account
-				case "singleaccount":
-					{
-						if( args.Length < 3 )
-						{
-							DisplaySyntax( client );
-							return;
-						}
+                #region Single Account
+                case "singleaccount":
+                    {
+                        if (args.Length < 3)
+                        {
+                            DisplaySyntax(client);
+                            return;
+                        }
 
-						if( args.Length > 3 )
-						{
-							GameClient targetClient = WorldMgr.GetClientByPlayerName( args[3], true, true );
+                        if (args.Length > 3)
+                        {
+                            GameClient targetClient = WorldMgr.GetClientByPlayerName(args[3], true, true);
 
-							if( targetClient != null )
-								target = targetClient.Player;
-						}
+                            if (targetClient != null)
+                                target = targetClient.Player;
+                        }
 
-						SinglePermission.setPermissionAccount( target, args[2] );
-						DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "AdminCommands.plvl.AddedSingleAccountPermission", target.Client.Account.Name, args[2]));
+                        SinglePermission.setPermissionAccount(target, args[2]);
+                        DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "AdminCommands.plvl.AddedSingleAccountPermission", target.Client.Account.Name, args[2]));
 
-						break;
-					}
-				#endregion
+                        break;
+                    }
+                #endregion
 
-				#region Remove
-				case "remove":
-					{
-						if( args.Length < 2 )
-						{
-							DisplaySyntax( client );
-							return;
-						}
+                #region Remove
+                case "remove":
+                    {
+                        if (args.Length < 2)
+                        {
+                            DisplaySyntax(client);
+                            return;
+                        }
 
-						if( args.Length > 3 )
-						{
-							GameClient targetClient = WorldMgr.GetClientByPlayerName( args[3], true, true );
+                        if (args.Length > 3)
+                        {
+                            GameClient targetClient = WorldMgr.GetClientByPlayerName(args[3], true, true);
 
-							if( targetClient != null )
-								target = targetClient.Player;
-						}
+                            if (targetClient != null)
+                                target = targetClient.Player;
+                        }
 
-						if( SinglePermission.removePermission( target, args[2] ) )
-							DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "AdminCommands.plvl.RemoveSinglePermission", target.Name, args[2]));
-						else
-							DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "AdminCommands.plvl.NoPermissionForCommand", target.Name, args[2]));
+                        if (SinglePermission.removePermission(target, args[2]))
+                            DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "AdminCommands.plvl.RemoveSinglePermission", target.Name, args[2]));
+                        else
+                            DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "AdminCommands.plvl.NoPermissionForCommand", target.Name, args[2]));
 
-						break;
-					}
+                        break;
+                    }
                 #endregion Remove
 
                 #region Remove Account
@@ -145,38 +145,38 @@ namespace DOL.GS.Commands
                     }
                 #endregion Remove
 
-				#region Default
-				default:
-					{
-						uint plvl = 1;
+                #region Default
+                default:
+                    {
+                        uint plvl = 1;
 
-						if (!UInt32.TryParse(args[1], out plvl))
-						{
-							DisplaySyntax(client);
-							return;
-						}
+                        if (!UInt32.TryParse(args[1], out plvl))
+                        {
+                            DisplaySyntax(client);
+                            return;
+                        }
 
-						if (args.Length > 2)
-						{
-							GameClient targetClient = WorldMgr.GetClientByPlayerName(args[2], true, true);
+                        if (args.Length > 2)
+                        {
+                            GameClient targetClient = WorldMgr.GetClientByPlayerName(args[2], true, true);
 
-							if (targetClient != null)
-								target = targetClient.Player;
-						}
+                            if (targetClient != null)
+                                target = targetClient.Player;
+                        }
 
-						target.Client.Account.PrivLevel = plvl;
-						GameServer.Database.SaveObject(target.Client.Account);
-						client.Player.RefreshWorld();
+                        target.Client.Account.PrivLevel = plvl;
+                        GameServer.Database.SaveObject(target.Client.Account);
+                        client.Player.RefreshWorld();
 
-						target.Client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "AdminCommands.plvl.YourPlvlHasBeenSetted", plvl.ToString()), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                        target.Client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "AdminCommands.plvl.YourPlvlHasBeenSetted", plvl.ToString()), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
 
-						if (target != client.Player)
-							client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "AdminCommands.plvl.PlayerPlvlHasBeenSetted", target.Name, plvl.ToString()), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                        if (target != client.Player)
+                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "AdminCommands.plvl.PlayerPlvlHasBeenSetted", target.Name, plvl.ToString()), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
 
-						break;
-					}
-				#endregion Default
-			}
-		}
-	}
+                        break;
+                    }
+                    #endregion Default
+            }
+        }
+    }
 }

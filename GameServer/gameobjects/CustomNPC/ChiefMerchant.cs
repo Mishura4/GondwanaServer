@@ -18,7 +18,7 @@ namespace DOL.GS
             }
 
             TurnTo(player, 5000);
-            
+
             if (player.HasAbility(DOL.GS.Abilities.Trading))
             {
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ChiefMerchant.Denied"), eChatType.CT_System, eChatLoc.CL_PopupWindow);

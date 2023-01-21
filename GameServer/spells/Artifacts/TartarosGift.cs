@@ -26,10 +26,10 @@ namespace DOL.GS.Spells
     [SpellHandlerAttribute("Tartaros")]
     public class Tartaros : LifedrainSpellHandler
     {
-		public override int CalculateSpellResistChance(GameLiving target)
-		{
-			return 0;
-		}
+        public override int CalculateSpellResistChance(GameLiving target)
+        {
+            return 0;
+        }
         /// <summary>
         /// Uses percent of damage to heal the caster
         /// </summary>
@@ -47,7 +47,7 @@ namespace DOL.GS.Spells
                 MessageToCaster("You are diseased!", eChatType.CT_SpellResisted);
                 heal >>= 1;
             }
-            if (heal <= 0) return;            
+            if (heal <= 0) return;
             heal = Caster.ChangeHealth(Caster, GameLiving.eHealthChangeType.Spell, heal);
             if (heal > 0)
             {
@@ -57,9 +57,9 @@ namespace DOL.GS.Spells
             {
                 MessageToCaster("You cannot absorb any more life.", eChatType.CT_SpellResisted);
             }
-            
-            if (mana <=0) return;
-            mana = Caster.ChangeMana(Caster,GameLiving.eManaChangeType.Spell,mana);
+
+            if (mana <= 0) return;
+            mana = Caster.ChangeMana(Caster, GameLiving.eManaChangeType.Spell, mana);
             if (mana > 0)
             {
                 MessageToCaster("You drain " + mana + " power point" + (mana == 1 ? "." : "s."), eChatType.CT_Spell);
@@ -67,10 +67,10 @@ namespace DOL.GS.Spells
             else
             {
                 MessageToCaster("You cannot absorb any more power.", eChatType.CT_SpellResisted);
-            }     
-            
-            if (endu <=0) return;
-            endu = Caster.ChangeEndurance(Caster,GameLiving.eEnduranceChangeType.Spell,endu);            
+            }
+
+            if (endu <= 0) return;
+            endu = Caster.ChangeEndurance(Caster, GameLiving.eEnduranceChangeType.Spell, endu);
             if (heal > 0)
             {
                 MessageToCaster("You drain " + endu + " endurance point" + (endu == 1 ? "." : "s."), eChatType.CT_Spell);

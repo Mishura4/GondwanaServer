@@ -33,7 +33,7 @@ namespace DOL.GS.Scripts
         public static void OnScriptsUnloaded(DOLEvent e, object sender, EventArgs args)
         {
             _running = false;
-            try { _listener.Stop(); } catch {}
+            try { _listener.Stop(); } catch { }
         }
         #endregion
 

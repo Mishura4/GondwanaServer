@@ -25,14 +25,14 @@ using DOL.GS.ServerRules;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute(
-	   "&realm",
-	   ePrivLevel.Player,
-		"Commands.Players.Realm.Description",
-		"Commands.Players.Realm.Usage")]
-	public class RealmCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		/*          Realm status
+    [CmdAttribute(
+       "&realm",
+       ePrivLevel.Player,
+        "Commands.Players.Realm.Description",
+        "Commands.Players.Realm.Usage")]
+    public class RealmCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        /*          Realm status
 		 *
 		 * Albion Keeps:
 		 * Caer Benowyc: OwnerRealm (Guild)
@@ -66,79 +66,79 @@ namespace DOL.GS.Commands
 		 * Type '/relic' to display the relic status.
 		 */
 
-		
-
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (IsSpammingCommand(client.Player, "realm"))
-				return;
-
-			string albKeeps = "";
-			string midKeeps = "";
-			string hibKeeps = "";
-			ICollection<AbstractGameKeep> keepList = GameServer.KeepManager.GetFrontierKeeps();
-			foreach (AbstractGameKeep keep in keepList)
-			{
-				if (keep is GameKeep)
-				{
-					switch (keep.OriginalRealm)
-					{
-						case eRealm.Albion:
-							albKeeps += KeepStringBuilder(keep);
-							break;
-						case eRealm.Hibernia:
-							hibKeeps += KeepStringBuilder(keep);
-							break;
-						case eRealm.Midgard:
-							midKeeps += KeepStringBuilder(keep);
-							break;
-					}
-				}
-			}
-			var realmInfo = new List<string>();
-			realmInfo.Add(
-				LanguageMgr.GetTranslation(
-					client.Account.Language,
-					"Commands.Players.Realm.AlbKeeps") + ":");
-			realmInfo.Add(albKeeps);
-			realmInfo.Add(
-				LanguageMgr.GetTranslation(
-					client.Account.Language,
-					"Commands.Players.Realm.MidKeeps") + ":");
-			realmInfo.Add(midKeeps);
-			realmInfo.Add(
-				LanguageMgr.GetTranslation(
-					client.Account.Language,
-					"Commands.Players.Realm.HibKeeps") + ":");
-			realmInfo.Add(hibKeeps);
-			realmInfo.Add(
-				LanguageMgr.GetTranslation(
-					client.Account.Language,
-					"Commands.Players.Realm.DarknessFalls") + ": " + GlobalConstants.RealmToName(DFEnterJumpPoint.DarknessFallOwner));
-			realmInfo.Add(" ");
-			realmInfo.Add(
-				LanguageMgr.GetTranslation(
-					client.Account.Language,
-					"Commands.Players.Realm.UseRelicCommand"));
-			client.Out.SendCustomTextWindow(
-				LanguageMgr.GetTranslation(
-					client.Account.Language,
-					"Commands.Players.Realm.Title"),
-				realmInfo);
-		}
-
-		private string KeepStringBuilder(AbstractGameKeep keep)
-		{
-			string buffer = "";
-			buffer += keep.Name + ": " + GlobalConstants.RealmToName(keep.Realm);
-			if (keep.Guild != null)
-			{
-				buffer += " (" + keep.Guild.Name + ")";
-			}
-			buffer += "\n";
-			return buffer;
-		}
 
 
-	}
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (IsSpammingCommand(client.Player, "realm"))
+                return;
+
+            string albKeeps = "";
+            string midKeeps = "";
+            string hibKeeps = "";
+            ICollection<AbstractGameKeep> keepList = GameServer.KeepManager.GetFrontierKeeps();
+            foreach (AbstractGameKeep keep in keepList)
+            {
+                if (keep is GameKeep)
+                {
+                    switch (keep.OriginalRealm)
+                    {
+                        case eRealm.Albion:
+                            albKeeps += KeepStringBuilder(keep);
+                            break;
+                        case eRealm.Hibernia:
+                            hibKeeps += KeepStringBuilder(keep);
+                            break;
+                        case eRealm.Midgard:
+                            midKeeps += KeepStringBuilder(keep);
+                            break;
+                    }
+                }
+            }
+            var realmInfo = new List<string>();
+            realmInfo.Add(
+                LanguageMgr.GetTranslation(
+                    client.Account.Language,
+                    "Commands.Players.Realm.AlbKeeps") + ":");
+            realmInfo.Add(albKeeps);
+            realmInfo.Add(
+                LanguageMgr.GetTranslation(
+                    client.Account.Language,
+                    "Commands.Players.Realm.MidKeeps") + ":");
+            realmInfo.Add(midKeeps);
+            realmInfo.Add(
+                LanguageMgr.GetTranslation(
+                    client.Account.Language,
+                    "Commands.Players.Realm.HibKeeps") + ":");
+            realmInfo.Add(hibKeeps);
+            realmInfo.Add(
+                LanguageMgr.GetTranslation(
+                    client.Account.Language,
+                    "Commands.Players.Realm.DarknessFalls") + ": " + GlobalConstants.RealmToName(DFEnterJumpPoint.DarknessFallOwner));
+            realmInfo.Add(" ");
+            realmInfo.Add(
+                LanguageMgr.GetTranslation(
+                    client.Account.Language,
+                    "Commands.Players.Realm.UseRelicCommand"));
+            client.Out.SendCustomTextWindow(
+                LanguageMgr.GetTranslation(
+                    client.Account.Language,
+                    "Commands.Players.Realm.Title"),
+                realmInfo);
+        }
+
+        private string KeepStringBuilder(AbstractGameKeep keep)
+        {
+            string buffer = "";
+            buffer += keep.Name + ": " + GlobalConstants.RealmToName(keep.Realm);
+            if (keep.Guild != null)
+            {
+                buffer += " (" + keep.Guild.Name + ")";
+            }
+            buffer += "\n";
+            return buffer;
+        }
+
+
+    }
 }

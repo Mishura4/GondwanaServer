@@ -21,42 +21,42 @@ using DOL.GS.PacketHandler;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute(
-		"&range",
-		ePrivLevel.Player,
-		"Commands.Players.Range.Description",
-		"Commands.Players.Range.Usage")]
-	public class RangeCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (IsSpammingCommand(client.Player, "range"))
-				return;
+    [CmdAttribute(
+        "&range",
+        ePrivLevel.Player,
+        "Commands.Players.Range.Description",
+        "Commands.Players.Range.Usage")]
+    public class RangeCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (IsSpammingCommand(client.Player, "range"))
+                return;
 
-			GameLiving living = client.Player.TargetObject as GameLiving;
-			if (client.Player.TargetObject == null)
-				DisplayMessage(
-					client,
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Range.NeedTarget"));
-			else if (living == null || (living != null && client.Account.PrivLevel > 1))
-			{
-				var range = client.Player.GetDistanceTo(client.Player.TargetObject.Position);
-				DisplayMessage(
-					client,
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Range.Result",
-						range,
-						(client.Player.TargetInView ? "" : LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Range.NotVisible"))));
-			}
-			else
-				DisplayMessage(
-					client,
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Range.InvalidObject"));
-		}
-	}
+            GameLiving living = client.Player.TargetObject as GameLiving;
+            if (client.Player.TargetObject == null)
+                DisplayMessage(
+                    client,
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Range.NeedTarget"));
+            else if (living == null || (living != null && client.Account.PrivLevel > 1))
+            {
+                var range = client.Player.GetDistanceTo(client.Player.TargetObject.Position);
+                DisplayMessage(
+                    client,
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Range.Result",
+                        range,
+                        (client.Player.TargetInView ? "" : LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Range.NotVisible"))));
+            }
+            else
+                DisplayMessage(
+                    client,
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Range.InvalidObject"));
+        }
+    }
 }

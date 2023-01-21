@@ -20,103 +20,103 @@ using System;
 
 namespace DOL
 {
-	namespace GS
-	{
-		/// <summary>
-		/// Marks a class as a command handler
-		/// </summary>
-		[AttributeUsage(AttributeTargets.Class,AllowMultiple = true)]
-		public class CmdAttribute : Attribute
-		{
-			private	string		m_cmd;
-			private string[]	m_cmdAliases;
-			private uint		m_lvl;
-			private	string		m_description;
-			private string[]	m_usage;
+    namespace GS
+    {
+        /// <summary>
+        /// Marks a class as a command handler
+        /// </summary>
+        [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+        public class CmdAttribute : Attribute
+        {
+            private string m_cmd;
+            private string[] m_cmdAliases;
+            private uint m_lvl;
+            private string m_description;
+            private string[] m_usage;
 
-			/// <summary>
-			/// Constructor
-			/// </summary>
-			/// <param name="cmd">Command to handle</param>
-			/// <param name="alias">Other names the command goes by</param>
-			/// <param name="lvl">Minimum required plvl for this command</param>
-			/// <param name="desc">Description of the command</param>
-			/// <param name="usage">How to use the command</param>
-			public CmdAttribute(string cmd, string[] alias, ePrivLevel lvl, string desc, params string[] usage)
-			{
-				m_cmd=cmd;
-				m_cmdAliases = alias;
-				m_lvl = (uint)lvl;
-				m_description = desc;
-				//m_usage = new string[1];
-				m_usage = usage;
-			}
+            /// <summary>
+            /// Constructor
+            /// </summary>
+            /// <param name="cmd">Command to handle</param>
+            /// <param name="alias">Other names the command goes by</param>
+            /// <param name="lvl">Minimum required plvl for this command</param>
+            /// <param name="desc">Description of the command</param>
+            /// <param name="usage">How to use the command</param>
+            public CmdAttribute(string cmd, string[] alias, ePrivLevel lvl, string desc, params string[] usage)
+            {
+                m_cmd = cmd;
+                m_cmdAliases = alias;
+                m_lvl = (uint)lvl;
+                m_description = desc;
+                //m_usage = new string[1];
+                m_usage = usage;
+            }
 
-			/// <summary>
-			/// Constructor
-			/// </summary>
-			/// <param name="cmd">Command to handle</param>
-			/// <param name="lvl">Minimum required plvl for this command</param>
-			/// <param name="desc">Description of the command</param>
-			/// <param name="usage">How to use the command</param>
-			public CmdAttribute(string cmd, ePrivLevel lvl, string desc, params string[] usage) : this(cmd,null,lvl,desc,usage)
-			{
-			}
+            /// <summary>
+            /// Constructor
+            /// </summary>
+            /// <param name="cmd">Command to handle</param>
+            /// <param name="lvl">Minimum required plvl for this command</param>
+            /// <param name="desc">Description of the command</param>
+            /// <param name="usage">How to use the command</param>
+            public CmdAttribute(string cmd, ePrivLevel lvl, string desc, params string[] usage) : this(cmd, null, lvl, desc, usage)
+            {
+            }
 
-			/// <summary>
-			/// Gets the command being handled
-			/// </summary>
-			public string Cmd
-			{
-				get 
-				{
-	  				return m_cmd;
-				}
-			}
+            /// <summary>
+            /// Gets the command being handled
+            /// </summary>
+            public string Cmd
+            {
+                get
+                {
+                    return m_cmd;
+                }
+            }
 
-			/// <summary>
-			/// Gets aliases for the command being handled
-			/// </summary>
-			public string[] Aliases
-			{
-				get
-				{
-					return m_cmdAliases;
-				}
-			}
+            /// <summary>
+            /// Gets aliases for the command being handled
+            /// </summary>
+            public string[] Aliases
+            {
+                get
+                {
+                    return m_cmdAliases;
+                }
+            }
 
-			/// <summary>
-			/// Gets minimum required plvl for the command to be used
-			/// </summary>
-			public uint Level
-			{
-				get
-				{
-					return m_lvl;
-				}
-			}
+            /// <summary>
+            /// Gets minimum required plvl for the command to be used
+            /// </summary>
+            public uint Level
+            {
+                get
+                {
+                    return m_lvl;
+                }
+            }
 
-			/// <summary>
-			/// Gets the description of the command
-			/// </summary>
-			public string Description
-			{
-				get 
-				{
-					return m_description;
-				}
-			}
+            /// <summary>
+            /// Gets the description of the command
+            /// </summary>
+            public string Description
+            {
+                get
+                {
+                    return m_description;
+                }
+            }
 
-			/// <summary>
-			/// Gets the command usage
-			/// </summary>
-			public string[] Usage
-			{
-				get
-				{
-					return m_usage;
-				}
-			}
-		}
-	}
+            /// <summary>
+            /// Gets the command usage
+            /// </summary>
+            public string[] Usage
+            {
+                get
+                {
+                    return m_usage;
+                }
+            }
+        }
+    }
 }

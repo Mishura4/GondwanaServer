@@ -34,19 +34,19 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute(
-		"&stats",
-		ePrivLevel.Player,
-		"Commands.Players.Stats.Description")]
+    [CmdAttribute(
+        "&stats",
+        ePrivLevel.Player,
+        "Commands.Players.Stats.Description")]
 
-	public class StatsCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (IsSpammingCommand(client.Player, "stats"))
-				return;
+    public class StatsCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (IsSpammingCommand(client.Player, "stats"))
+                return;
 
-			if (client == null) return;
+            if (client == null) return;
 
             if (args.Length > 1)
             {
@@ -74,6 +74,6 @@ namespace DOL.GS.Commands
             {
                 DisplayMessage(client, client.Player.Statistics.GetStatisticsMessage());
             }
-		}
-	}
+        }
+    }
 }

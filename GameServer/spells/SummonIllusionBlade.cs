@@ -56,7 +56,7 @@ namespace DOL.GS.Spells
             m_pet.Position = pos;
             m_pet.Heading = heading;
             m_pet.CurrentRegion = region;
-           // m_pet.CurrentSpeed = 0;
+            // m_pet.CurrentSpeed = 0;
             m_pet.Realm = Caster.Realm;
             m_pet.Race = 0;
             m_pet.Level = 44; // lowered in patch 1109b, also calls AutoSetStats()

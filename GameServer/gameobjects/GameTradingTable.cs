@@ -26,11 +26,11 @@ using DOL.Language;
 
 namespace DOL.GS
 {
-	/// <summary>
-	/// This class represents a static Item in the gameworld
-	/// </summary>
-	public class GameTradingTable : GameStaticItem
-	{
-		public TemporaryConsignmentMerchant consignmentMerchant;
-	}
+    /// <summary>
+    /// This class represents a static Item in the gameworld
+    /// </summary>
+    public class GameTradingTable : GameStaticItem
+    {
+        public TemporaryConsignmentMerchant consignmentMerchant;
+    }
 }

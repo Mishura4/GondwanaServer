@@ -26,48 +26,48 @@ using DOL.GS.Geometry;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute(
-		"&checklos",
-		ePrivLevel.GM,
-		"Check line of sight with the target",
-		"'/checklos'")]
-	public class CheckLosCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		public async void OnCommand(GameClient client, string[] args)
-		{
-			if (client.Player?.TargetObject == null && client.Player?.GroundTarget == null)
-			{
-				DisplayMessage(client, "You need a target to use this command.");
-				return;
-			}
+    [CmdAttribute(
+        "&checklos",
+        ePrivLevel.GM,
+        "Check line of sight with the target",
+        "'/checklos'")]
+    public class CheckLosCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        public async void OnCommand(GameClient client, string[] args)
+        {
+            if (client.Player?.TargetObject == null && client.Player?.GroundTarget == null)
+            {
+                DisplayMessage(client, "You need a target to use this command.");
+                return;
+            }
 
-			var text = new List<string>();
-			if (client.Player.TargetObject != null)
-			{
-				var target = client.Player.TargetObject;
-				text.Add($"Target: {target.Name} (OID: {target.ObjectID}, distance: {Vector3.Distance(target.Position, client.Player.Position)})");
-				text.Add($"Target in view (player's cache): {client.Player.TargetInView}");
+            var text = new List<string>();
+            if (client.Player.TargetObject != null)
+            {
+                var target = client.Player.TargetObject;
+                text.Add($"Target: {target.Name} (OID: {target.ObjectID}, distance: {Vector3.Distance(target.Position, client.Player.Position)})");
+                text.Add($"Target in view (player's cache): {client.Player.TargetInView}");
 
-				var stats = new RaycastStats();
-				var sw = new Stopwatch();
-				sw.Start();
-				var serverResult = LosCheckMgr.GetCollisionDistance(client.Player, target, ref stats);
-				sw.Stop();
-				text.Add($"Target in view (server-side los): {serverResult} ({stats.nbNodeTests} node, {stats.nbFaceTests} face, {sw.Elapsed.TotalMilliseconds}ms)");
-				var losResult = new TaskCompletionSource<ushort>();
-				client.Out.SendCheckLOS(client.Player, target, (player, response, targetOID) => losResult.SetResult(response));
-				var result = await losResult.Task;
-				text.Add($"CheckLOS packet response: 0x{result:X4} (in view: {(result & 0x100) != 0})");
-			}
-			else
-			{
-				var ground = client.Player.GroundTarget;
-				text.Add($"Ground target: {ground}");
-				text.Add($"Target in view (player's cache): {client.Player.GroundTargetInView}");
-				// TODO
-			}
+                var stats = new RaycastStats();
+                var sw = new Stopwatch();
+                sw.Start();
+                var serverResult = LosCheckMgr.GetCollisionDistance(client.Player, target, ref stats);
+                sw.Stop();
+                text.Add($"Target in view (server-side los): {serverResult} ({stats.nbNodeTests} node, {stats.nbFaceTests} face, {sw.Elapsed.TotalMilliseconds}ms)");
+                var losResult = new TaskCompletionSource<ushort>();
+                client.Out.SendCheckLOS(client.Player, target, (player, response, targetOID) => losResult.SetResult(response));
+                var result = await losResult.Task;
+                text.Add($"CheckLOS packet response: 0x{result:X4} (in view: {(result & 0x100) != 0})");
+            }
+            else
+            {
+                var ground = client.Player.GroundTarget;
+                text.Add($"Ground target: {ground}");
+                text.Add($"Target in view (player's cache): {client.Player.GroundTargetInView}");
+                // TODO
+            }
 
-			client.Out.SendCustomTextWindow("Check LOS", text);
-		}
-	}
+            client.Out.SendCustomTextWindow("Check LOS", text);
+        }
+    }
 }

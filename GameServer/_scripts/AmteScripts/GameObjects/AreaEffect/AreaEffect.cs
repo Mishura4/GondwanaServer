@@ -77,7 +77,7 @@ namespace DOL.GS.Scripts
                 var health = HealHarm + (HealHarm * Util.Random(-5, 5) / 100);
                 if (health < 0 && player.Client.Account.PrivLevel == 1)
                 {
-					player.TakeDamage(this, eDamageType.Natural, -health, 0);
+                    player.TakeDamage(this, eDamageType.Natural, -health, 0);
                 }
                 if (health > 0 && player.Health < player.MaxHealth)
                     player.Health += health;
@@ -158,7 +158,7 @@ namespace DOL.GS.Scripts
 
         public AreaEffect CheckFamily()
         {
-            if(enable && AreaEffectFamily != 0)
+            if (enable && AreaEffectFamily != 0)
             {
                 List<DBAreaEffect> areaList = GameServer.Database.SelectObjects<DBAreaEffect>(DB.Column("AreaEffectFamily").IsEqualTo(AreaEffectFamily)).OrderBy((area) => area.OrderInFamily).ToList();
                 // search the next 
@@ -166,7 +166,7 @@ namespace DOL.GS.Scripts
                     if (area.OrderInFamily > OrderInFamily)
                     {
                         Mob mob = GameServer.Database.SelectObjects<Mob>(DB.Column("Mob_ID").IsEqualTo(area.MobID)).FirstOrDefault();
-                        if(mob != null)
+                        if (mob != null)
                         {
                             if (OneUse)
                                 enable = false;
@@ -283,7 +283,7 @@ namespace DOL.GS.Scripts
             AreaEffect areaSource = source as AreaEffect;
             if (areaSource != null)
             {
-                DBAreaEffect lastarea = GameServer.Database.SelectObjects<DBAreaEffect>(DB.Column("AreaEffectFamily").IsEqualTo(areaSource.AreaEffectFamily)).OrderBy((area) => area.OrderInFamily).ToList().LastOrDefault(); 
+                DBAreaEffect lastarea = GameServer.Database.SelectObjects<DBAreaEffect>(DB.Column("AreaEffectFamily").IsEqualTo(areaSource.AreaEffectFamily)).OrderBy((area) => area.OrderInFamily).ToList().LastOrDefault();
                 ushort order = 0;
                 if (lastarea != null)
                     order = (ushort)(lastarea.OrderInFamily + 1);

@@ -22,26 +22,26 @@ using DOL.GS.PacketHandler;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute(
-		"&advisor",
-		ePrivLevel.Player,
-		"Commands.Players.Advisor.Description",
-		"Commands.Players.Advisor.Usage")]
-	public class AdvisorCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (client.Player.IsMuted)
-			{
-				client.Player.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Advisor.Muted"), eChatType.CT_Staff, eChatLoc.CL_SystemWindow);
-				return;
-			}
+    [CmdAttribute(
+        "&advisor",
+        ePrivLevel.Player,
+        "Commands.Players.Advisor.Description",
+        "Commands.Players.Advisor.Usage")]
+    public class AdvisorCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (client.Player.IsMuted)
+            {
+                client.Player.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Advisor.Muted"), eChatType.CT_Staff, eChatLoc.CL_SystemWindow);
+                return;
+            }
 
-			client.Player.Advisor = !client.Player.Advisor;
-			if (client.Player.Advisor)
-				DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Advisor.On"));
-			else
-				DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Advisor.Off"));
-		}
-	}
+            client.Player.Advisor = !client.Player.Advisor;
+            if (client.Player.Advisor)
+                DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Advisor.On"));
+            else
+                DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Advisor.Off"));
+        }
+    }
 }

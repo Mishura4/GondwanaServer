@@ -23,80 +23,80 @@ using DOL.GS;
 
 namespace DOL.AI.Brain
 {
-	public class NoveltyPetBrain : DOL.AI.ABrain, IControlledBrain
-	{
-		public const string HAS_PET = "HasNoveltyPet";
+    public class NoveltyPetBrain : DOL.AI.ABrain, IControlledBrain
+    {
+        public const string HAS_PET = "HasNoveltyPet";
 
-		private GamePlayer m_owner;
+        private GamePlayer m_owner;
 
-		public NoveltyPetBrain(GamePlayer owner)
-			: base()
-		{
-			m_owner = owner;
-		}
+        public NoveltyPetBrain(GamePlayer owner)
+            : base()
+        {
+            m_owner = owner;
+        }
 
-		public virtual GameLiving GetLivingOwner()
-		{
-			var owner = Owner;
-			int i = 0;
-			while (owner is GameNPC && owner != null)
-			{
-				i++;
-				if (i > 50)
-					throw new Exception("GetLivingOwner() from " + Owner.Name + "caused a cyclical loop.");
-				//If this is a pet, get its owner
-				if (((GameNPC)owner).Brain is IControlledBrain)
-					owner = ((IControlledBrain)((GameNPC)owner).Brain).Owner;
-				//This isn't a pet, that means it's at the top of the tree.  This case will only happen if
-				//owner is not a GamePlayer
-				else
-					break;
-			}
-			return owner;
-		}
+        public virtual GameLiving GetLivingOwner()
+        {
+            var owner = Owner;
+            int i = 0;
+            while (owner is GameNPC && owner != null)
+            {
+                i++;
+                if (i > 50)
+                    throw new Exception("GetLivingOwner() from " + Owner.Name + "caused a cyclical loop.");
+                //If this is a pet, get its owner
+                if (((GameNPC)owner).Brain is IControlledBrain)
+                    owner = ((IControlledBrain)((GameNPC)owner).Brain).Owner;
+                //This isn't a pet, that means it's at the top of the tree.  This case will only happen if
+                //owner is not a GamePlayer
+                else
+                    break;
+            }
+            return owner;
+        }
 
-		#region Think
+        #region Think
 
-		public override int ThinkInterval
-		{
-			get { return 5000; }
-			set { }
-		}
+        public override int ThinkInterval
+        {
+            get { return 5000; }
+            set { }
+        }
 
-		public override void Think()
-		{
-			if (m_owner == null || 
-				m_owner.IsAlive == false || 
-				m_owner.Client.ClientState != GameClient.eClientState.Playing || 
-				Body.IsWithinRadius(m_owner, WorldMgr.VISIBILITY_DISTANCE) == false)
-			{
-				Body.Delete();
-				Body = null;
-				if (m_owner != null && m_owner.TempProperties.getProperty<bool>(HAS_PET, false))
-				{
-					m_owner.TempProperties.setProperty(HAS_PET, false);
-				}
-				m_owner = null;
-			}
-		}
+        public override void Think()
+        {
+            if (m_owner == null ||
+                m_owner.IsAlive == false ||
+                m_owner.Client.ClientState != GameClient.eClientState.Playing ||
+                Body.IsWithinRadius(m_owner, WorldMgr.VISIBILITY_DISTANCE) == false)
+            {
+                Body.Delete();
+                Body = null;
+                if (m_owner != null && m_owner.TempProperties.getProperty<bool>(HAS_PET, false))
+                {
+                    m_owner.TempProperties.setProperty(HAS_PET, false);
+                }
+                m_owner = null;
+            }
+        }
 
-		#endregion Think
+        #endregion Think
 
-		#region IControlledBrain Members
-		public void SetAggressionState(eAggressionState state) { }
-		public eWalkState WalkState { get { return eWalkState.Follow; } }
-		public eAggressionState AggressionState { get { return eAggressionState.Passive; } set { } }
-		public GameLiving Owner { get { return m_owner; } }
-		public void Attack(GameObject target) { }
-		public void Follow(GameObject target) { }
-		public void FollowOwner() { }
-		public void Stay() { }
-		public void ComeHere() { }
-		public void Goto(GameObject target) { }
-		public void UpdatePetWindow() { }
-		public GamePlayer GetPlayerOwner() { return GetLivingOwner() as GamePlayer; }
-		public GameNPC GetNPCOwner() { return GetLivingOwner() as GameNPC; }
-		public bool IsMainPet { get { return false; } set { } }
-		#endregion
-	}
+        #region IControlledBrain Members
+        public void SetAggressionState(eAggressionState state) { }
+        public eWalkState WalkState { get { return eWalkState.Follow; } }
+        public eAggressionState AggressionState { get { return eAggressionState.Passive; } set { } }
+        public GameLiving Owner { get { return m_owner; } }
+        public void Attack(GameObject target) { }
+        public void Follow(GameObject target) { }
+        public void FollowOwner() { }
+        public void Stay() { }
+        public void ComeHere() { }
+        public void Goto(GameObject target) { }
+        public void UpdatePetWindow() { }
+        public GamePlayer GetPlayerOwner() { return GetLivingOwner() as GamePlayer; }
+        public GameNPC GetNPCOwner() { return GetLivingOwner() as GameNPC; }
+        public bool IsMainPet { get { return false; } set { } }
+        #endregion
+    }
 }

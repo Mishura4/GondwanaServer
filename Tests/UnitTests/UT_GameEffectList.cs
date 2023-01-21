@@ -87,7 +87,7 @@ namespace DOL.UnitTests.Gameserver
             var effect = NewFakeEffect();
 
             bool actual = effectList.Remove(effect);
-            
+
             Assert.AreEqual(false, actual);
         }
 
@@ -113,7 +113,7 @@ namespace DOL.UnitTests.Gameserver
             effectList.Add(differentEffect);
 
             bool actual = effectList.Remove(effect);
-            
+
             Assert.AreEqual(false, actual);
         }
 
@@ -148,7 +148,7 @@ namespace DOL.UnitTests.Gameserver
             var brain = NewFakeControlledBrain();
             var owner = new GameNPC(brain);
             var effectList = NewGameEffectList(owner);
-            
+
             effectList.OnEffectsChanged(null);
 
             Assert.IsTrue(brain.receivedUpdatePetWindow);
@@ -173,7 +173,7 @@ namespace DOL.UnitTests.Gameserver
             var brain = NewFakeControlledBrain();
             var owner = new GameNPC(brain);
             var effectList = NewGameEffectList(owner);
-            
+
             effectList.OnEffectsChanged(null);
 
             Assert.IsTrue(brain.receivedUpdatePetWindow);
@@ -211,7 +211,7 @@ namespace DOL.UnitTests.Gameserver
             effectList.Add(effect);
 
             IGameEffect actual = effectList.GetOfType<GameSpellEffect>();
-            
+
             Assert.IsNotNull(actual);
         }
 

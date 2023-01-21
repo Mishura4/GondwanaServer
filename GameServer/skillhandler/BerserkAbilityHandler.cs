@@ -24,40 +24,40 @@ using DOL.Language;
 
 namespace DOL.GS.SkillHandler
 {
-	/// <summary>
-	/// Handler for Sprint Ability clicks
-	/// </summary>
-	[SkillHandlerAttribute(Abilities.Berserk)]
-	public class BerserkAbilityHandler : IAbilityActionHandler
-	{
-		/// <summary>
-		/// Defines a logger for this class.
-		/// </summary>
-		private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+    /// <summary>
+    /// Handler for Sprint Ability clicks
+    /// </summary>
+    [SkillHandlerAttribute(Abilities.Berserk)]
+    public class BerserkAbilityHandler : IAbilityActionHandler
+    {
+        /// <summary>
+        /// Defines a logger for this class.
+        /// </summary>
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-		/// <summary>
-		/// The reuse time in milliseconds for berserk ability
-		/// </summary>
-		protected const int REUSE_TIMER = 60000 * 7; // 7 minutes
+        /// <summary>
+        /// The reuse time in milliseconds for berserk ability
+        /// </summary>
+        protected const int REUSE_TIMER = 60000 * 7; // 7 minutes
 
-		/// <summary>
-		/// The effect duration in milliseconds
-		/// </summary>
-		public const int DURATION = 20000;
+        /// <summary>
+        /// The effect duration in milliseconds
+        /// </summary>
+        public const int DURATION = 20000;
 
-		/// <summary>
-		/// Execute the ability
-		/// </summary>
-		/// <param name="ab">The ability executed</param>
-		/// <param name="player">The player that used the ability</param>
-		public void Execute(Ability ab, GamePlayer player)
-		{
-			if (player == null)
-			{
-				if (log.IsWarnEnabled)
-					log.Warn("Could not retrieve player in BerserkAbilityHandler.");
-				return;
-			}
+        /// <summary>
+        /// Execute the ability
+        /// </summary>
+        /// <param name="ab">The ability executed</param>
+        /// <param name="player">The player that used the ability</param>
+        public void Execute(Ability ab, GamePlayer player)
+        {
+            if (player == null)
+            {
+                if (log.IsWarnEnabled)
+                    log.Warn("Could not retrieve player in BerserkAbilityHandler.");
+                return;
+            }
 
             if (!player.IsAlive)
             {
@@ -74,23 +74,23 @@ namespace DOL.GS.SkillHandler
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Skill.Ability.CannotUseStunned"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
             }
-			if (player.IsSitting)
-			{
+            if (player.IsSitting)
+            {
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Skill.Ability.CannotUseStanding"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-				return;
-			}
+                return;
+            }
 
-			//Cancel old berserk effects on player
-			BerserkEffect berserk = player.EffectList.GetOfType<BerserkEffect>();
-			if (berserk!=null)
-			{
-				berserk.Cancel(false);
-				return;
-			}
+            //Cancel old berserk effects on player
+            BerserkEffect berserk = player.EffectList.GetOfType<BerserkEffect>();
+            if (berserk != null)
+            {
+                berserk.Cancel(false);
+                return;
+            }
 
-			player.DisableSkill(ab, REUSE_TIMER);
+            player.DisableSkill(ab, REUSE_TIMER);
 
-			new BerserkEffect().Start(player);
-		}                       
+            new BerserkEffect().Start(player);
+        }
     }
 }

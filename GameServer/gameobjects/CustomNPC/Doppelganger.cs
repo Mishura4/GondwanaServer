@@ -48,7 +48,7 @@ namespace DOL.GS
 
         static Doppelganger()
         {
-           DBNpcTemplate chthonian = DOLDB<DBNpcTemplate>.SelectObject(DB.Column(nameof(DBNpcTemplate.Name)).IsEqualTo("chthonian crawler"));
+            DBNpcTemplate chthonian = DOLDB<DBNpcTemplate>.SelectObject(DB.Column(nameof(DBNpcTemplate.Name)).IsEqualTo("chthonian crawler"));
             if (chthonian != null)
                 m_petTemplate = new NpcTemplate(chthonian);
         }
@@ -255,7 +255,7 @@ namespace DOL.GS
                 SwitchWeapon(eActiveWeaponSlot.TwoHanded);
             else
                 SwitchWeapon(eActiveWeaponSlot.Standard);
-            
+
         }
     }
 }

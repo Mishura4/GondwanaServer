@@ -20,14 +20,14 @@ using System.Numerics;
 
 namespace DOL.GS
 {
-	/// <summary>
-	/// interface for classes that represent a point in 3d space
-	/// </summary>
-	public interface IGameLocation
-	{
-		ushort RegionID { get; }
-		Vector3 Position { get; }
-		ushort Heading { get; }
-		string Name { get; }
-	}
+    /// <summary>
+    /// interface for classes that represent a point in 3d space
+    /// </summary>
+    public interface IGameLocation
+    {
+        ushort RegionID { get; }
+        Vector3 Position { get; }
+        ushort Heading { get; }
+        string Name { get; }
+    }
 }

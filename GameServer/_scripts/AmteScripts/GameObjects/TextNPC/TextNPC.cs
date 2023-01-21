@@ -9,8 +9,8 @@ using DOL.GS.Quests;
 
 namespace DOL.GS.Scripts
 {
-	public class TextNPC : AmteMob, ITextNPC
-	{
+    public class TextNPC : AmteMob, ITextNPC
+    {
         public TextNPCPolicy TextNPCData { get; set; }
 
         public TextNPC()
@@ -46,17 +46,17 @@ namespace DOL.GS.Scripts
             return TextNPCData.ReceiveItem(source, item);
         }
 
-		public override void LoadFromDatabase(DataObject obj)
-		{
-			base.LoadFromDatabase(obj);
-			TextNPCData.LoadFromDatabase(obj);
-		}
+        public override void LoadFromDatabase(DataObject obj)
+        {
+            base.LoadFromDatabase(obj);
+            TextNPCData.LoadFromDatabase(obj);
+        }
 
-		public override void SaveIntoDatabase()
-		{
-			base.SaveIntoDatabase();
-			TextNPCData.SaveIntoDatabase();
-		}
+        public override void SaveIntoDatabase()
+        {
+            base.SaveIntoDatabase();
+            TextNPCData.SaveIntoDatabase();
+        }
 
         public override void DeleteFromDatabase()
         {
@@ -64,27 +64,27 @@ namespace DOL.GS.Scripts
             TextNPCData.DeleteFromDatabase();
         }
 
-		public override eQuestIndicator GetQuestIndicator(GamePlayer player)
-		{
-			var result = base.GetQuestIndicator(player);
-			if (result != eQuestIndicator.None)
-				return result;
+        public override eQuestIndicator GetQuestIndicator(GamePlayer player)
+        {
+            var result = base.GetQuestIndicator(player);
+            if (result != eQuestIndicator.None)
+                return result;
 
-			foreach (var q in QuestIdListToGive.OfType<PlayerQuest>())
-			{
-				var quest = player.QuestList.OfType<PlayerQuest>().FirstOrDefault(pq => pq.QuestId == q.QuestId);
-				if (quest == null)
-					continue;
-				if (quest.VisibleGoals.OfType<DataQuestJsonGoal.GenericDataQuestGoal>().Any(g => g.Goal is EndGoal end && end.Target == this))
-					return eQuestIndicator.Finish;
-			}
+            foreach (var q in QuestIdListToGive.OfType<PlayerQuest>())
+            {
+                var quest = player.QuestList.OfType<PlayerQuest>().FirstOrDefault(pq => pq.QuestId == q.QuestId);
+                if (quest == null)
+                    continue;
+                if (quest.VisibleGoals.OfType<DataQuestJsonGoal.GenericDataQuestGoal>().Any(g => g.Goal is EndGoal end && end.Target == this))
+                    return eQuestIndicator.Finish;
+            }
 
-			return TextNPCData.Condition.CanGiveQuest != eQuestIndicator.None && TextNPCData.Condition.CheckAccess(player)
-				? TextNPCData.Condition.CanGiveQuest
-				: eQuestIndicator.None;
-		}
+            return TextNPCData.Condition.CanGiveQuest != eQuestIndicator.None && TextNPCData.Condition.CheckAccess(player)
+                ? TextNPCData.Condition.CanGiveQuest
+                : eQuestIndicator.None;
+        }
         #endregion
-	}
+    }
 
     /// <summary>
     /// Provided only for compatibility

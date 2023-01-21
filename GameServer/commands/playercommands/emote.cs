@@ -21,90 +21,90 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	/// <summary>
-	/// Command handler to handle emotes
-	/// </summary>
-	[CmdAttribute(
-		"&emote", new string[] {"&em", "&e"},
-		ePrivLevel.Player,
-		"Commands.Players.Emote.Description",
-		"Commands.Players.Emote.Usage")]
-	public class CustomEmoteCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		/// <summary>
-		/// Method to handle the command from the client
-		/// </summary>
-		/// <param name="client"></param>
-		/// <param name="args"></param>
-		/// <returns></returns>
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (IsSpammingCommand(client.Player, "emote"))
-				return;
+    /// <summary>
+    /// Command handler to handle emotes
+    /// </summary>
+    [CmdAttribute(
+        "&emote", new string[] { "&em", "&e" },
+        ePrivLevel.Player,
+        "Commands.Players.Emote.Description",
+        "Commands.Players.Emote.Usage")]
+    public class CustomEmoteCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        /// <summary>
+        /// Method to handle the command from the client
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (IsSpammingCommand(client.Player, "emote"))
+                return;
 
-			// no emotes if dead
-			if (!client.Player.IsAlive)
-			{
-				client.Out.SendMessage(
-					LanguageMgr.GetTranslation(
-						client.Account.Language, "Commands.Players.Emote.Dead"),
-					eChatType.CT_Emote,
-					eChatLoc.CL_SystemWindow);
-				return;
-			}
+            // no emotes if dead
+            if (!client.Player.IsAlive)
+            {
+                client.Out.SendMessage(
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language, "Commands.Players.Emote.Dead"),
+                    eChatType.CT_Emote,
+                    eChatLoc.CL_SystemWindow);
+                return;
+            }
 
-			if (args.Length < 2)
-			{
-				client.Out.SendMessage(
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Emote.Empty"
-					),
-					eChatType.CT_System, 
-					eChatLoc.CL_SystemWindow
-				);
-				return;
-			}
+            if (args.Length < 2)
+            {
+                client.Out.SendMessage(
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Emote.Empty"
+                    ),
+                    eChatType.CT_System,
+                    eChatLoc.CL_SystemWindow
+                );
+                return;
+            }
 
-			if (client.Player.IsMuted)
-			{
-				client.Player.Out.SendMessage(
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Emote.Empty"
-					),
-					eChatType.CT_Staff,
-					eChatLoc.CL_SystemWindow
-				);
-				return;
-			}
+            if (client.Player.IsMuted)
+            {
+                client.Player.Out.SendMessage(
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Emote.Empty"
+                    ),
+                    eChatType.CT_Staff,
+                    eChatLoc.CL_SystemWindow
+                );
+                return;
+            }
 
-			string EmoteStr = string.Join(" ", args, 1, args.Length - 1);
-			string ownRealm = LanguageMgr.GetTranslation(
-				client.Account.Language,
-				"Commands.Players.Emote.Act",
-				client.Player.Name,
-				EmoteStr
-			);
+            string EmoteStr = string.Join(" ", args, 1, args.Length - 1);
+            string ownRealm = LanguageMgr.GetTranslation(
+                client.Account.Language,
+                "Commands.Players.Emote.Act",
+                client.Player.Name,
+                EmoteStr
+            );
 
-			string diffRealm = LanguageMgr.GetTranslation(
-				client.Account.Language,
-				"Commands.Players.Emote.Strange",
-				client.Player.Name
-			);
+            string diffRealm = LanguageMgr.GetTranslation(
+                client.Account.Language,
+                "Commands.Players.Emote.Strange",
+                client.Player.Name
+            );
 
-			foreach (GamePlayer player in client.Player.GetPlayersInRadius(WorldMgr.SAY_DISTANCE))
-			{
-				if (GameServer.ServerRules.IsAllowedToUnderstand(client.Player, player))
-				{
-					player.Out.SendMessage(ownRealm, eChatType.CT_Emote, eChatLoc.CL_ChatWindow);
-				}
-				else
-				{
+            foreach (GamePlayer player in client.Player.GetPlayersInRadius(WorldMgr.SAY_DISTANCE))
+            {
+                if (GameServer.ServerRules.IsAllowedToUnderstand(client.Player, player))
+                {
+                    player.Out.SendMessage(ownRealm, eChatType.CT_Emote, eChatLoc.CL_ChatWindow);
+                }
+                else
+                {
                     if (!player.IsIgnoring(client.Player as GameLiving))
-					player.Out.SendMessage(diffRealm, eChatType.CT_Emote, eChatLoc.CL_ChatWindow);
-				}
-			}
-		}
-	}
+                        player.Out.SendMessage(diffRealm, eChatType.CT_Emote, eChatLoc.CL_ChatWindow);
+                }
+            }
+        }
+    }
 }

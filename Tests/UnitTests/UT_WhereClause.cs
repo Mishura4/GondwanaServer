@@ -59,7 +59,7 @@ namespace DOL.UnitTests.Database
         [Test]
         public void ParameterizedText_FooIsInOneAndTwo_FooIsInAtACommaAtB()
         {
-            var expr = DB.Column("foo").IsIn(new [] { 1, 2 });
+            var expr = DB.Column("foo").IsIn(new[] { 1, 2 });
             var placeHolder1 = expr.Parameters[0].Item1;
             var placeHolder2 = expr.Parameters[1].Item1;
             var actual = expr.ParameterizedText;
@@ -70,7 +70,7 @@ namespace DOL.UnitTests.Database
         [Test]
         public void ParameterizedText_FooIsInAandB_FooIsInAtACommaAtB()
         {
-            var expr = DB.Column("foo").IsIn(new [] { "a", "b" });
+            var expr = DB.Column("foo").IsIn(new[] { "a", "b" });
             var placeHolder1 = expr.Parameters[0].Item1;
             var placeHolder2 = expr.Parameters[1].Item1;
             var actual = expr.ParameterizedText;

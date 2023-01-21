@@ -23,115 +23,115 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute(
-		"&checkappeal",
-		ePrivLevel.Player,
-		"Commands.Players.CheckAppeal.Description",
-		"Commands.Players.CheckAppeal.Usage.View",
-		"Commands.Players.CheckAppeal.Usage.Cancel",
-		"Commands.Players.CheckAppeal.Usage.Appeal")]
+    [CmdAttribute(
+        "&checkappeal",
+        ePrivLevel.Player,
+        "Commands.Players.CheckAppeal.Description",
+        "Commands.Players.CheckAppeal.Usage.View",
+        "Commands.Players.CheckAppeal.Usage.Cancel",
+        "Commands.Players.CheckAppeal.Usage.Appeal")]
 
-	public class CheckAppealCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (IsSpammingCommand(client.Player, "checkappeal"))
-				return;
+    public class CheckAppealCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (IsSpammingCommand(client.Player, "checkappeal"))
+                return;
 
-			if (ServerProperties.Properties.DISABLE_APPEALSYSTEM)
-			{
-				AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Appeal.SystemDisabled"));
-				return;
-			}
+            if (ServerProperties.Properties.DISABLE_APPEALSYSTEM)
+            {
+                AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Appeal.SystemDisabled"));
+                return;
+            }
 
-			if (args.Length < 2)
-			{
-				DisplaySyntax(client);
-				return;
-			}
+            if (args.Length < 2)
+            {
+                DisplaySyntax(client);
+                return;
+            }
 
-			switch (args[1])
-			{
+            switch (args[1])
+            {
 
-					#region checkappeal cancel
-				case "remove":
-				case "delete":
-				case "cancel":
-					{
-						if (args.Length < 2)
-						{
-							DisplaySyntax(client);
-							return;
-						}
-						//if your temporary properties says your a liar, don't even check the DB (prevent DB hammer abuse)
-						bool HasPendingAppeal = client.Player.TempProperties.getProperty<bool>("HasPendingAppeal");
-						if (!HasPendingAppeal)
-						{
-							AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Appeal.DoNotHaveAppeal"));
-							return;
-						}
-						DBAppeal appeal = AppealMgr.GetAppealByPlayerName(client.Player.Name);
-						if (appeal != null)
-						{
-							if (appeal.Status == "Being Helped")
-							{
-								AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Appeal.CantCancelWhile"));
-								return;
-							}
-							else
-							{
-								AppealMgr.CancelAppeal(client.Player, appeal);
-								break;
-							}
-						}
-						AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Appeal.DoNotHaveAppeal"));
-						break;
-					}
-					#endregion checkappeal cancel
-					#region checkappeal view
-				case "display":
-				case "show":
-				case "list":
-				case "view":
-					{
-						if (args.Length < 2)
-						{
-							DisplaySyntax(client);
-							return;
-						}
-						bool HasPendingAppeal = client.Player.TempProperties.getProperty<bool>("HasPendingAppeal");
-						if (!HasPendingAppeal)
-						{
-							AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Appeal.NoAppealToView"));
-							return;
-						}
-						DBAppeal appeal = AppealMgr.GetAppealByPlayerName(client.Player.Name);
-						if (appeal != null)
-						{
-							//Let's view it.
-							List<string> msg = new List<string>();
-							//note: we do not show the player his Appeals priority.
-							msg.Add("[Player]: " + appeal.Name + ", [Status]: " + appeal.Status + ", [Issue]: " + appeal.Text + ", [Time]: " + appeal.Timestamp + ".\n");
-							AppealMgr.GetAllAppeals(); //refresh the total number of appeals.
-							msg.Add(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Appeal.CurrentStaffAvailable", AppealMgr.StaffList.Count, AppealMgr.TotalAppeals) + "\n");
-							msg.Add(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Appeal.PleaseBePatient") + "\n");
-							msg.Add(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Appeal.IfYouLogOut") + "\n");
-							msg.Add(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Appeal.ToCancelYourAppeal"));
-							client.Out.SendCustomTextWindow("Your Appeal", msg);
-							return;
-						}
-						AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Appeal.NoAppealToView"));
-						break;
+                #region checkappeal cancel
+                case "remove":
+                case "delete":
+                case "cancel":
+                    {
+                        if (args.Length < 2)
+                        {
+                            DisplaySyntax(client);
+                            return;
+                        }
+                        //if your temporary properties says your a liar, don't even check the DB (prevent DB hammer abuse)
+                        bool HasPendingAppeal = client.Player.TempProperties.getProperty<bool>("HasPendingAppeal");
+                        if (!HasPendingAppeal)
+                        {
+                            AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Appeal.DoNotHaveAppeal"));
+                            return;
+                        }
+                        DBAppeal appeal = AppealMgr.GetAppealByPlayerName(client.Player.Name);
+                        if (appeal != null)
+                        {
+                            if (appeal.Status == "Being Helped")
+                            {
+                                AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Appeal.CantCancelWhile"));
+                                return;
+                            }
+                            else
+                            {
+                                AppealMgr.CancelAppeal(client.Player, appeal);
+                                break;
+                            }
+                        }
+                        AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Appeal.DoNotHaveAppeal"));
+                        break;
+                    }
+                #endregion checkappeal cancel
+                #region checkappeal view
+                case "display":
+                case "show":
+                case "list":
+                case "view":
+                    {
+                        if (args.Length < 2)
+                        {
+                            DisplaySyntax(client);
+                            return;
+                        }
+                        bool HasPendingAppeal = client.Player.TempProperties.getProperty<bool>("HasPendingAppeal");
+                        if (!HasPendingAppeal)
+                        {
+                            AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Appeal.NoAppealToView"));
+                            return;
+                        }
+                        DBAppeal appeal = AppealMgr.GetAppealByPlayerName(client.Player.Name);
+                        if (appeal != null)
+                        {
+                            //Let's view it.
+                            List<string> msg = new List<string>();
+                            //note: we do not show the player his Appeals priority.
+                            msg.Add("[Player]: " + appeal.Name + ", [Status]: " + appeal.Status + ", [Issue]: " + appeal.Text + ", [Time]: " + appeal.Timestamp + ".\n");
+                            AppealMgr.GetAllAppeals(); //refresh the total number of appeals.
+                            msg.Add(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Appeal.CurrentStaffAvailable", AppealMgr.StaffList.Count, AppealMgr.TotalAppeals) + "\n");
+                            msg.Add(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Appeal.PleaseBePatient") + "\n");
+                            msg.Add(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Appeal.IfYouLogOut") + "\n");
+                            msg.Add(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Appeal.ToCancelYourAppeal"));
+                            client.Out.SendCustomTextWindow("Your Appeal", msg);
+                            return;
+                        }
+                        AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Appeal.NoAppealToView"));
+                        break;
 
-					}
-				default:
-					{
-						DisplaySyntax(client);
-						return;
-					}
-					#endregion checkappeal view
+                    }
+                default:
+                    {
+                        DisplaySyntax(client);
+                        return;
+                    }
+                    #endregion checkappeal view
 
-			}
-		}
-	}
+            }
+        }
+    }
 }

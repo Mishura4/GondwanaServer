@@ -23,25 +23,25 @@ using log4net;
 
 namespace DOL.GS.PacketHandler.Client.v168
 {
-	[PacketHandlerAttribute(PacketHandlerType.TCP, eClientPackets.ObjectUpdateRequest, "Update all GameObjects in Playerrange", eClientStatus.PlayerInGame)]
-	public class ObjectUpdateRequestHandler : IPacketHandler
-	{
-		/// <summary>
-		/// Defines a logger for this class.
-		/// </summary>
-		private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+    [PacketHandlerAttribute(PacketHandlerType.TCP, eClientPackets.ObjectUpdateRequest, "Update all GameObjects in Playerrange", eClientStatus.PlayerInGame)]
+    public class ObjectUpdateRequestHandler : IPacketHandler
+    {
+        /// <summary>
+        /// Defines a logger for this class.
+        /// </summary>
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-		public void HandlePacket(GameClient client, GSPacketIn packet)
-		{
-			foreach (GameStaticItem item in client.Player.GetItemsInRadius(WorldMgr.OBJ_UPDATE_DISTANCE))
-				client.Out.SendObjectCreate(item);
+        public void HandlePacket(GameClient client, GSPacketIn packet)
+        {
+            foreach (GameStaticItem item in client.Player.GetItemsInRadius(WorldMgr.OBJ_UPDATE_DISTANCE))
+                client.Out.SendObjectCreate(item);
 
-			foreach (IDoor door in client.Player.GetDoorsInRadius(WorldMgr.OBJ_UPDATE_DISTANCE))
-				client.Player.SendDoorUpdate(door);
+            foreach (IDoor door in client.Player.GetDoorsInRadius(WorldMgr.OBJ_UPDATE_DISTANCE))
+                client.Player.SendDoorUpdate(door);
 
-			//housing
-			if (client.Player.CurrentRegion.HousingEnabled)
-				WorldUpdateThread.UpdatePlayerHousing(client.Player, GameTimer.GetTickCount()+60000);
-		}
-	}
+            //housing
+            if (client.Player.CurrentRegion.HousingEnabled)
+                WorldUpdateThread.UpdatePlayerHousing(client.Player, GameTimer.GetTickCount() + 60000);
+        }
+    }
 }

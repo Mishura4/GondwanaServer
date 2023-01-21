@@ -40,7 +40,7 @@ namespace DOL.GS.Spells
         public override void OnEffectStart(GameSpellEffect effect)
         {
             base.OnEffectStart(effect);
-            
+
             GameEventMgr.AddHandler(effect.Owner, GameLivingEvent.AttackedByEnemy, new DOLEventHandler(OnAttack));
 
             eChatType toLiving = (Spell.Pulse == 0) ? eChatType.CT_Spell : eChatType.CT_SpellPulse;
@@ -59,7 +59,7 @@ namespace DOL.GS.Spells
         public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
         {
             GameEventMgr.RemoveHandler(effect.Owner, GameLivingEvent.AttackedByEnemy, new DOLEventHandler(OnAttack));
-            
+
             if (!noMessages && Spell.Pulse == 0)
             {
                 MessageToLiving(effect.Owner, Spell.Message3, eChatType.CT_SpellExpires);
@@ -100,7 +100,7 @@ namespace DOL.GS.Spells
                 absorbPercent = 100;
             //This only absorbs style damage.
             int damageAbsorbed = (int)(0.01 * absorbPercent * (ad.StyleDamage));
-            
+
             ad.Damage -= damageAbsorbed;
 
             OnDamageAbsorbed(ad, damageAbsorbed);
@@ -118,8 +118,8 @@ namespace DOL.GS.Spells
         public override PlayerXEffect GetSavedEffect(GameSpellEffect e)
         {
             if ( //VaNaTiC-> this cannot work, cause PulsingSpellEffect is derived from object and only implements IConcEffect
-                //e is PulsingSpellEffect ||
-                //VaNaTiC<-
+                 //e is PulsingSpellEffect ||
+                 //VaNaTiC<-
                 Spell.Pulse != 0 || Spell.Concentration != 0 || e.RemainingTime < 1)
                 return null;
             PlayerXEffect eff = new PlayerXEffect();

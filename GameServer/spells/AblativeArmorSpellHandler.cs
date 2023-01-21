@@ -29,89 +29,89 @@ using log4net;
 
 namespace DOL.GS.Spells
 {
-	// Melee ablative
-	[SpellHandlerAttribute("AblativeArmor")]
-	public class AblativeArmorSpellHandler : SpellHandler
-	{
-		public const string ABLATIVE_HP = "ablative hp";
+    // Melee ablative
+    [SpellHandlerAttribute("AblativeArmor")]
+    public class AblativeArmorSpellHandler : SpellHandler
+    {
+        public const string ABLATIVE_HP = "ablative hp";
 
-		public override void OnEffectStart(GameSpellEffect effect)
-		{
-			base.OnEffectStart(effect);
-			effect.Owner.TempProperties.setProperty(ABLATIVE_HP, (int)Spell.Value);
-			GameEventMgr.AddHandler(effect.Owner, GameLivingEvent.AttackedByEnemy, new DOLEventHandler(OnAttack));
+        public override void OnEffectStart(GameSpellEffect effect)
+        {
+            base.OnEffectStart(effect);
+            effect.Owner.TempProperties.setProperty(ABLATIVE_HP, (int)Spell.Value);
+            GameEventMgr.AddHandler(effect.Owner, GameLivingEvent.AttackedByEnemy, new DOLEventHandler(OnAttack));
 
-			eChatType toLiving = (Spell.Pulse == 0) ? eChatType.CT_Spell : eChatType.CT_SpellPulse;
-			eChatType toOther = (Spell.Pulse == 0) ? eChatType.CT_System : eChatType.CT_SpellPulse;
-			MessageToLiving(effect.Owner, Spell.Message1, toLiving);
-			Message.SystemToArea(effect.Owner, Util.MakeSentence(Spell.Message2, effect.Owner.GetName(0, false)), toOther, effect.Owner);
-		}
+            eChatType toLiving = (Spell.Pulse == 0) ? eChatType.CT_Spell : eChatType.CT_SpellPulse;
+            eChatType toOther = (Spell.Pulse == 0) ? eChatType.CT_System : eChatType.CT_SpellPulse;
+            MessageToLiving(effect.Owner, Spell.Message1, toLiving);
+            Message.SystemToArea(effect.Owner, Util.MakeSentence(Spell.Message2, effect.Owner.GetName(0, false)), toOther, effect.Owner);
+        }
 
-		/// <summary>
-		/// When an applied effect expires.
-		/// Duration spells only.
-		/// </summary>
-		/// <param name="effect">The expired effect</param>
-		/// <param name="noMessages">true, when no messages should be sent to player and surrounding</param>
-		/// <returns>immunity duration in milliseconds</returns>
-		public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
-		{
-			GameEventMgr.RemoveHandler(effect.Owner, GameLivingEvent.AttackedByEnemy, new DOLEventHandler(OnAttack));
-			effect.Owner.TempProperties.removeProperty(ABLATIVE_HP);
-			if (!noMessages && Spell.Pulse == 0)
-			{
-				MessageToLiving(effect.Owner, Spell.Message3, eChatType.CT_SpellExpires);
-				Message.SystemToArea(effect.Owner, Util.MakeSentence(Spell.Message4, effect.Owner.GetName(0, false)), eChatType.CT_SpellExpires, effect.Owner);
-			}
-			return 0;
-		}
+        /// <summary>
+        /// When an applied effect expires.
+        /// Duration spells only.
+        /// </summary>
+        /// <param name="effect">The expired effect</param>
+        /// <param name="noMessages">true, when no messages should be sent to player and surrounding</param>
+        /// <returns>immunity duration in milliseconds</returns>
+        public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
+        {
+            GameEventMgr.RemoveHandler(effect.Owner, GameLivingEvent.AttackedByEnemy, new DOLEventHandler(OnAttack));
+            effect.Owner.TempProperties.removeProperty(ABLATIVE_HP);
+            if (!noMessages && Spell.Pulse == 0)
+            {
+                MessageToLiving(effect.Owner, Spell.Message3, eChatType.CT_SpellExpires);
+                Message.SystemToArea(effect.Owner, Util.MakeSentence(Spell.Message4, effect.Owner.GetName(0, false)), eChatType.CT_SpellExpires, effect.Owner);
+            }
+            return 0;
+        }
 
-		public override void FinishSpellCast(GameLiving target)
-		{
-			m_caster.Mana -= PowerCost(target);
-			base.FinishSpellCast(target);
-		}
-		
-		/// <summary>
-		/// Calculates the effect duration in milliseconds
-		/// </summary>
-		/// <param name="target">The effect target</param>
-		/// <param name="effectiveness">The effect effectiveness</param>
-		/// <returns>The effect duration in milliseconds</returns>
-		protected override int CalculateEffectDuration(GameLiving target, double effectiveness)
-		{
-			double duration = Spell.Duration;
-			duration *= (1.0 + m_caster.GetModified(eProperty.SpellDuration) * 0.01);
-			return (int)duration;
-		}
-		
-		private void OnAttack(DOLEvent e, object sender, EventArgs arguments)
-		{
-			GameLiving living = sender as GameLiving;
-			if (living == null) return;
-			AttackedByEnemyEventArgs attackedByEnemy = arguments as AttackedByEnemyEventArgs;
-			AttackData ad = null;
-			if (attackedByEnemy != null)
-				ad = attackedByEnemy.AttackData;
+        public override void FinishSpellCast(GameLiving target)
+        {
+            m_caster.Mana -= PowerCost(target);
+            base.FinishSpellCast(target);
+        }
 
-//			Log.DebugFormat("sender:{0} res:{1} IsMelee:{2} Type:{3}", living.Name, ad.AttackResult, ad.IsMeleeAttack, ad.AttackType);
-			
-			// Melee or Magic or Both ?
-			if (!MatchingDamageType(ref ad)) return;
-			
-			int ablativehp = living.TempProperties.getProperty<int>(ABLATIVE_HP);
-			double absorbPercent = 25;
-			if (Spell.Damage > 0)
-				absorbPercent = Spell.Damage;
-			//because albatives can reach 100%
-			if (absorbPercent > 100)
-				absorbPercent = 100;
-			int damageAbsorbed = (int)(0.01 * absorbPercent * (ad.Damage+ad.CriticalDamage));
-			if (damageAbsorbed > ablativehp)
-				damageAbsorbed = ablativehp;
-			ablativehp -= damageAbsorbed;
-			ad.Damage -= damageAbsorbed;
-			OnDamageAbsorbed(ad, damageAbsorbed);
+        /// <summary>
+        /// Calculates the effect duration in milliseconds
+        /// </summary>
+        /// <param name="target">The effect target</param>
+        /// <param name="effectiveness">The effect effectiveness</param>
+        /// <returns>The effect duration in milliseconds</returns>
+        protected override int CalculateEffectDuration(GameLiving target, double effectiveness)
+        {
+            double duration = Spell.Duration;
+            duration *= (1.0 + m_caster.GetModified(eProperty.SpellDuration) * 0.01);
+            return (int)duration;
+        }
+
+        private void OnAttack(DOLEvent e, object sender, EventArgs arguments)
+        {
+            GameLiving living = sender as GameLiving;
+            if (living == null) return;
+            AttackedByEnemyEventArgs attackedByEnemy = arguments as AttackedByEnemyEventArgs;
+            AttackData ad = null;
+            if (attackedByEnemy != null)
+                ad = attackedByEnemy.AttackData;
+
+            //			Log.DebugFormat("sender:{0} res:{1} IsMelee:{2} Type:{3}", living.Name, ad.AttackResult, ad.IsMeleeAttack, ad.AttackType);
+
+            // Melee or Magic or Both ?
+            if (!MatchingDamageType(ref ad)) return;
+
+            int ablativehp = living.TempProperties.getProperty<int>(ABLATIVE_HP);
+            double absorbPercent = 25;
+            if (Spell.Damage > 0)
+                absorbPercent = Spell.Damage;
+            //because albatives can reach 100%
+            if (absorbPercent > 100)
+                absorbPercent = 100;
+            int damageAbsorbed = (int)(0.01 * absorbPercent * (ad.Damage + ad.CriticalDamage));
+            if (damageAbsorbed > ablativehp)
+                damageAbsorbed = ablativehp;
+            ablativehp -= damageAbsorbed;
+            ad.Damage -= damageAbsorbed;
+            OnDamageAbsorbed(ad, damageAbsorbed);
 
             if (ad.Target is GamePlayer)
                 (ad.Target as GamePlayer).Out.SendMessage(LanguageMgr.GetTranslation((ad.Target as GamePlayer).Client, "AblativeArmor.Target", damageAbsorbed), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
@@ -119,72 +119,72 @@ namespace DOL.GS.Spells
             if (ad.Attacker is GamePlayer)
                 (ad.Attacker as GamePlayer).Out.SendMessage(LanguageMgr.GetTranslation((ad.Attacker as GamePlayer).Client, "AblativeArmor.Attacker", damageAbsorbed), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
 
-			if(ablativehp <= 0)
-			{
-				GameSpellEffect effect = SpellHandler.FindEffectOnTarget(living, this);
-				if(effect != null)
-					effect.Cancel(false);
-			}
-			else
-			{
-				living.TempProperties.setProperty(ABLATIVE_HP,ablativehp);
-			}
-		}
+            if (ablativehp <= 0)
+            {
+                GameSpellEffect effect = SpellHandler.FindEffectOnTarget(living, this);
+                if (effect != null)
+                    effect.Cancel(false);
+            }
+            else
+            {
+                living.TempProperties.setProperty(ABLATIVE_HP, ablativehp);
+            }
+        }
 
-		// Check if Melee
-		protected virtual bool MatchingDamageType(ref AttackData ad)
-		{
-			
-			if (ad == null || (ad.AttackResult != GameLiving.eAttackResult.HitStyle && ad.AttackResult != GameLiving.eAttackResult.HitUnstyled))
-				return false;
-			if (!ad.IsMeleeAttack && ad.AttackType != AttackData.eAttackType.Ranged)
-				return false;
-			
-			return true;
-		}
+        // Check if Melee
+        protected virtual bool MatchingDamageType(ref AttackData ad)
+        {
 
-		protected virtual void OnDamageAbsorbed(AttackData ad, int DamageAmount)
-		{
-		}
-		
-		public override PlayerXEffect GetSavedEffect(GameSpellEffect e)
-		{
-			if ( //VaNaTiC-> this cannot work, cause PulsingSpellEffect is derived from object and only implements IConcEffect
-			    //e is PulsingSpellEffect ||
-			    //VaNaTiC<-
-			    Spell.Pulse != 0 || Spell.Concentration != 0 || e.RemainingTime < 1)
-				return null;
-			PlayerXEffect eff = new PlayerXEffect();
-			eff.Var1 = Spell.ID;
-			eff.Duration = e.RemainingTime;
-			eff.IsHandler = true;
-			eff.Var2 = (int)Spell.Value;
-			eff.SpellLine = SpellLine.KeyName;
-			return eff;
-		}
+            if (ad == null || (ad.AttackResult != GameLiving.eAttackResult.HitStyle && ad.AttackResult != GameLiving.eAttackResult.HitUnstyled))
+                return false;
+            if (!ad.IsMeleeAttack && ad.AttackType != AttackData.eAttackType.Ranged)
+                return false;
 
-		public override void OnEffectRestored(GameSpellEffect effect, int[] vars)
-		{
-			effect.Owner.TempProperties.setProperty(ABLATIVE_HP, (int)vars[1]);
-			GameEventMgr.AddHandler(effect.Owner, GameLivingEvent.AttackedByEnemy, new DOLEventHandler(OnAttack));
-		}
+            return true;
+        }
 
-		public override int OnRestoredEffectExpires(GameSpellEffect effect, int[] vars, bool noMessages)
-		{
-			GameEventMgr.RemoveHandler(effect.Owner, GameLivingEvent.AttackedByEnemy, new DOLEventHandler(OnAttack));
-			effect.Owner.TempProperties.removeProperty(ABLATIVE_HP);
-			if (!noMessages && Spell.Pulse == 0)
-			{
-				MessageToLiving(effect.Owner, Spell.Message3, eChatType.CT_SpellExpires);
-				Message.SystemToArea(effect.Owner, Util.MakeSentence(Spell.Message4, effect.Owner.GetName(0, false)), eChatType.CT_SpellExpires, effect.Owner);
-			}
-			return 0;
-		}
-		#region Delve Info
-		public override IList<string> DelveInfo
-		{
-			get
-			{
+        protected virtual void OnDamageAbsorbed(AttackData ad, int DamageAmount)
+        {
+        }
+
+        public override PlayerXEffect GetSavedEffect(GameSpellEffect e)
+        {
+            if ( //VaNaTiC-> this cannot work, cause PulsingSpellEffect is derived from object and only implements IConcEffect
+                 //e is PulsingSpellEffect ||
+                 //VaNaTiC<-
+                Spell.Pulse != 0 || Spell.Concentration != 0 || e.RemainingTime < 1)
+                return null;
+            PlayerXEffect eff = new PlayerXEffect();
+            eff.Var1 = Spell.ID;
+            eff.Duration = e.RemainingTime;
+            eff.IsHandler = true;
+            eff.Var2 = (int)Spell.Value;
+            eff.SpellLine = SpellLine.KeyName;
+            return eff;
+        }
+
+        public override void OnEffectRestored(GameSpellEffect effect, int[] vars)
+        {
+            effect.Owner.TempProperties.setProperty(ABLATIVE_HP, (int)vars[1]);
+            GameEventMgr.AddHandler(effect.Owner, GameLivingEvent.AttackedByEnemy, new DOLEventHandler(OnAttack));
+        }
+
+        public override int OnRestoredEffectExpires(GameSpellEffect effect, int[] vars, bool noMessages)
+        {
+            GameEventMgr.RemoveHandler(effect.Owner, GameLivingEvent.AttackedByEnemy, new DOLEventHandler(OnAttack));
+            effect.Owner.TempProperties.removeProperty(ABLATIVE_HP);
+            if (!noMessages && Spell.Pulse == 0)
+            {
+                MessageToLiving(effect.Owner, Spell.Message3, eChatType.CT_SpellExpires);
+                Message.SystemToArea(effect.Owner, Util.MakeSentence(Spell.Message4, effect.Owner.GetName(0, false)), eChatType.CT_SpellExpires, effect.Owner);
+            }
+            return 0;
+        }
+        #region Delve Info
+        public override IList<string> DelveInfo
+        {
+            get
+            {
                 var list = new List<string>();
 
                 list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "AblativeArmor.DelveInfo.Function"));
@@ -205,7 +205,7 @@ namespace DOL.GS.Spells
                 if (Spell.Duration >= ushort.MaxValue * 1000)
                     list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DelveInfo.Duration") + " Permanent.");
                 else if (Spell.Duration > 60000)
-					list.Add(string.Format(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DelveInfo.Duration") + Spell.Duration / 60000 + ":" + (Spell.Duration % 60000 / 1000).ToString("00") + " min"));
+                    list.Add(string.Format(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DelveInfo.Duration") + Spell.Duration / 60000 + ":" + (Spell.Duration % 60000 / 1000).ToString("00") + " min"));
                 else if (Spell.Duration != 0)
                     list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DelveInfo.Duration") + (Spell.Duration / 1000).ToString("0' sec';'Permanent.';'Permanent.'"));
                 if (Spell.Power != 0)
@@ -226,44 +226,44 @@ namespace DOL.GS.Spells
                         list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DelveInfo.DamageType", Spell.DamageType));
                 }
                 return list;
-			}
-			#endregion
-		}
+            }
+            #endregion
+        }
 
-		public override string ShortDescription 
-			=> $"Target gains a temporary health buffer that absorbs {(Spell.Damage > 0 ? Spell.Damage : 25)}% of the physical damage dealt, up to a maximum of {Spell.Value} damage.";
+        public override string ShortDescription
+            => $"Target gains a temporary health buffer that absorbs {(Spell.Damage > 0 ? Spell.Damage : 25)}% of the physical damage dealt, up to a maximum of {Spell.Value} damage.";
 
-		protected virtual string GetAblativeType()
-		{
-			return "Type: Melee Absorption";
-		}
-		
-		public AblativeArmorSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) {}
-	}
+        protected virtual string GetAblativeType()
+        {
+            return "Type: Melee Absorption";
+        }
 
-	[SpellHandler("MagicAblativeArmor")]
-	public class MagicAblativeArmorSpellHandler : AblativeArmorSpellHandler
-	{
-		public MagicAblativeArmorSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) {}
-		
-		protected override bool MatchingDamageType(ref AttackData ad)
-		{
-			if (ad == null || (ad.AttackResult == GameLiving.eAttackResult.HitStyle && ad.AttackResult == GameLiving.eAttackResult.HitUnstyled))
-				return false;
-			if (ad.IsMeleeAttack && ad.AttackType == AttackData.eAttackType.Ranged)
-				return false;
+        public AblativeArmorSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+    }
 
-			return true;
-		}
-		
-		protected override string GetAblativeType()
-		{
-			return "Type: Magic Absorption";
-		}
+    [SpellHandler("MagicAblativeArmor")]
+    public class MagicAblativeArmorSpellHandler : AblativeArmorSpellHandler
+    {
+        public MagicAblativeArmorSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-		public override string ShortDescription 
-			=> $"Target gains a temporary health buffer that absorbs {(Spell.Damage > 0 ? Spell.Damage : 25)}% of the magical damage dealt, up to a maximum of {Spell.Value} damage.";
-	}
+        protected override bool MatchingDamageType(ref AttackData ad)
+        {
+            if (ad == null || (ad.AttackResult == GameLiving.eAttackResult.HitStyle && ad.AttackResult == GameLiving.eAttackResult.HitUnstyled))
+                return false;
+            if (ad.IsMeleeAttack && ad.AttackType == AttackData.eAttackType.Ranged)
+                return false;
+
+            return true;
+        }
+
+        protected override string GetAblativeType()
+        {
+            return "Type: Magic Absorption";
+        }
+
+        public override string ShortDescription
+            => $"Target gains a temporary health buffer that absorbs {(Spell.Damage > 0 ? Spell.Damage : 25)}% of the magical damage dealt, up to a maximum of {Spell.Value} damage.";
+    }
 
     [SpellHandler("BothAblativeArmor")]
     public class BothAblativeArmorSpellHandler : AblativeArmorSpellHandler
@@ -280,7 +280,7 @@ namespace DOL.GS.Spells
             return "Type: Melee/Magic Absorption";
         }
 
-		public override string ShortDescription
-			=> $"Target gains a temporary health buffer that absorbs {(Spell.Damage > 0 ? Spell.Damage : 25)}% of all damage dealt, up to a maximum of {Spell.Value} damage.";
-	}
+        public override string ShortDescription
+            => $"Target gains a temporary health buffer that absorbs {(Spell.Damage > 0 ? Spell.Damage : 25)}% of all damage dealt, up to a maximum of {Spell.Value} damage.";
+    }
 }

@@ -21,24 +21,24 @@ using DOL.GS;
 
 namespace DOL.Events
 {
-	/// <summary>
-	/// Holds the arguments for the Interact event of GameObjects
-	/// </summary>
-	public class InteractEventArgs : SourceEventArgs 
-	{		
+    /// <summary>
+    /// Holds the arguments for the Interact event of GameObjects
+    /// </summary>
+    public class InteractEventArgs : SourceEventArgs
+    {
 
-		/// <summary>
-		/// Constructs a new interact event argument class
-		/// </summary>
-		/// <param name="source">the player wanting to interact</param>
-		public InteractEventArgs(GamePlayer source) : base(source)
-		{			
-		}
+        /// <summary>
+        /// Constructs a new interact event argument class
+        /// </summary>
+        /// <param name="source">the player wanting to interact</param>
+        public InteractEventArgs(GamePlayer source) : base(source)
+        {
+        }
 
-		public new GamePlayer Source
-		{
-			get {return (GamePlayer) base.Source;}
-		}
-		
-	}
+        public new GamePlayer Source
+        {
+            get { return (GamePlayer)base.Source; }
+        }
+
+    }
 }

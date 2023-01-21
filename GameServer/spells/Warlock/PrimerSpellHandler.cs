@@ -30,68 +30,68 @@ using log4net;
 
 namespace DOL.GS.Spells
 {
-	/// <summary>
-	/// 
-	/// </summary>
+    /// <summary>
+    /// 
+    /// </summary>
     public class PrimerSpellHandler : SpellHandler
-	{
-		/// <summary>
-		/// Cast Powerless
-		/// </summary>
-		/// <param name="target"></param>
-		public override void FinishSpellCast(GameLiving target)
-		{
-			m_caster.Mana -= PowerCost(target);
-			
-			base.FinishSpellCast(target);
-		}
+    {
+        /// <summary>
+        /// Cast Powerless
+        /// </summary>
+        /// <param name="target"></param>
+        public override void FinishSpellCast(GameLiving target)
+        {
+            m_caster.Mana -= PowerCost(target);
 
-		protected override GameSpellEffect CreateSpellEffect(GameLiving target, double effectiveness)
-		{
-			return new GameSpellEffect(this, Spell.Duration, 0, effectiveness);
-		}
+            base.FinishSpellCast(target);
+        }
 
-		public override void OnEffectStart(GameSpellEffect effect)
-		{			
-			GameEventMgr.AddHandler(effect.Owner, GamePlayerEvent.Moving, new DOLEventHandler(OnMove));
-			SendEffectAnimation(effect.Owner, 0, false, 1);			
-		}
+        protected override GameSpellEffect CreateSpellEffect(GameLiving target, double effectiveness)
+        {
+            return new GameSpellEffect(this, Spell.Duration, 0, effectiveness);
+        }
 
-		public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
-		{
-			if(effect.Owner is GamePlayer && !noMessages)
-				((GamePlayer)effect.Owner).Out.SendMessage("You modification spell effect has expired.", eChatType.CT_SpellExpires, eChatLoc.CL_SystemWindow);
+        public override void OnEffectStart(GameSpellEffect effect)
+        {
+            GameEventMgr.AddHandler(effect.Owner, GamePlayerEvent.Moving, new DOLEventHandler(OnMove));
+            SendEffectAnimation(effect.Owner, 0, false, 1);
+        }
 
-			GameEventMgr.RemoveHandler(effect.Owner, GamePlayerEvent.Moving, new DOLEventHandler(OnMove));
+        public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
+        {
+            if (effect.Owner is GamePlayer && !noMessages)
+                ((GamePlayer)effect.Owner).Out.SendMessage("You modification spell effect has expired.", eChatType.CT_SpellExpires, eChatLoc.CL_SystemWindow);
 
-			return base.OnEffectExpires (effect, false);
-		}
+            GameEventMgr.RemoveHandler(effect.Owner, GamePlayerEvent.Moving, new DOLEventHandler(OnMove));
 
-	
-		/// <summary>
-		/// Handles attacks on player/by player
-		/// </summary>
-		/// <param name="e"></param>
-		/// <param name="sender"></param>
-		/// <param name="arguments"></param>
-		private void OnMove(DOLEvent e, object sender, EventArgs arguments)
-		{
-			GameLiving living = sender as GameLiving;
-			if (living == null) return;
-			if(living.IsMoving)
-			{
-				// remove speed buff if in combat
-				GameSpellEffect effect = SpellHandler.FindEffectOnTarget(living, this);
-				if (effect != null)
-				{
-					effect.Cancel(false);
-					((GamePlayer)living).Out.SendMessage("You move and break your modification spell.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-				}
-			}
-		}
+            return base.OnEffectExpires(effect, false);
+        }
 
 
-		// constructor
-		public PrimerSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) {}
-	}
+        /// <summary>
+        /// Handles attacks on player/by player
+        /// </summary>
+        /// <param name="e"></param>
+        /// <param name="sender"></param>
+        /// <param name="arguments"></param>
+        private void OnMove(DOLEvent e, object sender, EventArgs arguments)
+        {
+            GameLiving living = sender as GameLiving;
+            if (living == null) return;
+            if (living.IsMoving)
+            {
+                // remove speed buff if in combat
+                GameSpellEffect effect = SpellHandler.FindEffectOnTarget(living, this);
+                if (effect != null)
+                {
+                    effect.Cancel(false);
+                    ((GamePlayer)living).Out.SendMessage("You move and break your modification spell.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                }
+            }
+        }
+
+
+        // constructor
+        public PrimerSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+    }
 }

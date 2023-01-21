@@ -22,57 +22,57 @@ using System.Linq;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute(
-		"&disband",
-		ePrivLevel.Player,
-		"Commands.Players.Disband.Description",
-		"Commands.Players.Disband.Usage",
-		"Commands.Players.Disband.Usage.Name")]
-	public class DisbandCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (client.Player.Group == null)
-			{
-				client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Disband.NotInGroup"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-				return;
-			}
+    [CmdAttribute(
+        "&disband",
+        ePrivLevel.Player,
+        "Commands.Players.Disband.Description",
+        "Commands.Players.Disband.Usage",
+        "Commands.Players.Disband.Usage.Name")]
+    public class DisbandCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (client.Player.Group == null)
+            {
+                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Disband.NotInGroup"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return;
+            }
 
-			if (args.Length < 2)//disband myslef
-			{
-				client.Player.Group.RemoveMember(client.Player);
-				return;
-			}
-			else//disband by name
-			{
-				if (client.Player.Group.Leader != client.Player)
-				{
-					client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Disband.NotLeader"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-					return;
-				}
+            if (args.Length < 2)//disband myslef
+            {
+                client.Player.Group.RemoveMember(client.Player);
+                return;
+            }
+            else//disband by name
+            {
+                if (client.Player.Group.Leader != client.Player)
+                {
+                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Disband.NotLeader"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    return;
+                }
 
-				string name = args[1];
+                string name = args[1];
 
-				if (name.Equals(client.Player.Name, System.StringComparison.OrdinalIgnoreCase))
-				{
-					client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Disband.NoYourself"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-					return;
-				}
+                if (name.Equals(client.Player.Name, System.StringComparison.OrdinalIgnoreCase))
+                {
+                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Disband.NoYourself"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    return;
+                }
 
-				int startCount = client.Player.Group.MemberCount;
+                int startCount = client.Player.Group.MemberCount;
 
-				foreach (GameLiving living in client.Player.Group.GetMembersInTheGroup().Where(gl => gl.Name.Equals(name, System.StringComparison.OrdinalIgnoreCase)))
-				{
-						client.Player.Group.RemoveMember(living);
-				}
+                foreach (GameLiving living in client.Player.Group.GetMembersInTheGroup().Where(gl => gl.Name.Equals(name, System.StringComparison.OrdinalIgnoreCase)))
+                {
+                    client.Player.Group.RemoveMember(living);
+                }
 
-				//no target found to remove
-				if (client.Player.Group != null && client.Player.Group.MemberCount == startCount)
-				{
-					client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Disband.NoPlayer"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-					return;
-				}
-			}
-		}
-	}
+                //no target found to remove
+                if (client.Player.Group != null && client.Player.Group.MemberCount == startCount)
+                {
+                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Disband.NoPlayer"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    return;
+                }
+            }
+        }
+    }
 }

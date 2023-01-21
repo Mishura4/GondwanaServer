@@ -21,32 +21,32 @@ using DOL.GS.PacketHandler;
 
 namespace DOL.GS.Spells
 {
-	[SpellHandlerAttribute("RealPowerDrain")]
-	public class RealPowerDrain : PowerDrain
-	{
+    [SpellHandlerAttribute("RealPowerDrain")]
+    public class RealPowerDrain : PowerDrain
+    {
 
-		public override void DrainPower(GameLiving target, AttackData ad)
-		{
-			if (ad == null || !m_caster.IsAlive)
-				return;
+        public override void DrainPower(GameLiving target, AttackData ad)
+        {
+            if (ad == null || !m_caster.IsAlive)
+                return;
 
-			GameLiving owner = Owner();
-			if (owner == null)
-				return;
+            GameLiving owner = Owner();
+            if (owner == null)
+                return;
 
-			int powerGain = (ad.Damage + ad.CriticalDamage) * m_spell.LifeDrainReturn / 100;
-			powerGain = owner.ChangeMana(m_caster, GameLiving.eManaChangeType.Spell, powerGain);
+            int powerGain = (ad.Damage + ad.CriticalDamage) * m_spell.LifeDrainReturn / 100;
+            powerGain = owner.ChangeMana(m_caster, GameLiving.eManaChangeType.Spell, powerGain);
 
-			//remove mana from target
-			target.ChangeMana(m_caster, GameLiving.eManaChangeType.Spell, -Spell.AmnesiaChance*target.MaxMana/100);
+            //remove mana from target
+            target.ChangeMana(m_caster, GameLiving.eManaChangeType.Spell, -Spell.AmnesiaChance * target.MaxMana / 100);
 
-			if (powerGain > 0)
-				MessageToOwner(String.Format("Your summon channels {0} power to you!", powerGain), eChatType.CT_Spell);
-			else
-				MessageToOwner("You cannot absorb any more power.", eChatType.CT_SpellResisted);
-		}
-		
-		public RealPowerDrain(GameLiving caster, Spell spell, SpellLine line)
-			: base(caster, spell, line) { }
-	}
+            if (powerGain > 0)
+                MessageToOwner(String.Format("Your summon channels {0} power to you!", powerGain), eChatType.CT_Spell);
+            else
+                MessageToOwner("You cannot absorb any more power.", eChatType.CT_SpellResisted);
+        }
+
+        public RealPowerDrain(GameLiving caster, Spell spell, SpellLine line)
+            : base(caster, spell, line) { }
+    }
 }

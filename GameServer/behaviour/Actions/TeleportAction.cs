@@ -28,19 +28,19 @@ using System.Numerics;
 
 namespace DOL.GS.Behaviour.Actions
 {
-    [ActionAttribute(ActionType = eActionType.Teleport,DefaultValueQ=0)]
-    public class TeleportAction : AbstractAction<GameLocation,int>
-    {               
+    [ActionAttribute(ActionType = eActionType.Teleport, DefaultValueQ = 0)]
+    public class TeleportAction : AbstractAction<GameLocation, int>
+    {
 
-        public TeleportAction(GameNPC defaultNPC,  Object p, Object q)
+        public TeleportAction(GameNPC defaultNPC, Object p, Object q)
             : base(defaultNPC, eActionType.Teleport, p, q)
-        {            
-            }
+        {
+        }
 
 
-        public TeleportAction(GameNPC defaultNPC,  GameLocation location, int fuzzyRadius)
-            : this(defaultNPC,  (object)location, (object)fuzzyRadius) { }
-        
+        public TeleportAction(GameNPC defaultNPC, GameLocation location, int fuzzyRadius)
+            : this(defaultNPC, (object)location, (object)fuzzyRadius) { }
+
 
 
         public override void Perform(DOLEvent e, object sender, EventArgs args)

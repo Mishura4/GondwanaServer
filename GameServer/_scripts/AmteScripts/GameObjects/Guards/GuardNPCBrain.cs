@@ -23,14 +23,14 @@ namespace DOL.AI.Brain
                 ((ITextNPC)Body).SayRandomPhrase();
         }
 
-		protected override void CheckPlayerAggro()
-		{
-			if (Body.AttackState)
-				return;
-			foreach(GamePlayer pl in Body.GetPlayersInRadius((ushort)AggroRange))
-			{
-				if (!pl.IsAlive || pl.ObjectState != GameObject.eObjectState.Active || !GameServer.ServerRules.IsAllowedToAttack(Body, pl, true))
-					continue;
+        protected override void CheckPlayerAggro()
+        {
+            if (Body.AttackState)
+                return;
+            foreach (GamePlayer pl in Body.GetPlayersInRadius((ushort)AggroRange))
+            {
+                if (!pl.IsAlive || pl.ObjectState != GameObject.eObjectState.Active || !GameServer.ServerRules.IsAllowedToAttack(Body, pl, true))
+                    continue;
 
                 if (pl.IsStealthed)
                     pl.Stealth(false);
@@ -44,14 +44,14 @@ namespace DOL.AI.Brain
                     continue;
                 }
 
-				int aggro = CalculateAggroLevelToTarget(pl);
-				if (aggro <= 0)
-					continue;
-				AddToAggroList(pl, aggro);
-				if (pl.Level > Body.Level - 20 || (pl.Group != null && pl.Group.MemberCount >= 2))
-					BringFriends(pl);
-			}
-		}
+                int aggro = CalculateAggroLevelToTarget(pl);
+                if (aggro <= 0)
+                    continue;
+                AddToAggroList(pl, aggro);
+                if (pl.Level > Body.Level - 20 || (pl.Group != null && pl.Group.MemberCount >= 2))
+                    BringFriends(pl);
+            }
+        }
 
         protected override void CheckNPCAggro()
         {
@@ -61,18 +61,18 @@ namespace DOL.AI.Brain
             {
                 if (npc is ShadowNPC)
                     continue;
-				if (npc.Realm != 0 || (npc.Flags & GameNPC.eFlags.PEACE) != 0 ||
-					!npc.IsAlive || npc.ObjectState != GameObject.eObjectState.Active ||
-					npc is GameTaxi ||
-					m_aggroTable.ContainsKey(npc) ||
-					!GameServer.ServerRules.IsAllowedToAttack(Body, npc, true))
-					continue;
+                if (npc.Realm != 0 || (npc.Flags & GameNPC.eFlags.PEACE) != 0 ||
+                    !npc.IsAlive || npc.ObjectState != GameObject.eObjectState.Active ||
+                    npc is GameTaxi ||
+                    m_aggroTable.ContainsKey(npc) ||
+                    !GameServer.ServerRules.IsAllowedToAttack(Body, npc, true))
+                    continue;
 
                 int aggro = CalculateAggroLevelToTarget(npc);
-            	    if (aggro <= 0)
-            		    continue;
-            	    AddToAggroList(npc, aggro);
-            	    if (npc.Level > Body.Level)
+                if (aggro <= 0)
+                    continue;
+                AddToAggroList(npc, aggro);
+                if (npc.Level > Body.Level)
                     BringFriends(npc);
             }
         }
@@ -94,16 +94,16 @@ namespace DOL.AI.Brain
 
         public override int CalculateAggroLevelToTarget(GameLiving target)
         {
-			if (target is AmtePlayer)
-			{
-				var player = (AmtePlayer)target;
+            if (target is AmtePlayer)
+            {
+                var player = (AmtePlayer)target;
                 if (player.Reputation < 0)
                 {
                     return 100;
                 }
-				return GuardsMgr.CalculateAggro(player);
-			}
-        	if (target.Realm == 0)
+                return GuardsMgr.CalculateAggro(player);
+            }
+            if (target.Realm == 0)
                 return Math.Max(100, 200 - target.Level);
             return base.CalculateAggroLevelToTarget(target);
         }

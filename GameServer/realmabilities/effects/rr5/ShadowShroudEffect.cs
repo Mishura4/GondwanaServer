@@ -97,7 +97,7 @@ namespace DOL.GS.Effects
             AttackedByEnemyEventArgs args = arguments as AttackedByEnemyEventArgs;
             if (args == null) return;
             if (args.AttackData == null) return;
-          
+
             AttackData ad = args.AttackData;
             GameLiving living = sender as GameLiving;
             if (living == null) return;
@@ -134,7 +134,7 @@ namespace DOL.GS.Effects
             get
             {
                 var list = new List<string>();
-                list.Add("Reduce all incoming damage by 10% and increase the Nightshade’s chance to be missed by 10% for 30 seconds");
+                list.Add("Reduce all incoming damage by 10% and increase the Nightshadeï¿½s chance to be missed by 10% for 30 seconds");
                 return list;
             }
         }

@@ -21,42 +21,42 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute(
-		"&xp",
-		ePrivLevel.Player,
-		"Commands.Players.Xp.Description",
-		"Commands.Players.Xp.Usage")]
-	public class XPCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (args.Length < 2)
-			{
-				DisplaySyntax(client);
-				return;
-			}
+    [CmdAttribute(
+        "&xp",
+        ePrivLevel.Player,
+        "Commands.Players.Xp.Description",
+        "Commands.Players.Xp.Usage")]
+    public class XPCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (args.Length < 2)
+            {
+                DisplaySyntax(client);
+                return;
+            }
 
-			if (IsSpammingCommand(client.Player, "xp"))
-				return;
+            if (IsSpammingCommand(client.Player, "xp"))
+                return;
 
-			if (args[1].ToLower().Equals("on"))
-			{
-				client.Player.GainXP = true;
-				client.Out.SendMessage(
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Xp.On"),
-					eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-			}
-			else if (args[1].ToLower().Equals("off"))
-			{
-				client.Player.GainXP = false;
-				client.Out.SendMessage(
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Xp.Off"),
-					eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-			}
-		}
-	}
+            if (args[1].ToLower().Equals("on"))
+            {
+                client.Player.GainXP = true;
+                client.Out.SendMessage(
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Xp.On"),
+                    eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+            }
+            else if (args[1].ToLower().Equals("off"))
+            {
+                client.Player.GainXP = false;
+                client.Out.SendMessage(
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Xp.Off"),
+                    eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+            }
+        }
+    }
 }

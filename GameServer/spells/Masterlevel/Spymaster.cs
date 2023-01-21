@@ -131,7 +131,7 @@ namespace DOL.GS.Spells
             decoy.GuildName = "";
         }
 
-        public override string ShortDescription 
+        public override string ShortDescription
             => "Ground targeted summon that creates a simulacrum of a realm ally.";
     }
     #endregion
@@ -157,7 +157,7 @@ namespace DOL.GS.Spells
 
         public SabotageSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription 
+        public override string ShortDescription
             => "Destroys a targeted ward or piece of siege equipment.";
     }
     #endregion
@@ -208,7 +208,7 @@ namespace DOL.GS.Spells
             trap = ScriptMgr.CreateSpellHandler(m_caster, s, sl);
         }
 
-        public override string ShortDescription 
+        public override string ShortDescription
             => "Rune that snares enemies when it detonates.";
     }
     #endregion
@@ -259,7 +259,7 @@ namespace DOL.GS.Spells
             trap = ScriptMgr.CreateSpellHandler(m_caster, s, sl);
         }
 
-        public override string ShortDescription 
+        public override string ShortDescription
             => "Rune that poisons enemies when it detonates.";
     }
     #region Subspell
@@ -323,7 +323,7 @@ namespace DOL.GS.Spells
         }
         public LoockoutSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription 
+        public override string ShortDescription
             => "Watcher cannot move while hidden, but any hidden enemy moving within 350 units is exposed along with the watcher.";
     }
     #endregion
@@ -395,7 +395,7 @@ namespace DOL.GS.Spells
             trap = ScriptMgr.CreateSpellHandler(m_caster, s, sl);
         }
 
-        public override string ShortDescription 
+        public override string ShortDescription
             => "Rune that does major damage to siege engines when it detonates.\n\n" +
             $"Does {Spell.Damage} Essence damage to the target.";
     }
@@ -423,7 +423,7 @@ namespace DOL.GS.Spells
             }
         }
 
-        public override string ShortDescription 
+        public override string ShortDescription
             => "Summons a poison that mezmerizes the enemy and all enemies nearby when applied.";
     }
     #endregion
@@ -512,30 +512,30 @@ namespace DOL.GS.Spells
             }
         }
 
-        public override string ShortDescription 
+        public override string ShortDescription
             => "Conceal your group in stealth. Moving will break the effect for non-stealthers.";
     }
-        #endregion
-    }
-    //to show an Icon & informations to the caster
-    namespace DOL.GS.Effects
+    #endregion
+}
+//to show an Icon & informations to the caster
+namespace DOL.GS.Effects
+{
+    public class LoockoutOwner : StaticEffect, IGameEffect
     {
-        public class LoockoutOwner : StaticEffect, IGameEffect
+        public LoockoutOwner() : base() { }
+        public void Start(GamePlayer player) { base.Start(player); }
+        public override void Stop() { base.Stop(); }
+        public override ushort Icon { get { return 2616; } }
+        public override string Name { get { return "Loockout"; } }
+        public override IList<string> DelveInfo
         {
-            public LoockoutOwner() : base() { }
-            public void Start(GamePlayer player) { base.Start(player); }
-            public override void Stop() { base.Stop(); }
-            public override ushort Icon { get { return 2616; } }
-            public override string Name { get { return "Loockout"; } }
-            public override IList<string> DelveInfo
+            get
             {
-                get
-                {
-                    var delveInfoList = new List<string>();
-                    delveInfoList.Add("Your stealth range is increased.");
-                    return delveInfoList;
-                }
+                var delveInfoList = new List<string>();
+                delveInfoList.Add("Your stealth range is increased.");
+                return delveInfoList;
             }
         }
     }
+}
 

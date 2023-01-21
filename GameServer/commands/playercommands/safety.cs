@@ -22,53 +22,53 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute(
-		 "&safety",
-		 ePrivLevel.Player,
-		 "Commands.Players.Safety.Description",
-		 "Commands.Players.Safety.Usage")]
-	public class SafetyCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (client.Player.IsPvP == false)
-				return;
+    [CmdAttribute(
+         "&safety",
+         ePrivLevel.Player,
+         "Commands.Players.Safety.Description",
+         "Commands.Players.Safety.Usage")]
+    public class SafetyCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (client.Player.IsPvP == false)
+                return;
 
-			if(args.Length >= 2 && args[1].ToLower() == "off")
-			{
-				client.Player.SafetyFlag = false;
-				DisplayMessage(
-					client,
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Safety.Off"));
-			}
-			else if(client.Player.SafetyFlag)
-			{
-				DisplayMessage(
-					client,
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Message.1"));
-				DisplayMessage(
-					client,
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Message.2"));
-				DisplayMessage(
-					client,
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Message.3"));
-			}
-			else
-			{
-				DisplayMessage(
-					client,
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Safety.Off.Already"));
-			}
-		}
-	}
+            if (args.Length >= 2 && args[1].ToLower() == "off")
+            {
+                client.Player.SafetyFlag = false;
+                DisplayMessage(
+                    client,
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Safety.Off"));
+            }
+            else if (client.Player.SafetyFlag)
+            {
+                DisplayMessage(
+                    client,
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Message.1"));
+                DisplayMessage(
+                    client,
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Message.2"));
+                DisplayMessage(
+                    client,
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Message.3"));
+            }
+            else
+            {
+                DisplayMessage(
+                    client,
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Safety.Off.Already"));
+            }
+        }
+    }
 }

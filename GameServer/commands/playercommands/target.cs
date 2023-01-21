@@ -22,92 +22,92 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute(
-		"&target",
-		ePrivLevel.Player,
-		"Commands.Players.Target.Description",
-		"Commands.Players.Target.Usage")]
-	public class TargetCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (IsSpammingCommand(client.Player, "target"))
-				return;
+    [CmdAttribute(
+        "&target",
+        ePrivLevel.Player,
+        "Commands.Players.Target.Description",
+        "Commands.Players.Target.Usage")]
+    public class TargetCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (IsSpammingCommand(client.Player, "target"))
+                return;
 
-			GamePlayer targetPlayer = null;
-			if (args.Length == 2)
-			{
-				int result = 0;
-				GameClient targetClient = WorldMgr.GuessClientByPlayerNameAndRealm(args[1], 0, true, out result);
-				if (targetClient != null)
-				{
-					targetPlayer = targetClient.Player;
+            GamePlayer targetPlayer = null;
+            if (args.Length == 2)
+            {
+                int result = 0;
+                GameClient targetClient = WorldMgr.GuessClientByPlayerNameAndRealm(args[1], 0, true, out result);
+                if (targetClient != null)
+                {
+                    targetPlayer = targetClient.Player;
 
-					if (!client.Player.IsWithinRadius( targetPlayer, WorldMgr.YELL_DISTANCE ) || targetPlayer.IsStealthed || GameServer.ServerRules.IsAllowedToAttack(client.Player, targetPlayer, true))
-					{
-						client.Out.SendMessage(
-							LanguageMgr.GetTranslation(
-								client.Account.Language,
-								"Commands.Players.Target.NotFound",
-								args[1]),
-							eChatType.CT_System, eChatLoc.CL_SystemWindow);
-						return;
-					}
+                    if (!client.Player.IsWithinRadius(targetPlayer, WorldMgr.YELL_DISTANCE) || targetPlayer.IsStealthed || GameServer.ServerRules.IsAllowedToAttack(client.Player, targetPlayer, true))
+                    {
+                        client.Out.SendMessage(
+                            LanguageMgr.GetTranslation(
+                                client.Account.Language,
+                                "Commands.Players.Target.NotFound",
+                                args[1]),
+                            eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        return;
+                    }
 
-					client.Out.SendChangeTarget(targetPlayer);
-					client.Out.SendMessage(
-						LanguageMgr.GetTranslation(
-							client.Account.Language,
-							"Commands.Players.Target.Found",
-							targetPlayer.GetName(0, true)),
-						eChatType.CT_System, eChatLoc.CL_SystemWindow);
-					return;
-				}
-				if (client.Account.PrivLevel > 1)
-				{
-					IEnumerator en = client.Player.GetNPCsInRadius(800).GetEnumerator();
-					while (en.MoveNext())
-					{
-						if (((GameObject)en.Current).Name == args[1])
-						{
-							client.Out.SendChangeTarget((GameObject)en.Current);
-							client.Out.SendMessage(
-								LanguageMgr.GetTranslation(
-									client.Account.Language,
-									"Commands.Players.Target.GM.Found",
-									((GameObject)en.Current).GetName(0, true)),
-								eChatType.CT_System, eChatLoc.CL_SystemWindow);
-							return;
-						}
-					}
-				}
+                    client.Out.SendChangeTarget(targetPlayer);
+                    client.Out.SendMessage(
+                        LanguageMgr.GetTranslation(
+                            client.Account.Language,
+                            "Commands.Players.Target.Found",
+                            targetPlayer.GetName(0, true)),
+                        eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    return;
+                }
+                if (client.Account.PrivLevel > 1)
+                {
+                    IEnumerator en = client.Player.GetNPCsInRadius(800).GetEnumerator();
+                    while (en.MoveNext())
+                    {
+                        if (((GameObject)en.Current).Name == args[1])
+                        {
+                            client.Out.SendChangeTarget((GameObject)en.Current);
+                            client.Out.SendMessage(
+                                LanguageMgr.GetTranslation(
+                                    client.Account.Language,
+                                    "Commands.Players.Target.GM.Found",
+                                    ((GameObject)en.Current).GetName(0, true)),
+                                eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            return;
+                        }
+                    }
+                }
 
-				client.Out.SendMessage(
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Target.NotFound",
-						args[1]),
-					eChatType.CT_System, eChatLoc.CL_SystemWindow);
-				return;
-			}
-			if (client.Account.PrivLevel > 1)
-			{
-				client.Out.SendMessage(
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Target.GM.Help",
-						args[1]),
-					eChatType.CT_System, eChatLoc.CL_SystemWindow);
-			}
-			else
-			{
-				client.Out.SendMessage(
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Target.Usage",
-						args[1]),
-					eChatType.CT_System, eChatLoc.CL_SystemWindow);
-			}
-		}
-	}
+                client.Out.SendMessage(
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Target.NotFound",
+                        args[1]),
+                    eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return;
+            }
+            if (client.Account.PrivLevel > 1)
+            {
+                client.Out.SendMessage(
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Target.GM.Help",
+                        args[1]),
+                    eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            }
+            else
+            {
+                client.Out.SendMessage(
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Target.Usage",
+                        args[1]),
+                    eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            }
+        }
+    }
 }

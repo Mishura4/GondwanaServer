@@ -6,9 +6,9 @@ using DOL.Events;
 namespace DOL.GS.Spells
 {
 
-	[SpellHandlerAttribute("HereticPiercingMagic")]
-	public class HereticPiercingMagic : SpellHandler
-	{
+    [SpellHandlerAttribute("HereticPiercingMagic")]
+    public class HereticPiercingMagic : SpellHandler
+    {
         protected GameLiving focustarget = null;
         protected ArrayList m_focusTargets = null;
         public override void FinishSpellCast(GameLiving target)
@@ -74,7 +74,7 @@ namespace DOL.GS.Spells
                 player.Out.SendInterruptAnimation(m_caster);
             }
         }
-	
-		public HereticPiercingMagic(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) {}
-	}
+
+        public HereticPiercingMagic(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+    }
 }

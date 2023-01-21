@@ -27,7 +27,7 @@ using log4net;
 
 namespace DOL.GS
 {
-	/*
+    /*
 	 * These boats are very fast, and can carry up to sixteen passengers.
 	 * You have thirty seconds to board the boat before it sets sail.
 	 * You can board the boat by double clicking on it,
@@ -36,19 +36,19 @@ namespace DOL.GS
 	 * but if you wish to leave before then, just type `/disembark'.
 	 * or press the jump key
 	 */
-	public class GameTaxiBoat : GameMovingObject
-	{
-		public GameTaxiBoat()
-			: base()
-		{
-			Model = 2650;
-			Level = 0;
-			Flags = eFlags.PEACE;
-			Name = "boat";
-			MaxSpeedBase = 1000;
-			BlankBrain brain = new BlankBrain();
-			SetOwnBrain(brain);
-		}
+    public class GameTaxiBoat : GameMovingObject
+    {
+        public GameTaxiBoat()
+            : base()
+        {
+            Model = 2650;
+            Level = 0;
+            Flags = eFlags.PEACE;
+            Name = "boat";
+            MaxSpeedBase = 1000;
+            BlankBrain brain = new BlankBrain();
+            SetOwnBrain(brain);
+        }
 
         /// <summary>
         /// The distance this object can be interacted with - we need this to be larger for the boat
@@ -61,28 +61,28 @@ namespace DOL.GS
             }
         }
 
-		public override int MAX_PASSENGERS
-		{
-			get
-			{
-				return 16;
-			}
-		}
+        public override int MAX_PASSENGERS
+        {
+            get
+            {
+                return 16;
+            }
+        }
 
-		public override int SLOT_OFFSET
-		{
-			get
-			{
-				return 1;
-			}
-		}
+        public override int SLOT_OFFSET
+        {
+            get
+            {
+                return 1;
+            }
+        }
 
-		public override short MaxSpeed
-		{
-			get
-			{
-				return 1000;
-			}
-		}
-	}
+        public override short MaxSpeed
+        {
+            get
+            {
+                return 1000;
+            }
+        }
+    }
 }

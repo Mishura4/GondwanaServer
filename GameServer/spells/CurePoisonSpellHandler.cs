@@ -20,17 +20,17 @@ using System.Collections.Generic;
 
 namespace DOL.GS.Spells
 {
-	[SpellHandler("CurePoison")]
-	public class CurePoisonSpellHandler : RemoveSpellEffectHandler
-	{
-		public CurePoisonSpellHandler(GameLiving caster, Spell spell, SpellLine line)
-			: base(caster, spell, line)
-		{
-			m_spellTypesToRemove = new List<string>();
-			m_spellTypesToRemove.Add("DamageOverTime");
+    [SpellHandler("CurePoison")]
+    public class CurePoisonSpellHandler : RemoveSpellEffectHandler
+    {
+        public CurePoisonSpellHandler(GameLiving caster, Spell spell, SpellLine line)
+            : base(caster, spell, line)
+        {
+            m_spellTypesToRemove = new List<string>();
+            m_spellTypesToRemove.Add("DamageOverTime");
             m_spellTypesToRemove.Add("StyleBleeding");
-		}
+        }
 
-		public override string ShortDescription => "All damage over time effects (such as poisons) are removed from the target.";
-	}
+        public override string ShortDescription => "All damage over time effects (such as poisons) are removed from the target.";
+    }
 }

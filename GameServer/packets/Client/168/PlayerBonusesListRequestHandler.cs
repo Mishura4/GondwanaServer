@@ -26,30 +26,30 @@ using log4net;
 
 namespace DOL.GS.PacketHandler.Client.v168
 {
-	[PacketHandlerAttribute(PacketHandlerType.TCP, eClientPackets.BonusesListRequest, "Handles player bonuses button clicks", eClientStatus.PlayerInGame)]
-	public class PlayerBonusesListRequestHandler : IPacketHandler
-	{
-		/// <summary>
-		/// Defines a logger for this class.
-		/// </summary>
-		private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+    [PacketHandlerAttribute(PacketHandlerType.TCP, eClientPackets.BonusesListRequest, "Handles player bonuses button clicks", eClientStatus.PlayerInGame)]
+    public class PlayerBonusesListRequestHandler : IPacketHandler
+    {
+        /// <summary>
+        /// Defines a logger for this class.
+        /// </summary>
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-		public void HandlePacket(GameClient client, GSPacketIn packet)
-		{
-			if (client.Player == null)
-				return;
+        public void HandlePacket(GameClient client, GSPacketIn packet)
+        {
+            if (client.Player == null)
+                return;
 
-			int code = packet.ReadByte();
-			if (code != 0)
-				log.Warn($"bonuses button: code is other than zero ({code})");
+            int code = packet.ReadByte();
+            if (code != 0)
+                log.Warn($"bonuses button: code is other than zero ({code})");
 
-			new RegionTimerAction<GamePlayer>(
-				client.Player,
-				p => p.Out.SendCustomTextWindow(
-						LanguageMgr.GetTranslation(client.Account.Language, "PlayerBonusesListRequestHandler.HandlePacket.Bonuses"),
-						client.Player.GetBonuses().ToList()
-					)
-				).Start(1);
-		}
-	}
+            new RegionTimerAction<GamePlayer>(
+                client.Player,
+                p => p.Out.SendCustomTextWindow(
+                        LanguageMgr.GetTranslation(client.Account.Language, "PlayerBonusesListRequestHandler.HandlePacket.Bonuses"),
+                        client.Player.GetBonuses().ToList()
+                    )
+                ).Start(1);
+        }
+    }
 }

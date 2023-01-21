@@ -24,22 +24,22 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[Cmd(
-		"&clientlist",
-		ePrivLevel.GM,
+    [Cmd(
+        "&clientlist",
+        ePrivLevel.GM,
         "Commands.GM.ClientList.Usage",
         "Commands.GM.ClientList.Description")]
-	public class ClientListCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		public void OnCommand(GameClient client, string[] args)
-		{
-			var clients = WorldMgr.GetAllPlayingClients();
-			var message = new List<string>();
+    public class ClientListCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        public void OnCommand(GameClient client, string[] args)
+        {
+            var clients = WorldMgr.GetAllPlayingClients();
+            var message = new List<string>();
 
-			foreach (GameClient gc in clients)
-			{
-				if (gc.Player != null)
-				{
+            foreach (GameClient gc in clients)
+            {
+                if (gc.Player != null)
+                {
                     if (args.Length > 1 && args[1].ToLower() == "full")
                     {
                         message.Add("(" + gc.SessionID + ") " + gc.TcpEndpointAddress + ", " + gc.Account.Name + ", " + gc.Player.Name + " " + gc.Version);
@@ -48,11 +48,11 @@ namespace DOL.GS.Commands
                     {
                         message.Add("(" + gc.SessionID + ") " + gc.Player.Name);
                     }
-				}
-			}
+                }
+            }
 
-			client.Out.SendCustomTextWindow("[ Playing Client List ]", message);
-			return;
-		}
-	}
+            client.Out.SendCustomTextWindow("[ Playing Client List ]", message);
+            return;
+        }
+    }
 }

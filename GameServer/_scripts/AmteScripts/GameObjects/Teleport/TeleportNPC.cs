@@ -13,9 +13,9 @@ using log4net;
 
 namespace DOL.GS.Scripts
 {
-	public class TeleportNPC : GameNPC
-	{
-		private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+    public class TeleportNPC : GameNPC
+    {
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         #region Variables
         public Dictionary<string, JumpPos> JumpPositions;
@@ -51,7 +51,7 @@ namespace DOL.GS.Scripts
         }
 
         public bool? IsOutlawFriendly
-        { 
+        {
             get;
             set;
         }
@@ -61,7 +61,7 @@ namespace DOL.GS.Scripts
         #region Interaction
         public override bool Interact(GamePlayer player)
         {
-            if (!base.Interact(player)) return false;    
+            if (!base.Interact(player)) return false;
 
             if (m_Occupe)
             {
@@ -136,9 +136,9 @@ namespace DOL.GS.Scripts
             if (!(source is GamePlayer) || item == null || String.IsNullOrEmpty(item.Id_nb))
                 return false;
             GamePlayer player = (GamePlayer)source;
-            foreach(JumpPos pos in JumpPositions.Values)
+            foreach (JumpPos pos in JumpPositions.Values)
             {
-                if (pos.Conditions.Item.Equals(item.Id_nb,StringComparison.CurrentCultureIgnoreCase))
+                if (pos.Conditions.Item.Equals(item.Id_nb, StringComparison.CurrentCultureIgnoreCase))
                 {
                     RegionTimer TimerTL = new RegionTimer(this, Teleportation);
                     TimerTL.Properties.setProperty("TP", pos);
@@ -160,7 +160,7 @@ namespace DOL.GS.Scripts
         {
             m_Occupe = false;
             JumpPos pos = timer.Properties.getProperty<JumpPos>("TP", null);
-			GamePlayer player = timer.Properties.getProperty<GamePlayer>("player", null);
+            GamePlayer player = timer.Properties.getProperty<GamePlayer>("player", null);
             if (pos == null || player == null) return 0;
             if (player.InCombat)
                 player.Out.SendMessage("Vous ne pouvez pas être téléporté en étant en combat !", eChatType.CT_Important,
@@ -169,7 +169,7 @@ namespace DOL.GS.Scripts
                 pos.Jump(this, player);
             return 0;
         }
-	    #endregion
+        #endregion
 
         #region JumpArea
         public void JumpArea()
@@ -200,8 +200,8 @@ namespace DOL.GS.Scripts
         {
             base.LoadFromDatabase(mobobject);
 
-			db = GameServer.Database.SelectObject<DBTeleportNPC>(t => t.MobID == InternalID);
-            if (db == null) 
+            db = GameServer.Database.SelectObject<DBTeleportNPC>(t => t.MobID == InternalID);
+            if (db == null)
                 return;
             m_Range = db.Range;
             m_MinLevel = db.Level;
@@ -214,7 +214,7 @@ namespace DOL.GS.Scripts
                 if (db.IsRegularFriendly)
                 {
                     IsOutlawFriendly = false;
-                }                
+                }
 
                 if (db.IsOutlawFriendly)
                 {
@@ -304,7 +304,7 @@ namespace DOL.GS.Scripts
                 try
                 {
                     JumpPos pos = new JumpPos(S_pos);
-                    if(!string.IsNullOrEmpty(pos.Name))
+                    if (!string.IsNullOrEmpty(pos.Name))
                         JumpPositions.Add(pos.Name, pos);
                 }
                 catch { }
@@ -367,7 +367,7 @@ namespace DOL.GS.Scripts
         public override bool AddToWorld()
         {
             if (!base.AddToWorld()) return false;
-            if(JumpPositions == null)
+            if (JumpPositions == null)
                 JumpPositions = new Dictionary<string, JumpPos>();
 
             if (!(Brain is TeleportNPCBrain))
@@ -444,8 +444,8 @@ namespace DOL.GS.Scripts
                     else
                         InventoryLogging.LogInventoryAction(player, source, eInventoryActionType.Other, Conditions.ItemTemplate);
                 player.MoveTo(RegionID, X, Y, Z, Heading);
-				if (Conditions.Bind)
-					player.Bind(true);
+                if (Conditions.Bind)
+                    player.Bind(true);
             }
         }
 
@@ -453,7 +453,7 @@ namespace DOL.GS.Scripts
         {
             private string _item;
 
-			public bool Bind;
+            public bool Bind;
             public bool Visible = true;
 
             public string Item
@@ -481,9 +481,9 @@ namespace DOL.GS.Scripts
                             string[] arg = s.Split('=');
                             switch (arg[0])
                             {
-								case "Bind":
-                            		Bind = bool.Parse(arg[1]);
-									break;
+                                case "Bind":
+                                    Bind = bool.Parse(arg[1]);
+                                    break;
                                 case "Visible":
                                     Visible = bool.Parse(arg[1]);
                                     break;
@@ -515,13 +515,13 @@ namespace DOL.GS.Scripts
                     sb.Append("Visible=");
                     sb.Append(Visible);
                 }
-				if (Bind)
-				{
-					if (sb.Length > 0) sb.Append("/");
-					sb.Append("Bind=");
-					sb.Append(Bind);
-				}
-            	if (!string.IsNullOrEmpty(Item))
+                if (Bind)
+                {
+                    if (sb.Length > 0) sb.Append("/");
+                    sb.Append("Bind=");
+                    sb.Append(Bind);
+                }
+                if (!string.IsNullOrEmpty(Item))
                 {
                     if (sb.Length > 0) sb.Append("/");
                     sb.Append("Item=");
@@ -545,8 +545,8 @@ namespace DOL.GS.Scripts
             public override string ToString()
             {
                 StringBuilder sb = new StringBuilder();
-            	sb.Append("Bind le joueur après l'avoir TP : ");
-            	sb.Append(Bind ? "oui" : "non");
+                sb.Append("Bind le joueur après l'avoir TP : ");
+                sb.Append(Bind ? "oui" : "non");
                 sb.Append("\nVisible dans la liste: ");
                 sb.Append(Visible ? "oui" : "non");
                 if (!string.IsNullOrEmpty(Item))

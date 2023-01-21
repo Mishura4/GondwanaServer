@@ -21,7 +21,8 @@ using System.Collections.Generic;
 using System.Text;
 using DOL.GS.PacketHandler;
 using DOL.Events;
-using DOL.GS.Behaviour.Attributes;using DOL.GS.Behaviour;
+using DOL.GS.Behaviour.Attributes;
+using DOL.GS.Behaviour;
 using DOL.Database;
 using DOL.AI.Brain;
 using log4net;
@@ -30,21 +31,21 @@ using DOL.GS.Movement;
 
 namespace DOL.GS.Behaviour.Actions
 {
-    [ActionAttribute(ActionType = eActionType.SetMonsterPath,DefaultValueP=eDefaultValueConstants.NPC)]
-    public class SetMonsterPathAction : AbstractAction<PathPoint,GameNPC>
+    [ActionAttribute(ActionType = eActionType.SetMonsterPath, DefaultValueP = eDefaultValueConstants.NPC)]
+    public class SetMonsterPathAction : AbstractAction<PathPoint, GameNPC>
     {
 
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public SetMonsterPathAction(GameNPC defaultNPC,  Object p, Object q)
+        public SetMonsterPathAction(GameNPC defaultNPC, Object p, Object q)
             : base(defaultNPC, eActionType.SetMonsterPath, p, q)
-        {                
+        {
         }
 
 
-        public SetMonsterPathAction(GameNPC defaultNPC,  PathPoint firstPathPoint, GameNPC npc)
-            : this(defaultNPC,  (object)firstPathPoint, (object)npc) { }
-        
+        public SetMonsterPathAction(GameNPC defaultNPC, PathPoint firstPathPoint, GameNPC npc)
+            : this(defaultNPC, (object)firstPathPoint, (object)npc) { }
+
 
 
         public override void Perform(DOLEvent e, object sender, EventArgs args)
@@ -55,14 +56,14 @@ namespace DOL.GS.Behaviour.Actions
             {
                 RoundsBrain brain = (RoundsBrain)npc.Brain;
                 npc.CurrentWayPoint = P;
-                brain.Start();                
+                brain.Start();
             }
             else
             {
                 if (log.IsWarnEnabled)
-                    log.Warn("Mob without RoundsBrain was assigned to walk along Path");                
+                    log.Warn("Mob without RoundsBrain was assigned to walk along Path");
             }
-            
+
         }
     }
 }

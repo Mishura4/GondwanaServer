@@ -23,81 +23,81 @@ namespace DOL.Database
 {
     public class DbConfig
     {
-		private Dictionary<string,(string, string)> nonDefaultOptions = new Dictionary<string,(string, string)>();
-		private Dictionary<string, (string, string)> defaultOptions = new Dictionary<string, (string, string)>();
-		private Dictionary<string, (string, string)> options => nonDefaultOptions.Union(defaultOptions).ToDictionary(pair => pair.Key, pair => pair.Value);
-		private List<string> suppressedDigests = new List<string>();
+        private Dictionary<string, (string, string)> nonDefaultOptions = new Dictionary<string, (string, string)>();
+        private Dictionary<string, (string, string)> defaultOptions = new Dictionary<string, (string, string)>();
+        private Dictionary<string, (string, string)> options => nonDefaultOptions.Union(defaultOptions).ToDictionary(pair => pair.Key, pair => pair.Value);
+        private List<string> suppressedDigests = new List<string>();
 
-		public string ConnectionString 
-			=> string.Join(";", options
-			.Where(k => !suppressedDigests.Contains(k.Key))
-			.Select(kv => $"{kv.Value.Item1}={kv.Value.Item2}"));
+        public string ConnectionString
+            => string.Join(";", options
+            .Where(k => !suppressedDigests.Contains(k.Key))
+            .Select(kv => $"{kv.Value.Item1}={kv.Value.Item2}"));
 
-		public DbConfig() { }
+        public DbConfig() { }
 
-		public DbConfig(string connectionString)
+        public DbConfig(string connectionString)
         {
-			ApplyConnectionString(connectionString);
+            ApplyConnectionString(connectionString);
         }
 
-		public void ApplyConnectionString(string connectionString)
-		{
-			var userOptions = connectionString.Split(new[] { ';' }, System.StringSplitOptions.RemoveEmptyEntries)
-				.Select(o => new KeyValuePair<string, string>(o.Split('=')[0], o.Split('=')[1]));
+        public void ApplyConnectionString(string connectionString)
+        {
+            var userOptions = connectionString.Split(new[] { ';' }, System.StringSplitOptions.RemoveEmptyEntries)
+                .Select(o => new KeyValuePair<string, string>(o.Split('=')[0], o.Split('=')[1]));
 
-			foreach(var userOption in userOptions)
+            foreach (var userOption in userOptions)
             {
-				SetOption(userOption.Key, userOption.Value);
+                SetOption(userOption.Key, userOption.Value);
             }
-		}
+        }
 
-		public string GetValueOf(string optionName)
-		{
-			if (options.TryGetValue(Digest(optionName), out var optionValue))
-			{
-				return optionValue.Item2;
-			}
-			else
-			{
-				return "";
-			}
-		}
-
-		public void SetOption(string key, string value)
+        public string GetValueOf(string optionName)
         {
-			if(defaultOptions.ContainsKey(Digest(key)))
+            if (options.TryGetValue(Digest(optionName), out var optionValue))
             {
-				defaultOptions[Digest(key)] = (defaultOptions[Digest(key)].Item1, value);
+                return optionValue.Item2;
             }
-			else if (nonDefaultOptions.ContainsKey(Digest(key)))
-			{
-				nonDefaultOptions[Digest(key)] = (nonDefaultOptions[Digest(key)].Item1, value);
-			}
-			else
-			{
-				nonDefaultOptions.Add(Digest(key), (key, value));
-			}
-		}
+            else
+            {
+                return "";
+            }
+        }
 
-		public void AddDefaultOption(string key, string value)
+        public void SetOption(string key, string value)
         {
-			if (nonDefaultOptions.ContainsKey(Digest(key)))
-			{
-				value = nonDefaultOptions[Digest(key)].Item2;
-				nonDefaultOptions.Remove(Digest(key));
-			}
-			defaultOptions.Add(Digest(key), (key, value));
-		}
+            if (defaultOptions.ContainsKey(Digest(key)))
+            {
+                defaultOptions[Digest(key)] = (defaultOptions[Digest(key)].Item1, value);
+            }
+            else if (nonDefaultOptions.ContainsKey(Digest(key)))
+            {
+                nonDefaultOptions[Digest(key)] = (nonDefaultOptions[Digest(key)].Item1, value);
+            }
+            else
+            {
+                nonDefaultOptions.Add(Digest(key), (key, value));
+            }
+        }
 
-		public void SuppressFromConnectionString(params string[] suppressedOptions)
+        public void AddDefaultOption(string key, string value)
         {
-			suppressedDigests = new List<string>();
-			suppressedDigests.AddRange(suppressedOptions.Select(opt => Digest(opt)));
-		}
+            if (nonDefaultOptions.ContainsKey(Digest(key)))
+            {
+                value = nonDefaultOptions[Digest(key)].Item2;
+                nonDefaultOptions.Remove(Digest(key));
+            }
+            defaultOptions.Add(Digest(key), (key, value));
+        }
 
-		private string Digest(string input)
+        public void SuppressFromConnectionString(params string[] suppressedOptions)
         {
-			return input.ToLower().Replace(" ","");
+            suppressedDigests = new List<string>();
+            suppressedDigests.AddRange(suppressedOptions.Select(opt => Digest(opt)));
+        }
+
+        private string Digest(string input)
+        {
+            return input.ToLower().Replace(" ", "");
         }
     }
 }

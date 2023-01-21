@@ -26,16 +26,16 @@ using DOL.GS.PacketHandler;
 
 namespace DOL.GS.Spells
 {
-	[SpellHandler("CureMezz")]
-	public class CureMezzSpellHandler : RemoveSpellEffectHandler
-	{
-		public CureMezzSpellHandler(GameLiving caster, Spell spell, SpellLine line)
-			: base(caster, spell, line)
-		{
-			m_spellTypesToRemove = new List<string>();
-			m_spellTypesToRemove.Add("Mesmerize");
-		}
+    [SpellHandler("CureMezz")]
+    public class CureMezzSpellHandler : RemoveSpellEffectHandler
+    {
+        public CureMezzSpellHandler(GameLiving caster, Spell spell, SpellLine line)
+            : base(caster, spell, line)
+        {
+            m_spellTypesToRemove = new List<string>();
+            m_spellTypesToRemove.Add("Mesmerize");
+        }
 
-		public override string ShortDescription => "All mesmerization effects are removed from the target.";
-	}
+        public override string ShortDescription => "All mesmerization effects are removed from the target.";
+    }
 }

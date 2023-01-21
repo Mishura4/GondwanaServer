@@ -31,50 +31,50 @@ using DOL.GS.Friends;
 
 namespace DOL.GS.Commands
 {
-	[Cmd(
-		"&player",
-		ePrivLevel.GM,
-		"Various Admin/GM commands to edit characters.",
-		"/player name <newName>",
-		"/player lastname <change|reset> <newLastName>",
-		"/player level <newLevel>",
+    [Cmd(
+        "&player",
+        ePrivLevel.GM,
+        "Various Admin/GM commands to edit characters.",
+        "/player name <newName>",
+        "/player lastname <change|reset> <newLastName>",
+        "/player level <newLevel>",
         "/player levelup",
         "/player reset - Reset and re-level a player to their current level.",
-		"/player realm <newRealm>",
-		"/player inventory [wear|bag|vault|house|cons]",
-		"/player <rps|bps|xp|xpa|clxp|mlxp> <amount>",
-		"/player stat <typeofStat> <value>",
-		"/player money <copp|silv|gold|plat|mith> <amount>",
-		"/player respec <all|line|realm|dol|champion> <amount=1>",
-		"/player model <reset|[change]> <modelid>",
-		"/player friend <list|playerName>",
-		"/player <rez|kill> <albs|mids|hibs|self|all>", // if realm not specified, it will rez target.
-		"/player jump <group|guild|cg|bg> <name>", // to jump a group to you, just type in a player's name and his or her entire group will come with.
-		"/player kick <all>",
-		"/player save <all>",
-		"/player purge",
-		"/player update",
-		"/player info",
-		"/player location - write a location string to the chat window",
-		"/player showgroup",
-		"/player showeffects",
-		"/player startchampion - Starts the target on the path of the Champion.",
-		"/player clearchampion - Remove all Champion XP and levels from this player.",
-		"/player respecchampion - Respec this players Champion skills.",
-		"/player saddlebags <0 - 15> - Set what horse saddlebags are active on this player",
-		"/player startml - Start this players Master Level training.",
-		"/player setml <level> - Set this players current Master Level.",
-		"/player setmlstep <level> <step> [false] - Sets a step for an ML level to finished. 0 to set as unfinished.",
+        "/player realm <newRealm>",
+        "/player inventory [wear|bag|vault|house|cons]",
+        "/player <rps|bps|xp|xpa|clxp|mlxp> <amount>",
+        "/player stat <typeofStat> <value>",
+        "/player money <copp|silv|gold|plat|mith> <amount>",
+        "/player respec <all|line|realm|dol|champion> <amount=1>",
+        "/player model <reset|[change]> <modelid>",
+        "/player friend <list|playerName>",
+        "/player <rez|kill> <albs|mids|hibs|self|all>", // if realm not specified, it will rez target.
+        "/player jump <group|guild|cg|bg> <name>", // to jump a group to you, just type in a player's name and his or her entire group will come with.
+        "/player kick <all>",
+        "/player save <all>",
+        "/player purge",
+        "/player update",
+        "/player info",
+        "/player location - write a location string to the chat window",
+        "/player showgroup",
+        "/player showeffects",
+        "/player startchampion - Starts the target on the path of the Champion.",
+        "/player clearchampion - Remove all Champion XP and levels from this player.",
+        "/player respecchampion - Respec this players Champion skills.",
+        "/player saddlebags <0 - 15> - Set what horse saddlebags are active on this player",
+        "/player startml - Start this players Master Level training.",
+        "/player setml <level> - Set this players current Master Level.",
+        "/player setmlstep <level> <step> [false] - Sets a step for an ML level to finished. 0 to set as unfinished.",
         "/player allchars <PlayerName>",
         "/player class <list|classID> - view a list of classes, or change the targets class.",
         "/player areas - list all the areas the player is currently inside of ",
         "/player isRenaissance <true|false> - set player isRenaissance",
         "/player quest [remove <quest name>] - Manage the player's quests",
         "/player reputation <newReputation> - Set player's reputation"
-		)]
-	public class PlayerCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        )]
+    public class PlayerCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         public void OnCommand(GameClient client, string[] args)
         {
@@ -205,7 +205,7 @@ namespace DOL.GS.Commands
                                     client.Player.Name + "(PrivLevel: " + client.Account.PrivLevel + ") has given you a free half level!",
                                     eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                         }
-                        
+
                     }
 
                     break;
@@ -298,40 +298,40 @@ namespace DOL.GS.Commands
 
                 #endregion
 
-				#region Start Champion
+                #region Start Champion
 
-				case "startchampion":
-					try
-					{
-						var player = client.Player.TargetObject as GamePlayer;
-						if (player == null)
-							player = client.Player;
+                case "startchampion":
+                    try
+                    {
+                        var player = client.Player.TargetObject as GamePlayer;
+                        if (player == null)
+                            player = client.Player;
 
-						if (player.Champion == false)
-						{
-							player.Champion = true;
-							player.SaveIntoDatabase();
-							client.Out.SendMessage(player.Name + " is now on the path of the Champion!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-							player.Out.SendMessage(client.Player.Name + "(PrivLevel: " + client.Account.PrivLevel + ") has started you on the path of the Champion!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-						}
-						else
-						{
-							client.Out.SendMessage(player.Name + " is already on the path of the Champion!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-						}
+                        if (player.Champion == false)
+                        {
+                            player.Champion = true;
+                            player.SaveIntoDatabase();
+                            client.Out.SendMessage(player.Name + " is now on the path of the Champion!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                            player.Out.SendMessage(client.Player.Name + "(PrivLevel: " + client.Account.PrivLevel + ") has started you on the path of the Champion!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                        }
+                        else
+                        {
+                            client.Out.SendMessage(player.Name + " is already on the path of the Champion!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                        }
 
-					}
-					catch
-					{
-						DisplaySyntax(client);
-						return;
-					}
-					break;
+                    }
+                    catch
+                    {
+                        DisplaySyntax(client);
+                        return;
+                    }
+                    break;
 
-				#endregion Start Champion
+                #endregion Start Champion
 
-				#region Clear / Respec Champion
+                #region Clear / Respec Champion
 
-				case "clearchampion":
+                case "clearchampion":
 
                     try
                     {
@@ -351,176 +351,176 @@ namespace DOL.GS.Commands
                     }
                     break;
 
-				case "respecchampion":
+                case "respecchampion":
 
-					try
-					{
-						var player = client.Player.TargetObject as GamePlayer;
-						if (player == null)
-							player = client.Player;
+                    try
+                    {
+                        var player = client.Player.TargetObject as GamePlayer;
+                        if (player == null)
+                            player = client.Player;
 
-						player.RespecChampionSkills();
-						client.Out.SendMessage("You have respecced " + player.Name + "'s Champion levels!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-						player.Out.SendMessage(client.Player.Name + "(PrivLevel: " + client.Account.PrivLevel + ") has respecced your Champion levels!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-					}
+                        player.RespecChampionSkills();
+                        client.Out.SendMessage("You have respecced " + player.Name + "'s Champion levels!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                        player.Out.SendMessage(client.Player.Name + "(PrivLevel: " + client.Account.PrivLevel + ") has respecced your Champion levels!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                    }
 
-					catch (Exception)
-					{
-						DisplaySyntax(client);
-						return;
-					}
-					break;
+                    catch (Exception)
+                    {
+                        DisplaySyntax(client);
+                        return;
+                    }
+                    break;
 
                 #endregion Clear / Respec Champion
 
-				#region Master Levels
+                #region Master Levels
 
-				case "startml":
+                case "startml":
 
-					try
-					{
-						var player = client.Player.TargetObject as GamePlayer;
-						if (player == null)
-							player = client.Player;
+                    try
+                    {
+                        var player = client.Player.TargetObject as GamePlayer;
+                        if (player == null)
+                            player = client.Player;
 
-						if (player.MLGranted == false)
-						{
-							player.MLGranted = true;
-							player.SaveIntoDatabase();
-							client.Out.SendMessage(player.Name + " is now ready to start Master Level training!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-							player.Out.SendMessage(client.Player.Name + "(PrivLevel: " + client.Account.PrivLevel + ") has started your Master Level training!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-						}
-						else
-						{
-							client.Out.SendMessage(player.Name + " has already started Master Level training!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-						}
-					}
-					catch (Exception)
-					{
-						DisplaySyntax(client);
-						return;
-					}
-					break;
+                        if (player.MLGranted == false)
+                        {
+                            player.MLGranted = true;
+                            player.SaveIntoDatabase();
+                            client.Out.SendMessage(player.Name + " is now ready to start Master Level training!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                            player.Out.SendMessage(client.Player.Name + "(PrivLevel: " + client.Account.PrivLevel + ") has started your Master Level training!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                        }
+                        else
+                        {
+                            client.Out.SendMessage(player.Name + " has already started Master Level training!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        DisplaySyntax(client);
+                        return;
+                    }
+                    break;
 
-				case "setml":
+                case "setml":
 
-					try
-					{
-						var player = client.Player.TargetObject as GamePlayer;
-						if (player == null)
-							player = client.Player;
+                    try
+                    {
+                        var player = client.Player.TargetObject as GamePlayer;
+                        if (player == null)
+                            player = client.Player;
 
-						byte level = Convert.ToByte(args[2]);
+                        byte level = Convert.ToByte(args[2]);
 
-						if (level > GamePlayer.ML_MAX_LEVEL) level = GamePlayer.ML_MAX_LEVEL;
+                        if (level > GamePlayer.ML_MAX_LEVEL) level = GamePlayer.ML_MAX_LEVEL;
 
-						player.MLLevel = level;
-						player.MLExperience = 0;
-						player.SaveIntoDatabase();
-						player.Out.SendUpdatePlayer();
-						player.Out.SendMasterLevelWindow((byte)player.MLLevel);
-						client.Out.SendMessage(player.Name + " Master Level is set to " + level + "!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-						player.Out.SendMessage(client.Player.Name + "(PrivLevel: " + client.Account.PrivLevel + ") has set your Master Level to " + level + "!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-					}
-					catch (Exception)
-					{
-						DisplaySyntax(client);
-						return;
-					}
-					break;
+                        player.MLLevel = level;
+                        player.MLExperience = 0;
+                        player.SaveIntoDatabase();
+                        player.Out.SendUpdatePlayer();
+                        player.Out.SendMasterLevelWindow((byte)player.MLLevel);
+                        client.Out.SendMessage(player.Name + " Master Level is set to " + level + "!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                        player.Out.SendMessage(client.Player.Name + "(PrivLevel: " + client.Account.PrivLevel + ") has set your Master Level to " + level + "!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                    }
+                    catch (Exception)
+                    {
+                        DisplaySyntax(client);
+                        return;
+                    }
+                    break;
 
-				case "setmlline":
+                case "setmlline":
 
-					try
-					{
-						var player = client.Player.TargetObject as GamePlayer;
-						if (player == null)
-							player = client.Player;
+                    try
+                    {
+                        var player = client.Player.TargetObject as GamePlayer;
+                        if (player == null)
+                            player = client.Player;
 
-						byte line = Convert.ToByte(args[2]);
+                        byte line = Convert.ToByte(args[2]);
 
-						if (line > 1) line = 1;
+                        if (line > 1) line = 1;
 
-						player.MLLine = line;
-						player.SaveIntoDatabase();
-						player.RefreshSpecDependantSkills(true);
-						player.Out.SendUpdatePlayerSkills();
-						player.Out.SendUpdatePlayer();
-						player.Out.SendMasterLevelWindow((byte)player.MLLevel);
-						client.Out.SendMessage(player.Name + " Master Line is set to " + line + "!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-						player.Out.SendMessage(client.Player.Name + "(PrivLevel: " + client.Account.PrivLevel + ") has set your Master Line to " + line + "!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-					}
-					catch (Exception)
-					{
-						DisplaySyntax(client);
-						return;
-					}
-					break;
+                        player.MLLine = line;
+                        player.SaveIntoDatabase();
+                        player.RefreshSpecDependantSkills(true);
+                        player.Out.SendUpdatePlayerSkills();
+                        player.Out.SendUpdatePlayer();
+                        player.Out.SendMasterLevelWindow((byte)player.MLLevel);
+                        client.Out.SendMessage(player.Name + " Master Line is set to " + line + "!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                        player.Out.SendMessage(client.Player.Name + "(PrivLevel: " + client.Account.PrivLevel + ") has set your Master Line to " + line + "!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                    }
+                    catch (Exception)
+                    {
+                        DisplaySyntax(client);
+                        return;
+                    }
+                    break;
 
-				case "setmlstep":
+                case "setmlstep":
 
-					try
-					{
-						var player = client.Player.TargetObject as GamePlayer;
-						if (player == null)
-							player = client.Player;
+                    try
+                    {
+                        var player = client.Player.TargetObject as GamePlayer;
+                        if (player == null)
+                            player = client.Player;
 
-						if (player.MLLevel == GamePlayer.ML_MAX_LEVEL)
-						{
-							client.Out.SendMessage(player.Name + " has already finished all Master Levels!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-							return;
-						}
+                        if (player.MLLevel == GamePlayer.ML_MAX_LEVEL)
+                        {
+                            client.Out.SendMessage(player.Name + " has already finished all Master Levels!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                            return;
+                        }
 
-						byte level = Convert.ToByte(args[2]);
-						if (level > GamePlayer.ML_MAX_LEVEL)
-						{
-							client.Out.SendMessage("Valid levels are 0 - " + GamePlayer.ML_MAX_LEVEL + "!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-							return;
-						}
+                        byte level = Convert.ToByte(args[2]);
+                        if (level > GamePlayer.ML_MAX_LEVEL)
+                        {
+                            client.Out.SendMessage("Valid levels are 0 - " + GamePlayer.ML_MAX_LEVEL + "!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                            return;
+                        }
 
-						// Possible steps per level varies, max appears to be 11
-						byte step = Convert.ToByte(args[3]);
+                        // Possible steps per level varies, max appears to be 11
+                        byte step = Convert.ToByte(args[3]);
 
-						bool setFinished = true;
-						if (args.Length > 4)
-						{
-							setFinished = Convert.ToBoolean(args[4]);
-						}
+                        bool setFinished = true;
+                        if (args.Length > 4)
+                        {
+                            setFinished = Convert.ToBoolean(args[4]);
+                        }
 
-						if (setFinished && player.HasFinishedMLStep(player.MLLevel + 1, step))
-						{
-							client.Out.SendMessage(player.Name + " has already finished step " + step + " for Master Level " + (player.MLLevel + 1) + "!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-						}
-						else if (setFinished == false && player.HasFinishedMLStep(player.MLLevel + 1, step) == false)
-						{
-							client.Out.SendMessage(player.Name + " has not yet finished step " + step + " for Master Level " + (player.MLLevel + 1) + "!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-						}
-						else
-						{
-							player.SetFinishedMLStep(player.MLLevel + 1, step, setFinished);
-							if (setFinished)
-							{
-								client.Out.SendMessage(player.Name + " has now finished step " + step + " for Master Level " + (player.MLLevel + 1) + "!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-								player.Out.SendMessage(client.Player.Name + "(PrivLevel: " + client.Account.PrivLevel + ") has set step " + step + " completed for Master Level " + (player.MLLevel + 1) + "!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-							}
-							else
-							{
-								client.Out.SendMessage(player.Name + " has no longer finished step " + step + " for Master Level " + (player.MLLevel + 1) + "!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-								player.Out.SendMessage(client.Player.Name + "(PrivLevel: " + client.Account.PrivLevel + ") has set step " + step + " as unfinished for Master Level " + (player.MLLevel + 1) + "!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-							}
-							player.SaveIntoDatabase();
-							player.Out.SendMasterLevelWindow(level);
-							player.Out.SendUpdatePlayer();
-						}
-					}
-					catch (Exception)
-					{
-						DisplaySyntax(client);
-						return;
-					}
-					break;
+                        if (setFinished && player.HasFinishedMLStep(player.MLLevel + 1, step))
+                        {
+                            client.Out.SendMessage(player.Name + " has already finished step " + step + " for Master Level " + (player.MLLevel + 1) + "!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                        }
+                        else if (setFinished == false && player.HasFinishedMLStep(player.MLLevel + 1, step) == false)
+                        {
+                            client.Out.SendMessage(player.Name + " has not yet finished step " + step + " for Master Level " + (player.MLLevel + 1) + "!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                        }
+                        else
+                        {
+                            player.SetFinishedMLStep(player.MLLevel + 1, step, setFinished);
+                            if (setFinished)
+                            {
+                                client.Out.SendMessage(player.Name + " has now finished step " + step + " for Master Level " + (player.MLLevel + 1) + "!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                                player.Out.SendMessage(client.Player.Name + "(PrivLevel: " + client.Account.PrivLevel + ") has set step " + step + " completed for Master Level " + (player.MLLevel + 1) + "!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                            }
+                            else
+                            {
+                                client.Out.SendMessage(player.Name + " has no longer finished step " + step + " for Master Level " + (player.MLLevel + 1) + "!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                                player.Out.SendMessage(client.Player.Name + "(PrivLevel: " + client.Account.PrivLevel + ") has set step " + step + " as unfinished for Master Level " + (player.MLLevel + 1) + "!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                            }
+                            player.SaveIntoDatabase();
+                            player.Out.SendMasterLevelWindow(level);
+                            player.Out.SendUpdatePlayer();
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        DisplaySyntax(client);
+                        return;
+                    }
+                    break;
 
-				#endregion Master Levels
+                #endregion Master Levels
 
                 #region realm
 
@@ -834,18 +834,18 @@ namespace DOL.GS.Commands
                             client.Out.SendMessage("You gave " + player.Name + " " + amount + " Champion experience succesfully!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                             player.Out.SendMessage(client.Player.Name + "(PrivLevel: " + client.Account.PrivLevel + ") has given you " + amount + " Champion experience!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
 
-							// now see if player gained any CL and level them up
-							bool gainedLevel = false;
-							while (player.ChampionLevel < player.ChampionMaxLevel && player.ChampionExperience >= player.ChampionExperienceForNextLevel)
-							{
-								player.ChampionLevelUp();
-								gainedLevel = true;
-							}
+                            // now see if player gained any CL and level them up
+                            bool gainedLevel = false;
+                            while (player.ChampionLevel < player.ChampionMaxLevel && player.ChampionExperience >= player.ChampionExperienceForNextLevel)
+                            {
+                                player.ChampionLevelUp();
+                                gainedLevel = true;
+                            }
 
-							if (gainedLevel)
-							{
-								player.Out.SendMessage("You reached champion level " + player.ChampionLevel + "!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-							}
+                            if (gainedLevel)
+                            {
+                                player.Out.SendMessage("You reached champion level " + player.ChampionLevel + "!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                            }
 
 
                             player.SaveIntoDatabase();
@@ -859,49 +859,49 @@ namespace DOL.GS.Commands
                     }
                     break;
 
-				case "mlxp":
-					{
-						var player = client.Player.TargetObject as GamePlayer;
-						try
-						{
-							if (args.Length != 3)
-							{
-								DisplaySyntax(client);
-								return;
-							}
+                case "mlxp":
+                    {
+                        var player = client.Player.TargetObject as GamePlayer;
+                        try
+                        {
+                            if (args.Length != 3)
+                            {
+                                DisplaySyntax(client);
+                                return;
+                            }
 
-							if (player == null)
-								player = client.Player;
+                            if (player == null)
+                                player = client.Player;
 
-							// WIP, For the moment it simply sets MLExperience - Tolakram
+                            // WIP, For the moment it simply sets MLExperience - Tolakram
 
-							long amount = long.Parse(args[2]);
+                            long amount = long.Parse(args[2]);
 
-							player.MLExperience += amount;
-							client.Out.SendMessage("You gave " + player.Name + " " + amount + " ML experience succesfully!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-							player.Out.SendMessage(client.Player.Name + "(PrivLevel: " + client.Account.PrivLevel + ") has given you " + amount + " ML experience!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                            player.MLExperience += amount;
+                            client.Out.SendMessage("You gave " + player.Name + " " + amount + " ML experience succesfully!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                            player.Out.SendMessage(client.Player.Name + "(PrivLevel: " + client.Account.PrivLevel + ") has given you " + amount + " ML experience!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
 
-							if (player.MLExperience > player.GetMLExperienceForLevel(player.MLLevel + 1))
-							{
-								player.MLExperience = player.GetMLExperienceForLevel(player.MLLevel + 1);
-							}
+                            if (player.MLExperience > player.GetMLExperienceForLevel(player.MLLevel + 1))
+                            {
+                                player.MLExperience = player.GetMLExperienceForLevel(player.MLLevel + 1);
+                            }
 
-							if (player.MLExperience < 0)
-							{
-								player.MLExperience = 0;
-							}
+                            if (player.MLExperience < 0)
+                            {
+                                player.MLExperience = 0;
+                            }
 
-							player.SaveIntoDatabase();
-							player.Out.SendUpdatePlayer();
-							player.Out.SendMasterLevelWindow((byte)player.MLLevel);
-						}
-						catch (Exception)
-						{
-							DisplaySyntax(client);
-							return;
-						}
-					}
-					break;
+                            player.SaveIntoDatabase();
+                            player.Out.SendUpdatePlayer();
+                            player.Out.SendMasterLevelWindow((byte)player.MLLevel);
+                        }
+                        catch (Exception)
+                        {
+                            DisplaySyntax(client);
+                            return;
+                        }
+                    }
+                    break;
 
                 case "bps":
                     {
@@ -1270,13 +1270,13 @@ namespace DOL.GS.Commands
                                                            eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                                     break;
                                 }
-                            /*case "ml":
-                            {
-                                //
-                                player.Client.Out.SendMessage(client.Player.Name + "(PrivLevel: " + client.Account.PrivLevel + ") has awarded you an ML respec!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                                client.Out.SendMessage("ML respec given successfully to " + player.Name + "!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                                break;
-                            }*/
+                                /*case "ml":
+                                {
+                                    //
+                                    player.Client.Out.SendMessage(client.Player.Name + "(PrivLevel: " + client.Account.PrivLevel + ") has awarded you an ML respec!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                                    client.Out.SendMessage("ML respec given successfully to " + player.Name + "!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                                    break;
+                                }*/
                         }
 
                         player.Client.Player.SaveIntoDatabase();
@@ -1915,51 +1915,51 @@ namespace DOL.GS.Commands
 
                 #endregion
 
-				#region Saddlebags
+                #region Saddlebags
 
-				case "saddlebags":
-					{
-						var player = client.Player.TargetObject as GamePlayer;
+                case "saddlebags":
+                    {
+                        var player = client.Player.TargetObject as GamePlayer;
 
-						if (args.Length != 3)
-						{
-							DisplaySyntax(client);
-							return;
-						}
+                        if (args.Length != 3)
+                        {
+                            DisplaySyntax(client);
+                            return;
+                        }
 
-						if (player == null)
-							player = client.Player;
+                        if (player == null)
+                            player = client.Player;
 
-						byte activeBags = 0;
+                        byte activeBags = 0;
 
-						if (byte.TryParse(args[2], out activeBags))
-						{
-							if (activeBags <= 0x0F)
-							{
-								player.ActiveSaddleBags = activeBags;
-								player.SaveIntoDatabase();
-								client.Player.Out.SendMessage(string.Format("{0}'s active saddlebags set to 0x{1:X2}!", player.Name, player.ActiveSaddleBags), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-								player.Out.SendMessage(string.Format("Your active saddlebags have been set to 0x{0:X2} by {1}!", player.ActiveSaddleBags, client.Player.Name), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-								player.Out.SendSetControlledHorse(player);
-							}
-							else
-							{
-								DisplayMessage(client, "Valid saddlebag values are between 0 and 15!");
-							}
-						}
-						else
-						{
-							DisplaySyntax(client);
-						}
+                        if (byte.TryParse(args[2], out activeBags))
+                        {
+                            if (activeBags <= 0x0F)
+                            {
+                                player.ActiveSaddleBags = activeBags;
+                                player.SaveIntoDatabase();
+                                client.Player.Out.SendMessage(string.Format("{0}'s active saddlebags set to 0x{1:X2}!", player.Name, player.ActiveSaddleBags), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                                player.Out.SendMessage(string.Format("Your active saddlebags have been set to 0x{0:X2} by {1}!", player.ActiveSaddleBags, client.Player.Name), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                                player.Out.SendSetControlledHorse(player);
+                            }
+                            else
+                            {
+                                DisplayMessage(client, "Valid saddlebag values are between 0 and 15!");
+                            }
+                        }
+                        else
+                        {
+                            DisplaySyntax(client);
+                        }
 
-					}
-					break;
+                    }
+                    break;
 
-				#endregion Saddlebags
+                #endregion Saddlebags
 
-				#region info
+                #region info
 
-				case "info":
+                case "info":
                     {
                         var player = client.Player.TargetObject as GamePlayer;
 
@@ -2168,7 +2168,7 @@ namespace DOL.GS.Commands
                                 break;
                         }
                     }
-                    break; 
+                    break;
                 #endregion
 
                 #region areas
@@ -2218,9 +2218,9 @@ namespace DOL.GS.Commands
                             else
                             {
                                 client.Out.SendMessage("Vous devez selectionner un joueur", eChatType.CT_Say, eChatLoc.CL_SystemWindow);
-                            }                         
+                            }
                         }
-                    }          
+                    }
                     break;
                 #endregion
 
@@ -2269,7 +2269,7 @@ namespace DOL.GS.Commands
                         return;
                     }
                 #endregion
-                
+
                 #region reputation
 
                 case "reputation":
@@ -2288,18 +2288,20 @@ namespace DOL.GS.Commands
 
                             int amount = int.Parse(args[2]);
 
-                            if (amount > 0){
+                            if (amount > 0)
+                            {
                                 player.Reputation = 0;
                                 player.Out.SendMessage(
-                                    client.Player.Name + "(PrivLevel: " + client.Account.PrivLevel + ") has set your reputation to 0" ,
-                                    eChatType.CT_Important, eChatLoc.CL_SystemWindow);}
-                            else 
+                                    client.Player.Name + "(PrivLevel: " + client.Account.PrivLevel + ") has set your reputation to 0",
+                                    eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                            }
+                            else
                             {
                                 player.Reputation = amount;
                                 player.Out.SendMessage(
-                                    client.Player.Name + "(PrivLevel: " + client.Account.PrivLevel + ") has set your reputation to " +  amount ,
+                                    client.Player.Name + "(PrivLevel: " + client.Account.PrivLevel + ") has set your reputation to " + amount,
                                     eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                        }
+                            }
                             InventoryLogging.LogInventoryAction(client.Player, player, eInventoryActionType.Other, amount);
                             client.Out.SendMessage("You set reputation of " + player.Name + " successfully!", eChatType.CT_Important,
                                                     eChatLoc.CL_SystemWindow);
@@ -2316,276 +2318,276 @@ namespace DOL.GS.Commands
                     }
                     break;
 
-                #endregion
+                    #endregion
             }
-		}
+        }
 
         private void SetIsRenaissance(GamePlayer player, bool isRenaissance)
         {
             player.IsRenaissance = isRenaissance;
         }
 
-		private void SendResistEffect(GamePlayer target)
-		{
-			if (target != null)
-			{
-				foreach (GamePlayer nearPlayer in target.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
-				{
-					nearPlayer.Out.SendSpellEffectAnimation(target, target, 7011, 0, false, 0);
-				}
-			}
-		}
+        private void SendResistEffect(GamePlayer target)
+        {
+            if (target != null)
+            {
+                foreach (GamePlayer nearPlayer in target.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+                {
+                    nearPlayer.Out.SendSpellEffectAnimation(target, target, 7011, 0, false, 0);
+                }
+            }
+        }
 
-		private static void KillPlayer(GameLiving killer, GamePlayer player)
-		{
-			int damage = player.Health;
-			if (damage > 0)
-				player.TakeDamage(killer, eDamageType.Natural, damage, 0);
-		}
+        private static void KillPlayer(GameLiving killer, GamePlayer player)
+        {
+            int damage = player.Health;
+            if (damage > 0)
+                player.TakeDamage(killer, eDamageType.Natural, damage, 0);
+        }
 
-		private void Show_Inventory(GamePlayer player, GameClient client, string limitType)
-		{
-			var text = new List<string>();
-			text.Add("  - Name Lastname : " + player.Name + " " + player.LastName);
-			text.Add("  - Realm Level Class : " + GlobalConstants.RealmToName(player.Realm) + " " + player.Level + " " +
-					 player.CharacterClass.Name);
-			text.Add(" ");
-			text.Add(Money.GetShortString(player.GetCurrentMoney()));
-			text.Add(" ");
+        private void Show_Inventory(GamePlayer player, GameClient client, string limitType)
+        {
+            var text = new List<string>();
+            text.Add("  - Name Lastname : " + player.Name + " " + player.LastName);
+            text.Add("  - Realm Level Class : " + GlobalConstants.RealmToName(player.Realm) + " " + player.Level + " " +
+                     player.CharacterClass.Name);
+            text.Add(" ");
+            text.Add(Money.GetShortString(player.GetCurrentMoney()));
+            text.Add(" ");
 
-			bool limitShown = false;
-
-
-			if (limitType == "" || limitType == "wear")
-			{
-				limitShown = true;
-				text.Add("  ----- Wearing:");
-
-				foreach (InventoryItem item in player.Inventory.EquippedItems)
-				{
-					text.Add("     [" + GlobalConstants.SlotToName(client, item.Item_Type) + "] " + item.Name + " (" + item.Id_nb + ")");
-				}
-				text.Add(" ");
-			}
-
-			if (limitType == "" || limitType == "bag")
-			{
-				limitShown = true;
-				text.Add("  ----- Backpack:");
-				foreach (InventoryItem item in player.Inventory.AllItems)
-				{
-					if (item.SlotPosition >= (int)eInventorySlot.FirstBackpack &&
-						item.SlotPosition <= (int)eInventorySlot.LastBackpack)
-					{
-						text.Add(item.Count.ToString("000") + " " + item.Name + " (" + item.Id_nb + ")");
-					}
-				}
-			}
-
-			if (limitType == "vault")
-			{
-				limitShown = true;
-				text.Add("  ----- Vault:");
-				foreach (InventoryItem item in player.Inventory.AllItems)
-				{
-					if (item.SlotPosition >= (int)eInventorySlot.FirstVault && item.SlotPosition <= (int)eInventorySlot.LastVault)
-					{
-						text.Add(item.Count.ToString("000") + " " + item.Name + " (" + item.Id_nb + ")");
-					}
-				}
-			}
-
-			if (limitType == "house")
-			{
-				limitShown = true;
-				text.Add("  ----- Housing:");
-				foreach (InventoryItem item in player.Inventory.AllItems)
-				{
-					if (item.SlotPosition >= (int)eInventorySlot.HouseVault_First &&
-						item.SlotPosition <= (int)eInventorySlot.HouseVault_Last)
-					{
-						text.Add(item.Count.ToString("000") + " " + item.Name + " (" + item.Id_nb + ")");
-					}
-				}
-			}
-
-			if (limitType == "cons")
-			{
-				limitShown = true;
-				text.Add("  ----- GameConsignmentMerchant:");
-				foreach (InventoryItem item in player.Inventory.AllItems)
-				{
-					if (item.SlotPosition >= (int)eInventorySlot.Consignment_First &&
-						item.SlotPosition <= (int)eInventorySlot.Consignment_Last)
-					{
-						text.Add(item.Count.ToString("000") + " " + item.Name + " (" + item.Id_nb + ")");
-					}
-				}
-			}
-
-			if (!limitShown)
-			{
-				text.Add("Unkown command.  Use wear | bag | vault | house | cons");
-			}
+            bool limitShown = false;
 
 
-			client.Out.SendCustomTextWindow("PLAYER INVENTORY LISTING", text);
-		}
+            if (limitType == "" || limitType == "wear")
+            {
+                limitShown = true;
+                text.Add("  ----- Wearing:");
 
-		private void Show_Info(GamePlayer player, GameClient client)
-		{
-			var text = new List<string>();
-			text.Add(" ");
-			text.Add("PLAYER INFORMATION (Client # " + player.Client.SessionID + ", " + player.GetType().FullName + ")");
-			text.Add("  - Name Lastname : " + player.Name + " " + player.LastName);
-			text.Add("  - Realm Level Gender Class : " + GlobalConstants.RealmToName(player.Realm) + " " + player.Level + " " + player.Gender + " " + player.CharacterClass.Name + " (" + player.CharacterClass.ID + ")");
-			text.Add("  - Guild : " + player.GuildName + " " + (player.GuildRank != null ? "Rank: " + player.GuildRank.RankLevel.ToString() : ""));
-			text.Add("  - XPs/RPs/BPs : " + player.Experience + " xp, " + player.RealmPoints + " rp, " + player.BountyPoints + " bp");
+                foreach (InventoryItem item in player.Inventory.EquippedItems)
+                {
+                    text.Add("     [" + GlobalConstants.SlotToName(client, item.Item_Type) + "] " + item.Name + " (" + item.Id_nb + ")");
+                }
+                text.Add(" ");
+            }
+
+            if (limitType == "" || limitType == "bag")
+            {
+                limitShown = true;
+                text.Add("  ----- Backpack:");
+                foreach (InventoryItem item in player.Inventory.AllItems)
+                {
+                    if (item.SlotPosition >= (int)eInventorySlot.FirstBackpack &&
+                        item.SlotPosition <= (int)eInventorySlot.LastBackpack)
+                    {
+                        text.Add(item.Count.ToString("000") + " " + item.Name + " (" + item.Id_nb + ")");
+                    }
+                }
+            }
+
+            if (limitType == "vault")
+            {
+                limitShown = true;
+                text.Add("  ----- Vault:");
+                foreach (InventoryItem item in player.Inventory.AllItems)
+                {
+                    if (item.SlotPosition >= (int)eInventorySlot.FirstVault && item.SlotPosition <= (int)eInventorySlot.LastVault)
+                    {
+                        text.Add(item.Count.ToString("000") + " " + item.Name + " (" + item.Id_nb + ")");
+                    }
+                }
+            }
+
+            if (limitType == "house")
+            {
+                limitShown = true;
+                text.Add("  ----- Housing:");
+                foreach (InventoryItem item in player.Inventory.AllItems)
+                {
+                    if (item.SlotPosition >= (int)eInventorySlot.HouseVault_First &&
+                        item.SlotPosition <= (int)eInventorySlot.HouseVault_Last)
+                    {
+                        text.Add(item.Count.ToString("000") + " " + item.Name + " (" + item.Id_nb + ")");
+                    }
+                }
+            }
+
+            if (limitType == "cons")
+            {
+                limitShown = true;
+                text.Add("  ----- GameConsignmentMerchant:");
+                foreach (InventoryItem item in player.Inventory.AllItems)
+                {
+                    if (item.SlotPosition >= (int)eInventorySlot.Consignment_First &&
+                        item.SlotPosition <= (int)eInventorySlot.Consignment_Last)
+                    {
+                        text.Add(item.Count.ToString("000") + " " + item.Name + " (" + item.Id_nb + ")");
+                    }
+                }
+            }
+
+            if (!limitShown)
+            {
+                text.Add("Unkown command.  Use wear | bag | vault | house | cons");
+            }
+
+
+            client.Out.SendCustomTextWindow("PLAYER INVENTORY LISTING", text);
+        }
+
+        private void Show_Info(GamePlayer player, GameClient client)
+        {
+            var text = new List<string>();
+            text.Add(" ");
+            text.Add("PLAYER INFORMATION (Client # " + player.Client.SessionID + ", " + player.GetType().FullName + ")");
+            text.Add("  - Name Lastname : " + player.Name + " " + player.LastName);
+            text.Add("  - Realm Level Gender Class : " + GlobalConstants.RealmToName(player.Realm) + " " + player.Level + " " + player.Gender + " " + player.CharacterClass.Name + " (" + player.CharacterClass.ID + ")");
+            text.Add("  - Guild : " + player.GuildName + " " + (player.GuildRank != null ? "Rank: " + player.GuildRank.RankLevel.ToString() : ""));
+            text.Add("  - XPs/RPs/BPs : " + player.Experience + " xp, " + player.RealmPoints + " rp, " + player.BountyPoints + " bp");
 
             if (player.DamageRvRMemory > 0)
                 text.Add("  - Damage RvR Memory: " + player.DamageRvRMemory);
-			
+
             if (player.Champion)
-			{
-				text.Add("  - Champion :  CL " + player.ChampionLevel + ", " + player.ChampionExperience + " clxp");
+            {
+                text.Add("  - Champion :  CL " + player.ChampionLevel + ", " + player.ChampionExperience + " clxp");
 
-				string activeBags = "None";
-				if (player.ActiveSaddleBags != 0)
-				{
-					if (player.ActiveSaddleBags == (byte)GamePlayer.eHorseSaddleBag.All)
-					{
-						activeBags = "All";
-					}
-					else
-					{
-						activeBags = "";
+                string activeBags = "None";
+                if (player.ActiveSaddleBags != 0)
+                {
+                    if (player.ActiveSaddleBags == (byte)GamePlayer.eHorseSaddleBag.All)
+                    {
+                        activeBags = "All";
+                    }
+                    else
+                    {
+                        activeBags = "";
 
-						if ((player.ActiveSaddleBags & (byte)GamePlayer.eHorseSaddleBag.LeftFront) > 0)
-						{
-							if (activeBags != "")
-								activeBags += ", ";
+                        if ((player.ActiveSaddleBags & (byte)GamePlayer.eHorseSaddleBag.LeftFront) > 0)
+                        {
+                            if (activeBags != "")
+                                activeBags += ", ";
 
-							activeBags += "LeftFront";
-						}
-						if ((player.ActiveSaddleBags & (byte)GamePlayer.eHorseSaddleBag.RightFront) > 0)
-						{
-							if (activeBags != "")
-								activeBags += ", ";
+                            activeBags += "LeftFront";
+                        }
+                        if ((player.ActiveSaddleBags & (byte)GamePlayer.eHorseSaddleBag.RightFront) > 0)
+                        {
+                            if (activeBags != "")
+                                activeBags += ", ";
 
-							activeBags += "RightFront";
-						}
-						if ((player.ActiveSaddleBags & (byte)GamePlayer.eHorseSaddleBag.LeftRear) > 0)
-						{
-							if (activeBags != "")
-								activeBags += ", ";
+                            activeBags += "RightFront";
+                        }
+                        if ((player.ActiveSaddleBags & (byte)GamePlayer.eHorseSaddleBag.LeftRear) > 0)
+                        {
+                            if (activeBags != "")
+                                activeBags += ", ";
 
-							activeBags += "LeftRear";
-						}
-						if ((player.ActiveSaddleBags & (byte)GamePlayer.eHorseSaddleBag.RightRear) > 0)
-						{
-							if (activeBags != "")
-								activeBags += ", ";
+                            activeBags += "LeftRear";
+                        }
+                        if ((player.ActiveSaddleBags & (byte)GamePlayer.eHorseSaddleBag.RightRear) > 0)
+                        {
+                            if (activeBags != "")
+                                activeBags += ", ";
 
-							activeBags += "RightRear";
-						}
-					}
-				}
+                            activeBags += "RightRear";
+                        }
+                    }
+                }
 
-				text.Add(string.Format("  - ActiveSaddleBags : {0} (0x{1:X2})", activeBags, player.ActiveSaddleBags));
-			}
-			else
-			{
-				text.Add("  - Champion :  Not Started");
-			}
-			if (player.MLGranted)
-			{
-				text.Add("  - Master Levels :  ML " + player.MLLevel + ", " + player.MLExperience + " mlxp , MLLine " + player.MLLine);
-			}
-			else
-			{
-				text.Add("  - Master Levels :  Not Started");
-			}
+                text.Add(string.Format("  - ActiveSaddleBags : {0} (0x{1:X2})", activeBags, player.ActiveSaddleBags));
+            }
+            else
+            {
+                text.Add("  - Champion :  Not Started");
+            }
+            if (player.MLGranted)
+            {
+                text.Add("  - Master Levels :  ML " + player.MLLevel + ", " + player.MLExperience + " mlxp , MLLine " + player.MLLine);
+            }
+            else
+            {
+                text.Add("  - Master Levels :  Not Started");
+            }
 
             text.Add("  - Reputation: " + player.Reputation);
             text.Add("  - IsRenaissance: " + player.IsRenaissance);
-			text.Add("  - Craftingskill : " + player.CraftingPrimarySkill + "");
-			text.Add("  - Money : " + Money.GetString(player.GetCurrentMoney()) + "");
-			text.Add("  - Model ID : " + player.Model);
-			text.Add("  - Region OID : " + player.ObjectID);
-			text.Add("  - AFK Message: " + player.TempProperties.getProperty<string>(GamePlayer.AFK_MESSAGE) + "");
-			text.Add(" ");
-			text.Add("HOUSE INFORMATION ");
-			text.Add("  - Personal House : " + HouseMgr.GetHouseNumberByPlayer(player));
-			if (player.CurrentHouse != null && player.CurrentHouse.HouseNumber > 0)
-				text.Add("  - Current House : " + player.CurrentHouse.HouseNumber);
-			text.Add("  - In House : " + player.InHouse);
-			text.Add(" ");
-			text.Add("ACCOUNT INFORMATION ");
-			text.Add("  - Account Name & IP : " + player.Client.Account.Name + " from " + player.Client.Account.LastLoginIP);
-			text.Add("  - Priv. Level : " + player.Client.Account.PrivLevel);
-			text.Add("  - Client Version: " + player.Client.Account.LastClientVersion);
-			text.Add(" ");
-			text.Add("CHARACTER STATS ");
+            text.Add("  - Craftingskill : " + player.CraftingPrimarySkill + "");
+            text.Add("  - Money : " + Money.GetString(player.GetCurrentMoney()) + "");
+            text.Add("  - Model ID : " + player.Model);
+            text.Add("  - Region OID : " + player.ObjectID);
+            text.Add("  - AFK Message: " + player.TempProperties.getProperty<string>(GamePlayer.AFK_MESSAGE) + "");
+            text.Add(" ");
+            text.Add("HOUSE INFORMATION ");
+            text.Add("  - Personal House : " + HouseMgr.GetHouseNumberByPlayer(player));
+            if (player.CurrentHouse != null && player.CurrentHouse.HouseNumber > 0)
+                text.Add("  - Current House : " + player.CurrentHouse.HouseNumber);
+            text.Add("  - In House : " + player.InHouse);
+            text.Add(" ");
+            text.Add("ACCOUNT INFORMATION ");
+            text.Add("  - Account Name & IP : " + player.Client.Account.Name + " from " + player.Client.Account.LastLoginIP);
+            text.Add("  - Priv. Level : " + player.Client.Account.PrivLevel);
+            text.Add("  - Client Version: " + player.Client.Account.LastClientVersion);
+            text.Add(" ");
+            text.Add("CHARACTER STATS ");
 
-			String sCurrent = "";
-			String sTitle = "";
-			int cnt = 0;
+            String sCurrent = "";
+            String sTitle = "";
+            int cnt = 0;
 
-			for (eProperty stat = eProperty.Stat_First; stat <= eProperty.Stat_Last; stat++, cnt++)
-			{
-				sTitle += GlobalConstants.PropertyToName(client, stat) + "/";
-				sCurrent += player.GetModified(stat) + "/";
-				if (cnt == 3)
-				{
-					text.Add("  - Current stats " + sTitle + " : " + sCurrent);
-					sTitle = "";
-					sCurrent = "";
-				}
-			}
-			text.Add("  - Current stats " + sTitle + " : " + sCurrent);
+            for (eProperty stat = eProperty.Stat_First; stat <= eProperty.Stat_Last; stat++, cnt++)
+            {
+                sTitle += GlobalConstants.PropertyToName(client, stat) + "/";
+                sCurrent += player.GetModified(stat) + "/";
+                if (cnt == 3)
+                {
+                    text.Add("  - Current stats " + sTitle + " : " + sCurrent);
+                    sTitle = "";
+                    sCurrent = "";
+                }
+            }
+            text.Add("  - Current stats " + sTitle + " : " + sCurrent);
 
-			sCurrent = "";
-			sTitle = "";
-			cnt = 0;
-			for (eProperty res = eProperty.Resist_First; res <= eProperty.Resist_Last; res++, cnt++)
-			{
-				sTitle += GlobalConstants.PropertyToName(client, res) + "/";
-				sCurrent += player.GetModified(res) + "/";
-				if (cnt == 2)
-				{
-					text.Add("  - Current " + sTitle + " : " + sCurrent);
-					sCurrent = "";
-					sTitle = "";
-				}
-				if (cnt == 5)
-				{
-					text.Add("  - Current " + sTitle + " : " + sCurrent);
-					sCurrent = "";
-					sTitle = "";
-				}
-			}
-			text.Add("  - Current " + sTitle + " : " + sCurrent);
+            sCurrent = "";
+            sTitle = "";
+            cnt = 0;
+            for (eProperty res = eProperty.Resist_First; res <= eProperty.Resist_Last; res++, cnt++)
+            {
+                sTitle += GlobalConstants.PropertyToName(client, res) + "/";
+                sCurrent += player.GetModified(res) + "/";
+                if (cnt == 2)
+                {
+                    text.Add("  - Current " + sTitle + " : " + sCurrent);
+                    sCurrent = "";
+                    sTitle = "";
+                }
+                if (cnt == 5)
+                {
+                    text.Add("  - Current " + sTitle + " : " + sCurrent);
+                    sCurrent = "";
+                    sTitle = "";
+                }
+            }
+            text.Add("  - Current " + sTitle + " : " + sCurrent);
 
-			text.Add("  - Maximum Health : " + player.MaxHealth);
-			text.Add("  - Current AF and ABS : " + player.GetModified(eProperty.ArmorFactor) + " AF, " +
-					 player.GetModified(eProperty.ArmorAbsorption) + " ABS");
+            text.Add("  - Maximum Health : " + player.MaxHealth);
+            text.Add("  - Current AF and ABS : " + player.GetModified(eProperty.ArmorFactor) + " AF, " +
+                     player.GetModified(eProperty.ArmorAbsorption) + " ABS");
             text.Add("  - Coin bonus : " + player.GetModified(eProperty.MythicalCoin));
             text.Add("  - Realm bonus : " + player.GetModified(eProperty.RealmPoints));
             text.Add("  - Xp bonus : " + player.GetModified(eProperty.XpPoints));
-			text.Add(" ");
-			text.Add("SPECCING INFORMATIONS ");
-			text.Add("  - Respecs availables : " + player.RespecAmountDOL + " dol, " + player.RespecAmountSingleSkill +
-					 " single, " + player.RespecAmountAllSkill + " full");
-			text.Add("  - Remaining spec. points : " + player.SkillSpecialtyPoints);
-			sTitle = "  - Player specialisations : ";
-			sCurrent = "";
-			foreach (Specialization spec in player.GetSpecList())
-			{
-				sCurrent += spec.Name + " = " + spec.Level + " ; ";
-			}
-			text.Add(sTitle + sCurrent);
+            text.Add(" ");
+            text.Add("SPECCING INFORMATIONS ");
+            text.Add("  - Respecs availables : " + player.RespecAmountDOL + " dol, " + player.RespecAmountSingleSkill +
+                     " single, " + player.RespecAmountAllSkill + " full");
+            text.Add("  - Remaining spec. points : " + player.SkillSpecialtyPoints);
+            sTitle = "  - Player specialisations : ";
+            sCurrent = "";
+            foreach (Specialization spec in player.GetSpecList())
+            {
+                sCurrent += spec.Name + " = " + spec.Level + " ; ";
+            }
+            text.Add(sTitle + sCurrent);
 
-			client.Out.SendCustomTextWindow("PLAYER & ACCOUNT INFORMATION", text);
+            client.Out.SendCustomTextWindow("PLAYER & ACCOUNT INFORMATION", text);
         }
         public void SetClass(GamePlayer target, int classID)
         {
@@ -2607,5 +2609,5 @@ namespace DOL.GS.Commands
             target.Out.SendUpdatePlayerSkills();
             target.Out.SendUpdatePoints();
         }
-	}
+    }
 }

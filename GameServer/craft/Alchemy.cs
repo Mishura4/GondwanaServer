@@ -24,147 +24,147 @@ using System.Collections.Generic;
 
 namespace DOL.GS
 {
-	public class Alchemy : AdvancedCraftingSkill
-	{
-		public Alchemy()
-		{
-			Icon = 0x04;
-			Name = LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, 
+    public class Alchemy : AdvancedCraftingSkill
+    {
+        public Alchemy()
+        {
+            Icon = 0x04;
+            Name = LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE,
                 "Crafting.Name.Alchemy");
-			eSkill = eCraftingSkill.Alchemy;
-		}
+            eSkill = eCraftingSkill.Alchemy;
+        }
 
         protected override String Profession
         {
-            get 
-            { 
-                return "CraftersProfession.Alchemist"; 
+            get
+            {
+                return "CraftersProfession.Alchemist";
             }
         }
 
-		#region Classic Crafting Overrides
-		public override void GainCraftingSkillPoints(GamePlayer player, Recipe recipe)
-		{
-			if (Util.Chance( CalculateChanceToGainPoint(player, recipe.Level)))
-			{
-				player.GainCraftingSkill(eCraftingSkill.Alchemy, 1);
+        #region Classic Crafting Overrides
+        public override void GainCraftingSkillPoints(GamePlayer player, Recipe recipe)
+        {
+            if (Util.Chance(CalculateChanceToGainPoint(player, recipe.Level)))
+            {
+                player.GainCraftingSkill(eCraftingSkill.Alchemy, 1);
 
-				if (player.GetCraftingSkillValue(eCraftingSkill.HerbalCrafting) < subSkillCap)
-					player.GainCraftingSkill(eCraftingSkill.HerbalCrafting, 1);
+                if (player.GetCraftingSkillValue(eCraftingSkill.HerbalCrafting) < subSkillCap)
+                    player.GainCraftingSkill(eCraftingSkill.HerbalCrafting, 1);
 
-				player.Out.SendUpdateCraftingSkills();
-			}
-		}
+                player.Out.SendUpdateCraftingSkills();
+            }
+        }
 
-		#endregion
-		
-		#region Requirement check
+        #endregion
 
-		/// <summary>
-		/// This function is called when player accept the combine
-		/// </summary>
-		/// <param name="player"></param>
-		/// <param name="item"></param>
-		public override bool IsAllowedToCombine(GamePlayer player, InventoryItem item)
-		{
-			if (!base.IsAllowedToCombine(player, item)) 
+        #region Requirement check
+
+        /// <summary>
+        /// This function is called when player accept the combine
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="item"></param>
+        public override bool IsAllowedToCombine(GamePlayer player, InventoryItem item)
+        {
+            if (!base.IsAllowedToCombine(player, item))
                 return false;
-			
-			if (((InventoryItem)player.TradeWindow.TradeItems[0]).Object_Type != 
+
+            if (((InventoryItem)player.TradeWindow.TradeItems[0]).Object_Type !=
                 (int)eObjectType.AlchemyTincture)
-			{
-				player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, 
-                    "Alchemy.IsAllowedToCombine.AlchemyTinctures"), PacketHandler.eChatType.CT_System, 
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,
+                    "Alchemy.IsAllowedToCombine.AlchemyTinctures"), PacketHandler.eChatType.CT_System,
                     PacketHandler.eChatLoc.CL_SystemWindow);
-				
+
                 return false;
-			}
+            }
 
-			if (player.TradeWindow.ItemsCount > 1)
-			{
-				player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,
-                    "Alchemy.IsAllowedToCombine.OneTincture"), PacketHandler.eChatType.CT_System, 
+            if (player.TradeWindow.ItemsCount > 1)
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,
+                    "Alchemy.IsAllowedToCombine.OneTincture"), PacketHandler.eChatType.CT_System,
                     PacketHandler.eChatLoc.CL_SystemWindow);
 
-				return false;
-			}
+                return false;
+            }
 
-			if (item.ProcSpellID != 0 || item.SpellID != 0)
-			{
-				player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, 
-                    "Alchemy.IsAllowedToCombine.AlreadyImbued", item.Name), 
+            if (item.ProcSpellID != 0 || item.SpellID != 0)
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,
+                    "Alchemy.IsAllowedToCombine.AlreadyImbued", item.Name),
                     PacketHandler.eChatType.CT_System, PacketHandler.eChatLoc.CL_SystemWindow);
 
-				return false;
-			}
+                return false;
+            }
 
-			return true;
-		}
+            return true;
+        }
 
-		#endregion
+        #endregion
 
-		#region Apply magical effect
+        #region Apply magical effect
 
-		/// <summary>
-		/// Apply all needed magical bonus to the item
-		/// </summary>
-		/// <param name="player"></param>
-		/// <param name="item"></param>
-		/// <returns></returns>
-		protected override void ApplyMagicalEffect(GamePlayer player, InventoryItem item)
-		{
-			InventoryItem tincture = (InventoryItem)player.TradeWindow.TradeItems[0];
+        /// <summary>
+        /// Apply all needed magical bonus to the item
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        protected override void ApplyMagicalEffect(GamePlayer player, InventoryItem item)
+        {
+            InventoryItem tincture = (InventoryItem)player.TradeWindow.TradeItems[0];
 
             // One item each side of the trade window.
 
-			if (item == null || tincture == null) 
-                return ;
-			
-			if(tincture.ProcSpellID != 0)
-			{
-				item.ProcSpellID = tincture.ProcSpellID;
-			}
-			else
-			{
-				item.MaxCharges = GetItemMaxCharges(item);
-				item.Charges = item.MaxCharges;
-				item.SpellID = tincture.SpellID;
-			}
+            if (item == null || tincture == null)
+                return;
 
-			player.Inventory.RemoveCountFromStack(tincture, 1);
-			InventoryLogging.LogInventoryAction(player, "(craft)", eInventoryActionType.Craft, tincture.Template);
+            if (tincture.ProcSpellID != 0)
+            {
+                item.ProcSpellID = tincture.ProcSpellID;
+            }
+            else
+            {
+                item.MaxCharges = GetItemMaxCharges(item);
+                item.Charges = item.MaxCharges;
+                item.SpellID = tincture.SpellID;
+            }
 
-			if (item.Template is ItemUnique)
-			{
-				GameServer.Database.SaveObject(item);
-				GameServer.Database.SaveObject(item.Template as ItemUnique);
-			}
-			else
-			{
-				ChatUtil.SendErrorMessage(player, "Alchemy crafting error: Item was not an ItemUnique, crafting changes not saved to DB!");
-				log.ErrorFormat("Alchemy crafting error: Item {0} was not an ItemUnique for player {1}, crafting changes not saved to DB!", item.Id_nb, player.Name);
-			}
-		}
+            player.Inventory.RemoveCountFromStack(tincture, 1);
+            InventoryLogging.LogInventoryAction(player, "(craft)", eInventoryActionType.Craft, tincture.Template);
 
-		#endregion
+            if (item.Template is ItemUnique)
+            {
+                GameServer.Database.SaveObject(item);
+                GameServer.Database.SaveObject(item.Template as ItemUnique);
+            }
+            else
+            {
+                ChatUtil.SendErrorMessage(player, "Alchemy crafting error: Item was not an ItemUnique, crafting changes not saved to DB!");
+                log.ErrorFormat("Alchemy crafting error: Item {0} was not an ItemUnique for player {1}, crafting changes not saved to DB!", item.Id_nb, player.Name);
+            }
+        }
 
-		/// <summary>
-		/// Get the maximum charge the item will have
-		/// </summary>
-		/// <param name="item"></param>
-		/// <returns></returns>
-		public int GetItemMaxCharges(InventoryItem item)
-		{
-			if(item.Quality < 94)
-			{
-				return 2;
-			}
-			if(item.Quality >= 100)
-			{
-				return 10;
-			}
-			return item.Quality - 92;
-		}
+        #endregion
+
+        /// <summary>
+        /// Get the maximum charge the item will have
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public int GetItemMaxCharges(InventoryItem item)
+        {
+            if (item.Quality < 94)
+            {
+                return 2;
+            }
+            if (item.Quality >= 100)
+            {
+                return 10;
+            }
+            return item.Quality - 92;
+        }
 
         /// <summary>
         /// Reduce time for craft potions
@@ -175,10 +175,10 @@ namespace DOL.GS
         public override int GetCraftingTime(GamePlayer player, Recipe recipe)
         {
             //int time = (int)Math.Round(0.75*base.GetCraftingTime(player, recipe, rawMaterials)); -> 
-            int time = (int)Math.Round(0.75*base.GetCraftingTime(player, recipe));
+            int time = (int)Math.Round(0.75 * base.GetCraftingTime(player, recipe));
             if (time < 1)
                 time = 1;
             return time;
         }
-	}
+    }
 }

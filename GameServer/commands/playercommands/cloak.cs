@@ -22,89 +22,89 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute(
-		"&cloak",
-		ePrivLevel.Player,
-		"Commands.Players.Cloak.Description",
-		"Commands.Players.Cloak.Usage"
-	)]
-	public class CloakCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		/* version 1.98 :
+    [CmdAttribute(
+        "&cloak",
+        ePrivLevel.Player,
+        "Commands.Players.Cloak.Description",
+        "Commands.Players.Cloak.Usage"
+    )]
+    public class CloakCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        /* version 1.98 :
 		 * [19:37:34] Usage: /cloak [on|off].
 		 * [19:37:34] Example: "/cloak off" to hide your cloak
 		 * [19:37:36] Your cloak will no longer be hidden from view.
 		 * [19:37:39] Your cloak will now be hidden from view.
 		 * */
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (IsSpammingCommand(client.Player, "cloak"))
-				return;
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (IsSpammingCommand(client.Player, "cloak"))
+                return;
 
-			if (args.Length != 2)
-			{
-				DisplaySyntax(client);
-				return;
-			}
-			string onOff = args[1].ToLower();
-			if (onOff == "on")
-			{
-				if(client.Player.IsCloakInvisible)
-				{
-					client.Player.IsCloakInvisible = false;
-					client.Out.SendMessage(
-						LanguageMgr.GetTranslation(
-							client.Account.Language,
-							"Commands.Players.Cloak.Visible"
-						),
-						eChatType.CT_YouWereHit,
-						eChatLoc.CL_SystemWindow
-					);
-					return;
-				}
-				else
-				{
-					client.Out.SendMessage(
-						LanguageMgr.GetTranslation(
-							client.Account.Language,
-							"Commands.Players.Cloak.AlreadyVisible"
-						),
-						eChatType.CT_YouWereHit,
-						eChatLoc.CL_SystemWindow
-					);
-					return;
-				}
-			}
-			
-			if (onOff == "off")
-			{
-				if (client.Player.IsCloakInvisible)
-				{
-					client.Out.SendMessage(
-						LanguageMgr.GetTranslation(
-							client.Account.Language,
-							"Commands.Players.Cloak.AlreadyInvisible"
-							),
-						eChatType.CT_YouWereHit,
-						eChatLoc.CL_SystemWindow
-					);
-					return;
-				}
-				else
-				{
-					client.Player.IsCloakInvisible = true;
-					client.Out.SendMessage(
-						LanguageMgr.GetTranslation(
-							client.Account.Language,
-							"Commands.Players.Cloak.Invisible"
-						),
-						eChatType.CT_YouWereHit,
-						eChatLoc.CL_SystemWindow
-					);
-					return;
-				}
-			}
-			DisplaySyntax(client);
-		}
-	}
+            if (args.Length != 2)
+            {
+                DisplaySyntax(client);
+                return;
+            }
+            string onOff = args[1].ToLower();
+            if (onOff == "on")
+            {
+                if (client.Player.IsCloakInvisible)
+                {
+                    client.Player.IsCloakInvisible = false;
+                    client.Out.SendMessage(
+                        LanguageMgr.GetTranslation(
+                            client.Account.Language,
+                            "Commands.Players.Cloak.Visible"
+                        ),
+                        eChatType.CT_YouWereHit,
+                        eChatLoc.CL_SystemWindow
+                    );
+                    return;
+                }
+                else
+                {
+                    client.Out.SendMessage(
+                        LanguageMgr.GetTranslation(
+                            client.Account.Language,
+                            "Commands.Players.Cloak.AlreadyVisible"
+                        ),
+                        eChatType.CT_YouWereHit,
+                        eChatLoc.CL_SystemWindow
+                    );
+                    return;
+                }
+            }
+
+            if (onOff == "off")
+            {
+                if (client.Player.IsCloakInvisible)
+                {
+                    client.Out.SendMessage(
+                        LanguageMgr.GetTranslation(
+                            client.Account.Language,
+                            "Commands.Players.Cloak.AlreadyInvisible"
+                            ),
+                        eChatType.CT_YouWereHit,
+                        eChatLoc.CL_SystemWindow
+                    );
+                    return;
+                }
+                else
+                {
+                    client.Player.IsCloakInvisible = true;
+                    client.Out.SendMessage(
+                        LanguageMgr.GetTranslation(
+                            client.Account.Language,
+                            "Commands.Players.Cloak.Invisible"
+                        ),
+                        eChatType.CT_YouWereHit,
+                        eChatLoc.CL_SystemWindow
+                    );
+                    return;
+                }
+            }
+            DisplaySyntax(client);
+        }
+    }
 }

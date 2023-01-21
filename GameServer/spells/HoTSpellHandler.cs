@@ -25,62 +25,62 @@ using DOL.AI.Brain;
 
 namespace DOL.GS.Spells
 {
-	[SpellHandlerAttribute("HealOverTime")]
-	public class HoTSpellHandler : SpellHandler
-	{
-		public override void FinishSpellCast(GameLiving target)
-		{
-			m_caster.Mana -= PowerCost(target);
-			base.FinishSpellCast(target);
-		}
+    [SpellHandlerAttribute("HealOverTime")]
+    public class HoTSpellHandler : SpellHandler
+    {
+        public override void FinishSpellCast(GameLiving target)
+        {
+            m_caster.Mana -= PowerCost(target);
+            base.FinishSpellCast(target);
+        }
 
-		public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
-		{
-			// TODO: correct formula
-			double eff = 1.25;
-			if(Caster is GamePlayer)
-			{
-				double lineSpec = Caster.GetModifiedSpecLevel(m_spellLine.Spec);
-				if (lineSpec < 1)
-					lineSpec = 1;
-				eff = 0.75;
-				if (Spell.Level > 0)
-				{
-					eff += (lineSpec-1.0)/Spell.Level*0.5;
-					if (eff > 1.25)
-						eff = 1.25;
-				}
-			}
-			base.ApplyEffectOnTarget(target, eff);
-		}
+        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        {
+            // TODO: correct formula
+            double eff = 1.25;
+            if (Caster is GamePlayer)
+            {
+                double lineSpec = Caster.GetModifiedSpecLevel(m_spellLine.Spec);
+                if (lineSpec < 1)
+                    lineSpec = 1;
+                eff = 0.75;
+                if (Spell.Level > 0)
+                {
+                    eff += (lineSpec - 1.0) / Spell.Level * 0.5;
+                    if (eff > 1.25)
+                        eff = 1.25;
+                }
+            }
+            base.ApplyEffectOnTarget(target, eff);
+        }
 
-		protected override GameSpellEffect CreateSpellEffect(GameLiving target, double effectiveness)
-		{
-			return new GameSpellEffect(this, Spell.Duration, Spell.Frequency, effectiveness);
-		}
+        protected override GameSpellEffect CreateSpellEffect(GameLiving target, double effectiveness)
+        {
+            return new GameSpellEffect(this, Spell.Duration, Spell.Frequency, effectiveness);
+        }
 
-		public override void OnEffectStart(GameSpellEffect effect)
-		{			
-			SendEffectAnimation(effect.Owner, 0, false, 1);
-			//"{0} seems calm and healthy."
-			Message.SystemToArea(effect.Owner, Util.MakeSentence(Spell.Message2, effect.Owner.GetName(0, false)), eChatType.CT_Spell, effect.Owner);
-		}
+        public override void OnEffectStart(GameSpellEffect effect)
+        {
+            SendEffectAnimation(effect.Owner, 0, false, 1);
+            //"{0} seems calm and healthy."
+            Message.SystemToArea(effect.Owner, Util.MakeSentence(Spell.Message2, effect.Owner.GetName(0, false)), eChatType.CT_Spell, effect.Owner);
+        }
 
-		public override void OnEffectPulse(GameSpellEffect effect)
-		{
-			base.OnEffectPulse(effect);
-			OnDirectEffect(effect.Owner, effect.Effectiveness);
-		}
+        public override void OnEffectPulse(GameSpellEffect effect)
+        {
+            base.OnEffectPulse(effect);
+            OnDirectEffect(effect.Owner, effect.Effectiveness);
+        }
 
-		public override void OnDirectEffect(GameLiving target, double effectiveness)
-		{
-			if (target.ObjectState != GameObject.eObjectState.Active) return;
-			if (target.IsAlive == false) return;
+        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        {
+            if (target.ObjectState != GameObject.eObjectState.Active) return;
+            if (target.IsAlive == false) return;
 
-			base.OnDirectEffect(target, effectiveness);
-			double heal = Spell.Value * effectiveness;
-			
-			target.Health += (int)heal;
+            base.OnDirectEffect(target, effectiveness);
+            double heal = Spell.Value * effectiveness;
+
+            target.Health += (int)heal;
 
             #region PVP DAMAGE
 
@@ -95,25 +95,26 @@ namespace DOL.GS.Spells
 
             #endregion PVP DAMAGE
 
-			//"You feel calm and healthy."
-			MessageToLiving(target, Spell.Message1, eChatType.CT_Spell);
-		}
+            //"You feel calm and healthy."
+            MessageToLiving(target, Spell.Message1, eChatType.CT_Spell);
+        }
 
-		public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
-		{
-			base.OnEffectExpires(effect, noMessages);
-			if (!noMessages) {
-				//"Your meditative state fades."
-				MessageToLiving(effect.Owner, Spell.Message3, eChatType.CT_SpellExpires);
-				//"{0}'s meditative state fades."
-				Message.SystemToArea(effect.Owner, Util.MakeSentence(Spell.Message4, effect.Owner.GetName(0, false)), eChatType.CT_SpellExpires, effect.Owner);
-			}
-			return 0;
-		}
+        public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
+        {
+            base.OnEffectExpires(effect, noMessages);
+            if (!noMessages)
+            {
+                //"Your meditative state fades."
+                MessageToLiving(effect.Owner, Spell.Message3, eChatType.CT_SpellExpires);
+                //"{0}'s meditative state fades."
+                Message.SystemToArea(effect.Owner, Util.MakeSentence(Spell.Message4, effect.Owner.GetName(0, false)), eChatType.CT_SpellExpires, effect.Owner);
+            }
+            return 0;
+        }
 
-		public HoTSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) {}
+        public HoTSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription 
-			=> $"The target regenerates {Spell.Value} health every {Spell.Frequency/1000.0} sec.";
+        public override string ShortDescription
+            => $"The target regenerates {Spell.Value} health every {Spell.Frequency / 1000.0} sec.";
     }
 }

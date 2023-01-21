@@ -46,244 +46,244 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute(
-		"&who",
-		ePrivLevel.Player,
-		"Commands.Players.Who.Description",
-		"Commands.Players.Who.Usage"
-		//help:
-		//"/who  Can be modified with [playername], [class], [#] level, [location], [##] [##] level range",
-		//"/WHO ALL lists all players online",
-		//"/WHO NF lists all players online in New Frontiers",
-		//// "/WHO CSR lists all Customer Service Representatives currently online",
-		//// "/WHO DEV lists all Development Team Members currently online",
-		//// "/WHO QTA lists all Quest Team Assistants currently online",
-		//"/WHO <name> lists players with names that start with <name>",
-		//"/WHO <guild name> lists players with names that start with <guild name>",
-		//"/WHO <class> lists players with of class <class>",
-		//"/WHO <location> lists players in the <location> area",
-		//"/WHO <level> lists players of level <level>",
-		//"/WHO <level> <level> lists players in level range",
-		//"/WHO <language> lists players with a specific language"
-	)]
-	public class WhoCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		private static log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+    [CmdAttribute(
+        "&who",
+        ePrivLevel.Player,
+        "Commands.Players.Who.Description",
+        "Commands.Players.Who.Usage"
+    //help:
+    //"/who  Can be modified with [playername], [class], [#] level, [location], [##] [##] level range",
+    //"/WHO ALL lists all players online",
+    //"/WHO NF lists all players online in New Frontiers",
+    //// "/WHO CSR lists all Customer Service Representatives currently online",
+    //// "/WHO DEV lists all Development Team Members currently online",
+    //// "/WHO QTA lists all Quest Team Assistants currently online",
+    //"/WHO <name> lists players with names that start with <name>",
+    //"/WHO <guild name> lists players with names that start with <guild name>",
+    //"/WHO <class> lists players with of class <class>",
+    //"/WHO <location> lists players in the <location> area",
+    //"/WHO <level> lists players of level <level>",
+    //"/WHO <level> <level> lists players in level range",
+    //"/WHO <language> lists players with a specific language"
+    )]
+    public class WhoCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        private static log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-		public const int MAX_LIST_SIZE = 26;
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (IsSpammingCommand(client.Player, "who"))
-				return;
+        public const int MAX_LIST_SIZE = 26;
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (IsSpammingCommand(client.Player, "who"))
+                return;
 
-			int listStart = 1;
-			ArrayList filters = null;
-			ArrayList clientsList = new ArrayList();
-			ArrayList resultMessages = new ArrayList();
+            int listStart = 1;
+            ArrayList filters = null;
+            ArrayList clientsList = new ArrayList();
+            ArrayList resultMessages = new ArrayList();
 
-			// get list of clients depending on server type
-			foreach (GameClient serverClient in WorldMgr.GetAllPlayingClients())
-			{
-				GamePlayer addPlayer = serverClient.Player;
-				if (addPlayer == null) continue;
-				if (serverClient.Account.PrivLevel > (uint)ePrivLevel.Player && serverClient.Player.IsAnonymous == false)
-				{
-					clientsList.Add(addPlayer.Client);
-					continue;
-				}
-				if (addPlayer.Client != client // always add self
-					&& client.Account.PrivLevel == (uint)ePrivLevel.Player
-					&& (addPlayer.IsAnonymous || !GameServer.ServerRules.IsSameRealm(addPlayer, client.Player, true)))
-				{
-					continue;
-				}
-				clientsList.Add(addPlayer.Client);
-			}
+            // get list of clients depending on server type
+            foreach (GameClient serverClient in WorldMgr.GetAllPlayingClients())
+            {
+                GamePlayer addPlayer = serverClient.Player;
+                if (addPlayer == null) continue;
+                if (serverClient.Account.PrivLevel > (uint)ePrivLevel.Player && serverClient.Player.IsAnonymous == false)
+                {
+                    clientsList.Add(addPlayer.Client);
+                    continue;
+                }
+                if (addPlayer.Client != client // always add self
+                    && client.Account.PrivLevel == (uint)ePrivLevel.Player
+                    && (addPlayer.IsAnonymous || !GameServer.ServerRules.IsSameRealm(addPlayer, client.Player, true)))
+                {
+                    continue;
+                }
+                clientsList.Add(addPlayer.Client);
+            }
 
-			// no params
-			if (args.Length == 1)
-			{
-				int playing = clientsList.Count;
+            // no params
+            if (args.Length == 1)
+            {
+                int playing = clientsList.Count;
 
-				// including anon?
-				DisplayMessage(
-					client,
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Who.Player" + (playing > 1 ? "s" : "") +".Online",
-						playing));
-				DisplayMessage(
-					client,
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Who.Help"));
-				return;
-			}
-
-
-			// any params passed?
-			switch (args[1].ToLower())
-			{
-				case "all": // display all players, no filter
-					{
-						filters = null;
-						break;
-					}
-				case "help": // list syntax for the who command
-					{
-						//DisplaySyntax(client);
-						DisplayMessage(
-							client,
-							LanguageMgr.GetTranslation(
-								client.Account.Language,
-								"Commands.Players.Who.Usage.All"));
-						DisplayMessage(
-							client,
-							LanguageMgr.GetTranslation(
-								client.Account.Language,
-								"Commands.Players.Who.Usage.NF"));
-						//DisplayMessage(
-						//	client,
-						//	LanguageMgr.GetTranslation(
-						//		client.Account.Language,
-						//		Commands.Players.Who.Usage.CSR));
-						//DisplayMessage(
-						//	client,
-						//	LanguageMgr.GetTranslation(
-						//		client.Account.Language,
-						//		Commands.Players.Who.Usage.DEV));
-						//DisplayMessage(
-						//	client,
-						//	LanguageMgr.GetTranslation(
-						//		client.Account.Language,
-						//		Commands.Players.Who.Usage.QTA));
-						DisplayMessage(
-							client,
-							LanguageMgr.GetTranslation(
-								client.Account.Language,
-								"Commands.Players.Who.Usage.Name"));
-						DisplayMessage(
-							client,
-							LanguageMgr.GetTranslation(
-								client.Account.Language,
-								"Commands.Players.Who.Usage.GuildName"));
-						DisplayMessage(
-							client,
-							LanguageMgr.GetTranslation(
-								client.Account.Language,
-								"Commands.Players.Who.Usage.Class"));
-						DisplayMessage(
-							client,
-							LanguageMgr.GetTranslation(
-								client.Account.Language,
-								"Commands.Players.Who.Usage.Location"));
-						DisplayMessage(
-							client,
-							LanguageMgr.GetTranslation(
-								client.Account.Language,
-								"Commands.Players.Who.Usage.Level"));
-						DisplayMessage(
-							client,
-							LanguageMgr.GetTranslation(
-								client.Account.Language,
-								"Commands.Players.Who.Usage.LevelLevel"));
-						DisplayMessage(
-							client,
-							LanguageMgr.GetTranslation(
-								client.Account.Language,
-								"Commands.Players.Who.Usage.Language"));
-						return;
-					}
-				case "staff":
-				case "gm":
-				case "admin":
-					{
-						filters = new ArrayList(1);
-						filters.Add(new GMFilter());
-						break;
-					}
-				case "en":
-				case "cz":
-				case "de":
-				case "es":
-				case "fr":
-				case "it":
-					{
-						filters = new ArrayList(1);
-						filters.Add(new LanguageFilter(args[1].ToLower()));
-						break;
-					}
-				case "cg":
-					{
-						filters = new ArrayList(1);
-						filters.Add(new ChatGroupFilter());
-						break;
-					}
-				case "nf":
-					{
-						filters = new ArrayList(1);
-						filters.Add(new NewFrontiersFilter());
-						break;
-					}
-				case "rp":
-					{
-						filters = new ArrayList(1);
-						filters.Add(new RPFilter());
-						break;
-					}
-				default:
-					{
-						filters = new ArrayList();
-						AddFilters(filters, args, 1);
-						break;
-					}
-			}
+                // including anon?
+                DisplayMessage(
+                    client,
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Who.Player" + (playing > 1 ? "s" : "") + ".Online",
+                        playing));
+                DisplayMessage(
+                    client,
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Who.Help"));
+                return;
+            }
 
 
-			int resultCount = 0;
-			foreach (GameClient clients in clientsList)
-			{
-				if (ApplyFilter(filters, clients.Player))
-				{
-					resultCount++;
-					if (resultMessages.Count < MAX_LIST_SIZE && resultCount >= listStart)
-					{
-						resultMessages.Add(resultCount + ") " + FormatLine(clients.Player, client.Account.PrivLevel, client));
-					}
-				}
-			}
+            // any params passed?
+            switch (args[1].ToLower())
+            {
+                case "all": // display all players, no filter
+                    {
+                        filters = null;
+                        break;
+                    }
+                case "help": // list syntax for the who command
+                    {
+                        //DisplaySyntax(client);
+                        DisplayMessage(
+                            client,
+                            LanguageMgr.GetTranslation(
+                                client.Account.Language,
+                                "Commands.Players.Who.Usage.All"));
+                        DisplayMessage(
+                            client,
+                            LanguageMgr.GetTranslation(
+                                client.Account.Language,
+                                "Commands.Players.Who.Usage.NF"));
+                        //DisplayMessage(
+                        //	client,
+                        //	LanguageMgr.GetTranslation(
+                        //		client.Account.Language,
+                        //		Commands.Players.Who.Usage.CSR));
+                        //DisplayMessage(
+                        //	client,
+                        //	LanguageMgr.GetTranslation(
+                        //		client.Account.Language,
+                        //		Commands.Players.Who.Usage.DEV));
+                        //DisplayMessage(
+                        //	client,
+                        //	LanguageMgr.GetTranslation(
+                        //		client.Account.Language,
+                        //		Commands.Players.Who.Usage.QTA));
+                        DisplayMessage(
+                            client,
+                            LanguageMgr.GetTranslation(
+                                client.Account.Language,
+                                "Commands.Players.Who.Usage.Name"));
+                        DisplayMessage(
+                            client,
+                            LanguageMgr.GetTranslation(
+                                client.Account.Language,
+                                "Commands.Players.Who.Usage.GuildName"));
+                        DisplayMessage(
+                            client,
+                            LanguageMgr.GetTranslation(
+                                client.Account.Language,
+                                "Commands.Players.Who.Usage.Class"));
+                        DisplayMessage(
+                            client,
+                            LanguageMgr.GetTranslation(
+                                client.Account.Language,
+                                "Commands.Players.Who.Usage.Location"));
+                        DisplayMessage(
+                            client,
+                            LanguageMgr.GetTranslation(
+                                client.Account.Language,
+                                "Commands.Players.Who.Usage.Level"));
+                        DisplayMessage(
+                            client,
+                            LanguageMgr.GetTranslation(
+                                client.Account.Language,
+                                "Commands.Players.Who.Usage.LevelLevel"));
+                        DisplayMessage(
+                            client,
+                            LanguageMgr.GetTranslation(
+                                client.Account.Language,
+                                "Commands.Players.Who.Usage.Language"));
+                        return;
+                    }
+                case "staff":
+                case "gm":
+                case "admin":
+                    {
+                        filters = new ArrayList(1);
+                        filters.Add(new GMFilter());
+                        break;
+                    }
+                case "en":
+                case "cz":
+                case "de":
+                case "es":
+                case "fr":
+                case "it":
+                    {
+                        filters = new ArrayList(1);
+                        filters.Add(new LanguageFilter(args[1].ToLower()));
+                        break;
+                    }
+                case "cg":
+                    {
+                        filters = new ArrayList(1);
+                        filters.Add(new ChatGroupFilter());
+                        break;
+                    }
+                case "nf":
+                    {
+                        filters = new ArrayList(1);
+                        filters.Add(new NewFrontiersFilter());
+                        break;
+                    }
+                case "rp":
+                    {
+                        filters = new ArrayList(1);
+                        filters.Add(new RPFilter());
+                        break;
+                    }
+                default:
+                    {
+                        filters = new ArrayList();
+                        AddFilters(filters, args, 1);
+                        break;
+                    }
+            }
 
-			foreach (string str in resultMessages)
-			{
-				DisplayMessage(client, str);
-			}
 
-			if (resultCount == 0)
-			{
-				DisplayMessage(
-					client,
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Who.NoMatch"));
-			}
-			else if (resultCount > MAX_LIST_SIZE)
-			{
-				DisplayMessage(
-					client,
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Who.List.Truncated",
-						resultCount));
-			}
+            int resultCount = 0;
+            foreach (GameClient clients in clientsList)
+            {
+                if (ApplyFilter(filters, clients.Player))
+                {
+                    resultCount++;
+                    if (resultMessages.Count < MAX_LIST_SIZE && resultCount >= listStart)
+                    {
+                        resultMessages.Add(resultCount + ") " + FormatLine(clients.Player, client.Account.PrivLevel, client));
+                    }
+                }
+            }
 
-			filters = null;
-		}
+            foreach (string str in resultMessages)
+            {
+                DisplayMessage(client, str);
+            }
+
+            if (resultCount == 0)
+            {
+                DisplayMessage(
+                    client,
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Who.NoMatch"));
+            }
+            else if (resultCount > MAX_LIST_SIZE)
+            {
+                DisplayMessage(
+                    client,
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Who.List.Truncated",
+                        resultCount));
+            }
+
+            filters = null;
+        }
 
 
-		// make /who line using GamePlayer
-		private string FormatLine(GamePlayer player, uint PrivLevel, GameClient source)
-		{
-			/*
+        // make /who line using GamePlayer
+        private string FormatLine(GamePlayer player, uint PrivLevel, GameClient source)
+        {
+            /*
 			 * /setwho class | trade
 			 * Sets how the player wishes to be displayed on a /who inquery.
 			 * Class displays the character's class and level.
@@ -291,313 +291,313 @@ namespace DOL.GS.Commands
 			 * and it is saved after char logs out
 			 */
 
-			if (player == null)
-			{
-				if (log.IsErrorEnabled)
-					log.Error("null player in who command");
-				return "???";
-			}
+            if (player == null)
+            {
+                if (log.IsErrorEnabled)
+                    log.Error("null player in who command");
+                return "???";
+            }
 
-			StringBuilder result = new StringBuilder(player.Name, 100);
-			if (player.GuildName != "")
-			{
-				result.Append(" ");
-				result.Append(
-					LanguageMgr.GetTranslation(
-						source.Account.Language,
-						"Commands.Players.Who.List.Guild",
-						player.GuildName));
-			}
+            StringBuilder result = new StringBuilder(player.Name, 100);
+            if (player.GuildName != "")
+            {
+                result.Append(" ");
+                result.Append(
+                    LanguageMgr.GetTranslation(
+                        source.Account.Language,
+                        "Commands.Players.Who.List.Guild",
+                        player.GuildName));
+            }
 
-			// simle format for PvP
-			if (GameServer.Instance.Configuration.ServerType == eGameServerType.GST_PvP && PrivLevel == 1)
-				return result.ToString();
+            // simle format for PvP
+            if (GameServer.Instance.Configuration.ServerType == eGameServerType.GST_PvP && PrivLevel == 1)
+                return result.ToString();
 
-			result.Append(" ");
-			result.Append(LanguageMgr.GetTranslation(
-				source.Account.Language,
-				"Commands.Players.Who.List.Level",
-				player.Level));
-			if (player.ClassNameFlag)
-			{
-				result.Append(" ");
-				result.Append(player.CharacterClass.Name);
-			}
-			else if (player.CharacterClass != null)
-			{
-				result.Append(" ");
-				AbstractCraftingSkill skill = CraftingMgr.getSkillbyEnum(player.CraftingPrimarySkill);
-				result.Append(player.CraftTitle.GetValue(source.Player, player));
-			}
-			else
-			{
-				if (log.IsErrorEnabled)
-					log.Error("no character class spec in who commandhandler for player " + player.Name);
-			}
-			if (player.CurrentZone != null)
-			{
-				result.Append(" ");
-				result.Append(
-					LanguageMgr.GetTranslation(
-						source.Account.Language,
-						"Commands.Players.Who.List.In",
-						player.CurrentZone.Description));
-			}
-			else
-			{
-				if (log.IsErrorEnabled)
-					log.Error("no currentzone in who commandhandler for player " + player.Name);
-			}
-			ChatGroup mychatgroup = (ChatGroup) player.TempProperties.getProperty<object>(ChatGroup.CHATGROUP_PROPERTY, null);
-			if (mychatgroup != null && (mychatgroup.Members.Contains(player) || mychatgroup.IsPublic && (bool)mychatgroup.Members[player] == true))
-			{
-				result.Append(" ");
-				result.Append(
-					LanguageMgr.GetTranslation(
-						source.Account.Language,
-						"Commands.Players.Who.List.CG"));
-			}
-			BattleGroup mybattlegroup = (BattleGroup)player.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null);
-			if (mybattlegroup != null && (mybattlegroup.Members.Contains(player) || mybattlegroup.IsPublic && (bool)mybattlegroup.Members[player] == true))
-			{
-				result.Append(" ");
-				result.Append(
-					LanguageMgr.GetTranslation(
-						source.Account.Language,
-						"Commands.Players.Who.List.BG"));
-			}
-			if (player.IsAnonymous)
-			{
-				result.Append(" ");
-				result.Append(
-					LanguageMgr.GetTranslation(
-						source.Account.Language,
-						"Commands.Players.Who.List.ANON"));
-			}
-			if (player.TempProperties.getProperty<string>(GamePlayer.AFK_MESSAGE) != null)
-			{
-				result.Append(" ");
-				result.Append(
-					LanguageMgr.GetTranslation(
-						source.Account.Language,
-						"Commands.Players.Who.List.AFK"));
-			}
-			if (player.Advisor)
-			{
-				result.Append(" ");
-				result.Append(
-					LanguageMgr.GetTranslation(
-						source.Account.Language,
-						"Commands.Players.Who.List.ADV"));
-			}
-			if(player.Client.Account.PrivLevel == (uint)ePrivLevel.GM)
-			{
-				result.Append(" ");
-				result.Append(
-					LanguageMgr.GetTranslation(
-						source.Account.Language,
-						"Commands.Players.Who.List.GM"));
-			}
-			if(player.Client.Account.PrivLevel == (uint)ePrivLevel.Admin)
-			{
-				result.Append(" ");
-				result.Append(
-					LanguageMgr.GetTranslation(
-						source.Account.Language,
-						"Commands.Players.Who.List.Admin"));
-			}
-			if (ServerProperties.Properties.ALLOW_CHANGE_LANGUAGE)
-			{
-				result.Append(" ");
-				result.Append(
-					LanguageMgr.GetTranslation(
-						source.Account.Language,
-						"Commands.Players.Who.List.Language",
-						player.Client.Account.Language
-						));
-			}
+            result.Append(" ");
+            result.Append(LanguageMgr.GetTranslation(
+                source.Account.Language,
+                "Commands.Players.Who.List.Level",
+                player.Level));
+            if (player.ClassNameFlag)
+            {
+                result.Append(" ");
+                result.Append(player.CharacterClass.Name);
+            }
+            else if (player.CharacterClass != null)
+            {
+                result.Append(" ");
+                AbstractCraftingSkill skill = CraftingMgr.getSkillbyEnum(player.CraftingPrimarySkill);
+                result.Append(player.CraftTitle.GetValue(source.Player, player));
+            }
+            else
+            {
+                if (log.IsErrorEnabled)
+                    log.Error("no character class spec in who commandhandler for player " + player.Name);
+            }
+            if (player.CurrentZone != null)
+            {
+                result.Append(" ");
+                result.Append(
+                    LanguageMgr.GetTranslation(
+                        source.Account.Language,
+                        "Commands.Players.Who.List.In",
+                        player.CurrentZone.Description));
+            }
+            else
+            {
+                if (log.IsErrorEnabled)
+                    log.Error("no currentzone in who commandhandler for player " + player.Name);
+            }
+            ChatGroup mychatgroup = (ChatGroup)player.TempProperties.getProperty<object>(ChatGroup.CHATGROUP_PROPERTY, null);
+            if (mychatgroup != null && (mychatgroup.Members.Contains(player) || mychatgroup.IsPublic && (bool)mychatgroup.Members[player] == true))
+            {
+                result.Append(" ");
+                result.Append(
+                    LanguageMgr.GetTranslation(
+                        source.Account.Language,
+                        "Commands.Players.Who.List.CG"));
+            }
+            BattleGroup mybattlegroup = (BattleGroup)player.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null);
+            if (mybattlegroup != null && (mybattlegroup.Members.Contains(player) || mybattlegroup.IsPublic && (bool)mybattlegroup.Members[player] == true))
+            {
+                result.Append(" ");
+                result.Append(
+                    LanguageMgr.GetTranslation(
+                        source.Account.Language,
+                        "Commands.Players.Who.List.BG"));
+            }
+            if (player.IsAnonymous)
+            {
+                result.Append(" ");
+                result.Append(
+                    LanguageMgr.GetTranslation(
+                        source.Account.Language,
+                        "Commands.Players.Who.List.ANON"));
+            }
+            if (player.TempProperties.getProperty<string>(GamePlayer.AFK_MESSAGE) != null)
+            {
+                result.Append(" ");
+                result.Append(
+                    LanguageMgr.GetTranslation(
+                        source.Account.Language,
+                        "Commands.Players.Who.List.AFK"));
+            }
+            if (player.Advisor)
+            {
+                result.Append(" ");
+                result.Append(
+                    LanguageMgr.GetTranslation(
+                        source.Account.Language,
+                        "Commands.Players.Who.List.ADV"));
+            }
+            if (player.Client.Account.PrivLevel == (uint)ePrivLevel.GM)
+            {
+                result.Append(" ");
+                result.Append(
+                    LanguageMgr.GetTranslation(
+                        source.Account.Language,
+                        "Commands.Players.Who.List.GM"));
+            }
+            if (player.Client.Account.PrivLevel == (uint)ePrivLevel.Admin)
+            {
+                result.Append(" ");
+                result.Append(
+                    LanguageMgr.GetTranslation(
+                        source.Account.Language,
+                        "Commands.Players.Who.List.Admin"));
+            }
+            if (ServerProperties.Properties.ALLOW_CHANGE_LANGUAGE)
+            {
+                result.Append(" ");
+                result.Append(
+                    LanguageMgr.GetTranslation(
+                        source.Account.Language,
+                        "Commands.Players.Who.List.Language",
+                        player.Client.Account.Language
+                        ));
+            }
 
-			return result.ToString();
-		}
+            return result.ToString();
+        }
 
-		private void AddFilters(ArrayList filters, string[] args, int skip)
-		{
-			for (int i = skip; i < args.Length; i++)
-			{
-				if (GameServer.Instance.Configuration.ServerType == eGameServerType.GST_PvP)
-					filters.Add(new StringFilter(args[i]));
-				else
-				{
-					try
-					{
-						int currentNum = (int) System.Convert.ToUInt32(args[i]);
-						int nextNum = -1;
-						try
-						{
-							nextNum = (int) System.Convert.ToUInt32(args[i + 1]);
-						}
-						catch
-						{
-						}
+        private void AddFilters(ArrayList filters, string[] args, int skip)
+        {
+            for (int i = skip; i < args.Length; i++)
+            {
+                if (GameServer.Instance.Configuration.ServerType == eGameServerType.GST_PvP)
+                    filters.Add(new StringFilter(args[i]));
+                else
+                {
+                    try
+                    {
+                        int currentNum = (int)System.Convert.ToUInt32(args[i]);
+                        int nextNum = -1;
+                        try
+                        {
+                            nextNum = (int)System.Convert.ToUInt32(args[i + 1]);
+                        }
+                        catch
+                        {
+                        }
 
-						if (nextNum != -1)
-						{
-							filters.Add(new LevelRangeFilter(currentNum, nextNum));
-							i++;
-						}
-						else
-						{
-							filters.Add(new LevelFilter(currentNum));
-						}
-					}
-					catch
-					{
-						filters.Add(new StringFilter(args[i]));
-					}
-				}
-			}
-		}
-
-
-		private bool ApplyFilter(ArrayList filters, GamePlayer player)
-		{
-			if (filters == null)
-				return true;
-			foreach (IWhoFilter filter in filters)
-			{
-				if (!filter.ApplyFilter(player))
-					return false;
-			}
-			return true;
-		}
+                        if (nextNum != -1)
+                        {
+                            filters.Add(new LevelRangeFilter(currentNum, nextNum));
+                            i++;
+                        }
+                        else
+                        {
+                            filters.Add(new LevelFilter(currentNum));
+                        }
+                    }
+                    catch
+                    {
+                        filters.Add(new StringFilter(args[i]));
+                    }
+                }
+            }
+        }
 
 
-		//Filters
+        private bool ApplyFilter(ArrayList filters, GamePlayer player)
+        {
+            if (filters == null)
+                return true;
+            foreach (IWhoFilter filter in filters)
+            {
+                if (!filter.ApplyFilter(player))
+                    return false;
+            }
+            return true;
+        }
 
-		private class StringFilter : IWhoFilter
-		{
-			private string m_filterString;
 
-			public StringFilter(string str)
-			{
-				m_filterString = str.ToLower().Trim();
-			}
+        //Filters
 
-			public bool ApplyFilter(GamePlayer player)
-			{
-				if (player.Name.ToLower().StartsWith(m_filterString))
-					return true;
-				if (player.GuildName.ToLower().StartsWith(m_filterString))
-					return true;
-				if (GameServer.Instance.Configuration.ServerType == eGameServerType.GST_PvP)
-					return false;
-				if (player.CharacterClass.Name.ToLower().StartsWith(m_filterString))
-					return true;
-				if (player.CurrentZone != null && player.CurrentZone.Description.ToLower().Contains(m_filterString))
-					return true;
-				return false;
-			}
-		}
+        private class StringFilter : IWhoFilter
+        {
+            private string m_filterString;
 
-		private class LevelRangeFilter : IWhoFilter
-		{
-			private int m_minLevel;
-			private int m_maxLevel;
+            public StringFilter(string str)
+            {
+                m_filterString = str.ToLower().Trim();
+            }
 
-			public LevelRangeFilter(int minLevel, int maxLevel)
-			{
-				m_minLevel = Math.Min(minLevel, maxLevel);
-				m_maxLevel = Math.Max(minLevel, maxLevel);
-			}
+            public bool ApplyFilter(GamePlayer player)
+            {
+                if (player.Name.ToLower().StartsWith(m_filterString))
+                    return true;
+                if (player.GuildName.ToLower().StartsWith(m_filterString))
+                    return true;
+                if (GameServer.Instance.Configuration.ServerType == eGameServerType.GST_PvP)
+                    return false;
+                if (player.CharacterClass.Name.ToLower().StartsWith(m_filterString))
+                    return true;
+                if (player.CurrentZone != null && player.CurrentZone.Description.ToLower().Contains(m_filterString))
+                    return true;
+                return false;
+            }
+        }
 
-			public bool ApplyFilter(GamePlayer player)
-			{
-				if (player.Level >= m_minLevel && player.Level <= m_maxLevel)
-					return true;
-				return false;
-			}
-		}
+        private class LevelRangeFilter : IWhoFilter
+        {
+            private int m_minLevel;
+            private int m_maxLevel;
 
-		private class LevelFilter : IWhoFilter
-		{
-			private int m_level;
+            public LevelRangeFilter(int minLevel, int maxLevel)
+            {
+                m_minLevel = Math.Min(minLevel, maxLevel);
+                m_maxLevel = Math.Max(minLevel, maxLevel);
+            }
 
-			public LevelFilter(int level)
-			{
-				m_level = level;
-			}
+            public bool ApplyFilter(GamePlayer player)
+            {
+                if (player.Level >= m_minLevel && player.Level <= m_maxLevel)
+                    return true;
+                return false;
+            }
+        }
 
-			public bool ApplyFilter(GamePlayer player)
-			{
-				return player.Level == m_level;
-			}
-		}
+        private class LevelFilter : IWhoFilter
+        {
+            private int m_level;
 
-		private class GMFilter : IWhoFilter
-		{
-			public bool ApplyFilter(GamePlayer player)
-			{
-				if(!player.IsAnonymous && player.Client.Account.PrivLevel > (uint)ePrivLevel.Player)
-					return true;
-				return false;
-			}
-		}
+            public LevelFilter(int level)
+            {
+                m_level = level;
+            }
 
-		private class LanguageFilter : IWhoFilter
-		{
-			private string m_str;
-			public bool ApplyFilter(GamePlayer player)
-			{
-				if (!player.IsAnonymous && player.Client.Account.Language.ToLower() == m_str)
-					return true;
-				return false;
-			}
-			
-			public LanguageFilter(string language)
-			{
-				m_str = language;
-			}
-		}
+            public bool ApplyFilter(GamePlayer player)
+            {
+                return player.Level == m_level;
+            }
+        }
 
-		private class ChatGroupFilter : IWhoFilter
-		{
-			public bool ApplyFilter(GamePlayer player)
-			{
-				ChatGroup cg = (ChatGroup)player.TempProperties.getProperty<object>(ChatGroup.CHATGROUP_PROPERTY, null);
-				//no chatgroup found
-				if (cg == null)
-					return false;
+        private class GMFilter : IWhoFilter
+        {
+            public bool ApplyFilter(GamePlayer player)
+            {
+                if (!player.IsAnonymous && player.Client.Account.PrivLevel > (uint)ePrivLevel.Player)
+                    return true;
+                return false;
+            }
+        }
 
-				//always show your own cg
-				//TODO
+        private class LanguageFilter : IWhoFilter
+        {
+            private string m_str;
+            public bool ApplyFilter(GamePlayer player)
+            {
+                if (!player.IsAnonymous && player.Client.Account.Language.ToLower() == m_str)
+                    return true;
+                return false;
+            }
 
-				//player is a cg leader, and the cg is public
-				if ((bool)cg.Members[player] == true && cg.IsPublic)
-					return true;
+            public LanguageFilter(string language)
+            {
+                m_str = language;
+            }
+        }
 
-				return false;
-			}
-		}
+        private class ChatGroupFilter : IWhoFilter
+        {
+            public bool ApplyFilter(GamePlayer player)
+            {
+                ChatGroup cg = (ChatGroup)player.TempProperties.getProperty<object>(ChatGroup.CHATGROUP_PROPERTY, null);
+                //no chatgroup found
+                if (cg == null)
+                    return false;
 
-		private class NewFrontiersFilter : IWhoFilter
-		{
-			public bool ApplyFilter(GamePlayer player)
-			{
-				return player.CurrentRegionID == 163;
-			}
-		}
+                //always show your own cg
+                //TODO
 
-		private class RPFilter : IWhoFilter
-		{
-			public bool ApplyFilter(GamePlayer player)
-			{
-				return player.RPFlag;
-			}
-		}
+                //player is a cg leader, and the cg is public
+                if ((bool)cg.Members[player] == true && cg.IsPublic)
+                    return true;
 
-		private interface IWhoFilter
-		{
-			bool ApplyFilter(GamePlayer player);
-		}
-	}
+                return false;
+            }
+        }
+
+        private class NewFrontiersFilter : IWhoFilter
+        {
+            public bool ApplyFilter(GamePlayer player)
+            {
+                return player.CurrentRegionID == 163;
+            }
+        }
+
+        private class RPFilter : IWhoFilter
+        {
+            public bool ApplyFilter(GamePlayer player)
+            {
+                return player.RPFlag;
+            }
+        }
+
+        private interface IWhoFilter
+        {
+            bool ApplyFilter(GamePlayer player);
+        }
+    }
 }

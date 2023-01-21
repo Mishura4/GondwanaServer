@@ -22,60 +22,60 @@ using NUnit.Framework;
 
 namespace DOL.Integration.Server
 {
-	/// <summary>
-	/// Unit tests for the Zone Class
-	/// </summary>
-	[TestFixture]
-	public class ZoneTest : ServerTests
-	{
+    /// <summary>
+    /// Unit tests for the Zone Class
+    /// </summary>
+    [TestFixture]
+    public class ZoneTest : ServerTests
+    {
 
-		public ZoneTest()
-		{
-		}
+        public ZoneTest()
+        {
+        }
 
-		[Test]
-		public void GetZCoordinateTest()
-		{
+        [Test]
+        public void GetZCoordinateTest()
+        {
 
-		}
+        }
 
-		[Test]
-		public void GetRandomNPCTest()
-		{
-			Zone zone = WorldMgr.GetZone(0);
-			Assert.IsNotNull(zone);
+        [Test]
+        public void GetRandomNPCTest()
+        {
+            Zone zone = WorldMgr.GetZone(0);
+            Assert.IsNotNull(zone);
 
-			StartWatch();
-			GameNPC npc = zone.GetRandomNPC(eRealm.None, 5, 7);
-			if (npc != null)
-			{
-				Console.WriteLine("Found NPC from Realm None in " + zone.ZoneRegion.Description + "/" + zone.Description + ":" + npc.Name + " level:" + npc.Level);
-				if (npc.Level < 5 || npc.Level > 7)
-					Assert.Fail("NPC Level out of defined range");
+            StartWatch();
+            GameNPC npc = zone.GetRandomNPC(eRealm.None, 5, 7);
+            if (npc != null)
+            {
+                Console.WriteLine("Found NPC from Realm None in " + zone.ZoneRegion.Description + "/" + zone.Description + ":" + npc.Name + " level:" + npc.Level);
+                if (npc.Level < 5 || npc.Level > 7)
+                    Assert.Fail("NPC Level out of defined range");
 
-				if (npc.Realm != eRealm.None)
-					Assert.Fail("NPC wrong Realm");
-			}
-			else
-			{
-				Console.WriteLine("nothing found in " + zone.ZoneRegion.Description + "/" + zone.Description);
-			}
-			StopWatch();
+                if (npc.Realm != eRealm.None)
+                    Assert.Fail("NPC wrong Realm");
+            }
+            else
+            {
+                Console.WriteLine("nothing found in " + zone.ZoneRegion.Description + "/" + zone.Description);
+            }
+            StopWatch();
 
-			StartWatch();
-			npc = zone.GetRandomNPC(eRealm.Albion);
-			if (npc != null)
-			{
-				Console.WriteLine("Found Albion NPC in " + zone.ZoneRegion.Description + "/" + zone.Description + ":" + npc.Name);
+            StartWatch();
+            npc = zone.GetRandomNPC(eRealm.Albion);
+            if (npc != null)
+            {
+                Console.WriteLine("Found Albion NPC in " + zone.ZoneRegion.Description + "/" + zone.Description + ":" + npc.Name);
 
-				if (npc.Realm != eRealm.Albion)
-					Assert.Fail("NPC wrong Realm");
-			}
-			else
-			{
-				Console.WriteLine("nothing found in " + zone.ZoneRegion.Description + "/" + zone.Description);
-			}
-			StopWatch();
-		}
-	}
+                if (npc.Realm != eRealm.Albion)
+                    Assert.Fail("NPC wrong Realm");
+            }
+            else
+            {
+                Console.WriteLine("nothing found in " + zone.ZoneRegion.Description + "/" + zone.Description);
+            }
+            StopWatch();
+        }
+    }
 }

@@ -26,27 +26,27 @@ using DOL.GS.Behaviour;
 
 namespace DOL.GS.Behaviour.Actions
 {
-	[ActionAttribute(ActionType = eActionType.PlaySound, IsNullableQ=true)]
-	public class PlaySoundAction : AbstractAction<ushort, eSoundType>
-	{
+    [ActionAttribute(ActionType = eActionType.PlaySound, IsNullableQ = true)]
+    public class PlaySoundAction : AbstractAction<ushort, eSoundType>
+    {
 
-		public PlaySoundAction(GameNPC defaultNPC, Object p, Object q)
-			: base(defaultNPC, eActionType.PlaySound, p, q) { }
-
-
-		public PlaySoundAction(GameNPC defaultNPC, ushort id, eSoundType type)
-			: this(defaultNPC, (object)id, (object)type) { }
+        public PlaySoundAction(GameNPC defaultNPC, Object p, Object q)
+            : base(defaultNPC, eActionType.PlaySound, p, q) { }
 
 
-		public PlaySoundAction(GameNPC defaultNPC, ushort id)
-			: this(defaultNPC, (object)id, (object)eSoundType.Divers) { }
+        public PlaySoundAction(GameNPC defaultNPC, ushort id, eSoundType type)
+            : this(defaultNPC, (object)id, (object)type) { }
 
 
-		public override void Perform(DOLEvent e, object sender, EventArgs args)
-		{
-			GamePlayer player = BehaviourUtils.GuessGamePlayerFromNotify(e, sender, args);
-			ushort message = P;
-			player.Out.SendPlaySound(Q, P);
-		}
-	}
+        public PlaySoundAction(GameNPC defaultNPC, ushort id)
+            : this(defaultNPC, (object)id, (object)eSoundType.Divers) { }
+
+
+        public override void Perform(DOLEvent e, object sender, EventArgs args)
+        {
+            GamePlayer player = BehaviourUtils.GuessGamePlayerFromNotify(e, sender, args);
+            ushort message = P;
+            player.Out.SendPlaySound(Q, P);
+        }
+    }
 }

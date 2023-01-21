@@ -23,18 +23,18 @@ using log4net;
 
 namespace DOL.GS.PacketHandler.Client.v168
 {
-	[PacketHandlerAttribute(PacketHandlerType.UDP, eClientPackets.UDPInitRequest, "Handles UDP init", eClientStatus.None)]
-	public class UDPInitRequestHandler : IPacketHandler
-	{
-		/// <summary>
-		/// Defines a logger for this class.
-		/// </summary>
-		private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+    [PacketHandlerAttribute(PacketHandlerType.UDP, eClientPackets.UDPInitRequest, "Handles UDP init", eClientStatus.None)]
+    public class UDPInitRequestHandler : IPacketHandler
+    {
+        /// <summary>
+        /// Defines a logger for this class.
+        /// </summary>
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-		public void HandlePacket(GameClient client, GSPacketIn packet)
-		{
-			// don't need anything from  this packet
-			client.Out.SendUDPInitReply();
-		}
-	}
+        public void HandlePacket(GameClient client, GSPacketIn packet)
+        {
+            // don't need anything from  this packet
+            client.Out.SendUDPInitReply();
+        }
+    }
 }

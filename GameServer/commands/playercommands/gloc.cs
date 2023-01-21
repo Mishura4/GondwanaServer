@@ -21,25 +21,25 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute("&gloc", //command to handle
-		ePrivLevel.Player, //minimum privelege level
-		"Commands.Players.Gloc.Description", //command description
-		"Commands.Players.Gloc.Usage")] //command usage
-	public class GlocCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (IsSpammingCommand(client.Player, "gloc"))
-				return;
+    [CmdAttribute("&gloc", //command to handle
+        ePrivLevel.Player, //minimum privelege level
+        "Commands.Players.Gloc.Description", //command description
+        "Commands.Players.Gloc.Usage")] //command usage
+    public class GlocCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (IsSpammingCommand(client.Player, "gloc"))
+                return;
 
-			DisplayMessage(
-				client,
-				LanguageMgr.GetTranslation(
-					client.Account.Language,
-					"Commands.Players.Gloc.Position",
-				client.Player.Position.X, client.Player.Position.Y, client.Player.Position.Z, client.Player.Heading, client.Player.CurrentRegionID,
-				client.Player.CurrentRegion is BaseInstance ? string.Format("Skin:{0}", client.Player.CurrentRegion.Skin) : "")
-				);
-		}
-	}
+            DisplayMessage(
+                client,
+                LanguageMgr.GetTranslation(
+                    client.Account.Language,
+                    "Commands.Players.Gloc.Position",
+                client.Player.Position.X, client.Player.Position.Y, client.Player.Position.Z, client.Player.Heading, client.Player.CurrentRegionID,
+                client.Player.CurrentRegion is BaseInstance ? string.Format("Skin:{0}", client.Player.CurrentRegion.Skin) : "")
+                );
+        }
+    }
 }

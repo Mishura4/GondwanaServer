@@ -20,31 +20,31 @@ using System;
 
 namespace DOL.GS.PropertyCalc
 {
-	/// <summary>
-	/// The Power Pool calculator
-	/// 
-	/// BuffBonusCategory1 unused
-	/// BuffBonusCategory2 unused
-	/// BuffBonusCategory3 unused
-	/// BuffBonusCategory4 unused
-	/// BuffBonusMultCategory1 unused
-	/// </summary>
-	[PropertyCalculator(eProperty.MaxMana)]
-	public class MaxManaCalculator : PropertyCalculator
-	{
-		public MaxManaCalculator() {}
+    /// <summary>
+    /// The Power Pool calculator
+    /// 
+    /// BuffBonusCategory1 unused
+    /// BuffBonusCategory2 unused
+    /// BuffBonusCategory3 unused
+    /// BuffBonusCategory4 unused
+    /// BuffBonusMultCategory1 unused
+    /// </summary>
+    [PropertyCalculator(eProperty.MaxMana)]
+    public class MaxManaCalculator : PropertyCalculator
+    {
+        public MaxManaCalculator() { }
 
-		public override int CalcValue(GameLiving living, eProperty property) 
-		{
-			if (living is GamePlayer) 
-			{
-				GamePlayer player = living as GamePlayer;
-				eStat manaStat = player.CharacterClass.ManaStat;
+        public override int CalcValue(GameLiving living, eProperty property)
+        {
+            if (living is GamePlayer)
+            {
+                GamePlayer player = living as GamePlayer;
+                eStat manaStat = player.CharacterClass.ManaStat;
 
-				if (player.CharacterClass.ManaStat == eStat.UNDEFINED)
-				{
-					//Special handling for Vampiirs:
-					/* There is no stat that affects the Vampiir's power pool or the damage done by its power based spells.
+                if (player.CharacterClass.ManaStat == eStat.UNDEFINED)
+                {
+                    //Special handling for Vampiirs:
+                    /* There is no stat that affects the Vampiir's power pool or the damage done by its power based spells.
 					 * The Vampiir is not a focus based class like, say, an Enchanter.
 					 * The Vampiir is a lot more cut and dried than the typical casting class. 
 					 * EDIT, 12/13/04 - I was told today that this answer is not entirely accurate.
@@ -53,48 +53,49 @@ namespace DOL.GS.PropertyCalc
 					 * 
 					 * This means that strength ONLY affects a Vampiir's mana pool
 					 */
-					if (player.CharacterClass.ID == (int)eCharacterClass.Vampiir)
-					{
-						manaStat = eStat.STR;
-					}
-					else if (player.Champion && player.ChampionLevel > 0)
-					{
-						return player.CalculateMaxMana(player.Level, 0);
-					}
-					else
-					{
-						return 0;
-					}
-				}
+                    if (player.CharacterClass.ID == (int)eCharacterClass.Vampiir)
+                    {
+                        manaStat = eStat.STR;
+                    }
+                    else if (player.Champion && player.ChampionLevel > 0)
+                    {
+                        return player.CalculateMaxMana(player.Level, 0);
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                }
 
-				int manaBase = player.CalculateMaxMana(player.Level, player.GetModified((eProperty)manaStat));
-				int itemBonus = living.ItemBonus[(int)property];
-				int poolBonus = living.ItemBonus[(int)eProperty.PowerPool];
-				int abilityBonus = living.AbilityBonus[(int)property]; 
+                int manaBase = player.CalculateMaxMana(player.Level, player.GetModified((eProperty)manaStat));
+                int itemBonus = living.ItemBonus[(int)property];
+                int poolBonus = living.ItemBonus[(int)eProperty.PowerPool];
+                int abilityBonus = living.AbilityBonus[(int)property];
 
-				int itemCap = player.Level / 2 + 1;
-				int poolCap = player.Level / 2;
-				itemCap = itemCap + Math.Min(player.ItemBonus[(int)eProperty.PowerPoolCapBonus], itemCap);
-				poolCap = poolCap + Math.Min(player.ItemBonus[(int)eProperty.PowerPoolCapBonus], player.Level);
+                int itemCap = player.Level / 2 + 1;
+                int poolCap = player.Level / 2;
+                itemCap = itemCap + Math.Min(player.ItemBonus[(int)eProperty.PowerPoolCapBonus], itemCap);
+                poolCap = poolCap + Math.Min(player.ItemBonus[(int)eProperty.PowerPoolCapBonus], player.Level);
 
 
-				if (itemBonus > itemCap) {
-					itemBonus = itemCap;
-				}
-				if (poolBonus > poolCap)
-					poolBonus = poolCap;
+                if (itemBonus > itemCap)
+                {
+                    itemBonus = itemCap;
+                }
+                if (poolBonus > poolCap)
+                    poolBonus = poolCap;
 
-				//Q: What exactly does the power pool % increase do?Does it increase the amount of power my cleric
-				//can generate (like having higher piety)? Or, like the dex cap increase, do I have to put spellcraft points into power to make it worth anything?
-				//A: I�m better off quoting Balance Boy directly here: � Power pool is affected by
-				//your acuity stat, +power bonus, the Ethereal Bond Realm ability, and your level.
-				//The resulting power pool is adjusted by your power pool % increase bonus.
-				return (int)(manaBase + itemBonus + abilityBonus + (manaBase + itemBonus + abilityBonus) * poolBonus * 0.01); 
-			}
-			else 
-			{
-				return living.AbilityBonus[(int)property] + Math.Max(5, (living.Level * 5) + (living.GetModified(eProperty.Intelligence) - 25));
-			}
-		}
-	}
+                //Q: What exactly does the power pool % increase do?Does it increase the amount of power my cleric
+                //can generate (like having higher piety)? Or, like the dex cap increase, do I have to put spellcraft points into power to make it worth anything?
+                //A: I�m better off quoting Balance Boy directly here: � Power pool is affected by
+                //your acuity stat, +power bonus, the Ethereal Bond Realm ability, and your level.
+                //The resulting power pool is adjusted by your power pool % increase bonus.
+                return (int)(manaBase + itemBonus + abilityBonus + (manaBase + itemBonus + abilityBonus) * poolBonus * 0.01);
+            }
+            else
+            {
+                return living.AbilityBonus[(int)property] + Math.Max(5, (living.Level * 5) + (living.GetModified(eProperty.Intelligence) - 25));
+            }
+        }
+    }
 }

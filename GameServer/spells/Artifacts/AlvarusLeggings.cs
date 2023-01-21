@@ -31,23 +31,23 @@ namespace DOL.GS.Spells
     [SpellHandlerAttribute("AlvarusMorph")]
     public class AlvarusMorph : Morph
     {
-    	GameSpellEffect m_effect = null;
+        GameSpellEffect m_effect = null;
         public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             GamePlayer targetPlayer = target as GamePlayer;
 
-			if (targetPlayer == null)
-				return;
+            if (targetPlayer == null)
+                return;
 
             if (!targetPlayer.IsUnderwater)
             {
                 MessageToCaster("You must be under water to use this ability.", eChatType.CT_SpellResisted);
                 return;
             }
-			foreach (GameSpellEffect Effect in targetPlayer.EffectList.GetAllOfType<GameSpellEffect>())
+            foreach (GameSpellEffect Effect in targetPlayer.EffectList.GetAllOfType<GameSpellEffect>())
             {
                 if (
-                    Effect.SpellHandler.Spell.SpellType.Equals("ShadesOfMist") || 
+                    Effect.SpellHandler.Spell.SpellType.Equals("ShadesOfMist") ||
                     Effect.SpellHandler.Spell.SpellType.Equals("TraitorsDaggerProc") ||
                     Effect.SpellHandler.Spell.SpellType.Equals("DreamMorph") ||
                     Effect.SpellHandler.Spell.SpellType.Equals("DreamGroupMorph") ||
@@ -73,13 +73,13 @@ namespace DOL.GS.Spells
         {
             GamePlayer player = effect.Owner as GamePlayer;
             if (player == null) return base.OnEffectExpires(effect, noMessages);
-            GameEventMgr.RemoveHandler((GamePlayer)effect.Owner, GamePlayerEvent.SwimmingStatus, new DOLEventHandler(SwimmingStatusChange));  
+            GameEventMgr.RemoveHandler((GamePlayer)effect.Owner, GamePlayerEvent.SwimmingStatus, new DOLEventHandler(SwimmingStatusChange));
             return base.OnEffectExpires(effect, noMessages);
-        }        
+        }
         private void SwimmingStatusChange(DOLEvent e, object sender, EventArgs args)
         {
             OnEffectExpires(m_effect, true);
-        }        
+        }
         public AlvarusMorph(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
     }

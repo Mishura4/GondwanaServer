@@ -24,31 +24,31 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute(
-		"&account",
-		ePrivLevel.Admin,
-		"AdminCommands.Account.Description",
+    [CmdAttribute(
+        "&account",
+        ePrivLevel.Admin,
+        "AdminCommands.Account.Description",
         "AdminCommands.Account.Usage.Create",
-		"AdminCommands.Account.Usage.ChangePassword",
-		"AdminCommands.Account.Usage.Delete",
-		"AdminCommands.Account.Usage.DeleteChar",
-		"AdminCommands.Account.Usage.MoveChar",
+        "AdminCommands.Account.Usage.ChangePassword",
+        "AdminCommands.Account.Usage.Delete",
+        "AdminCommands.Account.Usage.DeleteChar",
+        "AdminCommands.Account.Usage.MoveChar",
         "AdminCommands.Account.Usage.Status",
         "AdminCommands.Account.Usage.UnBan",
         "AdminCommands.Account.Usage.AccountName")]
-	public class AccountCommand : AbstractCommandHandler, ICommandHandler
-	{
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (args.Length < 2)
-			{
-				DisplaySyntax(client);
-				return;
-			}
+    public class AccountCommand : AbstractCommandHandler, ICommandHandler
+    {
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (args.Length < 2)
+            {
+                DisplaySyntax(client);
+                return;
+            }
 
-			switch (args[1].ToLower())
-			{
-				#region Create
+            switch (args[1].ToLower())
+            {
+                #region Create
                 case "create":
                     {
                         if (args.Length < 4)
@@ -98,60 +98,60 @@ namespace DOL.GS.Commands
                     break;
                 #endregion Create
                 #region ChangePassword
-				case "changepassword":
-					{
-						if (args.Length < 4)
-						{
-							DisplaySyntax(client);
-							return;
-						}
+                case "changepassword":
+                    {
+                        if (args.Length < 4)
+                        {
+                            DisplaySyntax(client);
+                            return;
+                        }
 
-						string accountname = args[2];
-						string newpass = args[3];
+                        string accountname = args[2];
+                        string newpass = args[3];
 
-						Account acc = GetAccount(accountname);
-						if (acc == null)
-						{
-							DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "AdminCommands.Account.AccountNotFound", accountname));
-							return;
-						}
+                        Account acc = GetAccount(accountname);
+                        if (acc == null)
+                        {
+                            DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "AdminCommands.Account.AccountNotFound", accountname));
+                            return;
+                        }
 
-						acc.Password = LoginRequestHandler.CryptPassword(newpass);
-						GameServer.Database.SaveObject(acc);
+                        acc.Password = LoginRequestHandler.CryptPassword(newpass);
+                        GameServer.Database.SaveObject(acc);
 
-						// Log change
-						AuditMgr.AddAuditEntry(client, AuditType.Account, AuditSubtype.AccountPasswordChange, "", (client.Player != null ? client.Player.Name : ""));
-					}
-					break;
-				#endregion ChangePassword
-				#region Delete
-				case "delete":
-					{
-						if (args.Length < 3)
-						{
-							DisplaySyntax(client);
-							return;
-						}
+                        // Log change
+                        AuditMgr.AddAuditEntry(client, AuditType.Account, AuditSubtype.AccountPasswordChange, "", (client.Player != null ? client.Player.Name : ""));
+                    }
+                    break;
+                #endregion ChangePassword
+                #region Delete
+                case "delete":
+                    {
+                        if (args.Length < 3)
+                        {
+                            DisplaySyntax(client);
+                            return;
+                        }
 
-						string AccountName = args[2];
+                        string AccountName = args[2];
                         Account acc = GetAccount(AccountName);
 
-						if (acc == null)
-						{
+                        if (acc == null)
+                        {
                             DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "AdminCommands.Account.AccountNotFound", AccountName));
-							return;
-						}
+                            return;
+                        }
 
-						KickAccount(acc);
-						GameServer.Database.DeleteObject(acc);
+                        KickAccount(acc);
+                        GameServer.Database.DeleteObject(acc);
 
-						// Log change
-						AuditMgr.AddAuditEntry(client, AuditType.Account, AuditSubtype.AccountDelete, "acct="+AccountName, (client.Player != null ? client.Player.Name : ""));
+                        // Log change
+                        AuditMgr.AddAuditEntry(client, AuditType.Account, AuditSubtype.AccountDelete, "acct=" + AccountName, (client.Player != null ? client.Player.Name : ""));
 
                         DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "AdminCommands.Account.AccountDeleted", acc.Name));
-						return;
-					}
-				#endregion Delete
+                        return;
+                    }
+                #endregion Delete
                 #region DeleteCharacter
                 case "deletecharacter":
                     {
@@ -173,8 +173,8 @@ namespace DOL.GS.Commands
                         KickCharacter(cha);
                         GameServer.Database.DeleteObject(cha);
 
-						// Log change
-						AuditMgr.AddAuditEntry(client, AuditType.Character, AuditSubtype.CharacterDelete, "char="+charname, (client.Player != null ? client.Player.Name : ""));
+                        // Log change
+                        AuditMgr.AddAuditEntry(client, AuditType.Character, AuditSubtype.CharacterDelete, "char=" + charname, (client.Player != null ? client.Player.Name : ""));
 
                         DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "AdminCommands.Account.CharacterDeleted", cha.Name));
                         return;
@@ -261,70 +261,70 @@ namespace DOL.GS.Commands
                         return;
                     }
                 #endregion MoveCharacter
-				#region Status
-				case "status":
-					{
-						if (args.Length < 4)
-						{
-							DisplaySyntax(client);
-							return;
-						}
+                #region Status
+                case "status":
+                    {
+                        if (args.Length < 4)
+                        {
+                            DisplaySyntax(client);
+                            return;
+                        }
 
-						string accountname = args[2];
-						Account acc = GetAccount(accountname);
+                        string accountname = args[2];
+                        Account acc = GetAccount(accountname);
 
-						if (acc == null)
-						{
-							DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "AdminCommands.Account.AccountNotFound", accountname));
-							return;
-						}
+                        if (acc == null)
+                        {
+                            DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "AdminCommands.Account.AccountNotFound", accountname));
+                            return;
+                        }
 
                         int status;
-						try { status=Convert.ToInt32(args[3]); } catch(Exception) { DisplaySyntax(client); return; }
-						if(status >= 0 && status < 256 )
-						{
-							acc.Status=status;
-							GameServer.Database.SaveObject(acc);
-							DisplayMessage(client, "Account "+acc.Name+" Status is now set to : "+acc.Status);
-						}
-						else DisplaySyntax(client);
-						return;
-					}
-				#endregion Status
-				#region Unban
-				case "unban":
-					{
-						if (args.Length < 3)
-						{
-							DisplaySyntax(client);
-							return;
-						}
+                        try { status = Convert.ToInt32(args[3]); } catch (Exception) { DisplaySyntax(client); return; }
+                        if (status >= 0 && status < 256)
+                        {
+                            acc.Status = status;
+                            GameServer.Database.SaveObject(acc);
+                            DisplayMessage(client, "Account " + acc.Name + " Status is now set to : " + acc.Status);
+                        }
+                        else DisplaySyntax(client);
+                        return;
+                    }
+                #endregion Status
+                #region Unban
+                case "unban":
+                    {
+                        if (args.Length < 3)
+                        {
+                            DisplaySyntax(client);
+                            return;
+                        }
 
-						string accountname = args[2];
-						Account acc = GetAccount(accountname);
+                        string accountname = args[2];
+                        Account acc = GetAccount(accountname);
 
-						if (acc == null)
-						{
-							DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "AdminCommands.Account.AccountNotFound", accountname));
-							return;
-						}
+                        if (acc == null)
+                        {
+                            DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "AdminCommands.Account.AccountNotFound", accountname));
+                            return;
+                        }
 
-						var banacc = DOLDB<DBBannedAccount>.SelectObjects(DB.Column(nameof(DBBannedAccount.Type)).IsEqualTo("A").Or(DB.Column(nameof(DBBannedAccount.Type)).IsEqualTo("B")).And(DB.Column(nameof(DBBannedAccount.Account)).IsEqualTo(accountname)));
-						if (banacc.Count == 0)
-						{
-							DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "AdminCommands.Account.AccountNotFound", accountname));
-							return;
-						}
-						
-						try
+                        var banacc = DOLDB<DBBannedAccount>.SelectObjects(DB.Column(nameof(DBBannedAccount.Type)).IsEqualTo("A").Or(DB.Column(nameof(DBBannedAccount.Type)).IsEqualTo("B")).And(DB.Column(nameof(DBBannedAccount.Account)).IsEqualTo(accountname)));
+                        if (banacc.Count == 0)
+                        {
+                            DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "AdminCommands.Account.AccountNotFound", accountname));
+                            return;
+                        }
+
+                        try
                         {
                             GameServer.Database.DeleteObject(banacc);
                         }
-                        catch(Exception) { DisplaySyntax(client); return; }
-						DisplayMessage(client, "Account "+accountname+" unbanned!");
-						return;
-					}
-				#endregion Unban
+                        catch (Exception) { DisplaySyntax(client); return; }
+                        DisplayMessage(client, "Account " + accountname + " unbanned!");
+                        return;
+                    }
+                #endregion Unban
                 #region AccountName
                 case "accountname":
                     {
@@ -336,7 +336,7 @@ namespace DOL.GS.Commands
 
                         string CharName = args[2];
                         DOLCharacters Char = GetCharacter(CharName);
-                        
+
                         if (Char == null)
                         {
                             DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "AdminCommands.Account.CharacterNotFound", CharName));
@@ -345,83 +345,83 @@ namespace DOL.GS.Commands
 
                         string AccName = GetAccountName(Char.Name);
                         DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "AdminCommands.Account.AccNameForChar", Char.Name, AccName));
-                        
+
                         return;
                     }
-                #endregion AccountName
+                    #endregion AccountName
             }
-		}
-        
-		/// <summary>
-		/// Loads an account
-		/// </summary>
-		/// <param name="name">the accountname</param>
-		/// <returns>the found account or null</returns>
-		private Account GetAccount(string name)
-		{
-			GameClient client = WorldMgr.GetClientByAccountName(name, true);
-			if (client != null)
-				return client.Account;
-			return GameServer.Database.FindObjectByKey<Account>(name);
-		}
+        }
 
-		/// <summary>
-		/// Returns a given character
-		/// </summary>
-		/// <param name="charname">the charactername</param>
-		/// <returns>the found character or null</returns>
-		private DOLCharacters GetCharacter(string charname)
-		{
-			GameClient client = WorldMgr.GetClientByPlayerName(charname, true, false);
-			if (client != null)
-				return client.Player.DBCharacter;
-			return DOLDB<DOLCharacters>.SelectObject(DB.Column(nameof(DOLCharacters.Name)).IsEqualTo(charname));
-		}
+        /// <summary>
+        /// Loads an account
+        /// </summary>
+        /// <param name="name">the accountname</param>
+        /// <returns>the found account or null</returns>
+        private Account GetAccount(string name)
+        {
+            GameClient client = WorldMgr.GetClientByAccountName(name, true);
+            if (client != null)
+                return client.Account;
+            return GameServer.Database.FindObjectByKey<Account>(name);
+        }
 
-		/// <summary>
-		/// Kicks an active playing account from the server
-		/// </summary>
-		/// <param name="acc">The account</param>
-		private void KickAccount(Account acc)
-		{
-			GameClient playingclient = WorldMgr.GetClientByAccountName(acc.Name, true);
-			if (playingclient != null)
-			{
-				playingclient.Out.SendPlayerQuit(true);
-				playingclient.Disconnect();
-			}
-		}
+        /// <summary>
+        /// Returns a given character
+        /// </summary>
+        /// <param name="charname">the charactername</param>
+        /// <returns>the found character or null</returns>
+        private DOLCharacters GetCharacter(string charname)
+        {
+            GameClient client = WorldMgr.GetClientByPlayerName(charname, true, false);
+            if (client != null)
+                return client.Player.DBCharacter;
+            return DOLDB<DOLCharacters>.SelectObject(DB.Column(nameof(DOLCharacters.Name)).IsEqualTo(charname));
+        }
 
-		/// <summary>
-		/// Kicks an active playing character from the server
-		/// </summary>
-		/// <param name="cha">the character</param>
-		private void KickCharacter(DOLCharacters cha)
-		{
-			GameClient playingclient = WorldMgr.GetClientByPlayerName(cha.Name, true, false);
-			if (playingclient != null)
-			{
-				playingclient.Out.SendPlayerQuit(true);
-				playingclient.Disconnect();
-			}
-		}
+        /// <summary>
+        /// Kicks an active playing account from the server
+        /// </summary>
+        /// <param name="acc">The account</param>
+        private void KickAccount(Account acc)
+        {
+            GameClient playingclient = WorldMgr.GetClientByAccountName(acc.Name, true);
+            if (playingclient != null)
+            {
+                playingclient.Out.SendPlayerQuit(true);
+                playingclient.Disconnect();
+            }
+        }
 
-		/// <summary>
-		/// Returns an account name with a given character name
-		/// </summary>
-		/// <param name="charname">the charactername</param>
-		/// <returns>the account name or null</returns>
-		private string GetAccountName(string charname)
-		{
-			GameClient client = WorldMgr.GetClientByPlayerName(charname, true, false);
-			if (client != null)
-				return client.Account.Name;
+        /// <summary>
+        /// Kicks an active playing character from the server
+        /// </summary>
+        /// <param name="cha">the character</param>
+        private void KickCharacter(DOLCharacters cha)
+        {
+            GameClient playingclient = WorldMgr.GetClientByPlayerName(cha.Name, true, false);
+            if (playingclient != null)
+            {
+                playingclient.Out.SendPlayerQuit(true);
+                playingclient.Disconnect();
+            }
+        }
 
-			var ch = DOLDB<DOLCharacters>.SelectObject(DB.Column(nameof(DOLCharacters.Name)).IsEqualTo(charname));
-			if (ch != null)
-				return ch.AccountName;
-			else
-				return null;
-		}
-	}
+        /// <summary>
+        /// Returns an account name with a given character name
+        /// </summary>
+        /// <param name="charname">the charactername</param>
+        /// <returns>the account name or null</returns>
+        private string GetAccountName(string charname)
+        {
+            GameClient client = WorldMgr.GetClientByPlayerName(charname, true, false);
+            if (client != null)
+                return client.Account.Name;
+
+            var ch = DOLDB<DOLCharacters>.SelectObject(DB.Column(nameof(DOLCharacters.Name)).IsEqualTo(charname));
+            if (ch != null)
+                return ch.AccountName;
+            else
+                return null;
+        }
+    }
 }

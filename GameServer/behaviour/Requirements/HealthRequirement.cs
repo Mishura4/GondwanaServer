@@ -28,27 +28,27 @@ using DOL.GS.Behaviour;
 namespace DOL.GS.Behaviour.Requirements
 {
 
-	/// <summary>
-	/// Requirements describe what must be true to allow a QuestAction to fire.
-	/// Level of player, Step of Quest, Class of Player, etc... There are also some variables to add
-	/// additional parameters. To fire a QuestAction ALL requirements must be fulfilled.         
-	/// </summary>
-    [RequirementAttribute(RequirementType=eRequirementType.Health)]
-	public class HealthRequirement : AbstractRequirement<int,Unused>
-	{
-		private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+    /// <summary>
+    /// Requirements describe what must be true to allow a QuestAction to fire.
+    /// Level of player, Step of Quest, Class of Player, etc... There are also some variables to add
+    /// additional parameters. To fire a QuestAction ALL requirements must be fulfilled.         
+    /// </summary>
+    [RequirementAttribute(RequirementType = eRequirementType.Health)]
+    public class HealthRequirement : AbstractRequirement<int, Unused>
+    {
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-		/// <summary>
+        /// <summary>
         /// Creates a new QuestRequirement and does some basich compativilite checks for the parameters
-		/// </summary>
-		/// <param name="defaultNPC"></param>
-		/// <param name="n"></param>
-		/// <param name="v"></param>
-		/// <param name="comp"></param>
-        public HealthRequirement(GameNPC defaultNPC,  Object n, Object v, eComparator comp)
+        /// </summary>
+        /// <param name="defaultNPC"></param>
+        /// <param name="n"></param>
+        /// <param name="v"></param>
+        /// <param name="comp"></param>
+        public HealthRequirement(GameNPC defaultNPC, Object n, Object v, eComparator comp)
             : base(defaultNPC, eRequirementType.Health, n, v, comp)
-		{   			
-		}
+        {
+        }
 
         /// <summary>
 		/// Creates a new QuestRequirement and does some basich compativilite checks for the parameters
@@ -56,10 +56,10 @@ namespace DOL.GS.Behaviour.Requirements
 	    /// <param name="defaultNPC">Parent defaultNPC of this Requirement</param>		
 		/// <param name="n">First Requirement Variable, meaning depends on RequirementType</param>		
 		/// <param name="comp">Comparator used if some values are veeing compared</param>
-        public HealthRequirement(GameNPC defaultNPC,  int n,  eComparator comp)
+        public HealthRequirement(GameNPC defaultNPC, int n, eComparator comp)
             : this(defaultNPC, (object)n, (object)null, comp)
-		{   			
-		}
+        {
+        }
 
         /// <summary>
         /// Checks the added requirement whenever a trigger associated with this defaultNPC fires.(returns true)
@@ -69,15 +69,15 @@ namespace DOL.GS.Behaviour.Requirements
         /// <param name="args"></param>
         /// <returns></returns>
 		public override bool Check(DOLEvent e, object sender, EventArgs args)
-		{
-			bool result = true;
+        {
+            bool result = true;
             GamePlayer player = BehaviourUtils.GuessGamePlayerFromNotify(e, sender, args);
 
             result = compare(player.Health, N, Comparator);
 
-			return result;
-		}
+            return result;
+        }
 
-		
+
     }
 }

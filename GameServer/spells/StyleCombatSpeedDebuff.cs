@@ -18,15 +18,15 @@
  */
 namespace DOL.GS.Spells
 {
-	[SpellHandler("StyleCombatSpeedDebuff")]
-	public class StyleCombatSpeedDebuff : CombatSpeedDebuff
-	{
-		public override int CalculateSpellResistChance(GameLiving target) 
-			=> 0;
+    [SpellHandler("StyleCombatSpeedDebuff")]
+    public class StyleCombatSpeedDebuff : CombatSpeedDebuff
+    {
+        public override int CalculateSpellResistChance(GameLiving target)
+            => 0;
 
-		protected override int CalculateEffectDuration(GameLiving target, double effectiveness) 
-			=> Spell.Duration;
+        protected override int CalculateEffectDuration(GameLiving target, double effectiveness)
+            => Spell.Duration;
 
-		public StyleCombatSpeedDebuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) {}
-	}
+        public StyleCombatSpeedDebuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+    }
 }

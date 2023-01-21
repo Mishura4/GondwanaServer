@@ -21,10 +21,10 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace DOL.GS.Behaviour.Attributes
-{    
+{
 
     [AttributeUsage(AttributeTargets.Class)]
-    public class ActionAttribute :Attribute
+    public class ActionAttribute : Attribute
     {
 
         private eActionType actionType;
@@ -66,6 +66,6 @@ namespace DOL.GS.Behaviour.Attributes
             get { return defaultValueQ; }
             set { defaultValueQ = value; }
         }
-        
+
     }
 }

@@ -3,15 +3,15 @@ using System.Collections;
 using DOL.GS.PacketHandler;
 using DOL.GS.Effects;
 using DOL.Events;
- 
+
 namespace DOL.GS.Spells
 {
-	/// <summary>
-	/// Summary description for RangeShield.
-	/// </summary>
-	[SpellHandlerAttribute("RangeShield")]
-	public class RangeShield : BladeturnSpellHandler 
-	{
+    /// <summary>
+    /// Summary description for RangeShield.
+    /// </summary>
+    [SpellHandlerAttribute("RangeShield")]
+    public class RangeShield : BladeturnSpellHandler
+    {
         public override void OnEffectStart(GameSpellEffect effect)
         {
             base.OnEffectStart(effect);
@@ -44,6 +44,6 @@ namespace DOL.GS.Spells
                     break;
             }
         }
-		public RangeShield(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) {}
-	}
+        public RangeShield(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+    }
 }

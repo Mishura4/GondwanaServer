@@ -33,93 +33,93 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	//[CmdAttribute("&task", ePrivLevel.Player, "Ask for a Task from Guards or Merchants", "/task")]
-	[CmdAttribute(
-		"&task",
-		ePrivLevel.Player,
-		"Commands.Players.Task.Description",
-		"Commands.Players.Task.Usage")]
-	public class TaskCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (IsSpammingCommand(client.Player, "task"))
-				return;
+    //[CmdAttribute("&task", ePrivLevel.Player, "Ask for a Task from Guards or Merchants", "/task")]
+    [CmdAttribute(
+        "&task",
+        ePrivLevel.Player,
+        "Commands.Players.Task.Description",
+        "Commands.Players.Task.Usage")]
+    public class TaskCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (IsSpammingCommand(client.Player, "task"))
+                return;
 
-			if (args.Length > 1)
-			{
-				if (args[1] == "abort")
-				{
-					if (client.Player.Task != null && client.Player.Task.TaskActive)
-						client.Player.Task.ExpireTask();
-				}
-			}
-			else
-			{
-				GamePlayer player = client.Player;
-				//TaskCommand(client.Player);
-				if (player.Task != null)
-					player.Task.CheckTaskExpired();
-				
-				AbstractTask task = player.Task;
-				
-				if (task != null && task.TaskActive)
-				{
-					var messages = new List<string>();
-					messages.Add(
-						LanguageMgr.GetTranslation(
-							client.Account.Language,
-							"Commands.Players.Task.YouAreOn",
-							task.Name));
-					messages.Add(
-						LanguageMgr.GetTranslation(
-							client.Account.Language,
-							"Commands.Players.Task.WhatTodo",
-							task.Description));
-					messages.Add(" ");
-					messages.Add(
-						LanguageMgr.GetTranslation(
-							client.Account.Language,
-							"Commands.Players.Task.WillExpire",
-							task.TimeOut.ToShortTimeString()));
-					messages.Add(
-						LanguageMgr.GetTranslation(
-							client.Account.Language,
-							"Commands.Players.Task.YouHaveDone",
-							AbstractTask.MaxTasksDone(player.Level)));
-					
-					player.Out.SendCustomTextWindow(
-						LanguageMgr.GetTranslation(
-							client.Account.Language,
-							"Commands.Players.Task.Snapshot"),
-							messages);
-				}
-				else if (task != null && task.TasksDone >= AbstractTask.MaxTasksDone(player.Level))
-				{
-					player.Out.SendMessage(
-						LanguageMgr.GetTranslation(
-							client.Account.Language,
-							"Commands.Players.Task.NoMore"),
-						eChatType.CT_System, eChatLoc.CL_SystemWindow);
-				}
-				else
-				{
-					player.Out.SendMessage(
-						LanguageMgr.GetTranslation(
-							client.Account.Language,
-							"Commands.Players.Task.NoPending"),
-						eChatType.CT_System, eChatLoc.CL_SystemWindow);
-				}
-			}
-		}
+            if (args.Length > 1)
+            {
+                if (args[1] == "abort")
+                {
+                    if (client.Player.Task != null && client.Player.Task.TaskActive)
+                        client.Player.Task.ExpireTask();
+                }
+            }
+            else
+            {
+                GamePlayer player = client.Player;
+                //TaskCommand(client.Player);
+                if (player.Task != null)
+                    player.Task.CheckTaskExpired();
 
-		/// <summary>
-		/// Execute /Task Command
-		/// Same if Player write /Task or press TaskButtom
-		/// </summary>
-		/// <param name="player">The GamePlayer Object</param>
-		/// <returns>True if Command Execute Succesfully</returns>
-		/*public static bool TaskCommand(GamePlayer player)
+                AbstractTask task = player.Task;
+
+                if (task != null && task.TaskActive)
+                {
+                    var messages = new List<string>();
+                    messages.Add(
+                        LanguageMgr.GetTranslation(
+                            client.Account.Language,
+                            "Commands.Players.Task.YouAreOn",
+                            task.Name));
+                    messages.Add(
+                        LanguageMgr.GetTranslation(
+                            client.Account.Language,
+                            "Commands.Players.Task.WhatTodo",
+                            task.Description));
+                    messages.Add(" ");
+                    messages.Add(
+                        LanguageMgr.GetTranslation(
+                            client.Account.Language,
+                            "Commands.Players.Task.WillExpire",
+                            task.TimeOut.ToShortTimeString()));
+                    messages.Add(
+                        LanguageMgr.GetTranslation(
+                            client.Account.Language,
+                            "Commands.Players.Task.YouHaveDone",
+                            AbstractTask.MaxTasksDone(player.Level)));
+
+                    player.Out.SendCustomTextWindow(
+                        LanguageMgr.GetTranslation(
+                            client.Account.Language,
+                            "Commands.Players.Task.Snapshot"),
+                            messages);
+                }
+                else if (task != null && task.TasksDone >= AbstractTask.MaxTasksDone(player.Level))
+                {
+                    player.Out.SendMessage(
+                        LanguageMgr.GetTranslation(
+                            client.Account.Language,
+                            "Commands.Players.Task.NoMore"),
+                        eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                }
+                else
+                {
+                    player.Out.SendMessage(
+                        LanguageMgr.GetTranslation(
+                            client.Account.Language,
+                            "Commands.Players.Task.NoPending"),
+                        eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Execute /Task Command
+        /// Same if Player write /Task or press TaskButtom
+        /// </summary>
+        /// <param name="player">The GamePlayer Object</param>
+        /// <returns>True if Command Execute Succesfully</returns>
+        /*public static bool TaskCommand(GamePlayer player)
 		{
 			if (player.Task != null)
 				player.Task.CheckTaskExpired();
@@ -182,6 +182,6 @@ namespace DOL.GS.Commands
 				}
 			}
 		}*/
-	}
+    }
 
 }

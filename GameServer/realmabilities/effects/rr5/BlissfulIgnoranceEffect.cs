@@ -62,7 +62,7 @@ namespace DOL.GS.Effects
         /// <param name="args">EventArgs associated with the event</param>
         protected void PlayerLeftWorld(DOLEvent e, object sender, EventArgs args)
         {
- 			Cancel(false);
+            Cancel(false);
         }
 
         public override string Name { get { return "Blissful Ignorance"; } }

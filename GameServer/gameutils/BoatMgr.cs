@@ -241,7 +241,7 @@ namespace DOL.GS
             }
             return null;
         }
-        
+
         /// <summary>
         /// Returns a list of boats by their status
         /// </summary>

@@ -22,75 +22,75 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute(
-		"&time",
-		ePrivLevel.Player,
-		"Commands.Players.Time.Description",
-		"Commands.Players.Time.Usage")]
-	public class TimeCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (IsSpammingCommand(client.Player, "time", 1000))
-				return;
+    [CmdAttribute(
+        "&time",
+        ePrivLevel.Player,
+        "Commands.Players.Time.Description",
+        "Commands.Players.Time.Usage")]
+    public class TimeCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (IsSpammingCommand(client.Player, "time", 1000))
+                return;
 
-			if (client.Account.PrivLevel == (int)ePrivLevel.Admin) // admins only
-			{
-				try
-				{
-					if (args.Length == 3)
-					{
-						uint speed = 0;
-						uint time = 0;
-	
-						speed = Convert.ToUInt32(args[1]);
-						time = Convert.ToUInt32(args[2]);
-	
-						WorldMgr.StartDay( speed, time / 1000.0 );
-						return;
-					}
-					else throw new Exception ();
-				}
-				catch
-				{
-					client.Out.SendMessage(
-						LanguageMgr.GetTranslation(
-							client.Account.Language,
-							"Commands.Players.Time.Usage.Admin"),
-											eChatType.CT_System, eChatLoc.CL_SystemWindow);
-				}
-			}
+            if (client.Account.PrivLevel == (int)ePrivLevel.Admin) // admins only
+            {
+                try
+                {
+                    if (args.Length == 3)
+                    {
+                        uint speed = 0;
+                        uint time = 0;
 
-			if (client.Player != null)
-			{
-				uint cTime = WorldMgr.GetCurrentGameTime(client.Player);
+                        speed = Convert.ToUInt32(args[1]);
+                        time = Convert.ToUInt32(args[2]);
 
-				uint hour = cTime / 1000 / 60 / 60;
-				uint minute = cTime / 1000 / 60 % 60;
-				uint seconds = cTime / 1000 % 60;
-				bool pm = false;
+                        WorldMgr.StartDay(speed, time / 1000.0);
+                        return;
+                    }
+                    else throw new Exception();
+                }
+                catch
+                {
+                    client.Out.SendMessage(
+                        LanguageMgr.GetTranslation(
+                            client.Account.Language,
+                            "Commands.Players.Time.Usage.Admin"),
+                                            eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                }
+            }
 
-				if (hour == 0)
-				{
-					hour = 12;
-				}
-				else if (hour == 12)
-				{
-					pm = true;
-				}
-				else if (hour > 12)
-				{
-					hour -= 12;
-					pm = true;
-				}
+            if (client.Player != null)
+            {
+                uint cTime = WorldMgr.GetCurrentGameTime(client.Player);
 
-				client.Out.SendMessage(
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Time.Print",
-						hour.ToString(), minute.ToString("00"), seconds.ToString("00"), (pm ? " pm" : "")),
-									   eChatType.CT_System, eChatLoc.CL_SystemWindow);
-			}
-		}
-	}
+                uint hour = cTime / 1000 / 60 / 60;
+                uint minute = cTime / 1000 / 60 % 60;
+                uint seconds = cTime / 1000 % 60;
+                bool pm = false;
+
+                if (hour == 0)
+                {
+                    hour = 12;
+                }
+                else if (hour == 12)
+                {
+                    pm = true;
+                }
+                else if (hour > 12)
+                {
+                    hour -= 12;
+                    pm = true;
+                }
+
+                client.Out.SendMessage(
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Time.Print",
+                        hour.ToString(), minute.ToString("00"), seconds.ToString("00"), (pm ? " pm" : "")),
+                                       eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            }
+        }
+    }
 }

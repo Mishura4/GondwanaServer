@@ -20,7 +20,7 @@ namespace DOL.UnitTests.Gameserver
             npc.Constitution = 75;
 
             int actual = npc.GetModified(eProperty.Constitution);
-            
+
             Assert.AreEqual(75, actual);
         }
 

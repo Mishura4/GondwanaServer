@@ -24,15 +24,15 @@ using DOL.Database;
 
 namespace DOL.GS.Keeps
 {
-	public interface IKeepItem
-	{
-		ushort CurrentRegionID { get;set; }
-		Vector3 Position { get; set; }
-		ushort Heading { get;set;}
-		string TemplateID { get;}
-		GameKeepComponent Component { get; set;}
-		DBKeepPosition DBPosition { get;set; }
-		void LoadFromPosition(DBKeepPosition position, GameKeepComponent component);
-		void MoveToPosition(DBKeepPosition position);
-	}
+    public interface IKeepItem
+    {
+        ushort CurrentRegionID { get; set; }
+        Vector3 Position { get; set; }
+        ushort Heading { get; set; }
+        string TemplateID { get; }
+        GameKeepComponent Component { get; set; }
+        DBKeepPosition DBPosition { get; set; }
+        void LoadFromPosition(DBKeepPosition position, GameKeepComponent component);
+        void MoveToPosition(DBKeepPosition position);
+    }
 }

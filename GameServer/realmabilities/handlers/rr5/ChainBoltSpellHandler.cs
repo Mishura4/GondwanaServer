@@ -34,7 +34,7 @@ namespace DOL.GS.Spells
 
         public ChainBoltSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine) { }
 
-        
+
 
         protected GameLiving m_currentSource;
         protected int m_maxTick;
@@ -51,7 +51,7 @@ namespace DOL.GS.Spells
 
             if (m_maxTick >= 0)
             {
-                m_maxTick = (Spell.Pulse>1)?Spell.Pulse:1;
+                m_maxTick = (Spell.Pulse > 1) ? Spell.Pulse : 1;
                 m_currentTick = 1;
                 m_currentSource = target;
             }
@@ -67,8 +67,8 @@ namespace DOL.GS.Spells
             m_currentSource = target;
             m_currentTick++;
 
-			return true;
-		}
+            return true;
+        }
 
         public override void DamageTarget(AttackData ad, bool showEffectAnimation)
         {
@@ -76,11 +76,12 @@ namespace DOL.GS.Spells
             base.DamageTarget(ad, showEffectAnimation);
             if (m_currentTick < m_maxTick)
             {
-                m_effetiveness -= 0.1;   
+                m_effetiveness -= 0.1;
                 //fetch next target
                 foreach (GamePlayer pl in m_currentSource.GetPlayersInRadius(500))
                 {
-                    if (GameServer.ServerRules.IsAllowedToAttack(Caster,pl,true)){
+                    if (GameServer.ServerRules.IsAllowedToAttack(Caster, pl, true))
+                    {
                         StartSpell(pl);
                         break;
                     }

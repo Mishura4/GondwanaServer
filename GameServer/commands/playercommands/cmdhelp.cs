@@ -23,62 +23,62 @@ using System.Collections.Generic;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute("&cmdhelp", //command to handle
-		ePrivLevel.Player, //minimum privelege level
-		"Commands.Players.Cmdhelp.Description",
-		"Commands.Players.Cmdhelp.Usage",
-		"Commands.Players.Cmdhelp.Usage.Plvl",
-		"Commands.Players.Cmdhelp.Usage.Cmd")]
-	public class CmdHelpCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (IsSpammingCommand(client.Player, "cmdhelp"))
-				return;
+    [CmdAttribute("&cmdhelp", //command to handle
+        ePrivLevel.Player, //minimum privelege level
+        "Commands.Players.Cmdhelp.Description",
+        "Commands.Players.Cmdhelp.Usage",
+        "Commands.Players.Cmdhelp.Usage.Plvl",
+        "Commands.Players.Cmdhelp.Usage.Cmd")]
+    public class CmdHelpCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (IsSpammingCommand(client.Player, "cmdhelp"))
+                return;
 
-			ePrivLevel privilegeLevel = (ePrivLevel)client.Account.PrivLevel;
-			bool isCommand = true;
+            ePrivLevel privilegeLevel = (ePrivLevel)client.Account.PrivLevel;
+            bool isCommand = true;
 
-			if (args.Length > 1)
-			{
-				try
-				{
-					privilegeLevel = (ePrivLevel)Convert.ToUInt32(args[1]);
-				}
-				catch (Exception)
-				{
-					isCommand = false;
-				}
-			}
+            if (args.Length > 1)
+            {
+                try
+                {
+                    privilegeLevel = (ePrivLevel)Convert.ToUInt32(args[1]);
+                }
+                catch (Exception)
+                {
+                    isCommand = false;
+                }
+            }
 
-			if (isCommand)
-			{
+            if (isCommand)
+            {
                 String[] commandList = GetCommandList(privilegeLevel);
-				DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Cmdhelp.PlvlCommands", privilegeLevel.ToString()));
+                DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Cmdhelp.PlvlCommands", privilegeLevel.ToString()));
 
                 foreach (String command in commandList)
-					DisplayMessage(client, command);
-			}
-			else
-			{
-				string command = args[1];
+                    DisplayMessage(client, command);
+            }
+            else
+            {
+                string command = args[1];
 
-				if (command[0] != '&')
-					command = "&" + command;
+                if (command[0] != '&')
+                    command = "&" + command;
 
-				ScriptMgr.GameCommand gameCommand = ScriptMgr.GetCommand(command);
+                ScriptMgr.GameCommand gameCommand = ScriptMgr.GetCommand(command);
 
-				if (gameCommand == null)
+                if (gameCommand == null)
                     DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Cmdhelp.NoCommand", command));
                 else
-				{
-					DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Cmdhelp.Usage", command));
+                {
+                    DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Cmdhelp.Usage", command));
 
-					foreach (String usage in gameCommand.Usage)
-						DisplayMessage(client, usage);
-				}
-			}
-		}
+                    foreach (String usage in gameCommand.Usage)
+                        DisplayMessage(client, usage);
+                }
+            }
+        }
 
         private static IDictionary<ePrivLevel, String[]> m_commandLists = new Dictionary<ePrivLevel, String[]>();
         private static object m_syncObject = new object();

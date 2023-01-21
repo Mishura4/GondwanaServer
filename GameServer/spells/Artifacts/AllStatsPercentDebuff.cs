@@ -22,9 +22,9 @@ using DOL.GS.Effects;
 
 namespace DOL.GS.Spells
 {
-	[SpellHandler("AllStatsPercentDebuff")]
-	public class AllStatsPercentDebuff : SpellHandler
-	{
+    [SpellHandler("AllStatsPercentDebuff")]
+    public class AllStatsPercentDebuff : SpellHandler
+    {
         protected int StrDebuff = 0;
         protected int DexDebuff = 0;
         protected int ConDebuff = 0;
@@ -34,14 +34,14 @@ namespace DOL.GS.Spells
         protected int ChaDebuff = 0;
         protected int PieDebuff = 0;
 
-		public override int CalculateSpellResistChance(GameLiving target)
-		{
-			return 0;
-		}
-		public override void OnEffectStart(GameSpellEffect effect)
-		{
-			base.OnEffectStart(effect); 
-			//effect.Owner.DebuffCategory[(int)eProperty.Dexterity] += (int)m_spell.Value;
+        public override int CalculateSpellResistChance(GameLiving target)
+        {
+            return 0;
+        }
+        public override void OnEffectStart(GameSpellEffect effect)
+        {
+            base.OnEffectStart(effect);
+            //effect.Owner.DebuffCategory[(int)eProperty.Dexterity] += (int)m_spell.Value;
             double percentValue = (m_spell.Value) / 100;
             StrDebuff = (int)((double)effect.Owner.GetModified(eProperty.Strength) * percentValue);
             DexDebuff = (int)((double)effect.Owner.GetModified(eProperty.Dexterity) * percentValue);
@@ -51,7 +51,7 @@ namespace DOL.GS.Spells
             IntDebuff = (int)((double)effect.Owner.GetModified(eProperty.Intelligence) * percentValue);
             ChaDebuff = (int)((double)effect.Owner.GetModified(eProperty.Charisma) * percentValue);
             PieDebuff = (int)((double)effect.Owner.GetModified(eProperty.Piety) * percentValue);
-            
+
 
             effect.Owner.DebuffCategory[(int)eProperty.Dexterity] += DexDebuff;
             effect.Owner.DebuffCategory[(int)eProperty.Strength] += StrDebuff;
@@ -62,17 +62,17 @@ namespace DOL.GS.Spells
             effect.Owner.DebuffCategory[(int)eProperty.Intelligence] += IntDebuff;
             effect.Owner.DebuffCategory[(int)eProperty.Charisma] += ChaDebuff;
 
-			if (effect.Owner is GamePlayer)
-			{
-				GamePlayer player = effect.Owner as GamePlayer;
-				player.Out.SendCharStatsUpdate();
-				player.UpdateEncumberance();
-				player.UpdatePlayerStatus();
-				player.Out.SendUpdatePlayer();
-			}
-		}
-		public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
-		{
+            if (effect.Owner is GamePlayer)
+            {
+                GamePlayer player = effect.Owner as GamePlayer;
+                player.Out.SendCharStatsUpdate();
+                player.UpdateEncumberance();
+                player.UpdatePlayerStatus();
+                player.Out.SendUpdatePlayer();
+            }
+        }
+        public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
+        {
             double percentValue = (m_spell.Value) / 100;
 
             effect.Owner.DebuffCategory[(int)eProperty.Dexterity] -= DexDebuff;
@@ -84,39 +84,39 @@ namespace DOL.GS.Spells
             effect.Owner.DebuffCategory[(int)eProperty.Intelligence] -= IntDebuff;
             effect.Owner.DebuffCategory[(int)eProperty.Charisma] -= ChaDebuff;
 
-			if (effect.Owner is GamePlayer)
-			{
-				GamePlayer player = effect.Owner as GamePlayer;
-				player.Out.SendCharStatsUpdate();
-				player.UpdateEncumberance();
-				player.UpdatePlayerStatus();
-				player.Out.SendUpdatePlayer();
-			}
-			return base.OnEffectExpires(effect, noMessages);
-		}
+            if (effect.Owner is GamePlayer)
+            {
+                GamePlayer player = effect.Owner as GamePlayer;
+                player.Out.SendCharStatsUpdate();
+                player.UpdateEncumberance();
+                player.UpdatePlayerStatus();
+                player.Out.SendUpdatePlayer();
+            }
+            return base.OnEffectExpires(effect, noMessages);
+        }
 
-		public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
-		{
-			base.ApplyEffectOnTarget(target, effectiveness);
-			if (target.Realm == 0 || Caster.Realm == 0)
-			{
-				target.LastAttackedByEnemyTickPvE = target.CurrentRegion.Time;
-				Caster.LastAttackTickPvE = Caster.CurrentRegion.Time;
-			}
-			else
-			{
-				target.LastAttackedByEnemyTickPvP = target.CurrentRegion.Time;
-				Caster.LastAttackTickPvP = Caster.CurrentRegion.Time;
-			}
-			if (target is GameNPC)
-			{
-				IOldAggressiveBrain aggroBrain = ((GameNPC)target).Brain as IOldAggressiveBrain;
-				if (aggroBrain != null)
-					aggroBrain.AddToAggroList(Caster, (int)Spell.Value);
-			}
-		}
+        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        {
+            base.ApplyEffectOnTarget(target, effectiveness);
+            if (target.Realm == 0 || Caster.Realm == 0)
+            {
+                target.LastAttackedByEnemyTickPvE = target.CurrentRegion.Time;
+                Caster.LastAttackTickPvE = Caster.CurrentRegion.Time;
+            }
+            else
+            {
+                target.LastAttackedByEnemyTickPvP = target.CurrentRegion.Time;
+                Caster.LastAttackTickPvP = Caster.CurrentRegion.Time;
+            }
+            if (target is GameNPC)
+            {
+                IOldAggressiveBrain aggroBrain = ((GameNPC)target).Brain as IOldAggressiveBrain;
+                if (aggroBrain != null)
+                    aggroBrain.AddToAggroList(Caster, (int)Spell.Value);
+            }
+        }
         public AllStatsPercentDebuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-		public override string ShortDescription => $"Decreases all stats of the target by {Spell.Value}%.";
-	}
+        public override string ShortDescription => $"Decreases all stats of the target by {Spell.Value}%.";
+    }
 }

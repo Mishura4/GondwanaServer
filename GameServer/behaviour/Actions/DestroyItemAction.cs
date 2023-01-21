@@ -29,19 +29,19 @@ using DOL.Language;
 
 namespace DOL.GS.Behaviour.Actions
 {
-    [ActionAttribute(ActionType = eActionType.DestroyItem,DefaultValueQ = 1)]
-    public class DestroyItemAction : AbstractAction<ItemTemplate,int>
+    [ActionAttribute(ActionType = eActionType.DestroyItem, DefaultValueQ = 1)]
+    public class DestroyItemAction : AbstractAction<ItemTemplate, int>
     {
 
-        public DestroyItemAction(GameNPC defaultNPC,  Object p, Object q)
+        public DestroyItemAction(GameNPC defaultNPC, Object p, Object q)
             : base(defaultNPC, eActionType.DestroyItem, p, q)
-        {                
+        {
         }
 
 
         public DestroyItemAction(GameNPC defaultNPC, ItemTemplate itemTemplate, int quantity)
-            : this(defaultNPC, (object)itemTemplate,(object) quantity) { }
-        
+            : this(defaultNPC, (object)itemTemplate, (object)quantity) { }
+
 
 
         public override void Perform(DOLEvent e, object sender, EventArgs args)
@@ -50,7 +50,7 @@ namespace DOL.GS.Behaviour.Actions
             int count = Q;
             ItemTemplate itemToDestroy = P;
 
-			Dictionary<InventoryItem, int?> dataSlots = new Dictionary<InventoryItem, int?>(10);
+            Dictionary<InventoryItem, int?> dataSlots = new Dictionary<InventoryItem, int?>(10);
             lock (player.Inventory)
             {
                 var allBackpackItems = player.Inventory.GetItemRange(eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack);
@@ -105,10 +105,10 @@ namespace DOL.GS.Behaviour.Actions
 
             GamePlayerInventory playerInventory = player.Inventory as GamePlayerInventory;
             playerInventory.BeginChanges();
-			Dictionary<InventoryItem, int?>.Enumerator enumerator= dataSlots.GetEnumerator();
-            while(enumerator.MoveNext())
+            Dictionary<InventoryItem, int?>.Enumerator enumerator = dataSlots.GetEnumerator();
+            while (enumerator.MoveNext())
             {
-				KeyValuePair<InventoryItem, int?> de = enumerator.Current;
+                KeyValuePair<InventoryItem, int?> de = enumerator.Current;
                 if (!de.Value.HasValue)
                 {
                     playerInventory.RemoveItem(de.Key);

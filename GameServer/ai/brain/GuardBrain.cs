@@ -20,77 +20,77 @@ using DOL.GS;
 
 namespace DOL.AI.Brain
 {
-	public class GuardBrain : StandardMobBrain
-	{
-		public GuardBrain()
-			: base()
-		{
-			ThinkInterval = 2000;
-		}
+    public class GuardBrain : StandardMobBrain
+    {
+        public GuardBrain()
+            : base()
+        {
+            ThinkInterval = 2000;
+        }
 
-		public override int AggroLevel
-		{
-			get { return 90; }
-		}
+        public override int AggroLevel
+        {
+            get { return 90; }
+        }
 
-		public override int AggroRange
-		{
-			get { return 750; }
-		}
+        public override int AggroRange
+        {
+            get { return 750; }
+        }
 
-		protected override void CheckPlayerAggro()
-		{
-			if (HasAggro) return;
+        protected override void CheckPlayerAggro()
+        {
+            if (HasAggro) return;
 
-			foreach (GamePlayer player in Body.GetPlayersInRadius((ushort)AggroRange))
-			{
-				if (m_aggroTable.ContainsKey(player))
-					continue; // add only new players
-				if (!player.IsAlive || player.ObjectState != GameObject.eObjectState.Active || player.IsStealthed)
-					continue;
-				if (player.Steed != null)
-					continue; //do not attack players on steed
-				if (!GameServer.ServerRules.IsAllowedToAttack(Body, player, true))
-					continue;
-				if (!Body.IsWithinRadius(player, AggroRange))
-					continue;
+            foreach (GamePlayer player in Body.GetPlayersInRadius((ushort)AggroRange))
+            {
+                if (m_aggroTable.ContainsKey(player))
+                    continue; // add only new players
+                if (!player.IsAlive || player.ObjectState != GameObject.eObjectState.Active || player.IsStealthed)
+                    continue;
+                if (player.Steed != null)
+                    continue; //do not attack players on steed
+                if (!GameServer.ServerRules.IsAllowedToAttack(Body, player, true))
+                    continue;
+                if (!Body.IsWithinRadius(player, AggroRange))
+                    continue;
 
-				AddToAggroList(player, 1);
-				return;
-			}
-		}
+                AddToAggroList(player, 1);
+                return;
+            }
+        }
 
-		protected override void CheckNPCAggro()
-		{
-			if (HasAggro) return;
+        protected override void CheckNPCAggro()
+        {
+            if (HasAggro) return;
 
-			foreach (GameNPC npc in Body.GetNPCsInRadius((ushort)AggroRange))
-			{
-				if (m_aggroTable.ContainsKey(npc))
-					continue; // add only new npcs
-				if ((npc.Flags & GameNPC.eFlags.FLYING) != 0)
-					continue; // let's not try to attack flying mobs
-				if (!GameServer.ServerRules.IsAllowedToAttack(Body, npc, true))
-					continue;
-				if (!npc.IsWithinRadius(Body, AggroRange))
-					continue;
+            foreach (GameNPC npc in Body.GetNPCsInRadius((ushort)AggroRange))
+            {
+                if (m_aggroTable.ContainsKey(npc))
+                    continue; // add only new npcs
+                if ((npc.Flags & GameNPC.eFlags.FLYING) != 0)
+                    continue; // let's not try to attack flying mobs
+                if (!GameServer.ServerRules.IsAllowedToAttack(Body, npc, true))
+                    continue;
+                if (!npc.IsWithinRadius(Body, AggroRange))
+                    continue;
 
-				AddToAggroList(npc, 1);
-				return;
-			}
-		}
+                AddToAggroList(npc, 1);
+                return;
+            }
+        }
 
-		/// <summary>
-		/// We override this because we want guards to attack even gray npcs
-		/// </summary>
-		/// <param name="target"></param>
-		/// <returns></returns>
-		public override int CalculateAggroLevelToTarget(GameLiving target)
-		{
-			if (GameServer.ServerRules.IsAllowedToAttack(Body, target, true) == false)
-				return 0;
+        /// <summary>
+        /// We override this because we want guards to attack even gray npcs
+        /// </summary>
+        /// <param name="target"></param>
+        /// <returns></returns>
+        public override int CalculateAggroLevelToTarget(GameLiving target)
+        {
+            if (GameServer.ServerRules.IsAllowedToAttack(Body, target, true) == false)
+                return 0;
 
-			return AggroLevel;
-		}
-	}
+            return AggroLevel;
+        }
+    }
 }

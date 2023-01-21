@@ -20,7 +20,7 @@ namespace DOL.GS.RealmAbilities
         {
             GamePlayer player = living as GamePlayer;
             if (CheckPreconditions(living, DEAD | SITTING | STEALTHED)) return;
-			if (player.EffectList.CountOfType<AdrenalineRushEffect>() > 0)
+            if (player.EffectList.CountOfType<AdrenalineRushEffect>() > 0)
             {
                 player.Out.SendMessage("You already an effect of that type!", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
             }
@@ -33,51 +33,51 @@ namespace DOL.GS.RealmAbilities
         }
         public override int GetReUseDelay(int level)
         {
-        	if(ServerProperties.Properties.USE_NEW_ACTIVES_RAS_SCALING)
-        	{
-	            switch (level)
-	            {
-	                case 1: return 1200;
-	                case 2: return 900;
-	                case 3: return 600;
-	                case 4: return 450;
-	                case 5: return 300;
-	            }       		        		
-        	}
-        	else
-        	{
-	            switch (level)
-	            {
-	                case 1: return 1200;
-	                case 2: return 600;
-	                case 3: return 300;
-	            }       		
-	        }
+            if (ServerProperties.Properties.USE_NEW_ACTIVES_RAS_SCALING)
+            {
+                switch (level)
+                {
+                    case 1: return 1200;
+                    case 2: return 900;
+                    case 3: return 600;
+                    case 4: return 450;
+                    case 5: return 300;
+                }
+            }
+            else
+            {
+                switch (level)
+                {
+                    case 1: return 1200;
+                    case 2: return 600;
+                    case 3: return 300;
+                }
+            }
 
             return 600;
         }
 
         public override void AddEffectsInfo(IList<string> list)
         {
-        	// TODO translate
-        	if(ServerProperties.Properties.USE_NEW_ACTIVES_RAS_SCALING)
-        	{
-	            list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AdrenalineRushAbility.AddEffectsInfo.Info1"));
-	            list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AdrenalineRushAbility.AddEffectsInfo.Info2"));
-	            list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AdrenalineRushAbility.AddEffectsInfo.Info3"));
-	            list.Add("");
-	            list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AdrenalineRushAbility.AddEffectsInfo.Info4"));
-	            list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AdrenalineRushAbility.AddEffectsInfo.Info5"));
-        	}
-        	else
-        	{
-	            list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AdrenalineRushAbility.AddEffectsInfo.Info1"));
-	            list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AdrenalineRushAbility.AddEffectsInfo.Info2"));
-	            list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AdrenalineRushAbility.AddEffectsInfo.Info3"));
-	            list.Add("");
-	            list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AdrenalineRushAbility.AddEffectsInfo.Info4"));
-	            list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AdrenalineRushAbility.AddEffectsInfo.Info5"));
-        	}
+            // TODO translate
+            if (ServerProperties.Properties.USE_NEW_ACTIVES_RAS_SCALING)
+            {
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AdrenalineRushAbility.AddEffectsInfo.Info1"));
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AdrenalineRushAbility.AddEffectsInfo.Info2"));
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AdrenalineRushAbility.AddEffectsInfo.Info3"));
+                list.Add("");
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AdrenalineRushAbility.AddEffectsInfo.Info4"));
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AdrenalineRushAbility.AddEffectsInfo.Info5"));
+            }
+            else
+            {
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AdrenalineRushAbility.AddEffectsInfo.Info1"));
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AdrenalineRushAbility.AddEffectsInfo.Info2"));
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AdrenalineRushAbility.AddEffectsInfo.Info3"));
+                list.Add("");
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AdrenalineRushAbility.AddEffectsInfo.Info4"));
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "AdrenalineRushAbility.AddEffectsInfo.Info5"));
+            }
 
         }
 

@@ -59,7 +59,7 @@ namespace DOL.GS.RealmAbilities
                 {
                     foreach (GamePlayer grpplayer in player.Group.GetPlayersInTheGroup())
                     {
-                        if (player.IsWithinRadius( grpplayer, SpellRadius ) && grpplayer.IsAlive)
+                        if (player.IsWithinRadius(grpplayer, SpellRadius) && grpplayer.IsAlive)
                             targets.Add(grpplayer);
                     }
                 }
@@ -67,7 +67,7 @@ namespace DOL.GS.RealmAbilities
                 {
                     //send spelleffect
                     if (!target.IsAlive) continue;
-					ValhallasBlessingEffect ValhallasBlessing = target.EffectList.GetOfType<ValhallasBlessingEffect>();
+                    ValhallasBlessingEffect ValhallasBlessing = target.EffectList.GetOfType<ValhallasBlessingEffect>();
                     if (ValhallasBlessing != null)
                         ValhallasBlessing.Cancel(false);
                     new ValhallasBlessingEffect().Start(target);

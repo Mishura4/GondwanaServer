@@ -323,7 +323,7 @@ namespace DOL.UnitTests.Gameserver
             var owner = NewFakePlayer();
             owner.fakeCharacterClass = new CharacterClassAnimist();
             owner.modifiedIntelligence = 100;
-            owner.Level = 50; 
+            owner.Level = 50;
             var brain = new FakeControlledBrain();
             brain.fakeOwner = owner;
             GamePet source = new GamePet(brain);
@@ -524,7 +524,7 @@ namespace DOL.UnitTests.Gameserver
         private class GameEventMgrSpy : GameEventMgr
         {
             public System.Collections.Generic.Dictionary<object, DOLEventHandlerCollection> GameObjectEventCollection => m_gameObjectEventCollections;
-        
+
             public static GameEventMgrSpy LoadAndReturn()
             {
                 var spy = new GameEventMgrSpy();

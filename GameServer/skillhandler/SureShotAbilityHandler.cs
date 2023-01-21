@@ -23,36 +23,36 @@ using DOL.Language;
 
 namespace DOL.GS.SkillHandler
 {
-	/// <summary>
-	/// Handler for Sure Shot ability
-	/// </summary>
-	[SkillHandlerAttribute(Abilities.SureShot)]
-	public class SureShotAbilityHandler : IAbilityActionHandler
-	{
-		public void Execute(Ability ab, GamePlayer player)
-		{
-			SureShotEffect sureShot = player.EffectList.GetOfType<SureShotEffect>();
-			if (sureShot != null)
-			{
-				sureShot.Cancel(false);
-				return;
-			}
+    /// <summary>
+    /// Handler for Sure Shot ability
+    /// </summary>
+    [SkillHandlerAttribute(Abilities.SureShot)]
+    public class SureShotAbilityHandler : IAbilityActionHandler
+    {
+        public void Execute(Ability ab, GamePlayer player)
+        {
+            SureShotEffect sureShot = player.EffectList.GetOfType<SureShotEffect>();
+            if (sureShot != null)
+            {
+                sureShot.Cancel(false);
+                return;
+            }
 
-			if (!player.IsAlive)
-			{
+            if (!player.IsAlive)
+            {
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Skill.Ability.SureShot.CannotUseDead"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
-			}
+            }
 
-			RapidFireEffect rapidFire = player.EffectList.GetOfType<RapidFireEffect>();
-			if (rapidFire != null)
-				rapidFire.Cancel(false);
+            RapidFireEffect rapidFire = player.EffectList.GetOfType<RapidFireEffect>();
+            if (rapidFire != null)
+                rapidFire.Cancel(false);
 
-			TrueshotEffect trueshot = player.EffectList.GetOfType<TrueshotEffect>();
-			if (trueshot != null)
-				trueshot.Cancel(false);
+            TrueshotEffect trueshot = player.EffectList.GetOfType<TrueshotEffect>();
+            if (trueshot != null)
+                trueshot.Cancel(false);
 
-			new SureShotEffect().Start(player);
-		}
-	}
+            new SureShotEffect().Start(player);
+        }
+    }
 }

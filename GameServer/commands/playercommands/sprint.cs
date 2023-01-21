@@ -21,30 +21,30 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute(
-		"&sprint",
-		ePrivLevel.Player,
-		"Commands.Players.Sprint.Description",
-		"Commands.Players.Sprint.Usage")]
-	public class SprintCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (!IsSpammingCommand(client.Player, "sprint"))
-			{
-				if (client.Player.HasAbility(Abilities.Sprint))
-				{
-					client.Player.Sprint(!client.Player.IsSprinting);
-				}
-				else
-				{
-					client.Out.SendMessage(
-						LanguageMgr.GetTranslation(
-							client.Account.Language,
-							"Commands.Players.Sprint.Missing.Ability"),
-						eChatType.CT_System, eChatLoc.CL_SystemWindow);
-				}
-			}
-		}
-	}
+    [CmdAttribute(
+        "&sprint",
+        ePrivLevel.Player,
+        "Commands.Players.Sprint.Description",
+        "Commands.Players.Sprint.Usage")]
+    public class SprintCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (!IsSpammingCommand(client.Player, "sprint"))
+            {
+                if (client.Player.HasAbility(Abilities.Sprint))
+                {
+                    client.Player.Sprint(!client.Player.IsSprinting);
+                }
+                else
+                {
+                    client.Out.SendMessage(
+                        LanguageMgr.GetTranslation(
+                            client.Account.Language,
+                            "Commands.Players.Sprint.Missing.Ability"),
+                        eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                }
+            }
+        }
+    }
 }

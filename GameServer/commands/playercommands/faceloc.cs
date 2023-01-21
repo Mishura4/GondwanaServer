@@ -29,67 +29,67 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute(
-		"&faceloc",
-		ePrivLevel.Player,
-		"Commands.Players.Faceloc.Description",
-		"Commands.Players.Faceloc.Usage")]
-	public class LocFaceCommandHandler : AbstractCommandHandler,ICommandHandler
-	{
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (IsSpammingCommand(client.Player, "faceloc"))
-				return;
+    [CmdAttribute(
+        "&faceloc",
+        ePrivLevel.Player,
+        "Commands.Players.Faceloc.Description",
+        "Commands.Players.Faceloc.Usage")]
+    public class LocFaceCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (IsSpammingCommand(client.Player, "faceloc"))
+                return;
 
-			if (client.Player.IsTurningDisabled)
-			{
-				DisplayMessage(
-					client,
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Faceloc.IsTurningDisabled"
-					)
-				);
-				return;
-			}
+            if (client.Player.IsTurningDisabled)
+            {
+                DisplayMessage(
+                    client,
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Faceloc.IsTurningDisabled"
+                    )
+                );
+                return;
+            }
 
-			if (args.Length < 3)
-			{
-				client.Out.SendMessage(
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Faceloc.Error.Coordinates"
-					),
-					eChatType.CT_System,
-					eChatLoc.CL_SystemWindow
-					);
-				return;
-			}
-			int x = 0;
-			int y = 0;
-			try
-			{
-				x = System.Convert.ToInt32(args[1]);
-				y = System.Convert.ToInt32(args[2]);
-			}
-			catch
-			{
-				client.Out.SendMessage(
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Faceloc.Error.Coordinates"
-						),
-					eChatType.CT_System,
-					eChatLoc.CL_SystemWindow
-				);
-				return;
-			}
-			int Xoffset = client.Player.CurrentZone.XOffset;
-			int Yoffset = client.Player.CurrentZone.YOffset;
-            Vector2 gloc = new Vector2( Xoffset + x, Yoffset + y );
-			ushort direction = client.Player.GetHeading(gloc);
-			client.Player.Heading = direction;
-			client.Out.SendPlayerJump(true);
-		}
-	}
+            if (args.Length < 3)
+            {
+                client.Out.SendMessage(
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Faceloc.Error.Coordinates"
+                    ),
+                    eChatType.CT_System,
+                    eChatLoc.CL_SystemWindow
+                    );
+                return;
+            }
+            int x = 0;
+            int y = 0;
+            try
+            {
+                x = System.Convert.ToInt32(args[1]);
+                y = System.Convert.ToInt32(args[2]);
+            }
+            catch
+            {
+                client.Out.SendMessage(
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Faceloc.Error.Coordinates"
+                        ),
+                    eChatType.CT_System,
+                    eChatLoc.CL_SystemWindow
+                );
+                return;
+            }
+            int Xoffset = client.Player.CurrentZone.XOffset;
+            int Yoffset = client.Player.CurrentZone.YOffset;
+            Vector2 gloc = new Vector2(Xoffset + x, Yoffset + y);
+            ushort direction = client.Player.GetHeading(gloc);
+            client.Player.Heading = direction;
+            client.Out.SendPlayerJump(true);
+        }
+    }
 }

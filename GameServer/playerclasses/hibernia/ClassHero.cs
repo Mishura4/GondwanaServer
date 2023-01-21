@@ -21,33 +21,33 @@ using DOL.GS.Realm;
 
 namespace DOL.GS.PlayerClass
 {
-	[CharacterClass((int)eCharacterClass.Hero, "Hero", "Guardian", "Heroine")]
-	public class ClassHero : ClassGuardian
-	{
-		public ClassHero()
-			: base()
-		{
-			m_profession = "PlayerClass.Profession.PathofFocus";
-			m_specializationMultiplier = 20;
-			m_primaryStat = eStat.STR;
-			m_secondaryStat = eStat.CON;
-			m_tertiaryStat = eStat.DEX;
-			m_wsbase = 440;
-		}
+    [CharacterClass((int)eCharacterClass.Hero, "Hero", "Guardian", "Heroine")]
+    public class ClassHero : ClassGuardian
+    {
+        public ClassHero()
+            : base()
+        {
+            m_profession = "PlayerClass.Profession.PathofFocus";
+            m_specializationMultiplier = 20;
+            m_primaryStat = eStat.STR;
+            m_secondaryStat = eStat.CON;
+            m_tertiaryStat = eStat.DEX;
+            m_wsbase = 440;
+        }
 
-		public override int WeaponSkillFactor(eObjectType type)
-		{
-			return 20;
-		}
+        public override int WeaponSkillFactor(eObjectType type)
+        {
+            return 20;
+        }
 
-		public override bool HasAdvancedFromBaseClass()
-		{
-			return true;
-		}
+        public override bool HasAdvancedFromBaseClass()
+        {
+            return true;
+        }
 
-		public override List<PlayerRace> EligibleRaces => new List<PlayerRace>()
-		{
-			 PlayerRace.Celt, PlayerRace.Firbolg, PlayerRace.Graoch, PlayerRace.Lurikeen, PlayerRace.Shar, PlayerRace.Sylvan,
-		};
-	}
+        public override List<PlayerRace> EligibleRaces => new List<PlayerRace>()
+        {
+             PlayerRace.Celt, PlayerRace.Firbolg, PlayerRace.Graoch, PlayerRace.Lurikeen, PlayerRace.Shar, PlayerRace.Sylvan,
+        };
+    }
 }

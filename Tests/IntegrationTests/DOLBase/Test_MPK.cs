@@ -53,7 +53,7 @@ namespace DOL.Integration.DOLBase
             var mpk = new MPK.MPK(mpkFileLocation, false);
             mpk.Extract(extractPath);
 
-            var actualFileText = File.ReadAllText(Path.Combine(extractPath,  textFileLocation));
+            var actualFileText = File.ReadAllText(Path.Combine(extractPath, textFileLocation));
             var expectedFileText = textFileContent;
             Assert.AreEqual(expectedFileText, actualFileText);
         }

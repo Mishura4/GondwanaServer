@@ -47,7 +47,7 @@ namespace DOL.GS
                                 .Where(s => !string.IsNullOrEmpty(s))
                                 .Select(s => MetadataReference.CreateFromFile(s))
                                 .ToList();
-            var gameServerScriptAdditionalReferences = new string[] { 
+            var gameServerScriptAdditionalReferences = new string[] {
                 "System.Security.Cryptography.Algorithms", //for SHA256 in AutoXMLDatabaseUpdate
                 "System.Security.Cryptography.Primitives", //for SHA256 in AutoXMLDatabaseUpdate
                 "System.Net.Http"
@@ -98,7 +98,7 @@ namespace DOL.GS
 
         public Assembly CompileFromText(GameClient client, string code)
         {
-            var outputFile = new FileInfo("code_"+Guid.NewGuid()+".dll");
+            var outputFile = new FileInfo("code_" + Guid.NewGuid() + ".dll");
             var syntaxTrees = new List<SyntaxTree>() { CSharpSyntaxTree.ParseText(code) };
 
             Compile(outputFile, syntaxTrees);

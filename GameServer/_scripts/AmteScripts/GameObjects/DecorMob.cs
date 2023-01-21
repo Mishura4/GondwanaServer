@@ -5,9 +5,9 @@ namespace DOL.GS.Scripts
 {
     public class DecorMob : AmteMob
     {
-    	public string WeaponTemplate { get; set; }
+        public string WeaponTemplate { get; set; }
 
-    	public override void AddAttacker(GameObject attacker) { }
+        public override void AddAttacker(GameObject attacker) { }
         public override void StartAttack(GameObject attackTarget) { }
         public override bool IsWorthReward
         {
@@ -17,8 +17,8 @@ namespace DOL.GS.Scripts
 
         public DecorMob()
         {
-        	WeaponTemplate = "";
-        	m_respawnInterval = 10000;
+            WeaponTemplate = "";
+            m_respawnInterval = 10000;
         }
 
         public override int GetModified(eProperty property)
@@ -48,9 +48,9 @@ namespace DOL.GS.Scripts
             return true;
         }
 
-		public override AmteCustomParam GetCustomParam()
-		{
-			return new AmteCustomParam("WeaponTemplate", () => WeaponTemplate, v => WeaponTemplate = v);
-		}
+        public override AmteCustomParam GetCustomParam()
+        {
+            return new AmteCustomParam("WeaponTemplate", () => WeaponTemplate, v => WeaponTemplate = v);
+        }
     }
 }

@@ -4,29 +4,29 @@ using DOL.GS;
 
 namespace AmteScripts.Management
 {
-	public static class StartLocation
-	{
-		[ScriptLoadedEvent]
-		public static void OnScriptCompiled(DOLEvent e, object sender, EventArgs args)
-		{
-			//We want to be notified whenever a new character is created
-			GameEventMgr.AddHandler(DatabaseEvent.CharacterCreated, new DOLEventHandler(CharacterCreation));
-		}
+    public static class StartLocation
+    {
+        [ScriptLoadedEvent]
+        public static void OnScriptCompiled(DOLEvent e, object sender, EventArgs args)
+        {
+            //We want to be notified whenever a new character is created
+            GameEventMgr.AddHandler(DatabaseEvent.CharacterCreated, new DOLEventHandler(CharacterCreation));
+        }
 
-		[ScriptUnloadedEvent]
-		public static void OnScriptUnloaded(DOLEvent e, object sender, EventArgs args)
-		{
-			GameEventMgr.RemoveHandler(DatabaseEvent.CharacterCreated, new DOLEventHandler(CharacterCreation));
-		}
+        [ScriptUnloadedEvent]
+        public static void OnScriptUnloaded(DOLEvent e, object sender, EventArgs args)
+        {
+            GameEventMgr.RemoveHandler(DatabaseEvent.CharacterCreated, new DOLEventHandler(CharacterCreation));
+        }
 
-		private static void CharacterCreation(DOLEvent e, object sender, EventArgs arguments)
-		{
-			CharacterEventArgs charArgs = arguments as CharacterEventArgs;
-			if (charArgs == null)
-				return;
-			charArgs.Character.GuildID = "17118d10-a7e9-4aee-82e5-cd6ca50c0c33";
-			charArgs.Character.GuildRank = 8;
-			switch (charArgs.Character.Realm)
+        private static void CharacterCreation(DOLEvent e, object sender, EventArgs arguments)
+        {
+            CharacterEventArgs charArgs = arguments as CharacterEventArgs;
+            if (charArgs == null)
+                return;
+            charArgs.Character.GuildID = "17118d10-a7e9-4aee-82e5-cd6ca50c0c33";
+            charArgs.Character.GuildRank = 8;
+            switch (charArgs.Character.Realm)
             {
                 case (int)eRealm.Albion:
                 default:
@@ -63,6 +63,6 @@ namespace AmteScripts.Management
                     charArgs.Character.BindHeading = 2602;
                     break;
             }
-		}
-	}
+        }
+    }
 }

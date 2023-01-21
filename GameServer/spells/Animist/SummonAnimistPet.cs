@@ -23,101 +23,101 @@ using System.Numerics;
 
 namespace DOL.GS.Spells
 {
-	public abstract class SummonAnimistPet : SummonSpellHandler
-	{
-		protected SummonAnimistPet(GameLiving caster, Spell spell, SpellLine line)
-			: base(caster, spell, line) { }
+    public abstract class SummonAnimistPet : SummonSpellHandler
+    {
+        protected SummonAnimistPet(GameLiving caster, Spell spell, SpellLine line)
+            : base(caster, spell, line) { }
 
-		public override bool CheckBeginCast(GameLiving selectedTarget)
-		{
-			if (Caster.GroundTarget == null)
-			{
+        public override bool CheckBeginCast(GameLiving selectedTarget)
+        {
+            if (Caster.GroundTarget == null)
+            {
                 if (Caster is GamePlayer)
                     MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "SummonAnimistPet.CheckBeginCast.GroundTargetNull"), eChatType.CT_SpellResisted);
                 return false;
-			}
+            }
 
-			if (!Caster.GroundTargetInView)
-			{
+            if (!Caster.GroundTargetInView)
+            {
                 if (Caster is GamePlayer)
                     MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "SummonAnimistPet.CheckBeginCast.GroundTargetNotInView"), eChatType.CT_SpellResisted);
                 return false;
-			}
+            }
 
-			if (!Caster.IsWithinRadius(Caster.GroundTarget.Value, CalculateSpellRange()))
-			{
+            if (!Caster.IsWithinRadius(Caster.GroundTarget.Value, CalculateSpellRange()))
+            {
                 if (Caster is GamePlayer)
                     MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "SummonAnimistPet.CheckBeginCast.GroundTargetNotInSpellRange"), eChatType.CT_SpellResisted);
                 return false;
-			}
+            }
 
-			return base.CheckBeginCast(selectedTarget);
-		}
-		public override void FinishSpellCast(GameLiving target)
-		{
-			if (Caster.GroundTarget == null)
-			{
+            return base.CheckBeginCast(selectedTarget);
+        }
+        public override void FinishSpellCast(GameLiving target)
+        {
+            if (Caster.GroundTarget == null)
+            {
                 if (Caster is GamePlayer)
                     MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "SummonAnimistPet.CheckBeginCast.GroundTargetNull"), eChatType.CT_SpellResisted);
                 return;
-			}
+            }
 
-			if (!Caster.GroundTargetInView)
-			{
+            if (!Caster.GroundTargetInView)
+            {
                 if (Caster is GamePlayer)
                     MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "SummonAnimistPet.CheckBeginCast.GroundTargetNotInView"), eChatType.CT_SpellResisted);
                 return;
-			}
+            }
 
-			if (!Caster.GroundTargetInView)
-			{
-				if (Caster is GamePlayer)
-					MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "SummonAnimistPet.CheckBeginCast.GroundTargetNotInView"), eChatType.CT_SpellResisted);
-				return;
-			}
+            if (!Caster.GroundTargetInView)
+            {
+                if (Caster is GamePlayer)
+                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "SummonAnimistPet.CheckBeginCast.GroundTargetNotInView"), eChatType.CT_SpellResisted);
+                return;
+            }
 
-			if (!Caster.IsWithinRadius(Caster.GroundTarget.Value, CalculateSpellRange()))
-			{
+            if (!Caster.IsWithinRadius(Caster.GroundTarget.Value, CalculateSpellRange()))
+            {
                 if (Caster is GamePlayer)
                     MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "SummonAnimistPet.CheckBeginCast.GroundTargetNotInSpellRange"), eChatType.CT_SpellResisted);
                 return;
-			}
+            }
 
-			base.FinishSpellCast(target);
-		}
+            base.FinishSpellCast(target);
+        }
 
-		public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
-		{
-			base.ApplyEffectOnTarget(target, effectiveness);
+        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        {
+            base.ApplyEffectOnTarget(target, effectiveness);
 
-			m_pet.Name = Spell.Name;
+            m_pet.Name = Spell.Name;
 
-			if (m_pet is TurretPet)
-			{
-				//[Ganrod] Nidel: Set only one spell.
-				if (m_pet.Spells != null && m_pet.Spells.Count > 0)
-				{
-					(m_pet as TurretPet).TurretSpell = m_pet.Spells[0] as Spell;
-				}
-			}
-		}
+            if (m_pet is TurretPet)
+            {
+                //[Ganrod] Nidel: Set only one spell.
+                if (m_pet.Spells != null && m_pet.Spells.Count > 0)
+                {
+                    (m_pet as TurretPet).TurretSpell = m_pet.Spells[0] as Spell;
+                }
+            }
+        }
 
-		protected override GamePet GetGamePet(INpcTemplate template)
-		{
-			return new TurretPet(template);
-		}
+        protected override GamePet GetGamePet(INpcTemplate template)
+        {
+            return new TurretPet(template);
+        }
 
-		protected override IControlledBrain GetPetBrain(GameLiving owner)
-		{
-			return new TurretBrain(owner);
-		}
+        protected override IControlledBrain GetPetBrain(GameLiving owner)
+        {
+            return new TurretBrain(owner);
+        }
 
-		protected override void GetPetLocation(out Vector3 pos, out ushort heading, out Region region)
-		{
-			pos = Caster.GroundTarget.Value;
-			heading = Caster.Heading;
-			region = Caster.CurrentRegion;
-		}
+        protected override void GetPetLocation(out Vector3 pos, out ushort heading, out Region region)
+        {
+            pos = Caster.GroundTarget.Value;
+            heading = Caster.Heading;
+            region = Caster.CurrentRegion;
+        }
 
         /// <summary>
         /// Do not trigger SubSpells
@@ -128,5 +128,5 @@ namespace DOL.GS.Spells
             if (ServerProperties.Properties.ENABLE_SUB_SPELL_ALL_CLASS)
                 base.CastSubSpells(target);
         }
-	}
+    }
 }

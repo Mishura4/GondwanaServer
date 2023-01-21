@@ -86,7 +86,7 @@ namespace DOL.Database
 
         public virtual WhereClause And(WhereClause rightExpression)
             => rightExpression.Equals(Empty) ? this : new ChainingExpression(this, "AND", rightExpression);
-        public virtual WhereClause Or(WhereClause rightExpression) 
+        public virtual WhereClause Or(WhereClause rightExpression)
             => rightExpression.Equals(Empty) ? this : new ChainingExpression(this, "OR", rightExpression);
 
         public static WhereClause Empty => new EmptyWhereClause();
@@ -143,7 +143,7 @@ namespace DOL.Database
                 {
                     var result = new List<TextAtom>() { new TextAtom(columnName), new TextAtom(op), new TextAtom("(") };
                     result.Add(new ValueAtom(valueCollection.ElementAt(0)));
-                    foreach(var element in valueCollection.Skip(1))
+                    foreach (var element in valueCollection.Skip(1))
                     {
                         result.Add(new TextAtom(","));
                         result.Add(new ValueAtom(element));

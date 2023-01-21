@@ -17,34 +17,34 @@ namespace DOL.GS.RealmAbilities
         {
             if (CheckPreconditions(living, DEAD | SITTING | MEZZED | STUNNED)) return;
             GamePlayer player = living as GamePlayer;
-			if (player.EffectList.CountOfType<StrikePredictionEffect>() > 0)
+            if (player.EffectList.CountOfType<StrikePredictionEffect>() > 0)
             {
                 player.Out.SendMessage("You already have an effect of that type!", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
             }
-			
-			if(ServerProperties.Properties.USE_NEW_ACTIVES_RAS_SCALING)
-			{
-	            switch (Level)
-	            {
-	                case 1: m_value = 5; break;
-	                case 2: m_value = 7; break;
-	                case 3: m_value = 10; break;
-	                case 4: m_value = 15; break;
-	                case 5: m_value = 20; break;
-	                default: return;
-	            }				
-			}
-			else
-			{
-	            switch (Level)
-	            {
-	                case 1: m_value = 5; break;
-	                case 2: m_value = 10; break;
-	                case 3: m_value = 20; break;
-	                default: return;
-	            }
-			}
-			
+
+            if (ServerProperties.Properties.USE_NEW_ACTIVES_RAS_SCALING)
+            {
+                switch (Level)
+                {
+                    case 1: m_value = 5; break;
+                    case 2: m_value = 7; break;
+                    case 3: m_value = 10; break;
+                    case 4: m_value = 15; break;
+                    case 5: m_value = 20; break;
+                    default: return;
+                }
+            }
+            else
+            {
+                switch (Level)
+                {
+                    case 1: m_value = 5; break;
+                    case 2: m_value = 10; break;
+                    case 3: m_value = 20; break;
+                    default: return;
+                }
+            }
+
             DisableSkill(living);
             ArrayList targets = new ArrayList();
             if (player.Group == null)
@@ -56,7 +56,7 @@ namespace DOL.GS.RealmAbilities
             bool success;
             foreach (GamePlayer target in targets)
             {
-				success = (target.EffectList.CountOfType<StrikePredictionEffect>() == 0);
+                success = (target.EffectList.CountOfType<StrikePredictionEffect>() == 0);
                 foreach (GamePlayer visPlayer in target.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
                     visPlayer.Out.SendSpellEffectAnimation(player, target, 7037, 0, false, CastSuccess(success));
                 if (success)

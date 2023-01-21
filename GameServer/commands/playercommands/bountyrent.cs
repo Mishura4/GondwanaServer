@@ -23,23 +23,23 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute("&bountyrent", //command to handle
-		ePrivLevel.Player, //minimum privelege level
-		"Commands.Players.Bountyrent.Description", //command description
+    [CmdAttribute("&bountyrent", //command to handle
+        ePrivLevel.Player, //minimum privelege level
+        "Commands.Players.Bountyrent.Description", //command description
         "Commands.Players.Bountyrent.Usage")]
-	public class BountyRentCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		public void OnCommand(GameClient client, string[] args)
-		{
+    public class BountyRentCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        public void OnCommand(GameClient client, string[] args)
+        {
             long bpWorth = ServerProperties.Properties.RENT_BOUNTY_POINT_TO_GOLD;
 
-			if (args.Length < 2)
-			{
+            if (args.Length < 2)
+            {
                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Bountyrent.CmdUsage", bpWorth),
                     eChatType.CT_System, eChatLoc.CL_SystemWindow);
 
-				return;
-			}
+                return;
+            }
 
             if (args.Length < 3)
             {
@@ -50,13 +50,13 @@ namespace DOL.GS.Commands
             }
 
             House house = client.Player.CurrentHouse;
-			if (house == null)
-			{
+            if (house == null)
+            {
                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Bountyrent.RangeOfAHouse"),
                     eChatType.CT_System, eChatLoc.CL_SystemWindow);
 
-				return;
-			}
+                return;
+            }
 
             long BPsToAdd = 0;
             try
@@ -71,10 +71,10 @@ namespace DOL.GS.Commands
                 return;
             }
 
-			switch (args[1].ToLower())
-			{
-				case "personal":
-					{
+            switch (args[1].ToLower())
+            {
+                case "personal":
+                    {
                         if (!house.CanPayRent(client.Player))
                         {
                             client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Bountyrent.NoPayRentPerm"),
@@ -83,13 +83,13 @@ namespace DOL.GS.Commands
                             return;
                         }
 
-						if ((client.Player.BountyPoints -= BPsToAdd) < 0)
-						{
+                        if ((client.Player.BountyPoints -= BPsToAdd) < 0)
+                        {
                             client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Bountyrent.NotEnoughBp"),
                                 eChatType.CT_System, eChatLoc.CL_SystemWindow);
 
-							return;
-						}
+                            return;
+                        }
 
                         if (house.KeptMoney >= (HouseMgr.GetRentByModel(house.Model) * ServerProperties.Properties.RENT_LOCKBOX_PAYMENTS))
                         {
@@ -116,9 +116,10 @@ namespace DOL.GS.Commands
                         client.Out.SendUpdatePoints();
                         client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Bountyrent.YouSpend", BPsToAdd, ((BPsToAdd * bpWorth) / bpWorth)),
                             eChatType.CT_System, eChatLoc.CL_SystemWindow);
-					} break;
-				case "guild":
-					{
+                    }
+                    break;
+                case "guild":
+                    {
                         if (house.DatabaseItem.GuildHouse && client.Player.GuildName == house.DatabaseItem.GuildName)
                         {
                             if (house.CanPayRent(client.Player))
@@ -167,12 +168,14 @@ namespace DOL.GS.Commands
                         }
 
                         DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Bountyrent.NotAHouseGuildLeader"));
-					} break;
-				default:
-					{
+                    }
+                    break;
+                default:
+                    {
                         DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Bountyrent.CorrectFormat"));
-					} break;
-			}
-		}
-	}
+                    }
+                    break;
+            }
+        }
+    }
 }

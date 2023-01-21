@@ -53,7 +53,7 @@ namespace DOL.GS.GameEvents
                     if (IsKillAllowedArea(killed))
                     {
                         return;
-                    }                 
+                    }
 
                     bool isLegitimeKiller = killer is GuardNPC || killerPlayer != null;
                     //Log interplayer kills & Killed by Guard
@@ -92,7 +92,7 @@ namespace DOL.GS.GameEvents
                     }
                 }
             }
-        }    
+        }
 
         private static void GuardKillLostReputation(GamePlayer player)
         {
@@ -121,6 +121,6 @@ namespace DOL.GS.GameEvents
             }
 
             return false;
-        }     
+        }
     }
 }

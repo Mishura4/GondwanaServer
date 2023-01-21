@@ -11,11 +11,11 @@ using GameServerScripts.Amtescripts.Managers;
 
 namespace DOL.GS.Scripts
 {
-	public class OutlawMob : GuardOutlaw
+    public class OutlawMob : GuardOutlaw
     {
         public OutlawMob()
         {
             SetOwnBrain(new OutlawMobBrain());
         }
-	}
+    }
 }

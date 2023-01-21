@@ -26,21 +26,21 @@ using System.Reflection;
 
 namespace DOL.AI.Brain
 {
-	/// <summary>
-	/// A retriever type mob is an NPC that is spawned from a boss-like
-	/// mob (its master). Upon spawning, the master mob orders the
-	/// retriever to make for a certain location; once the retriever
-	/// has reached its target it reports back to its master. The player's
-	/// task usually is to prevent the retriever from reaching its target,
-	/// because bad things may happen should it succeed.
-	/// </summary>
-	/// <author>Aredhel</author>
+    /// <summary>
+    /// A retriever type mob is an NPC that is spawned from a boss-like
+    /// mob (its master). Upon spawning, the master mob orders the
+    /// retriever to make for a certain location; once the retriever
+    /// has reached its target it reports back to its master. The player's
+    /// task usually is to prevent the retriever from reaching its target,
+    /// because bad things may happen should it succeed.
+    /// </summary>
+    /// <author>Aredhel</author>
     class RetrieverMobBrain : StandardMobBrain
     {
-		/// <summary>
-		/// Defines a logger for this class.
-		/// </summary>
-		private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        /// <summary>
+        /// Defines a logger for this class.
+        /// </summary>
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         private enum State { Passive, GettingHelp, Aggressive };
         private State m_state;
@@ -62,7 +62,7 @@ namespace DOL.AI.Brain
         public GameNPC Master
         {
             get { return m_master; }
-			set { m_master = value; }
+            set { m_master = value; }
         }
 
         /// <summary>
@@ -83,8 +83,8 @@ namespace DOL.AI.Brain
                 m_state = State.GettingHelp;
             else if (e == GameNPCEvent.ArriveAtTarget && m_state == State.GettingHelp)
             {
-				if (Master != null && Master.Brain != null)
-					Master.Brain.Notify(GameNPCEvent.ArriveAtTarget, this.Body, new EventArgs());
+                if (Master != null && Master.Brain != null)
+                    Master.Brain.Notify(GameNPCEvent.ArriveAtTarget, this.Body, new EventArgs());
                 m_state = State.Aggressive;
             }
             else if (e == GameNPCEvent.TakeDamage)

@@ -52,660 +52,660 @@ using DOL.events.server;
 
 namespace DOL.GS
 {
-	public class GameServer : BaseServer
-	{
-		private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+    public class GameServer : BaseServer
+    {
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-		#region Variables
+        #region Variables
 
-		/// <summary>
-		/// Maximum UDP buffer size
-		/// </summary>
-		protected const int MAX_UDPBUF = 4096;
+        /// <summary>
+        /// Maximum UDP buffer size
+        /// </summary>
+        protected const int MAX_UDPBUF = 4096;
 
-		/// <summary>
-		/// Minute conversion from milliseconds
-		/// </summary>
-		protected const int MINUTE_CONV = 60000;
+        /// <summary>
+        /// Minute conversion from milliseconds
+        /// </summary>
+        protected const int MINUTE_CONV = 60000;
 
-		/// <summary>
-		/// The instance!
-		/// </summary>
-		protected static GameServer m_instance;
+        /// <summary>
+        /// The instance!
+        /// </summary>
+        protected static GameServer m_instance;
 
-		/// <summary>
-		/// The textwrite for log operations
-		/// </summary>
-		protected ILog m_cheatLog;
+        /// <summary>
+        /// The textwrite for log operations
+        /// </summary>
+        protected ILog m_cheatLog;
 
-		/// <summary>
-		/// Database instance
-		/// </summary>
-		protected IObjectDatabase m_database;
+        /// <summary>
+        /// Database instance
+        /// </summary>
+        protected IObjectDatabase m_database;
 
-		/// <summary>
-		/// The textwrite for log operations
-		/// </summary>
-		protected ILog m_gmLog;
+        /// <summary>
+        /// The textwrite for log operations
+        /// </summary>
+        protected ILog m_gmLog;
 
         /// <summary>
         /// The textwrite for log operations
         /// </summary>
         protected ILog m_inventoryLog;
 
-		/// <summary>
-		/// Holds instance of current server rules
-		/// </summary>
-		protected IServerRules m_serverRules;
+        /// <summary>
+        /// Holds instance of current server rules
+        /// </summary>
+        protected IServerRules m_serverRules;
 
-		/// <summary>
-		/// Holds the instance of the current keep manager
-		/// </summary>
-		protected IKeepManager m_keepManager;
+        /// <summary>
+        /// Holds the instance of the current keep manager
+        /// </summary>
+        protected IKeepManager m_keepManager;
 
-		/// <summary>
-		/// Holds the startSystemTick when server is up.
-		/// </summary>
-		protected uint m_startTick;
+        /// <summary>
+        /// Holds the startSystemTick when server is up.
+        /// </summary>
+        protected uint m_startTick;
 
-		/// <summary>
-		/// Game server status variable
-		/// </summary>
-		protected eGameServerStatus m_status;
+        /// <summary>
+        /// Game server status variable
+        /// </summary>
+        protected eGameServerStatus m_status;
 
-		/// <summary>
-		/// World save timer
-		/// </summary>
-		protected Timer m_timer;
+        /// <summary>
+        /// World save timer
+        /// </summary>
+        protected Timer m_timer;
 
-		/// <summary>
-		/// Receive buffer for UDP
-		/// </summary>
-		protected byte[] m_udpBuf;
+        /// <summary>
+        /// Receive buffer for UDP
+        /// </summary>
+        protected byte[] m_udpBuf;
 
-		/// <summary>
-		/// Socket for UDP packets
-		/// </summary>
-		protected Socket m_udpSocket;
+        /// <summary>
+        /// Socket for UDP packets
+        /// </summary>
+        protected Socket m_udpSocket;
 
-		/// <summary>
-		/// A general logger for the server
-		/// </summary>
-		public ILog Logger
-		{
-			get { return log; }
-		}
+        /// <summary>
+        /// A general logger for the server
+        /// </summary>
+        public ILog Logger
+        {
+            get { return log; }
+        }
 
-		#endregion
+        #endregion
 
-		#region Properties
-		public static GameServer Instance => m_instance;
-		public static IServerRules ServerRules => m_instance.ServerRulesImpl;
-		public static IObjectDatabase Database => m_instance.DataBaseImpl;
+        #region Properties
+        public static GameServer Instance => m_instance;
+        public static IServerRules ServerRules => m_instance.ServerRulesImpl;
+        public static IObjectDatabase Database => m_instance.DataBaseImpl;
 
-		public new virtual GameServerConfiguration Configuration => (GameServerConfiguration) _config;
-		public IObjectDatabase IDatabase => m_database;
-		public eGameServerStatus ServerStatus => m_status;
-		public Scheduler.SimpleScheduler Scheduler { get; protected set; }
-		public WorldManager WorldManager { get; protected set; }
-		public PlayerManager PlayerManager { get; protected set; }
-		public NpcManager NpcManager { get; protected set; }
-		public string Version => Assembly.GetExecutingAssembly().GetName().Version.ToString();
+        public new virtual GameServerConfiguration Configuration => (GameServerConfiguration)_config;
+        public IObjectDatabase IDatabase => m_database;
+        public eGameServerStatus ServerStatus => m_status;
+        public Scheduler.SimpleScheduler Scheduler { get; protected set; }
+        public WorldManager WorldManager { get; protected set; }
+        public PlayerManager PlayerManager { get; protected set; }
+        public NpcManager NpcManager { get; protected set; }
+        public string Version => Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
-		protected virtual IObjectDatabase DataBaseImpl => Instance.m_database;
+        protected virtual IObjectDatabase DataBaseImpl => Instance.m_database;
 
-		protected IServerRules ServerRulesImpl
-		{
-			get
-			{
-				if (Instance.m_serverRules == null)
-				{
-					Instance.m_serverRules = ScriptMgr.CreateServerRules(Instance.Configuration.ServerType);
-					if (Instance.m_serverRules != null)
-					{
-						Instance.m_serverRules.Initialize();
-					}
-					else
-					{
-						if (log.IsErrorEnabled)
-						{
-							log.Error("ServerRules null on access and failed to create.");
-						}
-					}
-				}
-				return Instance.m_serverRules;
-			}
-		}
+        protected IServerRules ServerRulesImpl
+        {
+            get
+            {
+                if (Instance.m_serverRules == null)
+                {
+                    Instance.m_serverRules = ScriptMgr.CreateServerRules(Instance.Configuration.ServerType);
+                    if (Instance.m_serverRules != null)
+                    {
+                        Instance.m_serverRules.Initialize();
+                    }
+                    else
+                    {
+                        if (log.IsErrorEnabled)
+                        {
+                            log.Error("ServerRules null on access and failed to create.");
+                        }
+                    }
+                }
+                return Instance.m_serverRules;
+            }
+        }
 
-		public static IKeepManager KeepManager
-		{
-			get
-			{
-				if (Instance.m_keepManager == null)
-				{
-					Instance.StartKeepManager();
-					if (Instance.m_keepManager == null && log.IsErrorEnabled)
-					{
-						log.Error("Could not get or start Keep Manager!");
-					}
-				}
+        public static IKeepManager KeepManager
+        {
+            get
+            {
+                if (Instance.m_keepManager == null)
+                {
+                    Instance.StartKeepManager();
+                    if (Instance.m_keepManager == null && log.IsErrorEnabled)
+                    {
+                        log.Error("Could not get or start Keep Manager!");
+                    }
+                }
 
-				return Instance.m_keepManager;
-			}
-		}
+                return Instance.m_keepManager;
+            }
+        }
 
-		/// <summary>
-		/// Gets or sets the world save interval
-		/// </summary>
-		public int SaveInterval
-		{
-			get { return Configuration.SaveInterval; }
-			set
-			{
-				Configuration.SaveInterval = value;
-				if (m_timer != null)
-					m_timer.Change(value*MINUTE_CONV, Timeout.Infinite);
-			}
-		}
+        /// <summary>
+        /// Gets or sets the world save interval
+        /// </summary>
+        public int SaveInterval
+        {
+            get { return Configuration.SaveInterval; }
+            set
+            {
+                Configuration.SaveInterval = value;
+                if (m_timer != null)
+                    m_timer.Change(value * MINUTE_CONV, Timeout.Infinite);
+            }
+        }
 
-		/// <summary>
-		/// True if the server is listening
-		/// </summary>
-		public bool IsRunning
-		{
-			get { return _listen != null; }
-		}
+        /// <summary>
+        /// True if the server is listening
+        /// </summary>
+        public bool IsRunning
+        {
+            get { return _listen != null; }
+        }
 
-		/// <summary>
-		/// Gets the number of millisecounds elapsed since the GameServer started.
-		/// </summary>
-		public uint TickCount
-		{
-			get { return GameTimer.GetTickCount() - m_startTick; }
-		}
+        /// <summary>
+        /// Gets the number of millisecounds elapsed since the GameServer started.
+        /// </summary>
+        public uint TickCount
+        {
+            get { return GameTimer.GetTickCount() - m_startTick; }
+        }
 
-		#endregion
+        #endregion
 
-		#region Initialization
+        #region Initialization
 
-		public static void LoadTestDouble(GameServer server) { m_instance = server; }
+        public static void LoadTestDouble(GameServer server) { m_instance = server; }
 
-		public static void CreateInstance(GameServerConfiguration config)
-		{
-			//Only one intance
-			if (Instance != null)
-				return;
+        public static void CreateInstance(GameServerConfiguration config)
+        {
+            //Only one intance
+            if (Instance != null)
+                return;
 
-			//Try to find the log.config file, if it doesn't exist
-			//we create it
-			var logConfig = new FileInfo(config.LogConfigFile);
-			if (!logConfig.Exists)
-			{
-				ResourceUtil.ExtractResource("logconfig.xml", logConfig.FullName);
-			}
+            //Try to find the log.config file, if it doesn't exist
+            //we create it
+            var logConfig = new FileInfo(config.LogConfigFile);
+            if (!logConfig.Exists)
+            {
+                ResourceUtil.ExtractResource("logconfig.xml", logConfig.FullName);
+            }
 
-			//Configure and watch the config file
-			var assembly = Assembly.GetEntryAssembly() ?? Assembly.GetCallingAssembly() ?? Assembly.GetExecutingAssembly();
-			var logRepository = LogManager.GetRepository(assembly);
-			XmlConfigurator.ConfigureAndWatch(logRepository, logConfig);
+            //Configure and watch the config file
+            var assembly = Assembly.GetEntryAssembly() ?? Assembly.GetCallingAssembly() ?? Assembly.GetExecutingAssembly();
+            var logRepository = LogManager.GetRepository(assembly);
+            XmlConfigurator.ConfigureAndWatch(logRepository, logConfig);
 
-			//Create the instance
-			m_instance = new GameServer(config);
-		}
-		#endregion
+            //Create the instance
+            m_instance = new GameServer(config);
+        }
+        #endregion
 
-		#region UDP
+        #region UDP
 
-		/// <summary>
-		/// Holds udp receive callback delegate
-		/// </summary>
-		protected readonly AsyncCallback m_udpReceiveCallback;
+        /// <summary>
+        /// Holds udp receive callback delegate
+        /// </summary>
+        protected readonly AsyncCallback m_udpReceiveCallback;
 
-		/// <summary>
-		/// Holds the async UDP send callback
-		/// </summary>
-		protected readonly AsyncCallback m_udpSendCallback;
+        /// <summary>
+        /// Holds the async UDP send callback
+        /// </summary>
+        protected readonly AsyncCallback m_udpSendCallback;
 
-		/// <summary>
-		/// Gets the UDP Socket of this server instance
-		/// </summary>
-		protected Socket UDPSocket
-		{
-			get { return m_udpSocket; }
-		}
+        /// <summary>
+        /// Gets the UDP Socket of this server instance
+        /// </summary>
+        protected Socket UDPSocket
+        {
+            get { return m_udpSocket; }
+        }
 
-		/// <summary>
-		/// Gets the UDP buffer of this server instance
-		/// </summary>
-		protected byte[] UDPBuffer
-		{
-			get { return m_udpBuf; }
-		}
+        /// <summary>
+        /// Gets the UDP buffer of this server instance
+        /// </summary>
+        protected byte[] UDPBuffer
+        {
+            get { return m_udpBuf; }
+        }
 
-		/// <summary>
-		/// Starts the udp listening
-		/// </summary>
-		/// <returns>true if successfull</returns>
-		protected bool StartUDP()
-		{
-			bool ret = true;
-			try
-			{
-				// Open our udp socket
-				m_udpSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-				m_udpSocket.Bind(new IPEndPoint(Configuration.UDPIP, Configuration.UDPPort));
+        /// <summary>
+        /// Starts the udp listening
+        /// </summary>
+        /// <returns>true if successfull</returns>
+        protected bool StartUDP()
+        {
+            bool ret = true;
+            try
+            {
+                // Open our udp socket
+                m_udpSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+                m_udpSocket.Bind(new IPEndPoint(Configuration.UDPIP, Configuration.UDPPort));
 
-				ret = BeginReceiveUDP(m_udpSocket, this);
-			}
-			catch (Exception e)
-			{
-				if (log.IsErrorEnabled)
-					log.Error("StartUDP", e);
-				ret = false;
-			}
+                ret = BeginReceiveUDP(m_udpSocket, this);
+            }
+            catch (Exception e)
+            {
+                if (log.IsErrorEnabled)
+                    log.Error("StartUDP", e);
+                ret = false;
+            }
 
-			return ret;
-		}
+            return ret;
+        }
 
-		/// <summary>
-		/// UDP event handler. Called when a UDP packet is waiting to be read
-		/// </summary>
-		/// <param name="ar"></param>
-		protected void RecvFromCallback(IAsyncResult ar)
-		{
-			if (m_status != eGameServerStatus.GSS_Open)
-				return;
+        /// <summary>
+        /// UDP event handler. Called when a UDP packet is waiting to be read
+        /// </summary>
+        /// <param name="ar"></param>
+        protected void RecvFromCallback(IAsyncResult ar)
+        {
+            if (m_status != eGameServerStatus.GSS_Open)
+                return;
 
-			if (ar == null)
-				return;
+            if (ar == null)
+                return;
 
-			var server = (GameServer) ar.AsyncState;
-			Socket s = server.UDPSocket;
-			GameClient client = null;
+            var server = (GameServer)ar.AsyncState;
+            Socket s = server.UDPSocket;
+            GameClient client = null;
 
-			if (s != null)
-			{
-				//Creates a temporary EndPoint to pass to EndReceiveFrom.
-				EndPoint tempRemoteEP = new IPEndPoint(IPAddress.Any, 0);
-				bool receiving = false;
-				try
-				{
-					// Handle the packet
-					int read = s.EndReceiveFrom(ar, ref tempRemoteEP);
-					if (read == 0)
-					{
-						log.Debug("UDP received bytes = 0");
-					}
-					else
-					{
-						int pakCheck = (server.UDPBuffer[read - 2] << 8) | server.UDPBuffer[read - 1];
-						int calcCheck = PacketProcessor.CalculateChecksum(server.UDPBuffer, 0, read - 2);
+            if (s != null)
+            {
+                //Creates a temporary EndPoint to pass to EndReceiveFrom.
+                EndPoint tempRemoteEP = new IPEndPoint(IPAddress.Any, 0);
+                bool receiving = false;
+                try
+                {
+                    // Handle the packet
+                    int read = s.EndReceiveFrom(ar, ref tempRemoteEP);
+                    if (read == 0)
+                    {
+                        log.Debug("UDP received bytes = 0");
+                    }
+                    else
+                    {
+                        int pakCheck = (server.UDPBuffer[read - 2] << 8) | server.UDPBuffer[read - 1];
+                        int calcCheck = PacketProcessor.CalculateChecksum(server.UDPBuffer, 0, read - 2);
 
-						if (calcCheck != pakCheck)
-						{
-							if (log.IsWarnEnabled)
-								log.WarnFormat("Bad UDP packet checksum (packet:0x{0:X4} calculated:0x{1:X4}) -> ignored", pakCheck, calcCheck);
-							if (log.IsDebugEnabled)
-								log.Debug(Marshal.ToHexDump("UDP buffer dump, received " + read + "bytes", server.UDPBuffer));
-						}
-						else
-						{
-							var sender = (IPEndPoint) (tempRemoteEP);
+                        if (calcCheck != pakCheck)
+                        {
+                            if (log.IsWarnEnabled)
+                                log.WarnFormat("Bad UDP packet checksum (packet:0x{0:X4} calculated:0x{1:X4}) -> ignored", pakCheck, calcCheck);
+                            if (log.IsDebugEnabled)
+                                log.Debug(Marshal.ToHexDump("UDP buffer dump, received " + read + "bytes", server.UDPBuffer));
+                        }
+                        else
+                        {
+                            var sender = (IPEndPoint)(tempRemoteEP);
 
-							var pakin = new GSPacketIn(read - GSPacketIn.HDR_SIZE);
-							pakin.Load(server.UDPBuffer, 0, read);
+                            var pakin = new GSPacketIn(read - GSPacketIn.HDR_SIZE);
+                            pakin.Load(server.UDPBuffer, 0, read);
 
-							//Get the next message
-							BeginReceiveUDP(s, server);
-							receiving = true;
+                            //Get the next message
+                            BeginReceiveUDP(s, server);
+                            receiving = true;
 
-							client = WorldMgr.GetClientFromID(pakin.SessionID);
-							if (client != null)
-							{
-								//If this is the first message from the client, we
-								//save the endpoint!
-								if (client.UdpEndPoint == null)
-								{
-									client.UdpEndPoint = sender;
-									client.UdpConfirm = false;
-								}
-								//Only handle the packet if it comes from a valid client
-								if (client.UdpEndPoint.Equals(sender))
-								{
-									client.PacketProcessor.HandlePacket(pakin);
-								}
-							}
-							else if (log.IsErrorEnabled)
-							{
-								log.Error(
-									string.Format("Got an UDP packet from invalid client id or ip: client id = {0}, ip = {1},  code = {2:x2}",
-									              pakin.SessionID, sender, pakin.ID));
-							}
-						}
-					}
-				}
-				catch (SocketException)
-				{
-				}
-				catch (ObjectDisposedException)
-				{
-				}
-				catch (Exception e)
-				{
-					if (log.IsErrorEnabled)
-						log.Error("RecvFromCallback", e);
-				}
-				finally
-				{
-					if (!receiving)
-					{
-						//Get the next message
-						//Even if we have errors, we need to continue with UDP
-						BeginReceiveUDP(s, server);
-					}
-				}
-			}
-		}
+                            client = WorldMgr.GetClientFromID(pakin.SessionID);
+                            if (client != null)
+                            {
+                                //If this is the first message from the client, we
+                                //save the endpoint!
+                                if (client.UdpEndPoint == null)
+                                {
+                                    client.UdpEndPoint = sender;
+                                    client.UdpConfirm = false;
+                                }
+                                //Only handle the packet if it comes from a valid client
+                                if (client.UdpEndPoint.Equals(sender))
+                                {
+                                    client.PacketProcessor.HandlePacket(pakin);
+                                }
+                            }
+                            else if (log.IsErrorEnabled)
+                            {
+                                log.Error(
+                                    string.Format("Got an UDP packet from invalid client id or ip: client id = {0}, ip = {1},  code = {2:x2}",
+                                                  pakin.SessionID, sender, pakin.ID));
+                            }
+                        }
+                    }
+                }
+                catch (SocketException)
+                {
+                }
+                catch (ObjectDisposedException)
+                {
+                }
+                catch (Exception e)
+                {
+                    if (log.IsErrorEnabled)
+                        log.Error("RecvFromCallback", e);
+                }
+                finally
+                {
+                    if (!receiving)
+                    {
+                        //Get the next message
+                        //Even if we have errors, we need to continue with UDP
+                        BeginReceiveUDP(s, server);
+                    }
+                }
+            }
+        }
 
-		/// <summary>
-		/// Starts receiving UDP packets.
-		/// </summary>
-		/// <param name="s">Socket to receive packets.</param>
-		/// <param name="server">Server instance used to receive packets.</param>
-		private bool BeginReceiveUDP(Socket s, GameServer server)
-		{
-			bool ret = false;
-			EndPoint tempRemoteEP = new IPEndPoint(IPAddress.Any, 0);
+        /// <summary>
+        /// Starts receiving UDP packets.
+        /// </summary>
+        /// <param name="s">Socket to receive packets.</param>
+        /// <param name="server">Server instance used to receive packets.</param>
+        private bool BeginReceiveUDP(Socket s, GameServer server)
+        {
+            bool ret = false;
+            EndPoint tempRemoteEP = new IPEndPoint(IPAddress.Any, 0);
 
-			try
-			{
-				s.BeginReceiveFrom(server.UDPBuffer, 0, MAX_UDPBUF, SocketFlags.None, ref tempRemoteEP, m_udpReceiveCallback,
-				                   server);
-				ret = true;
-			}
-			catch (SocketException e)
-			{
-				log.Fatal(
-					string.Format("Failed to resume receiving UDP packets. UDP is DEAD now. (code: {0}  socketCode: {1})", e.ErrorCode,
-					              e.SocketErrorCode), e);
-			}
-			catch (ObjectDisposedException e)
-			{
-				log.Fatal("Tried to start UDP. Object disposed.", e);
-			}
-			catch (Exception e)
-			{
-				if (log.IsErrorEnabled)
-					log.Error("UDP Recv", e);
-			}
+            try
+            {
+                s.BeginReceiveFrom(server.UDPBuffer, 0, MAX_UDPBUF, SocketFlags.None, ref tempRemoteEP, m_udpReceiveCallback,
+                                   server);
+                ret = true;
+            }
+            catch (SocketException e)
+            {
+                log.Fatal(
+                    string.Format("Failed to resume receiving UDP packets. UDP is DEAD now. (code: {0}  socketCode: {1})", e.ErrorCode,
+                                  e.SocketErrorCode), e);
+            }
+            catch (ObjectDisposedException e)
+            {
+                log.Fatal("Tried to start UDP. Object disposed.", e);
+            }
+            catch (Exception e)
+            {
+                if (log.IsErrorEnabled)
+                    log.Error("UDP Recv", e);
+            }
 
-			return ret;
-		}
+            return ret;
+        }
 
-		/// <summary>
-		/// Sends a UDP packet
-		/// </summary>
-		/// <param name="bytes">Packet to be sent</param>
-		/// <param name="count">The count of bytes to send</param>
-		/// <param name="clientEndpoint">Address of receiving client</param>
-		public void SendUDP(byte[] bytes, int count, EndPoint clientEndpoint)
-		{
-			SendUDP(bytes, count, clientEndpoint, null);
-		}
+        /// <summary>
+        /// Sends a UDP packet
+        /// </summary>
+        /// <param name="bytes">Packet to be sent</param>
+        /// <param name="count">The count of bytes to send</param>
+        /// <param name="clientEndpoint">Address of receiving client</param>
+        public void SendUDP(byte[] bytes, int count, EndPoint clientEndpoint)
+        {
+            SendUDP(bytes, count, clientEndpoint, null);
+        }
 
-		/// <summary>
-		/// Sends a UDP packet
-		/// </summary>
-		/// <param name="bytes">Packet to be sent</param>
-		/// <param name="count">The count of bytes to send</param>
-		/// <param name="clientEndpoint">Address of receiving client</param>
-		/// <param name="callback"></param>
-		public void SendUDP(byte[] bytes, int count, EndPoint clientEndpoint, AsyncCallback callback)
-		{
-			var start = GameTimer.GetTickCount();
+        /// <summary>
+        /// Sends a UDP packet
+        /// </summary>
+        /// <param name="bytes">Packet to be sent</param>
+        /// <param name="count">The count of bytes to send</param>
+        /// <param name="clientEndpoint">Address of receiving client</param>
+        /// <param name="callback"></param>
+        public void SendUDP(byte[] bytes, int count, EndPoint clientEndpoint, AsyncCallback callback)
+        {
+            var start = GameTimer.GetTickCount();
 
-			m_udpSocket.BeginSendTo(bytes, 0, count, SocketFlags.None, clientEndpoint, callback, m_udpSocket);
+            m_udpSocket.BeginSendTo(bytes, 0, count, SocketFlags.None, clientEndpoint, callback, m_udpSocket);
 
-			var took = GameTimer.GetTickCount() - start;
-			if (took > 100 && log.IsWarnEnabled)
-				log.WarnFormat("m_udpSocket.BeginSendTo took {0}ms! (UDP to {1})", took, clientEndpoint.ToString());
-		}
+            var took = GameTimer.GetTickCount() - start;
+            if (took > 100 && log.IsWarnEnabled)
+                log.WarnFormat("m_udpSocket.BeginSendTo took {0}ms! (UDP to {1})", took, clientEndpoint.ToString());
+        }
 
-		/// <summary>
-		/// Callback function for UDP sends
-		/// </summary>
-		/// <param name="ar">Asynchronous result of this operation</param>
-		protected void SendToCallback(IAsyncResult ar)
-		{
-			if (ar == null)
-				return;
+        /// <summary>
+        /// Callback function for UDP sends
+        /// </summary>
+        /// <param name="ar">Asynchronous result of this operation</param>
+        protected void SendToCallback(IAsyncResult ar)
+        {
+            if (ar == null)
+                return;
 
-			try
-			{
-				var s = (Socket) ar.AsyncState;
-				s.EndSendTo(ar);
-			}
-			catch (ObjectDisposedException)
-			{
-			}
-			catch (SocketException)
-			{
-			}
-			catch (Exception e)
-			{
-				if (log.IsErrorEnabled)
-					log.Error("SendToCallback", e);
-			}
-		}
+            try
+            {
+                var s = (Socket)ar.AsyncState;
+                s.EndSendTo(ar);
+            }
+            catch (ObjectDisposedException)
+            {
+            }
+            catch (SocketException)
+            {
+            }
+            catch (Exception e)
+            {
+                if (log.IsErrorEnabled)
+                    log.Error("SendToCallback", e);
+            }
+        }
 
-		#endregion
+        #endregion
 
-		#region Start
+        #region Start
 
-		public override bool Start()
-		{
-			try
-			{
-				if (log.IsDebugEnabled)
-					log.DebugFormat("Starting Server, Memory is {0}MB", GC.GetTotalMemory(false)/1024/1024);
-				
-				m_status = eGameServerStatus.GSS_Closed;
-				Thread.CurrentThread.Priority = ThreadPriority.Normal;
+        public override bool Start()
+        {
+            try
+            {
+                if (log.IsDebugEnabled)
+                    log.DebugFormat("Starting Server, Memory is {0}MB", GC.GetTotalMemory(false) / 1024 / 1024);
 
-				AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+                m_status = eGameServerStatus.GSS_Closed;
+                Thread.CurrentThread.Priority = ThreadPriority.Normal;
 
-				//---------------------------------------------------------------
-				//Try to compile the Scripts
-				if (!InitComponent(CompileScripts(), "Script compilation"))
-					return false;
-				
-				//---------------------------------------------------------------
-				//Try to init Server Properties
-				if (!InitComponent(Properties.InitProperties, "Server Properties Lookup"))
-					return false;
-				
-				//---------------------------------------------------------------
-				//Try loading the commands
-				if (!InitComponent(ScriptMgr.LoadCommands(), "Loading Commands"))
-					return false;
+                AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
-				//---------------------------------------------------------------
-				//Check and update the database if needed
-				if (!UpdateDatabase())
-					return false;
+                //---------------------------------------------------------------
+                //Try to compile the Scripts
+                if (!InitComponent(CompileScripts(), "Script compilation"))
+                    return false;
 
-				//---------------------------------------------------------------
-				//Try to init the server port
-				if (!InitComponent(InitSocket(), "InitSocket()"))
-					return false;
+                //---------------------------------------------------------------
+                //Try to init Server Properties
+                if (!InitComponent(Properties.InitProperties, "Server Properties Lookup"))
+                    return false;
 
-				//---------------------------------------------------------------
-				//Packet buffers
-				if (!InitComponent(AllocatePacketBuffers(), "AllocatePacketBuffers()"))
-					return false;
+                //---------------------------------------------------------------
+                //Try loading the commands
+                if (!InitComponent(ScriptMgr.LoadCommands(), "Loading Commands"))
+                    return false;
 
-				//---------------------------------------------------------------
-				//Try to start the udp port
-				if (!InitComponent(StartUDP(), "StartUDP()"))
-					return false;
+                //---------------------------------------------------------------
+                //Check and update the database if needed
+                if (!UpdateDatabase())
+                    return false;
 
-				//---------------------------------------------------------------
-				//Try to init the RSA key
-				/* No Cryptlib currently
+                //---------------------------------------------------------------
+                //Try to init the server port
+                if (!InitComponent(InitSocket(), "InitSocket()"))
+                    return false;
+
+                //---------------------------------------------------------------
+                //Packet buffers
+                if (!InitComponent(AllocatePacketBuffers(), "AllocatePacketBuffers()"))
+                    return false;
+
+                //---------------------------------------------------------------
+                //Try to start the udp port
+                if (!InitComponent(StartUDP(), "StartUDP()"))
+                    return false;
+
+                //---------------------------------------------------------------
+                //Try to init the RSA key
+                /* No Cryptlib currently
 					if (log.IsInfoEnabled)
 						log.Info("Generating RSA key, may take a minute, please wait...");
 					if (!InitComponent(CryptLib168.GenerateRSAKey(), "RSA key generation"))
 						return false;
 				 */
 
-				//---------------------------------------------------------------
-				//Try to initialize the Scheduler
-				if (!InitComponent(() => Scheduler = new Scheduler.SimpleScheduler(), "Scheduler Initialization"))
-					return false;
+                //---------------------------------------------------------------
+                //Try to initialize the Scheduler
+                if (!InitComponent(() => Scheduler = new Scheduler.SimpleScheduler(), "Scheduler Initialization"))
+                    return false;
 
-				//---------------------------------------------------------------
-				//Try to initialize the WorldManager
-				if (!InitComponent(() => WorldManager = new WorldManager(this), "Instancied World Manager Initialization"))
-					return false;
+                //---------------------------------------------------------------
+                //Try to initialize the WorldManager
+                if (!InitComponent(() => WorldManager = new WorldManager(this), "Instancied World Manager Initialization"))
+                    return false;
 
-				
-				//---------------------------------------------------------------
-				//Try to initialize the PlayerManager
-				if (!InitComponent(() => PlayerManager = new PlayerManager(this), "Player Manager Initialization"))
-					return false;
 
-				//---------------------------------------------------------------
-				//Try to initialize the NpcManager
-				if (!InitComponent(() => NpcManager = new NpcManager(this), "NPC Manager Initialization"))
-					return false;
-				
-				//---------------------------------------------------------------
-				//Try to start the Language Manager
-				if (!InitComponent(LanguageMgr.Init(), "Multi Language Initialization"))
-					return false;
+                //---------------------------------------------------------------
+                //Try to initialize the PlayerManager
+                if (!InitComponent(() => PlayerManager = new PlayerManager(this), "Player Manager Initialization"))
+                    return false;
 
-				//Init the mail manager
-				InitComponent(MailMgr.Init(), "Mail Manager Initialization");
+                //---------------------------------------------------------------
+                //Try to initialize the NpcManager
+                if (!InitComponent(() => NpcManager = new NpcManager(this), "NPC Manager Initialization"))
+                    return false;
 
-				//---------------------------------------------------------------
-				//Try to initialize the WorldMgr in early state
-				RegionData[] regionsData;
-				if (!InitComponent(WorldMgr.EarlyInit(out regionsData), "World Manager PreInitialization"))
-					return false;
+                //---------------------------------------------------------------
+                //Try to start the Language Manager
+                if (!InitComponent(LanguageMgr.Init(), "Multi Language Initialization"))
+                    return false;
 
-				if (!InitComponent(() => PathingMgr.Init(), "Pathing Manager Initialization"))
-					return false;
+                //Init the mail manager
+                InitComponent(MailMgr.Init(), "Mail Manager Initialization");
 
-				//---------------------------------------------------------------
-				//Try to initialize the script components
-				if (!InitComponent(StartScriptComponents(), "Script components"))
-					return false;
+                //---------------------------------------------------------------
+                //Try to initialize the WorldMgr in early state
+                RegionData[] regionsData;
+                if (!InitComponent(WorldMgr.EarlyInit(out regionsData), "World Manager PreInitialization"))
+                    return false;
 
-				//---------------------------------------------------------------
-				//Load all faction managers
-				if (!InitComponent(FactionMgr.Init(), "Faction Managers"))
-					return false;
+                if (!InitComponent(() => PathingMgr.Init(), "Pathing Manager Initialization"))
+                    return false;
 
-				//---------------------------------------------------------------
-				//Load artifact manager
-				InitComponent(ArtifactMgr.Init(), "Artifact Manager");
+                //---------------------------------------------------------------
+                //Try to initialize the script components
+                if (!InitComponent(StartScriptComponents(), "Script components"))
+                    return false;
 
-				//---------------------------------------------------------------
-				//Load all calculators
-				if (!InitComponent(GameLiving.LoadCalculators(), "GameLiving.LoadCalculators()"))
-					return false;
+                //---------------------------------------------------------------
+                //Load all faction managers
+                if (!InitComponent(FactionMgr.Init(), "Faction Managers"))
+                    return false;
 
-				//---------------------------------------------------------------
-				//Try to start the npc equipment
-				if (!InitComponent(GameNpcInventoryTemplate.Init(), "Npc Equipment"))
-					return false;
+                //---------------------------------------------------------------
+                //Load artifact manager
+                InitComponent(ArtifactMgr.Init(), "Artifact Manager");
 
-				//---------------------------------------------------------------
-				//Try to start the Npc Templates Manager
-				if (!InitComponent(NpcTemplateMgr.Init(), "Npc Templates Manager"))
-					return false;
+                //---------------------------------------------------------------
+                //Load all calculators
+                if (!InitComponent(GameLiving.LoadCalculators(), "GameLiving.LoadCalculators()"))
+                    return false;
 
-				//---------------------------------------------------------------
-				//Load the house manager
-				if (!InitComponent(HouseMgr.Start(), "House Manager"))
-					return false;
+                //---------------------------------------------------------------
+                //Try to start the npc equipment
+                if (!InitComponent(GameNpcInventoryTemplate.Init(), "Npc Equipment"))
+                    return false;
 
-				//---------------------------------------------------------------
-				//Create the market cache
-				if (!InitComponent(MarketCache.Initialize(), "Market Cache"))
-					return false;
+                //---------------------------------------------------------------
+                //Try to start the Npc Templates Manager
+                if (!InitComponent(NpcTemplateMgr.Init(), "Npc Templates Manager"))
+                    return false;
 
-				//---------------------------------------------------------------
-				//Load the region managers
-				if (!InitComponent(WorldMgr.StartRegionMgrs(), "Region Managers"))
-					return false;
+                //---------------------------------------------------------------
+                //Load the house manager
+                if (!InitComponent(HouseMgr.Start(), "House Manager"))
+                    return false;
 
-				//---------------------------------------------------------------
-				//Load the area manager
-				if (!InitComponent(AreaMgr.LoadAllAreas(), "Areas"))
-					return false;
+                //---------------------------------------------------------------
+                //Create the market cache
+                if (!InitComponent(MarketCache.Initialize(), "Market Cache"))
+                    return false;
 
-				//---------------------------------------------------------------
-				//Enable Worldsave timer now
-				if (m_timer != null)
-				{
-					m_timer.Change(Timeout.Infinite, Timeout.Infinite);
-					m_timer.Dispose();
-				}
-				m_timer = new Timer(SaveTimerProc, null, SaveInterval*MINUTE_CONV, Timeout.Infinite);
-				if (log.IsInfoEnabled)
-					log.Info("World save timer: true");
+                //---------------------------------------------------------------
+                //Load the region managers
+                if (!InitComponent(WorldMgr.StartRegionMgrs(), "Region Managers"))
+                    return false;
 
-				//---------------------------------------------------------------
-				//Load all boats
-				if (!InitComponent(BoatMgr.LoadAllBoats(), "Boat Manager"))
-					return false;
+                //---------------------------------------------------------------
+                //Load the area manager
+                if (!InitComponent(AreaMgr.LoadAllAreas(), "Areas"))
+                    return false;
 
-				//---------------------------------------------------------------
-				//Load all guilds
-				if (!InitComponent(GuildMgr.LoadAllGuilds(), "Guild Manager"))
-					return false;
+                //---------------------------------------------------------------
+                //Enable Worldsave timer now
+                if (m_timer != null)
+                {
+                    m_timer.Change(Timeout.Infinite, Timeout.Infinite);
+                    m_timer.Dispose();
+                }
+                m_timer = new Timer(SaveTimerProc, null, SaveInterval * MINUTE_CONV, Timeout.Infinite);
+                if (log.IsInfoEnabled)
+                    log.Info("World save timer: true");
 
-				//---------------------------------------------------------------
-				//Load the keep manager
-				if (!InitComponent(StartKeepManager(), "Keep Manager"))
-					return false;
+                //---------------------------------------------------------------
+                //Load all boats
+                if (!InitComponent(BoatMgr.LoadAllBoats(), "Boat Manager"))
+                    return false;
 
-				//---------------------------------------------------------------
-				//Load the door manager
-				if (!InitComponent(DoorMgr.Init(), "Door Manager"))
-					return false;
+                //---------------------------------------------------------------
+                //Load all guilds
+                if (!InitComponent(GuildMgr.LoadAllGuilds(), "Guild Manager"))
+                    return false;
 
-				//---------------------------------------------------------------
-				//Try to initialize the WorldMgr
-				if (!InitComponent(WorldMgr.Init(regionsData), "World Manager Initialization"))
-					return false;
-				regionsData = null;
+                //---------------------------------------------------------------
+                //Load the keep manager
+                if (!InitComponent(StartKeepManager(), "Keep Manager"))
+                    return false;
 
-				if (!InitComponent(() => LosCheckMgr.Initialize(), "LosCheckMgr Initialization"))
-					return false;
+                //---------------------------------------------------------------
+                //Load the door manager
+                if (!InitComponent(DoorMgr.Init(), "Door Manager"))
+                    return false;
 
-				//---------------------------------------------------------------
-				//Load the relic manager
-				if (!InitComponent(RelicMgr.Init(), "Relic Manager"))
-					return false;
+                //---------------------------------------------------------------
+                //Try to initialize the WorldMgr
+                if (!InitComponent(WorldMgr.Init(regionsData), "World Manager Initialization"))
+                    return false;
+                regionsData = null;
 
-				//---------------------------------------------------------------
-				//Load all crafting managers
-				if (!InitComponent(CraftingMgr.Init(), "Crafting Managers"))
-					return false;
+                if (!InitComponent(() => LosCheckMgr.Initialize(), "LosCheckMgr Initialization"))
+                    return false;
 
-				//---------------------------------------------------------------
-				//Load player titles manager
-				if (!InitComponent(PlayerTitleMgr.Init(), "Player Titles Manager"))
-					return false;
+                //---------------------------------------------------------------
+                //Load the relic manager
+                if (!InitComponent(RelicMgr.Init(), "Relic Manager"))
+                    return false;
 
-				//---------------------------------------------------------------
-				//Load behaviour manager
-				if (!InitComponent(BehaviourMgr.Init(), "Behaviour Manager"))
-					return false;
+                //---------------------------------------------------------------
+                //Load all crafting managers
+                if (!InitComponent(CraftingMgr.Init(), "Crafting Managers"))
+                    return false;
 
-				//---------------------------------------------------------------
+                //---------------------------------------------------------------
+                //Load player titles manager
+                if (!InitComponent(PlayerTitleMgr.Init(), "Player Titles Manager"))
+                    return false;
+
+                //---------------------------------------------------------------
+                //Load behaviour manager
+                if (!InitComponent(BehaviourMgr.Init(), "Behaviour Manager"))
+                    return false;
+
+                //---------------------------------------------------------------
                 //Load Firecamp manager
                 if (!InitComponent(FeuxCampMgr.Instance.Init(), "FeuDeCamp Manager"))
                 {
@@ -726,618 +726,618 @@ namespace DOL.GS
                     return false;
                 }
 
-				//---------------------------------------------------------------
-				//Notify our scripts that everything went fine!
-				GameEventMgr.Notify(ScriptEvent.Loaded);
+                //---------------------------------------------------------------
+                //Notify our scripts that everything went fine!
+                GameEventMgr.Notify(ScriptEvent.Loaded);
 
-				//---------------------------------------------------------------
-				//Set the GameServer StartTick
-				m_startTick = GameTimer.GetTickCount();
+                //---------------------------------------------------------------
+                //Set the GameServer StartTick
+                m_startTick = GameTimer.GetTickCount();
 
-				//---------------------------------------------------------------
-				//Notify everyone that the server is now started!
-				GameEventMgr.Notify(GameServerEvent.Started, this);
+                //---------------------------------------------------------------
+                //Notify everyone that the server is now started!
+                GameEventMgr.Notify(GameServerEvent.Started, this);
 
-				//---------------------------------------------------------------
-				//Try to start the base server (open server port for connections)
-				if (!InitComponent(base.Start(), "base.Start()"))
-					return false;
+                //---------------------------------------------------------------
+                //Try to start the base server (open server port for connections)
+                if (!InitComponent(base.Start(), "base.Start()"))
+                    return false;
 
-				GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
 
-				//---------------------------------------------------------------
-				//Open the server, players can now connect if webhook, inform Discord!
-				m_status = eGameServerStatus.GSS_Open;
+                //---------------------------------------------------------------
+                //Open the server, players can now connect if webhook, inform Discord!
+                m_status = eGameServerStatus.GSS_Open;
 
-				if (Properties.DISCORD_ACTIVE && (!string.IsNullOrEmpty(Properties.DISCORD_WEBHOOK_ID)))
-				{
+                if (Properties.DISCORD_ACTIVE && (!string.IsNullOrEmpty(Properties.DISCORD_WEBHOOK_ID)))
+                {
 
-					var hook = new DolWebHook(Properties.DISCORD_WEBHOOK_ID);					
-					hook.SendMessage("Server open for connections");
-				}
-								
-				if (log.IsInfoEnabled)
-					log.Info($"GameServer {Version} is now open for connections!");
+                    var hook = new DolWebHook(Properties.DISCORD_WEBHOOK_ID);
+                    hook.SendMessage("Server open for connections");
+                }
 
-				//INIT WAS FINE!
-				return true;
-			}
-			catch (Exception e)
-			{
-				if (log.IsErrorEnabled)
-					log.Error("Failed to start the server", e);
+                if (log.IsInfoEnabled)
+                    log.Info($"GameServer {Version} is now open for connections!");
 
-				return false;
-			}
-		}
+                //INIT WAS FINE!
+                return true;
+            }
+            catch (Exception e)
+            {
+                if (log.IsErrorEnabled)
+                    log.Error("Failed to start the server", e);
 
-		/// <summary>
-		/// Logs unhandled exceptions
-		/// </summary>
-		private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
-		{
-			log.Fatal("Unhandled exception!\n" + e.ExceptionObject);
-			if (e.IsTerminating)
-				LogManager.Shutdown();
-		}
+                return false;
+            }
+        }
 
-		public bool CompileScripts()
-		{
-			string scriptDirectory = Path.Combine(Configuration.RootDirectory, "scripts");
-			if (!Directory.Exists(scriptDirectory))
-				Directory.CreateDirectory(scriptDirectory);
-			
-			bool compiled = false;
-			
-			// Check if Configuration Forces to use Pre-Compiled Game Server Scripts Assembly
-			if (!Configuration.EnableCompilation)
-			{
-				log.Info("Script Compilation Disabled in Server Configuration, Loading pre-compiled Assembly...");
+        /// <summary>
+        /// Logs unhandled exceptions
+        /// </summary>
+        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            log.Fatal("Unhandled exception!\n" + e.ExceptionObject);
+            if (e.IsTerminating)
+                LogManager.Shutdown();
+        }
 
-				if (File.Exists(Configuration.ScriptCompilationTarget))
-				{
-					ScriptMgr.LoadAssembly(Configuration.ScriptCompilationTarget);
-				}
-				else
-				{
-					log.WarnFormat("Compilation Disabled - Could not find pre-compiled Assembly : {0} - Server starting without Scripts Assembly!", Configuration.ScriptCompilationTarget);
-				}
-				
-				compiled = true;
-			}
-			else
-			{
-				compiled = ScriptMgr.CompileScripts(false, scriptDirectory, Configuration.ScriptCompilationTarget, Configuration.AdditionalScriptAssemblies);
-			}
-			
-			if (compiled)
-			{
-				//---------------------------------------------------------------
-				//Register Script Tables
-				if (log.IsInfoEnabled)
-					log.Info("GameServerScripts Tables Initializing...");
-				
-				try
-				{
-					// Walk through each assembly in scripts
-					foreach (Assembly asm in ScriptMgr.Scripts)
-					{
-						// Walk through each type in the assembly
-						foreach (Type type in asm.GetTypes())
-						{
-							if (type.IsClass != true || !typeof(DataObject).IsAssignableFrom(type))
-								continue;
-							
-							object[] attrib = type.GetCustomAttributes(typeof(DataTable), false);
-							if (attrib.Length > 0)
-							{
-								if (log.IsInfoEnabled)
-									log.Info("Registering Scripts table: " + type.FullName);
-								
-								GameServer.Database.RegisterDataObject(type);
-							}
-						}
-					}
-				}
-				catch (DatabaseException dbex)
-				{
-					if (log.IsErrorEnabled)
-						log.Error("Error while registering Script Tables", dbex);
-					
-					return false;
-				}
-				
-	        	if (log.IsInfoEnabled)
-					log.Info("GameServerScripts Database Tables Initialization: true");
-	        	
-	        	return true;
-			}
-			
-			return false;
-		}
+        public bool CompileScripts()
+        {
+            string scriptDirectory = Path.Combine(Configuration.RootDirectory, "scripts");
+            if (!Directory.Exists(scriptDirectory))
+                Directory.CreateDirectory(scriptDirectory);
 
-		/// <summary>
-		/// Initialize all script components
-		/// </summary>
-		/// <returns>true if successfull, false if not</returns>
-		protected bool StartScriptComponents()
-		{
-			try
-			{	        	
-				//---------------------------------------------------------------
-				//Create the server rules
-				m_serverRules = ScriptMgr.CreateServerRules(Configuration.ServerType);
-				m_serverRules.Initialize();
+            bool compiled = false;
 
-				if (log.IsInfoEnabled)
-					log.Info("Server rules: true");
+            // Check if Configuration Forces to use Pre-Compiled Game Server Scripts Assembly
+            if (!Configuration.EnableCompilation)
+            {
+                log.Info("Script Compilation Disabled in Server Configuration, Loading pre-compiled Assembly...");
 
-				//---------------------------------------------------------------
-				//Load the skills
-				SkillBase.LoadSkills();
-				if (log.IsInfoEnabled)
-					log.Info("Loading skills: true");
+                if (File.Exists(Configuration.ScriptCompilationTarget))
+                {
+                    ScriptMgr.LoadAssembly(Configuration.ScriptCompilationTarget);
+                }
+                else
+                {
+                    log.WarnFormat("Compilation Disabled - Could not find pre-compiled Assembly : {0} - Server starting without Scripts Assembly!", Configuration.ScriptCompilationTarget);
+                }
+
+                compiled = true;
+            }
+            else
+            {
+                compiled = ScriptMgr.CompileScripts(false, scriptDirectory, Configuration.ScriptCompilationTarget, Configuration.AdditionalScriptAssemblies);
+            }
+
+            if (compiled)
+            {
+                //---------------------------------------------------------------
+                //Register Script Tables
+                if (log.IsInfoEnabled)
+                    log.Info("GameServerScripts Tables Initializing...");
+
+                try
+                {
+                    // Walk through each assembly in scripts
+                    foreach (Assembly asm in ScriptMgr.Scripts)
+                    {
+                        // Walk through each type in the assembly
+                        foreach (Type type in asm.GetTypes())
+                        {
+                            if (type.IsClass != true || !typeof(DataObject).IsAssignableFrom(type))
+                                continue;
+
+                            object[] attrib = type.GetCustomAttributes(typeof(DataTable), false);
+                            if (attrib.Length > 0)
+                            {
+                                if (log.IsInfoEnabled)
+                                    log.Info("Registering Scripts table: " + type.FullName);
+
+                                GameServer.Database.RegisterDataObject(type);
+                            }
+                        }
+                    }
+                }
+                catch (DatabaseException dbex)
+                {
+                    if (log.IsErrorEnabled)
+                        log.Error("Error while registering Script Tables", dbex);
+
+                    return false;
+                }
+
+                if (log.IsInfoEnabled)
+                    log.Info("GameServerScripts Database Tables Initialization: true");
+
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Initialize all script components
+        /// </summary>
+        /// <returns>true if successfull, false if not</returns>
+        protected bool StartScriptComponents()
+        {
+            try
+            {
+                //---------------------------------------------------------------
+                //Create the server rules
+                m_serverRules = ScriptMgr.CreateServerRules(Configuration.ServerType);
+                m_serverRules.Initialize();
+
+                if (log.IsInfoEnabled)
+                    log.Info("Server rules: true");
+
+                //---------------------------------------------------------------
+                //Load the skills
+                SkillBase.LoadSkills();
+                if (log.IsInfoEnabled)
+                    log.Info("Loading skills: true");
 
                 GameEventMgr.RegisterGlobalEvents(Assembly.GetExecutingAssembly(), typeof(GameServerCoffreLoadedAttribute), GameServerEvent.CoffreLoaded);
                 GameEventMgr.RegisterGlobalEvents(Assembly.GetExecutingAssembly(), typeof(GameEventLoadedAttribute), GameServerEvent.GameEventLoaded);
 
-				//---------------------------------------------------------------
-				//Register all event handlers
-				foreach (Assembly asm in ScriptMgr.GameServerScripts)
-				{
-					GameEventMgr.RegisterGlobalEvents(asm, typeof(GameServerStartedEventAttribute), GameServerEvent.Started);
-					GameEventMgr.RegisterGlobalEvents(asm, typeof(GameServerStoppedEventAttribute), GameServerEvent.Stopped);
-					GameEventMgr.RegisterGlobalEvents(asm, typeof(ScriptLoadedEventAttribute), ScriptEvent.Loaded);
-					GameEventMgr.RegisterGlobalEvents(asm, typeof(ScriptUnloadedEventAttribute), ScriptEvent.Unloaded);
-				}
-				if (log.IsInfoEnabled)
-					log.Info("Registering global event handlers: true");
-			}
-			catch (Exception e)
-			{
-				if (log.IsErrorEnabled)
-					log.Error("StartScriptComponents", e);
-				return false;
-			}
-			//---------------------------------------------------------------
-			return true;
-		}
+                //---------------------------------------------------------------
+                //Register all event handlers
+                foreach (Assembly asm in ScriptMgr.GameServerScripts)
+                {
+                    GameEventMgr.RegisterGlobalEvents(asm, typeof(GameServerStartedEventAttribute), GameServerEvent.Started);
+                    GameEventMgr.RegisterGlobalEvents(asm, typeof(GameServerStoppedEventAttribute), GameServerEvent.Stopped);
+                    GameEventMgr.RegisterGlobalEvents(asm, typeof(ScriptLoadedEventAttribute), ScriptEvent.Loaded);
+                    GameEventMgr.RegisterGlobalEvents(asm, typeof(ScriptUnloadedEventAttribute), ScriptEvent.Unloaded);
+                }
+                if (log.IsInfoEnabled)
+                    log.Info("Registering global event handlers: true");
+            }
+            catch (Exception e)
+            {
+                if (log.IsErrorEnabled)
+                    log.Error("StartScriptComponents", e);
+                return false;
+            }
+            //---------------------------------------------------------------
+            return true;
+        }
 
-		/// <summary>
-		/// Find the keep manager and start it
-		/// </summary>
-		/// <returns></returns>
-		protected bool StartKeepManager()
-		{
-			Type keepManager = null;
+        /// <summary>
+        /// Find the keep manager and start it
+        /// </summary>
+        /// <returns></returns>
+        protected bool StartKeepManager()
+        {
+            Type keepManager = null;
 
-			// first search in scripts
-			foreach (Assembly script in ScriptMgr.Scripts)
-			{
-				foreach (Type type in script.GetTypes())
-				{
-					if (type.IsClass == false) continue;
-					if (type.GetInterface("DOL.GS.Keeps.IKeepManager") == null) continue;
+            // first search in scripts
+            foreach (Assembly script in ScriptMgr.Scripts)
+            {
+                foreach (Type type in script.GetTypes())
+                {
+                    if (type.IsClass == false) continue;
+                    if (type.GetInterface("DOL.GS.Keeps.IKeepManager") == null) continue;
 
-					// look for attribute
-					try
-					{
-						object[] objs = type.GetCustomAttributes(typeof(KeepManagerAttribute), false);
-						if (objs.Length == 0) continue;
+                    // look for attribute
+                    try
+                    {
+                        object[] objs = type.GetCustomAttributes(typeof(KeepManagerAttribute), false);
+                        if (objs.Length == 0) continue;
 
-						// found a keep manager, use it
-						keepManager = type;
-						break;
-					}
-					catch (Exception e)
-					{
-						if (log.IsErrorEnabled)
-							log.Error("StartKeepManager, Script Search", e);
-					}
+                        // found a keep manager, use it
+                        keepManager = type;
+                        break;
+                    }
+                    catch (Exception e)
+                    {
+                        if (log.IsErrorEnabled)
+                            log.Error("StartKeepManager, Script Search", e);
+                    }
 
-					if (keepManager != null) break;
-				}
-			}
+                    if (keepManager != null) break;
+                }
+            }
 
-			if (keepManager == null)
-			{
-				// second search in gameserver
-				foreach (Type type in Assembly.GetAssembly(typeof(GameServer)).GetTypes())
-				{
-					if (type.IsClass == false) continue;
-					if (type.GetInterface("DOL.GS.Keeps.IKeepManager") == null) continue;
+            if (keepManager == null)
+            {
+                // second search in gameserver
+                foreach (Type type in Assembly.GetAssembly(typeof(GameServer)).GetTypes())
+                {
+                    if (type.IsClass == false) continue;
+                    if (type.GetInterface("DOL.GS.Keeps.IKeepManager") == null) continue;
 
-					// look for attribute
-					try
-					{
-						object[] objs = type.GetCustomAttributes(typeof(KeepManagerAttribute), false);
-						if (objs.Length == 0) continue;
+                    // look for attribute
+                    try
+                    {
+                        object[] objs = type.GetCustomAttributes(typeof(KeepManagerAttribute), false);
+                        if (objs.Length == 0) continue;
 
-						// found a keep manager, use it
-						keepManager = type;
-						break;
-					}
-					catch (Exception e)
-					{
-						if (log.IsErrorEnabled)
-							log.Error("StartKeepManager, GameServer Search", e);
-					}
-					if (keepManager != null) break;
-				}
+                        // found a keep manager, use it
+                        keepManager = type;
+                        break;
+                    }
+                    catch (Exception e)
+                    {
+                        if (log.IsErrorEnabled)
+                            log.Error("StartKeepManager, GameServer Search", e);
+                    }
+                    if (keepManager != null) break;
+                }
 
-			}
+            }
 
-			if (keepManager != null)
-			{
-				try
-				{
-					IKeepManager manager = Activator.CreateInstance(keepManager, null) as IKeepManager;
+            if (keepManager != null)
+            {
+                try
+                {
+                    IKeepManager manager = Activator.CreateInstance(keepManager, null) as IKeepManager;
 
-					if (log.IsInfoEnabled)
-						log.Info("Found KeepManager " + manager.GetType().FullName);
+                    if (log.IsInfoEnabled)
+                        log.Info("Found KeepManager " + manager.GetType().FullName);
 
-					m_keepManager = manager;
-				}
-				catch (Exception e)
-				{
-					if (log.IsErrorEnabled)
-						log.Error("StartKeepManager, CreateInstance", e);
-				}
-			}
+                    m_keepManager = manager;
+                }
+                catch (Exception e)
+                {
+                    if (log.IsErrorEnabled)
+                        log.Error("StartKeepManager, CreateInstance", e);
+                }
+            }
 
-			if (m_keepManager == null)
-			{
-				m_keepManager = new DefaultKeepManager();
+            if (m_keepManager == null)
+            {
+                m_keepManager = new DefaultKeepManager();
 
-				if (m_keepManager != null)
-				{
-					log.Warn("No Keep manager found, using " + m_keepManager.GetType().FullName);
-				}
-				else
-				{
-					log.Error("Cannot create Keep manager!");
-					return false;
-				}
-			}
+                if (m_keepManager != null)
+                {
+                    log.Warn("No Keep manager found, using " + m_keepManager.GetType().FullName);
+                }
+                else
+                {
+                    log.Error("Cannot create Keep manager!");
+                    return false;
+                }
+            }
 
-			return m_keepManager.Load();
-		}
+            return m_keepManager.Load();
+        }
 
-		protected virtual bool UpdateDatabase()
-		{
-			bool result = true;
-			try
-			{
-				log.Info("Checking database for updates ...");
-				
-				foreach (Assembly asm in ScriptMgr.GameServerScripts)
-				{
+        protected virtual bool UpdateDatabase()
+        {
+            bool result = true;
+            try
+            {
+                log.Info("Checking database for updates ...");
 
-					foreach (Type type in asm.GetTypes())
-					{
-						if (!type.IsClass)
-							continue;
-						if (!typeof(IDatabaseUpdater).IsAssignableFrom(type))
-							continue;
-						
-						object[] attributes = type.GetCustomAttributes(typeof (DatabaseUpdateAttribute), false);
-						if (attributes.Length <= 0)
-							continue;
-	
-						try
-						{
-							var instance = Activator.CreateInstance(type) as IDatabaseUpdater;
-							instance.Update();
-						}
-						catch (Exception uex)
-						{
-							if (log.IsErrorEnabled)
-								log.ErrorFormat("Error While Updating Database with Script {0} - {1}", type, uex);
-							
-							result = false;
-						}
-					}
-				}
-			}
-			catch (Exception e)
-			{
-				log.Error("Error checking/updating database: ", e);
-				return false;
-			}
+                foreach (Assembly asm in ScriptMgr.GameServerScripts)
+                {
 
-			log.Info("Database update complete.");
-			return result;
-		}
+                    foreach (Type type in asm.GetTypes())
+                    {
+                        if (!type.IsClass)
+                            continue;
+                        if (!typeof(IDatabaseUpdater).IsAssignableFrom(type))
+                            continue;
 
-		/// <summary>
-		/// Prints out some text info on component initialisation
-		/// and stops the server again if the component failed
-		/// </summary>
-		/// <param name="componentInitState">The state</param>
-		/// <param name="text">The text to print</param>
-		/// <returns>false if startup should be interrupted</returns>
-		protected bool InitComponent(bool componentInitState, string text)
-		{
-			if (log.IsDebugEnabled)
-				log.DebugFormat("Start Memory {0}: {1}MB", text, GC.GetTotalMemory(false)/1024/1024);
-			
-			if (log.IsInfoEnabled)
-				log.InfoFormat("{0}: {1}", text, componentInitState);
-			
-			if (!componentInitState)
-				Stop();
-			
-			if (log.IsDebugEnabled)
-				log.DebugFormat("Finish Memory {0}: {1}MB", text, GC.GetTotalMemory(false)/1024/1024);
-			
-			return componentInitState;
-		}
+                        object[] attributes = type.GetCustomAttributes(typeof(DatabaseUpdateAttribute), false);
+                        if (attributes.Length <= 0)
+                            continue;
 
-		protected bool InitComponent(Action componentInitMethod, string text)
-		{
-			if (log.IsDebugEnabled)
-				log.DebugFormat("Start Memory {0}: {1}MB", text, GC.GetTotalMemory(false)/1024/1024);
-			
-			bool componentInitState = false;
-			try
-			{
-				componentInitMethod();
-				componentInitState = true;
-			}
-			catch (Exception ex)
-			{
-				if (log.IsErrorEnabled)
-					log.ErrorFormat("{0}: Error While Initialization\n{1}", text, ex);
-			}
+                        try
+                        {
+                            var instance = Activator.CreateInstance(type) as IDatabaseUpdater;
+                            instance.Update();
+                        }
+                        catch (Exception uex)
+                        {
+                            if (log.IsErrorEnabled)
+                                log.ErrorFormat("Error While Updating Database with Script {0} - {1}", type, uex);
 
-			if (log.IsInfoEnabled)
-				log.InfoFormat("{0}: {1}", text, componentInitState);
+                            result = false;
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                log.Error("Error checking/updating database: ", e);
+                return false;
+            }
 
-			if (!componentInitState)
-				Stop();
-			
-			if (log.IsDebugEnabled)
-				log.DebugFormat("Finish Memory {0}: {1}MB", text, GC.GetTotalMemory(false)/1024/1024);
-			
-			return componentInitState;
-		}
-		#endregion
+            log.Info("Database update complete.");
+            return result;
+        }
 
-		#region Stop
+        /// <summary>
+        /// Prints out some text info on component initialisation
+        /// and stops the server again if the component failed
+        /// </summary>
+        /// <param name="componentInitState">The state</param>
+        /// <param name="text">The text to print</param>
+        /// <returns>false if startup should be interrupted</returns>
+        protected bool InitComponent(bool componentInitState, string text)
+        {
+            if (log.IsDebugEnabled)
+                log.DebugFormat("Start Memory {0}: {1}MB", text, GC.GetTotalMemory(false) / 1024 / 1024);
 
-		public void Close()
-		{
-			m_status = eGameServerStatus.GSS_Closed;
-		}
+            if (log.IsInfoEnabled)
+                log.InfoFormat("{0}: {1}", text, componentInitState);
 
-		public void Open()
-		{
-			m_status = eGameServerStatus.GSS_Open;
-		}
+            if (!componentInitState)
+                Stop();
 
-		/// <summary>
-		/// Stops the server, disconnects all clients, and writes the database to disk
-		/// </summary>
-		public override void Stop()
-		{
-			//Stop new clients from logging in
-			m_status = eGameServerStatus.GSS_Closed;
+            if (log.IsDebugEnabled)
+                log.DebugFormat("Finish Memory {0}: {1}MB", text, GC.GetTotalMemory(false) / 1024 / 1024);
 
-			log.Info("GameServer.Stop() - enter method");
+            return componentInitState;
+        }
 
-			if (log.IsWarnEnabled)
-			{
-				string stacks = PacketProcessor.GetConnectionThreadpoolStacks();
-				if (stacks.Length > 0)
-				{
-					log.Warn("Packet processor thread stacks:");
-					log.Warn(stacks);
-				}
-			}
+        protected bool InitComponent(Action componentInitMethod, string text)
+        {
+            if (log.IsDebugEnabled)
+                log.DebugFormat("Start Memory {0}: {1}MB", text, GC.GetTotalMemory(false) / 1024 / 1024);
 
-			//Notify our scripthandlers
-			GameEventMgr.Notify(ScriptEvent.Unloaded);
+            bool componentInitState = false;
+            try
+            {
+                componentInitMethod();
+                componentInitState = true;
+            }
+            catch (Exception ex)
+            {
+                if (log.IsErrorEnabled)
+                    log.ErrorFormat("{0}: Error While Initialization\n{1}", text, ex);
+            }
 
-			//Notify of the global server stop event
-			//We notify before we shutdown the database
-			//so that event handlers can use the datbase too
-			GameEventMgr.Notify(GameServerEvent.Stopped, this);
-			GameEventMgr.RemoveAllHandlers(true);
+            if (log.IsInfoEnabled)
+                log.InfoFormat("{0}: {1}", text, componentInitState);
 
-			//Stop the World Save timer
-			if (m_timer != null)
-			{
-				m_timer.Change(Timeout.Infinite, Timeout.Infinite);
-				m_timer.Dispose();
-				m_timer = null;
-			}
+            if (!componentInitState)
+                Stop();
 
-			// kick everyone
-			foreach (var clientB in _clients)
-			{
-				var client = clientB as GameClient;
-				if (client == null)
-					continue;
-				client.Out.SendPlayerQuit(true);
-				if (client.Player == null)
-					continue;
-				client.Player.SaveIntoDatabase();
-				client.Player.Quit(true);
-			}
+            if (log.IsDebugEnabled)
+                log.DebugFormat("Finish Memory {0}: {1}MB", text, GC.GetTotalMemory(false) / 1024 / 1024);
 
-			//Stop the base server
-			base.Stop();
+            return componentInitState;
+        }
+        #endregion
 
-			//Close the UDP connection
-			if (m_udpSocket != null)
-			{
-				m_udpSocket.Close();
-				m_udpSocket = null;
-			}
+        #region Stop
 
-			//Stop all mobMgrs
-			WorldMgr.StopRegionMgrs();
+        public void Close()
+        {
+            m_status = eGameServerStatus.GSS_Closed;
+        }
 
-			//Stop the WorldMgr, save all players
-			//WorldMgr.SaveToDatabase();
-			SaveTimerProc(null);
+        public void Open()
+        {
+            m_status = eGameServerStatus.GSS_Open;
+        }
 
-			WorldMgr.Exit();
+        /// <summary>
+        /// Stops the server, disconnects all clients, and writes the database to disk
+        /// </summary>
+        public override void Stop()
+        {
+            //Stop new clients from logging in
+            m_status = eGameServerStatus.GSS_Closed;
 
-			//Save the database
-			// 2008-01-29 Kakuri - Obsolete
-			/*if ( m_database != null )
+            log.Info("GameServer.Stop() - enter method");
+
+            if (log.IsWarnEnabled)
+            {
+                string stacks = PacketProcessor.GetConnectionThreadpoolStacks();
+                if (stacks.Length > 0)
+                {
+                    log.Warn("Packet processor thread stacks:");
+                    log.Warn(stacks);
+                }
+            }
+
+            //Notify our scripthandlers
+            GameEventMgr.Notify(ScriptEvent.Unloaded);
+
+            //Notify of the global server stop event
+            //We notify before we shutdown the database
+            //so that event handlers can use the datbase too
+            GameEventMgr.Notify(GameServerEvent.Stopped, this);
+            GameEventMgr.RemoveAllHandlers(true);
+
+            //Stop the World Save timer
+            if (m_timer != null)
+            {
+                m_timer.Change(Timeout.Infinite, Timeout.Infinite);
+                m_timer.Dispose();
+                m_timer = null;
+            }
+
+            // kick everyone
+            foreach (var clientB in _clients)
+            {
+                var client = clientB as GameClient;
+                if (client == null)
+                    continue;
+                client.Out.SendPlayerQuit(true);
+                if (client.Player == null)
+                    continue;
+                client.Player.SaveIntoDatabase();
+                client.Player.Quit(true);
+            }
+
+            //Stop the base server
+            base.Stop();
+
+            //Close the UDP connection
+            if (m_udpSocket != null)
+            {
+                m_udpSocket.Close();
+                m_udpSocket = null;
+            }
+
+            //Stop all mobMgrs
+            WorldMgr.StopRegionMgrs();
+
+            //Stop the WorldMgr, save all players
+            //WorldMgr.SaveToDatabase();
+            SaveTimerProc(null);
+
+            WorldMgr.Exit();
+
+            //Save the database
+            // 2008-01-29 Kakuri - Obsolete
+            /*if ( m_database != null )
 				{
 					m_database.WriteDatabaseTables();
 				}*/
 
-			m_serverRules = null;
+            m_serverRules = null;
 
-			// Stop Server Scheduler
-			if (Scheduler != null)
-				Scheduler.Shutdown();
-			Scheduler = null;
-			
-			Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
+            // Stop Server Scheduler
+            if (Scheduler != null)
+                Scheduler.Shutdown();
+            Scheduler = null;
 
-			if (log.IsInfoEnabled)
-				log.Info("Server Stopped");
+            Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
 
-			LogManager.Shutdown();
-		}
+            if (log.IsInfoEnabled)
+                log.Info("Server Stopped");
 
-		#endregion
+            LogManager.Shutdown();
+        }
 
-		#region Packet buffer pool
+        #endregion
 
-		/// <summary>
-		/// The size of all packet buffers.
-		/// </summary>
-		private const int BUF_SIZE = 2048;
+        #region Packet buffer pool
 
-		/// <summary>
-		/// Holds all packet buffers.
-		/// </summary>
-		private Queue<byte[]> m_packetBufPool;
-		private object m_packetBufPoolLock = new object();
+        /// <summary>
+        /// The size of all packet buffers.
+        /// </summary>
+        private const int BUF_SIZE = 2048;
 
-		public int MaxPacketPoolSize
-		{
-			get { return Configuration.MaxClientCount*3; }
-		}
-		
-		/// <summary>
-		/// Gets the count of packet buffers in the pool.
-		/// </summary>
-		public int PacketPoolSize
-		{
-			get
-			{
-				int packetBufCount = 0;
-				
-				lock(m_packetBufPoolLock)
-					packetBufCount = m_packetBufPool.Count;
-				
-				return packetBufCount;
-			}
-		}
+        /// <summary>
+        /// Holds all packet buffers.
+        /// </summary>
+        private Queue<byte[]> m_packetBufPool;
+        private object m_packetBufPoolLock = new object();
 
-		/// <summary>
-		/// Allocates all packet buffers.
-		/// </summary>
-		/// <returns>success</returns>
-		private bool AllocatePacketBuffers()
-		{
-			int count = MaxPacketPoolSize;
+        public int MaxPacketPoolSize
+        {
+            get { return Configuration.MaxClientCount * 3; }
+        }
 
-			lock(m_packetBufPoolLock)
-			{
-				m_packetBufPool = new Queue<byte[]>(count);
-			
-				for (int i = 0; i < count; i++)
-				{
-					m_packetBufPool.Enqueue(new byte[BUF_SIZE]);
-				}
-			}
-	
-			if (log.IsDebugEnabled)
-				log.DebugFormat("allocated packet buffers: {0}", count.ToString());
+        /// <summary>
+        /// Gets the count of packet buffers in the pool.
+        /// </summary>
+        public int PacketPoolSize
+        {
+            get
+            {
+                int packetBufCount = 0;
 
-			return true;
-		}
+                lock (m_packetBufPoolLock)
+                    packetBufCount = m_packetBufPool.Count;
 
-		/// <summary>
-		/// Gets packet buffer from the pool.
-		/// </summary>
-		/// <returns>byte array that will be used as packet buffer.</returns>
-		public override byte[] AcquirePacketBuffer()
-		{
-			lock (m_packetBufPoolLock)
-			{
-				if (m_packetBufPool != null && m_packetBufPool.Count > 0)
-					return m_packetBufPool.Dequeue();
-			}
+                return packetBufCount;
+            }
+        }
 
-			log.Warn("packet buffer pool is empty!");
+        /// <summary>
+        /// Allocates all packet buffers.
+        /// </summary>
+        /// <returns>success</returns>
+        private bool AllocatePacketBuffers()
+        {
+            int count = MaxPacketPoolSize;
 
-			return new byte[BUF_SIZE];
-		}
+            lock (m_packetBufPoolLock)
+            {
+                m_packetBufPool = new Queue<byte[]>(count);
 
-		/// <summary>
-		/// Releases previously acquired packet buffer.
-		/// </summary>
-		/// <param name="buf">The released buf</param>
-		public override void ReleasePacketBuffer(byte[] buf)
-		{
-			if (buf == null)
-				return;
+                for (int i = 0; i < count; i++)
+                {
+                    m_packetBufPool.Enqueue(new byte[BUF_SIZE]);
+                }
+            }
 
-			lock (m_packetBufPoolLock)
-			{
-				if (m_packetBufPool.Count < MaxPacketPoolSize)
-					m_packetBufPool.Enqueue(buf);
-			}
-		}
+            if (log.IsDebugEnabled)
+                log.DebugFormat("allocated packet buffers: {0}", count.ToString());
 
-		#endregion
+            return true;
+        }
 
-		#region Client
+        /// <summary>
+        /// Gets packet buffer from the pool.
+        /// </summary>
+        /// <returns>byte array that will be used as packet buffer.</returns>
+        public override byte[] AcquirePacketBuffer()
+        {
+            lock (m_packetBufPoolLock)
+            {
+                if (m_packetBufPool != null && m_packetBufPool.Count > 0)
+                    return m_packetBufPool.Dequeue();
+            }
 
-		/// <summary>
-		/// Creates a new client
-		/// </summary>
-		/// <returns>An instance of a new client</returns>
-		protected override BaseClient GetNewClient()
-		{
-			var client = new GameClient(this);
-			GameEventMgr.Notify(GameClientEvent.Created, client);
-			client.UdpConfirm = false;
+            log.Warn("packet buffer pool is empty!");
 
-			return client;
-		}
+            return new byte[BUF_SIZE];
+        }
 
-		#endregion
+        /// <summary>
+        /// Releases previously acquired packet buffer.
+        /// </summary>
+        /// <param name="buf">The released buf</param>
+        public override void ReleasePacketBuffer(byte[] buf)
+        {
+            if (buf == null)
+                return;
 
-		#region Logging
+            lock (m_packetBufPoolLock)
+            {
+                if (m_packetBufPool.Count < MaxPacketPoolSize)
+                    m_packetBufPool.Enqueue(buf);
+            }
+        }
 
-		/// <summary>
-		/// Writes a line to the gm log file
-		/// </summary>
-		/// <param name="text">the text to log</param>
-		public void LogGMAction(string text)
-		{
-			m_gmLog.Logger.Log(typeof (GameServer), Level.Alert, text, null);
-		}
+        #endregion
 
-		/// <summary>
-		/// Writes a line to the cheat log file
-		/// </summary>
-		/// <param name="text">the text to log</param>
-		public void LogCheatAction(string text)
-		{
-			m_cheatLog.Logger.Log(typeof (GameServer), Level.Alert, text, null);
-			log.Debug(text);
-		}
+        #region Client
+
+        /// <summary>
+        /// Creates a new client
+        /// </summary>
+        /// <returns>An instance of a new client</returns>
+        protected override BaseClient GetNewClient()
+        {
+            var client = new GameClient(this);
+            GameEventMgr.Notify(GameClientEvent.Created, client);
+            client.UdpConfirm = false;
+
+            return client;
+        }
+
+        #endregion
+
+        #region Logging
+
+        /// <summary>
+        /// Writes a line to the gm log file
+        /// </summary>
+        /// <param name="text">the text to log</param>
+        public void LogGMAction(string text)
+        {
+            m_gmLog.Logger.Log(typeof(GameServer), Level.Alert, text, null);
+        }
+
+        /// <summary>
+        /// Writes a line to the cheat log file
+        /// </summary>
+        /// <param name="text">the text to log</param>
+        public void LogCheatAction(string text)
+        {
+            m_cheatLog.Logger.Log(typeof(GameServer), Level.Alert, text, null);
+            log.Debug(text);
+        }
 
         /// <summary>
         /// Writes a line to the inventory log file
@@ -1348,159 +1348,159 @@ namespace DOL.GS
             m_inventoryLog.Logger.Log(typeof(GameServer), Level.Alert, text, null);
         }
 
-		#endregion
+        #endregion
 
-		#region Database
-		public bool InitDB()
-		{
-			if (m_database == null)
-			{
-				m_database = ObjectDatabase.GetObjectDatabase(Configuration.DBType, Configuration.DBConnectionString);
+        #region Database
+        public bool InitDB()
+        {
+            if (m_database == null)
+            {
+                m_database = ObjectDatabase.GetObjectDatabase(Configuration.DBType, Configuration.DBConnectionString);
 
-				try
-				{
-					//We will search our assemblies for DataTables by reflection so
-					//it is not neccessary anymore to register new tables with the
-					//server, it is done automatically!
-					foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
-					{
+                try
+                {
+                    //We will search our assemblies for DataTables by reflection so
+                    //it is not neccessary anymore to register new tables with the
+                    //server, it is done automatically!
+                    foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+                    {
                         // Walk through each type in the assembly
-					    assembly.GetTypes().AsParallel().ForAll(type =>
-					    {
-					        if (!type.IsClass || type.IsAbstract)
-					        {
-					            return;
-					        }
+                        assembly.GetTypes().AsParallel().ForAll(type =>
+                        {
+                            if (!type.IsClass || type.IsAbstract)
+                            {
+                                return;
+                            }
 
-					        var attrib = type.GetCustomAttributes<DataTable>(false);
-					        if (attrib.Any())
-					        {
-					            if (log.IsInfoEnabled)
-					            {
-					                log.InfoFormat("Registering table: {0}", type.FullName);
-					            }
+                            var attrib = type.GetCustomAttributes<DataTable>(false);
+                            if (attrib.Any())
+                            {
+                                if (log.IsInfoEnabled)
+                                {
+                                    log.InfoFormat("Registering table: {0}", type.FullName);
+                                }
 
-					            m_database.RegisterDataObject(type);
-					        }
+                                m_database.RegisterDataObject(type);
+                            }
                         });
-					}
-				}
-				catch (DatabaseException e)
-				{
-					if (log.IsErrorEnabled)
-						log.Error("Error registering Tables", e);
-					return false;
-				}
-			}
-			if (log.IsInfoEnabled)
-				log.Info("Database Initialization: true");
-			return true;
-		}
+                    }
+                }
+                catch (DatabaseException e)
+                {
+                    if (log.IsErrorEnabled)
+                        log.Error("Error registering Tables", e);
+                    return false;
+                }
+            }
+            if (log.IsInfoEnabled)
+                log.Info("Database Initialization: true");
+            return true;
+        }
 
-		/// <summary>
-		/// Function called at X interval to write the database to disk
-		/// </summary>
-		/// <param name="sender">Object that generated the event</param>
-		protected void SaveTimerProc(object sender)
-		{
-			try
-			{
-				var startTick = GameTimer.GetTickCount();
-				if (log.IsInfoEnabled)
-					log.Info("Saving database...");
-				if (log.IsDebugEnabled)
-					log.Debug("Save ThreadId=" + Thread.CurrentThread.ManagedThreadId);
-				int saveCount = 0;
-				if (m_database != null)
-				{
-					ThreadPriority oldprio = Thread.CurrentThread.Priority;
-					Thread.CurrentThread.Priority = ThreadPriority.Lowest;
+        /// <summary>
+        /// Function called at X interval to write the database to disk
+        /// </summary>
+        /// <param name="sender">Object that generated the event</param>
+        protected void SaveTimerProc(object sender)
+        {
+            try
+            {
+                var startTick = GameTimer.GetTickCount();
+                if (log.IsInfoEnabled)
+                    log.Info("Saving database...");
+                if (log.IsDebugEnabled)
+                    log.Debug("Save ThreadId=" + Thread.CurrentThread.ManagedThreadId);
+                int saveCount = 0;
+                if (m_database != null)
+                {
+                    ThreadPriority oldprio = Thread.CurrentThread.Priority;
+                    Thread.CurrentThread.Priority = ThreadPriority.Lowest;
 
-					//Only save the players, NOT any other object!
-					saveCount = WorldMgr.SavePlayers();
+                    //Only save the players, NOT any other object!
+                    saveCount = WorldMgr.SavePlayers();
 
-					//The following line goes through EACH region and EACH object
-					//is tested for savability. A real waste of time, so it is commented out
-					//WorldMgr.SaveToDatabase();
+                    //The following line goes through EACH region and EACH object
+                    //is tested for savability. A real waste of time, so it is commented out
+                    //WorldMgr.SaveToDatabase();
 
-					GuildMgr.SaveAllGuilds();
-					BoatMgr.SaveAllBoats();
+                    GuildMgr.SaveAllGuilds();
+                    BoatMgr.SaveAllBoats();
 
-					FactionMgr.SaveAllAggroToFaction();
+                    FactionMgr.SaveAllAggroToFaction();
 
-					// 2008-01-29 Kakuri - Obsolete
-					//m_database.WriteDatabaseTables();
-					Thread.CurrentThread.Priority = oldprio;
-				}
-				if (log.IsInfoEnabled)
-					log.Info("Saving database complete!");
-				startTick = GameTimer.GetTickCount() - startTick;
-				if (log.IsInfoEnabled)
-					log.Info("Saved all databases and " + saveCount + " players in " + startTick + "ms");
-			}
-			catch (Exception e1)
-			{
-				if (log.IsErrorEnabled)
-					log.Error("SaveTimerProc", e1);
-			}
-			finally
-			{
-				if (m_timer != null)
-					m_timer.Change(SaveInterval*MINUTE_CONV, Timeout.Infinite);
-				GameEventMgr.Notify(GameServerEvent.WorldSave);
-			}
-		}
+                    // 2008-01-29 Kakuri - Obsolete
+                    //m_database.WriteDatabaseTables();
+                    Thread.CurrentThread.Priority = oldprio;
+                }
+                if (log.IsInfoEnabled)
+                    log.Info("Saving database complete!");
+                startTick = GameTimer.GetTickCount() - startTick;
+                if (log.IsInfoEnabled)
+                    log.Info("Saved all databases and " + saveCount + " players in " + startTick + "ms");
+            }
+            catch (Exception e1)
+            {
+                if (log.IsErrorEnabled)
+                    log.Error("SaveTimerProc", e1);
+            }
+            finally
+            {
+                if (m_timer != null)
+                    m_timer.Change(SaveInterval * MINUTE_CONV, Timeout.Infinite);
+                GameEventMgr.Notify(GameServerEvent.WorldSave);
+            }
+        }
 
-		#endregion
+        #endregion
 
-		#region Constructors
-		protected GameServer()
-			: this(new GameServerConfiguration()) { }
+        #region Constructors
+        protected GameServer()
+            : this(new GameServerConfiguration()) { }
 
-		protected GameServer(GameServerConfiguration config)
-			: base(config)
-		{
-			var assembly = Assembly.GetEntryAssembly() ?? Assembly.GetCallingAssembly() ?? Assembly.GetExecutingAssembly();
-			m_gmLog = LogManager.GetLogger(assembly, Configuration.GMActionsLoggerName);
-			m_cheatLog = LogManager.GetLogger(assembly, Configuration.CheatLoggerName);
-			m_inventoryLog = LogManager.GetLogger(assembly, Configuration.InventoryLoggerName);
+        protected GameServer(GameServerConfiguration config)
+            : base(config)
+        {
+            var assembly = Assembly.GetEntryAssembly() ?? Assembly.GetCallingAssembly() ?? Assembly.GetExecutingAssembly();
+            m_gmLog = LogManager.GetLogger(assembly, Configuration.GMActionsLoggerName);
+            m_cheatLog = LogManager.GetLogger(assembly, Configuration.CheatLoggerName);
+            m_inventoryLog = LogManager.GetLogger(assembly, Configuration.InventoryLoggerName);
 
-			if (log.IsDebugEnabled)
-			{
-				log.Debug("Current directory is: " + Directory.GetCurrentDirectory());
-				log.Debug("Gameserver root directory is: " + Configuration.RootDirectory);
-				log.Debug("Changing directory to root directory");
-			}
-			Directory.SetCurrentDirectory(Configuration.RootDirectory);
+            if (log.IsDebugEnabled)
+            {
+                log.Debug("Current directory is: " + Directory.GetCurrentDirectory());
+                log.Debug("Gameserver root directory is: " + Configuration.RootDirectory);
+                log.Debug("Changing directory to root directory");
+            }
+            Directory.SetCurrentDirectory(Configuration.RootDirectory);
 
-			try
-			{
-				m_udpBuf = new byte[MAX_UDPBUF];
-				m_udpReceiveCallback = new AsyncCallback(RecvFromCallback);
-				m_udpSendCallback = new AsyncCallback(SendToCallback);
+            try
+            {
+                m_udpBuf = new byte[MAX_UDPBUF];
+                m_udpReceiveCallback = new AsyncCallback(RecvFromCallback);
+                m_udpSendCallback = new AsyncCallback(SendToCallback);
 
-				CheckAndInitDB();
+                CheckAndInitDB();
 
-				if (log.IsInfoEnabled)
-					log.Info("Game Server Initialization finished!");
-			}
-			catch (Exception e)
-			{
-				if (log.IsFatalEnabled)
-					log.Fatal("GameServer initialization failed!", e);
-				throw new ApplicationException("Fatal Error: Could not initialize Game Server", e);
-			}
-		}
+                if (log.IsInfoEnabled)
+                    log.Info("Game Server Initialization finished!");
+            }
+            catch (Exception e)
+            {
+                if (log.IsFatalEnabled)
+                    log.Fatal("GameServer initialization failed!", e);
+                throw new ApplicationException("Fatal Error: Could not initialize Game Server", e);
+            }
+        }
 
-		protected virtual void CheckAndInitDB()
-		{
-			if (!InitDB() || m_database == null)
-			{
-				if (log.IsErrorEnabled)
-					log.Error("Could not initialize DB, please check path/connection string");
-				throw new ApplicationException("DB initialization error");
-			}
-		}
-		#endregion
-	}
+        protected virtual void CheckAndInitDB()
+        {
+            if (!InitDB() || m_database == null)
+            {
+                if (log.IsErrorEnabled)
+                    log.Error("Could not initialize DB, please check path/connection string");
+                throw new ApplicationException("DB initialization error");
+            }
+        }
+        #endregion
+    }
 }

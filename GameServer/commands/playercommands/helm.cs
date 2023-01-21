@@ -19,18 +19,18 @@
 using DOL.Language;
 namespace DOL.GS.Commands
 {
-	[CmdAttribute("&helm", //command to handle
-		ePrivLevel.Player, //minimum privelege level
-		"Commands.Players.Helm.Description", //command description
-		"Commands.Players.Helm.Usage")] //usage
-	public class HelmCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (IsSpammingCommand(client.Player, "helm"))
-				return;
+    [CmdAttribute("&helm", //command to handle
+        ePrivLevel.Player, //minimum privelege level
+        "Commands.Players.Helm.Description", //command description
+        "Commands.Players.Helm.Usage")] //usage
+    public class HelmCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (IsSpammingCommand(client.Player, "helm"))
+                return;
 
-			client.Player.IsHelmInvisible = !client.Player.IsHelmInvisible;
-		}
-	}
+            client.Player.IsHelmInvisible = !client.Player.IsHelmInvisible;
+        }
+    }
 }

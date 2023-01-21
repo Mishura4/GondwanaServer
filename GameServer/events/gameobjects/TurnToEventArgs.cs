@@ -20,39 +20,39 @@ using System;
 
 namespace DOL.Events
 {
-	/// <summary>
-	/// Holds the arguments for the TurnTo event of GameNPC
-	/// </summary>
-	public class TurnToEventArgs : EventArgs
-	{
-		private float x;
-		private float y;
+    /// <summary>
+    /// Holds the arguments for the TurnTo event of GameNPC
+    /// </summary>
+    public class TurnToEventArgs : EventArgs
+    {
+        private float x;
+        private float y;
 
-		/// <summary>
-		/// Constructs a new TurnToEventArgs
-		/// </summary>
-		/// <param name="x">the target x</param>
-		/// <param name="y">the target y</param>
-		public TurnToEventArgs(float x, float y)
-		{
-			this.x=x;
-			this.y=y;
-		}
+        /// <summary>
+        /// Constructs a new TurnToEventArgs
+        /// </summary>
+        /// <param name="x">the target x</param>
+        /// <param name="y">the target y</param>
+        public TurnToEventArgs(float x, float y)
+        {
+            this.x = x;
+            this.y = y;
+        }
 
-		/// <summary>
-		/// Gets the target X
-		/// </summary>
-		public float X
-		{
-			get { return x; }
-		}		
-		
-		/// <summary>
-		/// Gets the target Y
-		/// </summary>
-		public float Y
-		{
-			get { return y; }
-		}
-	}
+        /// <summary>
+        /// Gets the target X
+        /// </summary>
+        public float X
+        {
+            get { return x; }
+        }
+
+        /// <summary>
+        /// Gets the target Y
+        /// </summary>
+        public float Y
+        {
+            get { return y; }
+        }
+    }
 }

@@ -27,7 +27,7 @@ namespace DOL.GS
         {
             Size = 16;
             Realm = eRealm.Door;
-        	Flags = eFlags.PEACE;
+            Flags = eFlags.PEACE;
             Model = 1613;
             MaxSpeedBase = 600;
             Level = 0;
@@ -85,7 +85,7 @@ namespace DOL.GS
 
         public void Reset()
         {
-            if(IsMoving)
+            if (IsMoving)
                 StopMoving();
             if (m_PathName != "")
             {

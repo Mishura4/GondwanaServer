@@ -37,8 +37,8 @@ namespace DOL.GS.Spells
         public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             int specLevel = Caster.GetModifiedSpecLevel(m_spellLine.Spec);
-			
-			if (Caster is GamePlayer && ((GamePlayer)Caster).CharacterClass.ClassType != eClassType.ListCaster && Spell.Level > 0 && ((GamePlayer)Caster).CharacterClass.ID != (int)eCharacterClass.Savage)
+
+            if (Caster is GamePlayer && ((GamePlayer)Caster).CharacterClass.ClassType != eClassType.ListCaster && Spell.Level > 0 && ((GamePlayer)Caster).CharacterClass.ID != (int)eCharacterClass.Savage)
             {
                 effectiveness = 0.75; // This section is for self bulfs, cleric buffs etc.
                 if (Spell.Level > 0)
@@ -51,20 +51,20 @@ namespace DOL.GS.Spells
             }
             else if (Caster is GamePlayer && Spell.Level > 0 && Spell.Target == "Enemy")
             {
-				effectiveness = 0.75; // This section is for list casters stat debuffs.
-				if (((GamePlayer)Caster).CharacterClass.ClassType == eClassType.ListCaster)
-				{
+                effectiveness = 0.75; // This section is for list casters stat debuffs.
+                if (((GamePlayer)Caster).CharacterClass.ClassType == eClassType.ListCaster)
+                {
                     effectiveness += (specLevel - 1.0) * 0.5 / Spell.Level;
                     effectiveness = Math.Max(0.75, effectiveness);
                     effectiveness = Math.Min(1.25, effectiveness);
                     effectiveness *= (1.0 + m_caster.GetModified(eProperty.DebuffEffectivness) * 0.01);
                 }
-				else
-					{
-						effectiveness = 1.0; // Non list casters debuffs. Reaver curses, Champ debuffs etc.
-						effectiveness *= (1.0 + m_caster.GetModified(eProperty.DebuffEffectivness) * 0.01);
-					}
-			}
+                else
+                {
+                    effectiveness = 1.0; // Non list casters debuffs. Reaver curses, Champ debuffs etc.
+                    effectiveness *= (1.0 + m_caster.GetModified(eProperty.DebuffEffectivness) * 0.01);
+                }
+            }
             else if (Caster is GameNPC)
             {
                 // apply the basic formula for any NPC spell
@@ -173,7 +173,7 @@ namespace DOL.GS.Spells
         {
             get
             {
-            	if (Spell.Target.Equals("Self", StringComparison.OrdinalIgnoreCase)) return eBuffBonusCategory.Other; // no caps for self buffs
+                if (Spell.Target.Equals("Self", StringComparison.OrdinalIgnoreCase)) return eBuffBonusCategory.Other; // no caps for self buffs
                 if (m_spellLine.IsBaseLine) return eBuffBonusCategory.BaseBuff; // baseline cap
                 return eBuffBonusCategory.Other; // no caps for spec line buffs
             }
@@ -204,7 +204,7 @@ namespace DOL.GS.Spells
 
         public override string ShortDescription => $"Increases {TargetPronoun.ToLower()} combat speed by {Spell.Value}%.";
     }
-    
+
     [SpellHandler("HasteBuff")]
     public class HasteBuff : CombatSpeedBuff
     {

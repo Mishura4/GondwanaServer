@@ -17,95 +17,95 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[Cmd(
-		"&password",
-		ePrivLevel.Player,
-		"Commands.Players.Password.Description",
-		"Commands.Players.Password.Usage")]
-	public class PasswordCommand : AbstractCommandHandler, ICommandHandler
-	{
-		private static log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+    [Cmd(
+        "&password",
+        ePrivLevel.Player,
+        "Commands.Players.Password.Description",
+        "Commands.Players.Password.Usage")]
+    public class PasswordCommand : AbstractCommandHandler, ICommandHandler
+    {
+        private static log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-		#region ICommandHandler Members
+        #region ICommandHandler Members
 
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (args.Length < 3)
-			{
-				client.Out.SendMessage(
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Password.Usage"),
-					eChatType.CT_System, eChatLoc.CL_SystemWindow);
-				return;
-			}
-			try
-			{
-				string oldPassword = args[1];
-				string newPassword = args[2];
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (args.Length < 3)
+            {
+                client.Out.SendMessage(
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Password.Usage"),
+                    eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return;
+            }
+            try
+            {
+                string oldPassword = args[1];
+                string newPassword = args[2];
 
-				if ((client.Account != null) && (LoginRequestHandler.CryptPassword(oldPassword) == client.Account.Password))
-				{
-					// TODO: Add confirmation dialog
-					// TODO: If user has set their email address, mail them the change notification
-					client.Player.TempProperties.setProperty(this, newPassword);
-					client.Out.SendCustomDialog(
-						LanguageMgr.GetTranslation(
-							client.Account.Language,
-							"Commands.Players.Password.WannaChange",
-							newPassword),
-						PasswordCheckCallback);
-				}
-				else
-				{
-					client.Out.SendMessage(
-						LanguageMgr.GetTranslation(
-							client.Account.Language,
-							"Commands.Players.Password.Incorrect"),
-						eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                if ((client.Account != null) && (LoginRequestHandler.CryptPassword(oldPassword) == client.Account.Password))
+                {
+                    // TODO: Add confirmation dialog
+                    // TODO: If user has set their email address, mail them the change notification
+                    client.Player.TempProperties.setProperty(this, newPassword);
+                    client.Out.SendCustomDialog(
+                        LanguageMgr.GetTranslation(
+                            client.Account.Language,
+                            "Commands.Players.Password.WannaChange",
+                            newPassword),
+                        PasswordCheckCallback);
+                }
+                else
+                {
+                    client.Out.SendMessage(
+                        LanguageMgr.GetTranslation(
+                            client.Account.Language,
+                            "Commands.Players.Password.Incorrect"),
+                        eChatType.CT_Important, eChatLoc.CL_SystemWindow);
 
-					if (log.IsInfoEnabled)
-						log.Info(client.Player.Name + " (" + client.Account.Name + ") attempted to change password but failed!");
+                    if (log.IsInfoEnabled)
+                        log.Info(client.Player.Name + " (" + client.Account.Name + ") attempted to change password but failed!");
 
-					return;
-				}
-			}
-			catch (Exception)
-			{
-				client.Out.SendMessage(
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Password.Usage"),
-					eChatType.CT_System, eChatLoc.CL_SystemWindow);
-			}
-		}
+                    return;
+                }
+            }
+            catch (Exception)
+            {
+                client.Out.SendMessage(
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Password.Usage"),
+                    eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            }
+        }
 
-		#endregion
+        #endregion
 
-		private void PasswordCheckCallback(GamePlayer player, byte response)
-		{
-			if (response != 0x01)
-				return;
+        private void PasswordCheckCallback(GamePlayer player, byte response)
+        {
+            if (response != 0x01)
+                return;
 
-			var newPassword = player.TempProperties.getProperty<string>(this, null);
-			if (newPassword == null)
-				return;
+            var newPassword = player.TempProperties.getProperty<string>(this, null);
+            if (newPassword == null)
+                return;
 
-			player.TempProperties.removeProperty(this);
-			player.Out.SendMessage(
-				LanguageMgr.GetTranslation(
-					player.Client.Account.Language,
-					"Commands.Players.Password.Changed"),
-				eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-			player.Client.Account.Password = LoginRequestHandler.CryptPassword(newPassword);
+            player.TempProperties.removeProperty(this);
+            player.Out.SendMessage(
+                LanguageMgr.GetTranslation(
+                    player.Client.Account.Language,
+                    "Commands.Players.Password.Changed"),
+                eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+            player.Client.Account.Password = LoginRequestHandler.CryptPassword(newPassword);
 
-			GameServer.Database.SaveObject(player.Client.Account);
+            GameServer.Database.SaveObject(player.Client.Account);
 
-			// Log change
-			AuditMgr.AddAuditEntry(player, AuditType.Account, AuditSubtype.AccountPasswordChange, "", player.Name);
+            // Log change
+            AuditMgr.AddAuditEntry(player, AuditType.Account, AuditSubtype.AccountPasswordChange, "", player.Name);
 
-			if (log.IsInfoEnabled)
-				log.Info(player.Name + " (" + player.Client.Account.Name + ") changed password.");
-		}
-	}
+            if (log.IsInfoEnabled)
+                log.Info(player.Name + " (" + player.Client.Account.Name + ") changed password.");
+        }
+    }
 }

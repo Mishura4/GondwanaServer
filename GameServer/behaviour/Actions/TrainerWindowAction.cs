@@ -30,20 +30,20 @@ using System.Reflection;
 
 namespace DOL.GS.Behaviour.Actions
 {
-	[ActionAttribute(ActionType = eActionType.TrainerWindow, IsNullableP = true)]
-	public class TrainerWindowAction : AbstractAction<Nullable<Int32>, GameNPC>
-	{
-		private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+    [ActionAttribute(ActionType = eActionType.TrainerWindow, IsNullableP = true)]
+    public class TrainerWindowAction : AbstractAction<Nullable<Int32>, GameNPC>
+    {
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-		public TrainerWindowAction(GameNPC defaultNPC)
-			: base(defaultNPC, eActionType.TrainerWindow)
-		{
-		}
-		public override void Perform(DOLEvent e, object sender, EventArgs args)
-		{
-			GamePlayer player = BehaviourUtils.GuessGamePlayerFromNotify(e, sender, args);
-			if (player != null)
-				player.Out.SendTrainerWindow();
-		}
-	}
+        public TrainerWindowAction(GameNPC defaultNPC)
+            : base(defaultNPC, eActionType.TrainerWindow)
+        {
+        }
+        public override void Perform(DOLEvent e, object sender, EventArgs args)
+        {
+            GamePlayer player = BehaviourUtils.GuessGamePlayerFromNotify(e, sender, args);
+            if (player != null)
+                player.Out.SendTrainerWindow();
+        }
+    }
 }

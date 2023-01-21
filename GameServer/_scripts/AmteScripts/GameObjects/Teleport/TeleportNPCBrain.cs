@@ -4,19 +4,19 @@ using DOL.GS.Scripts;
 
 namespace DOL.AI.Brain
 {
-	public class TeleportNPCBrain : AmteMobBrain
-	{
-		public override int ThinkInterval
-		{
-			get { return 500; }
-		}
+    public class TeleportNPCBrain : AmteMobBrain
+    {
+        public override int ThinkInterval
+        {
+            get { return 500; }
+        }
 
-		public override void Think()
-		{
-			base.Think();
+        public override void Think()
+        {
+            base.Think();
             if (Body is TeleportNPC)
                 ((TeleportNPC)Body).JumpArea();
-		}
+        }
 
         protected override int BrainTimerCallback(RegionTimer callingTimer)
         {
@@ -31,5 +31,5 @@ namespace DOL.AI.Brain
             GameEventMgr.Notify(GameNPCEvent.OnAICallback, m_body);
             return ThinkInterval;
         }
-	}
+    }
 }

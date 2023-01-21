@@ -20,22 +20,22 @@ using DOL.GS.PacketHandler;
 
 namespace DOL.GS.Spells
 {
-	[SpellHandler("CombatHeal")]
-	public class CombatHealSpellHandler : HealSpellHandler
-	{
-		public override bool StartSpell(GameLiving target)
-		{
-			m_startReuseTimer = true;
-			// do not start spell if not in combat
-			GamePlayer player = Caster as GamePlayer;
-			if (!Caster.InCombat && (player==null || player.Group==null || !player.Group.IsGroupInCombat()))
-				return false;
+    [SpellHandler("CombatHeal")]
+    public class CombatHealSpellHandler : HealSpellHandler
+    {
+        public override bool StartSpell(GameLiving target)
+        {
+            m_startReuseTimer = true;
+            // do not start spell if not in combat
+            GamePlayer player = Caster as GamePlayer;
+            if (!Caster.InCombat && (player == null || player.Group == null || !player.Group.IsGroupInCombat()))
+                return false;
 
-			return base.StartSpell(target);
-		}
+            return base.StartSpell(target);
+        }
 
-		public CombatHealSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine) {}
+        public CombatHealSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine) { }
 
-        public override string ShortDescription => $"Target is healed {Spell.Value} of damage every {Spell.Frequency/10.0} seconds.";
+        public override string ShortDescription => $"Target is healed {Spell.Value} of damage every {Spell.Frequency / 10.0} seconds.";
     }
 }

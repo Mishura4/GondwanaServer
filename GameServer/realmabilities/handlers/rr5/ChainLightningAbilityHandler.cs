@@ -60,7 +60,7 @@ namespace DOL.GS.RealmAbilities
                 return;
             }
 
-            if (!living.IsWithinRadius( target, (int)(1500 * living.GetModified(eProperty.SpellRange) * 0.01)))
+            if (!living.IsWithinRadius(target, (int)(1500 * living.GetModified(eProperty.SpellRange) * 0.01)))
             {
                 Message.ChatToOthers(living, "You are too far away from your target to use this ability!", eChatType.CT_SpellResisted);
                 return;
@@ -79,14 +79,14 @@ namespace DOL.GS.RealmAbilities
                     if (p != m_oldtarget && p != living && GameServer.ServerRules.IsAllowedToAttack(living, p, true))
                     {
                         DamageTarget(p, living, x);
-						p.StartInterruptTimer(3000, AttackData.eAttackType.Spell, living);
+                        p.StartInterruptTimer(3000, AttackData.eAttackType.Spell, living);
                         m_newtarget = p;
                         break;
                     }
                 }
             }
-            if(deactivate)
-            DisableSkill(living);
+            if (deactivate)
+                DisableSkill(living);
         }
         private void DamageTarget(GameLiving target, GameLiving caster, double counter)
         {

@@ -28,7 +28,7 @@ using DOL.GS.Quests;
 namespace DOL.GS.Behaviour
 {
     public enum eDefaultValueConstants
-    {        
+    {
         NPC
     }
 
@@ -55,9 +55,9 @@ namespace DOL.GS.Behaviour
         public static object ConvertObject(object obj, Type destinationType)
         {
             return ConvertObject(obj, null, destinationType);
-        }        
+        }
 
-        public static object ConvertObject(object obj,object defaultValue, Type destinationType)
+        public static object ConvertObject(object obj, object defaultValue, Type destinationType)
         {
             object result = null;
             if (destinationType == typeof(Type))
@@ -118,7 +118,7 @@ namespace DOL.GS.Behaviour
             else if (destinationType == typeof(PathPoint))
             {
                 result = (PathPoint)obj;
-            }                  
+            }
             else
             {
                 result = obj;

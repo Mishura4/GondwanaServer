@@ -158,12 +158,12 @@ namespace DOL.GS.Commands
         #region Messages
         private void EmptySlot(GameClient client, int slot)
         {
-             client.Out.SendMessage(
-                LanguageMgr.GetTranslation(
-                    client.Account.Language,
-                    "Commands.Players.Rearrange.Slot.Empty",
-                    slot),
-                eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            client.Out.SendMessage(
+               LanguageMgr.GetTranslation(
+                   client.Account.Language,
+                   "Commands.Players.Rearrange.Slot.Empty",
+                   slot),
+               eChatType.CT_System, eChatLoc.CL_SystemWindow);
         }
 
         private void InvalidSlot(GameClient client, int[] slots)
@@ -183,7 +183,7 @@ namespace DOL.GS.Commands
                     client.Account.Language,
                     "Commands.Players.Rearrange.Slot.Invalid" + (slots.Length > 1 ? "s" : ""),
                     str),
-                eChatType.CT_System, eChatLoc.CL_SystemWindow); 
+                eChatType.CT_System, eChatLoc.CL_SystemWindow);
         }
 
         private void NotSameRealm(GameClient client, int sourceSlot, int targetSlot)
@@ -234,7 +234,7 @@ namespace DOL.GS.Commands
                     string slotEmpty = LanguageMgr.GetTranslation(
                                         client.Account.Language,
                                         "Commands.Players.Rearrange.Slot.List.slotEmpty");
-                    slots.Add(i, slotEmpty );
+                    slots.Add(i, slotEmpty);
 
                     if (i == (firstSlot + 9))
                     {

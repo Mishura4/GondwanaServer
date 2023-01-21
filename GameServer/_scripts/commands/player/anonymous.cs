@@ -24,35 +24,35 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute(
-	  "&anonymous",
-	  ePrivLevel.Player,
+    [CmdAttribute(
+      "&anonymous",
+      ePrivLevel.Player,
       "Commands.Players.Anonymous.Description",
       "Commands.Players.Anonymous.Usage")]
-	public class AnonymousCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		/// <summary>
-		/// Change Player Anonymous Flag on Command
-		/// </summary>
-		/// <param name="client"></param>
-		/// <param name="args"></param>
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (client.Player == null)
-				return;
-			
-			if (client.Account.PrivLevel == 1 && ServerProperties.Properties.ANON_MODIFIER == -1)
-			{
-				DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Scripts.Players.Anonymous.Error"));
-				return;
-			}
+    public class AnonymousCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        /// <summary>
+        /// Change Player Anonymous Flag on Command
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="args"></param>
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (client.Player == null)
+                return;
 
-			client.Player.IsAnonymous = !client.Player.IsAnonymous;
+            if (client.Account.PrivLevel == 1 && ServerProperties.Properties.ANON_MODIFIER == -1)
+            {
+                DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Scripts.Players.Anonymous.Error"));
+                return;
+            }
 
-			if (client.Player.IsAnonymous)
-				client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Scripts.Players.Anonymous.On"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-			else
-				client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Scripts.Players.Anonymous.Off"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-		}
-	}
+            client.Player.IsAnonymous = !client.Player.IsAnonymous;
+
+            if (client.Player.IsAnonymous)
+                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Scripts.Players.Anonymous.On"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            else
+                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Scripts.Players.Anonymous.Off"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+        }
+    }
 }

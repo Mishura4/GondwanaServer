@@ -43,34 +43,34 @@ namespace DOL.GS
     ///</summary>
     public class BaseInstance : Region
     {
-		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-		/// <summary>
+        /// <summary>
         /// Creates an instance object. This shouldn't be used directly - Please use WorldMgr.CreateInstance
         /// to create an instance.
         /// </summary>
-        public BaseInstance(ushort ID, GameTimer.TimeManager time, RegionData data) :base(time, data)
+        public BaseInstance(ushort ID, GameTimer.TimeManager time, RegionData data) : base(time, data)
         {
             m_regionID = ID;
             m_skinID = data.Id;
-            
+
             //Notify we've created an instance.
             log.Warn("An instance is created! " + Name + ", RegionID: " + ID + ", SkinID: " + Skin);
         }
 
-		/// <summary>
-		/// Called as last step in Instance creation.
-		/// </summary>
-		public virtual void Start()
-		{
-			StartRegionMgr();
-			BeginAutoClosureCountdown(10);
-			
-			foreach (Zone z in m_zones)
-			{
-				m_zoneSkinMap.Add(z.ZoneSkinID, z);
-			}
-		}
+        /// <summary>
+        /// Called as last step in Instance creation.
+        /// </summary>
+        public virtual void Start()
+        {
+            StartRegionMgr();
+            BeginAutoClosureCountdown(10);
+
+            foreach (Zone z in m_zones)
+            {
+                m_zoneSkinMap.Add(z.ZoneSkinID, z);
+            }
+        }
 
         #region Inheritance and Region
 
@@ -91,8 +91,8 @@ namespace DOL.GS
             }
         }
 
-		private ushort m_skinID;
-		/// <summary>
+        private ushort m_skinID;
+        /// <summary>
         /// Gets the SkinID of the instance - the 'look' of the instance.
         /// </summary>
         public override ushort Skin
@@ -108,78 +108,78 @@ namespace DOL.GS
         { get { return true; } }
 
 
-		private bool m_destroyWhenEmpty = true;
-		private bool m_persistent = false;
+        private bool m_destroyWhenEmpty = true;
+        private bool m_persistent = false;
 
-		/// <summary>
-		/// If this is true the instance will be destroyed as soon as the last player leaves.
-		/// </summary>
-		public bool DestroyWhenEmpty
-		{
-			get { return m_destroyWhenEmpty; }
-			set 
-			{ 
-				m_destroyWhenEmpty = value;
+        /// <summary>
+        /// If this is true the instance will be destroyed as soon as the last player leaves.
+        /// </summary>
+        public bool DestroyWhenEmpty
+        {
+            get { return m_destroyWhenEmpty; }
+            set
+            {
+                m_destroyWhenEmpty = value;
 
-				// Instance will be destroyed as soon as all players leave
-				if (m_destroyWhenEmpty)
-				{
-					if (m_autoCloseRegionTimer != null)
-					{
-						m_autoCloseRegionTimer.Stop();
-						m_autoCloseRegionTimer = null;
-					}
+                // Instance will be destroyed as soon as all players leave
+                if (m_destroyWhenEmpty)
+                {
+                    if (m_autoCloseRegionTimer != null)
+                    {
+                        m_autoCloseRegionTimer.Stop();
+                        m_autoCloseRegionTimer = null;
+                    }
 
-					if (m_delayCloseRegionTimer != null)
-					{
-						m_delayCloseRegionTimer.Stop();
-						m_delayCloseRegionTimer = null;
-					}
-				}
+                    if (m_delayCloseRegionTimer != null)
+                    {
+                        m_delayCloseRegionTimer.Stop();
+                        m_delayCloseRegionTimer = null;
+                    }
+                }
 
-				//If no more players remain, remove and clean up the instance...
-				if (m_destroyWhenEmpty && m_playersInInstance == 0)
-				{
-					log.Info("Instance is empty, destroying instance " + Description + ", ID: " + ID + ".");
-					WorldMgr.RemoveInstance(this);
-				}
-			}
-		}
+                //If no more players remain, remove and clean up the instance...
+                if (m_destroyWhenEmpty && m_playersInInstance == 0)
+                {
+                    log.Info("Instance is empty, destroying instance " + Description + ", ID: " + ID + ".");
+                    WorldMgr.RemoveInstance(this);
+                }
+            }
+        }
 
-		/// <summary>
-		/// Persistent instances never close
-		/// </summary>
-		public bool Persistent
-		{
-			get { return m_persistent; }
+        /// <summary>
+        /// Persistent instances never close
+        /// </summary>
+        public bool Persistent
+        {
+            get { return m_persistent; }
 
-			set
-			{
-				m_persistent = value;
+            set
+            {
+                m_persistent = value;
 
-				// This instance is persistent, stop all close timers
-				if (m_persistent)
-				{
-					DestroyWhenEmpty = false;
+                // This instance is persistent, stop all close timers
+                if (m_persistent)
+                {
+                    DestroyWhenEmpty = false;
 
-					if (m_autoCloseRegionTimer != null)
-					{
-						m_autoCloseRegionTimer.Stop();
-						m_autoCloseRegionTimer = null;
-					}
+                    if (m_autoCloseRegionTimer != null)
+                    {
+                        m_autoCloseRegionTimer.Stop();
+                        m_autoCloseRegionTimer = null;
+                    }
 
-					if (m_delayCloseRegionTimer != null)
-					{
-						m_delayCloseRegionTimer.Stop();
-						m_delayCloseRegionTimer = null;
-					}
-				}
-				else
-				{
-					DestroyWhenEmpty = true;
-				}
-			}
-		}
+                    if (m_delayCloseRegionTimer != null)
+                    {
+                        m_delayCloseRegionTimer.Stop();
+                        m_delayCloseRegionTimer = null;
+                    }
+                }
+                else
+                {
+                    DestroyWhenEmpty = true;
+                }
+            }
+        }
 
         #endregion
 
@@ -191,30 +191,30 @@ namespace DOL.GS
 
         private int m_playersInInstance;
 
-		protected int PlayersInInstance
-		{
-			get { return m_playersInInstance; }
-		}
+        protected int PlayersInInstance
+        {
+            get { return m_playersInInstance; }
+        }
 
- 		/// <summary>
-		/// Event handler for player entering instance
-		/// </summary>
+        /// <summary>
+        /// Event handler for player entering instance
+        /// </summary>
         public virtual void OnPlayerEnterInstance(GamePlayer player)
-        { 
-        //Increment the amount of players.
+        {
+            //Increment the amount of players.
             m_playersInInstance++;
 
             //Stop the timer to prevent the region's removal.
-			if (m_autoCloseRegionTimer != null)
-			{
-				m_autoCloseRegionTimer.Stop();
-				m_autoCloseRegionTimer = null;
-			}
+            if (m_autoCloseRegionTimer != null)
+            {
+                m_autoCloseRegionTimer.Stop();
+                m_autoCloseRegionTimer = null;
+            }
         }
 
- 		/// <summary>
-		/// Event handler for player leaving instance
-		/// </summary>
+        /// <summary>
+        /// Event handler for player leaving instance
+        /// </summary>
         public virtual void OnPlayerLeaveInstance(GamePlayer player)
         {
             //Decrease the amount of players
@@ -259,81 +259,81 @@ namespace DOL.GS
         /// </summary>
         public override void OnCollapse()
         {
-			base.OnCollapse();
+            base.OnCollapse();
 
-			if (m_autoCloseRegionTimer != null)
-			{
-				m_autoCloseRegionTimer.Stop();
-				m_autoCloseRegionTimer = null;
-			}
+            if (m_autoCloseRegionTimer != null)
+            {
+                m_autoCloseRegionTimer.Stop();
+                m_autoCloseRegionTimer = null;
+            }
 
-			if (m_delayCloseRegionTimer != null)
-			{
-				m_delayCloseRegionTimer.Stop();
-				m_delayCloseRegionTimer = null;
-			}
+            if (m_delayCloseRegionTimer != null)
+            {
+                m_delayCloseRegionTimer.Stop();
+                m_delayCloseRegionTimer = null;
+            }
 
-			DOL.Events.GameEventMgr.RemoveAllHandlersForObject(this);
-			
-			m_zoneSkinMap.Clear();
+            DOL.Events.GameEventMgr.RemoveAllHandlersForObject(this);
 
-			Areas.Clear();
-		}
+            m_zoneSkinMap.Clear();
 
-		~BaseInstance()
-		{
-			log.Debug("BaseInstance destructor called for " + Description);
-		}
+            Areas.Clear();
+        }
+
+        ~BaseInstance()
+        {
+            log.Debug("BaseInstance destructor called for " + Description);
+        }
 
         private AutoCloseRegionTimer m_autoCloseRegionTimer;
-		private DelayCloseRegionTimer m_delayCloseRegionTimer;
+        private DelayCloseRegionTimer m_delayCloseRegionTimer;
 
-		/// <summary>
-		/// Setting this will ensure the instance stays around x minutes.  After that the region will be destroyed when empty
-		/// </summary>
-		/// <param name="minutes"></param>
+        /// <summary>
+        /// Setting this will ensure the instance stays around x minutes.  After that the region will be destroyed when empty
+        /// </summary>
+        /// <param name="minutes"></param>
         public void BeginAutoClosureCountdown(int minutes)
         {
-			if (m_autoCloseRegionTimer != null)
-			{
-				m_autoCloseRegionTimer.Stop();
-				m_autoCloseRegionTimer = null;
-			}
+            if (m_autoCloseRegionTimer != null)
+            {
+                m_autoCloseRegionTimer.Stop();
+                m_autoCloseRegionTimer = null;
+            }
 
             m_autoCloseRegionTimer = new AutoCloseRegionTimer(TimeManager, this);
             m_autoCloseRegionTimer.Interval = minutes * 60000;
             m_autoCloseRegionTimer.Start(minutes * 60000);
         }
 
-		/// <summary>
-		/// Setting this will ensure the instance stays around x minutes.  After that the region will be destroyed when empty
-		/// </summary>
-		/// <param name="minutes"></param>
-		public void BeginDelayCloseCountdown(int minutes)
-		{
-			DestroyWhenEmpty = false;
+        /// <summary>
+        /// Setting this will ensure the instance stays around x minutes.  After that the region will be destroyed when empty
+        /// </summary>
+        /// <param name="minutes"></param>
+        public void BeginDelayCloseCountdown(int minutes)
+        {
+            DestroyWhenEmpty = false;
 
-			if (m_autoCloseRegionTimer != null)
-			{
-				m_autoCloseRegionTimer.Stop();
-				m_autoCloseRegionTimer = null;
-			}
+            if (m_autoCloseRegionTimer != null)
+            {
+                m_autoCloseRegionTimer.Stop();
+                m_autoCloseRegionTimer = null;
+            }
 
-			if (m_delayCloseRegionTimer != null)
-			{
-				m_delayCloseRegionTimer.Stop();
-				m_delayCloseRegionTimer = null;
-			}
+            if (m_delayCloseRegionTimer != null)
+            {
+                m_delayCloseRegionTimer.Stop();
+                m_delayCloseRegionTimer = null;
+            }
 
-			m_delayCloseRegionTimer = new DelayCloseRegionTimer(TimeManager, this);
-			m_delayCloseRegionTimer.Interval = minutes * 60000;
-			m_delayCloseRegionTimer.Start(minutes * 60000);
-		}
+            m_delayCloseRegionTimer = new DelayCloseRegionTimer(TimeManager, this);
+            m_delayCloseRegionTimer.Interval = minutes * 60000;
+            m_delayCloseRegionTimer.Start(minutes * 60000);
+        }
 
-		/// <summary>
-		/// Automated Closing Timer for Instances
-		/// </summary>
-		protected class AutoCloseRegionTimer : GameTimer
+        /// <summary>
+        /// Automated Closing Timer for Instances
+        /// </summary>
+        protected class AutoCloseRegionTimer : GameTimer
         {
             public AutoCloseRegionTimer(TimeManager time, BaseInstance i)
                 : base(time)
@@ -368,174 +368,174 @@ namespace DOL.GS
                     log.Info(m_instance.Name + " (ID: " + m_instance.ID + ") just reached the timeout for the removal timer. The region is empty, and will now be demolished and removed from the world. Entering OnCollapse!");
                     Stop();
                     WorldMgr.RemoveInstance(m_instance);
-                }                
+                }
             }
 
         }
 
-		/// <summary>
-		/// Delay Closing Timer for Instances
-		/// </summary>
-		protected class DelayCloseRegionTimer : GameTimer
-		{
-			public DelayCloseRegionTimer(TimeManager time, BaseInstance i)
-				: base(time)
-			{
-				m_instance = i;
-			}
+        /// <summary>
+        /// Delay Closing Timer for Instances
+        /// </summary>
+        protected class DelayCloseRegionTimer : GameTimer
+        {
+            public DelayCloseRegionTimer(TimeManager time, BaseInstance i)
+                : base(time)
+            {
+                m_instance = i;
+            }
 
-			//The instance to remove...
-			BaseInstance m_instance;
+            //The instance to remove...
+            BaseInstance m_instance;
 
-			protected override void OnTick()
-			{
-				if (m_instance == null)
-				{
-					log.Warn("DelayCloseRegionTimer is not being stopped once the instance is destroyed!");
-					Stop();
-					return;
-				}
+            protected override void OnTick()
+            {
+                if (m_instance == null)
+                {
+                    log.Warn("DelayCloseRegionTimer is not being stopped once the instance is destroyed!");
+                    Stop();
+                    return;
+                }
 
-				Stop();
-				m_instance.DestroyWhenEmpty = true;
-			}
+                Stop();
+                m_instance.DestroyWhenEmpty = true;
+            }
 
-		}
+        }
 
         #endregion
 
-        
-		#region Area
 
-		/// <summary>
-		/// Zone Mapping for Instances
-		/// Update Leodagan : moved from Instance to BaseInstance to make Areas work !
-		/// </summary>
-		protected Dictionary<int, Zone> m_zoneSkinMap = new Dictionary<int, Zone>();
+        #region Area
 
-		/// <summary>
-		/// Gets the areas for a certain spot
-		/// </summary>
-		/// <param name="zone"></param>
-		/// <param name="p"></param>
-		/// <param name="checkZ"></param>
-		/// <returns></returns>
-		public override IList<IArea> GetAreasOfZone(Zone zone, Vector3 p, bool checkZ)
-		{
-			Zone checkZone = zone;
-			var areas = new List<IArea>();
+        /// <summary>
+        /// Zone Mapping for Instances
+        /// Update Leodagan : moved from Instance to BaseInstance to make Areas work !
+        /// </summary>
+        protected Dictionary<int, Zone> m_zoneSkinMap = new Dictionary<int, Zone>();
 
-			if (checkZone == null)
-			{
-				return areas;
-			}
+        /// <summary>
+        /// Gets the areas for a certain spot
+        /// </summary>
+        /// <param name="zone"></param>
+        /// <param name="p"></param>
+        /// <param name="checkZ"></param>
+        /// <returns></returns>
+        public override IList<IArea> GetAreasOfZone(Zone zone, Vector3 p, bool checkZ)
+        {
+            Zone checkZone = zone;
+            var areas = new List<IArea>();
 
-			// Players will always request the skinned zone so map it to the actual instance zone
-			if (m_zoneSkinMap.ContainsKey(zone.ID))
-			{
-				checkZone = m_zoneSkinMap[zone.ID];
-			}
+            if (checkZone == null)
+            {
+                return areas;
+            }
 
-			int zoneIndex = Zones.IndexOf(checkZone);
+            // Players will always request the skinned zone so map it to the actual instance zone
+            if (m_zoneSkinMap.ContainsKey(zone.ID))
+            {
+                checkZone = m_zoneSkinMap[zone.ID];
+            }
 
-			if (zoneIndex >= 0)
-			{
-				lock (m_lockAreas)
-				{
-					try
-					{
-						for (int i = 0; i < m_ZoneAreasCount[zoneIndex]; i++)
-						{
-							IArea area = (IArea)Areas[m_ZoneAreas[zoneIndex][i]];
-							if (area.IsContaining(p, checkZ))
-							{
-								areas.Add(area);
-							}
-						}
-					}
-					catch (Exception e)
-					{
-						log.Error("GetAreaOfZone: Caught exception for Zone " + zone.Description + ", Area count " + m_ZoneAreasCount[zoneIndex] + ".", e);
-					}
-				}
-			}
+            int zoneIndex = Zones.IndexOf(checkZone);
 
-			return areas;
-		}
+            if (zoneIndex >= 0)
+            {
+                lock (m_lockAreas)
+                {
+                    try
+                    {
+                        for (int i = 0; i < m_ZoneAreasCount[zoneIndex]; i++)
+                        {
+                            IArea area = (IArea)Areas[m_ZoneAreas[zoneIndex][i]];
+                            if (area.IsContaining(p, checkZ))
+                            {
+                                areas.Add(area);
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        log.Error("GetAreaOfZone: Caught exception for Zone " + zone.Description + ", Area count " + m_ZoneAreasCount[zoneIndex] + ".", e);
+                    }
+                }
+            }
 
-		/// <summary>
-		/// Gets the areas for a certain spot
-		/// </summary>
-		/// <param name="zone"></param>
-		/// <param name="p"></param>
-		/// <param name="checkZ"></param>
-		/// <returns></returns>
-		public override IList<IArea> GetAreasOfZone(Zone zone, int x, int y, int z)
-		{
-			Zone checkZone = zone;
-			var areas = new List<IArea>();
+            return areas;
+        }
 
-			if (checkZone == null)
-			{
-				return areas;
-			}
+        /// <summary>
+        /// Gets the areas for a certain spot
+        /// </summary>
+        /// <param name="zone"></param>
+        /// <param name="p"></param>
+        /// <param name="checkZ"></param>
+        /// <returns></returns>
+        public override IList<IArea> GetAreasOfZone(Zone zone, int x, int y, int z)
+        {
+            Zone checkZone = zone;
+            var areas = new List<IArea>();
 
-			// Players will always request the skinned zone so map it to the actual instance zone
-			if (m_zoneSkinMap.ContainsKey(zone.ID))
-			{
-				checkZone = m_zoneSkinMap[zone.ID];
-			}
+            if (checkZone == null)
+            {
+                return areas;
+            }
 
-			int zoneIndex = Zones.IndexOf(checkZone);
+            // Players will always request the skinned zone so map it to the actual instance zone
+            if (m_zoneSkinMap.ContainsKey(zone.ID))
+            {
+                checkZone = m_zoneSkinMap[zone.ID];
+            }
 
-			if (zoneIndex >= 0)
-			{
-				lock (m_lockAreas)
-				{
-					try
-					{
-						for (int i = 0; i < m_ZoneAreasCount[zoneIndex]; i++)
-						{
-							IArea area = (IArea)Areas[m_ZoneAreas[zoneIndex][i]];
-							if (area.IsContaining(x, y, z))
-								areas.Add(area);
-						}
-					}
-					catch (Exception e)
-					{
-						log.Error("GetArea exception.Area count " + m_ZoneAreasCount[zoneIndex], e);
-					}
-				}
-			}
+            int zoneIndex = Zones.IndexOf(checkZone);
 
-			return areas;
-		}
+            if (zoneIndex >= 0)
+            {
+                lock (m_lockAreas)
+                {
+                    try
+                    {
+                        for (int i = 0; i < m_ZoneAreasCount[zoneIndex]; i++)
+                        {
+                            IArea area = (IArea)Areas[m_ZoneAreas[zoneIndex][i]];
+                            if (area.IsContaining(x, y, z))
+                                areas.Add(area);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        log.Error("GetArea exception.Area count " + m_ZoneAreasCount[zoneIndex], e);
+                    }
+                }
+            }
 
-		#endregion
+            return areas;
+        }
 
-		#region mobcount
+        #endregion
 
-		/// <summary>
-		/// Get an Enumerable of Mobs inside instance, Meant for mini-quest finished conditions.
-		/// Can be used to update all mobs in area depending on player levels or other conditions.
-		/// </summary>
-		/// <param name="alive">Return Alive mobs or all mobs</param>
-		/// <returns>List of Mobs</returns>
-		public IEnumerable<GameNPC> GetMobsInsideInstance(bool alive)
-		{
-			lock(ObjectsSyncLock)
-			{
-				if(alive)
-				{
-					return new List<GameNPC>(from regionObjects in this.Objects where (regionObjects is GameNPC) && ((((GameNPC)regionObjects).Flags & GameNPC.eFlags.PEACE) != GameNPC.eFlags.PEACE) && ((GameNPC)regionObjects).IsAlive select (GameNPC)regionObjects);
-				}
-				else
-				{
-					return new List<GameNPC>(from regionObjects in this.Objects where (regionObjects is GameNPC) && ((((GameNPC)regionObjects).Flags & GameNPC.eFlags.PEACE) != GameNPC.eFlags.PEACE) select (GameNPC)regionObjects);
-				}
-			}
-		}
-		
-		#endregion
+        #region mobcount
+
+        /// <summary>
+        /// Get an Enumerable of Mobs inside instance, Meant for mini-quest finished conditions.
+        /// Can be used to update all mobs in area depending on player levels or other conditions.
+        /// </summary>
+        /// <param name="alive">Return Alive mobs or all mobs</param>
+        /// <returns>List of Mobs</returns>
+        public IEnumerable<GameNPC> GetMobsInsideInstance(bool alive)
+        {
+            lock (ObjectsSyncLock)
+            {
+                if (alive)
+                {
+                    return new List<GameNPC>(from regionObjects in this.Objects where (regionObjects is GameNPC) && ((((GameNPC)regionObjects).Flags & GameNPC.eFlags.PEACE) != GameNPC.eFlags.PEACE) && ((GameNPC)regionObjects).IsAlive select (GameNPC)regionObjects);
+                }
+                else
+                {
+                    return new List<GameNPC>(from regionObjects in this.Objects where (regionObjects is GameNPC) && ((((GameNPC)regionObjects).Flags & GameNPC.eFlags.PEACE) != GameNPC.eFlags.PEACE) select (GameNPC)regionObjects);
+                }
+            }
+        }
+
+        #endregion
     }
 }

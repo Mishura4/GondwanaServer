@@ -28,69 +28,69 @@ using DOL.Language;
 
 namespace DOL.GS
 {
-	/// <summary>
-	/// Represents an in-game GameHealer NPC
-	/// </summary>
-	[NPCGuildScript("Healer")]
-	public class GameHealer : GameNPC
-	{
-		private const string CURED_SPELL_TYPE = "PveResurrectionIllness";
+    /// <summary>
+    /// Represents an in-game GameHealer NPC
+    /// </summary>
+    [NPCGuildScript("Healer")]
+    public class GameHealer : GameNPC
+    {
+        private const string CURED_SPELL_TYPE = "PveResurrectionIllness";
 
         private const string COST_BY_PTS = "cost";
 
-		/// <summary>
-		/// Constructor
-		/// </summary>
-		public GameHealer()
-			: base()
-		{
-		}
-
-		#region Examine/Interact Message
-
-		/// <summary>
-		/// Adds messages to ArrayList which are sent when object is targeted
-		/// </summary>
-		/// <param name="player">GamePlayer that is examining this object</param>
-		/// <returns>list with string messages</returns>
-		public override IList GetExamineMessages(GamePlayer player)
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public GameHealer()
+            : base()
         {
-			IList list = new ArrayList();
+        }
+
+        #region Examine/Interact Message
+
+        /// <summary>
+        /// Adds messages to ArrayList which are sent when object is targeted
+        /// </summary>
+        /// <param name="player">GamePlayer that is examining this object</param>
+        /// <returns>list with string messages</returns>
+        public override IList GetExamineMessages(GamePlayer player)
+        {
+            IList list = new ArrayList();
             list.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "Healer.GetExamineMessages.Text1",
                 GetName(0, false, player.Client.Account.Language, this), GetPronoun(0, true, player.Client.Account.Language), GetAggroLevelString(player, false)));
             return list;
-		}
+        }
 
-		public override bool Interact(GamePlayer player)
-		{
-			if (!base.Interact(player))
-				return false;
+        public override bool Interact(GamePlayer player)
+        {
+            if (!base.Interact(player))
+                return false;
 
-			TurnTo(player, 5000);
+            TurnTo(player, 5000);
 
-			GameSpellEffect effect = SpellHandler.FindEffectOnTarget(player, CURED_SPELL_TYPE);
-			if (effect != null)
-			{
-				effect.Cancel(false);
+            GameSpellEffect effect = SpellHandler.FindEffectOnTarget(player, CURED_SPELL_TYPE);
+            if (effect != null)
+            {
+                effect.Cancel(false);
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Healer.Interact.Text1",
                     GetName(0, false, player.Client.Account.Language, this)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
             }
 
-			if (player.TotalConstitutionLostAtDeath > 0)
-			{
-				int oneConCost = GamePlayer.prcRestore[player.Level < GamePlayer.prcRestore.Length ? player.Level : GamePlayer.prcRestore.Length - 1];
-				player.TempProperties.setProperty(COST_BY_PTS, (long)oneConCost);
-                player.Out.SendCustomDialog(LanguageMgr.GetTranslation(player.Client.Account.Language, "Healer.Interact.Text2", 
+            if (player.TotalConstitutionLostAtDeath > 0)
+            {
+                int oneConCost = GamePlayer.prcRestore[player.Level < GamePlayer.prcRestore.Length ? player.Level : GamePlayer.prcRestore.Length - 1];
+                player.TempProperties.setProperty(COST_BY_PTS, (long)oneConCost);
+                player.Out.SendCustomDialog(LanguageMgr.GetTranslation(player.Client.Account.Language, "Healer.Interact.Text2",
                     Money.GetString(player.TotalConstitutionLostAtDeath * (long)oneConCost)), new CustomDialogResponse(HealerDialogResponse));
             }
-			else
-			{
+            else
+            {
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Healer.Interact.Text3"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
             }
-			return true;
-		}
+            return true;
+        }
 
-		protected void HealerDialogResponse(GamePlayer player, byte response)
+        protected void HealerDialogResponse(GamePlayer player, byte response)
         {
             if (!this.IsWithinRadius(player, WorldMgr.INTERACT_DISTANCE))
             {
@@ -124,6 +124,6 @@ namespace DOL.GS
             }
             return;
         }
-		#endregion Examine/Interact Message
-	}
+        #endregion Examine/Interact Message
+    }
 }

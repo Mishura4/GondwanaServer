@@ -30,40 +30,40 @@ namespace DOL.GS
 {
     public class GameConsignmentMerchant : GameNPC, IGameInventoryObject
     {
-		private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-		public const int CONSIGNMENT_SIZE = 100;
-		public const int CONSIGNMENT_OFFSET = 1350; // client sends the same slots as a housing vault
+        public const int CONSIGNMENT_SIZE = 100;
+        public const int CONSIGNMENT_OFFSET = 1350; // client sends the same slots as a housing vault
 
-		public const string CONSIGNMENT_BUY_ITEM = "ConsignmentBuyItem";
+        public const string CONSIGNMENT_BUY_ITEM = "ConsignmentBuyItem";
 
         protected readonly Dictionary<string, GamePlayer> _observers = new Dictionary<string, GamePlayer>();
         protected readonly object m_moneyLock = new object();
         protected readonly object m_vaultSync = new object();
         protected long m_totalMoney;
 
-		public bool houseRequired = true;
-		
-		public object LockObject()
-		{
-			return m_vaultSync;
-		}
+        public bool houseRequired = true;
 
-		/// <summary>
-		/// First slot of the client window that shows this inventory
-		/// </summary>
-		public virtual int FirstClientSlot
-		{
-			get { return (int)eInventorySlot.HousingInventory_First; }
-		}
+        public object LockObject()
+        {
+            return m_vaultSync;
+        }
 
-		/// <summary>
-		/// Last slot of the client window that shows this inventory
-		/// </summary>
-		public virtual int LastClientSlot
-		{
-			get { return (int)eInventorySlot.HousingInventory_Last; }
-		}
+        /// <summary>
+        /// First slot of the client window that shows this inventory
+        /// </summary>
+        public virtual int FirstClientSlot
+        {
+            get { return (int)eInventorySlot.HousingInventory_First; }
+        }
+
+        /// <summary>
+        /// Last slot of the client window that shows this inventory
+        /// </summary>
+        public virtual int LastClientSlot
+        {
+            get { return (int)eInventorySlot.HousingInventory_Last; }
+        }
 
         /// <summary>
         /// First slot in the DB.
@@ -154,31 +154,31 @@ namespace DOL.GS
 
         #endregion Token return
 
-		public virtual string GetOwner(GamePlayer player)
-		{
-			if(houseRequired)
-				return CurrentHouse.OwnerID;
-			else
-				return OwnerID;
-		}
+        public virtual string GetOwner(GamePlayer player)
+        {
+            if (houseRequired)
+                return CurrentHouse.OwnerID;
+            else
+                return OwnerID;
+        }
 
-		public override House CurrentHouse
-		{
-			get
-			{
-				return HouseMgr.GetHouse(CurrentRegionID, HouseNumber);
-			}
-			set
-			{
-			}
-		}
+        public override House CurrentHouse
+        {
+            get
+            {
+                return HouseMgr.GetHouse(CurrentRegionID, HouseNumber);
+            }
+            set
+            {
+            }
+        }
 
         /// <summary>
         /// Inventory of the Consignment Merchant, mapped to client slots
         /// </summary>
         public virtual Dictionary<int, InventoryItem> GetClientInventory(GamePlayer player)
         {
-			return this.GetClientItems(player);
+            return this.GetClientItems(player);
         }
 
         /// <summary>
@@ -186,7 +186,7 @@ namespace DOL.GS
         /// </summary>
 		public virtual IList<InventoryItem> DBItems(GamePlayer player = null)
         {
-			return MarketCache.Items.Where(item => item.OwnerID == OwnerID).ToList();
+            return MarketCache.Items.Where(item => item.OwnerID == OwnerID).ToList();
         }
 
         /// <summary>
@@ -206,11 +206,11 @@ namespace DOL.GS
                 lock (m_moneyLock)
                 {
                     m_totalMoney = value;
-					HouseConsignmentMerchant merchant;
-					if(houseRequired)
-                    	merchant = DOLDB<HouseConsignmentMerchant>.SelectObject(DB.Column(nameof(HouseConsignmentMerchant.HouseNumber)).IsEqualTo(HouseNumber));
+                    HouseConsignmentMerchant merchant;
+                    if (houseRequired)
+                        merchant = DOLDB<HouseConsignmentMerchant>.SelectObject(DB.Column(nameof(HouseConsignmentMerchant.HouseNumber)).IsEqualTo(HouseNumber));
                     else
-						merchant = DOLDB<HouseConsignmentMerchant>.SelectObject(DB.Column(nameof(HouseConsignmentMerchant.OwnerID)).IsEqualTo(OwnerID));
+                        merchant = DOLDB<HouseConsignmentMerchant>.SelectObject(DB.Column(nameof(HouseConsignmentMerchant.OwnerID)).IsEqualTo(OwnerID));
                     merchant.Money = m_totalMoney;
                     GameServer.Database.SaveObject(merchant);
                 }
@@ -224,8 +224,8 @@ namespace DOL.GS
         /// <returns></returns>
 		public virtual bool HasPermissionToMove(GamePlayer player)
         {
-			if(!houseRequired && OwnerID == player.ObjectId)
-				return true;
+            if (!houseRequired && OwnerID == player.ObjectId)
+                return true;
 
             House house = HouseMgr.GetHouse(CurrentRegionID, HouseNumber);
             if (house == null)
@@ -237,20 +237,20 @@ namespace DOL.GS
             return false;
         }
 
-		/// <summary>
-		/// Can this inventory object handle the a move item request?
-		/// </summary>
-		/// <param name="player"></param>
-		/// <param name="fromClientSlot"></param>
-		/// <param name="toClientSlot"></param>
-		/// <returns></returns>
-		public virtual bool CanHandleMove(GamePlayer player, ushort fromClientSlot, ushort toClientSlot)
-		{
-			if (player == null || player.ActiveInventoryObject != this)
-				return false;
+        /// <summary>
+        /// Can this inventory object handle the a move item request?
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="fromClientSlot"></param>
+        /// <param name="toClientSlot"></param>
+        /// <returns></returns>
+        public virtual bool CanHandleMove(GamePlayer player, ushort fromClientSlot, ushort toClientSlot)
+        {
+            if (player == null || player.ActiveInventoryObject != this)
+                return false;
 
-			return this.CanHandleRequest(player, fromClientSlot, toClientSlot);
-		}
+            return this.CanHandleRequest(player, fromClientSlot, toClientSlot);
+        }
 
         /// <summary>
         /// Is this a move request for a consigment merchant?
@@ -268,10 +268,10 @@ namespace DOL.GS
             if (house == null && houseRequired)
                 return false;
 
-			if (this.CanHandleRequest(player, fromClientSlot, toClientSlot) == false)
-				return false;
+            if (this.CanHandleRequest(player, fromClientSlot, toClientSlot) == false)
+                return false;
 
-			// let's move it
+            // let's move it
 
             lock (m_vaultSync)
             {
@@ -281,169 +281,169 @@ namespace DOL.GS
                 }
                 else if (fromClientSlot >= FirstClientSlot && fromClientSlot <= LastClientSlot)
                 {
-					// Moving from the consignment merchant to ...
+                    // Moving from the consignment merchant to ...
 
-					if (toClientSlot >= FirstClientSlot && toClientSlot <= LastClientSlot)
-					{
-						// ... consignment merchant
-						if (HasPermissionToMove(player))
-						{
-							NotifyObservers(player, this.MoveItemInsideObject(player, (eInventorySlot)fromClientSlot, (eInventorySlot)toClientSlot));
-						}
-						else
-						{
-							return false;
-						}
-					}
-					else
-					{
-						// ... player
+                    if (toClientSlot >= FirstClientSlot && toClientSlot <= LastClientSlot)
+                    {
+                        // ... consignment merchant
+                        if (HasPermissionToMove(player))
+                        {
+                            NotifyObservers(player, this.MoveItemInsideObject(player, (eInventorySlot)fromClientSlot, (eInventorySlot)toClientSlot));
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        // ... player
 
-						InventoryItem toItem = player.Inventory.GetItem((eInventorySlot)toClientSlot);
+                        InventoryItem toItem = player.Inventory.GetItem((eInventorySlot)toClientSlot);
 
-						if (toItem != null)
-						{
-							player.Client.Out.SendMessage("You can only move an item to an empty slot!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-							return false;
-						}
+                        if (toItem != null)
+                        {
+                            player.Client.Out.SendMessage("You can only move an item to an empty slot!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            return false;
+                        }
 
-						if (HasPermissionToMove(player) == false)
-						{
-							// Move must be an attempt to buy
-							OnPlayerBuy(player, (eInventorySlot)fromClientSlot, (eInventorySlot)toClientSlot);
-						}
-						else if (player.TargetObject == this)
-						{
-							// Allow a move only if the player with permission is standing in front of the CM.
-							// This prevents moves if player has owner permission but is viewing from the Market Explorer
-							NotifyObservers(player, this.MoveItemFromObject(player, (eInventorySlot)fromClientSlot, (eInventorySlot)toClientSlot));
-						}
-						else
-						{
-							player.Client.Out.SendMessage("You can't buy items from yourself!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-							return false;
-						}
-					}
+                        if (HasPermissionToMove(player) == false)
+                        {
+                            // Move must be an attempt to buy
+                            OnPlayerBuy(player, (eInventorySlot)fromClientSlot, (eInventorySlot)toClientSlot);
+                        }
+                        else if (player.TargetObject == this)
+                        {
+                            // Allow a move only if the player with permission is standing in front of the CM.
+                            // This prevents moves if player has owner permission but is viewing from the Market Explorer
+                            NotifyObservers(player, this.MoveItemFromObject(player, (eInventorySlot)fromClientSlot, (eInventorySlot)toClientSlot));
+                        }
+                        else
+                        {
+                            player.Client.Out.SendMessage("You can't buy items from yourself!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            return false;
+                        }
+                    }
                 }
-				else if (toClientSlot >= FirstClientSlot && toClientSlot <= LastClientSlot)
+                else if (toClientSlot >= FirstClientSlot && toClientSlot <= LastClientSlot)
                 {
-					// moving an item from the client to the consignment merchant
-					if (HasPermissionToMove(player))
-					{
-						InventoryItem toItem = player.Inventory.GetItem((eInventorySlot)toClientSlot);
+                    // moving an item from the client to the consignment merchant
+                    if (HasPermissionToMove(player))
+                    {
+                        InventoryItem toItem = player.Inventory.GetItem((eInventorySlot)toClientSlot);
 
-						if (toItem != null)
-						{
-							// in most clients this is actually handled ON the client, but just in case...
-							player.Client.Out.SendMessage("You can only move an item to an empty slot!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-							return false;
-						}
+                        if (toItem != null)
+                        {
+                            // in most clients this is actually handled ON the client, but just in case...
+                            player.Client.Out.SendMessage("You can only move an item to an empty slot!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            return false;
+                        }
 
-						NotifyObservers(player, this.MoveItemToObject(player, (eInventorySlot)fromClientSlot, (eInventorySlot)toClientSlot));
-					}
-					else
-					{
-						return false;
-					}
+                        NotifyObservers(player, this.MoveItemToObject(player, (eInventorySlot)fromClientSlot, (eInventorySlot)toClientSlot));
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
             }
 
-			return true;
+            return true;
         }
 
 
-		/// <summary>
-		/// Add an item to this object
-		/// </summary>
-		public virtual bool OnAddItem(GamePlayer player, InventoryItem item)
-		{
-			if (ServerProperties.Properties.MARKET_ENABLE_LOG)
-			{
-				log.DebugFormat("CM: {0}:{1} adding '{2}' to consignment merchant on lot {3}.", player.Name, player.Client.Account.Name, item.Name, HouseNumber);
-			}
-			return MarketCache.AddItem(item);
-		}
+        /// <summary>
+        /// Add an item to this object
+        /// </summary>
+        public virtual bool OnAddItem(GamePlayer player, InventoryItem item)
+        {
+            if (ServerProperties.Properties.MARKET_ENABLE_LOG)
+            {
+                log.DebugFormat("CM: {0}:{1} adding '{2}' to consignment merchant on lot {3}.", player.Name, player.Client.Account.Name, item.Name, HouseNumber);
+            }
+            return MarketCache.AddItem(item);
+        }
 
-		/// <summary>
-		/// Remove an item from this object
-		/// </summary>
-		public virtual bool OnRemoveItem(GamePlayer player, InventoryItem item)
-		{
-			if (ServerProperties.Properties.MARKET_ENABLE_LOG)
-			{
-				log.DebugFormat("CM: {0}:{1} removing '{2}' from consignment merchant on lot {3}.", player.Name, player.Client.Account.Name, item.Name, HouseNumber);
-			}
-			item.OwnerLot = 0;
-			item.SellPrice = 0;
-			return MarketCache.RemoveItem(item);
-		}
-
-
-		/// <summary>
-		/// What to do after an item is added.  For consignment merchants this is called after price is set
-		/// </summary>
-		/// <param name="player"></param>
-		/// <param name="clientSlot"></param>
-		/// <param name="price"></param>
-		/// <returns></returns>
-		public virtual bool SetSellPrice(GamePlayer player, ushort clientSlot, uint price)
-		{
-			GameConsignmentMerchant conMerchant = player.ActiveInventoryObject as GameConsignmentMerchant;
-			if (conMerchant == null)
-			{
-				return false;
-			}
-			House house = HouseMgr.GetHouse(conMerchant.HouseNumber);
-			if (houseRequired && house == null)
-			{
-				return false;
-			}
-
-			if ((house != null && house.HasOwnerPermissions(player) == false) || (!houseRequired && OwnerID != player.ObjectId) )
-			{
-				return false;
-			}
-
-			InventoryItem item = player.TempProperties.getProperty<InventoryItem>(GameInventoryObjectExtensions.ITEM_BEING_ADDED, null);
-
-			if (item != null)
-			{
-				if (item.IsTradable)
-				{
-					item.SellPrice = (int)price;
-				}
-				else
-				{
-					// Unique DOL feature
-					item.SellPrice = 0;
-					player.Out.SendCustomDialog("This item is not tradable. You can store it here but cannot sell it.", null);
-				}
-
-				item.OwnerLot = conMerchant.HouseNumber;
-				item.OwnerID = conMerchant.GetOwner(player);
-				GameServer.Database.SaveObject(item);
-				ChatUtil.SendDebugMessage(player, item.Name + " SellPrice=" + price + ", OwnerLot=" + item.OwnerLot + ", OwnerID=" + item.OwnerID);
-				player.Out.SendMessage("Price set!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-
-				if (ServerProperties.Properties.MARKET_ENABLE_LOG)
-				{
-					log.DebugFormat("CM: {0}:{1} set sell price of '{2}' to {3} for consignment merchant on lot {4}.", player.Name, player.Client.Account.Name, item.Name, item.SellPrice, HouseNumber);
-				}
-
-				NotifyObservers(player, null);
-			}
+        /// <summary>
+        /// Remove an item from this object
+        /// </summary>
+        public virtual bool OnRemoveItem(GamePlayer player, InventoryItem item)
+        {
+            if (ServerProperties.Properties.MARKET_ENABLE_LOG)
+            {
+                log.DebugFormat("CM: {0}:{1} removing '{2}' from consignment merchant on lot {3}.", player.Name, player.Client.Account.Name, item.Name, HouseNumber);
+            }
+            item.OwnerLot = 0;
+            item.SellPrice = 0;
+            return MarketCache.RemoveItem(item);
+        }
 
 
-			return true;
-		}
+        /// <summary>
+        /// What to do after an item is added.  For consignment merchants this is called after price is set
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="clientSlot"></param>
+        /// <param name="price"></param>
+        /// <returns></returns>
+        public virtual bool SetSellPrice(GamePlayer player, ushort clientSlot, uint price)
+        {
+            GameConsignmentMerchant conMerchant = player.ActiveInventoryObject as GameConsignmentMerchant;
+            if (conMerchant == null)
+            {
+                return false;
+            }
+            House house = HouseMgr.GetHouse(conMerchant.HouseNumber);
+            if (houseRequired && house == null)
+            {
+                return false;
+            }
 
-		/// <summary>
-		/// Do we handle a search?
-		/// </summary>
-		public virtual bool SearchInventory(GamePlayer player, MarketSearch.SearchData searchData)
-		{
-			return false; // not applicable
-		}
+            if ((house != null && house.HasOwnerPermissions(player) == false) || (!houseRequired && OwnerID != player.ObjectId))
+            {
+                return false;
+            }
+
+            InventoryItem item = player.TempProperties.getProperty<InventoryItem>(GameInventoryObjectExtensions.ITEM_BEING_ADDED, null);
+
+            if (item != null)
+            {
+                if (item.IsTradable)
+                {
+                    item.SellPrice = (int)price;
+                }
+                else
+                {
+                    // Unique DOL feature
+                    item.SellPrice = 0;
+                    player.Out.SendCustomDialog("This item is not tradable. You can store it here but cannot sell it.", null);
+                }
+
+                item.OwnerLot = conMerchant.HouseNumber;
+                item.OwnerID = conMerchant.GetOwner(player);
+                GameServer.Database.SaveObject(item);
+                ChatUtil.SendDebugMessage(player, item.Name + " SellPrice=" + price + ", OwnerLot=" + item.OwnerLot + ", OwnerID=" + item.OwnerID);
+                player.Out.SendMessage("Price set!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+
+                if (ServerProperties.Properties.MARKET_ENABLE_LOG)
+                {
+                    log.DebugFormat("CM: {0}:{1} set sell price of '{2}' to {3} for consignment merchant on lot {4}.", player.Name, player.Client.Account.Name, item.Name, item.SellPrice, HouseNumber);
+                }
+
+                NotifyObservers(player, null);
+            }
+
+
+            return true;
+        }
+
+        /// <summary>
+        /// Do we handle a search?
+        /// </summary>
+        public virtual bool SearchInventory(GamePlayer player, MarketSearch.SearchData searchData)
+        {
+            return false; // not applicable
+        }
 
 
         /// <summary>
@@ -455,207 +455,207 @@ namespace DOL.GS
         /// <param name="toClientSlot"></param>
 		public virtual void OnPlayerBuy(GamePlayer player, eInventorySlot fromClientSlot, eInventorySlot toClientSlot, bool usingMarketExplorer = false)
         {
-			IDictionary<int, InventoryItem> clientInventory = GetClientInventory(player);
+            IDictionary<int, InventoryItem> clientInventory = GetClientInventory(player);
 
-			InventoryItem fromItem = null;
+            InventoryItem fromItem = null;
 
-			if (clientInventory.ContainsKey((int)fromClientSlot))
-			{
-				fromItem = clientInventory[(int)fromClientSlot];
-			}
+            if (clientInventory.ContainsKey((int)fromClientSlot))
+            {
+                fromItem = clientInventory[(int)fromClientSlot];
+            }
 
-			if (fromItem == null)
-			{
-				ChatUtil.SendErrorMessage(player, "I can't find the item you want to purchase!");
-				log.ErrorFormat("CM: {0}:{1} can't find item to buy in slot {2} on consignment merchant on lot {3}.", player.Name, player.Client.Account, (int)fromClientSlot, HouseNumber);
-				return;
-			}
+            if (fromItem == null)
+            {
+                ChatUtil.SendErrorMessage(player, "I can't find the item you want to purchase!");
+                log.ErrorFormat("CM: {0}:{1} can't find item to buy in slot {2} on consignment merchant on lot {3}.", player.Name, player.Client.Account, (int)fromClientSlot, HouseNumber);
+                return;
+            }
 
-			string buyText = "Do you want to buy this Item?";
+            string buyText = "Do you want to buy this Item?";
 
-			// If the player has a marketExplorer activated they will be charged a commission
-			if (player.TargetObject is MarketExplorer)
-			{
-				player.TempProperties.setProperty(CONSIGNMENT_BUY_ITEM, fromClientSlot);
-				if (ServerProperties.Properties.MARKET_FEE_PERCENT > 0)
-				{
-					player.Out.SendCustomDialog("Buying directly from the Market Explorer costs an additional " +  ServerProperties.Properties.MARKET_FEE_PERCENT + "% fee. Do you want to buy this Item?", new CustomDialogResponse(BuyMarketResponse));
-				}
-				else
-				{
-					player.Out.SendCustomDialog(buyText, new CustomDialogResponse(BuyResponse));
-				}
-			}
-			else if (player.TargetObject == this)
-			{
-				player.TempProperties.setProperty(CONSIGNMENT_BUY_ITEM, fromClientSlot);
-				player.Out.SendCustomDialog(buyText, new CustomDialogResponse(BuyResponse));
-			}
-			else
-			{
-				ChatUtil.SendErrorMessage(player, "I'm sorry, you need to be talking to a market explorer or consignment merchant in order to make a purchase.");
-				log.ErrorFormat("CM: {0}:{1} did not have a CM or ME targeted when attempting to purchase {2} on consignment merchant on lot {3}.", player.Name, player.Client.Account, fromItem.Name, HouseNumber);
-			}
+            // If the player has a marketExplorer activated they will be charged a commission
+            if (player.TargetObject is MarketExplorer)
+            {
+                player.TempProperties.setProperty(CONSIGNMENT_BUY_ITEM, fromClientSlot);
+                if (ServerProperties.Properties.MARKET_FEE_PERCENT > 0)
+                {
+                    player.Out.SendCustomDialog("Buying directly from the Market Explorer costs an additional " + ServerProperties.Properties.MARKET_FEE_PERCENT + "% fee. Do you want to buy this Item?", new CustomDialogResponse(BuyMarketResponse));
+                }
+                else
+                {
+                    player.Out.SendCustomDialog(buyText, new CustomDialogResponse(BuyResponse));
+                }
+            }
+            else if (player.TargetObject == this)
+            {
+                player.TempProperties.setProperty(CONSIGNMENT_BUY_ITEM, fromClientSlot);
+                player.Out.SendCustomDialog(buyText, new CustomDialogResponse(BuyResponse));
+            }
+            else
+            {
+                ChatUtil.SendErrorMessage(player, "I'm sorry, you need to be talking to a market explorer or consignment merchant in order to make a purchase.");
+                log.ErrorFormat("CM: {0}:{1} did not have a CM or ME targeted when attempting to purchase {2} on consignment merchant on lot {3}.", player.Name, player.Client.Account, fromItem.Name, HouseNumber);
+            }
         }
 
-		/// <summary>
-		/// Response when buying directly from consignment
-		/// </summary>
-		/// <param name="player"></param>
-		/// <param name="response"></param>
-		protected virtual void BuyResponse(GamePlayer player, byte response)
-		{
-			if (response != 0x01)
-			{
-				player.TempProperties.removeProperty(CONSIGNMENT_BUY_ITEM);
-				return;
-			}
+        /// <summary>
+        /// Response when buying directly from consignment
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="response"></param>
+        protected virtual void BuyResponse(GamePlayer player, byte response)
+        {
+            if (response != 0x01)
+            {
+                player.TempProperties.removeProperty(CONSIGNMENT_BUY_ITEM);
+                return;
+            }
 
-			BuyItem(player);
-		}
-
-
-		/// <summary>
-		/// Response when buying from the MarketExplorer
-		/// </summary>
-		/// <param name="player"></param>
-		/// <param name="response"></param>
-		protected virtual void BuyMarketResponse(GamePlayer player, byte response)
-		{
-			if (response != 0x01)
-			{
-				player.TempProperties.removeProperty(CONSIGNMENT_BUY_ITEM);
-				return;
-			}
-
-			BuyItem(player, true);
-		}
+            BuyItem(player);
+        }
 
 
-		protected virtual void BuyItem(GamePlayer player, bool usingMarketExplorer = false)
-		{
-			eInventorySlot fromClientSlot = player.TempProperties.getProperty<eInventorySlot>(CONSIGNMENT_BUY_ITEM, eInventorySlot.Invalid);
-			player.TempProperties.removeProperty(CONSIGNMENT_BUY_ITEM);
+        /// <summary>
+        /// Response when buying from the MarketExplorer
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="response"></param>
+        protected virtual void BuyMarketResponse(GamePlayer player, byte response)
+        {
+            if (response != 0x01)
+            {
+                player.TempProperties.removeProperty(CONSIGNMENT_BUY_ITEM);
+                return;
+            }
 
-			InventoryItem item = null;
+            BuyItem(player, true);
+        }
 
-			lock (LockObject())
-			{
 
-				if (fromClientSlot != eInventorySlot.Invalid)
-				{
-					IDictionary<int, InventoryItem> clientInventory = GetClientInventory(player);
+        protected virtual void BuyItem(GamePlayer player, bool usingMarketExplorer = false)
+        {
+            eInventorySlot fromClientSlot = player.TempProperties.getProperty<eInventorySlot>(CONSIGNMENT_BUY_ITEM, eInventorySlot.Invalid);
+            player.TempProperties.removeProperty(CONSIGNMENT_BUY_ITEM);
 
-					if (clientInventory.ContainsKey((int)fromClientSlot))
-					{
-						item = clientInventory[(int)fromClientSlot];
-					}
-				}
+            InventoryItem item = null;
 
-				if (item == null)
-				{
-					ChatUtil.SendErrorMessage(player, "I can't find the item you want to purchase!");
-					log.ErrorFormat("{0}:{1} tried to purchase an item from slot {2} for consignment merchant on lot {3} and the item does not exist.", player.Name, player.Client.Account, (int)fromClientSlot, HouseNumber);
+            lock (LockObject())
+            {
 
-					return;
-				}
+                if (fromClientSlot != eInventorySlot.Invalid)
+                {
+                    IDictionary<int, InventoryItem> clientInventory = GetClientInventory(player);
 
-				int sellPrice = item.SellPrice;
-				int purchasePrice = sellPrice;
+                    if (clientInventory.ContainsKey((int)fromClientSlot))
+                    {
+                        item = clientInventory[(int)fromClientSlot];
+                    }
+                }
 
-				if (usingMarketExplorer && ServerProperties.Properties.MARKET_FEE_PERCENT > 0)
-				{
-					purchasePrice += ((purchasePrice * ServerProperties.Properties.MARKET_FEE_PERCENT) / 100);
-				}
+                if (item == null)
+                {
+                    ChatUtil.SendErrorMessage(player, "I can't find the item you want to purchase!");
+                    log.ErrorFormat("{0}:{1} tried to purchase an item from slot {2} for consignment merchant on lot {3} and the item does not exist.", player.Name, player.Client.Account, (int)fromClientSlot, HouseNumber);
 
-				lock (player.Inventory)
-				{
-					if (purchasePrice <= 0)
-					{
-						ChatUtil.SendErrorMessage(player, "This item can't be purchased!");
-						log.ErrorFormat("{0}:{1} tried to purchase {2} for consignment merchant on lot {3} and purchasePrice was {4}.", player.Name, player.Client.Account, item.Name, HouseNumber, purchasePrice);
-						return;
-					}
+                    return;
+                }
 
-					if (ServerProperties.Properties.CONSIGNMENT_USE_BP)
-					{
-						if (player.BountyPoints < purchasePrice)
-						{
-							ChatUtil.SendSystemMessage(player, "GameMerchant.OnPlayerBuy.YouNeedBP", purchasePrice);
-							return;
-						}
-					}
-					else
-					{
-						if (player.GetCurrentMoney() < purchasePrice)
-						{
-							ChatUtil.SendSystemMessage(player, "GameMerchant.OnPlayerBuy.YouNeed", Money.GetString(purchasePrice));
-							return;
-						}
-					}
+                int sellPrice = item.SellPrice;
+                int purchasePrice = sellPrice;
 
-					eInventorySlot toClientSlot = player.Inventory.FindFirstEmptySlot(eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack);
+                if (usingMarketExplorer && ServerProperties.Properties.MARKET_FEE_PERCENT > 0)
+                {
+                    purchasePrice += ((purchasePrice * ServerProperties.Properties.MARKET_FEE_PERCENT) / 100);
+                }
 
-					if (toClientSlot == eInventorySlot.Invalid)
-					{
-						ChatUtil.SendSystemMessage(player, "GameMerchant.OnPlayerBuy.NotInventorySpace", null);
-						return;
-					}
+                lock (player.Inventory)
+                {
+                    if (purchasePrice <= 0)
+                    {
+                        ChatUtil.SendErrorMessage(player, "This item can't be purchased!");
+                        log.ErrorFormat("{0}:{1} tried to purchase {2} for consignment merchant on lot {3} and purchasePrice was {4}.", player.Name, player.Client.Account, item.Name, HouseNumber, purchasePrice);
+                        return;
+                    }
 
-					if (ServerProperties.Properties.CONSIGNMENT_USE_BP)
-					{
-						ChatUtil.SendMerchantMessage(player, "GameMerchant.OnPlayerBuy.BoughtBP", item.GetName(1, false), purchasePrice);
-						player.BountyPoints -= purchasePrice;
-						player.Out.SendUpdatePoints();
-					}
-					else
-					{
-						if (player.RemoveMoney(purchasePrice))
-						{
-							InventoryLogging.LogInventoryAction(player, this, eInventoryActionType.Merchant, purchasePrice);
-							ChatUtil.SendMerchantMessage(player, "GameMerchant.OnPlayerBuy.Bought", item.GetName(1, false), Money.GetString(purchasePrice));
-						}
-						else
-						{
-							return;
-						}
-					}
+                    if (ServerProperties.Properties.CONSIGNMENT_USE_BP)
+                    {
+                        if (player.BountyPoints < purchasePrice)
+                        {
+                            ChatUtil.SendSystemMessage(player, "GameMerchant.OnPlayerBuy.YouNeedBP", purchasePrice);
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        if (player.GetCurrentMoney() < purchasePrice)
+                        {
+                            ChatUtil.SendSystemMessage(player, "GameMerchant.OnPlayerBuy.YouNeed", Money.GetString(purchasePrice));
+                            return;
+                        }
+                    }
 
-					TotalMoney += sellPrice;
+                    eInventorySlot toClientSlot = player.Inventory.FindFirstEmptySlot(eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack);
 
-					if (ServerProperties.Properties.MARKET_ENABLE_LOG)
-					{
-						log.DebugFormat("CM: {0}:{1} purchased '{2}' for {3} from consignment merchant on lot {4}.", player.Name, player.Client.Account.Name, item.Name, purchasePrice, HouseNumber);
-					}
+                    if (toClientSlot == eInventorySlot.Invalid)
+                    {
+                        ChatUtil.SendSystemMessage(player, "GameMerchant.OnPlayerBuy.NotInventorySpace", null);
+                        return;
+                    }
 
-					NotifyObservers(player, this.MoveItemFromObject(player, fromClientSlot, toClientSlot));
-				}
-			}
-		}
+                    if (ServerProperties.Properties.CONSIGNMENT_USE_BP)
+                    {
+                        ChatUtil.SendMerchantMessage(player, "GameMerchant.OnPlayerBuy.BoughtBP", item.GetName(1, false), purchasePrice);
+                        player.BountyPoints -= purchasePrice;
+                        player.Out.SendUpdatePoints();
+                    }
+                    else
+                    {
+                        if (player.RemoveMoney(purchasePrice))
+                        {
+                            InventoryLogging.LogInventoryAction(player, this, eInventoryActionType.Merchant, purchasePrice);
+                            ChatUtil.SendMerchantMessage(player, "GameMerchant.OnPlayerBuy.Bought", item.GetName(1, false), Money.GetString(purchasePrice));
+                        }
+                        else
+                        {
+                            return;
+                        }
+                    }
 
-		/// <summary>
-		/// Add an observer to this CM
-		/// </summary>
-		/// <param name="player"></param>
-		public virtual void AddObserver(GamePlayer player)
-		{
-			if (_observers.ContainsKey(player.Name) == false)
-			{
-				_observers.Add(player.Name, player);
-			}
-		}
+                    TotalMoney += sellPrice;
 
-		/// <summary>
-		/// Remove an observer of this CM
-		/// </summary>
-		/// <param name="player"></param>
-		public virtual void RemoveObserver(GamePlayer player)
-		{
-			if (_observers.ContainsKey(player.Name))
-			{
-				_observers.Remove(player.Name);
-			}
-		}
+                    if (ServerProperties.Properties.MARKET_ENABLE_LOG)
+                    {
+                        log.DebugFormat("CM: {0}:{1} purchased '{2}' for {3} from consignment merchant on lot {4}.", player.Name, player.Client.Account.Name, item.Name, purchasePrice, HouseNumber);
+                    }
+
+                    NotifyObservers(player, this.MoveItemFromObject(player, fromClientSlot, toClientSlot));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Add an observer to this CM
+        /// </summary>
+        /// <param name="player"></param>
+        public virtual void AddObserver(GamePlayer player)
+        {
+            if (_observers.ContainsKey(player.Name) == false)
+            {
+                _observers.Add(player.Name, player);
+            }
+        }
+
+        /// <summary>
+        /// Remove an observer of this CM
+        /// </summary>
+        /// <param name="player"></param>
+        public virtual void RemoveObserver(GamePlayer player)
+        {
+            if (_observers.ContainsKey(player.Name))
+            {
+                _observers.Remove(player.Name);
+            }
+        }
 
 
         /// <summary>
@@ -666,31 +666,31 @@ namespace DOL.GS
 		protected virtual void NotifyObservers(GamePlayer player, IDictionary<int, InventoryItem> updateItems)
         {
             var inactiveList = new List<string>();
-			bool hasUpdatedPlayer = false;
+            bool hasUpdatedPlayer = false;
 
             foreach (GamePlayer observer in _observers.Values)
             {
-				if (observer.ActiveInventoryObject != this)
+                if (observer.ActiveInventoryObject != this)
                 {
-					inactiveList.Add(observer.Name);
+                    inactiveList.Add(observer.Name);
                     continue;
                 }
 
                 if ((observer.TargetObject is MarketExplorer) == false && observer.IsWithinRadius(this, WorldMgr.INTERACT_DISTANCE) == false)
                 {
-					observer.ActiveInventoryObject = null;
-					inactiveList.Add(observer.Name);
+                    observer.ActiveInventoryObject = null;
+                    inactiveList.Add(observer.Name);
                     continue;
                 }
 
                 observer.Client.Out.SendInventoryItemsUpdate(updateItems, eInventoryWindowType.Update);
 
-				// The above code is suspect, it seems to work 80% of the time, so let's make sure we update the player doing the move - Tolakram
-				if (hasUpdatedPlayer == false)
-				{
-					player.Client.Out.SendInventoryItemsUpdate(updateItems, PacketHandler.eInventoryWindowType.Update);
-				}
-			}
+                // The above code is suspect, it seems to work 80% of the time, so let's make sure we update the player doing the move - Tolakram
+                if (hasUpdatedPlayer == false)
+                {
+                    player.Client.Out.SendInventoryItemsUpdate(updateItems, PacketHandler.eInventoryWindowType.Update);
+                }
+            }
 
             // Now remove all inactive observers.
             foreach (string observerName in inactiveList)
@@ -709,174 +709,174 @@ namespace DOL.GS
             if (!base.Interact(player))
                 return false;
 
-			CheckInventory();
+            CheckInventory();
 
-			if (player.ActiveInventoryObject != null)
-			{
-				player.ActiveInventoryObject.RemoveObserver(player);
-				player.ActiveInventoryObject = null;
-			}
+            if (player.ActiveInventoryObject != null)
+            {
+                player.ActiveInventoryObject.RemoveObserver(player);
+                player.ActiveInventoryObject = null;
+            }
 
-			player.ActiveInventoryObject = this;
+            player.ActiveInventoryObject = this;
 
-			AddObserver(player);
+            AddObserver(player);
 
-            House house = HouseMgr.GetHouse(CurrentRegionID, HouseNumber); 
+            House house = HouseMgr.GetHouse(CurrentRegionID, HouseNumber);
             if (houseRequired && house == null)
                 return false;
             if ((!houseRequired && OwnerID == player.ObjectId) || (house != null && house.CanUseConsignmentMerchant(player, ConsignmentPermissions.Any)))
             {
-				player.Out.SendInventoryItemsUpdate(GetClientInventory(player), eInventoryWindowType.ConsignmentOwner);
+                player.Out.SendInventoryItemsUpdate(GetClientInventory(player), eInventoryWindowType.ConsignmentOwner);
 
                 long amount = m_totalMoney;
                 player.Out.SendConsignmentMerchantMoney(amount);
 
-				if (ServerProperties.Properties.CONSIGNMENT_USE_BP)
+                if (ServerProperties.Properties.CONSIGNMENT_USE_BP)
                 {
                     player.Out.SendMessage("Your merchant currently holds " + amount + " BountyPoints.", eChatType.CT_Important, eChatLoc.CL_ChatWindow);
                 }
             }
             else
             {
-				player.Out.SendInventoryItemsUpdate(GetClientInventory(player), eInventoryWindowType.ConsignmentViewer);
+                player.Out.SendInventoryItemsUpdate(GetClientInventory(player), eInventoryWindowType.ConsignmentViewer);
             }
 
             return true;
         }
         public override bool AddToWorld()
         {
-			if (!houseRequired)
-			{
-				base.AddToWorld();
-				SetEmblem();
-				CheckInventory();
-				return true;
-			}
-			Console.WriteLine("House Required");
-			House house = HouseMgr.GetHouse(HouseNumber);
+            if (!houseRequired)
+            {
+                base.AddToWorld();
+                SetEmblem();
+                CheckInventory();
+                return true;
+            }
+            Console.WriteLine("House Required");
+            House house = HouseMgr.GetHouse(HouseNumber);
 
-			if (house == null)
-			{
-				log.ErrorFormat("CM: Can't find house #{0}!", HouseNumber);
-				return false;
-			}
+            if (house == null)
+            {
+                log.ErrorFormat("CM: Can't find house #{0}!", HouseNumber);
+                return false;
+            }
 
-			SetInventoryTemplate();
+            SetInventoryTemplate();
 
-			var houseCM = DOLDB<HouseConsignmentMerchant>.SelectObject(DB.Column(nameof(HouseConsignmentMerchant.HouseNumber)).IsEqualTo(HouseNumber));
-			if (houseCM != null)
-			{
-				TotalMoney = houseCM.Money;
-			}
-			else
-			{
-				log.ErrorFormat("CM: Can't find HouseConsignmentMerchant entry for CM on lot {0}!", HouseNumber);
-				return false;
-			}
+            var houseCM = DOLDB<HouseConsignmentMerchant>.SelectObject(DB.Column(nameof(HouseConsignmentMerchant.HouseNumber)).IsEqualTo(HouseNumber));
+            if (houseCM != null)
+            {
+                TotalMoney = houseCM.Money;
+            }
+            else
+            {
+                log.ErrorFormat("CM: Can't find HouseConsignmentMerchant entry for CM on lot {0}!", HouseNumber);
+                return false;
+            }
 
             base.AddToWorld();
 
             house.ConsignmentMerchant = this;
             SetEmblem();
 
-			CheckInventory();
+            CheckInventory();
 
             return true;
         }
 
-		/// <summary>
-		/// Check all items that belong to this ownerid and fix the OwnerLot if needed
-		/// </summary>
-		public virtual bool CheckInventory()
-		{
-			House house = HouseMgr.GetHouse(CurrentRegionID, HouseNumber);
-			if (house == null)
-				return false;
+        /// <summary>
+        /// Check all items that belong to this ownerid and fix the OwnerLot if needed
+        /// </summary>
+        public virtual bool CheckInventory()
+        {
+            House house = HouseMgr.GetHouse(CurrentRegionID, HouseNumber);
+            if (house == null)
+                return false;
 
-			bool isFixed = false;
+            bool isFixed = false;
 
-			var items = DOLDB<InventoryItem>.SelectObjects(DB.Column(nameof(InventoryItem.OwnerID)).IsEqualTo(house.OwnerID).And(DB.Column(nameof(InventoryItem.SlotPosition)).IsGreaterOrEqualTo(FirstDBSlot)).And(DB.Column(nameof(InventoryItem.SlotPosition)).IsLessOrEqualTo(LastDBSlot)).And(DB.Column(nameof(InventoryItem.OwnerLot)).IsEqualTo(0)));
+            var items = DOLDB<InventoryItem>.SelectObjects(DB.Column(nameof(InventoryItem.OwnerID)).IsEqualTo(house.OwnerID).And(DB.Column(nameof(InventoryItem.SlotPosition)).IsGreaterOrEqualTo(FirstDBSlot)).And(DB.Column(nameof(InventoryItem.SlotPosition)).IsLessOrEqualTo(LastDBSlot)).And(DB.Column(nameof(InventoryItem.OwnerLot)).IsEqualTo(0)));
 
-			foreach (InventoryItem item in items)
-			{
-				item.OwnerLot = (ushort)HouseNumber;
-				MarketCache.AddItem(item);
-				if (ServerProperties.Properties.MARKET_ENABLE_LOG)
-				{
-					log.DebugFormat("CM: Fixed OwnerLot for item '{0}' on CM for lot {1}", item.Name, HouseNumber);
-				}
-				isFixed = true;
-			}
-			GameServer.Database.SaveObject(items);
+            foreach (InventoryItem item in items)
+            {
+                item.OwnerLot = (ushort)HouseNumber;
+                MarketCache.AddItem(item);
+                if (ServerProperties.Properties.MARKET_ENABLE_LOG)
+                {
+                    log.DebugFormat("CM: Fixed OwnerLot for item '{0}' on CM for lot {1}", item.Name, HouseNumber);
+                }
+                isFixed = true;
+            }
+            GameServer.Database.SaveObject(items);
 
-			return isFixed;
-		}
+            return isFixed;
+        }
 
-		public virtual void SetInventoryTemplate()
-		{
-			var template = new GameNpcInventoryTemplate();
-			switch (Realm)
-			{
-				case eRealm.Albion:
-					{
-						Model = 92;
-						template.AddNPCEquipment(eInventorySlot.RightHandWeapon, 310, 81);
-						template.AddNPCEquipment(eInventorySlot.FeetArmor, 1301);
-						template.AddNPCEquipment(eInventorySlot.LegsArmor, 1312);
+        public virtual void SetInventoryTemplate()
+        {
+            var template = new GameNpcInventoryTemplate();
+            switch (Realm)
+            {
+                case eRealm.Albion:
+                    {
+                        Model = 92;
+                        template.AddNPCEquipment(eInventorySlot.RightHandWeapon, 310, 81);
+                        template.AddNPCEquipment(eInventorySlot.FeetArmor, 1301);
+                        template.AddNPCEquipment(eInventorySlot.LegsArmor, 1312);
 
-						if (Util.Chance(50))
-						{
-							template.AddNPCEquipment(eInventorySlot.TorsoArmor, 1005, 67);
-						}
-						else
-						{
-							template.AddNPCEquipment(eInventorySlot.TorsoArmor, 1313);
-						}
+                        if (Util.Chance(50))
+                        {
+                            template.AddNPCEquipment(eInventorySlot.TorsoArmor, 1005, 67);
+                        }
+                        else
+                        {
+                            template.AddNPCEquipment(eInventorySlot.TorsoArmor, 1313);
+                        }
 
-						template.AddNPCEquipment(eInventorySlot.Cloak, 669, 65);
-					}
-					break;
-				case eRealm.Midgard:
-					{
-						Model = 156;
-						template.AddNPCEquipment(eInventorySlot.RightHandWeapon, 321, 81);
-						template.AddNPCEquipment(eInventorySlot.FeetArmor, 1301);
-						template.AddNPCEquipment(eInventorySlot.LegsArmor, 1303);
+                        template.AddNPCEquipment(eInventorySlot.Cloak, 669, 65);
+                    }
+                    break;
+                case eRealm.Midgard:
+                    {
+                        Model = 156;
+                        template.AddNPCEquipment(eInventorySlot.RightHandWeapon, 321, 81);
+                        template.AddNPCEquipment(eInventorySlot.FeetArmor, 1301);
+                        template.AddNPCEquipment(eInventorySlot.LegsArmor, 1303);
 
-						if (Util.Chance(50))
-						{
-							template.AddNPCEquipment(eInventorySlot.TorsoArmor, 1300);
-						}
-						else
-						{
-							template.AddNPCEquipment(eInventorySlot.TorsoArmor, 993);
-						}
+                        if (Util.Chance(50))
+                        {
+                            template.AddNPCEquipment(eInventorySlot.TorsoArmor, 1300);
+                        }
+                        else
+                        {
+                            template.AddNPCEquipment(eInventorySlot.TorsoArmor, 993);
+                        }
 
-						template.AddNPCEquipment(eInventorySlot.Cloak, 669, 51);
-					}
-					break;
-				case eRealm.Hibernia:
-					{
-						Model = 335;
-						template.AddNPCEquipment(eInventorySlot.RightHandWeapon, 457, 81);
-						template.AddNPCEquipment(eInventorySlot.FeetArmor, 1333);
+                        template.AddNPCEquipment(eInventorySlot.Cloak, 669, 51);
+                    }
+                    break;
+                case eRealm.Hibernia:
+                    {
+                        Model = 335;
+                        template.AddNPCEquipment(eInventorySlot.RightHandWeapon, 457, 81);
+                        template.AddNPCEquipment(eInventorySlot.FeetArmor, 1333);
 
-						if (Util.Chance(50))
-						{
-							template.AddNPCEquipment(eInventorySlot.TorsoArmor, 1336);
-						}
-						else
-						{
-							template.AddNPCEquipment(eInventorySlot.TorsoArmor, 1008);
-						}
+                        if (Util.Chance(50))
+                        {
+                            template.AddNPCEquipment(eInventorySlot.TorsoArmor, 1336);
+                        }
+                        else
+                        {
+                            template.AddNPCEquipment(eInventorySlot.TorsoArmor, 1008);
+                        }
 
-						template.AddNPCEquipment(eInventorySlot.Cloak, 669);
-					}
-					break;
-			}
+                        template.AddNPCEquipment(eInventorySlot.Cloak, 669);
+                    }
+                    break;
+            }
 
-			Inventory = template.CloseTemplate();
-		}
+            Inventory = template.CloseTemplate();
+        }
 
         /// <summary>
         /// Not Livelike but looks better - adds the owners guild emblem to the consignment merchants cloak
@@ -892,7 +892,7 @@ namespace DOL.GS
 
             if (house.DatabaseItem.GuildHouse)
             {
-            	var guild = DOLDB<DBGuild>.SelectObject(DB.Column(nameof(DBGuild.GuildName)).IsEqualTo(house.DatabaseItem.GuildName));
+                var guild = DOLDB<DBGuild>.SelectObject(DB.Column(nameof(DBGuild.GuildName)).IsEqualTo(house.DatabaseItem.GuildName));
                 int emblem = guild.Emblem;
 
                 InventoryItem cloak = Inventory.GetItem(eInventorySlot.Cloak);

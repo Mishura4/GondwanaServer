@@ -21,42 +21,42 @@ using DOL.AI.Brain;
 
 namespace DOL.GS
 {
-	/// <summary>
-	/// 
-	/// </summary>
-	public class GameTaxi : GameNPC
-	{
-		public GameTaxi() : base()
-		{
-			Model = 450;
-			MaxSpeedBase = 600;
-			Size = 63;
-			Level = 55;
-			Name = "horse";
-			BlankBrain brain = new BlankBrain();
-			SetOwnBrain(brain);
-		}
-		
-		public GameTaxi(INpcTemplate templateid) : base(templateid)
-		{
-			BlankBrain brain = new BlankBrain();
-			SetOwnBrain(brain);
-		}
-		
-		public override int MAX_PASSENGERS
-		{
-			get
-			{
-				return 1;
-			}
-		}
+    /// <summary>
+    /// 
+    /// </summary>
+    public class GameTaxi : GameNPC
+    {
+        public GameTaxi() : base()
+        {
+            Model = 450;
+            MaxSpeedBase = 600;
+            Size = 63;
+            Level = 55;
+            Name = "horse";
+            BlankBrain brain = new BlankBrain();
+            SetOwnBrain(brain);
+        }
 
-		public override int SLOT_OFFSET
-		{
-			get
-			{
-				return 0;
-			}
-		}
-	}
+        public GameTaxi(INpcTemplate templateid) : base(templateid)
+        {
+            BlankBrain brain = new BlankBrain();
+            SetOwnBrain(brain);
+        }
+
+        public override int MAX_PASSENGERS
+        {
+            get
+            {
+                return 1;
+            }
+        }
+
+        public override int SLOT_OFFSET
+        {
+            get
+            {
+                return 0;
+            }
+        }
+    }
 }

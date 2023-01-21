@@ -20,12 +20,12 @@ using NUnit.Framework;
 
 namespace DOL.Integration.Database.MySQL
 {
-	[TestFixture, Explicit]
-	public class MySQLDatabaseTypeTests : DatabaseTypeTests
-	{
-		public MySQLDatabaseTypeTests()
-		{
-			Database = MySQLDBSetUp.Database;
-		}
-	}
+    [TestFixture, Explicit]
+    public class MySQLDatabaseTypeTests : DatabaseTypeTests
+    {
+        public MySQLDatabaseTypeTests()
+        {
+            Database = MySQLDBSetUp.Database;
+        }
+    }
 }

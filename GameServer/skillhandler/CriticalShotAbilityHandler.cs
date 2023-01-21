@@ -23,54 +23,54 @@ using DOL.Language;
 
 namespace DOL.GS.SkillHandler
 {
-	/// <summary>
-	/// Handler for Critical Shot ability
-	/// </summary>
-	[SkillHandlerAttribute(Abilities.Critical_Shot)]
-	public class CriticalShotAbilityHandler : IAbilityActionHandler
-	{
-		public void Execute(Ability ab, GamePlayer player)
-		{
-			if (player.ActiveWeaponSlot != GameLiving.eActiveWeaponSlot.Distance)
-			{
+    /// <summary>
+    /// Handler for Critical Shot ability
+    /// </summary>
+    [SkillHandlerAttribute(Abilities.Critical_Shot)]
+    public class CriticalShotAbilityHandler : IAbilityActionHandler
+    {
+        public void Execute(Ability ab, GamePlayer player)
+        {
+            if (player.ActiveWeaponSlot != GameLiving.eActiveWeaponSlot.Distance)
+            {
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Skill.Ability.CannotUse.CriticalShot.NoRangedWeapons"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                 return;
-			}
-			if (player.IsSitting)
-			{
+            }
+            if (player.IsSitting)
+            {
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Skill.Ability.CannotUse.CriticalShot.MustBeStanding"), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
                 return;
-			}
+            }
 
-			// cancel rapid fire effect
-			RapidFireEffect rapidFire = player.EffectList.GetOfType<RapidFireEffect>();
-			if (rapidFire != null)
-				rapidFire.Cancel(false);
+            // cancel rapid fire effect
+            RapidFireEffect rapidFire = player.EffectList.GetOfType<RapidFireEffect>();
+            if (rapidFire != null)
+                rapidFire.Cancel(false);
 
-			// cancel sure shot effect
-			SureShotEffect sureShot = player.EffectList.GetOfType<SureShotEffect>();
-			if (sureShot != null)
-				sureShot.Cancel(false);
+            // cancel sure shot effect
+            SureShotEffect sureShot = player.EffectList.GetOfType<SureShotEffect>();
+            if (sureShot != null)
+                sureShot.Cancel(false);
 
-			TrueshotEffect trueshot = player.EffectList.GetOfType<TrueshotEffect>();
-			if (trueshot != null)
-				trueshot.Cancel(false);
+            TrueshotEffect trueshot = player.EffectList.GetOfType<TrueshotEffect>();
+            if (trueshot != null)
+                trueshot.Cancel(false);
 
-			if (player.AttackState)
-			{
-				if (player.RangedAttackType == GameLiving.eRangedAttackType.Critical)
-				{
+            if (player.AttackState)
+            {
+                if (player.RangedAttackType == GameLiving.eRangedAttackType.Critical)
+                {
                     player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Skill.Ability.CriticalShot.SwitchToRegular"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-					player.RangedAttackType = GameLiving.eRangedAttackType.Normal;
-				}
-				else
-				{
+                    player.RangedAttackType = GameLiving.eRangedAttackType.Normal;
+                }
+                else
+                {
                     player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Skill.Ability.CriticalShot.AlreadyFiring"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-				}
-				return;
-			}
-			player.RangedAttackType = GameLiving.eRangedAttackType.Critical;
-			player.StartAttack(player.TargetObject);
-		}
-	}
+                }
+                return;
+            }
+            player.RangedAttackType = GameLiving.eRangedAttackType.Critical;
+            player.StartAttack(player.TargetObject);
+        }
+    }
 }

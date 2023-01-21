@@ -19,7 +19,7 @@
  *
  */
 
- //Created by Loki 2020
+//Created by Loki 2020
 
 using System;
 using System.Collections.Generic;

@@ -58,7 +58,7 @@ namespace DOL.GS.SkillHandler
             GameObject targetObject = player.TargetObject;
             if (targetObject == null)
             {
-				foreach (BodyguardEffect bg in player.EffectList.GetAllOfType<BodyguardEffect>())
+                foreach (BodyguardEffect bg in player.EffectList.GetAllOfType<BodyguardEffect>())
                 {
                     if (bg.GuardSource == player)
                         bg.Cancel(false);
@@ -85,7 +85,7 @@ namespace DOL.GS.SkillHandler
             }
 
             // check if someone is guarding the target
-			foreach (BodyguardEffect bg in guardTarget.EffectList.GetAllOfType<BodyguardEffect>())
+            foreach (BodyguardEffect bg in guardTarget.EffectList.GetAllOfType<BodyguardEffect>())
             {
                 if (bg.GuardTarget != guardTarget) continue;
                 if (bg.GuardSource == player)
@@ -97,17 +97,17 @@ namespace DOL.GS.SkillHandler
                 return;
             }
 
-			foreach (BodyguardEffect bg in player.EffectList.GetAllOfType<BodyguardEffect>())
+            foreach (BodyguardEffect bg in player.EffectList.GetAllOfType<BodyguardEffect>())
             {
-                    if (bg != null && player == bg.GuardTarget)
-                    {
-                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Skill.Ability.CannotUse.Bodyguard.GuardSourceBodyGuarded"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                        return;
-                    }
+                if (bg != null && player == bg.GuardTarget)
+                {
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Skill.Ability.CannotUse.Bodyguard.GuardSourceBodyGuarded"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    return;
+                }
             }
 
             // cancel all guard effects by this player before adding a new one
-			foreach (BodyguardEffect bg in player.EffectList.GetAllOfType<BodyguardEffect>())
+            foreach (BodyguardEffect bg in player.EffectList.GetAllOfType<BodyguardEffect>())
             {
                 if (bg.GuardSource == player)
                     bg.Cancel(false);

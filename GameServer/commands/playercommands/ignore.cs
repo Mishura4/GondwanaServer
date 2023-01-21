@@ -96,7 +96,7 @@ namespace DOL.GS.Commands
                         name = fclient.Player.Name;
                         if (client.Player.IgnoreList.Contains(name))
                         {
-                           client.Player.ModifyIgnoreList(name, true);
+                            client.Player.ModifyIgnoreList(name, true);
                         }
                         else
                         {

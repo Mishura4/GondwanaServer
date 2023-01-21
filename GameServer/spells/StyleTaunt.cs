@@ -23,14 +23,14 @@ using DOL.GS.PacketHandler;
 
 namespace DOL.GS.Spells
 {
-	[SpellHandler("StyleTaunt")]
-	public class StyleTaunt : SpellHandler 
-	{
-		public override int CalculateSpellResistChance(GameLiving target)
-			=> 0;
+    [SpellHandler("StyleTaunt")]
+    public class StyleTaunt : SpellHandler
+    {
+        public override int CalculateSpellResistChance(GameLiving target)
+            => 0;
 
-		public override bool IsOverwritable(GameSpellEffect compare)
-			=> false;
+        public override bool IsOverwritable(GameSpellEffect compare)
+            => false;
 
         public override void OnDirectEffect(GameLiving target, double effectiveness)
         {
@@ -40,22 +40,22 @@ namespace DOL.GS.Spells
                 if (ad != null)
                 {
                     IOldAggressiveBrain aggroBrain = ((GameNPC)target).Brain as IOldAggressiveBrain;
-					if (aggroBrain != null)
-					{
-						int aggro = Convert.ToInt32(ad.Damage * Spell.Value);
-						aggroBrain.AddToAggroList(Caster, aggro);
+                    if (aggroBrain != null)
+                    {
+                        int aggro = Convert.ToInt32(ad.Damage * Spell.Value);
+                        aggroBrain.AddToAggroList(Caster, aggro);
 
-						//log.DebugFormat("Damage: {0}, Taunt Value: {1}, (de)Taunt Amount {2}", ad.Damage, Spell.Value, aggro.ToString());
-					}
+                        //log.DebugFormat("Damage: {0}, Taunt Value: {1}, (de)Taunt Amount {2}", ad.Damage, Spell.Value, aggro.ToString());
+                    }
                 }
             }
         }
 
         public StyleTaunt(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-		public override string ShortDescription 
-			=> Spell.Value > 0 
-			? $"Taunts target, increasing your threat against it by {Spell.Value}."
-			: $"Detaunts target, decreases your threat against it by {-Spell.Value}";
-	}
+        public override string ShortDescription
+            => Spell.Value > 0
+            ? $"Taunts target, increasing your threat against it by {Spell.Value}."
+            : $"Detaunts target, decreases your threat against it by {-Spell.Value}";
+    }
 }

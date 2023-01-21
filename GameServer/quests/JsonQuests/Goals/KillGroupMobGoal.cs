@@ -17,7 +17,7 @@ namespace DOL.GS.Quests
 
         public override eQuestGoalType Type => eQuestGoalType.Kill;
         public override int ProgressTotal => m_killCount;
-		public override QuestZonePoint PointA { get; }
+        public override QuestZonePoint PointA { get; }
         Region m_region;
         ushort m_regionId;
         string m_targetName;
@@ -38,7 +38,7 @@ namespace DOL.GS.Quests
 
                 var reg = WorldMgr.GetRegion(m_areaRegion);
                 reg.AddArea(m_area);
-				PointA = new QuestZonePoint(reg.GetZone(m_area.Position), m_area.Position);
+                PointA = new QuestZonePoint(reg.GetZone(m_area.Position), m_area.Position);
             }
         }
 

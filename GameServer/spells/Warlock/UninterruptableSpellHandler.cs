@@ -32,25 +32,25 @@ using log4net;
 
 namespace DOL.GS.Spells
 {
-	/// <summary>
-	/// 
-	/// </summary>
-	[SpellHandlerAttribute("Uninterruptable")]
-	public class UninterruptableSpellHandler : PrimerSpellHandler
-	{
+    /// <summary>
+    /// 
+    /// </summary>
+    [SpellHandlerAttribute("Uninterruptable")]
+    public class UninterruptableSpellHandler : PrimerSpellHandler
+    {
         public static string WARLOCK_UNINTERRUPTABLE_SPELL = "WARLOCK_UNINTERRUPTABLE_SPELL";
 
-       	public override bool CheckBeginCast(GameLiving selectedTarget)
-		{
-			if (!base.CheckBeginCast(selectedTarget)) return false;
+        public override bool CheckBeginCast(GameLiving selectedTarget)
+        {
+            if (!base.CheckBeginCast(selectedTarget)) return false;
             GameSpellEffect RangeSpell = SpellHandler.FindEffectOnTarget(Caster, "Range");
-  			if(RangeSpell != null) { MessageToCaster("You already preparing a Range spell", eChatType.CT_System); return false; }
+            if (RangeSpell != null) { MessageToCaster("You already preparing a Range spell", eChatType.CT_System); return false; }
             GameSpellEffect PowerlessSpell = SpellHandler.FindEffectOnTarget(Caster, "Powerless");
-  			if(PowerlessSpell != null) { MessageToCaster("You already preparing a Powerless spell", eChatType.CT_System); return false; }
+            if (PowerlessSpell != null) { MessageToCaster("You already preparing a Powerless spell", eChatType.CT_System); return false; }
             GameSpellEffect UninterruptableSpell = SpellHandler.FindEffectOnTarget(Caster, "Uninterruptable");
             if (UninterruptableSpell != null) { MessageToCaster("You must finish casting Uninterruptable before you can cast it again", eChatType.CT_System); return false; }
             return true;
-		}
+        }
         public override void FinishSpellCast(GameLiving target)
         {
             Caster.TempProperties.setProperty(WARLOCK_UNINTERRUPTABLE_SPELL, Spell);
@@ -59,42 +59,42 @@ namespace DOL.GS.Spells
 
 
         }
-		/// <summary>
+        /// <summary>
         /// Calculates the power to cast the spell
         /// </summary>
         /// <param name="target"></param>
         /// <returns></returns>
         public override int PowerCost(GameLiving target)
-        { 
+        {
             double basepower = m_spell.Power; //<== defined a basevar first then modified this base-var to tell %-costs from absolut-costs
 
             // percent of maxPower if less than zero
-			if (basepower < 0)
-			{
-				if (Caster is GamePlayer && ((GamePlayer)Caster).CharacterClass.ManaStat != eStat.UNDEFINED)
-				{
-					GamePlayer player = Caster as GamePlayer;
-					basepower = player.CalculateMaxMana(player.Level, player.GetBaseStat(player.CharacterClass.ManaStat)) * basepower * -0.01;
-				}
-				else
-				{
-					basepower = Caster.MaxMana * basepower * -0.01;
-				}
-			}
-            return (int) basepower;
+            if (basepower < 0)
+            {
+                if (Caster is GamePlayer && ((GamePlayer)Caster).CharacterClass.ManaStat != eStat.UNDEFINED)
+                {
+                    GamePlayer player = Caster as GamePlayer;
+                    basepower = player.CalculateMaxMana(player.Level, player.GetBaseStat(player.CharacterClass.ManaStat)) * basepower * -0.01;
+                }
+                else
+                {
+                    basepower = Caster.MaxMana * basepower * -0.01;
+                }
+            }
+            return (int)basepower;
         }
 
 
-		public override bool CasterIsAttacked(GameLiving attacker)
-		{
-			return false;
-		}
+        public override bool CasterIsAttacked(GameLiving attacker)
+        {
+            return false;
+        }
         #region Devle Info
         public override IList<string> DelveInfo
         {
             get
             {
-            	var list = new List<string>(16);
+                var list = new List<string>(16);
 
                 //Name
                 list.Add("Name: " + Spell.Name);
@@ -122,16 +122,16 @@ namespace DOL.GS.Spells
                     list.Add(string.Format("Duration: {0}:{1} min", Spell.Duration / 60000, (Spell.Duration % 60000 / 1000).ToString("00")));
                 else if (Spell.Duration != 0)
 
-                //Cost
-                list.Add("Power cost: " + Spell.Power.ToString("0;0'%'"));
+                    //Cost
+                    list.Add("Power cost: " + Spell.Power.ToString("0;0'%'"));
 
                 //Cast
                 list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DelveInfo.CastingTime", (Spell.CastTime * 0.001).ToString("0.0## sec;-0.0## sec;'instant'")));
                 return list;
             }
-        #endregion
+            #endregion
         }
-		// constructor
-		public UninterruptableSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) {}
-	}
+        // constructor
+        public UninterruptableSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+    }
 }

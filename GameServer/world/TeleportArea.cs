@@ -25,46 +25,46 @@ using DOL.GS.PacketHandler;
 
 namespace DOL.GS
 {
-	/// <summary>
-	/// Description of TeleportArea.
-	/// Used to teleport players when someone enters, with Z-checks
-	/// </summary>
-	public class TeleportArea : Area.Circle
-	{
-		public override void OnPlayerEnter(GamePlayer player)
-		{
-			base.OnPlayerEnter(player);
-			Teleport destination =  WorldMgr.GetTeleportLocation(player.Realm, String.Format("{0}:{1}", this.GetType(), this.Description));
-			
-			if (destination != null)
-				OnTeleport(player, destination);
-			else
-				player.Out.SendMessage("This destination is not available : "+String.Format("{0}:{1}", this.GetType(), this.Description)+".", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-		}
-		
-		/// <summary>
-		/// Teleport the player to the designated coordinates. 
-		/// </summary>
-		/// <param name="player"></param>
-		/// <param name="destination"></param>
-		protected void OnTeleport(GamePlayer player, Teleport destination)
-		{
-			if (player.InCombat == false && GameRelic.IsPlayerCarryingRelic(player) == false)
-			{
-				player.LeaveHouse();
-				GameLocation currentLocation = new GameLocation("TeleportStart", player.CurrentRegionID, player.Position, player.Heading);
-				player.MoveTo((ushort)destination.RegionID, destination.X, destination.Y, destination.Z, (ushort)destination.Heading);
-				GameServer.ServerRules.OnPlayerTeleport(player, currentLocation, destination);
-			}
-		}
-		
-	}
+    /// <summary>
+    /// Description of TeleportArea.
+    /// Used to teleport players when someone enters, with Z-checks
+    /// </summary>
+    public class TeleportArea : Area.Circle
+    {
+        public override void OnPlayerEnter(GamePlayer player)
+        {
+            base.OnPlayerEnter(player);
+            Teleport destination = WorldMgr.GetTeleportLocation(player.Realm, String.Format("{0}:{1}", this.GetType(), this.Description));
 
-	/// <summary>
-	/// Description of TeleportArea.
-	/// Used to teleport players when someone enters, Withtout Z-checks
-	/// </summary>	
-	public class TeleportPillarArea : TeleportArea
-	{
-	}
+            if (destination != null)
+                OnTeleport(player, destination);
+            else
+                player.Out.SendMessage("This destination is not available : " + String.Format("{0}:{1}", this.GetType(), this.Description) + ".", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+        }
+
+        /// <summary>
+        /// Teleport the player to the designated coordinates. 
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="destination"></param>
+        protected void OnTeleport(GamePlayer player, Teleport destination)
+        {
+            if (player.InCombat == false && GameRelic.IsPlayerCarryingRelic(player) == false)
+            {
+                player.LeaveHouse();
+                GameLocation currentLocation = new GameLocation("TeleportStart", player.CurrentRegionID, player.Position, player.Heading);
+                player.MoveTo((ushort)destination.RegionID, destination.X, destination.Y, destination.Z, (ushort)destination.Heading);
+                GameServer.ServerRules.OnPlayerTeleport(player, currentLocation, destination);
+            }
+        }
+
+    }
+
+    /// <summary>
+    /// Description of TeleportArea.
+    /// Used to teleport players when someone enters, Withtout Z-checks
+    /// </summary>	
+    public class TeleportPillarArea : TeleportArea
+    {
+    }
 }

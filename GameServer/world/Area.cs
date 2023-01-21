@@ -24,116 +24,116 @@ using DOL.Database;
 using System.Numerics;
 
 namespace DOL.GS
-{		
-	/// <summary>
-	/// Collection of basic area shapes
-	/// Circle
-	/// Square
-	/// </summary>
-	public class Area 
-	{
-		public class Square : AbstractArea
-		{
-			/// <summary>
-			/// The X coordinate of this Area
-			/// </summary>
-			protected int m_X;
+{
+    /// <summary>
+    /// Collection of basic area shapes
+    /// Circle
+    /// Square
+    /// </summary>
+    public class Area
+    {
+        public class Square : AbstractArea
+        {
+            /// <summary>
+            /// The X coordinate of this Area
+            /// </summary>
+            protected int m_X;
 
-			/// <summary>
-			/// The Y coordinate of this Area 
-			/// </summary>
-			protected int m_Y;
+            /// <summary>
+            /// The Y coordinate of this Area 
+            /// </summary>
+            protected int m_Y;
 
-			/// <summary>
-			/// The width of this Area 
-			/// </summary>
-			protected int m_Width;
+            /// <summary>
+            /// The width of this Area 
+            /// </summary>
+            protected int m_Width;
 
-			/// <summary>
-			/// The height of this Area 
-			/// </summary>
-			protected int m_Height;
+            /// <summary>
+            /// The height of this Area 
+            /// </summary>
+            protected int m_Height;
 
-			public Square()
-				: base()
-			{ }
+            public Square()
+                : base()
+            { }
 
-			public Square(string desc, int x, int y, int width, int height, bool isPvp) : base(desc)
-			{
-				m_X = x;
-				m_Y = y;
-				m_Height = height;
-				m_Width = width;
-				IsPvP = isPvp;
-			}
+            public Square(string desc, int x, int y, int width, int height, bool isPvp) : base(desc)
+            {
+                m_X = x;
+                m_Y = y;
+                m_Height = height;
+                m_Width = width;
+                IsPvP = isPvp;
+            }
 
-			/// <summary>
-			/// Returns the X Coordinate of this Area
-			/// </summary>
-			public int X
-			{
-				get { return m_X; }
-			}
+            /// <summary>
+            /// Returns the X Coordinate of this Area
+            /// </summary>
+            public int X
+            {
+                get { return m_X; }
+            }
 
-			/// <summary>
-			/// Returns the Y Coordinate of this Area
-			/// </summary>
-			public int Y
-			{
-				get { return m_Y; }
-			}
+            /// <summary>
+            /// Returns the Y Coordinate of this Area
+            /// </summary>
+            public int Y
+            {
+                get { return m_Y; }
+            }
 
-			/// <summary>
-			/// Returns the Width of this Area
-			/// </summary>
-			public int Width
-			{
-				get { return m_Width; }
-			}
+            /// <summary>
+            /// Returns the Width of this Area
+            /// </summary>
+            public int Width
+            {
+                get { return m_Width; }
+            }
 
-			/// <summary>
-			/// Returns the Height of this Area
-			/// </summary>
-			public int Height
-			{
-				get { return m_Height; }
-			}
+            /// <summary>
+            /// Returns the Height of this Area
+            /// </summary>
+            public int Height
+            {
+                get { return m_Height; }
+            }
 
-			/// <summary>
-			/// Checks wether area intersects with given zone
-			/// </summary>
-			/// <param name="zone"></param>
-			/// <returns></returns>
-			public override bool IsIntersectingZone(Zone zone)
-			{
-				if (X+Width < zone.XOffset)
-					return false;
-				if (X-Width >= zone.XOffset + 65536)
-					return false;
-				if (Y+Height < zone.YOffset)
-					return false;
-				if (Y-Height >= zone.YOffset + 65536)
-					return false;
+            /// <summary>
+            /// Checks wether area intersects with given zone
+            /// </summary>
+            /// <param name="zone"></param>
+            /// <returns></returns>
+            public override bool IsIntersectingZone(Zone zone)
+            {
+                if (X + Width < zone.XOffset)
+                    return false;
+                if (X - Width >= zone.XOffset + 65536)
+                    return false;
+                if (Y + Height < zone.YOffset)
+                    return false;
+                if (Y - Height >= zone.YOffset + 65536)
+                    return false;
 
-				return true;
-			}	
+                return true;
+            }
 
-			/// <summary>
-			/// Checks wether given point is within area boundaries
-			/// </summary>
-			/// <param name="p"></param>
-			/// <returns></returns>
-			public override bool IsContaining(Vector3 p, bool checkZ)
-			{
-				var m_xdiff = p.X - X;
-				if (m_xdiff < 0 || m_xdiff > Width)
-					return false;
+            /// <summary>
+            /// Checks wether given point is within area boundaries
+            /// </summary>
+            /// <param name="p"></param>
+            /// <returns></returns>
+            public override bool IsContaining(Vector3 p, bool checkZ)
+            {
+                var m_xdiff = p.X - X;
+                if (m_xdiff < 0 || m_xdiff > Width)
+                    return false;
 
-				var m_ydiff = p.Y - Y;
-				if (m_ydiff < 0 || m_ydiff > Height)
-					return false;
+                var m_ydiff = p.Y - Y;
+                if (m_ydiff < 0 || m_ydiff > Height)
+                    return false;
 
-				/*
+                /*
 				//SH: Removed Z checks when one of the two Z values is zero(on ground)
 				if (Z != 0 && spotZ != 0)
 				{
@@ -143,115 +143,115 @@ namespace DOL.GS
 				}
 				*/
 
-				return true;
-			}
+                return true;
+            }
 
-			public override void LoadFromDatabase(DBArea area)
-			{
-				DbArea = area;
+            public override void LoadFromDatabase(DBArea area)
+            {
+                DbArea = area;
                 m_translationId = area.TranslationId;
-				m_Description = area.Description;
-				m_X = area.X;
-				m_Y = area.Y;
-				m_Width = area.Radius;
-				m_Height = area.Radius;
-				this.CanVol = area.AllowVol;
-				RealmPoints = area.RealmPoints;
-				this.IsPvP = area.IsPvP;
-			}
-		}
+                m_Description = area.Description;
+                m_X = area.X;
+                m_Y = area.Y;
+                m_Width = area.Radius;
+                m_Height = area.Radius;
+                this.CanVol = area.AllowVol;
+                RealmPoints = area.RealmPoints;
+                this.IsPvP = area.IsPvP;
+            }
+        }
 
-		public class Circle : AbstractArea
-		{
-			/// <summary>
-			/// The radius of the area in Coordinates
-			/// </summary>
-			protected int m_Radius;
+        public class Circle : AbstractArea
+        {
+            /// <summary>
+            /// The radius of the area in Coordinates
+            /// </summary>
+            protected int m_Radius;
 
-			protected long m_distSq;
+            protected long m_distSq;
 
-			public Circle()
-				: base()
-			{
-			}
-
-			public Circle(string desc, Vector3 center, int radius) : base(desc)
-			{
-				m_Description = desc;
-				Position = center;
-				m_Radius = radius;
-				m_RadiusRadius = radius * radius;
-			}
-
-			public Circle( string desc, float x, float y, float z, int radius) : this(desc, new Vector3(x, y, z), radius)
+            public Circle()
+                : base()
             {
             }
 
-			public Vector3 Position { get; private set; }
+            public Circle(string desc, Vector3 center, int radius) : base(desc)
+            {
+                m_Description = desc;
+                Position = center;
+                m_Radius = radius;
+                m_RadiusRadius = radius * radius;
+            }
 
-			/// <summary>
-			/// Returns the Height of this Area
-			/// </summary>
-			public int Radius
-			{
-				get { return m_Radius; }
-			}
+            public Circle(string desc, float x, float y, float z, int radius) : this(desc, new Vector3(x, y, z), radius)
+            {
+            }
 
-			/// <summary>
-			/// Cache for radius*radius to increase performance of circle check,
-			/// radius is still needed for square check
-			/// </summary>
-			protected int m_RadiusRadius;
-			
+            public Vector3 Position { get; private set; }
 
-			/// <summary>
-			/// Checks wether area intersects with given zone
-			/// </summary>
-			/// <param name="zone"></param>
-			/// <returns></returns>
-			public override bool IsIntersectingZone(Zone zone)
-			{
-				if (Position.X + Radius < zone.XOffset)
-					return false;
-				if (Position.X - Radius >= zone.XOffset + 65536)
-					return false;
-				if (Position.Y + Radius < zone.YOffset)
-					return false;
-				if (Position.Y - Radius >= zone.YOffset + 65536)
-					return false;
+            /// <summary>
+            /// Returns the Height of this Area
+            /// </summary>
+            public int Radius
+            {
+                get { return m_Radius; }
+            }
 
-				return true;
-			}
+            /// <summary>
+            /// Cache for radius*radius to increase performance of circle check,
+            /// radius is still needed for square check
+            /// </summary>
+            protected int m_RadiusRadius;
 
-			public override bool IsContaining(Vector3 point, bool checkZ)
-			{
-				// spot is not in square around circle no need to check for circle...
-				var diff = point - Position;
 
-				// check if spot is in circle
-				var m_distSq = diff.ToVector2().LengthSquared();
-				if (Position.Z != 0 && point.Z != 0 && checkZ)
-				{
-					float m_zdiff = point.Z - Position.Z;
-					m_distSq += m_zdiff * m_zdiff;
-				}
+            /// <summary>
+            /// Checks wether area intersects with given zone
+            /// </summary>
+            /// <param name="zone"></param>
+            /// <returns></returns>
+            public override bool IsIntersectingZone(Zone zone)
+            {
+                if (Position.X + Radius < zone.XOffset)
+                    return false;
+                if (Position.X - Radius >= zone.XOffset + 65536)
+                    return false;
+                if (Position.Y + Radius < zone.YOffset)
+                    return false;
+                if (Position.Y - Radius >= zone.YOffset + 65536)
+                    return false;
 
-				return (m_distSq <= m_RadiusRadius);
-			}
+                return true;
+            }
 
-			public override void LoadFromDatabase(DBArea area)
-			{
-				DbArea = area;
+            public override bool IsContaining(Vector3 point, bool checkZ)
+            {
+                // spot is not in square around circle no need to check for circle...
+                var diff = point - Position;
+
+                // check if spot is in circle
+                var m_distSq = diff.ToVector2().LengthSquared();
+                if (Position.Z != 0 && point.Z != 0 && checkZ)
+                {
+                    float m_zdiff = point.Z - Position.Z;
+                    m_distSq += m_zdiff * m_zdiff;
+                }
+
+                return (m_distSq <= m_RadiusRadius);
+            }
+
+            public override void LoadFromDatabase(DBArea area)
+            {
+                DbArea = area;
                 m_translationId = area.TranslationId;
-				m_Description = area.Description;
-				Position = new Vector3(area.X, area.Y, area.Z);
-				m_Radius = area.Radius;
-				m_RadiusRadius = area.Radius * area.Radius;
-				this.CanVol = area.AllowVol;
-				RealmPoints = area.RealmPoints;
-				this.IsPvP = area.IsPvP;
-			}
-		}
+                m_Description = area.Description;
+                Position = new Vector3(area.X, area.Y, area.Z);
+                m_Radius = area.Radius;
+                m_RadiusRadius = area.Radius * area.Radius;
+                this.CanVol = area.AllowVol;
+                RealmPoints = area.RealmPoints;
+                this.IsPvP = area.IsPvP;
+            }
+        }
 
         public class Polygon : AbstractArea
         {
@@ -392,7 +392,7 @@ namespace DOL.GS
 
             public override void LoadFromDatabase(DBArea area)
             {
-            	DbArea = area;
+                DbArea = area;
                 m_translationId = area.TranslationId;
                 m_Description = area.Description;
                 m_X = area.X;
@@ -405,55 +405,55 @@ namespace DOL.GS
             }
         }
 
-		public class BindArea : Circle
-		{
-			protected BindPoint m_dbBindPoint;
+        public class BindArea : Circle
+        {
+            protected BindPoint m_dbBindPoint;
 
-			public BindArea()
-				: base()
-			{
-				m_displayMessage = false;
-			}
+            public BindArea()
+                : base()
+            {
+                m_displayMessage = false;
+            }
 
-			public BindArea(string desc, BindPoint dbBindPoint)
-				: base(desc, dbBindPoint.X, dbBindPoint.Y, dbBindPoint.Z, dbBindPoint.Radius)
-			{
-				m_dbBindPoint = dbBindPoint;
-				m_displayMessage = false;
-			}
+            public BindArea(string desc, BindPoint dbBindPoint)
+                : base(desc, dbBindPoint.X, dbBindPoint.Y, dbBindPoint.Z, dbBindPoint.Radius)
+            {
+                m_dbBindPoint = dbBindPoint;
+                m_displayMessage = false;
+            }
 
-			public BindPoint BindPoint
-			{
-				get { return m_dbBindPoint; }
-			}
+            public BindPoint BindPoint
+            {
+                get { return m_dbBindPoint; }
+            }
 
-			public override void LoadFromDatabase(DBArea area)
-			{
-				base.LoadFromDatabase(area);
+            public override void LoadFromDatabase(DBArea area)
+            {
+                base.LoadFromDatabase(area);
 
-				m_dbBindPoint = new BindPoint();
-				m_dbBindPoint.Radius = (ushort)area.Radius;
-				m_dbBindPoint.X = area.X;
-				m_dbBindPoint.Y = area.Y;
-				m_dbBindPoint.Z = area.Z;
-				m_dbBindPoint.Region = area.Region;
-			}
-		}
+                m_dbBindPoint = new BindPoint();
+                m_dbBindPoint.Radius = (ushort)area.Radius;
+                m_dbBindPoint.X = area.X;
+                m_dbBindPoint.Y = area.Y;
+                m_dbBindPoint.Z = area.Z;
+                m_dbBindPoint.Region = area.Region;
+            }
+        }
 
-		public class SafeArea : Circle
-		{
-			public SafeArea()
-				: base()
-			{
-				m_safeArea = true;
-			}
+        public class SafeArea : Circle
+        {
+            public SafeArea()
+                : base()
+            {
+                m_safeArea = true;
+            }
 
-			public SafeArea(string desc, int x, int y, int z, int radius)
-				: base
-				(desc, x, y, z, radius)
-			{
-				m_safeArea = true;
-			}
-		}
-	}
+            public SafeArea(string desc, int x, int y, int z, int radius)
+                : base
+                (desc, x, y, z, radius)
+            {
+                m_safeArea = true;
+            }
+        }
+    }
 }

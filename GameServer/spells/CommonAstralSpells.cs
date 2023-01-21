@@ -98,7 +98,7 @@ namespace DOL.GS.Spells
         GameNPC summoned = null;
         GameSpellEffect beffect = null;
         public SummonHealingElemental(GameLiving caster, Spell spell, SpellLine line)
-            : base(caster, spell, line)  {}
+            : base(caster, spell, line) { }
 
         /// <summary>
         /// Apply effect on target or do spell action if non duration spell
@@ -224,7 +224,7 @@ namespace DOL.GS.Spells
 
         public SummonElemental(GameLiving caster, Spell spell, SpellLine line)
             : base(caster, spell, line) { }
-    } 
+    }
 }
 
 namespace DOL.GS

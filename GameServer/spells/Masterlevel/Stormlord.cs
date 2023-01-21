@@ -124,7 +124,7 @@ namespace DOL.GS.Spells
 
         public override IList<GameLiving> SelectTargets(GameObject CasterTarget)
         {
-            
+
             var list = new List<GameLiving>(8);
             foreach (GameNPC storms in Caster.GetNPCsInRadius(350))
             {
@@ -163,7 +163,7 @@ namespace DOL.GS.Spells
 
         public VacuumVortexSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription 
+        public override string ShortDescription
             => "Ground targeted effect that pushes any storms near the ground target directly away from that point.";
     }
     #endregion
@@ -248,7 +248,7 @@ namespace DOL.GS.Spells
             return 0;
         }
 
-        public override string ShortDescription 
+        public override string ShortDescription
             => "Storm that drains fatigue from enemies who stand inside it.";
     }
     #endregion
@@ -434,7 +434,7 @@ namespace DOL.GS.Spells
             return base.OnEffectExpires(effect, noMessages);
         }
 
-        public override string ShortDescription 
+        public override string ShortDescription
             => "Storm that drains power from enemies who stand inside it.";
     }
 
@@ -487,7 +487,7 @@ namespace DOL.GS.Spells
         }
         public FocusingWindsSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription 
+        public override string ShortDescription
             => "Cast on a friendly storm, focusing on it to hold it in place.";
     }
     #endregion
@@ -761,7 +761,7 @@ namespace DOL.GS.Spells
 
         public StormEnergyTempest(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription 
+        public override string ShortDescription
             => "Storm that wracks the enemy with essence damage.";
     }
     #endregion

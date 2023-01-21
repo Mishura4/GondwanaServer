@@ -19,53 +19,53 @@
 using DOL.GS.PacketHandler;
 
 namespace DOL.GS.Spells
-{	
-	public abstract class DualStatBuff : SingleStatBuff
-	{
-		public override eBuffBonusCategory BonusCategory1 { get { return eBuffBonusCategory.SpecBuff; } }
-		public override eBuffBonusCategory BonusCategory2 { get { return eBuffBonusCategory.SpecBuff; } }
+{
+    public abstract class DualStatBuff : SingleStatBuff
+    {
+        public override eBuffBonusCategory BonusCategory1 { get { return eBuffBonusCategory.SpecBuff; } }
+        public override eBuffBonusCategory BonusCategory2 { get { return eBuffBonusCategory.SpecBuff; } }
 
-		protected DualStatBuff(GameLiving caster, Spell spell, SpellLine line)
-			: base(caster, spell, line) { }
+        protected DualStatBuff(GameLiving caster, Spell spell, SpellLine line)
+            : base(caster, spell, line) { }
 
         public override string ShortDescription => $"{TargetPronoun} {ConvertPropertyToText(Property1)} and {ConvertPropertyToText(Property2)} are increased by {Spell.Value}.";
     }
 
-	[SpellHandler("StrengthConstitutionBuff")]
-	public class StrengthConBuff : DualStatBuff
-	{
+    [SpellHandler("StrengthConstitutionBuff")]
+    public class StrengthConBuff : DualStatBuff
+    {
         public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             if (target.HasAbility(Abilities.VampiirStrength)
-        	   || target.HasAbility(Abilities.VampiirConstitution))
+               || target.HasAbility(Abilities.VampiirConstitution))
             {
                 MessageToCaster("Your target already has an effect of that type!", eChatType.CT_Spell);
                 return;
             }
             base.ApplyEffectOnTarget(target, effectiveness);
         }
-		public override eProperty Property1 { get { return eProperty.Strength; } }	
-		public override eProperty Property2 { get { return eProperty.Constitution; } }	
+        public override eProperty Property1 { get { return eProperty.Strength; } }
+        public override eProperty Property2 { get { return eProperty.Constitution; } }
 
-		public StrengthConBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) {}
-	}
+        public StrengthConBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+    }
 
-	[SpellHandler("DexterityQuicknessBuff")]
-	public class DexterityQuiBuff : DualStatBuff
-	{
+    [SpellHandler("DexterityQuicknessBuff")]
+    public class DexterityQuiBuff : DualStatBuff
+    {
         public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             if (target.HasAbility(Abilities.VampiirDexterity)
-        	   || target.HasAbility(Abilities.VampiirQuickness))
+               || target.HasAbility(Abilities.VampiirQuickness))
             {
                 MessageToCaster("Your target already has an effect of that type!", eChatType.CT_Spell);
                 return;
             }
             base.ApplyEffectOnTarget(target, effectiveness);
         }
-		public override eProperty Property1 { get { return eProperty.Dexterity; } }	
-		public override eProperty Property2 { get { return eProperty.Quickness; } }	
+        public override eProperty Property1 { get { return eProperty.Dexterity; } }
+        public override eProperty Property2 { get { return eProperty.Quickness; } }
 
-		public DexterityQuiBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) {}
-	}
+        public DexterityQuiBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+    }
 }

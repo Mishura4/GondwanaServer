@@ -26,41 +26,41 @@ namespace DOL.GS.RealmAbilities
             if (CheckPreconditions(living, DEAD | SITTING | MEZZED | STUNNED)) return;
             if (player.TempProperties.getProperty(Dashing, false))
             {
-				player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "DashingDefenseAbility.Execute.AlreadyEffect"), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
-				return;
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "DashingDefenseAbility.Execute.AlreadyEffect"), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
+                return;
             }
-			
-            if(ServerProperties.Properties.USE_NEW_ACTIVES_RAS_SCALING)
+
+            if (ServerProperties.Properties.USE_NEW_ACTIVES_RAS_SCALING)
             {
- 	            switch (Level)
-	            {
-	                case 1: m_duration = 10; break;
-	                case 2: m_duration = 20; break;
-	                case 3: m_duration = 30; break;
-	                case 4: m_duration = 45; break;
-	                case 5: m_duration = 60; break;
-	                default: return;
-	            }            	           	
+                switch (Level)
+                {
+                    case 1: m_duration = 10; break;
+                    case 2: m_duration = 20; break;
+                    case 3: m_duration = 30; break;
+                    case 4: m_duration = 45; break;
+                    case 5: m_duration = 60; break;
+                    default: return;
+                }
             }
             else
             {
-	            switch (Level)
-	            {
-	                case 1: m_duration = 10; break;
-	                case 2: m_duration = 30; break;
-	                case 3: m_duration = 60; break;
-	                default: return;
-	            }            	
+                switch (Level)
+                {
+                    case 1: m_duration = 10; break;
+                    case 2: m_duration = 30; break;
+                    case 3: m_duration = 60; break;
+                    default: return;
+                }
             }
 
             DisableSkill(living);
 
             ArrayList targets = new ArrayList();
             if (player.Group == null)
-                {
-					player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "DashingDefenseAbility.Execute.MustInGroup"), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
-					return;
-                }
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "DashingDefenseAbility.Execute.MustInGroup"), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
+                return;
+            }
             else foreach (GamePlayer grpMate in player.Group.GetPlayersInTheGroup())
                     if (player.IsWithinRadius(grpMate, m_range) && grpMate.IsAlive)
                         targets.Add(grpMate);
@@ -85,23 +85,23 @@ namespace DOL.GS.RealmAbilities
             return 420;
         }
 
-		public override void AddEffectsInfo(IList<string> list)
-		{
-			//TODO Translate
-			if(ServerProperties.Properties.USE_NEW_ACTIVES_RAS_SCALING)
-			{
-				list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "DashingDefenseAbility.AddEffectsInfo.Info1"));
-				list.Add("");
-				list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "DashingDefenseAbility.AddEffectsInfo.Info2"));
-				list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "DashingDefenseAbility.AddEffectsInfo.Info3"));
-			}
-			else
-			{
-				list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "DashingDefenseAbility.AddEffectsInfo.Info1"));
-				list.Add("");
-				list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "DashingDefenseAbility.AddEffectsInfo.Info2"));
-				list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "DashingDefenseAbility.AddEffectsInfo.Info3"));
-			}
-		}
+        public override void AddEffectsInfo(IList<string> list)
+        {
+            //TODO Translate
+            if (ServerProperties.Properties.USE_NEW_ACTIVES_RAS_SCALING)
+            {
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "DashingDefenseAbility.AddEffectsInfo.Info1"));
+                list.Add("");
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "DashingDefenseAbility.AddEffectsInfo.Info2"));
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "DashingDefenseAbility.AddEffectsInfo.Info3"));
+            }
+            else
+            {
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "DashingDefenseAbility.AddEffectsInfo.Info1"));
+                list.Add("");
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "DashingDefenseAbility.AddEffectsInfo.Info2"));
+                list.Add(LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, "DashingDefenseAbility.AddEffectsInfo.Info3"));
+            }
+        }
     }
 }

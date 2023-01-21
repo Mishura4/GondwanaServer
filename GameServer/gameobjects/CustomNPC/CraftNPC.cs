@@ -26,30 +26,30 @@ using log4net;
 
 namespace DOL.GS
 {
-	public abstract class CraftNPC : GameNPC
-	{
-		public abstract string GUILD_ORDER { get; }
+    public abstract class CraftNPC : GameNPC
+    {
+        public abstract string GUILD_ORDER { get; }
 
-		public abstract string ACCEPTED_BY_ORDER_NAME { get; }
+        public abstract string ACCEPTED_BY_ORDER_NAME { get; }
 
         public abstract string Crafters_Profession { get; }
 
-		public abstract eCraftingSkill[] TrainedSkills { get; }
+        public abstract eCraftingSkill[] TrainedSkills { get; }
 
-		public abstract eCraftingSkill TheCraftingSkill { get; }
+        public abstract eCraftingSkill TheCraftingSkill { get; }
 
-		public abstract string InitialEntersentence { get; }
+        public abstract string InitialEntersentence { get; }
 
-        protected readonly IList<int> maxValues = new List<int>(new int[]{99, 199, 299, 399, 499, 599, 699, 799, 899, 999, 1099});
+        protected readonly IList<int> maxValues = new List<int>(new int[] { 99, 199, 299, 399, 499, 599, 699, 799, 899, 999, 1099 });
 
-		public override bool Interact(GamePlayer player)
-		{
-			if (!base.Interact(player))
-				return false;
-			if (player.CharacterClass == null)
-				return false;
+        public override bool Interact(GamePlayer player)
+        {
+            if (!base.Interact(player))
+                return false;
+            if (player.CharacterClass == null)
+                return false;
 
-			TurnTo(player, 5000);
+            TurnTo(player, 5000);
 
             if (player.Client.Account.PrivLevel == 1 && player.CraftingPrimarySkill != eCraftingSkill.BasicCrafting && player.CraftingPrimarySkill != TheCraftingSkill)
             {
@@ -57,7 +57,7 @@ namespace DOL.GS
                 return true;
             }
 
-            if(CheckIfPlayerNeedPromotion(player))
+            if (CheckIfPlayerNeedPromotion(player))
             {
                 SayTo(player, eChatLoc.CL_ChatWindow, LanguageMgr.GetTranslation(player.Client.Account.Language, "CraftNPC.Interact.Promoted", GetNextRang(player)));
                 player.GainCraftingSkill(TheCraftingSkill, 1, true);
@@ -68,23 +68,23 @@ namespace DOL.GS
             }
 
 
-			// Dunnerholl : Basic Crafting Master does not give the option to rejoin this craft
-			if (player.CraftingPrimarySkill != TheCraftingSkill && InitialEntersentence != null)
-			{
-				SayTo(player, eChatLoc.CL_PopupWindow, InitialEntersentence);
-			}
+            // Dunnerholl : Basic Crafting Master does not give the option to rejoin this craft
+            if (player.CraftingPrimarySkill != TheCraftingSkill && InitialEntersentence != null)
+            {
+                SayTo(player, eChatLoc.CL_PopupWindow, InitialEntersentence);
+            }
             else if (player.CraftingPrimarySkill == TheCraftingSkill)
                 SayTo(player, eChatLoc.CL_ChatWindow, "Je n'ai rien à vous apprendre pour le moment !");
-                else
+            else
                 // Only GM and Admin can see this one
                 SayTo(player, eChatLoc.CL_PopupWindow, "Voulez-vous redevenir [Basic Crafting] ? (GM and Admin Only)");
-            		
-			return true;
-		}
+
+            return true;
+        }
 
         protected virtual string GetNextRang(GamePlayer player)
         {
-            switch(player.GetCraftingSkillValue(TheCraftingSkill))
+            switch (player.GetCraftingSkillValue(TheCraftingSkill))
             {
                 case 99:
                     return LanguageMgr.GetTranslation(player.Client.Account.Language, "CraftersTitle.JuniorApprentice", Crafters_Profession);
@@ -118,38 +118,38 @@ namespace DOL.GS
             return player.CraftingPrimarySkill == TheCraftingSkill && maxValues.Contains(player.GetCraftingSkillValue(TheCraftingSkill));
         }
 
-		public override bool WhisperReceive(GameLiving source, string text)
-		{
-			if (!base.WhisperReceive(source, text))
-				return false;
-			if (source is GamePlayer == false)
-				return true;
+        public override bool WhisperReceive(GameLiving source, string text)
+        {
+            if (!base.WhisperReceive(source, text))
+                return false;
+            if (source is GamePlayer == false)
+                return true;
 
-			GamePlayer player = (GamePlayer) source;
+            GamePlayer player = (GamePlayer)source;
 
-            if(text == GUILD_ORDER)
-			{
-				player.Out.SendCustomDialog(LanguageMgr.GetTranslation(player.Client.Account.Language, "CraftNPC.WhisperReceive.WishToJoin", ACCEPTED_BY_ORDER_NAME), new CustomDialogResponse(CraftNpcDialogResponse));
-			}
-			return true;
-		}
+            if (text == GUILD_ORDER)
+            {
+                player.Out.SendCustomDialog(LanguageMgr.GetTranslation(player.Client.Account.Language, "CraftNPC.WhisperReceive.WishToJoin", ACCEPTED_BY_ORDER_NAME), new CustomDialogResponse(CraftNpcDialogResponse));
+            }
+            return true;
+        }
 
-		protected virtual void CraftNpcDialogResponse(GamePlayer player, byte response)
-		{
-			if (response != 0x01)
-				return; //declined
+        protected virtual void CraftNpcDialogResponse(GamePlayer player, byte response)
+        {
+            if (response != 0x01)
+                return; //declined
 
-			player.CraftingPrimarySkill = TheCraftingSkill;
+            player.CraftingPrimarySkill = TheCraftingSkill;
 
-			player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "CraftNPC.CraftNpcDialogResponse.Accepted", ACCEPTED_BY_ORDER_NAME), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-				
-			foreach (eCraftingSkill skill in TrainedSkills)
-			{
-				player.AddCraftingSkill(skill, 1);
-			}
-			player.Out.SendUpdatePlayer();
-			player.Out.SendUpdateCraftingSkills();
+            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "CraftNPC.CraftNpcDialogResponse.Accepted", ACCEPTED_BY_ORDER_NAME), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+
+            foreach (eCraftingSkill skill in TrainedSkills)
+            {
+                player.AddCraftingSkill(skill, 1);
+            }
+            player.Out.SendUpdatePlayer();
+            player.Out.SendUpdateCraftingSkills();
             player.SaveIntoDatabase();
-		}
-	}
+        }
+    }
 }

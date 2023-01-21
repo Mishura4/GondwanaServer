@@ -21,15 +21,16 @@ using System.Collections.Generic;
 using System.Text;
 using DOL.GS.PacketHandler;
 using DOL.Events;
-using DOL.GS.Behaviour.Attributes;using DOL.GS.Behaviour;
+using DOL.GS.Behaviour.Attributes;
+using DOL.GS.Behaviour;
 
 namespace DOL.GS.Behaviour.Actions
 {
-    [ActionAttribute(ActionType = eActionType.Talk,DefaultValueQ=eDefaultValueConstants.NPC)]
-    public class TalkAction : AbstractAction<String,GameNPC>
+    [ActionAttribute(ActionType = eActionType.Talk, DefaultValueQ = eDefaultValueConstants.NPC)]
+    public class TalkAction : AbstractAction<String, GameNPC>
     {
 
-        public TalkAction(GameNPC defaultNPC,  Object p, Object q)
+        public TalkAction(GameNPC defaultNPC, Object p, Object q)
             : base(defaultNPC, eActionType.Talk, p, q)
         {
         }
@@ -37,7 +38,7 @@ namespace DOL.GS.Behaviour.Actions
 
         public TalkAction(GameNPC defaultNPC, String message, GameNPC npc)
             : this(defaultNPC, (object)message, (object)npc) { }
-        
+
 
 
         public override void Perform(DOLEvent e, object sender, EventArgs args)

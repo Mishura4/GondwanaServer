@@ -49,7 +49,7 @@ namespace DOL.GS.Effects
         {
             GamePlayer player = (GamePlayer)sender;
 
-        	StrikePredictionEffect SPEffect = player.EffectList.GetOfType<StrikePredictionEffect>();
+            StrikePredictionEffect SPEffect = player.EffectList.GetOfType<StrikePredictionEffect>();
             if (SPEffect != null)
             {
                 SPEffect.Cancel(false);
@@ -145,7 +145,7 @@ namespace DOL.GS.Effects
         {
             get
             {
-				var delveInfoList = new List<string>();
+                var delveInfoList = new List<string>();
                 delveInfoList.Add(m_delveString);
                 delveInfoList.Add(" ");
                 delveInfoList.Add("Value: " + m_value + "%");

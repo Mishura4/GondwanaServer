@@ -32,112 +32,112 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute(
-		"&random",
-		ePrivLevel.Player,
-		"Commands.Players.Random.Description",
-		"Commands.Players.Random.Usage")]
-	public class RandomCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		// declaring some msg's
-		private const int RESULT_RANGE = 512; // emote range
-		private const string MESSAGE_HELP = "You must select a maximum number for your random selection!";
-		private const string MESSAGE_RESULT_SELF = "You pick a random number between 1 and {0}: {1}"; // thrownMax, thrown
-		private const string MESSAGE_RESULT_OTHER = "{0} picks a random number between 1 and {1}: {2}"; // client.Player.Name, thrownMax, thrown
-		private const string MESSAGE_LOW_NUMBER = "You must select a maximum number greater than 1!";
+    [CmdAttribute(
+        "&random",
+        ePrivLevel.Player,
+        "Commands.Players.Random.Description",
+        "Commands.Players.Random.Usage")]
+    public class RandomCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        // declaring some msg's
+        private const int RESULT_RANGE = 512; // emote range
+        private const string MESSAGE_HELP = "You must select a maximum number for your random selection!";
+        private const string MESSAGE_RESULT_SELF = "You pick a random number between 1 and {0}: {1}"; // thrownMax, thrown
+        private const string MESSAGE_RESULT_OTHER = "{0} picks a random number between 1 and {1}: {2}"; // client.Player.Name, thrownMax, thrown
+        private const string MESSAGE_LOW_NUMBER = "You must select a maximum number greater than 1!";
 
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (IsSpammingCommand(client.Player, "random", 500))
-			{
-				DisplayMessage(
-					client,
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Random.SlowDown"));
-				return;
-			}
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (IsSpammingCommand(client.Player, "random", 500))
+            {
+                DisplayMessage(
+                    client,
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Random.SlowDown"));
+                return;
+            }
 
-			// no args - display usage
-			if (args.Length < 2)
-			{
-				SystemMessage(
-					client,
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Random.Help"));
-				return;
-			}
+            // no args - display usage
+            if (args.Length < 2)
+            {
+                SystemMessage(
+                    client,
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Random.Help"));
+                return;
+            }
 
-			int thrownMax;
+            int thrownMax;
 
-			// trying to convert number
-			try
-			{
-				thrownMax = System.Convert.ToInt32(args[1]);
-			}
-			catch (OverflowException)
-			{
-				thrownMax = int.MaxValue - 1; // max+1 is used in GameObject.Random(int,int)
-			}
-			catch (Exception)
-			{
-				SystemMessage(
-					client,
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Random.Help"));
-				return;
-			}
+            // trying to convert number
+            try
+            {
+                thrownMax = System.Convert.ToInt32(args[1]);
+            }
+            catch (OverflowException)
+            {
+                thrownMax = int.MaxValue - 1; // max+1 is used in GameObject.Random(int,int)
+            }
+            catch (Exception)
+            {
+                SystemMessage(
+                    client,
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Random.Help"));
+                return;
+            }
 
-			if (thrownMax < 2)
-			{
-				SystemMessage(
-					client,
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Random.LowNumber"));
-				return;
-			}
+            if (thrownMax < 2)
+            {
+                SystemMessage(
+                    client,
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Random.LowNumber"));
+                return;
+            }
 
-			// throw result
-			int thrown = Util.Random(1, thrownMax);
+            // throw result
+            int thrown = Util.Random(1, thrownMax);
 
-			// building result messages
-			string selfMessage = LanguageMgr.GetTranslation(
-									client.Account.Language,
-									"Commands.Players.Random.Result.Self",
-									thrownMax, thrown);
-			string otherMessage = LanguageMgr.GetTranslation(
-									client.Account.Language,
-									"Commands.Players.Random.Result.Other",
-									client.Player.Name, thrownMax, thrown);
+            // building result messages
+            string selfMessage = LanguageMgr.GetTranslation(
+                                    client.Account.Language,
+                                    "Commands.Players.Random.Result.Self",
+                                    thrownMax, thrown);
+            string otherMessage = LanguageMgr.GetTranslation(
+                                    client.Account.Language,
+                                    "Commands.Players.Random.Result.Other",
+                                    client.Player.Name, thrownMax, thrown);
 
-			// sending msg to player
-			EmoteMessage(client, selfMessage);
+            // sending msg to player
+            EmoteMessage(client, selfMessage);
 
-			// sending result & playername to all players in range
-			foreach (GamePlayer player in client.Player.GetPlayersInRadius(RESULT_RANGE))
-			{
-				if (client.Player != player) // client gets unique message
-					EmoteMessage(player, otherMessage); // sending msg to other players
-			}
-		}
+            // sending result & playername to all players in range
+            foreach (GamePlayer player in client.Player.GetPlayersInRadius(RESULT_RANGE))
+            {
+                if (client.Player != player) // client gets unique message
+                    EmoteMessage(player, otherMessage); // sending msg to other players
+            }
+        }
 
-		// these are to make code look better
-		private void SystemMessage(GameClient client, string str)
-		{
-			client.Out.SendMessage(str, eChatType.CT_System, eChatLoc.CL_SystemWindow);
-		}
+        // these are to make code look better
+        private void SystemMessage(GameClient client, string str)
+        {
+            client.Out.SendMessage(str, eChatType.CT_System, eChatLoc.CL_SystemWindow);
+        }
 
-		private void EmoteMessage(GamePlayer player, string str)
-		{
-			EmoteMessage(player.Client, str);
-		}
+        private void EmoteMessage(GamePlayer player, string str)
+        {
+            EmoteMessage(player.Client, str);
+        }
 
-		private void EmoteMessage(GameClient client, string str)
-		{
-			client.Out.SendMessage(str, eChatType.CT_Emote, eChatLoc.CL_SystemWindow);
-		}
-	}
+        private void EmoteMessage(GameClient client, string str)
+        {
+            client.Out.SendMessage(str, eChatType.CT_Emote, eChatLoc.CL_SystemWindow);
+        }
+    }
 }

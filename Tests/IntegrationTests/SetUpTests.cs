@@ -29,99 +29,99 @@ using DOL.Database.Attributes;
 
 namespace DOL.Integration.Server
 {
-	/// <summary>
-	/// SetUpTests Start The Needed Environnement for Unit Tests
-	/// </summary>
-	[SetUpFixture]
-	public class SetUpTests
-	{
-		public SetUpTests()
-		{
-		}
+    /// <summary>
+    /// SetUpTests Start The Needed Environnement for Unit Tests
+    /// </summary>
+    [SetUpFixture]
+    public class SetUpTests
+    {
+        public SetUpTests()
+        {
+        }
 
-		/// <summary>
-		/// Create Game Server Instance for Tests
-		/// </summary>
-		public static void CreateGameServerInstance()
-		{
-			Console.WriteLine("Create Game Server Instance");
-			DirectoryInfo CodeBase = new FileInfo(new Uri(Assembly.GetExecutingAssembly().Location).LocalPath).Directory;
-			Console.WriteLine("Code Base: " + CodeBase.FullName);
-			DirectoryInfo FakeRoot = CodeBase.Parent;
-			Console.WriteLine("Fake Root: " + FakeRoot.FullName);
+        /// <summary>
+        /// Create Game Server Instance for Tests
+        /// </summary>
+        public static void CreateGameServerInstance()
+        {
+            Console.WriteLine("Create Game Server Instance");
+            DirectoryInfo CodeBase = new FileInfo(new Uri(Assembly.GetExecutingAssembly().Location).LocalPath).Directory;
+            Console.WriteLine("Code Base: " + CodeBase.FullName);
+            DirectoryInfo FakeRoot = CodeBase.Parent;
+            Console.WriteLine("Fake Root: " + FakeRoot.FullName);
 
-			if (GameServer.Instance == null || GameServer.Instance.GetType() != typeof(GameServer))
-			{
-				GameServerConfiguration config = new GameServerConfiguration();
-				config.RootDirectory = FakeRoot.FullName;
-				config.DBType = ConnectionType.DATABASE_SQLITE;
-				config.DBConnectionString = $"Data Source={Path.Combine(config.RootDirectory, "dol-tests-only.sqlite3.db")}";
-				config.Port = 0; // Auto Choosing Listen Port
-				config.UDPPort = 0; // Auto Choosing Listen Port
-				config.IP = System.Net.IPAddress.Parse("127.0.0.1");
-				config.UDPIP = System.Net.IPAddress.Parse("127.0.0.1");
-				config.RegionIP = System.Net.IPAddress.Parse("127.0.0.1");
+            if (GameServer.Instance == null || GameServer.Instance.GetType() != typeof(GameServer))
+            {
+                GameServerConfiguration config = new GameServerConfiguration();
+                config.RootDirectory = FakeRoot.FullName;
+                config.DBType = ConnectionType.DATABASE_SQLITE;
+                config.DBConnectionString = $"Data Source={Path.Combine(config.RootDirectory, "dol-tests-only.sqlite3.db")}";
+                config.Port = 0; // Auto Choosing Listen Port
+                config.UDPPort = 0; // Auto Choosing Listen Port
+                config.IP = System.Net.IPAddress.Parse("127.0.0.1");
+                config.UDPIP = System.Net.IPAddress.Parse("127.0.0.1");
+                config.RegionIP = System.Net.IPAddress.Parse("127.0.0.1");
 
-				GameServer.LoadTestDouble(new GameServerWithDefaultDB(config));
+                GameServer.LoadTestDouble(new GameServerWithDefaultDB(config));
 
-				Console.WriteLine("Game Server Instance Created !");
-			}
-		}
+                Console.WriteLine("Game Server Instance Created !");
+            }
+        }
 
-		private class GameServerWithDefaultDB : GameServer
-		{
-			public GameServerWithDefaultDB(GameServerConfiguration config) : base(config) { }
+        private class GameServerWithDefaultDB : GameServer
+        {
+            public GameServerWithDefaultDB(GameServerConfiguration config) : base(config) { }
 
-			protected override void CheckAndInitDB()
-			{
-				if (m_database == null)
-				{
-					m_database = ObjectDatabase.GetObjectDatabase(Configuration.DBType, Configuration.DBConnectionString);
+            protected override void CheckAndInitDB()
+            {
+                if (m_database == null)
+                {
+                    m_database = ObjectDatabase.GetObjectDatabase(Configuration.DBType, Configuration.DBConnectionString);
 
-					//Load only default assembly
-					var assembly = Assembly.Load("DOLDatabase");
-					// Walk through each type in the assembly
-					assembly.GetTypes().AsParallel().ForAll(type =>
-						{
-							if (!type.IsClass || type.IsAbstract)
-							{
-								return;
-							}
+                    //Load only default assembly
+                    var assembly = Assembly.Load("DOLDatabase");
+                    // Walk through each type in the assembly
+                    assembly.GetTypes().AsParallel().ForAll(type =>
+                        {
+                            if (!type.IsClass || type.IsAbstract)
+                            {
+                                return;
+                            }
 
-							var attrib = type.GetCustomAttributes<DataTable>(false);
-							if (attrib.Any())
-							{
+                            var attrib = type.GetCustomAttributes<DataTable>(false);
+                            if (attrib.Any())
+                            {
 
-								m_database.RegisterDataObject(type);
-							}
-						});
-				}
-			}
-		}
-		
-		[OneTimeSetUp]
-		public virtual void Init()
-		{
-			CreateGameServerInstance();
-			
-			if (!GameServer.Instance.IsRunning)
-			{
-				Console.WriteLine("Starting GameServer");
-				if (!GameServer.Instance.Start())
-				{
-					Console.WriteLine("Error init GameServer");
-				}
-			}
-			else
-			{
-				Console.WriteLine("GameServer already running, skip init of Gameserver...");
-			}
-		}
+                                m_database.RegisterDataObject(type);
+                            }
+                        });
+                }
+            }
+        }
 
-		[OneTimeTearDown]
-		public void Dispose()
-		{
-			GameServer.Instance.Stop();
-		}
-	}
+        [OneTimeSetUp]
+        public virtual void Init()
+        {
+            CreateGameServerInstance();
+
+            if (!GameServer.Instance.IsRunning)
+            {
+                Console.WriteLine("Starting GameServer");
+                if (!GameServer.Instance.Start())
+                {
+                    Console.WriteLine("Error init GameServer");
+                }
+            }
+            else
+            {
+                Console.WriteLine("GameServer already running, skip init of Gameserver...");
+            }
+        }
+
+        [OneTimeTearDown]
+        public void Dispose()
+        {
+            GameServer.Instance.Stop();
+        }
+    }
 }

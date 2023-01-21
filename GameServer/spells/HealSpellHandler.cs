@@ -52,10 +52,10 @@ namespace DOL.GS.Spells
             {
                 int heal = Util.Random(minHeal, maxHeal);
 
-				if (SpellLine.KeyName == GlobalSpellsLines.Item_Effects)
-				{
-					heal = maxHeal;
-				}
+                if (SpellLine.KeyName == GlobalSpellsLines.Item_Effects)
+                {
+                    heal = maxHeal;
+                }
 
                 if (healTarget.IsDiseased)
                 {
@@ -63,14 +63,14 @@ namespace DOL.GS.Spells
                     heal >>= 1;
                 }
 
-				if (SpellLine.KeyName == GlobalSpellsLines.Item_Effects)
-				{
-					healed |= ProcHeal(healTarget, heal);
-				}
-				else
-				{
-					healed |= HealTarget(healTarget, heal);
-				}
+                if (SpellLine.KeyName == GlobalSpellsLines.Item_Effects)
+                {
+                    healed |= ProcHeal(healTarget, heal);
+                }
+                else
+                {
+                    healed |= HealTarget(healTarget, heal);
+                }
             }
 
             // group heals seem to use full power even if no heals
@@ -83,15 +83,15 @@ namespace DOL.GS.Spells
             if (Spell.Pulse == 0)
             {
                 // show resisted effect if not healed
-				foreach (GameLiving healTarget in targets)
-					if(healTarget.IsAlive)
-						SendEffectAnimation(healTarget, 0, false, healed ? (byte)1 : (byte)0);
+                foreach (GameLiving healTarget in targets)
+                    if (healTarget.IsAlive)
+                        SendEffectAnimation(healTarget, 0, false, healed ? (byte)1 : (byte)0);
             }
 
             if (!healed && Spell.CastTime == 0) m_startReuseTimer = false;
 
-			return true;
-		}
+            return true;
+        }
 
         /// <summary>
         /// Heals hit points of one target and sends needed messages, no spell effects
@@ -103,15 +103,15 @@ namespace DOL.GS.Spells
         {
             if (target == null || target.ObjectState != GameLiving.eObjectState.Active) return false;
 
-			// we can't heal enemy people
-			if (!GameServer.ServerRules.IsSameRealm(Caster, target, true))
-				return false;
+            // we can't heal enemy people
+            if (!GameServer.ServerRules.IsSameRealm(Caster, target, true))
+                return false;
 
-			// no healing of keep components
-			if (target is Keeps.GameKeepComponent || target is Keeps.GameKeepDoor)
-				return false;
+            // no healing of keep components
+            if (target is Keeps.GameKeepComponent || target is Keeps.GameKeepDoor)
+                return false;
 
-			if (!target.IsAlive)
+            if (!target.IsAlive)
             {
                 //"You cannot heal the dead!" sshot550.tga
                 MessageToCaster(target.GetName(0, true) + " is dead!", eChatType.CT_SpellResisted);
@@ -133,13 +133,13 @@ namespace DOL.GS.Spells
 
             //moc heal decrease
             double mocFactor = 1.0;
-        	MasteryofConcentrationEffect moc = Caster.EffectList.GetOfType<MasteryofConcentrationEffect>();
+            MasteryofConcentrationEffect moc = Caster.EffectList.GetOfType<MasteryofConcentrationEffect>();
             if (moc != null)
             {
                 GamePlayer playerCaster = Caster as GamePlayer;
                 MasteryofConcentrationAbility ra = playerCaster.GetAbility<MasteryofConcentrationAbility>();
                 if (ra != null)
-                	mocFactor = (double)ra.GetAmountForLevel(ra.Level) / 100.0;
+                    mocFactor = (double)ra.GetAmountForLevel(ra.Level) / 100.0;
                 amount = amount * mocFactor;
             }
             double criticalvalue = 0;
@@ -165,29 +165,29 @@ namespace DOL.GS.Spells
             amount += criticalvalue;
 
             GamePlayer playerTarget = target as GamePlayer;
-			if (playerTarget != null)
-			{
-				GameSpellEffect HealEffect = SpellHandler.FindEffectOnTarget(playerTarget, "EfficientHealing");
-				if (HealEffect != null)
-				{
-					double HealBonus = amount * ((int)HealEffect.Spell.Value * 0.01);
-					amount += (int)HealBonus;
-					playerTarget.Out.SendMessage("Your Efficient Healing buff grants you a additional" + HealBonus + " in the Heal!", eChatType.CT_Spell, eChatLoc.CL_ChatWindow);
-				}
-				GameSpellEffect EndEffect = SpellHandler.FindEffectOnTarget(playerTarget, "EfficientEndurance");
-				if (EndEffect != null)
-				{
-					double EndBonus = amount * ((int)EndEffect.Spell.Value * 0.01);
-					//600 / 10 = 60end
-					playerTarget.Endurance += (int)EndBonus;
-					playerTarget.Out.SendMessage("Your Efficient Endurance buff grants you " + EndBonus + " Endurance from the Heal!", eChatType.CT_Spell, eChatLoc.CL_ChatWindow);
-				}
-			}
+            if (playerTarget != null)
+            {
+                GameSpellEffect HealEffect = SpellHandler.FindEffectOnTarget(playerTarget, "EfficientHealing");
+                if (HealEffect != null)
+                {
+                    double HealBonus = amount * ((int)HealEffect.Spell.Value * 0.01);
+                    amount += (int)HealBonus;
+                    playerTarget.Out.SendMessage("Your Efficient Healing buff grants you a additional" + HealBonus + " in the Heal!", eChatType.CT_Spell, eChatLoc.CL_ChatWindow);
+                }
+                GameSpellEffect EndEffect = SpellHandler.FindEffectOnTarget(playerTarget, "EfficientEndurance");
+                if (EndEffect != null)
+                {
+                    double EndBonus = amount * ((int)EndEffect.Spell.Value * 0.01);
+                    //600 / 10 = 60end
+                    playerTarget.Endurance += (int)EndBonus;
+                    playerTarget.Out.SendMessage("Your Efficient Endurance buff grants you " + EndBonus + " Endurance from the Heal!", eChatType.CT_Spell, eChatLoc.CL_ChatWindow);
+                }
+            }
 
             GameSpellEffect flaskHeal = FindEffectOnTarget(target, "HealFlask");
-            if(flaskHeal != null)
+            if (flaskHeal != null)
             {
-                amount += (int) ((amount*flaskHeal.Spell.Value)*0.01);
+                amount += (int)((amount * flaskHeal.Spell.Value) * 0.01);
             }
 
             amount = Math.Round(amount);
@@ -210,9 +210,9 @@ namespace DOL.GS.Spells
             {
                 if (Spell.Pulse == 0)
                 {
-                    if (target == m_caster) 
+                    if (target == m_caster)
                         MessageToCaster("You are fully healed.", eChatType.CT_SpellResisted);
-                    else 
+                    else
                         MessageToCaster(target.GetName(0, true) + " is fully healed.", eChatType.CT_SpellResisted);
                 }
                 return false;
@@ -310,24 +310,24 @@ namespace DOL.GS.Spells
         /// <returns></returns>
         public virtual bool ProcHeal(GameLiving target, double amount)
         {
-			if (target == null || target.ObjectState != GameLiving.eObjectState.Active) return false;
+            if (target == null || target.ObjectState != GameLiving.eObjectState.Active) return false;
 
-			if (!target.IsAlive)
-				return false;
+            if (!target.IsAlive)
+                return false;
 
-			// no healing of keep components
-			if (target is Keeps.GameKeepComponent || target is Keeps.GameKeepDoor)
-				return false;
+            // no healing of keep components
+            if (target is Keeps.GameKeepComponent || target is Keeps.GameKeepDoor)
+                return false;
 
-			int heal = target.ChangeHealth(Caster, GameLiving.eHealthChangeType.Spell, (int)Math.Round(amount));
+            int heal = target.ChangeHealth(Caster, GameLiving.eHealthChangeType.Spell, (int)Math.Round(amount));
 
-			if (m_caster == target && heal > 0)
-			{
-				MessageToCaster("You heal yourself for " + heal + " hit points.", eChatType.CT_Spell);
+            if (m_caster == target && heal > 0)
+            {
+                MessageToCaster("You heal yourself for " + heal + " hit points.", eChatType.CT_Spell);
 
-				if (heal < amount)
-				{
-					MessageToCaster("You are fully healed.", eChatType.CT_Spell);
+                if (heal < amount)
+                {
+                    MessageToCaster("You are fully healed.", eChatType.CT_Spell);
                     #region PVP DAMAGE
 
                     if (target is NecromancerPet &&
@@ -338,13 +338,13 @@ namespace DOL.GS.Spells
                     }
 
                     #endregion PVP DAMAGE
-				}
-			}
-			else if (heal > 0)
-			{
-				MessageToCaster("You heal " + target.GetName(0, false) + " for " + heal + " hit points!", eChatType.CT_Spell);
-				MessageToLiving(target, "You are healed by " + m_caster.GetName(0, false) + " for " + heal + " hit points.", eChatType.CT_Spell);
-                
+                }
+            }
+            else if (heal > 0)
+            {
+                MessageToCaster("You heal " + target.GetName(0, false) + " for " + heal + " hit points!", eChatType.CT_Spell);
+                MessageToLiving(target, "You are healed by " + m_caster.GetName(0, false) + " for " + heal + " hit points.", eChatType.CT_Spell);
+
                 #region PVP DAMAGE
 
                 if (heal < amount)
@@ -369,8 +369,8 @@ namespace DOL.GS.Spells
 
             #endregion PVP DAMAGE
 
-			return true;
-		}
+            return true;
+        }
 
 
         /// <summary>
@@ -380,18 +380,18 @@ namespace DOL.GS.Spells
         /// <param name="max">store max variance here</param>
         public virtual void CalculateHealVariance(out int min, out int max)
         {
-			double spellValue = m_spell.Value;
-			GamePlayer casterPlayer = m_caster as GamePlayer;
+            double spellValue = m_spell.Value;
+            GamePlayer casterPlayer = m_caster as GamePlayer;
 
             if (m_spellLine.KeyName == GlobalSpellsLines.Item_Effects)
-			{
-				if (m_spell.Value > 0)
-				{
-					min = (int)(spellValue * 0.75);
-					max = (int)(spellValue * 1.25);
-					return;
-				}
-			}
+            {
+                if (m_spell.Value > 0)
+                {
+                    min = (int)(spellValue * 0.75);
+                    max = (int)(spellValue * 1.25);
+                    return;
+                }
+            }
 
             if (m_spellLine.KeyName == GlobalSpellsLines.Potions_Effects)
             {
@@ -404,28 +404,28 @@ namespace DOL.GS.Spells
             }
 
             if (m_spellLine.KeyName == GlobalSpellsLines.Combat_Styles_Effect)
-			{
-				if (m_spell.Value > 0)
-				{
-					if (UseMinVariance)
-					{
-						min = (int)(spellValue * 1.25);
-					}
-					else
-					{
-						min = (int)(spellValue * 0.75);
-					}
+            {
+                if (m_spell.Value > 0)
+                {
+                    if (UseMinVariance)
+                    {
+                        min = (int)(spellValue * 1.25);
+                    }
+                    else
+                    {
+                        min = (int)(spellValue * 0.75);
+                    }
 
-					max = (int)(spellValue * 1.25);
-					return;
-				}
-			}
+                    max = (int)(spellValue * 1.25);
+                    return;
+                }
+            }
 
-			if (m_spellLine.KeyName == GlobalSpellsLines.Reserved_Spells)
-			{
-				min = max = (int)spellValue;
-				return;
-			}
+            if (m_spellLine.KeyName == GlobalSpellsLines.Reserved_Spells)
+            {
+                min = max = (int)spellValue;
+                return;
+            }
 
             // percents if less than zero
             if (spellValue < 0)

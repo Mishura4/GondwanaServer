@@ -3,14 +3,14 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute(
-		"&rvrinfo",
+    [CmdAttribute(
+        "&rvrinfo",
         new[] { "/score" },
-		ePrivLevel.Player,
+        ePrivLevel.Player,
         "Commands.Players.RvRInfo.Description",
         "Commands.Players.RvRInfo.Usage")]
-	public class RvRInfoCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
+    public class RvRInfoCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
         public void OnCommand(GameClient client, string[] args)
         {
             if (IsSpammingCommand(client.Player, "rvrinfo", 500))
@@ -21,5 +21,5 @@ namespace DOL.GS.Commands
 
             client.Out.SendCustomTextWindow("RvR", RvrManager.Instance.GetStatistics(client.Player));
         }
-	}
+    }
 }

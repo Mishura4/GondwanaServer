@@ -6,8 +6,8 @@ using DOL.GS.Effects;
 namespace DOL.GS.Spells
 {
     [SpellHandlerAttribute("ShatterIllusions")]
-	public class ShatterIllusions : SpellHandler
-	{
+    public class ShatterIllusions : SpellHandler
+    {
         //Shatter Illusions 
         //(returns the enemy from their shapeshift forms 
         //causing 200 body damage to the enemy. Range: 1500) 
@@ -45,5 +45,5 @@ namespace DOL.GS.Spells
             }
         }
         public ShatterIllusions(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
-	}
+    }
 }

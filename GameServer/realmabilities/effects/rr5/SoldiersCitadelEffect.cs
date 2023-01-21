@@ -28,7 +28,7 @@ namespace DOL.GS.Effects
 
     public class SoldiersCitadelEffect : TimedEffect
     {
-		private GamePlayer EffectOwner;
+        private GamePlayer EffectOwner;
 
         public SoldiersCitadelEffect()
             : base(RealmAbilities.SoldiersCitadelAbility.DURATION)
@@ -46,11 +46,11 @@ namespace DOL.GS.Effects
                 }
                 EffectOwner.BaseBuffBonusCategory[(int)eProperty.ParryChance] += 50;
                 EffectOwner.BaseBuffBonusCategory[(int)eProperty.BlockChance] += 50;
-				
-				GameEventMgr.AddHandler(EffectOwner, GamePlayerEvent.Quit, new DOLEventHandler(PlayerLeftWorld));
-				GameEventMgr.AddHandler(EffectOwner, GamePlayerEvent.Dying, new DOLEventHandler(PlayerLeftWorld));
-				GameEventMgr.AddHandler(EffectOwner, GamePlayerEvent.Linkdeath, new DOLEventHandler(PlayerLeftWorld));
-				GameEventMgr.AddHandler(EffectOwner, GamePlayerEvent.RegionChanged, new DOLEventHandler(PlayerLeftWorld));
+
+                GameEventMgr.AddHandler(EffectOwner, GamePlayerEvent.Quit, new DOLEventHandler(PlayerLeftWorld));
+                GameEventMgr.AddHandler(EffectOwner, GamePlayerEvent.Dying, new DOLEventHandler(PlayerLeftWorld));
+                GameEventMgr.AddHandler(EffectOwner, GamePlayerEvent.Linkdeath, new DOLEventHandler(PlayerLeftWorld));
+                GameEventMgr.AddHandler(EffectOwner, GamePlayerEvent.RegionChanged, new DOLEventHandler(PlayerLeftWorld));
             }
         }
         public override void Stop()
@@ -59,14 +59,14 @@ namespace DOL.GS.Effects
             {
                 EffectOwner.BaseBuffBonusCategory[(int)eProperty.ParryChance] -= 50;
                 EffectOwner.BaseBuffBonusCategory[(int)eProperty.BlockChance] -= 50;
-                if(EffectOwner.IsAlive) new SoldiersCitadelSecondaryEffect().Start(EffectOwner);
-				
-				GameEventMgr.RemoveHandler(EffectOwner, GamePlayerEvent.Quit, new DOLEventHandler(PlayerLeftWorld));
-				GameEventMgr.RemoveHandler(EffectOwner, GamePlayerEvent.Dying, new DOLEventHandler(PlayerLeftWorld));
-				GameEventMgr.RemoveHandler(EffectOwner, GamePlayerEvent.Linkdeath, new DOLEventHandler(PlayerLeftWorld));
-				GameEventMgr.RemoveHandler(EffectOwner, GamePlayerEvent.RegionChanged, new DOLEventHandler(PlayerLeftWorld));
-			}
-			base.Stop();
+                if (EffectOwner.IsAlive) new SoldiersCitadelSecondaryEffect().Start(EffectOwner);
+
+                GameEventMgr.RemoveHandler(EffectOwner, GamePlayerEvent.Quit, new DOLEventHandler(PlayerLeftWorld));
+                GameEventMgr.RemoveHandler(EffectOwner, GamePlayerEvent.Dying, new DOLEventHandler(PlayerLeftWorld));
+                GameEventMgr.RemoveHandler(EffectOwner, GamePlayerEvent.Linkdeath, new DOLEventHandler(PlayerLeftWorld));
+                GameEventMgr.RemoveHandler(EffectOwner, GamePlayerEvent.RegionChanged, new DOLEventHandler(PlayerLeftWorld));
+            }
+            base.Stop();
         }
 
         /// <summary>
@@ -77,12 +77,12 @@ namespace DOL.GS.Effects
         /// <param name="args">EventArgs associated with the event</param>
         protected void PlayerLeftWorld(DOLEvent e, object sender, EventArgs args)
         {
-			GamePlayer player = sender as GamePlayer;
+            GamePlayer player = sender as GamePlayer;
 
-			SoldiersCitadelEffect SoldiersCitadel = player.EffectList.GetOfType<SoldiersCitadelEffect>();
-			if (SoldiersCitadel != null)
-				SoldiersCitadel.Cancel(false);
-		}
+            SoldiersCitadelEffect SoldiersCitadel = player.EffectList.GetOfType<SoldiersCitadelEffect>();
+            if (SoldiersCitadel != null)
+                SoldiersCitadel.Cancel(false);
+        }
 
         public override string Name { get { return "Soldier's Citadel"; } }
         public override ushort Icon { get { return 3091; } }
@@ -114,11 +114,11 @@ namespace DOL.GS.Effects
                 EffectOwner = target as GamePlayer;
                 EffectOwner.BaseBuffBonusCategory[(int)eProperty.ParryChance] -= 10;
                 EffectOwner.BaseBuffBonusCategory[(int)eProperty.BlockChance] -= 10;
-				
-				GameEventMgr.AddHandler(EffectOwner, GamePlayerEvent.Quit, new DOLEventHandler(PlayerLeftWorld));
-				GameEventMgr.AddHandler(EffectOwner, GamePlayerEvent.Dying, new DOLEventHandler(PlayerLeftWorld));
-				GameEventMgr.AddHandler(EffectOwner, GamePlayerEvent.Linkdeath, new DOLEventHandler(PlayerLeftWorld));
-				GameEventMgr.AddHandler(EffectOwner, GamePlayerEvent.RegionChanged, new DOLEventHandler(PlayerLeftWorld));
+
+                GameEventMgr.AddHandler(EffectOwner, GamePlayerEvent.Quit, new DOLEventHandler(PlayerLeftWorld));
+                GameEventMgr.AddHandler(EffectOwner, GamePlayerEvent.Dying, new DOLEventHandler(PlayerLeftWorld));
+                GameEventMgr.AddHandler(EffectOwner, GamePlayerEvent.Linkdeath, new DOLEventHandler(PlayerLeftWorld));
+                GameEventMgr.AddHandler(EffectOwner, GamePlayerEvent.RegionChanged, new DOLEventHandler(PlayerLeftWorld));
             }
         }
         public override void Stop()
@@ -127,13 +127,13 @@ namespace DOL.GS.Effects
             {
                 EffectOwner.BaseBuffBonusCategory[(int)eProperty.ParryChance] += 10;
                 EffectOwner.BaseBuffBonusCategory[(int)eProperty.BlockChance] += 10;
-				
-				GameEventMgr.RemoveHandler(EffectOwner, GamePlayerEvent.Quit, new DOLEventHandler(PlayerLeftWorld));
-				GameEventMgr.RemoveHandler(EffectOwner, GamePlayerEvent.Dying, new DOLEventHandler(PlayerLeftWorld));
-				GameEventMgr.RemoveHandler(EffectOwner, GamePlayerEvent.Linkdeath, new DOLEventHandler(PlayerLeftWorld));
-				GameEventMgr.RemoveHandler(EffectOwner, GamePlayerEvent.RegionChanged, new DOLEventHandler(PlayerLeftWorld));
-			}
-			base.Stop();
+
+                GameEventMgr.RemoveHandler(EffectOwner, GamePlayerEvent.Quit, new DOLEventHandler(PlayerLeftWorld));
+                GameEventMgr.RemoveHandler(EffectOwner, GamePlayerEvent.Dying, new DOLEventHandler(PlayerLeftWorld));
+                GameEventMgr.RemoveHandler(EffectOwner, GamePlayerEvent.Linkdeath, new DOLEventHandler(PlayerLeftWorld));
+                GameEventMgr.RemoveHandler(EffectOwner, GamePlayerEvent.RegionChanged, new DOLEventHandler(PlayerLeftWorld));
+            }
+            base.Stop();
         }
 
         /// <summary>
@@ -146,10 +146,10 @@ namespace DOL.GS.Effects
         {
             GamePlayer player = sender as GamePlayer;
 
-			SoldiersCitadelSecondaryEffect SoldiersCitadel = player.EffectList.GetOfType<SoldiersCitadelSecondaryEffect>();
+            SoldiersCitadelSecondaryEffect SoldiersCitadel = player.EffectList.GetOfType<SoldiersCitadelSecondaryEffect>();
             if (SoldiersCitadel != null)
                 SoldiersCitadel.Cancel(false);
-       }
+        }
 
         public override string Name { get { return "Soldier's Citadel"; } }
         public override ushort Icon { get { return 3091; } }

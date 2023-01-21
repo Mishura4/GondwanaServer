@@ -35,19 +35,21 @@ namespace DOL.GS.Commands
     {
         public void OnCommand(GameClient client, string[] args)
         {
-        	if (args.Length != 2) {
-        		DisplaySyntax(client);
-        	}
-        	else if (args[1].ToLower().Equals("on")) {
+            if (args.Length != 2)
+            {
+                DisplaySyntax(client);
+            }
+            else if (args[1].ToLower().Equals("on"))
+            {
 
                 if (client.Player.IsStealthed != true)
                 {
-                   client.Player.Stealth(true);
+                    client.Player.Stealth(true);
                 }
-        	}
+            }
             else if (args[1].ToLower().Equals("off"))
             {
-                    client.Player.Stealth(false);
+                client.Player.Stealth(false);
             }
         }
     }

@@ -26,44 +26,44 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[Cmd(
-		 "&settitle",
-		 ePrivLevel.Player,
-		 "Commands.Players.Settitle.Description",
-		 "Commands.Players.Settitle.Usage")]
-	public class SetTitleCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (IsSpammingCommand(client.Player, "settitle"))
-				return;
+    [Cmd(
+         "&settitle",
+         ePrivLevel.Player,
+         "Commands.Players.Settitle.Description",
+         "Commands.Players.Settitle.Usage")]
+    public class SetTitleCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (IsSpammingCommand(client.Player, "settitle"))
+                return;
 
-			int index = -1;
-			if (args.Length > 1)
-			{
-				try { index = int.Parse(args[1]); }
-				catch { }
+            int index = -1;
+            if (args.Length > 1)
+            {
+                try { index = int.Parse(args[1]); }
+                catch { }
 
-				IPlayerTitle current = client.Player.CurrentTitle;
-				if (current != null && current.IsForced(client.Player))
-					client.Out.SendMessage(
-						LanguageMgr.GetTranslation(
-							client.Account.Language,
-							"Commands.Players.Settitle.Cannot"),
-						eChatType.CT_System, eChatLoc.CL_SystemWindow);
-				else
-				{
-					var titles = client.Player.Titles.ToArray();
-					if (index < 0 || index >= titles.Length)
-						client.Player.CurrentTitle = PlayerTitleMgr.ClearTitle;
-					else
-						client.Player.CurrentTitle = (IPlayerTitle)titles[index];
-				}
-			}
-			else
-			{
-				client.Out.SendPlayerTitles();
-			}
-		}
-	}
+                IPlayerTitle current = client.Player.CurrentTitle;
+                if (current != null && current.IsForced(client.Player))
+                    client.Out.SendMessage(
+                        LanguageMgr.GetTranslation(
+                            client.Account.Language,
+                            "Commands.Players.Settitle.Cannot"),
+                        eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                else
+                {
+                    var titles = client.Player.Titles.ToArray();
+                    if (index < 0 || index >= titles.Length)
+                        client.Player.CurrentTitle = PlayerTitleMgr.ClearTitle;
+                    else
+                        client.Player.CurrentTitle = (IPlayerTitle)titles[index];
+                }
+            }
+            else
+            {
+                client.Out.SendPlayerTitles();
+            }
+        }
+    }
 }

@@ -26,52 +26,52 @@ using DOL.Language;
 namespace DOL.GS.Commands
 {
     [Cmd(
-		"&benchmark",
-		ePrivLevel.Admin,
+        "&benchmark",
+        ePrivLevel.Admin,
         "Commands.Admin.Benchmark.Description",
         "Commands.Admin.Benchmark.Usage")]
-	public class BenchmarkCommand : AbstractCommandHandler, ICommandHandler
-	{		
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (args.Length < 2 || client == null || client.Player == null)
-			{
-				DisplaySyntax(client);
-				return;
-			}
-			
-			long start,spent;
-			switch(args[1])
-			{
-			
-				case "listskills":
-					start = GameTimer.GetTickCount();
-					Util.ForEach(Enumerable.Range(0, 1000).AsParallel(), i =>
-					{
-						var tmp = client.Player.GetAllUsableSkills(true);
-					}
-					                                              );
-					
-					spent = GameTimer.GetTickCount() - start;
-					
-					client.Player.Out.SendMessage(string.Format("Skills Benchmark took {0}ms for 1000 iterations...", spent), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-				break;
-				case "listspells":
-					start = GameTimer.GetTickCount();
-					Util.ForEach(Enumerable.Range(0, 1000).AsParallel(), i =>
-					{
-						var tmp = client.Player.GetAllUsableListSpells(true);
-					}
-					                                              );
-					
-					spent = GameTimer.GetTickCount() - start;
-					
-					client.Player.Out.SendMessage(string.Format("Spells Benchmark took {0}ms for 1000 iterations...", spent), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-				break;
-				
-			}
-	
-		}
+    public class BenchmarkCommand : AbstractCommandHandler, ICommandHandler
+    {
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (args.Length < 2 || client == null || client.Player == null)
+            {
+                DisplaySyntax(client);
+                return;
+            }
 
-	}
+            long start, spent;
+            switch (args[1])
+            {
+
+                case "listskills":
+                    start = GameTimer.GetTickCount();
+                    Util.ForEach(Enumerable.Range(0, 1000).AsParallel(), i =>
+                    {
+                        var tmp = client.Player.GetAllUsableSkills(true);
+                    }
+                                                                  );
+
+                    spent = GameTimer.GetTickCount() - start;
+
+                    client.Player.Out.SendMessage(string.Format("Skills Benchmark took {0}ms for 1000 iterations...", spent), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    break;
+                case "listspells":
+                    start = GameTimer.GetTickCount();
+                    Util.ForEach(Enumerable.Range(0, 1000).AsParallel(), i =>
+                    {
+                        var tmp = client.Player.GetAllUsableListSpells(true);
+                    }
+                                                                  );
+
+                    spent = GameTimer.GetTickCount() - start;
+
+                    client.Player.Out.SendMessage(string.Format("Spells Benchmark took {0}ms for 1000 iterations...", spent), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    break;
+
+            }
+
+        }
+
+    }
 }

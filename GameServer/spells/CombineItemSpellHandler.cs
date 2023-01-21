@@ -143,7 +143,7 @@ namespace DOL.spells
                 removeItems.Add(useItem, match.Items[useItem.Id_nb]);
 
             combined = WorldInventoryItem.CreateFromTemplate(match.TemplateId);
-            
+
             if (combined == null)
             {
                 log.Warn($"Missing item in ItemTemplate table '{match.TemplateId}' for CombineItem spell");
@@ -476,7 +476,7 @@ namespace DOL.spells
                     if (toolkit.Durability <= 0)
                         player.Inventory.RemoveItem(toolkit);
                     else
-			            player.Out.SendInventoryItemsUpdate(new InventoryItem[] { toolkit });
+                        player.Out.SendInventoryItemsUpdate(new InventoryItem[] { toolkit });
                 }
             }
 

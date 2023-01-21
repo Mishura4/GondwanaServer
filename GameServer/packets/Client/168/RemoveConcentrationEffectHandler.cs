@@ -20,58 +20,58 @@ using DOL.GS.Effects;
 
 namespace DOL.GS.PacketHandler.Client.v168
 {
-	/// <summary>
-	/// Called when player removes concentration spell in conc window
-	/// </summary>
-	[PacketHandlerAttribute(PacketHandlerType.TCP, eClientPackets.RemoveConcentrationEffect, "Handles Concentration Effect Remove Request", eClientStatus.PlayerInGame)]
-	public class RemoveConcentrationEffectHandler : IPacketHandler
-	{
-		public void HandlePacket(GameClient client, GSPacketIn packet)
-		{
-			int index = packet.ReadByte();
+    /// <summary>
+    /// Called when player removes concentration spell in conc window
+    /// </summary>
+    [PacketHandlerAttribute(PacketHandlerType.TCP, eClientPackets.RemoveConcentrationEffect, "Handles Concentration Effect Remove Request", eClientStatus.PlayerInGame)]
+    public class RemoveConcentrationEffectHandler : IPacketHandler
+    {
+        public void HandlePacket(GameClient client, GSPacketIn packet)
+        {
+            int index = packet.ReadByte();
 
-			new CancelEffectHandler(client.Player, index).Start(1);
-		}
+            new CancelEffectHandler(client.Player, index).Start(1);
+        }
 
-		/// <summary>
-		/// Handles player cancel effect requests
-		/// </summary>
-		protected class CancelEffectHandler : RegionAction
-		{
-			/// <summary>
-			/// The effect index
-			/// </summary>
-			protected readonly int m_index;
+        /// <summary>
+        /// Handles player cancel effect requests
+        /// </summary>
+        protected class CancelEffectHandler : RegionAction
+        {
+            /// <summary>
+            /// The effect index
+            /// </summary>
+            protected readonly int m_index;
 
-			/// <summary>
-			/// Constructs a new CancelEffectHandler
-			/// </summary>
-			/// <param name="actionSource">The action source</param>
-			/// <param name="index">The effect index</param>
-			public CancelEffectHandler(GamePlayer actionSource, int index) : base(actionSource)
-			{
-				m_index = index;
-			}
+            /// <summary>
+            /// Constructs a new CancelEffectHandler
+            /// </summary>
+            /// <param name="actionSource">The action source</param>
+            /// <param name="index">The effect index</param>
+            public CancelEffectHandler(GamePlayer actionSource, int index) : base(actionSource)
+            {
+                m_index = index;
+            }
 
-			/// <summary>
-			/// Called on every timer tick
-			/// </summary>
-			protected override void OnTick()
-			{
-				var player = (GamePlayer) m_actionSource;
+            /// <summary>
+            /// Called on every timer tick
+            /// </summary>
+            protected override void OnTick()
+            {
+                var player = (GamePlayer)m_actionSource;
 
-				IConcentrationEffect effect = null;
-				lock (player.ConcentrationEffects)
-				{
-					if (m_index < player.ConcentrationEffects.Count)
-					{
-						effect = player.ConcentrationEffects[m_index];
-						player.ConcentrationEffects.Remove(effect);
-					}
-				}
+                IConcentrationEffect effect = null;
+                lock (player.ConcentrationEffects)
+                {
+                    if (m_index < player.ConcentrationEffects.Count)
+                    {
+                        effect = player.ConcentrationEffects[m_index];
+                        player.ConcentrationEffects.Remove(effect);
+                    }
+                }
 
-				effect?.Cancel(true);
-			}
-		}
-	}
+                effect?.Cancel(true);
+            }
+        }
+    }
 }

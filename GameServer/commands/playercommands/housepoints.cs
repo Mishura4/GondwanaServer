@@ -5,21 +5,21 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute(
-	  "&housepoints",
-	  ePrivLevel.Player,
+    [CmdAttribute(
+      "&housepoints",
+      ePrivLevel.Player,
         "Commands.Players.Housepoint.Description",
         "Commands.Players.Housepoint.Usage")]
-	public class HousePointsCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		public void OnCommand(GameClient client, string[] args)
-		{
+    public class HousePointsCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        public void OnCommand(GameClient client, string[] args)
+        {
             House house = client.Player.CurrentHouse;
-			if (!client.Player.InHouse || house == null)
-			{
+            if (!client.Player.InHouse || house == null)
+            {
                 DisplayMessage(client, LanguageMgr.GetTranslation(client, "Commands.Players.Housepoint.NotInHouse"));
-				return;
-			}
+                return;
+            }
 
             if (!house.HasOwnerPermissions(client.Player))
             {
@@ -27,7 +27,7 @@ namespace DOL.GS.Commands
                 return;
             }
 
-			client.Player.Out.SendToggleHousePoints(house);
-		}
-	}
+            client.Player.Out.SendToggleHousePoints(house);
+        }
+    }
 }

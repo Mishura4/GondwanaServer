@@ -24,28 +24,28 @@ using DOL.GS.RealmAbilities;
 
 namespace DOL.GS.Effects
 {
-	/// <summary>
-	/// The helper class for sprint ability
-	/// </summary>
-	public sealed class SprintEffect : StaticEffect, IGameEffect
-	{
-		/// <summary>
-		/// The timer that reduce the endurance every interval
-		/// </summary>
-		//RegionTimer m_tickTimer;
+    /// <summary>
+    /// The helper class for sprint ability
+    /// </summary>
+    public sealed class SprintEffect : StaticEffect, IGameEffect
+    {
+        /// <summary>
+        /// The timer that reduce the endurance every interval
+        /// </summary>
+        //RegionTimer m_tickTimer;
 
-		/// <summary>
-		/// The amount of timer ticks player was not moving
-		/// </summary>
-		//int m_idleTicks = 0;
+        /// <summary>
+        /// The amount of timer ticks player was not moving
+        /// </summary>
+        //int m_idleTicks = 0;
 
-		/// <summary>
-		/// Start the sprinting on player
-		/// </summary>
-		public override void Start(GameLiving target)
-		{
-			base.Start(target);
-			/*if (m_tickTimer != null)
+        /// <summary>
+        /// Start the sprinting on player
+        /// </summary>
+        public override void Start(GameLiving target)
+        {
+            base.Start(target);
+            /*if (m_tickTimer != null)
 			{
 				m_tickTimer.Stop();
 				m_tickTimer = null;
@@ -54,12 +54,12 @@ namespace DOL.GS.Effects
 			m_tickTimer.Callback = new RegionTimerCallback(PulseCallback);
 			m_tickTimer.Start(1);*/
             target.StartEnduranceRegeneration();
-		}
+        }
 
-		/// <summary>
-		/// Stop the effect on target
-		/// </summary>
-		/*public override void Stop()
+        /// <summary>
+        /// Stop the effect on target
+        /// </summary>
+        /*public override void Stop()
 		{
 			base.Stop();
 			if (m_tickTimer != null)
@@ -69,12 +69,12 @@ namespace DOL.GS.Effects
 			}
 		}*/
 
-		/// <summary>
-		/// Sprint "pulse"
-		/// </summary>
-		/// <param name="callingTimer"></param>
-		/// <returns></returns>
-		/*public int PulseCallback(RegionTimer callingTimer)
+        /// <summary>
+        /// Sprint "pulse"
+        /// </summary>
+        /// <param name="callingTimer"></param>
+        /// <returns></returns>
+        /*public int PulseCallback(RegionTimer callingTimer)
 		{
 			int nextInterval;
 
@@ -104,29 +104,29 @@ namespace DOL.GS.Effects
 			return nextInterval;
 		}*/
 
-		/// <summary>
-		/// Called when effect must be canceled
-		/// </summary>
-		public override void Cancel(bool playerCancel)
-		{
-			base.Cancel(playerCancel);
-			if (m_owner is GamePlayer)
-				(m_owner as GamePlayer).Sprint(false);
-		}
+        /// <summary>
+        /// Called when effect must be canceled
+        /// </summary>
+        public override void Cancel(bool playerCancel)
+        {
+            base.Cancel(playerCancel);
+            if (m_owner is GamePlayer)
+                (m_owner as GamePlayer).Sprint(false);
+        }
 
-		/// <summary>
-		/// Name of the effect
-		/// </summary>
-		public override string Name { get { return LanguageMgr.GetTranslation(((GamePlayer)Owner).Client, "Effects.SprintEffect.Name"); } }
+        /// <summary>
+        /// Name of the effect
+        /// </summary>
+        public override string Name { get { return LanguageMgr.GetTranslation(((GamePlayer)Owner).Client, "Effects.SprintEffect.Name"); } }
 
-		/// <summary>
-		/// Remaining Time of the effect in milliseconds
-		/// </summary>
-		public override int RemainingTime { get { return 1000; } } // always 1 for blink effect
+        /// <summary>
+        /// Remaining Time of the effect in milliseconds
+        /// </summary>
+        public override int RemainingTime { get { return 1000; } } // always 1 for blink effect
 
-		/// <summary>
-		/// Icon to show on players, can be id
-		/// </summary>
-		public override ushort Icon { get { return 0x199; } }
-	}
+        /// <summary>
+        /// Icon to show on players, can be id
+        /// </summary>
+        public override ushort Icon { get { return 0x199; } }
+    }
 }

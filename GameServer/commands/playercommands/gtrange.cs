@@ -22,40 +22,40 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute(
-		"&gtrange",
-		ePrivLevel.Player,
-		"Commands.Players.Gtrange.Description",
-		"Commands.Players.Gtrange.Usage")]
-	public class GroundTargetRangeCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (IsSpammingCommand(client.Player, "gtrange"))
-				return;
+    [CmdAttribute(
+        "&gtrange",
+        ePrivLevel.Player,
+        "Commands.Players.Gtrange.Description",
+        "Commands.Players.Gtrange.Usage")]
+    public class GroundTargetRangeCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (IsSpammingCommand(client.Player, "gtrange"))
+                return;
 
-			if (client.Player.GroundTarget != null)
-			{
-				var range = (int)Vector3.Distance(client.Player.Position, client.Player.GroundTarget.Value);
-				client.Out.SendMessage(
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Gtrange.Range",
-						range
-					),
-					eChatType.CT_System,
-					eChatLoc.CL_SystemWindow
-				);
-			}
-			else
-				client.Out.SendMessage(
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Gtrange.Missing.Groundtarget"
-					),
-					eChatType.CT_System,
-					eChatLoc.CL_SystemWindow
-				);
-		}
-	}
+            if (client.Player.GroundTarget != null)
+            {
+                var range = (int)Vector3.Distance(client.Player.Position, client.Player.GroundTarget.Value);
+                client.Out.SendMessage(
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Gtrange.Range",
+                        range
+                    ),
+                    eChatType.CT_System,
+                    eChatLoc.CL_SystemWindow
+                );
+            }
+            else
+                client.Out.SendMessage(
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Gtrange.Missing.Groundtarget"
+                    ),
+                    eChatType.CT_System,
+                    eChatLoc.CL_SystemWindow
+                );
+        }
+    }
 }

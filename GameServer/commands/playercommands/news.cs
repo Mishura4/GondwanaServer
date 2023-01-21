@@ -23,22 +23,22 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute(
-		"&news",
-		ePrivLevel.Player,
-		"Commands.Players.News.Description",
-		"Commands.Players.News.Usage")]
-	public class NewsCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (client.Player == null)
-				return;
+    [CmdAttribute(
+        "&news",
+        ePrivLevel.Player,
+        "Commands.Players.News.Description",
+        "Commands.Players.News.Usage")]
+    public class NewsCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (client.Player == null)
+                return;
 
-			if (IsSpammingCommand(client.Player, "news"))
-				return;
+            if (IsSpammingCommand(client.Player, "news"))
+                return;
 
-			NewsMgr.DisplayNews(client);
-		}
-	}
+            NewsMgr.DisplayNews(client);
+        }
+    }
 }

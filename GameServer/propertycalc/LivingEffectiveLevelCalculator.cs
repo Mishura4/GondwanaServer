@@ -22,28 +22,28 @@ using DOL.AI.Brain;
 
 namespace DOL.GS.PropertyCalc
 {
-	/// <summary>
-	/// The Living Effective Level calculator
-	/// 
-	/// BuffBonusCategory1 is used for buffs, uncapped
-	/// BuffBonusCategory2 unused
-	/// BuffBonusCategory3 unused
-	/// BuffBonusCategory4 unused
-	/// BuffBonusMultCategory1 unused
-	/// </summary>
-	[PropertyCalculator(eProperty.LivingEffectiveLevel)]
-	public class LivingEffectiveLevelCalculator : PropertyCalculator
-	{
-		public override int CalcValue(GameLiving living, eProperty property) 
-		{
-			if (living is GameNPC) 
-			{
-				IControlledBrain brain = ((GameNPC)living).Brain as IControlledBrain;
-				if (brain != null)
-					return brain.GetLivingOwner().Level + living.ItemBonus[(int)property] + living.BaseBuffBonusCategory[(int)property];
-				return living.Level + living.ItemBonus[(int)property] + living.BaseBuffBonusCategory[(int)property];
-			}
-			return living.Level + living.ItemBonus[(int)property] + living.BaseBuffBonusCategory[(int)property];
-		}
-	}
+    /// <summary>
+    /// The Living Effective Level calculator
+    /// 
+    /// BuffBonusCategory1 is used for buffs, uncapped
+    /// BuffBonusCategory2 unused
+    /// BuffBonusCategory3 unused
+    /// BuffBonusCategory4 unused
+    /// BuffBonusMultCategory1 unused
+    /// </summary>
+    [PropertyCalculator(eProperty.LivingEffectiveLevel)]
+    public class LivingEffectiveLevelCalculator : PropertyCalculator
+    {
+        public override int CalcValue(GameLiving living, eProperty property)
+        {
+            if (living is GameNPC)
+            {
+                IControlledBrain brain = ((GameNPC)living).Brain as IControlledBrain;
+                if (brain != null)
+                    return brain.GetLivingOwner().Level + living.ItemBonus[(int)property] + living.BaseBuffBonusCategory[(int)property];
+                return living.Level + living.ItemBonus[(int)property] + living.BaseBuffBonusCategory[(int)property];
+            }
+            return living.Level + living.ItemBonus[(int)property] + living.BaseBuffBonusCategory[(int)property];
+        }
+    }
 }

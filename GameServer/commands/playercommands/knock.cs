@@ -24,51 +24,51 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute("&knock", //command to handle
-		ePrivLevel.Player, //minimum privelege level
+    [CmdAttribute("&knock", //command to handle
+        ePrivLevel.Player, //minimum privelege level
         "Commands.Players.Knock.Description",
         "Commands.Players.Knock.Usage")]
-	public class KnockCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		public const string PLAYER_KNOCKED = "player_knocked_weak";
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (client.Player.CurrentHouse != null)
-			{
-				DisplayMessage(client, LanguageMgr.GetTranslation(client, "Commands.Players.Knock.InHouse"));
-				return;
-			}
+    public class KnockCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        public const string PLAYER_KNOCKED = "player_knocked_weak";
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (client.Player.CurrentHouse != null)
+            {
+                DisplayMessage(client, LanguageMgr.GetTranslation(client, "Commands.Players.Knock.InHouse"));
+                return;
+            }
 
-			long KnockTick = client.Player.TempProperties.getProperty<long>(PLAYER_KNOCKED);
-			if (KnockTick > 0 && KnockTick - client.Player.CurrentRegion.Time <= 0)
-			{
-				client.Player.TempProperties.removeProperty(PLAYER_KNOCKED);
-			}
+            long KnockTick = client.Player.TempProperties.getProperty<long>(PLAYER_KNOCKED);
+            if (KnockTick > 0 && KnockTick - client.Player.CurrentRegion.Time <= 0)
+            {
+                client.Player.TempProperties.removeProperty(PLAYER_KNOCKED);
+            }
 
-			long changeTime = client.Player.CurrentRegion.Time - KnockTick;
-			if (changeTime < 30000 && KnockTick > 0)
-			{
-				client.Player.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.Players.Knock.Wait", ((30000 - changeTime) / 1000).ToString()), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-				return;
-			}
+            long changeTime = client.Player.CurrentRegion.Time - KnockTick;
+            if (changeTime < 30000 && KnockTick > 0)
+            {
+                client.Player.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.Players.Knock.Wait", ((30000 - changeTime) / 1000).ToString()), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return;
+            }
 
-			bool done = false;
-			foreach (House house in HouseMgr.GetHousesCloseToSpot(client.Player.CurrentRegionID, (int)client.Player.Position.X, (int)client.Player.Position.Y, 650))
-			{
-				client.Player.Emote(eEmote.Knock);
-				foreach (GamePlayer player in house.GetAllPlayersInHouse())
-				{
-					player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Commands.Players.Knock.IsKnocking", client.Player.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-				}
-				done = true;
-			}
+            bool done = false;
+            foreach (House house in HouseMgr.GetHousesCloseToSpot(client.Player.CurrentRegionID, (int)client.Player.Position.X, (int)client.Player.Position.Y, 650))
+            {
+                client.Player.Emote(eEmote.Knock);
+                foreach (GamePlayer player in house.GetAllPlayersInHouse())
+                {
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Commands.Players.Knock.IsKnocking", client.Player.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                }
+                done = true;
+            }
 
-			if (done)
-			{
-				client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.Players.Knock.YouKnock"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-				client.Player.TempProperties.setProperty(PLAYER_KNOCKED, client.Player.CurrentRegion.Time);
-			}
-			else client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.Players.Knock.GoToDoor"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-		}
-	}
+            if (done)
+            {
+                client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.Players.Knock.YouKnock"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                client.Player.TempProperties.setProperty(PLAYER_KNOCKED, client.Player.CurrentRegion.Time);
+            }
+            else client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.Players.Knock.GoToDoor"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+        }
+    }
 }

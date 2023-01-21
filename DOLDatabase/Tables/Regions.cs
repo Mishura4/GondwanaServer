@@ -69,15 +69,15 @@ namespace DOL.Database
         /// </summary>
         private int m_waterLevel;
 
-		/// <summary>
-		/// The class of this region
-		/// </summary>
-		private string m_classType;
+        /// <summary>
+        /// The class of this region
+        /// </summary>
+        private string m_classType;
 
-		/// <summary>
-		/// Should this region be treated as the Frontiers?
-		/// </summary>
-		private bool m_isFrontier;
+        /// <summary>
+        /// Should this region be treated as the Frontiers?
+        /// </summary>
+        private bool m_isFrontier;
 
         public DBRegions()
         {
@@ -90,8 +90,8 @@ namespace DOL.Database
             m_housingEnabled = false;
             m_divingEnabled = false;
             m_waterLevel = 0;
-			m_classType = string.Empty;
-			m_isFrontier = false;
+            m_classType = string.Empty;
+            m_isFrontier = false;
         }
 
         /// <summary>
@@ -220,32 +220,32 @@ namespace DOL.Database
             }
         }
 
-		/// <summary>
-		/// Gets or sets the region class.
-		/// </summary>
-		[DataElement(AllowDbNull = false, Varchar = 200)]
-		public string ClassType
-		{
-			get { return m_classType; }
-			set
-			{
-				Dirty = true;
-				m_classType = value;
-			}
-		}
+        /// <summary>
+        /// Gets or sets the region class.
+        /// </summary>
+        [DataElement(AllowDbNull = false, Varchar = 200)]
+        public string ClassType
+        {
+            get { return m_classType; }
+            set
+            {
+                Dirty = true;
+                m_classType = value;
+            }
+        }
 
-		/// <summary>
-		/// Should the keep manager manage keeps in this region?
-		/// </summary>
-		[DataElement(AllowDbNull = false)]
-		public bool IsFrontier
-		{
-			get { return m_isFrontier; }
-			set
-			{
-				Dirty = true;
-				m_isFrontier = value;
-			}
-		}
-	}
+        /// <summary>
+        /// Should the keep manager manage keeps in this region?
+        /// </summary>
+        [DataElement(AllowDbNull = false)]
+        public bool IsFrontier
+        {
+            get { return m_isFrontier; }
+            set
+            {
+                Dirty = true;
+                m_isFrontier = value;
+            }
+        }
+    }
 }

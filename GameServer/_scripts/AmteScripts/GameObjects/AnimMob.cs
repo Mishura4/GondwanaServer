@@ -6,7 +6,7 @@ namespace DOL.GS.Scripts
     {
         private RegionTimer mtimer;
 
-    	protected ushort _SpellID;
+        protected ushort _SpellID;
 
         public int Rplay(RegionTimer callingTimer)
         {
@@ -18,7 +18,7 @@ namespace DOL.GS.Scripts
 
         public override bool AddToWorld()
         {
-        	SetOwnBrain(new BlankBrain());
+            SetOwnBrain(new BlankBrain());
             if (!base.AddToWorld()) return false;
             //On démarre 
             mtimer = new RegionTimer(this, Rplay);
@@ -34,12 +34,12 @@ namespace DOL.GS.Scripts
         }
 
         #region IAmteNPC
-		public override AmteCustomParam GetCustomParam()
-		{
-			var cp = base.GetCustomParam();
-			cp.next = new AmteCustomParam("SpellID", () => _SpellID.ToString(), v => _SpellID = ushort.Parse(v), "0");
-			return cp;
-		}
+        public override AmteCustomParam GetCustomParam()
+        {
+            var cp = base.GetCustomParam();
+            cp.next = new AmteCustomParam("SpellID", () => _SpellID.ToString(), v => _SpellID = ushort.Parse(v), "0");
+            return cp;
+        }
         #endregion
     }
 

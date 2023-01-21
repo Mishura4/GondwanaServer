@@ -22,19 +22,19 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute(
-		"&housefriend",
-		ePrivLevel.Player,
+    [CmdAttribute(
+        "&housefriend",
+        ePrivLevel.Player,
         "Commands.Players.Housefriend.Description",
         "Commands.Players.Housefriend.All",
         "Commands.Players.Housefriend.Player",
         "Commands.Players.Housefriend.Account",
         "Commands.Players.Housepoint.Guild")]
-	public class HousefriendCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (args.Length == 1)
+    public class HousefriendCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (args.Length == 1)
             {
                 DisplaySyntax(client);
                 return;
@@ -46,29 +46,29 @@ namespace DOL.GS.Commands
                 return;
             }
 
-			switch (args[1])
-			{
-				case "player":
-					{
-						if (args.Length == 2)
-							return;
+            switch (args[1])
+            {
+                case "player":
+                    {
+                        if (args.Length == 2)
+                            return;
 
-						if (client.Player.Name == args[2])
-							return;
+                        if (client.Player.Name == args[2])
+                            return;
 
-						GameClient targetClient = WorldMgr.GetClientByPlayerNameAndRealm(args[2], 0, true);
-						if (targetClient == null)
-						{
-							client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.Players.Housefriend.NotOnline"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-							return;
-						}
+                        GameClient targetClient = WorldMgr.GetClientByPlayerNameAndRealm(args[2], 0, true);
+                        if (targetClient == null)
+                        {
+                            client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.Players.Housefriend.NotOnline"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            return;
+                        }
 
-						if (client.Player.CurrentHouse.AddPermission(targetClient.Player, PermissionType.Player, HousingConstants.MinPermissionLevel))
-						{
-							client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.Players.Housefriend.Added", targetClient.Player.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-						}
-						break;
-					}
+                        if (client.Player.CurrentHouse.AddPermission(targetClient.Player, PermissionType.Player, HousingConstants.MinPermissionLevel))
+                        {
+                            client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.Players.Housefriend.Added", targetClient.Player.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        }
+                        break;
+                    }
 
                 case "account":
                     {
@@ -85,10 +85,10 @@ namespace DOL.GS.Commands
                             return;
                         }
 
-						if (client.Player.CurrentHouse.AddPermission(targetClient.Player, PermissionType.Account, HousingConstants.MinPermissionLevel))
-						{
-							client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.Players.Housefriend.AddedAccount", targetClient.Player.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-						}
+                        if (client.Player.CurrentHouse.AddPermission(targetClient.Player, PermissionType.Account, HousingConstants.MinPermissionLevel))
+                        {
+                            client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.Players.Housefriend.AddedAccount", targetClient.Player.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        }
                         break;
                     }
 
@@ -104,25 +104,25 @@ namespace DOL.GS.Commands
                             return;
                         }
 
-						if (client.Player.CurrentHouse.AddPermission(targetGuild.Name, PermissionType.Guild, HousingConstants.MinPermissionLevel))
-						{
-							client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.Players.Housefriend.Added", targetGuild.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-						}
+                        if (client.Player.CurrentHouse.AddPermission(targetGuild.Name, PermissionType.Guild, HousingConstants.MinPermissionLevel))
+                        {
+                            client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.Players.Housefriend.Added", targetGuild.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        }
                         break;
-                    
+
                     }
-				case "all":
-					{
-						if (client.Player.CurrentHouse.AddPermission("All", PermissionType.All, HousingConstants.MinPermissionLevel))
-						{
-							client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.Players.Housefriend.AddedAll"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-						}
-						break;
-					}
+                case "all":
+                    {
+                        if (client.Player.CurrentHouse.AddPermission("All", PermissionType.All, HousingConstants.MinPermissionLevel))
+                        {
+                            client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.Players.Housefriend.AddedAll"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        }
+                        break;
+                    }
                 default:
                     DisplaySyntax(client);
                     break;
-			}
-		}
-	}
+            }
+        }
+    }
 }

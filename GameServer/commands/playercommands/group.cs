@@ -21,54 +21,54 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute(
-		"&group",
-		new string[] {"&g"},
-		ePrivLevel.Player,
-		"Commands.Players.Group.Description",
-		"Commands.Players.Group.Usage")]
-	public class GCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (client.Player.Group == null)
-			{
-				DisplayMessage(
-					client,
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Group.NotInGroup"
-					)
-				);
-				return;
-			}
+    [CmdAttribute(
+        "&group",
+        new string[] { "&g" },
+        ePrivLevel.Player,
+        "Commands.Players.Group.Description",
+        "Commands.Players.Group.Usage")]
+    public class GCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (client.Player.Group == null)
+            {
+                DisplayMessage(
+                    client,
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Group.NotInGroup"
+                    )
+                );
+                return;
+            }
 
-			if (IsSpammingCommand(client.Player, "group", 500))
-			{
-				DisplayMessage(
-					client,
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Group.SlowDown"
-					)
-				);
-				return;
-			}
+            if (IsSpammingCommand(client.Player, "group", 500))
+            {
+                DisplayMessage(
+                    client,
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Group.SlowDown"
+                    )
+                );
+                return;
+            }
 
-			if (args.Length >= 2)
-			{
-				string msg = "";
-				for (int i = 1; i < args.Length; ++i)
-				{
-					msg += args[i] + " ";
-				}
+            if (args.Length >= 2)
+            {
+                string msg = "";
+                for (int i = 1; i < args.Length; ++i)
+                {
+                    msg += args[i] + " ";
+                }
 
-				client.Player.Group.SendMessageToGroupMembers(client.Player, msg, eChatType.CT_Group, eChatLoc.CL_ChatWindow);
-			}
-			else
-			{
-				DisplaySyntax(client);
-			}
-		}
-	}
+                client.Player.Group.SendMessageToGroupMembers(client.Player, msg, eChatType.CT_Group, eChatLoc.CL_ChatWindow);
+            }
+            else
+            {
+                DisplaySyntax(client);
+            }
+        }
+    }
 }

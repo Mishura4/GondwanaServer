@@ -30,26 +30,26 @@ namespace DOL.GS.Spells
     [SpellHandlerAttribute("ScarabProc")]
     public class ScarabProc : UnbreakableSpeedDecreaseSpellHandler
     {
- 		public override int CalculateSpellResistChance(GameLiving target)
-		{
-			return 0;
-		}
+        public override int CalculateSpellResistChance(GameLiving target)
+        {
+            return 0;
+        }
         public override void OnEffectStart(GameSpellEffect effect)
-        {        	           
-            if(effect.Owner is GamePlayer)
+        {
+            if (effect.Owner is GamePlayer)
             {
-            	GamePlayer player = effect.Owner as GamePlayer;
-            	player.Model = (ushort)Spell.LifeDrainReturn; // 1200 is official id
-            }     
+                GamePlayer player = effect.Owner as GamePlayer;
+                player.Model = (ushort)Spell.LifeDrainReturn; // 1200 is official id
+            }
             base.OnEffectStart(effect);
         }
         public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
         {
-            if(effect.Owner is GamePlayer)
+            if (effect.Owner is GamePlayer)
             {
-            	GamePlayer player = effect.Owner as GamePlayer;
- 				player.Model = player.CreationModel;     
-            }                       
+                GamePlayer player = effect.Owner as GamePlayer;
+                player.Model = player.CreationModel;
+            }
             return base.OnEffectExpires(effect, noMessages);
         }
         public ScarabProc(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }

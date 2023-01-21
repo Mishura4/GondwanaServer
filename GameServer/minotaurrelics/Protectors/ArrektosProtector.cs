@@ -87,7 +87,7 @@ namespace DOL.GS
                 {
                     //on initial attack, all fireborn in range add!
                     if (npc.Name == "minotaur fireborn")
-                    npc.StartAttack(target);
+                        npc.StartAttack(target);
                 }
 
                 TempProperties.setProperty(ALREADY_GOT_HELP, true);

@@ -26,9 +26,9 @@ using DOL.Database.Attributes;
 [DataTable(TableName = "MobXAmbientBehaviour", PreCache = true)]
 public class MobXAmbientBehaviour : DataObject
 {
-	private string m_source;
-	private string m_trigger;
-	private ushort m_damageTypeRepeat;
+    private string m_source;
+    private string m_trigger;
+    private ushort m_damageTypeRepeat;
     private int m_triggerTimer;
     private ushort m_nbUse;
     private ushort m_changeFlag;
@@ -39,32 +39,32 @@ public class MobXAmbientBehaviour : DataObject
     private ushort m_playertoTPpoint;
     private ushort m_mobtoTPpoint;
     private int m_tPeffect;
-	private ushort m_emote;
-	private string m_text;
-	private ushort m_chance;
-	private string m_voice;
-	private int m_spell;
+    private ushort m_emote;
+    private string m_text;
+    private ushort m_chance;
+    private string m_voice;
+    private int m_spell;
     private ushort m_hp;
 
-	/// <summary>
-	/// Constructor
-	/// </summary>
-	/// <param name="name">Mob's name</param>
-	/// <param name="type">The type of trigger to act on (eAmbientTrigger)</param>
-	/// <param name="text">The formatted text for the trigger. You can use [targetclass],[targetname],[sourcename]
-	/// and supply formatting stuff: [b] for broadcast, [y] for yell</param>
-	/// <param name="action">the desired emote</param>
-	public MobXAmbientBehaviour()
-	{
-		m_source = string.Empty;
-		m_trigger =string.Empty;
-		m_emote = 0;
-		m_text = string.Empty;
-		m_chance = 0;
-		m_voice = string.Empty;
-		m_spell = 0;
+    /// <summary>
+    /// Constructor
+    /// </summary>
+    /// <param name="name">Mob's name</param>
+    /// <param name="type">The type of trigger to act on (eAmbientTrigger)</param>
+    /// <param name="text">The formatted text for the trigger. You can use [targetclass],[targetname],[sourcename]
+    /// and supply formatting stuff: [b] for broadcast, [y] for yell</param>
+    /// <param name="action">the desired emote</param>
+    public MobXAmbientBehaviour()
+    {
+        m_source = string.Empty;
+        m_trigger = string.Empty;
+        m_emote = 0;
+        m_text = string.Empty;
+        m_chance = 0;
+        m_voice = string.Empty;
+        m_spell = 0;
         m_hp = 0;
-	}
+    }
 
     /// <summary>
     /// 
@@ -88,15 +88,15 @@ public class MobXAmbientBehaviour : DataObject
     /// <param name="domageTypeRepeat"></param>
     /// <param name="nbUse"></param>
     /// <param name="changeFlag"></param>
-       public MobXAmbientBehaviour(string name, string trigger, ushort emote, string text, ushort chance, string voice, int spell, ushort hp, string changeBrain, int changeNPCTemplate, ushort callAreaeffectID, ushort playertoTPpoint, ushort mobtoTPpoint, int trigerTimer, int changeEffect, int tpEffect, ushort domageTypeRepeat, ushort nbUse, ushort changeFlag)
-	{
-		m_source = name;
-		m_trigger = trigger;
-		m_emote = emote;
-		m_text = text;
-		m_chance = chance;
-		m_voice = voice;
-		m_spell = spell;
+    public MobXAmbientBehaviour(string name, string trigger, ushort emote, string text, ushort chance, string voice, int spell, ushort hp, string changeBrain, int changeNPCTemplate, ushort callAreaeffectID, ushort playertoTPpoint, ushort mobtoTPpoint, int trigerTimer, int changeEffect, int tpEffect, ushort domageTypeRepeat, ushort nbUse, ushort changeFlag)
+    {
+        m_source = name;
+        m_trigger = trigger;
+        m_emote = emote;
+        m_text = text;
+        m_chance = chance;
+        m_voice = voice;
+        m_spell = spell;
         m_hp = hp;
         m_changeBrain = changeBrain;
         m_changeNPCTemplate = changeNPCTemplate;
@@ -109,49 +109,49 @@ public class MobXAmbientBehaviour : DataObject
         m_nbUse = nbUse;
         m_damageTypeRepeat = domageTypeRepeat;
         m_changeFlag = changeFlag;
-	}
+    }
 
-	[DataElement(AllowDbNull = false, Index = true)]
-	public string Source
-	{
-		get { return m_source; }
-		set { m_source = value; }
-	}
+    [DataElement(AllowDbNull = false, Index = true)]
+    public string Source
+    {
+        get { return m_source; }
+        set { m_source = value; }
+    }
 
-	[DataElement(AllowDbNull = false)]
-	public string Trigger
-	{
-		get { return m_trigger; }
-		set { m_trigger = value; }
-	}
+    [DataElement(AllowDbNull = false)]
+    public string Trigger
+    {
+        get { return m_trigger; }
+        set { m_trigger = value; }
+    }
 
-	[DataElement(AllowDbNull = false)]
-	public ushort Emote
-	{
-		get { return m_emote; }
-		set { m_emote = value; }
-	}
+    [DataElement(AllowDbNull = false)]
+    public ushort Emote
+    {
+        get { return m_emote; }
+        set { m_emote = value; }
+    }
 
-	[DataElement(AllowDbNull = false)]
-	public string Text
-	{
-		get { return m_text; }
-		set { m_text = value; }
-	}
-	
-	[DataElement(AllowDbNull = false)]
-	public ushort Chance
-	{
-		get { return m_chance; }
-		set { m_chance = value; }
-	}
+    [DataElement(AllowDbNull = false)]
+    public string Text
+    {
+        get { return m_text; }
+        set { m_text = value; }
+    }
 
-	[DataElement(AllowDbNull = true)]
-	public string Voice
-	{
-		get { return m_voice; }
-		set { m_voice = value; }
-	}
+    [DataElement(AllowDbNull = false)]
+    public ushort Chance
+    {
+        get { return m_chance; }
+        set { m_chance = value; }
+    }
+
+    [DataElement(AllowDbNull = true)]
+    public string Voice
+    {
+        get { return m_voice; }
+        set { m_voice = value; }
+    }
 
     [DataElement(AllowDbNull = true)]
     public int Spell

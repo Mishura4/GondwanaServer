@@ -29,18 +29,18 @@ using DOL.Language;
 
 namespace DOL.GS.Behaviour.Actions
 {
-    [ActionAttribute(ActionType = eActionType.TakeItem,DefaultValueQ=1)]
+    [ActionAttribute(ActionType = eActionType.TakeItem, DefaultValueQ = 1)]
     public class TakeItemAction : AbstractAction<ItemTemplate, int>
     {
 
-        public TakeItemAction(GameNPC defaultNPC,  Object p, Object q)
+        public TakeItemAction(GameNPC defaultNPC, Object p, Object q)
             : base(defaultNPC, eActionType.TakeItem, p, q)
         {
         }
 
 
-        public TakeItemAction(GameNPC defaultNPC,   ItemTemplate itemTemplate, int quantity)
-            : this(defaultNPC, (object)itemTemplate,(object) quantity) { }
+        public TakeItemAction(GameNPC defaultNPC, ItemTemplate itemTemplate, int quantity)
+            : this(defaultNPC, (object)itemTemplate, (object)quantity) { }
 
 
 
@@ -50,7 +50,7 @@ namespace DOL.GS.Behaviour.Actions
             int count = Q;
             ItemTemplate itemToRemove = P;
 
-			Dictionary<InventoryItem, int?> dataSlots = new Dictionary<InventoryItem, int?>(10);
+            Dictionary<InventoryItem, int?> dataSlots = new Dictionary<InventoryItem, int?>(10);
             lock (player.Inventory)
             {
                 var allBackpackItems = player.Inventory.GetItemRange(eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack);
@@ -104,13 +104,13 @@ namespace DOL.GS.Behaviour.Actions
 
                 GamePlayerInventory playerInventory = player.Inventory as GamePlayerInventory;
                 playerInventory.BeginChanges();
-				Dictionary<InventoryItem, int?>.Enumerator enumerator = dataSlots.GetEnumerator();
+                Dictionary<InventoryItem, int?>.Enumerator enumerator = dataSlots.GetEnumerator();
                 while (enumerator.MoveNext())
                 {
-		
-		KeyValuePair<InventoryItem, int?> de = enumerator.Current;
-                    
-		if (de.Value.HasValue)
+
+                    KeyValuePair<InventoryItem, int?> de = enumerator.Current;
+
+                    if (de.Value.HasValue)
                     {
                         playerInventory.RemoveItem(de.Key);
                         InventoryLogging.LogInventoryAction(player, NPC, eInventoryActionType.Quest, de.Key.Template, de.Key.Count);

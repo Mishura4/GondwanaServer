@@ -211,7 +211,7 @@ namespace DOL.GS.Behaviour
         /// usable with QuestPending, QuestGivable
         /// </summary>
         Not = 5
-    }	 
+    }
 
     /// <summary>
     /// Requirements describe what must be true to allow a QuestAction to fire.

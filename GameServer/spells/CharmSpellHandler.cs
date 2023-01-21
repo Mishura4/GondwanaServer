@@ -38,18 +38,18 @@ namespace DOL.GS.Spells
         protected ControlledNpcBrain m_controlledBrain;
 
         protected bool m_isBrainSet;
-                
+
         public enum eCharmType : ushort
         {
-        	All = 0,
-        	Humanoid = 1,
-        	Animal = 2,
-        	Insect = 3,
-        	HumanoidAnimal = 4,
-        	HumanoidAnimalInsect = 5,
-        	HumanoidAnimalInsectMagical = 6,
-        	HumanoidAnimalInsectMagicalUndead = 7,
-        	Reptile = 8,	
+            All = 0,
+            Humanoid = 1,
+            Animal = 2,
+            Insect = 3,
+            HumanoidAnimal = 4,
+            HumanoidAnimalInsect = 5,
+            HumanoidAnimalInsectMagical = 6,
+            HumanoidAnimalInsectMagicalUndead = 7,
+            Reptile = 8,
         }
 
         public override void FinishSpellCast(GameLiving target)
@@ -60,21 +60,21 @@ namespace DOL.GS.Spells
 
         public override bool StartSpell(GameLiving target)
         {
-        	
-        	if (m_charmedNpc == null) 
-        	{
-            	// save target on first start
-                m_charmedNpc = target as GameNPC;
-        	}
-        	else 
-        	{
-            	// reuse for pulsing spells
-                target = m_charmedNpc;
-        	}
 
-            if (target == null) 
-            	return false;
-            
+            if (m_charmedNpc == null)
+            {
+                // save target on first start
+                m_charmedNpc = target as GameNPC;
+            }
+            else
+            {
+                // reuse for pulsing spells
+                target = m_charmedNpc;
+            }
+
+            if (target == null)
+                return false;
+
             if (Util.Chance(CalculateSpellResistChance(target)))
             {
                 OnSpellResisted(target);
@@ -94,16 +94,16 @@ namespace DOL.GS.Spells
 
         public override bool CheckBeginCast(GameLiving selectedTarget)
         {
-        	// check cast target
+            // check cast target
             if (selectedTarget == null || (selectedTarget != null && !selectedTarget.IsAlive))
             {
                 MessageToCaster("You must select a target for this spell!", eChatType.CT_SpellResisted);
                 return false;
             }
-            
+
             if (selectedTarget is GameNPC == false)
             {
-            	//proper message?
+                //proper message?
                 MessageToCaster("This spell does not charm this type of creature!", eChatType.CT_SpellResisted);
                 return false;
             }
@@ -114,136 +114,138 @@ namespace DOL.GS.Spells
                 ((GamePlayer)Caster).CommandNpcRelease();
             }
 
-            if (!base.CheckBeginCast(selectedTarget)) 
-            	return false;
+            if (!base.CheckBeginCast(selectedTarget))
+                return false;
 
             if (Caster is GamePlayer && ((GamePlayer)Caster).ControlledBrain != null)
             {
                 MessageToCaster("You already have a charmed creature, release it first!", eChatType.CT_SpellResisted);
                 return false;
             }
-            
+
             return true;
         }
 
         public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
-        	
-        	// This prevent most of type casting errors
-        	if(target is GameNPC == false) {
-        		MessageToCaster("This spell does not charm this type of monster!", eChatType.CT_SpellResisted);
+
+            // This prevent most of type casting errors
+            if (target is GameNPC == false)
+            {
+                MessageToCaster("This spell does not charm this type of monster!", eChatType.CT_SpellResisted);
                 return;
-        	}
-        	
+            }
+
             // check only if brain wasn't changed at least once
             if (m_controlledBrain == null)
             {
-            	 // Target is already controlled
-	    	    if(((GameNPC)target).Brain != null && ((GameNPC)target).Brain is IControlledBrain && (((IControlledBrain)((GameNPC)target).Brain).Owner as GamePlayer) != Caster)
-	            {
-	                // TODO: proper message
-	                MessageToCaster("Your target is not valid.", eChatType.CT_SpellResisted);
-	                return;
-	            }
-	    	    
-            	// Already have a pet...
-	    	    if(Caster.ControlledBrain != null)
-	            {
-	                MessageToCaster("You already have a charmed creature, release it first!", eChatType.CT_SpellResisted);
-	                return;
-	            }
-	    	    
-            	// Body Type None (0) is used to make mobs un-charmable , Realm Guards or NPC cannot be charmed.
-            	if (target.Realm != 0 || ((GameNPC)target).BodyType == (ushort)NpcTemplateMgr.eBodyType.None)
+                // Target is already controlled
+                if (((GameNPC)target).Brain != null && ((GameNPC)target).Brain is IControlledBrain && (((IControlledBrain)((GameNPC)target).Brain).Owner as GamePlayer) != Caster)
+                {
+                    // TODO: proper message
+                    MessageToCaster("Your target is not valid.", eChatType.CT_SpellResisted);
+                    return;
+                }
+
+                // Already have a pet...
+                if (Caster.ControlledBrain != null)
+                {
+                    MessageToCaster("You already have a charmed creature, release it first!", eChatType.CT_SpellResisted);
+                    return;
+                }
+
+                // Body Type None (0) is used to make mobs un-charmable , Realm Guards or NPC cannot be charmed.
+                if (target.Realm != 0 || ((GameNPC)target).BodyType == (ushort)NpcTemplateMgr.eBodyType.None)
                 {
                     MessageToCaster("This spell does not charm this type of monster!", eChatType.CT_SpellResisted);
                     return;
                 }
-                
-            	// If server properties prevent Named charm.
-            	if(ServerProperties.Properties.SPELL_CHARM_NAMED_CHECK != 0 && !target.Name[0].ToString().ToLower().Equals(target.Name[0].ToString()))
+
+                // If server properties prevent Named charm.
+                if (ServerProperties.Properties.SPELL_CHARM_NAMED_CHECK != 0 && !target.Name[0].ToString().ToLower().Equals(target.Name[0].ToString()))
                 {
                     MessageToCaster("This spell does not charm this type of monster!", eChatType.CT_SpellResisted);
                     return;
                 }
-                            		
-            	
+
+
                 // Check if Body type applies
                 if (m_spell.AmnesiaChance != (ushort)eCharmType.All)
                 {
-                	
-                	bool charmable = false;
-                	
-                	// gets true only for charm-able mobs for this spell type
-                	switch((eCharmType)m_spell.AmnesiaChance) {
-                 		
-                		case eCharmType.HumanoidAnimalInsectMagicalUndead :
-                			if(((GameNPC)target).BodyType == (ushort)NpcTemplateMgr.eBodyType.Undead)
-                				charmable = true;
-                			
-                		goto case eCharmType.HumanoidAnimalInsectMagical;
-                			
-                		case eCharmType.HumanoidAnimalInsectMagical :
-                 			if(((GameNPC)target).BodyType == (ushort)NpcTemplateMgr.eBodyType.Magical)
-                				charmable = true;
-                 			if(((GameNPC)target).BodyType == (ushort)NpcTemplateMgr.eBodyType.Plant)
-                				charmable = true;
-                 			if(((GameNPC)target).BodyType == (ushort)NpcTemplateMgr.eBodyType.Elemental)
-                				charmable = true;
-                 			
-               			goto case eCharmType.HumanoidAnimalInsect;
-               				
-  	             		case eCharmType.HumanoidAnimalInsect :
-                			if(((GameNPC)target).BodyType == (ushort)NpcTemplateMgr.eBodyType.Insect)
-                				charmable = true;
-                			if(((GameNPC)target).BodyType == (ushort)NpcTemplateMgr.eBodyType.Reptile)
-                				charmable = true;
-                			
-                		goto case eCharmType.HumanoidAnimal;
 
- 	                	case eCharmType.HumanoidAnimal :
-                  			if(((GameNPC)target).BodyType == (ushort)NpcTemplateMgr.eBodyType.Animal)
-                				charmable = true;
-                  			
-                  		goto case eCharmType.Humanoid;
-              			
-                		case eCharmType.Humanoid :
-                			if(((GameNPC)target).BodyType == (ushort)NpcTemplateMgr.eBodyType.Humanoid)
-                				charmable = true;
-                			
-                		break;
-                		
-	                	case eCharmType.Animal :
-                			if(((GameNPC)target).BodyType == (ushort)NpcTemplateMgr.eBodyType.Animal)
-                				charmable = true;
-                			
-                		break;
-                		
-                		case eCharmType.Insect :
-                			if(((GameNPC)target).BodyType == (ushort)NpcTemplateMgr.eBodyType.Insect)
-                				charmable = true;
-                			
-                		break;
-                		
-                		case eCharmType.Reptile :
-                			if(((GameNPC)target).BodyType == (ushort)NpcTemplateMgr.eBodyType.Reptile)
-                				charmable = true;
-                			
-                		break;
-                	}
-                	
-                	// The NPC type doesn't match spell charm types.
-                	if(!charmable) 
-                	{
-                		
-            		   	MessageToCaster("This spell does not charm this type of monster!", eChatType.CT_SpellResisted);
+                    bool charmable = false;
+
+                    // gets true only for charm-able mobs for this spell type
+                    switch ((eCharmType)m_spell.AmnesiaChance)
+                    {
+
+                        case eCharmType.HumanoidAnimalInsectMagicalUndead:
+                            if (((GameNPC)target).BodyType == (ushort)NpcTemplateMgr.eBodyType.Undead)
+                                charmable = true;
+
+                            goto case eCharmType.HumanoidAnimalInsectMagical;
+
+                        case eCharmType.HumanoidAnimalInsectMagical:
+                            if (((GameNPC)target).BodyType == (ushort)NpcTemplateMgr.eBodyType.Magical)
+                                charmable = true;
+                            if (((GameNPC)target).BodyType == (ushort)NpcTemplateMgr.eBodyType.Plant)
+                                charmable = true;
+                            if (((GameNPC)target).BodyType == (ushort)NpcTemplateMgr.eBodyType.Elemental)
+                                charmable = true;
+
+                            goto case eCharmType.HumanoidAnimalInsect;
+
+                        case eCharmType.HumanoidAnimalInsect:
+                            if (((GameNPC)target).BodyType == (ushort)NpcTemplateMgr.eBodyType.Insect)
+                                charmable = true;
+                            if (((GameNPC)target).BodyType == (ushort)NpcTemplateMgr.eBodyType.Reptile)
+                                charmable = true;
+
+                            goto case eCharmType.HumanoidAnimal;
+
+                        case eCharmType.HumanoidAnimal:
+                            if (((GameNPC)target).BodyType == (ushort)NpcTemplateMgr.eBodyType.Animal)
+                                charmable = true;
+
+                            goto case eCharmType.Humanoid;
+
+                        case eCharmType.Humanoid:
+                            if (((GameNPC)target).BodyType == (ushort)NpcTemplateMgr.eBodyType.Humanoid)
+                                charmable = true;
+
+                            break;
+
+                        case eCharmType.Animal:
+                            if (((GameNPC)target).BodyType == (ushort)NpcTemplateMgr.eBodyType.Animal)
+                                charmable = true;
+
+                            break;
+
+                        case eCharmType.Insect:
+                            if (((GameNPC)target).BodyType == (ushort)NpcTemplateMgr.eBodyType.Insect)
+                                charmable = true;
+
+                            break;
+
+                        case eCharmType.Reptile:
+                            if (((GameNPC)target).BodyType == (ushort)NpcTemplateMgr.eBodyType.Reptile)
+                                charmable = true;
+
+                            break;
+                    }
+
+                    // The NPC type doesn't match spell charm types.
+                    if (!charmable)
+                    {
+
+                        MessageToCaster("This spell does not charm this type of monster!", eChatType.CT_SpellResisted);
                         return;
-                	}
+                    }
 
                 }
-                
+
             }
-			
+
             // Spell.Value == Max Level this spell can charm, Spell.Damage == Max percent of the caster level this spell can charm
             if (target.Level > Spell.Value || target.Level > Caster.Level * Spell.Damage / 100)
             {
@@ -253,12 +255,12 @@ namespace DOL.GS.Spells
 
             if (Caster is GamePlayer)
             {
-            	// base resists for all charm spells
+                // base resists for all charm spells
                 int resistChance = 100 - (85 + ((Caster.Level - target.Level) / 2));
 
                 if (Spell.Pulse != 0) // not permanent
                 {
-                	
+
                     /*
                      * The Minstrel/Mentalist has an almost certain chance to charm/retain control of
                      * a creature his level or lower, although there is a small random chance that it
@@ -268,18 +270,18 @@ namespace DOL.GS.Spells
                      * charm spell will modify your base chance of charming and retaining control.
                      * The higher your spec level, the greater your chance of controlling.
                      */
-                    
+
                     int diffLevel = (int)(Caster.Level / 1.5 + Caster.GetModifiedSpecLevel(m_spellLine.Spec) / 3) - target.Level;
-                    
+
                     if (diffLevel >= 0)
                     {
-                    	
+
                         resistChance = 10 - diffLevel * 3;
                         resistChance = Math.Max(resistChance, 1);
                     }
                     else
                     {
-                    	
+
                         resistChance = 10 + diffLevel * diffLevel * 3;
                         resistChance = Math.Min(resistChance, 99);
                     }
@@ -288,7 +290,7 @@ namespace DOL.GS.Spells
 
                 if (Util.Chance(resistChance))
                 {
-                	
+
                     MessageToCaster(target.GetName(0, true) + " resists the charm!", eChatType.CT_SpellResisted);
                     return;
                 }
@@ -303,16 +305,16 @@ namespace DOL.GS.Spells
 
             GamePlayer player = Caster as GamePlayer;
             GameNPC npc = effect.Owner as GameNPC;
-            
+
             if (player != null && npc != null)
             {
-            	
+
                 if (m_controlledBrain == null)
                     m_controlledBrain = new ControlledNpcBrain(player);
 
                 if (!m_isBrainSet)
                 {
-                	
+
                     npc.AddBrain(m_controlledBrain);
                     m_isBrainSet = true;
 
@@ -321,20 +323,21 @@ namespace DOL.GS.Spells
 
                 if (player.ControlledBrain != m_controlledBrain)
                 {
-                	
+
                     // sorc: "The slough serpent is enthralled!" ct_spell
                     Message.SystemToArea(effect.Owner, Util.MakeSentence(Spell.Message1, npc.GetName(0, false)), eChatType.CT_Spell);
                     MessageToCaster(npc.GetName(0, true) + " is now under your control.", eChatType.CT_Spell);
 
                     player.SetControlledBrain(m_controlledBrain);
-                    
-	                foreach (GamePlayer ply in npc.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE)) {
-	                    ply.Out.SendNPCCreate(npc);
-	                    if (npc.Inventory != null)
-								ply.Out.SendLivingEquipmentUpdate(npc);
-	                    
-	                   ply.Out.SendObjectGuildID(npc, player.Guild);
-	                }
+
+                    foreach (GamePlayer ply in npc.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+                    {
+                        ply.Out.SendNPCCreate(npc);
+                        if (npc.Inventory != null)
+                            ply.Out.SendLivingEquipmentUpdate(npc);
+
+                        ply.Out.SendObjectGuildID(npc, player.Guild);
+                    }
                 }
             }
             else
@@ -350,21 +353,21 @@ namespace DOL.GS.Spells
         private void ReleaseEventHandler(DOLEvent e, object sender, EventArgs arguments)
         {
             IControlledBrain npc = null;
-            
+
             if (e == GameLivingEvent.PetReleased)
                 npc = ((GameNPC)sender).Brain as IControlledBrain;
             else if (e == GameLivingEvent.Dying)
                 npc = ((GameNPC)sender).Brain as IControlledBrain;
 
-            if (npc == null) 
-            	return;
+            if (npc == null)
+                return;
 
             PulsingSpellEffect concEffect = FindPulsingSpellOnTarget(npc.Owner, this);
             if (concEffect != null)
                 concEffect.Cancel(false);
 
             GameSpellEffect charm = FindEffectOnTarget(npc.Body, this);
-            
+
             if (charm == null)
             {
                 log.Warn("charm effect is already canceled");
@@ -380,12 +383,12 @@ namespace DOL.GS.Spells
 
             GamePlayer player = Caster as GamePlayer;
             GameNPC npc = effect.Owner as GameNPC;
-            
+
             if (player != null && npc != null)
             {
                 if (!noMessages) // no overwrite
                 {
-                	
+
                     GameEventMgr.RemoveHandler(npc, GameLivingEvent.PetReleased, new DOLEventHandler(ReleaseEventHandler));
 
                     player.SetControlledBrain(null);
@@ -393,7 +396,7 @@ namespace DOL.GS.Spells
 
                     lock (npc.BrainSync)
                     {
-                    	
+
                         npc.StopAttack();
                         npc.RemoveBrain(m_controlledBrain);
                         m_isBrainSet = false;
@@ -401,9 +404,9 @@ namespace DOL.GS.Spells
 
                         if (npc.Brain != null && npc.Brain is IOldAggressiveBrain)
                         {
-                        	
-                        	((IOldAggressiveBrain)npc.Brain).ClearAggroList();
-                            
+
+                            ((IOldAggressiveBrain)npc.Brain).ClearAggroList();
+
                             if (Spell.Pulse != 0 && Caster.ObjectState == GameObject.eObjectState.Active && Caster.IsAlive)
                             {
                                 ((IOldAggressiveBrain)npc.Brain).AddToAggroList(Caster, Caster.Level * 10);
@@ -413,45 +416,46 @@ namespace DOL.GS.Spells
                             {
                                 npc.WalkToSpawn();
                             }
-                            
+
                         }
-                        
+
                     }
 
                     // remove NPC with new brain from all attackers aggro list
                     lock (npc.Attackers)
-	                    foreach (GameObject obj in npc.Attackers)
-	                    {
-	
-	                        if (obj == null || !(obj is GameNPC))
-	                        	continue;
-	                        
-	                        if (((GameNPC)obj).Brain != null && ((GameNPC)obj).Brain is IOldAggressiveBrain)
-	                        	((IOldAggressiveBrain)((GameNPC)obj).Brain).RemoveFromAggroList(npc);
-	                    }
+                        foreach (GameObject obj in npc.Attackers)
+                        {
+
+                            if (obj == null || !(obj is GameNPC))
+                                continue;
+
+                            if (((GameNPC)obj).Brain != null && ((GameNPC)obj).Brain is IOldAggressiveBrain)
+                                ((IOldAggressiveBrain)((GameNPC)obj).Brain).RemoveFromAggroList(npc);
+                        }
 
                     m_controlledBrain.ClearAggroList();
                     npc.StopFollowing();
 
                     npc.TempProperties.setProperty(GameNPC.CHARMED_TICK_PROP, npc.CurrentRegion.Time);
-                    
+
 
                     foreach (GamePlayer ply in npc.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
                     {
-                    	if(npc.IsAlive) {
-                    		
-                    		ply.Out.SendNPCCreate(npc);
-	                        
-                    		if (npc.Inventory != null)
-								ply.Out.SendLivingEquipmentUpdate(npc);
-	                        
-	                        ply.Out.SendObjectGuildID(npc, null);
-	                        
-                    	}
+                        if (npc.IsAlive)
+                        {
+
+                            ply.Out.SendNPCCreate(npc);
+
+                            if (npc.Inventory != null)
+                                ply.Out.SendLivingEquipmentUpdate(npc);
+
+                            ply.Out.SendObjectGuildID(npc, null);
+
+                        }
 
                     }
                 }
-                
+
             }
             else
             {
@@ -471,10 +475,10 @@ namespace DOL.GS.Spells
             {
                 if (log.IsWarnEnabled)
                     log.Warn("Spell effect compare with different types " + oldeffect.Spell.SpellType + " <=> " + neweffect.Spell.SpellType + "\n" + Environment.StackTrace);
-                
+
                 return false;
             }
-            
+
             return neweffect.SpellHandler == this;
         }
 

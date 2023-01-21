@@ -26,105 +26,105 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute(
-		"&report",
-		ePrivLevel.Player,
-		"Commands.Players.Report.Description",
-		"Commands.Players.Report.Usage")]
-	public class ReportCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		private const ushort MAX_REPORTS = 100;
-		
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (ServerProperties.Properties.DISABLE_BUG_REPORTS)
-			{
-				DisplayMessage(
-					client,
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Report.Disabled"));
-				return;
-			}
+    [CmdAttribute(
+        "&report",
+        ePrivLevel.Player,
+        "Commands.Players.Report.Description",
+        "Commands.Players.Report.Usage")]
+    public class ReportCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        private const ushort MAX_REPORTS = 100;
 
-			if (IsSpammingCommand(client.Player, "report"))
-				return;
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (ServerProperties.Properties.DISABLE_BUG_REPORTS)
+            {
+                DisplayMessage(
+                    client,
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Report.Disabled"));
+                return;
+            }
 
-			if (args.Length < 2)
-			{
-				DisplaySyntax(client);
-				return;
-			}
+            if (IsSpammingCommand(client.Player, "report"))
+                return;
 
-			if (client.Player.IsMuted)
-			{
-				client.Player.Out.SendMessage(
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Report.Muted"),
-					eChatType.CT_Staff, eChatLoc.CL_SystemWindow);
-				return;
-			}
+            if (args.Length < 2)
+            {
+                DisplaySyntax(client);
+                return;
+            }
 
-			string message = string.Join(" ", args, 1, args.Length - 1);
-			BugReport report = new BugReport();
+            if (client.Player.IsMuted)
+            {
+                client.Player.Out.SendMessage(
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Report.Muted"),
+                    eChatType.CT_Staff, eChatLoc.CL_SystemWindow);
+                return;
+            }
 
-			if (ServerProperties.Properties.MAX_BUGREPORT_QUEUE > 0)
-			{
-				//Andraste
-				var reports = GameServer.Database.SelectAllObjects<BugReport>();
-				bool found = false; int i = 0;
-				for (i = 0; i < ServerProperties.Properties.MAX_BUGREPORT_QUEUE; i++)
-				{
-					found = false;
-					foreach (BugReport rep in reports) if (rep.ID == i) found = true;
-					if (!found) break;
-				}
-				if (found)
-				{
-					client.Player.Out.SendMessage(
-						LanguageMgr.GetTranslation(
-							client.Account.Language,
-							"Commands.Players.Report.TooManyReport"),
-						eChatType.CT_System, eChatLoc.CL_SystemWindow);
-					return;
-				}
+            string message = string.Join(" ", args, 1, args.Length - 1);
+            BugReport report = new BugReport();
 
-				report.ID = i;
-			}
-			else
-			{
-				// This depends on bugs never being deleted from the report table!
-				report.ID = GameServer.Database.GetObjectCount<BugReport>() + 1;
-			}
-			
-			report.Message = message;
-			report.Submitter = client.Player.Name + " [" + client.Account.Name + "]";
-			GameServer.Database.AddObject(report);
-			client.Player.Out.SendMessage(
-				LanguageMgr.GetTranslation(
-					client.Account.Language,
-					"Commands.Players.Report.Submitted"),
-				eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            if (ServerProperties.Properties.MAX_BUGREPORT_QUEUE > 0)
+            {
+                //Andraste
+                var reports = GameServer.Database.SelectAllObjects<BugReport>();
+                bool found = false; int i = 0;
+                for (i = 0; i < ServerProperties.Properties.MAX_BUGREPORT_QUEUE; i++)
+                {
+                    found = false;
+                    foreach (BugReport rep in reports) if (rep.ID == i) found = true;
+                    if (!found) break;
+                }
+                if (found)
+                {
+                    client.Player.Out.SendMessage(
+                        LanguageMgr.GetTranslation(
+                            client.Account.Language,
+                            "Commands.Players.Report.TooManyReport"),
+                        eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    return;
+                }
 
-			if (ServerProperties.Properties.BUG_REPORT_EMAIL_ADDRESSES.Trim() != "")
-			{
-				if (client.Account.Mail == "")
-					client.Player.Out.SendMessage(
-						LanguageMgr.GetTranslation(
-							client.Account.Language,
-							"Commands.Players.Report.Email"),
-						eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-				else
-				{
-					Mail.MailMgr.SendMail(
-						ServerProperties.Properties.BUG_REPORT_EMAIL_ADDRESSES,
-						GameServer.Instance.Configuration.ServerName + " bug report " + report.ID,
-						report.Message,
-						report.Submitter,
-						client.Account.Mail);
-				}
-			}
-		}
-	}
+                report.ID = i;
+            }
+            else
+            {
+                // This depends on bugs never being deleted from the report table!
+                report.ID = GameServer.Database.GetObjectCount<BugReport>() + 1;
+            }
+
+            report.Message = message;
+            report.Submitter = client.Player.Name + " [" + client.Account.Name + "]";
+            GameServer.Database.AddObject(report);
+            client.Player.Out.SendMessage(
+                LanguageMgr.GetTranslation(
+                    client.Account.Language,
+                    "Commands.Players.Report.Submitted"),
+                eChatType.CT_System, eChatLoc.CL_SystemWindow);
+
+            if (ServerProperties.Properties.BUG_REPORT_EMAIL_ADDRESSES.Trim() != "")
+            {
+                if (client.Account.Mail == "")
+                    client.Player.Out.SendMessage(
+                        LanguageMgr.GetTranslation(
+                            client.Account.Language,
+                            "Commands.Players.Report.Email"),
+                        eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                else
+                {
+                    Mail.MailMgr.SendMail(
+                        ServerProperties.Properties.BUG_REPORT_EMAIL_ADDRESSES,
+                        GameServer.Instance.Configuration.ServerName + " bug report " + report.ID,
+                        report.Message,
+                        report.Submitter,
+                        client.Account.Mail);
+                }
+            }
+        }
+    }
 }

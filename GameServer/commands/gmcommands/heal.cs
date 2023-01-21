@@ -21,31 +21,31 @@ using DOL.GS.PacketHandler;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute(
-		"&heal",
-		ePrivLevel.GM,
-		"Commands.GM.Heal.Description",
-		"Commands.GM.Heal.Usage",
-		"/heal me - heals self")]
-	public class HealCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		public void OnCommand(GameClient client, string[] args)
-		{
-			try
-			{
-				GameLiving target = client.Player.TargetObject as GameLiving;
-				
-				if (target == null || (args.Length > 1 && args[1].ToLower() == "me"))
-					target = (GameLiving)client.Player;
+    [CmdAttribute(
+        "&heal",
+        ePrivLevel.GM,
+        "Commands.GM.Heal.Description",
+        "Commands.GM.Heal.Usage",
+        "/heal me - heals self")]
+    public class HealCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        public void OnCommand(GameClient client, string[] args)
+        {
+            try
+            {
+                GameLiving target = client.Player.TargetObject as GameLiving;
 
-				target.Health = target.MaxHealth;
-				target.Endurance = target.MaxEndurance;
-				target.Mana = target.MaxMana;
-			}
-			catch (Exception)
-			{
-				DisplaySyntax(client);
-			}
-		}
-	}
+                if (target == null || (args.Length > 1 && args[1].ToLower() == "me"))
+                    target = (GameLiving)client.Player;
+
+                target.Health = target.MaxHealth;
+                target.Endurance = target.MaxEndurance;
+                target.Mana = target.MaxMana;
+            }
+            catch (Exception)
+            {
+                DisplaySyntax(client);
+            }
+        }
+    }
 }

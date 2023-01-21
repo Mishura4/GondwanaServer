@@ -22,52 +22,54 @@ using DOL.GS;
 
 namespace DOL.AI.Brain
 {
-	public class FearBrain : StandardMobBrain
-	{
-		/// <summary>
-		/// Fixed thinking Interval for Fleeing
-		/// </summary>
-		public override int ThinkInterval {
-			get {
-				return 3000;
-			}
-		}
-		
-		/// <summary>
-		/// Flee from Players on Brain Think
-		/// </summary>
-		public override void Think()
-		{
-			foreach (GamePlayer player in Body.GetPlayersInRadius((ushort)Math.Max(AggroRange, 750)))
-			{
-				CalculateFleeTarget(player);
-				break;
-			}
-		}
+    public class FearBrain : StandardMobBrain
+    {
+        /// <summary>
+        /// Fixed thinking Interval for Fleeing
+        /// </summary>
+        public override int ThinkInterval
+        {
+            get
+            {
+                return 3000;
+            }
+        }
 
-		///<summary>
-		/// Calculate flee target.
-		/// </summary>
-		///<param name="target">The target to flee.</param>
-		protected virtual async void CalculateFleeTarget(GameLiving target)
-		{
-			ushort TargetAngle = (ushort)((Body.GetHeading(target) + 2048) % 4096);
+        /// <summary>
+        /// Flee from Players on Brain Think
+        /// </summary>
+        public override void Think()
+        {
+            foreach (GamePlayer player in Body.GetPlayersInRadius((ushort)Math.Max(AggroRange, 750)))
+            {
+                CalculateFleeTarget(player);
+                break;
+            }
+        }
 
-			var fleePoint = Body.GetPointFromHeading(TargetAngle, 300);
-			var point = await PathingMgr.Instance.GetClosestPointAsync(Body.CurrentZone, new Vector3(fleePoint, Body.Position.Z), 128, 128, 256);
-			Body.StopFollowing();
-			Body.StopAttack();
-			Body.PathTo(point.HasValue ? point.Value : new Vector3(fleePoint, Body.Position.Z), Body.MaxSpeed);
-		}
+        ///<summary>
+        /// Calculate flee target.
+        /// </summary>
+        ///<param name="target">The target to flee.</param>
+        protected virtual async void CalculateFleeTarget(GameLiving target)
+        {
+            ushort TargetAngle = (ushort)((Body.GetHeading(target) + 2048) % 4096);
 
-		///<summary>
-		/// Remove effect.
-		/// </summary>
-		///<param name="target">The target to flee.</param>
-		public virtual void RemoveEffect()
-		{
+            var fleePoint = Body.GetPointFromHeading(TargetAngle, 300);
+            var point = await PathingMgr.Instance.GetClosestPointAsync(Body.CurrentZone, new Vector3(fleePoint, Body.Position.Z), 128, 128, 256);
+            Body.StopFollowing();
+            Body.StopAttack();
+            Body.PathTo(point.HasValue ? point.Value : new Vector3(fleePoint, Body.Position.Z), Body.MaxSpeed);
+        }
 
-		}
+        ///<summary>
+        /// Remove effect.
+        /// </summary>
+        ///<param name="target">The target to flee.</param>
+        public virtual void RemoveEffect()
+        {
 
-	}
-} 
+        }
+
+    }
+}

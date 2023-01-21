@@ -23,18 +23,18 @@ using NUnit.Framework;
 
 namespace DOL.Integration.Server
 {
-	[TestFixture]
-	public class ServerTest
-	{
-		public ServerTest()
-		{
-		}
-		
-		[Test]
-		public void TestGameServerStartup()
-		{
-			Console.WriteLine("Test GameServer Startup...");
-			Assert.IsTrue(GameServer.Instance.IsRunning && GameServer.Instance.ServerStatus == eGameServerStatus.GSS_Open, "GameServer is not running correctly  : " + GameServer.Instance.ServerStatus);
-		}
-	}
+    [TestFixture]
+    public class ServerTest
+    {
+        public ServerTest()
+        {
+        }
+
+        [Test]
+        public void TestGameServerStartup()
+        {
+            Console.WriteLine("Test GameServer Startup...");
+            Assert.IsTrue(GameServer.Instance.IsRunning && GameServer.Instance.ServerStatus == eGameServerStatus.GSS_Open, "GameServer is not running correctly  : " + GameServer.Instance.ServerStatus);
+        }
+    }
 }

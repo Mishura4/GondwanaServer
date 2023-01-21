@@ -226,7 +226,7 @@ namespace DOL.GS
                         if (version.ItemID == item.Id_nb || version.ItemID == item.Id_nb.Split('#')[0])
                         {
                             return true;
-                        } 
+                        }
                     }
                 }
             }
@@ -502,20 +502,20 @@ namespace DOL.GS
                     }
                     else
                     {
-                       /// foreach (string classID in itemTemplate.AllowedClasses.SplitCSV(true))
+                        /// foreach (string classID in itemTemplate.AllowedClasses.SplitCSV(true))
                         {
-                           /// try
+                            /// try
                             {
-                               /// if (int.Parse(classID) == (int)charClass)
+                                /// if (int.Parse(classID) == (int)charClass)
                                 {
-                                   /// classVersions.Add(version.Version, itemTemplate);
-                                   /// break;
+                                    /// classVersions.Add(version.Version, itemTemplate);
+                                    /// break;
                                 }
                             }
-                           /// catch (Exception ex)
+                            /// catch (Exception ex)
                             {
-                               /// log.Error(string.Format("Invalid class ID '{0}' for item template '{1}', checked by class '{2}'", classID, itemTemplate.Id_nb, (int)charClass));
-                               /// log.Error(ex.Message);
+                                /// log.Error(string.Format("Invalid class ID '{0}' for item template '{1}', checked by class '{2}'", classID, itemTemplate.Id_nb, (int)charClass));
+                                /// log.Error(ex.Message);
                             }
                         }
                     }

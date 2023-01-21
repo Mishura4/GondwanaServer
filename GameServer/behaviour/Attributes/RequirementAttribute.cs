@@ -23,7 +23,7 @@ using System.Text;
 namespace DOL.GS.Behaviour.Attributes
 {
     [AttributeUsage(AttributeTargets.Class)]
-    public class RequirementAttribute :Attribute
+    public class RequirementAttribute : Attribute
     {
         private eRequirementType requirementType;
 
@@ -31,7 +31,7 @@ namespace DOL.GS.Behaviour.Attributes
         {
             get { return requirementType; }
             set { requirementType = value; }
-        }        
+        }
 
         private bool isNullableN;
 

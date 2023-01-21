@@ -21,42 +21,42 @@ using DOL.GS.Realm;
 
 namespace DOL.GS.PlayerClass
 {
-	[CharacterClass((int)eCharacterClass.Thane, "Thane", "Viking")]
-	public class ClassThane : ClassViking
-	{
-		public ClassThane()
-			: base()
-		{
-			m_profession = "PlayerClass.Profession.HouseofThor";
-			m_specializationMultiplier = 20;
-			m_primaryStat = eStat.STR;
-			m_secondaryStat = eStat.PIE;
-			m_tertiaryStat = eStat.CON;
-			m_manaStat = eStat.PIE;
-			m_wsbase = 360;
-			m_baseHP = 720;
-		}
+    [CharacterClass((int)eCharacterClass.Thane, "Thane", "Viking")]
+    public class ClassThane : ClassViking
+    {
+        public ClassThane()
+            : base()
+        {
+            m_profession = "PlayerClass.Profession.HouseofThor";
+            m_specializationMultiplier = 20;
+            m_primaryStat = eStat.STR;
+            m_secondaryStat = eStat.PIE;
+            m_tertiaryStat = eStat.CON;
+            m_manaStat = eStat.PIE;
+            m_wsbase = 360;
+            m_baseHP = 720;
+        }
 
-		public override int WeaponSkillFactor(eObjectType type)
-		{
-			if (type == eObjectType.Hammer)
-				return 19;
-			return 18;
-		}
+        public override int WeaponSkillFactor(eObjectType type)
+        {
+            if (type == eObjectType.Hammer)
+                return 19;
+            return 18;
+        }
 
-		public override eClassType ClassType
-		{
-			get { return eClassType.Hybrid; }
-		}
+        public override eClassType ClassType
+        {
+            get { return eClassType.Hybrid; }
+        }
 
-		public override bool HasAdvancedFromBaseClass()
-		{
-			return true;
-		}
+        public override bool HasAdvancedFromBaseClass()
+        {
+            return true;
+        }
 
-		public override List<PlayerRace> EligibleRaces => new List<PlayerRace>()
-		{
-			 PlayerRace.Dwarf, PlayerRace.Frostalf, PlayerRace.Deifrang, PlayerRace.Norseman, PlayerRace.Troll,
-		};
-	}
+        public override List<PlayerRace> EligibleRaces => new List<PlayerRace>()
+        {
+             PlayerRace.Dwarf, PlayerRace.Frostalf, PlayerRace.Deifrang, PlayerRace.Norseman, PlayerRace.Troll,
+        };
+    }
 }

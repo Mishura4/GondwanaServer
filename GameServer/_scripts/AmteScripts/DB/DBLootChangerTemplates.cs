@@ -21,11 +21,11 @@ namespace DOL.Database
         private string m_FamilyName;
         private short m_Order;
 
-// ReSharper disable EmptyConstructor
+        // ReSharper disable EmptyConstructor
         public DBLootChangerTemplate()
         {
         }
-// ReSharper restore EmptyConstructor
+        // ReSharper restore EmptyConstructor
 
         [DataElement(AllowDbNull = false)]
         public string LootChangerTemplateName

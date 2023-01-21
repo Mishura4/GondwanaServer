@@ -608,7 +608,7 @@ namespace DOL.GameEvents
                         var mobgroupDb = GameServer.Database.FindObjectByKey<GroupMobDb>(groupMob.GroupId);
                         if (mobgroupDb != null)
                         {
-                            var groupInteraction = mobgroupDb.GroupMobInteract_FK_Id != null ? 
+                            var groupInteraction = mobgroupDb.GroupMobInteract_FK_Id != null ?
                             GameServer.Database.SelectObjects<GroupMobStatusDb>(DB.Column("GroupStatusId").IsEqualTo(mobgroupDb.GroupMobInteract_FK_Id))?.FirstOrDefault() : null;
 
                             var groupOriginStatus = mobgroupDb.GroupMobOrigin_FK_Id != null ?

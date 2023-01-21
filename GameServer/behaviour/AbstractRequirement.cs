@@ -19,7 +19,8 @@
 using System;
 using System.Text;
 using DOL.Events;
-using DOL.GS.Behaviour.Attributes;using DOL.GS.Behaviour;
+using DOL.GS.Behaviour.Attributes;
+using DOL.GS.Behaviour;
 using log4net;
 using System.Reflection;
 
@@ -30,15 +31,15 @@ namespace DOL.GS.Behaviour
     /// Level of player, Step of Quest, Class of Player, etc... There are also some variables to add
     /// additional parameters. To fire a QuestAction ALL requirements must be fulfilled.         
     /// </summary>
-    public abstract class AbstractRequirement<TypeN,TypeV> : IBehaviourRequirement
+    public abstract class AbstractRequirement<TypeN, TypeV> : IBehaviourRequirement
     {
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-		private eRequirementType type;
+        private eRequirementType type;
         private TypeN n;
         private TypeV v;
         private eComparator comparator;
-		private GameNPC defaultNPC;		
+        private GameNPC defaultNPC;
 
         /// <summary>
         /// R: RequirmentType
@@ -54,7 +55,7 @@ namespace DOL.GS.Behaviour
         public TypeN N
         {
             get { return n; }
-			set { n = value; }
+            set { n = value; }
         }
         /// <summary>
         /// V: Secoond Requirmenet Variable
@@ -62,7 +63,7 @@ namespace DOL.GS.Behaviour
         public TypeV V
         {
             get { return v; }
-			set { v = value; }
+            set { v = value; }
         }
         /// <summary>
         /// C: Requirement Comparator
@@ -80,8 +81,8 @@ namespace DOL.GS.Behaviour
         {
             get { return defaultNPC; }
             set { defaultNPC = value; }
-        }		
-        
+        }
+
 
         public AbstractRequirement(GameNPC npc, eRequirementType type, eComparator comp)
         {
@@ -90,28 +91,28 @@ namespace DOL.GS.Behaviour
             this.comparator = comp;
         }
 
-		/// <summary>
+        /// <summary>
         /// Creates a new QuestRequirement and does some basich compativilite checks for the parameters
-		/// </summary>
-		/// <param name="defaultNPC"></param>
-		/// <param name="type"></param>
-		/// <param name="n"></param>
-		/// <param name="v"></param>
-		/// <param name="comp"></param>
-        public AbstractRequirement(GameNPC defaultNPC, eRequirementType type, Object n, Object v, eComparator comp) : this(defaultNPC,type,comp)
-        {            			            
+        /// </summary>
+        /// <param name="defaultNPC"></param>
+        /// <param name="type"></param>
+        /// <param name="n"></param>
+        /// <param name="v"></param>
+        /// <param name="comp"></param>
+        public AbstractRequirement(GameNPC defaultNPC, eRequirementType type, Object n, Object v, eComparator comp) : this(defaultNPC, type, comp)
+        {
 
             RequirementAttribute attr = BehaviourMgr.getRequirementAttribute(this.GetType());
             // handle parameter N
-            object defaultValueN = GetDefaultValue(attr.DefaultValueN);            
+            object defaultValueN = GetDefaultValue(attr.DefaultValueN);
             this.N = (TypeN)BehaviourUtils.ConvertObject(n, defaultValueN, typeof(TypeN));
             CheckParameter(this.N, attr.IsNullableN, typeof(TypeN));
-            
+
             // handle parameter V
-            object defaultValueV = GetDefaultValue(attr.DefaultValueV);            
+            object defaultValueV = GetDefaultValue(attr.DefaultValueV);
             this.v = (TypeV)BehaviourUtils.ConvertObject(v, defaultValueV, typeof(TypeV));
             CheckParameter(this.V, attr.IsNullableV, typeof(TypeV));
-            
+
         }
 
         protected virtual object GetDefaultValue(Object defaultValue)
@@ -121,7 +122,7 @@ namespace DOL.GS.Behaviour
                 if (defaultValue is eDefaultValueConstants)
                 {
                     switch ((eDefaultValueConstants)defaultValue)
-                    {                        
+                    {
                         case eDefaultValueConstants.NPC:
                             defaultValue = NPC;
                             break;

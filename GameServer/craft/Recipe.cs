@@ -84,7 +84,7 @@ namespace DOL.GS
             if (updatePrice)
             {
                 long pricetoset;
-                var secondaryCraftingSkills = new List<eCraftingSkill>() { 
+                var secondaryCraftingSkills = new List<eCraftingSkill>() {
                     eCraftingSkill.MetalWorking, eCraftingSkill.LeatherCrafting, eCraftingSkill.ClothWorking, eCraftingSkill.WoodWorking
                 };
 

@@ -19,7 +19,8 @@
 using System;
 using System.Text;
 using DOL.Events;
-using DOL.GS.Behaviour.Attributes;using DOL.GS.Behaviour;
+using DOL.GS.Behaviour.Attributes;
+using DOL.GS.Behaviour;
 using System.Reflection;
 using log4net;
 
@@ -35,10 +36,10 @@ namespace DOL.GS.Behaviour
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         private TypeK k; //trigger keyword 
-        private TypeI i;        
+        private TypeI i;
         private eTriggerType triggerType; // t## : trigger type, see following description (NONE:no trigger)        
-		private GameLiving defaultNPC;
-		private DOLEventHandler notifyHandler;		
+        private GameLiving defaultNPC;
+        private DOLEventHandler notifyHandler;
 
         /// <summary>
         /// Trigger Keyword
@@ -46,7 +47,7 @@ namespace DOL.GS.Behaviour
         public TypeK K
         {
             get { return k; }
-			set { k = value; }
+            set { k = value; }
         }
 
         /// <summary>
@@ -55,7 +56,7 @@ namespace DOL.GS.Behaviour
         public TypeI I
         {
             get { return i; }
-			set { i = value; }
+            set { i = value; }
         }
 
         /// <summary>
@@ -67,7 +68,7 @@ namespace DOL.GS.Behaviour
             set { triggerType = value; }
         }
 
-    	/// <summary>
+        /// <summary>
         /// returns the NPC of the trigger
         /// </summary>
         public GameLiving NPC
@@ -76,18 +77,18 @@ namespace DOL.GS.Behaviour
             set { defaultNPC = value; }
         }
 
-		public DOLEventHandler NotifyHandler
-		{
-			get { return notifyHandler; }
+        public DOLEventHandler NotifyHandler
+        {
+            get { return notifyHandler; }
             set { notifyHandler = value; }
-		}
-		   
- 	    /// <summary>
+        }
+
+        /// <summary>
         /// Creates a new questtrigger and does some simple triggertype parameter compatibility checking
- 	    /// </summary>
- 	    /// <param name="defaultNPC"></param>
- 	    /// <param name="notifyHandler"></param>
- 	    /// <param name="type"></param>
+        /// </summary>
+        /// <param name="defaultNPC"></param>
+        /// <param name="notifyHandler"></param>
+        /// <param name="type"></param>
         public AbstractTrigger(GameLiving defaultNPC, DOLEventHandler notifyHandler, eTriggerType type)
         {
             this.defaultNPC = defaultNPC;
@@ -95,16 +96,16 @@ namespace DOL.GS.Behaviour
             this.triggerType = type;
         }
 
-		/// <summary>
-		/// Creates a new questtrigger and does some simple triggertype parameter compatibility checking
-		/// </summary>
-		/// <param name="defaultNPC"></param>
-		/// <param name="notifyHandler"></param>
-		/// <param name="type">Triggertype</param>
-		/// <param name="k">keyword (K), meaning depends on triggertype</param>
-		/// <param name="i">variable (I), meaning depends on triggertype</param>
-		public AbstractTrigger(GameLiving defaultNPC,DOLEventHandler notifyHandler, eTriggerType type, object k, object i) : this(defaultNPC,notifyHandler,type)
-		{
+        /// <summary>
+        /// Creates a new questtrigger and does some simple triggertype parameter compatibility checking
+        /// </summary>
+        /// <param name="defaultNPC"></param>
+        /// <param name="notifyHandler"></param>
+        /// <param name="type">Triggertype</param>
+        /// <param name="k">keyword (K), meaning depends on triggertype</param>
+        /// <param name="i">variable (I), meaning depends on triggertype</param>
+        public AbstractTrigger(GameLiving defaultNPC, DOLEventHandler notifyHandler, eTriggerType type, object k, object i) : this(defaultNPC, notifyHandler, type)
+        {
             TriggerAttribute attr = BehaviourMgr.getTriggerAttribute(this.GetType());
 
             // handle parameter K
@@ -116,7 +117,7 @@ namespace DOL.GS.Behaviour
             object defaultValueI = GetDefaultValue(attr.DefaultValueI);
             this.i = (TypeI)BehaviourUtils.ConvertObject(i, defaultValueI, typeof(TypeI));
             CheckParameter(I, attr.IsNullableI, typeof(TypeI));
-		}
+        }
 
         protected virtual object GetDefaultValue(Object defaultValue)
         {
@@ -125,7 +126,7 @@ namespace DOL.GS.Behaviour
                 if (defaultValue is eDefaultValueConstants)
                 {
                     switch ((eDefaultValueConstants)defaultValue)
-                    {                        
+                    {
                         case eDefaultValueConstants.NPC:
                             defaultValue = NPC;
                             break;
@@ -172,7 +173,7 @@ namespace DOL.GS.Behaviour
         }
 
 
-    	/// <summary>
+        /// <summary>
         /// Checks the trigger, this method is called whenever a event associated with this questparts quest
         /// or a manualy associated eventhandler is notified.
         /// </summary>
@@ -182,22 +183,22 @@ namespace DOL.GS.Behaviour
         /// <returns>true if QuestPart should be executes, else false</returns>
         public abstract bool Check(DOLEvent e, object sender, EventArgs args);
 
-		/// <summary>
-		/// Registers the needed EventHandler for this Trigger
-		/// </summary>
-		/// <remarks>
-		/// This method will be called multiple times, so use AddHandlerUnique to make
-		/// sure only one handler is actually registered
-		/// </remarks>
+        /// <summary>
+        /// Registers the needed EventHandler for this Trigger
+        /// </summary>
+        /// <remarks>
+        /// This method will be called multiple times, so use AddHandlerUnique to make
+        /// sure only one handler is actually registered
+        /// </remarks>
         public abstract void Register();
 
-		/// <summary>
-		/// Unregisters the needed EventHandler for this Trigger
-		/// </summary>
-		/// <remarks>
-		/// Don't remove handlers that will be used by other triggers etc.
-		/// This is rather difficult since we don't know which events other triggers use.
-		/// </remarks>
+        /// <summary>
+        /// Unregisters the needed EventHandler for this Trigger
+        /// </summary>
+        /// <remarks>
+        /// Don't remove handlers that will be used by other triggers etc.
+        /// This is rather difficult since we don't know which events other triggers use.
+        /// </remarks>
         public abstract void Unregister();
     }
 

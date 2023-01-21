@@ -70,8 +70,8 @@ namespace DOL.GS.Effects
             tSpell.Duration = spellDuration;
             tSpell.Uninterruptible = true;
             tSpell.Type = "Stun";
-			tSpell.ResurrectMana=1;
-			tSpell.ResurrectHealth=1;
+            tSpell.ResurrectMana = 1;
+            tSpell.ResurrectHealth = 1;
             tSpell.Damage = 0;
             tSpell.DamageType = 0;
             tSpell.Value = 0;
@@ -157,7 +157,7 @@ namespace DOL.GS.Effects
                 return 0;
             }
 
-            if ( targetPlayer.IsWithinRadius( spirit, 100 ) )
+            if (targetPlayer.IsWithinRadius(spirit, 100))
             {
                 ApplySpiritEffect(spirit, targetPlayer);
                 timer.Stop();

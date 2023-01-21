@@ -22,66 +22,66 @@ using DOL.GS.PacketHandler;
 
 namespace DOL.GS.Spells
 {
-	[SpellHandler("Taunt")]
-	public class TauntSpellHandler : SpellHandler
-	{
-		public override void FinishSpellCast(GameLiving target)
-		{
-			Caster.Mana -= PowerCost(target);
-			base.FinishSpellCast(target);
-		}
+    [SpellHandler("Taunt")]
+    public class TauntSpellHandler : SpellHandler
+    {
+        public override void FinishSpellCast(GameLiving target)
+        {
+            Caster.Mana -= PowerCost(target);
+            base.FinishSpellCast(target);
+        }
 
-		public override void OnDirectEffect(GameLiving target, double effectiveness)
-		{
-			if (target == null) return;
-			if (!target.IsAlive || target.ObjectState!=GameLiving.eObjectState.Active) return;
-			
-			// no animation on stealthed players
-			if (target is GamePlayer)
-				if ( target.IsStealthed ) 
-					return;
-			
-			SendEffectAnimation(target, 0, false, 1);
+        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        {
+            if (target == null) return;
+            if (!target.IsAlive || target.ObjectState != GameLiving.eObjectState.Active) return;
 
-			// Create attack data.
-			AttackData ad = CalculateDamageToTarget(target, effectiveness);
-			DamageTarget(ad, false);
+            // no animation on stealthed players
+            if (target is GamePlayer)
+                if (target.IsStealthed)
+                    return;
 
-			// Interrupt only if target is actually casting
-			if (target.IsCasting && Spell.Target.ToLower() != "cone")
-				target.StartInterruptTimer(target.SpellInterruptDuration, ad.AttackType, Caster);
-		}
+            SendEffectAnimation(target, 0, false, 1);
 
-		protected override void OnSpellResisted(GameLiving target)
-		{
-			base.OnSpellResisted(target);
+            // Create attack data.
+            AttackData ad = CalculateDamageToTarget(target, effectiveness);
+            DamageTarget(ad, false);
 
-			// Interrupt only if target is actually casting
-			if (target.IsCasting && Spell.Target.ToLower() != "cone")
-				target.StartInterruptTimer(target.SpellInterruptDuration, AttackData.eAttackType.Spell, Caster);
-		}
+            // Interrupt only if target is actually casting
+            if (target.IsCasting && Spell.Target.ToLower() != "cone")
+                target.StartInterruptTimer(target.SpellInterruptDuration, ad.AttackType, Caster);
+        }
 
-		public override void DamageTarget(AttackData ad, bool showEffectAnimation, int attackResult)
-		{
-			base.DamageTarget(ad, showEffectAnimation, attackResult);
+        protected override void OnSpellResisted(GameLiving target)
+        {
+            base.OnSpellResisted(target);
 
-			if (ad.Target is GameNPC && Spell.Value > 0)
-			{
-				IOldAggressiveBrain aggroBrain = ((GameNPC)ad.Target).Brain as IOldAggressiveBrain;
-				if (aggroBrain != null)
-				{
-					// this amount is a wild guess - Tolakram
-					aggroBrain.AddToAggroList(Caster, Math.Max(1, (int)(Spell.Value * Caster.Level * 0.1)));
-					//log.DebugFormat("Damage: {0}, Taunt Value: {1}, Taunt Amount {2}", ad.Damage, Spell.Value, Math.Max(1, (int)(Spell.Value * Caster.Level * 0.1)));
-				}
-			}
+            // Interrupt only if target is actually casting
+            if (target.IsCasting && Spell.Target.ToLower() != "cone")
+                target.StartInterruptTimer(target.SpellInterruptDuration, AttackData.eAttackType.Spell, Caster);
+        }
 
-			m_lastAttackData = ad;
-		}
+        public override void DamageTarget(AttackData ad, bool showEffectAnimation, int attackResult)
+        {
+            base.DamageTarget(ad, showEffectAnimation, attackResult);
 
-		public TauntSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine) {}
+            if (ad.Target is GameNPC && Spell.Value > 0)
+            {
+                IOldAggressiveBrain aggroBrain = ((GameNPC)ad.Target).Brain as IOldAggressiveBrain;
+                if (aggroBrain != null)
+                {
+                    // this amount is a wild guess - Tolakram
+                    aggroBrain.AddToAggroList(Caster, Math.Max(1, (int)(Spell.Value * Caster.Level * 0.1)));
+                    //log.DebugFormat("Damage: {0}, Taunt Value: {1}, Taunt Amount {2}", ad.Damage, Spell.Value, Math.Max(1, (int)(Spell.Value * Caster.Level * 0.1)));
+                }
+            }
 
-		public override string ShortDescription
-			=> $"Taunts target, increasing your threat against it by {Spell.Value}.";
-	}
+            m_lastAttackData = ad;
+        }
+
+        public TauntSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine) { }
+
+        public override string ShortDescription
+            => $"Taunts target, increasing your threat against it by {Spell.Value}.";
+    }
 }

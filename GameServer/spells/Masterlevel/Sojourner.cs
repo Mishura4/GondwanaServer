@@ -59,7 +59,7 @@ namespace DOL.GS.Spells
 
         public UnmakeCrystalseedSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription 
+        public override string ShortDescription
             => "Destroys the targeted rune, and any runes immediately nearby.";
     }
     #endregion
@@ -115,7 +115,7 @@ namespace DOL.GS.Spells
             }
         }
 
-        public override string ShortDescription 
+        public override string ShortDescription
             => "Summon a vendor to sell to and buy basic supplies.";
     }
     #endregion
@@ -145,26 +145,26 @@ namespace DOL.GS.Spells
                 if (!player.InCombat && !GameRelic.IsPlayerCarryingRelic(player))
                 {
                     SendEffectAnimation(player, 0, false, 1);
-					player.MoveToBind();
+                    player.MoveToBind();
                 }
             }
         }
 
-        public override string ShortDescription 
+        public override string ShortDescription
             => "Teleport to your world bindpoint. This spell will fail if you are in combat or in an RvR zone.";
     }
     #endregion
 
     //no shared timer
-	#region Sojourner-7
-	[SpellHandlerAttribute("EssenceResist")]
-	public class EssenceResistHandler : AbstractResistBuff
-	{
-		public override eBuffBonusCategory BonusCategory1 { get { return eBuffBonusCategory.BaseBuff; } }
-		public override eProperty Property1 { get { return eProperty.Resist_Natural; } }
-		public EssenceResistHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
-	}
-	#endregion Sojourner-7
+    #region Sojourner-7
+    [SpellHandlerAttribute("EssenceResist")]
+    public class EssenceResistHandler : AbstractResistBuff
+    {
+        public override eBuffBonusCategory BonusCategory1 { get { return eBuffBonusCategory.BaseBuff; } }
+        public override eProperty Property1 { get { return eProperty.Resist_Natural; } }
+        public EssenceResistHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+    }
+    #endregion Sojourner-7
 
     //no shared timer
     #region Sojourner-8
@@ -174,7 +174,7 @@ namespace DOL.GS.Spells
         protected RegionTimer m_expireTimer;
         protected GameNPC m_npc;
         protected GamePlayer m_target;
-		protected Vector3 m_loc;
+        protected Vector3 m_loc;
 
         public override void OnDirectEffect(GameLiving target, double effectiveness)
         {
@@ -220,7 +220,7 @@ namespace DOL.GS.Spells
             npc.CurrentRegion = Caster.CurrentRegion;
             npc.Flags |= GameNPC.eFlags.PEACE;
             npc.Flags |= GameNPC.eFlags.DONTSHOWNAME;
-			npc.Flags |= GameNPC.eFlags.CANTTARGET;
+            npc.Flags |= GameNPC.eFlags.CANTTARGET;
             BlankBrain brain = new BlankBrain();
             npc.SetOwnBrain(brain);
             npc.AddToWorld();
@@ -243,13 +243,13 @@ namespace DOL.GS.Spells
         protected virtual int ExpiredCallback(RegionTimer callingTimer)
         {
             m_target.IsStunned = false;
-			m_target.DismountSteed(true);
-            m_target.DebuffCategory[(int)eProperty.SpellFumbleChance]-=100;
+            m_target.DismountSteed(true);
+            m_target.DebuffCategory[(int)eProperty.SpellFumbleChance] -= 100;
             GameEventMgr.RemoveHandler(m_target, GamePlayerEvent.AttackedByEnemy, new DOLEventHandler(OnAttack));
             m_npc.StopMoving();
             m_npc.RemoveFromWorld();
-			//sometimes player can't move after zephyr :
-			m_target.Out.SendUpdateMaxSpeed();
+            //sometimes player can't move after zephyr :
+            m_target.Out.SendUpdateMaxSpeed();
             return 0;
         }
 
@@ -301,7 +301,7 @@ namespace DOL.GS.Spells
 
             player.IsStunned = true;
             //player.IsSilenced = true;
-            player.DebuffCategory[(int)eProperty.SpellFumbleChance]+=100;
+            player.DebuffCategory[(int)eProperty.SpellFumbleChance] += 100;
             player.StopAttack();
             player.StopCurrentSpellcast();
             player.MountSteed(npc, true);
@@ -314,13 +314,13 @@ namespace DOL.GS.Spells
             {
                 //Calculate random target
                 m_loc = GetTargetLoc();
-				(Caster as GamePlayer).Out.SendCheckLOS((Caster as GamePlayer), m_npc, new CheckLOSResponse(ZephyrCheckLOS));
+                (Caster as GamePlayer).Out.SendCheckLOS((Caster as GamePlayer), m_npc, new CheckLOSResponse(ZephyrCheckLOS));
             }
         }
-		public void ZephyrCheckLOS(GamePlayer player, ushort response, ushort targetOID)
+        public void ZephyrCheckLOS(GamePlayer player, ushort response, ushort targetOID)
         {
             if ((response & 0x100) == 0x100)
-				m_npc.PathTo(m_loc.X, m_loc.Y, m_loc.Z, 100);
+                m_npc.PathTo(m_loc.X, m_loc.Y, m_loc.Z, 100);
         }
 
         public virtual Vector3 GetTargetLoc()
@@ -335,7 +335,7 @@ namespace DOL.GS.Spells
 
         public FZSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription 
+        public override string ShortDescription
             => "Targeted summon that picks up the selected enemy player and carries them in a random direction. " +
             "The zephyred player is immune to damage for the duration. Once zephyred, a player cannot be zephyred again for 1 minute.";
     }
@@ -408,7 +408,7 @@ namespace DOL.GS.Spells
         // constructor
         public PhaseshiftHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription 
+        public override string ShortDescription
             => "Self buff that provides nigh-invulnerability to spells and melee for a short duration.";
     }
     #endregion
@@ -474,7 +474,7 @@ namespace DOL.GS.Spells
             }
         }
 
-        public override string ShortDescription 
+        public override string ShortDescription
             => "Teleport your group to your world bindpoint. If any group member is in combat, this spell will fail.";
     }
     #endregion

@@ -27,7 +27,7 @@ namespace DOL.GS
         public static IList<T> SelectAllObjects()
             => GameServer.Database.SelectAllObjects<T>();
 
-        public static T SelectObject(WhereClause whereClause) 
+        public static T SelectObject(WhereClause whereClause)
             => GameServer.Database.SelectObject<T>(whereClause);
 
         public static IList<T> SelectObjects(WhereClause whereClause)

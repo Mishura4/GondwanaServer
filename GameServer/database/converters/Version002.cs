@@ -22,59 +22,59 @@ using DOL.Database;
 
 namespace DOL.GS.DatabaseConverters
 {
-	/// <summary>
-	/// Converts the database format to the version 2
-	/// </summary>
-	[DatabaseConverter(2)]
-	public class Version002 : IDatabaseConverter
-	{
-		/// <summary>
-		/// Defines a logger for this class.
-		/// </summary>
-		private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+    /// <summary>
+    /// Converts the database format to the version 2
+    /// </summary>
+    [DatabaseConverter(2)]
+    public class Version002 : IDatabaseConverter
+    {
+        /// <summary>
+        /// Defines a logger for this class.
+        /// </summary>
+        private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-		/// <summary>
-		/// style icon field added this should copy the ID value
-		/// realm 6 should be peace flag and realm changed
-		/// </summary>
-		public void ConvertDatabase()
-		{
-			log.Info("Database Version 2 Convert Started");
+        /// <summary>
+        /// style icon field added this should copy the ID value
+        /// realm 6 should be peace flag and realm changed
+        /// </summary>
+        public void ConvertDatabase()
+        {
+            log.Info("Database Version 2 Convert Started");
 
-			log.Info("Converting Styles");
-			var styles = GameServer.Database.SelectAllObjects<DBStyle>();
-			foreach (DBStyle style in styles)
-			{
-				style.Icon = style.ID;
+            log.Info("Converting Styles");
+            var styles = GameServer.Database.SelectAllObjects<DBStyle>();
+            foreach (DBStyle style in styles)
+            {
+                style.Icon = style.ID;
 
-				GameServer.Database.SaveObject(style);
-			}
-			log.Info(styles.Count + " Styles Processed");
+                GameServer.Database.SaveObject(style);
+            }
+            log.Info(styles.Count + " Styles Processed");
 
-			log.Info("Converting Mobs");
-			var mobs = DOLDB<Mob>.SelectObjects(DB.Column(nameof(Mob.Realm)).IsEqualTo(6));
-			foreach (Mob mob in mobs)
-			{
-				if ((mob.Flags & (uint)GameNPC.eFlags.PEACE) == 0)
-				{
-					mob.Flags ^= (uint)GameNPC.eFlags.PEACE;
-				}
+            log.Info("Converting Mobs");
+            var mobs = DOLDB<Mob>.SelectObjects(DB.Column(nameof(Mob.Realm)).IsEqualTo(6));
+            foreach (Mob mob in mobs)
+            {
+                if ((mob.Flags & (uint)GameNPC.eFlags.PEACE) == 0)
+                {
+                    mob.Flags ^= (uint)GameNPC.eFlags.PEACE;
+                }
 
-				Region region = WorldMgr.GetRegion(mob.Region);
-				if (region != null)
-				{
-					Zone zone = region.GetZone(mob.X, mob.Y);
-					if (zone != null)
-					{
-						mob.Realm = (byte)zone.Realm;
-					}
-				}
+                Region region = WorldMgr.GetRegion(mob.Region);
+                if (region != null)
+                {
+                    Zone zone = region.GetZone(mob.X, mob.Y);
+                    if (zone != null)
+                    {
+                        mob.Realm = (byte)zone.Realm;
+                    }
+                }
 
-				GameServer.Database.SaveObject(mob);
-			}
-			log.Info(mobs.Count + " Mobs Processed");
+                GameServer.Database.SaveObject(mob);
+            }
+            log.Info(mobs.Count + " Mobs Processed");
 
-			log.Info("Database Version 2 Convert Finished");
-		}
-	}
+            log.Info("Database Version 2 Convert Finished");
+        }
+    }
 }

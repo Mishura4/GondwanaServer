@@ -21,25 +21,26 @@ using System.Collections.Generic;
 using System.Text;
 using DOL.GS.PacketHandler;
 using DOL.Events;
-using DOL.GS.Behaviour.Attributes;using DOL.GS.Behaviour;
+using DOL.GS.Behaviour.Attributes;
+using DOL.GS.Behaviour;
 using DOL.Database;
 
 namespace DOL.GS.Behaviour.Actions
 {
     [ActionAttribute(ActionType = eActionType.CustomTimer)]
-    public class CustomTimerAction : AbstractAction<RegionTimer,int>
+    public class CustomTimerAction : AbstractAction<RegionTimer, int>
     {
 
-        public CustomTimerAction(GameNPC defaultNPC,  Object p, Object q)
+        public CustomTimerAction(GameNPC defaultNPC, Object p, Object q)
             : base(defaultNPC, eActionType.CustomTimer, p, q)
-        { 
-            
+        {
+
         }
 
 
         public CustomTimerAction(GameNPC defaultNPC, RegionTimer regionTimer, int delay)
-            : this(defaultNPC, (object) regionTimer,(object) delay) { }
-        
+            : this(defaultNPC, (object)regionTimer, (object)delay) { }
+
 
 
         public override void Perform(DOLEvent e, object sender, EventArgs args)

@@ -20,19 +20,19 @@
 
 namespace DOL.FTP
 {
-	/// <summary>
-	/// FTP Modes
-	/// </summary>
-	public enum FTPMode
-	{
-		/// <summary>
-		/// Ftp connection in passive mode
-		/// </summary>
-		Passive = 1,
+    /// <summary>
+    /// FTP Modes
+    /// </summary>
+    public enum FTPMode
+    {
+        /// <summary>
+        /// Ftp connection in passive mode
+        /// </summary>
+        Passive = 1,
 
-		/// <summary>
-		/// Ftp connection in active mode
-		/// </summary>
-		Active = 2
-	}
+        /// <summary>
+        /// Ftp connection in active mode
+        /// </summary>
+        Active = 2
+    }
 }

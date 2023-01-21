@@ -32,118 +32,118 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute(
-		"&roll",
-		ePrivLevel.Player,
-		"Commands.Players.Roll.Description",
-		"Commands.Players.Roll.Usage")]
-	public class RollCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		// declaring some msg's
-		private const int RESULT_RANGE = 512; // emote range
-		private const int MAX_DICE = 100;
-		private const int ONE_DIE_MAX_VALUE = 6; // :)
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (IsSpammingCommand(client.Player, "roll", 500))
-			{
-				DisplayMessage(
-					client,
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Roll.SlowDown"));
-				return;
-			}
+    [CmdAttribute(
+        "&roll",
+        ePrivLevel.Player,
+        "Commands.Players.Roll.Description",
+        "Commands.Players.Roll.Usage")]
+    public class RollCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        // declaring some msg's
+        private const int RESULT_RANGE = 512; // emote range
+        private const int MAX_DICE = 100;
+        private const int ONE_DIE_MAX_VALUE = 6; // :)
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (IsSpammingCommand(client.Player, "roll", 500))
+            {
+                DisplayMessage(
+                    client,
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Roll.SlowDown"));
+                return;
+            }
 
-			// no args - display usage
-			if (args.Length < 2)
-			{
-				SystemMessage(
-					client,
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Roll.Help"
-					));
-				return;
-			}
+            // no args - display usage
+            if (args.Length < 2)
+            {
+                SystemMessage(
+                    client,
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Roll.Help"
+                    ));
+                return;
+            }
 
 
-			int dice; // number of dice to roll
+            int dice; // number of dice to roll
 
-			// trying to convert number
-			try
-			{
-				dice = System.Convert.ToInt32(args[1]);
-			}
-			catch (OverflowException)
-			{
-				SystemMessage(
-					client,
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Roll.WrongNumber"));
-				return;
-			}
-			catch (Exception)
-			{
-				SystemMessage(
-					client,
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Roll.Help"));
-				return;
-			}
+            // trying to convert number
+            try
+            {
+                dice = System.Convert.ToInt32(args[1]);
+            }
+            catch (OverflowException)
+            {
+                SystemMessage(
+                    client,
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Roll.WrongNumber"));
+                return;
+            }
+            catch (Exception)
+            {
+                SystemMessage(
+                    client,
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Roll.Help"));
+                return;
+            }
 
-			if (dice < 1 || dice > MAX_DICE)
-			{
-				SystemMessage(
-					client,
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Roll.WrongNumber"));
-				return;
-			}
+            if (dice < 1 || dice > MAX_DICE)
+            {
+                SystemMessage(
+                    client,
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Roll.WrongNumber"));
+                return;
+            }
 
-			// throw result
-			int thrown = Util.Random(dice, dice * ONE_DIE_MAX_VALUE);
+            // throw result
+            int thrown = Util.Random(dice, dice * ONE_DIE_MAX_VALUE);
 
-			// sending msg to player
-			EmoteMessage(
-					client,
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Result.Self",
-						dice, thrown));
+            // sending msg to player
+            EmoteMessage(
+                    client,
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Result.Self",
+                        dice, thrown));
 
-			// sending result & playername to all players in range
-			foreach (GamePlayer player in client.Player.GetPlayersInRadius(RESULT_RANGE))
-			{
-				if (client.Player != player) // client gets unique message
-				{
-					EmoteMessage(
-						player,
-						LanguageMgr.GetTranslation(
-							player.Client.Account.Language,
-							"Commands.Players.Result.Other",
-							client.Player.Name, dice, thrown));
-				}
-			}
-		}
+            // sending result & playername to all players in range
+            foreach (GamePlayer player in client.Player.GetPlayersInRadius(RESULT_RANGE))
+            {
+                if (client.Player != player) // client gets unique message
+                {
+                    EmoteMessage(
+                        player,
+                        LanguageMgr.GetTranslation(
+                            player.Client.Account.Language,
+                            "Commands.Players.Result.Other",
+                            client.Player.Name, dice, thrown));
+                }
+            }
+        }
 
-		// these are to make code look better
-		private void SystemMessage(GameClient client, string str)
-		{
-			client.Out.SendMessage(str, eChatType.CT_System, eChatLoc.CL_SystemWindow);
-		}
+        // these are to make code look better
+        private void SystemMessage(GameClient client, string str)
+        {
+            client.Out.SendMessage(str, eChatType.CT_System, eChatLoc.CL_SystemWindow);
+        }
 
-		private void EmoteMessage(GamePlayer player, string str)
-		{
-			EmoteMessage(player.Client, str);
-		}
+        private void EmoteMessage(GamePlayer player, string str)
+        {
+            EmoteMessage(player.Client, str);
+        }
 
-		private void EmoteMessage(GameClient client, string str)
-		{
-			client.Out.SendMessage(str, eChatType.CT_Emote, eChatLoc.CL_SystemWindow);
-		}
-	}
+        private void EmoteMessage(GameClient client, string str)
+        {
+            client.Out.SendMessage(str, eChatType.CT_Emote, eChatLoc.CL_SystemWindow);
+        }
+    }
 }

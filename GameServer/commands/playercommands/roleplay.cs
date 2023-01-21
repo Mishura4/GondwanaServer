@@ -21,42 +21,42 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute(
-		"&roleplay",
-		ePrivLevel.Player,
-	   "Commands.Players.Roleplay.Description",
-	   "Commands.Players.Roleplay.Usage")]
-	public class RolePlayCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (IsSpammingCommand(client.Player, "roleplay"))
-				return;
+    [CmdAttribute(
+        "&roleplay",
+        ePrivLevel.Player,
+       "Commands.Players.Roleplay.Description",
+       "Commands.Players.Roleplay.Usage")]
+    public class RolePlayCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (IsSpammingCommand(client.Player, "roleplay"))
+                return;
 
-			if (args.Length < 2)
-			{
-				DisplaySyntax(client);
-				return;
-			}
+            if (args.Length < 2)
+            {
+                DisplaySyntax(client);
+                return;
+            }
 
-			if (args[1].ToLower().Equals("on"))
-			{
-				client.Player.RPFlag = true;
-				client.Out.SendMessage(
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Roleplay.On"),
-					eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-			}
-			else if (args[1].ToLower().Equals("off"))
-			{
-				client.Player.RPFlag = false;
-				client.Out.SendMessage(
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Roleplay.Off"),
-					eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-			}
-		}
-	}
+            if (args[1].ToLower().Equals("on"))
+            {
+                client.Player.RPFlag = true;
+                client.Out.SendMessage(
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Roleplay.On"),
+                    eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+            }
+            else if (args[1].ToLower().Equals("off"))
+            {
+                client.Player.RPFlag = false;
+                client.Out.SendMessage(
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Roleplay.Off"),
+                    eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+            }
+        }
+    }
 }

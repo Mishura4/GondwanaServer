@@ -23,31 +23,31 @@ using System.Collections.Generic;
 
 namespace DOL.GS.Scripts
 {
-	[CmdAttribute(
-		"&nightmob",
-		ePrivLevel.GM,
+    [CmdAttribute(
+        "&nightmob",
+        ePrivLevel.GM,
         "Commands.GM.nightmob.Description",
         "Commands.GM.nightmob.Usage.Create",
         "Commands.GM.nightmob.Usage.Info",
         "Commands.GM.nightmob.Usage.Time")]
-	public class NightMobCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (args.Length < 2)
-			{
-				DisplaySyntax(client);
-				return;
-			}
+    public class NightMobCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (args.Length < 2)
+            {
+                DisplaySyntax(client);
+                return;
+            }
             NightMob mob = client.Player.TargetObject as NightMob;
-			switch (args[1].ToLower())
-			{
+            switch (args[1].ToLower())
+            {
                 case "create":
                     mob = new NightMob();
                     mob.Position = client.Player.Position;
                     mob.Heading = client.Player.Heading;
                     mob.CurrentRegion = client.Player.CurrentRegion;
-					mob.Flags = GameNPC.eFlags.PEACE;
+                    mob.Flags = GameNPC.eFlags.PEACE;
                     mob.Name = "New Night Mob";
                     mob.Model = 409;
                     mob.LoadedFromScript = false;
@@ -67,41 +67,41 @@ namespace DOL.GS.Scripts
                     client.Out.SendCustomTextWindow(mob.Name + " Info", txt);
                     break;
 
-				case "hour":
+                case "hour":
                 case "time":
                     if (mob == null)
                     {
                         DisplaySyntax(client);
                         return;
                     }
-					try
-					{
-						mob.StartHour = int.Parse(args[2]);
-						mob.EndHour = int.Parse(args[3]);
-						//check 
-						if (mob.StartHour > 24)
-							mob.StartHour = 24;
-						if (mob.EndHour > 24)
-							mob.EndHour = 24;
-						if (mob.EndHour == 24 && mob.StartHour == 24)
-							mob.StartHour = 0;
-						if (mob.StartHour < 0)
-							mob.StartHour = 0;
-						if (mob.EndHour < 0)
-							mob.EndHour = 0;
-					}
-					catch
-					{
-						DisplaySyntax(client);
+                    try
+                    {
+                        mob.StartHour = int.Parse(args[2]);
+                        mob.EndHour = int.Parse(args[3]);
+                        //check 
+                        if (mob.StartHour > 24)
+                            mob.StartHour = 24;
+                        if (mob.EndHour > 24)
+                            mob.EndHour = 24;
+                        if (mob.EndHour == 24 && mob.StartHour == 24)
+                            mob.StartHour = 0;
+                        if (mob.StartHour < 0)
+                            mob.StartHour = 0;
+                        if (mob.EndHour < 0)
+                            mob.EndHour = 0;
+                    }
+                    catch
+                    {
+                        DisplaySyntax(client);
                         return;
-					}
-					mob.SaveIntoDatabase();
-					client.Out.SendMessage("Les heures d'apparition sont maintenant " + mob.StartHour + ":00 et " + mob.EndHour + ":00.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    }
+                    mob.SaveIntoDatabase();
+                    client.Out.SendMessage("Les heures d'apparition sont maintenant " + mob.StartHour + ":00 et " + mob.EndHour + ":00.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     break;
 
                 default: DisplaySyntax(client); break;
-			}
-			return;
-		}
-	}
+            }
+            return;
+        }
+    }
 }

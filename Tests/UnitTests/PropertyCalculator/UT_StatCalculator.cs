@@ -61,7 +61,7 @@ namespace DOL.UnitTests.Gameserver.PropertyCalc
         public void CalcValueFromBuffs_LivingIsNull_Zero()
         {
             int actual = StatCalculator.CalcValueFromBuffs(null, eProperty.Constitution);
-            
+
             Assert.AreEqual(0, actual);
         }
 
@@ -109,7 +109,7 @@ namespace DOL.UnitTests.Gameserver.PropertyCalc
             player.ItemBonus[eProperty.Acuity] = 50;
 
             int actual = StatCalculator.CalcValueFromItems(player, eProperty.Intelligence);
-            
+
             Assert.AreEqual(50, actual);
         }
 
@@ -253,7 +253,7 @@ namespace DOL.UnitTests.Gameserver.PropertyCalc
 
             int actual = StatCalculator.CalcValue(player, eProperty.Constitution);
 
-            Assert.AreEqual(200 - (50/2), actual);
+            Assert.AreEqual(200 - (50 / 2), actual);
         }
 
         [Test]
@@ -306,7 +306,7 @@ namespace DOL.UnitTests.Gameserver.PropertyCalc
             player.TotalConstitutionLostAtDeath = 3;
 
             int actual = StatCalculator.CalcValue(player, eProperty.Constitution);
-            
+
             Assert.AreEqual(67, actual);
         }
 

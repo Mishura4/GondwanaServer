@@ -24,86 +24,86 @@ using DOL.Language;
 
 namespace DOL.GS.Keeps
 {
-	public class GuardCaster : GameKeepGuard
-	{
-		public const int INTERVAL = 360 * 1000;
+    public class GuardCaster : GameKeepGuard
+    {
+        public const int INTERVAL = 360 * 1000;
 
-		protected virtual int Timer(RegionTimer callingTimer)
-		{
-			if (base.IsAlive)
-			{
-				foreach (GamePlayer player in this.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
-				{
-					player.Out.SendSpellCastAnimation(this, 4321, 30);
-					RegionTimer timer = new RegionTimer(player, new RegionTimerCallback(ShowEffect), 3000);
-				}
-			}
-			return INTERVAL;
-		}
+        protected virtual int Timer(RegionTimer callingTimer)
+        {
+            if (base.IsAlive)
+            {
+                foreach (GamePlayer player in this.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+                {
+                    player.Out.SendSpellCastAnimation(this, 4321, 30);
+                    RegionTimer timer = new RegionTimer(player, new RegionTimerCallback(ShowEffect), 3000);
+                }
+            }
+            return INTERVAL;
+        }
 
-		public int ShowEffect(RegionTimer timer)
-		{
-			if (base.IsAlive)
-			{
-				foreach (GamePlayer player in this.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
-				{
-					player.Out.SendSpellEffectAnimation(this, this, 4321, 0, false, 1);
-				}
-				foreach (GamePlayer player in this.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
-				{
+        public int ShowEffect(RegionTimer timer)
+        {
+            if (base.IsAlive)
+            {
+                foreach (GamePlayer player in this.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+                {
+                    player.Out.SendSpellEffectAnimation(this, this, 4321, 0, false, 1);
+                }
+                foreach (GamePlayer player in this.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
+                {
 
-					player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GuardCaster.SkinsHardens", this.Name), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GuardCaster.SkinsHardens", this.Name), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
 
-				}
-			}
-			timer.Stop();
-			timer = null;
-			return 0;
-		}
+                }
+            }
+            timer.Stop();
+            timer = null;
+            return 0;
+        }
 
-		public override bool AddToWorld()
-		{
-			bool success = base.AddToWorld();
-			if (success) new RegionTimer(this, new RegionTimerCallback(Timer), INTERVAL);
-			return success;
-		}
+        public override bool AddToWorld()
+        {
+            bool success = base.AddToWorld();
+            if (success) new RegionTimer(this, new RegionTimerCallback(Timer), INTERVAL);
+            return success;
+        }
 
-		protected override ICharacterClass GetClass()
-		{
-			if (ModelRealm == eRealm.Albion) return new ClassWizard();
-			else if (ModelRealm == eRealm.Midgard) return new ClassRunemaster();
-			else if (ModelRealm == eRealm.Hibernia) return new ClassEldritch();
-			return new DefaultCharacterClass();
-		}
+        protected override ICharacterClass GetClass()
+        {
+            if (ModelRealm == eRealm.Albion) return new ClassWizard();
+            else if (ModelRealm == eRealm.Midgard) return new ClassRunemaster();
+            else if (ModelRealm == eRealm.Hibernia) return new ClassEldritch();
+            return new DefaultCharacterClass();
+        }
 
-		protected override KeepGuardBrain GetBrain() => new CasterBrain();
+        protected override KeepGuardBrain GetBrain() => new CasterBrain();
 
-		protected override void SetName()
-		{
-			switch (ModelRealm)
-			{
-				case eRealm.None:
-				case eRealm.Albion:
-					if (IsPortalKeepGuard)
-						Name = LanguageMgr.GetTranslation(Properties.SERV_LANGUAGE, "SetGuardName.MasterWizard");
-					else Name = LanguageMgr.GetTranslation(Properties.SERV_LANGUAGE, "SetGuardName.Wizard");
-					break;
-				case eRealm.Midgard:
-					if (IsPortalKeepGuard)
-						Name = LanguageMgr.GetTranslation(Properties.SERV_LANGUAGE, "SetGuardName.MasterRunes");
-					else Name = LanguageMgr.GetTranslation(Properties.SERV_LANGUAGE, "SetGuardName.Runemaster");
-					break;
-				case eRealm.Hibernia:
-					if (IsPortalKeepGuard)
-						Name = LanguageMgr.GetTranslation(Properties.SERV_LANGUAGE, "SetGuardName.MasterEldritch");
-					else Name = LanguageMgr.GetTranslation(Properties.SERV_LANGUAGE, "SetGuardName.Eldritch");
-					break;
-			}
+        protected override void SetName()
+        {
+            switch (ModelRealm)
+            {
+                case eRealm.None:
+                case eRealm.Albion:
+                    if (IsPortalKeepGuard)
+                        Name = LanguageMgr.GetTranslation(Properties.SERV_LANGUAGE, "SetGuardName.MasterWizard");
+                    else Name = LanguageMgr.GetTranslation(Properties.SERV_LANGUAGE, "SetGuardName.Wizard");
+                    break;
+                case eRealm.Midgard:
+                    if (IsPortalKeepGuard)
+                        Name = LanguageMgr.GetTranslation(Properties.SERV_LANGUAGE, "SetGuardName.MasterRunes");
+                    else Name = LanguageMgr.GetTranslation(Properties.SERV_LANGUAGE, "SetGuardName.Runemaster");
+                    break;
+                case eRealm.Hibernia:
+                    if (IsPortalKeepGuard)
+                        Name = LanguageMgr.GetTranslation(Properties.SERV_LANGUAGE, "SetGuardName.MasterEldritch");
+                    else Name = LanguageMgr.GetTranslation(Properties.SERV_LANGUAGE, "SetGuardName.Eldritch");
+                    break;
+            }
 
-			if (Realm == eRealm.None)
-			{
-				Name = LanguageMgr.GetTranslation(Properties.SERV_LANGUAGE, "SetGuardName.Renegade", Name);
-			}
-		}
-	}
+            if (Realm == eRealm.None)
+            {
+                Name = LanguageMgr.GetTranslation(Properties.SERV_LANGUAGE, "SetGuardName.Renegade", Name);
+            }
+        }
+    }
 }

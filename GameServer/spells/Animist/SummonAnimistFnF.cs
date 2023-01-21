@@ -26,103 +26,103 @@ using DOL.Language;
 
 namespace DOL.GS.Spells
 {
-	[SpellHandler("SummonAnimistFnF")]
-	public class SummonAnimistFnF : SummonAnimistPet
-	{
-		public SummonAnimistFnF(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+    [SpellHandler("SummonAnimistFnF")]
+    public class SummonAnimistFnF : SummonAnimistPet
+    {
+        public SummonAnimistFnF(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-		public override bool CheckBeginCast(GameLiving selectedTarget)
-		{
-			int nCount = 0;
+        public override bool CheckBeginCast(GameLiving selectedTarget)
+        {
+            int nCount = 0;
 
-			Region rgn = WorldMgr.GetRegion(Caster.CurrentRegion.ID);
+            Region rgn = WorldMgr.GetRegion(Caster.CurrentRegion.ID);
 
-			if (rgn == null || rgn.GetZone(Caster.GroundTarget.Value) == null)
-			{
+            if (rgn == null || rgn.GetZone(Caster.GroundTarget.Value) == null)
+            {
                 if (Caster is GamePlayer)
                     MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "SummonAnimistFnF.CheckBeginCast.NoGroundTarget"), eChatType.CT_SpellResisted);
                 return false;
-			}
+            }
 
-			foreach (GameNPC npc in Caster.CurrentRegion.GetNPCsInRadius(Caster.GroundTarget.Value, (ushort)Properties.TURRET_AREA_CAP_RADIUS, false, true))
-				if (npc.Brain is TurretFNFBrain)
-					nCount++;
+            foreach (GameNPC npc in Caster.CurrentRegion.GetNPCsInRadius(Caster.GroundTarget.Value, (ushort)Properties.TURRET_AREA_CAP_RADIUS, false, true))
+                if (npc.Brain is TurretFNFBrain)
+                    nCount++;
 
-			if (nCount >= Properties.TURRET_AREA_CAP_COUNT)
-			{
+            if (nCount >= Properties.TURRET_AREA_CAP_COUNT)
+            {
                 if (Caster is GamePlayer)
                     MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "SummonAnimistFnF.CheckBeginCast.TurretAreaCap"), eChatType.CT_SpellResisted);
                 return false;
-			}
+            }
 
-			if (Caster.PetCount >= Properties.TURRET_PLAYER_CAP_COUNT)
-			{
+            if (Caster.PetCount >= Properties.TURRET_PLAYER_CAP_COUNT)
+            {
                 if (Caster is GamePlayer)
                     MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "SummonAnimistFnF.CheckBeginCast.TurretPlayerCap"), eChatType.CT_SpellResisted);
                 return false;
-			}
+            }
 
-			return base.CheckBeginCast(selectedTarget);
-		}
+            return base.CheckBeginCast(selectedTarget);
+        }
 
-		public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
-		{
-			base.ApplyEffectOnTarget(target, effectiveness);
+        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        {
+            base.ApplyEffectOnTarget(target, effectiveness);
 
-			if (Spell.SubSpellID > 0 && SkillBase.GetSpellByID(Spell.SubSpellID) != null)
-			{
-				m_pet.Spells.Add(SkillBase.GetSpellByID(Spell.SubSpellID));
-			}
+            if (Spell.SubSpellID > 0 && SkillBase.GetSpellByID(Spell.SubSpellID) != null)
+            {
+                m_pet.Spells.Add(SkillBase.GetSpellByID(Spell.SubSpellID));
+            }
 
-			(m_pet.Brain as TurretBrain).IsMainPet = false;
+            (m_pet.Brain as TurretBrain).IsMainPet = false;
 
-			(m_pet.Brain as IOldAggressiveBrain).AddToAggroList(target, 1);
-			(m_pet.Brain as TurretBrain).Think();
-			//[Ganrod] Nidel: Set only one spell.
-			(m_pet as TurretPet).TurretSpell = m_pet.Spells[0] as Spell;
-			Caster.PetCount++;
-		}
+            (m_pet.Brain as IOldAggressiveBrain).AddToAggroList(target, 1);
+            (m_pet.Brain as TurretBrain).Think();
+            //[Ganrod] Nidel: Set only one spell.
+            (m_pet as TurretPet).TurretSpell = m_pet.Spells[0] as Spell;
+            Caster.PetCount++;
+        }
 
-		protected override void SetBrainToOwner(IControlledBrain brain)
-		{
-		}
+        protected override void SetBrainToOwner(IControlledBrain brain)
+        {
+        }
 
-		protected override void OnNpcReleaseCommand(DOLEvent e, object sender, EventArgs arguments)
-		{
-			m_pet = sender as GamePet;
-			if (m_pet == null)
-				return;
+        protected override void OnNpcReleaseCommand(DOLEvent e, object sender, EventArgs arguments)
+        {
+            m_pet = sender as GamePet;
+            if (m_pet == null)
+                return;
 
-			if ((m_pet.Brain as TurretFNFBrain) == null)
-				return;
+            if ((m_pet.Brain as TurretFNFBrain) == null)
+                return;
 
-			if (Caster.ControlledBrain == null)
-			{
-				((GamePlayer)Caster).Out.SendPetWindow(null, ePetWindowAction.Close, 0, 0);
-			}
+            if (Caster.ControlledBrain == null)
+            {
+                ((GamePlayer)Caster).Out.SendPetWindow(null, ePetWindowAction.Close, 0, 0);
+            }
 
-			GameEventMgr.RemoveHandler(m_pet, GameLivingEvent.PetReleased, OnNpcReleaseCommand);
+            GameEventMgr.RemoveHandler(m_pet, GameLivingEvent.PetReleased, OnNpcReleaseCommand);
 
-			GameSpellEffect effect = FindEffectOnTarget(m_pet, this);
-			if (effect != null)
-				effect.Cancel(false);
-		}
+            GameSpellEffect effect = FindEffectOnTarget(m_pet, this);
+            if (effect != null)
+                effect.Cancel(false);
+        }
 
-		public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
-		{
-			Caster.PetCount--;
+        public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
+        {
+            Caster.PetCount--;
 
-			return base.OnEffectExpires(effect, noMessages);
-		}
+            return base.OnEffectExpires(effect, noMessages);
+        }
 
-		protected override IControlledBrain GetPetBrain(GameLiving owner)
-		{
-			return new TurretFNFBrain(owner);
-		}
+        protected override IControlledBrain GetPetBrain(GameLiving owner)
+        {
+            return new TurretFNFBrain(owner);
+        }
 
-		public override void CastSubSpells(GameLiving target)
-		{
-		}
+        public override void CastSubSpells(GameLiving target)
+        {
+        }
 
         public override string ShortDescription => "Summons an elemental spirit to attack the target.";
     }

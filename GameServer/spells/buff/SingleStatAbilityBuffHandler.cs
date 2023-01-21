@@ -20,83 +20,83 @@ using System;
 
 namespace DOL.GS.Spells
 {
-	[Obsolete("This is going to be removed without replacement.")]
-	public abstract class SingleStatAbilityBuffHandler : PropertyChangingSpell
-	{
-		public override eBuffBonusCategory BonusCategory1 { get { return eBuffBonusCategory.AbilityBuff; } }
+    [Obsolete("This is going to be removed without replacement.")]
+    public abstract class SingleStatAbilityBuffHandler : PropertyChangingSpell
+    {
+        public override eBuffBonusCategory BonusCategory1 { get { return eBuffBonusCategory.AbilityBuff; } }
 
-		protected override void SendUpdates(GameLiving target)
-		{
-			target.UpdateHealthManaEndu();
-		}
-		
-		public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
-		{
-			// Ability Bonus are not modified by any effectiveness modifier
-			base.ApplyEffectOnTarget(target, 1.0);
-		}
+        protected override void SendUpdates(GameLiving target)
+        {
+            target.UpdateHealthManaEndu();
+        }
 
-		protected SingleStatAbilityBuffHandler(GameLiving caster, Spell spell, SpellLine line)
-			: base(caster, spell, line) { }
-	}
+        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        {
+            // Ability Bonus are not modified by any effectiveness modifier
+            base.ApplyEffectOnTarget(target, 1.0);
+        }
 
-	[Obsolete("This is going to be removed without replacement.")]
-	[SpellHandler("StrengthAbilityBuff")]
-	public class StrengthAbilityBuffHandler : SingleStatAbilityBuffHandler
-	{
-		public override eProperty Property1 { get { return eProperty.Strength; } }
+        protected SingleStatAbilityBuffHandler(GameLiving caster, Spell spell, SpellLine line)
+            : base(caster, spell, line) { }
+    }
 
-		public StrengthAbilityBuffHandler(GameLiving caster, Spell spell, SpellLine line)
-			: base(caster, spell, line) { }
-	}
+    [Obsolete("This is going to be removed without replacement.")]
+    [SpellHandler("StrengthAbilityBuff")]
+    public class StrengthAbilityBuffHandler : SingleStatAbilityBuffHandler
+    {
+        public override eProperty Property1 { get { return eProperty.Strength; } }
 
-	[Obsolete("This is going to be removed without replacement.")]
-	[SpellHandler("DexterityAbilityBuff")]
-	public class DexterityAbilityBuffHandler : SingleStatAbilityBuffHandler
-	{
-		public override eProperty Property1 { get { return eProperty.Dexterity; } }
+        public StrengthAbilityBuffHandler(GameLiving caster, Spell spell, SpellLine line)
+            : base(caster, spell, line) { }
+    }
 
-		public DexterityAbilityBuffHandler(GameLiving caster, Spell spell, SpellLine line)
-			: base(caster, spell, line) { }
-	}
+    [Obsolete("This is going to be removed without replacement.")]
+    [SpellHandler("DexterityAbilityBuff")]
+    public class DexterityAbilityBuffHandler : SingleStatAbilityBuffHandler
+    {
+        public override eProperty Property1 { get { return eProperty.Dexterity; } }
 
-	[Obsolete("This is going to be removed without replacement.")]
-	[SpellHandler("ConstitutionAbilityBuff")]
-	public class ConstitutionAbilityBuffHandler : SingleStatAbilityBuffHandler
-	{
-		public override eProperty Property1 { get { return eProperty.Constitution; } }
+        public DexterityAbilityBuffHandler(GameLiving caster, Spell spell, SpellLine line)
+            : base(caster, spell, line) { }
+    }
 
-		public ConstitutionAbilityBuffHandler(GameLiving caster, Spell spell, SpellLine line)
-			: base(caster, spell, line) { }
-	}
+    [Obsolete("This is going to be removed without replacement.")]
+    [SpellHandler("ConstitutionAbilityBuff")]
+    public class ConstitutionAbilityBuffHandler : SingleStatAbilityBuffHandler
+    {
+        public override eProperty Property1 { get { return eProperty.Constitution; } }
 
-	[Obsolete("This is going to be removed without replacement.")]
-	[SpellHandler("QuicknessAbilityBuff")]
-	public class QuicknessAbilityBuffHandler : SingleStatAbilityBuffHandler
-	{
-		public override eProperty Property1 { get { return eProperty.Quickness; } }
+        public ConstitutionAbilityBuffHandler(GameLiving caster, Spell spell, SpellLine line)
+            : base(caster, spell, line) { }
+    }
 
-		public QuicknessAbilityBuffHandler(GameLiving caster, Spell spell, SpellLine line)
-			: base(caster, spell, line) { }
-	}
+    [Obsolete("This is going to be removed without replacement.")]
+    [SpellHandler("QuicknessAbilityBuff")]
+    public class QuicknessAbilityBuffHandler : SingleStatAbilityBuffHandler
+    {
+        public override eProperty Property1 { get { return eProperty.Quickness; } }
 
-	[Obsolete("This is going to be removed without replacement.")]
-	[SpellHandler("AcuityAbilityBuff")]
-	public class AcuityAbilityBuffHandler : SingleStatAbilityBuffHandler
-	{
-		public override eProperty Property1 { get { return eProperty.Acuity; } }
+        public QuicknessAbilityBuffHandler(GameLiving caster, Spell spell, SpellLine line)
+            : base(caster, spell, line) { }
+    }
 
-		public AcuityAbilityBuffHandler(GameLiving caster, Spell spell, SpellLine line)
-			: base(caster, spell, line) { }
-	}
+    [Obsolete("This is going to be removed without replacement.")]
+    [SpellHandler("AcuityAbilityBuff")]
+    public class AcuityAbilityBuffHandler : SingleStatAbilityBuffHandler
+    {
+        public override eProperty Property1 { get { return eProperty.Acuity; } }
 
-	[Obsolete("This is going to be removed without replacement.")]
+        public AcuityAbilityBuffHandler(GameLiving caster, Spell spell, SpellLine line)
+            : base(caster, spell, line) { }
+    }
+
+    [Obsolete("This is going to be removed without replacement.")]
     [SpellHandler("MaxHealthAbilityBuff")]
-	public class MaxHealthAbilityBuffHandler : SingleStatAbilityBuffHandler
-	{
-		public override eProperty Property1 { get { return eProperty.MaxHealth; } }
+    public class MaxHealthAbilityBuffHandler : SingleStatAbilityBuffHandler
+    {
+        public override eProperty Property1 { get { return eProperty.MaxHealth; } }
 
-		public MaxHealthAbilityBuffHandler(GameLiving caster, Spell spell, SpellLine line)
-			: base(caster, spell, line) { }
-	}
+        public MaxHealthAbilityBuffHandler(GameLiving caster, Spell spell, SpellLine line)
+            : base(caster, spell, line) { }
+    }
 }

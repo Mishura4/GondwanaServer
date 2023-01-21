@@ -60,7 +60,7 @@ namespace DOL.GS
             ArtifactID = ArtifactMgr.GetArtifactIDFromItemID(template.Id_nb.Split('#')[0]);
             ArtifactLevel = 0;
             m_levelRequirements = ArtifactMgr.GetLevelRequirements(ArtifactID);
-            
+
             for (ArtifactBonus.ID bonusID = ArtifactBonus.ID.Min; bonusID <= ArtifactBonus.ID.Max; ++bonusID)
             {
                 // Clear all bonuses except the base (L0) bonuses.

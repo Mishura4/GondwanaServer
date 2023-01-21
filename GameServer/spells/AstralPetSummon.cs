@@ -32,11 +32,11 @@ using System.Numerics;
 
 namespace DOL.GS.Spells
 {
-    
-   [SpellHandler("AstralPetSummon")]
+
+    [SpellHandler("AstralPetSummon")]
     public class AstralPetSummon : SummonSpellHandler
     {
-    	//Graveen: Not implemented property - can be interesting
+        //Graveen: Not implemented property - can be interesting
         /* 
         public bool Controllable
         {
@@ -60,7 +60,7 @@ namespace DOL.GS.Spells
 
         protected override GamePet GetGamePet(INpcTemplate template) { return new AstralPet(template); }
         protected override IControlledBrain GetPetBrain(GameLiving owner) { return new ProcPetBrain(owner); }
-        protected override void SetBrainToOwner(IControlledBrain brain) {}
+        protected override void SetBrainToOwner(IControlledBrain brain) { }
 
         protected override void OnNpcReleaseCommand(DOLEvent e, object sender, EventArgs arguments)
         {
@@ -82,8 +82,8 @@ namespace DOL.GS.Spells
             heading = Caster.Heading;
         }
 
-         public AstralPetSummon(GameLiving caster, Spell spell, SpellLine line)
-            : base(caster, spell, line) { }
+        public AstralPetSummon(GameLiving caster, Spell spell, SpellLine line)
+           : base(caster, spell, line) { }
     }
 }
 

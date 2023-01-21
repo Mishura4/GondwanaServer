@@ -17,12 +17,14 @@
  *
  */
 
-namespace DOL.Geometry {
-  /// <summary>
-  ///   interface for classes that represent a point in 2d space
-  /// </summary>
-  public interface IPoint2D {
-    int X { get; }
-    int Y { get; }
-  }
+namespace DOL.Geometry
+{
+    /// <summary>
+    ///   interface for classes that represent a point in 2d space
+    /// </summary>
+    public interface IPoint2D
+    {
+        int X { get; }
+        int Y { get; }
+    }
 }

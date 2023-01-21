@@ -44,7 +44,7 @@ namespace DOL.GS.RealmAbilities
             GamePlayer player = living as GamePlayer;
             if (player != null)
             {
-            	CallOfDarknessEffect CallOfDarkness = player.EffectList.GetOfType<CallOfDarknessEffect>();
+                CallOfDarknessEffect CallOfDarkness = player.EffectList.GetOfType<CallOfDarknessEffect>();
                 if (CallOfDarkness != null)
                     CallOfDarkness.Cancel(false);
 

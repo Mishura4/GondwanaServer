@@ -21,37 +21,37 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute(
-		"&Noqueue", //command to handle
-		ePrivLevel.Player, //minimum privelege level
-		"Commands.Players.Noqueue.Description",
-		"Commands.Players.Noqueue.Usage")] //usage
-	public class NoqueueCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (IsSpammingCommand(client.Player, "noqueue"))
-				return;
+    [CmdAttribute(
+        "&Noqueue", //command to handle
+        ePrivLevel.Player, //minimum privelege level
+        "Commands.Players.Noqueue.Description",
+        "Commands.Players.Noqueue.Usage")] //usage
+    public class NoqueueCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (IsSpammingCommand(client.Player, "noqueue"))
+                return;
 
-			client.Player.SpellQueue = !client.Player.SpellQueue;
+            client.Player.SpellQueue = !client.Player.SpellQueue;
 
-			if (client.Player.SpellQueue)
-			{
-				DisplayMessage(
-					client,
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Noqueue.On"));
-			}
-			else
-			{
-				DisplayMessage(
-					client,
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Noqueue.Off"));
+            if (client.Player.SpellQueue)
+            {
+                DisplayMessage(
+                    client,
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Noqueue.On"));
+            }
+            else
+            {
+                DisplayMessage(
+                    client,
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Noqueue.Off"));
 
-			}
-		}
-	}
+            }
+        }
+    }
 }

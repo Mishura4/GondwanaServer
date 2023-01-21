@@ -22,31 +22,31 @@ using DOL.Database;
 
 namespace DOL.GS
 {
-	/// <summary>
-	/// The state a door can take
-	/// </summary>
-	public enum eDoorState
-	{
-		Open,
-		Closed
-	}
-	/// <summary>
-	/// IDoor is interface for door and keepdoor
-	/// </summary>
-	public interface IDoor
-	{
-		string Name	{get;}
-		uint Flag {get;}
-		Vector3 Position {get;}
-		ushort Heading	{get;}
-		ushort ZoneID { get; }
-		eRealm Realm {get;}
-		int DoorID	{get;}
-		int ObjectID	{get;}
-		eDoorState State {get; set;}
-		void Open(GameLiving opener = null);
-		void Close(GameLiving closer = null);
-		void NPCManipulateDoorRequest(GameNPC npc, bool open);
-		void LoadFromDatabase(DataObject obj);
-	}
+    /// <summary>
+    /// The state a door can take
+    /// </summary>
+    public enum eDoorState
+    {
+        Open,
+        Closed
+    }
+    /// <summary>
+    /// IDoor is interface for door and keepdoor
+    /// </summary>
+    public interface IDoor
+    {
+        string Name { get; }
+        uint Flag { get; }
+        Vector3 Position { get; }
+        ushort Heading { get; }
+        ushort ZoneID { get; }
+        eRealm Realm { get; }
+        int DoorID { get; }
+        int ObjectID { get; }
+        eDoorState State { get; set; }
+        void Open(GameLiving opener = null);
+        void Close(GameLiving closer = null);
+        void NPCManipulateDoorRequest(GameNPC npc, bool open);
+        void LoadFromDatabase(DataObject obj);
+    }
 }

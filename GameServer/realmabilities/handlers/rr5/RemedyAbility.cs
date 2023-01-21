@@ -28,9 +28,9 @@ using DOL.GS.Spells;
 
 namespace DOL.GS.RealmAbilities
 {
-	/// <summary>
-	/// Remedy Realm Ability
-	/// </summary>
+    /// <summary>
+    /// Remedy Realm Ability
+    /// </summary>
     public class RemedyAbility : RealmAbility
     {
         public RemedyAbility(DBAbility dba, int level) : base(dba, level)
@@ -38,26 +38,26 @@ namespace DOL.GS.RealmAbilities
 
         }
 
-		/// <summary>
-		/// Action
-		/// </summary>
-		/// <param name="living"></param>
+        /// <summary>
+        /// Action
+        /// </summary>
+        /// <param name="living"></param>
         public override void Execute(GameLiving living)
-		{
+        {
             GamePlayer player = living as GamePlayer;
 
             if (!player.IsAlive || player.IsSitting || player.IsMezzed || player.IsStunned)
                 return;
 
-			if (player != null)
-			{
+            if (player != null)
+            {
                 player.Out.SendSpellEffectAnimation(player, player, 7060, 0, false, 1);
                 //SendCasterSpellEffectAndCastMessage(player, 7060, true);
-				RemedyEffect effect = new RemedyEffect();
-				effect.Start(player);
+                RemedyEffect effect = new RemedyEffect();
+                effect.Start(player);
 
                 player.DisableSkill(this, 300 * 1000);
-			}
-		}
-	}
+            }
+        }
+    }
 }

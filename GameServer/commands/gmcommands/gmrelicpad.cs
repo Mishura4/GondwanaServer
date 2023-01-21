@@ -23,33 +23,33 @@ using DOL.Database;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute(
-		"&gmrelicpad",
-		ePrivLevel.GM,
-		"Commands.GM.GMRelicPad.Description",
-		"Commands.GM.GMRelicPad.Usage")]
-	public class GMRelicPadCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (args.Length != 4 || (args[1] != "magic" && args[1] != "strength"))
-			{
-				DisplaySyntax(client);
-				return;
-			}
+    [CmdAttribute(
+        "&gmrelicpad",
+        ePrivLevel.GM,
+        "Commands.GM.GMRelicPad.Description",
+        "Commands.GM.GMRelicPad.Usage")]
+    public class GMRelicPadCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (args.Length != 4 || (args[1] != "magic" && args[1] != "strength"))
+            {
+                DisplaySyntax(client);
+                return;
+            }
 
-			ushort emblem = ushort.Parse(args[3]);
-			emblem += (ushort)((args[1] == "magic") ? 10 : 0);
+            ushort emblem = ushort.Parse(args[3]);
+            emblem += (ushort)((args[1] == "magic") ? 10 : 0);
 
-			GameRelicPad pad = new GameRelicPad();
-			pad.Name = args[2];
-			pad.Realm = (eRealm)byte.Parse(args[3]);
-			pad.Emblem = emblem;
-			pad.CurrentRegionID = client.Player.CurrentRegionID;
-			pad.Position = client.Player.Position;
-			pad.Heading = client.Player.Heading;
-			pad.AddToWorld();
-			pad.SaveIntoDatabase();
-		}
-	}
+            GameRelicPad pad = new GameRelicPad();
+            pad.Name = args[2];
+            pad.Realm = (eRealm)byte.Parse(args[3]);
+            pad.Emblem = emblem;
+            pad.CurrentRegionID = client.Player.CurrentRegionID;
+            pad.Position = client.Player.Position;
+            pad.Heading = client.Player.Heading;
+            pad.AddToWorld();
+            pad.SaveIntoDatabase();
+        }
+    }
 }

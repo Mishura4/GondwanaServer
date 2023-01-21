@@ -23,62 +23,62 @@ using DOL.Database;
 
 namespace DOL.GS
 {
-	/// <summary>
-	/// Special NPC for giving DR players items
-	/// </summary>
-	public class RoyalTreasuryClerk : GameNPC
-	{
-		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+    /// <summary>
+    /// Special NPC for giving DR players items
+    /// </summary>
+    public class RoyalTreasuryClerk : GameNPC
+    {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-		/// <summary>
-		/// Interact with the NPC.
-		/// </summary>
-		/// <param name="player"></param>
-		/// <returns></returns>
-		public override bool Interact(GamePlayer player)
-		{
-			if (!base.Interact(player) || player == null)
-				return false;
+        /// <summary>
+        /// Interact with the NPC.
+        /// </summary>
+        /// <param name="player"></param>
+        /// <returns></returns>
+        public override bool Interact(GamePlayer player)
+        {
+            if (!base.Interact(player) || player == null)
+                return false;
 
-			if (GlobalConstants.IsExpansionEnabled((int)eClientExpansion.DarknessRising))
-			{
-				SayTo(player, "Voyons voir si il te manque des objets...");
+            if (GlobalConstants.IsExpansionEnabled((int)eClientExpansion.DarknessRising))
+            {
+                SayTo(player, "Voyons voir si il te manque des objets...");
 
-				if (player.Inventory.CountItemTemplate("Personal_Bind_Recall_Stone", eInventorySlot.Min_Inv, eInventorySlot.Max_Inv) == 0)
-				{
-					SayTo(player, "Je vois que tu n'as plus ta pierre de rappel. En veux-tu une [autre]?");
-				}
+                if (player.Inventory.CountItemTemplate("Personal_Bind_Recall_Stone", eInventorySlot.Min_Inv, eInventorySlot.Max_Inv) == 0)
+                {
+                    SayTo(player, "Je vois que tu n'as plus ta pierre de rappel. En veux-tu une [autre]?");
+                }
 
-				return true;
-			}
+                return true;
+            }
 
-			return false;
-		}
+            return false;
+        }
 
-		/// <summary>
-		/// Talk to the NPC.
-		/// </summary>
-		/// <param name="source"></param>
-		/// <param name="str"></param>
-		/// <returns></returns>
-		public override bool WhisperReceive(GameLiving source, string text)
-		{
-			if (!base.WhisperReceive(source, text) || !(source is GamePlayer))
-				return false;
+        /// <summary>
+        /// Talk to the NPC.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public override bool WhisperReceive(GameLiving source, string text)
+        {
+            if (!base.WhisperReceive(source, text) || !(source is GamePlayer))
+                return false;
 
-			GamePlayer player = source as GamePlayer;
+            GamePlayer player = source as GamePlayer;
 
-			if (text.ToLower() == "autre")
-			{
-				if (player.Inventory.CountItemTemplate("Personal_Bind_Recall_Stone", eInventorySlot.Min_Inv, eInventorySlot.Max_Inv) == 0)
-				{
-					SayTo(player, "Ok pas de soucis, voici ta pierre de rappel. J'espere que tu en feras bon usage.");
-					player.ReceiveItem(this, "Personal_Bind_Recall_Stone");
-				}
-				return true;
-			}
+            if (text.ToLower() == "autre")
+            {
+                if (player.Inventory.CountItemTemplate("Personal_Bind_Recall_Stone", eInventorySlot.Min_Inv, eInventorySlot.Max_Inv) == 0)
+                {
+                    SayTo(player, "Ok pas de soucis, voici ta pierre de rappel. J'espere que tu en feras bon usage.");
+                    player.ReceiveItem(this, "Personal_Bind_Recall_Stone");
+                }
+                return true;
+            }
 
-			return true;
-		}
-	}
+            return true;
+        }
+    }
 }

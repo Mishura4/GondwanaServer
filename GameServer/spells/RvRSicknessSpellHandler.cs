@@ -25,10 +25,10 @@ namespace DOL.GS.Spells
     /// </summary>
     [SpellHandlerAttribute("RvrResurrectionIllness")]
     public class RvrResurrectionIllness : PveResurrectionIllness
-	{
-		// constructor
-		public RvrResurrectionIllness(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line)
-		{
-		}
-	}
+    {
+        // constructor
+        public RvrResurrectionIllness(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line)
+        {
+        }
+    }
 }

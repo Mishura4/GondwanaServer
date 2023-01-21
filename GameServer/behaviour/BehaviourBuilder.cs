@@ -26,19 +26,19 @@ namespace DOL.GS.Behaviour
 {
     public class BehaviourBuilder
     {
-        
+
         //private MethodInfo addActionMethod;
 
         public BehaviourBuilder()
-        {            
+        {
             //this.addActionMethod = questType.GetMethod("AddBehaviour", BindingFlags.Static | BindingFlags.Public | BindingFlags.FlattenHierarchy);            
         }
 
         public BaseBehaviour CreateBehaviour(GameNPC npc)
         {
-            BaseBehaviour behaviour =  new BaseBehaviour(npc);            
+            BaseBehaviour behaviour = new BaseBehaviour(npc);
             return behaviour;
         }
-        
+
     }
 }

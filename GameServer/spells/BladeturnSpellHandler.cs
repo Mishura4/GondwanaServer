@@ -19,38 +19,38 @@
 
 using DOL.Database;
 using DOL.GS.PacketHandler;
-using DOL.GS.Effects; 
- 
+using DOL.GS.Effects;
+
 namespace DOL.GS.Spells
 {
-	[SpellHandler("Bladeturn")]
-	public class BladeturnSpellHandler : SpellHandler
-	{
-		public override void FinishSpellCast(GameLiving target)
-		{
-			m_caster.Mana -= PowerCost(target);
-			base.FinishSpellCast(target);
-		}
+    [SpellHandler("Bladeturn")]
+    public class BladeturnSpellHandler : SpellHandler
+    {
+        public override void FinishSpellCast(GameLiving target)
+        {
+            m_caster.Mana -= PowerCost(target);
+            base.FinishSpellCast(target);
+        }
 
-		public override void OnEffectStart(GameSpellEffect effect)
-		{
-			base.OnEffectStart(effect);
-			eChatType toLiving = (Spell.Pulse == 0) ? eChatType.CT_Spell : eChatType.CT_SpellPulse;
-			eChatType toOther = (Spell.Pulse == 0) ? eChatType.CT_System : eChatType.CT_SpellPulse;
-			MessageToLiving(effect.Owner, Spell.Message1, toLiving);
-			Message.SystemToArea(effect.Owner, Util.MakeSentence(Spell.Message2, effect.Owner.GetName(0, false)), toOther, effect.Owner);
-		}
+        public override void OnEffectStart(GameSpellEffect effect)
+        {
+            base.OnEffectStart(effect);
+            eChatType toLiving = (Spell.Pulse == 0) ? eChatType.CT_Spell : eChatType.CT_SpellPulse;
+            eChatType toOther = (Spell.Pulse == 0) ? eChatType.CT_System : eChatType.CT_SpellPulse;
+            MessageToLiving(effect.Owner, Spell.Message1, toLiving);
+            Message.SystemToArea(effect.Owner, Util.MakeSentence(Spell.Message2, effect.Owner.GetName(0, false)), toOther, effect.Owner);
+        }
 
-		public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
-		{
-			if (!noMessages && Spell.Pulse == 0) 
-			{
-				MessageToLiving(effect.Owner, Spell.Message3, eChatType.CT_SpellExpires);
-				Message.SystemToArea(effect.Owner, Util.MakeSentence(Spell.Message4, effect.Owner.GetName(0, false)), eChatType.CT_SpellExpires, effect.Owner);
-			}
-			return 0;
-		}
-      
+        public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
+        {
+            if (!noMessages && Spell.Pulse == 0)
+            {
+                MessageToLiving(effect.Owner, Spell.Message3, eChatType.CT_SpellExpires);
+                Message.SystemToArea(effect.Owner, Util.MakeSentence(Spell.Message4, effect.Owner.GetName(0, false)), eChatType.CT_SpellExpires, effect.Owner);
+            }
+            return 0;
+        }
+
         public override PlayerXEffect GetSavedEffect(GameSpellEffect e)
         {
             PlayerXEffect eff = new PlayerXEffect();
@@ -61,9 +61,9 @@ namespace DOL.GS.Spells
             eff.SpellLine = SpellLine.KeyName;
             return eff;
         }
-    
+
         public override int OnRestoredEffectExpires(GameSpellEffect effect, int[] vars, bool noMessages)
-        {            
+        {
             if (!noMessages && Spell.Pulse == 0)
             {
                 MessageToLiving(effect.Owner, Spell.Message3, eChatType.CT_SpellExpires);
@@ -72,7 +72,7 @@ namespace DOL.GS.Spells
             return 0;
         }
 
-        public BladeturnSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) {}
+        public BladeturnSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
         public override string ShortDescription => "Creates a 'bubble' that absorbs the damage of a single melee hit.";
     }

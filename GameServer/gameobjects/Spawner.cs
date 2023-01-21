@@ -55,8 +55,8 @@ namespace DOL.GS
             {
                 return "spwn_" + (this.dbId != null ? this.dbId.Substring(0, 8) : Guid.NewGuid().ToString().Substring(0, 8));
             }
-        }           
-           
+        }
+
 
         public string InactiveGroupStatusAddsKey
         {
@@ -121,7 +121,7 @@ namespace DOL.GS
                         {
                             this.AddSpawnerToMobGroup();
                         }
-                     
+
                         this.UpdateMasterGroupInDatabase();
                     }
 
@@ -182,7 +182,7 @@ namespace DOL.GS
         {
             if (this.addsGroupmobId != null && this.hasLoadedAdd && MobGroupManager.Instance.Groups.ContainsKey(this.addsGroupmobId))
             {
-                MobGroupManager.Instance.RemoveGroupsAndMobs(this.addsGroupmobId, true); 
+                MobGroupManager.Instance.RemoveGroupsAndMobs(this.addsGroupmobId, true);
                 this.hasLoadedAdd = false;
             }
         }
@@ -199,7 +199,7 @@ namespace DOL.GS
                 {
                     masterGroup.GroupMobInteract_FK_Id = activeDefaultGroupStatusAddsKey;
                 }
-    
+
                 GameServer.Database.SaveObject(masterGroup);
             }
         }
@@ -259,13 +259,13 @@ namespace DOL.GS
             bool isXOffset = false;
             bool isPositiveOffset = true;
             List<GameNPC> npcs = new List<GameNPC>();
-         
+
             isPositiveOffset = LoadNpcTemplateMob(npc1, template1, isXOffset, isPositiveOffset, npcs);
             isPositiveOffset = LoadNpcTemplateMob(npc2, template2, isXOffset, isPositiveOffset, npcs);
             isXOffset = true;
             isPositiveOffset = LoadNpcTemplateMob(npc3, template3, isXOffset, isPositiveOffset, npcs);
             LoadNpcTemplateMob(npc4, template4, isXOffset, isPositiveOffset, npcs);
-            this.AddToMobGroupToNPCTemplates(npcs);       
+            this.AddToMobGroupToNPCTemplates(npcs);
         }
 
         private bool LoadNpcTemplateMob(GameNPC npc, NpcTemplate template, bool isXOffset, bool isPositiveOffset, List<GameNPC> npcs)
@@ -332,7 +332,7 @@ namespace DOL.GS
             if (this.Faction != null)
             {
                 npc.Faction = FactionMgr.GetFactionByID(this.Faction.ID);
-            }           
+            }
         }
 
         public override void StartAttack(GameObject target)
@@ -343,12 +343,12 @@ namespace DOL.GS
             {
                 this.LoadAdds();
 
-                if (!isAddsGroupMasterGroup && !isAddsActiveStatus 
-                    && this.addsGroupmobId != null  && MobGroupManager.Instance.Groups.ContainsKey(this.addsGroupmobId))
+                if (!isAddsGroupMasterGroup && !isAddsActiveStatus
+                    && this.addsGroupmobId != null && MobGroupManager.Instance.Groups.ContainsKey(this.addsGroupmobId))
                 {
                     isAddsActiveStatus = true;
                     MobGroupManager.Instance.Groups[this.addsGroupmobId].ResetGroupInfo(true);
-                } 
+                }
             }
         }
         public override void TakeDamage(AttackData ad)
@@ -380,7 +380,7 @@ namespace DOL.GS
                         MobGroupManager.Instance.Groups[this.addsGroupmobId].SetGroupInfo(this.GetActiveStatus(), false, true);
                     }
                 }
-            } 
+            }
         }
 
 
@@ -395,7 +395,7 @@ namespace DOL.GS
                 }
             }
             else
-            {       
+            {
                 this.InstanciateMobs();
             }
 
@@ -447,17 +447,17 @@ namespace DOL.GS
                 if (respawnTimeInMs > 0 && respawnTimeInMs < int.MaxValue)
                 {
                     respawnValueIsCorrect = true;
-                }              
+                }
 
                 //Check if group can respawn
                 if (this.addsRespawnCountTotal > 0 && this.addsRespawnCurrentCount < this.addsRespawnCountTotal && respawnValueIsCorrect)
-                {                    
+                {
                     this.addsRespawnCurrentCount++;
                     foreach (var npc in MobGroupManager.Instance.Groups[this.addsGroupmobId].NPCs)
                     {
                         npc.RespawnInterval = respawnTimeInMs;
                         npc.StartRespawn();
-                        npc.RespawnInterval = -1;      
+                        npc.RespawnInterval = -1;
                     }
                 }
             }
@@ -467,7 +467,7 @@ namespace DOL.GS
         {
             base.Die(killer);
             this.isAddsActiveStatus = false;
-            this.RemoveAdds();  
+            this.RemoveAdds();
         }
 
 
@@ -477,7 +477,7 @@ namespace DOL.GS
 
             if (result != null && result.Any())
             {
-                var inactiveStatus = result.FirstOrDefault();  
+                var inactiveStatus = result.FirstOrDefault();
                 return inactiveStatus;
             }
             else
@@ -516,8 +516,8 @@ namespace DOL.GS
                         GroupStatusId = this.InactiveGroupStatusAddsKey
                     };
                     GameServer.Database.AddObject(inactiveStatus);
-                }               
-             
+                }
+
                 return inactiveStatus;
             }
         }
@@ -525,25 +525,25 @@ namespace DOL.GS
 
         public override bool AddToWorld()
         {
-            base.AddToWorld();    
+            base.AddToWorld();
 
             if (this.isAddsGroupMasterGroup && addsGroupmobId != null)
             {
                 //remove mastergroup mob if present
                 if (MobGroupManager.Instance.Groups.ContainsKey(this.addsGroupmobId))
                 {
-                    MobGroupManager.Instance.Groups[this.addsGroupmobId].NPCs.ForEach(n => 
+                    MobGroupManager.Instance.Groups[this.addsGroupmobId].NPCs.ForEach(n =>
                     {
                         n.RemoveFromWorld();
                         n.Delete();
-                    }); 
+                    });
                 }
                 else
                 {
                     //on server load add groups to remove list
                     MobGroupManager.Instance.GroupsToRemoveOnServerLoad.Add(this.addsGroupmobId);
                 }
-    
+
                 this.hasLoadedAdd = false;
 
                 //reset groupinfo
@@ -556,7 +556,7 @@ namespace DOL.GS
             {
                 //Handle repop by clearing npctemplate pops       
                 this.ClearNPCTemplatesOldMobs();
-            }          
+            }
 
             //reset adds currentCount respawn
             this.addsRespawnCurrentCount = 0;

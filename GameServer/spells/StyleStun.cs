@@ -21,35 +21,35 @@ using DOL.GS.PacketHandler;
 
 namespace DOL.GS.Spells
 {
-	[SpellHandler("StyleStun")]
-	public class StyleStun : StunSpellHandler
-	{
-		public override int CalculateSpellResistChance(GameLiving target)
-		{
-			return 0;
-		}
+    [SpellHandler("StyleStun")]
+    public class StyleStun : StunSpellHandler
+    {
+        public override int CalculateSpellResistChance(GameLiving target)
+        {
+            return 0;
+        }
 
-		protected override int CalculateEffectDuration(GameLiving target, double effectiveness)
-		{
-			return Spell.Duration;
-		}
+        protected override int CalculateEffectDuration(GameLiving target, double effectiveness)
+        {
+            return Spell.Duration;
+        }
 
-		public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
-		{
-			// http://www.camelotherald.com/more/1749.shtml
-			// immunity timer will now be exactly five times the length of the stun
-			base.OnEffectExpires(effect, noMessages);
-			return Spell.Duration * 5;
-		}
+        public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
+        {
+            // http://www.camelotherald.com/more/1749.shtml
+            // immunity timer will now be exactly five times the length of the stun
+            base.OnEffectExpires(effect, noMessages);
+            return Spell.Duration * 5;
+        }
 
-		public override bool IsOverwritable(GameSpellEffect compare)
-		{
-			if (Spell.EffectGroup != 0 || compare.Spell.EffectGroup != 0)
-				return Spell.EffectGroup == compare.Spell.EffectGroup;
-			if (compare.Spell.SpellType == "Stun") return true;
-			return base.IsOverwritable(compare);
-		}
+        public override bool IsOverwritable(GameSpellEffect compare)
+        {
+            if (Spell.EffectGroup != 0 || compare.Spell.EffectGroup != 0)
+                return Spell.EffectGroup == compare.Spell.EffectGroup;
+            if (compare.Spell.SpellType == "Stun") return true;
+            return base.IsOverwritable(compare);
+        }
 
-		public StyleStun(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) {}
-	}
+        public StyleStun(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+    }
 }

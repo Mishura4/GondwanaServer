@@ -21,22 +21,22 @@ using DOL.Database;
 
 namespace DOL.GS.Spells
 {
-	[SpellHandler("SpeedOfTheRealm")]
-	public class SpeedOfTheRealmHandler : SpeedEnhancementSpellHandler
-	{
-		private const ushort SECONDEFFECT = 2086;
+    [SpellHandler("SpeedOfTheRealm")]
+    public class SpeedOfTheRealmHandler : SpeedEnhancementSpellHandler
+    {
+        private const ushort SECONDEFFECT = 2086;
 
-		public override void FinishSpellCast(GameLiving target)
-		{
-			base.FinishSpellCast(target);
-			foreach (GamePlayer player in Caster.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
-				player.Out.SendSpellCastAnimation(Caster, SECONDEFFECT, 20);
-		}
+        public override void FinishSpellCast(GameLiving target)
+        {
+            base.FinishSpellCast(target);
+            foreach (GamePlayer player in Caster.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+                player.Out.SendSpellCastAnimation(Caster, SECONDEFFECT, 20);
+        }
 
-		protected override int CalculateEffectDuration(GameLiving target, double effectiveness)
-		{
-			return Spell.Duration;
-		}
+        protected override int CalculateEffectDuration(GameLiving target, double effectiveness)
+        {
+            return Spell.Duration;
+        }
 
         public override PlayerXEffect GetSavedEffect(GameSpellEffect e)
         {
@@ -49,15 +49,15 @@ namespace DOL.GS.Spells
         }
 
         public override void OnEffectRestored(GameSpellEffect effect, int[] vars)
-		{
-			OnEffectStart(effect);
-		}
+        {
+            OnEffectStart(effect);
+        }
 
-		public override int OnRestoredEffectExpires(GameSpellEffect effect, int[] vars, bool noMessages)
-		{
-			return OnEffectExpires(effect, false);
-		}		
+        public override int OnRestoredEffectExpires(GameSpellEffect effect, int[] vars, bool noMessages)
+        {
+            return OnEffectExpires(effect, false);
+        }
 
-		public SpeedOfTheRealmHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
-	}
+        public SpeedOfTheRealmHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+    }
 }

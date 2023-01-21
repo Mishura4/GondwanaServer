@@ -37,16 +37,16 @@ namespace DOL.GS.PacketHandler.Client.v168
             if (client == null || client.Player == null)
                 return;
 
-			int slot = packet.ReadByte();
-			int unk1 = packet.ReadByte();
-			ushort unk2 = packet.ReadShort();
-			uint price = packet.ReadInt();
+            int slot = packet.ReadByte();
+            int unk1 = packet.ReadByte();
+            ushort unk2 = packet.ReadShort();
+            uint price = packet.ReadInt();
 
-			// only IGameInventoryObjects can handle set price commands
-			if (client.Player.TargetObject == null || (client.Player.TargetObject is IGameInventoryObject) == false)
-				return;
+            // only IGameInventoryObjects can handle set price commands
+            if (client.Player.TargetObject == null || (client.Player.TargetObject is IGameInventoryObject) == false)
+                return;
 
-			(client.Player.TargetObject as IGameInventoryObject).SetSellPrice(client.Player, (ushort)slot, price);
+            (client.Player.TargetObject as IGameInventoryObject).SetSellPrice(client.Player, (ushort)slot, price);
         }
     }
 }

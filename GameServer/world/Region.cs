@@ -36,13 +36,13 @@ using DOL.GameEvents;
 
 namespace DOL.GS
 {
-	/// <summary>
-	/// This class represents a region in DAOC. A region is everything where you
-	/// need a loadingscreen to go there. Eg. whole Albion is one Region, Midgard and
-	/// Hibernia are just one region too. Darkness Falls is a region. Each dungeon, city
-	/// is a region ... you get the clue. Each Region can hold an arbitary number of
-	/// Zones! Camelot Hills is one Zone, Tir na Nog is one Zone (and one Region)...
-	/// </summary>
+    /// <summary>
+    /// This class represents a region in DAOC. A region is everything where you
+    /// need a loadingscreen to go there. Eg. whole Albion is one Region, Midgard and
+    /// Hibernia are just one region too. Darkness Falls is a region. Each dungeon, city
+    /// is a region ... you get the clue. Each Region can hold an arbitary number of
+    /// Zones! Camelot Hills is one Zone, Tir na Nog is one Zone (and one Region)...
+    /// </summary>
     public class Region
     {
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
@@ -59,7 +59,7 @@ namespace DOL.GS
         /// <summary>
         /// This holds all objects inside this region. Their index = their id!
         /// </summary>
-        protected GameObject[] m_objects;        
+        protected GameObject[] m_objects;
 
 
         /// <summary>
@@ -728,10 +728,10 @@ namespace DOL.GS
 
         public virtual ConcurrentDictionary<GameNPC, int> MobsRespawning
         {
-        	get
-        	{
-        		return m_mobsRespawning;
-        	}
+            get
+            {
+                return m_mobsRespawning;
+            }
         }
 
         #endregion
@@ -815,9 +815,9 @@ namespace DOL.GS
 
                     // load template if any
                     INpcTemplate template = null;
-                    if(mob.NPCTemplateID != -1)
+                    if (mob.NPCTemplateID != -1)
                     {
-                    	template = NpcTemplateMgr.GetTemplate(mob.NPCTemplateID);
+                        template = NpcTemplateMgr.GetTemplate(mob.NPCTemplateID);
                     }
 
 
@@ -843,10 +843,10 @@ namespace DOL.GS
 
                     if (myMob == null)
                     {
-                    	if(template != null && template.ClassType != null && template.ClassType.Length > 0 && template.ClassType != Mob.DEFAULT_NPC_CLASSTYPE && template.ReplaceMobValues)
-                    	{
-                			classtype = template.ClassType;
-                    	}
+                        if (template != null && template.ClassType != null && template.ClassType.Length > 0 && template.ClassType != Mob.DEFAULT_NPC_CLASSTYPE && template.ReplaceMobValues)
+                        {
+                            classtype = template.ClassType;
+                        }
                         else if (mob.ClassType != null && mob.ClassType.Length > 0 && mob.ClassType != Mob.DEFAULT_NPC_CLASSTYPE)
                         {
                             classtype = mob.ClassType;
@@ -1359,14 +1359,14 @@ namespace DOL.GS
         {
             lock (m_lockAreas)
             {
-                area.ID = (ushort)(m_Areas.Keys.Union(new []{ (ushort)0 }).Max() + 1);
+                area.ID = (ushort)(m_Areas.Keys.Union(new[] { (ushort)0 }).Max() + 1);
                 m_Areas.Add(area.ID, area);
 
                 int zonePos = 0;
                 foreach (Zone zone in Zones)
                 {
                     if (area.IsIntersectingZone(zone))
-                    	m_ZoneAreas[zonePos][m_ZoneAreasCount[zonePos]++] = area.ID;
+                        m_ZoneAreas[zonePos][m_ZoneAreasCount[zonePos]++] = area.ID;
 
                     zonePos++;
                 }
@@ -1950,12 +1950,12 @@ namespace DOL.GS
 
         public void Relocate()
         {
-        	foreach (var zone in m_zones)
-        	{
-        		zone.Relocate(null);
-        	}
+            foreach (var zone in m_zones)
+            {
+                zone.Relocate(null);
+            }
 
-        	m_lastRelocationTime = DateTime.Now.Ticks / (10 * 1000);
+            m_lastRelocationTime = DateTime.Now.Ticks / (10 * 1000);
         }
 
         #endregion
@@ -1963,67 +1963,67 @@ namespace DOL.GS
         #endregion
 
     }
-	#region Helpers classes
+    #region Helpers classes
 
-	/// <summary>
-	/// Holds a Object and it's distance towards the center
-	/// </summary>
-	public struct PlayerDistEntry
-	{
-		public PlayerDistEntry(GamePlayer o, float distance)
-		{
-			Player = o;
-			Distance = distance;
-		}
+    /// <summary>
+    /// Holds a Object and it's distance towards the center
+    /// </summary>
+    public struct PlayerDistEntry
+    {
+        public PlayerDistEntry(GamePlayer o, float distance)
+        {
+            Player = o;
+            Distance = distance;
+        }
 
-		public readonly GamePlayer Player;
-		public readonly float Distance;
-	}
+        public readonly GamePlayer Player;
+        public readonly float Distance;
+    }
 
-	/// <summary>
-	/// Holds a Object and it's distance towards the center
-	/// </summary>
-	public struct NPCDistEntry
-	{
-		public NPCDistEntry(GameNPC o, float distance)
-		{
-			NPC = o;
-			Distance = distance;
-		}
+    /// <summary>
+    /// Holds a Object and it's distance towards the center
+    /// </summary>
+    public struct NPCDistEntry
+    {
+        public NPCDistEntry(GameNPC o, float distance)
+        {
+            NPC = o;
+            Distance = distance;
+        }
 
-		public readonly GameNPC NPC;
-		public readonly float Distance;
-	}
+        public readonly GameNPC NPC;
+        public readonly float Distance;
+    }
 
-	/// <summary>
-	/// Holds a Object and it's distance towards the center
-	/// </summary>
-	public struct ItemDistEntry
-	{
-		public ItemDistEntry(GameStaticItem o, float distance)
-		{
-			Item = o;
-			Distance = distance;
-		}
+    /// <summary>
+    /// Holds a Object and it's distance towards the center
+    /// </summary>
+    public struct ItemDistEntry
+    {
+        public ItemDistEntry(GameStaticItem o, float distance)
+        {
+            Item = o;
+            Distance = distance;
+        }
 
-		public readonly GameStaticItem Item;
-		public readonly float Distance;
-	}
+        public readonly GameStaticItem Item;
+        public readonly float Distance;
+    }
 
-	/// <summary>
-	/// Holds a Object and it's distance towards the center
-	/// </summary>
-	public struct DoorDistEntry
-	{
-		public DoorDistEntry(IDoor d, float distance)
-		{
-			Door = d;
-			Distance = distance;
-		}
+    /// <summary>
+    /// Holds a Object and it's distance towards the center
+    /// </summary>
+    public struct DoorDistEntry
+    {
+        public DoorDistEntry(IDoor d, float distance)
+        {
+            Door = d;
+            Distance = distance;
+        }
 
-		public readonly IDoor Door;
-		public readonly float Distance;
-	}
+        public readonly IDoor Door;
+        public readonly float Distance;
+    }
 
-	#endregion
+    #endregion
 }

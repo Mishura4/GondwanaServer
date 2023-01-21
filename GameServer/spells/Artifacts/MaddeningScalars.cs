@@ -28,14 +28,14 @@ namespace DOL.GS.Spells
     /// </summary>
     [SpellHandlerAttribute("MaddeningScalars")]
     public class MaddeningScalars : OffensiveProcSpellHandler
-    {   	
-   		public override void OnEffectStart(GameSpellEffect effect)
-		{
+    {
+        public override void OnEffectStart(GameSpellEffect effect)
+        {
             base.OnEffectStart(effect);
-            if(effect.Owner is GamePlayer)
+            if (effect.Owner is GamePlayer)
             {
-	            GamePlayer player = effect.Owner as GamePlayer;
-				foreach (GameSpellEffect Effect in player.EffectList.GetAllOfType<GameSpellEffect>())
+                GamePlayer player = effect.Owner as GamePlayer;
+                foreach (GameSpellEffect Effect in player.EffectList.GetAllOfType<GameSpellEffect>())
                 {
                     if (Effect.SpellHandler.Spell.SpellType.Equals("ShadesOfMist") ||
                         Effect.SpellHandler.Spell.SpellType.Equals("TraitorsDaggerProc") ||
@@ -48,24 +48,24 @@ namespace DOL.GS.Spells
                         return;
                     }
                 }
-	            if(player.CharacterClass.ID!=(byte)eCharacterClass.Necromancer && (ushort)Spell.LifeDrainReturn > 0)
+                if (player.CharacterClass.ID != (byte)eCharacterClass.Necromancer && (ushort)Spell.LifeDrainReturn > 0)
                     player.Model = (ushort)Spell.LifeDrainReturn; // 102 official model
-	   			player.Out.SendUpdatePlayer();
-   			}
-   		}
-   		
-  		public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
-		{
-  			if(effect.Owner is GamePlayer)
+                player.Out.SendUpdatePlayer();
+            }
+        }
+
+        public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
+        {
+            if (effect.Owner is GamePlayer)
             {
-	            GamePlayer player = effect.Owner as GamePlayer; 				
-  				if(player.CharacterClass.ID!=(byte)eCharacterClass.Necromancer)
+                GamePlayer player = effect.Owner as GamePlayer;
+                if (player.CharacterClass.ID != (byte)eCharacterClass.Necromancer)
                     player.Model = player.CreationModel;
-    			player.Out.SendUpdatePlayer();
-    		}	
-    		return base.OnEffectExpires(effect,noMessages);
-  		}
-        
+                player.Out.SendUpdatePlayer();
+            }
+            return base.OnEffectExpires(effect, noMessages);
+        }
+
         public MaddeningScalars(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
     }
 }

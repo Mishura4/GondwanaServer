@@ -45,7 +45,7 @@ namespace DOL.GS.RealmAbilities
             GamePlayer player = living as GamePlayer;
             if (player != null)
             {
-            	SoldiersCitadelEffect SoldiersCitadel = player.EffectList.GetOfType<SoldiersCitadelEffect>();
+                SoldiersCitadelEffect SoldiersCitadel = player.EffectList.GetOfType<SoldiersCitadelEffect>();
                 if (SoldiersCitadel != null)
                     SoldiersCitadel.Cancel(false);
 

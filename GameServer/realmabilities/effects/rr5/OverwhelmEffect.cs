@@ -46,7 +46,7 @@ namespace DOL.GS.Effects
                 EffectOwner = target as GamePlayer;
                 foreach (GamePlayer p in EffectOwner.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
                 {
-                    p.Out.SendSpellEffectAnimation(EffectOwner, EffectOwner, OverwhelmAbility.EFFECT , 0, false, 1);
+                    p.Out.SendSpellEffectAnimation(EffectOwner, EffectOwner, OverwhelmAbility.EFFECT, 0, false, 1);
                 }
                 GameEventMgr.AddHandler(EffectOwner, GamePlayerEvent.Quit, new DOLEventHandler(PlayerLeftWorld));
                 GameEventMgr.AddHandler(EffectOwner, GamePlayerEvent.Dying, new DOLEventHandler(PlayerLeftWorld));
@@ -90,7 +90,7 @@ namespace DOL.GS.Effects
             get
             {
                 var list = new List<string>();
-                list.Add("a 15% increased chance to bypass their target’s block, parry, and evade defenses for 30 seconds.");
+                list.Add("a 15% increased chance to bypass their targetï¿½s block, parry, and evade defenses for 30 seconds.");
                 return list;
             }
         }

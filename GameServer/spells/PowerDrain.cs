@@ -21,57 +21,57 @@ using DOL.GS.PacketHandler;
 
 namespace DOL.GS.Spells
 {
-	[SpellHandlerAttribute("PowerDrain")]
-	public class PowerDrain : DirectDamageSpellHandler
-	{
-		public override void OnDirectEffect(GameLiving target, double effectiveness)
-		{
-			if (target == null) return;
-			if (!target.IsAlive || target.ObjectState != GameLiving.eObjectState.Active) return;
+    [SpellHandlerAttribute("PowerDrain")]
+    public class PowerDrain : DirectDamageSpellHandler
+    {
+        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        {
+            if (target == null) return;
+            if (!target.IsAlive || target.ObjectState != GameLiving.eObjectState.Active) return;
 
-			AttackData ad = CalculateDamageToTarget(target, effectiveness);
-			SendDamageMessages(ad);
-			DamageTarget(ad, true);
-			DrainPower(target, ad);
-			target.StartInterruptTimer(target.SpellInterruptDuration, ad.AttackType, Caster);
-		}
+            AttackData ad = CalculateDamageToTarget(target, effectiveness);
+            SendDamageMessages(ad);
+            DamageTarget(ad, true);
+            DrainPower(target, ad);
+            target.StartInterruptTimer(target.SpellInterruptDuration, ad.AttackType, Caster);
+        }
 
-		public virtual void DrainPower(GameLiving target, AttackData ad)
-		{
-			if (ad == null || !m_caster.IsAlive)
-				return;
+        public virtual void DrainPower(GameLiving target, AttackData ad)
+        {
+            if (ad == null || !m_caster.IsAlive)
+                return;
 
-			GameLiving owner = Owner();
-			if (owner == null)
-				return;
+            GameLiving owner = Owner();
+            if (owner == null)
+                return;
 
-			int powerGain = (ad.Damage + ad.CriticalDamage) * m_spell.LifeDrainReturn / 100;
-			powerGain = owner.ChangeMana(m_caster, GameLiving.eManaChangeType.Spell, powerGain);
+            int powerGain = (ad.Damage + ad.CriticalDamage) * m_spell.LifeDrainReturn / 100;
+            powerGain = owner.ChangeMana(m_caster, GameLiving.eManaChangeType.Spell, powerGain);
 
-			//remove mana from target if ts's not a player
+            //remove mana from target if ts's not a player
             if (!(target is GamePlayer))
-				target.ChangeMana(m_caster, GameLiving.eManaChangeType.Spell, -powerGain);
+                target.ChangeMana(m_caster, GameLiving.eManaChangeType.Spell, -powerGain);
 
-			if (powerGain > 0)
-				MessageToOwner(String.Format("Your summon channels {0} power to you!", powerGain), eChatType.CT_Spell);
-			else
-				MessageToOwner("You cannot absorb any more power.", eChatType.CT_SpellResisted);
-		}
-		
-		protected virtual GameLiving Owner()
-		{
-			return Caster;
-		}
-		
-		protected virtual void MessageToOwner(String message, eChatType chatType)
-		{
-			base.MessageToCaster(message, chatType);
-		}
+            if (powerGain > 0)
+                MessageToOwner(String.Format("Your summon channels {0} power to you!", powerGain), eChatType.CT_Spell);
+            else
+                MessageToOwner("You cannot absorb any more power.", eChatType.CT_SpellResisted);
+        }
 
-		public PowerDrain(GameLiving caster, Spell spell, SpellLine line)
-			: base(caster, spell, line) { }
+        protected virtual GameLiving Owner()
+        {
+            return Caster;
+        }
 
-        public override string ShortDescription 
-			=> $"Damage the target for {Spell.Damage} Spirit damage and the attacker gains {Spell.LifeDrainReturn}% of that damage as power.";
+        protected virtual void MessageToOwner(String message, eChatType chatType)
+        {
+            base.MessageToCaster(message, chatType);
+        }
+
+        public PowerDrain(GameLiving caster, Spell spell, SpellLine line)
+            : base(caster, spell, line) { }
+
+        public override string ShortDescription
+            => $"Damage the target for {Spell.Damage} Spirit damage and the attacker gains {Spell.LifeDrainReturn}% of that damage as power.";
     }
 }

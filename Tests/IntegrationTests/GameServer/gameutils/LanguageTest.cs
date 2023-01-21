@@ -22,20 +22,20 @@ using NUnit.Framework;
 
 namespace DOL.Integration.Server
 {
-	[TestFixture]
-	public class LanguageTest: ServerTests
-	{
-		public LanguageTest()
-		{
-			LanguageMgr.Init();
-		}
-		
-		[Test]
-		public void TestGetString()
-		{
-			Console.WriteLine("TestGetString();");
-			Console.WriteLine(LanguageMgr.GetTranslation ("test","fail default string"));
-			Assert.IsTrue(true, "ok");
-		}
-	}
+    [TestFixture]
+    public class LanguageTest : ServerTests
+    {
+        public LanguageTest()
+        {
+            LanguageMgr.Init();
+        }
+
+        [Test]
+        public void TestGetString()
+        {
+            Console.WriteLine("TestGetString();");
+            Console.WriteLine(LanguageMgr.GetTranslation("test", "fail default string"));
+            Assert.IsTrue(true, "ok");
+        }
+    }
 }

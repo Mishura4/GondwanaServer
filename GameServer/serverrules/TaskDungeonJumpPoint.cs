@@ -23,19 +23,19 @@ using DOL.GS.Quests;
 
 namespace DOL.GS.ServerRules
 {
-	/// <summary>
-	/// Handles task dungeon jump points
-	/// </summary>
-	public class TaskDungeonJumpPoint : IJumpPointHandler
-	{
-		/// <summary>
-		/// Decides whether player can jump to the target point.
-		/// All messages with reasons must be sent here.
-		/// Can change destination too.
-		/// </summary>
-		/// <param name="targetPoint">The jump destination</param>
-		/// <param name="player">The jumping player</param>
-		/// <returns>True if allowed</returns>
+    /// <summary>
+    /// Handles task dungeon jump points
+    /// </summary>
+    public class TaskDungeonJumpPoint : IJumpPointHandler
+    {
+        /// <summary>
+        /// Decides whether player can jump to the target point.
+        /// All messages with reasons must be sent here.
+        /// Can change destination too.
+        /// </summary>
+        /// <param name="targetPoint">The jump destination</param>
+        /// <param name="player">The jumping player</param>
+        /// <returns>True if allowed</returns>
         public bool IsAllowedToJump(ZonePoint targetPoint, GamePlayer player)
         {
             //Handles zoning INTO an instance.
@@ -72,5 +72,5 @@ namespace DOL.GS.ServerRules
             player.Out.SendMessage("You need to have a proper mission before entering this area!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
             return false;
         }
-	}
+    }
 }

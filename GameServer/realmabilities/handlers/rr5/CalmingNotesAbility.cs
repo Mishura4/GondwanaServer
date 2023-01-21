@@ -27,23 +27,23 @@ namespace DOL.GS.RealmAbilities
     public class CalmingNotesAbility : RR5RealmAbility
     {
         public CalmingNotesAbility(DBAbility dba, int level) : base(dba, level) { }
- 
+
         public override void Execute(GameLiving living)
         {
             if (CheckPreconditions(living, DEAD | SITTING | MEZZED | STUNNED)) return;
-            
-			SpellLine spline = SkillBase.GetSpellLine(GlobalSpellsLines.Character_Abilities);
- 			Spell abSpell = SkillBase.GetSpellByID(7045);
-					 
- 			if (spline != null && abSpell != null)
-			{        
-	            foreach (GameNPC enemy in living.GetNPCsInRadius(750))
-	            {
-	            	if (enemy.IsAlive && enemy.Brain!=null)
-	            		if(enemy.Brain is IControlledBrain)
-							living.CastSpell(abSpell, spline);
-	            }
- 			}
+
+            SpellLine spline = SkillBase.GetSpellLine(GlobalSpellsLines.Character_Abilities);
+            Spell abSpell = SkillBase.GetSpellByID(7045);
+
+            if (spline != null && abSpell != null)
+            {
+                foreach (GameNPC enemy in living.GetNPCsInRadius(750))
+                {
+                    if (enemy.IsAlive && enemy.Brain != null)
+                        if (enemy.Brain is IControlledBrain)
+                            living.CastSpell(abSpell, spline);
+                }
+            }
             DisableSkill(living);
         }
         public override int GetReUseDelay(int level)

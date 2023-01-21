@@ -163,7 +163,7 @@ namespace DOL.GS.Behaviour
         /// sure only one handler is actually registered
         /// </remarks>        
         void Register();
-        
+
         /// <summary>
         /// Unregister all added triggers that are no longer needed.
         /// </summary>

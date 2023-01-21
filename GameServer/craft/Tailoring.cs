@@ -29,7 +29,7 @@ namespace DOL.GS
         public Tailoring()
         {
             Icon = 0x0B;
-            Name = LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE, 
+            Name = LanguageMgr.GetTranslation(ServerProperties.Properties.SERV_LANGUAGE,
                 "Crafting.Name.Tailoring");
             eSkill = eCraftingSkill.Tailoring;
         }
@@ -42,8 +42,8 @@ namespace DOL.GS
             }
         }
 
-		protected override bool CheckForTools(GamePlayer player, Recipe recipe)
-		{
+        protected override bool CheckForTools(GamePlayer player, Recipe recipe)
+        {
             bool needForge = false;
 
             foreach (var ingredient in recipe.Ingredients)
@@ -66,10 +66,10 @@ namespace DOL.GS
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Crafting.CheckTool.NotHaveTools", recipe.Product.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 player.Out.SendMessage(LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE, "Crafting.CheckTool.FindForge"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 
-				if (player.Client.Account.PrivLevel > 1)
-					return true;
+                if (player.Client.Account.PrivLevel > 1)
+                    return true;
 
-				return false;
+                return false;
             }
 
             return true;
@@ -88,7 +88,7 @@ namespace DOL.GS
             return base.GetSecondaryCraftingSkillMinimumLevel(recipe);
         }
 
-		public override void GainCraftingSkillPoints(GamePlayer player, Recipe recipe)
+        public override void GainCraftingSkillPoints(GamePlayer player, Recipe recipe)
         {
             if (Util.Chance(CalculateChanceToGainPoint(player, recipe.Level)))
             {

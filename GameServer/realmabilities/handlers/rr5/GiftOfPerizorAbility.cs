@@ -40,35 +40,35 @@ namespace DOL.GS.RealmAbilities
         /// </summary>
         /// <param name="living"></param>
 		public override void Execute(GameLiving living)
-		{
-			if (CheckPreconditions(living, DEAD | SITTING | MEZZED | STUNNED)) return;
+        {
+            if (CheckPreconditions(living, DEAD | SITTING | MEZZED | STUNNED)) return;
 
-			GamePlayer player = living as GamePlayer;
-			if (player != null)
-			{
-				ArrayList targets = new ArrayList();
-				if (player.Group == null)
-					targets.Add(player);
-				else
-				{
-					foreach (GamePlayer p in player.Group.GetPlayersInTheGroup())
-					{
-						if (player.IsWithinRadius(p, SpellRadius ) && p.IsAlive)
-							targets.Add(p);
-					}
-				}
-				foreach (GamePlayer target in targets)
-				{
-					//send spelleffect
-					if (!target.IsAlive) continue;
-					GiftOfPerizorEffect GiftOfPerizor = target.EffectList.GetOfType<GiftOfPerizorEffect>();
-					if (GiftOfPerizor != null) GiftOfPerizor.Cancel(false);
-					target.TempProperties.setProperty("GiftOfPerizorOwner", player);
-					new GiftOfPerizorEffect().Start(target);
-				}
-			}
-			DisableSkill(living);
-		}
+            GamePlayer player = living as GamePlayer;
+            if (player != null)
+            {
+                ArrayList targets = new ArrayList();
+                if (player.Group == null)
+                    targets.Add(player);
+                else
+                {
+                    foreach (GamePlayer p in player.Group.GetPlayersInTheGroup())
+                    {
+                        if (player.IsWithinRadius(p, SpellRadius) && p.IsAlive)
+                            targets.Add(p);
+                    }
+                }
+                foreach (GamePlayer target in targets)
+                {
+                    //send spelleffect
+                    if (!target.IsAlive) continue;
+                    GiftOfPerizorEffect GiftOfPerizor = target.EffectList.GetOfType<GiftOfPerizorEffect>();
+                    if (GiftOfPerizor != null) GiftOfPerizor.Cancel(false);
+                    target.TempProperties.setProperty("GiftOfPerizorOwner", player);
+                    new GiftOfPerizorEffect().Start(target);
+                }
+            }
+            DisableSkill(living);
+        }
 
         public override int GetReUseDelay(int level)
         {

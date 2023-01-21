@@ -23,28 +23,28 @@ using DOL.Database;
 
 namespace DOL.GS.PacketHandler.Client.v168
 {
-	[PacketHandlerAttribute(PacketHandlerType.TCP, eClientPackets.DuplicateNameCheck, "Checks if a character name already exists", eClientStatus.LoggedIn)]
-	public class DupNameCheckRequestHandler : IPacketHandler
-	{
-		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+    [PacketHandlerAttribute(PacketHandlerType.TCP, eClientPackets.DuplicateNameCheck, "Checks if a character name already exists", eClientStatus.LoggedIn)]
+    public class DupNameCheckRequestHandler : IPacketHandler
+    {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-		public void HandlePacket(GameClient client, GSPacketIn packet)
-		{
-			string name;
-			if (client.Version >= GameClient.eClientVersion.Version1126)
-				name = packet.ReadString(24);
-			else
-				name = packet.ReadString(30);
+        public void HandlePacket(GameClient client, GSPacketIn packet)
+        {
+            string name;
+            if (client.Version >= GameClient.eClientVersion.Version1126)
+                name = packet.ReadString(24);
+            else
+                name = packet.ReadString(30);
 
-			var character = DOLDB<DOLCharacters>.SelectObject(DB.Column(nameof(DOLCharacters.Name)).IsEqualTo(name));
-			byte result = 0;
-			// Bad Name check.
-			if (character != null)
-				result = 0x02;
-			else if (GameServer.Instance.PlayerManager.InvalidNames[name])
-				result = 0x01;
+            var character = DOLDB<DOLCharacters>.SelectObject(DB.Column(nameof(DOLCharacters.Name)).IsEqualTo(name));
+            byte result = 0;
+            // Bad Name check.
+            if (character != null)
+                result = 0x02;
+            else if (GameServer.Instance.PlayerManager.InvalidNames[name])
+                result = 0x01;
 
-			client.Out.SendDupNameCheckReply(name, result);
-		}
-	}
+            client.Out.SendDupNameCheckReply(name, result);
+        }
+    }
 }

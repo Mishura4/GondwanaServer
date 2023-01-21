@@ -21,42 +21,42 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute(
-		"&rp",
-		ePrivLevel.Player,
-		"Commands.Players.RP.Description",
-		"Commands.Players.RP.Usage")]
-	public class RPCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (args.Length < 2)
-			{
-				DisplaySyntax(client);
-				return;
-			}
+    [CmdAttribute(
+        "&rp",
+        ePrivLevel.Player,
+        "Commands.Players.RP.Description",
+        "Commands.Players.RP.Usage")]
+    public class RPCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (args.Length < 2)
+            {
+                DisplaySyntax(client);
+                return;
+            }
 
-			if (IsSpammingCommand(client.Player, "rp"))
-				return;
+            if (IsSpammingCommand(client.Player, "rp"))
+                return;
 
-			if (args[1].ToLower().Equals("on"))
-			{
-				client.Player.GainRP = true;
-				client.Out.SendMessage(
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.RP.On"),
-					eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-			}
-			else if (args[1].ToLower().Equals("off"))
-			{
-				client.Player.GainRP = false;
-				client.Out.SendMessage(
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.RP.Off"),
-					eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-			}
-		}
-	}
+            if (args[1].ToLower().Equals("on"))
+            {
+                client.Player.GainRP = true;
+                client.Out.SendMessage(
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.RP.On"),
+                    eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+            }
+            else if (args[1].ToLower().Equals("off"))
+            {
+                client.Player.GainRP = false;
+                client.Out.SendMessage(
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.RP.Off"),
+                    eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+            }
+        }
+    }
 }

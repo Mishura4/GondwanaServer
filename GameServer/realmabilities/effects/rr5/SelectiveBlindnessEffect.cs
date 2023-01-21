@@ -32,14 +32,15 @@ namespace DOL.GS.Effects
         public SelectiveBlindnessEffect(GameLiving source)
             : base(RealmAbilities.SelectiveBlindnessAbility.DURATION)
         {
-            	m_EffectSource = source as GamePlayer;       
+            m_EffectSource = source as GamePlayer;
         }
-        
+
         public GameLiving EffectSource
         {
-        	get {
-        		return m_EffectSource;
-        	}
+            get
+            {
+                return m_EffectSource;
+            }
         }
 
         public override void Start(GameLiving target)
@@ -50,16 +51,16 @@ namespace DOL.GS.Effects
             {
                 p.Out.SendSpellEffectAnimation(EffectOwner, EffectOwner, 7059, 0, false, 1);
             }
-          	GameEventMgr.AddHandler(EffectSource, GameLivingEvent.AttackFinished, new DOLEventHandler(EventHandler));        
-           	GameEventMgr.AddHandler(EffectSource, GameLivingEvent.CastFinished, new DOLEventHandler(EventHandler));                        
-         }
+            GameEventMgr.AddHandler(EffectSource, GameLivingEvent.AttackFinished, new DOLEventHandler(EventHandler));
+            GameEventMgr.AddHandler(EffectSource, GameLivingEvent.CastFinished, new DOLEventHandler(EventHandler));
+        }
         public override void Stop()
         {
             if (EffectOwner != null)
             {
                 GameEventMgr.RemoveHandler(EffectSource, GameLivingEvent.AttackFinished, new DOLEventHandler(EventHandler));
-           	 	GameEventMgr.RemoveHandler(EffectSource, GameLivingEvent.CastFinished, new DOLEventHandler(EventHandler));                              
-           }
+                GameEventMgr.RemoveHandler(EffectSource, GameLivingEvent.CastFinished, new DOLEventHandler(EventHandler));
+            }
 
             base.Stop();
         }
@@ -71,8 +72,8 @@ namespace DOL.GS.Effects
         /// <param name="sender">Sender of the event</param>
         /// <param name="args">EventArgs associated with the event</param>
         protected void EventHandler(DOLEvent e, object sender, EventArgs args)
-        {       	
- 			Cancel(false);
+        {
+            Cancel(false);
         }
 
 

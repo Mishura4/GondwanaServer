@@ -26,7 +26,7 @@ namespace DOL.Territory
             this.AreaId = areaId;
             this.GroupId = groupId;
             this.BossId = boss?.InternalID;
-            this.Boss = boss;            
+            this.Boss = boss;
             this.Coordinates = TerritoryManager.GetCoordinates(area);
             this.Radius = this.GetRadius();
             this.OriginalGuilds = new Dictionary<string, string>();
@@ -148,7 +148,7 @@ namespace DOL.Territory
         }
 
         private void SetBossAndMobsInEventInTerritory()
-        {           
+        {
             if (this.Boss != null)
             {
                 this.Boss.IsInTerritory = true;
@@ -158,15 +158,15 @@ namespace DOL.Territory
                 {
                     gameEvent.Mobs.ForEach(m => m.IsInTerritory = true);
                 }
-            }           
+            }
         }
 
         protected virtual void SaveOriginalGuilds()
         {
             if (this.Mobs != null)
             {
-                this.Mobs.ForEach(m => this.SaveMobOriginalGuildname(m));               
-            }    
+                this.Mobs.ForEach(m => this.SaveMobOriginalGuildname(m));
+            }
 
             if (this.Boss != null)
             {
@@ -175,7 +175,7 @@ namespace DOL.Territory
                 if (gameEvent?.Mobs?.Any() == true)
                 {
                     gameEvent.Mobs.ForEach(m => this.SaveMobOriginalGuildname(m));
-                }                
+                }
             }
         }
 

@@ -69,18 +69,18 @@ namespace DOL.GS
                             loot.AddFixed(m_SanguineDreadedSeal, 10);
                         else if (mob.Level >= ServerProperties.Properties.LOOTGENERATOR_DREADEDSEALS_STARTING_LEVEL)
                         {
-                        int iPercentDrop = (mob.Level - ServerProperties.Properties.LOOTGENERATOR_DREADEDSEALS_STARTING_LEVEL)
-	                        * ServerProperties.Properties.LOOTGENERATOR_DREADEDSEALS_DROP_CHANCE_PER_LEVEL
-	                        + ServerProperties.Properties.LOOTGENERATOR_DREADEDSEALS_BASE_CHANCE;
+                            int iPercentDrop = (mob.Level - ServerProperties.Properties.LOOTGENERATOR_DREADEDSEALS_STARTING_LEVEL)
+                                * ServerProperties.Properties.LOOTGENERATOR_DREADEDSEALS_DROP_CHANCE_PER_LEVEL
+                                + ServerProperties.Properties.LOOTGENERATOR_DREADEDSEALS_BASE_CHANCE;
 
-                        if (!mob.Name.ToLower().Equals(mob.Name)) // Named mobs are more likely to drop a seal
-	                        iPercentDrop = (int)Math.Round(iPercentDrop * ServerProperties.Properties.LOOTGENERATOR_DREADEDSEALS_NAMED_CHANCE);
+                            if (!mob.Name.ToLower().Equals(mob.Name)) // Named mobs are more likely to drop a seal
+                                iPercentDrop = (int)Math.Round(iPercentDrop * ServerProperties.Properties.LOOTGENERATOR_DREADEDSEALS_NAMED_CHANCE);
 
-                        if (Util.Random(9999) < iPercentDrop)
-	                        loot.AddFixed(m_GlowingDreadedSeal, 1);
+                            if (Util.Random(9999) < iPercentDrop)
+                                loot.AddFixed(m_GlowingDreadedSeal, 1);
                         }
                         break;
-	            }// switch
+                }// switch
             }//try
             catch (Exception e)
             {
@@ -89,5 +89,5 @@ namespace DOL.GS
 
             return loot;
         }
-	}
+    }
 }

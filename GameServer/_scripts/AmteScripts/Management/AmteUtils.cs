@@ -33,12 +33,12 @@ namespace DOL.GS
         /// </summary>
         /// <param name="player"></param>
 		public static void SendClearPopupWindow(GamePlayer player)
-		{
-			GameObject obj = player.TargetObject;
-			player.Out.SendChangeTarget(player);
-			player.Out.SendMessage("", eChatType.CT_System, eChatLoc.CL_PopupWindow);
-			player.Out.SendChangeTarget(obj);
-		}
+        {
+            GameObject obj = player.TargetObject;
+            player.Out.SendChangeTarget(player);
+            player.Out.SendMessage("", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+            player.Out.SendChangeTarget(obj);
+        }
 
         /// <summary>Supprime une guilde du serveur</summary>
         private static void _OnGuildRemoved()

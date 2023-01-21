@@ -23,97 +23,97 @@ using DOL.Database;
 
 namespace DOL.GS.DatabaseConverters
 {
-	/// <summary>
-	/// Converts the database format to the version 3
-	/// </summary>
-	[DatabaseConverter(3)]
-	public class Version003 : IDatabaseConverter
-	{
-		/// <summary>
-		/// Defines a logger for this class.
-		/// </summary>
-		private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+    /// <summary>
+    /// Converts the database format to the version 3
+    /// </summary>
+    [DatabaseConverter(3)]
+    public class Version003 : IDatabaseConverter
+    {
+        /// <summary>
+        /// Defines a logger for this class.
+        /// </summary>
+        private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-		/// <summary>
-		/// we need to make use of the new poison fields
-		/// </summary>
-		public void ConvertDatabase()
-		{
-			log.Info("Database Version 3 Convert Started");
+        /// <summary>
+        /// we need to make use of the new poison fields
+        /// </summary>
+        public void ConvertDatabase()
+        {
+            log.Info("Database Version 3 Convert Started");
 
-			if (GameServer.Instance.Configuration.DBType == DOL.Database.Connection.ConnectionType.DATABASE_XML)
-			{
-				log.Info("You have an XML database loaded, this converter will only work with MySQL, skipping");
-				return;
-			}
+            if (GameServer.Instance.Configuration.DBType == DOL.Database.Connection.ConnectionType.DATABASE_XML)
+            {
+                log.Info("You have an XML database loaded, this converter will only work with MySQL, skipping");
+                return;
+            }
 
-			var templates = DOLDB<ItemTemplate>.SelectObjects(DB.Column(nameof(ItemTemplate.SpellID)).IsEqualTo(0));
+            var templates = DOLDB<ItemTemplate>.SelectObjects(DB.Column(nameof(ItemTemplate.SpellID)).IsEqualTo(0));
 
-			int count = 0;
-			foreach (ItemTemplate template in templates)
-			{
-				SpellLine poisonLine = SkillBase.GetSpellLine(GlobalSpellsLines.Mundane_Poisons);
-				if (poisonLine != null)
-				{
-					IList spells = SkillBase.GetSpellList(poisonLine.KeyName);
-					if (spells != null)
-					{
-						foreach (Spell spl in spells)
-						{
-							if (spl.ID == template.SpellID)
-							{
-								template.PoisonSpellID = template.SpellID;
-								template.SpellID = 0;
-								template.PoisonCharges = template.Charges;
-								template.Charges = 0;
-								template.PoisonMaxCharges = template.MaxCharges;
-								template.MaxCharges = 0;
-								GameServer.Database.SaveObject(template);
-								count++;
-								break;
-							}
-						}
-					}
-				}
-			}
+            int count = 0;
+            foreach (ItemTemplate template in templates)
+            {
+                SpellLine poisonLine = SkillBase.GetSpellLine(GlobalSpellsLines.Mundane_Poisons);
+                if (poisonLine != null)
+                {
+                    IList spells = SkillBase.GetSpellList(poisonLine.KeyName);
+                    if (spells != null)
+                    {
+                        foreach (Spell spl in spells)
+                        {
+                            if (spl.ID == template.SpellID)
+                            {
+                                template.PoisonSpellID = template.SpellID;
+                                template.SpellID = 0;
+                                template.PoisonCharges = template.Charges;
+                                template.Charges = 0;
+                                template.PoisonMaxCharges = template.MaxCharges;
+                                template.MaxCharges = 0;
+                                GameServer.Database.SaveObject(template);
+                                count++;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
 
-			log.Info("Converted " + count + " templates");
+            log.Info("Converted " + count + " templates");
 
-			var items = DOLDB<InventoryItem>.SelectObjects(DB.Column(nameof(InventoryItem.SpellID)).IsEqualTo(0));
-			count = 0;
-			foreach (InventoryItem item in items)
-			{
-				foreach (ItemTemplate template in templates)
-				{
-					SpellLine poisonLine = SkillBase.GetSpellLine(GlobalSpellsLines.Mundane_Poisons);
-					if (poisonLine != null)
-					{
-						IList spells = SkillBase.GetSpellList(poisonLine.KeyName);
-						if (spells != null)
-						{
-							foreach (Spell spl in spells)
-							{
-								if (spl.ID == template.SpellID)
-								{
-									template.PoisonSpellID = template.SpellID;
-									template.SpellID = 0;
-									template.PoisonCharges = template.Charges;
-									template.Charges = 0;
-									template.PoisonMaxCharges = template.MaxCharges;
-									template.MaxCharges = 0;
-									GameServer.Database.SaveObject(template);
-									count++;
-									break;
-								}
-							}
-						}
-					}
-				}
-			}
+            var items = DOLDB<InventoryItem>.SelectObjects(DB.Column(nameof(InventoryItem.SpellID)).IsEqualTo(0));
+            count = 0;
+            foreach (InventoryItem item in items)
+            {
+                foreach (ItemTemplate template in templates)
+                {
+                    SpellLine poisonLine = SkillBase.GetSpellLine(GlobalSpellsLines.Mundane_Poisons);
+                    if (poisonLine != null)
+                    {
+                        IList spells = SkillBase.GetSpellList(poisonLine.KeyName);
+                        if (spells != null)
+                        {
+                            foreach (Spell spl in spells)
+                            {
+                                if (spl.ID == template.SpellID)
+                                {
+                                    template.PoisonSpellID = template.SpellID;
+                                    template.SpellID = 0;
+                                    template.PoisonCharges = template.Charges;
+                                    template.Charges = 0;
+                                    template.PoisonMaxCharges = template.MaxCharges;
+                                    template.MaxCharges = 0;
+                                    GameServer.Database.SaveObject(template);
+                                    count++;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
-			log.Info("Converted " + count + " items");
+            log.Info("Converted " + count + " items");
 
-			log.Info("Database Version 3 Convert Finished");
-		}
-	}
+            log.Info("Database Version 3 Convert Finished");
+        }
+    }
 }

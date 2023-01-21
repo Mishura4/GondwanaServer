@@ -21,19 +21,19 @@ using NUnit.Framework;
 
 namespace DOL.Integration.Server
 {
-	/// <summary>
-	/// Unit tests for the new Training System
-	/// </summary>
-	[TestFixture]
-	public class Train1105 : ServerTests
-	{
-		[Test, Explicit]
-		public void TrainNow()
-		{
-			GamePlayer player = CreateMockGamePlayer();
-			Assert.IsNotNull(player);
-			player.Out.SendTrainerWindow();
-			return;
-		}
-	}
+    /// <summary>
+    /// Unit tests for the new Training System
+    /// </summary>
+    [TestFixture]
+    public class Train1105 : ServerTests
+    {
+        [Test, Explicit]
+        public void TrainNow()
+        {
+            GamePlayer player = CreateMockGamePlayer();
+            Assert.IsNotNull(player);
+            player.Out.SendTrainerWindow();
+            return;
+        }
+    }
 }

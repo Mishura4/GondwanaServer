@@ -10,9 +10,9 @@ using DOL.GS.Styles;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute(
-		"&areaeffect",
-		ePrivLevel.GM,
+    [CmdAttribute(
+        "&areaeffect",
+        ePrivLevel.GM,
         "Commands.GM.AreaEffect.Description",
         "Commands.GM.AreaEffect.Usage.Create",
         "Commands.GM.AreaEffect.Usage.Spell",
@@ -31,8 +31,8 @@ namespace DOL.GS.Commands
         "Commands.GM.AreaEffect.Usage.MissChance",
         "Commands.GM.AreaEffect.Usage.Message",
         "Commands.GM.AreaEffect.Usage.Info")]
-	public class AreaEffectCommand : AbstractCommandHandler, ICommandHandler
-	{
+    public class AreaEffectCommand : AbstractCommandHandler, ICommandHandler
+    {
         /// <summary>
         /// Method to add a groopmob to a AreaEffect
         /// </summary>
@@ -41,7 +41,7 @@ namespace DOL.GS.Commands
         /// <param name="args"></param>
         private void GroupMob(GameClient client, AreaEffect targetArea, string[] args)
         {
-            if(targetArea == null)
+            if (targetArea == null)
             {
                 client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.GM.AreaEffect.NeedTarget"), eChatType.CT_System, eChatLoc.CL_ChatWindow);
                 return;
@@ -52,7 +52,7 @@ namespace DOL.GS.Commands
             if (args.Length > 3)
             {
                 groupId = args[2];
-                if(args[3] == "ON")
+                if (args[3] == "ON")
                 {
                     turn = true;
                 }
@@ -70,7 +70,7 @@ namespace DOL.GS.Commands
             }
             targetArea.Group_Mob_Id = groupId;
             targetArea.Group_Mob_Turn = turn;
-            client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.GM.AreaEffect.Result.GroupMob", targetArea.Name, groupId, turn? "ON":"OFF"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.GM.AreaEffect.Result.GroupMob", targetArea.Name, groupId, turn ? "ON" : "OFF"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
             targetArea.SaveIntoDatabase();
         }
 
@@ -154,23 +154,23 @@ namespace DOL.GS.Commands
                 DisplaySyntax(client);
                 return;
             }
-            if(familyID == 0 && client != null)
+            if (familyID == 0 && client != null)
                 client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.GM.AreaEffect.CallAreaEffect.NotFound", familyID), eChatType.CT_System, eChatLoc.CL_ChatWindow);
             else
             {
                 DBAreaEffect areaEffect = GameServer.Database.SelectObjects<DBAreaEffect>(DB.Column("AreaEffectFamily").IsEqualTo(familyID)).OrderBy((area) => area.OrderInFamily).FirstOrDefault();
-                if(areaEffect != null)
+                if (areaEffect != null)
                 {
                     Mob mob = GameServer.Database.SelectObjects<Mob>(DB.Column("Mob_ID").IsEqualTo(areaEffect.MobID)).FirstOrDefault();
-                    if(mob != null)
+                    if (mob != null)
                     {
                         AreaEffect areaMob = WorldMgr.GetNPCsByName(mob.Name, (eRealm)mob.Realm).FirstOrDefault((npc) => npc.InternalID == mob.ObjectId) as AreaEffect;
-                        if(areaMob != null)
+                        if (areaMob != null)
                         {
                             areaMob.CallAreaEffect();
-                            if(client != null)
+                            if (client != null)
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.GM.AreaEffect.Result.CallAreaEffect", familyID), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                        }   
+                        }
                     }
                 }
                 else if (client != null)
@@ -187,21 +187,21 @@ namespace DOL.GS.Commands
             if (client != null)
                 AE = client.Player.TargetObject as AreaEffect;
 
-			if (args.Length == 2 && args[1].ToLower() == "info" && AE != null)
-			{
-				var infos = new List<string>
-				    {
-				        "- Information de l'AreaEffect " + AE.Name,
-				        "Vie: " + AE.HealHarm + " points de vie (+/- 10%).",
+            if (args.Length == 2 && args[1].ToLower() == "info" && AE != null)
+            {
+                var infos = new List<string>
+                    {
+                        "- Information de l'AreaEffect " + AE.Name,
+                        "Vie: " + AE.HealHarm + " points de vie (+/- 10%).",
                         "Mana: " + AE.AddMana + " points de mana.",
                         "Endurance: " + AE.AddEndurance + " points d'endurance.",
-				        "Rayon: " + AE.Radius,
-				        "Effect: " + AE.SpellEffect,
+                        "Rayon: " + AE.Radius,
+                        "Effect: " + AE.SpellEffect,
                         "Spell: " + AE.SpellID,
                         "Interval entre chaque effet " + AE.IntervalMin + " à " + AE.IntervalMax + " secondes",
-				        "Chance de miss: " + AE.MissChance + "%",
-				        "Message: " + AE.Message
-				    };
+                        "Chance de miss: " + AE.MissChance + "%",
+                        "Message: " + AE.Message
+                    };
                 infos.Add(" + Spell: " + AE.SpellID);
                 infos.Add(" + Family: " + AE.AreaEffectFamily);
                 infos.Add(" + Order in family: " + AE.OrderInFamily);
@@ -210,51 +210,51 @@ namespace DOL.GS.Commands
                 infos.Add(" + Enable: " + !AE.Disable);
                 infos.Add(" + OneUse: " + AE.OneUse);
                 client.Out.SendCustomTextWindow("Info AreaEffect", infos);
-				return;
-			}
+                return;
+            }
 
-            if(args.Length < 2)
+            if (args.Length < 2)
             {
                 DisplaySyntax(client);
                 return;
             }
 
             GamePlayer player = null;
-            if(client != null)
+            if (client != null)
                 player = client.Player;
 
             switch (args[1].ToLower())
-			{
-				case "create":
-					if (args.Length < 4)
-					{
-						DisplaySyntax(client);
-						return;
-					}
-					int Radius;
-					int EffectID;
-					if (!int.TryParse(args[2], out Radius) || !int.TryParse(args[3], out EffectID))
-					{
-						DisplaySyntax(client);
-						return;
-					}
-					AE = new AreaEffect
-					    {
-					        Position = player.Position,
-					        CurrentRegion = player.CurrentRegion,
-					        Heading = player.Heading,
-					        Model = 1,
-					        Name = "Area Effect",
-					        Radius = Radius,
-					        SpellEffect = EffectID,
-                            Flags = GameNPC.eFlags.DONTSHOWNAME | GameNPC.eFlags.CANTTARGET | GameNPC.eFlags.PEACE | GameNPC.eFlags.FLYING,
-					        LoadedFromScript = false
-					    };
-			        AE.AddToWorld();
-					client.Out.SendMessage("Création d'un AreaEffect, OID:" + AE.ObjectID, eChatType.CT_System,
-					                       eChatLoc.CL_SystemWindow);
-					break;
- 
+            {
+                case "create":
+                    if (args.Length < 4)
+                    {
+                        DisplaySyntax(client);
+                        return;
+                    }
+                    int Radius;
+                    int EffectID;
+                    if (!int.TryParse(args[2], out Radius) || !int.TryParse(args[3], out EffectID))
+                    {
+                        DisplaySyntax(client);
+                        return;
+                    }
+                    AE = new AreaEffect
+                    {
+                        Position = player.Position,
+                        CurrentRegion = player.CurrentRegion,
+                        Heading = player.Heading,
+                        Model = 1,
+                        Name = "Area Effect",
+                        Radius = Radius,
+                        SpellEffect = EffectID,
+                        Flags = GameNPC.eFlags.DONTSHOWNAME | GameNPC.eFlags.CANTTARGET | GameNPC.eFlags.PEACE | GameNPC.eFlags.FLYING,
+                        LoadedFromScript = false
+                    };
+                    AE.AddToWorld();
+                    client.Out.SendMessage("Création d'un AreaEffect, OID:" + AE.ObjectID, eChatType.CT_System,
+                                           eChatLoc.CL_SystemWindow);
+                    break;
+
                 case "spell":
                     if (AE == null)
                     {
@@ -272,46 +272,46 @@ namespace DOL.GS.Commands
 
                 case "heal":
                 case "harm":
-			        {
+                    {
                         if (AE == null)
                         {
                             client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.GM.AreaEffect.NeedTarget"), eChatType.CT_System, eChatLoc.CL_ChatWindow);
                             return;
                         }
                         int value;
-			            if (!int.TryParse(args[2], out value))
-			            {
-			                DisplaySyntax(client);
-			                return;
-			            }
-			            if (args[1].ToLower() == "harm" && value > 0)
-			                value = -value;
-			            AE.HealHarm = value;
-			            client.Out.SendMessage(
-			                AE.Name + (AE.HealHarm > 0 ? " heal" : " harm") + " maintenant de " + Math.Abs(AE.HealHarm) + " points de vie.",
-			                eChatType.CT_System, eChatLoc.CL_SystemWindow);
-			            break;
-			        }
+                        if (!int.TryParse(args[2], out value))
+                        {
+                            DisplaySyntax(client);
+                            return;
+                        }
+                        if (args[1].ToLower() == "harm" && value > 0)
+                            value = -value;
+                        AE.HealHarm = value;
+                        client.Out.SendMessage(
+                            AE.Name + (AE.HealHarm > 0 ? " heal" : " harm") + " maintenant de " + Math.Abs(AE.HealHarm) + " points de vie.",
+                            eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        break;
+                    }
 
                 case "mana":
-			        {
+                    {
                         if (AE == null)
                         {
                             client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.GM.AreaEffect.NeedTarget"), eChatType.CT_System, eChatLoc.CL_ChatWindow);
                             return;
                         }
                         int value;
-			            if (!int.TryParse(args[2], out value))
-			            {
-			                DisplaySyntax(client);
-			                return;
-			            }
-			            AE.AddMana = value;
-			            client.Out.SendMessage(
+                        if (!int.TryParse(args[2], out value))
+                        {
+                            DisplaySyntax(client);
+                            return;
+                        }
+                        AE.AddMana = value;
+                        client.Out.SendMessage(
                             AE.Name + " ajoute maintenant " + AE.AddMana + " points de mana.",
-			                eChatType.CT_System, eChatLoc.CL_SystemWindow);
-			            break;
-			        }
+                            eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        break;
+                    }
 
                 case "groupmob":
                     GroupMob(client, AE, args);
@@ -358,112 +358,112 @@ namespace DOL.GS.Commands
                         break;
                     }
 
-			    case "radius":
+                case "radius":
                     if (AE == null)
                     {
                         client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.GM.AreaEffect.NeedTarget"), eChatType.CT_System, eChatLoc.CL_ChatWindow);
                         return;
                     }
                     int radius;
-					if (!int.TryParse(args[2], out radius))
-					{
-						DisplaySyntax(client);
-						return;
-					}
-					AE.Radius = radius;
-					client.Out.SendMessage(AE.Name + " a maintenant un rayon d'effet de " + AE.Radius, eChatType.CT_System,
-					                       eChatLoc.CL_SystemWindow);
-					break;
+                    if (!int.TryParse(args[2], out radius))
+                    {
+                        DisplaySyntax(client);
+                        return;
+                    }
+                    AE.Radius = radius;
+                    client.Out.SendMessage(AE.Name + " a maintenant un rayon d'effet de " + AE.Radius, eChatType.CT_System,
+                                           eChatLoc.CL_SystemWindow);
+                    break;
 
-				case "effect":
+                case "effect":
                     if (AE == null)
                     {
                         client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.GM.AreaEffect.NeedTarget"), eChatType.CT_System, eChatLoc.CL_ChatWindow);
                         return;
                     }
                     int effect;
-					if (!int.TryParse(args[2], out effect))
-					{
-						DisplaySyntax(client);
-						return;
-					}
-					AE.SpellEffect = effect;
-					client.Out.SendMessage(AE.Name + " a maintenant l'effet du spell " + AE.SpellEffect, eChatType.CT_System,
-					                       eChatLoc.CL_SystemWindow);
-					break;
+                    if (!int.TryParse(args[2], out effect))
+                    {
+                        DisplaySyntax(client);
+                        return;
+                    }
+                    AE.SpellEffect = effect;
+                    client.Out.SendMessage(AE.Name + " a maintenant l'effet du spell " + AE.SpellEffect, eChatType.CT_System,
+                                           eChatLoc.CL_SystemWindow);
+                    break;
 
-				case "interval":
+                case "interval":
                     if (AE == null)
                     {
                         client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.GM.AreaEffect.NeedTarget"), eChatType.CT_System, eChatLoc.CL_ChatWindow);
                         return;
                     }
                     int min;
-					if (!int.TryParse(args[2], out min))
-					{
-						DisplaySyntax(client);
-						return;
-					}
-					int max = 0;
-					if (args.Length >= 4 && !int.TryParse(args[3], out max))
-					{
-						DisplaySyntax(client);
-						return;
-					}
-					max = Math.Max(min, max);
-					if (min > max)
-					{
-						int i = max;
-						max = min;
-						min = i;
-					}
-					AE.IntervalMin = min;
-					AE.IntervalMax = max;
-					client.Out.SendMessage(AE.Name + " a maintenant un interval compris entre " + min + " et " + max,
-					                       eChatType.CT_System, eChatLoc.CL_SystemWindow);
-					break;
+                    if (!int.TryParse(args[2], out min))
+                    {
+                        DisplaySyntax(client);
+                        return;
+                    }
+                    int max = 0;
+                    if (args.Length >= 4 && !int.TryParse(args[3], out max))
+                    {
+                        DisplaySyntax(client);
+                        return;
+                    }
+                    max = Math.Max(min, max);
+                    if (min > max)
+                    {
+                        int i = max;
+                        max = min;
+                        min = i;
+                    }
+                    AE.IntervalMin = min;
+                    AE.IntervalMax = max;
+                    client.Out.SendMessage(AE.Name + " a maintenant un interval compris entre " + min + " et " + max,
+                                           eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    break;
 
-				case "miss":
-				case "chance":
-				case "misschance":
+                case "miss":
+                case "chance":
+                case "misschance":
                     if (AE == null)
                     {
                         client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.GM.AreaEffect.NeedTarget"), eChatType.CT_System, eChatLoc.CL_ChatWindow);
                         return;
                     }
                     int chance;
-					if (!int.TryParse(args[2], out chance))
-					{
-						DisplaySyntax(client);
-						return;
-					}
-					if (chance > 100)
-						chance = 100;
-					else if (chance < 0)
-						chance = 0;
-					AE.MissChance = chance;
-					client.Out.SendMessage(AE.Name + " a maintenant " + chance + " chance de raté.", eChatType.CT_System,
-					                       eChatLoc.CL_SystemWindow);
-					break;
+                    if (!int.TryParse(args[2], out chance))
+                    {
+                        DisplaySyntax(client);
+                        return;
+                    }
+                    if (chance > 100)
+                        chance = 100;
+                    else if (chance < 0)
+                        chance = 0;
+                    AE.MissChance = chance;
+                    client.Out.SendMessage(AE.Name + " a maintenant " + chance + " chance de raté.", eChatType.CT_System,
+                                           eChatLoc.CL_SystemWindow);
+                    break;
 
-				case "message":
+                case "message":
                     if (AE == null)
                     {
                         client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.GM.AreaEffect.NeedTarget"), eChatType.CT_System, eChatLoc.CL_ChatWindow);
                         return;
                     }
                     AE.Message = string.Join(" ", args, 2, args.Length - 2);
-					client.Out.SendMessage(
-						AE.Name + " a maintenant le message \"" + AE.Message + "\" lorsqu'on est touché par son effect.",
-						eChatType.CT_System, eChatLoc.CL_SystemWindow);
-					break;
+                    client.Out.SendMessage(
+                        AE.Name + " a maintenant le message \"" + AE.Message + "\" lorsqu'on est touché par son effect.",
+                        eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    break;
 
-				default:
-					DisplaySyntax(client);
-					break;
-			}
-			if(AE != null)
-			    AE.SaveIntoDatabase();
-		}
-	}
+                default:
+                    DisplaySyntax(client);
+                    break;
+            }
+            if (AE != null)
+                AE.SaveIntoDatabase();
+        }
+    }
 }

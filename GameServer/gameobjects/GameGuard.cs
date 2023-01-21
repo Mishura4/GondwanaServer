@@ -22,7 +22,7 @@ namespace DOL.GS
         public override IList GetExamineMessages(GamePlayer player)
         {
             IList list = new ArrayList(4);
-            list.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameGuard.GetExamineMessages.Examine", 
+            list.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameGuard.GetExamineMessages.Examine",
                                                 GetName(0, true, player.Client.Account.Language, this), GetPronoun(0, true, player.Client.Account.Language),
                                                 GetAggroLevelString(player, false)));
             return list;

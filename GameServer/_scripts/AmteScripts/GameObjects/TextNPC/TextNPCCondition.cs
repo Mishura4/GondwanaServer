@@ -222,14 +222,14 @@ namespace DOL.GS.Scripts
                                                  (player.GuildName == "" && !GuildNamesA.Contains("NO GUILD"))))
                 return false;
             //Classe
-            if (Classes.Contains(((eCharacterClass) player.CharacterClass.ID).ToString().ToLower()))
+            if (Classes.Contains(((eCharacterClass)player.CharacterClass.ID).ToString().ToLower()))
                 return false;
             //Race
             if (Races.Contains(player.RaceName.ToLower()))
                 return false;
 
             //Heure
-            int heure = (int) (WorldMgr.GetCurrentGameTime() / 1000 / 60 / 54);
+            int heure = (int)(WorldMgr.GetCurrentGameTime() / 1000 / 60 / 54);
             if (Heure_max < Heure_min && (Heure_min > heure || heure <= Heure_max))
                 return false;
             if (Heure_max > Heure_min && (Heure_min > heure || heure >= Heure_max))

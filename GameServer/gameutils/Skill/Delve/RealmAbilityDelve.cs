@@ -24,49 +24,49 @@ namespace DOL.GS.Delve
 {
     public class RealmAbilityDelve : SkillDelve
     {
-		private Skill skill;
+        private Skill skill;
 
-		public RealmAbilityDelve(GameClient client, int skillIndex)
+        public RealmAbilityDelve(GameClient client, int skillIndex)
         {
-			skill = client.Player.GetAllUsableSkills().Where(e => e.Item1.InternalID == skillIndex && e.Item1 is Ability).Select(e => e.Item1).FirstOrDefault();
+            skill = client.Player.GetAllUsableSkills().Where(e => e.Item1.InternalID == skillIndex && e.Item1 is Ability).Select(e => e.Item1).FirstOrDefault();
 
-			if (skill == null)
-			{
-				skill = SkillBase.GetAbilityByInternalID(skillIndex);
-			}
+            if (skill == null)
+            {
+                skill = SkillBase.GetAbilityByInternalID(skillIndex);
+            }
 
-			DelveType = "RealmAbility";
-			Index = unchecked((short)skillIndex);
-		}
+            DelveType = "RealmAbility";
+            Index = unchecked((short)skillIndex);
+        }
 
         public override ClientDelve GetClientDelve()
         {
-			var delve = new ClientDelve(DelveType);
-			delve.AddElement("Index", Index);
+            var delve = new ClientDelve(DelveType);
+            delve.AddElement("Index", Index);
 
-			if (skill is RealmAbility realmAbility)
-			{
-				delve.AddElement("Name", realmAbility.Name);
-				if (skill.Icon > 0)
-				{
-					delve.AddElement("icon", realmAbility.Icon);
-				}
-
-				for (int i = 0; i <= realmAbility.MaxLevel - 1; i++)
-				{
-					delve.AddElement($"TrainingCost_{i + 1}", realmAbility.CostForUpgrade(i));
-				}
-
-				if(skill is RAStatEnhancer statEnhancer)
+            if (skill is RealmAbility realmAbility)
+            {
+                delve.AddElement("Name", realmAbility.Name);
+                if (skill.Icon > 0)
                 {
-					for (int i = 1; i <= realmAbility.MaxLevel; i++)
-                    {
-						var statIncrease = statEnhancer.GetAmountForLevel(i) - statEnhancer.GetAmountForLevel(i - 1);
-						delve.AddElement($"AmountLvl_{i}", statIncrease);
-                    }
-				}
+                    delve.AddElement("icon", realmAbility.Icon);
+                }
 
-				if (skill is TimedRealmAbility timedRealmAbility)
+                for (int i = 0; i <= realmAbility.MaxLevel - 1; i++)
+                {
+                    delve.AddElement($"TrainingCost_{i + 1}", realmAbility.CostForUpgrade(i));
+                }
+
+                if (skill is RAStatEnhancer statEnhancer)
+                {
+                    for (int i = 1; i <= realmAbility.MaxLevel; i++)
+                    {
+                        var statIncrease = statEnhancer.GetAmountForLevel(i) - statEnhancer.GetAmountForLevel(i - 1);
+                        delve.AddElement($"AmountLvl_{i}", statIncrease);
+                    }
+                }
+
+                if (skill is TimedRealmAbility timedRealmAbility)
                 {
                     for (int i = 1; i <= timedRealmAbility.MaxLevel; i++)
                     {
@@ -74,16 +74,16 @@ namespace DOL.GS.Delve
                     }
                 }
             }
-			else if (skill != null)
-			{
-				delve.AddElement("Name", skill.Name);
-			}
-			else
-			{
-				delve.AddElement("Name", "(not found)");
-			}
+            else if (skill != null)
+            {
+                delve.AddElement("Name", skill.Name);
+            }
+            else
+            {
+                delve.AddElement("Name", "(not found)");
+            }
 
-			return delve;
-		}
-	}
+            return delve;
+        }
+    }
 }

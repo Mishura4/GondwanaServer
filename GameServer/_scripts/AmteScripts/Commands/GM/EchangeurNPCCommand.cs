@@ -7,9 +7,9 @@ using DOL.Language;
 
 namespace DOL.GS.Scripts
 {
-	[CmdAttribute(
-		"&echangeurnpc",
-		ePrivLevel.GM,
+    [CmdAttribute(
+        "&echangeurnpc",
+        ePrivLevel.GM,
         "Commands.GM.EchangeurNPC.Description",
         "Commands.GM.EchangeurNPC.Usage.Add",
         "Commands.GM.EchangeurNPC.Usage.Remove",
@@ -23,167 +23,167 @@ namespace DOL.GS.Scripts
         "Commands.GM.EchangeurNPC.Usage.Priceressource3",
         "Commands.GM.EchangeurNPC.Usage.Priceressource",
         "Commands.GM.EchangeurNPC.Usage.AdditionalDescription")]
-	public class EchangeurNPCCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if(client.Player == null) return;
-			GamePlayer player = client.Player;
+    public class EchangeurNPCCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (client.Player == null) return;
+            GamePlayer player = client.Player;
 
-			if(args.Length < 2)
-			{
-				DisplaySyntax(client);
-				return;
-			}
+            if (args.Length < 2)
+            {
+                DisplaySyntax(client);
+                return;
+            }
 
-			ITextNPC npc = player.TargetObject as ITextNPC;
-			string item;
-			switch (args[1].ToLower())
-			{
-				case "add":
-					if (npc == null || args.Length < 4)
-					{
-						DisplaySyntax(client);
-						return;
-					}
-					int amount;
-					if (!int.TryParse(args[2], out amount) || amount <= 0)
-					{
-						DisplaySyntax(client);
-						return;
-					}
-					item = string.Join(" ", args, 3, args.Length - 3);
-					if (!npc.TextNPCData.EchangeurDB.ContainsKey(item))
-					{
-                        npc.TextNPCData.EchangeurDB[item] = new DBEchangeur
-						                        	{
-						                        		ItemRecvCount = amount,
-						                        		ItemRecvID = item,
-						                        		ItemGiveCount = 0,
-						                        		ItemGiveID = "",
-						                        		GainMoney = 0,
-						                        		GainXP = 0
-						                        	};
-                        npc.TextNPCData.SaveIntoDatabase();
-						player.Out.SendMessage(item + " a été ajouté.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-					}
-					else
-						player.Out.SendMessage(item + " existe déjà.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-					break;
-
-				case "remove":
-					if (npc == null || args.Length < 3)
-					{
-						DisplaySyntax(client);
-						return;
-					}
-					item = string.Join(" ", args, 2, args.Length - 2);
+            ITextNPC npc = player.TargetObject as ITextNPC;
+            string item;
+            switch (args[1].ToLower())
+            {
+                case "add":
+                    if (npc == null || args.Length < 4)
+                    {
+                        DisplaySyntax(client);
+                        return;
+                    }
+                    int amount;
+                    if (!int.TryParse(args[2], out amount) || amount <= 0)
+                    {
+                        DisplaySyntax(client);
+                        return;
+                    }
+                    item = string.Join(" ", args, 3, args.Length - 3);
                     if (!npc.TextNPCData.EchangeurDB.ContainsKey(item))
-						player.Out.SendMessage(item + " n'existe pas.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-					else
-					{
+                    {
+                        npc.TextNPCData.EchangeurDB[item] = new DBEchangeur
+                        {
+                            ItemRecvCount = amount,
+                            ItemRecvID = item,
+                            ItemGiveCount = 0,
+                            ItemGiveID = "",
+                            GainMoney = 0,
+                            GainXP = 0
+                        };
+                        npc.TextNPCData.SaveIntoDatabase();
+                        player.Out.SendMessage(item + " a été ajouté.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    }
+                    else
+                        player.Out.SendMessage(item + " existe déjà.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    break;
+
+                case "remove":
+                    if (npc == null || args.Length < 3)
+                    {
+                        DisplaySyntax(client);
+                        return;
+                    }
+                    item = string.Join(" ", args, 2, args.Length - 2);
+                    if (!npc.TextNPCData.EchangeurDB.ContainsKey(item))
+                        player.Out.SendMessage(item + " n'existe pas.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    else
+                    {
                         DBEchangeur db = npc.TextNPCData.EchangeurDB[item];
                         npc.TextNPCData.EchangeurDB.Remove(item);
-						GameServer.Database.DeleteObject(db);
+                        GameServer.Database.DeleteObject(db);
                         if (npc.TextNPCData.Reponses.ContainsKey(item))
                             npc.TextNPCData.Reponses.Remove(item);
                         npc.TextNPCData.SaveIntoDatabase();
-						player.Out.SendMessage(item + " a été retiré.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-					}
-					break;
+                        player.Out.SendMessage(item + " a été retiré.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    }
+                    break;
 
-				case "money":
-					if (npc == null || args.Length < 4)
-					{
-						DisplaySyntax(client);
-						return;
-					}
-					item = args[2];
-					long money;
-					if (!long.TryParse(args[3], out money) || money < 0)
-					{
-						DisplaySyntax(client);
-						return;
-					}
+                case "money":
+                    if (npc == null || args.Length < 4)
+                    {
+                        DisplaySyntax(client);
+                        return;
+                    }
+                    item = args[2];
+                    long money;
+                    if (!long.TryParse(args[3], out money) || money < 0)
+                    {
+                        DisplaySyntax(client);
+                        return;
+                    }
                     if (!npc.TextNPCData.EchangeurDB.ContainsKey(item))
-						player.Out.SendMessage(item + " n'existe pas.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-					else
-					{
+                        player.Out.SendMessage(item + " n'existe pas.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    else
+                    {
                         npc.TextNPCData.EchangeurDB[item].GainMoney = money;
                         npc.TextNPCData.SaveIntoDatabase();
-						player.Out.SendMessage(item + " donne " + Money.GetString(money) + " maintenant.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-					}
-					break;
+                        player.Out.SendMessage(item + " donne " + Money.GetString(money) + " maintenant.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    }
+                    break;
 
-				case "xp":
-					if (npc == null || args.Length < 4)
-					{
-						DisplaySyntax(client);
-						return;
-					}
-					item = args[2];
-					int xp;
-					if (!int.TryParse(args[3], out xp))
-					{
-						DisplaySyntax(client);
-						return;
-					}
+                case "xp":
+                    if (npc == null || args.Length < 4)
+                    {
+                        DisplaySyntax(client);
+                        return;
+                    }
+                    item = args[2];
+                    int xp;
+                    if (!int.TryParse(args[3], out xp))
+                    {
+                        DisplaySyntax(client);
+                        return;
+                    }
                     if (!npc.TextNPCData.EchangeurDB.ContainsKey(item))
-						player.Out.SendMessage(item + " n'existe pas.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-					else
-					{
+                        player.Out.SendMessage(item + " n'existe pas.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    else
+                    {
                         npc.TextNPCData.EchangeurDB[item].GainXP = xp;
                         npc.TextNPCData.SaveIntoDatabase();
-						player.Out.SendMessage(item + " donne " + (xp > 0 ? xp + " xp" : (-xp)+"/1000 du niveau en cours") + " maintenant.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-					}
-					break;
+                        player.Out.SendMessage(item + " donne " + (xp > 0 ? xp + " xp" : (-xp) + "/1000 du niveau en cours") + " maintenant.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    }
+                    break;
 
-				case "item":
-					if (npc == null || args.Length < 4)
-					{
-						DisplaySyntax(client);
-						return;
-					}
-					item = args[2];
-					string item2 = args[4];
-					int count;
-					if (!int.TryParse(args[3], out count) || count < 0)
-					{
-						DisplaySyntax(client);
-						return;
-					}
+                case "item":
+                    if (npc == null || args.Length < 4)
+                    {
+                        DisplaySyntax(client);
+                        return;
+                    }
+                    item = args[2];
+                    string item2 = args[4];
+                    int count;
+                    if (!int.TryParse(args[3], out count) || count < 0)
+                    {
+                        DisplaySyntax(client);
+                        return;
+                    }
                     if (!npc.TextNPCData.EchangeurDB.ContainsKey(item))
-						player.Out.SendMessage(item + " n'existe pas.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-					else
-					{
+                        player.Out.SendMessage(item + " n'existe pas.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    else
+                    {
                         npc.TextNPCData.EchangeurDB[item].ItemGiveCount = count;
                         npc.TextNPCData.EchangeurDB[item].ItemGiveID = item2;
                         npc.TextNPCData.SaveIntoDatabase();
-						player.Out.SendMessage(item + " donne " + count + " " + item2 + " maintenant.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-					}
-					break;
+                        player.Out.SendMessage(item + " donne " + count + " " + item2 + " maintenant.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    }
+                    break;
 
-				case "info":
-					if (npc == null)
-					{
-						DisplaySyntax(client);
-						return;
-					}
-					List<string> text = new List<string>();
+                case "info":
+                    if (npc == null)
+                    {
+                        DisplaySyntax(client);
+                        return;
+                    }
+                    List<string> text = new List<string>();
                     foreach (KeyValuePair<string, DBEchangeur> pair in npc.TextNPCData.EchangeurDB)
-					{
-						text.Add(" - " + pair.Value.ItemRecvID + " (" + pair.Value.ItemRecvCount +"):");
-						if (pair.Value.ItemGiveCount > 0)
-							text.Add("     " + pair.Value.ItemGiveCount + " " + pair.Value.ItemGiveID);
-						if (pair.Value.GainMoney > 0)
-							text.Add("     " + Money.GetString(pair.Value.GainMoney));
-						if (pair.Value.GainXP > 0)
-							text.Add("     " + pair.Value.GainXP + "xp");
-						if (pair.Value.GainXP < 0)
-							text.Add("     " + (-pair.Value.GainXP) + "/1000 du niveau en cours");
+                    {
+                        text.Add(" - " + pair.Value.ItemRecvID + " (" + pair.Value.ItemRecvCount + "):");
+                        if (pair.Value.ItemGiveCount > 0)
+                            text.Add("     " + pair.Value.ItemGiveCount + " " + pair.Value.ItemGiveID);
+                        if (pair.Value.GainMoney > 0)
+                            text.Add("     " + Money.GetString(pair.Value.GainMoney));
+                        if (pair.Value.GainXP > 0)
+                            text.Add("     " + pair.Value.GainXP + "xp");
+                        if (pair.Value.GainXP < 0)
+                            text.Add("     " + (-pair.Value.GainXP) + "/1000 du niveau en cours");
                         if (npc.TextNPCData.Reponses.ContainsKey(pair.Value.ItemRecvID))
                             text.Add("     Réponse: " + npc.TextNPCData.Reponses[pair.Value.ItemRecvID]);
-						text.Add(" . " + pair.Value.ChangedItemCount + " Items échangés");
+                        text.Add(" . " + pair.Value.ChangedItemCount + " Items échangés");
 
                         text.Add(" PriceMoney: " + pair.Value.MoneyPrice + " or");
                         if (!string.IsNullOrEmpty(pair.Value.PriceRessource1))
@@ -206,9 +206,9 @@ namespace DOL.GS.Scripts
                         }
 
 
-					}
-					player.Out.SendCustomTextWindow("Info " + ((GameNPC)npc).Name, text);
-					break;
+                    }
+                    player.Out.SendCustomTextWindow("Info " + ((GameNPC)npc).Name, text);
+                    break;
 
                 case "pricemoney":
                     if (npc == null || args.Length < 4)
@@ -293,19 +293,19 @@ namespace DOL.GS.Scripts
                                     break;
                                 }
                             }
-                        }                       
+                        }
                     }
 
                     DisplaySyntax(client);
                     break;
 
 
-				default:
-					DisplaySyntax(client);
-					break;
-			}
-			return;
-		}
+                default:
+                    DisplaySyntax(client);
+                    break;
+            }
+            return;
+        }
 
         private void ChangeRessource(int ressource, ITextNPC npc, string[] args, GameClient client)
         {
@@ -353,31 +353,31 @@ namespace DOL.GS.Scripts
             }
         }
 
-		public override void DisplaySyntax(GameClient client)
-		{
-			if(client==null || !client.IsPlaying)
-				return;
-			CmdAttribute[] attrib = (CmdAttribute[]) GetType().GetCustomAttributes(typeof(CmdAttribute), false);
-			if(attrib.Length==0) 
-				return;
+        public override void DisplaySyntax(GameClient client)
+        {
+            if (client == null || !client.IsPlaying)
+                return;
+            CmdAttribute[] attrib = (CmdAttribute[])GetType().GetCustomAttributes(typeof(CmdAttribute), false);
+            if (attrib.Length == 0)
+                return;
 
-			int i = 0;
-			string lines = LanguageMgr.GetTranslation(client.Account.Language, attrib[0].Description) + "\n\n";
+            int i = 0;
+            string lines = LanguageMgr.GetTranslation(client.Account.Language, attrib[0].Description) + "\n\n";
             foreach (string usage in attrib[0].Usage)
-			{
-				var str = LanguageMgr.GetTranslation(client.Account.Language, usage);
-				i += str.Length;
-				if(i > 2000)
-				{
-					client.Out.SendMessage(lines, eChatType.CT_System, eChatLoc.CL_PopupWindow);
-					lines = "";
-					i = str.Length;
-				}
-				lines += str+"\n";
-				//log.Debug(str.Length + " - " + i);
-			}
-			client.Out.SendMessage(lines, eChatType.CT_System, eChatLoc.CL_PopupWindow);
-			return;
-		}
-	}
+            {
+                var str = LanguageMgr.GetTranslation(client.Account.Language, usage);
+                i += str.Length;
+                if (i > 2000)
+                {
+                    client.Out.SendMessage(lines, eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                    lines = "";
+                    i = str.Length;
+                }
+                lines += str + "\n";
+                //log.Debug(str.Length + " - " + i);
+            }
+            client.Out.SendMessage(lines, eChatType.CT_System, eChatLoc.CL_PopupWindow);
+            return;
+        }
+    }
 }

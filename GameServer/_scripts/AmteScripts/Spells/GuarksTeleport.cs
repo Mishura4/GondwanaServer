@@ -25,114 +25,114 @@ using AmteScripts.Managers;
 
 namespace DOL.GS.Spells
 {
-	/// <summary>
-	/// The spell used for the Personal Bind Recall Stone.
-	/// </summary>
-	/// <author>Aredhel</author>
-	[SpellHandlerAttribute("GuarksTeleport")]
-	public class GuarksTeleport : SpellHandler
-	{
-		public GuarksTeleport(GameLiving caster, Spell spell, SpellLine spellLine)
-			: base(caster, spell, spellLine) { }
+    /// <summary>
+    /// The spell used for the Personal Bind Recall Stone.
+    /// </summary>
+    /// <author>Aredhel</author>
+    [SpellHandlerAttribute("GuarksTeleport")]
+    public class GuarksTeleport : SpellHandler
+    {
+        public GuarksTeleport(GameLiving caster, Spell spell, SpellLine spellLine)
+            : base(caster, spell, spellLine) { }
 
 
-		/// <summary>
-		/// Can this spell be queued with other spells?
-		/// </summary>
-		public override bool CanQueue
-		{
-			get { return false; }
-		}
+        /// <summary>
+        /// Can this spell be queued with other spells?
+        /// </summary>
+        public override bool CanQueue
+        {
+            get { return false; }
+        }
 
 
-		/// <summary>
-		/// Whether this spell can be cast on the selected target at all.
-		/// </summary>
-		/// <param name="selectedTarget"></param>
-		/// <returns></returns>
-		public override bool CheckBeginCast(GameLiving selectedTarget)
-		{
-			GamePlayer player = Caster as GamePlayer;
-			if (player == null)
-				return false;
+        /// <summary>
+        /// Whether this spell can be cast on the selected target at all.
+        /// </summary>
+        /// <param name="selectedTarget"></param>
+        /// <returns></returns>
+        public override bool CheckBeginCast(GameLiving selectedTarget)
+        {
+            GamePlayer player = Caster as GamePlayer;
+            if (player == null)
+                return false;
 
-			if (player.CurrentRegion.IsRvR || player.CurrentRegion.IsInstance || PvpManager.Instance.IsIn(player))
-			{
-				player.Out.SendMessage("Vous ne pouvez pas utiliser cet objet ici.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-				return false;
-			}
+            if (player.CurrentRegion.IsRvR || player.CurrentRegion.IsInstance || PvpManager.Instance.IsIn(player))
+            {
+                player.Out.SendMessage("Vous ne pouvez pas utiliser cet objet ici.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return false;
+            }
 
-			if (player.IsMoving)
-			{
-				player.Out.SendMessage("Vous devez rester sur place pour utiliser cet objet.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-				return false;
-			}
+            if (player.IsMoving)
+            {
+                player.Out.SendMessage("Vous devez rester sur place pour utiliser cet objet.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return false;
+            }
 
-			if (player.InCombat || GameRelic.IsPlayerCarryingRelic(player))
-			{
-				player.Out.SendMessage("Vous avez été en combat récemment, vous devez patienter pour utiliser cet objet.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-				return false;
-			}
+            if (player.InCombat || GameRelic.IsPlayerCarryingRelic(player))
+            {
+                player.Out.SendMessage("Vous avez ï¿½tï¿½ en combat rï¿½cemment, vous devez patienter pour utiliser cet objet.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return false;
+            }
 
-			return true;
-		}
-
-
-		/// <summary>
-		/// Always a constant casting time
-		/// </summary>
-		/// <returns></returns>
-		public override int CalculateCastingTime()
-		{
-			return m_spell.CastTime;
-		}
+            return true;
+        }
 
 
-		/// <summary>
-		/// Apply the effect.
-		/// </summary>
-		/// <param name="target"></param>
-		/// <param name="effectiveness"></param>
-		public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
-		{
-			GamePlayer player = Caster as GamePlayer;
-			if (player == null)
-				return;
-
-			if (player.InCombat || GameRelic.IsPlayerCarryingRelic(player) || player.IsMoving)
-				return;
-
-			SendEffectAnimation(player, 0, false, 1);
-
-			UniPortalEffect effect = new UniPortalEffect(this, 1000);
-			effect.Start(player);
-
-			player.MoveTo((ushort)player.BindRegion, player.BindXpos, player.BindYpos, player.BindZpos, (ushort)player.BindHeading);
-		}
+        /// <summary>
+        /// Always a constant casting time
+        /// </summary>
+        /// <returns></returns>
+        public override int CalculateCastingTime()
+        {
+            return m_spell.CastTime;
+        }
 
 
-		public override void CasterMoves()
-		{
-			InterruptCasting();
-			if (Caster is GamePlayer)
+        /// <summary>
+        /// Apply the effect.
+        /// </summary>
+        /// <param name="target"></param>
+        /// <param name="effectiveness"></param>
+        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        {
+            GamePlayer player = Caster as GamePlayer;
+            if (player == null)
+                return;
+
+            if (player.InCombat || GameRelic.IsPlayerCarryingRelic(player) || player.IsMoving)
+                return;
+
+            SendEffectAnimation(player, 0, false, 1);
+
+            UniPortalEffect effect = new UniPortalEffect(this, 1000);
+            effect.Start(player);
+
+            player.MoveTo((ushort)player.BindRegion, player.BindXpos, player.BindYpos, player.BindZpos, (ushort)player.BindHeading);
+        }
+
+
+        public override void CasterMoves()
+        {
+            InterruptCasting();
+            if (Caster is GamePlayer)
                 (Caster as GamePlayer).Out.SendMessage(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "SpellHandler.CasterMove"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-		}
+        }
 
 
-		public override void InterruptCasting()
-		{
-			m_startReuseTimer = false;
-			base.InterruptCasting();
-		}
+        public override void InterruptCasting()
+        {
+            m_startReuseTimer = false;
+            base.InterruptCasting();
+        }
 
-		public override IList<string> DelveInfo
-		{
-			get
-			{
-				var list = new List<string>();
-				list.Add(string.Format("{0}", Spell.Description));
-				return list;
-			}
-		}
-	}
+        public override IList<string> DelveInfo
+        {
+            get
+            {
+                var list = new List<string>();
+                list.Add(string.Format("{0}", Spell.Description));
+                return list;
+            }
+        }
+    }
 }

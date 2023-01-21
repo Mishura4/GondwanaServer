@@ -22,22 +22,22 @@ using log4net;
 
 namespace DOL.Database
 {
-	/// <summary>
-	/// Texte des pnj
-	/// </summary>
-	[DataTable(TableName="AreaEffect")]
-	public class DBAreaEffect : DataObject
-	{
-		private int m_Effect;
-		private int m_IntervalMin;
-		private int m_IntervalMax;
-		private int m_HealHarm;
+    /// <summary>
+    /// Texte des pnj
+    /// </summary>
+    [DataTable(TableName = "AreaEffect")]
+    public class DBAreaEffect : DataObject
+    {
+        private int m_Effect;
+        private int m_IntervalMin;
+        private int m_IntervalMax;
+        private int m_HealHarm;
         private int m_Mana;
         private int m_Endurance;
-		private int m_Radius;
-		private int m_MissChance;
-		private string m_Message;
-		private int spellID;
+        private int m_Radius;
+        private int m_MissChance;
+        private string m_Message;
+        private int spellID;
         private bool m_Group_Mob_Turn;
         private string m_Group_Mob_Id;
         private ushort m_Family;
@@ -47,70 +47,70 @@ namespace DOL.Database
 
         #region Init
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-		private static bool Loaded = false;
+        private static bool Loaded = false;
 
-	    [ScriptLoadedEvent]
-		public static void OnScriptsCompiled(DOLEvent e, object sender, EventArgs args)
-		{
-			Init();
-		}
+        [ScriptLoadedEvent]
+        public static void OnScriptsCompiled(DOLEvent e, object sender, EventArgs args)
+        {
+            Init();
+        }
 
-		public static void Init()
-		{
-			if(Loaded)
-				return;
-			GameServer.Database.RegisterDataObject(typeof(DBAreaEffect));
-			Loaded = true;
-			log.Info("DATABASE DBAreaEffect LOADED");
-		}
-		#endregion
+        public static void Init()
+        {
+            if (Loaded)
+                return;
+            GameServer.Database.RegisterDataObject(typeof(DBAreaEffect));
+            Loaded = true;
+            log.Info("DATABASE DBAreaEffect LOADED");
+        }
+        #endregion
 
-		[DataElement(AllowDbNull=false)]
-		public string MobID { get; set; }
+        [DataElement(AllowDbNull = false)]
+        public string MobID { get; set; }
 
-		[DataElement(AllowDbNull=false)]
-		public int Effect
-		{
-			get { return m_Effect; }
-			set 
-			{ 
-				Dirty = true;
-				m_Effect = value; 
-			}
-		}
+        [DataElement(AllowDbNull = false)]
+        public int Effect
+        {
+            get { return m_Effect; }
+            set
+            {
+                Dirty = true;
+                m_Effect = value;
+            }
+        }
 
-		[DataElement(AllowDbNull=false)]
-		public int IntervalMin
-		{
-			get { return m_IntervalMin; }
-			set 
-			{ 
-				Dirty = true;
-				m_IntervalMin = value; 
-			}
-		}
+        [DataElement(AllowDbNull = false)]
+        public int IntervalMin
+        {
+            get { return m_IntervalMin; }
+            set
+            {
+                Dirty = true;
+                m_IntervalMin = value;
+            }
+        }
 
-		[DataElement(AllowDbNull=false)]
-		public int IntervalMax
-		{
-			get { return m_IntervalMax; }
-			set 
-			{ 
-				Dirty = true;
-				m_IntervalMax = value; 
-			}
-		}
+        [DataElement(AllowDbNull = false)]
+        public int IntervalMax
+        {
+            get { return m_IntervalMax; }
+            set
+            {
+                Dirty = true;
+                m_IntervalMax = value;
+            }
+        }
 
-		[DataElement(AllowDbNull=false)]
-		public int HealHarm
-		{
-			get { return m_HealHarm; }
-			set 
-			{ 
-				Dirty = true;
-				m_HealHarm = value; 
-			}
-		}
+        [DataElement(AllowDbNull = false)]
+        public int HealHarm
+        {
+            get { return m_HealHarm; }
+            set
+            {
+                Dirty = true;
+                m_HealHarm = value;
+            }
+        }
 
         [DataElement(AllowDbNull = false)]
         public int Mana
@@ -134,38 +134,38 @@ namespace DOL.Database
             }
         }
 
-		[DataElement(AllowDbNull=false)]
-		public int MissChance
-		{
-			get { return m_MissChance; }
-			set 
-			{ 
-				Dirty = true;
-				m_MissChance = value; 
-			}
-		}
+        [DataElement(AllowDbNull = false)]
+        public int MissChance
+        {
+            get { return m_MissChance; }
+            set
+            {
+                Dirty = true;
+                m_MissChance = value;
+            }
+        }
 
-		[DataElement(AllowDbNull=false)]
-		public int Radius
-		{
-			get { return m_Radius; }
-			set 
-			{ 
-				Dirty = true;
-				m_Radius = value; 
-			}
-		}
+        [DataElement(AllowDbNull = false)]
+        public int Radius
+        {
+            get { return m_Radius; }
+            set
+            {
+                Dirty = true;
+                m_Radius = value;
+            }
+        }
 
-		[DataElement(AllowDbNull=false)]
-		public string Message
-		{
-			get { return m_Message; }
-			set 
-			{
-				Dirty = true;
-				m_Message = value;
-			}
-		}
+        [DataElement(AllowDbNull = false)]
+        public string Message
+        {
+            get { return m_Message; }
+            set
+            {
+                Dirty = true;
+                m_Message = value;
+            }
+        }
 
         [DataElement(AllowDbNull = true)]
         public int SpellID

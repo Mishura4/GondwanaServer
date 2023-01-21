@@ -23,37 +23,37 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute(
-		"&addbind",
-		ePrivLevel.GM,
-		"Commands.GM.AddBind.Description",
-		"Commands.GM.AddBind.Usage")]
-	public class AddBindCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		public void OnCommand(GameClient client, string[] args)
-		{
-			ushort bindRadius = 750;
-			if (args.Length >= 2)
-			{
-				try
-				{
-					bindRadius = UInt16.Parse(args[1]);
-				}
-				catch (Exception e)
-				{
-					DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Error", e.Message));
-					return;
-				}
-			}
-			BindPoint bp = new BindPoint();
-			bp.X = (int)client.Player.Position.X;
-			bp.Y = (int)client.Player.Position.Y;
-			bp.Z = (int)client.Player.Position.Z;
-			bp.Region = client.Player.CurrentRegionID;
-			bp.Radius = bindRadius;
-			GameServer.Database.AddObject(bp);
-			client.Player.CurrentRegion.AddArea(new Area.BindArea("bind point", bp));
-			DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.AddBind.BindPointAdded", bp.X, bp.Y, bp.Z, bp.Radius, bp.Region));
-		}
-	}
+    [CmdAttribute(
+        "&addbind",
+        ePrivLevel.GM,
+        "Commands.GM.AddBind.Description",
+        "Commands.GM.AddBind.Usage")]
+    public class AddBindCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        public void OnCommand(GameClient client, string[] args)
+        {
+            ushort bindRadius = 750;
+            if (args.Length >= 2)
+            {
+                try
+                {
+                    bindRadius = UInt16.Parse(args[1]);
+                }
+                catch (Exception e)
+                {
+                    DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Error", e.Message));
+                    return;
+                }
+            }
+            BindPoint bp = new BindPoint();
+            bp.X = (int)client.Player.Position.X;
+            bp.Y = (int)client.Player.Position.Y;
+            bp.Z = (int)client.Player.Position.Z;
+            bp.Region = client.Player.CurrentRegionID;
+            bp.Radius = bindRadius;
+            GameServer.Database.AddObject(bp);
+            client.Player.CurrentRegion.AddArea(new Area.BindArea("bind point", bp));
+            DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.AddBind.BindPointAdded", bp.X, bp.Y, bp.Z, bp.Radius, bp.Region));
+        }
+    }
 }

@@ -22,11 +22,11 @@ using DOL.GS;
 
 namespace DOL.Events
 {
-	/// <summary>
-	/// Holds the arguments for the WalkTo event of GameNPC
-	/// </summary>
-	public class WalkToEventArgs : EventArgs
-	{
+    /// <summary>
+    /// Holds the arguments for the WalkTo event of GameNPC
+    /// </summary>
+    public class WalkToEventArgs : EventArgs
+    {
         public WalkToEventArgs(Vector3 target, int speed)
         {
             Target = target;
@@ -38,9 +38,9 @@ namespace DOL.Events
         /// </summary>
         public Vector3 Target { get; private set; }
 
-		/// <summary>
-		/// The speed to walk at.
-		/// </summary>
+        /// <summary>
+        /// The speed to walk at.
+        /// </summary>
         public int Speed { get; private set; }
-	}
+    }
 }

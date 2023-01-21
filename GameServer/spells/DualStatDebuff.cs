@@ -18,49 +18,49 @@
  */
 namespace DOL.GS.Spells
 {
-	public abstract class DualStatDebuff : SingleStatDebuff
-	{
-		public override eBuffBonusCategory BonusCategory1 { get { return eBuffBonusCategory.Debuff; } }
-		public override eBuffBonusCategory BonusCategory2 { get { return eBuffBonusCategory.Debuff; } }
+    public abstract class DualStatDebuff : SingleStatDebuff
+    {
+        public override eBuffBonusCategory BonusCategory1 { get { return eBuffBonusCategory.Debuff; } }
+        public override eBuffBonusCategory BonusCategory2 { get { return eBuffBonusCategory.Debuff; } }
 
-		public DualStatDebuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+        public DualStatDebuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
         public override string ShortDescription => $"Target's {ConvertPropertyToText(Property1)} and {ConvertPropertyToText(Property2)} are reduced by {Spell.Value}.";
     }
 
-	[SpellHandler("StrengthConstitutionDebuff")]
-	public class StrengthConDebuff : DualStatDebuff
-	{
-		public override eProperty Property1 { get { return eProperty.Strength; } }
-		public override eProperty Property2 { get { return eProperty.Constitution; } }
+    [SpellHandler("StrengthConstitutionDebuff")]
+    public class StrengthConDebuff : DualStatDebuff
+    {
+        public override eProperty Property1 { get { return eProperty.Strength; } }
+        public override eProperty Property2 { get { return eProperty.Constitution; } }
 
-		public StrengthConDebuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
-	}
+        public StrengthConDebuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+    }
 
-	[SpellHandler("DexterityQuicknessDebuff")]
-	public class DexterityQuiDebuff : DualStatDebuff
-	{
-		public override eProperty Property1 { get { return eProperty.Dexterity; } }
-		public override eProperty Property2 { get { return eProperty.Quickness; } }
+    [SpellHandler("DexterityQuicknessDebuff")]
+    public class DexterityQuiDebuff : DualStatDebuff
+    {
+        public override eProperty Property1 { get { return eProperty.Dexterity; } }
+        public override eProperty Property2 { get { return eProperty.Quickness; } }
 
-		public DexterityQuiDebuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
-	}
+        public DexterityQuiDebuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+    }
 
-	[SpellHandler("DexterityConstitutionDebuff")]
-	public class DexterityConDebuff : DualStatDebuff
-	{
-		public override eProperty Property1 { get { return eProperty.Dexterity; } }
-		public override eProperty Property2 { get { return eProperty.Constitution; } }
+    [SpellHandler("DexterityConstitutionDebuff")]
+    public class DexterityConDebuff : DualStatDebuff
+    {
+        public override eProperty Property1 { get { return eProperty.Dexterity; } }
+        public override eProperty Property2 { get { return eProperty.Constitution; } }
 
-		public DexterityConDebuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
-	}
+        public DexterityConDebuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+    }
 
-	[SpellHandler("WeaponSkillConstitutionDebuff")]
-	public class WeaponskillConDebuff : DualStatDebuff
-	{
-		public override eProperty Property1 { get { return eProperty.WeaponSkill; } }
-		public override eProperty Property2 { get { return eProperty.Constitution; } }
+    [SpellHandler("WeaponSkillConstitutionDebuff")]
+    public class WeaponskillConDebuff : DualStatDebuff
+    {
+        public override eProperty Property1 { get { return eProperty.WeaponSkill; } }
+        public override eProperty Property2 { get { return eProperty.Constitution; } }
 
-		public WeaponskillConDebuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
-	}
+        public WeaponskillConDebuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+    }
 }

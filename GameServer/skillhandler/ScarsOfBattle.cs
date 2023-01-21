@@ -21,16 +21,16 @@ using DOL.Database;
 
 namespace DOL.GS.SkillHandler
 {
-	[SkillHandlerAttribute(Abilities.ScarsOfBattle)]
-	public class ScarsOfBattle : StatChangingAbility
-	{
-		public ScarsOfBattle(DBAbility dba, int level)
-			: base(dba, 1, eProperty.MaxHealth)
-		{
-		}
-		public override int GetAmountForLevel(int level)
-		{
-			return 10;
-		}
-	}
+    [SkillHandlerAttribute(Abilities.ScarsOfBattle)]
+    public class ScarsOfBattle : StatChangingAbility
+    {
+        public ScarsOfBattle(DBAbility dba, int level)
+            : base(dba, 1, eProperty.MaxHealth)
+        {
+        }
+        public override int GetAmountForLevel(int level)
+        {
+            return 10;
+        }
+    }
 }

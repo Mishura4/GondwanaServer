@@ -5,26 +5,26 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute(
-		"&amteboat",
-		ePrivLevel.GM,
+    [CmdAttribute(
+        "&amteboat",
+        ePrivLevel.GM,
         "Commands.GM.Boat.Description",
         "Commands.GM.Boat.Usage.Info",
         "Commands.GM.Boat.Usage.Create",
         "Commands.GM.Boat.Usage.Speed",
         "Commands.GM.Boat.Usage.Path")]
-	public class AmteBoatCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (args.Length < 2)
-			{
-				DisplaySyntax(client);
-				return;
-			}
+    public class AmteBoatCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (args.Length < 2)
+            {
+                DisplaySyntax(client);
+                return;
+            }
             GameBoatAmte mob = client.Player.TargetObject as GameBoatAmte;
-			switch (args[1])
-			{
+            switch (args[1])
+            {
                 case "create":
                     mob = new GameBoatAmte();
                     try
@@ -58,7 +58,7 @@ namespace DOL.GS.Commands
                             "Nom du path: '" + mob.PathName + "'",
                             "Vitesse sur le path: " + mob.MaxSpeedBase + "'"
                         };
-			        client.Out.SendCustomTextWindow(mob.Name + " Info", txt);
+                    client.Out.SendCustomTextWindow(mob.Name + " Info", txt);
                     break;
 
                 case "path":
@@ -87,12 +87,12 @@ namespace DOL.GS.Commands
                         DisplaySyntax(client);
                         return;
                     }
-			        mob.SaveIntoDatabase();
+                    mob.SaveIntoDatabase();
                     client.Out.SendMessage("La vitesse de trajet est maintenant: " + mob.MaxSpeedBase, eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     break;
 
                 default: DisplaySyntax(client); break;
-			}
-		}
-	}
+            }
+        }
+    }
 }

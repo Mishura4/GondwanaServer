@@ -35,56 +35,56 @@ namespace DOL.GS.PacketHandler.Client.v168
 
         public void HandlePacket(GameClient client, GSPacketIn packet)
         {
-			// player is null, return
+            // player is null, return
             if (client.Player == null)
                 return;
 
-			// active consignment merchant is null, return
+            // active consignment merchant is null, return
             GameConsignmentMerchant conMerchant = client.Player.ActiveInventoryObject as GameConsignmentMerchant;
             if (conMerchant == null)
                 return;
 
-			// current house is null, return
+            // current house is null, return
             House house = HouseMgr.GetHouse(conMerchant.HouseNumber);
             if (house == null && conMerchant.houseRequired)
                 return;
 
-			// make sure player has permissions to withdraw from the consignment merchant
-            if ((!conMerchant.houseRequired && conMerchant.OwnerID!=client.Player.ObjectId)||(house != null && !house.CanUseConsignmentMerchant(client.Player, ConsignmentPermissions.Withdraw)))
+            // make sure player has permissions to withdraw from the consignment merchant
+            if ((!conMerchant.houseRequired && conMerchant.OwnerID != client.Player.ObjectId) || (house != null && !house.CanUseConsignmentMerchant(client.Player, ConsignmentPermissions.Withdraw)))
             {
                 client.Player.Out.SendMessage("You don't have permission to withdraw money from this merchant!", eChatType.CT_Important, eChatLoc.CL_ChatWindow);
                 return;
             }
 
-			lock (conMerchant.LockObject())
-			{
-				long totalConMoney = conMerchant.TotalMoney;
+            lock (conMerchant.LockObject())
+            {
+                long totalConMoney = conMerchant.TotalMoney;
 
-				if (totalConMoney > 0)
-				{
-					if (ServerProperties.Properties.CONSIGNMENT_USE_BP)
-					{
-						client.Player.Out.SendMessage("You withdraw " + totalConMoney.ToString() + " BountyPoints from your Merchant.", eChatType.CT_Important, eChatLoc.CL_ChatWindow);
-						client.Player.BountyPoints += totalConMoney;
-						client.Player.Out.SendUpdatePoints();
-					}
-					else
-					{
-						ChatUtil.SendMerchantMessage(client, "GameMerchant.OnPlayerWithdraw", Money.GetString(totalConMoney));
-						client.Player.AddMoney(totalConMoney);
-						InventoryLogging.LogInventoryAction(conMerchant, client.Player, eInventoryActionType.Merchant, totalConMoney);
-					}
+                if (totalConMoney > 0)
+                {
+                    if (ServerProperties.Properties.CONSIGNMENT_USE_BP)
+                    {
+                        client.Player.Out.SendMessage("You withdraw " + totalConMoney.ToString() + " BountyPoints from your Merchant.", eChatType.CT_Important, eChatLoc.CL_ChatWindow);
+                        client.Player.BountyPoints += totalConMoney;
+                        client.Player.Out.SendUpdatePoints();
+                    }
+                    else
+                    {
+                        ChatUtil.SendMerchantMessage(client, "GameMerchant.OnPlayerWithdraw", Money.GetString(totalConMoney));
+                        client.Player.AddMoney(totalConMoney);
+                        InventoryLogging.LogInventoryAction(conMerchant, client.Player, eInventoryActionType.Merchant, totalConMoney);
+                    }
 
-					conMerchant.TotalMoney -= totalConMoney;
+                    conMerchant.TotalMoney -= totalConMoney;
 
-					if (ServerProperties.Properties.MARKET_ENABLE_LOG)
-					{
-						log.DebugFormat("CM: [{0}:{1}] withdraws {2} from CM on lot {3}.", client.Player.Name, client.Account.Name, totalConMoney, conMerchant.HouseNumber);
-					}
+                    if (ServerProperties.Properties.MARKET_ENABLE_LOG)
+                    {
+                        log.DebugFormat("CM: [{0}:{1}] withdraws {2} from CM on lot {3}.", client.Player.Name, client.Account.Name, totalConMoney, conMerchant.HouseNumber);
+                    }
 
-					client.Out.SendConsignmentMerchantMoney(conMerchant.TotalMoney);
-				}
-			}
+                    client.Out.SendConsignmentMerchantMoney(conMerchant.TotalMoney);
+                }
+            }
         }
     }
 }

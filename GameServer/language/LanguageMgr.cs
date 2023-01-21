@@ -119,7 +119,8 @@ namespace DOL.Language
         /// <summary>
         /// Give a way to change or relocate the lang files
         /// </summary>
-        private static string LangPath { 
+        private static string LangPath
+        {
             get
             {
                 if (soleInstance.LangPathImpl == "")
@@ -353,10 +354,10 @@ namespace DOL.Language
                 log.Info("[Language-Manager] Loading object translations...");
 
             IList<LanguageDataObject> lngObjs = new List<LanguageDataObject>();
-			Util.AddRange(lngObjs, (IList<LanguageDataObject>)GameServer.Database.SelectAllObjects<DBLanguageArea>());
-			Util.AddRange(lngObjs, (IList<LanguageDataObject>)GameServer.Database.SelectAllObjects<DBLanguageGameObject>());
-			Util.AddRange(lngObjs, (IList<LanguageDataObject>)GameServer.Database.SelectAllObjects<DBLanguageNPC>());
-			Util.AddRange(lngObjs, (IList<LanguageDataObject>)GameServer.Database.SelectAllObjects<DBLanguageZone>());
+            Util.AddRange(lngObjs, (IList<LanguageDataObject>)GameServer.Database.SelectAllObjects<DBLanguageArea>());
+            Util.AddRange(lngObjs, (IList<LanguageDataObject>)GameServer.Database.SelectAllObjects<DBLanguageGameObject>());
+            Util.AddRange(lngObjs, (IList<LanguageDataObject>)GameServer.Database.SelectAllObjects<DBLanguageNPC>());
+            Util.AddRange(lngObjs, (IList<LanguageDataObject>)GameServer.Database.SelectAllObjects<DBLanguageZone>());
 
             foreach (LanguageDataObject lngObj in lngObjs)
                 RegisterLanguageDataObject(lngObj);
@@ -396,7 +397,7 @@ namespace DOL.Language
         #region ReadLanguageDirectory
         private static ArrayList ReadLanguageDirectory(string path, string language)
         {
-		    ArrayList sentences = new ArrayList();
+            ArrayList sentences = new ArrayList();
             foreach (string languageFile in Directory.GetFiles(path, "*", SearchOption.AllDirectories))
             {
                 if (!languageFile.EndsWith(".txt"))
@@ -508,33 +509,33 @@ namespace DOL.Language
         public static LanguageDataObject GetTranslation(GameClient client, ITranslatableObject obj)
         {
             LanguageDataObject translation;
-			TryGetTranslation(out translation, client, obj);
+            TryGetTranslation(out translation, client, obj);
             return translation;
         }
-        
+
         public static LanguageDataObject GetTranslation(GamePlayer player, ITranslatableObject obj)
         {
-        	return GetTranslation(player.Client, obj);
+            return GetTranslation(player.Client, obj);
         }
 
         public static LanguageDataObject GetTranslation(string language, ITranslatableObject obj)
         {
-            LanguageDataObject translation; 
-			TryGetTranslation(out translation, language, obj);
+            LanguageDataObject translation;
+            TryGetTranslation(out translation, language, obj);
             return translation;
         }
 
         public static string GetTranslation(GameClient client, string translationId, params object[] args)
         {
-            string translation; 
-			TryGetTranslation(out translation, client, translationId, args);
+            string translation;
+            TryGetTranslation(out translation, client, translationId, args);
             return translation;
         }
 
         public static string GetTranslation(string language, string translationId, params object[] args)
         {
-            string translation; 
-			TryGetTranslation(out translation, language, translationId, args);
+            string translation;
+            TryGetTranslation(out translation, language, translationId, args);
             return translation;
         }
         #endregion GetTranslation
@@ -597,36 +598,36 @@ namespace DOL.Language
 
 
 
-		/// <summary>
-		/// This returns the last part of the translation text id if actual translation fails
-		/// This helps to avoid returning strings that are too long and overflow the client
-		/// When the name overflows players my not be targetable or even visible!
-		/// PLEASE DO NOT REMOVE THIS FUNCTIONALITY  - tolakram
-		/// </summary>
-		/// <param name="TranslationID"></param>
-		/// <returns></returns>
-		public static string GetTranslationErrorText(string lang, string TranslationID)
-		{
-			try
-			{
-				if (TranslationID.Contains(".") && TranslationID.TrimEnd().EndsWith(".") == false && TranslationID.StartsWith("'") == false)
-				{
-					return lang + " " + TranslationID.Substring(TranslationID.LastIndexOf(".") + 1);
-				}
-				else
-				{
-					// Odds are a literal string was passed with no translation, so just return the string unmodified
-					return TranslationID;
-				}
-			}
-			catch (Exception ex)
-			{
-				log.Error("Error Getting Translation Error Text for " + lang + ":" + TranslationID, ex);
-			}
+        /// <summary>
+        /// This returns the last part of the translation text id if actual translation fails
+        /// This helps to avoid returning strings that are too long and overflow the client
+        /// When the name overflows players my not be targetable or even visible!
+        /// PLEASE DO NOT REMOVE THIS FUNCTIONALITY  - tolakram
+        /// </summary>
+        /// <param name="TranslationID"></param>
+        /// <returns></returns>
+        public static string GetTranslationErrorText(string lang, string TranslationID)
+        {
+            try
+            {
+                if (TranslationID.Contains(".") && TranslationID.TrimEnd().EndsWith(".") == false && TranslationID.StartsWith("'") == false)
+                {
+                    return lang + " " + TranslationID.Substring(TranslationID.LastIndexOf(".") + 1);
+                }
+                else
+                {
+                    // Odds are a literal string was passed with no translation, so just return the string unmodified
+                    return TranslationID;
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error("Error Getting Translation Error Text for " + lang + ":" + TranslationID, ex);
+            }
 
-			return lang + " Translation Error!";
-		}
-		
+            return lang + " Translation Error!";
+        }
+
 
         public static bool TryGetTranslation(out string translation, string language, string translationId, params object[] args)
         {
@@ -648,31 +649,31 @@ namespace DOL.Language
         /// <returns>Translated Sentence or Default string.</returns>
         public static string TryTranslateOrDefault(GamePlayer player, string missingDefault, string translationId, params object[] args)
         {
-        	string missing = missingDefault;
-        	
-        	if (args.Length > 0)
-        	{
-	        	try
-	        	{
-	        		missing = string.Format(missingDefault, args);
-	        	}
-	        	catch
-	        	{
-	        	}
-        	}
-        	
-        	if (player == null || player.Client == null || player.Client.Account == null)
-        		return missing;
-        	
-        	string retval;
-        	if (TryGetTranslation(out retval, player.Client.Account.Language, translationId, args))
-        	{
-        		return retval;
-        	}
-        	
-        	return missing;
+            string missing = missingDefault;
+
+            if (args.Length > 0)
+            {
+                try
+                {
+                    missing = string.Format(missingDefault, args);
+                }
+                catch
+                {
+                }
+            }
+
+            if (player == null || player.Client == null || player.Client.Account == null)
+                return missing;
+
+            string retval;
+            if (TryGetTranslation(out retval, player.Client.Account.Language, translationId, args))
+            {
+                return retval;
+            }
+
+            return missing;
         }
-        
+
         #endregion
 
         #region RegisterLanguageDataObject / UnregisterLanguageDataObject

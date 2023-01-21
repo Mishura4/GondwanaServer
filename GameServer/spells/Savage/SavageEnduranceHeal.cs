@@ -22,37 +22,37 @@ using DOL.Language;
 
 namespace DOL.GS.Spells
 {
-	[SpellHandler("SavageEnduranceHeal")]
-	public class SavageEnduranceHeal : EnduranceHealSpellHandler
-	{
+    [SpellHandler("SavageEnduranceHeal")]
+    public class SavageEnduranceHeal : EnduranceHealSpellHandler
+    {
         public override string CostType => "Health";
         public SavageEnduranceHeal(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-		protected override void RemoveFromStat(int value)
-		{
-			m_caster.Health -= value;
-		}
+        protected override void RemoveFromStat(int value)
+        {
+            m_caster.Health -= value;
+        }
 
-		public override int PowerCost(GameLiving target)
-		{
-			int cost = 0;
-			if (m_spell.Power < 0)
-				cost = (int)(m_caster.MaxHealth * Math.Abs(m_spell.Power) * 0.01);
-			else
-				cost = m_spell.Power;
-			return cost;
-		}
+        public override int PowerCost(GameLiving target)
+        {
+            int cost = 0;
+            if (m_spell.Power < 0)
+                cost = (int)(m_caster.MaxHealth * Math.Abs(m_spell.Power) * 0.01);
+            else
+                cost = m_spell.Power;
+            return cost;
+        }
 
-		public override bool CheckBeginCast(GameLiving selectedTarget)
-		{
-			int cost = PowerCost(Caster);
-			if (Caster.Health < cost)
-			{
+        public override bool CheckBeginCast(GameLiving selectedTarget)
+        {
+            int cost = PowerCost(Caster);
+            if (Caster.Health < cost)
+            {
                 MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "SavageEnduranceHeal.CheckBeginCast.InsuffiscientHealth"), eChatType.CT_SpellResisted);
                 return false;
-			}
-			return base.CheckBeginCast(Caster);
-		}
+            }
+            return base.CheckBeginCast(Caster);
+        }
 
         public override string ShortDescription => $"You regain {Spell.Value} endurance.";
     }

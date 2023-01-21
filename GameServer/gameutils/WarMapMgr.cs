@@ -7,7 +7,7 @@ using log4net;
 namespace DOL.GS
 {
     public class WarMapMgr
-    {   
+    {
         const long REMAIN_IN_CACHE = 2 * 60 * 1000; // 2min
         const long REFRESH_INTERVAL = 10 * 1000; // 10sec
         const int FIGHTS_RATIO = 4; // 4 players = small fight, *2 = normal, *3 = big, *4 = huge
@@ -45,7 +45,7 @@ namespace DOL.GS
             public byte Y; // 0..3
             public byte Realm;
         }
-        
+
         public static bool AddFight(byte zoneid, int x, int y, byte realm1, byte realm2)
         {
             if (!ServerProperties.Properties.ENABLE_WARMAPMGR)
@@ -76,7 +76,7 @@ namespace DOL.GS
             lock (m_groups)
             {
                 if (m_groups.ContainsKey(name)) return false;
-                m_groups.Add(name, new Dictionary<long,Group>());
+                m_groups.Add(name, new Dictionary<long, Group>());
                 Zone zone = WorldMgr.GetZone(zoneid);
                 if (zone == null) return false;
                 long time = NFTime;
@@ -87,7 +87,7 @@ namespace DOL.GS
                 group.Realm = realm;
                 while (m_groups[name].ContainsKey(time)) time++;
                 m_groups[name].Add(time, group);
-             }
+            }
             return true;
         }
 
@@ -96,7 +96,7 @@ namespace DOL.GS
             try
             {
                 long nftime = NFTime;
-                
+
                 #region CalculFights
                 lock (m_fights)
                 {
@@ -180,7 +180,7 @@ namespace DOL.GS
                         if (m_groups.ContainsKey(name))
                             m_groups.Remove(name);
                     }
-                    
+
                     lock (b_groups)
                     {
                         b_groups.Clear();
@@ -221,7 +221,7 @@ namespace DOL.GS
                                     int mid = b_groups[zone][x][y][2];
                                     int hib = b_groups[zone][x][y][3];
                                     byte realm = 0x00;
-									int size = 0;
+                                    int size = 0;
                                     if (alb >= mid && alb >= hib) { realm = 0x01; size = alb; }
                                     else if (mid >= hib && mid >= alb) { realm = 0x02; size = mid; }
                                     else /*if ((hib >= mid && mid >= alb) || (mid >= hib && hib >= alb))*/ { realm = 0x03; size = hib; }
@@ -243,7 +243,7 @@ namespace DOL.GS
                 log.Error("WarMapMgr.Calcul: " + e);
             }
         }
-        
+
         public static void SendFightInfo(GameClient client)
         {
             if (!ServerProperties.Properties.ENABLE_WARMAPMGR)
@@ -251,10 +251,10 @@ namespace DOL.GS
 
             if (client == null || client.Player == null) return;
 
-			if (LastCalcul + REFRESH_INTERVAL < NFTime)
-			{
-				Calcul();
-			}
+            if (LastCalcul + REFRESH_INTERVAL < NFTime)
+            {
+                Calcul();
+            }
 
             client.Out.SendWarmapDetailUpdate(w_fights, w_groups);
         }

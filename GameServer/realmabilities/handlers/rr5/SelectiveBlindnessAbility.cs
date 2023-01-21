@@ -67,7 +67,7 @@ namespace DOL.GS.RealmAbilities
                     m_player.DisableSkill(this, 3 * 1000);
                     return;
                 }
-                if ( !m_player.IsWithinRadius( m_player.TargetObject, SpellRange ) )
+                if (!m_player.IsWithinRadius(m_player.TargetObject, SpellRange))
                 {
                     m_player.Out.SendMessage(m_player.TargetObject + " is too far away!", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
                     m_player.DisableSkill(this, 3 * 1000);
@@ -75,14 +75,14 @@ namespace DOL.GS.RealmAbilities
                 }
                 foreach (GamePlayer radiusPlayer in m_player.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
                 {
-					if (radiusPlayer == m_player)
-					{
-						radiusPlayer.MessageToSelf("You cast " + this.Name + "!", eChatType.CT_Spell);
-					}
-					else
-					{
-						radiusPlayer.MessageFromArea(m_player, m_player.Name + " casts a spell!", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
-					}
+                    if (radiusPlayer == m_player)
+                    {
+                        radiusPlayer.MessageToSelf("You cast " + this.Name + "!", eChatType.CT_Spell);
+                    }
+                    else
+                    {
+                        radiusPlayer.MessageFromArea(m_player, m_player.Name + " casts a spell!", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                    }
 
                     radiusPlayer.Out.SendSpellCastAnimation(m_player, 7059, 0);
                 }
@@ -113,7 +113,7 @@ namespace DOL.GS.RealmAbilities
                 m_player.DisableSkill(this, 3 * 1000);
                 return;
             }
-            if ( !m_player.IsWithinRadius( m_targetPlayer, SpellRange ) )
+            if (!m_player.IsWithinRadius(m_targetPlayer, SpellRange))
             {
                 m_player.Out.SendMessage(m_targetPlayer + " is too far away.", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
                 m_player.DisableSkill(this, 3 * 1000);
@@ -124,7 +124,7 @@ namespace DOL.GS.RealmAbilities
                 if (!GameServer.ServerRules.IsAllowedToAttack(m_player, radiusPlayer, true))
                     continue;
 
-				SelectiveBlindnessEffect SelectiveBlindness = radiusPlayer.EffectList.GetOfType<SelectiveBlindnessEffect>();
+                SelectiveBlindnessEffect SelectiveBlindness = radiusPlayer.EffectList.GetOfType<SelectiveBlindnessEffect>();
                 if (SelectiveBlindness != null) SelectiveBlindness.Cancel(false);
                 new SelectiveBlindnessEffect(m_player).Start(radiusPlayer);
             }

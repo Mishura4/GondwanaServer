@@ -27,45 +27,45 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute(
-		"&played",
-		ePrivLevel.Player,
-		"Commands.Players.Played.Description",
-		"Commands.Players.Played.Usage")]
-	public class PlayedCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (IsSpammingCommand(client.Player, "played"))
-				return;
+    [CmdAttribute(
+        "&played",
+        ePrivLevel.Player,
+        "Commands.Players.Played.Description",
+        "Commands.Players.Played.Usage")]
+    public class PlayedCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (IsSpammingCommand(client.Player, "played"))
+                return;
 
-			int yearsPlayed = 0;
-			int monthsPlayed = 0;
-			TimeSpan showPlayed = TimeSpan.FromSeconds(client.Player.PlayedTime);
-			int daysPlayed = showPlayed.Days;
-			// Figure Years
-			if (showPlayed.Days >= 365)
-			{
-				yearsPlayed = daysPlayed/365;
-				daysPlayed -= yearsPlayed*365;
-			}
-			// Figure Months (roughly)
-			if (showPlayed.Days >= 30)
-			{
-				monthsPlayed = daysPlayed/30;
-				daysPlayed -= monthsPlayed*30;
-			}
+            int yearsPlayed = 0;
+            int monthsPlayed = 0;
+            TimeSpan showPlayed = TimeSpan.FromSeconds(client.Player.PlayedTime);
+            int daysPlayed = showPlayed.Days;
+            // Figure Years
+            if (showPlayed.Days >= 365)
+            {
+                yearsPlayed = daysPlayed / 365;
+                daysPlayed -= yearsPlayed * 365;
+            }
+            // Figure Months (roughly)
+            if (showPlayed.Days >= 30)
+            {
+                monthsPlayed = daysPlayed / 30;
+                daysPlayed -= monthsPlayed * 30;
+            }
 
-			client.Out.SendMessage(
-				LanguageMgr.GetTranslation(
-					client.Account.Language,
-					"Commands.Players.Played.Played",
-					yearsPlayed,
-					monthsPlayed,
-					daysPlayed,
-					showPlayed.Hours,
-					showPlayed.Minutes),
-				eChatType.CT_System, eChatLoc.CL_SystemWindow);
-		}
-	}
+            client.Out.SendMessage(
+                LanguageMgr.GetTranslation(
+                    client.Account.Language,
+                    "Commands.Players.Played.Played",
+                    yearsPlayed,
+                    monthsPlayed,
+                    daysPlayed,
+                    showPlayed.Hours,
+                    showPlayed.Minutes),
+                eChatType.CT_System, eChatLoc.CL_SystemWindow);
+        }
+    }
 }

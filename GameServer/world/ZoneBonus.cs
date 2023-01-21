@@ -38,7 +38,7 @@ namespace DOL.GS
             RP = 1,
             BP = 2,
             COIN = 3,
-        } 
+        }
         #endregion
         #region Get Bonuses Methods
         public static int GetXPBonus(GamePlayer player)
@@ -56,7 +56,7 @@ namespace DOL.GS
         public static int GetCoinBonus(GamePlayer player)
         {
             return player.CurrentZone.BonusCoin;
-        } 
+        }
         #endregion
         #region Get Bonus Message
         public static string GetBonusMessage(GamePlayer player, int bonusAmount, eZoneBonusType type)
@@ -73,7 +73,7 @@ namespace DOL.GS
                     return LanguageMgr.GetTranslation(player.Client.Account.Language, "ZoneBonus.AdditionalCoin");
                 default: return "No Bonus Type Found";
             }
-        } 
+        }
         #endregion
 
     }

@@ -21,34 +21,35 @@ using System.Collections.Generic;
 using System.Text;
 using DOL.GS.PacketHandler;
 using DOL.Events;
-using DOL.GS.Behaviour.Attributes;using DOL.GS.Behaviour;
+using DOL.GS.Behaviour.Attributes;
+using DOL.GS.Behaviour;
 
 namespace DOL.GS.Behaviour.Actions
 {
-	[ActionAttribute(ActionType = eActionType.MoveTo)]
-	public class MoveToAction : AbstractAction<GameLocation,GameLiving>
-	{
+    [ActionAttribute(ActionType = eActionType.MoveTo)]
+    public class MoveToAction : AbstractAction<GameLocation, GameLiving>
+    {
 
-		public MoveToAction(GameNPC defaultNPC,  Object p, Object q)
-			: base(defaultNPC, eActionType.MoveTo, p, q)
-		{ }
+        public MoveToAction(GameNPC defaultNPC, Object p, Object q)
+            : base(defaultNPC, eActionType.MoveTo, p, q)
+        { }
 
-		public MoveToAction(GameNPC defaultNPC, GameLocation location, GameLiving npc)
-			: this(defaultNPC, (object)location,(object) npc) { }
-		
-		public override void Perform(DOLEvent e, object sender, EventArgs args)
-		{
-			GameLiving npc = Q;
+        public MoveToAction(GameNPC defaultNPC, GameLocation location, GameLiving npc)
+            : this(defaultNPC, (object)location, (object)npc) { }
 
-			if (P is GameLocation location)
-			{
-				npc.MoveTo(location);
-			}
-			else
-			{
-				GamePlayer player = BehaviourUtils.GuessGamePlayerFromNotify(e, sender, args);
-				npc.MoveTo(player.CurrentRegionID, player.Position, player.Heading);
-			}
-		}
-	}
+        public override void Perform(DOLEvent e, object sender, EventArgs args)
+        {
+            GameLiving npc = Q;
+
+            if (P is GameLocation location)
+            {
+                npc.MoveTo(location);
+            }
+            else
+            {
+                GamePlayer player = BehaviourUtils.GuessGamePlayerFromNotify(e, sender, args);
+                npc.MoveTo(player.CurrentRegionID, player.Position, player.Heading);
+            }
+        }
+    }
 }

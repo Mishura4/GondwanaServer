@@ -24,98 +24,98 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute(
-		"&area",
-		ePrivLevel.GM,
-		"Commands.GM.Area.Description",
-		"Commands.GM.Area.Usage.Create")]
-	public class AreaCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (args.Length == 1)
-			{
-				DisplaySyntax(client);
-				return;
-			}
+    [CmdAttribute(
+        "&area",
+        ePrivLevel.GM,
+        "Commands.GM.Area.Description",
+        "Commands.GM.Area.Usage.Create")]
+    public class AreaCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (args.Length == 1)
+            {
+                DisplaySyntax(client);
+                return;
+            }
 
-			switch (args[1].ToLower())
-			{
-				#region Create
-				case "create":
-					{
+            switch (args[1].ToLower())
+            {
+                #region Create
+                case "create":
+                    {
                         if (!(args.Length != 7 || args.Length != 8))
                         {
-							DisplaySyntax(client);
-							return;
-						}
+                            DisplaySyntax(client);
+                            return;
+                        }
 
-						DBArea area = new DBArea();
-						area.Description = args[2];
+                        DBArea area = new DBArea();
+                        area.Description = args[2];
 
-						switch (args[3].ToLower())
-						{
-							case "circle": area.ClassType = "DOL.GS.Area+Circle"; break;
-							case "square": area.ClassType = "DOL.GS.Area+Square"; break;
-							case "safe":
-							case "safearea": area.ClassType = "DOL.GS.Area+SafeArea"; break;
-							case "bind":
-							case "bindarea": area.ClassType = "DOL.GS.Area+BindArea"; break;
-							default:
-								{
-									DisplaySyntax(client);
-									return;
-								}
-						}
+                        switch (args[3].ToLower())
+                        {
+                            case "circle": area.ClassType = "DOL.GS.Area+Circle"; break;
+                            case "square": area.ClassType = "DOL.GS.Area+Square"; break;
+                            case "safe":
+                            case "safearea": area.ClassType = "DOL.GS.Area+SafeArea"; break;
+                            case "bind":
+                            case "bindarea": area.ClassType = "DOL.GS.Area+BindArea"; break;
+                            default:
+                                {
+                                    DisplaySyntax(client);
+                                    return;
+                                }
+                        }
 
-						area.Radius = Convert.ToInt16(args[4]);
-						switch (args[5].ToLower())
-						{
-							case "y": { area.CanBroadcast = true; break; }
-							case "n": { area.CanBroadcast = false; break; }
-							default: { DisplaySyntax(client); return; }
-						}
-						area.Sound = byte.Parse(args[6]);
-						area.Region = client.Player.CurrentRegionID;
-						area.X = (int)client.Player.Position.X;
-						area.Y = (int)client.Player.Position.Y;
-						area.Z = (int)client.Player.Position.Z;
-						area.ObjectId = area.Description;
+                        area.Radius = Convert.ToInt16(args[4]);
+                        switch (args[5].ToLower())
+                        {
+                            case "y": { area.CanBroadcast = true; break; }
+                            case "n": { area.CanBroadcast = false; break; }
+                            default: { DisplaySyntax(client); return; }
+                        }
+                        area.Sound = byte.Parse(args[6]);
+                        area.Region = client.Player.CurrentRegionID;
+                        area.X = (int)client.Player.Position.X;
+                        area.Y = (int)client.Player.Position.Y;
+                        area.Z = (int)client.Player.Position.Z;
+                        area.ObjectId = area.Description;
 
                         if (args.Length == 8 && bool.TryParse(args[7], out bool canVol))
                         {
                             area.AllowVol = canVol;
                         }
 
-                        Assembly gasm = Assembly.GetAssembly(typeof(GameServer));					
-						AbstractArea newArea = (AbstractArea)gasm.CreateInstance(area.ClassType, false);
+                        Assembly gasm = Assembly.GetAssembly(typeof(GameServer));
+                        AbstractArea newArea = (AbstractArea)gasm.CreateInstance(area.ClassType, false);
                         newArea.LoadFromDatabase(area);
 
                         newArea.Sound = area.Sound;
-						newArea.CanBroadcast = area.CanBroadcast;
-						WorldMgr.GetRegion(client.Player.CurrentRegionID).AddArea(newArea);
-						try
-						{
-							GameServer.Database.AddObject(area);
-						}
-						catch
-						{
-							client.Out.SendMessage("Le nom de cet Area doit etre unique", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-							break;
-						}
-	
-						DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Area.AreaCreated", area.Description, area.X, area.Y, area.Z, area.Radius, area.CanBroadcast.ToString(), area.Sound));
-						break;
-					}
-				#endregion Create
-				#region Default
-				default:
-					{
-						DisplaySyntax(client);
-						break;
-					}
-				#endregion Default
-			}
-		}
-	}
+                        newArea.CanBroadcast = area.CanBroadcast;
+                        WorldMgr.GetRegion(client.Player.CurrentRegionID).AddArea(newArea);
+                        try
+                        {
+                            GameServer.Database.AddObject(area);
+                        }
+                        catch
+                        {
+                            client.Out.SendMessage("Le nom de cet Area doit etre unique", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            break;
+                        }
+
+                        DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Area.AreaCreated", area.Description, area.X, area.Y, area.Z, area.Radius, area.CanBroadcast.ToString(), area.Sound));
+                        break;
+                    }
+                #endregion Create
+                #region Default
+                default:
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    #endregion Default
+            }
+        }
+    }
 }

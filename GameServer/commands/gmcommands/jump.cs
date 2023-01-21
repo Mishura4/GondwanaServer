@@ -25,377 +25,377 @@ using System.Numerics;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute("&jump",
-		ePrivLevel.GM,
-		"Commands.GM.Jump.Description",
-		"Commands.GM.Jump.Information",
-		"Commands.GM.Jump.Usage.ToPlayerName",
-		"/jump to <#ClientID> ex. /jump to #10",
-		"Commands.GM.Jump.Usage.ToNameRealmID",
-		"Commands.GM.Jump.Usage.ToXYZRegionID",
-		"/jump to <myhouse | house [#]>",
-		"/jump to region [#] - jump to same location in new region",
-		"Commands.GM.Jump.Usage.PlayerNameToXYZ",
-		"Commands.GM.Jump.Usage.PlayerNameToXYZRegID",
-		"Commands.GM.Jump.Usage.PlayerNToPlayerN",
-		"Commands.GM.Jump.Usage.ToGT",
-		"Commands.GM.Jump.Usage.RelXYZ",
-		"Commands.GM.Jump.Usage.Push",
-		"Commands.GM.Jump.Usage.Pop",
-		"/jump refresh - force a world refresh around you"
-		)]
-	public class JumpCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		private const string TEMP_KEY_JUMP = "JumpLocStack";
+    [CmdAttribute("&jump",
+        ePrivLevel.GM,
+        "Commands.GM.Jump.Description",
+        "Commands.GM.Jump.Information",
+        "Commands.GM.Jump.Usage.ToPlayerName",
+        "/jump to <#ClientID> ex. /jump to #10",
+        "Commands.GM.Jump.Usage.ToNameRealmID",
+        "Commands.GM.Jump.Usage.ToXYZRegionID",
+        "/jump to <myhouse | house [#]>",
+        "/jump to region [#] - jump to same location in new region",
+        "Commands.GM.Jump.Usage.PlayerNameToXYZ",
+        "Commands.GM.Jump.Usage.PlayerNameToXYZRegID",
+        "Commands.GM.Jump.Usage.PlayerNToPlayerN",
+        "Commands.GM.Jump.Usage.ToGT",
+        "Commands.GM.Jump.Usage.RelXYZ",
+        "Commands.GM.Jump.Usage.Push",
+        "Commands.GM.Jump.Usage.Pop",
+        "/jump refresh - force a world refresh around you"
+        )]
+    public class JumpCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        private const string TEMP_KEY_JUMP = "JumpLocStack";
 
-		public void OnCommand(GameClient client, string[] args)
-		{
-			try
-			{
-				#region Refresh
-				if (args.Length == 2 && args[1].ToLower() == "refresh")
-				{
-					client.Player.LeaveHouse();
-					client.Player.RefreshWorld();
-					return;
-				}
-				#endregion Refresh
-				#region Jump to Target
-				if (args.Length == 3 && args[1].ToLower() == "to" && args[2].ToLower() == "target")
-				{
-					var target = client.Player.TargetObject;
-					var player = client.Player;
-					player.MoveTo(target.CurrentRegionID, target.Position.X, target.Position.Y, target.Position.Z, target.Heading);
-					return;
-				}
-				#endregion
-				#region Jump to GT
-				if (args.Length == 3 && args[1].ToLower() == "to" && args[2].ToLower() == "gt")
-				{
-					if (client.Player.GroundTarget.HasValue)
-						client.Player.MoveTo(client.Player.CurrentRegionID, client.Player.GroundTarget.Value, client.Player.Heading);
-					return;
-				}
-				#endregion Jump to GT
-				#region Jump to house
-				else if (args.Length >= 3 && args[1].ToLower() == "to" && (args[2].ToLower() == "house" || args[2].ToLower() == "myhouse"))
-				{
-					House house = null;
-					if (args[2] == "myhouse")
-					{
-						house = HouseMgr.GetHouseByPlayer(client.Player);
-					}
-					else
-					{
-						house = HouseMgr.GetHouse(Convert.ToInt32(args[3]));
-					}
-					if (house != null)
-					{
-						client.Player.MoveTo(house.OutdoorJumpPoint);
-					}
-					else
-					{
-						client.Out.SendMessage("This house number is not owned by anyone!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-					}
-					return;
-				}
-				#endregion Jump to house
-				#region Jump t region #
-				if (args.Length == 4 && args[1] == "to" && args[2] == "region")
-				{
-					client.Player.MoveTo(Convert.ToUInt16(args[3]), client.Player.Position, client.Player.Heading);
-					return;
-				}
-				#endregion Jump t region #
-				#region Jump to PlayerName or ClientID
-				if (args.Length == 3 && args[1] == "to")
-				{
-					GameClient clientc = null;
-					if (args[2].StartsWith("#"))
-					{
-						try
-						{
-							var sessionID = Convert.ToUInt32(args[2].Substring(1));
-							clientc = WorldMgr.GetClientFromID(sessionID);
-						}
-						catch
-						{
-						}
-					}
-					else
-					{
-						clientc = WorldMgr.GetClientByPlayerName(args[2], false, true);
-					}
+        public void OnCommand(GameClient client, string[] args)
+        {
+            try
+            {
+                #region Refresh
+                if (args.Length == 2 && args[1].ToLower() == "refresh")
+                {
+                    client.Player.LeaveHouse();
+                    client.Player.RefreshWorld();
+                    return;
+                }
+                #endregion Refresh
+                #region Jump to Target
+                if (args.Length == 3 && args[1].ToLower() == "to" && args[2].ToLower() == "target")
+                {
+                    var target = client.Player.TargetObject;
+                    var player = client.Player;
+                    player.MoveTo(target.CurrentRegionID, target.Position.X, target.Position.Y, target.Position.Z, target.Heading);
+                    return;
+                }
+                #endregion
+                #region Jump to GT
+                if (args.Length == 3 && args[1].ToLower() == "to" && args[2].ToLower() == "gt")
+                {
+                    if (client.Player.GroundTarget.HasValue)
+                        client.Player.MoveTo(client.Player.CurrentRegionID, client.Player.GroundTarget.Value, client.Player.Heading);
+                    return;
+                }
+                #endregion Jump to GT
+                #region Jump to house
+                else if (args.Length >= 3 && args[1].ToLower() == "to" && (args[2].ToLower() == "house" || args[2].ToLower() == "myhouse"))
+                {
+                    House house = null;
+                    if (args[2] == "myhouse")
+                    {
+                        house = HouseMgr.GetHouseByPlayer(client.Player);
+                    }
+                    else
+                    {
+                        house = HouseMgr.GetHouse(Convert.ToInt32(args[3]));
+                    }
+                    if (house != null)
+                    {
+                        client.Player.MoveTo(house.OutdoorJumpPoint);
+                    }
+                    else
+                    {
+                        client.Out.SendMessage("This house number is not owned by anyone!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    }
+                    return;
+                }
+                #endregion Jump to house
+                #region Jump t region #
+                if (args.Length == 4 && args[1] == "to" && args[2] == "region")
+                {
+                    client.Player.MoveTo(Convert.ToUInt16(args[3]), client.Player.Position, client.Player.Heading);
+                    return;
+                }
+                #endregion Jump t region #
+                #region Jump to PlayerName or ClientID
+                if (args.Length == 3 && args[1] == "to")
+                {
+                    GameClient clientc = null;
+                    if (args[2].StartsWith("#"))
+                    {
+                        try
+                        {
+                            var sessionID = Convert.ToUInt32(args[2].Substring(1));
+                            clientc = WorldMgr.GetClientFromID(sessionID);
+                        }
+                        catch
+                        {
+                        }
+                    }
+                    else
+                    {
+                        clientc = WorldMgr.GetClientByPlayerName(args[2], false, true);
+                    }
 
-					if (clientc == null)
-					{
-						GameNPC[] npcs = WorldMgr.GetNPCsByName(args[2], eRealm.None);
+                    if (clientc == null)
+                    {
+                        GameNPC[] npcs = WorldMgr.GetNPCsByName(args[2], eRealm.None);
 
-						if (npcs.Length > 0)
-						{
-							// for multiple npc's first try to jump to the npc in the players current region
-							GameNPC jumpTarget = npcs[0];
+                        if (npcs.Length > 0)
+                        {
+                            // for multiple npc's first try to jump to the npc in the players current region
+                            GameNPC jumpTarget = npcs[0];
 
-							foreach (GameNPC npc in npcs)
-							{
-								if (npc.CurrentRegionID == client.Player.CurrentRegionID)
-								{
-									jumpTarget = npc;
-									break;
-								}
-							}
+                            foreach (GameNPC npc in npcs)
+                            {
+                                if (npc.CurrentRegionID == client.Player.CurrentRegionID)
+                                {
+                                    jumpTarget = npc;
+                                    break;
+                                }
+                            }
 
-							client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Jump.JumpToX", npcs[0].CurrentRegion.Description), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-							if (jumpTarget.InHouse && jumpTarget.CurrentHouse != null)
-							{
-								jumpTarget.CurrentHouse.Enter(client.Player);
-							}
-							else
-							{
-								client.Player.MoveTo(jumpTarget.CurrentRegionID, jumpTarget.Position, jumpTarget.Heading);
-							}
-							return;
-						}
+                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Jump.JumpToX", npcs[0].CurrentRegion.Description), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            if (jumpTarget.InHouse && jumpTarget.CurrentHouse != null)
+                            {
+                                jumpTarget.CurrentHouse.Enter(client.Player);
+                            }
+                            else
+                            {
+                                client.Player.MoveTo(jumpTarget.CurrentRegionID, jumpTarget.Position, jumpTarget.Heading);
+                            }
+                            return;
+                        }
 
-						client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Jump.CannotBeFound", args[2]), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-						return;
-					}
+                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Jump.CannotBeFound", args[2]), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        return;
+                    }
 
-					if (CheckExpansion(client, clientc, clientc.Player.CurrentRegionID))
-					{
-						client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Jump.JumpToX", clientc.Player.CurrentRegion.Description), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-						if (clientc.Player.CurrentHouse != null && clientc.Player.InHouse)
-							clientc.Player.CurrentHouse.Enter(client.Player);
-						else
-							client.Player.MoveTo(clientc.Player.CurrentRegionID, clientc.Player.Position, client.Player.Heading);
-						return;
-					}
+                    if (CheckExpansion(client, clientc, clientc.Player.CurrentRegionID))
+                    {
+                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Jump.JumpToX", clientc.Player.CurrentRegion.Description), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        if (clientc.Player.CurrentHouse != null && clientc.Player.InHouse)
+                            clientc.Player.CurrentHouse.Enter(client.Player);
+                        else
+                            client.Player.MoveTo(clientc.Player.CurrentRegionID, clientc.Player.Position, client.Player.Heading);
+                        return;
+                    }
 
-					client.Out.SendMessage("You don't have an expansion needed to jump to this location.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    client.Out.SendMessage("You don't have an expansion needed to jump to this location.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
 
-					return;
-				}
-				#endregion Jump to PlayerName
-				#region Jump to Name Realm
-				else if (args.Length == 4 && args[1] == "to")
-				{
-					GameClient clientc;
-					clientc = WorldMgr.GetClientByPlayerName(args[2], false, true);
-					if (clientc == null)
-					{
-						int realm = 0;
-						int.TryParse(args[3], out realm);
+                    return;
+                }
+                #endregion Jump to PlayerName
+                #region Jump to Name Realm
+                else if (args.Length == 4 && args[1] == "to")
+                {
+                    GameClient clientc;
+                    clientc = WorldMgr.GetClientByPlayerName(args[2], false, true);
+                    if (clientc == null)
+                    {
+                        int realm = 0;
+                        int.TryParse(args[3], out realm);
 
-						GameNPC[] npcs = WorldMgr.GetNPCsByName(args[2], (eRealm)realm);
+                        GameNPC[] npcs = WorldMgr.GetNPCsByName(args[2], (eRealm)realm);
 
-						if (npcs.Length > 0)
-						{
-							// for multiple npc's first try to jump to the npc in the players current region
-							GameNPC jumpTarget = npcs[0];
+                        if (npcs.Length > 0)
+                        {
+                            // for multiple npc's first try to jump to the npc in the players current region
+                            GameNPC jumpTarget = npcs[0];
 
-							foreach (GameNPC npc in npcs)
-							{
-								if (npc.CurrentRegionID == client.Player.CurrentRegionID)
-								{
-									jumpTarget = npc;
-									break;
-								}
-							}
+                            foreach (GameNPC npc in npcs)
+                            {
+                                if (npc.CurrentRegionID == client.Player.CurrentRegionID)
+                                {
+                                    jumpTarget = npc;
+                                    break;
+                                }
+                            }
 
-							client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Jump.JumpToX", npcs[0].CurrentRegion.Description), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-							client.Player.MoveTo(jumpTarget.CurrentRegionID, jumpTarget.Position, jumpTarget.Heading);
-							return;
-						}
+                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Jump.JumpToX", npcs[0].CurrentRegion.Description), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            client.Player.MoveTo(jumpTarget.CurrentRegionID, jumpTarget.Position, jumpTarget.Heading);
+                            return;
+                        }
 
-						client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Jump.CannotBeFoundInRealm", args[2], realm), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-						return;
-					}
-					if (CheckExpansion(client, clientc, clientc.Player.CurrentRegionID))
-					{
-						if (clientc.Player.InHouse)
-						{
-							client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Jump.CannotJumpToInsideHouse"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-							return;
-						}
-						client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Jump.JumpToX", clientc.Player.CurrentRegion.Description), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-						if (clientc.Player.CurrentHouse != null && clientc.Player.InHouse)
-							clientc.Player.CurrentHouse.Enter(client.Player);
-						else
-							client.Player.MoveTo(clientc.Player.CurrentRegionID, clientc.Player.Position, client.Player.Heading);
-						return;
-					}
-					return;
-				}
-				#endregion Jump to Name Realm
-				#region Jump to X Y Z
-				else if (args.Length == 5 && args[1] == "to")
-				{
-					client.Player.MoveTo(client.Player.CurrentRegionID, Convert.ToInt32(args[2]), Convert.ToInt32(args[3]), Convert.ToInt32(args[4]), client.Player.Heading);
-					return;
-				}
-				#endregion Jump to X Y Z
-				#region Jump rel +/-X +/-Y +/-Z
-				else if (args.Length == 5 && args[1] == "rel")
-				{
-					client.Player.MoveTo(client.Player.CurrentRegionID,
-										 client.Player.Position + new Vector3(Convert.ToInt32(args[2]), Convert.ToInt32(args[3]), Convert.ToInt32(args[4])),
-										 client.Player.Heading);
-					return;
-				}
-				#endregion Jump rel +/-X +/-Y +/-Z
-				#region Jump to X Y Z RegionID
-				else if (args.Length == 6 && args[1] == "to")
-				{
-					if (CheckExpansion(client, client, (ushort)Convert.ToUInt16(args[5])))
-					{
-						client.Player.MoveTo(Convert.ToUInt16(args[5]), Convert.ToInt32(args[2]), Convert.ToInt32(args[3]), Convert.ToInt32(args[4]), client.Player.Heading);
-						return;
-					}
-					return;
-				}
-				#endregion Jump to X Y Z RegionID
-				#region Jump PlayerName to X Y Z
-				else if (args.Length == 6 && args[2] == "to")
-				{
-					GameClient clientc;
-					clientc = WorldMgr.GetClientByPlayerName(args[1], false, true);
-					if (clientc == null)
-					{
-						client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Jump.PlayerIsNotInGame", args[1]), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-						return;
-					}
-					clientc.Player.MoveTo(clientc.Player.CurrentRegionID, Convert.ToInt32(args[3]), Convert.ToInt32(args[4]), Convert.ToInt32(args[5]), clientc.Player.Heading);
-					return;
-				}
-				#endregion Jump PlayerName to X Y Z
-				#region Jump PlayerName to X Y Z RegionID
-				else if (args.Length == 7 && args[2] == "to")
-				{
-					GameClient clientc;
-					clientc = WorldMgr.GetClientByPlayerName(args[1], false, true);
-					if (clientc == null)
-					{
-						client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Jump.PlayerIsNotInGame", args[1]), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-						return;
-					}
-					if (CheckExpansion(clientc, clientc, (ushort)Convert.ToUInt16(args[6])))
-					{
-						clientc.Player.MoveTo(Convert.ToUInt16(args[6]), Convert.ToInt32(args[3]), Convert.ToInt32(args[4]), Convert.ToInt32(args[5]), clientc.Player.Heading);
-						return;
-					}
-					return;
-				}
-				#endregion Jump PlayerName to X Y Z RegionID
-				#region Jump PlayerName to PlayerCible
-				else if (args.Length == 4 && args[2] == "to")
-				{
-					GameClient clientc;
-					GameClient clientto;
-					clientc = WorldMgr.GetClientByPlayerName(args[1], false, true);
-					if (clientc == null)
-					{
-						client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Jump.PlayerIsNotInGame", args[1]), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-						return;
-					}
-					if (args[3] == "me")
-					{
-						clientto = client;
-					}
-					else
-					{
-						clientto = WorldMgr.GetClientByPlayerName(args[3], false, false);
-					}
+                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Jump.CannotBeFoundInRealm", args[2], realm), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        return;
+                    }
+                    if (CheckExpansion(client, clientc, clientc.Player.CurrentRegionID))
+                    {
+                        if (clientc.Player.InHouse)
+                        {
+                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Jump.CannotJumpToInsideHouse"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            return;
+                        }
+                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Jump.JumpToX", clientc.Player.CurrentRegion.Description), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        if (clientc.Player.CurrentHouse != null && clientc.Player.InHouse)
+                            clientc.Player.CurrentHouse.Enter(client.Player);
+                        else
+                            client.Player.MoveTo(clientc.Player.CurrentRegionID, clientc.Player.Position, client.Player.Heading);
+                        return;
+                    }
+                    return;
+                }
+                #endregion Jump to Name Realm
+                #region Jump to X Y Z
+                else if (args.Length == 5 && args[1] == "to")
+                {
+                    client.Player.MoveTo(client.Player.CurrentRegionID, Convert.ToInt32(args[2]), Convert.ToInt32(args[3]), Convert.ToInt32(args[4]), client.Player.Heading);
+                    return;
+                }
+                #endregion Jump to X Y Z
+                #region Jump rel +/-X +/-Y +/-Z
+                else if (args.Length == 5 && args[1] == "rel")
+                {
+                    client.Player.MoveTo(client.Player.CurrentRegionID,
+                                         client.Player.Position + new Vector3(Convert.ToInt32(args[2]), Convert.ToInt32(args[3]), Convert.ToInt32(args[4])),
+                                         client.Player.Heading);
+                    return;
+                }
+                #endregion Jump rel +/-X +/-Y +/-Z
+                #region Jump to X Y Z RegionID
+                else if (args.Length == 6 && args[1] == "to")
+                {
+                    if (CheckExpansion(client, client, (ushort)Convert.ToUInt16(args[5])))
+                    {
+                        client.Player.MoveTo(Convert.ToUInt16(args[5]), Convert.ToInt32(args[2]), Convert.ToInt32(args[3]), Convert.ToInt32(args[4]), client.Player.Heading);
+                        return;
+                    }
+                    return;
+                }
+                #endregion Jump to X Y Z RegionID
+                #region Jump PlayerName to X Y Z
+                else if (args.Length == 6 && args[2] == "to")
+                {
+                    GameClient clientc;
+                    clientc = WorldMgr.GetClientByPlayerName(args[1], false, true);
+                    if (clientc == null)
+                    {
+                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Jump.PlayerIsNotInGame", args[1]), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        return;
+                    }
+                    clientc.Player.MoveTo(clientc.Player.CurrentRegionID, Convert.ToInt32(args[3]), Convert.ToInt32(args[4]), Convert.ToInt32(args[5]), clientc.Player.Heading);
+                    return;
+                }
+                #endregion Jump PlayerName to X Y Z
+                #region Jump PlayerName to X Y Z RegionID
+                else if (args.Length == 7 && args[2] == "to")
+                {
+                    GameClient clientc;
+                    clientc = WorldMgr.GetClientByPlayerName(args[1], false, true);
+                    if (clientc == null)
+                    {
+                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Jump.PlayerIsNotInGame", args[1]), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        return;
+                    }
+                    if (CheckExpansion(clientc, clientc, (ushort)Convert.ToUInt16(args[6])))
+                    {
+                        clientc.Player.MoveTo(Convert.ToUInt16(args[6]), Convert.ToInt32(args[3]), Convert.ToInt32(args[4]), Convert.ToInt32(args[5]), clientc.Player.Heading);
+                        return;
+                    }
+                    return;
+                }
+                #endregion Jump PlayerName to X Y Z RegionID
+                #region Jump PlayerName to PlayerCible
+                else if (args.Length == 4 && args[2] == "to")
+                {
+                    GameClient clientc;
+                    GameClient clientto;
+                    clientc = WorldMgr.GetClientByPlayerName(args[1], false, true);
+                    if (clientc == null)
+                    {
+                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Jump.PlayerIsNotInGame", args[1]), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        return;
+                    }
+                    if (args[3] == "me")
+                    {
+                        clientto = client;
+                    }
+                    else
+                    {
+                        clientto = WorldMgr.GetClientByPlayerName(args[3], false, false);
+                    }
 
-					if (clientto == null)
-					{
-						client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Jump.PlayerIsNotInGame", args[3]), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-						return;
-					}
-					else
-					{
-						if (CheckExpansion(clientto, clientc, clientto.Player.CurrentRegionID))
-						{
-							if (clientto.Player.CurrentHouse != null && clientto.Player.InHouse)
-								clientto.Player.CurrentHouse.Enter(clientc.Player);
-							else
-								clientc.Player.MoveTo(clientto.Player.CurrentRegionID, clientto.Player.Position, client.Player.Heading);
-							return;
-						}
-						return;
-					}
-				}
-				#endregion Jump PlayerName to PlayerCible
-				#region push/pop
-				else if (args.Length > 1 && args[1] == "push")
-				{
-					Stack<GameLocation> locations;
+                    if (clientto == null)
+                    {
+                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Jump.PlayerIsNotInGame", args[3]), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        return;
+                    }
+                    else
+                    {
+                        if (CheckExpansion(clientto, clientc, clientto.Player.CurrentRegionID))
+                        {
+                            if (clientto.Player.CurrentHouse != null && clientto.Player.InHouse)
+                                clientto.Player.CurrentHouse.Enter(clientc.Player);
+                            else
+                                clientc.Player.MoveTo(clientto.Player.CurrentRegionID, clientto.Player.Position, client.Player.Heading);
+                            return;
+                        }
+                        return;
+                    }
+                }
+                #endregion Jump PlayerName to PlayerCible
+                #region push/pop
+                else if (args.Length > 1 && args[1] == "push")
+                {
+                    Stack<GameLocation> locations;
 
-					locations = client.Player.TempProperties.getProperty<object>(TEMP_KEY_JUMP, null) as Stack<GameLocation>;
+                    locations = client.Player.TempProperties.getProperty<object>(TEMP_KEY_JUMP, null) as Stack<GameLocation>;
 
-					if (locations == null)
-					{
-						locations = new Stack<GameLocation>(3);
-						client.Player.TempProperties.setProperty(TEMP_KEY_JUMP, locations);
-					}
+                    if (locations == null)
+                    {
+                        locations = new Stack<GameLocation>(3);
+                        client.Player.TempProperties.setProperty(TEMP_KEY_JUMP, locations);
+                    }
 
-					locations.Push(new GameLocation("temploc", client.Player.CurrentRegionID, client.Player.Position, client.Player.Heading));
+                    locations.Push(new GameLocation("temploc", client.Player.CurrentRegionID, client.Player.Position, client.Player.Heading));
 
-					string message = LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Jump.Pushed");
+                    string message = LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Jump.Pushed");
 
-					if (locations.Count > 1)
-						message += " " + LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Jump.PushedTotal", locations.Count);
+                    if (locations.Count > 1)
+                        message += " " + LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Jump.PushedTotal", locations.Count);
 
-					message += " - " + LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Jump.PopInstructions");
+                    message += " - " + LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Jump.PopInstructions");
 
-					client.Out.SendMessage(message, eChatType.CT_System, eChatLoc.CL_SystemWindow);
-				}
-				else if (args.Length > 1 && args[1] == "pop")
-				{
-					Stack<GameLocation> locations;
+                    client.Out.SendMessage(message, eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                }
+                else if (args.Length > 1 && args[1] == "pop")
+                {
+                    Stack<GameLocation> locations;
 
-					locations = client.Player.TempProperties.getProperty<object>(TEMP_KEY_JUMP, null) as Stack<GameLocation>;
+                    locations = client.Player.TempProperties.getProperty<object>(TEMP_KEY_JUMP, null) as Stack<GameLocation>;
 
-					if (locations == null || locations.Count < 1)
-					{
-						client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Jump.NothingPushed"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-						return;
-					}
+                    if (locations == null || locations.Count < 1)
+                    {
+                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Jump.NothingPushed"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        return;
+                    }
 
-					GameLocation jumploc = locations.Pop();
+                    GameLocation jumploc = locations.Pop();
 
-					// slight abuse of the stack principle, but convenient to always have your last popped loc jumpable
-					if (locations.Count < 1)
-						locations.Push(jumploc);
+                    // slight abuse of the stack principle, but convenient to always have your last popped loc jumpable
+                    if (locations.Count < 1)
+                        locations.Push(jumploc);
 
-					client.Player.MoveTo(jumploc.RegionID, jumploc.Position, jumploc.Heading);
-				}
-				#endregion push/pop
-				#region DisplaySyntax
-				else
-				{
-					DisplaySyntax(client);
-					return;
-				}
-				#endregion DisplaySyntax
-			}
+                    client.Player.MoveTo(jumploc.RegionID, jumploc.Position, jumploc.Heading);
+                }
+                #endregion push/pop
+                #region DisplaySyntax
+                else
+                {
+                    DisplaySyntax(client);
+                    return;
+                }
+                #endregion DisplaySyntax
+            }
 
-			catch (Exception ex)
-			{
-				DisplayMessage(client, ex.Message);
-			}
-		}
+            catch (Exception ex)
+            {
+                DisplayMessage(client, ex.Message);
+            }
+        }
 
-		public bool CheckExpansion(GameClient clientJumper, GameClient clientJumpee, ushort RegionID)
-		{
-			Region reg = WorldMgr.GetRegion(RegionID);
-			if (reg != null && reg.Expansion > (int)clientJumpee.ClientType)
-			{
-				clientJumper.Out.SendMessage(LanguageMgr.GetTranslation(clientJumper, "Commands.GM.Jump.CheckExpansion.CannotJump", clientJumpee.Player.Name, reg.Description), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-				if (clientJumper != clientJumpee)
-					clientJumpee.Out.SendMessage(LanguageMgr.GetTranslation(clientJumpee, "Commands.GM.Jump.CheckExpansion.ClientNoSup", clientJumper.Player.Name, reg.Description), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-				return false;
-			}
-			return true;
-		}
-	}
+        public bool CheckExpansion(GameClient clientJumper, GameClient clientJumpee, ushort RegionID)
+        {
+            Region reg = WorldMgr.GetRegion(RegionID);
+            if (reg != null && reg.Expansion > (int)clientJumpee.ClientType)
+            {
+                clientJumper.Out.SendMessage(LanguageMgr.GetTranslation(clientJumper, "Commands.GM.Jump.CheckExpansion.CannotJump", clientJumpee.Player.Name, reg.Description), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                if (clientJumper != clientJumpee)
+                    clientJumpee.Out.SendMessage(LanguageMgr.GetTranslation(clientJumpee, "Commands.GM.Jump.CheckExpansion.ClientNoSup", clientJumper.Player.Name, reg.Description), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return false;
+            }
+            return true;
+        }
+    }
 }

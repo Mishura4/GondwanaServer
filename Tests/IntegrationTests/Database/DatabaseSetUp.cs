@@ -27,37 +27,38 @@ using NUnit.Framework;
 
 namespace DOL.Integration.Database
 {
-	[SetUpFixture]
-	public class DatabaseSetUp
-	{
-		public DatabaseSetUp()
-		{
-		}
-		
-		public static SQLObjectDatabase Database { get; set; }
-		public static string ConnectionString { get; set; }
-				
-		[OneTimeSetUp]
-		public void SetUp()
-		{
-			var CodeBase = new FileInfo(new Uri(Assembly.GetExecutingAssembly().Location).LocalPath).Directory;
-			ConnectionString = $"Data Source={Path.Combine(CodeBase.Parent.FullName, "dol-database-tests-only.sqlite3.db")}";
-			                                     
-			Database = (SQLObjectDatabase)ObjectDatabase.GetObjectDatabase(ConnectionType.DATABASE_SQLITE, ConnectionString);
-			
-			Console.WriteLine("DB Configured : {0}, {1}", Database.ConnectionType, ConnectionString);
-			
-			log4net.Config.BasicConfigurator.Configure(
-				new log4net.Appender.ConsoleAppender {
-					Layout = new log4net.Layout.SimpleLayout(),
-					Threshold = log4net.Core.Level.Info
-				});
-		}
-		
-		[OneTimeTearDown]
-		public void TearDown()
-		{
-			log4net.LogManager.Shutdown();
-		}
-	}
+    [SetUpFixture]
+    public class DatabaseSetUp
+    {
+        public DatabaseSetUp()
+        {
+        }
+
+        public static SQLObjectDatabase Database { get; set; }
+        public static string ConnectionString { get; set; }
+
+        [OneTimeSetUp]
+        public void SetUp()
+        {
+            var CodeBase = new FileInfo(new Uri(Assembly.GetExecutingAssembly().Location).LocalPath).Directory;
+            ConnectionString = $"Data Source={Path.Combine(CodeBase.Parent.FullName, "dol-database-tests-only.sqlite3.db")}";
+
+            Database = (SQLObjectDatabase)ObjectDatabase.GetObjectDatabase(ConnectionType.DATABASE_SQLITE, ConnectionString);
+
+            Console.WriteLine("DB Configured : {0}, {1}", Database.ConnectionType, ConnectionString);
+
+            log4net.Config.BasicConfigurator.Configure(
+                new log4net.Appender.ConsoleAppender
+                {
+                    Layout = new log4net.Layout.SimpleLayout(),
+                    Threshold = log4net.Core.Level.Info
+                });
+        }
+
+        [OneTimeTearDown]
+        public void TearDown()
+        {
+            log4net.LogManager.Shutdown();
+        }
+    }
 }

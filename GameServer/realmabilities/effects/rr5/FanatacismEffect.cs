@@ -27,15 +27,15 @@ namespace DOL.GS.Effects
     /// </summary>
     public class FanatacismEffect : TimedEffect
     {
- 		private GamePlayer EffectOwner;
- 		
+        private GamePlayer EffectOwner;
+
         public FanatacismEffect()
             : base(RealmAbilities.FanatacismAbility.DURATION)
-        { }    
+        { }
 
-         public override void Start(GameLiving target)
+        public override void Start(GameLiving target)
         {
-        	base.Start(target);
+            base.Start(target);
             if (target is GamePlayer)
             {
                 EffectOwner = target as GamePlayer;
@@ -44,7 +44,7 @@ namespace DOL.GS.Effects
                     p.Out.SendSpellEffectAnimation(EffectOwner, p, 7088, 0, false, 1);
                 }
                 GameEventMgr.AddHandler(EffectOwner, GamePlayerEvent.Quit, new DOLEventHandler(PlayerLeftWorld));
-            	EffectOwner.BaseBuffBonusCategory[(int)eProperty.MagicAbsorption] += RealmAbilities.FanatacismAbility.VALUE;
+                EffectOwner.BaseBuffBonusCategory[(int)eProperty.MagicAbsorption] += RealmAbilities.FanatacismAbility.VALUE;
             }
         }
 
@@ -52,10 +52,10 @@ namespace DOL.GS.Effects
         {
             if (EffectOwner != null)
             {
-            	EffectOwner.BaseBuffBonusCategory[(int)eProperty.MagicAbsorption] -= RealmAbilities.FanatacismAbility.VALUE;
+                EffectOwner.BaseBuffBonusCategory[(int)eProperty.MagicAbsorption] -= RealmAbilities.FanatacismAbility.VALUE;
                 GameEventMgr.RemoveHandler(EffectOwner, GamePlayerEvent.Quit, new DOLEventHandler(PlayerLeftWorld));
             }
-            
+
             base.Stop();
         }
 
@@ -67,7 +67,7 @@ namespace DOL.GS.Effects
         /// <param name="args">EventArgs associated with the event</param>
         protected void PlayerLeftWorld(DOLEvent e, object sender, EventArgs args)
         {
-  			Cancel(false);
+            Cancel(false);
         }
 
         public override string Name { get { return "Fanatacism"; } }

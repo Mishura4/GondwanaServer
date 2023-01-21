@@ -27,34 +27,34 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute(
-	"&statsanon",
-	ePrivLevel.Player,
-	"Commands.Players.Statsanon.Description",
-	"Commands.Players.Statsanon.Usage")]
-	public class StatsAnonHandler : AbstractCommandHandler, ICommandHandler
-	{
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (IsSpammingCommand(client.Player, "statsanon"))
-				return;
+    [CmdAttribute(
+    "&statsanon",
+    ePrivLevel.Player,
+    "Commands.Players.Statsanon.Description",
+    "Commands.Players.Statsanon.Usage")]
+    public class StatsAnonHandler : AbstractCommandHandler, ICommandHandler
+    {
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (IsSpammingCommand(client.Player, "statsanon"))
+                return;
 
-			if (client == null)
-				return;
+            if (client == null)
+                return;
 
-			string msg;
+            string msg;
 
-			client.Player.StatsAnonFlag = !client.Player.StatsAnonFlag;
-			if (client.Player.StatsAnonFlag)
-				msg = LanguageMgr.GetTranslation(
-					client.Account.Language,
-					"Commands.Players.Statsanon.On");
-			else
-				msg = LanguageMgr.GetTranslation(
-					client.Account.Language,
-					"Commands.Players.Statsanon.Off");
+            client.Player.StatsAnonFlag = !client.Player.StatsAnonFlag;
+            if (client.Player.StatsAnonFlag)
+                msg = LanguageMgr.GetTranslation(
+                    client.Account.Language,
+                    "Commands.Players.Statsanon.On");
+            else
+                msg = LanguageMgr.GetTranslation(
+                    client.Account.Language,
+                    "Commands.Players.Statsanon.Off");
 
-			client.Player.Out.SendMessage(msg, eChatType.CT_System, eChatLoc.CL_ChatWindow);
-		}
-	}
+            client.Player.Out.SendMessage(msg, eChatType.CT_System, eChatLoc.CL_ChatWindow);
+        }
+    }
 }

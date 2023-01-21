@@ -21,36 +21,36 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute(
-		"&nohelp",
-		ePrivLevel.Player,
-		"Commands.Players.Nohelp.Description",
-		"Commands.Players.Nohelp.Usage")]
-	public class NoHelpCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (IsSpammingCommand(client.Player, "nohelp"))
-				return;
+    [CmdAttribute(
+        "&nohelp",
+        ePrivLevel.Player,
+        "Commands.Players.Nohelp.Description",
+        "Commands.Players.Nohelp.Usage")]
+    public class NoHelpCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (IsSpammingCommand(client.Player, "nohelp"))
+                return;
 
-			client.Player.NoHelp = !client.Player.NoHelp;
+            client.Player.NoHelp = !client.Player.NoHelp;
 
-			if (client.Player.NoHelp)
-			{
-				client.Out.SendMessage(
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Nohelp.Off"),
-					eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-			}
-			else
-			{
-				client.Out.SendMessage(
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Nohelp.On"),
-					eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-			}
-		}
-	}
+            if (client.Player.NoHelp)
+            {
+                client.Out.SendMessage(
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Nohelp.Off"),
+                    eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+            }
+            else
+            {
+                client.Out.SendMessage(
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Nohelp.On"),
+                    eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+            }
+        }
+    }
 }

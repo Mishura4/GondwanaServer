@@ -25,97 +25,97 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute("&makeleader",
-		 ePrivLevel.Player,
-		 "Commands.Players.Makeleader.Description",
-		 "Commands.Players.Makeleader.Usage")]
+    [CmdAttribute("&makeleader",
+         ePrivLevel.Player,
+         "Commands.Players.Makeleader.Description",
+         "Commands.Players.Makeleader.Usage")]
 
-	public class MakeLeaderCommandHandler : ICommandHandler
-	{
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (client.Player.Group == null || client.Player.Group.MemberCount < 2)
-			{
-				client.Out.SendMessage(
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Makeleader.NotInGroup"),
-					eChatType.CT_System,eChatLoc.CL_SystemWindow);
-				return;
-			}
-			if(client.Player.Group.Leader != client.Player)
-			{
-				client.Out.SendMessage(
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Makeleader.NotLeader"),
-					eChatType.CT_System,eChatLoc.CL_SystemWindow);
-				return;
-			}
+    public class MakeLeaderCommandHandler : ICommandHandler
+    {
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (client.Player.Group == null || client.Player.Group.MemberCount < 2)
+            {
+                client.Out.SendMessage(
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Makeleader.NotInGroup"),
+                    eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return;
+            }
+            if (client.Player.Group.Leader != client.Player)
+            {
+                client.Out.SendMessage(
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Makeleader.NotLeader"),
+                    eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return;
+            }
 
-			GamePlayer target;
+            GamePlayer target;
 
-			if(args.Length<2) // Setting by target
-			{
-				if(client.Player.TargetObject == null || client.Player.TargetObject == client.Player)
-				{
-					client.Out.SendMessage(
-						LanguageMgr.GetTranslation(
-							client.Account.Language,
-							"Commands.Players.Makeleader.TargetNotValid"),
-						eChatType.CT_System,eChatLoc.CL_SystemWindow);
-					return;
-				}
+            if (args.Length < 2) // Setting by target
+            {
+                if (client.Player.TargetObject == null || client.Player.TargetObject == client.Player)
+                {
+                    client.Out.SendMessage(
+                        LanguageMgr.GetTranslation(
+                            client.Account.Language,
+                            "Commands.Players.Makeleader.TargetNotValid"),
+                        eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    return;
+                }
 
-				if(!(client.Player.TargetObject is GamePlayer))
-				{
-					client.Out.SendMessage(
-						LanguageMgr.GetTranslation(
-							client.Account.Language,
-							"Commands.Players.Makeleader.TargetNotValid"),
-						eChatType.CT_System,eChatLoc.CL_SystemWindow);
-					return;
-				}
-				target = (GamePlayer)client.Player.TargetObject;
-				if(client.Player.Group != target.Group)
-				{
-					client.Out.SendMessage(
-						LanguageMgr.GetTranslation(
-							client.Account.Language,
-							"Commands.Players.Makeleader.TargetNotValid"),
-						eChatType.CT_System,eChatLoc.CL_SystemWindow);
-					return;
-				}
-			}
-			else //Setting by name
-			{
-				string targetName = args[1];
-				GameClient targetClient = WorldMgr.GetClientByPlayerName(targetName, false, true);
-				if (targetClient == null)
-					target = null;
-				else target = targetClient.Player;
-				if(target==null || client.Player.Group != target.Group)
-				{ // Invalid target
-					client.Out.SendMessage(
-						LanguageMgr.GetTranslation(
-							client.Account.Language,
-							"Commands.Players.Makeleader.NotFoundInGroup"),
-						eChatType.CT_System,eChatLoc.CL_SystemWindow);
-					return;
-				}
-				if(target==client.Player)
-				{
-					client.Out.SendMessage(
-						LanguageMgr.GetTranslation(
-							client.Account.Language,
-							"Commands.Players.Makeleader.NoYou"),
-						eChatType.CT_System,eChatLoc.CL_SystemWindow);
-					return;
-				}
+                if (!(client.Player.TargetObject is GamePlayer))
+                {
+                    client.Out.SendMessage(
+                        LanguageMgr.GetTranslation(
+                            client.Account.Language,
+                            "Commands.Players.Makeleader.TargetNotValid"),
+                        eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    return;
+                }
+                target = (GamePlayer)client.Player.TargetObject;
+                if (client.Player.Group != target.Group)
+                {
+                    client.Out.SendMessage(
+                        LanguageMgr.GetTranslation(
+                            client.Account.Language,
+                            "Commands.Players.Makeleader.TargetNotValid"),
+                        eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    return;
+                }
+            }
+            else //Setting by name
+            {
+                string targetName = args[1];
+                GameClient targetClient = WorldMgr.GetClientByPlayerName(targetName, false, true);
+                if (targetClient == null)
+                    target = null;
+                else target = targetClient.Player;
+                if (target == null || client.Player.Group != target.Group)
+                { // Invalid target
+                    client.Out.SendMessage(
+                        LanguageMgr.GetTranslation(
+                            client.Account.Language,
+                            "Commands.Players.Makeleader.NotFoundInGroup"),
+                        eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    return;
+                }
+                if (target == client.Player)
+                {
+                    client.Out.SendMessage(
+                        LanguageMgr.GetTranslation(
+                            client.Account.Language,
+                            "Commands.Players.Makeleader.NoYou"),
+                        eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    return;
+                }
 
-			}
+            }
 
-			client.Player.Group.MakeLeader(target);
-		}
-	}
+            client.Player.Group.MakeLeader(target);
+        }
+    }
 }

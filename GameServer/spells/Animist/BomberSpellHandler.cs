@@ -30,11 +30,11 @@ namespace DOL.GS.Spells
     [SpellHandler("Bomber")]
     public class BomberSpellHandler : SummonSpellHandler
     {
-		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-		const string BOMBERTARGET = "bombertarget";
+        const string BOMBERTARGET = "bombertarget";
 
-		public BomberSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { m_isSilent = true; }
+        public BomberSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { m_isSilent = true; }
 
         public override bool CheckBeginCast(GameLiving selectedTarget)
         {
@@ -53,8 +53,8 @@ namespace DOL.GS.Spells
             m_pet.Level = Caster.Level; // No bomber class to override SetPetLevel() in, so set level here
             m_pet.TempProperties.setProperty(BOMBERTARGET, target);
             m_pet.Name = Spell.Name;
-			m_pet.Flags ^= GameNPC.eFlags.DONTSHOWNAME;
-			m_pet.FixedSpeed = true;
+            m_pet.Flags ^= GameNPC.eFlags.DONTSHOWNAME;
+            m_pet.FixedSpeed = true;
             m_pet.Follow(target, 5, Spell.Range * 5); // with Toa bonus, if the bomber was fired > Spell.Range base, it didnt move..
         }
 
@@ -106,7 +106,7 @@ namespace DOL.GS.Spells
             {
                 if (ReduceSubSpellDamage > 0)
                     subspell.Damage = subspell.Damage * ReduceSubSpellDamage / 100;
-				ISpellHandler spellhandler = ScriptMgr.CreateSpellHandler(Caster, subspell, SkillBase.GetSpellLine(SpellLine.KeyName));
+                ISpellHandler spellhandler = ScriptMgr.CreateSpellHandler(Caster, subspell, SkillBase.GetSpellLine(SpellLine.KeyName));
                 spellhandler.Parent = this;
                 spellhandler.StartSpell(living);
             }

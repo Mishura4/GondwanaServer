@@ -23,38 +23,38 @@ using DOL.GS.Quests;
 
 namespace DOL.GS.PacketHandler.Client.v168
 {
-	[PacketHandlerAttribute(PacketHandlerType.TCP, eClientPackets.RemoveQuestRequest, "Quest Remove request Handler.", eClientStatus.PlayerInGame)]
-	public class QuestRemoveRequestHandler : IPacketHandler
-	{
-		public void HandlePacket(GameClient client, GSPacketIn packet)
-		{
-			ushort unk1 = packet.ReadShort();
-			ushort questIndex = packet.ReadShort();
-			ushort unk2 = packet.ReadShort();
-			ushort unk3 = packet.ReadShort();
+    [PacketHandlerAttribute(PacketHandlerType.TCP, eClientPackets.RemoveQuestRequest, "Quest Remove request Handler.", eClientStatus.PlayerInGame)]
+    public class QuestRemoveRequestHandler : IPacketHandler
+    {
+        public void HandlePacket(GameClient client, GSPacketIn packet)
+        {
+            ushort unk1 = packet.ReadShort();
+            ushort questIndex = packet.ReadShort();
+            ushort unk2 = packet.ReadShort();
+            ushort unk3 = packet.ReadShort();
 
-			PlayerQuest quest = null;
+            PlayerQuest quest = null;
 
-			int index = 0;
-			lock (client.Player.QuestList)
-			{
-				foreach (var q in client.Player.QuestList)
-				{
-					// ignore completed quests
-					if (q.Status == eQuestStatus.Done)
-						continue;
+            int index = 0;
+            lock (client.Player.QuestList)
+            {
+                foreach (var q in client.Player.QuestList)
+                {
+                    // ignore completed quests
+                    if (q.Status == eQuestStatus.Done)
+                        continue;
 
-					if (index == questIndex)
-					{
-						quest = q;
-						break;
-					}
+                    if (index == questIndex)
+                    {
+                        quest = q;
+                        break;
+                    }
 
-					index++;
-				}
-			}
+                    index++;
+                }
+            }
 
-			quest?.AbortQuest();
-		}
-	}
+            quest?.AbortQuest();
+        }
+    }
 }

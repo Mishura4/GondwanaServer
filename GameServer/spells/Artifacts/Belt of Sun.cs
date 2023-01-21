@@ -471,7 +471,7 @@ namespace DOL.GS.Spells
                 return;
             }
         }
-            #endregion Hib
+        #endregion Hib
 
         #region Sun Albion Weapons
         private ItemTemplate Crush

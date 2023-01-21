@@ -20,38 +20,38 @@ using DOL.GS.PacketHandler;
 
 namespace DOL.GS.Spells
 {
-	[SpellHandler("PetConversion")]
-	public class PetConversionSpellHandler : SpellHandler
-	{
-		public PetConversionSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+    [SpellHandler("PetConversion")]
+    public class PetConversionSpellHandler : SpellHandler
+    {
+        public PetConversionSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-		public override bool StartSpell(GameLiving target)
-		{
-			var targets = SelectTargets(target);
-			if (targets.Count <= 0) return false;
-			int mana = 0;
+        public override bool StartSpell(GameLiving target)
+        {
+            var targets = SelectTargets(target);
+            if (targets.Count <= 0) return false;
+            int mana = 0;
 
-			foreach (GameLiving living in targets)
-			{
-				ApplyEffectOnTarget(living, 1.0);
-				mana += (int)(living.Health * Spell.Value / 100);
-			}
+            foreach (GameLiving living in targets)
+            {
+                ApplyEffectOnTarget(living, 1.0);
+                mana += (int)(living.Health * Spell.Value / 100);
+            }
 
-			int absorb = m_caster.ChangeMana(m_caster, GameLiving.eManaChangeType.Spell, mana);
+            int absorb = m_caster.ChangeMana(m_caster, GameLiving.eManaChangeType.Spell, mana);
 
-			if (m_caster is GamePlayer)
-			{
-				if (absorb > 0)
-					MessageToCaster("You absorb " + absorb + " power points.", eChatType.CT_Spell);
-				else
-					MessageToCaster("Your mana is already full!", eChatType.CT_SpellResisted);
-				((GamePlayer)m_caster).CommandNpcRelease();
-			}
+            if (m_caster is GamePlayer)
+            {
+                if (absorb > 0)
+                    MessageToCaster("You absorb " + absorb + " power points.", eChatType.CT_Spell);
+                else
+                    MessageToCaster("Your mana is already full!", eChatType.CT_SpellResisted);
+                ((GamePlayer)m_caster).CommandNpcRelease();
+            }
 
-			return true;
-		}
+            return true;
+        }
 
-        public override string ShortDescription 
-			=> $"Releases the target and all other turrets you have summoned from the area. {Spell.Value}% of the power used in summoning the pet is returned to the caster.";
+        public override string ShortDescription
+            => $"Releases the target and all other turrets you have summoned from the area. {Spell.Value}% of the power used in summoning the pet is returned to the caster.";
     }
 }

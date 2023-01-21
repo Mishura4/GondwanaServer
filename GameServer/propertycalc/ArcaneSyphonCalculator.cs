@@ -36,12 +36,12 @@ namespace DOL.GS.PropertyCalc
         public override int CalcValue(GameLiving living, eProperty property)
         {
             GamePlayer player = living as GamePlayer;
-            if(player == null)
+            if (player == null)
             {
                 return 0;
             }
 
-            return Math.Min(living.ItemBonus[(int) property], 25);
+            return Math.Min(living.ItemBonus[(int)property], 25);
         }
     }
 }

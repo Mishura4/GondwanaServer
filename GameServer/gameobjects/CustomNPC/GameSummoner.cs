@@ -48,8 +48,8 @@ namespace DOL.GS
         // Optional modifiers.
         virtual public int PetTetherRange { get { return 0; } }
         virtual public int PetMaxDistance { get { return 1500; } }
-        virtual public byte PetSize {  get { return 0; } }
-        virtual public int PetSummonDistance {  get { return 100; } }
+        virtual public byte PetSize { get { return 0; } }
+        virtual public int PetSummonDistance { get { return 100; } }
         virtual public long PetResummonTime { get { return 60000; } }
 
         private GameNPC m_pet = null;
@@ -114,7 +114,7 @@ namespace DOL.GS
             {
                 petBrain.AddToAggroList((GameLiving)source, 1);
                 petBrain.Think();
-             }
+            }
         }
 
         /// <summary>

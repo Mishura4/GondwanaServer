@@ -21,14 +21,14 @@ using DOL.GS.PacketHandler;
 
 namespace DOL.GS.Spells
 {
-	[SpellHandler("CureDisease")]
-	public class CureDiseaseSpellHandler : RemoveSpellEffectHandler
-	{
-		public CureDiseaseSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line)
-		{
-			m_spellTypesToRemove = new List<string>();
-			m_spellTypesToRemove.Add("Disease");
-		}
+    [SpellHandler("CureDisease")]
+    public class CureDiseaseSpellHandler : RemoveSpellEffectHandler
+    {
+        public CureDiseaseSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line)
+        {
+            m_spellTypesToRemove = new List<string>();
+            m_spellTypesToRemove.Add("Disease");
+        }
 
         public override string ShortDescription => "All disease effects are removed from the target.";
     }

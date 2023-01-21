@@ -29,25 +29,25 @@ namespace DOL.GS.Spells
     [SpellHandler("GoldenSpearJavelin")]
     public class GoldenSpearJavelin : SummonItemSpellHandler
     {
-		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-		private ItemTemplate _artefJavelin;
+        private ItemTemplate _artefJavelin;
 
         public GoldenSpearJavelin(GameLiving caster, Spell spell, SpellLine line)
             : base(caster, spell, line)
         {
             _artefJavelin = GameServer.Database.FindObjectByKey<ItemTemplate>("Artef_Javelin") ?? Javelin;
-            items.Add (GameInventoryItem.Create(_artefJavelin));
+            items.Add(GameInventoryItem.Create(_artefJavelin));
         }
 
         private ItemTemplate Javelin
         {
             get
             {
-                _artefJavelin = (ItemTemplate) GameServer.Database.FindObjectByKey<ItemTemplate>("Artef_Javelin");
-                if(_artefJavelin == null)
+                _artefJavelin = (ItemTemplate)GameServer.Database.FindObjectByKey<ItemTemplate>("Artef_Javelin");
+                if (_artefJavelin == null)
                 {
-                    if(log.IsWarnEnabled) log.Warn("Could not find Artef_Javelin, loading it ...");
+                    if (log.IsWarnEnabled) log.Warn("Could not find Artef_Javelin, loading it ...");
                     _artefJavelin = new ItemTemplate();
                     _artefJavelin.Id_nb = "Artef_Javelin";
                     _artefJavelin.Name = "Golden Javelin";
@@ -55,7 +55,7 @@ namespace DOL.GS.Spells
                     _artefJavelin.MaxDurability = 50000;
                     _artefJavelin.MaxCondition = 50000;
                     _artefJavelin.Quality = 100;
-                    _artefJavelin.Object_Type = (int) eObjectType.Magical;
+                    _artefJavelin.Object_Type = (int)eObjectType.Magical;
                     _artefJavelin.Item_Type = 41;
                     _artefJavelin.Model = 23;
                     _artefJavelin.IsPickable = false;
@@ -78,16 +78,16 @@ namespace DOL.GS.Spells
             GameEventMgr.AddHandler(Caster, GamePlayerEvent.Quit, OnPlayerLeft);
         }
 
-        private static void OnPlayerLeft(DOLEvent e,object sender,EventArgs arguments)
+        private static void OnPlayerLeft(DOLEvent e, object sender, EventArgs arguments)
         {
-            if(!(sender is GamePlayer)) return;
+            if (!(sender is GamePlayer)) return;
             GamePlayer player = sender as GamePlayer;
-            lock(player.Inventory)
+            lock (player.Inventory)
             {
                 var items = player.Inventory.GetItemRange(eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack);
-                foreach(InventoryItem invItem in items)
+                foreach (InventoryItem invItem in items)
                 {
-                    if(invItem.Id_nb.Equals("Artef_Javelin"))
+                    if (invItem.Id_nb.Equals("Artef_Javelin"))
                     {
                         player.Inventory.RemoveItem(invItem);
                     }

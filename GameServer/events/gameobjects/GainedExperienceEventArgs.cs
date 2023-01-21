@@ -21,18 +21,18 @@ using DOL.GS;
 
 namespace DOL.Events
 {
-	/// <summary>
-	/// Holds the arguments for the GainedExperience event of GameLivings
-	/// </summary>
-	public class GainedExperienceEventArgs : EventArgs
-	{
-		private long m_expBase;
-		private long m_expCampBonus;
-		private long m_expGroupBonus;
-		private long m_expOutpostBonus;
-		private bool m_sendMessage;
-		private bool m_allowMultiply;
-		private GameLiving.eXPSource m_xpSource;
+    /// <summary>
+    /// Holds the arguments for the GainedExperience event of GameLivings
+    /// </summary>
+    public class GainedExperienceEventArgs : EventArgs
+    {
+        private long m_expBase;
+        private long m_expCampBonus;
+        private long m_expGroupBonus;
+        private long m_expOutpostBonus;
+        private bool m_sendMessage;
+        private bool m_allowMultiply;
+        private GameLiving.eXPSource m_xpSource;
 
         /// <summary>
         /// Constructs new ReceiveMoneyEventArgs
@@ -44,67 +44,67 @@ namespace DOL.Events
         /// <param name="sendMessage">send experience gained messages</param>
         /// <param name="allowMultiply"></param>
 		public GainedExperienceEventArgs(long expBase, long expCampBonus, long expGroupBonus, long expOutpostBonus, bool sendMessage, bool allowMultiply, GameLiving.eXPSource xpSource)
-		{
-			m_expBase = expBase;
-			m_expCampBonus = expCampBonus;
-			m_expGroupBonus = expGroupBonus;
-			m_expOutpostBonus = expOutpostBonus;
-			m_sendMessage = sendMessage;
-			m_allowMultiply = allowMultiply;
-			m_xpSource = xpSource;
-		}
+        {
+            m_expBase = expBase;
+            m_expCampBonus = expCampBonus;
+            m_expGroupBonus = expGroupBonus;
+            m_expOutpostBonus = expOutpostBonus;
+            m_sendMessage = sendMessage;
+            m_allowMultiply = allowMultiply;
+            m_xpSource = xpSource;
+        }
 
-		/// <summary>
-		/// Gets the amount of base experience gained
-		/// </summary>
-		public long ExpBase
-		{
-			get { return m_expBase; }
-		}
+        /// <summary>
+        /// Gets the amount of base experience gained
+        /// </summary>
+        public long ExpBase
+        {
+            get { return m_expBase; }
+        }
 
-		/// <summary>
-		/// Gets the amount of camp bonus experience gained
-		/// </summary>
-		public long ExpCampBonus
-		{
-			get { return m_expCampBonus; }
-		}
+        /// <summary>
+        /// Gets the amount of camp bonus experience gained
+        /// </summary>
+        public long ExpCampBonus
+        {
+            get { return m_expCampBonus; }
+        }
 
-		/// <summary>
-		/// Gets the amount of group bonus experience gained
-		/// </summary>
-		public long ExpGroupBonus
-		{
-			get { return m_expGroupBonus; }
-		}
+        /// <summary>
+        /// Gets the amount of group bonus experience gained
+        /// </summary>
+        public long ExpGroupBonus
+        {
+            get { return m_expGroupBonus; }
+        }
 
-		/// <summary>
-		/// gets the amount of outpost bonus experience gained
-		/// </summary>
-		public long ExpOutpostBonus
-		{
-			get { return m_expOutpostBonus; }
-		}
+        /// <summary>
+        /// gets the amount of outpost bonus experience gained
+        /// </summary>
+        public long ExpOutpostBonus
+        {
+            get { return m_expOutpostBonus; }
+        }
 
-		/// <summary>
-		/// True if experience gain message was sent
-		/// </summary>
-		public bool SendMessage
-		{
-			get { return m_sendMessage; }
-		}
+        /// <summary>
+        /// True if experience gain message was sent
+        /// </summary>
+        public bool SendMessage
+        {
+            get { return m_sendMessage; }
+        }
 
-		/// <summary>
-		/// is the experience allowed to be multiplied
-		/// </summary>
-		public bool AllowMultiply
-		{
-			get { return m_allowMultiply; }
-		}
+        /// <summary>
+        /// is the experience allowed to be multiplied
+        /// </summary>
+        public bool AllowMultiply
+        {
+            get { return m_allowMultiply; }
+        }
 
-		public GameLiving.eXPSource XPSource
-		{
-			get { return m_xpSource; }
-		}
-	}
+        public GameLiving.eXPSource XPSource
+        {
+            get { return m_xpSource; }
+        }
+    }
 }

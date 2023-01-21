@@ -22,50 +22,50 @@ namespace DOL.GS.RealmAbilities
         public override void Execute(GameLiving living)
         {
             if (CheckPreconditions(living, DEAD | SITTING)) return;
-            
-            if(ServerProperties.Properties.USE_NEW_ACTIVES_RAS_SCALING)
+
+            if (ServerProperties.Properties.USE_NEW_ACTIVES_RAS_SCALING)
             {
-            	int seconds = 0;
-            	switch(Level)
-            	{
-            		case 1:
-            			seconds = 5;
-            		break;
-            	}
-            	
-            	if(seconds > 0)
-            	{
-	                PurgeTimer timer = new PurgeTimer(living, this, seconds);
-	                timer.Interval = 1000;
-	                timer.Start(1);
-	                DisableSkill(living);            		
-            	}
-            	else
-            	{
-	                SendCastMessage(living);
-	                if (RemoveNegativeEffects(living, this))
-	                {
-	                    DisableSkill(living);
-	                }            		
-            	}
+                int seconds = 0;
+                switch (Level)
+                {
+                    case 1:
+                        seconds = 5;
+                        break;
+                }
+
+                if (seconds > 0)
+                {
+                    PurgeTimer timer = new PurgeTimer(living, this, seconds);
+                    timer.Interval = 1000;
+                    timer.Start(1);
+                    DisableSkill(living);
+                }
+                else
+                {
+                    SendCastMessage(living);
+                    if (RemoveNegativeEffects(living, this))
+                    {
+                        DisableSkill(living);
+                    }
+                }
             }
             else
             {
-	            if (Level < 2)
-	            {
-	                PurgeTimer timer = new PurgeTimer(living, this, 5);
-	                timer.Interval = 1000;
-	                timer.Start(1);
-	                DisableSkill(living);
-	            }
-	            else
-	            {
-	                SendCastMessage(living);
-	                if (RemoveNegativeEffects(living, this))
-	                {
-	                    DisableSkill(living);
-	                }
-	            }
+                if (Level < 2)
+                {
+                    PurgeTimer timer = new PurgeTimer(living, this, 5);
+                    timer.Interval = 1000;
+                    timer.Start(1);
+                    DisableSkill(living);
+                }
+                else
+                {
+                    SendCastMessage(living);
+                    if (RemoveNegativeEffects(living, this))
+                    {
+                        DisableSkill(living);
+                    }
+                }
             }
         }
 
@@ -195,24 +195,24 @@ namespace DOL.GS.RealmAbilities
 
         public override int GetReUseDelay(int level)
         {
-        	if(ServerProperties.Properties.USE_NEW_ACTIVES_RAS_SCALING)
-        	{
-        		switch(level)
-        		{
-					case 3 :
-						return 600;
-        			case 4 :
-        				return 450;
-        			case 5 :
-        				return 300;
-        			default :
-        				return 900;        				
-        		}
-        	}
-        	else 
-        	{
-            	return (level < 3) ? 900 : 300;
-        	}
+            if (ServerProperties.Properties.USE_NEW_ACTIVES_RAS_SCALING)
+            {
+                switch (level)
+                {
+                    case 3:
+                        return 600;
+                    case 4:
+                        return 450;
+                    case 5:
+                        return 300;
+                    default:
+                        return 900;
+                }
+            }
+            else
+            {
+                return (level < 3) ? 900 : 300;
+            }
         }
 
         public override void AddEffectsInfo(IList<string> list)

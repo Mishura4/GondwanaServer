@@ -22,44 +22,44 @@ using log4net;
 
 namespace DOL.GS.PropertyCalc
 {
-	/// <summary>
-	/// The Concentration point calculator
-	/// 
-	/// BuffBonusCategory1 unused
-	/// BuffBonusCategory2 unused
-	/// BuffBonusCategory3 unused
-	/// BuffBonusCategory4 unused
-	/// BuffBonusMultCategory1 unused
-	/// </summary>
-	[PropertyCalculator(eProperty.MaxConcentration)]
-	public class MaxConcentrationCalculator : PropertyCalculator
-	{
-		public MaxConcentrationCalculator() {}
+    /// <summary>
+    /// The Concentration point calculator
+    /// 
+    /// BuffBonusCategory1 unused
+    /// BuffBonusCategory2 unused
+    /// BuffBonusCategory3 unused
+    /// BuffBonusCategory4 unused
+    /// BuffBonusMultCategory1 unused
+    /// </summary>
+    [PropertyCalculator(eProperty.MaxConcentration)]
+    public class MaxConcentrationCalculator : PropertyCalculator
+    {
+        public MaxConcentrationCalculator() { }
 
-		public override int CalcValue(GameLiving living, eProperty property) 
-		{
-			eStat manaStat = eStat.INT;
-			GamePlayer player = living as GamePlayer;
-			if (player != null && player.CharacterClass.ManaStat != eStat.UNDEFINED) 
-				manaStat = player.CharacterClass.ManaStat;
+        public override int CalcValue(GameLiving living, eProperty property)
+        {
+            eStat manaStat = eStat.INT;
+            GamePlayer player = living as GamePlayer;
+            if (player != null && player.CharacterClass.ManaStat != eStat.UNDEFINED)
+                manaStat = player.CharacterClass.ManaStat;
 
-			int concBase = (int)((living.Level * 4) * 2.2);
-			int stat = living.GetModified((eProperty)manaStat);
-			int factor = (stat > 50) ? (stat - 50) / 2 : (stat - 50);
-			int conc = (concBase + concBase * factor / 100) / 2;
-			conc = (int)(living.Effectiveness * (double)conc);
+            int concBase = (int)((living.Level * 4) * 2.2);
+            int stat = living.GetModified((eProperty)manaStat);
+            int factor = (stat > 50) ? (stat - 50) / 2 : (stat - 50);
+            int conc = (concBase + concBase * factor / 100) / 2;
+            conc = (int)(living.Effectiveness * (double)conc);
 
-			if (conc < 0)
-			{
-				if (log.IsWarnEnabled)
-					log.WarnFormat(living.Name+": concentration is less than zerro (conc:{0} eff:{1:R} concBase:{2} stat:{3} factor:{4})", conc, player.Effectiveness, concBase, stat, factor);
-				conc = 0;
-			}
+            if (conc < 0)
+            {
+                if (log.IsWarnEnabled)
+                    log.WarnFormat(living.Name + ": concentration is less than zerro (conc:{0} eff:{1:R} concBase:{2} stat:{3} factor:{4})", conc, player.Effectiveness, concBase, stat, factor);
+                conc = 0;
+            }
 
-			if (player?.GetSpellLine("Perfecter") != null && player.MLLevel >= 4)
-				conc += (20 * conc / 100);
+            if (player?.GetSpellLine("Perfecter") != null && player.MLLevel >= 4)
+                conc += (20 * conc / 100);
 
-			return conc;
-		}
-	}
+            return conc;
+        }
+    }
 }

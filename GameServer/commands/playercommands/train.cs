@@ -29,208 +29,208 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[Cmd(
-		"&train",
-		new string[] { "&trainline", "&trainskill" }, // new aliases to work around 1.105 client /train command
-		ePrivLevel.Player,
-		"Commands.Players.Train.Description",
-		"Commands.Players.Train.Usage")]
-	public class TrainCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		private const string CantTrainSpec = "You can't train in this specialization again this level!";
-		private const string NotEnoughPointsLeft = "You don't have that many specialization points left for this level.";
+    [Cmd(
+        "&train",
+        new string[] { "&trainline", "&trainskill" }, // new aliases to work around 1.105 client /train command
+        ePrivLevel.Player,
+        "Commands.Players.Train.Description",
+        "Commands.Players.Train.Usage")]
+    public class TrainCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        private const string CantTrainSpec = "You can't train in this specialization again this level!";
+        private const string NotEnoughPointsLeft = "You don't have that many specialization points left for this level.";
 
-		// Allow to automate this command: no checks for spam command
-		private bool automated = false;
-		public TrainCommandHandler() {}
-		public TrainCommandHandler(bool automated)
-		{
-			this.automated = automated;
-		}
-		
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (!automated && IsSpammingCommand(client.Player, "train"))
-			{
-				return;
-			}
+        // Allow to automate this command: no checks for spam command
+        private bool automated = false;
+        public TrainCommandHandler() { }
+        public TrainCommandHandler(bool automated)
+        {
+            this.automated = automated;
+        }
 
-			// no longer used since 1.105, except if we explicitely want
-			if (client.Version >= GameClient.eClientVersion.Version1105)
-			{
-				if (!ServerProperties.Properties.CUSTOM_TRAIN)
-				{
-					client.Out.SendTrainerWindow();
-					return;
-				}
-			}
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (!automated && IsSpammingCommand(client.Player, "train"))
+            {
+                return;
+            }
 
-			GameTrainer trainer = client.Player.TargetObject as GameTrainer;
-			// Make sure the player is at a trainer.
-			if (!DOL.GS.ServerProperties.Properties.ALLOW_TRAIN_ANYWHERE && client.Account.PrivLevel == (int)ePrivLevel.Player && (trainer == null || trainer.CanTrain(client.Player) == false))
-			{
-				client.Out.SendMessage(
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Train.Miss.Trainer"),
-					eChatType.CT_System, eChatLoc.CL_SystemWindow);
-				return;
-			}
+            // no longer used since 1.105, except if we explicitely want
+            if (client.Version >= GameClient.eClientVersion.Version1105)
+            {
+                if (!ServerProperties.Properties.CUSTOM_TRAIN)
+                {
+                    client.Out.SendTrainerWindow();
+                    return;
+                }
+            }
 
-			// Make sure the user gave us atleast the specialization line and the level to train it to.
-			if (args.Length < 3)
-			{
-				DisplaySyntax(client);
-				return;
-			}
+            GameTrainer trainer = client.Player.TargetObject as GameTrainer;
+            // Make sure the player is at a trainer.
+            if (!DOL.GS.ServerProperties.Properties.ALLOW_TRAIN_ANYWHERE && client.Account.PrivLevel == (int)ePrivLevel.Player && (trainer == null || trainer.CanTrain(client.Player) == false))
+            {
+                client.Out.SendMessage(
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Train.Miss.Trainer"),
+                    eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return;
+            }
 
-			// Get the level to train the specialization line to.
-			int level;
-			if (!int.TryParse(args[args.Length - 1], out level))
-			{
-				DisplaySyntax(client);
-				return;
-			}
+            // Make sure the user gave us atleast the specialization line and the level to train it to.
+            if (args.Length < 3)
+            {
+                DisplaySyntax(client);
+                return;
+            }
 
-			// Get the specialization line.
-			string line = string.Join(" ", args, 1, args.Length - 2);
-			line = GameServer.Database.Escape(line);
+            // Get the level to train the specialization line to.
+            int level;
+            if (!int.TryParse(args[args.Length - 1], out level))
+            {
+                DisplaySyntax(client);
+                return;
+            }
 
-			var dbSpec = DOLDB<DBSpecialization>.SelectObject(DB.Column(nameof(DBSpecialization.KeyName)).IsLike($"{line}%"));
+            // Get the specialization line.
+            string line = string.Join(" ", args, 1, args.Length - 2);
+            line = GameServer.Database.Escape(line);
 
-			Specialization spec = null;
+            var dbSpec = DOLDB<DBSpecialization>.SelectObject(DB.Column(nameof(DBSpecialization.KeyName)).IsLike($"{line}%"));
 
-			if (dbSpec != null)
-			{
-				spec = client.Player.GetSpecializationByName(dbSpec.KeyName);
-			}
-			else
-			{
-				// if this is a custom line it might not be in the db so search for exact match on player
-				spec = client.Player.GetSpecializationByName(line);
-			}
+            Specialization spec = null;
 
-			if (spec == null)
-			{
-				client.Out.SendMessage(
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Train.Skill.NotFound"),
-					eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            if (dbSpec != null)
+            {
+                spec = client.Player.GetSpecializationByName(dbSpec.KeyName);
+            }
+            else
+            {
+                // if this is a custom line it might not be in the db so search for exact match on player
+                spec = client.Player.GetSpecializationByName(line);
+            }
 
-				return;
-			}
+            if (spec == null)
+            {
+                client.Out.SendMessage(
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Train.Skill.NotFound"),
+                    eChatType.CT_System, eChatLoc.CL_SystemWindow);
 
-			// Make sure the player can actually train the given specialization.
-			int currentSpecLevel = spec.Level;
+                return;
+            }
 
-			if (currentSpecLevel >= client.Player.BaseLevel)
-			{
-				client.Out.SendMessage(
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Train.CantTrainSpec"),
-					eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            // Make sure the player can actually train the given specialization.
+            int currentSpecLevel = spec.Level;
 
-				return;
-			}
+            if (currentSpecLevel >= client.Player.BaseLevel)
+            {
+                client.Out.SendMessage(
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Train.CantTrainSpec"),
+                    eChatType.CT_System, eChatLoc.CL_SystemWindow);
 
-			if (level <= currentSpecLevel)
-			{
-				client.Out.SendMessage(
-					LanguageMgr.GetTranslation(
-						client.Account.Language,
-						"Commands.Players.Train.Skill.Already"),
-					eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return;
+            }
 
-				return;
-			}
+            if (level <= currentSpecLevel)
+            {
+                client.Out.SendMessage(
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Train.Skill.Already"),
+                    eChatType.CT_System, eChatLoc.CL_SystemWindow);
 
-			// Calculate the points to remove for training the specialization.
-			level -= currentSpecLevel;
-			ushort skillSpecialtyPoints = 0;
-			int specLevel = 0;
-			bool changed = false;
-			bool canAutotrainSpec = client.Player.GetAutoTrainPoints(spec, 4) != 0;
-			int autotrainPoints = client.Player.GetAutoTrainPoints(spec, 3);
+                return;
+            }
 
-			for (int i = 0; i < level; i++)
-			{
-				if (spec.Level + specLevel >= client.Player.BaseLevel)
-				{
-					client.Out.SendMessage(
-						LanguageMgr.GetTranslation(
-							client.Account.Language,
-							"Commands.Players.Train.CantTrainSpec"),
-						eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            // Calculate the points to remove for training the specialization.
+            level -= currentSpecLevel;
+            ushort skillSpecialtyPoints = 0;
+            int specLevel = 0;
+            bool changed = false;
+            bool canAutotrainSpec = client.Player.GetAutoTrainPoints(spec, 4) != 0;
+            int autotrainPoints = client.Player.GetAutoTrainPoints(spec, 3);
 
-					break;
-				}
+            for (int i = 0; i < level; i++)
+            {
+                if (spec.Level + specLevel >= client.Player.BaseLevel)
+                {
+                    client.Out.SendMessage(
+                        LanguageMgr.GetTranslation(
+                            client.Account.Language,
+                            "Commands.Players.Train.CantTrainSpec"),
+                        eChatType.CT_System, eChatLoc.CL_SystemWindow);
 
-				// graveen: /train now match 1.87 autotrain rules
-				if ((client.Player.SkillSpecialtyPoints + autotrainPoints) - skillSpecialtyPoints >= (spec.Level + specLevel) + 1)
-				{
-					changed = true;
-					skillSpecialtyPoints += (ushort) ((spec.Level + specLevel) + 1);
+                    break;
+                }
 
-					if (spec.Level + specLevel < client.Player.Level/4 && canAutotrainSpec)
-					{
-						skillSpecialtyPoints -= (ushort) ((spec.Level + specLevel) + 1);
-					}
+                // graveen: /train now match 1.87 autotrain rules
+                if ((client.Player.SkillSpecialtyPoints + autotrainPoints) - skillSpecialtyPoints >= (spec.Level + specLevel) + 1)
+                {
+                    changed = true;
+                    skillSpecialtyPoints += (ushort)((spec.Level + specLevel) + 1);
 
-					specLevel++;
-				}
-				else
-				{
-					var sb = new StringBuilder();
-					sb.AppendLine(
-						LanguageMgr.GetTranslation(
-							client.Account.Language,
-							"Commands.Players.Train.Cost",
-							(spec.Level + 1)));
-					sb.AppendLine(
-						LanguageMgr.GetTranslation(
-							client.Account.Language,
-							"Commands.Players.Train.NotEnoughPoint"));
-					client.Out.SendMessage(sb.ToString(), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-					break;
-				}
-			}
+                    if (spec.Level + specLevel < client.Player.Level / 4 && canAutotrainSpec)
+                    {
+                        skillSpecialtyPoints -= (ushort)((spec.Level + specLevel) + 1);
+                    }
 
-			if (changed)
-			{
-				// tolakram - add some additional error checking to avoid overflow error
-				if (client.Player.SkillSpecialtyPoints >= skillSpecialtyPoints)
-				{
-					spec.Level += specLevel;
+                    specLevel++;
+                }
+                else
+                {
+                    var sb = new StringBuilder();
+                    sb.AppendLine(
+                        LanguageMgr.GetTranslation(
+                            client.Account.Language,
+                            "Commands.Players.Train.Cost",
+                            (spec.Level + 1)));
+                    sb.AppendLine(
+                        LanguageMgr.GetTranslation(
+                            client.Account.Language,
+                            "Commands.Players.Train.NotEnoughPoint"));
+                    client.Out.SendMessage(sb.ToString(), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    break;
+                }
+            }
 
-					client.Player.OnSkillTrained(spec);
+            if (changed)
+            {
+                // tolakram - add some additional error checking to avoid overflow error
+                if (client.Player.SkillSpecialtyPoints >= skillSpecialtyPoints)
+                {
+                    spec.Level += specLevel;
 
-					client.Out.SendUpdatePoints();
-					client.Out.SendTrainerWindow();
+                    client.Player.OnSkillTrained(spec);
 
-					client.Out.SendMessage(
-						LanguageMgr.GetTranslation(
-							client.Account.Language,
-							"Commands.Players.Train.Complete"),
-						eChatType.CT_System, eChatLoc.CL_SystemWindow);
-				}
-				else
-				{
-					var sb = new StringBuilder();
-					sb.AppendLine(
-						LanguageMgr.GetTranslation(
-							client.Account.Language,
-							"Commands.Players.Train.Cost",
-							(spec.Level + 1)));
-					sb.AppendLine(
-						LanguageMgr.GetTranslation(
-							client.Account.Language,
-							"Commands.Players.Train.NotEnoughPoint"));
+                    client.Out.SendUpdatePoints();
+                    client.Out.SendTrainerWindow();
 
-					client.Out.SendMessage(sb.ToString(), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-				}
-			}
-		}
-	}
+                    client.Out.SendMessage(
+                        LanguageMgr.GetTranslation(
+                            client.Account.Language,
+                            "Commands.Players.Train.Complete"),
+                        eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                }
+                else
+                {
+                    var sb = new StringBuilder();
+                    sb.AppendLine(
+                        LanguageMgr.GetTranslation(
+                            client.Account.Language,
+                            "Commands.Players.Train.Cost",
+                            (spec.Level + 1)));
+                    sb.AppendLine(
+                        LanguageMgr.GetTranslation(
+                            client.Account.Language,
+                            "Commands.Players.Train.NotEnoughPoint"));
+
+                    client.Out.SendMessage(sb.ToString(), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                }
+            }
+        }
+    }
 }

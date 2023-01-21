@@ -21,14 +21,15 @@ using System.Collections.Generic;
 using System.Text;
 using DOL.GS.PacketHandler;
 using DOL.Events;
-using DOL.GS.Behaviour.Attributes;using DOL.GS.Behaviour;
+using DOL.GS.Behaviour.Attributes;
+using DOL.GS.Behaviour;
 using DOL.Database;
 
 namespace DOL.GS.Behaviour.Actions
 {
 
     [ActionAttribute(ActionType = eActionType.Timer)]
-    public class TimerAction : AbstractAction<string,int>
+    public class TimerAction : AbstractAction<string, int>
     {
         /// <summary>
         /// Constant used to store timerid in RegionTimer.Properties
@@ -40,16 +41,16 @@ namespace DOL.GS.Behaviour.Actions
         const string TIMER_SOURCE = "timersource";
 
 
-        public TimerAction(GameNPC defaultNPC,  Object p, Object q)
+        public TimerAction(GameNPC defaultNPC, Object p, Object q)
             : base(defaultNPC, eActionType.Timer, p, q)
-        { 
-            
+        {
+
         }
 
 
-        public TimerAction(GameNPC defaultNPC,   string timerID, int delay)
-            : this(defaultNPC, (object)timerID,(object) delay) { }
-        
+        public TimerAction(GameNPC defaultNPC, string timerID, int delay)
+            : this(defaultNPC, (object)timerID, (object)delay) { }
+
 
 
         public override void Perform(DOLEvent e, object sender, EventArgs args)

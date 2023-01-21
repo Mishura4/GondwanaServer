@@ -23,9 +23,9 @@ using DOL.Language;
 
 namespace DOL.GS.Spells
 {
-	[SpellHandler("Nearsight")]
-	public class NearsightSpellHandler : ImmunityEffectSpellHandler
-	{
+    [SpellHandler("Nearsight")]
+    public class NearsightSpellHandler : ImmunityEffectSpellHandler
+    {
         public override int CalculateSpellResistChance(GameLiving target)
         {
             if (target.EffectList.GetOfType<AllureofDeathEffect>() != null)
@@ -36,36 +36,37 @@ namespace DOL.GS.Spells
 
         }
 
-		public override void OnEffectStart(GameSpellEffect effect)
-		{
-			GameSpellEffect mezz = SpellHandler.FindEffectOnTarget(effect.Owner, "Mesmerize");
- 			if(mezz != null) mezz.Cancel(false);
-			// percent category
-			effect.Owner.DebuffCategory[(int)eProperty.ArcheryRange] += (int)Spell.Value;
-			effect.Owner.DebuffCategory[(int)eProperty.SpellRange] += (int)Spell.Value;
-			SendEffectAnimation(effect.Owner, 0, false, 1);
-			MessageToLiving(effect.Owner, Spell.Message1, eChatType.CT_Spell);
-			Message.SystemToArea(effect.Owner, Util.MakeSentence(Spell.Message2, effect.Owner.GetName(0, false)), eChatType.CT_Spell, effect.Owner);
-		}
+        public override void OnEffectStart(GameSpellEffect effect)
+        {
+            GameSpellEffect mezz = SpellHandler.FindEffectOnTarget(effect.Owner, "Mesmerize");
+            if (mezz != null) mezz.Cancel(false);
+            // percent category
+            effect.Owner.DebuffCategory[(int)eProperty.ArcheryRange] += (int)Spell.Value;
+            effect.Owner.DebuffCategory[(int)eProperty.SpellRange] += (int)Spell.Value;
+            SendEffectAnimation(effect.Owner, 0, false, 1);
+            MessageToLiving(effect.Owner, Spell.Message1, eChatType.CT_Spell);
+            Message.SystemToArea(effect.Owner, Util.MakeSentence(Spell.Message2, effect.Owner.GetName(0, false)), eChatType.CT_Spell, effect.Owner);
+        }
 
-		public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
-		{
-			// percent category
-			effect.Owner.DebuffCategory[(int)eProperty.ArcheryRange] -= (int)Spell.Value;
-			effect.Owner.DebuffCategory[(int)eProperty.SpellRange] -= (int)Spell.Value;
-			if (!noMessages) {
-				MessageToLiving(effect.Owner, Spell.Message3, eChatType.CT_SpellExpires);
-				Message.SystemToArea(effect.Owner, Util.MakeSentence(Spell.Message4, effect.Owner.GetName(0, false)), eChatType.CT_SpellExpires, effect.Owner);
-			}
-			return 60000;
-		}
+        public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
+        {
+            // percent category
+            effect.Owner.DebuffCategory[(int)eProperty.ArcheryRange] -= (int)Spell.Value;
+            effect.Owner.DebuffCategory[(int)eProperty.SpellRange] -= (int)Spell.Value;
+            if (!noMessages)
+            {
+                MessageToLiving(effect.Owner, Spell.Message3, eChatType.CT_SpellExpires);
+                Message.SystemToArea(effect.Owner, Util.MakeSentence(Spell.Message4, effect.Owner.GetName(0, false)), eChatType.CT_SpellExpires, effect.Owner);
+            }
+            return 60000;
+        }
 
-		public override IList<string> DelveInfo
-		{
-			get
-			{
-				// value should be in percents
-				/*
+        public override IList<string> DelveInfo
+        {
+            get
+            {
+                // value should be in percents
+                /*
 				 * <Begin Info: Encrust Eyes>
 				 * Function: nearsight
 				 * Target's effective range of all their ranged attacks (archery and magic) reduced.
@@ -81,12 +82,12 @@ namespace DOL.GS.Spells
 				 * <End Info>
 				 */
 
-				var list = new List<string>();
+                var list = new List<string>();
 
                 list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "NearsightSpellHandler.DelveInfo.Function", (Spell.SpellType == "" ? "(not implemented)" : Spell.SpellType)));
-				list.Add(" "); //empty line
-				list.Add(Spell.Description);
-				list.Add(" "); //empty line
+                list.Add(" "); //empty line
+                list.Add(Spell.Description);
+                list.Add(" "); //empty line
                 if (Spell.Damage != 0)
                     list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DelveInfo.Damage", Spell.Damage.ToString("0.###;0.###'%'")));
                 if (Spell.Value != 0)
@@ -96,8 +97,8 @@ namespace DOL.GS.Spells
                     list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DelveInfo.Range", Spell.Range));
                 if (Spell.Duration >= ushort.MaxValue * 1000)
                     list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DelveInfo.Duration" + " Permanent."));
-				else if(Spell.Duration > 60000)
-                    list.Add(string.Format(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DelveInfo.Duration") + Spell.Duration/60000 + ":" + (Spell.Duration%60000/1000).ToString("00") + " min"));
+                else if (Spell.Duration > 60000)
+                    list.Add(string.Format(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DelveInfo.Duration") + Spell.Duration / 60000 + ":" + (Spell.Duration % 60000 / 1000).ToString("00") + " min"));
                 else if (Spell.Duration != 0)
                     list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DelveInfo.Duration") + (Spell.Duration / 1000).ToString("0' sec';'Permanent.';'Permanent.'"));
                 if (Spell.Frequency != 0)
@@ -116,27 +117,27 @@ namespace DOL.GS.Spells
                 if (Spell.DamageType != eDamageType.Natural)
                     list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DelveInfo.Damage", GlobalConstants.DamageTypeToName(Spell.DamageType)));
 
-				return list;
-			}
-		}
+                return list;
+            }
+        }
 
-		public NearsightSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine) {}
+        public NearsightSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine) { }
 
         public override string ShortDescription => $"Target's effective range is reduced by {Spell.Value}% for ranged attacks.";
     }
 
-	[SpellHandler("NearsightReduction")]
-	public class NearsightReductionSpellHandler : SpellHandler
-	{
-		public override void FinishSpellCast(GameLiving target)
-		{
-			m_caster.Mana -= PowerCost(target);
-			base.FinishSpellCast(target);
-		}
+    [SpellHandler("NearsightReduction")]
+    public class NearsightReductionSpellHandler : SpellHandler
+    {
+        public override void FinishSpellCast(GameLiving target)
+        {
+            m_caster.Mana -= PowerCost(target);
+            base.FinishSpellCast(target);
+        }
 
-		public NearsightReductionSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine) {}
+        public NearsightReductionSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine) { }
 
-		public override string ShortDescription
-			=> $"Nearsight spells cast upon the caster's group are reduced in effectiveness by {Spell.Value}%, or outright resisted.";
+        public override string ShortDescription
+            => $"Nearsight spells cast upon the caster's group are reduced in effectiveness by {Spell.Value}%, or outright resisted.";
     }
 }

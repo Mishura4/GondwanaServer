@@ -23,58 +23,58 @@ using DOL.Language;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute(
-		"&sell",
-		ePrivLevel.Player,
+    [CmdAttribute(
+        "&sell",
+        ePrivLevel.Player,
         "Commands.Players.Sell.Description",
         "Commands.Players.Sell.Usage1")]
-	public class SellCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		public void OnCommand(GameClient client, string[] args)
-		{
-			int firstItem = 0, lastItem = 0;
+    public class SellCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        public void OnCommand(GameClient client, string[] args)
+        {
+            int firstItem = 0, lastItem = 0;
 
-			switch (args.Length)
+            switch (args.Length)
             {
-				case 2:
-					if (int.TryParse(args[1], out firstItem))
-						lastItem = firstItem;
-					break;
-				case 3:
-					if (int.TryParse(args[1], out firstItem) && int.TryParse(args[2], out lastItem))
+                case 2:
+                    if (int.TryParse(args[1], out firstItem))
+                        lastItem = firstItem;
+                    break;
+                case 3:
+                    if (int.TryParse(args[1], out firstItem) && int.TryParse(args[2], out lastItem))
                     {
-						if (lastItem < firstItem)
+                        if (lastItem < firstItem)
                         {
-							int temp = firstItem;
-							firstItem = lastItem;
-							lastItem = temp;
+                            int temp = firstItem;
+                            firstItem = lastItem;
+                            lastItem = temp;
                         }
                     }
-					break;
-				default:
-					client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.Players.Sell.Usage2"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-					return;
-			}
+                    break;
+                default:
+                    client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.Players.Sell.Usage2"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    return;
+            }
 
-			if (firstItem < 1 || firstItem > 40 || lastItem < 1 || lastItem > 40)
-				client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.Players.Sell.Invalid"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-			else if (client.Player is GamePlayer player && player.Inventory != null)
+            if (firstItem < 1 || firstItem > 40 || lastItem < 1 || lastItem > 40)
+                client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.Players.Sell.Invalid"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            else if (client.Player is GamePlayer player && player.Inventory != null)
             {
-				if (player.TargetObject is GameMerchant merchant)
+                if (player.TargetObject is GameMerchant merchant)
                 {
-					firstItem += (int)eInventorySlot.FirstBackpack - 1;
-					lastItem += (int)eInventorySlot.FirstBackpack - 1;
+                    firstItem += (int)eInventorySlot.FirstBackpack - 1;
+                    lastItem += (int)eInventorySlot.FirstBackpack - 1;
 
-					for (int i = firstItem; i <= lastItem; i++)
+                    for (int i = firstItem; i <= lastItem; i++)
                     {
-						InventoryItem item = player.Inventory.GetItem((eInventorySlot)i);
-						if (item != null)
-							merchant.OnPlayerSell(player, item);
+                        InventoryItem item = player.Inventory.GetItem((eInventorySlot)i);
+                        if (item != null)
+                            merchant.OnPlayerSell(player, item);
                     }
-				}
-				else
-					client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.Players.Sell.Merchant"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-			}
-		}
-	}
+                }
+                else
+                    client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.Players.Sell.Merchant"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            }
+        }
+    }
 }

@@ -26,7 +26,7 @@ using System.ServiceProcess;
 namespace DOL.DOLServer
 {
 	/// <summary>
-	/// Zusammenfassung für GameServerServiceInstaller.
+	/// Zusammenfassung fï¿½r GameServerServiceInstaller.
 	/// </summary>
 	[RunInstaller(true)]
 	public class GameServerServiceInstaller : Installer

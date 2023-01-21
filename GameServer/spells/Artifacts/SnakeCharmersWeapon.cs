@@ -29,10 +29,10 @@ namespace DOL.GS.Spells
     [SpellHandlerAttribute("SnakeCharmer")]
     public class SnakeCharmer : LifedrainSpellHandler
     {
-		public override int CalculateSpellResistChance(GameLiving target)
-		{
-			return 0;
-		}
+        public override int CalculateSpellResistChance(GameLiving target)
+        {
+            return 0;
+        }
 
         /// <summary>
         /// Uses percent of damage to heal the caster
@@ -51,7 +51,7 @@ namespace DOL.GS.Spells
                 MessageToCaster("You are diseased!", eChatType.CT_SpellResisted);
                 heal >>= 1;
             }
-            if (heal <= 0) return;            
+            if (heal <= 0) return;
             heal = m_caster.ChangeHealth(m_caster, GameLiving.eHealthChangeType.Spell, heal);
             if (heal > 0)
             {
@@ -61,9 +61,9 @@ namespace DOL.GS.Spells
             {
                 MessageToCaster("You cannot absorb any more life.", eChatType.CT_SpellResisted);
             }
-            
-            if (mana <=0) return;
-            mana = m_caster.ChangeMana(m_caster,GameLiving.eManaChangeType.Spell,mana);
+
+            if (mana <= 0) return;
+            mana = m_caster.ChangeMana(m_caster, GameLiving.eManaChangeType.Spell, mana);
             if (mana > 0)
             {
                 MessageToCaster("You steal " + mana + " power point" + (mana == 1 ? "." : "s."), eChatType.CT_Spell);
@@ -71,10 +71,10 @@ namespace DOL.GS.Spells
             else
             {
                 MessageToCaster("You cannot absorb any more power.", eChatType.CT_SpellResisted);
-            }     
-            
-            if (endu <=0) return;
-            endu = m_caster.ChangeEndurance(m_caster,GameLiving.eEnduranceChangeType.Spell,endu);            
+            }
+
+            if (endu <= 0) return;
+            endu = m_caster.ChangeEndurance(m_caster, GameLiving.eEnduranceChangeType.Spell, endu);
             if (heal > 0)
             {
                 MessageToCaster("You steal " + endu + " endurance point" + (endu == 1 ? "." : "s."), eChatType.CT_Spell);

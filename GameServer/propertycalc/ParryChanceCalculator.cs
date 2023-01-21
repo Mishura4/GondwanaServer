@@ -21,53 +21,53 @@ using DOL.AI.Brain;
 
 namespace DOL.GS.PropertyCalc
 {
-	/// <summary>
-	/// The parry chance calculator. Returns 0 .. 1000 chance.
-	/// 
-	/// BuffBonusCategory1 unused
-	/// BuffBonusCategory2 unused
-	/// BuffBonusCategory3 unused
-	/// BuffBonusCategory4 unused
-	/// BuffBonusMultCategory1 unused
-	/// </summary>
-	[PropertyCalculator(eProperty.ParryChance)]
-	public class ParryChanceCalculator : PropertyCalculator
-	{
-		public override int CalcValue(GameLiving living, eProperty property)
-		{
-			
-			GamePlayer player = living as GamePlayer;
-			if (player != null)
-			{
-				int buff = player.BaseBuffBonusCategory[(int)property] * 10
-				+ player.SpecBuffBonusCategory[(int)property] * 10
-				- player.DebuffCategory[(int)property] * 10
-				+ player.BuffBonusCategory4[(int)property] * 10
-				+ player.AbilityBonus[(int)property] * 10;
-				int parrySpec = 0;
-				if (player.HasSpecialization(Specs.Parry))
-				{					
-					parrySpec = (player.Dexterity * 2 - 100) / 4 + (player.GetModifiedSpecLevel(Specs.Parry) - 1) * (10 / 2) + 50;
-				}
+    /// <summary>
+    /// The parry chance calculator. Returns 0 .. 1000 chance.
+    /// 
+    /// BuffBonusCategory1 unused
+    /// BuffBonusCategory2 unused
+    /// BuffBonusCategory3 unused
+    /// BuffBonusCategory4 unused
+    /// BuffBonusMultCategory1 unused
+    /// </summary>
+    [PropertyCalculator(eProperty.ParryChance)]
+    public class ParryChanceCalculator : PropertyCalculator
+    {
+        public override int CalcValue(GameLiving living, eProperty property)
+        {
+
+            GamePlayer player = living as GamePlayer;
+            if (player != null)
+            {
+                int buff = player.BaseBuffBonusCategory[(int)property] * 10
+                + player.SpecBuffBonusCategory[(int)property] * 10
+                - player.DebuffCategory[(int)property] * 10
+                + player.BuffBonusCategory4[(int)property] * 10
+                + player.AbilityBonus[(int)property] * 10;
+                int parrySpec = 0;
+                if (player.HasSpecialization(Specs.Parry))
+                {
+                    parrySpec = (player.Dexterity * 2 - 100) / 4 + (player.GetModifiedSpecLevel(Specs.Parry) - 1) * (10 / 2) + 50;
+                }
                 if (parrySpec > 500)
                 {
                     parrySpec = 500;
                 }
-				return parrySpec + buff;
-			}
-			if (living is GameNPC pet)
-			{
-				int buff = pet.BaseBuffBonusCategory[(int)property] * 10
-					+ pet.SpecBuffBonusCategory[(int)property] * 10
-					- pet.DebuffCategory[(int)property] * 10
-					+ pet.BuffBonusCategory4[(int)property] * 10
-					+ pet.AbilityBonus[(int)property] * 10
-					+ (pet.GetModified(eProperty.Dexterity) * 2 - 100) / 4
-					+ pet.ParryChance * 10;
-				return buff;
-			}
+                return parrySpec + buff;
+            }
+            if (living is GameNPC pet)
+            {
+                int buff = pet.BaseBuffBonusCategory[(int)property] * 10
+                    + pet.SpecBuffBonusCategory[(int)property] * 10
+                    - pet.DebuffCategory[(int)property] * 10
+                    + pet.BuffBonusCategory4[(int)property] * 10
+                    + pet.AbilityBonus[(int)property] * 10
+                    + (pet.GetModified(eProperty.Dexterity) * 2 - 100) / 4
+                    + pet.ParryChance * 10;
+                return buff;
+            }
 
-			return 0;
-		}
-	}
+            return 0;
+        }
+    }
 }

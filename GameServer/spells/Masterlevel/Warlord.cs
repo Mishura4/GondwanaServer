@@ -29,7 +29,7 @@ using DOL.Events;
 using System.Collections.Specialized;
 
 namespace DOL.GS.Spells
-{    
+{
     //http://www.camelotherald.com/masterlevels/ma.php?ml=Warlord
     #region Warlord-1
     //Gamesiegeweapon - getactiondelay
@@ -102,11 +102,11 @@ namespace DOL.GS.Spells
                         {
                             int healvalue = (int)m_spell.Value;
                             int heal;
-                                if (target.IsAlive && !GameServer.ServerRules.IsAllowedToAttack(Caster, player, true))
-                                {
-                                    heal = target.ChangeHealth(target, GameLiving.eHealthChangeType.Spell, healvalue);
-                                    if (heal != 0) player.Out.SendMessage(m_caster.Name + " heal you for " + heal + " hit point!", eChatType.CT_YouWereHit, eChatLoc.CL_SystemWindow);
-                                }
+                            if (target.IsAlive && !GameServer.ServerRules.IsAllowedToAttack(Caster, player, true))
+                            {
+                                heal = target.ChangeHealth(target, GameLiving.eHealthChangeType.Spell, healvalue);
+                                if (heal != 0) player.Out.SendMessage(m_caster.Name + " heal you for " + heal + " hit point!", eChatType.CT_YouWereHit, eChatLoc.CL_SystemWindow);
+                            }
                             heal = m_caster.ChangeHealth(Caster, GameLiving.eHealthChangeType.Spell, (int)(-m_caster.Health * 90 / 100));
                             if (heal != 0) MessageToCaster("You lose " + heal + " hit point" + (heal == 1 ? "." : "s."), eChatType.CT_Spell);
 
@@ -120,7 +120,7 @@ namespace DOL.GS.Spells
         // constructor
         public PBAEHealHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription 
+        public override string ShortDescription
             => Spell.DamageType == 0 ? ML2Description : ML8Description;
 
         private string ML2Description => "Point blank area effect shout that heals allies' health, power and fatigue.";
@@ -151,7 +151,7 @@ namespace DOL.GS.Spells
 
         public CoweringBellowSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription 
+        public override string ShortDescription
             => "Point blank area effect shout that sends enemy pets running. This spell works only against enemy realm monsters.";
     }
     #endregion
@@ -168,11 +168,11 @@ namespace DOL.GS.Spells
 
         public CriticalDamageBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription 
+        public override string ShortDescription
             => $"Point blank area effect shout that increases allies' chance of getting a critical hit on their next attack by {Spell.Value}%.";
     }
-    #endregion  
-       
+    #endregion
+
     //ML6~     //shared timer 4
 
     //shared timer 3
@@ -187,7 +187,7 @@ namespace DOL.GS.Spells
 
         public CleansingAurauraSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription 
+        public override string ShortDescription
             => "Point blank area effect shout which reduces the effect of damage-over-time spells significantly. If this reduces the damage below zero, the DOT is dispelled.";
     }
     #endregion
@@ -248,7 +248,7 @@ namespace DOL.GS.Spells
 
         public EffectivenessBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription 
+        public override string ShortDescription
             => "Point blank area effect shout that boosts effective level of allies for determining damage variance for spell and melee damage.";
     }
     #endregion

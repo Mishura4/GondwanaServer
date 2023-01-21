@@ -20,31 +20,31 @@ using System;
 using DOL.GS;
 namespace DOL.Events
 {
-	/// <summary>
-	/// Holds the arguments for the AttackedByEnemy event of GameLivings
-	/// </summary>
-	public class AttackedByEnemyEventArgs : EventArgs
-	{
+    /// <summary>
+    /// Holds the arguments for the AttackedByEnemy event of GameLivings
+    /// </summary>
+    public class AttackedByEnemyEventArgs : EventArgs
+    {
 
-		/// <summary>
-		/// The attack data
-		/// </summary>
-		private AttackData m_attackData;
+        /// <summary>
+        /// The attack data
+        /// </summary>
+        private AttackData m_attackData;
 
-		/// <summary>
-		/// Constructs a new AttackedByEnemy
-		/// </summary>
-		public AttackedByEnemyEventArgs(AttackData attackData)
-		{
-			this.m_attackData=attackData;
-		}
+        /// <summary>
+        /// Constructs a new AttackedByEnemy
+        /// </summary>
+        public AttackedByEnemyEventArgs(AttackData attackData)
+        {
+            this.m_attackData = attackData;
+        }
 
-		/// <summary>
-		/// Gets the attack data
-		/// </summary>
-		public AttackData AttackData
-		{
-			get { return m_attackData; }
-		}
-	}
+        /// <summary>
+        /// Gets the attack data
+        /// </summary>
+        public AttackData AttackData
+        {
+            get { return m_attackData; }
+        }
+    }
 }

@@ -23,116 +23,116 @@ using DOL.Language;
 using DOL.GS.PacketHandler;
 namespace DOL.GS.Spells
 {
-	/// <summary>
-	/// The spell used for the Personal Bind Recall Stone.
-	/// </summary>
-	/// <author>Aredhel</author>
-	[SpellHandlerAttribute("GatewayPersonalBind")]
-	public class GatewayPersonalBind : SpellHandler
-	{
-		public GatewayPersonalBind(GameLiving caster, Spell spell, SpellLine spellLine)
-			: base(caster, spell, spellLine) { }
+    /// <summary>
+    /// The spell used for the Personal Bind Recall Stone.
+    /// </summary>
+    /// <author>Aredhel</author>
+    [SpellHandlerAttribute("GatewayPersonalBind")]
+    public class GatewayPersonalBind : SpellHandler
+    {
+        public GatewayPersonalBind(GameLiving caster, Spell spell, SpellLine spellLine)
+            : base(caster, spell, spellLine) { }
 
 
-		/// <summary>
-		/// Can this spell be queued with other spells?
-		/// </summary>
-		public override bool CanQueue
-		{
-			get { return false; }
-		}
+        /// <summary>
+        /// Can this spell be queued with other spells?
+        /// </summary>
+        public override bool CanQueue
+        {
+            get { return false; }
+        }
 
 
-		/// <summary>
-		/// Whether this spell can be cast on the selected target at all.
-		/// </summary>
-		/// <param name="selectedTarget"></param>
-		/// <returns></returns>
-		public override bool CheckBeginCast(GameLiving selectedTarget)
-		{
-			GamePlayer player = Caster as GamePlayer;
-			if (player == null)
-				return false;
+        /// <summary>
+        /// Whether this spell can be cast on the selected target at all.
+        /// </summary>
+        /// <param name="selectedTarget"></param>
+        /// <returns></returns>
+        public override bool CheckBeginCast(GameLiving selectedTarget)
+        {
+            GamePlayer player = Caster as GamePlayer;
+            if (player == null)
+                return false;
 
-			if ((player.CurrentRegion.IsRvR || player.CurrentRegion.IsInstance) && GameServer.Instance.Configuration.ServerType != eGameServerType.GST_PvE)
-			{
-				// Actual live message is: You can't use that item!
-				player.Out.SendMessage("You can't use that here!", DOL.GS.PacketHandler.eChatType.CT_System, DOL.GS.PacketHandler.eChatLoc.CL_SystemWindow);
-				return false;
-			}
+            if ((player.CurrentRegion.IsRvR || player.CurrentRegion.IsInstance) && GameServer.Instance.Configuration.ServerType != eGameServerType.GST_PvE)
+            {
+                // Actual live message is: You can't use that item!
+                player.Out.SendMessage("You can't use that here!", DOL.GS.PacketHandler.eChatType.CT_System, DOL.GS.PacketHandler.eChatLoc.CL_SystemWindow);
+                return false;
+            }
 
-			if (player.IsMoving)
-			{
-				player.Out.SendMessage("You must be standing still to use this item!", DOL.GS.PacketHandler.eChatType.CT_System, DOL.GS.PacketHandler.eChatLoc.CL_SystemWindow);
-				return false;
-			}
+            if (player.IsMoving)
+            {
+                player.Out.SendMessage("You must be standing still to use this item!", DOL.GS.PacketHandler.eChatType.CT_System, DOL.GS.PacketHandler.eChatLoc.CL_SystemWindow);
+                return false;
+            }
 
-			if (player.InCombat || GameRelic.IsPlayerCarryingRelic(player))
-			{
-				player.Out.SendMessage("You have been in combat recently and cannot use this item!", DOL.GS.PacketHandler.eChatType.CT_System, DOL.GS.PacketHandler.eChatLoc.CL_SystemWindow);
-				return false;
-			}
+            if (player.InCombat || GameRelic.IsPlayerCarryingRelic(player))
+            {
+                player.Out.SendMessage("You have been in combat recently and cannot use this item!", DOL.GS.PacketHandler.eChatType.CT_System, DOL.GS.PacketHandler.eChatLoc.CL_SystemWindow);
+                return false;
+            }
 
-			return true;
-		}
-
-
-		/// <summary>
-		/// Always a constant casting time
-		/// </summary>
-		/// <returns></returns>
-		public override int CalculateCastingTime()
-		{
-			return m_spell.CastTime;
-		}
+            return true;
+        }
 
 
-		/// <summary>
-		/// Apply the effect.
-		/// </summary>
-		/// <param name="target"></param>
-		/// <param name="effectiveness"></param>
-		public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
-		{
-			GamePlayer player = Caster as GamePlayer;
-			if (player == null)
-				return;
-
-			if (player.InCombat || GameRelic.IsPlayerCarryingRelic(player) || player.IsMoving)
-				return;
-
-			SendEffectAnimation(player, 0, false, 1);
-
-			UniPortalEffect effect = new UniPortalEffect(this, 1000);
-			effect.Start(player);
-
-			player.MoveTo((ushort)player.BindRegion,	player.BindXpos, player.BindYpos, player.BindZpos, (ushort)player.BindHeading);
-		}
+        /// <summary>
+        /// Always a constant casting time
+        /// </summary>
+        /// <returns></returns>
+        public override int CalculateCastingTime()
+        {
+            return m_spell.CastTime;
+        }
 
 
-		public override void CasterMoves()
-		{
-			InterruptCasting();
-			if (Caster is GamePlayer)
+        /// <summary>
+        /// Apply the effect.
+        /// </summary>
+        /// <param name="target"></param>
+        /// <param name="effectiveness"></param>
+        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        {
+            GamePlayer player = Caster as GamePlayer;
+            if (player == null)
+                return;
+
+            if (player.InCombat || GameRelic.IsPlayerCarryingRelic(player) || player.IsMoving)
+                return;
+
+            SendEffectAnimation(player, 0, false, 1);
+
+            UniPortalEffect effect = new UniPortalEffect(this, 1000);
+            effect.Start(player);
+
+            player.MoveTo((ushort)player.BindRegion, player.BindXpos, player.BindYpos, player.BindZpos, (ushort)player.BindHeading);
+        }
+
+
+        public override void CasterMoves()
+        {
+            InterruptCasting();
+            if (Caster is GamePlayer)
                 (Caster as GamePlayer).Out.SendMessage(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "SpellHandler.CasterMove"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-		}
+        }
 
 
-		public override void InterruptCasting()
-		{
-			m_startReuseTimer = false;
-			base.InterruptCasting();
-		}
+        public override void InterruptCasting()
+        {
+            m_startReuseTimer = false;
+            base.InterruptCasting();
+        }
 
-		public override IList<string> DelveInfo
-		{
-			get
-			{
-				var list = new List<string>();
-				list.Add(string.Format("  {0}", Spell.Description));
+        public override IList<string> DelveInfo
+        {
+            get
+            {
+                var list = new List<string>();
+                list.Add(string.Format("  {0}", Spell.Description));
 
-				return list;
-			}
-		}
-	}
+                return list;
+            }
+        }
+    }
 }

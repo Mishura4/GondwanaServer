@@ -26,13 +26,13 @@ using DOL.GS.Behaviour.Attributes;
 using DOL.GS.Behaviour;
 
 namespace DOL.GS.Behaviour.Triggers
-{	
+{
     /// <summary>
     /// A trigger defines the circumstances under which a certain QuestAction is fired.
     /// This can be eTriggerAction.Interact, eTriggerAction.GiveItem, eTriggerAction.Attack, etc...
     /// Additional there are two variables to add the needed parameters for the triggertype (Item to give for GiveItem, NPC to interact for Interact, etc...). To fire a QuestAction at least one of the added triggers must be fulfilled. 
     /// </summary>
-    [TriggerAttribute(Global = true,TriggerType = eTriggerType.EnterArea)]
+    [TriggerAttribute(Global = true, TriggerType = eTriggerType.EnterArea)]
     public class EnterAreaTrigger : AbstractTrigger<Unused, IArea>
     {
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
@@ -44,7 +44,7 @@ namespace DOL.GS.Behaviour.Triggers
         /// <param name="notifyHandler"></param>
         /// <param name="k">keyword (K), meaning depends on triggertype</param>
         /// <param name="i">variable (I), meaning depends on triggertype</param>
-        public EnterAreaTrigger(GameNPC defaultNPC, DOLEventHandler notifyHandler,  Object k, Object i)
+        public EnterAreaTrigger(GameNPC defaultNPC, DOLEventHandler notifyHandler, Object k, Object i)
             : base(defaultNPC, notifyHandler, eTriggerType.EnterArea, k, i)
         { }
 
@@ -55,7 +55,7 @@ namespace DOL.GS.Behaviour.Triggers
         /// <param name="notifyHandler"></param>
         /// <param name="i">variable (I), meaning depends on triggertype</param>
         public EnterAreaTrigger(GameNPC defaultNPC, DOLEventHandler notifyHandler, IArea i)
-            : this(defaultNPC,notifyHandler,  (object)null,(object) i)
+            : this(defaultNPC, notifyHandler, (object)null, (object)i)
         { }
 
         /// <summary>
@@ -73,38 +73,38 @@ namespace DOL.GS.Behaviour.Triggers
             GamePlayer player = BehaviourUtils.GuessGamePlayerFromNotify(e, sender, args);
 
             if (e == AreaEvent.PlayerEnter)
-            {                
+            {
                 AreaEventArgs aArgs = (AreaEventArgs)args;
                 result = aArgs.GameObject == player && I == aArgs.Area;
             }
-            
+
             return result;
         }
 
-		/// <summary>
-		/// Registers the needed EventHandler for this Trigger
-		/// </summary>
-		/// <remarks>
-		/// This method will be called multiple times, so use AddHandlerUnique to make
-		/// sure only one handler is actually registered
-		/// </remarks>
+        /// <summary>
+        /// Registers the needed EventHandler for this Trigger
+        /// </summary>
+        /// <remarks>
+        /// This method will be called multiple times, so use AddHandlerUnique to make
+        /// sure only one handler is actually registered
+        /// </remarks>
         public override void Register()
-        {            
-            GameEventMgr.AddHandler(I, AreaEvent.PlayerEnter, NotifyHandler);                                
+        {
+            GameEventMgr.AddHandler(I, AreaEvent.PlayerEnter, NotifyHandler);
         }
 
-		/// <summary>
-		/// Unregisters the needed EventHandler for this Trigger
-		/// </summary>
-		/// <remarks>
-		/// Don't remove handlers that will be used by other triggers etc.
-		/// This is rather difficult since we don't know which events other triggers use.
-		/// </remarks>
+        /// <summary>
+        /// Unregisters the needed EventHandler for this Trigger
+        /// </summary>
+        /// <remarks>
+        /// Don't remove handlers that will be used by other triggers etc.
+        /// This is rather difficult since we don't know which events other triggers use.
+        /// </remarks>
         public override void Unregister()
         {
 
             GameEventMgr.RemoveHandler(I, AreaEvent.PlayerEnter, NotifyHandler);
-            
-        }		
+
+        }
     }
 }

@@ -25,35 +25,35 @@ using DOL.GS.Effects;
 
 namespace DOL.GS.RealmAbilities
 {
-	public class SelflessDevotionAbility : RR5RealmAbility
-	{
-		public SelflessDevotionAbility(DBAbility dba, int level) : base(dba, level) { }
+    public class SelflessDevotionAbility : RR5RealmAbility
+    {
+        public SelflessDevotionAbility(DBAbility dba, int level) : base(dba, level) { }
 
-		public override void Execute(GameLiving living)
-		{
-			if (CheckPreconditions(living, DEAD | SITTING | MEZZED | STUNNED)) return;
+        public override void Execute(GameLiving living)
+        {
+            if (CheckPreconditions(living, DEAD | SITTING | MEZZED | STUNNED)) return;
 
-			GamePlayer player = living as GamePlayer;
-			if (player != null)
-			{
-				SendCasterSpellEffectAndCastMessage(player, 7039, true);
-				SelflessDevotionEffect effect = new SelflessDevotionEffect();
-				effect.Start(player);
-			}
-			DisableSkill(living);
-		}
+            GamePlayer player = living as GamePlayer;
+            if (player != null)
+            {
+                SendCasterSpellEffectAndCastMessage(player, 7039, true);
+                SelflessDevotionEffect effect = new SelflessDevotionEffect();
+                effect.Start(player);
+            }
+            DisableSkill(living);
+        }
 
-		public override int GetReUseDelay(int level)
-		{
-			return 900;
-		}
+        public override int GetReUseDelay(int level)
+        {
+            return 900;
+        }
 
-		public override void AddEffectsInfo(IList<string> list)
-		{
-			list.Add("Decrease Paladin stats by 25%, and pulse a 300 points group heal with a 750 units range every 3 seconds for 15 seconds total.");
-			list.Add("");
-			list.Add("Duration: 15 sec");
-			list.Add("Casting time: instant");
-		}
-	}
+        public override void AddEffectsInfo(IList<string> list)
+        {
+            list.Add("Decrease Paladin stats by 25%, and pulse a 300 points group heal with a 750 units range every 3 seconds for 15 seconds total.");
+            list.Add("");
+            list.Add("Duration: 15 sec");
+            list.Add("Casting time: instant");
+        }
+    }
 }

@@ -21,73 +21,73 @@ using DOL.GS.PacketHandler;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute(
-		"&advice",
-		ePrivLevel.Player,
-		"Commands.Players.Advice.Description",
-		"Commands.Players.Advice.Description1",
-		"Commands.Players.Advice.Usage",
-		"Commands.Players.Advice.All",
-		"Commands.Players.Advice.Name")]
-	public class AdviceCommandHandler : AbstractCommandHandler, ICommandHandler
-	{
-		public void OnCommand(GameClient client, string[] args)
-		{
-			if (client.Player.IsMuted)
-			{
-				client.Player.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Advice.Muted"), eChatType.CT_Staff, eChatLoc.CL_SystemWindow);
-				return;
-			}
+    [CmdAttribute(
+        "&advice",
+        ePrivLevel.Player,
+        "Commands.Players.Advice.Description",
+        "Commands.Players.Advice.Description1",
+        "Commands.Players.Advice.Usage",
+        "Commands.Players.Advice.All",
+        "Commands.Players.Advice.Name")]
+    public class AdviceCommandHandler : AbstractCommandHandler, ICommandHandler
+    {
+        public void OnCommand(GameClient client, string[] args)
+        {
+            if (client.Player.IsMuted)
+            {
+                client.Player.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Advice.Muted"), eChatType.CT_Staff, eChatLoc.CL_SystemWindow);
+                return;
+            }
 
-			if (IsSpammingCommand(client.Player, "advice"))
-				return;
+            if (IsSpammingCommand(client.Player, "advice"))
+                return;
 
-			string msg = "";
-			if (args.Length >= 2)
-			{
-				for (int i = 1; i < args.Length; ++i)
-				{
-					msg += args[i] + " ";
-				}
-			}
-			else
-			{
-				int total = 0;
-				foreach (GameClient playerClient in WorldMgr.GetAllClients())
-				{
-					if (playerClient.Player == null) continue;
-					if (playerClient.Player.Advisor &&
-					   ((playerClient.Player.Realm == client.Player.Realm && playerClient.Player.IsAnonymous == false) ||
-					   client.Account.PrivLevel > 1))
-					{
-						total++;
-						client.Out.SendMessage(total + ")" + playerClient.Player.Name + (playerClient.Player.IsAnonymous ? " [ANON]" : ""), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-					}
+            string msg = "";
+            if (args.Length >= 2)
+            {
+                for (int i = 1; i < args.Length; ++i)
+                {
+                    msg += args[i] + " ";
+                }
+            }
+            else
+            {
+                int total = 0;
+                foreach (GameClient playerClient in WorldMgr.GetAllClients())
+                {
+                    if (playerClient.Player == null) continue;
+                    if (playerClient.Player.Advisor &&
+                       ((playerClient.Player.Realm == client.Player.Realm && playerClient.Player.IsAnonymous == false) ||
+                       client.Account.PrivLevel > 1))
+                    {
+                        total++;
+                        client.Out.SendMessage(total + ")" + playerClient.Player.Name + (playerClient.Player.IsAnonymous ? " [ANON]" : ""), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    }
 
-				}
-				client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Advice.AdvicersOn", total), eChatType.CT_System, eChatLoc.CL_PopupWindow);
-				return;
-			}
-			foreach (GameClient playerClient in WorldMgr.GetAllClients())
-			{
-				if (playerClient.Player == null) continue;
-				if ((playerClient.Player.Advisor &&
-					playerClient.Player.Realm == client.Player.Realm) ||
-					playerClient.Account.PrivLevel > 1)
-					playerClient.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Advice.Advice", getRealmString(client.Player.Realm), client.Player.Name, msg), eChatType.CT_Staff, eChatLoc.CL_ChatWindow);
+                }
+                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Advice.AdvicersOn", total), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                return;
+            }
+            foreach (GameClient playerClient in WorldMgr.GetAllClients())
+            {
+                if (playerClient.Player == null) continue;
+                if ((playerClient.Player.Advisor &&
+                    playerClient.Player.Realm == client.Player.Realm) ||
+                    playerClient.Account.PrivLevel > 1)
+                    playerClient.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Advice.Advice", getRealmString(client.Player.Realm), client.Player.Name, msg), eChatType.CT_Staff, eChatLoc.CL_ChatWindow);
 
-			}
-		}
+            }
+        }
 
-		public string getRealmString(eRealm Realm)
-		{
-			switch (Realm)
-			{
-				case eRealm.Albion: return " ALB";
-				case eRealm.Midgard: return " MID";
-				case eRealm.Hibernia: return " HIB";
-				default: return " NONE";
-			}
-		}
-	}
+        public string getRealmString(eRealm Realm)
+        {
+            switch (Realm)
+            {
+                case eRealm.Albion: return " ALB";
+                case eRealm.Midgard: return " MID";
+                case eRealm.Hibernia: return " HIB";
+                default: return " NONE";
+            }
+        }
+    }
 }

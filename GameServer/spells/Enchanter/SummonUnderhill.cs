@@ -21,19 +21,19 @@ using DOL.Language;
 
 namespace DOL.GS.Spells
 {
-	[SpellHandler("SummonUnderhill")]
-	public class SummonUnderhill : SummonSpellHandler
-	{
-		public SummonUnderhill(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+    [SpellHandler("SummonUnderhill")]
+    public class SummonUnderhill : SummonSpellHandler
+    {
+        public SummonUnderhill(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-		public override bool CheckBeginCast(GameLiving selectedTarget)
-		{
-			if (Caster is GamePlayer && ((GamePlayer)Caster).ControlledBrain != null)
-			{
+        public override bool CheckBeginCast(GameLiving selectedTarget)
+        {
+            if (Caster is GamePlayer && ((GamePlayer)Caster).ControlledBrain != null)
+            {
                 MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "Summon.CheckBeginCast.AlreadyHaveaPet"), eChatType.CT_SpellResisted);
                 return false;
-			}
-			return base.CheckBeginCast(selectedTarget);
-		}
-	}
+            }
+            return base.CheckBeginCast(selectedTarget);
+        }
+    }
 }

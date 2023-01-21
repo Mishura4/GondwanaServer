@@ -4,30 +4,30 @@ using System.Collections.Generic;
 
 namespace DOL.GS.Quests
 {
-	public class DummyGoal : DataQuestJsonGoal
-	{
-		public override eQuestGoalType Type => eQuestGoalType.Unknown;
-		public override int ProgressTotal => 1;
-		public override bool Visible => false;
+    public class DummyGoal : DataQuestJsonGoal
+    {
+        public override eQuestGoalType Type => eQuestGoalType.Unknown;
+        public override int ProgressTotal => 1;
+        public override bool Visible => false;
 
-		public DummyGoal(DataQuestJson quest, int goalId, dynamic db) : base(quest, goalId, (object)db)
-		{
-		}
+        public DummyGoal(DataQuestJson quest, int goalId, dynamic db) : base(quest, goalId, (object)db)
+        {
+        }
 
-		public override void NotifyActive(PlayerQuest quest, PlayerGoalState goal, DOLEvent e, object sender, EventArgs args)
-		{
-		}
+        public override void NotifyActive(PlayerQuest quest, PlayerGoalState goal, DOLEvent e, object sender, EventArgs args)
+        {
+        }
 
-		public override PlayerGoalState ForceStartGoal(PlayerQuest questData)
-		{
-			var state = base.ForceStartGoal(questData);
-			EndGoal(questData, state);
-			new RegionTimer(questData.Owner, _timer =>
-			{
-				EndGoal(questData, state);
-				return 0;
-			}).Start(1);
-			return state;
-		}
-	}
+        public override PlayerGoalState ForceStartGoal(PlayerQuest questData)
+        {
+            var state = base.ForceStartGoal(questData);
+            EndGoal(questData, state);
+            new RegionTimer(questData.Owner, _timer =>
+            {
+                EndGoal(questData, state);
+                return 0;
+            }).Start(1);
+            return state;
+        }
+    }
 }

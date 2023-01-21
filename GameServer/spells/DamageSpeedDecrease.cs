@@ -26,77 +26,77 @@ using DOL.Language;
 
 namespace DOL.GS.Spells
 {
-	[SpellHandler("DamageSpeedDecrease")]
-	public class DamageSpeedDecreaseSpellHandler : SpeedDecreaseSpellHandler
-	{
-		public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
-		{
-			// do damage even if immune to duration effect
-			OnDirectEffect(target, effectiveness);
+    [SpellHandler("DamageSpeedDecrease")]
+    public class DamageSpeedDecreaseSpellHandler : SpeedDecreaseSpellHandler
+    {
+        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        {
+            // do damage even if immune to duration effect
+            OnDirectEffect(target, effectiveness);
 
-			if ((target is Keeps.GameKeepDoor) == false && (target is Keeps.GameKeepComponent == false))
-			{
-				base.ApplyEffectOnTarget(target, effectiveness);
-			}
-		}
+            if ((target is Keeps.GameKeepDoor) == false && (target is Keeps.GameKeepComponent == false))
+            {
+                base.ApplyEffectOnTarget(target, effectiveness);
+            }
+        }
 
-		public override void OnDirectEffect(GameLiving target, double effectiveness)
-		{
-			base.OnDirectEffect(target, effectiveness);
-			// calc damage
-			AttackData ad = CalculateDamageToTarget(target, effectiveness);
-			SendDamageMessages(ad);
-			DamageTarget(ad, true);
-			if (Spell.LifeDrainReturn != 0)
-				StealLife(ad);
-		}
+        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        {
+            base.OnDirectEffect(target, effectiveness);
+            // calc damage
+            AttackData ad = CalculateDamageToTarget(target, effectiveness);
+            SendDamageMessages(ad);
+            DamageTarget(ad, true);
+            if (Spell.LifeDrainReturn != 0)
+                StealLife(ad);
+        }
 
-		public virtual void StealLife(AttackData ad)
-		{
-			if(ad == null) return;
-			if(!m_caster.IsAlive) return;
+        public virtual void StealLife(AttackData ad)
+        {
+            if (ad == null) return;
+            if (!m_caster.IsAlive) return;
 
-			if (ad.Target is Keeps.GameKeepDoor || ad.Target is Keeps.GameKeepComponent)
-			{
-				return;
-			}
+            if (ad.Target is Keeps.GameKeepDoor || ad.Target is Keeps.GameKeepComponent)
+            {
+                return;
+            }
 
-			int heal = (ad.Damage + ad.CriticalDamage) * m_spell.LifeDrainReturn/100;
-			if (m_caster.IsDiseased)
-			{
-				MessageToCaster("You are diseased!", eChatType.CT_SpellResisted);
-				heal >>= 1;
-			}
-			if(heal <= 0) return;
-			heal = m_caster.ChangeHealth(m_caster, GameLiving.eHealthChangeType.Spell, heal);
+            int heal = (ad.Damage + ad.CriticalDamage) * m_spell.LifeDrainReturn / 100;
+            if (m_caster.IsDiseased)
+            {
+                MessageToCaster("You are diseased!", eChatType.CT_SpellResisted);
+                heal >>= 1;
+            }
+            if (heal <= 0) return;
+            heal = m_caster.ChangeHealth(m_caster, GameLiving.eHealthChangeType.Spell, heal);
 
-			if(heal > 0) 
-			{
-				MessageToCaster("You steal " + heal + " hit point" + (heal==1?".":"s."), eChatType.CT_Spell);
-			}
-			else 
-			{
-				MessageToCaster("You cannot absorb any more life.", eChatType.CT_SpellResisted);
-			}
-		}
+            if (heal > 0)
+            {
+                MessageToCaster("You steal " + heal + " hit point" + (heal == 1 ? "." : "s."), eChatType.CT_Spell);
+            }
+            else
+            {
+                MessageToCaster("You cannot absorb any more life.", eChatType.CT_SpellResisted);
+            }
+        }
 
-		public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
-		{
-			base.OnEffectExpires(effect, noMessages);
-			return 0;
-		}
+        public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
+        {
+            base.OnEffectExpires(effect, noMessages);
+            return 0;
+        }
 
-		protected override GameSpellEffect CreateSpellEffect(GameLiving target, double effectiveness)
-		{
-			int duration = CalculateEffectDuration(target, effectiveness);
-			return new GameSpellEffect(this, duration, 0, effectiveness);
-		}
+        protected override GameSpellEffect CreateSpellEffect(GameLiving target, double effectiveness)
+        {
+            int duration = CalculateEffectDuration(target, effectiveness);
+            return new GameSpellEffect(this, duration, 0, effectiveness);
+        }
 
-		public override IList<string> DelveInfo
-		{
-			get
-			{
-				/*
+        public override IList<string> DelveInfo
+        {
+            get
+            {
+                /*
 				<Begin Info: Lesser Constricting Jolt>
 				Function: damage/speed decrease
 
@@ -114,7 +114,7 @@ namespace DOL.GS.Spells
 				<End Info>
 				*/
 
-				var list = new List<string>();
+                var list = new List<string>();
                 list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DamageSpeedDecrease.DelveInfo.Function"));
                 list.Add(" "); //empty line
                 list.Add(Spell.Description);
@@ -148,13 +148,13 @@ namespace DOL.GS.Spells
                     list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DelveInfo.Radius", Spell.Radius));
                 if (Spell.DamageType != eDamageType.Natural)
                     list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DelveInfo.Damage", GlobalConstants.DamageTypeToName(Spell.DamageType)));
-                
+
                 return list;
-			}
-		}
+            }
+        }
 
         public override string ShortDescription => $"The target is slowed by {Spell.Value}%. Does {Spell.Damage} Cold damage to the target.";
 
-        public DamageSpeedDecreaseSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) {}
-	}
+        public DamageSpeedDecreaseSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+    }
 }

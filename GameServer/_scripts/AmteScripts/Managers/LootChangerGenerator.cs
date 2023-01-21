@@ -17,7 +17,7 @@ namespace DOL.GS
             PreloadLootTemplates();
         }
 
-        private readonly static Dictionary<string, DBMobXLootChanger> m_MobXDB = new Dictionary<string,DBMobXLootChanger>();
+        private readonly static Dictionary<string, DBMobXLootChanger> m_MobXDB = new Dictionary<string, DBMobXLootChanger>();
         private readonly static Dictionary<string, Dictionary<string, DBLootChangerTemplate>> m_MobNameXLootChangerTemplates = new Dictionary<string, Dictionary<string, DBLootChangerTemplate>>();
 
         /// <summary>
@@ -97,13 +97,13 @@ namespace DOL.GS
                         else
                         {
                             template = new DBLootChangerTemplate
-                                           {
-                                               LootChangerTemplateName = lootTemplate,
-                                               ItemsTemplatesRecvs = itemRecv.Id_nb,
-                                               ItemsTemplatesGives = itemGive.Id_nb,
-                                               Order = order,
-                                               FamilyName = familyName
-                                           };
+                            {
+                                LootChangerTemplateName = lootTemplate,
+                                ItemsTemplatesRecvs = itemRecv.Id_nb,
+                                ItemsTemplatesGives = itemGive.Id_nb,
+                                Order = order,
+                                FamilyName = familyName
+                            };
                             GameServer.Database.AddObject(template);
                         }
                         #endregion
@@ -129,11 +129,11 @@ namespace DOL.GS
 
                             //DB
                             var mXlc = new DBMobXLootChanger
-                                           {
-                                               LootChangerTemplateName = lootTemplate,
-                                               MobName = npc.Name,
-                                               DropCount = 1
-                                           };
+                            {
+                                LootChangerTemplateName = lootTemplate,
+                                MobName = npc.Name,
+                                DropCount = 1
+                            };
                             GameServer.Database.AddObject(mXlc);
                             m_MobXDB.Add(npc.Name, mXlc);
                         }
@@ -159,7 +159,7 @@ namespace DOL.GS
 
                             return SendMsg(client, "Les loots de " + npc.Name + " ont été supprimés.");
                         }
-                    	return SendMsg(client, "TODO, use \"/lootchanger remove all\"");
+                        return SendMsg(client, "TODO, use \"/lootchanger remove all\"");
                     }
                     catch
                     {
@@ -167,7 +167,7 @@ namespace DOL.GS
                     }
 
                 case "info":
-                    var infos = new List<string> {" ..:: " + npc.Name + " ::.."};
+                    var infos = new List<string> { " ..:: " + npc.Name + " ::.." };
                     if (!m_MobXDB.ContainsKey(npc.Name))
                         infos.Add("Aucun loot changer.");
                     else
@@ -200,7 +200,7 @@ namespace DOL.GS
             foreach (var tmp in m_MobNameXLootChangerTemplates[mob.Name])
             {
                 var obj = pl.Inventory.GetItemRange(eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack).Where(item => tmp.Key == item.Id_nb).FirstOrDefault();
-                if(obj != null)
+                if (obj != null)
                 {
                     if (string.IsNullOrEmpty(tmp.Value.FamilyName))
                         randLoot.Add(tmp.Value, obj);

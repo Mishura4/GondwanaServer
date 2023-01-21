@@ -54,7 +54,7 @@ namespace DOL.Territory
 
         public void TerritoryAttacked(Territory territory)
         {
-            if(!m_TerritoriesAttacked.ContainsValue(territory))
+            if (!m_TerritoriesAttacked.ContainsValue(territory))
             {
                 Timer timer = new Timer(20000);
                 timer.Elapsed += TerritoryAttackedCallback;
@@ -116,13 +116,13 @@ namespace DOL.Territory
                                     if (!string.IsNullOrEmpty(territory.GuildOwner) && territory.IsBannerSummoned)
                                     {
                                         Guild guild = GuildMgr.GetGuildByName(territory.GuildOwner);
-                                        if(guild != null)
+                                        if (guild != null)
                                         {
                                             Instance.ApplyEmblemToTerritory(territory, guild);
                                         }
                                         else
                                         {
-                                            log.Error($"Territory Manager cant find guild { territory.GuildOwner }");
+                                            log.Error($"Territory Manager cant find guild {territory.GuildOwner}");
                                         }
                                     }
 
@@ -213,7 +213,7 @@ namespace DOL.Territory
                 {
                     gameEvent.Mobs.ForEach(m => m.GuildName = guild.Name);
                 }
-            }   
+            }
 
             if (territory == null || territory.Mobs == null)
             {
@@ -221,14 +221,14 @@ namespace DOL.Territory
                 return;
             }
 
-            this.ApplyTerritoryChange(guild, territory, true); 
+            this.ApplyTerritoryChange(guild, territory, true);
         }
 
         public void RestoreTerritoryGuildNames(Territory territory)
         {
             if (territory == null || territory.Mobs == null || territory.Boss == null)
             {
-                log.Error($"Impossible to clear territory. One Value is Null: Territory: {territory == null }, Mobs: {territory?.Mobs == null }, Boss: { territory?.Boss == null }");
+                log.Error($"Impossible to clear territory. One Value is Null: Territory: {territory == null}, Mobs: {territory?.Mobs == null}, Boss: {territory?.Boss == null}");
                 return;
             }
 
@@ -272,7 +272,7 @@ namespace DOL.Territory
                 {
                     mob.GuildName = null;
                 }
-            }       
+            }
 
             territory.GuildOwner = null;
             territory.Boss.RestoreOriginalGuildName();
@@ -307,9 +307,9 @@ namespace DOL.Territory
 
             territory.IsBannerSummoned = false;
             foreach (var mob in territory.Mobs)
-            {     
+            {
                 RestoreOriginalEmblem(mob);
-                if(wasBannerSummoned)
+                if (wasBannerSummoned)
                 {
                     // Unapply magic and physical resistance bonus
                     Instance.ChangeMagicAndPhysicalResistance(mob, 30, true);
@@ -358,7 +358,7 @@ namespace DOL.Territory
                 if (equipment != null)
                 {
                     item.Emblem = equipment.Emblem;
-                }               
+                }
             }
 
             mob.BroadcastLivingEquipmentUpdate();
@@ -413,7 +413,7 @@ namespace DOL.Territory
             }
 
             return infos;
-        }    
+        }
 
 
         public static Territory GetTerritoryFromMobId(string mobId)
@@ -479,7 +479,7 @@ namespace DOL.Territory
             }
 
             guild.AddTerritory(territory.AreaId, saveChange);
-            territory.GuildOwner = guild.Name;         
+            territory.GuildOwner = guild.Name;
 
             territory.Mobs.ForEach(m => m.GuildName = guild.Name);
             territory.Boss.GuildName = guild.Name;
@@ -540,7 +540,7 @@ namespace DOL.Territory
         public static void ApplyEmblemToTerritory(Territory territory, Guild guild, bool saveterritory, GameNPC initSearchNPC = null)
         {
             Instance.ApplyEmblemToTerritory(territory, guild, initSearchNPC);
-            if(saveterritory)
+            if (saveterritory)
             {
                 territory.SaveIntoDatabase();
             }

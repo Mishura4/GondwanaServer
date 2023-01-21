@@ -30,13 +30,13 @@ namespace DOL.GS.Spells
     [SpellHandlerAttribute("AllStatsDebuff")]
     public class AllStatsDebuff : SpellHandler
     {
-		public override int CalculateSpellResistChance(GameLiving target)
-		{
-			return 0;
-		}
+        public override int CalculateSpellResistChance(GameLiving target)
+        {
+            return 0;
+        }
         public override void OnEffectStart(GameSpellEffect effect)
-        {    
-     		base.OnEffectStart(effect);            
+        {
+            base.OnEffectStart(effect);
             effect.Owner.DebuffCategory[(int)eProperty.Dexterity] += (int)m_spell.Value;
             effect.Owner.DebuffCategory[(int)eProperty.Strength] += (int)m_spell.Value;
             effect.Owner.DebuffCategory[(int)eProperty.Constitution] += (int)m_spell.Value;
@@ -45,21 +45,21 @@ namespace DOL.GS.Spells
             effect.Owner.DebuffCategory[(int)eProperty.Empathy] += (int)m_spell.Value;
             effect.Owner.DebuffCategory[(int)eProperty.Quickness] += (int)m_spell.Value;
             effect.Owner.DebuffCategory[(int)eProperty.Intelligence] += (int)m_spell.Value;
-            effect.Owner.DebuffCategory[(int)eProperty.Charisma] += (int)m_spell.Value;   
-            effect.Owner.DebuffCategory[(int)eProperty.ArmorAbsorption] += (int)m_spell.Value; 
-            effect.Owner.DebuffCategory[(int)eProperty.MagicAbsorption] += (int)m_spell.Value; 
-            
-            if(effect.Owner is GamePlayer)
+            effect.Owner.DebuffCategory[(int)eProperty.Charisma] += (int)m_spell.Value;
+            effect.Owner.DebuffCategory[(int)eProperty.ArmorAbsorption] += (int)m_spell.Value;
+            effect.Owner.DebuffCategory[(int)eProperty.MagicAbsorption] += (int)m_spell.Value;
+
+            if (effect.Owner is GamePlayer)
             {
-            	GamePlayer player = effect.Owner as GamePlayer;  
+                GamePlayer player = effect.Owner as GamePlayer;
                 player.Out.SendCharStatsUpdate();
                 player.UpdateEncumberance();
                 player.UpdatePlayerStatus();
-            	player.Out.SendUpdatePlayer();             	
+                player.Out.SendUpdatePlayer();
             }
         }
         public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
-        {  
+        {
             effect.Owner.DebuffCategory[(int)eProperty.Dexterity] -= (int)m_spell.Value;
             effect.Owner.DebuffCategory[(int)eProperty.Strength] -= (int)m_spell.Value;
             effect.Owner.DebuffCategory[(int)eProperty.Constitution] -= (int)m_spell.Value;
@@ -68,75 +68,75 @@ namespace DOL.GS.Spells
             effect.Owner.DebuffCategory[(int)eProperty.Empathy] -= (int)m_spell.Value;
             effect.Owner.DebuffCategory[(int)eProperty.Quickness] -= (int)m_spell.Value;
             effect.Owner.DebuffCategory[(int)eProperty.Intelligence] -= (int)m_spell.Value;
-            effect.Owner.DebuffCategory[(int)eProperty.Charisma] -= (int)m_spell.Value;        
-            effect.Owner.DebuffCategory[(int)eProperty.ArmorAbsorption] -= (int)m_spell.Value; 
-            effect.Owner.DebuffCategory[(int)eProperty.MagicAbsorption] -= (int)m_spell.Value; 
- 
-            if(effect.Owner is GamePlayer)
+            effect.Owner.DebuffCategory[(int)eProperty.Charisma] -= (int)m_spell.Value;
+            effect.Owner.DebuffCategory[(int)eProperty.ArmorAbsorption] -= (int)m_spell.Value;
+            effect.Owner.DebuffCategory[(int)eProperty.MagicAbsorption] -= (int)m_spell.Value;
+
+            if (effect.Owner is GamePlayer)
             {
-            	GamePlayer player = effect.Owner as GamePlayer;    
+                GamePlayer player = effect.Owner as GamePlayer;
                 player.Out.SendCharStatsUpdate();
                 player.UpdateEncumberance();
                 player.UpdatePlayerStatus();
-            	player.Out.SendUpdatePlayer();  
-            }                       
+                player.Out.SendUpdatePlayer();
+            }
             return base.OnEffectExpires(effect, noMessages);
         }
-        
-		/// <summary>
-		/// Apply effect on target or do spell action if non duration spell
-		/// </summary>
-		/// <param name="target">target that gets the effect</param>
-		/// <param name="effectiveness">factor from 0..1 (0%-100%)</param>
-		public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
-		{
-			base.ApplyEffectOnTarget(target, effectiveness);
-			if (target.Realm == 0 || Caster.Realm == 0)
-			{
-				target.LastAttackedByEnemyTickPvE = target.CurrentRegion.Time;
-				Caster.LastAttackTickPvE = Caster.CurrentRegion.Time;
-			}
-			else
-			{
-				target.LastAttackedByEnemyTickPvP = target.CurrentRegion.Time;
-				Caster.LastAttackTickPvP = Caster.CurrentRegion.Time;
-			}
-			if(target is GameNPC) 
-			{
-				IOldAggressiveBrain aggroBrain = ((GameNPC)target).Brain as IOldAggressiveBrain;
-				if (aggroBrain != null)
-					aggroBrain.AddToAggroList(Caster, (int)Spell.Value);
-			}
-		}		
+
+        /// <summary>
+        /// Apply effect on target or do spell action if non duration spell
+        /// </summary>
+        /// <param name="target">target that gets the effect</param>
+        /// <param name="effectiveness">factor from 0..1 (0%-100%)</param>
+        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        {
+            base.ApplyEffectOnTarget(target, effectiveness);
+            if (target.Realm == 0 || Caster.Realm == 0)
+            {
+                target.LastAttackedByEnemyTickPvE = target.CurrentRegion.Time;
+                Caster.LastAttackTickPvE = Caster.CurrentRegion.Time;
+            }
+            else
+            {
+                target.LastAttackedByEnemyTickPvP = target.CurrentRegion.Time;
+                Caster.LastAttackTickPvP = Caster.CurrentRegion.Time;
+            }
+            if (target is GameNPC)
+            {
+                IOldAggressiveBrain aggroBrain = ((GameNPC)target).Brain as IOldAggressiveBrain;
+                if (aggroBrain != null)
+                    aggroBrain.AddToAggroList(Caster, (int)Spell.Value);
+            }
+        }
         public AllStatsDebuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
     }
- 
+
     /// <summary>
     /// Lore debuff spell handler (Magic resist debuff)
     /// </summary>
     [SpellHandlerAttribute("LoreDebuff")]
     public class LoreDebuff : SpellHandler
     {
- 		public override int CalculateSpellResistChance(GameLiving target)
-		{
-			return 0;
-		}
+        public override int CalculateSpellResistChance(GameLiving target)
+        {
+            return 0;
+        }
         public override void OnEffectStart(GameSpellEffect effect)
         {
-        	base.OnEffectStart(effect);      
-        	effect.Owner.DebuffCategory[(int)eProperty.SpellDamage] += (int)Spell.Value;
+            base.OnEffectStart(effect);
+            effect.Owner.DebuffCategory[(int)eProperty.SpellDamage] += (int)Spell.Value;
             effect.Owner.DebuffCategory[(int)eProperty.Resist_Heat] += (int)Spell.Value;
             effect.Owner.DebuffCategory[(int)eProperty.Resist_Cold] += (int)Spell.Value;
             effect.Owner.DebuffCategory[(int)eProperty.Resist_Matter] += (int)Spell.Value;
             effect.Owner.DebuffCategory[(int)eProperty.Resist_Spirit] += (int)Spell.Value;
             effect.Owner.DebuffCategory[(int)eProperty.Resist_Energy] += (int)Spell.Value;
-            
-            if(effect.Owner is GamePlayer)
+
+            if (effect.Owner is GamePlayer)
             {
-            	GamePlayer player = effect.Owner as GamePlayer;
-             	player.Out.SendCharResistsUpdate(); 
-             	player.UpdatePlayerStatus();
-            }                       
+                GamePlayer player = effect.Owner as GamePlayer;
+                player.Out.SendCharResistsUpdate();
+                player.UpdatePlayerStatus();
+            }
         }
         public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
         {
@@ -146,41 +146,41 @@ namespace DOL.GS.Spells
             effect.Owner.DebuffCategory[(int)eProperty.Resist_Matter] -= (int)Spell.Value;
             effect.Owner.DebuffCategory[(int)eProperty.Resist_Spirit] -= (int)Spell.Value;
             effect.Owner.DebuffCategory[(int)eProperty.Resist_Energy] -= (int)Spell.Value;
-            
-            if(effect.Owner is GamePlayer)
+
+            if (effect.Owner is GamePlayer)
             {
-            	GamePlayer player = effect.Owner as GamePlayer;
-             	player.Out.SendCharResistsUpdate(); 
-             	player.UpdatePlayerStatus();
-            }           
-            
+                GamePlayer player = effect.Owner as GamePlayer;
+                player.Out.SendCharResistsUpdate();
+                player.UpdatePlayerStatus();
+            }
+
             return base.OnEffectExpires(effect, noMessages);
         }
-		/// <summary>
-		/// Apply effect on target or do spell action if non duration spell
-		/// </summary>
-		/// <param name="target">target that gets the effect</param>
-		/// <param name="effectiveness">factor from 0..1 (0%-100%)</param>
-		public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
-		{
-			base.ApplyEffectOnTarget(target, effectiveness);
-			if (target.Realm == 0 || Caster.Realm == 0)
-			{
-				target.LastAttackedByEnemyTickPvE = target.CurrentRegion.Time;
-				Caster.LastAttackTickPvE = Caster.CurrentRegion.Time;
-			}
-			else
-			{
-				target.LastAttackedByEnemyTickPvP = target.CurrentRegion.Time;
-				Caster.LastAttackTickPvP = Caster.CurrentRegion.Time;
-			}
-			if(target is GameNPC) 
-			{
-				IOldAggressiveBrain aggroBrain = ((GameNPC)target).Brain as IOldAggressiveBrain;
-				if (aggroBrain != null)
-					aggroBrain.AddToAggroList(Caster, (int)Spell.Value);
-			}
-		}	
+        /// <summary>
+        /// Apply effect on target or do spell action if non duration spell
+        /// </summary>
+        /// <param name="target">target that gets the effect</param>
+        /// <param name="effectiveness">factor from 0..1 (0%-100%)</param>
+        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        {
+            base.ApplyEffectOnTarget(target, effectiveness);
+            if (target.Realm == 0 || Caster.Realm == 0)
+            {
+                target.LastAttackedByEnemyTickPvE = target.CurrentRegion.Time;
+                Caster.LastAttackTickPvE = Caster.CurrentRegion.Time;
+            }
+            else
+            {
+                target.LastAttackedByEnemyTickPvP = target.CurrentRegion.Time;
+                Caster.LastAttackTickPvP = Caster.CurrentRegion.Time;
+            }
+            if (target is GameNPC)
+            {
+                IOldAggressiveBrain aggroBrain = ((GameNPC)target).Brain as IOldAggressiveBrain;
+                if (aggroBrain != null)
+                    aggroBrain.AddToAggroList(Caster, (int)Spell.Value);
+            }
+        }
         public LoreDebuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
     }
 
@@ -189,41 +189,41 @@ namespace DOL.GS.Spells
     /// </summary>
     [SpellHandlerAttribute("StrengthConstitutionDrain")]
     public class StrengthConstitutionDrain : StrengthConDebuff
-    {  	
-		public override int CalculateSpellResistChance(GameLiving target)
-		{
-			return 0;
-		}
+    {
+        public override int CalculateSpellResistChance(GameLiving target)
+        {
+            return 0;
+        }
         public override void OnEffectStart(GameSpellEffect effect)
         {
-        	base.OnEffectStart(effect);         
+            base.OnEffectStart(effect);
             Caster.BaseBuffBonusCategory[(int)eProperty.Strength] += (int)m_spell.Value;
             Caster.BaseBuffBonusCategory[(int)eProperty.Constitution] += (int)m_spell.Value;
- 
-            if(Caster is GamePlayer)
+
+            if (Caster is GamePlayer)
             {
-            	GamePlayer player = Caster as GamePlayer;          	
-             	player.Out.SendCharStatsUpdate(); 
-             	player.UpdateEncumberance();
-             	player.UpdatePlayerStatus();
-            } 
+                GamePlayer player = Caster as GamePlayer;
+                player.Out.SendCharStatsUpdate();
+                player.UpdateEncumberance();
+                player.UpdatePlayerStatus();
+            }
         }
 
         public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
-        {           
+        {
             Caster.BaseBuffBonusCategory[(int)eProperty.Strength] -= (int)m_spell.Value;
-            Caster.BaseBuffBonusCategory[(int)eProperty.Constitution] -= (int)m_spell.Value;          
- 
-            if(Caster is GamePlayer)
+            Caster.BaseBuffBonusCategory[(int)eProperty.Constitution] -= (int)m_spell.Value;
+
+            if (Caster is GamePlayer)
             {
-            	GamePlayer player = Caster as GamePlayer;          	
-             	player.Out.SendCharStatsUpdate(); 
-             	player.UpdateEncumberance();
-             	player.UpdatePlayerStatus();
-            } 
-            return base.OnEffectExpires(effect,noMessages);
-        } 
-        
+                GamePlayer player = Caster as GamePlayer;
+                player.Out.SendCharStatsUpdate();
+                player.UpdateEncumberance();
+                player.UpdatePlayerStatus();
+            }
+            return base.OnEffectExpires(effect, noMessages);
+        }
+
         public StrengthConstitutionDrain(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
     }
 
@@ -248,7 +248,7 @@ namespace DOL.GS.Spells
         }
         public ABSDamageShield(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
     }
-    
+
     /// <summary>
     /// Morph spell handler
     /// </summary>
@@ -256,36 +256,36 @@ namespace DOL.GS.Spells
     public class Morph : SpellHandler
     {
         public override void OnEffectStart(GameSpellEffect effect)
-        {    
-           if(effect.Owner is GamePlayer)
+        {
+            if (effect.Owner is GamePlayer)
             {
-            	GamePlayer player = effect.Owner as GamePlayer;  
-            	player.Model = (ushort)Spell.LifeDrainReturn;     
-            	player.Out.SendUpdatePlayer();  
-            }       	
-     		base.OnEffectStart(effect); 
+                GamePlayer player = effect.Owner as GamePlayer;
+                player.Model = (ushort)Spell.LifeDrainReturn;
+                player.Out.SendUpdatePlayer();
+            }
+            base.OnEffectStart(effect);
         }
-        
+
         public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
         {
-           if(effect.Owner is GamePlayer)
+            if (effect.Owner is GamePlayer)
             {
-            	GamePlayer player = effect.Owner as GamePlayer;
+                GamePlayer player = effect.Owner as GamePlayer;
                 GameClient client = player.Client;
- 				player.Model = (ushort)client.Account.Characters[client.ActiveCharIndex].CreationModel;            	
- 				player.Out.SendUpdatePlayer();  
-            }                       
-            return base.OnEffectExpires(effect, noMessages);         	
-        }    	
-    	public Morph(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
-    }   
- 
+                player.Model = (ushort)client.Account.Characters[client.ActiveCharIndex].CreationModel;
+                player.Out.SendUpdatePlayer();
+            }
+            return base.OnEffectExpires(effect, noMessages);
+        }
+        public Morph(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+    }
+
     /// <summary>
     /// Arcane leadership spell handler (range+resist pierce)
     /// </summary>
     [SpellHandlerAttribute("ArcaneLeadership")]
     public class ArcaneLeadership : CloudsongAuraSpellHandler
     {
-    	public ArcaneLeadership(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
-    }   
+        public ArcaneLeadership(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+    }
 }

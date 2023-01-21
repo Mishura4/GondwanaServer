@@ -18,22 +18,22 @@
  */
 namespace DOL.AI.Brain
 {
-	public class BlankBrain : ABrain
-	{
-		public BlankBrain()
-			: base()
-		{
-		}
-		public override bool Start()
-		{
-			return true;
-		}
-		public override bool Stop()
-		{
-			return true;
-		}
-		public override void Think()
-		{
-		}
-	}
+    public class BlankBrain : ABrain
+    {
+        public BlankBrain()
+            : base()
+        {
+        }
+        public override bool Start()
+        {
+            return true;
+        }
+        public override bool Stop()
+        {
+            return true;
+        }
+        public override void Think()
+        {
+        }
+    }
 }

@@ -73,10 +73,10 @@ namespace DOL.GS.Spells
             dbs.Power = 0;
             dbs.CastTime = 0;
             dbs.Range = WorldMgr.VISIBILITY_DISTANCE;
-			dbs.Message1 = spell.Message1;
-			dbs.Message2 = spell.Message2;
-			dbs.Message3 = spell.Message3;
-			dbs.Message4 = spell.Message4;
+            dbs.Message1 = spell.Message1;
+            dbs.Message2 = spell.Message2;
+            dbs.Message3 = spell.Message3;
+            dbs.Message4 = spell.Message4;
             sRadius = 350;
             s = new Spell(dbs, 1);
             sl = SkillBase.GetSpellLine(GlobalSpellsLines.Reserved_Spells);
@@ -127,10 +127,10 @@ namespace DOL.GS.Spells
             dbs.Power = 0;
             dbs.CastTime = 0;
             dbs.Range = WorldMgr.VISIBILITY_DISTANCE;
-			dbs.Message1 = spell.Message1;
-			dbs.Message2 = spell.Message2;
-			dbs.Message3 = spell.Message3;
-			dbs.Message4 = spell.Message4;
+            dbs.Message1 = spell.Message1;
+            dbs.Message2 = spell.Message2;
+            dbs.Message3 = spell.Message3;
+            dbs.Message4 = spell.Message4;
             sRadius = 350;
             s = new Spell(dbs, 1);
             sl = SkillBase.GetSpellLine(GlobalSpellsLines.Reserved_Spells);
@@ -205,7 +205,7 @@ namespace DOL.GS.Spells
             m_spellTypesToRemove.Add("RvrResurrectionIllness");
         }
 
-        public override string ShortDescription 
+        public override string ShortDescription
             => "Cure resurrection illness.";
     }
     #endregion
@@ -255,7 +255,7 @@ namespace DOL.GS.Spells
             sl = SkillBase.GetSpellLine(GlobalSpellsLines.Reserved_Spells);
             heal = ScriptMgr.CreateSpellHandler(m_caster, s, sl);
         }
-    }	
+    }
     #endregion
 
     //shared timer 2
@@ -321,7 +321,7 @@ namespace DOL.GS.Spells
             if (target is GamePlayer)
             {
                 GamePlayer player = target as GamePlayer;
-                if (player.CharacterClass.ID == (int)eCharacterClass.Vampiir 
+                if (player.CharacterClass.ID == (int)eCharacterClass.Vampiir
                     || player.CharacterClass.ID == (int)eCharacterClass.MaulerHib
                     || player.CharacterClass.ID == (int)eCharacterClass.MaulerMid
                     || player.CharacterClass.ID == (int)eCharacterClass.MaulerAlb)
@@ -360,7 +360,7 @@ namespace DOL.GS.Spells
         // constructor
         public PoTSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override string ShortDescription 
+        public override string ShortDescription
             => $"Targets in range are regain {-Spell.Value}% additional power every tick.";
     }
     #endregion
@@ -371,16 +371,16 @@ namespace DOL.GS.Spells
     {
         public override void OnEffectStart(GameSpellEffect effect)
         {
-        	base.OnEffectStart(effect);
+            base.OnEffectStart(effect);
             effect.Owner.BaseBuffBonusCategory[(int)eProperty.MesmerizeDurationReduction] += (int)m_spell.Value;
             effect.Owner.BaseBuffBonusCategory[(int)eProperty.StunDurationReduction] += (int)m_spell.Value;
             effect.Owner.BaseBuffBonusCategory[(int)eProperty.SpeedDecreaseDurationReduction] += (int)m_spell.Value;
-             
+
             if (effect.Owner is GamePlayer)
             {
-            	GamePlayer player = effect.Owner as GamePlayer;
+                GamePlayer player = effect.Owner as GamePlayer;
                 player.UpdatePlayerStatus();
-            	player.Out.SendUpdatePlayer();       
+                player.Out.SendUpdatePlayer();
             }
         }
 
@@ -389,14 +389,14 @@ namespace DOL.GS.Spells
             effect.Owner.BaseBuffBonusCategory[(int)eProperty.MesmerizeDurationReduction] -= (int)m_spell.Value;
             effect.Owner.BaseBuffBonusCategory[(int)eProperty.StunDurationReduction] -= (int)m_spell.Value;
             effect.Owner.BaseBuffBonusCategory[(int)eProperty.SpeedDecreaseDurationReduction] -= (int)m_spell.Value;
-            
+
             if (effect.Owner is GamePlayer)
             {
-            	GamePlayer player = effect.Owner as GamePlayer;
+                GamePlayer player = effect.Owner as GamePlayer;
                 player.UpdatePlayerStatus();
-            	player.Out.SendUpdatePlayer();  
+                player.Out.SendUpdatePlayer();
             }
-            return base.OnEffectExpires(effect,noMessages);
+            return base.OnEffectExpires(effect, noMessages);
         }
 
         // constructor
