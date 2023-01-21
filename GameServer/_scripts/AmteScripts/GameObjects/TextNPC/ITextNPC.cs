@@ -8,7 +8,9 @@ using System.Reflection;
 using DOL.Database;
 using DOL.Events;
 using DOL.GS.PacketHandler;
+using DOL.GS.Quests;
 using log4net;
+using static DOL.GS.Quests.DataQuestJsonGoal;
 
 namespace DOL.GS.Scripts
 {
@@ -29,6 +31,8 @@ namespace DOL.GS.Scripts
         public Dictionary<string, string> Reponses { get; private set; }
         public Dictionary<string, eEmote> EmoteReponses { get; private set; }
         public Dictionary<string, ushort> SpellReponses { get; private set; }
+        public Dictionary<string, string> QuestReponses { get; private set; }
+        public Dictionary<string, Tuple<string, int>> QuestReponsesValues { get; private set; }
         public Dictionary<string, eEmote> RandomPhrases { get; private set; }
         public string Interact_Text { get; set; }
         public int PhraseInterval { get; set; }
@@ -44,6 +48,8 @@ namespace DOL.GS.Scripts
             Reponses = new Dictionary<string, string>();
             EmoteReponses = new Dictionary<string, eEmote>();
             SpellReponses = new Dictionary<string, ushort>();
+            QuestReponses = new Dictionary<string, string>();
+            QuestReponsesValues = new Dictionary<string, Tuple<string, int>>();
             _body = body;
             _lastPhrase = 0;
             Interact_Text = "";
@@ -55,7 +61,7 @@ namespace DOL.GS.Scripts
         {
             if (string.IsNullOrEmpty(Interact_Text) || !CheckAccess(player))
                 return false;
-
+                
             _body.TurnTo(player);        
 
             if (this.IsOutlawFriendly.HasValue)
@@ -87,6 +93,10 @@ namespace DOL.GS.Scripts
             if (SpellReponses != null && SpellReponses.ContainsKey("INTERACT"))
                 foreach (GamePlayer plr in _body.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
                     plr.Out.SendSpellEffectAnimation(_body, player, SpellReponses["INTERACT"], 0, false, 1);
+
+            //Quest
+            if (QuestReponses != null && QuestReponses.ContainsKey("INTERACT"))
+                HandleQuestInteraction(player, "INTERACT");
 
             //Emote
             if (EmoteReponses != null && EmoteReponses.ContainsKey("INTERACT"))
@@ -137,6 +147,10 @@ namespace DOL.GS.Scripts
                 foreach (GamePlayer plr in _body.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
                     plr.Out.SendSpellEffectAnimation(_body, player, SpellReponses[str], 0, false, 1);
 
+            //Quest
+            if (QuestReponses != null && QuestReponses.ContainsKey(str))
+                HandleQuestInteraction(player, str);
+
             //Emote
             if (EmoteReponses != null && EmoteReponses.ContainsKey(str))
                 foreach (GamePlayer plr in _body.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
@@ -144,6 +158,61 @@ namespace DOL.GS.Scripts
 
 
             return true;
+        }
+        void HandleQuestInteraction(GamePlayer player, string response)
+        {
+            var possibleQuests = _body.QuestIdListToGive;
+		    //lock (player.QuestList)
+                if (QuestReponsesValues[response].Item2 == 0 && !player.QuestList.Any(q => possibleQuests.Contains(q.QuestId)))
+                   {
+                    // Quest not in progress
+                    var questName = QuestReponsesValues[response].Item1;
+
+                    foreach (var questId in possibleQuests)
+                    {
+                        var quest = DataQuestJsonMgr.GetQuest(QuestReponsesValues[response].Item1);
+                        if (quest != null && quest.CheckQuestQualification(player))
+                        {
+                            player.Out.SendQuestOfferWindow(quest.Npc, player, PlayerQuest.CreateQuestPreview(quest, player));
+                            return;
+                        }
+                    }
+                   }
+                else if(QuestReponsesValues[response].Item2 != 0)
+                {
+                        // Quest in progress
+                        var goalId = QuestReponsesValues[response].Item2;
+                        var currentQuest = player.QuestList.FirstOrDefault(q => q.VisibleGoals.Any(g => g is GenericDataQuestGoal jgoal && jgoal.Goal.GoalId == goalId));
+                        if (currentQuest != null)
+                        {
+                            var currentGoal = currentQuest.VisibleGoals.FirstOrDefault(g => g is GenericDataQuestGoal jgoal && jgoal.Goal.GoalId == goalId);
+                            if(currentGoal != null)
+                            {
+                                if(currentQuest.CanFinish())
+                                    player.Out.SendQuestRewardWindow(_body, player, currentQuest);
+                                else 
+                                {
+                                    var jGoal = currentGoal as GenericDataQuestGoal;
+			                        var goalState = currentQuest.GoalStates.Find(gs => gs.GoalId == goalId);
+				                    jGoal.Goal.AdvanceGoal(currentQuest, goalState);
+                                 }
+                            }
+                        }
+                }
+        }
+        public bool CheckQuestAvailable(string Name, int goalId = 0)
+        {
+            foreach (var kvp in QuestReponsesValues)
+            {
+                if (kvp.Value.Item1 == Name)
+                {
+                    if (goalId == 0 && kvp.Value.Item2 != goalId)
+                        return false;
+                    if (goalId == 0 || kvp.Value.Item2 == goalId)
+                        return true;
+                }
+            }
+            return false;
         }
 
         public bool ReceiveItem(GameLiving source, InventoryItem item)
@@ -559,6 +628,24 @@ namespace DOL.GS.Scripts
             }
             Reponses = table;
 
+            QuestReponses = new Dictionary<string, string>();
+            QuestReponsesValues = new Dictionary<string, Tuple<string, int>>();
+            if (TextDB.ReponseQuest != "")
+            {
+                foreach (string item in TextDB.ReponseQuest.Split('\n'))
+                {
+                    string[] items = item.Split('|');
+                    if (items.Length != 2)
+                        continue;
+                    QuestReponses.Add(items[0], items[1]);
+                    var values = items[1].Split('-');
+                    if (values.Length != 2)
+                        QuestReponsesValues.Add(items[0], new Tuple<string, int>(values[0], 0));
+                    else
+                        QuestReponsesValues.Add(items[0], new Tuple<string, int>(values[0], int.Parse(values[1])));
+                }
+            }
+
             //Chargement des spells réponses
             var table2 = new Dictionary<string, ushort>();
             if (TextDB.ReponseSpell != "")
@@ -621,7 +708,6 @@ namespace DOL.GS.Scripts
             PhraseInterval = TextDB.PhraseInterval;
 
 
-
             //Chargement des conditions
             Condition = new TextNPCCondition(TextDB.Condition);
         }
@@ -647,6 +733,19 @@ namespace DOL.GS.Scripts
                 }
             }
             TextDB.Reponse = reponse;
+
+            //Sauve les quest réponses
+            reponse = "";
+            if (QuestReponses != null && QuestReponses.Count > 0)
+            {
+                foreach (var de in QuestReponses)
+                {
+                    if (reponse.Length > 1)
+                        reponse += "\n";
+                    reponse += de.Key.Trim('|', ';') + "|" + de.Value;
+                }
+            }
+            TextDB.ReponseQuest = reponse;
 
             //Sauve les spell réponses
             reponse = "";

@@ -22,7 +22,7 @@ namespace DOL.GS.Quests
 		private readonly bool hasArea = false;
 		private readonly bool destroyItem = false;
 		public override QuestZonePoint PointA { get; }
-		public override bool hasInteractIcon { get; set; } = false;
+		public override bool hasInteraction { get; set; } = false;
 
 		public UseItemGoal(DataQuestJson quest, int goalId, dynamic db) : base(quest, goalId, (object)db)
 		{
@@ -41,7 +41,7 @@ namespace DOL.GS.Quests
 			}
 			if( db.TargetName != null && db.TargetName != "" && db.TargetRegion != null && db.TargetRegion != "" )
 			{
-				hasInteractIcon = true;
+				hasInteraction = true;
 				m_target = WorldMgr.GetNPCsByNameFromRegion((string)db.TargetName ??  "", (ushort)db.TargetRegion, eRealm.None)
 					.FirstOrDefault(quest.Npc);
 			}

@@ -1,5 +1,6 @@
 ﻿using DOL.Events;
 using DOL.GS.Behaviour;
+using DOL.GS.Scripts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace DOL.GS.Quests
 
 		public override eQuestGoalType Type => eQuestGoalType.Unknown;
 		public override int ProgressTotal => 1;
-		public override bool hasInteractIcon { get; set; } = true;
+		public override bool hasInteraction { get; set; } = true;
 		public override QuestZonePoint PointA => new(m_target);
 
 		public WhisperGoal(DataQuestJson quest, int goalId, dynamic db) : base(quest, goalId, (object)db)
@@ -41,8 +42,10 @@ namespace DOL.GS.Quests
 
 		public override void NotifyActive(PlayerQuest quest, PlayerGoalState goal, DOLEvent e, object sender, EventArgs args)
 		{
+			if (args is WhisperEventArgs interact && interact.Target is ITextNPC textNPC && textNPC.TextNPCData.CheckQuestAvailable(Quest.Name, GoalId))
+				return;
 			var player = quest.Owner;
-			if (e == GameLivingEvent.Whisper && args is WhisperEventArgs interact && interact.Target.Name == m_target.Name && interact.Target.CurrentRegion == m_target.CurrentRegion && interact.Text == m_whisperText)
+			if (e == GameLivingEvent.Whisper && args is WhisperEventArgs interacting && interacting.Target.Name == m_target.Name && interacting.Target.CurrentRegion == m_target.CurrentRegion && interacting.Text == m_whisperText)
 			{
 				if (!string.IsNullOrWhiteSpace(m_text))
 					ChatUtil.SendPopup(player, BehaviourUtils.GetPersonalizedMessage(m_text, player));

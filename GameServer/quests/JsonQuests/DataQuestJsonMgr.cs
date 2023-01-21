@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using DOL.GS.PacketHandler;
+using DOL.GS.Scripts;
 
 namespace DOL.GS.Quests;
 
@@ -35,6 +36,10 @@ public static class DataQuestJsonMgr
 	{
 		return Quests.TryGetValue(id, out var quest) ? quest : null;
 	}
+	public static DataQuestJson GetQuest(string name)
+	{
+		return Quests.Values.FirstOrDefault(quest => quest.Name == name);
+	}	
 
 	public static List<string> ReloadQuests()
 	{
@@ -87,20 +92,22 @@ public static class DataQuestJsonMgr
 
 	public static void OnInteract(DOLEvent _, object sender, EventArgs args)
 	{
-		if (args is not InteractEventArgs arguments || arguments.Source == null)
+
+		if ( args is not InteractEventArgs arguments || arguments.Source == null)
 			return;
 
 		var player = arguments.Source;
 		var possibleQuests = sender is GameNPC npc ? npc.QuestIdListToGive : Array.Empty<ushort>();
 		if (possibleQuests.Count == 0)
 			return;
-
 		lock (player.QuestList)
 			if (player.QuestList.Any(q => possibleQuests.Contains(q.QuestId) || q.CanInteractWith(sender)))
 				return; // Quest in progress
 		foreach (var questId in possibleQuests)
 		{
 			var quest = GetQuest(questId);
+			if (sender is ITextNPC textNPC && textNPC.TextNPCData.CheckQuestAvailable(quest.Name))
+				return;
 			if (quest != null && quest.CheckQuestQualification(player))
 			{
 				player.Out.SendQuestOfferWindow(quest.Npc, player, PlayerQuest.CreateQuestPreview(quest, player));

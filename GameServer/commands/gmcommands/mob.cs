@@ -2638,6 +2638,11 @@ namespace DOL.GS.Commands
 				((GameMerchant)mob).TradeItems = ((GameMerchant)targetMob).TradeItems;
 			}
 
+			if (mob is TextNPC)
+			{
+				((TextNPC)mob).TextNPCData = ((TextNPC)targetMob).TextNPCData;
+			}
+
 			ABrain brain = null;
 			foreach (Assembly script in ScriptMgr.GameServerScripts)
 			{

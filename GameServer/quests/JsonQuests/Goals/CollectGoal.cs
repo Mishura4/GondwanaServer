@@ -19,7 +19,7 @@ namespace DOL.GS.Quests
 		public override int ProgressTotal => m_itemCount;
 		public override QuestZonePoint PointA => new(m_target);
 		public override ItemTemplate QuestItem => m_item;
-		public override bool hasInteractIcon { get; set; } = true;
+		public override bool hasInteraction { get; set; } = true;
 
 		public CollectGoal(DataQuestJson quest, int goalId, dynamic db) : base(quest, goalId, (object)db)
 		{

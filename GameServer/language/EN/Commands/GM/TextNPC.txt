@@ -19,6 +19,8 @@ Commands.GM.TextNPC.Usage.RandomPhrase.interval:		'/textnpc randomphrase interva
 Commands.GM.TextNPC.Usage.RandomPhrase.Help:		'/textnpc randomphrase help' Display some infos about random phrases on NPCs
 Commands.GM.TextNPC.Usage.RandomPhrase.View:		'/textnpc randomphrase view' To see the random phrases on a specific NPC
 Commands.GM.TextNPC.Usage.Quest:		'/textnpc quest <None/Available/Lesson/Lore/Finish/Pending>' Shows the quest icon on the NPC
+Commands.GM.TextNPC.Usage.Quest.Add:			'/textnpc quest add <questName(-goalId-)> <reponse>' To add a quest(optionally goal) as a response
+Commands.GM.TextNPC.Usage.Quest.Remove:			'/textnpc quest remove <questName(-goalId)> <reponse>' To remove a quest(optionally goal)
 Commands.GM.TextNPC.Usage.Level:		'/textnpc level <levelmin> <levelmax>' Set minimum and maximum level players can interact with this NPC
 Commands.GM.TextNPC.Usage.Guild.Add:	'/textnpc guild add <guildname>' Add a Guild the NPC cannot interact with (use 'NO GUILD' for non-guilded players)
 Commands.GM.TextNPC.Usage.Guild.Remove:			'/textnpc guild remove <guildname>' Remove a Guild the NPC cannot interact with

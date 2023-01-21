@@ -43,6 +43,8 @@ namespace DOL.GS.Scripts
 
 		 //conditions
          "Commands.GM.TextNPC.Usage.Quest",
+		 "Commands.GM.TextNPC.Usage.Quest.Add",
+		 "Commands.GM.TextNPC.Usage.Quest.Remove",
          "Commands.GM.TextNPC.Usage.Level",
          "Commands.GM.TextNPC.Usage.Guild.Add",
          "Commands.GM.TextNPC.Usage.Guild.Remove",
@@ -435,14 +437,85 @@ namespace DOL.GS.Scripts
 
 					#region level/guild/race/class/prp/hour/karma
                 case "quest":
-	                eQuestIndicator indicator;
-                    if (npc == null || args.Length < 3 || !Enum.TryParse(args[2], out indicator))
-                    {
-                        DisplaySyntax(client);
-                        return;
-                    }
-                    npc.TextNPCData.Condition.CanGiveQuest = indicator;
-                    npc.TextNPCData.SaveIntoDatabase();
+					if(npc == null || args.Length < 3)
+					{
+						DisplaySyntax(client);
+						return;
+					}
+                    if(args.Length > 4)
+					    reponse = string.Join(" ", args, 4, args.Length - 4);
+					if(args[2].ToLower() == "add")
+					{
+					 
+						if(args.Length < 5)
+						{
+							DisplaySyntax(client);
+							return;
+						}
+						try
+						{
+                            if (npc.TextNPCData.QuestReponses.ContainsKey(reponse))
+							{
+                                npc.TextNPCData.QuestReponses[reponse] = args[3];
+								player.Out.SendMessage("Quest réponse \""+reponse+"\" modifiée", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+							}
+							else
+							{
+                                npc.TextNPCData.QuestReponses.Add(reponse, args[3]);
+								player.Out.SendMessage("Quest réponse \""+reponse+"\" ajoutée", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+							}
+							npc.TextNPCData.SaveIntoDatabase();
+
+							var values = args[3].Split('-');
+							if (npc.TextNPCData.QuestReponsesValues.ContainsKey(reponse))
+								npc.TextNPCData.QuestReponsesValues.Remove(reponse);
+							if (values.Length < 2)
+								npc.TextNPCData.QuestReponsesValues.Add(reponse, new Tuple<string, int>(values[0], 0));
+							else
+								npc.TextNPCData.QuestReponsesValues.Add(reponse, new Tuple<string, int>(values[0], int.Parse(values[1])));
+							
+							foreach (var kvp in npc.TextNPCData.QuestReponsesValues)
+							{
+							Console.WriteLine("CheckQuestAvailable"+kvp.Value.Item1);
+							}
+						}
+						catch(Exception e)
+						{
+							log.Debug("ERROR: ", e);
+							player.Out.SendMessage("Le Quest n'est pas valide.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+							return;
+						}
+					}
+					else if(args[2].ToLower() == "remove")
+					{
+						if(args.Length < 4)
+						{
+							DisplaySyntax(client);
+							return;
+						}
+                        if (npc.TextNPCData.QuestReponses.ContainsKey(reponse))
+						{
+                            npc.TextNPCData.QuestReponses.Remove(reponse);
+							if(npc.TextNPCData.QuestReponsesValues.ContainsKey(reponse))
+								npc.TextNPCData.QuestReponsesValues.Remove(reponse);
+							npc.TextNPCData.SaveIntoDatabase();
+							player.Out.SendMessage("Quest réponse \""+reponse+"\" supprimée", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+						}
+						else
+							player.Out.SendMessage("Ce pnj n'a pas de quest réponse '"+reponse+"'.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+
+					}
+					else
+					{
+						eQuestIndicator indicator;
+						if (npc == null || args.Length < 3 || !Enum.TryParse(args[2], out indicator))
+						{
+							DisplaySyntax(client);
+							return;
+						}
+						npc.TextNPCData.Condition.CanGiveQuest = indicator;
+						npc.TextNPCData.SaveIntoDatabase();
+					}
                     break;
 
 				case "level":

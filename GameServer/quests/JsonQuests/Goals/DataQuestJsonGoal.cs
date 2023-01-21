@@ -23,7 +23,7 @@ namespace DOL.GS.Quests
 		public virtual bool Visible => true;
 		public ItemTemplate GiveItemTemplate { get; set; }
 		public ItemTemplate StartItemTemplate { get; set; }
-		public virtual bool hasInteractIcon { get; set; } = false;
+		public virtual bool hasInteraction { get; set; } = false;
 
 		public string MessageStarted { get; set; }
 		public string MessageAborted { get; set; }
