@@ -107,6 +107,7 @@ namespace DOL.GS.Commands
          "'/mob removeotd <ItemTemplateID>' to remove a one time drop from the mob's unique drop table.",
          "'/mob refreshloot' to refresh all loot generators for this mob.",
          "'/mob copy [name]' copies a mob exactly and places it at your location.",
+         "'/mob copytextnpc [name]' copies a textnpc mob exactly and places it at your location.",
          "'/mob npctemplate <NPCTemplateID>' creates a mob with npc template, or modifies target.",
          "'/mob npctemplate create <NPCTemplateID>' creates a new template from selected mob.",
          "'/mob class <ClassName>' replaces mob with a clone of the specified class.",
@@ -164,6 +165,7 @@ namespace DOL.GS.Commands
                     && args[1] != "modelinc"
                     && args[1] != "modeldec"
                     && args[1] != "copy"
+                    && args[1] != "copytextnpc"
                     && args[1] != "select"
                     && args[1] != "reload"
                     && args[1] != "findname"
@@ -250,6 +252,7 @@ namespace DOL.GS.Commands
                     case "removeotd": removeotd(client, targetMob, args); break;
                     case "refreshloot": refreshloot(client, targetMob, args); break;
                     case "copy": copy(client, targetMob, args); break;
+                    case "copytextnpc": copy(client, targetMob, args, true); break;
                     case "npctemplate": npctemplate(client, targetMob, args); break;
                     case "class": setClass(client, targetMob, args); break;
                     case "path": path(client, targetMob, args); break;
@@ -2512,7 +2515,7 @@ namespace DOL.GS.Commands
             client.Out.SendMessage("Mob class changed: OID=" + mob.ObjectID, eChatType.CT_System, eChatLoc.CL_SystemWindow);
         }
 
-        private void copy(GameClient client, GameNPC targetMob, string[] args)
+        private void copy(GameClient client, GameNPC targetMob, string[] args, bool isTextNpc = false)
         {
             GameNPC mob = null;
 
@@ -2638,7 +2641,7 @@ namespace DOL.GS.Commands
                 ((GameMerchant)mob).TradeItems = ((GameMerchant)targetMob).TradeItems;
             }
 
-            if (mob is TextNPC && args.Length > 2 && args[2] == "textnpc")
+            if (mob is TextNPC && isTextNpc)
             {
                 ((TextNPC)mob).TextNPCData = ((TextNPC)targetMob).TextNPCData;
             }
