@@ -630,7 +630,7 @@ namespace DOL.GS.Scripts
 
             QuestReponses = new Dictionary<string, string>();
             QuestReponsesValues = new Dictionary<string, Tuple<string, int>>();
-            if (TextDB.ReponseQuest != "")
+            if (TextDB.ReponseQuest != null && TextDB.ReponseQuest != "")
             {
                 foreach (string item in TextDB.ReponseQuest.Split('\n'))
                 {
