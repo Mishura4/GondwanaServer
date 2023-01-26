@@ -153,7 +153,10 @@ public static class DataQuestJsonMgr
                 player.Out.SendCustomTextWindow(npc.Name + " dit", finalMsg);
             }
             dq.SaveIntoDatabase();
-            player.Out.SendNPCsQuestEffect(npc, npc.GetQuestIndicator(player));
+            foreach (GameNPC mob in WorldMgr.GetRegion(player.CurrentRegionID)?.Objects?.Where(o => o != null && o is GameNPC))
+            {
+                player.Out.SendNPCsQuestEffect(mob, mob.GetQuestIndicator(player));
+            }
             player.Out.SendQuestListUpdate();
         }
     }

@@ -59,7 +59,7 @@ namespace DOL.GS.Scripts
 
         public bool Interact(GamePlayer player)
         {
-            if (string.IsNullOrEmpty(Interact_Text) || !CheckAccess(player))
+            if (string.IsNullOrEmpty(Interact_Text) || !CheckAccess(player) || !CheckQuestDialog(player))
                 return false;
 
             _body.TurnTo(player);
@@ -111,7 +111,7 @@ namespace DOL.GS.Scripts
             if (!(source is GamePlayer))
                 return false;
             GamePlayer player = source as GamePlayer;
-            if (!CheckAccess(player))
+            if (!CheckAccess(player) || !CheckQuestDialog(player))
                 return false;
 
             _body.TurnTo(player, 10000);
@@ -162,7 +162,6 @@ namespace DOL.GS.Scripts
         void HandleQuestInteraction(GamePlayer player, string response)
         {
             var possibleQuests = _body.QuestIdListToGive;
-            //lock (player.QuestList)
             if (QuestReponsesValues[response].Item2 == 0 && !player.QuestList.Any(q => possibleQuests.Contains(q.QuestId)))
             {
                 // Quest not in progress
@@ -188,6 +187,7 @@ namespace DOL.GS.Scripts
                     var currentGoal = currentQuest.VisibleGoals.FirstOrDefault(g => g is GenericDataQuestGoal jgoal && jgoal.Goal.GoalId == goalId);
                     if (currentGoal != null)
                     {
+                        // finish visible goal
                         if (currentQuest.CanFinish())
                             player.Out.SendQuestRewardWindow(_body, player, currentQuest);
                         else
@@ -198,7 +198,55 @@ namespace DOL.GS.Scripts
                         }
                     }
                 }
+                else
+                {
+                    currentQuest = player.QuestList.FirstOrDefault(q => q.Goals.Any(g => g is GenericDataQuestGoal jgoal && jgoal.Goal.GoalId == goalId));
+                    if (currentQuest != null)
+                    {
+                        // start another goal
+                        var currentGoal = currentQuest.Goals.FirstOrDefault(g => g is GenericDataQuestGoal jgoal && jgoal.Goal.GoalId == goalId);
+                        if (currentGoal != null)
+                        {
+                            var jGoal = currentGoal as GenericDataQuestGoal;
+                            jGoal.Goal.ForceStartGoal(currentQuest);
+                        }
+                    }
+                }
             }
+        }
+        public bool CheckQuestDialog(GamePlayer player)
+        {
+            if (QuestReponsesValues.Count == 0)
+                return true;
+
+            var possibleQuests = _body.QuestIdListToGive;
+
+            foreach (var questReponse in QuestReponsesValues)
+            {
+                if (questReponse.Value.Item2 == 0)
+                {
+                    var quest = DataQuestJsonMgr.GetQuest(questReponse.Value.Item1);
+                    if (quest != null && quest.CheckQuestQualification(player))
+                    {
+                        return true;
+                    }
+                }
+                else
+                {
+                    // Quest in progress
+                    var goalId = questReponse.Value.Item2;
+                    var currentQuest = player.QuestList.FirstOrDefault(q => q.VisibleGoals.Any(g => g is GenericDataQuestGoal jgoal && jgoal.Goal.GoalId == goalId));
+                    if (currentQuest != null)
+                    {
+                        var currentGoal = currentQuest.VisibleGoals.FirstOrDefault(g => g is GenericDataQuestGoal jgoal && jgoal.Goal.GoalId == goalId);
+                        if (currentGoal != null)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
         }
         public bool CheckQuestAvailable(string Name, int goalId = 0)
         {
