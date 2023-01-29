@@ -74,7 +74,7 @@ public class TextNPCItemMerchant : GameItemCurrencyMerchant, ITextNPC, IAmteNPC
         base.SaveIntoDatabase();
         TextNPCData.SaveIntoDatabase();
         DBBrainsParam[] data;
-        if (!DBBrainsParam.MobXDBBrains.TryGetValue(InternalID, out data))
+        if (!DBBrainsParam.MobXDBBrains.TryGetValue(TextNPCData.TextDB.MobID, out data))
             data = new DBBrainsParam[0];
         var param = data.FirstOrDefault(d => d.Param == _moneyItemParam.name);
         if (param != null && param.Value != _moneyItemParam.Value)
@@ -86,17 +86,17 @@ public class TextNPCItemMerchant : GameItemCurrencyMerchant, ITextNPC, IAmteNPC
         {
             param = new DBBrainsParam
             {
-                MobID = InternalID,
+                MobID = TextNPCData.TextDB.MobID,
                 Param = _moneyItemParam.name,
                 Value = _moneyItemParam.Value,
             };
             GameServer.Database.AddObject(param);
             if (data.Length == 0)
-                DBBrainsParam.MobXDBBrains.Add(InternalID, new[] { param });
+                DBBrainsParam.MobXDBBrains.Add(TextNPCData.TextDB.MobID, new[] { param });
             else
             {
                 data = data.Concat(new[] { param }).ToArray();
-                DBBrainsParam.MobXDBBrains[InternalID] = data;
+                DBBrainsParam.MobXDBBrains[TextNPCData.TextDB.MobID] = data;
             }
         }
     }
@@ -106,12 +106,12 @@ public class TextNPCItemMerchant : GameItemCurrencyMerchant, ITextNPC, IAmteNPC
         base.DeleteFromDatabase();
         TextNPCData.DeleteFromDatabase();
         DBBrainsParam[] data;
-        if (!DBBrainsParam.MobXDBBrains.TryGetValue(InternalID, out data))
+        if (!DBBrainsParam.MobXDBBrains.TryGetValue(TextNPCData.TextDB.MobID, out data))
             data = new DBBrainsParam[0];
         var param = data.FirstOrDefault(d => d.Param == _moneyItemParam.name);
         if (param != null)
             GameServer.Database.DeleteObject(param);
-        DBBrainsParam.MobXDBBrains.Remove(InternalID);
+        DBBrainsParam.MobXDBBrains.Remove(TextNPCData.TextDB.MobID);
     }
 
     public override eQuestIndicator GetQuestIndicator(GamePlayer player)

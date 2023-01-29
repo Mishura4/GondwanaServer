@@ -28,12 +28,14 @@ namespace DOL.GS.Scripts
         private readonly GameNPC _body;
 
         public readonly Dictionary<string, DBEchangeur> EchangeurDB = new Dictionary<string, DBEchangeur>();
+        public Dictionary<string, string> QuestTexts { get; private set; }
         public Dictionary<string, string> Reponses { get; private set; }
         public Dictionary<string, eEmote> EmoteReponses { get; private set; }
         public Dictionary<string, ushort> SpellReponses { get; private set; }
         public Dictionary<string, string> QuestReponses { get; private set; }
         public Dictionary<string, Tuple<string, int>> QuestReponsesValues { get; private set; }
         public Dictionary<string, eEmote> RandomPhrases { get; private set; }
+        public string QuestReponseKey { get; set; }
         public string Interact_Text { get; set; }
         public int PhraseInterval { get; set; }
         public TextNPCCondition Condition { get; private set; }
@@ -45,6 +47,7 @@ namespace DOL.GS.Scripts
         public TextNPCPolicy(GameNPC body)
         {
             Condition = new TextNPCCondition("");
+            QuestTexts = new Dictionary<string, string>();
             Reponses = new Dictionary<string, string>();
             EmoteReponses = new Dictionary<string, eEmote>();
             SpellReponses = new Dictionary<string, ushort>();
@@ -59,7 +62,7 @@ namespace DOL.GS.Scripts
 
         public bool Interact(GamePlayer player)
         {
-            if (string.IsNullOrEmpty(Interact_Text) || !CheckAccess(player) || !CheckQuestDialog(player))
+            if ((!CheckQuestDialog(player) && string.IsNullOrEmpty(Interact_Text)) || !CheckAccess(player))
                 return false;
 
             _body.TurnTo(player);
@@ -85,9 +88,22 @@ namespace DOL.GS.Scripts
             }
 
             //Message
-            string text = string.Format(Interact_Text, player.Name, player.LastName, player.GuildName, player.CharacterClass.Name, player.RaceName);
-            if (text != "")
-                player.Out.SendMessage(text, eChatType.CT_System, eChatLoc.CL_PopupWindow);
+            if (QuestReponseKey != null)
+            {
+                Console.WriteLine("QuestReponseKey: " + QuestReponseKey);
+                //get text from QuestTexts specific to current QuestReponseKey
+                string text = QuestTexts.ContainsKey(QuestReponses[QuestReponseKey]) ? QuestTexts[QuestReponses[QuestReponseKey]] : "";
+                text = string.Format(text, player.Name, player.LastName, player.GuildName, player.CharacterClass.Name, player.RaceName);
+                if (text != "")
+                    player.Out.SendMessage(text, eChatType.CT_System, eChatLoc.CL_PopupWindow);
+            }
+            else
+            {
+                Console.WriteLine("itext : " + Interact_Text);
+                string text = string.Format(Interact_Text, player.Name, player.LastName, player.GuildName, player.CharacterClass.Name, player.RaceName);
+                if (text != "")
+                    player.Out.SendMessage(text, eChatType.CT_System, eChatLoc.CL_PopupWindow);
+            }
 
             //Spell
             if (SpellReponses != null && SpellReponses.ContainsKey("INTERACT"))
@@ -216,8 +232,9 @@ namespace DOL.GS.Scripts
         }
         public bool CheckQuestDialog(GamePlayer player)
         {
+            QuestReponseKey = null;
             if (QuestReponsesValues.Count == 0)
-                return true;
+                return false;
 
             var possibleQuests = _body.QuestIdListToGive;
 
@@ -228,6 +245,7 @@ namespace DOL.GS.Scripts
                     var quest = DataQuestJsonMgr.GetQuest(questReponse.Value.Item1);
                     if (quest != null && quest.CheckQuestQualification(player))
                     {
+                        QuestReponseKey = questReponse.Key;
                         return true;
                     }
                 }
@@ -241,6 +259,7 @@ namespace DOL.GS.Scripts
                         var currentGoal = currentQuest.VisibleGoals.FirstOrDefault(g => g is GenericDataQuestGoal jgoal && jgoal.Goal.GoalId == goalId);
                         if (currentGoal != null)
                         {
+                            QuestReponseKey = questReponse.Key;
                             return true;
                         }
                     }
@@ -663,6 +682,18 @@ namespace DOL.GS.Scripts
             }
 
 
+            QuestTexts = new Dictionary<string, string>();
+            if (TextDB.QuestTexts != null && TextDB.QuestTexts != "")
+            {
+                foreach (string item in TextDB.QuestTexts.Split(';'))
+                {
+                    string[] items = item.Split('|');
+                    if (items.Length != 2)
+                        continue;
+                    QuestTexts.Add(items[0], items[1]);
+                }
+            }
+
             var table = new Dictionary<string, string>();
             if (TextDB.Reponse != "")
             {
@@ -768,6 +799,19 @@ namespace DOL.GS.Scripts
             TextDB.MobName = _body.Name;
             TextDB.MobRealm = (byte)_body.Realm;
             TextDB.Text = Interact_Text;
+
+            //Sauve quest texts
+            string questTexts = "";
+            if (QuestTexts != null && QuestTexts.Count > 0)
+            {
+                foreach (var de in QuestTexts)
+                {
+                    if (questTexts.Length > 1)
+                        questTexts += ";";
+                    questTexts += de.Key.Trim('|', ';') + "|" + de.Value.Trim('|', ';');
+                }
+            }
+            TextDB.QuestTexts = questTexts;
 
             //Sauve les réponses
             string reponse = "";

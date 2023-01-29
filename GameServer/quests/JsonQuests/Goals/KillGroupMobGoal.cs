@@ -11,6 +11,7 @@ namespace DOL.GS.Quests
     public class KillGroupMobGoal : DataQuestJsonGoal
     {
         private readonly int m_killCount = 1;
+        private readonly GameNPC m_target;
         private readonly Area.Circle m_area;
         private readonly ushort m_areaRegion;
         private readonly bool hasArea = false;
@@ -23,6 +24,7 @@ namespace DOL.GS.Quests
         string m_targetName;
         public KillGroupMobGoal(DataQuestJson quest, int goalId, dynamic db) : base(quest, goalId, (object)db)
         {
+            m_target = WorldMgr.GetNPCsByNameFromRegion((string)db.TargetName, (ushort)db.TargetRegion, eRealm.None).FirstOrDefault();
             m_region = WorldMgr.GetRegion((ushort)db.TargetRegion);
             m_targetName = (string)db.TargetName;
             if (m_targetName == null)
@@ -39,6 +41,10 @@ namespace DOL.GS.Quests
                 var reg = WorldMgr.GetRegion(m_areaRegion);
                 reg.AddArea(m_area);
                 PointA = new QuestZonePoint(reg.GetZone(m_area.Position), m_area.Position);
+            }
+            else
+            {
+                PointA = new(m_target);
             }
         }
 

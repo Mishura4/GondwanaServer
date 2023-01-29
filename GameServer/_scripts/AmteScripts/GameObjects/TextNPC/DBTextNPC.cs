@@ -34,6 +34,7 @@ namespace DOL.Database
         private string m_mobName;
         private byte m_mobRealm;
         private string m_Text;
+        private string m_QuestTexts;
         private string m_Reponse;
         private string m_ReponseQuest;
         private string m_ReponseSpell;
@@ -85,6 +86,17 @@ namespace DOL.Database
             {
                 Dirty = true;
                 m_Text = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = true)]
+        public string QuestTexts
+        {
+            get { return m_QuestTexts; }
+            set
+            {
+                Dirty = true;
+                m_QuestTexts = value;
             }
         }
 

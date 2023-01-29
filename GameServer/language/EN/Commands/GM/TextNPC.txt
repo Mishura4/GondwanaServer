@@ -5,6 +5,7 @@ Commands.GM.TextNPC.Usage.CreateItemMerchant:	'/textnpc createitemmerchant' Crea
 Commands.GM.TextNPC.Usage.CreateGuard:	'/textnpc createguard [isRenaissance]' Create a new Guard who can talk to the player. [isRenaissance] Check if the player is Reborn in order to allow the guard to interact
 Commands.GM.TextNPC.Usage.Response:			'/textnpc reponse' Shows NPC's response (the first 20 letters of the response)
 Commands.GM.TextNPC.Usage.Text:			'/textnpc text <text>' Set interact text (right click) (use the character | or ; to skip a line)
+Commands.GM.TextNPC.Usage.Quest.Text:			'/textnpc questtext <questName(-goalId-)> <text>' Set interact text (right click) for specific quest or step (use the character | or ; to skip a line)
 Commands.GM.TextNPC.Usage.Add:			'/textnpc add <response> <text>' Add or change the NPC's 'response' (use the character | or ; to skip a line)
 Commands.GM.TextNPC.Usage.Remove:			'/textnpc remove <response>' Removes the response 'response'
 Commands.GM.TextNPC.Usage.Emote.Add:			'/textnpc emote add <emote> <response>' To add an emote as a response

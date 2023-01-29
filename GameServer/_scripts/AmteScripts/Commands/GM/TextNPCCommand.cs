@@ -24,6 +24,9 @@ namespace DOL.GS.Scripts
          "Commands.GM.TextNPC.Usage.Add",
          "Commands.GM.TextNPC.Usage.Remove",
 
+         //questtext
+         "Commands.GM.TextNPC.Usage.Quest.Text",
+
          //emote
          "Commands.GM.TextNPC.Usage.Emote.Add",
          "Commands.GM.TextNPC.Usage.Emote.Remove",
@@ -84,7 +87,7 @@ namespace DOL.GS.Scripts
             IList<string> lines;
             switch (args[1].ToLower())
             {
-                #region create - view - reponse - text
+                #region create - view - reponse - text - questtext
                 case "create":
                 case "createmerchant":
                 case "createitemmerchant":
@@ -151,6 +154,28 @@ namespace DOL.GS.Scripts
                         npc.TextNPCData.Interact_Text = "";
                     else
                         npc.TextNPCData.Interact_Text = text;
+                    npc.TextNPCData.SaveIntoDatabase();
+                    player.Out.SendMessage("Texte défini:\n" + text, eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                    break;
+
+                case "questtext":
+                    if (npc == null || args.Length < 4)
+                    {
+                        DisplaySyntax(client);
+                        return;
+                    }
+                    var QuestName = args[2];
+                    text = string.Join(" ", args, 3, args.Length - 3);
+                    text = text.Replace('|', '\n');
+                    text = text.Replace(';', '\n');
+                    if (text == "NO TEXT")
+                        text = "";
+
+                    if (npc.TextNPCData.QuestTexts.ContainsKey(QuestName))
+                        npc.TextNPCData.QuestTexts[QuestName] = text;
+                    else
+                        npc.TextNPCData.QuestTexts.Add(QuestName, text);
+
                     npc.TextNPCData.SaveIntoDatabase();
                     player.Out.SendMessage("Texte défini:\n" + text, eChatType.CT_System, eChatLoc.CL_PopupWindow);
                     break;
