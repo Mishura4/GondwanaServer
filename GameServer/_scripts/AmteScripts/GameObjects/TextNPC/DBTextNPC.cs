@@ -44,6 +44,10 @@ namespace DOL.Database
         private string m_Condition;
         private bool m_IsOutlawFriendly;
         private bool m_IsRegularFriendly;
+        private bool m_IsInTaskMaster;
+        private string m_TaskDescEN;
+        private string m_TaskDescFR;
+
 
         [DataElement(AllowDbNull = false)]
         public string MobID
@@ -204,6 +208,38 @@ namespace DOL.Database
             {
                 Dirty = true;
                 m_IsRegularFriendly = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = true)]
+        public bool IsInTaskMaster
+        {
+            get { return m_IsInTaskMaster; }
+            set
+            {
+                Dirty = true;
+                m_IsInTaskMaster = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = true)]
+        public string TaskDescEN
+        {
+            get { return m_TaskDescEN; }
+            set
+            {
+                Dirty = true;
+                m_TaskDescEN = value;
+            }
+        }
+        [DataElement(AllowDbNull = true)]
+        public string TaskDescFR
+        {
+            get { return m_TaskDescFR; }
+            set
+            {
+                Dirty = true;
+                m_TaskDescFR = value;
             }
         }
     }

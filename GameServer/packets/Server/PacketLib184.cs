@@ -80,7 +80,8 @@ namespace DOL.GS.PacketHandler
 
         protected override void SendTaskInfo()
         {
-            string name = BuildTaskString();
+            string name = "use /task to see a list of your active tasks";
+            //string name = BuildTaskString();
 
             using (GSTCPPacketOut pak = new GSTCPPacketOut(GetPacketCode(eServerPackets.QuestEntry)))
             {

@@ -36,6 +36,7 @@ namespace DOL.GS.Scripts
          "Commands.GM.TextNPC.Usage.Spell.Add",
          "Commands.GM.TextNPC.Usage.Spell.Remove",
          "Commands.GM.TextNPC.Usage.Spell.Help",
+         "Commands.GM.TextNPC.Usage.Spell.Cast",
 
          //phrase cc general
          "Commands.GM.TextNPC.Usage.RandomPhrase.Add",
@@ -348,6 +349,23 @@ namespace DOL.GS.Scripts
                         lines = new List<string>();
                         lines.Add("Si la réponse est 'INTERACT' (sans les guillemets) alors l'animation du spell sera faite lorsque le joueur parle au pnj (clic droit).");
                         player.Out.SendCustomTextWindow("Les spell réponses pour les nuls !", lines);
+                    }
+                    else if (args[2].ToLower() == "cast")
+                    {
+                        if (npc.TextNPCData.SpellReponses.ContainsKey(reponse))
+                        {
+                            if (npc.TextNPCData.SpellReponsesCast.ContainsKey(reponse))
+                            {
+                                npc.TextNPCData.SpellReponsesCast[reponse] = bool.Parse(args[3]);
+                                player.Out.SendMessage("Spell réponse \"" + reponse + "\" cast modified", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            }
+                            else
+                            {
+                                npc.TextNPCData.SpellReponsesCast.Add(reponse, bool.Parse(args[3]));
+                                player.Out.SendMessage("Spell réponse \"" + reponse + "\" ajoutée", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            }
+                            npc.TextNPCData.SaveIntoDatabase();
+                        }
                     }
                     break;
                 #endregion

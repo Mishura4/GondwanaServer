@@ -32,6 +32,7 @@ namespace DOL.GS.Scripts
         public Dictionary<string, string> Reponses { get; private set; }
         public Dictionary<string, eEmote> EmoteReponses { get; private set; }
         public Dictionary<string, ushort> SpellReponses { get; private set; }
+        public Dictionary<string, bool> SpellReponsesCast { get; private set; }
         public Dictionary<string, string> QuestReponses { get; private set; }
         public Dictionary<string, Tuple<string, int>> QuestReponsesValues { get; private set; }
         public Dictionary<string, eEmote> RandomPhrases { get; private set; }
@@ -51,6 +52,7 @@ namespace DOL.GS.Scripts
             Reponses = new Dictionary<string, string>();
             EmoteReponses = new Dictionary<string, eEmote>();
             SpellReponses = new Dictionary<string, ushort>();
+            SpellReponsesCast = new Dictionary<string, bool>();
             QuestReponses = new Dictionary<string, string>();
             QuestReponsesValues = new Dictionary<string, Tuple<string, int>>();
             _body = body;
@@ -127,7 +129,7 @@ namespace DOL.GS.Scripts
             if (!(source is GamePlayer))
                 return false;
             GamePlayer player = source as GamePlayer;
-            if (!CheckAccess(player) || !CheckQuestDialog(player))
+            if (!CheckAccess(player))
                 return false;
 
             _body.TurnTo(player, 10000);
@@ -160,8 +162,25 @@ namespace DOL.GS.Scripts
 
             //Spell
             if (SpellReponses != null && SpellReponses.ContainsKey(str))
-                foreach (GamePlayer plr in _body.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
-                    plr.Out.SendSpellEffectAnimation(_body, player, SpellReponses[str], 0, false, 1);
+                if (SpellReponsesCast.ContainsKey(str) && SpellReponsesCast[str])
+                {
+                    Console.WriteLine("SpellReponsesCast: " + SpellReponsesCast[str]);
+                    //cast spell on player
+                    SpellLine spellLine = SkillBase.GetSpellLine(GlobalSpellsLines.Mob_Spells);
+                    Spell spell = SkillBase.GetSpellByID(SpellReponses[str]);
+                    if (spellLine != null && spell != null)
+                    {
+                        _body.TargetObject = player;
+                        _body.CastSpell(spell, spellLine);
+                        Console.WriteLine("SpellReponsesCasted: ");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("SpellReponseseffect: " + SpellReponses[str]);
+                    foreach (GamePlayer plr in _body.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+                        plr.Out.SendSpellEffectAnimation(_body, player, SpellReponses[str], 0, false, 1);
+                }
 
             //Quest
             if (QuestReponses != null && QuestReponses.ContainsKey(str))
@@ -732,11 +751,13 @@ namespace DOL.GS.Scripts
                 foreach (string item in TextDB.ReponseSpell.Split('\n'))
                 {
                     string[] items = item.Split('|');
-                    if (items.Length != 2)
+                    if (items.Length != 2 && items.Length != 3)
                         continue;
                     try
                     {
                         table2.Add(items[0], ushort.Parse(items[1]));
+                        if (items.Length != 3)
+                            SpellReponsesCast.Add(items[0], bool.Parse(items[2]));
                     }
                     catch { }
                 }
@@ -848,6 +869,9 @@ namespace DOL.GS.Scripts
                     if (reponse.Length > 1)
                         reponse += "\n";
                     reponse += de.Key.Trim('|', ';') + "|" + de.Value;
+
+                    if (SpellReponsesCast.ContainsKey(de.Key))
+                        reponse += "|" + SpellReponsesCast[de.Key];
                 }
             }
             TextDB.ReponseSpell = reponse;

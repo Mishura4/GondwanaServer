@@ -46,71 +46,73 @@ namespace DOL.GS.Commands
             if (IsSpammingCommand(client.Player, "task"))
                 return;
 
-            if (args.Length > 1)
-            {
-                if (args[1] == "abort")
-                {
-                    if (client.Player.Task != null && client.Player.Task.TaskActive)
-                        client.Player.Task.ExpireTask();
-                }
-            }
-            else
-            {
-                GamePlayer player = client.Player;
-                //TaskCommand(client.Player);
-                if (player.Task != null)
-                    player.Task.CheckTaskExpired();
 
-                AbstractTask task = player.Task;
+            client.Player.Out.SendMessage("", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+            /* if (args.Length > 1)
+             {
+                 if (args[1] == "abort")
+                 {
+                     if (client.Player.Task != null && client.Player.Task.TaskActive)
+                         client.Player.Task.ExpireTask();
+                 }
+             }
+             else
+             {
+                 GamePlayer player = client.Player;
+                 //TaskCommand(client.Player);
+                 if (player.Task != null)
+                     player.Task.CheckTaskExpired();
 
-                if (task != null && task.TaskActive)
-                {
-                    var messages = new List<string>();
-                    messages.Add(
-                        LanguageMgr.GetTranslation(
-                            client.Account.Language,
-                            "Commands.Players.Task.YouAreOn",
-                            task.Name));
-                    messages.Add(
-                        LanguageMgr.GetTranslation(
-                            client.Account.Language,
-                            "Commands.Players.Task.WhatTodo",
-                            task.Description));
-                    messages.Add(" ");
-                    messages.Add(
-                        LanguageMgr.GetTranslation(
-                            client.Account.Language,
-                            "Commands.Players.Task.WillExpire",
-                            task.TimeOut.ToShortTimeString()));
-                    messages.Add(
-                        LanguageMgr.GetTranslation(
-                            client.Account.Language,
-                            "Commands.Players.Task.YouHaveDone",
-                            AbstractTask.MaxTasksDone(player.Level)));
+                 AbstractTask task = player.Task;
 
-                    player.Out.SendCustomTextWindow(
-                        LanguageMgr.GetTranslation(
-                            client.Account.Language,
-                            "Commands.Players.Task.Snapshot"),
-                            messages);
-                }
-                else if (task != null && task.TasksDone >= AbstractTask.MaxTasksDone(player.Level))
-                {
-                    player.Out.SendMessage(
-                        LanguageMgr.GetTranslation(
-                            client.Account.Language,
-                            "Commands.Players.Task.NoMore"),
-                        eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                }
-                else
-                {
-                    player.Out.SendMessage(
-                        LanguageMgr.GetTranslation(
-                            client.Account.Language,
-                            "Commands.Players.Task.NoPending"),
-                        eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                }
-            }
+                 if (task != null && task.TaskActive)
+                 {
+                     var messages = new List<string>();
+                     messages.Add(
+                         LanguageMgr.GetTranslation(
+                             client.Account.Language,
+                             "Commands.Players.Task.YouAreOn",
+                             task.Name));
+                     messages.Add(
+                         LanguageMgr.GetTranslation(
+                             client.Account.Language,
+                             "Commands.Players.Task.WhatTodo",
+                             task.Description));
+                     messages.Add(" ");
+                     messages.Add(
+                         LanguageMgr.GetTranslation(
+                             client.Account.Language,
+                             "Commands.Players.Task.WillExpire",
+                             task.TimeOut.ToShortTimeString()));
+                     messages.Add(
+                         LanguageMgr.GetTranslation(
+                             client.Account.Language,
+                             "Commands.Players.Task.YouHaveDone",
+                             AbstractTask.MaxTasksDone(player.Level)));
+
+                     player.Out.SendCustomTextWindow(
+                         LanguageMgr.GetTranslation(
+                             client.Account.Language,
+                             "Commands.Players.Task.Snapshot"),
+                             messages);
+                 }
+                 else if (task != null && task.TasksDone >= AbstractTask.MaxTasksDone(player.Level))
+                 {
+                     player.Out.SendMessage(
+                         LanguageMgr.GetTranslation(
+                             client.Account.Language,
+                             "Commands.Players.Task.NoMore"),
+                         eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                 }
+                 else
+                 {
+                     player.Out.SendMessage(
+                         LanguageMgr.GetTranslation(
+                             client.Account.Language,
+                             "Commands.Players.Task.NoPending"),
+                         eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                 }
+             }*/
         }
 
         /// <summary>
