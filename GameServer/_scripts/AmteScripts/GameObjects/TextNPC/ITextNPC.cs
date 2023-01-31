@@ -95,6 +95,10 @@ namespace DOL.GS.Scripts
                 Console.WriteLine("QuestReponseKey: " + QuestReponseKey);
                 //get text from QuestTexts specific to current QuestReponseKey
                 string text = QuestTexts.ContainsKey(QuestReponses[QuestReponseKey]) ? QuestTexts[QuestReponses[QuestReponseKey]] : "";
+                Console.WriteLine("333111QuestReponseKey: " + QuestTexts.ContainsKey(QuestReponses[QuestReponseKey]));
+                Console.WriteLine("333111QuestReponseKey: " + QuestTexts.Keys);
+                Console.WriteLine("111QuestReponseKey: " + QuestReponses[QuestReponseKey]);
+                Console.WriteLine("2222uestReponseKey: " + QuestTexts[QuestReponses[QuestReponseKey]]);
                 text = string.Format(text, player.Name, player.LastName, player.GuildName, player.CharacterClass.Name, player.RaceName);
                 if (text != "")
                     player.Out.SendMessage(text, eChatType.CT_System, eChatLoc.CL_PopupWindow);
@@ -164,7 +168,6 @@ namespace DOL.GS.Scripts
             if (SpellReponses != null && SpellReponses.ContainsKey(str))
                 if (SpellReponsesCast.ContainsKey(str) && SpellReponsesCast[str])
                 {
-                    Console.WriteLine("SpellReponsesCast: " + SpellReponsesCast[str]);
                     //cast spell on player
                     SpellLine spellLine = SkillBase.GetSpellLine(GlobalSpellsLines.Mob_Spells);
                     Spell spell = SkillBase.GetSpellByID(SpellReponses[str]);
@@ -172,18 +175,18 @@ namespace DOL.GS.Scripts
                     {
                         _body.TargetObject = player;
                         _body.CastSpell(spell, spellLine);
-                        Console.WriteLine("SpellReponsesCasted: ");
                     }
                 }
                 else
                 {
-                    Console.WriteLine("SpellReponseseffect: " + SpellReponses[str]);
                     foreach (GamePlayer plr in _body.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
                         plr.Out.SendSpellEffectAnimation(_body, player, SpellReponses[str], 0, false, 1);
                 }
 
             //Quest
-            if (QuestReponses != null && QuestReponses.ContainsKey(str))
+            if (QuestReponses != null && QuestReponseKey != null && QuestReponseKey.LastIndexOf('-') != -1 && QuestReponses.ContainsKey(QuestReponseKey.Remove(QuestReponseKey.LastIndexOf('-')) + str))
+                HandleQuestInteraction(player, QuestReponseKey.Remove(QuestReponseKey.LastIndexOf('-')) + str);
+            else if (QuestReponses != null && QuestReponses.ContainsKey(str))
                 HandleQuestInteraction(player, str);
 
             //Emote
@@ -216,7 +219,7 @@ namespace DOL.GS.Scripts
             {
                 // Quest in progress
                 var goalId = QuestReponsesValues[response].Item2;
-                var currentQuest = player.QuestList.FirstOrDefault(q => q.VisibleGoals.Any(g => g is GenericDataQuestGoal jgoal && jgoal.Goal.GoalId == goalId));
+                var currentQuest = player.QuestList.FirstOrDefault(q => q.Quest.Name == QuestReponsesValues[response].Item1 && q.VisibleGoals.Any(g => g is GenericDataQuestGoal jgoal && jgoal.Goal.GoalId == goalId));
                 if (currentQuest != null)
                 {
                     var currentGoal = currentQuest.VisibleGoals.FirstOrDefault(g => g is GenericDataQuestGoal jgoal && jgoal.Goal.GoalId == goalId);
@@ -225,7 +228,7 @@ namespace DOL.GS.Scripts
                         // finish visible goal
                         if (currentQuest.CanFinish())
                             player.Out.SendQuestRewardWindow(_body, player, currentQuest);
-                        else
+                        else if (currentGoal.Status != eQuestGoalStatus.Active)
                         {
                             var jGoal = currentGoal as GenericDataQuestGoal;
                             var goalState = currentQuest.GoalStates.Find(gs => gs.GoalId == goalId);
@@ -272,7 +275,7 @@ namespace DOL.GS.Scripts
                 {
                     // Quest in progress
                     var goalId = questReponse.Value.Item2;
-                    var currentQuest = player.QuestList.FirstOrDefault(q => q.VisibleGoals.Any(g => g is GenericDataQuestGoal jgoal && jgoal.Goal.GoalId == goalId));
+                    var currentQuest = player.QuestList.FirstOrDefault(q => q.Quest.Name == questReponse.Value.Item1 && q.VisibleGoals.Any(g => g is GenericDataQuestGoal jgoal && jgoal.Goal.GoalId == goalId));
                     if (currentQuest != null)
                     {
                         var currentGoal = currentQuest.VisibleGoals.FirstOrDefault(g => g is GenericDataQuestGoal jgoal && jgoal.Goal.GoalId == goalId);
@@ -730,6 +733,7 @@ namespace DOL.GS.Scripts
             QuestReponsesValues = new Dictionary<string, Tuple<string, int>>();
             if (TextDB.ReponseQuest != null && TextDB.ReponseQuest != "")
             {
+                TextDB.ReponseQuest.Replace("\r", "\n");
                 foreach (string item in TextDB.ReponseQuest.Split('\n'))
                 {
                     string[] items = item.Split('|');
@@ -748,6 +752,7 @@ namespace DOL.GS.Scripts
             var table2 = new Dictionary<string, ushort>();
             if (TextDB.ReponseSpell != "")
             {
+                TextDB.ReponseSpell.Replace("\r", "\n");
                 foreach (string item in TextDB.ReponseSpell.Split('\n'))
                 {
                     string[] items = item.Split('|');
@@ -756,7 +761,7 @@ namespace DOL.GS.Scripts
                     try
                     {
                         table2.Add(items[0], ushort.Parse(items[1]));
-                        if (items.Length != 3)
+                        if (items.Length == 3)
                             SpellReponsesCast.Add(items[0], bool.Parse(items[2]));
                     }
                     catch { }
@@ -768,6 +773,7 @@ namespace DOL.GS.Scripts
             var table3 = new Dictionary<string, eEmote>();
             if (TextDB.ReponseEmote != "")
             {
+                TextDB.ReponseEmote.Replace("\r", "\n");
                 foreach (string item in TextDB.ReponseEmote.Split('\n'))
                 {
                     string[] items = item.Split('|');
@@ -786,6 +792,7 @@ namespace DOL.GS.Scripts
             var table4 = new Dictionary<string, eEmote>();
             if (TextDB.RandomPhraseEmote != "")
             {
+                TextDB.RandomPhraseEmote.Replace("\r", "\n");
                 foreach (string item in TextDB.RandomPhraseEmote.Split('\n'))
                 {
                     string[] items = item.Split('|');

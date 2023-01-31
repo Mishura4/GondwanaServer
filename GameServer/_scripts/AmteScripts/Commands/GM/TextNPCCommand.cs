@@ -516,11 +516,6 @@ namespace DOL.GS.Scripts
                                 npc.TextNPCData.QuestReponsesValues.Add(reponse, new Tuple<string, int>(values[0], 0));
                             else
                                 npc.TextNPCData.QuestReponsesValues.Add(reponse, new Tuple<string, int>(values[0], int.Parse(values[1])));
-
-                            foreach (var kvp in npc.TextNPCData.QuestReponsesValues)
-                            {
-                                Console.WriteLine("CheckQuestAvailable" + kvp.Value.Item1);
-                            }
                         }
                         catch (Exception e)
                         {

@@ -135,7 +135,9 @@ namespace DOL.GS.Quests
         }
         public void AbortQuest()
         {
-            Owner.Out.SendCloseTimerWindow();
+            foreach (var goal in Quest.Goals.Values)
+                if (goal is TimerGoal)
+                    goal.AbortGoal(this);
             DbQuest.Step = (int)eQuestStatus.Done;
             lock (Owner.QuestList)
                 Owner.QuestList.Remove(this);

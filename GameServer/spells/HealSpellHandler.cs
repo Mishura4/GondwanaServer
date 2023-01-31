@@ -23,6 +23,7 @@ using DOL.AI.Brain;
 
 namespace DOL.GS.Spells
 {
+    using DOL.GS.Scripts;
     using Effects;
 
     /// <summary>
@@ -104,7 +105,7 @@ namespace DOL.GS.Spells
             if (target == null || target.ObjectState != GameLiving.eObjectState.Active) return false;
 
             // we can't heal enemy people
-            if (!GameServer.ServerRules.IsSameRealm(Caster, target, true))
+            if (!(Caster is TextNPC) && !GameServer.ServerRules.IsSameRealm(Caster, target, true))
                 return false;
 
             // no healing of keep components

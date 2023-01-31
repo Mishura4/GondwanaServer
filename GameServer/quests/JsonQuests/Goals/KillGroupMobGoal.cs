@@ -24,7 +24,6 @@ namespace DOL.GS.Quests
         string m_targetName;
         public KillGroupMobGoal(DataQuestJson quest, int goalId, dynamic db) : base(quest, goalId, (object)db)
         {
-            m_target = WorldMgr.GetNPCsByNameFromRegion((string)db.TargetName, (ushort)db.TargetRegion, eRealm.None).FirstOrDefault();
             m_region = WorldMgr.GetRegion((ushort)db.TargetRegion);
             m_targetName = (string)db.TargetName;
             if (m_targetName == null)
@@ -41,10 +40,6 @@ namespace DOL.GS.Quests
                 var reg = WorldMgr.GetRegion(m_areaRegion);
                 reg.AddArea(m_area);
                 PointA = new QuestZonePoint(reg.GetZone(m_area.Position), m_area.Position);
-            }
-            else
-            {
-                PointA = new(m_target);
             }
         }
 

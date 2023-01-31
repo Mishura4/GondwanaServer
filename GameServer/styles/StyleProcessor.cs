@@ -408,6 +408,8 @@ namespace DOL.GS.Styles
 
                     bool staticGrowth = attackData.Style.StealthRequirement;  //static growth is not a function of (effective) weapon speed
                     double absorbRatio = 0;
+                    if (weapon == null)
+                        return false;
                     if (weapon.DPS_AF >= 15) absorbRatio = attackData.Damage / living.UnstyledDamageCap(weapon);
                     double effectiveWeaponSpeed = living.AttackSpeed(weapon) * 0.001;
                     double styleDamageBonus = living.GetModified(eProperty.StyleDamage) * 0.01 - 1;
