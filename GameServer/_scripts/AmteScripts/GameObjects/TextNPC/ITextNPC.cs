@@ -92,20 +92,14 @@ namespace DOL.GS.Scripts
             //Message
             if (QuestReponseKey != null)
             {
-                Console.WriteLine("QuestReponseKey: " + QuestReponseKey);
                 //get text from QuestTexts specific to current QuestReponseKey
                 string text = QuestTexts.ContainsKey(QuestReponses[QuestReponseKey]) ? QuestTexts[QuestReponses[QuestReponseKey]] : "";
-                Console.WriteLine("333111QuestReponseKey: " + QuestTexts.ContainsKey(QuestReponses[QuestReponseKey]));
-                Console.WriteLine("333111QuestReponseKey: " + QuestTexts.Keys);
-                Console.WriteLine("111QuestReponseKey: " + QuestReponses[QuestReponseKey]);
-                Console.WriteLine("2222uestReponseKey: " + QuestTexts[QuestReponses[QuestReponseKey]]);
                 text = string.Format(text, player.Name, player.LastName, player.GuildName, player.CharacterClass.Name, player.RaceName);
                 if (text != "")
                     player.Out.SendMessage(text, eChatType.CT_System, eChatLoc.CL_PopupWindow);
             }
             else
             {
-                Console.WriteLine("itext : " + Interact_Text);
                 string text = string.Format(Interact_Text, player.Name, player.LastName, player.GuildName, player.CharacterClass.Name, player.RaceName);
                 if (text != "")
                     player.Out.SendMessage(text, eChatType.CT_System, eChatLoc.CL_PopupWindow);
@@ -184,8 +178,8 @@ namespace DOL.GS.Scripts
                 }
 
             //Quest
-            if (QuestReponses != null && QuestReponseKey != null && QuestReponseKey.LastIndexOf('-') != -1 && QuestReponses.ContainsKey(QuestReponseKey.Remove(QuestReponseKey.LastIndexOf('-')) + str))
-                HandleQuestInteraction(player, QuestReponseKey.Remove(QuestReponseKey.LastIndexOf('-')) + str);
+            if (QuestReponses != null && QuestReponseKey != null && QuestReponseKey.LastIndexOf('-') != -1 && QuestReponses.ContainsKey(QuestReponseKey.Remove(QuestReponseKey.LastIndexOf('-')) + "-" + str))
+                HandleQuestInteraction(player, QuestReponseKey.Remove(QuestReponseKey.LastIndexOf('-')) + "-" + str);
             else if (QuestReponses != null && QuestReponses.ContainsKey(str))
                 HandleQuestInteraction(player, str);
 
@@ -223,12 +217,12 @@ namespace DOL.GS.Scripts
                 if (currentQuest != null)
                 {
                     var currentGoal = currentQuest.VisibleGoals.FirstOrDefault(g => g is GenericDataQuestGoal jgoal && jgoal.Goal.GoalId == goalId);
-                    if (currentGoal != null)
+                    if (currentGoal != null && currentGoal.Status == eQuestGoalStatus.Active)
                     {
                         // finish visible goal
                         if (currentQuest.CanFinish())
                             player.Out.SendQuestRewardWindow(_body, player, currentQuest);
-                        else if (currentGoal.Status != eQuestGoalStatus.Active)
+                        else
                         {
                             var jGoal = currentGoal as GenericDataQuestGoal;
                             var goalState = currentQuest.GoalStates.Find(gs => gs.GoalId == goalId);
@@ -238,11 +232,11 @@ namespace DOL.GS.Scripts
                 }
                 else
                 {
-                    currentQuest = player.QuestList.FirstOrDefault(q => q.Goals.Any(g => g is GenericDataQuestGoal jgoal && jgoal.Goal.GoalId == goalId));
+                    currentQuest = player.QuestList.FirstOrDefault(q => q.Quest.Name == QuestReponsesValues[response].Item1 && q.Goals.Any(g => g is GenericDataQuestGoal jgoal && jgoal.Goal.GoalId == goalId));
                     if (currentQuest != null)
                     {
                         // start another goal
-                        var currentGoal = currentQuest.Goals.FirstOrDefault(g => g is GenericDataQuestGoal jgoal && jgoal.Goal.GoalId == goalId);
+                        var currentGoal = currentQuest.Goals.FirstOrDefault(g => g is GenericDataQuestGoal jgoal && jgoal.Goal.GoalId == goalId && jgoal.Goal.IsFinished(currentQuest) == false);
                         if (currentGoal != null)
                         {
                             var jGoal = currentGoal as GenericDataQuestGoal;
