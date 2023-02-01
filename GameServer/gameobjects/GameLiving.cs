@@ -1128,7 +1128,7 @@ namespace DOL.GS
         /// <summary>
         /// Gets the attack-state of this living
         /// </summary>
-        public virtual bool AttackState { get; protected set; }
+        public virtual bool AttackState { get; set; }
 
         /// <summary>
         /// Whether or not the living can be attacked.

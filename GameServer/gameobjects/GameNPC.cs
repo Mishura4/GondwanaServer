@@ -1111,6 +1111,16 @@ namespace DOL.GS
         }
 
         /// <summary>
+        /// Is allowed to attack anyone?
+        /// </summary>
+        public virtual bool ApplyAttackRules
+        {
+            get;
+            set;
+        } = true;
+
+
+        /// <summary>
         /// The target object.
         /// </summary>
         public override GameObject TargetObject

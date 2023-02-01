@@ -167,6 +167,7 @@ namespace DOL.GS.Scripts
                     Spell spell = SkillBase.GetSpellByID(SpellReponses[str]);
                     if (spellLine != null && spell != null)
                     {
+                        _body.ApplyAttackRules = false;
                         _body.TargetObject = player;
                         _body.CastSpell(spell, spellLine);
                     }

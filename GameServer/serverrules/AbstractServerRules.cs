@@ -322,6 +322,10 @@ namespace DOL.GS.ServerRules
             GamePlayer playerAttacker = attacker as GamePlayer;
             GamePlayer playerDefender = defender as GamePlayer;
 
+            if (attacker is GameNPC)
+                if (!(attacker as GameNPC).ApplyAttackRules)
+                    return true;
+
             // if Pet, let's define the controller once
             if (defender is GameNPC)
                 if ((defender as GameNPC).Brain is IControlledBrain)

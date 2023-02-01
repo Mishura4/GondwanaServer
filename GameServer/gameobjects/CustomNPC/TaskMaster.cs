@@ -60,8 +60,15 @@ namespace DOL.GS
                                     text += taskNPC.TaskDescFR;
                                 //get taskNPC 
                                 var mob = DOLDB<Mob>.SelectObject(DB.Column("Mob_ID").IsEqualTo(taskNPC.MobID));
-                                var zone = WorldMgr.GetZone(mob.Region);
-                                player.Out.SendMessage(text + "\n" + zone.Description + "\n", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                                var region = WorldMgr.GetRegion(mob.Region);
+                                if (region != null)
+                                {
+                                    var zone = region.GetZone(mob.X, mob.Y);
+                                    if (zone != null)
+                                    {
+                                        player.Out.SendMessage(text + "\n" + zone.Description + "\n", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                                    }
+                                }
                             }
                         }
                         break;
