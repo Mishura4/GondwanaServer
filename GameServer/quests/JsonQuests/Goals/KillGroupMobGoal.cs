@@ -1,5 +1,6 @@
 ﻿using DOL.Database;
 using DOL.Events;
+using DOL.MobGroups;
 using DOLDatabase.Tables;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,6 @@ namespace DOL.GS.Quests
     public class KillGroupMobGoal : DataQuestJsonGoal
     {
         private readonly int m_killCount = 1;
-        private readonly GameNPC m_target;
         private readonly Area.Circle m_area;
         private readonly ushort m_areaRegion;
         private readonly bool hasArea = false;
@@ -41,6 +41,11 @@ namespace DOL.GS.Quests
                 reg.AddArea(m_area);
                 PointA = new QuestZonePoint(reg.GetZone(m_area.Position), m_area.Position);
             }
+            else if (m_region != null && db.AreaCenter != null)
+            {
+                var pos = new Vector3((float)db.AreaCenter.X, (float)db.AreaCenter.Y, (float)db.AreaCenter.Z);
+                PointA = new QuestZonePoint(m_region.GetZone(pos), pos);
+            }
         }
 
         public override Dictionary<string, object> GetDatabaseJsonObject()
@@ -56,15 +61,16 @@ namespace DOL.GS.Quests
         }
 
         public override bool CanInteractWith(PlayerQuest questData, PlayerGoalState state, GameObject target)
-            => state?.IsActive == true && (target is GameNPC npc && npc.CurrentGroupMob == null) && (m_region == null || target.CurrentRegion == m_region);
+            => state?.IsActive == true && (target is GameNPC npc && MobGroupManager.Instance.GetGroupIdFromMobId(npc.MobID) == m_targetName) && (m_region == null || target.CurrentRegion == m_region);
 
         public override void NotifyActive(PlayerQuest quest, PlayerGoalState goal, DOLEvent e, object sender, EventArgs args)
         {
             // Enemy of player with quest was killed, check quests and steps
             if (e == GameLivingEvent.EnemyKilled && args is EnemyKilledEventArgs killedArgs)
             {
-                var killed = killedArgs.Target;
-                if (killed == null || !(killed is GameNPC npc && npc.CurrentGroupMob == null) || m_region != killed.CurrentRegion
+                var killed = killedArgs.Target as GameNPC;
+
+                if (killed == null || !(killed is GameNPC npc && MobGroupManager.Instance.GetGroupIdFromMobId(npc.InternalID) == m_targetName) || m_region != killed.CurrentRegion
                     || (hasArea && !m_area.IsContaining(killed.Position, false)))
                     return;
                 AdvanceGoal(quest, goal);
