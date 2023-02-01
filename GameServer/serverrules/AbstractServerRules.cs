@@ -1187,17 +1187,17 @@ namespace DOL.GS.ServerRules
                     int territoryCount = player.Guild.Territories.Count();
                     int multiplier = 0;
 
-                    if (killedNPC.Level < 23)
+                    if (killedNPC.Level < 45)
+                    {
+                        multiplier = 0;
+                    }
+                    else if (killedNPC.Level < 65)
                     {
                         multiplier = 1;
                     }
-                    else if (killedNPC.Level < 46)
-                    {
-                        multiplier = 2;
-                    }
                     else
                     {
-                        multiplier = 3;
+                        multiplier = 2;
                     }
 
                     int bonusBP = 0;

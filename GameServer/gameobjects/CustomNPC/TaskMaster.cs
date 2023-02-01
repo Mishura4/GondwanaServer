@@ -4,6 +4,7 @@ using System.Reflection;
 using DOL.Database;
 using DOL.GS;
 using DOL.GS.PacketHandler;
+using DOL.Language;
 using DOL.GS.Quests;
 using DOL.GS.Scripts;
 using log4net;
@@ -27,8 +28,8 @@ namespace DOL.GS
             if (!base.Interact(player) && player.Reputation < 0)
                 return false;
 
-            player.Out.SendMessage("Greetings, " + player.RaceName + ", maybe I can help you? The wind brings to my ears all kind of news from the realm, I'm on the lookout for rumors, and I can give you some information about people in need of small services in the region if you are interested.\nHere are some [tasks] that you can currently perform."
-            , eChatType.CT_System, eChatLoc.CL_PopupWindow);
+            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "TaskMaster.Greetings", player.RaceName), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "TaskMaster.Taskline"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
 
             return true;
         }

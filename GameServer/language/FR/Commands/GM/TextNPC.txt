@@ -5,6 +5,7 @@ Commands.GM.TextNPC.Usage.CreateItemMerchant:	'/textnpc createitemmerchant' cré
 Commands.GM.TextNPC.Usage.CreateGuard:	'/textnpc createguard [isRenaissance]' Crée un garde qui parle [isRenaissance] Définit si ce garde a besoin de la renaissance du joueur pour interagir
 Commands.GM.TextNPC.Usage.Response:			'/textnpc reponse' Affiche les réponses du pnj (les 20 premières lettres de la réponse)
 Commands.GM.TextNPC.Usage.Text:			'/textnpc text <texte>' Définit le texte d'interaction (clic droit) (mettez le caractère | ou ; pour les sauts de ligne)
+Commands.GM.TextNPC.Usage.Quest.Text:			'/textnpc questtext <questName(-goalId-)> <text>' Définissez le texte d'interaction (clic droit) pour une quête ou une étape spécifique (utilisez le caractère | ou ; pour sauter une ligne)
 Commands.GM.TextNPC.Usage.Add:			'/textnpc add <reponse> <texte>' Ajoute ou modifie la réponse 'réponse' (mettez le caractère | ou ; pour les sauts de ligne)
 Commands.GM.TextNPC.Usage.Remove:			'/textnpc remove <reponse>' Retire la réponse 'reponse'
 Commands.GM.TextNPC.Usage.Emote.Add:			'/textnpc emote add <emote> <reponse>'
@@ -12,13 +13,16 @@ Commands.GM.TextNPC.Usage.Emote.Remove:		'/textnpc emote remove <reponse>'
 Commands.GM.TextNPC.Usage.Emote.Help:			'/textnpc emote help' Affiche la liste des émotes disponibles sur le serveur (un pnj doit être selectionné pour afficher la fenêtre)
 Commands.GM.TextNPC.Usage.Spell.Add:			'/textnpc spell add <spellID> <reponse>'
 Commands.GM.TextNPC.Usage.Spell.Remove:		'/textnpc spell remove <reponse>'
-Commands.GM.TextNPC.Usage.Spell.Help:		'/textnpc spell help' Informations sur comment ajouter un spell comme réponse d'un pnj (un pnj doit être selectionné pour afficher la fenêtre)
+Commands.GM.TextNPC.Usage.Spell.Help:		'/textnpc spell help' Informations sur comment ajouter un effet de sort comme réponse d'un pnj (un pnj doit être selectionné pour afficher la fenêtre)
+Commands.GM.TextNPC.Usage.Spell.Cast:			'/textnpc spell cast <true/false> <reponse>' Pour ajouter ou retirer un sort réel (avec dommages) dans une réponse
 Commands.GM.TextNPC.Usage.RandomPhrase.Add:		'/textnpc randomphrase add <emote (0=aucune)> <say/yell/em> <phrase>' Pour ajouter une phrase aléatoire sur un pnj à laquelle pourra s'ajouter une émote, ainsi que la manière dont cette phrase est générée (parlée, hurlée, envoi de message)
 Commands.GM.TextNPC.Usage.RandomPhrase.Remove:		'/textnpc randomphrase remove <phrase>'
 Commands.GM.TextNPC.Usage.RandomPhrase.interval:		'/textnpc randomphrase interval <interval en secondes>'
 Commands.GM.TextNPC.Usage.RandomPhrase.Help:		'/textnpc randomphrase help' Informations sur comment ajouter une phrase aléatoire sur un pnj (un pnj doit être selectionné pour afficher la fenêtre)
 Commands.GM.TextNPC.Usage.RandomPhrase.View:		'/textnpc randomphrase view'
 Commands.GM.TextNPC.Usage.Quest:		'/textnpc quest <None/Available/Lesson/Lore/Finish/Pending>' affiche ou non l'icone pour la quête
+Commands.GM.TextNPC.Usage.Quest.Add:			'/textnpc quest add <questName(-goalId-)> <reponse>' Ajouter une quête(but optionel) en tant que réponse et appelle une nouvelle étape
+Commands.GM.TextNPC.Usage.Quest.Remove:			'/textnpc quest remove <questName(-goalId)> <reponse>' Retire une quête(but optionel)
 Commands.GM.TextNPC.Usage.Level:		'/textnpc level <levelmin> <levelmax>' règle le niveau minimum et maximum des personnage pouvant parler au pnj
 Commands.GM.TextNPC.Usage.Guild.Add:	'/textnpc guild add <guildname>' ajoute une guilde à laquelle le pnj ne parle pas (mettre 'NO GUILD' pour les non guildés)
 Commands.GM.TextNPC.Usage.Guild.Remove:			'/textnpc guild remove <guildname>' retire une guilde à laquelle le pnj ne parle pas

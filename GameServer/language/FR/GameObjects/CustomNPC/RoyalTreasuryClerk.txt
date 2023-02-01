@@ -1,0 +1,5 @@
+# RoyalTreasuryClerk NPC
+RoyalTreasuryClerk.Checking:		Voyons voir si il te manque des objets...
+RoyalTreasuryClerk.Nostone:             Je vois que tu n'as plus ta pierre de rappel. En veux-tu une [autre]?
+RoyalTreasuryClerk.Other:		autre
+RoyalTreasuryClerk.Stonegive:           Ok pas de soucis, voici ta pierre de rappel. J'espere que tu en feras bon usage.

@@ -79,31 +79,31 @@ namespace DOL.GS.Scripts
                 if (args.OriginalReputation == -1)
                 {
                     cost = 450;
-                    time = TimeSpan.FromHours(24);
+                    time = TimeSpan.FromHours(16);
                     reason = "Hors-la-loi";
                 }
                 else if (args.OriginalReputation == -2)
                 {
                     cost = 900;
-                    time = TimeSpan.FromHours(42);
+                    time = TimeSpan.FromHours(32);
                     reason = "Bandit";
                 }
                 else if (args.OriginalReputation == -3)
                 {
                     cost = 1800;
-                    time = TimeSpan.FromHours(72);
+                    time = TimeSpan.FromHours(48);
                     reason = "Bandit-Lieutenant";
                 }
                 else if (args.OriginalReputation == -4)
                 {
                     cost = 3600;
-                    time = TimeSpan.FromHours(120);
+                    time = TimeSpan.FromHours(72);
                     reason = "Consiglière";
                 }
                 else if (args.OriginalReputation <= -5)
                 {
                     cost = 7200;
-                    time = TimeSpan.FromHours(168);
+                    time = TimeSpan.FromHours(96);
                     reason = "Parrain";
                 }
                 else

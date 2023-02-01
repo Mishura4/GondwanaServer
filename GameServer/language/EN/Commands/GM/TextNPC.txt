@@ -11,17 +11,17 @@ Commands.GM.TextNPC.Usage.Remove:			'/textnpc remove <response>' Removes the res
 Commands.GM.TextNPC.Usage.Emote.Add:			'/textnpc emote add <emote> <response>' To add an emote as a response
 Commands.GM.TextNPC.Usage.Emote.Remove:		'/textnpc emote remove <response>' To remove an emote
 Commands.GM.TextNPC.Usage.Emote.Help:			'/textnpc emote help' Display server's emotes list while selecting the NPC
-Commands.GM.TextNPC.Usage.Spell.Add:			'/textnpc spell add <spellID> <reponse>' To add a spell as a Response
+Commands.GM.TextNPC.Usage.Spell.Add:			'/textnpc spell add <spellID> <reponse>' To add a spell effect as a Response
 Commands.GM.TextNPC.Usage.Spell.Remove:		'/textnpc spell remove <reponse>' To remove a spell
 Commands.GM.TextNPC.Usage.Spell.Help:		'/textnpc spell help' Display spell infos while selecting the NPC
-Commands.GM.TextNPC.Usage.Spell.Cast:			'/textnpc spell cast <true/false> <reponse>' To add or remove a cast effect from a response
+Commands.GM.TextNPC.Usage.Spell.Cast:			'/textnpc spell cast <true/false> <reponse>' To add or remove a real spell cast (with damages) from a response
 Commands.GM.TextNPC.Usage.RandomPhrase.Add:		'/textnpc randomphrase add <emote (0=none)> <say/yell/em> <phrase>' To set up a random phrase the NPC will say from time to time with a specific interval, in association with an emote. This phrase can be <say/yell/em>
 Commands.GM.TextNPC.Usage.RandomPhrase.Remove:		'/textnpc randomphrase remove <phrase>' To remove a random phrase
 Commands.GM.TextNPC.Usage.RandomPhrase.interval:		'/textnpc randomphrase interval <interval in seconds>' Interval for the NPC to repeat a random phrase
 Commands.GM.TextNPC.Usage.RandomPhrase.Help:		'/textnpc randomphrase help' Display some infos about random phrases on NPCs
 Commands.GM.TextNPC.Usage.RandomPhrase.View:		'/textnpc randomphrase view' To see the random phrases on a specific NPC
 Commands.GM.TextNPC.Usage.Quest:		'/textnpc quest <None/Available/Lesson/Lore/Finish/Pending>' Shows the quest icon on the NPC
-Commands.GM.TextNPC.Usage.Quest.Add:			'/textnpc quest add <questName(-goalId-)> <reponse>' To add a quest(optionally goal) as a response
+Commands.GM.TextNPC.Usage.Quest.Add:			'/textnpc quest add <questName(-goalId-)> <reponse>' To add a quest(optionally goal) as a response and call a new step
 Commands.GM.TextNPC.Usage.Quest.Remove:			'/textnpc quest remove <questName(-goalId)> <reponse>' To remove a quest(optionally goal)
 Commands.GM.TextNPC.Usage.Level:		'/textnpc level <levelmin> <levelmax>' Set minimum and maximum level players can interact with this NPC
 Commands.GM.TextNPC.Usage.Guild.Add:	'/textnpc guild add <guildname>' Add a Guild the NPC cannot interact with (use 'NO GUILD' for non-guilded players)

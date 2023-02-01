@@ -316,6 +316,43 @@ namespace DOL.commands.gmcommands
 
                     break;
 
+                case "quest":
+                    if (args.Length != 6)
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+
+                    if (!int.TryParse(args[3], out int questId) || questId <= 0)
+                    {
+                        DisplayMessage(client, "QuestId non correct");
+                        break;
+                    }
+
+                    if (!int.TryParse(args[4], out int questCount) || questCount <= 0)
+                    {
+                        DisplayMessage(client, "QuestCount non correct");
+                        break;
+                    }
+
+                    if (!bool.TryParse(args[5], out bool isFriendly))
+                    {
+                        DisplayMessage(client, "isFriendly <true|false> non correct");
+                        break;
+                    }
+
+                    if (!this.isGroupIdAvailable(groupId, client))
+                    {
+                        return;
+                    }
+
+                    MobGroupManager.Instance.Groups[groupId].CompletedQuestID = questId;
+                    MobGroupManager.Instance.Groups[groupId].ComletedQuestCount = questCount;
+                    MobGroupManager.Instance.Groups[groupId].IsQuestConditionFriendly = isFriendly;
+                    MobGroupManager.Instance.Groups[groupId].SaveToDabatase();
+                    DisplayMessage(client, string.Format("La Quest {0} a bien été associée au GroupMob {1}", questId, groupId));
+                    break;
+
                 default:
                     DisplaySyntax(client);
                     break;

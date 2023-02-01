@@ -1,0 +1,4 @@
+# TaskMaster NPC
+TaskMaster.Greetings:	Greetings, {0}, maybe I can help you? The wind brings to my ears all kind of news from the realm, I'm on the lookout for rumors, and I can give you some information about people in need of small services in the region if you are interested.
+TaskMaster.Taskline:	Here are some [tasks] that you can currently perform.
+TaskMaster.Tasks:	tasks

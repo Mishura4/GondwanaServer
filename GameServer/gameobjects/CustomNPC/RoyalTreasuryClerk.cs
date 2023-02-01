@@ -19,6 +19,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using DOL.Language;
+using DOL.GS.PacketHandler;
 using DOL.Database;
 
 namespace DOL.GS
@@ -42,11 +44,11 @@ namespace DOL.GS
 
             if (GlobalConstants.IsExpansionEnabled((int)eClientExpansion.DarknessRising))
             {
-                SayTo(player, "Voyons voir si il te manque des objets...");
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "RoyalTreasuryClerk.Checking"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
 
                 if (player.Inventory.CountItemTemplate("Personal_Bind_Recall_Stone", eInventorySlot.Min_Inv, eInventorySlot.Max_Inv) == 0)
                 {
-                    SayTo(player, "Je vois que tu n'as plus ta pierre de rappel. En veux-tu une [autre]?");
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "RoyalTreasuryClerk.Nostone"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 }
 
                 return true;
@@ -68,11 +70,11 @@ namespace DOL.GS
 
             GamePlayer player = source as GamePlayer;
 
-            if (text.ToLower() == "autre")
+            if (text.ToLower() == (LanguageMgr.GetTranslation(player.Client.Account.Language,"RoyalTreasuryClerk.Other")))
             {
                 if (player.Inventory.CountItemTemplate("Personal_Bind_Recall_Stone", eInventorySlot.Min_Inv, eInventorySlot.Max_Inv) == 0)
                 {
-                    SayTo(player, "Ok pas de soucis, voici ta pierre de rappel. J'espere que tu en feras bon usage.");
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "RoyalTreasuryClerk.Stonegive"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                     player.ReceiveItem(this, "Personal_Bind_Recall_Stone");
                 }
                 return true;

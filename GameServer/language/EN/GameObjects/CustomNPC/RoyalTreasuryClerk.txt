@@ -1,0 +1,5 @@
+# RoyalTreasuryClerk NPC
+RoyalTreasuryClerk.Checking:		Let me check to see if you are owed any items ...
+RoyalTreasuryClerk.Nostone:             I see you are missing your Personal Bind Recall Stone.  Would you like [another]?
+RoyalTreasuryClerk.Other:		another
+RoyalTreasuryClerk.Stonegive:           Very well then, here's your Personal Bind Recall Stone, may it serve you well.

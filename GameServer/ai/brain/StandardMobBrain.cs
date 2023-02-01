@@ -1084,7 +1084,7 @@ namespace DOL.AI.Brain
                 bool needpet = false;
                 bool needheal = false;
                 // Don't cast if mana is too low
-                if (waitingForMana && Body.Mana > Body.MaxMana * 0.4)
+                if (waitingForMana && Body.Mana > Body.MaxMana * 0.5)
                 {
                     waitingForMana = false;
                 }
@@ -1092,7 +1092,7 @@ namespace DOL.AI.Brain
                 {
                     return false;
                 }
-                else if (Body.Mana < Body.MaxMana * 0.1)
+                else if (Body.Mana < Body.MaxMana * 0.2)
                 {
                     waitingForMana = true;
                     return false;
