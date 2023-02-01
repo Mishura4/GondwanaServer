@@ -61,14 +61,14 @@ namespace DOL.GS.Quests
         }
 
         public override bool CanInteractWith(PlayerQuest questData, PlayerGoalState state, GameObject target)
-            => state?.IsActive == true && (target is GameNPC npc && MobGroupManager.Instance.GetGroupIdFromMobId(npc.MobID) == m_targetName) && (m_region == null || target.CurrentRegion == m_region);
+            => state?.IsActive == true && (target is GameNPC npc && MobGroupManager.Instance.GetGroupIdFromMobId(npc.InternalID) == m_targetName) && (m_region == null || target.CurrentRegion == m_region);
 
         public override void NotifyActive(PlayerQuest quest, PlayerGoalState goal, DOLEvent e, object sender, EventArgs args)
         {
             // Enemy of player with quest was killed, check quests and steps
             if (e == GameLivingEvent.EnemyKilled && args is EnemyKilledEventArgs killedArgs)
             {
-                var killed = killedArgs.Target as GameNPC;
+                var killed = killedArgs.Target;
 
                 if (killed == null || !(killed is GameNPC npc && MobGroupManager.Instance.GetGroupIdFromMobId(npc.InternalID) == m_targetName) || m_region != killed.CurrentRegion
                     || (hasArea && !m_area.IsContaining(killed.Position, false)))
