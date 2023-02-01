@@ -388,14 +388,35 @@ namespace DOL.GS.ServerRules
             if (target is GameKeepComponent && source is GamePlayer)
                 return GameServer.KeepManager.IsEnemy(target as GameKeepComponent, source as GamePlayer);
 
-            //Peace flag NPCs are same realm
-            if (target is GameNPC)
+            if (target is GameNPC targetNpc)
+            {
+                //CheckMobGroup
+                if (source is GamePlayer sourcePlayer)
+                {
+                    if (MobGroups.MobGroup.IsQuestFriendly(targetNpc, sourcePlayer))
+                    {
+                        return true;
+                    }
+                }
+                //Peace flag NPCs are same realm
                 if ((((GameNPC)target).Flags & GameNPC.eFlags.PEACE) != 0)
                     return true;
+            }
 
-            if (source is GameNPC)
+            if (source is GameNPC sourceNpc)
+            {
+                //CheckMobGroup
+                if (target is GamePlayer targetPlayer)
+                {
+                    if (MobGroups.MobGroup.IsQuestFriendly(sourceNpc, targetPlayer))
+                    {
+                        return true;
+                    }
+                }
                 if ((((GameNPC)source).Flags & GameNPC.eFlags.PEACE) != 0)
                     return true;
+            }
+
 
             if (source is GamePlayer && target is GamePlayer)
                 return true;

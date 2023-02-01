@@ -1496,6 +1496,7 @@ namespace DOL.GS.Commands
                                 player.Out.SendMessage("You have been resurrected by " + client.Player.GetName(0, false) + "!",
                                                        eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 player.Notify(GamePlayerEvent.Revive, player);
+                                player.Notify(GamePlayerEvent.Released, player);
                             }
                             else
                             {
@@ -1525,6 +1526,7 @@ namespace DOL.GS.Commands
                                                 aplayer.Player.Out.SendMessage("You have been resurrected by " + client.Player.GetName(0, false) + "!",
                                                                                eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                                 aplayer.Player.Notify(GamePlayerEvent.Revive, aplayer.Player);
+                                                aplayer.Player.Notify(GamePlayerEvent.Released, aplayer.Player);
                                             }
                                         }
                                     }
@@ -1547,6 +1549,7 @@ namespace DOL.GS.Commands
                                                 hplayer.Player.Out.SendMessage("You have been resurrected by " + client.Player.GetName(0, false) + "!",
                                                                                eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                                 hplayer.Player.Notify(GamePlayerEvent.Revive, hplayer.Player);
+                                                hplayer.Player.Notify(GamePlayerEvent.Released, hplayer.Player);
                                             }
                                         }
                                     }
@@ -1569,6 +1572,7 @@ namespace DOL.GS.Commands
                                                 mplayer.Player.Out.SendMessage("You have been resurrected by " + client.Player.GetName(0, false) + "!",
                                                                                eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                                 mplayer.Player.Notify(GamePlayerEvent.Revive, mplayer.Player);
+                                                mplayer.Player.Notify(GamePlayerEvent.Released, mplayer.Player);
                                             }
                                         }
                                     }
@@ -1591,6 +1595,7 @@ namespace DOL.GS.Commands
                                             selfplayer.Out.SendPlayerRevive(selfplayer);
                                             selfplayer.Out.SendStatusUpdate();
                                             selfplayer.Notify(GamePlayerEvent.Revive, selfplayer);
+                                            selfplayer.Notify(GamePlayerEvent.Released, selfplayer);
                                         }
                                         else
                                         {
@@ -1617,6 +1622,7 @@ namespace DOL.GS.Commands
                                                 allplayer.Player.Out.SendMessage("You have been resurrected by " + client.Player.GetName(0, false) + "!",
                                                                                  eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                                 allplayer.Player.Notify(GamePlayerEvent.Revive, allplayer.Player);
+                                                allplayer.Player.Notify(GamePlayerEvent.Released, allplayer.Player);
                                             }
                                         }
                                     }

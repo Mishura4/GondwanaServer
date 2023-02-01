@@ -37,6 +37,7 @@ namespace DOL.GS.ServerRules
         {
             if (RvrManager.Instance.IsInRvr(sender as GameLiving) || PvpManager.Instance.IsIn(sender as GameLiving))
                 return;
+            StartPVEImmunityTimer((GamePlayer)sender, Properties.TIMER_KILLED_BY_MOB * 1000);
             base.OnReleased(e, sender, args);
         }
 
@@ -204,7 +205,16 @@ namespace DOL.GS.ServerRules
 
             if (attackerNpc != null && playerDefender != null)
             {
+                if (MobGroups.MobGroup.IsQuestFriendly(attackerNpc, playerDefender))
+                {
+                    return false;
+                }
 
+                // PEACE NPCs can't be attacked/attack
+                if (this.IsPeacefulNPC(attackerNpc, defenderNpc, playerDefender))
+                {
+                    return false;
+                }
                 //Territory
                 //Check guilds and ally Guilds
                 if (attackerNpc.IsInTerritory && playerDefender.GuildName != null)
@@ -233,6 +243,20 @@ namespace DOL.GS.ServerRules
                             }
                         }
                     }
+                }
+            }
+
+            //Groupmobs quest friendly
+            if (playerAttacker != null && defenderNpc != null)
+            {
+                if (MobGroups.MobGroup.IsQuestFriendly(defenderNpc, playerAttacker))
+                {
+                    return false;
+                }
+                // PEACE NPCs can't be attacked/attack
+                if (this.IsPeacefulNPC(attackerNpc, defenderNpc, playerAttacker))
+                {
+                    return false;
                 }
             }
 
@@ -388,7 +412,14 @@ namespace DOL.GS.ServerRules
             }
             // "friendly" NPCs can't be attacked by "friendly" players
             if (attacker is GameNPC && attacker.Realm != 0 && defender.Realm != 0 && attacker is GameKeepGuard == false)
+            {
+                if (attackerNpc.CurrentGroupMob != null && playerDefender != null && MobGroups.MobGroup.IsQuestAggresive(attackerNpc, playerDefender))
+                {
+                    return true;
+                }
+
                 return false;
+            }
 
             return true;
 
@@ -405,13 +436,36 @@ namespace DOL.GS.ServerRules
                 return true;
             }
 
-            if (target is GameNPC npcTarget)
-                if ((npcTarget.Flags & GameNPC.eFlags.PEACE) != 0)
+            var targetNpc = target as GameNPC;
+            if (targetNpc != null)
+            {
+                var sourcePlayer = source as GamePlayer;
+                if (sourcePlayer != null && targetNpc.CurrentGroupMob != null)
+                {
+                    if (MobGroups.MobGroup.IsQuestAggresive(targetNpc, sourcePlayer))
+                    {
+                        return false;
+                    }
+                }
+                if ((targetNpc.Flags & GameNPC.eFlags.PEACE) != 0)
                     return true;
 
-            if (source is GameNPC npcSource)
-                if ((npcSource.Flags & GameNPC.eFlags.PEACE) != 0)
+            }
+
+            var sourceNpc = source as GameNPC;
+            if (sourceNpc != null)
+            {
+                if (sourceNpc.CurrentGroupMob != null && targetPlayer != null)
+                {
+                    if (MobGroups.MobGroup.IsQuestAggresive(sourceNpc, targetPlayer))
+                    {
+                        return false;
+                    }
+                }
+                if ((sourceNpc.Flags & GameNPC.eFlags.PEACE) != 0)
                     return true;
+            }
+
             if (RvrManager.Instance != null && (RvrManager.Instance.IsInRvr(source) || RvrManager.Instance.IsInRvr(target)))
                 return source.Realm == target.Realm;
 
@@ -543,7 +597,30 @@ namespace DOL.GS.ServerRules
 
             return false;
         }
+        private bool IsPeacefulNPC(GameNPC attackerNpc, GameNPC defenderNpc, GamePlayer player)
+        {
+            if (attackerNpc != null && (attackerNpc.Flags & GameNPC.eFlags.PEACE) != 0)
+            {
+                if (attackerNpc.CurrentGroupMob != null && MobGroups.MobGroup.IsQuestAggresive(attackerNpc, player))
+                {
+                    return false;
+                }
 
+                return true;
+            }
+
+            if (defenderNpc != null && ((defenderNpc.Flags & GameNPC.eFlags.PEACE) != 0))
+            {
+                if (defenderNpc.CurrentGroupMob != null && MobGroups.MobGroup.IsQuestAggresive(defenderNpc, player))
+                {
+                    return false;
+                }
+
+                return true;
+            }
+
+            return false;
+        }
         public override bool IsAllowedToCastSpell(GameLiving caster, GameLiving target, Spell spell, SpellLine spellLine)
 
         {

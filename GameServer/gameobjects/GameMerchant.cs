@@ -536,20 +536,6 @@ namespace DOL.GS
             player.Notify(GameObjectEvent.InteractWith, player, new InteractWithEventArgs(this));
 
 
-            /* TODO: change to json quests or remove
-            foreach (DQRewardQ q in QuestIdListToGive)
-            {
-                // Notify all our potential quests of the interaction so we can check for quest offers
-                q.Notify(GameObjectEvent.Interact, this, new InteractEventArgs(player));
-            }
-
-            foreach (DQRewardQ q in DQRewardQList) // patch 0026
-            {
-                // Notify all our potential quests of the interaction so we can check for quest offers
-                q.Notify(GameObjectEvent.Interact, this, new InteractEventArgs(player));
-            }
-			*/
-
             if (IsInTerritory)
             {
                 Territory.Territory territory = TerritoryManager.Instance.GetCurrentTerritory(CurrentAreas);

@@ -108,6 +108,10 @@ namespace DOL.MobGroups
             infos.Add("MobGroup Interact StatusId: " + (mobGroup?.mobGroupInterfactFk ?? "-"));
             infos.Add(" - SlaveGroupId : " + (mobGroup.SlaveGroupId ?? "-"));
             infos.Add("");
+            infos.Add("ON Completed QUEST:");
+            infos.Add("CompletedQuestID: " + (mobGroup.CompletedQuestID > 0 ? mobGroup.CompletedQuestID.ToString() : "-"));
+            infos.Add("ComletedQuestCount: " + (mobGroup.CompletedQuestID > 0 ? mobGroup.ComletedQuestCount.ToString() : "-"));
+            infos.Add("IsQuestConditionFriendly (will become): " + (mobGroup.CompletedQuestID > 0 ? mobGroup.IsQuestConditionFriendly ? "Friendly" : "Aggressive" : "-"));
             if (mobGroup.GroupInteractions != null)
             {
                 infos.Add(" Actions on Group Killed : ");

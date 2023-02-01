@@ -1,5 +1,6 @@
 ﻿using DOL.Database;
 using DOL.GS;
+using DOL.GS.Quests;
 using DOLDatabase.Tables;
 using System;
 using System.Collections.Generic;
@@ -48,6 +49,46 @@ namespace DOL.MobGroups
             this.SetGroupInteractions(groupInteract);
             this.HasOriginalStatus = IsStatusOriginal();
         }
+
+        /// <summary>
+        /// Is this npc-player relation allows Friendly interact 
+        /// </summary>
+        /// <param name="npc"></param>
+        /// <param name="player"></param>
+        /// <returns></returns>
+        public static bool IsQuestFriendly(GameNPC npc, GamePlayer player)
+        {
+            if (npc.CurrentGroupMob != null && npc.CurrentGroupMob.CompletedQuestID > 0 && npc.CurrentGroupMob.ComletedQuestCount > 0)
+            {
+                var finishedCount = player.QuestListFinished.Select(q => q.QuestId == npc.CurrentGroupMob.CompletedQuestID).Count();
+                if (finishedCount >= npc.CurrentGroupMob.ComletedQuestCount)
+                {
+                    return npc.CurrentGroupMob.IsQuestConditionFriendly;
+                }
+            }
+            return false;
+        }
+
+
+        /// <summary>
+        /// Is NPC aggressive on Quest Associated Condition
+        /// </summary>
+        /// <param name="npc"></param>
+        /// <param name="player"></param>
+        /// <returns></returns>
+        public static bool IsQuestAggresive(GameNPC npc, GamePlayer player)
+        {
+            if (npc.CurrentGroupMob != null && npc.CurrentGroupMob.CompletedQuestID > 0 && npc.CurrentGroupMob.ComletedQuestCount > 0)
+            {
+                var finishedCount = player.QuestListFinished.Select(q => q.QuestId == npc.CurrentGroupMob.CompletedQuestID).Count();
+                if (finishedCount >= npc.CurrentGroupMob.ComletedQuestCount)
+                {
+                    return !npc.CurrentGroupMob.IsQuestConditionFriendly;
+                }
+            }
+            return false;
+        }
+
 
         private static MobGroupInfo GetMobInfoFromSource(GroupMobStatusDb source)
         {
