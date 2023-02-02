@@ -1,5 +1,6 @@
 ﻿using DOL.Database;
 using DOL.GameEvents;
+using DOL.GS.Finance;
 using DOL.GS.PacketHandler;
 using DOLDatabase.Tables;
 using System;
@@ -271,7 +272,7 @@ namespace DOL.GS
             {
                 var text = ValidateText ?? Language.LanguageMgr.GetTranslation(player.Client.Account.Language, ValidateTextDefault);
                 player.Client.Out.SendMessage(text, eChatType.CT_Chat, eChatLoc.CL_PopupWindow);
-                player.RemoveMoney(money);
+                player.RemoveMoney(Currency.Copper.Mint(money));
                 this.SaveIntoDatabase();
                 Task.Run(() => GameEventManager.Instance.StartEvent(ev));
             }
@@ -279,7 +280,7 @@ namespace DOL.GS
             {
                 var text = NeedMoreMoneyText ?? Language.LanguageMgr.GetTranslation(player.Client.Account.Language, NeedMoreMoneyTextDefault);
                 player.Client.Out.SendMessage(text, eChatType.CT_Chat, eChatLoc.CL_PopupWindow);
-                player.RemoveMoney(money);
+                player.RemoveMoney(Currency.Copper.Mint(money));
                 this.SaveIntoDatabase();
             }
 

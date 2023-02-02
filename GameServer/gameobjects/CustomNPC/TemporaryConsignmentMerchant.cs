@@ -142,12 +142,12 @@ namespace DOL.GS
                     if (ServerProperties.Properties.CONSIGNMENT_USE_BP)
                     {
                         ChatUtil.SendMerchantMessage(player, "GameMerchant.OnPlayerBuy.BoughtBP", item.GetName(1, false), purchasePrice);
-                        player.BountyPoints -= purchasePrice;
+                        Currency.BountyPoints.Mint(player.GetBalance(Currency.BountyPoints).Amount - purchasePrice);
                         player.Out.SendUpdatePoints();
                     }
                     else
                     {
-                        if (player.RemoveMoney(purchasePrice))
+                        if (player.RemoveMoney(Currency.Copper.Mint(purchasePrice)))
                         {
                             InventoryLogging.LogInventoryAction(player, this, eInventoryActionType.Merchant, purchasePrice);
                             ChatUtil.SendMerchantMessage(player, "GameMerchant.OnPlayerBuy.Bought", item.GetName(1, false), Money.GetString(purchasePrice));

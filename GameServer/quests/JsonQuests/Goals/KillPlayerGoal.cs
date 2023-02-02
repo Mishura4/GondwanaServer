@@ -9,7 +9,6 @@ namespace DOL.GS.Quests
     public class KillPlayerGoal : DataQuestJsonGoal
     {
         private readonly int m_killCount = 1;
-        private readonly GameNPC m_target;
         private readonly Area.Circle m_area;
         private readonly ushort m_areaRegion;
         private readonly bool hasArea = false;
@@ -23,8 +22,9 @@ namespace DOL.GS.Quests
         public KillPlayerGoal(DataQuestJson quest, int goalId, dynamic db) : base(quest, goalId, (object)db)
         {
             m_killCount = db.KillCount;
+            m_regionId = (ushort)db.TargetRegion;
             if (db.TargetRegion != null && db.TargetRegion != "")
-                m_region = WorldMgr.GetRegion((ushort)db.TargetRegion);
+                m_region = WorldMgr.GetRegion(m_regionId);
             if (db.AreaRadius != null && db.AreaRadius != "" && db.AreaRegion != null && db.AreaRegion != "" && db.AreaCenter != null)
             {
                 hasArea = true;

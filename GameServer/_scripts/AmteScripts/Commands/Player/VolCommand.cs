@@ -1,5 +1,6 @@
 ﻿using DOL.Database;
 using DOL.Events;
+using DOL.GS.Finance;
 using DOL.GS.PacketHandler;
 using DOL.GS.SkillHandler;
 using DOL.Language;
@@ -352,8 +353,8 @@ namespace DOL.GS.Commands
         {
             if (vol.Status == VolResultStatus.SUCCESS_MONEY)
             {
-                stealer.AddMoney(vol.Money);
-                target.RemoveMoney(vol.Money);
+                stealer.AddMoney(Currency.Copper.Mint(vol.Money));
+                target.RemoveMoney(Currency.Copper.Mint(vol.Money));
                 target.Out.SendMessage(LanguageMgr.GetTranslation(target.Client.Account.Language, "Commands.Players.Vol.BeStealed", Money.GetString(vol.Money)), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                 stealer.Out.SendMessage(LanguageMgr.GetTranslation(stealer.Client.Account.Language, "Commands.Players.Vol.StealGain", Money.GetString(vol.Money)), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
 

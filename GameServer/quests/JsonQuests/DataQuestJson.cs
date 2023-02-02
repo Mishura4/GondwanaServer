@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using DOL.Language;
+using DOL.GS.Finance;
 
 namespace DOL.GS.Quests
 {
@@ -117,7 +118,7 @@ namespace DOL.GS.Quests
 
             player.Out.SendSoundEffect(11, 0, 0, 0, 0, 0);
             player.GainExperience(GameLiving.eXPSource.Quest, RewardXP);
-            player.AddMoney(RewardMoney);
+            player.AddMoney(Currency.Copper.Mint(RewardMoney));
             InventoryLogging.LogInventoryAction("(QUEST;" + Name + ")", player, eInventoryActionType.Quest, RewardMoney);
             if (RewardBP > 0)
                 player.GainBountyPoints(RewardBP);

@@ -1465,7 +1465,7 @@ namespace DOL.GS.Commands
                 info.Add(" + Is Merchant ");
                 if (targetM.Catalog != null)
                 {
-                    info.Add(" + Sell List: " + targetM.Catalog.ItemsListID);
+                    info.Add(" + Sell List: " + targetM.Catalog.ItemListId);
                 }
                 else
                 {

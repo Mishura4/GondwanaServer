@@ -1,6 +1,7 @@
 using DOL.Database;
 using DOL.GS.PacketHandler;
 using DOL.AI.Brain;
+using DOL.GS.Finance;
 
 namespace DOL.GS.Scripts
 {
@@ -36,7 +37,7 @@ namespace DOL.GS.Scripts
 
             if (removeMoney)
             {
-                if (!player.RemoveMoney(money))
+                if (!player.RemoveMoney(Currency.Copper.Mint(money)))
                 {
                     player.Out.SendMessage("Vous n'avez pas cette somme sur vous !", eChatType.CT_System, eChatLoc.CL_PopupWindow);
                     return false;
@@ -180,7 +181,7 @@ namespace DOL.GS.Scripts
 
             bank.Money -= money;
             GameServer.Database.SaveObject(bank);
-            player.AddMoney(money);
+            player.AddMoney(Currency.Copper.Mint(money));
             player.SaveIntoDatabase();
             return true;
         }

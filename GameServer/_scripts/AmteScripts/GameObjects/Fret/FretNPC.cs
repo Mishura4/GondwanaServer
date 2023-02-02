@@ -8,6 +8,7 @@ using DOL.Events;
 using DOL.GS.PacketHandler;
 using log4net;
 using DOL.AI.Brain;
+using DOL.GS.Finance;
 
 namespace DOL.GS.Scripts
 {
@@ -239,9 +240,9 @@ namespace DOL.GS.Scripts
         {
             if (response != 0x01) return;
             InteractPlayer IP = TempItems[player.InternalID];
-            if (player.GetCurrentMoney() >= IP.Price)
+            if (player.CopperBalance >= IP.Price)
             {
-                if (SendColis(player)) player.RemoveMoney(IP.Price);
+                if (SendColis(player)) player.RemoveMoney(Currency.Copper.Mint(IP.Price));
             }
             else
                 player.Out.SendMessage("Vous n'avez pas assez d'argent !", eChatType.CT_System, eChatLoc.CL_PopupWindow);

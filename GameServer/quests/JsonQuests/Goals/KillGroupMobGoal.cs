@@ -11,7 +11,6 @@ namespace DOL.GS.Quests
 {
     public class KillGroupMobGoal : DataQuestJsonGoal
     {
-        private readonly int m_killCount = 1;
         private readonly Area.Circle m_area;
         private readonly ushort m_areaRegion;
         private readonly bool hasArea = false;
@@ -24,7 +23,8 @@ namespace DOL.GS.Quests
         string m_targetName;
         public KillGroupMobGoal(DataQuestJson quest, int goalId, dynamic db) : base(quest, goalId, (object)db)
         {
-            m_region = WorldMgr.GetRegion((ushort)db.TargetRegion);
+            m_regionId = (ushort)db.TargetRegion;
+            m_region = WorldMgr.GetRegion(m_regionId);
             m_targetName = (string)db.TargetName;
             if (m_targetName == null)
                 throw new Exception($"[DataQuestJson] Quest {quest.Id}: can't load the goal id {goalId}, the target groupnpc (name: {db.TargetName}, reg: {db.TargetRegion}) is not found");

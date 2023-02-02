@@ -5,6 +5,7 @@ using DOL.Database;
 using System.Timers;
 using System.Collections;
 using DOL.GS.PacketHandler;
+using DOL.GS.Finance;
 
 namespace DOL.GS
 {
@@ -50,7 +51,7 @@ namespace DOL.GS
 
             if (str == paystring)
             {
-                if (player.GetCurrentMoney() < Price)
+                if (player.CopperBalance < Price)
                 {
                     foreach (GamePlayer emoteplayer in this.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
                         emoteplayer.Out.SendEmoteAnimation(this, eEmote.Laugh);
@@ -64,7 +65,7 @@ namespace DOL.GS
                         return true;
                     }
 
-                    player.RemoveMoney(Price, null);
+                    player.RemoveMoney(Currency.Copper.Mint(Price));
                     player.Out.SendMessage("Vous donnez " + Money.GetString(Price) + " au douanier.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                     Say("Bien, tu peux passer toi !");
 

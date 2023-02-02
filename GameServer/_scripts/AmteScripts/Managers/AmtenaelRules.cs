@@ -14,6 +14,7 @@ using System.Reflection;
 using DOL.Events;
 using DOL.GS.PlayerClass;
 using DOL.gameobjects.CustomNPC;
+using DOL.GS.Finance;
 
 namespace DOL.GS.ServerRules
 {
@@ -949,7 +950,8 @@ namespace DOL.GS.ServerRules
                         money += 20 * money / 100;
                     }
                     //long money = (long)(Money.GetMoney(0, 0, 17, 85, 0) * damagePercent * killedPlayer.Level / 50);
-                    player.AddMoney(money, "You recieve {0}");
+                    player.AddMoney(Currency.Copper.Mint(money));
+                    player.SendSystemMessage(string.Format("You recieve {0}", Money.GetString(money)));
                     InventoryLogging.LogInventoryAction(killer, player, eInventoryActionType.Other, money);
                 }
 

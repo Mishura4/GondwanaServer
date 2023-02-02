@@ -5,8 +5,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Security.Policy;
 using DOL.Database;
 using DOL.Events;
+using DOL.GS.Finance;
 using DOL.GS.PacketHandler;
 using DOL.GS.Quests;
 using log4net;
@@ -319,7 +321,7 @@ namespace DOL.GS.Scripts
                 return false;
             }
 
-            if (EchItem.MoneyPrice > 0 && player.GetCurrentMoney() < EchItem.MoneyPrice)
+            if (EchItem.MoneyPrice > 0 && player.CopperBalance < EchItem.MoneyPrice)
             {
                 player.Out.SendMessage(string.Format("Vous avez besoin de {0} pour échanger cet objet", Money.GetString(EchItem.MoneyPrice)), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 return false;
@@ -572,7 +574,7 @@ namespace DOL.GS.Scripts
 
             if (echItem.GainMoney > 0)
             {
-                player.AddMoney(echItem.GainMoney);
+                player.AddMoney(Currency.Copper.Mint(echItem.GainMoney));
                 InventoryLogging.LogInventoryAction(_body, player, eInventoryActionType.Quest, echItem.GainMoney);
             }
             if (echItem.GainXP > 0)
@@ -584,7 +586,8 @@ namespace DOL.GS.Scripts
             }
 
             if (echItem.MoneyPrice > 0)
-                player.RemoveMoney(echItem.MoneyPrice, "Vous avez payé {0}");
+                player.RemoveMoney(Currency.Copper.Mint(echItem.MoneyPrice));
+            player.SendSystemMessage(string.Format("Vous avez payé {0}.", Money.GetString(echItem.MoneyPrice)));
 
             if (requireItems.Any())
                 this.RemoveItemsFromPlayer(player, requireItems, item);

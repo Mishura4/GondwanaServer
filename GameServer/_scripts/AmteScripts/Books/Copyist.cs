@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using DOL.Database;
+using DOL.GS.Finance;
 using DOL.GS.PacketHandler;
 
 namespace DOL.GS.Scripts
@@ -34,7 +35,7 @@ namespace DOL.GS.Scripts
                         p.Out.SendMessage("\"Désolé, seul l'auteur d'un livre peut demander une copie.\"", eChatType.CT_System, eChatLoc.CL_PopupWindow);
                         return false;
                     }
-                    if (!p.RemoveMoney(20000))
+                    if (!p.RemoveMoney(Currency.Copper.Mint(20000)))
                     {
                         p.Out.SendMessage("\"Il vous faut 5 piece d'or pour dupliquer un livre.\"", eChatType.CT_System, eChatLoc.CL_PopupWindow);
                         return false;

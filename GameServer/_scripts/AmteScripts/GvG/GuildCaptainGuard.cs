@@ -1,4 +1,5 @@
 ﻿using DOL.Database;
+using DOL.GS.Finance;
 using DOL.GS.PacketHandler;
 using DOL.GS.ServerProperties;
 using System;
@@ -246,7 +247,7 @@ namespace DOL.GS.Scripts
                 return;
             }
 
-            if (!player.RemoveMoney(CLAIM_COST))
+            if (!player.RemoveMoney(Currency.Copper.Mint(CLAIM_COST)))
             {
                 player.Out.SendMessage(
                     "Vous n'avez pas assez d'argent pour prendre possession du territoire.",

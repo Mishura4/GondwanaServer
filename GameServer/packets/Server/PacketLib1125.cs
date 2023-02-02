@@ -629,9 +629,12 @@ namespace DOL.GS.PacketHandler
                     pak.WriteByte((byte)windowType);
                     pak.WriteByte((byte)page.Number); //Page number
                                                       //pak.WriteByte(0x00); //Unused // testing
-
+                    var i = 0;
                     foreach (var entry in page.GetAllEntries())
                     {
+                        if (i > MerchantTradeItems.MAX_ITEM_IN_TRADEWINDOWS)
+                            break;
+                        i += 1;
                         var item = entry.Item;
                         if (item != null)
                         {

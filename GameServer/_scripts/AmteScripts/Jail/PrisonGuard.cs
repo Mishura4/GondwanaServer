@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using DOL.Database;
+using DOL.GS.Finance;
 using DOL.GS.PacketHandler;
 
 namespace DOL.GS.Scripts
@@ -83,7 +84,7 @@ namespace DOL.GS.Scripts
             }
 
             int PrixTotal = prisoner.Cost;
-            if (player.Client.Account.PrivLevel == 1 && !player.RemoveMoney(PrixTotal * 10000))
+            if (player.Client.Account.PrivLevel == 1 && !player.RemoveMoney(Currency.Copper.Mint(PrixTotal * 10000)))
             {
                 player.Out.SendMessage("Vous n'avez pas assez d'argent...", eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 return true;
