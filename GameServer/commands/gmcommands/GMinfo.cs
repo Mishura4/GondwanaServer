@@ -24,6 +24,7 @@ using System.Collections.Generic;
 using DOL.AI.Brain;
 using DOL.Database;
 using DOL.GS.Effects;
+using DOL.GS.Finance;
 using DOL.GS.Housing;
 using DOL.GS.Keeps;
 using DOL.GS.PacketHandler.Client.v168;
@@ -74,9 +75,9 @@ namespace DOL.GS.Commands
                         var targetM = client.Player.TargetObject as GameMerchant;
 
                         info.Add(" + Is Merchant ");
-                        if (targetM.TradeItems != null)
+                        if (targetM.Catalog.IsEmpty == false)
                         {
-                            info.Add(" + Sell List: \n   " + targetM.TradeItems.ItemsListID);
+                            info.Add(" + Sell List: \n   " + targetM.Catalog.ItemListId);
                         }
                         else
                             info.Add(" + Sell List:  Not Present !\n");
@@ -338,11 +339,11 @@ namespace DOL.GS.Commands
                     info.Add("  - Model ID : " + target.Model);
                     info.Add("  - AFK Message: " + target.TempProperties.getProperty<string>(GamePlayer.AFK_MESSAGE) + "");
                     info.Add(" ");
-                    info.Add("  - Money : " + Money.GetString(target.GetCurrentMoney()) + "\n");
+                    info.Add("  - Money : " + Money.GetString(target.CopperBalance) + "\n");
                     info.Add("  - Speed : " + target.MaxSpeedBase);
                     info.Add("  - XPs : " + target.Experience);
                     info.Add("  - RPs : " + target.RealmPoints);
-                    info.Add("  - BPs : " + target.BountyPoints);
+                    info.Add("  - BPs : " + target.BountyPointBalance);
 
                     String sCurrent = "";
                     String sTitle = "";
@@ -403,7 +404,7 @@ namespace DOL.GS.Commands
                     info.Add("  --------------------------------------");
                     ////////////// Inventaire /////////////
                     info.Add("  ----- Money:");
-                    info.Add(Money.GetShortString(target.GetCurrentMoney()));
+                    info.Add(Money.GetShortString(target.CopperBalance));
                     info.Add(" ");
 
                     info.Add("  ----- Wearing:");

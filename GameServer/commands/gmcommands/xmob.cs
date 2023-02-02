@@ -334,7 +334,7 @@ namespace DOL.GS.Commands
 
                             if (mob is GameMerchant)
                             {
-                                ((GameMerchant)mob).TradeItems = ((GameMerchant)targetMob).TradeItems;
+                                ((GameMerchant)mob).Catalog = ((GameMerchant)targetMob).Catalog;
                             }
 
                             ABrain brain = null;

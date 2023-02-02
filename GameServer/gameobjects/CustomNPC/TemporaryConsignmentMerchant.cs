@@ -26,6 +26,7 @@ using DOL.GS.PacketHandler;
 using DOL.GS.PacketHandler.Client.v168;
 using DOL.AI.Brain;
 using log4net;
+using DOL.GS.Finance;
 
 namespace DOL.GS
 {
@@ -115,7 +116,7 @@ namespace DOL.GS
 
                     if (ServerProperties.Properties.CONSIGNMENT_USE_BP)
                     {
-                        if (player.BountyPoints < purchasePrice)
+                        if (player.GetBalance(Currency.BountyPoints).Amount < purchasePrice)
                         {
                             ChatUtil.SendSystemMessage(player, "GameMerchant.OnPlayerBuy.YouNeedBP", purchasePrice);
                             return;
@@ -123,7 +124,7 @@ namespace DOL.GS
                     }
                     else
                     {
-                        if (player.GetCurrentMoney() < purchasePrice)
+                        if (player.CopperBalance < purchasePrice)
                         {
                             ChatUtil.SendSystemMessage(player, "GameMerchant.OnPlayerBuy.YouNeed", Money.GetString(purchasePrice));
                             return;

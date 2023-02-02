@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using DOL.Database;
+using DOL.GS.Finance;
 using DOL.GS.Housing;
 using DOL.GS.PacketHandler;
 using DOL.GS.PacketHandler.Client.v168;
@@ -579,7 +580,7 @@ namespace DOL.GS
 
                     if (ServerProperties.Properties.CONSIGNMENT_USE_BP)
                     {
-                        if (player.BountyPoints < purchasePrice)
+                        if (player.BountyPointBalance < purchasePrice)
                         {
                             ChatUtil.SendSystemMessage(player, "GameMerchant.OnPlayerBuy.YouNeedBP", purchasePrice);
                             return;
@@ -587,7 +588,7 @@ namespace DOL.GS
                     }
                     else
                     {
-                        if (player.GetCurrentMoney() < purchasePrice)
+                        if (player.CopperBalance < purchasePrice)
                         {
                             ChatUtil.SendSystemMessage(player, "GameMerchant.OnPlayerBuy.YouNeed", Money.GetString(purchasePrice));
                             return;
@@ -605,12 +606,11 @@ namespace DOL.GS
                     if (ServerProperties.Properties.CONSIGNMENT_USE_BP)
                     {
                         ChatUtil.SendMerchantMessage(player, "GameMerchant.OnPlayerBuy.BoughtBP", item.GetName(1, false), purchasePrice);
-                        player.BountyPoints -= purchasePrice;
-                        player.Out.SendUpdatePoints();
+                        player.RemoveMoney(Currency.BountyPoints.Mint(purchasePrice));
                     }
                     else
                     {
-                        if (player.RemoveMoney(purchasePrice))
+                        if (player.RemoveMoney(Currency.Copper.Mint(purchasePrice)))
                         {
                             InventoryLogging.LogInventoryAction(player, this, eInventoryActionType.Merchant, purchasePrice);
                             ChatUtil.SendMerchantMessage(player, "GameMerchant.OnPlayerBuy.Bought", item.GetName(1, false), Money.GetString(purchasePrice));

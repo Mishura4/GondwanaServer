@@ -29,6 +29,7 @@ using DOL.GS.Housing;
 using DOL.GS.PacketHandler;
 using DOL.GS.ServerProperties;
 using DOL.Territory;
+using DOL.GS.Finance;
 
 namespace DOL.GS
 {
@@ -376,7 +377,7 @@ namespace DOL.GS
                 return;
             }
 
-            if (!donating.RemoveMoney(long.Parse(amount.ToString())))
+            if (!donating.RemoveMoney(Currency.Copper.Mint(long.Parse(amount.ToString()))))
             {
                 donating.Out.SendMessage("You don't have this amount of money !", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                 return;
@@ -409,7 +410,7 @@ namespace DOL.GS
             m_DBguild.Bank -= amount;
 
             var amt = long.Parse(amount.ToString());
-            withdraw.AddMoney(amt);
+            withdraw.AddMoney(Currency.Copper.Mint(amt));
             InventoryLogging.LogInventoryAction("(GUILD;" + Name + ")", withdraw, eInventoryActionType.Other, amt);
             withdraw.Out.SendUpdatePlayer();
             withdraw.SaveIntoDatabase();

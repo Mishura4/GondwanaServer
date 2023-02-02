@@ -35,6 +35,7 @@ using DOL.GS.Quests;
 using DOL.GS.Scripts;
 using DOL.GS.Styles;
 using DOL.GS.Utils;
+using DOL.MobGroups;
 using DOLDatabase.Tables;
 
 namespace DOL.GS.Commands
@@ -1462,9 +1463,9 @@ namespace DOL.GS.Commands
             if (targetMob is GameMerchant targetM)
             {
                 info.Add(" + Is Merchant ");
-                if (targetM.TradeItems != null)
+                if (targetM.Catalog != null)
                 {
-                    info.Add(" + Sell List: " + targetM.TradeItems.ItemsListID);
+                    info.Add(" + Sell List: " + targetM.Catalog.ItemsListID);
                 }
                 else
                 {
@@ -2636,9 +2637,9 @@ namespace DOL.GS.Commands
 
             mob.EquipmentTemplateID = targetMob.EquipmentTemplateID;
 
-            if (mob is GameMerchant)
+            if (mob is GameMerchant merchant)
             {
-                ((GameMerchant)mob).TradeItems = ((GameMerchant)targetMob).TradeItems;
+                merchant.Catalog = ((GameMerchant)targetMob).Catalog;
             }
 
             if (mob is TextNPC && isTextNpc)
@@ -2676,6 +2677,14 @@ namespace DOL.GS.Commands
             mob.AddToWorld();
             mob.LoadedFromScript = false;
             mob.SaveIntoDatabase();
+
+            //copy groupmob
+            mob.CurrentGroupMob = targetMob.CurrentGroupMob;
+            if (mob.CurrentGroupMob != null && MobGroupManager.Instance.Groups.ContainsKey(mob.CurrentGroupMob.GroupId))
+            {
+                MobGroupManager.Instance.AddMobToGroup(mob, mob.CurrentGroupMob.GroupId);
+            }
+
             client.Out.SendMessage("Mob created: OID=" + mob.ObjectID, eChatType.CT_System, eChatLoc.CL_SystemWindow);
             if ((mob.Flags & GameNPC.eFlags.PEACE) != 0)
             {

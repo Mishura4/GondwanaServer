@@ -14,7 +14,6 @@ namespace DOL.GS
     public class OutlawTradeItems
         : MerchantTradeItems
     {
-
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         public OutlawTradeItems(string itemsListId)
@@ -25,158 +24,38 @@ namespace DOL.GS
 
         public override IDictionary GetItemsInPage(int page)
         {
-            try
+            var pageEntries = Catalog.GetPage(page).GetAllEntries();
+            var result = new HybridDictionary();
+            foreach (var entry in pageEntries)
             {
-                HybridDictionary itemsInPage = new HybridDictionary(MAX_ITEM_IN_TRADEWINDOWS);
-                if (m_itemsListID != null && m_itemsListID.Length > 0)
-                {
-                    var itemList = GameServer.Database.SelectObjects<MerchantItem>(DB.Column("ItemListID").IsEqualTo(m_itemsListID).And(DB.Column("PageNumber").IsEqualTo(page)));
-                    foreach (MerchantItem merchantitem in itemList)
-                    {
-                        //Force query to execute without precache
-                        ItemTemplate item = GameServer.Database.SelectObjects<ItemTemplate>(DB.Column("Id_nb").IsEqualTo(merchantitem.ItemTemplateID))?.FirstOrDefault();
-                        if (item != null)
-                        {
-                            ItemTemplate slotItem = (ItemTemplate)itemsInPage[merchantitem.SlotPosition];
-                            if (slotItem == null)
-                            {
-                                item.Price *= 2;
-                                itemsInPage.Add(merchantitem.SlotPosition, item);
-                            }
-                            else
-                            {
-                                log.ErrorFormat("two merchant items on same page/slot: listID={0} page={1} slot={2}", m_itemsListID, page, merchantitem.SlotPosition);
-                            }
-                        }
-                        else
-                        {
-                            log.ErrorFormat(
-                                "Item template with ID = '{0}' not found for merchant item list '{1}'",
-                                merchantitem.ItemTemplateID, ItemsListID);
-                        }
-                    }
-                }
-
-                lock (m_usedItemsTemplates.SyncRoot)
-                {
-                    foreach (DictionaryEntry de in m_usedItemsTemplates)
-                    {
-                        if ((int)de.Key >= (MAX_ITEM_IN_TRADEWINDOWS * page) && (int)de.Key < (MAX_ITEM_IN_TRADEWINDOWS * page + MAX_ITEM_IN_TRADEWINDOWS))
-                        {
-                            itemsInPage[(int)de.Key % MAX_ITEM_IN_TRADEWINDOWS] = (ItemTemplate)de.Value;
-                        }
-                    }
-                }
-
-                return itemsInPage;
+                entry.Item.Price *= 2;
+                result.Add((int)entry.SlotPosition, entry.Item);
             }
-            catch (Exception e)
-            {
-                if (log.IsErrorEnabled)
-                {
-                    log.Error("Loading merchant items list (" + m_itemsListID + ") page (" + page + "): ", e);
-                }
-
-                return new HybridDictionary();
-            }
+            return result;
         }
 
         public override IDictionary GetAllItems()
         {
-            try
+            var items = new Hashtable();
+            var catalogEntries = Catalog.GetAllEntries();
+            foreach (var entry in catalogEntries)
             {
-                Hashtable allItems = new Hashtable();
-                if (m_itemsListID != null && m_itemsListID.Length > 0)
+                if (items.Contains((entry.Page, entry.SlotPosition)))
                 {
-                    var itemList = GameServer.Database.SelectObjects<MerchantItem>(DB.Column("ItemListID").IsEqualTo(m_itemsListID));
-                    foreach (MerchantItem merchantitem in itemList)
-                    {
-                        ItemTemplate item = GameServer.Database.SelectObjects<ItemTemplate>(DB.Column("Id_nb").IsEqualTo(merchantitem.ItemTemplateID))?.FirstOrDefault();
-                        if (item != null)
-                        {
-                            ItemTemplate slotItem = (ItemTemplate)allItems[merchantitem.SlotPosition];
-                            if (slotItem == null)
-                            {
-                                item.Price *= 2;
-                                allItems.Add(merchantitem.SlotPosition, item);
-                            }
-                            else
-                            {
-                                log.ErrorFormat("two merchant items on same page/slot: listID={0} page={1} slot={2}", m_itemsListID, merchantitem.PageNumber, merchantitem.SlotPosition);
-                            }
-                        }
-                    }
+                    log.ErrorFormat($"two merchant items on same page/slot: listID={ItemsListID} page={entry.Page} slot={entry.SlotPosition}");
+                    continue;
                 }
-
-                lock (m_usedItemsTemplates.SyncRoot)
-                {
-                    foreach (DictionaryEntry de in m_usedItemsTemplates)
-                    {
-                        allItems[(int)de.Key] = (ItemTemplate)de.Value;
-                    }
-                }
-
-                return allItems;
+                entry.Item.Price *= 2;
+                items.Add((entry.Page, entry.SlotPosition), entry.Item);
             }
-            catch (Exception e)
-            {
-                if (log.IsErrorEnabled)
-                {
-                    log.Error("Loading merchant items list (" + m_itemsListID + "):", e);
-                }
-
-                return new HybridDictionary();
-            }
+            return items;
         }
 
         public override ItemTemplate GetItem(int page, eMerchantWindowSlot slot)
         {
-            try
-            {
-                slot = GetValidSlot(page, slot);
-                if (slot == eMerchantWindowSlot.Invalid)
-                {
-                    return null;
-                }
-
-                ItemTemplate item;
-                lock (m_usedItemsTemplates.SyncRoot)
-                {
-                    item = m_usedItemsTemplates[(int)slot + (page * MAX_ITEM_IN_TRADEWINDOWS)] as ItemTemplate;
-                    if (item != null)
-                    {
-                        return item;
-                    }
-                }
-
-                if (m_itemsListID != null && m_itemsListID.Length > 0)
-                {
-                    var itemToFind = GameServer.Database.SelectObjects<MerchantItem>(DB.Column("ItemListID").IsEqualTo(m_itemsListID)
-                        .And(DB.Column("PageNumber").IsEqualTo(page)
-                        .And(DB.Column("SlotPosition").IsEqualTo((int)slot)))).FirstOrDefault();
-                    if (itemToFind != null)
-                    {
-                        //Prevent precache by calling SelectObjects
-                        item = GameServer.Database.SelectObjects<ItemTemplate>(DB.Column("Id_nb").IsEqualTo(itemToFind.ItemTemplateID))?.FirstOrDefault();
-
-                        if (item != null)
-                        {
-                            item.Price *= 2;
-                        }
-                    }
-                }
-
-                return item;
-            }
-            catch (Exception e)
-            {
-                if (log.IsErrorEnabled)
-                {
-                    log.Error("Loading merchant items list (" + m_itemsListID + ") page (" + page + ") slot (" + slot + "): ", e);
-                }
-
-                return null;
-            }
+            var item = Catalog.GetPage(page).GetEntry((byte)slot).Item;
+            item.Price *= 2;
+            return item;
         }
     }
 }

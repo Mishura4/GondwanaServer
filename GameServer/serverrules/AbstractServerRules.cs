@@ -26,6 +26,7 @@ using System.Reflection;
 using DOL.AI.Brain;
 using DOL.Database;
 using DOL.Events;
+using DOL.GS.Finance;
 using DOL.GS.Housing;
 using DOL.GS.Keeps;
 using DOL.GS.PacketHandler;
@@ -1717,7 +1718,8 @@ namespace DOL.GS.ServerRules
                     }
 
                     //long money = (long)(Money.GetMoney(0, 0, 17, 85, 0) * damagePercent * killedPlayer.Level / 50);
-                    player.AddMoney(money, "You recieve {0}");
+                    player.AddMoney(Currency.Copper.Mint(money));
+                    player.SendSystemMessage(string.Format("You recieve {0}", Money.GetString(money)));
                     InventoryLogging.LogInventoryAction(killer, player, eInventoryActionType.Other, money);
                 }
 
@@ -2161,26 +2163,26 @@ namespace DOL.GS.ServerRules
             {
                 case eMerchantWindowType.HousingInsideShop:
                 case eMerchantWindowType.HousingInsideMenu:
-                    player.Out.SendMerchantWindow(HouseTemplateMgr.IndoorShopItems, merchantType);
+                    player.Out.SendMerchantWindow(HouseTemplateMgr.IndoorShopItems.Catalog, merchantType);
                     break;
                 case eMerchantWindowType.HousingOutsideShop:
                 case eMerchantWindowType.HousingOutsideMenu:
-                    player.Out.SendMerchantWindow(HouseTemplateMgr.OutdoorShopItems, merchantType);
+                    player.Out.SendMerchantWindow(HouseTemplateMgr.OutdoorShopItems.Catalog, merchantType);
                     break;
                 case eMerchantWindowType.HousingBindstoneHookpoint:
-                    player.Out.SendMerchantWindow(HouseTemplateMgr.IndoorBindstoneShopItems, merchantType);
+                    player.Out.SendMerchantWindow(HouseTemplateMgr.IndoorBindstoneShopItems.Catalog, merchantType);
                     break;
                 case eMerchantWindowType.HousingCraftingHookpoint:
-                    player.Out.SendMerchantWindow(HouseTemplateMgr.IndoorCraftShopItems, merchantType);
+                    player.Out.SendMerchantWindow(HouseTemplateMgr.IndoorCraftShopItems.Catalog, merchantType);
                     break;
                 case eMerchantWindowType.HousingNPCHookpoint:
-                    player.Out.SendMerchantWindow(HouseTemplateMgr.GetNpcShopItems(player), merchantType);
+                    player.Out.SendMerchantWindow(HouseTemplateMgr.GetNpcShopItems(player).Catalog, merchantType);
                     break;
                 case eMerchantWindowType.HousingVaultHookpoint:
-                    player.Out.SendMerchantWindow(HouseTemplateMgr.IndoorVaultShopItems, merchantType);
+                    player.Out.SendMerchantWindow(HouseTemplateMgr.IndoorVaultShopItems.Catalog, merchantType);
                     break;
                 case eMerchantWindowType.HousingDeedMenu:
-                    player.Out.SendMerchantWindow(/* TODO */HouseTemplateMgr.OutdoorMenuItems, eMerchantWindowType.HousingDeedMenu);
+                    player.Out.SendMerchantWindow(/* TODO */HouseTemplateMgr.OutdoorMenuItems.Catalog, eMerchantWindowType.HousingDeedMenu);
                     break;
                 default:
                     player.Out.SendMessage("Unknown merchant type!", eChatType.CT_Staff, eChatLoc.CL_SystemWindow);

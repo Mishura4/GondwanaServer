@@ -6,7 +6,7 @@ using DOL.GS;
 using DOL.Database;
 using DOL.GS.PacketHandler;
 using DOL.Language;
-
+using DOL.GS.Finance;
 
 namespace DOL.GS.Commands
 {
@@ -50,7 +50,7 @@ namespace DOL.GS.Commands
             }
 
             /* When you don't have a lastname, change is for free, otherwise you need money */
-            if (client.Player.LastName != "" && client.Player.GetCurrentMoney() < Money.GetMoney(0, 0, LASTNAME_FEE, 0, 0))
+            if (client.Player.LastName != "" && client.Player.CopperBalance < Money.GetMoney(0, 0, LASTNAME_FEE, 0, 0))
             {
                 client.Out.SendMessage(
                     LanguageMgr.GetTranslation(
@@ -199,7 +199,7 @@ namespace DOL.GS.Commands
             }
 
             /* Check money only if your lastname is not blank */
-            if (player.LastName != "" && player.GetCurrentMoney() < Money.GetMoney(0, 0, LASTNAME_FEE, 0, 0))
+            if (player.LastName != "" && player.CopperBalance < Money.GetMoney(0, 0, LASTNAME_FEE, 0, 0))
             {
                 player.Out.SendMessage(
                     LanguageMgr.GetTranslation(
@@ -235,7 +235,7 @@ namespace DOL.GS.Commands
             /* Remove money only if your lastname is not blank and is different from the previous one */
             if (player.LastName != "" && player.LastName != NewLastName)
             {
-                player.RemoveMoney(Money.GetMoney(0, 0, LASTNAME_FEE, 0, 0), null);
+                player.RemoveMoney(Currency.Copper.Mint(LASTNAME_FEE * 100 * 100));
                 InventoryLogging.LogInventoryAction(player, player.TargetObject, eInventoryActionType.Merchant, LASTNAME_FEE * 10000);
             }
 

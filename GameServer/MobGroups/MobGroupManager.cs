@@ -48,7 +48,7 @@ namespace DOL.MobGroups
                 return false;
             }
 
-            bool allDead = this.Groups[npc.CurrentGroupMob.GroupId].NPCs.All(m => !m.IsAlive);
+            bool allDead = this.Groups[npc.CurrentGroupMob.GroupId].NPCs.All(m => npc == m || !m.IsAlive);
 
             if (allDead)
             {

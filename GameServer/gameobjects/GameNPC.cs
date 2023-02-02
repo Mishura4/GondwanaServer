@@ -45,6 +45,7 @@ using DOL.GameEvents;
 using DOL.MobGroups;
 using DOL.Territory;
 using static DOL.GS.ScriptMgr;
+using DOL.GS.Finance;
 
 namespace DOL.GS
 {
@@ -2297,7 +2298,6 @@ namespace DOL.GS
                     return;
                 }
             }
-
             mob.TranslationId = TranslationId;
             mob.Name = Name;
             mob.Suffix = Suffix;
@@ -4792,9 +4792,9 @@ namespace DOL.GS
                         if (zoneBonus > 0)
                         {
                             long amount = (long)(zoneBonus * ServerProperties.Properties.MONEY_DROP);
-                            killerPlayer.AddMoney(amount,
-                                                  ZoneBonus.GetBonusMessage(killerPlayer, (int)(zoneBonus * ServerProperties.Properties.MONEY_DROP), ZoneBonus.eZoneBonusType.COIN),
-                                                  eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                            killerPlayer.AddMoney(Currency.Copper.Mint(amount));
+                            killerPlayer.SendMessage(ZoneBonus.GetBonusMessage(killerPlayer, (int)(zoneBonus * ServerProperties.Properties.MONEY_DROP), ZoneBonus.eZoneBonusType.COIN),
+                                eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                             InventoryLogging.LogInventoryAction(this, killerPlayer, eInventoryActionType.Loot, amount);
                         }
                     }

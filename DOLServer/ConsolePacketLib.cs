@@ -31,6 +31,7 @@ using DOL.GS.Quests;
 using log4net;
 using DOL.Database;
 using System.Numerics;
+using DOL.GS.Profession;
 
 namespace DOLGameServerConsole
 {
@@ -138,6 +139,7 @@ namespace DOLGameServerConsole
         public void SendInventoryItemsPartialUpdate(IDictionary<int, InventoryItem> items, eInventoryWindowType windowType) { }
         public void SendDoorState(Region region, IDoor door) { }
         public void SendMerchantWindow(MerchantTradeItems itemlist, eMerchantWindowType windowType) { }
+        public void SendMerchantWindow(MerchantCatalog catalog, eMerchantWindowType windowType) { }
         public void SendTradeWindow() { }
         public void SendCloseTradeWindow() { }
         public void SendPlayerDied(GamePlayer killedPlayer, GameObject killer) { }

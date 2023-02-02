@@ -20,6 +20,7 @@ using System;
 using System.Collections;
 using System.Numerics;
 using DOL.Database;
+using DOL.GS.Finance;
 using DOL.GS.PacketHandler;
 
 namespace DOL.GS.Housing
@@ -84,7 +85,7 @@ namespace DOL.GS.Housing
             {
                 if (HouseMgr.IsOwner(DatabaseItem, player))
                 {
-                    player.Out.SendMerchantWindow(HouseTemplateMgr.GetLotMarkerItems(this), eMerchantWindowType.Normal);
+                    player.Out.SendMerchantWindow(HouseTemplateMgr.GetLotMarkerItems(this).Catalog, eMerchantWindowType.Normal);
                 }
                 else
                 {
@@ -111,11 +112,11 @@ namespace DOL.GS.Housing
                     return;
                 }
 
-                long totalCost = HouseTemplateMgr.GetLotPrice(DatabaseItem);
-                if (player.RemoveMoney(totalCost, "You just bought this lot for {0}.",
-                                       eChatType.CT_Merchant, eChatLoc.CL_SystemWindow))
+                var totalCost = Currency.Copper.Mint(HouseTemplateMgr.GetLotPrice(DatabaseItem));
+                if (player.RemoveMoney(totalCost))
                 {
-                    InventoryLogging.LogInventoryAction(player, this, eInventoryActionType.Merchant, totalCost);
+                    player.SendMessage(string.Format("You just bought this lot for {0}.", totalCost.ToText()), eChatType.CT_Merchant, eChatLoc.CL_SystemWindow);
+                    InventoryLogging.LogInventoryAction(player, this, eInventoryActionType.Merchant, totalCost.Amount);
                     DatabaseItem.LastPaid = DateTime.Now;
                     DatabaseItem.OwnerID = player.ObjectId;
                     CreateHouse(player, 0);

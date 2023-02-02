@@ -37,6 +37,7 @@
 
 using System.Collections;
 using DOL.GS.PacketHandler;
+using DOL.GS.Finance;
 using DOL.Language;
 
 namespace DOL.GS.Commands
@@ -203,7 +204,7 @@ namespace DOL.GS.Commands
                         }
 
                         long mgold = client.Player.RespecCost;
-                        if ((client.Player.Gold + 1000 * client.Player.Platinum) < mgold)
+                        if (client.Player.CopperBalance < mgold * 100 * 100)
                         {
                             DisplayMessage(
                                 client,
@@ -393,7 +394,7 @@ namespace DOL.GS.Commands
             if (player.TempProperties.getProperty(BUY_RESPEC, false))
             {
                 player.TempProperties.removeProperty(BUY_RESPEC);
-                if (player.RespecCost >= 0 && player.RemoveMoney(player.RespecCost * 10000))
+                if (player.RespecCost >= 0 && player.RemoveMoney(Currency.Copper.Mint(player.RespecCost * 100 * 100)))
                 {
                     InventoryLogging.LogInventoryAction(player, "(respec)", eInventoryActionType.Merchant, player.RespecCost * 10000);
                     player.RespecAmountSingleSkill++;
@@ -404,7 +405,6 @@ namespace DOL.GS.Commands
                             player.Client.Account.Language,
                             "Commands.Players.Respec.Buy.Line"));
                 }
-                player.Out.SendUpdateMoney();
             }
             // Assign full points returned
             if (player.SkillSpecialtyPoints > specPoints)

@@ -4,16 +4,19 @@ using System.Runtime.CompilerServices;
 using DOL.AI.Brain;
 using DOL.Database;
 using DOL.GS;
+using DOL.GS.Finance;
 using DOL.GS.Quests;
 using DOL.GS.Scripts;
 
-public class TextNPCItemMerchant : GameItemCurrencyMerchant, ITextNPC, IAmteNPC
+public class TextNPCItemMerchant : GameMerchant, ITextNPC, IAmteNPC
 {
-    public override string MoneyKey
+    public string MoneyKey
     {
         get => _moneyKey;
     }
     public TextNPCPolicy TextNPCData { get; set; }
+    protected ItemTemplate m_itemTemplate = null;
+    protected WorldInventoryItem m_moneyItem = null;
 
     private string _moneyKey;
     private AmteCustomParam _moneyItemParam => new AmteCustomParam("money_item",
@@ -63,6 +66,7 @@ public class TextNPCItemMerchant : GameItemCurrencyMerchant, ITextNPC, IAmteNPC
 
         if (!string.IsNullOrEmpty(MoneyKey))
         {
+            //Currency.Item("SapphireSeal");
             m_itemTemplate = GameServer.Database.FindObjectByKey<ItemTemplate>(MoneyKey);
             if (m_itemTemplate != null)
                 m_moneyItem = WorldInventoryItem.CreateFromTemplate(m_itemTemplate);

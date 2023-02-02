@@ -25,6 +25,8 @@ using DOL.GS.Movement;
 using DOL.GS.PacketHandler;
 using System.Collections;
 using log4net;
+using System.Linq;
+using DOL.GS.Finance;
 
 namespace DOL.GS
 {
@@ -53,7 +55,7 @@ namespace DOL.GS
             int pagenumber = item_slot / MerchantTradeItems.MAX_ITEM_IN_TRADEWINDOWS;
             int slotnumber = item_slot % MerchantTradeItems.MAX_ITEM_IN_TRADEWINDOWS;
 
-            ItemTemplate template = this.TradeItems.GetItem(pagenumber, (eMerchantWindowSlot)slotnumber);
+            var template = Catalog.GetEntry(pagenumber, slotnumber).Item;
             if (template == null) return;
 
             //Calculate the amout of items
@@ -64,16 +66,16 @@ namespace DOL.GS
             if (amountToBuy <= 0) return;
 
             //Calculate the value of items
-            long totalValue = number * template.Price;
+            var totalCost = Currency.Copper.Mint(number * template.Price);
 
             GameInventoryItem item = GameInventoryItem.Create(template);
 
             lock (player.Inventory)
             {
 
-                if (player.GetCurrentMoney() < totalValue)
+                if (player.CopperBalance < totalCost.Amount)
                 {
-                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameMerchant.OnPlayerBuy.YouNeed", Money.GetString(totalValue)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameMerchant.OnPlayerBuy.YouNeed", totalCost.ToText()), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     return;
                 }
 
@@ -86,16 +88,17 @@ namespace DOL.GS
                 //Generate the buy message
                 string message;
                 if (amountToBuy > 1)
-                    message = LanguageMgr.GetTranslation(player.Client.Account.Language, "GameMerchant.OnPlayerBuy.BoughtPieces", amountToBuy, template.GetName(1, false), Money.GetString(totalValue));
+                    message = LanguageMgr.GetTranslation(player.Client.Account.Language, "GameMerchant.OnPlayerBuy.BoughtPieces", amountToBuy, template.GetName(1, false), totalCost.ToText());
                 else
-                    message = LanguageMgr.GetTranslation(player.Client.Account.Language, "GameMerchant.OnPlayerBuy.Bought", template.GetName(1, false), Money.GetString(totalValue));
+                    message = LanguageMgr.GetTranslation(player.Client.Account.Language, "GameMerchant.OnPlayerBuy.Bought", template.GetName(1, false), totalCost.ToText());
 
                 // Check if player has enough money and subtract the money
-                if (!player.RemoveMoney(totalValue, message, eChatType.CT_Merchant, eChatLoc.CL_SystemWindow))
+                if (!player.RemoveMoney(totalCost))
                 {
                     throw new Exception("Money amount changed while adding items.");
                 }
-                InventoryLogging.LogInventoryAction(player, this, eInventoryActionType.Merchant, totalValue);
+                player.SendMessage(message, eChatType.CT_Merchant, eChatLoc.CL_SystemWindow);
+                InventoryLogging.LogInventoryAction(player, this, eInventoryActionType.Merchant, totalCost.Amount);
             }
 
             if (item.Name.ToUpper().Contains("TICKET TO") || item.Description.ToUpper() == "TICKET")
@@ -230,23 +233,7 @@ namespace DOL.GS
         }
 
         private bool isItemInMerchantList(InventoryItem item)
-        {
-            if (m_tradeItems != null)
-            {
-                foreach (DictionaryEntry de in m_tradeItems.GetAllItems())
-                {
-                    ItemTemplate compareItem = de.Value as ItemTemplate;
-                    if (compareItem != null)
-                    {
-                        if (compareItem.Id_nb == item.Id_nb)
-                        {
-                            return true;
-                        }
-                    }
-                }
-            }
-            return false;
-        }
+            => Catalog.GetAllEntries().Where(x => x.Item.Id_nb == item.Id_nb).Any();
 
 
         private void SendReply(GamePlayer target, string msg)
