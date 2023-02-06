@@ -46,6 +46,7 @@ using DOL.MobGroups;
 using DOL.Territory;
 using static DOL.GS.ScriptMgr;
 using DOL.GS.Finance;
+using DOLDatabase.Tables;
 
 namespace DOL.GS
 {
@@ -1034,6 +1035,44 @@ namespace DOL.GS
             }
         }
 
+        /// <summary>
+        /// Is this object visible to another?
+        /// </summary>
+        /// <param name="checkObject"></param>
+        /// <returns></returns>
+        public override bool IsVisibleTo(GameObject checkObject)
+        {
+            if (base.IsVisibleTo(checkObject))
+            {
+                if (EventID != null && EventID != "" && checkObject is GamePlayer player)
+                {
+                    var gameEvent = GameEventManager.Instance.Events.FirstOrDefault(e => e.ID.Equals(EventID));
+                    switch (gameEvent.InstancedConditionType)
+                    {
+                        case InstancedConditionTypes.All:
+                            return true;
+                        case InstancedConditionTypes.Player:
+                            return gameEvent.Owner == player;
+                        case InstancedConditionTypes.Group:
+                            return player.Group != null && player.Group.IsInTheGroup(gameEvent.Owner);
+                        case InstancedConditionTypes.Guild:
+                            return player.Guild != null && player.Guild == gameEvent.Owner.Guild;
+                        case InstancedConditionTypes.Battlegroup:
+                            return gameEvent.Owner.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null) != null &&
+                            gameEvent.Owner.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null) ==
+                            player.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null);
+                        default:
+                            break;
+                    }
+                }
+                else
+                {
+                    return true;
+                }
+
+            }
+            return false;
+        }
         #endregion
 
         #region Movement

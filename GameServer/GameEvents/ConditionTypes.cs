@@ -6,7 +6,9 @@
         Kill,
         Event,
         Money,
-        Interval
+        Interval,
+        Areaxevent,
+        Quest
     }
 
     public enum EndingConditionType
@@ -14,5 +16,13 @@
         Timer,
         Kill,
         StartingEvent
+    }
+    public enum InstancedConditionTypes
+    {
+        All,
+        Player,
+        Group,
+        Guild,
+        Battlegroup
     }
 }

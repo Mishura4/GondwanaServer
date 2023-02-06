@@ -22,6 +22,8 @@ namespace DOL.GameEvents
 
         public Dictionary<string, ushort> StartEffects;
         public Dictionary<string, ushort> EndEffects;
+        public Dictionary<string, GameNPC> RemovedMobs { get; }
+        public Dictionary<string, GameStaticItem> RemovedCoffres { get; }
 
         public GameEvent(EventDB db)
         {
@@ -36,6 +38,8 @@ namespace DOL.GameEvents
             this.Mobs = new List<GameNPC>();
             this.StartEffects = new Dictionary<string, ushort>();
             this.EndEffects = new Dictionary<string, ushort>();
+            RemovedMobs = new Dictionary<string, GameNPC>();
+            RemovedCoffres = new Dictionary<string, GameStaticItem>();
         }
 
         public void ParseValuesFromDb(EventDB db)
@@ -70,6 +74,9 @@ namespace DOL.GameEvents
             ChanceLastTimeChecked = db.ChanceLastTimeChecked > 0 ? DateTimeOffset.FromUnixTimeSeconds(db.ChanceLastTimeChecked) : (DateTimeOffset?)null;
             AnnonceType = Enum.TryParse(db.AnnonceType.ToString(), out AnnonceType a) ? a : AnnonceType.Center;
             Discord = db.Discord;
+            InstancedConditionType = Enum.TryParse(db.InstancedConditionType.ToString(), out InstancedConditionTypes inst) ? inst : InstancedConditionTypes.All;
+            AreaStartingId = !string.IsNullOrEmpty(db.AreaStartingId) ? db.AreaStartingId : null;
+            QuestStartingId = !string.IsNullOrEmpty(db.QuestStartingId) ? db.QuestStartingId : null;
 
             //Handle invalid ChronoType
             if (TimerType == TimerType.ChronoType && ChronoTime <= 0)
@@ -251,6 +258,24 @@ namespace DOL.GameEvents
             set;
         }
 
+        public InstancedConditionTypes InstancedConditionType
+        {
+            get;
+            set;
+        }
+
+        public string AreaStartingId
+        {
+            get;
+            set;
+        }
+
+        public string QuestStartingId
+        {
+            get;
+            set;
+        }
+
         public int WantedMobsCount
         {
             get;
@@ -408,6 +433,9 @@ namespace DOL.GameEvents
             db.ChanceLastTimeChecked = ChanceLastTimeChecked.HasValue ? ChanceLastTimeChecked.Value.ToUnixTimeSeconds() : 0;
             db.AnnonceType = (byte)AnnonceType;
             db.Discord = Discord;
+            db.InstancedConditionType = (int)InstancedConditionType;
+            db.AreaStartingId = AreaStartingId;
+            db.QuestStartingId = QuestStartingId;
 
             if (ID == null)
             {

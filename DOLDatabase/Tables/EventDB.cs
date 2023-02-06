@@ -37,6 +37,9 @@ namespace DOLDatabase.Tables
         private long m_chanceLastTimeChecked;
         private byte m_AnnonceType;
         private int m_Discord;
+        private int m_instancedConditionType;
+        private string areaStartingId;
+        private string questStartingId;
 
         [DataElement(AllowDbNull = false, Varchar = 255)]
         public string EventName
@@ -488,5 +491,44 @@ namespace DOLDatabase.Tables
                 Dirty = true;
             }
         }
+
+        [DataElement(AllowDbNull = false)]
+        public int InstancedConditionType
+        {
+            get
+            {
+                return m_instancedConditionType;
+            }
+
+            set
+            {
+                m_instancedConditionType = value;
+                Dirty = true;
+            }
+        }
+        [DataElement(AllowDbNull = true, Varchar = 255)]
+        public string AreaStartingId
+        {
+            get => areaStartingId;
+
+            set
+            {
+                areaStartingId = value;
+                Dirty = true;
+            }
+        }
+
+        [DataElement(AllowDbNull = true, Varchar = 255)]
+        public string QuestStartingId
+        {
+            get => questStartingId;
+
+            set
+            {
+                questStartingId = value;
+                Dirty = true;
+            }
+        }
+
     }
 }

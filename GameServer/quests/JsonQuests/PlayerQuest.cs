@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DOL.GS.PacketHandler;
 using DOL.Language;
+using DOL.GameEvents;
 
 namespace DOL.GS.Quests
 {
@@ -132,6 +133,16 @@ namespace DOL.GS.Quests
             }
             Owner.SaveIntoDatabase();
             Owner.Out.SendQuestListUpdate();
+
+            var questEvent = GameEventManager.Instance.Events.FirstOrDefault(e =>
+            e.QuestStartingId?.Equals(Quest.Id + "-end") == true &&
+           !e.StartedTime.HasValue &&
+            e.Status == EventStatus.NotOver &&
+            e.StartConditionType == StartingConditionType.Quest);
+            if (questEvent != null)
+            {
+                System.Threading.Tasks.Task.Run(() => GameEventManager.Instance.StartEvent(questEvent));
+            }
         }
         public void AbortQuest()
         {
@@ -149,6 +160,16 @@ namespace DOL.GS.Quests
                 Owner.Out.SendNPCsQuestEffect(mob, mob.GetQuestIndicator(Owner));
             }
             Owner.Out.SendMessage(LanguageMgr.GetTranslation(Owner.Client, "AbstractQuest.AbortQuest", Quest.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+
+            var mobs = Owner.GetNPCsInRadius(WorldMgr.VISIBILITY_DISTANCE);
+            foreach (var mob in mobs)
+            {
+                if (mob is GameNPC groupMob && groupMob.CurrentGroupMob != null)
+                {
+                    Owner.Out.SendNPCCreate(groupMob);
+                    Owner.Out.SendModelChange(groupMob, groupMob.Model);
+                }
+            }
         }
 
         public class QuestRewards : IQuestRewards

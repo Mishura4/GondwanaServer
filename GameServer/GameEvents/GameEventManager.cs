@@ -28,7 +28,6 @@ namespace DOL.GameEvents
         public static GameEventManager Instance => instance ?? (instance = new GameEventManager());
 
         public List<GameNPC> PreloadedMobs { get; }
-
         public List<GameStaticItem> PreloadedCoffres { get; }
 
         private GameEventManager()
@@ -559,6 +558,21 @@ namespace DOL.GameEvents
 
             }
 
+            //restore temporarly disabled RemovedMobs
+            foreach (var mob in ev.RemovedMobs)
+            {
+                mob.Value.InternalID = mob.Key;
+                mob.Value.AddToWorld();
+            }
+            ev.RemovedMobs.Clear();
+
+            foreach (var item in ev.RemovedCoffres)
+            {
+                item.Value.InternalID = item.Key;
+                item.Value.AddToWorld();
+            }
+            ev.RemovedCoffres.Clear();
+
             ev.SaveToDatabase();
         }
 
@@ -699,6 +713,38 @@ namespace DOL.GameEvents
                 await FinishEventByEventById(e.ID, e.StartActionStopEventID);
             }
 
+            //temporarly disable
+            var disabledMobs = GameServer.Database.SelectObjects<Mob>(DB.Column("RemovedByEventID").IsNotNull());
+            foreach (var mob in disabledMobs)
+            {
+                if (mob.RemovedByEventID.Split("|").Contains(e.ID.ToString()))
+                {
+                    var mobInRegion = WorldMgr.Regions[mob.Region].Objects.FirstOrDefault(o => o != null && o is GameNPC npc && npc.InternalID != null && npc.InternalID.Equals(mob.ObjectId));
+                    if (mobInRegion != null)
+                    {
+                        var npcInRegion = mobInRegion as GameNPC;
+                        //copy npc
+                        e.RemovedMobs[npcInRegion.InternalID] = npcInRegion;
+                        npcInRegion.RemoveFromWorld();
+                        npcInRegion.Delete();
+                    }
+                }
+            }
+            var disabledCoffres = GameServer.Database.SelectObjects<DBCoffre>(DB.Column("RemovedByEventID").IsNotNull());
+            foreach (var coffre in disabledCoffres)
+            {
+                if (coffre.RemovedByEventID.Split("|").Contains(e.ID.ToString()))
+                {
+                    var coffreInRegion = WorldMgr.Regions[coffre.Region].Objects.FirstOrDefault(o => o != null && o is GameStaticItem item && item.InternalID.Equals(coffre.ObjectId)) as GameStaticItem;
+                    if (coffreInRegion != null)
+                    {
+                        var itemInRegion = coffreInRegion as GameStaticItem;
+                        e.RemovedCoffres[itemInRegion.InternalID] = itemInRegion;
+                        itemInRegion.RemoveFromWorld();
+                        itemInRegion.Delete();
+                    }
+                }
+            }
             log.Info(string.Format("Event ID: {0}, Name: {1} was Launched At: {2}", e.ID, e.EventName, DateTime.Now.ToLocalTime()));
             e.SaveToDatabase();
 
@@ -816,6 +862,22 @@ namespace DOL.GameEvents
                     SendEventNotification(e, message, (e.Discord == 2 || e.Discord == 3));
 
                 }
+
+                //restore temporarly disabled
+                foreach (var mob in e.RemovedMobs)
+                {
+                    mob.Value.AddToWorld();
+                    mob.Value.InternalID = mob.Key;
+                }
+                e.RemovedMobs.Clear();
+
+                foreach (var item in e.RemovedCoffres)
+                {
+                    item.Value.AddToWorld();
+                    item.Value.InternalID = item.Key;
+                }
+                e.RemovedCoffres.Clear();
+
                 //Enjoy the message
                 await Task.Delay(TimeSpan.FromSeconds(5));
             }
@@ -968,9 +1030,6 @@ namespace DOL.GameEvents
             {
                 if (mob.ObjectState == GameObject.eObjectState.Active)
                 {
-                    if (!(mob is MoneyEventNPC))
-                        mob.Health = 0;
-
                     mob.RemoveFromWorld();
                     mob.Delete();
                 }

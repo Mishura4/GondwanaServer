@@ -25,6 +25,9 @@ namespace DOL.commands.gmcommands
           "Commands.GM.GroupMob.Usage.Status.Origin",
           "Commands.GM.GroupMob.Usage.Status.Create",
           "Commands.GM.GroupMob.Usage.Status.Quest",
+          "Commands.GM.GroupMob.Usage.Status.Quest.Flag",
+          "Commands.GM.GroupMob.Usage.Status.Quest.Model",
+          "Commands.GM.GroupMob.Usage.Status.Quest.Size",
           "Commands.GM.GroupMob.Usage.Status.Reset")]
 
     public class GroupMob
@@ -317,42 +320,82 @@ namespace DOL.commands.gmcommands
                     break;
 
                 case "quest":
-                    if (args.Length != 6)
+                    if (args.Length == 5)
                     {
-                        DisplaySyntax(client);
-                        break;
-                    }
+                        groupId = args[3];
+                        if (!this.isGroupIdAvailable(groupId, client))
+                        {
+                            break;
+                        }
+                        if (!ushort.TryParse(args[4], out ushort id))
+                        {
+                            DisplayMessage(client, "id non correct");
+                            break;
+                        }
+                        switch (args[2].ToLowerInvariant())
+                        {
+                            case "flag":
+                                MobGroupManager.Instance.Groups[groupId].CompletedQuestNPCFlags = id;
+                                break;
+                            case "model":
+                                MobGroupManager.Instance.Groups[groupId].CompletedQuestNPCModel = id;
+                                break;
+                            case "size":
+                                MobGroupManager.Instance.Groups[groupId].CompletedQuestNPCSize = id;
+                                break;
 
-                    if (!int.TryParse(args[3], out int questId) || questId <= 0)
+                            default:
+                                DisplaySyntax(client);
+                                break;
+                        }
+                    }
+                    else
                     {
-                        DisplayMessage(client, "QuestId non correct");
-                        break;
-                    }
+                        if (args.Length != 6 && args.Length != 7)
+                        {
+                            DisplaySyntax(client);
+                            break;
+                        }
 
-                    if (!int.TryParse(args[4], out int questCount) || questCount <= 0)
-                    {
-                        DisplayMessage(client, "QuestCount non correct");
-                        break;
-                    }
+                        if (!int.TryParse(args[3], out int questId) || questId <= 0)
+                        {
+                            DisplayMessage(client, "QuestId non correct");
+                            break;
+                        }
 
-                    if (!bool.TryParse(args[5], out bool isFriendly))
-                    {
-                        DisplayMessage(client, "isFriendly <true|false> non correct");
-                        break;
-                    }
+                        if (!int.TryParse(args[4], out int questCount) || questCount <= 0)
+                        {
+                            DisplayMessage(client, "QuestCount non correct");
+                            break;
+                        }
 
-                    if (!this.isGroupIdAvailable(groupId, client))
-                    {
-                        return;
-                    }
+                        if (!bool.TryParse(args[5], out bool isFriendly))
+                        {
+                            DisplayMessage(client, "isFriendly <true|false> non correct");
+                            break;
+                        }
 
-                    MobGroupManager.Instance.Groups[groupId].CompletedQuestID = questId;
-                    MobGroupManager.Instance.Groups[groupId].ComletedQuestCount = questCount;
-                    MobGroupManager.Instance.Groups[groupId].IsQuestConditionFriendly = isFriendly;
+                        if (!this.isGroupIdAvailable(groupId, client))
+                        {
+                            return;
+                        }
+
+                        MobGroupManager.Instance.Groups[groupId].CompletedQuestID = questId;
+                        MobGroupManager.Instance.Groups[groupId].CompletedQuestCount = questCount;
+                        MobGroupManager.Instance.Groups[groupId].IsQuestConditionFriendly = isFriendly;
+                        if (args.Length == 7)
+                        {
+                            if (!ushort.TryParse(args[6], out ushort questStep))
+                            {
+                                DisplayMessage(client, "QuestStep non correct");
+                                break;
+                            }
+                            MobGroupManager.Instance.Groups[groupId].CompletedStepQuestID = questStep;
+                        }
+                        DisplayMessage(client, string.Format("La Quest {0} a bien été associée au GroupMob {1}", questId, groupId));
+                    }
                     MobGroupManager.Instance.Groups[groupId].SaveToDabatase();
-                    DisplayMessage(client, string.Format("La Quest {0} a bien été associée au GroupMob {1}", questId, groupId));
                     break;
-
                 default:
                     DisplaySyntax(client);
                     break;

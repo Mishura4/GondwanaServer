@@ -110,8 +110,12 @@ namespace DOL.MobGroups
             infos.Add("");
             infos.Add("ON Completed QUEST:");
             infos.Add("CompletedQuestID: " + (mobGroup.CompletedQuestID > 0 ? mobGroup.CompletedQuestID.ToString() : "-"));
-            infos.Add("ComletedQuestCount: " + (mobGroup.CompletedQuestID > 0 ? mobGroup.ComletedQuestCount.ToString() : "-"));
+            infos.Add("CompletedStepQuestID: " + (mobGroup.CompletedStepQuestID > 0 ? mobGroup.CompletedStepQuestID.ToString() : "-"));
+            infos.Add("CompletedQuestCount: " + (mobGroup.CompletedQuestID > 0 ? mobGroup.CompletedQuestCount.ToString() : "-"));
             infos.Add("IsQuestConditionFriendly (will become): " + (mobGroup.CompletedQuestID > 0 ? mobGroup.IsQuestConditionFriendly ? "Friendly" : "Aggressive" : "-"));
+            infos.Add("CompletedQuestNPCModel: " + (mobGroup.CompletedQuestNPCModel != 0 ? mobGroup.CompletedQuestNPCModel.ToString() : "-"));
+            infos.Add("CompletedQuestNPCRace: " + (mobGroup.CompletedQuestNPCFlags != 0 ? mobGroup.CompletedQuestNPCFlags.ToString() : "-"));
+            infos.Add("CompletedQuestNPCRace: " + (mobGroup.CompletedQuestNPCSize != 0 ? mobGroup.CompletedQuestNPCSize.ToString() : "-"));
             if (mobGroup.GroupInteractions != null)
             {
                 infos.Add(" Actions on Group Killed : ");

@@ -21,6 +21,8 @@ using System;
 using DOL.Database;
 using DOL.Database.Attributes;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace DOL.Database
 {
@@ -78,6 +80,7 @@ namespace DOL.Database
         private byte m_visibleWeaponSlots;
         private bool m_isRenaissance;
         private byte m_gender = 0;
+        private List<string> m_removedByEventID;
         private string m_eventID;
 
         public static readonly string DEFAULT_NPC_CLASSTYPE = "DOL.GS.GameNPC";
@@ -110,6 +113,7 @@ namespace DOL.Database
             m_ownerID = string.Empty;
             m_roamingRange = -1;
             m_gender = 0;
+            m_removedByEventID = new List<string>();
         }
 
         #region Properties
@@ -821,6 +825,20 @@ namespace DOL.Database
                     m_gender = value;
                     Dirty = true;
                 }
+            }
+        }
+
+        /// <summary>
+        /// List of events removing this
+        /// </summary>
+        [DataElement(AllowDbNull = true)]
+        public string RemovedByEventID
+        {
+            get { return string.Join("|", m_removedByEventID); }
+            set
+            {
+                m_removedByEventID = value.Split('|').ToList();
+                Dirty = true;
             }
         }
 

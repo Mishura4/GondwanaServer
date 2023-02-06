@@ -173,6 +173,10 @@ namespace DOL.GS.PacketHandler
             {
                 int speed = 0;
                 ushort speedZ = 0;
+                var npcFlags = npc.Flags;
+                if (MobGroups.MobGroup.IsQuestCompleted(npc, m_gameClient.Player) && npc.CurrentGroupMob.CompletedQuestNPCFlags != 0)
+                    npcFlags = (GameNPC.eFlags)npc.CurrentGroupMob.CompletedQuestNPCFlags;
+
                 if (npc == null)
                     return;
                 if (!npc.IsAtTargetPosition)
@@ -190,18 +194,18 @@ namespace DOL.GS.PacketHandler
                 pak.WriteShort(npc.Model);
                 pak.WriteByte(npc.Size);
                 byte level = npc.GetDisplayLevel(m_gameClient.Player);
-                if ((npc.Flags & GameNPC.eFlags.STATUE) != 0)
+                if ((npcFlags & GameNPC.eFlags.STATUE) != 0)
                 {
                     level |= 0x80;
                 }
                 pak.WriteByte(level);
 
                 byte flags = (byte)(GameServer.ServerRules.GetLivingRealm(m_gameClient.Player, npc) << 6);
-                if ((npc.Flags & GameNPC.eFlags.GHOST) != 0) flags |= 0x01;
+                if ((npcFlags & GameNPC.eFlags.GHOST) != 0) flags |= 0x01;
                 if (npc.Inventory != null) flags |= 0x02; //If mob has equipment, then only show it after the client gets the 0xBD packet
-                if ((npc.Flags & GameNPC.eFlags.PEACE) != 0) flags |= 0x10;
-                if ((npc.Flags & GameNPC.eFlags.FLYING) != 0) flags |= 0x20;
-                if ((npc.Flags & GameNPC.eFlags.TORCH) != 0) flags |= 0x04;
+                if ((npcFlags & GameNPC.eFlags.PEACE) != 0) flags |= 0x10;
+                if ((npcFlags & GameNPC.eFlags.FLYING) != 0) flags |= 0x20;
+                if ((npcFlags & GameNPC.eFlags.TORCH) != 0) flags |= 0x04;
 
                 pak.WriteByte(flags);
                 pak.WriteByte(0x20); //TODO this is the default maxstick distance
@@ -215,14 +219,14 @@ namespace DOL.GS.PacketHandler
                     flags2 |= 0x80; // have Owner
                 }
 
-                if ((npc.Flags & GameNPC.eFlags.CANTTARGET) != 0)
+                if ((npcFlags & GameNPC.eFlags.CANTTARGET) != 0)
                     if (m_gameClient.Account.PrivLevel > 1) add += "-DOR"; // indicates DOR flag for GMs
                     else flags2 |= 0x01;
-                if ((npc.Flags & GameNPC.eFlags.DONTSHOWNAME) != 0)
+                if ((npcFlags & GameNPC.eFlags.DONTSHOWNAME) != 0)
                     if (m_gameClient.Account.PrivLevel > 1) add += "-NON"; // indicates NON flag for GMs
                     else flags2 |= 0x02;
 
-                if ((npc.Flags & GameNPC.eFlags.STEALTH) > 0)
+                if ((npcFlags & GameNPC.eFlags.STEALTH) > 0)
                     flags2 |= 0x04;
 
                 eQuestIndicator questIndicator = npc.GetQuestIndicator(m_gameClient.Player);

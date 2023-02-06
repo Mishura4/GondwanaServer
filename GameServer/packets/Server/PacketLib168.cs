@@ -773,16 +773,19 @@ namespace DOL.GS.PacketHandler
             {
                 var npc = obj as GameNPC;
                 flags = (byte)(GameServer.ServerRules.GetLivingRealm(m_gameClient.Player, npc) << 6);
+                var npcFlags = npc.Flags;
+                if (MobGroups.MobGroup.IsQuestCompleted(npc, m_gameClient.Player) && npc.CurrentGroupMob.CompletedQuestNPCFlags != 0)
+                    npcFlags = (GameNPC.eFlags)npc.CurrentGroupMob.CompletedQuestNPCFlags;
 
                 if (m_gameClient.Account.PrivLevel < 2)
                 {
                     // no name only if normal player
-                    if ((npc.Flags & GameNPC.eFlags.CANTTARGET) != 0)
+                    if ((npcFlags & GameNPC.eFlags.CANTTARGET) != 0)
                         flags |= 0x01;
-                    if ((npc.Flags & GameNPC.eFlags.DONTSHOWNAME) != 0)
+                    if ((npcFlags & GameNPC.eFlags.DONTSHOWNAME) != 0)
                         flags |= 0x02;
                 }
-                if ((npc.Flags & GameNPC.eFlags.STATUE) != 0)
+                if ((npcFlags & GameNPC.eFlags.STATUE) != 0)
                 {
                     flags |= 0x01;
                 }
@@ -790,7 +793,7 @@ namespace DOL.GS.PacketHandler
                 {
                     flags |= 0x10;
                 }
-                if ((npc.Flags & GameNPC.eFlags.FLYING) != 0)
+                if ((npcFlags & GameNPC.eFlags.FLYING) != 0)
                 {
                     flags |= 0x20;
                 }
@@ -999,7 +1002,13 @@ namespace DOL.GS.PacketHandler
         public void SendModelChange(GameObject obj, ushort newModel)
         {
             if (obj is GameNPC)
-                SendModelAndSizeChange(obj, newModel, (obj as GameNPC).Size);
+            {
+                var gameNPC = obj as GameNPC;
+                if (gameNPC.CurrentGroupMob != null && MobGroups.MobGroup.IsQuestCompleted(gameNPC, m_gameClient.Player))
+                    SendModelAndSizeChange(obj, gameNPC.CurrentGroupMob.CompletedQuestNPCModel, (byte)gameNPC.CurrentGroupMob.CompletedQuestNPCSize);
+                else
+                    SendModelAndSizeChange(obj, newModel, gameNPC.Size);
+            }
             else
                 SendModelAndSizeChange(obj, newModel, 0);
         }
@@ -1058,16 +1067,29 @@ namespace DOL.GS.PacketHandler
                 pak.WriteInt((uint)npc.Position.X);
                 pak.WriteInt((uint)npc.Position.Y);
                 pak.WriteShort(speedZ);
-                pak.WriteShort(npc.Model);
-                pak.WriteByte(npc.Size);
+
+                var gameNPC = npc as GameNPC;
+                if (gameNPC.CurrentGroupMob != null && MobGroups.MobGroup.IsQuestCompleted(gameNPC, m_gameClient.Player))
+                {
+                    pak.WriteShort(gameNPC.CurrentGroupMob.CompletedQuestNPCModel);
+                    pak.WriteByte((byte)gameNPC.CurrentGroupMob.CompletedQuestNPCSize);
+                }
+                else
+                {
+                    pak.WriteShort(npc.Model);
+                    pak.WriteByte(npc.Size);
+                }
                 pak.WriteByte(npc.GetDisplayLevel(m_gameClient.Player));
 
                 var flags = (byte)(GameServer.ServerRules.GetLivingRealm(m_gameClient.Player, npc) << 6);
-                if ((npc.Flags & GameNPC.eFlags.GHOST) != 0) flags |= 0x01;
+                var npcFlags = npc.Flags;
+                if (MobGroups.MobGroup.IsQuestCompleted(npc, m_gameClient.Player) && npc.CurrentGroupMob.CompletedQuestNPCFlags != 0)
+                    npcFlags = (GameNPC.eFlags)npc.CurrentGroupMob.CompletedQuestNPCFlags;
+                if ((npcFlags & GameNPC.eFlags.GHOST) != 0) flags |= 0x01;
                 if (npc.Inventory != null)
                     flags |= 0x02; //If mob has equipment, then only show it after the client gets the 0xBD packet
-                if ((npc.Flags & GameNPC.eFlags.PEACE) != 0) flags |= 0x10;
-                if ((npc.Flags & GameNPC.eFlags.FLYING) != 0) flags |= 0x20;
+                if ((npcFlags & GameNPC.eFlags.PEACE) != 0) flags |= 0x10;
+                if ((npcFlags & GameNPC.eFlags.FLYING) != 0) flags |= 0x20;
 
                 pak.WriteByte(flags);
                 pak.WriteByte(0x20); //TODO this is the default maxstick distance
@@ -1075,9 +1097,9 @@ namespace DOL.GS.PacketHandler
                 string add = "";
                 if (m_gameClient.Account.PrivLevel > 1)
                 {
-                    if ((npc.Flags & GameNPC.eFlags.CANTTARGET) != 0)
+                    if ((npcFlags & GameNPC.eFlags.CANTTARGET) != 0)
                         add += "-DOR"; // indicates DOR flag for GMs
-                    if ((npc.Flags & GameNPC.eFlags.DONTSHOWNAME) != 0)
+                    if ((npcFlags & GameNPC.eFlags.DONTSHOWNAME) != 0)
                         add += "-NON"; // indicates NON flag for GMs
                 }
 

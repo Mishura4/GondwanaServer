@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using DOL.GS.Behaviour;
+using DOL.GameEvents;
+using System.Threading.Tasks;
 
 namespace DOL.GS.Quests
 {
@@ -73,6 +75,7 @@ namespace DOL.GS.Quests
         // this one is always called, useful if you want to start a goal with some hidden task
         public void Notify(PlayerQuest questData, DOLEvent e, object sender, EventArgs args)
         {
+            UpdateGroupMob(questData);
             var goalData = questData.GoalStates.Find(gs => gs.GoalId == GoalId);
             Notify(questData, goalData, e, sender, args);
         }
@@ -99,6 +102,18 @@ namespace DOL.GS.Quests
             if (CanStart(questData))
                 return ForceStartGoal(questData);
             return null;
+        }
+        void UpdateGroupMob(PlayerQuest questData)
+        {
+            var mobs = questData.Owner.GetNPCsInRadius(WorldMgr.VISIBILITY_DISTANCE);
+            foreach (var mob in mobs)
+            {
+                if (mob is GameNPC groupMob && groupMob.CurrentGroupMob != null)
+                {
+                    questData.Owner.Out.SendNPCCreate(groupMob);
+                    questData.Owner.Out.SendModelChange(groupMob, groupMob.Model);
+                }
+            }
         }
         public virtual PlayerGoalState ForceStartGoal(PlayerQuest questData)
         {
@@ -207,6 +222,16 @@ namespace DOL.GS.Quests
             foreach (GameNPC mob in WorldMgr.GetRegion(questData.Owner.CurrentRegionID)?.Objects?.Where(o => o != null && o is GameNPC))
             {
                 questData.Owner.Out.SendNPCsQuestEffect(mob, mob.GetQuestIndicator(questData.Owner));
+            }
+
+            var questEvent = GameEventManager.Instance.Events.FirstOrDefault(e =>
+            e.QuestStartingId?.Equals(Quest.Id + "-" + GoalId) == true &&
+           !e.StartedTime.HasValue &&
+            e.Status == EventStatus.NotOver &&
+            e.StartConditionType == StartingConditionType.Quest);
+            if (questEvent != null)
+            {
+                Task.Run(() => GameEventManager.Instance.StartEvent(questEvent));
             }
         }
 

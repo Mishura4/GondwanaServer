@@ -23,6 +23,10 @@ namespace DOLDatabase.Tables
         private string m_groupMobInteractId;
         private string m_groupMobOrigin_FK_Id;
         private bool m_isQuestConditionFriendly;
+        private ushort m_completedQuestNPCFlags;
+        private ushort m_completedQuestNPCModel;
+        private ushort m_completedQuestNPCSize;
+        private ushort m_completedStepQuestID;
         private int m_completedQuestId;
         private int m_completedQuestCount;
 
@@ -83,6 +87,35 @@ namespace DOLDatabase.Tables
         }
 
         [DataElement(AllowDbNull = false)]
+        public ushort CompletedQuestNPCFlags
+        {
+            get => m_completedQuestNPCFlags;
+            set { Dirty = true; m_completedQuestNPCFlags = value; }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public ushort CompletedQuestNPCModel
+        {
+            get => m_completedQuestNPCModel;
+            set { Dirty = true; m_completedQuestNPCModel = value; }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public ushort CompletedQuestNPCSize
+        {
+            get => m_completedQuestNPCSize;
+            set { Dirty = true; m_completedQuestNPCSize = value; }
+        }
+
+
+        [DataElement(AllowDbNull = false)]
+        public ushort CompletedStepQuestID
+        {
+            get => m_completedStepQuestID;
+            set { Dirty = true; m_completedStepQuestID = value; }
+        }
+
+        [DataElement(AllowDbNull = false)]
         public int CompletedQuestID
         {
             get => m_completedQuestId;
@@ -90,7 +123,7 @@ namespace DOLDatabase.Tables
         }
 
         [DataElement(AllowDbNull = false)]
-        public int ComletedQuestCount
+        public int CompletedQuestCount
         {
             get => m_completedQuestCount;
             set { Dirty = true; m_completedQuestCount = value; }

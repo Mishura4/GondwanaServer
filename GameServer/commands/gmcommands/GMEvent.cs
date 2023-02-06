@@ -23,6 +23,7 @@ namespace DOL.GS.Commands
         "Commands.GM.GMEvent.Usage.Reset",
         "Commands.GM.GMEvent.Usage.Add.Event",
         "Commands.GM.GMEvent.Usage.Add.MobChest",
+        "Commands.GM.GMEvent.Usage.TempRemove.MobChest",
         "Commands.GM.GMEvent.Usage.Respawn",
         "Commands.GM.GMEvent.Usage.StartEffect",
         "Commands.GM.GMEvent.Usage.EndEffect",
@@ -150,6 +151,125 @@ namespace DOL.GS.Commands
                             }
                         }
 
+                        break;
+
+                    case "tempremove":
+
+                        if (args.Length >= 6)
+                        {
+                            name = args[3];
+                            ushort region = 0;
+                            id = args[5];
+
+                            if (!ushort.TryParse(args[4], out region) || string.IsNullOrEmpty(name))
+                            {
+                                DisplaySyntax(client);
+                                return;
+                            }
+                            if (string.IsNullOrEmpty(id))
+                            {
+                                DisplaySyntax(client);
+                                return;
+                            }
+
+                            if (args[2] == "mob")
+                            {
+                                var disableMob = GameServer.Database.SelectObjects<Mob>(DB.Column("Name").IsEqualTo(name)
+                                .And(DB.Column("Region").IsEqualTo(region))).FirstOrDefault();
+                                if (disableMob != null)
+                                {
+                                    if (disableMob.RemovedByEventID != null || disableMob.RemovedByEventID != "")
+                                        disableMob.RemovedByEventID += "|" + id;
+                                    else
+                                        disableMob.RemovedByEventID = id;
+                                    GameServer.Database.SaveObject(disableMob);
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Event.ItemAdded", name, id), eChatType.CT_Chat, eChatLoc.CL_SystemWindow);
+                                }
+                                else
+                                {
+                                    DisplaySyntax(client);
+                                }
+                            }
+                            else if (args[2] == "coffre")
+                            {
+                                var disableChest = GameServer.Database.SelectObjects<DBCoffre>(DB.Column("Name").IsEqualTo(name)
+                                .And(DB.Column("Region").IsEqualTo(region))).FirstOrDefault();
+                                if (disableChest != null)
+                                {
+                                    if (disableChest.RemovedByEventID != null || disableChest.RemovedByEventID != "")
+                                        disableChest.RemovedByEventID += "|" + id;
+                                    else
+                                        disableChest.RemovedByEventID = id;
+                                    GameServer.Database.SaveObject(disableChest);
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Event.ItemAdded", name, id), eChatType.CT_Chat, eChatLoc.CL_SystemWindow);
+                                }
+                                else
+                                {
+                                    DisplaySyntax(client);
+                                }
+                            }
+                            else
+                            {
+                                DisplaySyntax(client);
+                            }
+                        }
+                        else if (args.Length == 4)
+                        {
+                            id = args[3];
+                            if (string.IsNullOrEmpty(id))
+                            {
+                                DisplaySyntax(client);
+                                return;
+                            }
+                            if (args[2] == "mob")
+                            {
+                                if (client.Player.TargetObject is GameNPC npc)
+                                {
+                                    var disableMob = GameServer.Database.SelectObjects<Mob>(DB.Column("Mob_ID").IsEqualTo(npc.InternalID)).FirstOrDefault();
+                                    if (disableMob != null)
+                                    {
+                                        if (disableMob.RemovedByEventID != null || disableMob.RemovedByEventID != "")
+                                            disableMob.RemovedByEventID += "|" + id;
+                                        else
+                                            disableMob.RemovedByEventID = id;
+                                        GameServer.Database.SaveObject(disableMob);
+                                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Event.ItemAdded", npc.Name, id), eChatType.CT_Chat, eChatLoc.CL_SystemWindow);
+                                    }
+                                }
+                                else
+                                {
+                                    DisplaySyntax(client);
+                                }
+                            }
+                            else if (args[2] == "coffre")
+                            {
+                                if (client.Player.TargetObject is GameStaticItem st && st.IsCoffre)
+                                {
+                                    var disableChest = GameServer.Database.SelectObjects<DBCoffre>(DB.Column("Coffre_ID").IsEqualTo(st.InternalID)).FirstOrDefault();
+                                    if (disableChest != null)
+                                    {
+                                        if (disableChest.RemovedByEventID != null || disableChest.RemovedByEventID != "")
+                                            disableChest.RemovedByEventID += "|" + id;
+                                        else
+                                            disableChest.RemovedByEventID = id;
+                                        GameServer.Database.SaveObject(disableChest);
+                                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Event.ItemAdded", st.Name, id), eChatType.CT_Chat, eChatLoc.CL_SystemWindow);
+                                    }
+                                }
+                                else
+                                {
+                                    DisplaySyntax(client);
+                                }
+                            }
+                            else
+                            {
+                                DisplaySyntax(client);
+                            }
+                        }
+                        else
+                        {
+                            DisplaySyntax(client);
+                        }
                         break;
 
                     case "reset":

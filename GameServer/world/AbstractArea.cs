@@ -23,6 +23,9 @@ using DOL.Events;
 using DOL.Language;
 using DOL.GS.PacketHandler;
 using System.Numerics;
+using DOL.GameEvents;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace DOL.GS
 {
@@ -260,6 +263,17 @@ namespace DOL.GS
             }
 
             player.IsAllowToVolInThisArea = this.CanVol;
+
+            var areaEvent = GameEventManager.Instance.Events.FirstOrDefault(e =>
+            e.AreaStartingId?.Equals(ID) == true &&
+           !e.StartedTime.HasValue &&
+            e.Status == EventStatus.NotOver &&
+            e.StartConditionType == StartingConditionType.Areaxevent);
+
+            if (areaEvent != null)
+            {
+                Task.Run(() => GameEventManager.Instance.StartEvent(areaEvent));
+            }
 
             player.Notify(AreaEvent.PlayerEnter, this, new AreaEventArgs(this, player));
         }

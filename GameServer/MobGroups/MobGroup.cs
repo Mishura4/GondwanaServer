@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static DOL.GS.GameNPC;
+using static DOL.GS.Quests.DataQuestJsonGoal;
 
 namespace DOL.MobGroups
 {
@@ -31,8 +32,12 @@ namespace DOL.MobGroups
             this.GroupId = db.GroupId;
             this.SlaveGroupId = db.SlaveGroupId;
             this.IsQuestConditionFriendly = db.IsQuestConditionFriendly;
+            this.CompletedQuestNPCFlags = db.CompletedQuestNPCFlags;
+            this.CompletedQuestNPCModel = db.CompletedQuestNPCModel;
+            this.CompletedQuestNPCSize = db.CompletedQuestNPCSize;
+            this.CompletedStepQuestID = db.CompletedStepQuestID;
             this.CompletedQuestID = db.CompletedQuestID;
-            this.ComletedQuestCount = db.ComletedQuestCount;
+            this.CompletedQuestCount = db.CompletedQuestCount;
             this.NPCs = new List<GameNPC>();
             this.GroupInfos = new MobGroupInfo()
             {
@@ -56,15 +61,48 @@ namespace DOL.MobGroups
         /// <param name="npc"></param>
         /// <param name="player"></param>
         /// <returns></returns>
+        public static bool IsQuestCompleted(GameNPC npc, GamePlayer player)
+        {
+            if (npc.CurrentGroupMob != null && npc.CurrentGroupMob.CompletedQuestID > 0)
+            {
+                if (npc.CurrentGroupMob.CompletedQuestCount > 0)
+                {
+                    var finishedCount = player.QuestListFinished.Select(q => q.QuestId == npc.CurrentGroupMob.CompletedQuestID).Count();
+                    if (finishedCount >= npc.CurrentGroupMob.CompletedQuestCount)
+                    {
+                        return true;
+                    }
+                }
+
+                if (npc.CurrentGroupMob.CompletedStepQuestID > 0)
+                {
+                    var currentQuest = player.QuestList.FirstOrDefault(q => q.Quest.Id == npc.CurrentGroupMob.CompletedQuestID
+                    && q.Goals.Any(g => g is GenericDataQuestGoal jgoal && jgoal.Goal.GoalId == npc.CurrentGroupMob.CompletedStepQuestID));
+
+                    if (currentQuest != null)
+                    {
+                        var currentGoal = currentQuest.Goals.FirstOrDefault(g => g is GenericDataQuestGoal jgoal && jgoal.Goal.GoalId == npc.CurrentGroupMob.CompletedStepQuestID);
+                        if (currentGoal != null && currentGoal.Status == eQuestGoalStatus.Active)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Is this npc-player relation allows Friendly interact 
+        /// </summary>
+        /// <param name="npc"></param>
+        /// <param name="player"></param>
+        /// <returns></returns>
         public static bool IsQuestFriendly(GameNPC npc, GamePlayer player)
         {
-            if (npc.CurrentGroupMob != null && npc.CurrentGroupMob.CompletedQuestID > 0 && npc.CurrentGroupMob.ComletedQuestCount > 0)
+            if (IsQuestCompleted(npc, player))
             {
-                var finishedCount = player.QuestListFinished.Select(q => q.QuestId == npc.CurrentGroupMob.CompletedQuestID).Count();
-                if (finishedCount >= npc.CurrentGroupMob.ComletedQuestCount)
-                {
-                    return npc.CurrentGroupMob.IsQuestConditionFriendly;
-                }
+                return npc.CurrentGroupMob.IsQuestConditionFriendly;
             }
             return false;
         }
@@ -78,13 +116,9 @@ namespace DOL.MobGroups
         /// <returns></returns>
         public static bool IsQuestAggresive(GameNPC npc, GamePlayer player)
         {
-            if (npc.CurrentGroupMob != null && npc.CurrentGroupMob.CompletedQuestID > 0 && npc.CurrentGroupMob.ComletedQuestCount > 0)
+            if (IsQuestCompleted(npc, player))
             {
-                var finishedCount = player.QuestListFinished.Select(q => q.QuestId == npc.CurrentGroupMob.CompletedQuestID).Count();
-                if (finishedCount >= npc.CurrentGroupMob.ComletedQuestCount)
-                {
-                    return !npc.CurrentGroupMob.IsQuestConditionFriendly;
-                }
+                return !npc.CurrentGroupMob.IsQuestConditionFriendly;
             }
             return false;
         }
@@ -193,13 +227,34 @@ namespace DOL.MobGroups
             set;
         }
 
+        public ushort CompletedQuestNPCFlags
+        {
+            get;
+            set;
+        }
+        public ushort CompletedQuestNPCModel
+        {
+            get;
+            set;
+        }
+        public ushort CompletedQuestNPCSize
+        {
+            get;
+            set;
+        }
+        public ushort CompletedStepQuestID
+        {
+            get;
+            set;
+        }
+
         public int CompletedQuestID
         {
             get;
             set;
         }
 
-        public int ComletedQuestCount
+        public int CompletedQuestCount
         {
             get;
             set;
@@ -321,11 +376,15 @@ namespace DOL.MobGroups
             this.GroupInfos = new MobGroupInfo();
             this.mobGroupInterfactFk = null;
             this.mobGroupOriginFk = null;
-            this.ComletedQuestCount = 0;
+            this.CompletedQuestCount = 0;
             this.CompletedQuestID = 0;
+            this.CompletedStepQuestID = 0;
             this.IsQuestConditionFriendly = false;
             this.HasOriginalStatus = true;
             this.SlaveGroupId = null;
+            this.CompletedQuestNPCFlags = 0;
+            this.CompletedQuestNPCModel = 0;
+            this.CompletedQuestNPCSize = 0;
             this.ApplyGroupInfos();
             this.SaveToDabatase();
 
@@ -388,9 +447,13 @@ namespace DOL.MobGroups
             db.ObjectId = this.InternalId;
             db.GroupMobInteract_FK_Id = this.mobGroupInterfactFk;
             db.GroupMobOrigin_FK_Id = this.mobGroupOriginFk;
-            db.ComletedQuestCount = this.ComletedQuestCount;
+            db.CompletedQuestCount = this.CompletedQuestCount;
             db.CompletedQuestID = this.CompletedQuestID;
             db.IsQuestConditionFriendly = this.IsQuestConditionFriendly;
+            db.CompletedStepQuestID = this.CompletedStepQuestID;
+            db.CompletedQuestNPCModel = this.CompletedQuestNPCModel;
+            db.CompletedQuestNPCSize = this.CompletedQuestNPCSize;
+            db.CompletedQuestNPCFlags = this.CompletedQuestNPCFlags;
 
             if (isNew)
             {

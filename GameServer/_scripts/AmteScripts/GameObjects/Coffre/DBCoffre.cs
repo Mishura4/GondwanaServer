@@ -11,6 +11,8 @@ using DOL.Database.Attributes;
 using System.Reflection;
 using log4net;
 using DOL.GameEvents;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace DOL.Database
 {
@@ -82,6 +84,7 @@ namespace DOL.Database
         private bool m_hasPickableAnim;
         private int m_coffreOpeningInterval;
         private string m_eventID;
+        private List<string> m_removedByEventID;
 
         [DataElement(AllowDbNull = false)]
         public string Name
@@ -509,6 +512,19 @@ namespace DOL.Database
             {
                 Dirty = true;
                 m_eventID = value;
+            }
+        }
+        /// <summary>
+        /// List of events removing this
+        /// </summary>
+        [DataElement(AllowDbNull = true)]
+        public string RemovedByEventID
+        {
+            get { return string.Join("|", m_removedByEventID); }
+            set
+            {
+                m_removedByEventID = value.Split('|').ToList();
+                Dirty = true;
             }
         }
     }

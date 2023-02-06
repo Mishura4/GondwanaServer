@@ -8,6 +8,8 @@ using System.Linq;
 using System.Reflection;
 using DOL.GS.PacketHandler;
 using DOL.GS.Scripts;
+using DOL.GameEvents;
+using System.Threading.Tasks;
 
 namespace DOL.GS.Quests;
 
@@ -158,6 +160,16 @@ public static class DataQuestJsonMgr
                 player.Out.SendNPCsQuestEffect(mob, mob.GetQuestIndicator(player));
             }
             player.Out.SendQuestListUpdate();
+        }
+
+        var questEvent = GameEventManager.Instance.Events.FirstOrDefault(e =>
+        e.QuestStartingId?.Equals(dq.Quest.Id + "-start") == true &&
+       !e.StartedTime.HasValue &&
+        e.Status == EventStatus.NotOver &&
+        e.StartConditionType == StartingConditionType.Quest);
+        if (questEvent != null)
+        {
+            Task.Run(() => GameEventManager.Instance.StartEvent(questEvent));
         }
     }
 
