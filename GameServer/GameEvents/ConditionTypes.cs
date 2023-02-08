@@ -15,7 +15,8 @@
     {
         Timer,
         Kill,
-        StartingEvent
+        StartingEvent,
+        AreaEvent
     }
     public enum InstancedConditionTypes
     {

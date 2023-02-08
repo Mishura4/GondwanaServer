@@ -43,6 +43,7 @@ using DOL.GS.PlayerClass;
 using DOL.GS.ServerProperties;
 using static DOL.GS.ScriptMgr;
 using System.Threading.Tasks;
+using DOL.GameEvents;
 
 namespace DOL.GS
 {
@@ -6155,6 +6156,8 @@ namespace DOL.GS
                 return false;
             }
 
+            if (this is GamePlayer)
+                GameEventManager.AreaWhisperEvent((GamePlayer)this, str);
             Notify(GameLivingEvent.Whisper, this, new WhisperEventArgs(target, str));
 
             if (target is GameLiving)

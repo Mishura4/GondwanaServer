@@ -226,6 +226,11 @@ namespace DOL.GS
 
             player.IsAllowToVolInThisArea = true;
 
+            if (DbArea != null)
+            {
+                Task.Run(() => GameEventManager.Instance.ResetAreaEvent(this));
+            }
+
             player.Notify(AreaEvent.PlayerLeave, this, new AreaEventArgs(this, player));
         }
 
@@ -264,17 +269,10 @@ namespace DOL.GS
 
             player.IsAllowToVolInThisArea = this.CanVol;
 
-            var areaEvent = GameEventManager.Instance.Events.FirstOrDefault(e =>
-            e.AreaStartingId?.Equals(ID) == true &&
-           !e.StartedTime.HasValue &&
-            e.Status == EventStatus.NotOver &&
-            e.StartConditionType == StartingConditionType.Areaxevent);
-
-            if (areaEvent != null)
+            if (DbArea != null)
             {
-                Task.Run(() => GameEventManager.Instance.StartEvent(areaEvent));
+                GameEventManager.UpdateAreaEvent(this);
             }
-
             player.Notify(AreaEvent.PlayerEnter, this, new AreaEventArgs(this, player));
         }
 

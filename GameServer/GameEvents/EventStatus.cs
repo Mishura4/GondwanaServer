@@ -5,6 +5,7 @@
         NotOver,
         EndedByTimer,
         EndedByKill,
-        EndedByEventStarting
+        EndedByEventStarting,
+        EndedByAreaEvent,
     }
 }

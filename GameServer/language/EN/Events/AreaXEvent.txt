@@ -1,0 +1,2 @@
+Area.Event.Timer.Start:			An event is triggering, you've got {0} seconds to act.
+Area.Event.Timer.Stop:			Event's times up! Try again!

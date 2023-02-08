@@ -33,11 +33,13 @@ namespace DOL.GameEvents
         private GameEventManager()
         {
             Events = new List<GameEvent>();
+            Areas = new List<AreaGameEvent>();
             PreloadedCoffres = new List<GameStaticItem>();
             PreloadedMobs = new List<GameNPC>();
         }
 
         public List<GameEvent> Events { get; set; }
+        public List<AreaGameEvent> Areas { get; set; }
 
         public bool Init()
         {
@@ -47,8 +49,6 @@ namespace DOL.GameEvents
         private async void TimeCheck(object o)
         {
             Instance.timer.Change(Timeout.Infinite, Timeout.Infinite);
-            Console.WriteLine("GameEvent: " + DateTime.Now.ToString());
-
 
             foreach (var ev in this.Events.Where(ev => ev.Status == EventStatus.NotOver))
             {
@@ -94,6 +94,100 @@ namespace DOL.GameEvents
             }
 
             Instance.timer.Change(Instance.period, Instance.period);
+        }
+
+        /// <summary>
+        /// Init Events Areas after Area loaded event
+        /// </summary>
+        /// <returns></returns>
+        [GameServerStartedEvent]
+        public static void LoadAreas(DOLEvent e, object sender, EventArgs arguments)
+        {
+            var areasFromDb = GameServer.Database.SelectAllObjects<AreaXEvent>();
+
+            if (areasFromDb == null)
+            {
+                return;
+            }
+
+            foreach (var area in areasFromDb)
+            {
+                var areaEvent = new AreaGameEvent(area);
+                Instance.Areas.Add(areaEvent);
+            }
+        }
+
+        /// <summary>
+        /// Reset area event on leave
+        /// </summary>
+        /// <returns></returns>
+        public async Task ResetAreaEvent(AbstractArea area)
+        {
+            var areaXEvent = Instance.Areas.FirstOrDefault(a => a.AreaID.Equals(area.DbArea.ObjectId));
+
+            if (areaXEvent == null)
+            {
+                return;
+            }
+            await areaXEvent.ResetAreaEvent();
+        }
+        /// <summary>
+        /// Update area event on enter
+        /// </summary>
+        /// <returns></returns>
+        public static void UpdateAreaEvent(AbstractArea area)
+        {
+            var areaXEvent = Instance.Areas.FirstOrDefault(a => a.AreaID.Equals(area.DbArea.ObjectId));
+
+            if (areaXEvent == null)
+            {
+                return;
+            }
+            areaXEvent.CheckConditions(area);
+        }
+
+        /// <summary>
+        /// Update area event on use item
+        /// </summary>
+        /// <returns></returns>
+        public static void AreaUseItemEvent(GamePlayer player, string itemId)
+        {
+            foreach (AbstractArea area in player.CurrentAreas)
+            {
+                if (area.DbArea == null)
+                    continue;
+                var areaXEvent = Instance.Areas.FirstOrDefault(a => a.AreaID.Equals(area.DbArea.ObjectId));
+
+                if (areaXEvent == null)
+                {
+                    continue;
+                }
+                if (areaXEvent.UseItem == itemId)
+                    areaXEvent.UseItemCounter++;
+                areaXEvent.CheckConditions();
+            }
+        }
+
+        /// <summary>
+        /// Update area event on whisper
+        /// </summary>
+        /// <returns></returns>
+        public static void AreaWhisperEvent(GamePlayer player, string whisper)
+        {
+            foreach (AbstractArea area in player.CurrentAreas)
+            {
+                if (area.DbArea == null)
+                    continue;
+                var areaXEvent = Instance.Areas.FirstOrDefault(a => a.AreaID.Equals(area.DbArea.ObjectId));
+
+                if (areaXEvent == null)
+                {
+                    continue;
+                }
+                if (areaXEvent.Whisper == whisper)
+                    areaXEvent.WhisperCounter++;
+                areaXEvent.CheckConditions();
+            }
         }
 
         /// <summary>
@@ -213,7 +307,6 @@ namespace DOL.GameEvents
             Instance.timer = new System.Threading.Timer(Instance.TimeCheck, Instance, Instance.dueTime, Instance.period);
             GameEventMgr.Notify(GameServerEvent.GameEventLoaded);
         }
-
 
         internal IList<string> GetEventInfo(string id)
         {
@@ -810,6 +903,13 @@ namespace DOL.GameEvents
                 CleanEvent(e);
             }
 
+            else if (end == EndingConditionType.AreaEvent)
+            {
+                e.Status = EventStatus.EndedByAreaEvent;
+                await ShowEndEffects(e);
+                CleanEvent(e);
+            }
+
             if (e.EndText != null && e.EventZones?.Any() == true)
             {
                 string message = e.EndText;
@@ -1030,6 +1130,9 @@ namespace DOL.GameEvents
             {
                 if (mob.ObjectState == GameObject.eObjectState.Active)
                 {
+                    if (!(mob is GameNPC))
+                        mob.Health = 0;
+
                     mob.RemoveFromWorld();
                     mob.Delete();
                 }

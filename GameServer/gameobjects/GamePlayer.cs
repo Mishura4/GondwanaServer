@@ -49,6 +49,7 @@ using DOL.GS.Styles;
 using DOL.GS.Utils;
 using DOL.Language;
 using DOL.Territory;
+using DOL.GameEvents;
 using log4net;
 
 namespace DOL.GS
@@ -9584,6 +9585,7 @@ namespace DOL.GS
                     }
                 }
                 // notify event handlers about used slot
+                GameEventManager.AreaUseItemEvent(this, useItem.Id_nb);
                 Notify(GamePlayerEvent.UseSlot, this, new UseSlotEventArgs(slot, type));
             }
         }
