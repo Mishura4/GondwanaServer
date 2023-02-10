@@ -143,6 +143,30 @@ namespace DOL.GS.Quests
             {
                 System.Threading.Tasks.Task.Run(() => GameEventManager.Instance.StartEvent(questEvent));
             }
+            if (Quest.EndStartEvent)
+            {
+
+                questEvent = GameEventManager.Instance.Events.FirstOrDefault(e =>
+                e.ID?.Equals(Quest.EndEventId) == true &&
+                !e.StartedTime.HasValue &&
+                e.Status == EventStatus.NotOver &&
+                e.StartConditionType == StartingConditionType.Quest);
+                if (questEvent != null)
+                {
+                    System.Threading.Tasks.Task.Run(() => GameEventManager.Instance.StartEvent(questEvent));
+                }
+            }
+            else if (Quest.EndResetEvent)
+            {
+                questEvent = GameEventManager.Instance.Events.FirstOrDefault(e =>
+                e.ID?.Equals(Quest.EndEventId) == true &&
+                e.StartedTime.HasValue &&
+                e.StartConditionType == StartingConditionType.Quest);
+                if (questEvent != null)
+                {
+                    System.Threading.Tasks.Task.Run(() => GameEventManager.Instance.ResetEvent(questEvent));
+                }
+            }
         }
         public void AbortQuest()
         {

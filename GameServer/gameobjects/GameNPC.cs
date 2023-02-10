@@ -1046,21 +1046,21 @@ namespace DOL.GS
             {
                 if (EventID != null && EventID != "" && checkObject is GamePlayer player)
                 {
-                    var gameEvent = GameEventManager.Instance.Events.FirstOrDefault(e => e.ID.Equals(EventID));
-                    switch (gameEvent.InstancedConditionType)
+                    var gameEvents = GameEventManager.Instance.Events.Where(e => e.ID.Equals(EventID));
+                    switch (gameEvents.FirstOrDefault().InstancedConditionType)
                     {
                         case InstancedConditionTypes.All:
                             return true;
                         case InstancedConditionTypes.Player:
-                            return gameEvent.Owner == player;
+                            return gameEvents.Where(e => e.Owner != null && e.Owner == player && e.Mobs.Contains(this)).Any();
                         case InstancedConditionTypes.Group:
-                            return player.Group != null && player.Group.IsInTheGroup(gameEvent.Owner);
+                            return gameEvents.Where(e => e.Owner != null && e.Owner.Group != null && e.Owner.Group.IsInTheGroup(player) && e.Mobs.Contains(this)).Any();
                         case InstancedConditionTypes.Guild:
-                            return player.Guild != null && player.Guild == gameEvent.Owner.Guild;
+                            return gameEvents.Where(e => e.Owner != null && e.Owner.Guild != null && e.Owner.Guild == player.Guild && e.Mobs.Contains(this)).Any();
                         case InstancedConditionTypes.Battlegroup:
-                            return gameEvent.Owner.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null) != null &&
-                            gameEvent.Owner.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null) ==
-                            player.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null);
+                            return gameEvents.Where(e => e.Owner != null && e.Owner.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null) != null &&
+                            e.Owner.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null) ==
+                            player.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null) && e.Mobs.Contains(this)).Any();
                         default:
                             break;
                     }
@@ -6098,6 +6098,7 @@ namespace DOL.GS
             if (copyTarget == null)
                 copyTarget = new GameNPC();
 
+            copyTarget.InternalID = InternalID;
             copyTarget.TranslationId = TranslationId;
             copyTarget.BlockChance = BlockChance;
             copyTarget.BodyType = BodyType;

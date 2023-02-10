@@ -58,6 +58,13 @@ namespace DOL.Database
 
         private string m_goalsJson;
 
+        private bool m_startEvent;
+        private bool m_resetEvent;
+        private bool m_endStartEvent;
+        private bool m_endResetEvent;
+        private string m_startEventId;
+        private string m_endEventId;
+
         public DBDataQuestJson()
         {
         }
@@ -299,5 +306,42 @@ namespace DOL.Database
             get { return m_rewardReputation; }
             set { Dirty = true; m_rewardReputation = value; }
         }
+        [DataElement(AllowDbNull = true)]
+        public bool StartEvent
+        {
+            get { return m_startEvent; }
+            set { Dirty = true; m_startEvent = value; }
+        }
+        [DataElement(AllowDbNull = true)]
+        public bool ResetEvent
+        {
+            get { return m_resetEvent; }
+            set { Dirty = true; m_resetEvent = value; }
+        }
+        [DataElement(AllowDbNull = true)]
+        public bool EndStartEvent
+        {
+            get { return m_endStartEvent; }
+            set { Dirty = true; m_endStartEvent = value; }
+        }
+        [DataElement(AllowDbNull = true)]
+        public bool EndResetEvent
+        {
+            get { return m_endResetEvent; }
+            set { Dirty = true; m_endResetEvent = value; }
+        }
+        [DataElement(AllowDbNull = true)]
+        public string StartEventId
+        {
+            get { return m_startEventId; }
+            set { Dirty = true; m_startEventId = value; }
+        }
+        [DataElement(AllowDbNull = true)]
+        public string EndEventId
+        {
+            get { return m_endEventId; }
+            set { Dirty = true; m_endEventId = value; }
+        }
+
     }
 }

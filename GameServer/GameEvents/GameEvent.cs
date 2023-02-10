@@ -25,6 +25,31 @@ namespace DOL.GameEvents
         public Dictionary<string, GameNPC> RemovedMobs { get; }
         public Dictionary<string, GameStaticItem> RemovedCoffres { get; }
 
+        public GameEvent(GameEvent ev)
+        {
+            _db = ev._db;
+            ID = ev.ID;
+            RandomTextTimer = new Timer();
+            RemainingTimeTimer = new Timer();
+
+            ParseValuesFromDb(ev._db as EventDB);
+
+            Coffres = new List<GameStaticItem>();
+            foreach (var coffre in ev.Coffres)
+            {
+                Coffres.Add(coffre.Copy());
+            }
+            Mobs = new List<GameNPC>();
+            foreach (var mob in ev.Mobs)
+            {
+                Mobs.Add(mob.Copy());
+            }
+            StartEffects = new Dictionary<string, ushort>(ev.StartEffects);
+            EndEffects = new Dictionary<string, ushort>(ev.EndEffects);
+            RemovedMobs = new Dictionary<string, GameNPC>(ev.RemovedMobs);
+            RemovedCoffres = new Dictionary<string, GameStaticItem>(ev.RemovedCoffres);
+        }
+
         public GameEvent(EventDB db)
         {
             _db = db.Clone();

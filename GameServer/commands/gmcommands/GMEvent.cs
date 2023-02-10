@@ -28,7 +28,8 @@ namespace DOL.GS.Commands
         "Commands.GM.GMEvent.Usage.StartEffect",
         "Commands.GM.GMEvent.Usage.EndEffect",
         "Commands.GM.GMEvent.Usage.Reresh",
-        "Commands.GM.GMEvent.Usage.Annonce")]
+        "Commands.GM.GMEvent.Usage.Annonce",
+        "Commands.GM.GMEvent.Usage.Instanced")]
 
     public class GMEvent
         : AbstractCommandHandler, ICommandHandler
@@ -493,6 +494,30 @@ namespace DOL.GS.Commands
 
                         break;
 
+                    case "isinstanced":
+                        if (args.Length != 4 || id == null)
+                        {
+                            DisplaySyntax(client);
+                            return;
+                        }
+
+                        var e = GetEventById(client, id);
+                        if (e == null)
+                        {
+                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Event.EventNotFound", id), eChatType.CT_Chat, eChatLoc.CL_SystemWindow);
+                            return;
+                        }
+
+                        InstancedConditionTypes instancedConditionType;
+                        if (!Enum.TryParse(args[3], out instancedConditionType))
+                        {
+                            DisplaySyntax(client);
+                            return;
+                        }
+                        e.InstancedConditionType = instancedConditionType;
+                        e.SaveToDatabase();
+                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Instance.Changed", instancedConditionType), eChatType.CT_Chat, eChatLoc.CL_SystemWindow);
+                        break;
 
                     default:
                         DisplaySyntax(client);

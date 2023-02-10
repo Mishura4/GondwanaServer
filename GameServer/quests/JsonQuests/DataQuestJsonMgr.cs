@@ -169,7 +169,31 @@ public static class DataQuestJsonMgr
         e.StartConditionType == StartingConditionType.Quest);
         if (questEvent != null)
         {
-            Task.Run(() => GameEventManager.Instance.StartEvent(questEvent));
+            System.Threading.Tasks.Task.Run(() => GameEventManager.Instance.StartEvent(questEvent));
+        }
+        if (dq.Quest.StartEvent)
+        {
+
+            questEvent = GameEventManager.Instance.Events.FirstOrDefault(e =>
+            e.ID?.Equals(dq.Quest.StartEventId) == true &&
+            !e.StartedTime.HasValue &&
+            e.Status == EventStatus.NotOver &&
+            e.StartConditionType == StartingConditionType.Quest);
+            if (questEvent != null)
+            {
+                System.Threading.Tasks.Task.Run(() => GameEventManager.Instance.StartEvent(questEvent));
+            }
+        }
+        else if (dq.Quest.ResetEvent)
+        {
+            questEvent = GameEventManager.Instance.Events.FirstOrDefault(e =>
+            e.ID?.Equals(dq.Quest.StartEventId) == true &&
+            e.StartedTime.HasValue &&
+            e.StartConditionType == StartingConditionType.Quest);
+            if (questEvent != null)
+            {
+                System.Threading.Tasks.Task.Run(() => GameEventManager.Instance.ResetEvent(questEvent));
+            }
         }
     }
 

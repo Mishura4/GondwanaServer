@@ -35,6 +35,10 @@ namespace DOL.GS.Quests
         public List<int> StartGoalsDone { get; set; } = new();
         public List<int> EndWhenGoalsDone { get; set; } = new();
 
+        public bool StartEvent { get; set; } = false;
+        public bool ResetEvent { get; set; } = false;
+        public string EventId { get; set; } = "";
+
         public DataQuestJsonGoal(DataQuestJson quest, int goalId, dynamic db)
         {
             QuestId = quest.Id;
@@ -59,6 +63,12 @@ namespace DOL.GS.Quests
             if (db.EndWhenGoalsDone != null)
                 foreach (var id in db.EndWhenGoalsDone)
                     EndWhenGoalsDone.Add((int)id);
+            if (db.StartEvent != null && db.StartEvent != "")
+                StartEvent = (bool)db.StartEvent;
+            if (db.ResetEvent != null && db.ResetEvent != "")
+                ResetEvent = (bool)db.ResetEvent;
+            if (db.EventId != null && db.EventId != "")
+                EventId = db.EventId;
         }
 
         public bool IsActive(PlayerQuest questData) => questData.GoalStates.Any(gs => gs.GoalId == GoalId && gs.IsActive);
@@ -231,7 +241,31 @@ namespace DOL.GS.Quests
             e.StartConditionType == StartingConditionType.Quest);
             if (questEvent != null)
             {
-                Task.Run(() => GameEventManager.Instance.StartEvent(questEvent));
+                System.Threading.Tasks.Task.Run(() => GameEventManager.Instance.StartEvent(questEvent));
+            }
+            if (StartEvent)
+            {
+
+                questEvent = GameEventManager.Instance.Events.FirstOrDefault(e =>
+                e.ID?.Equals(EventId) == true &&
+                !e.StartedTime.HasValue &&
+                e.Status == EventStatus.NotOver &&
+                e.StartConditionType == StartingConditionType.Quest);
+                if (questEvent != null)
+                {
+                    System.Threading.Tasks.Task.Run(() => GameEventManager.Instance.StartEvent(questEvent));
+                }
+            }
+            else if (ResetEvent)
+            {
+                questEvent = GameEventManager.Instance.Events.FirstOrDefault(e =>
+                e.ID?.Equals(EventId) == true &&
+                e.StartedTime.HasValue &&
+                e.StartConditionType == StartingConditionType.Quest);
+                if (questEvent != null)
+                {
+                    System.Threading.Tasks.Task.Run(() => GameEventManager.Instance.ResetEvent(questEvent));
+                }
             }
         }
 
@@ -255,6 +289,9 @@ namespace DOL.GS.Quests
                 { "MessageCompleted", MessageCompleted },
                 { "StartGoalsDone", StartGoalsDone.Count > 0 ? StartGoalsDone : null },
                 { "EndWhenGoalsDone", EndWhenGoalsDone.Count > 0 ? EndWhenGoalsDone : null },
+                { "StartEvent", StartEvent ? "1" : "0" },
+                { "ResetEvent", ResetEvent ? "1" : "0"  },
+                { "EventId", EventId },
             };
         }
 

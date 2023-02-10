@@ -55,6 +55,23 @@ namespace DOL.GS
             m_owners = new ArrayList(1);
         }
 
+        public GameStaticItem Copy()
+        {
+            GameStaticItem item = new GameStaticItem();
+            item.Model = Model;
+            item.RespawnInterval = RespawnInterval;
+            item.Emblem = Emblem;
+            item.TranslationId = TranslationId;
+            item.EventID = EventID;
+            item.Name = Name;
+            item.ExamineArticle = ExamineArticle;
+            item.Heading = Heading;
+            item.Level = Level;
+            item.Realm = Realm;
+            item.Position = Position;
+            return item;
+        }
+
         #region Name/Model/GetName/GetExamineMessages
         /// <summary>
         /// gets or sets the model of this Item

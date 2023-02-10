@@ -11,3 +11,4 @@ Commands.GM.GMEvent.Usage.StartEffect:		'/GMEvent starteffect <mob name> <eventI
 Commands.GM.GMEvent.Usage.EndEffect:		'/GMEvent endeffect <mob name> <eventId> <spellId>'Apply an effect on a mob by its <name> while disappearing at the end of an <eventId> by specifying the <spellId> of the effect
 Commands.GM.GMEvent.Usage.Reresh:		'/GMEvent refresh region <regionid>'Look for mobs and chests in the region <regionid> and make them match with recently added EventID and add them to the event'
 Commands.GM.GMEvent.Usage.Annonce:		'/GMEvent annonce <screen|windowed|send|log|confirm> <id>'To modify the announce type of an event <Event_id>
+Commands.GM.GMEvent.Usage.Instanced:		'/GMEvent isinstanced <value> <eventid>' To modify instanced type of  of an event <Event_id>

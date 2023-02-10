@@ -50,6 +50,13 @@ namespace DOL.GS.Quests
         public List<ItemTemplate> OptionalRewardItemTemplates = new();
         public List<ItemTemplate> FinalRewardItemTemplates = new();
 
+        public bool StartEvent;
+        public bool ResetEvent;
+        public bool EndStartEvent;
+        public bool EndResetEvent;
+        public string StartEventId;
+        public string EndEventId;
+
         /// <summary>
         /// GoalID to DataQuestJsonGoal
         /// </summary>
@@ -183,6 +190,12 @@ namespace DOL.GS.Quests
             _db.AllowedClasses = string.Join("|", AllowedClasses.Select(c => (int)c));
             _db.AllowedRaces = string.Join("|", AllowedRaces.Select(c => (int)c));
             _db.GoalsJson = JsonConvert.SerializeObject(Goals.Select(kv => new { Id = kv.Key, Type = kv.Value.GetType().FullName, Data = kv.Value.GetDatabaseJsonObject() }).ToArray());
+            _db.StartEvent = StartEvent;
+            _db.ResetEvent = ResetEvent;
+            _db.EndStartEvent = EndStartEvent;
+            _db.EndResetEvent = EndResetEvent;
+            _db.StartEventId = StartEventId;
+            _db.EndEventId = EndEventId;
             if (_db.IsPersisted)
                 GameServer.Database.SaveObject(_db);
             else
@@ -228,6 +241,13 @@ namespace DOL.GS.Quests
             var items = GameServer.Database.FindObjectsByKey<ItemTemplate>(optionalTemplates.Union(finalTemplates));
             OptionalRewardItemTemplates = optionalTemplates.Select(id => items.FirstOrDefault(it => it.Id_nb == id)).ToList();
             FinalRewardItemTemplates = finalTemplates.Select(id => items.FirstOrDefault(it => it.Id_nb == id)).ToList();
+
+            StartEvent = db.StartEvent;
+            ResetEvent = db.ResetEvent;
+            EndStartEvent = db.EndStartEvent;
+            EndResetEvent = db.EndResetEvent;
+            StartEventId = db.StartEventId;
+            EndEventId = db.EndEventId;
 
             var goals = JsonConvert.DeserializeObject<JArray>(db.GoalsJson);
             foreach (var json in goals)

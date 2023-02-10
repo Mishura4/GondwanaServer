@@ -36,9 +36,9 @@ namespace DOL.GameEvents
             LaunchTimer.Elapsed += LaunchTimer_Elapsed;
             MobCheckTimer.Interval = 2000; // update every 2 seconds
             MobCheckTimer.Elapsed += MobCheckTimer_Elapsed;
-            MobCheckTimer.AutoReset = true;
-            if (Mobs != null)
+            if (Mobs.Count() != 0 && Mobs != null)
             {
+                MobCheckTimer.AutoReset = true;
                 MobCheckTimer.Start();
             }
         }
@@ -48,7 +48,7 @@ namespace DOL.GameEvents
             EventID = db.EventID;
             AreaID = db.AreaID;
             PlayersNb = db.PlayersNb;
-            if (db.Mobs != null)
+            if (db.Mobs != "" && db.Mobs != null)
             {
                 var mobs = db.Mobs.Split(new char[] { ';' });
                 foreach (var mob in mobs)
@@ -95,7 +95,7 @@ namespace DOL.GameEvents
                         return;
                     }
                 }
-                Task.Run(() => GameEventManager.Instance.StartEvent(areaEvent));
+                Task.Run(() => GameEventManager.Instance.StartEvent(areaEvent, this));
                 MobCheckTimer.Stop();
             }
         }
@@ -133,7 +133,7 @@ namespace DOL.GameEvents
 
             if (areaEvent != null)
             {
-                if (Mobs != null && !MobCheckTimer.Enabled)
+                if (Mobs.Count() != 0 && Mobs != null && !MobCheckTimer.Enabled)
                 {
                     MobCheckTimer.Start();
                 }
@@ -147,7 +147,7 @@ namespace DOL.GameEvents
                         (UseItem != null && Whisper != null && UseItemCounter == PlayersNb && WhisperCounter == PlayersNb) ||
                         (UseItem == null && Whisper == null))
                     {
-                        Task.Run(() => GameEventManager.Instance.StartEvent(areaEvent));
+                        Task.Run(() => GameEventManager.Instance.StartEvent(areaEvent, this));
                         LaunchTimer.Stop();
                         return true;
                     }
@@ -167,7 +167,7 @@ namespace DOL.GameEvents
             return false;
         }
 
-        List<GameClient> GetPlayersInArea()
+        public List<GameClient> GetPlayersInArea()
         {
             return WorldMgr.GetAllPlayingClients().Where(c => Area.IsContaining(c.Player.Position.X, c.Player.Position.Y, c.Player.Position.Z)).ToList();
         }

@@ -613,11 +613,17 @@ namespace DOL.GameEvents
 
         public void ResetEvent(GameEvent ev)
         {
+
+            while (Instance.Events.Where(e => e.ID.Equals(ev.ID)).Count() != 1)
+            {
+                CleanEvent(ev);
+                Instance.Events.Remove(ev);
+                ev = Instance.Events.FirstOrDefault(e => e.ID.Equals(ev.ID));
+            }
             ev.StartedTime = (DateTimeOffset?)null;
             ev.EndTime = (DateTimeOffset?)null;
             ev.Status = EventStatus.NotOver;
             ev.WantedMobsCount = 0;
-
             CleanEvent(ev);
 
             if (ev.StartConditionType == StartingConditionType.Money)
@@ -669,7 +675,111 @@ namespace DOL.GameEvents
             ev.SaveToDatabase();
         }
 
-        public async Task<bool> StartEvent(GameEvent e)
+        public async Task<bool> StartEvent(GameEvent ev, AreaGameEvent areaEvent = null)
+        {
+            //temporarly disable
+            var disabledMobs = GameServer.Database.SelectObjects<Mob>(DB.Column("RemovedByEventID").IsNotNull());
+            foreach (var mob in disabledMobs)
+            {
+                if (mob.RemovedByEventID.Split("|").Contains(ev.ID.ToString()))
+                {
+                    var mobInRegion = WorldMgr.Regions[mob.Region].Objects.FirstOrDefault(o => o != null && o is GameNPC npc && npc.InternalID != null && npc.InternalID.Equals(mob.ObjectId));
+                    if (mobInRegion != null)
+                    {
+                        var npcInRegion = mobInRegion as GameNPC;
+                        //copy npc
+                        ev.RemovedMobs[npcInRegion.InternalID] = npcInRegion;
+                        npcInRegion.RemoveFromWorld();
+                        npcInRegion.Delete();
+                    }
+                }
+            }
+            var disabledCoffres = GameServer.Database.SelectObjects<DBCoffre>(DB.Column("RemovedByEventID").IsNotNull());
+            foreach (var coffre in disabledCoffres)
+            {
+                if (coffre.RemovedByEventID.Split("|").Contains(ev.ID.ToString()))
+                {
+                    var coffreInRegion = WorldMgr.Regions[coffre.Region].Objects.FirstOrDefault(o => o != null && o is GameStaticItem item && item.InternalID.Equals(coffre.ObjectId)) as GameStaticItem;
+                    if (coffreInRegion != null)
+                    {
+                        var itemInRegion = coffreInRegion as GameStaticItem;
+                        ev.RemovedCoffres[itemInRegion.InternalID] = itemInRegion;
+                        itemInRegion.RemoveFromWorld();
+                        itemInRegion.Delete();
+                    }
+                }
+            }
+
+            List<GameEvent> events = new List<GameEvent>();
+            if (areaEvent != null && ev.InstancedConditionType != InstancedConditionTypes.All)
+            {
+                var newEvent = ev;
+                List<Group> addedGroups = new List<Group>();
+                List<Guild> addedGuilds = new List<Guild>();
+                List<object> addedBattlegroups = new List<object>();
+                foreach (var cl in areaEvent.GetPlayersInArea())
+                {
+                    switch (ev.InstancedConditionType)
+                    {
+                        case InstancedConditionTypes.Player:
+                            newEvent.Owner = cl.Player;
+                            events.Add(newEvent);
+                            break;
+                        case InstancedConditionTypes.Group:
+                            if (cl.Player.Group != null && !addedGroups.Contains(cl.Player.Group))
+                            {
+                                newEvent.Owner = cl.Player;
+                                events.Add(newEvent);
+                                addedGroups.Add(cl.Player.Group);
+                            }
+                            break;
+                        case InstancedConditionTypes.Guild:
+                            if (cl.Player.Guild != null && !addedGuilds.Contains(cl.Player.Guild))
+                            {
+                                newEvent.Owner = cl.Player;
+                                events.Add(newEvent);
+                                addedGuilds.Add(cl.Player.Guild);
+                            }
+                            break;
+                        case InstancedConditionTypes.Battlegroup:
+                            if (cl.Player.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null) != null && !addedBattlegroups.Contains(cl.Player.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null)))
+                            {
+                                newEvent.Owner = cl.Player;
+                                events.Add(newEvent);
+                                addedBattlegroups.Add(cl.Player.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null));
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                    if (!Instance.Events.Contains(newEvent))
+                        Instance.Events.Add(newEvent);
+                    newEvent = new GameEvent(ev);
+                }
+
+            }
+            else
+                events.Add(ev);
+
+            foreach (var e in events)
+            {
+                StartEventSetup(e);
+            }
+
+            //need give more time to client after addtoworld to perform animation
+            await Task.Delay(500);
+
+            foreach (var e in events)
+            {
+                await Task.Run(() => GameEventManager.Instance.StartEventEffects(e));
+            }
+
+            log.Info(string.Format("Event ID: {0}, Name: {1} was Launched At: {2}", ev.ID, ev.EventName, DateTime.Now.ToLocalTime()));
+            ev.SaveToDatabase();
+
+            return true;
+        }
+        public bool StartEventSetup(GameEvent e)
         {
             e.WantedMobsCount = 0;
 
@@ -777,9 +887,12 @@ namespace DOL.GameEvents
                 mob.AddToWorld();
             }
 
-            //need give more time to client after addtoworld to perform animation
-            await Task.Delay(500);
+            e.Coffres.ForEach(c => c.AddToWorld());
+            return true;
+        }
 
+        public async Task<bool> StartEventEffects(GameEvent e)
+        {
             foreach (var mob in e.Mobs)
             {
                 if (e.StartEffects.ContainsKey(mob.InternalID))
@@ -787,11 +900,6 @@ namespace DOL.GameEvents
                     this.ApplyEffect(mob, e.StartEffects);
                 }
             }
-
-            e.Coffres.ForEach(c => c.AddToWorld());
-
-            //need give more time to client after addtoworld to perform animation
-            await Task.Delay(500);
 
             foreach (var coffre in e.Coffres)
             {
@@ -805,42 +913,6 @@ namespace DOL.GameEvents
             {
                 await FinishEventByEventById(e.ID, e.StartActionStopEventID);
             }
-
-            //temporarly disable
-            var disabledMobs = GameServer.Database.SelectObjects<Mob>(DB.Column("RemovedByEventID").IsNotNull());
-            foreach (var mob in disabledMobs)
-            {
-                if (mob.RemovedByEventID.Split("|").Contains(e.ID.ToString()))
-                {
-                    var mobInRegion = WorldMgr.Regions[mob.Region].Objects.FirstOrDefault(o => o != null && o is GameNPC npc && npc.InternalID != null && npc.InternalID.Equals(mob.ObjectId));
-                    if (mobInRegion != null)
-                    {
-                        var npcInRegion = mobInRegion as GameNPC;
-                        //copy npc
-                        e.RemovedMobs[npcInRegion.InternalID] = npcInRegion;
-                        npcInRegion.RemoveFromWorld();
-                        npcInRegion.Delete();
-                    }
-                }
-            }
-            var disabledCoffres = GameServer.Database.SelectObjects<DBCoffre>(DB.Column("RemovedByEventID").IsNotNull());
-            foreach (var coffre in disabledCoffres)
-            {
-                if (coffre.RemovedByEventID.Split("|").Contains(e.ID.ToString()))
-                {
-                    var coffreInRegion = WorldMgr.Regions[coffre.Region].Objects.FirstOrDefault(o => o != null && o is GameStaticItem item && item.InternalID.Equals(coffre.ObjectId)) as GameStaticItem;
-                    if (coffreInRegion != null)
-                    {
-                        var itemInRegion = coffreInRegion as GameStaticItem;
-                        e.RemovedCoffres[itemInRegion.InternalID] = itemInRegion;
-                        itemInRegion.RemoveFromWorld();
-                        itemInRegion.Delete();
-                    }
-                }
-            }
-            log.Info(string.Format("Event ID: {0}, Name: {1} was Launched At: {2}", e.ID, e.EventName, DateTime.Now.ToLocalTime()));
-            e.SaveToDatabase();
-
             return true;
         }
 
@@ -963,20 +1035,28 @@ namespace DOL.GameEvents
 
                 }
 
-                //restore temporarly disabled
-                foreach (var mob in e.RemovedMobs)
+                var eventsCount = GameEventManager.Instance.Events.Where(ev => ev.ID.Equals(e.ID)).Count();
+                if (eventsCount == 1)
                 {
-                    mob.Value.AddToWorld();
-                    mob.Value.InternalID = mob.Key;
-                }
-                e.RemovedMobs.Clear();
+                    //restore temporarly disabled
+                    foreach (var mob in e.RemovedMobs)
+                    {
+                        mob.Value.AddToWorld();
+                        mob.Value.InternalID = mob.Key;
+                    }
+                    e.RemovedMobs.Clear();
 
-                foreach (var item in e.RemovedCoffres)
-                {
-                    item.Value.AddToWorld();
-                    item.Value.InternalID = item.Key;
+                    foreach (var item in e.RemovedCoffres)
+                    {
+                        item.Value.AddToWorld();
+                        item.Value.InternalID = item.Key;
+                    }
+                    e.RemovedCoffres.Clear();
                 }
-                e.RemovedCoffres.Clear();
+                else
+                {
+                    GameEventManager.Instance.Events.Remove(e);
+                }
 
                 //Enjoy the message
                 await Task.Delay(TimeSpan.FromSeconds(5));
@@ -1130,8 +1210,9 @@ namespace DOL.GameEvents
             {
                 if (mob.ObjectState == GameObject.eObjectState.Active)
                 {
-                    if (!(mob is GameNPC))
+                    if ((mob.Flags & GameNPC.eFlags.PEACE) == 0)
                         mob.Health = 0;
+                    Console.WriteLine("mob name: " + mob.Name);
 
                     mob.RemoveFromWorld();
                     mob.Delete();
