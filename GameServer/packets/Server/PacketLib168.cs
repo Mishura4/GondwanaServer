@@ -1004,10 +1004,7 @@ namespace DOL.GS.PacketHandler
             if (obj is GameNPC)
             {
                 var gameNPC = obj as GameNPC;
-                if (gameNPC.CurrentGroupMob != null && MobGroups.MobGroup.IsQuestCompleted(gameNPC, m_gameClient.Player))
-                    SendModelAndSizeChange(obj, gameNPC.CurrentGroupMob.CompletedQuestNPCModel, (byte)gameNPC.CurrentGroupMob.CompletedQuestNPCSize);
-                else
-                    SendModelAndSizeChange(obj, newModel, gameNPC.Size);
+                SendModelAndSizeChange(obj, newModel, gameNPC.Size);
             }
             else
                 SendModelAndSizeChange(obj, newModel, 0);
@@ -1015,7 +1012,10 @@ namespace DOL.GS.PacketHandler
 
         public void SendModelAndSizeChange(GameObject obj, ushort newModel, byte newSize)
         {
-            SendModelAndSizeChange((ushort)obj.ObjectID, newModel, newSize);
+            if (obj is GameNPC gameNPC && gameNPC.CurrentGroupMob != null && MobGroups.MobGroup.IsQuestCompleted(gameNPC, m_gameClient.Player))
+                SendModelAndSizeChange((ushort)obj.ObjectID, gameNPC.CurrentGroupMob.CompletedQuestNPCModel, (byte)gameNPC.CurrentGroupMob.CompletedQuestNPCSize);
+            else
+                SendModelAndSizeChange((ushort)obj.ObjectID, newModel, newSize);
         }
 
         public virtual void SendModelAndSizeChange(ushort objectId, ushort newModel, byte newSize)

@@ -17,7 +17,7 @@ namespace DOL.GS.Quests
         public EnterAreaGoal(DataQuestJson quest, int goalId, dynamic db) : base(quest, goalId, (object)db)
         {
             m_area = new Area.Circle($"{quest.Name} EnterAreaGoal {goalId}", new Vector3((float)db.AreaCenter.X, (float)db.AreaCenter.Y, (float)db.AreaCenter.Z), (int)db.AreaRadius);
-            m_area.DisplayMessage = !false;
+            m_area.DisplayMessage = false;
             m_areaRegion = db.AreaRegion;
 
             var reg = WorldMgr.GetRegion(m_areaRegion);

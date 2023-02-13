@@ -85,7 +85,6 @@ namespace DOL.GS.Quests
         // this one is always called, useful if you want to start a goal with some hidden task
         public void Notify(PlayerQuest questData, DOLEvent e, object sender, EventArgs args)
         {
-            UpdateGroupMob(questData);
             var goalData = questData.GoalStates.Find(gs => gs.GoalId == GoalId);
             Notify(questData, goalData, e, sender, args);
         }
@@ -112,18 +111,6 @@ namespace DOL.GS.Quests
             if (CanStart(questData))
                 return ForceStartGoal(questData);
             return null;
-        }
-        void UpdateGroupMob(PlayerQuest questData)
-        {
-            var mobs = questData.Owner.GetNPCsInRadius(WorldMgr.VISIBILITY_DISTANCE);
-            foreach (var mob in mobs)
-            {
-                if (mob is GameNPC groupMob && groupMob.CurrentGroupMob != null)
-                {
-                    questData.Owner.Out.SendNPCCreate(groupMob);
-                    questData.Owner.Out.SendModelChange(groupMob, groupMob.Model);
-                }
-            }
         }
         public virtual PlayerGoalState ForceStartGoal(PlayerQuest questData)
         {
@@ -241,11 +228,12 @@ namespace DOL.GS.Quests
             e.StartConditionType == StartingConditionType.Quest);
             if (questEvent != null)
             {
+                if (questEvent.InstancedConditionType != InstancedConditionTypes.All)
+                    questEvent.Owner = player;
                 System.Threading.Tasks.Task.Run(() => GameEventManager.Instance.StartEvent(questEvent));
             }
             if (StartEvent)
             {
-
                 questEvent = GameEventManager.Instance.Events.FirstOrDefault(e =>
                 e.ID?.Equals(EventId) == true &&
                 !e.StartedTime.HasValue &&
@@ -253,6 +241,8 @@ namespace DOL.GS.Quests
                 e.StartConditionType == StartingConditionType.Quest);
                 if (questEvent != null)
                 {
+                    if (questEvent.InstancedConditionType != InstancedConditionTypes.All)
+                        questEvent.Owner = player;
                     System.Threading.Tasks.Task.Run(() => GameEventManager.Instance.StartEvent(questEvent));
                 }
             }
@@ -267,6 +257,7 @@ namespace DOL.GS.Quests
                     System.Threading.Tasks.Task.Run(() => GameEventManager.Instance.ResetEvent(questEvent));
                 }
             }
+            questData.UpdateGroupMob(questData.Owner);
         }
 
         public virtual IQuestGoal ToQuestGoal(PlayerQuest questData, PlayerGoalState goalData)

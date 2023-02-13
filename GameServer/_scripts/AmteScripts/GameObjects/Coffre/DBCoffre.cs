@@ -520,10 +520,16 @@ namespace DOL.Database
         [DataElement(AllowDbNull = true)]
         public string RemovedByEventID
         {
-            get { return string.Join("|", m_removedByEventID); }
+            get {
+                if (m_removedByEventID != null)
+                    return string.Join("|", m_removedByEventID);
+                else 
+                    return "";
+            }
             set
             {
-                m_removedByEventID = value.Split('|').ToList();
+                if(value!= null)
+                    m_removedByEventID = value.Split('|').ToList();
                 Dirty = true;
             }
         }

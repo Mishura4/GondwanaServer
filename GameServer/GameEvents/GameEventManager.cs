@@ -728,7 +728,7 @@ namespace DOL.GameEvents
                         case InstancedConditionTypes.Group:
                             if (cl.Player.Group != null && !addedGroups.Contains(cl.Player.Group))
                             {
-                                newEvent.Owner = cl.Player;
+                                newEvent.Owner = cl.Player.Group.Leader;
                                 events.Add(newEvent);
                                 addedGroups.Add(cl.Player.Group);
                             }
@@ -809,6 +809,7 @@ namespace DOL.GameEvents
 
             foreach (var mob in e.Mobs)
             {
+                mob.Health = mob.MaxHealth;
                 var db = GameServer.Database.FindObjectByKey<Mob>(mob.InternalID);
                 mob.LoadFromDatabase(db);
 
@@ -1212,8 +1213,6 @@ namespace DOL.GameEvents
                 {
                     if ((mob.Flags & GameNPC.eFlags.PEACE) == 0)
                         mob.Health = 0;
-                    Console.WriteLine("mob name: " + mob.Name);
-
                     mob.RemoveFromWorld();
                     mob.Delete();
                 }

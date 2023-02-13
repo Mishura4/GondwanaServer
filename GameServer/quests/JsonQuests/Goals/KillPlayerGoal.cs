@@ -29,7 +29,7 @@ namespace DOL.GS.Quests
             {
                 hasArea = true;
                 m_area = new Area.Circle($"{quest.Name} KillPlayerGoal {goalId}", new Vector3((float)db.AreaCenter.X, (float)db.AreaCenter.Y, (float)db.AreaCenter.Z), (int)db.AreaRadius);
-                m_area.DisplayMessage = !false;
+                m_area.DisplayMessage = false;
                 m_areaRegion = db.AreaRegion;
 
                 var reg = WorldMgr.GetRegion(m_areaRegion);
@@ -62,8 +62,6 @@ namespace DOL.GS.Quests
                     || !(killed is GamePlayer)
                     || (hasArea && !m_area.IsContaining(killed.Position, false)))
                     return;
-                Console.WriteLine(killed.CurrentRegion);
-                Console.WriteLine(m_region);
                 AdvanceGoal(quest, goal);
             }
         }

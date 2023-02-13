@@ -187,8 +187,18 @@ namespace DOL.GS.PacketHandler
                 pak.WriteInt((uint)npc.Position.X);
                 pak.WriteInt((uint)npc.Position.Y);
                 pak.WriteShort(speedZ);
-                pak.WriteShort(npc.Model);
-                pak.WriteByte(npc.Size);
+
+                var gameNPC = npc as GameNPC;
+                if (gameNPC.CurrentGroupMob != null && MobGroups.MobGroup.IsQuestCompleted(gameNPC, m_gameClient.Player))
+                {
+                    pak.WriteShort(gameNPC.CurrentGroupMob.CompletedQuestNPCModel);
+                    pak.WriteByte((byte)gameNPC.CurrentGroupMob.CompletedQuestNPCSize);
+                }
+                else
+                {
+                    pak.WriteShort(npc.Model);
+                    pak.WriteByte(npc.Size);
+                }
                 byte level = npc.GetDisplayLevel(m_gameClient.Player);
                 if ((npcFlags & GameNPC.eFlags.STATUE) != 0)
                 {

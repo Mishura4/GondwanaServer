@@ -141,11 +141,12 @@ namespace DOL.GS.Quests
             e.StartConditionType == StartingConditionType.Quest);
             if (questEvent != null)
             {
+                if (questEvent.InstancedConditionType != InstancedConditionTypes.All)
+                    questEvent.Owner = Owner;
                 System.Threading.Tasks.Task.Run(() => GameEventManager.Instance.StartEvent(questEvent));
             }
             if (Quest.EndStartEvent)
             {
-
                 questEvent = GameEventManager.Instance.Events.FirstOrDefault(e =>
                 e.ID?.Equals(Quest.EndEventId) == true &&
                 !e.StartedTime.HasValue &&
@@ -153,6 +154,8 @@ namespace DOL.GS.Quests
                 e.StartConditionType == StartingConditionType.Quest);
                 if (questEvent != null)
                 {
+                    if (questEvent.InstancedConditionType != InstancedConditionTypes.All)
+                        questEvent.Owner = Owner;
                     System.Threading.Tasks.Task.Run(() => GameEventManager.Instance.StartEvent(questEvent));
                 }
             }
@@ -167,6 +170,7 @@ namespace DOL.GS.Quests
                     System.Threading.Tasks.Task.Run(() => GameEventManager.Instance.ResetEvent(questEvent));
                 }
             }
+            UpdateGroupMob(Owner);
         }
         public void AbortQuest()
         {
@@ -184,14 +188,20 @@ namespace DOL.GS.Quests
                 Owner.Out.SendNPCsQuestEffect(mob, mob.GetQuestIndicator(Owner));
             }
             Owner.Out.SendMessage(LanguageMgr.GetTranslation(Owner.Client, "AbstractQuest.AbortQuest", Quest.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-
-            var mobs = Owner.GetNPCsInRadius(WorldMgr.VISIBILITY_DISTANCE);
+            UpdateGroupMob(Owner);
+        }
+        public void UpdateGroupMob(GamePlayer owner)
+        {
+            var mobs = owner.GetNPCsInRadius(WorldMgr.VISIBILITY_DISTANCE);
             foreach (var mob in mobs)
             {
                 if (mob is GameNPC groupMob && groupMob.CurrentGroupMob != null)
                 {
-                    Owner.Out.SendNPCCreate(groupMob);
-                    Owner.Out.SendModelChange(groupMob, groupMob.Model);
+                    if (MobGroups.MobGroup.IsQuestCompleted(groupMob, owner))
+                    {
+                        owner.Out.SendNPCCreate(groupMob);
+                        owner.Out.SendModelChange(groupMob, groupMob.Model);
+                    }
                 }
             }
         }

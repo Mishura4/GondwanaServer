@@ -126,6 +126,11 @@ namespace DOL.GS.Scripts
             get;
             set;
         }
+        public string RemovedByEventID
+        {
+            get;
+            set;
+        }
 
         public int TpEffect
         {
@@ -712,6 +717,7 @@ namespace DOL.GS.Scripts
             EventID = coffre.EventID;
             CoffreOpeningInterval = coffre.CoffreOpeningInterval;
             IsLargeCoffre = coffre.IsLargeCoffre;
+            RemovedByEventID = coffre.RemovedByEventID;
 
             InitTimer();
 
@@ -772,6 +778,7 @@ namespace DOL.GS.Scripts
             Coffre.EventID = EventID;
             Coffre.CoffreOpeningInterval = CoffreOpeningInterval;
             Coffre.IsLargeCoffre = IsLargeCoffre;
+            Coffre.RemovedByEventID = RemovedByEventID;
 
             if (Items != null)
             {

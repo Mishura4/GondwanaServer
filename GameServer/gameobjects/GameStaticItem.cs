@@ -19,9 +19,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using DOL.Database;
 using DOL.Events;
+using DOL.GameEvents;
 using DOL.Language;
 
 namespace DOL.GS
@@ -503,6 +505,45 @@ namespace DOL.GS
                         activeOwners.Add(weak.Target);
                 return (GameObject[])activeOwners.ToArray(typeof(GameObject));
             }
+        }
+
+        /// <summary>
+        /// Is this object visible to another?
+        /// </summary>
+        /// <param name="checkObject"></param>
+        /// <returns></returns>
+        public override bool IsVisibleTo(GameObject checkObject)
+        {
+            if (base.IsVisibleTo(checkObject))
+            {
+                if (EventID != null && EventID != "" && checkObject is GamePlayer player)
+                {
+                    var gameEvents = GameEventManager.Instance.Events.Where(e => e.ID.Equals(EventID));
+                    switch (gameEvents.FirstOrDefault().InstancedConditionType)
+                    {
+                        case InstancedConditionTypes.All:
+                            return true;
+                        case InstancedConditionTypes.Player:
+                            return gameEvents.Where(e => e.Owner != null && e.Owner == player && e.Coffres.Contains(this)).Any();
+                        case InstancedConditionTypes.Group:
+                            return gameEvents.Where(e => e.Owner != null && e.Owner.Group != null && e.Owner.Group.IsInTheGroup(player) && e.Coffres.Contains(this)).Any();
+                        case InstancedConditionTypes.Guild:
+                            return gameEvents.Where(e => e.Owner != null && e.Owner.Guild != null && e.Owner.Guild == player.Guild && e.Coffres.Contains(this)).Any();
+                        case InstancedConditionTypes.Battlegroup:
+                            return gameEvents.Where(e => e.Owner != null && e.Owner.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null) != null &&
+                            e.Owner.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null) ==
+                            player.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null) && e.Coffres.Contains(this)).Any();
+                        default:
+                            break;
+                    }
+                }
+                else
+                {
+                    return true;
+                }
+
+            }
+            return false;
         }
     }
 }

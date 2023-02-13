@@ -4397,6 +4397,8 @@ namespace DOL.GS
 
                 if (isAllOthersGroupMobDead && mobGroupEvent != null)
                 {
+                    if (mobGroupEvent.InstancedConditionType != InstancedConditionTypes.All)
+                        mobGroupEvent.Owner = killer as GamePlayer;
                     Task.Run(() => GameEventManager.Instance.StartEvent(mobGroupEvent));
                 }
             }
