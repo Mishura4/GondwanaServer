@@ -199,6 +199,7 @@ public static class DataQuestJsonMgr
                 System.Threading.Tasks.Task.Run(() => GameEventManager.Instance.ResetEvent(questEvent));
             }
         }
+        dq.UpdateGroupMob(player);
     }
 
     public static (PlayerQuest quest, PlayerGoalState goal) FindQuestAndGoalFromPlayer(GamePlayer player, ushort questId, int goalId)

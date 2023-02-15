@@ -80,5 +80,10 @@ namespace DOL.GS.Quests
                 }
             }
         }
+        public override void Unload()
+        {
+            WorldMgr.GetRegion(m_areaRegion)?.RemoveArea(m_area);
+            base.Unload();
+        }
     }
 }

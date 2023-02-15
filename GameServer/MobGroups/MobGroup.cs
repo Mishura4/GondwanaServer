@@ -67,7 +67,7 @@ namespace DOL.MobGroups
             {
                 if (npc.CurrentGroupMob.CompletedQuestCount > 0)
                 {
-                    var finishedCount = player.QuestListFinished.Select(q => q.QuestId == npc.CurrentGroupMob.CompletedQuestID).Count();
+                    var finishedCount = player.QuestListFinished.Where(q => q.QuestId == npc.CurrentGroupMob.CompletedQuestID).Count();
                     if (finishedCount >= npc.CurrentGroupMob.CompletedQuestCount)
                     {
                         return true;
@@ -76,7 +76,7 @@ namespace DOL.MobGroups
 
                 if (npc.CurrentGroupMob.CompletedStepQuestID > 0)
                 {
-                    var currentQuest = player.QuestList.FirstOrDefault(q => q.Quest.Id == npc.CurrentGroupMob.CompletedQuestID
+                    var currentQuest = player.QuestList.FirstOrDefault(q => q.QuestId == npc.CurrentGroupMob.CompletedQuestID
                     && q.Goals.Any(g => g is GenericDataQuestGoal jgoal && jgoal.Goal.GoalId == npc.CurrentGroupMob.CompletedStepQuestID));
 
                     if (currentQuest != null)

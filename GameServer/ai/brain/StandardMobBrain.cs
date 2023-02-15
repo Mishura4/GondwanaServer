@@ -31,6 +31,7 @@ using DOL.Language;
 using log4net;
 using System.Numerics;
 using DOL.gameobjects.CustomNPC;
+using DOL.GS.Scripts;
 
 namespace DOL.AI.Brain
 {
@@ -226,6 +227,7 @@ namespace DOL.AI.Brain
                 }
             }
         }
+        public float AggroMultiplier = 1.0f;
 
         /// <summary>
         /// Check for aggro against close NPCs
@@ -233,9 +235,20 @@ namespace DOL.AI.Brain
         protected virtual void CheckNPCAggro()
         {
             if (HasAggro) return;
-
-            foreach (GameNPC npc in Body.GetNPCsInRadius((ushort)AggroRange, Body.CurrentRegion.IsDungeon ? false : true))
+            var FollowingFriendMobCount = 0;
+            foreach (GameNPC npc in Body.GetNPCsInRadius((ushort)(AggroRange * AggroMultiplier), Body.CurrentRegion.IsDungeon ? false : true))
             {
+                //recheck range for not FollowingFriendMob npcs
+                if (AggroMultiplier != 1 && !(npc is FollowingFriendMob))
+                {
+                    if (Body.GetDistanceTo(npc) > AggroRange * AggroMultiplier)
+                        continue;
+                }
+                else if (AggroMultiplier != 1 && npc is FollowingFriendMob)
+                {
+                    FollowingFriendMobCount++;
+                }
+
                 if (!GameServer.ServerRules.IsAllowedToAttack(Body, npc, true)) continue;
                 if (m_aggroTable.ContainsKey(npc))
                     continue; // add only new NPCs
@@ -251,6 +264,10 @@ namespace DOL.AI.Brain
                     else
                         AddToAggroList(npc, 1);
                 }
+            }
+            if (AggroMultiplier != 1 && FollowingFriendMobCount > 0)
+            {
+                AggroMultiplier = 1.0f;
             }
         }
 
@@ -701,6 +718,12 @@ namespace DOL.AI.Brain
             // Withdraw if can't attack.
             if (GameServer.ServerRules.IsAllowedToAttack(Body, target, true) == false)
                 return 0;
+
+            // FollowingFriendMob will have higher aggro
+            if (target is FollowingFriendMob)
+            {
+                return Math.Min(100, AggroLevel) * (target as FollowingFriendMob).AggroMultiplier;
+            }
 
             // Get owner if target is pet
             GameLiving realTarget = target;

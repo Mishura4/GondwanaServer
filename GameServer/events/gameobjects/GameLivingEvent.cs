@@ -88,6 +88,10 @@ namespace DOL.Events
         /// </summary>
         public static readonly GameLivingEvent EnemyKilled = new GameLivingEvent("GameLiving.EnemyKilled");
         /// <summary>
+        /// The BringAFriend event is fired whenever the living brings a friend to the target
+        /// </summary>
+        public static readonly GameLivingEvent BringAFriend = new GameLivingEvent("GameLiving.BringAFriend");
+        /// <summary>
         /// The GainedExperience event is fired whenever the living gains experience
         /// </summary>
         public static readonly GameLivingEvent GainedExperience = new GameLivingEvent("GameLiving.GainedExperience");

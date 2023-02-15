@@ -148,6 +148,16 @@ namespace DOL.GS.Quests
                 ChatUtil.SendScreenCenter(questData.Owner, $"{Description} - {goalData.Progress}/{ProgressTotal}");
             }
         }
+        public virtual void DecreaseGoal(PlayerQuest questData, PlayerGoalState goalData)
+        {
+            goalData.Progress -= 1;
+            questData.SaveIntoDatabase();
+            if (Visible)
+            {
+                questData.Owner.Out.SendQuestUpdate(questData);
+                ChatUtil.SendScreenCenter(questData.Owner, $"{Description} - {goalData.Progress}/{ProgressTotal}");
+            }
+        }
 
         public virtual void AbortGoal(PlayerQuest questData)
         {
@@ -170,7 +180,7 @@ namespace DOL.GS.Quests
                 ChatUtil.SendImportant(player, $"[Quest {Quest.Name}] " + BehaviourUtils.GetPersonalizedMessage(MessageAborted, player));
         }
 
-        public void EndGoal(PlayerQuest questData, PlayerGoalState goalData)
+        public virtual void EndGoal(PlayerQuest questData, PlayerGoalState goalData)
         {
             EndGoal(questData, goalData, null);
             questData.SaveIntoDatabase();

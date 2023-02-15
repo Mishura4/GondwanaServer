@@ -197,11 +197,8 @@ namespace DOL.GS.Quests
             {
                 if (mob is GameNPC groupMob && groupMob.CurrentGroupMob != null)
                 {
-                    if (MobGroups.MobGroup.IsQuestCompleted(groupMob, owner))
-                    {
-                        owner.Out.SendNPCCreate(groupMob);
-                        owner.Out.SendModelChange(groupMob, groupMob.Model);
-                    }
+                    owner.Out.SendNPCCreate(groupMob);
+                    owner.Out.SendModelChange(groupMob, groupMob.Model);
                 }
             }
         }
