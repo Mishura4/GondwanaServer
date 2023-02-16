@@ -6,3 +6,4 @@ Commands.Players.Event.EventAlreadyStarted:  L'évènement avec l'id {0} a déja
 Commands.Players.Event.ItemAdded:            {0} a été ajouté avec succès à l'event {1}
 Commands.Players.Event.ItemNotFound:         L'item avec l'id {0} n'a pas été trouvé
 Commands.Players.Event.ItemModified:         L'item Nom: {0} a bien été modifié
+Commands.Players.Instance.Changed:           L'instance a bien été remplacée par : {0} 

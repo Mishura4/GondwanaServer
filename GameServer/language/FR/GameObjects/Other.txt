@@ -1,0 +1,5 @@
+# GAMEOBJECTS/ATLANTIS
+# /Researcher
+Researcher.GetExamineMessages.YouExamine:		Vous regardez {0}. {1} est {2}.
+Researcher.GetExamineMessages.She:			elle
+Researcher.GetExamineMessages.He:			il
