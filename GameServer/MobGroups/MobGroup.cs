@@ -229,7 +229,7 @@ namespace DOL.MobGroups
             set;
         }
 
-        public ushort CompletedQuestNPCFlags
+        public string CompletedQuestNPCFlags
         {
             get;
             set;
@@ -394,7 +394,7 @@ namespace DOL.MobGroups
             this.IsQuestConditionFriendly = false;
             this.HasOriginalStatus = true;
             this.SlaveGroupId = null;
-            this.CompletedQuestNPCFlags = 0;
+            this.CompletedQuestNPCFlags = null;
             this.CompletedQuestNPCModel = 0;
             this.CompletedQuestNPCSize = 0;
             this.CompletedQuestAggro = 0;

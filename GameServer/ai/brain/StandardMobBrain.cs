@@ -208,8 +208,16 @@ namespace DOL.AI.Brain
                 //If we have an aggrolevel above 0, we check for players and npcs in the area to attack
                 if (!Body.AttackState && AggroLevel > 0)
                 {
-                    CheckPlayerAggro();
-                    CheckNPCAggro();
+                    if (AggroMultiplier != 1)
+                    {
+                        CheckNPCAggro();
+                        CheckPlayerAggro();
+                    }
+                    else
+                    {
+                        CheckPlayerAggro();
+                        CheckNPCAggro();
+                    }
                 }
 
                 if (HasAggro)

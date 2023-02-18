@@ -11,6 +11,7 @@ using DOL.GS.Scripts;
 using DOL.GameEvents;
 using System.Threading.Tasks;
 using DOL.Language;
+using DOL.GS.Behaviour;
 
 namespace DOL.GS.Quests;
 
@@ -111,7 +112,7 @@ public static class DataQuestJsonMgr
             var quest = GetQuest(questId);
             if (sender is ITextNPC textNPC && textNPC.TextNPCData.CheckQuestAvailable(quest.Name))
                 return;
-            if (IsDoingTimerQuest(player))
+            if (IsDoingTimerQuest(player) && quest.Goals.Any(g => g.Value is TimerGoal))
             {
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "DataQuestJson.JsonQuest.Timer"),
                     eChatType.CT_System, eChatLoc.CL_SystemWindow);
@@ -162,7 +163,7 @@ public static class DataQuestJsonMgr
             {
                 var formatMsg = dq.Quest.AcceptText.Replace(@"\n", "\n");
 
-                var finalMsg = Util.SplitCSV(formatMsg, true);
+                var finalMsg = Util.SplitCSV(BehaviourUtils.GetPersonalizedMessage(formatMsg, player), true);
 
                 player.Out.SendCustomTextWindow(npc.Name + " dit", finalMsg);
             }

@@ -11,4 +11,6 @@ Commands.GM.GroupMob.Usage.Status.Quest:		'/GroupMob quest <GroupId> <QuestId> <
 Commands.GM.GroupMob.Usage.Status.Quest.Flag:		'/GroupMob quest flag <GroupId> <New Flag>' To add a new flag for groupmob after completing a quest
 Commands.GM.GroupMob.Usage.Status.Quest.Model:		'/GroupMob quest model <GroupId> <New Model>' To add a new model for groupmob after completing a quest
 Commands.GM.GroupMob.Usage.Status.Quest.Size:		'/GroupMob quest size <GroupId> <New Size>' To add a new size for groupmob after completing a quest
+Commands.GM.GroupMob.Usage.Status.Quest.Aggro:		'/GroupMob quest aggro <GroupId> <New Aggro>' To add a new aggro for groupmob after completing a quest
+Commands.GM.GroupMob.Usage.Status.Quest.Range:		'/GroupMob quest range <GroupId> <New Range>' To add a new range for groupmob after completing a quest
 Commands.GM.GroupMob.Usage.Status.Reset:		'/GroupMob status reset <GroupId> <GroupId>'  Reset the GroupMob Status as well as its interactions

@@ -173,8 +173,8 @@ namespace DOL.GS.PacketHandler
                 if (npc == null)
                     return;
                 var npcFlags = npc.Flags;
-                if (MobGroups.MobGroup.IsQuestCompleted(npc, m_gameClient.Player) && npc.CurrentGroupMob.CompletedQuestNPCFlags != 0)
-                    npcFlags = (GameNPC.eFlags)npc.CurrentGroupMob.CompletedQuestNPCFlags;
+                if (MobGroups.MobGroup.IsQuestCompleted(npc, m_gameClient.Player) && npc.CurrentGroupMob.CompletedQuestNPCFlags != null)
+                    npcFlags = (GameNPC.eFlags)int.Parse(npc.CurrentGroupMob.CompletedQuestNPCFlags);
                 if (!npc.IsAtTargetPosition)
                 {
                     speed = npc.CurrentSpeed;

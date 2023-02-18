@@ -35,14 +35,19 @@ namespace DOL.Events
         /// the friendly mob
         /// </summary>
         private readonly GameLiving m_friend;
+        /// <summary>
+        /// has the target started following
+        /// </summary>
+        private readonly bool m_following;
 
         /// <summary>
         /// Constructs a new BringAFriendArgs
         /// </summary>
-        public BringAFriendArgs(GameLiving friend, bool entered)
+        public BringAFriendArgs(GameLiving friend, bool entered, bool following = false)
         {
             this.m_friend = friend;
             this.m_entered = entered;
+            this.m_following = following;
         }
 
         /// <summary>
@@ -51,6 +56,14 @@ namespace DOL.Events
         public bool Entered
         {
             get { return m_entered; }
+        }
+
+        /// <summary>
+        /// Gets if the target has started following
+        /// </summary>
+        public bool Following
+        {
+            get { return m_following; }
         }
 
         /// <summary>

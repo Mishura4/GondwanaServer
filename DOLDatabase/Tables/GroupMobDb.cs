@@ -23,7 +23,7 @@ namespace DOLDatabase.Tables
         private string m_groupMobInteractId;
         private string m_groupMobOrigin_FK_Id;
         private bool m_isQuestConditionFriendly;
-        private ushort m_completedQuestNPCFlags;
+        private string m_completedQuestNPCFlags;
         private ushort m_completedQuestNPCModel;
         private ushort m_completedQuestNPCSize;
         private ushort m_completedQuestAggro;
@@ -88,8 +88,8 @@ namespace DOLDatabase.Tables
             set { Dirty = true; m_isQuestConditionFriendly = value; }
         }
 
-        [DataElement(AllowDbNull = false)]
-        public ushort CompletedQuestNPCFlags
+        [DataElement(AllowDbNull = true)]
+        public string CompletedQuestNPCFlags
         {
             get => m_completedQuestNPCFlags;
             set { Dirty = true; m_completedQuestNPCFlags = value; }

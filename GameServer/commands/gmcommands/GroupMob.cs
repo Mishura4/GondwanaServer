@@ -28,6 +28,8 @@ namespace DOL.commands.gmcommands
           "Commands.GM.GroupMob.Usage.Status.Quest.Flag",
           "Commands.GM.GroupMob.Usage.Status.Quest.Model",
           "Commands.GM.GroupMob.Usage.Status.Quest.Size",
+          "Commands.GM.GroupMob.Usage.Status.Quest.Aggro",
+          "Commands.GM.GroupMob.Usage.Status.Quest.Range",
           "Commands.GM.GroupMob.Usage.Status.Reset")]
 
     public class GroupMob
@@ -39,7 +41,7 @@ namespace DOL.commands.gmcommands
             GameNPC target = client.Player.TargetObject as GameNPC;
             string groupId = null;
 
-            if (target == null && args.Length > 3 && args[1].ToLowerInvariant() != "status" && args[1].ToLowerInvariant() != "add")
+            if (target == null && args.Length > 3 && args[1].ToLowerInvariant() != "status" && args[1].ToLowerInvariant() != "add" && args[1].ToLowerInvariant() != "quest")
             {
                 if (args.Length == 4 && args[1].ToLowerInvariant() == "group" && args[2].ToLowerInvariant() == "remove")
                 {
@@ -335,7 +337,7 @@ namespace DOL.commands.gmcommands
                         switch (args[2].ToLowerInvariant())
                         {
                             case "flag":
-                                MobGroupManager.Instance.Groups[groupId].CompletedQuestNPCFlags = id;
+                                MobGroupManager.Instance.Groups[groupId].CompletedQuestNPCFlags = id.ToString();
                                 break;
                             case "model":
                                 MobGroupManager.Instance.Groups[groupId].CompletedQuestNPCModel = id;

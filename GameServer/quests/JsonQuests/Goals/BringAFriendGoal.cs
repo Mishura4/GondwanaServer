@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using DOL.GS.Scripts;
+using DOLDatabase.Tables;
 
 namespace DOL.GS.Quests
 {
@@ -21,11 +22,18 @@ namespace DOL.GS.Quests
         private readonly Area.Circle m_area;
         private readonly ushort m_areaRegion;
         public FollowingFriendMob lastFriend;
+        bool hasMobGroup = false;
 
         public BringAFriendGoal(DataQuestJson quest, int goalId, dynamic db) : base(quest, goalId, (object)db)
         {
             m_target = db.TargetName;
-            m_friendCount = db.Count;
+            GroupMobDb mobGroup = GameServer.Database.SelectObject<GroupMobDb>(t => t.GroupId == m_target);
+            if (mobGroup != null)
+            {
+                hasMobGroup = true;
+                int mobGroupCount = GameServer.Database.SelectObjects<GroupMobXMobs>(t => t.GroupId == mobGroup.GroupId).Count();
+                m_friendCount = mobGroupCount;
+            }
             if (db.AreaRadius != null && db.AreaRadius != "" && db.AreaRegion != null && db.AreaRegion != "" && db.AreaCenter != null)
             {
                 m_area = new Area.Circle($"{quest.Name} EnterAreaGoal {goalId}", new Vector3((float)db.AreaCenter.X, (float)db.AreaCenter.Y, (float)db.AreaCenter.Z), (int)db.AreaRadius);
@@ -42,7 +50,6 @@ namespace DOL.GS.Quests
         {
             var dict = base.GetDatabaseJsonObject();
             dict.Add("TargetName", m_target);
-            dict.Add("Count", m_friendCount);
             dict.Add("AreaCenter", m_area.Position);
             dict.Add("AreaRadius", m_area.Radius);
             dict.Add("AreaRegion", m_areaRegion);
@@ -52,7 +59,9 @@ namespace DOL.GS.Quests
         public override void AbortGoal(PlayerQuest questData)
         {
             if (lastFriend != null)
-                lastFriend.ResetFriendMobs();
+                if (hasMobGroup)
+                    lastFriend.ResetFriendMobs();
+                else lastFriend.ResetFriendMob();
             base.AbortGoal(questData);
         }
 
@@ -70,10 +79,14 @@ namespace DOL.GS.Quests
         {
             if (e == GameLivingEvent.BringAFriend && args is BringAFriendArgs bringAFriendArgs)
             {
-                var friend = bringAFriendArgs.Friend as FollowingFriendMob;
+                FollowingFriendMob friend = bringAFriendArgs.Friend as FollowingFriendMob;
                 if (friend == null || (friend.Name != m_target && (friend.CurrentGroupMob == null || friend.CurrentGroupMob.GroupId != m_target)))
                     return;
                 lastFriend = friend;
+
+                if (bringAFriendArgs.Following)
+                    return;
+
                 if (bringAFriendArgs.Entered)
                 {
                     AdvanceGoal(quest, goal);

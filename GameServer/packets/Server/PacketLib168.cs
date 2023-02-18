@@ -774,8 +774,8 @@ namespace DOL.GS.PacketHandler
                 var npc = obj as GameNPC;
                 flags = (byte)(GameServer.ServerRules.GetLivingRealm(m_gameClient.Player, npc) << 6);
                 var npcFlags = npc.Flags;
-                if (MobGroups.MobGroup.IsQuestCompleted(npc, m_gameClient.Player) && npc.CurrentGroupMob.CompletedQuestNPCFlags != 0)
-                    npcFlags = (GameNPC.eFlags)npc.CurrentGroupMob.CompletedQuestNPCFlags;
+                if (MobGroups.MobGroup.IsQuestCompleted(npc, m_gameClient.Player) && npc.CurrentGroupMob.CompletedQuestNPCFlags != null)
+                    npcFlags = (GameNPC.eFlags)int.Parse(npc.CurrentGroupMob.CompletedQuestNPCFlags);
 
                 if (m_gameClient.Account.PrivLevel < 2)
                 {
@@ -1083,8 +1083,8 @@ namespace DOL.GS.PacketHandler
 
                 var flags = (byte)(GameServer.ServerRules.GetLivingRealm(m_gameClient.Player, npc) << 6);
                 var npcFlags = npc.Flags;
-                if (MobGroups.MobGroup.IsQuestCompleted(npc, m_gameClient.Player) && npc.CurrentGroupMob.CompletedQuestNPCFlags != 0)
-                    npcFlags = (GameNPC.eFlags)npc.CurrentGroupMob.CompletedQuestNPCFlags;
+                if (MobGroups.MobGroup.IsQuestCompleted(npc, m_gameClient.Player) && npc.CurrentGroupMob.CompletedQuestNPCFlags != null)
+                    npcFlags = (GameNPC.eFlags)int.Parse(npc.CurrentGroupMob.CompletedQuestNPCFlags);
                 if ((npcFlags & GameNPC.eFlags.GHOST) != 0) flags |= 0x01;
                 if (npc.Inventory != null)
                     flags |= 0x02; //If mob has equipment, then only show it after the client gets the 0xBD packet

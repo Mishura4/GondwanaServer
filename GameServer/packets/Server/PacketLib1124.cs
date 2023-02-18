@@ -174,8 +174,8 @@ namespace DOL.GS.PacketHandler
                 int speed = 0;
                 ushort speedZ = 0;
                 var npcFlags = npc.Flags;
-                if (MobGroups.MobGroup.IsQuestCompleted(npc, m_gameClient.Player) && npc.CurrentGroupMob.CompletedQuestNPCFlags != 0)
-                    npcFlags = (GameNPC.eFlags)npc.CurrentGroupMob.CompletedQuestNPCFlags;
+                if (MobGroups.MobGroup.IsQuestCompleted(npc, m_gameClient.Player) && npc.CurrentGroupMob.CompletedQuestNPCFlags != null)
+                    npcFlags = (GameNPC.eFlags)int.Parse(npc.CurrentGroupMob.CompletedQuestNPCFlags);
 
                 if (npc == null)
                     return;

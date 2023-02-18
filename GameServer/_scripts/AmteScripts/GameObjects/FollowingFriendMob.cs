@@ -71,8 +71,11 @@ namespace DOL.GS.Scripts
                 if (string.IsNullOrEmpty(TextUnfollow))
                     return false;
 
-                TurnTo(player);
-                player.Out.SendMessage(TextUnfollow, eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                if (PlayerFollow != null && PlayerFollow == player)
+                {
+                    TurnTo(player);
+                    player.Out.SendMessage(TextUnfollow, eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                }
             }
             else if (FollowingFromRadius == 0)
             {
@@ -102,6 +105,7 @@ namespace DOL.GS.Scripts
             if (!string.IsNullOrEmpty(ResponseFollow) && str.ToLower() == ResponseFollow.ToLower())
             {
                 PlayerFollow = player;
+                player.Notify(GameLivingEvent.BringAFriend, player, new BringAFriendArgs(this, true, true));
             }
             if (str.ToLower() == "ungroup" || (ungroupText != null && str.ToLower() == ungroupText))
             {
@@ -194,16 +198,17 @@ namespace DOL.GS.Scripts
 
         public void ResetFriendMobs()
         {
-            var area = CurrentRegion.GetAreasOfSpot(Position).OfType<AbstractArea>().FirstOrDefault(a => a.DbArea != null && a.DbArea.ObjectId == AreaToEnter);
-            if (area != null)
+            if (CurrentGroupMob != null)
             {
                 var mobs = WorldMgr.GetNPCsFromRegion(CurrentRegion.ID).Where(c => c is FollowingFriendMob &&
-                    area.IsContaining(c.Position.X, c.Position.Y, c.Position.Z)).ToList();
+                    c.CurrentGroupMob != null && c.CurrentGroupMob == CurrentGroupMob).ToList();
                 foreach (FollowingFriendMob mob in mobs)
                 {
                     mob.ResetFriendMob();
                 }
             }
+            else
+                ResetFriendMob();
         }
         public void ResetFriendMob()
         {
@@ -450,6 +455,7 @@ namespace DOL.AI.Brain
                 foreach (var player in players)
                 {
                     ((FollowingFriendMob)Body).PlayerFollow = player as GamePlayer;
+                    ((GamePlayer)player).Notify(GameLivingEvent.BringAFriend, ((GamePlayer)player), new BringAFriendArgs((FollowingFriendMob)Body, true, true));
                     break;
                 }
             }
