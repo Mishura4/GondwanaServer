@@ -618,7 +618,11 @@ namespace DOL.GS.PacketHandler
                     for (var idx = 0; idx < q.VisibleGoals.Count; ++idx)
                     {
                         var goal = q.VisibleGoals[idx];
-                        var desc = $"{goal.Description} ({goal.Progress} / {goal.ProgressTotal})\r";
+                        var desc = "";
+                        if (goal.ProgressTotal == 1)
+                            desc = $"{goal.Description}\r";
+                        else
+                            desc = $"{goal.Description} ({goal.Progress} / {goal.ProgressTotal})\r";
                         pak.WriteShortLowEndian((ushort)desc.Length);
                         pak.WriteStringBytes(desc);
                         // pak.WriteShortLowEndian(goal.PointB.ZoneId);

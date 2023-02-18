@@ -1851,14 +1851,6 @@ namespace DOL.GS
 
             int oldRegion = CurrentRegionID;
 
-            //Call MoveTo after new GameGravestone(this...
-            //or the GraveStone will be located at the player's bindpoint		
-
-            if (m_releaseType != eReleaseType.Jail)
-            {
-                MoveTo(relRegion, relX, relY, relZ, relHeading);
-            }
-
             //It is enough if we revive the player on this client only here
             //because for other players the player will be removed in the MoveTo
             //method and added back again (if in view) with full health ... so no
@@ -1866,6 +1858,14 @@ namespace DOL.GS
             Out.SendPlayerRevive(this);
             //			Out.SendUpdatePlayer();
             Out.SendUpdatePoints();
+
+            //Call MoveTo after new GameGravestone(this...
+            //or the GraveStone will be located at the player's bindpoint		
+
+            if (m_releaseType != eReleaseType.Jail)
+            {
+                MoveTo(relRegion, relX, relY, relZ, relHeading);
+            }
 
             //Set property indicating that we are releasing to another region; used for Released event
             if (oldRegion != CurrentRegionID)

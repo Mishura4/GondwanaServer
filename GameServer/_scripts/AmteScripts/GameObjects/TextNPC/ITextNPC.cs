@@ -64,6 +64,24 @@ namespace DOL.GS.Scripts
             PlayerReferences = new Dictionary<string, EchangeurInfo>();
         }
 
+        public TextNPCPolicy(GameNPC body, TextNPCPolicy policy)
+        {
+            Condition = policy.Condition;
+            QuestTexts = new Dictionary<string, string>(policy.QuestTexts);
+            Reponses = new Dictionary<string, string>(policy.Reponses);
+            EmoteReponses = new Dictionary<string, eEmote>(policy.EmoteReponses);
+            SpellReponses = new Dictionary<string, ushort>(policy.SpellReponses);
+            SpellReponsesCast = new Dictionary<string, bool>(policy.SpellReponsesCast);
+            QuestReponses = new Dictionary<string, string>(policy.QuestReponses);
+            QuestReponsesValues = new Dictionary<string, Tuple<string, int>>(policy.QuestReponsesValues);
+            _body = body;
+            _lastPhrase = 0;
+            Interact_Text = policy.Interact_Text;
+            PhraseInterval = policy.PhraseInterval;
+            PlayerReferences = new Dictionary<string, EchangeurInfo>();
+            SaveIntoDatabase();
+        }
+
         public bool Interact(GamePlayer player)
         {
             if ((!CheckQuestDialog(player) && string.IsNullOrEmpty(Interact_Text)) || !CheckAccess(player))

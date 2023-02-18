@@ -35,6 +35,8 @@ namespace DOL.MobGroups
             this.CompletedQuestNPCFlags = db.CompletedQuestNPCFlags;
             this.CompletedQuestNPCModel = db.CompletedQuestNPCModel;
             this.CompletedQuestNPCSize = db.CompletedQuestNPCSize;
+            this.CompletedQuestAggro = db.CompletedQuestAggro;
+            this.CompletedQuestRange = db.CompletedQuestRange;
             this.CompletedStepQuestID = db.CompletedStepQuestID;
             this.CompletedQuestID = db.CompletedQuestID;
             this.CompletedQuestCount = db.CompletedQuestCount;
@@ -242,6 +244,16 @@ namespace DOL.MobGroups
             get;
             set;
         }
+        public ushort CompletedQuestAggro
+        {
+            get;
+            set;
+        }
+        public ushort CompletedQuestRange
+        {
+            get;
+            set;
+        }
         public ushort CompletedStepQuestID
         {
             get;
@@ -385,6 +397,8 @@ namespace DOL.MobGroups
             this.CompletedQuestNPCFlags = 0;
             this.CompletedQuestNPCModel = 0;
             this.CompletedQuestNPCSize = 0;
+            this.CompletedQuestAggro = 0;
+            this.CompletedQuestRange = 0;
             this.ApplyGroupInfos();
             this.SaveToDabatase();
 
@@ -453,6 +467,8 @@ namespace DOL.MobGroups
             db.CompletedStepQuestID = this.CompletedStepQuestID;
             db.CompletedQuestNPCModel = this.CompletedQuestNPCModel;
             db.CompletedQuestNPCSize = this.CompletedQuestNPCSize;
+            db.CompletedQuestAggro = this.CompletedQuestAggro;
+            db.CompletedQuestRange = this.CompletedQuestRange;
             db.CompletedQuestNPCFlags = this.CompletedQuestNPCFlags;
 
             if (isNew)

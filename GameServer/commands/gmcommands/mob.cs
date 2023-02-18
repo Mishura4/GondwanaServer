@@ -2644,7 +2644,7 @@ namespace DOL.GS.Commands
 
             if (mob is TextNPC && isTextNpc)
             {
-                ((TextNPC)mob).TextNPCData = ((TextNPC)targetMob).TextNPCData;
+                ((TextNPC)mob).TextNPCData = new TextNPCPolicy((TextNPC)mob, ((TextNPC)targetMob).TextNPCData);
             }
 
             ABrain brain = null;

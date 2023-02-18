@@ -209,7 +209,7 @@ namespace DOL.GS.Quests
             public DataQuestJson Quest => DataQuestJsonMgr.GetQuest(QuestId);
             public List<ItemTemplate> BasicItems => Quest.FinalRewardItemTemplates;
             public List<ItemTemplate> OptionalItems => Quest.OptionalRewardItemTemplates;
-            public int ChoiceOf => 1;
+            public int ChoiceOf => Quest.NbChooseOptionalItems;
             public long Money => Quest.RewardMoney;
             public long Experience => Quest.RewardXP;
 

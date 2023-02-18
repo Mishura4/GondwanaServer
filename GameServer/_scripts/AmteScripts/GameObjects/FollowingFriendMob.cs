@@ -19,7 +19,7 @@ namespace DOL.GS.Scripts
         public string MobID { get; set; }
         public string MobName { get; set; }
         public string Text { get; set; }
-        public Dictionary<string, string> Responses { get; private set; }
+        public Dictionary<string, string> Responses { get; set; }
         public string ResponseFollow { get; set; }
         public string TextUnfollow { get; set; }
         public ushort FollowingFromRadius { get; set; }
@@ -28,6 +28,7 @@ namespace DOL.GS.Scripts
         public string AreaToEnter { get; set; }
         public int TimerBeforeReset { get; set; }
         public bool WaitingInArea { get; set; }
+        public string ungroupText;
 
         private double m_Angle;
         private int m_DistMob;
@@ -102,9 +103,9 @@ namespace DOL.GS.Scripts
             {
                 PlayerFollow = player;
             }
-            if (str.ToLower() == "ungroup")
+            if (str.ToLower() == "ungroup" || (ungroupText != null && str.ToLower() == ungroupText))
             {
-                if (PlayerFollow != null)
+                if (PlayerFollow != null && PlayerFollow == source)
                 {
                     ResetFriendMob();
                 }
@@ -137,15 +138,23 @@ namespace DOL.GS.Scripts
                 MobName = data.MobName;
                 Text = data.Text;
                 Responses = new Dictionary<string, string>();
-                foreach (string item in data.Response.Split(';'))
+                if (data.Response != null)
                 {
-                    string[] items = item.Split('|');
-                    if (items.Length != 2)
-                        continue;
-                    Responses.Add(items[0].ToLower(), items[1]);
+                    foreach (string item in data.Response.Split(';'))
+                    {
+                        string[] items = item.Split('|');
+                        if (items.Length != 2)
+                            continue;
+                        Responses.Add(items[0].ToLower(), items[1]);
+                    }
                 }
                 ResponseFollow = data.ResponseFollow;
                 TextUnfollow = data.TextUnfollow;
+                // get ungroupText from [] in TextUnfollow
+                if (TextUnfollow != null && TextUnfollow.Contains("[") && TextUnfollow.Contains("]"))
+                {
+                    ungroupText = TextUnfollow.Substring(TextUnfollow.IndexOf("[") + 1, TextUnfollow.IndexOf("]") - TextUnfollow.IndexOf("[") - 1);
+                }
                 FollowingFromRadius = data.FollowingFromRadius;
                 AggroMultiplier = data.AggroMultiplier;
                 LinkedGroupMob = data.LinkedGroupMob;
@@ -167,6 +176,16 @@ namespace DOL.GS.Scripts
             }
             base.LoadFromDatabase(obj);
         }
+        public override void DeleteFromDatabase()
+        {
+            followingfriendmob data = null;
+            data = GameServer.Database.SelectObject<followingfriendmob>(t => t.MobID == MobID);
+            if (data != null)
+            {
+                GameServer.Database.DeleteObject(data);
+            }
+            base.DeleteFromDatabase();
+        }
 
         private void ResetTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
@@ -176,12 +195,14 @@ namespace DOL.GS.Scripts
         public void ResetFriendMobs()
         {
             var area = CurrentRegion.GetAreasOfSpot(Position).OfType<AbstractArea>().FirstOrDefault(a => a.DbArea != null && a.DbArea.ObjectId == AreaToEnter);
-
-            var mobs = WorldMgr.GetNPCsFromRegion(CurrentRegion.ID).Where(c => c is FollowingFriendMob &&
-                area.IsContaining(c.Position.X, c.Position.Y, c.Position.Z)).ToList();
-            foreach (FollowingFriendMob mob in mobs)
+            if (area != null)
             {
-                mob.ResetFriendMob();
+                var mobs = WorldMgr.GetNPCsFromRegion(CurrentRegion.ID).Where(c => c is FollowingFriendMob &&
+                    area.IsContaining(c.Position.X, c.Position.Y, c.Position.Z)).ToList();
+                foreach (FollowingFriendMob mob in mobs)
+                {
+                    mob.ResetFriendMob();
+                }
             }
         }
         public void ResetFriendMob()
@@ -205,19 +226,25 @@ namespace DOL.GS.Scripts
         }
         public override void SaveIntoDatabase()
         {
+            base.SaveIntoDatabase();
             followingfriendmob data = null;
+            MobID = InternalID;
             if (MobID == null)
                 return;
             data = GameServer.Database.SelectObject<followingfriendmob>(t => t.MobID == MobID);
+            bool isNew = false;
             if (data == null)
             {
                 data = new followingfriendmob();
-                data.MobID = MobID;
-                GameServer.Database.AddObject(data);
+                isNew = true;
             }
+            data.MobID = MobID;
             data.MobName = MobName;
             data.Text = Text;
-            data.Response = string.Join(";", Responses.Select(t => t.Key + "|" + t.Value).ToArray());
+            if (Responses != null)
+                data.Response = string.Join(";", Responses.Select(t => t.Key + "|" + t.Value).ToArray());
+            else
+                data.Response = null;
             data.ResponseFollow = ResponseFollow;
             data.TextUnfollow = TextUnfollow;
             data.FollowingFromRadius = FollowingFromRadius;
@@ -225,7 +252,10 @@ namespace DOL.GS.Scripts
             data.LinkedGroupMob = LinkedGroupMob;
             data.AreaToEnter = AreaToEnter;
             data.TimerBeforeReset = TimerBeforeReset;
-            base.SaveIntoDatabase();
+            if (isNew)
+                GameServer.Database.AddObject(data);
+            else
+                GameServer.Database.SaveObject(data);
         }
         #endregion
 
@@ -346,7 +376,18 @@ namespace DOL.GS.Scripts
 
         public override void CustomCopy(GameObject source)
         {
-            MobID = (source as FollowingFriendMob).MobID;
+            var followingSource = source as FollowingFriendMob;
+            MobName = followingSource.MobName;
+            Text = followingSource.Text;
+            Responses = followingSource.Responses;
+            ResponseFollow = followingSource.ResponseFollow;
+            TextUnfollow = followingSource.TextUnfollow;
+            FollowingFromRadius = followingSource.FollowingFromRadius;
+            AggroMultiplier = followingSource.AggroMultiplier;
+            LinkedGroupMob = followingSource.LinkedGroupMob;
+            AreaToEnter = followingSource.AreaToEnter;
+            TimerBeforeReset = followingSource.TimerBeforeReset;
+            ungroupText = followingSource.ungroupText;
             base.CustomCopy(source);
         }
     }
@@ -403,7 +444,7 @@ namespace DOL.AI.Brain
         private void SetPlayerByMobID()
         {
             var followingMob = (FollowingFriendMob)Body;
-            if (!followingMob.WaitingInArea && string.IsNullOrEmpty(followingMob.Text) && followingMob.Responses.Count == 0 && string.IsNullOrEmpty(followingMob.ResponseFollow))
+            if (!followingMob.WaitingInArea && string.IsNullOrEmpty(followingMob.Text) && (followingMob.Responses == null || followingMob.Responses.Count == 0) && string.IsNullOrEmpty(followingMob.ResponseFollow))
             {
                 var players = Body.GetPlayersInRadius(followingMob.FollowingFromRadius);
                 foreach (var player in players)
@@ -412,7 +453,6 @@ namespace DOL.AI.Brain
                     break;
                 }
             }
-
         }
     }
 }

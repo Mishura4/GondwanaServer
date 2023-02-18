@@ -343,6 +343,12 @@ namespace DOL.commands.gmcommands
                             case "size":
                                 MobGroupManager.Instance.Groups[groupId].CompletedQuestNPCSize = id;
                                 break;
+                            case "aggro":
+                                MobGroupManager.Instance.Groups[groupId].CompletedQuestAggro = id;
+                                break;
+                            case "range":
+                                MobGroupManager.Instance.Groups[groupId].CompletedQuestRange = id;
+                                break;
 
                             default:
                                 DisplaySyntax(client);

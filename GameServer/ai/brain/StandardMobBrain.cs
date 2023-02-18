@@ -228,6 +228,30 @@ namespace DOL.AI.Brain
             }
         }
         public float AggroMultiplier = 1.0f;
+        public int GetGroupMobAggroMultiplier(GamePlayer player)
+        {
+            int multiplier = 1;
+            if (Body.CurrentGroupMob != null)
+            {
+                if (MobGroups.MobGroup.IsQuestCompleted(Body, player))
+                {
+                    return 1 * Body.CurrentGroupMob.CompletedQuestAggro;
+                }
+            }
+            return multiplier;
+        }
+        public int GetGroupMobRangeMultiplier(GamePlayer player)
+        {
+            int multiplier = 1;
+            if (Body.CurrentGroupMob != null)
+            {
+                if (MobGroups.MobGroup.IsQuestCompleted(Body, player))
+                {
+                    return 1 * Body.CurrentGroupMob.CompletedQuestRange;
+                }
+            }
+            return multiplier;
+        }
 
         /// <summary>
         /// Check for aggro against close NPCs
@@ -241,7 +265,7 @@ namespace DOL.AI.Brain
                 //recheck range for not FollowingFriendMob npcs
                 if (AggroMultiplier != 1 && !(npc is FollowingFriendMob))
                 {
-                    if (Body.GetDistanceTo(npc) > AggroRange * AggroMultiplier)
+                    if (Body.GetDistanceTo(npc) > AggroRange)
                         continue;
                 }
                 else if (AggroMultiplier != 1 && npc is FollowingFriendMob)
@@ -278,8 +302,10 @@ namespace DOL.AI.Brain
         {
             if (HasAggro) return;
 
-            foreach (GamePlayer player in Body.GetPlayersInRadius((ushort)AggroRange, Body.CurrentZone.IsDungeon ? false : true))
+            foreach (GamePlayer player in Body.GetPlayersInRadius(MAX_AGGRO_DISTANCE, Body.CurrentZone.IsDungeon ? false : true))
             {
+                if (Body.GetDistanceTo(player) > (ushort)AggroRange * GetGroupMobRangeMultiplier(player))
+                    continue;
                 if (!GameServer.ServerRules.IsAllowedToAttack(Body, player, true)) continue;
                 // Don't aggro on immune players.
 
@@ -722,7 +748,7 @@ namespace DOL.AI.Brain
             // FollowingFriendMob will have higher aggro
             if (target is FollowingFriendMob)
             {
-                return Math.Min(100, AggroLevel) * (target as FollowingFriendMob).AggroMultiplier;
+                return Math.Min(100, (int)(AggroLevel * (target as FollowingFriendMob).AggroMultiplier));
             }
 
             // Get owner if target is pet
@@ -746,7 +772,7 @@ namespace DOL.AI.Brain
             {
                 if (realTarget is GamePlayer)
                 {
-                    return Math.Min(100, Body.Faction.GetAggroToFaction((GamePlayer)realTarget));
+                    return Math.Min(100, (int)(Body.Faction.GetAggroToFaction((GamePlayer)realTarget) * GetGroupMobAggroMultiplier((GamePlayer)realTarget)));
                 }
                 else if (realTarget is GameNPC && Body.Faction.EnemyFactions.Contains(((GameNPC)realTarget).Faction))
                 {
@@ -758,7 +784,14 @@ namespace DOL.AI.Brain
             if (Body.Realm == eRealm.None && realTarget is GameNPC)
                 return 0;
 
-            return Math.Min(100, AggroLevel);
+            if (realTarget is GamePlayer)
+            {
+                return Math.Min(100, (int)(AggroLevel * GetGroupMobAggroMultiplier((GamePlayer)realTarget)));
+            }
+            else
+            {
+                return Math.Min(100, (int)(AggroLevel));
+            }
         }
 
         /// <summary>
@@ -1617,11 +1650,11 @@ namespace DOL.AI.Brain
             get
             {
                 /* Roaming:
-				   <0 means random range
-				   0 means no roaming
-				   >0 means range of roaming
-				   defaut roaming range is defined in CanRandomWalk method
-				 */
+                   <0 means random range
+                   0 means no roaming
+                   >0 means range of roaming
+                   defaut roaming range is defined in CanRandomWalk method
+                 */
                 if (!DOL.GS.ServerProperties.Properties.ALLOW_ROAM)
                     return false;
                 if (Body.RoamingRange == 0)

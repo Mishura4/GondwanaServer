@@ -26,6 +26,8 @@ namespace DOLDatabase.Tables
         private ushort m_completedQuestNPCFlags;
         private ushort m_completedQuestNPCModel;
         private ushort m_completedQuestNPCSize;
+        private ushort m_completedQuestAggro;
+        private ushort m_completedQuestRange;
         private ushort m_completedStepQuestID;
         private int m_completedQuestId;
         private int m_completedQuestCount;
@@ -105,6 +107,18 @@ namespace DOLDatabase.Tables
         {
             get => m_completedQuestNPCSize;
             set { Dirty = true; m_completedQuestNPCSize = value; }
+        }
+        [DataElement(AllowDbNull = false)]
+        public ushort CompletedQuestAggro
+        {
+            get => m_completedQuestAggro;
+            set { Dirty = true; m_completedQuestAggro = value; }
+        }
+        [DataElement(AllowDbNull = false)]
+        public ushort CompletedQuestRange
+        {
+            get => m_completedQuestRange;
+            set { Dirty = true; m_completedQuestRange = value; }
         }
 
 

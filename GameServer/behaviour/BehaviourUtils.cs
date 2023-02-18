@@ -169,22 +169,50 @@ namespace DOL.GS.Behaviour
             message = message.Replace(CLASS, player.CharacterClass.Name);
             message = message.Replace("<RealmTitle>", player.RealmTitle);
 
-            if (message.Contains("<Guild>"))
+            if (message.Contains("<Guild>") || message.Contains("<guild>"))
             {
                 string guild = "";
                 if (player.Guild != null)
                     guild = player.GuildName;
 
                 message = message.Replace("<Guild>", guild);
+                message = message.Replace("<guild>", guild);
             }
 
-            if (message.Contains("<Title>"))
+            if (message.Contains("<Title>") || message.Contains("<title>"))
             {
                 string title = "";
                 if (player.CurrentTitle != null)
                     title = player.CurrentTitle.GetValue(player, player);
 
                 message = message.Replace("<Title>", title);
+                message = message.Replace("<title>", title);
+            }
+
+            if (message.Contains("<player>"))
+            {
+                message = message.Replace("<player>", player.GetName(0, true));
+            }
+
+            if (message.Contains("<Class>") || message.Contains("<class>"))
+            {
+                string pleyerClass = "";
+                if (player.CharacterClass != null)
+                    pleyerClass = player.CharacterClass.Name;
+
+                message = message.Replace("<Class>", pleyerClass);
+                message = message.Replace("<class>", pleyerClass);
+            }
+
+
+            if (message.Contains("<Race>") || message.Contains("<race>"))
+            {
+                string race = "";
+                if (player.RaceName != null)
+                    race = player.RaceName;
+
+                message = message.Replace("<Race>", race);
+                message = message.Replace("<race>", race);
             }
 
             return message;

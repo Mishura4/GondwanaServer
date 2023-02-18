@@ -10,6 +10,7 @@ using DOL.GS.PacketHandler;
 using DOL.GS.Scripts;
 using DOL.GameEvents;
 using System.Threading.Tasks;
+using DOL.Language;
 
 namespace DOL.GS.Quests;
 
@@ -110,12 +111,23 @@ public static class DataQuestJsonMgr
             var quest = GetQuest(questId);
             if (sender is ITextNPC textNPC && textNPC.TextNPCData.CheckQuestAvailable(quest.Name))
                 return;
-            if (quest != null && quest.CheckQuestQualification(player))
+            if (IsDoingTimerQuest(player))
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "DataQuestJson.JsonQuest.Timer"),
+                    eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return;
+            }
+            else if (quest != null && quest.CheckQuestQualification(player))
             {
                 player.Out.SendQuestOfferWindow(quest.Npc, player, PlayerQuest.CreateQuestPreview(quest, player));
                 return;
             }
         }
+    }
+    public static bool IsDoingTimerQuest(GamePlayer player)
+    {
+        //return if player is doing a quest that has a goal with a timer
+        return player.QuestList.Any(q => q is PlayerQuest playerQuest && playerQuest.Quest.Goals.Any(g => g.Value is TimerGoal));
     }
 
     public static void OnAcceptQuest(DOLEvent _, object sender, EventArgs args)

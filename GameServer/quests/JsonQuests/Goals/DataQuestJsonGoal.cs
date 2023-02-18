@@ -126,7 +126,10 @@ namespace DOL.GS.Quests
             if (Visible)
             {
                 player.Out.SendQuestUpdate(questData);
-                ChatUtil.SendScreenCenter(player, $"{Description} - {goalData.Progress}/{ProgressTotal}");
+                if (ProgressTotal == 1)
+                    ChatUtil.SendScreenCenter(player, $"{Description}");
+                else
+                    ChatUtil.SendScreenCenter(player, $"{Description} - {goalData.Progress}/{ProgressTotal}");
             }
             if (!string.IsNullOrWhiteSpace(MessageStarted))
                 ChatUtil.SendImportant(player, $"[Quest {Quest.Name}] " + BehaviourUtils.GetPersonalizedMessage(MessageStarted, player));
@@ -145,7 +148,10 @@ namespace DOL.GS.Quests
             if (Visible)
             {
                 questData.Owner.Out.SendQuestUpdate(questData);
-                ChatUtil.SendScreenCenter(questData.Owner, $"{Description} - {goalData.Progress}/{ProgressTotal}");
+                if (ProgressTotal == 1)
+                    ChatUtil.SendScreenCenter(questData.Owner, $"{Description}");
+                else
+                    ChatUtil.SendScreenCenter(questData.Owner, $"{Description} - {goalData.Progress}/{ProgressTotal}");
             }
         }
         public virtual void DecreaseGoal(PlayerQuest questData, PlayerGoalState goalData)
@@ -155,7 +161,10 @@ namespace DOL.GS.Quests
             if (Visible)
             {
                 questData.Owner.Out.SendQuestUpdate(questData);
-                ChatUtil.SendScreenCenter(questData.Owner, $"{Description} - {goalData.Progress}/{ProgressTotal}");
+                if (ProgressTotal == 1)
+                    ChatUtil.SendScreenCenter(questData.Owner, $"{Description}");
+                else
+                    ChatUtil.SendScreenCenter(questData.Owner, $"{Description} - {goalData.Progress}/{ProgressTotal}");
             }
         }
 
@@ -195,7 +204,10 @@ namespace DOL.GS.Quests
 
             var player = questData.Owner;
             if (Visible)
-                ChatUtil.SendScreenCenter(player, $"{Description} - {goalData.Progress}/{ProgressTotal}");
+                if (ProgressTotal == 1)
+                    ChatUtil.SendScreenCenter(player, $"{Description}");
+                else
+                    ChatUtil.SendScreenCenter(player, $"{Description} - {goalData.Progress}/{ProgressTotal}");
             if (!string.IsNullOrWhiteSpace(MessageDone))
                 ChatUtil.SendImportant(player, $"[Quest {Quest.Name}] " + BehaviourUtils.GetPersonalizedMessage(MessageDone, player));
             EndOtherGoals(questData, except ?? new List<DataQuestJsonGoal>());

@@ -20,7 +20,6 @@ namespace DOL.GS.Quests
         public override bool hasInteraction { get; set; } = true;
         private readonly Area.Circle m_area;
         private readonly ushort m_areaRegion;
-        private readonly bool hasArea = false;
         public FollowingFriendMob lastFriend;
 
         public BringAFriendGoal(DataQuestJson quest, int goalId, dynamic db) : base(quest, goalId, (object)db)
@@ -29,7 +28,6 @@ namespace DOL.GS.Quests
             m_friendCount = db.Count;
             if (db.AreaRadius != null && db.AreaRadius != "" && db.AreaRegion != null && db.AreaRegion != "" && db.AreaCenter != null)
             {
-                hasArea = true;
                 m_area = new Area.Circle($"{quest.Name} EnterAreaGoal {goalId}", new Vector3((float)db.AreaCenter.X, (float)db.AreaCenter.Y, (float)db.AreaCenter.Z), (int)db.AreaRadius);
                 m_area.DisplayMessage = false;
                 m_areaRegion = db.AreaRegion;

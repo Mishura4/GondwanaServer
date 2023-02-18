@@ -1,0 +1,1 @@
+DataQuestJson.JsonQuest.Timer:			You are already doing a timer quest, you cannot do another one in the same time.
