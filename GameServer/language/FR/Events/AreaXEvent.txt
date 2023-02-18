@@ -1,0 +1,2 @@
+Area.Event.Timer.Start:			Un évènement se déclenche, vous avez {0} secondes pour agir.
+Area.Event.Timer.Stop:			Le temps de l'évènement est écoulé ! Essayez à nouveau!
