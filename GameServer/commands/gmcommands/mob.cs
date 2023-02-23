@@ -3263,6 +3263,10 @@ namespace DOL.GS.Commands
             int triggertimer = 0;
             int changeeffect = 0;
             int tpeffect = 0;
+            string responseTrigger = "";
+            int interactTimerDelay = 0;
+            string walkToPath = "";
+            ushort yell = 0;
             try
             {
                 string type = args[2].ToLower();
@@ -3356,6 +3360,18 @@ namespace DOL.GS.Commands
                                 case "tpeffect":
                                     tpeffect = Convert.ToInt32(args[i + 1]);
                                     break;
+                                case "responsetrigger":
+                                    responseTrigger = args[i + 1];
+                                    break;
+                                case "interacttimerdelay":
+                                    interactTimerDelay = Convert.ToInt32(args[i + 1]);
+                                    break;
+                                case "walktopath":
+                                    walkToPath = args[i + 1];
+                                    break;
+                                case "yell":
+                                    yell = Convert.ToUInt16(args[i + 1]);
+                                    break;
                             }
                             i += 2;
                         }
@@ -3379,7 +3395,7 @@ namespace DOL.GS.Commands
                 if (text.Contains("{y}"))
                     voice = "y";
                 text = text.Replace("{b}", string.Empty).Replace("{y}", string.Empty);
-                GameServer.Database.AddObject(new MobXAmbientBehaviour(targetMob.Name, trig.ToString(), emote, text, chance, voice, spell, hp, changebrain, changenpctemplate, areaeffectid, playertppoint, mobtppoint, triggertimer, changeeffect, tpeffect, domagetyperepeate, nbuse, changeflag) { Dirty = true, AllowAdd = true });
+                GameServer.Database.AddObject(new MobXAmbientBehaviour(targetMob.Name, trig.ToString(), emote, text, chance, voice, spell, hp, changebrain, changenpctemplate, areaeffectid, playertppoint, mobtppoint, triggertimer, changeeffect, tpeffect, domagetyperepeate, nbuse, changeflag, responseTrigger, interactTimerDelay, walkToPath, yell) { Dirty = true, AllowAdd = true });
                 GameServer.Instance.NpcManager.AmbientBehaviour.Reload(GameServer.Instance.IDatabase);
                 targetMob.DamageTypeLimit = domagetyperepeate;
                 targetMob.ambientTexts = GameServer.Instance.NpcManager.AmbientBehaviour[targetMob.Name];

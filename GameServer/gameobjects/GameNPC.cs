@@ -47,6 +47,9 @@ using DOL.Territory;
 using static DOL.GS.ScriptMgr;
 using DOL.GS.Finance;
 using DOLDatabase.Tables;
+using DOL.GS.Scripts;
+using System.Timers;
+using System.Text.RegularExpressions;
 
 namespace DOL.GS
 {
@@ -5739,20 +5742,88 @@ namespace DOL.GS
             }
         }
 
+        System.Timers.Timer InteractTriggerTimer { get; set; }
+        System.Timers.Timer TriggerPlayerLostTimer = new System.Timers.Timer(20000);
+        GamePlayer TriggerPlayer;
+
+        private void TriggerPlayerLostTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            if (TriggerPlayer == null)
+                return;
+            foreach (GamePlayer player in GetPlayersInRadius(1500))
+            {
+                if (player == TriggerPlayer)
+                {
+                    if (player.IsWithinRadius(this, 1500))
+                    {
+                        return;
+                    }
+                }
+            }
+            // reset if player lost
+            if (InteractTriggerTimer != null)
+                InteractTriggerTimer.Stop();
+            RemoveFromWorld();
+            LoadFromDatabase(GameServer.Database.FindObjectByKey<Mob>(InternalID));
+            AddToWorld();
+            CurrentWayPoint = null;
+            TriggerPlayer = null;
+        }
         /// <summary>
         /// Handle triggers for ambient sentences
         /// </summary>
         /// <param name="action">The trigger action</param>
         /// <param name="npc">The NPC to handle the trigger for</param>
-        public void FireAmbientSentence(eAmbientTrigger trigger, GameLiving living = null)
+        public void FireAmbientSentence(eAmbientTrigger trigger, GameLiving living = null, string preChosenID = null, string responseTrigger = null, bool useTimer = true)
         {
             if (IsSilent || ambientTexts == null || ambientTexts.Count == 0) return;
             if (trigger == eAmbientTrigger.interact && living == null) return;
-            List<MobXAmbientBehaviour> mxa = (from i in ambientTexts where i.Trigger == trigger.ToString() select i).ToList();
-            if (mxa.Count == 0) return;
+            TriggerPlayerLostTimer.Stop();
+            MobXAmbientBehaviour chosen = null;
+            if (preChosenID != null && responseTrigger != null)
+            {
+                chosen = (from i in ambientTexts where i.ObjectId == preChosenID && i.ResponseTrigger == responseTrigger select i).FirstOrDefault();
+                if (chosen == null) return;
+            }
+            else
+            {
+                List<MobXAmbientBehaviour> mxa = (from i in ambientTexts where i.Trigger == trigger.ToString() select i).ToList();
+                if (mxa.Count == 0) return;
 
-            // grab random sentence
-            var chosen = mxa[Util.Random(mxa.Count - 1)];
+                // grab random sentence
+                chosen = mxa[Util.Random(mxa.Count - 1)];
+            }
+
+            //check if is itextnpc and has this interaction trigger
+            if (preChosenID == null && responseTrigger == null && chosen.ResponseTrigger != null && trigger == eAmbientTrigger.interact && this is TextNPC
+            && ((TextNPC)this).TextNPCData.ResponseTrigger.ContainsValue(chosen.ObjectId) && ((TextNPC)this).TextNPCData.ResponseTrigger.ContainsKey(chosen.ResponseTrigger))
+            {
+                return;
+            }
+
+            if (useTimer && trigger == eAmbientTrigger.interact && chosen.InteractTimerDelay > 0)
+            {
+                if (InteractTriggerTimer != null)
+                {
+                    InteractTriggerTimer.Stop();
+                    InteractTriggerTimer.Dispose();
+                }
+                InteractTriggerTimer = new System.Timers.Timer();
+                InteractTriggerTimer.Interval = chosen.InteractTimerDelay * 1000;
+                InteractTriggerTimer.Start();
+                InteractTriggerTimer.Elapsed += (sender, e) =>
+                {
+                    if (InteractTriggerTimer != null)
+                    {
+                        InteractTriggerTimer.Stop();
+                        InteractTriggerTimer.Dispose();
+                    }
+                    FireAmbientSentence(trigger, living, chosen.ObjectId, chosen.ResponseTrigger, false);
+                };
+                TriggerPlayer = living as GamePlayer;
+                TriggerPlayerLostTimer.Start();
+                return;
+            }
 
             if (chosen.HP < 1 && chosen.Chance > 0)
                 if (!Util.Chance(chosen.Chance))
@@ -5761,6 +5832,32 @@ namespace DOL.GS
                     return;
                 else if (chosen.HP > 0 && chosen.Chance > 0 && !Util.Chance(chosen.Chance))
                     return;
+
+            //WalkToPath
+            if (!string.IsNullOrEmpty(chosen.WalkToPath))
+            {
+                CurrentWayPoint = null;
+                DBPathPoint pathPoint = DOLDB<DBPathPoint>.SelectObject(DB.Column(nameof(DBPathPoint.PathID)).IsEqualTo(chosen.WalkToPath));
+                if (pathPoint == null)
+                    return;
+                CurrentWayPoint = new PathPoint(pathPoint.X, pathPoint.Y, pathPoint.Z, pathPoint.MaxSpeed, ePathType.Once);
+                MoveOnPath(MaxSpeed);
+                TriggerPlayer = living as GamePlayer;
+                TriggerPlayerLostTimer.Start();
+            }
+
+            //Yell
+            if (chosen.Yell > 0)
+            {
+                foreach (GameNPC npc in GetNPCsInRadius(chosen.Yell))
+                {
+                    var match = Regex.Match(this.Name, @"\s(" + npc.GuildName + ")$");
+                    if (npc is GameNPC && match != null && match.Length > 1 && !npc.InCombat)
+                    {
+                        npc.StartAttack(living);
+                    }
+                }
+            }
 
             //NbUse
             if (chosen.NbUse > 0 && (chosen.Spell == 0 || (chosen.Spell > 0 && !IsCasting)))
@@ -5944,9 +6041,9 @@ namespace DOL.GS
             if (living is GameNPC)
                 text = text.Replace("{class}", "NPC").Replace("{race}", "NPC");
 
-            // for interact text we pop up a window
             if (trigger == eAmbientTrigger.interact)
             {
+                // for interact text we pop up a window
                 (living as GamePlayer).Out.SendMessage(text, eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 return;
             }
@@ -6212,6 +6309,7 @@ namespace DOL.GS
         public GameNPC()
             : this(new StandardMobBrain())
         {
+            TriggerPlayerLostTimer.Elapsed += TriggerPlayerLostTimer_Elapsed;
         }
 
         public GameNPC(ABrain defaultBrain) : base()
@@ -6245,6 +6343,7 @@ namespace DOL.GS
                 m_ownBrain = defaultBrain;
                 m_ownBrain.Body = this;
             }
+            TriggerPlayerLostTimer.Elapsed += TriggerPlayerLostTimer_Elapsed;
         }
 
         /// <summary>
@@ -6262,6 +6361,7 @@ namespace DOL.GS
             if (template is NpcTemplate npcTemplate)
                 npcTemplate.ReplaceMobValues = true;
 
+            TriggerPlayerLostTimer.Elapsed += TriggerPlayerLostTimer_Elapsed;
             LoadTemplate(template);
         }
 

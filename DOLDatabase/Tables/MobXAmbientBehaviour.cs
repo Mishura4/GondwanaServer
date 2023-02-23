@@ -45,6 +45,10 @@ public class MobXAmbientBehaviour : DataObject
     private string m_voice;
     private int m_spell;
     private ushort m_hp;
+    private string m_responseTrigger;
+    private int m_interactTimerDelay;
+    private string m_walkToPath;
+    private ushort m_yell;
 
     /// <summary>
     /// Constructor
@@ -88,7 +92,11 @@ public class MobXAmbientBehaviour : DataObject
     /// <param name="domageTypeRepeat"></param>
     /// <param name="nbUse"></param>
     /// <param name="changeFlag"></param>
-    public MobXAmbientBehaviour(string name, string trigger, ushort emote, string text, ushort chance, string voice, int spell, ushort hp, string changeBrain, int changeNPCTemplate, ushort callAreaeffectID, ushort playertoTPpoint, ushort mobtoTPpoint, int trigerTimer, int changeEffect, int tpEffect, ushort domageTypeRepeat, ushort nbUse, ushort changeFlag)
+    /// <param name="responseTrigger"></param>
+    /// <param name="interactTimerDelay"></param>
+    /// <param name="walkToPath"></param>
+    /// <param name="yell"></param>
+    public MobXAmbientBehaviour(string name, string trigger, ushort emote, string text, ushort chance, string voice, int spell, ushort hp, string changeBrain, int changeNPCTemplate, ushort callAreaeffectID, ushort playertoTPpoint, ushort mobtoTPpoint, int trigerTimer, int changeEffect, int tpEffect, ushort domageTypeRepeat, ushort nbUse, ushort changeFlag, string responseTrigger, int interactTimerDelay, string walkToPath, ushort yell)
     {
         m_source = name;
         m_trigger = trigger;
@@ -109,6 +117,10 @@ public class MobXAmbientBehaviour : DataObject
         m_nbUse = nbUse;
         m_damageTypeRepeat = domageTypeRepeat;
         m_changeFlag = changeFlag;
+        m_responseTrigger = responseTrigger;
+        m_interactTimerDelay = interactTimerDelay;
+        m_walkToPath = walkToPath;
+        m_yell = yell;
     }
 
     [DataElement(AllowDbNull = false, Index = true)]
@@ -242,5 +254,30 @@ public class MobXAmbientBehaviour : DataObject
     {
         get { return m_tPeffect; }
         set { m_tPeffect = value; }
+    }
+
+    [DataElement(AllowDbNull = true)]
+    public string ResponseTrigger
+    {
+        get { return m_responseTrigger; }
+        set { m_responseTrigger = value; }
+    }
+    [DataElement(AllowDbNull = true)]
+    public int InteractTimerDelay
+    {
+        get { return m_interactTimerDelay; }
+        set { m_interactTimerDelay = value; }
+    }
+    [DataElement(AllowDbNull = true)]
+    public string WalkToPath
+    {
+        get { return m_walkToPath; }
+        set { m_walkToPath = value; }
+    }
+    [DataElement(AllowDbNull = true)]
+    public ushort Yell
+    {
+        get { return m_yell; }
+        set { m_yell = value; }
     }
 }

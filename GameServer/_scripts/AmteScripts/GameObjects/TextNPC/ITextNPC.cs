@@ -12,6 +12,7 @@ using DOL.GS.Finance;
 using DOL.GS.PacketHandler;
 using DOL.GS.Quests;
 using log4net;
+using static DOL.GS.GameNPC;
 using static DOL.GS.Quests.DataQuestJsonGoal;
 
 namespace DOL.GS.Scripts
@@ -34,6 +35,7 @@ namespace DOL.GS.Scripts
         public Dictionary<string, string> Reponses { get; private set; }
         public Dictionary<string, eEmote> EmoteReponses { get; private set; }
         public Dictionary<string, ushort> SpellReponses { get; private set; }
+        public Dictionary<string, string> ResponseTrigger { get; set; }
         public Dictionary<string, bool> SpellReponsesCast { get; private set; }
         public Dictionary<string, string> QuestReponses { get; private set; }
         public Dictionary<string, Tuple<string, int>> QuestReponsesValues { get; private set; }
@@ -54,6 +56,7 @@ namespace DOL.GS.Scripts
             Reponses = new Dictionary<string, string>();
             EmoteReponses = new Dictionary<string, eEmote>();
             SpellReponses = new Dictionary<string, ushort>();
+            ResponseTrigger = new Dictionary<string, string>();
             SpellReponsesCast = new Dictionary<string, bool>();
             QuestReponses = new Dictionary<string, string>();
             QuestReponsesValues = new Dictionary<string, Tuple<string, int>>();
@@ -71,6 +74,7 @@ namespace DOL.GS.Scripts
             Reponses = new Dictionary<string, string>(policy.Reponses);
             EmoteReponses = new Dictionary<string, eEmote>(policy.EmoteReponses);
             SpellReponses = new Dictionary<string, ushort>(policy.SpellReponses);
+            ResponseTrigger = new Dictionary<string, string>(policy.ResponseTrigger);
             SpellReponsesCast = new Dictionary<string, bool>(policy.SpellReponsesCast);
             QuestReponses = new Dictionary<string, string>(policy.QuestReponses);
             QuestReponsesValues = new Dictionary<string, Tuple<string, int>>(policy.QuestReponsesValues);
@@ -200,15 +204,29 @@ namespace DOL.GS.Scripts
 
             //Quest
             if (QuestReponses != null && QuestReponseKey != null && QuestReponseKey.LastIndexOf('-') != -1 && QuestReponses.ContainsKey(QuestReponseKey.Remove(QuestReponseKey.LastIndexOf('-')) + "-" + str))
-                HandleQuestInteraction(player, QuestReponseKey.Remove(QuestReponseKey.LastIndexOf('-')) + "-" + str);
+            {
+                string questStr = QuestReponseKey.Remove(QuestReponseKey.LastIndexOf('-'));
+                HandleQuestInteraction(player, questStr + "-" + str);
+                //Trigger
+                if (ResponseTrigger != null && ResponseTrigger.ContainsKey(questStr + "-" + str))
+                    _body.FireAmbientSentence(eAmbientTrigger.interact, player, ResponseTrigger[questStr + "-" + str], questStr + "-" + str);
+            }
             else if (QuestReponses != null && QuestReponses.ContainsKey(str))
+            {
                 HandleQuestInteraction(player, str);
+                //Trigger
+                if (ResponseTrigger != null && ResponseTrigger.ContainsKey(QuestReponses[str] + "-" + str))
+                    _body.FireAmbientSentence(eAmbientTrigger.interact, player, ResponseTrigger[QuestReponses[str] + "-" + str], QuestReponses[str] + "-" + str);
+            }
 
             //Emote
             if (EmoteReponses != null && EmoteReponses.ContainsKey(str))
                 foreach (GamePlayer plr in _body.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
                     plr.Out.SendEmoteAnimation(_body, EmoteReponses[str]);
 
+            //Trigger
+            if (ResponseTrigger != null && ResponseTrigger.ContainsKey(str))
+                _body.FireAmbientSentence(eAmbientTrigger.interact, player, ResponseTrigger[str], str);
 
             return true;
         }
@@ -785,6 +803,24 @@ namespace DOL.GS.Scripts
             }
             SpellReponses = table2;
 
+            //Chargement des trigger réponses
+            ResponseTrigger = new Dictionary<string, string>();
+            if (TextDB.ResponseTrigger != null && TextDB.ResponseTrigger != "")
+            {
+                TextDB.ResponseTrigger.Replace("\r", "\n");
+                foreach (string item in TextDB.ResponseTrigger.Split('\n'))
+                {
+                    string[] items = item.Split('|');
+                    if (items.Length != 2 && items.Length != 3)
+                        continue;
+                    try
+                    {
+                        ResponseTrigger.Add(items[0], items[1]);
+                    }
+                    catch { }
+                }
+            }
+
             //Chargement des emotes réponses
             var table3 = new Dictionary<string, eEmote>();
             if (TextDB.ReponseEmote != "")
@@ -898,6 +934,19 @@ namespace DOL.GS.Scripts
                 }
             }
             TextDB.ReponseSpell = reponse;
+
+            //Sauve les trigger réponses
+            reponse = "";
+            if (ResponseTrigger != null && ResponseTrigger.Count > 0)
+            {
+                foreach (var de in ResponseTrigger)
+                {
+                    if (reponse.Length > 1)
+                        reponse += "\n";
+                    reponse += de.Key.Trim('|', ';') + "|" + de.Value;
+                }
+            }
+            TextDB.ResponseTrigger = reponse;
 
             //Sauve les emote réponses
             reponse = "";

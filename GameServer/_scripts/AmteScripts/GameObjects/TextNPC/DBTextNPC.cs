@@ -39,6 +39,7 @@ namespace DOL.Database
         private string m_ReponseQuest;
         private string m_ReponseSpell;
         private string m_ReponseEmote;
+        private string m_ResponseTrigger;
         private string m_RandomPhraseEmote;
         private int m_PhraseInterval;
         private string m_Condition;
@@ -145,6 +146,16 @@ namespace DOL.Database
             {
                 Dirty = true;
                 m_ReponseEmote = value;
+            }
+        }
+        [DataElement(AllowDbNull = true)]
+        public string ResponseTrigger
+        {
+            get { return m_ResponseTrigger; }
+            set
+            {
+                Dirty = true;
+                m_ResponseTrigger = value;
             }
         }
 
