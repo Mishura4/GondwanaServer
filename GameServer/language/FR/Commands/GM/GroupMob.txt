@@ -11,4 +11,6 @@ Commands.GM.GroupMob.Usage.Status.Quest:		'/GroupMob quest <GroupId> <QuestId> <
 Commands.GM.GroupMob.Usage.Status.Quest.Flag:		'/GroupMob quest flag <GroupId> <New Flag>' Change le FLAG d'un groupmob après avoir complété une quête
 Commands.GM.GroupMob.Usage.Status.Quest.Model:		'/GroupMob quest model <GroupId> <New Model>' Change le MODELE d'un groupmob après avoir complété une quête
 Commands.GM.GroupMob.Usage.Status.Quest.Size:		'/GroupMob quest size <GroupId> <New Size>' Change la TAILLE d'un groupmob après avoir complété une quête
+Commands.GM.GroupMob.Usage.Status.Quest.Aggro:		'/GroupMob quest aggro <GroupId> <New Aggro>' Change l'AGGRO des mobs d'un groupmob après avoir complété une quête
+Commands.GM.GroupMob.Usage.Status.Quest.Range:		'/GroupMob quest range <GroupId> <New Range>' Change l'AGGRO RANGE des mobs d'un groupmob après avoir complété une quête
 Commands.GM.GroupMob.Usage.Status.Reset:		'/GroupMob status reset <GroupId>'  Reset le status ainsi que ses interractions

@@ -403,6 +403,8 @@ namespace DOL.GS.PacketHandler
             {
                 SendRvRGuildBanner(playerToCreate, true);
             }
+
+            SendWarlockChamberEffect(playerToCreate);
         }
 
         public override void SendPlayerForgedPosition(GamePlayer player)

@@ -12514,7 +12514,7 @@ namespace DOL.GS
                                 if (eligibleMember.Guild.GetGuildDuesPercent() != 100)
                                 {
                                     eligibleMember.AddMoney(Currency.Copper.Mint(moneyToPlayer));
-                                    eligibleMember.SendSystemMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GamePlayer.PickupObject.YourLootShare", Money.GetString(moneyToPlayer)));
+                                    eligibleMember.SendSystemMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.PickupObject.YourLootShare", Money.GetString(moneyToPlayer)));
                                 }
                                 else
                                     eligibleMember.AddMoney(Currency.Copper.Mint(moneyToPlayer));
@@ -12526,7 +12526,7 @@ namespace DOL.GS
                             {
 
                                 eligibleMember.AddMoney(Currency.Copper.Mint(moneyToPlayer));
-                                eligibleMember.SendSystemMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GamePlayer.PickupObject.YourLootShare", Money.GetString(moneyToPlayer)));
+                                eligibleMember.SendSystemMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.PickupObject.YourLootShare", Money.GetString(moneyToPlayer)));
                                 InventoryLogging.LogInventoryAction("(ground)", eligibleMember, eInventoryActionType.Loot, moneyToPlayer);
                             }
                         }
@@ -12540,7 +12540,7 @@ namespace DOL.GS
                             if (Guild.GetGuildDuesPercent() != 100)
                             {
                                 AddMoney(Currency.Copper.Mint(moneyObject.TotalCopper));
-                                SendSystemMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GamePlayer.PickupObject.YouPickUp", Money.GetString(moneyObject.TotalCopper)));
+                                SendSystemMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.PickupObject.YouPickUp", Money.GetString(moneyObject.TotalCopper)));
                             }
                             else
                             {
@@ -12552,7 +12552,7 @@ namespace DOL.GS
                         else
                         {
                             AddMoney(Currency.Copper.Mint(moneyObject.TotalCopper));
-                            SendSystemMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GamePlayer.PickupObject.YouPickUp", Money.GetString(moneyObject.TotalCopper)));
+                            SendSystemMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.PickupObject.YouPickUp", Money.GetString(moneyObject.TotalCopper)));
                             InventoryLogging.LogInventoryAction("(ground)", this, eInventoryActionType.Loot, moneyObject.TotalCopper);
                         }
                     }

@@ -1,0 +1,1 @@
+DataQuestJson.JsonQuest.Timer:			Vous faites déjà une quête chronométrée, vous ne pouvez pas en faire une autre du même type en même temps.
