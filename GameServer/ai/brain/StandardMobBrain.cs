@@ -234,6 +234,17 @@ namespace DOL.AI.Brain
                     Body.TargetObject = null;
                 }
             }
+
+            CheckStealth();
+        }
+
+        /// <summary>
+        /// Check if the NPC can be stealthed
+        /// </summary>
+        public virtual void CheckStealth()
+        {
+            if (Body.CanStealth && !Body.IsStealthed && !Body.InCombat && !Body.IsCasting)
+                Body.Stealth(true);
         }
         public float AggroMultiplier = 1.0f;
         public int GetGroupMobAggroMultiplier(GamePlayer player)
@@ -872,7 +883,7 @@ namespace DOL.AI.Brain
                     // first check to see if the healer is in our aggrolist so we don't go attacking anyone who heals
                     if (m_aggroTable.ContainsKey(eArgs.HealSource as GameLiving))
                     {
-                        if (eArgs.HealSource is GamePlayer || (eArgs.HealSource is GameNPC && (((GameNPC)eArgs.HealSource).Flags & GameNPC.eFlags.PEACE) == 0))
+                        if (eArgs.HealSource is GamePlayer || (eArgs.HealSource is GameNPC && !((GameNPC)eArgs.HealSource).IsPeaceful))
                         {
                             AddToAggroList((GameLiving)eArgs.HealSource, eArgs.HealAmount);
                         }

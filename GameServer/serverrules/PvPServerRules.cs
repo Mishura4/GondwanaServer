@@ -400,7 +400,7 @@ namespace DOL.GS.ServerRules
                     }
                 }
                 //Peace flag NPCs are same realm
-                if ((((GameNPC)target).Flags & GameNPC.eFlags.PEACE) != 0)
+                if (((GameNPC)target).IsPeaceful)
                     return true;
             }
 
@@ -414,7 +414,7 @@ namespace DOL.GS.ServerRules
                         return true;
                     }
                 }
-                if ((((GameNPC)source).Flags & GameNPC.eFlags.PEACE) != 0)
+                if (((GameNPC)source).IsPeaceful)
                     return true;
             }
 
