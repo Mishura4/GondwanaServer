@@ -366,7 +366,7 @@ namespace DOL.GS.Commands
                             mob.LoadedFromScript = false;
                             mob.SaveIntoDatabase();
                             client.Out.SendMessage("Mob created: OID=" + mob.ObjectID, eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                            if ((mob.Flags & GameNPC.eFlags.PEACE) != 0)
+                            if (mob.IsPeaceful)
                             {
                                 // because copying 100 mobs with their peace flag set is not fun
                                 client.Out.SendMessage("This mobs PEACE flag is set!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
@@ -638,7 +638,7 @@ namespace DOL.GS.Commands
             mob.LoadedFromScript = false;
             mob.SaveIntoDatabase();
             client.Out.SendMessage("Mob created: OID=" + mob.ObjectID, eChatType.CT_System, eChatLoc.CL_SystemWindow);
-            if ((mob.Flags & GameNPC.eFlags.PEACE) != 0)
+            if (mob.IsPeaceful)
             {
                 // because copying 100 mobs with their peace flag set is not fun
                 client.Out.SendMessage("This mobs PEACE flag is set!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);

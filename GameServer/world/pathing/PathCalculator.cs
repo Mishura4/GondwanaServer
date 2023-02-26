@@ -121,7 +121,7 @@ namespace DOL.GS
         {
             if (Vector3.Distance(owner.Position, target) < MIN_PATHING_DISTANCE)
                 return false; // too close to path
-            if ((owner.Flags & GameNPC.eFlags.FLYING) != 0)
+            if (owner.IsFlying)
                 return false;
             if (owner.Position.Z <= float.Epsilon)
                 return false; // this will probably result in some really awkward paths otherwise

@@ -45,7 +45,7 @@ namespace DOL.GS.Scripts
         public int PhraseInterval { get; set; }
         public TextNPCCondition Condition { get; private set; }
         public DBTextNPC TextDB { get; set; }
-        bool? IsOutlawFriendly { get; set; }
+        public bool? IsOutlawFriendly { get; set; }
 
         public Dictionary<string, EchangeurInfo> PlayerReferences;
 
@@ -209,14 +209,14 @@ namespace DOL.GS.Scripts
                 HandleQuestInteraction(player, questStr + "-" + str);
                 //Trigger
                 if (ResponseTrigger != null && ResponseTrigger.ContainsKey(questStr + "-" + str))
-                    _body.FireAmbientSentence(eAmbientTrigger.interact, player, ResponseTrigger[questStr + "-" + str], questStr + "-" + str);
+                    _body.FireAllResponseTriggers(eAmbientTrigger.interact, player, questStr + "-" + str);
             }
             else if (QuestReponses != null && QuestReponses.ContainsKey(str))
             {
                 HandleQuestInteraction(player, str);
                 //Trigger
                 if (ResponseTrigger != null && ResponseTrigger.ContainsKey(QuestReponses[str] + "-" + str))
-                    _body.FireAmbientSentence(eAmbientTrigger.interact, player, ResponseTrigger[QuestReponses[str] + "-" + str], QuestReponses[str] + "-" + str);
+                    _body.FireAllResponseTriggers(eAmbientTrigger.interact, player, QuestReponses[str] + "-" + str);
             }
 
             //Emote
@@ -226,7 +226,7 @@ namespace DOL.GS.Scripts
 
             //Trigger
             if (ResponseTrigger != null && ResponseTrigger.ContainsKey(str))
-                _body.FireAmbientSentence(eAmbientTrigger.interact, player, ResponseTrigger[str], str);
+                _body.FireAllResponseTriggers(eAmbientTrigger.interact, player, str);
 
             return true;
         }
@@ -810,12 +810,9 @@ namespace DOL.GS.Scripts
                 TextDB.ResponseTrigger.Replace("\r", "\n");
                 foreach (string item in TextDB.ResponseTrigger.Split('\n'))
                 {
-                    string[] items = item.Split('|');
-                    if (items.Length != 2 && items.Length != 3)
-                        continue;
                     try
                     {
-                        ResponseTrigger.Add(items[0], items[1]);
+                        ResponseTrigger.Add(item, "");
                     }
                     catch { }
                 }
@@ -880,6 +877,16 @@ namespace DOL.GS.Scripts
             TextDB.MobRealm = (byte)_body.Realm;
             TextDB.Text = Interact_Text;
 
+            if (IsOutlawFriendly != null)
+            {
+                TextDB.IsOutlawFriendly = (bool)IsOutlawFriendly;
+                TextDB.IsRegularFriendly = !(bool)IsOutlawFriendly;
+            }
+            else
+            {
+                TextDB.IsOutlawFriendly = false;
+                TextDB.IsRegularFriendly = false;
+            }
             //Sauve quest texts
             string questTexts = "";
             if (QuestTexts != null && QuestTexts.Count > 0)
@@ -943,7 +950,7 @@ namespace DOL.GS.Scripts
                 {
                     if (reponse.Length > 1)
                         reponse += "\n";
-                    reponse += de.Key.Trim('|', ';') + "|" + de.Value;
+                    reponse += de.Key.Trim('|', ';');
                 }
             }
             TextDB.ResponseTrigger = reponse;

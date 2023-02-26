@@ -1211,7 +1211,7 @@ namespace DOL.GameEvents
             {
                 if (mob.ObjectState == GameObject.eObjectState.Active)
                 {
-                    if ((mob.Flags & GameNPC.eFlags.PEACE) == 0)
+                    if (mob.IsPeaceful)
                         mob.Health = 0;
                     mob.RemoveFromWorld();
                     mob.Delete();

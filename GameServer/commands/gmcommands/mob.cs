@@ -1130,7 +1130,7 @@ namespace DOL.GS.Commands
             targetMob.Flags ^= GameNPC.eFlags.GHOST;
             targetMob.FlagsDb = (uint)targetMob.Flags;
             targetMob.SaveIntoDatabase();
-            client.Out.SendMessage("Mob GHOST flag is set to " + ((targetMob.Flags & GameNPC.eFlags.GHOST) != 0), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            client.Out.SendMessage("Mob GHOST flag is set to " + (targetMob.IsGhost), eChatType.CT_System, eChatLoc.CL_SystemWindow);
         }
 
         private void stealth(GameClient client, GameNPC targetMob, string[] args)
@@ -1139,7 +1139,7 @@ namespace DOL.GS.Commands
             targetMob.CanStealth = targetMob.IsStealthed;
             targetMob.FlagsDb = (uint)targetMob.Flags;
             targetMob.SaveIntoDatabase();
-            client.Out.SendMessage("Mob STEALTH flag is set to " + ((targetMob.Flags & GameNPC.eFlags.STEALTH) != 0), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            client.Out.SendMessage("Mob STEALTH flag is set to " + (targetMob.IsStealthed), eChatType.CT_System, eChatLoc.CL_SystemWindow);
         }
 
         private void torch(GameClient client, GameNPC targetMob, string[] args)
@@ -1201,7 +1201,7 @@ namespace DOL.GS.Commands
             targetMob.Flags ^= GameNPC.eFlags.DONTSHOWNAME;
             targetMob.FlagsDb = (uint)targetMob.Flags;
             targetMob.SaveIntoDatabase();
-            client.Out.SendMessage("Mob DONTSHOWNAME flag is set to " + ((targetMob.Flags & GameNPC.eFlags.DONTSHOWNAME) != 0), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            client.Out.SendMessage("Mob DONTSHOWNAME flag is set to " + (targetMob.IsDontShowName), eChatType.CT_System, eChatLoc.CL_SystemWindow);
         }
 
         private void notarget(GameClient client, GameNPC targetMob, string[] args)
@@ -1209,7 +1209,7 @@ namespace DOL.GS.Commands
             targetMob.Flags ^= GameNPC.eFlags.CANTTARGET;
             targetMob.FlagsDb = (uint)targetMob.Flags;
             targetMob.SaveIntoDatabase();
-            client.Out.SendMessage("Mob CANTTARGET flag is set to " + ((targetMob.Flags & GameNPC.eFlags.CANTTARGET) != 0), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            client.Out.SendMessage("Mob CANTTARGET flag is set to " + (targetMob.IsCannotTarget), eChatType.CT_System, eChatLoc.CL_SystemWindow);
         }
 
         private void kill(GameClient client, GameNPC targetMob, string[] args)
@@ -3437,7 +3437,7 @@ namespace DOL.GS.Commands
             ChatUtil.SendSystemMessage(client, targetMob.Name + "'s triggers:");
             var i = 0;
             foreach (var trigger in triggers)
-                ChatUtil.SendSystemMessage(client, ++i + ". " + trigger.Trigger + ", chance: " + trigger.Chance + ", voice: " + trigger.Voice + ", emote: " + trigger.Emote + ", spell: " + trigger.Spell + ", hp: " + trigger.HP + ", damge type repeate: " + trigger.DamageTypeRepeat + ", trigger timer: " + trigger.TriggerTimer + ", nb use: " + trigger.NbUse + ", change flag: " + trigger.ChangeFlag + ", change brain: " + trigger.ChangeBrain + ", change npc temmplate: " + trigger.ChangeNPCTemplate + ", change effect: " + trigger.ChangeEffect + ", area effect: " + trigger.CallAreaeffectID + ", playertppoint: " + trigger.PlayertoTPpoint + ", mobtppoint: " + trigger.MobtoTPpoint + ", tp effect: " + trigger.TPeffect + ", text: " + trigger.Text);
+                ChatUtil.SendSystemMessage(client, ++i + ". " + trigger.Trigger + ", chance: " + trigger.Chance + ", voice: " + trigger.Voice + ", emote: " + trigger.Emote + ", spell: " + trigger.Spell + ", hp: " + trigger.HP + ", damge type repeate: " + trigger.DamageTypeRepeat + ", trigger timer: " + trigger.TriggerTimer + ", nb use: " + trigger.NbUse + ", change flag: " + trigger.ChangeFlag + ", change brain: " + trigger.ChangeBrain + ", change npc temmplate: " + trigger.ChangeNPCTemplate + ", change effect: " + trigger.ChangeEffect + ", area effect: " + trigger.CallAreaeffectID + ", playertppoint: " + trigger.PlayertoTPpoint + ", mobtppoint: " + trigger.MobtoTPpoint + ", tp effect: " + trigger.TPeffect + ", text: " + trigger.Text + " , response trigger: " + trigger.ResponseTrigger + ", interact timer delay: " + trigger.InteractTimerDelay + ", walk to path: " + trigger.WalkToPath + ", yell: " + trigger.Yell);
         }
 
         private void trigger_help(GameClient client)

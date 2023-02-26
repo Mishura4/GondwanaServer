@@ -61,7 +61,7 @@ namespace DOL.AI.Brain
             {
                 if (npc is ShadowNPC)
                     continue;
-                if (npc.Realm != 0 || (npc.Flags & GameNPC.eFlags.PEACE) != 0 ||
+                if (npc.Realm != 0 || npc.IsPeaceful ||
                     !npc.IsAlive || npc.ObjectState != GameObject.eObjectState.Active ||
                     npc is GameTaxi ||
                     m_aggroTable.ContainsKey(npc) ||

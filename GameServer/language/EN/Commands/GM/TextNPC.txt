@@ -20,6 +20,10 @@ Commands.GM.TextNPC.Usage.RandomPhrase.Remove:		'/textnpc randomphrase remove <p
 Commands.GM.TextNPC.Usage.RandomPhrase.interval:		'/textnpc randomphrase interval <interval in seconds>' Interval for the NPC to repeat a random phrase
 Commands.GM.TextNPC.Usage.RandomPhrase.Help:		'/textnpc randomphrase help' Display some infos about random phrases on NPCs
 Commands.GM.TextNPC.Usage.RandomPhrase.View:		'/textnpc randomphrase view' To see the random phrases on a specific NPC
+Commands.GM.TextNPC.Usage.IsOutlawfriendly:		'/textnpc IsOutlawfriendly <true/false>' To set if textnpc should only talk to outlaw players
+Commands.GM.TextNPC.Usage.IsRegularfriendly:		'/textnpc IsRegularfriendly <true/false>' To set if textnpc should only talk to normal reputation players
+Commands.GM.TextNPC.Usage.Responsetrigger.Add:		'/textnpc Responsetrigger add <(questName-goalId-)reponse>' To add a trigger to a response or quest response
+Commands.GM.TextNPC.Usage.Responsetrigger.Remove:		'/textnpc Responsetrigger remove <(questName-goalId-)reponse>' To remove a trigger from a response or quest response
 Commands.GM.TextNPC.Usage.Quest:		'/textnpc quest <None/Available/Lesson/Lore/Finish/Pending>' Shows the quest icon on the NPC
 Commands.GM.TextNPC.Usage.Quest.Add:			'/textnpc quest add <questName(-goalId-)> <reponse>' To add a quest(optionally goal) as a response and call a new step
 Commands.GM.TextNPC.Usage.Quest.Remove:			'/textnpc quest remove <questName(-goalId)> <reponse>' To remove a quest(optionally goal)

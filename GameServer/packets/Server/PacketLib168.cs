@@ -780,12 +780,12 @@ namespace DOL.GS.PacketHandler
                 if (m_gameClient.Account.PrivLevel < 2)
                 {
                     // no name only if normal player
-                    if (npc.IsCannotTarget)
+                    if ((npcFlags & GameNPC.eFlags.CANTTARGET) != 0)
                         flags |= 0x01;
-                    if (npc.IsDontShowName)
+                    if ((npcFlags & GameNPC.eFlags.DONTSHOWNAME) != 0)
                         flags |= 0x02;
                 }
-                if (npc.IsStatue)
+                if ((npcFlags & GameNPC.eFlags.STATUE) != 0)
                 {
                     flags |= 0x01;
                 }
@@ -793,7 +793,7 @@ namespace DOL.GS.PacketHandler
                 {
                     flags |= 0x10;
                 }
-                if (npc.IsFlying)
+                if ((npcFlags & GameNPC.eFlags.FLYING) != 0)
                 {
                     flags |= 0x20;
                 }
@@ -1088,8 +1088,8 @@ namespace DOL.GS.PacketHandler
                 if ((npcFlags & GameNPC.eFlags.GHOST) != 0) flags |= 0x01;
                 if (npc.Inventory != null)
                     flags |= 0x02; //If mob has equipment, then only show it after the client gets the 0xBD packet
-                if (npc.IsPeaceful) flags |= 0x10;
-                if (npc.IsFlying) flags |= 0x20;
+                if ((npcFlags & GameNPC.eFlags.PEACE) != 0) flags |= 0x10;
+                if ((npcFlags & GameNPC.eFlags.FLYING) != 0) flags |= 0x20;
 
                 pak.WriteByte(flags);
                 pak.WriteByte(0x20); //TODO this is the default maxstick distance
@@ -1097,9 +1097,9 @@ namespace DOL.GS.PacketHandler
                 string add = "";
                 if (m_gameClient.Account.PrivLevel > 1)
                 {
-                    if (npc.IsCannotTarget)
+                    if ((npcFlags & GameNPC.eFlags.CANTTARGET) != 0)
                         add += "-DOR"; // indicates DOR flag for GMs
-                    iif (npc.IsDontShowName)
+                    if ((npcFlags & GameNPC.eFlags.DONTSHOWNAME) != 0)
                         add += "-NON"; // indicates NON flag for GMs
                 }
 

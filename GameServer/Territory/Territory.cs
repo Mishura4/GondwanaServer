@@ -206,7 +206,7 @@ namespace DOL.Territory
 
             foreach (GameObject item in items.Cast<GameObject>())
             {
-                if (item is GameNPC mob && (mob.Flags & GameNPC.eFlags.CANTTARGET) == 0)
+                if (item is GameNPC mob && !mob.IsCannotTarget)
                 {
                     mob.IsInTerritory = true;
                     mobs.Add(mob);

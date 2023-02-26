@@ -170,8 +170,8 @@ namespace DOL.GS.ServerRules
             // PEACE NPCs can't be attacked/attack
             var attackerNpc = attacker as GameNPC;
             var defenderNpc = defender as GameNPC;
-            if (attackerNpc != null && ((attackerNpc.Flags & GameNPC.eFlags.PEACE) != 0) ||
-                (defenderNpc != null && ((defenderNpc.Flags & GameNPC.eFlags.PEACE) != 0)))
+            if (attackerNpc != null && (attackerNpc.IsPeaceful) ||
+                (defenderNpc != null && (defenderNpc.IsPeaceful)))
                 return false;
 
             var playerAttacker = attacker as GamePlayer;
@@ -448,7 +448,7 @@ namespace DOL.GS.ServerRules
                         return false;
                     }
                 }
-                if ((targetNpc.Flags & GameNPC.eFlags.PEACE) != 0)
+                if (targetNpc.IsPeaceful)
                     return true;
 
             }
@@ -463,7 +463,7 @@ namespace DOL.GS.ServerRules
                         return false;
                     }
                 }
-                if ((sourceNpc.Flags & GameNPC.eFlags.PEACE) != 0)
+                if (sourceNpc.IsPeaceful)
                     return true;
             }
 
@@ -600,7 +600,7 @@ namespace DOL.GS.ServerRules
         }
         private bool IsPeacefulNPC(GameNPC attackerNpc, GameNPC defenderNpc, GamePlayer player)
         {
-            if (attackerNpc != null && (attackerNpc.Flags & GameNPC.eFlags.PEACE) != 0)
+            if (attackerNpc != null && attackerNpc.IsPeaceful)
             {
                 if (attackerNpc.CurrentGroupMob != null && MobGroups.MobGroup.IsQuestAggresive(attackerNpc, player))
                 {
@@ -610,7 +610,7 @@ namespace DOL.GS.ServerRules
                 return true;
             }
 
-            if (defenderNpc != null && ((defenderNpc.Flags & GameNPC.eFlags.PEACE) != 0))
+            if (defenderNpc != null && (defenderNpc.IsPeaceful))
             {
                 if (defenderNpc.CurrentGroupMob != null && MobGroups.MobGroup.IsQuestAggresive(defenderNpc, player))
                 {

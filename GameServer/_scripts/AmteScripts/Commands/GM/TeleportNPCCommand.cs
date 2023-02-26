@@ -108,7 +108,7 @@ namespace DOL.GS.Scripts
                         };
                     }
 
-                    if ((npc.Flags & GameNPC.eFlags.PEACE) == 0)
+                    if (npc.IsPeaceful)
                         npc.Flags ^= GameNPC.eFlags.PEACE;
                     npc.LoadedFromScript = false;
                     npc.AddToWorld();
@@ -160,9 +160,9 @@ namespace DOL.GS.Scripts
                         if (min > 500) min = 500;
                         npc.Range = min;
                         npc.Realm = 0;
-                        if ((npc.Flags & GameNPC.eFlags.PEACE) == 0)
+                        if (!npc.IsPeaceful)
                             npc.Flags ^= GameNPC.eFlags.PEACE;
-                        if ((npc.Flags & GameNPC.eFlags.DONTSHOWNAME) == 0)
+                        if (!npc.IsDontShowName)
                             npc.Flags ^= GameNPC.eFlags.DONTSHOWNAME;
                         npc.Model = 1;
                         npc.SaveIntoDatabase();

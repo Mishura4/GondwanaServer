@@ -49,6 +49,7 @@ public class MobXAmbientBehaviour : DataObject
     private int m_interactTimerDelay;
     private string m_walkToPath;
     private ushort m_yell;
+    public System.Timers.Timer InteractTriggerTimer { get; set; }
 
     /// <summary>
     /// Constructor

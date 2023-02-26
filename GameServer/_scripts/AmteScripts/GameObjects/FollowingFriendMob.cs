@@ -10,6 +10,7 @@ using DOL.GS;
 using DOL.GS.PacketHandler;
 using DOL.GS.Scripts;
 using DOLDatabase.Tables;
+using static DOL.GS.GameObject;
 
 namespace DOL.GS.Scripts
 {
@@ -62,7 +63,7 @@ namespace DOL.GS.Scripts
 
         public override bool Interact(GamePlayer player)
         {
-            if (!base.Interact(player) && ((Flags & GameNPC.eFlags.PEACE) != 0 || WaitingInArea ||
+            if (!base.Interact(player) && (IsPeaceful || WaitingInArea ||
             (((StandardMobBrain)Brain).AggroLevel == 0 && ((StandardMobBrain)Brain).AggroRange == 0))
             && CurrentRegion.GetAreasOfSpot(Position).OfType<AbstractArea>().FirstOrDefault(a => a.DbArea != null && a.DbArea.ObjectId == AreaToEnter) != null)
                 return false;
@@ -204,11 +205,12 @@ namespace DOL.GS.Scripts
                     c.CurrentGroupMob != null && c.CurrentGroupMob == CurrentGroupMob).ToList();
                 foreach (FollowingFriendMob mob in mobs)
                 {
-                    mob.ResetFriendMob();
+                    if (mob.PlayerFollow != null)
+                        mob.ResetFriendMob();
                 }
             }
-            else
-                ResetFriendMob();
+
+            ResetFriendMob();
         }
         public void ResetFriendMob()
         {
@@ -219,10 +221,13 @@ namespace DOL.GS.Scripts
             }
             WaitingInArea = false;
             PlayerFollow = null;
-            RemoveFromWorld();
-            Delete();
-            Position = SpawnPoint;
-            AddToWorld();
+            var mob = GameServer.Database.FindObjectByKey<Mob>(InternalID);
+            if (mob != null)
+            {
+                RemoveFromWorld();
+                LoadFromDatabase(mob);
+                AddToWorld();
+            }
         }
         public override void Die(GameObject killer)
         {
@@ -418,6 +423,12 @@ namespace DOL.AI.Brain
 
         public override void Think()
         {
+            //if player quits the game
+            if (((FollowingFriendMob)Body).PlayerFollow != null && ((FollowingFriendMob)Body).PlayerFollow.ObjectState == eObjectState.Deleted)
+            {
+                ((FollowingFriendMob)Body).ResetFriendMobs();
+                return;
+            }
             if (!Body.IsCasting && CheckSpells(eCheckSpellType.Defensive))
                 return;
 

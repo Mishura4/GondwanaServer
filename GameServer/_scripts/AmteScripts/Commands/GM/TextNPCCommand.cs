@@ -46,6 +46,10 @@ namespace DOL.GS.Scripts
          "Commands.GM.TextNPC.Usage.RandomPhrase.View",
 
          //conditions
+         "Commands.GM.TextNPC.Usage.IsOutlawfriendly",
+         "Commands.GM.TextNPC.Usage.IsRegularfriendly",
+         "Commands.GM.TextNPC.Usage.Responsetrigger.Add",
+         "Commands.GM.TextNPC.Usage.Responsetrigger.Remove",
          "Commands.GM.TextNPC.Usage.Quest",
          "Commands.GM.TextNPC.Usage.Quest.Add",
          "Commands.GM.TextNPC.Usage.Quest.Remove",
@@ -110,7 +114,7 @@ namespace DOL.GS.Scripts
                     ((GameNPC)npc).CurrentRegion = player.CurrentRegion;
                     ((GameNPC)npc).Name = "Nouveau pnj";
                     ((GameNPC)npc).Realm = 0;
-                    if ((((GameNPC)npc).Flags & GameNPC.eFlags.PEACE) == 0)
+                    if (!((GameNPC)npc).IsPeaceful)
                         ((GameNPC)npc).Flags ^= GameNPC.eFlags.PEACE;
                     ((GameNPC)npc).Model = 40;
                     ((GameNPC)npc).IsRenaissance = isRenaissance;
@@ -479,6 +483,38 @@ namespace DOL.GS.Scripts
                 #endregion
 
                 #region level/guild/race/class/prp/hour/karma
+                case "isoutlawfriendly":
+                    if (npc == null || args.Length < 2)
+                    {
+                        DisplaySyntax(client);
+                        return;
+                    }
+                    npc.TextNPCData.IsOutlawFriendly = args[2].ToLower() == "true";
+                    npc.TextNPCData.SaveIntoDatabase();
+                    break;
+                case "isregularfriendly":
+                    if (npc == null || args.Length < 2)
+                    {
+                        DisplaySyntax(client);
+                        return;
+                    }
+                    npc.TextNPCData.IsOutlawFriendly = args[2].ToLower() == "false";
+                    npc.TextNPCData.SaveIntoDatabase();
+                    break;
+                case "responsetrigger":
+                    if (npc == null || args.Length < 3)
+                    {
+                        DisplaySyntax(client);
+                        return;
+                    }
+                    if (args[2].ToLower() == "add")
+                    {
+                    }
+                    if (args[2].ToLower() == "remove")
+                    {
+                    }
+                    npc.TextNPCData.SaveIntoDatabase();
+                    break;
                 case "quest":
                     if (npc == null || args.Length < 3)
                     {

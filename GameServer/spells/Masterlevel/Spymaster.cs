@@ -428,7 +428,7 @@ namespace DOL.GS.Spells
 
     #region Spymaster-10
     [SpellHandler("BlanketOfCamouflage")]
-    public class GroupstealthHandler : MasterlevelHandling
+    public class GroupStealthHandler : MasterlevelHandling
     {
         private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 

@@ -4025,7 +4025,7 @@ namespace DOL.GS
             StopMovingOnPath();
 
             if (Brain is IControlledBrain brain && brain.AggressionState == eAggressionState.Passive)
-                    return;
+                return;
 
             SetLastMeleeAttackTick();
             StartMeleeAttackTimer();
@@ -5501,7 +5501,6 @@ namespace DOL.GS
                 }
             } // foreach
         }
-        #endregion
 
         private SpellAction m_spellaction = null;
         /// <summary>
@@ -5786,9 +5785,10 @@ namespace DOL.GS
             }
         }
 
-        System.Timers.Timer InteractTriggerTimer { get; set; }
         System.Timers.Timer TriggerPlayerLostTimer = new System.Timers.Timer(20000);
         GamePlayer TriggerPlayer;
+
+        string BeforeTriggerPathID = "";
 
         private void TriggerPlayerLostTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
@@ -5805,19 +5805,46 @@ namespace DOL.GS
                 }
             }
             // reset if player lost
-            if (InteractTriggerTimer != null)
-                InteractTriggerTimer.Stop();
+            foreach (MobXAmbientBehaviour ambientText in ambientTexts)
+            {
+                if (ambientText.InteractTriggerTimer != null)
+                    ambientText.InteractTriggerTimer.Stop();
+            }
             RemoveFromWorld();
             LoadFromDatabase(GameServer.Database.FindObjectByKey<Mob>(InternalID));
             AddToWorld();
             CurrentWayPoint = null;
+            PathID = BeforeTriggerPathID;
             TriggerPlayer = null;
+        }
+
+        /// <summary>
+        /// Handle ResponseTriggers and launch all ambient sentences that countain it 
+        /// </summary>
+        /// <param name="action">The trigger action</param>
+        /// <param name="npc">The NPC to handle the trigger for</param>
+        /// <param name="preChosenID">The ID of the sentence to fire</param>
+        /// <param name="responseTrigger">The response trigger of the sentence to fire</param>
+        /// <param name="useTimer">Whether to use the timer or not</param>
+        public void FireAllResponseTriggers(eAmbientTrigger trigger, GameLiving living = null, string responseTrigger = null, bool useTimer = true)
+        {
+            if (IsSilent || ambientTexts == null || ambientTexts.Count == 0) return;
+            if (responseTrigger == null) return;
+            List<MobXAmbientBehaviour> mxa = (from i in ambientTexts where i.ResponseTrigger == responseTrigger select i).ToList();
+            if (mxa.Count == 0) return;
+            foreach (MobXAmbientBehaviour m in mxa)
+            {
+                FireAmbientSentence(trigger, living, m.ObjectId, m.ResponseTrigger, useTimer);
+            }
         }
         /// <summary>
         /// Handle triggers for ambient sentences
         /// </summary>
         /// <param name="action">The trigger action</param>
         /// <param name="npc">The NPC to handle the trigger for</param>
+        /// <param name="preChosenID">The ID of the sentence to fire</param>
+        /// <param name="responseTrigger">The response trigger of the sentence to fire</param>
+        /// <param name="useTimer">Whether to use the timer or not</param>
         public void FireAmbientSentence(eAmbientTrigger trigger, GameLiving living = null, string preChosenID = null, string responseTrigger = null, bool useTimer = true)
         {
             if (IsSilent || ambientTexts == null || ambientTexts.Count == 0) return;
@@ -5840,27 +5867,27 @@ namespace DOL.GS
 
             //check if is itextnpc and has this interaction trigger
             if (preChosenID == null && responseTrigger == null && chosen.ResponseTrigger != null && trigger == eAmbientTrigger.interact && this is TextNPC
-            && ((TextNPC)this).TextNPCData.ResponseTrigger.ContainsValue(chosen.ObjectId) && ((TextNPC)this).TextNPCData.ResponseTrigger.ContainsKey(chosen.ResponseTrigger))
+             && ((TextNPC)this).TextNPCData.ResponseTrigger.ContainsKey(chosen.ResponseTrigger))
             {
                 return;
             }
 
             if (useTimer && trigger == eAmbientTrigger.interact && chosen.InteractTimerDelay > 0)
             {
-                if (InteractTriggerTimer != null)
+                if (chosen.InteractTriggerTimer != null)
                 {
-                    InteractTriggerTimer.Stop();
-                    InteractTriggerTimer.Dispose();
+                    chosen.InteractTriggerTimer.Stop();
+                    chosen.InteractTriggerTimer.Dispose();
                 }
-                InteractTriggerTimer = new System.Timers.Timer();
-                InteractTriggerTimer.Interval = chosen.InteractTimerDelay * 1000;
-                InteractTriggerTimer.Start();
-                InteractTriggerTimer.Elapsed += (sender, e) =>
+                chosen.InteractTriggerTimer = new System.Timers.Timer();
+                chosen.InteractTriggerTimer.Interval = chosen.InteractTimerDelay * 1000;
+                chosen.InteractTriggerTimer.Start();
+                chosen.InteractTriggerTimer.Elapsed += (sender, e) =>
                 {
-                    if (InteractTriggerTimer != null)
+                    if (chosen.InteractTriggerTimer != null)
                     {
-                        InteractTriggerTimer.Stop();
-                        InteractTriggerTimer.Dispose();
+                        chosen.InteractTriggerTimer.Stop();
+                        chosen.InteractTriggerTimer.Dispose();
                     }
                     FireAmbientSentence(trigger, living, chosen.ObjectId, chosen.ResponseTrigger, false);
                 };
@@ -5885,6 +5912,8 @@ namespace DOL.GS
                 if (pathPoint == null)
                     return;
                 CurrentWayPoint = new PathPoint(pathPoint.X, pathPoint.Y, pathPoint.Z, pathPoint.MaxSpeed, ePathType.Once);
+                BeforeTriggerPathID = PathID;
+                PathID = pathPoint.PathID;
                 MoveOnPath(MaxSpeed);
                 TriggerPlayer = living as GamePlayer;
                 TriggerPlayerLostTimer.Start();
@@ -5895,8 +5924,12 @@ namespace DOL.GS
             {
                 foreach (GameNPC npc in GetNPCsInRadius(chosen.Yell))
                 {
-                    var match = Regex.Match(this.Name, @"\s(" + npc.GuildName + ")$");
-                    if (npc is GameNPC && match != null && match.Length > 1 && !npc.InCombat)
+                    if (!(npc is GameNPC))
+                        continue;
+                    if ((string.IsNullOrEmpty(GuildName) && string.IsNullOrEmpty(Faction.Name))
+                    || (string.IsNullOrEmpty(GuildName) && npc.Faction.Name == Faction.Name)
+                    || (npc.GuildName == GuildName && string.IsNullOrEmpty(Faction.Name))
+                    || (npc.GuildName == GuildName && npc.Faction.Name == Faction.Name))
                     {
                         npc.StartAttack(living);
                     }

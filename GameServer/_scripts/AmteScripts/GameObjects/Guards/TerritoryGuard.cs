@@ -123,7 +123,7 @@ namespace DOL.AI.Brain
             foreach (GameNPC npc in Body.GetNPCsInRadius((ushort)AggroRange, Body.CurrentRegion.IsDungeon ? false : true))
             {
                 bool isTaxi = npc as GameTaxi != null;
-                if (npc.Realm != 0 || (npc.Flags & GameNPC.eFlags.PEACE) != 0 ||
+                if (npc.Realm != 0 || npc.IsPeaceful ||
                     !npc.IsAlive || npc.ObjectState != GameObject.eObjectState.Active ||
                     isTaxi ||
                     m_aggroTable.ContainsKey(npc) ||
