@@ -4228,6 +4228,35 @@ namespace DOL.GS
 
             Health -= damageAmount + criticalAmount;
 
+
+            int triggerSpellValue = TempProperties.getProperty("TriggerSpell", -1);
+            int spellLevel = TempProperties.getProperty("TriggerSpellLevel", -1);
+            if (triggerSpellValue > 0)
+            {
+                if (m_health < triggerSpellValue)
+                {
+                    int triggerSubSpell = TempProperties.getProperty("TriggerSubSpell", -1);
+                    if (triggerSubSpell > 0)
+                    {
+                        DBSpell dbspell = GameServer.Database.SelectObject<DBSpell>(DB.Column("SpellID").IsEqualTo(triggerSubSpell));
+                        if (dbspell != null)
+                        {
+                            Spell spell = new Spell(dbspell, spellLevel);
+                            ISpellHandler dd = CreateSpellHandler(this, spell, SkillBase.GetSpellLine(GlobalSpellsLines.Mob_Spells));
+                            dd.IgnoreDamageCap = true;
+                            if (spell.Target.ToLower() == "self")
+                                dd.StartSpell(this);
+                            else if (source is GameLiving)
+                                dd.StartSpell((GameLiving)source);
+                        }
+                    }
+                    else
+                    {
+                        log.Warn("A triggerSpell haven't subspell id ! Plz check in DB");
+                    }
+                }
+            }
+
             Stealth(false);
 
             if (!IsAlive)
@@ -5513,7 +5542,6 @@ namespace DOL.GS
             get { return m_health; }
             set
             {
-
                 int maxhealth = MaxHealth;
                 if (value >= maxhealth)
                 {
@@ -5538,31 +5566,6 @@ namespace DOL.GS
                 if (IsAlive && m_health < maxhealth)
                 {
                     StartHealthRegeneration();
-                }
-
-                int triggerSpellValue = TempProperties.getProperty("TriggerSpell", -1);
-                int spellLevel = TempProperties.getProperty("TriggerSpellLevel", -1);
-                if (triggerSpellValue > 0)
-                {
-                    if (m_health < triggerSpellValue)
-                    {
-                        int triggerSubSpell = TempProperties.getProperty("TriggerSubSpell", -1);
-                        if (triggerSubSpell > 0)
-                        {
-                            DBSpell dbspell = GameServer.Database.SelectObject<DBSpell>(DB.Column("SpellID").IsEqualTo(triggerSubSpell));
-                            if (dbspell != null)
-                            {
-                                Spell spell = new Spell(dbspell, spellLevel);
-                                ISpellHandler dd = CreateSpellHandler(this, spell, SkillBase.GetSpellLine(GlobalSpellsLines.Item_Effects));
-                                dd.IgnoreDamageCap = true;
-                                dd.StartSpell(this);
-                            }
-                        }
-                        else
-                        {
-                            log.Warn("A triggerSpell haven't subspell id ! Plz check in DB");
-                        }
-                    }
                 }
             }
         }

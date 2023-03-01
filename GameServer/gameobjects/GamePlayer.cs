@@ -1851,22 +1851,31 @@ namespace DOL.GS
 
             int oldRegion = CurrentRegionID;
 
-            //It is enough if we revive the player on this client only here
-            //because for other players the player will be removed in the MoveTo
-            //method and added back again (if in view) with full health ... so no
-            //revive needed for others...
-            Out.SendPlayerRevive(this);
-            //			Out.SendUpdatePlayer();
-            Out.SendUpdatePoints();
-
-            //Call MoveTo after new GameGravestone(this...
-            //or the GraveStone will be located at the player's bindpoint		
-
-            if (m_releaseType != eReleaseType.Jail)
+            if (oldRegion != relRegion)
             {
-                MoveTo(relRegion, relX, relY, relZ, relHeading);
+                Out.SendPlayerRevive(this);
+                Out.SendUpdatePoints();
+                if (m_releaseType != eReleaseType.Jail)
+                    MoveTo(relRegion, relX, relY, relZ, relHeading);
             }
+            else
+            {
+                //Call MoveTo after new GameGravestone(this...
+                //or the GraveStone will be located at the player's bindpoint		
 
+                if (m_releaseType != eReleaseType.Jail)
+                {
+                    MoveTo(relRegion, relX, relY, relZ, relHeading);
+                }
+
+                //It is enough if we revive the player on this client only here
+                //because for other players the player will be removed in the MoveTo
+                //method and added back again (if in view) with full health ... so no
+                //revive needed for others...
+                Out.SendPlayerRevive(this);
+                //			Out.SendUpdatePlayer();
+                Out.SendUpdatePoints();
+            }
             //Set property indicating that we are releasing to another region; used for Released event
             if (oldRegion != CurrentRegionID)
                 TempProperties.setProperty(RELEASING_PROPERTY, true);
@@ -6149,10 +6158,10 @@ namespace DOL.GS
 
             // Necromancer with summoned pet cannot attack
             if (ControlledBody is NecromancerPet)
-                {
-                     Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.StartAttack.CantInShadeMode"), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
-                     return;
-                }
+            {
+                Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.StartAttack.CantInShadeMode"), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
+                return;
+            }
 
             if (this.PlayerAfkMessage != null)
             {
@@ -10689,9 +10698,9 @@ namespace DOL.GS
 
                         if (petBody.ControlledNpcList != null)
                             foreach (IControlledBrain icb in petBody.ControlledNpcList)
-                            if (icb != null && icb.Body is GameNPC petBody2
-                                    && petBody2.IsWithinRadius(originalPoint, 500))
-                                        petBody2.MoveInRegion(CurrentRegionID, point.X, point.Y, this.Position.Z + 10, (ushort)((this.Heading + 2048) % 4096), false);
+                                if (icb != null && icb.Body is GameNPC petBody2
+                                        && petBody2.IsWithinRadius(originalPoint, 500))
+                                    petBody2.MoveInRegion(CurrentRegionID, point.X, point.Y, this.Position.Z + 10, (ushort)((this.Heading + 2048) % 4096), false);
                     }
                 }
                 shadowNPC.MoveToPlayer();

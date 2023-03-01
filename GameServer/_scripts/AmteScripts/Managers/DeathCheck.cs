@@ -70,7 +70,8 @@ namespace GameServerScripts.Amtescripts.Managers
         public bool IsChainKiller(GamePlayer killer, GamePlayer killed)
         {
             var deaths = GameServer.Database.SelectObjects<DBDeathLog>(DB.Column("KillerId").IsEqualTo(killer.InternalID)
-                .And(DB.Column("DeathDate").IsGreatherThan("SUBTIME(NOW(), '0:10:0')")));
+                .And(DB.Column("KilledId").IsEqualTo(killed.InternalID)
+                .And(DB.Column("DeathDate").IsGreatherThan("SUBTIME(NOW(), '0:10:0')"))));
 
             if (deaths == null || !deaths.Any() || deaths.Count == 1)
             {

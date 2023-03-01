@@ -1101,6 +1101,9 @@ namespace DOL.GS.Commands
 
             if (typeOfMob == "DOL.GS.Scripts.AreaEffect")
                 GameServer.Database.DeleteObject(GameServer.Database.SelectObjects<DBAreaEffect>(DB.Column("MobID").IsEqualTo(targetMob.InternalID)));
+            IList<GroupMobXMobs> GroupMobs = GameServer.Database.SelectObjects<GroupMobXMobs>(DB.Column("MobID").IsEqualTo(targetMob.InternalID));
+            if(GroupMobs.Count > 0)
+                GameServer.Database.DeleteObject(GroupMobs);
 
             client.Out.SendMessage("Target Mob removed from DB.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
         }

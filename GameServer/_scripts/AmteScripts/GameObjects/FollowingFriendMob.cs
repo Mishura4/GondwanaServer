@@ -221,13 +221,10 @@ namespace DOL.GS.Scripts
             }
             WaitingInArea = false;
             PlayerFollow = null;
-            var mob = GameServer.Database.FindObjectByKey<Mob>(InternalID);
-            if (mob != null)
-            {
-                RemoveFromWorld();
-                LoadFromDatabase(mob);
-                AddToWorld();
-            }
+            RemoveFromWorld();
+            Health = MaxHealth;
+            LoadFromDatabase(GameServer.Database.FindObjectByKey<Mob>(InternalID));
+            AddToWorld();
         }
         public override void Die(GameObject killer)
         {

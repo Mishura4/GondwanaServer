@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DOL.GS.Spells
 {
-    [SpellHandler("SpellReflectionDebuff ")]
+    [SpellHandler("SpellReflectionDebuff")]
     public class SpellReflectionDebuff : RemoveSpellEffectHandler
     {
         public SpellReflectionDebuff(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine)

@@ -109,14 +109,8 @@ namespace DOL.GS.Scripts
 
         public IEnumerable<string> GetOutlawsName()
         {
-            var outlaws = GameServer.Database.SelectObjects<DOLCharacters>(DB.Column("Reputation").IsEqualTo(0));
-
-            if (outlaws == null || !outlaws.Any())
-            {
-                return null;
-            }
-
-            return outlaws.Select(c => c.Name);
+            IList<DBDeathLog> kills = GameServer.Database.SelectObjects<DBDeathLog>(DB.Column("isWanted").IsEqualTo(1).And(DB.Column("ExitFromJail").IsEqualTo(0)));
+            return kills.Select(k => k.Killer).Distinct();
         }
     }
 

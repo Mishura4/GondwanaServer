@@ -29,6 +29,7 @@ using DOL.GS.PacketHandler;
 using DOL.GS.Quests;
 using DOL.GS.Friends;
 using DOL.GS.Finance;
+using GameServerScripts.Amtescripts.Managers;
 
 namespace DOL.GS.Commands
 {
@@ -2308,7 +2309,34 @@ namespace DOL.GS.Commands
                                 player.Out.SendMessage(
                                     client.Player.Name + "(PrivLevel: " + client.Account.PrivLevel + ") has set your reputation to " + amount,
                                     eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+
                             }
+
+                            if (amount < 0)
+                            {
+                                //log fake death on GM
+                                DBDeathLog deathLog = new DBDeathLog();
+                                deathLog.KillerId = client.Player.InternalID;
+                                deathLog.KilledId = player.InternalID;
+                                deathLog.IsWanted = true;
+                                deathLog.ExitFromJail = false;
+                                deathLog.DeathDate = DateTime.Now;
+                                GameServer.Database.AddObject(deathLog);
+
+                                //report player to guards
+                                DeathCheck.Instance.ReportPlayer(player);
+                            }
+                            else
+                            {
+                                //remove all wanted DBDeathLog
+                                IList<DBDeathLog> deathLogs = GameServer.Database.SelectObjects<DBDeathLog>(DB.Column("KilledId").IsEqualTo(player.InternalID).And(DB.Column("IsWanted").IsEqualTo(true)));
+                                foreach (DBDeathLog deathLog in deathLogs)
+                                {
+                                    deathLog.IsWanted = false;
+                                    GameServer.Database.SaveObject(deathLog);
+                                }
+                            }
+
                             InventoryLogging.LogInventoryAction(client.Player, player, eInventoryActionType.Other, amount);
                             client.Out.SendMessage("You set reputation of " + player.Name + " successfully!", eChatType.CT_Important,
                                                     eChatLoc.CL_SystemWindow);

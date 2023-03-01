@@ -43,7 +43,8 @@ namespace DOL.GS.Commands
             }
 
             //Check if player should go to jail
-            this.ReleaseOutlawsToJail(client);
+            if (this.ReleaseOutlawsToJail(client))
+                return;
 
             if (args.Length > 1 && args[1].ToLower() == "city")
             {
@@ -59,46 +60,18 @@ namespace DOL.GS.Commands
             client.Player.Release(GamePlayer.eReleaseType.Normal, false);
         }
 
-        private void ReleaseOutlawsToJail(GameClient client)
+        private bool ReleaseOutlawsToJail(GameClient client)
         {
-            string fulltype = "DOL.Database.DBDeathLog";
-            Type deathType = null;
-
-            foreach (var scriptAss in ScriptMgr.Scripts)
+            IList<DBDeathLog> deaths = GameServer.Database.SelectObjects<DBDeathLog>(DB.Column("KilledId").IsEqualTo(client.Player.InternalID)
+                .And(DB.Column("IsWanted").IsEqualTo(1)
+                .And(DB.Column("ExitFromJail").IsEqualTo("0"))));
+            
+            if (deaths != null && deaths.Count > 0)
             {
-                try
-                {
-                    deathType = scriptAss.GetType(fulltype);
-                    if (deathType != null)
-                        break;
-                }
-                catch
-                {
-                    continue;
-                }
+                client.Player.Release(GamePlayer.eReleaseType.Jail, true);
+                return true;
             }
-
-            if (deathType != null)
-            {
-                MethodInfo[] methods = GameServer.Database.GetType().GetMethods();
-
-                foreach (var method in methods.Where(m => m.Name.Contains("SelectObjects")))
-                {
-                    var parameters = method.GetParameters();
-                    if (parameters.Any(p => p.ParameterType == typeof(QueryParameter)) && parameters.Any(p => p.ParameterType == typeof(string)))
-                    {
-                        MethodInfo generic = method.MakeGenericMethod(deathType);
-                        var result = generic.Invoke(GameServer.Database, new object[] { "KilledId = @id AND IsWanted = 1 AND ExitFromJail = 0", new QueryParameter("id", client.Player.InternalID, typeof(string)) }) as IList<object>;
-
-                        var matched = result?.FirstOrDefault();
-                        if (matched != null)
-                        {
-                            client.Player.Release(GamePlayer.eReleaseType.Jail, true);
-                            return;
-                        }
-                    }
-                }
-            }
+            return false;
         }
     }
 }

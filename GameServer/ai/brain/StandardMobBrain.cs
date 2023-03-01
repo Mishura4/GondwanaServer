@@ -701,6 +701,16 @@ namespace DOL.AI.Brain
                 {
                     GameLiving living = aggros.Current.Key;
 
+                    //if spawned by an event, check visibility
+                    if (Body.EventID != null)
+                    {
+                        if (living is GamePlayer)
+                        {
+                            if (Body.IsVisibleTo((GamePlayer)living) == false)
+                                continue;
+                        }
+                    }
+
                     // check to make sure this target is still valid
                     if (living.IsAlive == false ||
                         living.ObjectState != GameObject.eObjectState.Active ||

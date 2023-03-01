@@ -3913,6 +3913,16 @@ namespace DOL.GS
             if (target == null)
                 return;
 
+            //if spawned by an event, check visibility
+            if (EventID != null)
+            {
+                if (target is GamePlayer)
+                {
+                    if (IsVisibleTo((GamePlayer)target) == false)
+                        return;
+                }
+            }
+
             TargetObject = target;
 
             long lastTick = this.TempProperties.getProperty<long>(LAST_LOS_TICK_PROPERTY);
@@ -5926,10 +5936,10 @@ namespace DOL.GS
                 {
                     if (!(npc is GameNPC))
                         continue;
-                    if ((string.IsNullOrEmpty(GuildName) && string.IsNullOrEmpty(Faction.Name))
-                    || (string.IsNullOrEmpty(GuildName) && npc.Faction.Name == Faction.Name)
-                    || (npc.GuildName == GuildName && string.IsNullOrEmpty(Faction.Name))
-                    || (npc.GuildName == GuildName && npc.Faction.Name == Faction.Name))
+                    if ((string.IsNullOrEmpty(GuildName) && (Faction == null || string.IsNullOrEmpty(Faction.Name)))
+                    || (string.IsNullOrEmpty(GuildName) && npc.Faction != null && Faction != null && npc.Faction.Name == Faction.Name)
+                    || (GuildName != null && npc.GuildName == GuildName && (Faction == null || string.IsNullOrEmpty(Faction.Name)))
+                    || (GuildName != null && npc.GuildName == GuildName && npc.Faction != null && Faction != null && npc.Faction.Name == Faction.Name))
                     {
                         npc.StartAttack(living);
                     }
