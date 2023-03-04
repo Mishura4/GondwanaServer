@@ -630,7 +630,11 @@ namespace DOL.GS.Spells
                 ad.UncappedDamage = ad.Damage;
                 ad.Damage = Math.Min(ad.Damage, (int)(player.UnstyledDamageCap(weapon) * effectiveness));
                 ad.Damage = (int)((double)ad.Damage * ServerProperties.Properties.PVP_MELEE_DAMAGE);
-                if (ad.Damage == 0) ad.AttackResult = DOL.GS.GameLiving.eAttackResult.Missed;
+                if (ad.Damage == 0)
+                {
+                    ad.missChance = 100;
+                    ad.AttackResult = DOL.GS.GameLiving.eAttackResult.Missed;
+                }
                 ad.CriticalDamage = player.GetMeleeCriticalDamage(ad, weapon);
             }
             else

@@ -33,6 +33,7 @@ namespace DOL.Database
         private byte m_type;
         private byte m_realm;
         private string m_text;
+        private string m_textFR;
 
         /// <summary>
         /// Create account row in DB
@@ -98,6 +99,20 @@ namespace DOL.Database
             {
                 Dirty = true;
                 m_text = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = true)]
+        public string TextFR
+        {
+            get
+            {
+                return m_textFR;
+            }
+            set
+            {
+                Dirty = true;
+                m_textFR = value;
             }
         }
     }

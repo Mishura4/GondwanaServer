@@ -633,6 +633,13 @@ namespace DOL.GS.ServerProperties
         /// </summary>
         [ServerProperty("server", "free_respec", "Set to true to always allow respecs", false)]
         public static bool FREE_RESPEC;
+
+        /// <summary>
+        /// Is the server cross realm?
+        /// </summary>
+        [ServerProperty("guild", "server_is_cross_realm", "Is the server cross realm?", false)]
+        public static bool SERVER_IS_CROSS_REALM;
+
         #endregion
 
         #region WORLD

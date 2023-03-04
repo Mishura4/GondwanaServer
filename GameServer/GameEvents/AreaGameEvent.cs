@@ -140,7 +140,7 @@ namespace DOL.GameEvents
                 //recheck number of players in area
                 PlayersCounter = GetPlayersInArea().Count();
 
-                if (PlayersNb == PlayersCounter)
+                if (PlayersNb <= PlayersCounter)
                 {
                     if ((UseItem != null && Whisper == null && UseItemCounter == PlayersNb) ||
                         (Whisper != null && UseItem == null && WhisperCounter == PlayersNb) ||

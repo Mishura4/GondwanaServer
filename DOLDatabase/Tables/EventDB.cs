@@ -38,8 +38,9 @@ namespace DOLDatabase.Tables
         private byte m_AnnonceType;
         private int m_Discord;
         private int m_instancedConditionType;
-        private string areaStartingId;
-        private string questStartingId;
+        private string m_areaStartingId;
+        private string m_questStartingId;
+        private bool m_parallelLaunch;
 
         [DataElement(AllowDbNull = false, Varchar = 255)]
         public string EventName
@@ -509,11 +510,11 @@ namespace DOLDatabase.Tables
         [DataElement(AllowDbNull = true, Varchar = 255)]
         public string AreaStartingId
         {
-            get => areaStartingId;
+            get => m_areaStartingId;
 
             set
             {
-                areaStartingId = value;
+                m_areaStartingId = value;
                 Dirty = true;
             }
         }
@@ -521,11 +522,23 @@ namespace DOLDatabase.Tables
         [DataElement(AllowDbNull = true, Varchar = 255)]
         public string QuestStartingId
         {
-            get => questStartingId;
+            get => m_questStartingId;
 
             set
             {
-                questStartingId = value;
+                m_questStartingId = value;
+                Dirty = true;
+            }
+        }
+
+        [DataElement(AllowDbNull = true)]
+        public bool ParallelLaunch
+        {
+            get => m_parallelLaunch;
+
+            set
+            {
+                m_parallelLaunch = value;
                 Dirty = true;
             }
         }

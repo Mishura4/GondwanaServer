@@ -6837,6 +6837,7 @@ namespace DOL.GS
                         //30% chance to miss
                         if (IsStrafing && ad.Target is GamePlayer && Util.Chance(30))
                         {
+                            ad.missChance = 30;
                             ad.AttackResult = eAttackResult.Missed;
                             Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Attack.StrafMiss"), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
                             break;
@@ -7067,9 +7068,11 @@ namespace DOL.GS
                     if (ad.AttackType == AttackData.eAttackType.Spell)
                         break;
                     if (ad.Attacker is GameNPC)
-                        Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Attack.Missed", ad.Attacker.GetName(0, true, Client.Account.Language, (ad.Attacker as GameNPC))), eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
+                        Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Attack.Missed", ad.Attacker.GetName(0, true, Client.Account.Language, (ad.Attacker as GameNPC)))
+                        + (ad.missChance > 0 ? " (" + ad.missChance + "%)" : ""), eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
                     else
-                        Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Attack.Missed", ad.Attacker.GetName(0, true)), eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
+                        Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Attack.Missed", ad.Attacker.GetName(0, true))
+                        + (ad.missChance > 0 ? " (" + ad.missChance + "%)" : ""), eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
                     break;
                 case eAttackResult.HitStyle:
                 case eAttackResult.HitUnstyled:
@@ -7996,6 +7999,11 @@ namespace DOL.GS
         }
 
         /// <summary>
+        /// Name of the last killer of this player
+        /// </summary>
+        public string LastKillerName { get; set; }
+
+        /// <summary>
         /// Called when the player dies
         /// </summary>
         /// <param name="killer">the killer</param>
@@ -8044,6 +8052,7 @@ namespace DOL.GS
             }
             else
             {
+                LastKillerName = killer.GetName(0, true);
                 if (DuelTarget == killer)
                 {
                     m_releaseType = eReleaseType.Duel;

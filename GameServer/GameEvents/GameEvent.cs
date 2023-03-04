@@ -102,6 +102,7 @@ namespace DOL.GameEvents
             InstancedConditionType = Enum.TryParse(db.InstancedConditionType.ToString(), out InstancedConditionTypes inst) ? inst : InstancedConditionTypes.All;
             AreaStartingId = !string.IsNullOrEmpty(db.AreaStartingId) ? db.AreaStartingId : null;
             QuestStartingId = !string.IsNullOrEmpty(db.QuestStartingId) ? db.QuestStartingId : null;
+            ParallelLaunch = db.ParallelLaunch;
 
             //Handle invalid ChronoType
             if (TimerType == TimerType.ChronoType && ChronoTime <= 0)
@@ -402,6 +403,13 @@ namespace DOL.GameEvents
         {
             get;
         }
+
+        public bool ParallelLaunch
+        {
+            get;
+            set;
+        }
+
         public GamePlayer Owner { get => owner; set => owner = value; }
 
         public void Clean()

@@ -58,6 +58,12 @@ namespace DOL.GS
         public double enemyResist = 0;
         public double weaponStat = 0;
 
+        // attack fail chances
+        public double parryChance = 0;
+        public double evadeChance = 0;
+        public double fumbleChance = 0;
+        public double missChance = 0;
+        public double blockChance = 0;
 
         /// <summary>
         /// Constructs new AttackData
@@ -306,9 +312,12 @@ namespace DOL.GS
         {
             get
             {
-                return (IsMeleeAttack)
-                    ? Util.ChanceDouble(Attacker.ChanceToFumble)
-                    : false;
+                if (IsMeleeAttack && Util.ChanceDouble(Attacker.ChanceToFumble))
+                {
+                    fumbleChance = Attacker.ChanceToFumble;
+                    return true;
+                }
+                return false;
             }
         }
 
@@ -316,9 +325,12 @@ namespace DOL.GS
         {
             get
             {
-                return (IsMeleeAttack)
-                    ? Util.ChanceDouble(Target.ChanceToBeMissed)
-                    : false;
+                if (IsMeleeAttack && Util.ChanceDouble(Target.ChanceToBeMissed))
+                {
+                    missChance = Target.ChanceToBeMissed;
+                    return true;
+                }
+                return false;
             }
         }
 

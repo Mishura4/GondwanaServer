@@ -3913,16 +3913,6 @@ namespace DOL.GS
             if (target == null)
                 return;
 
-            //if spawned by an event, check visibility
-            if (EventID != null)
-            {
-                if (target is GamePlayer)
-                {
-                    if (IsVisibleTo((GamePlayer)target) == false)
-                        return;
-                }
-            }
-
             TargetObject = target;
 
             long lastTick = this.TempProperties.getProperty<long>(LAST_LOS_TICK_PROPERTY);

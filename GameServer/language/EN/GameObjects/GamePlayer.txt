@@ -9,7 +9,7 @@ GameObjects.GamePlayer.ApplyPoison.CantUsePoisons:			You can't use poisons.
 GameObjects.GamePlayer.ApplyPoison.PoisonsAppliedWeapons:	Poisons can be applied only to weapons.
 GameObjects.GamePlayer.ApplyPoison.CantReapplyPoison:	Poisons can't be re-applied on this weapon.
 GameObjects.GamePlayer.Attack.AlreadyDead:				{0} is already dead!
-GameObjects.GamePlayer.Attack.Blocked:					{0} blocks your attack!	
+GameObjects.GamePlayer.Attack.Blocked:					{0} blocks your attack! 
 GameObjects.GamePlayer.Attack.CantBeAttacked:			This can't be attacked!		
 GameObjects.GamePlayer.Attack.CantCritical:				You can't get a critical shot on your target, you switch to a standard shot.	
 GameObjects.GamePlayer.Attack.CantSeeTarget:			You can't see your target!		
@@ -35,7 +35,7 @@ GameObjects.GamePlayer.Attack.Location.Head:			head
 GameObjects.GamePlayer.Attack.Location.Leg:				leg	
 GameObjects.GamePlayer.Attack.Location.Torso:			torso		
 GameObjects.GamePlayer.Attack.Miss:						You miss!
-GameObjects.GamePlayer.Attack.Missed:					{0} attacks you and misses!	
+GameObjects.GamePlayer.Attack.Missed:					{0} attacks you and misses! 
 GameObjects.GamePlayer.Attack.MustSelectQuiver:			You must select a quiver slot to draw from!		
 GameObjects.GamePlayer.Attack.NeedRepair:				Your {0} is in need of repairs.	
 GameObjects.GamePlayer.Attack.NeedRepairDire:			Your {0} is in dire need of repairs.		
@@ -350,5 +350,11 @@ GameObjects.GamePlayer.UseSlot.CantUseState:			    You can't use {0} in your sta
 GameObjects.GamePlayer.UseSlot.Used:			            {0} has been used.
 GameObjects.GamePlayer.UseSlot.CantUseCast:				You need to finish your current action for use your {0}!
 GameObjects.GamePlayer.Whisper.SelectTarget:				Select a target to whisper to!
+GameObjects.GamePlayer.Wanted                               {0} is now wanted for his crimes and his felony.
+GameObjects.GamePlayer.Jailed                               {0} has been put in jail by {1}.
+GameObjects.GamePlayer.Jailed.Unknown                       {0} has been put in jail by the guards.
+GameObjects.GamePlayer.RvR                                  \nTotal players killed : {0}\n
+GameObjects.GamePlayer.RvR.Champion                         \nTotal players killed : {0}\n Champion of the day : {1} ( {2} enemy players killed )
+GameObjects.GamePlayer.RvR.Battlegrounds                    The Rvr {1} is under the control of {0}!
 
 

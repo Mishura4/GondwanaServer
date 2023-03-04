@@ -3519,7 +3519,10 @@ namespace DOL.GS
             }
 
             if (phaseshift != null)
+            {
+                ad.missChance = 100;
                 return eAttackResult.Missed;
+            }
 
             if (grapple != null)
                 return eAttackResult.Grappled;
@@ -3531,6 +3534,7 @@ namespace DOL.GS
                 if (ad.Attacker is GamePlayer)
                     ((GamePlayer)ad.Attacker).Out.SendMessage(LanguageMgr.GetTranslation(((GamePlayer)ad.Attacker).Client.Account.Language, "GameLiving.CalculateEnemyAttackResult.StrikeIntercepted"), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
                 brittleguard.Cancel(false);
+                ad.missChance = 100;
                 return eAttackResult.Missed;
             }
 
@@ -3554,14 +3558,20 @@ namespace DOL.GS
                 double evadeChance = TryEvade(ad, lastAD, attackerConLevel, attackerCount);
 
                 if (Util.ChanceDouble(evadeChance))
+                {
+                    ad.evadeChance = evadeChance;
                     return eAttackResult.Evaded;
+                }
 
                 if (ad.IsMeleeAttack)
                 {
                     double parryChance = TryParry(ad, lastAD, attackerConLevel, attackerCount);
 
                     if (Util.ChanceDouble(parryChance))
+                    {
+                        ad.parryChance = parryChance;
                         return eAttackResult.Parried;
+                    }
                 }
 
                 double blockChance = TryBlock(ad, lastAD, attackerConLevel, attackerCount, engage);
@@ -3569,6 +3579,7 @@ namespace DOL.GS
                 if (Util.ChanceDouble(blockChance))
                 {
                     // reactive effects on block moved to GamePlayer
+                    ad.blockChance = blockChance;
                     return eAttackResult.Blocked;
                 }
             }
@@ -3623,6 +3634,7 @@ namespace DOL.GS
                         if (Util.ChanceDouble(guardchance))
                         {
                             ad.Target = guard.GuardSource;
+                            ad.blockChance = guardchance;
                             return eAttackResult.Blocked;
                         }
                     }
@@ -3676,11 +3688,13 @@ namespace DOL.GS
                         if (Util.ChanceDouble(guardchance))
                         {
                             ad.Target = dashing.GuardSource;
+                            ad.blockChance = guardchance;
                             return eAttackResult.Blocked;
                         }
                         else if (Util.ChanceDouble(parrychance))
                         {
                             ad.Target = dashing.GuardSource;
+                            ad.parryChance = parrychance;
                             return eAttackResult.Parried;
                         }
                     }
@@ -3700,6 +3714,7 @@ namespace DOL.GS
                         if (Util.ChanceDouble(parrychance))
                         {
                             ad.Target = dashing.GuardSource;
+                            ad.parryChance = parrychance;
                             return eAttackResult.Parried;
                         }
                     }
@@ -3785,6 +3800,7 @@ namespace DOL.GS
             missrate = Math.Min(95, missrate); // cap the missrate
             if (Util.Chance(missrate))
             {
+                ad.missChance = missrate;
                 return eAttackResult.Missed;
             }
 
@@ -3819,8 +3835,8 @@ namespace DOL.GS
                     || (ad.AttackType == AttackData.eAttackType.Ranged && ad.Target != bladeturn.SpellHandler.Caster && ad.Attacker is GamePlayer && ((GamePlayer)ad.Attacker).HasAbility(Abilities.PenetratingArrow)))  // penetrating arrow attack pierce bladeturn
                     penetrate = true;
 
-
-                if (ad.IsMeleeAttack && !Util.ChanceDouble((double)bladeturn.SpellHandler.Caster.Level / (double)ad.Attacker.Level))
+                var missChance = (double)bladeturn.SpellHandler.Caster.Level / (double)ad.Attacker.Level;
+                if (ad.IsMeleeAttack && !Util.ChanceDouble(missChance))
                     penetrate = true;
                 if (penetrate)
                 {
@@ -3833,6 +3849,7 @@ namespace DOL.GS
                     if (ad.Attacker is GamePlayer) ((GamePlayer)ad.Attacker).Out.SendMessage(LanguageMgr.GetTranslation(((GamePlayer)ad.Attacker).Client.Account.Language, "GameLiving.CalculateEnemyAttackResult.StrikeAbsorbed"), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
                     bladeturn.Cancel(false);
                     Stealth(false);
+                    ad.missChance = missChance;
                     return eAttackResult.Missed;
                 }
             }
@@ -4229,30 +4246,52 @@ namespace DOL.GS
             Health -= damageAmount + criticalAmount;
 
 
-            int triggerSpellValue = TempProperties.getProperty("TriggerSpell", -1);
-            int spellLevel = TempProperties.getProperty("TriggerSpellLevel", -1);
-            if (triggerSpellValue > 0)
+            if (this is GamePlayer)
             {
-                if (m_health < triggerSpellValue)
+                double triggerSpellValue = TempProperties.getProperty<double>("TriggerSpell", 0);
+                int spellLevel = TempProperties.getProperty("TriggerSpellLevel", 0);
+                if (triggerSpellValue > 0)
                 {
-                    int triggerSubSpell = TempProperties.getProperty("TriggerSubSpell", -1);
-                    if (triggerSubSpell > 0)
+                    if (100 * Health / MaxHealth < triggerSpellValue)
                     {
-                        DBSpell dbspell = GameServer.Database.SelectObject<DBSpell>(DB.Column("SpellID").IsEqualTo(triggerSubSpell));
-                        if (dbspell != null)
+                        int triggerSubSpell = TempProperties.getProperty("TriggerSubSpell", 0);
+                        if (triggerSubSpell > 0)
                         {
-                            Spell spell = new Spell(dbspell, spellLevel);
-                            ISpellHandler dd = CreateSpellHandler(this, spell, SkillBase.GetSpellLine(GlobalSpellsLines.Mob_Spells));
-                            dd.IgnoreDamageCap = true;
-                            if (spell.Target.ToLower() == "self")
-                                dd.StartSpell(this);
-                            else if (source is GameLiving)
-                                dd.StartSpell((GameLiving)source);
+                            DBSpell dbspell = GameServer.Database.SelectObject<DBSpell>(DB.Column("SpellID").IsEqualTo(triggerSubSpell));
+                            if (dbspell != null)
+                            {
+                                Spell spell = new Spell(dbspell, spellLevel);
+                                ISpellHandler dd = CreateSpellHandler(this, spell, SkillBase.GetSpellLine(GlobalSpellsLines.Mob_Spells));
+
+                                //cancel current trigger effect
+                                foreach (IGameEffect fx in EffectList)
+                                {
+                                    if (!(fx is GameSpellEffect))
+                                        continue;
+                                    GameSpellEffect effect = (GameSpellEffect)fx;
+                                    if (fx is GameSpellAndImmunityEffect && ((GameSpellAndImmunityEffect)fx).ImmunityState)
+                                        continue; // ignore immunity effects
+
+                                    if (effect.SpellHandler.Spell != null && (effect.SpellHandler.Spell.SpellType == "TriggerBuff") && (effect.SpellHandler.Spell.SubSpellID == triggerSubSpell))
+                                    {
+                                        effect.Cancel(false);
+                                    }
+                                }
+
+                                dd.IgnoreDamageCap = true;
+                                if (spell.Target.ToLower() == "self")
+                                    dd.StartSpell(this);
+                                else if (source is GameLiving)
+                                    dd.StartSpell((GameLiving)source);
+                                TempProperties.removeProperty("TriggerSpell");
+                                TempProperties.removeProperty("TriggerSubSpell");
+                                TempProperties.removeProperty("TriggerSpellLevel");
+                            }
                         }
-                    }
-                    else
-                    {
-                        log.Warn("A triggerSpell haven't subspell id ! Plz check in DB");
+                        else
+                        {
+                            log.Warn("A triggerSpell haven't subspell id ! Plz check in DB");
+                        }
                     }
                 }
             }

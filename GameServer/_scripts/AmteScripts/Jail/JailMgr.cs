@@ -6,6 +6,7 @@ using DOL.Database;
 using DOL.events.gameobjects;
 using DOL.Events;
 using DOL.GS.PacketHandler;
+using DOL.Language;
 using log4net;
 
 namespace DOL.GS.Scripts
@@ -128,7 +129,7 @@ namespace DOL.GS.Scripts
                     }
                 }
 
-                EmprisonnerRP(args.GamePlayer, cost, DateTime.Now + time, "les gardes", reason, true);
+                EmprisonnerRP(args.GamePlayer, cost, DateTime.Now + time, "", reason, true);
             }
         }
 
@@ -274,6 +275,28 @@ namespace DOL.GS.Scripts
             if (JailRP)
                 player.Out.SendMessage("Vous avez été mis en prison pour vos actes par " + GM + ". Votre caution s'éleve à " + cost + " Or. Pour sortir, demandez à quelqu'un de payer votre caution à Stronghold, le gardien de la prison.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
             else player.Out.SendMessage("Vous avez été mis en prison pour HRP par " + GM + ". Vous devez attendre la fin de votre durée d'emprisonnement en temps réel pour sortir automatiquement.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+
+
+            string message = "";
+            if (GM != "")
+            {
+                LanguageMgr.GetTranslation(player.Client.Account.Language, "GameObjects.GamePlayer.Jailed", player.Name, GM);
+                NewsMgr.CreateNews("GameObjects.GamePlayer.Jailed", player.Realm, eNewsType.RvRGlobal, false, true, player.Name, GM);
+            }
+            else if (string.IsNullOrEmpty(player.LastKillerName))
+            {
+                LanguageMgr.GetTranslation(player.Client.Account.Language, "GameObjects.GamePlayer.Jailed.Unknown", player.Name);
+                NewsMgr.CreateNews("GameObjects.GamePlayer.Jailed.Unknown", player.Realm, eNewsType.RvRGlobal, false, true, player.Name);
+            }
+            else
+            {
+                LanguageMgr.GetTranslation(player.Client.Account.Language, "GameObjects.GamePlayer.Jailed", player.Name, player.LastKillerName);
+                NewsMgr.CreateNews("GameObjects.GamePlayer.Jailed", player.Realm, eNewsType.RvRGlobal, false, true, player.Name, player.LastKillerName);
+            }
+
+
+            DolWebHook hook = new DolWebHook(DOL.GS.ServerProperties.Properties.DISCORD_WEBHOOK_ID);
+            hook.SendMessage(message);
 
             if (sortie == DateTime.MinValue) return;
 

@@ -323,6 +323,11 @@ namespace DOL.AI.Brain
 
             foreach (GamePlayer player in Body.GetPlayersInRadius(MAX_AGGRO_DISTANCE, Body.CurrentZone.IsDungeon ? false : true))
             {
+
+                //if spawned by an event, check visibility
+                if (Body.EventID != null && Body.IsVisibleTo(player) == false)
+                    return;
+
                 if (Body.GetDistanceTo(player) > (ushort)AggroRange * GetGroupMobRangeMultiplier(player))
                     continue;
                 if (!GameServer.ServerRules.IsAllowedToAttack(Body, player, true)) continue;

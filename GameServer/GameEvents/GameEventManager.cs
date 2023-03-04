@@ -713,7 +713,11 @@ namespace DOL.GameEvents
             List<GameEvent> events = new List<GameEvent>();
             if (areaEvent != null && ev.InstancedConditionType != InstancedConditionTypes.All)
             {
-                var newEvent = ev;
+                GameEvent newEvent = null;
+                if (ev.ParallelLaunch)
+                    newEvent = new GameEvent(ev);
+                else
+                    newEvent = ev;
                 List<Group> addedGroups = new List<Group>();
                 List<Guild> addedGuilds = new List<Guild>();
                 List<object> addedBattlegroups = new List<object>();
@@ -759,7 +763,12 @@ namespace DOL.GameEvents
 
             }
             else
-                events.Add(ev);
+            {
+                if (ev.ParallelLaunch)
+                    events.Add(new GameEvent(ev));
+                else
+                    events.Add(ev);
+            }
 
             foreach (var e in events)
             {
@@ -949,6 +958,7 @@ namespace DOL.GameEvents
                 var hook = new DolWebHook(Properties.DISCORD_WEBHOOK_ID);
                 hook.SendMessage(message);
             }
+            NewsMgr.CreateNews(message, 0, eNewsType.RvRLocal, false);
         }
 
         public async Task StopEvent(GameEvent e, EndingConditionType end)

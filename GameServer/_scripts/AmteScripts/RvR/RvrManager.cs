@@ -577,9 +577,16 @@ namespace AmteScripts.Managers
                         champion = killsPerPlayer.Key.Name;
                     }
                 }
-                message += string.Format("\nTotal players killed : {0}\n", countKilledPlayers);
                 if (!string.IsNullOrEmpty(champion))
-                    message += string.Format("Champion of the day : {0} ( {1} enemy players killed )", champion, maxKills);
+                {
+                    NewsMgr.CreateNews("GameObjects.GamePlayer.RvR.Champion", 0, eNewsType.RvRGlobal, false, true, countKilledPlayers, champion, maxKills);
+                    message += string.Format(LanguageMgr.GetTranslation("EN", "GameObjects.GamePlayer.RvR.Champion", countKilledPlayers, champion, maxKills));
+                }
+                else
+                {
+                    NewsMgr.CreateNews("GameObjects.GamePlayer.RvR", 0, eNewsType.RvRGlobal, false, true, countKilledPlayers);
+                    message += string.Format(LanguageMgr.GetTranslation("EN", "GameObjects.GamePlayer.RvR", countKilledPlayers));
+                }
                 var hook = new DolWebHook(Properties.DISCORD_WEBHOOK_ID);
                 hook.SendMessage(message);
             }

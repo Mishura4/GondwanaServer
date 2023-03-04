@@ -4,6 +4,7 @@ using DOL.Events;
 using DOL.GameEvents;
 using DOL.GS;
 using DOL.GS.PacketHandler;
+using DOL.Language;
 using System;
 using System.Collections.Generic;
 
@@ -148,7 +149,8 @@ namespace Amte
 
             foreach (GameClient client in WorldMgr.GetAllPlayingClients())
             {
-                client.Out.SendMessage(string.Format("Le RvR {1} est sous le contrôle du royaume {0}", player.GuildName, fortName), eChatType.CT_Help, eChatLoc.CL_SystemWindow);
+                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GameObjects.GamePlayer.RvR.Battlegrounds", player.GuildName, fortName), eChatType.CT_Help, eChatLoc.CL_SystemWindow);
+                NewsMgr.CreateNews("GameObjects.GamePlayer.RvR.Battlegrounds", 0, eNewsType.RvRGlobal, false, true, player.GuildName, fortName);
             }
 
             RvrManager.Instance.OnControlChange(this.InternalID, player.Guild);

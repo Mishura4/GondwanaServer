@@ -12,5 +12,6 @@ namespace DOL.events.gameobjects
     {
         public GamePlayer GamePlayer { get; set; }
         public int OriginalReputation { get; set; }
+        public string SenderName { get; set; }
     }
 }

@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using DOL.Database;
 using DOL.Events;
 using DOL.GS.PacketHandler;
+using DOL.Language;
 
 namespace DOL.GS
 {
@@ -35,7 +36,7 @@ namespace DOL.GS
 
     public class NewsMgr
     {
-        public static void CreateNews(string message, eRealm realm, eNewsType type, bool sendMessage)
+        public static void CreateNews(string message, eRealm realm, eNewsType type, bool sendMessage, bool translate = false, params object[] args)
         {
             if (sendMessage)
             {
@@ -43,9 +44,12 @@ namespace DOL.GS
                 {
                     if (client.Player == null)
                         continue;
-                    if ((client.Account.PrivLevel != 1 || realm == eRealm.None) || client.Player.Realm == realm)
+                    if ((client.Account.PrivLevel != 1 || realm == eRealm.None) || ServerProperties.Properties.SERVER_IS_CROSS_REALM || client.Player.Realm == realm)
                     {
-                        client.Out.SendMessage(message, eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        if (translate)
+                            client.Out.SendMessage(LanguageMgr.GetTranslation(client, message, args), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        else
+                            client.Out.SendMessage(message, eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     }
                 }
             }
@@ -55,7 +59,13 @@ namespace DOL.GS
                 DBNews news = new DBNews();
                 news.Type = (byte)type;
                 news.Realm = (byte)realm;
-                news.Text = message;
+                if (translate)
+                {
+                    news.Text = LanguageMgr.GetTranslation("EN", message, args);
+                    news.TextFR = LanguageMgr.GetTranslation("FR", message, args);
+                }
+                else
+                    news.Text = message;
                 GameServer.Database.AddObject(news);
                 GameEventMgr.Notify(DatabaseEvent.NewsCreated, new NewsEventArgs(news));
             }
@@ -71,7 +81,7 @@ namespace DOL.GS
                 string realm = "";
                 //we can see all captures
                 IList<DBNews> newsList;
-                if (type > 0)
+                if (type > 0 && !ServerProperties.Properties.SERVER_IS_CROSS_REALM)
                     newsList = DOLDB<DBNews>.SelectObjects(DB.Column(nameof(DBNews.Type)).IsEqualTo(type).And(DB.Column(nameof(DBNews.Realm)).IsEqualTo(0).Or(DB.Column(nameof(DBNews.Realm)).IsEqualTo(realm))));
                 else
                     newsList = DOLDB<DBNews>.SelectObjects(DB.Column(nameof(DBNews.Type)).IsEqualTo(type));
@@ -83,7 +93,10 @@ namespace DOL.GS
                 {
                     n--;
                     DBNews news = newsList[n];
-                    client.Out.SendMessage(string.Format("N,{0},{1},{2},\"{3}\"", news.Type, index++, RetElapsedTime(news.CreationDate), news.Text), eChatType.CT_SocialInterface, eChatLoc.CL_SystemWindow);
+                    if (client.Account.Language == "FR" && !string.IsNullOrEmpty(news.TextFR))
+                        client.Out.SendMessage(string.Format("N,{0},{1},{2},\"{3}\"", news.Type, index++, RetElapsedTime(news.CreationDate), news.TextFR), eChatType.CT_SocialInterface, eChatLoc.CL_SystemWindow);
+                    else
+                        client.Out.SendMessage(string.Format("N,{0},{1},{2},\"{3}\"", news.Type, index++, RetElapsedTime(news.CreationDate), news.Text), eChatType.CT_SocialInterface, eChatLoc.CL_SystemWindow);
                 }
             }
         }
