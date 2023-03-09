@@ -12,6 +12,7 @@ using DOL.GS.PacketHandler;
 using DOL.GS.ServerProperties;
 using DOL.Language;
 using DOL.Territory;
+using DOL.GS.Keeps;
 using log4net;
 
 namespace AmteScripts.Managers
@@ -171,6 +172,13 @@ namespace AmteScripts.Managers
                 });
                 territory.RvRTerritory.GuildOwner = guild.Name;
                 territory.RvRTerritory.Boss.Realm = guild.Realm;
+                AbstractGameKeep keep = GameServer.KeepManager.GetKeepCloseToSpot(territory.RvRTerritory.RegionId, territory.RvRTerritory.Boss.Position, 10000);
+                keep.TempRealm = guild.Realm;
+                // reset all doors
+                foreach (GameKeepDoor door in keep.Doors.Values)
+                {
+                    door.Realm = guild.Realm;
+                }
             }
         }
 
@@ -556,37 +564,38 @@ namespace AmteScripts.Managers
                 GameServer.Database.SelectObjects<DOLCharacters>(c => c.Region == +region.Key).Foreach(RemovePlayer);
             });
 
+            string message = string.Format("RvR Scores for the {0} :\n", DateTime.Now.Date.ToString("MM/dd/yyyy"));
+            message += messageScore;
+            if (string.IsNullOrEmpty(winnerName))
+                message += "Winner: none";
+            else
+                message += "Winner: " + winnerName;
+
+            short countKilledPlayers = 0;
+            short maxKills = 0;
+            string champion = "";
+            foreach (KeyValuePair<GamePlayer, short> killsPerPlayer in Kills)
+            {
+                countKilledPlayers += killsPerPlayer.Value;
+                if (killsPerPlayer.Value > maxKills)
+                {
+                    maxKills = killsPerPlayer.Value;
+                    champion = killsPerPlayer.Key.Name;
+                }
+            }
+            if (!string.IsNullOrEmpty(champion))
+            {
+                NewsMgr.CreateNews("GameObjects.GamePlayer.RvR.Champion", 0, eNewsType.RvRGlobal, false, true, countKilledPlayers, champion, maxKills);
+                message += string.Format(LanguageMgr.GetTranslation("EN", "GameObjects.GamePlayer.RvR.Champion", countKilledPlayers, champion, maxKills));
+            }
+            else
+            {
+                NewsMgr.CreateNews("GameObjects.GamePlayer.RvR", 0, eNewsType.RvRGlobal, false, true, countKilledPlayers);
+                message += string.Format(LanguageMgr.GetTranslation("EN", "GameObjects.GamePlayer.RvR", countKilledPlayers));
+            }
+
             if (Properties.DISCORD_ACTIVE)
             {
-                string message = string.Format("RvR Scores for the {0} :\n", DateTime.Now.Date.ToString("MM/dd/yyyy"));
-                message += messageScore;
-                if (string.IsNullOrEmpty(winnerName))
-                    message += "Winner: none";
-                else
-                    message += "Winner: " + winnerName;
-
-                short countKilledPlayers = 0;
-                short maxKills = 0;
-                string champion = "";
-                foreach (KeyValuePair<GamePlayer, short> killsPerPlayer in Kills)
-                {
-                    countKilledPlayers += killsPerPlayer.Value;
-                    if (killsPerPlayer.Value > maxKills)
-                    {
-                        maxKills = killsPerPlayer.Value;
-                        champion = killsPerPlayer.Key.Name;
-                    }
-                }
-                if (!string.IsNullOrEmpty(champion))
-                {
-                    NewsMgr.CreateNews("GameObjects.GamePlayer.RvR.Champion", 0, eNewsType.RvRGlobal, false, true, countKilledPlayers, champion, maxKills);
-                    message += string.Format(LanguageMgr.GetTranslation("EN", "GameObjects.GamePlayer.RvR.Champion", countKilledPlayers, champion, maxKills));
-                }
-                else
-                {
-                    NewsMgr.CreateNews("GameObjects.GamePlayer.RvR", 0, eNewsType.RvRGlobal, false, true, countKilledPlayers);
-                    message += string.Format(LanguageMgr.GetTranslation("EN", "GameObjects.GamePlayer.RvR", countKilledPlayers));
-                }
                 var hook = new DolWebHook(Properties.DISCORD_WEBHOOK_ID);
                 hook.SendMessage(message);
             }

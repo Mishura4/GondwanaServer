@@ -595,7 +595,7 @@ namespace DOL.GS
         /// <summary>
         /// Spawn texts are in database
         /// </summary>
-        protected override void BuildAmbientTexts()
+        public override void BuildAmbientTexts()
         {
             base.BuildAmbientTexts();
 

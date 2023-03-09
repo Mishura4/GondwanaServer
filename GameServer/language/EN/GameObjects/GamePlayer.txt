@@ -350,11 +350,11 @@ GameObjects.GamePlayer.UseSlot.CantUseState:			    You can't use {0} in your sta
 GameObjects.GamePlayer.UseSlot.Used:			            {0} has been used.
 GameObjects.GamePlayer.UseSlot.CantUseCast:				You need to finish your current action for use your {0}!
 GameObjects.GamePlayer.Whisper.SelectTarget:				Select a target to whisper to!
-GameObjects.GamePlayer.Wanted                               {0} is now wanted for his crimes and his felony.
-GameObjects.GamePlayer.Jailed                               {0} has been put in jail by {1}.
-GameObjects.GamePlayer.Jailed.Unknown                       {0} has been put in jail by the guards.
-GameObjects.GamePlayer.RvR                                  \nTotal players killed : {0}\n
-GameObjects.GamePlayer.RvR.Champion                         \nTotal players killed : {0}\n Champion of the day : {1} ( {2} enemy players killed )
-GameObjects.GamePlayer.RvR.Battlegrounds                    The Rvr {1} is under the control of {0}!
+GameObjects.GamePlayer.Wanted:                              {0} is now wanted for his crimes and his felony.
+GameObjects.GamePlayer.Jailed:                              {0} has been put in jail by {1}.
+GameObjects.GamePlayer.Jailed.Unknown:                      {0} has been put in jail by the guards.
+GameObjects.GamePlayer.RvR:                                 \nTotal players killed : {0}\n
+GameObjects.GamePlayer.RvR.Champion:                        \nTotal players killed : {0}\n Champion of the day : {1} ( {2} enemy players killed )
+GameObjects.GamePlayer.RvR.Control:                         The Rvr {1} is under the control of {0}!
 
 

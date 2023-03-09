@@ -399,9 +399,19 @@ namespace DOL.GS.Keeps
         /// </summary>
         public eRealm Realm
         {
-            get { return (eRealm)DBKeep.Realm; }
+            get
+            {
+                if (TempRealm != eRealm.None)
+                    return TempRealm;
+                return (eRealm)DBKeep.Realm;
+            }
             set { DBKeep.Realm = (byte)value; }
         }
+
+        /// <summary>
+        /// Temporary Realm used for keep capture. If its set, it overrides the Realm property
+        /// </summary>
+        public eRealm TempRealm = eRealm.None;
 
         /// <summary>
         /// The Original Keep Realm linked to the DBKeep

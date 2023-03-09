@@ -42,7 +42,9 @@ namespace DOL.GameEvents
             Mobs = new List<GameNPC>();
             foreach (var mob in ev.Mobs)
             {
-                Mobs.Add(mob.Copy());
+                GameNPC newMob = mob.Copy();
+                newMob.BuildAmbientTexts();
+                Mobs.Add(newMob);
             }
             StartEffects = new Dictionary<string, ushort>(ev.StartEffects);
             EndEffects = new Dictionary<string, ushort>(ev.EndEffects);

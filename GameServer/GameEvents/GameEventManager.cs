@@ -613,13 +613,24 @@ namespace DOL.GameEvents
 
         public void ResetEvent(GameEvent ev)
         {
-
-            while (Instance.Events.Where(e => e.ID.Equals(ev.ID)).Count() != 1)
+            if (!ev.StartedTime.HasValue)
+            {
+                GameEvent startedEvent = Instance.Events.FirstOrDefault(e => e.ID.Equals(ev.ID) && e.StartedTime.HasValue);
+                if (startedEvent != null)
+                    ev = startedEvent;
+            }
+            while (Instance.Events.Where(e => e.ID.Equals(ev.ID) && e.StartedTime.HasValue).Count() > 1)
             {
                 CleanEvent(ev);
                 Instance.Events.Remove(ev);
-                ev = Instance.Events.FirstOrDefault(e => e.ID.Equals(ev.ID));
+                ev = Instance.Events.FirstOrDefault(e => e.ID.Equals(ev.ID) && e.StartedTime.HasValue);
             }
+            if (ev != null && Instance.Events.Where(e => e.ID.Equals(ev.ID)).Count() > 1)
+            {
+                CleanEvent(ev);
+                Instance.Events.Remove(ev);
+            }
+            ev = Instance.Events.FirstOrDefault(e => e.ID.Equals(ev.ID));
             ev.StartedTime = (DateTimeOffset?)null;
             ev.EndTime = (DateTimeOffset?)null;
             ev.Status = EventStatus.NotOver;
@@ -756,6 +767,11 @@ namespace DOL.GameEvents
                         default:
                             break;
                     }
+
+                    // If player already has this event continue
+                    if (Instance.Events.Any(e => e.Owner == cl.Player && e.ID == ev.ID))
+                        continue;
+
                     if (!Instance.Events.Contains(newEvent))
                         Instance.Events.Add(newEvent);
                     newEvent = new GameEvent(ev);

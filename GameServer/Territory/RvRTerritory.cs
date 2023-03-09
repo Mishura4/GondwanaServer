@@ -1,4 +1,5 @@
 ﻿using DOL.GS;
+using DOL.GS.Keeps;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,6 +51,14 @@ namespace DOL.Territory
                 {
                     mob.GuildName = null;
                 }
+            }
+            // reset keep
+            AbstractGameKeep keep = GameServer.KeepManager.GetKeepCloseToSpot(RegionId, Boss.Position, 10000);
+            keep.TempRealm = eRealm.None;
+            // reset all doors
+            foreach (GameKeepDoor door in keep.Doors.Values)
+            {
+                door.Realm = eRealm.None;
             }
         }
     }

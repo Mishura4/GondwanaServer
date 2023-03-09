@@ -47,7 +47,7 @@ namespace DOL.GS
         /// Not all summoned turrets 'll throw ambient texts
         /// let's say 20%
         /// </summary>
-        protected override void BuildAmbientTexts()
+        public override void BuildAmbientTexts()
         {
             base.BuildAmbientTexts();
             if (ambientTexts.Count > 0)

@@ -91,6 +91,14 @@ namespace DOL.GS.Commands
                     var pvp = string.Join(", ", PvpManager.Instance.FindPvPMaps());
                     DisplayMessage(client, string.Format("Le rvr utilise les maps: {0}, le pvp utilise les maps: {1}.", rvr, pvp));
                     break;
+                case "reset":
+                    PvpManager.Instance.Close();
+                    RvrManager.Instance.Close();
+                    RvrManager.Instance.Open(false);
+                    PvpManager.Instance.Open(0, false);
+
+                    DisplayMessage(client, "Les rvr et le pvp ont été réinitialisés.");
+                    break;
             }
         }
     }

@@ -46,13 +46,13 @@ namespace Amte
             {
                 if (timeBeforeClaim > 0)
                 {
-                    player.Out.SendMessage("Vous devez attendre " + Math.Round(timeBeforeClaim, 1) + " secondes avant de pouvoir pretendre au contrôle du fort.", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameObjects.GamePlayer.RvR.Open.UnClaimble", Math.Round(timeBeforeClaim, 1)), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                     return true;
                 }
-                player.Out.SendMessage("Voulez vous [prendre le contrôle] du fort ?", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameObjects.GamePlayer.RvR.Open.Claimable"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
             }
             else
-                player.Out.SendMessage("La prise de fort est momentanément indisponible.", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameObjects.GamePlayer.RvR.Closed"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
 
             return true;
         }
@@ -72,17 +72,17 @@ namespace Amte
                 return true;
             if (player.InCombat)
             {
-                player.Out.SendMessage("Vous ne pouvez pas prendre le contrôle du fort en combat.", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameObjects.GamePlayer.RvR.In.Combat"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 return true;
             }
             if (timeBeforeClaim > 0)
             {
-                player.Out.SendMessage("Vous devez attendre " + Math.Round(timeBeforeClaim, 1) + " secondes avant de pouvoir prétendre au contrôle du fort.", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameObjects.GamePlayer.RvR.Open.UnClaimble", Math.Round(timeBeforeClaim, 1)), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 return true;
             }
             if (_claimTimer != null)
             {
-                player.Out.SendMessage("Je suis occupé pour le moment, revenez plus tard.", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameObjects.GamePlayer.RvR.Occupied"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 return true;
             }
 
@@ -95,14 +95,14 @@ namespace Amte
                     {
                         _claimTimer = null;
                         player.Out.SendCloseTimerWindow();
-                        player.Out.SendMessage("Vous avez été interrompu.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameObjects.GamePlayer.Interrupt"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                         return 0;
                     }
                     if (player.GetDistanceTo(this) > WorldMgr.GIVE_ITEM_DISTANCE)
                     {
                         _claimTimer = null;
                         player.Out.SendCloseTimerWindow();
-                        player.Out.SendMessage("Vous vous êtes trop éloigné.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameObjects.GamePlayer.RvR.Too.Far"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                         return 0;
                     }
                     var passedTime = DateTime.Now - startTime;
@@ -117,13 +117,13 @@ namespace Amte
                 500
             );
 
-            player.Out.SendTimerWindow("Prise du fort", CLAIM_TIME_SECONDS);
+            player.Out.SendTimerWindow(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameObjects.GamePlayer.RvR.Capture.Timer"), CLAIM_TIME_SECONDS);
 
             foreach (var obj in GetPlayersInRadius(ushort.MaxValue - 1))
             {
                 var pl = obj as GamePlayer;
                 if (pl != null)
-                    pl.Out.SendMessage(string.Format("{0} commence à prendre le contrôle du fort !", player.GuildName), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                    pl.Out.SendMessage(LanguageMgr.GetTranslation(pl.Client.Account.Language, "GameObjects.GamePlayer.RvR.Capture.Start", player.GuildName), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
             }
 
             return true;
@@ -149,9 +149,9 @@ namespace Amte
 
             foreach (GameClient client in WorldMgr.GetAllPlayingClients())
             {
-                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GameObjects.GamePlayer.RvR.Battlegrounds", player.GuildName, fortName), eChatType.CT_Help, eChatLoc.CL_SystemWindow);
-                NewsMgr.CreateNews("GameObjects.GamePlayer.RvR.Battlegrounds", 0, eNewsType.RvRGlobal, false, true, player.GuildName, fortName);
+                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GameObjects.GamePlayer.RvR.Control", player.GuildName, fortName), eChatType.CT_Help, eChatLoc.CL_SystemWindow);
             }
+            NewsMgr.CreateNews("GameObjects.GamePlayer.RvR.Control", 0, eNewsType.RvRGlobal, false, true, player.GuildName, fortName);
 
             RvrManager.Instance.OnControlChange(this.InternalID, player.Guild);
         }

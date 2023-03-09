@@ -178,28 +178,26 @@ namespace DOL.GS.PacketHandler.Client.v168
             {
                 PositionMgr.CreateDoor(m_handlerDoorID, player);
             }
-            else
-            {
-                var door = new DBDoor();
-                door.ObjectId = null;
-                door.InternalID = m_handlerDoorID;
-                door.Name = "door";
-                door.Type = m_handlerDoorID / 100000000;
-                door.Level = 20;
-                door.Realm = 6;
-                door.MaxHealth = 2545;
-                door.Health = 2545;
-                door.Locked = 0;
-                door.X = (int)player.Position.X;
-                door.Y = (int)player.Position.Y;
-                door.Z = (int)player.Position.Z;
-                door.Heading = player.Heading;
-                GameServer.Database.AddObject(door);
+            var door = new DBDoor();
+            door.ObjectId = null;
+            door.InternalID = m_handlerDoorID;
+            door.Name = "door";
+            door.Type = m_handlerDoorID / 100000000;
+            door.Level = 20;
+            door.Realm = 6;
+            door.MaxHealth = 2545;
+            door.Health = 2545;
+            door.Locked = 0;
+            door.X = (int)player.Position.X;
+            door.Y = (int)player.Position.Y;
+            door.Z = (int)player.Position.Z;
+            door.Heading = player.Heading;
+            GameServer.Database.AddObject(door);
 
-                player.Out.SendMessage("Added door " + m_handlerDoorID + " to the database!", eChatType.CT_Important,
-                                       eChatLoc.CL_SystemWindow);
-                DoorMgr.Init();
-            }
+
+            player.Out.SendMessage("Added door " + m_handlerDoorID + " to the database!", eChatType.CT_Important,
+                                   eChatLoc.CL_SystemWindow);
+            DoorMgr.Init();
         }
 
         /// <summary>

@@ -51,6 +51,7 @@ namespace GameServerScripts.Amtescripts.Managers
                 client.Out.SendMessage("Vous avez perdu 1 point de réputation pour avoir tué " + player.Name, DOL.GS.PacketHandler.eChatType.CT_System, DOL.GS.PacketHandler.eChatLoc.CL_SystemWindow);
                 death.IsWanted = true;
                 GameServer.Database.SaveObject(death);
+                newsMessage = LanguageMgr.GetTranslation(client, "GameObjects.GamePlayer.Wanted", client.Player.Name);
                 NewsMgr.CreateNews("GameObjects.GamePlayer.Wanted", player.Realm, eNewsType.RvRGlobal, false, true, client.Player.Name);
             }
             else
@@ -64,12 +65,16 @@ namespace GameServerScripts.Amtescripts.Managers
                     death.IsWanted = true;
                     reported++;
                     GameServer.Database.SaveObject(death);
+                    newsMessage = LanguageMgr.GetTranslation(client, "GameObjects.GamePlayer.Wanted", killer.Name);
                     NewsMgr.CreateNews("GameObjects.GamePlayer.Wanted", player.Realm, eNewsType.RvRGlobal, false, true, killer.Name);
                 }
             }
 
-            DolWebHook hook = new DolWebHook(DOL.GS.ServerProperties.Properties.DISCORD_WEBHOOK_ID);
-            hook.SendMessage(newsMessage);
+            if (DOL.GS.ServerProperties.Properties.DISCORD_ACTIVE)
+            {
+                DolWebHook hook = new DolWebHook(DOL.GS.ServerProperties.Properties.DISCORD_WEBHOOK_ID);
+                hook.SendMessage(newsMessage);
+            }
             return reported;
         }
 

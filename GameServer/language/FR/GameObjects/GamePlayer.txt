@@ -710,3 +710,13 @@ GameObjects.GamePlayer.Bind.CantBindDead:				You can not bind while dead!
 GameObjects.GamePlayer.Bind.CantHere:					You cannot bind here!	
 GameObjects.GamePlayer.Bind.LastBindPoint:				Last Bind Point : {0}.	
 GameObjects.GamePlayer.Bind.MustWait:					You must wait {0} seconds to bind again!
+
+GameObjects.GamePlayer.RvR.Open.Claimable:              Voulez vous [prendre le contrôle] du fort?
+GameObjects.GamePlayer.RvR.Open.UnClaimble:             Vous devez attendre {0} secondes avant de pouvoir pretendre au contrôle du fort.
+GameObjects.GamePlayer.RvR.Closed:                      La prise de fort est momentanément indisponible.
+GameObjects.GamePlayer.RvR.In.Combat:                   Vous ne pouvez pas prendre le contrôle du fort en combat.
+GameObjects.GamePlayer.RvR.Occupied:                    Je suis occupé pour le moment, revenez plus tard.
+GameObjects.GamePlayer.RvR.Interrupt:                   Vous avez été interrompu.
+GameObjects.GamePlayer.RvR.Too.Far:                     Vous vous êtes trop éloigné.
+GameObjects.GamePlayer.RvR.Capture.Timer:               Prise du fort
+GameObjects.GamePlayer.RvR.Capture.Start:               {0} commence à prendre le contrôle du fort!

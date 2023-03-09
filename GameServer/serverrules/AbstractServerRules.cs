@@ -316,6 +316,10 @@ namespace DOL.GS.ServerRules
             if (attacker == null || defender == null)
                 return false;
 
+            //if spawned by an event, check visibility
+            if (attacker is GameNPC && (attacker as GameNPC).EventID != null && (attacker as GameNPC).IsVisibleTo(defender) == false)
+                return false;
+
             //dead things can't attack
             if (!defender.IsAlive || !attacker.IsAlive)
                 return false;

@@ -3221,7 +3221,7 @@ namespace DOL.GS
         /// <summary>
         /// Fill the ambient text list for this NPC
         /// </summary>
-        protected virtual void BuildAmbientTexts()
+        public virtual void BuildAmbientTexts()
         {
             // list of ambient texts
             if (!string.IsNullOrEmpty(Name))

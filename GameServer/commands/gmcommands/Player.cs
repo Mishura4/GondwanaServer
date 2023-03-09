@@ -2315,16 +2315,12 @@ namespace DOL.GS.Commands
                             if (amount < 0)
                             {
                                 //log fake death on GM
-                                DBDeathLog deathLog = new DBDeathLog();
-                                deathLog.KillerId = client.Player.InternalID;
-                                deathLog.KilledId = player.InternalID;
-                                deathLog.IsWanted = true;
+                                DBDeathLog deathLog = new DBDeathLog(client.Player, player, false);
                                 deathLog.ExitFromJail = false;
-                                deathLog.DeathDate = DateTime.Now;
                                 GameServer.Database.AddObject(deathLog);
 
                                 //report player to guards
-                                DeathCheck.Instance.ReportPlayer(player);
+                                DeathCheck.Instance.ReportPlayer(client.Player);
                             }
                             else
                             {

@@ -294,9 +294,11 @@ namespace DOL.GS.Scripts
                 NewsMgr.CreateNews("GameObjects.GamePlayer.Jailed", player.Realm, eNewsType.RvRGlobal, false, true, player.Name, player.LastKillerName);
             }
 
-
-            DolWebHook hook = new DolWebHook(DOL.GS.ServerProperties.Properties.DISCORD_WEBHOOK_ID);
-            hook.SendMessage(message);
+            if (DOL.GS.ServerProperties.Properties.DISCORD_ACTIVE)
+            {
+                DolWebHook hook = new DolWebHook(DOL.GS.ServerProperties.Properties.DISCORD_WEBHOOK_ID);
+                hook.SendMessage(message);
+            }
 
             if (sortie == DateTime.MinValue) return;
 

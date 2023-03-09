@@ -14,7 +14,7 @@ namespace DOL.GS
         /// not each summoned pet 'll fire ambiant sentences
         /// let's say 10%
         /// </summary>
-        protected override void BuildAmbientTexts()
+        public override void BuildAmbientTexts()
         {
             base.BuildAmbientTexts();
             if (ambientTexts.Count > 0)

@@ -6842,6 +6842,16 @@ namespace DOL.GS
                             Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Attack.StrafMiss"), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
                             break;
                         }
+                        // if hit add effect for ranged
+                        if (ActiveWeaponSlot == eActiveWeaponSlot.Distance)
+                        {
+                            // for weapon
+                            if (AttackWeapon != null)
+                                CheckWeaponMagicalEffect(ad, AttackWeapon);
+                            // for ammo
+                            if (RangeAttackAmmo != null)
+                                CheckWeaponMagicalEffect(ad, RangeAttackAmmo);
+                        }
                         break;
                     }
             }
