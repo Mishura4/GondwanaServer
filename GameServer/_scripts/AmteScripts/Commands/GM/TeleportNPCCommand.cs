@@ -108,7 +108,7 @@ namespace DOL.GS.Scripts
                         };
                     }
 
-                    if (npc.IsPeaceful)
+                    if (!npc.IsPeaceful)
                         npc.Flags ^= GameNPC.eFlags.PEACE;
                     npc.LoadedFromScript = false;
                     npc.AddToWorld();

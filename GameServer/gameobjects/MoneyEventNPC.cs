@@ -231,9 +231,7 @@ namespace DOL.GS
                 player.Client.Out.SendMessage(text, eChatType.CT_Chat, eChatLoc.CL_PopupWindow);
                 player.Inventory.RemoveItem(item);
                 this.SaveIntoDatabase();
-                if (ev.InstancedConditionType != InstancedConditionTypes.All)
-                    ev.Owner = player;
-                Task.Run(() => GameEventManager.Instance.StartEvent(ev));
+                Task.Run(() => GameEventManager.Instance.StartEvent(ev, null, player));
             }
             else
             {
@@ -276,9 +274,7 @@ namespace DOL.GS
                 player.Client.Out.SendMessage(text, eChatType.CT_Chat, eChatLoc.CL_PopupWindow);
                 player.RemoveMoney(Currency.Copper.Mint(money));
                 this.SaveIntoDatabase();
-                if (ev.InstancedConditionType != InstancedConditionTypes.All)
-                    ev.Owner = player;
-                Task.Run(() => GameEventManager.Instance.StartEvent(ev));
+                Task.Run(() => GameEventManager.Instance.StartEvent(ev, null, player));
             }
             else
             {

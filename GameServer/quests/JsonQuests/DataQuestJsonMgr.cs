@@ -182,9 +182,7 @@ public static class DataQuestJsonMgr
         e.StartConditionType == StartingConditionType.Quest);
         if (questEvent != null)
         {
-            if (questEvent.InstancedConditionType != InstancedConditionTypes.All)
-                questEvent.Owner = player;
-            System.Threading.Tasks.Task.Run(() => GameEventManager.Instance.StartEvent(questEvent));
+            System.Threading.Tasks.Task.Run(() => GameEventManager.Instance.StartEvent(questEvent, null, player));
         }
         if (dq.Quest.StartEvent)
         {
@@ -196,9 +194,7 @@ public static class DataQuestJsonMgr
             e.StartConditionType == StartingConditionType.Quest);
             if (questEvent != null)
             {
-                if (questEvent.InstancedConditionType != InstancedConditionTypes.All)
-                    questEvent.Owner = player;
-                System.Threading.Tasks.Task.Run(() => GameEventManager.Instance.StartEvent(questEvent));
+                System.Threading.Tasks.Task.Run(() => GameEventManager.Instance.StartEvent(questEvent, null, player));
             }
         }
         else if (dq.Quest.ResetEvent)

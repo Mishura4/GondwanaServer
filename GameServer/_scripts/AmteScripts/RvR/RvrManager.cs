@@ -172,8 +172,9 @@ namespace AmteScripts.Managers
                 });
                 territory.RvRTerritory.GuildOwner = guild.Name;
                 territory.RvRTerritory.Boss.Realm = guild.Realm;
-                AbstractGameKeep keep = GameServer.KeepManager.GetKeepCloseToSpot(territory.RvRTerritory.RegionId, territory.RvRTerritory.Boss.Position, 10000);
+                AbstractGameKeep keep = GameServer.KeepManager.GetKeepCloseToSpot(territory.RvRTerritory.RegionId, territory.RvRTerritory.Boss.Position, 100000);
                 keep.TempRealm = guild.Realm;
+                keep.Reset(guild.Realm);
                 // reset all doors
                 foreach (GameKeepDoor door in keep.Doors.Values)
                 {

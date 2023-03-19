@@ -94,10 +94,19 @@ namespace DOL.GS.Scripts
 
             if (!player.Inventory.RemoveCountFromStack(item, 1))
                 return false;
+            int reward = ServerProperties.Properties.REWARD_OUTLAW_HEAD_GOLD;
 
-            var prime = Money.GetMoney(0, 0, ServerProperties.Properties.REWARD_OUTLAW_HEAD_GOLD, 0, 0);
+            // Get player that has item.Name without "Tête de " at the beggining
+            DOLCharacters killerPlayer =
+                GameServer.Database.SelectObject<DOLCharacters>(DB.Column("Name").IsEqualTo(item.Name.Substring(0, item.Name.Length - "Tête de ".Length)));
+            if (killerPlayer != null)
+            {
+                reward *= (int)(killerPlayer.Reputation / 0.5);
+            }
+
+            var prime = Money.GetMoney(0, 0, reward, 0, 0);
             player.AddMoney(Currency.Copper.Mint(prime));
-            player.Out.SendMessage("Merci de votre précieuse aide, voici " + ServerProperties.Properties.REWARD_OUTLAW_HEAD_GOLD + " pièces d'or pour vous !", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+            player.Out.SendMessage("Merci de votre précieuse aide, voici " + reward + " pièces d'or pour vous !", eChatType.CT_System, eChatLoc.CL_PopupWindow);
 
             return true;
         }

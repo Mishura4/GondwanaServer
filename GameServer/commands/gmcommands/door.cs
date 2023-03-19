@@ -269,7 +269,7 @@ namespace DOL.GS.Commands
             }
             if (DOOR == null)
             {
-                if (doorType != 7 && doorType != 9)
+                if (doorType != 9)
                 {
                     var door = new DBDoor();
                     door.ObjectId = null;
@@ -299,7 +299,7 @@ namespace DOL.GS.Commands
 
             if (targetDoor != null)
             {
-                if (doorType != 7 && doorType != 9)
+                if (doorType != 9)
                 {
                     var door = new DBDoor();
                     door.ObjectId = null;

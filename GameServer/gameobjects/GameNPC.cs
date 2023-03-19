@@ -892,32 +892,32 @@ namespace DOL.GS
         }
 
         public bool IsGhost
-        { get => m_flags.HasFlag(eFlags.GHOST); }
+        { get => Flags.HasFlag(eFlags.GHOST); }
 
         public override bool IsStealthed
-        { get => m_flags.HasFlag(eFlags.STEALTH); }
+        { get => Flags.HasFlag(eFlags.STEALTH); }
 
         public bool IsDontShowName
-        { get => m_flags.HasFlag(eFlags.DONTSHOWNAME); }
+        { get => Flags.HasFlag(eFlags.DONTSHOWNAME); }
 
         public bool IsCannotTarget
-        { get => m_flags.HasFlag(eFlags.CANTTARGET); }
+        { get => Flags.HasFlag(eFlags.CANTTARGET); }
 
         public bool IsPeaceful
-        { get => m_flags.HasFlag(eFlags.PEACE); }
+        { get => Flags.HasFlag(eFlags.PEACE); }
 
         public bool IsFlying
-        { get => m_flags.HasFlag(eFlags.FLYING); }
+        { get => Flags.HasFlag(eFlags.FLYING); }
 
         public bool IsTorchLit
-        { get => m_flags.HasFlag(eFlags.TORCH); }
+        { get => Flags.HasFlag(eFlags.TORCH); }
 
         public bool IsStatue
-        { get => m_flags.HasFlag(eFlags.STATUE); }
+        { get => Flags.HasFlag(eFlags.STATUE); }
 
         public override bool IsUnderwater
         {
-            get { return m_flags.HasFlag(eFlags.SWIMMING) || base.IsUnderwater; }
+            get { return Flags.HasFlag(eFlags.SWIMMING) || base.IsUnderwater; }
         }
 
         /// <summary>
@@ -4423,9 +4423,7 @@ namespace DOL.GS
 
                 if (isAllOthersGroupMobDead && mobGroupEvent != null)
                 {
-                    if (mobGroupEvent.InstancedConditionType != InstancedConditionTypes.All)
-                        mobGroupEvent.Owner = killer as GamePlayer;
-                    Task.Run(() => GameEventManager.Instance.StartEvent(mobGroupEvent));
+                    Task.Run(() => GameEventManager.Instance.StartEvent(mobGroupEvent, null, killer as GamePlayer));
                 }
             }
 

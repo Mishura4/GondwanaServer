@@ -49,23 +49,26 @@ namespace DOL.GameEvents
         private async void TimeCheck(object o)
         {
             Instance.timer.Change(Timeout.Infinite, Timeout.Infinite);
-
-            foreach (var ev in this.Events.Where(ev => ev.Status == EventStatus.NotOver))
+            List<GameEvent> events = new List<GameEvent>(Events);
+            int counter = 0;
+            while (counter < this.Events.Where(ev => ev.Status == EventStatus.NotOver).Count())
             {
+                GameEvent ev = events[counter];
                 //End events with timer over
                 if (ev.EndTime.HasValue && ev.EndingConditionTypes.Contains(EndingConditionType.Timer) && DateTime.UtcNow >= ev.EndTime.Value.DateTime)
                 {
                     await this.StopEvent(ev, EndingConditionType.Timer);
                 }
-
-                //Start Events Timer
-                if (!ev.StartedTime.HasValue && ev.StartTriggerTime.HasValue && ev.StartConditionType == StartingConditionType.Timer)
+                else if (!ev.StartedTime.HasValue && ev.StartTriggerTime.HasValue && ev.StartConditionType == StartingConditionType.Timer)
                 {
+                    //Start Events Timer
                     if (DateTime.UtcNow >= ev.StartTriggerTime.Value.DateTime)
                     {
                         await this.StartEvent(ev);
                     }
+                    else counter++;
                 }
+                else counter++;
             }
 
             var chanceEvents = this.Events.Where(e => e.Status == EventStatus.NotOver && e.EventChanceInterval.HasValue && e.EventChance > 0 && !e.StartedTime.HasValue);
@@ -123,13 +126,16 @@ namespace DOL.GameEvents
         /// <returns></returns>
         public async Task ResetAreaEvent(AbstractArea area)
         {
-            var areaXEvent = Instance.Areas.FirstOrDefault(a => a.AreaID.Equals(area.DbArea.ObjectId));
+            var areaXEvents = Instance.Areas.Where(a => a.AreaID.Equals(area.DbArea.ObjectId));
 
-            if (areaXEvent == null)
+            if (areaXEvents == null)
             {
                 return;
             }
-            await areaXEvent.ResetAreaEvent();
+            foreach (var areaEvent in areaXEvents)
+            {
+                await areaEvent.ResetAreaEvent();
+            }
         }
         /// <summary>
         /// Update area event on enter
@@ -613,24 +619,27 @@ namespace DOL.GameEvents
 
         public void ResetEvent(GameEvent ev)
         {
-            if (!ev.StartedTime.HasValue)
+            if (!ev.ParallelLaunch)
             {
-                GameEvent startedEvent = Instance.Events.FirstOrDefault(e => e.ID.Equals(ev.ID) && e.StartedTime.HasValue);
-                if (startedEvent != null)
-                    ev = startedEvent;
+                if (!ev.StartedTime.HasValue)
+                {
+                    GameEvent startedEvent = Instance.Events.FirstOrDefault(e => e.ID.Equals(ev.ID) && e.StartedTime.HasValue);
+                    if (startedEvent != null)
+                        ev = startedEvent;
+                }
+                while (Instance.Events.Where(e => e.ID.Equals(ev.ID) && e.StartedTime.HasValue).Count() > 1)
+                {
+                    CleanEvent(ev);
+                    Instance.Events.Remove(ev);
+                    ev = Instance.Events.FirstOrDefault(e => e.ID.Equals(ev.ID) && e.StartedTime.HasValue);
+                }
+                if (ev != null && Instance.Events.Where(e => e.ID.Equals(ev.ID)).Count() > 1)
+                {
+                    CleanEvent(ev);
+                    Instance.Events.Remove(ev);
+                }
+                ev = Instance.Events.FirstOrDefault(e => e.ID.Equals(ev.ID));
             }
-            while (Instance.Events.Where(e => e.ID.Equals(ev.ID) && e.StartedTime.HasValue).Count() > 1)
-            {
-                CleanEvent(ev);
-                Instance.Events.Remove(ev);
-                ev = Instance.Events.FirstOrDefault(e => e.ID.Equals(ev.ID) && e.StartedTime.HasValue);
-            }
-            if (ev != null && Instance.Events.Where(e => e.ID.Equals(ev.ID)).Count() > 1)
-            {
-                CleanEvent(ev);
-                Instance.Events.Remove(ev);
-            }
-            ev = Instance.Events.FirstOrDefault(e => e.ID.Equals(ev.ID));
             ev.StartedTime = (DateTimeOffset?)null;
             ev.EndTime = (DateTimeOffset?)null;
             ev.Status = EventStatus.NotOver;
@@ -686,7 +695,7 @@ namespace DOL.GameEvents
             ev.SaveToDatabase();
         }
 
-        public async Task<bool> StartEvent(GameEvent ev, AreaGameEvent areaEvent = null)
+        public async Task<bool> StartEvent(GameEvent ev, AreaGameEvent areaEvent = null, GamePlayer startingPlayer = null)
         {
             //temporarly disable
             var disabledMobs = GameServer.Database.SelectObjects<Mob>(DB.Column("RemovedByEventID").IsNotNull());
@@ -729,6 +738,11 @@ namespace DOL.GameEvents
                     newEvent = new GameEvent(ev);
                 else
                     newEvent = ev;
+                AreaGameEvent newAreaEvent = new AreaGameEvent(areaEvent);
+                newAreaEvent.LaunchedEvent = newEvent;
+                newAreaEvent.LaunchedInstancedConditionType = ev.InstancedConditionType;
+                Instance.Areas.Add(newAreaEvent);
+
                 List<Group> addedGroups = new List<Group>();
                 List<Guild> addedGuilds = new List<Guild>();
                 List<object> addedBattlegroups = new List<object>();
@@ -738,13 +752,11 @@ namespace DOL.GameEvents
                     {
                         case InstancedConditionTypes.Player:
                             newEvent.Owner = cl.Player;
-                            events.Add(newEvent);
                             break;
                         case InstancedConditionTypes.Group:
                             if (cl.Player.Group != null && !addedGroups.Contains(cl.Player.Group))
                             {
                                 newEvent.Owner = cl.Player.Group.Leader;
-                                events.Add(newEvent);
                                 addedGroups.Add(cl.Player.Group);
                             }
                             break;
@@ -752,7 +764,6 @@ namespace DOL.GameEvents
                             if (cl.Player.Guild != null && !addedGuilds.Contains(cl.Player.Guild))
                             {
                                 newEvent.Owner = cl.Player;
-                                events.Add(newEvent);
                                 addedGuilds.Add(cl.Player.Guild);
                             }
                             break;
@@ -760,13 +771,13 @@ namespace DOL.GameEvents
                             if (cl.Player.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null) != null && !addedBattlegroups.Contains(cl.Player.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null)))
                             {
                                 newEvent.Owner = cl.Player;
-                                events.Add(newEvent);
                                 addedBattlegroups.Add(cl.Player.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null));
                             }
                             break;
                         default:
                             break;
                     }
+                    events.Add(newEvent);
 
                     // If player already has this event continue
                     if (Instance.Events.Any(e => e.Owner == cl.Player && e.ID == ev.ID))
@@ -780,6 +791,19 @@ namespace DOL.GameEvents
             }
             else
             {
+                // If event is parallel launch, create new instance of event for each player
+                if (ev.ParallelLaunch && ev.InstancedConditionType == InstancedConditionTypes.All)
+                    ev.InstancedConditionType = InstancedConditionTypes.Player;
+
+                // Set owner of event
+                if (startingPlayer != null)
+                {
+                    if (ev.InstancedConditionType == InstancedConditionTypes.Group)
+                        ev.Owner = startingPlayer.Group.Leader;
+                    else
+                        ev.Owner = startingPlayer;
+                }
+
                 if (ev.ParallelLaunch)
                     events.Add(new GameEvent(ev));
                 else
@@ -799,7 +823,6 @@ namespace DOL.GameEvents
                 await Task.Run(() => GameEventManager.Instance.StartEventEffects(e));
             }
 
-            log.Info(string.Format("Event ID: {0}, Name: {1} was Launched At: {2}", ev.ID, ev.EventName, DateTime.Now.ToLocalTime()));
             ev.SaveToDatabase();
 
             return true;
@@ -1237,7 +1260,7 @@ namespace DOL.GameEvents
             {
                 if (mob.ObjectState == GameObject.eObjectState.Active)
                 {
-                    if (mob.IsPeaceful)
+                    if (!mob.IsPeaceful)
                         mob.Health = 0;
                     mob.RemoveFromWorld();
                     mob.Delete();

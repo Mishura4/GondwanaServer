@@ -19,6 +19,9 @@ namespace DOL.GameEvents
         public Timer LaunchTimer { get; }
         public Timer MobCheckTimer { get; }
         public AbstractArea Area { get; set; }
+        public InstancedConditionTypes LaunchedInstancedConditionType;
+        public GameEvent LaunchedEvent;
+        public GamePlayer LaunchedPlayer;
 
         public AreaGameEvent(AreaXEvent db)
         {
@@ -41,6 +44,26 @@ namespace DOL.GameEvents
                 MobCheckTimer.AutoReset = true;
                 MobCheckTimer.Start();
             }
+        }
+
+        public AreaGameEvent(AreaGameEvent areaEvent)
+        {
+            _db = areaEvent._db;
+            this.LaunchTimer = new Timer();
+            this.MobCheckTimer = new Timer();
+            PlayersCounter = 0;
+            UseItemCounter = 0;
+            WhisperCounter = 0;
+            Mobs = new Dictionary<string, int>();
+            AreaID = areaEvent.AreaID;
+            Area = areaEvent.Area;
+
+            ParseValuesFromDb((AreaXEvent)_db);
+
+            LaunchTimer.Interval = ((AreaXEvent)_db).TimerCount * 1000;
+            LaunchTimer.Elapsed += LaunchTimer_Elapsed;
+            MobCheckTimer.Interval = 2000; // update every 2 seconds
+            MobCheckTimer.Elapsed += MobCheckTimer_Elapsed;
         }
 
         public void ParseValuesFromDb(AreaXEvent db)
@@ -104,20 +127,16 @@ namespace DOL.GameEvents
         {
             if (PlayersLeave)
             {
-                var areaEvent = GameEventManager.Instance.Events.FirstOrDefault(e =>
-                    e.AreaStartingId?.Equals(AreaID) == true &&
-                    e.StartedTime.HasValue &&
-                    e.StartConditionType == StartingConditionType.Areaxevent);
-                if (areaEvent != null)
+                if (LaunchedEvent != null)
                 {
                     PlayersCounter = GetPlayersInArea().Count();
                     if (PlayersCounter == 0)
                     {
                         LaunchTimer.Stop();
                         if (ResetEvent)
-                            GameEventManager.Instance.ResetEvent(areaEvent);
+                            GameEventManager.Instance.ResetEvent(LaunchedEvent);
                         else
-                            await GameEventManager.Instance.StopEvent(areaEvent, EndingConditionType.AreaEvent);
+                            await GameEventManager.Instance.StopEvent(LaunchedEvent, EndingConditionType.AreaEvent);
                     }
                 }
             }
@@ -169,7 +188,46 @@ namespace DOL.GameEvents
 
         public List<GameClient> GetPlayersInArea()
         {
-            return WorldMgr.GetAllPlayingClients().Where(c => Area.IsContaining(c.Player.Position.X, c.Player.Position.Y, c.Player.Position.Z)).ToList();
+            if (LaunchedEvent != null)
+            {
+                switch (LaunchedInstancedConditionType)
+                {
+                    case InstancedConditionTypes.Player:
+                        return WorldMgr.GetAllPlayingClients().Where(c => Area.IsContaining(c.Player.Position.X, c.Player.Position.Y, c.Player.Position.Z)
+                            && c.Player == LaunchedEvent.Owner).ToList();
+                    case InstancedConditionTypes.Group:
+                        return WorldMgr.GetAllPlayingClients().Where(c => Area.IsContaining(c.Player.Position.X, c.Player.Position.Y, c.Player.Position.Z)
+                            && c.Player.Group != null && c.Player.Group == LaunchedEvent.Owner.Group).ToList();
+                    case InstancedConditionTypes.Guild:
+                        return WorldMgr.GetAllPlayingClients().Where(c => Area.IsContaining(c.Player.Position.X, c.Player.Position.Y, c.Player.Position.Z)
+                            && c.Player.Guild != null && c.Player.Guild == LaunchedEvent.Owner.Guild).ToList();
+                    case InstancedConditionTypes.Battlegroup:
+                        return WorldMgr.GetAllPlayingClients().Where(c => Area.IsContaining(c.Player.Position.X, c.Player.Position.Y, c.Player.Position.Z)
+                            && c.Player.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null) != null
+                            && c.Player.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null) ==
+                            LaunchedEvent.Owner.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null)).ToList();
+                }
+                return WorldMgr.GetAllPlayingClients().Where(c => Area.IsContaining(c.Player.Position.X, c.Player.Position.Y, c.Player.Position.Z)).ToList();
+            }
+            else
+            {
+                List<GameClient> outClients = new List<GameClient>();
+                List<GameClient> clients = WorldMgr.GetAllPlayingClients().Where(c => Area.IsContaining(c.Player.Position.X, c.Player.Position.Y, c.Player.Position.Z)).ToList();
+                foreach (var c in clients)
+                {
+                    GameEvent startedEvent = GameEventManager.Instance.Events.FirstOrDefault(e =>
+                        e.AreaStartingId?.Equals(AreaID) == true &&
+                        e.StartedTime.HasValue &&
+                        e.Status == EventStatus.NotOver &&
+                        e.StartConditionType == StartingConditionType.Areaxevent &&
+                        c.Player == e.Owner || c.Player.Group != null && c.Player.Group == e.Owner.Group || c.Player.Guild != null && c.Player.Guild == e.Owner.Guild ||
+                        c.Player.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null) != null
+                        && c.Player.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null) == e.Owner.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null));
+                    if (startedEvent == null)
+                        outClients.Add(c);
+                }
+                return outClients;
+            }
         }
 
         GameEvent GetGameEvent()

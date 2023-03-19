@@ -250,9 +250,7 @@ namespace DOL.GS.Quests
             e.StartConditionType == StartingConditionType.Quest);
             if (questEvent != null)
             {
-                if (questEvent.InstancedConditionType != InstancedConditionTypes.All)
-                    questEvent.Owner = player;
-                System.Threading.Tasks.Task.Run(() => GameEventManager.Instance.StartEvent(questEvent));
+                System.Threading.Tasks.Task.Run(() => GameEventManager.Instance.StartEvent(questEvent, null, player));
             }
             if (StartEvent)
             {
@@ -263,9 +261,7 @@ namespace DOL.GS.Quests
                 e.StartConditionType == StartingConditionType.Quest);
                 if (questEvent != null)
                 {
-                    if (questEvent.InstancedConditionType != InstancedConditionTypes.All)
-                        questEvent.Owner = player;
-                    System.Threading.Tasks.Task.Run(() => GameEventManager.Instance.StartEvent(questEvent));
+                    System.Threading.Tasks.Task.Run(() => GameEventManager.Instance.StartEvent(questEvent, null, player));
                 }
             }
             else if (ResetEvent)

@@ -141,7 +141,7 @@ namespace DOL.GS.Spells
             if (player == null)
                 return;
 
-            if (m_spell.Target.ToLower() == "group" && player.Group != null && player.Group != group)
+            if (m_spell.Target.ToLower() == "group" && (player.Group != null || player.Group != group))
                 return;
 
             if (portalUsed == firstPortalNPC)
@@ -151,6 +151,7 @@ namespace DOL.GS.Spells
 
                 PlayersUsedFirstPortal.Add(player);
                 player.MoveTo(secondPortal.CurrentRegionID, secondPortal.Position.X, secondPortal.Position.Y, secondPortal.Position.Z, secondPortal.Heading);
+                ApplyTeleportEffect(player);
             }
             else if (portalUsed == secondPortalNPC)
             {
@@ -159,9 +160,16 @@ namespace DOL.GS.Spells
 
                 PlayersUsedSecondPortal.Add(player);
                 player.MoveTo(firstPortal.CurrentRegionID, firstPortal.Position.X, firstPortal.Position.Y, firstPortal.Position.Z, firstPortal.Heading);
+                ApplyTeleportEffect(player);
             }
 
             CheckFinished();
+        }
+        void ApplyTeleportEffect(GamePlayer player)
+        {
+            SendEffectAnimation(player, 0, false, 1);
+            UniPortalEffect effect = new UniPortalEffect(this, 1000);
+            effect.Start(player);
         }
 
         public void CheckFinished()

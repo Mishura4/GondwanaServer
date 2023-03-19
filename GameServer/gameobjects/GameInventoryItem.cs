@@ -711,13 +711,16 @@ namespace DOL.GS
 
                     output.Add(" ");
 
-                    var procCondition = this.BonusConditions.FirstOrDefault(b => b.BonusName.Equals(nameof(this.ProcSpellID)));
-
-                    if (procCondition != null)
+                    if (this.BonusConditions != null)
                     {
-                        output.Add(" ProcSpellID proc Conditions: ");
-                        output.Add(procCondition.BonusName + "( " + this.GetBonusTypeFromBonusName(client, procCondition.BonusName) + " ) : Level Champion: " + procCondition.ChampionLevel + " | ML Level: " + procCondition.MlLevel + " | Renaissance: " + (procCondition.IsRenaissanceRequired ? "Oui" : "Non"));
-                        output.Add(" ");
+                        var procCondition = this.BonusConditions.FirstOrDefault(b => b.BonusName.Equals(nameof(this.ProcSpellID)));
+
+                        if (procCondition != null)
+                        {
+                            output.Add(" ProcSpellID proc Conditions: ");
+                            output.Add(procCondition.BonusName + "( " + this.GetBonusTypeFromBonusName(client, procCondition.BonusName) + " ) : Level Champion: " + procCondition.ChampionLevel + " | ML Level: " + procCondition.MlLevel + " | Renaissance: " + (procCondition.IsRenaissanceRequired ? "Oui" : "Non"));
+                            output.Add(" ");
+                        }
                     }
                 }
                 #endregion
@@ -767,14 +770,16 @@ namespace DOL.GS
 
                     output.Add(" ");
 
-
-                    var procCondition = this.BonusConditions.FirstOrDefault(b => b.BonusName.Equals(nameof(this.ProcSpellID1)));
-
-                    if (procCondition != null)
+                    if (this.BonusConditions != null)
                     {
-                        output.Add(" ProcSpellID1 2 proc Conditions: ");
-                        output.Add(procCondition.BonusName + "( " + this.GetBonusTypeFromBonusName(client, procCondition.BonusName) + " ) : Level Champion: " + procCondition.ChampionLevel + " | ML Level: " + procCondition.MlLevel + " | Renaissance: " + (procCondition.IsRenaissanceRequired ? "Oui" : "Non"));
-                        output.Add(" ");
+                        var procCondition = this.BonusConditions.FirstOrDefault(b => b.BonusName.Equals(nameof(this.ProcSpellID1)));
+
+                        if (procCondition != null)
+                        {
+                            output.Add(" ProcSpellID1 2 proc Conditions: ");
+                            output.Add(procCondition.BonusName + "( " + this.GetBonusTypeFromBonusName(client, procCondition.BonusName) + " ) : Level Champion: " + procCondition.ChampionLevel + " | ML Level: " + procCondition.MlLevel + " | Renaissance: " + (procCondition.IsRenaissanceRequired ? "Oui" : "Non"));
+                            output.Add(" ");
+                        }
                     }
                 }
                 #endregion

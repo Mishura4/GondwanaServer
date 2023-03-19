@@ -443,6 +443,14 @@ namespace DOL.GS.Scripts
             GameEventMgr.RemoveHandler(player, GamePlayerEvent.Quit, PlayerExit);
             GameEventMgr.RemoveHandler(player, GamePlayerEvent.RegionChanged, PlayerRevive);
             Animation(player);
+
+            NewsMgr.CreateNews("GameObjects.GamePlayer.Released", player.Realm, eNewsType.RvRGlobal, false, true, player.Name);
+            if (DOL.GS.ServerProperties.Properties.DISCORD_ACTIVE)
+            {
+                DolWebHook hook = new DolWebHook(DOL.GS.ServerProperties.Properties.DISCORD_WEBHOOK_ID);
+                hook.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameObjects.GamePlayer.Jailed", player.Name));
+            }
+
             return true;
         }
 
