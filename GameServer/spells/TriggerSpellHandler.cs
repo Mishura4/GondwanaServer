@@ -12,7 +12,11 @@ namespace DOL.spells
     [SpellHandler("TriggerBuff")]
     public class TriggerSpellHandler : SpellHandler
     {
-        public TriggerSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine) { }
+        string subSpellDescription;
+        public TriggerSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine)
+        {
+            subSpellDescription = ScriptMgr.CreateSpellHandler(m_caster, SkillBase.GetSpellByID((int)m_spell.SubSpellID), null).ShortDescription;
+        }
 
         public override int CalculateToHitChance(GameLiving target)
         {
@@ -50,5 +54,8 @@ namespace DOL.spells
             effect.Owner.TempProperties.setProperty("TriggerSubSpell", Spell.SubSpellID);
             effect.Owner.TempProperties.setProperty("TriggerSpellLevel", effect.SpellHandler.Caster.Level);
         }
+
+        public override string ShortDescription
+            => $"Generates a magic Proc as a buff on the target. {Spell.Name} gets triggered when the target is hit.\n{subSpellDescription}";
     }
 }

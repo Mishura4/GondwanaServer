@@ -6,6 +6,7 @@ using DOL.Database;
 using DOL.Events;
 using DOL.GS.PacketHandler;
 using DOL.GS.Scripts;
+using DOL.Language;
 using GameServerScripts.Amtescripts.Managers;
 using log4net;
 
@@ -40,7 +41,7 @@ namespace DOL.GS.GameEvents
                 var killed = sender as GamePlayer;
                 var killerPlayer = killer as GamePlayer;
                 //Player isWanted when Killed by Guard
-                if (killed != null)
+                if (killed != null && killerPlayer != null)
                 {
                     //If killer is GM, let go
                     if (killerPlayer != null && killerPlayer.Client.Account.PrivLevel > 1)
@@ -48,7 +49,7 @@ namespace DOL.GS.GameEvents
                         return;
                     }
 
-                    bool isWanted = killed.Reputation < 0;
+                    bool isWanted = killerPlayer.Reputation < 0;
 
                     if (IsKillAllowedArea(killed))
                     {
@@ -69,6 +70,13 @@ namespace DOL.GS.GameEvents
                                 killerPlayer.Reputation -= 1;
                                 killerPlayer.SaveIntoDatabase();
                                 killerPlayer.Out.SendMessage("Vous avez perdu 1 point de réputation pour cause d'assassinats multiples.", PacketHandler.eChatType.CT_System, PacketHandler.eChatLoc.CL_SystemWindow);
+                                string newsMessage = LanguageMgr.GetTranslation(killerPlayer.Client, "GameObjects.GamePlayer.Wanted", killer.Name);
+                                NewsMgr.CreateNews("GameObjects.GamePlayer.Wanted", killerPlayer.Realm, eNewsType.RvRGlobal, false, true, killerPlayer.Name);
+                                if (DOL.GS.ServerProperties.Properties.DISCORD_ACTIVE)
+                                {
+                                    DolWebHook hook = new DolWebHook(DOL.GS.ServerProperties.Properties.DISCORD_WEBHOOK_ID);
+                                    hook.SendMessage(newsMessage);
+                                }
                             }
                         }
                     }

@@ -645,6 +645,10 @@ namespace DOL.GameEvents
             ev.Status = EventStatus.NotOver;
             ev.WantedMobsCount = 0;
             CleanEvent(ev);
+            if (ev != null && Instance.Events.Where(e => e.ID.Equals(ev.ID)).Count() > 1)
+            {
+                Instance.Events.Remove(ev);
+            }
 
             if (ev.StartConditionType == StartingConditionType.Money)
             {

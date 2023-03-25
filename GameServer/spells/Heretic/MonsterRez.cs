@@ -55,6 +55,8 @@ namespace DOL.GS.Spells
             ISpellHandler spellhandler = ScriptMgr.CreateSpellHandler(m_caster, castSpell, line);
             spellhandler.StartSpell(living);
         }
+        public override string ShortDescription
+            => $"Brings the target monster back to life, restores {Spell.ResurrectHealth}% health and {Spell.ResurrectMana}% power and endurance and suffers no experience or constitution loss.";
     }
 
     /// <summary>
@@ -171,6 +173,9 @@ namespace DOL.GS.Spells
         // Constructor
         public SummonMonster(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
+        public override string ShortDescription
+            => $"Summons a monster.";
+
     }
 
     /// <summary>
@@ -244,5 +249,6 @@ namespace DOL.GS.Spells
 
         // Constructor
         public MonsterDisease(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+
     }
 }

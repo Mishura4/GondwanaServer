@@ -14,8 +14,15 @@ namespace DOL.GS.Spells
     [SpellHandler("AvaloniaFake")]
     public class FakeSpellHandler : SpellHandler
     {
+        string m_shortDescription;
         public FakeSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine)
         {
+            m_shortDescription = "";
+            while (spell.SubSpellID != 0)
+            {
+                spell = SkillBase.GetSpellByID((int)spell.SubSpellID);
+                m_shortDescription += ScriptMgr.CreateSpellHandler(m_caster, spell, null).ShortDescription + "\n";
+            }
         }
 
         public override bool StartSpell(GameLiving target)
@@ -23,6 +30,9 @@ namespace DOL.GS.Spells
             CastSubSpells(target);
             return true;
         }
+
+        public override string ShortDescription
+            => m_shortDescription;
     }
 
     [SpellHandler("AllStatsBuffItem")]

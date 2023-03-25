@@ -17,5 +17,8 @@ namespace DOL.GS.Spells
         {
             m_spellTypesToRemove = new List<string> { "Petrify" };
         }
+
+        public override string ShortDescription
+            => $"Cures the target from Petrified status.";
     }
 }

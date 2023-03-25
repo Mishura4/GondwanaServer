@@ -123,5 +123,8 @@ namespace DOL.GS.Spells
             GameEventMgr.RemoveHandler(effect.Owner, GameLivingEvent.AttackedByEnemy, new DOLEventHandler(EventHandler));
             return base.OnEffectExpires(effect, noMessages);
         }
+        public override string ShortDescription
+            => $"{Spell.Name} deflect a spell back to the enemy caster with {Spell.Value}% of chance and {Spell.AmnesiaChance}% of its original damages. At the same time, this spell acts as a shield absorbing {Spell.LifeDrainReturn}% of the damages dealt. This magic shield neither absorbs nor reflects close combat as well as archery spells.";
+
     }
 }

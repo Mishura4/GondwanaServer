@@ -48,6 +48,7 @@ namespace DOL.Database
         private bool m_IsInTaskMaster;
         private string m_TaskDescEN;
         private string m_TaskDescFR;
+        private string m_GiveItem;
 
 
         [DataElement(AllowDbNull = false)]
@@ -253,5 +254,17 @@ namespace DOL.Database
                 m_TaskDescFR = value;
             }
         }
+
+        [DataElement(AllowDbNull = true)]
+        public string GiveItem
+        {
+            get { return m_GiveItem; }
+            set
+            {
+                Dirty = true;
+                m_GiveItem = value;
+            }
+        }
+
     }
 }

@@ -53,8 +53,9 @@ namespace DOL.Territory
                 }
             }
             // reset keep
-            AbstractGameKeep keep = GameServer.KeepManager.GetKeepCloseToSpot(RegionId, Boss.Position, 10000);
+            AbstractGameKeep keep = GameServer.KeepManager.GetKeepCloseToSpot(RegionId, Boss.Position, 100000);
             keep.TempRealm = eRealm.None;
+            keep.Reset(keep.TempRealm);
             // reset all doors
             foreach (GameKeepDoor door in keep.Doors.Values)
             {

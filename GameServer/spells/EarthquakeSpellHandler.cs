@@ -226,6 +226,9 @@ namespace DOL.GS.Spells
                 }
             }
         }
+
+        public override string ShortDescription
+            => $"Creates an earthquake having an intensity of {Spell.Value / 50} on the Richter scale, causing from {Spell.Damage} damages near the epicenter to {Spell.AmnesiaChance} damages at the farthest points. Earthquakes have no effect on flying mobs, swimming mobs, bainshees or floating vampiirs.";
     }
 
 }

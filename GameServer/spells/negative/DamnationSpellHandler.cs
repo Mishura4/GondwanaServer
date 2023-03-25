@@ -85,5 +85,8 @@ namespace DOL.GS.Spells
                 return 0;
             return base.CalculateToHitChance(target);
         }
+
+        public override string ShortDescription
+            => $"The target is condemned, turned into a zombie and loses all its spell enhancements. The target will inevitably die after {Spell.Duration} seconds. No cure can reverse this effect... Undead monsters are not affected by this spell.";
     }
 }

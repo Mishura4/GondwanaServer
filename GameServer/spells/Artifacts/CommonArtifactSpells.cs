@@ -278,6 +278,15 @@ namespace DOL.GS.Spells
             return base.OnEffectExpires(effect, noMessages);
         }
         public Morph(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+        public override string ShortDescription
+        {
+            get
+            {
+                var subSpell = ScriptMgr.CreateSpellHandler(m_caster, SkillBase.GetSpellByID((int)Spell.Value), null);
+                return $"Triggers the following spell with a {Spell.Frequency / 100}% chance on own melee attacks.: \n\n"
+                + (subSpell != null ? subSpell.ShortDescription : $"Spell with ID {Spell.Value} not found");
+            }
+        }
     }
 
     /// <summary>

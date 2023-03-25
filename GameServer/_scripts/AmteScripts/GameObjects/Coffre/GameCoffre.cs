@@ -492,7 +492,7 @@ namespace DOL.GS.Scripts
                             CurrentRegionID = CurrentRegionID,
                             CurrentRegion = CurrentRegion,
                             Size = 50,
-                            Name = "Gardien du Coffre"
+                            Name = template.Name
                         };
 
                         mob.RespawnInterval = -1;

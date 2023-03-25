@@ -77,6 +77,7 @@ namespace DOL.GS.Spells
         }
         public override void OnEffectStart(GameSpellEffect effect)
         {
+            DeletePortals();
             GamePlayer player = effect.Owner as GamePlayer;
 
             PlayersWithAccess = new List<GamePlayer>();
@@ -141,7 +142,7 @@ namespace DOL.GS.Spells
             if (player == null)
                 return;
 
-            if (m_spell.Target.ToLower() == "group" && (player.Group != null || player.Group != group))
+            if (PlayersWithAccess.Contains(player) == false)
                 return;
 
             if (portalUsed == firstPortalNPC)
@@ -150,8 +151,8 @@ namespace DOL.GS.Spells
                     return;
 
                 PlayersUsedFirstPortal.Add(player);
-                player.MoveTo(secondPortal.CurrentRegionID, secondPortal.Position.X, secondPortal.Position.Y, secondPortal.Position.Z, secondPortal.Heading);
                 ApplyTeleportEffect(player);
+                player.MoveTo(secondPortal.CurrentRegionID, secondPortal.Position.X, secondPortal.Position.Y, secondPortal.Position.Z, secondPortal.Heading);
             }
             else if (portalUsed == secondPortalNPC)
             {
@@ -159,17 +160,19 @@ namespace DOL.GS.Spells
                     return;
 
                 PlayersUsedSecondPortal.Add(player);
-                player.MoveTo(firstPortal.CurrentRegionID, firstPortal.Position.X, firstPortal.Position.Y, firstPortal.Position.Z, firstPortal.Heading);
                 ApplyTeleportEffect(player);
+                player.MoveTo(firstPortal.CurrentRegionID, firstPortal.Position.X, firstPortal.Position.Y, firstPortal.Position.Z, firstPortal.Heading);
             }
 
             CheckFinished();
         }
         void ApplyTeleportEffect(GamePlayer player)
         {
-            SendEffectAnimation(player, 0, false, 1);
-            UniPortalEffect effect = new UniPortalEffect(this, 1000);
+            DummyEffect effect = new DummyEffect(4310);
             effect.Start(player);
+
+            foreach (GamePlayer pl in player.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+                pl.Out.SendSpellEffectAnimation(player, player, 4310, 0, false, 1);
         }
 
         public void CheckFinished()
@@ -179,25 +182,30 @@ namespace DOL.GS.Spells
                 DeletePortals();
             }
         }
+
         void DeletePortals()
         {
             if (firstPortal != null)
             {
+                firstPortal.RemoveFromWorld();
                 firstPortal.Delete();
             }
 
-            if (firstPortal != null)
+            if (secondPortal != null)
             {
+                secondPortal.RemoveFromWorld();
                 secondPortal.Delete();
             }
 
             if (firstPortalNPC != null)
             {
+                firstPortalNPC.RemoveFromWorld();
                 firstPortalNPC.Delete();
             }
 
-            if (firstPortalNPC != null)
+            if (secondPortalNPC != null)
             {
+                secondPortalNPC.RemoveFromWorld();
                 secondPortalNPC.Delete();
             }
         }

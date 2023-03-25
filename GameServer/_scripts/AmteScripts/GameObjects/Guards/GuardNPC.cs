@@ -98,7 +98,7 @@ namespace DOL.GS.Scripts
 
             // Get player that has item.Name without "Tête de " at the beggining
             DOLCharacters killerPlayer =
-                GameServer.Database.SelectObject<DOLCharacters>(DB.Column("Name").IsEqualTo(item.Name.Substring(0, item.Name.Length - "Tête de ".Length)));
+                GameServer.Database.SelectObject<DOLCharacters>(DB.Column("Name").IsEqualTo(item.Name.Substring("Tête de ".Length, item.Name.Length)));
             if (killerPlayer != null)
             {
                 reward *= (int)(killerPlayer.Reputation / 0.5);

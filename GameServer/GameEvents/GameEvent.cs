@@ -43,6 +43,8 @@ namespace DOL.GameEvents
             foreach (var mob in ev.Mobs)
             {
                 GameNPC newMob = mob.Copy();
+                // var newMob = new GameNPC();
+                // newMob.LoadFromDatabase(GameServer.Database.FindObjectByKey<Mob>(mob.InternalID));
                 newMob.BuildAmbientTexts();
                 Mobs.Add(newMob);
             }
@@ -80,7 +82,7 @@ namespace DOL.GameEvents
             EventChanceInterval = db.EventChanceInterval > 0 && db.EventChanceInterval < long.MaxValue ? TimeSpan.FromMinutes(db.EventChanceInterval) : (TimeSpan?)null;
             DebutText = !string.IsNullOrEmpty(db.DebutText) ? db.DebutText : null;
             EndText = !string.IsNullOrEmpty(db.EndText) ? db.EndText : null;
-            StartedTime = db.StartedTime > 0 && db.StartedTime < long.MaxValue ? DateTimeOffset.FromUnixTimeSeconds(db.StartedTime) : (DateTimeOffset?)null;
+            StartedTime = (DateTimeOffset?)null;
             EndingConditionTypes = db.EndingConditionTypes.Split(new char[] { '|' }).Select(c => Enum.TryParse(c, out EndingConditionType end) ? end : GameEvents.EndingConditionType.Timer);
             RandomText = !string.IsNullOrEmpty(db.RandomText) ? db.RandomText.Split(new char[] { '|' }) : null;
             RandTextInterval = db.RandTextInterval > 0 && db.RandTextInterval < long.MaxValue ? TimeSpan.FromMinutes(db.RandTextInterval) : (TimeSpan?)null;
@@ -93,12 +95,12 @@ namespace DOL.GameEvents
             StartActionStopEventID = !string.IsNullOrEmpty(db.StartActionStopEventID) ? db.StartActionStopEventID : null;
             StartTriggerTime = db.StartTriggerTime > 0 && db.StartTriggerTime < long.MaxValue ? DateTimeOffset.FromUnixTimeSeconds(db.StartTriggerTime) : (DateTimeOffset?)null;
             TimerType = Enum.TryParse(db.TimerType.ToString(), out TimerType timer) ? timer : TimerType.DateType;
-            EndTime = db.EndTime > 0 && db.EndTime < long.MaxValue ? DateTimeOffset.FromUnixTimeSeconds(db.EndTime) : (DateTimeOffset?)null;
+            EndTime = (DateTimeOffset?)null;
             ChronoTime = db.ChronoTime;
             KillStartingGroupMobId = !string.IsNullOrEmpty(db.KillStartingGroupMobId) ? db.KillStartingGroupMobId : null;
             ResetEventId = !string.IsNullOrEmpty(db.ResetEventId) ? db.ResetEventId : null;
-            Status = Enum.TryParse(db.Status.ToString(), out EventStatus stat) ? stat : EventStatus.NotOver;
-            ChanceLastTimeChecked = db.ChanceLastTimeChecked > 0 ? DateTimeOffset.FromUnixTimeSeconds(db.ChanceLastTimeChecked) : (DateTimeOffset?)null;
+            Status = EventStatus.NotOver;
+            ChanceLastTimeChecked = DateTimeOffset.FromUnixTimeSeconds(0);
             AnnonceType = Enum.TryParse(db.AnnonceType.ToString(), out AnnonceType a) ? a : AnnonceType.Center;
             Discord = db.Discord;
             InstancedConditionType = Enum.TryParse(db.InstancedConditionType.ToString(), out InstancedConditionTypes inst) ? inst : InstancedConditionTypes.All;

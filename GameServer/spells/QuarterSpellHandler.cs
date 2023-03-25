@@ -47,5 +47,8 @@ namespace DOL.GS.Spells
                 return base.CalculateSpellResistChance(target) * 3;
             return base.CalculateSpellResistChance(target);
         }
+        public override string ShortDescription
+            => $"{Spell.Name} reduces enemy's life to a quarter, it doesn't affect weak enemies or enemies having a level above {Spell.AmnesiaChance}. This spell rarely affect ghosts, demons, necromancers, bainshee and vampiirs.";
+
     }
 }

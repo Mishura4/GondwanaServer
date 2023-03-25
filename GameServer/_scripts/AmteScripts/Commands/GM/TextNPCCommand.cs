@@ -38,6 +38,10 @@ namespace DOL.GS.Scripts
          "Commands.GM.TextNPC.Usage.Spell.Help",
          "Commands.GM.TextNPC.Usage.Spell.Cast",
 
+         //Give Item
+         "Commands.GM.TextNPC.Usage.Give.Item.Add",
+         "Commands.GM.TextNPC.Usage.Give.Item.Remove",
+
          //phrase cc general
          "Commands.GM.TextNPC.Usage.RandomPhrase.Add",
          "Commands.GM.TextNPC.Usage.RandomPhrase.Remove",
@@ -370,6 +374,62 @@ namespace DOL.GS.Scripts
                             }
                             npc.TextNPCData.SaveIntoDatabase();
                         }
+                    }
+                    break;
+                #endregion
+
+                #region giveitem add/remove
+                case "giveitem":
+                    if (npc == null || args.Length < 3)
+                    {
+                        DisplaySyntax(client);
+                        return;
+                    }
+                    if (args.Length > 4)
+                        reponse = string.Join(" ", args, 4, args.Length - 4);
+                    if (args[2].ToLower() == "add")
+                    {
+                        if (args.Length < 5)
+                        {
+                            DisplaySyntax(client);
+                            return;
+                        }
+                        try
+                        {
+                            if (npc.TextNPCData.GiveItem.ContainsKey(reponse))
+                            {
+                                npc.TextNPCData.GiveItem[reponse] = args[3];
+                                player.Out.SendMessage("Giveitem réponse \"" + reponse + "\" modifiée", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            }
+                            else
+                            {
+                                npc.TextNPCData.GiveItem.Add(reponse, args[3]);
+                                player.Out.SendMessage("Giveitem réponse \"" + reponse + "\" ajoutée", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            }
+                            npc.TextNPCData.SaveIntoDatabase();
+                        }
+                        catch (Exception e)
+                        {
+                            log.Debug("ERROR: ", e);
+                            player.Out.SendMessage("Le itemtemplateid n'est pas valide.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            return;
+                        }
+                    }
+                    else if (args[2].ToLower() == "remove")
+                    {
+                        if (args.Length < 4)
+                        {
+                            DisplaySyntax(client);
+                            return;
+                        }
+                        if (npc.TextNPCData.GiveItem.ContainsKey(reponse))
+                        {
+                            npc.TextNPCData.GiveItem.Remove(reponse);
+                            npc.TextNPCData.SaveIntoDatabase();
+                            player.Out.SendMessage("giveitem réponse \"" + reponse + "\" supprimée", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        }
+                        else
+                            player.Out.SendMessage("Ce pnj n'a pas de giveitem réponse '" + reponse + "'.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     }
                     break;
                 #endregion

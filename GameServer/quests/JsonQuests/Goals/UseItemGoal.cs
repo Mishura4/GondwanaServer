@@ -1,6 +1,7 @@
 ﻿using DOL.Database;
 using DOL.Events;
 using DOL.GS.Behaviour;
+using DOL.GS.PacketHandler;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ namespace DOL.GS.Quests
     {
         private readonly GameNPC m_target;
         public override GameNPC Target { get => m_target; }
+        private readonly string m_text;
         private readonly ItemTemplate m_item;
 
         public override eQuestGoalType Type => eQuestGoalType.Unknown;
@@ -26,6 +28,7 @@ namespace DOL.GS.Quests
 
         public UseItemGoal(DataQuestJson quest, int goalId, dynamic db) : base(quest, goalId, (object)db)
         {
+            m_text = db.Text;
             m_item = GameServer.Database.FindObjectByKey<ItemTemplate>((string)db.Item);
 
             if (db.AreaRadius != null && db.AreaRadius != "" && db.AreaRegion != null && db.AreaRegion != "" && db.AreaCenter != null)
@@ -61,6 +64,7 @@ namespace DOL.GS.Quests
             dict.Add("AreaCenter", m_area.Position);
             dict.Add("AreaRadius", m_area.Radius);
             dict.Add("AreaRegion", m_areaRegion);
+            dict.Add("Text", m_text);
             return dict;
         }
 
@@ -76,6 +80,7 @@ namespace DOL.GS.Quests
                     {
                         player.Inventory.RemoveCountFromStack(usedItem, 1);
                     }
+                    player.Client.Out.SendDialogBox(eDialogCode.CustomDialog, 0, 0, 0, 0, eDialogType.Ok, true, m_text);
                     AdvanceGoal(quest, goal);
                 }
             }

@@ -1,4 +1,5 @@
 ﻿using DOL.Events;
+using DOL.GS.PacketHandler;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
@@ -8,6 +9,7 @@ namespace DOL.GS.Quests
     public class EnterAreaGoal : DataQuestJsonGoal
     {
         private readonly Area.Circle m_area;
+        private readonly string m_text;
         private readonly ushort m_areaRegion;
 
         public override eQuestGoalType Type => eQuestGoalType.Unknown;
@@ -16,6 +18,7 @@ namespace DOL.GS.Quests
 
         public EnterAreaGoal(DataQuestJson quest, int goalId, dynamic db) : base(quest, goalId, (object)db)
         {
+            m_text = db.Text;
             m_area = new Area.Circle($"{quest.Name} EnterAreaGoal {goalId}", new Vector3((float)db.AreaCenter.X, (float)db.AreaCenter.Y, (float)db.AreaCenter.Z), (int)db.AreaRadius);
             m_area.DisplayMessage = false;
             m_areaRegion = db.AreaRegion;
@@ -31,6 +34,7 @@ namespace DOL.GS.Quests
             dict.Add("AreaCenter", m_area.Position);
             dict.Add("AreaRadius", m_area.Radius);
             dict.Add("AreaRegion", m_areaRegion);
+            dict.Add("Text", m_text);
             return dict;
         }
 
@@ -51,7 +55,10 @@ namespace DOL.GS.Quests
             if ((sender as AbstractArea)?.ID != m_area.ID || args is not AreaEventArgs arguments || arguments.GameObject != quest.Owner)
                 return;
             if (e == AreaEvent.PlayerEnter)
+            {
+                quest.Owner.Client.Out.SendDialogBox(eDialogCode.CustomDialog, 0, 0, 0, 0, eDialogType.Ok, true, m_text);
                 OnPlayerEnterArea(quest, goal);
+            }
             if (e == AreaEvent.PlayerLeave)
                 OnPlayerLeaveArea(quest, goal);
         }

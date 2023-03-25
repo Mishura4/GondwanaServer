@@ -246,5 +246,8 @@ namespace DOL.GS.Spells
             max = upperLimit;
             return;
         }
+
+        public override string ShortDescription
+            => $"The target regains {Spell.Value} % of health, endurance and power.";
     }
 }

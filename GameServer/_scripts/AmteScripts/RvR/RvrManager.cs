@@ -178,7 +178,7 @@ namespace AmteScripts.Managers
                 // reset all doors
                 foreach (GameKeepDoor door in keep.Doors.Values)
                 {
-                    door.Realm = guild.Realm;
+                    door.Reset(0);
                 }
             }
         }
@@ -557,6 +557,14 @@ namespace AmteScripts.Managers
             {
                 ((LordRvR)m.Value.RvRTerritory.Boss).StopRvR();
                 TerritoryManager.ClearEmblem(m.Value.RvRTerritory, m.Value.RvRTerritory.Boss);
+                AbstractGameKeep keep = GameServer.KeepManager.GetKeepCloseToSpot(m.Value.RvRTerritory.RegionId, m.Value.RvRTerritory.Boss.Position, 100000);
+                keep.TempRealm = 0;
+                keep.Reset(0);
+                // reset all doors
+                foreach (GameKeepDoor door in keep.Doors.Values)
+                {
+                    door.Reset(0);
+                }
             });
 
             this._maps.Values.GroupBy(v => v.Location.RegionID).ForEach(region =>

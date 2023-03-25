@@ -38,6 +38,7 @@ namespace DOL.GS.Scripts
         public Dictionary<string, string> ResponseTrigger { get; set; }
         public Dictionary<string, bool> SpellReponsesCast { get; private set; }
         public Dictionary<string, string> QuestReponses { get; private set; }
+        public Dictionary<string, string> GiveItem { get; private set; }
         public Dictionary<string, Tuple<string, int>> QuestReponsesValues { get; private set; }
         public Dictionary<string, eEmote> RandomPhrases { get; private set; }
         public string QuestReponseKey { get; set; }
@@ -227,6 +228,22 @@ namespace DOL.GS.Scripts
             //Trigger
             if (ResponseTrigger != null && ResponseTrigger.ContainsKey(str))
                 _body.FireAllResponseTriggers(eAmbientTrigger.interact, player, str);
+
+            //Give Item
+            if (GiveItem != null && GiveItem.ContainsKey(str))
+            {
+                //Get item from db
+                ItemTemplate item = GameServer.Database.FindObjectByKey<ItemTemplate>(GiveItem[str]);
+                if (item != null)
+                {
+                    InventoryItem playerItem = player.Inventory.GetFirstItemByName(item.Name, eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack);
+                    if (playerItem == null)
+                    {
+                        InventoryItem itemToGive = GameInventoryItem.Create(item);
+                        player.Inventory.AddTemplate(itemToGive, 1, eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack);
+                    }
+                }
+            }
 
             return true;
         }
@@ -762,6 +779,19 @@ namespace DOL.GS.Scripts
                 }
             }
             Reponses = table;
+
+            GiveItem = new Dictionary<string, string>();
+            if (TextDB.GiveItem != null && TextDB.GiveItem != "")
+            {
+                TextDB.GiveItem.Replace("\r", "\n");
+                foreach (string item in TextDB.GiveItem.Split('\n'))
+                {
+                    string[] items = item.Split('|');
+                    if (items.Length != 2)
+                        continue;
+                    GiveItem.Add(items[0], items[1]);
+                }
+            }
 
             QuestReponses = new Dictionary<string, string>();
             QuestReponsesValues = new Dictionary<string, Tuple<string, int>>();

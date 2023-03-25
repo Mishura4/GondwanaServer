@@ -62,7 +62,7 @@ namespace DOL.GS.Commands
 
         private bool ReleaseOutlawsToJail(GameClient client)
         {
-            IList<DBDeathLog> deaths = GameServer.Database.SelectObjects<DBDeathLog>(DB.Column("KilledId").IsEqualTo(client.Player.InternalID)
+            IList<DBDeathLog> deaths = GameServer.Database.SelectObjects<DBDeathLog>(DB.Column("KillerId").IsEqualTo(client.Player.InternalID)
                 .And(DB.Column("IsWanted").IsEqualTo(1)
                 .And(DB.Column("ExitFromJail").IsEqualTo("0"))));
             

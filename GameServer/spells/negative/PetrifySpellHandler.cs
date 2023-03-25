@@ -229,5 +229,8 @@ namespace DOL.GS.Spells
             GameEventMgr.RemoveHandler(effect.Owner, GameLivingEvent.AttackedByEnemy, new DOLEventHandler(EventHandler));
             return base.OnEffectExpires(effect, noMessages);
         }
+
+        public override string ShortDescription
+            => $"Petrifies the target and turns it into a statue. The target is completely paralysed and absorbs 50% of physical damages as well as 75% of magical damages it might suffer if attacked.";
     }
 }

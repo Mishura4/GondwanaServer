@@ -15,6 +15,8 @@ Commands.GM.TextNPC.Usage.Spell.Add:			'/textnpc spell add <spellID> <reponse>' 
 Commands.GM.TextNPC.Usage.Spell.Remove:		'/textnpc spell remove <reponse>' To remove a spell
 Commands.GM.TextNPC.Usage.Spell.Help:		'/textnpc spell help' Display spell infos while selecting the NPC
 Commands.GM.TextNPC.Usage.Spell.Cast:			'/textnpc spell cast <true/false> <reponse>' To add or remove a real spell cast (with damages) from a response
+Commands.GM.TextNPC.Usage.Give.Item.Add:			'/textnpc giveitem add <itemTempalateId> <reponse>' To add a GiveItem  as a Response
+Commands.GM.TextNPC.Usage.Give.Item.Remove:			'/textnpc giveitem remove <reponse>' To remove a GiveItem
 Commands.GM.TextNPC.Usage.RandomPhrase.Add:		'/textnpc randomphrase add <emote (0=none)> <say/yell/em> <phrase>' To set up a random phrase the NPC will say from time to time with a specific interval, in association with an emote. This phrase can be <say/yell/em>
 Commands.GM.TextNPC.Usage.RandomPhrase.Remove:		'/textnpc randomphrase remove <phrase>' To remove a random phrase
 Commands.GM.TextNPC.Usage.RandomPhrase.interval:		'/textnpc randomphrase interval <interval in seconds>' Interval for the NPC to repeat a random phrase

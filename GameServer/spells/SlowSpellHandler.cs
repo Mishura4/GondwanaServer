@@ -120,5 +120,7 @@ namespace DOL.GS.Spells
             : base(caster, spell, line)
         {
         }
+        public override string ShortDescription
+            => Spell.Value >= 99 ? "Target is rooted in place" : $"The target is slowed by {Spell.Value}%. There's no immunity against this spell and it cannot be interrupted by hits.";
     }
 }
