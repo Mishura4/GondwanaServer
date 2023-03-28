@@ -178,7 +178,7 @@ namespace AmteScripts.Managers
                 // reset all doors
                 foreach (GameKeepDoor door in keep.Doors.Values)
                 {
-                    door.Reset(0);
+                    door.Reset((eRealm)6);
                 }
             }
         }
@@ -563,7 +563,7 @@ namespace AmteScripts.Managers
                 // reset all doors
                 foreach (GameKeepDoor door in keep.Doors.Values)
                 {
-                    door.Reset(0);
+                    door.Reset((eRealm)6);
                 }
             });
 

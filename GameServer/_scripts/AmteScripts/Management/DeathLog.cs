@@ -49,7 +49,10 @@ namespace DOL.GS.GameEvents
                         return;
                     }
 
-                    bool isWanted = killerPlayer.Reputation < 0;
+                    if (killed.Reputation < 0)
+                    {
+                        return;
+                    }
 
                     if (IsKillAllowedArea(killed))
                     {
@@ -61,13 +64,13 @@ namespace DOL.GS.GameEvents
                     //Dot not log killed by npcs
                     if (isLegitimeKiller)
                     {
-                        //Log Death
-                        GameServer.Database.AddObject(new DBDeathLog((GameObject)sender, killer, isWanted));
                         if (killerPlayer != null)
                         {
                             if (DeathCheck.Instance.IsChainKiller(killerPlayer, killed))
                             {
                                 killerPlayer.Reputation -= 1;
+                                if (killerPlayer.Reputation == 1)
+                                    killerPlayer.Reputation -= 1;
                                 killerPlayer.SaveIntoDatabase();
                                 killerPlayer.Out.SendMessage("Vous avez perdu 1 point de réputation pour cause d'assassinats multiples.", PacketHandler.eChatType.CT_System, PacketHandler.eChatLoc.CL_SystemWindow);
                                 string newsMessage = LanguageMgr.GetTranslation(killerPlayer.Client, "GameObjects.GamePlayer.Wanted", killer.Name);
@@ -79,6 +82,9 @@ namespace DOL.GS.GameEvents
                                 }
                             }
                         }
+                        bool isWanted = killerPlayer.Reputation < 0;
+                        //Log Death
+                        GameServer.Database.AddObject(new DBDeathLog((GameObject)sender, killer, isWanted));
                     }
                 }
                 else

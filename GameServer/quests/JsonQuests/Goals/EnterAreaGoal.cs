@@ -1,4 +1,5 @@
 ﻿using DOL.Events;
+using DOL.GS.Behaviour;
 using DOL.GS.PacketHandler;
 using System;
 using System.Collections.Generic;
@@ -56,7 +57,7 @@ namespace DOL.GS.Quests
                 return;
             if (e == AreaEvent.PlayerEnter)
             {
-                quest.Owner.Client.Out.SendDialogBox(eDialogCode.CustomDialog, 0, 0, 0, 0, eDialogType.Ok, true, m_text);
+                quest.Owner.Client.Out.SendDialogBox(eDialogCode.CustomDialog, 0, 0, 0, 0, eDialogType.Ok, true, BehaviourUtils.GetPersonalizedMessage(m_text, quest.Owner));
                 OnPlayerEnterArea(quest, goal);
             }
             if (e == AreaEvent.PlayerLeave)

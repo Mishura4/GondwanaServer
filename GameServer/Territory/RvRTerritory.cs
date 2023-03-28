@@ -59,7 +59,7 @@ namespace DOL.Territory
             // reset all doors
             foreach (GameKeepDoor door in keep.Doors.Values)
             {
-                door.Realm = eRealm.None;
+                door.Reset((eRealm)6);
             }
         }
     }

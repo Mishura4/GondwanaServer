@@ -87,6 +87,6 @@ namespace DOL.GS.Spells
         }
 
         public override string ShortDescription
-            => $"The target is condemned, turned into a zombie and loses all its spell enhancements. The target will inevitably die after {Spell.Duration} seconds. No cure can reverse this effect... Undead monsters are not affected by this spell.";
+            => $"The target is condemned, turned into a zombie and loses all its spell enhancements. The target will inevitably die after {Spell.Duration / 1000} seconds. No cure can reverse this effect... Undead monsters are not affected by this spell.";
     }
 }

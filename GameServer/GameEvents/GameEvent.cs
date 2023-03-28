@@ -31,6 +31,8 @@ namespace DOL.GameEvents
             ID = ev.ID;
             RandomTextTimer = new Timer();
             RemainingTimeTimer = new Timer();
+            Owner = ev.Owner;
+            InstancedConditionType = ev.InstancedConditionType;
 
             ParseValuesFromDb(ev._db as EventDB);
 
@@ -42,12 +44,14 @@ namespace DOL.GameEvents
             Mobs = new List<GameNPC>();
             foreach (var mob in ev.Mobs)
             {
-                GameNPC newMob = mob.Copy();
-                // var newMob = new GameNPC();
-                // newMob.LoadFromDatabase(GameServer.Database.FindObjectByKey<Mob>(mob.InternalID));
+                var newMob = new GameNPC();
+                newMob.LoadFromDatabase(GameServer.Database.FindObjectByKey<Mob>(mob.InternalID));
+                newMob.InternalID = mob.InternalID;
                 newMob.BuildAmbientTexts();
+                newMob.EventID = ID;
                 Mobs.Add(newMob);
             }
+
             StartEffects = new Dictionary<string, ushort>(ev.StartEffects);
             EndEffects = new Dictionary<string, ushort>(ev.EndEffects);
             RemovedMobs = new Dictionary<string, GameNPC>(ev.RemovedMobs);

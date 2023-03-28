@@ -49,11 +49,10 @@ namespace DOL.GameEvents
         private async void TimeCheck(object o)
         {
             Instance.timer.Change(Timeout.Infinite, Timeout.Infinite);
-            List<GameEvent> events = new List<GameEvent>(Events);
             int counter = 0;
             while (counter < this.Events.Where(ev => ev.Status == EventStatus.NotOver).Count())
             {
-                GameEvent ev = events[counter];
+                GameEvent ev = Events[counter];
                 //End events with timer over
                 if (ev.EndTime.HasValue && ev.EndingConditionTypes.Contains(EndingConditionType.Timer) && DateTime.UtcNow >= ev.EndTime.Value.DateTime)
                 {

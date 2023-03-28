@@ -29,6 +29,7 @@ using DOL.Database;
 using DOL.GS.PacketHandler;
 using DOL.GS.PacketHandler.Client.v168;
 using DOL.MobGroups;
+using DOL.GS.Keeps;
 
 namespace DOL.GS.Commands
 {
@@ -65,7 +66,7 @@ namespace DOL.GS.Commands
 
         public void OnCommand(GameClient client, string[] args)
         {
-            GameDoor targetDoor = null;
+            IDoor targetIDoor = null;
 
             if (args.Length > 1 && args[1] == "show" && client.Player != null)
             {
@@ -104,11 +105,11 @@ namespace DOL.GS.Commands
                 return;
             }
 
-            if (client.Player.TargetObject != null && client.Player.TargetObject is GameDoor)
+            if (client.Player.TargetObject != null && client.Player.TargetObject is IDoor)
             {
-                targetDoor = (GameDoor)client.Player.TargetObject;
-                DoorID = targetDoor.DoorID;
-                doorType = targetDoor.DoorID / 100000000;
+                targetIDoor = (IDoor)client.Player.TargetObject;
+                DoorID = targetIDoor.DoorID;
+                doorType = targetIDoor.DoorID / 100000000;
             }
 
             if (args.Length < 2)
@@ -116,67 +117,81 @@ namespace DOL.GS.Commands
                 DisplaySyntax(client);
                 return;
             }
-
-            switch (args[1])
+            if (targetIDoor is GameDoor targetDoor)
             {
-                case "name":
-                    name(client, targetDoor, args);
-                    break;
-                case "guild":
-                    guild(client, targetDoor, args);
-                    break;
-                case "level":
-                    level(client, targetDoor, args);
-                    break;
-                case "realm":
-                    realm(client, targetDoor, args);
-                    break;
-                case "info":
-                    info(client, targetDoor);
-                    break;
-                case "heal":
-                    heal(client, targetDoor);
-                    break;
-                case "locked":
-                    locked(client, targetDoor);
-                    break;
-                case "unlocked":
-                    unlocked(client, targetDoor);
-                    break;
-                case "kill":
-                    kill(client, targetDoor, args);
-                    break;
-                case "delete":
-                    delete(client, targetDoor);
-                    break;
-                case "add":
-                    add(client, targetDoor);
-                    break;
-                case "update":
-                    update(client, targetDoor);
-                    break;
-                case "sound":
-                    sound(client, targetDoor, args);
-                    break;
-                case "groupmob":
-                    GroupMob(client, targetDoor, args);
-                    break;
-                case "key":
-                    Key(client, targetDoor, args);
-                    break;
-                case "key_chance":
-                    Key_Chance(client, targetDoor, args);
-                    break;
-                case "isrenaissance":
-                    IsRenaissance(client, targetDoor, args);
-                    break;
-                case "punishspell":
-                    PunishSpell(client, targetDoor, args);
-                    break;
+                switch (args[1])
+                {
+                    case "name":
+                        name(client, targetDoor, args);
+                        break;
+                    case "guild":
+                        guild(client, targetDoor, args);
+                        break;
+                    case "level":
+                        level(client, targetDoor, args);
+                        break;
+                    case "realm":
+                        realm(client, targetDoor, args);
+                        break;
+                    case "info":
+                        info(client, targetDoor);
+                        break;
+                    case "heal":
+                        heal(client, targetDoor);
+                        break;
+                    case "locked":
+                        locked(client, targetDoor);
+                        break;
+                    case "unlocked":
+                        unlocked(client, targetDoor);
+                        break;
+                    case "kill":
+                        kill(client, targetDoor, args);
+                        break;
+                    case "delete":
+                        delete(client, targetDoor);
+                        break;
+                    case "add":
+                        add(client, targetDoor);
+                        break;
+                    case "update":
+                        update(client, targetDoor);
+                        break;
+                    case "sound":
+                        sound(client, targetDoor, args);
+                        break;
+                    case "groupmob":
+                        GroupMob(client, targetDoor, args);
+                        break;
+                    case "key":
+                        Key(client, targetDoor, args);
+                        break;
+                    case "key_chance":
+                        Key_Chance(client, targetDoor, args);
+                        break;
+                    case "isrenaissance":
+                        IsRenaissance(client, targetDoor, args);
+                        break;
+                    case "punishspell":
+                        PunishSpell(client, targetDoor, args);
+                        break;
 
-                default:
-                    DisplaySyntax(client);
-                    return;
+                    default:
+                        DisplaySyntax(client);
+                        return;
+                }
+            }
+            else if (targetIDoor is GameKeepDoor targetKeepDoor)
+            {
+                switch (args[1])
+                {
+                    case "add":
+                        add(client, targetKeepDoor);
+                        break;
+                    case "info":
+                        info(client, targetKeepDoor);
+                        break;
+                }
             }
         }
         #endregion
@@ -259,6 +274,40 @@ namespace DOL.GS.Commands
         }
 
         private void add(GameClient client, GameDoor targetDoor)
+        {
+            var DOOR = DOLDB<DBDoor>.SelectObject(DB.Column(nameof(DBDoor.InternalID)).IsEqualTo(DoorID));
+
+            if (DOOR != null)
+            {
+                client.Out.SendMessage("The door is already in the database", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return;
+            }
+            if (DOOR == null)
+            {
+                if (doorType != 9)
+                {
+                    var door = new DBDoor();
+                    door.ObjectId = null;
+                    door.InternalID = DoorID;
+                    door.Name = "door";
+                    door.Type = DoorID / 100000000;
+                    door.Level = 20;
+                    door.Realm = 6;
+                    door.X = (int)targetDoor.Position.X;
+                    door.Y = (int)targetDoor.Position.Y;
+                    door.Z = (int)targetDoor.Position.Z;
+                    door.Heading = targetDoor.Heading;
+                    door.Health = 2545;
+                    GameServer.Database.AddObject(door);
+                    (targetDoor).AddToWorld();
+                    client.Player.Out.SendMessage("Added door ID:" + DoorID + "to the database", eChatType.CT_Important,
+                                                  eChatLoc.CL_SystemWindow);
+                    //DoorMgr.Init( );
+                    return;
+                }
+            }
+        }
+        private void add(GameClient client, GameKeepDoor targetDoor)
         {
             var DOOR = DOLDB<DBDoor>.SelectObject(DB.Column(nameof(DBDoor.InternalID)).IsEqualTo(DoorID));
 
@@ -495,6 +544,45 @@ namespace DOL.GS.Commands
             info.Add(" + Key Chance : " + targetDoor.Key_Chance);
             info.Add(" + IsRenaissance : " + targetDoor.IsRenaissance);
             info.Add(" + Punish Spell : " + targetDoor.PunishSpell);
+
+            client.Out.SendCustomTextWindow("Door Information", info);
+        }
+
+        private void info(GameClient client, GameKeepDoor targetDoor)
+        {
+            if (targetDoor.Realm == eRealm.None)
+                Realmname = "None";
+
+            if (targetDoor.Realm == eRealm.Albion)
+                Realmname = "Albion";
+
+            if (targetDoor.Realm == eRealm.Midgard)
+                Realmname = "Midgard";
+
+            if (targetDoor.Realm == eRealm.Hibernia)
+                Realmname = "Hibernia";
+
+            if (targetDoor.Realm == eRealm.Door)
+                Realmname = "All";
+
+            int doorType = DoorRequestHandler.m_handlerDoorID / 100000000;
+
+            var info = new List<string>();
+
+            info.Add(" + Door Info :  " + targetDoor.Name);
+            info.Add("  ");
+            info.Add(" + Name : " + targetDoor.Name);
+            info.Add(" + ID : " + DoorID);
+            info.Add(" + Realm : " + (int)targetDoor.Realm + " : " + Realmname);
+            info.Add(" + Level : " + targetDoor.Level);
+            info.Add(" + Guild : " + targetDoor.GuildName);
+            info.Add(" + Health : " + targetDoor.Health + " / " + targetDoor.MaxHealth);
+            info.Add(" + Statut : " + statut);
+            info.Add(" + Type : " + doorType);
+            info.Add(" + X : " + targetDoor.Position.X.ToString("F0"));
+            info.Add(" + Y : " + targetDoor.Position.Y.ToString("F0"));
+            info.Add(" + Z : " + targetDoor.Position.Z.ToString("F0"));
+            info.Add(" + Heading : " + targetDoor.Heading);
 
             client.Out.SendCustomTextWindow("Door Information", info);
         }

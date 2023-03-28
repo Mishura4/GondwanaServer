@@ -41,6 +41,7 @@ namespace DOL.GS.Spells
         private GameNPC secondPortal;
         private PlayerPortalNPC secondPortalNPC;
         private Group group;
+        GameSpellEffect portalEffect;
 
         GameNPC CreatePortal(GameNPC portal, GamePlayer player)
         {
@@ -128,6 +129,7 @@ namespace DOL.GS.Spells
             secondPortal.AddToWorld();
             secondPortalNPC.AddToWorld();
 
+            portalEffect = effect;
             base.OnEffectStart(effect);
         }
 
@@ -168,9 +170,6 @@ namespace DOL.GS.Spells
         }
         void ApplyTeleportEffect(GamePlayer player)
         {
-            DummyEffect effect = new DummyEffect(4310);
-            effect.Start(player);
-
             foreach (GamePlayer pl in player.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
                 pl.Out.SendSpellEffectAnimation(player, player, 4310, 0, false, 1);
         }
@@ -180,6 +179,7 @@ namespace DOL.GS.Spells
             if (PlayersUsedFirstPortal.Count == PlayersWithAccess.Count && PlayersUsedSecondPortal.Count == PlayersWithAccess.Count)
             {
                 DeletePortals();
+                portalEffect.Cancel(false);
             }
         }
 

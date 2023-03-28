@@ -622,6 +622,7 @@ namespace DOL.GS.Keeps
             m_model = 0xFFFF;
             m_doorID = door.InternalID;
             m_state = eDoorState.Closed;
+            Realm = eRealm.None;
             this.AddToWorld();
 
             foreach (AbstractArea area in this.CurrentAreas)
@@ -634,6 +635,7 @@ namespace DOL.GS.Keeps
                         Component = new GameKeepComponent();
                         Component.Keep = keepArea.Keep;
                         keepArea.Keep.Doors.Add(sKey, this);
+                        Realm = (eRealm)keepArea.Keep.Realm;
                     }
                     break;
                 }

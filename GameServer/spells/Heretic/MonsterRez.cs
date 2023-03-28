@@ -33,9 +33,28 @@ namespace DOL.GS.Spells
     [SpellHandlerAttribute("ReanimateCorpse")]
     public class MonsterRez : ResurrectSpellHandler
     {
+        string m_shortDescription;
         // Constructor
         public MonsterRez(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line)
         {
+            m_shortDescription = $"Brings the target monster back to life, restores {Spell.ResurrectHealth}% health and {Spell.ResurrectMana}% power and endurance and suffers no experience or constitution loss.\n";
+
+            while (spell.SubSpellID != 0)
+            {
+                spell = SkillBase.GetSpellByID((int)spell.SubSpellID);
+                m_shortDescription += ScriptMgr.CreateSpellHandler(m_caster, spell, null).ShortDescription + "\n";
+                if (spell.Radius > 0 || spell.Frequency > 0 || spell.Duration > 0)
+                {
+                    m_shortDescription += $"Does {spell.DamageType}{spell.Damage} damages to the target";
+                    if (spell.Radius > 0)
+                        m_shortDescription += "and its surroundings";
+                    if (spell.Frequency > 0)
+                        m_shortDescription += $"every {spell.Frequency} seconds";
+                    if (spell.Duration > 0)
+                        m_shortDescription += $"over a period of {spell.Duration / 1000} seconds";
+                    m_shortDescription += ".\n";
+                }
+            }
         }
 
         protected override void ResurrectResponceHandler(GamePlayer player, byte response)
@@ -56,8 +75,8 @@ namespace DOL.GS.Spells
             spellhandler.StartSpell(living);
         }
         public override string ShortDescription
-            => $"Brings the target monster back to life, restores {Spell.ResurrectHealth}% health and {Spell.ResurrectMana}% power and endurance and suffers no experience or constitution loss.";
-    }
+            => m_shortDescription;
+            }
 
     /// <summary>
     /// Summary description for ReanimateCorpe.

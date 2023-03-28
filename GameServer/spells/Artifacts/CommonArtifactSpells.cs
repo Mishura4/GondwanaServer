@@ -282,9 +282,11 @@ namespace DOL.GS.Spells
         {
             get
             {
+                string output = $"Target has been shapechanged into {Spell.Description}.";
                 var subSpell = ScriptMgr.CreateSpellHandler(m_caster, SkillBase.GetSpellByID((int)Spell.Value), null);
-                return $"Triggers the following spell with a {Spell.Frequency / 100}% chance on own melee attacks.: \n\n"
-                + (subSpell != null ? subSpell.ShortDescription : $"Spell with ID {Spell.Value} not found");
+                if (subSpell != null)
+                    output += "\n" + subSpell.ShortDescription;
+                return output;
             }
         }
     }

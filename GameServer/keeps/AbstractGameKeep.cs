@@ -1067,8 +1067,8 @@ namespace DOL.GS.Keeps
             StartCombatTick = 0;
 
             Realm = realm;
-
-            PlayerMgr.BroadcastCapture(this);
+            if (Name != null)
+                PlayerMgr.BroadcastCapture(this);
 
             Level = (byte)ServerProperties.Properties.STARTING_KEEP_LEVEL;
 
@@ -1116,6 +1116,7 @@ namespace DOL.GS.Keeps
                         guard.StopRespawn();
                         guard.AddToWorld();
                         guard.Health = guard.MaxHealth;
+                        guard.Realm = realm;
                     }
                     guard.RefreshTemplate();
                 }
