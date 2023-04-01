@@ -134,6 +134,7 @@ namespace DOL.Database
         private string m_disabledAbilities = string.Empty;
 
         private string m_friendList = string.Empty; //comma seperated string of friends
+        private string m_askNameList = string.Empty; //comma seperated string of friends
         private string m_ignoreList = string.Empty; //comma seperated string of ignored Players
         private string m_playerTitleType = string.Empty;
 
@@ -1303,6 +1304,20 @@ namespace DOL.Database
             {
                 Dirty = true;
                 m_friendList = value;
+            }
+        }
+
+        /// <summary>
+        /// The known names list
+        /// </summary>
+        [DataElement(AllowDbNull = true)]
+        public string SerializedAskNameList
+        {
+            get { return m_askNameList; }
+            set
+            {
+                Dirty = true;
+                m_askNameList = value;
             }
         }
 

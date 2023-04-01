@@ -99,7 +99,7 @@ namespace DOL.GS.Spells
                         GameSpellEffect Heat = FindEffectOnTarget(player, "HeatResistBuff");
                         if (Matter != null || Cold != null || Heat != null)
                         {
-                            MessageToCaster(target.Name + " already has this effect", eChatType.CT_SpellResisted);
+                            MessageToCaster(player.GetPersonalizedName(target) + " already has this effect", eChatType.CT_SpellResisted);
                             return;
                         }
                     }
@@ -114,7 +114,7 @@ namespace DOL.GS.Spells
                         GameSpellEffect Energy = FindEffectOnTarget(player, "EnergyResistBuff");
                         if (Body != null || Spirit != null || Energy != null)
                         {
-                            MessageToCaster(target.Name + " already has this effect", eChatType.CT_SpellResisted);
+                            MessageToCaster(player.GetPersonalizedName(target) + " already has this effect", eChatType.CT_SpellResisted);
                             return;
                         }
                     }

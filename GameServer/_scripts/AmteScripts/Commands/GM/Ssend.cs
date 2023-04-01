@@ -21,10 +21,10 @@ namespace DOL.GS.Commands
 
             GameClient cl_player = WorldMgr.GetClientByPlayerName(args[1], false, true);
             string message = string.Join(" ", args, 2, args.Length - 2);
-            cl_player.Out.SendMessage("[Report] " + client.Player.Name + ": " + message, eChatType.CT_Staff, eChatLoc.CL_ChatWindow);
+            cl_player.Out.SendMessage("[Report] " + cl_player.Player.GetPersonalizedName(client.Player) + ": " + message, eChatType.CT_Staff, eChatLoc.CL_ChatWindow);
             foreach (var cl in WorldMgr.GetAllPlayingClients())
                 if (cl.Account.PrivLevel >= 2 && cl != cl_player)
-                    cl.Out.SendMessage("[Report] " + client.Player.Name + " à " + cl_player.Player.Name + ": \"" + message + "\".", eChatType.CT_Staff, eChatLoc.CL_ChatWindow);
+                    cl.Out.SendMessage("[Report] " + cl_player.Player.GetPersonalizedName(client.Player) + " à " + cl_player.Player.Name + ": \"" + message + "\".", eChatType.CT_Staff, eChatLoc.CL_ChatWindow);
         }
     }
 }

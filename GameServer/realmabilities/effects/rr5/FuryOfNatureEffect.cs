@@ -145,9 +145,13 @@ namespace DOL.GS.Effects
                 if (reducedHeal < baseheal)
                     baseheal = reducedHeal;
                 healTarget.ChangeHealth(player, GameLiving.eHealthChangeType.Spell, baseheal);
-                player.Out.SendMessage("You heal " + healTarget.Name + " for " + baseheal + "!", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
                 if (healTarget is GamePlayer)
-                    ((GamePlayer)healTarget).Out.SendMessage(player.Name + " heals you for " + baseheal + "!", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                {
+                    player.Out.SendMessage("You heal " + player.GetPersonalizedName((GamePlayer)healTarget) + " for " + baseheal + "!", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                    ((GamePlayer)healTarget).Out.SendMessage(((GamePlayer)healTarget).GetPersonalizedName(player) + " heals you for " + baseheal + "!", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                }
+                else
+                    player.Out.SendMessage("You heal " + healTarget.Name + " for " + baseheal + "!", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
             }
 
             return;

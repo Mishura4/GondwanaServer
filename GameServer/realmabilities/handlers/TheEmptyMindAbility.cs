@@ -28,7 +28,7 @@ namespace DOL.GS.RealmAbilities
                 }
                 else
                 {
-                    t_player.Out.SendMessage(living.Name + " casts a spell!", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                    t_player.Out.SendMessage(t_player.GetPersonalizedName(living) + " casts a spell!", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
                 }
             }
 

@@ -93,7 +93,7 @@ namespace DOL.GS.Spells
                     GamePlayer owner = brain.GetPlayerOwner();
                     if (owner != null)
                     {
-                        MessageToLiving(owner, String.Format(LanguageMgr.GetTranslation(owner.Client, "DamageAddAndShield.EventHandlerDA.YourHitFor"), ad.Attacker.Name, target.GetName(0, false), ad.Damage), eChatType.CT_Spell);
+                        MessageToLiving(owner, String.Format(LanguageMgr.GetTranslation(owner.Client, "DamageAddAndShield.EventHandlerDA.YourHitFor"), owner.GetPersonalizedName(ad.Attacker), target.GetName(0, false), ad.Damage), eChatType.CT_Spell);
                     }
                 }
             }
@@ -186,7 +186,7 @@ namespace DOL.GS.Spells
                     owner = brain.GetPlayerOwner();
                     if (owner != null && owner.ControlledBrain != null && ad.Attacker == owner.ControlledBrain.Body)
                     {
-                        MessageToLiving(owner, String.Format(LanguageMgr.GetTranslation(owner.Client, "DamageAddAndShield.EventHandlerDS.YourHitFor"), ad.Attacker.Name, target.GetName(0, false), ad.Damage), eChatType.CT_Spell);
+                        MessageToLiving(owner, String.Format(LanguageMgr.GetTranslation(owner.Client, "DamageAddAndShield.EventHandlerDS.YourHitFor"), owner.GetPersonalizedName(ad.Attacker), target.GetName(0, false), ad.Damage), eChatType.CT_Spell);
                     }
                 }
             }

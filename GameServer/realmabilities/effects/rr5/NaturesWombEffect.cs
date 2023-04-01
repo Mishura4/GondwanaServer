@@ -73,7 +73,9 @@ namespace DOL.GS.Effects
             ad.CriticalDamage = 0;
             GamePlayer player = living as GamePlayer;
             GamePlayer attackplayer = ad.Attacker as GamePlayer;
-            if (attackplayer != null)
+            if (attackplayer != null && player != null)
+                attackplayer.Out.SendMessage(attackplayer.GetPersonalizedName(player) + "'s druidic powers absorb your attack!", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
+            else if (attackplayer != null)
                 attackplayer.Out.SendMessage(living.Name + "'s druidic powers absorb your attack!", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
             int modheal = living.MaxHealth - living.Health;
             if (modheal > heal)

@@ -79,7 +79,7 @@ namespace DOL.GS.Commands
                             LanguageMgr.GetTranslation(
                                 player.Client.Account.Language,
                                 "Commands.Players.Yell.From",
-                                client.Player.Name, direction),
+                                player.GetPersonalizedName(client.Player), direction),
                             eChatType.CT_Help, eChatLoc.CL_SystemWindow);
                     }
                     else

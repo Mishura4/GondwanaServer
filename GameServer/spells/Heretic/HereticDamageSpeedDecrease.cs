@@ -202,7 +202,7 @@ namespace DOL.GS.Spells
                     GamePlayer owner = brain.GetPlayerOwner();
                     if (owner != null)
                     {
-                        MessageToLiving(owner, "Your " + target.Name + " resists the effect!", eChatType.CT_SpellResisted);
+                        MessageToLiving(owner, "Your " + owner.GetPersonalizedName(target) + " resists the effect!", eChatType.CT_SpellResisted);
                     }
                 }
             }

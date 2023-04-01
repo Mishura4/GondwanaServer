@@ -48,11 +48,11 @@ namespace GameServerScripts.Amtescripts.Managers
                 client.Player.Reputation--;
                 client.Player.SaveIntoDatabase();
                 reported++;
-                client.Out.SendMessage("Vous avez perdu 1 point de réputation pour avoir tué " + player.Name, DOL.GS.PacketHandler.eChatType.CT_System, DOL.GS.PacketHandler.eChatLoc.CL_SystemWindow);
+                client.Out.SendMessage("Vous avez perdu 1 point de réputation pour avoir tué " + client.Player.GetPersonalizedName(player), DOL.GS.PacketHandler.eChatType.CT_System, DOL.GS.PacketHandler.eChatLoc.CL_SystemWindow);
                 death.IsWanted = true;
                 death.Dirty = true;
                 GameServer.Database.SaveObject(death);
-                newsMessage = LanguageMgr.GetTranslation(client, "GameObjects.GamePlayer.Wanted", client.Player.Name);
+                newsMessage = LanguageMgr.GetTranslation(client, "GameObjects.GamePlayer.Wanted", client.Player.GetPersonalizedName(player));
                 NewsMgr.CreateNews("GameObjects.GamePlayer.Wanted", player.Realm, eNewsType.RvRGlobal, false, true, client.Player.Name);
             }
             else

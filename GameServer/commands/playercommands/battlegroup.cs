@@ -58,8 +58,6 @@ namespace DOL.GS.Commands
             if ((bool)mybattlegroup.Members[client.Player] == true)
             {
                 text.Append(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Battlechat.ChatName"));
-                text.Append(" ");
-                text.Append(client.Player.Name);
                 text.Append(": \"");
                 text.Append(args[1]);
                 for (int i = 2; i < args.Length; i++)
@@ -71,14 +69,12 @@ namespace DOL.GS.Commands
                 string message = text.ToString();
                 foreach (GamePlayer ply in mybattlegroup.Members.Keys)
                 {
-                    ply.Out.SendMessage(message, eChatType.CT_BattleGroupLeader, eChatLoc.CL_ChatWindow);
+                    ply.Out.SendMessage(" " + ply.GetPersonalizedName(client.Player) + message, eChatType.CT_BattleGroupLeader, eChatLoc.CL_ChatWindow);
                 }
             }
             else
             {
                 text.Append(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Battlechat.ChatName"));
-                text.Append(" ");
-                text.Append(client.Player.Name);
                 text.Append(": \"");
                 text.Append(args[1]);
                 for (int i = 2; i < args.Length; i++)
@@ -90,7 +86,7 @@ namespace DOL.GS.Commands
                 string message = text.ToString();
                 foreach (GamePlayer ply in mybattlegroup.Members.Keys)
                 {
-                    ply.Out.SendMessage(message, eChatType.CT_BattleGroup, eChatLoc.CL_ChatWindow);
+                    ply.Out.SendMessage(" " + ply.GetPersonalizedName(client.Player) + message, eChatType.CT_BattleGroup, eChatLoc.CL_ChatWindow);
                 }
             }
         }
@@ -142,7 +138,7 @@ namespace DOL.GS.Commands
                         BattleGroup oldbattlegroup = inviteeclient.Player.TempProperties.getProperty<BattleGroup>(BattleGroup.BATTLEGROUP_PROPERTY, null);
                         if (oldbattlegroup != null)
                         {
-                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Battlegroup.PlayerInBattlegroup", inviteeclient.Player.Name), eChatType.CT_BattleGroup, eChatLoc.CL_SystemWindow);
+                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Battlegroup.PlayerInBattlegroup", client.Player.GetPersonalizedName(inviteeclient.Player)), eChatType.CT_BattleGroup, eChatLoc.CL_SystemWindow);
                             return;
                         }
                         BattleGroup mybattlegroup = client.Player.TempProperties.getProperty<BattleGroup>(BattleGroup.BATTLEGROUP_PROPERTY, null);
@@ -157,7 +153,7 @@ namespace DOL.GS.Commands
                             return;
                         }
                         inviteeclient.Player.TempProperties.setProperty(JOIN_BATTLEGROUP_PROPERTY, mybattlegroup);
-                        inviteeclient.Player.Out.SendCustomDialog(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Battlegroup.JoinBattleGroup", client.Player.Name), new CustomDialogResponse(JoinBattleGroup));
+                        inviteeclient.Player.Out.SendCustomDialog(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Battlegroup.JoinBattleGroup", inviteeclient.Player.GetPersonalizedName(client.Player)), new CustomDialogResponse(JoinBattleGroup));
                     }
                     break;
                 case "groups":
@@ -234,8 +230,7 @@ namespace DOL.GS.Commands
                                 text.Append(" ");
                                 text.Append(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Battlegroup.Leader"));
                             }
-                            text.Append(nongrouped.Name + '\n');
-                            client.Out.SendMessage(text.ToString(), eChatType.CT_BattleGroup, eChatLoc.CL_SystemWindow);
+                            client.Out.SendMessage(text.ToString() + client.Player.GetPersonalizedName(nongrouped) + "\n", eChatType.CT_BattleGroup, eChatLoc.CL_SystemWindow);
                         }
                     }
                     break;
@@ -314,8 +309,7 @@ namespace DOL.GS.Commands
                                 text.Append(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Battlegroup.Leader"));
                             }
                             text.Append("(" + nongrouped.CharacterClass.Name + ")");
-                            text.Append(nongrouped.Name + '\n');
-                            client.Out.SendMessage(text.ToString(), eChatType.CT_BattleGroup, eChatLoc.CL_SystemWindow);
+                            client.Out.SendMessage(text.ToString() + client.Player.GetPersonalizedName(nongrouped) + "\n", eChatType.CT_BattleGroup, eChatLoc.CL_SystemWindow);
                         }
                     }
                     break;
@@ -349,7 +343,7 @@ namespace DOL.GS.Commands
                             }
                             text.Append(player.Name);
 
-                            client.Out.SendMessage(text.ToString(), eChatType.CT_BattleGroup, eChatLoc.CL_SystemWindow);
+                            client.Out.SendMessage(text.ToString() + client.Player.GetPersonalizedName(player), eChatType.CT_BattleGroup, eChatLoc.CL_SystemWindow);
                             //TODO: make function formatstring                        
                         }
                     }
@@ -432,9 +426,9 @@ namespace DOL.GS.Commands
                             return;
                         }
                         mybattlegroup.Members[inviteeclient.Player] = true;
-                        string message = LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Battlegroup.Moderator", inviteeclient.Player.Name);
                         foreach (GamePlayer ply in mybattlegroup.Members.Keys)
                         {
+                            string message = LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Battlegroup.Moderator", ply.GetPersonalizedName(inviteeclient.Player));
                             ply.Out.SendMessage(message, eChatType.CT_Chat, eChatLoc.CL_ChatWindow);
                         }
                     }
@@ -651,15 +645,15 @@ namespace DOL.GS.Commands
                         GameClient treasclient = WorldMgr.GetClientByPlayerName(treasname, false, false);
                         if (treasclient == null)
                         {
-                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Battlegroup.NoPlayer", treasclient.Player.Name), eChatType.CT_BattleGroup, eChatLoc.CL_SystemWindow);
+                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Battlegroup.NoPlayer", client.Player.GetPersonalizedName(treasclient.Player)), eChatType.CT_BattleGroup, eChatLoc.CL_SystemWindow);
                             return;
                         }
                         mybattlegroup.SetBGTreasurer(treasclient.Player);
-                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Battlegroup.BattlegroupTreasurerOn", treasclient.Player.Name), eChatType.CT_BattleGroupLeader, eChatLoc.CL_SystemWindow);
+                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Battlegroup.BattlegroupTreasurerOn", client.Player.GetPersonalizedName(treasclient.Player)), eChatType.CT_BattleGroupLeader, eChatLoc.CL_SystemWindow);
                         treasclient.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Battlegroup.BattlegroupTreasurerIsYou"), eChatType.CT_BattleGroup, eChatLoc.CL_SystemWindow);
                         foreach (GamePlayer ply in mybattlegroup.Members.Keys)
                         {
-                            ply.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Battlegroup.BattlegroupTreasurerIs", treasclient.Player.Name), eChatType.CT_Chat, eChatLoc.CL_SystemWindow);
+                            ply.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Battlegroup.BattlegroupTreasurerIs", client.Player.GetPersonalizedName(treasclient.Player)), eChatType.CT_Chat, eChatLoc.CL_SystemWindow);
                         }
                         if (mybattlegroup.GetBGTreasurer() == null)
                         {

@@ -19,6 +19,7 @@
 using System.Linq;
 
 using DOL.GS.Friends;
+using DOL.GS.PacketHandler;
 using DOL.Language;
 
 namespace DOL.GS.Commands
@@ -50,6 +51,20 @@ namespace DOL.GS.Commands
             if (fclient != null && !GameServer.ServerRules.IsSameRealm(fclient.Player, client.Player, true))
             {
                 fclient = null;
+            }
+            if (fclient != null && DOL.GS.ServerProperties.Properties.HIDE_PLAYER_NAME &&
+            (client.Player.Guild == null || fclient.Player.Guild == null || client.Player.Guild != fclient.Player.Guild)
+             && !client.Player.SerializedAskNameList.Contains(fclient.Player.Name))
+            {
+                DisplayMessage(
+                    client,
+                    LanguageMgr.GetTranslation(
+                        client.Account.Language,
+                        "Commands.Players.Friend.Askname",
+                         client.Player.GetPersonalizedName(fclient.Player)
+                    )
+                );
+                return;
             }
 
             if (fclient == null)

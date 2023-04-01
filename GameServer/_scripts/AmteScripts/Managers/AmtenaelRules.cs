@@ -67,7 +67,7 @@ namespace DOL.GS.ServerRules
                     if (playerDefender.IsInvulnerableToAttack)
                     {
                         if (quiet == false)
-                            MessageToLiving(attacker, playerDefender.Name + " is temporarily immune to PvP attacks!");
+                            MessageToLiving(attacker, playerAttacker.GetPersonalizedName(playerDefender) + " is temporarily immune to PvP attacks!");
                         return false;
                     }
                 }
@@ -732,8 +732,8 @@ namespace DOL.GS.ServerRules
                 {
                     if (de.Key is GamePlayer pl)
                     {
-                        pl.Out.SendMessage(killedPlayer.Name + " has been killed recently and is worth no realm points!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                        pl.Out.SendMessage(killedPlayer.Name + " has been killed recently and is worth no experience!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                        pl.Out.SendMessage(pl.GetPersonalizedName(killedPlayer) + " has been killed recently and is worth no realm points!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                        pl.Out.SendMessage(pl.GetPersonalizedName(killedPlayer) + " has been killed recently and is worth no experience!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                     }
                 }
                 return;

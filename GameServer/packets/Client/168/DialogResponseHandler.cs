@@ -21,7 +21,9 @@ using DOL.Events;
 using DOL.GS.Finance;
 using DOL.GS.Housing;
 using DOL.GS.Keeps;
+using DOL.Language;
 using System;
+using System.Linq;
 
 namespace DOL.GS.PacketHandler.Client.v168
 {
@@ -365,6 +367,25 @@ namespace DOL.GS.PacketHandler.Client.v168
                                     player.TemporaryConsignmentMerchant = consignmentMerchant;
                                     consignmentMerchant.AddToWorld();
                                 }
+                            }
+                            break;
+                        }
+                    case eDialogCode.AskName:
+                        {
+                            GameClient cln = WorldMgr.GetClientFromID(m_data1);
+                            Console.WriteLine("AskName: " + m_data1);
+                            Console.WriteLine("AskName: " + cln != null);
+                            if (m_response == 0x01 && cln != null && !cln.Player.SerializedAskNameList.Contains(player.Name))
+                            {
+                                Console.WriteLine("AskName: " + m_response + " " + cln.Player.SerializedAskNameList.Contains(player.Name));
+                                cln.Player.SerializedAskNameList = cln.Player.SerializedAskNameList.Append(player.Name).ToArray();
+                                // Save to database
+                                cln.Player.SaveIntoDatabase();
+                                // Update player in world SendLivingDataUpdate
+                                cln.Player.Out.SendObjectRemove(player);
+                                cln.Player.Out.SendPlayerCreate(player);
+                                cln.Player.Out.SendLivingEquipmentUpdate(player);
+                                cln.Player.Out.SendMessage(LanguageMgr.GetTranslation(cln, "Commands.Players.Askname.Added", player.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             }
                             break;
                         }

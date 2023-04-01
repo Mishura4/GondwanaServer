@@ -29,12 +29,12 @@ namespace DOL.GS.Spells
         {
             if (target.HasAbility(Abilities.CCImmunity) || target.HasAbility(Abilities.RootImmunity))
             {
-                MessageToCaster(target.Name + " is immune to this effect!", eChatType.CT_SpellResisted);
+                MessageToCaster((Caster as GamePlayer).GetPersonalizedName(target) + " is immune to this effect!", eChatType.CT_SpellResisted);
                 return;
             }
             if (target.EffectList.GetOfType<ChargeEffect>() != null)
             {
-                MessageToCaster(target.Name + " is moving to fast for this spell to have any effect!", eChatType.CT_SpellResisted);
+                MessageToCaster((Caster as GamePlayer).GetPersonalizedName(target) + " is moving to fast for this spell to have any effect!", eChatType.CT_SpellResisted);
                 return;
             }
 

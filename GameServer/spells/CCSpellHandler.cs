@@ -31,12 +31,12 @@ namespace DOL.GS.Spells
         {
             if (target.HasAbility(Abilities.CCImmunity))
             {
-                MessageToCaster(target.Name + " is immune to this effect!", eChatType.CT_SpellResisted);
+                MessageToCaster(((GamePlayer)m_caster).GetPersonalizedName(target) + " is immune to this effect!", eChatType.CT_SpellResisted);
                 return;
             }
             if (target.EffectList.GetOfType<ChargeEffect>() != null || target.TempProperties.getProperty("Charging", false))
             {
-                MessageToCaster(target.Name + " is moving too fast for this spell to have any effect!", eChatType.CT_SpellResisted);
+                MessageToCaster(((GamePlayer)m_caster).GetPersonalizedName(target) + " is moving too fast for this spell to have any effect!", eChatType.CT_SpellResisted);
                 return;
             }
 
@@ -303,7 +303,7 @@ namespace DOL.GS.Spells
 
             if (target.HasAbility(Abilities.MezzImmunity))
             {
-                MessageToCaster(target.Name + " is immune to this effect!", eChatType.CT_SpellResisted);
+                MessageToCaster(((GamePlayer)m_caster).GetPersonalizedName(target) + " is immune to this effect!", eChatType.CT_SpellResisted);
                 SendEffectAnimation(target, 0, false, 0);
                 target.StartInterruptTimer(target.SpellInterruptDuration, AttackData.eAttackType.Spell, Caster);
                 return;
@@ -462,7 +462,7 @@ namespace DOL.GS.Spells
         {
             if (target.HasAbility(Abilities.StunImmunity))
             {
-                MessageToCaster(target.Name + " is immune to this effect!", eChatType.CT_SpellResisted);
+                MessageToCaster(((GamePlayer)m_caster).GetPersonalizedName(target) + " is immune to this effect!", eChatType.CT_SpellResisted);
                 base.OnSpellResisted(target);
                 return;
             }

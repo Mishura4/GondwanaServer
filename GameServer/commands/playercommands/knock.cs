@@ -58,7 +58,7 @@ namespace DOL.GS.Commands
                 client.Player.Emote(eEmote.Knock);
                 foreach (GamePlayer player in house.GetAllPlayersInHouse())
                 {
-                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Commands.Players.Knock.IsKnocking", client.Player.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Commands.Players.Knock.IsKnocking", player.GetPersonalizedName(client.Player)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 }
                 done = true;
             }

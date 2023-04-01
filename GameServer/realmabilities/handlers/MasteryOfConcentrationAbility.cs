@@ -67,8 +67,8 @@ namespace DOL.GS.RealmAbilities
                     }
                     else
                     {
-                        player.MessageFromArea(caster, caster.Name + " casts a spell!", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
-                        player.Out.SendMessage(caster.Name + "'s castings have perfect poise!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        player.MessageFromArea(caster, player.GetPersonalizedName(caster) + " casts a spell!", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                        player.Out.SendMessage(player.GetPersonalizedName(caster) + "'s castings have perfect poise!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     }
                 }
             }

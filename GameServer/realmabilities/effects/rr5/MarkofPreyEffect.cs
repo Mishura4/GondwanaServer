@@ -115,7 +115,9 @@ namespace DOL.GS.Effects
             ad.AttackResult = GameLiving.eAttackResult.HitUnstyled;
             target.OnAttackedByEnemy(ad);
             EffectCaster.ChangeMana(EffectOwner, GameLiving.eManaChangeType.Spell, (int)ad.Damage);
-            if (attacker is GamePlayer)
+            if (attacker is GamePlayer && target is GamePlayer)
+                (attacker as GamePlayer).Out.SendMessage(string.Format("You hit {0} for {1} extra damage!", (attacker as GamePlayer).GetPersonalizedName((target as GamePlayer)), ad.Damage), DOL.GS.PacketHandler.eChatType.CT_Spell, DOL.GS.PacketHandler.eChatLoc.CL_SystemWindow);
+            else if (attacker is GamePlayer)
                 (attacker as GamePlayer).Out.SendMessage(string.Format("You hit {0} for {1} extra damage!", target.Name, ad.Damage), DOL.GS.PacketHandler.eChatType.CT_Spell, DOL.GS.PacketHandler.eChatLoc.CL_SystemWindow);
             attacker.DealDamage(ad);
         }

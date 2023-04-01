@@ -437,7 +437,7 @@ namespace DOL.GS
                 m_tradeAccept = true;
                 GamePlayer partner = m_partnerWindow.Owner;
 
-                partner.Out.SendMessage(m_owner.Name + " has accepted the trade.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                partner.Out.SendMessage(partner.GetPersonalizedName(m_owner) + " has accepted the trade.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
 
                 // Check if the tradepartner has also agreed to the trade
                 if (!m_partnerWindow.m_tradeAccept) return false;
@@ -463,7 +463,7 @@ namespace DOL.GS
                         }
 
                         m_owner.Out.SendMessage("You don't have enough money.", eChatType.CT_Merchant, eChatLoc.CL_SystemWindow);
-                        partner.Out.SendMessage(m_owner.Name + " doesn't have enough money.", eChatType.CT_Merchant, eChatLoc.CL_SystemWindow);
+                        partner.Out.SendMessage(partner.GetPersonalizedName(m_owner) + " doesn't have enough money.", eChatType.CT_Merchant, eChatLoc.CL_SystemWindow);
                     }
                     if (!partnerEnoughMoney)
                     {
@@ -547,12 +547,12 @@ namespace DOL.GS
                         if (!enoughSpace)
                         {
                             m_owner.Out.SendMessage("You don't have enough space in your inventory.", eChatType.CT_Merchant, eChatLoc.CL_SystemWindow);
-                            partner.Out.SendMessage(m_owner.Name + " doesn't have enough space in his inventory.", eChatType.CT_Merchant, eChatLoc.CL_SystemWindow);
+                            partner.Out.SendMessage(partner.GetPersonalizedName(m_owner) + " doesn't have enough space in his inventory.", eChatType.CT_Merchant, eChatLoc.CL_SystemWindow);
                         }
                         if (!partnerEnoughSpace)
                         {
                             partner.Out.SendMessage("You don't have enough space in your inventory.", eChatType.CT_Merchant, eChatLoc.CL_SystemWindow);
-                            m_owner.Out.SendMessage(partner.Name + " doesn't have enough space in his inventory.", eChatType.CT_Merchant, eChatLoc.CL_SystemWindow);
+                            m_owner.Out.SendMessage(m_owner.GetPersonalizedName(partner) + " doesn't have enough space in his inventory.", eChatType.CT_Merchant, eChatLoc.CL_SystemWindow);
                         }
 
                         //Update our tradewindow and return
@@ -584,7 +584,7 @@ namespace DOL.GS
                             if (!m_owner.Inventory.RemoveTradeItem(item))
                             {
                                 if (logTrade)
-                                    GameServer.Instance.LogGMAction("   NOTItem: " + m_owner.Name + "(" + m_owner.Client.Account.Name + ") -> " + partner.Name + "(" + partner.Client.Account.Name + ") : " + item.Name + "(" + item.Id_nb + ")");
+                                    GameServer.Instance.LogGMAction("   NOTItem: " + partner.GetPersonalizedName(m_owner) + "(" + m_owner.Client.Account.Name + ") -> " + m_owner.GetPersonalizedName(partner) + "(" + partner.Client.Account.Name + ") : " + item.Name + "(" + item.Id_nb + ")");
 
                                 //BOT.Ban(m_owner, "Trade Hack");
                                 //BOT.Ban(partner, "Trade Hack");
@@ -600,7 +600,7 @@ namespace DOL.GS
                             if (!partner.Inventory.RemoveTradeItem(item))
                             {
                                 if (logTrade)
-                                    GameServer.Instance.LogGMAction("   NOTItem: " + m_owner.Name + "(" + m_owner.Client.Account.Name + ") -> " + partner.Name + "(" + partner.Client.Account.Name + ") : " + item.Name + "(" + item.Id_nb + ")");
+                                    GameServer.Instance.LogGMAction("   NOTItem: " + partner.GetPersonalizedName(m_owner) + "(" + m_owner.Client.Account.Name + ") -> " + m_owner.GetPersonalizedName(partner) + "(" + partner.Client.Account.Name + ") : " + item.Name + "(" + item.Id_nb + ")");
 
                                 //BOT.Ban(m_owner, "Trade Hack");
                                 //BOT.Ban(partner, "Trade Hack");
@@ -641,14 +641,14 @@ namespace DOL.GS
 
                         if (!tradeSuccess)
                         {
-                            log.Error("Trade item was not added to Partner first free slot.  Owner = " + m_owner.Name + ", Partner = " + partner.Name + "; Item = " + item.Id_nb);
+                            log.Error("Trade item was not added to Partner first free slot.  Owner = " + partner.GetPersonalizedName(m_owner) + ", Partner = " + m_owner.GetPersonalizedName(partner) + "; Item = " + item.Id_nb);
                         }
                         else
                         {
                             InventoryLogging.LogInventoryAction(m_owner, partner, eInventoryActionType.Trade, item.Template, item.Count);
                             if (logTrade)
                             {
-                                GameServer.Instance.LogGMAction("   Item: " + m_owner.Name + "(" + m_owner.Client.Account.Name + ") -> " + partner.Name + "(" + partner.Client.Account.Name + ") : " + item.Name + "(" + item.Id_nb + ")");
+                                GameServer.Instance.LogGMAction("   Item: " + partner.GetPersonalizedName(m_owner) + "(" + m_owner.Client.Account.Name + ") -> " + m_owner.GetPersonalizedName(partner) + "(" + partner.Client.Account.Name + ") : " + item.Name + "(" + item.Id_nb + ")");
                             }
                         }
                     }
@@ -684,14 +684,14 @@ namespace DOL.GS
 
                         if (!tradeSuccess)
                         {
-                            log.Error("Trade item was not added to Owner first free slot.  Owner = " + m_owner.Name + ", Partner = " + partner.Name + "; Item = " + item.Id_nb);
+                            log.Error("Trade item was not added to Owner first free slot.  Owner = " + partner.GetPersonalizedName(m_owner) + ", Partner = " + m_owner.GetPersonalizedName(partner) + "; Item = " + item.Id_nb);
                         }
                         else
                         {
                             InventoryLogging.LogInventoryAction(partner, m_owner, eInventoryActionType.Trade, item.Template, item.Count);
                             if (logTrade)
                             {
-                                GameServer.Instance.LogGMAction("   Item: " + partner.Name + "(" + partner.Client.Account.Name + ") -> " + m_owner.Name + "(" + m_owner.Client.Account.Name + ") : " + item.Name + "(" + item.Id_nb + ")");
+                                GameServer.Instance.LogGMAction("   Item: " + m_owner.GetPersonalizedName(partner) + "(" + partner.Client.Account.Name + ") -> " + partner.GetPersonalizedName(m_owner) + "(" + m_owner.Client.Account.Name + ") : " + item.Name + "(" + item.Id_nb + ")");
                             }
                         }
                     }
@@ -711,9 +711,9 @@ namespace DOL.GS
                 if (logTrade)
                 {
                     if (m_partnerWindow.TradeMoney > 0)
-                        GameServer.Instance.LogGMAction("  Money: " + partner.Name + "(" + partner.Client.Account.Name + ") -> " + m_owner.Name + "(" + m_owner.Client.Account.Name + ") : " + m_partnerWindow.TradeMoney + "coppers");
+                        GameServer.Instance.LogGMAction("  Money: " + m_owner.GetPersonalizedName(partner) + "(" + partner.Client.Account.Name + ") -> " + partner.GetPersonalizedName(m_owner) + "(" + m_owner.Client.Account.Name + ") : " + m_partnerWindow.TradeMoney + "coppers");
                     if (TradeMoney > 0)
-                        GameServer.Instance.LogGMAction("  Money: " + m_owner.Name + "(" + m_owner.Client.Account.Name + ") -> " + partner.Name + "(" + partner.Client.Account.Name + ") : " + TradeMoney + "coppers");
+                        GameServer.Instance.LogGMAction("  Money: " + partner.GetPersonalizedName(m_owner) + "(" + m_owner.Client.Account.Name + ") -> " + m_owner.GetPersonalizedName(partner) + "(" + partner.Client.Account.Name + ") : " + TradeMoney + "coppers");
                 }
 
                 if (TradeMoney > 0 || m_partnerWindow.TradeMoney > 0)

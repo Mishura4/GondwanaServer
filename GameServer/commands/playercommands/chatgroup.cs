@@ -55,8 +55,6 @@ namespace DOL.GS.Commands
 
             StringBuilder text = new StringBuilder(7 + 3 + client.Player.Name.Length + (args.Length - 1) * 8);
             text.Append(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Chatgroup.Chat"));
-            text.Append(" ");
-            text.Append(client.Player.Name);
             text.Append(": \"");
             text.Append(args[1]);
             for (int i = 2; i < args.Length; i++)
@@ -68,7 +66,7 @@ namespace DOL.GS.Commands
             string message = text.ToString();
             foreach (GamePlayer ply in mychatgroup.Members.Keys)
             {
-                ply.Out.SendMessage(message, eChatType.CT_Chat, eChatLoc.CL_ChatWindow);
+                ply.Out.SendMessage(" " + ply.GetPersonalizedName(client.Player) + message, eChatType.CT_Chat, eChatLoc.CL_ChatWindow);
             }
         }
     }
@@ -119,7 +117,7 @@ namespace DOL.GS.Commands
                         ChatGroup oldchatgroup = (ChatGroup)inviteeclient.Player.TempProperties.getProperty<object>(ChatGroup.CHATGROUP_PROPERTY, null);
                         if (oldchatgroup != null)
                         {
-                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Chatgroup.PlayerInChatgroup", inviteeclient.Player.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Chatgroup.PlayerInChatgroup", client.Player.GetPersonalizedName(inviteeclient.Player)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             return;
                         }
                         ChatGroup mychatgroup = (ChatGroup)client.Player.TempProperties.getProperty<object>(ChatGroup.CHATGROUP_PROPERTY, null);
@@ -134,7 +132,7 @@ namespace DOL.GS.Commands
                             return;
                         }
                         inviteeclient.Player.TempProperties.setProperty(JOIN_CHATGROUP_PROPERTY, mychatgroup);
-                        inviteeclient.Player.Out.SendCustomDialog(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Chatgroup.JoinChatGroup", client.Player.Name), new CustomDialogResponse(JoinChatGroup));
+                        inviteeclient.Player.Out.SendCustomDialog(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Chatgroup.JoinChatGroup", inviteeclient.Player.GetPersonalizedName(client.Player)), new CustomDialogResponse(JoinChatGroup));
                     }
                     break;
                 case "who":
@@ -153,7 +151,7 @@ namespace DOL.GS.Commands
                             text.Length = 0;
                             text.Append(i);
                             text.Append(") ");
-                            text.Append(player.Name);
+                            text.Append(client.Player.GetPersonalizedName(player));
                             if (player.Guild != null)
                             {
                                 text.Append(" <");
@@ -246,7 +244,7 @@ namespace DOL.GS.Commands
                             return;
                         }
                         mychatgroup.Members[inviteeclient.Player] = true;
-                        string message = LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Chatgroup.Moderator", inviteeclient.Player.Name);
+                        string message = LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Chatgroup.Moderator", client.Player.GetPersonalizedName(inviteeclient.Player));
                         foreach (GamePlayer ply in mychatgroup.Members.Keys)
                         {
                             ply.Out.SendMessage(message, eChatType.CT_Chat, eChatLoc.CL_ChatWindow);

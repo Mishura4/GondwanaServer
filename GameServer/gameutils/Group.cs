@@ -201,9 +201,13 @@ namespace DOL.GS
             // update all icons for just joined player
             var player = living as GamePlayer;
             if (player != null)
+            {
                 player.Out.SendGroupMembersUpdate(true, true);
-
-            SendMessageToGroupMembers(string.Format("{0} has joined the group.", living.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                foreach (GamePlayer pl in GetPlayersInTheGroup())
+                    pl.Out.SendMessage(string.Format("{0} has joined the group.", pl.GetPersonalizedName(player)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            }
+            else
+                SendMessageToGroupMembers(string.Format("{0} has joined the group.", living.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
             GameEventMgr.Notify(GroupEvent.MemberJoined, this, new MemberJoinedEventArgs(living));
             return true;
         }
@@ -237,9 +241,11 @@ namespace DOL.GS
             {
                 player.Out.SendMessage("You leave your group.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 player.Notify(GamePlayerEvent.LeaveGroup, player);
+                foreach (GamePlayer pl in GetPlayersInTheGroup())
+                    pl.Out.SendMessage(string.Format("{0} has left the group.", pl.GetPersonalizedName(player)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
             }
-
-            SendMessageToGroupMembers(string.Format("{0} has left the group.", living.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            else
+                SendMessageToGroupMembers(string.Format("{0} has left the group.", living.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 
             // only one member left?
             if (MemberCount == 1)
@@ -256,7 +262,8 @@ namespace DOL.GS
                 if (newLeader != null)
                 {
                     LivingLeader = newLeader;
-                    SendMessageToGroupMembers(string.Format("{0} is the new group leader.", Leader.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    foreach (GamePlayer pl in GetPlayersInTheGroup())
+                        pl.Out.SendMessage(string.Format("{0} has joined the group.", pl.GetPersonalizedName(Leader)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 }
                 else
                 {
@@ -323,7 +330,8 @@ namespace DOL.GS
             {
                 // all went ok
                 UpdateGroupWindow();
-                SendMessageToGroupMembers(string.Format("{0} is the new group leader.", Leader.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                foreach (GamePlayer pl in GetPlayersInTheGroup())
+                    pl.Out.SendMessage(string.Format("{0} has joined the group.", pl.GetPersonalizedName(Leader)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
             }
 
             return allOk;
@@ -458,7 +466,7 @@ namespace DOL.GS
                         }
                         text.Append("(I)");
                     }
-                    text.Append(plr.Name + " ");
+                    text.Append(player.GetPersonalizedName(plr) + " ");
                 }
                 return text.ToString();
             }
@@ -486,7 +494,7 @@ namespace DOL.GS
                         }
                     }
                     text.Append("(" + plr.CharacterClass.Name + ")");
-                    text.Append(plr.Name + " ");
+                    text.Append(player.GetPersonalizedName(plr) + " ");
                 }
                 return text.ToString();
             }

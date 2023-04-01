@@ -1821,7 +1821,7 @@ namespace DOL.GS.ServerRules
         /// <param name="source">The "looking" player</param>
         /// <param name="target">The considered player</param>
         /// <returns>The name of the target</returns>
-        public virtual string GetPlayerName(GamePlayer source, GamePlayer target) => target.Name;
+        public virtual string GetPlayerName(GamePlayer source, GamePlayer target) => source.GetPersonalizedName(target);
 
         /// <summary>
         /// Gets the player Realmrank 12 or 13 title

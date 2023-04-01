@@ -312,7 +312,7 @@ namespace DOL.GS.ServerRules
         public override string GetPlayerName(GamePlayer source, GamePlayer target)
         {
             if (IsSameRealm(source, target, true))
-                return target.Name;
+                return source.GetPersonalizedName(target);
             return source.RaceToTranslatedName(target.Race, target.Gender);
         }
 

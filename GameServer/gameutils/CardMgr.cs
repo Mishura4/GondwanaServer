@@ -181,14 +181,14 @@ namespace DOL.GS
             {
                 if (m_hand.Count == 0)
                 {
-                    source.Out.SendMessage((source == m_owner ? "You have " : m_owner.Player.Name + " has ") + "no cards.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    source.Out.SendMessage((source == m_owner ? "You have " : source.Player.GetPersonalizedName(m_owner.Player) + " has ") + "no cards.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     return;
                 }
                 string cards = "";
                 foreach (Card c in m_hand)
                     if (source == m_owner || c.Up)
                         cards += c.Id + " - " + c.Name + "\n";
-                source.Out.SendMessage((source == m_owner ? "You are holding " : m_owner.Player.Name + " is holding ") + m_hand.Count + (m_hand.Count > 1 ? " cards." : " card."), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                source.Out.SendMessage((source == m_owner ? "You are holding " : source.Player.GetPersonalizedName(m_owner.Player) + " is holding ") + m_hand.Count + (m_hand.Count > 1 ? " cards." : " card."), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 source.Out.SendMessage(cards, eChatType.CT_System, eChatLoc.CL_SystemWindow);
             }
 
@@ -204,7 +204,7 @@ namespace DOL.GS
                             foreach (GamePlayer Groupee in m_owner.Player.Group.GetPlayersInTheGroup())
                             {
                                 if (Groupee == m_owner.Player) m_owner.Out.SendMessage("You discard the " + c.Name + " from your hand.", eChatType.CT_Emote, eChatLoc.CL_SystemWindow);
-                                else Groupee.Client.Out.SendMessage(m_owner.Player.Name + " discards " + (c.Up ? "the " + c.Name : "a card") + " from their hand.", eChatType.CT_Emote, eChatLoc.CL_SystemWindow);
+                                else Groupee.Client.Out.SendMessage(Groupee.GetPersonalizedName(m_owner.Player) + " discards " + (c.Up ? "the " + c.Name : "a card") + " from their hand.", eChatType.CT_Emote, eChatLoc.CL_SystemWindow);
                             }
                         }
                         else
@@ -302,7 +302,7 @@ namespace DOL.GS
                 {
                     DiscardAll(Groupee.Client);
                     if (Groupee == player.Player) player.Out.SendMessage("You shuffle " + numDecks + (numDecks > 1 ? " decks " : " deck ") + "of cards.", eChatType.CT_Emote, eChatLoc.CL_SystemWindow);
-                    else Groupee.Client.Out.SendMessage(player.Player.Name + " shuffles " + numDecks + (numDecks > 1 ? " decks " : " deck ") + "of cards.", eChatType.CT_Emote, eChatLoc.CL_SystemWindow);
+                    else Groupee.Client.Out.SendMessage(Groupee.GetPersonalizedName(player.Player) + " shuffles " + numDecks + (numDecks > 1 ? " decks " : " deck ") + "of cards.", eChatType.CT_Emote, eChatLoc.CL_SystemWindow);
                 }
             }
             catch (Exception)
@@ -319,7 +319,7 @@ namespace DOL.GS
             Card c;
 
             if (!dealer.Player.Group.IsInTheGroup(player.Player))
-            { dealer.Out.SendMessage(player.Player.Name + " must be in your group to play cards!", eChatType.CT_System, eChatLoc.CL_SystemWindow); return; }
+            { dealer.Out.SendMessage(dealer.Player.GetPersonalizedName(player.Player) + " must be in your group to play cards!", eChatType.CT_System, eChatLoc.CL_SystemWindow); return; }
             if (!IsDealer(dealer))
             { dealer.Out.SendMessage("You must use /shuffle to prepare cards before dealing!", eChatType.CT_System, eChatLoc.CL_SystemWindow); return; }
             if (!IsPlayer(player))
@@ -343,11 +343,11 @@ namespace DOL.GS
             foreach (GamePlayer Groupee in dealer.Player.Group.GetPlayersInTheGroup())
             {
                 if (Groupee == dealer.Player)
-                    dealer.Out.SendMessage("You deal " + (player == dealer ? "yourself" : player.Player.Name) + (up ? " the " + c.Name : " a card face down") + ".", eChatType.CT_Emote, eChatLoc.CL_SystemWindow);
+                    dealer.Out.SendMessage("You deal " + (player == dealer ? "yourself" : dealer.Player.GetPersonalizedName(player.Player)) + (up ? " the " + c.Name : " a card face down") + ".", eChatType.CT_Emote, eChatLoc.CL_SystemWindow);
                 else if (Groupee == player.Player)
-                    player.Out.SendMessage(dealer.Player.Name + " deals you the " + c.Name + ".", eChatType.CT_Emote, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage(player.Player.GetPersonalizedName(dealer.Player) + " deals you the " + c.Name + ".", eChatType.CT_Emote, eChatLoc.CL_SystemWindow);
                 else
-                    Groupee.Client.Out.SendMessage(dealer.Player.Name + " deals " + (player == dealer ? "themself" : player.Player.Name) + (up ? " the " + c.Name : " a card face down") + ".", eChatType.CT_Emote, eChatLoc.CL_SystemWindow);
+                    Groupee.Client.Out.SendMessage(Groupee.GetPersonalizedName(dealer.Player) + " deals " + (player == dealer ? "themself" : Groupee.GetPersonalizedName(player.Player)) + (up ? " the " + c.Name : " a card face down") + ".", eChatType.CT_Emote, eChatLoc.CL_SystemWindow);
             }
             return;
         }
@@ -357,7 +357,7 @@ namespace DOL.GS
         {
             if (!IsPlayer(target))
             {
-                source.Player.Out.SendMessage((source == target ? "You have" : target.Player.Name + " has") + " no cards.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                source.Player.Out.SendMessage((source == target ? "You have" : source.Player.GetPersonalizedName(target.Player) + " has") + " no cards.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
             }
             (m_playerHands[target.Player.ObjectId] as PlayerHand).Held(source);
@@ -375,7 +375,7 @@ namespace DOL.GS
                 if (Groupee == player.Player)
                     player.Out.SendMessage("You show your hand.", eChatType.CT_Emote, eChatLoc.CL_SystemWindow);
                 else
-                    Groupee.Client.Out.SendMessage(player.Player.Name + " shows their hand.", eChatType.CT_Emote, eChatLoc.CL_SystemWindow);
+                    Groupee.Client.Out.SendMessage(Groupee.GetPersonalizedName(player.Player) + " shows their hand.", eChatType.CT_Emote, eChatLoc.CL_SystemWindow);
             }
         }
 

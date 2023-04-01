@@ -82,7 +82,7 @@ namespace DOL.GS.Commands
             {
                 if (GameServer.ServerRules.IsAllowedToUnderstand(p, player) || ((eBroadcastType)ServerProperties.Properties.BROADCAST_TYPE == eBroadcastType.Server))
                 {
-                    p.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Commands.Players.Broadcast.Message", player.Name, message), eChatType.CT_Broadcast, eChatLoc.CL_ChatWindow);
+                    p.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Commands.Players.Broadcast.Message", p.GetPersonalizedName(player), message), eChatType.CT_Broadcast, eChatLoc.CL_ChatWindow);
                 }
             }
 

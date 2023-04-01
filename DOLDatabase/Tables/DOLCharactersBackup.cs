@@ -161,6 +161,7 @@ namespace DOL.Database
             this.SerializedAbilities = character.SerializedAbilities;
             this.SerializedCraftingSkills = character.SerializedCraftingSkills;
             this.SerializedFriendsList = character.SerializedFriendsList;
+            this.SerializedAskNameList = character.SerializedAskNameList;
             this.SerializedIgnoreList = character.SerializedIgnoreList;
             this.SerializedRealmAbilities = character.SerializedRealmAbilities;
             this.SerializedSpecs = character.SerializedSpecs;

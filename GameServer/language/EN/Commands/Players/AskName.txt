@@ -1,0 +1,5 @@
+Commands.Players.Askname.Added:			{0} has accepted your request
+Commands.Players.Askname.Description:	Allows you to see player's name
+Commands.Players.Askname.Request:	    {0} wants to see your name
+Commands.Players.Askname.Removed:		{0} can no longer see your name
+Commands.Players.Askname.Usage:			Target player and /askname 

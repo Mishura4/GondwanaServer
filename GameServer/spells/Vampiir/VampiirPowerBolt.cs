@@ -105,16 +105,16 @@ namespace DOL.GS.Spells
                     target.Mana -= power;
                     if (target is GamePlayer)
                     {
-                        ((GamePlayer)target).Out.SendMessage(caster.Name + " takes " + power + " power!", eChatType.CT_YouWereHit, eChatLoc.CL_SystemWindow);
+                        ((GamePlayer)target).Out.SendMessage((target as GamePlayer).GetPersonalizedName(caster) + " takes " + power + " power!", eChatType.CT_YouWereHit, eChatLoc.CL_SystemWindow);
                     }
 
                     if (caster is GamePlayer)
                     {
-                        ((GamePlayer)caster).Out.SendMessage("You receive " + power + " power from " + target.Name + "!", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                        ((GamePlayer)caster).Out.SendMessage("You receive " + power + " power from " + (caster as GamePlayer).GetPersonalizedName(target) + "!", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
                     }
                 }
                 else
-                    ((GamePlayer)caster).Out.SendMessage("You did not receive any power from " + target.Name + "!", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                    ((GamePlayer)caster).Out.SendMessage("You did not receive any power from " + (caster as GamePlayer).GetPersonalizedName(target) + "!", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
 
                 //Place the caster in combat
                 if (target is GamePlayer)

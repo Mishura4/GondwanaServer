@@ -176,7 +176,10 @@ namespace DOL.GS.RealmAbilities
             GamePlayer player = owner as GamePlayer;
             if (player != null)
             {
-                player.Out.SendMessage("You hit " + target.Name + " for " + damage + "(" + resist + ") points of damage!", eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
+                if (target is GamePlayer targetPlayer)
+                    player.Out.SendMessage("You hit " + player.GetPersonalizedName(targetPlayer) + " for " + damage + "(" + resist + ") points of damage!", eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
+                else
+                    player.Out.SendMessage("You hit " + target.Name + " for " + damage + "(" + resist + ") points of damage!", eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
             }
 
             foreach (GamePlayer p in target.GetPlayersInRadius(false, WorldMgr.VISIBILITY_DISTANCE))

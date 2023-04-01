@@ -383,7 +383,7 @@ namespace DOL.GS.Spells
                 ad.Damage = 0;
                 ad.CriticalDamage = 0;
                 GamePlayer player = ad.Attacker as GamePlayer;
-                player.Out.SendMessage(living.Name + " is Phaseshifted and can't be attacked!", eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(player.GetPersonalizedName(living) + " is Phaseshifted and can't be attacked!", eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
             }
         }
 

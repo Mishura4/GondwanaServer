@@ -183,7 +183,7 @@ namespace DOL.GS.Spells
                 }
                 if (PhaseShift != null)
                 {
-                    MessageToCaster(m_spellTarget.Name + " is Phaseshifted and can't be attacked!", eChatType.CT_System); return false;
+                    MessageToCaster((Caster as GamePlayer).GetPersonalizedName(m_spellTarget) + " is Phaseshifted and can't be attacked!", eChatType.CT_System); return false;
                 }
                 if (SelectiveBlindness != null)
                 {
@@ -198,7 +198,7 @@ namespace DOL.GS.Spells
                 }
                 if (m_spellTarget.HasAbility(Abilities.DamageImmunity))
                 {
-                    MessageToCaster(m_spellTarget.Name + " is immune to this effect!", eChatType.CT_SpellResisted);
+                    MessageToCaster((Caster as GamePlayer).GetPersonalizedName(m_spellTarget) + " is immune to this effect!", eChatType.CT_SpellResisted);
                     return false;
                 }
                 if (GameServer.ServerRules.IsAllowedToAttack(Caster, m_spellTarget, true) && chamber.PrimarySpell.Target.ToLower() == "realm")

@@ -35,14 +35,14 @@ namespace DOL.GS.RealmAbilities
 
             if (!caster.TargetInView)
             {
-                caster.Out.SendMessage(caster.TargetObject.Name + " is not in view.", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
+                caster.Out.SendMessage(caster.GetPersonalizedName((GamePlayer)caster.TargetObject) + " is not in view.", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
                 caster.DisableSkill(this, 3 * 1000);
                 return;
             }
 
             if (!caster.IsWithinRadius(caster.TargetObject, 1875))
             {
-                caster.Out.SendMessage(caster.TargetObject.Name + " is too far away.", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                caster.Out.SendMessage(caster.GetPersonalizedName((GamePlayer)caster.TargetObject) + " is too far away.", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
                 caster.DisableSkill(this, 3 * 1000);
                 return;
             }
@@ -116,7 +116,7 @@ namespace DOL.GS.RealmAbilities
                 }
                 else
                 {
-                    i_player.MessageFromArea(caster, caster.Name + " casts a spell!", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                    i_player.MessageFromArea(caster, i_player.GetPersonalizedName(caster) + " casts a spell!", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
                 }
 
                 i_player.Out.SendSpellCastAnimation(caster, 7029, 20);
@@ -143,7 +143,7 @@ namespace DOL.GS.RealmAbilities
 
             if (!caster.IsWithinRadius(caster.TargetObject, 1875))
             {
-                caster.Out.SendMessage(caster.TargetObject.Name + " is too far away.", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                caster.Out.SendMessage(caster.GetPersonalizedName((GamePlayer)caster.TargetObject) + " is too far away.", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
                 caster.DisableSkill(this, 3 * 1000);
                 return 0;
             }
@@ -219,7 +219,7 @@ namespace DOL.GS.RealmAbilities
                     SendUpdates(aeplayer);
                 }
 
-                caster.Out.SendMessage("You hit " + aeplayer.Name + " for " + dmgValue + " damage.", eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
+                caster.Out.SendMessage("You hit " + caster.GetPersonalizedName(aeplayer) + " for " + dmgValue + " damage.", eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
 
                 foreach (GamePlayer player3 in living.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
                 {

@@ -160,20 +160,20 @@ namespace DOL.GS.Commands
                     LanguageMgr.GetTranslation(
                         client.Account.Language,
                         "Commands.Players.Invite.YouInvite",
-                        target.Name),
+                        client.Player.GetPersonalizedName(target)),
                     eChatType.CT_System, eChatLoc.CL_SystemWindow);
             target.Out.SendGroupInviteCommand(
                 client.Player,
                 LanguageMgr.GetTranslation(
                     targetNewClient.Account.Language,
                     "Commands.Players.Invite.InvitedYouTo",
-                    client.Player.Name,
+                    target.GetPersonalizedName(client.Player),
                     client.Player.GetPronoun(1, false)));
             target.Out.SendMessage(
                 LanguageMgr.GetTranslation(
                     targetNewClient.Account.Language,
                     "Commands.Players.Invite.InvitedYou",
-                    client.Player.Name,
+                    target.GetPersonalizedName(client.Player),
                     client.Player.GetPronoun(1, false)),
                 eChatType.CT_System, eChatLoc.CL_SystemWindow);
 

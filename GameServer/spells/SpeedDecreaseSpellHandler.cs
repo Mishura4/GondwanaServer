@@ -43,7 +43,10 @@ namespace DOL.GS.Spells
             // Cannot apply if the effect owner has a charging effect
             if (effect.Owner.EffectList.GetOfType<ChargeEffect>() != null || effect.Owner.TempProperties.getProperty("Charging", false))
             {
-                MessageToCaster(effect.Owner.Name + " is moving too fast for this spell to have any effect!", eChatType.CT_SpellResisted);
+                if (m_caster is GamePlayer player)
+                    MessageToCaster(player.GetPersonalizedName(effect.Owner) + " is moving too fast for this spell to have any effect!", eChatType.CT_SpellResisted);
+                else
+                    MessageToCaster(effect.Owner.Name + " is moving too fast for this spell to have any effect!", eChatType.CT_SpellResisted);
                 return;
             }
             base.OnEffectStart(effect);

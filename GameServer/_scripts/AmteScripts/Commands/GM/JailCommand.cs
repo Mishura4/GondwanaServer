@@ -180,12 +180,12 @@ namespace DOL.GS.Scripts
                 if (RP)
                 {
                     JailMgr.EmprisonnerRP(Prisonnier, cost, sortie, player.Name, raison, false);
-                    player.Out.SendMessage(Prisonnier.Name + " a été emprisonné avec une amende de " + cost + "po.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage( player.GetPersonalizedName(Prisonnier) + " a été emprisonné avec une amende de " + cost + "po.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 }
                 else
                 {
                     JailMgr.EmprisonnerHRP(Prisonnier, sortie, player.Name, raison);
-                    player.Out.SendMessage(Prisonnier.Name + " a été emprisonné.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage(player.GetPersonalizedName(Prisonnier) + " a été emprisonné.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 }
             }
             else

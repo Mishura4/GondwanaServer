@@ -94,7 +94,7 @@ namespace DOL.GS.Spells
             foreach (GamePlayer player in FSTarget.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
             {
                 if (player != FSTarget)
-                    MessageToLiving(player, string.Format(Spell.Message3, FSTarget.Name), eChatType.CT_Spell);
+                    MessageToLiving(player, string.Format(Spell.Message3, player.GetPersonalizedName(FSTarget)), eChatType.CT_Spell);
             }
 
             timer = new FSTimer(Caster, this);
@@ -121,7 +121,7 @@ namespace DOL.GS.Spells
             foreach (GamePlayer player in FSTarget.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
             {
                 if (player != FSTarget)
-                    MessageToLiving(player, string.Format(Spell.Message4, FSTarget.Name), eChatType.CT_System);
+                    MessageToLiving(player, string.Format(Spell.Message4, player.GetPersonalizedName(FSTarget)), eChatType.CT_System);
             }
 
             return base.OnEffectExpires(effect, noMessages);

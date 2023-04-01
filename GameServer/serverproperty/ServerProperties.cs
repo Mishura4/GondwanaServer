@@ -2652,6 +2652,12 @@ namespace DOL.GS.ServerProperties
         [ServerProperty("trading", "trading_tax", "Set the tax percentage of trading", 10)]
         public static int TRADING_TAX;
 
+        /// <summary>
+        /// Set the tax percentage of trading
+        /// </summary>
+        [ServerProperty("name", "ask_name", "Set hiding of not /askname players", true)]
+        public static bool HIDE_PLAYER_NAME;
+
         #endregion
 
         public static IDictionary<string, object> AllCurrentProperties

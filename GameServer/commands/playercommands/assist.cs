@@ -78,7 +78,7 @@ namespace DOL.GS.Commands
                                 if (!HasTarget(client, assistPlayer))
                                     return;
 
-                                YouAssist(client, assistPlayer.Name, assistPlayer.TargetObject);
+                                YouAssist(client, client.Player.GetPersonalizedName(assistPlayer), assistPlayer.TargetObject);
                                 return;
                             }
                         #endregion
@@ -89,7 +89,7 @@ namespace DOL.GS.Commands
                                 if (!HasTarget(client, assistPlayer))
                                     return;
 
-                                YouAssist(client, assistPlayer.Name, assistPlayer.TargetObject);
+                                YouAssist(client, client.Player.GetPersonalizedName(assistPlayer), assistPlayer.TargetObject);
                                 return;
                             }
                         #endregion
@@ -109,7 +109,7 @@ namespace DOL.GS.Commands
                                         if (!HasTarget(client, assistPlayer))
                                             return;
 
-                                        YouAssist(client, assistPlayer.Name, assistPlayer.TargetObject);
+                                        YouAssist(client, client.Player.GetPersonalizedName(assistPlayer), assistPlayer.TargetObject);
                                         return;
                                     }
 
@@ -120,7 +120,7 @@ namespace DOL.GS.Commands
                                         if (!HasTarget(client, assistPlayer))
                                             return;
 
-                                        YouAssist(client, assistPlayer.Name, assistPlayer.TargetObject);
+                                        YouAssist(client, client.Player.GetPersonalizedName(assistPlayer), assistPlayer.TargetObject);
                                         return;
                                     }
                                 }
@@ -132,7 +132,7 @@ namespace DOL.GS.Commands
                                     if (!HasTarget(client, assistPlayer))
                                         return;
 
-                                    YouAssist(client, assistPlayer.Name, assistPlayer.TargetObject);
+                                    YouAssist(client, client.Player.GetPersonalizedName(assistPlayer), assistPlayer.TargetObject);
                                     return;
                                 }
 
@@ -146,7 +146,7 @@ namespace DOL.GS.Commands
                                         if (!HasTarget(client, assistPlayer))
                                             return;
 
-                                        YouAssist(client, assistPlayer.Name, assistPlayer.TargetObject);
+                                        YouAssist(client, client.Player.GetPersonalizedName(assistPlayer), assistPlayer.TargetObject);
                                         return;
                                     }
                                 }
@@ -161,7 +161,7 @@ namespace DOL.GS.Commands
                                         if (!HasTarget(client, assistPlayer))
                                             return;
 
-                                        YouAssist(client, assistPlayer.Name, assistPlayer.TargetObject);
+                                        YouAssist(client, client.Player.GetPersonalizedName(assistPlayer), assistPlayer.TargetObject);
                                         return;
                                     }
                                 }
@@ -263,7 +263,7 @@ namespace DOL.GS.Commands
                                         if (!HasTarget(client, targetPlayer))
                                             return;
 
-                                        YouAssist(client, targetPlayer.Name, targetPlayer.TargetObject);
+                                        YouAssist(client, client.Player.GetPersonalizedName(targetPlayer), targetPlayer.TargetObject);
                                         return;
                                     }
 
@@ -274,7 +274,7 @@ namespace DOL.GS.Commands
                                         if (!HasTarget(client, targetPlayer))
                                             return;
 
-                                        YouAssist(client, targetPlayer.Name, targetPlayer.TargetObject);
+                                        YouAssist(client, client.Player.GetPersonalizedName(targetPlayer), targetPlayer.TargetObject);
                                         return;
                                     }
 
@@ -285,7 +285,7 @@ namespace DOL.GS.Commands
                                         if (!HasTarget(client, targetPlayer))
                                             return;
 
-                                        YouAssist(client, targetPlayer.Name, targetPlayer.TargetObject);
+                                        YouAssist(client, client.Player.GetPersonalizedName(targetPlayer), targetPlayer.TargetObject);
                                         return;
                                     }
 
@@ -299,7 +299,7 @@ namespace DOL.GS.Commands
                                             if (!HasTarget(client, targetPlayer))
                                                 return;
 
-                                            YouAssist(client, targetPlayer.Name, targetPlayer.TargetObject);
+                                            YouAssist(client, client.Player.GetPersonalizedName(targetPlayer), targetPlayer.TargetObject);
                                             return;
                                         }
                                     }
@@ -314,7 +314,7 @@ namespace DOL.GS.Commands
                                             if (!HasTarget(client, targetPlayer))
                                                 return;
 
-                                            YouAssist(client, targetPlayer.Name, targetPlayer.TargetObject);
+                                            YouAssist(client, client.Player.GetPersonalizedName(targetPlayer), targetPlayer.TargetObject);
                                             return;
                                         }
                                     }

@@ -31,6 +31,10 @@ namespace DOL.GS
         /// Reference to the Instanced GameServer
         /// </summary>
         private GameServer GameServerInstance { get; set; }
+        /// <summary>
+        /// PLayer joined since server start count
+        /// </summary>
+        public int PlayerCount { get; set; }
 
         /// <summary>
         /// Reference to the Invalid Names Manager

@@ -28,12 +28,12 @@ namespace DOL.GS.RealmAbilities
             if (!(caster.TargetObject is GameLiving)
                 || !GameServer.ServerRules.IsAllowedToAttack(caster, (GameLiving)caster.TargetObject, true))
             {
-                caster.Out.SendMessage("You cannot attack " + caster.TargetObject.Name + "!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                caster.Out.SendMessage("You cannot attack " + caster.GetPersonalizedName((GameLiving)caster.TargetObject) + "!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
             }
             if (!caster.TargetInView)
             {
-                caster.Out.SendMessage("You cannot see " + caster.TargetObject.Name + "!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                caster.Out.SendMessage("You cannot see " + caster.GetPersonalizedName((GameLiving)caster.TargetObject) + "!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
             }
             if (!caster.IsWithinRadius(caster.TargetObject, 1500))
@@ -74,7 +74,7 @@ namespace DOL.GS.RealmAbilities
                 }
                 else
                 {
-                    i_player.MessageFromArea(caster, caster.Name + " casts a spell!", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                    i_player.MessageFromArea(caster, i_player.GetPersonalizedName(caster) + " casts a spell!", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
                 }
             }
             Statics.StaticTempestBase st = new Statics.StaticTempestBase(m_stunDuration);

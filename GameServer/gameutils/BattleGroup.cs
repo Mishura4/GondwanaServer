@@ -85,7 +85,7 @@ namespace DOL.GS
                 player.Out.SendMessage("You join the battle group.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 foreach (GamePlayer member in Members.Keys)
                 {
-                    member.Out.SendMessage(player.Name + " has joined the battle group.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    member.Out.SendMessage(member.GetPersonalizedName(player) + " has joined the battle group.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 }
                 m_battlegroupMembers.Add(player, leader);
 
@@ -216,7 +216,7 @@ namespace DOL.GS
                 player.Out.SendMessage("You leave the battle group.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 foreach (GamePlayer member in Members.Keys)
                 {
-                    member.Out.SendMessage(player.Name + " has left the battle group.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    member.Out.SendMessage(member.GetPersonalizedName(player) + " has left the battle group.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 }
                 if (m_battlegroupMembers.Count == 1)
                 {

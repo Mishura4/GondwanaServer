@@ -694,7 +694,7 @@ namespace DOL.GS.Spells
 
             if (selectedTarget != null && selectedTarget.HasAbility("DamageImmunity") && Spell.SpellType == "DirectDamage" && Spell.Radius == 0)
             {
-                if (!quiet) MessageToCaster(selectedTarget.Name + " is immune to this effect!", eChatType.CT_SpellResisted);
+                if (!quiet) MessageToCaster(((GamePlayer)m_caster).GetPersonalizedName(selectedTarget) + " is immune to this effect!", eChatType.CT_SpellResisted);
                 return false;
             }
 
@@ -2673,7 +2673,7 @@ namespace DOL.GS.Spells
                 effect1 = SpellHandler.FindEffectOnTarget(target, "Phaseshift");
                 if ((effect1 != null && (Spell.SpellType != "SpreadHeal" || Spell.SpellType != "Heal" || Spell.SpellType != "SpeedEnhancement")))
                 {
-                    MessageToCaster(target.Name + " is Phaseshifted and can't be effected by this Spell!", eChatType.CT_SpellResisted);
+                    MessageToCaster(((GamePlayer)m_caster).GetPersonalizedName(target) + " is Phaseshifted and can't be effected by this Spell!", eChatType.CT_SpellResisted);
                     return;
                 }
             }
@@ -2682,7 +2682,7 @@ namespace DOL.GS.Spells
             if (pertrifyEffect != null && (HasPositiveOrSpeedEffect() || Spell.Pulse > 0 || Spell.SpellType == "Petrify" || Spell.SpellType == "Damnation"))
             {
                 if (Caster is GamePlayer player)
-                    MessageToCaster(LanguageMgr.GetTranslation(player.Client, "Petrify.Target.Resist", target.Name), eChatType.CT_SpellResisted);
+                    MessageToCaster(LanguageMgr.GetTranslation(player.Client, "Petrify.Target.Resist", ((GamePlayer)m_caster).GetPersonalizedName(target)), eChatType.CT_SpellResisted);
                 return;
             }
 
@@ -2722,7 +2722,7 @@ namespace DOL.GS.Spells
                 {
                     if (!isSilent)
                     {
-                        MessageToCaster(String.Format("Your spell has no effect on the {0}!", target.Name), eChatType.CT_SpellResisted);
+                        MessageToCaster(String.Format("Your spell has no effect on the {0}!", ((GamePlayer)m_caster).GetPersonalizedName(target)), eChatType.CT_SpellResisted);
                     }
 
                     return;
@@ -3128,7 +3128,7 @@ namespace DOL.GS.Spells
                     GamePlayer owner = brain.GetPlayerOwner();
                     if (owner != null)
                     {
-                        this.MessageToLiving(owner, eChatType.CT_SpellResisted, "Your {0} resists the effect!", target.Name);
+                        this.MessageToLiving(owner, eChatType.CT_SpellResisted, "Your {0} resists the effect!", owner.GetPersonalizedName(target));
                     }
                 }
             }
@@ -3138,7 +3138,7 @@ namespace DOL.GS.Spells
             }
 
             // Deliver message to the caster as well.
-            this.MessageToCaster(eChatType.CT_SpellResisted, "{0} resists the effect!", target.GetName(0, true));
+            this.MessageToCaster(eChatType.CT_SpellResisted, "{0} resists the effect!", ((GamePlayer)m_caster).GetPersonalizedName(target));
         }
 
         /// <summary>
@@ -4014,7 +4014,7 @@ namespace DOL.GS.Spells
             if (ad.Modifier < 0)
                 modmessage = " (" + ad.Modifier + ")";
             if (Caster is GamePlayer || Caster is NecromancerPet)
-                MessageToCaster(string.Format("You hit {0} for {1}{2} damage!", ad.Target.GetName(0, false), ad.Damage, modmessage), eChatType.CT_YouHit);
+                MessageToCaster(string.Format("You hit {0} for {1}{2} damage!", (Caster as GamePlayer).GetPersonalizedName(ad.Target), ad.Damage, modmessage), eChatType.CT_YouHit);
             else if (Caster is GameNPC)
                 MessageToCaster(string.Format("Your " + Caster.Name + " hits {0} for {1}{2} damage!",
                                               ad.Target.GetName(0, false), ad.Damage, modmessage), eChatType.CT_YouHit);

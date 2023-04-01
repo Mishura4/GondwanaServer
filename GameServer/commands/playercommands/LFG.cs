@@ -89,7 +89,7 @@ namespace DOL.GS.Commands
                         LanguageMgr.GetTranslation(
                             player.Client.Account.Language,
                             "Commands.Players.LFG.Message",
-                            player.Name, message),
+                            c.Player.GetPersonalizedName(player), message),
                         eChatType.CT_LFG, eChatLoc.CL_ChatWindow);
                 }
             }

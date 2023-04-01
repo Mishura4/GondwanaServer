@@ -86,7 +86,7 @@ namespace DOL.GS.Spells
             // Is immune ?
             if (selectedTarget != null && selectedTarget.HasAbility("DamageImmunity"))
             {
-                MessageToCaster(selectedTarget.Name + " is immune to this effect!", eChatType.CT_SpellResisted);
+                MessageToCaster(((GamePlayer)m_caster).GetPersonalizedName(selectedTarget) + " is immune to this effect!", eChatType.CT_SpellResisted);
                 return false;
             }
 

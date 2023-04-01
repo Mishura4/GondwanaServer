@@ -474,6 +474,16 @@ namespace DOL.GS
         }
 
         /// <summary>
+        /// Gets or sets the SerializedAskNameList for this player
+        /// (delegate to property in DBCharacter)
+        /// </summary>
+        public string[] SerializedAskNameList
+        {
+            get { return DBCharacter != null ? DBCharacter.SerializedAskNameList.Split(',').Select(name => name.Trim()).Where(name => !string.IsNullOrEmpty(name)).ToArray() : Array.Empty<string>(); }
+            set { if (DBCharacter != null) DBCharacter.SerializedAskNameList = string.Join(",", value.Select(name => name.Trim()).Where(name => !string.IsNullOrEmpty(name))); }
+        }
+
+        /// <summary>
         /// Gets or sets the NotDisplayedInHerald for this player
         /// (delegate to property in DBCharacter)
         /// </summary>
@@ -2147,6 +2157,34 @@ namespace DOL.GS
             }
             set
             { }
+        }
+
+        /// <summary>
+        /// Number of the player name (for personalization)
+        /// </summary>
+        int PlayerNameNumber = 0;
+
+        /// <summary>
+        /// Checks another player modified name for this player
+        /// (delegate to PlayerCharacter)
+        /// </summary>
+        /// <param name="player">the player to check</param>
+        /// <returns>true if player can be shown</returns>
+        public string GetPersonalizedName(GameLiving living)
+        {
+            if (living == null)
+                return "";
+
+            if (Client == null || !DOL.GS.ServerProperties.Properties.HIDE_PLAYER_NAME || !(living is GamePlayer player) || player == this)
+                return living.Name;
+
+            if (player == this)
+                return player.Name;
+
+            if (SerializedAskNameList.Contains(player.Name) || SerializedFriendsList.Contains(player.Name))
+                return player.Name;
+            // get row position in db by CreationDate
+            return "(" + player.Race + " " + Client.SessionID + ")";
         }
 
         /// <summary>
@@ -8994,11 +9032,11 @@ namespace DOL.GS
                             GamePlayer partner = TradeWindow.Partner;
                             if (partner == null)
                             {
-                                source.Out.SendMessage(Name + " is still selfcrafting.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                source.Out.SendMessage(source.GetPersonalizedName(this) + " is still selfcrafting.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             }
                             else
                             {
-                                source.Out.SendMessage(Name + " is still trading with " + partner.Name + ".", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                source.Out.SendMessage(source.GetPersonalizedName(this) + " is still trading with " + source.GetPersonalizedName(partner) + ".", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             }
                         }
                         else if (source.TradeWindow != null)
@@ -9010,7 +9048,7 @@ namespace DOL.GS
                             }
                             else
                             {
-                                source.Out.SendMessage("You are still trading with " + sourceTradePartner.Name + ".", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                source.Out.SendMessage("You are still trading with " + GetPersonalizedName(sourceTradePartner) + ".", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             }
                         }
                         return false;
@@ -9052,11 +9090,11 @@ namespace DOL.GS
                             GamePlayer partner = TradeWindow.Partner;
                             if (partner == null)
                             {
-                                source.Out.SendMessage(Name + " is still selfcrafting.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                source.Out.SendMessage(source.GetPersonalizedName(this) + " is still selfcrafting.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             }
                             else
                             {
-                                source.Out.SendMessage(Name + " is still trading with " + partner.Name + ".", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                source.Out.SendMessage(source.GetPersonalizedName(this) + " is still trading with " + source.GetPersonalizedName(partner) + ".", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             }
                         }
                         else if (source.TradeWindow != null)
@@ -9068,7 +9106,7 @@ namespace DOL.GS
                             }
                             else
                             {
-                                source.Out.SendMessage("You are still trading with " + sourceTradePartner.Name + ".", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                source.Out.SendMessage("You are still trading with " + source.GetPersonalizedName(sourceTradePartner) + ".", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             }
                         }
                         return false;
@@ -10087,11 +10125,11 @@ namespace DOL.GS
                 type = eChatType.CT_Staff;
 
             if (GameServer.ServerRules.IsAllowedToUnderstand(source, this))
-                Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.SendReceive.Sends", source.Name, str), type,
+                Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.SendReceive.Sends", GetPersonalizedName(source), str), type,
                                 eChatLoc.CL_ChatWindow);
             else
             {
-                Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.SendReceive.FalseLanguage", source.Name),
+                Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.SendReceive.FalseLanguage", GetPersonalizedName(source)),
                                 eChatType.CT_Send, eChatLoc.CL_ChatWindow);
                 return true;
             }
@@ -10101,13 +10139,13 @@ namespace DOL.GS
             {
                 if (afkmessage == "")
                 {
-                    source.Out.SendMessage(LanguageMgr.GetTranslation(source.Client.Account.Language, "GameObjects.GamePlayer.SendReceive.Afk", Name),
+                    source.Out.SendMessage(LanguageMgr.GetTranslation(source.Client.Account.Language, "GameObjects.GamePlayer.SendReceive.Afk", source.GetPersonalizedName(this)),
                                            eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 }
                 else
                 {
                     source.Out.SendMessage(
-                        LanguageMgr.GetTranslation(source.Client.Account.Language, "GameObjects.GamePlayer.SendReceive.AfkMessage", Name, afkmessage), eChatType.CT_Say,
+                        LanguageMgr.GetTranslation(source.Client.Account.Language, "GameObjects.GamePlayer.SendReceive.AfkMessage", source.GetPersonalizedName(this), afkmessage), eChatType.CT_Say,
                         eChatLoc.CL_ChatWindow);
                 }
             }
@@ -10132,7 +10170,7 @@ namespace DOL.GS
 
             if (!target.PrivateMessageReceive(this, str))
             {
-                Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Send.target.DontUnderstandYou", target.Name),
+                Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Send.target.DontUnderstandYou", GetPersonalizedName(target)),
                                 eChatType.CT_Send, eChatLoc.CL_ChatWindow);
                 return false;
             }
@@ -10140,7 +10178,7 @@ namespace DOL.GS
             if (Client.Account.PrivLevel == 1 && target.Client.Account.PrivLevel > 1 && target.IsAnonymous)
                 return true;
 
-            Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Send.YouSendTo", str, target.Name), eChatType.CT_Send,
+            Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Send.YouSendTo", str, GetPersonalizedName(target)), eChatType.CT_Send,
                             eChatLoc.CL_ChatWindow);
 
             return true;
@@ -13037,6 +13075,9 @@ namespace DOL.GS
             if (!(obj is DOLCharacters))
                 return;
             m_dbCharacter = (DOLCharacters)obj;
+
+            GameServer.Instance.PlayerManager.PlayerCount++;
+            PlayerNameNumber = GameServer.Instance.PlayerManager.PlayerCount;
 
             Wallet.InitializeFromDatabase();
 

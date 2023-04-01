@@ -389,7 +389,7 @@ namespace DOL.GS.Commands
                             target.Inventory.RemoveItem(item);
                             stealer.Inventory.AddItem(slot, item);
 
-                            stealer.Out.SendMessage(LanguageMgr.GetTranslation(stealer.Client.Account.Language, "Commands.Players.Vol.StealItem", item.Name, target.Name), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                            stealer.Out.SendMessage(LanguageMgr.GetTranslation(stealer.Client.Account.Language, "Commands.Players.Vol.StealItem", item.Name, stealer.GetPersonalizedName(target)), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                             target.Out.SendMessage(LanguageMgr.GetTranslation(target.Client.Account.Language, "Commands.Players.Vol.BeStealedItem", item.Name, target.Name), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                         }
                     }
