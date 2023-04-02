@@ -102,7 +102,7 @@ namespace DOL.GS.Scripts
                     GameServer.Database.SelectObject<DOLCharacters>(DB.Column("Name").IsEqualTo(item.Name.Substring("Tête de ".Length, item.Name.Length - "Tête de ".Length)));
                 if (killerPlayer != null)
                 {
-                    reward *= (int)(killerPlayer.Reputation / 0.5);
+                    reward *= (int)(-killerPlayer.Reputation / 0.5);
                 }
             }
 

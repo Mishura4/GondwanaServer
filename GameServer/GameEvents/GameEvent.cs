@@ -44,9 +44,58 @@ namespace DOL.GameEvents
             Mobs = new List<GameNPC>();
             foreach (var mob in ev.Mobs)
             {
-                var newMob = new GameNPC();
-                newMob.LoadFromDatabase(GameServer.Database.FindObjectByKey<Mob>(mob.InternalID));
+                GameNPC newMob = null;
+                var mobDef = GameServer.Database.FindObjectByKey<Mob>(mob.InternalID);
+                Console.WriteLine("MobDef: " + mobDef.ClassType);
+                Type type = ScriptMgr.FindNPCGuildScriptClass(mobDef.Guild, (eRealm)mob.Realm);
+                Assembly gasm = Assembly.GetAssembly(typeof(GameServer));
+                if (type != null)
+                {
+                    try
+                    {
+                        newMob = (GameNPC)type.Assembly.CreateInstance(type.FullName);
+                    }
+                    catch (Exception e)
+                    {
+                        if (log.IsErrorEnabled)
+                            log.Error("LoadFromDatabase", e);
+                    }
+                }
+                if (newMob == null)
+                {
+                    try
+                    {
+                        newMob = (GameNPC)gasm.CreateInstance(mobDef.ClassType, false);
+                    }
+                    catch
+                    {
+                    }
+                    if (newMob == null)
+                    {
+                        foreach (Assembly asm in ScriptMgr.Scripts)
+                        {
+                            try
+                            {
+                                newMob = (GameNPC)asm.CreateInstance(mobDef.ClassType, false);
+                            }
+                            catch
+                            {
+                            }
+
+                            if (newMob != null)
+                                break;
+                        }
+                    }
+                }
+                if (newMob == null)
+                {
+                    newMob = new GameNPC();
+                }
+
+                newMob.Name = mob.Name;
                 newMob.InternalID = mob.InternalID;
+                newMob.GuildName = mobDef.Guild;
+                newMob.LoadFromDatabase(mobDef);
                 newMob.BuildAmbientTexts();
                 newMob.EventID = ID;
                 Mobs.Add(newMob);

@@ -43,17 +43,17 @@ namespace DOL.GS.Spells
             {
                 spell = SkillBase.GetSpellByID((int)spell.SubSpellID);
                 m_shortDescription += ScriptMgr.CreateSpellHandler(m_caster, spell, null).ShortDescription + "\n";
-                if (spell.Radius > 0 || spell.Frequency > 0 || spell.Duration > 0)
-                {
-                    m_shortDescription += $"Does {spell.DamageType}{spell.Damage} damages to the target";
-                    if (spell.Radius > 0)
-                        m_shortDescription += "and its surroundings";
-                    if (spell.Frequency > 0)
-                        m_shortDescription += $"every {spell.Frequency} seconds";
-                    if (spell.Duration > 0)
-                        m_shortDescription += $"over a period of {spell.Duration / 1000} seconds";
-                    m_shortDescription += ".\n";
-                }
+            }
+            if (spell.Radius > 0 || spell.Frequency > 0 || spell.Duration > 0)
+            {
+                m_shortDescription += $"Does {spell.DamageType} {spell.Damage} damages to the target";
+                if (spell.Radius > 0)
+                    m_shortDescription += " and its surroundings";
+                if (spell.Frequency > 0)
+                    m_shortDescription += $" every {spell.Frequency / 1000} seconds";
+                if (spell.Duration > 0)
+                    m_shortDescription += $" over a period of {spell.Duration / 1000} seconds";
+                m_shortDescription += ".\n";
             }
         }
 
@@ -76,7 +76,7 @@ namespace DOL.GS.Spells
         }
         public override string ShortDescription
             => m_shortDescription;
-            }
+    }
 
     /// <summary>
     /// Summary description for ReanimateCorpe.

@@ -1067,7 +1067,7 @@ namespace DOL.GS.Keeps
             StartCombatTick = 0;
 
             Realm = realm;
-            if (Name != null)
+            if (Name != null && realm != eRealm.None)
                 PlayerMgr.BroadcastCapture(this);
 
             Level = (byte)ServerProperties.Properties.STARTING_KEEP_LEVEL;
@@ -1105,6 +1105,7 @@ namespace DOL.GS.Keeps
             //we reset the guards
             foreach (GameKeepGuard guard in Guards.Values)
             {
+                guard.Realm = realm;
                 if (guard is GuardLord && guard.IsAlive)
                 {
                     guard.RefreshTemplate();

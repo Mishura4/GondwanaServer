@@ -52,7 +52,7 @@ namespace DOL.GameEvents
             int counter = 0;
             while (counter < this.Events.Where(ev => ev.Status == EventStatus.NotOver).Count())
             {
-                GameEvent ev = Events[counter];
+                GameEvent ev = Events.Where(ev => ev.Status == EventStatus.NotOver).ToArray()[counter];
                 //End events with timer over
                 if (ev.EndTime.HasValue && ev.EndingConditionTypes.Contains(EndingConditionType.Timer) && DateTime.UtcNow >= ev.EndTime.Value.DateTime)
                 {

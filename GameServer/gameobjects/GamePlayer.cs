@@ -9490,7 +9490,7 @@ namespace DOL.GS
 
                             Spell spell = SkillBase.FindSpell(useItem.SpellID, potionEffectLine);
 
-                            if (spell != null)
+                            if (spell != null && !IsInvulnerableToAttack)
                             {
                                 // For potions most can be used by any player level except a few higher level ones.
                                 // So for the case of potions we will only restrict the level of usage if LevelRequirement is >0 for the item
@@ -9852,7 +9852,7 @@ namespace DOL.GS
                                 }
                             }
                         }
-                        if (useItem.MaxCharges > 0)
+                        if (useItem.MaxCharges > 0 && !IsInvulnerableToAttack)
                         {
                             useItem.Charges--;
                         }
