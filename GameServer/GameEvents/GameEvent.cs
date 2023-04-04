@@ -20,6 +20,8 @@ namespace DOL.GameEvents
         public Timer RandomTextTimer { get; }
         public Timer RemainingTimeTimer { get; }
 
+        public Timer ResetFamilyTimer { get; }
+
         public Dictionary<string, ushort> StartEffects;
         public Dictionary<string, ushort> EndEffects;
         public Dictionary<string, GameNPC> RemovedMobs { get; }
@@ -31,6 +33,7 @@ namespace DOL.GameEvents
             ID = ev.ID;
             RandomTextTimer = new Timer();
             RemainingTimeTimer = new Timer();
+            ResetFamilyTimer = new Timer();
             Owner = ev.Owner;
             InstancedConditionType = ev.InstancedConditionType;
 
@@ -113,6 +116,8 @@ namespace DOL.GameEvents
             ID = db.ObjectId;
             this.RandomTextTimer = new Timer();
             this.RemainingTimeTimer = new Timer();
+            this.ResetFamilyTimer = new Timer();
+            this.EventFamily = new Dictionary<string, bool>();
 
             ParseValuesFromDb(db);
 
@@ -160,6 +165,17 @@ namespace DOL.GameEvents
             AreaStartingId = !string.IsNullOrEmpty(db.AreaStartingId) ? db.AreaStartingId : null;
             QuestStartingId = !string.IsNullOrEmpty(db.QuestStartingId) ? db.QuestStartingId : null;
             ParallelLaunch = db.ParallelLaunch;
+
+            // get kes from string[] db.EventFamily, and set values to false 
+            if (db.EventFamily != null)
+                foreach (string family in db.EventFamily.Split('|'))
+                    EventFamily.Add(family, false);
+            if (db.TimerBeforeReset != 0)
+            {
+                TimeBeforeReset = db.TimerBeforeReset;
+                ResetFamilyTimer.Interval = ((long)TimeBeforeReset) * 1000;
+                ResetFamilyTimer.Elapsed += ResetFamilyTimer_Elapsed;
+            }
 
             //Handle invalid ChronoType
             if (TimerType == TimerType.ChronoType && ChronoTime <= 0)
@@ -212,6 +228,11 @@ namespace DOL.GameEvents
             int index = rand.Next(0, this.RandomText.Count());
 
             GameEventManager.NotifyPlayersInEventZones(this.AnnonceType, RandomText.ElementAt(index), this.EventZones);
+        }
+
+        private void ResetFamilyTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+
         }
 
         public string ID
@@ -462,6 +483,18 @@ namespace DOL.GameEvents
         }
 
         public bool ParallelLaunch
+        {
+            get;
+            set;
+        }
+
+        public Dictionary<string, bool> EventFamily
+        {
+            get;
+            set;
+        }
+
+        public int TimeBeforeReset
         {
             get;
             set;

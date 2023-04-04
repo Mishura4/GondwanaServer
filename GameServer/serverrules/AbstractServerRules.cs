@@ -1858,6 +1858,9 @@ namespace DOL.GS.ServerRules
         /// <returns>The guild name of the target</returns>
         public virtual string GetPlayerGuildName(GamePlayer source, GamePlayer target)
         {
+            if (DOL.GS.ServerProperties.Properties.HIDE_PLAYER_NAME &&
+                !source.SerializedAskNameList.Contains(target.Name))
+                return string.Empty;
             return target.GuildName;
         }
 

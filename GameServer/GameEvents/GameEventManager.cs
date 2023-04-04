@@ -1119,12 +1119,12 @@ namespace DOL.GameEvents
             //Consequence A
             if (e.EndingConditionTypes.Count() == 1 || (e.EndingConditionTypes.Count() > 1 && e.EndingConditionTypes.First() == end))
             {
-                await this.HandleConsequence(e.EndingActionA, e.EventZones, e.EndActionStartEventID, e.ResetEventId);
+                await this.HandleConsequence(e.EndingActionA, e.EventZones, e.EndActionStartEventID, e.ResetEventId, e.ID);
             }
             else
             {
                 //Consequence B
-                await this.HandleConsequence(e.EndingActionB, e.EventZones, e.EndActionStartEventID, e.ResetEventId);
+                await this.HandleConsequence(e.EndingActionB, e.EventZones, e.EndActionStartEventID, e.ResetEventId, e.ID);
             }
 
             log.Info(string.Format("Event Id: {0}, Name: {1} was stopped At: {2}", e.ID, e.EventName, DateTime.Now.ToString()));
@@ -1163,7 +1163,7 @@ namespace DOL.GameEvents
             await Task.Delay(TimeSpan.FromSeconds(5));
         }
 
-        private async Task HandleConsequence(EndingAction action, IEnumerable<string> zones, string startEventId, string resetEventId)
+        private async Task HandleConsequence(EndingAction action, IEnumerable<string> zones, string startEventId, string resetEventId, string eventId)
         {
             if (action == EndingAction.BindStone)
             {
@@ -1175,9 +1175,41 @@ namespace DOL.GameEvents
                 return;
             }
 
-            if (action == EndingAction.Event && startEventId != null)
+            if (startEventId != null)
             {
                 var ev = Instance.Events.FirstOrDefault(e => e.ID.Equals(startEventId));
+                if (ev != null && ev.TimeBeforeReset != 0)
+                {
+                    bool startEvent = true;
+                    bool startTimer = false;
+                    ev.EventFamily[eventId] = true;
+                    foreach (var family in ev.EventFamily)
+                    {
+                        if (family.Value == false)
+                        {
+                            startTimer = true;
+                            startEvent = false;
+                        }
+                    }
+
+                    if (startTimer == true)
+                    {
+                        ev.ResetFamilyTimer.Start();
+                    }
+
+                    if (startEvent == false)
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        ev.ResetFamilyTimer.Stop();
+                        foreach (var family in ev.EventFamily)
+                        {
+                            ev.EventFamily[family.Key] = false;
+                        }
+                    }
+                }
 
                 if (ev == null)
                 {
@@ -1195,7 +1227,7 @@ namespace DOL.GameEvents
                     await Instance.StartEvent(ev);
                 }
             }
-            else if (action == EndingAction.Reset && resetEventId != null)
+            if (resetEventId != null)
             {
                 var resetEvent = this.Events.FirstOrDefault(e => e.ID.Equals(resetEventId));
 

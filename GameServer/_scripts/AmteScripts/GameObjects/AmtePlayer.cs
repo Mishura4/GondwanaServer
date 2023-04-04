@@ -92,7 +92,7 @@ namespace DOL.GS
                 ItemUnique iu = new ItemUnique(HeadTemplate)
                 {
                     Name = "Tête de " + victim.Name,
-                    MessageArticle = victim.InternalID,
+                    MessageArticle = victim.InternalID + " " + victim.Reputation,
                     CanDropAsLoot = true,
                     MaxCondition = (int)DateTime.Now.Subtract(new DateTime(2000, 1, 1)).TotalSeconds
                 };

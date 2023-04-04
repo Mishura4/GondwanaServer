@@ -1,5 +1,6 @@
 ﻿using DOL.Database;
 using DOL.Database.Attributes;
+using System.Collections.Generic;
 
 
 namespace DOLDatabase.Tables
@@ -41,6 +42,8 @@ namespace DOLDatabase.Tables
         private string m_areaStartingId;
         private string m_questStartingId;
         private bool m_parallelLaunch;
+        private string m_eventFamily;
+        private int m_timerBeforeReset;
 
         [DataElement(AllowDbNull = false, Varchar = 255)]
         public string EventName
@@ -540,6 +543,29 @@ namespace DOLDatabase.Tables
             {
                 m_parallelLaunch = value;
                 Dirty = true;
+            }
+        }
+
+        [DataElement(AllowDbNull = true, Varchar = 255)]
+        public string EventFamily
+        {
+            get => m_eventFamily;
+            set
+            {
+                m_eventFamily = string.Join("|", value);
+                Dirty = true;
+            }
+        }
+
+        [DataElement(AllowDbNull = true)]
+        public int TimerBeforeReset
+        {
+            get => m_timerBeforeReset;
+
+            set
+            {
+                Dirty = true;
+                m_timerBeforeReset = value;
             }
         }
 

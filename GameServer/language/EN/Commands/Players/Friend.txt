@@ -6,3 +6,4 @@ Commands.Players.Friend.Removed:		{0} was removed from your friend list!
 Commands.Players.Friend.Unknown:		No players online with that name.
 Commands.Players.Friend.Usage:			/friend <playerName>
 Commands.Players.Friend.Askname:		You cannot add {0} in your friend list because you haven't asked his name first.
+Commands.Players.Friend.Notarget:		You have to target someone first.

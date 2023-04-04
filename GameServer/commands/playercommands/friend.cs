@@ -44,7 +44,16 @@ namespace DOL.GS.Commands
                 return;
             }
 
-            string name = string.Join(" ", args, 1, args.Length - 1);
+            string name = "";
+            if (args.Length > 2)
+                name = string.Join(" ", args, 1, args.Length - 1);
+            else if (client.Player.TargetObject != null && client.Player.TargetObject is GamePlayer)
+                name = client.Player.TargetObject.Name;
+            else
+            {
+                DisplaySyntax(client);
+                return;
+            }
 
             int result = 0;
             GameClient fclient = WorldMgr.GuessClientByPlayerNameAndRealm(name, 0, false, out result);
@@ -66,89 +75,148 @@ namespace DOL.GS.Commands
                 );
                 return;
             }
-
-            if (fclient == null)
+            if (args[1] == "add")
             {
-                name = args[1];
-                if (client.Player.GetFriends().Contains(name) && client.Player.RemoveFriend(name))
+                if (fclient == null)
                 {
-                    DisplayMessage(
-                        client,
-                        LanguageMgr.GetTranslation(
-                            client.Account.Language,
-                            "Commands.Players.Friend.Removed",
-                            name
-                        )
-                    );
-                    return;
-                }
-                else
-                {
-                    // nothing found
-                    DisplayMessage(
-                        client,
-                        LanguageMgr.GetTranslation(
-                            client.Account.Language,
-                            "Commands.Players.Friend.Unknown"
-                        )
-                    );
-                    return;
-                }
-            }
-
-            switch (result)
-            {
-                case 2:
+                    name = args[2];
+                    if (client.Player.GetFriends().Contains(name))
                     {
-                        // name not unique
                         DisplayMessage(
                             client,
                             LanguageMgr.GetTranslation(
                                 client.Account.Language,
-                                "Commands.Players.Friend.NotUnique"
+                                "Commands.Players.Friend.AlreadyAdded",
+                                name
                             )
                         );
-                        break;
+                        return;
                     }
-                case 3: // exact match
-                case 4: // guessed name
+                    else if (client.Player.AddFriend(name))
                     {
-                        if (fclient == client)
-                        {
-                            DisplayMessage(
-                                client,
-                                LanguageMgr.GetTranslation(
-                                    client.Account.Language,
-                                    "Commands.Players.Friend.NotYourself"
-                                )
-                            );
-                            return;
-                        }
-
-                        name = fclient.Player.Name;
-                        if (client.Player.GetFriends().Contains(name) && client.Player.RemoveFriend(name))
-                        {
-                            DisplayMessage(
-                                client,
-                                LanguageMgr.GetTranslation(
-                                    client.Account.Language,
-                                    "Commands.Players.Friend.Removed",
-                                    name)
-                            );
-                        }
-                        else if (client.Player.AddFriend(name))
-                        {
-                            DisplayMessage(
-                                client,
-                                LanguageMgr.GetTranslation(
-                                    client.Account.Language,
-                                    "Commands.Players.Friend.Added",
-                                    name
-                                )
-                            );
-                        }
-                        break;
+                        DisplayMessage(
+                            client,
+                            LanguageMgr.GetTranslation(
+                                client.Account.Language,
+                                "Commands.Players.Friend.Added",
+                                name
+                            )
+                        );
+                        return;
                     }
+                    else
+                    {
+                        // nothing found
+                        DisplayMessage(
+                            client,
+                            LanguageMgr.GetTranslation(
+                                client.Account.Language,
+                                "Commands.Players.Friend.Unknown"
+                            )
+                        );
+                        return;
+                    }
+                }
+
+                switch (result)
+                {
+                    case 2:
+                        {
+                            // name not unique
+                            DisplayMessage(
+                                client,
+                                LanguageMgr.GetTranslation(
+                                    client.Account.Language,
+                                    "Commands.Players.Friend.NotUnique"
+                                )
+                            );
+                            break;
+                        }
+                    case 3: // exact match
+                    case 4: // guessed name
+                        {
+                            if (fclient == client)
+                            {
+                                DisplayMessage(
+                                    client,
+                                    LanguageMgr.GetTranslation(
+                                        client.Account.Language,
+                                        "Commands.Players.Friend.Self"
+                                    )
+                                );
+                                return;
+                            }
+
+                            if (client.Player.GetFriends().Contains(fclient.Player.Name))
+                            {
+                                DisplayMessage(
+                                    client,
+                                    LanguageMgr.GetTranslation(
+                                        client.Account.Language,
+                                        "Commands.Players.Friend.AlreadyAdded",
+                                        fclient.Player.Name
+                                    )
+                                );
+                                return;
+                            }
+
+                            if (client.Player.AddFriend(fclient.Player.Name))
+                            {
+                                DisplayMessage(
+                                    client,
+                                    LanguageMgr.GetTranslation(
+                                        client.Account.Language,
+                                        "Commands.Players.Friend.Added",
+                                        fclient.Player.Name
+                                    )
+                                );
+                                return;
+                            }
+                            else
+                            {
+                                // nothing found
+                                DisplayMessage(
+                                    client,
+                                    LanguageMgr.GetTranslation(
+                                        client.Account.Language,
+                                        "Commands.Players.Friend.Unknown"
+                                    )
+                                );
+                                return;
+                            }
+                        }
+                }
+            }
+            else if (args[1] == "remove")
+            {
+                if (fclient == null)
+                {
+                    name = args[2];
+                    if (client.Player.GetFriends().Contains(name) && client.Player.RemoveFriend(name))
+                    {
+                        DisplayMessage(
+                            client,
+                            LanguageMgr.GetTranslation(
+                                client.Account.Language,
+                                "Commands.Players.Friend.Removed",
+                                name
+                            )
+                        );
+                        return;
+                    }
+                    else
+                    {
+                        // nothing found
+                        DisplayMessage(
+                            client,
+                            LanguageMgr.GetTranslation(
+                                client.Account.Language,
+                                "Commands.Players.Friend.Unknown"
+                            )
+                        );
+                        return;
+                    }
+                }
             }
         }
     }

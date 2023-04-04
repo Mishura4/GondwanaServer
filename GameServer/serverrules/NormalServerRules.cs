@@ -23,6 +23,7 @@ using DOL.Database;
 using DOL.GS.Keeps;
 using DOL.GS.PacketHandler;
 using DOL.GS.Styles;
+using System.Linq;
 
 namespace DOL.GS.ServerRules
 {
@@ -338,6 +339,10 @@ namespace DOL.GS.ServerRules
         /// <returns>The guild name of the target</returns>
         public override string GetPlayerGuildName(GamePlayer source, GamePlayer target)
         {
+            if (DOL.GS.ServerProperties.Properties.HIDE_PLAYER_NAME &&
+                !source.SerializedAskNameList.Contains(target.Name))
+                return string.Empty;
+
             if (IsSameRealm(source, target, true))
                 return target.GuildName;
             return string.Empty;

@@ -95,14 +95,18 @@ namespace DOL.GS.Scripts
             if (!player.Inventory.RemoveCountFromStack(item, 1))
                 return false;
             int reward = ServerProperties.Properties.REWARD_OUTLAW_HEAD_GOLD;
-            if (item.Name.Length >= "Tête de ".Length)
+            List<string> messages = item.Template.MessageArticle.Split(' ').ToList();
+            if (messages.Count > 2)
             {
-                // Get player that has item.Name without "Tête de " at the beggining
-                DOLCharacters killerPlayer =
-                    GameServer.Database.SelectObject<DOLCharacters>(DB.Column("Name").IsEqualTo(item.Name.Substring("Tête de ".Length, item.Name.Length - "Tête de ".Length)));
-                if (killerPlayer != null)
+                if (item.Name.Length >= "Tête de ".Length)
                 {
-                    reward *= (int)(-killerPlayer.Reputation / 0.5);
+                    // Get player that has item.Name without "Tête de " at the beggining
+                    DOLCharacters killerPlayer =
+                        GameServer.Database.SelectObject<DOLCharacters>(DB.Column("Name").IsEqualTo(messages[0]));
+                    if (killerPlayer != null)
+                    {
+                        reward *= (int)(-int.Parse(messages[1]) / 0.5);
+                    }
                 }
             }
 

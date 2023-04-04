@@ -96,7 +96,7 @@ namespace DOL.GS.PacketHandler
                             pak.WriteInt(0x20);
                             pak.WriteShort(0);
                         }
-                        pak.WritePascalString(living.Name);
+                        pak.WritePascalString(m_gameClient.Player.GetPersonalizedName(living));
                         pak.WritePascalString(living is GamePlayer ? ((GamePlayer)living).CharacterClass.Name : "NPC");//classname
                     }
                 }

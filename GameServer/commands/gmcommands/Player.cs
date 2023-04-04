@@ -1669,9 +1669,9 @@ namespace DOL.GS.Commands
                             if (player.IsAlive)
                             {
                                 KillPlayer(client.Player, player);
-                                client.Out.SendMessage("You killed " + player.Name + " successfully!", eChatType.CT_Important,
+                                client.Out.SendMessage("You killed " + player.GetPersonalizedName(player) + " successfully!", eChatType.CT_Important,
                                                        eChatLoc.CL_SystemWindow);
-                                player.Out.SendMessage(client.Player.Name + " has killed you!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                                player.Out.SendMessage(player.GetPersonalizedName(client.Player) + " has killed you!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                             }
                             else
                             {

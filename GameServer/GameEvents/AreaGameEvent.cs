@@ -133,6 +133,7 @@ namespace DOL.GameEvents
                     if (PlayersCounter == 0)
                     {
                         LaunchTimer.Stop();
+                        LaunchedEvent.Status = EventStatus.EndedByAreaEvent;
                         if (ResetEvent)
                             GameEventManager.Instance.ResetEvent(LaunchedEvent);
                         else
