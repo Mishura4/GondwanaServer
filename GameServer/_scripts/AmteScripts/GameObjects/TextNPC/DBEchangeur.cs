@@ -29,6 +29,9 @@ namespace DOL.Database
         private string m_priceRessource2;
         private string m_priceRessource3;
 
+        private string m_queatName;
+        private int m_step;
+
         public ItemTemplate GiveTemplate
         {
             get
@@ -217,6 +220,36 @@ namespace DOL.Database
             set
             {
                 m_priceRessource3 = value;
+                Dirty = true;
+            }
+        }
+
+        [DataElement(AllowDbNull = true)]
+        public string QuestName
+        {
+            get
+            {
+                return m_queatName;
+            }
+
+            set
+            {
+                m_queatName = value;
+                Dirty = true;
+            }
+        }
+
+        [DataElement(AllowDbNull = true)]
+        public int Step
+        {
+            get
+            {
+                return m_step;
+            }
+
+            set
+            {
+                m_step = value;
                 Dirty = true;
             }
         }

@@ -3,7 +3,7 @@ Commands.GM.EchangeurNPC.Usage.Add:		add <quantity of item to change> <ID_nb of 
 Commands.GM.EchangeurNPC.Usage.Remove:	remove <ID_nb of the item to give>' Removes an item from the NPC's list
 Commands.GM.EchangeurNPC.Usage.Money:		money <ID_nb of the item to give> <quantity>' Gives money in exchange for an item
 Commands.GM.EchangeurNPC.Usage.XP:	xp <ID_nb of the item to give> <quantity>' Gives experience in exchange for an item. Put a negative quantity that will be one per thousand (xp/1000) of the experience return to match player's level
-Commands.GM.EchangeurNPC.Usage.Item:		item <ID_nb of the item to give> <quantity of final item to get> <ID_nb of the final item to get>' To exchange items
+Commands.GM.EchangeurNPC.Usage.Item:		item <ID_nb of the item to give> <quantity of final item to get> <ID_nb of the final item to get> <questID> <step>' To exchange items, quest arguments are optional
 Commands.GM.EchangeurNPC.Usage.Info:	info' Shows item changer NPC's informations
 Commands.GM.EchangeurNPC.Usage.Pricemoney:		pricemoney <ID de l'item a donner> <gold>' Defines a cost <gold> to validate a trade
 Commands.GM.EchangeurNPC.Usage.Priceressource1:	priceressource1 <ID_nb of the item to give> <ID_nb of a required ressource1> <quantity of the required ressource1>' Defines a required ressource1 by its <ID_nb> and its quantity in order to validate an exchange for an item (can add up to the cost of trading in gold)

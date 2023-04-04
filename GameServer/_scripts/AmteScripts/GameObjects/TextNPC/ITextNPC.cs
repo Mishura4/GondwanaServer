@@ -380,6 +380,16 @@ namespace DOL.GS.Scripts
                 return false;
             }
 
+            if (EchangeurDB[item.Id_nb].QuestName != "")
+            {
+                var currentQuest = player.QuestList.FirstOrDefault(q => q.Quest.Name == EchangeurDB[item.Id_nb].QuestName
+                    && q.VisibleGoals.Any(g => g is GenericDataQuestGoal jgoal && jgoal.Goal.GoalId == EchangeurDB[item.Id_nb].Step));
+                if (currentQuest == null)
+                {
+                    return false;
+                }
+            }
+
             var requireditems = this.GetRequireItems(EchItem);
 
             if (requireditems.Any())
