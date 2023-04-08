@@ -24,6 +24,10 @@ namespace DOL.GS.PlayerClass
     [CharacterClass((int)eCharacterClass.Wizard, "Wizard", "Elementalist")]
     public class ClassWizard : ClassElementalist
     {
+        private static readonly List<PlayerRace> DefaultEligibleRaces = new()
+        {
+             PlayerRace.Avalonian, PlayerRace.Briton, PlayerRace.HalfOgre,
+        };
         public ClassWizard()
             : base()
         {
@@ -33,17 +37,13 @@ namespace DOL.GS.PlayerClass
             m_secondaryStat = eStat.DEX;
             m_tertiaryStat = eStat.QUI;
             m_manaStat = eStat.INT;
-            m_wsbase = 240; // yes, lower that for other casters for some reason
+            m_baseWeaponSkill = 240; // yes, lower that for other casters for some reason
+            m_eligibleRaces = DefaultEligibleRaces;
         }
 
         public override bool HasAdvancedFromBaseClass()
         {
             return true;
         }
-
-        public override List<PlayerRace> EligibleRaces => new List<PlayerRace>()
-        {
-             PlayerRace.Avalonian, PlayerRace.Briton, PlayerRace.HalfOgre,
-        };
     }
 }

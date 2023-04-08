@@ -25,6 +25,11 @@ namespace DOL.GS.PlayerClass
     [CharacterClass((int)eCharacterClass.Valewalker, "Valewalker", "Forester")]
     public class ClassValewalker : ClassForester
     {
+        private static readonly List<PlayerRace> DefaultEligibleRaces = new()
+        {
+             PlayerRace.Celt, PlayerRace.Firbolg, PlayerRace.Sylvan,
+        };
+
         public ClassValewalker()
             : base()
         {
@@ -34,8 +39,9 @@ namespace DOL.GS.PlayerClass
             m_secondaryStat = eStat.INT;
             m_tertiaryStat = eStat.CON;
             m_manaStat = eStat.INT;
-            m_wsbase = 400;
+            m_baseWeaponSkill = 400;
             m_baseHP = 720;
+            m_eligibleRaces = DefaultEligibleRaces;
         }
 
         public override int WeaponSkillFactor(eObjectType type)
@@ -47,11 +53,6 @@ namespace DOL.GS.PlayerClass
         {
             return true;
         }
-
-        public override List<PlayerRace> EligibleRaces => new List<PlayerRace>()
-        {
-             PlayerRace.Celt, PlayerRace.Firbolg, PlayerRace.Sylvan,
-        };
     }
 }
 

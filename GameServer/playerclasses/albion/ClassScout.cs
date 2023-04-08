@@ -24,7 +24,12 @@ namespace DOL.GS.PlayerClass
     [CharacterClass((int)eCharacterClass.Scout, "Scout", "Rogue")]
     public class ClassScout : ClassAlbionRogue
     {
-        private static readonly string[] AutotrainableSkills = new[] { Specs.Archery, Specs.Longbow };
+        private static readonly List<string> DefaultAutoTrainableSkills = new() { Specs.Archery, Specs.Longbow };
+        private static readonly List<PlayerRace> DefaultEligibleRaces = new()
+        {
+             PlayerRace.Briton, PlayerRace.Highlander, PlayerRace.Inconnu, PlayerRace.Saracen,
+        };
+
 
         public ClassScout()
             : base()
@@ -34,8 +39,9 @@ namespace DOL.GS.PlayerClass
             m_primaryStat = eStat.DEX;
             m_secondaryStat = eStat.QUI;
             m_tertiaryStat = eStat.STR;
-            m_baseHP = 720;
             m_manaStat = eStat.INT;
+            m_autotrainableSkills = DefaultAutoTrainableSkills;
+            m_eligibleRaces = DefaultEligibleRaces;
         }
 
         public override int WeaponSkillFactor(eObjectType type)
@@ -46,11 +52,6 @@ namespace DOL.GS.PlayerClass
         public override eClassType ClassType
         {
             get { return eClassType.Hybrid; }
-        }
-
-        public override IList<string> GetAutotrainableSkills()
-        {
-            return AutotrainableSkills;
         }
 
         /// <summary>
@@ -144,10 +145,5 @@ namespace DOL.GS.PlayerClass
         {
             return true;
         }
-
-        public override List<PlayerRace> EligibleRaces => new List<PlayerRace>()
-        {
-             PlayerRace.Briton, PlayerRace.Highlander, PlayerRace.Inconnu, PlayerRace.Saracen,
-        };
     }
 }

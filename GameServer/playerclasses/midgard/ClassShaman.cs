@@ -24,15 +24,20 @@ namespace DOL.GS.PlayerClass
     [CharacterClass((int)eCharacterClass.Shaman, "Shaman", "Seer")]
     public class ClassShaman : ClassSeer
     {
+        private static readonly List<PlayerRace> DefaultEligibleRaces = new()
+        {
+             PlayerRace.Dwarf, PlayerRace.Frostalf, PlayerRace.Kobold, PlayerRace.Troll,
+        };
+
         public ClassShaman()
             : base()
         {
             m_profession = "PlayerClass.Profession.HouseofYmir";
-            m_specializationMultiplier = 10;
             m_primaryStat = eStat.PIE;
             m_secondaryStat = eStat.CON;
             m_tertiaryStat = eStat.STR;
             m_manaStat = eStat.PIE;
+            m_eligibleRaces = DefaultEligibleRaces;
         }
 
         public override int WeaponSkillFactor(eObjectType type)
@@ -44,10 +49,5 @@ namespace DOL.GS.PlayerClass
         {
             return true;
         }
-
-        public override List<PlayerRace> EligibleRaces => new List<PlayerRace>()
-        {
-             PlayerRace.Dwarf, PlayerRace.Frostalf, PlayerRace.Kobold, PlayerRace.Troll,
-        };
     }
 }
