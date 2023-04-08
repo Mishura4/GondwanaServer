@@ -68,7 +68,7 @@ namespace DOL.GS.PacketHandler
                             pak.WriteByte(nbsolo++);
                         }
                         pak.WriteByte(player.Level);
-                        pak.WritePascalString(player.Name);
+                        pak.WritePascalString(m_gameClient.Player.GetPersonalizedName(player));
                         pak.WriteString(player.CharacterClass.Name, 4);
                         //Dinberg:Instances - We use ZoneSkinID to bluff our way to victory and
                         //trick the client for positioning objects (as IDs are hard coded).

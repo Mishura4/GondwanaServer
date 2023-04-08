@@ -95,8 +95,8 @@ namespace DOL.GS.Scripts
             if (!player.Inventory.RemoveCountFromStack(item, 1))
                 return false;
             int reward = ServerProperties.Properties.REWARD_OUTLAW_HEAD_GOLD;
-            List<string> messages = item.Template.MessageArticle.Split(' ').ToList();
-            if (messages.Count > 2)
+            List<string> messages = item.Template.MessageArticle.Split(';').ToList();
+            if (messages.Count >= 2)
             {
                 if (item.Name.Length >= "Tête de ".Length)
                 {

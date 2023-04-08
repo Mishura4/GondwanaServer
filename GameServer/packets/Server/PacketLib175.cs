@@ -139,7 +139,7 @@ namespace DOL.GS.PacketHandler
                                      //entry :
 
                 pak.WriteByte(player.GetDisplayLevel(m_gameClient.Player)); //level
-                pak.WritePascalString(player.Name);
+                pak.WritePascalString(m_gameClient.Player.GetPersonalizedName(player));
 
                 pak.WriteByte((byte)(player.MaxHealth >> 8)); // maxhealth high byte ?
                 pak.WritePascalString(player.CharacterClass.Name); // class name

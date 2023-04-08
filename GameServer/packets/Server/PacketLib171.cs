@@ -310,7 +310,7 @@ namespace DOL.GS.PacketHandler
                             pak.WriteByte(nbsolo++);
                         }
                         pak.WriteByte(player.Level);
-                        pak.WritePascalString(player.Name);
+                        pak.WritePascalString(m_gameClient.Player.GetPersonalizedName(player));
                         pak.WriteString(player.CharacterClass.Name, 4);
                         //Dinberg:Instances - you know the score by now ;)
                         //ZoneSkinID for clientside positioning of objects.

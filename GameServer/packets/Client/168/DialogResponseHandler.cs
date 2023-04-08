@@ -373,11 +373,8 @@ namespace DOL.GS.PacketHandler.Client.v168
                     case eDialogCode.AskName:
                         {
                             GameClient cln = WorldMgr.GetClientFromID(m_data1);
-                            Console.WriteLine("AskName: " + m_data1);
-                            Console.WriteLine("AskName: " + cln != null);
                             if (m_response == 0x01 && cln != null && !cln.Player.SerializedAskNameList.Contains(player.Name))
                             {
-                                Console.WriteLine("AskName: " + m_response + " " + cln.Player.SerializedAskNameList.Contains(player.Name));
                                 cln.Player.SerializedAskNameList = cln.Player.SerializedAskNameList.Append(player.Name).ToArray();
                                 // Save to database
                                 cln.Player.SaveIntoDatabase();

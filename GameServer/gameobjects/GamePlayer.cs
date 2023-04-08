@@ -2179,7 +2179,7 @@ namespace DOL.GS
             if (SerializedAskNameList.Contains(player.Name) || SerializedFriendsList.Contains(player.Name))
                 return player.Name;
             // get row position in db by CreationDate
-            return "(" + player.RaceToTranslatedName(player.Race, player.Gender) + " " + Client.SessionID + ")";
+            return "(" + this.RaceToTranslatedName(player.Race, player.Gender) + " " + Client.SessionID + ")";
         }
 
         /// <summary>

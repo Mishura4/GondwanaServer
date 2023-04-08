@@ -380,7 +380,7 @@ namespace DOL.GS.Scripts
                 return false;
             }
 
-            if (EchangeurDB[item.Id_nb].QuestName != "")
+            if (string.IsNullOrEmpty(EchangeurDB[item.Id_nb].QuestName) == false)
             {
                 var currentQuest = player.QuestList.FirstOrDefault(q => q.Quest.Name == EchangeurDB[item.Id_nb].QuestName
                     && q.VisibleGoals.Any(g => g is GenericDataQuestGoal jgoal && jgoal.Goal.GoalId == EchangeurDB[item.Id_nb].Step));

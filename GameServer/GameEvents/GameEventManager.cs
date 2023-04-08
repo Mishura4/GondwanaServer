@@ -1119,12 +1119,12 @@ namespace DOL.GameEvents
             //Consequence A
             if (e.EndingConditionTypes.Count() == 1 || (e.EndingConditionTypes.Count() > 1 && e.EndingConditionTypes.First() == end))
             {
-                await this.HandleConsequence(e.EndingActionA, e.EventZones, e.EndActionStartEventID, e.ResetEventId, e.ID);
+                await this.HandleConsequence(e.EndingActionA, e.EventZones, e.EndActionStartEventID, e.ResetEventId, e);
             }
             else
             {
                 //Consequence B
-                await this.HandleConsequence(e.EndingActionB, e.EventZones, e.EndActionStartEventID, e.ResetEventId, e.ID);
+                await this.HandleConsequence(e.EndingActionB, e.EventZones, e.EndActionStartEventID, e.ResetEventId, e);
             }
 
             log.Info(string.Format("Event Id: {0}, Name: {1} was stopped At: {2}", e.ID, e.EventName, DateTime.Now.ToString()));
@@ -1163,8 +1163,9 @@ namespace DOL.GameEvents
             await Task.Delay(TimeSpan.FromSeconds(5));
         }
 
-        private async Task HandleConsequence(EndingAction action, IEnumerable<string> zones, string startEventId, string resetEventId, string eventId)
+        private async Task HandleConsequence(EndingAction action, IEnumerable<string> zones, string startEventId, string resetEventId, GameEvent startingEvent)
         {
+            string eventId = startingEvent.ID;
             if (action == EndingAction.BindStone)
             {
                 foreach (var cl in WorldMgr.GetAllPlayingClients().Where(c => zones.Contains(c.Player.CurrentZone.ID.ToString())))
@@ -1178,7 +1179,7 @@ namespace DOL.GameEvents
             if (startEventId != null)
             {
                 var ev = Instance.Events.FirstOrDefault(e => e.ID.Equals(startEventId));
-                if (ev != null && ev.TimeBeforeReset != 0)
+                if (ev != null && ev.TimeBeforeReset != 0 && startingEvent.EndingConditionTypes.Count() != 1)
                 {
                     bool startEvent = true;
                     bool startTimer = false;
@@ -1197,7 +1198,7 @@ namespace DOL.GameEvents
                         ev.ResetFamilyTimer.Start();
                     }
 
-                    if (startEvent == false)
+                    if (startEvent == false || startingEvent.Status == EventStatus.EndedByTimer)
                     {
                         return;
                     }

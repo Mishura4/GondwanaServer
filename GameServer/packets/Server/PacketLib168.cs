@@ -1377,7 +1377,7 @@ namespace DOL.GS.PacketHandler
                             pak.WriteByte(nbsolo++);
                         }
                         pak.WriteByte(player.Level);
-                        pak.WritePascalString(player.Name);
+                        pak.WritePascalString(m_gameClient.Player.GetPersonalizedName(player));
                         pak.WriteString(player.CharacterClass.Name, 4);
                         //Dinberg:Instances - have to write zoneskinID, it uses this to display the text 'x is in y'.
                         if (player.CurrentZone != null)
@@ -2023,7 +2023,7 @@ namespace DOL.GS.PacketHandler
                     if (m_gameClient.Player.TradeWindow is SelfCraftWindow)
                         pak.WritePascalString("Combining for " + m_gameClient.Player.Name);
                     else
-                        pak.WritePascalString("Trading with " + m_gameClient.Player.TradeWindow.Partner.Name); // transaction with ...
+                        pak.WritePascalString("Trading with " + m_gameClient.Player.GetPersonalizedName(m_gameClient.Player.TradeWindow.Partner)); // transaction with ...
                     SendTCP(pak);
                 }
             }
@@ -2201,7 +2201,7 @@ namespace DOL.GS.PacketHandler
                                      //entry :
 
                 pak.WriteByte(player.GetDisplayLevel(m_gameClient.Player)); //level
-                pak.WritePascalString(player.Name); // player name
+                pak.WritePascalString(m_gameClient.Player.GetPersonalizedName(player)); // player name
                 pak.WriteByte((byte)(player.MaxHealth >> 8)); // maxhealth high byte ?
                 pak.WritePascalString(player.CharacterClass.Name); // class name
                 pak.WriteByte((byte)(player.MaxHealth & 0xFF)); // maxhealth low byte ?

@@ -139,7 +139,7 @@ namespace DOL.GS.Scripts
                     break;
 
                 case "item":
-                    if (npc == null || args.Length < 6)
+                    if (npc == null || args.Length < 4)
                     {
                         DisplaySyntax(client);
                         return;
@@ -153,32 +153,42 @@ namespace DOL.GS.Scripts
                         return;
                     }
 
-                    string questName = "";
-                    int step = 0;
-                    if (args.Length > 3)
-                    {
-                        questName = args[4];
-                        if (!int.TryParse(args[5], out step) || step < 0)
-                        {
-                            DisplaySyntax(client);
-                            return;
-                        }
-                    }
-
                     if (!npc.TextNPCData.EchangeurDB.ContainsKey(item))
                         player.Out.SendMessage(item + " n'existe pas.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     else
                     {
                         npc.TextNPCData.EchangeurDB[item].ItemGiveCount = count;
                         npc.TextNPCData.EchangeurDB[item].ItemGiveID = item2;
-                        if (args.Length > 3)
-                        {
-                            npc.TextNPCData.EchangeurDB[item].QuestName = questName;
-                            npc.TextNPCData.EchangeurDB[item].Step = step;
-                        }
                         npc.TextNPCData.SaveIntoDatabase();
                         player.Out.SendMessage(item + " donne " + count + " " + item2 + " maintenant.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     }
+                    break;
+
+                case "quest":
+                    if (npc == null || args.Length < 4)
+                    {
+                        DisplaySyntax(client);
+                        return;
+                    }
+                    item = args[2];
+                    string questName = args[3];
+                    int step;
+                    if (!int.TryParse(args[4], out step) || step < 0)
+                    {
+                        DisplaySyntax(client);
+                        return;
+                    }
+                    if (!npc.TextNPCData.EchangeurDB.ContainsKey(item))
+                        player.Out.SendMessage(item + " n'existe pas.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    else
+                    {
+                        npc.TextNPCData.EchangeurDB[item].QuestName = questName;
+                        npc.TextNPCData.EchangeurDB[item].Step = step;
+                        npc.TextNPCData.SaveIntoDatabase();
+                        player.Out.SendMessage(item + " donne la quête " + questName + " étape " + step + " maintenant.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    }
+
+
                     break;
 
                 case "info":

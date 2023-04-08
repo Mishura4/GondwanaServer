@@ -31,7 +31,9 @@ namespace GameServerScripts.Amtescripts.Managers
         {
             var deaths = GameServer.Database.SelectObjects<DBDeathLog>(DB.Column("KilledId").IsEqualTo(player.InternalID).And(DB.Column("isWanted").IsEqualTo(0).And(DB.Column("DeathDate").IsGreatherThan("SUBTIME(NOW(), '3:0:0')").And(DB.Column("ExitFromJail").IsEqualTo(0)))));
 
-            if (deaths == null || !deaths.Any())
+            var reportedDeaths = GameServer.Database.SelectObjects<DBDeathLog>(DB.Column("KilledId").IsEqualTo(player.InternalID).And(DB.Column("isWanted").IsEqualTo(1).And(DB.Column("DeathDate").IsGreatherThan("SUBTIME(NOW(), '3:0:0')").And(DB.Column("ExitFromJail").IsEqualTo(0)))));
+
+            if (deaths == null || !deaths.Any() || reportedDeaths == null || reportedDeaths.Any())
             {
                 return 0;
             }
@@ -86,7 +88,7 @@ namespace GameServerScripts.Amtescripts.Managers
                 .And(DB.Column("KilledId").IsEqualTo(killed.InternalID)
                 .And(DB.Column("DeathDate").IsGreatherThan("SUBTIME(NOW(), '0:10:0')"))));
 
-            if (deaths == null || !deaths.Any() || deaths.Count == 1)
+            if (deaths == null || !deaths.Any())
             {
                 return false;
             }

@@ -59,7 +59,7 @@ namespace DOL.GS.Commands
                         LanguageMgr.GetTranslation(
                             client.Account.Language,
                             "Commands.Players.Target.Found",
-                            targetPlayer.GetName(0, true)),
+                            client.Player.GetPersonalizedName(targetPlayer)),
                         eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     return;
                 }
