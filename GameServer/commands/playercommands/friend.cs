@@ -65,7 +65,7 @@ namespace DOL.GS.Commands
             (client.Player.Guild == null || fclient.Player.Guild == null || client.Player.Guild != fclient.Player.Guild)
              && !client.Player.SerializedAskNameList.Contains(fclient.Player.Name))
             {
-                if (fclient.Account.PrivLevel == 0)
+                if (fclient.Account.PrivLevel <= 1)
                     DisplayMessage(
                         client,
                         LanguageMgr.GetTranslation(

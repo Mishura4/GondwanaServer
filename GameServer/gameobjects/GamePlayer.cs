@@ -7159,12 +7159,12 @@ namespace DOL.GS
                         else
                         {
                             if (hitLocName != null)
-                                Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Attack.HitsYour", ad.Attacker.GetName(0, true), hitLocName, ad.Damage, modmessage), eChatType.CT_Damaged, eChatLoc.CL_SystemWindow);
+                                Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Attack.HitsYour", GetPersonalizedName(ad.Attacker), hitLocName, ad.Damage, modmessage), eChatType.CT_Damaged, eChatLoc.CL_SystemWindow);
                             else
-                                Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Attack.HitsYou", ad.Attacker.IsAlive ? ad.Attacker.GetName(0, true) : "A dead enemy", ad.Damage, modmessage), eChatType.CT_Damaged, eChatLoc.CL_SystemWindow);
+                                Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Attack.HitsYou", ad.Attacker.IsAlive ? GetPersonalizedName(ad.Attacker) : "A dead enemy", ad.Damage, modmessage), eChatType.CT_Damaged, eChatLoc.CL_SystemWindow);
 
                             if (ad.CriticalDamage > 0)
-                                Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Attack.HitsYouCritical", ad.Attacker.GetName(0, true), ad.CriticalDamage), eChatType.CT_Damaged, eChatLoc.CL_SystemWindow);
+                                Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Attack.HitsYouCritical", GetPersonalizedName(ad.Attacker), ad.CriticalDamage), eChatType.CT_Damaged, eChatLoc.CL_SystemWindow);
                         }
 
 
@@ -8068,7 +8068,6 @@ namespace DOL.GS
             if (Task != null && Task.TaskActive)
                 Task.ExpireTask();
 
-            string playerMessage;
             string publicMessage;
             ushort messageDistance = WorldMgr.DEATH_MESSAGE_DISTANCE;
             m_releaseType = eReleaseType.Normal;
@@ -8083,12 +8082,10 @@ namespace DOL.GS
             {
                 if (realmDeath)
                 {
-                    playerMessage = LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Die.KilledLocation", GetName(0, true), location);
                     publicMessage = "GameObjects.GamePlayer.Die.KilledLocation";
                 }
                 else
                 {
-                    playerMessage = LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Die.Killed", GetName(0, true));
                     publicMessage = "GameObjects.GamePlayer.Die.Killed";
                 }
             }
@@ -8099,7 +8096,6 @@ namespace DOL.GS
                 {
                     m_releaseType = eReleaseType.Duel;
                     messageDistance = WorldMgr.YELL_DISTANCE;
-                    playerMessage = LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Die.DuelDefeated", GetName(0, true), killer.GetName(1, false));
                     publicMessage = "GameObjects.GamePlayer.Die.DuelDefeated";
                 }
                 else
@@ -8107,12 +8103,10 @@ namespace DOL.GS
                     messageDistance = 0;
                     if (realmDeath)
                     {
-                        playerMessage = LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Die.KilledByLocation", GetName(0, true), killer.GetName(1, false), location);
                         publicMessage = "GameObjects.GamePlayer.Die.KilledByLocation";
                     }
                     else
                     {
-                        playerMessage = LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Die.KilledBy", GetName(0, true), killer.GetName(1, false));
                         publicMessage = "GameObjects.GamePlayer.Die.KilledBy";
                     }
                 }
@@ -8159,7 +8153,6 @@ namespace DOL.GS
                     players.Add(player);
                 }
             }
-
             foreach (GamePlayer player in players)
             {
                 // on normal server type send messages only to the killer and dead players realm
@@ -8170,10 +8163,20 @@ namespace DOL.GS
                         || (GameServer.ServerRules.IsSameRealm(this, player, true))
                         || ServerProperties.Properties.DEATH_MESSAGES_ALL_REALMS)
                 )
-                    if (player == this)
-                        player.Out.SendMessage(playerMessage, messageType, eChatLoc.CL_SystemWindow);
-                    else player.Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, publicMessage,
-                        player.GetPersonalizedName(this), player.GetPersonalizedName(killer)), messageType, eChatLoc.CL_SystemWindow);
+                {
+                    if (publicMessage == "GameObjects.GamePlayer.Die.KilledLocation")
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, publicMessage,
+                            player.GetPersonalizedName(this), location), messageType, eChatLoc.CL_SystemWindow);
+                    else if (publicMessage == "GameObjects.GamePlayer.Die.KilledByLocation")
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, publicMessage,
+                            player.GetPersonalizedName(this), player.GetPersonalizedName(killer), location), messageType, eChatLoc.CL_SystemWindow);
+                    else if (publicMessage == "GameObjects.GamePlayer.Die.Killed")
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, publicMessage,
+                            player.GetPersonalizedName(this)), messageType, eChatLoc.CL_SystemWindow);
+                    else
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, publicMessage,
+                            player.GetPersonalizedName(this), player.GetPersonalizedName(killer)), messageType, eChatLoc.CL_SystemWindow);
+                }
             }
 
             //Dead ppl. dismount ...
@@ -8303,11 +8306,20 @@ namespace DOL.GS
 
             // sent after buffs drop
             // GamePlayer.Die.CorpseLies:		{0} just died. {1} corpse lies on the ground.
-            Message.SystemToOthers2(this, eChatType.CT_PlayerDied, "GameObjects.GamePlayer.Die.CorpseLies", GetName(0, true), GetPronoun(this.Client, 1, true));
+            foreach (GamePlayer player in GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
+            {
+                player.MessageFromArea(this, LanguageMgr.GetTranslation(player.Client.Account.Language, "GameObjects.GamePlayer.Die.CorpseLies", player.GetPersonalizedName(this), GetPronoun(this.Client, 1, true)), eChatType.CT_PlayerDied, eChatLoc.CL_SystemWindow);
+            }
 
             if (m_releaseType == eReleaseType.Duel)
             {
                 Message.SystemToOthers(this, killer.Name + "GameObjects.GamePlayer.Die.DuelWinner", eChatType.CT_Emote);
+
+                foreach (GamePlayer player in this.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
+                {
+                    string message = string.Format(player.GetPersonalizedName(killer) + "GameObjects.GamePlayer.Die.DuelWinner");
+                    player.MessageFromArea(killer, message, eChatType.CT_OthersCombat, eChatLoc.CL_SystemWindow);
+                }
             }
 
             // deal out exp and realm points based on server rules
@@ -8318,6 +8330,7 @@ namespace DOL.GS
 
             IsSwimming = false;
         }
+
 
         public override void EnemyKilled(GameLiving enemy)
         {

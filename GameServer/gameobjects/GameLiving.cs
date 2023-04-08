@@ -1972,13 +1972,40 @@ namespace DOL.GS
 
             switch (ad.AttackResult)
             {
-                case eAttackResult.Parried: message = string.Format("{0} attacks {1} and is parried!", ad.Attacker.GetName(0, true), ad.Target.GetName(0, false)); break;
-                case eAttackResult.Evaded: message = string.Format("{0} attacks {1} and is evaded!", ad.Attacker.GetName(0, true), ad.Target.GetName(0, false)); break;
-                case eAttackResult.Missed: message = string.Format("{0} attacks {1} and misses!", ad.Attacker.GetName(0, true), ad.Target.GetName(0, false)); break;
+                case eAttackResult.Parried:
+                    if (broadcast)
+                        foreach (GamePlayer player in ad.Attacker.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
+                        {
+                            message = string.Format("{0} attacks {1} and is parried!", player.GetPersonalizedName(ad.Attacker), player.GetPersonalizedName(ad.Target));
+                            player.MessageFromArea(ad.Attacker, message, eChatType.CT_OthersCombat, eChatLoc.CL_SystemWindow);
+                        }
+                    break;
+                case eAttackResult.Evaded:
+                    if (broadcast)
+                        foreach (GamePlayer player in ad.Attacker.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
+                        {
+                            message = string.Format("{0} attacks {1} and is evaded!", player.GetPersonalizedName(ad.Attacker), player.GetPersonalizedName(ad.Target));
+                            player.MessageFromArea(ad.Attacker, message, eChatType.CT_OthersCombat, eChatLoc.CL_SystemWindow);
+                        }
+                    break;
+                case eAttackResult.Missed:
+
+                    if (broadcast)
+                        foreach (GamePlayer player in ad.Attacker.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
+                        {
+                            message = string.Format("{0} attacks {1} and misses!", player.GetPersonalizedName(ad.Attacker), player.GetPersonalizedName(ad.Target));
+                            player.MessageFromArea(ad.Attacker, message, eChatType.CT_OthersCombat, eChatLoc.CL_SystemWindow);
+                        }
+                    break;
 
                 case eAttackResult.Blocked:
                     {
-                        message = string.Format("{0} attacks {1} and is blocked!", ad.Attacker.GetName(0, true), ad.Target.GetName(0, false));
+                        if (broadcast)
+                            foreach (GamePlayer player in ad.Attacker.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
+                            {
+                                message = string.Format("{0} attacks {1} and is blocked!", player.GetPersonalizedName(ad.Attacker), player.GetPersonalizedName(ad.Target));
+                                player.MessageFromArea(ad.Attacker, message, eChatType.CT_OthersCombat, eChatLoc.CL_SystemWindow);
+                            }
                         // guard messages
                         if (target != null && target != ad.Target)
                         {
@@ -2005,7 +2032,12 @@ namespace DOL.GS
                     {
                         if (target != null && target != ad.Target)
                         {
-                            message = string.Format("{0} attacks {1} but hits {2}!", ad.Attacker.GetName(0, true), target.GetName(0, false), ad.Target.GetName(0, false));
+                            if (broadcast)
+                                foreach (GamePlayer player in ad.Attacker.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
+                                {
+                                    message = string.Format("{0} attacks {1} but hits {2}!", player.GetPersonalizedName(ad.Attacker), player.GetPersonalizedName(target), player.GetPersonalizedName(ad.Target));
+                                    player.MessageFromArea(ad.Attacker, message, eChatType.CT_OthersCombat, eChatLoc.CL_SystemWindow);
+                                }
                             excludes.Add(target);
 
                             // intercept for another player
@@ -2023,11 +2055,21 @@ namespace DOL.GS
                                 string hitWeapon = "weapon";
                                 if (weapon != null)
                                     hitWeapon = GlobalConstants.NameToShortName(weapon.Name);
-                                message = string.Format("{0} attacks {1} with {2} {3}!", ad.Attacker.GetName(0, true), ad.Target.GetName(0, false), ad.Attacker.GetPronoun(1, false), hitWeapon);
+                                if (broadcast)
+                                    foreach (GamePlayer player in ad.Attacker.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
+                                    {
+                                        message = string.Format("{0} attacks {1} with {2} {3}!", player.GetPersonalizedName(ad.Attacker), player.GetPersonalizedName(ad.Target), ad.Attacker.GetPronoun(1, false), hitWeapon);
+                                        player.MessageFromArea(ad.Attacker, message, eChatType.CT_OthersCombat, eChatLoc.CL_SystemWindow);
+                                    }
                             }
                             else
                             {
-                                message = string.Format("{0} attacks {1} and hits!", ad.Attacker.GetName(0, true), ad.Target.GetName(0, false));
+                                if (broadcast)
+                                    foreach (GamePlayer player in ad.Attacker.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
+                                    {
+                                        message = string.Format("{0} attacks {1} and hits!", player.GetPersonalizedName(ad.Attacker), player.GetPersonalizedName(ad.Target));
+                                        player.MessageFromArea(ad.Attacker, message, eChatType.CT_OthersCombat, eChatLoc.CL_SystemWindow);
+                                    }
                             }
                         }
                         break;
@@ -2092,10 +2134,10 @@ namespace DOL.GS
                                     {
                                         attackTypeMsg = "shoots";
                                     }
-                                    owner.Out.SendMessage(string.Format(LanguageMgr.GetTranslation(owner.Client.Account.Language, "GameLiving.AttackData.YourHits"), ad.Attacker.Name, attackTypeMsg, ad.Target.GetName(0, false), ad.Damage, modmessage), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
+                                    owner.Out.SendMessage(string.Format(LanguageMgr.GetTranslation(owner.Client.Account.Language, "GameLiving.AttackData.YourHits"), owner.GetPersonalizedName(ad.Attacker), attackTypeMsg, owner.GetPersonalizedName(ad.Target), ad.Damage, modmessage), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
                                     if (ad.CriticalDamage > 0)
                                     {
-                                        owner.Out.SendMessage(string.Format(LanguageMgr.GetTranslation(owner.Client.Account.Language, "GameLiving.AttackData.YourCriticallyHits"), ad.Attacker.Name, ad.Target.GetName(0, false), ad.CriticalDamage), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
+                                        owner.Out.SendMessage(string.Format(LanguageMgr.GetTranslation(owner.Client.Account.Language, "GameLiving.AttackData.YourCriticallyHits"), owner.GetPersonalizedName(ad.Attacker), owner.GetPersonalizedName(ad.Target), ad.CriticalDamage), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
                                     }
 
                                     break;
@@ -2155,12 +2197,6 @@ namespace DOL.GS
             }
 
             #endregion
-
-            // broadcast messages
-            if (broadcast)
-            {
-                Message.SystemToArea(ad.Attacker, message, eChatType.CT_OthersCombat, (GameObject[])excludes.ToArray(typeof(GameObject)));
-            }
 
             ad.Target.StartInterruptTimer(ad, interruptDuration);
             //Return the result

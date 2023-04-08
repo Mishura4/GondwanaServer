@@ -81,12 +81,12 @@ namespace DOL.GS.PacketHandler.Client.v168
                     return;
                 }
 
-                ChatUtil.SendSystemMessage(player, "You have invited " + target.Name + " to join your group.");
+                ChatUtil.SendSystemMessage(player, "You have invited " + player.GetPersonalizedName(target) + " to join your group.");
                 target.Out.SendGroupInviteCommand(player,
-                                                  player.Name + " has invited you to join\n" + player.GetPronoun(1, false) +
+                                                  target.GetPersonalizedName(player) + " has invited you to join\n" + player.GetPronoun(1, false) +
                                                   " group. Do you wish to join?");
                 ChatUtil.SendSystemMessage(target,
-                                           player.Name + " has invited you to join " + player.GetPronoun(1, false) + " group.");
+                                           target.GetPersonalizedName(player) + " has invited you to join " + player.GetPronoun(1, false) + " group.");
             }
         }
     }

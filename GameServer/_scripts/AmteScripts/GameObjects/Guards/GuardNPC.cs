@@ -96,18 +96,10 @@ namespace DOL.GS.Scripts
                 return false;
             int reward = ServerProperties.Properties.REWARD_OUTLAW_HEAD_GOLD;
             List<string> messages = item.Template.MessageArticle.Split(';').ToList();
+
             if (messages.Count >= 2)
             {
-                if (item.Name.Length >= "Tête de ".Length)
-                {
-                    // Get player that has item.Name without "Tête de " at the beggining
-                    DOLCharacters killerPlayer =
-                        GameServer.Database.SelectObject<DOLCharacters>(DB.Column("Name").IsEqualTo(messages[0]));
-                    if (killerPlayer != null)
-                    {
-                        reward *= (int)(-int.Parse(messages[1]) / 0.5);
-                    }
-                }
+                reward *= (int)(-int.Parse(messages[1]) / 0.5);
             }
 
             var prime = Money.GetMoney(0, 0, reward, 0, 0);

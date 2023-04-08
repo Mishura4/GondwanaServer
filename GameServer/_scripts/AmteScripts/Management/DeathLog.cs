@@ -66,9 +66,9 @@ namespace DOL.GS.GameEvents
                     {
                         if (killerPlayer != null)
                         {
-                            killerPlayer.Reputation -= 1;
                             if (DeathCheck.Instance.IsChainKiller(killerPlayer, killed))
                             {
+                                killerPlayer.Reputation -= 1;
                                 if (killerPlayer.Reputation == -1)
                                     killerPlayer.Reputation -= 1;
                                 killerPlayer.SaveIntoDatabase();

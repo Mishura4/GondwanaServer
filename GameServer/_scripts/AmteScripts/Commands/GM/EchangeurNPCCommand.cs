@@ -16,6 +16,7 @@ namespace DOL.GS.Scripts
         "Commands.GM.EchangeurNPC.Usage.Money",
         "Commands.GM.EchangeurNPC.Usage.XP",
         "Commands.GM.EchangeurNPC.Usage.Item",
+        "Commands.GM.EchangeurNPC.Usage.Quest",
         "Commands.GM.EchangeurNPC.Usage.Info",
         "Commands.GM.EchangeurNPC.Usage.Pricemoney",
         "Commands.GM.EchangeurNPC.Usage.Priceressource1",
@@ -232,7 +233,10 @@ namespace DOL.GS.Scripts
                             if (val3.Length == 2)
                                 text.Add(" PriceRessource3:  " + val3[1] + " " + val3[0]);
                         }
-
+                        if (!string.IsNullOrEmpty(pair.Value.QuestName))
+                        {
+                            text.Add(" Quest: " + pair.Value.QuestName + " step " + pair.Value.Step);
+                        }
 
                     }
                     player.Out.SendCustomTextWindow("Info " + ((GameNPC)npc).Name, text);
