@@ -53,7 +53,14 @@ namespace DOL.GS.Spells
                 player.Out.SendCharStatsUpdate();
                 player.UpdatePlayerStatus();
                 MessageToLiving(effect.Owner, Spell.Message1, eChatType.CT_Spell);
-                Message.SystemToArea(effect.Owner, Util.MakeSentence(Spell.Message2, effect.Owner.GetName(0, true)), eChatType.CT_Spell, effect.Owner);
+                foreach (GamePlayer player1 in effect.Owner.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
+                {
+                    if (!(effect.Owner == player1))
+                    {
+                        player1.MessageFromArea(effect.Owner, Util.MakeSentence(Spell.Message2,
+                            player1.GetPersonalizedName(effect.Owner)), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                    }
+                }
 
             }
 
@@ -73,7 +80,14 @@ namespace DOL.GS.Spells
                 player.Out.SendCharStatsUpdate();
                 player.UpdatePlayerStatus();
                 MessageToLiving(effect.Owner, Spell.Message3, eChatType.CT_Spell);
-                Message.SystemToArea(effect.Owner, Util.MakeSentence(Spell.Message4, effect.Owner.GetName(0, true)), eChatType.CT_Spell, effect.Owner);
+                foreach (GamePlayer player1 in effect.Owner.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
+                {
+                    if (!(effect.Owner == player1))
+                    {
+                        player1.MessageFromArea(effect.Owner, Util.MakeSentence(Spell.Message4,
+                            player1.GetPersonalizedName(effect.Owner)), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                    }
+                }
 
             }
             return 0;

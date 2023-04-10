@@ -70,7 +70,14 @@ namespace DOL.GS.Spells
                 chatType = eChatType.CT_Spell;
             }
             MessageToLiving(effect.Owner, Spell.Message1, chatType);
-            Message.SystemToArea(effect.Owner, Util.MakeSentence(Spell.Message2, effect.Owner.GetName(0, true)), chatType, effect.Owner);
+            foreach (GamePlayer player in effect.Owner.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
+            {
+                if (!(effect.Owner == player))
+                {
+                    player.MessageFromArea(effect.Owner, Util.MakeSentence(Spell.Message2,
+                        player.GetPersonalizedName(effect.Owner)), chatType, eChatLoc.CL_SystemWindow);
+                }
+            }
             GameEventMgr.AddHandler(effect.Owner, EventType, new DOLEventHandler(EventHandler));
         }
 
@@ -79,7 +86,14 @@ namespace DOL.GS.Spells
             if (!noMessages)
             {
                 MessageToLiving(effect.Owner, Spell.Message3, eChatType.CT_SpellExpires);
-                Message.SystemToArea(effect.Owner, Util.MakeSentence(Spell.Message4, effect.Owner.GetName(0, true)), eChatType.CT_SpellExpires, effect.Owner);
+                foreach (GamePlayer player in effect.Owner.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
+                {
+                    if (!(effect.Owner == player))
+                    {
+                        player.MessageFromArea(effect.Owner, Util.MakeSentence(Spell.Message4,
+                            player.GetPersonalizedName(effect.Owner)), eChatType.CT_SpellExpires, eChatLoc.CL_SystemWindow);
+                    }
+                }
             }
             GameEventMgr.RemoveHandler(effect.Owner, EventType, new DOLEventHandler(EventHandler));
             return 0;
@@ -149,7 +163,14 @@ namespace DOL.GS.Spells
             if (!noMessages && Spell.Pulse == 0)
             {
                 MessageToLiving(effect.Owner, Spell.Message3, eChatType.CT_SpellExpires);
-                Message.SystemToArea(effect.Owner, Util.MakeSentence(Spell.Message4, effect.Owner.GetName(0, false)), eChatType.CT_SpellExpires, effect.Owner);
+                foreach (GamePlayer player in effect.Owner.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
+                {
+                    if (!(effect.Owner == player))
+                    {
+                        player.MessageFromArea(effect.Owner, Util.MakeSentence(Spell.Message4,
+                            player.GetPersonalizedName(effect.Owner)), eChatType.CT_SpellExpires, eChatLoc.CL_SystemWindow);
+                    }
+                }
             }
             return 0;
         }

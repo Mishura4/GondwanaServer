@@ -289,7 +289,13 @@ namespace DOL.GS.Commands
 
                             client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Duel.YouSurrender", client.Player.GetPersonalizedName(target)), eChatType.CT_Emote, eChatLoc.CL_SystemWindow);
                             target.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Duel.TargetSurrender", target.GetPersonalizedName(client.Player)), eChatType.CT_Emote, eChatLoc.CL_SystemWindow);
-                            Message.SystemToArea(client.Player, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Duel.PlayerVsPlayer", target.GetPersonalizedName(client.Player), client.Player.GetPersonalizedName(target)), eChatType.CT_Emote, client.Player, target);
+                            foreach (GamePlayer player in client.Player.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
+                            {
+                                if (!(client.Player == player || target == player))
+                                {
+                                    player.MessageFromArea(client.Player, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Duel.PlayerVsPlayer", player.GetPersonalizedName(client.Player), player.GetPersonalizedName(target)), eChatType.CT_Emote, eChatLoc.CL_SystemWindow);
+                                }
+                            }
 
                             return;
                         }

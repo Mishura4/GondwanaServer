@@ -460,8 +460,8 @@ namespace DOL.GS.Commands
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.InviteNotThis"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 return;
                             }
-                            obj.Out.SendGuildInviteCommand(client.Player, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.InviteRecieved", client.Player.Name, client.Player.Guild.Name));
-                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.InviteSent", obj.Name, client.Player.Guild.Name), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                            obj.Out.SendGuildInviteCommand(client.Player, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.InviteRecieved", obj.GetPersonalizedName(client.Player), client.Player.Guild.Name));
+                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.InviteSent", client.Player.GetPersonalizedName(obj), client.Player.Guild.Name), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                             client.Player.Guild.UpdateGuildWindow();
                         }
                         break;

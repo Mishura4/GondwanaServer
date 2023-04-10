@@ -175,7 +175,7 @@ namespace DOL.GS.Spells
                     bool charmable = false;
 
                     // gets true only for charm-able mobs for this spell type
-                    switch(((GameNPC)target).BodyType)
+                    switch (((GameNPC)target).BodyType)
                     {
                         case (ushort)NpcTemplateMgr.eBodyType.Humanoid:
                             charmable = m_spell.AmnesiaChance == (int)eCharmType.Humanoid
@@ -301,7 +301,14 @@ namespace DOL.GS.Spells
                 {
 
                     // sorc: "The slough serpent is enthralled!" ct_spell
-                    Message.SystemToArea(effect.Owner, Util.MakeSentence(Spell.Message1, npc.GetName(0, false)), eChatType.CT_Spell);
+                    foreach (GamePlayer player1 in effect.Owner.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
+                    {
+                        if (!(effect.Owner == player1))
+                        {
+                            player1.MessageFromArea(effect.Owner, Util.MakeSentence(Spell.Message1,
+                                player1.GetPersonalizedName(effect.Owner)), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                        }
+                    }
                     MessageToCaster(npc.GetName(0, true) + " is now under your control.", eChatType.CT_Spell);
 
                     player.SetControlledBrain(m_controlledBrain);

@@ -49,7 +49,14 @@ namespace DOL.GS.Spells
 
             MessageToLiving(effect.Owner, Spell.Message1, eChatType.CT_Spell);
             MessageToCaster(Util.MakeSentence(Spell.Message2, effect.Owner.GetName(0, true)), eChatType.CT_Spell);
-            Message.SystemToArea(effect.Owner, Util.MakeSentence(Spell.Message2, effect.Owner.GetName(0, true)), eChatType.CT_Spell, effect.Owner, m_caster);
+            foreach (GamePlayer player1 in effect.Owner.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
+            {
+                if (!(effect.Owner == player1 || m_caster == player1))
+                {
+                    player1.MessageFromArea(effect.Owner, Util.MakeSentence(Spell.Message2,
+                        player1.GetPersonalizedName(effect.Owner)), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                }
+            }
 
             GamePlayer player = effect.Owner as GamePlayer;
             if (player != null)

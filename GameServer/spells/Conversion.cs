@@ -44,7 +44,14 @@ namespace DOL.GS.Spells
             eChatType toLiving = (Spell.Pulse == 0) ? eChatType.CT_Spell : eChatType.CT_SpellPulse;
             eChatType toOther = (Spell.Pulse == 0) ? eChatType.CT_System : eChatType.CT_Spell;
             MessageToLiving(effect.Owner, Spell.Message1, toLiving);
-            Message.SystemToArea(effect.Owner, Util.MakeSentence(Spell.Message2, effect.Owner.GetName(0, false)), toOther, effect.Owner);
+            foreach (GamePlayer player in effect.Owner.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
+            {
+                if (!(effect.Owner == player))
+                {
+                    player.MessageFromArea(effect.Owner, Util.MakeSentence(Spell.Message2,
+                        player.GetPersonalizedName(effect.Owner)), toOther, eChatLoc.CL_SystemWindow);
+                }
+            }
         }
 
         public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)

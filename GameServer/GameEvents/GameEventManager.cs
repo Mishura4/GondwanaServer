@@ -1179,8 +1179,11 @@ namespace DOL.GameEvents
             if (startEventId != null)
             {
                 var ev = Instance.Events.FirstOrDefault(e => e.ID.Equals(startEventId));
-                if (ev != null && ev.TimeBeforeReset != 0 && startingEvent.EndingConditionTypes.Count() != 1)
+                if (ev != null && ev.TimeBeforeReset != 0)
                 {
+                    if (startingEvent.Status == EventStatus.EndedByTimer)
+                        return;
+
                     bool startEvent = true;
                     bool startTimer = false;
                     ev.EventFamily[eventId] = true;
@@ -1198,7 +1201,7 @@ namespace DOL.GameEvents
                         ev.ResetFamilyTimer.Start();
                     }
 
-                    if (startEvent == false || startingEvent.Status == EventStatus.EndedByTimer)
+                    if (startEvent == false)
                     {
                         return;
                     }

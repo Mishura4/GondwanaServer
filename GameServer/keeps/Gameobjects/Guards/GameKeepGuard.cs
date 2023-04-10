@@ -798,11 +798,11 @@ namespace DOL.GS.Keeps
             //You examine the Armswoman. She is friendly and is a realm guard.
             //She has upgraded equipment (5).
             IList list = new ArrayList(4);
-            list.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameKeepGuard.GetExamineMessages.YouTarget", GetName(0, false)));
+            list.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameKeepGuard.GetExamineMessages.YouTarget", player.GetPersonalizedName(this)));
 
             if (Realm != eRealm.None)
             {
-                list.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameKeepGuard.GetExamineMessages.YouExamine", GetName(0, false), GetPronoun(0, true), GetAggroLevelString(player, false)));
+                list.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameKeepGuard.GetExamineMessages.YouExamine", player.GetPersonalizedName(this), GetPronoun(0, true), GetAggroLevelString(player, false)));
                 if (this.Component != null)
                 {
                     string text = "";

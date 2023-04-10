@@ -101,8 +101,13 @@ namespace DOL.GS
             target.TakeDamage(this, eDamageType.Crush, damageAmount, 0);
             Owner.Out.SendMessage("The Ram hits " + target.Name + " for " + damageAmount + " dmg!", eChatType.CT_YouHit,
                                   eChatLoc.CL_SystemWindow);
-            Message.SystemToArea(this, GetName(0, false) + " hits " + target.GetName(0, true), eChatType.CT_OthersCombat,
-                                 Owner);
+            foreach (GamePlayer player in GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
+            {
+                if (!(Owner == player))
+                {
+                    player.MessageFromArea(this, player.GetPersonalizedName(this) + " hits " + player.GetPersonalizedName(target), eChatType.CT_OthersCombat, eChatLoc.CL_SystemWindow);
+                }
+            }
             base.DoDamage();
         }
 

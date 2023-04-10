@@ -214,7 +214,7 @@ namespace DOL.GS
         public override IList GetExamineMessages(GamePlayer player)
         {
             IList list = base.GetExamineMessages(player);
-            list.Insert(0, "You select " + GetName(0, false) + ".");
+            list.Insert(0, "You select " + player.GetPersonalizedName(this) + ".");
             return list;
         }
         #endregion

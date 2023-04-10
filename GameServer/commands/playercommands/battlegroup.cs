@@ -343,7 +343,8 @@ namespace DOL.GS.Commands
                             }
                             text.Append(player.Name);
 
-                            client.Out.SendMessage(text.ToString() + client.Player.GetPersonalizedName(player), eChatType.CT_BattleGroup, eChatLoc.CL_SystemWindow);
+                            client.Out.SendMessage(text.ToString() + (client.Player == player ? " " : client.Player.GetPersonalizedName(player)),
+                                eChatType.CT_BattleGroup, eChatLoc.CL_SystemWindow);
                             //TODO: make function formatstring                        
                         }
                     }

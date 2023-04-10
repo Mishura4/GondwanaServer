@@ -3871,7 +3871,15 @@ namespace DOL.GS
                     target.Out.SendMessage(resultText, eChatType.CT_System, eChatLoc.CL_PopupWindow);
                     if (announce)
                     {
-                        Message.ChatToArea(this, LanguageMgr.GetTranslation(target.Client.Account.Language, "GameNPC.SayTo.SpeaksTo", GetName(0, true, target.Client.Account.Language, this), target.GetName(0, false)), eChatType.CT_System, WorldMgr.SAY_DISTANCE, target);
+                        foreach (GamePlayer player in GetPlayersInRadius(WorldMgr.SAY_DISTANCE))
+                        {
+                            if (!(target == player))
+                            {
+                                player.MessageFromArea(this, LanguageMgr.GetTranslation(player.Client.Account.Language, "GameNPC.SayTo.SpeaksTo",
+                                player.GetPersonalizedName(this), player.GetPersonalizedName(target)
+                                ), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                            }
+                        }
                     }
                     break;
                 case eChatLoc.CL_ChatWindow:
@@ -4349,9 +4357,15 @@ namespace DOL.GS
                 if (IsWorthReward)
                     DropLoot(killer);
 
-                Message.SystemToArea(this, GetName(0, true) + " dies!", eChatType.CT_PlayerDied, killer);
+                foreach (GamePlayer player in GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
+                {
+                    if (!(killer == player))
+                    {
+                        player.MessageFromArea(this, player.GetPersonalizedName(this) + " dies!", eChatType.CT_PlayerDied, eChatLoc.CL_SystemWindow);
+                    }
+                }
                 if (killer is GamePlayer)
-                    ((GamePlayer)killer).Out.SendMessage(GetName(0, true) + " dies!", eChatType.CT_PlayerDied, eChatLoc.CL_SystemWindow);
+                    ((GamePlayer)killer).Out.SendMessage(((GamePlayer)killer).GetPersonalizedName(this) + " dies!", eChatType.CT_PlayerDied, eChatLoc.CL_SystemWindow);
             }
             StopFollowing();
 
