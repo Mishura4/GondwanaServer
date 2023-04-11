@@ -646,7 +646,7 @@ namespace DOL.GS
         public virtual IList GetExamineMessages(GamePlayer player)
         {
             IList list = new ArrayList(4);
-            list.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameObject.GetExamineMessages.YouTarget", GetName(0, false)));
+            list.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameObject.GetExamineMessages.YouTarget", player.GetPersonalizedName(this)));
             return list;
         }
 

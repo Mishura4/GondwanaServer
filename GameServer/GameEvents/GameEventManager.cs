@@ -1166,6 +1166,26 @@ namespace DOL.GameEvents
         private async Task HandleConsequence(EndingAction action, IEnumerable<string> zones, string startEventId, string resetEventId, GameEvent startingEvent)
         {
             string eventId = startingEvent.ID;
+            if (resetEventId != null)
+            {
+                var resetEvent = this.Events.FirstOrDefault(e => e.ID.Equals(resetEventId));
+
+                if (resetEvent == null)
+                {
+                    log.Error("Impossible to reset Event from resetEventId : " + resetEventId);
+                    return;
+                }
+
+                if (resetEvent.TimerType == TimerType.DateType && resetEvent.EndingConditionTypes.Contains(EndingConditionType.Timer) && resetEvent.EndingConditionTypes.Count() == 1)
+                {
+                    log.Error(string.Format("Cannot Reset Event {0}, Name: {1} with DateType with only Timer as Ending condition", resetEvent.ID, resetEvent.EventName));
+                }
+                else
+                {
+                    this.ResetEventsFromId(resetEventId);
+                }
+            }
+            
             if (action == EndingAction.BindStone)
             {
                 foreach (var cl in WorldMgr.GetAllPlayingClients().Where(c => zones.Contains(c.Player.CurrentZone.ID.ToString())))
@@ -1182,7 +1202,10 @@ namespace DOL.GameEvents
                 if (ev != null && ev.TimeBeforeReset != 0)
                 {
                     if (startingEvent.Status == EventStatus.EndedByTimer)
+                    {
                         return;
+                    }
+
 
                     bool startEvent = true;
                     bool startTimer = false;
@@ -1229,25 +1252,6 @@ namespace DOL.GameEvents
                 {
                     ev.StartedTime = null;
                     await Instance.StartEvent(ev);
-                }
-            }
-            if (resetEventId != null)
-            {
-                var resetEvent = this.Events.FirstOrDefault(e => e.ID.Equals(resetEventId));
-
-                if (resetEvent == null)
-                {
-                    log.Error("Impossible to reset Event from resetEventId : " + resetEventId);
-                    return;
-                }
-
-                if (resetEvent.TimerType == TimerType.DateType && resetEvent.EndingConditionTypes.Contains(EndingConditionType.Timer) && resetEvent.EndingConditionTypes.Count() == 1)
-                {
-                    log.Error(string.Format("Cannot Reset Event {0}, Name: {1} with DateType with only Timer as Ending condition", resetEvent.ID, resetEvent.EventName));
-                }
-                else
-                {
-                    this.ResetEventsFromId(resetEventId);
                 }
             }
         }

@@ -81,7 +81,7 @@ namespace DOL.GS.RealmAbilities
                     }
                     else
                     {
-                        radiusPlayer.MessageFromArea(m_player, m_player.Name + " casts a spell!", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                        radiusPlayer.MessageFromArea(m_player, i_player.GetPersonalizedName(caster) + " casts a spell!", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
                     }
 
                     radiusPlayer.Out.SendSpellCastAnimation(m_player, 7059, 0);

@@ -379,11 +379,11 @@ namespace DOL.GS.Commands
             }
             else
             {
-                messageToSource = string.Format(emoteMessages[EMOTE_TO_SOURCE], targetObject.GetName(0, false));
-                messageToOthers = string.Format(emoteMessages[EMOTE_TO_OTHERS], sourcePlayer.Name, targetObject.GetName(0, false));
+                messageToSource = string.Format(emoteMessages[EMOTE_TO_SOURCE], sourcePlayer.GetPersonalizedName(targetObject));
+                messageToOthers = emoteMessages[EMOTE_TO_OTHERS];
 
                 if (targetObject is GamePlayer)
-                    messageToTarget = string.Format(emoteMessages[EMOTE_TO_OTHERS], sourcePlayer.Name, YOU);
+                    messageToTarget = string.Format(emoteMessages[EMOTE_TO_OTHERS], ((GamePlayer)targetObject).GetPersonalizedName(sourcePlayer), YOU);
             }
 
             foreach (GamePlayer player in sourcePlayer.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
@@ -409,7 +409,7 @@ namespace DOL.GS.Commands
 
             foreach (GamePlayer player in sourcePlayer.GetPlayersInRadius(EMOTE_RANGE_TO_OTHERS))
                 if (player != sourcePlayer && player != targetPlayer && !player.IsIgnoring(sourcePlayer)) // client and target gets unique messages
-                    SendEmoteMessage(player, messageToOthers);
+                    SendEmoteMessage(player, string.Format(messageToOthers, player.GetPersonalizedName(sourcePlayer), player.GetPersonalizedName(targetPlayer)));
 
             return;
         }

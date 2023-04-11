@@ -127,16 +127,16 @@ namespace DOL.GS.Spells
             if (Spell.Name.StartsWith("Proc"))
             {
                 MessageToCaster(String.Format(LanguageMgr.GetTranslation(PlayerReceivingMessages.Client, "DoTSpellHandler.SendDamageMessages.YouHitFor",
-                    ad.Target.GetName(0, false), ad.Damage)), eChatType.CT_YouHit);
+                    ((GamePlayer)m_caster).GetPersonalizedName(ad.Target), ad.Damage)), eChatType.CT_YouHit);
             }
             else
             {
                 MessageToCaster(String.Format(LanguageMgr.GetTranslation(PlayerReceivingMessages.Client, "DoTSpellHandler.SendDamageMessages.YourHitsFor",
-                    Spell.Name, ad.Target.GetName(0, false), ad.Damage)), eChatType.CT_YouHit);
+                    Spell.Name, ((GamePlayer)m_caster).GetPersonalizedName(ad.Target), ad.Damage)), eChatType.CT_YouHit);
             }
             if (ad.CriticalDamage > 0)
                 MessageToCaster(String.Format(LanguageMgr.GetTranslation(PlayerReceivingMessages.Client, "DoTSpellHandler.SendDamageMessages.YourCriticallyHits",
-                    Spell.Name, ad.Target.GetName(0, false), ad.CriticalDamage)), eChatType.CT_YouHit);
+                    Spell.Name, ((GamePlayer)m_caster).GetPersonalizedName(ad.Target), ad.CriticalDamage)), eChatType.CT_YouHit);
         }
 
         public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)

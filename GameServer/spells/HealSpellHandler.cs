@@ -213,8 +213,8 @@ namespace DOL.GS.Spells
                 {
                     if (target == m_caster)
                         MessageToCaster("You are fully healed.", eChatType.CT_SpellResisted);
-                    else
-                        MessageToCaster(target.GetName(0, true) + " is fully healed.", eChatType.CT_SpellResisted);
+                    else if (target is GamePlayer)
+                        MessageToCaster(((GamePlayer)m_caster).GetPersonalizedName(target) + " is fully healed.", eChatType.CT_SpellResisted);
                 }
                 return false;
             }

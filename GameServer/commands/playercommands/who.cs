@@ -248,7 +248,7 @@ namespace DOL.GS.Commands
                     resultCount++;
                     if (resultMessages.Count < MAX_LIST_SIZE && resultCount >= listStart)
                     {
-                        resultMessages.Add(resultCount + ") " + FormatLine(clients.Player, client.Account.PrivLevel, client));
+                        resultMessages.Add(resultCount + ") " + FormatLine(client, clients.Player, client.Account.PrivLevel, client));
                     }
                 }
             }
@@ -281,7 +281,7 @@ namespace DOL.GS.Commands
 
 
         // make /who line using GamePlayer
-        private string FormatLine(GamePlayer player, uint PrivLevel, GameClient source)
+        private string FormatLine(GameClient client, GamePlayer player, uint PrivLevel, GameClient source)
         {
             /*
 			 * /setwho class | trade
@@ -298,7 +298,7 @@ namespace DOL.GS.Commands
                 return "???";
             }
 
-            StringBuilder result = new StringBuilder(player.Name, 100);
+            StringBuilder result = new StringBuilder(client.Player.GetPersonalizedName(player), 100);
             if (player.GuildName != "")
             {
                 result.Append(" ");

@@ -3662,7 +3662,7 @@ namespace DOL.GS
                     {
                         IList list = new ArrayList(4);
                         list.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameObject.GetExamineMessages.YouTarget",
-                                                            GetName(0, false, player.Client.Account.Language, this)));
+                                                            player.GetPersonalizedName(this)));
                         list.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameNPC.GetExamineMessages.YouExamine",
                                                             GetName(0, false, player.Client.Account.Language, this),
                                                             GetPronoun(0, true, player.Client.Account.Language), GetAggroLevelString(player, false)));

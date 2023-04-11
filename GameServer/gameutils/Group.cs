@@ -357,7 +357,10 @@ namespace DOL.GS
             string message;
             if (from != null)
             {
+                foreach (GamePlayer player in GetPlayersInTheGroup())
+                    player.Out.SendMessage(string.Format("[Party] {0}: \"{1}\"", player.GetPersonalizedName(from), msg), type, loc);
                 message = string.Format("[Party] {0}: \"{1}\"", from.GetName(0, true), msg);
+                return;
             }
             else
             {
