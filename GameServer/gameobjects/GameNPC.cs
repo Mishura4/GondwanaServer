@@ -4919,6 +4919,11 @@ namespace DOL.GS
                     else
                         invitem = GameInventoryItem.Create(lootTemplate);
 
+                    if (lootTemplate is GeneratedUniqueItem)
+                    {
+                        invitem.IsROG = true;
+                    }
+
                     loot = new WorldInventoryItem(invitem);
                     loot.Position = Position;
                     loot.Heading = Heading;

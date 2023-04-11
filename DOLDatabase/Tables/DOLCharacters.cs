@@ -197,6 +197,8 @@ namespace DOL.Database
 
         private byte m_activeSaddleBags = 0;
 
+        private bool m_receiveROG; // toggle receiving ROGs for the player
+
         /// <summary>
         /// Create the character row in table
         /// </summary>
@@ -231,6 +233,24 @@ namespace DOL.Database
             m_roleplay = false;
             m_ignoreStatistics = false;
             m_isRenaissance = false;
+            m_receiveROG = true;
+        }
+
+        /// <summary>
+        /// Gets/sets the characters option to receive ROGs /eventrog
+        /// </summary>
+        [DataElement(AllowDbNull = false)]
+        public bool ReceiveROG
+        {
+            get
+            {
+                return m_receiveROG;
+            }
+            set
+            {
+                Dirty = true;
+                m_receiveROG = value;
+            }
         }
 
         /// <summary>

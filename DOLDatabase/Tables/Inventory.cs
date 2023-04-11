@@ -43,6 +43,14 @@ namespace DOL.Database
 
         #region Inventory fields
 
+        protected bool m_isROG;         // iscrafted or looted ?
+        [DataElement(AllowDbNull = false)]
+        public virtual bool IsROG
+        {
+            get { return m_isROG; }
+            set { Dirty = true; m_isROG = value; }
+        }
+
         protected string m_ownerID;         // owner id
         [DataElement(AllowDbNull = false, Index = true)]
         public string OwnerID

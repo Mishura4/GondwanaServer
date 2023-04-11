@@ -163,6 +163,12 @@ namespace DOL.GS
             return m_groupMembers.ToArray();
         }
 
+        public ICollection<GamePlayer> GetNearbyPlayersInTheGroup(GamePlayer source)
+        {
+            return m_groupMembers.OfType<GamePlayer>().Where(groupmate =>
+                source.GetDistanceTo(groupmate) <= WorldMgr.MAX_EXPFORKILL_DISTANCE).ToArray();
+        }
+
         /// <summary>
         /// Gets all players of the group
         /// </summary>

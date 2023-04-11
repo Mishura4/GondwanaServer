@@ -146,6 +146,25 @@ namespace DOL.GS
         public override bool CanTradeAnyItem { get { return Client.Account.PrivLevel > (int)ePrivLevel.Player; } }
 
         /// <summary>
+        /// Gets/sets the characters option to receive ROGs /eventrog
+        /// (delegate to property in DBCharacter)
+        /// </summary>
+        public bool ReceiveROG
+        {
+            get { return DBCharacter != null ? DBCharacter.ReceiveROG : true; }
+            set { if (DBCharacter != null) DBCharacter.ReceiveROG = value; }
+        }
+        
+        protected int m_OutOfClassROGPercent = 0;
+
+        public int OutOfClassROGPercent
+        {
+            get { return m_OutOfClassROGPercent; }
+            set { m_OutOfClassROGPercent = value; }
+        }
+
+
+        /// <summary>
         /// Gets or sets the targetObject's visibility
         /// </summary>
         public override bool TargetInView
