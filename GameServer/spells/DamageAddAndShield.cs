@@ -192,14 +192,14 @@ namespace DOL.GS.Spells
             }
             else if (attackerClient != null)
             {
-                MessageToLiving(attacker, String.Format(LanguageMgr.GetTranslation(attackerClient, "DamageAddAndShield.EventHandlerDS.YouHitFor"), target.GetName(0, false), ad.Damage), eChatType.CT_Spell);
+                MessageToLiving(attacker, String.Format(LanguageMgr.GetTranslation(attackerClient, "DamageAddAndShield.EventHandlerDS.YouHitFor"), attackerClient.Player.GetPersonalizedName(target), ad.Damage), eChatType.CT_Spell);
             }
 
             GameClient targetClient = null;
             if (target is GamePlayer) targetClient = ((GamePlayer)target).Client;
 
             if (targetClient != null)
-                MessageToLiving(target, String.Format(LanguageMgr.GetTranslation(targetClient, "DamageAddAndShield.EventHandlerDS.DamageToYou"), attacker.GetName(0, false), ad.Damage), eChatType.CT_Spell);
+                MessageToLiving(target, String.Format(LanguageMgr.GetTranslation(targetClient, "DamageAddAndShield.EventHandlerDS.DamageToYou"), targetClient.Player.GetPersonalizedName(attacker), ad.Damage), eChatType.CT_Spell);
 
             target.OnAttackedByEnemy(ad);
             attacker.DealDamage(ad);
