@@ -278,8 +278,8 @@ namespace DOL.GS.Spells
             }
             else
             {
-                MessageToCaster("You heal " + target.GetName(0, false) + " for " + heal + " hit points!", eChatType.CT_Spell);
-                MessageToLiving(target, "You are healed by " + m_caster.GetName(0, false) + " for " + heal + " hit points.", eChatType.CT_Spell);
+                MessageToCaster("You heal " + ((GamePlayer)m_caster).GetPersonalizedName(target) + " for " + heal + " hit points!", eChatType.CT_Spell);
+                MessageToLiving(target, "You are healed by " + ((GamePlayer)target).GetPersonalizedName(m_caster) + " for " + heal + " hit points.", eChatType.CT_Spell);
                 if (heal < amount)
                 {
 
@@ -294,7 +294,7 @@ namespace DOL.GS.Spells
 
                     #endregion PVP DAMAGE
 
-                    MessageToCaster(target.GetName(0, true) + " is fully healed.", eChatType.CT_Spell);
+                    MessageToCaster(((GamePlayer)m_caster).GetPersonalizedName(target) + " is fully healed.", eChatType.CT_Spell);
                 }
                 if (heal > 0 && criticalvalue > 0)
                     MessageToCaster("Your heal criticals for an extra " + criticalvalue + " amount of hit points!", eChatType.CT_Spell);
@@ -343,8 +343,8 @@ namespace DOL.GS.Spells
             }
             else if (heal > 0)
             {
-                MessageToCaster("You heal " + target.GetName(0, false) + " for " + heal + " hit points!", eChatType.CT_Spell);
-                MessageToLiving(target, "You are healed by " + m_caster.GetName(0, false) + " for " + heal + " hit points.", eChatType.CT_Spell);
+                MessageToCaster("You heal " + ((GamePlayer)m_caster).GetPersonalizedName(target) + " for " + heal + " hit points!", eChatType.CT_Spell);
+                MessageToLiving(target, "You are healed by " + ((GamePlayer)target).GetPersonalizedName(m_caster) + " for " + heal + " hit points.", eChatType.CT_Spell);
 
                 #region PVP DAMAGE
 

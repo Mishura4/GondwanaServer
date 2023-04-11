@@ -48,7 +48,7 @@ namespace DOL.GS.Spells
             base.OnEffectStart(effect);
 
             MessageToLiving(effect.Owner, Spell.Message1, eChatType.CT_Spell);
-            MessageToCaster(Util.MakeSentence(Spell.Message2, effect.Owner.GetName(0, true)), eChatType.CT_Spell);
+            MessageToCaster(Util.MakeSentence(Spell.Message2, ((GamePlayer)m_caster).GetPersonalizedName(effect.Owner)), eChatType.CT_Spell);
             foreach (GamePlayer player1 in effect.Owner.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
             {
                 if (!(effect.Owner == player1 || m_caster == player1))
@@ -254,7 +254,7 @@ namespace DOL.GS.Spells
                             if (immunity.ImmunityState
                                 && target == immunity.Owner)
                             {
-                                MessageToCaster(immunity.Owner.GetName(0, true) + " can't have that effect again yet!!!", eChatType.CT_SpellPulse);
+                                MessageToCaster(((GamePlayer)m_caster).GetPersonalizedName(immunity.Owner) + " can't have that effect again yet!!!", eChatType.CT_SpellPulse);
                                 return;
                             }
                         }

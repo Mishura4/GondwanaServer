@@ -83,7 +83,10 @@ namespace DOL.GS.GameEvents
 
             // Set Primary Skill to Basic.
             ch.SerializedCraftingSkills = string.Join(";", collectionAllCraftingSkills);
-            ch.CraftingPrimarySkill = (int)eCraftingSkill.BasicCrafting;
+            if (ServerProperties.Properties.PLAYERCREATION_PRIMARY_CRAFTINGSKILL)
+                ch.CraftingPrimarySkill = 0;
+            else
+                ch.CraftingPrimarySkill = (int)eCraftingSkill.BasicCrafting;
         }
 
     }

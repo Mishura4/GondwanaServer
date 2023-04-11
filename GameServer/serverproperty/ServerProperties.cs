@@ -2548,6 +2548,12 @@ namespace DOL.GS.ServerProperties
         #region CRAFT / SALVAGE
 
         /// <summary>
+        /// If players should have craftingPrimary skill = 0 by default at character creation
+        /// </summary>
+        [ServerProperty("craft", "playercreation_primary_craftingskill", "If players should have craftingPrimary skill = 0 by default at character creation", false)]
+        public static bool PLAYERCREATION_PRIMARY_CRAFTINGSKILL;
+
+        /// <summary>
         /// The crafting sellback price control at each craft (calculate a percent of raw materials used)
         /// </summary>
         [ServerProperty("craft", "crafting_adjust_product_price", "Change price to recommended value in database for product itemtemplate", false)]

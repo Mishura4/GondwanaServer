@@ -104,7 +104,7 @@ namespace DOL.GS.Spells
 
                 if (attackerClient != null)
                 {
-                    MessageToLiving(attacker, String.Format(LanguageMgr.GetTranslation(attackerClient, "DamageAddAndShield.EventHandlerDA.YouHitExtra"), target.GetName(0, false), ad.Damage), eChatType.CT_Spell);
+                    MessageToLiving(attacker, String.Format(LanguageMgr.GetTranslation(attackerClient, "DamageAddAndShield.EventHandlerDA.YouHitExtra"), attackerClient.Player.GetPersonalizedName(target), ad.Damage), eChatType.CT_Spell);
                 }
             }
 
@@ -113,7 +113,7 @@ namespace DOL.GS.Spells
 
             if (targetClient != null)
             {
-                MessageToLiving(target, String.Format(LanguageMgr.GetTranslation(targetClient, "DamageAddAndShield.EventHandlerDA.DamageToYou"), attacker.GetName(0, false), ad.Damage), eChatType.CT_Spell);
+                MessageToLiving(target, String.Format(LanguageMgr.GetTranslation(targetClient, "DamageAddAndShield.EventHandlerDA.DamageToYou"), targetClient.Player.GetPersonalizedName(attacker), ad.Damage), eChatType.CT_Spell);
             }
 
             target.OnAttackedByEnemy(ad);

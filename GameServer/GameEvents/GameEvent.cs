@@ -232,7 +232,15 @@ namespace DOL.GameEvents
 
         private void ResetFamilyTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-
+            ResetFamilyTimer.Stop();
+            foreach (var family in EventFamily)
+            {
+                if (EventFamily[family.Key])
+                {
+                    GameEventManager.Instance.ResetEventsFromId(family.Key);
+                    EventFamily[family.Key] = false;
+                }
+            }
         }
 
         public string ID

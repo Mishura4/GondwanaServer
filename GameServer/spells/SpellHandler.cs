@@ -2910,11 +2910,11 @@ namespace DOL.GS.Spells
                         {
                             if (ovEffect.ImmunityState)
                             {
-                                this.MessageToCaster(noOverwrite, "{0} can't have that effect again yet!", ovEffect.Owner != null ? ovEffect.Owner.GetName(0, true) : "(null)");
+                                this.MessageToCaster(noOverwrite, "{0} can't have that effect again yet!", ovEffect.Owner != null ? ((GamePlayer)m_caster).GetPersonalizedName(ovEffect.Owner) : "(null)");
                             }
                             else
                             {
-                                this.MessageToCaster(noOverwrite, "{0} already has that effect.", target.GetName(0, true));
+                                this.MessageToCaster(noOverwrite, "{0} already has that effect.", ((GamePlayer)m_caster).GetPersonalizedName(target));
                                 MessageToCaster("Wait until it expires. Spell Failed.", noOverwrite);
                             }
                         }
