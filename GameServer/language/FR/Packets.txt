@@ -18,14 +18,14 @@ DetailDisplayHandler.HandlePacket.Damage:					Dégats :
 DetailDisplayHandler.HandlePacket.Defense:					Défense : 
 DetailDisplayHandler.HandlePacket.Devastating:				Dévastateur
 DetailDisplayHandler.HandlePacket.DontBelongGuild:			Vous n'appartenez pas à une guilde.
-DetailDisplayHandler.HandlePacket.FatigueCost:				Coût en endurance : 
+DetailDisplayHandler.HandlePacket.FatigueCost:				Coût en endurance : 
 DetailDisplayHandler.HandlePacket.FollowupStyle:				Style à suivre : {0}
 DetailDisplayHandler.HandlePacket.Front:					(Face)	
-DetailDisplayHandler.HandlePacket.GuildItem:				[Guilde] {0}/Objet : "{1}"
+DetailDisplayHandler.HandlePacket.GuildItem:				[Guilde] {0}/Objet : "{1}"
 DetailDisplayHandler.HandlePacket.High:						Élevé
 DetailDisplayHandler.HandlePacket.HighBonus:				Bonus élevé
 DetailDisplayHandler.HandlePacket.HighPenalty:				Pénalité élevé
-DetailDisplayHandler.HandlePacket.Item:						{0}/objet : "{1}
+DetailDisplayHandler.HandlePacket.Item:						{0}/objet : "{1}
 DetailDisplayHandler.HandlePacket.LevName:					Niv   Nom
 DetailDisplayHandler.HandlePacket.Low:						Faible
 DetailDisplayHandler.HandlePacket.LowBonus:					Bonus faible
@@ -142,21 +142,21 @@ DetailDisplayHandler.WritePotionInfo.Range:					Portée : {0}
 DetailDisplayHandler.WriteUsableClasses.UsableBy:			Utilisable par : 
 
 # /DoorRequestHandler.cs
-DoorRequestHandler.OnTick.TooFarAway:			Vous êtes trop loin de {0} !
+DoorRequestHandler.OnTick.TooFarAway:			Vous êtes trop loin de {0} !
 HousingPickupItemHandler.GardenRemoved:			Objet de jardin retiré.
 HousingPickupItemHandler.PickUp:				Vous mettez {0} dans votre inventaire.
 HousingPlaceItemHandler.30objects:				Vous avez déjà placé 30 objets. Vous ne pouvez pas en placer plus.
 HousingPlaceItemHandler.40objects:				Vous avez déjà placé 40 objets. Vous ne pouvez pas en placer plus.
-HousingPlaceItemHandler.CantFloor:				Cet objet ne peut pas être placé sur le sol !
-HousingPlaceItemHandler.CantWall:				Cet objet ne peut pas être placé sur un mur !
+HousingPlaceItemHandler.CantFloor:				Cet objet ne peut pas être placé sur le sol !
+HousingPlaceItemHandler.CantWall:				Cet objet ne peut pas être placé sur un mur !
 HousingPlaceItemHandler.DropOnFloor:			Vous déposez l'objet {0} sur le sol de votre maison.
 HousingPlaceItemHandler.DropOnGarden:			Vous déposez l'objet {0} dans votre jardin.
 HousingPlaceItemHandler.DropOnWall:				Vous déposez l'objet {0} sur le mur de votre maison.
 HousingPlaceItemHandler.GardenObjectPlaced:		Objet de jardin placé. {0} places restantes.
-HousingPlaceItemHandler.HasPorch:				Cette maison a déjà un porche !
-HousingPlaceItemHandler.HasNoPorch:				Cette maison n'a pas de porche !
+HousingPlaceItemHandler.HasPorch:				Cette maison a déjà un porche !
+HousingPlaceItemHandler.HasNoPorch:				Cette maison n'a pas de porche !
 HousingPlaceItemHandler.IndoorObjectPlaced:		Objet intérieur placé. {0} places restantes.
-HousingPlaceItemHandler.NoHookpoint:			Il n'y a plus de point d'ancrage !
+HousingPlaceItemHandler.NoHookpoint:			Il n'y a plus de point d'ancrage !
 HousingPlaceItemHandler.PutMoney:				Vous déposez de l'argent sur le compte de votre maison.
 
 # /PlayerBonusesListRequestHandler
@@ -171,20 +171,20 @@ PlayerBonusesListRequestHandler.HandlePacket.Special:	Bonus d'objets spéciaux
 PlayerBonusesListRequestHandler.HandlePacket.Specs:		+{0} toutes compétences
 
 # /PlayerInitRequestHandler
-PlayerInitRequestHandler.AllianceMessage:	Message d'Alliance : {0}
-PlayerInitRequestHandler.FreeLevel:			Vous êtes éligible pour un niveau gratuit ! Cliquez sur votre entraîneur pour le recevoir (ou tapez « /freelevel decline » pour refuser votre niveau gratuit).
-PlayerInitRequestHandler.GuildMessage:		Message de Guilde : 
-PlayerInitRequestHandler.LevelCap:			Vous avez excédé la limite de niveau pour ce champs de bataille !
-PlayerInitRequestHandler.OfficerMessage:	Message Officiers : {0}
+PlayerInitRequestHandler.AllianceMessage:	Message d'Alliance : {0}
+PlayerInitRequestHandler.FreeLevel:			Vous êtes éligible pour un niveau gratuit ! Cliquez sur votre entraîneur pour le recevoir (ou tapez « /freelevel decline » pour refuser votre niveau gratuit).
+PlayerInitRequestHandler.GuildMessage:		Message de Guilde : 
+PlayerInitRequestHandler.LevelCap:			Vous avez excédé la limite de niveau pour ce champs de bataille !
+PlayerInitRequestHandler.OfficerMessage:	Message Officiers : {0}
 PlayerInitRequestHandler.SaferLocation:		Cette zone n'est actuellement pas sécurisée et vous êtes transporté(e) vers un endroit plus sûr.
 
 # /PlayerMoveItemRequestHandler
 PlayerMoveItemRequestHandler.TooFarAway:	Vous êtes trop loin pour donner quoi que ce soit à {0}.
 
 # /PlayerPositionUpdateHandler
-PlayerPositionUpdateHandler.Endurance:		Vous perdez de l'endurance !
+PlayerPositionUpdateHandler.Endurance:		Vous perdez de l'endurance !
 PlayerPositionUpdateHandler.Entered:		Vous êtes entré·e dans {0}.
-PlayerPositionUpdateHandler.FallingDamage:	Vous encaissez des dégats de chute !
+PlayerPositionUpdateHandler.FallingDamage:	Vous encaissez des dégats de chute !
 PlayerPositionUpdateHandler.FallPercent:	Vous perdez {0}% de votre total de points de vie.
-PlayerPositionUpdateHandler.SafeFall:		Les dommages ont été réduits grâce à votre abilité de chute contrôlée !
-PlayerPositionUpdateHandler.UnknownZone:	Zone inconnue ! Vous êtes ramené à la pierre d'âme.
+PlayerPositionUpdateHandler.SafeFall:		Les dommages ont été réduits grâce à votre abilité de chute contrôlée !
+PlayerPositionUpdateHandler.UnknownZone:	Zone inconnue ! Vous êtes ramené à la pierre d'âme.

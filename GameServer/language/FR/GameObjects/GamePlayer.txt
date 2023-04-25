@@ -382,7 +382,14 @@ GameObjects.GamePlayer.UseSlot.CantUseCast:				Vous devez finir votre action en 
 GameObjects.GamePlayer.UseSlot.Used:			        Vous utilisez {0}.
 GameObjects.GamePlayer.UseSlot.CantUseCast:				Vous devez finir votre action en cours pour utiliser votre {0}.
 GameObjects.GamePlayer.Whisper.SelectTarget:			Sélectionnez une cible à qui chuchoter.
-
+GameObjects.GamePlayer.Multiplekills:						Vous avez perdu 1 point de réputation pour cause d'assassinats multiples.
+GameObjects.GamePlayer.Wanted:                              {0} est maintenant recherché pour ses crimes.
+GameObjects.GamePlayer.Jailed:                              {0} a été mis en prison par {1}.
+GameObjects.GamePlayer.Jailed.Unknown:                      {0} a été mis en prison par les gardes.
+GameObjects.GamePlayer.Released:                            {0} a été relâché(e) de prison.
+GameObjects.GamePlayer.RvR:                                 \nNombre total de joueurs tués : {0}\n
+GameObjects.GamePlayer.RvR.Champion:                        \nNombre total de joueurs tués : {0}\n Champion du jour : {1} ( {2} attaquants ennemis tués )
+GameObjects.GamePlayer.RvR.Control:                         Le Rvr {1} est sous le contrôle de {0}!
 
 		
 GameObjects.GamePlayer.CastSpell.AlreadyChosenSpells:		You have already chosen your spells for this chamber.	
@@ -719,4 +726,4 @@ GameObjects.GamePlayer.RvR.Occupied:                    Je suis occupé pour le 
 GameObjects.GamePlayer.RvR.Interrupt:                   Vous avez été interrompu.
 GameObjects.GamePlayer.RvR.Too.Far:                     Vous vous êtes trop éloigné.
 GameObjects.GamePlayer.RvR.Capture.Timer:               Prise du fort
-GameObjects.GamePlayer.RvR.Capture.Start:               {0} commence à prendre le contrôle du fort!
+GameObjects.GamePlayer.RvR.Capture.Start:               {0} commence à prendre le contrôle du fort! 

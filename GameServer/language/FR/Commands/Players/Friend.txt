@@ -1,7 +1,9 @@
-Commands.Players.Friend.Added:			{0} was added to your friend list!
-Commands.Players.Friend.Description:	Adds/Removes a player to/from your friendlist!
-Commands.Players.Friend.NotUnique:		Character name is not unique.
-Commands.Players.Friend.NotYourself:	You can't add yourself!
-Commands.Players.Friend.Removed:		{0} was removed from your friend list!
-Commands.Players.Friend.Unknown:		No players online with that name.
+Commands.Players.Friend.Added:			{0} a été ajouté à votre liste d'amis!
+Commands.Players.Friend.Description:	Ajoute/supprime un joueur de votre liste d'amis!
+Commands.Players.Friend.NotUnique:		Le nom du personnage n'est pas unique.
+Commands.Players.Friend.NotYourself:	Vous ne pouvez pas vous ajouter vous-même!
+Commands.Players.Friend.Removed:		{0} a été retiré de votre liste d'amis!
+Commands.Players.Friend.Unknown:		Aucun joueur avec ce nom est en ligne.
 Commands.Players.Friend.Usage:			/friend <playerName>
+Commands.Players.Friend.Askname:		Vous ne pouvez pas ajouter {0} à votre liste d'amis car vous ne connaissez pas son nom!
+Commands.Players.Friend.Notarget:		Vous devez d'abord cibler quelqu'un.

@@ -12,7 +12,7 @@ namespace DOL.GS.Scripts
             if (!base.Interact(player))
                 return false;
 
-            player.Client.Out.SendMessage("Bonjour et bienvenue à la bibliothèque d'Amtenaël !\n" +
+            player.Client.Out.SendMessage("Bonjour et bienvenue à la bibliothèque de Gondwana !\n" +
                                           "Que voulez-vous ?\n\n" +
                                           "[Voir les livres]\n[Ajouter un livre]",
                                           eChatType.CT_Say, eChatLoc.CL_PopupWindow);

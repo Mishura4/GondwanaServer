@@ -207,7 +207,7 @@ namespace DOL.GS
 
             this.GenerateItemWeight();
 
-            this.Description = "Atlas ROG | " + charClass.ToString();
+            this.Description = "Gondwana ROG | " + charClass.ToString();
 
             //don't add to database implicitly, must be done explicitly
             this.AllowAdd = false;

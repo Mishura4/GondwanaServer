@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using DOL.AI.Brain;
 using DOL.Database;
 using DOL.GS.Finance;
+using DOL.Language;
 using DOL.GS.PacketHandler;
 using GameServerScripts.Amtescripts.Managers;
 
@@ -29,8 +30,9 @@ namespace DOL.GS.Scripts
             if (!base.Interact(player))
                 return false;
 
-            player.Out.SendMessage("Bonjour, que voulez-vous ?\n\n[Signaler] mon tueur !\n\n[Voir] la liste noire.",
-                eChatType.CT_System, eChatLoc.CL_PopupWindow);
+            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GuardNPC.Interact.Text1"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GuardNPC.Interact.Text2"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GuardNPC.Interact.Text3"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
             return true;
         }
 
@@ -43,30 +45,32 @@ namespace DOL.GS.Scripts
             switch (text)
             {
                 case "Signaler":
+                case "Report":
 
                     int reported = DeathCheck.Instance.ReportPlayer(player);
                     //if (BlacklistMgr.ReportPlayer(player)) Old Way not used anymore
                     if (reported > 0)
                     {
-                        string words = reported == 1 ? "La personne qui vous a tué a été signalé !" : "Les " + reported + " personnes qui vont ont tués ont été signalés !";
+                        string words = reported == 1 ? LanguageMgr.GetTranslation(player.Client.Account.Language, "GuardNPC.Report.Oneplayer") : LanguageMgr.GetTranslation(player.Client.Account.Language, "GuardNPC.Report.Moreplayers", reported);
                         player.Out.SendMessage(words, eChatType.CT_System, eChatLoc.CL_PopupWindow);
                     }
                     else
-                        player.Out.SendMessage("C'est trop tard pour signaler votre tueur !", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GuardNPC.Report.Toolate"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                     break;
 
                 case "Voir":
+                case "Look":
                     StringBuilder sb = new StringBuilder();
                     var names = this.GetOutlawsName();
 
                     if (names == null)
                     {
-                        sb.AppendLine("Personne n'est recherchée actuellement.");
+                        sb.AppendLine(LanguageMgr.GetTranslation(player.Client.Account.Language, "GuardNPC.Response.Nobodywanted"));
                         player.Out.SendMessage(sb.ToString(), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                         break;
                     }
 
-                    sb.AppendLine("Les personnes suivantes sont sur la liste noire:");
+                    sb.AppendLine(LanguageMgr.GetTranslation(player.Client.Account.Language, "GuardNPC.Response.Blacklist"));
                     names.ForEach(s => sb.AppendLine(s));
                     player.Out.SendMessage(sb.ToString(), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                     break;
@@ -82,13 +86,13 @@ namespace DOL.GS.Scripts
 
             if (!item.CanDropAsLoot)
             {
-                player.Out.SendMessage("Hmm, peut-être que... non, ça ne me dit rien !", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GuardNPC.Response.Dontknow"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 return false;
             }
 
             if (new DateTime(2000, 1, 1).Add(new TimeSpan(0, 0, item.MaxCondition)) < DateTime.Now.Subtract(new TimeSpan(1, 0, 0, 0)))
             {
-                player.Out.SendMessage("Elle a l'air pourri cette tête, je ne la reconnais pas !", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GuardNPC.Response.Rottenhead"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 return false;
             }
 
@@ -104,7 +108,7 @@ namespace DOL.GS.Scripts
 
             var prime = Money.GetMoney(0, 0, reward, 0, 0);
             player.AddMoney(Currency.Copper.Mint(prime));
-            player.Out.SendMessage("Merci de votre précieuse aide, voici " + reward + " pièces d'or pour vous !", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GuardNPC.Response.Headreward", reward), eChatType.CT_System, eChatLoc.CL_PopupWindow);
 
             return true;
         }

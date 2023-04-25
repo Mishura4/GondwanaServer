@@ -55,7 +55,7 @@ namespace DOL.GS.Trainer
                 // player can be promoted
                 if (player.Level >= 5)
                 {
-                    player.Out.SendMessage(this.Name + " says, \"You must now seek your training elsewhere. Which path would you like to follow? [Eldritch], [Enchanter] or [Mentalist]?\"", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MagicianTrainer.Interact.Text1", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                 }
                 else
                 {
@@ -65,7 +65,7 @@ namespace DOL.GS.Trainer
                 // ask for basic equipment if player doesnt own it
                 if (player.Inventory.GetFirstItemByID(PRACTICE_WEAPON_ID, eInventorySlot.MinEquipable, eInventorySlot.LastBackpack) == null)
                 {
-                    player.Out.SendMessage(this.Name + " says, \"Do you require a [practice staff]?\"", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MagicianTrainer.Interact.Text2", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                 }
 
             }
@@ -92,34 +92,48 @@ namespace DOL.GS.Trainer
                 case "Eldritch":
                     if (player.Race == (int)eRace.Elf || player.Race == (int)eRace.Lurikeen)
                     {
-                        player.Out.SendMessage(this.Name + " says, \"I can't tell you something about this class.\"", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MagicianTrainer.Eldritch.Explain", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
                     else
                     {
-                        player.Out.SendMessage(this.Name + " says, \"The path of a Eldritch is not available to your race. Please choose another.\"", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MagicianTrainer.Eldritch.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_ChatWindow);
                     }
                     return true;
                 case "Enchanter":
+                case "Enchanteur":
                     if (player.Race == (int)eRace.Elf || player.Race == (int)eRace.Lurikeen)
                     {
-                        player.Out.SendMessage(this.Name + " says, \"I can't tell you something about this class.\"", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MagicianTrainer.Enchanter.Explain", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
                     else
                     {
-                        player.Out.SendMessage(this.Name + " says, \"The path of a Enchanter is not available to your race. Please choose another.\"", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MagicianTrainer.Enchanter.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_ChatWindow);
                     }
                     return true;
                 case "Mentalist":
+                case "Empathe":
                     if (player.Race == (int)eRace.Celt || player.Race == (int)eRace.Elf || player.Race == (int)eRace.Lurikeen || player.Race == (int)eRace.Shar)
                     {
-                        player.Out.SendMessage(this.Name + " says, \"I can't tell you something about this class.\"", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MagicianTrainer.Mentalist.Explain", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
                     else
                     {
-                        player.Out.SendMessage(this.Name + " says, \"The path of a Mentalist is not available to your race. Please choose another.\"", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MagicianTrainer.Mentalist.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_ChatWindow);
+                    }
+                    return true;
+                case "Bainshee":
+                case "Banshee":
+                    if (player.Race == (int)eRace.Celt || player.Race == (int)eRace.Elf || player.Race == (int)eRace.Lurikeen)
+                    {
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MagicianTrainer.Bainshee.Explain", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                    }
+                    else
+                    {
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MagicianTrainer.Bainshee.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_ChatWindow);
                     }
                     return true;
                 case "practice staff":
+                case "bâton d'entraînement":
                     if (player.Inventory.GetFirstItemByID(PRACTICE_WEAPON_ID, eInventorySlot.Min_Inv, eInventorySlot.Max_Inv) == null)
                     {
                         player.ReceiveItem(this, PRACTICE_WEAPON_ID);

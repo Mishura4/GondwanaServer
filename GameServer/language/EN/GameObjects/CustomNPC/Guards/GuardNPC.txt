@@ -1,0 +1,12 @@
+# CITY GUARDS
+GuardNPC.Interact.Text1:			Greetings, do you need any help?
+GuardNPC.Interact.Text2:			[Report] my killer!
+GuardNPC.Interact.Text3:			[Look] at the blacklist.
+GuardNPC.Report.Oneplayer:			The person who killed you has been reported!
+GuardNPC.Report.Moreplayers:		The {0} persons who killed you have been reported!
+GuardNPC.Report.Toolate:			It's too late to report your killer!
+GuardNPC.Response.Nobodywanted:			No one is currently wanted.
+GuardNPC.Response.Blacklist:			The following people are blacklisted:
+GuardNPC.Response.Dontknow:				Hmm, maybe... no, that doesn't remind me of anything!
+GuardNPC.Response.Rottenhead:			That head looks completely rotten, I cannot recognize it!
+GuardNPC.Response.Headreward:			Thank you for your precious help, here is {0} gold coins for you!

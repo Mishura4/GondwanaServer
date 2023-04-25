@@ -82,16 +82,18 @@ namespace DOL.GS.Trainer
         {
             if (!base.WhisperReceive(source, text)) return false;
             GamePlayer player = source as GamePlayer;
-            String lowerCase = text.ToLower();
 
-            if (lowerCase == LanguageMgr.GetTranslation(player.Client.Account.Language, "EnchanterTrainer.WhisperReceiveCase.Text1"))
+            switch (text)
             {
-                // promote player to other class
-                if (CanPromotePlayer(player))
-                {
+                case "Enchanter":
+                case "Enchanteur":
+                    // promote player to other class
+                    if (CanPromotePlayer(player))
+                    {
                     PromotePlayer(player, (int)eCharacterClass.Enchanter, LanguageMgr.GetTranslation(player.Client.Account.Language, "EnchanterTrainer.WhisperReceive.Text1", player.GetName(0, false)), null);
                     player.ReceiveItem(this, WEAPON_ID1);
-                }
+                    }
+                    break;
             }
             return true;
         }

@@ -15,12 +15,18 @@ Commands.GM.TextNPC.Usage.Spell.Add:			'/textnpc spell add <spellID> <reponse>'
 Commands.GM.TextNPC.Usage.Spell.Remove:		'/textnpc spell remove <reponse>'
 Commands.GM.TextNPC.Usage.Spell.Help:		'/textnpc spell help' Informations sur comment ajouter un effet de sort comme réponse d'un pnj (un pnj doit être selectionné pour afficher la fenêtre)
 Commands.GM.TextNPC.Usage.Spell.Cast:			'/textnpc spell cast <true/false> <reponse>' Pour ajouter ou retirer un sort réel (avec dommages) dans une réponse
+Commands.GM.TextNPC.Usage.Give.Item.Add:			'/textnpc giveitem add <itemTemplateId> <reponse>' Pour ajouter un "objet à donner", suite à une réponse cliquée d'un pnj
+Commands.GM.TextNPC.Usage.Give.Item.Remove:			'/textnpc giveitem remove <reponse>' Pour retirer un "objet à donner", suite à une réponse cliquée d'un pnj
 Commands.GM.TextNPC.Usage.RandomPhrase.Add:		'/textnpc randomphrase add <emote (0=aucune)> <say/yell/em> <phrase>' Pour ajouter une phrase aléatoire sur un pnj à laquelle pourra s'ajouter une émote, ainsi que la manière dont cette phrase est générée (parlée, hurlée, envoi de message)
 Commands.GM.TextNPC.Usage.RandomPhrase.Remove:		'/textnpc randomphrase remove <phrase>'
 Commands.GM.TextNPC.Usage.RandomPhrase.interval:		'/textnpc randomphrase interval <interval en secondes>'
 Commands.GM.TextNPC.Usage.RandomPhrase.Help:		'/textnpc randomphrase help' Informations sur comment ajouter une phrase aléatoire sur un pnj (un pnj doit être selectionné pour afficher la fenêtre)
-Commands.GM.TextNPC.Usage.RandomPhrase.View:		'/textnpc randomphrase view'
-Commands.GM.TextNPC.Usage.Quest:		'/textnpc quest <None/Available/Lesson/Lore/Finish/Pending>' affiche ou non l'icone pour la quête
+Commands.GM.TextNPC.Usage.RandomPhrase.View:		'/textnpc randomphrase view' Montre les phrases aléatoires sur un pnj
+Commands.GM.TextNPC.Usage.IsOutlawfriendly:		'/textnpc IsOutlawfriendly <true/false>' Définit si le Textnpc ne doit parler qu'aux joueurs hors-la-loi
+Commands.GM.TextNPC.Usage.IsRegularfriendly:		'/textnpc IsRegularfriendly <true/false>' Définit si le Textnpc ne doit parler uniquement qu'aux joueurs de réputation normale (réputation = 0)
+Commands.GM.TextNPC.Usage.Responsetrigger.Add:		'/textnpc Responsetrigger add <(questName-goalId-)reponse>' Pour ajouter un "déclencheur" à une réponse ou à une réponse de quête
+Commands.GM.TextNPC.Usage.Responsetrigger.Remove:		'/textnpc Responsetrigger remove <(questName-goalId-)reponse>' Pour retirer un "déclencheur" existant à une réponse ou à une réponse de quête
+Commands.GM.TextNPC.Usage.Quest:		'/textnpc quest <None/Available/Lesson/Lore/Finish/Pending>' affiche ou non l'icône pour la quête
 Commands.GM.TextNPC.Usage.Quest.Add:			'/textnpc quest add <questName(-goalId-)> <reponse>' Ajouter une quête(but optionel) en tant que réponse et appelle une nouvelle étape
 Commands.GM.TextNPC.Usage.Quest.Remove:			'/textnpc quest remove <questName(-goalId)> <reponse>' Retire une quête(but optionel)
 Commands.GM.TextNPC.Usage.Level:		'/textnpc level <levelmin> <levelmax>' règle le niveau minimum et maximum des personnage pouvant parler au pnj

@@ -99,16 +99,18 @@ namespace DOL.GS.Trainer
         {
             if (!base.WhisperReceive(source, text)) return false;
             GamePlayer player = source as GamePlayer;
-            String lowerCase = text.ToLower();
 
-            if (lowerCase == LanguageMgr.GetTranslation(player.Client.Account.Language, "FriarTrainer.WhisperReceiveCase.Text1"))
+            switch (text)
             {
-                // promote player to other class
-                if (CanPromotePlayer(player))
-                {
-                    PromotePlayer(player, (int)eCharacterClass.Friar, LanguageMgr.GetTranslation(player.Client.Account.Language, "FriarTrainer.WhisperReceive.Text1"), null);
-                    addGift(ARMOR_ID1, player);
-                }
+                case "Defenders of Albion":
+                case "Défenseurs d'Albion":
+                    // promote player to other class
+                    if (CanPromotePlayer(player))
+                    {
+                    PromotePlayer(player, (int)eCharacterClass.Bainshee, LanguageMgr.GetTranslation(player.Client.Account.Language, "FriarTrainer.WhisperReceive.Text1", player.GetName(0, false)), null);
+                    player.ReceiveItem(this, ARMOR_ID1);
+                    }
+                    break;
             }
             return true;
         }

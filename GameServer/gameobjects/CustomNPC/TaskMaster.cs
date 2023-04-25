@@ -45,6 +45,7 @@ namespace DOL.GS
 
             switch (str.ToLower())
             {
+                case "tâches":
                 case "tasks":
                     {
                         //get list of all itextnpcs from db, that have isintaskmaster==1

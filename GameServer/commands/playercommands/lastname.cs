@@ -246,7 +246,7 @@ namespace DOL.GS.Commands
                 player.Out.SendMessage(
                     LanguageMgr.GetTranslation(
                         player.Client.Account.Language,
-                        "Commands.Players.Lastname.set.To",
+                        "Commands.Players.Lastname.Set.To",
                         NewLastName),
                     eChatType.CT_System, eChatLoc.CL_SystemWindow);
             }
@@ -255,7 +255,7 @@ namespace DOL.GS.Commands
                 player.Out.SendMessage(
                     LanguageMgr.GetTranslation(
                         player.Client.Account.Language,
-                        "Commands.Players.Lastname.set.Clear"),
+                        "Commands.Players.Lastname.Set.Clear"),
                     eChatType.CT_System, eChatLoc.CL_SystemWindow);
             }
         }

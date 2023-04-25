@@ -72,7 +72,7 @@ namespace DOL.GS.GameEvents
                                 if (killerPlayer.Reputation == -1)
                                     killerPlayer.Reputation -= 1;
                                 killerPlayer.SaveIntoDatabase();
-                                killerPlayer.Out.SendMessage("Vous avez perdu 1 point de réputation pour cause d'assassinats multiples.", PacketHandler.eChatType.CT_System, PacketHandler.eChatLoc.CL_SystemWindow);
+                                killerPlayer.Out.SendMessage(LanguageMgr.GetTranslation(killerPlayer.Client, "GameObjects.GamePlayer.Multiplekills", killer.Name), PacketHandler.eChatType.CT_System, PacketHandler.eChatLoc.CL_SystemWindow);
                                 string newsMessage = LanguageMgr.GetTranslation(killerPlayer.Client, "GameObjects.GamePlayer.Wanted", killer.Name);
                                 NewsMgr.CreateNews("GameObjects.GamePlayer.Wanted", killerPlayer.Realm, eNewsType.RvRGlobal, false, true, killerPlayer.Name);
                                 if (DOL.GS.ServerProperties.Properties.DISCORD_ACTIVE)

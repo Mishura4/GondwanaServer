@@ -1,89 +1,105 @@
-
-# /EnchanterTrainer
-EnchanterTrainer.Interact.Text1:			{0} dit, "Voulez-vous vous devenir un Enchanteur et suivre la voix des magiciens ? La vie d'un [Enchanteur] en vaut la peine mais elle est dangereuse, mais cela est votre demande."
-EnchanterTrainer.Interact.Text2:			{0} dit, "Vous êtes un bon élève, {1}. Mais ne soyez pas trop rapide dans votre approche du combat. Il y a toujours plus à apprendre."
-EnchanterTrainer.WhisperReceiveCase.Text1:		Enchanteur
-EnchanterTrainer.WhisperReceive.Text1:			Bienvenue, {0}. À partir de ce jour, vous serez connu(e) comme un Enchanteur. Ici {0}. Prenez ce cadeau pour vous aider dans votre aventure.
-
-
-# /HeroTrainer
-HeroTrainer.Interact.Text1:				{0} dit, "You wish for the life of a [hero]? You wish to walk the Path of Focus?"
-HeroTrainer.Interact.Text2:				{0} dit, "Training makes for a strong, healthy Hero! Keep up the good work, {1}!"
-HeroTrainer.WhisperReceiveCase.Text1:			hero
-HeroTrainer.WhisperReceive.Text1:			Let me welcome you then, {0}. Go, honor us with your deeds. Here is a gift for you. Try not to drop it, eh {1}.
-
+## Hibernia
 # /AnimistTrainer
-AnimistTrainer.Interact.Text1:				{0} dit, "c'est [Path of Affinity] la voix que vous souhaitez suivre?"
-AnimistTrainer.Interact.Text2:				Voulez-vous vous entrainer ?
-AnimistTrainer.WhisperReceiveCase.Text1:		Path of Affinity
-AnimistTrainer.WhisperReceive.Text1:			Vous êtes maintenant un Animiste, {0}. bienvenue dans la voix de Affinity.
+AnimistTrainer.Interact.Text1:				{0} dit, "c'est la [Voie de l'Affinité] que vous souhaitez poursuivre ?"
+AnimistTrainer.Interact.Text2:				Voulez-vous vous entraîner ?
+AnimistTrainer.Interact.Text3:
+AnimistTrainer.Interact.Text4:
+AnimistTrainer.WhisperReceive.Text1:			Vous êtes maintenant un Animiste, {0}. Bienvenue dans la Voie de l'Affinité.
 
-# /FriarTrainer
-FriarTrainer.Interact.Text1:				{0} says, "Do you desire to [join the Defenders of Albion] and defend our realm as a Friar?"
-FriarTrainer.Interact.Text2:				Voulez-vous vous entrainer ?
-FriarTrainer.Interact.Text3:				{0} says, "insert english text"
-FriarTrainer.Interact.Text4:				{0} says, "insert english text"
-FriarTrainer.ReceiveItem.Text1:				{0} says, "insert english text"
-FriarTrainer.WhisperReceive.Text1:			We welcome you into our society as an equal! We are at your disposal. We will now issue your Robes of the Novice. Wear them always and let it serve to remind you of your faith. When you have reached the title of Lesser Chaplain, return them to me. We shall then see if you require another.
-FriarTrainer.WhisperReceiveCase.Text1:			join the defenders of albion
-
-BainsheeTrainer.Interact.Text1:				{0} says, "Do you wish to train as a [Bainshee] and walk the Path of Affinity?"
-BainsheeTrainer.Interact.Text2:				{0} says, "Our way is a hard one, {1}. I can only train you in skills. You must gain knowledge and wisdom on your own."
+BainsheeTrainer.Interact.Text1:				{0} dit, "Voulez-vous devenir [Bainshee] et pousuivre votre entraînement dans la Voie la Force Spectrale ?"
+BainsheeTrainer.Interact.Text2:				{0} dit, "Our way is a hard one, {1}. I can only train you in skills. You must gain knowledge and wisdom on your own."
 BainsheeTrainer.Interact.Text3:
 BainsheeTrainer.Interact.Text4:
 BainsheeTrainer.WhisperReceive.Text1:			Well met then, {0}. It is a hard road, but I see hardness is no stranger to you. Welcome, Bainshee, welcome. Here, take this. It will aid you in your first encounters as a Bainshee.
-BainsheeTrainer.WhisperReceiveCase.Text1:		bainshee
+
+# /EnchanterTrainer
+EnchanterTrainer.Interact.Text1:			{0} dit, "Voulez-vous vous devenir un Enchanteur et suivre la voie de l'Essence? La vie d'un [Enchanteur] en vaut la peine mais elle est dangereuse, mais cela est votre demande."
+EnchanterTrainer.Interact.Text2:			{0} dit, "Vous êtes un bon élève, {1}. Mais ne soyez pas trop rapide dans votre approche du combat. Il y a toujours plus à apprendre."
+EnchanterTrainer.Interact.Text3:
+EnchanterTrainer.Interact.Text4:
+EnchanterTrainer.WhisperReceive.Text1:			Bienvenue, {0}. À partir de ce jour, vous serez connu(e) comme un Enchanteur. Ici {0}. Prenez ce cadeau pour vous aider dans votre aventure.
+
+# /HeroTrainer
+HeroTrainer.Interact.Text1:				{0} dit, "You wish for the life of a [Protecteur]? You wish to walk the Path of Focus?"
+HeroTrainer.Interact.Text2:				{0} dit, "Training makes for a strong, healthy Hero! Keep up the good work, {1}!"
+HeroTrainer.Interact.Text3:
+HeroTrainer.Interact.Text4:
+HeroTrainer.WhisperReceive.Text1:			Let me welcome you then, {0}. Go, honor us with your deeds. Here is a gift for you. Try not to drop it, eh {1}.
 
 # /MaulerHibTrainer
-MaulerHibTrainer.Interact.Text1:			{0} says, "Do you desire to [join the Temple of the Iron Fist] and fight for the glorious realm of Hibernia?"
-MaulerHibTrainer.Interact.Text2:			Voulez-vous vous entrainer ?
+MaulerHibTrainer.Interact.Text1:			{0} says, "Do you desire to join the [Temple du Poing de Fer] and fight for the glorious realm of Hibernia?"
+MaulerHibTrainer.Interact.Text2:			Voulez-vous vous entrainer?
 MaulerHibTrainer.Interact.Text3:			
 MaulerHibTrainer.Interact.Text4:			
 MaulerHibTrainer.ReceiveItem.Text1:			
 MaulerHibTrainer.WhisperReceive.Text1:			Welcome young Mauler. May your time in Hibernia be rewarding. Would you prefer to fight with a [staff] or with [fist]?
 MaulerHibTrainer.WhisperReceive.Text2:			You get a gift by Laresh.
-MaulerHibTrainer.WhisperReceiveCase.Text1:		join the temple of the iron fist
-MaulerHibTrainer.WhisperReceiveCase.Text2:		staff
-MaulerHibTrainer.WhisperReceiveCase.Text3:		fist
 
 # /MentalistTrainer
-MentalistTrainer.Interact.Text1:			{0} says, "Do you wish to train as a [Mentalist] and walk the Path of Harmony?"
+MentalistTrainer.Interact.Text1:			{0} says, "Do you wish to train as a [Empathe] and walk the Path of Harmony?"
 MentalistTrainer.Interact.Text2:			{0} says, "Our way is a hard one, {1}. I can only train you in skills. You must gain knowledge and wisdom on your own."
 MentalistTrainer.Interact.Text3:
 MentalistTrainer.Interact.Text4:
 MentalistTrainer.WhisperReceive.Text1:			Well met then, {0}. It is a hard road, but I see hardness is no stranger to you. Welcome, Mentalist, welcome. Here, take this. It will aid you in your first encounters as a Mentalist.
-MentalistTrainer.WhisperReceiveCase.Text1:		mentalist
+
+
+## Albion
+# /FriarTrainer
+FriarTrainer.Interact.Text1:				{0} dit, "Do you desire to join the [Défenseurs d'Albion] and defend our realm as a Friar?"
+FriarTrainer.Interact.Text2:				Voulez-vous vous entrainer?
+FriarTrainer.Interact.Text3:				{0} says, "insert english text"
+FriarTrainer.Interact.Text4:				{0} says, "insert english text"
+FriarTrainer.ReceiveItem.Text1:				{0} says, "insert english text"
+FriarTrainer.WhisperReceive.Text1:			We welcome you into our society as an equal! We are at your disposal. We will now issue your Robes of the Novice. Wear them always and let it serve to remind you of your faith. When you have reached the title of Lesser Chaplain, return them to me. We shall then see if you require another.
+
 
 ## Midgard
 # /BonedancerTrainer
-BonedancerTrainer.Interact.Text1:			{0} says, "Do you desire to [join the House of Bodgar] and defend our realm as a Bonedancer?"
-BonedancerTrainer.Interact.Text2:			Voulez-vous vous entrainer ?
+BonedancerTrainer.Interact.Text1:			{0} says, "Do you desire to join the [Panthéon de Bogdar] and defend our realm as a Prêtre de Bogdar?"
+BonedancerTrainer.Interact.Text2:			Voulez-vous vous entrainer?
 BonedancerTrainer.Interact.Text3:		
 BonedancerTrainer.Interact.Text4:		
 BonedancerTrainer.ReceiveItem.Text1:		
-BonedancerTrainer.WhisperReceive.Text1:			Welcome young warrior! May your time in Midgard army be rewarding!
-BonedancerTrainer.WhisperReceiveCase.Text1:		join the house of bodgar
+BonedancerTrainer.WhisperReceive.Text1:			Welcome young Prêtre de Bogdar! May your time in Midgard army be rewarding!
 
 # /Spiritmaster
-SpiritmasterTrainer.Interact.Text1:			{0} says, "Do you desire to [join the House of Hel] and defend our realm as a Spiritmaster?"	
-SpiritmasterTrainer.Interact.Text2:			Voulez-vous vous entrainer ?
+SpiritmasterTrainer.Interact.Text1:			{0} says, "Do you desire to join the [Panthéon de Hel] and defend our realm as a Prêtre de Hel?"	
+SpiritmasterTrainer.Interact.Text2:			Voulez-vous vous entrainer?
 SpiritmasterTrainer.Interact.Text3:				
 SpiritmasterTrainer.Interact.Text4:				
 SpiritmasterTrainer.ReceiveItem.Text1:			
-SpiritmasterTrainer.WhisperReceive.Text1:		Welcome young Spiritmaster! May your time in Midgard army be rewarding!	
-SpiritmasterTrainer.WhisperReceiveCase.Text1:		join the house of hel
+SpiritmasterTrainer.WhisperReceive.Text1:		Welcome young Prêtre de Hel! May your time in Midgard army be rewarding!
 
 # /Valkyrie
-ValkyrieTrainer.Interact.Text1:				{0} says, "Do you desire to [join the House of Odin] and defend our realm as a Valkyrie?"
-ValkyrieTrainer.Interact.Text2:				Voulez-vous vous entrainer ?
+ValkyrieTrainer.Interact.Text1:				{0} says, "Do you desire to join the [Panthéon d'Odin] and defend our realm as a Valkyrie?"
+ValkyrieTrainer.Interact.Text2:				Voulez-vous vous entrainer?
 ValkyrieTrainer.Interact.Text3:				
 ValkyrieTrainer.Interact.Text4:				
 ValkyrieTrainer.ReceiveItem.Text1:			
 ValkyrieTrainer.WhisperReceive.Text1:			Welcome young Valkyrie! May your time in Midgard army be rewarding! Would you prefer to fight with a [sword] or with a [spear]?
 ValkyrieTrainer.WhisperReceive.Text2:			You get a gift by Odin.
-ValkyrieTrainer.WhisperReceiveCase.Text1:		join the house of odin
-ValkyrieTrainer.WhisperReceiveCase.Text2:		sword
-ValkyrieTrainer.WhisperReceiveCase.Text3:		spear
 
 
+## Baseclasses
+# /MagicianTrainer
+MagicianTrainer.Interact.Text1:			{0} dit, "Vous devrez désormais poursuivre votre entraînement ailleurs. Quelle voie aimeriez-vous suivre ? [Eldritch], [Enchanteur], [Empathe] ou [Bainshee]?"
+MagicianTrainer.Interact.Text2:			{0} dit, "Avez-vous besoin d'un [bâton d'entraînement]?"
+MagicianTrainer.Eldritch.Explain:		{0} dit, "Les Eldritchs sont l'un des principaux lanceurs de dégâts du royaume d'Hibernia. Ils recherchent et étudient les voies de la nature entre le Soleil, la Lune et l'Éclipse. Les différentes lignes de sorts offrent de nombreuses options aux Eldritches dans la manière dont ils peuvent infliger des dégâts."
+MagicianTrainer.Eldritch.Refuse:		{0} dit, "La voie de l'Eldritch n'est pas disponible pour votre race. Choisissez un autre chemin..."
+MagicianTrainer.Enchanter.Explain:		{0} dit, "Les Enchanteurs sont les seuls lanceurs de sorts du royaume d'Hibernia capables d'invoquer des citoyens "Souterrains" pour les aider au combat. Eux aussi recherchent et étudient les voies de la magie à travers le Soleil, la Lune et les pouvoirs Enchanteurs. Ils ont la capacité d'améliorer leurs compagnons de royaume et d'infliger de puissants dégâts directs à leurs ennemis."
+MagicianTrainer.Enchanter.Refuse:		{0} dit, "La voie de l'Enchanteur n'est pas disponible pour votre race. Choisissez un autre chemin..."
+MagicianTrainer.Mentalist.Explain:		{0} dit, "Les Empathes sont de purs lanceurs de sorts capables de soigner leurs compagnons de royaume et de contrôler l'esprit de leurs ennemis. Tout comme les autres magiciens d'Hibernia, l'Empathe recherche et étudie les voies de la magie de la nature à travers le Soleil, la Lune et le Mentalisme."
+MagicianTrainer.Mentalist.Refuse:		{0} dit, "La voie de l'Empathe n'est pas disponible pour votre race. Choisissez un autre chemin..."
+MagicianTrainer.Bainshee.Explain:		{0} dit, "La Bainshee est un lanceur de sorts uniquement féminin en tissu dont la magie est acoustique, ses cris étant des sorts à effets de zone centrés sur l'utilisateur. Elle dispose de trois lignes de spécialisation, chaque ligne ayant sa propre forme de sorts : de zone à distance, de zone centré sur la Bainshee, ou en cône, formant tout un arsenal auditif, dont des effets totalement inédits, avec par exemple la possibilité de transformer des monstres en garde du royaume pour combattre Albion et Midgard."
+MagicianTrainer.Bainshee.Refuse:		{0} dit, "La voie de la Bainshee n'est pas disponible pour votre race. Choisissez un autre chemin..."
 
+# /GuardianTrainer
+GuardianTrainer.Interact.Text1:			{0} dit, "Vous devrez désormais poursuivre votre entraînement ailleurs. Quelle voie aimeriez-vous suivre ? [Protecteur], [Champion] ou [Finelame]?"
+GuardianTrainer.Interact.Text2:			{0} dit, "Avez-vous besoin d'une [arme d'entraînement]?"
+GuardianTrainer.Interact.Text3:			{0} dit, "Avez-vous besoin d'un [bouclier d'entraînement]?"
+GuardianTrainer.Hero.Explain:			{0} dit, "Les Protecteurs sont la classe de combat de base du royaume Hibernien. Ils ont la capacité de s'entraîner à tous les types d'armes disponibles dans le royaume. Ils ont également accès à tous les types d'armures Hiberniennes. Les héros peuvent puiser dans la bête en eux-mêmes et se transformer en un grand cerf intimidant, ce qui donne une courte poussée de santé."
+GuardianTrainer.Hero.Refuse:			{0} dit, "La voie du Protecteur n'est pas disponible pour votre race. Choisissez un autre chemin..."
+GuardianTrainer.Champion.Explain:		{0} dit, "Les Champions sont une fusion entre un lanceur de sorts et un combattant. Ils ont des capacités offensives, mais ils sont améliorés grâce à leurs puissants sorts de debuff. Les Champions lancent instantanément des débuffs sur leurs ennemis, ce qui entrave considérablement la capacité de l'ennemi à se battre à son meilleur niveau. Cela donne finalement au Champion l'avantage dans de nombreuses situations."
+GuardianTrainer.Champion.Refuse:		{0} dit, "La voie du Champion n'est pas disponible pour votre race. Choisissez un autre chemin..."
+GuardianTrainer.Blademaster.Explain:	{0} dit, "Adeptes de la Voie de l'Harmonie, les Finelames sont les combattants légers et rapides d'Hibernia. Ils ont sacrifié des armures plus lourdes pour pouvoir manier deux armes à la fois. Malgré leur nom, ils sont capables de maîtriser plus que de simples épées, et leur force de double maniement réside dans leur formation en Celtic Dual. Bien que leur véritable force consiste à charger l'ennemi et à abattre rapidement leurs ennemis, les Finelames peuvent également jouer le rôle de gardiens de leurs compagnons de royaume, avec la capacité de s'entraîner aux boucliers et les compétences d'interception, de garde et de protection."
+GuardianTrainer.Blademaster.Refuse:		{0} dit, "La voie du Finelame n'est pas disponible pour votre race. Choisissez un autre chemin..."

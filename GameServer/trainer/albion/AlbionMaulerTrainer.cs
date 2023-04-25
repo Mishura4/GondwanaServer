@@ -34,6 +34,9 @@ namespace DOL.GS.Trainer
             get { return eCharacterClass.MaulerAlb; }
         }
 
+        public const string WEAPON_ID1 = "mauleralb_item_staff";
+        public const string WEAPON_ID2 = "mauleralb_item_fist";
+
         /// <summary>
         /// Interact with trainer
         /// </summary>

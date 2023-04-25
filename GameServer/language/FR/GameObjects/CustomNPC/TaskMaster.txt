@@ -1,4 +1,3 @@
 # TaskMaster NPC
 TaskMaster.Greetings:	Mes salutations, {0}, peut-être puis-je vous aider ? J'ai vent de toutes les nouvelles du royaume, je suis a l'affût des bruits qui circulent, et je peux vous transmettre des informations concernant les personnes ayant besoin de petits services dans la région ! Cela vous intéresse ?
-TaskMaster.Taskline:	Voici les [tasks] que vous pouvez effectuer actuellement.
-TaskMaster.Tasks:	tâches
+TaskMaster.Taskline:	Voici les [tâches] que vous pouvez effectuer actuellement.

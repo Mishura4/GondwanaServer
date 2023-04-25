@@ -82,33 +82,26 @@ namespace DOL.GS.Trainer
             if (!base.WhisperReceive(source, text)) return false;
             GamePlayer player = source as GamePlayer;
 
-            String lowerCase = text.ToLower();
-
-            if (lowerCase == LanguageMgr.GetTranslation(player.Client.Account.Language, "MaulerHibTrainer.WhisperReceiveCase.Text1"))
+            if (CanPromotePlayer(player))
             {
-                // promote player to other class
-                if (CanPromotePlayer(player))
+                switch (text)
                 {
-                    // Mauler_Hib = 62
-                    PromotePlayer(player, (int)eCharacterClass.MaulerHib, LanguageMgr.GetTranslation(player.Client.Account.Language, "MaulerHibTrainer.WhisperReceive.Text1"), null);
+                    case "Temple of the Iron Fist":
+                    case "Temple du Poing de Fer":
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MentalistTrainer.WhisperReceive.Text1", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        break;
+
+                    case "staff":
+                        PromotePlayer(player, (int)eCharacterClass.MaulerHib, LanguageMgr.GetTranslation(player.Client.Account.Language, "MaulerHibTrainer.WhisperReceive.Text2", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, WEAPON_ID1);
+                        break;
+
+                    case "fist":
+                        PromotePlayer(player, (int)eCharacterClass.MaulerHib, LanguageMgr.GetTranslation(player.Client.Account.Language, "MaulerHibTrainer.WhisperReceive.Text2", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, WEAPON_ID2);
+                        break;
                 }
             }
-            else if ((player.Inventory.GetFirstItemByID(WEAPON_ID1, eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack) == null) &&
-                     (player.Inventory.GetFirstItemByID(WEAPON_ID2, eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack) == null))
-            {
-                if (lowerCase == LanguageMgr.GetTranslation(player.Client.Account.Language, "MaulerHibTrainer.WhisperReceiveCase.Text2"))
-                {
-                    player.ReceiveItem(this, WEAPON_ID1);
-                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MaulerHibTrainer.WhisperReceive.Text2"), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
-                }
-                else if (lowerCase == LanguageMgr.GetTranslation(player.Client.Account.Language, "MaulerHibTrainer.WhisperReceiveCase.Text3"))
-                {
-                    player.ReceiveItem(this, WEAPON_ID2);
-                    player.ReceiveItem(this, WEAPON_ID2);
-                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MaulerHibTrainer.WhisperReceive.Text2"), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
-                }
-            }
-
             return true;
         }
     }

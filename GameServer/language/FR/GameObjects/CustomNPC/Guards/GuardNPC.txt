@@ -1,0 +1,12 @@
+# CITY GUARDS
+GuardNPC.Interact.Text1:			Bonjour, que voulez-vous ?
+GuardNPC.Interact.Text2:			[Signaler] mon tueur !
+GuardNPC.Interact.Text3:			[Voir] la liste noire.
+GuardNPC.Report.Oneplayer:			La personne qui vous a tué a été signalée !		
+GuardNPC.Report.Moreplayers:		Les {0} personnes qui vont ont tué ont été signalées !
+GuardNPC.Report.Toolate:			C'est trop tard pour signaler votre tueur !
+GuardNPC.Response.Nobodywanted:			Personne n'est recherché actuellement.
+GuardNPC.Response.Blacklist:			Les personnes suivantes sont sur la liste noire:
+GuardNPC.Response.Dontknow:				Hmm, peut-être que... non, ça ne me dit rien !
+GuardNPC.Response.Rottenhead:			Elle a l'air pourrie cette tête, je ne la reconnais pas !
+GuardNPC.Response.Headreward:			Merci de votre précieuse aide, voici {0} pièces d'or pour vous !
