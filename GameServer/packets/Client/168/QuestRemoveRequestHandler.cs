@@ -36,8 +36,6 @@ namespace DOL.GS.PacketHandler.Client.v168
             PlayerQuest quest = null;
 
             int index = 0;
-            lock (client.Player.QuestList)
-            {
                 foreach (var q in client.Player.QuestList)
                 {
                     // ignore completed quests
@@ -52,7 +50,6 @@ namespace DOL.GS.PacketHandler.Client.v168
 
                     index++;
                 }
-            }
 
             quest?.AbortQuest();
         }

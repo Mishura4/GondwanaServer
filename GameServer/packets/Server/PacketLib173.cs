@@ -528,8 +528,6 @@ namespace DOL.GS.PacketHandler
             // add check for null due to LD
             if (m_gameClient != null && m_gameClient.Player != null && m_gameClient.Player.QuestList != null)
             {
-                lock (m_gameClient.Player.QuestList)
-                {
                     foreach (var q in m_gameClient.Player.QuestList)
                     {
                         if (q == quest)
@@ -541,7 +539,6 @@ namespace DOL.GS.PacketHandler
                         if (q.Status != eQuestStatus.Done)
                             questIndex++;
                     }
-                }
             }
         }
 
@@ -552,14 +549,11 @@ namespace DOL.GS.PacketHandler
             SendTaskInfo();
 
             int questIndex = 1;
-            lock (m_gameClient.Player.QuestList)
-            {
                 foreach (var quest in m_gameClient.Player.QuestList)
                 {
                     SendQuestPacket(quest, questIndex);
                     questIndex++;
                 }
-            }
         }
 
         public override void SendRegionChanged()

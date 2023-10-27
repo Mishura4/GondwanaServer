@@ -218,7 +218,6 @@ namespace DOL.GS.PacketHandler
             SendTaskInfo();
 
             int questIndex = 1;
-            lock (m_gameClient.Player.QuestList)
                 foreach (var quest in m_gameClient.Player.QuestList)
                     SendQuestPacket(quest, questIndex++);
             while (questIndex <= 25)
