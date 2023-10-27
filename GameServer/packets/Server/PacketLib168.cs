@@ -1623,8 +1623,6 @@ namespace DOL.GS.PacketHandler
         public virtual void SendQuestListUpdate()
         {
             int questIndex = 0;
-            lock (m_gameClient.Player.QuestList)
-            {
                 foreach (var quest in m_gameClient.Player.QuestList)
                 {
                     if (quest.Status != eQuestStatus.Done)
@@ -1633,7 +1631,6 @@ namespace DOL.GS.PacketHandler
                         questIndex++;
                     }
                 }
-            }
         }
 
         public virtual void SendGroupWindowUpdate()

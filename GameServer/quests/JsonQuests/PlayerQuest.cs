@@ -169,8 +169,7 @@ namespace DOL.GS.Quests
             foreach (var goal in Quest.Goals.Values)
                 goal.AbortGoal(this);
             DbQuest.Step = (int)eQuestStatus.Done;
-            lock (Owner.QuestList)
-                Owner.QuestList.Remove(this);
+            Owner.RemoveQuest(this);
             GameServer.Database.DeleteObject(DbQuest);
 
             Owner.Out.SendQuestListUpdate();

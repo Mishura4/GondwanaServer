@@ -2798,15 +2798,12 @@ namespace DOL.GS
         /// <returns>true if yes, false if the npc can progress any quest by interaction</returns>
         public bool CanInteractOneQuest(GamePlayer player)
         {
-            lock (player.QuestList)
-            {
                 foreach (var quest in player.QuestList)
                 {
                     foreach (var goal in quest.Quest.Goals.Values.Where(g => g.hasInteraction && g.Target == this))
                         if (goal.IsActive(quest))
                             return true;
                 }
-            }
 
             return false;
         }
@@ -2818,27 +2815,21 @@ namespace DOL.GS
         /// <returns>true if yes, false if the npc can give any quest</returns>
         public bool CanShowOneQuest(GamePlayer player)
         {
-            // Scripted quests
-            lock (QuestIdListToGive)
+            foreach (var id in QuestIdListToGive)
             {
-                foreach (var id in QuestIdListToGive)
-                {
-                    var quest = DataQuestJsonMgr.GetQuest(id);
-                    if (quest == null)
-                        continue;
+                var quest = DataQuestJsonMgr.GetQuest(id);
+                if (quest == null)
+                    continue;
 
-                    var doingQuest = (player.IsDoingQuest(quest) != null ? 1 : 0);
-                    if (quest.CheckQuestQualification(player) && player.HasFinishedQuest(quest) + doingQuest < quest.MaxCount)
-                        return true;
-                }
+                var doingQuest = (player.IsDoingQuest(quest) != null ? 1 : 0);
+                if (quest.CheckQuestQualification(player) && player.HasFinishedQuest(quest) + doingQuest < quest.MaxCount)
+                    return true;
             }
             return false;
         }
 
         public bool CanFinishOneQuest(GamePlayer player)
         {
-            lock (QuestIdListToGive)
-            {
                 foreach (var id in QuestIdListToGive)
                 {
                     var quest = DataQuestJsonMgr.GetQuest(id);
@@ -2849,7 +2840,6 @@ namespace DOL.GS
                     if (pq != null && pq.CanFinish())
                         return true;
                 }
-            }
 
             return false;
         }
