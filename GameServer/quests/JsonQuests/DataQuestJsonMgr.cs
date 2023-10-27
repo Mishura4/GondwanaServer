@@ -96,7 +96,6 @@ public static class DataQuestJsonMgr
 
     public static void OnInteract(DOLEvent _, object sender, EventArgs args)
     {
-
         if (args is not InteractEventArgs arguments || arguments.Source == null)
             return;
 
@@ -104,7 +103,6 @@ public static class DataQuestJsonMgr
         var possibleQuests = sender is GameNPC npc ? npc.QuestIdListToGive : Array.Empty<ushort>();
         if (possibleQuests.Count == 0)
             return;
-        lock (player.QuestList)
             if (player.QuestList.Any(q => possibleQuests.Contains(q.QuestId) || q.CanInteractWith(sender)))
                 return; // Quest in progress
         foreach (var questId in possibleQuests)
@@ -133,8 +131,7 @@ public static class DataQuestJsonMgr
 
     public static void OnAcceptQuest(DOLEvent _, object sender, EventArgs args)
     {
-        var arguments = args as QuestEventArgs;
-        if (arguments == null || arguments.Source == null)
+        if (args is not QuestEventArgs arguments || arguments.Source == null)
             return;
         var player = arguments.Player;
         var quest = Quests.Values.FirstOrDefault(q => q.Id == arguments.QuestID);
@@ -186,7 +183,6 @@ public static class DataQuestJsonMgr
         }
         if (dq.Quest.StartEvent)
         {
-
             questEvent = GameEventManager.Instance.Events.FirstOrDefault(e =>
             e.ID?.Equals(dq.Quest.StartEventId) == true &&
             !e.StartedTime.HasValue &&
@@ -213,7 +209,7 @@ public static class DataQuestJsonMgr
 
     public static (PlayerQuest quest, PlayerGoalState goal) FindQuestAndGoalFromPlayer(GamePlayer player, ushort questId, int goalId)
     {
-        var quest = player.QuestList.Find(q => q.QuestId == questId);
+        var quest = player.QuestList.FirstOrDefault(q => q.QuestId == questId);
         var goal = quest?.GoalStates.Find(gs => gs.GoalId == goalId);
         return (quest, goal);
     }

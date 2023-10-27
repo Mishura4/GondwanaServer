@@ -88,28 +88,21 @@ namespace DOL.GS.Quests
         {
             if (MinLevel > player.Level || player.Level > MaxLevel)
                 return false;
-            if (AllowedClasses.Count(id => id > 0) > 0 && !AllowedClasses.Contains((eCharacterClass)player.CharacterClass.ID))
+            if (AllowedClasses.Any(id => id > 0) && !AllowedClasses.Contains((eCharacterClass)player.CharacterClass.ID))
                 return false;
-            if (AllowedRaces.Count(id => id > 0) > 0 && !AllowedRaces.Contains((eRace)player.Race))
+            if (AllowedRaces.Any(id => id > 0) && !AllowedRaces.Contains((eRace)player.Race))
                 return false;
             if (IsRenaissance && !player.IsRenaissance)
                 return false;
             if (player.Reputation > Reputation)
                 return false;
 
-            lock (player.QuestList)
-            {
                 // the player is doing this quest
-                if (player.QuestList.Where(q => q.Status == eQuestStatus.InProgress).Any(q => q.Quest == this))
+                if (player.QuestList.Any(q => q.Quest == this && q.Status == eQuestStatus.InProgress))
                     return false;
-            }
-            lock (player.QuestListFinished)
-            {
                 var count = player.QuestListFinished.Count(q => q.Quest == this);
                 if (count >= MaxCount)
                     return false;
-            }
-
             return true;
         }
 

@@ -126,11 +126,7 @@ namespace DOL.GS.Quests
             Owner.Out.SendMessage(String.Format(LanguageMgr.GetTranslation(Owner.Client, "AbstractQuest.FinishQuest.Completed", Quest.Name)), eChatType.CT_ScreenCenter, eChatLoc.CL_SystemWindow);
 
             // move quest from active list to finished list...
-            lock (Owner.QuestList)
-            {
-                Owner.QuestList.Remove(this);
-                Owner.QuestListFinished.Add(this);
-            }
+            Owner.AddFinishedQuest(this);
             Owner.SaveIntoDatabase();
             Owner.Out.SendQuestListUpdate();
 
