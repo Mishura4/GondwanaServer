@@ -1784,11 +1784,11 @@ namespace DOL.GS
                                     }
                                     break;
                                 }/*
-								//bg45-49
-							case 165:
-								{
-									break;
-								}*/
+                                //bg45-49
+                            case 165:
+                                {
+                                    break;
+                                }*/
                             default:
                                 {
                                     relRegion = (ushort)BindRegion;
@@ -2783,23 +2783,23 @@ namespace DOL.GS
 
             //Special handling for Vampiirs:
             /* There is no stat that affects the Vampiir's power pool or the damage done by its power based spells.
-			 * The Vampiir is not a focus based class like, say, an Enchanter.
-			 * The Vampiir is a lot more cut and dried than the typical casting class.
-			 * EDIT, 12/13/04 - I was told today that this answer is not entirely accurate.
-			 * While there is no stat that affects the damage dealt (in the way that intelligence or piety affects how much damage a more traditional caster can do),
-			 * the Vampiir's power pool capacity is intended to be increased as the Vampiir's strength increases.
-			 *
-			 * This means that strength ONLY affects a Vampiir's mana pool
-			 * 
-			 * http://www.camelotherald.com/more/1913.shtml
-			 * Strength affects the amount of damage done by spells in all of the Vampiir's spell lines.
-			 * The amount of said affecting was recently increased slightly (fixing a bug), and that minor increase will go live in 1.74 next week.
-			 * 
-			 * Strength ALSO affects the size of the power pool for a Vampiir sort of.
-			 * Your INNATE strength (the number of attribute points your character has for strength) has no effect at all.
-			 * Extra points added through ITEMS, however, does increase the size of your power pool.
+             * The Vampiir is not a focus based class like, say, an Enchanter.
+             * The Vampiir is a lot more cut and dried than the typical casting class.
+             * EDIT, 12/13/04 - I was told today that this answer is not entirely accurate.
+             * While there is no stat that affects the damage dealt (in the way that intelligence or piety affects how much damage a more traditional caster can do),
+             * the Vampiir's power pool capacity is intended to be increased as the Vampiir's strength increases.
+             *
+             * This means that strength ONLY affects a Vampiir's mana pool
+             * 
+             * http://www.camelotherald.com/more/1913.shtml
+             * Strength affects the amount of damage done by spells in all of the Vampiir's spell lines.
+             * The amount of said affecting was recently increased slightly (fixing a bug), and that minor increase will go live in 1.74 next week.
+             * 
+             * Strength ALSO affects the size of the power pool for a Vampiir sort of.
+             * Your INNATE strength (the number of attribute points your character has for strength) has no effect at all.
+             * Extra points added through ITEMS, however, does increase the size of your power pool.
 
-			 */
+             */
             if (CharacterClass.ManaStat != eStat.UNDEFINED || CharacterClass.ID == (int)eCharacterClass.Vampiir)
             {
                 maxpower = Math.Max(5, (level * 5) + (manaStat - 50));
@@ -3144,16 +3144,16 @@ namespace DOL.GS
         protected static readonly int[] m_numRespecsCanBuyOnLevel =
         {
             1,1,1,1,1, //1-5
-			2,2,2,2,2,2,2, //6-12
-			3,3,3,3, //13-16
-			4,4,4,4,4,4, //17-22
-			5,5,5,5,5, //23-27
-			6,6,6,6,6,6, //28-33
-			7,7,7,7,7, //34-38
-			8,8,8,8,8,8, //39-44
-			9,9,9,9,9, //45-49
-			10 //50
-		};
+            2,2,2,2,2,2,2, //6-12
+            3,3,3,3, //13-16
+            4,4,4,4,4,4, //17-22
+            5,5,5,5,5, //23-27
+            6,6,6,6,6,6, //28-33
+            7,7,7,7,7, //34-38
+            8,8,8,8,8,8, //39-44
+            9,9,9,9,9, //45-49
+            10 //50
+        };
 
 
         /// <summary>
@@ -3181,44 +3181,44 @@ namespace DOL.GS
         protected static readonly int[] m_respecCost =
         {
             1,2,3, //13
-			2,5,9, //14
-			3,9,17, //15
-			6,16,30, //16
-			10,26,48,75, //17
-			16,40,72,112, //18
-			22,56,102,159, //19
-			31,78,140,218, //20
-			41,103,187,291, //21
-			54,135,243,378, //22
-			68,171,308,480,652, //23
-			85,214,385,600,814, //24
-			105,263,474,738,1001, //25
-			128,320,576,896,1216, //26
-			153,383,690,1074,1458, //27
-			182,455,820,1275,1731,2278, //28
-			214,535,964,1500,2036,2679, //29
-			250,625,1125,1750,2375,3125, //30
-			289,723,1302,2025,2749,3617, //31
-			332,831,1497,2329,3161,4159, //32
-			380,950,1710,2661,3612,4752, //33
-			432,1080,1944,3024,4104,5400,6696, //34
-			488,1220,2197,3417,4638,6103,7568, //35
-			549,1373,2471,3844,5217,6865,8513, //36
-			615,1537,2767,4305,5843,7688,9533, //37
-			686,1715,3087,4802,6517,8575,10633, //38
-			762,1905,3429,5335,7240,9526,11813,14099, //39
-			843,2109,3796,5906,8015,10546,13078,15609, //40
-			930,2327,4189,6516,8844,11637,14430,17222, //41
-			1024,2560,4608,7168,9728,1280,15872,18944, //42
-			1123,2807,5053,7861,10668,14037,17406,20776, //43
-			1228,3070,5527,8597,11668,15353,19037,22722, //44
-			1339,3349,6029,9378,12725,16748,20767,24787,28806, //45
-			1458,3645,6561,10206,13851,18225,22599,26973,31347, //46
-			1582,3957,7123,11080,15037,19786,24535,29283,34032, //47
-			1714,4286,7716,12003,16290,21434,26578,31722,36867, //48
-			1853,4634,8341,12976,17610,23171,28732,34293,39854, //49
-			2000,5000,9000,14000,19000,25000,31000,37000,43000,50000 //50
-		};
+            2,5,9, //14
+            3,9,17, //15
+            6,16,30, //16
+            10,26,48,75, //17
+            16,40,72,112, //18
+            22,56,102,159, //19
+            31,78,140,218, //20
+            41,103,187,291, //21
+            54,135,243,378, //22
+            68,171,308,480,652, //23
+            85,214,385,600,814, //24
+            105,263,474,738,1001, //25
+            128,320,576,896,1216, //26
+            153,383,690,1074,1458, //27
+            182,455,820,1275,1731,2278, //28
+            214,535,964,1500,2036,2679, //29
+            250,625,1125,1750,2375,3125, //30
+            289,723,1302,2025,2749,3617, //31
+            332,831,1497,2329,3161,4159, //32
+            380,950,1710,2661,3612,4752, //33
+            432,1080,1944,3024,4104,5400,6696, //34
+            488,1220,2197,3417,4638,6103,7568, //35
+            549,1373,2471,3844,5217,6865,8513, //36
+            615,1537,2767,4305,5843,7688,9533, //37
+            686,1715,3087,4802,6517,8575,10633, //38
+            762,1905,3429,5335,7240,9526,11813,14099, //39
+            843,2109,3796,5906,8015,10546,13078,15609, //40
+            930,2327,4189,6516,8844,11637,14430,17222, //41
+            1024,2560,4608,7168,9728,1280,15872,18944, //42
+            1123,2807,5053,7861,10668,14037,17406,20776, //43
+            1228,3070,5527,8597,11668,15353,19037,22722, //44
+            1339,3349,6029,9378,12725,16748,20767,24787,28806, //45
+            1458,3645,6561,10206,13851,18225,22599,26973,31347, //46
+            1582,3957,7123,11080,15037,19786,24535,29283,34032, //47
+            1714,4286,7716,12003,16290,21434,26578,31722,36867, //48
+            1853,4634,8341,12976,17610,23171,28732,34293,39854, //49
+            2000,5000,9000,14000,19000,25000,31000,37000,43000,50000 //50
+        };
 
 
         /// <summary>
@@ -4787,138 +4787,138 @@ namespace DOL.GS
         public static readonly long[] REALMPOINTS_FOR_LEVEL =
         {
             0,	// for level 0
-			0,	// for level 1
-			25,	// for level 2
-			125,	// for level 3
-			350,	// for level 4
-			750,	// for level 5
-			1375,	// for level 6
-			2275,	// for level 7
-			3500,	// for level 8
-			5100,	// for level 9
-			7125,	// for level 10
-			9625,	// for level 11
-			12650,	// for level 12
-			16250,	// for level 13
-			20475,	// for level 14
-			25375,	// for level 15
-			31000,	// for level 16
-			37400,	// for level 17
-			44625,	// for level 18
-			52725,	// for level 19
-			61750,	// for level 20
-			71750,	// for level 21
-			82775,	// for level 22
-			94875,	// for level 23
-			108100,	// for level 24
-			122500,	// for level 25
-			138125,	// for level 26
-			155025,	// for level 27
-			173250,	// for level 28
-			192850,	// for level 29
-			213875,	// for level 30
-			236375,	// for level 31
-			260400,	// for level 32
-			286000,	// for level 33
-			313225,	// for level 34
-			342125,	// for level 35
-			372750,	// for level 36
-			405150,	// for level 37
-			439375,	// for level 38
-			475475,	// for level 39
-			513500,	// for level 40
-			553500,	// for level 41
-			595525,	// for level 42
-			639625,	// for level 43
-			685850,	// for level 44
-			734250,	// for level 45
-			784875,	// for level 46
-			837775,	// for level 47
-			893000,	// for level 48
-			950600,	// for level 49
-			1010625,	// for level 50
-			1073125,	// for level 51
-			1138150,	// for level 52
-			1205750,	// for level 53
-			1275975,	// for level 54
-			1348875,	// for level 55
-			1424500,	// for level 56
-			1502900,	// for level 57
-			1584125,	// for level 58
-			1668225,	// for level 59
-			1755250,	// for level 60
-			1845250,	// for level 61
-			1938275,	// for level 62
-			2034375,	// for level 63
-			2133600,	// for level 64
-			2236000,	// for level 65
-			2341625,	// for level 66
-			2450525,	// for level 67
-			2562750,	// for level 68
-			2678350,	// for level 69
-			2797375,	// for level 70
-			2919875,	// for level 71
-			3045900,	// for level 72
-			3175500,	// for level 73
-			3308725,	// for level 74
-			3445625,	// for level 75
-			3586250,	// for level 76
-			3730650,	// for level 77
-			3878875,	// for level 78
-			4030975,	// for level 79
-			4187000,	// for level 80
-			4347000,	// for level 81
-			4511025,	// for level 82
-			4679125,	// for level 83
-			4851350,	// for level 84
-			5027750,	// for level 85
-			5208375,	// for level 86
-			5393275,	// for level 87
-			5582500,	// for level 88
-			5776100,	// for level 89
-			5974125,	// for level 90
-			6176625,	// for level 91
-			6383650,	// for level 92
-			6595250,	// for level 93
-			6811475,	// for level 94
-			7032375,	// for level 95
-			7258000,	// for level 96
-			7488400,	// for level 97
-			7723625,	// for level 98
-			7963725,	// for level 99
-			8208750,	// for level 100
-			9111713,	// for level 101
-			10114001,	// for level 102
-			11226541,	// for level 103
-			12461460,	// for level 104
-			13832221,	// for level 105
-			15353765,	// for level 106
-			17042680,	// for level 107
-			18917374,	// for level 108
-			20998286,	// for level 109
-			23308097,	// for level 110
-			25871988,	// for level 111
-			28717906,	// for level 112
-			31876876,	// for level 113
-			35383333,	// for level 114
-			39275499,	// for level 115
-			43595804,	// for level 116
-			48391343,	// for level 117
-			53714390,	// for level 118
-			59622973,	// for level 119
-			66181501,	// for level 120
-			73461466,	// for level 121
-			81542227,	// for level 122
-			90511872,	// for level 123
-			100468178,	// for level 124
-			111519678,	// for level 125
-			123786843,	// for level 126
-			137403395,	// for level 127
-			152517769,	// for level 128
-			169294723,	// for level 129
-			187917143,	// for level 130
+            0,	// for level 1
+            25,	// for level 2
+            125,	// for level 3
+            350,	// for level 4
+            750,	// for level 5
+            1375,	// for level 6
+            2275,	// for level 7
+            3500,	// for level 8
+            5100,	// for level 9
+            7125,	// for level 10
+            9625,	// for level 11
+            12650,	// for level 12
+            16250,	// for level 13
+            20475,	// for level 14
+            25375,	// for level 15
+            31000,	// for level 16
+            37400,	// for level 17
+            44625,	// for level 18
+            52725,	// for level 19
+            61750,	// for level 20
+            71750,	// for level 21
+            82775,	// for level 22
+            94875,	// for level 23
+            108100,	// for level 24
+            122500,	// for level 25
+            138125,	// for level 26
+            155025,	// for level 27
+            173250,	// for level 28
+            192850,	// for level 29
+            213875,	// for level 30
+            236375,	// for level 31
+            260400,	// for level 32
+            286000,	// for level 33
+            313225,	// for level 34
+            342125,	// for level 35
+            372750,	// for level 36
+            405150,	// for level 37
+            439375,	// for level 38
+            475475,	// for level 39
+            513500,	// for level 40
+            553500,	// for level 41
+            595525,	// for level 42
+            639625,	// for level 43
+            685850,	// for level 44
+            734250,	// for level 45
+            784875,	// for level 46
+            837775,	// for level 47
+            893000,	// for level 48
+            950600,	// for level 49
+            1010625,	// for level 50
+            1073125,	// for level 51
+            1138150,	// for level 52
+            1205750,	// for level 53
+            1275975,	// for level 54
+            1348875,	// for level 55
+            1424500,	// for level 56
+            1502900,	// for level 57
+            1584125,	// for level 58
+            1668225,	// for level 59
+            1755250,	// for level 60
+            1845250,	// for level 61
+            1938275,	// for level 62
+            2034375,	// for level 63
+            2133600,	// for level 64
+            2236000,	// for level 65
+            2341625,	// for level 66
+            2450525,	// for level 67
+            2562750,	// for level 68
+            2678350,	// for level 69
+            2797375,	// for level 70
+            2919875,	// for level 71
+            3045900,	// for level 72
+            3175500,	// for level 73
+            3308725,	// for level 74
+            3445625,	// for level 75
+            3586250,	// for level 76
+            3730650,	// for level 77
+            3878875,	// for level 78
+            4030975,	// for level 79
+            4187000,	// for level 80
+            4347000,	// for level 81
+            4511025,	// for level 82
+            4679125,	// for level 83
+            4851350,	// for level 84
+            5027750,	// for level 85
+            5208375,	// for level 86
+            5393275,	// for level 87
+            5582500,	// for level 88
+            5776100,	// for level 89
+            5974125,	// for level 90
+            6176625,	// for level 91
+            6383650,	// for level 92
+            6595250,	// for level 93
+            6811475,	// for level 94
+            7032375,	// for level 95
+            7258000,	// for level 96
+            7488400,	// for level 97
+            7723625,	// for level 98
+            7963725,	// for level 99
+            8208750,	// for level 100
+            9111713,	// for level 101
+            10114001,	// for level 102
+            11226541,	// for level 103
+            12461460,	// for level 104
+            13832221,	// for level 105
+            15353765,	// for level 106
+            17042680,	// for level 107
+            18917374,	// for level 108
+            20998286,	// for level 109
+            23308097,	// for level 110
+            25871988,	// for level 111
+            28717906,	// for level 112
+            31876876,	// for level 113
+            35383333,	// for level 114
+            39275499,	// for level 115
+            43595804,	// for level 116
+            48391343,	// for level 117
+            53714390,	// for level 118
+            59622973,	// for level 119
+            66181501,	// for level 120
+            73461466,	// for level 121
+            81542227,	// for level 122
+            90511872,	// for level 123
+            100468178,	// for level 124
+            111519678,	// for level 125
+            123786843,	// for level 126
+            137403395,	// for level 127
+            152517769,	// for level 128
+            169294723,	// for level 129
+            187917143,	// for level 130
 
-		};
+        };
 
         /// <summary>
         /// Calculates amount of RealmPoints needed for special realm level
@@ -4996,59 +4996,59 @@ namespace DOL.GS
 
         public static readonly int[] prcRestore =
         {
-			// http://www.silicondragon.com/Gaming/DAoC/Misc/XPs.htm
-			1,//0
-			3,//1
-			6,//2
-			10,//3
-			15,//4
-			21,//5
-			33,//6
-			53,//7
-			82,//8
-			125,//9
-			188,//10
-			278,//11
-			352,//12
-			443,//13
-			553,//14
-			688,//15
-			851,//16
-			1048,//17
-			1288,//18
-			1578,//19
-			1926,//20
-			2347,//21
-			2721,//22
-			3146,//23
-			3633,//24
-			4187,//25
-			4820,//26
-			5537,//27
-			6356,//28
-			7281,//29
-			8337,//30
-			9532,//31 - from logs
-			10886,//32 - from logs
-			12421,//33 - from logs
-			14161,//34
-			16131,//35
-			18360,//36 - recheck
-			19965,//37 - guessed
-			21857,//38
-			23821,//39
-			25928,//40 - guessed
-			28244,//41
-			30731,//42
-			33411,//43
-			36308,//44
-			39438,//45
-			42812,//46
-			46454,//47
-			50385,//48
-			54625,//49
-			59195,//50
-		};
+            // http://www.silicondragon.com/Gaming/DAoC/Misc/XPs.htm
+            1,//0
+            3,//1
+            6,//2
+            10,//3
+            15,//4
+            21,//5
+            33,//6
+            53,//7
+            82,//8
+            125,//9
+            188,//10
+            278,//11
+            352,//12
+            443,//13
+            553,//14
+            688,//15
+            851,//16
+            1048,//17
+            1288,//18
+            1578,//19
+            1926,//20
+            2347,//21
+            2721,//22
+            3146,//23
+            3633,//24
+            4187,//25
+            4820,//26
+            5537,//27
+            6356,//28
+            7281,//29
+            8337,//30
+            9532,//31 - from logs
+            10886,//32 - from logs
+            12421,//33 - from logs
+            14161,//34
+            16131,//35
+            18360,//36 - recheck
+            19965,//37 - guessed
+            21857,//38
+            23821,//39
+            25928,//40 - guessed
+            28244,//41
+            30731,//42
+            33411,//43
+            36308,//44
+            39438,//45
+            42812,//46
+            46454,//47
+            50385,//48
+            54625,//49
+            59195,//50
+        };
 
         /// <summary>
         /// Money value of this player
@@ -5118,57 +5118,57 @@ namespace DOL.GS
         private static readonly long[] XPForLevel =
         {
             0, // xp to level 1
-			50, // xp to level 2
-			250, // xp to level 3
-			850, // xp to level 4
-			2300, // xp to level 5
-			6350, // xp to level 6
-			15950, // xp to level 7
-			37950, // xp to level 8
-			88950, // xp to level 9
-			203950, // xp to level 10
-			459950, // xp to level 11
-			839950, // xp to level 12
-			1399950, // xp to level 13
-			2199950, // xp to level 14
-			3399950, // xp to level 15
-			5199950, // xp to level 16
-			7899950, // xp to level 17
-			11799950, // xp to level 18
-			17499950, // xp to level 19
-			25899950, // xp to level 20
-			38199950, // xp to level 21
-			54699950, // xp to level 22
-			76999950, // xp to level 23
-			106999950, // xp to level 24
-			146999950, // xp to level 25
-			199999950, // xp to level 26
-			269999950, // xp to level 27
-			359999950, // xp to level 28
-			479999950, // xp to level 29
-			639999950, // xp to level 30
-			849999950, // xp to level 31
-			1119999950, // xp to level 32
-			1469999950, // xp to level 33
-			1929999950, // xp to level 34
-			2529999950, // xp to level 35
-			3319999950, // xp to level 36
-			4299999950, // xp to level 37
-			5499999950, // xp to level 38
-			6899999950, // xp to level 39
-			8599999950, // xp to level 40
-			12899999950, // xp to level 41
-			20699999950, // xp to level 42
-			29999999950, // xp to level 43
-			40799999950, // xp to level 44
-			53999999950, // xp to level 45
-			69599999950, // xp to level 46
-			88499999950, // xp to level 47
-			110999999950, // xp to level 48
-			137999999950, // xp to level 49
-			169999999950, // xp to level 50
-			999999999950, // xp to level 51
-		};
+            50, // xp to level 2
+            250, // xp to level 3
+            850, // xp to level 4
+            2300, // xp to level 5
+            6350, // xp to level 6
+            15950, // xp to level 7
+            37950, // xp to level 8
+            88950, // xp to level 9
+            203950, // xp to level 10
+            459950, // xp to level 11
+            839950, // xp to level 12
+            1399950, // xp to level 13
+            2199950, // xp to level 14
+            3399950, // xp to level 15
+            5199950, // xp to level 16
+            7899950, // xp to level 17
+            11799950, // xp to level 18
+            17499950, // xp to level 19
+            25899950, // xp to level 20
+            38199950, // xp to level 21
+            54699950, // xp to level 22
+            76999950, // xp to level 23
+            106999950, // xp to level 24
+            146999950, // xp to level 25
+            199999950, // xp to level 26
+            269999950, // xp to level 27
+            359999950, // xp to level 28
+            479999950, // xp to level 29
+            639999950, // xp to level 30
+            849999950, // xp to level 31
+            1119999950, // xp to level 32
+            1469999950, // xp to level 33
+            1929999950, // xp to level 34
+            2529999950, // xp to level 35
+            3319999950, // xp to level 36
+            4299999950, // xp to level 37
+            5499999950, // xp to level 38
+            6899999950, // xp to level 39
+            8599999950, // xp to level 40
+            12899999950, // xp to level 41
+            20699999950, // xp to level 42
+            29999999950, // xp to level 43
+            40799999950, // xp to level 44
+            53999999950, // xp to level 45
+            69599999950, // xp to level 46
+            88499999950, // xp to level 47
+            110999999950, // xp to level 48
+            137999999950, // xp to level 49
+            169999999950, // xp to level 50
+            999999999950, // xp to level 51
+        };
 
         /// <summary>
         /// Gets or sets the current xp of this player
@@ -6660,24 +6660,24 @@ namespace DOL.GS
                            ))
                     {
                         /*
-						 * http://rothwellhome.org/guides/archery.htm
-						 * Please note that critical shot will work against targets that are:
-						 * sitting, standing still (which includes standing in combat mode but
-						 * not actively swinging at something), walking, moving backwards,
-						 * strafing, or casting a spell. Critical shot will not work against
-						 * targets that are: running, in active combat (swinging at something),
-						 * or mezzed. Stunned targets may be critical shot once any timers from
-						 * active combat have expired if they are not yet free to act; i.e.:
-						 * they may not be critical shot until their weapon delay timer has run
-						 * out after their last attack, they may be critical shot during the
-						 * period between the weapon delay running out and the stun wearing off,
-						 * and they may not be critical shot once they have begun swinging again.
-						 * If the target was in melee with an archer, the critical shot may not
-						 * be drawn against them until after their weapon delay has run out or it
-						 * will be interrupted.  This means that the scout's shield stun is much
-						 * less effective against large weapon wielders (who have longer weapon
-						 * delays) than against fast piercing/thrusting weapon wielders.
-						 */
+                         * http://rothwellhome.org/guides/archery.htm
+                         * Please note that critical shot will work against targets that are:
+                         * sitting, standing still (which includes standing in combat mode but
+                         * not actively swinging at something), walking, moving backwards,
+                         * strafing, or casting a spell. Critical shot will not work against
+                         * targets that are: running, in active combat (swinging at something),
+                         * or mezzed. Stunned targets may be critical shot once any timers from
+                         * active combat have expired if they are not yet free to act; i.e.:
+                         * they may not be critical shot until their weapon delay timer has run
+                         * out after their last attack, they may be critical shot during the
+                         * period between the weapon delay running out and the stun wearing off,
+                         * and they may not be critical shot once they have begun swinging again.
+                         * If the target was in melee with an archer, the critical shot may not
+                         * be drawn against them until after their weapon delay has run out or it
+                         * will be interrupted.  This means that the scout's shield stun is much
+                         * less effective against large weapon wielders (who have longer weapon
+                         * delays) than against fast piercing/thrusting weapon wielders.
+                         */
 
                         // TODO: more checks?
                         Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Attack.CantCritical"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
@@ -7630,10 +7630,10 @@ namespace DOL.GS
             eaf += GetModified(eProperty.ArmorFactor) / 5;
 
             /*GameSpellEffect effect = SpellHandler.FindEffectOnTarget(this, typeof(VampiirArmorDebuff));
-			if (effect != null && slot == (effect.SpellHandler as VampiirArmorDebuff).Slot)
-			{
-				eaf -= (int)(effect.SpellHandler as VampiirArmorDebuff).Spell.Value;
-			}*/
+            if (effect != null && slot == (effect.SpellHandler as VampiirArmorDebuff).Slot)
+            {
+                eaf -= (int)(effect.SpellHandler as VampiirArmorDebuff).Spell.Value;
+            }*/
             return 20 + eaf;
         }
 
@@ -7844,13 +7844,13 @@ namespace DOL.GS
         public override int AttackRange
         {
             /* tested with:
-			staff					= 125-130
-			sword			   		= 126-128.06
-			shield (Numb style)		= 127-129
-			polearm	(Impale style)	= 127-130
-			mace (Daze style)		= 127.5-128.7
+            staff					= 125-130
+            sword			   		= 126-128.06
+            shield (Numb style)		= 127-129
+            polearm	(Impale style)	= 127-130
+            mace (Daze style)		= 127.5-128.7
 
-			Think it's safe to say that it never changes; different with mobs. */
+            Think it's safe to say that it never changes; different with mobs. */
 
             get
             {
@@ -13350,11 +13350,8 @@ namespace DOL.GS
                 GameServer.Database.SaveObject(DBCharacter);
                 Inventory.SaveIntoDatabase(InternalID);
                 var questsToSave = new List<PlayerQuest>();
-                lock (QuestList)
-                {
-                    questsToSave.AddRange(QuestList);
-                    questsToSave.AddRange(QuestListFinished);
-                }
+                questsToSave.AddRange(QuestList);
+                questsToSave.AddRange(QuestListFinished);
                 foreach (var quest in questsToSave)
                     quest.SaveIntoDatabase();
 
@@ -13847,13 +13844,13 @@ namespace DOL.GS
                 return false;
 
             /*
-			 * http://www.critshot.com/forums/showthread.php?threadid=3142
-			 * The person doing the looking has a chance to find them based on their level, minus the stealthed person's stealth spec.
-			 *
-			 * -Normal detection range = (enemy lvl  your stealth spec) * 20 + 125
-			 * -Detect Hidden Range = (enemy lvl  your stealth spec) * 50 + 250
-			 * -See Hidden range = 2700 - (38 * your stealth spec)
-			 */
+             * http://www.critshot.com/forums/showthread.php?threadid=3142
+             * The person doing the looking has a chance to find them based on their level, minus the stealthed person's stealth spec.
+             *
+             * -Normal detection range = (enemy lvl  your stealth spec) * 20 + 125
+             * -Detect Hidden Range = (enemy lvl  your stealth spec) * 50 + 250
+             * -See Hidden range = 2700 - (38 * your stealth spec)
+             */
 
             int EnemyStealthLevel = enemy.GetModifiedSpecLevel(Specs.Stealth);
             if (EnemyStealthLevel > 50)
@@ -14020,17 +14017,25 @@ namespace DOL.GS
         /// <summary>
         /// Gets the questlist of this player
         /// </summary>
-        public virtual List<PlayerQuest> QuestList
+        public IReadOnlyList<PlayerQuest> QuestList
         {
-            get { return m_questList; }
+            get
+            {
+                lock (m_questList)
+                    return m_questList.ToList();
+            }
         }
 
         /// <summary>
         /// Gets the finished quests of this player
         /// </summary>
-        public virtual List<PlayerQuest> QuestListFinished
+        public IReadOnlyList<PlayerQuest> QuestListFinished
         {
-            get { return m_questListFinished; }
+            get
+            {
+                lock(m_questListFinished)
+                    return m_questListFinished.ToList();
+            }
         }
 
         /// <summary>
@@ -14053,7 +14058,7 @@ namespace DOL.GS
         /// <returns>true if added, false if player is already doing the quest!</returns>
         public bool AddQuest(PlayerQuest quest)
         {
-            lock (QuestList)
+            lock (m_questList)
             {
                 if (IsDoingQuest(quest.Quest) != null)
                     return false;
@@ -14066,6 +14071,31 @@ namespace DOL.GS
         }
 
         /// <summary>
+        /// Taken from Breamor
+        /// https://github.com/jeremv42/DOLSharp/commit/7e62188960a20ead501661e2702935e7f2db0762#diff-e628a30c076896a273c9bbd15e30726eec02461ac6d6de285e30fe5e961e51aaR13298
+        /// </summary>
+        /// <param name="quest"></param>
+        /// <returns></returns>
+        public bool RemoveQuest(PlayerQuest quest)
+        {
+            lock (m_questList)
+                return m_questList.Remove(quest);
+            Out.SendQuestListUpdate();
+        }
+
+        /// <summary>
+        /// Taken from Breamor
+        /// https://github.com/jeremv42/DOLSharp/commit/7e62188960a20ead501661e2702935e7f2db0762#diff-e628a30c076896a273c9bbd15e30726eec02461ac6d6de285e30fe5e961e51aaR13298
+        /// </summary>
+        /// <param name="quest"></param>
+        /// <returns></returns>
+        public bool RemoveQuestFinished(PlayerQuest quest)
+        {
+            lock (m_questListFinished)
+                return m_questListFinished.Remove(quest);
+        }
+
+        /// <summary>
         /// Checks if a player has done a specific quest type
         /// This is used for scripted quests
         /// </summary>
@@ -14073,8 +14103,8 @@ namespace DOL.GS
         /// <returns>the number of times the player did this quest</returns>
         public int HasFinishedQuest(DataQuestJson quest)
         {
-            lock (QuestListFinished)
-                return QuestListFinished.Count(q => q.Quest == quest);
+            lock (m_questListFinished)
+                return m_questListFinished.Count(q => q.Quest == quest);
         }
 
         /// <summary>
@@ -14085,7 +14115,7 @@ namespace DOL.GS
         /// <returns>the quest if player is doing the quest or null if not</returns>
         public PlayerQuest IsDoingQuest(DataQuestJson quest)
         {
-            lock (QuestList)
+            lock (m_questList)
                 return m_questList.Find(q => q.Quest == quest);
         }
         #endregion
@@ -14096,12 +14126,8 @@ namespace DOL.GS
             CharacterClass.Notify(e, sender, args);
             base.Notify(e, sender, args);
 
-            // events will only fire for currently active quests.
-            var quests = new List<PlayerQuest>(QuestList.Count);
-            lock (QuestList)
-                quests.AddRange(QuestList);
             // player forwards every single notify message to all active quests
-            foreach (var q in quests)
+            foreach (var q in QuestList)
                 q.Notify(e, sender, args);
 
             if (Task != null)
@@ -15165,9 +15191,9 @@ namespace DOL.GS
         /// </summary>
         protected InvulnerabilityTimer m_pveinvulnerabilityTimer;
         /// <summary>
-		/// Holds the pve invulnerability expiration tick
-		/// </summary>
-		protected long m_pve_invulnerabilityTick;
+        /// Holds the pve invulnerability expiration tick
+        /// </summary>
+        protected long m_pve_invulnerabilityTick;
 
         /// <summary>
         /// Starts the PVE Invulnerability Timer
@@ -15904,22 +15930,22 @@ namespace DOL.GS
         public static readonly long[] CLXPLevel =
         {
             0, //xp tp level 0
-			32000, //xp to level 1
-			64000, // xp to level 2
-			96000, // xp to level 3
-			128000, // xp to level 4
-			160000, // xp to level 5
-			192000, // xp to level 6
-			224000, // xp to level 7
-			256000, // xp to level 8
-			288000, // xp to level 9
-			320000, // xp to level 10
-			640000, // xp to level 11
-			640000, // xp to level 12
-			640000, // xp to level 13
-			640000, // xp to level 14
-			640000, // xp to level 15
-		};
+            32000, //xp to level 1
+            64000, // xp to level 2
+            96000, // xp to level 3
+            128000, // xp to level 4
+            160000, // xp to level 5
+            192000, // xp to level 6
+            224000, // xp to level 7
+            256000, // xp to level 8
+            288000, // xp to level 9
+            320000, // xp to level 10
+            640000, // xp to level 11
+            640000, // xp to level 12
+            640000, // xp to level 13
+            640000, // xp to level 14
+            640000, // xp to level 15
+        };
 
         /// <summary>
         /// Get the CL title string of the player
@@ -16157,17 +16183,17 @@ namespace DOL.GS
         private static readonly long[] MLXPLevel =
         {
             0, //xp tp level 0
-			32000, //xp to level 1
-			32000, // xp to level 2
-			32000, // xp to level 3
-			32000, // xp to level 4
-			32000, // xp to level 5
-			32000, // xp to level 6
-			32000, // xp to level 7
-			32000, // xp to level 8
-			32000, // xp to level 9
-			32000, // xp to level 10
-		};
+            32000, //xp to level 1
+            32000, // xp to level 2
+            32000, // xp to level 3
+            32000, // xp to level 4
+            32000, // xp to level 5
+            32000, // xp to level 6
+            32000, // xp to level 7
+            32000, // xp to level 8
+            32000, // xp to level 9
+            32000, // xp to level 10
+        };
 
         /// <summary>
         /// Get the amount of XP needed for a ML
@@ -16188,8 +16214,8 @@ namespace DOL.GS
         private static readonly byte[] MLStepsForLevel =
         {
             10, // ML0 == ML1
-			10, // ML1
-			11,
+            10, // ML1
+            11,
             11,
             11,
             11,
@@ -16198,7 +16224,7 @@ namespace DOL.GS
             11,
             11,
             5, // ML10
-		};
+        };
 
         /// <summary>
         /// Get the number of steps required for a ML

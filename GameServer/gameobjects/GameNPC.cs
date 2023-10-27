@@ -2312,9 +2312,9 @@ namespace DOL.GS
 
             LoadTemplate(NPCTemplate);
             /*
-						if (Inventory != null)
-							SwitchWeapon(ActiveWeaponSlot);
-			*/
+                        if (Inventory != null)
+                            SwitchWeapon(ActiveWeaponSlot);
+            */
         }
 
         /// <summary>
@@ -2710,7 +2710,14 @@ namespace DOL.GS
         /// <summary>
         /// Gets the questlist of this player
         /// </summary>
-        public IReadOnlyList<ushort> QuestIdListToGive => m_questIdListToGive;
+        public IReadOnlyList<ushort> QuestIdListToGive
+        {
+            get
+            {
+                lock (m_questIdListToGive)
+                    return m_questIdListToGive.ToList();
+            }
+        }
 
         /// <summary>
         /// Adds a scripted quest type to the npc questlist
@@ -2720,7 +2727,7 @@ namespace DOL.GS
         public void AddQuestToGive(DataQuestJson quest)
         {
             lock (m_questIdListToGive)
-                if (!HasQuest(quest))
+                if (!m_questIdListToGive.Contains(quest.Id))
                     m_questIdListToGive.Add(quest.Id);
         }
 
@@ -3672,49 +3679,49 @@ namespace DOL.GS
         }
 
         /*		/// <summary>
-				/// Pronoun of this NPC in case you need to refer it in 3rd person
-				/// http://webster.commnet.edu/grammar/cases.htm
-				/// </summary>
-				/// <param name="firstLetterUppercase"></param>
-				/// <param name="form">0=Subjective, 1=Possessive, 2=Objective</param>
-				/// <returns>pronoun of this object</returns>
-				public override string GetPronoun(bool firstLetterUppercase, int form)
-				{
-					// TODO: when mobs will get gender
-					if(PlayerCharacter.Gender == 0)
-						// male
-						switch(form)
-						{
-							default: // Subjective
-								if(firstLetterUppercase) return "He"; else return "he";
-							case 1:	// Possessive
-								if(firstLetterUppercase) return "His"; else return "his";
-							case 2:	// Objective
-								if(firstLetterUppercase) return "Him"; else return "him";
-						}
-					else
-						// female
-						switch(form)
-						{
-							default: // Subjective
-								if(firstLetterUppercase) return "She"; else return "she";
-							case 1:	// Possessive
-								if(firstLetterUppercase) return "Her"; else return "her";
-							case 2:	// Objective
-								if(firstLetterUppercase) return "Her"; else return "her";
-						}
+                /// Pronoun of this NPC in case you need to refer it in 3rd person
+                /// http://webster.commnet.edu/grammar/cases.htm
+                /// </summary>
+                /// <param name="firstLetterUppercase"></param>
+                /// <param name="form">0=Subjective, 1=Possessive, 2=Objective</param>
+                /// <returns>pronoun of this object</returns>
+                public override string GetPronoun(bool firstLetterUppercase, int form)
+                {
+                    // TODO: when mobs will get gender
+                    if(PlayerCharacter.Gender == 0)
+                        // male
+                        switch(form)
+                        {
+                            default: // Subjective
+                                if(firstLetterUppercase) return "He"; else return "he";
+                            case 1:	// Possessive
+                                if(firstLetterUppercase) return "His"; else return "his";
+                            case 2:	// Objective
+                                if(firstLetterUppercase) return "Him"; else return "him";
+                        }
+                    else
+                        // female
+                        switch(form)
+                        {
+                            default: // Subjective
+                                if(firstLetterUppercase) return "She"; else return "she";
+                            case 1:	// Possessive
+                                if(firstLetterUppercase) return "Her"; else return "her";
+                            case 2:	// Objective
+                                if(firstLetterUppercase) return "Her"; else return "her";
+                        }
 
-					// it
-					switch(form)
-					{
-						// Subjective
-						default: if(firstLetterUppercase) return "It"; else return "it";
-						// Possessive
-						case 1:	if(firstLetterUppercase) return "Its"; else return "its";
-						// Objective
-						case 2: if(firstLetterUppercase) return "It"; else return "it";
-					}
-				}*/
+                    // it
+                    switch(form)
+                    {
+                        // Subjective
+                        default: if(firstLetterUppercase) return "It"; else return "it";
+                        // Possessive
+                        case 1:	if(firstLetterUppercase) return "Its"; else return "its";
+                        // Objective
+                        case 2: if(firstLetterUppercase) return "It"; else return "it";
+                    }
+                }*/
         #endregion
 
         #region Interact/WhisperReceive/SayTo
@@ -6002,8 +6009,8 @@ namespace DOL.GS
                 {
                     /*foreach (GamePlayer pl in GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
                     {
-						if(!(living is GamePlayer) || (living as GamePlayer != pl))
-							pl.Out.SendSpellEffectAnimation(this, living, (ushort)dbspell.ClientEffect, 0, false, 1);
+                        if(!(living is GamePlayer) || (living as GamePlayer != pl))
+                            pl.Out.SendSpellEffectAnimation(this, living, (ushort)dbspell.ClientEffect, 0, false, 1);
                     }
                     if (living is GamePlayer player)
                         player.Out.SendSpellEffectAnimation(this, player, (ushort)dbspell.ClientEffect, 0, false, 1);
