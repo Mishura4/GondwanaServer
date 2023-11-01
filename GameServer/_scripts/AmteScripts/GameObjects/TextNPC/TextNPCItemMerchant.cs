@@ -124,9 +124,9 @@ public class TextNPCItemMerchant : GameMerchant, ITextNPC, IAmteNPC
         if (result != eQuestIndicator.None)
             return result;
 
-        foreach (var q in QuestIdListToGive.OfType<PlayerQuest>())
+        foreach (var qid in QuestIdListToGive)
         {
-            var quest = player.QuestList.OfType<PlayerQuest>().FirstOrDefault(pq => pq.QuestId == q.QuestId);
+            var quest = player.QuestList.OfType<PlayerQuest>().FirstOrDefault(pq => pq.QuestId == qid);
             if (quest == null)
                 continue;
             if (quest.VisibleGoals.OfType<DataQuestJsonGoal.GenericDataQuestGoal>()

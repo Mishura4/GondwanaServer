@@ -2239,25 +2239,19 @@ namespace DOL.GS.Commands
                         if (args.Length >= 3 && args[2].ToLower() == "remove")
                         {
                             var questName = string.Join(" ", args.Skip(3)).ToLower();
-                            lock (targetPlayer.QuestList)
-                            {
                                 var found = targetPlayer.QuestList.FirstOrDefault(q => q.Quest.Id.ToString() == questName || q.Quest.Name.ToLower() == questName);
                                 if (found != null)
                                 {
                                     found.AbortQuest();
                                     DisplayMessage(client, $"Quest {found.Quest.Name} removed from player {targetPlayer.Name}");
                                 }
-                            }
-                            lock (targetPlayer.QuestListFinished)
-                            {
-                                var found = targetPlayer.QuestListFinished.FirstOrDefault(q => q.Quest.Id.ToString() == questName || q.Quest.Name.ToLower() == questName);
+                                found = targetPlayer.QuestListFinished.FirstOrDefault(q => q.Quest.Id.ToString() == questName || q.Quest.Name.ToLower() == questName);
                                 if (found != null)
                                 {
-                                    targetPlayer.QuestListFinished.Remove(found);
+                                    targetPlayer.RemoveQuestFinished(found);
                                     found.AbortQuest();
                                     DisplayMessage(client, $"Quest {found.Quest.Name} removed from player {targetPlayer.Name}");
                                 }
-                            }
                         }
                         else if (args.Length >= 3)
                         {
@@ -2266,13 +2260,10 @@ namespace DOL.GS.Commands
                         }
 
                         var questList = new List<string>();
-                        lock (targetPlayer.QuestList)
-                        {
                             foreach (var quest in targetPlayer.QuestList.Where(q => q.Status != eQuestStatus.Done))
                                 questList.Add($"[In progress] {quest.Quest.Id}. {quest.Quest.Name} (level {quest.Quest.MinLevel})");
                             foreach (var quest in targetPlayer.QuestListFinished)
                                 questList.Add($"[Complete] {quest.Quest.Name} (level {quest.Quest.MinLevel})");
-                        }
                         client.Player.Out.SendCustomTextWindow($"[{targetPlayer.Name}'s quests]", questList);
                         return;
                     }

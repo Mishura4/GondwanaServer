@@ -464,22 +464,20 @@ namespace DOL.GS.PacketHandler
             // add check for null due to LD
             if (m_gameClient?.Player?.QuestList != null)
             {
-                lock (m_gameClient.Player.QuestList)
+                foreach (var q in m_gameClient.Player.QuestList)
                 {
-                    foreach (var q in m_gameClient.Player.QuestList)
+                    if (q == quest)
                     {
-                        if (q == quest)
-                        {
-                            SendQuestPacket(q, questIndex);
-                            break;
-                        }
-
-                        if (q.Status != eQuestStatus.Done)
-                            questIndex++;
+                        SendQuestPacket(q, questIndex);
+                        break;
                     }
+
+                    if (q.Status != eQuestStatus.Done)
+                        questIndex++;
                 }
             }
         }
+
         public override void SendQuestListUpdate()
         {
             if (m_gameClient == null || m_gameClient.Player == null)
@@ -490,13 +488,10 @@ namespace DOL.GS.PacketHandler
             SendTaskInfo();
 
             int questIndex = 1;
-            lock (m_gameClient.Player.QuestList)
-            {
                 foreach (var quest in m_gameClient.Player.QuestList)
                 {
                     SendQuestPacket(quest, questIndex++);
                 }
-            }
 
             while (questIndex <= 25)
                 SendQuestPacket(null, questIndex++);
