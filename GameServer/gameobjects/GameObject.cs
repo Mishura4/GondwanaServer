@@ -327,9 +327,7 @@ namespace DOL.GS
         {
             get
             {
-                if (CurrentZone != null)
-                    return CurrentZone.GetAreasOfSpot(this.Position);
-                return new List<IArea>();
+                    return CurrentZone?.GetAreasOfSpot(this.Position) ?? new List<IArea>();
             }
             set { }
         }
