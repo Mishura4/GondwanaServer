@@ -4019,8 +4019,8 @@ namespace DOL.GS
             if (Brain is IControlledBrain brain && brain.AggressionState == eAggressionState.Passive)
                 return;
 
-            if (target != TargetObject)
-                SetLastMeleeAttackTick();
+            //if (target != TargetObject)
+            SetLastMeleeAttackTick();
             StartMeleeAttackTimer();
 
             base.StartAttack(target);
