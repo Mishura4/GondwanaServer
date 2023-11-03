@@ -57,8 +57,8 @@ namespace DOL.AI.Brain
         public StandardMobBrain()
             : base()
         {
-            m_aggroLevel = 0;
-            m_aggroMaxRange = 0;
+            AggroLevel = 0;
+            AggroRange = 0;
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace DOL.AI.Brain
         /// <returns></returns>
         public override string ToString()
         {
-            return base.ToString() + ", m_aggroLevel=" + m_aggroLevel.ToString() + ", m_aggroMaxRange=" + m_aggroMaxRange.ToString();
+            return base.ToString() + ", m_aggroLevel=" + AggroLevel.ToString() + ", m_aggroMaxRange=" + AggroRange.ToString();
         }
 
         public override bool Stop()
@@ -127,6 +127,12 @@ namespace DOL.AI.Brain
                     Body.WalkToSpawn();
                     return;
                 }
+            }
+
+            if (Body.MaxDistance == 0 && Body.AttackState && (Body.CurrentRegion.Time - Body.LastCombatTick) > 40000)
+            {
+                Body.WalkToSpawn();
+                return;
             }
 
             //If this NPC can randomly walk around, we allow it to walk around
@@ -391,14 +397,6 @@ namespace DOL.AI.Brain
         #region Aggro
 
         /// <summary>
-        /// Max Aggro range in that this npc searches for enemies
-        /// </summary>
-        protected int m_aggroMaxRange;
-        /// <summary>
-        /// Aggressive Level of this npc
-        /// </summary>
-        protected int m_aggroLevel;
-        /// <summary>
         /// List of livings that this npc has aggro on, living => aggroamount
         /// </summary>
         protected readonly Dictionary<GameLiving, long> m_aggroTable = new Dictionary<GameLiving, long>();
@@ -414,20 +412,12 @@ namespace DOL.AI.Brain
         /// <summary>
         /// Aggressive Level in % 0..100, 0 means not Aggressive
         /// </summary>
-        public virtual int AggroLevel
-        {
-            get { return m_aggroLevel; }
-            set { m_aggroLevel = value; }
-        }
+        public int AggroLevel { get; set; }
 
         /// <summary>
         /// Range in that this npc aggros
         /// </summary>
-        public virtual int AggroRange
-        {
-            get { return m_aggroMaxRange; }
-            set { m_aggroMaxRange = value; }
-        }
+        public int AggroRange { get; set; }
 
         /// <summary>
         /// Checks whether living has someone on its aggrolist
@@ -1105,6 +1095,8 @@ namespace DOL.AI.Brain
                 {
                     foreach (GameNPC npc in Body.GetNPCsInRadius(range))
                     {
+                        if (npc == Body)
+                            continue;
                         if (numAdds >= maxAdds)
                             break;
 
@@ -1689,7 +1681,7 @@ namespace DOL.AI.Brain
         {
             if (Body.CurrentZone.IsPathingEnabled)
             {
-                var pt = PathingMgr.Instance.GetRandomPointAsync(Body.CurrentZone, Body.SpawnPoint, Body.RoamingRange > 0 ? Body.RoamingRange : 200).Result;
+                var pt = PathingMgr.Instance.GetRandomPoint(Body.CurrentZone, Body.SpawnPoint, Body.RoamingRange > 0 ? Body.RoamingRange : 200);
                 if (pt.HasValue)
                     return pt.Value;
             }

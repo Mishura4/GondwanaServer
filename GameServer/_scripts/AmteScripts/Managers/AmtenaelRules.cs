@@ -725,7 +725,7 @@ namespace DOL.GS.ServerRules
 
             killedPlayer.LastDeathRealmPoints = 0;
             // "player has been killed recently"
-            long noExpSeconds = ServerProperties.Properties.RP_WORTH_SECONDS;
+            long noExpSeconds = Properties.RP_WORTH_SECONDS;
             if (killedPlayer.DeathTime + noExpSeconds > killedPlayer.PlayedTime)
             {
                 foreach (var de in gainers)

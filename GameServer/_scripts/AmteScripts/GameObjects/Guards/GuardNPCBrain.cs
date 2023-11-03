@@ -8,10 +8,9 @@ namespace DOL.AI.Brain
 {
     public class GuardNPCBrain : AmteMobBrain
     {
-        public override int AggroLevel
+        public GuardNPCBrain()
         {
-            get { return 100; }
-            set { }
+            AggroLevel = 100;
         }
 
         public override bool CanBAF { get => true; set => base.CanBAF = value; }
@@ -103,8 +102,8 @@ namespace DOL.AI.Brain
                 }
                 return GuardsMgr.CalculateAggro(player);
             }
-            if (target.Realm == 0)
-                return Math.Max(100, 200 - target.Level);
+            if (target.Realm == 0) 
+                return target.Level + 1;
             return base.CalculateAggroLevelToTarget(target);
         }
     }

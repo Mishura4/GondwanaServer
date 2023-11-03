@@ -1168,7 +1168,7 @@ namespace DOL.GS
             {
                 if (!IsMoving || TargetPosition == Vector3.Zero)
                     return _basePosition;
-                if (MovementElapsedTicks > (Vector3.Distance(_basePosition, TargetPosition) * 1000 / CurrentSpeed))
+                if (MovementElapsedTicks > (Vector2.Distance(_basePosition.ToVector2(), TargetPosition.ToVector2()) * 1000 / CurrentSpeed))
                     return TargetPosition;
                 _basePosition.Z = TargetPosition.Z;
                 return _basePosition + MovementElapsedTicks * Velocity;
@@ -1393,7 +1393,7 @@ namespace DOL.GS
         /// <returns></returns>
         public int GetTicksToArriveAt(Vector3 target, short speed)
         {
-            return (int)(Vector3.Distance(Position, target) * 1000 / speed);
+            return (int)(Vector2.Distance(Position.ToVector2(), target.ToVector2()) * 1000 / speed);
         }
 
         /// <summary>
@@ -1541,23 +1541,20 @@ namespace DOL.GS
             Interlocked.Increment(ref Statistics.PathToCalls);
 
             // Pick the next pathing node, and walk towards it
-            PathCalculator.CalculateNextTargetAsync(dest).ContinueWith(res =>
+            var (nextNode, reason) = PathCalculator.CalculateNextTarget(dest);
+            var shouldUseAirPath = reason == NoPathReason.RECAST_FOUND_NO_PATH;
+
+            if (!nextNode.HasValue)
             {
-                var nextNode = res.Result.Item1;
-                var shouldUseAirPath = res.Result.Item2 == NoPathReason.RECAST_FOUND_NO_PATH;
+                // Directly walk towards the target (or call the customly provided action)
+                if (shouldUseAirPath)
+                    WalkTo(dest, walkSpeed);
+                return;
+            }
 
-                if (!nextNode.HasValue)
-                {
-                    // Directly walk towards the target (or call the customly provided action)
-                    if (shouldUseAirPath)
-                        WalkTo(dest, walkSpeed);
-                    return;
-                }
-
-                Notify(GameNPCEvent.WalkTo, this, new WalkToEventArgs(dest, walkSpeed));
-                // Do the actual pathing bit: Walk towards the next pathing node
-                _WalkToPathNode(nextNode.Value, walkSpeed);
-            });
+            Notify(GameNPCEvent.WalkTo, this, new WalkToEventArgs(dest, walkSpeed));
+            // Do the actual pathing bit: Walk towards the next pathing node
+            _WalkToPathNode(nextNode.Value, walkSpeed);
         }
 
         private void _WalkToPathNode(Vector3 node, short speed)
@@ -1591,7 +1588,6 @@ namespace DOL.GS
             MovementStartTick = GameTimer.GetTickCount();
 
             UpdateTickSpeed();
-            StartArriveAtTargetAction(GetTicksToArriveAt(TargetPosition, speed));
             BroadcastUpdate();
         }
 
@@ -1599,9 +1595,9 @@ namespace DOL.GS
         private void _StartArriveAtPathNodeAction(int requiredTicks)
         {
             CancelWalkToTimer();
-            _arriveAtPathNodeAction = new ArriveAtPathNodeAction(this);
-            _arriveAtPathNodeAction.Start(requiredTicks);
-            _arriveAtPathNodeAction.Start(Math.Max(1, requiredTicks));
+            var action = new ArriveAtPathNodeAction(this);
+            action.Start(Math.Max(1,requiredTicks));
+            _arriveAtPathNodeAction = action;
         }
         private class ArriveAtPathNodeAction : RegionAction
         {
@@ -1613,20 +1609,17 @@ namespace DOL.GS
                 var npc = (GameNPC)m_actionSource;
                 npc.DebugSend("calculate next node..." + npc.MovementElapsedTicks + " / " + (uint)(Vector3.Distance(npc._basePosition, npc.TargetPosition) * 1000 / npc.CurrentSpeed));
                 // Pick the next pathing node, and walk towards it
-                npc.PathCalculator.CalculateNextTargetAsync().ContinueWith(res =>
+                var (nextNode, _reason) = npc.PathCalculator.CalculateNextTarget();
+                if (!nextNode.HasValue)
                 {
-                    var nextNode = res.Result.Item1;
-                    if (!nextNode.HasValue)
-                    {
-                        // Directly walk towards the target (or call the customly provided action)
-                        npc.WalkTo(npc.TargetPosition, npc.CurrentSpeed);
-                        return;
-                    }
+                    // Directly walk towards the target (or call the customly provided action)
+                    npc.WalkTo(npc.TargetPosition, npc.CurrentSpeed);
+                    return;
+                }
 
-                    npc.DebugSend("Next target for {0} is {1}", npc.TargetPosition, nextNode.Value);
-                    // Do the actual pathing bit: Walk towards the next pathing node
-                    npc._WalkToPathNode(nextNode.Value, npc.CurrentSpeed);
-                });
+                npc.DebugSend("Next target for {0} is {1}", npc.TargetPosition, nextNode.Value);
+                // Do the actual pathing bit: Walk towards the next pathing node
+                npc._WalkToPathNode(nextNode.Value, npc.CurrentSpeed);
             }
         }
 
@@ -1668,22 +1661,22 @@ namespace DOL.GS
             BroadcastUpdate();
         }
 
-        protected override void UpdateTickSpeed()
+        protected override void UpdateTickSpeed(Vector3? target = null)
         {
             if (CurrentSpeed == 0)
             {
-                base.UpdateTickSpeed();
+                base.UpdateTickSpeed(target);
                 return;
             }
 
-            if (TargetPosition == Vector3.Zero)
+            if ((target ?? TargetPosition) == Vector3.Zero)
             {
                 CurrentSpeed = 0;
                 return;
             }
 
-            Heading = GetHeading(TargetPosition);
-            base.UpdateTickSpeed();
+            Heading = GetHeading(target ?? TargetPosition);
+            base.UpdateTickSpeed(target ?? TargetPosition);
         }
 
         public override void UpdateMaxSpeed()
@@ -4026,7 +4019,8 @@ namespace DOL.GS
             if (Brain is IControlledBrain brain && brain.AggressionState == eAggressionState.Passive)
                 return;
 
-            SetLastMeleeAttackTick();
+            if (target != TargetObject)
+                SetLastMeleeAttackTick();
             StartMeleeAttackTimer();
 
             base.StartAttack(target);
@@ -4832,7 +4826,6 @@ namespace DOL.GS
             ArrayList aplayer = new ArrayList();
 
             var gainers = XPGainers.ToArray();
-            //XPGainers.Clear();
             if (gainers.Length == 0)
                 return;
 

@@ -34,7 +34,8 @@ namespace DOL.GS.Commands
         "Commands.Admin.Reload.Usage.Object",
         "Commands.Admin.Reload.Usage.Specs",
         "Commands.Admin.Reload.Usage.Spells",
-        "/reload mob|object|specs|spells")]
+        "Commands.Admin.Reload.Usage.Npctemplates",
+        "/reload mob|object|specs|spells|npctemplates")]
     public class ReloadCommandHandler : ICommandHandler
     {
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
@@ -107,6 +108,7 @@ namespace DOL.GS.Commands
                     SendSystemMessageObject(client);
                     client.Out.SendMessage(" /reload specs - reload all specializations.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     client.Out.SendMessage(" /reload spells - reload a spells and spelllines, checking db for changed and new spells.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    client.Out.SendMessage(" /reload npctemplates - reload npc template cache", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 }
                 log.Info("/reload command failed, review parameters.");
                 return;
@@ -188,7 +190,7 @@ namespace DOL.GS.Commands
             {
                 SkillBase.ReloadDBSpells();
                 int loaded = SkillBase.ReloadSpellLines();
-                if (client != null) ChatUtil.SendSystemMessage(client, string.Format("Reloaded db spells and {0} spells for all lines !", loaded));
+                ChatUtil.SendSystemMessage(client, string.Format("Reloaded db spells and {0} spells for all lines !", loaded));
                 log.Info(string.Format("Reloaded db spells and {0} spells for all spell lines !", loaded));
                 return;
             }
@@ -196,9 +198,15 @@ namespace DOL.GS.Commands
             if (args[1].ToLower() == "specs")
             {
                 int count = SkillBase.LoadSpecializations();
-                if (client != null) client.Out.SendMessage(string.Format("{0} specializations loaded.", count), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                ChatUtil.SendSystemMessage(client, string.Format("{0} specializations loaded.", count));
                 log.Info(string.Format("{0} specializations loaded.", count));
                 return;
+            }
+
+            if (args[1].ToLower() == "npctemplate" || args[1].ToLower() == "npctemplates")
+            {
+                NpcTemplateMgr.Reload();
+                ChatUtil.SendSystemMessage(client, "Npc templates reloaded.");
             }
 
             return;

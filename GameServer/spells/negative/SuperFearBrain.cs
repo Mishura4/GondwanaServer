@@ -29,12 +29,12 @@ namespace DOL.AI.Brain
         /// Calculate flee target.
         /// </summary>
         ///<param name="target">The target to flee.</param>
-        protected override async void CalculateFleeTarget(GameLiving target)
+        protected virtual void CalculateFleeTarget(GameLiving target)
         {
             ushort TargetAngle = (ushort)((Body.GetHeading(target) + 2048) % 4096);
 
             var fleePoint = Body.GetPointFromHeading(TargetAngle, 450);
-            var point = await PathingMgr.Instance.GetClosestPointAsync(Body.CurrentZone, new Vector3(fleePoint, Body.Position.Z), 128, 128, 256);
+            var point = PathingMgr.Instance.GetClosestPoint(Body.CurrentZone, new Vector3(fleePoint, Body.Position.Z), 128, 128, 256);
             Body.StopFollowing();
             Body.StopAttack();
             Body.PathTo(point.HasValue ? point.Value : new Vector3(fleePoint, Body.Position.Z), Body.MaxSpeed);
