@@ -50,7 +50,7 @@
   <ItemGroup>
     <ScriptFiles Include="..\GameServerScripts\**\*.cs" />
     <DbUpdaterFiles Include="..\GameServerScripts\dbupdater\**\*.xml" />
-    <ScriptFiles Remove="..\GameServerScripts\**" />
+    <TranslationFiles Include="..\GameServer\language\**\*.txt" />
   </ItemGroup>
   <Target Name="CopyFiles" AfterTargets="AfterBuild">
     <Copy SourceFiles="@(ScriptFiles)" DestinationFiles="@(ScriptFiles->'$(MSBuildProjectDirectory)\$(OutputPath)\..\scripts\%(RecursiveDir)%(Filename)%(Extension)')" />
