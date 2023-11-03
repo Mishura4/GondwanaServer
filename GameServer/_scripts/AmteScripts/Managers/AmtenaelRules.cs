@@ -248,29 +248,27 @@ namespace DOL.GS.ServerRules
             }
 
             //Groupmobs quest friendly
-            if (playerAttacker != null && defenderNpc != null)
+            if (playerAttacker != null)
             {
-                if (MobGroups.MobGroup.IsQuestFriendly(defenderNpc, playerAttacker))
+                if (defenderNpc != null)
+                {
+                    if (MobGroups.MobGroup.IsQuestFriendly(defenderNpc, playerAttacker))
+                    {
+                        return false;
+                    }
+                    // PEACE NPCs can't be attacked/attack
+                    if (this.IsPeacefulNPC(attackerNpc, defenderNpc, playerAttacker))
+                    {
+                        return false;
+                    }
+                }
+
+                //Forbids attack on territory
+                var ownsTerritory = Territory.TerritoryManager.Instance.DoesPlayerOwnsTerritory(playerAttacker);
+                if (ownsTerritory)
                 {
                     return false;
                 }
-                // PEACE NPCs can't be attacked/attack
-                if (this.IsPeacefulNPC(attackerNpc, defenderNpc, playerAttacker))
-                {
-                    return false;
-                }
-            }
-
-            //Forbids attack on territory
-            var ownsTerritory = Territory.TerritoryManager.Instance.DoesPlayerOwnsTerritory(playerAttacker);
-            if (ownsTerritory)
-            {
-                return false;
-            }
-
-            // PVE Timer
-            if (playerDefender.IsInvulnerableToPVEAttack)
-                return false;
 
             // PVE Timer
             if (playerAttacker.IsInvulnerableToPVEAttack)
@@ -278,15 +276,26 @@ namespace DOL.GS.ServerRules
                 if (quiet == false) MessageToLiving(attacker, "You can't attack mobs until your PvE invulnerability timer wears off!");
                 return false;
             }
+            }
 
-            //Housing
-            if (playerDefender != null && playerAttacker != null &&
-                (attacker.CurrentRegionID == HousingRegionID || defender.CurrentRegionID == HousingRegionID))
-                return false;
+            if (playerDefender != null)
+            {
+                // PVE Timer
+                if (playerDefender.IsInvulnerableToPVEAttack)
+                {
+                    return false;
+                }
 
-
-            if (!_IsAllowedToAttack_PvpImmunity(attacker, playerAttacker, playerDefender, quiet))
-                return false;
+                if (playerAttacker != null) // PVP
+                {
+                    if (attacker.CurrentRegionID == HousingRegionID || defender.CurrentRegionID == HousingRegionID)
+                    {
+                        return false;
+                    }
+                    if (!_IsAllowedToAttack_PvpImmunity(attacker, playerAttacker, playerDefender, quiet))
+                        return false;
+}
+                }
 
             // Your pet can only attack stealthed players you have selected
             if (defender.IsStealthed && attackerNpc != null)
