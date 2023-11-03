@@ -429,8 +429,11 @@ namespace DOL.AI.Brain
         {
             AggroLevel = 100;
             AggroRange = 650;
-            ThinkInterval = 2000;
         }
+
+        /// <inheritdoc />
+        public override int ThinkInterval => 2000;
+
         public override void Think()
         {
             MobHirule hirule = Body as MobHirule;

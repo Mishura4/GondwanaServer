@@ -40,10 +40,12 @@ namespace DOL.AI.Brain
         public AntipassBrain()
             : base()
         {
-            ThinkInterval = 50;
             AggroLevel = 100;
             AggroRange = 400;
         }
+
+        /// <inheritdoc />
+        public override int ThinkInterval => 50;
 
         public override void Think()
         {

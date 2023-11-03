@@ -90,11 +90,9 @@ namespace DOL.AI.Brain
 {
     public class TerritoryBrain : AmteMobBrain
     {
-
-        public override int AggroLevel
+        public TerritoryBrain() : base()
         {
-            get { return 100; }
-            set { }
+            AggroLevel = 100;
         }
 
         protected override void CheckPlayerAggro()

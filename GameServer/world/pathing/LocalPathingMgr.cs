@@ -22,30 +22,33 @@ namespace DOL.GS
         private enum dtStatus : uint
         {
             // High level status.
-            DT_SUCCESS = 1u << 30,        // Operation succeed.
+            DT_SUCCESS = 1u << 30, // Operation succeed.
 
             // Detail information for status.
-            DT_PARTIAL_RESULT = 1 << 6,     // Query did not reach the end location, returning best guess. 
+            DT_PARTIAL_RESULT = 1 << 6, // Query did not reach the end location, returning best guess. 
         }
 
         public enum dtStraightPathOptions : uint
         {
-            DT_STRAIGHTPATH_NO_CROSSINGS = 0x00,    // Do not add extra vertices on polygon edge crossings.
-            DT_STRAIGHTPATH_AREA_CROSSINGS = 0x01,  // Add a vertex at every polygon edge crossing where area changes.
-            DT_STRAIGHTPATH_ALL_CROSSINGS = 0x02,     // Add a vertex at every polygon edge crossing.
+            DT_STRAIGHTPATH_NO_CROSSINGS = 0x00, // Do not add extra vertices on polygon edge crossings.
+            DT_STRAIGHTPATH_AREA_CROSSINGS = 0x01, // Add a vertex at every polygon edge crossing where area changes.
+            DT_STRAIGHTPATH_ALL_CROSSINGS = 0x02, // Add a vertex at every polygon edge crossing.
         }
 
-        private const int MAX_POLY = 256;    // max vector3 when looking up a path (for straight paths too)
+        private const int MAX_POLY = 256; // max vector3 when looking up a path (for straight paths too)
 
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private static Dictionary<ushort, IntPtr> _navmeshPtrs = new Dictionary<ushort, IntPtr>();
-        private static ThreadLocal<Dictionary<ushort, NavMeshQuery>> _navmeshQueries = new ThreadLocal<Dictionary<ushort, NavMeshQuery>>(() => new Dictionary<ushort, NavMeshQuery>());
+
+        private static ThreadLocal<Dictionary<ushort, NavMeshQuery>> _navmeshQueries =
+            new ThreadLocal<Dictionary<ushort, NavMeshQuery>>(() => new Dictionary<ushort, NavMeshQuery>());
 
         [DllImport("dol_detour", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern bool LoadNavMesh(string file, ref IntPtr meshPtr);
 
         [DllImport("dol_detour", CallingConvention = CallingConvention.Cdecl)]
         private static extern bool FreeNavMesh(IntPtr meshPtr);
+
         [DllImport("dol_detour", CallingConvention = CallingConvention.Cdecl)]
         private static extern bool CreateNavMeshQuery(IntPtr meshPtr, ref IntPtr queryPtr);
 
@@ -54,22 +57,28 @@ namespace DOL.GS
 
 
         [DllImport("dol_detour", CallingConvention = CallingConvention.Cdecl)]
-        private static extern dtStatus PathStraight(IntPtr queryPtr, float[] start, float[] end, float[] polyPickExt, dtPolyFlags[] queryFilter, dtStraightPathOptions pathOptions, ref int pointCount, float[] pointBuffer, dtPolyFlags[] pointFlags, int[] polyRefs);
+        private static extern dtStatus PathStraight(IntPtr queryPtr, float[] start, float[] end, float[] polyPickExt,
+            dtPolyFlags[] queryFilter, dtStraightPathOptions pathOptions, ref int pointCount, float[] pointBuffer,
+            dtPolyFlags[] pointFlags, int[] polyRefs);
 
         [DllImport("dol_detour", CallingConvention = CallingConvention.Cdecl)]
-        private static extern dtStatus FindRandomPointAroundCircle(IntPtr queryPtr, float[] center, float radius, float[] polyPickExt, dtPolyFlags[] queryFilter, float[] outputVector);
+        private static extern dtStatus FindRandomPointAroundCircle(IntPtr queryPtr, float[] center, float radius,
+            float[] polyPickExt, dtPolyFlags[] queryFilter, float[] outputVector);
 
         [DllImport("dol_detour", CallingConvention = CallingConvention.Cdecl)]
-        private static extern dtStatus FindClosestPoint(IntPtr queryPtr, float[] center, float[] polyPickExt, dtPolyFlags[] queryFilter, float[] outputVector);
+        private static extern dtStatus FindClosestPoint(IntPtr queryPtr, float[] center, float[] polyPickExt,
+            dtPolyFlags[] queryFilter, float[] outputVector);
 
         [DllImport("dol_detour", CallingConvention = CallingConvention.Cdecl)]
-        private static extern dtStatus GetPolyAt(IntPtr queryPtr, float[] center, float[] polyPickExt, dtPolyFlags[] queryFilter, ref uint outputPolyRef, float[] outputVector);
+        private static extern dtStatus GetPolyAt(IntPtr queryPtr, float[] center, float[] polyPickExt,
+            dtPolyFlags[] queryFilter, ref uint outputPolyRef, float[] outputVector);
 
         [DllImport("dol_detour", CallingConvention = CallingConvention.Cdecl)]
         private static extern dtStatus SetPolyFlags(IntPtr meshPtr, uint polyRef, dtPolyFlags flags);
 
         [DllImport("dol_detour", CallingConvention = CallingConvention.Cdecl)]
-        private static extern dtStatus QueryPolygons(IntPtr queryPtr, float[] center, float[] polyPickExt, dtPolyFlags[] queryFilter, uint[] outputPolyRefs, ref int outputPolyCount, int maxPolyCount);
+        private static extern dtStatus QueryPolygons(IntPtr queryPtr, float[] center, float[] polyPickExt,
+            dtPolyFlags[] queryFilter, uint[] outputPolyRefs, ref int outputPolyCount, int maxPolyCount);
 
         private class NavMeshQuery : IDisposable
         {
@@ -80,6 +89,7 @@ namespace DOL.GS
                 if (!CreateNavMeshQuery(navMesh, ref this._query))
                     throw new Exception("can't create NavMeshQuery");
             }
+
             public void Dispose()
             {
                 if (_query != IntPtr.Zero)
@@ -142,6 +152,7 @@ namespace DOL.GS
                 log.ErrorFormat("Loading NavMesh failed for zone {0}! (Pointer was zero!)", id);
                 return;
             }
+
             log.InfoFormat("Loading NavMesh sucessful for zone {0}", id);
             _navmeshPtrs[zone.ID] = meshPtr;
             zone.IsPathingEnabled = true;
@@ -197,6 +208,7 @@ namespace DOL.GS
                 query = new NavMeshQuery(_navmeshPtrs[zone.ID]);
                 _navmeshQueries.Value.Add(zone.ID, query);
             }
+
             var startFloats = (start + Vector3.UnitZ * 8).ToRecastFloats();
             var endFloats = (end + Vector3.UnitZ * 8).ToRecastFloats();
 
@@ -208,7 +220,8 @@ namespace DOL.GS
             var polyExt = new Vector3(64, 64, 256).ToRecastFloats();
             dtStraightPathOptions options = dtStraightPathOptions.DT_STRAIGHTPATH_ALL_CROSSINGS;
             var filter = new[] { includeFilter, excludeFilter };
-            var status = PathStraight(query, startFloats, endFloats, polyExt, filter, options, ref numNodes, buffer, flags, null);
+            var status = PathStraight(query, startFloats, endFloats, polyExt, filter, options, ref numNodes, buffer,
+                flags, null);
             if ((status & dtStatus.DT_SUCCESS) == 0)
             {
                 result.Error = PathingError.NoPathFound;
@@ -255,6 +268,7 @@ namespace DOL.GS
                 query = new NavMeshQuery(_navmeshPtrs[zone.ID]);
                 _navmeshQueries.Value.Add(zone.ID, query);
             }
+
             var ptrs = _navmeshPtrs[zone.ID];
             var center = (position + Vector3.UnitZ * 8).ToRecastFloats();
             var cradius = (radius * CONVERSION_FACTOR);
@@ -277,11 +291,12 @@ namespace DOL.GS
         /// <summary>
         /// Returns the closest point on the navmesh (UNTESTED! EXPERIMENTAL! WILL GO SUPERNOVA ON USE! MAYBE!?)
         /// </summary>
-        public Vector3? GetClosestPoint(Zone zone, Vector3 position, float xRange = 256f, float yRange = 256f, float zRange = 256f)
+        public Vector3? GetClosestPoint(Zone zone, Vector3 position, float xRange = 256f, float yRange = 256f,
+            float zRange = 256f)
         {
             if (!_navmeshPtrs.ContainsKey(zone.ID))
                 return position; // Assume the point is safe if we don't have a navmesh
-                                 //GSStatistics.Paths.Inc();
+            //GSStatistics.Paths.Inc();
 
             Vector3? result = null;
             NavMeshQuery query;
@@ -290,6 +305,7 @@ namespace DOL.GS
                 query = new NavMeshQuery(_navmeshPtrs[zone.ID]);
                 _navmeshQueries.Value.Add(zone.ID, query);
             }
+
             var ptrs = _navmeshPtrs[zone.ID];
             var center = (position + Vector3.UnitZ * 8).ToRecastFloats();
             var outVec = new float[3];
@@ -312,7 +328,8 @@ namespace DOL.GS
         {
             var result = new Vector3[numNodes];
             for (var i = 0; i < numNodes; i++)
-                result[i] = new Vector3(buffer[i * 3 + 0] * INV_FACTOR, buffer[i * 3 + 2] * INV_FACTOR, buffer[i * 3 + 1] * INV_FACTOR);
+                result[i] = new Vector3(buffer[i * 3 + 0] * INV_FACTOR, buffer[i * 3 + 2] * INV_FACTOR,
+                    buffer[i * 3 + 1] * INV_FACTOR);
             return result;
         }
 
@@ -328,3 +345,4 @@ namespace DOL.GS
 
         public bool IsAvailable => true;
     }
+}
