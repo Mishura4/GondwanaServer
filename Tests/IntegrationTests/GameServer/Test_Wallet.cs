@@ -16,10 +16,14 @@ namespace DOL.Integration.Gameserver
             sqliteDB.RegisterDataObject(typeof(ItemTemplate));
             sqliteDB.RegisterDataObject(typeof(InventoryItem));
             sqliteDB.RegisterDataObject(typeof(ItemUnique));
+            sqliteDB.RegisterDataObject(typeof(Artifact));
+            sqliteDB.RegisterDataObject(typeof(ArtifactXItem));
+            sqliteDB.RegisterDataObject(typeof(ArtifactBonus));
 
             var fakeServer = new FakeServer();
             fakeServer.SetDatabase(sqliteDB);
             GameServer.LoadTestDouble(fakeServer);
+            ArtifactMgr.Init();
         }
 
         [Test]
