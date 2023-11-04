@@ -2745,7 +2745,8 @@ namespace DOL.GS
         public virtual int CalculateMaxHealth(int level, int constitution)
         {
             constitution -= 50;
-            if (constitution < 0) constitution *= 2;
+            if (constitution < 0)
+                constitution *= 2;
 
             // hp1 : from level
             // hp2 : from constitution
@@ -2757,8 +2758,9 @@ namespace DOL.GS
             if (ChampionLevel >= 1)
                 hp3 = ServerProperties.Properties.HPS_PER_CHAMPIONLEVEL * ChampionLevel;
             double hp4 = 20 + hp1 / 50 + hp2 + hp3;
-            if (GetModified(eProperty.ExtraHP) > 0)
-                hp4 += Math.Round(hp4 * (double)GetModified(eProperty.ExtraHP) / 100);
+            var extra = GetModified(eProperty.ExtraHP);
+            if (extra > 0)
+                hp4 += Math.Round(hp4 * extra / 100);
 
             return Math.Max(1, (int)hp4);
         }
@@ -5932,6 +5934,8 @@ namespace DOL.GS
         /// </summary>
         public const int CRITICAL_SHOT_ENDURANCE = 10;
 
+        public bool CombatInfo = false;
+
         /// <summary>
         /// Holds the cancel style flag
         /// </summary>
@@ -6862,6 +6866,9 @@ namespace DOL.GS
             }
 
             AttackData ad = base.MakeAttack(target, weapon, style, effectiveness * Effectiveness, interruptDuration, dualWield, ignoreLOS);
+
+            if (CombatInfo)
+                Out.SendMessage($"CombatInfo: result:{ad.AttackResult} dmg={ad.Damage} crits={ad.CriticalDamage} style dmg={ad.StyleDamage} uncap dmg={ad.UncappedDamage} weapon dmg={ad.weaponDamage:F1} mod={ad.dmgMod:F1}", eChatType.CT_System, eChatLoc.CL_SystemWindow);
 
             //Clear the styles for the next round!
             NextCombatStyle = null;

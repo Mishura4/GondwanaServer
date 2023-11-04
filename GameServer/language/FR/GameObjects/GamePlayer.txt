@@ -233,8 +233,8 @@ GameObjects.GamePlayer.Quit.CanTQuitDamned:				Vous ne pouvez pas quitter, vous 
 GameObjects.GamePlayer.Quit.CanTQuitStunned:			Vous ne pouvez pas quitter, vous êtes immobilisé(e) par un sort.
 GameObjects.GamePlayer.Quit.CanTQuitMezzed:				Vous ne pouvez pas quitter, vous dormez.
 GameObjects.GamePlayer.Quit.RecentlyInCombat:			Vous étiez récemment en combat, vous devez attendre plus longtemps pour quitter.
-GameObjects.GamePlayer.Quit.YouWillQuit1:				Vous allez quitter le jeux au bout de {0} secondes.	
-GameObjects.GamePlayer.Quit.YouWillQuit2:				Vous allez quitter le jeux au bout de {0} secondes.  Tapez '/stand' ou deplacez-vous pour annuler la procédure.
+GameObjects.GamePlayer.Quit.YouWillQuit1:				Vous allez quitter le jeu au bout de {0} secondes.	
+GameObjects.GamePlayer.Quit.YouWillQuit2:				Vous allez quitter le jeu au bout de {0} secondes.  Tapez '/stand' ou deplacez-vous pour annuler la procédure.
 
 GameObjects.GamePlayer.RealmTitle.UnknownRealm:			Royaume inconnu.
 

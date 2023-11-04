@@ -323,36 +323,36 @@ namespace DOL.GS.Commands
                     var target = client.Player.TargetObject as GamePlayer;
 
                     info.Add("PLAYER INFORMATION (Client # " + target.Client.SessionID + ")");
-                    info.Add("  - Name : " + target.Name);
-                    info.Add("  - Lastname : " + target.LastName);
-                    info.Add("  - Realm : " + GlobalConstants.RealmToName(target.Realm));
-                    info.Add("  - Level : " + target.Level);
-                    info.Add("  - Class : " + target.CharacterClass.Name);
-                    info.Add("  - Guild : " + target.GuildName);
-                    info.Add(" ");
-                    info.Add("  - Account Name : " + target.AccountName);
-                    info.Add("  - IP : " + target.Client.Account.LastLoginIP);
-                    info.Add("  - Priv. Level : " + target.Client.Account.PrivLevel);
-                    info.Add("  - Client Version: " + target.Client.Account.LastClientVersion);
-                    info.Add(" ");
-                    info.Add("  - Craftingskill : " + target.CraftingPrimarySkill + "");
-                    info.Add("  - Model ID : " + target.Model);
-                    info.Add("  - AFK Message: " + target.TempProperties.getProperty<string>(GamePlayer.AFK_MESSAGE) + "");
-                    info.Add(" ");
-                    info.Add("  - Money : " + Money.GetString(target.CopperBalance) + "\n");
-                    info.Add("  - Speed : " + target.MaxSpeedBase);
-                    info.Add("  - XPs : " + target.Experience);
-                    info.Add("  - RPs : " + target.RealmPoints);
-                    info.Add("  - BPs : " + target.BountyPointBalance);
+                    info.Add("- Name : " + target.Name);
+                    info.Add("- Lastname : " + target.LastName);
+                    info.Add("- Realm : " + GlobalConstants.RealmToName(target.Realm));
+                    info.Add("- Level : " + target.Level);
+                    info.Add("- Class : " + target.CharacterClass.Name);
+                    info.Add("- Guild : " + target.GuildName);
+                    info.Add("");
+                    info.Add("- Account: " + target.AccountName + " (Discord: " + target.Client.Account.Discord + ")");
+                    info.Add("- IP : " + target.Client.Account.LastLoginIP);
+                    info.Add("- Priv. Level : " + target.Client.Account.PrivLevel);
+                    info.Add("- Client Version: " + target.Client.Account.LastClientVersion);
+                    info.Add("");
+                    info.Add("- Craftingskill : " + target.CraftingPrimarySkill + "");
+                    info.Add("- Model ID : " + target.Model);
+                    info.Add("- AFK Message: " + target.TempProperties.getProperty<string>(GamePlayer.AFK_MESSAGE) + "");
+                    info.Add("");
+                    info.Add("- Money : " + Money.GetString(target.CopperBalance) + "\n");
+                    info.Add("- Speed : " + target.MaxSpeedBase);
+                    info.Add("- XPs : " + target.Experience);
+                    info.Add("- RPs : " + target.RealmPoints);
+                    info.Add("- BPs : " + target.BountyPointBalance);
 
-                    String sCurrent = "";
-                    String sTitle = "";
+                    string sCurrent = "";
+                    string sTitle = "";
                     int cnt = 0;
 
                     info.Add(" ");
                     info.Add("SPECCING INFORMATIONS ");
-                    info.Add("  - Remaining spec. points : " + target.SkillSpecialtyPoints);
-                    sTitle = "  - Player specialisations / level: \n";
+                    info.Add("- Remaining spec. points : " + target.SkillSpecialtyPoints);
+                    sTitle = "- Player specialisations / level: \n";
                     sCurrent = "";
                     foreach (Specialization spec in target.GetSpecList())
                     {
@@ -365,9 +365,9 @@ namespace DOL.GS.Commands
 
                     info.Add(" ");
                     info.Add("CHARACTER STATS ");
-                    info.Add("  - Maximum Health : " + target.MaxHealth);
-                    info.Add("  - Current AF : " + target.GetModified(eProperty.ArmorFactor));
-                    info.Add("  - Current ABS : " + target.GetModified(eProperty.ArmorAbsorption));
+                    info.Add("- Maximum Health : " + target.MaxHealth);
+                    info.Add("- Current AF : " + target.GetModified(eProperty.ArmorFactor));
+                    info.Add("- Current ABS : " + target.GetModified(eProperty.ArmorAbsorption));
 
                     for (eProperty stat = eProperty.Stat_First; stat <= eProperty.Stat_Last; stat++, cnt++)
                     {
@@ -391,23 +391,23 @@ namespace DOL.GS.Commands
                         sTitle = "";
                     }
 
-                    info.Add(" ");
-                    info.Add(" ");
-                    info.Add("  - Respecs dol : " + target.RespecAmountDOL);
-                    info.Add("  - Respecs single : " + target.RespecAmountSingleSkill);
-                    info.Add("  - Respecs full : " + target.RespecAmountAllSkill);
+                    info.Add("");
+                    info.Add("");
+                    info.Add("- Respecs dol : " + target.RespecAmountDOL);
+                    info.Add("- Respecs single : " + target.RespecAmountSingleSkill);
+                    info.Add("- Respecs full : " + target.RespecAmountAllSkill);
 
-                    info.Add(" ");
-                    info.Add(" ");
-                    info.Add("  --------------------------------------");
-                    info.Add("  -----  Inventory Equiped -----");
-                    info.Add("  --------------------------------------");
+                    info.Add("");
+                    info.Add("");
+                    info.Add("--------------------------------------");
+                    info.Add("-----  Inventory Equiped -----");
+                    info.Add("--------------------------------------");
                     ////////////// Inventaire /////////////
-                    info.Add("  ----- Money:");
+                    info.Add("----- Money:");
                     info.Add(Money.GetShortString(target.CopperBalance));
-                    info.Add(" ");
+                    info.Add("");
 
-                    info.Add("  ----- Wearing:");
+                    info.Add("----- Wearing:");
                     foreach (InventoryItem item in target.Inventory.EquippedItems)
                         info.Add(" [" + GlobalConstants.SlotToName(client, item.Item_Type) + "] " + item.Name);
                     info.Add(" ");

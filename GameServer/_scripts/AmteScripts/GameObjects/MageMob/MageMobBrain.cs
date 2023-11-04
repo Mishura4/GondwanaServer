@@ -15,7 +15,7 @@ namespace DOL.AI.Brain
         public override void Think()
         {
 
-            foreach (GamePlayer player in Body.GetPlayersInRadius(350))
+            foreach (GamePlayer player in Body.GetPlayersInRadius(70))
             {
                 CalculateFleeTarget(player);
                 return;

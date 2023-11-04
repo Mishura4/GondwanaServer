@@ -891,34 +891,16 @@ namespace DOL.GS
             }
         }
 
-        public bool IsGhost
-        { get => Flags.HasFlag(eFlags.GHOST); }
-
-        public override bool IsStealthed
-        { get => Flags.HasFlag(eFlags.STEALTH); }
-
-        public bool IsDontShowName
-        { get => Flags.HasFlag(eFlags.DONTSHOWNAME); }
-
-        public bool IsCannotTarget
-        { get => Flags.HasFlag(eFlags.CANTTARGET); }
-
-        public bool IsPeaceful
-        { get => Flags.HasFlag(eFlags.PEACE); }
-
-        public bool IsFlying
-        { get => Flags.HasFlag(eFlags.FLYING); }
-
-        public bool IsTorchLit
-        { get => Flags.HasFlag(eFlags.TORCH); }
-
-        public bool IsStatue
-        { get => Flags.HasFlag(eFlags.STATUE); }
-
+        public bool IsGhost => Flags.HasFlag(eFlags.GHOST);
+        public override bool IsStealthed => Flags.HasFlag(eFlags.STEALTH);
+        public bool IsDontShowName => Flags.HasFlag(eFlags.DONTSHOWNAME);
+        public bool IsCannotTarget => Flags.HasFlag(eFlags.CANTTARGET);
+        public bool IsPeaceful => Flags.HasFlag(eFlags.PEACE);
+        public bool IsFlying => Flags.HasFlag(eFlags.FLYING);
+        public bool IsTorchLit => Flags.HasFlag(eFlags.TORCH);
+        public bool IsStatue => Flags.HasFlag(eFlags.STATUE);
         public override bool IsUnderwater
-        {
-            get { return Flags.HasFlag(eFlags.SWIMMING) || base.IsUnderwater; }
-        }
+            => Flags.HasFlag(eFlags.SWIMMING) || base.IsUnderwater;
 
         /// <summary>
         /// Set the NPC to stealth or unstealth
@@ -5062,7 +5044,7 @@ namespace DOL.GS
 
         public override double GetArmorAF(eArmorSlot slot)
         {
-            return 5 + ArmorFactor + GetModified(eProperty.ArmorFactor) / 5;
+            return Math.Min(5, (int)Level) + ArmorFactor + GetModified(eProperty.ArmorFactor) / 5;
         }
         public override double GetArmorAbsorb(eArmorSlot slot)
         {

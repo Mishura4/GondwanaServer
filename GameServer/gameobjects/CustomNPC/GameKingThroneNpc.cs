@@ -56,12 +56,12 @@ namespace DOL.GS
 
                 if (cllevel)
                 {
-                    player.Out.SendMessage("You reached champion level " + player.ChampionLevel + "!", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "KingNPC.ReachCL"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 }
 
                 if (player.ChampionLevel >= 5)
                 {
-                    player.Out.SendMessage("I can [respecialize] your champion skills if you so desire.", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "KingNPC.Respecialize"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 }
 
             }
@@ -97,7 +97,14 @@ namespace DOL.GS
             {
                 player.RespecChampionSkills();
                 player.SaveIntoDatabase();
-                player.Out.SendMessage("I have reset your champion skills!", eChatType.CT_Important, eChatLoc.CL_PopupWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "KingNPC.ResetCL"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+            }
+
+            if (str.ToLower() == "re-spécialiser" && player.Champion && player.ChampionLevel >= 5)
+            {
+                player.RespecChampionSkills();
+                player.SaveIntoDatabase();
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "KingNPC.ResetCL"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
             }
 
             return true;
@@ -127,10 +134,11 @@ namespace DOL.GS
             {
                 //level respec for players
                 case "respecialize":
+                case "re-spécialiser":
                     if (player.Champion && player.ChampionLevel >= 5)
                     {
                         player.RespecChampionSkills();
-                        player.Out.SendMessage("I have reset your Champion skills!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "KingNPC.ResetCL"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
 
                     }
                     break;

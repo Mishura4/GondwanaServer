@@ -3,3 +3,6 @@ CLWeaponNPC.ReceiveItem.RespecCL:				Thanks, I added a single champion skill res
 KingNPC.WhisperReceive.IsNowChampion:			You have just embraced on the life of the champions!
 KingNPC.WhisperReceive.AlreadyChampion:			You are already a Champion of the Realm!
 KingNPC.WhisperReceive.AskForChampion:			Would you like to embrace in the life of [Champions]?
+KingNPC.ReachCL:								You reached champion level 
+KingNPC.Respecialize:							I can [respecialize] your champion skills if you so desire.
+KingNPC.ResetCL:								I have reset your Champion skills!
