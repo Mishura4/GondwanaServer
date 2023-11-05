@@ -851,7 +851,7 @@ namespace DOL.GS.Spells
                         break;
 
                     case "realm":
-                        if (!GameServer.ServerRules.IsAllowedToAttack(Caster, selectedTarget, true))
+                        if (GameServer.ServerRules.IsAllowedToAttack(Caster, selectedTarget, true))
                         {
                             return false;
                         }
@@ -1090,7 +1090,7 @@ namespace DOL.GS.Spells
                         break;
 
                     case "realm":
-                        if (!GameServer.ServerRules.IsAllowedToAttack(Caster, target, true))
+                        if (GameServer.ServerRules.IsAllowedToAttack(Caster, target, true))
                         {
                             return false;
                         }
@@ -1293,7 +1293,7 @@ namespace DOL.GS.Spells
                         break;
 
                     case "realm":
-                        if (!GameServer.ServerRules.IsAllowedToAttack(Caster, target, true))
+                        if (GameServer.ServerRules.IsAllowedToAttack(Caster, target, true))
                         {
                             return false;
                         }
@@ -1445,7 +1445,7 @@ namespace DOL.GS.Spells
 
                 switch (m_spell.Target)
                 {
-                    case "Enemy":
+                    case "enemy":
                         //enemys have to be in front and in view for targeted spells
                         if (Caster is GamePlayer && !m_caster.IsObjectInFront(target, 180) && !Caster.IsWithinRadius(target, 50))
                         {
@@ -1459,7 +1459,7 @@ namespace DOL.GS.Spells
                         }
                         break;
 
-                    case "Corpse":
+                    case "corpse":
                         if (target.IsAlive || (!(Caster is TextNPC) && !GameServer.ServerRules.IsSameRealm(Caster, target, quiet)))
                         {
                             if (!quiet) MessageToCaster("This spell only works on dead members of your realm!", eChatType.CT_SpellResisted);
@@ -1467,14 +1467,14 @@ namespace DOL.GS.Spells
                         }
                         break;
 
-                    case "Realm":
-                        if (!GameServer.ServerRules.IsAllowedToAttack(Caster, target, true))
+                    case "realm":
+                        if (GameServer.ServerRules.IsAllowedToAttack(Caster, target, true))
                         {
                             return false;
                         }
                         break;
 
-                    case "Pet":
+                    case "pet":
                         /*
 						 * [Ganrod] Nidel: Can cast pet spell on all Pet/Turret/Minion (our pet)
 						 * -If caster target's isn't own pet.
@@ -2243,14 +2243,14 @@ namespace DOL.GS.Spells
 
                         foreach (GamePlayer player in target.GetPlayersInRadius(modifiedRadius))
                         {
-                            if (GameServer.ServerRules.IsAllowedToAttack(Caster, player, true) || force)
+                            if (!GameServer.ServerRules.IsAllowedToAttack(Caster, player, true) || force)
                             {
                                 list.Add(player);
                             }
                         }
                         foreach (GameNPC npc in target.GetNPCsInRadius(modifiedRadius))
                         {
-                            if (GameServer.ServerRules.IsAllowedToAttack(Caster, npc, true) || force)
+                            if (!GameServer.ServerRules.IsAllowedToAttack(Caster, npc, true) || force)
                             {
                                 list.Add(npc);
                             }
@@ -2258,7 +2258,7 @@ namespace DOL.GS.Spells
                     }
                     else
                     {
-                        if (target != null && (GameServer.ServerRules.IsAllowedToAttack(Caster, target, true) || force))
+                        if (target != null && (!GameServer.ServerRules.IsAllowedToAttack(Caster, target, true) || force))
                             list.Add(target);
                     }
                     break;

@@ -2,6 +2,6 @@ Commands.GM.GMTerritories.Description:	GM territory creation commands:
 Commands.GM.GMTerritories.Usage.GroupMob:		'/GMTerritories add <areaId> <zoneId> <name> <groupId>' Add a territory by specifying the <areaId>, the <zoneId>, the <name> and the <groupId> to use for this territory
 Commands.GM.GMTerritories.Usage.Key:		'/GMTerritories info <areaId>' Gives informations related to the territory based on its <areaId>
 Commands.GM.GMTerritories.Usage.KeyChance:		'/GMTerritories clear <areadId>' Removes a territory selected by its <areaId>
-Commands.GM.GMTerritories.Usage.IsRenaissance:		'/GMTerritories bonus add <resist> <areaId>' Add a resist to the territory based on the <areaId> selected (the same resist can be added several times on a territory)
-Commands.GM.GMTerritories.Usage.PunishSpell:		'/GMTerritories bonus remove <resist> <areaId>' Removes a resist from the territory based on the <areaId> selected
+Commands.GM.GMTerritories.Usage.BonusAdd:		'/GMTerritories bonus add <resist> <areaId>' Add a resist to the territory based on the <areaId> selected (the same resist can be added several times on a territory)
+Commands.GM.GMTerritories.Usage.BonusRemove:		'/GMTerritories bonus remove <resist> <areaId>' Removes a resist from the territory based on the <areaId> selected
 Commands.GM.GMTerritories.Resist:	resist: <nature|crush|slash|thrust|body|cold|energy|heat|matter|spirit>

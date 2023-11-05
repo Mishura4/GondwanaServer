@@ -121,7 +121,7 @@ Commands.Players.Guild.Help.GuildEmail:			'/gc email <contact@guildpage.com>' #�
 Commands.Players.Guild.Help.GuildEmblem:			'/gc emblem' # Présentation de l'emblème.
 Commands.Players.Guild.Help.TerritoryBanner:			'/gc territorybanner' # Permet de montrer sa bannière de guilde dans un territoire conquis, réduit les coûts d'entretien du territoire, et améliore sa défense.
 Commands.Players.Guild.Help.GuildForm:			'/gc form <nom de guilde>' # Création d'une guilde (4 joueurs au minimum requis dans le groupe).
-Commands.Players.Guild.Help.GuildGMAddPlayer:		'/gc addplayer <nom de joueur> to <noum de guilde>' # Ajoute un joueur à la guilde.
+Commands.Players.Guild.Help.GuildGMAddPlayer:		'/gc addplayer <nom de joueur> to <nom de guilde>' # Ajoute un joueur à la guilde.
 Commands.Players.Guild.Help.GuildGMCommands:		Game Master commandes :
 Commands.Players.Guild.Help.GuildGMCreate:		'/gc create <nom de guilde>' # Crée une guilde et désigne le joueur sélectionné comme chef.
 Commands.Players.Guild.Help.GuildGMPurge:			'/gc purge <nom de guilde>' # Purge complètement une guilde.
@@ -233,7 +233,7 @@ Commands.Players.Guild.WithdrawTooMuch:			Vous ne pouvez plus ajouter d'argent d
 
 
 Commands.Players.Guild.InviteNotThis:			Vous ne pouvez pas inviter un membre de ce royaume dans votre guilde.
-Commands.Players.Guild.Help.GuildTerritories:   '/gc territoires' Affiche les territoires ainsi que leurs occupations.
+Commands.Players.Guild.Help.GuildTerritories:   '/gc territories' Affiche les territoires ainsi que leurs occupations.
 Commands.Players.Guild.TerritoryPaid:           La somme de {0} a été retirée de la banque de votre guilde pour financer vos territoires.
 Commands.Players.Guild.TerritoryNoMoney:        Votre guilde n'a pas pu honorer ses dettes et vous avez perdu vos territoires conquis.  
 Commands.Players.Guild.TerritoryMeritPoints:   L'occupation de vos territoires vous rapporte {0} points de mérite.
