@@ -89,7 +89,7 @@ namespace DOL.GS.Trainer
                     if (CanPromotePlayer(player))
                     {
                         PromotePlayer(player, (int)eCharacterClass.Scout, "Welcome young warrior! May your time in Albion's army be rewarding! Here is your Huntsman's Longbow. The bow is your guild weapon! Be sure to carry it with you always.", null);
-                        player.ReceiveItem(this, WEAPON_ID1);
+                        player.ReceiveItem(this, WEAPON_ID1, eInventoryActionType.Other);
                     }
                     break;
             }

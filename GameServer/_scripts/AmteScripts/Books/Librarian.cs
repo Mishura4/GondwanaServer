@@ -2,6 +2,7 @@ using System.Linq;
 using System.Text;
 using DOL.Database;
 using DOL.GS.PacketHandler;
+using DOL.Language;
 
 namespace DOL.GS.Scripts
 {
@@ -12,10 +13,10 @@ namespace DOL.GS.Scripts
             if (!base.Interact(player))
                 return false;
 
-            player.Client.Out.SendMessage("Bonjour et bienvenue à la bibliothèque de Gondwana !\n" +
-                                          "Que voulez-vous ?\n\n" +
-                                          "[Voir les livres]\n[Ajouter un livre]",
-                                          eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+            player.Client.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Librarian.InteractText01"), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+            player.Client.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Librarian.InteractText02"), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+            player.Client.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Librarian.InteractText03"), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+            player.Client.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Librarian.InteractText04"), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
             return true;
         }
 
@@ -28,12 +29,13 @@ namespace DOL.GS.Scripts
             switch (text)
             {
                 case "Voir les livres":
-                    player.SendMessage("Voici la liste des livres que je détiens:", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                case "Consult the books":
+                    player.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Librarian.ResponseText01"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                     StringBuilder sb = new StringBuilder(2048);
                     GameServer.Database.SelectObjects<DBBook>(b => b.IsInLibrary).OrderBy(b => b.Title).Foreach(
                         b =>
                         {
-                            sb.Append("\n[").AppendLine(b.Title).Append("] de ").Append(b.Author);
+                            sb.Append("\n[").AppendLine(b.Title).Append("], ").Append(b.Author);
                             if (sb.Length > 1900)
                             {
                                 player.SendMessage(sb.ToString(), eChatType.CT_System, eChatLoc.CL_PopupWindow);
@@ -44,14 +46,15 @@ namespace DOL.GS.Scripts
                     break;
 
                 case "Ajouter un livre":
-                    player.SendMessage("Donnez moi votre livre et je l'ajouterais.", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                case "Add a book":
+                    player.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Librarian.ResponseText02"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                     break;
 
                 default:
                     var book = GameServer.Database.SelectObject<DBBook>(b => b.Title == text && b.IsInLibrary);
                     if (book == null)
                     {
-                        player.SendMessage("Je ne trouve pas ce livre.", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                        player.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Librarian.ResponseText03"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                         break;
                     }
                     BooksMgr.ReadBook(player, book);
@@ -73,23 +76,23 @@ namespace DOL.GS.Scripts
                 {
                     if (book.PlayerID != p.InternalID)
                     {
-                        p.Out.SendMessage("Vous n'êtes pas l'auteur de ce livre !", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                        p.Out.SendMessage(LanguageMgr.GetTranslation(p.Client.Account.Language,"Librarian.ResponseText04"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                         return false;
                     }
                     book.IsInLibrary = !book.IsInLibrary;
                     book.Save();
                     p.Out.SendMessage(
                         book.IsInLibrary
-                            ? "Votre livre fait maintenant partit de la bibliothèque."
+                            ? "Votre livre fait maintenant partie de la bibliothèque."
                             : "Vous avez retiré votre livre de la bibliothèque.", eChatType.CT_System,
                         eChatLoc.CL_PopupWindow);
                 }
                 else
-                    p.Out.SendMessage("Désolé, ce livre n'existe plus.", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                    p.Out.SendMessage(LanguageMgr.GetTranslation(p.Client.Account.Language,"Librarian.ResponseText05"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
 
             }
             else
-                p.Out.SendMessage("Qu'est-ce que c'est ?!", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                p.Out.SendMessage(LanguageMgr.GetTranslation(p.Client.Account.Language,"Librarian.ResponseText06"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
 
             return false;
         }

@@ -17,7 +17,7 @@ Hib.ImportantDelivery.Description.Step5:		[Step #5] Listen to what Aethic has to
 Hib.ImportantDelivery.Description.Step6:		[Step #6] Take the ticket Aethic gave you to Stable Master Truichon north-northwest of the building with the red-door. Hand him the ticket the same way you handed Aethic the supplies.
 Hib.ImportantDelivery.Description.Step7:		[Step #7] Hand Stable Master Freagus the Crate of Vegetables.
 Hib.ImportantDelivery.Description.Step8:		[Step #8] Listen to Stable Master Freagus some more. If he stops speaking with you, ask him if he has a [reward] for your hard work and service to Hibernia.
-Hib.ImportantDelivery.FinishQuest.RecieveReward:	You recieve {0} as a reward.
+Hib.ImportantDelivery.FinishQuest.RecieveReward:	You receive {0} as a reward.
 Hib.ImportantDelivery.Notify.RentingHorse:		Good day, {0}. If you are interested in renting a horse, purchase a ticket, then hand it to me. Have a safe trip!
 Hib.ImportantDelivery.Notify.Supplies:			Ah! The supplies I have been waiting for. Thank you {0}. These will help us tremendously in the coming weeks. I have another [errand] if you are up for it.
 Hib.ImportantDelivery.Notify.Vegetables:		Ah, the vegetables I've been waiting for from Aethic. Thank you for delivering them to me. I couldn't find anyone to look after my stable so I could go and get them. Let me see, I think a [reward] is in order for your hard work.

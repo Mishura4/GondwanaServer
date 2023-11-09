@@ -306,7 +306,7 @@ namespace DOL.GS.PacketHandler.Client.v168
                                 // take the money from the player
                                 if (!player.RemoveMoney(Currency.Copper.Mint(moneyToAdd)))
                                     return;
-                                InventoryLogging.LogInventoryAction(player, "(HOUSE;" + house.HouseNumber + ")", eInventoryActionType.Other, moneyToAdd);
+                                InventoryLogging.LogInventoryAction(player, house.DatabaseItem.ObjectId, "(HOUSE;" + house.HouseNumber + ")", eInventoryActionType.Other, moneyToAdd);
 
                                 // add the money to the lockbox
                                 house.KeptMoney += moneyToAdd;

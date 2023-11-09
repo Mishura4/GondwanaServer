@@ -9,7 +9,7 @@ Mid.StolenEggs.Descriptiont.Text4:		[Step #4] You may now interact with the grif
 Mid.StolenEggs.Descriptiont.Text5:		[Step #5] Take the grifflet back to Griffin Handler Njiedi near the gates of Jordheim. Hand him the whip when he asks. If the grifflet gets lost, proceed to Griffin Handler Njiedi. The grifflet will find his way home.
 Mid.StolenEggs.Descriptiont.Text6:		[Step #6] Speak with Griffin Handler Njiedi.
 Mid.StolenEggs.Descriptiont.Text7:		[Step #7] Return to Dalikor at the guard tower near Mularn. Tell him you [successfully] returned the grifflet to Njiedi.
-Mid.StolenEggs.FinishQuest.Text1:		You recieve {0} as a reward.
+Mid.StolenEggs.FinishQuest.Text1:		You receive {0} as a reward.
 Mid.StolenEggs.InitGrifflet.NPCGrifflet:	Grifflet
 Mid.StolenEggs.Notify.Text1:			{0} says, "You shall not take what is rightfully ours land-bound abomination!"
 Mid.StolenEggs.Notify.Text2:			You slay the creature and pluck a whip from the Askefruer trainer's hands.

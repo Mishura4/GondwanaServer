@@ -129,7 +129,7 @@ namespace DOL.GS.Behaviour
                 {
                     if (log.IsWarnEnabled)
                     {
-                        log.Warn("Parameter is not used for =" + this.GetType().Name + ".\n The recieved parameter " + value + " will not be used for anthing. Check your quest code for inproper usage of parameters!");
+                        log.Warn("Parameter is not used for =" + this.GetType().Name + ".\n The received parameter " + value + " will not be used for anthing. Check your quest code for inproper usage of parameters!");
                         return false;
                     }
                 }

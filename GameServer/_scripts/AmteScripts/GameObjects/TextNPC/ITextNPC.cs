@@ -623,14 +623,16 @@ namespace DOL.GS.Scripts
         {
             if (!player.Inventory.RemoveCountFromStack(item, echItem.ItemRecvCount))
                 return false;
-            InventoryLogging.LogInventoryAction(player, _body, eInventoryActionType.Quest, item.Template, echItem.ItemRecvCount);
+            InventoryLogging.LogInventoryAction(player, _body, eInventoryActionType.Quest, item, EchItem.ItemRecvCount);
 
             if (echItem.GiveTemplate != null)
                 if (!player.Inventory.AddTemplate(GameInventoryItem.Create(echItem.GiveTemplate), echItem.ItemGiveCount, eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack))
                 {
                     player.Out.SendMessage("Votre inventaire est plein, l'objet est déposé au sol.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                    for (int i = 0; i < echItem.ItemGiveCount; i++)
-                        player.CreateItemOnTheGround(GameInventoryItem.Create(echItem.GiveTemplate));
+                    var invItem = GameInventoryItem.Create(EchItem.GiveTemplate);
+                    invItem.Count = EchItem.ItemGiveCount;
+                    player.CreateItemOnTheGround(invItem);
+                    InventoryLogging.LogInventoryAction(_body, "", $"(ground;{player.InternalID})", eInventoryActionType.Quest, invItem, EchItem.ItemGiveCount);
                 }
                 else
                     InventoryLogging.LogInventoryAction(_body, player, eInventoryActionType.Quest, echItem.GiveTemplate, echItem.ItemGiveCount);

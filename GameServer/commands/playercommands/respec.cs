@@ -396,7 +396,7 @@ namespace DOL.GS.Commands
                 player.TempProperties.removeProperty(BUY_RESPEC);
                 if (player.RespecCost >= 0 && player.RemoveMoney(Currency.Copper.Mint(player.RespecCost * 100 * 100)))
                 {
-                    InventoryLogging.LogInventoryAction(player, "(respec)", eInventoryActionType.Merchant, player.RespecCost * 10000);
+                    InventoryLogging.LogInventoryAction(player, "", "(respec)", eInventoryActionType.Merchant, player.RespecCost * 10000);
                     player.RespecAmountSingleSkill++;
                     player.RespecBought++;
                     DisplayMessage(

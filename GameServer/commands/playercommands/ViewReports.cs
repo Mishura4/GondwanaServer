@@ -37,7 +37,7 @@ namespace DOL.GS.Commands
 
             try
             {
-                // We recieved args, and must be admin
+                // We received args, and must be admin
                 switch (args[1])
                 {
                     case "close":

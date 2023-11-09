@@ -645,7 +645,7 @@ namespace DOL.GS
                         }
                         else
                         {
-                            InventoryLogging.LogInventoryAction(m_owner, partner, eInventoryActionType.Trade, item.Template, item.Count);
+                            InventoryLogging.LogInventoryAction(m_owner, partner, eInventoryActionType.Trade, item, item.Count);
                             if (logTrade)
                             {
                                 GameServer.Instance.LogGMAction("   Item: " + partner.GetPersonalizedName(m_owner) + "(" + m_owner.Client.Account.Name + ") -> " + m_owner.GetPersonalizedName(partner) + "(" + partner.Client.Account.Name + ") : " + item.Name + "(" + item.Id_nb + ")");
@@ -688,7 +688,7 @@ namespace DOL.GS
                         }
                         else
                         {
-                            InventoryLogging.LogInventoryAction(partner, m_owner, eInventoryActionType.Trade, item.Template, item.Count);
+                            InventoryLogging.LogInventoryAction(partner, m_owner, eInventoryActionType.Trade, item, item.Count);
                             if (logTrade)
                             {
                                 GameServer.Instance.LogGMAction("   Item: " + m_owner.GetPersonalizedName(partner) + "(" + partner.Client.Account.Name + ") -> " + partner.GetPersonalizedName(m_owner) + "(" + m_owner.Client.Account.Name + ") : " + item.Name + "(" + item.Id_nb + ")");

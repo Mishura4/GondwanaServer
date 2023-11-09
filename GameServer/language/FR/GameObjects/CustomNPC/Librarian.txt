@@ -1,0 +1,10 @@
+Librarian.InteractText01:			Bonjour et bienvenue à la bibliothèque !
+Librarian.InteractText02:			Que voulez-vous ?
+Librarian.InteractText03:			[Voir les livres]
+Librarian.InteractText04:			[Ajouter un livre]
+Librarian.ResponseText01:			Voici la liste des livres que je détiens:
+Librarian.ResponseText02:			Donnez-moi votre livre et je l'ajouterai.
+Librarian.ResponseText03:			Je ne trouve pas ce livre.
+Librarian.ResponseText04:			Vous n'êtes pas l'auteur de ce livre !
+Librarian.ResponseText05:			Désolé, ce livre est introuvable.
+Librarian.ResponseText06:			Qu'est-ce que c'est ?!

@@ -439,10 +439,11 @@ namespace DOL.GS.Scripts
                 if (player.Level < Conditions.LevelMin || player.Level > Conditions.LevelMax)
                     return;
                 if (!string.IsNullOrEmpty(Conditions.Item))
+                {
                     if (!player.Inventory.RemoveTemplate(Conditions.Item, 1, eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack))
                         return;
-                    else
-                        InventoryLogging.LogInventoryAction(player, source, eInventoryActionType.Other, Conditions.ItemTemplate);
+                    InventoryLogging.LogInventoryAction(player, source, eInventoryActionType.Other, Conditions.ItemTemplate, 1);
+                }
                 player.MoveTo(RegionID, X, Y, Z, Heading);
                 if (Conditions.Bind)
                     player.Bind(true);

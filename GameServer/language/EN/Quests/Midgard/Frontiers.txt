@@ -2,14 +2,14 @@ Mid.Frontiers.CheckPlayerAbortQuest.Text1:	Good, no go out there and finish your
 Mid.Frontiers.CheckPlayerAbortQuest.Text2:	Aborting Quest {0}. You can start over again if you want.
 Mid.Frontiers.CheckPlayerAcceptQuest.Text1:	Oh well, if you change your mind, please come back!
 Mid.Frontiers.CheckPlayerAcceptQuest.Text2:	Wonderful {0}. Now here, take the plans and also this scroll for Griffin Handler Njiedi. Give him the scroll so he knows where to send you. You can find him near the gates to Jordheim. I wish you luck and speed on your journey {0}.
-Mid.Frontiers.CheckPlayerAcceptQuest.Text3:	You recieve {0} for the ride to Svasud Faste
+Mid.Frontiers.CheckPlayerAcceptQuest.Text3:	You receive {0} for the ride to Svasud Faste
 Mid.Frontiers.Description.Text1:		[Step #1] You must deliver the Askefruer Plans Dalikor gave you to Scryer Idora in the Frontiers. You must first take the scroll to Griffin Handler Njiedi near the Jordheim Gates.
 Mid.Frontiers.Description.Text2:		[Step #2] Take the griffin to Svasud Faste. When you are there, speak with Stor Gothi Annark who will then teleport you to the Frontiers.
 Mid.Frontiers.Description.Text3:		[Step #3] Give the Askefruer Plans to Idora.
 Mid.Frontiers.Description.Text4:		[Step #4] Wait for Scryer Idora to finish translating the plans. If she stops speaking with you, ask her if she is [done] with her translations.
 Mid.Frontiers.Description.Text5:		[Step #5] Take the translated plans back to Dalikor at the tower near Mularn. You can give the ticket Idora gave you to Stable Master Vorgar for a faster ride home.
 Mid.Frontiers.Description.Text6:		[Step #6] Wait for Dalikor to finsh reading the translated text.
-Mid.Frontiers.FinishQuest.Text1:		You recieve {0} as a reward.
+Mid.Frontiers.FinishQuest.Text1:		You receive {0} as a reward.
 Mid.Frontiers.Notify.Text1:			Ah, from my old friend Dalikor. Let's see what he says. Ah, I am to give you transportation to Svasud Faste. No problem. All you need to do is purchase a ticket from my store.
 Mid.Frontiers.Notify.Text2:			Hmm...What's this now? A letter? For me? Interesting. Ah, I see it is from my old friend, Dalikor, something about plans written in fairy. I can translate this if you can wait just a few moments.
 Mid.Frontiers.Notify.Text3:			Scryer Idora takes out a piece of parchment and begins to translate the scroll you brought to her. In just a few short minutes, she is done with the translation.

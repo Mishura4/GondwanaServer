@@ -198,7 +198,7 @@ namespace DOL.GS
                     player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameMerchant.OnPlayerBuy.NotInventorySpace"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     return;
                 }
-                InventoryLogging.LogInventoryAction("(TRADEITEMS;" + TradeItems.ItemsListID + ")", player, eInventoryActionType.Merchant, template, amountToBuy);
+                InventoryLogging.LogInventoryAction(TradeItems.ItemsListID, $"(TRADEITEMS;{TradeItems.ItemsListID})", player, eInventoryActionType.Merchant, template, amountToBuy);
                 //Generate the buy message
                 string message;
                 if (amountToBuy > 1)
@@ -213,7 +213,7 @@ namespace DOL.GS
                     throw new Exception("Money amount changed while adding items.");
                 }
                 player.SendMessage(message, eChatType.CT_Merchant, eChatLoc.CL_SystemWindow);
-                InventoryLogging.LogInventoryAction(player, "(TRADEITEMS;" + TradeItems.ItemsListID + ")", eInventoryActionType.Merchant, totalCost.Amount);
+                InventoryLogging.LogInventoryAction(player, TradeItems.ItemsListID, $"(TRADEITEMS;{TradeItems.ItemsListID})", eInventoryActionType.Merchant, totalValue);
             }
         }
 
@@ -251,7 +251,7 @@ namespace DOL.GS
                 string message = LanguageMgr.GetTranslation(player.Client.Account.Language, "GameMerchant.OnPlayerSell.GivesYou", GetName(0, true), Money.GetString(itemValue), item.GetName(0, false));
                 player.AddMoney(Currency.Copper.Mint(itemValue));
                 player.SendMessage(message, eChatType.CT_Merchant, eChatLoc.CL_SystemWindow);
-                InventoryLogging.LogInventoryAction(player, this, eInventoryActionType.Merchant, item.Template, item.Count);
+                InventoryLogging.LogInventoryAction(player, this, eInventoryActionType.Merchant, item, item.Count);
                 InventoryLogging.LogInventoryAction(this, player, eInventoryActionType.Merchant, itemValue);
                 return;
             }

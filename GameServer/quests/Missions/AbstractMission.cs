@@ -214,7 +214,7 @@ namespace DOL.GS.Quests
                 {
                     player.AddMoney(Currency.Copper.Mint(RewardMoney));
                     player.SendSystemMessage($"You receive {Money.GetString(RewardMoney)} for completing your task.");
-                    InventoryLogging.LogInventoryAction("(MISSION;" + MissionType + ")", player, eInventoryActionType.Quest, RewardMoney);
+                    InventoryLogging.LogInventoryAction("", "(MISSION;" + MissionType + ")", player, eInventoryActionType.Quest, RewardMoney);
                 }
 
                 if (RewardRealmPoints > 0)

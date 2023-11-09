@@ -327,10 +327,10 @@ namespace DOL.GS.Scripts
                     m_interactPlayer = null;
                     m_lastInteract = DateTime.MinValue;
                 }
-                player.Out.SendMessage("Un problème est survenue.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage("Un problème est survenu.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
             }
-            InventoryLogging.LogInventoryAction(player, this, eInventoryActionType.Other, it.Template);
+            InventoryLogging.LogInventoryAction(player, this, eInventoryActionType.Loot, it, 1);
             InteractEnd(player);
         }
 
@@ -350,7 +350,7 @@ namespace DOL.GS.Scripts
                         ItemTemplate item = GameServer.Database.SelectObject<ItemTemplate>(DB.Column("Id_nb").IsEqualTo(GameServer.Database.Escape(coffre.Id_nb)));
                         if (item == null)
                         {
-                            player.Out.SendMessage("Vous ne trouvez rien d'intéressant. (Erreur de donnée, veuillez le signaliser à un GameMaster)", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                            player.Out.SendMessage("Vous ne trouvez rien d'intéressant. (Erreur de donnée, veuillez le signaler à un GameMaster)", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                             coffre.Chance = 0;
                         }
                         else
@@ -437,7 +437,7 @@ namespace DOL.GS.Scripts
             if (player.Inventory.AddTemplate(GameInventoryItem.Create(item), 1, eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack))
             {
                 player.Out.SendMessage("Vous récupérez un objet!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                InventoryLogging.LogInventoryAction(this, player, eInventoryActionType.Loot, item);
+                InventoryLogging.LogInventoryAction(this, player, eInventoryActionType.Loot, item, 1);
                 return true;
             }
             else

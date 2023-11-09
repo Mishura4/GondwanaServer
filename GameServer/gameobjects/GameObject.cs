@@ -1219,7 +1219,7 @@ namespace DOL.GS
         /// <param name="source">Source from where to get the item</param>
         /// <param name="item">Item to get</param>
         /// <returns>true if the item was successfully received</returns>
-        public virtual bool ReceiveItem(GameLiving source, InventoryItem item)
+        public virtual bool ReceiveItem(GameLiving source, string templateID, eInventoryActionType type)
         {
             if (item == null || item.OwnerID == null)
             {

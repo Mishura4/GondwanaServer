@@ -75,7 +75,7 @@ namespace DOL.GS
                 if (player.Inventory.CountItemTemplate("Personal_Bind_Recall_Stone", eInventorySlot.Min_Inv, eInventorySlot.Max_Inv) == 0)
                 {
                     player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "RoyalTreasuryClerk.Stonegive"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
-                    player.ReceiveItem(this, "Personal_Bind_Recall_Stone");
+                    player.ReceiveItem(this, "Personal_Bind_Recall_Stone", eInventoryActionType.Other);
                 }
                 return true;
             }

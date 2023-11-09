@@ -377,8 +377,8 @@ namespace DOL.GS.Quests
             if (RewardMoney > 0)
             {
                 m_taskPlayer.AddMoney(Currency.Copper.Mint(RewardMoney));
-                m_taskPlayer.SendSystemMessage(string.Format("You recieve {0} for completing your task.", Money.GetString(RewardMoney)));
-                InventoryLogging.LogInventoryAction("(TASK;" + m_dbTask.TaskType + ")", m_taskPlayer, eInventoryActionType.Quest, RewardMoney);
+                m_taskPlayer.SendSystemMessage(string.Format("You receive {0} for completing your task.", Money.GetString(RewardMoney)));
+                InventoryLogging.LogInventoryAction("", $"(TASK;{m_dbTask.TaskType})", m_taskPlayer, eInventoryActionType.Quest, RewardMoney);
             }
 
             if (RewardItems != null && RewardItems.Count > 0)
@@ -387,7 +387,7 @@ namespace DOL.GS.Quests
                 foreach (InventoryItem item in RewardItems)
                 {
                     if (m_taskPlayer.Inventory.AddItem(eInventorySlot.FirstEmptyBackpack, item))
-                        InventoryLogging.LogInventoryAction("(TASK;" + m_dbTask.TaskType + ")", m_taskPlayer, eInventoryActionType.Quest, item.Template, item.Count);
+                        InventoryLogging.LogInventoryAction("", $"(TASK;{m_dbTask.TaskType})", m_taskPlayer, eInventoryActionType.Quest, item, item.Count);
                 }
                 m_taskPlayer.Inventory.CommitChanges();
             }
@@ -413,7 +413,7 @@ namespace DOL.GS.Quests
                     if (item != null)
                     {
                         m_taskPlayer.Inventory.RemoveItem(item);
-                        InventoryLogging.LogInventoryAction(m_taskPlayer, "(TASK;" + m_dbTask.TaskType + ")", eInventoryActionType.Quest, item.Template, item.Count);
+                        InventoryLogging.LogInventoryAction(m_taskPlayer, "", $"(TASK;{m_dbTask.TaskType})", eInventoryActionType.Quest, item, item.Count);
                     }
                 }
                 m_taskPlayer.Out.SendMessage("Your task related item has been removed from your inventory.", eChatType.CT_System, eChatLoc.CL_SystemWindow);

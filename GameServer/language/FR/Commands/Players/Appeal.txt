@@ -17,9 +17,9 @@ Commands.Players.Appeal.NeedMoreDetail:			Report has NOT been received.  Please 
 Commands.Players.Appeal.NoAppealsinQueue:		There are no Appeals currently in queue.
 Commands.Players.Appeal.NoAppealToView:			You currently do not have an appeal to view.
 Commands.Players.Appeal.NoLocationToJump:		No location to jump back to.
-Commands.Players.Appeal.NoLongerReceiveMsg:		You will no longer recieve Appeal messages for this session.
+Commands.Players.Appeal.NoLongerReceiveMsg:		You will no longer receive Appeal messages for this session.
 Commands.Players.Appeal.NotBeingHelped:			You have to be assisting this player with their appeal before you can release it.
-Commands.Players.Appeal.NowReceiveMsg:			You will now recieve Appeal messages again for this session.
+Commands.Players.Appeal.NowReceiveMsg:			You will now receive Appeal messages again for this session.
 Commands.Players.Appeal.PlayerNotFound:			{0}  is not in the game.
 Commands.Players.Appeal.PleaseBePatient:		Please be patient while we work to address your concern as quickly as possible.
 Commands.Players.Appeal.RandMessage0:			Howdy {0}, thanks for waiting.  How may I help you? 

@@ -34,6 +34,9 @@ namespace DOL.GS.Trainer
             get { return eCharacterClass.MaulerMid; }
         }
 
+        public const string WEAPON_ID1 = "maulermid_item_staff";
+        public const string WEAPON_ID2 = "maulermid_item_fist";
+
         /// <summary>
         /// Interact with trainer
         /// </summary>
@@ -78,16 +81,27 @@ namespace DOL.GS.Trainer
             if (!base.WhisperReceive(source, text)) return false;
             GamePlayer player = source as GamePlayer;
 
-            switch (text)
+            if (CanPromotePlayer(player))
             {
-                case "join the Temple of the Iron Fist":
-                    // promote player to other class
-                    if (CanPromotePlayer(player))
-                    {
-                        // Mauler_mid = 61
-                        PromotePlayer(player, (int)eCharacterClass.MaulerMid, "Welcome young Mauler. May your time in Midgard be rewarding.", null);
-                    }
-                    break;
+                switch (text)
+                {
+                    // Mauler_mid = 61
+                    case "Temple of the Iron Fist":
+                    case "Temple du Poing de Fer":
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MaulerMidTrainer.WhisperReceive.Text1", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        break;
+
+                    case "staff":
+                        PromotePlayer(player, (int)eCharacterClass.MaulerMid, LanguageMgr.GetTranslation(player.Client.Account.Language, "MaulerMidTrainer.WhisperReceive.Text2", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, WEAPON_ID1, eInventoryActionType.Other);
+                        break;
+
+                    case "fist":
+                        PromotePlayer(player, (int)eCharacterClass.MaulerMid, LanguageMgr.GetTranslation(player.Client.Account.Language, "MaulerMidTrainer.WhisperReceive.Text2", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, WEAPON_ID2, eInventoryActionType.Other);
+                        player.ReceiveItem(this, WEAPON_ID2, eInventoryActionType.Other);
+                        break;
+                }
             }
             return true;
         }

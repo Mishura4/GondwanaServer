@@ -9610,7 +9610,7 @@ namespace DOL.GS
                                                         if (useItem.Count > 1)
                                                         {
                                                             Inventory.RemoveCountFromStack(useItem, 1);
-                                                            InventoryLogging.LogInventoryAction(this, "(potion)", eInventoryActionType.Other, useItem.Template);
+                                                            InventoryLogging.LogInventoryAction(this, "", "(potion)", eInventoryActionType.Other, useItem, 1);
                                                         }
                                                         else
                                                         {
@@ -9618,7 +9618,7 @@ namespace DOL.GS
                                                             if (useItem.Charges < 1)
                                                             {
                                                                 Inventory.RemoveCountFromStack(useItem, 1);
-                                                                InventoryLogging.LogInventoryAction(this, "(potion)", eInventoryActionType.Other, useItem.Template);
+                                                                InventoryLogging.LogInventoryAction(this, "", "(potion)", eInventoryActionType.Other, useItem, 1);
                                                             }
                                                         }
                                                         Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.UseSlot.Used", useItem.GetName(0, false)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
@@ -9765,7 +9765,7 @@ namespace DOL.GS
                 {
                     if (Inventory.RemoveItem(useItem))
                     {
-                        InventoryLogging.LogInventoryAction(this, "(HorseSaddleBag)", eInventoryActionType.Other, useItem.Template, useItem.Count);
+                        InventoryLogging.LogInventoryAction(this, "", "(HorseSaddleBag)", eInventoryActionType.Other, useItem, useItem.Count);
                         ActiveSaddleBags |= (byte)bag;
                         Out.SendSetControlledHorse(this);
                         Out.SendMessage("You've activated a saddlebag!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
@@ -10093,7 +10093,7 @@ namespace DOL.GS
                 toItem.PoisonSpellID = poisonPotion.Template.PoisonSpellID;
             }
             Inventory.RemoveCountFromStack(poisonPotion, 1);
-            InventoryLogging.LogInventoryAction(this, "(poison)", eInventoryActionType.Other, poisonPotion.Template);
+            InventoryLogging.LogInventoryAction(this, "", "(poison)", eInventoryActionType.Other, poisonPotion.Template, 1);
             Out.SendMessage(string.Format("You apply {0} to {1}.", poisonPotion.GetName(0, false), toItem.GetName(0, false)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
             return true;
         }
@@ -12318,7 +12318,6 @@ namespace DOL.GS
 
             if (!Inventory.AddItem(eInventorySlot.FirstEmptyBackpack, item))
                 return false;
-            InventoryLogging.LogInventoryAction(source, this, eInventoryActionType.Trade, item.Template, item.Count);
 
             if (source == null)
             {
@@ -12399,7 +12398,7 @@ namespace DOL.GS
                     }
 
                     if (!Inventory.RemoveItem(item)) return false;
-                    InventoryLogging.LogInventoryAction(this, "(ground)", eInventoryActionType.Other, item.Template, item.Count);
+                    InventoryLogging.LogInventoryAction(this, "", "(ground)", eInventoryActionType.Other, item, item.Count);
 
                     droppedItem = CreateItemOnTheGround(item);
 
@@ -12527,7 +12526,7 @@ namespace DOL.GS
                                         player.GetPersonalizedName(this), floorItem.Item.GetName(1, false)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 }
                             }
-                            InventoryLogging.LogInventoryAction("(ground)", this, eInventoryActionType.Loot, floorItem.Item.Template, floorItem.Item.IsStackable ? floorItem.Item.Count : 1);
+                            InventoryLogging.LogInventoryAction("", "(ground)", this, eInventoryActionType.Loot, floorItem.Item, floorItem.Item.IsStackable ? floorItem.Item.Count : 1);
                         }
                         else
                         {
@@ -12582,7 +12581,7 @@ namespace DOL.GS
                                 }
                             }
                             group.SendMessageToGroupMembers(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.PickupObject.Autosplit", floorItem.Item.GetName(1, true), eligibleMember.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                            InventoryLogging.LogInventoryAction("(ground)", this, eInventoryActionType.Loot, floorItem.Item.Template, floorItem.Item.IsStackable ? floorItem.Item.Count : 1);
+                            InventoryLogging.LogInventoryAction("", "(ground)", this, eInventoryActionType.Loot, floorItem.Item, floorItem.Item.IsStackable ? floorItem.Item.Count : 1);
                         }
                     }
                     else
@@ -12607,7 +12606,7 @@ namespace DOL.GS
                                     player.GetPersonalizedName(this), floorItem.Item.GetName(1, false)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             }
                         }
-                        InventoryLogging.LogInventoryAction("(ground)", this, eInventoryActionType.Loot, floorItem.Item.Template, floorItem.Item.IsStackable ? floorItem.Item.Count : 1);
+                        InventoryLogging.LogInventoryAction("", "(ground)", this, eInventoryActionType.Loot, floorItem.Item, floorItem.Item.IsStackable ? floorItem.Item.Count : 1);
                     }
                     floorItem.RemoveFromWorld();
                 }
@@ -12647,7 +12646,7 @@ namespace DOL.GS
                                 else
                                     eligibleMember.AddMoney(Currency.Copper.Mint(moneyToPlayer));
 
-                                InventoryLogging.LogInventoryAction("(ground)", eligibleMember, eInventoryActionType.Loot, moneyToPlayer);
+                                InventoryLogging.LogInventoryAction("", "(ground)", eligibleMember, eInventoryActionType.Loot, moneyToPlayer);
                                 eligibleMember.Guild.SetGuildBank(eligibleMember, moneyToGuild);
                             }
                             else
@@ -12655,7 +12654,7 @@ namespace DOL.GS
 
                                 eligibleMember.AddMoney(Currency.Copper.Mint(moneyToPlayer));
                                 eligibleMember.SendSystemMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.PickupObject.YourLootShare", Money.GetString(moneyToPlayer)));
-                                InventoryLogging.LogInventoryAction("(ground)", eligibleMember, eInventoryActionType.Loot, moneyToPlayer);
+                                InventoryLogging.LogInventoryAction("", "(ground)", eligibleMember, eInventoryActionType.Loot, moneyToPlayer);
                             }
                         }
                     }
@@ -12674,14 +12673,14 @@ namespace DOL.GS
                             {
                                 AddMoney(Currency.Copper.Mint(moneyObject.TotalCopper));
                             }
-                            InventoryLogging.LogInventoryAction("(ground)", this, eInventoryActionType.Loot, moneyObject.TotalCopper);
+                            InventoryLogging.LogInventoryAction("", "(ground)", this, eInventoryActionType.Loot, moneyObject.TotalCopper);
                             Guild.SetGuildBank(this, moneyToGuild);
                         }
                         else
                         {
                             AddMoney(Currency.Copper.Mint(moneyObject.TotalCopper));
                             SendSystemMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.PickupObject.YouPickUp", Money.GetString(moneyObject.TotalCopper)));
-                            InventoryLogging.LogInventoryAction("(ground)", this, eInventoryActionType.Loot, moneyObject.TotalCopper);
+                            InventoryLogging.LogInventoryAction("", "(ground)", this, eInventoryActionType.Loot, moneyObject.TotalCopper);
                         }
                     }
                     moneyObject.Delete();
@@ -12708,7 +12707,7 @@ namespace DOL.GS
                 {
                     ItemTemplate template = GameServer.Database.FindObjectByKey<ItemTemplate>(houseVault.TemplateID);
                     Inventory.AddItem(eInventorySlot.FirstEmptyBackpack, GameInventoryItem.Create(template));
-                    InventoryLogging.LogInventoryAction("(HOUSE;" + floorObject.CurrentHouse.HouseNumber + ")", this, eInventoryActionType.Other, template);
+                    InventoryLogging.LogInventoryAction(floorObject.CurrentHouse.DatabaseItem.ObjectId, "(HOUSE;" + floorObject.CurrentHouse.HouseNumber + ")", this, eInventoryActionType.Other, template);
                 }
                 return true;
             }

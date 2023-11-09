@@ -88,17 +88,18 @@ namespace DOL.GS.Trainer
                 {
                     case "Temple of the Iron Fist":
                     case "Temple du Poing de Fer":
-                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MentalistTrainer.WhisperReceive.Text1", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MaulerHibTrainer.WhisperReceive.Text1", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                         break;
 
                     case "staff":
                         PromotePlayer(player, (int)eCharacterClass.MaulerHib, LanguageMgr.GetTranslation(player.Client.Account.Language, "MaulerHibTrainer.WhisperReceive.Text2", player.GetName(0, false)), null);
-                        player.ReceiveItem(this, WEAPON_ID1);
+                        player.ReceiveItem(this, WEAPON_ID1, eInventoryActionType.Other);
                         break;
 
                     case "fist":
                         PromotePlayer(player, (int)eCharacterClass.MaulerHib, LanguageMgr.GetTranslation(player.Client.Account.Language, "MaulerHibTrainer.WhisperReceive.Text2", player.GetName(0, false)), null);
-                        player.ReceiveItem(this, WEAPON_ID2);
+                        player.ReceiveItem(this, WEAPON_ID2, eInventoryActionType.Other);
+                        player.ReceiveItem(this, WEAPON_ID2, eInventoryActionType.Other);
                         break;
                 }
             }

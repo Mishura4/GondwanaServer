@@ -1,0 +1,10 @@
+Librarian.InteractText01:			Hello sir, welcome to the library!
+Librarian.InteractText02:			How can I help you?
+Librarian.InteractText03:			[Consult the books]
+Librarian.InteractText04:			[Add a book]
+Librarian.ResponseText01:			Here is the list of the library's books:
+Librarian.ResponseText02:			Please give me your book and I will add it to the list.
+Librarian.ResponseText03:			I cannot find this book.
+Librarian.ResponseText04:			You are not the author of this book!
+Librarian.ResponseText05:			Sorry, this book is not recorded.
+Librarian.ResponseText06:			What is this?!

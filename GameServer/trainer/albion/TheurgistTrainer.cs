@@ -90,7 +90,7 @@ namespace DOL.GS.Trainer
                     if (CanPromotePlayer(player))
                     {
                         PromotePlayer(player, (int)eCharacterClass.Theurgist, "I know you shall do your best to guard the realm from those that would harm it! To help you with this task, here is a gift from the Defenders! Use it well!", null);
-                        player.ReceiveItem(this, WEAPON_ID);
+                        player.ReceiveItem(this, WEAPON_ID, eInventoryActionType.Other);
                     }
                     break;
             }

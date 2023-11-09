@@ -565,7 +565,7 @@ namespace DOL.GS
             if (oldemblem != 0)
             {
                 player.RemoveMoney(Currency.Copper.Mint(COST_RE_EMBLEM));
-                InventoryLogging.LogInventoryAction(player, "(GUILD;" + player.GuildName + ")", eInventoryActionType.Other, COST_RE_EMBLEM);
+                InventoryLogging.LogInventoryAction(player, "", "(GUILD;" + player.GuildName + ")", eInventoryActionType.Other, COST_RE_EMBLEM);
                 var objs = DOLDB<InventoryItem>.SelectObjects(DB.Column(nameof(InventoryItem.Emblem)).IsEqualTo(oldemblem));
 
                 foreach (InventoryItem item in objs)

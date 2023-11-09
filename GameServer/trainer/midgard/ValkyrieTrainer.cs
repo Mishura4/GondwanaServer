@@ -93,12 +93,12 @@ namespace DOL.GS.Trainer
 
                     case "sword":
                         PromotePlayer(player, (int)eCharacterClass.Valkyrie, LanguageMgr.GetTranslation(player.Client.Account.Language, "ValkyrieTrainer.WhisperReceive.Text2", player.GetName(0, false)), null);
-                        player.ReceiveItem(this, WEAPON_ID1);
+                        player.ReceiveItem(this, WEAPON_ID1, eInventoryActionType.Other);
                         break;
 
                     case "spear":
                         PromotePlayer(player, (int)eCharacterClass.Valkyrie, LanguageMgr.GetTranslation(player.Client.Account.Language, "ValkyrieTrainer.WhisperReceive.Text2", player.GetName(0, false)), null);
-                        player.ReceiveItem(this, WEAPON_ID2);
+                        player.ReceiveItem(this, WEAPON_ID2, eInventoryActionType.Other);
                         break;
                 }
             }

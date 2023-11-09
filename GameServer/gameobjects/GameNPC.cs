@@ -1151,7 +1151,9 @@ namespace DOL.GS
                 if (!IsMoving || TargetPosition == Vector3.Zero)
                     return _basePosition;
                 if (MovementElapsedTicks > (Vector2.Distance(_basePosition.ToVector2(), TargetPosition.ToVector2()) * 1000 / CurrentSpeed))
+                {
                     return TargetPosition;
+                }
                 _basePosition.Z = TargetPosition.Z;
                 return _basePosition + MovementElapsedTicks * Velocity;
             }
@@ -1570,6 +1572,7 @@ namespace DOL.GS
             MovementStartTick = GameTimer.GetTickCount();
 
             UpdateTickSpeed();
+            StartArriveAtTargetAction(GetTicksToArriveAt(TargetPosition, speed));
             BroadcastUpdate();
         }
 

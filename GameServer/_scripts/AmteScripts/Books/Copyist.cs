@@ -3,6 +3,7 @@ using System.Linq;
 using DOL.Database;
 using DOL.GS.Finance;
 using DOL.GS.PacketHandler;
+using DOL.Language;
 
 namespace DOL.GS.Scripts
 {
@@ -13,9 +14,8 @@ namespace DOL.GS.Scripts
             if (!base.Interact(player))
                 return false;
 
-            player.Client.Out.SendMessage("Bonjour ! Que puis-je faire pour vous ?\n" +
-                                          "Pour 2 pieces d'or, je peux dupliquer un livre dont vous êtes l'auteur !",
-                                          eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+            player.Client.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Copyist.InteractText01"), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+            player.Client.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Copyist.InteractText02"), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
             return true;
         }
 
@@ -32,27 +32,29 @@ namespace DOL.GS.Scripts
                 {
                     if (book.PlayerID != p.InternalID)
                     {
-                        p.Out.SendMessage("\"Désolé, seul l'auteur d'un livre peut demander une copie.\"", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                        p.Out.SendMessage(LanguageMgr.GetTranslation(p.Client.Account.Language,"\"Copyist.ResponseText01\""), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                         return false;
                     }
                     if (!p.RemoveMoney(Currency.Copper.Mint(20000)))
                     {
-                        p.Out.SendMessage("\"Il vous faut 5 piece d'or pour dupliquer un livre.\"", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                        p.Out.SendMessage(LanguageMgr.GetTranslation(p.Client.Account.Language,"\"Copyist.ResponseText02\""), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                         return false;
                     }
 
                     var iu = new ItemUnique(item.IUWrapper) { Id_nb = "scroll" + Guid.NewGuid() };
                     GameServer.Database.AddObject(iu);
-                    p.Inventory.AddItem(eInventorySlot.FirstEmptyBackpack, GameInventoryItem.Create(iu));
-                    p.Out.SendMessage("\"Voilà la copie de votre livre sir " + p.Name + ".\"", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                    var invItem = GameInventoryItem.Create(iu);
+                    p.Inventory.AddItem(eInventorySlot.FirstEmptyBackpack, invItem);
+                    InventoryLogging.LogInventoryAction(this, p, eInventoryActionType.Merchant, invItem, invItem.Count);
+                    p.Out.SendMessage(LanguageMgr.GetTranslation(p.Client.Account.Language,"\"Copyist.ResponseText03" + p.Name + ".\""), eChatType.CT_System, eChatLoc.CL_PopupWindow);
 
                 }
                 else
-                    p.Out.SendMessage("\"Désolé, ce livre n'existe plus.\"", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                    p.Out.SendMessage(LanguageMgr.GetTranslation(p.Client.Account.Language,"\"Copyist.ResponseText04\""), eChatType.CT_System, eChatLoc.CL_PopupWindow);
 
             }
             else
-                p.Out.SendMessage("\"Désolé, je ne peux recopier qu'un livre ...\"", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                p.Out.SendMessage(LanguageMgr.GetTranslation(p.Client.Account.Language,"\"Copyist.ResponseText05\""), eChatType.CT_System, eChatLoc.CL_PopupWindow);
 
             return false;
         }

@@ -136,7 +136,7 @@ namespace DOL.GS.Trainer
                 case "bâton d'entraînement":
                     if (player.Inventory.GetFirstItemByID(PRACTICE_WEAPON_ID, eInventorySlot.Min_Inv, eInventorySlot.Max_Inv) == null)
                     {
-                        player.ReceiveItem(this, PRACTICE_WEAPON_ID);
+                        player.ReceiveItem(this, PRACTICE_WEAPON_ID, eInventoryActionType.Other);
                     }
                     return true;
 
