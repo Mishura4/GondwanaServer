@@ -148,7 +148,7 @@ namespace DOL.GS.Spells
                 foreach (InventoryItem item in removeItems)
                 {
                     player.Inventory.RemoveItem(item);
-                    InventoryLogging.LogInventoryAction(player, "(ARTIFACT;CombineScrolls)", eInventoryActionType.Quest, item.Template, item.Count);
+                    InventoryLogging.LogInventoryAction(player, null, eInventoryActionType.Quest, item.Template, item.Count);
                 }
             }
         }

@@ -3392,7 +3392,7 @@ namespace DOL.GS
         /// </summary>
         /// <param name="brain">The new brain</param>
         /// <returns>The old own brain</returns>
-        public ABrain SetOwnBrain(ABrain brain)
+        public virtual ABrain SetOwnBrain(ABrain brain)
         {
             if (brain == null)
                 return null;

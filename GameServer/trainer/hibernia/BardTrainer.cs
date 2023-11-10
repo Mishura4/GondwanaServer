@@ -90,7 +90,7 @@ namespace DOL.GS.Trainer
                     if (CanPromotePlayer(player))
                     {
                         PromotePlayer(player, (int)eCharacterClass.Bard, "Welcome then, " + source.GetName(0, false) + ", to the Bard's life. Here, take this. Keep it well, " + source.GetName(0, false) + ", for the tools of our trade can be quite expensive.", null);
-                        player.ReceiveItem(this, WEAPON_ID, eInventoryActionType.Other);
+                        player.ReceiveItem(this, WEAPON_ID1, eInventoryActionType.Other);
                     }
                     break;
             }

@@ -213,7 +213,7 @@ namespace DOL.GS
                     throw new Exception("Money amount changed while adding items.");
                 }
                 player.SendMessage(message, eChatType.CT_Merchant, eChatLoc.CL_SystemWindow);
-                InventoryLogging.LogInventoryAction(player, TradeItems.ItemsListID, $"(TRADEITEMS;{TradeItems.ItemsListID})", eInventoryActionType.Merchant, totalValue);
+                InventoryLogging.LogInventoryAction(player, TradeItems.ItemsListID, $"(TRADEITEMS;{TradeItems.ItemsListID})", eInventoryActionType.Merchant, totalCost.Amount);
             }
         }
 
