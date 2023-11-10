@@ -59,7 +59,16 @@ namespace DOL.GS.ServerRules
         bool IsAllowedToMoveToBind(GamePlayer player);
 
         /// <summary>
-        /// Is attacker allowed to attack defender.  Use this check for all attack / heal / buff decisions
+        /// Is a source allowed to help the target. Use this check for all heal / buff decisions
+        /// </summary>
+        /// <param name="source">living that makes attack</param>
+        /// <param name="target">attacker's target</param>
+        /// <param name="quiet">should messages be sent</param>
+        /// <returns>true if help is allowed</returns>
+        bool IsAllowedToHelp(GameLiving source, GameLiving target, bool quiet);
+
+        /// <summary>
+        /// Is attacker allowed to attack defender. Use this check for all attack decisions
         /// </summary>
         /// <param name="attacker">living that makes attack</param>
         /// <param name="defender">attacker's target</param>

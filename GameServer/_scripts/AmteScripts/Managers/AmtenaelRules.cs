@@ -149,6 +149,72 @@ namespace DOL.GS.ServerRules
             base.OnGameEntered(e, sender, args);
         }
 
+        public override bool IsAllowedToHelp(GameLiving source, GameLiving target, bool quiet)
+        {
+            if (source == null || target == null)
+            {
+                return false;
+            }
+
+            if (target == source)
+            {
+                return true;
+            }
+
+            if (!target.IsVisibleTo(source) || target is AreaEffect)
+            {
+                return false;
+            }
+
+            if (source is GameNPC srcNpc)
+            {
+                if (!IsSameRealm(source, target, true))
+                {
+                    if (target is GamePlayer tarPlayer)
+                    {
+                        if (!MobGroups.MobGroup.IsQuestFriendly(srcNpc, tarPlayer))
+                        {
+                            if (!quiet) MessageToLiving(source, "Cette cible est hostile.");
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        if (!quiet) MessageToLiving(source, "Cette cible est hostile.");
+                        return false;
+                    }
+                }
+                else // same realm
+                {
+                     if (target is GameNPC { IsCannotTarget: true })
+                     {
+                         return false;
+                     }
+                }
+            }
+            else if (source is GamePlayer srcPlayer)
+            {
+                if (!IsSameRealm(source, target, true))
+                {
+                    if (target is GamePlayer tarPlayer)
+                    {
+                        if (srcPlayer.Guild != tarPlayer.Guild)
+                        {
+                            if (!quiet) MessageToLiving(source, "Cette cible est hostile.");
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        if (!quiet) MessageToLiving(source, "Cette cible est hostile.");
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
         public override bool IsAllowedToAttack(GameLiving attacker, GameLiving defender, bool quiet)
         {
             if (attacker == null || defender == null)
@@ -634,6 +700,8 @@ namespace DOL.GS.ServerRules
         public override bool IsAllowedToCastSpell(GameLiving caster, GameLiving target, Spell spell, SpellLine spellLine)
 
         {
+            if (target is ShadowNPC)
+                return false;
             var plc = caster as GamePlayer;
             var plt = target as GamePlayer;
             // player on horse cant heal, cure or cast a pet spell

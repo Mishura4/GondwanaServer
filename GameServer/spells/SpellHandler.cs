@@ -851,8 +851,14 @@ namespace DOL.GS.Spells
                         break;
 
                     case "realm":
-                        if (GameServer.ServerRules.IsAllowedToAttack(Caster, selectedTarget, true))
+                        if (!GameServer.ServerRules.IsAllowedToHelp(Caster, selectedTarget, true))
                         {
+                            if (!quiet) MessageToCaster("This spell only works on friendly targets!", eChatType.CT_SpellResisted);
+                            return false;
+                        }
+                        if (!selectedTarget.IsAlive)
+                        {
+                            if (!quiet) MessageToCaster("Your target is dead!", eChatType.CT_SpellResisted);
                             return false;
                         }
                         break;
@@ -1090,8 +1096,14 @@ namespace DOL.GS.Spells
                         break;
 
                     case "realm":
-                        if (GameServer.ServerRules.IsAllowedToAttack(Caster, target, true))
+                        if (!GameServer.ServerRules.IsAllowedToHelp(Caster, target, true))
                         {
+                            MessageToCaster("This spell only works on friendly targets!", eChatType.CT_SpellResisted);
+                            return false;
+                        }
+                        if (!target.IsAlive)
+                        {
+                            MessageToCaster("Your target is dead!", eChatType.CT_SpellResisted);
                             return false;
                         }
                         break;
@@ -1293,8 +1305,14 @@ namespace DOL.GS.Spells
                         break;
 
                     case "realm":
-                        if (GameServer.ServerRules.IsAllowedToAttack(Caster, target, true))
+                        if (!GameServer.ServerRules.IsAllowedToHelp(Caster, target, true))
                         {
+                            if (!quiet) MessageToCaster("This spell only works on friendly targets!", eChatType.CT_SpellResisted);
+                            return false;
+                        }
+                        if (!target.IsAlive)
+                        {
+                            if (!quiet) MessageToCaster("Your target is dead!", eChatType.CT_SpellResisted);
                             return false;
                         }
                         break;
@@ -1468,8 +1486,14 @@ namespace DOL.GS.Spells
                         break;
 
                     case "realm":
-                        if (GameServer.ServerRules.IsAllowedToAttack(Caster, target, true))
+                        if (!GameServer.ServerRules.IsAllowedToHelp(Caster, target, true))
                         {
+                            if (!quiet) MessageToCaster("This spell only works on friendly targets!", eChatType.CT_SpellResisted);
+                            return false;
+                        }
+                        if (!target.IsAlive)
+                        {
+                            if (!quiet) MessageToCaster("Your target is dead!", eChatType.CT_SpellResisted);
                             return false;
                         }
                         break;
@@ -2243,14 +2267,14 @@ namespace DOL.GS.Spells
 
                         foreach (GamePlayer player in target.GetPlayersInRadius(modifiedRadius))
                         {
-                            if (!GameServer.ServerRules.IsAllowedToAttack(Caster, player, true) || force)
+                            if (player.IsVisibleTo(Caster) && GameServer.ServerRules.IsAllowedToHelp(Caster, player, true) && player.IsAlive)
                             {
                                 list.Add(player);
                             }
-                        }
+}
                         foreach (GameNPC npc in target.GetNPCsInRadius(modifiedRadius))
                         {
-                            if (!GameServer.ServerRules.IsAllowedToAttack(Caster, npc, true) || force)
+                            if (npc.IsVisibleTo(Caster) && (GameServer.ServerRules.IsAllowedToHelp(Caster, npc, true) && npc.IsAlive) || force)
                             {
                                 list.Add(npc);
                             }

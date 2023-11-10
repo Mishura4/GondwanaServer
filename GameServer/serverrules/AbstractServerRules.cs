@@ -26,10 +26,12 @@ using System.Reflection;
 using DOL.AI.Brain;
 using DOL.Database;
 using DOL.Events;
+using DOL.gameobjects.CustomNPC;
 using DOL.GS.Finance;
 using DOL.GS.Housing;
 using DOL.GS.Keeps;
 using DOL.GS.PacketHandler;
+using DOL.GS.Scripts;
 using DOL.GS.ServerProperties;
 using DOL.Language;
 using log4net;
@@ -302,6 +304,22 @@ namespace DOL.GS.ServerRules
         public virtual bool CountsTowardsSlashLevel(DOLCharacters player)
         {
             return true;
+        }
+
+
+        /// <summary>
+        /// Is a source allowed to help the target. Use this check for all heal / buff decisions
+        /// </summary>
+        /// <param name="source">living that makes attack</param>
+        /// <param name="target">attacker's target</param>
+        /// <param name="quiet">should messages be sent</param>
+        /// <returns>true if help is allowed</returns>
+        public virtual bool IsAllowedToHelp(GameLiving source, GameLiving target, bool quiet)
+        {
+            if (source == null || target == null)
+                return false;
+            
+            return IsSameRealm(source, target, quiet);
         }
 
         /// <summary>

@@ -1330,7 +1330,7 @@ namespace DOL.AI.Brain
                         {
                             foreach (GameNPC npc in Body.GetNPCsInRadius((ushort)Math.Max(spell.Radius, spell.Range)))
                             {
-                                if (Body.IsFriend(npc) && Util.Chance(60) && !LivingHasEffect(npc, spell))
+                                if (GameServer.ServerRules.IsAllowedToHelp(Body, npc, true) && Body.IsFriend(npc) && Util.Chance(60) && !LivingHasEffect(npc, spell))
                                 {
                                     Body.TargetObject = npc;
                                     break;
