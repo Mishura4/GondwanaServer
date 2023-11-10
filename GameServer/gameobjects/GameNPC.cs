@@ -5771,6 +5771,14 @@ namespace DOL.GS
             }
         }
 
+        /// <inheritdoc />
+        public override string GetPersonalizedName(GameObject obj)
+        {
+            if (Brain is IControlledBrain { Owner: not null } controlledBrain)
+                return controlledBrain.Owner.GetPersonalizedName(obj);
+            return base.GetPersonalizedName(obj);
+        }
+
         System.Timers.Timer TriggerPlayerLostTimer = new System.Timers.Timer(20000);
         GamePlayer TriggerPlayer;
 

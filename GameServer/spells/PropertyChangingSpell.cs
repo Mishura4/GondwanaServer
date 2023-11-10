@@ -160,7 +160,7 @@ namespace DOL.GS.Spells
                 // Controlled NPC. Show message in blue writing to owner...
 
                 MessageToLiving(player, String.Format(Spell.Message2,
-                                                      ((GamePlayer)player).GetPersonalizedName(effect.Owner)), toLiving);
+                                                      player.GetPersonalizedName(effect.Owner)), toLiving);
 
                 // ...and in white writing for everyone else.
 

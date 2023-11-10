@@ -7053,6 +7053,17 @@ namespace DOL.GS
             base.Notify(e, sender, args);
         }
 
+
+        /// <summary>
+        /// Checks another object's modified name for this GameLiving
+        /// </summary>
+        /// <param name="obj">the object to check</param>
+        /// <returns>string personalized name to show to the GameLiving</returns>
+        public virtual string GetPersonalizedName(GameObject obj)
+        {
+            return obj.Name;
+        }
+
         /// <summary>
         /// Constructor to create a new GameLiving
         /// </summary>

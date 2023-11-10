@@ -2183,13 +2183,13 @@ namespace DOL.GS
         /// (delegate to PlayerCharacter)
         /// </summary>
         /// <param name="player">the player to check</param>
-        /// <returns>true if player can be shown</returns>
-        public string GetPersonalizedName(GameObject gameObject)
+        /// <returns>string personalized name to show to the player</returns>
+        public override string GetPersonalizedName(GameObject gameObject)
         {
             if (gameObject == null)
                 return "";
 
-            if (Client == null || !DOL.GS.ServerProperties.Properties.HIDE_PLAYER_NAME || !(gameObject is GamePlayer player) || player == this)
+            if (Client == null || DOL.GS.ServerProperties.Properties.HIDE_PLAYER_NAME || !(gameObject is GamePlayer player) || player == this)
                 return gameObject.Name;
 
             if (player.Client.Account.PrivLevel > 1 || Client.Account.PrivLevel > 1)
