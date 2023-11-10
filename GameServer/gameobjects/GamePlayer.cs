@@ -2189,10 +2189,10 @@ namespace DOL.GS
             if (gameObject == null)
                 return "";
 
-            if (Client == null || DOL.GS.ServerProperties.Properties.HIDE_PLAYER_NAME || !(gameObject is GamePlayer player) || player == this)
+            if (Client == null || !(gameObject is GamePlayer player) || player == this)
                 return gameObject.Name;
 
-            if (player.Client.Account.PrivLevel > 1 || Client.Account.PrivLevel > 1)
+            if (!DOL.GS.ServerProperties.Properties.HIDE_PLAYER_NAME || player.Client.Account.PrivLevel > 1 || Client.Account.PrivLevel > 1)
                 return player.Name;
 
             if (SerializedAskNameList.Contains(player.Name) || SerializedFriendsList.Contains(player.Name))
