@@ -26,7 +26,7 @@ namespace DOL.GS.PlayerClass
     {
         private static readonly List<PlayerRace> DefaultEligibleRaces = new()
         {
-             PlayerRace.Avalonian, PlayerRace.Briton, PlayerRace.HalfOgre,
+             PlayerRace.Avalonian, PlayerRace.Briton, PlayerRace.HalfOgre, PlayerRace.Inconnu,
         };
         public ClassWizard()
             : base()

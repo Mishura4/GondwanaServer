@@ -34,34 +34,11 @@ public class AmteMob : GameNPC, IAmteNPC
             "-1");
     }
 
-    public override bool IsFriend(GameNPC npc)
-    {
-        if (npc.Brain is IControlledBrain)
-            return GameServer.ServerRules.IsSameRealm(this, npc, true);
-        if (Faction == null && npc.Faction == null)
-            return npc.Name == Name || (!string.IsNullOrEmpty(npc.GuildName) && npc.GuildName == GuildName);
-        return base.IsFriend(npc);
-    }
-
     public override void LoadFromDatabase(DataObject obj)
     {
         base.LoadFromDatabase(obj);
 
         LoadDbBrainParam(obj.ObjectId);
-        // load some stats from the npctemplate
-        if (NPCTemplate != null && !NPCTemplate.ReplaceMobValues)
-        {
-            if (NPCTemplate.Spells != null) this.Spells = NPCTemplate.Spells;
-            if (NPCTemplate.Styles != null) this.Styles = NPCTemplate.Styles;
-            if (NPCTemplate.Abilities != null)
-            {
-                lock (m_lockAbilities)
-                {
-                    foreach (Ability ab in NPCTemplate.Abilities)
-                        m_abilities[ab.KeyName] = ab;
-                }
-            }
-        }
     }
 
     private void LoadDbBrainParam(string dataid)
@@ -71,7 +48,7 @@ public class AmteMob : GameNPC, IAmteNPC
         for (var cp = GetCustomParam(); cp != null; cp = cp.next)
         {
             var cp1 = cp;
-            var param = data.Where(o => o.Param == cp1.name).FirstOrDefault();
+            var param = data.FirstOrDefault(o => o.Param == cp1.name);
             if (param == null)
             {
                 continue;

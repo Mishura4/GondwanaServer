@@ -26,7 +26,7 @@ namespace DOL.GS.PlayerClass
     {
         private static readonly List<PlayerRace> DefaultEligibleRaces = new List<PlayerRace>()
         {
-            PlayerRace.Korazh, PlayerRace.Avalonian, PlayerRace.Briton, PlayerRace.Inconnu, PlayerRace.Saracen
+            PlayerRace.Korazh, PlayerRace.Avalonian, PlayerRace.Briton, PlayerRace.Inconnu, PlayerRace.Saracen, PlayerRace.Highlander,
         };
         public ClassHeretic()
             : base()

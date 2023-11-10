@@ -27,7 +27,7 @@ namespace DOL.GS.PlayerClass
     {
         private static readonly List<PlayerRace> DefaultEligibleRaces = new()
         {
-             PlayerRace.Celt, PlayerRace.Firbolg, PlayerRace.Sylvan,
+             PlayerRace.Celt, PlayerRace.Firbolg, PlayerRace.Sylvan, PlayerRace.Graoch,
         };
 
         public ClassValewalker()

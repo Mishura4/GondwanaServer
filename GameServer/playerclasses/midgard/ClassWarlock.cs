@@ -26,7 +26,7 @@ namespace DOL.GS.PlayerClass
     {
         private static readonly List<PlayerRace> DefaultEligibleRaces = new()
         {
-             PlayerRace.Frostalf, PlayerRace.Kobold, PlayerRace.Norseman,
+             PlayerRace.Frostalf, PlayerRace.Kobold, PlayerRace.Norseman, PlayerRace.Troll,
         };
 
         public ClassWarlock()

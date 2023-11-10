@@ -27,7 +27,7 @@ namespace DOL.GS.PlayerClass
         private static readonly List<string> DefaultAutotrainableSkills = new() { Specs.Instruments };
         private static readonly List<PlayerRace> DefaultEligibleRaces = new()
         {
-             PlayerRace.Briton, PlayerRace.Highlander, PlayerRace.Saracen,
+             PlayerRace.Briton, PlayerRace.Highlander, PlayerRace.Saracen, PlayerRace.Inconnu,
         };
 
         public ClassMinstrel()

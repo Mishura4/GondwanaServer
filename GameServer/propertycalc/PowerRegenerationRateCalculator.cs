@@ -45,7 +45,7 @@ namespace DOL.GS.PropertyCalc
             double regen = 5 + (living.Level / 2.75);
 
             if (living is GameNPC && living.InCombat)
-                regen /= 2.0;
+                regen /= 2.2;
 
             // tolakram - there is no difference per tic between combat and non combat
 
@@ -68,7 +68,7 @@ namespace DOL.GS.PropertyCalc
                 regen = 1;
 
             if (living.IsSitting && !living.InCombat)
-                regen *= 3;
+                regen *= 2;
 
             return (int)regen;
         }

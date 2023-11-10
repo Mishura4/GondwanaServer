@@ -74,7 +74,7 @@ namespace DOL.GS.PropertyCalc
             if (living is GameNPC)
             {
                 if (living.InCombat)
-                    regen /= 2.0;
+                    regen /= 2.5;
             }
 
             if (regen != 0 && ServerProperties.Properties.HEALTH_REGEN_RATE != 1)
@@ -98,7 +98,7 @@ namespace DOL.GS.PropertyCalc
                 regen = 1;
 
             if (living.IsSitting && !living.InCombat)
-                regen *= 3;
+                regen *= 1.6;
 
             return (int)regen;
         }

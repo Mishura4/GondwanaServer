@@ -20,6 +20,7 @@ using System;
 using DOL.Database;
 using DOL.GS.Finance;
 using DOL.GS.PacketHandler;
+using DOL.Language;
 
 namespace DOL.GS
 {
@@ -43,7 +44,7 @@ namespace DOL.GS
                 return false;
 
             TurnTo(player, 5000);
-            SayTo(player, eChatLoc.CL_ChatWindow, "For 5 gold, I can put the emblem of your guild on the item. Just hand me the item.");
+            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "EmblemNPC.Interact.Text1"), eChatType.CT_System, eChatLoc.CL_ChatWindow);
 
             return true;
         }
@@ -56,34 +57,34 @@ namespace DOL.GS
 
             if (item.Emblem != 0)
             {
-                t.Out.SendMessage("This item already has an emblem on it.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                t.Out.SendMessage(LanguageMgr.GetTranslation(t.Client.Account.Language, "EmblemNPC.ResponseDialog01"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return false;
             }
 
-            if (item.Object_Type == (int) eObjectType.Shield || item.Item_Type == Slot.CLOAK)
+            if (item.Object_Type == (int)eObjectType.Shield || item.Item_Type == Slot.CLOAK)
             {
                 if (t.Guild == null)
                 {
-                    t.Out.SendMessage("You have no guild.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    t.Out.SendMessage(LanguageMgr.GetTranslation(t.Client.Account.Language, "EmblemNPC.ResponseDialog02"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     return false;
                 }
                 if (t.Guild.Emblem == 0)
                 {
-                    t.Out.SendMessage("Your guild has no emblem.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    t.Out.SendMessage(LanguageMgr.GetTranslation(t.Client.Account.Language, "EmblemNPC.ResponseDialog03"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     return false;
                 }
                 if (t.Level < 20) //if level of player < 20 so can not put emblem
                 {
                     if (t.CraftingPrimarySkill == eCraftingSkill.NoCrafting)
                     {
-                        t.Out.SendMessage("You have to be at least level 20 or have 400 in a tradeskill to be able to wear an emblem.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        t.Out.SendMessage(LanguageMgr.GetTranslation(t.Client.Account.Language, "EmblemNPC.ResponseDialog04"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                         return false;
                     }
                     else
                     {
                         if (t.GetCraftingSkillValue(t.CraftingPrimarySkill) < 400)
                         {
-                            t.Out.SendMessage("You have to be at least level 20 or have 400 in a tradeskill to be able to wear an emblem.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            t.Out.SendMessage(LanguageMgr.GetTranslation(t.Client.Account.Language, "EmblemNPC.ResponseDialog05"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             return false;
                         }
                     }
@@ -92,14 +93,14 @@ namespace DOL.GS
 
                 if (!t.Guild.HasRank(t, Guild.eRank.Emblem))
                 {
-                    t.Out.SendMessage("You do not have enough privileges for that.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    t.Out.SendMessage(LanguageMgr.GetTranslation(t.Client.Account.Language, "EmblemNPC.ResponseDialog06"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     return false;
                 }
                 t.TempProperties.setProperty(EMBLEMIZE_ITEM_WEAK, new WeakRef(item));
-                t.Out.SendCustomDialog("Do you agree to put an emblem on this object?", new CustomDialogResponse(EmblemerDialogResponse));
+                t.Out.SendCustomDialog(LanguageMgr.GetTranslation(t.Client.Account.Language, "EmblemNPC.ResponseDialog07"), new CustomDialogResponse(EmblemerDialogResponse));
             }
             else
-                t.Out.SendMessage("I can not put an emblem on this item.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                t.Out.SendMessage(LanguageMgr.GetTranslation(t.Client.Account.Language, "EmblemNPC.ResponseDialog08"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 
             return false;
         }
@@ -121,14 +122,14 @@ namespace DOL.GS
             if (item == null || item.SlotPosition == (int)eInventorySlot.Ground
                 || item.OwnerID == null || item.OwnerID != player.InternalID)
             {
-                player.Out.SendMessage("Invalid item.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "EmblemNPC.Interact.Text2"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
             }
 
             if (!player.RemoveMoney(Currency.Copper.Mint(EMBLEM_COST)))
             {
                 InventoryLogging.LogInventoryAction(player, this, eInventoryActionType.Merchant, EMBLEM_COST);
-                player.Out.SendMessage("You don't have enough money.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "EmblemNPC.Interact.Text3"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
             }
 
@@ -136,7 +137,7 @@ namespace DOL.GS
             player.Out.SendInventoryItemsUpdate(new InventoryItem[] { item });
             if (item.SlotPosition < (int)eInventorySlot.FirstBackpack)
                 player.UpdateEquipmentAppearance();
-            SayTo(player, eChatLoc.CL_ChatWindow, "I have put an emblem on your item.");
+            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "EmblemNPC.Interact.Text4"), eChatType.CT_System, eChatLoc.CL_ChatWindow);
             return;
         }
     }

@@ -27,7 +27,7 @@ namespace DOL.GS.PlayerClass
         private static readonly List<string> DefaultAutoTrainableSkills = new() { Specs.Slash, Specs.Flexible };
         private static readonly List<PlayerRace> DefaultEligibleRaces = new()
         {
-             PlayerRace.Briton, PlayerRace.Inconnu, PlayerRace.Saracen,
+             PlayerRace.Briton, PlayerRace.Inconnu, PlayerRace.Saracen, PlayerRace.Korazh,
         };
 
         public ClassReaver()

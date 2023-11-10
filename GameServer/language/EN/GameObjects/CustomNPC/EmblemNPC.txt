@@ -1,0 +1,13 @@
+EmblemNPC.Interact.Text1:		For 5 gold, I can put the emblem of your guild on the item. Just hand me the item.
+EmblemNPC.Interact.Text2:		Invalid item.
+EmblemNPC.Interact.Text3:		You don't have enough money.
+EmblemNPC.Interact.Text4:		I have put an emblem on your item.
+EmblemNPC.ResponseDialog01:		This item already has an emblem on it.
+EmblemNPC.ResponseDialog02:		You have no guild.
+EmblemNPC.ResponseDialog03:		Your guild has no emblem.
+EmblemNPC.ResponseDialog04:		You have to be at least level 20 or have 400 in a tradeskill to be able to wear an emblem.
+EmblemNPC.ResponseDialog05:		You have to be at least level 20 or have 400 in a tradeskill to be able to wear an emblem.
+EmblemNPC.ResponseDialog06:		You do not have enough privileges for that.
+EmblemNPC.ResponseDialog07:		Do you agree to put an emblem on this object?
+EmblemNPC.ResponseDialog08:		I can not put an emblem on this item.
+

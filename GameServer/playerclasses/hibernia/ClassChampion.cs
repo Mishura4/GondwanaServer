@@ -26,7 +26,7 @@ namespace DOL.GS.PlayerClass
     {
         private static readonly List<PlayerRace> DefaultEligibleRaces = new()
         {
-             PlayerRace.Celt, PlayerRace.Elf, PlayerRace.Graoch, PlayerRace.Lurikeen, PlayerRace.Shar,
+             PlayerRace.Celt, PlayerRace.Elf, PlayerRace.Graoch, PlayerRace.Lurikeen, PlayerRace.Shar, PlayerRace.Sylvan,
         };
 
         public ClassChampion()

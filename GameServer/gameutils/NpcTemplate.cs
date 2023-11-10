@@ -69,7 +69,7 @@ namespace DOL.GS
         protected short m_intelligence;
         protected short m_empathy;
         protected short m_charisma;
-        protected IList m_styles;
+        protected List<Style> m_styles;
         protected IList m_spells;
         protected IList m_spelllines;
         protected IList m_abilities;
@@ -146,7 +146,7 @@ namespace DOL.GS
             }
 
             // Adding Style list to Template NPC
-            m_styles = new ArrayList();
+            m_styles = new List<Style>();
             if (data.Styles != null && data.Styles.Length > 0)
             {
                 string[] styles = data.Styles.Split(';');
@@ -284,7 +284,7 @@ namespace DOL.GS
                 try
                 {
                     if (m_styles == null)
-                        m_styles = new ArrayList(mob.Styles.Count);
+                        m_styles = new List<Style>(mob.Styles.Count);
 
                     foreach (Style mobStyle in mob.Styles)
                     {
@@ -536,7 +536,7 @@ namespace DOL.GS
         /// <summary>
         /// Gets the template npc styles name array
         /// </summary>
-        public IList Styles
+        public List<Style> Styles
         {
             get { return m_styles; }
             set { m_styles = value; }

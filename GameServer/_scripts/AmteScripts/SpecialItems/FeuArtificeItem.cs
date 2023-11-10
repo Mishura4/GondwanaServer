@@ -13,6 +13,7 @@ using DOL.AI.Brain;
 using DOL.GS.PacketHandler;
 using DOL.Database;
 using DOL.Events;
+using DOL.Language;
 
 namespace DOL.GS.Scripts
 {
@@ -57,7 +58,7 @@ namespace DOL.GS.Scripts
                 int time = Math.Max(item.Condition, 10);
                 timer.Start(time * 1000);
 
-                player.Out.SendMessage("Le feu d'artifice va commencer dans " + time + " secondes.", eChatType.CT_Broadcast, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Items.Specialitems.Feuartificetext", time), eChatType.CT_Broadcast, eChatLoc.CL_SystemWindow);
             }
         }
 

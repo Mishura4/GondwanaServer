@@ -13,10 +13,8 @@ namespace DOL.GS.Scripts
             if (!base.Interact(player))
                 return false;
 
-            player.Client.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Librarian.InteractText01"), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
-            player.Client.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Librarian.InteractText02"), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
-            player.Client.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Librarian.InteractText03"), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
-            player.Client.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Librarian.InteractText04"), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+            player.Client.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Librarian.InteractText01") + "\n" + LanguageMgr.GetTranslation(player.Client.Account.Language,"Librarian.InteractText02"), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+            player.Client.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Librarian.InteractText03") + "\n" + LanguageMgr.GetTranslation(player.Client.Account.Language,"Librarian.InteractText04"), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
             return true;
         }
 

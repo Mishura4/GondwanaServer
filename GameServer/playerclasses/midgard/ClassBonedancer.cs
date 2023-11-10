@@ -26,7 +26,7 @@ namespace DOL.GS.PlayerClass
     {
         private static readonly List<PlayerRace> DefaultEligibleRaces = new()
         {
-            PlayerRace.Kobold, PlayerRace.Troll, PlayerRace.Valkyn,
+            PlayerRace.Kobold, PlayerRace.Troll, PlayerRace.Valkyn, PlayerRace.Frostalf,
         };
 
         public ClassBonedancer()
