@@ -2646,11 +2646,6 @@ namespace DOL.GS.Commands
                 merchant.Catalog = ((GameMerchant)targetMob).Catalog;
             }
 
-            if (mob is TextNPC && isTextNpc)
-            {
-                ((TextNPC)mob).TextNPCData = new TextNPCPolicy((TextNPC)mob, ((TextNPC)targetMob).TextNPCData);
-            }
-
             ABrain brain = null;
             foreach (Assembly script in ScriptMgr.GameServerScripts)
             {
@@ -2681,6 +2676,11 @@ namespace DOL.GS.Commands
             mob.AddToWorld();
             mob.LoadedFromScript = false;
             mob.SaveIntoDatabase();
+
+            if (mob is TextNPC textNPC && isTextNpc)
+            {
+                textNPC.TextNPCData = new TextNPCPolicy(textNPC, ((TextNPC)targetMob).TextNPCData);
+            }
 
             //copy groupmob
             mob.CurrentGroupMob = targetMob.CurrentGroupMob;

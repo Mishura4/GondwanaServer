@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Security.Policy;
+using System.Threading;
 using DOL.Database;
 using DOL.Events;
 using DOL.GS.Finance;
@@ -1024,13 +1025,23 @@ namespace DOL.GS.Scripts
             TextDB.RandomPhraseEmote = reponse;
             TextDB.PhraseInterval = PhraseInterval;
 
+            if (GiveItem != null)
+            {
+                foreach (KeyValuePair<string, string> entry in GiveItem)
+                {
+                    TextDB.GiveItem += entry.Key + "|" + entry.Value + "\n";
+                }
+            }
+
             //Sauve les conditions
             if (Condition != null)
                 TextDB.Condition = Condition.GetConditionString();
 
             var data = GameServer.Database.SelectObject<DBTextNPC>(t => t.MobID == _body.InternalID);
             if (data == null)
+            {
                 GameServer.Database.AddObject(TextDB);
+            }
             else
             {
                 TextDB.ObjectId = data.ObjectId;
