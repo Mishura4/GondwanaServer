@@ -545,15 +545,17 @@ namespace DOL.GS.PacketHandler
                 }
                 else
                 {
-                    if (quest.Quest.Conclusion.Length > (ushort)ServerProperties.Properties.MAX_REWARDQUEST_DESCRIPTION_LENGTH)
+                    string personalizedConclusion = BehaviourUtils.GetPersonalizedMessage(quest.Quest.Conclusion, player);
+                    
+                    if (personalizedConclusion.Length > (ushort)ServerProperties.Properties.MAX_REWARDQUEST_DESCRIPTION_LENGTH)
                     {
                         pak.WriteShort((ushort)ServerProperties.Properties.MAX_REWARDQUEST_DESCRIPTION_LENGTH);
-                        pak.WriteStringBytes(quest.Quest.Conclusion.Substring(0, (ushort)ServerProperties.Properties.MAX_REWARDQUEST_DESCRIPTION_LENGTH));
+                        pak.WriteStringBytes(personalizedConclusion.Substring(0, (ushort)ServerProperties.Properties.MAX_REWARDQUEST_DESCRIPTION_LENGTH));
                     }
                     else
                     {
-                        pak.WriteShort((ushort)quest.Quest.Conclusion.Length);
-                        pak.WriteStringBytes(quest.Quest.Conclusion);
+                        pak.WriteShort((ushort)personalizedConclusion.Length);
+                        pak.WriteStringBytes(personalizedConclusion);
                     }
                 }
 
