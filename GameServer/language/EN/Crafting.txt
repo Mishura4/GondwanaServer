@@ -166,6 +166,18 @@ Salvage.IsAllowedToBeginWork.BackpackItems:		You can only salvage items in your 
 Salvage.IsAllowedToBeginWork.EndCurrentAction:		You must end your current action before you salvage anything!
 Salvage.IsAllowedToBeginWork.NotEnoughSkill:		You don't have enough skill to salvage the {0}!
 Salvage.Proceed.GetBackMaterial:			You get back {0} {1} after salvaging the {2}.
+Salvage.Proceed.CantfindItem:				Can't find material (" {0} ") needed to salvage this item!
+Salvage.Proceed.ItemRecipeNotimplemented:		This items salvage recipe (" {0} ") not implemented yet.
+Salvage.Proceed.SalvageRecipeNotfound:			Salvage recipe not found for this item.
+Salvage.Proceed.ErrorRetrievingSalvage:			Error retrieving salvage data!
+Salvage.Proceed.NoMaterialSiegeweapon:			No raw materials provided for this siege weapon!
+Salvage.Proceed.MissingRawMaterial:			Missing raw material " {0} "!
+Salvage.Proceed.ErrorRetrievingSalvage2:		Error retrieving salvage data for this item!
+Salvage.Proceed.ErrorFindingRawMaterial:		Error finding the raw material needed to salvage this item!
+Salvage.Proceed.ErrorFindingItem:			Error finding the item to salvage!
+Salvage.BeginWork.NoSalvageCombat:			You can't salvage while in combat.
+Salvage.BeginWork.ItemIndestructible:			.  This item is indestructible
+Salvage.BeginWork.NoSecondarySkill:			.  You do not have the required secondary skill
 
 # /SpellCrafting
 SpellCrafting.ApplySpellcraftGems.ImbuedItem:		{0} imbued 1 item.

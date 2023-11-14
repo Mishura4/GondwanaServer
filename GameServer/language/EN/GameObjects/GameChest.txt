@@ -1,0 +1,18 @@
+# GAMECHEST
+GameChest.AlreadyOpen:		Someone has already looked around here... Come back later.
+GameChest.Oneuse:		You used 
+GameChest.UseItem:		Do you want to use 
+GameChest.PickLock:		Do you want to pick the lock?
+GameChest.LockDifficult1:	You need an item.
+GameChest.LockDifficult2:	You need a hook.
+GameChest.LockDifficult3:	You need an item or a hook.
+GameChest.PickLockChance:	Your character's chance: 
+GameChest.PickLockSuccess:	You picked the the chest's lock successfully!
+GameChest.PickLockFail:		You failed to pick the chest's lock and you break a hook!
+GameChest.ItemError:		A problem occurred.
+GameChest.NothingInteresting1:	You can't find anything interesting.
+GameChest.NothingInteresting2:	You can't find anything interesting. (Data error, please report it to a GameMaster)
+GameChest.AlreadyOpen2:		Someone already came here before you... Come back later.
+GameChest.Cannotteleport:	This object fails to teleport you right now. You should come back later.
+GameChest.GetItem:		You get an item!
+GameChest.GetItemBagFull:	You pick up an item but your backpack is full.

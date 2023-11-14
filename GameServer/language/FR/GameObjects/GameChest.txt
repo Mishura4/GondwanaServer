@@ -1,0 +1,18 @@
+# GAMECHEST
+GameChest.AlreadyOpen:		Quelqu'un a déjà regardé par ici... Revenez-plus tard.
+GameChest.Oneuse:		Vous avez utilisé 
+GameChest.UseItem:		Voulez-vous utiliser 
+GameChest.PickLock:		Voulez-vous crocheter la serrure ?
+GameChest.LockDifficult1:	Vous avez besoin d'un objet.
+GameChest.LockDifficult2:	Vous avez besoin d'un crochet.
+GameChest.LockDifficult3:	Vous avez besoin d'un objet ou d'un crochet.
+GameChest.PickLockChance:	Chance de votre personnage: 
+GameChest.PickLockSuccess:	Vous crochetez le coffre avec succès !
+GameChest.PickLockFail:		Vous n'avez pas réussi à crocheter le coffre et vous cassez un crochet !
+GameChest.ItemError:		Un problème est survenu.
+GameChest.NothingInteresting1:	Vous ne trouvez rien d'intéressant.
+GameChest.NothingInteresting2:	Vous ne trouvez rien d'intéressant. (Erreur de donnée, veuillez le signaler à un GameMaster)
+GameChest.AlreadyOpen2:		Quelqu'un est déjà passé avant vous, revenez plus tard.
+GameChest.Cannotteleport:	Cet objet ne parvient pas à vous téléporter. Vous devriez revenir plus tard.
+GameChest.GetItem:		Vous récupérez un objet!
+GameChest.GetItemBagFull:	Vous récupérez un objet mais votre sac-à-dos est plein.
