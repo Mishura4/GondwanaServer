@@ -20,7 +20,7 @@ namespace DOL.GS.Scripts
 
         public override bool WhisperReceive(GameLiving source, string text)
         {
-            var player = source as AmtePlayer;
+            var player = source as GamePlayer;
             if (!base.WhisperReceive(source, text) || player == null)
                 return false;
 

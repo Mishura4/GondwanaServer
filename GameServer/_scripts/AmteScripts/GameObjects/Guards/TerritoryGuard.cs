@@ -155,8 +155,7 @@ namespace DOL.AI.Brain
 
         public override int CalculateAggroLevelToTarget(GameLiving target)
         {
-            var player = target as AmtePlayer;
-            if (player != null)
+            if (target is GamePlayer targetPlayer)
             {
                 //if (Captain != null)
                 //{
@@ -165,7 +164,7 @@ namespace DOL.AI.Brain
                 //        return 0;
                 //    return 100;
                 //}
-                return target.GuildName == Body.GuildName ? 0 : 100;
+                return targetPlayer.GuildName == Body.GuildName ? 0 : 100;
             }
             if (target.Realm == 0)
                 return 0;

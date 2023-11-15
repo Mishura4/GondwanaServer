@@ -256,17 +256,16 @@ namespace DOL.AI.Brain
 
         public override int CalculateAggroLevelToTarget(GameLiving target)
         {
-            var player = target as AmtePlayer;
-            if (player != null)
+            if (target is GamePlayer targetPlayer)
             {
                 if (Captain != null)
                 {
-                    var plGuildId = player.Guild != null ? player.GuildID : "NOGUILD";
-                    if (target.GuildName == Body.GuildName || Captain.safeGuildIds.Contains(plGuildId))
+                    var plGuildId = targetPlayer.Guild != null ? targetPlayer.GuildID : "NOGUILD";
+                    if (targetPlayer.GuildName == Body.GuildName || Captain.safeGuildIds.Contains(plGuildId))
                         return 0;
                     return 100;
                 }
-                return target.GuildName == Body.GuildName ? 0 : 100;
+                return targetPlayer.GuildName == Body.GuildName ? 0 : 100;
             }
             if (target.Realm == 0)
                 return 0;

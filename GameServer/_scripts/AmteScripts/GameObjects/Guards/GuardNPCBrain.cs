@@ -93,9 +93,8 @@ namespace DOL.AI.Brain
 
         public override int CalculateAggroLevelToTarget(GameLiving target)
         {
-            if (target is AmtePlayer)
+            if (target is GamePlayer player)
             {
-                var player = (AmtePlayer)target;
                 if (player.Reputation < 0)
                 {
                     return 100;

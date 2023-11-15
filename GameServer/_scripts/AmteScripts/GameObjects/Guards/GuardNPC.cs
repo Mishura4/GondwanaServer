@@ -80,23 +80,22 @@ namespace DOL.GS.Scripts
 
         public override bool ReceiveItem(GameLiving source, Database.InventoryItem item)
         {
-            var player = source as AmtePlayer;
-            if (player == null || item == null || !item.Id_nb.StartsWith(player.HeadTemplate.Id_nb))
+            if (!(source is GamePlayer srcPlayer) || item == null || !item.Id_nb.StartsWith(srcPlayer.HeadTemplate.Id_nb))
                 return false;
 
             if (!item.CanDropAsLoot)
             {
-                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GuardNPC.Response.Dontknow"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                srcPlayer.Out.SendMessage(LanguageMgr.GetTranslation(srcPlayer.Client.Account.Language, "GuardNPC.Response.Dontknow"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 return false;
             }
 
             if (new DateTime(2000, 1, 1).Add(new TimeSpan(0, 0, item.MaxCondition)) < DateTime.Now.Subtract(new TimeSpan(1, 0, 0, 0)))
             {
-                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GuardNPC.Response.Rottenhead"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                srcPlayer.Out.SendMessage(LanguageMgr.GetTranslation(srcPlayer.Client.Account.Language, "GuardNPC.Response.Rottenhead"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 return false;
             }
 
-            if (!player.Inventory.RemoveCountFromStack(item, 1))
+            if (!srcPlayer.Inventory.RemoveCountFromStack(item, 1))
                 return false;
             int reward = ServerProperties.Properties.REWARD_OUTLAW_HEAD_GOLD;
             List<string> messages = item.Template.MessageArticle.Split(';').ToList();
@@ -107,8 +106,8 @@ namespace DOL.GS.Scripts
             }
 
             var prime = Money.GetMoney(0, 0, reward, 0, 0);
-            player.AddMoney(Currency.Copper.Mint(prime));
-            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GuardNPC.Response.Headreward", reward), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+            srcPlayer.AddMoney(Currency.Copper.Mint(prime));
+            srcPlayer.Out.SendMessage(LanguageMgr.GetTranslation(srcPlayer.Client.Account.Language, "GuardNPC.Response.Headreward", reward), eChatType.CT_System, eChatLoc.CL_PopupWindow);
 
             return true;
         }

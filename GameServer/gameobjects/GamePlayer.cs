@@ -28,6 +28,7 @@ using System.Text;
 using DOL.AI;
 using DOL.AI.Brain;
 using System.Timers;
+using AmteScripts.Managers;
 using DOL.Database;
 using DOL.events.gameobjects;
 using DOL.Events;
@@ -50,6 +51,7 @@ using DOL.GS.Utils;
 using DOL.Language;
 using DOL.Territory;
 using DOL.GameEvents;
+using DOL.GS.Scripts;
 using log4net;
 
 namespace DOL.GS
@@ -4982,7 +4984,12 @@ namespace DOL.GS
         public override int BountyPointsValue
         {
             // TODO: correct formula!
-            get { return (int)(1 + Level * 0.6); }
+            get
+            {
+                if (RvrManager.Instance.IsInRvr(this))
+                    return (int)(1 + Level * 0.6);
+                return 0;
+            }
         }
 
         /// <summary>
@@ -8369,6 +8376,64 @@ namespace DOL.GS
                 DeathTime = PlayedTime;
 
             IsSwimming = false;
+
+            if (RvrManager.Instance.IsInRvr(this))
+            {
+                GamePlayer killerAsPlayer = killer as GamePlayer;
+                if (killerAsPlayer != null && killerAsPlayer.IsInRvR)
+                {
+                    if (RvrManager.Instance.Kills.ContainsKey(killerAsPlayer))
+                        RvrManager.Instance.Kills[killerAsPlayer]++;
+                    else
+                        RvrManager.Instance.Kills.Add(killerAsPlayer, 1);
+                }
+                return;
+            }
+
+            if (killer is GamePlayer playerKiller)
+            {
+                this.PlayerKilledByPlayer(this, playerKiller);
+            }
+        }
+
+        /// <summary>
+        /// Player head as an item template
+        /// </summary>
+        protected ItemTemplate m_headTemplate;
+
+
+        /// <summary>
+        /// Player head as an item template
+        /// </summary>
+        public ItemTemplate HeadTemplate { get; }
+
+        public void PlayerKilledByPlayer(GamePlayer victim, GamePlayer killer)
+        {
+            if (victim == killer)
+                return;
+            //old system
+            //var inBL = IsBlacklisted(victim);
+
+            if (victim.isInBG || victim.IsInPvP || victim.IsInRvR || Territory.TerritoryManager.Instance.IsTerritoryArea(victim.CurrentAreas))
+            {
+                return;
+            }
+
+            if (victim.Reputation < 0)
+            {
+                ItemUnique iu = new ItemUnique(HeadTemplate)
+                {
+                    Name = "Tête de " + victim.Name,
+                    MessageArticle = victim.InternalID + ";" + victim.Reputation,
+                    CanDropAsLoot = true,
+                    MaxCondition = (int)DateTime.Now.Subtract(new DateTime(2000, 1, 1)).TotalSeconds
+                };
+                GameServer.Database.AddObject(iu);
+                if (killer.Inventory.AddItem(eInventorySlot.FirstEmptyBackpack, GameInventoryItem.Create(iu)))
+                    killer.SendMessage("Vous avez récupéré la tête de " + victim.Name + ".", eChatType.CT_Loot);
+                else
+                    killer.SendMessage("Vous n'avez pas pu récupérer la tête de " + victim.Name + ", votre inventaire est plein!", eChatType.CT_Loot);
+            }
         }
 
 
@@ -9262,7 +9327,7 @@ namespace DOL.GS
 
         public virtual void UseSlot(int slot, int type)
         {
-            if (!IsAlive)
+            if (JailMgr.IsPrisoner(this) || !IsAlive)
             {
                 Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.UseSlot.CantFire"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
@@ -10377,7 +10442,7 @@ namespace DOL.GS
         /// <param name="message"></param>
         /// <param name="chatType"></param>
         /// <param name="chatLocation"></param>
-        public virtual void MessageFromArea(GameObject source, string message, eChatType chatType, eChatLoc chatLocation)
+        public void MessageFromArea(GameObject source, string message, eChatType chatType, eChatLoc chatLocation)
         {
             Out.SendMessage(message, chatType, chatLocation);
         }
@@ -13547,7 +13612,8 @@ namespace DOL.GS
 
         public virtual void SendSystemMessage(string message)
             => Out.SendMessage(message, eChatType.CT_System, eChatLoc.CL_SystemWindow);
-        public virtual void SendMessage(string message, eChatType chatType, eChatLoc chatLocation)
+
+        public virtual void SendMessage(string message, eChatType chatType = eChatType.CT_System, eChatLoc chatLocation = eChatLoc.CL_SystemWindow)
             => Out.SendMessage(message, chatType, chatLocation);
         #endregion
 
@@ -14557,6 +14623,11 @@ namespace DOL.GS
         /// </summary>
         public virtual void CraftItem(ushort itemID)
         {
+            if (JailMgr.IsPrisoner(this))
+            {
+                return;
+            }
+
             var recipe = RecipeDB.FindBy(itemID);
 
             AbstractCraftingSkill skill = CraftingMgr.getSkillbyEnum(recipe.RequiredCraftingSkill);
@@ -16482,6 +16553,14 @@ namespace DOL.GS
             this.IsAfkDelayElapsed = true;
             this.IsAllowToVolInThisArea = true;
             this.ConfigureReputationTimer();
+
+            HeadTemplate = GameServer.Database.FindObjectByKey<ItemTemplate>("head_blacklist") ?? new ItemTemplate();
+            if (RvrManager.WinnerRealm == Realm)
+            {
+                BaseBuffBonusCategory[eProperty.MythicalCoin] += 5;
+                BaseBuffBonusCategory[eProperty.XpPoints] += 10;
+                BaseBuffBonusCategory[eProperty.RealmPoints] += 5;
+            }
         }
 
         /// <summary>
