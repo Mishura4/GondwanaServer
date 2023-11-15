@@ -18,8 +18,14 @@ public class AmteMob : GameNPC, IAmteNPC
         SetOwnBrain(new AmteMobBrain(Brain));
         _linkParam = new AmteCustomParam(
             "link",
-            () => ((AmteMobBrain)Brain).AggroLink.ToString(),
-            v => ((AmteMobBrain)Brain).AggroLink = int.Parse(v),
+            () => (Brain is AmteMobBrain amteBrain ? amteBrain.AggroLink.ToString() : "-1"),
+            v =>
+            {
+                if (Brain is AmteMobBrain amteBrain)
+                {
+                    amteBrain.AggroLink = int.Parse(v);
+                }
+            },
             "-1");
     }
 
@@ -29,8 +35,14 @@ public class AmteMob : GameNPC, IAmteNPC
         SetOwnBrain(new AmteMobBrain(Brain));
         _linkParam = new AmteCustomParam(
             "link",
-            () => ((AmteMobBrain)Brain).AggroLink.ToString(),
-            v => ((AmteMobBrain)Brain).AggroLink = int.Parse(v),
+            () => (Brain is AmteMobBrain amteBrain ? amteBrain.AggroLink.ToString() : "-1"),
+            v =>
+            {
+                if (Brain is AmteMobBrain amteBrain)
+                {
+                    amteBrain.AggroLink = int.Parse(v);
+                }
+            },
             "-1");
     }
 

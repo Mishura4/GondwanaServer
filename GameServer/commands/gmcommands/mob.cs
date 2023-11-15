@@ -1665,9 +1665,10 @@ namespace DOL.GS.Commands
                     client.Out.SendMessage(targetMob.Name + "'s brain set to " + targetMob.Brain.ToString(), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                DisplaySyntax(client, args[1]);
+                client.Out.SendMessage("Error: " + e.Message, eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                Log.Error(e.ToString());
             }
         }
 
