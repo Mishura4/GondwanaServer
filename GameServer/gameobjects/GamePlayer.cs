@@ -16553,14 +16553,6 @@ namespace DOL.GS
             this.IsAfkDelayElapsed = true;
             this.IsAllowToVolInThisArea = true;
             this.ConfigureReputationTimer();
-
-            HeadTemplate = GameServer.Database.FindObjectByKey<ItemTemplate>("head_blacklist") ?? new ItemTemplate();
-            if (RvrManager.WinnerRealm == Realm)
-            {
-                BaseBuffBonusCategory[eProperty.MythicalCoin] += 5;
-                BaseBuffBonusCategory[eProperty.XpPoints] += 10;
-                BaseBuffBonusCategory[eProperty.RealmPoints] += 5;
-            }
         }
 
         /// <summary>
@@ -16607,6 +16599,14 @@ namespace DOL.GS
             CreateStatistics();
             this.ConfigureReputationTimer();
             shadowNPC = new ShadowNPC(this);
+
+            HeadTemplate = GameServer.Database.FindObjectByKey<ItemTemplate>("head_blacklist") ?? new ItemTemplate();
+            if (RvrManager.WinnerRealm == Realm)
+            {
+                BaseBuffBonusCategory[eProperty.MythicalCoin] += 5;
+                BaseBuffBonusCategory[eProperty.XpPoints] += 10;
+                BaseBuffBonusCategory[eProperty.RealmPoints] += 5;
+            }
         }
 
         /// <summary>
