@@ -318,7 +318,7 @@ namespace DOL.GS.Commands
                             if (clientto.Player.CurrentHouse != null && clientto.Player.InHouse)
                                 clientto.Player.CurrentHouse.Enter(clientc.Player);
                             else
-                                clientc.Player.MoveTo(clientto.Player.CurrentRegionID, clientto.Player.Position, client.Player.Heading);
+                                clientc.Player.MoveTo(clientto.Player.CurrentRegionID, clientto.Player.Position, clientto.Player.Heading);
                             return;
                         }
                         return;

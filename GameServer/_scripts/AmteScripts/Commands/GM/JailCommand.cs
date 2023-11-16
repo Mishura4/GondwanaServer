@@ -105,7 +105,8 @@ namespace DOL.GS.Scripts
 
         private void Emprisonner(GameClient client, string[] args)
         {
-            GamePlayer player = client.Player;
+            GamePlayer jailer = client?.Player;
+            string jailerName = jailer?.Name ?? "(Serveur)";
 
             if (args.Length <= 3)
             {
@@ -116,8 +117,8 @@ namespace DOL.GS.Scripts
             Prisoner Pris = JailMgr.GetPrisoner(args[2]);
             if (Pris != null)
             {
-                if (Pris.RP) player.Out.SendMessage("Le joueur '" + Pris.Name + "' est déjà en prison RP.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                else player.Out.SendMessage("Le joueur '" + Pris.Name + "' est déjà en prison HRP.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                if (Pris.RP) jailer?.Out.SendMessage("Le joueur '" + Pris.Name + "' est déjà en prison RP.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                else jailer?.Out.SendMessage("Le joueur '" + Pris.Name + "' est déjà en prison HRP.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
             }
 
@@ -140,7 +141,7 @@ namespace DOL.GS.Scripts
                 }
                 catch
                 {
-                    player.Out.SendMessage("L'amende est incorrecte. (" + args[4] + ")", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    jailer?.Out.SendMessage("L'amende est incorrecte. (" + args[4] + ")", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     return;
                 }
             }
@@ -162,7 +163,7 @@ namespace DOL.GS.Scripts
                         }
                         catch
                         {
-                            player.Out.SendMessage("Le nombre de jours est incorrect. (" + args[(RP ? 6 : 5)] + ")", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            jailer?.Out.SendMessage("Le nombre de jours est incorrect. (" + args[(RP ? 6 : 5)] + ")", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             return;
                         }
                     }
@@ -170,7 +171,7 @@ namespace DOL.GS.Scripts
                 }
                 catch
                 {
-                    player.Out.SendMessage("Le nombre d'heures est incorrecte. (" + args[(RP ? 5 : 4)] + ")", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    jailer?.Out.SendMessage("Le nombre d'heures est incorrecte. (" + args[(RP ? 5 : 4)] + ")", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     return;
                 }
             }
@@ -179,23 +180,23 @@ namespace DOL.GS.Scripts
             {
                 if (RP)
                 {
-                    JailMgr.EmprisonnerRP(Prisonnier, cost, sortie, player.Name, raison, false);
-                    player.Out.SendMessage( player.GetPersonalizedName(Prisonnier) + " a été emprisonné avec une amende de " + cost + "po.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    JailMgr.EmprisonnerRP(Prisonnier, cost, sortie, jailerName, raison, false);
+                    jailer?.Out.SendMessage( jailer.GetPersonalizedName(Prisonnier) + " a été emprisonné avec une amende de " + cost + "po.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 }
                 else
                 {
-                    JailMgr.EmprisonnerHRP(Prisonnier, sortie, player.Name, raison);
-                    player.Out.SendMessage(player.GetPersonalizedName(Prisonnier) + " a été emprisonné.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    JailMgr.EmprisonnerHRP(Prisonnier, sortie, jailerName, raison);
+                    jailer?.Out.SendMessage(jailer.GetPersonalizedName(Prisonnier) + " a été emprisonné.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 }
             }
             else
             {
-                if (RP && JailMgr.EmprisonnerRP(args[2], cost, sortie, player.Name, raison))
-                    player.Out.SendMessage(args[2] + " a été emprisonné avec une amende de " + cost + "po.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                else if (!RP && JailMgr.EmprisonnerHRP(args[2], sortie, player.Name, raison))
-                    player.Out.SendMessage(args[2] + " a été emprisonné.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                if (RP && JailMgr.EmprisonnerRP(args[2], cost, sortie, jailerName, raison))
+                    jailer?.Out.SendMessage(args[2] + " a été emprisonné avec une amende de " + cost + "po.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                else if (!RP && JailMgr.EmprisonnerHRP(args[2], sortie, jailerName, raison))
+                    jailer?.Out.SendMessage(args[2] + " a été emprisonné.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 else
-                    player.Out.SendMessage("Ce joueur (" + args[2] + ") n'a pas été trouvé.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    jailer?.Out.SendMessage("Ce joueur (" + args[2] + ") n'a pas été trouvé.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
             }
         }
 
