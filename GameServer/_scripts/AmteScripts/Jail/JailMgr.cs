@@ -448,7 +448,7 @@ namespace DOL.GS.Scripts
             if (DOL.GS.ServerProperties.Properties.DISCORD_ACTIVE)
             {
                 DolWebHook hook = new DolWebHook(DOL.GS.ServerProperties.Properties.DISCORD_WEBHOOK_ID);
-                hook.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameObjects.GamePlayer.Jailed", player.Name));
+                hook.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameObjects.GamePlayer.Released", player.Name));
             }
 
             return true;
