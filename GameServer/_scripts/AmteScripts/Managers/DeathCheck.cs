@@ -27,11 +27,11 @@ namespace GameServerScripts.Amtescripts.Managers
         }
         private DeathCheck() { }
 
-        public int ReportPlayer(GamePlayer player)
+        public int ReportPlayer(GamePlayer victim)
         {
-            var deaths = GameServer.Database.SelectObjects<DBDeathLog>(DB.Column("KilledId").IsEqualTo(player.InternalID).And(DB.Column("isWanted").IsEqualTo(0).And(DB.Column("DeathDate").IsGreatherThan("SUBTIME(NOW(), '3:0:0')").And(DB.Column("ExitFromJail").IsEqualTo(0)))));
+            var deaths = GameServer.Database.SelectObjects<DBDeathLog>(DB.Column("KilledId").IsEqualTo(victim.InternalID).And(DB.Column("isWanted").IsEqualTo(0).And(DB.Column("DeathDate").IsGreatherThan("SUBTIME(NOW(), '3:0:0')").And(DB.Column("ExitFromJail").IsEqualTo(0)))));
 
-            var reportedDeaths = GameServer.Database.SelectObjects<DBDeathLog>(DB.Column("KilledId").IsEqualTo(player.InternalID).And(DB.Column("isWanted").IsEqualTo(1).And(DB.Column("DeathDate").IsGreatherThan("SUBTIME(NOW(), '3:0:0')").And(DB.Column("ExitFromJail").IsEqualTo(0)))));
+            var reportedDeaths = GameServer.Database.SelectObjects<DBDeathLog>(DB.Column("KilledId").IsEqualTo(victim.InternalID).And(DB.Column("isWanted").IsEqualTo(1).And(DB.Column("DeathDate").IsGreatherThan("SUBTIME(NOW(), '3:0:0')").And(DB.Column("ExitFromJail").IsEqualTo(0)))));
 
             if (deaths == null || !deaths.Any() || reportedDeaths == null || reportedDeaths.Any())
             {
@@ -42,25 +42,25 @@ namespace GameServerScripts.Amtescripts.Managers
 
             var death = deaths.OrderByDescending(d => d.DeathDate).FirstOrDefault();
 
-            var client = WorldMgr.GetClientByPlayerID(death.KillerId, true, true);
+            var killerClient = WorldMgr.GetClientByPlayerID(death.KillerId, true, true);
             string newsMessage = "";
-
-            if (client != null)
+            
+            // TODO: hidden name server property?
+            if (killerClient != null)
             {
-                client.Player.Reputation--;
-                client.Player.SaveIntoDatabase();
+                killerClient.Player.Reputation--;
+                killerClient.Player.SaveIntoDatabase();
                 reported++;
-                client.Out.SendMessage("Vous avez perdu 1 point de réputation pour avoir tué " + client.Player.GetPersonalizedName(player), DOL.GS.PacketHandler.eChatType.CT_System, DOL.GS.PacketHandler.eChatLoc.CL_SystemWindow);
+                killerClient.Out.SendMessage("Vous avez perdu 1 point de réputation pour avoir tué " + killerClient.Player.GetPersonalizedName(victim), DOL.GS.PacketHandler.eChatType.CT_System, DOL.GS.PacketHandler.eChatLoc.CL_SystemWindow);
                 death.IsWanted = true;
                 death.Dirty = true;
                 GameServer.Database.SaveObject(death);
-                newsMessage = LanguageMgr.GetTranslation(client, "GameObjects.GamePlayer.Wanted", client.Player.GetPersonalizedName(player));
-                NewsMgr.CreateNews("GameObjects.GamePlayer.Wanted", player.Realm, eNewsType.RvRGlobal, false, true, client.Player.Name);
+                newsMessage = LanguageMgr.GetTranslation(killerClient, "GameObjects.GamePlayer.Wanted", victim.GetPersonalizedName(killerClient.Player));
+                NewsMgr.CreateNews("GameObjects.GamePlayer.Wanted", victim.Realm, eNewsType.RvRGlobal, false, true, killerClient.Player.Name);
             }
             else
             {
                 var killer = GameServer.Database.FindObjectByKey<DOLCharacters>(death.KillerId);
-
                 if (killer != null)
                 {
                     killer.Reputation--;
@@ -69,8 +69,8 @@ namespace GameServerScripts.Amtescripts.Managers
                     death.Dirty = true;
                     reported++;
                     GameServer.Database.SaveObject(death);
-                    newsMessage = LanguageMgr.GetTranslation(client, "GameObjects.GamePlayer.Wanted", killer.Name);
-                    NewsMgr.CreateNews("GameObjects.GamePlayer.Wanted", player.Realm, eNewsType.RvRGlobal, false, true, killer.Name);
+                    newsMessage = LanguageMgr.GetTranslation(killerClient, "GameObjects.GamePlayer.Wanted", killer.Name); // TODO: hidden name
+                    NewsMgr.CreateNews("GameObjects.GamePlayer.Wanted", victim.Realm, eNewsType.RvRGlobal, false, true, killer.Name);
                 }
             }
 

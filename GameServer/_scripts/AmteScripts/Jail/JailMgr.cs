@@ -129,7 +129,7 @@ namespace DOL.GS.Scripts
                     }
                 }
 
-                EmprisonnerRP(args.GamePlayer, cost, DateTime.Now + time, "", reason, true);
+                EmprisonnerRP(args.GamePlayer, cost, DateTime.Now + time, args.GamePlayer.LastKillerName, reason, true);
             }
         }
 
@@ -236,7 +236,7 @@ namespace DOL.GS.Scripts
         /// <param name="GM"></param>
         /// <param name="JailRP"></param>
         /// <param name="raison"></param>
-        private static void Emprisonner(GamePlayer player, int cost, DateTime sortie, string GM, bool JailRP, string raison, bool isOutLaw)
+        private static void Emprisonner(GamePlayer player, int cost, DateTime sortie, string jailer, bool JailRP, string raison, bool isOutLaw)
         {
             //On vérifie le tps
             long time = (sortie.Ticks - DateTime.Now.Ticks) / 10000;
@@ -273,25 +273,20 @@ namespace DOL.GS.Scripts
             Animation(player);
 
             if (JailRP)
-                player.Out.SendMessage("Vous avez été mis en prison pour vos actes par " + GM + ". Votre caution s'éleve à " + cost + " Or. Pour sortir, demandez à quelqu'un de payer votre caution à Stronghold, le gardien de la prison.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-            else player.Out.SendMessage("Vous avez été mis en prison pour HRP par " + GM + ". Vous devez attendre la fin de votre durée d'emprisonnement en temps réel pour sortir automatiquement.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage("Vous avez été mis en prison pour vos actes" + (jailer != null ? " par " + jailer : "") + ". Votre caution s'éleve à " + cost + " Or. Pour sortir, demandez à quelqu'un de payer votre caution à Stronghold, le gardien de la prison.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+            else player.Out.SendMessage("Vous avez été mis en prison pour HRP" + (jailer != null ? " par " + jailer : "") + ". Vous devez attendre la fin de votre durée d'emprisonnement en temps réel pour sortir automatiquement.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
 
 
             string message = "";
-            if (GM != "")
+            if (!string.IsNullOrEmpty(jailer))
             {
-                LanguageMgr.GetTranslation(player.Client.Account.Language, "GameObjects.GamePlayer.Jailed", player.Name, GM);
-                NewsMgr.CreateNews("GameObjects.GamePlayer.Jailed", player.Realm, eNewsType.RvRGlobal, false, true, player.Name, GM);
+                message = LanguageMgr.GetTranslation(player.Client.Account.Language, "GameObjects.GamePlayer.Jailed", player.Name, jailer);
+                NewsMgr.CreateNews("GameObjects.GamePlayer.Jailed", player.Realm, eNewsType.RvRGlobal, false, true, player.Name, jailer);
             }
             else if (string.IsNullOrEmpty(player.LastKillerName))
             {
-                LanguageMgr.GetTranslation(player.Client.Account.Language, "GameObjects.GamePlayer.Jailed.Unknown", player.Name);
+                message = LanguageMgr.GetTranslation(player.Client.Account.Language, "GameObjects.GamePlayer.Jailed.Unknown", player.Name);
                 NewsMgr.CreateNews("GameObjects.GamePlayer.Jailed.Unknown", player.Realm, eNewsType.RvRGlobal, false, true, player.Name);
-            }
-            else
-            {
-                LanguageMgr.GetTranslation(player.Client.Account.Language, "GameObjects.GamePlayer.Jailed", player.Name, player.LastKillerName);
-                NewsMgr.CreateNews("GameObjects.GamePlayer.Jailed", player.Realm, eNewsType.RvRGlobal, false, true, player.Name, player.LastKillerName);
             }
 
             if (DOL.GS.ServerProperties.Properties.DISCORD_ACTIVE)
@@ -377,29 +372,29 @@ namespace DOL.GS.Scripts
         /// <summary>
         /// Emprisonner un joueur connecté dans la prison RP
         /// </summary>
-        public static void EmprisonnerRP(GamePlayer player, int cost, DateTime sortie, string GM, string raison, bool isOutLaw)
+        public static void EmprisonnerRP(GamePlayer player, int cost, DateTime sortie, string jailer, string raison, bool isOutLaw)
         {
-            Emprisonner(player, cost, sortie, GM, true, raison, isOutLaw);
+            Emprisonner(player, cost, sortie, jailer, true, raison, isOutLaw);
         }
         /// <summary>
         /// Emprisonner un joueur connecté dans la prison HRP
         /// </summary>
-        public static void EmprisonnerHRP(GamePlayer player, DateTime sortie, string GM, string raison)
+        public static void EmprisonnerHRP(GamePlayer player, DateTime sortie, string jailer, string raison)
         {
-            Emprisonner(player, 0, sortie, GM, false, raison, false);
+            Emprisonner(player, 0, sortie, jailer, false, raison, false);
         }
 
         /// <summary>
         /// Emprisonner un joueur déconnecté dans la prison RP
         /// </summary>
-        public static bool EmprisonnerRP(string player, int cost, DateTime sortie, string GM, string raison)
+        public static bool EmprisonnerRP(string player, int cost, DateTime sortie, string jailer, string raison)
         {
             return Emprisonner(player, cost, sortie, true, raison);
         }
         /// <summary>
         /// Emprisonner un joueur déconnecté dans la prison HRP
         /// </summary>
-        public static bool EmprisonnerHRP(string player, DateTime sortie, string GM, string raison)
+        public static bool EmprisonnerHRP(string player, DateTime sortie, string jailer, string raison)
         {
             return Emprisonner(player, 0, sortie, false, raison);
         }

@@ -15105,7 +15105,7 @@ namespace DOL.GS
                     if (oldValue >= 0 && Properties.DISCORD_ACTIVE)
                     {
                         var hook = new DolWebHook(Properties.DISCORD_WEBHOOK_ID);
-                        hook.SendMessage(Name + " is now wanted for his crimes and his felony");
+                        hook.SendMessage(LanguageMgr.GetTranslation(Name, "GameObjects.GamePlayer.Wanted", Name));
                     }
                     OutlawTimeStamp = DateTimeOffset.Now.ToUnixTimeSeconds();
                     this.ConfigureReputationTimer();
