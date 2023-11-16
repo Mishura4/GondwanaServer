@@ -343,8 +343,8 @@ namespace DOL.GS.Spells
             }
             else if (heal > 0)
             {
-                MessageToCaster("You heal " + ((GamePlayer)m_caster).GetPersonalizedName(target) + " for " + heal + " hit points!", eChatType.CT_Spell);
-                MessageToLiving(target, "You are healed by " + ((GamePlayer)target).GetPersonalizedName(m_caster) + " for " + heal + " hit points.", eChatType.CT_Spell);
+                MessageToCaster("You heal " + m_caster.GetPersonalizedName(target) + " for " + heal + " hit points!", eChatType.CT_Spell);
+                MessageToLiving(target, "You are healed by " + target.GetPersonalizedName(m_caster) + " for " + heal + " hit points.", eChatType.CT_Spell);
 
                 #region PVP DAMAGE
 

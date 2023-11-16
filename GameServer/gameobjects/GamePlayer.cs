@@ -8172,9 +8172,9 @@ namespace DOL.GS
                 }
             }
 
-            if (killer is GamePlayer && killer != this)
+            if (killer is GamePlayer killerPlayer && killer != this)
             {
-                ((GamePlayer)killer).Out.SendMessage(LanguageMgr.GetTranslation(((GamePlayer)killer).Client.Account.Language, "GameObjects.GamePlayer.Die.YouKilled", ((GamePlayer)killer).GetPersonalizedName(this)), eChatType.CT_PlayerDied, eChatLoc.CL_SystemWindow);
+                killerPlayer.Out.SendMessage(LanguageMgr.GetTranslation(killerPlayer.Client.Account.Language, "GameObjects.GamePlayer.Die.YouKilled", killerPlayer.GetPersonalizedName(this)), eChatType.CT_PlayerDied, eChatLoc.CL_SystemWindow);
             }
 
             ArrayList players = new ArrayList();

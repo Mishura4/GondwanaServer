@@ -76,8 +76,8 @@ namespace DOL.GS.Spells
                 GameLiving EffectOwner = SelectiveBlindness.EffectSource;
                 if (EffectOwner == selectedTarget)
                 {
-                    if (m_caster is GamePlayer)
-                        ((GamePlayer)m_caster).Out.SendMessage(string.Format("{0} is invisible to you!", selectedTarget.GetName(0, true)), eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
+                    if (m_caster is GamePlayer player)
+                        player.Out.SendMessage(string.Format("{0} is invisible to you!", selectedTarget.GetName(0, true)), eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
 
                     return false;
                 }
@@ -86,7 +86,7 @@ namespace DOL.GS.Spells
             // Is immune ?
             if (selectedTarget != null && selectedTarget.HasAbility("DamageImmunity"))
             {
-                MessageToCaster(((GamePlayer)m_caster).GetPersonalizedName(selectedTarget) + " is immune to this effect!", eChatType.CT_SpellResisted);
+                MessageToCaster(m_caster.GetPersonalizedName(selectedTarget) + " is immune to this effect!", eChatType.CT_SpellResisted);
                 return false;
             }
 

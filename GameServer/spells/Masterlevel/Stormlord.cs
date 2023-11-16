@@ -399,7 +399,7 @@ namespace DOL.GS.Spells
 
             if (target is GamePlayer)
             {
-                ((GamePlayer)target).Out.SendMessage(((GamePlayer)target).GetPersonalizedName(m_caster) + " steals you " + mana + " points of power!", eChatType.CT_YouWereHit, eChatLoc.CL_SystemWindow);
+                ((GamePlayer)target).Out.SendMessage(target.GetPersonalizedName(m_caster) + " steals you " + mana + " points of power!", eChatType.CT_YouWereHit, eChatLoc.CL_SystemWindow);
             }
 
             StealMana(target, mana);
@@ -418,7 +418,7 @@ namespace DOL.GS.Spells
 
         public virtual void SendCasterMessage(GameLiving target, int mana)
         {
-            MessageToCaster(string.Format("You steal {0} for {1} power!", ((GamePlayer)m_caster).GetPersonalizedName(target), mana), eChatType.CT_YouHit);
+            MessageToCaster(string.Format("You steal {0} for {1} power!", m_caster.GetPersonalizedName(target), mana), eChatType.CT_YouHit);
             if (mana > 0)
             {
                 MessageToCaster("You steal " + mana + " power points" + (mana == 1 ? "." : "s."), eChatType.CT_Spell);

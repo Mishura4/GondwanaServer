@@ -31,12 +31,12 @@ namespace DOL.GS.Spells
         {
             if (target.HasAbility(Abilities.CCImmunity))
             {
-                MessageToCaster(((GamePlayer)m_caster).GetPersonalizedName(target) + " is immune to this effect!", eChatType.CT_SpellResisted);
+                MessageToCaster(m_caster.GetPersonalizedName(target) + " is immune to this effect!", eChatType.CT_SpellResisted);
                 return;
             }
             if (target.EffectList.GetOfType<ChargeEffect>() != null || target.TempProperties.getProperty("Charging", false))
             {
-                MessageToCaster(((GamePlayer)m_caster).GetPersonalizedName(target) + " is moving too fast for this spell to have any effect!", eChatType.CT_SpellResisted);
+                MessageToCaster(m_caster.GetPersonalizedName(target) + " is moving too fast for this spell to have any effect!", eChatType.CT_SpellResisted);
                 return;
             }
 
@@ -48,7 +48,7 @@ namespace DOL.GS.Spells
             base.OnEffectStart(effect);
 
             MessageToLiving(effect.Owner, Spell.Message1, eChatType.CT_Spell);
-            MessageToCaster(Util.MakeSentence(Spell.Message2, ((GamePlayer)m_caster).GetPersonalizedName(effect.Owner)), eChatType.CT_Spell);
+            MessageToCaster(Util.MakeSentence(Spell.Message2, m_caster.GetPersonalizedName(effect.Owner)), eChatType.CT_Spell);
             foreach (GamePlayer player1 in effect.Owner.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
             {
                 if (!(effect.Owner == player1 || m_caster == player1))
@@ -254,7 +254,7 @@ namespace DOL.GS.Spells
                             if (immunity.ImmunityState
                                 && target == immunity.Owner)
                             {
-                                MessageToCaster(((GamePlayer)m_caster).GetPersonalizedName(immunity.Owner) + " can't have that effect again yet!!!", eChatType.CT_SpellPulse);
+                                MessageToCaster(m_caster.GetPersonalizedName(immunity.Owner) + " can't have that effect again yet!!!", eChatType.CT_SpellPulse);
                                 return;
                             }
                         }
@@ -310,7 +310,7 @@ namespace DOL.GS.Spells
 
             if (target.HasAbility(Abilities.MezzImmunity))
             {
-                MessageToCaster(((GamePlayer)m_caster).GetPersonalizedName(target) + " is immune to this effect!", eChatType.CT_SpellResisted);
+                MessageToCaster(m_caster.GetPersonalizedName(target) + " is immune to this effect!", eChatType.CT_SpellResisted);
                 SendEffectAnimation(target, 0, false, 0);
                 target.StartInterruptTimer(target.SpellInterruptDuration, AttackData.eAttackType.Spell, Caster);
                 return;
@@ -469,7 +469,7 @@ namespace DOL.GS.Spells
         {
             if (target.HasAbility(Abilities.StunImmunity))
             {
-                MessageToCaster(((GamePlayer)m_caster).GetPersonalizedName(target) + " is immune to this effect!", eChatType.CT_SpellResisted);
+                MessageToCaster(m_caster.GetPersonalizedName(target) + " is immune to this effect!", eChatType.CT_SpellResisted);
                 base.OnSpellResisted(target);
                 return;
             }

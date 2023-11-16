@@ -263,7 +263,7 @@ namespace DOL.GS.Spells
             SendEffectAnimation(effect.Owner, 0, false, 1);
 
             MessageToLiving(effect.Owner, Spell.Message1, eChatType.CT_Spell);
-            MessageToCaster(Util.MakeSentence(Spell.Message2, ((GamePlayer)m_caster).GetPersonalizedName(effect.Owner)), eChatType.CT_Spell);
+            MessageToCaster(Util.MakeSentence(Spell.Message2, m_caster.GetPersonalizedName(effect.Owner)), eChatType.CT_Spell);
             foreach (GamePlayer player1 in effect.Owner.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
             {
                 if (!(effect.Owner == player1 || m_caster == player1))

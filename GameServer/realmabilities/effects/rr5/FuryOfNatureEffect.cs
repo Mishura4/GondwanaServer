@@ -148,7 +148,7 @@ namespace DOL.GS.Effects
                 if (healTarget is GamePlayer)
                 {
                     player.Out.SendMessage("You heal " + player.GetPersonalizedName((GamePlayer)healTarget) + " for " + baseheal + "!", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
-                    ((GamePlayer)healTarget).Out.SendMessage(((GamePlayer)healTarget).GetPersonalizedName(player) + " heals you for " + baseheal + "!", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                    ((GamePlayer)healTarget).Out.SendMessage(healTarget.GetPersonalizedName(player) + " heals you for " + baseheal + "!", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
                 }
                 else
                     player.Out.SendMessage("You heal " + player.GetPersonalizedName(healTarget) + " for " + baseheal + "!", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);

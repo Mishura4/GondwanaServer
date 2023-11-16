@@ -382,8 +382,8 @@ namespace DOL.GS.Commands
                 messageToSource = string.Format(emoteMessages[EMOTE_TO_SOURCE], sourcePlayer.GetPersonalizedName(targetObject));
                 messageToOthers = emoteMessages[EMOTE_TO_OTHERS];
 
-                if (targetObject is GamePlayer)
-                    messageToTarget = string.Format(emoteMessages[EMOTE_TO_OTHERS], ((GamePlayer)targetObject).GetPersonalizedName(sourcePlayer), YOU);
+                if (targetObject is GamePlayer targetPlayer)
+                    messageToTarget = string.Format(emoteMessages[EMOTE_TO_OTHERS], targetPlayer.GetPersonalizedName(sourcePlayer), YOU);
             }
 
             foreach (GamePlayer player in sourcePlayer.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))

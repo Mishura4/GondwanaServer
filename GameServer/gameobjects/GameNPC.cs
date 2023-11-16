@@ -4334,8 +4334,8 @@ namespace DOL.GS
                         player.MessageFromArea(this, player.GetPersonalizedName(this) + " dies!", eChatType.CT_PlayerDied, eChatLoc.CL_SystemWindow);
                     }
                 }
-                if (killer is GamePlayer)
-                    ((GamePlayer)killer).Out.SendMessage(((GamePlayer)killer).GetPersonalizedName(this) + " dies!", eChatType.CT_PlayerDied, eChatLoc.CL_SystemWindow);
+                if (killer is GamePlayer killerPlayer)
+                    killerPlayer.Out.SendMessage(killerPlayer.GetPersonalizedName(this) + " dies!", eChatType.CT_PlayerDied, eChatLoc.CL_SystemWindow);
             }
             StopFollowing();
 
