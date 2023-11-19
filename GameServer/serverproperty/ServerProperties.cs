@@ -2666,6 +2666,50 @@ namespace DOL.GS.ServerProperties
 
         #endregion
 
+        #region RANDOM OBJECT GENERATION
+
+        [ServerProperty("atlas_rog", "rog_toa_item_chance", "chance of generating an object with TOA stats (in %)", 0)]
+        public static int ROG_TOA_ITEM_CHANCE;
+
+        [ServerProperty("atlas_rog", "rog_armor_weight", "chance of armor being included in the roll (in %)", 50)]
+        public static int ROG_ARMOR_WEIGHT;
+
+        [ServerProperty("atlas_rog", "rog_magical_weight", "chance of jewelry/magical being included in the roll (in %)", 40)]
+        public static int ROG_MAGICAL_WEIGHT;
+
+        [ServerProperty("atlas_rog", "rog_weapon_weight", "chance of weapons being included in the roll (in %)", 40)]
+        public static int ROG_WEAPON_WEIGHT;
+
+        [ServerProperty("atlas_rog", "rog_starting_qual", "base item quality (in %)", 95)]
+        public static int ROG_STARTING_QUAL;
+
+        [ServerProperty("atlas_rog", "rog_cap_qual", "max item quality (in %)", 99)]
+        public static int ROG_CAP_QUAL;
+
+        //don't put this above 35-45 or you will get way too many
+        [ServerProperty("atlas_rog", "rog_toa_stat_weight", "toa specific stat weight (in %)", 0)]
+        public static int ROG_TOA_STAT_WEIGHT;
+
+        [ServerProperty("atlas_rog", "rog_item_stat_weight", "stat bonus (str, con, dex, etc) weight (in %)", 45)]
+        public static int ROG_ITEM_STAT_WEIGHT;
+
+        [ServerProperty("atlas_rog", "rog_item_resist_weight", "resist bonus (body, matter, etc) weight (in %)", 48)]
+        public static int ROG_ITEM_RESIST_WEIGHT;
+
+        [ServerProperty("atlas_rog", "rog_item_skill_weight", "skill bonus (Celtic Spear, Dual Wield, etc) weight (in %)", 25)]
+        public static int ROG_ITEM_SKILL_WEIGHT;
+
+        [ServerProperty("atlas_rog", "rog_item_allskill_weight", "all skills bonus weight (in %)", 0)]
+        public static int ROG_STAT_ALLSKILL_WEIGHT;
+
+        [ServerProperty("atlas_rog", "rog_magical_item_offset", "base chance to get a magical RoG item (in %) [Level*2 is added to get final value]", 60)]
+        public static int ROG_MAGICAL_ITEM_OFFSET;
+
+        [ServerProperty("atlas_rog", "rog_use_weighted_generation", "toggle weighted rolls vs. simple generation", false)]
+        public static bool ROG_USE_WEIGHTED_GENERATION;
+
+        #endregion
+
         public static IDictionary<string, object> AllCurrentProperties
         {
             get; private set;

@@ -2,7 +2,7 @@ EmblemNPC.Interact.Text1:		Pour 5 pièces d'or, je peux mettre l'emblème de vot
 EmblemNPC.Interact.Text2:		Cet objet est invalide.
 EmblemNPC.Interact.Text3:		Vous n'avez pas assez d'argent, revenez plus tard...
 EmblemNPC.Interact.Text4:		J'ai mis une emblème sur votre objet.
-EmblemNPC.ResponseDialog01:		Cet objet est déjà decore d'une emblème.
+EmblemNPC.ResponseDialog01:		Cet objet dispose déjà d'une emblème.
 EmblemNPC.ResponseDialog02:		Vous ne faites partie d'aucune guilde !
 EmblemNPC.ResponseDialog03:		Votre guilde ne dispose pas d'emblème.
 EmblemNPC.ResponseDialog04:		Vous devez être au moins de niveau 20 ou avoir 400 points dans un métier d'artisanat pour pouvoir porter une emblème.

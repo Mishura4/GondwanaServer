@@ -74,16 +74,12 @@ public class DiscordBot
 		if (channelBroadcast == null)
 			return;
 		_channelBroadcast = channelBroadcast;
-		if ((DateTime.Now - Process.GetCurrentProcess().StartTime).TotalMinutes < 5) // 5min after start max
-			await _channelBroadcast.SendMessageAsync("Server open!");
 	}
 
 	public static async Task Stop()
 	{
 		if (Instance == null)
 			return;
-		if (Instance._channelBroadcast != null)
-			await Instance._channelBroadcast.SendMessageAsync("Server closed!");
 		await Instance._client.LogoutAsync();
 		await Instance._client.StopAsync();
 		Instance = null;
