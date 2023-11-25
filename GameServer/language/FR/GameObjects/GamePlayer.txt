@@ -349,6 +349,9 @@ GameObjects.GamePlayer.SwitchQuiver.NotUseQuiver:		Vous n'utiliserez pas votre c
 GameObjects.GamePlayer.SwitchQuiver.ShootWith:			Vous attaquerez avec : {0}.
 GameObjects.GamePlayer.SwitchWeapon.SpellCancelled:		Votre sort est annulé.
 
+GameObjects.GamePlayer.Trade.CanOnlyTradeToOutlaw:		Vous ne pouvez pas échanger avec ce joueur car vous êtes hors-la-loi.
+GameObjects.GamePlayer.Trade.CannotTradeToOutlaw:		Vous ne pouvez pas échanger avec un·e hors-la-loi.
+
 GameObjects.GamePlayer.UpdateEncumberance.Encumbered:				Vous êtes encombré·e.
 GameObjects.GamePlayer.UpdateEncumberance.EncumberedMoveSlowly:		Vous êtes encombré·e, et bougez lentement.
 

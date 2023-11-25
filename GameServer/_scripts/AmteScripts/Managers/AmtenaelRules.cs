@@ -736,18 +736,7 @@ namespace DOL.GS.ServerRules
                 return source.Realm == target.Realm;
             if ((source != null && JailMgr.IsPrisoner(pls)) || (plt != null && JailMgr.IsPrisoner(plt)))
                 return false;
-            //Do not allow Trading from outlaw (but allow trading from outlaw to outlaw)
-            if (pls != null && pls.Reputation < 0 && plt != null && plt.Reputation > 0)
-            {
-                return false;
-            }
-            //Do not allow Trading to outlaw
-            if (pls != null && pls.Reputation > 0 && plt != null && plt.Reputation < 0)
-            {
-                return false;
-            }
-
-            return true;
+            return base.IsAllowedToTrade(source, target, quiet);
         }
 
         public override bool IsAllowedToUnderstand(GameLiving source, GamePlayer target)

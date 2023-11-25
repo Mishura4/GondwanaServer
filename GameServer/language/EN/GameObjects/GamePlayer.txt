@@ -318,6 +318,8 @@ GameObjects.GamePlayer.SwitchQuiver.NoMoreAmmo:				You have no more ammo in your
 GameObjects.GamePlayer.SwitchQuiver.NotUseQuiver:			You will not use your quiver.		
 GameObjects.GamePlayer.SwitchQuiver.ShootWith:				You will shoot with: {0}.		
 GameObjects.GamePlayer.SwitchWeapon.SpellCancelled:			Your spell is cancelled!		
+GameObjects.GamePlayer.Trade.CanOnlyTradeToOutlaw:			You cannot trade with this player because you are an outlaw.
+GameObjects.GamePlayer.Trade.CannotTradeToOutlaw:			You cannot trade with this player because they are an outlaw.
 GameObjects.GamePlayer.UpdateEncumberance.Encumbered:		You are encumbered!			
 GameObjects.GamePlayer.UpdateEncumberance.EncumberedMoveSlowly:	You are encumbered and move more slowly.				
 GameObjects.GamePlayer.UpdateSpellLine.GainPower:			You gain power in the {0} spell list!		

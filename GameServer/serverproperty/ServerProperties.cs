@@ -182,6 +182,12 @@ namespace DOL.GS.ServerProperties
         public static int REPUTATION_POINTS_RECOVERY;
 
         /// <summary>
+        /// Whether to allow trading between non-outlaws and outlaws
+        /// </summary>
+        [ServerProperty("system", "allow_trade_with_outlaw", "Is trading allowed between outlaws and non-outlaws", false)]
+        public static bool ALLOW_TRADE_WITH_OUTLAW;
+
+        /// <summary>
         /// Disable Bug Reports
         /// </summary>
         [ServerProperty("system", "disable_bug_reports", "Set to true to disable bug reporting, and false to enable bug reporting", true)]

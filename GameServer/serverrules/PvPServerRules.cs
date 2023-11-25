@@ -444,11 +444,6 @@ namespace DOL.GS.ServerRules
             return true;
         }
 
-        public override bool IsAllowedToTrade(GameLiving source, GameLiving target, bool quiet)
-        {
-            return true;
-        }
-
         public override bool IsAllowedToUnderstand(GameLiving source, GamePlayer target)
         {
             return true;

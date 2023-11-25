@@ -31,6 +31,7 @@ using DOL.GS.Finance;
 using DOL.GS.Housing;
 using DOL.GS.Keeps;
 using DOL.GS.PacketHandler;
+using DOL.GS.PacketHandler.Client.v168;
 using DOL.GS.Scripts;
 using DOL.GS.ServerProperties;
 using DOL.Language;
@@ -292,7 +293,54 @@ namespace DOL.GS.ServerRules
         public abstract bool IsAllowedCharsInAllRealms(GameClient client);
         public abstract bool IsAllowedToGroup(GamePlayer source, GamePlayer target, bool quiet);
         public abstract bool IsAllowedToJoinGuild(GamePlayer source, Guild guild);
-        public abstract bool IsAllowedToTrade(GameLiving source, GameLiving target, bool quiet);
+
+        public virtual bool IsAllowedToTrade(GameLiving source, GameLiving target, bool quiet)
+        {
+            if (source is GamePlayer plSource)
+            {
+                GameClient cSource = plSource.Client;
+
+                // GMs always allowed to trade
+                if (cSource.Account.PrivLevel > (uint)ePrivLevel.Player)
+                {
+                    return true;
+                }
+
+                if (target is GamePlayer plTarget)
+                {
+                    // Check outlaw status and server rule
+                    if (!DOL.GS.ServerProperties.Properties.ALLOW_TRADE_WITH_OUTLAW)
+                    {
+                        if (plSource.Reputation < 0)
+                        {
+                            // Outlaws can only trade with outlaws
+                            if (!(plTarget.Reputation < 0))
+                            {
+                                if (!quiet)
+                                {
+                                    plSource.Out.SendMessage(LanguageMgr.GetTranslation(cSource.Account.Language, "GameObjects.GamePlayer.Trade.CanOnlyTradeToOutlaw"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                }
+                                return false;
+                            }
+                        }
+                        else // Not outlaw
+                        {
+                            // Non outlaws can only trade with non outlaws
+                            if (plTarget.Reputation < 0)
+                            {
+                                if (!quiet)
+                                {
+                                    plSource.Out.SendMessage(LanguageMgr.GetTranslation(cSource.Account.Language, "GameObjects.GamePlayer.Trade.CannotTradeToOutlaw"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                }
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return true;
+        }
         public abstract bool IsAllowedToUnderstand(GameLiving source, GamePlayer target);
         public abstract string RulesDescription();
 

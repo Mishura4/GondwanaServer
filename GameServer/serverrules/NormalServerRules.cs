@@ -204,7 +204,7 @@ namespace DOL.GS.ServerRules
                 if (quiet == false) MessageToLiving(source, "You can't trade with enemy realm!");
                 return false;
             }
-            return true;
+            return base.IsAllowedToTrade(source, target, quiet);
         }
 
         public override bool IsAllowedToUnderstand(GameLiving source, GamePlayer target)
