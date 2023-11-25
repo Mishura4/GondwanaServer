@@ -3801,7 +3801,16 @@ namespace DOL.GS.Spells
 			- Tolakram
 			 */
 
-            int hitchance = 85 + ((spellLevel - target.Level) / 2) + bonustohit;
+            int missrate = 15;
+            if (caster is GamePlayer && target is GamePlayer)
+            {
+                missrate = (int)(missrate * ServerProperties.Properties.PVP_BASE_MISS_MULTIPLIER);
+            }
+            else
+            {
+                missrate = (int)(missrate * ServerProperties.Properties.PVE_BASE_MISS_MULTIPLIER);
+            }
+            int hitchance = 100 - missrate + ((spellLevel - target.Level) / 2) + bonustohit;
 
             if (!(caster is GamePlayer && target is GamePlayer))
             {

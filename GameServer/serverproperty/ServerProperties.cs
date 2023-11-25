@@ -994,6 +994,18 @@ namespace DOL.GS.ServerProperties
         public static double PVP_SPELL_DAMAGE;
 
         /// <summary>
+        /// A multiplier to apply to the base miss rate in PVP combat
+        /// </summary>
+        [ServerProperty("rates", "pvp_base_miss_multiplier", "A multiplier to apply to the base miss rate in PVP combat - Edit this to change the rate of missed attacks in Player versus Player", 1.0)]
+        public static double PVP_BASE_MISS_MULTIPLIER;
+
+        /// <summary>
+        /// A multiplier to apply to the base miss rate in PVP combat
+        /// </summary>
+        [ServerProperty("rates", "pve_base_miss_multiplier", "A multiplier to apply to the base miss rate in PVE combat - Edit this to change the rate of missed attacks in Player versus Environment", 1.0)]
+        public static double PVE_BASE_MISS_MULTIPLIER;
+
+        /// <summary>
         /// The % value of gainrps when heal a players recently damaged in rvr.
         /// </summary>
         [ServerProperty("rates", "heal_pvp_damage_value_rp", "How many % of heal final value is obtained in rps?", 8)]
