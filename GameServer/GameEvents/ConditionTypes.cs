@@ -16,7 +16,8 @@
         Timer,
         Kill,
         StartingEvent,
-        AreaEvent
+        AreaEvent,
+        TextNPC
     }
     public enum InstancedConditionTypes
     {

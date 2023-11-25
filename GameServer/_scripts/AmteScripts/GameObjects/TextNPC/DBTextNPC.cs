@@ -49,6 +49,8 @@ namespace DOL.Database
         private string m_TaskDescEN;
         private string m_TaskDescFR;
         private string m_GiveItem;
+        private string m_ResponseStartEvent;
+        private string m_ResponseStopEvent;
 
 
         [DataElement(AllowDbNull = false)]
@@ -263,6 +265,28 @@ namespace DOL.Database
             {
                 Dirty = true;
                 m_GiveItem = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = true)]
+        public string ResponseStartEvent
+        {
+            get { return m_ResponseStartEvent; }
+            set
+            {
+                Dirty = true;
+                m_ResponseStartEvent = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = true)]
+        public string ResponseStopEvent
+        {
+            get { return m_ResponseStopEvent; }
+            set
+            {
+                Dirty = true;
+                m_ResponseStopEvent = value;
             }
         }
 

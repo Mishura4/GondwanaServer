@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using DOL.GS.Commands;
 using DOL.GS.PacketHandler;
 using System.Reflection;
+using DOL.GameEvents;
 using log4net;
 using DOL.Language;
 
@@ -915,6 +917,138 @@ namespace DOL.GS.Scripts
                     }
                     else
                         DisplaySyntax(client);
+                    break;
+                #endregion
+
+                #region events
+                case "startevent":
+                    switch (args[2].ToLower())
+                    {
+                        case "list":
+                            lines = new List<String>();
+                            foreach (var startevent in npc.TextNPCData.StartEventResponses)
+                            {
+                                GameEvent ev = GameEventManager.Instance.Events.FirstOrDefault(e => e.ID.Equals(startevent.Value));
+                                lines.Add("[" + startevent.Key + "] => " + (ev?.EventName ?? "UNKNOWN") + " (" + startevent.Value + ")");
+                            }
+                            player.Out.SendCustomTextWindow("StartEvent réponses:", lines);
+                            break;
+
+                        case "add":
+                            if (args.Length < 5)
+                            {
+                                player.Out.SendMessage("Syntaxe: /textnpc startevent add <eventId> <text>", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                break;
+                            }
+                            reponse = string.Join(" ", args, 4, args.Length - 4);
+                            if (npc == null)
+                            {
+                                player.Out.SendMessage("Vous devez sélectionner un PNJ!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                break;
+                            }
+                            GameEvent? gameEvent = GameEventManager.Instance.Events.FirstOrDefault(e => e.ID.Equals(args[3]));
+                            if (gameEvent == null)
+                            {
+                                player.Out.SendMessage("L'évènement avec ID `" + args[3] + "` n'a pas pu être trouvé", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                break;
+                            }
+
+                            bool modified = npc.TextNPCData.StartEventResponses.ContainsKey(reponse);
+                            npc.TextNPCData.StartEventResponses[reponse] = args[3];
+                            npc.TextNPCData.SaveIntoDatabase();
+                            player.Out.SendMessage("StartEvent réponse \"" + reponse + (modified ? "\" modifiée" : "\" ajoutée") + " : " + gameEvent.EventName, eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            break;
+
+                        case "remove":
+                            if (args.Length < 4)
+                            {
+                                player.Out.SendMessage("Syntaxe: /textnpc startevent remove <text>", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                break;
+                            }
+                            reponse = string.Join(" ", args, 3, args.Length - 3);
+                            if (npc == null)
+                            {
+                                player.Out.SendMessage("Vous devez sélectionner un PNJ!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                break;
+                            }
+
+                            if (npc.TextNPCData.StartEventResponses.Remove(reponse))
+                            {
+                                npc.TextNPCData.SaveIntoDatabase();
+                                player.Out.SendMessage("StartEvent réponse \"" + reponse + "\" supprimée", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            }
+                            else
+                            {
+                                player.Out.SendMessage("Aucune réponse StartEvent \"" + reponse + "\" n'a été trouvée", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            }
+                            break;
+                    }
+
+                    break;
+
+                case "stopevent":
+                    switch (args[2].ToLower())
+                    {
+                        case "list":
+                            lines = new List<String>();
+                            foreach (var stopevent in npc.TextNPCData.StopEventResponses)
+                            {
+                                GameEvent ev = GameEventManager.Instance.Events.FirstOrDefault(e => e.ID.Equals(stopevent.Value));
+                                lines.Add("[" + stopevent.Key + "] => " + (ev?.EventName ?? "UNKNOWN") + " (" + stopevent.Value + ")");
+                            }
+                            player.Out.SendCustomTextWindow("StopEvent réponses:", lines);
+                            break;
+
+                        case "add":
+                            if (args.Length < 5)
+                            {
+                                player.Out.SendMessage("Syntaxe: /textnpc stopevent add <eventId> <text>", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                break;
+                            }
+                            reponse = string.Join(" ", args, 4, args.Length - 4);
+                            if (npc == null)
+                            {
+                                player.Out.SendMessage("Vous devez sélectionner un PNJ!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                break;
+                            }
+                            GameEvent? gameEvent = GameEventManager.Instance.Events.FirstOrDefault(e => e.ID.Equals(args[3]));
+                            if (gameEvent == null)
+                            {
+                                player.Out.SendMessage("L'évènement avec ID `" + args[3] + "` n'a pas pu être trouvé", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                break;
+                            }
+
+                            bool modified = npc.TextNPCData.StopEventResponses.ContainsKey(reponse);
+                            npc.TextNPCData.StopEventResponses[reponse] = args[3];
+                            npc.TextNPCData.SaveIntoDatabase();
+                            player.Out.SendMessage("StopEvent réponse \"" + reponse + (modified ? "\" modifiée" : "\" ajoutée") + " : " + gameEvent.EventName, eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            break;
+
+
+                        case "remove":
+                            if (args.Length < 4)
+                            {
+                                player.Out.SendMessage("Syntaxe: /textnpc stopevent remove <text>", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                break;
+                            }
+                            reponse = string.Join(" ", args, 3, args.Length - 3);
+                            if (npc == null)
+                            {
+                                player.Out.SendMessage("Vous devez sélectionner un PNJ!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                break;
+                            }
+                            if (npc.TextNPCData.StopEventResponses.Remove(reponse))
+                            {
+                                npc.TextNPCData.SaveIntoDatabase();
+                                player.Out.SendMessage("StopEvent réponse \"" + reponse + "\" supprimée", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            }
+                            else
+                            {
+                                player.Out.SendMessage("Aucune réponse StopEvent \"" + reponse + "\" n'a été trouvée", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            }
+                            break;
+                    }
+
                     break;
                 #endregion
 

@@ -1027,10 +1027,15 @@ namespace DOL.GameEvents
                 await ShowEndEffects(e);
                 CleanEvent(e);
             }
-
             else if (end == EndingConditionType.AreaEvent)
             {
                 e.Status = EventStatus.EndedByAreaEvent;
+                await ShowEndEffects(e);
+                CleanEvent(e);
+            }
+            else if (end == EndingConditionType.TextNPC)
+            {
+                e.Status = EventStatus.EndedByTextNPC;
                 await ShowEndEffects(e);
                 CleanEvent(e);
             }

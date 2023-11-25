@@ -9,10 +9,12 @@ using System.Security.Policy;
 using System.Threading;
 using DOL.Database;
 using DOL.Events;
+using DOL.GameEvents;
 using DOL.GS.Finance;
 using DOL.GS.PacketHandler;
 using DOL.GS.Quests;
 using log4net;
+using static DOL.Database.ArtifactBonus;
 using static DOL.GS.GameNPC;
 using static DOL.GS.Quests.DataQuestJsonGoal;
 
@@ -42,6 +44,8 @@ namespace DOL.GS.Scripts
         public Dictionary<string, string> GiveItem { get; private set; }
         public Dictionary<string, Tuple<string, int>> QuestReponsesValues { get; private set; }
         public Dictionary<string, eEmote> RandomPhrases { get; private set; }
+        public Dictionary<string, string> StartEventResponses { get; private set; }
+        public Dictionary<string, string> StopEventResponses { get; private set; }
         public string QuestReponseKey { get; set; }
         public string Interact_Text { get; set; }
         public int PhraseInterval { get; set; }
@@ -62,6 +66,8 @@ namespace DOL.GS.Scripts
             SpellReponsesCast = new Dictionary<string, bool>();
             QuestReponses = new Dictionary<string, string>();
             QuestReponsesValues = new Dictionary<string, Tuple<string, int>>();
+            StartEventResponses = new Dictionary<string, string>();
+            StopEventResponses = new Dictionary<string, string>();
             _body = body;
             _lastPhrase = 0;
             Interact_Text = "";
@@ -80,6 +86,8 @@ namespace DOL.GS.Scripts
             SpellReponsesCast = new Dictionary<string, bool>(policy.SpellReponsesCast);
             QuestReponses = new Dictionary<string, string>(policy.QuestReponses);
             QuestReponsesValues = new Dictionary<string, Tuple<string, int>>(policy.QuestReponsesValues);
+            StartEventResponses = new Dictionary<string, string>(policy.StartEventResponses);
+            StopEventResponses = new Dictionary<string, string>(policy.StopEventResponses);
             _body = body;
             _lastPhrase = 0;
             Interact_Text = policy.Interact_Text;
@@ -242,6 +250,40 @@ namespace DOL.GS.Scripts
                     {
                         InventoryItem itemToGive = GameInventoryItem.Create(item);
                         player.Inventory.AddTemplate(itemToGive, 1, eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack);
+                    }
+                }
+            }
+
+            string eventId;
+            //Stop Event
+            if (StopEventResponses != null && StopEventResponses.TryGetValue(str, out eventId))
+            {
+                var ev = GameEventManager.Instance.Events.FirstOrDefault(e => e.ID.Equals(eventId));
+
+                if (ev != null)
+                {
+                    lock (ev)
+                    {
+                        if (ev.StartedTime.HasValue)
+                        {
+                            GameEventManager.Instance.StopEvent(ev, EndingConditionType.TextNPC);
+                        }
+                    }
+                }
+            }
+            //Start Event
+            if (StartEventResponses != null && StartEventResponses.TryGetValue(str, out eventId))
+            {
+                var ev = GameEventManager.Instance.Events.FirstOrDefault(e => e.ID.Equals(eventId));
+
+                if (ev != null)
+                {
+                    lock (ev)
+                    {
+                        if (!ev.StartedTime.HasValue)
+                        {
+                            GameEventManager.Instance.StartEvent(ev);
+                        }
                     }
                 }
             }
@@ -806,6 +848,32 @@ namespace DOL.GS.Scripts
                 }
             }
 
+            StartEventResponses = new Dictionary<string, string>();
+            if (TextDB.ResponseStartEvent != null && TextDB.ResponseStartEvent != "")
+            {
+                TextDB.ResponseStartEvent.Replace("\r", "\n");
+                foreach (string eventResponse in TextDB.ResponseStartEvent.Split('\n'))
+                {
+                    string[] ev = eventResponse.Split('|');
+                    if (ev.Length != 2)
+                        continue;
+                    StartEventResponses.Add(ev[0], ev[1]);
+                }
+            }
+
+            StopEventResponses = new Dictionary<string, string>();
+            if (TextDB.ResponseStopEvent != null && TextDB.ResponseStopEvent != "")
+            {
+                TextDB.ResponseStopEvent.Replace("\r", "\n");
+                foreach (string eventResponse in TextDB.ResponseStopEvent.Split('\n'))
+                {
+                    string[] ev = eventResponse.Split('|');
+                    if (ev.Length != 2)
+                        continue;
+                    StopEventResponses.Add(ev[0], ev[1]);
+                }
+            }
+
             QuestReponses = new Dictionary<string, string>();
             QuestReponsesValues = new Dictionary<string, Tuple<string, int>>();
             if (TextDB.ReponseQuest != null && TextDB.ReponseQuest != "")
@@ -1025,13 +1093,41 @@ namespace DOL.GS.Scripts
             TextDB.RandomPhraseEmote = reponse;
             TextDB.PhraseInterval = PhraseInterval;
 
+            reponse = "";
             if (GiveItem != null)
             {
                 foreach (KeyValuePair<string, string> entry in GiveItem)
                 {
-                    TextDB.GiveItem += entry.Key + "|" + entry.Value + "\n";
+                    if (reponse.Length > 1)
+                        reponse += "\n";
+                    reponse += entry.Key + "|" + entry.Value;
                 }
             }
+            TextDB.GiveItem = reponse;
+
+            reponse = "";
+            if (StartEventResponses != null)
+            {
+                foreach (KeyValuePair<string, string> entry in StartEventResponses)
+                {
+                    if (reponse.Length > 1)
+                        reponse += "\n";
+                    reponse += entry.Key + "|" + entry.Value;
+                }
+            }
+            TextDB.ResponseStartEvent = reponse;
+
+            reponse = "";
+            if (StopEventResponses != null)
+            {
+                foreach (KeyValuePair<string, string> entry in StopEventResponses)
+                {
+                    if (reponse.Length > 1)
+                        reponse += "\n";
+                    reponse += entry.Key + "|" + entry.Value;
+                }
+            }
+            TextDB.ResponseStopEvent = reponse;
 
             //Sauve les conditions
             if (Condition != null)

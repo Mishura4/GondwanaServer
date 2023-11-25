@@ -7,5 +7,6 @@
         EndedByKill,
         EndedByEventStarting,
         EndedByAreaEvent,
+        EndedByTextNPC,
     }
 }
