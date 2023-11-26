@@ -23,6 +23,7 @@ using System;
 using DOL.Database;
 using DOL.Events;
 using DOL.GS.PacketHandler;
+using DOL.Language;
 
 namespace DOL.GS.Scripts
 {
@@ -47,7 +48,7 @@ namespace DOL.GS.Scripts
             {
                 if (player.TempProperties.getProperty("Drink", false))
                 {
-                    player.Out.SendMessage("Vous êtes déjà en train de boire !", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Items.Specialitems.BeerAlreadyDrinking"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     return;
                 }
 
@@ -63,7 +64,7 @@ namespace DOL.GS.Scripts
                     player.Inventory.MoveItem((eInventorySlot)item.SlotPosition, eInventorySlot.RightHandWeapon, 1);
                 player.Emote(eEmote.Drink);
                 foreach (GamePlayer target in player.GetPlayersInRadius(WorldMgr.SAY_DISTANCE))
-                    target.Out.SendMessage(GameServer.ServerRules.GetPlayerName(target, player) + " boit " + item.Name + ".", eChatType.CT_Emote, eChatLoc.CL_SystemWindow);
+                    target.Out.SendMessage(GameServer.ServerRules.GetPlayerName(target, player) + LanguageMgr.GetTranslation(player.Client.Account.Language,"Items.Specialitems.BeerDrinkDistance") + item.Name + ".", eChatType.CT_Emote, eChatLoc.CL_SystemWindow);
 
                 #region Bonus/Malus
                 bool effect = false;

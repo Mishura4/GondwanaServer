@@ -1,7 +1,7 @@
 # GAMECHEST
 GameChest.AlreadyOpen:		Quelqu'un a déjà regardé par ici... Revenez-plus tard.
 GameChest.Oneuse:		Vous avez utilisé 
-GameChest.UseItem:		Voulez-vous utiliser 
+GameChest.UseItem:		Voulez-vous utiliser "{0}" ?
 GameChest.PickLock:		Voulez-vous crocheter la serrure ?
 GameChest.LockDifficult1:	Vous avez besoin d'un objet.
 GameChest.LockDifficult2:	Vous avez besoin d'un crochet.

@@ -9,6 +9,7 @@ using DOL.GS.PacketHandler;
 using log4net;
 using DOL.AI.Brain;
 using DOL.GS.Finance;
+using DOL.Language;
 
 namespace DOL.GS.Scripts
 {
@@ -52,7 +53,7 @@ namespace DOL.GS.Scripts
             if (player.Reputation < 0)
             {
                 TurnTo(player, 5000);
-                player.Out.SendMessage("Je ne vends rien aux hors-la-loi", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Fret.InteractOutlaw"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return false;
             }
 
@@ -65,17 +66,17 @@ namespace DOL.GS.Scripts
 
             if (ItemsFret == null || ItemsFret.Count <= 0)
             {
-                player.Out.SendMessage("Bonjour " + player.Name + ", je n'ai aucun colis à votre nom !\n" +
-                                       "\nSi vous voulez envoyer un objet à une personne, donnez le moi et chuchotez-moi (/whisper <nom>) le nom de la personne.",
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Fret.InteractText01", player.Name) +"\n" +
+                                       "\n" + LanguageMgr.GetTranslation(player.Client.Account.Language,"Fret.InteractText02"),
                                        eChatType.CT_System, eChatLoc.CL_PopupWindow);
             }
             else
             {
-                string message = "Bonjour " + player.Name + ", j'ai " + ItemsFret.Count + " colis à votre nom:\n\n";
+                string message = LanguageMgr.GetTranslation(player.Client.Account.Language,"Fret.HavePackage", player.Name, ItemsFret.Count) + "\n\n";
                 int id = 1;
                 foreach (DBFret fret in ItemsFret)
                 {
-                    message += " [" + id + "] " + fret.Name + " donné par " + fret.FromPlayer + "\n";
+                    message += LanguageMgr.GetTranslation(player.Client.Account.Language,"Fret.PackageInfo1", id, fret.Name, fret.FromPlayer) + "\n";
                     id++;
                     if (message.Length > 1900)
                     {
@@ -83,7 +84,7 @@ namespace DOL.GS.Scripts
                         message = "";
                     }
                 }
-                message += "\n(pour récupérer un colis, cliquez juste sur son numéro)";
+                message += "\n" + LanguageMgr.GetTranslation(player.Client.Account.Language,"Fret.PackageInfo2");
                 player.Out.SendMessage(message, eChatType.CT_System, eChatLoc.CL_PopupWindow);
             }
             return true;
@@ -127,16 +128,16 @@ namespace DOL.GS.Scripts
             }
             #endregion
             #region Envoi du colis
-            else if (str == "Envoyer le colis")
+            else if (str == "Envoyer le colis" || str == "Send the package") 
             {
                 if (TempItems.ContainsKey(player.InternalID))
                 {
                     InteractPlayer IP = TempItems[player.InternalID];
-                    player.Out.SendCustomDialog("Voulez-vous envoyer votre colis pour " + Money.GetString(IP.Price) + " ?",
+                    player.Out.SendCustomDialog(LanguageMgr.GetTranslation(player.Client.Account.Language,"Fret.PackageSendConfirm") + Money.GetString(IP.Price) + " ?",
                                                 SendColisResponse);
                 }
                 else
-                    player.Out.SendMessage("Vous devez préparer un colis avant de l'envoyer !", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Fret.PackageToPrepare"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
             }
             #endregion
             #region Réglage du destinataire
@@ -189,18 +190,18 @@ namespace DOL.GS.Scripts
         private static bool Recapitulatif(GamePlayer player)
         {
             InteractPlayer IP = TempItems[player.InternalID];
-            string msg = "Vous vous préparez à envoyer ce colis :\n";
-            msg += " - Pour: " + (IP.ToPlayerID == "" ? "(Non spécifié, tapez '/whisper <nom>' pour le donner)" : IP.ToPlayerName) + "\n";
-            msg += " - Poids: " + (IP.Weight / 10) + "," + (IP.Weight % 10) + "livres\n";
-            msg += " - Prix: " + Money.GetString(IP.Price) + "\n";
-            msg += " - Objets: " + IP.Items.Count + "/" + MaxItem + "\n";
+            string msg = LanguageMgr.GetTranslation(player.Client.Account.Language,"Fret.PackageSendDescription01") + "\n";
+            msg += LanguageMgr.GetTranslation(player.Client.Account.Language,"Fret.PackageSendDescription02") + (IP.ToPlayerID == "" ? LanguageMgr.GetTranslation(player.Client.Account.Language,"Fret.PackageSendDescription03") : IP.ToPlayerName) + "\n";
+            msg += LanguageMgr.GetTranslation(player.Client.Account.Language,"Fret.PackageSendDescription04") + (IP.Weight / 10) + "," + (IP.Weight % 10) + LanguageMgr.GetTranslation(player.Client.Account.Language,"Fret.PackageSendDescription05") + "\n";
+            msg += LanguageMgr.GetTranslation(player.Client.Account.Language,"Fret.PackageSendDescription06") + Money.GetString(IP.Price) + "\n";
+            msg += LanguageMgr.GetTranslation(player.Client.Account.Language,"Fret.PackageSendDescription07") + IP.Items.Count + "/" + MaxItem + "\n";
             int id = 1;
             foreach (InventoryItem item in IP.Items)
             {
                 msg += id + ". " + (item.Count > 1 ? item.Count + " " : "") + item.Name + "\n";
                 id++;
             }
-            msg += "\nPour retirer un objet, donnez le même objet une deuxième fois.\n[Envoyer le colis]";
+            msg += "\n" + LanguageMgr.GetTranslation(player.Client.Account.Language,"Fret.PackageRemove") + "\n" + LanguageMgr.GetTranslation(player.Client.Account.Language,"Fret.PackageToSend");
             player.Out.SendMessage(msg, eChatType.CT_System, eChatLoc.CL_PopupWindow);
             return true;
         }
@@ -245,7 +246,7 @@ namespace DOL.GS.Scripts
                 if (SendColis(player)) player.RemoveMoney(Currency.Copper.Mint(IP.Price));
             }
             else
-                player.Out.SendMessage("Vous n'avez pas assez d'argent !", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Fret.PackageNoMoney"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
         }
 
         /// <summary>
@@ -255,7 +256,7 @@ namespace DOL.GS.Scripts
         {
             if (!TempItems.ContainsKey(player.InternalID))
             {
-                player.Out.SendMessage("Vous n'avez pas préparé de colis !", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Fret.PackageNotPrepared"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 return false;
             }
             InteractPlayer IP = TempItems[player.InternalID];
@@ -301,7 +302,7 @@ namespace DOL.GS.Scripts
                 foreach (InventoryItem item in Sended)
                     player.Inventory.AddItem(eInventorySlot.FirstEmptyBackpack, item);
                 TempItems.Remove(player.InternalID);
-                player.Out.SendMessage("Un problème est survenu lors de l'envoi du colis, veuillez tout recommencer. (Ne déplacez pas vos objets pendant la création du colis)", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Fret.PackageSendError"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 return false;
             }
             foreach (DBFret fret in frets)
@@ -311,7 +312,7 @@ namespace DOL.GS.Scripts
                 GameServer.Database.AddObject(fret);
             }
             TempItems.Remove(player.InternalID);
-            player.Out.SendMessage("Votre colis a été envoyé !", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Fret.PackageSent"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
             return true;
         }
         #endregion

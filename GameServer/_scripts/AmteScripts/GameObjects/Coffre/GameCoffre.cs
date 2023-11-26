@@ -6,6 +6,7 @@ using System.Numerics;
 using DOL.Database;
 using DOL.GameEvents;
 using DOL.GS.PacketHandler;
+using DOL.Language;
 
 namespace DOL.GS.Scripts
 {
@@ -276,18 +277,18 @@ namespace DOL.GS.Scripts
             {
                 if (m_interactPlayer != null && player != m_interactPlayer && (m_lastInteract.Ticks + 200000000) > DateTime.Now.Ticks)
                 {
-                    player.Out.SendMessage("Quelqu'un a déjà regardé par ici... Revenez-plus tard.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.AlreadyOpen"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                     return true;
                 }
                 if (KeyItem != "" && player.Inventory.GetFirstItemByID(KeyItem, eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack) != null)
                 {
                     if (!KeyItem.StartsWith("oneuse"))
-                        player.Out.SendMessage("Vous avez utilisé " + player.Inventory.GetFirstItemByID(KeyItem, eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack).Name + ".", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.Oneuse") + player.Inventory.GetFirstItemByID(KeyItem, eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack).Name + ".", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                     else
                     {
                         InventoryItem it = player.Inventory.GetFirstItemByID(KeyItem, eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack);
                         player.TempProperties.setProperty("CoffreItem", it);
-                        player.Out.SendCustomDialog("Voulez-vous utiliser \"" + it.Name + "\" ?", OneUseOpen);
+                        player.Out.SendCustomDialog(LanguageMgr.GetTranslation(player.Client, "GameChest.UseItem", it.Name), OneUseOpen);
                         m_interactPlayer = player;
                         m_lastInteract = DateTime.Now;
                         return true;
@@ -295,7 +296,7 @@ namespace DOL.GS.Scripts
                 }
                 else if (LockDifficult > 0 && player.Inventory.GetFirstItemByID(CROCHET, eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack) != null)
                 {
-                    player.Out.SendCustomDialog("Voulez-vous crocheter la serrure ?", Unlock);
+                    player.Out.SendCustomDialog(LanguageMgr.GetTranslation(player.Client, "GameChest.PickLock"), Unlock);
                     m_interactPlayer = player;
                     m_lastInteract = DateTime.Now;
                     return true;
@@ -303,11 +304,11 @@ namespace DOL.GS.Scripts
                 else
                 {
                     if (LockDifficult == 0 && KeyItem != "")
-                        player.Out.SendMessage("Vous avez besoin d'un objet.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.LockDifficult1"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                     else if (LockDifficult > 0 && KeyItem == "")
-                        player.Out.SendMessage("Vous avez besoin d'un crochet.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.LockDifficult2"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                     else
-                        player.Out.SendMessage("Vous avez besoin d'un objet ou d'un crochet.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.LockDifficult3"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                     return true;
                 }
             }
@@ -327,7 +328,7 @@ namespace DOL.GS.Scripts
                     m_interactPlayer = null;
                     m_lastInteract = DateTime.MinValue;
                 }
-                player.Out.SendMessage("Un problème est survenu.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.ItemError"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
             }
             InventoryLogging.LogInventoryAction(player, this, eInventoryActionType.Loot, it, 1);
@@ -344,13 +345,13 @@ namespace DOL.GS.Scripts
                     this.LastTimeChecked = DateTime.Now;
                     CoffreItem coffre = GetRandomItem();
                     if (coffre.Id_nb == "" && coffre.Chance == 0)
-                        player.Out.SendMessage("Vous ne trouvez rien d'intéressant.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.NothingInteresting1"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                     else
                     {
                         ItemTemplate item = GameServer.Database.SelectObject<ItemTemplate>(DB.Column("Id_nb").IsEqualTo(GameServer.Database.Escape(coffre.Id_nb)));
                         if (item == null)
                         {
-                            player.Out.SendMessage("Vous ne trouvez rien d'intéressant. (Erreur de donnée, veuillez le signaler à un GameMaster)", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.NothingInteresting2"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                             coffre.Chance = 0;
                         }
                         else
@@ -388,7 +389,7 @@ namespace DOL.GS.Scripts
                 }
                 else
                 {
-                    player.Out.SendMessage("Quelqu'un est déjà passé avant vous, revenez plus tard.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.AlreadyOpen2"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                 }
             }
             else
@@ -406,7 +407,7 @@ namespace DOL.GS.Scripts
 
                 if (failed)
                 {
-                    player.Out.SendMessage("Ce coffre ne parvient pas à vous téléporter. Vous devriez revenir plus tard.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.Cannotteleport"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                 }
                 else
                 {
@@ -436,12 +437,12 @@ namespace DOL.GS.Scripts
         {
             if (player.Inventory.AddTemplate(GameInventoryItem.Create(item), 1, eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack))
             {
-                player.Out.SendMessage("Vous récupérez un objet!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.GetItem"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                 InventoryLogging.LogInventoryAction(this, player, eInventoryActionType.Loot, item, 1);
                 return true;
             }
             else
-                player.Out.SendMessage("Vous récupérez un objet mais votre sac-à-dos est plein.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.GetItemBagFull"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
 
             return false;
         }
@@ -603,16 +604,16 @@ namespace DOL.GS.Scripts
                 Chance = 99;
 
             if (player.Client.Account.PrivLevel >= 2)
-                player.Out.SendMessage("Chance de votre personnage: " + Chance + "/100", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.PickLockChance") + Chance + "/100", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
 
             if (Chance > 0 && Util.Chance(Chance))
             {
-                player.Out.SendMessage("Vous crochetez le coffre avec succès !", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.PickLockSuccess"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                 InteractEnd(player);
             }
             else
             {
-                player.Out.SendMessage("Vous n'avez pas réussi à crocheter le coffre et vous cassez un crochet !", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.PickLockFail"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                 player.Inventory.RemoveTemplate(CROCHET, 1, eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack);
             }
             return 0;
@@ -849,11 +850,12 @@ namespace DOL.GS.Scripts
                     " + Realm: " + Realm,
                     " + Model: " + Model,
                     " + EventID: " + EventID,
+                    " + Masqué par un EventID: " + RemovedByEventID,
                     "",
                     "-- Coffre --",
                     " + Chance d'apparition d'un item: " + ItemChance + "%",
-                    " + Interval d'apparition d'un item: " + ItemInterval + " minutes",
-                    " + Interval d'ouverture un coffre: " + this.CoffreOpeningInterval + " minutes",
+                    " + Intervalle d'apparition d'un item: " + ItemInterval + " minutes",
+                    " + Intervalle d'ouverture un coffre: " + this.CoffreOpeningInterval + " minutes",
                     " + Dernière fois que le coffre a été ouvert: " + LastOpen.ToShortDateString() + " " + LastOpen.ToShortTimeString(),
                     " + IsLongDistance type: " + this.IsLargeCoffre
                 };
@@ -866,7 +868,7 @@ namespace DOL.GS.Scripts
             else
                 text.Add(" + Le coffre n'a pas besoin de clef");
 
-            text.Add("PickableAnim: " + HasPickableAnim);
+            text.Add(" + PickableAnim: " + HasPickableAnim);
 
             text.Add("");
             text.Add(" + Listes des items (" + Items.Count + " items):");

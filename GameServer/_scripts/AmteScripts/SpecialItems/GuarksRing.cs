@@ -6,6 +6,7 @@ using System.Xml.Linq;
 using AmteScripts.Managers;
 using DOL.Events;
 using DOL.GS.PacketHandler;
+using DOL.Language;
 
 namespace DOL.GS.Scripts
 {
@@ -52,7 +53,7 @@ namespace DOL.GS.Scripts
                 if (lieu != Lieux[0] && arg.Text.ToLower().IndexOf(lieu.Name.ToLower()) != -1)
                 {
                     player.TempProperties.setProperty(RING_TARGET, lieu);
-                    player.Out.SendMessage("Votre demande a été entendue.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Items.Specialitems.GuarkRingListened"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                     return;
                 }
             }
@@ -70,7 +71,7 @@ namespace DOL.GS.Scripts
             if (!CheckUse(player))
                 return;
 
-            player.Out.SendMessage("Vous ressentez une puissante magie qui vous immobilise.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Items.Specialitems.GuarkRingUsed"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
 
             player.MaxSpeedBase = 1;
             player.Out.SendUpdateMaxSpeed();
@@ -78,9 +79,9 @@ namespace DOL.GS.Scripts
             if (player.HealthPercent <= 75)
             {
                 if (arg.Item.Id_nb == "anneau_guarks")
-                    player.Out.SendMessage("Vous n'avez pas assez d'énergie vitale pour utiliser l'anneau.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Items.Specialitems.GuarkRingNoPower"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                 else
-                    player.Out.SendMessage("Vous n'avez pas assez d'énergie vitale pour utiliser l'amulette.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Items.Specialitems.GuarkAmuletNoPower"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                 return;
             }
 
@@ -154,11 +155,11 @@ namespace DOL.GS.Scripts
                 timer.Stop();
                 player.TempProperties.removeProperty(RING_TARGET);
                 if (stop)
-                    player.Out.SendMessage("Vous avez bougé, la téléportation est annulée.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Items.Specialitems.GuarkRingTPCancelMoved"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                 else if (!_playerIDs.Contains(player.InternalID) && !player.TempProperties.getProperty(RING_IS_AMULETTE, false))
-                    player.Out.SendMessage("Vous avez retiré l'anneau de votre doigt, la téléportation est annulée.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Items.Specialitems.GuarkRingTPCancelRemoved"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                 else if (!_playerIDs.Contains(player.InternalID))
-                    player.Out.SendMessage("Vous avez retiré l'amulette de votre cou, la téléportation est annulée.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Items.Specialitems.GuarkAmuletTPCancelRemoved"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                 _playerIDs.Remove(player.InternalID);
                 return 0;
             }
@@ -268,12 +269,12 @@ namespace DOL.GS.Scripts
                     if (Util.Chance(5))
                     {
                         lieu = Lieux[0];
-                        player.Out.SendMessage("La magie céleste a échoué, destination inconnue.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Items.Specialitems.GuarkRingTPFailed"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                     }
                     else if (lieu == null)
                     {
                         lieu = GetRandomLieu(player.TempProperties.getProperty(RING_IS_AMULETTE, false));
-                        player.Out.SendMessage("Aucune demande n'a été formulée, la destination est inconnue.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Items.Specialitems.GuarkRingTPNone"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                     }
 
                     ushort oldRegion = player.CurrentRegionID;
@@ -298,22 +299,22 @@ namespace DOL.GS.Scripts
         {
             if (player.InCombat)
             {
-                player.Out.SendMessage("Vous ne pouvez pas utiliser la magie céleste en combat !", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Items.Specialitems.GuarkRingUsageCombat"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                 return false;
             }
             if (RvrManager.Instance.IsInRvr(player)) //UXU TODO  || PvpManager.Instance.IsIn(player))
             {
-                player.Out.SendMessage("La magie céleste n'éxiste pas en ce lieu.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Items.Specialitems.GuarkRingUsageHere"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                 return false;
             }
             if (JailMgr.IsPrisoner(player))
             {
-                player.Out.SendMessage("Vous ne pouvez pas utiliser la magie céleste en prison !", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Items.Specialitems.GuarkRingUsageJailed"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                 return false;
             }
             if (player.IsRiding)
             {
-                player.Out.SendMessage("Vous ne pouvez pas utiliser la magie céleste à cheval !", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Items.Specialitems.GuarkRingUsageMounted"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                 return false;
             }
             return true;

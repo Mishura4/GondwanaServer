@@ -1,0 +1,5 @@
+Banker.InteractOutlaw:			I don't deal with outlaws!
+Banker.InteractText01:			Hello sir, you don't have any bank account yet.
+Banker.InteractText02:			In order to open an account just give me some money or a check, the account will be created automatically!
+Banker.Nomoney:				You don't have any money in your bank account.
+Banker.Moneyamount:			You have {0} in your bank account.

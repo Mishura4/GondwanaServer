@@ -2,6 +2,7 @@ using DOL.Database;
 using DOL.GS.PacketHandler;
 using DOL.AI.Brain;
 using DOL.GS.Finance;
+using DOL.Language;
 
 namespace DOL.GS.Scripts
 {
@@ -61,9 +62,9 @@ namespace DOL.GS.Scripts
                 message += Money.GetCopper(bank.Money) + "C ";
 
             if (message != "")
-                message += "Vous avez " + message + "dans votre compte.";
+                message += LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.Moneyamount", message);
             else
-                message = "Vous n'avez pas d'argent dans votre compte";
+                message = LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.Nomoney");
             player.Out.SendMessage(message, eChatType.CT_System, eChatLoc.CL_SystemWindow);
             return true;
         }
@@ -76,7 +77,7 @@ namespace DOL.GS.Scripts
             if (player != null && player.Reputation < 0)
             {
                 TurnTo(player, 5000);
-                player.Out.SendMessage("Je ne traite pas avec les hors-la-loi", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.InteractOutlaw"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return false;
             }
 
@@ -98,14 +99,14 @@ namespace DOL.GS.Scripts
             if (player.Reputation < 0)
             {
                 TurnTo(player, 5000);
-                player.Out.SendMessage("Je ne traite pas avec les hors-la-loi.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.InteractOutlaw"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return false;
             }
 
             DBBanque bank = GameServer.Database.FindObjectByKey<DBBanque>(player.InternalID);
             if (bank == null)
             {
-                player.Out.SendMessage("Bonjour, vous n'avez pas encore de compte.\r\nPour créer un compte il suffit de me donner de l'argent ou un chèque, le compte sera créé automatiquement !", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.InteractText01") + "\r\n" + LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.InteractText02"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 return true;
             }
 
@@ -136,7 +137,7 @@ namespace DOL.GS.Scripts
             if (player.Reputation < 0)
             {
                 TurnTo(player, 5000);
-                player.Out.SendMessage("Je ne traite pas avec les hors-la-loi", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.InteractOutlaw"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return true;
             }
 

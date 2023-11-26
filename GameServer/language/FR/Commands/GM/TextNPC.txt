@@ -24,6 +24,10 @@ Commands.GM.TextNPC.Usage.RandomPhrase.Help:		'/textnpc randomphrase help' Infor
 Commands.GM.TextNPC.Usage.RandomPhrase.View:		'/textnpc randomphrase view' Montre les phrases aléatoires sur un pnj
 Commands.GM.TextNPC.Usage.IsOutlawfriendly:		'/textnpc IsOutlawfriendly <true/false>' Définit si le Textnpc ne doit parler qu'aux joueurs hors-la-loi
 Commands.GM.TextNPC.Usage.IsRegularfriendly:		'/textnpc IsRegularfriendly <true/false>' Définit si le Textnpc ne doit parler uniquement qu'aux joueurs de réputation normale (réputation = 0)
+Commands.GM.TextNPC.Usage.Startevent.Add:		'textnpc startevent add <eventId> <text>' Pour démarrer un "évent" suite à une réponse ou à une réponse de quête
+Commands.GM.TextNPC.Usage.Startevent.Remove:		'textnpc startevent remove <text>' Pour retirer un "évent" à une réponse ou à une réponse de quête
+Commands.GM.TextNPC.Usage.Stopevent.Add:		'/textnpc stopevent add <eventId> <text>' Pour stopper un "évent" actuellement en cours suite à une réponse ou à une réponse de quête
+Commands.GM.TextNPC.Usage.Stopevent.Remove:		'/textnpc stopevent remove <text>' Pour retirer un "évent" en cours devant être stoppé suite à une réponse ou à une réponse de quête
 Commands.GM.TextNPC.Usage.Responsetrigger.Add:		'/textnpc Responsetrigger add <(questName-goalId-)reponse>' Pour ajouter un "déclencheur" à une réponse ou à une réponse de quête
 Commands.GM.TextNPC.Usage.Responsetrigger.Remove:		'/textnpc Responsetrigger remove <(questName-goalId-)reponse>' Pour retirer un "déclencheur" existant à une réponse ou à une réponse de quête
 Commands.GM.TextNPC.Usage.Quest:		'/textnpc quest <None/Available/Lesson/Lore/Finish/Pending>' affiche ou non l'icône pour la quête

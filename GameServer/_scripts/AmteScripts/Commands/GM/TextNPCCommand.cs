@@ -54,6 +54,10 @@ namespace DOL.GS.Scripts
          //conditions
          "Commands.GM.TextNPC.Usage.IsOutlawfriendly",
          "Commands.GM.TextNPC.Usage.IsRegularfriendly",
+         "Commands.GM.TextNPC.Usage.Startevent.Add",
+         "Commands.GM.TextNPC.Usage.Startevent.Remove",
+         "Commands.GM.TextNPC.Usage.Stopevent.Add",
+         "Commands.GM.TextNPC.Usage.Stopevent.Remove",
          "Commands.GM.TextNPC.Usage.Responsetrigger.Add",
          "Commands.GM.TextNPC.Usage.Responsetrigger.Remove",
          "Commands.GM.TextNPC.Usage.Quest",

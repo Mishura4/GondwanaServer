@@ -1,1 +1,30 @@
-Items.Specialitems.Feuartificetext:            The fireworks will start in {0} seconds.
+Items.Specialitems.Feuartificetext:        		    The fireworks will start in {0} seconds.
+
+
+Items.Specialitems.BeerAlreadyDrinking:				You're already drinking!
+Items.Specialitems.BeerDrinkDistance:				drinks
+
+
+Items.Specialitems.GuarkRingListened:				Your request has been heard.
+Items.Specialitems.GuarkRingUsed:					You feel a powerful aura that immobilizes you.
+Items.Specialitems.GuarkRingNoPower:				You don't have enough life power in your veins to use the ring.
+Items.Specialitems.GuarkAmuletNoPower:				You don't have enough life power in your veins to use the amulet.
+Items.Specialitems.GuarkRingTPCancelMoved:			You have moved, the magical request failed and you can't be teleported.
+Items.Specialitems.GuarkRingTPCancelRemoved:		You have removed the ring from your finger, the magical request failed and you can't be teleported.
+Items.Specialitems.GuarkAmuletTPCancelRemoved:		You have removed the amulet from your neck, the magical request failed and you can't be teleported.
+Items.Specialitems.GuarkRingTPFailed:				Celestial magic has failed, unknown destination.
+Items.Specialitems.GuarkRingTPNone:					No request has been made, your destination is unknown.
+Items.Specialitems.GuarkRingUsageCombat:			You can't use celestial magic while in combat!
+Items.Specialitems.GuarkRingUsageHere:				Celestial magic does not exist in this place.
+Items.Specialitems.GuarkRingUsageJailed:			You can't use celestial magic while beeing jailed!
+Items.Specialitems.GuarkRingUsageMounted:			You can't use celestial magic from a mount!
+Items.Specialitems.GuarkRingCannotUseHere:			You can't use this item here.
+Items.Specialitems.GuarkRingDoNotMove:				You must remain at the same place to use this item.
+Items.Specialitems.GuarkRingWaitBeforeUse:			You've been in combat recently, so you have to wait to be able to use this item again.
+
+
+Items.Specialitems.MiniPetNoCast:					You cannot cast this spell here!
+
+
+Items.Specialitems.FirecampNoSit:					Do not sit close to a bonfire to remove this effect.
+Items.Specialitems.FirecampHeatRegen:				The warmth of the bonfire allows you to recover your health faster.

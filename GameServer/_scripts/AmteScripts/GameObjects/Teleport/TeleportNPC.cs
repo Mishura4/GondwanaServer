@@ -10,6 +10,7 @@ using DOL.Database;
 using DOL.GS.PacketHandler;
 using System.Reflection;
 using log4net;
+using DOL.Language;
 
 namespace DOL.GS.Scripts
 {
@@ -65,7 +66,7 @@ namespace DOL.GS.Scripts
 
             if (m_Occupe)
             {
-                player.Out.SendMessage("Je suis occupé pour le moment.", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"TeleportNPC.Busy"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 return true;
             }
 
@@ -106,13 +107,13 @@ namespace DOL.GS.Scripts
 
             if (m_Occupe)
             {
-                player.Out.SendMessage("Je suis occupé pour le moment.", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"TeleportNPC.Busy"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 return true;
             }
 
             if (!JumpPositions.ContainsKey(str))
             {
-                player.Out.SendMessage("Je ne connais pas cette destination.", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"TeleportNPC.UnknownDestination"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 return false;
             }
 
@@ -163,7 +164,7 @@ namespace DOL.GS.Scripts
             GamePlayer player = timer.Properties.getProperty<GamePlayer>("player", null);
             if (pos == null || player == null) return 0;
             if (player.InCombat)
-                player.Out.SendMessage("Vous ne pouvez pas être téléporté en étant en combat !", eChatType.CT_Important,
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"TeleportNPC.NoTPCombat"), eChatType.CT_Important,
                                        eChatLoc.CL_SystemWindow);
             else
                 pos.Jump(this, player);
@@ -183,7 +184,7 @@ namespace DOL.GS.Scripts
                 if (player.Level >= m_MinLevel)
                 {
                     if (player.InCombat)
-                        player.Out.SendMessage("Vous ne pouvez pas être téléporté en étant en combat !",
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"TeleportNPC.NoTPCombat"),
                                                eChatType.CT_Important,
                                                eChatLoc.CL_SystemWindow);
                     else

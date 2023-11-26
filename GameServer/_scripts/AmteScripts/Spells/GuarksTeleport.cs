@@ -22,6 +22,7 @@ using DOL.Database;
 using DOL.Language;
 using DOL.GS.PacketHandler;
 using AmteScripts.Managers;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -58,19 +59,19 @@ namespace DOL.GS.Spells
 
             if (player.CurrentRegion.IsRvR || player.CurrentRegion.IsInstance || PvpManager.Instance.IsIn(player))
             {
-                player.Out.SendMessage("Vous ne pouvez pas utiliser cet objet ici.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Items.Specialitems.GuarkRingCannotUseHere"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return false;
             }
 
             if (player.IsMoving)
             {
-                player.Out.SendMessage("Vous devez rester sur place pour utiliser cet objet.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Items.Specialitems.GuarkRingDoNotMove"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return false;
             }
 
             if (player.InCombat || GameRelic.IsPlayerCarryingRelic(player))
             {
-                player.Out.SendMessage("Vous avez �t� en combat r�cemment, vous devez patienter pour utiliser cet objet.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Items.Specialitems.GuarkRingWaitBeforeUse"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return false;
             }
 

@@ -1,0 +1,21 @@
+Fret.InteractOutlaw:			Je n'offre aucun service aux hors-la-loi... Allez voir ailleurs !
+Fret.InteractText01:			Bonjour {0}, je n'ai aucun colis à votre nom !
+Fret.InteractText02:			Si vous voulez envoyer un objet à une personne, donnez-le moi et chuchotez-moi (/whisper <nom>) le nom de la personne.
+Fret.HavePackage:			Bonjour {0}, j'ai {1} colis à votre nom:
+Fret.PackageInfo1:			[" {0} "] {1} donné par {2}
+Fret.PackageInfo2:			(pour récupérer un colis, cliquez juste sur son numéro)
+Fret.PackageSendDescription01:		Vous vous préparez à envoyer ce colis :
+Fret.PackageSendDescription02:		 - Pour :
+Fret.PackageSendDescription03:		(Non spécifié, tapez '/whisper <nom>' pour le donner)
+Fret.PackageSendDescription04:		 - Poids :
+Fret.PackageSendDescription05:		livres
+Fret.PackageSendDescription06:		 - Prix :
+Fret.PackageSendDescription07:		 - Objets :
+Fret.PackageRemove:			Pour retirer un objet de la liste, donnez le même objet une deuxième fois.
+Fret.PackageToSend:			[Envoyer le colis]
+Fret.PackageSendConfirm:		Voulez-vous envoyer votre colis pour 
+Fret.PackageToPrepare:			Vous devez préparer un colis avant de l'envoyer !
+Fret.PackageNoMoney:			Vous n'avez pas assez d'argent !
+Fret.PackageNotPrepared:		Vous n'avez pas préparé de colis !
+Fret.PackageSendError:			Un problème est survenu lors de l'envoi du colis, veuillez tout recommencer. (Ne déplacez pas vos objets pendant la création du colis)
+Fret.PackageSent:			Votre colis a été envoyé !

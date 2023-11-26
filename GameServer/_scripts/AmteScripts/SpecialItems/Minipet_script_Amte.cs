@@ -6,6 +6,7 @@ using System.Text;
 using DOL.GS;
 using DOL.GS.Spells;
 using DOL.AI.Brain;
+using DOL.Language;
 
 //Edit Norec
 namespace DOL.GS.Scripts

@@ -1,0 +1,4 @@
+TeleportNPC.RequiredLevel:		You don't have the required level to be teleported.
+TeleportNPC.Busy:			I'm busy at the moment.
+TeleportNPC.UnknownDestination:		I don't know this destination.
+TeleportNPC.NoTPCombat:			You can't be teleported while in combat!

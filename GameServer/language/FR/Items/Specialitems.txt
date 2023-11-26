@@ -1,1 +1,30 @@
-Items.Specialitems.Feuartificetext:            Le feu d'artifice va commencer dans {0} secondes.
+Items.Specialitems.Feuartificetext:					Le feu d'artifice va commencer dans {0} secondes.
+
+
+Items.Specialitems.BeerAlreadyDrinking:				Vous êtes déjà en train de boire !
+Items.Specialitems.BeerDrinkDistance:				boit
+
+
+Items.Specialitems.GuarkRingListened:				Votre demande a été entendue.
+Items.Specialitems.GuarkRingUsed:					Vous ressentez une puissante magie qui vous immobilise.
+Items.Specialitems.GuarkRingNoPower:				Vous n'avez pas assez d'énergie vitale pour utiliser l'anneau.
+Items.Specialitems.GuarkAmuletNoPower:				Vous n'avez pas assez d'énergie vitale pour utiliser l'amulette.
+Items.Specialitems.GuarkRingTPCancelMoved:			Vous avez bougé, la téléportation est annulée.
+Items.Specialitems.GuarkRingTPCancelRemoved:		Vous avez retiré l'anneau de votre doigt, la téléportation est annulée.
+Items.Specialitems.GuarkAmuletTPCancelRemoved:		Vous avez retiré l'amulette de votre cou, la téléportation est annulée.
+Items.Specialitems.GuarkRingTPFailed:				La magie céleste a échoué, destination inconnue.
+Items.Specialitems.GuarkRingTPNone:					Aucune demande n'a été formulée, la destination est inconnue.
+Items.Specialitems.GuarkRingUsageCombat:			Vous ne pouvez pas utiliser la magie céleste en combat !
+Items.Specialitems.GuarkRingUsageHere:				La magie céleste n'éxiste pas en ce lieu.
+Items.Specialitems.GuarkRingUsageJailed:			Vous ne pouvez pas utiliser la magie céleste en prison !
+Items.Specialitems.GuarkRingUsageMounted:			Vous ne pouvez pas utiliser la magie céleste à cheval !
+Items.Specialitems.GuarkRingCannotUseHere:			Vous ne pouvez pas utiliser cet objet ici.
+Items.Specialitems.GuarkRingDoNotMove:				Vous devez rester sur place pour utiliser cet objet.
+Items.Specialitems.GuarkRingWaitBeforeUse:			Vous avez été en combat récemment, vous devez patienter pour utiliser cet objet.
+
+
+Items.Specialitems.MiniPetNoCast:					Vous ne pouvez pas lancer ce sort ici !
+
+
+Items.Specialitems.FirecampNoSit:					Ne restez pas assis près d'un feu de camp pour retirer cet effet.
+Items.Specialitems.FirecampHeatRegen:				La chaleur du feu de camp permet de vous reposer plus rapidement.

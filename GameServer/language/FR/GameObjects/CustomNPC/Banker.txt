@@ -1,0 +1,5 @@
+Banker.InteractOutlaw:			Je ne traite pas avec les hors-la-loi !
+Banker.InteractText01:			Bonjour, vous n'avez pas encore de compte.
+Banker.InteractText02:			Pour créer un compte il suffit de me donner de l'argent ou un chèque, le compte sera créé automatiquement !
+Banker.Nomoney:				Vous n'avez pas d'argent dans votre compte.
+Banker.Moneyamount:			Vous avez {0} dans votre compte.
