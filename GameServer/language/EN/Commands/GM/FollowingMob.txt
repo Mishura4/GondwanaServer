@@ -1,4 +1,10 @@
-Commands.GM.FollowingMob.Description:	FollowMob Commands:
-Commands.GM.FollowingMob.Delete:		/followmob create - create a FollowMob
-Commands.GM.FollowingMob.Description:	/followmob follow <name of the mob to follow> - Configure the targeted mob the FollowMob will follow
-Commands.GM.FollowingMob.Guild:			/followmob copy - Copy the FollowMob with its target already configured
+Commands.GM.FollowingMob.Description:		FollowMob Commands
+Commands.GM.FollowingMob.Create:			/followmob create [friend] - create a FollowingMob, or optionally a FollowingFriendMob
+Commands.GM.FollowingMob.Follow:			/followmob follow [name of mob to follow] - Set the target to follow by name, or to the closest target, or to the player in the case of a FollowingFriendMob
+Commands.GM.FollowingMob.Reset:				/followmob reset - Stop following and return to the spawn location
+Commands.GM.FollowingMob.Copy:				/followmob copy - Copy the mob and its parameters
+Commands.GM.FollowingMob.ResponseList:		/followmob response <follow|unfollow> list - For a FollowingFriendMob, list the responses toggling the following mode
+Commands.GM.FollowingMob.ResponseAdd:		/followmob response <follow|unfollow> add <response> <text> - For a FollowingFriendMob, add or modify responses that toggle the following mode
+Commands.GM.FollowingMob.ResponseRemove:	/followmob response <follow|unfollow> remove <response> - For a FollowingFriendMob, remove responses that toggle the following mode
+
+Commands.GM.FollowingMob.InvalidTarget: 	Invalid target

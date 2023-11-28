@@ -24,6 +24,16 @@ namespace DOL.GS.Scripts
     {
         public TextNPCPolicy TextNPCData { get; set; }
 
+        public TextNPCPolicy GetTextNPCPolicy(GameLiving target = null)
+        {
+            return TextNPCData;
+        }
+
+        public TextNPCPolicy GetOrCreateTextNPCPolicy(GameLiving target = null)
+        {
+            return GetTextNPCPolicy(target);
+        }
+
         public TextNPCMerchant() : base()
         {
             TextNPCData = new TextNPCPolicy(this);
@@ -57,7 +67,19 @@ namespace DOL.GS.Scripts
         public override void LoadFromDatabase(DataObject obj)
         {
             base.LoadFromDatabase(obj);
-            TextNPCData.LoadFromDatabase(obj);
+            DBTextNPC textDB;
+            try
+            {
+                textDB = GameServer.Database.SelectObject<DBTextNPC>(t => t.MobID == obj.ObjectId);
+            }
+            catch
+            {
+                DBTextNPC.Init();
+                textDB = GameServer.Database.SelectObject<DBTextNPC>(t => t.MobID == obj.ObjectId);
+            }
+
+            if (textDB != null)
+                TextNPCData.LoadFromDatabase(textDB);
         }
 
         public override void SaveIntoDatabase()

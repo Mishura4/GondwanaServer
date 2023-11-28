@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using DOL.GameEvents;
 using DOL.GS.PacketHandler;
 using DOL.GS.Scripts;
 using DOL.Language;
@@ -8,9 +12,14 @@ namespace DOL.GS.Commands
         "&followmob",
         ePrivLevel.GM,
         "Commands.GM.FollowingMob.Description",
-        "Commands.GM.FollowingMob.Delete",
-        "Commands.GM.FollowingMob.Description",
-        "Commands.GM.FollowingMob.Guild")]
+        "Commands.GM.FollowingMob.Create",
+        "Commands.GM.FollowingMob.Follow",
+        "Commands.GM.FollowingMob.Reset",
+        "Commands.GM.FollowingMob.Copy",
+        "Commands.GM.FollowingMob.ResponseList",
+        "Commands.GM.FollowingMob.ResponseAdd",
+        "Commands.GM.FollowingMob.ResponseRemove"
+        )]
     public class FollowMobCommandHandler : AbstractCommandHandler, ICommandHandler
     {
         public void OnCommand(GameClient client, string[] args)
@@ -20,11 +29,22 @@ namespace DOL.GS.Commands
                 DisplaySyntax(client);
                 return;
             }
-            FollowingMob mob = client.Player.TargetObject as FollowingMob;
+            IFollowingMob followingMob = client.Player.TargetObject as IFollowingMob;
+            GameNPC mob = followingMob as GameNPC;
+            GamePlayer player = client.Player;
             switch (args[1])
             {
                 case "create":
-                    mob = new FollowingMob();
+                    if (args.Length > 2)
+                    {
+                        if (args[2] == "friend")
+                            followingMob = new FollowingFriendMob();
+                    }
+                    if (followingMob == null)
+                    {
+                        followingMob = new FollowingMob();
+                    }
+                    mob = followingMob as GameNPC;
                     mob.Position = client.Player.Position;
                     mob.Heading = client.Player.Heading;
                     mob.CurrentRegion = client.Player.CurrentRegion;
@@ -37,39 +57,242 @@ namespace DOL.GS.Commands
                     break;
 
                 case "follow":
+                {
                     if (mob == null)
                     {
                         DisplaySyntax(client);
                         return;
                     }
-                    mob.FollowMobID = "";
-                    mob.MobFollow = null;
-                    mob.StopFollowing();
-                    foreach (GameNPC npc in mob.GetNPCsInRadius(2000))
-                        if (npc.Name == args[2])
+
+                    followingMob.Reset();
+                    if (followingMob is FollowingMob fMob)
+                    {
+                        GameNPC found = null;
+                        foreach (GameNPC npc in mob.GetNPCsInRadius(2000))
+                            if (args.Length < 3 || npc.Name == args[2])
+                            {
+                                found = npc;
+                                followingMob.Follow(npc);
+                                break;
+                            }
+
+                        if (found == null)
                         {
-                            mob.MobFollow = npc;
-                            mob.FollowMobID = npc.InternalID;
-                            mob.Follow(npc, 10, 3000);
+                            client.Out.SendMessage(
+                                "Aucun mob " + (args.Length > 2 ? "\"" + args[2] + "\" " : "") + "trouvé.",
+                                eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             break;
                         }
-                    if (mob.MobFollow == null)
-                    {
-                        client.Out.SendMessage("Aucun mob '" + mob.MobFollow.Name + "' trouvé.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                        break;
+
+                        mob.SaveIntoDatabase();
+                        client.Out.SendMessage("Le mob suit maintenant '" + found.Name + "'.", eChatType.CT_System,
+                            eChatLoc.CL_SystemWindow);
                     }
-                    mob.SaveIntoDatabase();
-                    client.Out.SendMessage("Le mob suit maintenant '" + mob.MobFollow.Name + "'.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    else if (followingMob is FollowingFriendMob friendMob)
+                    {
+                        friendMob.Follow(client.Player);
+                    }
+
                     break;
+                }
+
+                case "reset":
+                    if (mob == null)
+                    {
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.GM.FollowingMob.InvalidTarget"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                        DisplaySyntax(client);
+                        return;
+                    }
+                    followingMob.Reset();
+                    break;
+
+                case "response":
+                {
+                    if (args.Length < 4)
+                    {
+                        DisplaySyntax(client);
+                        return;
+                    }
+
+                    if (!(mob is FollowingFriendMob friendMob))
+                    {
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.GM.FollowingMob.InvalidTarget"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                        DisplaySyntax(client);
+                        return;
+                    }
+
+                    switch (args[2])
+                    {
+                        case "follow":
+                        {
+                            switch (args[3])
+                            {
+                                case "list":
+                                {
+                                    List<String> lines = new List<String>();
+                                    foreach (var follow in friendMob.ResponsesFollow)
+                                    {
+                                        lines.Add("[" + follow.Key + "] => " + follow.Value);
+                                    }
+                                    player.Out.SendCustomTextWindow("Réponses follow:", lines);
+break;
+                                }
+
+                                case "add":
+                                {
+                                    if (args.Length < 5)
+                                    {
+                                        DisplaySyntax(client);
+                                        return;
+                                    }
+                                    string reponse = args[4];
+                                    string texte = null;
+                                    if (args.Length >= 6)
+                                    {
+                                        texte = string.Join(" ", args, 5, args.Length - 5);
+                                        texte = texte.Replace('|', '\n');
+                                        texte = texte.Replace(';', '\n');
+                                    }
+                                    if (friendMob.ResponsesFollow.ContainsKey(reponse))
+                                    {
+                                        friendMob.ResponsesFollow[reponse] = texte;
+                                        player.Out.SendMessage("Réponse follow \"" + reponse + "\" modifiée avec le texte:\n" + texte, eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                                    }
+                                    else
+                                    {
+                                        friendMob.ResponsesFollow.Add(reponse, texte);
+                                        player.Out.SendMessage("Réponse follow \"" + reponse + "\" ajoutée avec le texte:\n" + texte, eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                                    }
+                                    friendMob.SaveIntoDatabase();
+                                    break;
+                                }
+
+                                case "remove":
+                                {
+                                    if (args.Length < 5)
+                                    {
+                                        DisplaySyntax(client);
+                                        return;
+                                    }
+                                    string reponse = string.Join(" ", args, 4, args.Length - 4);
+                                    if (friendMob.ResponsesFollow.Remove(reponse))
+                                    {
+                                        friendMob.SaveIntoDatabase();
+                                        player.Out.SendMessage("Réponse follow \"" + reponse + "\" supprimée", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    }
+                                    else
+                                    {
+                                        player.Out.SendMessage("Aucune réponse follow \"" + reponse + "\" n'a été trouvée", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    }
+                                    break;
+                                }
+
+                                default:
+                                    DisplaySyntax(client);
+                                    break;
+                            }
+                            break;
+                        }
+
+                        case "unfollow":
+                        {
+                            switch (args[3])
+                            {
+                                case "list":
+                                {
+                                    List<String> lines = new List<String>();
+                                    foreach (var unfollow in friendMob.ResponsesUnfollow)
+                                    {
+                                        lines.Add("[" + unfollow.Key + "] => " + unfollow.Value);
+                                    }
+                                    player.Out.SendCustomTextWindow("Réponses unfollow:", lines);
+                                    break;
+                                }
+
+                                case "add":
+                                {
+                                    if (args.Length < 5)
+                                    {
+                                        DisplaySyntax(client);
+                                        return;
+                                    }
+                                    string reponse = args[4];
+                                    string texte = null;
+                                    if (args.Length >= 6)
+                                    {
+                                        texte = string.Join(" ", args, 5, args.Length - 5);
+                                        texte = texte.Replace('|', '\n');
+                                        texte = texte.Replace(';', '\n');
+                                    }
+                                    if (friendMob.ResponsesUnfollow.ContainsKey(reponse))
+                                    {
+                                        friendMob.ResponsesUnfollow[reponse] = texte;
+                                        player.Out.SendMessage("Réponse unfollow \"" + reponse + "\" modifiée avec le texte:\n" + texte, eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                                    }
+                                    else
+                                    {
+                                        friendMob.ResponsesUnfollow.Add(reponse, texte);
+                                        player.Out.SendMessage("Réponse unfollow \"" + reponse + "\" ajoutée avec le texte:\n" + texte, eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                                    }
+                                    friendMob.SaveIntoDatabase();
+                                    break;
+                                }
+
+                                case "remove":
+                                {
+                                    if (args.Length < 5)
+                                    {
+                                        DisplaySyntax(client);
+                                        return;
+                                    }
+                                    string reponse = string.Join(" ", args, 4, args.Length - 4);
+                                    if (friendMob.ResponsesUnfollow.Remove(reponse))
+                                    {
+                                        friendMob.SaveIntoDatabase();
+                                        player.Out.SendMessage("Réponse unfollow \"" + reponse + "\" supprimée", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    }
+                                    else
+                                    {
+                                        player.Out.SendMessage("Aucune réponse unfollow \"" + reponse + "\" n'a été trouvée", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    }
+                                    break;
+                                }
+
+                                default:
+                                    DisplaySyntax(client);
+                                    break;
+                            }
+                            break;
+                        }
+
+                        default:
+                            DisplaySyntax(client);
+                            break;
+                    }
+                    break;
+                }
 
                 case "copy":
                     if (mob == null)
                     {
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.GM.FollowingMob.InvalidTarget"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                         DisplaySyntax(client);
                         return;
                     }
-                    FollowingMob oldmob = mob;
-                    mob = new FollowingMob();
+
+                    IFollowingMob oldFollowingMob = followingMob;
+                    GameNPC oldmob = mob;
+
+                    if (oldFollowingMob is FollowingMob)
+                        mob = new FollowingMob();
+                    else if (oldFollowingMob is FollowingFriendMob)
+                        mob = new FollowingFriendMob();
+                    else
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    followingMob = (IFollowingMob)mob;
                     mob.Position = client.Player.Position;
                     mob.Heading = client.Player.Heading;
                     mob.CurrentRegion = client.Player.CurrentRegion;
@@ -85,12 +308,23 @@ namespace DOL.GS.Commands
                     mob.GuildName = oldmob.GuildName;
                     mob.Size = oldmob.Size;
                     mob.Inventory = oldmob.Inventory;
-                    mob.FollowMobID = oldmob.FollowMobID;
-                    mob.MobFollow = oldmob.MobFollow;
-                    mob.Follow(mob.MobFollow, 10, 3000);
+                    followingMob.Follow(mob.CurrentFollowTarget);
+
+                    mob.CustomCopy(oldmob);
 
                     mob.AddToWorld();
+                    mob.LoadedFromScript = false;
                     mob.SaveIntoDatabase();
+
+                    if (oldFollowingMob is FollowingFriendMob oldFollowingFriend)
+                    {
+                        if (oldFollowingFriend.TextNPCIdle != null)
+                            ((FollowingFriendMob)mob).TextNPCIdle = new TextNPCPolicy(mob, oldFollowingFriend.TextNPCIdle);
+                        if (oldFollowingFriend.TextNPCFollowing != null)
+                            ((FollowingFriendMob)mob).TextNPCFollowing = new TextNPCPolicy(mob, oldFollowingFriend.TextNPCFollowing);
+
+                        mob.SaveIntoDatabase();
+                    }
                     client.Out.SendMessage("Mob created: OID=" + mob.ObjectID, eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     break;
 

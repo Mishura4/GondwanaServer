@@ -36,12 +36,15 @@ namespace DOL.GS.Quests
         {
             var player = quest.Owner;
 
-            if (e == GameObjectEvent.InteractWith && args is InteractWithEventArgs interact && interact.Target is ITextNPC textNPC && textNPC.TextNPCData.CheckQuestAvailable(Quest.Name, GoalId))
-                return;
-
             // interact with the final NPC
-            if (e == GameObjectEvent.InteractWith && args is InteractWithEventArgs interacting && interacting.Target.Name == Target.Name && interacting.Target.CurrentRegion == Target.CurrentRegion)
-                player.Out.SendQuestRewardWindow(interacting.Target as GameNPC, player, quest);
+            if (e == GameObjectEvent.InteractWith && args is InteractWithEventArgs interact)
+            {
+                if (interact.Target is ITextNPC textNPC && textNPC.CheckQuestAvailable(player, Quest.Name, GoalId))
+                    return;
+
+                if (interact.Target.Name == Target.Name && interact.Target.CurrentRegion == Target.CurrentRegion)
+                    player.Out.SendQuestRewardWindow(interact.Target as GameNPC, player, quest);
+            }
 
             // receive the quest window response
             if (e == GamePlayerEvent.QuestRewardChosen && args is QuestRewardChosenEventArgs rewardArgs && rewardArgs.QuestID == quest.QuestId)

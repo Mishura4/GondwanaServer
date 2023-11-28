@@ -18,6 +18,16 @@ public class TextNPCItemMerchant : GameMerchant, ITextNPC, IAmteNPC
     protected ItemTemplate m_itemTemplate = null;
     protected WorldInventoryItem m_moneyItem = null;
 
+    public TextNPCPolicy GetTextNPCPolicy(GameLiving target = null)
+    {
+        return TextNPCData;
+    }
+
+    public TextNPCPolicy GetOrCreateTextNPCPolicy(GameLiving target = null)
+    {
+        return GetTextNPCPolicy(target);
+    }
+
     private string _moneyKey;
     private AmteCustomParam _moneyItemParam => new AmteCustomParam("money_item",
         () => MoneyKey,
@@ -58,7 +68,19 @@ public class TextNPCItemMerchant : GameMerchant, ITextNPC, IAmteNPC
     public override void LoadFromDatabase(DataObject obj)
     {
         base.LoadFromDatabase(obj);
-        TextNPCData.LoadFromDatabase(obj);
+        DBTextNPC textDB;
+        try
+        {
+            textDB = GameServer.Database.SelectObject<DBTextNPC>(t => t.MobID == obj.ObjectId);
+        }
+        catch
+        {
+            DBTextNPC.Init();
+            textDB = GameServer.Database.SelectObject<DBTextNPC>(t => t.MobID == obj.ObjectId);
+        }
+
+        if (textDB != null)
+            TextNPCData.LoadFromDatabase(textDB);
         DBBrainsParam[] data;
         if (!DBBrainsParam.MobXDBBrains.TryGetValue(obj.ObjectId, out data))
             data = new DBBrainsParam[0];

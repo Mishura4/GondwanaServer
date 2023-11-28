@@ -9,7 +9,7 @@ using DOL.GS.Scripts;
 
 namespace DOL.GS.Scripts
 {
-    public class FollowingMob : AmteMob
+    public class FollowingMob : AmteMob, IFollowingMob
     {
         private DBBrainsParam m_param;
         public string FollowMobID = "";
@@ -91,6 +91,12 @@ namespace DOL.GS.Scripts
                 GameServer.Database.DeleteObject(m_param);
         }
         #endregion
+
+        public void Reset()
+        {
+            StopFollowing();
+            WalkToSpawn();
+        }
 
         public override void StartAttack(GameObject attackTarget)
         {
@@ -214,6 +220,18 @@ namespace DOL.GS.Scripts
         {
             FollowMobID = (source as FollowingMob).FollowMobID;
             base.CustomCopy(source);
+        }
+
+        public void Follow(GameObject obj)
+        {
+            if (!(obj is GameNPC npc))
+            {
+                return;
+            }
+
+            MobFollow = npc;
+            FollowMobID = npc.InternalID;
+            Follow(npc, 10, 3000);
         }
     }
 }

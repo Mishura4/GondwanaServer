@@ -6,12 +6,24 @@ using System.Linq;
 using DOL.AI.Brain;
 using DOL.Database;
 using DOL.GS.Quests;
+using static System.Net.Mime.MediaTypeNames;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace DOL.GS.Scripts
 {
     public class TextNPC : AmteMob, ITextNPC
     {
         public TextNPCPolicy TextNPCData { get; set; }
+
+        public TextNPCPolicy GetTextNPCPolicy(GameLiving target = null)
+        {
+            return TextNPCData;
+        }
+
+        public TextNPCPolicy GetOrCreateTextNPCPolicy(GameLiving target = null)
+        {
+            return GetTextNPCPolicy(target);
+        }
 
         public TextNPC()
         {
@@ -49,7 +61,19 @@ namespace DOL.GS.Scripts
         public override void LoadFromDatabase(DataObject obj)
         {
             base.LoadFromDatabase(obj);
-            TextNPCData.LoadFromDatabase(obj);
+            DBTextNPC textDB;
+            try
+            {
+                textDB = GameServer.Database.SelectObject<DBTextNPC>(t => t.MobID == obj.ObjectId);
+            }
+            catch
+            {
+                DBTextNPC.Init();
+                textDB = GameServer.Database.SelectObject<DBTextNPC>(t => t.MobID == obj.ObjectId);
+            }
+
+            if (textDB != null)
+                TextNPCData.LoadFromDatabase(textDB);
         }
 
         public override void SaveIntoDatabase()

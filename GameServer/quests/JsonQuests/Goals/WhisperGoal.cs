@@ -42,15 +42,21 @@ namespace DOL.GS.Quests
 
         public override void NotifyActive(PlayerQuest quest, PlayerGoalState goal, DOLEvent e, object sender, EventArgs args)
         {
-            if (args is WhisperEventArgs interact && interact.Target is ITextNPC textNPC && textNPC.TextNPCData.CheckQuestAvailable(Quest.Name, GoalId))
-                return;
             var player = quest.Owner;
-            if (e == GameLivingEvent.Whisper && args is WhisperEventArgs interacting && interacting.Target.Name == m_target.Name && interacting.Target.CurrentRegion == m_target.CurrentRegion && interacting.Text == m_whisperText)
+
+            if (args is WhisperEventArgs interact)
             {
-                if (!string.IsNullOrWhiteSpace(m_text))
-                    ChatUtil.SendPopup(player, BehaviourUtils.GetPersonalizedMessage(m_text, player));
-                AdvanceGoal(quest, goal);
+                if (interact.Target is ITextNPC textNPC && textNPC.CheckQuestAvailable(player, Quest.Name, GoalId))
+                    return;
+
+                if (e == GameLivingEvent.Whisper && interact.Target.Name == m_target.Name && interact.Target.CurrentRegion == m_target.CurrentRegion && interact.Text == m_whisperText)
+                {
+                    if (!string.IsNullOrWhiteSpace(m_text))
+                        ChatUtil.SendPopup(player, BehaviourUtils.GetPersonalizedMessage(m_text, player));
+                    AdvanceGoal(quest, goal);
+                }
             }
+
         }
     }
 }

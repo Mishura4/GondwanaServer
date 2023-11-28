@@ -14,15 +14,15 @@ using static DOL.GS.GameObject;
 
 namespace DOL.GS.Scripts
 {
-    public class FollowingFriendMob : AmteMob
+    public class FollowingFriendMob : AmteMob, ITextNPC, IFollowingMob
     {
 
         public string MobID { get; set; }
         public string MobName { get; set; }
-        public string Text { get; set; }
-        public Dictionary<string, string> Responses { get; set; }
-        public string ResponseFollow { get; set; }
-        public string TextUnfollow { get; set; }
+        public TextNPCPolicy TextNPCIdle { get; set; }
+        public TextNPCPolicy TextNPCFollowing { get; set; }
+        public Dictionary<string, string> ResponsesFollow { get; set; }
+        public Dictionary<string, string> ResponsesUnfollow { get; set; }
         public ushort FollowingFromRadius { get; set; }
         public int AggroMultiplier { get; set; }
         public string LinkedGroupMob { get; set; }
@@ -61,58 +61,76 @@ namespace DOL.GS.Scripts
             }
         }
 
+        public TextNPCPolicy GetTextNPCPolicy(GameLiving target = null)
+        {
+            return PlayerFollow == target ? TextNPCFollowing : TextNPCIdle;
+        }
+
+        public TextNPCPolicy GetOrCreateTextNPCPolicy(GameLiving target = null)
+        {
+            if (PlayerFollow == target)
+            {
+                return TextNPCFollowing ??= new TextNPCPolicy(this);
+            }
+            else
+            {
+                return TextNPCIdle ??= new TextNPCPolicy(this);
+            }
+        }
+
         public override bool Interact(GamePlayer player)
         {
             if (!base.Interact(player) && (IsPeaceful || WaitingInArea ||
             (((StandardMobBrain)Brain).AggroLevel == 0 && ((StandardMobBrain)Brain).AggroRange == 0))
             && CurrentRegion.GetAreasOfSpot(Position).OfType<AbstractArea>().FirstOrDefault(a => a.DbArea != null && a.DbArea.ObjectId == AreaToEnter) != null)
                 return false;
-            if (PlayerFollow != null)
+            if (PlayerFollow != null && PlayerFollow == player)
             {
-                if (string.IsNullOrEmpty(TextUnfollow))
+                if (TextNPCFollowing == null)
                     return false;
 
-                if (PlayerFollow != null && PlayerFollow == player)
-                {
-                    TurnTo(player);
-                    player.Out.SendMessage(TextUnfollow, eChatType.CT_System, eChatLoc.CL_PopupWindow);
-                }
+                return TextNPCFollowing.Interact(player);
             }
-            else if (FollowingFromRadius == 0)
-            {
-                if (string.IsNullOrEmpty(Text))
-                    return false;
-
-                TurnTo(player);
-                player.Out.SendMessage(Text, eChatType.CT_System, eChatLoc.CL_PopupWindow);
-            }
-            return true;
+            if (TextNPCIdle == null)
+                return false;
+            return TextNPCIdle.Interact(player);
         }
         public override bool WhisperReceive(GameLiving source, string str)
         {
             if (!base.WhisperReceive(source, str))
                 return false;
-            if (!(source is GamePlayer))
+            if (source is not GamePlayer player)
                 return false;
-            GamePlayer player = source as GamePlayer;
-            TurnTo(player);
 
-            if (Responses != null && Responses.ContainsKey(str.ToLower()))
+            TurnTo(player);
+            if (PlayerFollow == player)
             {
-                string text = string.Format(Responses[str], player.Name, player.LastName, player.GuildName, player.CharacterClass.Name, player.RaceName);
-                if (text != "")
-                    player.Out.SendMessage(text, eChatType.CT_System, eChatLoc.CL_PopupWindow);
-            }
-            if (!string.IsNullOrEmpty(ResponseFollow) && str.ToLower() == ResponseFollow.ToLower())
-            {
-                PlayerFollow = player;
-                player.Notify(GameLivingEvent.BringAFriend, player, new BringAFriendArgs(this, true, true));
-            }
-            if (str.ToLower() == "ungroup" || (ungroupText != null && str.ToLower() == ungroupText))
-            {
-                if (PlayerFollow != null && PlayerFollow == source)
+                if (TextNPCFollowing != null && TextNPCFollowing.WhisperReceive(player, str) == false)
+                    return false;
+                string unfollowEntry = null;
+                if (str == "ungroup" || ResponsesUnfollow.TryGetValue(str.ToLower(), out unfollowEntry))
                 {
-                    ResetFriendMob();
+                    if (unfollowEntry != null)
+                    {
+                        string text = string.Format(unfollowEntry, player.Name, player.LastName, player.GuildName, player.CharacterClass.Name, player.RaceName);
+                        player.Out.SendMessage(text, eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                    }
+                    Notify(GameNPCEvent.FollowLostTarget, this, new FollowLostTargetEventArgs(player));
+                    Reset();
+                }
+            }
+            else
+            {
+                if (TextNPCIdle != null && TextNPCIdle.WhisperReceive(player, str) == false)
+                    return false;
+                if (ResponsesFollow.TryGetValue(str.ToLower(), out var followEntry))
+                {
+                    if (followEntry != null)
+                    {
+                        string text = string.Format(followEntry, player.Name, player.LastName, player.GuildName, player.CharacterClass.Name, player.RaceName);
+                        player.Out.SendMessage(text, eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                    }
+                    Follow(player);
                 }
             }
             return true;
@@ -140,25 +158,39 @@ namespace DOL.GS.Scripts
             if (data != null)
             {
                 MobID = data.MobID;
-                MobName = data.MobName;
-                Text = data.Text;
-                Responses = new Dictionary<string, string>();
-                if (data.Response != null)
+                var textData = GameServer.Database.FindObjectByKey<DBTextNPC>(data.TextIdle);
+                if (textData != null)
                 {
-                    foreach (string item in data.Response.Split(';'))
+                    TextNPCIdle = new TextNPCPolicy(this);
+                    TextNPCIdle.LoadFromDatabase(textData);
+                }
+                textData = GameServer.Database.FindObjectByKey<DBTextNPC>(data.TextFollowing);
+                if (textData != null)
+                {
+                    TextNPCFollowing = new TextNPCPolicy(this);
+                    TextNPCFollowing.LoadFromDatabase(textData);
+                }
+                ResponsesFollow = new Dictionary<string, string>();
+                if (data.ReponseFollow != null)
+                {
+                    foreach (string item in data.ReponseFollow.Split(';'))
                     {
                         string[] items = item.Split('|');
                         if (items.Length != 2)
                             continue;
-                        Responses.Add(items[0].ToLower(), items[1]);
+                        ResponsesFollow.Add(items[0].ToLower(), items[1]);
                     }
                 }
-                ResponseFollow = data.ResponseFollow;
-                TextUnfollow = data.TextUnfollow;
-                // get ungroupText from [] in TextUnfollow
-                if (TextUnfollow != null && TextUnfollow.Contains("[") && TextUnfollow.Contains("]"))
+                ResponsesUnfollow = new Dictionary<string, string>();
+                if (data.ReponseUnfollow != null)
                 {
-                    ungroupText = TextUnfollow.Substring(TextUnfollow.IndexOf("[") + 1, TextUnfollow.IndexOf("]") - TextUnfollow.IndexOf("[") - 1);
+                    foreach (string item in data.ReponseUnfollow.Split(';'))
+                    {
+                        string[] items = item.Split('|');
+                        if (items.Length != 2)
+                            continue;
+                        ResponsesUnfollow.Add(items[0].ToLower(), items[1]);
+                    }
                 }
                 FollowingFromRadius = data.FollowingFromRadius;
                 AggroMultiplier = data.AggroMultiplier;
@@ -187,6 +219,16 @@ namespace DOL.GS.Scripts
             data = GameServer.Database.SelectObject<followingfriendmob>(t => t.MobID == MobID);
             if (data != null)
             {
+                var textData = GameServer.Database.FindObjectByKey<DBTextNPC>(data.TextIdle);
+                if (textData != null)
+                {
+                    GameServer.Database.DeleteObject(textData);
+                }
+                textData = GameServer.Database.FindObjectByKey<DBTextNPC>(data.TextFollowing);
+                if (textData != null)
+                {
+                    GameServer.Database.DeleteObject(textData);
+                }
                 GameServer.Database.DeleteObject(data);
             }
             base.DeleteFromDatabase();
@@ -212,6 +254,7 @@ namespace DOL.GS.Scripts
 
             ResetFriendMob();
         }
+
         public void ResetFriendMob()
         {
             if (WaitingInArea == true && PlayerFollow != null)
@@ -226,6 +269,12 @@ namespace DOL.GS.Scripts
             LoadFromDatabase(GameServer.Database.FindObjectByKey<Mob>(InternalID));
             AddToWorld();
         }
+
+        public void Reset()
+        {
+            ResetFriendMobs();
+        }
+
         public override void Die(GameObject killer)
         {
             base.Die(killer);
@@ -238,6 +287,7 @@ namespace DOL.GS.Scripts
             MobID = InternalID;
             if (MobID == null)
                 return;
+            MobName = Name;
             data = GameServer.Database.SelectObject<followingfriendmob>(t => t.MobID == MobID);
             bool isNew = false;
             if (data == null)
@@ -246,19 +296,29 @@ namespace DOL.GS.Scripts
                 isNew = true;
             }
             data.MobID = MobID;
-            data.MobName = MobName;
-            data.Text = Text;
-            if (Responses != null)
-                data.Response = string.Join(";", Responses.Select(t => t.Key + "|" + t.Value).ToArray());
+            if (ResponsesFollow.Count > 0)
+                data.ReponseFollow = string.Join(";", ResponsesFollow.Select(t => t.Key + "|" + t.Value).ToArray());
             else
-                data.Response = null;
-            data.ResponseFollow = ResponseFollow;
-            data.TextUnfollow = TextUnfollow;
+                data.ReponseFollow = null;
+            if (ResponsesUnfollow.Count > 0)
+                data.ReponseUnfollow = string.Join(";", ResponsesUnfollow.Select(t => t.Key + "|" + t.Value).ToArray());
+            else
+                data.ReponseUnfollow = null;
             data.FollowingFromRadius = FollowingFromRadius;
             data.AggroMultiplier = AggroMultiplier;
             data.LinkedGroupMob = LinkedGroupMob;
             data.AreaToEnter = AreaToEnter;
             data.TimerBeforeReset = TimerBeforeReset;
+            if (TextNPCIdle != null)
+            {
+                TextNPCIdle.SaveIntoDatabase();
+                data.TextIdle = TextNPCIdle.TextDB.ObjectId;
+            }
+            if (TextNPCFollowing != null)
+            {
+                TextNPCFollowing.SaveIntoDatabase();
+                data.TextFollowing = TextNPCFollowing.TextDB.ObjectId;
+            }
             if (isNew)
                 GameServer.Database.AddObject(data);
             else
@@ -365,8 +425,8 @@ namespace DOL.GS.Scripts
             //foreach in visible distance
             foreach (GameNPC npc in GetNPCsInRadius(WorldMgr.VISIBILITY_DISTANCE))
             {
-                if (npc.Brain as StandardMobBrain != null)
-                    (npc.Brain as StandardMobBrain).AggroMultiplier = 1 + AggroMultiplier;
+                if (npc.Brain is StandardMobBrain brain)
+                    brain.AggroMultiplier = 1 + AggroMultiplier;
             }
 
             return ServerProperties.Properties.GAMENPC_FOLLOWCHECK_TIME;
@@ -385,10 +445,10 @@ namespace DOL.GS.Scripts
         {
             var followingSource = source as FollowingFriendMob;
             MobName = followingSource.MobName;
-            Text = followingSource.Text;
-            Responses = followingSource.Responses;
-            ResponseFollow = followingSource.ResponseFollow;
-            TextUnfollow = followingSource.TextUnfollow;
+            TextNPCIdle = followingSource.TextNPCIdle;
+            TextNPCFollowing = followingSource.TextNPCFollowing;
+            ResponsesFollow = followingSource.ResponsesFollow;
+            ResponsesUnfollow = followingSource.ResponsesUnfollow;
             FollowingFromRadius = followingSource.FollowingFromRadius;
             AggroMultiplier = followingSource.AggroMultiplier;
             LinkedGroupMob = followingSource.LinkedGroupMob;
@@ -396,6 +456,26 @@ namespace DOL.GS.Scripts
             TimerBeforeReset = followingSource.TimerBeforeReset;
             ungroupText = followingSource.ungroupText;
             base.CustomCopy(source);
+        }
+
+        public void SayRandomPhrase()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Follow(GameObject obj)
+        {
+            if (!(Brain is FollowingFriendMobBrain followBrain) || !(obj is GamePlayer player))
+            {
+                return;
+            }
+            followBrain.Follow(player);
+        }
+
+        public override void StopFollowing()
+        {
+            PlayerFollow = null;
+            base.StopFollowing();
         }
     }
 }
@@ -412,7 +492,7 @@ namespace DOL.AI.Brain
                 return false;
             if (Body is not FollowingFriendMob)
                 return false;
-            SetPlayerByMobID();
+            ScanForPlayers();
             if ((Body as FollowingFriendMob)?.PlayerFollow != null)
                 Body.Follow(((FollowingFriendMob)Body).PlayerFollow, 10, 3000);
             return true;
@@ -446,27 +526,34 @@ namespace DOL.AI.Brain
                 Body.InCombat || Body.IsMovingOnPath || Body.CurrentFollowTarget != null)
                 return;
             if ((Body as FollowingFriendMob)?.PlayerFollow == null)
-                SetPlayerByMobID();
-
-            if ((Body as FollowingFriendMob)?.PlayerFollow != null)
-                Body.Follow(((FollowingFriendMob)Body).PlayerFollow, 10, 3000);
-            else
-                Body.WalkToSpawn();
+                ScanForPlayers();
         }
 
-        private void SetPlayerByMobID()
+        private void ScanForPlayers()
         {
             var followingMob = (FollowingFriendMob)Body;
-            if (!followingMob.WaitingInArea && string.IsNullOrEmpty(followingMob.Text) && (followingMob.Responses == null || followingMob.Responses.Count == 0) && string.IsNullOrEmpty(followingMob.ResponseFollow))
+            if (followingMob.FollowingFromRadius > 0 && !followingMob.WaitingInArea)
             {
                 var players = Body.GetPlayersInRadius(followingMob.FollowingFromRadius);
                 foreach (var player in players)
                 {
-                    ((FollowingFriendMob)Body).PlayerFollow = player as GamePlayer;
-                    ((GamePlayer)player).Notify(GameLivingEvent.BringAFriend, ((GamePlayer)player), new BringAFriendArgs((FollowingFriendMob)Body, true, true));
+                    Follow((GamePlayer)player);
                     break;
                 }
             }
+        }
+
+        public void Follow(GamePlayer player)
+        {
+            ((FollowingFriendMob)Body).PlayerFollow = player;
+            player.Notify(GameLivingEvent.BringAFriend, player, new BringAFriendArgs((FollowingFriendMob)Body, true, true));
+            Body.Follow(player, 10, 3000);
+        }
+
+        public void StopFollowing()
+        {
+            Body.Notify(GameNPCEvent.FollowLostTarget, this, new FollowLostTargetEventArgs(Body.CurrentFollowTarget));
+            Body.StopFollowing();
         }
     }
 }

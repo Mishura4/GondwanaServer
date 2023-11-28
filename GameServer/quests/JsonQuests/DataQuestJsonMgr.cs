@@ -108,7 +108,7 @@ public static class DataQuestJsonMgr
         foreach (var questId in possibleQuests)
         {
             var quest = GetQuest(questId);
-            if (sender is ITextNPC textNPC && textNPC.TextNPCData.CheckQuestAvailable(quest.Name))
+            if (sender is ITextNPC textNPC && textNPC.CheckQuestAvailable(player, quest.Name))
                 return;
             if (IsDoingTimerQuest(player) && quest.Goals.Any(g => g.Value is TimerGoal))
             {

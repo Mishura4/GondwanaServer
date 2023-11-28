@@ -3,6 +3,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Security.Policy;
@@ -22,8 +23,16 @@ namespace DOL.GS.Scripts
 {
     public interface ITextNPC
     {
-        TextNPCPolicy TextNPCData { get; set; }
+        TextNPCPolicy GetTextNPCPolicy(GameLiving target = null);
+
+        TextNPCPolicy GetOrCreateTextNPCPolicy(GameLiving target = null);
+
         void SayRandomPhrase();
+
+        bool CheckQuestAvailable(GameLiving target, string Name, int goalId = 0)
+        {
+            return GetTextNPCPolicy(target)?.CheckQuestAvailable(Name, goalId) ?? false;
+        }
     }
 
     public class TextNPCPolicy
@@ -766,26 +775,12 @@ namespace DOL.GS.Scripts
 
         }
 
-        public void LoadFromDatabase(DataObject obj)
+        public void LoadFromDatabase(DBTextNPC data)
         {
-            var objs = GameServer.Database.SelectObjects<DBEchangeur>(e => e.NpcID == obj.ObjectId);
+            var objs = GameServer.Database.SelectObjects<DBEchangeur>(e => e.NpcID == data.MobID);
             foreach (DBEchangeur echangeur in objs)
                 if (!EchangeurDB.ContainsKey(echangeur.ItemRecvID))
                     EchangeurDB.Add(echangeur.ItemRecvID, echangeur);
-
-            DBTextNPC data = null;
-            try
-            {
-                data = GameServer.Database.SelectObject<DBTextNPC>(t => t.MobID == obj.ObjectId);
-            }
-            catch
-            {
-                DBTextNPC.Init();
-            }
-            if (data == null)
-                data = GameServer.Database.SelectObject<DBTextNPC>(t => t.MobID == obj.ObjectId);
-            if (data == null)
-                return;
 
             //Chargement des textes
             TextDB = data;
@@ -1133,7 +1128,7 @@ namespace DOL.GS.Scripts
             if (Condition != null)
                 TextDB.Condition = Condition.GetConditionString();
 
-            var data = GameServer.Database.SelectObject<DBTextNPC>(t => t.MobID == _body.InternalID);
+            var data = GameServer.Database.FindObjectByKey<DBTextNPC>(TextDB.ObjectId);
             if (data == null)
             {
                 GameServer.Database.AddObject(TextDB);

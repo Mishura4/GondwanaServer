@@ -10,11 +10,10 @@ namespace DOLDatabase.Tables
     public class followingfriendmob : DataObject
     {
         private string m_mobID;
-        private string m_mobName;
-        private string m_text;
-        private string m_response;
-        private string m_responseFollow;
-        private string m_textUnfollow;
+        private string m_textIdle;
+        private string m_textFollowing;
+        private string m_reponseFollow;
+        private string m_reponseUnfollow;
         private ushort m_followingFromRadius;
         private int m_aggroMultiplier;
         private string m_linkedGroupMob;
@@ -36,77 +35,62 @@ namespace DOLDatabase.Tables
             }
         }
 
-        [DataElement(AllowDbNull = false, Varchar = 255)]
-        public string MobName
+        [DataElement(AllowDbNull = true, Varchar = 255)]
+        public string TextIdle
         {
             get
             {
-                return m_mobName;
+                return m_textIdle;
             }
 
             set
             {
-                m_mobName = value;
+                m_textIdle = value;
                 Dirty = true;
             }
         }
 
         [DataElement(AllowDbNull = true, Varchar = 255)]
-        public string Text
+        public string TextFollowing
         {
             get
             {
-                return m_text;
+                return m_textFollowing;
             }
 
             set
             {
-                m_text = value;
+                m_textFollowing = value;
                 Dirty = true;
             }
         }
 
         [DataElement(AllowDbNull = true, Varchar = 255)]
-        public string Response
+        public string ReponseFollow
         {
             get
             {
-                return m_response;
+                return m_reponseFollow;
             }
 
             set
             {
-                m_response = value;
+                m_reponseFollow = value;
                 Dirty = true;
             }
         }
 
         [DataElement(AllowDbNull = true, Varchar = 255)]
-        public string ResponseFollow
+        public string ReponseUnfollow
         {
             get
             {
-                return m_responseFollow;
+                return m_reponseUnfollow;
             }
 
             set
             {
-                m_responseFollow = value;
-                Dirty = true;
-            }
-        }
-
-        [DataElement(AllowDbNull = true, Varchar = 255)]
-        public string TextUnfollow
-        {
-            get
-            {
-                return m_textUnfollow;
-            }
-
-            set
-            {
-                m_textUnfollow = value;
+                m_reponseUnfollow = value;
                 Dirty = true;
             }
         }

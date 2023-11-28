@@ -100,6 +100,7 @@ namespace DOL.GS.Scripts
             string reponse = "";
             bool isRenaissance = false;
             IList<string> lines;
+            TextNPCPolicy textnpc;
             switch (args[1].ToLower())
             {
                 #region create - view - reponse - text - questtext
@@ -118,6 +119,7 @@ namespace DOL.GS.Scripts
                     }
 
                     if (npc == null) npc = new TextNPC();
+                    textnpc = npc.GetTextNPCPolicy(player);
                     ((GameNPC)npc).LoadedFromScript = false;
                     ((GameNPC)npc).Position = player.Position;
                     ((GameNPC)npc).Heading = player.Heading;
@@ -128,7 +130,7 @@ namespace DOL.GS.Scripts
                         ((GameNPC)npc).Flags ^= GameNPC.eFlags.PEACE;
                     ((GameNPC)npc).Model = 40;
                     ((GameNPC)npc).IsRenaissance = isRenaissance;
-                    npc.TextNPCData.Interact_Text = "Texte à définir.";
+                    textnpc.Interact_Text = "Texte à définir.";
                     ((GameNPC)npc).AddToWorld();
                     ((GameNPC)npc).SaveIntoDatabase();
                     break;
@@ -139,9 +141,10 @@ namespace DOL.GS.Scripts
                         DisplaySyntax(client);
                         return;
                     }
-                    if (npc.TextNPCData.Reponses != null && npc.TextNPCData.Reponses.Count > 0)
+                    textnpc = npc.GetTextNPCPolicy(player);
+                    if (textnpc?.Reponses != null && textnpc.Reponses.Count > 0)
                     {
-                        foreach (var de in npc.TextNPCData.Reponses)
+                        foreach (var de in textnpc.Reponses)
                         {
                             if (text.Length > 1)
                                 text += "\n";
@@ -165,11 +168,9 @@ namespace DOL.GS.Scripts
                     text = string.Join(" ", args, 2, args.Length - 2);
                     text = text.Replace('|', '\n');
                     text = text.Replace(';', '\n');
-                    if (text == "NO TEXT")
-                        npc.TextNPCData.Interact_Text = "";
-                    else
-                        npc.TextNPCData.Interact_Text = text;
-                    npc.TextNPCData.SaveIntoDatabase();
+                    textnpc = npc.GetOrCreateTextNPCPolicy(player);
+                    textnpc.Interact_Text = (text == "NO TEXT" ? "" : text);
+                    textnpc.SaveIntoDatabase();
                     player.Out.SendMessage("Texte défini:\n" + text, eChatType.CT_System, eChatLoc.CL_PopupWindow);
                     break;
 
@@ -186,12 +187,9 @@ namespace DOL.GS.Scripts
                     if (text == "NO TEXT")
                         text = "";
 
-                    if (npc.TextNPCData.QuestTexts.ContainsKey(QuestName))
-                        npc.TextNPCData.QuestTexts[QuestName] = text;
-                    else
-                        npc.TextNPCData.QuestTexts.Add(QuestName, text);
-
-                    npc.TextNPCData.SaveIntoDatabase();
+                    textnpc = npc.GetOrCreateTextNPCPolicy(player);
+                    textnpc.QuestTexts[QuestName] = text;
+                    textnpc.SaveIntoDatabase();
                     player.Out.SendMessage("Texte défini:\n" + text, eChatType.CT_System, eChatLoc.CL_PopupWindow);
                     break;
                 #endregion
@@ -207,17 +205,18 @@ namespace DOL.GS.Scripts
                     string texte = string.Join(" ", args, 3, args.Length - 3);
                     texte = texte.Replace('|', '\n');
                     texte = texte.Replace(';', '\n');
-                    if (npc.TextNPCData.Reponses.ContainsKey(reponse))
+                    textnpc = npc.GetOrCreateTextNPCPolicy(player);
+                    if (textnpc.Reponses.ContainsKey(reponse))
                     {
-                        npc.TextNPCData.Reponses[reponse] = texte;
+                        textnpc.Reponses[reponse] = texte;
                         player.Out.SendMessage("Réponse \"" + reponse + "\" modifié avec le texte:\n" + texte, eChatType.CT_System, eChatLoc.CL_PopupWindow);
                     }
                     else
                     {
-                        npc.TextNPCData.Reponses.Add(reponse, texte);
+                        textnpc.Reponses.Add(reponse, texte);
                         player.Out.SendMessage("Réponse \"" + reponse + "\" ajouté avec le texte:\n" + texte, eChatType.CT_System, eChatLoc.CL_PopupWindow);
                     }
-                    npc.TextNPCData.SaveIntoDatabase();
+                    textnpc.SaveIntoDatabase();
                     break;
 
                 case "remove":
@@ -226,13 +225,14 @@ namespace DOL.GS.Scripts
                         DisplaySyntax(client);
                         return;
                     }
-                    if (npc.TextNPCData.Reponses != null && npc.TextNPCData.Reponses.Count > 0)
+                    textnpc = npc.GetTextNPCPolicy(player);
+                    if (textnpc != null && textnpc.Reponses != null && textnpc.Reponses.Count > 0)
                     {
-                        if (npc.TextNPCData.Reponses.ContainsKey(args[2]))
+                        if (textnpc.Reponses.ContainsKey(args[2]))
                         {
-                            text = "La réponse \"" + args[2] + "\" a été supprimé dont le texte était:\n" + npc.TextNPCData.Reponses[args[2]];
-                            npc.TextNPCData.Reponses.Remove(args[2]);
-                            npc.TextNPCData.SaveIntoDatabase();
+                            text = "La réponse \"" + args[2] + "\" a été supprimé dont le texte était:\n" + textnpc.Reponses[args[2]];
+                            textnpc.Reponses.Remove(args[2]);
+                            textnpc.SaveIntoDatabase();
                         }
                         else
                             text = "Ce pnj n'a pas de réponse \"" + args[2] + "\" défini.";
@@ -261,17 +261,18 @@ namespace DOL.GS.Scripts
                         }
                         try
                         {
-                            if (npc.TextNPCData.EmoteReponses.ContainsKey(reponse))
+                            textnpc = npc.GetOrCreateTextNPCPolicy(player);
+                            if (textnpc.EmoteReponses.ContainsKey(reponse))
                             {
-                                npc.TextNPCData.EmoteReponses[reponse] = (eEmote)Enum.Parse(typeof(eEmote), args[3], true);
+                                textnpc.EmoteReponses[reponse] = (eEmote)Enum.Parse(typeof(eEmote), args[3], true);
                                 player.Out.SendMessage("Emote réponse \"" + reponse + "\" modifié", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             }
                             else
                             {
-                                npc.TextNPCData.EmoteReponses.Add(reponse, (eEmote)Enum.Parse(typeof(eEmote), args[3], true));
+                                textnpc.EmoteReponses.Add(reponse, (eEmote)Enum.Parse(typeof(eEmote), args[3], true));
                                 player.Out.SendMessage("Emote réponse \"" + reponse + "\" ajouté", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             }
-                            npc.TextNPCData.SaveIntoDatabase();
+                            textnpc.SaveIntoDatabase();
                         }
                         catch
                         {
@@ -286,10 +287,11 @@ namespace DOL.GS.Scripts
                             DisplaySyntax(client);
                             return;
                         }
-                        if (npc.TextNPCData.EmoteReponses.ContainsKey(reponse))
+                        textnpc = npc.GetTextNPCPolicy(player);
+                        if (textnpc != null && textnpc.EmoteReponses.ContainsKey(reponse))
                         {
-                            npc.TextNPCData.EmoteReponses.Remove(reponse);
-                            npc.TextNPCData.SaveIntoDatabase();
+                            textnpc.EmoteReponses.Remove(reponse);
+                            textnpc.SaveIntoDatabase();
                             player.Out.SendMessage("Emote réponse \"" + reponse + "\" supprimée", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                         }
                     }
@@ -323,17 +325,18 @@ namespace DOL.GS.Scripts
                         }
                         try
                         {
-                            if (npc.TextNPCData.SpellReponses.ContainsKey(reponse))
+                            textnpc = npc.GetOrCreateTextNPCPolicy(player);
+                            if (textnpc.SpellReponses.ContainsKey(reponse))
                             {
-                                npc.TextNPCData.SpellReponses[reponse] = ushort.Parse(args[3]);
+                                textnpc.SpellReponses[reponse] = ushort.Parse(args[3]);
                                 player.Out.SendMessage("Spell réponse \"" + reponse + "\" modifiée", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             }
                             else
                             {
-                                npc.TextNPCData.SpellReponses.Add(reponse, ushort.Parse(args[3]));
+                                textnpc.SpellReponses.Add(reponse, ushort.Parse(args[3]));
                                 player.Out.SendMessage("Spell réponse \"" + reponse + "\" ajoutée", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             }
-                            npc.TextNPCData.SaveIntoDatabase();
+                            textnpc.SaveIntoDatabase();
                         }
                         catch (Exception e)
                         {
@@ -349,10 +352,11 @@ namespace DOL.GS.Scripts
                             DisplaySyntax(client);
                             return;
                         }
-                        if (npc.TextNPCData.SpellReponses.ContainsKey(reponse))
+                        textnpc = npc.GetTextNPCPolicy(player);
+                        if (textnpc != null && textnpc.SpellReponses.ContainsKey(reponse))
                         {
-                            npc.TextNPCData.SpellReponses.Remove(reponse);
-                            npc.TextNPCData.SaveIntoDatabase();
+                            textnpc.SpellReponses.Remove(reponse);
+                            textnpc.SaveIntoDatabase();
                             player.Out.SendMessage("Spell réponse \"" + reponse + "\" supprimée", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                         }
                         else
@@ -366,19 +370,20 @@ namespace DOL.GS.Scripts
                     }
                     else if (args[2].ToLower() == "cast")
                     {
-                        if (npc.TextNPCData.SpellReponses.ContainsKey(reponse))
+                        textnpc = npc.GetOrCreateTextNPCPolicy(player);
+                        if (textnpc.SpellReponses.ContainsKey(reponse))
                         {
-                            if (npc.TextNPCData.SpellReponsesCast.ContainsKey(reponse))
+                            if (textnpc.SpellReponsesCast.ContainsKey(reponse))
                             {
-                                npc.TextNPCData.SpellReponsesCast[reponse] = bool.Parse(args[3]);
+                                textnpc.SpellReponsesCast[reponse] = bool.Parse(args[3]);
                                 player.Out.SendMessage("Spell réponse \"" + reponse + "\" cast modified", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             }
                             else
                             {
-                                npc.TextNPCData.SpellReponsesCast.Add(reponse, bool.Parse(args[3]));
+                                textnpc.SpellReponsesCast.Add(reponse, bool.Parse(args[3]));
                                 player.Out.SendMessage("Spell réponse \"" + reponse + "\" ajoutée", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             }
-                            npc.TextNPCData.SaveIntoDatabase();
+                            textnpc.SaveIntoDatabase();
                         }
                     }
                     break;
@@ -402,17 +407,18 @@ namespace DOL.GS.Scripts
                         }
                         try
                         {
-                            if (npc.TextNPCData.GiveItem.ContainsKey(reponse))
+                            textnpc = npc.GetOrCreateTextNPCPolicy(player);
+                            if (textnpc.GiveItem.ContainsKey(reponse))
                             {
-                                npc.TextNPCData.GiveItem[reponse] = args[3];
+                                textnpc.GiveItem[reponse] = args[3];
                                 player.Out.SendMessage("Giveitem réponse \"" + reponse + "\" modifiée", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             }
                             else
                             {
-                                npc.TextNPCData.GiveItem.Add(reponse, args[3]);
+                                textnpc.GiveItem.Add(reponse, args[3]);
                                 player.Out.SendMessage("Giveitem réponse \"" + reponse + "\" ajoutée", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             }
-                            npc.TextNPCData.SaveIntoDatabase();
+                            textnpc.SaveIntoDatabase();
                         }
                         catch (Exception e)
                         {
@@ -428,10 +434,11 @@ namespace DOL.GS.Scripts
                             DisplaySyntax(client);
                             return;
                         }
-                        if (npc.TextNPCData.GiveItem.ContainsKey(reponse))
+                        textnpc = npc.GetTextNPCPolicy(player);
+                        if (textnpc != null && textnpc.GiveItem.ContainsKey(reponse))
                         {
-                            npc.TextNPCData.GiveItem.Remove(reponse);
-                            npc.TextNPCData.SaveIntoDatabase();
+                            textnpc.GiveItem.Remove(reponse);
+                            textnpc.SaveIntoDatabase();
                             player.Out.SendMessage("giveitem réponse \"" + reponse + "\" supprimée", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                         }
                         else
@@ -457,20 +464,21 @@ namespace DOL.GS.Scripts
                         reponse = args[4].ToLower() + ":" + string.Join(" ", args, 5, args.Length - 5);
                         try
                         {
-                            if (npc.TextNPCData.RandomPhrases.ContainsKey(reponse))
+                            textnpc = npc.GetOrCreateTextNPCPolicy(player);
+                            if (textnpc.RandomPhrases.ContainsKey(reponse))
                             {
                                 if (args[3] != "0")
-                                    npc.TextNPCData.RandomPhrases[reponse] = (eEmote)Enum.Parse(typeof(eEmote), args[3], true);
+                                    textnpc.RandomPhrases[reponse] = (eEmote)Enum.Parse(typeof(eEmote), args[3], true);
                                 else
-                                    npc.TextNPCData.RandomPhrases[reponse] = 0;
+                                    textnpc.RandomPhrases[reponse] = 0;
                                 player.Out.SendMessage("L'emote de la phrase \"" + reponse + "\" a été modifié", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             }
                             else
                             {
-                                npc.TextNPCData.RandomPhrases.Add(reponse, (eEmote)Enum.Parse(typeof(eEmote), args[3], true));
+                                textnpc.RandomPhrases.Add(reponse, (eEmote)Enum.Parse(typeof(eEmote), args[3], true));
                                 player.Out.SendMessage("La phrase \"" + reponse + "\" a été ajouté", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             }
-                            npc.TextNPCData.SaveIntoDatabase();
+                            textnpc.SaveIntoDatabase();
                         }
                         catch
                         {
@@ -487,17 +495,18 @@ namespace DOL.GS.Scripts
                             return;
                         }
                         text = string.Join(" ", args, 3, args.Length - 3);
-                        if (npc.TextNPCData.RandomPhrases.ContainsKey("say:" + text) ||
-                            npc.TextNPCData.RandomPhrases.ContainsKey("yell:" + text) ||
-                            npc.TextNPCData.RandomPhrases.ContainsKey("em:" + text))
+                        textnpc = npc.GetTextNPCPolicy(player);
+                        if (textnpc != null && textnpc.RandomPhrases.ContainsKey("say:" + text) ||
+                            textnpc.RandomPhrases.ContainsKey("yell:" + text) ||
+                            textnpc.RandomPhrases.ContainsKey("em:" + text))
                         {
-                            if (npc.TextNPCData.RandomPhrases.ContainsKey("say:" + text))
-                                npc.TextNPCData.RandomPhrases.Remove("say:" + text);
-                            else if (npc.TextNPCData.RandomPhrases.ContainsKey("em:" + text))
-                                npc.TextNPCData.RandomPhrases.Remove("yell:" + text);
+                            if (textnpc.RandomPhrases.ContainsKey("say:" + text))
+                                textnpc.RandomPhrases.Remove("say:" + text);
+                            else if (textnpc.RandomPhrases.ContainsKey("em:" + text))
+                                textnpc.RandomPhrases.Remove("yell:" + text);
                             else
-                                npc.TextNPCData.RandomPhrases.Remove("em:" + text);
-                            npc.TextNPCData.SaveIntoDatabase();
+                                textnpc.RandomPhrases.Remove("em:" + text);
+                            textnpc.SaveIntoDatabase();
                             player.Out.SendMessage("Phrase \"" + text + "\" supprimée", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                         }
                         else
@@ -511,10 +520,11 @@ namespace DOL.GS.Scripts
                             DisplaySyntax(client);
                             return;
                         }
+                        textnpc = npc.GetOrCreateTextNPCPolicy(player);
                         try
                         {
-                            npc.TextNPCData.PhraseInterval = int.Parse(args[3]);
-                            npc.TextNPCData.SaveIntoDatabase();
+                            textnpc.PhraseInterval = int.Parse(args[3]);
+                            textnpc.SaveIntoDatabase();
                         }
                         catch
                         {
@@ -524,14 +534,15 @@ namespace DOL.GS.Scripts
 
                     if (args[2].ToLower() == "view")
                     {
-                        if (npc.TextNPCData.RandomPhrases.Count < 1)
+                        textnpc = npc.GetOrCreateTextNPCPolicy(player);
+                        if (textnpc.RandomPhrases.Count < 1)
                         {
                             player.Out.SendMessage("Ce pnj n'a pas de phrase.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             return;
                         }
                         lines = new List<string>();
-                        lines.Add("Phrases que peut dire le pnj à un interval de " + npc.TextNPCData.PhraseInterval + " secondes:");
-                        foreach (var de in npc.TextNPCData.RandomPhrases)
+                        lines.Add("Phrases que peut dire le pnj à un interval de " + textnpc.PhraseInterval + " secondes:");
+                        foreach (var de in textnpc.RandomPhrases)
                             lines.Add(de.Key + " - Emote: " + de.Value);
                         player.Out.SendCustomTextWindow("Les phrases de " + ((GameNPC)npc).Name, lines);
                     }
@@ -555,8 +566,9 @@ namespace DOL.GS.Scripts
                         DisplaySyntax(client);
                         return;
                     }
-                    npc.TextNPCData.IsOutlawFriendly = args[2].ToLower() == "true";
-                    npc.TextNPCData.SaveIntoDatabase();
+                    textnpc = npc.GetOrCreateTextNPCPolicy(player);
+                    textnpc.IsOutlawFriendly = args[2].ToLower() == "true";
+                    textnpc.SaveIntoDatabase();
                     break;
                 case "isregularfriendly":
                     if (npc == null || args.Length < 2)
@@ -564,8 +576,9 @@ namespace DOL.GS.Scripts
                         DisplaySyntax(client);
                         return;
                     }
-                    npc.TextNPCData.IsOutlawFriendly = args[2].ToLower() == "false";
-                    npc.TextNPCData.SaveIntoDatabase();
+                    textnpc = npc.GetOrCreateTextNPCPolicy(player);
+                    textnpc.IsOutlawFriendly = args[2].ToLower() == "false";
+                    textnpc.SaveIntoDatabase();
                     break;
                 case "responsetrigger":
                     if (npc == null || args.Length < 3)
@@ -579,7 +592,8 @@ namespace DOL.GS.Scripts
                     if (args[2].ToLower() == "remove")
                     {
                     }
-                    npc.TextNPCData.SaveIntoDatabase();
+                    textnpc = npc.GetOrCreateTextNPCPolicy(player);
+                    textnpc.SaveIntoDatabase();
                     break;
                 case "quest":
                     if (npc == null || args.Length < 3)
@@ -597,27 +611,28 @@ namespace DOL.GS.Scripts
                             DisplaySyntax(client);
                             return;
                         }
+                        textnpc = npc.GetOrCreateTextNPCPolicy(player);
                         try
                         {
-                            if (npc.TextNPCData.QuestReponses.ContainsKey(reponse))
+                            if (textnpc.QuestReponses.ContainsKey(reponse))
                             {
-                                npc.TextNPCData.QuestReponses[reponse] = args[3];
+                                textnpc.QuestReponses[reponse] = args[3];
                                 player.Out.SendMessage("Quest réponse \"" + reponse + "\" modifiée", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             }
                             else
                             {
-                                npc.TextNPCData.QuestReponses.Add(reponse, args[3]);
+                                textnpc.QuestReponses.Add(reponse, args[3]);
                                 player.Out.SendMessage("Quest réponse \"" + reponse + "\" ajoutée", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             }
-                            npc.TextNPCData.SaveIntoDatabase();
+                            textnpc.SaveIntoDatabase();
 
                             var values = args[3].Split('-');
-                            if (npc.TextNPCData.QuestReponsesValues.ContainsKey(reponse))
-                                npc.TextNPCData.QuestReponsesValues.Remove(reponse);
+                            if (textnpc.QuestReponsesValues.ContainsKey(reponse))
+                                textnpc.QuestReponsesValues.Remove(reponse);
                             if (values.Length < 2)
-                                npc.TextNPCData.QuestReponsesValues.Add(reponse, new Tuple<string, int>(values[0], 0));
+                                textnpc.QuestReponsesValues.Add(reponse, new Tuple<string, int>(values[0], 0));
                             else
-                                npc.TextNPCData.QuestReponsesValues.Add(reponse, new Tuple<string, int>(values[0], int.Parse(values[1])));
+                                textnpc.QuestReponsesValues.Add(reponse, new Tuple<string, int>(values[0], int.Parse(values[1])));
                         }
                         catch (Exception e)
                         {
@@ -633,12 +648,13 @@ namespace DOL.GS.Scripts
                             DisplaySyntax(client);
                             return;
                         }
-                        if (npc.TextNPCData.QuestReponses.ContainsKey(reponse))
+                        textnpc = npc.GetTextNPCPolicy(player);
+                        if (textnpc != null && textnpc.QuestReponses.ContainsKey(reponse))
                         {
-                            npc.TextNPCData.QuestReponses.Remove(reponse);
-                            if (npc.TextNPCData.QuestReponsesValues.ContainsKey(reponse))
-                                npc.TextNPCData.QuestReponsesValues.Remove(reponse);
-                            npc.TextNPCData.SaveIntoDatabase();
+                            textnpc.QuestReponses.Remove(reponse);
+                            if (textnpc.QuestReponsesValues.ContainsKey(reponse))
+                                textnpc.QuestReponsesValues.Remove(reponse);
+                            textnpc.SaveIntoDatabase();
                             player.Out.SendMessage("Quest réponse \"" + reponse + "\" supprimée", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                         }
                         else
@@ -648,13 +664,14 @@ namespace DOL.GS.Scripts
                     else
                     {
                         eQuestIndicator indicator;
-                        if (npc == null || args.Length < 3 || !Enum.TryParse(args[2], out indicator))
+                        if (args.Length < 3 || !Enum.TryParse(args[2], out indicator))
                         {
                             DisplaySyntax(client);
                             return;
                         }
-                        npc.TextNPCData.Condition.CanGiveQuest = indicator;
-                        npc.TextNPCData.SaveIntoDatabase();
+                        textnpc = npc.GetOrCreateTextNPCPolicy(player);
+                        textnpc.Condition.CanGiveQuest = indicator;
+                        textnpc.SaveIntoDatabase();
                     }
                     break;
 
@@ -664,6 +681,7 @@ namespace DOL.GS.Scripts
                         DisplaySyntax(client);
                         return;
                     }
+                    textnpc = npc.GetOrCreateTextNPCPolicy(player);
                     try
                     {
                         int min = int.Parse(args[2]);
@@ -676,16 +694,16 @@ namespace DOL.GS.Scripts
                             max = min;
                         if (max > 50)
                             max = 50;
-                        npc.TextNPCData.Condition.Level_min = min;
-                        npc.TextNPCData.Condition.Level_max = max;
-                        npc.TextNPCData.SaveIntoDatabase();
+                        textnpc.Condition.Level_min = min;
+                        textnpc.Condition.Level_max = max;
+                        textnpc.SaveIntoDatabase();
                     }
                     catch
                     {
                         player.Out.SendMessage("Le level max ou min n'est pas valide.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     }
                     player.Out.SendMessage(
-                        "Le niveau est maintenant de " + npc.TextNPCData.Condition.Level_min + " minimum et " + npc.TextNPCData.Condition.Level_max + " maximum.",
+                        "Le niveau est maintenant de " + textnpc.Condition.Level_min + " minimum et " + textnpc.Condition.Level_max + " maximum.",
                         eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     break;
 
@@ -702,19 +720,21 @@ namespace DOL.GS.Scripts
                             player.Out.SendMessage("La guilde \"" + args[3] + "\" n'éxiste pas.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             break;
                         }
-                        npc.TextNPCData.Condition.GuildNames.Add(args[3]);
-                        npc.TextNPCData.SaveIntoDatabase();
+                        textnpc = npc.GetOrCreateTextNPCPolicy(player);
+                        textnpc.Condition.GuildNames.Add(args[3]);
+                        textnpc.SaveIntoDatabase();
                         player.Out.SendMessage("La guilde " + args[3] + " a été ajouté aux guildes interdites.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     }
                     else if (args[2].ToLower() == "remove")
                     {
-                        if (npc.TextNPCData.Condition.GuildNames.Count < 1 || !npc.TextNPCData.Condition.GuildNames.Contains(args[3]))
+                        textnpc = npc.GetTextNPCPolicy(player);
+                        if (textnpc == null || textnpc.Condition.GuildNames.Count < 1 || !textnpc.Condition.GuildNames.Contains(args[3]))
                         {
                             player.Out.SendMessage("Ce pnj n'a pas d'interdiction sur la guilde \"" + args[3] + "\".", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             break;
                         }
-                        npc.TextNPCData.Condition.GuildNames.Remove(args[3]);
-                        npc.TextNPCData.SaveIntoDatabase();
+                        textnpc.Condition.GuildNames.Remove(args[3]);
+                        textnpc.SaveIntoDatabase();
                         player.Out.SendMessage("La guilde " + args[3] + " a été retirée des guildes interdites.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     }
                     else
@@ -734,24 +754,26 @@ namespace DOL.GS.Scripts
                             player.Out.SendMessage("La guilde \"" + args[3] + "\" n'existe pas.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             break;
                         }
-                        if (npc.TextNPCData.Condition.GuildNamesA.Contains(args[3]))
+                        textnpc = npc.GetOrCreateTextNPCPolicy(player);
+                        if (textnpc.Condition.GuildNamesA.Contains(args[3]))
                         {
                             DisplayMessage(client, "La guilde \"{0}\" a déjà été ajouté.", args[3]);
                             return;
                         }
-                        npc.TextNPCData.Condition.GuildNamesA.Add(args[3]);
-                        npc.TextNPCData.SaveIntoDatabase();
+                        textnpc.Condition.GuildNamesA.Add(args[3]);
+                        textnpc.SaveIntoDatabase();
                         player.Out.SendMessage("La guilde " + args[3] + " a été ajouté aux guildes autorisées.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     }
                     else if (args[2].ToLower() == "remove")
                     {
-                        if (npc.TextNPCData.Condition.GuildNamesA.Count < 1 || !npc.TextNPCData.Condition.GuildNamesA.Contains(args[3]))
+                        textnpc = npc.GetTextNPCPolicy(player);
+                        if (textnpc == null || textnpc.Condition.GuildNamesA.Count < 1 || !textnpc.Condition.GuildNamesA.Contains(args[3]))
                         {
                             player.Out.SendMessage("Ce pnj n'a pas d'autorisation sur la guilde \"" + args[3] + "\".", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             break;
                         }
-                        npc.TextNPCData.Condition.GuildNamesA.Remove(args[3]);
-                        npc.TextNPCData.SaveIntoDatabase();
+                        textnpc.Condition.GuildNamesA.Remove(args[3]);
+                        textnpc.SaveIntoDatabase();
                         player.Out.SendMessage("La guilde " + args[3] + " a été retirée des guildes autorisées.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     }
                     else
@@ -771,19 +793,21 @@ namespace DOL.GS.Scripts
                             player.Out.SendMessage("La race \"" + args[3] + "\" n'éxiste pas, voir '/textnpc race list'", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             break;
                         }
-                        npc.TextNPCData.Condition.Races.Add(args[3].ToLower());
-                        npc.TextNPCData.SaveIntoDatabase();
+                        textnpc = npc.GetOrCreateTextNPCPolicy(player);
+                        textnpc.Condition.Races.Add(args[3].ToLower());
+                        textnpc.SaveIntoDatabase();
                         player.Out.SendMessage("La race " + args[3] + " a été ajouté aux races interdites.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     }
                     else if (args[2].ToLower() == "remove")
                     {
-                        if (npc.TextNPCData.Condition.Races.Count < 1 || !npc.TextNPCData.Condition.Races.Contains(args[3]))
+                        textnpc = npc.GetTextNPCPolicy(player);
+                        if (textnpc == null || textnpc.Condition.Races.Count < 1 || !textnpc.Condition.Races.Contains(args[3]))
                         {
                             player.Out.SendMessage("Ce pnj n'a pas d'interdiction sur la race \"" + args[3] + "\".", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             break;
                         }
-                        npc.TextNPCData.Condition.Races.Remove(args[3].ToLower());
-                        npc.TextNPCData.SaveIntoDatabase();
+                        textnpc.Condition.Races.Remove(args[3].ToLower());
+                        textnpc.SaveIntoDatabase();
                         player.Out.SendMessage("La race " + args[3] + " a été retirée des races interdites.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     }
                     else if (args[2].ToLower() == "list")
@@ -812,19 +836,21 @@ namespace DOL.GS.Scripts
                             player.Out.SendMessage("La classe \"" + args[3] + "\" n'éxiste pas, voir '/textnpc class list'", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             break;
                         }
-                        npc.TextNPCData.Condition.Classes.Add(args[3].ToLower());
-                        npc.TextNPCData.SaveIntoDatabase();
+                        textnpc = npc.GetOrCreateTextNPCPolicy(player);
+                        textnpc.Condition.Classes.Add(args[3].ToLower());
+                        textnpc.SaveIntoDatabase();
                         player.Out.SendMessage("La classe " + args[3] + " a été ajouté aux classes interdites.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     }
                     else if (args[2].ToLower() == "remove")
                     {
-                        if (npc.TextNPCData.Condition.Classes.Count < 1 || !npc.TextNPCData.Condition.Classes.Contains(args[3]))
+                        textnpc = npc.GetTextNPCPolicy(player);
+                        if (textnpc == null || textnpc.Condition.Classes.Count < 1 || !textnpc.Condition.Classes.Contains(args[3]))
                         {
                             player.Out.SendMessage("Ce pnj n'a pas d'interdiction sur la classe \"" + args[3] + "\".", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             break;
                         }
-                        npc.TextNPCData.Condition.Classes.Remove(args[3].ToLower());
-                        npc.TextNPCData.SaveIntoDatabase();
+                        textnpc.Condition.Classes.Remove(args[3].ToLower());
+                        textnpc.SaveIntoDatabase();
                         player.Out.SendMessage("La classe " + args[3] + " a été retirée des classes interdites.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     }
                     else if (args[2].ToLower() == "list")
@@ -845,19 +871,20 @@ namespace DOL.GS.Scripts
                         DisplaySyntax(client);
                         return;
                     }
+                    textnpc = npc.GetOrCreateTextNPCPolicy(player);
                     try
                     {
                         int min = int.Parse(args[2]);
                         int max = int.Parse(args[3]);
-                        npc.TextNPCData.Condition.Heure_min = min;
-                        npc.TextNPCData.Condition.Heure_max = max;
-                        npc.TextNPCData.SaveIntoDatabase();
+                        textnpc.Condition.Heure_min = min;
+                        textnpc.Condition.Heure_max = max;
+                        textnpc.SaveIntoDatabase();
                     }
                     catch
                     {
                         player.Out.SendMessage("L'heure max ou min n'est pas valide.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     }
-                    player.Out.SendMessage("L'heure est maintenant comprise entre " + npc.TextNPCData.Condition.Heure_min + "h et " + npc.TextNPCData.Condition.Heure_max + "h.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage("L'heure est maintenant comprise entre " + textnpc.Condition.Heure_min + "h et " + textnpc.Condition.Heure_max + "h.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     break;
                 #endregion
 
@@ -868,42 +895,51 @@ namespace DOL.GS.Scripts
                         DisplaySyntax(client);
                         break;
                     }
-                    if (args[2].ToLower() == "list" && npc != null)
+
+                    textnpc = npc?.GetTextNPCPolicy(player);
+                    if (args[2].ToLower() == "list")
                     {
-                        lines = new List<string>
+                        if (textnpc == null)
+                        {
+                            lines = new List<string>() { "Ce PNJ n'a pas de texte" };
+                        }
+                        else
+                        {
+                            lines = new List<string>
                                 {
                                     "Conditions du pnj " + ((GameNPC) npc).Name + ":",
-                                    "+ Heure      min: " + npc.TextNPCData.Condition.Heure_min + " max:" +
-                                    npc.TextNPCData.Condition.Heure_max
+                                    "+ Heure      min: " + textnpc.Condition.Heure_min + " max:" +
+                                    textnpc.Condition.Heure_max
                                 };
-                        if (npc.TextNPCData.Condition.Level_min != 1 || npc.TextNPCData.Condition.Level_max != 50)
-                            lines.Add("+ Level      min: " + npc.TextNPCData.Condition.Level_min + " max: " + npc.TextNPCData.Condition.Level_max);
-                        if (npc.TextNPCData.Condition.GuildNames != null && npc.TextNPCData.Condition.GuildNames.Count > 0)
-                        {
-                            lines.Add("+ Guildes interdites:");
-                            foreach (string guild in npc.TextNPCData.Condition.GuildNames)
-                                lines.Add("   " + guild);
+                            if (textnpc.Condition.Level_min != 1 || textnpc.Condition.Level_max != 50)
+                                lines.Add("+ Level      min: " + textnpc.Condition.Level_min + " max: " + textnpc.Condition.Level_max);
+                            if (textnpc.Condition.GuildNames != null && textnpc.Condition.GuildNames.Count > 0)
+                            {
+                                lines.Add("+ Guildes interdites:");
+                                foreach (string guild in textnpc.Condition.GuildNames)
+                                    lines.Add("   " + guild);
+                            }
+                            if (textnpc.Condition.GuildNames != null && textnpc.Condition.GuildNames.Count > 0)
+                            {
+                                lines.Add("+ Guildes autorisées:");
+                                foreach (string guild in textnpc.Condition.GuildNamesA)
+                                    lines.Add("   " + guild);
+                            }
+                            if (textnpc.Condition.Races != null && textnpc.Condition.Races.Count > 0)
+                            {
+                                lines.Add("+ Races interdites:");
+                                foreach (string race in textnpc.Condition.Races)
+                                    lines.Add("   " + race);
+                            }
+                            if (textnpc.Condition.Classes != null && textnpc.Condition.Classes.Count > 0)
+                            {
+                                lines.Add("+ Classes interdites:");
+                                foreach (string classe in textnpc.Condition.Classes)
+                                    lines.Add("   " + classe);
+                            }
+                            if (textnpc.Condition.CanGiveQuest != eQuestIndicator.None)
+                                lines.Add($"+ Quêtes: {textnpc.Condition.CanGiveQuest}");
                         }
-                        if (npc.TextNPCData.Condition.GuildNames != null && npc.TextNPCData.Condition.GuildNames.Count > 0)
-                        {
-                            lines.Add("+ Guildes autorisées:");
-                            foreach (string guild in npc.TextNPCData.Condition.GuildNamesA)
-                                lines.Add("   " + guild);
-                        }
-                        if (npc.TextNPCData.Condition.Races != null && npc.TextNPCData.Condition.Races.Count > 0)
-                        {
-                            lines.Add("+ Races interdites:");
-                            foreach (string race in npc.TextNPCData.Condition.Races)
-                                lines.Add("   " + race);
-                        }
-                        if (npc.TextNPCData.Condition.Classes != null && npc.TextNPCData.Condition.Classes.Count > 0)
-                        {
-                            lines.Add("+ Classes interdites:");
-                            foreach (string classe in npc.TextNPCData.Condition.Classes)
-                                lines.Add("   " + classe);
-                        }
-                        if (npc.TextNPCData.Condition.CanGiveQuest != eQuestIndicator.None)
-                            lines.Add($"+ Quêtes: {npc.TextNPCData.Condition.CanGiveQuest}");
                         player.Out.SendCustomTextWindow("Conditions de " + ((GameNPC)npc).Name, lines);
                     }
                     else if (args[2].ToLower() == "help")
@@ -926,14 +962,23 @@ namespace DOL.GS.Scripts
 
                 #region events
                 case "startevent":
+                    if (npc == null)
+                    {
+                        player.Out.SendMessage("Vous devez sélectionner un PNJ!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        break;
+                    }
                     switch (args[2].ToLower())
                     {
                         case "list":
                             lines = new List<String>();
-                            foreach (var startevent in npc.TextNPCData.StartEventResponses)
+                            textnpc = npc.GetTextNPCPolicy(player);
+                            if (textnpc != null)
                             {
-                                GameEvent ev = GameEventManager.Instance.Events.FirstOrDefault(e => e.ID.Equals(startevent.Value));
-                                lines.Add("[" + startevent.Key + "] => " + (ev?.EventName ?? "UNKNOWN") + " (" + startevent.Value + ")");
+                                foreach (var startevent in textnpc.StartEventResponses)
+                                {
+                                    GameEvent ev = GameEventManager.Instance.Events.FirstOrDefault(e => e.ID.Equals(startevent.Value));
+                                    lines.Add("[" + startevent.Key + "] => " + (ev?.EventName ?? "UNKNOWN") + " (" + startevent.Value + ")");
+                                }
                             }
                             player.Out.SendCustomTextWindow("StartEvent réponses:", lines);
                             break;
@@ -945,21 +990,16 @@ namespace DOL.GS.Scripts
                                 break;
                             }
                             reponse = string.Join(" ", args, 4, args.Length - 4);
-                            if (npc == null)
-                            {
-                                player.Out.SendMessage("Vous devez sélectionner un PNJ!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                                break;
-                            }
-                            GameEvent? gameEvent = GameEventManager.Instance.Events.FirstOrDefault(e => e.ID.Equals(args[3]));
+                            GameEvent gameEvent = GameEventManager.Instance.Events.FirstOrDefault(e => e.ID.Equals(args[3]));
                             if (gameEvent == null)
                             {
                                 player.Out.SendMessage("L'évènement avec ID `" + args[3] + "` n'a pas pu être trouvé", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 break;
                             }
-
-                            bool modified = npc.TextNPCData.StartEventResponses.ContainsKey(reponse);
-                            npc.TextNPCData.StartEventResponses[reponse] = args[3];
-                            npc.TextNPCData.SaveIntoDatabase();
+                            textnpc = npc.GetOrCreateTextNPCPolicy(player);
+                            bool modified = textnpc.StartEventResponses.ContainsKey(reponse);
+                            textnpc.StartEventResponses[reponse] = args[3];
+                            textnpc.SaveIntoDatabase();
                             player.Out.SendMessage("StartEvent réponse \"" + reponse + (modified ? "\" modifiée" : "\" ajoutée") + " : " + gameEvent.EventName, eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             break;
 
@@ -970,15 +1010,10 @@ namespace DOL.GS.Scripts
                                 break;
                             }
                             reponse = string.Join(" ", args, 3, args.Length - 3);
-                            if (npc == null)
+                            textnpc = npc.GetTextNPCPolicy(player);
+                            if (textnpc != null && textnpc.StartEventResponses.Remove(reponse))
                             {
-                                player.Out.SendMessage("Vous devez sélectionner un PNJ!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                                break;
-                            }
-
-                            if (npc.TextNPCData.StartEventResponses.Remove(reponse))
-                            {
-                                npc.TextNPCData.SaveIntoDatabase();
+                                textnpc.SaveIntoDatabase();
                                 player.Out.SendMessage("StartEvent réponse \"" + reponse + "\" supprimée", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             }
                             else
@@ -991,14 +1026,23 @@ namespace DOL.GS.Scripts
                     break;
 
                 case "stopevent":
+                    if (npc == null)
+                    {
+                        player.Out.SendMessage("Vous devez sélectionner un PNJ!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        break;
+                    }
                     switch (args[2].ToLower())
                     {
                         case "list":
                             lines = new List<String>();
-                            foreach (var stopevent in npc.TextNPCData.StopEventResponses)
+                            textnpc = npc.GetTextNPCPolicy(player);
+                            if (textnpc != null)
                             {
-                                GameEvent ev = GameEventManager.Instance.Events.FirstOrDefault(e => e.ID.Equals(stopevent.Value));
-                                lines.Add("[" + stopevent.Key + "] => " + (ev?.EventName ?? "UNKNOWN") + " (" + stopevent.Value + ")");
+                                foreach (var startevent in textnpc.StartEventResponses)
+                                {
+                                    GameEvent ev = GameEventManager.Instance.Events.FirstOrDefault(e => e.ID.Equals(startevent.Value));
+                                    lines.Add("[" + startevent.Key + "] => " + (ev?.EventName ?? "UNKNOWN") + " (" + startevent.Value + ")");
+                                }
                             }
                             player.Out.SendCustomTextWindow("StopEvent réponses:", lines);
                             break;
@@ -1010,11 +1054,6 @@ namespace DOL.GS.Scripts
                                 break;
                             }
                             reponse = string.Join(" ", args, 4, args.Length - 4);
-                            if (npc == null)
-                            {
-                                player.Out.SendMessage("Vous devez sélectionner un PNJ!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                                break;
-                            }
                             GameEvent? gameEvent = GameEventManager.Instance.Events.FirstOrDefault(e => e.ID.Equals(args[3]));
                             if (gameEvent == null)
                             {
@@ -1022,9 +1061,10 @@ namespace DOL.GS.Scripts
                                 break;
                             }
 
-                            bool modified = npc.TextNPCData.StopEventResponses.ContainsKey(reponse);
-                            npc.TextNPCData.StopEventResponses[reponse] = args[3];
-                            npc.TextNPCData.SaveIntoDatabase();
+                            textnpc = npc.GetOrCreateTextNPCPolicy(player);
+                            bool modified = textnpc.StopEventResponses.ContainsKey(reponse);
+                            textnpc.StopEventResponses[reponse] = args[3];
+                            textnpc.SaveIntoDatabase();
                             player.Out.SendMessage("StopEvent réponse \"" + reponse + (modified ? "\" modifiée" : "\" ajoutée") + " : " + gameEvent.EventName, eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             break;
 
@@ -1036,14 +1076,10 @@ namespace DOL.GS.Scripts
                                 break;
                             }
                             reponse = string.Join(" ", args, 3, args.Length - 3);
-                            if (npc == null)
+                            textnpc = npc.GetTextNPCPolicy(player);
+                            if (textnpc != null && textnpc.StopEventResponses.Remove(reponse))
                             {
-                                player.Out.SendMessage("Vous devez sélectionner un PNJ!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                                break;
-                            }
-                            if (npc.TextNPCData.StopEventResponses.Remove(reponse))
-                            {
-                                npc.TextNPCData.SaveIntoDatabase();
+                                textnpc.SaveIntoDatabase();
                                 player.Out.SendMessage("StopEvent réponse \"" + reponse + "\" supprimée", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             }
                             else
