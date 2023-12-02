@@ -108,7 +108,7 @@ namespace DOL.GS.Scripts
                 if (TextNPCFollowing != null && TextNPCFollowing.WhisperReceive(player, str) == false)
                     return false;
                 string unfollowEntry = null;
-                if (str == "ungroup" || ResponsesUnfollow.TryGetValue(str.ToLower(), out unfollowEntry))
+                if (str == "ungroup" || (ResponsesUnfollow != null && ResponsesUnfollow.TryGetValue(str.ToLower(), out unfollowEntry)))
                 {
                     if (unfollowEntry != null)
                     {
@@ -123,7 +123,7 @@ namespace DOL.GS.Scripts
             {
                 if (TextNPCIdle != null && TextNPCIdle.WhisperReceive(player, str) == false)
                     return false;
-                if (ResponsesFollow.TryGetValue(str.ToLower(), out var followEntry))
+                if (ResponsesFollow != null && ResponsesFollow.TryGetValue(str.ToLower(), out var followEntry))
                 {
                     if (followEntry != null)
                     {
@@ -296,14 +296,8 @@ namespace DOL.GS.Scripts
                 isNew = true;
             }
             data.MobID = MobID;
-            if (ResponsesFollow.Count > 0)
-                data.ReponseFollow = string.Join(";", ResponsesFollow.Select(t => t.Key + "|" + t.Value).ToArray());
-            else
-                data.ReponseFollow = null;
-            if (ResponsesUnfollow.Count > 0)
-                data.ReponseUnfollow = string.Join(";", ResponsesUnfollow.Select(t => t.Key + "|" + t.Value).ToArray());
-            else
-                data.ReponseUnfollow = null;
+            data.ReponseFollow = ResponsesFollow is { Count: > 0 } ? string.Join(";", ResponsesFollow.Select(t => t.Key + "|" + t.Value).ToArray()) : null;
+            data.ReponseUnfollow = ResponsesUnfollow is { Count: > 0 } ? string.Join(";", ResponsesUnfollow.Select(t => t.Key + "|" + t.Value).ToArray()) : null;
             data.FollowingFromRadius = FollowingFromRadius;
             data.AggroMultiplier = AggroMultiplier;
             data.LinkedGroupMob = LinkedGroupMob;

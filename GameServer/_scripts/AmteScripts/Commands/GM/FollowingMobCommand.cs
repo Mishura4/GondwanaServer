@@ -130,12 +130,15 @@ namespace DOL.GS.Commands
                                 case "list":
                                 {
                                     List<String> lines = new List<String>();
-                                    foreach (var follow in friendMob.ResponsesFollow)
+                                    if (friendMob.ResponsesFollow is { Count: > 0 })
                                     {
-                                        lines.Add("[" + follow.Key + "] => " + follow.Value);
+                                        foreach (var follow in friendMob.ResponsesFollow)
+                                        {
+                                            lines.Add("[" + follow.Key + "] => " + follow.Value);
+                                        }
                                     }
                                     player.Out.SendCustomTextWindow("Réponses follow:", lines);
-break;
+                                    break;
                                 }
 
                                 case "add":
@@ -153,6 +156,7 @@ break;
                                         texte = texte.Replace('|', '\n');
                                         texte = texte.Replace(';', '\n');
                                     }
+                                    friendMob.ResponsesFollow ??= new Dictionary<string, string>();
                                     if (friendMob.ResponsesFollow.ContainsKey(reponse))
                                     {
                                         friendMob.ResponsesFollow[reponse] = texte;
@@ -175,7 +179,7 @@ break;
                                         return;
                                     }
                                     string reponse = string.Join(" ", args, 4, args.Length - 4);
-                                    if (friendMob.ResponsesFollow.Remove(reponse))
+                                    if (friendMob.ResponsesFollow != null && friendMob.ResponsesFollow.Remove(reponse))
                                     {
                                         friendMob.SaveIntoDatabase();
                                         player.Out.SendMessage("Réponse follow \"" + reponse + "\" supprimée", eChatType.CT_System, eChatLoc.CL_SystemWindow);
@@ -201,9 +205,12 @@ break;
                                 case "list":
                                 {
                                     List<String> lines = new List<String>();
-                                    foreach (var unfollow in friendMob.ResponsesUnfollow)
+                                    if (friendMob.ResponsesUnfollow is { Count: > 0 })
                                     {
-                                        lines.Add("[" + unfollow.Key + "] => " + unfollow.Value);
+                                        foreach (var unfollow in friendMob.ResponsesUnfollow)
+                                        {
+                                            lines.Add("[" + unfollow.Key + "] => " + unfollow.Value);
+                                        }
                                     }
                                     player.Out.SendCustomTextWindow("Réponses unfollow:", lines);
                                     break;
@@ -224,6 +231,7 @@ break;
                                         texte = texte.Replace('|', '\n');
                                         texte = texte.Replace(';', '\n');
                                     }
+                                    friendMob.ResponsesUnfollow ??= new Dictionary<string, string>();
                                     if (friendMob.ResponsesUnfollow.ContainsKey(reponse))
                                     {
                                         friendMob.ResponsesUnfollow[reponse] = texte;
@@ -246,7 +254,7 @@ break;
                                         return;
                                     }
                                     string reponse = string.Join(" ", args, 4, args.Length - 4);
-                                    if (friendMob.ResponsesUnfollow.Remove(reponse))
+                                    if (friendMob.ResponsesUnfollow != null && friendMob.ResponsesUnfollow.Remove(reponse))
                                     {
                                         friendMob.SaveIntoDatabase();
                                         player.Out.SendMessage("Réponse unfollow \"" + reponse + "\" supprimée", eChatType.CT_System, eChatLoc.CL_SystemWindow);
