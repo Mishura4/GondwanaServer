@@ -15,7 +15,7 @@ namespace DOLDatabase.Tables
         private string m_reponseFollow;
         private string m_reponseUnfollow;
         private ushort m_followingFromRadius;
-        private int m_aggroMultiplier;
+        private int m_aggroMultiplier = 1;
         private string m_linkedGroupMob;
         private string m_areaToEnter;
         private int m_timerBeforeReset;

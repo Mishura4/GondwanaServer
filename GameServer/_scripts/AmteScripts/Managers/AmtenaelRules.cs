@@ -25,9 +25,9 @@ namespace DOL.GS.ServerRules
         public static ushort[] UnsafeRegions = new ushort[] { 181 };
 
         /// <summary>
-		/// Holds the delegate called when PvE invulnerability is expired
-		/// </summary>
-		protected GamePlayer.InvulnerabilityExpiredCallback m_pveinvExpiredCallback;
+        /// Holds the delegate called when PvE invulnerability is expired
+        /// </summary>
+        protected GamePlayer.InvulnerabilityExpiredCallback m_pveinvExpiredCallback;
 
         public override string RulesDescription()
         {
@@ -82,10 +82,10 @@ namespace DOL.GS.ServerRules
         }
 
         /// <summary>
-		/// Removes immunity from the players
-		/// </summary>
-		/// <player></player>
-		public void PVEImmunityExpiredCallback(GamePlayer player)
+        /// Removes immunity from the players
+        /// </summary>
+        /// <player></player>
+        public void PVEImmunityExpiredCallback(GamePlayer player)
         {
             if (player.ObjectState != GameObject.eObjectState.Active) return;
             if (player.Client.IsPlaying == false) return;
@@ -96,11 +96,11 @@ namespace DOL.GS.ServerRules
         }
 
         /// <summary>
-		/// Starts the immunity timer for a player
-		/// </summary>
-		/// <param name="player">player that gets immunity</param>
-		/// <param name="duration">amount of milliseconds when immunity ends</param>
-		public void StartPVEImmunityTimer(GamePlayer player, int duration)
+        /// Starts the immunity timer for a player
+        /// </summary>
+        /// <param name="player">player that gets immunity</param>
+        /// <param name="duration">amount of milliseconds when immunity ends</param>
+        public void StartPVEImmunityTimer(GamePlayer player, int duration)
         {
             if (duration > 0)
             {
@@ -109,24 +109,24 @@ namespace DOL.GS.ServerRules
         }
 
         /// <summary>
-		/// Called when player has changed the region
-		/// </summary>
-		/// <param name="e">event</param>
-		/// <param name="sender">GamePlayer object that has changed the region</param>
-		/// <param name="args"></param>
-		public override void OnRegionChanged(DOLEvent e, object sender, EventArgs args)
+        /// Called when player has changed the region
+        /// </summary>
+        /// <param name="e">event</param>
+        /// <param name="sender">GamePlayer object that has changed the region</param>
+        /// <param name="args"></param>
+        public override void OnRegionChanged(DOLEvent e, object sender, EventArgs args)
         {
             StartPVEImmunityTimer((GamePlayer)sender, Properties.TIMER_PVE_REGION_CHANGED * 1000);
             base.OnRegionChanged(e, sender, args);
         }
 
         /// <summary>
-		/// Should be called whenever a player teleports to a new location
-		/// </summary>
-		/// <param name="player"></param>
-		/// <param name="source"></param>
-		/// <param name="destination"></param>
-		public override void OnPlayerTeleport(GamePlayer player, GameLocation source, Teleport destination)
+        /// Should be called whenever a player teleports to a new location
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="source"></param>
+        /// <param name="destination"></param>
+        public override void OnPlayerTeleport(GamePlayer player, GameLocation source, Teleport destination)
         {
             // Since region change already starts an immunity timer we only want to do this if a player
             // is teleporting within the same region
@@ -138,12 +138,12 @@ namespace DOL.GS.ServerRules
         }
 
         /// <summary>
-		/// Called when player enters the game for first time
-		/// </summary>
-		/// <param name="e">event</param>
-		/// <param name="sender">GamePlayer object that has entered the game</param>
-		/// <param name="args"></param>
-		public override void OnGameEntered(DOLEvent e, object sender, EventArgs args)
+        /// Called when player enters the game for first time
+        /// </summary>
+        /// <param name="e">event</param>
+        /// <param name="sender">GamePlayer object that has entered the game</param>
+        /// <param name="args"></param>
+        public override void OnGameEntered(DOLEvent e, object sender, EventArgs args)
         {
             StartPVEImmunityTimer((GamePlayer)sender, Properties.TIMER_GAME_ENTERED * 1000);
             base.OnGameEntered(e, sender, args);
@@ -243,19 +243,26 @@ namespace DOL.GS.ServerRules
             var playerAttacker = attacker as GamePlayer;
             var playerDefender = defender as GamePlayer;
 
-            // if Pet, let's define the controller once
+            // if friend, let's define the controller once
             if (defenderNpc != null)
             {
-                var contBrain = defenderNpc.Brain as IControlledBrain;
-                if (contBrain != null)
-                    playerDefender = contBrain.GetPlayerOwner();
+                if (defenderNpc.Brain is IControlledBrain controlledBrain)
+                {
+                    playerDefender = controlledBrain.GetPlayerOwner();
+                }
+
+                if (defenderNpc is FollowingFriendMob followMob)
+                {
+                    playerDefender = followMob.PlayerFollow;
+                }
             }
 
             if (attackerNpc != null)
             {
-                var contBrain = attackerNpc.Brain as IControlledBrain;
-                if (contBrain != null)
-                    playerAttacker = contBrain.GetPlayerOwner();
+                if (attackerNpc.Brain is IControlledBrain controlledBrain)
+                {
+                    playerAttacker = controlledBrain.GetPlayerOwner();
+                }
                 quiet = false;
             }
 
@@ -336,12 +343,12 @@ namespace DOL.GS.ServerRules
                     return false;
                 }
 
-            // PVE Timer
-            if (playerAttacker.IsInvulnerableToPVEAttack)
-            {
-                if (quiet == false) MessageToLiving(attacker, "You can't attack mobs until your PvE invulnerability timer wears off!");
-                return false;
-            }
+                // PVE Timer
+                if (playerAttacker.IsInvulnerableToPVEAttack)
+                {
+                    if (quiet == false) MessageToLiving(attacker, "You can't attack mobs until your PvE invulnerability timer wears off!");
+                    return false;
+                }
             }
 
             if (playerDefender != null)
@@ -360,8 +367,8 @@ namespace DOL.GS.ServerRules
                     }
                     if (!_IsAllowedToAttack_PvpImmunity(attacker, playerAttacker, playerDefender, quiet))
                         return false;
-}
                 }
+            }
 
             // Your pet can only attack stealthed players you have selected
             if (defender.IsStealthed && attackerNpc != null)
@@ -393,11 +400,12 @@ namespace DOL.GS.ServerRules
                     quiet = true; // silence all attacks by controlled npc
                 }
             }
-            if (defender is GameNPC)
+            if (defenderNpc != null)
             {
-                var controlled = ((GameNPC)defender).Brain as IControlledBrain;
-                if (controlled != null)
+                if (((GameNPC)defender).Brain is IControlledBrain controlled)
                     defender = controlled.GetLivingOwner() ?? defender;
+                else if (defender is FollowingFriendMob followMob)
+                    defender = followMob.PlayerFollow ?? defender;
             }
 
             if (playerAttacker != null && JailMgr.IsPrisoner(playerAttacker))
@@ -870,12 +878,12 @@ namespace DOL.GS.ServerRules
                 if (living == null) continue;
                 if (living.ObjectState != GameObject.eObjectState.Active) continue;
                 /*
-				 * http://www.camelotherald.com/more/2289.shtml
-				 * Dead players will now continue to retain and receive their realm point credit
-				 * on targets until they release. This will work for solo players as well as
-				 * grouped players in terms of continuing to contribute their share to the kill
-				 * if a target is being attacked by another non grouped player as well.
-				 */
+                 * http://www.camelotherald.com/more/2289.shtml
+                 * Dead players will now continue to retain and receive their realm point credit
+                 * on targets until they release. This will work for solo players as well as
+                 * grouped players in terms of continuing to contribute their share to the kill
+                 * if a target is being attacked by another non grouped player as well.
+                 */
                 //if (!living.Alive) continue;
                 if (!living.IsWithinRadius(killedPlayer, WorldMgr.MAX_EXPFORKILL_DISTANCE)) continue;
 

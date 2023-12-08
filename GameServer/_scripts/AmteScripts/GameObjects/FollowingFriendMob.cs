@@ -416,11 +416,11 @@ namespace DOL.GS.Scripts
             }
             else
                 PathTo(newPos, MaxSpeed);
-            //foreach in visible distance
+
+            //foreach npc in visible distance, notify presence
             foreach (GameNPC npc in GetNPCsInRadius(WorldMgr.VISIBILITY_DISTANCE))
             {
-                if (npc.Brain is StandardMobBrain brain)
-                    brain.AggroMultiplier = 1 + AggroMultiplier;
+                npc.Brain?.Notify(GameLivingEvent.TargetInRange, this, new TargetInRangeEventArgs(this));
             }
 
             return ServerProperties.Properties.GAMENPC_FOLLOWCHECK_TIME;

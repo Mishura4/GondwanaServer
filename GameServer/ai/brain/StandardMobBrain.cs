@@ -214,16 +214,8 @@ namespace DOL.AI.Brain
                 //If we have an aggrolevel above 0, we check for players and npcs in the area to attack
                 if (!Body.AttackState && AggroLevel > 0)
                 {
-                    if (AggroMultiplier != 1)
-                    {
-                        CheckNPCAggro();
-                        CheckPlayerAggro();
-                    }
-                    else
-                    {
-                        CheckPlayerAggro();
-                        CheckNPCAggro();
-                    }
+                    CheckPlayerAggro();
+                    CheckNPCAggro();
                 }
 
                 if (HasAggro)
@@ -252,7 +244,7 @@ namespace DOL.AI.Brain
             if (Body.CanStealth && !Body.IsStealthed && !Body.InCombat && !Body.IsCasting)
                 Body.Stealth(true);
         }
-        public float AggroMultiplier = 1.0f;
+
         public int GetGroupMobAggroMultiplier(GamePlayer player)
         {
             int multiplier = 1;
@@ -279,44 +271,78 @@ namespace DOL.AI.Brain
         }
 
         /// <summary>
+        /// Try aggroing an NPC
+        /// </summary>
+        /// <param name="npc"></param>
+        protected virtual void TryAggro(GameNPC npc)
+        {
+            if (!GameServer.ServerRules.IsAllowedToAttack(Body, npc, true))
+                return;
+            if (m_aggroTable.ContainsKey(npc))
+                return; // add only new NPCs
+            if (!npc.IsAlive || npc.ObjectState != GameObject.eObjectState.Active)
+                return;
+            if (npc is GameTaxi)
+                return; //do not attack horses
+            if (CalculateAggroLevelToTarget(npc) > 0)
+            {
+                if (npc.Brain is ControlledNpcBrain or FollowingFriendMobBrain) // This is a pet or charmed creature, checkLOS
+                    AddToAggroList(npc, 1, true);
+                else
+                    AddToAggroList(npc, 1);
+            }
+        }
+
+        /// <summary>
+        /// Try aggroing an NPC
+        /// </summary>
+        /// <param name="npc"></param>
+        protected virtual void TryAggro(GamePlayer player)
+        {
+            // Don't aggro on immune players.
+            if (!GameServer.ServerRules.IsAllowedToAttack(Body, player, true))
+                return;
+
+            if (Body.GetDistanceTo(player) > (ushort)AggroRange * GetGroupMobRangeMultiplier(player))
+                return;
+
+            if (player.EffectList.GetOfType<NecromancerShadeEffect>() != null)
+                return;
+
+            int aggrolevel = 0;
+
+            if (Body.Faction != null)
+            {
+                aggrolevel = Body.Faction.GetAggroToFaction(player);
+                if (aggrolevel < 0)
+                    aggrolevel = 0;
+            }
+
+            if (aggrolevel <= 0 && AggroLevel <= 0)
+                return;
+
+            if (m_aggroTable.ContainsKey(player))
+                return; // add only new players
+            if (!player.IsAlive || player.ObjectState != GameObject.eObjectState.Active || player.IsStealthed)
+                return;
+            if (player.Steed != null)
+                return; //do not attack players on steed
+
+            if (CalculateAggroLevelToTarget(player) > 0)
+            {
+                AddToAggroList(player, 1, true);
+            }
+        }
+
+        /// <summary>
         /// Check for aggro against close NPCs
         /// </summary>
         protected virtual void CheckNPCAggro()
         {
             if (HasAggro) return;
-            var FollowingFriendMobCount = 0;
-            foreach (GameNPC npc in Body.GetNPCsInRadius((ushort)(AggroRange * AggroMultiplier), Body.CurrentRegion.IsDungeon ? false : true))
+            foreach (GameNPC npc in Body.GetNPCsInRadius((ushort)(AggroRange), Body.CurrentRegion.IsDungeon ? false : true))
             {
-                //recheck range for not FollowingFriendMob npcs
-                if (AggroMultiplier != 1 && !(npc is FollowingFriendMob))
-                {
-                    if (Body.GetDistanceTo(npc) > AggroRange)
-                        continue;
-                }
-                else if (AggroMultiplier != 1 && npc is FollowingFriendMob)
-                {
-                    FollowingFriendMobCount++;
-                }
-
-                if (!GameServer.ServerRules.IsAllowedToAttack(Body, npc, true)) continue;
-                if (m_aggroTable.ContainsKey(npc))
-                    continue; // add only new NPCs
-                if (!npc.IsAlive || npc.ObjectState != GameObject.eObjectState.Active)
-                    continue;
-                if (npc is GameTaxi)
-                    continue; //do not attack horses
-
-                if (CalculateAggroLevelToTarget(npc) > 0)
-                {
-                    if (npc.Brain is ControlledNpcBrain) // This is a pet or charmed creature, checkLOS
-                        AddToAggroList(npc, 1, true);
-                    else
-                        AddToAggroList(npc, 1);
-                }
-            }
-            if (AggroMultiplier != 1 && FollowingFriendMobCount > 0)
-            {
-                AggroMultiplier = 1.0f;
+                TryAggro(npc);
             }
         }
 
@@ -329,38 +355,7 @@ namespace DOL.AI.Brain
 
             foreach (GamePlayer player in Body.GetPlayersInRadius(MAX_AGGRO_DISTANCE, Body.CurrentZone.IsDungeon ? false : true))
             {
-
-                if (Body.GetDistanceTo(player) > (ushort)AggroRange * GetGroupMobRangeMultiplier(player))
-                    continue;
-                if (!GameServer.ServerRules.IsAllowedToAttack(Body, player, true)) continue;
-                // Don't aggro on immune players.
-
-                if (player.EffectList.GetOfType<NecromancerShadeEffect>() != null)
-                    continue;
-
-                int aggrolevel = 0;
-
-                if (Body.Faction != null)
-                {
-                    aggrolevel = Body.Faction.GetAggroToFaction(player);
-                    if (aggrolevel < 0)
-                        aggrolevel = 0;
-                }
-
-                if (aggrolevel <= 0 && AggroLevel <= 0)
-                    return;
-
-                if (m_aggroTable.ContainsKey(player))
-                    continue; // add only new players
-                if (!player.IsAlive || player.ObjectState != GameObject.eObjectState.Active || player.IsStealthed)
-                    continue;
-                if (player.Steed != null)
-                    continue; //do not attack players on steed
-
-                if (CalculateAggroLevelToTarget(player) > 0)
-                {
-                    AddToAggroList(player, 1, true);
-                }
+                TryAggro(player);
             }
         }
 
@@ -751,27 +746,29 @@ namespace DOL.AI.Brain
         /// <returns></returns>
         public virtual int CalculateAggroLevelToTarget(GameLiving target)
         {
-            // Withdraw if can't attack.
-            if (GameServer.ServerRules.IsAllowedToAttack(Body, target, true) == false)
-                return 0;
-
-            // FollowingFriendMob will have higher aggro
-            if (target is FollowingFriendMob)
-            {
-                return Math.Min(100, (int)(AggroLevel * (target as FollowingFriendMob).AggroMultiplier));
-            }
-
             // Get owner if target is pet
             GameLiving realTarget = target;
-            if (target is GameNPC)
+            var realAggroLevel = AggroLevel;
+            if (target is GameNPC targetNPC)
             {
-                if (((GameNPC)target).Brain is IControlledBrain)
+                if (targetNPC.Brain is IControlledBrain controlledBrain)
                 {
-                    GameLiving owner = (((GameNPC)target).Brain as IControlledBrain).GetLivingOwner();
+                    GameLiving owner = controlledBrain.GetLivingOwner();
                     if (owner != null)
                         realTarget = owner;
                 }
+                // FollowingFriendMob will have higher aggro
+                if (realTarget is FollowingFriendMob { PlayerFollow: not null } followMob)
+                {
+                    realAggroLevel = (AggroLevel * followMob.AggroMultiplier);
+                    realTarget = followMob.PlayerFollow;
+                }
             }
+
+            // Withdraw if can't attack.
+            if (!GameServer.ServerRules.IsAllowedToAttack(Body, realTarget, true))
+                return 0;
+
 
             // only attack if green+ to target
             if (realTarget.IsObjectGreyCon(Body))
@@ -780,11 +777,11 @@ namespace DOL.AI.Brain
             // If this npc have Faction return the AggroAmount to Player
             if (Body.Faction != null)
             {
-                if (realTarget is GamePlayer)
+                if (realTarget is GamePlayer playerTarget)
                 {
-                    return Math.Min(100, (int)(Body.Faction.GetAggroToFaction((GamePlayer)realTarget) * GetGroupMobAggroMultiplier((GamePlayer)realTarget)));
+                    return Math.Min(100, (int)(Body.Faction.GetAggroToFaction(playerTarget) * GetGroupMobAggroMultiplier(playerTarget)));
                 }
-                else if (realTarget is GameNPC && Body.Faction.EnemyFactions.Contains(((GameNPC)realTarget).Faction))
+                else if (realTarget is GameNPC npcTarget && Body.Faction.EnemyFactions.Contains(npcTarget.Faction))
                 {
                     return 100;
                 }
@@ -796,11 +793,11 @@ namespace DOL.AI.Brain
 
             if (realTarget is GamePlayer)
             {
-                return Math.Min(100, (int)(AggroLevel * GetGroupMobAggroMultiplier((GamePlayer)realTarget)));
+                return Math.Min(100, (int)(realAggroLevel * GetGroupMobAggroMultiplier((GamePlayer)realTarget)));
             }
             else
             {
-                return Math.Min(100, (int)(AggroLevel));
+                return Math.Min(100, (int)(realAggroLevel));
             }
         }
 
@@ -820,15 +817,13 @@ namespace DOL.AI.Brain
             {
                 if (e == GameObjectEvent.TakeDamage)
                 {
-                    TakeDamageEventArgs eArgs = args as TakeDamageEventArgs;
-                    if (eArgs == null || eArgs.DamageSource is GameLiving == false) return;
+                    if (args is not TakeDamageEventArgs eArgs || eArgs.DamageSource is GameLiving == false) return;
 
                     int aggro = eArgs.DamageAmount + eArgs.CriticalAmount;
                     if (eArgs.DamageSource is GameNPC)
                     {
                         // owner gets 25% of aggro
-                        IControlledBrain brain = ((GameNPC)eArgs.DamageSource).Brain as IControlledBrain;
-                        if (brain != null)
+                        if (((GameNPC)eArgs.DamageSource).Brain is IControlledBrain brain)
                         {
                             AddToAggroList(brain.Owner, (int)Math.Max(1, aggro * 0.25));
                             aggro = (int)Math.Max(1, aggro * 0.75);
@@ -839,8 +834,7 @@ namespace DOL.AI.Brain
                 }
                 else if (e == GameLivingEvent.AttackedByEnemy)
                 {
-                    AttackedByEnemyEventArgs eArgs = args as AttackedByEnemyEventArgs;
-                    if (eArgs == null) return;
+                    if (args is not AttackedByEnemyEventArgs eArgs) return;
                     OnAttackedByEnemy(eArgs.AttackData);
                     return;
                 }
@@ -852,15 +846,13 @@ namespace DOL.AI.Brain
                 }
                 else if (e == GameNPCEvent.FollowLostTarget) // this means we lost the target
                 {
-                    FollowLostTargetEventArgs eArgs = args as FollowLostTargetEventArgs;
-                    if (eArgs == null) return;
+                    if (args is not FollowLostTargetEventArgs eArgs) return;
                     OnFollowLostTarget(eArgs.LostTarget);
                     return;
                 }
                 else if (e == GameLivingEvent.CastFailed)
                 {
-                    CastFailedEventArgs realArgs = args as CastFailedEventArgs;
-                    if (realArgs == null || realArgs.Reason == CastFailedEventArgs.Reasons.AlreadyCasting || realArgs.Reason == CastFailedEventArgs.Reasons.CrowdControlled)
+                    if (args is not CastFailedEventArgs realArgs || realArgs.Reason == CastFailedEventArgs.Reasons.AlreadyCasting || realArgs.Reason == CastFailedEventArgs.Reasons.CrowdControlled)
                         return;
                     Body.StartAttack(Body.TargetObject);
                 }
@@ -868,8 +860,7 @@ namespace DOL.AI.Brain
 
             if (e == GameLivingEvent.EnemyHealed)
             {
-                EnemyHealedEventArgs eArgs = args as EnemyHealedEventArgs;
-                if (eArgs != null && eArgs.HealSource is GameLiving)
+                if (args is EnemyHealedEventArgs { HealSource: GameLiving } eArgs)
                 {
                     // first check to see if the healer is in our aggrolist so we don't go attacking anyone who heals
                     if (m_aggroTable.ContainsKey(eArgs.HealSource as GameLiving))
@@ -884,14 +875,12 @@ namespace DOL.AI.Brain
             }
             else if (e == GameLivingEvent.EnemyKilled)
             {
-                EnemyKilledEventArgs eArgs = args as EnemyKilledEventArgs;
-                if (eArgs != null)
+                if (args is EnemyKilledEventArgs eArgs)
                 {
                     // transfer all controlled target aggro to the owner
                     if (eArgs.Target is GameNPC)
                     {
-                        IControlledBrain controlled = ((GameNPC)eArgs.Target).Brain as IControlledBrain;
-                        if (controlled != null)
+                        if (((GameNPC)eArgs.Target).Brain is IControlledBrain controlled)
                         {
                             long contrAggro = GetAggroAmountForLiving(controlled.Body);
                             AddToAggroList(controlled.Owner, (int)contrAggro);
@@ -901,6 +890,23 @@ namespace DOL.AI.Brain
                     Body.Attackers.Remove(eArgs.Target);
                     AttackMostWanted();
                 }
+                return;
+            }
+            else if (e == GameLivingEvent.TargetInRange)
+            {
+                if (AggroRange > 0 && args is TargetInRangeEventArgs eArgs && sender is GameLiving target)
+                {
+                    if (target is FollowingFriendMob { PlayerFollow: not null } followMob)
+                    {
+                        float range = Body.CurrentRegion.IsDungeon ? Body.GetDistanceTo(target.Position) : Body.GetDistance2DTo(target.Position);
+                        if (!HasAggro && range < (AggroRange * GetGroupMobRangeMultiplier(followMob.PlayerFollow) *
+                            followMob.AggroMultiplier))
+                        {
+                            TryAggro(followMob);
+                        }
+                    }
+                }
+
                 return;
             }
 

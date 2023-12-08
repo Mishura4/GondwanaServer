@@ -4,6 +4,7 @@ using System.Linq;
 using DOL.GS;
 using DOL.GS.Effects;
 using DOL.GS.RealmAbilities;
+using DOL.GS.Scripts;
 
 namespace DOL.AI.Brain
 {
@@ -29,19 +30,30 @@ namespace DOL.AI.Brain
 
         public override int CalculateAggroLevelToTarget(GameLiving target)
         {
-            if (GameServer.ServerRules.IsSameRealm(Body, target, true))
+            // Get owner if target is pet
+            GameLiving realTarget = target;
+            float aggroMultiplier = 1.0f;
+            if (target is GameNPC targetNPC)
+            {
+                if (targetNPC.Brain is IControlledBrain controlledBrain)
+                {
+                    GameLiving owner = controlledBrain.GetLivingOwner();
+                    if (owner != null)
+                        realTarget = owner;
+                }
+                // FollowingFriendMob will have higher aggro
+                if (realTarget is FollowingFriendMob { PlayerFollow: not null } followMob)
+                {
+                    aggroMultiplier = followMob.AggroMultiplier;
+                    realTarget = followMob.PlayerFollow;
+                }
+            }
+
+            if (GameServer.ServerRules.IsSameRealm(Body, realTarget, true))
                 return 0;
 
-            if (target.IsObjectGreyCon(Body))
+            if (realTarget.IsObjectGreyCon(Body))
                 return 0; // only attack if green+ to target
-
-            // related to the pet owner if applicable
-            if (target is GamePet pet)
-            {
-                var thisLiving = ((IControlledBrain)pet.Brain).GetPlayerOwner();
-                if (thisLiving != null && thisLiving.IsObjectGreyCon(Body))
-                    return 0;
-            }
 
             int aggro = AggroLevel;
             if (target is GamePlayer player)
@@ -52,7 +64,7 @@ namespace DOL.AI.Brain
                     aggro += 20;
             }
 
-            return Math.Min(100, aggro);
+            return Math.Min(100, (int)(aggro * aggroMultiplier));
         }
 
         public override void CheckAbilities()

@@ -166,5 +166,9 @@ namespace DOL.Events
         /// The InterruptExpired event is fired when a living's interrupt timer expires.
         /// </summary>
         public static readonly GameLivingEvent InterruptExpired = new GameLivingEvent("GameLiving.InterruptExpired");
+        /// <summary>
+        /// The TargetInRange event is fired by a GameLiving when they are in a certain range, for example for non-standard aggro (e.g. FollowingFriendMob)
+        /// </summary>
+        public static readonly GameLivingEvent TargetInRange = new GameLivingEvent("GameLiving.TargetInRange");
     }
 }
