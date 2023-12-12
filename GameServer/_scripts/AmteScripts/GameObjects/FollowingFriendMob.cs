@@ -16,6 +16,8 @@ namespace DOL.GS.Scripts
 {
     public class FollowingFriendMob : AmteMob, ITextNPC, IFollowingMob
     {
+        public const int FOLLOW_MIN_DISTANCE = 100;
+        public const int FOLLOW_MAX_DISTANCE = 3000;
 
         public string MobID { get; set; }
         public string MobName { get; set; }
@@ -31,35 +33,9 @@ namespace DOL.GS.Scripts
         public bool WaitingInArea { get; set; }
         public string ungroupText;
 
-        private double m_Angle;
-        private int m_DistMob;
         public Timer ResetTimer { get; set; }
 
-        private GamePlayer m_playerFollow;
-        public GamePlayer PlayerFollow
-        {
-            get { return m_playerFollow; }
-            set
-            {
-                m_playerFollow = value;
-                if (value == null)
-                    return;
-
-                double DX = SpawnPoint.X - value.Position.X;
-                double DY = SpawnPoint.Y - value.Position.Y;
-                m_DistMob = (int)Math.Sqrt(DX * DX + DY * DY);
-
-                if (m_DistMob > 0)
-                {
-                    m_Angle = Math.Asin(DX / m_DistMob);
-                    if (DY > 0) m_Angle += (Math.PI / 2 - m_Angle) * 2;
-                    m_Angle -= Math.PI / 2;
-
-                    m_Angle = (m_Angle - value.Heading / GameMath.RADIAN_TO_HEADING) % (Math.PI * 2);
-                }
-                else m_Angle = 0;
-            }
-        }
+        public GamePlayer PlayerFollow { get; set; }
 
         public TextNPCPolicy GetTextNPCPolicy(GameLiving target = null)
         {
@@ -322,8 +298,6 @@ namespace DOL.GS.Scripts
 
         public override void StartAttack(GameObject attackTarget)
         {
-            if (PlayerFollow != null)
-                StopFollowing();
             base.StartAttack(attackTarget);
         }
 
@@ -331,61 +305,96 @@ namespace DOL.GS.Scripts
         {
             if (IsCasting)
                 return ServerProperties.Properties.GAMENPC_FOLLOWCHECK_TIME;
+
             bool wasInRange = m_followTimer.Properties.getProperty(FOLLOW_TARGET_IN_RANGE, false);
             m_followTimer.Properties.removeProperty(FOLLOW_TARGET_IN_RANGE);
 
-            GameObject followTarget = (GameObject)m_followTarget.Target;
-            GameLiving followLiving = followTarget as GameLiving;
-            if (followLiving != null && !followLiving.IsAlive)
+            GamePlayer playerFollow = PlayerFollow;
+
+            if (PlayerFollow == null)
             {
-                StopFollowing();
-                Notify(GameNPCEvent.FollowLostTarget, this, new FollowLostTargetEventArgs(followTarget));
+                WalkToSpawn();
+                Notify(GameNPCEvent.FollowLostTarget, this, new FollowLostTargetEventArgs(null));
                 return 0;
             }
 
-            //Stop following if we have no target
-            if (followTarget == null || followTarget.ObjectState != eObjectState.Active || CurrentRegionID != followTarget.CurrentRegionID)
+            GameLiving followTarget = m_followTarget?.Target as GameLiving;
+
+            if (followTarget == PlayerFollow)
             {
-                StopFollowing();
-                Notify(GameNPCEvent.FollowLostTarget, this, new FollowLostTargetEventArgs(followTarget));
-                return 0;
+                if (!PlayerFollow.IsAlive)
+                {
+                    // Player died, reset
+                    PlayerFollow = null;
+                    StopFollowing();
+                    Notify(GameNPCEvent.FollowLostTarget, this, new FollowLostTargetEventArgs(playerFollow));
+                    WalkToSpawn();
+                    return 0;
+                }
+
+                if (PlayerFollow.ObjectState != eObjectState.Active || CurrentRegionID != PlayerFollow.CurrentRegionID)
+                {
+                    // Player left the game or area, reset
+                    PlayerFollow = null;
+                    StopFollowing();
+                    Notify(GameNPCEvent.FollowLostTarget, this, new FollowLostTargetEventArgs(playerFollow));
+                    ResetFriendMobs();
+                    return 0;
+                }
             }
 
             //Calculate the difference between our position and the players position
             var diff = followTarget.Position - Position;
 
             //SH: Removed Z checks when one of the two Z values is zero(on ground)
-            float distance;
+            float distanceToTarget;
             if (followTarget.Position.Z == 0 || Position.Z == 0)
-                distance = (float)Math.Sqrt(diff.X * diff.X + diff.Y * diff.Y);
+                distanceToTarget = (float)Math.Sqrt(diff.X * diff.X + diff.Y * diff.Y);
             else
-                distance = (float)Math.Sqrt(diff.X * diff.X + diff.Y * diff.Y + diff.Z * diff.Z);
+                distanceToTarget = (float)Math.Sqrt(diff.X * diff.X + diff.Y * diff.Y + diff.Z * diff.Z);
 
-            //if distance is greater then the max follow distance, stop following and return home
-            if (distance > m_followMaxDist)
+            //Are we in range still?
+            if (followTarget == PlayerFollow)
             {
-                StopFollowing();
-                Notify(GameNPCEvent.FollowLostTarget, this, new FollowLostTargetEventArgs(followTarget));
-                WalkToSpawn();
-                return 0;
-            }
-
-            //Are we in range yet?
-            if ((followTarget == PlayerFollow && distance - 5 <= m_DistMob && m_DistMob <= distance + 5)
-                || (followTarget != PlayerFollow && distance <= m_followMinDist))
-            {
-                //StopMoving();
-                if (followTarget != PlayerFollow) TurnTo(followTarget);
-                else TurnTo(followTarget.Heading);
-
-                if (!wasInRange)
+                if (distanceToTarget <= m_followMinDist)
                 {
-                    m_followTimer.Properties.setProperty(FOLLOW_TARGET_IN_RANGE, true);
-                    FollowTargetInRange();
+                    //StopMoving();
+                    TurnTo(followTarget);
+
+                    if (!wasInRange)
+                    {
+                        m_followTimer.Properties.setProperty(FOLLOW_TARGET_IN_RANGE, true);
+                        FollowTargetInRange();
+                    }
+                    NotifyPresence();
+                    return ServerProperties.Properties.GAMENPC_FOLLOWCHECK_TIME;
                 }
-                return ServerProperties.Properties.GAMENPC_FOLLOWCHECK_TIME;
+                else if (distanceToTarget > m_followMaxDist) // if distance is greater then the max follow distance, stop following and return home
+                {
+                    PlayerFollow = null;
+                    StopFollowing();
+                    Notify(GameNPCEvent.FollowLostTarget, this, new FollowLostTargetEventArgs(followTarget));
+                    WalkToSpawn();
+                    return 0;
+                }
+            }
+            else
+            {
+                if (distanceToTarget <= m_followMinDist)
+                {
+                    TurnTo(followTarget);
+
+                    if (!wasInRange)
+                    {
+                        m_followTimer.Properties.setProperty(FOLLOW_TARGET_IN_RANGE, true);
+                        FollowTargetInRange();
+                    }
+                    NotifyPresence();
+                    return ServerProperties.Properties.GAMENPC_FOLLOWCHECK_TIME;
+                }
             }
 
+            NotifyPresence();
             //check area reached
             var area = followTarget.CurrentRegion.GetAreasOfSpot(Position).OfType<AbstractArea>().FirstOrDefault(a => a.DbArea != null && a.DbArea.ObjectId == AreaToEnter);
             if (area != null && !WaitingInArea)
@@ -401,10 +410,12 @@ namespace DOL.GS.Scripts
                 return 0;
             }
             else if (WaitingInArea)
+            {
                 return 0;
+            }
 
             // follow on distance
-            diff = (diff / distance) * m_followMinDist;
+            diff = (diff / distanceToTarget) * m_followMinDist;
             var newPos = followTarget.Position - diff;
 
             if (followTarget == PlayerFollow)
@@ -416,14 +427,16 @@ namespace DOL.GS.Scripts
             }
             else
                 PathTo(newPos, MaxSpeed);
+            return ServerProperties.Properties.GAMENPC_FOLLOWCHECK_TIME;
+        }
 
+        protected void NotifyPresence()
+        {
             //foreach npc in visible distance, notify presence
             foreach (GameNPC npc in GetNPCsInRadius(WorldMgr.VISIBILITY_DISTANCE))
             {
                 npc.Brain?.Notify(GameLivingEvent.TargetInRange, this, new TargetInRangeEventArgs(this));
             }
-
-            return ServerProperties.Properties.GAMENPC_FOLLOWCHECK_TIME;
         }
 
         public override IList<string> DelveInfo()
@@ -465,12 +478,6 @@ namespace DOL.GS.Scripts
             }
             followBrain.Follow(player);
         }
-
-        public override void StopFollowing()
-        {
-            PlayerFollow = null;
-            base.StopFollowing();
-        }
     }
 }
 
@@ -484,20 +491,22 @@ namespace DOL.AI.Brain
         {
             if (!base.Start())
                 return false;
-            if (Body is not FollowingFriendMob)
+            if (Body is not FollowingFriendMob body)
                 return false;
             ScanForPlayers();
-            if ((Body as FollowingFriendMob)?.PlayerFollow != null)
-                Body.Follow(((FollowingFriendMob)Body).PlayerFollow, 10, 3000);
+            if (body.PlayerFollow != null)
+                body.Follow(body.PlayerFollow);
             return true;
         }
 
         public override void Think()
         {
+            FollowingFriendMob body = (FollowingFriendMob)Body;
+
             //if player quits the game
-            if (((FollowingFriendMob)Body).PlayerFollow != null && ((FollowingFriendMob)Body).PlayerFollow.ObjectState == eObjectState.Deleted)
+            if (body.PlayerFollow != null && body.PlayerFollow.ObjectState == eObjectState.Deleted)
             {
-                ((FollowingFriendMob)Body).ResetFriendMobs();
+                body.ResetFriendMobs();
                 return;
             }
             if (!Body.IsCasting && CheckSpells(eCheckSpellType.Defensive))
@@ -516,11 +525,22 @@ namespace DOL.AI.Brain
             if (!Body.InCombat)
                 Body.TempProperties.removeProperty(GameLiving.LAST_ATTACK_DATA);
 
-            if (Body.CurrentSpellHandler != null || Body.IsMoving || Body.AttackState ||
-                Body.InCombat || Body.IsMovingOnPath || Body.CurrentFollowTarget != null)
+            if (Body.CurrentSpellHandler != null || Body.IsMoving || Body.IsMovingOnPath)
                 return;
-            if ((Body as FollowingFriendMob)?.PlayerFollow == null)
+            if (Body.CurrentFollowTarget != body.PlayerFollow)
+            {
+                GameLiving followTarget = body.CurrentFollowTarget as GameLiving;
+                if (followTarget == null ||
+                    followTarget.IsAlive == false ||
+                    followTarget.ObjectState != eObjectState.Active || followTarget.CurrentRegionID != Body.CurrentRegionID)
+                {
+                    body.Follow(body.PlayerFollow);
+                }
+            }
+            else if (body.PlayerFollow == null)
+            {
                 ScanForPlayers();
+            }
         }
 
         private void ScanForPlayers()
@@ -529,9 +549,9 @@ namespace DOL.AI.Brain
             if (followingMob.FollowingFromRadius > 0 && !followingMob.WaitingInArea)
             {
                 var players = Body.GetPlayersInRadius(followingMob.FollowingFromRadius);
-                foreach (var player in players)
+                foreach (GamePlayer player in players)
                 {
-                    Follow((GamePlayer)player);
+                    Follow(player);
                     break;
                 }
             }
@@ -541,13 +561,7 @@ namespace DOL.AI.Brain
         {
             ((FollowingFriendMob)Body).PlayerFollow = player;
             player.Notify(GameLivingEvent.BringAFriend, player, new BringAFriendArgs((FollowingFriendMob)Body, true, true));
-            Body.Follow(player, 10, 3000);
-        }
-
-        public void StopFollowing()
-        {
-            Body.Notify(GameNPCEvent.FollowLostTarget, this, new FollowLostTargetEventArgs(Body.CurrentFollowTarget));
-            Body.StopFollowing();
+            Body.Follow(player, FollowingFriendMob.FOLLOW_MIN_DISTANCE, FollowingFriendMob.FOLLOW_MAX_DISTANCE);
         }
     }
 }
