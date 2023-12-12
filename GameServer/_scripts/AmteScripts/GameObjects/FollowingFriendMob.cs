@@ -26,7 +26,7 @@ namespace DOL.GS.Scripts
         public Dictionary<string, string> ResponsesFollow { get; set; }
         public Dictionary<string, string> ResponsesUnfollow { get; set; }
         public ushort FollowingFromRadius { get; set; }
-        public int AggroMultiplier { get; set; }
+        public float AggroMultiplier { get; set; }
         public string LinkedGroupMob { get; set; }
         public string AreaToEnter { get; set; }
         public int TimerBeforeReset { get; set; }
@@ -358,6 +358,7 @@ namespace DOL.GS.Scripts
             {
                 if (distanceToTarget <= m_followMinDist)
                 {
+                    // Within minimum distance, nothing to do
                     //StopMoving();
                     TurnTo(followTarget);
 
@@ -369,8 +370,9 @@ namespace DOL.GS.Scripts
                     NotifyPresence();
                     return ServerProperties.Properties.GAMENPC_FOLLOWCHECK_TIME;
                 }
-                else if (distanceToTarget > m_followMaxDist) // if distance is greater then the max follow distance, stop following and return home
+                else if (distanceToTarget > m_followMaxDist)
                 {
+                    // Distance is greater then the max follow distance, stop following and return home
                     PlayerFollow = null;
                     StopFollowing();
                     Notify(GameNPCEvent.FollowLostTarget, this, new FollowLostTargetEventArgs(followTarget));
@@ -382,6 +384,7 @@ namespace DOL.GS.Scripts
             {
                 if (distanceToTarget <= m_followMinDist)
                 {
+                    // Within minimum distance, nothing to do
                     TurnTo(followTarget);
 
                     if (!wasInRange)
@@ -527,7 +530,14 @@ namespace DOL.AI.Brain
 
             if (Body.CurrentSpellHandler != null || Body.IsMoving || Body.IsMovingOnPath)
                 return;
-            if (Body.CurrentFollowTarget != body.PlayerFollow)
+            if (body.PlayerFollow == null)
+            {
+                if (Body.CurrentFollowTarget == null)
+                {
+                    ScanForPlayers();
+                }
+            }
+            else if (Body.CurrentFollowTarget != body.PlayerFollow)
             {
                 GameLiving followTarget = body.CurrentFollowTarget as GameLiving;
                 if (followTarget == null ||
@@ -536,10 +546,6 @@ namespace DOL.AI.Brain
                 {
                     body.Follow(body.PlayerFollow);
                 }
-            }
-            else if (body.PlayerFollow == null)
-            {
-                ScanForPlayers();
             }
         }
 

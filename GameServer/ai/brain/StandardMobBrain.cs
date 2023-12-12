@@ -760,7 +760,7 @@ namespace DOL.AI.Brain
                 // FollowingFriendMob will have higher aggro
                 if (realTarget is FollowingFriendMob { PlayerFollow: not null } followMob)
                 {
-                    realAggroLevel = (AggroLevel * followMob.AggroMultiplier);
+                    realAggroLevel = (int)(AggroLevel * followMob.AggroMultiplier);
                     realTarget = followMob.PlayerFollow;
                 }
             }

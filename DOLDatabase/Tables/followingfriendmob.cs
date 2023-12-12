@@ -15,7 +15,7 @@ namespace DOLDatabase.Tables
         private string m_reponseFollow;
         private string m_reponseUnfollow;
         private ushort m_followingFromRadius;
-        private int m_aggroMultiplier = 1;
+        private float m_aggroMultiplier = 1.0f;
         private string m_linkedGroupMob;
         private string m_areaToEnter;
         private int m_timerBeforeReset;
@@ -111,7 +111,7 @@ namespace DOLDatabase.Tables
         }
 
         [DataElement(AllowDbNull = true)]
-        public int AggroMultiplier
+        public float AggroMultiplier
         {
             get
             {
