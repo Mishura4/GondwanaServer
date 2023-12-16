@@ -5,6 +5,7 @@ GuardNPC.Interact.Text3:			[Look] at the blacklist.
 GuardNPC.Report.Oneplayer:			The person who killed you has been reported!
 GuardNPC.Report.Moreplayers:		The {0} persons who killed you have been reported!
 GuardNPC.Report.Toolate:			It's too late to report your killer!
+GuardNPC.Report.AlreadyReported:	Your killer was already reported!
 GuardNPC.Response.Nobodywanted:			No one is currently wanted.
 GuardNPC.Response.Blacklist:			The following people are blacklisted:
 GuardNPC.Response.Dontknow:				Hmm, maybe... no, that doesn't remind me of anything!

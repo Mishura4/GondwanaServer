@@ -54,8 +54,6 @@ namespace DOL.GS.Scripts
                         string words = reported == 1 ? LanguageMgr.GetTranslation(player.Client.Account.Language, "GuardNPC.Report.Oneplayer") : LanguageMgr.GetTranslation(player.Client.Account.Language, "GuardNPC.Report.Moreplayers", reported);
                         player.Out.SendMessage(words, eChatType.CT_System, eChatLoc.CL_PopupWindow);
                     }
-                    else
-                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GuardNPC.Report.Toolate"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                     break;
 
                 case "Voir":
