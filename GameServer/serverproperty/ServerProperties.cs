@@ -182,6 +182,22 @@ namespace DOL.GS.ServerProperties
         public static int REPUTATION_POINTS_RECOVERY;
 
         /// <summary>
+        /// Threshold of reputation for which a player will automatically be wanted
+        /// Set to a value > 0 to disable
+        /// </summary>
+        [ServerProperty("system", "reputation_threshold_automatic_wanted",
+            "The threshold of reputation to make someone automatically wanted. Set to a value > 0 to disable", -5)]
+        public static int REPUTATION_THRESHOLD_AUTOMATIC_WANTED;
+
+        /// <summary>
+        /// Number of kills in 20 minutes of the same player to automatically make a player wanted
+        /// Set to 0 to disable
+        /// </summary>
+        [ServerProperty("system", "reputation_chain_kill_count",
+            "The number of times a player needs to kill the same player in the last 20 minutes to be \"a chain killer\" and be wanted (set to <= 0 to disable)", 2)]
+        public static int REPUTATION_CHAIN_KILL_COUNT;
+
+        /// <summary>
         /// Whether to allow trading between non-outlaws and outlaws
         /// </summary>
         [ServerProperty("system", "allow_trade_with_outlaw", "Is trading allowed between outlaws and non-outlaws", false)]

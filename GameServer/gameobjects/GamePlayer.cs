@@ -13223,7 +13223,8 @@ namespace DOL.GS
             Model = (ushort)DBCharacter.CurrentModel;
             IsRenaissance = DBCharacter.IsRenaissance;
             OutlawTimeStamp = DBCharacter.OutlawTimeStamp;
-            Reputation = DBCharacter.Reputation;
+            m_reputation = DBCharacter.Reputation;
+            m_wanted = DBCharacter.IsWanted;
 
             //update previous version by setting timestamp
             if (Reputation < 0 && OutlawTimeStamp == 0)
@@ -15089,39 +15090,72 @@ namespace DOL.GS
         public int Reputation
         {
             get { return m_reputation; }
-
             set
             {
-                int oldValue = m_reputation;
-                bool changed = m_reputation != value;
+                int oldReputation = m_reputation;
+                int difference = value - m_reputation;
                 m_reputation = value;
 
-                if (m_reputation >= 0)
+                if (difference == 0)
                 {
-                    this.OutlawTimeStamp = 0;
+                    return;
                 }
-
-                if (this.CurrentRegionID != 0)
-                {       //refresh npc quests according to new reputation
-                    foreach (GameNPC mob in WorldMgr.GetRegion(this.CurrentRegionID)?.Objects?.Where(o => o != null && o is GameNPC))
+                if (difference > 0) // adding
+                {
+                    if (m_reputation >= 0)
                     {
-                        this.Out.SendNPCsQuestEffect(mob, mob.GetQuestIndicator(this));
+                        OutlawTimeStamp = 0;
+                        Wanted = false;
+                    }
+                }
+                else // substracting
+                {
+                    if (m_reputation < 0)
+                    {
+                        if (oldReputation >= 0) // becoming outlaw
+                        {
+                            if (Properties.IS_REPUTATION_RECOVERY_ACTIVATED)
+                            {
+                                this.ConfigureReputationTimer();
+                            }
+                            OutlawTimeStamp = DateTimeOffset.Now.ToUnixTimeSeconds();
+                        }
+                    }
+
+                    if (ServerProperties.Properties.REPUTATION_THRESHOLD_AUTOMATIC_WANTED < 0 && m_reputation < ServerProperties.Properties.REPUTATION_THRESHOLD_AUTOMATIC_WANTED && !Wanted)
+                    {
+                        Wanted = true;
                     }
                 }
 
-                if (Properties.IS_REPUTATION_RECOVERY_ACTIVATED && m_reputation < 0 && OutlawTimeStamp == 0)
+                if (CurrentRegionID != 0)
                 {
-                    if (oldValue >= 0 && Properties.DISCORD_ACTIVE)
+                    //refresh npc quests according to new reputation
+                    foreach (GameNPC mob in WorldMgr.GetRegion(CurrentRegionID)?.Objects?.Where(o => o is GameNPC))
                     {
-                        var hook = new DolWebHook(Properties.DISCORD_WEBHOOK_ID);
-                        hook.SendMessage(LanguageMgr.GetTranslation(Name, "GameObjects.GamePlayer.Wanted", Name));
+                        Out.SendNPCsQuestEffect(mob, mob.GetQuestIndicator(this));
                     }
-                    OutlawTimeStamp = DateTimeOffset.Now.ToUnixTimeSeconds();
-                    this.ConfigureReputationTimer();
                 }
-                if (changed)
+            }
+        }
+
+        public bool Wanted
+        {
+            get { return m_wanted; };
+            set
+            {
+                bool wasWanted = m_wanted;
+                m_wanted = value;
+                if (wasWanted != value)
                 {
-                    this.SaveIntoDatabase();
+                    if (value) // Becoming wanted
+                    {
+                        if (Properties.DISCORD_ACTIVE)
+                        {
+                            var hook = new DolWebHook(Properties.DISCORD_WEBHOOK_ID);
+                            hook.SendMessage(LanguageMgr.GetTranslation(Client?.Account?.Language ?? Properties.SERV_LANGUAGE, "GameObjects.GamePlayer.Wanted", Name));
+                        }
+                    }
                 }
             }
         }
@@ -16505,7 +16539,10 @@ namespace DOL.GS
 
         #region Minotaur Relics
         protected MinotaurRelic m_minoRelic = null;
+
         private int m_reputation;
+
+        private bool m_wanted;
 
         /// <summary>
         /// sets or sets the Minotaur Relic of this Player
@@ -16589,6 +16626,8 @@ namespace DOL.GS
             m_itemBonus = new PropertyIndexer((int)eProperty.MaxProperty);
             m_lastUniqueLocations = new GameLocation[4];
             m_canFly = false;
+            m_wanted = false;
+            m_reputation = 0;
 
             CreateInventory();
             GameEventMgr.AddHandler(m_inventory, PlayerInventoryEvent.ItemEquipped, new DOLEventHandler(OnItemEquipped));

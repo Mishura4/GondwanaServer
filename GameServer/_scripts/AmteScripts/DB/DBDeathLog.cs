@@ -12,22 +12,28 @@ namespace DOL.Database
     {
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        private bool exitFromJail;
+        private bool wasPunished = false;
+
+        private bool isReported = false;
 
         public DBDeathLog()
         {
 
         }
 
-        public DBDeathLog(GameObject killed, GameObject killer, bool isWanted)
+        public DBDeathLog(GamePlayer killed, GamePlayer killer, bool reported)
         {
-            Killer = "(null)";
-            KillerClass = "(null)";
             if (killer != null)
             {
-                Killer = killer.Name;
+                Killer = killed.GetPersonalizedName(killer);
                 KillerClass = killer.GetType().ToString();
                 KillerId = killer.InternalID;
+            }
+            else
+            {
+                Killer = null;
+                KillerClass = null;
+                KillerId = null;
             }
             Killed = killed.Name;
             KilledClass = killed.GetType().ToString();
@@ -35,7 +41,7 @@ namespace DOL.Database
             Y = (int)killed.Position.Y;
             Region = killed.CurrentRegionID;
             DeathDate = DateTime.Now;
-            IsWanted = isWanted;
+            IsReported = reported;
             KilledId = killed.InternalID;
         }
 
@@ -74,10 +80,10 @@ namespace DOL.Database
         public DateTime DeathDate { get; set; }
 
         [DataElement(AllowDbNull = false)]
-        public bool IsWanted { get; set; }
+        public bool IsReported { get { return isReported; } set { Dirty = true; isReported = value; } }
 
         [DataElement(AllowDbNull = false)]
-        public bool ExitFromJail { get { return exitFromJail; } set { Dirty = true; exitFromJail = value; } }
+        public bool WasPunished { get { return wasPunished; } set { Dirty = true; wasPunished = value; } }
 
         #region Init
         private static bool Loaded = false;

@@ -34,74 +34,56 @@ namespace DOL.GS.GameEvents
 
         public static void LivingKillEnnemy(DOLEvent e, object sender, EventArgs args)
         {
-            var dyingArgs = args as DyingEventArgs;
-            if (dyingArgs != null)
+            if (args is not DyingEventArgs { Killer: not null } dyingArgs)
+                return;
+            var killer = dyingArgs.Killer;
+            if (sender is GamePlayer playerVictim)
             {
-                var killer = dyingArgs.Killer;
-                var killed = sender as GamePlayer;
-                var killerPlayer = killer as GamePlayer;
-                //Player isWanted when Killed by Guard
-                if (killed != null && killerPlayer != null)
+                if (killer is GamePlayer playerKiller)
                 {
-                    //If killer is GM, let go
-                    if (killerPlayer != null && killerPlayer.Client.Account.PrivLevel > 1)
+                    if (playerKiller.Client.Account.PrivLevel > 1)
                     {
+                        //If killer is GM, let go
                         return;
                     }
 
-                    if (killed.Reputation < 0)
+                    if (IsKillAllowedArea(playerVictim))
                     {
+                        // PvP area
                         return;
                     }
 
-                    if (IsKillAllowedArea(killed))
+                    if (DeathCheck.Instance.IsChainKiller(playerKiller, playerVictim))
                     {
-                        return;
+                        // Automatically report player
+                        --playerKiller.Reputation;
+                        playerKiller.SaveIntoDatabase();
+                        GameServer.Database.AddObject(new DBDeathLog(playerVictim, playerKiller, true));
+                        playerKiller.Out.SendMessage(LanguageMgr.GetTranslation(playerKiller.Client, "GameObjects.GamePlayer.Multiplekills", playerKiller.GetPersonalizedName(playerVictim)), PacketHandler.eChatType.CT_System, PacketHandler.eChatLoc.CL_SystemWindow);
                     }
-
-                    bool isLegitimeKiller = killer is GuardNPC || killerPlayer != null;
-                    //Log interplayer kills & Killed by Guard
-                    //Dot not log killed by npcs
-                    if (isLegitimeKiller)
+                    else
                     {
-                        if (killerPlayer != null)
-                        {
-                            if (DeathCheck.Instance.IsChainKiller(killerPlayer, killed))
-                            {
-                                killerPlayer.Reputation -= 1;
-                                if (killerPlayer.Reputation == -1)
-                                    killerPlayer.Reputation -= 1;
-                                killerPlayer.SaveIntoDatabase();
-                                killerPlayer.Out.SendMessage(LanguageMgr.GetTranslation(killerPlayer.Client, "GameObjects.GamePlayer.Multiplekills", killer.Name), PacketHandler.eChatType.CT_System, PacketHandler.eChatLoc.CL_SystemWindow);
-                                string newsMessage = LanguageMgr.GetTranslation(killerPlayer.Client, "GameObjects.GamePlayer.Wanted", killer.Name);
-                                NewsMgr.CreateNews("GameObjects.GamePlayer.Wanted", killerPlayer.Realm, eNewsType.RvRGlobal, false, true, killerPlayer.Name);
-                                if (DOL.GS.ServerProperties.Properties.DISCORD_ACTIVE)
-                                {
-                                    DolWebHook hook = new DolWebHook(DOL.GS.ServerProperties.Properties.DISCORD_WEBHOOK_ID);
-                                    hook.SendMessage(newsMessage);
-                                }
-                            }
-                        }
-                        bool isWanted = killerPlayer.Reputation < 0;
-                        //Log Death
-                        GameServer.Database.AddObject(new DBDeathLog((GameObject)sender, killer, isWanted));
+                        GameServer.Database.AddObject(new DBDeathLog(playerVictim, playerKiller, false));
                     }
                 }
-                else
+            }
+            else if (sender is GuardNPC)
+            {
+                if (killer is GamePlayer playerKiller)
                 {
-                    //Check if Guard was killed
-                    if (sender is GuardNPC && killerPlayer != null && !IsKillAllowedArea(killerPlayer))
+                    if (!IsKillAllowedArea(playerKiller))
                     {
-                        if (killerPlayer.Group != null)
+                        if (playerKiller.Group != null)
                         {
-                            foreach (GamePlayer player in killerPlayer.Group.GetMembersInTheGroup())
+                            foreach (GamePlayer groupPlayer in playerKiller.Group.GetMembersInTheGroup())
                             {
-                                GuardKillLostReputation(player);
+                                // I've copy pasted this from the code that was there before, but this seems grief-prone
+                                GuardKillLostReputation(groupPlayer);
                             }
                         }
                         else
                         {
-                            GuardKillLostReputation(killerPlayer);
+                            GuardKillLostReputation(playerKiller);
                         }
                     }
                 }

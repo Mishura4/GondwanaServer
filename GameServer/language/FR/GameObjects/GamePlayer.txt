@@ -385,7 +385,8 @@ GameObjects.GamePlayer.UseSlot.CantUseCast:				Vous devez finir votre action en 
 GameObjects.GamePlayer.UseSlot.Used:			        Vous utilisez {0}.
 GameObjects.GamePlayer.UseSlot.CantUseCast:				Vous devez finir votre action en cours pour utiliser votre {0}.
 GameObjects.GamePlayer.Whisper.SelectTarget:			Sélectionnez une cible à qui chuchoter.
-GameObjects.GamePlayer.Multiplekills:						Vous avez perdu 1 point de réputation pour cause d'assassinats multiples.
+GameObjects.GamePlayer.Murder:							Vous avez perdu 1 point de réputation pour avoir tué {0}.
+GameObjects.GamePlayer.Multiplekills:						Vous avez perdu 1 point de réputation pour cause d'assassinats multiples envers {0}.
 GameObjects.GamePlayer.Wanted:                              {0} est maintenant recherché pour ses crimes.
 GameObjects.GamePlayer.Jailed:                              {0} a été mis en prison par {1}.
 GameObjects.GamePlayer.Jailed.Unknown:                      {0} a été mis en prison par les gardes.

@@ -114,18 +114,14 @@ namespace DOL.GS.Scripts
                 }
 
                 //clear Deathlogs
-                var ids = GameServer.Database.SelectObjects<DBDeathLog>(DB.Column("KillerId").IsEqualTo(args.GamePlayer.InternalID));
+                var deathLogs = GameServer.Database.SelectObjects<DBDeathLog>(DB.Column("KillerId").IsEqualTo(args.GamePlayer.InternalID).And(DB.Column("WasPunished").IsEqualTo(0)));
 
-                if (ids != null)
+                if (deathLogs != null)
                 {
-                    foreach (var id in ids.Select(d => d.Id))
+                    foreach (DBDeathLog deathLog in deathLogs)
                     {
-                        var log = GameServer.Database.FindObjectByKey<DBDeathLog>(id);
-
-                        if (log != null)
-                        {
-                            GameServer.Database.DeleteObject(log);
-                        }
+                        deathLog.WasPunished = true;
+                        GameServer.Database.SaveObject(deathLog);
                     }
                 }
 
@@ -414,17 +410,7 @@ namespace DOL.GS.Scripts
             player.MaxSpeedBase = 191;
             player.Out.SendUpdateMaxSpeed();
             player.Reputation = 0;
-            var deaths = GameServer.Database.SelectObjects<DBDeathLog>(DB.Column("KilledId").IsEqualTo(player.InternalID).And(DB.Column("ExitFromJail").IsEqualTo(0).And(DB.Column("IsWanted").IsEqualTo(1))));
-
-            if (deaths != null)
-            {
-                var death = deaths.FirstOrDefault();
-                if (death != null)
-                {
-                    death.ExitFromJail = true;
-                    GameServer.Database.SaveObject(death);
-                }
-            }
+            player.Wanted = false;
 
             if (Prisonnier.RP) player.MoveTo(Sortie_RegionID, Sortie_X, Sortie_Y, Sortie_Z, Sortie_Heading);
             else player.MoveTo(SortieHRP_RegionID, SortieHRP_X, SortieHRP_Y, SortieHRP_Z, SortieHRP_Heading);

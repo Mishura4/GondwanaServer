@@ -31,71 +31,72 @@ namespace GameServerScripts.Amtescripts.Managers
 
         public int ReportPlayer(GamePlayer victim)
         {
-            IList<DBDeathLog> deaths = GameServer.Database.SelectObjects<DBDeathLog>(DB.Column("KilledId").IsEqualTo(victim.InternalID).And(DB.Column("DeathDate").IsGreatherThan("SUBTIME(NOW(), '3:0:0')").And(DB.Column("ExitFromJail").IsEqualTo(0))));
+            IList<DBDeathLog> deaths = GameServer.Database.SelectObjects<DBDeathLog>(DB.Column("KilledId").IsEqualTo(victim.InternalID).And(DB.Column("DeathDate").IsGreatherThan("SUBTIME(NOW(), '3:0:0')").And(DB.Column("WasPunished").IsEqualTo(0))));
 
-            if (deaths == null || !deaths.Any())
+            if (deaths == null || deaths.Count == 0)
             {
                 victim.Out.SendMessage(LanguageMgr.GetTranslation(victim.Client.Account.Language, "GuardNPC.Report.Toolate"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 return 0;
             }
 
-            IEnumerable<DBDeathLog> orderedDeaths = deaths.OrderByDescending(d => d.DeathDate);
+            int reported = 0;
 
-            List<DOLCharacters> reported = new List<DOLCharacters>();
-
-            foreach (var death in orderedDeaths)
+            foreach (var death in deaths.OrderByDescending(d => d.DeathDate))
             {
-                if (!death.IsWanted) // not reported yet
+                if (!death.IsReported)
                 {
+                    death.IsReported = true;
                     GameClient killerClient = WorldMgr.GetClientByPlayerID(death.KillerId, true, true);
-                    DOLCharacters killer = killerClient.Player.DBCharacter ?? GameServer.Database.FindObjectByKey<DOLCharacters>(death.KillerId);
-                    string newsMessage = "";
-                    // TODO: hidden name?
-                    if (killer != null)
+                    if (killerClient != null) // killer is online
                     {
-                        --killer.Reputation;
-                        if (killerClient != null)
+                        --killerClient.Player.Reputation;
+                        killerClient.Out.SendMessage(LanguageMgr.GetTranslation(killerClient.Account.Language, "GameObjects.GamePlayer.Murder", killerClient.Player.GetPersonalizedName(victim)), DOL.GS.PacketHandler.eChatType.CT_System, DOL.GS.PacketHandler.eChatLoc.CL_SystemWindow);
+                        if (!killerClient.Player.Wanted)
                         {
-                            killerClient.Out.SendMessage("Vous avez perdu 1 point de réputation pour avoir tué " + killerClient.Player.GetPersonalizedName(victim), DOL.GS.PacketHandler.eChatType.CT_System, DOL.GS.PacketHandler.eChatLoc.CL_SystemWindow);
+                            killerClient.Player.Wanted = true;
                         }
-                        GameServer.Database.SaveObject(killer);
-                        death.IsWanted = true;
-                        death.Dirty = true;
-                        GameServer.Database.SaveObject(death);
-                        if (!reported.Contains(killer))
+                        ++reported;
+                    }
+                    else // killer is offline
+                    {
+                        DOLCharacters killer = GameServer.Database.FindObjectByKey<DOLCharacters>(death.KillerId);
+                        if (!killer.IsWanted)
                         {
-                            reported.Add(killer);
-                            newsMessage = LanguageMgr.GetTranslation(victim.Client.Account.Language, "GameObjects.GamePlayer.Wanted", killer.Name);
+                            ++reported;
+                            --killer.Reputation;
+                            killer.IsWanted = true;
                             NewsMgr.CreateNews("GameObjects.GamePlayer.Wanted", victim.Realm, eNewsType.RvRGlobal, false, true, killer.Name);
                             if (DOL.GS.ServerProperties.Properties.DISCORD_ACTIVE)
                             {
                                 DolWebHook hook = new DolWebHook(DOL.GS.ServerProperties.Properties.DISCORD_WEBHOOK_ID);
-                                hook.SendMessage(newsMessage);
+                                hook.SendMessage(LanguageMgr.GetTranslation(DOL.GS.ServerProperties.Properties.SERV_LANGUAGE, "GameObjects.GamePlayer.Wanted", death.KillerId));
                             }
                         }
+                        GameServer.Database.SaveObject(killer);
                     }
+                    GameServer.Database.SaveObject(death);
                 }
             }
-            if (reported.Count == 0 && deaths.Count > 0)
+            if (reported == 0 && deaths.Count > 0)
             {
                 victim.Out.SendMessage(LanguageMgr.GetTranslation(victim.Client.Account.Language, "GuardNPC.Report.AlreadyReported"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 return 0;
             }
-            return reported.Count;
+            return reported;
         }
 
         public bool IsChainKiller(GamePlayer killer, GamePlayer killed)
         {
-            var deaths = GameServer.Database.SelectObjects<DBDeathLog>(DB.Column("KillerId").IsEqualTo(killer.InternalID)
-                .And(DB.Column("KilledId").IsEqualTo(killed.InternalID)
-                .And(DB.Column("DeathDate").IsGreatherThan("SUBTIME(NOW(), '0:10:0')"))));
-
-            if (deaths == null || !deaths.Any())
+            if (DOL.GS.ServerProperties.Properties.REPUTATION_CHAIN_KILL_COUNT < 1)
             {
                 return false;
             }
 
-            return true;
+            var deaths = GameServer.Database.SelectObjects<DBDeathLog>(DB.Column("KillerId").IsEqualTo(killer.InternalID)
+                .And(DB.Column("KilledId").IsEqualTo(killed.InternalID)
+                .And(DB.Column("DeathDate").IsGreatherThan("SUBTIME(NOW(), '0:20:0')"))));
+
+            return deaths != null && deaths.Count >= DOL.GS.ServerProperties.Properties.REPUTATION_CHAIN_KILL_COUNT;
         }
     }
 }

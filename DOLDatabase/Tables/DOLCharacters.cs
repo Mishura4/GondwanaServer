@@ -2323,6 +2323,18 @@ namespace DOL.Database
             }
         }
 
+        [DataElement(AllowDbNull = false)]
+        public bool IsWanted
+        {
+            get { return m_wanted; }
+
+            set
+            {
+                Dirty = true;
+                m_wanted = value;
+            }
+        }
+
         /// <summary>
         /// List of Custom Params for this Character
         /// </summary>
@@ -2330,6 +2342,7 @@ namespace DOL.Database
         public DOLCharactersXCustomParam[] CustomParams;
         private int m_reputation;
         private long m_outlawTimeStamp;
+        private bool m_wanted;
     }
 
     /// <summary>

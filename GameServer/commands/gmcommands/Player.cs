@@ -2303,23 +2303,14 @@ namespace DOL.GS.Commands
 
                             }
 
-                            if (amount < 0)
-                            {
-                                //log fake death on GM
-                                DBDeathLog deathLog = new DBDeathLog(client.Player, player, false);
-                                deathLog.ExitFromJail = false;
-                                GameServer.Database.AddObject(deathLog);
-
-                                //report player to guards
-                                DeathCheck.Instance.ReportPlayer(client.Player);
-                            }
-                            else
+                            if (amount > 0)
                             {
                                 //remove all wanted DBDeathLog
-                                IList<DBDeathLog> deathLogs = GameServer.Database.SelectObjects<DBDeathLog>(DB.Column("KilledId").IsEqualTo(player.InternalID).And(DB.Column("IsWanted").IsEqualTo(true)));
+                                IList<DBDeathLog> deathLogs = GameServer.Database.SelectObjects<DBDeathLog>(DB.Column("KillerId").IsEqualTo(player.InternalID));
                                 foreach (DBDeathLog deathLog in deathLogs)
                                 {
-                                    deathLog.IsWanted = false;
+                                    deathLog.IsReported = true;
+                                    deathLog.WasPunished = true;
                                     GameServer.Database.SaveObject(deathLog);
                                 }
                             }
