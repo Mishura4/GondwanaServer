@@ -2181,6 +2181,16 @@ namespace DOL.GS.ServerRules
         }
 
         /// <summary>
+        /// Is this GameObject able to put players in jail 
+        /// </summary>
+        /// <param name="obj">The object to check</param>
+        /// <returns></returns>
+        public virtual bool CanPutPlayersInJail(GameObject obj)
+        {
+            return obj is GamePlayer { Reputation: >= 0 } or GuardNPC;
+        }
+
+        /// <summary>
         /// Gets the NPC name based on server type
         /// </summary>
         /// <param name="source">The "looking" player</param>

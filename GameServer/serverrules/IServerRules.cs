@@ -404,6 +404,13 @@ namespace DOL.GS.ServerRules
         bool CanGenerateNews(GamePlayer player);
 
         /// <summary>
+        /// Is this GameObject able to put players in jail 
+        /// </summary>
+        /// <param name="obj">The object to check</param>
+        /// <returns></returns>
+        bool CanPutPlayersInJail(GameObject obj);
+
+        /// <summary>
         /// Is the player allowed to /level
         /// </summary>
         /// <param name="player">The player</param>

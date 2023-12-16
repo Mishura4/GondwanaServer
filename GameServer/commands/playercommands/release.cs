@@ -24,6 +24,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using DOL.GS.Scripts;
 
 namespace DOL.GS.Commands
 {
@@ -36,42 +37,33 @@ namespace DOL.GS.Commands
     {
         public void OnCommand(GameClient client, string[] args)
         {
-            if (client.Player.CurrentRegion.IsRvR && !client.Player.CurrentRegion.IsDungeon)
+            GamePlayer player = client.Player;
+
+            if (player.CurrentRegion.IsRvR && !client.Player.CurrentRegion.IsDungeon)
             {
-                client.Player.Release(GamePlayer.eReleaseType.RvR, false);
+                player.Release(GamePlayer.eReleaseType.RvR, false);
                 return;
             }
 
             //Check if player should go to jail
-            if (this.ReleaseOutlawsToJail(client))
+            if (player.Reputation < 0 && GameServer.ServerRules.CanPutPlayersInJail(player.LastKiller))
+            {
+                player.Release(GamePlayer.eReleaseType.Jail, true);
                 return;
+            }
 
             if (args.Length > 1 && args[1].ToLower() == "city")
             {
-                client.Player.Release(GamePlayer.eReleaseType.City, false);
+                player.Release(GamePlayer.eReleaseType.City, false);
                 return;
             }
 
             if (args.Length > 1 && args[1].ToLower() == "house")
             {
-                client.Player.Release(GamePlayer.eReleaseType.House, false);
+                player.Release(GamePlayer.eReleaseType.House, false);
                 return;
             }
-            client.Player.Release(GamePlayer.eReleaseType.Normal, false);
-        }
-
-        private bool ReleaseOutlawsToJail(GameClient client)
-        {
-            IList<DBDeathLog> deaths = GameServer.Database.SelectObjects<DBDeathLog>(DB.Column("KillerId").IsEqualTo(client.Player.InternalID)
-                .And(DB.Column("IsWanted").IsEqualTo(1)
-                .And(DB.Column("ExitFromJail").IsEqualTo("0"))));
-            
-            if (deaths != null && deaths.Count > 0)
-            {
-                client.Player.Release(GamePlayer.eReleaseType.Jail, true);
-                return true;
-            }
-            return false;
+            player.Release(GamePlayer.eReleaseType.Normal, false);
         }
     }
 }

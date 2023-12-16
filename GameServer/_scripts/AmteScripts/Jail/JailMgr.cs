@@ -129,7 +129,7 @@ namespace DOL.GS.Scripts
                     }
                 }
 
-                EmprisonnerRP(args.GamePlayer, cost, DateTime.Now + time, args.GamePlayer.LastKillerName, reason, true);
+                EmprisonnerRP(args.GamePlayer, cost, DateTime.Now + time, args.GamePlayer.LastKiller?.Name, reason, true);
             }
         }
 
@@ -283,7 +283,7 @@ namespace DOL.GS.Scripts
                 message = LanguageMgr.GetTranslation(player.Client.Account.Language, "GameObjects.GamePlayer.Jailed", player.Name, jailer);
                 NewsMgr.CreateNews("GameObjects.GamePlayer.Jailed", player.Realm, eNewsType.RvRGlobal, false, true, player.Name, jailer);
             }
-            else if (string.IsNullOrEmpty(player.LastKillerName))
+            else if (string.IsNullOrEmpty(player.LastKiller?.Name))
             {
                 message = LanguageMgr.GetTranslation(player.Client.Account.Language, "GameObjects.GamePlayer.Jailed.Unknown", player.Name);
                 NewsMgr.CreateNews("GameObjects.GamePlayer.Jailed.Unknown", player.Realm, eNewsType.RvRGlobal, false, true, player.Name);

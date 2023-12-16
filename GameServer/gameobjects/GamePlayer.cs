@@ -854,7 +854,15 @@ namespace DOL.GS
             {
                 if (!IsAlive)
                 {
-                    Release(m_releaseType, true);
+                    //Check if player should go to jail
+                    if (Reputation < 0 && GameServer.ServerRules.CanPutPlayersInJail(LastKiller))
+                    {
+                        Release(GamePlayer.eReleaseType.Jail, true);
+                    }
+                    else
+                    {
+                        Release(m_releaseType, true);
+                    }
                     if (log.IsInfoEnabled)
                         log.InfoFormat("Linkdead player {0}({1}) was auto-released from death!", Name, Client.Account.Name);
                 }
@@ -8081,9 +8089,9 @@ namespace DOL.GS
         }
 
         /// <summary>
-        /// Name of the last killer of this player
+        /// Last killer of this player. Can be null if killed by environment (e.g. falling)
         /// </summary>
-        public string LastKillerName { get; set; }
+        public GameObject LastKiller { get; set; }
 
         /// <summary>
         /// Called when the player dies
@@ -8120,6 +8128,7 @@ namespace DOL.GS
 
             if (killer == null)
             {
+                LastKiller = null;
                 if (realmDeath)
                 {
                     publicMessage = "GameObjects.GamePlayer.Die.KilledLocation";
@@ -8131,7 +8140,7 @@ namespace DOL.GS
             }
             else
             {
-                LastKillerName = killer.GetName(0, true);
+                LastKiller = killer;
                 if (DuelTarget == killer)
                 {
                     m_releaseType = eReleaseType.Duel;
