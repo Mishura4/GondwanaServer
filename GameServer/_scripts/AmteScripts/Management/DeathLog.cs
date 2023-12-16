@@ -41,9 +41,14 @@ namespace DOL.GS.GameEvents
             {
                 if (killer is GamePlayer playerKiller)
                 {
+                    if (playerVictim.Reputation < 0)
+                    {
+                        // Ignore kills on Outlaws
+                        return;
+                    }
                     if (playerKiller.Client.Account.PrivLevel > 1)
                     {
-                        //If killer is GM, let go
+                        // If killer is GM, let go
                         return;
                     }
 

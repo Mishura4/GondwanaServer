@@ -15141,7 +15141,7 @@ namespace DOL.GS
 
         public bool Wanted
         {
-            get { return m_wanted; };
+            get { return m_wanted; }
             set
             {
                 bool wasWanted = m_wanted;
