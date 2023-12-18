@@ -62,7 +62,10 @@ namespace DOL.GS.GameEvents
                     {
                         // Automatically report player
                         --playerKiller.Reputation;
-                        playerKiller.SaveIntoDatabase();
+                        if (!playerKiller.Wanted)
+                        {
+                            playerKiller.Wanted = true;
+                        }
                         GameServer.Database.AddObject(new DBDeathLog(playerVictim, playerKiller, true));
                         playerKiller.Out.SendMessage(LanguageMgr.GetTranslation(playerKiller.Client, "GameObjects.GamePlayer.Multiplekills", playerKiller.GetPersonalizedName(playerVictim)), PacketHandler.eChatType.CT_System, PacketHandler.eChatLoc.CL_SystemWindow);
                     }
@@ -97,7 +100,7 @@ namespace DOL.GS.GameEvents
 
         private static void GuardKillLostReputation(GamePlayer player)
         {
-            if (player.Client.Account.PrivLevel == 1)
+            if (player.Client.Account.PrivLevel <= 1)
             {
                 player.Reputation--;
                 player.SaveIntoDatabase();

@@ -46,7 +46,6 @@ namespace DOL.GS.Scripts
             {
                 case "Signaler":
                 case "Report":
-
                     int reported = DeathCheck.Instance.ReportPlayer(player);
                     //if (BlacklistMgr.ReportPlayer(player)) Old Way not used anymore
                     if (reported > 0)
@@ -58,18 +57,17 @@ namespace DOL.GS.Scripts
 
                 case "Voir":
                 case "Look":
-                    StringBuilder sb = new StringBuilder();
-                    var names = this.GetOutlawsName();
+                    IList<DOLCharacters> outlaws = GameServer.Database.SelectObjects<DOLCharacters>(DB.Column("LastPlayed").IsGreatherThan("DATE_SUB(NOW(), INTERVAL 1 MONTH)").And(DB.Column("IsWanted").IsNotEqualTo(0)));
 
-                    if (names == null)
+                    if (outlaws == null || outlaws.Count == 0)
                     {
-                        sb.AppendLine(LanguageMgr.GetTranslation(player.Client.Account.Language, "GuardNPC.Response.Nobodywanted"));
-                        player.Out.SendMessage(sb.ToString(), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GuardNPC.Response.Nobodywanted"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                         break;
                     }
 
+                    StringBuilder sb = new StringBuilder();
                     sb.AppendLine(LanguageMgr.GetTranslation(player.Client.Account.Language, "GuardNPC.Response.Blacklist"));
-                    names.ForEach(s => sb.AppendLine(s));
+                    outlaws.ForEach(s => sb.AppendLine(s.Name));
                     player.Out.SendMessage(sb.ToString(), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                     break;
             }
@@ -113,12 +111,6 @@ namespace DOL.GS.Scripts
         public override void WalkToSpawn(short speed)
         {
             base.WalkToSpawn(MaxSpeed);
-        }
-
-        public IEnumerable<string> GetOutlawsName()
-        {
-            IList<DBDeathLog> kills = GameServer.Database.SelectObjects<DBDeathLog>(DB.Column("IsReported").IsEqualTo(1).And(DB.Column("WasPunished").IsEqualTo(0)));
-            return kills.Select(k => k.Killer).Distinct();
         }
     }
 

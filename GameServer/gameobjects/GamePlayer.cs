@@ -13414,6 +13414,7 @@ namespace DOL.GS
                 DBCharacter.LastPlayed = DateTime.Now;
                 DBCharacter.IsRenaissance = IsRenaissance;
                 DBCharacter.Reputation = Reputation;
+                DBCharacter.IsWanted = Wanted;
 
                 DBCharacter.ActiveWeaponSlot = (byte)((byte)ActiveWeaponSlot | (byte)ActiveQuiverSlot);
                 if (m_stuckFlag)
@@ -15144,18 +15145,21 @@ namespace DOL.GS
             get { return m_wanted; }
             set
             {
-                bool wasWanted = m_wanted;
+                bool wasWanted;
+                wasWanted = m_wanted;
                 m_wanted = value;
                 if (wasWanted != value)
                 {
                     if (value) // Becoming wanted
                     {
+                        NewsMgr.CreateNews("GameObjects.GamePlayer.Wanted", Realm, eNewsType.RvRGlobal, false, true, Name);
                         if (Properties.DISCORD_ACTIVE)
                         {
                             var hook = new DolWebHook(Properties.DISCORD_WEBHOOK_ID);
                             hook.SendMessage(LanguageMgr.GetTranslation(Client?.Account?.Language ?? Properties.SERV_LANGUAGE, "GameObjects.GamePlayer.Wanted", Name));
                         }
                     }
+                    SaveIntoDatabase();
                 }
             }
         }

@@ -2181,7 +2181,7 @@ namespace DOL.GS.ServerRules
         }
 
         /// <summary>
-        /// Is this GameObject able to put players in jail 
+        /// Is this GameObject able to put players in jail
         /// </summary>
         /// <param name="obj">The object to check</param>
         /// <returns></returns>

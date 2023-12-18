@@ -143,6 +143,7 @@ namespace DOL.GS.Scripts
             Prisonniers.Add(player);
             PlayerXPrisoner.Add(player, prison);
             player.Reputation = 0;
+            player.Wanted = false;
 
             if (prison.RP) player.MoveTo(Prison_RegionID, Prison_X, Prison_Y, Prison_Z, Prison_Heading);
             else player.MoveTo(PrisonHRP_RegionID, PrisonHRP_X, PrisonHRP_Y, PrisonHRP_Z, PrisonHRP_Heading);
@@ -257,6 +258,7 @@ namespace DOL.GS.Scripts
             player.MaxSpeedBase = 50;
             player.Out.SendUpdateMaxSpeed();
             player.Reputation = 0;
+            player.Wanted = false;
             player.SaveIntoDatabase();
             Prisonniers.Add(player);
             PlayerXPrisoner.Add(player, prisoner);
@@ -358,6 +360,7 @@ namespace DOL.GS.Scripts
                 perso.BindRegion = PrisonHRP_RegionID;
             }
             perso.Reputation = 0;
+            perso.IsWanted = false;
             perso.OutlawTimeStamp = 0;
             perso.MaxSpeed = 50;
             GameServer.Database.SaveObject(perso);
