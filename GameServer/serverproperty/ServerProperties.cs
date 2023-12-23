@@ -169,40 +169,6 @@ namespace DOL.GS.ServerProperties
         [ServerProperty("system", "load_housing_npc", "Should the server load Housing npc, values True,False", true)]
         public static bool LOAD_HOUSING_NPC;
 
-        [ServerProperty("system", "reward_outlaw_head_gold", "The price in golds for the head of an outlaw", 50)]
-        public static int REWARD_OUTLAW_HEAD_GOLD;
-
-        [ServerProperty("system", "is_reputation_recovery_activated", "Is Reputation recovery interval activated", true)]
-        public static bool IS_REPUTATION_RECOVERY_ACTIVATED;
-
-        [ServerProperty("system", "reputation_days_interval_recovery", "The Number of days interval before recover reputation points", 5)]
-        public static int REPUTATION_DAYS_INTERVAL;
-
-        [ServerProperty("system", "reputation_points_recovery", "The Number points to recover when days interval is activated", 1)]
-        public static int REPUTATION_POINTS_RECOVERY;
-
-        /// <summary>
-        /// Threshold of reputation for which a player will automatically be wanted
-        /// Set to a value > 0 to disable
-        /// </summary>
-        [ServerProperty("system", "reputation_threshold_automatic_wanted",
-            "The threshold of reputation to make someone automatically wanted. Set to a value > 0 to disable", -5)]
-        public static int REPUTATION_THRESHOLD_AUTOMATIC_WANTED;
-
-        /// <summary>
-        /// Number of kills in 20 minutes of the same player to automatically make a player wanted
-        /// Set to 0 to disable
-        /// </summary>
-        [ServerProperty("system", "reputation_chain_kill_count",
-            "The number of times a player needs to kill the same player in the last 20 minutes to be \"a chain killer\" and be wanted (set to <= 0 to disable)", 2)]
-        public static int REPUTATION_CHAIN_KILL_COUNT;
-
-        /// <summary>
-        /// Whether to allow trading between non-outlaws and outlaws
-        /// </summary>
-        [ServerProperty("system", "allow_trade_with_outlaw", "Is trading allowed between outlaws and non-outlaws", false)]
-        public static bool ALLOW_TRADE_WITH_OUTLAW;
-
         /// <summary>
         /// Disable Bug Reports
         /// </summary>
@@ -1623,6 +1589,46 @@ namespace DOL.GS.ServerProperties
         /// </summary>
         [ServerProperty("pvp", "pvp_death_con_loss", "Loose con on pvp death on PvP servertype", true)]
         public static bool PVP_DEATH_CON_LOSS;
+
+        [ServerProperty("system", "reward_outlaw_head_gold", "The price in golds for the head of an outlaw", 50)]
+        public static int REWARD_OUTLAW_HEAD_GOLD;
+
+        [ServerProperty("system", "is_reputation_recovery_activated", "Is Reputation recovery interval activated", true)]
+        public static bool IS_REPUTATION_RECOVERY_ACTIVATED;
+
+        [ServerProperty("system", "reputation_days_interval_recovery", "The Number of days interval before recover reputation points", 5)]
+        public static int REPUTATION_DAYS_INTERVAL;
+
+        [ServerProperty("system", "reputation_points_recovery", "The Number points to recover when days interval is activated", 1)]
+        public static int REPUTATION_POINTS_RECOVERY;
+
+        /// <summary>
+        /// Threshold of reputation for which a player will automatically be wanted
+        /// Set to a value > 0 to disable
+        /// </summary>
+        [ServerProperty("system", "reputation_threshold_automatic_wanted",
+            "The threshold of reputation to make someone automatically wanted. Set to a value > 0 to disable", -5)]
+        public static int REPUTATION_THRESHOLD_AUTOMATIC_WANTED;
+
+        /// <summary>
+        /// Number of kills in 20 minutes of the same player to automatically make a player wanted
+        /// Set to 0 to disable
+        /// </summary>
+        [ServerProperty("system", "reputation_chain_kill_count",
+            "The number of times a player needs to kill the same player in the last 20 minutes to be \"a chain killer\" and be wanted (set to <= 0 to disable)", 2)]
+        public static int REPUTATION_CHAIN_KILL_COUNT;
+
+        /// <summary>
+        /// Whether to allow trading between non-outlaws and outlaws
+        /// </summary>
+        [ServerProperty("system", "allow_trade_with_outlaw", "Is trading allowed between outlaws and non-outlaws", false)]
+        public static bool ALLOW_TRADE_WITH_OUTLAW;
+
+        /// <summary>
+        /// The time in seconds before a player can drop another head after dropping one
+        /// </summary>
+        [ServerProperty("system", "player_head_cooldown_seconds", "The time in seconds before a player can drop another head after dropping one", 300)]
+        public static int PLAYER_HEAD_DROP_COOLDOWN_SECONDS;
         #endregion
 
         #region KEEPS

@@ -51,6 +51,7 @@ using DOL.GS.Utils;
 using DOL.Language;
 using DOL.Territory;
 using DOL.GameEvents;
+using DOL.GS.GameEvents;
 using DOL.GS.Scripts;
 using log4net;
 
@@ -855,8 +856,9 @@ namespace DOL.GS
                 if (!IsAlive)
                 {
                     //Check if player should go to jail
-                    if (Reputation < 0 && GameServer.ServerRules.CanPutPlayersInJail(LastKiller))
+                    if (Reputation < 0 && GameServer.ServerRules.CanPutPlayersInJail(LastKiller) && GameServer.ServerRules.IsInPvPArea(this))
                     {
+                        m_lastHeadDropTime = 0;
                         Release(GamePlayer.eReleaseType.Jail, true);
                     }
                     else
@@ -8401,7 +8403,7 @@ namespace DOL.GS
 
             if (killer is GamePlayer playerKiller)
             {
-                this.PlayerKilledByPlayer(this, playerKiller);
+                PlayerKilledByPlayer(playerKiller);
             }
         }
 
@@ -8416,32 +8418,35 @@ namespace DOL.GS
         /// </summary>
         public ItemTemplate HeadTemplate { get; }
 
-        public void PlayerKilledByPlayer(GamePlayer victim, GamePlayer killer)
+        public long m_lastHeadDropTime = 0;
+
+        private void PlayerKilledByPlayer(GamePlayer killer)
         {
-            if (victim == killer)
+            if (this == killer)
                 return;
             //old system
             //var inBL = IsBlacklisted(victim);
-
-            if (victim.isInBG || victim.IsInPvP || victim.IsInRvR || Territory.TerritoryManager.Instance.IsTerritoryArea(victim.CurrentAreas))
+            if (isInBG || IsInPvP || IsInRvR || Territory.TerritoryManager.Instance.IsTerritoryArea(CurrentAreas))
             {
                 return;
             }
 
-            if (victim.Reputation < 0)
+            long now = DateTimeOffset.Now.ToUnixTimeSeconds();
+            if (Reputation < 0 && now - m_lastHeadDropTime >= Properties.PLAYER_HEAD_DROP_COOLDOWN_SECONDS)
             {
                 ItemUnique iu = new ItemUnique(HeadTemplate)
                 {
-                    Name = "Tête de " + victim.Name,
-                    MessageArticle = victim.InternalID + ";" + victim.Reputation,
+                    Name = "Tête de " + Name,
+                    MessageArticle = InternalID + ";" + Reputation,
                     CanDropAsLoot = true,
                     MaxCondition = (int)DateTime.Now.Subtract(new DateTime(2000, 1, 1)).TotalSeconds
                 };
                 GameServer.Database.AddObject(iu);
+                m_lastHeadDropTime = now;
                 if (killer.Inventory.AddItem(eInventorySlot.FirstEmptyBackpack, GameInventoryItem.Create(iu)))
-                    killer.SendMessage("Vous avez récupéré la tête de " + victim.Name + ".", eChatType.CT_Loot);
+                    killer.SendMessage("Vous avez récupéré la tête de " + Name + ".", eChatType.CT_Loot);
                 else
-                    killer.SendMessage("Vous n'avez pas pu récupérer la tête de " + victim.Name + ", votre inventaire est plein!", eChatType.CT_Loot);
+                    killer.SendMessage("Vous n'avez pas pu récupérer la tête de " + Name + ", votre inventaire est plein!", eChatType.CT_Loot);
             }
         }
 
@@ -15090,42 +15095,48 @@ namespace DOL.GS
 
         public int Reputation
         {
-            get { return m_reputation; }
+            get { lock (m_LockObject) { return m_reputation; } }
             set
             {
-                int oldReputation = m_reputation;
-                int difference = value - m_reputation;
-                m_reputation = value;
+                lock (m_LockObject)
+                {
+                    int oldReputation = m_reputation;
+                    int difference = value - m_reputation;
+                    m_reputation = value;
 
-                if (difference == 0)
-                {
-                    return;
-                }
-                if (difference > 0) // adding
-                {
-                    if (m_reputation >= 0)
+                    if (difference == 0)
                     {
-                        OutlawTimeStamp = 0;
-                        Wanted = false;
+                        return;
                     }
-                }
-                else // substracting
-                {
-                    if (m_reputation < 0)
+
+                    if (difference > 0) // adding
                     {
-                        if (oldReputation >= 0) // becoming outlaw
+                        if (m_reputation >= 0)
                         {
-                            if (Properties.IS_REPUTATION_RECOVERY_ACTIVATED)
-                            {
-                                this.ConfigureReputationTimer();
-                            }
-                            OutlawTimeStamp = DateTimeOffset.Now.ToUnixTimeSeconds();
+                            OutlawTimeStamp = 0;
+                            WantedUnsafe = false;
                         }
                     }
-
-                    if (ServerProperties.Properties.REPUTATION_THRESHOLD_AUTOMATIC_WANTED < 0 && m_reputation < ServerProperties.Properties.REPUTATION_THRESHOLD_AUTOMATIC_WANTED && !Wanted)
+                    else // substracting
                     {
-                        Wanted = true;
+                        if (m_reputation < 0)
+                        {
+                            if (oldReputation >= 0) // becoming outlaw
+                            {
+                                if (Properties.IS_REPUTATION_RECOVERY_ACTIVATED)
+                                {
+                                    this.ConfigureReputationTimer();
+                                }
+
+                                OutlawTimeStamp = DateTimeOffset.Now.ToUnixTimeSeconds();
+                            }
+                        }
+
+                        if (ServerProperties.Properties.REPUTATION_THRESHOLD_AUTOMATIC_WANTED < 0 &&
+                            m_reputation < ServerProperties.Properties.REPUTATION_THRESHOLD_AUTOMATIC_WANTED && !WantedUnsafe)
+                        {
+                            WantedUnsafe = true;
+                        }
                     }
                 }
 
@@ -15140,7 +15151,10 @@ namespace DOL.GS
             }
         }
 
-        public bool Wanted
+        /// <summary>
+        /// Whether the player is wanted or not, thread-unsafe
+        /// </summary>
+        private bool WantedUnsafe
         {
             get { return m_wanted; }
             set
@@ -15159,7 +15173,22 @@ namespace DOL.GS
                             hook.SendMessage(LanguageMgr.GetTranslation(Client?.Account?.Language ?? Properties.SERV_LANGUAGE, "GameObjects.GamePlayer.Wanted", Name));
                         }
                     }
-                    SaveIntoDatabase();
+                    SaveIntoDatabase(); // This is necessary because guards pull wanted list from the DB
+                }
+            }
+        }
+
+        /// <summary>
+        /// Whether the player is wanted or not, thread-safe
+        /// </summary>
+        public bool Wanted
+        {
+            get { lock (m_LockObject) { return WantedUnsafe; } }
+            set
+            {
+                lock (m_LockObject)
+                {
+                    WantedUnsafe = value;
                 }
             }
         }

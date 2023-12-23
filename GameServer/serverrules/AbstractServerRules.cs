@@ -22,7 +22,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Reflection;
-
+using AmteScripts.Managers;
 using DOL.AI.Brain;
 using DOL.Database;
 using DOL.Events;
@@ -2178,6 +2178,20 @@ namespace DOL.GS.ServerRules
                 return false;
 
             return true;
+        }
+
+        /// <summary>
+        /// Is kill allowed ? Allow kills in PvP zones etc..
+        /// </summary>
+        /// <param name="player"></param>
+        /// <returns></returns>
+        public virtual bool IsInPvPArea(GamePlayer player)
+        {
+            return player.isInBG ||
+                   player.CurrentRegion.IsRvR ||
+                   PvpManager.Instance.IsPvPRegion(player.CurrentRegion.ID) ||
+                   player.CurrentAreas.Any(a => a.IsPvP) ||
+                   player.CurrentZone.AllowReputation;
         }
 
         /// <summary>

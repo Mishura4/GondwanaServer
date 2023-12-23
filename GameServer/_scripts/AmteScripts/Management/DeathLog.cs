@@ -52,7 +52,7 @@ namespace DOL.GS.GameEvents
                         return;
                     }
 
-                    if (IsKillAllowedArea(playerVictim))
+                    if (GameServer.ServerRules.IsInPvPArea(playerVictim))
                     {
                         // PvP area
                         return;
@@ -79,7 +79,7 @@ namespace DOL.GS.GameEvents
             {
                 if (killer is GamePlayer playerKiller)
                 {
-                    if (!IsKillAllowedArea(playerKiller))
+                    if (!GameServer.ServerRules.IsInPvPArea(playerKiller))
                     {
                         if (playerKiller.Group != null)
                         {
@@ -106,25 +106,6 @@ namespace DOL.GS.GameEvents
                 player.SaveIntoDatabase();
                 player.Out.SendMessage("Vous avez perdu 1 points de réputation pour cause d'assassinat de garde", eChatType.CT_System, eChatLoc.CL_SystemWindow);
             }
-        }
-
-        /// <summary>
-        /// Is kill allowed ? Allow kills in PvP zones etc..
-        /// </summary>
-        /// <param name="player"></param>
-        /// <returns></returns>
-        private static bool IsKillAllowedArea(GamePlayer player)
-        {
-            if (player.isInBG ||
-                player.CurrentRegion.IsRvR ||
-                PvpManager.Instance.IsPvPRegion(player.CurrentRegion.ID) ||
-                player.CurrentAreas.Any(a => a.IsPvP) ||
-                player.CurrentZone.AllowReputation)
-            {
-                return true;
-            }
-
-            return false;
         }
     }
 }

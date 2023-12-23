@@ -23,6 +23,8 @@ using DOL.Database;
 using DOL.GS.Styles;
 using DOL.GS.Keeps;
 using System.Numerics;
+using AmteScripts.Managers;
+using System.Linq;
 
 namespace DOL.GS.ServerRules
 {
@@ -402,6 +404,13 @@ namespace DOL.GS.ServerRules
         /// <param name="player">the player</param>
         /// <returns>true if the player is allowed to generate news</returns>
         bool CanGenerateNews(GamePlayer player);
+
+        /// <summary>
+        /// Is kill allowed ? Allow kills in PvP zones etc..
+        /// </summary>
+        /// <param name="player"></param>
+        /// <returns></returns>
+        bool IsInPvPArea(GamePlayer player);
 
         /// <summary>
         /// Is this GameObject able to put players in jail 
