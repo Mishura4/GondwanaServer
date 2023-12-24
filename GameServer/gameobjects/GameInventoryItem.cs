@@ -202,21 +202,25 @@ namespace DOL.GS
         {
             string classType = item.ClassType;
             var itemUnique = item as ItemUnique;
-            var itemIsNoCurrency = !item.ClassType.ToLower().StartsWith("currency.");
 
-            if (!string.IsNullOrEmpty(classType) && itemIsNoCurrency)
+            if (!string.IsNullOrEmpty(classType))
             {
-                GameInventoryItem gameItem;
-                if (itemUnique != null)
-                    gameItem = ScriptMgr.CreateObjectFromClassType<GameInventoryItem, ItemUnique>(classType, itemUnique);
-                else
-                    gameItem = ScriptMgr.CreateObjectFromClassType<GameInventoryItem, ItemTemplate>(classType, item);
+                var itemClass = item.ClassType.ToLower();
+                var itemIsSpecial = itemClass.StartsWith("currency") || itemClass.StartsWith("token");
+                if (!itemIsSpecial)
+                {
+                    GameInventoryItem gameItem;
+                    if (itemUnique != null)
+                        gameItem = ScriptMgr.CreateObjectFromClassType<GameInventoryItem, ItemUnique>(classType, itemUnique);
+                    else
+                        gameItem = ScriptMgr.CreateObjectFromClassType<GameInventoryItem, ItemTemplate>(classType, item);
 
-                if (gameItem != null)
-                    return gameItem;
+                    if (gameItem != null)
+                        return gameItem;
 
-                if (log.IsWarnEnabled)
-                    log.WarnFormat("Failed to construct game inventory item of ClassType {0}!", classType);
+                    if (log.IsWarnEnabled)
+                        log.WarnFormat("Failed to construct game inventory item of ClassType {0}!", classType);
+                }
             }
 
             if (itemUnique != null)

@@ -14248,7 +14248,7 @@ namespace DOL.GS
 
         #region Crafting
 
-        public Object CraftingLock = new Object();
+        public readonly Object CraftingLock = new Object();
 
         /// <summary>
         /// Store all player crafting skill and their value (eCraftingSkill => Value)
@@ -14560,10 +14560,10 @@ namespace DOL.GS
             }
             try
             {
-                CraftingPrimarySkill = (eCraftingSkill)DBCharacter.CraftingPrimarySkill;
-
                 lock (CraftingLock)
                 {
+                    CraftingPrimarySkill = (eCraftingSkill)DBCharacter.CraftingPrimarySkill;
+
                     foreach (string skill in Util.SplitCSV(DBCharacter.SerializedCraftingSkills))
                     {
                         string[] values = skill.Split('|');
@@ -14627,6 +14627,32 @@ namespace DOL.GS
                 if (log.IsErrorEnabled)
                     log.Error(Name + ": error in loading playerCraftingSkills => " + DBCharacter.SerializedCraftingSkills, e);
             }
+        }
+
+        public void ResetCraftingSkills()
+        {
+            lock (CraftingLock)
+            {
+                foreach (eCraftingSkill craftingSkillId in Enum.GetValues(typeof(eCraftingSkill)))
+                {
+                    if (m_craftingSkills.ContainsKey(craftingSkillId) && craftingSkillId != eCraftingSkill.BasicCrafting)
+                    {
+                        m_craftingSkills[craftingSkillId] = 1;
+                    }
+                }
+
+                if (ServerProperties.Properties.PLAYERCREATION_PRIMARY_CRAFTINGSKILL)
+                {
+                    CraftingPrimarySkill = eCraftingSkill.NoCrafting;
+                }
+                else
+                {
+                    CraftingPrimarySkill = eCraftingSkill.BasicCrafting;
+                }
+            }
+            SaveCraftingSkills();
+            Out.SendUpdateCraftingSkills();
+            Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "Crafting.Respec.SkillsReset"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
         }
 
         private bool IsCraftingSkillDefined(int craftingSkillToCheck)

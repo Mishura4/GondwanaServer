@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections;
 using System.Reflection;
+using DOL.Database;
 using DOL.GS.PacketHandler;
 using DOL.Language;
 using log4net;
@@ -53,7 +54,7 @@ namespace DOL.GS
 
             if (player.Client.Account.PrivLevel == 1 && player.CraftingPrimarySkill != eCraftingSkill.BasicCrafting && player.CraftingPrimarySkill != TheCraftingSkill)
             {
-                SayTo(player, eChatLoc.CL_ChatWindow, LanguageMgr.GetTranslation(player.Client.Account.Language, "CraftNPC.Interact.NotMaster"));
+                SayTo(player, eChatLoc.CL_PopupWindow, LanguageMgr.GetTranslation(player.Client.Account.Language, "CraftNPC.Interact.NotMaster"));
                 return true;
             }
 
@@ -131,6 +132,10 @@ namespace DOL.GS
             {
                 player.Out.SendCustomDialog(LanguageMgr.GetTranslation(player.Client.Account.Language, "CraftNPC.WhisperReceive.WishToJoin", ACCEPTED_BY_ORDER_NAME), new CustomDialogResponse(CraftNpcDialogResponse));
             }
+            else if (text is "respecialization" or "respécialisation")
+            {
+                player.Out.SendCustomDialog(LanguageMgr.GetTranslation(player.Client.Account.Language, "Crafting.Respec.Confirm"), new CustomDialogResponse(ResetDialogResponse));
+            }
             return true;
         }
 
@@ -150,6 +155,25 @@ namespace DOL.GS
             player.Out.SendUpdatePlayer();
             player.Out.SendUpdateCraftingSkills();
             player.SaveIntoDatabase();
+        }
+
+        protected virtual void ResetDialogResponse(GamePlayer player, byte response)
+        {
+            if (response != 0x01)
+                return; //declined
+
+            foreach (InventoryItem item in player.Inventory.AllItems)
+            {
+                if (item.Template.ClassType == "Token.CraftRespec")
+                {
+                    player.ResetCraftingSkills();
+                    player.Inventory.RemoveItem(item);
+                    Interact(player);
+                    return;
+                }
+            }
+            // No crafting token
+            SayTo(player, eChatLoc.CL_PopupWindow, LanguageMgr.GetTranslation(player.Client.Account.Language, "CraftNPC.Interact.NoToken"));
         }
     }
 }

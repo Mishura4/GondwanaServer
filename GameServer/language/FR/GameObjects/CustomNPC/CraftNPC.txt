@@ -1,5 +1,6 @@
 CraftNPC.CraftNpcDialogResponse.Accepted:   Vous avez été accepté par {0} !
-CraftNPC.Interact.Examine:                  Vous regardez {0}. Il est amicale envers vous. 
-CraftNPC.Interact.NotMaster:				Je ne suis pas votre maître crafteur.
+CraftNPC.Interact.Examine:                  Vous regardez {0}. Il est amicale envers vous.
+CraftNPC.Interact.NotMaster:				Je ne suis pas votre maître crafteur. Vous pouvez me donner un jeton de [respécialisation] pour quitter votre ordre actuel, et je pourrai ensuite vous enseigner.
 CraftNPC.Interact.Promoted:                 Vous êtes promu au rang de {0}.
-CraftNPC.WhisperReceive.WishToJoin:         Êtes-vous sur de vouloir rejoindre notre ordre? Quand vous aurez accepté, vous ne pourrez plus revenir en arrière.
+CraftNPC.Interact.NoToken:					Vous n'avez pas de jeton de respécialisation! Revenez quand vous en aurez un.
+CraftNPC.WhisperReceive.WishToJoin:         Êtes-vous sur de vouloir rejoindre notre ordre? Vous pouvez donner un jeton de respécialisation à un maître d'un autre ordre pour réinitialiser votre choix.

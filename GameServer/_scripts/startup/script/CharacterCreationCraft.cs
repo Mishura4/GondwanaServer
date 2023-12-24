@@ -67,18 +67,41 @@ namespace DOL.GS.GameEvents
             if (chArgs == null)
                 return;
 
-            DOLCharacters ch = chArgs.Character;
+            ResetCraftingSkills(chArgs.Character);
+        }
 
+        public static void ResetCraftingSkills(DOLCharacters ch)
+        {
+            int basicCraftingSkill = 1;
+            // If player has basic crafting already, keep old value
+            if (!ServerProperties.Properties.PLAYERCREATION_PRIMARY_CRAFTINGSKILL && ch.SerializedCraftingSkills != null)
+            {
+                foreach (string skill in Util.SplitCSV(ch.SerializedCraftingSkills))
+                {
+                    string[] values = skill.Split('|');
+                    if (values.Length > 1 && values[0] == "BasicCrafting" ||
+                        (eCraftingSkill)Convert.ToInt32(values[0]) == eCraftingSkill.BasicCrafting)
+                    {
+                        basicCraftingSkill = Convert.ToInt32(values[1]);
+                    }
+                }
+
+            }
             // Add all Crafting skills at level 1
             var collectionAllCraftingSkills = new List<string>();
             foreach (int craftingSkillId in Enum.GetValues(typeof(eCraftingSkill)))
             {
-                if (craftingSkillId > 0)
+                if (craftingSkillId <= 0) continue;
+                if (craftingSkillId == (int)eCraftingSkill.BasicCrafting && !ServerProperties.Properties.PLAYERCREATION_PRIMARY_CRAFTINGSKILL)
+                {
+                    collectionAllCraftingSkills.Add(string.Format("{0}|{1}", craftingSkillId, basicCraftingSkill));
+                }
+                else
                 {
                     collectionAllCraftingSkills.Add(string.Format("{0}|1", craftingSkillId));
-                    if (craftingSkillId == (int)eCraftingSkill._Last)
-                        break;
                 }
+                if (craftingSkillId == (int)eCraftingSkill._Last)
+                    break;
             }
 
             // Set Primary Skill to Basic.
@@ -87,6 +110,11 @@ namespace DOL.GS.GameEvents
                 ch.CraftingPrimarySkill = 0;
             else
                 ch.CraftingPrimarySkill = (int)eCraftingSkill.BasicCrafting;
+        }
+
+        public static void ResetCraftingSkills(GamePlayer player)
+        {
+            player.ResetCraftingSkills();
         }
 
     }

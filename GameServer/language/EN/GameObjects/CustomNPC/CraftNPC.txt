@@ -2,8 +2,9 @@
 
 CraftNPC.CraftNpcDialogResponse.Accepted:		You've been accepted by the {0}!
 CraftNPC.Interact.Examine:				You examine {0}. He is friendly 
-CraftNPC.Interact.NotMaster:				I am not your master.
+CraftNPC.Interact.NotMaster:				I am not your crafting master. You may give me a [respecialization] token to leave your current order, then I will be able to teach you.
 CraftNPC.Interact.Promoted:				You have been promoted to {0}.
-CraftNPC.WhisperReceive.WishToJoin:			Are you sure you wish to join the {0} order?
+CraftNPC.Interact.NoToken:				You do not have a respecialization token! Please come back when you do.
+CraftNPC.WhisperReceive.WishToJoin:			Are you sure you wish to join the {0} order? You may give a respecialization token to a master of any other order to reset your choice.
 
 
