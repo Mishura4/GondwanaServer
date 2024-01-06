@@ -167,7 +167,7 @@ namespace DOL.GS
                 if (item.Template.ClassType == "Token.CraftRespec")
                 {
                     player.ResetCraftingSkills();
-                    player.Inventory.RemoveItem(item);
+                    player.Inventory.RemoveCountFromStack(item, 1);
                     Interact(player);
                     return;
                 }
