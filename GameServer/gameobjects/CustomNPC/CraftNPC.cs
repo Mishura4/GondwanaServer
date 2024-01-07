@@ -139,6 +139,15 @@ namespace DOL.GS
             return true;
         }
 
+        /// <inheritdoc />
+        public override bool ReceiveItem(GameLiving source, InventoryItem item)
+        {
+            if (!(source is GamePlayer player))
+                return false;
+            player.Out.SendCustomDialog(LanguageMgr.GetTranslation(player.Client.Account.Language, "Crafting.Respec.Confirm"), new CustomDialogResponse(ResetDialogResponse));
+            return false;
+        }
+
         protected virtual void CraftNpcDialogResponse(GamePlayer player, byte response)
         {
             if (response != 0x01)
