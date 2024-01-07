@@ -49,6 +49,7 @@ public class MobXAmbientBehaviour : DataObject
     private int m_interactTimerDelay;
     private string m_walkToPath;
     private ushort m_yell;
+    private int m_timerBetweenTriggers = 1000;
     public System.Timers.Timer InteractTriggerTimer { get; set; }
 
     /// <summary>
@@ -97,7 +98,7 @@ public class MobXAmbientBehaviour : DataObject
     /// <param name="interactTimerDelay"></param>
     /// <param name="walkToPath"></param>
     /// <param name="yell"></param>
-    public MobXAmbientBehaviour(string name, string trigger, ushort emote, string text, ushort chance, string voice, int spell, ushort hp, string changeBrain, int changeNPCTemplate, ushort callAreaeffectID, ushort playertoTPpoint, ushort mobtoTPpoint, int trigerTimer, int changeEffect, int tpEffect, ushort domageTypeRepeat, ushort nbUse, ushort changeFlag, string responseTrigger, int interactTimerDelay, string walkToPath, ushort yell)
+    public MobXAmbientBehaviour(string name, string trigger, ushort emote, string text, ushort chance, string voice, int spell, ushort hp, string changeBrain, int changeNPCTemplate, ushort callAreaeffectID, ushort playertoTPpoint, ushort mobtoTPpoint, int trigerTimer, int changeEffect, int tpEffect, ushort domageTypeRepeat, ushort nbUse, ushort changeFlag, string responseTrigger, int interactTimerDelay, string walkToPath, ushort yell, int timerBetweenTriggers)
     {
         m_source = name;
         m_trigger = trigger;
@@ -122,163 +123,170 @@ public class MobXAmbientBehaviour : DataObject
         m_interactTimerDelay = interactTimerDelay;
         m_walkToPath = walkToPath;
         m_yell = yell;
+        m_timerBetweenTriggers = timerBetweenTriggers;
     }
 
     [DataElement(AllowDbNull = false, Index = true)]
     public string Source
     {
-        get { return m_source; }
-        set { m_source = value; }
+        get => m_source;
+        set => m_source = value;
     }
 
     [DataElement(AllowDbNull = false)]
     public string Trigger
     {
-        get { return m_trigger; }
-        set { m_trigger = value; }
+        get => m_trigger;
+        set => m_trigger = value;
     }
 
     [DataElement(AllowDbNull = false)]
     public ushort Emote
     {
-        get { return m_emote; }
-        set { m_emote = value; }
+        get => m_emote;
+        set => m_emote = value;
     }
 
     [DataElement(AllowDbNull = false)]
     public string Text
     {
-        get { return m_text; }
-        set { m_text = value; }
+        get => m_text;
+        set => m_text = value;
     }
 
     [DataElement(AllowDbNull = false)]
     public ushort Chance
     {
-        get { return m_chance; }
-        set { m_chance = value; }
+        get => m_chance;
+        set => m_chance = value;
     }
 
     [DataElement(AllowDbNull = true)]
     public string Voice
     {
-        get { return m_voice; }
-        set { m_voice = value; }
+        get => m_voice;
+        set => m_voice = value;
     }
 
     [DataElement(AllowDbNull = true)]
     public int Spell
     {
-        get { return m_spell; }
-        set { m_spell = value; }
+        get => m_spell;
+        set => m_spell = value;
     }
 
     [DataElement(AllowDbNull = true)]
     public ushort HP
     {
-        get { return m_hp; }
-        set { m_hp = value; }
+        get => m_hp;
+        set => m_hp = value;
     }
 
     [DataElement(AllowDbNull = true)]
     public string ChangeBrain
     {
-        get { return m_changeBrain; }
-        set { m_changeBrain = value; }
+        get => m_changeBrain;
+        set => m_changeBrain = value;
     }
 
     [DataElement(AllowDbNull = true)]
     public int ChangeNPCTemplate
     {
-        get { return m_changeNPCTemplate; }
-        set { m_changeNPCTemplate = value; }
+        get => m_changeNPCTemplate;
+        set => m_changeNPCTemplate = value;
     }
 
     [DataElement(AllowDbNull = true)]
     public ushort CallAreaeffectID
     {
-        get { return m_callAreaeffectID; }
-        set { m_callAreaeffectID = value; }
+        get => m_callAreaeffectID;
+        set => m_callAreaeffectID = value;
     }
 
     [DataElement(AllowDbNull = true)]
     public ushort PlayertoTPpoint
     {
-        get { return m_playertoTPpoint; }
-        set { m_playertoTPpoint = value; }
+        get => m_playertoTPpoint;
+        set => m_playertoTPpoint = value;
     }
 
     [DataElement(AllowDbNull = true)]
     public ushort MobtoTPpoint
     {
-        get { return m_mobtoTPpoint; }
-        set { m_mobtoTPpoint = value; }
+        get => m_mobtoTPpoint;
+        set => m_mobtoTPpoint = value;
     }
 
     [DataElement(AllowDbNull = true)]
     public ushort DamageTypeRepeat
     {
-        get { return m_damageTypeRepeat; }
-        set { m_damageTypeRepeat = value; }
+        get => m_damageTypeRepeat;
+        set => m_damageTypeRepeat = value;
     }
 
     [DataElement(AllowDbNull = true)]
     public ushort NbUse
     {
-        get { return m_nbUse; }
-        set { m_nbUse = value; }
+        get => m_nbUse;
+        set => m_nbUse = value;
     }
 
     [DataElement(AllowDbNull = true)]
     public ushort ChangeFlag
     {
-        get { return m_changeFlag; }
-        set { m_changeFlag = value; }
+        get => m_changeFlag;
+        set => m_changeFlag = value;
     }
 
     [DataElement(AllowDbNull = true)]
     public int TriggerTimer
     {
-        get { return m_triggerTimer; }
-        set { m_triggerTimer = value; }
+        get => m_triggerTimer;
+        set => m_triggerTimer = value;
     }
 
     [DataElement(AllowDbNull = true)]
     public int ChangeEffect
     {
-        get { return m_changeEffect; }
-        set { m_changeEffect = value; }
+        get => m_changeEffect;
+        set => m_changeEffect = value;
     }
 
     [DataElement(AllowDbNull = true)]
     public int TPeffect
     {
-        get { return m_tPeffect; }
-        set { m_tPeffect = value; }
+        get => m_tPeffect;
+        set => m_tPeffect = value;
     }
 
     [DataElement(AllowDbNull = true)]
     public string ResponseTrigger
     {
-        get { return m_responseTrigger; }
-        set { m_responseTrigger = value; }
+        get => m_responseTrigger;
+        set => m_responseTrigger = value;
     }
     [DataElement(AllowDbNull = true)]
     public int InteractTimerDelay
     {
-        get { return m_interactTimerDelay; }
-        set { m_interactTimerDelay = value; }
+        get => m_interactTimerDelay;
+        set => m_interactTimerDelay = value;
     }
     [DataElement(AllowDbNull = true)]
     public string WalkToPath
     {
-        get { return m_walkToPath; }
-        set { m_walkToPath = value; }
+        get => m_walkToPath;
+        set => m_walkToPath = value;
     }
     [DataElement(AllowDbNull = true)]
     public ushort Yell
     {
-        get { return m_yell; }
-        set { m_yell = value; }
+        get => m_yell;
+        set => m_yell = value;
+    }
+    [DataElement(AllowDbNull = false)]
+    public int TimerBetweenTriggers
+    {
+        get => m_timerBetweenTriggers;
+        set => m_timerBetweenTriggers = value;
     }
 }

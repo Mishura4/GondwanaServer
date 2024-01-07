@@ -5780,6 +5780,11 @@ namespace DOL.GS
         }
 
         System.Timers.Timer TriggerPlayerLostTimer = new System.Timers.Timer(20000);
+
+        /// <summary>
+        /// Cooldown for triggers, triggers cannot run while this is not finished
+        /// </summary>
+        private System.Timers.Timer TriggerCooldownTimer = new();
         GamePlayer TriggerPlayer;
 
         string BeforeTriggerPathID = "";
@@ -5788,15 +5793,9 @@ namespace DOL.GS
         {
             if (TriggerPlayer == null)
                 return;
-            foreach (GamePlayer player in GetPlayersInRadius(1500))
+            if (TriggerPlayer.IsWithinRadius(this, 1500))
             {
-                if (player == TriggerPlayer)
-                {
-                    if (player.IsWithinRadius(this, 1500))
-                    {
-                        return;
-                    }
-                }
+                return;
             }
             // reset if player lost
             foreach (MobXAmbientBehaviour ambientText in ambientTexts)
@@ -5850,8 +5849,18 @@ namespace DOL.GS
         public void FireAmbientSentence(eAmbientTrigger trigger, GameLiving living = null, MobXAmbientBehaviour preChosen = null, bool useTimer = true)
         {
             // TODO: clean this up
-            if (IsSilent) return;
-            if (trigger == eAmbientTrigger.interact && living == null) return;
+            if (IsSilent)
+            {
+                return;
+            }
+            if (TriggerCooldownTimer is { Enabled: true })
+            {
+                return;
+            }
+            if (trigger == eAmbientTrigger.interact && living == null)
+            {
+                return;
+            }
             TriggerPlayerLostTimer.Stop();
             MobXAmbientBehaviour chosen;
             if (preChosen != null)
@@ -5878,6 +5887,12 @@ namespace DOL.GS
                 chosen = mxa[Util.Random(mxa.Count - 1)];
             }
 
+            if (chosen.TimerBetweenTriggers > 0)
+            {
+                TriggerCooldownTimer.Interval = chosen.TimerBetweenTriggers;
+                TriggerCooldownTimer.AutoReset = false;
+                TriggerCooldownTimer.Start();
+            }
             if (useTimer && trigger == eAmbientTrigger.interact && chosen.InteractTimerDelay > 0)
             {
                 if (chosen.InteractTriggerTimer != null)

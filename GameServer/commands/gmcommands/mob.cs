@@ -3272,6 +3272,7 @@ namespace DOL.GS.Commands
             int interactTimerDelay = 0;
             string walkToPath = "";
             ushort yell = 0;
+            int timerBetweenTriggers = 1000;
             try
             {
                 string type = args[2].ToLower();
@@ -3377,6 +3378,9 @@ namespace DOL.GS.Commands
                                 case "yell":
                                     yell = Convert.ToUInt16(args[i + 1]);
                                     break;
+                                case "timerbetweentriggers":
+                                    timerBetweenTriggers = Convert.ToInt32(args[i + 1]);
+                                    break;
                             }
                             i += 2;
                         }
@@ -3400,7 +3404,7 @@ namespace DOL.GS.Commands
                 if (text.Contains("{y}"))
                     voice = "y";
                 text = text.Replace("{b}", string.Empty).Replace("{y}", string.Empty);
-                GameServer.Database.AddObject(new MobXAmbientBehaviour(targetMob.Name, trig.ToString(), emote, text, chance, voice, spell, hp, changebrain, changenpctemplate, areaeffectid, playertppoint, mobtppoint, triggertimer, changeeffect, tpeffect, domagetyperepeate, nbuse, changeflag, responseTrigger, interactTimerDelay, walkToPath, yell) { Dirty = true, AllowAdd = true });
+                GameServer.Database.AddObject(new MobXAmbientBehaviour(targetMob.Name, trig.ToString(), emote, text, chance, voice, spell, hp, changebrain, changenpctemplate, areaeffectid, playertppoint, mobtppoint, triggertimer, changeeffect, tpeffect, domagetyperepeate, nbuse, changeflag, responseTrigger, interactTimerDelay, walkToPath, yell, timerBetweenTriggers) { Dirty = true, AllowAdd = true });
                 GameServer.Instance.NpcManager.AmbientBehaviour.Reload(GameServer.Instance.IDatabase);
                 targetMob.DamageTypeLimit = domagetyperepeate;
                 targetMob.ambientTexts = GameServer.Instance.NpcManager.AmbientBehaviour[targetMob.Name];
@@ -3431,7 +3435,7 @@ namespace DOL.GS.Commands
             GameServer.Database.DeleteObject(trigger);
             GameServer.Instance.NpcManager.AmbientBehaviour.Reload(GameServer.Instance.IDatabase);
             targetMob.ambientTexts = GameServer.Instance.NpcManager.AmbientBehaviour[targetMob.Name];
-            ChatUtil.SendSystemMessage(client, "Trigger: \"" + trigger.Trigger + ", chance: " + trigger.Chance + ", voice: " + trigger.Voice + ", emote: " + trigger.Emote + ", text: " + trigger.Text + "\" has been removed.");
+            ChatUtil.SendSystemMessage(client, $"Trigger: \"{trigger.Trigger}, chance: {trigger.Chance}, voice: {trigger.Voice}, emote: {trigger.Emote}, text: {trigger.Text}\" has been removed.");
         }
 
         private void trigger_info(GameClient client, GameNPC targetMob)
@@ -3441,7 +3445,7 @@ namespace DOL.GS.Commands
             ChatUtil.SendSystemMessage(client, targetMob.Name + "'s triggers:");
             var i = 0;
             foreach (var trigger in triggers)
-                ChatUtil.SendSystemMessage(client, ++i + ". " + trigger.Trigger + ", chance: " + trigger.Chance + ", voice: " + trigger.Voice + ", emote: " + trigger.Emote + ", spell: " + trigger.Spell + ", hp: " + trigger.HP + ", damge type repeate: " + trigger.DamageTypeRepeat + ", trigger timer: " + trigger.TriggerTimer + ", nb use: " + trigger.NbUse + ", change flag: " + trigger.ChangeFlag + ", change brain: " + trigger.ChangeBrain + ", change npc temmplate: " + trigger.ChangeNPCTemplate + ", change effect: " + trigger.ChangeEffect + ", area effect: " + trigger.CallAreaeffectID + ", playertppoint: " + trigger.PlayertoTPpoint + ", mobtppoint: " + trigger.MobtoTPpoint + ", tp effect: " + trigger.TPeffect + ", text: " + trigger.Text + " , response trigger: " + trigger.ResponseTrigger + ", interact timer delay: " + trigger.InteractTimerDelay + ", walk to path: " + trigger.WalkToPath + ", yell: " + trigger.Yell);
+                ChatUtil.SendSystemMessage(client, ++i + $". {trigger.Trigger}, chance: {trigger.Chance}, voice: {trigger.Voice}, emote: {trigger.Emote}, spell: {trigger.Spell}, hp: {trigger.HP}, damge type repeate: {trigger.DamageTypeRepeat}, trigger timer: {trigger.TriggerTimer}, nb use: {trigger.NbUse}, change flag: {trigger.ChangeFlag}, change brain: {trigger.ChangeBrain}, change npc temmplate: {trigger.ChangeNPCTemplate}, change effect: {trigger.ChangeEffect}, area effect: {trigger.CallAreaeffectID}, playertppoint: {trigger.PlayertoTPpoint}, mobtppoint: {trigger.MobtoTPpoint}, tp effect: {trigger.TPeffect}, text: {trigger.Text} , response trigger: {trigger.ResponseTrigger}, interact timer delay: {trigger.InteractTimerDelay}, walk to path: {trigger.WalkToPath}, yell: {trigger.Yell}, timer between triggers: {trigger.TimerBetweenTriggers}");
         }
 
         private void trigger_help(GameClient client)
@@ -3455,7 +3459,7 @@ namespace DOL.GS.Commands
             client.Out.SendMessage("Ex: /mob trigger roam chance 5 emote 12 text Prepare to die {targetname}!", eChatType.CT_System, eChatLoc.CL_PopupWindow);
             client.Out.SendMessage("Ex: /mob trigger aggro chance 5 emote 0 text {b}I've been waiting for this moment ever since I was a young {sourcename}!", eChatType.CT_System, eChatLoc.CL_PopupWindow);
             client.Out.SendMessage("Usage: '/mob trigger <type(die,aggro,spawn,fight,kill,roam, hurting, immunised)> <param1> <value1> <param2> <value2> text <sentence(can include {targetname},{sourcename},{class},{race}, {controller})(can also be formatted with {y} for yelled and {b} for broadcasted sentence)>'", eChatType.CT_System, eChatLoc.CL_PopupWindow);
-            client.Out.SendMessage("Avalable params: emote, chance, spell, hp, damagetyperepeate, triggertimer, nbuse, changeflag, changebrain, changenpctemplate, changeeffect, areaeffectid, playertppoint, mobtppoint, tpeffect", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+            client.Out.SendMessage("Avalable params: emote, chance, spell, hp, damagetyperepeate, triggertimer, nbuse, changeflag, changebrain, changenpctemplate, changeeffect, areaeffectid, playertppoint, mobtppoint, tpeffect, yell, timerbetweentriggers", eChatType.CT_System, eChatLoc.CL_PopupWindow);
             client.Out.SendMessage("Usage: '/mob trigger info' Give trigger informations", eChatType.CT_System, eChatLoc.CL_PopupWindow);
             client.Out.SendMessage("Usage: '/mob trigger remove <id>' Remove a trigger", eChatType.CT_System, eChatLoc.CL_PopupWindow);
         }
