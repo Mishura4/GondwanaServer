@@ -8426,7 +8426,7 @@ namespace DOL.GS
                 return;
             //old system
             //var inBL = IsBlacklisted(victim);
-            if (GameServer.ServerRules.IsInPvPArea(player) || IsInPvP || IsInRvR || Territory.TerritoryManager.Instance.IsTerritoryArea(CurrentAreas))
+            if (GameServer.ServerRules.IsInPvPArea(this) || IsInPvP || IsInRvR || Territory.TerritoryManager.Instance.IsTerritoryArea(CurrentAreas))
             {
                 return;
             }
