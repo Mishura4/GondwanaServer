@@ -859,7 +859,7 @@ namespace DOL.GS
                     if (Reputation < 0 && GameServer.ServerRules.CanPutPlayersInJail(LastKiller) && !GameServer.ServerRules.IsInPvPArea(this))
                     {
                         m_lastHeadDropTime = 0;
-                        Release(GamePlayer.eReleaseType.Jail, true);
+                        Release(eReleaseType.Jail, true);
                     }
                     else
                     {
@@ -8426,7 +8426,7 @@ namespace DOL.GS
                 return;
             //old system
             //var inBL = IsBlacklisted(victim);
-            if (GameServer.ServerRules.IsInPvPArea(this) || IsInPvP || IsInRvR || Territory.TerritoryManager.Instance.IsTerritoryArea(CurrentAreas))
+            if (GameServer.ServerRules.IsInPvPArea(this) || Territory.TerritoryManager.Instance.IsTerritoryArea(CurrentAreas))
             {
                 return;
             }

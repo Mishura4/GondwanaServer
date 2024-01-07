@@ -46,7 +46,7 @@ namespace DOL.GS.Commands
             }
 
             //Check if player should go to jail
-            if (player.Reputation < 0 && GameServer.ServerRules.CanPutPlayersInJail(player.LastKiller))
+            if (player.Reputation < 0 && !GameServer.ServerRules.IsInPvPArea(player) && GameServer.ServerRules.CanPutPlayersInJail(player.LastKiller))
             {
                 player.Release(GamePlayer.eReleaseType.Jail, true);
                 return;
