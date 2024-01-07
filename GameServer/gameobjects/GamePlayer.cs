@@ -856,7 +856,7 @@ namespace DOL.GS
                 if (!IsAlive)
                 {
                     //Check if player should go to jail
-                    if (Reputation < 0 && GameServer.ServerRules.CanPutPlayersInJail(LastKiller) && GameServer.ServerRules.IsInPvPArea(this))
+                    if (Reputation < 0 && GameServer.ServerRules.CanPutPlayersInJail(LastKiller) && !GameServer.ServerRules.IsInPvPArea(this))
                     {
                         m_lastHeadDropTime = 0;
                         Release(GamePlayer.eReleaseType.Jail, true);
@@ -8426,7 +8426,7 @@ namespace DOL.GS
                 return;
             //old system
             //var inBL = IsBlacklisted(victim);
-            if (isInBG || IsInPvP || IsInRvR || Territory.TerritoryManager.Instance.IsTerritoryArea(CurrentAreas))
+            if (GameServer.ServerRules.IsInPvPArea(player) || IsInPvP || IsInRvR || Territory.TerritoryManager.Instance.IsTerritoryArea(CurrentAreas))
             {
                 return;
             }
@@ -15167,7 +15167,7 @@ namespace DOL.GS
                         }
 
                         if (ServerProperties.Properties.REPUTATION_THRESHOLD_AUTOMATIC_WANTED < 0 &&
-                            m_reputation < ServerProperties.Properties.REPUTATION_THRESHOLD_AUTOMATIC_WANTED && !WantedUnsafe)
+                            m_reputation <= ServerProperties.Properties.REPUTATION_THRESHOLD_AUTOMATIC_WANTED && !WantedUnsafe)
                         {
                             WantedUnsafe = true;
                         }
