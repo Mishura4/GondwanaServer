@@ -14633,20 +14633,28 @@ namespace DOL.GS
         {
             lock (CraftingLock)
             {
-                foreach (eCraftingSkill craftingSkillId in Enum.GetValues(typeof(eCraftingSkill)))
-                {
-                    if (m_craftingSkills.ContainsKey(craftingSkillId) && craftingSkillId != eCraftingSkill.BasicCrafting)
-                    {
-                        m_craftingSkills[craftingSkillId] = 1;
-                    }
-                }
-
                 if (ServerProperties.Properties.PLAYERCREATION_PRIMARY_CRAFTINGSKILL)
                 {
-                    CraftingPrimarySkill = eCraftingSkill.NoCrafting;
+                    // Remove all crafting skills and restore BasicCrafting
+                    int basicCraftingSkill;
+                    if (!m_craftingSkills.TryGetValue(eCraftingSkill.BasicCrafting, out basicCraftingSkill))
+                    {
+                        basicCraftingSkill = 1;
+                    }
+                    m_craftingSkills.Clear();
+                    m_craftingSkills[eCraftingSkill.BasicCrafting] = basicCraftingSkill;
+                    CraftingPrimarySkill = eCraftingSkill.BasicCrafting;
                 }
                 else
                 {
+                    // Reset every skill except BasicCrafting to 1
+                    foreach (eCraftingSkill craftingSkillId in Enum.GetValues(typeof(eCraftingSkill)))
+                    {
+                        if (m_craftingSkills.ContainsKey(craftingSkillId) && craftingSkillId != eCraftingSkill.BasicCrafting)
+                        {
+                            m_craftingSkills[craftingSkillId] = 1;
+                        }
+                    }
                     CraftingPrimarySkill = eCraftingSkill.BasicCrafting;
                 }
             }

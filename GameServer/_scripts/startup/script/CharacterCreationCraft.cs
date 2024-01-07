@@ -87,29 +87,35 @@ namespace DOL.GS.GameEvents
                 }
 
             }
-            // Add all Crafting skills at level 1
-            var collectionAllCraftingSkills = new List<string>();
-            foreach (int craftingSkillId in Enum.GetValues(typeof(eCraftingSkill)))
-            {
-                if (craftingSkillId <= 0) continue;
-                if (craftingSkillId == (int)eCraftingSkill.BasicCrafting && !ServerProperties.Properties.PLAYERCREATION_PRIMARY_CRAFTINGSKILL)
-                {
-                    collectionAllCraftingSkills.Add(string.Format("{0}|{1}", craftingSkillId, basicCraftingSkill));
-                }
-                else
-                {
-                    collectionAllCraftingSkills.Add(string.Format("{0}|1", craftingSkillId));
-                }
-                if (craftingSkillId == (int)eCraftingSkill._Last)
-                    break;
-            }
 
-            // Set Primary Skill to Basic.
-            ch.SerializedCraftingSkills = string.Join(";", collectionAllCraftingSkills);
-            if (ServerProperties.Properties.PLAYERCREATION_PRIMARY_CRAFTINGSKILL)
-                ch.CraftingPrimarySkill = 0;
-            else
+            if (!ServerProperties.Properties.PLAYERCREATION_PRIMARY_CRAFTINGSKILL)
+            {
+                // Add all Crafting skills at level 1
+                var collectionAllCraftingSkills = new List<string>();
+                foreach (int craftingSkillId in Enum.GetValues(typeof(eCraftingSkill)))
+                {
+                    if (craftingSkillId <= 0) continue;
+                    if (craftingSkillId == (int)eCraftingSkill.BasicCrafting)
+                    {
+                        collectionAllCraftingSkills.Add($"{craftingSkillId}|{basicCraftingSkill}");
+                    }
+                    else
+                    {
+                        collectionAllCraftingSkills.Add($"{craftingSkillId}|1");
+                    }
+                    if (craftingSkillId == (int)eCraftingSkill._Last)
+                        break;
+                }
+
+                // Set Primary Skill to Basic.
+                ch.SerializedCraftingSkills = string.Join(";", collectionAllCraftingSkills);
                 ch.CraftingPrimarySkill = (int)eCraftingSkill.BasicCrafting;
+            }
+            else
+            {
+                ch.SerializedCraftingSkills = $"{(int)eCraftingSkill.BasicCrafting}|{basicCraftingSkill}";
+                ch.CraftingPrimarySkill = (int)eCraftingSkill.BasicCrafting;
+            }
         }
 
         public static void ResetCraftingSkills(GamePlayer player)
