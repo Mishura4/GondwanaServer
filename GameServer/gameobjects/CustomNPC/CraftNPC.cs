@@ -144,6 +144,12 @@ namespace DOL.GS
         {
             if (!(source is GamePlayer player))
                 return false;
+            if (player.CraftingPrimarySkill == eCraftingSkill.BasicCrafting ||
+                player.CraftingPrimarySkill == TheCraftingSkill)
+            {
+                SayTo(player, eChatLoc.CL_ChatWindow, LanguageMgr.GetTranslation(player.Client.Account.Language, "CraftNPC.Interact.NoRespec"));
+                return false;
+            }
             player.Out.SendCustomDialog(LanguageMgr.GetTranslation(player.Client.Account.Language, "Crafting.Respec.Confirm"), new CustomDialogResponse(ResetDialogResponse));
             return false;
         }
