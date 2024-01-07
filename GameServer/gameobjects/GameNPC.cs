@@ -5822,13 +5822,22 @@ namespace DOL.GS
         /// <param name="useTimer">Whether to use the timer or not</param>
         public void FireAllResponseTriggers(eAmbientTrigger trigger, GameLiving living = null, string responseTrigger = null, bool useTimer = true)
         {
-            if (IsSilent || ambientTexts == null || ambientTexts.Count == 0) return;
-            if (responseTrigger == null) return;
-            List<MobXAmbientBehaviour> mxa = (from i in ambientTexts where i.ResponseTrigger == responseTrigger select i).ToList();
-            if (mxa.Count == 0) return;
-            foreach (MobXAmbientBehaviour m in mxa)
+            if (IsSilent || ambientTexts == null || ambientTexts.Count == 0)
             {
-                FireAmbientSentence(trigger, living, m.ObjectId, m.ResponseTrigger, useTimer);
+                return;
+            }
+
+            if (responseTrigger != null)
+            {
+                List<MobXAmbientBehaviour> mxa = (from i in ambientTexts where i.ResponseTrigger == responseTrigger select i).ToList();
+                foreach (MobXAmbientBehaviour m in mxa)
+                {
+                    FireAmbientSentence(trigger, living, m, useTimer);
+                }
+            }
+            else
+            {
+                FireAmbientSentence(trigger, living, null, useTimer);
             }
         }
         /// <summary>
@@ -5836,34 +5845,37 @@ namespace DOL.GS
         /// </summary>
         /// <param name="action">The trigger action</param>
         /// <param name="npc">The NPC to handle the trigger for</param>
-        /// <param name="preChosenID">The ID of the sentence to fire</param>
-        /// <param name="responseTrigger">The response trigger of the sentence to fire</param>
+        /// <param name="preChosen">The sentence to fire</param>
         /// <param name="useTimer">Whether to use the timer or not</param>
-        public void FireAmbientSentence(eAmbientTrigger trigger, GameLiving living = null, string preChosenID = null, string responseTrigger = null, bool useTimer = true)
+        public void FireAmbientSentence(eAmbientTrigger trigger, GameLiving living = null, MobXAmbientBehaviour preChosen = null, bool useTimer = true)
         {
-            if (IsSilent || ambientTexts == null || ambientTexts.Count == 0) return;
+            // TODO: clean this up
+            if (IsSilent) return;
             if (trigger == eAmbientTrigger.interact && living == null) return;
             TriggerPlayerLostTimer.Stop();
-            MobXAmbientBehaviour chosen = null;
-            if (preChosenID != null && responseTrigger != null)
+            MobXAmbientBehaviour chosen;
+            if (preChosen != null)
             {
-                chosen = (from i in ambientTexts where i.ObjectId == preChosenID && i.ResponseTrigger == responseTrigger select i).FirstOrDefault();
-                if (chosen == null) return;
+                chosen = preChosen;
             }
             else
             {
-                List<MobXAmbientBehaviour> mxa = (from i in ambientTexts where i.Trigger == trigger.ToString() select i).ToList();
+                if (ambientTexts == null || ambientTexts.Count == 0)
+                    return;
+                // select all triggers with no response associated
+                List<MobXAmbientBehaviour> mxa;
+                if (trigger == eAmbientTrigger.interact)
+                {
+                    mxa = ambientTexts.Where(i => i.Trigger == trigger.ToString() && string.IsNullOrEmpty(i.ResponseTrigger)).ToList();
+                }
+                else
+                {
+                    mxa = ambientTexts.Where(i => i.Trigger == trigger.ToString()).ToList();
+                }
                 if (mxa.Count == 0) return;
 
-                // grab random sentence
+                // grab random
                 chosen = mxa[Util.Random(mxa.Count - 1)];
-            }
-
-            //check if is itextnpc and has this interaction trigger
-            if (preChosenID == null && responseTrigger == null && chosen.ResponseTrigger != null && trigger == eAmbientTrigger.interact && this is TextNPC
-             && ((TextNPC)this).TextNPCData.ResponseTrigger.ContainsKey(chosen.ResponseTrigger))
-            {
-                return;
             }
 
             if (useTimer && trigger == eAmbientTrigger.interact && chosen.InteractTimerDelay > 0)
@@ -5883,7 +5895,7 @@ namespace DOL.GS
                         chosen.InteractTriggerTimer.Stop();
                         chosen.InteractTriggerTimer.Dispose();
                     }
-                    FireAmbientSentence(trigger, living, chosen.ObjectId, chosen.ResponseTrigger, false);
+                    FireAmbientSentence(trigger, living, chosen, false);
                 };
                 TriggerPlayer = living as GamePlayer;
                 TriggerPlayerLostTimer.Start();
