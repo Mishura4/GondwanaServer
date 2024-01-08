@@ -38,10 +38,14 @@ public class DiscordBot
 		if (author.IsBot)
 			return Task.CompletedTask;
 
-		var formattedMessage = $"[Discord] {author.DisplayName}: {msg.Content}";
+		string formattedMessage;
 		if (string.IsNullOrWhiteSpace(msg.Content))
 		{
 			formattedMessage = $"[Discord] {author.DisplayName} sent a non text message.";
+		}
+		else
+		{
+			formattedMessage = $"[Discord] {author.DisplayName}: {EmojiManager.ReplaceUtf16ToShortCode(msg.Content)}";
 		}
 		foreach (var client in WorldMgr.GetAllPlayingClients())
 			client.Player?.SendMessage(formattedMessage, eChatType.CT_Broadcast, eChatLoc.CL_ChatWindow);
@@ -56,6 +60,7 @@ public class DiscordBot
 		if (string.IsNullOrWhiteSpace(DISCORD_BOT_TOKEN))
 			return;
 
+		EmojiManager.Init();
 		var instance = new DiscordBot();
 		instance._client = new DiscordSocketClient(new DiscordSocketConfig { GatewayIntents = GatewayIntents.AllUnprivileged | GatewayIntents.MessageContent });
 		instance._client.MessageReceived += instance._MessageReceived;

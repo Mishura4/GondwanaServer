@@ -52,6 +52,7 @@
   <ItemGroup>
     <EmbeddedResource Include="..\GameServer\config\*" />
     <TranslationFiles Include="..\GameServer\language\**\*.txt" />
+    <TranslationFiles Include="..\GameServer\language\**\*.json" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="language\FR\Commands\Player\**" />
