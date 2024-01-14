@@ -783,7 +783,7 @@ namespace DOL.GS
 
             if (bInstaQuit == false)
             {
-                if (CraftTimer != null && CraftTimer.IsAlive)
+                if (IsCrafting)
                 {
                     Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Quit.CantQuitCrafting"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                     m_quitTimer = null;
@@ -977,11 +977,7 @@ namespace DOL.GS
 
             GameEventMgr.RemoveAllHandlersForObject(m_inventory);
 
-            if (CraftTimer != null)
-            {
-                CraftTimer.Stop();
-                CraftTimer = null;
-            }
+            StopCrafting();
 
             if (QuestActionTimer != null)
             {
@@ -1145,7 +1141,7 @@ namespace DOL.GS
                     Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Quit.CantQuitStanding"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     return false;
                 }
-                if (CraftTimer != null && CraftTimer.IsAlive)
+                if (IsCrafting)
                 {
                     Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Quit.CantQuitCrafting"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     return false;
@@ -6877,9 +6873,7 @@ namespace DOL.GS
             if (IsCrafting)
             {
                 Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Attack.InterruptedCrafting"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                CraftTimer.Stop();
-                CraftTimer = null;
-                Out.SendCloseTimerWindow();
+                StopCrafting();
             }
 
             AttackData ad = base.MakeAttack(target, weapon, style, effectiveness * Effectiveness, interruptDuration, dualWield, ignoreLOS);
@@ -7263,9 +7257,7 @@ namespace DOL.GS
             if (IsCrafting)
             {
                 Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Attack.InterruptedCrafting"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                CraftTimer.Stop();
-                CraftTimer = null;
-                Out.SendCloseTimerWindow();
+                StopCrafting();
             }
         }
 
@@ -8709,9 +8701,7 @@ namespace DOL.GS
             if (IsCrafting)
             {
                 Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Attack.InterruptedCrafting"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                CraftTimer.Stop();
-                CraftTimer = null;
-                Out.SendCloseTimerWindow();
+                StopCrafting();
             }
 
             if (spell.SpellType == "StyleHandler" || spell.SpellType == "MLStyleHandler")
@@ -9017,9 +9007,7 @@ namespace DOL.GS
             if (IsCrafting)
             {
                 Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Attack.InterruptedCrafting"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                CraftTimer.Stop();
-                CraftTimer = null;
-                Out.SendCloseTimerWindow();
+                StopCrafting();
             }
 
             ISpellHandler spellhandler = ScriptMgr.CreateSpellHandler(this, ab.Spell, ab.SpellLine);
@@ -11620,9 +11608,7 @@ namespace DOL.GS
             if (IsCrafting)
             {
                 Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.OnPlayerMove.InterruptCrafting"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                CraftTimer.Stop();
-                CraftTimer = null;
-                Out.SendCloseTimerWindow();
+                StopCrafting();
             }
             if (IsSummoningMount)
             {
@@ -13701,7 +13687,7 @@ namespace DOL.GS
             if (IsStealthed == goStealth)
                 return;
 
-            if (goStealth && CraftTimer != null && CraftTimer.IsAlive)
+            if (goStealth && IsCrafting)
             {
                 Out.SendMessage("You can't stealth while crafting!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
@@ -14479,25 +14465,56 @@ namespace DOL.GS
         }
 
         /// <summary>
-        /// This is the timer used to count time when a player craft
+        /// This is the timer used to count time when a player uses a special crafting skill, for example repairing or salvaging
         /// </summary>
-        private RegionTimer m_crafttimer;
+        private RegionTimer m_specialCraftTimer;
 
         /// <summary>
         /// Get and set the craft timer
         /// </summary>
         public RegionTimer CraftTimer
         {
-            get { return m_crafttimer; }
-            set { m_crafttimer = value; }
+            get { return m_specialCraftTimer; }
+            set { m_specialCraftTimer = value; }
         }
 
         /// <summary>
-        /// Does the player is crafting
+        /// Get and set the craft action
+        /// </summary>
+        public CraftAction CurrentCraft
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Is the player crafting
         /// </summary>
         public bool IsCrafting
         {
-            get { return (m_crafttimer != null && m_crafttimer.IsAlive); }
+            get { return ((CraftTimer != null && CraftTimer.IsAlive) || (CurrentCraft != null && CurrentCraft.IsAlive)); }
+        }
+
+        /// <summary>
+        /// Stop crafting.
+        /// </summary>
+        public void StopCrafting()
+        {
+            if (CurrentCraft != null)
+            {
+                CurrentCraft.Stop();
+                CurrentCraft = null;
+            }
+
+            if (CraftTimer != null)
+            {
+                if (CraftTimer.IsAlive)
+                {
+                    CraftTimer.Stop();
+                    Out.SendCloseTimerWindow();
+                }
+                CraftTimer = null;
+            }
         }
 
         /// <summary>

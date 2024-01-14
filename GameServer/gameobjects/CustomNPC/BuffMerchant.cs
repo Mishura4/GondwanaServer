@@ -898,13 +898,10 @@ namespace DOL.GS
             return true;
         }
 
-        public override void OnPlayerBuy(GamePlayer player, int item_slot, int number)
+        public override void OnPlayerBuy(GamePlayer player, int slotnumber, int pagenumber, int number)
         {
             if (isBounty == true) //...pay with Bounty Points.
             {
-                int pagenumber = item_slot / MerchantTradeItems.MAX_ITEM_IN_TRADEWINDOWS;
-                int slotnumber = item_slot % MerchantTradeItems.MAX_ITEM_IN_TRADEWINDOWS;
-
                 var template = Catalog.GetEntry(pagenumber, slotnumber).Item;
                 if (template == null) return;
 
@@ -941,9 +938,6 @@ namespace DOL.GS
             }
             if (isBounty == false) //...pay with Money.
             {
-                int pagenumber = item_slot / MerchantTradeItems.MAX_ITEM_IN_TRADEWINDOWS;
-                int slotnumber = item_slot % MerchantTradeItems.MAX_ITEM_IN_TRADEWINDOWS;
-
                 var template = Catalog.GetEntry(pagenumber, slotnumber).Item;
                 if (template == null) return;
 

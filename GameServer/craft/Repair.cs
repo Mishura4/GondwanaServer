@@ -79,7 +79,7 @@ namespace DOL.GS
             player.CraftTimer.Properties.setProperty(AbstractCraftingSkill.PLAYER_CRAFTER, player);
             player.CraftTimer.Properties.setProperty(PLAYER_PARTNER, tradePartner);
             player.CraftTimer.Properties.setProperty(AbstractCraftingSkill.RECIPE_BEING_CRAFTED, item);
-            player.CraftTimer.Start(workDuration * 1000);
+            player.CraftTimer.Start(workDuration);
             return 1;
         }
 

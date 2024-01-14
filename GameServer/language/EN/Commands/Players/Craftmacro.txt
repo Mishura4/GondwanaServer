@@ -1,0 +1,14 @@
+Commands.Players.Craftmacro.Description:		Crafting macros and utilities
+Commands.Players.Craftmacro.Usage.Set:			'/craftmacro set <#>' to set how many items you want to craft
+Commands.Players.Craftmacro.Usage.Clear:		'/craftmacro clear' to reset to crafting once
+Commands.Players.Craftmacro.Usage.Show:			'/craftmacro show' to show the current craft settings
+Commands.Players.Craftmacro.Usage.Buy:			'/craftmacro buy' to buy the necessary materials to craft one item
+Commands.Players.Craftmacro.Usage.BuyNb:		'/craftmacro buy <#>' to buy the necessary materials to craft <#> items
+Commands.Players.Craftmacro.Usage.BuyTo:		'/craftmacro buyto <#>' to buy only the missing materials to craft <#> items
+
+Commands.Players.Craftmacro.Queue.Set:			Crafting queue set to {0} items.
+Commands.Players.Craftmacro.Queue.SetOne:		Crafting queue set to 1 item.
+Commands.Players.Craftmacro.Queue.Cleared:		Crafting queue reset to 1 and item cleared.
+Commands.Players.Craftmacro.MustTargetMerchant:	You must target a merchant.
+Commands.Players.Craftmacro.SelectRecipe:		No recipe selected, start crafting an item first.
+Commands.Players.Craftmacro.BoughtItems:		Bought items to craft {0}x {1}.

@@ -1,0 +1,14 @@
+Commands.Players.Craftmacro.Description:		Macros et utilités de craft
+Commands.Players.Craftmacro.Usage.Set:			'/craftmacro set <#>' pour régler le nombre d'objets à crafter
+Commands.Players.Craftmacro.Usage.Clear:		'/craftmacro clear' pour réinitialiser la liste de craft à 1
+Commands.Players.Craftmacro.Usage.Show:			'/craftmacro show' pour montrer les réglages de craft actuel
+Commands.Players.Craftmacro.Usage.Buy:			'/craftmacro buy' pour acheter les matériels nécessaires pour crafter 1 objet
+Commands.Players.Craftmacro.Usage.BuyNb:		'/craftmacro buy <#>' pour acheter les matériels nécessaires pour crafter <#> objets
+Commands.Players.Craftmacro.Usage.BuyTo:		'/craftmacro buyto <#>' pour acheter seulement les matériels manquant pour crafter <#> objets
+
+Commands.Players.Craftmacro.Queue.Set:			File de crafting réglée à {0} objets.
+Commands.Players.Craftmacro.Queue.SetOne:		File de crafting réglée à 1 objet.
+Commands.Players.Craftmacro.Queue.Cleared:		File de crafting réglée à 1 objet, et recette réinitialisée.
+Commands.Players.Craftmacro.MustTargetMerchant:	Vous devez cibler un marchand.
+Commands.Players.Craftmacro.SelectRecipe:		Aucune recette sélectionnée, vous devez commencer a crafter un objet.
+Commands.Players.Craftmacro.BoughtItems:		Vous avez acheté des matériaux pour crafter {0}x {1}.

@@ -127,6 +127,12 @@ namespace DOL.GS
         {
             int pageNumber = globalSlotPosition / MerchantTradeItems.MAX_ITEM_IN_TRADEWINDOWS;
             int slotPosition = globalSlotPosition % MerchantTradeItems.MAX_ITEM_IN_TRADEWINDOWS;
+
+            OnPlayerBuy(player, slotPosition, pageNumber, amountToBuy);
+        }
+
+        public virtual void OnPlayerBuy(GamePlayer player, int slotPosition, int pageNumber, int amountToBuy)
+        {
             var page = Catalog.GetPage(pageNumber);
             var articleToBuy = page.GetEntry((byte)slotPosition);
             var itemToBuy = articleToBuy.Item;
@@ -168,12 +174,9 @@ namespace DOL.GS
             }
         }
 
-        public static void OnPlayerBuy(GamePlayer player, int item_slot, int number, MerchantTradeItems TradeItems)
+        public static void OnPlayerBuy(GamePlayer player, int item_slot, int page, int number, MerchantTradeItems TradeItems)
         {
-            int pagenumber = item_slot / MerchantTradeItems.MAX_ITEM_IN_TRADEWINDOWS;
-            int slotnumber = item_slot % MerchantTradeItems.MAX_ITEM_IN_TRADEWINDOWS;
-
-            ItemTemplate template = TradeItems.GetItem(pagenumber, (eMerchantWindowSlot)slotnumber);
+            ItemTemplate template = TradeItems.GetItem(page, (eMerchantWindowSlot)item_slot);
             if (template == null) return;
 
             int amountToBuy = number;
@@ -215,6 +218,14 @@ namespace DOL.GS
                 player.SendMessage(message, eChatType.CT_Merchant, eChatLoc.CL_SystemWindow);
                 InventoryLogging.LogInventoryAction(player, TradeItems.ItemsListID, $"(TRADEITEMS;{TradeItems.ItemsListID})", eInventoryActionType.Merchant, totalCost.Amount);
             }
+        }
+
+        public static void OnPlayerBuy(GamePlayer player, int item_slot, int number, MerchantTradeItems TradeItems)
+        {
+            int pagenumber = item_slot / MerchantTradeItems.MAX_ITEM_IN_TRADEWINDOWS;
+            int slotnumber = item_slot % MerchantTradeItems.MAX_ITEM_IN_TRADEWINDOWS;
+
+            OnPlayerBuy(player, slotnumber, pagenumber, number, TradeItems);
         }
 
         /// <summary>
