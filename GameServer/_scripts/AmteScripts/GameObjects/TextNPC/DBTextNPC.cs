@@ -152,17 +152,6 @@ namespace DOL.Database
             }
         }
         [DataElement(AllowDbNull = true)]
-        public string ResponseTrigger
-        {
-            get { return m_ResponseTrigger; }
-            set
-            {
-                Dirty = true;
-                m_ResponseTrigger = value;
-            }
-        }
-
-        [DataElement(AllowDbNull = true)]
         public string RandomPhraseEmote
         {
             get { return m_RandomPhraseEmote; }

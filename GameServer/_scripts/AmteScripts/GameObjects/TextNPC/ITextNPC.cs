@@ -47,7 +47,7 @@ namespace DOL.GS.Scripts
         public Dictionary<string, string> Reponses { get; private set; }
         public Dictionary<string, eEmote> EmoteReponses { get; private set; }
         public Dictionary<string, ushort> SpellReponses { get; private set; }
-        public Dictionary<string, string> ResponseTrigger { get; set; }
+        public HashSet<string> ResponseTrigger { get; set; }
         public Dictionary<string, bool> SpellReponsesCast { get; private set; }
         public Dictionary<string, string> QuestReponses { get; private set; }
         public Dictionary<string, string> GiveItem { get; private set; }
@@ -71,7 +71,7 @@ namespace DOL.GS.Scripts
             Reponses = new Dictionary<string, string>();
             EmoteReponses = new Dictionary<string, eEmote>();
             SpellReponses = new Dictionary<string, ushort>();
-            ResponseTrigger = new Dictionary<string, string>();
+            ResponseTrigger = new HashSet<string>();
             SpellReponsesCast = new Dictionary<string, bool>();
             QuestReponses = new Dictionary<string, string>();
             QuestReponsesValues = new Dictionary<string, Tuple<string, int>>();
@@ -91,7 +91,7 @@ namespace DOL.GS.Scripts
             Reponses = new Dictionary<string, string>(policy.Reponses);
             EmoteReponses = new Dictionary<string, eEmote>(policy.EmoteReponses);
             SpellReponses = new Dictionary<string, ushort>(policy.SpellReponses);
-            ResponseTrigger = new Dictionary<string, string>(policy.ResponseTrigger);
+            ResponseTrigger = new HashSet<string>(policy.ResponseTrigger);
             SpellReponsesCast = new Dictionary<string, bool>(policy.SpellReponsesCast);
             QuestReponses = new Dictionary<string, string>(policy.QuestReponses);
             QuestReponsesValues = new Dictionary<string, Tuple<string, int>>(policy.QuestReponsesValues);
@@ -227,14 +227,14 @@ namespace DOL.GS.Scripts
                 string questStr = QuestReponseKey.Remove(QuestReponseKey.LastIndexOf('-'));
                 HandleQuestInteraction(player, questStr + "-" + str);
                 //Trigger
-                if (ResponseTrigger != null && ResponseTrigger.ContainsKey(questStr + "-" + str))
+                if (ResponseTrigger != null && ResponseTrigger.Contains(questStr + "-" + str))
                     _body.FireAllResponseTriggers(eAmbientTrigger.interact, player, questStr + "-" + str);
             }
             else if (QuestReponses != null && QuestReponses.ContainsKey(str))
             {
                 HandleQuestInteraction(player, str);
                 //Trigger
-                if (ResponseTrigger != null && ResponseTrigger.ContainsKey(QuestReponses[str] + "-" + str))
+                if (ResponseTrigger != null && ResponseTrigger.Contains(QuestReponses[str] + "-" + str))
                     _body.FireAllResponseTriggers(eAmbientTrigger.interact, player, QuestReponses[str] + "-" + str);
             }
 
@@ -244,7 +244,7 @@ namespace DOL.GS.Scripts
                     plr.Out.SendEmoteAnimation(_body, EmoteReponses[str]);
 
             //Trigger
-            if (ResponseTrigger != null && ResponseTrigger.ContainsKey(str))
+            if (ResponseTrigger != null && ResponseTrigger.Contains(str))
                 _body.FireAllResponseTriggers(eAmbientTrigger.interact, player, str);
 
             //Give Item
@@ -910,17 +910,14 @@ namespace DOL.GS.Scripts
             SpellReponses = table2;
 
             //Chargement des trigger réponses
-            ResponseTrigger = new Dictionary<string, string>();
-            if (TextDB.ResponseTrigger != null && TextDB.ResponseTrigger != "")
+            ResponseTrigger = new HashSet<string>();
+            var ambientTexts = GameServer.Instance.NpcManager.AmbientBehaviour[_body.Name];
+            if (ambientTexts != null)
             {
-                TextDB.ResponseTrigger.Replace("\r", "\n");
-                foreach (string item in TextDB.ResponseTrigger.Split('\n'))
+                foreach (string responseTrigger in
+                         ambientTexts.Where(i => !string.IsNullOrEmpty(i.ResponseTrigger)).Select(i => i.ResponseTrigger))
                 {
-                    try
-                    {
-                        ResponseTrigger.Add(item, "");
-                    }
-                    catch { }
+                    ResponseTrigger.Add(responseTrigger);
                 }
             }
 
@@ -1047,19 +1044,6 @@ namespace DOL.GS.Scripts
                 }
             }
             TextDB.ReponseSpell = reponse;
-
-            //Sauve les trigger réponses
-            reponse = "";
-            if (ResponseTrigger != null && ResponseTrigger.Count > 0)
-            {
-                foreach (var de in ResponseTrigger)
-                {
-                    if (reponse.Length > 1)
-                        reponse += "\n";
-                    reponse += de.Key.Trim('|', ';');
-                }
-            }
-            TextDB.ResponseTrigger = reponse;
 
             //Sauve les emote réponses
             reponse = "";
