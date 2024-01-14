@@ -1,16 +1,16 @@
 ﻿/*
  * DAWN OF LIGHT - The first free open source DAoC server emulator
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -23,9 +23,89 @@ using System.Linq.Expressions;
 
 namespace DOL.Database
 {
-    public abstract class WhereClause
+    public class WhereClause
     {
-        private static string alphabet = "abcdefghijklmnopqrstuvwxyz";
+        internal virtual ParameterizedExpression expression { get; }
+
+        private WhereClause(ParameterizedExpression expr)
+        {
+            expression = expr;
+        }
+
+        internal WhereClause(string formatString, params object[] values)
+        {
+            expression = new ParameterizedExpression(formatString, values);
+        }
+
+        internal WhereClause(string formatString, ParameterizedExpression expr)
+        {
+            var queryText = formatString.Replace("{}", expr.QueryText);
+            expression = new ParameterizedExpression(queryText, expr.Parameters);
+        }
+
+        public virtual string ParameterizedText
+        {
+            get
+            {
+                if (expression.IsEmpty) return string.Empty;
+                var clause = $"WHERE {expression.QueryText}";
+                for (uint i = 0; i < Parameters.Length; i++)
+                {
+                    var searchString = "{}";
+                    int index = clause.IndexOf(searchString);
+                    clause = clause.Remove(index, searchString.Length);
+                    clause = clause.Insert(index, GetPlaceHolder(i));
+                }
+                return clause.Trim();
+            }
+        }
+
+        public virtual QueryParameter[] Parameters
+        {
+            get
+            {
+                var result = new List<QueryParameter>();
+                uint parameterID = 0;
+                foreach (var param in expression.Parameters)
+                {
+                    result.Add(new QueryParameter(GetPlaceHolder(parameterID), param));
+                    parameterID++;
+                }
+                return result.ToArray();
+            }
+        }
+
+        public virtual WhereClause And(WhereClause rightExpression)
+            => ChainExpressions(this, "AND", rightExpression);
+        public virtual WhereClause Or(WhereClause rightExpression)
+            => ChainExpressions(this, "OR", rightExpression);
+
+        private WhereClause ChainExpressions(WhereClause left, string chainingOperator, WhereClause right)
+        {
+            if (right.Equals(Empty)) return new WhereClause(left.expression);
+            if (left.Equals(Empty)) return new WhereClause(right.expression);
+
+            var leftText = left.expression.QueryText;
+            var rightText = right.expression.QueryText;
+            var leftParameters = left.expression.Parameters;
+            var rightParameters = right.expression.Parameters;
+            var queryText = $"( {leftText} {chainingOperator} {rightText} )";
+            var parameters = leftParameters.Concat(rightParameters).ToArray();
+            return new WhereClause(new ParameterizedExpression(queryText, parameters));
+        }
+
+        public static readonly WhereClause Empty = new WhereClause("", new object[] { });
+
+        public override bool Equals(object obj)
+        {
+            if (obj is WhereClause clause)
+            {
+                return expression.Equals(clause.expression);
+            }
+            else return false;
+        }
+
+        public override int GetHashCode() => base.GetHashCode();
 
         private string GetPlaceHolder(uint id)
         {
@@ -41,199 +121,32 @@ namespace DOL.Database
             return prefix + result;
         }
 
-        public virtual string ParameterizedText
-        {
-            get
-            {
-                var clause = "WHERE ";
-                uint parameterID = 0;
-                foreach (var atom in IntermediateRepresentation)
-                {
-                    if (atom.IsParameterized)
-                    {
-                        clause += GetPlaceHolder(parameterID);
-                        parameterID++;
-                    }
-                    else
-                    {
-                        clause += atom.Val;
-                    }
-                    clause += " ";
-                }
-                return clause.Trim();
-            }
-        }
-
-        public virtual QueryParameter[] Parameters
-        {
-            get
-            {
-                var result = new List<QueryParameter>();
-                uint parameterID = 0;
-                foreach (var atom in IntermediateRepresentation)
-                {
-                    if (atom.IsParameterized)
-                    {
-                        result.Add(new QueryParameter(GetPlaceHolder(parameterID), atom.Val));
-                        parameterID++;
-                    }
-                }
-                return result.ToArray();
-            }
-        }
-
-        internal abstract List<TextAtom> IntermediateRepresentation { get; }
-
-        public virtual WhereClause And(WhereClause rightExpression)
-            => rightExpression.Equals(Empty) ? this : new ChainingExpression(this, "AND", rightExpression);
-        public virtual WhereClause Or(WhereClause rightExpression)
-            => rightExpression.Equals(Empty) ? this : new ChainingExpression(this, "OR", rightExpression);
-
-        public static WhereClause Empty => new EmptyWhereClause();
-
-        public override int GetHashCode() => base.GetHashCode();
+        private static string alphabet = "abcdefghijklmnopqrstuvwxyz";
     }
 
-    internal class TextAtom
+    internal class ParameterizedExpression
     {
-        public object Val { get; }
+        public string QueryText { get; }
+        public object[] Parameters { get; }
 
-        public TextAtom(object val) { Val = val; }
-
-        public virtual bool IsParameterized => false;
-    }
-
-    internal class ValueAtom : TextAtom
-    {
-        public ValueAtom(object val) : base(val) { }
-
-        public override bool IsParameterized => true;
-    }
-
-    internal class EmptyWhereClause : WhereClause
-    {
-        internal override List<TextAtom> IntermediateRepresentation => new List<TextAtom>();
-
-        public override WhereClause And(WhereClause rightExpression) => rightExpression;
-        public override WhereClause Or(WhereClause rightExpression) => rightExpression;
-        public override string ParameterizedText => string.Empty;
-
-        public override bool Equals(object obj) => obj is EmptyWhereClause;
-        public override int GetHashCode() => base.GetHashCode();
-    }
-
-    internal class FilterExpression : WhereClause
-    {
-        private string columnName;
-        private string op;
-        private object val;
-
-        internal FilterExpression(string columnName, string op, object val)
+        public ParameterizedExpression(string queryText, params object[] parameters)
         {
-            this.columnName = columnName;
-            this.op = op;
-            this.val = val;
+            QueryText = queryText;
+            Parameters = parameters;
         }
 
-        internal override List<TextAtom> IntermediateRepresentation
-        {
-            get
-            {
-                if (val is IEnumerable<object> valueCollection && valueCollection.Any())
-                {
-                    var result = new List<TextAtom>() { new TextAtom(columnName), new TextAtom(op), new TextAtom("(") };
-                    result.Add(new ValueAtom(valueCollection.ElementAt(0)));
-                    foreach (var element in valueCollection.Skip(1))
-                    {
-                        result.Add(new TextAtom(","));
-                        result.Add(new ValueAtom(element));
-                    }
-                    result.Add(new TextAtom(")"));
-                    return result;
-                }
-                return new List<TextAtom>() { new TextAtom(columnName), new TextAtom(op), new ValueAtom(val) };
-            }
-        }
+        public bool IsEmpty => string.IsNullOrEmpty(QueryText);
 
         public override bool Equals(object obj)
         {
-            if (obj is FilterExpression filterExpression)
+            if (obj is ParameterizedExpression paramQuery)
             {
-                return filterExpression.op.Equals(op)
-                    && filterExpression.columnName.Equals(columnName)
-                    && filterExpression.val.Equals(val);
+                var sameQueryText = paramQuery.QueryText.Equals(QueryText);
+                return sameQueryText && Enumerable.SequenceEqual(Parameters, paramQuery.Parameters);
             }
-            return false;
+            else return false;
         }
 
-        public override int GetHashCode() => base.GetHashCode();
-    }
-
-    internal class PlainTextExpression : WhereClause
-    {
-        private string columnName;
-        private string op;
-
-        internal PlainTextExpression(string columnName, string op)
-        {
-            this.columnName = columnName;
-            this.op = op;
-        }
-
-        internal override List<TextAtom> IntermediateRepresentation
-            => new List<TextAtom>() { new TextAtom(columnName), new TextAtom(op) };
-
-        public override bool Equals(object obj)
-        {
-            if (obj is PlainTextExpression expression)
-            {
-                return expression.op.Equals(op)
-                    && expression.columnName.Equals(columnName);
-            }
-            return false;
-        }
-
-        public override int GetHashCode() => base.GetHashCode();
-    }
-
-    internal class ChainingExpression : WhereClause
-    {
-        private WhereClause left;
-        private WhereClause right;
-        private string chainingOperator;
-
-        internal ChainingExpression(WhereClause left, string chainingOperator, WhereClause right)
-        {
-            this.left = left;
-            this.right = right;
-            this.chainingOperator = chainingOperator;
-        }
-
-        internal override List<TextAtom> IntermediateRepresentation
-        {
-            get
-            {
-                if (right.Equals(Empty)) return left.IntermediateRepresentation;
-
-                var result = new List<TextAtom>() { new TextAtom("(") };
-                result.AddRange(left.IntermediateRepresentation);
-                result.Add(new TextAtom(chainingOperator));
-                result.AddRange(right.IntermediateRepresentation);
-                result.Add(new TextAtom(")"));
-                return result;
-            }
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (obj is ChainingExpression expr)
-            {
-                return expr.left.Equals(left)
-                    && expr.chainingOperator.Equals(chainingOperator)
-                    && expr.right.Equals(right);
-            }
-            return false;
-        }
         public override int GetHashCode() => base.GetHashCode();
     }
 
@@ -255,15 +168,28 @@ namespace DOL.Database
             Name = columnName;
         }
 
-        public WhereClause IsEqualTo(object val) => new FilterExpression(Name, "=", val);
-        public WhereClause IsNotEqualTo(object val) => new FilterExpression(Name, "!=", val);
-        public WhereClause IsGreatherThan(object val) => new FilterExpression(Name, ">", val);
-        public WhereClause IsGreaterOrEqualTo(object val) => new FilterExpression(Name, ">=", val);
-        public WhereClause IsLessThan(object val) => new FilterExpression(Name, "<", val);
-        public WhereClause IsLessOrEqualTo(object val) => new FilterExpression(Name, "<=", val);
-        public WhereClause IsLike(object val) => new FilterExpression(Name, "LIKE", val);
-        public WhereClause IsNull() => new PlainTextExpression(Name, "IS NULL");
-        public WhereClause IsNotNull() => new PlainTextExpression(Name, "IS NOT NULL");
-        public WhereClause IsIn<T>(IEnumerable<T> values) => new FilterExpression(Name, "IN", values.Cast<object>());
+        public WhereClause IsEqualTo(object val) => new WhereClause($"{Name} = {{}}", val);
+        public WhereClause IsNotEqualTo(object val) => new WhereClause($"{Name} != {{}}", val);
+        public WhereClause IsGreatherThan(object val) => new WhereClause($"{Name} > {{}}", val);
+        public WhereClause IsGreaterOrEqualTo(object val) => new WhereClause($"{Name} >= {{}}", val);
+        public WhereClause IsLessThan(object val) => new WhereClause($"{Name} < {{}}", val);
+        public WhereClause IsLessOrEqualTo(object val) => new WhereClause($"{Name} <= {{}}", val);
+        public WhereClause IsLike(object val) => new WhereClause($"{Name} LIKE {{}}", val);
+        public WhereClause IsNull() => new WhereClause($"{Name} IS NULL");
+        public WhereClause IsNotNull() => new WhereClause($"{Name} IS NOT NULL");
+        public WhereClause IsIn<T>(IEnumerable<T> values)
+        {
+            if (!values.Any()) return new WhereClause("false");
+            var expr = $"( {string.Join(" , ", values.Select(s => "{}"))} )";
+            var collectionParamText = new ParameterizedExpression(expr, values.Cast<object>().ToArray());
+            return new WhereClause($"{Name} IN {{}}", collectionParamText);
+        }
+        public WhereClause IsNotIn<T>(IEnumerable<T> values)
+        {
+            if (!values.Any()) return new WhereClause("true");
+            var expr = $"( {string.Join(" , ", values.Select(s => "{}"))} )";
+            var collectionParamText = new ParameterizedExpression(expr, values.Cast<object>().ToArray());
+            return new WhereClause($"{Name} NOT IN {{}}", collectionParamText);
+        }
     }
 }

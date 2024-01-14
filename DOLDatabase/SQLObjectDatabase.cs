@@ -1,16 +1,16 @@
 ﻿/*
  * DAWN OF LIGHT - The first free open source DAoC server emulator
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -22,7 +22,6 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-
 using DOL.Database.Connection;
 using DOL.Database.Attributes;
 using DOL.Database.UniqueID;
@@ -50,6 +49,7 @@ namespace DOL.Database
         }
 
         #region ObjectDatabase Base Implementation for SQL
+
         /// <summary>
         /// Register Data Object Type if not already Registered
         /// </summary>
@@ -120,9 +120,11 @@ namespace DOL.Database
             rawInput = rawInput.Replace("'", "\\'");
             return rawInput.Replace("’", "\\’");
         }
+
         #endregion
 
         #region ObjectDatabase Objects Implementations
+
         /// <summary>
         /// Adds new DataObjects to the database.
         /// </summary>
@@ -305,7 +307,7 @@ namespace DOL.Database
                     throw new DatabaseException(string.Format("Table {0} has no primary key for deletion...", tableHandler.TableName));
 
                 var command = string.Format("DELETE FROM `{0}` WHERE {1}", tableHandler.TableName,
-                            string.Join(" AND ", primary.Select(col => string.Format("`{0}` = @{0}", col.ColumnName))));
+                                            string.Join(" AND ", primary.Select(col => string.Format("`{0}` = @{0}", col.ColumnName))));
 
                 var objs = dataObjects.ToArray();
                 var parameters = objs.Select(obj => primary.Select(pk => new QueryParameter(string.Format("@{0}", pk.ColumnName), pk.GetValue(obj), pk.ValueType)));
@@ -337,9 +339,11 @@ namespace DOL.Database
 
             return success;
         }
+
         #endregion
 
         #region ObjectDatabase Select Implementation
+
         /// <summary>
         /// Retrieve a Collection of DataObjects from database based on their primary key values
         /// </summary>
@@ -430,8 +434,8 @@ namespace DOL.Database
             var columns = tableHandler.FieldElementBindings.ToArray();
 
             string selectFromExpression = string.Format("SELECT {0} FROM `{1}` ",
-                                        string.Join(", ", columns.Select(col => string.Format("`{0}`", col.ColumnName))),
-                                        tableHandler.TableName);
+                                                        string.Join(", ", columns.Select(col => string.Format("`{0}`", col.ColumnName))),
+                                                        tableHandler.TableName);
 
             var primary = columns.FirstOrDefault(col => col.PrimaryKey != null);
             var dataObjects = new List<IList<DataObject>>();
@@ -536,39 +540,29 @@ namespace DOL.Database
         }
 
         protected abstract DbParameter ConvertToDBParameter(QueryParameter queryParameter);
+
         #endregion
 
-        #region Abstract Properties		
+        #region Abstract Properties
+
         /// <summary>
         /// The connection type to DB (xml, mysql,...)
         /// </summary>
         public abstract ConnectionType ConnectionType { get; }
+
         #endregion
 
         #region Table Implementation
+
         /// <summary>
         /// Check for Table Existence, Create or Alter accordingly
         /// </summary>
         /// <param name="table">Table Handler</param>
         public abstract void CheckOrCreateTableImpl(DataTableHandler table);
+
         #endregion
 
         #region Select Implementation
-        [Obsolete("Use ExecuteSelectImpl(string,IEnumerable<IEnumerable<QueryParameter>>,Action<IDataReader>) instead.")]
-        protected void ExecuteSelectImpl(string SQLCommand, Action<IDataReader> Reader, Transaction.IsolationLevel Isolation)
-            => ExecuteSelectImpl(SQLCommand, new[] { Array.Empty<QueryParameter>() }, Reader);
-
-        [Obsolete("Use ExecuteSelectImpl(string,IEnumerable<IEnumerable<QueryParameter>>,Action<IDataReader>) instead.")]
-        protected void ExecuteSelectImpl(string SQLCommand, QueryParameter param, Action<IDataReader> Reader, Transaction.IsolationLevel Isolation)
-            => ExecuteSelectImpl(SQLCommand, new[] { new[] { param } }, Reader);
-
-        [Obsolete("Use ExecuteSelectImpl(string,IEnumerable<IEnumerable<QueryParameter>>,Action<IDataReader>) instead.")]
-        protected void ExecuteSelectImpl(string SQLCommand, IEnumerable<QueryParameter> parameter, Action<IDataReader> Reader, Transaction.IsolationLevel Isolation)
-            => ExecuteSelectImpl(SQLCommand, new[] { parameter }, Reader);
-
-        [Obsolete("Use ExecuteSelectImpl(string,IEnumerable<IEnumerable<QueryParameter>>,Action<IDataReader>) instead.")]
-        protected virtual void ExecuteSelectImpl(string SQLCommand, IEnumerable<IEnumerable<QueryParameter>> parameters, Action<IDataReader> Reader, Transaction.IsolationLevel Isolation)
-            => ExecuteSelectImpl(SQLCommand, parameters, Reader);
 
         protected virtual void ExecuteSelectImpl(string SQLCommand, IEnumerable<IEnumerable<QueryParameter>> parameters, Action<IDataReader> Reader)
         {
@@ -640,8 +634,7 @@ namespace DOL.Database
                         }
                     }
                 }
-            }
-            while (repeat);
+            } while (repeat);
         }
 
         protected virtual void ExecuteSelectImpl(string selectFromExpression, IEnumerable<WhereClause> whereClauseBatch, Action<IDataReader> Reader)
@@ -713,16 +706,17 @@ namespace DOL.Database
                         }
                     }
                 }
-            }
-            while (repeat);
+            } while (repeat);
         }
 
         public abstract DbConnection CreateConnection();
 
         protected abstract void CloseConnection(DbConnection connection);
+
         #endregion
 
         #region Non Query Implementation
+
         /// <summary>
         /// Execute a Raw Non-Query on the Database
         /// </summary>
@@ -854,14 +848,15 @@ namespace DOL.Database
                         }
                     }
                 }
-            }
-            while (repeat);
+            } while (repeat);
 
             return affected;
         }
+
         #endregion
 
         #region Scalar Implementation
+
         /// <summary>
         /// Implementation of Scalar Query
         /// </summary>
@@ -905,6 +900,7 @@ namespace DOL.Database
         /// <param name="retrieveLastInsertID">Return Last Insert ID of each Command instead of Scalar</param>
         /// <returns>Objects Returned by Scalar</returns>
         protected abstract object[] ExecuteScalarImpl(string SQLCommand, IEnumerable<IEnumerable<QueryParameter>> parameters, bool retrieveLastInsertID);
+
         #endregion
 
         protected virtual bool HandleException(Exception e)

@@ -94,7 +94,7 @@ namespace DOL.Database
                 else if (value == null && node.NodeType == ExpressionType.NotEqual)
                     Expressions.Add(DB.Column(GetColumnName(node.Left)).IsNotNull());
                 else
-                    Expressions.Add(new FilterExpression(GetColumnName(node.Left), sqlOp, value));
+                    Expressions.Add(new WhereClause($"{GetColumnName(node.Left)} {sqlOp} {{}}", value));
 
                 return node;
             }
