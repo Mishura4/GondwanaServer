@@ -2659,6 +2659,9 @@ namespace DOL.GS.ServerProperties
         [ServerProperty("salvage", "use_new_salvage", "Enable to use a new system calcul of salvage count based on object_type.", false)]
         public static bool USE_NEW_SALVAGE;
 
+        [ServerProperty("atlas", "max_craft_time", "The maximum craft time allowed in seconds. All timers above this value will be normalised to the input value", 0)]
+        public static int MAX_CRAFT_TIME;
+
         #endregion
 
         #region ACCOUNT

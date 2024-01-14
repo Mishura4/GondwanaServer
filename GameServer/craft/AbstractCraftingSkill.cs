@@ -687,8 +687,12 @@ namespace DOL.GS
 
             craftingTime = (int)(craftingTime * mod);
 
+            var maxCraftingTime = Properties.MAX_CRAFT_TIME;
+
             if (craftingTime < 1)
                 craftingTime = 1;
+            else if (maxCraftingTime > 0 && craftingTime > maxCraftingTime)
+                craftingTime = maxCraftingTime;
             return craftingTime;
         }
 
