@@ -19,6 +19,7 @@
 
 using DOL.Database;
 using DOL.GS.PacketHandler;
+using DOL.GS.ServerProperties;
 using DOL.Language;
 using System.Collections.Generic;
 
@@ -64,9 +65,9 @@ namespace DOL.GS.Commands
 
                     if (count > 0)
                     {
-                        if (count > 100)
+                        if (count > Properties.MAX_CRAFT_QUEUE)
                         {
-                            count = 100;
+                            count = Properties.MAX_CRAFT_QUEUE;
                         }
 
                         client.Player.TempProperties.setProperty(CraftQueueLength, count);
