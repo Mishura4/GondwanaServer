@@ -339,16 +339,18 @@ namespace DOL.GS
             log.Debug("loading mobs from DB...");
 
             var mobList = new List<Mob>();
-            if (ServerProperties.Properties.DEBUG_LOAD_REGIONS != string.Empty)
+            var debugLoadRegions = Util.SplitCSV(ServerProperties.Properties.DEBUG_LOAD_REGIONS, true);
+
+            if (debugLoadRegions.Count > 0)
             {
-                foreach (string loadRegion in Util.SplitCSV(ServerProperties.Properties.DEBUG_LOAD_REGIONS, true))
-                {
-                    mobList.AddRange(DOLDB<Mob>.SelectObjects(DB.Column(nameof(Mob.Region)).IsEqualTo(loadRegion)));
-                }
+                var whereClause = DB.Column(nameof(Mob.Region)).IsIn(debugLoadRegions);
+                mobList.AddRange(DOLDB<Mob>.SelectObjects(whereClause));
             }
             else
             {
-                mobList.AddRange(GameServer.Database.SelectAllObjects<Mob>());
+                var disabledRegions = Util.SplitCSV(ServerProperties.Properties.DISABLED_REGIONS, true);
+                var whereClause = DB.Column(nameof(Mob.Region)).IsNotIn(disabledRegions);
+                mobList.AddRange(DOLDB<Mob>.SelectObjects(whereClause));
             }
 
             var mobsByRegionId = new Dictionary<ushort, List<Mob>>(512);
@@ -630,11 +632,11 @@ namespace DOL.GS
         }
 
 #if NETFRAMEWORK
-		[Obsolete("Please use GetFormattedRelocateRegionsStackTrace() instead.")]
-		public static StackTrace GetRelocateRegionsStacktrace()
-		{
-			return Util.GetThreadStack(m_relocationThread);
-		}
+        [Obsolete("Please use GetFormattedRelocateRegionsStackTrace() instead.")]
+        public static StackTrace GetRelocateRegionsStacktrace()
+        {
+            return Util.GetThreadStack(m_relocationThread);
+        }
 #endif
 
         public static string GetFormattedRelocateRegionsStackTrace()
@@ -780,11 +782,11 @@ namespace DOL.GS
         }
 
 #if NETFRAMEWORK
-		[Obsolete("Use GetFormattedWorldUpdateStackTrace() instead.")]
-		public static StackTrace GetWorldUpdateStacktrace()
-		{
-			return Util.GetThreadStack(m_WorldUpdateThread);
-		}
+        [Obsolete("Use GetFormattedWorldUpdateStackTrace() instead.")]
+        public static StackTrace GetWorldUpdateStacktrace()
+        {
+            return Util.GetThreadStack(m_WorldUpdateThread);
+        }
 #endif
 
         public static string GetFormattedWorldUpdateStackTrace()
