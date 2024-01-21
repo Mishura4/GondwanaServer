@@ -34,20 +34,11 @@ namespace DOL.AI.Brain
                 if (pl.IsStealthed)
                     pl.Stealth(false);
 
-                //Check Reputation
-                if (pl.Reputation < 0)
-                {
-                    //Full aggression against outlaws
-                    AddToAggroList(pl, 1);
-                    BringFriends(pl);
-                    continue;
-                }
-
                 int aggro = CalculateAggroLevelToTarget(pl);
                 if (aggro <= 0)
                     continue;
                 AddToAggroList(pl, aggro);
-                if (pl.Level > Body.Level - 20 || (pl.Group != null && pl.Group.MemberCount >= 2))
+                if (pl.Wanted || pl.Level > Body.Level - 20 || (pl.Group != null && pl.Group.MemberCount >= 2))
                     BringFriends(pl);
             }
         }
