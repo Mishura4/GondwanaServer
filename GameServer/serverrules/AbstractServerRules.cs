@@ -129,29 +129,29 @@ namespace DOL.GS.ServerRules
             }
 
             /* Example to limit the connections from a certain IP range!
-			if(client.Socket.RemoteEndPoint.ToString().StartsWith("192.168.0."))
-			{
-				client.Out.SendLoginDenied(eLoginError.AccountNoAccessAnyGame);
-				return false;
-			}
-			 */
+            if(client.Socket.RemoteEndPoint.ToString().StartsWith("192.168.0."))
+            {
+                client.Out.SendLoginDenied(eLoginError.AccountNoAccessAnyGame);
+                return false;
+            }
+             */
 
 
             /* Example to deny new connections on saturdays
-			if(DateTime.Now.DayOfWeek == DayOfWeek.Saturday)
-			{
-				client.Out.SendLoginDenied(eLoginError.GameCurrentlyClosed);
-				return false;
-			}
-			 */
+            if(DateTime.Now.DayOfWeek == DayOfWeek.Saturday)
+            {
+                client.Out.SendLoginDenied(eLoginError.GameCurrentlyClosed);
+                return false;
+            }
+             */
 
             /* Example to deny new connections between 10am and 12am
-			if(DateTime.Now.Hour >= 10 && DateTime.Now.Hour <= 12)
-			{
-				client.Out.SendLoginDenied(eLoginError.GameCurrentlyClosed);
-				return false;
-			}
-			 */
+            if(DateTime.Now.Hour >= 10 && DateTime.Now.Hour <= 12)
+            {
+                client.Out.SendLoginDenied(eLoginError.GameCurrentlyClosed);
+                return false;
+            }
+             */
 
             Account account = GameServer.Database.FindObjectByKey<Account>(username);
 
@@ -493,6 +493,43 @@ namespace DOL.GS.ServerRules
                         return false;
                     }
 
+            return true;
+        }
+
+        /// <summary>
+        /// Should an AOE spell ignore a target.
+        /// </summary>
+        /// <param name="spell">Spell being cast</param>
+        /// <param name="attacker">living that makes attack</param>
+        /// <param name="defender">attacker's target</param>
+        /// <returns>true if target should be ignored by aoe selection</returns>
+        public virtual bool ShouldAOEHitTarget(Spell spell, GameLiving attacker, GameLiving defender)
+        {
+            if (!IsAllowedToAttack(attacker, defender, true))
+                return false;
+
+            GameLiving realAttacker = (attacker is GameNPC { Brain: IControlledBrain } petAttacker ? (petAttacker.Brain as IControlledBrain).Owner : attacker);
+            GameLiving realDefender = (defender is GameNPC { Brain: IControlledBrain } petDefender ? (petDefender.Brain as IControlledBrain).Owner : defender);
+            if (realDefender is GameNPC)
+            {
+                GameNPC defenderNpc = realDefender as GameNPC;
+
+                if (defenderNpc.Brain is GuardNPCBrain defenderGuardBrain)
+                {
+                    if (realAttacker is GamePlayer)
+                    {
+                        // Player vs Guard: guard only selected if the guard is in combat with the player or if the guard would normally range aggro the player
+                        var playerAttacker = realAttacker as GamePlayer;
+
+                        return defenderGuardBrain.AggroTable.ContainsKey(attacker) || defenderGuardBrain.AggroTable.ContainsKey(realAttacker) || defenderGuardBrain.CalculateAggroLevelToTarget(playerAttacker) > 0;
+                    }
+                    else
+                    {
+                        // Npc (probably) vs Guard: guard only selected if the realm is different
+                        return realAttacker.Realm != defenderNpc.Realm;
+                    }
+                }
+            }
             return true;
         }
 
@@ -1306,13 +1343,13 @@ namespace DOL.GS.ServerRules
 
                 // exp cap
                 /*
-				
-				http://support.darkageofcamelot.com/kb/article.php?id=438
-				 
-				Experience clamps have been raised from 1.1x a same level kill to 1.25x a same level kill.
-				This change has two effects: it will allow lower level players in a group to gain more experience faster (15% faster),
-				and it will also let higher level players (the 35-50s who tend to hit this clamp more often) to gain experience faster.
-				 */
+                
+                http://support.darkageofcamelot.com/kb/article.php?id=438
+                 
+                Experience clamps have been raised from 1.1x a same level kill to 1.25x a same level kill.
+                This change has two effects: it will allow lower level players in a group to gain more experience faster (15% faster),
+                and it will also let higher level players (the 35-50s who tend to hit this clamp more often) to gain experience faster.
+                 */
                 long expCap = (long)(GameServer.ServerRules.GetExperienceForLiving(living.Level) *
                     ServerProperties.Properties.XP_CAP_PERCENT / 100);
 
@@ -1332,19 +1369,19 @@ namespace DOL.GS.ServerRules
 
                 //let's check the con, for example if a level 50 kills a green, we want our level 1 to get green xp too
                 /*
-				 * http://www.camelotherald.com/more/110.shtml
-				 * All group experience is divided evenly amongst group members, if they are in the same level range. What's a level range? One color range.
-				 * If everyone in the group cons yellow to each other (or high blue, or low orange), experience will be shared out exactly evenly, with no leftover points.
-				 * How can you determine a color range? Simple - Level divided by ten plus one. So, to a level 40 player (40/10 + 1), 36-40 is yellow, 31-35 is blue,
-				 * 26-30 is green, and 25-less is gray. But for everyone in the group to get the maximum amount of experience possible, the encounter must be a challenge to
-				 * the group. If the group has two people, the monster must at least be (con) yellow to the highest level member. If the group has four people, the monster
-				 * must at least be orange. If the group has eight, the monster must at least be red.
-				 *
-				 * If "challenge code" has been activated, then the experience is divided roughly like so in a group of two (adjust the colors up if the group is bigger): If
-				 * the monster was blue to the highest level player, each lower level group member will ROUGHLY receive experience as if they soloed a blue monster.
-				 * Ditto for green. As everyone knows, a monster that cons gray to the highest level player will result in no exp for anyone. If the monster was high blue,
-				 * challenge code may not kick in. It could also kick in if the monster is low yellow to the high level player, depending on the group strength of the pair.
-				 */
+                 * http://www.camelotherald.com/more/110.shtml
+                 * All group experience is divided evenly amongst group members, if they are in the same level range. What's a level range? One color range.
+                 * If everyone in the group cons yellow to each other (or high blue, or low orange), experience will be shared out exactly evenly, with no leftover points.
+                 * How can you determine a color range? Simple - Level divided by ten plus one. So, to a level 40 player (40/10 + 1), 36-40 is yellow, 31-35 is blue,
+                 * 26-30 is green, and 25-less is gray. But for everyone in the group to get the maximum amount of experience possible, the encounter must be a challenge to
+                 * the group. If the group has two people, the monster must at least be (con) yellow to the highest level member. If the group has four people, the monster
+                 * must at least be orange. If the group has eight, the monster must at least be red.
+                 *
+                 * If "challenge code" has been activated, then the experience is divided roughly like so in a group of two (adjust the colors up if the group is bigger): If
+                 * the monster was blue to the highest level player, each lower level group member will ROUGHLY receive experience as if they soloed a blue monster.
+                 * Ditto for green. As everyone knows, a monster that cons gray to the highest level player will result in no exp for anyone. If the monster was high blue,
+                 * challenge code may not kick in. It could also kick in if the monster is low yellow to the high level player, depending on the group strength of the pair.
+                 */
                 //xp challenge
                 if (player != null && highestPlayer != null && highestConValue < 0)
                 {
@@ -1497,12 +1534,12 @@ namespace DOL.GS.ServerRules
                     continue;
                 }
                 /*
-				 * http://www.camelotherald.com/more/2289.shtml
-				 * Dead players will now continue to retain and receive their realm point credit
-				 * on targets until they release. This will work for solo players as well as
-				 * grouped players in terms of continuing to contribute their share to the kill
-				 * if a target is being attacked by another non grouped player as well.
-				 */
+                 * http://www.camelotherald.com/more/2289.shtml
+                 * Dead players will now continue to retain and receive their realm point credit
+                 * on targets until they release. This will work for solo players as well as
+                 * grouped players in terms of continuing to contribute their share to the kill
+                 * if a target is being attacked by another non grouped player as well.
+                 */
                 //if (!living.Alive) continue;
                 if (!living.IsWithinRadius(killedLiving, WorldMgr.MAX_EXPFORKILL_DISTANCE))
                 {
@@ -1664,12 +1701,12 @@ namespace DOL.GS.ServerRules
                 if (living == null) continue;
                 if (living.ObjectState != GameObject.eObjectState.Active) continue;
                 /*
-				 * http://www.camelotherald.com/more/2289.shtml
-				 * Dead players will now continue to retain and receive their realm point credit
-				 * on targets until they release. This will work for solo players as well as
-				 * grouped players in terms of continuing to contribute their share to the kill
-				 * if a target is being attacked by another non grouped player as well.
-				 */
+                 * http://www.camelotherald.com/more/2289.shtml
+                 * Dead players will now continue to retain and receive their realm point credit
+                 * on targets until they release. This will work for solo players as well as
+                 * grouped players in terms of continuing to contribute their share to the kill
+                 * if a target is being attacked by another non grouped player as well.
+                 */
                 //if (!living.Alive) continue;
                 if (!living.IsWithinRadius(killedPlayer, WorldMgr.MAX_EXPFORKILL_DISTANCE)) continue;
 

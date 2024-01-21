@@ -95,13 +95,13 @@ namespace DOL.AI.Brain
         {
             if (target is GamePlayer player)
             {
-                if (player.Reputation < 0)
+                if (player.Wanted)
                 {
                     return 100;
                 }
                 return GuardsMgr.CalculateAggro(player);
             }
-            if (target.Realm == 0) 
+            if (target.Realm == 0)
                 return target.Level + 1;
             return base.CalculateAggroLevelToTarget(target);
         }

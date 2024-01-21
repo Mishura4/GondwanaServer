@@ -506,7 +506,6 @@ namespace DOL.GS.ServerRules
             }
 
             return true;
-
         }
 
         public override bool IsSameRealm(GameLiving source, GameLiving target, bool quiet)
