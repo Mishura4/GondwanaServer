@@ -19,6 +19,12 @@ namespace DOL.GS
         {
         }
 
+        public TerritoryBanner(int emblem)
+            : base()
+        {
+            OriginalEmblem = emblem;
+        }
+
         public override void LoadFromDatabase(DataObject obj)
         {
             base.LoadFromDatabase(obj);

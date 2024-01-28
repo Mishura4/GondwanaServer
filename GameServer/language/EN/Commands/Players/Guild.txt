@@ -241,6 +241,17 @@ Commands.Players.Guild.TerritoryPortal.Called:		You have been called by your gui
 Commands.Players.Guild.TerritoryPortal.Expired:		The call to arms has expired!
 Commands.Players.Guild.TerritoryPortal.Summoned:	You have been teleported to defend {0}. You may use the portal to be teleported back to your previous location.
 
+Commands.Players.Guild.CombatZone.NoGuild:			You must be in a guild to start a combat zone.
+Commands.Players.Guild.CombatZone.CantInPvPRegion:	You cannot start a combat zone in a PvP or RvR region.
+Commands.Players.Guild.CombatZone.CantInDungeon:	You cannot start a combat zone in a dungeon.
+Commands.Players.Guild.CombatZone.TooCloseToArea:	You cannot start a combat zone this close to {0}.
+Commands.Players.Guild.CombatZone.Denied:			You must be rank 2 or lower in your guild to start a combat zone.
+Commands.Players.Guild.CombatZone.ConfirmCost:		Summoning a combat zone will cost {0} merit points. Confirm?
+Commands.Players.Guild.CombatZone.Cooldown:			You must wait {0} hours {1} minutes and {2} seconds to start a combat zone.
+Commands.Players.Guild.CombatZone.NotEnoughMerit:	Your guild must have {0} merit points to summon a combat zone.
+
+Commands.Players.Guild.CombatZone.AreaName:			Combat zone of {0}.
+
 Commands.Players.Guild.InviteNotThis:			You cannot invite a member of this realm to your guild.
 Commands.Players.Guild.Help.GuildTerritories:   '/gc territories' Displays the guild territories and their occupations.
 Commands.Players.Guild.TerritoryPaid:           The amount of {0} has been withdrawn from your guild's bank to fund your territories.

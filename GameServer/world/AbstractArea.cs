@@ -160,6 +160,39 @@ namespace DOL.GS
             set { m_sound = value; }
         }
 
+        public virtual string GetDescriptionForPlayer(GamePlayer player)
+        {
+            var translation = LanguageMgr.GetTranslation(player, this) as DBLanguageArea;
+            if (translation != null && !string.IsNullOrEmpty(translation.Description))
+            {
+                return translation.Description;
+            }
+            else
+            {
+                return Description;
+            }
+        }
+
+        public virtual string GetDescriptionForPlayer(GamePlayer player, out string screenDescription)
+        {
+            var translation = LanguageMgr.GetTranslation(player, this) as DBLanguageArea;
+            if (translation != null && !string.IsNullOrEmpty(translation.Description))
+            {
+                screenDescription = string.IsNullOrEmpty(translation.ScreenDescription) ? translation.Description : translation.ScreenDescription;
+                return translation.Description;
+            }
+            else
+            {
+                screenDescription = Description;
+                return Description;
+            }
+        }
+
+        /// <summary>
+        /// Whether an area is temporary (will not be saved to database)
+        /// </summary>
+        public bool IsTemporary { get; init; } = false;
+
         #region Event handling
 
         public void UnRegisterPlayerEnter(DOLEventHandler callback)
@@ -210,6 +243,15 @@ namespace DOL.GS
         {
             return IsContaining(new Vector3(x, y, z), true);
         }
+
+        /// <summary>
+        /// Get the distance to the closest edge of this area from a point
+        /// </summary>
+        /// <param name="position">Position to calculate the distance from</param>
+        /// <param name="checkZ">Whether to take Z into account</param>
+        /// <returns></returns>
+        public abstract float DistanceSquared(Vector3 position, bool checkZ);
+
         public bool CanVol { get; protected set; }
 
         public DBArea DbArea { get => dbArea; set => dbArea = value; }
@@ -220,9 +262,15 @@ namespace DOL.GS
         /// <param name="player"></param>
         public virtual void OnPlayerLeave(GamePlayer player)
         {
-            if (m_displayMessage && Description != null && Description != "")
-                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AbstractArea.Left", Description),
-                    eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            if (m_displayMessage)
+            {
+                string description = GetDescriptionForPlayer(player);
+                if (!String.IsNullOrEmpty(description))
+                {
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AbstractArea.Left", description),
+                                           eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                }
+            }
 
             player.IsAllowToVolInThisArea = true;
 
@@ -240,26 +288,18 @@ namespace DOL.GS
         /// <param name="player"></param>
         public virtual void OnPlayerEnter(GamePlayer player)
         {
-            if (m_displayMessage && Description != null && Description != "")
+            if (m_displayMessage)
             {
-                string description = Description;
-                string screenDescription = description;
+                string description = GetDescriptionForPlayer(player, out string screenDescription);
 
-                var translation = LanguageMgr.GetTranslation(player, this) as DBLanguageArea;
-                if (translation != null)
+                if (!String.IsNullOrEmpty(description))
                 {
-                    if (!Util.IsEmpty(translation.Description))
-                        description = translation.Description;
-
-                    if (!Util.IsEmpty(translation.ScreenDescription))
-                        screenDescription = translation.ScreenDescription;
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AbstractArea.Entered", description),
+                                           eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 }
 
-                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AbstractArea.Entered", description),
-                    eChatType.CT_System, eChatLoc.CL_SystemWindow);
-
-                //Changed by Apo 9. August 2010: Areas never send an screen description, but we will support it with an server property
-                if (ServerProperties.Properties.DISPLAY_AREA_ENTER_SCREEN_DESC)
+                //Changed by Apo 9. August 2010: Areas never send an screen description, but we will support it with a server property
+                if (ServerProperties.Properties.DISPLAY_AREA_ENTER_SCREEN_DESC && !String.IsNullOrEmpty(screenDescription))
                     player.Out.SendMessage(screenDescription, eChatType.CT_ScreenCenterSmaller, eChatLoc.CL_SystemWindow);
             }
             if (Sound != 0)

@@ -120,6 +120,8 @@ Commands.Players.Guild.Help.GuildEditWithdraw:	'/gc edit <rang#> withdraw <y|n>'
 Commands.Players.Guild.Help.GuildEmail:			'/gc email <contact@guildpage.com>' # Affiche l'adresse internet des contacts au sein de la guilde.
 Commands.Players.Guild.Help.GuildEmblem:			'/gc emblem' # Présentation de l'emblème.
 Commands.Players.Guild.Help.TerritoryBanner:			'/gc territorybanner' # Permet de montrer sa bannière de guilde dans un territoire conquis, réduit les coûts d'entretien du territoire, et améliore sa défense.
+Commands.Players.Guild.Help.TerritoryPortal:			'/gc territoryportal' # Permet d'invoquer un portail de guilde dans un territoire conquis et envoyer une notification à tous les joueurs de la guilde en ligne, leur permettant de se téléporter au territoire.
+Commands.Players.Guild.Help.CombatZone:			'/gc combatzone' # Établi une zone de combat PvP sur votre position, permettant de combattre des joueurs sans perte de réputation.
 Commands.Players.Guild.Help.GuildForm:			'/gc form <nom de guilde>' # Création d'une guilde (4 joueurs au minimum requis dans le groupe).
 Commands.Players.Guild.Help.GuildGMAddPlayer:		'/gc addplayer <nom de joueur> to <nom de guilde>' # Ajoute un joueur à la guilde.
 Commands.Players.Guild.Help.GuildGMCommands:		Game Master commandes :
@@ -235,12 +237,12 @@ Commands.Players.Guild.WithdrawTooMuch:			Vous ne pouvez plus ajouter d'argent d
 Commands.Players.Guild.InviteNotThis:			Vous ne pouvez pas inviter un membre de ce royaume dans votre guilde.
 Commands.Players.Guild.Help.GuildTerritories:   '/gc territories' Affiche les territoires ainsi que leurs occupations.
 Commands.Players.Guild.TerritoryPaid:           La somme de {0} a été retirée de la banque de votre guilde pour financer vos territoires.
-Commands.Players.Guild.TerritoryNoMoney:        Votre guilde n'a pas pu honorer ses dettes et vous avez perdu vos territoires conquis.  
+Commands.Players.Guild.TerritoryNoMoney:        Votre guilde n'a pas pu honorer ses dettes et vous avez perdu vos territoires conquis.
 Commands.Players.Guild.TerritoryMeritPoints:   L'occupation de vos territoires vous rapporte {0} points de mérite.
 
 Commands.Players.Guild.TerritoryPortal.NoGuild:			Vous devez faire parti d'une guilde pour invoquer un portail de guilde.
 Commands.Players.Guild.TerritoryPortal.Denied:			Vous devez être au moins rang 4 pour invoquer un portail de guilde.
-Commands.Players.Guild.TerritoryPortal.ConfirmCost:		Invoquer un portail de guilde coûtera {0} points de mérite. Confirmer?
+Commands.Players.Guild.TerritoryPortal.ConfirmCost:		Invoquer un portail de guilde coûtera {0} points de mérite à votre guilde. Confirmer?
 Commands.Players.Guild.TerritoryPortal.Cooldown:		Vous ne pouvez pas invoquer un portail de guilde si tôt après en avoir invoqué un.
 Commands.Players.Guild.TerritoryPortal.NotEnoughMerit:	Votre guilde doit avoir {0} points de mérite pour invoquer un portail de guilde.
 Commands.Players.Guild.TerritoryPortal.NotInTerritory:	Vous ne pouvez pas invoquer un portail de guilde en dehors d'un territoire contrôlé par votre guilde.
@@ -248,6 +250,17 @@ Commands.Players.Guild.TerritoryPortal.NotInTerritory:	Vous ne pouvez pas invoqu
 Commands.Players.Guild.TerritoryPortal.Called:		Vous avez été appelé(e) par votre guilde pour défendre {0}, allez-vous répondre à l'appel?
 Commands.Players.Guild.TerritoryPortal.Expired:		L'appel aux armes a éxpiré!
 Commands.Players.Guild.TerritoryPortal.Summoned:	Vous avez été téléporté(e) à {0}. Vous pouvez utiliser le portail au centre du territoire pour revenir à votre précédente position.
+
+Commands.Players.Guild.CombatZone.NoGuild:			Vous devez faire parti d'une guilde pour établir une zone de combat.
+Commands.Players.Guild.CombatZone.CantInPvPRegion:	Vous ne pouvez pas établir une zone de combat dans une région PvP ou RvR.
+Commands.Players.Guild.CombatZone.CantInDungeon:	Vous ne pouvez pas établir une zone de combat dans un donjon.
+Commands.Players.Guild.CombatZone.TooCloseToArea:	Vous ne pouvez pas établir une zone de combat si proche de {0}.
+Commands.Players.Guild.CombatZone.Denied:			Vous devez être au moins rang 2 pour établir une zone de combat.
+Commands.Players.Guild.CombatZone.ConfirmCost:		Établir une zone de combat coûtera {0} points de mérite à votre guilde. Confirmer?
+Commands.Players.Guild.CombatZone.Cooldown:			Vous devez attendre {0} heures {1} minutes et {2} secondes pour établir une zone de combat.
+Commands.Players.Guild.CombatZone.NotEnoughMerit:	Votre guilde doit avoir {0} points de mérite pour établir une zone de combat.
+
+Commands.Players.Guild.CombatZone.AreaName:			Zone de combat de {0}
 
 # /Guilds a traduire:
 Commands.Players.Guild.Alliance.AlreadyOther:		La guilde a déjà une alliance

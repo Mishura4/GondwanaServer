@@ -46,9 +46,11 @@ namespace DOL.GS
         void RegisterPlayerEnter(DOLEventHandler callback);
         void RegisterPlayerLeave(DOLEventHandler callback);
 
+        string GetDescriptionForPlayer(GamePlayer player);
+
         /// <summary>
         /// Checks wether is intersects with given zone.
-        /// This is needed to build an area.zone mapping cache for performance.		
+        /// This is needed to build an area.zone mapping cache for performance.
         /// </summary>
         /// <param name="zone"></param>
         /// <returns></returns>
@@ -66,6 +68,8 @@ namespace DOL.GS
         bool IsContaining(float x, float y, float z);
 
         bool IsContaining(float x, float y, float z, bool checkZ);
+
+        float DistanceSquared(Vector3 position, bool checkZ);
 
         /// <summary>
         /// Called whenever a player leaves the given area

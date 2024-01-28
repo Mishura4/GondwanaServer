@@ -21,7 +21,9 @@ using System.Collections.Generic;
 using DOL.Events;
 using DOL.GS.PacketHandler;
 using DOL.Database;
+using DOL.Language;
 using System.Numerics;
+using static DOL.GS.WarMapMgr;
 
 namespace DOL.GS
 {
@@ -124,6 +126,38 @@ namespace DOL.GS
                 return true;
             }
 
+            /// <inheritdoc />
+            public override float DistanceSquared(Vector3 position, bool checkZ)
+            {
+                Vector3 direction = position - Position;
+                Vector3 intersection = new Vector3();
+
+                if (Math.Abs(direction.X) < Width && Math.Abs(direction.Y) < Height) // Inside
+                {
+                    return 0.0f;
+                }
+                if (direction.X > 0)
+                {
+                    intersection.X = position.X + Math.Min(Width, direction.X);
+                }
+                else
+                {
+                    intersection.X = position.X - Math.Max(-Width, direction.X);
+                }
+
+                if (direction.Y > 0)
+                {
+                    intersection.Y = position.Y + Math.Min(Height, direction.Y);
+                }
+                else
+                {
+                    intersection.Y = position.Y - Math.Max(-Height, direction.Y);
+                }
+                float dx = position.X - intersection.X;
+                float dy = position.Y - intersection.Y;
+                return dx * dx + dy * dy;
+            }
+
             public override void LoadFromDatabase(DBArea area)
             {
                 DbArea = area;
@@ -214,6 +248,20 @@ namespace DOL.GS
                 }
 
                 return (m_distSq <= m_RadiusRadius);
+            }
+
+            /// <inheritdoc />
+            public override float DistanceSquared(Vector3 position, bool checkZ)
+            {
+                Vector3 direction = position - Position;
+                float radiusSquared = Radius * Radius;
+                float distanceToCenterSquared = direction.LengthSquared();
+
+                if (direction.LengthSquared() < radiusSquared) // Inside
+                {
+                    return 0.0f;
+                }
+                return distanceToCenterSquared - radiusSquared;
             }
 
             public override void LoadFromDatabase(DBArea area)
@@ -345,6 +393,24 @@ namespace DOL.GS
                 return inside;
             }
 
+            /// <inheritdoc />
+            public override float DistanceSquared(Vector3 position, bool checkZ)
+            {
+                Vector3 direction = position - Position;
+                float radiusSquared = Radius * Radius;
+                if (!checkZ)
+                {
+                    direction.Z = 0;
+                }
+                float distanceToCenterSquared = direction.LengthSquared();
+
+                if (direction.LengthSquared() < radiusSquared) // Inside
+                {
+                    return 0.0f;
+                }
+                return distanceToCenterSquared - radiusSquared;
+            }
+
             public override void LoadFromDatabase(DBArea area)
             {
                 DbArea = area;
@@ -407,6 +473,41 @@ namespace DOL.GS
                 (desc, x, y, z, radius)
             {
                 m_safeArea = true;
+            }
+        }
+
+        public class CombatZone : Circle
+        {
+            public CombatZone()
+            {
+            }
+
+            public CombatZone(Guild owningGuild, Vector3 position)
+            : base("", position, ServerProperties.Properties.GUILD_COMBAT_ZONE_RADIUS)
+            {
+                CanVol = true;
+                RealmPoints = 2;
+                IsPvP = true;
+                CanBroadcast = true;
+                Sound = 0;
+                CheckLOS = false;
+                IsTemporary = true;
+                OwningGuild = owningGuild;
+            }
+
+            public Guild OwningGuild { get; init; }
+
+            /// <inheritdoc />
+            public override string GetDescriptionForPlayer(GamePlayer player)
+            {
+                return LanguageMgr.GetTranslation(player.Client.Account.Language, "Commands.Players.Guild.CombatZone.AreaName", OwningGuild.Name);
+            }
+
+            /// <inheritdoc />
+            public override string GetDescriptionForPlayer(GamePlayer player, out string screenDescription)
+            {
+                screenDescription = GetDescriptionForPlayer(player);
+                return screenDescription;
             }
         }
     }

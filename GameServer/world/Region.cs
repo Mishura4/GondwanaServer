@@ -633,6 +633,32 @@ namespace DOL.GS
             return new GameKeepComponent();
         }
 
+        public virtual void CreateCombatZone(Guild owningGuild, Vector3 position)
+        {
+            Area.CombatZone zone = new(owningGuild, position);
+
+            AddArea(zone);
+            CombatZoneBanner banner = CombatZoneBanner.Create(owningGuild, zone);
+            banner.Position = position;
+            banner.CurrentRegion = this;
+            banner.CurrentRegionID = ID;
+            banner.LoadedFromScript = true;
+            RegionTimer zoneTimer = new RegionTimer(banner);
+            zoneTimer.Interval = Properties.GUILD_COMBAT_ZONE_DURATION * 1000;
+            zoneTimer.Callback = CombatZoneTimerCallback;
+            zoneTimer.Start(zoneTimer.Interval);
+            banner.AddToWorld();
+        }
+
+        private int CombatZoneTimerCallback(RegionTimer timer)
+        {
+            var banner = (CombatZoneBanner)timer.Owner;
+
+            timer.Stop();
+            banner.Delete();
+            return 0;
+        }
+
         /// <summary>
         /// Determine if the current time is AM.
         /// </summary>
@@ -1477,6 +1503,95 @@ namespace DOL.GS
                 }
 
                 return areas;
+            }
+        }
+
+        /// <summary>
+        /// Gets the areas at a certain distance of a spot
+        /// </summary>
+        /// <param name="zone"></param>
+        /// <param name="p"></param>
+        /// <param name="radius"></param>
+        /// <param name="checkZ"></param>
+        /// <returns></returns>
+        public virtual IList<IArea> GetAreasInRadius(Vector3 p, float radius, bool checkZ)
+        {
+            lock (m_lockAreas)
+            {
+                int zoneIndex = 0;
+                var areas = new List<IArea>();
+                foreach (Zone zone in m_zones)
+                {
+                    if (zone.XOffset <= p.X + radius && (zone.XOffset + zone.Width) > p.X - radius && zone.YOffset <= p.Y + radius && (zone.YOffset + zone.Height) > p.Y - radius)
+                    {
+                        float radiusSquared = radius * radius;
+
+                        if (zoneIndex >= 0)
+                        {
+                            try
+                            {
+                                for (int i = 0; i < m_ZoneAreasCount[zoneIndex]; i++)
+                                {
+                                    IArea area = (IArea)m_Areas[m_ZoneAreas[zoneIndex][i]];
+                                    if (area.DistanceSquared(p, checkZ) <= radiusSquared)
+                                    {
+                                        areas.Add(area);
+                                    }
+                                }
+                            }
+                            catch (Exception e)
+                            {
+                                log.Error("GetArea exception.Area count " + m_ZoneAreasCount[zoneIndex], e);
+                            }
+                        }
+                    }
+                    ++zoneIndex;
+                }
+                return areas;
+            }
+        }
+
+        /// <summary>
+        /// Gets the areas at a certain distance of a spot
+        /// </summary>
+        /// <param name="zone"></param>
+        /// <param name="p"></param>
+        /// <param name="radius"></param>
+        /// <param name="checkZ"></param>
+        /// <returns></returns>
+        public virtual IArea FindAnyAreaInRadius(Vector3 p, float radius, bool checkZ)
+        {
+            lock (m_lockAreas)
+            {
+                int zoneIndex = 0;
+                foreach (Zone zone in m_zones)
+                {
+                    if (zone.XOffset <= p.X + radius && (zone.XOffset + zone.Width) > p.X - radius && zone.YOffset <= p.Y + radius && (zone.YOffset + zone.Height) > p.Y - radius)
+                    {
+                        float radiusSquared = radius * radius;
+
+                        if (zoneIndex >= 0)
+                        {
+                            try
+                            {
+                                for (int i = 0; i < m_ZoneAreasCount[zoneIndex]; i++)
+                                {
+                                    IArea area = (IArea)m_Areas[m_ZoneAreas[zoneIndex][i]];
+                                    if (area.DistanceSquared(p, checkZ) <= radiusSquared)
+                                    {
+                                        return area;
+                                    }
+                                }
+                            }
+                            catch (Exception e)
+                            {
+                                log.Error("GetArea exception.Area count " + m_ZoneAreasCount[zoneIndex], e);
+                            }
+                        }
+                    }
+                    ++zoneIndex;
+                }
+                return null;
             }
         }
 
