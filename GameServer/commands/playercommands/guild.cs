@@ -16,6 +16,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
+using AmteScripts.Managers;
+using DOL.AI.Brain;
 using System;
 using System.Linq;
 using System.Collections.Generic;
@@ -1304,26 +1306,29 @@ namespace DOL.GS.Commands
                             {
                                 var territory = TerritoryManager.Instance.GetCurrentTerritory(player.CurrentAreas);
 
-                                if (player.GuildRank.RankLevel > 4 && client.Account.PrivLevel == 1)
+                                if (client.Account.PrivLevel == 1)
                                 {
-                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.TerritoryPortal.Denied"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                                    break;
+                                    if (player.GuildRank.RankLevel > 4)
+                                    {
+                                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.TerritoryPortal.Denied"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                        break;
+                                    }
+
+                                    var availableTick = guild.GuildPortalAvailableTick;
+                                    if (availableTick > GameServer.Instance.TickCount)
+                                    {
+                                        client.Out.SendMessage(string.Format(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.TerritoryPortal.Cooldown")), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                        return;
+                                    }
+
+                                    if (guild.MeritPoints < (long)Properties.GUILD_PORTAL_MERIT_PRICE)
+                                    {
+                                        client.Out.SendMessage(string.Format(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.TerritoryPortal.NotEnoughMerit"), Properties.GUILD_PORTAL_MERIT_PRICE), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                        return;
+                                    }
                                 }
 
-                                if (client.Account.PrivLevel == 1 && guild.MeritPoints < (long)Properties.GUILD_PORTAL_MERIT_PRICE)
-                                {
-                                    client.Out.SendMessage(string.Format(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.TerritoryPortal.NotEnoughMerit"), Properties.GUILD_BANNER_MERIT_PRICE), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                                    return;
-                                }
-
-                                var availableTick = guild.GuildPortalAvailableTick;
-                                if (client.Account.PrivLevel == 1 && availableTick > GameServer.Instance.TickCount)
-                                {
-                                    client.Out.SendMessage(string.Format(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.TerritoryPortal.Cooldown")), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                                    return;
-                                }
-
-                                client.Out.SendCustomDialog(string.Format(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.TerritoryPortal.ConfirmCost"), Properties.GUILD_PORTAL_MERIT_PRICE), (GamePlayer player, byte response) =>
+                                client.Out.SendCustomDialog(string.Format(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.TerritoryPortal.ConfirmCost"), client.Account.PrivLevel > 1 ? 0 : Properties.GUILD_PORTAL_MERIT_PRICE), (GamePlayer player, byte response) =>
                                 {
                                     if (response == 1)
                                     {
@@ -1331,12 +1336,15 @@ namespace DOL.GS.Commands
                                         {
                                             if (player.Guild.MeritPoints < (long)Properties.GUILD_PORTAL_MERIT_PRICE)
                                             {
-                                                client.Out.SendMessage(string.Format(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.TerritoryPortal.NotEnoughMerit"), Properties.GUILD_BANNER_MERIT_PRICE), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                                client.Out.SendMessage(string.Format(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.TerritoryPortal.NotEnoughMerit"), Properties.GUILD_PORTAL_MERIT_PRICE), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                                 return;
                                             }
 
                                             player.Guild.RemoveMeritPoints(Properties.GUILD_PORTAL_MERIT_PRICE);
-                                            player.Guild.GuildPortalAvailableTick = GameServer.Instance.TickCount + (uint)(Properties.GUILD_PORTAL_COOLDOWN < 0 ? 0 : Properties.GUILD_PORTAL_COOLDOWN) * 1000;
+                                            if (Properties.GUILD_COMBAT_ZONE_COOLDOWN > 0)
+                                            {
+                                                player.Guild.GuildPortalAvailableTick = GameServer.Instance.TickCount + (uint)(Properties.GUILD_PORTAL_COOLDOWN) * 60 * 1000;
+                                            }
                                         }
                                         territory.SpawnPortalNpc(player);
                                     }
@@ -1349,6 +1357,88 @@ namespace DOL.GS.Commands
                         }
                         break;
 
+                    #endregion
+                    #region CombatZone
+
+                    case "combatzone":
+                        {
+                            GamePlayer player = client.Player;
+                            Guild guild = player.Guild;
+                            Region region = player.CurrentRegion;
+
+                            if (guild == null)
+                            {
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.CombatZone.NoGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                break;
+                            }
+                            if (region.IsRvR || PvpManager.Instance.IsPvPRegion(region.ID))
+                            {
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.CombatZone.CantInPvPRegion"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                break;
+                            }
+                            if (region.IsDungeon)
+                            {
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.CombatZone.CantInDungeon"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                break;
+                            }
+
+                            if (client.Account.PrivLevel == 1)
+                            {
+                                // For players, check guild rank, cooldown, price, and area proximity
+                                if (player.GuildRank.RankLevel > 2)
+                                {
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.CombatZone.Denied"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    break;
+                                }
+                                var availableTick = guild.GuildCombatZoneAvailableTick;
+                                if (availableTick > GameServer.Instance.TickCount)
+                                {
+                                    uint totalSeconds = (availableTick - GameServer.Instance.TickCount) / 1000;
+                                    uint diffHours = totalSeconds / 3600;
+                                    uint diffMinutes = (totalSeconds % (3600)) / 60;
+                                    uint diffSeconds = totalSeconds % (60);
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.CombatZone.Cooldown", diffHours, diffMinutes, diffSeconds), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    break;
+                                }
+
+                                if (guild.MeritPoints < (long)Properties.GUILD_COMBAT_ZONE_MERIT_PRICE)
+                                {
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.CombatZone.NotEnoughMerit", Properties.GUILD_COMBAT_ZONE_MERIT_PRICE), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    break;
+                                }
+                                AbstractArea closeArea = (AbstractArea)region.FindAnyAreaInRadius(player.Position, Properties.GUILD_COMBAT_ZONE_DISTANCE_FROM_AREAS, true);
+                                if (closeArea != null)
+                                {
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.CombatZone.TooCloseToArea", closeArea.GetDescriptionForPlayer(player)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    break;
+                                }
+
+                                client.Out.SendCustomDialog(string.Format(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.CombatZone.ConfirmCost"), Properties.GUILD_COMBAT_ZONE_MERIT_PRICE), (GamePlayer player, byte response) =>
+                                {
+                                    if (response == 1)
+                                    {
+                                        if (player.Guild.MeritPoints < (long)Properties.GUILD_COMBAT_ZONE_MERIT_PRICE)
+                                        {
+                                            client.Out.SendMessage(string.Format(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.CombatZone.NotEnoughMerit"), Properties.GUILD_COMBAT_ZONE_MERIT_PRICE), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                            return;
+                                        }
+
+                                        player.Guild.RemoveMeritPoints(Properties.GUILD_COMBAT_ZONE_MERIT_PRICE);
+                                        if (Properties.GUILD_COMBAT_ZONE_COOLDOWN > 0)
+                                        {
+                                            player.Guild.GuildCombatZoneAvailableTick = GameServer.Instance.TickCount + (uint)(Properties.GUILD_COMBAT_ZONE_COOLDOWN) * 60 * 1000;
+                                        }
+                                        region.CreateCombatZone(guild, player.Position);
+                                    }
+                                });
+                            }
+                            else
+                            {
+                                // GMs can spawn it anywhere for free except PVP RVR & dungeons
+                                region.CreateCombatZone(guild, player.Position);
+                            }
+                        }
+                        break;
                     #endregion
                     #region List
                     // --------------------------------------------------------------------------------

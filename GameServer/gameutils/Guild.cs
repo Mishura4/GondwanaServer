@@ -452,6 +452,12 @@ namespace DOL.GS
             set;
         }
 
+        public uint GuildCombatZoneAvailableTick
+        {
+            get;
+            set;
+        }
+
         public int Emblem
         {
             get

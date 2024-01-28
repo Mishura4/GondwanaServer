@@ -2528,10 +2528,28 @@ namespace DOL.GS.ServerProperties
         public static int GUILD_PORTAL_COOLDOWN;
 
         /// <summary>
-        /// Duration of a guild portal. Default 15 minutes
+        /// Duration of a guild portal in seconds. Default 15 minutes
         /// </summary>
         [ServerProperty("guild", "guild_portal_duration", "The duration in seconds for guild portals", 15 * 60)]
         public static int GUILD_PORTAL_DURATION;
+
+        [ServerProperty("guild", "guild_combatzone_merit_price", "The guild portal price in merit points", 5000)]
+        public static int GUILD_COMBAT_ZONE_MERIT_PRICE;
+
+        [ServerProperty("guild", "guild_combatzone_cooldown", "The cooldown in minutes for guild combat zones, per guild", 120)]
+        public static int GUILD_COMBAT_ZONE_COOLDOWN;
+
+        [ServerProperty("guild", "guild_combatzone_radius", "The radius for guild combat zones", 3200)]
+        public static int GUILD_COMBAT_ZONE_RADIUS;
+
+        [ServerProperty("guild", "guild_combatzone_distance_from_areas", "The minimum distance from other areas to be able to start a guild combat zone", 5000f)]
+        public static float GUILD_COMBAT_ZONE_DISTANCE_FROM_AREAS;
+
+        /// <summary>
+        /// Duration of a guild combat zone in seconds. Default 15 minutes
+        /// </summary>
+        [ServerProperty("guild", "guild_combatzone_duration", "The duration in seconds for guild combat zones", 15 * 60)]
+        public static int GUILD_COMBAT_ZONE_DURATION;
 
         /// <summary>
         /// Do we allow guild members from other realms
