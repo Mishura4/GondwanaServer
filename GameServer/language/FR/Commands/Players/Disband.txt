@@ -1,4 +1,4 @@
-Commands.Players.Disband.Description:	Se séparer d’un groupe.
+Commands.Players.Disband.Description:	Se séparer d'un groupe.
 Commands.Players.Disband.Disbanded:		{0} a quitté le groupe.
 Commands.Players.Disband.NoPlayer:		Pas de joueur de ce nom dans le groupe.
 Commands.Players.Disband.NotInGroup:	Vous n'êtes pas dans un groupe.

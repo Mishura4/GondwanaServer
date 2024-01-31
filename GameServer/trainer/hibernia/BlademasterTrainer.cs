@@ -19,6 +19,7 @@
 using System;
 using DOL.GS.PacketHandler;
 using DOL.Language;
+using DOL.Database;
 
 namespace DOL.GS.Trainer
 {
@@ -33,7 +34,14 @@ namespace DOL.GS.Trainer
             get { return eCharacterClass.Blademaster; }
         }
 
-        public const string ARMOR_ID1 = "blademaster_item";
+        // public const string ARMOR_ID1 = "blademaster_armor";
+        public const string WEAPON_ID1 = "blunt_hib_item";
+        public const string WEAPON_ID2 = "blades_hib_item";
+        public const string WEAPON_ID3 = "piercing_hib_item";
+        public const string ARMOR_ID1 = "vest_of_the_neophyte_hib";
+        public const string ARMOR_ID2 = "stylists_vest";
+        public const string ARMOR_ID3 = "sabreurs_vest";
+        public const string ARMOR_ID4 = "bladeweavers_vest";
 
         public BlademasterTrainer() : base()
         {
@@ -51,14 +59,15 @@ namespace DOL.GS.Trainer
             // check if class matches.
             if (player.CharacterClass.ID == (int)TrainedClass)
             {
-                player.Out.SendMessage(this.Name + " says, \"Do you wish to learn some more, " + player.Name + "? Step up and receive your training!\"", eChatType.CT_Say, eChatLoc.CL_ChatWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "BlademasterTrainer.Interact.Text3", this.Name, player.GetName(0, false)), eChatType.CT_Say, eChatLoc.CL_ChatWindow);
+                OfferTraining(player);
             }
             else
             {
                 // perhaps player can be promoted
                 if (CanPromotePlayer(player))
                 {
-                    player.Out.SendMessage(this.Name + " says, \"" + player.Name + ", do you choose the Path of Harmony, and life as a [Blademaster]?\"", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "BlademasterTrainer.Interact.Text1", this.Name, player.CharacterClass.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     if (!player.IsLevelRespecUsed)
                     {
                         OfferRespecialize(player);
@@ -83,18 +92,74 @@ namespace DOL.GS.Trainer
             if (!base.WhisperReceive(source, text)) return false;
             GamePlayer player = source as GamePlayer;
 
-            switch (text)
+            if (CanPromotePlayer(player))
             {
-                case "Blademaster":
-                    // promote player to other class
-                    if (CanPromotePlayer(player))
-                    {
-                        PromotePlayer(player, (int)eCharacterClass.Blademaster, "Very well, " + source.GetName(0, false) + ". I gladly take your training into my hands. Congratulations, from this day forth, you are a Blademaster. Here, take this gift to aid you.", null);
+                switch (text)
+                {
+                    case "Path of Harmony":
+                    case "Voie de l'Harmonie":
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "BlademasterTrainer.Interact.Text4", this.Name, player.GetName(0, false), player.CharacterClass.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        break;
+
+                    case "blades":
+                    case "épées":
+                        PromotePlayer(player, (int)eCharacterClass.Blademaster, LanguageMgr.GetTranslation(player.Client.Account.Language, "BlademasterTrainer.WhisperReceive.Text1", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, WEAPON_ID1, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "BlademasterTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                         player.ReceiveItem(this, ARMOR_ID1, eInventoryActionType.Other);
-                    }
-                    break;
+                        break;
+
+                    case "blunt":
+                    case "contondante":
+                        PromotePlayer(player, (int)eCharacterClass.Blademaster, LanguageMgr.GetTranslation(player.Client.Account.Language, "BlademasterTrainer.WhisperReceive.Text2", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, WEAPON_ID2, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "BlademasterTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, ARMOR_ID1, eInventoryActionType.Other);
+                        break;
+
+                    case "piercing":
+                    case "perforante":
+                        PromotePlayer(player, (int)eCharacterClass.Blademaster, LanguageMgr.GetTranslation(player.Client.Account.Language, "BlademasterTrainer.WhisperReceive.Text3", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, WEAPON_ID3, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "BlademasterTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, ARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                }
             }
             return true;
+        }
+
+        /// <summary>
+        /// For Recieving Armors.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public override bool ReceiveItem(GameLiving source, InventoryItem item)
+        {
+            if (source == null || item == null) return false;
+
+            GamePlayer player = source as GamePlayer;
+
+            if (player.Level >= 10 && player.Level < 15 && item.Id_nb == ARMOR_ID1)
+            {
+                player.Inventory.RemoveCountFromStack(item, 1);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "BlademasterTrainer.ReceiveArmor.Text2", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                addGift(ARMOR_ID2, player);
+            }
+            if (player.Level >= 15 && player.Level < 20 && item.Id_nb == ARMOR_ID2)
+            {
+                player.Inventory.RemoveCountFromStack(item, 1);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "BlademasterTrainer.ReceiveArmor.Text3", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                addGift(ARMOR_ID3, player);
+            }
+            if (player.Level >= 20 && player.Level < 50 && item.Id_nb == ARMOR_ID3)
+            {
+                player.Inventory.RemoveCountFromStack(item, 1);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "BlademasterTrainer.ReceiveArmor.Text4", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                addGift(ARMOR_ID4, player);
+            }
+            return base.ReceiveItem(source, item);
         }
     }
 }

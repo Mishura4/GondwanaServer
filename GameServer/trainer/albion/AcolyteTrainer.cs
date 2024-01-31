@@ -57,7 +57,7 @@ namespace DOL.GS.Trainer
                 // player can be promoted
                 if (player.Level >= 5)
                 {
-                    player.Out.SendMessage(this.Name + " says, \"You must now seek your training elsewhere. Which path would you like to follow? [Cleric], [Heretic], or [Friar]?\"", eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AcolyteTrainer.Interact.Text1", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                 }
                 else
                 {
@@ -67,11 +67,11 @@ namespace DOL.GS.Trainer
                 // ask for basic equipment if player doesnt own it
                 if (player.Inventory.GetFirstItemByID(PRACTICE_WEAPON_ID, eInventorySlot.MinEquipable, eInventorySlot.LastBackpack) == null)
                 {
-                    player.Out.SendMessage(this.Name + " says, \"Do you require a [practice weapon]?\"", eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AcolyteTrainer.Interact.Text2", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                 }
                 if (player.Inventory.GetFirstItemByID(PRACTICE_SHIELD_ID, eInventorySlot.MinEquipable, eInventorySlot.LastBackpack) == null)
                 {
-                    player.Out.SendMessage(this.Name + " says, \"Do you require a [training shield]?\"", eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AcolyteTrainer.Interact.Text3", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                 }
             }
             else
@@ -95,42 +95,47 @@ namespace DOL.GS.Trainer
             switch (text)
             {
                 case "Cleric":
+                case "Clerc":
                     if (player.Race == (int)eRace.Avalonian || player.Race == (int)eRace.Briton || player.Race == (int)eRace.Highlander)
                     {
-                        this.SayTo(player, "So, you wish to serve the Church as healer, defender and leader of our faith. The Church of Albion will welcome one of your skill. Perhaps in time, your commitment will lead others to join our order.");
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AcolyteTrainer.Cleric.Explain", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
                     else
                     {
-                        this.SayTo(player, "The path of a Cleric is not available to your race. Please choose another.");
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AcolyteTrainer.Cleric.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_ChatWindow);
                     }
                     return true;
                 case "Friar":
-                    if (player.Race == (int)eRace.Briton)
+                case "Moine":
+                    if (player.Race == (int)eRace.Avalonian || player.Race == (int)eRace.Briton || player.Race == (int)eRace.Highlander)
                     {
-                        this.SayTo(player, "Members of a brotherhood, you will find more than a community should you join ranks with the Defenders of Albion. Deadly with a Quarterstaff, and proficient with the healing of wounds, the army is in constant need of new recruits such as you.");
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AcolyteTrainer.Friar.Explain", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
                     else
                     {
-                        this.SayTo(player, "The path of a Friar is not available to your race. Please choose another.");
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AcolyteTrainer.Friar.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_ChatWindow);
                     }
                     return true;
                 case "Heretic":
-                    if (player.Race == (int)eRace.Briton || player.Race == (int)eRace.Avalonian || player.Race == (int)eRace.Inconnu || player.Race == (int)eRace.AlbionMinotaur)
+                case "Hérétique":
+                    if (player.Race == (int)eRace.Briton || player.Race == (int)eRace.Avalonian || player.Race == (int)eRace.Inconnu || player.Race == (int)eRace.AlbionMinotaur || player.Race == (int)eRace.Saracen || player.Race == (int)eRace.Highlander)
                     {
-                        this.SayTo(player, "Members of a brotherhood, you will find more than a community should you join ranks with the Defenders of Albion. Deadly with a Quarterstaff, and proficient with the healing of wounds, the army is in constant need of new recruits such as you.");
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AcolyteTrainer.Heretic.Explain", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
                     else
                     {
-                        this.SayTo(player, "The path of a Friar is not available to your race. Please choose another.");
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AcolyteTrainer.Heretic.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_ChatWindow);
                     }
                     return true;
                 case "practice weapon":
+                case "arme d'entraînement":
                     if (player.Inventory.GetFirstItemByID(PRACTICE_WEAPON_ID, eInventorySlot.Min_Inv, eInventorySlot.Max_Inv) == null)
                     {
                         player.ReceiveItem(this, PRACTICE_WEAPON_ID, eInventoryActionType.Other);
                     }
                     return true;
                 case "training shield":
+                case "bouclier d'entraînement":
                     if (player.Inventory.GetFirstItemByID(PRACTICE_SHIELD_ID, eInventorySlot.Min_Inv, eInventorySlot.Max_Inv) == null)
                     {
                         player.ReceiveItem(this, PRACTICE_SHIELD_ID, eInventoryActionType.Other);

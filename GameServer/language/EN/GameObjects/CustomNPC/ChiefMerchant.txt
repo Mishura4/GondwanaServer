@@ -1,4 +1,4 @@
 # ChiefMerchant NPC
-ChiefMerchant.Ask:			Would you like to become a merchant and get some promotions thanks to our community? For this, you have to obtain a Merchant Licence! Let’s meet again when you have one!
+ChiefMerchant.Ask:			Would you like to become a merchant and get some promotions thanks to our community? For this, you have to obtain a Merchant Licence! Let's meet again when you have one!
 ChiefMerchant.Done:             Here you are! So you got your licence, wonderful! Now you can start selling your items to players thanks to your new trading kit! If you get experienced enough with negotiation you will be recognized within our community of merchants and benefit from special rates!
-ChiefMerchant.Denied:           You already belong to our community! I can’t do anything for you anymore. Sharpen your sense of negotiation and become a perfect trader, good luck!
+ChiefMerchant.Denied:           You already belong to our community! I can't do anything for you anymore. Sharpen your sense of negotiation and become a perfect trader, good luck!

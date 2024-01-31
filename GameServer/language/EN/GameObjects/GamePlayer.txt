@@ -154,6 +154,24 @@ GameObjects.GamePlayer.ItemBonusName.Bonus16:			Matter resistance
 GameObjects.GamePlayer.ItemBonusName.Bonus17:			Slash resistance
 GameObjects.GamePlayer.ItemBonusName.Bonus18:			Spirit resistance
 GameObjects.GamePlayer.ItemBonusName.Bonus19:			Thrust resistance
+GameObjects.GamePlayer.ItemBonusName.Bonus119:			Tension Factor
+GameObjects.GamePlayer.ItemBonusName.Bonus147:			Max Concentration
+GameObjects.GamePlayer.ItemBonusName.Bonus148:			Armor Factor
+GameObjects.GamePlayer.ItemBonusName.Bonus149:			Armor Absorption
+GameObjects.GamePlayer.ItemBonusName.Bonus150:			Health Regeneration rate
+GameObjects.GamePlayer.ItemBonusName.Bonus151:			Power Regeneration rate
+GameObjects.GamePlayer.ItemBonusName.Bonus152:			Endurance Regeneration rate
+GameObjects.GamePlayer.ItemBonusName.Bonus153:			Spell Range
+GameObjects.GamePlayer.ItemBonusName.Bonus154:			Archery Range
+GameObjects.GamePlayer.ItemBonusName.Bonus155:			Melee Speed
+GameObjects.GamePlayer.ItemBonusName.Bonus156:			Acuity
+GameObjects.GamePlayer.ItemBonusName.Bonus169:			Evade Chance rate
+GameObjects.GamePlayer.ItemBonusName.Bonus170:			Block Chance rate
+GameObjects.GamePlayer.ItemBonusName.Bonus171:			Parry Chance rate
+GameObjects.GamePlayer.ItemBonusName.Bonus175:			chance to not fumble in melee
+GameObjects.GamePlayer.ItemBonusName.Bonus181:			chance to not fumble spells
+GameObjects.GamePlayer.ItemBonusName.Bonus197:			Piercing resistance
+GameObjects.GamePlayer.ItemBonusName.Bonus249:			Essence resistance
 GameObjects.GamePlayer.LavaBurnTimerCallback.YourInLava:	You are in Lava and take damage!			
 GameObjects.GamePlayer.LavaBurnTimerCallback.Take34%Damage:	You take 34% of your max hits in damage.
 GameObjects.GamePlayer.OnItemEquipped.Increased:		Your {0} has increased.
@@ -358,8 +376,8 @@ GameObjects.GamePlayer.Wanted:                              {0} is now wanted fo
 GameObjects.GamePlayer.Jailed:                              {0} has been put in jail by {1}.
 GameObjects.GamePlayer.Jailed.Unknown:                      {0} has been put in jail by the guards.
 GameObjects.GamePlayer.Released:                            {0} has been released from jail.
-GameObjects.GamePlayer.RvR:                                 \nTotal players killed : {0}\n
-GameObjects.GamePlayer.RvR.Champion:                        \nTotal players killed : {0}\n Champion of the day : {1} ( {2} enemy players killed )
+GameObjects.GamePlayer.RvR:                                 - Total players killed : {0} -
+GameObjects.GamePlayer.RvR.Champion:                        - Total players killed : {0} - Champion of the day : {1} ( {2} enemy players killed )
 GameObjects.GamePlayer.RvR.Control:                         The Rvr {1} is under the control of {0}!
 
 GameObjects.GamePlayer.RvR.Open.Claimable:              Do you want to [seize control] of the keep?

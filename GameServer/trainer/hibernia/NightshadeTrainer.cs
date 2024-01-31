@@ -19,6 +19,7 @@
 using System;
 using DOL.GS.PacketHandler;
 using DOL.Language;
+using DOL.Database;
 
 namespace DOL.GS.Trainer
 {
@@ -32,6 +33,14 @@ namespace DOL.GS.Trainer
         {
             get { return eCharacterClass.Nightshade; }
         }
+
+        //public const string ARMOR_ID1 = "warden_armor";
+        public const string WEAPON_ID1 = "blades_hib_item";
+        public const string WEAPON_ID2 = "piercing_hib_item";
+        public const string ARMOR_ID1 = "vest_of_the_huntsman_hib";
+        public const string ARMOR_ID2 = "nightwalkers_vest";
+        public const string ARMOR_ID3 = "darkshades_vest";
+        public const string ARMOR_ID4 = "darkblades_vest";
 
         public NightshadeTrainer() : base()
         {
@@ -49,14 +58,15 @@ namespace DOL.GS.Trainer
             // check if class matches.				
             if (player.CharacterClass.ID == (int)TrainedClass)
             {
-                player.Out.SendMessage(this.Name + " says, \"Here for a bit of training, " + player.Name + "? Step up and get it!\"", eChatType.CT_System, eChatLoc.CL_PopupWindow); //popup window on live
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "NightshadeTrainer.Interact.Text3", this.Name, player.GetName(0, false)), eChatType.CT_Say, eChatLoc.CL_ChatWindow);
+                OfferTraining(player);
             }
             else
             {
                 // perhaps player can be promoted
                 if (CanPromotePlayer(player))
                 {
-                    player.Out.SendMessage(this.Name + " says, \"You have thought this through, I'm sure. Tell me now if you wish to train as a [Nightshade] and follow the Path of Essence.\"", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "NightshadeTrainer.Interact.Text1", this.Name, player.CharacterClass.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     if (!player.IsLevelRespecUsed)
                     {
                         OfferRespecialize(player);
@@ -81,18 +91,66 @@ namespace DOL.GS.Trainer
             if (!base.WhisperReceive(source, text)) return false;
             GamePlayer player = source as GamePlayer;
 
-            switch (text)
+            if (CanPromotePlayer(player))
             {
-                case "Nightshade":
-                    // promote player to other class
-                    if (CanPromotePlayer(player))
-                    {
-                        PromotePlayer(player, (int)eCharacterClass.Nightshade, "Some would think you mad, choosing to walk through life as a Nightshade. It is not meant for everyone, but I think it will suit you, " + source.GetName(0, false) + ". Here, from me, a small gift to aid you in your journeys.", null);    // TODO: gifts
-                                                                                                                                                                                                                                                                                                                            //"You receive  Nightshade Initiate Boots from Lierna!"
-                    }
-                    break;
+                switch (text)
+                {
+                    case "Path of Essence":
+                    case "Voie de l'Essence":
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "NightshadeTrainer.Interact.Text4", this.Name, player.GetName(0, false), player.CharacterClass.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        break;
+
+                    case "blades":
+                    case "épées":
+                        PromotePlayer(player, (int)eCharacterClass.Nightshade, LanguageMgr.GetTranslation(player.Client.Account.Language, "NightshadeTrainer.WhisperReceive.Text1", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, WEAPON_ID1, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "NightshadeTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, ARMOR_ID1, eInventoryActionType.Other);
+                        break;
+
+                    case "piercing":
+                    case "perforante":
+                        PromotePlayer(player, (int)eCharacterClass.Nightshade, LanguageMgr.GetTranslation(player.Client.Account.Language, "NightshadeTrainer.WhisperReceive.Text3", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, WEAPON_ID2, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "NightshadeTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, ARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                }
             }
             return true;
+        }
+
+        /// <summary>
+        /// For Recieving Armors.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public override bool ReceiveItem(GameLiving source, InventoryItem item)
+        {
+            if (source == null || item == null) return false;
+
+            GamePlayer player = source as GamePlayer;
+
+            if (player.Level >= 10 && player.Level < 15 && item.Id_nb == ARMOR_ID1)
+            {
+                player.Inventory.RemoveCountFromStack(item, 1);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "NightshadeTrainer.ReceiveArmor.Text2", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                addGift(ARMOR_ID2, player);
+            }
+            if (player.Level >= 15 && player.Level < 20 && item.Id_nb == ARMOR_ID2)
+            {
+                player.Inventory.RemoveCountFromStack(item, 1);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "NightshadeTrainer.ReceiveArmor.Text3", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                addGift(ARMOR_ID3, player);
+            }
+            if (player.Level >= 20 && player.Level < 50 && item.Id_nb == ARMOR_ID3)
+            {
+                player.Inventory.RemoveCountFromStack(item, 1);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "NightshadeTrainer.ReceiveArmor.Text4", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                addGift(ARMOR_ID4, player);
+            }
+            return base.ReceiveItem(source, item);
         }
     }
 }

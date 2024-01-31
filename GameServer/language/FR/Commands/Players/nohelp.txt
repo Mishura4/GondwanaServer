@@ -1,4 +1,4 @@
-Commands.Players.Nohelp.Description:	Change l’état de la fonction 'nohelp' entre actif ou désactivé. Vous permet de recevoir ou non de l’aide de votre royaume. 
-Commands.Players.Nohelp.Off:			Vous ne recevrez plus d’aide des autres membres de votre royaume, utilisez de nouveau '/nohelp' pour activer la fonction..
-Commands.Players.Nohelp.On:				Vous recevrez de l’aide des autres membre de votre royaume, utilisez à nouveau '/nohelp' pour désactiver la fonction. 
+Commands.Players.Nohelp.Description:	Change l'état de la fonction 'nohelp' entre actif ou désactivé. Vous permet de recevoir ou non de l'aide de votre royaume. 
+Commands.Players.Nohelp.Off:			Vous ne recevrez plus d'aide des autres membres de votre royaume, utilisez de nouveau '/nohelp' pour activer la fonction..
+Commands.Players.Nohelp.On:				Vous recevrez de l'aide des autres membre de votre royaume, utilisez à nouveau '/nohelp' pour désactiver la fonction. 
 Commands.Players.Nohelp.Usage:			Usage : '/nohelp'

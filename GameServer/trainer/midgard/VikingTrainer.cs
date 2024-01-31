@@ -30,6 +30,7 @@ namespace DOL.GS.Trainer
     public class VikingTrainer : GameTrainer
     {
         public const string PRACTICE_WEAPON_ID = "training_axe";
+        public const string PRACTICE_SHIELD_ID = "small_training_shield";
 
         public override eCharacterClass TrainedClass
         {
@@ -55,7 +56,7 @@ namespace DOL.GS.Trainer
                 // player can be promoted
                 if (player.Level >= 5)
                 {
-                    player.Out.SendMessage(this.Name + " says, \"You must now seek your training elsewhere. Which path would you like to follow? [Warrior], [Berserker], [Skald] or [Thane]?\"", eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "VikingTrainer.Interact.Text1", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                 }
                 else
                 {
@@ -65,7 +66,11 @@ namespace DOL.GS.Trainer
                 // ask for basic equipment if player doesnt own it
                 if (player.Inventory.GetFirstItemByID(PRACTICE_WEAPON_ID, eInventorySlot.MinEquipable, eInventorySlot.LastBackpack) == null)
                 {
-                    player.Out.SendMessage(this.Name + " says, \"Do you require a [practice weapon]?\"", eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "VikingTrainer.Interact.Text2", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                }
+                if (player.Inventory.GetFirstItemByID(PRACTICE_SHIELD_ID, eInventorySlot.MinEquipable, eInventorySlot.LastBackpack) == null)
+                {
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "VikingTrainer.Interact.Text3", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                 }
             }
             else
@@ -89,52 +94,91 @@ namespace DOL.GS.Trainer
             switch (text)
             {
                 case "Warrior":
+                case "Guerrier":
                     if (player.Race == (int)eRace.Dwarf || player.Race == (int)eRace.Kobold || player.Race == (int)eRace.Norseman || player.Race == (int)eRace.Troll || player.Race == (int)eRace.Valkyn || player.Race == (int)eRace.MidgardMinotaur)
                     {
-                        player.Out.SendMessage(this.Name + " says, \"I can't tell you something about this class.\"", eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "VikingTrainer.Warrior.Explain", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
                     else
                     {
-                        player.Out.SendMessage(this.Name + " says, \"The path of a Warrior is not available to your race. Please choose another.\"", eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "VikingTrainer.Warrior.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
                     return true;
                 case "Berserker":
                     if (player.Race == (int)eRace.Dwarf || player.Race == (int)eRace.Troll || player.Race == (int)eRace.Norseman || player.Race == (int)eRace.Valkyn || player.Race == (int)eRace.MidgardMinotaur)
                     {
-                        player.Out.SendMessage(this.Name + " says, \"I can't tell you something about this class.\"", eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "VikingTrainer.Berserker.Explain", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
                     else
                     {
-                        player.Out.SendMessage(this.Name + " says, \"The path of a Berserker is not available to your race. Please choose another.\"", eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "VikingTrainer.Berserker.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
                     return true;
                 case "Skald":
-                    if (player.Race == (int)eRace.Dwarf || player.Race == (int)eRace.Kobold || player.Race == (int)eRace.Norseman || player.Race == (int)eRace.Troll)
+                    if (player.Race == (int)eRace.Dwarf || player.Race == (int)eRace.Kobold || player.Race == (int)eRace.Norseman || player.Race == (int)eRace.Troll || player.Race == (int)eRace.MidgardMinotaur)
                     {
-                        player.Out.SendMessage(this.Name + " says, \"I can't tell you something about this class.\"", eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "VikingTrainer.Skald.Explain", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
                     else
                     {
-                        player.Out.SendMessage(this.Name + " says, \"The path of a Skald is not available to your race. Please choose another.\"", eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "VikingTrainer.Skald.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
                     return true;
                 case "Thane":
-                    if (player.Race == (int)eRace.Dwarf || player.Race == (int)eRace.Frostalf || player.Race == (int)eRace.Norseman || player.Race == (int)eRace.Troll)
+                    if (player.Race == (int)eRace.Dwarf || player.Race == (int)eRace.Frostalf || player.Race == (int)eRace.Norseman || player.Race == (int)eRace.Troll || player.Race == (int)eRace.MidgardMinotaur || player.Race == (int)eRace.Valkyn)
                     {
-                        player.Out.SendMessage(this.Name + " says, \"I can't tell you something about this class.\"", eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "VikingTrainer.Thane.Explain", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
                     else
                     {
-                        player.Out.SendMessage(this.Name + " says, \"The path of a Thane is not available to your race. Please choose another.\"", eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "VikingTrainer.Thane.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
                     return true;
+                case "Savage":
+                case "Sauvage":
+                    if (player.Race == (int)eRace.Dwarf || player.Race == (int)eRace.Kobold || player.Race == (int)eRace.Norseman || player.Race == (int)eRace.Troll || player.Race == (int)eRace.Valkyn)
+                    {
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "VikingTrainer.Savage.Explain", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                    }
+                    else
+                    {
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "VikingTrainer.Savage.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                    }
+                    return true;
+                case "Valkyrie":
+                    if (player.Race == (int)eRace.Dwarf || player.Race == (int)eRace.Valkyn || player.Race == (int)eRace.Norseman || player.Race == (int)eRace.Frostalf)
+                    {
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "VikingTrainer.Valkyrie.Explain", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                    }
+                    else
+                    {
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "VikingTrainer.Valkyrie.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                    }
+                    return true;
+                case "Mauler":
+                case "Kan-Laresh":
+                    if (player.Race == (int)eRace.Kobold || player.Race == (int)eRace.Norseman || player.Race == (int)eRace.Troll || player.Race == (int)eRace.MidgardMinotaur)
+                    {
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Baseclass.Mauler.Explain", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                    }
+                    else
+                    {
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Baseclass.Mauler.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_ChatWindow);
+                    }
                 case "practice weapon":
+                case "arme d'entraînement":
                     if (player.Inventory.GetFirstItemByID(PRACTICE_WEAPON_ID, eInventorySlot.Min_Inv, eInventorySlot.Max_Inv) == null)
                     {
                         player.ReceiveItem(this, PRACTICE_WEAPON_ID, eInventoryActionType.Other);
                     }
                     return true;
-
+                case "training shield":
+                case "bouclier d'entraînement":
+                    if (player.Inventory.GetFirstItemByID(PRACTICE_SHIELD_ID, eInventorySlot.Min_Inv, eInventorySlot.Max_Inv) == null)
+                    {
+                        player.ReceiveItem(this, PRACTICE_SHIELD_ID, eInventoryActionType.Other);
+                    }
+                    return true;
             }
             return true;
         }

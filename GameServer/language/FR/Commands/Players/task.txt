@@ -6,4 +6,4 @@ Commands.Players.Task.Usage:		Usage : '/task'
 Commands.Players.Task.WhatToDo:		Que faire : {0}
 Commands.Players.Task.WillExpire:	La tâche expirera à {0}
 Commands.Players.Task.YouAreOn:		Vous êtes sur {0}
-Commands.Players.Task.YouHaveDone:	Vous avez terminé {0} tâche sur {1} jusqu’à maintenant.
+Commands.Players.Task.YouHaveDone:	Vous avez terminé {0} tâche sur {1} jusqu'à maintenant.

@@ -9,5 +9,5 @@ Commands.GM.Ban.MustTarget:				Vous devez sélectionner une cible !
 Commands.GM.Ban.UnableToFindPlayer:		Joueur·se introuvable !
 Commands.GM.Ban.Usage.Account:			'/ban account <motif>' # Ban le compte de la cible
 Commands.GM.Ban.Usage.Both:				'/ban both <motif>'    # Ban le compte et l'IP
-Commands.GM.Ban.Usage.ClientID:			# <ClientID> peut être utilisé à la place d’un nom de joueur·se. '/clientlist' pour afficher la liste des clients connectés.
+Commands.GM.Ban.Usage.ClientID:			# <ClientID> peut être utilisé à la place d'un nom de joueur·se. '/clientlist' pour afficher la liste des clients connectés.
 Commands.GM.Ban.Usage.IP:				'/ban ip <motif>'      # Ban l'addresse IP de la cible

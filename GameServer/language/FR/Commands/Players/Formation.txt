@@ -1,7 +1,7 @@
 Commands.Players.Formation.Argument.Error:		Argument non reconnu : {0}
-Commands.Players.Formation.Commander.Missing:	Vous n’avez pas de commandant.
+Commands.Players.Formation.Commander.Missing:	Vous n'avez pas de commandant.
 Commands.Players.Formation.Description:			Change la formation de vos serviteurs.
-Commands.Players.Formation.Minion.Missing:		Vous n’avez pas de serviteurs.
+Commands.Players.Formation.Minion.Missing:		Vous n'avez pas de serviteurs.
 Commands.Players.Formation.OnlyBonedancer:		Seuls les prêtres de Bogdards peuvent utiliser cette commande.
 Commands.Players.Formation.Usage.Formation:		Commandes de formation :
 Commands.Players.Formation.Usage:				'/formation <type>'

@@ -55,7 +55,7 @@ namespace DOL.GS.Trainer
                 // player can be promoted
                 if (player.Level >= 5)
                 {
-                    player.Out.SendMessage(this.Name + " says, \"You must now seek your training elsewhere. Which path would you like to follow? [Hunter] or [Shadowblade]?\"", eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MidgardRogueTrainer.Interact.Text1", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                 }
                 else
                 {
@@ -65,7 +65,7 @@ namespace DOL.GS.Trainer
                 // ask for basic equipment if player doesnt own it
                 if (player.Inventory.GetFirstItemByID(PRACTICE_WEAPON_ID, eInventorySlot.MinEquipable, eInventorySlot.LastBackpack) == null)
                 {
-                    player.Out.SendMessage(this.Name + " says, \"Do you require a [practice weapon]?\"", eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MidgardRogueTrainer.Interact.Text2", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                 }
 
             }
@@ -90,26 +90,29 @@ namespace DOL.GS.Trainer
             switch (text)
             {
                 case "Hunter":
+                case "Chasseur":
                     if (player.Race == (int)eRace.Dwarf || player.Race == (int)eRace.Kobold || player.Race == (int)eRace.Frostalf || player.Race == (int)eRace.Norseman || player.Race == (int)eRace.Valkyn)
                     {
-                        player.Out.SendMessage(this.Name + " says, \"I can't tell you something about this class.\"", eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MidgardRogueTrainer.Hunter.Explain", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
                     else
                     {
-                        player.Out.SendMessage(this.Name + " says, \"The path of an Hunter is not available to your race. Please choose another.\"", eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MidgardRogueTrainer.Hunter.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_ChatWindow);
                     }
                     return true;
                 case "Shadowblade":
-                    if (player.Race == (int)eRace.Kobold || player.Race == (int)eRace.Norseman || player.Race == (int)eRace.Valkyn)
+                case "Assassin":
+                    if (player.Race == (int)eRace.Kobold || player.Race == (int)eRace.Norseman || player.Race == (int)eRace.Valkyn || player.Race == (int)eRace.Dwarf || player.Race == (int)eRace.Frostalf)
                     {
-                        player.Out.SendMessage(this.Name + " says, \"I can't tell you something about this class.\"", eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MidgardRogueTrainer.Shadowblade.Explain", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
                     else
                     {
-                        player.Out.SendMessage(this.Name + " says, \"The path of a Shadowblade is not available to your race. Please choose another.\"", eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MidgardRogueTrainer.Shadowblade.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_ChatWindow);
                     }
                     return true;
                 case "practice weapon":
+                case "arme d'entraînement":
                     if (player.Inventory.GetFirstItemByID(PRACTICE_WEAPON_ID, eInventorySlot.Min_Inv, eInventorySlot.Max_Inv) == null)
                     {
                         player.ReceiveItem(this, PRACTICE_WEAPON_ID, eInventoryActionType.Other);

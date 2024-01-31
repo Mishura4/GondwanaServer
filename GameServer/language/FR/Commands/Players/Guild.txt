@@ -120,8 +120,8 @@ Commands.Players.Guild.Help.GuildEditWithdraw:	'/gc edit <rang#> withdraw <y|n>'
 Commands.Players.Guild.Help.GuildEmail:			'/gc email <contact@guildpage.com>' # Affiche l'adresse internet des contacts au sein de la guilde.
 Commands.Players.Guild.Help.GuildEmblem:			'/gc emblem' # Présentation de l'emblème.
 Commands.Players.Guild.Help.TerritoryBanner:			'/gc territorybanner' # Permet de montrer sa bannière de guilde dans un territoire conquis, réduit les coûts d'entretien du territoire, et améliore sa défense.
-Commands.Players.Guild.Help.TerritoryPortal:			'/gc territoryportal' # Permet d'invoquer un portail de guilde dans un territoire conquis et envoyer une notification à tous les joueurs de la guilde en ligne, leur permettant de se téléporter au territoire.
-Commands.Players.Guild.Help.CombatZone:			'/gc combatzone' # Établi une zone de combat PvP sur votre position, permettant de combattre des joueurs sans perte de réputation.
+Commands.Players.Guild.Help.TerritoryPortal:			'/gc territoryportal' # Permet d'invoquer un portail de guilde dans un territoire conquis et d'envoyer une notification à tous les joueurs en ligne de la guilde, leur permettant de se téléporter au territoire.
+Commands.Players.Guild.Help.CombatZone:			'/gc combatzone' # Établit une zone de combat PvP sur votre position, permettant de combattre des joueurs sans perte de réputation.
 Commands.Players.Guild.Help.GuildForm:			'/gc form <nom de guilde>' # Création d'une guilde (4 joueurs au minimum requis dans le groupe).
 Commands.Players.Guild.Help.GuildGMAddPlayer:		'/gc addplayer <nom de joueur> to <nom de guilde>' # Ajoute un joueur à la guilde.
 Commands.Players.Guild.Help.GuildGMCommands:		Game Master commandes :

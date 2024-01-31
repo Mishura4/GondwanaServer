@@ -16,4 +16,4 @@ Commands.GM.door.Usage.GroupMob:		'/door groupmob <Group Mob Id>' # Connect a Gr
 Commands.GM.door.Usage.Key:		'/door key <itemid>' # Add an itemtemplate to a door to be used as a key.
 Commands.GM.door.Usage.KeyChance:		'/door key_chance <number between 0 and 100>' # Success rate for a key to unlock a door.
 Commands.GM.door.Usage.IsRenaissance:		'/door isrenaissance' Toggle enable/disable IsRenaissance to allow/disallow a player to open the door if Reborn only.
-Commands.GM.door.Usage.PunishSpell:		'/door punishspell <spell Id>' # Add a spell to a door in order to punish a player who can’t open it (with a key or by beeing Reborn).
+Commands.GM.door.Usage.PunishSpell:		'/door punishspell <spell Id>' # Add a spell to a door in order to punish a player who can't open it (with a key or by beeing Reborn).

@@ -2,7 +2,7 @@ Commands.GM.Cast.CastExecuted:			Cast animation executed. Id={0}
 Commands.GM.Cast.Description:			Cast a spell/effect/sound/style
 Commands.GM.Cast.EffectExecuted:		Effect animation executed. Id={0}
 Commands.GM.Cast.IdNegative:			ID can't be negative.
-Commands.GM.Cast.Spell.Inexistent:		This spell doesn’t exist. Id={0}# /gmrelicpad Command
+Commands.GM.Cast.Spell.Inexistent:		This spell doesn't exist. Id={0}# /gmrelicpad Command
 Commands.GM.Cast.InvalidId:				Invalid ID.
 Commands.GM.Cast.SoundPlayed:			Sound played. Id={0}
 Commands.GM.Cast.Spell.CastOnLiving:	You cast {0} on {1}.

@@ -9,5 +9,5 @@ Commands.GM.Ban.MustTarget:				You must select a target !
 Commands.GM.Ban.UnableToFindPlayer:		Unable to find player!
 Commands.GM.Ban.Usage.Account:			'/ban account <player name> <reason>' # Ban selected account
 Commands.GM.Ban.Usage.Both:				'/ban both <player name> <reason>'    # Ban selected account and its related IP adress
-Commands.GM.Ban.Usage.ClientID:			# <ClientID> can be used instead of a player’s name. '/clientlist' to show the list of connected clients.
+Commands.GM.Ban.Usage.ClientID:			# <ClientID> can be used instead of a player's name. '/clientlist' to show the list of connected clients.
 Commands.GM.Ban.Usage.IP:				'/ban ip <account or player name> <reason>'      # Ban selected IP adress

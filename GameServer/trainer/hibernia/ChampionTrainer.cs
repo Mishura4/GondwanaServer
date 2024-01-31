@@ -19,6 +19,7 @@
 using System;
 using DOL.GS.PacketHandler;
 using DOL.Language;
+using DOL.Database;
 
 namespace DOL.GS.Trainer
 {
@@ -33,7 +34,15 @@ namespace DOL.GS.Trainer
             get { return eCharacterClass.Champion; }
         }
 
-        public const string ARMOR_ID1 = "champion_item";
+        // public const string ARMOR_ID1 = "champion_armor";
+        public const string WEAPON_ID1 = "blunt_hib_item";
+        public const string WEAPON_ID2 = "blades_hib_item";
+        public const string WEAPON_ID3 = "piercing_hib_item";
+        public const string WEAPON_ID4 = "largeweap_hib_item";
+        public const string ARMOR_ID1 = "vest_of_the_neophyte_hib";
+        public const string ARMOR_ID2 = "chargers_vest";
+        public const string ARMOR_ID3 = "vest_of_the_propugner";
+        public const string ARMOR_ID4 = "huberk_of_the_valiant_hib";
 
         public ChampionTrainer() : base()
         {
@@ -51,14 +60,15 @@ namespace DOL.GS.Trainer
             // check if class matches.
             if (player.CharacterClass.ID == (int)TrainedClass)
             {
-                player.Out.SendMessage(this.Name + " says, \"I'm glad to see you taking an interest in your training, " + player.Name + ". There is always room to grow and learn!\"", eChatType.CT_Say, eChatLoc.CL_ChatWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ChampionTrainer.Interact.Text3", this.Name, player.GetName(0, false)), eChatType.CT_Say, eChatLoc.CL_ChatWindow);
+                OfferTraining(player);
             }
             else
             {
                 // perhaps player can be promoted
                 if (CanPromotePlayer(player))
                 {
-                    player.Out.SendMessage(this.Name + " says, \"Champions follow the Path of Essence. Choose now to become a [Champion], and I will train you in our ways, and the ways of the Path we follow.\"", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ChampionTrainer.Interact.Text1", this.Name, player.CharacterClass.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     if (!player.IsLevelRespecUsed)
                     {
                         OfferRespecialize(player);
@@ -83,18 +93,82 @@ namespace DOL.GS.Trainer
             if (!base.WhisperReceive(source, text)) return false;
             GamePlayer player = source as GamePlayer;
 
-            switch (text)
+            if (CanPromotePlayer(player))
             {
-                case "Champion":
-                    // promote player to other class
-                    if (CanPromotePlayer(player))
-                    {
-                        PromotePlayer(player, (int)eCharacterClass.Champion, "Welcome " + source.GetName(0, false) + ". Let us see if you will become a worthy Champion. Take this gift, " + source.GetName(0, false) + ". It is to aid you while you grow into a true Champion.", null);
+                switch (text)
+                {
+                    case "Path of Essence":
+                    case "Voie de l'Essence":
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ChampionTrainer.Interact.Text4", this.Name, player.GetName(0, false), player.CharacterClass.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        break;
+
+                    case "blades":
+                    case "épées":
+                        PromotePlayer(player, (int)eCharacterClass.Champion, LanguageMgr.GetTranslation(player.Client.Account.Language, "ChampionTrainer.WhisperReceive.Text1", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, WEAPON_ID1, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ChampionTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                         player.ReceiveItem(this, ARMOR_ID1, eInventoryActionType.Other);
-                    }
-                    break;
+                        break;
+
+                    case "blunt":
+                    case "contondante":
+                        PromotePlayer(player, (int)eCharacterClass.Champion, LanguageMgr.GetTranslation(player.Client.Account.Language, "ChampionTrainer.WhisperReceive.Text2", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, WEAPON_ID2, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ChampionTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, ARMOR_ID1, eInventoryActionType.Other);
+                        break;
+
+                    case "piercing":
+                    case "perforante":
+                        PromotePlayer(player, (int)eCharacterClass.Champion, LanguageMgr.GetTranslation(player.Client.Account.Language, "ChampionTrainer.WhisperReceive.Text3", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, WEAPON_ID3, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ChampionTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, ARMOR_ID1, eInventoryActionType.Other);
+                        break;
+
+                    case "large weapons":
+                    case "grandes armes":
+                        PromotePlayer(player, (int)eCharacterClass.Champion, LanguageMgr.GetTranslation(player.Client.Account.Language, "ChampionTrainer.WhisperReceive.Text5", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, WEAPON_ID4, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ChampionTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, ARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                }
             }
             return true;
+        }
+
+        /// <summary>
+        /// For Recieving Armors.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public override bool ReceiveItem(GameLiving source, InventoryItem item)
+        {
+            if (source == null || item == null) return false;
+
+            GamePlayer player = source as GamePlayer;
+
+            if (player.Level >= 10 && player.Level < 15 && item.Id_nb == ARMOR_ID1)
+            {
+                player.Inventory.RemoveCountFromStack(item, 1);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ChampionTrainer.ReceiveArmor.Text2", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                addGift(ARMOR_ID2, player);
+            }
+            if (player.Level >= 15 && player.Level < 20 && item.Id_nb == ARMOR_ID2)
+            {
+                player.Inventory.RemoveCountFromStack(item, 1);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ChampionTrainer.ReceiveArmor.Text3", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                addGift(ARMOR_ID3, player);
+            }
+            if (player.Level >= 20 && player.Level < 50 && item.Id_nb == ARMOR_ID3)
+            {
+                player.Inventory.RemoveCountFromStack(item, 1);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ChampionTrainer.ReceiveArmor.Text4", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                addGift(ARMOR_ID4, player);
+            }
+            return base.ReceiveItem(source, item);
         }
     }
 }

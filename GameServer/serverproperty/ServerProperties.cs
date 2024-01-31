@@ -1607,7 +1607,7 @@ namespace DOL.GS.ServerProperties
         /// Set to a value > 0 to disable
         /// </summary>
         [ServerProperty("system", "reputation_threshold_automatic_wanted",
-            "The threshold of reputation to make someone automatically wanted. Set to a value >= 0 to disable", -5)]
+            "The threshold of reputation to make someone automatically wanted. Set to a value >= 0 to disable", -3)]
         public static int REPUTATION_THRESHOLD_AUTOMATIC_WANTED;
 
         /// <summary>
@@ -2695,7 +2695,7 @@ namespace DOL.GS.ServerProperties
         /// <summary>
         /// The maximum number of crafts in the /craftmacro queue.
         /// </summary>
-        [ServerProperty("craft", "max_craft_queue", "The maximum number of crafts in the /craftmacro queue.", 0)]
+        [ServerProperty("craft", "max_craft_queue", "The maximum number of crafts in the /craftmacro queue.", 10)]
         public static int MAX_CRAFT_QUEUE;
 
         #endregion

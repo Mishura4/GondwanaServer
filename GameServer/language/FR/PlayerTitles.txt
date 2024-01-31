@@ -57,16 +57,16 @@ PlayerClass.Friar.GetTitle.15:  Novice
 PlayerClass.Friar.GetTitle.10:  Milicien
 PlayerClass.Friar.GetTitle.5:   Recrue
 
-PlayerClass.Heretic.GetTitle.50:    Châtiment d’Arawn
-PlayerClass.Heretic.GetTitle.45:    Juge d’Arawn
-PlayerClass.Heretic.GetTitle.40:    Zélateur d’Arawn
-PlayerClass.Heretic.GetTitle.35:    Disciple d’Arawn
-PlayerClass.Heretic.GetTitle.30:    Défenseur d’Arawn
-PlayerClass.Heretic.GetTitle.25:    Adepte d’Arawn
+PlayerClass.Heretic.GetTitle.50:    Châtiment d'Arawn
+PlayerClass.Heretic.GetTitle.45:    Juge d'Arawn
+PlayerClass.Heretic.GetTitle.40:    Zélateur d'Arawn
+PlayerClass.Heretic.GetTitle.35:    Disciple d'Arawn
+PlayerClass.Heretic.GetTitle.30:    Défenseur d'Arawn
+PlayerClass.Heretic.GetTitle.25:    Adepte d'Arawn
 PlayerClass.Heretic.GetTitle.20:    Prosélyte
-PlayerClass.Heretic.GetTitle.15:    Apprenti d’Arawn
-PlayerClass.Heretic.GetTitle.10:    Novice d’Arawn
-PlayerClass.Heretic.GetTitle.5:     Néophyte d’Arawn
+PlayerClass.Heretic.GetTitle.15:    Apprenti d'Arawn
+PlayerClass.Heretic.GetTitle.10:    Novice d'Arawn
+PlayerClass.Heretic.GetTitle.5:     Néophyte d'Arawn
 
 PlayerClass.Infiltrator.GetTitle.50:    Maître Assassin
 PlayerClass.Infiltrator.GetTitle.45:    Assassin
@@ -101,15 +101,15 @@ PlayerClass.Minstrel.GetTitle.15:   Apprenti Ménestrel
 PlayerClass.Minstrel.GetTitle.10:   Novice
 PlayerClass.Minstrel.GetTitle.5:    Néophyte
 
-PlayerClass.Necromancer.GetTitle.50:    Élu d’Arawn
-PlayerClass.Necromancer.GetTitle.45:    Prince d’Outremonde
-PlayerClass.Necromancer.GetTitle.40:    Main de l’Outremonde
-PlayerClass.Necromancer.GetTitle.35:    Grand Prêtre d’Arawn
+PlayerClass.Necromancer.GetTitle.50:    Élu d'Arawn
+PlayerClass.Necromancer.GetTitle.45:    Prince d'Outremonde
+PlayerClass.Necromancer.GetTitle.40:    Main de l'Outremonde
+PlayerClass.Necromancer.GetTitle.35:    Grand Prêtre d'Arawn
 PlayerClass.Necromancer.GetTitle.30:    Sombre Prêtre
 PlayerClass.Necromancer.GetTitle.25:    Serviteur de la Mort
 PlayerClass.Necromancer.GetTitle.20:    Guide des Défunts
 PlayerClass.Necromancer.GetTitle.15:    Sombre Adepte
-PlayerClass.Necromancer.GetTitle.10:    Serviteur d’Arawn
+PlayerClass.Necromancer.GetTitle.10:    Serviteur d'Arawn
 PlayerClass.Necromancer.GetTitle.5:     Invocateur Macabre
 
 PlayerClass.Paladin.GetTitle.50:    Templier
@@ -123,22 +123,22 @@ PlayerClass.Paladin.GetTitle.15:    Apprenti
 PlayerClass.Paladin.GetTitle.10:    Novice
 PlayerClass.Paladin.GetTitle.5:     Néophyte
 
-PlayerClass.Reaver.GetTitle.50: Protecteur d’Arawn
-PlayerClass.Reaver.GetTitle.45: Guide d’Ames Errantes
-PlayerClass.Reaver.GetTitle.40: Guide d’Ames Perdues
+PlayerClass.Reaver.GetTitle.50: Protecteur d'Arawn
+PlayerClass.Reaver.GetTitle.45: Guide d'Ames Errantes
+PlayerClass.Reaver.GetTitle.40: Guide d'Ames Perdues
 PlayerClass.Reaver.GetTitle.35: Gardien des Trépassés
-PlayerClass.Reaver.GetTitle.30: Escorteur d’Ames
-PlayerClass.Reaver.GetTitle.25: Passeur d’Ames
-PlayerClass.Reaver.GetTitle.20: Initié d’Arawn
-PlayerClass.Reaver.GetTitle.15: Apprenti d’Arawn
-PlayerClass.Reaver.GetTitle.10: Novice d’Arawn
-PlayerClass.Reaver.GetTitle.5:  Néophyte d’Arawn
+PlayerClass.Reaver.GetTitle.30: Escorteur d'Ames
+PlayerClass.Reaver.GetTitle.25: Passeur d'Ames
+PlayerClass.Reaver.GetTitle.20: Initié d'Arawn
+PlayerClass.Reaver.GetTitle.15: Apprenti d'Arawn
+PlayerClass.Reaver.GetTitle.10: Novice d'Arawn
+PlayerClass.Reaver.GetTitle.5:  Néophyte d'Arawn
 
 PlayerClass.Scout.GetTitle.50:  Maître Éclaireur
 PlayerClass.Scout.GetTitle.45:  Capitaine
 PlayerClass.Scout.GetTitle.40:  Lieutenant
 PlayerClass.Scout.GetTitle.35:  Sergent
-PlayerClass.Scout.GetTitle.30:  Archer d’Élite
+PlayerClass.Scout.GetTitle.30:  Archer d'Élite
 PlayerClass.Scout.GetTitle.25:  Archer
 PlayerClass.Scout.GetTitle.20:  Compagnon Archer
 PlayerClass.Scout.GetTitle.15:  Apprenti Archer
@@ -187,27 +187,27 @@ PlayerClass.Berserker.GetTitle.30:  Expert de Haine
 PlayerClass.Berserker.GetTitle.25:  Adepte de Rage
 PlayerClass.Berserker.GetTitle.20:  Initié de Colère
 PlayerClass.Berserker.GetTitle.15:  Néophyte de Hargne
-PlayerClass.Berserker.GetTitle.10:  Apprenti d’Énervement
-PlayerClass.Berserker.GetTitle.5:   Novice d’Impatience
+PlayerClass.Berserker.GetTitle.10:  Apprenti d'Énervement
+PlayerClass.Berserker.GetTitle.5:   Novice d'Impatience
 
 PlayerClass.Bonedancer.GetTitle.50: Main de Bogdar
 PlayerClass.Bonedancer.GetTitle.45: Seigneur des Os
 PlayerClass.Bonedancer.GetTitle.40: Maître Ossuaire
 PlayerClass.Bonedancer.GetTitle.35: Guide des Ossements
 PlayerClass.Bonedancer.GetTitle.30: Serviteur de Bogdar
-PlayerClass.Bonedancer.GetTitle.25: Amasseur d’Ossements
-PlayerClass.Bonedancer.GetTitle.20: Chercheur d’Ossements
+PlayerClass.Bonedancer.GetTitle.25: Amasseur d'Ossements
+PlayerClass.Bonedancer.GetTitle.20: Chercheur d'Ossements
 PlayerClass.Bonedancer.GetTitle.15: Initié de Bogdar
 PlayerClass.Bonedancer.GetTitle.10: Apprenti de Bogdar
 PlayerClass.Bonedancer.GetTitle.5:  Novice de Bogdar
 
-PlayerClass.Healer.GetTitle.50: Élu d’Eir
+PlayerClass.Healer.GetTitle.50: Élu d'Eir
 PlayerClass.Healer.GetTitle.45: Main du Destin
-PlayerClass.Healer.GetTitle.40: Sauveur d’Âmes
+PlayerClass.Healer.GetTitle.40: Sauveur d'Ames
 PlayerClass.Healer.GetTitle.35: Protecteur de la Vie
-PlayerClass.Healer.GetTitle.30: Apaiseur des Âmes
+PlayerClass.Healer.GetTitle.30: Apaiseur des Ames
 PlayerClass.Healer.GetTitle.25: Guérisseur Sacré
-PlayerClass.Healer.GetTitle.20: Guérisseur d’Eir
+PlayerClass.Healer.GetTitle.20: Guérisseur d'Eir
 PlayerClass.Healer.GetTitle.15: Soigneur Initié
 PlayerClass.Healer.GetTitle.10: Étudiant Guérisseur
 PlayerClass.Healer.GetTitle.5:  Élève Soigneur
@@ -257,12 +257,12 @@ PlayerClass.Shadowblade.GetTitle.10:    Ruse Perfide
 PlayerClass.Shadowblade.GetTitle.5:     Farce Cruelle
 
 PlayerClass.Shaman.GetTitle.50: Élu D'Ymir
-PlayerClass.Shaman.GetTitle.45: Oracle d’Ymir
-PlayerClass.Shaman.GetTitle.40: Prophète d’Ymir
-PlayerClass.Shaman.GetTitle.35: Augure d’Ymir
-PlayerClass.Shaman.GetTitle.30: Visionnaire d’Ymir
-PlayerClass.Shaman.GetTitle.25: Devin d’Ymir
-PlayerClass.Shaman.GetTitle.20: Voyant d’Ymir
+PlayerClass.Shaman.GetTitle.45: Oracle d'Ymir
+PlayerClass.Shaman.GetTitle.40: Prophète d'Ymir
+PlayerClass.Shaman.GetTitle.35: Augure d'Ymir
+PlayerClass.Shaman.GetTitle.30: Visionnaire d'Ymir
+PlayerClass.Shaman.GetTitle.25: Devin d'Ymir
+PlayerClass.Shaman.GetTitle.20: Voyant d'Ymir
 PlayerClass.Shaman.GetTitle.15: Adepte Chaman
 PlayerClass.Shaman.GetTitle.10: Initié Chaman
 PlayerClass.Shaman.GetTitle.5:  Apprenti Chaman
@@ -271,7 +271,7 @@ PlayerClass.Skald.GetTitle.50:  Élu de Bragi
 PlayerClass.Skald.GetTitle.45:  Voix de Bragi
 PlayerClass.Skald.GetTitle.40:  Compositeur de Saga
 PlayerClass.Skald.GetTitle.35:  Chanteur de Runes
-PlayerClass.Skald.GetTitle.30:  Créateur d’Hymnes
+PlayerClass.Skald.GetTitle.30:  Créateur d'Hymnes
 PlayerClass.Skald.GetTitle.25:  Conteur de Sagas
 PlayerClass.Skald.GetTitle.20:  Tisseur de Mélodies
 PlayerClass.Skald.GetTitle.15:  Adepte Chanteur
@@ -283,7 +283,7 @@ PlayerClass.Spiritmaster.GetTitle.45:   Seigneur des Esprits
 PlayerClass.Spiritmaster.GetTitle.40:   Maître Conjurateur
 PlayerClass.Spiritmaster.GetTitle.35:   Adepte Conjurateur
 PlayerClass.Spiritmaster.GetTitle.30:   Conjurateur
-PlayerClass.Spiritmaster.GetTitle.25:   Conjurateur d’Ames
+PlayerClass.Spiritmaster.GetTitle.25:   Conjurateur d'Ames
 PlayerClass.Spiritmaster.GetTitle.20:   Sombre Conjurateur
 PlayerClass.Spiritmaster.GetTitle.15:   Invocateur Initié
 PlayerClass.Spiritmaster.GetTitle.10:   Invocateur des Esprits
@@ -298,11 +298,11 @@ PlayerClass.Thane.GetTitle.25:  Invocateur de Foudre
 PlayerClass.Thane.GetTitle.20:  Initiateur des Tempêtes
 PlayerClass.Thane.GetTitle.15:  Marteau Fervent
 PlayerClass.Thane.GetTitle.10:  Initié de la Tempête
-PlayerClass.Thane.GetTitle.5:   Initié de l’Orage
+PlayerClass.Thane.GetTitle.5:   Initié de l'Orage
 
 PlayerClass.Valkyrie.GetTitle.50:   Valkyrie d'Odin
-PlayerClass.Valkyrie.GetTitle.45:   Élue d’Odin
-PlayerClass.Valkyrie.GetTitle.40:   Volonté d’Odin
+PlayerClass.Valkyrie.GetTitle.45:   Élue d'Odin
+PlayerClass.Valkyrie.GetTitle.40:   Volonté d'Odin
 PlayerClass.Valkyrie.GetTitle.35:   Élue du Valhalla
 PlayerClass.Valkyrie.GetTitle.30:   Gardienne du Valhalla
 PlayerClass.Valkyrie.GetTitle.25:   Protectrice de Midgard
@@ -312,12 +312,12 @@ PlayerClass.Valkyrie.GetTitle.10:   Vierge Combattante
 PlayerClass.Valkyrie.GetTitle.5:    Marquée par les Nornes
 
 PlayerClass.Warlock.GetTitle.50:    Maître Helhaxa
-PlayerClass.Warlock.GetTitle.45:    Tisseur d’Âmes
+PlayerClass.Warlock.GetTitle.45:    Tisseur d'Ames
 PlayerClass.Warlock.GetTitle.40:    Fléau de Nifleheim
 PlayerClass.Warlock.GetTitle.35:    Tourment des Esprits
 PlayerClass.Warlock.GetTitle.30:    Initié Helhaxa
 PlayerClass.Warlock.GetTitle.25:    Disciple Helhaxa
-PlayerClass.Warlock.GetTitle.20:    Manipulateur d’Esprits
+PlayerClass.Warlock.GetTitle.20:    Manipulateur d'Esprits
 PlayerClass.Warlock.GetTitle.15:    Initié aux Sortilèges
 PlayerClass.Warlock.GetTitle.10:    Manipulateur Novice
 PlayerClass.Warlock.GetTitle.5:     Apprenti Manipulateur
@@ -356,7 +356,7 @@ PlayerClass.Bainshee.GetTitle.15:   Soupir Fantomatique
 PlayerClass.Bainshee.GetTitle.10:   Adepte Éthérée
 PlayerClass.Bainshee.GetTitle.5:    Initiée Éthérée
 
-PlayerClass.Bard.GetTitle.50:   Voix d’Or
+PlayerClass.Bard.GetTitle.50:   Voix d'Or
 PlayerClass.Bard.GetTitle.45:   Maître des Chants
 PlayerClass.Bard.GetTitle.40:   Compositeur de Génie
 PlayerClass.Bard.GetTitle.35:   Artiste Expert
@@ -437,7 +437,7 @@ PlayerClass.Mentalist.GetTitle.50:  Astraliste
 PlayerClass.Mentalist.GetTitle.45:  Maître Artiseur
 PlayerClass.Mentalist.GetTitle.40:  Artiseur
 PlayerClass.Mentalist.GetTitle.35:  Artiseur Néophyte
-PlayerClass.Mentalist.GetTitle.30:  Manipulateur d’Esprit
+PlayerClass.Mentalist.GetTitle.30:  Manipulateur d'Esprit
 PlayerClass.Mentalist.GetTitle.25:  Changeur de Sentiments
 PlayerClass.Mentalist.GetTitle.20:  Hypnotiseur
 PlayerClass.Mentalist.GetTitle.15:  Séducteur
@@ -447,7 +447,7 @@ PlayerClass.Mentalist.GetTitle.5:   Charmeur
 PlayerClass.Nightshade.GetTitle.50: Seigneur des Ombres
 PlayerClass.Nightshade.GetTitle.45: Maître des Ténèbres
 PlayerClass.Nightshade.GetTitle.40: Gardien de la Nuit
-PlayerClass.Nightshade.GetTitle.35: Adepte d’Obscurité
+PlayerClass.Nightshade.GetTitle.35: Adepte d'Obscurité
 PlayerClass.Nightshade.GetTitle.30: Sentinelle de Pénombre
 PlayerClass.Nightshade.GetTitle.25: Sombre Présage
 PlayerClass.Nightshade.GetTitle.20: Lame des Ténèbres
@@ -517,7 +517,7 @@ Titles.Deathblows.BattleMaster:     Maître des Batailles
 
 
 # /Kills
-Titles.Kills.Albion.BaneOfAlbion:       Fléau d’Albion
+Titles.Kills.Albion.BaneOfAlbion:       Fléau d'Albion
 Titles.Kills.Albion.ScourgeOfAlbion:    Calamité d'Albion
 Titles.Kills.All.MasterAssassine:       Maître Assassin
 Titles.Kills.All.MasterEnforcer:        Maître Commandant

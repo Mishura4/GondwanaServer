@@ -19,6 +19,7 @@
 using System;
 using DOL.GS.PacketHandler;
 using DOL.Language;
+using DOL.Database;
 
 namespace DOL.GS.Trainer
 {
@@ -34,6 +35,10 @@ namespace DOL.GS.Trainer
         }
 
         public const string WEAPON_ID = "hunter_item";
+        public const string ARMOR_ID1 = "vest_of_the_huntsman_mid2";
+        public const string ARMOR_ID2 = "vest_of_the_shadowed_seeker";
+        public const string ARMOR_ID3 = "journeymans_vest_mid3";
+        public const string ARMOR_ID4 = "vest_of_the_prey_stalker";
 
         /// <summary>
         /// Interact with trainer
@@ -47,6 +52,7 @@ namespace DOL.GS.Trainer
             // check if class matches.
             if (player.CharacterClass.ID == (int)TrainedClass)
             {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "HunterTrainer.Interact.Text3", this.Name, player.GetName(0, false)), eChatType.CT_Say, eChatLoc.CL_ChatWindow);
                 OfferTraining(player);
             }
             else
@@ -54,7 +60,7 @@ namespace DOL.GS.Trainer
                 // perhaps player can be promoted
                 if (CanPromotePlayer(player))
                 {
-                    player.Out.SendMessage(this.Name + " says, \"Do you desire to [join the House of Skadi] and defend our realm as a Hunter?\"", eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "HunterTrainer.Interact.Text1", this.Name, player.CharacterClass.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     if (!player.IsLevelRespecUsed)
                     {
                         OfferRespecialize(player);
@@ -81,16 +87,52 @@ namespace DOL.GS.Trainer
 
             switch (text)
             {
-                case "join the House of Skadi":
+                case "House of Skadi":
+                case "Panthéon de Skadi":
                     // promote player to other class
                     if (CanPromotePlayer(player))
                     {
-                        PromotePlayer(player, (int)eCharacterClass.Hunter, "Welcome young Hunter! May your time in Midgard army be rewarding!", null);
+                        PromotePlayer(player, (int)eCharacterClass.Hunter, LanguageMgr.GetTranslation(player.Client.Account.Language, "HunterTrainer.Interact.Text4", player.GetName(0, false)), null);
                         player.ReceiveItem(this, WEAPON_ID, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "HunterTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, ARMOR_ID1, eInventoryActionType.Other);
                     }
                     break;
             }
             return true;
+        }
+
+        /// <summary>
+        /// For Recieving Armors.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public override bool ReceiveItem(GameLiving source, InventoryItem item)
+        {
+            if (source == null || item == null) return false;
+
+            GamePlayer player = source as GamePlayer;
+
+            if (player.Level >= 10 && player.Level < 15 && item.Id_nb == ARMOR_ID1)
+            {
+                player.Inventory.RemoveCountFromStack(item, 1);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "HunterTrainer.ReceiveArmor.Text2", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                addGift(ARMOR_ID2, player);
+            }
+            if (player.Level >= 15 && player.Level < 20 && item.Id_nb == ARMOR_ID2)
+            {
+                player.Inventory.RemoveCountFromStack(item, 1);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "HunterTrainer.ReceiveArmor.Text3", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                addGift(ARMOR_ID3, player);
+            }
+            if (player.Level >= 20 && player.Level < 50 && item.Id_nb == ARMOR_ID3)
+            {
+                player.Inventory.RemoveCountFromStack(item, 1);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "HunterTrainer.ReceiveArmor.Text4", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                addGift(ARMOR_ID4, player);
+            }
+            return base.ReceiveItem(source, item);
         }
     }
 }

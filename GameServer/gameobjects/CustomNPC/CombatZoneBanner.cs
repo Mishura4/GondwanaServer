@@ -27,7 +27,7 @@ namespace DOL.GS
         {
             CombatZoneBanner ret = new CombatZoneBanner();
 
-            ret.Model = 3223;
+            ret.Model = 679;
             ret.Name = "Banner of " + owningGuild.Name;
             ret.OwningGuild = owningGuild;
             ret.CombatArea = area;

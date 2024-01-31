@@ -130,6 +130,7 @@ SkillBase.RegisterPropertyNames.MindMagic:				Mind Magic
 SkillBase.RegisterPropertyNames.MindMagicFocus:			Mind Magic Focus
 SkillBase.RegisterPropertyNames.Music:					Music
 SkillBase.RegisterPropertyNames.Nature:					Nature
+SkillBase.RegisterPropertyNames.SpellFumbleChance:		Spell Fumble Chance
 SkillBase.RegisterPropertyNames.NegativeReduction:		Negative effect duration reduction: {0}% (PvE Only)
 SkillBase.RegisterPropertyNames.NightshadeMagic:		Nightshade Magic
 SkillBase.RegisterPropertyNames.Nurture:				Nurture

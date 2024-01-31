@@ -11897,6 +11897,24 @@ namespace DOL.GS
             if (BonusType == 17) BonusName = LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.ItemBonusName.Bonus17");//Slash
             if (BonusType == 18) BonusName = LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.ItemBonusName.Bonus18");//Spirit
             if (BonusType == 19) BonusName = LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.ItemBonusName.Bonus19");//Thrust
+            if (BonusType == 119) BonusName = LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.ItemBonusName.Bonus119");//Tension Bonus
+            if (BonusType == 147) BonusName = LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.ItemBonusName.Bonus147");//Max Concentration
+            if (BonusType == 148) BonusName = LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.ItemBonusName.Bonus148");//Armor Factor
+            if (BonusType == 149) BonusName = LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.ItemBonusName.Bonus149");//Armor Absorption
+            if (BonusType == 150) BonusName = LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.ItemBonusName.Bonus150");//Health Regeneration
+            if (BonusType == 151) BonusName = LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.ItemBonusName.Bonus151");//Power Regeneration
+            if (BonusType == 152) BonusName = LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.ItemBonusName.Bonus152");//Endurance Regeneration
+            if (BonusType == 153) BonusName = LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.ItemBonusName.Bonus153");//Spell Range
+            if (BonusType == 154) BonusName = LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.ItemBonusName.Bonus154");//Archery Range
+            if (BonusType == 155) BonusName = LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.ItemBonusName.Bonus155");//Melee Speed
+            if (BonusType == 156) BonusName = LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.ItemBonusName.Bonus156");//Acuity
+            if (BonusType == 169) BonusName = LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.ItemBonusName.Bonus169");//Evade Chance
+            if (BonusType == 170) BonusName = LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.ItemBonusName.Bonus170");//Block Chance
+            if (BonusType == 171) BonusName = LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.ItemBonusName.Bonus171");//Parry Chance
+            if (BonusType == 175) BonusName = LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.ItemBonusName.Bonus175");//Fumble Chance
+            if (BonusType == 181) BonusName = LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.ItemBonusName.Bonus181");//Spell Fumble Chance
+            if (BonusType == 197) BonusName = LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.ItemBonusName.Bonus197");//Resist Piercing
+            if (BonusType == 249) BonusName = LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.ItemBonusName.Bonus249");//Essence Resist
             return BonusName;
         }
 
@@ -11968,68 +11986,68 @@ namespace DOL.GS
             if (item.Bonus1 != 0)
             {
                 ItemBonus[item.Bonus1Type] += item.Bonus1;
-                if (item.Bonus1Type < 20)
+                if (item.Bonus1Type < 20 || item.Bonus1Type == 119 || (item.Bonus1Type >= 147 && item.Bonus1Type <= 156) || (item.Bonus1Type >= 169 && item.Bonus1Type <= 171) || item.Bonus1Type == 175 || item.Bonus1Type == 181 || item.Bonus1Type == 197 || item.Bonus1Type == 249)
                     Out.SendMessage(string.Format(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.OnItemEquipped.Increased", ItemBonusName(item.Bonus1Type))), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
             }
             if (item.Bonus2 != 0)
             {
                 ItemBonus[item.Bonus2Type] += item.Bonus2;
-                if (item.Bonus2Type < 20)
+                if (item.Bonus2Type < 20 || item.Bonus2Type == 119 || (item.Bonus2Type >= 147 && item.Bonus2Type <= 156) || (item.Bonus2Type >= 169 && item.Bonus2Type <= 171) || item.Bonus2Type == 175 || item.Bonus2Type == 181 || item.Bonus2Type == 197 || item.Bonus2Type == 249)
                     Out.SendMessage(string.Format(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.OnItemEquipped.Increased", ItemBonusName(item.Bonus2Type))), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
             }
             if (item.Bonus3 != 0)
             {
                 ItemBonus[item.Bonus3Type] += item.Bonus3;
-                if (item.Bonus3Type < 20)
+                if (item.Bonus3Type < 20 || item.Bonus3Type == 119 || (item.Bonus3Type >= 147 && item.Bonus3Type <= 156) || (item.Bonus3Type >= 169 && item.Bonus3Type <= 171) || item.Bonus3Type == 175 || item.Bonus3Type == 181 || item.Bonus3Type == 197 || item.Bonus3Type == 249)
                     Out.SendMessage(string.Format(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.OnItemEquipped.Increased", ItemBonusName(item.Bonus3Type))), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
             }
             if (item.Bonus4 != 0)
             {
                 ItemBonus[item.Bonus4Type] += item.Bonus4;
-                if (item.Bonus4Type < 20)
+                if (item.Bonus4Type < 20 || item.Bonus4Type == 119 || (item.Bonus4Type >= 147 && item.Bonus4Type <= 156) || (item.Bonus4Type >= 169 && item.Bonus4Type <= 171) || item.Bonus4Type == 175 || item.Bonus4Type == 181 || item.Bonus4Type == 197 || item.Bonus4Type == 249)
                     Out.SendMessage(string.Format(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.OnItemEquipped.Increased", ItemBonusName(item.Bonus4Type))), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
             }
             if (item.Bonus5 != 0)
             {
                 ItemBonus[item.Bonus5Type] += item.Bonus5;
-                if (item.Bonus5Type < 20)
+                if (item.Bonus5Type < 20 || item.Bonus5Type == 119 || (item.Bonus5Type >= 147 && item.Bonus5Type <= 156) || (item.Bonus5Type >= 169 && item.Bonus5Type <= 171) || item.Bonus5Type == 175 || item.Bonus5Type == 181 || item.Bonus5Type == 197 || item.Bonus5Type == 249)
                     Out.SendMessage(string.Format(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.OnItemEquipped.Increased", ItemBonusName(item.Bonus5Type))), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
             }
             if (item.Bonus6 != 0)
             {
                 ItemBonus[item.Bonus6Type] += item.Bonus6;
-                if (item.Bonus6Type < 20)
+                if (item.Bonus6Type < 20 || item.Bonus6Type == 119 || (item.Bonus6Type >= 147 && item.Bonus6Type <= 156) || (item.Bonus6Type >= 169 && item.Bonus6Type <= 171) || item.Bonus6Type == 175 || item.Bonus6Type == 181 || item.Bonus6Type == 197 || item.Bonus6Type == 249)
                     Out.SendMessage(string.Format(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.OnItemEquipped.Increased", ItemBonusName(item.Bonus6Type))), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
             }
             if (item.Bonus7 != 0)
             {
                 ItemBonus[item.Bonus7Type] += item.Bonus7;
-                if (item.Bonus7Type < 20)
+                if (item.Bonus7Type < 20 || item.Bonus7Type == 119 || (item.Bonus7Type >= 147 && item.Bonus7Type <= 156) || (item.Bonus7Type >= 169 && item.Bonus7Type <= 171) || item.Bonus7Type == 175 || item.Bonus7Type == 181 || item.Bonus7Type == 197 || item.Bonus7Type == 249)
                     Out.SendMessage(string.Format(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.OnItemEquipped.Increased", ItemBonusName(item.Bonus7Type))), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
             }
             if (item.Bonus8 != 0)
             {
                 ItemBonus[item.Bonus8Type] += item.Bonus8;
-                if (item.Bonus8Type < 20)
+                if (item.Bonus8Type < 20 || item.Bonus8Type == 119 || (item.Bonus8Type >= 147 && item.Bonus8Type <= 156) || (item.Bonus8Type >= 169 && item.Bonus8Type <= 171) || item.Bonus8Type == 175 || item.Bonus8Type == 181 || item.Bonus8Type == 197 || item.Bonus8Type == 249)
                     Out.SendMessage(string.Format(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.OnItemEquipped.Increased", ItemBonusName(item.Bonus8Type))), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
             }
             if (item.Bonus9 != 0)
             {
                 ItemBonus[item.Bonus9Type] += item.Bonus9;
-                if (item.Bonus9Type < 20)
+                if (item.Bonus9Type < 20 || item.Bonus9Type == 119 || (item.Bonus9Type >= 147 && item.Bonus9Type <= 156) || (item.Bonus9Type >= 169 && item.Bonus9Type <= 171) || item.Bonus9Type == 175 || item.Bonus9Type == 181 || item.Bonus9Type == 197 || item.Bonus9Type == 249)
                     Out.SendMessage(string.Format(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.OnItemEquipped.Increased", ItemBonusName(item.Bonus9Type))), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
             }
             if (item.Bonus10 != 0)
             {
                 ItemBonus[item.Bonus10Type] += item.Bonus10;
-                if (item.Bonus10Type < 20)
+                if (item.Bonus10Type < 20 || item.Bonus10Type == 119 || (item.Bonus10Type >= 147 && item.Bonus10Type <= 156) || (item.Bonus10Type >= 169 && item.Bonus10Type <= 171) || item.Bonus10Type == 175 || item.Bonus10Type == 181 || item.Bonus10Type == 197 || item.Bonus10Type == 249)
                     Out.SendMessage(string.Format(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.OnItemEquipped.Increased", ItemBonusName(item.Bonus10Type))), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
             }
             if (item.ExtraBonus != 0)
             {
                 ItemBonus[item.ExtraBonusType] += item.ExtraBonus;
-                //if (item.ExtraBonusType < 20)
-                //Out.SendMessage(string.Format(LanguageMgr.GetTranslation(Client.Account.Language, "GamePlayer.OnItemEquipped.Increased", ItemBonusName(item.ExtraBonusType))), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
+                if (item.ExtraBonusType < 20 || item.ExtraBonusType == 119 || (item.ExtraBonusType >= 147 && item.ExtraBonusType <= 156) || (item.ExtraBonusType >= 169 && item.ExtraBonusType <= 171) || item.ExtraBonusType == 181 || item.ExtraBonusType == 175 || item.ExtraBonusType == 197 || item.ExtraBonusType == 249)
+                    Out.SendMessage(string.Format(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.OnItemEquipped.Increased", ItemBonusName(item.ExtraBonusType))), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
             }
             //Check null on client.player bypass region change
             if (Client.Account.PrivLevel == (uint)ePrivLevel.Player && Client.Player != null && Client.Player.ObjectState == eObjectState.Active)
@@ -12123,68 +12141,68 @@ namespace DOL.GS
             if (item.Bonus1 != 0)
             {
                 ItemBonus[item.Bonus1Type] -= item.Bonus1;
-                if (item.Bonus1Type < 20)
+                if (item.Bonus1Type < 20 || item.Bonus1Type == 119 || (item.Bonus1Type >= 147 && item.Bonus1Type <= 156) || (item.Bonus1Type >= 169 && item.Bonus1Type <= 171) || item.Bonus1Type == 175 || item.Bonus1Type == 181 || item.Bonus1Type == 197 || item.Bonus1Type == 249)
                     Out.SendMessage(string.Format(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.OnItemUnequipped.Decreased", ItemBonusName(item.Bonus1Type))), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
             }
             if (item.Bonus2 != 0)
             {
                 ItemBonus[item.Bonus2Type] -= item.Bonus2;
-                if (item.Bonus2Type < 20)
+                if (item.Bonus2Type < 20 || item.Bonus2Type == 119 || (item.Bonus2Type >= 147 && item.Bonus2Type <= 156) || (item.Bonus2Type >= 169 && item.Bonus2Type <= 171) || item.Bonus2Type == 175 || item.Bonus2Type == 181 || item.Bonus2Type == 197 || item.Bonus2Type == 249)
                     Out.SendMessage(string.Format(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.OnItemUnequipped.Decreased", ItemBonusName(item.Bonus2Type))), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
             }
             if (item.Bonus3 != 0)
             {
                 ItemBonus[item.Bonus3Type] -= item.Bonus3;
-                if (item.Bonus3Type < 20)
+                if (item.Bonus3Type < 20 || item.Bonus3Type == 119 || (item.Bonus3Type >= 147 && item.Bonus3Type <= 156) || (item.Bonus3Type >= 169 && item.Bonus3Type <= 171) || item.Bonus3Type == 175 || item.Bonus3Type == 181 || item.Bonus3Type == 197 || item.Bonus3Type == 249)
                     Out.SendMessage(string.Format(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.OnItemUnequipped.Decreased", ItemBonusName(item.Bonus3Type))), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
             }
             if (item.Bonus4 != 0)
             {
                 ItemBonus[item.Bonus4Type] -= item.Bonus4;
-                if (item.Bonus4Type < 20)
+                if (item.Bonus4Type < 20 || item.Bonus4Type == 119 || (item.Bonus4Type >= 147 && item.Bonus4Type <= 156) || (item.Bonus4Type >= 169 && item.Bonus4Type <= 171) || item.Bonus4Type == 175 || item.Bonus4Type == 181 || item.Bonus4Type == 197 || item.Bonus4Type == 249)
                     Out.SendMessage(string.Format(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.OnItemUnequipped.Decreased", ItemBonusName(item.Bonus4Type))), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
             }
             if (item.Bonus5 != 0)
             {
                 ItemBonus[item.Bonus5Type] -= item.Bonus5;
-                if (item.Bonus5Type < 20)
+                if (item.Bonus5Type < 20 || item.Bonus5Type == 119 || (item.Bonus5Type >= 147 && item.Bonus5Type <= 156) || (item.Bonus5Type >= 169 && item.Bonus5Type <= 171) || item.Bonus5Type == 175 || item.Bonus5Type == 181 || item.Bonus5Type == 197 || item.Bonus5Type == 249)
                     Out.SendMessage(string.Format(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.OnItemUnequipped.Decreased", ItemBonusName(item.Bonus5Type))), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
             }
             if (item.Bonus6 != 0)
             {
                 ItemBonus[item.Bonus6Type] -= item.Bonus6;
-                if (item.Bonus6Type < 20)
+                if (item.Bonus6Type < 20 || item.Bonus6Type == 119 || (item.Bonus6Type >= 147 && item.Bonus6Type <= 156) || (item.Bonus6Type >= 169 && item.Bonus6Type <= 171) || item.Bonus6Type == 175 || item.Bonus6Type == 181 || item.Bonus6Type == 197 || item.Bonus6Type == 249)
                     Out.SendMessage(string.Format(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.OnItemUnequipped.Decreased", ItemBonusName(item.Bonus6Type))), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
             }
             if (item.Bonus7 != 0)
             {
                 ItemBonus[item.Bonus7Type] -= item.Bonus7;
-                if (item.Bonus7Type < 20)
+                if (item.Bonus7Type < 20 || item.Bonus7Type == 119 || (item.Bonus7Type >= 147 && item.Bonus7Type <= 156) || (item.Bonus7Type >= 169 && item.Bonus7Type <= 171) || item.Bonus7Type == 175 || item.Bonus7Type == 181 || item.Bonus7Type == 197 || item.Bonus7Type == 249)
                     Out.SendMessage(string.Format(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.OnItemUnequipped.Decreased", ItemBonusName(item.Bonus7Type))), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
             }
             if (item.Bonus8 != 0)
             {
                 ItemBonus[item.Bonus8Type] -= item.Bonus8;
-                if (item.Bonus8Type < 20)
+                if (item.Bonus8Type < 20 || item.Bonus8Type == 119 || (item.Bonus8Type >= 147 && item.Bonus8Type <= 156) || (item.Bonus8Type >= 169 && item.Bonus8Type <= 171) || item.Bonus8Type == 175 || item.Bonus8Type == 181 || item.Bonus8Type == 197 || item.Bonus8Type == 249)
                     Out.SendMessage(string.Format(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.OnItemUnequipped.Decreased", ItemBonusName(item.Bonus8Type))), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
             }
             if (item.Bonus9 != 0)
             {
                 ItemBonus[item.Bonus9Type] -= item.Bonus9;
-                if (item.Bonus9Type < 20)
+                if (item.Bonus9Type < 20 || item.Bonus9Type == 119 || (item.Bonus9Type >= 147 && item.Bonus9Type <= 156) || (item.Bonus9Type >= 169 && item.Bonus9Type <= 171) || item.Bonus9Type == 175 || item.Bonus9Type == 181 || item.Bonus9Type == 197 || item.Bonus9Type == 249)
                     Out.SendMessage(string.Format(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.OnItemUnequipped.Decreased", ItemBonusName(item.Bonus9Type))), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
             }
             if (item.Bonus10 != 0)
             {
                 ItemBonus[item.Bonus10Type] -= item.Bonus10;
-                if (item.Bonus10Type < 20)
+                if (item.Bonus10Type < 20 || item.Bonus10Type == 119 || (item.Bonus10Type >= 147 && item.Bonus10Type <= 156) || (item.Bonus10Type >= 169 && item.Bonus10Type <= 171) || item.Bonus10Type == 175 || item.Bonus10Type == 181 || item.Bonus10Type == 197 || item.Bonus10Type == 249)
                     Out.SendMessage(string.Format(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.OnItemUnequipped.Decreased", ItemBonusName(item.Bonus10Type))), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
             }
             if (item.ExtraBonus != 0)
             {
                 ItemBonus[item.ExtraBonusType] -= item.ExtraBonus;
-                //if (item.ExtraBonusType < 20)
-                //Out.SendMessage(string.Format(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.OnItemUnequipped.Decreased", ItemBonusName(item.ExtraBonusType))), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
+                if (item.ExtraBonusType < 20 || item.ExtraBonusType == 119 || (item.ExtraBonusType >= 147 && item.ExtraBonusType <= 156) || (item.ExtraBonusType >= 169 && item.ExtraBonusType <= 171) || item.ExtraBonusType == 175 || item.ExtraBonusType == 181 || item.ExtraBonusType == 197 || item.ExtraBonusType == 249)
+                    Out.SendMessage(string.Format(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.OnItemUnequipped.Decreased", ItemBonusName(item.ExtraBonusType))), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
             }
 
             if (item is IGameInventoryItem)

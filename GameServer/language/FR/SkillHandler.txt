@@ -123,6 +123,7 @@ SkillBase.RegisterPropertyNames.MindMagic:            Âme
 SkillBase.RegisterPropertyNames.MindMagicFocus:         Focus : Âme
 SkillBase.RegisterPropertyNames.Music:               Musique
 SkillBase.RegisterPropertyNames.Nature:               Croissance
+SkillBase.RegisterPropertyNames.SpellFumbleChance:		Chance d'échapper aux sorts
 SkillBase.RegisterPropertyNames.NegativeReduction:    Réduction de la durée des effets négatifs: {0}% (PvE Uniquement)
 SkillBase.RegisterPropertyNames.NightshadeMagic:      Magie de l'Ombre
 SkillBase.RegisterPropertyNames.Nurture:            Symbiose

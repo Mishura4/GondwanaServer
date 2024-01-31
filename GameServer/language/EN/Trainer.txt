@@ -1,84 +1,540 @@
 ## Hibernia
+# /MaulerHibTrainer
+MaulerHibTrainer.Interact.Text1:				{0} says, "Do you desire to join the [Temple of the Iron Fist] and fight for the glorious realm of Hibernia?"
+MaulerHibTrainer.Interact.Text2:				Would you like to do some training?
+MaulerHibTrainer.Interact.Text3:				{0} says, "You are a quick study, {1}. But do not be too hasty. There is always more to learn!"
+MaulerHibTrainer.Interact.Text4:					{0} says, "Welcome young Mauler. May your time in Hibernia be rewarding. Would you prefer to fight with a [staff] or with [fists]?"
+MaulerHibTrainer.ReceiveArmor.Text1:				{0} says, "We will now issue your Vest of the Initiate, it will help you greatly in your quest. When you have reached the title of Stone Palm, return it to me. We shall then see if you require another."
+MaulerHibTrainer.ReceiveArmor.Text2:				{0} says, "So, you reached the title of Stone Palm, here is the Stoneskin Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Five Paws. We shall then see if you require another."
+MaulerHibTrainer.ReceiveArmor.Text3:				{0} says, "So, you reached the title of Five Paws, here is the Vest of the Five Paws, it will help you greatly in your quest. Come back to me when you have reached the title of Pugilist. We shall then see if you require another."
+MaulerHibTrainer.ReceiveArmor.Text4:				{0} says, "So, you have come a long way in your training and achieved the title of Pugilist, here is the Vest of the Pugilist, it will help you greatly in your quest. You are now ready to fight for our Realm by following our teachings."
+MaulerHibTrainer.WhisperReceive.Text1:			Here is your Staff of the Initiate, gift of Laresh. Welcome to the Defenders of Hibernia!
+MaulerHibTrainer.WhisperReceive.Text2:			Here is your Fists of the Initiate, gift of Laresh. Welcome to the Defenders of Hibernia!
+
 # /AnimistTrainer
-AnimistTrainer.Interact.Text1:				{0} says, "Is the [Path of Affinity] the path you desire to walk?"
+AnimistTrainer.Interact.Text1:				{0} says, "Is it your wish to walk [Path of Affinity] and become an Animist?"
 AnimistTrainer.Interact.Text2:				Would you like to do some training?
-AnimistTrainer.Interact.Text3:
-AnimistTrainer.Interact.Text4:
-AnimistTrainer.WhisperReceive.Text1:			You are now an Animist, {0}. Welcome to the Path of Affinity.
+AnimistTrainer.Interact.Text3:				{0} says, "You are a quick study, {1}. But do not be too hasty. There is always more to learn!"
+AnimistTrainer.Interact.Text4:					{0} says, "You are now an Animist, {1}. Welcome to the Path of Affinity. Here too is your weapon, a Staff of Focus!"
+AnimistTrainer.ReceiveArmor.Text1:				{0} says, "We will now issue your Robe of the Apprentice, it will help you greatly in your quest. When you have reached the title of Arboreal Apprentice, return it to me. We shall then see if you require another."
+AnimistTrainer.ReceiveArmor.Text2:				{0} says, "So, you reached the title of Arboreal Apprentice, here is the Apprentice's Robe, it will help you greatly in your quest. Come back to me when you have reached the title of Friend of Gaia. We shall then see if you require another."
+AnimistTrainer.ReceiveArmor.Text3:				{0} says, "So, you reached the title of Friend of Gaia, here is the Friend of Gaia's Robe, it will help you greatly in your quest. Come back to me when you have reached the title of Plantfriend. We shall then see if you require another."
+AnimistTrainer.ReceiveArmor.Text4:				{0} says, "So, you have come a long way in your training and achieved the title of Plantfriend, here is the Plantfriend's Robe, it will help you greatly in your quest. You are now ready to fight for our Realm by following our teachings."
 
 # /BainsheeTrainer
-BainsheeTrainer.Interact.Text1:				{0} says, "Do you wish to train as a [Bainshee] and walk the Path of Spectral Force?"
-BainsheeTrainer.Interact.Text2:				{0} says, "Our way is a hard one, {1}. I can only train you in skills. You must gain knowledge and wisdom on your own."
-BainsheeTrainer.Interact.Text3:
-BainsheeTrainer.Interact.Text4:
-BainsheeTrainer.WhisperReceive.Text1:			Well met then, {0}. It is a hard road, but I see hardness is no stranger to you. Welcome, Bainshee, welcome. Here, take this. It will aid you in your first encounters as a Bainshee.
+BainsheeTrainer.Interact.Text1:				{0} says, "Do you wish to train as a Bainshee and walk the [Path of Spectral Force]?"
+BainsheeTrainer.Interact.Text2:				Would you like to do some training?
+BainsheeTrainer.Interact.Text3:				{0} says, "Our way is a hard one, {1}. I can only train you in skills. You must gain knowledge and wisdom on your own."
+BainsheeTrainer.Interact.Text4:					{0} says, "Well met then, {1}. It is a hard road, but I see hardness is no stranger to you. Welcome, Bainshee, welcome. Here, take this. It will aid you in your first encounters as a Bainshee."
+BainsheeTrainer.ReceiveArmor.Text1:				{0} says, "We will now issue your Robe of the Initiate, it will help you greatly in your quest. When you have reached the title of Wraith Apprentice, return it to me. We shall then see if you require another."
+BainsheeTrainer.ReceiveArmor.Text2:				{0} says, "So, you reached the title of Wraith Apprentice, here is the Wraith Apprentice's Robe, it will help you greatly in your quest. Come back to me when you have reached the title of Phantom Adept. We shall then see if you require another."
+BainsheeTrainer.ReceiveArmor.Text3:				{0} says, "So, you reached the title of Phantom Adept, here is the Robe of the Phantom Adept, it will help you greatly in your quest. Come back to me when you have reached the title of Phantom Reaper. We shall then see if you require another."
+BainsheeTrainer.ReceiveArmor.Text4:				{0} says, "So, you have come a long way in your training and achieved the title of Phantom Reaper, here is the Robe of the Phantom Reaper, it will help you greatly in your quest. You are now ready to fight for our Realm by following our teachings."
+
+# /BardTrainer
+BardTrainer.Interact.Text1:				{0} says, "Do you wish to walk the [Path of Essence], pursuing a life of storytelling and song? Of brave deeds which grow braver with every telling?"
+BardTrainer.Interact.Text2:				Would you like to do some training?
+BardTrainer.Interact.Text3:				{0} says, "Ahh, well met {1}. Back for more lore and knowledge, eh."
+BardTrainer.Interact.Text4:					{0} says, "Welcome then, {1}, to the Bard's life. Here, take this Lute. Keep it well, for the tools of our trade can be quite expensive."
+BardTrainer.ReceiveArmor.Text1:				{0} says, "We will now issue your Vest of the Chanter, it will help you greatly in your quest. When you have reached the title of Vocalist, return it to me. We shall then see if you require another."
+BardTrainer.ReceiveArmor.Text2:				{0} says, "So, you reached the title of Vocalist, here is the Vocalist's Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Caroler. We shall then see if you require another."
+BardTrainer.ReceiveArmor.Text3:				{0} says, "So, you reached the title of Caroler, here is the Caroler's Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Choralist. We shall then see if you require another."
+BardTrainer.ReceiveArmor.Text4:				{0} says, "So, you have come a long way in your training and achieved the title of Choralist, here is the Choralist's Vest, it will help you greatly in your quest. You are now ready to fight for our Realm by following our teachings."
+
+# /BlademasterTrainer
+BlademasterTrainer.Interact.Text1:				{0} says, "Do you choose to walk the [Path of Harmony] and defend our realm as a Blademaster?"
+BlademasterTrainer.Interact.Text2:				Would you like to do some training?
+BlademasterTrainer.Interact.Text3:				{0} says, "Do you wish to learn some more, {1}? Step up and receive your training!!"
+BlademasterTrainer.Interact.Text4:					{0} says, "Very well, {1}. I gladly take your training into my hands. Congratulations, from this day forth, you are a Blademaster. Here, choose a weapon to aid you: [blades], [blunt] or [piercing]."
+BlademasterTrainer.ReceiveArmor.Text1:				{0} says, "We will now issue your Vest of the Neophyte, it will help you greatly in your quest. When you have reached the title of Stylist, return it to me. We shall then see if you require another."
+BlademasterTrainer.ReceiveArmor.Text2:				{0} says, "So, you reached the title of Stylist, here is the Stylist's Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Sabreur. We shall then see if you require another."
+BlademasterTrainer.ReceiveArmor.Text3:				{0} says, "So, you reached the title of Sabreur, here is the Sabreur's Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Blade Weaver. We shall then see if you require another."
+BlademasterTrainer.ReceiveArmor.Text4:				{0} says, "So, you have come a long way in your training and achieved the title of Blade Weaver, here is the Bladeweaver's Vest, it will help you greatly in your quest. You are now ready to fight for our Realm by following our teachings."
+BlademasterTrainer.WhisperReceive.Text1:			Here is your Blade of the Initiate. Welcome to the Defenders of Hibernia!
+BlademasterTrainer.WhisperReceive.Text2:			Here is your Mace of the Initiate. Welcome to the Defenders of Hibernia!
+BlademasterTrainer.WhisperReceive.Text3:			Here is your Dagger of the Initiate. Welcome to the Defenders of Hibernia!
+
+# /ChampionTrainer
+ChampionTrainer.Interact.Text1:				{0} says, "Champions follow the [Path of Essence]. Choose now to become a Champion, and I will train you in our ways, and the ways of the Path we follow."
+ChampionTrainer.Interact.Text2:				Would you like to do some training?
+ChampionTrainer.Interact.Text3:				{0} says, "I'm glad to see you taking an interest in your training, {1}. There is always room to grow and learn!"
+ChampionTrainer.Interact.Text4:					{0} says, "Welcome {1}. Let us see if you will become a worthy Champion. Choose a weapon: [blades], [blunt], [piercing] or [large weapons]. It is to aid you while you grow into a true Champion."
+ChampionTrainer.ReceiveArmor.Text1:				{0} says, "We will now issue your Vest of the Neophyte, it will help you greatly in your quest. When you have reached the title of Charger, return it to me. We shall then see if you require another."
+ChampionTrainer.ReceiveArmor.Text2:				{0} says, "So, you reached the title of Charger, here is the Charger's Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Propugner. We shall then see if you require another."
+ChampionTrainer.ReceiveArmor.Text3:				{0} says, "So, you reached the title of Propugner, here is the Vest of the Propugner, it will help you greatly in your quest. Come back to me when you have reached the title of Valiant. We shall then see if you require another."
+ChampionTrainer.ReceiveArmor.Text4:				{0} says, "So, you have come a long way in your training and achieved the title of Valiant, here is the Hauberk of the Valiant, it will help you greatly in your quest. You are now ready to fight for our Realm by following our teachings."
+ChampionTrainer.WhisperReceive.Text1:			Here is your Blade of the Initiate. Welcome to the Defenders of Hibernia!
+ChampionTrainer.WhisperReceive.Text2:			Here is your Mace of the Initiate. Welcome to the Defenders of Hibernia!
+ChampionTrainer.WhisperReceive.Text3:			Here is your Dagger of the Initiate. Welcome to the Defenders of Hibernia!
+ChampionTrainer.WhisperReceive.Text4:			Here is your Great Sword of the Initiate. Welcome to the Defenders of Hibernia!
+
+# /DruidTrainer
+DruidTrainer.Interact.Text1:				{0} says, "Do you wish to walk the [Path of Harmony] and learn the ways of the Druid?"
+DruidTrainer.Interact.Text2:				Would you like to do some training?
+DruidTrainer.Interact.Text3:				{0} says, "Well met then, {1}. I shall impart all that I know, young Druid."
+DruidTrainer.Interact.Text4:					{0} says, "The path of the Druid suits you, {1}, Welcome. Take this weapon. You are a Druid now. Stick to our ways, and you shall go far."
+DruidTrainer.ReceiveArmor.Text1:				{0} says, "We will now issue your Vest of the Novice, it will help you greatly in your quest. When you have reached the title of Student, return it to me. We shall then see if you require another."
+DruidTrainer.ReceiveArmor.Text2:				{0} says, "So, you reached the title of Student, here is the Student's Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Apprentice Druid. We shall then see if you require another."
+DruidTrainer.ReceiveArmor.Text3:				{0} says, "So, you reached the title of Apprentice Druid, here is the Apprentice's Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Ovate. We shall then see if you require another."
+DruidTrainer.ReceiveArmor.Text4:				{0} says, "So, you have come a long way in your training and achieved the title of Ovate, here is the Grove Healer's 'Hauberk, it will help you greatly in your quest. You are now ready to fight for our Realm by following our teachings."
+
+# /EldritchTrainer
+EldritchTrainer.Interact.Text1:				{0} says, "Greetings, {1}. It is my understanding that you have chosen the [Path of Focus], and wish to train as an Eldritch."
+EldritchTrainer.Interact.Text2:				Would you like to do some training?
+EldritchTrainer.Interact.Text3:				{0} says, "Drink up this knowledge, {1}, and remember it, for there shall be a day when I no longer rise in the morning, and you may be required to take my place."
+EldritchTrainer.Interact.Text4:					{0} says, "I can give you the gift of knowledge, but wisdom you must seek on your own. I welcome you, {1}. Here, take this welcoming gift. Use it wisely."
+EldritchTrainer.ReceiveArmor.Text1:				{0} says, "We will now issue your Robe of the Apprentice, it will help you greatly in your quest. When you have reached the title of Evoker, return it to me. We shall then see if you require another."
+EldritchTrainer.ReceiveArmor.Text2:				{0} says, "So, you reached the title of Evoker, here is the Evoker's Robe, it will help you greatly in your quest. Come back to me when you have reached the title of Conjurer. We shall then see if you require another."
+EldritchTrainer.ReceiveArmor.Text3:				{0} says, "So, you reached the title of Conjurer, here is the Conjurer's Robe, it will help you greatly in your quest. Come back to me when you have reached the title of Magius. We shall then see if you require another."
+EldritchTrainer.ReceiveArmor.Text4:				{0} says, "So, you have come a long way in your training and achieved the title of Magius, here is the Magius' Robe, it will help you greatly in your quest. You are now ready to fight for our Realm by following our teachings."
 
 # /EnchanterTrainer
-EnchanterTrainer.Interact.Text1:			{0} says, "Do you choose to train as an Enchanter and follow the Path of Essence? Life as an [Enchanter] is as rewarding as it is dangerous, but it is yours for the asking."
-EnchanterTrainer.Interact.Text2:			{0} says, "You are a quick study, {1}. But do not be too hasty. There is always more to learn."
-EnchanterTrainer.Interact.Text3:
-EnchanterTrainer.Interact.Text4:
-EnchanterTrainer.WhisperReceive.Text1:			Welcome, {0}. From this day forth you shall be known as an Enchanter. Here, {0}. Take this gift to aid you on your path.
+EnchanterTrainer.Interact.Text1:				{0} says, "Do you choose to train as an Enchanter and follow the [Path of Essence]? Life as an Enchanter is as rewarding as it is dangerous, but it is yours for the asking."
+EnchanterTrainer.Interact.Text2:				Would you like to do some training?
+EnchanterTrainer.Interact.Text3:				{0} says, "You are a quick study, {1}. But do not be too hasty. There is always more to learn."
+EnchanterTrainer.Interact.Text4:					{0} says, "Welcome, {1}. From this day forth you shall be known as an Enchanter. Here, Take this gift to aid you on your path."
+EnchanterTrainer.ReceiveArmor.Text1:				{0} says, "We will now issue your Robe of the Apprentice, it will help you greatly in your quest. When you have reached the title of Illusionist, return it to me. We shall then see if you require another."
+EnchanterTrainer.ReceiveArmor.Text2:				{0} says, "So, you reached the title of Illusionist, here is the Illusionist's Robe, it will help you greatly in your quest. Come back to me when you have reached the title of Glamourist. We shall then see if you require another."
+EnchanterTrainer.ReceiveArmor.Text3:				{0} says, "So, you reached the title of Glamourist, here is the Glamourist's Robe, it will help you greatly in your quest. Come back to me when you have reached the title of Entrancer. We shall then see if you require another."
+EnchanterTrainer.ReceiveArmor.Text4:				{0} says, "So, you have come a long way in your training and achieved the title of Entrancer, here is the Entrancer's Robe, it will help you greatly in your quest. You are now ready to fight for our Realm by following our teachings."
 
 # /HeroTrainer
-HeroTrainer.Interact.Text1:				{0} says, "You wish for the life of a [Hero]? You wish to walk the Path of Focus?"
-HeroTrainer.Interact.Text2:				{0} says, "Training makes for a strong, healthy Hero! Keep up the good work, {1}!"
-HeroTrainer.Interact.Text3:
-HeroTrainer.Interact.Text4:
-HeroTrainer.WhisperReceive.Text1:			Let me welcome you then, {0}. Go, honor us with your deeds. Here is a gift for you. Try not to drop it, eh Hero.
-
-# /MaulerHibTrainer
-MaulerHibTrainer.Interact.Text1:			{0} says, "Do you desire to join the [Temple of the Iron Fist] and fight for the glorious realm of Hibernia?"
-MaulerHibTrainer.Interact.Text2:			Would you like to do some training?
-MaulerHibTrainer.Interact.Text3:			
-MaulerHibTrainer.Interact.Text4:			
-MaulerHibTrainer.ReceiveItem.Text1:			
-MaulerHibTrainer.WhisperReceive.Text1:			Welcome young Mauler. May your time in Hibernia be rewarding. Would you prefer to fight with a [staff] or with [fist]?
-MaulerHibTrainer.WhisperReceive.Text2:			You get a gift by Laresh.
+HeroTrainer.Interact.Text1:				{0} says, "Do you desire to walk the [Path of Focus] and defend our realm as a Hero?"
+HeroTrainer.Interact.Text2:				Would you like to do some training?
+HeroTrainer.Interact.Text3:				{0} says, "Training makes for a strong, healthy Hero! Keep up the good work, {1}!"
+HeroTrainer.Interact.Text4:					{0} says, "Let me welcome you then, {1}. Go, honor us with your deeds. Choose a weapon: [blades], [blunt], [piercing], [celtic spear] or [large weapons]."
+HeroTrainer.ReceiveArmor.Text1:				{0} says, "We will now issue your Vest of the Neophyte, it will help you greatly in your quest. When you have reached the title of Servitor, return it to me. We shall then see if you require another."
+HeroTrainer.ReceiveArmor.Text2:				{0} says, "So, you reached the title of Servitor, here is the Servitor's Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Confidant. We shall then see if you require another."
+HeroTrainer.ReceiveArmor.Text3:				{0} says, "So, you reached the title of Confidant, here is the Confidant's Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Henchman. We shall then see if you require another."
+HeroTrainer.ReceiveArmor.Text4:				{0} says, "So, you have come a long way in your training and achieved the title of Henchman, here is the Henchman's Vest, it will help you greatly in your quest. You are now ready to fight for our Realm by following our teachings."
+HeroTrainer.WhisperReceive.Text1:			Here is your Blade of the Initiate. Try not to drop it, eh Hero!
+HeroTrainer.WhisperReceive.Text2:			Here is your Mace of the Initiate. Try not to drop it, eh Hero!
+HeroTrainer.WhisperReceive.Text3:			Here is your Dagger of the Initiate. Try not to drop it, eh Hero!
+HeroTrainer.WhisperReceive.Text4:			Here is your Great Sword of the Initiate. Try not to drop it, eh Hero!
+HeroTrainer.WhisperReceive.Text5:			Here is your Spear of the Initiate. Try not to drop it, eh Hero!
 
 # /MentalistTrainer
-MentalistTrainer.Interact.Text1:			{0} says, "Do you wish to train as a [Mentalist] and walk the Path of Harmony?"
-MentalistTrainer.Interact.Text2:			{0} says, "Our way is a hard one, {1}. I can only train you in skills. You must gain knowledge and wisdom on your own."
-MentalistTrainer.Interact.Text3:
-MentalistTrainer.Interact.Text4:
-MentalistTrainer.WhisperReceive.Text1:			Well met then, {0}. It is a hard road, but I see hardness is no stranger to you. Welcome, Mentalist, welcome. Here, take this. It will aid you in your first encounters as a Mentalist.
+MentalistTrainer.Interact.Text1:				{0} says, "Do you wish to train as a Mentalist and walk the [Path of Harmony]?"
+MentalistTrainer.Interact.Text2:				Would you like to do some training?
+MentalistTrainer.Interact.Text3:				{0} says, "Our way is a hard one, {1}. I can only train you in skills. You must gain knowledge and wisdom on your own."
+MentalistTrainer.Interact.Text4:					{0} says, "Well met then, {1}. It is a hard road, but I see hardness is no stranger to you. Welcome, Mentalist, welcome. Here, take this Staff. It will aid you in your first encounters as a Mentalist."
+MentalistTrainer.ReceiveArmor.Text1:				{0} says, "We will now issue your Robe of the Apprentice, it will help you greatly in your quest. When you have reached the title of Adept, return it to me. We shall then see if you require another."
+MentalistTrainer.ReceiveArmor.Text2:				{0} says, "So, you reached the title of Adept, here is the Adept's Robe, it will help you greatly in your quest. Come back to me when you have reached the title of Thought Walker. We shall then see if you require another."
+MentalistTrainer.ReceiveArmor.Text3:				{0} says, "So, you reached the title of Thought Walker, here is the Robe of the Thought Walker, it will help you greatly in your quest. Come back to me when you have reached the title of Visionary. We shall then see if you require another."
+MentalistTrainer.ReceiveArmor.Text4:				{0} says, "So, you have come a long way in your training and achieved the title of Visionary, here is the Robe of the Visionary, it will help you greatly in your quest. You are now ready to fight for our Realm by following our teachings."
+
+# /NightshadeTrainer
+NightshadeTrainer.Interact.Text1:				{0} says, "You have thought this through, I'm sure. Tell me now if you wish to train as a Nightshade and follow the [Path of Essence]."
+NightshadeTrainer.Interact.Text2:				Would you like to do some training?
+NightshadeTrainer.Interact.Text3:				{0} says, "Do you wish to learn some more, {1}? Step up and receive your training!!"
+NightshadeTrainer.Interact.Text4:					{0} says, "Some would think you mad, choosing to walk through life as a Nightshade. It is not meant for everyone, but I think it will suit you, {1}. Here, from me, a small gift to aid you in your journeys, choose a weapon: [blades] or [piercing]."
+NightshadeTrainer.ReceiveArmor.Text1:				{0} says, "We will now issue your Vest of the Huntsman, it will help you greatly in your quest. When you have reached the title of Nightwalker, return it to me. We shall then see if you require another."
+NightshadeTrainer.ReceiveArmor.Text2:				{0} says, "So, you reached the title of Nightwalker, here is the Nightwalker's Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Darkshade. We shall then see if you require another."
+NightshadeTrainer.ReceiveArmor.Text3:				{0} says, "So, you reached the title of Darkshade, here is the Darkshade's Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Darkblade. We shall then see if you require another."
+NightshadeTrainer.ReceiveArmor.Text4:				{0} says, "So, you have come a long way in your training and achieved the title of Darkblade, here is the Darkblade's Vest, it will help you greatly in your quest. You are now ready to fight for our Realm by following our teachings."
+NightshadeTrainer.WhisperReceive.Text1:			Here is your Blade of the Initiate. Welcome to the Guild of Shadows!
+NightshadeTrainer.WhisperReceive.Text2:			Here is your Dagger of the Initiate. Welcome to the Guild of Shadows!
+
+# /RangerTrainer
+RangerTrainer.Interact.Text1:				{0} says, "Do you desire to walk the [Path of Focus] and become a Ranger? You know, the way of a Ranger is not for everyone. Are you sure this is your choice?"
+RangerTrainer.Interact.Text2:				Would you like to do some training?
+RangerTrainer.Interact.Text3:				{0} says, "Our way is a hard one, {1}. I can only train you in skills. You must gain knowledge and wisdom on your own."
+RangerTrainer.Interact.Text4:					{0} says, "Good then, {1}. Your path as a Ranger is before you. Walk it with care, friend. Take this Bow, to help make walking the path a bit easier."
+RangerTrainer.ReceiveArmor.Text1:				{0} says, "We will now issue your Vest of the Huntsman, it will help you greatly in your quest. When you have reached the title of Lurker, return it to me. We shall then see if you require another."
+RangerTrainer.ReceiveArmor.Text2:				{0} says, "So, you reached the title of Lurker, here is the Vest of the Lurker, it will help you greatly in your quest. Come back to me when you have reached the title of Archer. We shall then see if you require another."
+RangerTrainer.ReceiveArmor.Text3:				{0} says, "So, you reached the title of Archer, here is the Archer's Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Tracker. We shall then see if you require another."
+RangerTrainer.ReceiveArmor.Text4:				{0} says, "So, you have come a long way in your training and achieved the title of Tracker, here is the Tracker's Vest, it will help you greatly in your quest. You are now ready to fight for our Realm by following our teachings."
+
+# /ValewalkerTrainer
+ValewalkerTrainer.Interact.Text1:				{0} says, "You wish to follow the [Path of Affinity] and become a Valewalker?"
+ValewalkerTrainer.Interact.Text2:				Would you like to do some training?
+ValewalkerTrainer.Interact.Text3:				{0} says, "Training makes for a strong, healthy fighter! Keep up the good work, {1}"
+ValewalkerTrainer.Interact.Text4:					{0} says, "Welcome, then, to the Path of Affinity. Here is a gift. Consider it a welcoming gesture. Welcome, {1}."
+ValewalkerTrainer.ReceiveArmor.Text1:				{0} says, "We will now issue your Robe of the Apprentice, it will help you greatly in your quest. When you have reached the title of Scythewielder, return it to me. We shall then see if you require another."
+ValewalkerTrainer.ReceiveArmor.Text2:				{0} says, "So, you reached the title of Scythewielder, here is the Scythewielder's Robe, it will help you greatly in your quest. Come back to me when you have reached the title of Forestwalker. We shall then see if you require another."
+ValewalkerTrainer.ReceiveArmor.Text3:				{0} says, "So, you reached the title of Forestwalker, here is the Forestwalker's Robe, it will help you greatly in your quest. Come back to me when you have reached the title of Reaper. We shall then see if you require another."
+ValewalkerTrainer.ReceiveArmor.Text4:				{0} says, "So, you have come a long way in your training and achieved the title of Reaper, here is the Reaper's Robe, it will help you greatly in your quest. You are now ready to fight for our Realm by following our teachings."
+
+# /VampiirTrainer
+VampiirTrainer.Interact.Text1:				{0} says, "Do you choose a Vampiir's life and follow the [Path of Affinity]?"
+VampiirTrainer.Interact.Text2:				Would you like to do some training?
+VampiirTrainer.Interact.Text3:				{0} says, "Do you wish to learn some more, {1}? Step up and receive your training!!"
+VampiirTrainer.Interact.Text4:					{0} says, "Very well, {1}. I gladly take your training into my hands. Congratulations, from this day forth, you are a Vampiir. Here, take this weapon to aid you."
+VampiirTrainer.ReceiveArmor.Text1:				{0} says, "We will now issue your Vest of the Huntsman, it will help you greatly in your quest. When you have reached the title of Vampiir Apprentice, return it to me. We shall then see if you require another."
+VampiirTrainer.ReceiveArmor.Text2:				{0} says, "So, you reached the title of Vampiir Apprentice, here is the Apprentice's Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Vampiir Adept. We shall then see if you require another."
+VampiirTrainer.ReceiveArmor.Text3:				{0} says, "So, you reached the title of Vampiir Adept, here is the Robe of the Adept's Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Vampiir Protector. We shall then see if you require another."
+VampiirTrainer.ReceiveArmor.Text4:				{0} says, "So, you have come a long way in your training and achieved the title of Vampiir Protector, here is the Protector's Vest, it will help you greatly in your quest. You are now ready to fight for our Realm by following our teachings."
+
+# /WardenTrainer
+WardenTrainer.Interact.Text1:				{0} says, "Nidewst! You wish to follow the [Path of Focus] and train as a Warden?"
+WardenTrainer.Interact.Text2:				Would you like to do some training?
+WardenTrainer.Interact.Text3:				{0} says, "Do you wish to learn some more, {1}? Step up and receive your training!!"
+WardenTrainer.Interact.Text4:					{0} says, "Good then, {1}! Welcome to the ways of the Warden! Here, choose a weapon: [blades] or [blunt], to start you on the path of a Warden.
+WardenTrainer.ReceiveArmor.Text1:				{0} says, "We will now issue your Vest of the Neophyte, it will help you greatly in your quest. When you have reached the title of Woodsman, return it to me. We shall then see if you require another."
+WardenTrainer.ReceiveArmor.Text2:				{0} says, "So, you reached the title of Woodsman, here is the Woodsman's Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Guardian. We shall then see if you require another."
+WardenTrainer.ReceiveArmor.Text3:				{0} says, "So, you reached the title of Guardian, here is the Guardian's Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Hunter. We shall then see if you require another."
+WardenTrainer.ReceiveArmor.Text4:				{0} says, "So, you have come a long way in your training and achieved the title of Hunter, here is the Vest of the Hunter, it will help you greatly in your quest. You are now ready to fight for our Realm by following our teachings."
+WardenTrainer.WhisperReceive.Text1:			Here is your Blade of the Initiate. Welcome to the Defenders of Hibernia!
+WardenTrainer.WhisperReceive.Text2:			Here is your Mace of the Initiate. Welcome to the Defenders of Hibernia!
 
 
 ## Albion
+# /MaulerAlbTrainer
+MaulerAlbTrainer.Interact.Text1:				{0} says, "Do you desire to join the [Temple of the Iron Fist] and fight for the glorious realm of Albion?"
+MaulerAlbTrainer.Interact.Text2:				Would you like to do some training?
+MaulerAlbTrainer.Interact.Text3:				{0} says, "You are a quick study, {1}. But do not be too hasty. There is always more to learn!"
+MaulerAlbTrainer.Interact.Text4:					{0} says, "Welcome young Mauler. May your time in Albion be rewarding. Would you prefer to fight with a [staff] or with [fists]?"
+MaulerAlbTrainer.ReceiveArmor.Text1:				{0} says, "We will now issue your Vest of the Initiate, it will help you greatly in your quest. When you have reached the title of Stone Palm, return it to me. We shall then see if you require another."
+MaulerAlbTrainer.ReceiveArmor.Text2:				{0} says, "So, you reached the title of Stone Palm, here is the Stoneskin Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Five Paws. We shall then see if you require another."
+MaulerAlbTrainer.ReceiveArmor.Text3:				{0} says, "So, you reached the title of Five Paws, here is the Vest of the Five Paws, it will help you greatly in your quest. Come back to me when you have reached the title of Pugilist. We shall then see if you require another."
+MaulerAlbTrainer.ReceiveArmor.Text4:				{0} says, "So, you have come a long way in your training and achieved the title of Pugilist, here is the Vest of the Pugilist, it will help you greatly in your quest. You are now ready to fight for our Realm by following our teachings."
+MaulerAlbTrainer.WhisperReceive.Text1:			Here is your Staff of the Initiate, gift of Laresh. Welcome to the Defenders of Albion!
+MaulerAlbTrainer.WhisperReceive.Text2:			Here is your Fists of the Initiate, gift of Laresh. Welcome to the Defenders of Albion!
+
+# /ArmsmanTrainer
+ArmsmanTrainer.Interact.Text1:				{0} says, "Do you desire to join the [Defenders of Albion] and defend our realm as an Armsman?"
+ArmsmanTrainer.Interact.Text2:				Would you like to do some training?
+ArmsmanTrainer.Interact.Text3:				{0} says, "Training makes for a strong, healthy Defender! Keep up the good work, {1}!"
+ArmsmanTrainer.Interact.Text4:					{0} says, "Very well. Choose a weapon, and you shall become one of us. Which would you have, [slashing], [crushing], [thrusting], [polearms] or [two handed]?"
+ArmsmanTrainer.Interact.Text5:					{0} says, "test text test text"
+ArmsmanTrainer.ReceiveArmor.Text1:				{0} says, "We will now issue your Hauberk of the Neophyte, it will help you greatly in your quest. Wear it always and let it serve to remind you of your faith. When you have reached the title of Footsoldier, return it to me. We shall then see if you require another."
+ArmsmanTrainer.ReceiveArmor.Text2:				{0} says, "So, you reached the title of Footsoldier, here is the Footsoldier's Hauberk, it will help you greatly in your quest. Come back to me when you have reached the title of Infantry. We shall then see if you require another."
+ArmsmanTrainer.ReceiveArmor.Text3:				{0} says, "So, you reached the title of Infantry, here is the Infantry's Hauberk, it will help you greatly in your quest. Come back to me when you have reached the title of Soldier. We shall then see if you require another."
+ArmsmanTrainer.ReceiveArmor.Text4:				{0} says, "So, you have come a long way in your training and achieved the title of Soldier, here is the Soldier's Hauberk, it will help you greatly in your quest. You are now ready to fight for our Realm by following the teachings of the Church of Albion."
+ArmsmanTrainer.WhisperReceive.Text1:			Here is your Sword of the Initiate. Welcome to the Defenders of Albion!
+ArmsmanTrainer.WhisperReceive.Text2:			Here is your Mace of the Initiate. Welcome to the Defenders of Albion!
+ArmsmanTrainer.WhisperReceive.Text3:			Here is your Rapier of the Initiate. Welcome to the Defenders of Albion!
+ArmsmanTrainer.WhisperReceive.Text4:			Here is your Pike of the Initiate. Welcome to the Defenders of Albion!
+ArmsmanTrainer.WhisperReceive.Text5:			Here is your Great Sword of the Initiate. Welcome to the Defenders of Albion!
+
+# /CabalistTrainer
+CabalistTrainer.Interact.Text1:				{0} says, "Do you desire to join the [Guild of Shadows] and become a Cabalist? Your constructs would put fear into the hearts of all who oppose us!"
+CabalistTrainer.Interact.Text2:				Would you like to do some training?
+CabalistTrainer.Interact.Text3:				{0} says, "Our way is a hard one, {1}. I can only train you in skills. You must gain knowledge and wisdom on your own."
+CabalistTrainer.Interact.Text4:					{0} says, "Welcome to our guild! You have much to learn, but I see greatness in your future! Here too is your guild weapon, a Staff of Focus!"
+CabalistTrainer.ReceiveArmor.Text1:				{0} says, "We will now issue your Robe of the Apprentice, it will help you greatly in your quest. When you have reached the title of Journeyman Cleric, return it to me. We shall then see if you require another."
+CabalistTrainer.ReceiveArmor.Text2:				{0} says, "So, you reached the title of Journeyman Cleric, here is the Journeyman's Robe, it will help you greatly in your quest. Come back to me when you have reached the title of Imbuer. We shall then see if you require another."
+CabalistTrainer.ReceiveArmor.Text3:				{0} says, "So, you reached the title of Imbuer, here is the Imbuer's Robe, it will help you greatly in your quest. Come back to me when you have reached the title of Creator. We shall then see if you require another."
+CabalistTrainer.ReceiveArmor.Text4:				{0} says, "So, you have come a long way in your training and achieved the title of Creator, here is the Creator's Robe, it will help you greatly in your quest. You are now ready to fight for our Realm by following the teachings of the Guild of Shadows."
+
+# /ClericTrainer
+ClericTrainer.Interact.Text1:				{0} says, "Do you desire to join the [Church of Albion] and walk the path of a Cleric?"
+ClericTrainer.Interact.Text2:				Would you like to do some training?
+ClericTrainer.Interact.Text3:				{0} says, "You are a quick study, {1}. But do not be too hasty. There is always more to learn!"
+ClericTrainer.Interact.Text4:					{0} says, "Welcome my child! Walk the path of light, shout to all the words of our beloved church and rid the land of the faithless! Here is your Mace of the Initiate. It is our standard gift to all new members."
+ClericTrainer.ReceiveArmor.Text1:				{0} says, "We will now issue your Vest of the Apprentice, it will help you greatly in your quest. When you have reached the title of Novice, return it to me. We shall then see if you require another."
+ClericTrainer.ReceiveArmor.Text2:				{0} says, "So, you reached the title of Novice, here is the Novice's Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Curate. We shall then see if you require another."
+ClericTrainer.ReceiveArmor.Text3:				{0} says, "So, you reached the title of Curate, here is the Curate's Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Prelate. We shall then see if you require another."
+ClericTrainer.ReceiveArmor.Text4:				{0} says, "So, you have come a long way in your training and achieved the title of Prelate, here is the Prelate's Hauberk, it will help you greatly in your quest. You are now ready to fight for our Realm by following the teachings of the Church of Albion."
+
 # /FriarTrainer
 FriarTrainer.Interact.Text1:				{0} says, "Do you desire to join the [Defenders of Albion] and defend our realm as a Friar?"
 FriarTrainer.Interact.Text2:				Would you like to do some training?
-FriarTrainer.Interact.Text3:				{0} says, "insert english text"
-FriarTrainer.Interact.Text4:				{0} says, "insert english text"
-FriarTrainer.ReceiveItem.Text1:				{0} says, "insert english text"
-FriarTrainer.WhisperReceive.Text1:			We welcome you into our society as an equal! We are at your disposal. We will now issue your Robes of the Novice. Wear them always and let it serve to remind you of your faith. When you have reached the title of Lesser Chaplain, return them to me. We shall then see if you require another.
+FriarTrainer.Interact.Text3:				{0} says, "Training makes for a strong, healthy fighter! Keep up the good work, {1}!"
+FriarTrainer.Interact.Text4:					{0} says, "We welcome you into our society as an equal! We are at your disposal. Here is the Quarterstaff of the Acolyte. It is our standard gift to all new members."
+FriarTrainer.Interact.Text5:					{0} says, "test text test text"
+FriarTrainer.ReceiveArmor.Text1:				{0} says, "We will now issue your Robes of the Novice, it will help you greatly in your quest. When you have reached the title of Chaplain, return it to me. We shall then see if you require another."
+FriarTrainer.ReceiveArmor.Text2:				{0} says, "So, you reached the title of Chaplain, here is the Chaplain's Robe, it will help you greatly in your quest. Come back to me when you have reached the title of Fanatic. We shall then see if you require another."
+FriarTrainer.ReceiveArmor.Text3:				{0} says, "So, you reached the title of Fanatic, here is the Fanatic's Robe, it will help you greatly in your quest. Come back to me when you have reached the title of Zealot. We shall then see if you require another."
+FriarTrainer.ReceiveArmor.Text4:				{0} says, "So, you have come a long way in your training and achieved the title of Zealot, here is the Zealot's Robe, it will help you greatly in your quest. You are now ready to fight for our Realm by following the teachings of the Church of Albion."
+
+# /HereticTrainer
+HereticTrainer.Interact.Text1:				{0} says, "Do you desire to join the [Temple of Arawn] and defend our realm as a Heretic?"
+HereticTrainer.Interact.Text2:				Would you like to do some training?
+HereticTrainer.Interact.Text3:				{0} says, "You are a quick study, {1}. But do not be too hasty. There is always more to learn!"
+HereticTrainer.Interact.Text4:					{0} says, "Welcome to the Temple of Arawn! You have much to learn, but I see greatness in your future! May your time in Albion be rewarding. Which weapon would you prefer to fight with: [crushing] or [flexible]?"
+HereticTrainer.ReceiveArmor.Text1:				{0} says, "We will now issue your Robe of the Novice, it will help you greatly in your quest. When you have reached the title of Apprentice, return it to me. We shall then see if you require another."
+HereticTrainer.ReceiveArmor.Text2:				{0} says, "So, you reached the title of Apprentice, here is the Robe of the Apprentice, it will help you greatly in your quest. Come back to me when you have reached the title of Initiate. We shall then see if you require another."
+HereticTrainer.ReceiveArmor.Text3:				{0} says, "So, you reached the title of Initiate, here is the Robe of the Initiate, it will help you greatly in your quest. Come back to me when you have reached the title of Proselyte. We shall then see if you require another."
+HereticTrainer.ReceiveArmor.Text4:				{0} says, "So, you have come a long way in your training and achieved the title of Proselyte, here is the Robe of the Proselyte, it will help you greatly in your quest. You are now ready to fight for our Realm by following the teachings of the Temple of Arawn."
+HereticTrainer.WhisperReceive.Text1:			Here is your weapon, the Mace of the Initiate.
+HereticTrainer.WhisperReceive.Text2:			Here is your weapon, the Whip of the Initiate.
+
+# /InfiltratorTrainer
+InfiltratorTrainer.Interact.Text1:				{0} says, "You have come far to find us! Is it your wish to join the [Guild of Shadows] and become our dagger of the night? An Infiltrator!"
+InfiltratorTrainer.Interact.Text2:				Would you like to do some training?
+InfiltratorTrainer.Interact.Text3:				{0} says, "Our way is a hard one, {1}. I can only train you in skills. You must gain knowledge and wisdom on your own."
+InfiltratorTrainer.Interact.Text4:					{0} says, "Welcome to our guild! You have much to learn, but I see greatness in your future! Which weapon would you prefer to fight with: [slashing] or [thrusting]?"
+InfiltratorTrainer.ReceiveArmor.Text1:				{0} says, "We will now issue your Vest of the Initiate, it will help you greatly in your quest. When you have reached the title of Lurker, return it to me. We shall then see if you require another."
+InfiltratorTrainer.ReceiveArmor.Text2:				{0} says, "So, you reached the title of Lurker, here is the Vest of the Lurker, it will help you greatly in your quest. Come back to me when you have reached the title of Blue Hand. We shall then see if you require another."
+InfiltratorTrainer.ReceiveArmor.Text3:				{0} says, "So, you reached the title of Blue Hand, here is the Blue Hand's Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Spy. We shall then see if you require another."
+InfiltratorTrainer.ReceiveArmor.Text4:				{0} says, "So, you have come a long way in your training and achieved the title of Spy, here is the Spy's Vest, it will help you greatly in your quest. You are now ready to fight for our Realm by following the teachings of the Guild of Shadows."
+InfiltratorTrainer.WhisperReceive.Text1:			Here is your weapon, the Sword of the Initiate.
+InfiltratorTrainer.WhisperReceive.Text2:			Here is your weapon, the Rapier of the Initiate.
+
+# /MercenaryTrainer
+MercenaryTrainer.Interact.Text1:				{0} says, "Do you wish to join the [Guild of Shadows] and seek your fortune as a Mercenary?"
+MercenaryTrainer.Interact.Text2:				Would you like to do some training?
+MercenaryTrainer.Interact.Text3:				{0} says, "Our way is a hard one, {1}. I can only train you in skills. You must gain knowledge and wisdom on your own."
+MercenaryTrainer.Interact.Text4:					{0} says, "Very well. Choose a weapon, and you shall become one of us. Which would you have, [slashing], [crushing], or [thrusting]?"
+MercenaryTrainer.ReceiveArmor.Text1:				{0} says, "We will now issue your Hauberk of the Neophyte, it will help you greatly in your quest. When you have reached the title of Pugilist, return it to me. We shall then see if you require another."
+MercenaryTrainer.ReceiveArmor.Text2:				{0} says, "So, you reached the title of Pugilist, here is the Vest of the Pugilist, it will help you greatly in your quest. Come back to me when you have reached the title of Escaladar. We shall then see if you require another."
+MercenaryTrainer.ReceiveArmor.Text3:				{0} says, "So, you reached the title of Escaladar, here is the Hauberk of the Escalader, it will help you greatly in your quest. Come back to me when you have reached the title of Swashbuckler. We shall then see if you require another."
+MercenaryTrainer.ReceiveArmor.Text4:				{0} says, "So, you have come a long way in your training and achieved the title of Swashbuckler, here is the Swashbuckler's Hauberk, it will help you greatly in your quest. You are now ready to fight for our Realm by following the teachings of the Guild of Shadows."
+MercenaryTrainer.WhisperReceive.Text1:			Here is your Sword of the Initiate. Welcome to the Guild of Shadows.
+MercenaryTrainer.WhisperReceive.Text2:			Here is your Mace of the Initiate. Welcome to the Guild of Shadows.
+MercenaryTrainer.WhisperReceive.Text3:			Here is your Rapier of the Initiate. Welcome to the Guild of Shadows.
+
+# /MinstrelTrainer
+MinstrelTrainer.Interact.Text1:				{0} says, "Do you desire to join [the Academy] and sing our songs throughout Albion as a Minstrel?"
+MinstrelTrainer.Interact.Text2:				Would you like to do some training?
+MinstrelTrainer.Interact.Text3:				{0} says, "You are a quick study, {1}. But do not be too hasty. There is always more to learn!"
+MinstrelTrainer.Interact.Text4:					{0} says, "Welcome! Stand proud and sing the tales of old so that all may know of our name! Here is your Lute of the Initiate. It is our standard gift to all new members."
+MinstrelTrainer.ReceiveArmor.Text1:				{0} says, "We will now issue your Vest of the Initiate, it will help you greatly in your quest. When you have reached the title of Sonneteer, return it to me. We shall then see if you require another."
+MinstrelTrainer.ReceiveArmor.Text2:				{0} says, "So, you reached the title of Sonneteer, here is the Vest of the Sonneteer, it will help you greatly in your quest. Come back to me when you have reached the title of Versesmith. We shall then see if you require another."
+MinstrelTrainer.ReceiveArmor.Text3:				{0} says, "So, you reached the title of Versesmith, here is the Vest of the Versesmith, it will help you greatly in your quest. Come back to me when you have reached the title of Lyricist. We shall then see if you require another."
+MinstrelTrainer.ReceiveArmor.Text4:				{0} says, "So, you have come a long way in your training and achieved the title of Lyricist, here is the Vest of the Lyricist, it will help you greatly in your quest. You are now ready to fight for our Realm by following the teachings of our Academy."
+
+# /NecromancerTrainer
+NecromancerTrainer.Interact.Text1:				{0} says, "Hail, young Disciple. Have you come seeking to imbue yourself with the power of Arawn? Do you wish to dedicate yourself to Lord of the Underworld and join the [Temple of Arawn] to serve as one of his necromancers?"
+NecromancerTrainer.Interact.Text2:				Would you like to do some training?
+NecromancerTrainer.Interact.Text3:				{0} says, "Our way is a hard one, {1}. I can only train you in skills. You must gain knowledge and wisdom on your own."
+NecromancerTrainer.Interact.Text4:					{0} says, "Lord Arawn has accepted you into his Temple. Here is his gift to you. Use it well, Disciple."
+NecromancerTrainer.ReceiveArmor.Text1:				{0} says, "We will now issue your Robe of the Apprentice, it will help you greatly in your quest. When you have reached the title of Servant of Arawn, return it to me. We shall then see if you require another."
+NecromancerTrainer.ReceiveArmor.Text2:				{0} says, "So, you reached the title of Servant of Arawn, here is the Servant's Robe, it will help you greatly in your quest. Come back to me when you have reached the title of Summoner. We shall then see if you require another."
+NecromancerTrainer.ReceiveArmor.Text3:				{0} says, "So, you reached the title of Summoner, here is the Robe of the Summoner, it will help you greatly in your quest. Come back to me when you have reached the title of Adept of Arawn. We shall then see if you require another."
+NecromancerTrainer.ReceiveArmor.Text4:				{0} says, "So, you have come a long way in your training and achieved the title of Adept of Arawn, here is the Adept's Robe, it will help you greatly in your quest. You are now ready to fight for our Realm by following the teachings of the Temple of Arawn."
+
+# /PaladinTrainer
+PaladinTrainer.Interact.Text1:				{0} says, "The church has called out to you young warrior! Will you hear its calling and join the [Church of Albion]? Thus, walking the path of a Paladin forever?"
+PaladinTrainer.Interact.Text2:				Would you like to do some training?
+PaladinTrainer.Interact.Text3:				{0} says, "Training makes for a strong, faithful fighter! Keep up the good work, {1}!"
+PaladinTrainer.Interact.Text4:					{0} says, "Very well then! Choose your weapon, and your initiation into the Church of Albion will be complete. You may wield [slashing], [crushing], [thrusting] or [two handed] weapon."
+PaladinTrainer.ReceiveArmor.Text1:				{0} says, "We will now issue your Hauberk of the Neophyte, it will help you greatly in your quest. Wear it always and let it serve to remind you of your faith. When you have reached the title of Tyro, return it to me. We shall then see if you require another."
+PaladinTrainer.ReceiveArmor.Text2:				{0} says, "So, you reached the title of Tyro, here is Tyro's Hauberk, it will help you greatly in your quest. Come back to me when you have reached the title of Protector. We shall then see if you require another."
+PaladinTrainer.ReceiveArmor.Text3:				{0} says, "So, you reached the title of Protector, here is the Protector's Hauberk, it will help you greatly in your quest. Come back to me when you have reached the title of Defender. We shall then see if you require another."
+PaladinTrainer.ReceiveArmor.Text4:				{0} says, "So, you have come a long way in your training and achieved the title of Defender, here is the Hauberk of the Defender, it will help you greatly in your quest. You are now ready to fight for our Realm by following the teachings of the Church of Albion."
+PaladinTrainer.WhisperReceive.Text1:			Here is your Sword of the Initiate. Welcome to the Church of Albion.
+PaladinTrainer.WhisperReceive.Text2:			Here is your Mace of the Initiate. Welcome to the Church of Albion.
+PaladinTrainer.WhisperReceive.Text3:			Here is your Rapier of the Initiate. Welcome to the Church of Albion.
+PaladinTrainer.WhisperReceive.Text4:			Here is your Great Sword of the Initiate. Welcome to the Church of Albion.
+
+# /ReaverTrainer
+ReaverTrainer.Interact.Text1:				{0} says, "You have come to seek admittance into the [Temple of Arawn] to worship the old god that your ancestors worshipped?"
+ReaverTrainer.Interact.Text2:				Would you like to do some training?
+ReaverTrainer.Interact.Text3:				{0} says, "Training makes for a strong, healthy fighter! Keep up the good work, {1}!"
+ReaverTrainer.Interact.Text4:					{0} says, "Very well then. Choose your weapon, and it shall be done. Know that once this choice is made, there is no return. You may choose a [slashing], [crushing], [thrusting] or [flexible] weapon."
+ReaverTrainer.ReceiveArmor.Text1:				{0} says, "We will now issue your Hauberk of the Neophyte, it will help you greatly in your quest. When you have reached the title of Strongarm of Arawn, return it to me. We shall then see if you require another."
+ReaverTrainer.ReceiveArmor.Text2:				{0} says, "So, you reached the title of Strongarm of Arawn, here is the Vest of the Strongarm, it will help you greatly in your quest. Come back to me when you have reached the title of Protector of Arawn. We shall then see if you require another."
+ReaverTrainer.ReceiveArmor.Text3:				{0} says, "So, you reached the title of Protector of Arawn, here is the Protector's Hauberk, it will help you greatly in your quest. Come back to me when you have reached the title of Soul Protector. We shall then see if you require another."
+ReaverTrainer.ReceiveArmor.Text4:				{0} says, "So, you have come a long way in your training and achieved the title of Soul Protector, here is the Soul Protector's Hauberk, it will help you greatly in your quest. You are now ready to fight for our Realm by following the teachings of the Temple of Arawn."
+ReaverTrainer.WhisperReceive.Text1:			Here is your Sword of the Initiate. Welcome to the Temple of Arawn, Calaoron.
+ReaverTrainer.WhisperReceive.Text2:			Here is your Mace of the Initiate. Welcome to the Temple of Arawn, Calaoron.
+ReaverTrainer.WhisperReceive.Text3:			Here is your Rapier of the Initiate. Welcome to the Temple of Arawn, Calaoron.
+ReaverTrainer.WhisperReceive.Text4:			Here is your Whip of the Initiate. Welcome to the Temple of Arawn, Calaoron.
+
+# /ScoutTrainer
+ScoutTrainer.Interact.Text1:				{0} says, "Do you desire to join the [Defenders of Albion] and defend our realm as a Scout?"
+ScoutTrainer.Interact.Text2:				Would you like to do some training?
+ScoutTrainer.Interact.Text3:				{0} says, "Training makes for a strong, healthy fighter! Keep up the good work, {1}!"
+ScoutTrainer.Interact.Text4:					{0} says, "Welcome young warrior! May your time in Albion's army be rewarding! Here is your Huntsman's Longbow. The bow is your guild weapon! Be sure to carry it with you always."
+ScoutTrainer.ReceiveArmor.Text1:				{0} says, "We will now issue your Vest of the Initiate it will help you greatly in your quest. When you have reached the title of Bowman, return it to me. We shall then see if you require another."
+ScoutTrainer.ReceiveArmor.Text2:				{0} says, "So, you reached the title of Bowman, here is the Bowman's Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Tracker. We shall then see if you require another."
+ScoutTrainer.ReceiveArmor.Text3:				{0} says, "So, you reached the title of Tracker, here is the Tracker's Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Watcher. We shall then see if you require another."
+ScoutTrainer.ReceiveArmor.Text4:				{0} says, "So, you have come a long way in your training and achieved the title of Watcher, here is the Watcher's Vest, it will help you greatly in your quest. You are now ready to fight for our Realm by following the teachings of the Church of Albion."
+
+# /SorcererTrainer
+SorcererTrainer.Interact.Text1:				{0} says, "Is it your wish to join [the Academy] and lend us your power as a Sorcerer?"
+SorcererTrainer.Interact.Text2:				Would you like to do some training?
+SorcererTrainer.Interact.Text3:				{0} says, "You are a quick study, {1}. But do not be too hasty. There is always more to learn!"
+SorcererTrainer.Interact.Text4:					{0} says, "You are now part of our shadow! You shall forever have a place among us! Here too is your guild weapon, a Staff of Focus!"
+SorcererTrainer.ReceiveArmor.Text1:				{0} says, "We will now issue your Robe of the Apprentice, it will help you greatly in your quest. When you have reached the title of Journeyman, return it to me. We shall then see if you require another."
+SorcererTrainer.ReceiveArmor.Text2:				{0} says, "So, you reached the title of Journeyman, here is the Journeyman's Robe, it will help you greatly in your quest. Come back to me when you have reached the title of Befuddler. We shall then see if you require another."
+SorcererTrainer.ReceiveArmor.Text3:				{0} says, "So, you reached the title of Befuddler, here is the Befuddler's Robe, it will help you greatly in your quest. Come back to me when you have reached the title of Charmer. We shall then see if you require another."
+SorcererTrainer.ReceiveArmor.Text4:				{0} says, "So, you have come a long way in your training and achieved the title of Charmer, here is the Charmer's Robe, it will help you greatly in your quest. You are now ready to fight for our Realm by following the teachings of our Academy."
+
+# /TheurgistTrainer
+TheurgistTrainer.Interact.Text1:				{0} says, "Do you desire to join the [Defenders of Albion] and feel the magic of creation as a Theurgist?"
+TheurgistTrainer.Interact.Text2:				Would you like to do some training?
+TheurgistTrainer.Interact.Text3:				{0} says, "You are a quick study, {1}. But do not be too hasty. There is always more to learn!"
+TheurgistTrainer.Interact.Text4:					{0} says, "I know you shall do your best to guard the realm from those that would harm it! To help you with this task, here is a gift from the Defenders! Use it well!"
+TheurgistTrainer.ReceiveArmor.Text1:				{0} says, "We will now issue your Robe of the Apprentice, it will help you greatly in your quest. When you have reached the title of Journeyman, return it to me. We shall then see if you require another."
+TheurgistTrainer.ReceiveArmor.Text2:				{0} says, "So, you reached the title of Journeyman, here is the Journeyman's Robe, it will help you greatly in your quest. Come back to me when you have reached the title of Summoner. We shall then see if you require another."
+TheurgistTrainer.ReceiveArmor.Text3:				{0} says, "So, you reached the title of Summoner, here is the Robe of the Summoner, it will help you greatly in your quest. Come back to me when you have reached the title of Sapper. We shall then see if you require another."
+TheurgistTrainer.ReceiveArmor.Text4:				{0} says, "So, you have come a long way in your training and achieved the title of Sapper, here is the Sapper's Robe, it will help you greatly in your quest. You are now ready to fight for our Realm by following the teachings of our Academy."
+
+# /WizardTrainer
+WizardTrainer.Interact.Text1:				{0} says, "Do you desire to join [the Academy] and summon the power of the elements as a Wizard?"
+WizardTrainer.Interact.Text2:				Would you like to do some training?
+WizardTrainer.Interact.Text3:				{0} says, "You are a quick study, {1}. But do not be too hasty. There is always more to learn!"
+WizardTrainer.Interact.Text4:					{0} says, "Welcome to our guild! You have much to learn, but I see greatness in your future! Here too is your guild weapon, a Staff of Focus!"
+WizardTrainer.ReceiveArmor.Text1:				{0} says, "We will now issue your Robe of the Apprentice, it will help you greatly in your quest. When you have reached the title of Adept, return it to me. We shall then see if you require another."
+WizardTrainer.ReceiveArmor.Text2:				{0} says, "So, you reached the title of Adept, here is the Adept's Robe, it will help you greatly in your quest. Come back to me when you have reached the title of Elementalist. We shall then see if you require another."
+WizardTrainer.ReceiveArmor.Text3:				{0} says, "So, you reached the title of Elementalist, here is the Elementalist's Robe, it will help you greatly in your quest. Come back to me when you have reached the title of Spellbinder. We shall then see if you require another."
+WizardTrainer.ReceiveArmor.Text4:				{0} says, "So, you have come a long way in your training and achieved the title of Spellbinder, here is the Spellbinder's Robe, it will help you greatly in your quest. You are now ready to fight for our Realm by following the teachings of our Academy."
 
 
 ## Midgard
+# /MaulerMidTrainer
+MaulerMidTrainer.Interact.Text1:				{0} says, "Do you desire to join the [Temple of the Iron Fist] and fight for the glorious realm of Midgard?"
+MaulerMidTrainer.Interact.Text2:				Would you like to do some training?
+MaulerMidTrainer.Interact.Text3:				{0} says, "You are a quick study, {1}. But do not be too hasty. There is always more to learn!"
+MaulerMidTrainer.Interact.Text4:					{0} says, "Welcome young Mauler. May your time in Midgard be rewarding. Would you prefer to fight with a [staff] or with [fists]?"
+MaulerMidTrainer.ReceiveArmor.Text1:				{0} says, "We will now issue your Vest of the Initiate, it will help you greatly in your quest. When you have reached the title of Stone Palm, return it to me. We shall then see if you require another."
+MaulerMidTrainer.ReceiveArmor.Text2:				{0} says, "So, you reached the title of Stone Palm, here is the Stoneskin Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Five Paws. We shall then see if you require another."
+MaulerMidTrainer.ReceiveArmor.Text3:				{0} says, "So, you reached the title of Five Paws, here is the Vest of the Five Paws, it will help you greatly in your quest. Come back to me when you have reached the title of Pugilist. We shall then see if you require another."
+MaulerMidTrainer.ReceiveArmor.Text4:				{0} says, "So, you have come a long way in your training and achieved the title of Pugilist, here is the Vest of the Pugilist, it will help you greatly in your quest. You are now ready to fight for our Realm by following our teachings."
+MaulerMidTrainer.WhisperReceive.Text1:			Here is your Staff of the Initiate, gift of Laresh. Welcome to the Defenders of Midgard!
+MaulerMidTrainer.WhisperReceive.Text2:			Here is your Fists of the Initiate, gift of Laresh. Welcome to the Defenders of Midgard!
+
+# /BerserkerTrainer
+BerserkerTrainer.Interact.Text1:				{0} says, "Do you desire to join the [House of Modi] and defend our realm as a Berserker?"
+BerserkerTrainer.Interact.Text2:				Would you like to do some training?
+BerserkerTrainer.Interact.Text3:				{0} says, "Training makes for a strong, healthy fighter! Keep up the good work, {1}!"
+BerserkerTrainer.Interact.Text4:					{0} says, "Welcome young Berserker! May your time in Midgard army be rewarding! Which weapon would you like to choose, [sword], [hammer], [axe] or [left axe]?"
+BerserkerTrainer.ReceiveArmor.Text1:				{0} says, "We will now issue your Vest of the Huntsman, gift of Modi. It will help you greatly in your quest. When you have reached the title of Seeker, return it to me. We shall then see if you require another."
+BerserkerTrainer.ReceiveArmor.Text2:				{0} says, "So, you reached the title of Seeker, here is the Seeker's Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Fervent. We shall then see if you require another."
+BerserkerTrainer.ReceiveArmor.Text3:				{0} says, "So, you reached the title of Fervent, here is the Fervent's Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Pillager. We shall then see if you require another."
+BerserkerTrainer.ReceiveArmor.Text4:				{0} says, "So, you have come a long way in your training and achieved the title of Pillager, here is the Pillager's Vest, it will help you greatly in your quest. You are now ready to fight for our Realm by following our teachings."
+BerserkerTrainer.WhisperReceive.Text1:			Here is your Sword of the Initiate. Welcome to the Defenders of Midgard!
+BerserkerTrainer.WhisperReceive.Text2:			Here is your Hammer of the Initiate. Welcome to the Defenders of Midgard!
+BerserkerTrainer.WhisperReceive.Text3:			Here is your Axe of the Initiate. Welcome to the Defenders of Midgard!
+BerserkerTrainer.WhisperReceive.Text4:			Here is your Left Axe of the Initiate. Welcome to the Defenders of Midgard!
+
 # /BonedancerTrainer
-BonedancerTrainer.Interact.Text1:			{0} says, "Do you desire to join the [House of Bodgar] and defend our realm as a Bonedancer?"
-BonedancerTrainer.Interact.Text2:			Would you like to do some training?
-BonedancerTrainer.Interact.Text3:		
-BonedancerTrainer.Interact.Text4:		
-BonedancerTrainer.ReceiveItem.Text1:		
-BonedancerTrainer.WhisperReceive.Text1:			Welcome young Bonedancer! May your time in Midgard army be rewarding!
+BonedancerTrainer.Interact.Text1:				{0} says, "Do you desire to join the [House of Bodgar] and defend our realm as a Bonedancer?"
+BonedancerTrainer.Interact.Text2:				Would you like to do some training?
+BonedancerTrainer.Interact.Text3:				{0} says, "You are a quick study, {1}. But do not be too hasty. There is always more to learn!"
+BonedancerTrainer.Interact.Text4:					{0} says, "Welcome young Bonedancer! May your time in Midgard army be rewarding! Take this Staff of Focus. Consider it a welcoming gesture."
+BonedancerTrainer.ReceiveArmor.Text1:				{0} says, "We will now issue your Vest of the Eleve, gift of Bodgar. It will help you greatly in your quest. When you have reached the title of Bonegatherer, return it to me. We shall then see if you require another."
+BonedancerTrainer.ReceiveArmor.Text2:				{0} says, "So, you reached the title of Bonegatherer, here is the Bonegatherer's Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Tribal Mystic. We shall then see if you require another."
+BonedancerTrainer.ReceiveArmor.Text3:				{0} says, "So, you reached the title of Tribal Mystic, here is the Tribal's Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Apprentice of Bodgar. We shall then see if you require another."
+BonedancerTrainer.ReceiveArmor.Text4:				{0} says, "So, you have come a long way in your training and achieved the title of Apprentice of Bodgar, here is the Apprentice's Vest, it will help you greatly in your quest. You are now ready to fight for our Realm by following our teachings."
+
+# /HealerTrainer
+HealerTrainer.Interact.Text1:				{0} says, "Do you desire to join the [House of Eir] and defend our realm as a Healer?"
+HealerTrainer.Interact.Text2:				Would you like to do some training?
+HealerTrainer.Interact.Text3:				{0} says, "Well met then, {1}. I shall impart all that I know, young Healer."
+HealerTrainer.Interact.Text4:					{0} says, "Welcome young Healer! May your time in Midgard army be rewarding! Take this weapon. Consider it a welcoming gesture."
+HealerTrainer.ReceiveArmor.Text1:				{0} says, "We will now issue your Vest of the Seer, gift of Eir. It will help you greatly in your quest. When you have reached the title of Practitioner, return it to me. We shall then see if you require another."
+HealerTrainer.ReceiveArmor.Text2:				{0} says, "So, you reached the title of Practitioner, here is the Practitioner's Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Journeyman Healer. We shall then see if you require another."
+HealerTrainer.ReceiveArmor.Text3:				{0} says, "So, you reached the title of Journeyman Healer, here is the Journeyman's Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Wiseman. We shall then see if you require another."
+HealerTrainer.ReceiveArmor.Text4:				{0} says, "So, you have come a long way in your training and achieved the title of Wiseman, here is the Vest of the Wise, it will help you greatly in your quest. You are now ready to fight for our Realm by following our teachings."
+
+# /HunterTrainer
+HunterTrainer.Interact.Text1:				{0} says, "Do you desire to join the [House of Skadi] and defend our realm as a Hunter?"
+HunterTrainer.Interact.Text2:				Would you like to do some training?
+HunterTrainer.Interact.Text3:				{0} says, "Do you wish to learn some more, {1}? Step up and receive your training!!"
+HunterTrainer.Interact.Text4:					{0} says, "Welcome young Hunter! May your time in Midgard army be rewarding! Take this bow. Consider it a welcoming gesture."
+HunterTrainer.ReceiveArmor.Text1:				{0} says, "We will now issue your Vest of the Huntsman, gift of Skadi. It will help you greatly in your quest. When you have reached the title of Shadowed Seeker, return it to me. We shall then see if you require another."
+HunterTrainer.ReceiveArmor.Text2:				{0} says, "So, you reached the title of Shadowed Seeker, here is the Vest of the Shadowed Seeker, it will help you greatly in your quest. Come back to me when you have reached the title of Journeyman. We shall then see if you require another."
+HunterTrainer.ReceiveArmor.Text3:				{0} says, "So, you reached the title of Journeyman, here is the Journeyman's Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Prey Stalker. We shall then see if you require another."
+HunterTrainer.ReceiveArmor.Text4:				{0} says, "So, you have come a long way in your training and achieved the title of Prey Stalker, here is the Vest of the Prey Stalker, it will help you greatly in your quest. You are now ready to fight for our Realm by following our teachings."
+
+# /RunemasterTrainer
+RunemasterTrainer.Interact.Text1:				{0} says, "Do you desire to join the [House of Odin] and defend our realm as a Runemaster?"
+RunemasterTrainer.Interact.Text2:				Would you like to do some training?
+RunemasterTrainer.Interact.Text3:				{0} says, "You are a quick study, {1}. But do not be too hasty. There is always more to learn!"
+RunemasterTrainer.Interact.Text4:					{0} says, "Welcome young Runemaster! May your time in Midgard army be rewarding! Take this Staff of Focus. Consider it a welcoming gesture."
+RunemasterTrainer.ReceiveArmor.Text1:				{0} says, "We will now issue your Vest of the Eleve, gift of Odin. It will help you greatly in your quest. When you have reached the title of Runic Practitioner, return it to me. We shall then see if you require another."
+RunemasterTrainer.ReceiveArmor.Text2:				{0} says, "So, you reached the title of Runic Practitioner, here is the Runic Practitioner's Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Runecarver. We shall then see if you require another."
+RunemasterTrainer.ReceiveArmor.Text3:				{0} says, "So, you reached the title of Runecarver, here is the Runecarver's Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Stoneteller. We shall then see if you require another."
+RunemasterTrainer.ReceiveArmor.Text4:				{0} says, "So, you have come a long way in your training and achieved the title of Stoneteller, here is the Stoneteller's Vest, it will help you greatly in your quest. You are now ready to fight for our Realm by following our teachings."
+
+# /SavageTrainer
+SavageTrainer.Interact.Text1:				{0} says, "Do you desire to join the [House of Kelgor] and defend our realm as a Savage?"
+SavageTrainer.Interact.Text2:				Would you like to do some training?
+SavageTrainer.Interact.Text3:				{0} says, "Training makes for a strong, healthy fighter! Keep up the good work, {1}!"
+SavageTrainer.Interact.Text4:					{0} says, "Welcome young Savage! May your time in Midgard army be rewarding! Which weapon would you like to choose, [sword], [hammer], [axe] or [hand to hand]?"
+SavageTrainer.ReceiveArmor.Text1:				{0} says, "We will now issue your Vest of the Huntsman, gift of Kelgor. It will help you greatly in your quest. When you have reached the title of Apprentice of Kelgor, return it to me. We shall then see if you require another."
+SavageTrainer.ReceiveArmor.Text2:				{0} says, "So, you reached the title of Apprentice of Kelgor, here is the Apprentice's Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Servant of Kelgor. We shall then see if you require another."
+SavageTrainer.ReceiveArmor.Text3:				{0} says, "So, you reached the title of Servant of Kelgor, here is the Servant's Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Tribal Defender. We shall then see if you require another."
+SavageTrainer.ReceiveArmor.Text4:				{0} says, "So, you have come a long way in your training and achieved the title of Tribal Defender, here is the Tribal's Vest, it will help you greatly in your quest. You are now ready to fight for our Realm by following our teachings."
+SavageTrainer.WhisperReceive.Text1:			Here is your Sword of the Initiate. Welcome to the Defenders of Midgard!
+SavageTrainer.WhisperReceive.Text2:			Here is your Hammer of the Initiate. Welcome to the Defenders of Midgard!
+SavageTrainer.WhisperReceive.Text3:			Here is your Axe of the Initiate. Welcome to the Defenders of Midgard!
+SavageTrainer.WhisperReceive.Text4:			Here is your Claw of the Initiate. Welcome to the Defenders of Midgard!
+
+# /ShadowbladeTrainer
+ShadowbladeTrainer.Interact.Text1:				{0} says, "Do you desire to join the [House of Loki] and defend our realm as a Shadowblade?"
+ShadowbladeTrainer.Interact.Text2:				Would you like to do some training?
+ShadowbladeTrainer.Interact.Text3:				{0} says, "Do you wish to learn some more, {1}? Step up and receive your training!!"
+ShadowbladeTrainer.Interact.Text4:					{0} says, "Welcome young Shadowblade! May your time in Midgard army be rewarding! Take this weapon. Consider it a welcoming gesture."
+ShadowbladeTrainer.ReceiveArmor.Text1:				{0} says, "We will now issue your Vest of the Huntsman, gift of Loki. It will help you greatly in your quest. When you have reached the title of Dark Seeker, return it to me. We shall then see if you require another."
+ShadowbladeTrainer.ReceiveArmor.Text2:				{0} says, "So, you reached the title of Dark Seeker, here is the Dark Seeker's Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Deceiver. We shall then see if you require another."
+ShadowbladeTrainer.ReceiveArmor.Text3:				{0} says, "So, you reached the title of Deceiver, here is the Deceiver's Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Shadow Lurker. We shall then see if you require another."
+ShadowbladeTrainer.ReceiveArmor.Text4:				{0} says, "So, you have come a long way in your training and achieved the title of Shadow Lurker, here is the Shadow Lurker's Vest, it will help you greatly in your quest. You are now ready to fight for our Realm by following our teachings."
+
+# /ShamanTrainer
+ShamanTrainer.Interact.Text1:				{0} says, "Do you desire to join the [House of Ymir] and defend our realm as a Shaman?"
+ShamanTrainer.Interact.Text2:				Would you like to do some training?
+ShamanTrainer.Interact.Text3:				{0} says, "Well met then, {1}. I shall impart all that I know, young Shaman."
+ShamanTrainer.Interact.Text4:					{0} says, "Welcome young Shaman! May your time in Midgard army be rewarding! Take this weapon. Consider it a welcoming gesture."
+ShamanTrainer.ReceiveArmor.Text1:				{0} says, "We will now issue your Vest of the Seer, gift of Ymir. It will help you greatly in your quest. When you have reached the title of Practitioner, return it to me. We shall then see if you require another."
+ShamanTrainer.ReceiveArmor.Text2:				{0} says, "So, you reached the title of Practitioner, here is the Practitioner's Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Journeyman. We shall then see if you require another."
+ShamanTrainer.ReceiveArmor.Text3:				{0} says, "So, you reached the title of Journeyman, here is the Journeyman's Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Medicine Man. We shall then see if you require another."
+ShamanTrainer.ReceiveArmor.Text4:				{0} says, "So, you have come a long way in your training and achieved the title of Medicine Man, here is the Medicine's Vest, it will help you greatly in your quest. You are now ready to fight for our Realm by following our teachings."
+
+# /SkaldTrainer
+SkaldTrainer.Interact.Text1:				{0} says, "Do you desire to join the [House of Bragi] and defend our realm as a Skald?"
+SkaldTrainer.Interact.Text2:				Would you like to do some training?
+SkaldTrainer.Interact.Text3:				{0} says, "Training makes for a strong, healthy fighter! Keep up the good work, {1}!"
+SkaldTrainer.Interact.Text4:					{0} says, "Welcome young Skald! May your time in Midgard army be rewarding! Which weapon would you like to choose, [sword], [hammer] or [axe]?"
+SkaldTrainer.ReceiveArmor.Text1:				{0} says, "We will now issue your Vest of the Huntsman, gift of Bragi. It will help you greatly in your quest. When you have reached the title of Chanter, return it to me. We shall then see if you require another."
+SkaldTrainer.ReceiveArmor.Text2:				{0} says, "So, you reached the title of Chanter, here is the Chanter's Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Battle Chanter. We shall then see if you require another."
+SkaldTrainer.ReceiveArmor.Text3:				{0} says, "So, you reached the title of Battle Chanter, here is the Song Weaver's Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Song Weaver. We shall then see if you require another."
+SkaldTrainer.ReceiveArmor.Text4:				{0} says, "So, you have come a long way in your training and achieved the title of Song Weaver, here is the Saga Spinner's Vest, it will help you greatly in your quest. You are now ready to fight for our Realm by following our teachings."
+SkaldTrainer.WhisperReceive.Text1:			Here is your Sword of the Initiate. Welcome to the Defenders of Midgard!
+SkaldTrainer.WhisperReceive.Text2:			Here is your Hammer of the Initiate. Welcome to the Defenders of Midgard!
+SkaldTrainer.WhisperReceive.Text3:			Here is your Axe of the Initiate. Welcome to the Defenders of Midgard!
 
 # /Spiritmaster
-SpiritmasterTrainer.Interact.Text1:			{0} says, "Do you desire to join the [House of Hel] and defend our realm as a Spiritmaster?"	
-SpiritmasterTrainer.Interact.Text2:			Would you like to do some training?	
-SpiritmasterTrainer.Interact.Text3:				
-SpiritmasterTrainer.Interact.Text4:				
-SpiritmasterTrainer.ReceiveItem.Text1:			
-SpiritmasterTrainer.WhisperReceive.Text1:		Welcome young Spiritmaster! May your time in Midgard army be rewarding!	
+Spiritmaster.Interact.Text1:				{0} says, "Do you desire to join the [House of Hel] and defend our realm as a Spiritmaster?"
+Spiritmaster.Interact.Text2:				Would you like to do some training?
+Spiritmaster.Interact.Text3:				{0} says, "You are a quick study, {1}. But do not be too hasty. There is always more to learn!"
+Spiritmaster.Interact.Text4:					{0} says, "Welcome young Spiritmaster! May your time in Midgard army be rewarding! Take this Staff of Focus. Consider it a welcoming gesture."
+Spiritmaster.ReceiveArmor.Text1:				{0} says, "We will now issue your Vest of the Eleve, gift of Hel. It will help you greatly in your quest. When you have reached the title of Practitioner, return it to me. We shall then see if you require another."
+Spiritmaster.ReceiveArmor.Text2:				{0} says, "So, you reached the title of Practitioner, here is the Practitioner's Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Journeyman. We shall then see if you require another."
+Spiritmaster.ReceiveArmor.Text3:				{0} says, "So, you reached the title of Journeyman, here is the Journeyman's Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Summoner. We shall then see if you require another."
+Spiritmaster.ReceiveArmor.Text4:				{0} says, "So, you have come a long way in your training and achieved the title of Summoner, here is the Summoner's Vest, it will help you greatly in your quest. You are now ready to fight for our Realm by following our teachings."
 
-# /Valkyrie
+# /ThaneTrainer
+ThaneTrainer.Interact.Text1:				{0} says, "Do you desire to join the [House of Thor] and defend our realm as a Thane?"
+ThaneTrainer.Interact.Text2:				Would you like to do some training?
+ThaneTrainer.Interact.Text3:				{0} says, "Training makes for a strong, healthy fighter! Keep up the good work, {1}!"
+ThaneTrainer.Interact.Text4:					{0} says, "Welcome young Thane! May your time in Midgard army be rewarding! Would you prefer to fight with a [sword], [hammer] or an [axe]?"
+ThaneTrainer.ReceiveArmor.Text1:				{0} says, "We will now issue your Hauberk of the Neophyte, gift of Thor. It will help you greatly in your quest. When you have reached the title of Stormhammer, return it to me. We shall then see if you require another."
+ThaneTrainer.ReceiveArmor.Text2:				{0} says, "So, you reached the title of Stormhammer, here is the Stormhammer's Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Storm Caller. We shall then see if you require another."
+ThaneTrainer.ReceiveArmor.Text3:				{0} says, "So, you reached the title of Storm Caller, here is the Storm Caller's Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Fervent. We shall then see if you require another."
+ThaneTrainer.ReceiveArmor.Text4:				{0} says, "So, you have come a long way in your training and achieved the title of Fervent, here is the Thor Hammer's Vest, it will help you greatly in your quest. You are now ready to fight for our Realm by following our teachings."
+ThaneTrainer.WhisperReceive.Text1:			Here is your Sword of the Initiate. Welcome to the Defenders of Midgard!
+ThaneTrainer.WhisperReceive.Text2:			Here is your Hammer of the Initiate. Welcome to the Defenders of Midgard!
+ThaneTrainer.WhisperReceive.Text3:			Here is your Axe of the Initiate. Welcome to the Defenders of Midgard!
+
+# /ValkyrieTrainer
 ValkyrieTrainer.Interact.Text1:				{0} says, "Do you desire to join the [House of Odin] and defend our realm as a Valkyrie?"
 ValkyrieTrainer.Interact.Text2:				Would you like to do some training?
-ValkyrieTrainer.Interact.Text3:				
-ValkyrieTrainer.Interact.Text4:				
-ValkyrieTrainer.ReceiveItem.Text1:			
-ValkyrieTrainer.WhisperReceive.Text1:			Welcome young Valkyrie! May your time in Midgard army be rewarding! Would you prefer to fight with a [sword] or with a [spear]?
-ValkyrieTrainer.WhisperReceive.Text2:			You get a gift by Odin.
+ValkyrieTrainer.Interact.Text3:				{0} says, "Training makes for a strong, healthy fighter! Keep up the good work, {1}!"
+ValkyrieTrainer.Interact.Text4:					{0} says, "Welcome young Valkyrie! May your time in Midgard army be rewarding! Would you prefer to fight with a [sword] or with a [spear]?"
+ValkyrieTrainer.ReceiveArmor.Text1:				{0} says, "You get the Hauberk of the Neophyte, a gift by Odin, it will help you greatly in your quest. When you have reached the title of Handmaiden, return it to me. We shall then see if you require another."
+ValkyrieTrainer.ReceiveArmor.Text2:				{0} says, "So, you reached the title of Handmaiden, here is the Handmaiden's Hauberk, it will help you greatly in your quest. Come back to me when you have reached the title of Servant of Midgard. We shall then see if you require another."
+ValkyrieTrainer.ReceiveArmor.Text3:				{0} says, "So, you reached the title of Servant of Midgard, here is the Servant's Hauberk, it will help you greatly in your quest. Come back to me when you have reached the title of Protector of Midgard. We shall then see if you require another."
+ValkyrieTrainer.ReceiveArmor.Text4:				{0} says, "So, you have come a long way in your training and achieved the title of Protector of Midgard, here is the Protector's Hauberk, it will help you greatly in your quest. You are now ready to fight for our Realm by following our teachings."
+ValkyrieTrainer.WhisperReceive.Text1:			Here is your Sword of the Initiate. Welcome to the Defenders of Midgard!
+ValkyrieTrainer.WhisperReceive.Text2:			Here is your Spear of the Initiate. Welcome to the Defenders of Midgard!
+
+# /WarlockTrainer
+WarlockTrainer.Interact.Text1:				{0} says, "Do you desire to join the [House of Hel] and defend our realm as a Warlock?"
+WarlockTrainer.Interact.Text2:				Would you like to do some training?
+WarlockTrainer.Interact.Text3:				{0} says, "You are a quick study, {1}. But do not be too hasty. There is always more to learn!"
+WarlockTrainer.Interact.Text4:					{0} says, "Welcome young Warlock! May your time in Midgard army be rewarding! Take this Staff of Focus. Consider it a welcoming gesture."
+WarlockTrainer.ReceiveArmor.Text1:				{0} says, "We will now issue your Vest of the Eleve, gift of Hel. It will help you greatly in your quest. When you have reached the title of Conjurer, return it to me. We shall then see if you require another."
+WarlockTrainer.ReceiveArmor.Text2:				{0} says, "So, you reached the title of Conjurer, here is the Conjurer's Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Initiate of Hel. We shall then see if you require another."
+WarlockTrainer.ReceiveArmor.Text3:				{0} says, "So, you reached the title of Initiate of Hel, here you get Hel's Initiate Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Conjurer of Midgard. We shall then see if you require another."
+WarlockTrainer.ReceiveArmor.Text4:				{0} says, "So, you have come a long way in your training and achieved the title of Conjurer of Midgard, here you get Hel's Spiritist's Vest, it will help you greatly in your quest. You are now ready to fight for our Realm by following our teachings."
+
+# /WarriorTrainer
+WarriorTrainer.Interact.Text1:				{0} says, "Do you desire to join the [House of Tyr] and defend our realm as a Warrior?"
+WarriorTrainer.Interact.Text2:				Would you like to do some training?
+WarriorTrainer.Interact.Text3:				{0} says, "Training makes for a strong, healthy Warrior! Keep up the good work, {1}!"
+WarriorTrainer.Interact.Text4:					{0} says, "Welcome young Warrior! May your time in Midgard army be rewarding! Would you prefer to fight with a [sword], [hammer] or an [axe]?"
+WarriorTrainer.ReceiveArmor.Text1:				{0} says, "We will now issue your Hauberk of the Neophyte, gift of Tyr. It will help you greatly in your quest. When you have reached the title of Yeoman Fighter, return it to me. We shall then see if you require another."
+WarriorTrainer.ReceiveArmor.Text2:				{0} says, "So, you reached the title of Yeoman Fighter, here is the Yeoman's Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Footman. We shall then see if you require another."
+WarriorTrainer.ReceiveArmor.Text3:				{0} says, "So, you reached the title of Footman, here is the Footman's Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Veteran. We shall then see if you require another."
+WarriorTrainer.ReceiveArmor.Text4:				{0} says, "So, you have come a long way in your training and achieved the title of Veteran, here is the Veteran's Vest, it will help you greatly in your quest. You are now ready to fight for our Realm by following our teachings."
+WarriorTrainer.WhisperReceive.Text1:			Here is your Sword of the Initiate. Welcome to the Defenders of Midgard!
+WarriorTrainer.WhisperReceive.Text2:			Here is your Hammer of the Initiate. Welcome to the Defenders of Midgard!
+WarriorTrainer.WhisperReceive.Text3:			Here is your Axe of the Initiate. Welcome to the Defenders of Midgard!
 
 
 ## Baseclasses
@@ -95,7 +551,7 @@ MagicianTrainer.Bainshee.Explain:		{0} says, "The Bainshee class is a cloth wear
 MagicianTrainer.Bainshee.Refuse:		{0} says, "The path of the Bainshee is not available to your race. Please choose another."
 
 # /GuardianTrainer
-GuardianTrainer.Interact.Text1:			{0} says, "You must now seek your training elsewhere. Which path would you like to follow? [Hero], [Champion] or [Blademaster]?"
+GuardianTrainer.Interact.Text1:			{0} says, "You must now seek your training elsewhere. Which path would you like to follow? [Hero], [Champion], [Blademaster] or [Mauler]?"
 GuardianTrainer.Interact.Text2:			{0} says, "Do you require a [practice weapon]?"
 GuardianTrainer.Interact.Text3:			{0} says, "Do you require a [training shield]?"
 GuardianTrainer.Hero.Explain:			{0} says, "Heroes are the basic fighting class of the Hibernian realm. They have the ability to train in all of the weapons available in the realm. They also have access to every type of Hibernian armor. Heroes can tap into the beast within themselves and morph into a large, intimidating stag, which gives a short burst of health."
@@ -104,3 +560,138 @@ GuardianTrainer.Champion.Explain:		{0} says, "Champions are a fusion between a C
 GuardianTrainer.Champion.Refuse:		{0} says, "The path of the Champion is not available to your race. Please choose another."
 GuardianTrainer.Blademaster.Explain:	{0} says, "Followers of the Path of Harmony, Blademasters are the light, fast fighters of Hibernia. They have sacrificed heavier armors for the ability to wield two weapons at once. Despite the name, they are able to master more than just swords, and their dual-wielding strength lies in their training in Celtic Dual. While their true strength lies in charging the enemy and taking their foes down quickly, Blademasters can also function as guardians of their realm mates, with the ability to train in Shields, and the skills of Intercept, Guard and Protect."
 GuardianTrainer.Blademaster.Refuse:		{0} says, "The path of the Blademaster is not available to your race. Please choose another."
+
+# /ForesterTrainer
+ForesterTrainer.Interact.Text1:			{0} dit, "You must now seek your training elsewhere. Which path would you like to follow? [Animist] or [Valewalker]?"
+ForesterTrainer.Interact.Text2:			{0} dit, "Do you require a [practice staff]?"
+ForesterTrainer.Animist.Explain:		{0} dit, "Animists are a Hibernian primary spellcasting class that has an affinity with plants. They are able to animate plant life and other natural phenomena (phosphorescence, etc.) and use it to craft spells that damage their opponents."
+ForesterTrainer.Animist.Refuse:		{0} dit, "The path of the Animist is not available to your race. Please choose another."
+ForesterTrainer.Valewalker.Explain:		{0} dit, "Valewalkers are cloth-wearing Hibernian mages who are given the ability to wield a large Scythe as a weapon. They are the strong arm of the Sylvan community - they are the primary fighters of this natural magic-using people. Valewalkers wear mage-like cloth robes, which they can augment by casting armor-absorption and armor factor self-buffing spells. They also can evade and parry attacks."
+ForesterTrainer.Valewalker.Refuse:		{0} dit, "The path of the Animist is not available to your race. Please choose another."
+
+# /NaturalistTrainer
+NaturalistTrainer.Interact.Text1:			{0} says, "You must now seek your training elsewhere. Which path would you like to follow? [Bard], [Druid] or [Warden]?"
+NaturalistTrainer.Interact.Text2:			{0} says, "Do you require a [practice weapon]?"
+NaturalistTrainer.Interact.Text3:			{0} says, "Do you require a [training shield]?"
+NaturalistTrainer.Bard.Explain:			{0} says, "Bards are the singers of the realm of Hibernia. They use instruments to perform most of their repertoire. Their songs provide nurture and protection during and after battle. In addition, Bards are capable of increasing run speeds for their groups, which proves useful when attempting to outrun the enemy on the battlefield, or for traveling from place to place."
+NaturalistTrainer.Bard.Refuse:			{0} says, "The path of the Bard is not available to your race. Please choose another."
+NaturalistTrainer.Druid.Explain:		{0} says, "Followers of the Path of Harmony, druids use natural magic. They are primarily healers with a variety of spells they can learn to aid their realm mates. They receive basic buffs and can specialize in buffs that are unique in the realm. Druids have some offensive capabilities. Besides the ability to pick up a weapon and swing it at an enemy, they can cast poison spells to physically harm their opponent and cast root spells to freeze their opponent in place. They are also able to summon Nature's spirits as companions to travel or fight beside them. The role of a healing druid can be exacting. It takes a lot of patience, dedication and quick reflexes to keep your group healthy and performing their best. A druid can choose to spend his life alone with his spirit companion, dedicated to a group, or a little of both."
+NaturalistTrainer.Druid.Refuse:		{0} says, "The path of the Druid is not available to your race. Please choose another."
+NaturalistTrainer.Warden.Explain:	{0} says, "Wardens have their roots in the art of healing, but over the years have focused their abilities on buffing and fighting. They retain the ability to cast basic heals, but are not as strong of a healer as they are as a fighter / buffer. Wardens can train in one hand weapons as well as parry and are able to wear Scale armor and use a standard medium shield. They also have the ability to use a short bow. This gives Wardens a good foundation as a fighter, but their magical abilities are what really give them their real power."
+NaturalistTrainer.Warden.Refuse:		{0} says, "The path of the Warden is not available to your race. Please choose another."
+
+# /StalkerTrainer
+StalkerTrainer.Interact.Text1:			{0} says, "You must now seek your training elsewhere. Which path would you like to follow? [Ranger], [Nightshade], or [Vampiir]?"
+StalkerTrainer.Interact.Text2:			{0} says, "Do you require a [practice weapon]?"
+StalkerTrainer.Ranger.Explain:		{0} says, "Rangers are the archers of the realm of Hibernia. Their extensive training in Recurved Bows proves to be quite useful in the ranged attacks of war. They are similar to the Nightshade class, in that they are capable of stealthing and training in piercing weapons. Their minimal stealth training is useful in hiding and sneaking around enemies in order to find the best position for a bowshot."
+StalkerTrainer.Ranger.Refuse:		{0} says, "The path of the Ranger is not available to your race. Please choose another."
+StalkerTrainer.Nightshade.Explain:		{0} says, "While not physically as imposing as other assassins of the realms, those which choose to walk down the Way of Stealth and follow the Path of Essence will depend on their quick reactions, stealth, speed, and sharp wit to combat the enemies of the Hibernian Realm. To assist in the endeavor, the Nightshade Elders have developed and passed down a few magical baubles that grow in strength as the Nightshade becomes more acquainted with his repertoire of skills. In addition to the more common ways that the Nightshades uses to dispatch their foes, they freely practice the skill and art to poisoned weaponry and then turn these deadly blades upon their enemies. As their name would imply, there are certain Nightshades who are renowned for the unusual potency of these poisons."
+StalkerTrainer.Nightshade.Refuse:		{0} says, "The path of the Nightshade is not available to your race. Please choose another."
+StalkerTrainer.Vampiir.Explain:		{0} says, "The Vampiir class is a fighter who wields a one-handed piercing weapon in its right hand. While in melee combat, it is able to cast Vampiir magic with the left hand. The class does not have a normal power pool, however. It will gain power from a variety of attacks - primarily melee strikes. The class receives Safefall and Climb Walls, as well as a passive form of health regeneration. Vampiiric magic comes in three categories or spell lines: "Self Enhancement" spells such as parry, evade, run speed, magic and melee absorption bonuses; "Offensive Damage" spells such as Flame Strikes and a special ability to turn the left hand into a claw for further melee attacks; and "Utility" spells such as a single target mez, snare, Lull Enemies, and effectiveness debuffs."
+StalkerTrainer.Vampiir.Refuse:		{0} says, "The path of the Vampiir is not available to your race. Please choose another."
+
+# /MidgardRogueTrainer
+MidgardRogueTrainer.Interact.Text1:			{0} says, "You must now seek your training elsewhere. Which path would you like to follow? [Hunter] or [Shadowblade]?"
+MidgardRogueTrainer.Interact.Text2:			{0} says, "Do you require a [practice weapon]?"
+MidgardRogueTrainer.Hunter.Explain:		{0} says, "Hunters are the only archers of the frosty realm of Midgard. Their ability to train in Archery leads them to be one of the best long-ranged damage dealers in the realm. They also can learn how to wield a spear or sword for powerful melee fighting. In addition, blessed by their Norse goddess of the Hunt, Skadi, Hunters are capable of using her blessings to enhance and protect themselves."
+MidgardRogueTrainer.Hunter.Refuse:		{0} says, "The path of the Hunter is not available to your race. Please choose another."
+MidgardRogueTrainer.Shadowblade.Explain:		{0} says, "Shadowblades are sneaking little creatures, which lurk in the shadows and wait to stab their enemies from behind. They train heavily in the art of Stealthing and weaponry related to their roguish behavior. The Shadowblade derives his inspiration from the Norse trickster god, Loki. Much like any other rogue class, they have minimal armor available to them, but they train heavily in the art of evasion right up through the seventh level. They are stouter than their counterparts and able to take more hits."
+MidgardRogueTrainer.Shadowblade.Refuse:		{0} says, "The path of the Shadowblade is not available to your race. Please choose another."
+
+# /MysticTrainer
+MysticTrainer.Interact.Text1:			{0} says, "You must now seek your training elsewhere. Which path would you like to follow? [Runemaster], [Spiritmaster], [Bonedancer] or [Warlock]?"
+MysticTrainer.Interact.Text2:			{0} says, "Do you require a [practice staff]?"
+MysticTrainer.Runemaster.Explain:		{0} says, "Being one of the powerful direct-damage caster in the realm of Midgard, the Runemaster smites foes from great distances with vast amounts of power and wracking pain. He fashions his powerful spells from ancient runes used by the Mystics of Midgard. These runes are the absolute source of his power and work like recipes for the deadly destruction of the opposition."
+MysticTrainer.Runemaster.Refuse:		{0} says, "The path of the Runemaster is not available to your race. Please choose another."
+MysticTrainer.Spiritmaster.Explain:		{0} says, "Spiritmasters are a primary casting class in the Midgardian realm. They derive their power from the Queen of the Norse underworld, Hel. Her divine grace provides the Spiritmaster with the ability to summon the spirits of Midgard soldiers from the underworld to the surface to aid in the continuing battle against the infidels of Albion and Hibernia."
+MysticTrainer.Spiritmaster.Refuse:		{0} says, "The path of the Spiritmaster is not available to your race. Please choose another."
+MysticTrainer.Bonedancer.Explain:		{0} says, "The Bonedancer has the power to re-animate the skeletal remains of discarded bodies of Midgard as creatures that will obey commands, following the Valkyn ancient pre-Norse god Bogdar. Bogdar was accepted by the Norse gods when the Valkyn race became civilized and integrated with the Trolls, Kobolds, Dwarves, and human Norse. Bogdar is the Valkyn god of the dead - because Valkyn are staunch believers in reincarnation, Bogdar's job is to evaluate each dead soul and determine its next life. As the soul is reincarnated, its old body is discarded and eventually is returned to the Earth Mother through decomposition."
+MysticTrainer.Bonedancer.Refuse:		{0} says, "The path of the Bonedancer is not available to your race. Please choose another."
+MysticTrainer.Warlock.Explain:		{0} says, "Originating from a cult that lived underground in caves beneath the Realm of Midgard, Warlocks are cloth-wearing worshippers of Hel who have mastered the art of spell weaving. They have three types of spells: Primary spells, Secondary spells, and Utility spells. Warlock Primary spells take about twice as long to cast as regular spells in the game - however, anytime the Warlock casts a primary spell, they can (at no cost) add in a secondary spell that will land at the same time as the primary. This allows Warlocks to mix and match pairs of spells to fit whatever situation they find themselves in."
+MysticTrainer.Warlock.Refuse:		{0} says, "The path of the Warlock is not available to your race. Please choose another."
+
+# /SeerTrainer
+SeerTrainer.Interact.Text1:			{0} says, "You must now seek your training elsewhere. Which path would you like to follow? [Shaman] or [Healer]?"
+SeerTrainer.Interact.Text2:			{0} says, "Do you require a [practice weapon]?"
+SeerTrainer.Interact.Text3:			{0} says, "Do you require a [training shield]?"
+SeerTrainer.Shaman.Explain:			{0} says, "Patrons of Ymir, the ancient god whose body comprises the world of Midgard, Shaman are tribal spellcasters who specialize in a variety of healing and combat magic. Their healing abilities are primitive in comparison with the cultured Healer class, but good enough to serve as a primary healer in a group when needed. They are best known for their buffing abilities. They have a large selection of buffs they use to enhance the battle abilities of their comrades."
+SeerTrainer.Shaman.Refuse:			{0} says, "The path of the Shaman is not available to your race. Please choose another."
+SeerTrainer.Healer.Explain:		{0} says, "Followers of Eir, the Norse goddess of healing, Healers aid their comrades in battle with a variety of healing and buffing magic as well as very powerful crowd controlling spells. Despite their strong ability to heal, mesmerize, and stun those who come before them, they have little to no offensive abilities. Healers are blessed with their strong spell-working, yet are only capable of swinging a hammer at their enemies if they come too closely."
+SeerTrainer.Healer.Refuse:		{0} says, "The path of the Healer is not available to your race. Please choose another."
+
+# /VikingTrainer
+VikingTrainer.Interact.Text1:			{0} says, "You must now seek your training elsewhere. Which path would you like to follow? [Warrior], [Berserker], [Skald], [Thane], [Savage], [Valkyrie] or [Mauler]??"
+VikingTrainer.Interact.Text2:			{0} says, "Do you require a [practice weapon]?"
+VikingTrainer.Interact.Text3:			{0} says, "Do you require a [training shield]?"
+VikingTrainer.Warrior.Explain:			{0} says, "The fighting class of Midgard, Warriors are provided strength by Tyr, the Norse god of battle. Warriors have no magical abilities; instead they are the masters of weapons and armor. Able to use one and two handed weapons equally well, Warriors are also skilled with shield and parry."
+VikingTrainer.Warrior.Refuse:			{0} says, "The path of the Warrior is not available to your race. Please choose another."
+VikingTrainer.Berserker.Explain:		{0} says, "Patrons of Modi, the Norse god of battle-rage, Berserkers are light tanks who eschew heavy armor and rely on wielding two weapons at once. Their heavy training in weapons helps them deal powerful amounts of damage when in battle."
+VikingTrainer.Berserker.Refuse:		{0} says, "The path of the Berserker is not available to your race. Please choose another."
+VikingTrainer.Skald.Explain:	{0} says, "Bragi, the god of poetry and song bestows his blessings on the class called Skalds. With Bragi's blessings, the Skald is infused with the ability to deliver his party swiftly into battle. During the battle the Skald may call upon Bragi to enhance the party's battle prowess by chanting Bragi's poetry. The chants will either inspire the party to do better within the battle, or they may allow the party to be more aware of certain magic, allowing them to avoid such damage."
+VikingTrainer.Skald.Refuse:		{0} says, "The path of the Skald is not available to your race. Please choose another."
+VikingTrainer.Thane.Explain:	{0} says, "A Thane is a worshiper of the Norse God of Thunder and Lightning. Thor is probably the most famous of all the Norse gods know for his protection of Midgard using Mjolnir his mighty hammer, and the power of the storms rage to defeat any danger to Midgard. The character of a Thane draws upon both the Magic of Lightning and the Strength of Melee combat to defend Midgard. Thanes belong to the Viking Profession, but are part of the Hybrid grouping of characters; they attack their enemies through the use of Lightning when their foe is at range, and their Strength and Melee Weapons once they reach their target. Thanes are eventually able to use the best armor available to Midgard, and any Midgard weapon save the Spear, Hand-to-hand Devices of the Savages and Thrown Weapons."
+VikingTrainer.Thane.Refuse:		{0} says, "The path of the Thane is not available to your race. Please choose another."
+VikingTrainer.Savage.Explain:	{0} says, "The Savage is a studded-armor wearing fighter who disdains normal weapons in favor of hand-to-hand combat. Savages aren't interested in mastering the art of complicated weapons - instead they affix simple sharp or bladed weapons to their hands and swing away. Savages follow the Valkyn god of war, Kelgor, who represents bloodlust and the battlefield. Kelgor has been adopted by the Norse gods, especially Modi and Odin, as a brother-in-arms so long as the Valkyn continue assisting the Norse in their fight against the Morvaltar."
+VikingTrainer.Savage.Refuse:		{0} says, "The path of the Savage is not available to your race. Please choose another."
+VikingTrainer.Valkyrie.Explain:	{0} says, "The Order of the Valkyries was started by two stunningly beautiful orphaned twin sisters named Sigrun and Brynhild, who since childhood claimed to be able to hear the voices of the honored dead speaking to them from Valhalla. The voices warned the sisters from an early age that a time of great crisis would soon face the denizens of Midgard, and commanded them to build the Order of Valkyries to lead the defense of the realm against Albion and Hibernia."
+VikingTrainer.Valkyrie.Refuse:		{0} says, "The path of the Valkyrie is not available to your race. Please choose another."
+
+# /AlbionRogueTrainer
+AlbionRogueTrainer.Interact.Text1:			{0} says, "You must now seek your training elsewhere. Which path would you like to follow? [Infiltrator], [Minstrel], or [Scout]?"
+AlbionRogueTrainer.Interact.Text2:			{0} says, "Do you require a [practice weapon]?"
+AlbionRogueTrainer.Infiltrator.Explain:		{0} says, "You seek a tough life if you go that path. The life of an Infiltrator involves daily use of his special skills. The Guild of Shadows has made its fortune by using them to sneak, hide, disguise, backstab, and spy on the enemy. Without question they are an invaluable asset to Albion."
+AlbionRogueTrainer.Infiltrator.Refuse:		{0} says, "The path of the Infiltrator is not available to your race. Please choose another."
+AlbionRogueTrainer.Minstrel.Explain:		{0} says, "Ah! To sing the victories of Albion! To give praise to those who fight to keep the light of Camelot eternal. Many have studied their skill within the walls of The Academy and come forth to defend this realm. Without their magical songs, many would not be here today."
+AlbionRogueTrainer.Minstrel.Refuse:		{0} says, "The path of the Minstrel is not available to your race. Please choose another."
+AlbionRogueTrainer.Scout.Explain:		{0} says, "Ah! You wish to join the Defenders of Albion eh? That is quite a good choice for a Rogue. A Scouts accuracy with a bow is feared by all our enemies and has won Albion quite a few battles."
+AlbionRogueTrainer.Scout.Refuse:		{0} says, "The path of the Scout is not available to your race. Please choose another."
+
+# /AcolyteTrainer
+AcolyteTrainer.Interact.Text1:			{0} says, "You must now seek your training elsewhere. Which path would you like to follow? [Cleric], [Heretic], or [Friar]?"
+AcolyteTrainer.Interact.Text2:			{0} says, "Do you require a [practice weapon]?"
+AcolyteTrainer.Interact.Text3:			{0} says, "Do you require a [training shield]?"
+AcolyteTrainer.Cleric.Explain:		{0} says, "So, you wish to serve the Church as healer, defender and leader of our faith. The Church of Albion will welcome one of your skill. Perhaps in time, your commitment will lead others to join our order."
+AcolyteTrainer.Cleric.Refuse:		{0} says, "The path of the Cleric is not available to your race. Please choose another."
+AcolyteTrainer.Heretic.Explain:		{0} says, "So, you wish to turn away from the Church to follow the path of Arawn, lord of the Otherworld. As evil Cleric, you will fit into the hybrid category, mixing the enhancement spells inherited from the Church with the damage spells of Arawn. You will learn how to use both combat styles and high-damage focus spells, but you will be restricted to wearing cloth clothing and a small shield."
+AcolyteTrainer.Heretic.Refuse:		{0} says, "The path of the Heretic is not available to your race. Please choose another."
+AcolyteTrainer.Friar.Explain:		{0} says, "Members of a brotherhood, you will find more than a community should you join ranks with the Defenders of Albion. Deadly with a Quarterstaff, and proficient with the healing of wounds, the army is in constant need of new recruits such as you."
+AcolyteTrainer.Friar.Refuse:		{0} says, "The path of the Friar is not available to your race. Please choose another."
+
+# /DiscipleTrainer
+DiscipleTrainer.Interact.Text1:			{0} says, "You must now seek your training elsewhere. Which path would you like to follow? [Necromancer]?"
+DiscipleTrainer.Interact.Text2:			{0} says, "Do you require a [practice staff]?"
+DiscipleTrainer.Necromancer.Explain:		{0} says, "So you want to become a Necromancer? As a Necromancer you can summon undeath creatures. Without one of these, you are completely powerless and cannot cast any spells. However, once a familiar is summoned, it is capable of casting powerful damage spells of different types, whether area, over time, or direct."
+DiscipleTrainer.Necromancer.Refuse:		{0} says, "The path of the Necromancer is not available to your race. Please choose another."
+
+# /ElementalistTrainer
+ElementalistTrainer.Interact.Text1:			{0} says, "You must now seek your training elsewhere. Which path would you like to follow? [Theurgist] or [Wizard]?"
+ElementalistTrainer.Interact.Text2:			{0} says, "Do you require a [practice staff]?"
+ElementalistTrainer.Theurgist.Explain:		{0} says, "You wish to study the art of magical enchantments do you? The Defenders of Albion rely immensely on this ability and their art of building and animating creatures that can fight and protect the army while in battle."
+ElementalistTrainer.Theurgist.Refuse:		{0} says, "The path of the Theurgist is not available to your race. Please choose another."
+ElementalistTrainer.Wizard.Explain:		{0} says, "I see you wish to specialize in molding the four elements of fire, ice, earth, and air to create magical spells of immense power. Even now many of The Academy well-trained Wizards rain destruction upon our enemies."
+ElementalistTrainer.Wizard.Refuse:		{0} says, "The path of the Wizard is not available to your race. Please choose another."
+
+# /FighterTrainer
+FighterTrainer.Interact.Text1:			{0} says, "You must now seek your training elsewhere. Which path would you like to follow? [Armsman], [Paladin], [Mercenary], [Reaver] or [Mauler]?"
+FighterTrainer.Interact.Text2:			{0} says, "Do you require a [practice weapon]?"
+FighterTrainer.Interact.Text3:			{0} says, "Do you require a [training shield]?"
+FighterTrainer.Armsman.Explain:		{0} says, "Ah! An Armsmen is it? Good solid fighters they are! Their fighting prowess is a great asset to Albion. To become an armsman you must enlist with the Defenders of Albion."
+FighterTrainer.Armsman.Refuse:		{0} says, "The path of the Armsman is not available to your race. Please choose another."
+FighterTrainer.Paladin.Explain:		{0} says, "You wish to be a defender of the faith I take it? Many a Paladin has led our fighters into battle with victory not far behind. Their never-ending sacrifice proves that the Church of Albion will remain for many centuries!"
+FighterTrainer.Paladin.Refuse:		{0} says, "The path of the Paladin is not available to your race. Please choose another."
+FighterTrainer.Mercenary.Explain:		{0} says, "You wish to become a Mercenary do you? Roguish fighters in nature, solid warriors in battle, their ability to quickly evade enemy attacks has made them a valuable asset to the Guild of Shadows."
+FighterTrainer.Mercenary.Refuse:		{0} says, "The path of the Mercenary is not available to your race. Please choose another."
+FighterTrainer.Reaver.Explain:		{0} says, "So, you wish to become a champion of Arawn. You will be capable of casting different spells, whether personal enhancements or attacks towards your enemies, some of which allow them to drain life. You will learn how to release auras of damage or weakening. You will be part of the only warriors in the kingdom who know how to use dangerous flexible weapons like studded whips or ominous chains. You will Wear mail armor that allows you to dodge attacks, and know how to use large shields, the Reaver is a formidable fighter on the battlefield."
+FighterTrainer.Reaver.Refuse:		{0} says, "The path of the Reaver is not available to your race. Please choose another."
+
+# /MageTrainer
+MageTrainer.Interact.Text1:			{0} says, "You must now seek your training elsewhere. Which path would you like to follow? [Cabalist] or [Sorcerer]?"
+MageTrainer.Interact.Text2:			{0} says, "Do you require a [practice staff]?"
+MageTrainer.Cabalist.Explain:		{0} says, "So, you seek to embrace a darker side of magic do you? A Cabalist craving to summon up Golems out of inanimate matter is a true asset to Albion. Yet, because of their thirst for greater power many will not teach this skill. Therefore should one wish to follow this path; they must seek out the Guild of Shadows."
+MageTrainer.Cabalist.Refuse:		{0} says, "The path of the Cabalist is not available to your race. Please choose another."
+MageTrainer.Sorcerer.Explain:		{0} says, "So you wish to focus your training towards a pragmatic magic. Sorcerers prove their worth to The Academy by summoning up spells that disrupt, disable, and damage their enemies. In time you may even conjure up beasts to do your bidding."
+MageTrainer.Sorcerer.Refuse:		{0} says, "The path of the Sorcerer is not available to your race. Please choose another."
+
+# /BaseclassMauler
+Baseclass.Mauler.Explain:		{0} says, "The Mauler is a class comprised of brawny and brutish martial artist elements along with unique powers and spells. This brawling class channels earthen elemental powers to perform its primal magic. These powers augment Mauler combat abilities and combat styles. The class does not have a normal power pool, however. It will gain power from taking damage in combat. Maulers can specialize in two forms of melee combat. Mauler Staff uses a weighted, primitive form of the quarterstaff. It is known for its raw power, rather than the finesse of other staff based skills. Fist wraps are rune inscribed pieces of cloth, or heavy weights attached to the fists to augment the Mauler's naturally powerful hand to hand combat. Their spell lines augment melee combat depending on the specialization. Aura manipulation augments the natural auras around the Mauler, enhancing their defense and health, as well as those around them. Magnetism uses the power of the earth to disrupt the actions of enemies in close quarters with the Mauler. Power strikes allows the Mauler to launch a barrage of attacks that will damage and debuff anyone who decides to face them in combat."
+Baseclass.Mauler.Refuse:		{0} says, "The path of the Mauler is not available to your race. Please choose another."

@@ -34,9 +34,6 @@ namespace DOL.GS.Trainer
             get { return eCharacterClass.Stalker; }
         }
 
-        /// <summary>
-        /// The practice weaopon template ID
-        /// </summary>
         public const string PRACTICE_WEAPON_ID = "training_dirk";
 
         public StalkerTrainer() : base(eChampionTrainerType.Stalker)
@@ -58,7 +55,7 @@ namespace DOL.GS.Trainer
                 // player can be promoted
                 if (player.Level >= 5)
                 {
-                    player.Out.SendMessage(this.Name + " says, \"You must now seek your training elsewhere. Which path would you like to follow? [Ranger] or [Nightshade]?\"", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "StalkerTrainer.Interact.Text1", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                 }
                 else
                 {
@@ -68,7 +65,7 @@ namespace DOL.GS.Trainer
                 // ask for basic equipment if player doesnt own it
                 if (player.Inventory.GetFirstItemByID(PRACTICE_WEAPON_ID, eInventorySlot.MinEquipable, eInventorySlot.LastBackpack) == null)
                 {
-                    player.Out.SendMessage(this.Name + " says, \"Do you require a [practice weapon]?\"", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "StalkerTrainer.Interact.Text2", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                 }
 
             }
@@ -93,26 +90,39 @@ namespace DOL.GS.Trainer
             switch (text)
             {
                 case "Ranger":
-                    if (player.Race == (int)eRace.Celt || player.Race == (int)eRace.Elf || player.Race == (int)eRace.Lurikeen || player.Race == (int)eRace.Shar)
+                    if (player.Race == (int)eRace.Celt || player.Race == (int)eRace.Elf || player.Race == (int)eRace.Lurikeen || player.Race == (int)eRace.Shar || player.Race == (int)eRace.Sylvan)
                     {
-                        player.Out.SendMessage(this.Name + " says, \"I can't tell you something about this class.\"", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "StalkerTrainer.Ranger.Explain", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
                     else
                     {
-                        player.Out.SendMessage(this.Name + " says, \"The path of an Ranger is not available to your race. Please choose another.\"", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "StalkerTrainer.Bard.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_ChatWindow);
                     }
                     return true;
                 case "Nightshade":
-                    if (player.Race == (int)eRace.Elf || player.Race == (int)eRace.Lurikeen)
+                case "Ombre":
+                    if (player.Race == (int)eRace.Elf || player.Race == (int)eRace.Lurikeen || player.Race == (int)eRace.Celt)
                     {
-                        player.Out.SendMessage(this.Name + " says, \"I can't tell you something about this class.\"", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "StalkerTrainer.Nightshade.Explain", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
                     else
                     {
-                        player.Out.SendMessage(this.Name + " says, \"The path of a Nightshade is not available to your race. Please choose another.\"", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "StalkerTrainer.Nightshade.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                    }
+                    return true;
+                case "Vampiir":
+                case "Séide de Leanansidhe":
+                    if (player.Race == (int)eRace.Celt || player.Race == (int)eRace.Lurikeen || player.Race == (int)eRace.Shar)
+                    {
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "StalkerTrainer.Vampiir.Explain", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                    }
+                    else
+                    {
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "StalkerTrainer.Vampiir.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
                     return true;
                 case "practice weapon":
+                case "arme d'entraînement":
                     if (player.Inventory.GetFirstItemByID(PRACTICE_WEAPON_ID, eInventorySlot.Min_Inv, eInventorySlot.Max_Inv) == null)
                     {
                         player.ReceiveItem(this, PRACTICE_WEAPON_ID, eInventoryActionType.Other);

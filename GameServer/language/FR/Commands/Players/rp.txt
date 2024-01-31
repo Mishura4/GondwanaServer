@@ -1,4 +1,4 @@
 Commands.Players.RP.Description:	Active / Désactive la réception des points de royaumes
 Commands.Players.RP.Off:			Votre option « RP » est DÉSACTIVÉE. Vous ne gagnerez plus de points de royaumes. Utilisez '/rp on' pour de nouveau en recevoir.
-Commands.Players.RP.On:				Votre option « RP » est ACTIVÉE. Vous gagnez des points de royaumes. Utilisez '/rp off' pour arrêter d’en gagner.
+Commands.Players.RP.On:				Votre option « RP » est ACTIVÉE. Vous gagnez des points de royaumes. Utilisez '/rp off' pour arrêter d'en gagner.
 Commands.Players.RP.Usage:			Usage: '/rp <on|off>'

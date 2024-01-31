@@ -1,6 +1,6 @@
 Commands.Players.Cmdhelp.Description:	Affiche les commandes disponibles.
 Commands.Players.Cmdhelp.NoCommand:		La commande {0} n'existe pas.
 Commands.Players.Cmdhelp.PlvlCommands:	<----------Commandes disponibles pour le niveau de privilège {0}---------->
-Commands.Players.Cmdhelp.Usage.Cmd:		'/cmdhelp <commande>' # Affiche l’aide à l’utilisation d’une commande.
+Commands.Players.Cmdhelp.Usage.Cmd:		'/cmdhelp <commande>' # Affiche l'aide à l'utilisation d'une commande.
 Commands.Players.Cmdhelp.Usage.Plvl:	'/cmdhelp <plvl#>' # Affiche toutes les commandes qui nécéssitent au moins <plvl#> niveau de privilège.
 Commands.Players.Cmdhelp.Usage:			>----------Usage pour {0}----------<

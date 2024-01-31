@@ -11,7 +11,7 @@ namespace DOL.GS.Scripts
 
         private string[] rvrs = new string[]
         {
-            "RvR Débutant (Lv 20-28) : Lion’s Den",
+            "RvR Débutant (Lv 20-28) : Lion's Den",
             "RvR Standard (Lv 29-37) : Hills of Claret",
             "RvR Expert (Lv 38-45) : Molvik",
             "RvR Master (Lv 46-50) : Thidranki"

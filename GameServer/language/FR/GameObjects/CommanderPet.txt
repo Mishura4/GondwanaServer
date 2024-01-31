@@ -25,19 +25,19 @@ GameObjects.CommanderPet.WR.Const.Two:			deux
 GameObjects.CommanderPet.WR.Const.Harm:			endommager
 GameObjects.CommanderPet.WR.Const.Drain:		aspire
 GameObjects.CommanderPet.WR.Const.Suppress:		retire
-GameObjects.CommanderPet.WR.Const.1HandedSword:	épé à une main
-GameObjects.CommanderPet.WR.Const.2HandedSword:	épé à deux mains
+GameObjects.CommanderPet.WR.Const.1HandedSword:	épée à une main
+GameObjects.CommanderPet.WR.Const.2HandedSword:	épée à deux mains
 GameObjects.CommanderPet.WR.Const.1HandedHammer:	marteau à une main
 GameObjects.CommanderPet.WR.Const.2HandedHammer:	marteau à deux mains
 GameObjects.CommanderPet.WR.Const.1HandedAxe:	hache à une main
 GameObjects.CommanderPet.WR.Const.2HandedAxe:	hache à deux mains
 GameObjects.CommanderPet.WR.DreadGuardian:		Le {0} dit, "En tant que l'un des gardiens choisis par Bogdar, j'ai maîtrisé la capacité de {1} ses ennemis et {2} moi-même avec des défenses supplémentaires. J'ai également différentes tactiques {3} à votre disposition."
 GameObjects.CommanderPet.WR.DreadLich:			Le {0} dit, "En tant que mystique de Bogdar, j'ai maîtrisé les ténèbres {1}. J'ai aussi les moyens de {2} mes sorts pour être plus efficace. J'ai également différentes tactiques {3} à votre disposition."
-GameObjects.CommanderPet.WR.DreadArcher:		Le {0} dit, "En tant qu’un des archers préférés de Bogdar, vous pouvez me {1} pour être plus efficace avec mon arc. J'ai également différentes tactiques {2} à votre disposition."
-GameObjects.CommanderPet.WR.XCommander:			Le {0} dit, "En tant que commandant de Bogdar, j'ai maîtrisé bon nombre des [armes] fossiles au sein de son armée d'os. Quelle arme dois-je utiliser pour vous ? J'ai également diverses tactiques de combat à votre disposition."
+GameObjects.CommanderPet.WR.DreadArcher:		Le {0} dit, "En tant qu'un des archers préférés de Bogdar, vous pouvez me {1} pour être plus efficace avec mon arc. J'ai également différentes tactiques {2} à votre disposition."
+GameObjects.CommanderPet.WR.XCommander:			Le {0} dit, "En tant que commandant de Bogdar, j'ai maîtrisé bon nombre des [armes] fossiles au sein de son armée d'os. Quelle arme dois-je utiliser pour vous ? J'ai également diverses tactiques de combat à votre disposition."
 GameObjects.CommanderPet.WR.DreadLich2:			Le {0} dit, "Mon arsenal est constitué de {1}, {2} et de {3} sorts purs. Je lance des sorts débilitants lors de ma première invocation, mais vous pouvez m'ordonner de lancer un type particulier de sorts. Si vous le souhaitez."
-GameObjects.CommanderPet.WR.Combat:				Le {0} dit, "Dès le début, j'ordonne aux minions sous mon contrôle de [m'assister] avec une cible que vous avez choisie pour moi. Si vous relancez la commande, ils cesseront d’assister. Je peux aussi [narguer] vos ennemis pour qu'ils se concentrent sur moi plutôt que sur vous."
+GameObjects.CommanderPet.WR.Combat:				Le {0} dit, "Dès le début, j'ordonne aux minions sous mon contrôle de [m'assister] avec une cible que vous avez choisie pour moi. Si vous relancez la commande, ils cesseront d'assister. Je peux aussi [narguer] vos ennemis pour qu'ils se concentrent sur moi plutôt que sur vous."
 GameObjects.CommanderPet.WR.CommNoTaunt:		Votre commandant ne va plus narguer ses ennemis!
 GameObjects.CommanderPet.WR.CommStartTaunt:		Votre commandant va commencer à narguer ses ennemis!
-GameObjects.CommanderPet.WR.DiffCommander:		Le {0} dit, "J'ai maîtrisé l'[épé à une main], l'[épé à deux mains], le [marteau à une main], le [marteau à deux mains], la [hache à une main] et la [hache à deux mains]."
+GameObjects.CommanderPet.WR.DiffCommander:		Le {0} dit, "J'ai maîtrisé l'[épée à une main], l'[épée à deux mains], le [marteau à une main], le [marteau à deux mains], la [hache à une main] et la [hache à deux mains]."
 GameObjects.CommanderPet.WR.DreadGuardian:		Le {0} dit, "Bogdar m'a donné la possibilité de {1} donner la vie à nos ennemis ou de {2} blesser leur esprit. Je lance des sorts de dégâts d'esprit lors de ma première convocation, mais vous pouvez m'ordonner de lancer un type de sort particulier si vous le souhaitez."

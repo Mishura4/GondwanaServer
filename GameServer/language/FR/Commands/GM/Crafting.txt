@@ -1,15 +1,15 @@
-Commands.GM.Crafting.AlreadyHaveSkill:		{0} possède déjà la compétence d’artisanat {1}.
-Commands.GM.Crafting.Description:			Change le niveau d’artisanat de votre cible.
-Commands.GM.Crafting.InvalidSkill:			Vous devez indiquer un identifiant d’une compétence d’artisanat valide. '/crafting' pour plus d’information sur la commande.
+Commands.GM.Crafting.AlreadyHaveSkill:		{0} possède déjà la compétence d'artisanat {1}.
+Commands.GM.Crafting.Description:			Change le niveau d'artisanat de votre cible.
+Commands.GM.Crafting.InvalidSkill:			Vous devez indiquer un identifiant d'une compétence d'artisanat valide. '/crafting' pour plus d'information sur la commande.
 Commands.GM.Crafting.NoPlayerTarget:		Vous devez sélectionner un joueur.
-Commands.GM.Crafting.NotHaveSkillAddIt:		{0} ne possède pas la compétence d’artisanat {1}. Veuillez l’ajouter.
+Commands.GM.Crafting.NotHaveSkillAddIt:		{0} ne possède pas la compétence d'artisanat {1}. Veuillez l'ajouter.
 Commands.GM.Crafting.NowHasSkillPoints:		{0} possède maintenant {1} dans {2}.
-Commands.GM.Crafting.SkillAdded:			La compétence d’artisanat {0} a été ajouté.
-Commands.GM.Crafting.SkillChanged:			La compétence d’artisanat {0} a été changé.
-Commands.GM.Crafting.SkillDescription:		Compétence d’Artisanat ID description:
+Commands.GM.Crafting.SkillAdded:			La compétence d'artisanat {0} a été ajouté.
+Commands.GM.Crafting.SkillChanged:			La compétence d'artisanat {0} a été changé.
+Commands.GM.Crafting.SkillDescription:		Compétence d'Artisanat ID description:
 Commands.GM.Crafting.Usage.Add:				'/crafting add <craftingSkillID> <startLevel>' # Ajoute une nouvelle compétence d'artisanat à votre cible.
-Commands.GM.Crafting.Usage.Change:			'/crafting change <craftingSkillID> <amount>' # Pour augmenter ou diminuer une compétence d’artisanat de votre cible.
-Commands.GM.Crafting.Usage.List:			'/crafting list' # Liste toutes les compétences d’artisanat ainsi que leurs ID.
+Commands.GM.Crafting.Usage.Change:			'/crafting change <craftingSkillID> <amount>' # Pour augmenter ou diminuer une compétence d'artisanat de votre cible.
+Commands.GM.Crafting.Usage.List:			'/crafting list' # Liste toutes les compétences d'artisanat ainsi que leurs ID.
 Commands.GM.Crafting.Usage.SalvageAdd:		/crafting salvageadd <SalvageYieldID (0 for next free)> <MaterialId_nb> <Count> [Realm] [PackageID]
 Commands.GM.Crafting.Usage.SalvageUpdate:	/crafting salvageupdate <SalvageYieldID> <MaterialId_nb> <Count> <Realm> [PackageID]
 Commands.GM.Crafting.Usage.SalvageInfo:		/crafting salvageinfo <SalvageYieldID>

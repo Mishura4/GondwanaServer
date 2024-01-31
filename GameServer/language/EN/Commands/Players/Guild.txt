@@ -120,6 +120,8 @@ Commands.Players.Guild.Help.GuildEditWithdraw:	'/gc edit <rank#> withdraw <y|n>'
 Commands.Players.Guild.Help.GuildEmail:			'/gc email <contact@guildpage.com>' # Displays the web address of contacts within the guild.
 Commands.Players.Guild.Help.GuildEmblem:			'/gc emblem' # Presentation of the emblem.
 Commands.Players.Guild.Help.TerritoryBanner:			'/gc territorybanner' # Allows you to show your guild banner in a conquered territory, reduces the maintenance costs of the territory, and improves its defense.
+Commands.Players.Guild.Help.TerritoryPortal:			'/gc territoryportal' # Allows you to summon a guild portal in a conquered territory and send a notification to all players in the guild who are online, allowing them to teleport to the territory.
+Commands.Players.Guild.Help.CombatZone:			'/gc combatzone' # Establishes a PvP combat zone on your position, allowing players to be fought without reputation loss in this specific area.
 Commands.Players.Guild.Help.GuildForm:			'/gc form <guild's name>' # Creation of a guild (at least 4 players required in the group).
 Commands.Players.Guild.Help.GuildGMAddPlayer:		'/gc addplayer <player's name> to <nom de la guilde>' # Add a player to the guild.
 Commands.Players.Guild.Help.GuildGMCommands:		Game Master commands:

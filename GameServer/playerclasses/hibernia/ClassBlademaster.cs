@@ -26,7 +26,7 @@ namespace DOL.GS.PlayerClass
     {
         private static readonly List<PlayerRace> DefaultEligibleRaces = new()
         {
-             PlayerRace.Celt, PlayerRace.Elf, PlayerRace.Firbolg, PlayerRace.Graoch, PlayerRace.Shar,
+             PlayerRace.Celt, PlayerRace.Elf, PlayerRace.Firbolg, PlayerRace.Lurikeen, PlayerRace.Graoch, PlayerRace.Shar,
         };
 
         public ClassBlademaster()

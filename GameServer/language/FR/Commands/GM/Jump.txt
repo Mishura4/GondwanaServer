@@ -16,7 +16,7 @@ Commands.GM.Jump.Description:					Téléporte un joueur ou vous-même aux coordo
 Commands.GM.Jump.Information:					Nom du joueur peut-être [me]:
 Commands.GM.Jump.JumpToX:						'/Jump to {0}'
 Commands.GM.Jump.NothingPushed:					Pas de coordonnées dans la pile. Ajoutez des points avec '/jump push'.
-Commands.GM.Jump.PlayerIsNotInGame:				{0} n’est pas dans le jeu.
+Commands.GM.Jump.PlayerIsNotInGame:				{0} n'est pas dans le jeu.
 Commands.GM.Jump.PopInstructions:				Utilisez '/jump pop' pour y retourner.
 Commands.GM.Jump.Pushed:						Coordonnées actuelles empilées.
 Commands.GM.Jump.PushedTotal:					({0} total)
