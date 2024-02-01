@@ -65,6 +65,13 @@ namespace DOL.GS
             LootEntry entry = new LootEntry(chance, loot, count);
             m_randomItemDrops.Add(entry);
         }
+        public IEnumerable<LootEntry> Entries()
+        {
+            foreach (var item in m_fixedItemDrops)
+                yield return new LootEntry(-1, item, 1);
+            foreach (var entry in m_randomItemDrops)
+                yield return entry;
+        }
 
         /// <summary>
         /// Merges two list into one big list, containing items of both and having the bigger dropCount
@@ -158,7 +165,7 @@ namespace DOL.GS
     /// <summary>
     /// Container class for entries in the randomdroplist
     /// </summary>
-    internal class LootEntry
+    public class LootEntry
     {
         public readonly int Chance;
         public readonly ItemTemplate ItemTemplate;

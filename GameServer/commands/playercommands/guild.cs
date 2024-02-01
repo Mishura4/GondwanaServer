@@ -774,9 +774,13 @@ namespace DOL.GS.Commands
                     #region Buybanner
                     case "buybanner":
                         {
-                            //Not implemented yet
-                            break;
-                            long bannerPrice = Properties.GUILD_BANNER_MERIT_PRICE;
+                            if (client.Player.Guild.GuildLevel < 7)
+                            {
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.GuildLevelReq"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                return;
+                            }
+
+                            long bannerPrice = (client.Player.Guild.GuildLevel * 100);
 
                             if (client.Player.Guild == null)
                             {
@@ -797,24 +801,11 @@ namespace DOL.GS.Commands
                                 if (hoursLeft < 2)
                                 {
                                     int minutesLeft = (int)(Properties.GUILD_BANNER_LOST_TIME - lostTime.TotalMinutes + 1);
-                                    client.Out.SendMessage(
-                                        LanguageMgr.GetTranslation(
-                                            client.Account.Language,
-                                            "Commands.Players.Guild.Banner.LostMinutes",
-                                            minutesLeft
-                                        ),
-                                        eChatType.CT_Guild,
-                                        eChatLoc.CL_ChatWindow);
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Banner.LostMinutes", minutesLeft), eChatType.CT_Guild, eChatLoc.CL_ChatWindow);
                                 }
                                 else
                                 {
-                                    client.Out.SendMessage(
-                                        LanguageMgr.GetTranslation(
-                                            client.Account.Language,
-                                            "Commands.Players.Guild.Banner.LostHours",
-                                            hoursLeft),
-                                        eChatType.CT_Guild,
-                                        eChatLoc.CL_ChatWindow);
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Banner.LostHours", hoursLeft), eChatType.CT_Guild, eChatLoc.CL_ChatWindow);
                                 }
                                 return;
                             }
@@ -824,12 +815,7 @@ namespace DOL.GS.Commands
 
                             if (client.Player.Guild.BountyPoints > bannerPrice || client.Account.PrivLevel > (int)ePrivLevel.Player)
                             {
-                                client.Out.SendCustomDialog(
-                                    LanguageMgr.GetTranslation(
-                                        client.Account.Language,
-                                        "Commands.Players.Guild.Banner.BuyPrice",
-                                        bannerPrice),
-                                    ConfirmBannerBuy);
+                                client.Out.SendCustomDialog(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Banner.BuyPrice", bannerPrice), ConfirmBannerBuy);
                                 client.Player.TempProperties.setProperty(GUILD_BANNER_PRICE, bannerPrice);
                             }
                             else
@@ -844,8 +830,6 @@ namespace DOL.GS.Commands
                     #region Summon
                     case "summon":
                         {
-                            //Not implemented yet
-                            break;
                             if (client.Player.Guild == null)
                             {
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NotMember"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
@@ -882,7 +866,7 @@ namespace DOL.GS.Commands
                                 }
                             }
 
-                            if (client.Player.IsInRvR)
+                            /* if (client.Player.IsInRvR)
                             {
                                 GuildBanner banner = new GuildBanner(client.Player);
                                 banner.Start();
@@ -904,7 +888,7 @@ namespace DOL.GS.Commands
                             else
                             {
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.BannerNotRvR"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-                            }
+                            }*/
 
                             break;
                         }
