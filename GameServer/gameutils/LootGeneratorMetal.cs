@@ -30,10 +30,10 @@ namespace DOL.GS
     /// </summary>
     public class LootGeneratorMetal : LootGeneratorBase
     {
-        private static readonly List<string> _metal_barTemplateIds = new List<string> { "bronze_metal_bars", "copper_metal_bars", "iron_metal_bars", "iron_metal_bars", "steel_metal_bars", "quartz_metal_bars", "alloy_metal_bars", "dolomite_metal_bars", "fine_alloy_metal_bars", "cobalt_metal_bars", "mithril_metal_bars", "carbide_metal_bars", "adamantium_metal_bars", "sapphire_metal_bars", "asterite_metal_bars", "diamond_metal_bars", "netherium_metal_bars", "netherite_metal_bars", "arcanium_metal_bars", "arcanite_metal_bars" };
+        private static readonly List<string> _metal_barTemplateIds = new List<string> { "bronze_metal_bars", "copper_metal_bars", "iron_metal_bars", "ferrite_metal_bars", "steel_metal_bars", "quartz_metal_bars", "alloy_metal_bars", "dolomite_metal_bars", "fine_alloy_metal_bars", "cobalt_metal_bars", "mithril_metal_bars", "carbide_metal_bars", "adamantium_metal_bars", "sapphire_metal_bars", "asterite_metal_bars", "diamond_metal_bars", "netherium_metal_bars", "netherite_metal_bars", "arcanium_metal_bars", "arcanite_metal_bars" };
         private static readonly Dictionary<string, float> _metal_barValue = new Dictionary<string, float> {
             { "bronze_metal_bars", 5}, { "copper_metal_bars", 5},
-            { "iron_metal_bars", 8}, { "iron_metal_bars", 8},
+            { "iron_metal_bars", 8}, { "ferrite_metal_bars", 8},
             { "steel_metal_bars", 12}, { "quartz_metal_bars", 12},
             { "alloy_metal_bars", 20}, { "dolomite_metal_bars", 20},
             { "fine_alloy_metal_bars", 25}, { "cobalt_metal_bars", 25},
