@@ -50,7 +50,6 @@ namespace DOL.Database
         private bool m_guildHouse;
         private int m_guildHouseNumber;
 
-        private long m_guildLevel;
         private byte m_bonusType;
         private DateTime m_bonusStartTime;
         private long m_meritPoints;
@@ -310,20 +309,6 @@ namespace DOL.Database
             {
                 Dirty = true;
                 m_guildHouseNumber = value;
-            }
-        }
-
-        [DataElement(AllowDbNull = false)]
-        public long GuildLevel
-        {
-            get
-            {
-                return m_guildLevel;
-            }
-            set
-            {
-                Dirty = true;
-                m_guildLevel = value;
             }
         }
 
