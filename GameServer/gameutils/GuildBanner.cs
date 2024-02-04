@@ -15,10 +15,23 @@ namespace DOL.GS
     {
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        RegionTimer m_timer;
-        GamePlayer m_player;
-        GuildBannerItem m_item;
-        WorldInventoryItem gameItem;
+        /// <summary>
+        /// Tick timer
+        /// </summary>
+        private RegionTimer m_timer;
+
+        /// <summary>
+        /// Expiration timer after leaving a group
+        /// </summary>
+        private RegionTimer m_expireTimer;
+
+        /// <summary>
+        /// Player carrying the banner
+        /// </summary>
+        private GamePlayer m_player;
+
+        private GuildBannerItem m_item;
+        private WorldInventoryItem gameItem;
 
         public GuildBanner(GamePlayer player)
         {
@@ -114,7 +127,7 @@ namespace DOL.GS
             {
                 if (player.Group != null && m_player.Group != null && m_player.Group.IsInTheGroup(player))
                 {
-                    if (GameServer.ServerRules.IsAllowedToAttack(m_player, player, true) == false)
+                    if (GameServer.ServerRules.IsAllowedToHelp(m_player, player, true))
                     {
                         GuildBannerEffect effect = GuildBannerEffect.CreateEffectOfClass(m_player, player);
 
@@ -140,7 +153,7 @@ namespace DOL.GS
 
         protected virtual void AddHandlers()
         {
-            GameEventMgr.AddHandler(m_player, GamePlayerEvent.LeaveGroup, new DOLEventHandler(PlayerLoseBanner));
+            GameEventMgr.AddHandler(m_player, GamePlayerEvent.LeaveGroup, new DOLEventHandler(PlayerLeaveGroup));
             GameEventMgr.AddHandler(m_player, GamePlayerEvent.Quit, new DOLEventHandler(PlayerLoseBanner));
             GameEventMgr.AddHandler(m_player, GamePlayerEvent.StealthStateChanged, new DOLEventHandler(PlayerLoseBanner));
             GameEventMgr.AddHandler(m_player, GamePlayerEvent.Linkdeath, new DOLEventHandler(PlayerLoseBanner));
@@ -150,7 +163,7 @@ namespace DOL.GS
 
         protected virtual void RemoveHandlers()
         {
-            GameEventMgr.RemoveHandler(m_player, GamePlayerEvent.LeaveGroup, new DOLEventHandler(PlayerLoseBanner));
+            GameEventMgr.RemoveHandler(m_player, GamePlayerEvent.LeaveGroup, new DOLEventHandler(PlayerLeaveGroup));
             GameEventMgr.RemoveHandler(m_player, GamePlayerEvent.Quit, new DOLEventHandler(PlayerLoseBanner));
             GameEventMgr.RemoveHandler(m_player, GamePlayerEvent.StealthStateChanged, new DOLEventHandler(PlayerLoseBanner));
             GameEventMgr.RemoveHandler(m_player, GamePlayerEvent.Linkdeath, new DOLEventHandler(PlayerLoseBanner));
@@ -164,6 +177,30 @@ namespace DOL.GS
             m_player.GuildBanner = null;
             m_player.Guild.SendMessageToGuildMembers(string.Format("{0} has put away the guild banner!", m_player.Name), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
             m_player = null;
+        }
+
+        protected int BannerExpireCallback(RegionTimer timer)
+        {
+            timer.Stop();
+            m_expireTimer = null;
+            if (m_player != null)
+            {
+                m_player.Out.SendMessage("You have left the group and your guild banner disappears!", eChatType.CT_Loot, eChatLoc.CL_SystemWindow);
+                m_player.GuildBanner = null;
+            }
+            Stop();
+            m_player.GuildBanner = null;
+            m_player.Guild.SendMessageToGuildMembers(string.Format("{0} has put away the guild banner!", m_player.Name), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+            m_player = null;
+            return 0;
+        }
+
+        protected void PlayerLeaveGroup(DOLEvent e, object sender, EventArgs args)
+        {
+            m_expireTimer = new RegionTimer(m_player);
+            m_expireTimer.Interval = 30000; // Banner expires after 30 seconds
+            m_expireTimer.Callback = BannerExpireCallback;
+            m_expireTimer.Start(m_expireTimer.Interval);
         }
 
         protected void PlayerDied(DOLEvent e, object sender, EventArgs args)
