@@ -37,61 +37,33 @@ namespace DOL.GS
 
         public void Start()
         {
+            if (m_player == null)
+            {
+                if (m_timer != null)
+                {
+                    m_timer.Stop();
+                    m_timer = null;
+                }
+                return;
+            }
+
             if (m_player.Group != null)
             {
-                if (m_player != null)
+                foreach (GamePlayer groupPlayer in m_player.Group.GetPlayersInTheGroup())
                 {
-                    bool groupHasBanner = false;
-
-                    foreach (GamePlayer groupPlayer in m_player.Group.GetPlayersInTheGroup())
+                    if (groupPlayer.GuildBanner != null)
                     {
-                        if (groupPlayer.GuildBanner != null)
-                        {
-                            groupHasBanner = true;
-                            break;
-                        }
-                    }
-
-                    if (groupHasBanner == false)
-                    {
-                        if (m_item == null)
-                        {
-                            GuildBannerItem item = new GuildBannerItem(GuildBannerTemplate);
-
-                            item.OwnerGuild = m_player.Guild;
-                            item.SummonPlayer = m_player;
-                            m_item = item;
-                        }
-
-                        m_player.GuildBanner = this;
-                        m_player.Stealth(false);
-                        AddHandlers();
-
+                        m_player.Out.SendMessage("Someone in your group already has a guild banner active!", eChatType.CT_Loot, eChatLoc.CL_SystemWindow);
                         if (m_timer != null)
                         {
                             m_timer.Stop();
                             m_timer = null;
                         }
-
-                        m_timer = new RegionTimer(m_player, new RegionTimerCallback(TimerTick));
-                        m_timer.Start(1);
-
-                    }
-                    else
-                    {
-                        m_player.Out.SendMessage("Someone in your group already has a guild banner active!", eChatType.CT_Loot, eChatLoc.CL_SystemWindow);
-                    }
-                }
-                else
-                {
-                    if (m_timer != null)
-                    {
-                        m_timer.Stop();
-                        m_timer = null;
+                        return;
                     }
                 }
             }
-            else if (m_player.Client.Account.PrivLevel == (int)ePrivLevel.Player)
+            else if (m_player.Client.Account.PrivLevel <= (int)ePrivLevel.Player)
             {
                 m_player.Out.SendMessage("You have left the group and your guild banner disappears!", eChatType.CT_Loot, eChatLoc.CL_SystemWindow);
                 m_player.GuildBanner = null;
@@ -100,7 +72,30 @@ namespace DOL.GS
                     m_timer.Stop();
                     m_timer = null;
                 }
+                return;
             }
+
+            if (m_item == null)
+            {
+                GuildBannerItem item = new GuildBannerItem(GuildBannerTemplate);
+
+                item.OwnerGuild = m_player.Guild;
+                item.SummonPlayer = m_player;
+                m_item = item;
+            }
+
+            m_player.GuildBanner = this;
+            m_player.Stealth(false);
+            AddHandlers();
+
+            if (m_timer != null)
+            {
+                m_timer.Stop();
+                m_timer = null;
+            }
+
+            m_timer = new RegionTimer(m_player, new RegionTimerCallback(TimerTick));
+            m_timer.Start(1);
         }
 
         public void Stop()

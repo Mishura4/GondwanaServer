@@ -774,54 +774,65 @@ namespace DOL.GS.Commands
                     #region Buybanner
                     case "buybanner":
                         {
-                            if (client.Player.Guild.GuildLevel < 7)
+                            if (client.Player.Guild == null || (client.Player.Guild.IsSystemGuild == true && client.Account.PrivLevel <= 1))
                             {
-                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.GuildLevelReq"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NotMember"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 return;
                             }
 
                             long bannerPrice = (client.Player.Guild.GuildLevel * 100);
 
-                            if (client.Player.Guild == null)
-                            {
-                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NotMember"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                                return;
-                            }
                             if (client.Player.Guild.GuildBanner)
                             {
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.BannerAlready"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 return;
                             }
 
-                            TimeSpan lostTime = DateTime.Now.Subtract(client.Player.Guild.GuildBannerLostTime);
-
-                            if (lostTime.TotalMinutes < Properties.GUILD_BANNER_LOST_TIME)
+                            if (client.Account.PrivLevel <= 1)
                             {
-                                int hoursLeft = (int)((Properties.GUILD_BANNER_LOST_TIME - lostTime.TotalMinutes + 30) / 60);
-                                if (hoursLeft < 2)
+                                if (client.Player.Guild.GuildLevel < 7)
                                 {
-                                    int minutesLeft = (int)(Properties.GUILD_BANNER_LOST_TIME - lostTime.TotalMinutes + 1);
-                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Banner.LostMinutes", minutesLeft), eChatType.CT_Guild, eChatLoc.CL_ChatWindow);
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.GuildLevelReq"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    return;
                                 }
-                                else
+
+                                TimeSpan lostTime = DateTime.Now.Subtract(client.Player.Guild.GuildBannerLostTime);
+
+                                if (lostTime.TotalMinutes < Properties.GUILD_BANNER_LOST_TIME)
                                 {
-                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Banner.LostHours", hoursLeft), eChatType.CT_Guild, eChatLoc.CL_ChatWindow);
+                                    int hoursLeft = (int)((Properties.GUILD_BANNER_LOST_TIME - lostTime.TotalMinutes + 30) / 60);
+                                    if (hoursLeft < 2)
+                                    {
+                                        int minutesLeft = (int)(Properties.GUILD_BANNER_LOST_TIME - lostTime.TotalMinutes + 1);
+                                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Banner.LostMinutes", minutesLeft), eChatType.CT_Guild, eChatLoc.CL_ChatWindow);
+                                    }
+                                    else
+                                    {
+                                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Banner.LostHours", hoursLeft), eChatType.CT_Guild, eChatLoc.CL_ChatWindow);
+                                    }
+                                    return;
                                 }
-                                return;
                             }
 
 
                             client.Player.Guild.UpdateGuildWindow();
 
-                            if (client.Player.Guild.BountyPoints > bannerPrice || client.Account.PrivLevel > (int)ePrivLevel.Player)
+                            if (client.Account.PrivLevel > (int)ePrivLevel.Player)
                             {
-                                client.Out.SendCustomDialog(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Banner.BuyPrice", bannerPrice), ConfirmBannerBuy);
-                                client.Player.TempProperties.setProperty(GUILD_BANNER_PRICE, bannerPrice);
+                                ConfirmBannerBuy(client.Player, 0x01);
                             }
                             else
                             {
-                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.BannerNotAfford"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                                return;
+                                if (client.Player.Guild.BountyPoints > bannerPrice)
+                                {
+                                    client.Out.SendCustomDialog(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Banner.BuyPrice", bannerPrice), ConfirmBannerBuy);
+                                    client.Player.TempProperties.setProperty(GUILD_BANNER_PRICE, bannerPrice);
+                                }
+                                else
+                                {
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.BannerNotAfford"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    return;
+                                }
                             }
 
                             break;
@@ -866,24 +877,25 @@ namespace DOL.GS.Commands
                                 }
                             }
 
+                            GuildBanner banner = new GuildBanner(client.Player);
+                            banner.Start();
+                            client.Out.SendMessage(
+                                LanguageMgr.GetTranslation(
+                                    client.Account.Language,
+                                    "Commands.Players.Guild.BannerSummoned"),
+                                eChatType.CT_System,
+                                eChatLoc.CL_SystemWindow);
+                            client.Player.Guild.SendMessageToGuildMembers(
+                                LanguageMgr.GetTranslation(
+                                    client.Account.Language,
+                                    "Commands.Players.Guild.BannerSummoned",
+                                    client.Player.Name),
+                                eChatType.CT_Guild,
+                                eChatLoc.CL_SystemWindow);
+                            client.Player.Guild.UpdateGuildWindow();
+
                             /* if (client.Player.IsInRvR)
                             {
-                                GuildBanner banner = new GuildBanner(client.Player);
-                                banner.Start();
-                                client.Out.SendMessage(
-                                    LanguageMgr.GetTranslation(
-                                        client.Account.Language,
-                                        "Commands.Players.Guild.BannerSummoned"),
-                                        eChatType.CT_System,
-                                        eChatLoc.CL_SystemWindow);
-                                client.Player.Guild.SendMessageToGuildMembers(
-                                    LanguageMgr.GetTranslation(
-                                        client.Account.Language,
-                                        "Commands.Players.Guild.BannerSummoned",
-                                        client.Player.Name),
-                                    eChatType.CT_Guild,
-                                    eChatLoc.CL_SystemWindow);
-                                client.Player.Guild.UpdateGuildWindow();
                             }
                             else
                             {
@@ -2874,23 +2886,25 @@ namespace DOL.GS.Commands
             if (response != 0x01)
                 return;
 
-            long bannerPrice = player.TempProperties.getProperty<long>(GUILD_BANNER_PRICE, 0);
-            player.TempProperties.removeProperty(GUILD_BANNER_PRICE);
-
-            if (bannerPrice == 0 || player.Guild.GuildBanner)
+            if (player.Guild.GuildBanner)
                 return;
 
-            if (player.Guild.BountyPoints >= bannerPrice || player.Client.Account.PrivLevel > (int)ePrivLevel.Player)
+            long bannerPrice = 0;
+            if (player.Client.Account.PrivLevel <= (int)ePrivLevel.Player)
             {
+
+                bannerPrice = player.TempProperties.getProperty<long>(GUILD_BANNER_PRICE, 0);
+                player.TempProperties.removeProperty(GUILD_BANNER_PRICE);
+
+                if (player.Guild.BountyPoints < bannerPrice)
+                {
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Commands.Players.Guild.BannerNotAfford"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    return;
+                }
                 player.Guild.RemoveBountyPoints(bannerPrice);
-                player.Guild.GuildBanner = true;
-                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Commands.Players.Guild.BannerBought", bannerPrice), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
             }
-            else
-            {
-                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Commands.Players.Guild.BannerNotAfford"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                return;
-            }
+            player.Guild.GuildBanner = true;
+            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Commands.Players.Guild.BannerBought", bannerPrice), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
 
         }
 

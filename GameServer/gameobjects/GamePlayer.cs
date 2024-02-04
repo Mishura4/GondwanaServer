@@ -4784,7 +4784,7 @@ namespace DOL.GS
 
             Wallet.AddMoney(Currency.BountyPoints.Mint(amount));
 
-            if (m_guild != null && Client.Account.PrivLevel == 1)
+            if (m_guild is { IsSystemGuild: false } && Client.Account.PrivLevel == 1)
                 m_guild.BountyPoints += amount;
 
             if (sendMessage == true)
