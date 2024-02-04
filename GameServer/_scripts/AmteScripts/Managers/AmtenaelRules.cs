@@ -15,6 +15,7 @@ using DOL.Events;
 using DOL.GS.PlayerClass;
 using DOL.gameobjects.CustomNPC;
 using DOL.GS.Finance;
+using DOL.Language;
 
 namespace DOL.GS.ServerRules
 {
@@ -753,11 +754,28 @@ namespace DOL.GS.ServerRules
             return true;
         }
 
+        /// <summary>
+        /// Is this player allowed to summon their guild's banner
+        /// </summary>
+        /// <param name="player">The player trying to summon the guild banner</param>
+        /// <returns></returns>
+        public override bool IsAllowedToSummonBanner(GamePlayer player, bool quiet)
+        {
+            if (player.CurrentZone.IsDungeon)
+            {
+                if (!quiet)
+                {
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Commands.Players.Guild.BannerCantInDungeon"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                }
+                return false;
+            }
+            return true;
+        }
+
         public override string ReasonForDisallowMounting(GamePlayer player)
         {
             return RvrManager.Instance.IsInRvr(player) ? "GameObjects.GamePlayer.UseSlot.CantCallMountRVR" : base.ReasonForDisallowMounting(player);
         }
-
         public override string GetPlayerName(GamePlayer source, GamePlayer target)
         {
             if (RvrManager.Instance.IsInRvr(source) && RvrManager.Instance.IsInRvr(target) && source.Realm != target.Realm)

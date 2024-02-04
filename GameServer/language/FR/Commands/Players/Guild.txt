@@ -37,6 +37,7 @@ Commands.Players.Guild.BannerSummoned:		    Vous avez invoqué votre bannière d
 Commands.Players.Guild.BannerUnsummoned.You:		Vous avez retiré votre bannière de guilde.
 Commands.Players.Guild.BannerUnsummoned:		    {0} a retiré votre bannière de guilde.
 Commands.Players.Guild.BannerNotRvR:			    Vous devez vous trouver dans une zone RvR pour invoquer une bannière !
+Commands.Players.Guild.BannerCantInDungeon:			Voud ne pouvez pas invoquer une bannière dans un donjon!
 Commands.Players.Guild.Banner.BuyPrice:             Vous devez payer la somme de {0} pour acheter une bannière.
 Commands.Players.Guild.BannerCarriyng.None:         Vous ne portez pas de bannière.
 Commands.Players.Guild.Banner.LostMinutes           Votre bannière a été prise par l'ennemi. Vous devez attendre {0} minute(s) !

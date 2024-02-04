@@ -37,6 +37,7 @@ Commands.Players.Guild.BannerSummoned:		    You have summoned your guild banner.
 Commands.Players.Guild.BannerUnsummoned.You:		You have removed your guild banner.
 Commands.Players.Guild.BannerUnsummoned:		    {0} has removed your guild banner.
 Commands.Players.Guild.BannerNotRvR:			    You must be in an RvR zone to summon a banner!
+Commands.Players.Guild.BannerCantInDungeon:			You cannot summon a banner in a dungeon!
 Commands.Players.Guild.Banner.BuyPrice:             You must pay the amount of {0} to buy a banner.
 Commands.Players.Guild.BannerCarriyng.None:         You are not carrying a banner.
 Commands.Players.Guild.Banner.LostMinutes           Your banner has been lost to the enemy. You must wait {0} minute(s)!

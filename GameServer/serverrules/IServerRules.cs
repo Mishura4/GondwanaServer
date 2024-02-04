@@ -190,6 +190,14 @@ namespace DOL.GS.ServerRules
         bool IsAllowedToZone(GamePlayer player, Region region);
 
         /// <summary>
+        /// Is this player allowed to summon their guild's banner
+        /// </summary>
+        /// <param name="player">The player trying to summon the guild banner</param>
+        /// <param name="quiet">Should messages be sent</param>
+        /// <returns></returns>
+        bool IsAllowedToSummonBanner(GamePlayer player, bool quiet = true);
+
+        /// <summary>
         /// Is this player allowed to ride his personnal mount ?
         /// </summary>
         /// <param name="player">player summoning the horse</param>

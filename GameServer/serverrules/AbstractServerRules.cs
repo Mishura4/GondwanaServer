@@ -654,6 +654,24 @@ namespace DOL.GS.ServerRules
         }
 
         /// <summary>
+        /// Is this player allowed to summon their guild's banner
+        /// </summary>
+        /// <param name="player">The player trying to summon the guild banner</param>
+        /// <returns></returns>
+        public virtual bool IsAllowedToSummonBanner(GamePlayer player, bool quiet)
+        {
+            if (!player.IsInRvR)
+            {
+                if (!quiet)
+                {
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Commands.Players.Guild.BannerNotRvR"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                }
+                return false;
+            }
+            return true;
+        }
+
+        /// <summary>
         /// is player allowed to ride his personal mount ?
         /// </summary>
         /// <param name="player"></param>

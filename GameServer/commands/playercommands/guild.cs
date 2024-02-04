@@ -877,30 +877,25 @@ namespace DOL.GS.Commands
                                 }
                             }
 
-                            GuildBanner banner = new GuildBanner(client.Player);
-                            banner.Start();
-                            client.Out.SendMessage(
-                                LanguageMgr.GetTranslation(
-                                    client.Account.Language,
-                                    "Commands.Players.Guild.BannerSummoned"),
-                                eChatType.CT_System,
-                                eChatLoc.CL_SystemWindow);
-                            client.Player.Guild.SendMessageToGuildMembers(
-                                LanguageMgr.GetTranslation(
-                                    client.Account.Language,
-                                    "Commands.Players.Guild.BannerSummoned",
-                                    client.Player.Name),
-                                eChatType.CT_Guild,
-                                eChatLoc.CL_SystemWindow);
-                            client.Player.Guild.UpdateGuildWindow();
-
-                            /* if (client.Player.IsInRvR) // Gondwana -- bznners are summonable anywhere
+                            if (GameServer.ServerRules.IsAllowedToSummonBanner(client.Player, false))
                             {
+                                GuildBanner banner = new GuildBanner(client.Player);
+                                banner.Start();
+                                client.Out.SendMessage(
+                                    LanguageMgr.GetTranslation(
+                                        client.Account.Language,
+                                        "Commands.Players.Guild.BannerSummoned"),
+                                    eChatType.CT_System,
+                                    eChatLoc.CL_SystemWindow);
+                                client.Player.Guild.SendMessageToGuildMembers(
+                                    LanguageMgr.GetTranslation(
+                                        client.Account.Language,
+                                        "Commands.Players.Guild.BannerSummoned",
+                                        client.Player.Name),
+                                    eChatType.CT_Guild,
+                                    eChatLoc.CL_SystemWindow);
+                                client.Player.Guild.UpdateGuildWindow();
                             }
-                            else
-                            {
-                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.BannerNotRvR"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-                            }*/
 
                             break;
                         }
