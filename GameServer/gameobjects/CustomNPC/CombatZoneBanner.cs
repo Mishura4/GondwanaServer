@@ -31,6 +31,8 @@ namespace DOL.GS
             ret.Name = "Banner of " + owningGuild.Name;
             ret.OwningGuild = owningGuild;
             ret.CombatArea = area;
+            ret.OriginalEmblem = owningGuild.Emblem;
+            ret.Emblem = owningGuild.Emblem;
             return ret;
         }
 
