@@ -823,7 +823,7 @@ namespace DOL.GS.Commands
                             }
                             else
                             {
-                                if (client.Player.Guild.BountyPoints > bannerPrice)
+                                if (client.Player.Guild.MeritPoints > bannerPrice)
                                 {
                                     client.Out.SendCustomDialog(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Banner.BuyPrice", bannerPrice), ConfirmBannerBuy);
                                     client.Player.TempProperties.setProperty(GUILD_BANNER_PRICE, bannerPrice);
@@ -894,7 +894,7 @@ namespace DOL.GS.Commands
                                 eChatLoc.CL_SystemWindow);
                             client.Player.Guild.UpdateGuildWindow();
 
-                            /* if (client.Player.IsInRvR)
+                            /* if (client.Player.IsInRvR) // Gondwana -- bznners are summonable anywhere
                             {
                             }
                             else
@@ -2896,12 +2896,12 @@ namespace DOL.GS.Commands
                 bannerPrice = player.TempProperties.getProperty<long>(GUILD_BANNER_PRICE, 0);
                 player.TempProperties.removeProperty(GUILD_BANNER_PRICE);
 
-                if (player.Guild.BountyPoints < bannerPrice)
+                if (player.Guild.MeritPoints < bannerPrice)
                 {
                     player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Commands.Players.Guild.BannerNotAfford"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     return;
                 }
-                player.Guild.RemoveBountyPoints(bannerPrice);
+                player.Guild.RemoveMeritPoints(bannerPrice);
             }
             player.Guild.GuildBanner = true;
             player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Commands.Players.Guild.BannerBought", bannerPrice), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
