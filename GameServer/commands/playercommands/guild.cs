@@ -830,7 +830,7 @@ namespace DOL.GS.Commands
                     #region Summon
                     case "summon":
                         {
-                            if (client.Player.Guild == null)
+                            if (client.Player.Guild == null || (client.Player.Guild.IsSystemGuild == true && client.Account.PrivLevel <= 1))
                             {
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NotMember"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 return;
@@ -899,7 +899,7 @@ namespace DOL.GS.Commands
                     // --------------------------------------------------------------------------------
                     case "buff":
                         {
-                            if (client.Player.Guild == null)
+                            if (client.Player.Guild == null || (client.Player.Guild.IsSystemGuild == true && client.Account.PrivLevel <= 1))
                             {
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NotMember"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 return;
@@ -1240,7 +1240,7 @@ namespace DOL.GS.Commands
                             {
                                 var territory = TerritoryManager.Instance.GetCurrentTerritory(client.Player.CurrentAreas);
 
-                                if (client.Player.Guild == null)
+                                if (client.Player.Guild == null || (client.Player.Guild.IsSystemGuild == true && client.Account.PrivLevel <= 1))
                                 {
                                     client.Out.SendMessage("Vous devez avoir une guilde pour faire cela", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                     break;
@@ -1279,13 +1279,13 @@ namespace DOL.GS.Commands
                     case "territoryportal":
                         {
                             GamePlayer player = client.Player;
-                            Guild guild = player.Guild;
 
-                            if (guild == null)
+                            if (client.Player.Guild == null || (client.Player.Guild.IsSystemGuild == true && client.Account.PrivLevel <= 1))
                             {
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.TerritoryPortal.NoGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 break;
                             }
+                            Guild guild = player.Guild;
                             if (TerritoryManager.Instance.DoesPlayerOwnsTerritory(player) && GameServer.ServerRules.IsInPvPArea(player))
                             {
                                 var territory = TerritoryManager.Instance.GetCurrentTerritory(player.CurrentAreas);
@@ -1350,7 +1350,7 @@ namespace DOL.GS.Commands
                             Guild guild = player.Guild;
                             Region region = player.CurrentRegion;
 
-                            if (guild == null)
+                            if (client.Player.Guild == null || (client.Player.Guild.IsSystemGuild == true && client.Account.PrivLevel <= 1))
                             {
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.CombatZone.NoGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 break;
@@ -2534,7 +2534,7 @@ namespace DOL.GS.Commands
                     // --------------------------------------------------------------------------------
                     case "claim":
                         {
-                            if (client.Player.Guild == null)
+                            if (client.Player.Guild == null || (client.Player.Guild.IsSystemGuild == true && client.Account.PrivLevel <= 1))
                             {
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NotMember"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 return;
@@ -2834,7 +2834,7 @@ namespace DOL.GS.Commands
 
                     #region territories
                     case "territories":
-                        if (client.Player.Guild == null)
+                        if (client.Player.Guild == null || (client.Player.Guild.IsSystemGuild == true && client.Account.PrivLevel <= 1))
                         {
                             client.Out.SendMessage("Vous devez etre dans une guilde pour voir les territoires occupés", eChatType.CT_System, eChatLoc.CL_ChatWindow);
                             break;

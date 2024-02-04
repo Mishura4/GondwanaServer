@@ -201,7 +201,7 @@ namespace DOL.Territory
 
         public void ChangeGuildOwner(GameNPC mob, Guild guild)
         {
-            if (guild == null || mob == null || string.IsNullOrEmpty(mob.InternalID))
+            if (guild is not { IsSystemGuild: false } || mob == null || string.IsNullOrEmpty(mob.InternalID))
             {
                 return;
             }

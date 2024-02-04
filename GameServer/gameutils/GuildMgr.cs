@@ -27,6 +27,7 @@ using DOL.Events;
 using DOL.GS.PacketHandler;
 using log4net;
 using DOL.GS.Finance;
+using System.Collections;
 
 namespace DOL.GS
 {
@@ -388,6 +389,18 @@ namespace DOL.GS
         }
 
         /// <summary>
+        /// Update the system guilds after loading server properties
+        /// </summary>
+        public static void LoadSystemGuilds()
+        {
+            var ids = ServerProperties.Properties.SYSTEM_GUILDS.Split('|');
+            foreach (Guild g in m_guilds.Values)
+            {
+                g.IsSystemGuild = ids.Contains(g.GuildID);
+            }
+        }
+
+        /// <summary>
         /// Returns a guild according to the matching name
         /// </summary>
         /// <returns>Guild</returns>
@@ -507,6 +520,9 @@ namespace DOL.GS
                     }
                 }
             }
+
+            // load system guilds
+            LoadSystemGuilds();
 
             return true;
         }

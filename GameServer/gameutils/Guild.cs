@@ -155,6 +155,11 @@ namespace DOL.GS
         /// </summary>
         protected List<AbstractGameKeep> m_claimedKeeps = new List<AbstractGameKeep>();
 
+        /// <summary>
+        /// Whether the guild is a system guild, e.g. cannot claim territories
+        /// </summary>
+        public bool IsSystemGuild { get; set; }
+
         public eRealm Realm
         {
             get
@@ -1081,10 +1086,17 @@ namespace DOL.GS
         {
             get
             {
-                // added by Dunnerholl
-                // props to valmerwolf for formula
-                // checked with pendragon
-                return (long)(Math.Sqrt(m_DBguild.RealmPoints / 10000) + 1);
+                if (IsSystemGuild)
+                {
+                    return 0;
+                }
+                else
+                {
+                    // added by Dunnerholl
+                    // props to valmerwolf for formula
+                    // checked with pendragon
+                    return (long)(Math.Sqrt(m_DBguild.RealmPoints / 10000) + 1);
+                }
             }
         }
 

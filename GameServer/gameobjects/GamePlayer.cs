@@ -4653,7 +4653,7 @@ namespace DOL.GS
 
             RealmPoints += amount;
 
-            if (m_guild != null && Client.Account.PrivLevel == 1)
+            if (m_guild != null && !m_guild.IsSystemGuild && Client.Account.PrivLevel == 1)
                 m_guild.RealmPoints += amount;
 
             if (sendMessage == true && amount > 0)
@@ -14373,7 +14373,7 @@ namespace DOL.GS
         {
             get
             {
-                if (Guild == null || Client.Account.PrivLevel > 1 || m_isEligibleToGiveMeritPoints == false)
+                if (Guild == null || Guild.IsSystemGuild || Client.Account.PrivLevel > 1 || m_isEligibleToGiveMeritPoints == false)
                     return false;
 
                 return true;

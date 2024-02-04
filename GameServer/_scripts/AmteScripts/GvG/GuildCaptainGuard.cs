@@ -15,17 +15,6 @@ namespace DOL.GS.Scripts
         public const ushort AREA_RADIUS = 4096;
         public const ushort NEUTRAL_EMBLEM = 256;
 
-        /// <summary>
-        /// "Fausses" guildes : Albion, Hibernia, Midgard, Les Maitres du Temps, Citoyens d'Amtenael
-        /// </summary>
-        private static readonly string[] _systemGuildIds = new[]
-        {
-            "063bbcc7-0005-4667-a9ba-402746c5ae15",
-            "bdbc6f4a-b9f8-4316-b88b-9698e06cdd7b",
-            "50d7af62-7142-4955-9f31-0c58ac1ac33f",
-            "ce6f0b34-78bc-45a9-9f65-6e849d498f6c",
-            "386c822f-996b-4db6-8bd8-121c07fc11cd",
-        };
         public static readonly List<GuildCaptainGuard> allCaptains = new List<GuildCaptainGuard>();
 
         private Guild _guild;
@@ -149,7 +138,7 @@ namespace DOL.GS.Scripts
                 case "default":
                 case "modifier les alliances":
                     var guilds = GuildMgr.GetAllGuilds()
-                        .Where(g => !_systemGuildIds.Contains(g.GuildID) && g.GuildID != _guild.GuildID)
+                        .Where(g => g.IsSystemGuild == false && g.GuildID != _guild.GuildID)
                         .OrderBy(g => g.Name)
                         .Select(g =>
                         {
