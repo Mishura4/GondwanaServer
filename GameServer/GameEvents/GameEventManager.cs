@@ -1007,39 +1007,6 @@ namespace DOL.GameEvents
         {
             e.EndTime = DateTimeOffset.UtcNow;
 
-            if (end == EndingConditionType.Kill && e.IsKillingEvent)
-            {
-                e.Status = EventStatus.EndedByKill;
-                //Allow time to loot
-                await Task.Delay(TimeSpan.FromSeconds(15));
-                await ShowEndEffects(e);
-                CleanEvent(e);
-            }
-            else if (end == EndingConditionType.StartingEvent)
-            {
-                e.Status = EventStatus.EndedByEventStarting;
-                await ShowEndEffects(e);
-                CleanEvent(e);
-            }
-            else if (end == EndingConditionType.Timer)
-            {
-                e.Status = EventStatus.EndedByTimer;
-                await ShowEndEffects(e);
-                CleanEvent(e);
-            }
-            else if (end == EndingConditionType.AreaEvent)
-            {
-                e.Status = EventStatus.EndedByAreaEvent;
-                await ShowEndEffects(e);
-                CleanEvent(e);
-            }
-            else if (end == EndingConditionType.TextNPC)
-            {
-                e.Status = EventStatus.EndedByTextNPC;
-                await ShowEndEffects(e);
-                CleanEvent(e);
-            }
-
             if (e.EndText != null && e.EventZones?.Any() == true)
             {
                 string message = e.EndText;
@@ -1090,34 +1057,66 @@ namespace DOL.GameEvents
                 else
                 {
                     SendEventNotification(e, message, (e.Discord == 2 || e.Discord == 3));
-
-                }
-
-                var eventsCount = GameEventManager.Instance.Events.Where(ev => ev.ID.Equals(e.ID)).Count();
-                if (eventsCount == 1)
-                {
-                    //restore temporarly disabled
-                    foreach (var mob in e.RemovedMobs)
-                    {
-                        mob.Value.AddToWorld();
-                        mob.Value.InternalID = mob.Key;
-                    }
-                    e.RemovedMobs.Clear();
-
-                    foreach (var item in e.RemovedCoffres)
-                    {
-                        item.Value.AddToWorld();
-                        item.Value.InternalID = item.Key;
-                    }
-                    e.RemovedCoffres.Clear();
-                }
-                else
-                {
-                    GameEventManager.Instance.Events.Remove(e);
                 }
 
                 //Enjoy the message
                 await Task.Delay(TimeSpan.FromSeconds(5));
+            }
+
+            if (end == EndingConditionType.Kill && e.IsKillingEvent)
+            {
+                e.Status = EventStatus.EndedByKill;
+                //Allow time to loot
+                await Task.Delay(TimeSpan.FromSeconds(15));
+                await ShowEndEffects(e);
+                CleanEvent(e);
+            }
+            else if (end == EndingConditionType.StartingEvent)
+            {
+                e.Status = EventStatus.EndedByEventStarting;
+                await ShowEndEffects(e);
+                CleanEvent(e);
+            }
+            else if (end == EndingConditionType.Timer)
+            {
+                e.Status = EventStatus.EndedByTimer;
+                await ShowEndEffects(e);
+                CleanEvent(e);
+            }
+            else if (end == EndingConditionType.AreaEvent)
+            {
+                e.Status = EventStatus.EndedByAreaEvent;
+                await ShowEndEffects(e);
+                CleanEvent(e);
+            }
+            else if (end == EndingConditionType.TextNPC)
+            {
+                e.Status = EventStatus.EndedByTextNPC;
+                await ShowEndEffects(e);
+                CleanEvent(e);
+            }
+
+            var eventsCount = GameEventManager.Instance.Events.Where(ev => ev.ID.Equals(e.ID)).Count();
+            if (eventsCount == 1)
+            {
+                //restore temporarly disabled
+                foreach (var mob in e.RemovedMobs)
+                {
+                    mob.Value.AddToWorld();
+                    mob.Value.InternalID = mob.Key;
+                }
+                e.RemovedMobs.Clear();
+
+                foreach (var item in e.RemovedCoffres)
+                {
+                    item.Value.AddToWorld();
+                    item.Value.InternalID = item.Key;
+                }
+                e.RemovedCoffres.Clear();
+            }
+            else
+            {
+                GameEventManager.Instance.Events.Remove(e);
             }
 
             //Handle Consequences
