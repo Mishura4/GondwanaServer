@@ -1390,11 +1390,15 @@ namespace DOL.GS.Commands
                                     client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.CombatZone.NotEnoughMerit", Properties.GUILD_COMBAT_ZONE_MERIT_PRICE), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                     break;
                                 }
-                                AbstractArea closeArea = (AbstractArea)region.FindAnyAreaInRadius(player.Position, Properties.GUILD_COMBAT_ZONE_DISTANCE_FROM_AREAS, true);
-                                if (closeArea != null)
+
+                                if (Properties.GUILD_COMBAT_ZONE_DISTANCE_FROM_AREAS > 0)
                                 {
-                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.CombatZone.TooCloseToArea", closeArea.GetDescriptionForPlayer(player)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                                    break;
+                                    AbstractArea closeArea = (AbstractArea)region.FindAnyAreaInRadius(player.Position, Properties.GUILD_COMBAT_ZONE_DISTANCE_FROM_AREAS, true);
+                                    if (closeArea != null)
+                                    {
+                                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.CombatZone.TooCloseToArea", closeArea.GetDescriptionForPlayer(player)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                        break;
+                                    }
                                 }
 
                                 client.Out.SendCustomDialog(string.Format(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.CombatZone.ConfirmCost"), Properties.GUILD_COMBAT_ZONE_MERIT_PRICE), (GamePlayer player, byte response) =>
