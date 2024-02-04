@@ -135,6 +135,7 @@ namespace DOL.GS.Trainer
                     {
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Baseclass.Mauler.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_ChatWindow);
                     }
+                    return true;
                 case "practice weapon":
                 case "arme d'entraînement":
                     if (player.Inventory.GetFirstItemByID(PRACTICE_WEAPON_ID, eInventorySlot.Min_Inv, eInventorySlot.Max_Inv) == null)
