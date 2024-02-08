@@ -1733,17 +1733,20 @@ namespace DOL.GS.Commands
                             string guildId = "";
                             string plyName = "";
                             ushort currentTargetGuildRank = 9;
+                            Guild guild;
                             GamePlayer ply = obj as GamePlayer;
                             DOLCharacters ch = obj as DOLCharacters;
 
                             if (ply != null)
                             {
                                 plyName = ply.Name;
+                                guild = ply.Guild;
                                 guildId = ply.GuildID;
                                 currentTargetGuildRank = ply.GuildRank.RankLevel;
                             }
                             else if (ch != null)
                             {
+                                guild = GuildMgr.GetGuildByGuildID(ch.GuildID);
                                 plyName = ch.Name;
                                 guildId = ch.GuildID;
                                 currentTargetGuildRank = ch.GuildRank;
@@ -1784,7 +1787,7 @@ namespace DOL.GS.Commands
                             }
                             if (obj is GamePlayer)
                             {
-                                ply.GuildRank = client.Player.Guild.GetRankByID(newrank);
+                                ply.GuildRank = guild.GetRankByID(newrank);
                                 ply.SaveIntoDatabase();
                                 ply.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.PromotedSelf", newrank.ToString()), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             }
@@ -1795,7 +1798,7 @@ namespace DOL.GS.Commands
                                 GameServer.Database.FillObjectRelations(ch);
                             }
                             client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.PromotedOther", plyName, newrank.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-                            client.Player.Guild.UpdateGuildWindow();
+                            guild.UpdateGuildWindow();
                         }
                         break;
                     #endregion
@@ -1905,12 +1908,14 @@ namespace DOL.GS.Commands
                             string guildId = "";
                             ushort guildRank = 1;
                             string plyName = "";
+                            Guild guild;
                             GamePlayer ply = obj as GamePlayer;
                             DOLCharacters ch = obj as DOLCharacters;
                             if (obj is GamePlayer)
                             {
                                 plyName = ply.Name;
                                 guildId = ply.GuildID;
+                                guild = ply.Guild;
                                 if (ply.GuildRank != null)
                                     guildRank = ply.GuildRank.RankLevel;
                             }
@@ -1919,6 +1924,7 @@ namespace DOL.GS.Commands
                                 plyName = ch.Name;
                                 guildId = ch.GuildID;
                                 guildRank = ch.GuildRank;
+                                guild = GuildMgr.GetGuildByGuildID(guildId);
                             }
                             if (guildId != client.Player.GuildID && client.Account.PrivLevel <= 1)
                             {
@@ -1935,7 +1941,7 @@ namespace DOL.GS.Commands
                                 }
                                 if (obj is GamePlayer)
                                 {
-                                    ply.GuildRank = client.Player.Guild.GetRankByID(newrank);
+                                    ply.GuildRank = guild.GetRankByID(newrank);
                                     ply.SaveIntoDatabase();
                                     ply.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Demoted.Self", newrank.ToString()), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 }
@@ -1950,7 +1956,7 @@ namespace DOL.GS.Commands
                             {
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.InvalidRank"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             }
-                            client.Player.Guild.UpdateGuildWindow();
+                            guild.UpdateGuildWindow();
                         }
                         break;
                     #endregion
