@@ -364,7 +364,7 @@ namespace DOL.GS.Commands
                             string playername = String.Join(" ", args, 2, i - 2);
                             string guildname = String.Join(" ", args, i + 1, args.Length - i - 1);
 
-                            GuildMgr.GetGuildByName(guildname).AddPlayer(WorldMgr.GetClientByPlayerName(playername, true, false).Player);
+                            GuildMgr.GetGuildByName(guildname).AddPlayer(WorldMgr.GetClientByPlayerName(playername, true, false).Player, true);
                             client.Player.Guild.UpdateGuildWindow();
                         }
                         break;

@@ -801,7 +801,7 @@ namespace AmteScripts.Managers
                     var guild = GuildMgr.GetGuildByGuildID(rvr.GuildID);
                     if (guild != null)
                     {
-                        guild.AddPlayer(player, guild.GetRankByID(rvr.GuildRank));
+                        guild.AddPlayer(player, guild.GetRankByID(rvr.GuildRank), true);
 
                         foreach (var i in player.Inventory.AllItems.Where(i => i.Emblem != 0))
                             i.Emblem = guild.Emblem;

@@ -739,9 +739,9 @@ namespace DOL.GS
         /// </summary>
         /// <param name="addPlayer"></param>
         /// <returns></returns>
-        public bool AddPlayer(GamePlayer addPlayer)
+        public bool AddPlayer(GamePlayer addPlayer, bool force = false)
         {
-            return AddPlayer(addPlayer, GetRankByID(9));
+            return AddPlayer(addPlayer, GetRankByID(9), force);
         }
 
         /// <summary>
@@ -750,13 +750,13 @@ namespace DOL.GS
         /// <param name="addPlayer"></param>
         /// <param name="rank"></param>
         /// <returns></returns>
-        public bool AddPlayer(GamePlayer addPlayer, DBRank rank)
+        public bool AddPlayer(GamePlayer addPlayer, DBRank rank, bool force = false)
         {
             if (addPlayer == null || addPlayer.Guild != null)
                 return false;
 
 
-            if (m_leave_Players.ContainsKey(addPlayer) && addPlayer.Client.Account.PrivLevel == 1)
+            if (!force && !IsSystemGuild && m_leave_Players.ContainsKey(addPlayer) && addPlayer.Client.Account.PrivLevel == 1)
             {
                 int time = Properties.RECRUITMENT_TIMER_OPTION - (int)DateTime.Now.Subtract(m_leave_Players[addPlayer]).TotalMinutes;
                 addPlayer.Client.Out.SendMessage(LanguageMgr.GetTranslation(addPlayer.Client.Account.Language, "Commands.Players.Guild.NotAbleToBeInvited", time), eChatType.CT_Advise, eChatLoc.CL_SystemWindow);
@@ -779,7 +779,7 @@ namespace DOL.GS
                 addPlayer.Out.SendMessage("Your current rank is " + addPlayer.GuildRank.Title + "!", eChatType.CT_Group, eChatLoc.CL_SystemWindow);
                 SendMessageToGuildMembers(addPlayer.Name + " has joined the guild!", eChatType.CT_Group, eChatLoc.CL_SystemWindow);
                 addPlayer.Client.Out.SendCharResistsUpdate();
-                if (addPlayer.Client.Account.PrivLevel != 1)
+                if (IsSystemGuild || force || addPlayer.Client.Account.PrivLevel != 1)
                     return true;
                 m_invite_Players.Add(addPlayer, DateTime.Now);
             }
@@ -802,7 +802,7 @@ namespace DOL.GS
         public bool RemovePlayer(string removername, GamePlayer member)
         {
             GameClient remover = WorldMgr.GetClientByPlayerName(removername, false, true);
-            if (m_invite_Players.ContainsKey(member) && (remover == null || ((remover != null) && remover.Account.PrivLevel == 1)))
+            if (!IsSystemGuild && remover is { Account.PrivLevel: < 2 } && m_invite_Players.ContainsKey(member))
             {
                 int time = Properties.RECRUITMENT_TIMER_OPTION - (int)DateTime.Now.Subtract(m_invite_Players[member]).TotalMinutes;
                 if (member.Name == removername)
@@ -832,7 +832,7 @@ namespace DOL.GS
                     member.Out.SendMessage(removername + " removed you from " + this.Name, PacketHandler.eChatType.CT_System, PacketHandler.eChatLoc.CL_SystemWindow);
 
                 member.Client.Out.SendCharResistsUpdate();
-                if (remover != null && remover.Account.PrivLevel != 1)
+                if (IsSystemGuild || remover is { Account.PrivLevel: > 1 })
                     return true;
                 if (!m_leave_Players.ContainsKey(member))
                     m_leave_Players.Add(member, DateTime.Now);
