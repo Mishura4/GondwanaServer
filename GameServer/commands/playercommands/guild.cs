@@ -1790,6 +1790,7 @@ namespace DOL.GS.Commands
                                 ply.GuildRank = guild.GetRankByID(newrank);
                                 ply.SaveIntoDatabase();
                                 ply.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.PromotedSelf", newrank.ToString()), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                ply.Out.SendUpdatePlayer();
                             }
                             else
                             {
@@ -1944,6 +1945,7 @@ namespace DOL.GS.Commands
                                     ply.GuildRank = guild.GetRankByID(newrank);
                                     ply.SaveIntoDatabase();
                                     ply.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Demoted.Self", newrank.ToString()), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    ply.Out.SendUpdatePlayer();
                                 }
                                 else
                                 {
@@ -1951,12 +1953,12 @@ namespace DOL.GS.Commands
                                     GameServer.Database.SaveObject(ch);
                                 }
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Demoted.Other", plyName, newrank.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                                guild.UpdateGuildWindow();
                             }
                             catch
                             {
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.InvalidRank"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             }
-                            guild.UpdateGuildWindow();
                         }
                         break;
                     #endregion
