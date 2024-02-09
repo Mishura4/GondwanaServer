@@ -132,6 +132,7 @@ Commands.Players.Guild.Help.GuildGMRemovePlayer:	'/gc removeplayer <nom de joueu
 Commands.Players.Guild.Help.GuildGMRename:		'/gc rename <ancien nom> to <nouveau nom>' # Renomme une guilde <ancien nom> <nouveau nom>.
 Commands.Players.Guild.Help.GuildInfo:			'/gc info' # Liste les informations à propos de cette guilde.
 Commands.Players.Guild.Help.GuildInvite:			'/gc invite <nom de joueur>' # Invite un joueur à rejoindre la guilde.
+Commands.Players.Guild.Help.JailRelease:			'/gc jailrelease <nom de joueur>' # Paie l'ammende d'un joueur pour le ou la relâcher de prison avec l'argent de la banque de guilde.
 Commands.Players.Guild.Help.GuildLeader:			'/gc leader <nom de joueur>' # Choisis le nouveau chef de guilde.
 Commands.Players.Guild.Help.GuildList:			'/gc list' # Informe le joueur de toutes les guildes présentes dans le royaume.
 Commands.Players.Guild.Help.GuildMotd:			'/gc motd <texte>' # Modifie le message du jour de la guilde.
@@ -232,6 +233,14 @@ Commands.Players.Guild.WebpageSet:				Vous avez défini la page internet de la g
 Commands.Players.Guild.Withdrawamount:			Votre taxe de {0} va dans la caisse de guilde.
 Commands.Players.Guild.WithdrawInvalid:			Ce n'est pas un montant valide.
 Commands.Players.Guild.WithdrawTooMuch:			Vous ne pouvez plus ajouter d'argent dans la caisse de guilde.
+
+Commands.Players.Guild.JailRelease.NoGuild:			Vous devez faire parti d'une guilde pour utiliser cette commande.
+Commands.Players.Guild.JailRelease.GuildTooLow:		Votre guilde n'est pas assez haut niveau pour utiliser cette commande.
+Commands.Players.Guild.JailRelease.RankTooLow:		Votre rang de guilde est trop bas pour utiliser cette commande.
+Commands.Players.Guild.JailRelease.NotInJail:		{0} n'est pas en prison.
+Commands.Players.Guild.JailRelease.ConfirmCost:		Relâcher {0} de prison coûtera {1} pièces d'or à votre banque de guilde. Confirmer?
+Commands.Players.Guild.JailRelease.NotEnoughMoney:	Votre banque de guilde n'a pas assez d'or pour relâcher {0}.
+Commands.Players.Guild.JailRelease.Released:		{0} a été relâché(e) de prison par {1}.
 
 
 

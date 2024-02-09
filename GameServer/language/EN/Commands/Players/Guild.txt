@@ -132,6 +132,7 @@ Commands.Players.Guild.Help.GuildGMRemovePlayer:	'/gc removeplayer <player's nam
 Commands.Players.Guild.Help.GuildGMRename:		'/gc rename <previous name> to <new name>' # To rename a guilde <previous name> <new name>.
 Commands.Players.Guild.Help.GuildInfo:			'/gc info' # Displays all informations related to this guild.
 Commands.Players.Guild.Help.GuildInvite:			'/gc invite <player's name>' # Invite a player to join the guild.
+Commands.Players.Guild.Help.JailRelease:			'/gc jailrelease <player's name>' # Pay for a player to be released from jail from the guild bank funds.
 Commands.Players.Guild.Help.GuildLeader:			'/gc leader <player's name>' # Choose a new guild leader.
 Commands.Players.Guild.Help.GuildList:			'/gc list' # Shows all guilds in the realm to the player.
 Commands.Players.Guild.Help.GuildMotd:			'/gc motd <text>' # Edit Guild's Message of the Day.
@@ -233,6 +234,14 @@ Commands.Players.Guild.Withdrawamount:			Your {0} tax is transfered to the guild
 Commands.Players.Guild.WithdrawInvalid:			This is not a valid amount.
 Commands.Players.Guild.WithdrawTooMuch:			You can no longer add money to the guild's bank.
 
+Commands.Players.Guild.JailRelease.NoGuild:			You must be part of a guild to use this command.
+Commands.Players.Guild.JailRelease.GuildTooLow:		Your guild is too low level to use this command.
+Commands.Players.Guild.JailRelease.RankTooLow:		Your guild rank is too low to use this command.
+Commands.Players.Guild.JailRelease.NotInJail:		{0} is not in jail.
+Commands.Players.Guild.JailRelease.ConfirmCost:		Releasing {0} from jail will cost {1} gold to the guild bank. Confirm?
+Commands.Players.Guild.JailRelease.NotEnoughMoney:	Your guild bank do not have enough money to release {0}.
+Commands.Players.Guild.JailRelease.Released:		{0} was released from jail by {1}.
+
 Commands.Players.Guild.TerritoryPortal.NoGuild:			You must be in a guild to summon a guild portal.
 Commands.Players.Guild.TerritoryPortal.Denied:			You must be rank 4 or lower in your guild to summon a guild portal.
 Commands.Players.Guild.TerritoryPortal.ConfirmCost:		Summoning a guild portal will cost {0} merit points. Confirm?
@@ -260,7 +269,6 @@ Commands.Players.Guild.Help.GuildTerritories:   '/gc territories' Displays the g
 Commands.Players.Guild.TerritoryPaid:           The amount of {0} has been withdrawn from your guild's bank to fund your territories.
 Commands.Players.Guild.TerritoryNoMoney:        Your guild could not honor its debts and lost its conquered territories.  
 Commands.Players.Guild.TerritoryMeritPoints:   Territories occupation earns your guild {0} merit points.
-
 
 # /Guilds a traduire:
 Commands.Players.Guild.Alliance.AlreadyOther:		The guild already has an alliance.

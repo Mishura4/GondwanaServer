@@ -29,6 +29,7 @@ using DOL.GS.ServerProperties;
 using DOL.Language;
 using DOL.Territory;
 using DOL.GS.Finance;
+using DOL.GS.Scripts;
 
 namespace DOL.GS.Commands
 {
@@ -1239,7 +1240,71 @@ namespace DOL.GS.Commands
                             break;
                         }
                     #endregion
-                    #region Territorybanner
+                    #region JailRelease
+
+                    case "jailrelease":
+                        {
+                            GamePlayer player = client.Player;
+
+                            if (client.Player.Guild == null)
+                            {
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.JailRelease.NoGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                return;
+                            }
+
+                            Guild guild = client.Player.Guild;
+
+                            if (args.Length < 3)
+                            {
+                                DisplayHelp(client);
+                                return;
+                            }
+
+                            if (guild.GuildLevel < 6)
+                            {
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.JailRelease.GuildTooLow"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                return;
+                            }
+
+                            if (client.Player.GuildRank.RankLevel > 3)
+                            {
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.JailRelease.RankTooLow"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                return;
+                            }
+
+                            Prisoner jailedPlayer = JailMgr.GetPrisoner(args[2]);
+                            if (jailedPlayer == null)
+                            {
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.JailRelease.NotInJail", args[2]), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                return;
+                            }
+
+                            client.Out.SendCustomDialog(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.JailRelease.ConfirmCost", jailedPlayer.Name, client.Account.PrivLevel > 1 ? 0 : jailedPlayer.Cost), (GamePlayer player, byte response) =>
+                            {
+                                if (response == 1)
+                                {
+                                    if (client.Account.PrivLevel == 1)
+                                    {
+                                        var cost = jailedPlayer.Cost * 10000;
+                                        if (guild.GetGuildBank() < cost)
+                                        {
+                                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.JailRelease.NotEnoughMoney", jailedPlayer.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                            return;
+                                        }
+
+                                        guild.WithdrawGuildBank(player, cost);
+                                    }
+                                    JailMgr.Relacher(jailedPlayer.Name);
+                                    foreach (GamePlayer onlinePlayer in guild.GetListOfOnlineMembers())
+                                    {
+                                        onlinePlayer.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.JailRelease.Released", jailedPlayer.Name, client.Player.Name), eChatType.CT_Guild, eChatLoc.CL_ChatWindow);
+                                    }
+                                }
+                            });
+                            break;
+                        }
+                    #endregion
+                            #region Territorybanner
                     case "territorybanner":
                         {
                             bool owned = TerritoryManager.Instance.DoesPlayerOwnsTerritory(client.Player);
@@ -1290,7 +1355,7 @@ namespace DOL.GS.Commands
                             if (client.Player.Guild == null || (client.Player.Guild.IsSystemGuild == true && client.Account.PrivLevel <= 1))
                             {
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.TerritoryPortal.NoGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                                break;
+                                return;
                             }
                             Guild guild = player.Guild;
                             if (TerritoryManager.Instance.DoesPlayerOwnsTerritory(player) && GameServer.ServerRules.IsInPvPArea(player))
@@ -1302,7 +1367,7 @@ namespace DOL.GS.Commands
                                     if (player.GuildRank.RankLevel > 4)
                                     {
                                         client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.TerritoryPortal.Denied"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                                        break;
+                                        return;
                                     }
 
                                     var availableTick = guild.GuildPortalAvailableTick;
@@ -3105,6 +3170,7 @@ namespace DOL.GS.Commands
             client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.TerritoryBanner"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
             client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.TerritoryPortal"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
             client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.CombatZone"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.JailRelease"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
         }
 
         /// <summary>
