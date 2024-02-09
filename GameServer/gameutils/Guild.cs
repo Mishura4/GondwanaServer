@@ -1095,7 +1095,7 @@ namespace DOL.GS
                     // added by Dunnerholl
                     // props to valmerwolf for formula
                     // checked with pendragon
-                    return (long)(Math.Sqrt(m_DBguild.RealmPoints / 10000) + 1);
+                    return (long)(Math.Sqrt(m_DBguild.RealmPoints / Properties.GUILD_LEVELING_REALMPOINTS_RATIO) + 1);
                 }
             }
         }

@@ -2617,6 +2617,12 @@ namespace DOL.GS.ServerProperties
         [ServerProperty("guild", "guild_banner_lost_time", "When a banner is lost to the enemy how many minutes is the wait before purchase is allowed?", (ushort)1440)]
         public static ushort GUILD_BANNER_LOST_TIME;
 
+        /// <summary>
+        /// Ratio to calculate guild level from realm points with, with the formula `lvl = sqrt(points / ratio) + 1`
+        /// </summary>
+        [ServerProperty("guild", "guild_leveling_realmpoints_ratio", "Ratio to calculate guild level from realm points with, with the formula `lvl = \u221a(points / ratio) + 1`", (uint)10000)]
+        public static uint GUILD_LEVELING_REALMPOINTS_RATIO;
+
 
 
         #endregion
