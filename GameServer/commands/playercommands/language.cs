@@ -99,6 +99,14 @@ namespace DOL.GS.Commands
                                 client.Account.Language,
                                 "Commands.Players.Language.Set",
                                 args[2].ToUpper()));
+                        client.Out.SendUpdatePlayer();
+                        client.Out.SendUpdateCraftingSkills();
+                        client.Out.SendUpdateWeaponAndArmorStats();
+                        client.Out.SendUpdatePlayerSkills();
+                        client.Out.SendCharResistsUpdate();
+                        client.Out.SendCharStatsUpdate();
+                        client.Out.SendPlayerTitles();
+                        client.Out.SendQuestListUpdate();
                         return;
                     }
                 #endregion set
