@@ -130,6 +130,7 @@ Commands.Players.Guild.Help.GuildGMCreate:		'/gc create <guild's name>' # To cr
 Commands.Players.Guild.Help.GuildGMPurge:			'/gc purge <guild's name>' # Completely purge a guild.
 Commands.Players.Guild.Help.GuildGMRemovePlayer:	'/gc removeplayer <player's name> from <guild's name>' # Remove a player from the guild.
 Commands.Players.Guild.Help.GuildGMRename:		'/gc rename <previous name> to <new name>' # To rename a guilde <previous name> <new name>.
+Commands.Players.Guild.Help.GuildGMRealmPoints:	'/gc realmpoints <set|add|remove> <amount> <guild name>' # Change the amount of realm points a guild has.
 Commands.Players.Guild.Help.GuildInfo:			'/gc info' # Displays all informations related to this guild.
 Commands.Players.Guild.Help.GuildInvite:			'/gc invite <player's name>' # Invite a player to join the guild.
 Commands.Players.Guild.Help.JailRelease:			'/gc jailrelease <player's name>' # Pay for a player to be released from jail from the guild bank funds.

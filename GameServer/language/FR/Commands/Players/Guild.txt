@@ -130,6 +130,7 @@ Commands.Players.Guild.Help.GuildGMCreate:		'/gc create <nom de guilde>' # Cré
 Commands.Players.Guild.Help.GuildGMPurge:			'/gc purge <nom de guilde>' # Purge complètement une guilde.
 Commands.Players.Guild.Help.GuildGMRemovePlayer:	'/gc removeplayer <nom de joueur> from <nom de guilde>' # Retire un joueur de la guilde.
 Commands.Players.Guild.Help.GuildGMRename:		'/gc rename <ancien nom> to <nouveau nom>' # Renomme une guilde <ancien nom> <nouveau nom>.
+Commands.Players.Guild.Help.GuildGMRealmPoints:	'/gc realmpoints <set|add|remove> <montant> <guilde>' # Change les points de royaume d'une guilde
 Commands.Players.Guild.Help.GuildInfo:			'/gc info' # Liste les informations à propos de cette guilde.
 Commands.Players.Guild.Help.GuildInvite:			'/gc invite <nom de joueur>' # Invite un joueur à rejoindre la guilde.
 Commands.Players.Guild.Help.JailRelease:			'/gc jailrelease <nom de joueur>' # Paie l'ammende d'un joueur pour le ou la relâcher de prison avec l'argent de la banque de guilde.
@@ -234,6 +235,8 @@ Commands.Players.Guild.WebpageSet:				Vous avez défini la page internet de la g
 Commands.Players.Guild.Withdrawamount:			Votre taxe de {0} va dans la caisse de guilde.
 Commands.Players.Guild.WithdrawInvalid:			Ce n'est pas un montant valide.
 Commands.Players.Guild.WithdrawTooMuch:			Vous ne pouvez plus ajouter d'argent dans la caisse de guilde.
+
+Commands.Players.Guild.RealmPointsSet:			La guilde {0} a maintenant {1} points de royaume.
 
 Commands.Players.Guild.JailRelease.NoGuild:				Vous devez faire parti d'une guilde pour utiliser cette commande.
 Commands.Players.Guild.JailRelease.GuildTooLow:			Votre guilde n'est pas assez haut niveau pour utiliser cette commande.

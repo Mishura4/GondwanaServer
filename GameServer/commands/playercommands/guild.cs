@@ -406,6 +406,77 @@ namespace DOL.GS.Commands
                         }
                         break;
                     #endregion
+                    #region RealmPoints
+
+                    case "realmpoints":
+                        {
+                            if (client.Account.PrivLevel <= (uint)ePrivLevel.Player)
+                                break;
+
+                            if (args.Length < 4)
+                            {
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildGMRealmPoints"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                return;
+                            }
+
+                            Guild guild;
+                            if (args.Length >= 5)
+                            {
+                                string guildname = String.Join(" ", args, 4, args.Length - 4);
+
+                                if (!GuildMgr.DoesGuildExist(guildname))
+                                {
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.GuildNotExist"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    return;
+                                }
+                                guild = GuildMgr.GetGuildByName(guildname);
+                            }
+                            else
+                            {
+                                guild = client.Player.Guild;
+                                if (guild == null)
+                                {
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildGMRealmPoints"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    return;
+                                }
+                            }
+
+                            long points;
+                            try
+                            {
+                                points = long.Parse(args[3]);
+                            }
+                            catch
+                            {
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildGMRealmPoints"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                return;
+                            }
+
+                            switch (args[2])
+                            {
+                                case "set":
+                                    guild.RealmPoints = points;
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RealmPointsSet", guild.Name, points), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    return;
+
+                                case "add":
+                                    guild.RealmPoints += points;
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RealmPointsSet", guild.Name, guild.RealmPoints), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    return;
+
+                                case "remove":
+                                case "rm":
+                                    guild.RealmPoints -= points;
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RealmPointsSet", guild.Name, guild.RealmPoints), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    return;
+
+                                default:
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildGMRealmPoints"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    return;
+                            }
+                            break;
+                        }
+                    #endregion
                     #region Invite
                     /****************************************guild member command***********************************************/
                     // --------------------------------------------------------------------------------
