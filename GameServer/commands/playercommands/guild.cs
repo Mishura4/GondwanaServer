@@ -994,7 +994,22 @@ namespace DOL.GS.Commands
                                 return;
                             }
 
-                            if (client.Player.Guild.IsSystemGuild && client.Account.PrivLevel <= 1 && !client.Player.IsInRvR)
+                            if (client.Account.PrivLevel <= 1 && !client.Player.IsInRvR)
+                            {
+                                if (client.Player.Guild.IsSystemGuild)
+                                {
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.SystemGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    return;
+                                }
+
+                                if (client.Player.Guild.GuildLevel < 7)
+                                {
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.GuildLevelReq"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    return;
+                                }
+                            }
+
+                            if (client.Player.Guild.IsSystemGuild && client.Account.PrivLevel <= 1)
                             {
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.SystemGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 return;
@@ -1010,12 +1025,6 @@ namespace DOL.GS.Commands
 
                             if (client.Account.PrivLevel <= 1)
                             {
-                                if (client.Player.Guild.GuildLevel < 7)
-                                {
-                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.GuildLevelReq"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                                    return;
-                                }
-
                                 TimeSpan lostTime = DateTime.Now.Subtract(client.Player.Guild.GuildBannerLostTime);
 
                                 if (lostTime.TotalMinutes < Properties.GUILD_BANNER_LOST_TIME)
@@ -1066,11 +1075,22 @@ namespace DOL.GS.Commands
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NotMember"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 return;
                             }
-                            if (client.Player.Guild.IsSystemGuild && client.Account.PrivLevel <= 1 && !client.Player.IsInRvR)
+
+                            if (client.Account.PrivLevel <= 1 && !client.Player.IsInRvR)
                             {
-                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.SystemGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                                return;
+                                if (client.Player.Guild.IsSystemGuild)
+                                {
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.SystemGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    return;
+                                }
+
+                                if (client.Player.Guild.GuildLevel < 7)
+                                {
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.GuildLevelReq"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    return;
+                                }
                             }
+
                             if (!client.Player.Guild.GuildBanner)
                             {
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.BannerNone"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
@@ -1496,16 +1516,25 @@ namespace DOL.GS.Commands
                                 return;
                             }
 
-                            if (guild.GuildLevel < 0)
+                            if (client.Account.PrivLevel <= 1)
                             {
-                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.JailRelease.GuildTooLow"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                                return;
-                            }
+                                if (client.Player.Guild.IsSystemGuild)
+                                {
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.SystemGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    return;
+                                }
 
-                            if (client.Player.GuildRank.RankLevel > 9)
-                            {
-                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.JailRelease.RankTooLow"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                                return;
+                                if (client.Player.Guild.GuildLevel < 6)
+                                {
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.GuildLevelReq"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    return;
+                                }
+
+                                if (client.Player.GuildRank.RankLevel > 3)
+                                {
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.JailRelease.RankTooLow"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    return;
+                                }
                             }
 
                             Prisoner jailedPlayer = JailMgr.GetPrisoner(args[2]);
@@ -1565,11 +1594,22 @@ namespace DOL.GS.Commands
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NotMember"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 return;
                             }
-                            if (client.Player.Guild.IsSystemGuild && client.Account.PrivLevel <= 1)
+
+                            if (client.Account.PrivLevel <= 1)
                             {
-                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.SystemGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                                return;
+                                if (client.Player.Guild.IsSystemGuild)
+                                {
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.SystemGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    return;
+                                }
+
+                                if (client.Player.Guild.GuildLevel < 3)
+                                {
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.GuildLevelReq"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    return;
+                                }
                             }
+
                             bool owned = TerritoryManager.Instance.DoesPlayerOwnsTerritory(client.Player);
                             if (owned)
                             {
@@ -1614,11 +1654,22 @@ namespace DOL.GS.Commands
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.TerritoryPortal.NoGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 return;
                             }
-                            if (client.Player.Guild.IsSystemGuild && client.Account.PrivLevel <= 1)
+
+                            if (client.Account.PrivLevel <= 1)
                             {
-                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.SystemGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                                return;
+                                if (client.Player.Guild.IsSystemGuild)
+                                {
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.SystemGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    return;
+                                }
+
+                                if (client.Player.Guild.GuildLevel < 4)
+                                {
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.GuildLevelReq"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    return;
+                                }
                             }
+
                             Guild guild = player.Guild;
                             if (TerritoryManager.Instance.DoesPlayerOwnsTerritory(player) && GameServer.ServerRules.IsInPvPArea(player))
                             {
@@ -1689,16 +1740,28 @@ namespace DOL.GS.Commands
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.CombatZone.NoGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 break;
                             }
-                            if (client.Player.Guild.IsSystemGuild && client.Account.PrivLevel <= 1)
+
+                            if (client.Account.PrivLevel <= 1)
                             {
-                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.SystemGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                                return;
+                                if (client.Player.Guild.IsSystemGuild)
+                                {
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.SystemGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    return;
+                                }
+
+                                if (client.Player.Guild.GuildLevel < 5)
+                                {
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.GuildLevelReq"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    return;
+                                }
                             }
+
                             if (region.IsRvR || PvpManager.Instance.IsPvPRegion(region.ID))
                             {
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.CombatZone.CantInPvPRegion"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 break;
                             }
+
                             if (region.IsDungeon)
                             {
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.CombatZone.CantInDungeon"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
