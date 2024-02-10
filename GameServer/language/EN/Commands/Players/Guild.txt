@@ -234,13 +234,15 @@ Commands.Players.Guild.Withdrawamount:			Your {0} tax is transfered to the guild
 Commands.Players.Guild.WithdrawInvalid:			This is not a valid amount.
 Commands.Players.Guild.WithdrawTooMuch:			You can no longer add money to the guild's bank.
 
-Commands.Players.Guild.JailRelease.NoGuild:			You must be part of a guild to use this command.
-Commands.Players.Guild.JailRelease.GuildTooLow:		Your guild is too low level to use this command.
-Commands.Players.Guild.JailRelease.RankTooLow:		Your guild rank is too low to use this command.
-Commands.Players.Guild.JailRelease.NotInJail:		{0} is not in jail.
-Commands.Players.Guild.JailRelease.ConfirmCost:		Releasing {0} from jail will cost {1} gold to the guild bank. Confirm?
-Commands.Players.Guild.JailRelease.NotEnoughMoney:	Your guild bank do not have enough money to release {0}.
-Commands.Players.Guild.JailRelease.Released:		{0} was released from jail by {1}.
+Commands.Players.Guild.JailRelease.NoGuild:				You must be part of a guild to use this command.
+Commands.Players.Guild.JailRelease.GuildTooLow:			Your guild is too low level to use this command.
+Commands.Players.Guild.JailRelease.RankTooLow:			Your guild rank is too low to use this command.
+Commands.Players.Guild.JailRelease.NotInJail:			{0} is not in jail.
+Commands.Players.Guild.JailRelease.PlayerNotFound:		There was an error during the execution of the command.
+Commands.Players.Guild.JailRelease.PlayerNotInGuild:	{0} is not part of your guild.
+Commands.Players.Guild.JailRelease.ConfirmCost:			Releasing {0} from jail will cost {1} gold to the guild bank. Confirm?
+Commands.Players.Guild.JailRelease.NotEnoughMoney:		Your guild bank do not have enough money to release {0}.
+Commands.Players.Guild.JailRelease.Released:			{0} was released from jail by {1}.
 
 Commands.Players.Guild.TerritoryPortal.NoGuild:			You must be in a guild to summon a guild portal.
 Commands.Players.Guild.TerritoryPortal.Denied:			You must be rank 4 or lower in your guild to summon a guild portal.

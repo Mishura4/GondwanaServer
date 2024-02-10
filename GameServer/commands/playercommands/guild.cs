@@ -1260,13 +1260,13 @@ namespace DOL.GS.Commands
                                 return;
                             }
 
-                            if (guild.GuildLevel < 6)
+                            if (guild.GuildLevel < 0)
                             {
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.JailRelease.GuildTooLow"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 return;
                             }
 
-                            if (client.Player.GuildRank.RankLevel > 3)
+                            if (client.Player.GuildRank.RankLevel > 9)
                             {
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.JailRelease.RankTooLow"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 return;
@@ -1277,6 +1277,21 @@ namespace DOL.GS.Commands
                             {
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.JailRelease.NotInJail", args[2]), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 return;
+                            }
+
+                            if (Properties.GUILD_JAILRELEASE_GUILD_ONLY)
+                            {
+                                string guildID = WorldMgr.GetClientByPlayerName(jailedPlayer.Name, true, false)?.Player.GuildID ?? DOLDB<DOLCharacters>.SelectObject(DB.Column(nameof(DOLCharacters.Name)).IsEqualTo(jailedPlayer.Name))?.GuildID;
+                                if (guildID == null)
+                                {
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.JailRelease.PlayerNotFound"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    return;
+                                }
+                                if (!guildID.Equals(client.Player.GuildID))
+                                {
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.JailRelease.PlayerNotInGuild", args[2]), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    return;
+                                }
                             }
 
                             client.Out.SendCustomDialog(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.JailRelease.ConfirmCost", jailedPlayer.Name, client.Account.PrivLevel > 1 ? 0 : jailedPlayer.Cost), (GamePlayer player, byte response) =>
@@ -1292,7 +1307,7 @@ namespace DOL.GS.Commands
                                             return;
                                         }
 
-                                        guild.WithdrawGuildBank(player, cost);
+                                        guild.WithdrawGuildBank(player, cost, false);
                                     }
                                     JailMgr.Relacher(jailedPlayer.Name);
                                     foreach (GamePlayer onlinePlayer in guild.GetListOfOnlineMembers())
@@ -1304,7 +1319,8 @@ namespace DOL.GS.Commands
                             break;
                         }
                     #endregion
-                            #region Territorybanner
+
+                    #region Territorybanner
                     case "territorybanner":
                         {
                             bool owned = TerritoryManager.Instance.DoesPlayerOwnsTerritory(client.Player);

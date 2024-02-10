@@ -2623,6 +2623,12 @@ namespace DOL.GS.ServerProperties
         [ServerProperty("guild", "guild_leveling_realmpoints_ratio", "Ratio to calculate guild level from realm points with, with the formula `lvl = \u221a(points / ratio) + 1`", (uint)10000)]
         public static uint GUILD_LEVELING_REALMPOINTS_RATIO;
 
+        /// <summary>
+        /// Whether `/gc jailrelease` should only be useable for guild members
+        /// </summary>
+        [ServerProperty("guild", "guild_jailrelease_guild_only", "Whether `/gc jailrelease` should only be useable for guild members", true)]
+        public static bool GUILD_JAILRELEASE_GUILD_ONLY;
+
 
 
         #endregion

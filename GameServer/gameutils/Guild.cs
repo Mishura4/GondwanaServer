@@ -398,29 +398,32 @@ namespace DOL.GS
             donating.Out.SendUpdatePlayer();
             return;
         }
-        public void WithdrawGuildBank(GamePlayer withdraw, double amount)
+        public void WithdrawGuildBank(GamePlayer player, double amount, bool withdraw = true)
         {
             if (amount < 0)
             {
-                withdraw.Out.SendMessage(LanguageMgr.GetTranslation(withdraw.Client, "Scripts.Player.Guild.WithdrawInvalid"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Scripts.Player.Guild.WithdrawInvalid"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                 return;
             }
-            else if ((withdraw.Guild.GetGuildBank() - amount) < 0)
+            else if ((player.Guild.GetGuildBank() - amount) < 0)
             {
-                withdraw.Out.SendMessage(LanguageMgr.GetTranslation(withdraw.Client, "Scripts.Player.Guild.WithdrawTooMuch"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Scripts.Player.Guild.WithdrawTooMuch"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                 return;
             }
 
-            withdraw.Out.SendMessage(LanguageMgr.GetTranslation(withdraw.Client, "Scripts.Player.Guild.Withdrawamount", Money.GetString(long.Parse(amount.ToString()))), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            withdraw.Guild.UpdateGuildWindow();
+            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Scripts.Player.Guild.Withdrawamount", Money.GetString(long.Parse(amount.ToString()))), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+            player.Guild.UpdateGuildWindow();
             m_DBguild.Bank -= amount;
 
-            var amt = long.Parse(amount.ToString());
-            withdraw.AddMoney(Currency.Copper.Mint(amt));
-            InventoryLogging.LogInventoryAction("", "(GUILD;" + Name + ")", withdraw, eInventoryActionType.Other, amt);
-            withdraw.Out.SendUpdatePlayer();
-            withdraw.SaveIntoDatabase();
-            withdraw.Guild.SaveIntoDatabase();
+            if (withdraw)
+            {
+                var amt = long.Parse(amount.ToString());
+                player.AddMoney(Currency.Copper.Mint(amt));
+                InventoryLogging.LogInventoryAction("", "(GUILD;" + Name + ")", player, eInventoryActionType.Other, amt);
+                player.Out.SendUpdatePlayer();
+                player.SaveIntoDatabase();
+            }
+            player.Guild.SaveIntoDatabase();
             return;
         }
         /// <summary>

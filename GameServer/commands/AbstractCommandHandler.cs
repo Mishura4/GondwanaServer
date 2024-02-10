@@ -49,6 +49,10 @@ namespace DOL.GS.Commands
         /// <returns>true if less than spam protection interval</returns>
         public bool IsSpammingCommand(GamePlayer player, string commandName, int delay)
         {
+            if (player == null)
+            {
+                return false;
+            }
             string spamKey = commandName + "NOSPAM";
             long tick = player.TempProperties.getProperty<long>(spamKey, 0);
 

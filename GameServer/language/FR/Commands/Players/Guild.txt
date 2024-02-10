@@ -234,13 +234,15 @@ Commands.Players.Guild.Withdrawamount:			Votre taxe de {0} va dans la caisse de 
 Commands.Players.Guild.WithdrawInvalid:			Ce n'est pas un montant valide.
 Commands.Players.Guild.WithdrawTooMuch:			Vous ne pouvez plus ajouter d'argent dans la caisse de guilde.
 
-Commands.Players.Guild.JailRelease.NoGuild:			Vous devez faire parti d'une guilde pour utiliser cette commande.
-Commands.Players.Guild.JailRelease.GuildTooLow:		Votre guilde n'est pas assez haut niveau pour utiliser cette commande.
-Commands.Players.Guild.JailRelease.RankTooLow:		Votre rang de guilde est trop bas pour utiliser cette commande.
-Commands.Players.Guild.JailRelease.NotInJail:		{0} n'est pas en prison.
-Commands.Players.Guild.JailRelease.ConfirmCost:		Relâcher {0} de prison coûtera {1} pièces d'or à votre banque de guilde. Confirmer?
-Commands.Players.Guild.JailRelease.NotEnoughMoney:	Votre banque de guilde n'a pas assez d'or pour relâcher {0}.
-Commands.Players.Guild.JailRelease.Released:		{0} a été relâché(e) de prison par {1}.
+Commands.Players.Guild.JailRelease.NoGuild:				Vous devez faire parti d'une guilde pour utiliser cette commande.
+Commands.Players.Guild.JailRelease.GuildTooLow:			Votre guilde n'est pas assez haut niveau pour utiliser cette commande.
+Commands.Players.Guild.JailRelease.RankTooLow:			Votre rang de guilde est trop bas pour utiliser cette commande.
+Commands.Players.Guild.JailRelease.NotInJail:			{0} n'est pas en prison.
+Commands.Players.Guild.JailRelease.PlayerNotFound:		Une erreur est survenue pendant l'éxécution de la commande.
+Commands.Players.Guild.JailRelease.PlayerNotInGuild:	{0} n'est pas dans votre guilde.
+Commands.Players.Guild.JailRelease.ConfirmCost:			Relâcher {0} de prison coûtera {1} pièces d'or à votre banque de guilde. Confirmer?
+Commands.Players.Guild.JailRelease.NotEnoughMoney:		Votre banque de guilde n'a pas assez d'or pour relâcher {0}.
+Commands.Players.Guild.JailRelease.Released:			{0} a été relâché(e) de prison par {1}.
 
 
 
