@@ -76,7 +76,7 @@ Commands.Players.Guild.GuildCreated:			    La guilde {0} vient d'être créée a
 Commands.Players.Guild.GuildExists:			    Cette guilde ne peut être créée car elle existe déjà.
 Commands.Players.Guild.GuildForceLeave:			{0} est retiré·e de la guilde par {1}.
 Commands.Players.Guild.GuildLeave:			    Vous venez de quitter la guilde.
-Commands.Players.Guild.GuildLevelReq:			    Votre guilde n'est pas assez haut niveau pour cette commande.
+Commands.Players.Guild.GuildLevelReq:			    Votre guilde n'est pas assez haut niveau pour utiliser cette commande.
 Commands.Players.Guild.GuildNotExist:			    Cette guilde n'existe pas.
 Commands.Players.Guild.Help.GuildACancel:			'/gc acancel' # Annule une invitation au sein d'une alliance.
 Commands.Players.Guild.Help.GuildAAccept:			'/gc aaccept' # Accepte une invitation au sein d'une alliance.
@@ -195,6 +195,7 @@ Commands.Players.Guild.NoteSet:					La note de guilde est : {0}
 Commands.Players.Guild.NoPlayerWithName:        Il n'y a pas de joueur avec le nom {0}
 Commands.Players.Guild.NotInYourGuild:			Ce joueur n'est pas dans la guilde.
 Commands.Players.Guild.NotMember:				Vous devez être dans une guilde pour utiliser cette commande.
+Commands.Players.Guild.SystemGuild:				Vous ne pouvez pas utiliser cette commande dans cette guilde.
 Commands.Players.Guild.OMotdSet:				Le message des officiers est maintenant actualisé.
 Commands.Players.Guild.PlayerNotFound:			Ce joueur n'est pas en ligne ou se trouve dans un autre royaume.
 Commands.Players.Guild.PromotedOther:			{0} est promu(e) au rang {1}.

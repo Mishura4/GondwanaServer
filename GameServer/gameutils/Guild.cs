@@ -257,7 +257,7 @@ namespace DOL.GS
 
         public long GetGuildDuesPercent()
         {
-            return m_DBguild.DuesPercent;
+            return Properties.GUILD_NEW_DUES_SYSTEM ? long.Min(m_DBguild.DuesPercent, GuildLevel * 5) : m_DBguild.DuesPercent;
         }
 
         public void SetGuildDues(bool dues)
@@ -350,7 +350,7 @@ namespace DOL.GS
             return this.territories.Contains(area);
         }
 
-        public void SetGuildDuesPercent(long dues)
+        public void SetGuildDuesMaxPercent(long dues)
         {
             if (IsGuildDuesOn() == true)
             {

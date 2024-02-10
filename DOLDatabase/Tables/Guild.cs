@@ -46,7 +46,7 @@ namespace DOL.Database
         private DateTime m_guildBannerLostTime;
         private bool m_guildDues;
         private double m_guildBank;
-        private long m_guildDuesPercent;
+        private long m_GuildDuesPercent;
         private bool m_guildHouse;
         private int m_guildHouseNumber;
 
@@ -65,7 +65,7 @@ namespace DOL.Database
             m_guildBanner = false;
             m_guildDues = false;
             m_guildBank = 0;
-            m_guildDuesPercent = 0;
+            m_GuildDuesPercent = 0;
             m_guildHouse = false;
             m_guildHouseNumber = 0;
             m_meritPoints = 0;
@@ -282,11 +282,11 @@ namespace DOL.Database
         [DataElement(AllowDbNull = false)]
         public long DuesPercent
         {
-            get { return m_guildDuesPercent; }
+            get { return m_GuildDuesPercent; }
             set
             {
                 Dirty = true;
-                m_guildDuesPercent = value;
+                m_GuildDuesPercent = value;
             }
         }
 

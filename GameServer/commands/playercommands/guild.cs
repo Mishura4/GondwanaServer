@@ -775,9 +775,15 @@ namespace DOL.GS.Commands
                     #region Buybanner
                     case "buybanner":
                         {
-                            if (client.Player.Guild == null || (client.Player.Guild.IsSystemGuild == true && client.Account.PrivLevel <= 1))
+                            if (client.Player.Guild == null)
                             {
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NotMember"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                return;
+                            }
+
+                            if (client.Player.Guild.IsSystemGuild && client.Account.PrivLevel <= 1 && !client.Player.IsInRvR)
+                            {
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.SystemGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 return;
                             }
 
@@ -842,9 +848,14 @@ namespace DOL.GS.Commands
                     #region Summon
                     case "summon":
                         {
-                            if (client.Player.Guild == null || (client.Player.Guild.IsSystemGuild == true && client.Account.PrivLevel <= 1))
+                            if (client.Player.Guild == null)
                             {
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NotMember"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                return;
+                            }
+                            if (client.Player.Guild.IsSystemGuild && client.Account.PrivLevel <= 1 && !client.Player.IsInRvR)
+                            {
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.SystemGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 return;
                             }
                             if (!client.Player.Guild.GuildBanner)
@@ -910,6 +921,12 @@ namespace DOL.GS.Commands
                             if (client.Player.Guild == null || (client.Player.Guild.IsSystemGuild == true && client.Account.PrivLevel <= 1))
                             {
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NotMember"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                return;
+                            }
+
+                            if (client.Player.Guild.IsSystemGuild && client.Account.PrivLevel <= 1)
+                            {
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.SystemGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 return;
                             }
 
@@ -1252,6 +1269,12 @@ namespace DOL.GS.Commands
                                 return;
                             }
 
+                            if (client.Player.Guild.IsSystemGuild && client.Account.PrivLevel <= 1)
+                            {
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.SystemGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                return;
+                            }
+
                             Guild guild = client.Player.Guild;
 
                             if (args.Length < 3)
@@ -1323,16 +1346,21 @@ namespace DOL.GS.Commands
                     #region Territorybanner
                     case "territorybanner":
                         {
+
+                            if (client.Player.Guild == null)
+                            {
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NotMember"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                return;
+                            }
+                            if (client.Player.Guild.IsSystemGuild && client.Account.PrivLevel <= 1)
+                            {
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.SystemGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                return;
+                            }
                             bool owned = TerritoryManager.Instance.DoesPlayerOwnsTerritory(client.Player);
                             if (owned)
                             {
                                 var territory = TerritoryManager.Instance.GetCurrentTerritory(client.Player.CurrentAreas);
-
-                                if (client.Player.Guild == null || (client.Player.Guild.IsSystemGuild == true && client.Account.PrivLevel <= 1))
-                                {
-                                    client.Out.SendMessage("Vous devez avoir une guilde pour faire cela", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                                    break;
-                                }
 
                                 if (!client.Player.GuildRank.Claim && client.Account.PrivLevel == 1)
                                 {
@@ -1368,9 +1396,14 @@ namespace DOL.GS.Commands
                         {
                             GamePlayer player = client.Player;
 
-                            if (client.Player.Guild == null || (client.Player.Guild.IsSystemGuild == true && client.Account.PrivLevel <= 1))
+                            if (client.Player.Guild == null)
                             {
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.TerritoryPortal.NoGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                return;
+                            }
+                            if (client.Player.Guild.IsSystemGuild && client.Account.PrivLevel <= 1)
+                            {
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.SystemGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 return;
                             }
                             Guild guild = player.Guild;
@@ -1438,10 +1471,15 @@ namespace DOL.GS.Commands
                             Guild guild = player.Guild;
                             Region region = player.CurrentRegion;
 
-                            if (client.Player.Guild == null || (client.Player.Guild.IsSystemGuild == true && client.Account.PrivLevel <= 1))
+                            if (client.Player.Guild == null)
                             {
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.CombatZone.NoGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 break;
+                            }
+                            if (client.Player.Guild.IsSystemGuild && client.Account.PrivLevel <= 1)
+                            {
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.SystemGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                return;
                             }
                             if (region.IsRvR || PvpManager.Instance.IsPvPRegion(region.ID))
                             {
@@ -2842,6 +2880,12 @@ namespace DOL.GS.Commands
                             if (client.Player.Guild == null)
                             {
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NotMember"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                return;
+                            }
+                            if (client.Player.Guild.IsSystemGuild && client.Account.PrivLevel <= 1)
+                            {
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.SystemGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                return;
                             }
                             if (!client.Player.Guild.HasRank(client.Player, Guild.eRank.Dues))
                             {
@@ -2858,20 +2902,21 @@ namespace DOL.GS.Commands
                             if (amount == 0)
                             {
                                 client.Player.Guild.SetGuildDues(false);
-                                client.Player.Guild.SetGuildDuesPercent(0);
+                                client.Player.Guild.SetGuildDuesMaxPercent(0);
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.DuesOff"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                             }
                             else if (amount > 0 && amount <= 100)
                             {
-                                if (amount <= Properties.GUILD_DUES_MAX_VALUE)
+                                long max = Properties.GUILD_NEW_DUES_SYSTEM ? long.Min(Properties.GUILD_DUES_MAX_VALUE, client.Player.Guild.GuildLevel * 5) : Properties.GUILD_DUES_MAX_VALUE;
+                                if (amount <= max && client.Account.PrivLevel <= 1)
                                 {
                                     client.Player.Guild.SetGuildDues(true);
-                                    client.Player.Guild.SetGuildDuesPercent(amount);
+                                    client.Player.Guild.SetGuildDuesMaxPercent(amount);
                                     client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.DuesOn", amount), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                                 }
                                 else
                                 {
-                                    client.Out.SendMessage("Vous ne pouvez pas avoir une taxe supérieur à " + Properties.GUILD_DUES_MAX_VALUE + "%", eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                                    client.Out.SendMessage("Vous ne pouvez pas avoir une taxe supérieur à " + max + "%", eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                                 }
                             }
                             else

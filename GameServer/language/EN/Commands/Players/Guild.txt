@@ -76,7 +76,7 @@ Commands.Players.Guild.GuildCreated:			    The guild {0} has just been created w
 Commands.Players.Guild.GuildExists:			    This guild cannot be created because it already exists.
 Commands.Players.Guild.GuildForceLeave:			{0} is removed from the guild by {1}.
 Commands.Players.Guild.GuildLeave:			    You just left the guild.
-Commands.Players.Guild.GuildLevelReq:			    Your guild'level is not high enough to be able to use this command.
+Commands.Players.Guild.GuildLevelReq:			    Your guild's level is not high enough to be able to use this command.
 Commands.Players.Guild.GuildNotExist:			    This guild does not exist.
 Commands.Players.Guild.Help.GuildACancel:			'/gc acancel' # Cancels an invitation to an alliance.
 Commands.Players.Guild.Help.GuildAAccept:			'/gc aaccept' # Accepts an invitation to an alliance.
@@ -195,6 +195,7 @@ Commands.Players.Guild.NoteSet:					The guild note is: {0}
 Commands.Players.Guild.NoPlayerWithName:        There is no player with the name: {0}
 Commands.Players.Guild.NotInYourGuild:			This player is not in the guild.
 Commands.Players.Guild.NotMember:				You must be in a guild to use this command.
+Commands.Players.Guild.SystemGuild:				You cannot use this command in this guild.
 Commands.Players.Guild.OMotdSet:				The officers' message is now updated.
 Commands.Players.Guild.PlayerNotFound:			This player is not online or is in another realm.
 Commands.Players.Guild.PromotedOther:			{0} has been promoted to rank {1}.

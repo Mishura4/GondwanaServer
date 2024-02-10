@@ -2519,6 +2519,12 @@ namespace DOL.GS.ServerProperties
         public static int GUILD_NUM;
 
         /// <summary>
+        /// Whether to use the new guild dues system, starting at 5% at level 1 and increasing 5% every level
+        /// </summary>
+        [ServerProperty("guild", "new_guild_dues", "Whether to use the new guild dues system, starting at 5% at level 1 and increasing 5% every level", true)]
+        public static bool GUILD_NEW_DUES_SYSTEM;
+
+        /// <summary>
         /// Guild dues max value in %
         /// </summary>
         [ServerProperty("guild", "guild_dues_max_value", "Guild dues max value in %", 50)]
