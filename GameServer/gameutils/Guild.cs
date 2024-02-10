@@ -611,7 +611,44 @@ namespace DOL.GS
             }
             set
             {
+                var previousLevel = GuildLevel;
                 this.m_DBguild.RealmPoints = value;
+                var newLevel = GuildLevel;
+                if (newLevel > previousLevel)
+                {
+                    string newCommands = (newLevel switch
+                    {
+                        1 => "/gc dues & /gc buff",
+                        2 => null,
+                        3 => "/gc territorybanner",
+                        4 => "/gc territoryportal",
+                        5 => "/gc combatzone",
+                        6 => "/gc jailrelease",
+                        7 => "/gc buybanner, /gc summon, /gc edit buybanner & /gc edit summonbanner",
+                        _ => null
+                    })!;
+                    foreach (GamePlayer player in GetListOfOnlineMembers())
+                    {
+                        string msg = LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.LevelUp", Name, newLevel);
+                        player.Out.SendMessage(msg, eChatType.CT_ScreenCenter, eChatLoc.CL_SystemWindow);
+                        player.Out.SendMessage(msg, eChatType.CT_Guild, eChatLoc.CL_ChatWindow);
+                        if (newCommands != null)
+                        {
+                            if (newLevel is 1 or 7)
+                            {
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.CommandsAvailable", newCommands), eChatType.CT_Guild, eChatLoc.CL_ChatWindow);
+                            }
+                            else
+                            {
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.CommandAvailable", newCommands), eChatType.CT_Guild, eChatLoc.CL_ChatWindow);
+                            }
+                        }
+                        if (Properties.GUILD_NEW_DUES_SYSTEM)
+                        {
+                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MaxDuesAvailable", newLevel * 5), eChatType.CT_Guild, eChatLoc.CL_ChatWindow);
+                        }
+                    }
+                }
                 this.SaveIntoDatabase();
             }
         }

@@ -1,0 +1,4 @@
+GameUtils.Guild.LevelUp:			{0} has reached level {1}!
+GameUtils.Guild.CommandAvailable:	Guild command {0} is now available.
+GameUtils.Guild.CommandsAvailable:	Guild commands {0} are now available.
+GameUtils.Guild.MaxDuesAvailable:	Guild dues can now be set to {0}%.
