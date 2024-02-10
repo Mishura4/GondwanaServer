@@ -477,6 +477,148 @@ namespace DOL.GS.Commands
                             break;
                         }
                     #endregion
+                    #region MeritPoints
+
+                    case "meritpoints":
+                        {
+                            if (client.Account.PrivLevel <= (uint)ePrivLevel.Player)
+                                break;
+
+                            if (args.Length < 4)
+                            {
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildGMMeritPoints"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                return;
+                            }
+
+                            Guild guild;
+                            if (args.Length >= 5)
+                            {
+                                string guildname = String.Join(" ", args, 4, args.Length - 4);
+
+                                if (!GuildMgr.DoesGuildExist(guildname))
+                                {
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.GuildNotExist"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    return;
+                                }
+                                guild = GuildMgr.GetGuildByName(guildname);
+                            }
+                            else
+                            {
+                                guild = client.Player.Guild;
+                                if (guild == null)
+                                {
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildGMMeritPoints"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    return;
+                                }
+                            }
+
+                            long points;
+                            try
+                            {
+                                points = long.Parse(args[3]);
+                            }
+                            catch
+                            {
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildGMMeritPoints"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                return;
+                            }
+
+                            switch (args[2])
+                            {
+                                case "set":
+                                    guild.MeritPoints = points;
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.MeritPointsSet", guild.Name, points), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    return;
+
+                                case "add":
+                                    guild.MeritPoints += points;
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.MeritPointsSet", guild.Name, guild.MeritPoints), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    return;
+
+                                case "remove":
+                                case "rm":
+                                    guild.MeritPoints -= points;
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.MeritPointsSet", guild.Name, guild.MeritPoints), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    return;
+
+                                default:
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildGMMeritPoints"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    return;
+                            }
+                            break;
+                        }
+                    #endregion
+                    #region BountyPoints
+
+                    case "bountypoints":
+                        {
+                            if (client.Account.PrivLevel <= (uint)ePrivLevel.Player)
+                                break;
+
+                            if (args.Length < 4)
+                            {
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildGMBountyPoints"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                return;
+                            }
+
+                            Guild guild;
+                            if (args.Length >= 5)
+                            {
+                                string guildname = String.Join(" ", args, 4, args.Length - 4);
+
+                                if (!GuildMgr.DoesGuildExist(guildname))
+                                {
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.GuildNotExist"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    return;
+                                }
+                                guild = GuildMgr.GetGuildByName(guildname);
+                            }
+                            else
+                            {
+                                guild = client.Player.Guild;
+                                if (guild == null)
+                                {
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildGMBountyPoints"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    return;
+                                }
+                            }
+
+                            long points;
+                            try
+                            {
+                                points = long.Parse(args[3]);
+                            }
+                            catch
+                            {
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildGMBountyPoints"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                return;
+                            }
+
+                            switch (args[2])
+                            {
+                                case "set":
+                                    guild.BountyPoints = points;
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.BountyPointsSet", guild.Name, points), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    return;
+
+                                case "add":
+                                    guild.BountyPoints += points;
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.BountyPointsSet", guild.Name, guild.BountyPoints), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    return;
+
+                                case "remove":
+                                case "rm":
+                                    guild.BountyPoints -= points;
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.BountyPointsSet", guild.Name, guild.BountyPoints), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    return;
+
+                                default:
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildGMBountyPoints"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    return;
+                            }
+                            break;
+                        }
+                    #endregion
                     #region Invite
                     /****************************************guild member command***********************************************/
                     // --------------------------------------------------------------------------------
@@ -2979,7 +3121,7 @@ namespace DOL.GS.Commands
                             else if (amount > 0 && amount <= 100)
                             {
                                 long max = Properties.GUILD_NEW_DUES_SYSTEM ? long.Min(Properties.GUILD_DUES_MAX_VALUE, client.Player.Guild.GuildLevel * 5) : Properties.GUILD_DUES_MAX_VALUE;
-                                if (amount <= max && client.Account.PrivLevel <= 1)
+                                if (amount <= max || client.Account.PrivLevel > 1)
                                 {
                                     client.Player.Guild.SetGuildDues(true);
                                     client.Player.Guild.SetGuildDuesMaxPercent(amount);
@@ -3259,6 +3401,9 @@ namespace DOL.GS.Commands
                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildGMRename"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildGMAddPlayer"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildGMRemovePlayer"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildGMRealmPoints"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildGMMeritPoints"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildGMBountyPoints"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
             }
             client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildUsage"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
             client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildForm"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);

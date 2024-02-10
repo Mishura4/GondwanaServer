@@ -131,6 +131,8 @@ Commands.Players.Guild.Help.GuildGMPurge:			'/gc purge <guild's name>' # Comple
 Commands.Players.Guild.Help.GuildGMRemovePlayer:	'/gc removeplayer <player's name> from <guild's name>' # Remove a player from the guild.
 Commands.Players.Guild.Help.GuildGMRename:		'/gc rename <previous name> to <new name>' # To rename a guilde <previous name> <new name>.
 Commands.Players.Guild.Help.GuildGMRealmPoints:	'/gc realmpoints <set|add|remove> <amount> <guild name>' # Change the amount of realm points a guild has.
+Commands.Players.Guild.Help.GuildGMMeritPoints:		'/gc meritpoints <set|add|remove> <amount> <guild name>' # Change the amount of merit points a guild has.
+Commands.Players.Guild.Help.GuildGMBountyPoints:	'/gc bountypoints <set|add|remove> <amount> <guild name>' # Change the amount of bounty points a guild has.
 Commands.Players.Guild.Help.GuildInfo:			'/gc info' # Displays all informations related to this guild.
 Commands.Players.Guild.Help.GuildInvite:			'/gc invite <player's name>' # Invite a player to join the guild.
 Commands.Players.Guild.Help.JailRelease:			'/gc jailrelease <player's name>' # Pay for a player to be released from jail from the guild bank funds.
@@ -225,7 +227,7 @@ Commands.Players.Guild.RankUpgradeSet:			You have {0} access to keeps updates at
 Commands.Players.Guild.RankViewSet:				You have {0} access to the guild overview at rank {1}.
 Commands.Players.Guild.RankWithdrawSet:			You have {0} access to the guild's bank at rank {1}.
 Commands.Players.Guild.Rank.ErrorChanging:      Error while charging the rank.
-Commands.Players.Guild.ThirdArgNotNum:			This argument is not a valid number.
+Commands.Players.Guild.ThirdArgNotNum:			This argument is not a valid number. 
 Commands.Players.Guild.UnableToCreate:			The guild {0} has just been created.
 Commands.Players.Guild.UnableToCreateLead:		The guild {0} has just been created, {1} is the guild leader.
 Commands.Players.Guild.UnknownCommand:			Unknown command. Type '/gc help' for more informations.
@@ -235,6 +237,10 @@ Commands.Players.Guild.WebpageSet:				You have defined the guild webpage as: {0}
 Commands.Players.Guild.Withdrawamount:			Your {0} tax is transfered to the guild's bank.
 Commands.Players.Guild.WithdrawInvalid:			This is not a valid amount.
 Commands.Players.Guild.WithdrawTooMuch:			You can no longer add money to the guild's bank.
+
+Commands.Players.Guild.RealmPointsSet:			Guild {0} now has {1} realm points.
+Commands.Players.Guild.MeritPointsSet:			Guild {0} now has {1} merit points.
+Commands.Players.Guild.BountyPointsSet:			Guild {0} now has {1} bounty points.
 
 Commands.Players.Guild.JailRelease.NoGuild:				You must be part of a guild to use this command.
 Commands.Players.Guild.JailRelease.GuildTooLow:			Your guild is too low level to use this command.
