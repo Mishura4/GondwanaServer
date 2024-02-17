@@ -69,7 +69,7 @@ namespace DOL.Database
         public RvrPlayer(GamePlayer player)
         {
             PlayerID = player.InternalID;
-            GuildID = player.GuildID;
+            GuildID = player.GuildID ?? "";
             GuildRank = player.GuildRank != null ? player.GuildRank.RankLevel : 9;
 
             OldX = (int)player.Position.X;

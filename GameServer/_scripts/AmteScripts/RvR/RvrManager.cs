@@ -820,7 +820,7 @@ namespace AmteScripts.Managers
             {
                 GameServer.Instance.Logger.Error("Player " + player.Name + " (" + player.InternalID + ") logged into RvR but RvR data was not found, potentially lost their guild info");
                 player.MoveTo(_stuckSpawn);
-                if (player.Guild != null && (player.Guild.Name.Equals("RVR")))
+                if (player.Guild != null && player.Guild.GuildType == Guild.eGuildType.RvRGuild)
                     player.Guild.RemovePlayer("RVR", player);
                 player.RealGuild = null;
                 player.SaveIntoDatabase();
@@ -830,7 +830,7 @@ namespace AmteScripts.Managers
                 rvrPlayer.ResetCharacter(player);
                 player.MoveTo((ushort)rvrPlayer.OldRegion, rvrPlayer.OldX, rvrPlayer.OldY, rvrPlayer.OldZ, (ushort)rvrPlayer.OldHeading);
                 if (player.Guild != null)
-                    player.Guild.RemovePlayer("rvrPlayer", player);
+                    player.Guild.RemovePlayer("RVR", player);
                 player.RealGuild = null;
                 if (!string.IsNullOrWhiteSpace(rvrPlayer.GuildID))
                 {
