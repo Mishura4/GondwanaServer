@@ -529,6 +529,14 @@ namespace AmteScripts.Managers
             _midgard.RealmPoints = 0;
             _hibernia.RealmPoints = 0;
 
+            _albion.MeritPoints = 0;
+            _midgard.MeritPoints = 0;
+            _hibernia.MeritPoints = 0;
+
+            _albion.BountyPoints = 0;
+            _midgard.BountyPoints = 0;
+            _hibernia.BountyPoints = 0;
+
             // Count score
             Scores = new Dictionary<string, int>();
             if (File.Exists("temp/RvRScore.dat"))
@@ -808,12 +816,12 @@ namespace AmteScripts.Managers
             }
         }
 
-
         public void RemovePlayer(GameClient client)
         {
             if (client.Player != null)
                 RemovePlayer(client.Player);
         }
+
         private void RemovePlayer(GamePlayer player, RvrPlayer rvrPlayer)
         {
             if (rvrPlayer == null)
