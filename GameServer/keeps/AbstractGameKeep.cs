@@ -700,6 +700,10 @@ namespace DOL.GS.Keeps
             ChangeLevel((byte)ServerProperties.Properties.STARTING_KEEP_CLAIM_LEVEL);
 
             PlayerMgr.BroadcastClaim(this);
+            if (player.IsInRvR)
+            {
+                Guild.GainMeritPoints(800);
+            }
 
             foreach (GameKeepGuard guard in Guards.Values)
             {

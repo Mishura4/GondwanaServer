@@ -2483,10 +2483,16 @@ namespace DOL.GS.ServerProperties
 
         #region GUILDS / ALLIANCES
         /// <summary>
-        /// "Fausses" guildes : Albion, Hibernia, Midgard, Les Maitres du Temps, Citoyens d'Avalonia
+        /// "Fausses" guildes : Les Maitres du Temps, Citoyens d'Avalonia
         /// </summary>
-        [ServerProperty("guild", "system_guilds", "System guilds, that cannot claim territories or level up", "063bbcc7-0005-4667-a9ba-402746c5ae15|bdbc6f4a-b9f8-4316-b88b-9698e06cdd7b|50d7af62-7142-4955-9f31-0c58ac1ac33f|ce6f0b34-78bc-45a9-9f65-6e849d498f6c|17118d10-a7e9-4aee-82e5-cd6ca50c0c33")]
-        public static string SYSTEM_GUILDS;
+        [ServerProperty("guild", "server_guilds", "System guilds, that cannot claim territories or level up", "ce6f0b34-78bc-45a9-9f65-6e849d498f6c|17118d10-a7e9-4aee-82e5-cd6ca50c0c33")]
+        public static string SERVER_GUILDS;
+
+        /// <summary>
+        /// RvR guilds : Albion, Hibernia, Midgard
+        /// </summary>
+        [ServerProperty("guild", "rvr_guilds", "RvR guilds", "063bbcc7-0005-4667-a9ba-402746c5ae15|bdbc6f4a-b9f8-4316-b88b-9698e06cdd7b|50d7af62-7142-4955-9f31-0c58ac1ac33f")]
+        public static string RVR_GUILDS;
 
         /// <summary>
         /// The max number of guilds in an alliance

@@ -1012,7 +1012,7 @@ namespace DOL.GameEvents
                 string message = e.EndText;
                 if (message.Contains("<guilde>"))
                 {
-                    if (e.Owner != null && e.Owner.Guild is { IsSystemGuild: false })
+                    if (e.Owner != null && e.Owner.Guild is not { GuildType: Guild.eGuildType.PlayerGuild })
                     {
                         message = message.Replace("<guilde>", e.Owner.GuildName);
                         SendEventNotification(e, message, (e.Discord == 2 || e.Discord == 3));

@@ -378,6 +378,41 @@ namespace AmteScripts.Managers
             };
         }
 
+        public void OnPlayerLogIn(GamePlayer player)
+        {
+            var rvr = GameServer.Database.SelectObject<RvrPlayer>(r => r.PlayerID == player.InternalID);
+            if (rvr == null)
+            {
+                // Lost RvR data, oops, move the player out. Unfortunately this means we lost the player's real guild as well
+                if (player.Client.Account.PrivLevel > 1)
+                {
+                    // Leave GMs alone
+                    return;
+                }
+                RemovePlayer(player, rvr);
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(rvr.GuildID))
+                {
+                    Guild guild = GuildMgr.GetGuildByGuildID(rvr.GuildID);
+
+                    if (guild != null)
+                    {
+                        player.RealGuild = guild;
+                    }
+                    else if (GameServer.Instance.Logger.IsDebugEnabled)
+                    {
+                        GameServer.Instance.Logger.DebugFormat("Could not find guild {0} for RvR player {1} ({2}) logging in", rvr.GuildID, player.Name, player.InternalID);
+                    }
+                }
+                if (!_isOpen && player.Client.Account.PrivLevel <= 1)
+                {
+                    RemovePlayer(player, rvr);
+                }
+            }
+        }
+
         private int _CheckRvr(RegionTimer callingtimer)
         {
             Console.WriteLine("Check RVR");
@@ -662,7 +697,10 @@ namespace AmteScripts.Managers
             GameServer.Database.AddObject(rvr);
 
             if (player.Guild != null)
+            {
+                player.RealGuild = player.Guild;
                 player.Guild.RemovePlayer("RVR", player);
+            }
 
             bool isAdded = false;
 
@@ -776,6 +814,39 @@ namespace AmteScripts.Managers
             if (client.Player != null)
                 RemovePlayer(client.Player);
         }
+        private void RemovePlayer(GamePlayer player, RvrPlayer rvrPlayer)
+        {
+            if (rvrPlayer == null)
+            {
+                GameServer.Instance.Logger.Error("Player " + player.Name + " (" + player.InternalID + ") logged into RvR but RvR data was not found, potentially lost their guild info");
+                player.MoveTo(_stuckSpawn);
+                if (player.Guild != null && (player.Guild.Name.Equals("RVR")))
+                    player.Guild.RemovePlayer("RVR", player);
+                player.RealGuild = null;
+                player.SaveIntoDatabase();
+            }
+            else
+            {
+                rvrPlayer.ResetCharacter(player);
+                player.MoveTo((ushort)rvrPlayer.OldRegion, rvrPlayer.OldX, rvrPlayer.OldY, rvrPlayer.OldZ, (ushort)rvrPlayer.OldHeading);
+                if (player.Guild != null)
+                    player.Guild.RemovePlayer("rvrPlayer", player);
+                player.RealGuild = null;
+                if (!string.IsNullOrWhiteSpace(rvrPlayer.GuildID))
+                {
+                    var guild = GuildMgr.GetGuildByGuildID(rvrPlayer.GuildID);
+                    if (guild != null)
+                    {
+                        guild.AddPlayer(player, guild.GetRankByID(rvrPlayer.GuildRank), true);
+
+                        foreach (var i in player.Inventory.AllItems.Where(i => i.Emblem != 0))
+                            i.Emblem = guild.Emblem;
+                    }
+                }
+                player.SaveIntoDatabase();
+                GameServer.Database.DeleteObject(rvrPlayer);
+            }
+        }
 
         public void RemovePlayer(GamePlayer player)
         {
@@ -783,33 +854,7 @@ namespace AmteScripts.Managers
             if (player.Client.Account.PrivLevel == (uint)ePrivLevel.GM)
                 return;
             var rvr = GameServer.Database.SelectObject<RvrPlayer>(r => r.PlayerID == player.InternalID);
-            if (rvr == null)
-            {
-                player.MoveTo(_stuckSpawn);
-                if (player.Guild != null && (player.Guild.Name.Equals("RVR")))
-                    player.Guild.RemovePlayer("RVR", player);
-                player.SaveIntoDatabase();
-            }
-            else
-            {
-                rvr.ResetCharacter(player);
-                player.MoveTo((ushort)rvr.OldRegion, rvr.OldX, rvr.OldY, rvr.OldZ, (ushort)rvr.OldHeading);
-                if (player.Guild != null)
-                    player.Guild.RemovePlayer("RVR", player);
-                if (!string.IsNullOrWhiteSpace(rvr.GuildID))
-                {
-                    var guild = GuildMgr.GetGuildByGuildID(rvr.GuildID);
-                    if (guild != null)
-                    {
-                        guild.AddPlayer(player, guild.GetRankByID(rvr.GuildRank), true);
-
-                        foreach (var i in player.Inventory.AllItems.Where(i => i.Emblem != 0))
-                            i.Emblem = guild.Emblem;
-                    }
-                }
-                player.SaveIntoDatabase();
-                GameServer.Database.DeleteObject(rvr);
-            }
+            RemovePlayer(player, rvr);
         }
 
         public void RemovePlayer(DOLCharacters ch)

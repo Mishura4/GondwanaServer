@@ -17,11 +17,13 @@
  *
  */
 
+using AmteScripts.Managers;
 using System;
 using System.Collections;
 using System.Threading;
 using DOL.Events;
 using DOL.GS;
+using DOL.GS.Commands;
 using log4net;
 using DOL.GS.PacketHandler;
 using System.Collections.Generic;
@@ -101,7 +103,7 @@ namespace DOL.GS
                 if (cea.Points <= 1000 && cea.Points >= 700)
                 {
                     int meritpoints = cea.Points - 600;
-                    player.Guild.GainMeritPoints(meritpoints);
+                    player.GainGuildMeritPoints(meritpoints);
                     player.Out.SendMessage("You have earned " + meritpoints + " merit points for your guild!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                 }
             }
@@ -113,12 +115,8 @@ namespace DOL.GS
 
         public static void MeritForNPCKilled(GamePlayer player, GameNPC npc, int meritPoints)
         {
-            if (player.IsEligibleToGiveMeritPoints)
-            {
-                player.Guild.GainMeritPoints(meritPoints);
-                player.Out.SendMessage("You have earned " + meritPoints + " merit points for your guild!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-            }
-
+            player.GainGuildMeritPoints(meritPoints);
+            player.Out.SendMessage("You have earned " + meritPoints + " merit points for your guild!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
         }
 
         #endregion NPC Kill
@@ -134,7 +132,7 @@ namespace DOL.GS
                 // This equation is a rough guess based on Mythics documentation:
                 // ... These scale from 6 at level 2 to 253 at level 50.
                 int meritPoints = (int)((double)player.Level * (3.0 + ((double)player.Level / 25.0)));
-                player.Guild.GainMeritPoints(meritPoints);
+                player.GainGuildMeritPoints(meritPoints);
                 player.Out.SendMessage("You have earned " + meritPoints + " merit points for your guild!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
             }
         }
@@ -164,7 +162,7 @@ namespace DOL.GS
                 if (player.Guild != null && player.RealmLevel > 45)
                 {
                     int a = (int)Math.Pow((3 * (newRR - 1)), 2);
-                    player.Guild.GainMeritPoints(a);
+                    player.GainGuildMeritPoints(a);
                     player.Out.SendMessage("Your guild is awarded " + (int)Math.Pow((3 * (newRR - 1)), 2) + " merit points!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                 }
             }
@@ -175,7 +173,7 @@ namespace DOL.GS
                 if (player.Guild != null)
                 {
                     int a = (int)Math.Pow((3 * (RRHigh - 1)), 2);
-                    player.Guild.GainMeritPoints(a);
+                    player.GainGuildMeritPoints(a);
                     player.Out.SendMessage("Your guild is awarded " + (int)Math.Pow((3 * (RRHigh - 1)), 2) + " merit points!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                 }
             }
@@ -187,7 +185,7 @@ namespace DOL.GS
                     {
                         int RRHigh = ((int)Math.Floor(player.RealmLevel * 0.1) + 1);
                         int a = (int)Math.Pow((3 * (RRHigh - 1)), 2);
-                        player.Guild.GainMeritPoints(a);
+                        player.GainGuildMeritPoints(a);
                         player.Out.SendMessage("Your guild is awarded " + (int)Math.Pow((3 * (RRHigh - 1)), 2) + " merit points!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                     }
                 }
@@ -226,28 +224,30 @@ namespace DOL.GS
         {
             GamePlayer player = sender as GamePlayer;
 
-            if (player == null || player.Guild == null) return;
+            if (player == null) return;
 
-            GainedRealmPointsEventArgs rpsArgs = args as GainedRealmPointsEventArgs;
+            Guild guild = player.IsInRvR ? player.RealGuild : player.Guild;
 
-            if (player.Guild != null)
+            if (guild != null)
             {
-                if (player.Guild.BonusType == Guild.eBonusType.RealmPoints)
+                GainedRealmPointsEventArgs rpsArgs = args as GainedRealmPointsEventArgs;
+
+                if (guild.BonusType == Guild.eBonusType.RealmPoints)
                 {
-                    long oldGuildRealmPoints = player.Guild.RealmPoints;
+                    long oldGuildRealmPoints = guild.RealmPoints;
                     long bonusRealmPoints = (long)Math.Ceiling((double)rpsArgs.RealmPoints * ServerProperties.Properties.GUILD_BUFF_RP / 100);
 
                     player.GainRealmPoints(bonusRealmPoints, false, false, false);
                     player.Out.SendMessage("You get an additional " + bonusRealmPoints + " realm points due to your guild's buff!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
 
-                    if ((oldGuildRealmPoints < 100000000) && (player.Guild.RealmPoints > 100000000))
+                    if ((oldGuildRealmPoints < 100000000) && (guild.RealmPoints > 100000000))
                     {
                         // Report to Newsmgr
-                        string message = player.Guild.Name + " [" + GlobalConstants.RealmToName((eRealm)player.Realm) + "] has reached 100,000,000 Realm Points!";
+                        string message = guild.Name + " [" + GlobalConstants.RealmToName((eRealm)player.Realm) + "] has reached 100,000,000 Realm Points!";
                         NewsMgr.CreateNews(message, player.Realm, eNewsType.RvRGlobal, false);
                     }
 
-                    player.Guild.UpdateGuildWindow();
+                    guild.UpdateGuildWindow();
                 }
 
             }
@@ -261,23 +261,22 @@ namespace DOL.GS
         {
             GamePlayer player = sender as GamePlayer;
 
-            if (player == null || player.Guild == null) return;
+            if (player == null) return;
 
-            GainedBountyPointsEventArgs bpsArgs = args as GainedBountyPointsEventArgs;
+            Guild guild = player.IsInRvR ? player.RealGuild : player.Guild;
 
-            if (player.Guild != null)
+            if (guild != null)
             {
-                if (player.Guild.BonusType == Guild.eBonusType.BountyPoints)
+                GainedBountyPointsEventArgs bpsArgs = args as GainedBountyPointsEventArgs;
+                if (guild.BonusType == Guild.eBonusType.BountyPoints)
                 {
                     long bonusBountyPoints = (long)Math.Ceiling((double)bpsArgs.BountyPoints * ServerProperties.Properties.GUILD_BUFF_BP / 100);
                     player.GainBountyPoints(bonusBountyPoints, false, false, false);
-                    player.Guild.BountyPoints += bonusBountyPoints;
+                    guild.BountyPoints += bonusBountyPoints;
                     player.Out.SendMessage("You get an additional " + bonusBountyPoints + " bounty points due to your guild's buff!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                 }
+                guild.UpdateGuildWindow();
             }
-
-            if (player.Guild != null)
-                player.Guild.UpdateGuildWindow();
         }
 
         #endregion

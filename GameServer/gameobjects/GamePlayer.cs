@@ -4653,8 +4653,21 @@ namespace DOL.GS
 
             RealmPoints += amount;
 
-            if (m_guild != null && !m_guild.IsSystemGuild && Client.Account.PrivLevel == 1)
-                m_guild.RealmPoints += amount;
+            if (m_guild != null && Client.Account.PrivLevel == 1)
+            {
+                if (IsInRvR)
+                {
+                    if (RealGuild is { GuildType: Guild.eGuildType.PlayerGuild })
+                    {
+                        RealGuild.RealmPoints += amount;
+                    }
+                    // do not give realm points to RvR guilds
+                }
+                else
+                {
+                    m_guild.RealmPoints += amount;
+                }
+            }
 
             if (sendMessage == true && amount > 0)
                 Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.GainRealmPoints.YouGet", amount.ToString()), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
@@ -8385,6 +8398,7 @@ namespace DOL.GS
                 GamePlayer killerAsPlayer = killer as GamePlayer;
                 if (killerAsPlayer != null && killerAsPlayer.IsInRvR)
                 {
+                    killerAsPlayer.Guild.GainMeritPoints(25); // 25 flat on player kill to RvR guild
                     if (RvrManager.Instance.Kills.ContainsKey(killerAsPlayer))
                         RvrManager.Instance.Kills[killerAsPlayer]++;
                     else
@@ -10987,6 +11001,15 @@ namespace DOL.GS
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Real Guild of the player - used for RvR where the current guild will be the realm
+        /// </summary>
+        public Guild RealGuild
+        {
+            get;
+            set;
         }
 
         /// <summary>
@@ -14373,13 +14396,34 @@ namespace DOL.GS
         {
             get
             {
-                if (Guild == null || Guild.IsSystemGuild || Client.Account.PrivLevel > 1 || m_isEligibleToGiveMeritPoints == false)
+                if (Guild == null || Guild.GuildType == Guild.eGuildType.ServerGuild || m_isEligibleToGiveMeritPoints == false || Client.Account.PrivLevel > 1)
                     return false;
 
                 return true;
             }
 
             set { m_isEligibleToGiveMeritPoints = value; }
+        }
+
+        /// <summary>
+        /// Gain Merit Points for the guild
+        /// </summary>
+        public void GainGuildMeritPoints(int amount, bool quiet = false)
+        {
+            if (!IsEligibleToGiveMeritPoints)
+            {
+                return;
+            }
+
+            Guild.GainMeritPoints(amount);
+            if (RealGuild != null)
+            {
+                RealGuild.GainMeritPoints(amount);
+            }
+            if (!quiet)
+            {
+                Out.SendMessage("You have earned " + amount + " merit points for your guild!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+            }
         }
 
         protected bool m_canGenerateNews = true;

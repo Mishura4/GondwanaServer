@@ -393,10 +393,26 @@ namespace DOL.GS
         /// </summary>
         public static void LoadSystemGuilds()
         {
-            var ids = ServerProperties.Properties.SYSTEM_GUILDS.Split('|');
+            var system_ids = ServerProperties.Properties.SERVER_GUILDS.Split('|');
+            var rvr_ids = ServerProperties.Properties.RVR_GUILDS.Split('|');
             foreach (Guild g in m_guilds.Values)
             {
-                g.IsSystemGuild = ids.Contains(g.GuildID);
+                if (rvr_ids.Contains(g.GuildID))
+                {
+                    if (system_ids.Contains(g.GuildID))
+                    {
+                        GameServer.Instance.Logger.Warn("Guild " + g.Name + " (" + g.GuildID + ") is defined as both RvR and Server, it will be considered RvR");
+                    }
+                    g.GuildType = Guild.eGuildType.RvRGuild;
+                }
+                else if (system_ids.Contains(g.GuildID))
+                {
+                    g.GuildType = Guild.eGuildType.ServerGuild;
+                }
+                else
+                {
+                    g.GuildType = Guild.eGuildType.PlayerGuild;
+                }
             }
         }
 
@@ -423,11 +439,12 @@ namespace DOL.GS
 
             lock (m_guildids.SyncRoot)
             {
-                if (m_guildids[guildid] == null) return null;
+                var id = m_guildids[guildid];
+                if (id == null) return null;
 
                 lock (m_guilds.SyncRoot)
                 {
-                    return (Guild)m_guilds[m_guildids[guildid]];
+                    return (Guild)m_guilds[id];
                 }
             }
         }

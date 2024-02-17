@@ -16,6 +16,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
+using AmteScripts.Managers;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -190,6 +191,8 @@ namespace DOL.GS.PacketHandler.Client.v168
                 //check item at world load
                 if (log.IsDebugEnabled)
                     log.DebugFormat("Client {0}({1} PID:{2} OID:{3}) entering Region {4}(ID:{5})", player.Client.Account.Name, player.Name, player.Client.SessionID, player.ObjectID, player.CurrentRegion.Description, player.CurrentRegionID);
+                if (player.CurrentRegion.IsRvR)
+                    RvrManager.Instance.OnPlayerLogIn(player);
             }
         }
     }

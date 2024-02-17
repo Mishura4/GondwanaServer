@@ -155,10 +155,22 @@ namespace DOL.GS
         /// </summary>
         protected List<AbstractGameKeep> m_claimedKeeps = new List<AbstractGameKeep>();
 
-        /// <summary>
-        /// Whether the guild is a system guild, e.g. cannot claim territories
-        /// </summary>
-        public bool IsSystemGuild { get; set; }
+        public enum eGuildType
+        {
+            PlayerGuild,
+            ServerGuild,
+            RvRGuild
+        }
+
+        public eGuildType GuildType { get; set; }
+
+        public bool IsSystemGuild
+        {
+            get
+            {
+                return GuildType is eGuildType.ServerGuild or eGuildType.RvRGuild;
+            }
+        }
 
         public eRealm Realm
         {
@@ -1126,7 +1138,7 @@ namespace DOL.GS
         {
             get
             {
-                if (IsSystemGuild)
+                if (GuildType != eGuildType.PlayerGuild)
                 {
                     return 0;
                 }

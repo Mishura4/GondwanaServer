@@ -138,7 +138,7 @@ namespace DOL.GS.Scripts
                 case "default":
                 case "modifier les alliances":
                     var guilds = GuildMgr.GetAllGuilds()
-                        .Where(g => g.IsSystemGuild == false && g.GuildID != _guild.GuildID)
+                        .Where(g => g.GuildType == Guild.eGuildType.PlayerGuild && g.GuildID != _guild.GuildID)
                         .OrderBy(g => g.Name)
                         .Select(g =>
                         {

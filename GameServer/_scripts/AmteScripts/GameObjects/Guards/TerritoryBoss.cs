@@ -79,7 +79,7 @@ namespace DOL.GS.Scripts
             base.Die(killer);
             GamePlayer player = killer as GamePlayer;
 
-            if (player is { Guild.IsSystemGuild: false })
+            if (player is { Guild.GuildType: Guild.eGuildType.PlayerGuild })
             {
                 this.GuildName = killer.GuildName;
                 TerritoryManager.Instance.ChangeGuildOwner(this, player.Guild);
