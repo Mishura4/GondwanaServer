@@ -1579,10 +1579,17 @@ namespace DOL.GS.Commands
 
                                         guild.WithdrawGuildBank(player, cost, false);
                                     }
-                                    JailMgr.Relacher(jailedPlayer.Name);
+                                    JailMgr.Relacher(jailedPlayer.Name, true);
                                     foreach (GamePlayer onlinePlayer in guild.GetListOfOnlineMembers())
                                     {
                                         onlinePlayer.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.JailRelease.Released", jailedPlayer.Name, client.Player.Name), eChatType.CT_Guild, eChatLoc.CL_ChatWindow);
+                                    }
+
+                                    NewsMgr.CreateNews("Commands.Players.Guild.JailRelease.Released", guild.Realm, eNewsType.RvRGlobal, false, true, jailedPlayer.Name, client.Player.Name);
+                                    if (Properties.DISCORD_ACTIVE)
+                                    {
+                                        DolWebHook hook = new DolWebHook(Properties.DISCORD_WEBHOOK_ID);
+                                        hook.SendMessage(LanguageMgr.GetTranslation(Properties.SERV_LANGUAGE, "Commands.Players.Guild.JailRelease.Released", jailedPlayer.Name, client.Player.Name));
                                     }
                                 }
                             });

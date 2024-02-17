@@ -31,6 +31,7 @@ using DOL.GS.ServerProperties;
 using DOL.Territory;
 using DOL.GS.Finance;
 using System.Timers;
+using System.Numerics;
 
 namespace DOL.GS
 {
@@ -659,6 +660,13 @@ namespace DOL.GS
                         {
                             player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MaxDuesAvailable", newLevel * 5), eChatType.CT_Guild, eChatLoc.CL_ChatWindow);
                         }
+                    }
+
+                    NewsMgr.CreateNews("GameUtils.Guild.LevelUp", Realm, eNewsType.RvRGlobal, false, true, Name, newLevel);
+                    if (DOL.GS.ServerProperties.Properties.DISCORD_ACTIVE)
+                    {
+                        DolWebHook hook = new DolWebHook(DOL.GS.ServerProperties.Properties.DISCORD_WEBHOOK_ID);
+                        hook.SendMessage(LanguageMgr.GetTranslation(Properties.SERV_LANGUAGE, "GameUtils.Guild.LevelUp", Name, newLevel));
                     }
                 }
                 this.SaveIntoDatabase();

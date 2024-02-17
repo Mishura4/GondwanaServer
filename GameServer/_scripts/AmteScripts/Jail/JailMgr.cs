@@ -6,6 +6,7 @@ using DOL.Database;
 using DOL.events.gameobjects;
 using DOL.Events;
 using DOL.GS.PacketHandler;
+using DOL.GS.ServerProperties;
 using DOL.Language;
 using log4net;
 
@@ -403,7 +404,7 @@ namespace DOL.GS.Scripts
         /// </summary>
         /// <param name="player">Prisonnier</param>
         /// <returns></returns>
-        public static bool Relacher(GamePlayer player)
+        public static bool Relacher(GamePlayer player, bool quiet = false)
         {
             var Prisonnier = GameServer.Database.SelectObject<Prisoner>(p => p.PlayerId == player.InternalID);
             if (Prisonnier == null)
@@ -428,11 +429,14 @@ namespace DOL.GS.Scripts
             GameEventMgr.RemoveHandler(player, GamePlayerEvent.RegionChanged, PlayerRevive);
             Animation(player);
 
-            NewsMgr.CreateNews("GameObjects.GamePlayer.Released", player.Realm, eNewsType.RvRGlobal, false, true, player.Name);
-            if (DOL.GS.ServerProperties.Properties.DISCORD_ACTIVE)
+            if (!quiet)
             {
-                DolWebHook hook = new DolWebHook(DOL.GS.ServerProperties.Properties.DISCORD_WEBHOOK_ID);
-                hook.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameObjects.GamePlayer.Released", player.Name));
+                NewsMgr.CreateNews("GameObjects.GamePlayer.Released", player.Realm, eNewsType.RvRGlobal, false, true, player.Name);
+                if (Properties.DISCORD_ACTIVE)
+                {
+                    DolWebHook hook = new DolWebHook(Properties.DISCORD_WEBHOOK_ID);
+                    hook.SendMessage(LanguageMgr.GetTranslation(Properties.SERV_LANGUAGE, "GameObjects.GamePlayer.Released", player.Name));
+                }
             }
 
             return true;
@@ -443,7 +447,7 @@ namespace DOL.GS.Scripts
         /// </summary>
         /// <param name="player">Prisonnier</param>
         /// <returns></returns>
-        public static bool Relacher(DOLCharacters player)
+        public static bool Relacher(DOLCharacters player, bool quiet = false)
         {
             if (player == null)
                 return false;
@@ -478,6 +482,16 @@ namespace DOL.GS.Scripts
                 player.MaxSpeed = 191;
                 GameServer.Database.SaveObject(player);
             }
+
+            if (!quiet)
+            {
+                NewsMgr.CreateNews("GameObjects.GamePlayer.Released", (eRealm)player.Realm, eNewsType.RvRGlobal, false, true, player.Name);
+                if (Properties.DISCORD_ACTIVE)
+                {
+                    DolWebHook hook = new DolWebHook(Properties.DISCORD_WEBHOOK_ID);
+                    hook.SendMessage(LanguageMgr.GetTranslation(Properties.SERV_LANGUAGE, "GameObjects.GamePlayer.Released", player.Name));
+                }
+            }
             return true;
         }
 
@@ -486,14 +500,14 @@ namespace DOL.GS.Scripts
         /// </summary>
         /// <param name="name">Nom du prisonnier</param>
         /// <returns></returns>
-        public static bool Relacher(string name)
+        public static bool Relacher(string name, bool quiet = false)
         {
             GameClient client = null;
             if (WorldMgr.GetAllPlayingClientsCount() > 0)
                 client = WorldMgr.GetClientByPlayerName(name, true, true);
             if (client != null && client.Player != null)
-                return Relacher(client.Player);
-            return Relacher(GameServer.Database.SelectObject<DOLCharacters>(c => c.Name == name));
+                return Relacher(client.Player, quiet);
+            return Relacher(GameServer.Database.SelectObject<DOLCharacters>(c => c.Name == name), quiet);
         }
         #endregion
 
