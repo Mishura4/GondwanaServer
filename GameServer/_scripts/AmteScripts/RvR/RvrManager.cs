@@ -537,6 +537,10 @@ namespace AmteScripts.Managers
             _midgard.BountyPoints = 0;
             _hibernia.BountyPoints = 0;
 
+            _albion.GuildBanner = false;
+            _midgard.GuildBanner = false;
+            _hibernia.GuildBanner = false;
+
             // Count score
             Scores = new Dictionary<string, int>();
             if (File.Exists("temp/RvRScore.dat"))
