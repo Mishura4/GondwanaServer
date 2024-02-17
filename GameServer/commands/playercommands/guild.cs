@@ -994,9 +994,19 @@ namespace DOL.GS.Commands
                                 return;
                             }
 
-                            if (client.Account.PrivLevel <= 1 && !client.Player.IsInRvR)
+                            long bannerPrice;
+
+                            if (client.Account.PrivLevel > 1) // GMs can buy a banner for any guild
                             {
-                                if (client.Player.Guild.IsSystemGuild)
+                                bannerPrice = 0;
+                            }
+                            else if (client.Player.Guild.GuildType == Guild.eGuildType.RvRGuild) // RvR guilds can buy a banner for 1000 MP
+                            {
+                                bannerPrice = 1000;
+                            }
+                            else // Player guilds with level >= 7 can buy a banner
+                            {
+                                if (client.Player.Guild.GuildType != Guild.eGuildType.PlayerGuild)
                                 {
                                     client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.SystemGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                     return;
@@ -1007,15 +1017,10 @@ namespace DOL.GS.Commands
                                     client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.GuildLevelReq"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                     return;
                                 }
+
+                                bannerPrice = (client.Player.Guild.GuildLevel * 100);
                             }
 
-                            if (client.Player.Guild.IsSystemGuild && client.Account.PrivLevel <= 1)
-                            {
-                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.SystemGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                                return;
-                            }
-
-                            long bannerPrice = (client.Player.Guild.GuildLevel * 100);
 
                             if (client.Player.Guild.GuildBanner)
                             {
@@ -1076,7 +1081,7 @@ namespace DOL.GS.Commands
                                 return;
                             }
 
-                            if (client.Account.PrivLevel <= 1 && !client.Player.IsInRvR)
+                            if (client.Account.PrivLevel <= 1 && client.Player.Guild.GuildType != Guild.eGuildType.RvRGuild)
                             {
                                 if (client.Player.Guild.IsSystemGuild)
                                 {
