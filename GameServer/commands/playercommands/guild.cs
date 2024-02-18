@@ -1101,7 +1101,7 @@ namespace DOL.GS.Commands
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.BannerNone"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 return;
                             }
-                            if (client.Player.Group == null && client.Account.PrivLevel == (int)ePrivLevel.Player)
+                            if (client.Player.Group == null && !Properties.GUILD_BANNER_ALLOW_SOLO && client.Account.PrivLevel == (int)ePrivLevel.Player)
                             {
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.BannerNoGroup"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 return;
@@ -1121,7 +1121,7 @@ namespace DOL.GS.Commands
                                 {
                                     if (groupPlayer.GuildBanner != null)
                                     {
-                                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.BannerGroupSummoned"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.BannerGroupSummoned"), eChatType.CT_Group, eChatLoc.CL_SystemWindow);
                                         return;
                                     }
                                 }

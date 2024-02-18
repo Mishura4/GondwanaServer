@@ -262,7 +262,18 @@ namespace DOL.GS
 
             if (StealingPlayers.Any()) // Only restrict pickups if killed by player
             {
-                WorldItem.AddOwner(Banner.OwningPlayer);
+                if (Banner.OwningPlayer.Group != null)
+                {
+                    foreach (GamePlayer owningPlayer in Banner.OwningPlayer.Group.GetPlayersInTheGroup())
+                    {
+                        WorldItem.AddOwner(owningPlayer);
+                    }
+                }
+                else
+                {
+                    WorldItem.AddOwner(Banner.OwningPlayer);
+                }
+
                 foreach (GamePlayer stealingPlayer in StealingPlayers)
                 {
                     WorldItem.AddOwner(stealingPlayer);

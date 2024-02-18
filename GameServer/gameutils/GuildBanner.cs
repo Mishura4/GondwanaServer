@@ -8,6 +8,7 @@ using DOL.GS.PacketHandler;
 using DOL.Database;
 using log4net;
 using DOL.GS.Effects;
+using DOL.GS.ServerProperties;
 using System.Numerics;
 
 namespace DOL.GS
@@ -110,7 +111,7 @@ namespace DOL.GS
                     }
                 }
             }
-            else if (OwningPlayer.Client.Account.PrivLevel <= (int)ePrivLevel.Player)
+            else if (!Properties.GUILD_BANNER_ALLOW_SOLO && OwningPlayer.Client.Account.PrivLevel <= (int)ePrivLevel.Player)
             {
                 OwningPlayer.Out.SendMessage("You have left the group and your guild banner disappears!", eChatType.CT_Loot, eChatLoc.CL_SystemWindow);
                 OwningPlayer.GuildBanner = null;
@@ -226,23 +227,29 @@ namespace DOL.GS
         {
             timer.Stop();
             m_expireTimer = null;
-            if (CarryingPlayer != null)
+            if (!Properties.GUILD_BANNER_ALLOW_SOLO)
             {
-                CarryingPlayer.Out.SendMessage("You have left the group and your guild banner disappears!", eChatType.CT_Loot, eChatLoc.CL_SystemWindow);
-                CarryingPlayer.Guild.SendMessageToGuildMembers(string.Format("{0} has put away the guild banner!", CarryingPlayer.Name), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-                CarryingPlayer.GuildBanner = null;
-                CarryingPlayer = null;
+                if (CarryingPlayer != null)
+                {
+                    CarryingPlayer.Out.SendMessage("You have left the group and your guild banner disappears!", eChatType.CT_Loot, eChatLoc.CL_SystemWindow);
+                    CarryingPlayer.Guild.SendMessageToGuildMembers(string.Format("{0} has put away the guild banner!", CarryingPlayer.Name), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                    CarryingPlayer.GuildBanner = null;
+                    CarryingPlayer = null;
+                }
+                Stop();
             }
-            Stop();
             return 0;
         }
 
         protected void PlayerLeaveGroup(DOLEvent e, object sender, EventArgs args)
         {
-            m_expireTimer = new RegionTimer(CarryingPlayer);
-            m_expireTimer.Interval = 30000; // Banner expires after 30 seconds
-            m_expireTimer.Callback = BannerExpireCallback;
-            m_expireTimer.Start(m_expireTimer.Interval);
+            if (!Properties.GUILD_BANNER_ALLOW_SOLO)
+            {
+                m_expireTimer = new RegionTimer(CarryingPlayer);
+                m_expireTimer.Interval = 30000; // Banner expires after 30 seconds
+                m_expireTimer.Callback = BannerExpireCallback;
+                m_expireTimer.Start(m_expireTimer.Interval);
+            }
         }
 
         protected void PlayerDied(DOLEvent e, object sender, EventArgs args)

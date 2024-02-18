@@ -2630,6 +2630,12 @@ namespace DOL.GS.ServerProperties
         public static ushort GUILD_BANNER_LOST_TIME;
 
         /// <summary>
+        /// Whether to allow guild banners without a group
+        /// </summary>
+        [ServerProperty("guild", "guild_banner_allow_solo", "Should guild banners be useable without a group?", false)]
+        public static bool GUILD_BANNER_ALLOW_SOLO;
+
+        /// <summary>
         /// Ratio to calculate guild level from realm points with, with the formula `lvl = sqrt(points / ratio) + 1`
         /// </summary>
         [ServerProperty("guild", "guild_leveling_realmpoints_ratio", "Ratio to calculate guild level from realm points with, with the formula `lvl = \u221a(points / ratio) + 1`", (uint)10000)]
