@@ -1,3 +1,4 @@
+using DOL.AI.Brain;
 using System;
 using System.Reflection;
 using System.Collections;
@@ -121,33 +122,44 @@ namespace DOL.GS
             }
         }
 
+        private void ApplyBannerEffect(GamePlayer player)
+        {
+            GuildBannerEffect effect = GuildBannerEffect.CreateEffectOfClass(m_player, player);
+
+            if (effect != null)
+            {
+                GuildBannerEffect oldEffect = player.EffectList.GetOfType(effect.GetType()) as GuildBannerEffect;
+                if (oldEffect == null)
+                {
+                    effect.Start(player);
+                }
+                else
+                {
+                    oldEffect.Stop();
+                    effect.Start(player);
+                }
+            }
+        }
+
         private int TimerTick(RegionTimer timer)
         {
-            foreach (GamePlayer player in m_player.GetPlayersInRadius(1500))
+            if (m_player != null)
             {
-                if (player.Group != null && m_player.Group != null && m_player.Group.IsInTheGroup(player))
+                if (m_player.Group != null)
                 {
-                    if (GameServer.ServerRules.IsAllowedToHelp(m_player, player, true))
+                    foreach (GamePlayer player in m_player.Group.GetPlayersInTheGroup())
                     {
-                        GuildBannerEffect effect = GuildBannerEffect.CreateEffectOfClass(m_player, player);
-
-                        if (effect != null)
+                        if (player == m_player || (player is { ObjectState: GameObject.eObjectState.Active, IsAlive: true } && player.GetDistanceSquaredTo(m_player) < (1500 * 1500)))
                         {
-                            GuildBannerEffect oldEffect = player.EffectList.GetOfType(effect.GetType()) as GuildBannerEffect;
-                            if (oldEffect == null)
-                            {
-                                effect.Start(player);
-                            }
-                            else
-                            {
-                                oldEffect.Stop();
-                                effect.Start(player);
-                            }
+                            ApplyBannerEffect(player);
                         }
                     }
                 }
+                else
+                {
+                    ApplyBannerEffect(m_player);
+                }
             }
-
             return 9000; // Pulsing every 9 seconds with a duration of 9 seconds - Tolakram
         }
 
@@ -207,16 +219,19 @@ namespace DOL.GS
         {
             DyingEventArgs arg = args as DyingEventArgs;
             if (arg == null) return;
-            GameObject killer = arg.Killer as GameObject;
+            GameObject killer = arg.Killer;
             GamePlayer playerKiller = null;
 
             if (killer is GamePlayer)
             {
                 playerKiller = killer as GamePlayer;
             }
-            else if (killer is GameNPC && (killer as GameNPC).Brain != null && (killer as GameNPC).Brain is AI.Brain.IControlledBrain)
+            else if (killer is GameNPC killerNPC && killerNPC.Brain != null)
             {
-                playerKiller = ((killer as GameNPC).Brain as AI.Brain.IControlledBrain).Owner as GamePlayer;
+                if (killerNPC.Brain is IControlledBrain controlledBrain)
+                {
+                    playerKiller = controlledBrain.Owner as GamePlayer;
+                }
             }
 
             Stop();

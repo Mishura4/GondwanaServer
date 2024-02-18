@@ -239,6 +239,13 @@ namespace DOL.GS
             return float.MaxValue;
         }
 
+        public float GetDistanceSquaredTo(GameObject obj)
+        {
+            if (CurrentRegionID == obj?.CurrentRegionID)
+                return Vector3.DistanceSquared(Position, obj.Position);
+            return float.MaxValue;
+        }
+
         public float GetDistanceTo(Vector3 target) => Vector3.Distance(Position, target);
         public float GetDistance2DTo(Vector3 target) => Vector2.Distance(Position.ToVector2(), target.ToVector2());
         public bool IsWithinRadius(GameObject target, float distance) => GameMath.IsWithinRadius(this, target, distance);
