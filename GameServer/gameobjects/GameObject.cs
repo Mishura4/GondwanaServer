@@ -560,12 +560,12 @@ namespace DOL.GS
         public virtual string GetName(int article, bool firstLetterUppercase)
         {
             /*
-			 * http://www.camelotherald.com/more/888.shtml
-			 * - All monsters names whose names begin with a vowel should now use the article 'an' instead of 'a'.
-			 * 
-			 * http://www.camelotherald.com/more/865.shtml
-			 * - Instances where objects that began with a vowel but were prefixed by the article "a" (a orb of animation) have been corrected.
-			 */
+             * http://www.camelotherald.com/more/888.shtml
+             * - All monsters names whose names begin with a vowel should now use the article 'an' instead of 'a'.
+             * 
+             * http://www.camelotherald.com/more/865.shtml
+             * - Instances where objects that began with a vowel but were prefixed by the article "a" (a orb of animation) have been corrected.
+             */
 
             if (Name.Length < 1)
                 return "";
@@ -1336,9 +1336,9 @@ namespace DOL.GS
         #region Broadcast Utils
 
         /// <summary>
-		/// Broadcasts the Object Update to all players around
-		/// </summary>
-		public virtual void BroadcastUpdate()
+        /// Broadcasts the Object Update to all players around
+        /// </summary>
+        public virtual void BroadcastUpdate()
         {
             if (ObjectState != eObjectState.Active)
                 return;
