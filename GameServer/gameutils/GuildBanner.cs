@@ -31,9 +31,8 @@ namespace DOL.GS
 
         public GuildBanner(GamePlayer player)
         {
+            Guild = player.Guild;
             OwningPlayer = player;
-            Guild = OwningPlayer.Guild;
-            Start();
         }
 
         private GamePlayer m_owningPlayer;
@@ -46,6 +45,10 @@ namespace DOL.GS
             get => m_owningPlayer;
             set
             {
+                if (CarryingPlayer != null)
+                {
+                    throw new InvalidOperationException("Guild banner is already started");
+                }
                 m_owningPlayer = value;
                 if (value != null)
                 {
@@ -80,11 +83,6 @@ namespace DOL.GS
 
         protected bool Start()
         {
-            if (CarryingPlayer != null)
-            {
-                throw new InvalidOperationException("Guild banner is already started");
-            }
-
             if (OwningPlayer == null)
             {
                 if (m_timer != null)
