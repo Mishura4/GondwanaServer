@@ -1130,7 +1130,6 @@ namespace DOL.GS.Commands
                             if (GameServer.ServerRules.IsAllowedToSummonBanner(client.Player, false))
                             {
                                 GuildBanner banner = new GuildBanner(client.Player);
-                                banner.Start();
                                 client.Out.SendMessage(
                                     LanguageMgr.GetTranslation(
                                         client.Account.Language,
@@ -1393,12 +1392,12 @@ namespace DOL.GS.Commands
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.InCombat"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 return;
                             }
+
                             foreach (GamePlayer player in client.Player.Guild.GetListOfOnlineMembers())
                             {
                                 if (client.Player.Name == player.Name && player.GuildBanner != null && player.GuildBanner.BannerItem.Status == GuildBannerItem.eStatus.Active)
                                 {
                                     client.Player.GuildBanner.Stop();
-                                    client.Player.GuildBanner = null;
                                     client.Out.SendMessage(
                                         LanguageMgr.GetTranslation(
                                             client.Account.Language,
