@@ -1129,19 +1129,23 @@ namespace DOL.GS.Commands
                             if (GameServer.ServerRules.IsAllowedToSummonBanner(client.Player, false))
                             {
                                 client.Player.Guild.ActiveGuildBanner = new GuildBanner(client.Player);
-                                client.Out.SendMessage(
-                                    LanguageMgr.GetTranslation(
-                                        client.Account.Language,
-                                        "Commands.Players.Guild.BannerSummoned"),
-                                    eChatType.CT_System,
-                                    eChatLoc.CL_SystemWindow);
-                                client.Player.Guild.SendMessageToGuildMembers(
-                                    LanguageMgr.GetTranslation(
-                                        client.Account.Language,
-                                        "Commands.Players.Guild.BannerSummoned",
-                                        client.Player.Name),
-                                    eChatType.CT_Guild,
-                                    eChatLoc.CL_SystemWindow);
+                                foreach (GamePlayer player in client.Player.Guild.GetListOfOnlineMembers())
+                                {
+                                    if (player == client.Player)
+                                    {
+                                        player.Out.SendMessage(
+                                            LanguageMgr.GetTranslation(player.Client.Account.Language, "Commands.Players.Guild.BannerSummoned.You", client.Player.Name),
+                                            eChatType.CT_Guild, eChatLoc.CL_SystemWindow
+                                        );
+                                    }
+                                    else
+                                    {
+                                        player.Out.SendMessage(
+                                            LanguageMgr.GetTranslation(player.Client.Account.Language, "Commands.Players.Guild.BannerSummoned", client.Player.Name),
+                                            eChatType.CT_Guild, eChatLoc.CL_SystemWindow
+                                        );
+                                    }
+                                }
                                 client.Player.Guild.UpdateGuildWindow();
                             }
 
@@ -1385,14 +1389,18 @@ namespace DOL.GS.Commands
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.BannerUnsummoned.You"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                                 foreach (GamePlayer player in banner.Guild.GetListOfOnlineMembers())
                                 {
-                                    player.Out.SendMessage(
-                                        LanguageMgr.GetTranslation(
-                                            player.Client.Account.Language,
-                                            "Commands.Players.Guild.BannerUnsummoned",
-                                            client.Player.Name
-                                        ),
-                                        eChatType.CT_Guild, eChatLoc.CL_SystemWindow
-                                    );
+                                    if (player != client.Player)
+                                    {
+                                        player.Out.SendMessage(
+                                            LanguageMgr.GetTranslation(
+                                                player.Client.Account.Language,
+                                                "Commands.Players.Guild.BannerUnsummoned",
+                                                client.Player.Name
+                                            ),
+                                            eChatType.CT_Guild, eChatLoc.CL_SystemWindow
+                                        );
+                                    }
+                                    
                                 }
                                 banner.Guild.UpdateGuildWindow();
                             }
