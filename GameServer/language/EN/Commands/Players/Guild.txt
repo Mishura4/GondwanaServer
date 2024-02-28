@@ -33,13 +33,19 @@ Commands.Players.Guild.BannerGuildSummoned:	    Someone in your guild has alread
 Commands.Players.Guild.BannerNoGroup:			    You need a group to summon a banner.
 Commands.Players.Guild.BannerNone:			    Your guild does not have a guild banner.
 Commands.Players.Guild.BannerNotAfford:		    You need 50,000 merit points to buy a guild banner!
-Commands.Players.Guild.BannerSummoned:		    You have summoned your guild banner.
-Commands.Players.Guild.BannerUnsummoned.You:		You have removed your guild banner.
-Commands.Players.Guild.BannerUnsummoned:		    {0} has removed your guild banner.
+Commands.Players.Guild.BannerSummoned.You:		    You have summoned your guild banner.
+Commands.Players.Guild.BannerSummoned:		    {0} has summoned the guild banner.
+Commands.Players.Guild.BannerUnsummoned.You:		You have put away your guild banner.
+Commands.Players.Guild.BannerUnsummoned:			{0} has put away the guild banner.
+Commands.Players.Guild.BannerUnsummoned.You.Forced:	{0} has removed your guild banner.
+Commands.Players.Guild.BannerUnsummoned.Forced:		{0} has removed the guild banner from {1}.
+Commands.Players.Guild.BannerUnsummon.NotCarrying:	You are not carrying a banner.
+Commands.Players.Guild.BannerUnsummon.NoBanner:		Your banner is not summoned.
+Commands.Players.Guild.BannerUnsummon.Dropped:		You cannot unsummon the guild banner while it is on the ground.
+Commands.Players.Guild.BannerUnsummon.Denied:		You do not have permissions to unsummon the banner from {0}.
 Commands.Players.Guild.BannerNotRvR:			    You must be in an RvR zone to summon a banner!
 Commands.Players.Guild.BannerCantInDungeon:			You cannot summon a banner in a dungeon!
 Commands.Players.Guild.Banner.BuyPrice:             You must pay the amount of {0} to buy a banner.
-Commands.Players.Guild.BannerCarriyng.None:         You are not carrying a banner.
 Commands.Players.Guild.Banner.LostMinutes           Your banner has been lost to the enemy. You must wait {0} minute(s)!
 Commands.Players.Guild.Banner.LostHours:            Your banner has been lost to the enemy. You must wait {0} Hour(s)!
 Commands.Players.Guild.BuffActivated:			    [Guild Buff] {0} has cost 1000 Guild Merit Points and activated a Guild Buff!

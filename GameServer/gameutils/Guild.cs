@@ -492,7 +492,10 @@ namespace DOL.GS
             }
         }
 
-        public bool GuildBanner
+        /// <summary>
+        /// Whether the guild has bought a banner
+        /// </summary>
+        public bool HasGuildBanner
         {
             get
             {
@@ -503,6 +506,15 @@ namespace DOL.GS
                 this.m_DBguild.GuildBanner = value;
                 this.SaveIntoDatabase();
             }
+        }
+
+        /// <summary>
+        /// Guild banner currently active
+        /// </summary>
+        public GuildBanner ActiveGuildBanner
+        {
+            get;
+            set;
         }
 
         public DateTime GuildBannerLostTime
@@ -1246,7 +1258,7 @@ namespace DOL.GS
 
             if (player.Guild != null)
             {
-                if (player.Guild.GuildBanner)
+                if (player.Guild.HasGuildBanner)
                 {
                     foreach (GamePlayer plr in player.Guild.GetListOfOnlineMembers())
                     {

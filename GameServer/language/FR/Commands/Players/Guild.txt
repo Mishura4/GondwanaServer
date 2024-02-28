@@ -33,13 +33,19 @@ Commands.Players.Guild.BannerGuildSummoned:	    Quelqu'un dans votre guilde a d�
 Commands.Players.Guild.BannerNoGroup:			    Vous avez besoin d'un groupe pour invoquer une bannière.
 Commands.Players.Guild.BannerNone:			    Votre guilde ne possède pas de bannière de guilde.
 Commands.Players.Guild.BannerNotAfford:		    Vous avez besoin de 50,000 points de mérite pour acheter une bannière de guilde !
-Commands.Players.Guild.BannerSummoned:		    Vous avez invoqué votre bannière de guilde.
+Commands.Players.Guild.BannerSummoned.You:		    Vous avez invoqué votre bannière de guilde.
+Commands.Players.Guild.BannerSummoned:				{0} a invoqué la bannière de guilde..
 Commands.Players.Guild.BannerUnsummoned.You:		Vous avez retiré votre bannière de guilde.
-Commands.Players.Guild.BannerUnsummoned:		    {0} a retiré votre bannière de guilde.
+Commands.Players.Guild.BannerUnsummoned:			{0} a retiré la bannière de guilde.
+Commands.Players.Guild.BannerUnsummoned.You.Forced:	{0} vous a retiré votre bannière de guilde.
+Commands.Players.Guild.BannerUnsummoned.Forced:		{0} a retiré de {1} la bannière de guilde.
+Commands.Players.Guild.BannerUnsummon.NotCarrying:	Vous ne portez pas de bannière.
+Commands.Players.Guild.BannerUnsummon.NoBanner:		Votre bannière n'est pas active.
+Commands.Players.Guild.BannerUnsummon.Dropped:		Vous ne pouvez pas retirer votre bannière de guilde tant qu'elle est au sol.
+Commands.Players.Guild.BannerUnsummon.Denied:		Vous n'avez pas la permission de retirer de {0} la bannière de guilde.
 Commands.Players.Guild.BannerNotRvR:			    Vous devez vous trouver dans une zone RvR pour invoquer une bannière !
-Commands.Players.Guild.BannerCantInDungeon:			Voud ne pouvez pas invoquer une bannière dans un donjon!
+Commands.Players.Guild.BannerCantInDungeon:			Vous ne pouvez pas invoquer une bannière dans un donjon!
 Commands.Players.Guild.Banner.BuyPrice:             Vous devez payer la somme de {0} pour acheter une bannière.
-Commands.Players.Guild.BannerCarriyng.None:         Vous ne portez pas de bannière.
 Commands.Players.Guild.Banner.LostMinutes           Votre bannière a été prise par l'ennemi. Vous devez attendre {0} minute(s) !
 Commands.Players.Guild.Banner.LostHours:            Votre bannière a été prise par l'ennemi. Vous devez attendre {0} Heure(s) !
 Commands.Players.Guild.BuffActivated:			    [Guild Buff] {0} a utilisé  1000 Points de Mérite de Guilde et a activé une Amélioration de Guilde !

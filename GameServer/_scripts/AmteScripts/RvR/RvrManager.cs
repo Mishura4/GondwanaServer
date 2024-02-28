@@ -537,9 +537,9 @@ namespace AmteScripts.Managers
             _midgard.BountyPoints = 0;
             _hibernia.BountyPoints = 0;
 
-            _albion.GuildBanner = false;
-            _midgard.GuildBanner = false;
-            _hibernia.GuildBanner = false;
+            _albion.HasGuildBanner = false;
+            _midgard.HasGuildBanner = false;
+            _hibernia.HasGuildBanner = false;
 
             // Count score
             Scores = new Dictionary<string, int>();

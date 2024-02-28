@@ -129,10 +129,10 @@ namespace DOL.GS
                 m_item = item;
             }
 
-            OwningPlayer.GuildBanner = this;
-            OwningPlayer.Stealth(false);
             CarryingPlayer = OwningPlayer;
+            CarryingPlayer.Stealth(false);
             AddHandlers();
+            CarryingPlayer.GuildBanner = this;
 
             if (m_timer != null)
             {
@@ -185,7 +185,7 @@ namespace DOL.GS
                         }
                     }
                 }
-                else
+                else if (Properties.GUILD_BANNER_ALLOW_SOLO)
                 {
                     ApplyBannerEffect(CarryingPlayer);
                 }
@@ -255,7 +255,6 @@ namespace DOL.GS
             DyingEventArgs arg = args as DyingEventArgs;
             if (arg == null) return;
 
-            Stop();
             m_item.OnPlayerKilled(arg.Killer);
         }
 

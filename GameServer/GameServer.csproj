@@ -55,14 +55,6 @@
     <TranslationFiles Include="..\GameServer\language\**\*.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Remove="language\FR\Commands\Player\**" />
-    <Compile Remove="language\FR\CustomNPC\**" />
-    <EmbeddedResource Remove="language\FR\Commands\Player\**" />
-    <EmbeddedResource Remove="language\FR\CustomNPC\**" />
-    <None Remove="language\FR\Commands\Player\**" />
-    <None Remove="language\FR\CustomNPC\**" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="language\EN\Commands\GM\AreaEffect.txt" />
     <Content Include="language\EN\Commands\GM\Coffre.txt" />
     <Content Include="language\EN\Commands\GM\TPPoint.txt" />
