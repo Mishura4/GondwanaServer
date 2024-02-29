@@ -196,29 +196,31 @@ namespace DOL.GS
         protected virtual void AddHandlers()
         {
             GameEventMgr.AddHandler(CarryingPlayer, GamePlayerEvent.LeaveGroup, new DOLEventHandler(PlayerLeaveGroup));
-            GameEventMgr.AddHandler(CarryingPlayer, GamePlayerEvent.Quit, new DOLEventHandler(PlayerLoseBanner));
-            GameEventMgr.AddHandler(CarryingPlayer, GamePlayerEvent.StealthStateChanged, new DOLEventHandler(PlayerLoseBanner));
-            GameEventMgr.AddHandler(CarryingPlayer, GamePlayerEvent.Linkdeath, new DOLEventHandler(PlayerLoseBanner));
-            GameEventMgr.AddHandler(CarryingPlayer, GamePlayerEvent.RegionChanging, new DOLEventHandler(PlayerLoseBanner));
+            GameEventMgr.AddHandler(CarryingPlayer, GamePlayerEvent.Quit, new DOLEventHandler(PlayerPutAwayBanner));
+            GameEventMgr.AddHandler(CarryingPlayer, GamePlayerEvent.StealthStateChanged, new DOLEventHandler(PlayerPutAwayBanner));
+            GameEventMgr.AddHandler(CarryingPlayer, GamePlayerEvent.Linkdeath, new DOLEventHandler(PlayerPutAwayBanner));
+            GameEventMgr.AddHandler(CarryingPlayer, GamePlayerEvent.RegionChanging, new DOLEventHandler(PlayerPutAwayBanner));
             GameEventMgr.AddHandler(CarryingPlayer, GamePlayerEvent.Dying, new DOLEventHandler(PlayerDied));
         }
 
         protected virtual void RemoveHandlers()
         {
             GameEventMgr.RemoveHandler(CarryingPlayer, GamePlayerEvent.LeaveGroup, new DOLEventHandler(PlayerLeaveGroup));
-            GameEventMgr.RemoveHandler(CarryingPlayer, GamePlayerEvent.Quit, new DOLEventHandler(PlayerLoseBanner));
-            GameEventMgr.RemoveHandler(CarryingPlayer, GamePlayerEvent.StealthStateChanged, new DOLEventHandler(PlayerLoseBanner));
-            GameEventMgr.RemoveHandler(CarryingPlayer, GamePlayerEvent.Linkdeath, new DOLEventHandler(PlayerLoseBanner));
-            GameEventMgr.RemoveHandler(CarryingPlayer, GamePlayerEvent.RegionChanging, new DOLEventHandler(PlayerLoseBanner));
+            GameEventMgr.RemoveHandler(CarryingPlayer, GamePlayerEvent.Quit, new DOLEventHandler(PlayerPutAwayBanner));
+            GameEventMgr.RemoveHandler(CarryingPlayer, GamePlayerEvent.StealthStateChanged, new DOLEventHandler(PlayerPutAwayBanner));
+            GameEventMgr.RemoveHandler(CarryingPlayer, GamePlayerEvent.Linkdeath, new DOLEventHandler(PlayerPutAwayBanner));
+            GameEventMgr.RemoveHandler(CarryingPlayer, GamePlayerEvent.RegionChanging, new DOLEventHandler(PlayerPutAwayBanner));
             GameEventMgr.RemoveHandler(CarryingPlayer, GamePlayerEvent.Dying, new DOLEventHandler(PlayerDied));
         }
 
-        protected void PlayerLoseBanner(DOLEvent e, object sender, EventArgs args)
+        protected void PlayerPutAwayBanner(DOLEvent e, object sender, EventArgs args)
         {
+            if (Guild != null)
+            {
+                Guild.ActiveGuildBanner = null;
+                Guild.SendMessageToGuildMembers(string.Format("{0} has put away the guild banner!", CarryingPlayer.Name), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+            }
             Stop();
-            CarryingPlayer.GuildBanner = null;
-            CarryingPlayer.Guild.SendMessageToGuildMembers(string.Format("{0} has put away the guild banner!", CarryingPlayer.Name), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            CarryingPlayer = null;
         }
 
         protected int BannerExpireCallback(RegionTimer timer)
@@ -267,7 +269,7 @@ namespace DOL.GS
                 {
                     string guildIDNB = "GuildBanner_" + Guild.GuildID;
 
-                    m_guildBannerTemplate = new ItemTemplate();
+                    m_guildBannerTemplate = GameServer.Database.FindObjectByKey<ItemTemplate>(guildIDNB) ?? new ItemTemplate();
                     m_guildBannerTemplate.CanDropAsLoot = false;
                     m_guildBannerTemplate.Id_nb = guildIDNB;
                     m_guildBannerTemplate.IsDropable = false;
@@ -288,7 +290,7 @@ namespace DOL.GS
                             m_guildBannerTemplate.Model = 3224;
                             break;
                         case eRealm.Hibernia:
-                            m_guildBannerTemplate.Model = 3225;
+                            m_guildBannerTemplate.Model = 3223;
                             break;
                     }
                     m_guildBannerTemplate.Name = Guild.Name + "'s Banner";

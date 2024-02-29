@@ -1103,6 +1103,52 @@ namespace DOL.GS
         }
 
         /// <summary>
+        /// Sends a message that a player did an action to all guild members
+        /// </summary>
+        /// <param name="player">the player who did the action</param>
+        /// <param name="playerMsg">message to player who did the action</param>
+        /// <param name="guildMsg">message to others</param>
+        /// <param name="type">message type</param>
+        /// <param name="loc">message location</param>
+        public void SendPlayerActionToGuildMembers(GamePlayer player, string playerMsg, string guildMsg, PacketHandler.eChatType type, PacketHandler.eChatLoc loc)
+        {
+            lock (m_onlineGuildPlayers)
+            {
+                foreach (GamePlayer pl in m_onlineGuildPlayers.Values)
+                {
+                    if (!HasRank(pl, Guild.eRank.GcHear))
+                    {
+                        continue;
+                    }
+                    pl.Out.SendMessage(pl == player ? playerMsg : guildMsg, type, loc);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sends a message that a player did an action to all guild members
+        /// </summary>
+        /// <param name="player">the player who did the action</param>
+        /// <param name="playerMsg">message to player who did the action</param>
+        /// <param name="guildMsg">message to others</param>
+        /// <param name="type">message type</param>
+        /// <param name="loc">message location</param>
+        public void SendPlayerActionTranslationToGuildMembers(GamePlayer player, string playerMsg, string guildMsg, PacketHandler.eChatType type, PacketHandler.eChatLoc loc, params object[] args)
+        {
+            lock (m_onlineGuildPlayers)
+            {
+                foreach (GamePlayer pl in m_onlineGuildPlayers.Values)
+                {
+                    if (!HasRank(pl, Guild.eRank.GcHear))
+                    {
+                        continue;
+                    }
+                    pl.Out.SendMessage(LanguageMgr.GetTranslation(pl.Client.Account.Language, pl == player ? playerMsg : guildMsg, type, loc, args), type, loc);
+                }
+            }
+        }
+
+        /// <summary>
         /// Sends a message to all guild members with key to translate
         /// <param name="msg">message string</param>
         /// <param name="type">message type</param>

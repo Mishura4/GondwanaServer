@@ -174,24 +174,25 @@ namespace DOL.GS
             }
 
             Banner.Guild.ActiveGuildBanner = null;
-            if (StealingPlayers.Contains(player)) // Picked up by killers, turn into a trophy
-            {
-                GiveTrophy(player);
-            }
-            else if (player.Guild == Banner.Guild) // Same guild as owner, different group
+            if (player.Guild == Banner.Guild) // Same guild as owner, different group
             {
                 Status = eStatus.Recovered;
                 Banner.Guild.SendMessageToGuildMembers(player.Name + " has recovered your guild banner!", eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+            }
+            else if (StealingPlayers.Contains(player)) // Picked up by killers, turn into a trophy
+            {
+                GiveTrophy(player);
             }
             else if (GameServer.ServerRules.IsAllowedToAttack(player, Banner.OwningPlayer, true)) // Enemy
             {
                 GiveTrophy(player);
             }
-            else // Friend
+            else // Otherwise friendly player not in guild or group
             {
                 Status = eStatus.Recovered;
                 Banner.Guild.SendMessageToGuildMembers(player.Name + " has recovered your guild banner!", eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
             }
+            StealingPlayers.Clear();
         }
 
         protected void GiveTrophy(GamePlayer player)
@@ -203,7 +204,6 @@ namespace DOL.GS
                 3225 => 3360, // Hibernia
                 _ => 0
             };
-            player.Inventory.RemoveItem(this);
             ItemUnique template = new ItemUnique(Template);
             template.ClassType = "";
             template.Model = trophyModel;
@@ -213,7 +213,14 @@ namespace DOL.GS
             GameServer.Database.AddObject(template);
             GameInventoryItem trophy = new GameInventoryItem(template);
             player.Inventory.AddItem(eInventorySlot.FirstEmptyBackpack, trophy);
-            Banner.Guild.SendMessageToGuildMembers(player.Name + " of " + player.Guild.Name + " has captured your guild banner!", eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+            if (player.Guild != null)
+            {
+                Banner.Guild.SendMessageToGuildMembers(player.Name + " of " + player.Guild.Name + " has captured your guild banner!", eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+            }
+            else
+            {
+                Banner.Guild.SendMessageToGuildMembers(player.Name + " has captured your guild banner!", eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+            }
             Banner.Guild.GuildBannerLostTime = DateTime.Now;
         }
 
@@ -227,32 +234,6 @@ namespace DOL.GS
             item.Heading = player.Heading;
             item.CurrentRegionID = player.CurrentRegionID;
             return item;
-        }
-
-        /// <summary>
-        /// Player has dropped, traded, or otherwise lost this item
-        /// </summary>
-        /// <param name="player"></param>
-        public override void OnLose(GamePlayer player)
-        {
-            if (player.GuildBanner == null)
-            {
-                if (log.IsWarnEnabled)
-                {
-                    log.WarnFormat("Player {0} dropping banner {1} has no guild banner object", player.Name, Id_nb);
-                }
-                if (WorldItem != null)
-                {
-                    WorldItem.RemoveFromWorld();
-                    WorldItem.Delete();
-                    WorldItem = null;
-                }
-                return;
-            }
-            player.Guild?.SendMessageToGuildMembers(player.Name + " has dropped the guild banner!", eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            player.Group?.SendMessageToGroupMembers(player.Name + " has dropped the guild banner!", eChatType.CT_Group, eChatLoc.CL_SystemWindow);
-            player.GuildBanner.Stop();
-            Status = eStatus.Dropped;
         }
 
         /// <summary>
@@ -299,17 +280,24 @@ namespace DOL.GS
                 }
             }
 
-            WorldItem.StartPickupTimer(10);
+            //WorldItem.StartPickupTimer(10);
             GroundTimer = new RegionTimer(WorldItem, GroundTimerCallback, 30000);
-            OnLose(Banner.OwningPlayer);
+
+            Banner.OwningPlayer.Guild?.SendMessageToGuildMembers(Banner.OwningPlayer.Name + " has dropped the guild banner!", eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+            Banner.OwningPlayer.Group?.SendMessageToGroupMembers(Banner.OwningPlayer.Name + " has dropped the guild banner!", eChatType.CT_Group, eChatLoc.CL_SystemWindow);
+            Banner.Stop();
+            Status = eStatus.Dropped;
             WorldItem.AddToWorld();
         }
 
         protected int GroundTimerCallback(RegionTimer timer)
         {
-            WorldItem.RemoveFromWorld();
-            WorldItem.Delete();
-            WorldItem = null;
+            if (WorldItem != null)
+            {
+                WorldItem.RemoveFromWorld();
+                WorldItem.Delete();
+                WorldItem = null;
+            }
             return 0;
         }
 
@@ -326,6 +314,12 @@ namespace DOL.GS
 
         public override void OnRemoveFromWorld()
         {
+            if (GroundTimer is { IsAlive: true })
+            {
+                GroundTimer.Stop();
+                GroundTimer = null;
+            }
+
             if (Banner is { Guild: not null })
             {
                 Banner.Guild.ActiveGuildBanner = null;
@@ -333,7 +327,7 @@ namespace DOL.GS
                 {
                     // banner was dropped and not picked up, must be re-purchased
                     Banner.Guild.HasGuildBanner = false;
-                    Banner.Guild.SendMessageToGuildMembers("Your guild banner has been lost!", eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                    Banner.Guild.SendMessageToGuildMembers("Your guild banner is lost!", eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                 }
                 Banner.Guild = null;
                 Banner.OwningPlayer = null;

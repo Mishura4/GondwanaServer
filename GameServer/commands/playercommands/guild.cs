@@ -1400,7 +1400,6 @@ namespace DOL.GS.Commands
                                             eChatType.CT_Guild, eChatLoc.CL_SystemWindow
                                         );
                                     }
-                                    
                                 }
                                 banner.Guild.UpdateGuildWindow();
                             }
