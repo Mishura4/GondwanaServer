@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Text;
 using DOL.GS.PacketHandler;
 using DOL.Events;
+using DOL.Language;
 
 namespace DOL.GS
 {
@@ -380,6 +381,71 @@ namespace DOL.GS
         {
             foreach (GamePlayer player in GetPlayersInTheGroup())
                 player.Out.SendMessage(msg, type, loc);
+        }
+
+        /// <summary>
+        /// Sends a message that a player did an action to all group members
+        /// </summary>
+        /// <param name="player">the player who did the action</param>
+        /// <param name="playerMsg">message to player who did the action</param>
+        /// <param name="groupMsg">message to others</param>
+        /// <param name="type">message type</param>
+        /// <param name="loc">message location</param>
+        public void SendPlayerActionToGroupMembers(GamePlayer player, string playerMsg, string groupMsg, PacketHandler.eChatType type, PacketHandler.eChatLoc loc)
+        {
+            lock (m_groupMembers)
+            {
+                foreach (GamePlayer pl in m_groupMembers)
+                {
+                    pl.Out.SendMessage(pl == player ? playerMsg : groupMsg, type, loc);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sends a message that a player did an action to all group members
+        /// </summary>
+        /// <param name="player">the player who did the action</param>
+        /// <param name="groupMsg">message to group members</param>
+        /// <param name="type">message type</param>
+        /// <param name="loc">message location</param>
+        public void SendPlayerActionTranslationToGroupMembers(GamePlayer player, string groupMsg, PacketHandler.eChatType type, PacketHandler.eChatLoc loc, params object[] args)
+        {
+            lock (m_groupMembers)
+            {
+                foreach (GamePlayer pl in m_groupMembers)
+                {
+                    var fullArgs = new object[] { pl.GetPersonalizedName(player) }.Concat(args).ToArray();
+                    pl.Out.SendMessage(LanguageMgr.GetTranslation(pl.Client.Account.Language, groupMsg, fullArgs), type, loc);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sends a message that a player did an action to all group members
+        /// </summary>
+        /// <param name="player">the player who did the action</param>
+        /// <param name="playerMsg">message to player who did the action</param>
+        /// <param name="groupMsg">message to others</param>
+        /// <param name="type">message type</param>
+        /// <param name="loc">message location</param>
+        public void SendPlayerActionTranslationToGroupMembers(GamePlayer player, string playerMsg, string groupMsg, PacketHandler.eChatType type, PacketHandler.eChatLoc loc, params object[] args)
+        {
+            lock (m_groupMembers)
+            {
+                foreach (GamePlayer pl in m_groupMembers)
+                {
+                    if (pl == player)
+                    {
+                        pl.Out.SendMessage(LanguageMgr.GetTranslation(pl.Client.Account.Language, playerMsg, args), type, loc);
+                    }
+                    else
+                    {
+                        var fullArgs = new object[] { pl.GetPersonalizedName(player) }.Concat(args).ToArray();
+                        pl.Out.SendMessage(LanguageMgr.GetTranslation(pl.Client.Account.Language, groupMsg, fullArgs), type, loc);
+                    }
+                }
+            }
         }
         #endregion
 

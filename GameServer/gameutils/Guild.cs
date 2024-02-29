@@ -1120,7 +1120,17 @@ namespace DOL.GS
                     {
                         continue;
                     }
-                    pl.Out.SendMessage(pl == player ? playerMsg : guildMsg, type, loc);
+                    if (pl == player)
+                    {
+                        if (!String.IsNullOrEmpty(playerMsg))
+                        {
+                            pl.Out.SendMessage(playerMsg, type, loc);
+                        }
+                    }
+                    else
+                    {
+                        pl.Out.SendMessage(String.Format(guildMsg, pl.GetPersonalizedName(player)), type, loc);
+                    }
                 }
             }
         }
@@ -1129,11 +1139,10 @@ namespace DOL.GS
         /// Sends a message that a player did an action to all guild members
         /// </summary>
         /// <param name="player">the player who did the action</param>
-        /// <param name="playerMsg">message to player who did the action</param>
-        /// <param name="guildMsg">message to others</param>
+        /// <param name="key">message translation</param>
         /// <param name="type">message type</param>
         /// <param name="loc">message location</param>
-        public void SendPlayerActionTranslationToGuildMembers(GamePlayer player, string playerMsg, string guildMsg, PacketHandler.eChatType type, PacketHandler.eChatLoc loc, params object[] args)
+        public void SendPlayerActionTranslationToGuildMembers(GamePlayer player, string key, PacketHandler.eChatType type, PacketHandler.eChatLoc loc, params object[] args)
         {
             lock (m_onlineGuildPlayers)
             {
@@ -1143,7 +1152,49 @@ namespace DOL.GS
                     {
                         continue;
                     }
-                    pl.Out.SendMessage(LanguageMgr.GetTranslation(pl.Client.Account.Language, pl == player ? playerMsg : guildMsg, type, loc, args), type, loc);
+                    if (args.Length > 0)
+                    {
+                        var fullArgs = new object[] { pl.GetPersonalizedName(player) }.Concat(args).ToArray();
+                        pl.Out.SendMessage(LanguageMgr.GetTranslation(pl.Client.Account.Language, key, fullArgs), type, loc);
+                    }
+                    else
+                    {
+                        pl.Out.SendMessage(LanguageMgr.GetTranslation(pl.Client.Account.Language, key, pl.GetPersonalizedName(player)), type, loc);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sends a message that a player did an action to all guild members
+        /// </summary>
+        /// <param name="player">the player who did the action</param>
+        /// <param name="playerKey">message to player who did the action</param>
+        /// <param name="guildKey">message to others</param>
+        /// <param name="type">message type</param>
+        /// <param name="loc">message location</param>
+        public void SendPlayerActionTranslationToGuildMembers(GamePlayer player, string playerKey, string guildKey, PacketHandler.eChatType type, PacketHandler.eChatLoc loc, params object[] args)
+        {
+            lock (m_onlineGuildPlayers)
+            {
+                foreach (GamePlayer pl in m_onlineGuildPlayers.Values)
+                {
+                    if (!HasRank(pl, Guild.eRank.GcHear))
+                    {
+                        continue;
+                    }
+                    if (pl == player)
+                    {
+                        if (!String.IsNullOrEmpty(playerKey))
+                        {
+                            pl.Out.SendMessage(LanguageMgr.GetTranslation(pl.Client.Account.Language, playerKey, args), type, loc);
+                        }
+                    }
+                    else
+                    {
+                        var fullArgs = new object[] { pl.GetPersonalizedName(player) }.Concat(args).ToArray();
+                        pl.Out.SendMessage(LanguageMgr.GetTranslation(pl.Client.Account.Language, guildKey, fullArgs), type, loc);
+                    }
                 }
             }
         }

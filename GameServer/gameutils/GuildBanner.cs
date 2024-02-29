@@ -99,7 +99,7 @@ namespace DOL.GS
                 {
                     if (groupPlayer.GuildBanner != null)
                     {
-                        OwningPlayer.Out.SendMessage("Someone in your group already has a guild banner active!", eChatType.CT_Loot, eChatLoc.CL_SystemWindow);
+                        OwningPlayer.SendTranslatedMessage("GameUtils.Guild.Banner.BannerInGroup", eChatType.CT_Loot, eChatLoc.CL_SystemWindow);
                         if (m_timer != null)
                         {
                             m_timer.Stop();
@@ -111,7 +111,7 @@ namespace DOL.GS
             }
             else if (!Properties.GUILD_BANNER_ALLOW_SOLO && OwningPlayer.Client.Account.PrivLevel <= (int)ePrivLevel.Player)
             {
-                OwningPlayer.Out.SendMessage("You have left the group and your guild banner disappears!", eChatType.CT_Loot, eChatLoc.CL_SystemWindow);
+                OwningPlayer.SendTranslatedMessage("GameUtils.Guild.Banner.BannerNoGroup", eChatType.CT_Loot, eChatLoc.CL_SystemWindow);
                 OwningPlayer.GuildBanner = null;
                 if (m_timer != null)
                 {
@@ -218,7 +218,7 @@ namespace DOL.GS
             if (Guild != null)
             {
                 Guild.ActiveGuildBanner = null;
-                Guild.SendMessageToGuildMembers(string.Format("{0} has put away the guild banner!", CarryingPlayer.Name), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                Guild.SendPlayerActionTranslationToGuildMembers(CarryingPlayer, "GameUtils.Guild.Banner.PutAway", eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
             }
             Stop();
         }
@@ -231,8 +231,8 @@ namespace DOL.GS
             {
                 if (CarryingPlayer != null)
                 {
-                    CarryingPlayer.Out.SendMessage("You have left the group and your guild banner disappears!", eChatType.CT_Loot, eChatLoc.CL_SystemWindow);
-                    CarryingPlayer.Guild.SendMessageToGuildMembers(string.Format("{0} has put away the guild banner!", CarryingPlayer.Name), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                    CarryingPlayer.SendTranslatedMessage("GameUtils.Guild.Banner.BannerNoGroup", eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                    Guild.SendPlayerActionTranslationToGuildMembers(CarryingPlayer, "GameUtils.Guild.Banner.PutAway", eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                     CarryingPlayer.GuildBanner = null;
                     CarryingPlayer = null;
                 }

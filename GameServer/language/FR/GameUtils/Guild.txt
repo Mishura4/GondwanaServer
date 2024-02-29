@@ -2,3 +2,18 @@ GameUtils.Guild.LevelUp:			{0} a atteint le niveau {1}!
 GameUtils.Guild.CommandAvailable:	La commande {0} est maintenant disponible.
 GameUtils.Guild.CommandsAvailable:	Les commandes {0} sont maintenant disponible.
 GameUtils.Guild.MaxDuesAvailable:	Les taxes de guilde peuvent maintenant être réglées à {0}%.
+
+GameUtils.Guild.Banner.BannerInGroup:			Quelqu'un dans votre groupe a déjà une bannière active!
+GameUtils.Guild.Banner.BannerNoGroup:			Vous avez quitté le groupe et votre bannière disparaît!
+GameUtils.Guild.Banner.PutAway:					{0} a retiré la bannière de guilde!
+GameUtils.Guild.Banner.Dropped:					{0} a lâché la bannière de guilde!
+GameUtils.Guild.Banner.Dropped.OtherGuild:		{0} a lâché la bannière de {1}!
+GameUtils.Guild.Banner.Recovered:				{0} a récupéré la bannière de guilde!
+GameUtils.Guild.Banner.PickedUp:				{0} a ramassé la bannière de guilde!
+GameUtils.Guild.Banner.PickedUp.OtherGuild:		{0} a ramassé la bannière de {1}!
+GameUtils.Guild.Banner.Captured:				{0} a capturé votre bannière de guilde!
+GameUtils.Guild.Banner.Captured.InGuild:			{0} de {1} a capturé votre bannière de guilde!
+GameUtils.Guild.Banner.Captured.OtherGuild:			{0} a capturé la bannière de {1}!
+GameUtils.Guild.Banner.Captured.OtherGuild.InGuild:	{0} de {1} a capturé la bannière de {2}!
+GameUtils.Guild.Banner.Captured.You:			Vous avez capturé la bannière de {0}!
+GameUtils.Guild.Banner.Lost:					Votre bannière de guilde est perdue!

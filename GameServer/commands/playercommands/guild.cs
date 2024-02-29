@@ -1384,23 +1384,26 @@ namespace DOL.GS.Commands
                             if (client.Player.GuildBanner != null) // player is wearing the banner they want to unsummon
                             {
                                 GuildBanner banner = client.Player.GuildBanner;
-                                banner.Guild.ActiveGuildBanner = null;
                                 banner.Stop();
-                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.BannerUnsummoned.You"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-                                foreach (GamePlayer player in banner.Guild.GetListOfOnlineMembers())
+                                if (banner.Guild != null)
                                 {
-                                    if (player != client.Player)
+                                    banner.Guild.ActiveGuildBanner = null;
+                                    foreach (GamePlayer player in banner.Guild.GetListOfOnlineMembers())
                                     {
-                                        player.Out.SendMessage(
-                                            LanguageMgr.GetTranslation(
-                                                player.Client.Account.Language,
-                                                "Commands.Players.Guild.BannerUnsummoned",
-                                                client.Player.Name
-                                            ),
-                                            eChatType.CT_Guild, eChatLoc.CL_SystemWindow
-                                        );
+                                        if (player != client.Player)
+                                        {
+                                            player.Out.SendMessage(
+                                                LanguageMgr.GetTranslation(
+                                                    player.Client.Account.Language,
+                                                    "Commands.Players.Guild.BannerUnsummoned",
+                                                    client.Player.Name
+                                                ),
+                                                eChatType.CT_Guild, eChatLoc.CL_SystemWindow
+                                            );
+                                        }
                                     }
                                 }
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.BannerUnsummoned.You"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                                 banner.Guild.UpdateGuildWindow();
                             }
                             else // player is not wearing a banner, find banner in guild

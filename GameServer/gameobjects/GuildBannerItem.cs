@@ -166,8 +166,8 @@ namespace DOL.GS
             if (player.Group != null && player.Group == Banner.OwningPlayer?.Group) // Same group as owner, different or same guild, transfer to player
             {
                 Status = eStatus.Recovered;
-                Banner.Guild.SendMessageToGuildMembers(player.Name + " has recovered your guild banner!", eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-                player.Group.SendMessageToGroupMembers(player.Name + " has recovered your guild banner!", eChatType.CT_Group, eChatLoc.CL_SystemWindow);
+                Banner.Guild.SendPlayerActionTranslationToGuildMembers(player, "GameUtils.Guild.Banner.PickedUp", eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                player.Group.SendPlayerActionTranslationToGroupMembers(player, "GameUtils.Guild.Banner.PickedUp.OtherGuild", eChatType.CT_Group, eChatLoc.CL_SystemWindow, Banner.Guild.Name);
                 Banner.OwningPlayer = player;
                 StealingPlayers.Clear();
                 return;
@@ -177,25 +177,25 @@ namespace DOL.GS
             if (player.Guild == Banner.Guild) // Same guild as owner, different group
             {
                 Status = eStatus.Recovered;
-                Banner.Guild.SendMessageToGuildMembers(player.Name + " has recovered your guild banner!", eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                Banner.Guild.SendPlayerActionTranslationToGuildMembers(player, "GameUtils.Guild.Banner.Recovered", eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
             }
             else if (StealingPlayers.Contains(player)) // Picked up by killers, turn into a trophy
             {
-                GiveTrophy(player);
+                OnCapture(player);
             }
             else if (GameServer.ServerRules.IsAllowedToAttack(player, Banner.OwningPlayer, true)) // Enemy
             {
-                GiveTrophy(player);
+                OnCapture(player);
             }
             else // Otherwise friendly player not in guild or group
             {
                 Status = eStatus.Recovered;
-                Banner.Guild.SendMessageToGuildMembers(player.Name + " has recovered your guild banner!", eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                Banner.Guild.SendPlayerActionTranslationToGuildMembers(player, "GameUtils.Guild.Banner.Recovered", eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
             }
             StealingPlayers.Clear();
         }
 
-        protected void GiveTrophy(GamePlayer player)
+        protected void OnCapture(GamePlayer player)
         {
             int trophyModel = Model switch
             {
@@ -215,11 +215,15 @@ namespace DOL.GS
             player.Inventory.AddItem(eInventorySlot.FirstEmptyBackpack, trophy);
             if (player.Guild != null)
             {
-                Banner.Guild.SendMessageToGuildMembers(player.Name + " of " + player.Guild.Name + " has captured your guild banner!", eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                Banner.Guild.SendPlayerActionTranslationToGuildMembers(player, "GameUtils.Guild.Banner.Captured.InGuild", eChatType.CT_Guild, eChatLoc.CL_SystemWindow, player.Guild.Name);
+                Banner.OwningPlayer.Group?.SendPlayerActionTranslationToGroupMembers(player, "GameUtils.Guild.Banner.Captured.OtherGuild.InGuild", eChatType.CT_Group, eChatLoc.CL_SystemWindow, player.Guild.Name, Banner.Guild.Name);
+                player.Guild.SendPlayerActionTranslationToGuildMembers(player, "GameUtils.Guild.Banner.Captured.OtherGuild", eChatType.CT_Guild, eChatLoc.CL_SystemWindow, Banner.Guild.Name);
             }
             else
             {
-                Banner.Guild.SendMessageToGuildMembers(player.Name + " has captured your guild banner!", eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                Banner.Guild.SendPlayerActionTranslationToGuildMembers(player, "GameUtils.Guild.Banner.Captured", eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                Banner.OwningPlayer.Group?.SendPlayerActionTranslationToGroupMembers(player, "GameUtils.Guild.Banner.Captured.OtherGuild", eChatType.CT_Group, eChatLoc.CL_SystemWindow, Banner.Guild.Name);
+                player.SendTranslatedMessage("GameUtils.Guild.Banner.Captured.You", eChatType.CT_Loot, eChatLoc.CL_SystemWindow, Banner.Guild.Name);
             }
             Banner.Guild.GuildBannerLostTime = DateTime.Now;
         }
@@ -237,11 +241,12 @@ namespace DOL.GS
         }
 
         /// <summary>
-        /// Player has dropped, traded, or otherwise lost this item
+        /// Player was killed and dropped the banner
         /// </summary>
-        /// <param name="player"></param>
+        /// <param name="killer"></param>
         public void OnPlayerKilled(GameObject killer)
         {
+            GamePlayer killed = Banner.OwningPlayer;
             WorldItem = CreateWorldItem();
             GameObject realKiller = killer;
             if (killer is GameNPC { Brain: IControlledBrain { Owner: GamePlayer } } pet)
@@ -283,8 +288,8 @@ namespace DOL.GS
             //WorldItem.StartPickupTimer(10);
             GroundTimer = new RegionTimer(WorldItem, GroundTimerCallback, 30000);
 
-            Banner.OwningPlayer.Guild?.SendMessageToGuildMembers(Banner.OwningPlayer.Name + " has dropped the guild banner!", eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            Banner.OwningPlayer.Group?.SendMessageToGroupMembers(Banner.OwningPlayer.Name + " has dropped the guild banner!", eChatType.CT_Group, eChatLoc.CL_SystemWindow);
+            Banner.OwningPlayer.Guild?.SendPlayerActionTranslationToGuildMembers(killed, "GameUtils.Guild.Banner.Dropped", eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+            killed.Group?.SendPlayerActionTranslationToGroupMembers(killed, "GameUtils.Guild.Banner.Dropped.OtherGuild", eChatType.CT_Group, eChatLoc.CL_SystemWindow, Banner.Guild.Name);
             Banner.Stop();
             Status = eStatus.Dropped;
             WorldItem.AddToWorld();
@@ -322,15 +327,13 @@ namespace DOL.GS
 
             if (Banner is { Guild: not null })
             {
-                Banner.Guild.ActiveGuildBanner = null;
                 if (Status == eStatus.Dropped)
                 {
+                    Banner.Guild.ActiveGuildBanner = null;
                     // banner was dropped and not picked up, must be re-purchased
                     Banner.Guild.HasGuildBanner = false;
-                    Banner.Guild.SendMessageToGuildMembers("Your guild banner is lost!", eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                    Banner.Guild.SendMessageToGuildMembersKey("GameUtils.Guild.Banner.Lost", eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                 }
-                Banner.Guild = null;
-                Banner.OwningPlayer = null;
             }
 
             base.OnRemoveFromWorld();
