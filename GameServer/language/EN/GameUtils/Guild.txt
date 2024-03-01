@@ -5,7 +5,9 @@ GameUtils.Guild.MaxDuesAvailable:	Guild dues can now be set to {0}%.
 
 GameUtils.Guild.Banner.BannerInGroup:			Someone in your group already has a guild banner active!
 GameUtils.Guild.Banner.BannerNoGroup:			You have left the group and your guild banner disappears!
+GameUtils.Guild.Banner.LeavesGroup:				You have lost the effects of {0}'s guild banner!
 GameUtils.Guild.Banner.PutAway:					{0} has put away the guild banner!
+GameUtils.Guild.Banner.PutAway.OtherGuild:		{0} has put away {1}'s guild banner!
 GameUtils.Guild.Banner.Dropped:					{0} has dropped the guild banner!
 GameUtils.Guild.Banner.Dropped.OtherGuild:		{0} has dropped {1}'s guild banner!
 GameUtils.Guild.Banner.Recovered:				{0} has recovered the guild banner!
@@ -17,3 +19,4 @@ GameUtils.Guild.Banner.Captured.OtherGuild:			{0} has captured {1}'s guild banne
 GameUtils.Guild.Banner.Captured.OtherGuild.InGuild:	{0} of {1} has captured {2}'s guild banner!
 GameUtils.Guild.Banner.Captured.You:			You have captured {0}'s guild banner!
 GameUtils.Guild.Banner.Lost:					Your guild banner is lost!
+GameUtils.Guild.Banner.Expired:					Your guild banner disappears.

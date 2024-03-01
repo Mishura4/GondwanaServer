@@ -247,7 +247,7 @@ namespace DOL.GS
             if (player != null)
             {
                 player.Out.SendMessage("You leave your group.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                player.Notify(GamePlayerEvent.LeaveGroup, player);
+                player.Notify(GamePlayerEvent.LeaveGroup, player, new LeaveGroupEventArgs(this));
                 foreach (GamePlayer pl in GetPlayersInTheGroup())
                     pl.Out.SendMessage(string.Format("{0} has left the group.", pl.GetPersonalizedName(player)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
             }
@@ -381,6 +381,18 @@ namespace DOL.GS
         {
             foreach (GamePlayer player in GetPlayersInTheGroup())
                 player.Out.SendMessage(msg, type, loc);
+        }
+
+        /// <summary>
+        /// Send Raw Message to all group members.
+        /// </summary>
+        /// <param name="msg">message string</param>
+        /// <param name="type">message type</param>
+        /// <param name="loc">message location</param>
+        public virtual void SendTranslatedMessageToGroupMembers(string key, eChatType type, eChatLoc loc, params object[] args)
+        {
+            foreach (GamePlayer player in GetPlayersInTheGroup())
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, key, args), type, loc);
         }
 
         /// <summary>

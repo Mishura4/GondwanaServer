@@ -2630,6 +2630,12 @@ namespace DOL.GS.ServerProperties
         public static ushort GUILD_BANNER_LOST_TIME;
 
         /// <summary>
+        /// Duration of a guild banner in seconds before it disappears (0 for never)
+        /// </summary>
+        [ServerProperty("guild", "guild_banner_duration", "Duration of a guild banner in seconds before it disappears (0 for never)", 30 * 60)]
+        public static int GUILD_BANNER_DURATION;
+
+        /// <summary>
         /// Whether to allow guild banners without a group
         /// </summary>
         [ServerProperty("guild", "guild_banner_allow_solo", "Should guild banners be useable without a group?", false)]

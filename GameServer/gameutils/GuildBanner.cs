@@ -23,7 +23,7 @@ namespace DOL.GS
         private RegionTimer m_timer;
 
         /// <summary>
-        /// Expiration timer after leaving a group
+        /// Banner expiration timer
         /// </summary>
         private RegionTimer m_expireTimer;
 
@@ -33,6 +33,10 @@ namespace DOL.GS
         {
             Guild = player.Guild;
             OwningPlayer = player;
+            if (Properties.GUILD_BANNER_DURATION > 0)
+            {
+                m_expireTimer = new RegionTimer(OwningPlayer, new RegionTimerCallback(BannerExpireCallback), Properties.GUILD_BANNER_DURATION * 1000);
+            }
         }
 
         private GamePlayer m_owningPlayer;
@@ -223,7 +227,7 @@ namespace DOL.GS
             Stop();
         }
 
-        protected int BannerExpireCallback(RegionTimer timer)
+        protected int LeaveGroupCallback(RegionTimer timer)
         {
             timer.Stop();
             m_expireTimer = null;
@@ -237,7 +241,25 @@ namespace DOL.GS
                     CarryingPlayer = null;
                 }
                 Stop();
+                Guild.ActiveGuildBanner = null;
             }
+            return 0;
+        }
+
+        protected int BannerExpireCallback(RegionTimer timer)
+        {
+            timer.Stop();
+            m_expireTimer = null;
+            if (CarryingPlayer != null)
+            {
+                CarryingPlayer.SendTranslatedMessage("GameUtils.Guild.Banner.Expired", eChatType.CT_Loot, eChatLoc.CL_SystemWindow);
+                Guild.SendPlayerActionTranslationToGuildMembers(CarryingPlayer, "GameUtils.Guild.Banner.PutAway", eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                CarryingPlayer.Group?.SendPlayerActionTranslationToGroupMembers(CarryingPlayer, "GameUtils.Guild.Banner.PutAway.OtherGuild", eChatType.CT_Group, eChatLoc.CL_SystemWindow, Guild.Name);
+                CarryingPlayer.GuildBanner = null;
+                CarryingPlayer = null;
+            }
+            Stop();
+            Guild.ActiveGuildBanner = null;
             return 0;
         }
 
@@ -245,10 +267,14 @@ namespace DOL.GS
         {
             if (!Properties.GUILD_BANNER_ALLOW_SOLO)
             {
-                m_expireTimer = new RegionTimer(CarryingPlayer);
-                m_expireTimer.Interval = 30000; // Banner expires after 30 seconds
-                m_expireTimer.Callback = BannerExpireCallback;
-                m_expireTimer.Start(m_expireTimer.Interval);
+                CarryingPlayer.SendTranslatedMessage("GameUtils.Guild.Banner.LeavesGroup", eChatType.CT_Group, eChatLoc.CL_SystemWindow, Guild.Name);
+                (args as LeaveGroupEventArgs)?.Group.SendTranslatedMessageToGroupMembers("GameUtils.Guild.Banner.LeavesGroup", eChatType.CT_Group, eChatLoc.CL_SystemWindow, Guild.Name);
+                m_expireTimer?.Stop();
+                m_expireTimer = new RegionTimer(CarryingPlayer, LeaveGroupCallback, 30000);
+            }
+            else
+            {
+                (args as LeaveGroupEventArgs)?.Group.SendTranslatedMessageToGroupMembers("GameUtils.Guild.Banner.LeavesGroup", eChatType.CT_Group, eChatLoc.CL_SystemWindow, Guild.Name);
             }
         }
 
@@ -290,7 +316,7 @@ namespace DOL.GS
                             m_guildBannerTemplate.Model = 3224;
                             break;
                         case eRealm.Hibernia:
-                            m_guildBannerTemplate.Model = 3223;
+                            m_guildBannerTemplate.Model = 3225;
                             break;
                     }
                     m_guildBannerTemplate.Name = Guild.Name + "'s Banner";

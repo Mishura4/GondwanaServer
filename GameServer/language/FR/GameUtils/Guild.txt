@@ -5,7 +5,9 @@ GameUtils.Guild.MaxDuesAvailable:	Les taxes de guilde peuvent maintenant être r
 
 GameUtils.Guild.Banner.BannerInGroup:			Quelqu'un dans votre groupe a déjà une bannière active!
 GameUtils.Guild.Banner.BannerNoGroup:			Vous avez quitté le groupe et votre bannière disparaît!
+GameUtils.Guild.Banner.LeavesGroup:				Vous avez perdu les effets de la bannière de {0}!
 GameUtils.Guild.Banner.PutAway:					{0} a retiré la bannière de guilde!
+GameUtils.Guild.Banner.PutAway.OtherGuild:		{0} a retiré la bannière de {1}!
 GameUtils.Guild.Banner.Dropped:					{0} a lâché la bannière de guilde!
 GameUtils.Guild.Banner.Dropped.OtherGuild:		{0} a lâché la bannière de {1}!
 GameUtils.Guild.Banner.Recovered:				{0} a récupéré la bannière de guilde!
