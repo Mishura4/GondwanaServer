@@ -9,6 +9,7 @@ using DOL.Database;
 using log4net;
 using DOL.GS.Effects;
 using DOL.GS.ServerProperties;
+using System.Linq;
 using System.Numerics;
 
 namespace DOL.GS
@@ -179,19 +180,21 @@ namespace DOL.GS
         {
             if (CarryingPlayer != null)
             {
-                if (CarryingPlayer.Group != null)
+                if (CarryingPlayer.Group == null)
                 {
-                    foreach (GamePlayer player in CarryingPlayer.Group.GetPlayersInTheGroup())
+                    if (!Properties.GUILD_BANNER_ALLOW_SOLO)
+                        return 9000;
+                }
+                else
+                {
+                    foreach (GamePlayer player in CarryingPlayer.Group.GetPlayersInTheGroup().Where(p => p.Guild != Guild && p is { ObjectState: GameObject.eObjectState.Active, IsAlive: true } && p.GetDistanceSquaredTo(CarryingPlayer) < 1500 * 1500))
                     {
-                        if (player == CarryingPlayer || (player is { ObjectState: GameObject.eObjectState.Active, IsAlive: true } && player.GetDistanceSquaredTo(CarryingPlayer) < (1500 * 1500)))
-                        {
-                            ApplyBannerEffect(player);
-                        }
+                        ApplyBannerEffect(player);
                     }
                 }
-                else if (Properties.GUILD_BANNER_ALLOW_SOLO)
+                foreach (GamePlayer player in Guild.GetListOfOnlineMembers().Where(p => p is { ObjectState: GameObject.eObjectState.Active, IsAlive: true } && p.GetDistanceSquaredTo(CarryingPlayer) < 1500 * 1500))
                 {
-                    ApplyBannerEffect(CarryingPlayer);
+                    ApplyBannerEffect(player);
                 }
             }
             return 9000; // Pulsing every 9 seconds with a duration of 9 seconds - Tolakram
@@ -200,6 +203,7 @@ namespace DOL.GS
         protected virtual void AddHandlers()
         {
             GameEventMgr.AddHandler(CarryingPlayer, GamePlayerEvent.LeaveGroup, new DOLEventHandler(PlayerLeaveGroup));
+            GameEventMgr.AddHandler(CarryingPlayer, GamePlayerEvent.AcceptGroup, new DOLEventHandler(PlayerJoinGroup));
             GameEventMgr.AddHandler(CarryingPlayer, GamePlayerEvent.Quit, new DOLEventHandler(PlayerPutAwayBanner));
             GameEventMgr.AddHandler(CarryingPlayer, GamePlayerEvent.StealthStateChanged, new DOLEventHandler(PlayerPutAwayBanner));
             GameEventMgr.AddHandler(CarryingPlayer, GamePlayerEvent.Linkdeath, new DOLEventHandler(PlayerPutAwayBanner));
@@ -210,6 +214,7 @@ namespace DOL.GS
         protected virtual void RemoveHandlers()
         {
             GameEventMgr.RemoveHandler(CarryingPlayer, GamePlayerEvent.LeaveGroup, new DOLEventHandler(PlayerLeaveGroup));
+            GameEventMgr.RemoveHandler(CarryingPlayer, GamePlayerEvent.AcceptGroup, new DOLEventHandler(PlayerJoinGroup));
             GameEventMgr.RemoveHandler(CarryingPlayer, GamePlayerEvent.Quit, new DOLEventHandler(PlayerPutAwayBanner));
             GameEventMgr.RemoveHandler(CarryingPlayer, GamePlayerEvent.StealthStateChanged, new DOLEventHandler(PlayerPutAwayBanner));
             GameEventMgr.RemoveHandler(CarryingPlayer, GamePlayerEvent.Linkdeath, new DOLEventHandler(PlayerPutAwayBanner));
@@ -233,15 +238,8 @@ namespace DOL.GS
             m_expireTimer = null;
             if (!Properties.GUILD_BANNER_ALLOW_SOLO)
             {
-                if (CarryingPlayer != null)
-                {
-                    CarryingPlayer.SendTranslatedMessage("GameUtils.Guild.Banner.BannerNoGroup", eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-                    Guild.SendPlayerActionTranslationToGuildMembers(CarryingPlayer, "GameUtils.Guild.Banner.PutAway", eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-                    CarryingPlayer.GuildBanner = null;
-                    CarryingPlayer = null;
-                }
-                Stop();
-                Guild.ActiveGuildBanner = null;
+                CarryingPlayer?.SendTranslatedMessage("GameUtils.Guild.Banner.BannerNoGroup", eChatType.CT_Loot, eChatLoc.CL_SystemWindow);
+                PutAway();
             }
             return 0;
         }
@@ -250,17 +248,24 @@ namespace DOL.GS
         {
             timer.Stop();
             m_expireTimer = null;
+            PutAway();
+            return 0;
+        }
+
+        protected void PutAway(bool notifyGroup = true)
+        {
             if (CarryingPlayer != null)
             {
-                CarryingPlayer.SendTranslatedMessage("GameUtils.Guild.Banner.Expired", eChatType.CT_Loot, eChatLoc.CL_SystemWindow);
                 Guild.SendPlayerActionTranslationToGuildMembers(CarryingPlayer, "GameUtils.Guild.Banner.PutAway", eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-                CarryingPlayer.Group?.SendPlayerActionTranslationToGroupMembers(CarryingPlayer, "GameUtils.Guild.Banner.PutAway.OtherGuild", eChatType.CT_Group, eChatLoc.CL_SystemWindow, Guild.Name);
+                if (notifyGroup)
+                {
+                    CarryingPlayer.Group?.SendPlayerActionTranslationToGroupMembers(CarryingPlayer, "GameUtils.Guild.Banner.PutAway.OtherGuild", eChatType.CT_Group, eChatLoc.CL_SystemWindow, Guild.Name);
+                }
                 CarryingPlayer.GuildBanner = null;
                 CarryingPlayer = null;
             }
             Stop();
             Guild.ActiveGuildBanner = null;
-            return 0;
         }
 
         protected void PlayerLeaveGroup(DOLEvent e, object sender, EventArgs args)
@@ -275,6 +280,39 @@ namespace DOL.GS
             else
             {
                 (args as LeaveGroupEventArgs)?.Group.SendTranslatedMessageToGroupMembers("GameUtils.Guild.Banner.LeavesGroup", eChatType.CT_Group, eChatLoc.CL_SystemWindow, Guild.Name);
+            }
+        }
+
+        protected void PlayerJoinGroup(DOLEvent e, object sender, EventArgs args)
+        {
+            if (sender is not GamePlayer { Group: not null } player)
+            {
+                return;
+            }
+
+
+            if (player.Group.Leader == player)
+            {
+                foreach (GamePlayer groupPlayer in OwningPlayer.Group.GetPlayersInTheGroup())
+                {
+                    if (groupPlayer.GuildBanner != null)
+                    {
+                        groupPlayer.SendTranslatedMessage("GameUtils.Guild.Banner.BannerInGroup", eChatType.CT_Loot, eChatLoc.CL_SystemWindow);
+                        groupPlayer.GuildBanner.PutAway(false);
+                    }
+                }
+            }
+            else
+            {
+                foreach (GamePlayer groupPlayer in OwningPlayer.Group.GetPlayersInTheGroup())
+                {
+                    if (groupPlayer.GuildBanner != null)
+                    {
+                        player.SendTranslatedMessage("GameUtils.Guild.Banner.BannerInGroup", eChatType.CT_Loot, eChatLoc.CL_SystemWindow);
+                        PutAway();
+                        break;
+                    }
+                }
             }
         }
 
