@@ -3654,15 +3654,16 @@ namespace DOL.GS.Commands
                 return 0;
             }
 
+            if (!client.Player.Guild.HasRank(client.Player, Guild.eRank.Leader))
+            {
+                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NoPrivileges"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return 1;
+            }
+
             switch (args[3])
             {
                 case "title":
                     {
-                        if (!client.Player.Guild.HasRank(client.Player, Guild.eRank.Leader))
-                        {
-                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NoPrivileges"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                            return 1;
-                        }
                         string message = String.Join(" ", args, 4, args.Length - 4);
                         client.Player.Guild.GetRankByID(number).Title = message;
                         client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankTitleSet", number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
@@ -3671,11 +3672,6 @@ namespace DOL.GS.Commands
                     break;
                 case "ranklevel":
                     {
-                        if (!client.Player.Guild.HasRank(client.Player, Guild.eRank.Leader))
-                        {
-                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NoPrivileges"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                            return 1;
-                        }
                         if (args.Length >= 5)
                         {
                             byte lvl = Convert.ToByte(args[4]);
@@ -3691,221 +3687,120 @@ namespace DOL.GS.Commands
 
                 case "emblem":
                     {
-                        if (!client.Player.Guild.HasRank(client.Player, Guild.eRank.Leader))
-                        {
-                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NoPrivileges"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                            return 1;
-                        }
                         client.Player.Guild.GetRankByID(number).Emblem = reponse;
                         client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankEmblemSet", LanguageMgr.GetTranslation(client.Account.Language, status), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                     }
                     break;
                 case "gchear":
                     {
-                        if (!client.Player.Guild.HasRank(client.Player, Guild.eRank.Leader))
-                        {
-                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NoPrivileges"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                            return 1;
-                        }
                         client.Player.Guild.GetRankByID(number).GcHear = reponse;
                         client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankGCHearSet", LanguageMgr.GetTranslation(client.Account.Language, status), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                     }
                     break;
                 case "gcspeak":
                     {
-                        if (!client.Player.Guild.HasRank(client.Player, Guild.eRank.Leader))
-                        {
-                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NoPrivileges"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                            return 1;
-                        }
-
                         client.Player.Guild.GetRankByID(number).GcSpeak = reponse;
                         client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankGCSpeakSet", LanguageMgr.GetTranslation(client.Account.Language, status), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                     }
                     break;
                 case "ochear":
                     {
-                        if (!client.Player.Guild.HasRank(client.Player, Guild.eRank.Leader))
-                        {
-                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NoPrivileges"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                            return 1;
-                        }
                         client.Player.Guild.GetRankByID(number).OcHear = reponse;
                         client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankOCHearSet", LanguageMgr.GetTranslation(client.Account.Language, status), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                     }
                     break;
                 case "ocspeak":
                     {
-                        if (!client.Player.Guild.HasRank(client.Player, Guild.eRank.Leader))
-                        {
-                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NoPrivileges"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                            return 1;
-                        }
                         client.Player.Guild.GetRankByID(number).OcSpeak = reponse;
                         client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankOCSpeakSet", LanguageMgr.GetTranslation(client.Account.Language, status), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                     }
                     break;
                 case "achear":
                     {
-                        if (!client.Player.Guild.HasRank(client.Player, Guild.eRank.Leader))
-                        {
-                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NoPrivileges"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                            return 1;
-                        }
                         client.Player.Guild.GetRankByID(number).AcHear = reponse;
                         client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankACHearSet", LanguageMgr.GetTranslation(client.Account.Language, status), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                     }
                     break;
                 case "acspeak":
                     {
-                        if (!client.Player.Guild.HasRank(client.Player, Guild.eRank.Leader))
-                        {
-                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NoPrivileges"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                            return 1;
-                        }
                         client.Player.Guild.GetRankByID(number).AcSpeak = reponse;
                         client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankACSpeakSet", LanguageMgr.GetTranslation(client.Account.Language, status), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                     }
                     break;
                 case "invite":
                     {
-                        if (!client.Player.Guild.HasRank(client.Player, Guild.eRank.Leader))
-                        {
-                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NoPrivileges"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                            return 1;
-                        }
                         client.Player.Guild.GetRankByID(number).Invite = reponse;
                         client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankInviteSet", LanguageMgr.GetTranslation(client.Account.Language, status), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                     }
                     break;
                 case "promote":
                     {
-                        if (!client.Player.Guild.HasRank(client.Player, Guild.eRank.Leader))
-                        {
-                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NoPrivileges"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                            return 1;
-                        }
                         client.Player.Guild.GetRankByID(number).Promote = reponse;
                         client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankPromoteSet", LanguageMgr.GetTranslation(client.Account.Language, status), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                     }
                     break;
                 case "remove":
                     {
-                        if (!client.Player.Guild.HasRank(client.Player, Guild.eRank.Leader))
-                        {
-                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NoPrivileges"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                            return 1;
-                        }
                         client.Player.Guild.GetRankByID(number).Remove = reponse;
                         client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankRemoveSet", LanguageMgr.GetTranslation(client.Account.Language, status), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                     }
                     break;
                 case "alli":
                     {
-                        if (!client.Player.Guild.HasRank(client.Player, Guild.eRank.Leader))
-                        {
-                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NoPrivileges"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                            return 1;
-                        }
                         client.Player.Guild.GetRankByID(number).Alli = reponse;
                         client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankAlliSet", LanguageMgr.GetTranslation(client.Account.Language, status), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                     }
                     break;
                 case "view":
                     {
-                        if (!client.Player.Guild.HasRank(client.Player, Guild.eRank.View))
-                        {
-                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NoPrivileges"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                            return 1;
-                        }
                         client.Player.Guild.GetRankByID(number).View = reponse;
                         client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankViewSet", LanguageMgr.GetTranslation(client.Account.Language, status), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                     }
                     break;
                 case "buff":
                     {
-                        if (!client.Player.Guild.HasRank(client.Player, Guild.eRank.Leader))
-                        {
-                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NoPrivileges"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                            return 1;
-                        }
                         client.Player.Guild.GetRankByID(number).Buff = reponse;
                         client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankBuffSet", LanguageMgr.GetTranslation(client.Account.Language, status), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                     }
                     break;
                 case "claim":
                     {
-                        if (!client.Player.Guild.HasRank(client.Player, Guild.eRank.Claim))
-                        {
-                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NoPrivileges"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                            return 1;
-                        }
                         client.Player.Guild.GetRankByID(number).Claim = reponse;
                         client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankClaimSet", LanguageMgr.GetTranslation(client.Account.Language, status), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                     }
                     break;
                 case "upgrade":
                     {
-                        if (!client.Player.Guild.HasRank(client.Player, Guild.eRank.Upgrade))
-                        {
-                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NoPrivileges"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                            return 1;
-                        }
                         client.Player.Guild.GetRankByID(number).Upgrade = reponse;
                         client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankUpgradeSet", LanguageMgr.GetTranslation(client.Account.Language, status), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                     }
                     break;
                 case "release":
                     {
-                        if (!client.Player.Guild.HasRank(client.Player, Guild.eRank.Release))
-                        {
-                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NoPrivileges"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                            return 1;
-                        }
                         client.Player.Guild.GetRankByID(number).Release = reponse;
                         client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankReleaseSet", LanguageMgr.GetTranslation(client.Account.Language, status), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                     }
                     break;
                 case "dues":
                     {
-                        if (!client.Player.Guild.HasRank(client.Player, Guild.eRank.Dues))
-                        {
-                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NoPrivileges"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                            return 1;
-                        }
                         client.Player.Guild.GetRankByID(number).Release = reponse;
                         client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankDuesSet", LanguageMgr.GetTranslation(client.Account.Language, status), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                     }
                     break;
                 case "withdraw":
                     {
-                        if (!client.Player.Guild.HasRank(client.Player, Guild.eRank.Withdraw))
-                        {
-                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NoPrivileges"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                            return 1;
-                        }
                         client.Player.Guild.GetRankByID(number).Release = reponse;
                         client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankWithdrawSet", LanguageMgr.GetTranslation(client.Account.Language, status), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                     }
                     break;
                 case "buybanner":
                     {
-                        if (!client.Player.Guild.HasRank(client.Player, Guild.eRank.Withdraw))
-                        {
-                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NoPrivileges"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                            return 1;
-                        }
                         client.Player.Guild.GetRankByID(number).BuyBanner = reponse;
                         client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankBuyBannerSet", LanguageMgr.GetTranslation(client.Account.Language, status), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                     }
                     break;
                 case "summon":
                     {
-                        if (!client.Player.Guild.HasRank(client.Player, Guild.eRank.Summon))
-                        {
-                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NoPrivileges"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                            return 1;
-                        }
                         client.Player.Guild.GetRankByID(number).Summon = reponse;
                         client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankSummonSet", LanguageMgr.GetTranslation(client.Account.Language, status), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                     }
