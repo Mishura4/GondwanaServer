@@ -63,7 +63,9 @@ namespace DOL.GS
             Release,
             Buff,
             Dues,
-            Withdraw
+            Withdraw,
+            BuyBanner,
+            Summon
         }
 
         public enum eBonusType : byte
@@ -946,6 +948,10 @@ namespace DOL.GS
                     return false;
                 }
 
+                // If player is leader, yes
+                if (member.GuildRank.RankLevel == 0)
+                    return true;
+
                 switch (rankNeeded)
                 {
                     case Guild.eRank.Emblem:
@@ -1027,6 +1033,14 @@ namespace DOL.GS
                     case Guild.eRank.Buff:
                         {
                             return member.GuildRank.Buff;
+                        }
+                    case Guild.eRank.BuyBanner:
+                        {
+                            return member.GuildRank.BuyBanner;
+                        }
+                    case Guild.eRank.Summon:
+                        {
+                            return member.GuildRank.Summon;
                         }
                     default:
                         {

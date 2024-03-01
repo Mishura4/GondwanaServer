@@ -51,6 +51,8 @@ namespace DOL.Database
         private bool m_buff;
         private bool m_dues;
         private bool m_withdraw;
+        private bool m_buybanner;
+        private bool m_summon;
 
         /// <summary>
         /// create rank rules
@@ -418,6 +420,40 @@ namespace DOL.Database
             {
                 Dirty = true;
                 m_withdraw = value;
+            }
+        }
+
+        /// <summary>
+        /// Can player with this rank buy a guild banner
+        /// </summary>
+        [DataElement(AllowDbNull = false)]
+        public bool BuyBanner
+        {
+            get
+            {
+                return m_buybanner;
+            }
+            set
+            {
+                Dirty = true;
+                m_buybanner = value;
+            }
+        }
+
+        /// <summary>
+        /// Can player with this rank summon a guild banner
+        /// </summary>
+        [DataElement(AllowDbNull = false)]
+        public bool Summon
+        {
+            get
+            {
+                return m_summon;
+            }
+            set
+            {
+                Dirty = true;
+                m_summon = value;
             }
         }
     }

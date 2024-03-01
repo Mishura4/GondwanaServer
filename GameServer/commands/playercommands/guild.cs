@@ -1019,6 +1019,12 @@ namespace DOL.GS.Commands
                                     return;
                                 }
 
+                                if (!client.Player.Guild.HasRank(client.Player, Guild.eRank.BuyBanner))
+                                {
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NoPrivileges"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    return;
+                                }
+
                                 bannerPrice = (client.Player.Guild.GuildLevel * 100);
                             }
 
@@ -1093,6 +1099,12 @@ namespace DOL.GS.Commands
                                 if (client.Player.Guild.GuildLevel < 7)
                                 {
                                     client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.GuildLevelReq"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    return;
+                                }
+
+                                if (!client.Player.Guild.HasRank(client.Player, Guild.eRank.Summon))
+                                {
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NoPrivileges"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                     return;
                                 }
                             }
@@ -3628,6 +3640,7 @@ namespace DOL.GS.Commands
                     return 1;
                 }
             }
+            string status = reponse ? "Commands.Players.Guild.SetEnabled" : "Commands.Players.Guild.SetDisabled";
             byte number;
             try
             {
@@ -3684,7 +3697,7 @@ namespace DOL.GS.Commands
                             return 1;
                         }
                         client.Player.Guild.GetRankByID(number).Emblem = reponse;
-                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankEmblemSet", (reponse ? "enabled" : "disabled"), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankEmblemSet", LanguageMgr.GetTranslation(client.Account.Language, status), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                     }
                     break;
                 case "gchear":
@@ -3695,7 +3708,7 @@ namespace DOL.GS.Commands
                             return 1;
                         }
                         client.Player.Guild.GetRankByID(number).GcHear = reponse;
-                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankGCHearSet", (reponse ? "enabled" : "disabled"), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankGCHearSet", LanguageMgr.GetTranslation(client.Account.Language, status), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                     }
                     break;
                 case "gcspeak":
@@ -3707,7 +3720,7 @@ namespace DOL.GS.Commands
                         }
 
                         client.Player.Guild.GetRankByID(number).GcSpeak = reponse;
-                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankGCSpeakSet", (reponse ? "enabled" : "disabled"), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankGCSpeakSet", LanguageMgr.GetTranslation(client.Account.Language, status), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                     }
                     break;
                 case "ochear":
@@ -3718,7 +3731,7 @@ namespace DOL.GS.Commands
                             return 1;
                         }
                         client.Player.Guild.GetRankByID(number).OcHear = reponse;
-                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankOCHearSet", (reponse ? "enabled" : "disabled"), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankOCHearSet", LanguageMgr.GetTranslation(client.Account.Language, status), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                     }
                     break;
                 case "ocspeak":
@@ -3729,7 +3742,7 @@ namespace DOL.GS.Commands
                             return 1;
                         }
                         client.Player.Guild.GetRankByID(number).OcSpeak = reponse;
-                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankOCSpeakSet", (reponse ? "enabled" : "disabled"), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankOCSpeakSet", LanguageMgr.GetTranslation(client.Account.Language, status), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                     }
                     break;
                 case "achear":
@@ -3740,7 +3753,7 @@ namespace DOL.GS.Commands
                             return 1;
                         }
                         client.Player.Guild.GetRankByID(number).AcHear = reponse;
-                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankACHearSet", (reponse ? "enabled" : "disabled"), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankACHearSet", LanguageMgr.GetTranslation(client.Account.Language, status), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                     }
                     break;
                 case "acspeak":
@@ -3751,7 +3764,7 @@ namespace DOL.GS.Commands
                             return 1;
                         }
                         client.Player.Guild.GetRankByID(number).AcSpeak = reponse;
-                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankACSpeakSet", (reponse ? "enabled" : "disabled"), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankACSpeakSet", LanguageMgr.GetTranslation(client.Account.Language, status), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                     }
                     break;
                 case "invite":
@@ -3762,7 +3775,7 @@ namespace DOL.GS.Commands
                             return 1;
                         }
                         client.Player.Guild.GetRankByID(number).Invite = reponse;
-                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankInviteSet", (reponse ? "enabled" : "disabled"), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankInviteSet", LanguageMgr.GetTranslation(client.Account.Language, status), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                     }
                     break;
                 case "promote":
@@ -3773,7 +3786,7 @@ namespace DOL.GS.Commands
                             return 1;
                         }
                         client.Player.Guild.GetRankByID(number).Promote = reponse;
-                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankPromoteSet", (reponse ? "enabled" : "disabled"), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankPromoteSet", LanguageMgr.GetTranslation(client.Account.Language, status), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                     }
                     break;
                 case "remove":
@@ -3784,7 +3797,7 @@ namespace DOL.GS.Commands
                             return 1;
                         }
                         client.Player.Guild.GetRankByID(number).Remove = reponse;
-                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankRemoveSet", (reponse ? "enabled" : "disabled"), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankRemoveSet", LanguageMgr.GetTranslation(client.Account.Language, status), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                     }
                     break;
                 case "alli":
@@ -3795,7 +3808,7 @@ namespace DOL.GS.Commands
                             return 1;
                         }
                         client.Player.Guild.GetRankByID(number).Alli = reponse;
-                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankAlliSet", (reponse ? "enabled" : "disabled"), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankAlliSet", LanguageMgr.GetTranslation(client.Account.Language, status), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                     }
                     break;
                 case "view":
@@ -3806,7 +3819,7 @@ namespace DOL.GS.Commands
                             return 1;
                         }
                         client.Player.Guild.GetRankByID(number).View = reponse;
-                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankViewSet", (reponse ? "enabled" : "disabled"), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankViewSet", LanguageMgr.GetTranslation(client.Account.Language, status), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                     }
                     break;
                 case "buff":
@@ -3817,7 +3830,7 @@ namespace DOL.GS.Commands
                             return 1;
                         }
                         client.Player.Guild.GetRankByID(number).Buff = reponse;
-                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankBuffSet", (reponse ? "enabled" : "disabled"), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankBuffSet", LanguageMgr.GetTranslation(client.Account.Language, status), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                     }
                     break;
                 case "claim":
@@ -3828,7 +3841,7 @@ namespace DOL.GS.Commands
                             return 1;
                         }
                         client.Player.Guild.GetRankByID(number).Claim = reponse;
-                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankClaimSet", (reponse ? "enabled" : "disabled"), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankClaimSet", LanguageMgr.GetTranslation(client.Account.Language, status), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                     }
                     break;
                 case "upgrade":
@@ -3839,7 +3852,7 @@ namespace DOL.GS.Commands
                             return 1;
                         }
                         client.Player.Guild.GetRankByID(number).Upgrade = reponse;
-                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankUpgradeSet", (reponse ? "enabled" : "disabled"), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankUpgradeSet", LanguageMgr.GetTranslation(client.Account.Language, status), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                     }
                     break;
                 case "release":
@@ -3850,7 +3863,7 @@ namespace DOL.GS.Commands
                             return 1;
                         }
                         client.Player.Guild.GetRankByID(number).Release = reponse;
-                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankReleaseSet", (reponse ? "enabled" : "disabled"), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankReleaseSet", LanguageMgr.GetTranslation(client.Account.Language, status), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                     }
                     break;
                 case "dues":
@@ -3861,7 +3874,7 @@ namespace DOL.GS.Commands
                             return 1;
                         }
                         client.Player.Guild.GetRankByID(number).Release = reponse;
-                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankDuesSet", (reponse ? "enabled" : "disabled"), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankDuesSet", LanguageMgr.GetTranslation(client.Account.Language, status), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                     }
                     break;
                 case "withdraw":
@@ -3872,7 +3885,29 @@ namespace DOL.GS.Commands
                             return 1;
                         }
                         client.Player.Guild.GetRankByID(number).Release = reponse;
-                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankWithdrawSet", (reponse ? "enabled" : "disabled"), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankWithdrawSet", LanguageMgr.GetTranslation(client.Account.Language, status), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                    }
+                    break;
+                case "buybanner":
+                    {
+                        if (!client.Player.Guild.HasRank(client.Player, Guild.eRank.Withdraw))
+                        {
+                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NoPrivileges"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            return 1;
+                        }
+                        client.Player.Guild.GetRankByID(number).BuyBanner = reponse;
+                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankBuyBannerSet", LanguageMgr.GetTranslation(client.Account.Language, status), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                    }
+                    break;
+                case "summon":
+                    {
+                        if (!client.Player.Guild.HasRank(client.Player, Guild.eRank.Summon))
+                        {
+                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NoPrivileges"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            return 1;
+                        }
+                        client.Player.Guild.GetRankByID(number).Summon = reponse;
+                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankSummonSet", LanguageMgr.GetTranslation(client.Account.Language, status), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                     }
                     break;
                 default:
@@ -4071,6 +4106,8 @@ namespace DOL.GS.Commands
             client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.CombatZone"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
             client.Out.SendMessage("/gc edit <ranknum> buff <y/n>", eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
             client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditWithdraw"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditBuyBanner"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditSummon"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
         }
     }
 }

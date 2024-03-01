@@ -124,6 +124,8 @@ Commands.Players.Guild.Help.GuildEditTitle:		'/gc edit <rank#> title <text>' # 
 Commands.Players.Guild.Help.GuildEditUpgrade:		'/gc edit <rank#> upgrade <y|n>' # Allows the guild leader to grant to a rank the ability to join or leave an alliance.
 Commands.Players.Guild.Help.GuildEditView:		'/gc edit <rank#> view <y|n>' # Allows a selected rank to be able to see the members of the alliance.
 Commands.Players.Guild.Help.GuildEditWithdraw:	'/gc edit <rank#> withdraw <y|n>' # Allows a rank to be able to withdraw funds from your guild bank.
+Commands.Players.Guild.Help.GuildEditBuyBanner:	'/gc edit <rank#> buybanner <y|n>' # Allows a rank to be able to buy a guild banner.
+Commands.Players.Guild.Help.GuildEditSummon:	'/gc edit <rank#> summon <y|n>' # Allows a rank to be able to summon the guild banner.
 Commands.Players.Guild.Help.GuildEmail:			'/gc email <contact@guildpage.com>' # Displays the web address of contacts within the guild.
 Commands.Players.Guild.Help.GuildEmblem:			'/gc emblem' # Presentation of the emblem.
 Commands.Players.Guild.Help.TerritoryBanner:			'/gc territorybanner' # Allows you to show your guild banner in a conquered territory, reduces the maintenance costs of the territory, and improves its defense.
@@ -212,6 +214,8 @@ Commands.Players.Guild.PromotedSelf:			You are promoted to rank {0}.
 Commands.Players.Guild.PromoteHigherThanPlayer:	You can only promote a player below your rank.
 Commands.Players.Guild.PromoteHaveToUseDemote:	You cannot downgrade this player's rank with the promote command. Use '/gc demote player <rank#>'.
 Commands.Players.Guild.Purged:					{0} has been purged.
+Commands.Players.Guild.SetEnabled:				enabled
+Commands.Players.Guild.SetDisabled:				disabled
 Commands.Players.Guild.RankACHearSet:			You have {0} access to ACHear at rank {1}.
 Commands.Players.Guild.RankACSpeakSet:			You have {0} access to ACSpeak at rank {1}.
 Commands.Players.Guild.RankAlliSet:				You have {0} access to the Alliance at rank {1}.
@@ -232,6 +236,8 @@ Commands.Players.Guild.RankTitleSet:			You have {0} access to change guild rank 
 Commands.Players.Guild.RankUpgradeSet:			You have {0} access to keeps updates at rank {1}.
 Commands.Players.Guild.RankViewSet:				You have {0} access to the guild overview at rank {1}.
 Commands.Players.Guild.RankWithdrawSet:			You have {0} access to the guild's bank at rank {1}.
+Commands.Players.Guild.RankBuyBannerSet:		You have {0} buying a guild banner at rank {1}.
+Commands.Players.Guild.RankSummonSet:			You have {0} summoning the guild banner at rank {1}.
 Commands.Players.Guild.Rank.ErrorChanging:      Error while charging the rank.
 Commands.Players.Guild.ThirdArgNotNum:			This argument is not a valid number. 
 Commands.Players.Guild.UnableToCreate:			The guild {0} has just been created.
