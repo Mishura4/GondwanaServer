@@ -353,10 +353,9 @@ namespace DOL.GS
             lock (Sync)
             {
                 // allow admin and gm account opened windows to trade any item
-                if (this.m_owner.Client.Account.PrivLevel == 1)
+                if (!itemForTrade.IsTradable && !m_owner.CanTradeAnyItem && !Partner.CanTradeAnyItem)
                 {
-                    if (!itemForTrade.IsDropable || !itemForTrade.IsPickable || itemForTrade.IsNotLosingDur || !itemForTrade.IsTradable)
-                        return false;
+                    return false;
                 }
                 if (TradeItems.Contains(itemForTrade))
                     return false;

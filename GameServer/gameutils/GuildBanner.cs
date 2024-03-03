@@ -354,7 +354,7 @@ namespace DOL.GS
                             m_guildBannerTemplate.Model = 3224;
                             break;
                         case eRealm.Hibernia:
-                            m_guildBannerTemplate.Model = 3225;
+                            m_guildBannerTemplate.Model = 3223;
                             break;
                     }
                     m_guildBannerTemplate.Name = Guild.Name + "'s Banner";

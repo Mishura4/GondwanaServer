@@ -9156,43 +9156,60 @@ namespace DOL.GS
             {
                 lock (source)
                 {
-                    if ((TradeWindow != null && source != TradeWindow.Partner) || (TradeWindow == null && !OpenTrade(source)))
+                    if (item.IsTradable == false && source.CanTradeAnyItem == false && CanTradeAnyItem == false)
                     {
-                        if (TradeWindow != null)
+                        source.Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.ReceiveTradeItem.CantTrade"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        return false;
+                    }
+
+                    if (source.TradeWindow != null && source.TradeWindow.Partner != this)
+                    {
+                        GamePlayer sourceTradePartner = source.TradeWindow.Partner;
+                        if (sourceTradePartner == null)
                         {
-                            GamePlayer partner = TradeWindow.Partner;
-                            if (partner == null)
-                            {
-                                source.Out.SendMessage(source.GetPersonalizedName(this) + " is still selfcrafting.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                            }
-                            else
-                            {
-                                source.Out.SendMessage(source.GetPersonalizedName(this) + " is still trading with " + source.GetPersonalizedName(partner) + ".", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                            }
+                            source.Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.ReceiveTradeItem.StillSelfcrafting"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                         }
-                        else if (source.TradeWindow != null)
+                        else
                         {
-                            GamePlayer sourceTradePartner = source.TradeWindow.Partner;
-                            if (sourceTradePartner == null)
-                            {
-                                source.Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.ReceiveTradeItem.StillSelfcrafting"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                            }
-                            else
-                            {
-                                source.Out.SendMessage("You are still trading with " + GetPersonalizedName(sourceTradePartner) + ".", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                            }
+                            source.Out.SendMessage("You are still trading with " + source.GetPersonalizedName(sourceTradePartner) + ".", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                         }
                         return false;
                     }
-                    if (item.IsTradable == false && source.CanTradeAnyItem == false && TradeWindow.Partner.CanTradeAnyItem == false)
+
+                    if (TradeWindow == null)
                     {
-                        source.Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.ReceiveTradeItem.CantTrade"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        if (!OpenTrade(source))
+                        {
+                            source.Out.SendMessage("An error occured while trading with " + source.GetPersonalizedName(this), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            return false;
+                        }
+                        if (!source.TradeWindow.AddItemToTrade(item))
+                        {
+                            source.Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.ReceiveTradeItem.CantTrade"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            TradeWindow.CloseTrade();
+                            return false;
+                        }
+                        return true;
+                    }
+
+                    if (source != TradeWindow.Partner)
+                    {
+                        GamePlayer partner = TradeWindow.Partner;
+                        if (partner == null)
+                        {
+                            source.Out.SendMessage(source.GetPersonalizedName(this) + " is still selfcrafting.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        }
+                        else
+                        {
+                            source.Out.SendMessage(source.GetPersonalizedName(this) + " is still trading with " + source.GetPersonalizedName(partner) + ".", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        }
                         return false;
                     }
 
                     if (!source.TradeWindow.AddItemToTrade(item))
                     {
                         source.Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.ReceiveTradeItem.CantTrade"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        return false;
                     }
                     return true;
                 }
