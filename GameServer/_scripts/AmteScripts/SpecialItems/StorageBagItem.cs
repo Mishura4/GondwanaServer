@@ -1,6 +1,7 @@
 ﻿using DOL.Database;
 using DOL.Events;
 using DOL.GS.PacketHandler;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,6 +38,21 @@ namespace DOL.GS.Scripts
         /// <returns></returns>
         public virtual bool CanHoldItem(InventoryItem item)
         {
+            if (item == null)
+            {
+                return false;
+            }
+
+            if (item is StorageBagItem) // Prevent storing bags in bags
+            {
+                return false;
+            }
+
+            if (this.IsTradable && !item.IsTradable) // Prevent workaround untradeable items
+            {
+                return false;
+            }
+
             return true;
         }
 
@@ -126,7 +142,7 @@ namespace DOL.GS.Scripts
         /// <inheritdoc />
         public override bool CanHoldItem(InventoryItem item)
         {
-            if (item == null)
+            if (!base.CanHoldItem(item))
                 return false;
 
             if (item.Item_Type != 40)
