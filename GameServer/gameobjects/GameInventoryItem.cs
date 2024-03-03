@@ -320,10 +320,10 @@ namespace DOL.GS
         }
 
         /// <summary>
-		/// This inventory is used for a spell cast (staves lose condition when spells are cast)
-		/// </summary>
-		/// <param name="player"></param>
-		/// <param name="target"></param>
+        /// This inventory is used for a spell cast (staves lose condition when spells are cast)
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="target"></param>
         public virtual void OnSpellCast(GameLiving owner, GameObject target, Spell spell)
         {
             OnStrikeTarget(owner, target);
