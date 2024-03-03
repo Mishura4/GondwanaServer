@@ -36,7 +36,26 @@ namespace DOL.GS
         string GetOwner(GamePlayer player);
         IList<InventoryItem> DBItems(GamePlayer player = null);
         Dictionary<int, InventoryItem> GetClientInventory(GamePlayer player);
+
+        /// <summary>
+        /// Whether a move request is to be handled by this inventory
+        ///
+        /// If this returns false, the move is handled by the default handler in PlayerMoveItemRequestHandler
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="fromClientSlot"></param>
+        /// <param name="toClientSlot"></param>
+        /// <returns></returns>
         bool CanHandleMove(GamePlayer player, ushort fromClientSlot, ushort toClientSlot);
+
+        /// <summary>
+        /// Do the move between inventories
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="fromClientSlot"></param>
+        /// <param name="toClientSlot"></param>
+        /// <param name="itemCount"></param>
+        /// <returns></returns>
         bool MoveItem(GamePlayer player, ushort fromClientSlot, ushort toClientSlot, ushort itemCount);
         bool OnAddItem(GamePlayer player, InventoryItem item);
         bool OnRemoveItem(GamePlayer player, InventoryItem item);

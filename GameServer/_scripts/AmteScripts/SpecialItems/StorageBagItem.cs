@@ -172,6 +172,20 @@ namespace DOL.GS.Scripts
             return BagItem.CanHoldItem(item);
         }
 
+        public override bool CanHandleMove(GamePlayer player, ushort fromSlot, ushort toSlot)
+        {
+            if (player == null || player.ActiveInventoryObject != this)
+                return false;
+
+            if (fromSlot >= (ushort)eInventorySlot.FirstVault && fromSlot <= (ushort)eInventorySlot.LastVault)
+                return true;
+
+            if (toSlot >= (ushort)eInventorySlot.FirstVault && toSlot <= (ushort)eInventorySlot.LastVault)
+                return true;
+
+            return false;
+        }
+
         public override bool MoveItem(GamePlayer player, ushort fromSlot, ushort toSlot, ushort count)
         {
             if (fromSlot == toSlot)
