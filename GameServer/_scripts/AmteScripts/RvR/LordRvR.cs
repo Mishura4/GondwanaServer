@@ -151,6 +151,7 @@ namespace Amte
             {
                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "GameObjects.GamePlayer.RvR.Control", player.GuildName, fortName), eChatType.CT_Help, eChatLoc.CL_SystemWindow);
             }
+            player.GainGuildMeritPoints(800);
             NewsMgr.CreateNews("GameObjects.GamePlayer.RvR.Control", 0, eNewsType.RvRGlobal, false, true, player.GuildName, fortName);
 
             RvrManager.Instance.OnControlChange(this.InternalID, player.Guild);
