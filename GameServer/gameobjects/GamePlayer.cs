@@ -5808,6 +5808,8 @@ namespace DOL.GS
                 StartPowerRegeneration();
             }
 
+            GainGuildMeritPoints(500);
+
 
             this.RealmLevel = 0;
 
