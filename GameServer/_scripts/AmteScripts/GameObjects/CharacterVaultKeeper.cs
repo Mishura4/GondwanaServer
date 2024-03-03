@@ -5,7 +5,7 @@ using DOL.GS.PacketHandler;
 
 namespace DOL.GS
 {
-    public class AccountVaultKeeper : GameNPC
+    public class CharacterVaultKeeper : GameNPC
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -30,11 +30,11 @@ namespace DOL.GS
 
             message += "I am happy to offer you my services.\n\n";
 
-            message += "You can browse the [first] or [second] page of your Account Vault.";
+            message += "You can browse the [first] or [second] page of your Personal Vault.";
             player.Out.SendMessage(message, eChatType.CT_Say, eChatLoc.CL_PopupWindow);
 
             ItemTemplate vaultItem = GetDummyVaultItem(player);
-            AccountVault vault = new AccountVault(player, this, 0, vaultItem);
+            CharacterVault vault = new CharacterVault(player, this, 0, vaultItem);
             player.ActiveInventoryObject = vault;
             player.Out.SendInventoryItemsUpdate(vault.GetClientInventory(player), eInventoryWindowType.HouseVault);
             return true;
@@ -52,13 +52,13 @@ namespace DOL.GS
 
             if (text == "first")
             {
-                AccountVault vault = new AccountVault(player, this, 0, GetDummyVaultItem(player));
+                CharacterVault vault = new CharacterVault(player, this, 0, GetDummyVaultItem(player));
                 player.ActiveInventoryObject = vault;
                 player.Out.SendInventoryItemsUpdate(vault.GetClientInventory(player), eInventoryWindowType.HouseVault);
             }
             else if (text == "second")
             {
-                AccountVault vault = new AccountVault(player, this, 1, GetDummyVaultItem(player));
+                CharacterVault vault = new CharacterVault(player, this, 1, GetDummyVaultItem(player));
                 player.ActiveInventoryObject = vault;
                 player.Out.SendInventoryItemsUpdate(vault.GetClientInventory(player), eInventoryWindowType.HouseVault);
             }
@@ -71,7 +71,7 @@ namespace DOL.GS
             ItemTemplate vaultItem = new ItemTemplate();
             vaultItem.Object_Type = (int)eObjectType.HouseVault;
             vaultItem.Name = "Vault";
-            vaultItem.ObjectId = player.Client.Account.Name + "_" + player.Realm.ToString();
+            vaultItem.ObjectId = player.InternalID;
             switch (player.Realm)
             {
                 case eRealm.Albion:
@@ -92,27 +92,27 @@ namespace DOL.GS
         }
     }
 
-    public sealed class AccountVault : CustomVault
+    public sealed class CharacterVault : CustomVault
     {
         private readonly int m_vaultNumber = 0;
 
         /// <summary>
-        /// An account vault that masquerades as a house vault to the game client
+        /// A character vault that masquerades as a house vault to the game client
         /// </summary>
         /// <param name="player">Player who owns the vault</param>
         /// <param name="vaultNPC">NPC controlling the interaction between player and vault</param>
         /// <param name="vaultNumber">Valid vault IDs are 0-1</param>
         /// <param name="dummyTemplate">An ItemTemplate to satisfy the base class's constructor</param>
-        public AccountVault(GamePlayer player, GameNPC vaultNPC, int vaultNumber, ItemTemplate dummyTemplate)
-            : base(player, vaultNPC, player.Client.Account.Name + "_" + player.Realm.ToString(), vaultNumber, dummyTemplate)
+        public CharacterVault(GamePlayer player, GameNPC vaultNPC, int vaultNumber, ItemTemplate dummyTemplate)
+            : base(player, vaultNPC, player.InternalID, vaultNumber, dummyTemplate)
         {
             m_vaultNumber = vaultNumber;
-            Name = "Account Vault";
+            Name = player.Name + "'s Vault";
         }
 
         public override string GetOwner(GamePlayer player)
         {
-            return player.Client.Account.Name + "_" + player.Realm.ToString();
+            return (player.InternalID);
         }
 
         public override int FirstDBSlot
@@ -122,9 +122,9 @@ namespace DOL.GS
                 switch (m_vaultNumber)
                 {
                     case 0:
-                        return (int)2500;
+                        return (int)2700;
                     case 1:
-                        return (int)2600;
+                        return (int)2800;
                     default: return 0;
                 }
             }
@@ -137,9 +137,9 @@ namespace DOL.GS
                 switch (m_vaultNumber)
                 {
                     case 0:
-                        return (int)2599;
+                        return (int)2799;
                     case 1:
-                        return (int)2699;
+                        return (int)2899;
                     default: return 0;
                 }
             }

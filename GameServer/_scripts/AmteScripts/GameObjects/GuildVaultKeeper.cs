@@ -5,7 +5,7 @@ using DOL.GS.PacketHandler;
 
 namespace DOL.GS
 {
-    public class AccountVaultKeeper : GameNPC
+    public class GuildVaultKeeper : GameNPC
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -26,15 +26,27 @@ namespace DOL.GS
             //     return false;
             // }
 
+            if (player.Guild == null)
+            {
+                player.Out.SendMessage($"I'm sorry {player.Name}, I cannot do anything for you without a guild.", eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                return true;
+            }
+
+            if (player.Guild.IsSystemGuild)
+            {
+                player.Out.SendMessage($"I'm sorry {player.Name}, your guild does not have a vault.", eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                return true;
+            }
+
             string message = $"Greetings {player.Name}, nice meeting you.\n";
 
             message += "I am happy to offer you my services.\n\n";
 
-            message += "You can browse the [first] or [second] page of your Account Vault.";
+            message += "You can browse the [first], [second] or [third] page of " + player.Guild.Name + "'s vault.";
             player.Out.SendMessage(message, eChatType.CT_Say, eChatLoc.CL_PopupWindow);
 
             ItemTemplate vaultItem = GetDummyVaultItem(player);
-            AccountVault vault = new AccountVault(player, this, 0, vaultItem);
+            GuildVault vault = new GuildVault(player, this, 0, vaultItem);
             player.ActiveInventoryObject = vault;
             player.Out.SendInventoryItemsUpdate(vault.GetClientInventory(player), eInventoryWindowType.HouseVault);
             return true;
@@ -47,21 +59,35 @@ namespace DOL.GS
 
             GamePlayer player = source as GamePlayer;
 
-            if (player == null)
+            if (player?.Guild == null)
                 return false;
 
-            if (text == "first")
+            int index;
+
+            switch (text)
             {
-                AccountVault vault = new AccountVault(player, this, 0, GetDummyVaultItem(player));
-                player.ActiveInventoryObject = vault;
-                player.Out.SendInventoryItemsUpdate(vault.GetClientInventory(player), eInventoryWindowType.HouseVault);
+                case "first":
+                case "première":
+                    index = 0;
+                    break;
+
+                case "second":
+                case "deuxième":
+                    index = 1;
+                    break;
+
+                case "third":
+                case "troisième":
+                    index = 2;
+                    break;
+
+                default:
+                    return true;
             }
-            else if (text == "second")
-            {
-                AccountVault vault = new AccountVault(player, this, 1, GetDummyVaultItem(player));
-                player.ActiveInventoryObject = vault;
-                player.Out.SendInventoryItemsUpdate(vault.GetClientInventory(player), eInventoryWindowType.HouseVault);
-            }
+
+            GuildVault vault = new GuildVault(player, this, index, GetDummyVaultItem(player));
+            player.ActiveInventoryObject = vault;
+            player.Out.SendInventoryItemsUpdate(vault.GetClientInventory(player), eInventoryWindowType.HouseVault);
 
             return true;
         }
@@ -71,7 +97,7 @@ namespace DOL.GS
             ItemTemplate vaultItem = new ItemTemplate();
             vaultItem.Object_Type = (int)eObjectType.HouseVault;
             vaultItem.Name = "Vault";
-            vaultItem.ObjectId = player.Client.Account.Name + "_" + player.Realm.ToString();
+            vaultItem.ObjectId = player.Guild?.GuildID;
             switch (player.Realm)
             {
                 case eRealm.Albion:
@@ -92,27 +118,27 @@ namespace DOL.GS
         }
     }
 
-    public sealed class AccountVault : CustomVault
+    public sealed class GuildVault : CustomVault
     {
         private readonly int m_vaultNumber = 0;
 
         /// <summary>
-        /// An account vault that masquerades as a house vault to the game client
+        /// A guild vault that masquerades as a house vault to the game client
         /// </summary>
         /// <param name="player">Player who owns the vault</param>
         /// <param name="vaultNPC">NPC controlling the interaction between player and vault</param>
         /// <param name="vaultNumber">Valid vault IDs are 0-1</param>
         /// <param name="dummyTemplate">An ItemTemplate to satisfy the base class's constructor</param>
-        public AccountVault(GamePlayer player, GameNPC vaultNPC, int vaultNumber, ItemTemplate dummyTemplate)
-            : base(player, vaultNPC, player.Client.Account.Name + "_" + player.Realm.ToString(), vaultNumber, dummyTemplate)
+        public GuildVault(GamePlayer player, GameNPC vaultNPC, int vaultNumber, ItemTemplate dummyTemplate)
+            : base(player, vaultNPC, player.Guild?.GuildID ?? "", vaultNumber, dummyTemplate)
         {
             m_vaultNumber = vaultNumber;
-            Name = "Account Vault";
+            Name = player.Guild.Name + "'s Vault";
         }
 
         public override string GetOwner(GamePlayer player)
         {
-            return player.Client.Account.Name + "_" + player.Realm.ToString();
+            return (player.Guild?.GuildID);
         }
 
         public override int FirstDBSlot
@@ -122,9 +148,11 @@ namespace DOL.GS
                 switch (m_vaultNumber)
                 {
                     case 0:
-                        return (int)2500;
+                        return (int)2900;
                     case 1:
-                        return (int)2600;
+                        return (int)3000;
+                    case 2:
+                        return (int)3100;
                     default: return 0;
                 }
             }
@@ -137,9 +165,11 @@ namespace DOL.GS
                 switch (m_vaultNumber)
                 {
                     case 0:
-                        return (int)2599;
+                        return (int)2999;
                     case 1:
-                        return (int)2699;
+                        return (int)3099;
+                    case 2:
+                        return (int)3199;
                     default: return 0;
                 }
             }
