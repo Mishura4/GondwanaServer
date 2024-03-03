@@ -10,6 +10,11 @@ using System.Threading.Tasks;
 
 namespace DOL.GS.Scripts
 {
+    /// <summary>
+    /// StorageBagItem : base class for a portable bag
+    ///
+    /// Able to be extended into a bag that only holds certain items, simply override CanHoldItem
+    /// </summary>
     public class StorageBagItem : GameInventoryItem
     {
         public StorageBagItem()
@@ -209,18 +214,12 @@ namespace DOL.GS.Scripts
                 return false;
             }
 
-            bool fromVault = (fromSlot >= (ushort)eInventorySlot.FirstVault && fromSlot <= (ushort)eInventorySlot.LastVault);
-            bool toVault = (toSlot >= (ushort)eInventorySlot.FirstVault && toSlot <= (ushort)eInventorySlot.LastVault);
+            bool fromVault = IsVaultInventorySlot(fromSlot);
+            bool toVault = IsVaultInventorySlot(toSlot);
 
             if (fromVault == false && toVault == false)
             {
                 return false;
-            }
-
-            //Prevent exploit shift+clicking quiver exploit
-            if (fromVault)
-            {
-                if (fromSlot < (ushort)eInventorySlot.HousingInventory_First || fromSlot > (ushort)eInventorySlot.HousingInventory_Last) return false;
             }
 
             StorageBagVault gameVault = player.ActiveInventoryObject as StorageBagVault;
@@ -233,7 +232,7 @@ namespace DOL.GS.Scripts
 
             if (toVault)
             {
-                if (!gameVault.CanAddItem(player, player.Inventory.GetItem((eInventorySlot)toSlot)))
+                if (!gameVault.CanAddItem(player, player.Inventory.GetItem((eInventorySlot)fromSlot)))
                 {
                     player.Out.SendMessage("You cannot put this item in this bag!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     return false;
@@ -252,6 +251,12 @@ namespace DOL.GS.Scripts
             {
                 this.NotifyPlayers(this, player, _observers, this.MoveItem(player, (eInventorySlot)fromSlot, (eInventorySlot)toSlot, count));
             }
+        }
+
+        /// <inheritdoc />
+        public override string GetOwner(GamePlayer player = null)
+        {
+            return BagItem.Id_nb;
         }
 
         /// <summary>

@@ -90,35 +90,6 @@ namespace DOL.GS
         }
 
         /// <summary>
-        /// Is this a move request for a housing vault?
-        /// </summary>
-        /// <param name="player"></param>
-        /// <param name="fromSlot"></param>
-        /// <param name="toSlot"></param>
-        /// <returns></returns>
-        public override bool CanHandleMove(GamePlayer player, ushort fromSlot, ushort toSlot)
-        {
-            if (player == null || player.ActiveInventoryObject != this)
-                return false;
-
-            bool canHandle = false;
-
-            // House Vaults and GameConsignmentMerchant Merchants deliver the same slot numbers
-            if (fromSlot >= (ushort)eInventorySlot.HousingInventory_First &&
-                fromSlot <= (ushort)eInventorySlot.HousingInventory_Last)
-            {
-                canHandle = true;
-            }
-            else if (toSlot >= (ushort)eInventorySlot.HousingInventory_First &&
-                toSlot <= (ushort)eInventorySlot.HousingInventory_Last)
-            {
-                canHandle = true;
-            }
-
-            return canHandle;
-        }
-
-        /// <summary>
         /// Move an item from, to or inside a house vault.  From IGameInventoryObject
         /// </summary>
         public override bool MoveItem(GamePlayer player, ushort fromSlot, ushort toSlot, ushort count)
@@ -128,8 +99,8 @@ namespace DOL.GS
                 return false;
             }
 
-            bool fromVault = (fromSlot >= (ushort)eInventorySlot.HousingInventory_First && fromSlot <= (ushort)eInventorySlot.HousingInventory_Last);
-            bool toVault = (toSlot >= (ushort)eInventorySlot.HousingInventory_First && toSlot <= (ushort)eInventorySlot.HousingInventory_Last);
+            bool fromVault = IsVaultInventorySlot(fromSlot);
+            bool toVault = IsVaultInventorySlot(toSlot);
 
             if (fromVault == false && toVault == false)
             {
@@ -146,7 +117,6 @@ namespace DOL.GS
             if (gameVault == null)
             {
                 player.Out.SendMessage("You are not actively viewing a vault!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                player.Out.SendInventoryItemsUpdate(null);
                 return false;
             }
 
@@ -164,7 +134,7 @@ namespace DOL.GS
                         return false;
                     }
                 }
-                if (!gameVault.CanAddItem(player, itemInToSlot))
+                if (!gameVault.CanAddItem(player, player.Inventory.GetItem((eInventorySlot)fromSlot)))
                 {
                     player.Out.SendMessage("You don't have permission to add items!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     return false;
@@ -186,7 +156,6 @@ namespace DOL.GS
             {
                 player.Out.SendMessage("You cannot swap with an untradable item!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 //log.DebugFormat("GameVault: {0} attempted to swap untradable item {2} with {1}", player.Name, itemInFromSlot.Name, itemInToSlot.Name);
-                player.Out.SendInventoryItemsUpdate(null);
                 return false;
             }
 
@@ -197,7 +166,6 @@ namespace DOL.GS
                 /* DOL: if (itemInFromSlot.Id_nb != ServerProperties.Properties.ALT_CURRENCY_ID) */
                 {
                     player.Out.SendMessage("You can not put this item into a Vault!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                    player.Out.SendInventoryItemsUpdate(null);
                     return false;
                 }
             }

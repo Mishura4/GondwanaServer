@@ -56,6 +56,18 @@ namespace DOL.GS
             get { return HousingConstants.VaultSize; }
         }
 
+        /// <inheritdoc />
+        public override int FirstClientSlot
+        {
+            get { return (int)eInventorySlot.HousingInventory_First; }
+        }
+
+        /// <inheritdoc />
+        public override int LastClientSlot
+        {
+            get { return (int)eInventorySlot.HousingInventory_Last; }
+        }
+
         #region IHouseHookpointItem Members
 
         /// <summary>

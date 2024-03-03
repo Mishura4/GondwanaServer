@@ -42,7 +42,7 @@ namespace DOL.GS
         /// <summary>
         /// Number of items a single vault can hold.
         /// </summary>
-        private const int VAULT_SIZE = 100;
+        private const int VAULT_SIZE = 40;
 
         protected int m_vaultIndex;
 
@@ -79,15 +79,15 @@ namespace DOL.GS
         /// </summary>
         public virtual int FirstClientSlot
         {
-            get { return (int)eInventorySlot.HousingInventory_First; }
+            get { return (int)eInventorySlot.FirstVault; }
         }
 
         /// <summary>
         /// Last slot of the client window that shows this inventory
         /// </summary>
-        public int LastClientSlot
+        public virtual int LastClientSlot
         {
-            get { return (int)eInventorySlot.HousingInventory_Last; }
+            get { return (int)eInventorySlot.LastVault; }
         }
 
         /// <summary>
@@ -131,7 +131,7 @@ namespace DOL.GS
         public virtual Dictionary<int, InventoryItem> GetClientInventory(GamePlayer player)
         {
             var inventory = new Dictionary<int, InventoryItem>();
-            int slotOffset = -FirstDBSlot + (int)(eInventorySlot.HousingInventory_First);
+            int slotOffset = -FirstDBSlot + FirstClientSlot;
             foreach (InventoryItem item in DBItems(player))
             {
                 if (item != null)
@@ -177,6 +177,12 @@ namespace DOL.GS
             return true;
         }
 
+        /// <inheritdoc />
+        public bool IsVaultInventorySlot(ushort clientSlot)
+        {
+            return clientSlot >= FirstClientSlot && clientSlot <= LastClientSlot;
+        }
+
         /// <summary>
         /// List of items in the vault.
         /// </summary>
@@ -187,7 +193,7 @@ namespace DOL.GS
         }
 
         /// <summary>
-        /// Is this a move request for a housing vault?
+        /// Is this a move request for a vault?
         /// </summary>
         /// <param name="player"></param>
         /// <param name="fromSlot"></param>
@@ -198,21 +204,8 @@ namespace DOL.GS
             if (player == null || player.ActiveInventoryObject != this)
                 return false;
 
-            bool canHandle = false;
-
             // House Vaults and GameConsignmentMerchant Merchants deliver the same slot numbers
-            if (fromSlot >= (ushort)eInventorySlot.HousingInventory_First &&
-                fromSlot <= (ushort)eInventorySlot.HousingInventory_Last)
-            {
-                canHandle = true;
-            }
-            else if (toSlot >= (ushort)eInventorySlot.HousingInventory_First &&
-                toSlot <= (ushort)eInventorySlot.HousingInventory_Last)
-            {
-                canHandle = true;
-            }
-
-            return canHandle;
+            return IsVaultInventorySlot(fromSlot) || IsVaultInventorySlot(toSlot);
         }
 
         /// <summary>
@@ -225,8 +218,8 @@ namespace DOL.GS
                 return false;
             }
 
-            bool fromHousing = (fromSlot >= (ushort)eInventorySlot.HousingInventory_First && fromSlot <= (ushort)eInventorySlot.HousingInventory_Last);
-            bool toHousing = (toSlot >= (ushort)eInventorySlot.HousingInventory_First && toSlot <= (ushort)eInventorySlot.HousingInventory_Last);
+            bool fromHousing = IsVaultInventorySlot(fromSlot);
+            bool toHousing = IsVaultInventorySlot(toSlot);
 
             if (fromHousing == false && toHousing == false)
             {

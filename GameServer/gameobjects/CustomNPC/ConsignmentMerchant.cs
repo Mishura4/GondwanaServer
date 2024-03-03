@@ -80,6 +80,12 @@ namespace DOL.GS
             get { return (int)eInventorySlot.Consignment_Last; }
         }
 
+        /// <inheritdoc />
+        public bool IsVaultInventorySlot(ushort clientSlot)
+        {
+            return clientSlot >= FirstClientSlot && clientSlot <= LastClientSlot;
+        }
+
         #region Token return
 
         private static readonly Dictionary<string, GameLocation> _itemXdestination =

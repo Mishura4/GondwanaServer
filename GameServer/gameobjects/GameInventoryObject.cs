@@ -57,6 +57,9 @@ namespace DOL.GS
         /// <param name="itemCount"></param>
         /// <returns></returns>
         bool MoveItem(GamePlayer player, ushort fromClientSlot, ushort toClientSlot, ushort itemCount);
+
+        bool IsVaultInventorySlot(ushort clientSlot);
+
         bool OnAddItem(GamePlayer player, InventoryItem item);
         bool OnRemoveItem(GamePlayer player, InventoryItem item);
         bool SetSellPrice(GamePlayer player, ushort clientSlot, uint sellPrice);
@@ -108,7 +111,7 @@ namespace DOL.GS
             {
                 item = null;
 
-                if (IsHousingInventorySlot(slot))
+                if (thisObject.IsVaultInventorySlot((ushort)slot))
                     thisObject.GetClientInventory(player).TryGetValue((int)slot, out item);
                 else
                     item = player.Inventory.GetItem(slot);
@@ -134,7 +137,7 @@ namespace DOL.GS
                         return updatedItems;
                     }
 
-                    StackItems(player, fromClientSlot, toClientSlot, fromItem, toItem, updatedItems);
+                    StackItems(thisObject, player, fromClientSlot, toClientSlot, fromItem, toItem, updatedItems);
                 }
                 else
                     SwitchItems(thisObject, player, fromClientSlot, toClientSlot, fromItem, toItem, updatedItems);
@@ -227,7 +230,7 @@ namespace DOL.GS
                         return;
                     }
 
-                    if (IsHousingInventorySlot(toClientSlot))
+                    if (thisObject.IsVaultInventorySlot((ushort)toClientSlot))
                     {
                         fromItem.SlotPosition = (int)toClientSlot - thisObject.FirstClientSlot + thisObject.FirstDBSlot;
                         fromItem.OwnerID = thisObject.GetOwner(player);
@@ -244,9 +247,9 @@ namespace DOL.GS
                         return;
                     }
                 }
-                else if (IsHousingInventorySlot(fromClientSlot))
+                else if (thisObject.IsVaultInventorySlot((ushort)fromClientSlot))
                 {
-                    if (IsHousingInventorySlot(toClientSlot))
+                    if (thisObject.IsVaultInventorySlot((ushort)toClientSlot))
                     {
                         fromItem.SlotPosition = (int)toClientSlot - thisObject.FirstClientSlot + thisObject.FirstDBSlot;
                         fromItem.OwnerID = thisObject.GetOwner(player);
@@ -289,7 +292,7 @@ namespace DOL.GS
 
             void SplitStack()
             {
-                if (IsHousingInventorySlot(fromClientSlot))
+                if (thisObject.IsVaultInventorySlot((ushort)fromClientSlot))
                 {
                     fromItem.Count -= count;
 
@@ -317,7 +320,7 @@ namespace DOL.GS
                 toItem.Count = count;
                 toItem.AllowAdd = fromItem.Template.AllowAdd;
 
-                if (IsHousingInventorySlot(toClientSlot))
+                if (thisObject.IsVaultInventorySlot((ushort)toClientSlot))
                 {
                     toItem.SlotPosition = (int)toClientSlot - thisObject.FirstClientSlot + thisObject.FirstDBSlot;
                     toItem.OwnerID = thisObject.GetOwner(player);
@@ -353,12 +356,12 @@ namespace DOL.GS
             }
         }
 
-        private static void StackItems(GamePlayer player, eInventorySlot fromClientSlot, eInventorySlot toClientSlot, InventoryItem fromItem, InventoryItem toItem, Dictionary<int, InventoryItem> updatedItems)
+        private static void StackItems(this IGameInventoryObject thisObject, GamePlayer player, eInventorySlot fromClientSlot, eInventorySlot toClientSlot, InventoryItem fromItem, InventoryItem toItem, Dictionary<int, InventoryItem> updatedItems)
         {
             // Assumes that neither stacks are full. If that's the case, `SwitchItems` should be called instead.
             int count = fromItem.Count + toItem.Count > fromItem.MaxCount ? toItem.MaxCount - toItem.Count : fromItem.Count;
 
-            if (IsHousingInventorySlot(fromClientSlot))
+            if (thisObject.IsVaultInventorySlot((ushort)fromClientSlot))
             {
                 if (fromItem.Count - count <= 0)
                 {
@@ -408,7 +411,7 @@ namespace DOL.GS
                 return;
             }
 
-            if (IsHousingInventorySlot(toClientSlot))
+            if (thisObject.IsVaultInventorySlot((ushort)toClientSlot))
             {
                 toItem.Count += count;
 
@@ -438,9 +441,9 @@ namespace DOL.GS
 
         private static void SwitchItems(this IGameInventoryObject thisObject, GamePlayer player, eInventorySlot fromClientSlot, eInventorySlot toClientSlot, InventoryItem fromItem, InventoryItem toItem, Dictionary<int, InventoryItem> updatedItems)
         {
-            if (IsHousingInventorySlot(fromClientSlot))
+            if (thisObject.IsVaultInventorySlot((ushort)fromClientSlot))
             {
-                if (IsHousingInventorySlot(toClientSlot))
+                if (thisObject.IsVaultInventorySlot((ushort)toClientSlot))
                 {
                     int fromItemSlotPosition = fromItem.SlotPosition;
                     fromItem.SlotPosition = toItem.SlotPosition;
@@ -476,7 +479,7 @@ namespace DOL.GS
 
             if (IsBackpackSlot(fromClientSlot))
             {
-                if (IsHousingInventorySlot(toClientSlot))
+                if (thisObject.IsVaultInventorySlot((ushort)toClientSlot))
                 {
                     // From backpack to housing inventory.
                     SwitchItemsFromOrToBackpack(toClientSlot, fromClientSlot, toItem, fromItem);
@@ -533,11 +536,6 @@ namespace DOL.GS
                 updatedItems.Add((int)vaultSlot, backpackItem);
                 updatedItems.Add((int)backpackSlot, vaultItem);
             }
-        }
-
-        private static bool IsHousingInventorySlot(eInventorySlot slot)
-        {
-            return slot is >= eInventorySlot.HousingInventory_First and <= eInventorySlot.HousingInventory_Last;
         }
 
         private static bool IsBackpackSlot(eInventorySlot slot)

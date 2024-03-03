@@ -97,6 +97,11 @@ namespace DOL.GS
             get { return (int)eInventorySlot.Consignment_Last; } // not used
         }
 
+        /// <inheritdoc />
+        public bool IsVaultInventorySlot(ushort clientSlot)
+        {
+            return clientSlot >= FirstClientSlot && clientSlot <= LastClientSlot;
+        }
 
         /// <summary>
         /// Search the MarketCache
