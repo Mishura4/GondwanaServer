@@ -25,10 +25,38 @@ namespace DOL.GS.ServerRules
         public static ushort HousingRegionID = 202;
         public static ushort[] UnsafeRegions = new ushort[] { 181 };
 
+        private readonly List<ushort> BannerDisabledRegionIDs = new List<ushort>();
+
         /// <summary>
         /// Holds the delegate called when PvE invulnerability is expired
         /// </summary>
         protected GamePlayer.InvulnerabilityExpiredCallback m_pveinvExpiredCallback;
+
+        /// <summary>
+        /// This is called when server rules are reloaded for example when reloading server properties
+        /// </summary>
+        /// <returns></returns>
+        public override void Reload()
+        {
+            lock (BannerDisabledRegionIDs)
+            {
+                BannerDisabledRegionIDs.Clear();
+                if (!String.IsNullOrEmpty(Properties.GUILD_BANNER_DISABLED_REGIONS))
+                {
+                    foreach (string id in Properties.GUILD_BANNER_DISABLED_REGIONS.Split('|'))
+                    {
+                        if (!ushort.TryParse(id, out ushort regionId))
+                        {
+                            log.ErrorFormat("Could not parse region ID {0} for server property GUILD_BANNER_DISABLED_REGIONS", id);
+                        }
+                        else
+                        {
+                            BannerDisabledRegionIDs.Add(regionId);
+                        }
+                    }
+                }
+            }
+        }
 
         public override string RulesDescription()
         {
@@ -761,13 +789,16 @@ namespace DOL.GS.ServerRules
         /// <returns></returns>
         public override bool IsAllowedToSummonBanner(GamePlayer player, bool quiet)
         {
-            if (player.CurrentZone.IsDungeon)
+            lock (BannerDisabledRegionIDs)
             {
-                if (!quiet)
+                if (BannerDisabledRegionIDs.Contains(player.CurrentRegionID))
                 {
-                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Commands.Players.Guild.BannerCantInDungeon"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                    if (!quiet)
+                    {
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Commands.Players.Guild.BannerCantInDungeon"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                    }
+                    return false;
                 }
-                return false;
             }
             return true;
         }

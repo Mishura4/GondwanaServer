@@ -51,6 +51,7 @@ namespace DOL.GS.ServerProperties
 
             // Refresh static dict values for display
             AllCurrentProperties = propDict.ToDictionary(k => k.Key, v => v.Value.Item2.GetValue(null));
+            GameServer.ServerRules.Reload();
         }
 
         // Properties: feel free to improve the SPs in the
@@ -2640,6 +2641,12 @@ namespace DOL.GS.ServerProperties
         /// </summary>
         [ServerProperty("guild", "guild_banner_allow_solo", "Should guild banners be useable without a group?", false)]
         public static bool GUILD_BANNER_ALLOW_SOLO;
+
+        /// <summary>
+        /// Regions in which the guild banner cannot be summoned
+        /// </summary>
+        [ServerProperty("guild", "guild_banner_disabled_regions", "ID of regions in which the guild banner cannot be summoned, separated by |", "")]
+        public static string GUILD_BANNER_DISABLED_REGIONS;
 
         /// <summary>
         /// Ratio to calculate guild level from realm points with, with the formula `lvl = sqrt(points / ratio) + 1`

@@ -40,6 +40,12 @@ namespace DOL.GS.ServerRules
         void Initialize();
 
         /// <summary>
+        /// This is called when server rules are reloaded for example when reloading server properties
+        /// </summary>
+        /// <returns></returns>
+        void Reload();
+
+        /// <summary>
         /// Allows or denies a client from connecting to the server ...
         /// NOTE: The client has not been fully initialized when this method is called.
         /// For example, no account or character data has been loaded yet.
