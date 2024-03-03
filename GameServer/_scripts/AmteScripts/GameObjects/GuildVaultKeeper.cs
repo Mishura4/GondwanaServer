@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Numerics;
 using DOL.Database;
 using DOL.GS.Housing;
 using DOL.GS.PacketHandler;
@@ -46,7 +47,7 @@ namespace DOL.GS
             player.Out.SendMessage(message, eChatType.CT_Say, eChatLoc.CL_PopupWindow);
 
             ItemTemplate vaultItem = GetDummyVaultItem(player);
-            GuildVault vault = new GuildVault(player, this, 0, vaultItem);
+            GuildVault vault = new GuildVault(player, 0, vaultItem);
             player.ActiveInventoryObject = vault;
             player.Out.SendInventoryItemsUpdate(vault.GetClientInventory(player), eInventoryWindowType.HouseVault);
             return true;
@@ -85,7 +86,7 @@ namespace DOL.GS
                     return true;
             }
 
-            GuildVault vault = new GuildVault(player, this, index, GetDummyVaultItem(player));
+            GuildVault vault = new GuildVault(player, index, GetDummyVaultItem(player));
             player.ActiveInventoryObject = vault;
             player.Out.SendInventoryItemsUpdate(vault.GetClientInventory(player), eInventoryWindowType.HouseVault);
 
@@ -122,6 +123,8 @@ namespace DOL.GS
     {
         private readonly int m_vaultNumber = 0;
 
+        public Guild Guild { get; init; }
+
         /// <summary>
         /// A guild vault that masquerades as a house vault to the game client
         /// </summary>
@@ -129,11 +132,12 @@ namespace DOL.GS
         /// <param name="vaultNPC">NPC controlling the interaction between player and vault</param>
         /// <param name="vaultNumber">Valid vault IDs are 0-1</param>
         /// <param name="dummyTemplate">An ItemTemplate to satisfy the base class's constructor</param>
-        public GuildVault(GamePlayer player, GameNPC vaultNPC, int vaultNumber, ItemTemplate dummyTemplate)
-            : base(player, vaultNPC, player.Guild?.GuildID ?? "", vaultNumber, dummyTemplate)
+        public GuildVault(GamePlayer player, int vaultNumber, ItemTemplate dummyTemplate)
+            : base(player, player.Guild?.GuildID ?? "", vaultNumber, dummyTemplate)
         {
+            Guild = player.Guild;
             m_vaultNumber = vaultNumber;
-            Name = player.Guild.Name + "'s Vault";
+            Name = (player.Guild?.Name ?? "unknown") + "'s Vault";
         }
 
         public override string GetOwner(GamePlayer player)
@@ -173,6 +177,14 @@ namespace DOL.GS
                     default: return 0;
                 }
             }
+        }
+
+        /// <summary>
+        /// List of items in the vault.
+        /// </summary>
+        public override IList<InventoryItem> DBItems(GamePlayer player = null)
+        {
+            return GameServer.Database.SelectObjects<InventoryItem>(DB.Column("OwnerID").IsEqualTo(Guild.GuildID).And(DB.Column("SlotPosition").IsGreaterOrEqualTo(FirstDBSlot).And(DB.Column("SlotPosition").IsLessOrEqualTo(LastDBSlot))));
         }
     }
 }

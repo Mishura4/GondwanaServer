@@ -12,8 +12,6 @@ namespace DOL.GS
         public const int SIZE = 100;
         public const int Last_Used_FIRST_SLOT = 1600;
         public const int FIRST_SLOT = 2500;
-        private readonly GamePlayer m_player;
-        private readonly GameNPC m_vaultNPC;
         private readonly string m_vaultOwner;
 
         private readonly object _vaultLock = new object();
@@ -26,11 +24,9 @@ namespace DOL.GS
         /// <param name="vaultOwner">ID of vault owner (can be anything unique, if it's the account name then all toons on account can access the items)</param>
         /// <param name="vaultNumber">Valid vault IDs are 0-3</param>
         /// <param name="dummyTemplate">An ItemTemplate to satisfy the base class's constructor</param>
-        public CustomVault(GamePlayer player, GameNPC vaultNPC, string vaultOwner, int vaultNumber, ItemTemplate dummyTemplate)
+        public CustomVault(GamePlayer player, string vaultOwner, int vaultNumber, ItemTemplate dummyTemplate)
             : base(dummyTemplate, vaultNumber)
         {
-            m_player = player;
-            m_vaultNPC = vaultNPC;
             m_vaultOwner = vaultOwner;
 
             DBHouse dbh = new DBHouse();
@@ -56,22 +52,23 @@ namespace DOL.GS
                 player.ActiveInventoryObject.RemoveObserver(player);
             }
 
-            lock (_vaultLock)
-            {
-                if (!_observers.ContainsKey(player.Name))
-                {
-                    _observers.Add(player.Name, player);
-                }
-            }
+            AddObserver(player);
 
             player.ActiveInventoryObject = this;
             player.Out.SendInventoryItemsUpdate(GetClientInventory(player), eInventoryWindowType.HouseVault);
             return true;
         }
 
+        protected void AddObserver(GamePlayer player)
+        {
+            lock (_vaultLock)
+            {
+                _observers.TryAdd(player.Name, player);
+            }
+        }
+
         public override Dictionary<int, InventoryItem> GetClientInventory(GamePlayer player)
         {
-
             var items = new Dictionary<int, InventoryItem>();
             int slotOffset = -FirstDBSlot + (int)(eInventorySlot.HousingInventory_First);
             foreach (InventoryItem item in DBItems(player))
@@ -126,23 +123,21 @@ namespace DOL.GS
         /// </summary>
         public override bool MoveItem(GamePlayer player, ushort fromSlot, ushort toSlot, ushort count)
         {
-            if (GetOwner(player) != m_vaultOwner)
-                return false;
             if (fromSlot == toSlot)
             {
                 return false;
             }
 
-            bool fromCustomVault = (fromSlot >= (ushort)eInventorySlot.HousingInventory_First && fromSlot <= (ushort)eInventorySlot.HousingInventory_Last);
-            bool toCustomVault = (toSlot >= (ushort)eInventorySlot.HousingInventory_First && toSlot <= (ushort)eInventorySlot.HousingInventory_Last);
+            bool fromVault = (fromSlot >= (ushort)eInventorySlot.HousingInventory_First && fromSlot <= (ushort)eInventorySlot.HousingInventory_Last);
+            bool toVault = (toSlot >= (ushort)eInventorySlot.HousingInventory_First && toSlot <= (ushort)eInventorySlot.HousingInventory_Last);
 
-            if (fromCustomVault == false && toCustomVault == false)
+            if (fromVault == false && toVault == false)
             {
                 return false;
             }
 
             //Prevent exploit shift+clicking quiver exploit
-            if (fromCustomVault)
+            if (fromVault)
             {
                 if (fromSlot < (ushort)eInventorySlot.HousingInventory_First || fromSlot > (ushort) eInventorySlot.HousingInventory_Last) return false;
             }
@@ -155,35 +150,39 @@ namespace DOL.GS
                 return false;
             }
 
-            if (toCustomVault)
+            InventoryItem itemInToSlot = null;
+            InventoryItem itemInFromSlot = null;
+
+            if (toVault)
             {
-                InventoryItem item = player.Inventory.GetItem((eInventorySlot)toSlot);
-                if (item != null)
+                itemInToSlot = player.Inventory.GetItem((eInventorySlot)toSlot);
+                if (itemInToSlot != null)
                 {
-                    if (gameVault.CanRemoveItems(player) == false)
+                    if (!gameVault.CanRemoveItem(player, itemInToSlot))
                     {
-                        player.Out.SendMessage("You don't have permission to remove items!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        player.Out.SendMessage("You don't have permission to remove this item!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                         return false;
                     }
                 }
-                if (gameVault.CanAddItems(player) == false)
+                if (!gameVault.CanAddItem(player, itemInToSlot))
                 {
                     player.Out.SendMessage("You don't have permission to add items!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     return false;
                 }
             }
 
-            if (fromCustomVault && gameVault.CanRemoveItems(player) == false)
+            if (fromVault)
             {
-                player.Out.SendMessage("You don't have permission to remove items!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                return false;
+                itemInFromSlot = player.Inventory.GetItem((eInventorySlot)fromSlot);
+                if (!gameVault.CanRemoveItem(player, player.Inventory.GetItem((eInventorySlot)fromSlot)))
+                {
+                    player.Out.SendMessage("You don't have permission to remove items!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    return false;
+                }
             }
 
-            InventoryItem itemInFromSlot = player.Inventory.GetItem((eInventorySlot)fromSlot);
-            InventoryItem itemInToSlot = player.Inventory.GetItem((eInventorySlot)toSlot);
-
             // Check for a swap to get around not allowing non-tradables in a housing vault - Tolakram
-            if (fromCustomVault && itemInToSlot != null && itemInToSlot.IsTradable == false)
+            if (fromVault && itemInToSlot is { IsTradable: false })
             {
                 player.Out.SendMessage("You cannot swap with an untradable item!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 //log.DebugFormat("GameVault: {0} attempted to swap untradable item {2} with {1}", player.Name, itemInFromSlot.Name, itemInToSlot.Name);
@@ -191,19 +190,17 @@ namespace DOL.GS
                 return false;
             }
 
-            /* DOL
             // Allow people to get untradables out of their house vaults (old bug) but 
             // block placing untradables into housing vaults from any source - Tolakram
-            if (toCustomVault && itemInFromSlot != null && itemInFromSlot.IsTradable == false)
+            if (toVault && itemInFromSlot is { IsTradable: false })
             {
-                if (itemInFromSlot.Id_nb != ServerProperties.Properties.ALT_CURRENCY_ID)
+                /* DOL: if (itemInFromSlot.Id_nb != ServerProperties.Properties.ALT_CURRENCY_ID) */
                 {
-                    player.Out.SendMessage("You can not put this item into an Account Vault!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage("You can not put this item into a Vault!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     player.Out.SendInventoryItemsUpdate(null);
                     return false;
                 }
             }
-            */
 
             lock (m_vaultSync)
             {
@@ -231,7 +228,7 @@ namespace DOL.GS
         /// </summary>
         /// <param name="player"></param>
         /// <returns></returns>
-        public override bool CanAddItems(GamePlayer player)
+        public override bool CanAddItem(GamePlayer player, InventoryItem item)
         {
             if (GetOwner(player) == m_vaultOwner)
                 return true;
@@ -244,20 +241,12 @@ namespace DOL.GS
         /// </summary>
         /// <param name="player"></param>
         /// <returns></returns>
-        public override bool CanRemoveItems(GamePlayer player)
+        public override bool CanRemoveItem(GamePlayer player, InventoryItem item)
         {
             if (GetOwner(player) == m_vaultOwner)
                 return true;
 
             return false;
-        }
-
-        /// <summary>
-        /// List of items in the vault.
-        /// </summary>
-        private new IList<InventoryItem> DBItems(GamePlayer player = null)
-        {
-            return GameServer.Database.SelectObjects<InventoryItem>(DB.Column("OwnerID").IsEqualTo(GetOwner(player)).And(DB.Column("SlotPosition").IsGreaterOrEqualTo(FirstDBSlot).And(DB.Column("SlotPosition").IsLessOrEqualTo(LastDBSlot))));
         }
     }
 }

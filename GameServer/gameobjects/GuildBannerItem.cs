@@ -251,7 +251,7 @@ namespace DOL.GS
             GameObject realKiller = killer;
             if (killer is GameNPC { Brain: IControlledBrain { Owner: GamePlayer } } pet)
             {
-                realKiller = ((IControlledBrain)pet).Owner;
+                realKiller = ((IControlledBrain)pet.Brain).Owner;
             }
             if (realKiller is GameLiving { Group: not null } livingKiller) // Player or NPC in a group
             {

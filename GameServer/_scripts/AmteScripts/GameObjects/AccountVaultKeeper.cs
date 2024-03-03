@@ -34,7 +34,7 @@ namespace DOL.GS
             player.Out.SendMessage(message, eChatType.CT_Say, eChatLoc.CL_PopupWindow);
 
             ItemTemplate vaultItem = GetDummyVaultItem(player);
-            AccountVault vault = new AccountVault(player, this, 0, vaultItem);
+            AccountVault vault = new AccountVault(player, 0, vaultItem);
             player.ActiveInventoryObject = vault;
             player.Out.SendInventoryItemsUpdate(vault.GetClientInventory(player), eInventoryWindowType.HouseVault);
             return true;
@@ -52,13 +52,13 @@ namespace DOL.GS
 
             if (text == "first")
             {
-                AccountVault vault = new AccountVault(player, this, 0, GetDummyVaultItem(player));
+                AccountVault vault = new AccountVault(player, 0, GetDummyVaultItem(player));
                 player.ActiveInventoryObject = vault;
                 player.Out.SendInventoryItemsUpdate(vault.GetClientInventory(player), eInventoryWindowType.HouseVault);
             }
             else if (text == "second")
             {
-                AccountVault vault = new AccountVault(player, this, 1, GetDummyVaultItem(player));
+                AccountVault vault = new AccountVault(player, 1, GetDummyVaultItem(player));
                 player.ActiveInventoryObject = vault;
                 player.Out.SendInventoryItemsUpdate(vault.GetClientInventory(player), eInventoryWindowType.HouseVault);
             }
@@ -103,8 +103,8 @@ namespace DOL.GS
         /// <param name="vaultNPC">NPC controlling the interaction between player and vault</param>
         /// <param name="vaultNumber">Valid vault IDs are 0-1</param>
         /// <param name="dummyTemplate">An ItemTemplate to satisfy the base class's constructor</param>
-        public AccountVault(GamePlayer player, GameNPC vaultNPC, int vaultNumber, ItemTemplate dummyTemplate)
-            : base(player, vaultNPC, player.Client.Account.Name + "_" + player.Realm.ToString(), vaultNumber, dummyTemplate)
+        public AccountVault(GamePlayer player, int vaultNumber, ItemTemplate dummyTemplate)
+            : base(player, player.Client.Account.Name + "_" + player.Realm.ToString(), vaultNumber, dummyTemplate)
         {
             m_vaultNumber = vaultNumber;
             Name = "Account Vault";

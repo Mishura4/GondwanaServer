@@ -180,7 +180,7 @@ namespace DOL.GS
         /// <summary>
         /// List of items in the vault.
         /// </summary>
-        public IList<InventoryItem> DBItems(GamePlayer player = null)
+        public virtual IList<InventoryItem> DBItems(GamePlayer player = null)
         {
             var filterBySlot = DB.Column(nameof(InventoryItem.SlotPosition)).IsGreaterOrEqualTo(FirstDBSlot).And(DB.Column(nameof(InventoryItem.SlotPosition)).IsLessOrEqualTo(LastDBSlot));
             return DOLDB<InventoryItem>.SelectObjects(DB.Column(nameof(InventoryItem.OwnerID)).IsEqualTo(GetOwner(player)).And(filterBySlot));
@@ -241,20 +241,20 @@ namespace DOL.GS
                 return false;
             }
 
-            if (toHousing && gameVault.CanAddItems(player) == false)
-            {
-                player.Out.SendMessage("You don't have permission to add items!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                return false;
-            }
-
-            if (fromHousing && gameVault.CanRemoveItems(player) == false)
-            {
-                player.Out.SendMessage("You don't have permission to remove items!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                return false;
-            }
-
             InventoryItem itemInFromSlot = player.Inventory.GetItem((eInventorySlot)fromSlot);
             InventoryItem itemInToSlot = player.Inventory.GetItem((eInventorySlot)toSlot);
+
+            if (toHousing && !gameVault.CanAddItem(player, itemInFromSlot))
+            {
+                player.Out.SendMessage("You don't have permission to add this item!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return false;
+            }
+
+            if (fromHousing && !gameVault.CanRemoveItem(player, itemInToSlot))
+            {
+                player.Out.SendMessage("You don't have permission to remove this item!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return false;
+            }
 
             // Check for a swap to get around not allowing non-tradables in a housing vault - Tolakram
             if (fromHousing && itemInToSlot != null && itemInToSlot.IsTradable == false)
@@ -335,7 +335,7 @@ namespace DOL.GS
         /// </summary>
         /// <param name="player"></param>
         /// <returns></returns>
-        public virtual bool CanAddItems(GamePlayer player)
+        public virtual bool CanAddItem(GamePlayer player, InventoryItem item)
         {
             return true;
         }
@@ -345,7 +345,7 @@ namespace DOL.GS
         /// </summary>
         /// <param name="player"></param>
         /// <returns></returns>
-        public virtual bool CanRemoveItems(GamePlayer player)
+        public virtual bool CanRemoveItem(GamePlayer player, InventoryItem item)
         {
             return true;
         }

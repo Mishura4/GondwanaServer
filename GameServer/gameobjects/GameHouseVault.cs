@@ -218,7 +218,7 @@ namespace DOL.GS
         /// </summary>
         /// <param name="player"></param>
         /// <returns></returns>
-        public override bool CanAddItems(GamePlayer player)
+        public override bool CanAddItem(GamePlayer player, InventoryItem item)
         {
             return CurrentHouse.CanUseVault(player, this, VaultPermissions.Add);
         }
@@ -228,7 +228,7 @@ namespace DOL.GS
         /// </summary>
         /// <param name="player"></param>
         /// <returns></returns>
-        public override bool CanRemoveItems(GamePlayer player)
+        public override bool CanRemoveItem(GamePlayer player, InventoryItem item)
         {
             return CurrentHouse.CanUseVault(player, this, VaultPermissions.Remove);
         }
