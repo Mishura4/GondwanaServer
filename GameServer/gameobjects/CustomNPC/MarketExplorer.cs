@@ -173,8 +173,9 @@ namespace DOL.GS
         /// <param name="player"></param>
         /// <param name="fromClientSlot"></param>
         /// <param name="toClientSlot"></param>
+        /// <param name="count"></param>
         /// <returns></returns>
-        public virtual bool MoveItem(GamePlayer player, ushort fromClientSlot, ushort toClientSlot)
+        public virtual bool MoveItem(GamePlayer player, ushort fromClientSlot, ushort toClientSlot, ushort count)
         {
             // this move represents a buy item request
             if (fromClientSlot >= (ushort)eInventorySlot.MarketExplorerFirst &&
@@ -204,7 +205,7 @@ namespace DOL.GS
         /// </summary>
         public virtual bool OnAddItem(GamePlayer player, InventoryItem item)
         {
-            return false;
+            return true;
         }
 
         /// <summary>
@@ -212,7 +213,7 @@ namespace DOL.GS
         /// </summary>
         public virtual bool SetSellPrice(GamePlayer player, ushort clientSlot, uint price)
         {
-            return false;
+            return true;
         }
 
         /// <summary>
@@ -220,7 +221,7 @@ namespace DOL.GS
         /// </summary>
         public virtual bool OnRemoveItem(GamePlayer player, InventoryItem item)
         {
-            return false;
+            return true;
         }
 
         public virtual void BuyItem(InventoryItem item, GamePlayer player)

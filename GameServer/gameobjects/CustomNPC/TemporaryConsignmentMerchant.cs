@@ -41,7 +41,7 @@ namespace DOL.GS
         /// <param name="playerInventory"></param>
         /// <param name="fromClientSlot"></param>
         /// <param name="toClientSlot"></param>
-		public override void OnPlayerBuy(GamePlayer player, eInventorySlot fromClientSlot, eInventorySlot toClientSlot, bool usingMarketExplorer = false)
+        public override void OnPlayerBuy(GamePlayer player, eInventorySlot fromClientSlot, eInventorySlot toClientSlot, bool usingMarketExplorer = false)
         {
             IDictionary<int, InventoryItem> clientInventory = GetClientInventory(player);
 
@@ -165,7 +165,7 @@ namespace DOL.GS
                         log.DebugFormat("CM: {0}:{1} purchased '{2}' for {3} from consignment merchant on lot {4}.", player.Name, player.Client.Account.Name, item.Name, purchasePrice, HouseNumber);
                     }
 
-                    NotifyObservers(player, this.MoveItemFromObject(player, fromClientSlot, toClientSlot));
+                    this.NotifyPlayers(this, player, _observers, this.MoveItem(player, fromClientSlot, toClientSlot, (ushort)item.Count));
                 }
             }
         }

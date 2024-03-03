@@ -226,7 +226,7 @@ namespace DOL.GS.PacketHandler.Client.v168
 
             // First check for an active InventoryObject
 
-            if (client.Player.ActiveInventoryObject != null && client.Player.ActiveInventoryObject.MoveItem(client.Player, fromClientSlot, toClientSlot))
+            if (client.Player.ActiveInventoryObject != null && client.Player.ActiveInventoryObject.MoveItem(client.Player, fromClientSlot, toClientSlot, itemCount))
             {
                 //ChatUtil.SendDebugMessage(client, "ActiveInventoryObject handled move");
                 return;

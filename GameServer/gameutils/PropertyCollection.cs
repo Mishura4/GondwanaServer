@@ -102,8 +102,12 @@ namespace DOL.GS
         /// <param name="key">key</param>
         public void removeProperty(object key)
         {
-            object dummy;
-            _props.TryRemove(key, out dummy);
+            _props.TryRemove(key, out _);
+        }
+
+        public bool removeAndGetProperty(string key, out object value)
+        {
+            return _props.TryRemove(key, out value);
         }
 
         /// <summary>

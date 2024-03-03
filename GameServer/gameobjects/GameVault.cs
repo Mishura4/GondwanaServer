@@ -218,7 +218,7 @@ namespace DOL.GS
         /// <summary>
         /// Move an item from, to or inside a house vault.  From IGameInventoryObject
         /// </summary>
-        public virtual bool MoveItem(GamePlayer player, ushort fromSlot, ushort toSlot)
+        public virtual bool MoveItem(GamePlayer player, ushort fromSlot, ushort toSlot, ushort count)
         {
             if (fromSlot == toSlot)
             {
@@ -278,21 +278,7 @@ namespace DOL.GS
 
             lock (m_vaultSync)
             {
-                if (fromHousing)
-                {
-                    if (toHousing)
-                    {
-                        NotifyObservers(player, this.MoveItemInsideObject(player, (eInventorySlot)fromSlot, (eInventorySlot)toSlot));
-                    }
-                    else
-                    {
-                        NotifyObservers(player, this.MoveItemFromObject(player, (eInventorySlot)fromSlot, (eInventorySlot)toSlot));
-                    }
-                }
-                else if (toHousing)
-                {
-                    NotifyObservers(player, this.MoveItemToObject(player, (eInventorySlot)fromSlot, (eInventorySlot)toSlot));
-                }
+                this.NotifyPlayers(this, player, _observers, this.MoveItem(player, (eInventorySlot)fromSlot, (eInventorySlot)toSlot, count));
             }
 
             return true;
@@ -303,7 +289,7 @@ namespace DOL.GS
         /// </summary>
         public virtual bool OnAddItem(GamePlayer player, InventoryItem item)
         {
-            return false;
+            return true;
         }
 
         /// <summary>
@@ -311,7 +297,7 @@ namespace DOL.GS
         /// </summary>
         public virtual bool OnRemoveItem(GamePlayer player, InventoryItem item)
         {
-            return false;
+            return true;
         }
 
 
@@ -320,7 +306,7 @@ namespace DOL.GS
         /// </summary>
         public virtual bool SetSellPrice(GamePlayer player, ushort clientSlot, uint price)
         {
-            return false;
+            return true;
         }
 
 

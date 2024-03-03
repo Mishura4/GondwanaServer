@@ -203,54 +203,6 @@ namespace DOL.GS
         }
 
         /// <summary>
-        /// Send inventory updates to all players actively viewing this vault;
-        /// players that are too far away will be considered inactive.
-        /// </summary>
-        /// <param name="updateItems"></param>
-        protected override void NotifyObservers(GamePlayer player, IDictionary<int, InventoryItem> updateItems)
-        {
-            var inactiveList = new List<string>();
-            bool hasUpdatedPlayer = false;
-
-            lock (_vaultLock)
-            {
-                foreach (GamePlayer observer in _observers.Values)
-                {
-                    if (observer.ActiveInventoryObject != this)
-                    {
-                        inactiveList.Add(observer.Name);
-                        continue;
-                    }
-
-                    if (!IsWithinRadius(observer, WorldMgr.INFO_DISTANCE))
-                    {
-                        observer.ActiveInventoryObject = null;
-                        inactiveList.Add(observer.Name);
-
-                        continue;
-                    }
-
-                    observer.Client.Out.SendInventoryItemsUpdate(updateItems, PacketHandler.eInventoryWindowType.Update);
-
-                    if (observer == player)
-                        hasUpdatedPlayer = true;
-                }
-
-                // now remove all inactive observers.
-                foreach (string observerName in inactiveList)
-                {
-                    _observers.Remove(observerName);
-                }
-
-                // The above code is suspect, it seems to work 80% of the time, so let's make sure we update the player doing the move - Tolakram
-                if (hasUpdatedPlayer == false)
-                {
-                    player.Client.Out.SendInventoryItemsUpdate(updateItems, PacketHandler.eInventoryWindowType.Update);
-                }
-            }
-        }
-
-        /// <summary>
         /// Whether or not this player can view the contents of this
         /// vault.
         /// </summary>
