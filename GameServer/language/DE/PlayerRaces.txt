@@ -18,9 +18,9 @@ GamePlayer.PlayerRace.Male.Sylvan:		Sylvaner
 GamePlayer.PlayerRace.Male.HalfOgre:		Halboger
 GamePlayer.PlayerRace.Male.Frostalf:		Frostalf
 GamePlayer.PlayerRace.Male.Shar:		Shar
-GamePlayer.PlayerRace.Male.Korazh:		Korazh
-GamePlayer.PlayerRace.Male.Deifang:		Deifang
-GamePlayer.PlayerRace.Male.Graoch:		Graoch
+GamePlayer.PlayerRace.Male.AlbionMinotaur:		Korazh
+GamePlayer.PlayerRace.Male.Deifrang:			Deifrang
+GamePlayer.PlayerRace.Male.Graoch:				Graoch
 
 # Race names female
 GamePlayer.PlayerRace.Female.Briton:		Bretonin
@@ -41,6 +41,6 @@ GamePlayer.PlayerRace.Female.Sylvan:		Sylvanerin
 GamePlayer.PlayerRace.Female.HalfOgre:		Halboger
 GamePlayer.PlayerRace.Female.Frostalf:		Frostalf
 GamePlayer.PlayerRace.Female.Shar:		Shar
-GamePlayer.PlayerRace.Female.Korazh:		Korazh
-GamePlayer.PlayerRace.Female.Deifang:		Deifang
-GamePlayer.PlayerRace.Female.Graoch:		Graoch
+GamePlayer.PlayerRace.Male.AlbionMinotaur:		Korazh
+GamePlayer.PlayerRace.Male.Deifrang:			Deifrang
+GamePlayer.PlayerRace.Male.Graoch:				Graoch

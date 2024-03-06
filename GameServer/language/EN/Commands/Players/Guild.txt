@@ -32,7 +32,7 @@ Commands.Players.Guild.BannerGroupSummoned:	    Someone in your group has alread
 Commands.Players.Guild.BannerGuildSummoned:	    Someone in your guild has already summoned the guild banner.
 Commands.Players.Guild.BannerNoGroup:			    You need a group to summon a banner.
 Commands.Players.Guild.BannerNone:			    Your guild does not have a guild banner.
-Commands.Players.Guild.BannerNotAfford:		    You need 50,000 merit points to buy a guild banner!
+Commands.Players.Guild.BannerNotAfford:		    You need {0} more merit points to buy a guild banner!
 Commands.Players.Guild.BannerSummoned.You:		    You have summoned your guild banner.
 Commands.Players.Guild.BannerSummoned:		    {0} has summoned the guild banner.
 Commands.Players.Guild.BannerUnsummoned.You:		You have put away your guild banner.
@@ -48,7 +48,7 @@ Commands.Players.Guild.BannerCantInDungeon:			You cannot summon a banner in a du
 Commands.Players.Guild.Banner.BuyPrice:             You must pay the amount of {0} to buy a banner.
 Commands.Players.Guild.Banner.LostMinutes           Your banner has been lost to the enemy. You must wait {0} minute(s)!
 Commands.Players.Guild.Banner.LostHours:            Your banner has been lost to the enemy. You must wait {0} Hour(s)!
-Commands.Players.Guild.BuffActivated:			    [Guild Buff] {0} has cost 1000 Guild Merit Points and activated a Guild Buff!
+Commands.Players.Guild.BuffActivated:			    {0} has activated a Guild Buff: "{1}" which costs 1000 Guild Merit Points.
 Commands.Players.Guild.BuffBountyPoints:		    Your guild will now earn 5 % more bounty points for 6 hours!
 Commands.Players.Guild.BuffBPActivated:		    [Guild Buff] Your guild will receive a realm points bonus for 6 hours!
 Commands.Players.Guild.BuffMPActivated:		    [Guild Buff] Your guild will receive a merit points bonus for 6 hours!
@@ -96,6 +96,7 @@ Commands.Players.Guild.Help.GuildARemoveAlli:		'/gc aremove alliance <#>' # Re
 Commands.Players.Guild.Help.GuildAutoRemove:		'/gc autoremove <player's name>' # Kick a character out of the guild.
 Commands.Players.Guild.Help.GuildAutoRemoveAcc:	'/gc autoremove account <player's name>' # Kick all characters on the same account from the guild.
 Commands.Players.Guild.Help.GuildBannerSummon:	'/gc summon' # Summons Guild's Banner.
+Commands.Players.Guild.Help.GuildBannerUnsummon:	'/gc unsummon' # Unsummons Guild's Banner and remove its effects on the surrounding players.
 Commands.Players.Guild.Help.GuildBuff:			'/gc buff <artifact|crafting|rps|bps|xp|mlxp>' # Buy a Guild Merit Bonus.
 Commands.Players.Guild.Help.GuildBuyBanner:		'/gc buybanner' # Buy a guild banner.
 Commands.Players.Guild.Help.GuildCancel:			'/gc cancel <option> <player>' # Cancel all previous commands.
@@ -162,15 +163,19 @@ Commands.Players.Guild.InCombat:				    You cannot summon the guild banner while
 Commands.Players.Guild.InfoAMotd:				    Alliance message: {0}
 Commands.Players.Guild.InfoBanner.Lost:         The banner fell into the hands of the enemy.
 Commands.Players.Guild.InfoBanner.PurchaseAvailable:    Banner purchase is available.
-Commands.Players.Guild.InfoCEmail:			    Email contact: {0}
-Commands.Players.Guild.InfoGDuesBank:			    Tax: {0} Guild bank: {1} copper coins.
+Commands.Players.Guild.InfoCEmail:			    Email contact: {0}
+Commands.Players.Guild.InfoGuildBank:			Guild bank: {0}
+Commands.Players.Guild.InfoGuildDues:			Tax: {0}
 Commands.Players.Guild.InfoGuild:				    Informations about the guild {0}:
 Commands.Players.Guild.InfoGuildLevel:			Guild's level: {0}
 Commands.Players.Guild.InfoMotd:				    Message: {0}
 Commands.Players.Guild.InfoOMotd:				    Officer's message: {0}
-Commands.Players.Guild.InfoRPBPMP:			    Realm points: {0} Bounty points: {1} Merit points: {2}
+Commands.Players.Guild.InfoRP:					Realm points: {0}
+Commands.Players.Guild.InfoBP:					Bounty points: {0}
+Commands.Players.Guild.InfoMP:					Merit points: {0}
 Commands.Players.Guild.InfoWebpage:			    Website: {0}
-Commands.Players.Guild.InfoMerit:               Merit points: {0}
+Commands.Players.Guild.InfoGuildBuff:			Guild Buff: {0}
+Commands.Players.Guild.InfoBanner:				Banner: {0}
 Commands.Players.Guild.InfoEmail:               Email: {0}
 Commands.Players.Guild.InvalidLetters:			Characters used are invalid.
 Commands.Players.Guild.InvalidRank:			    This is not a valid rank.
@@ -211,7 +216,7 @@ Commands.Players.Guild.OMotdSet:				The officers' message is now updated.
 Commands.Players.Guild.PlayerNotFound:			This player is not online or is in another realm.
 Commands.Players.Guild.PromotedOther:			{0} has been promoted to rank {1}.
 Commands.Players.Guild.PromotedSelf:			You are promoted to rank {0}.
-Commands.Players.Guild.PromoteHigherThanPlayer:	You can only promote a player below your rank.
+Commands.Players.Guild.Promote
 Commands.Players.Guild.PromoteHaveToUseDemote:	You cannot downgrade this player's rank with the promote command. Use '/gc demote player <rank#>'.
 Commands.Players.Guild.Purged:					{0} has been purged.
 Commands.Players.Guild.SetEnabled:				enabled
@@ -317,25 +322,9 @@ Commands.Players.Guild.TotalMemberOnline:   Number of online players in the guil
 # Ancienne references ne fonctionnant pas mais contenant les textes à traduires (si besoin)
 Scripts.Player.Guild.AlreadyInGuild:			{0} is already a member of a guild.	
 Scripts.Player.Guild.AlreadyInGuild:			They are already a member of a guild.	
-Scripts.Player.Guild.AMotdSet:				You have set the alliance motd for the guild.	
-Scripts.Player.Guild.BannerAlready:			Your guild already has a banner.	
-Scripts.Player.Guild.BannerBought:			You have purchased a guild banner for {0} bounty points.	
-Scripts.Player.Guild.BannerGroupSummoned:		Someone in your group has already summoned the guild banner.	
-Scripts.Player.Guild.BannerGuildSummoned:		Someone in your guild has already summoned the guild banner.	
-Scripts.Player.Guild.BannerNoGroup:			You need to be in a Group to summon a Banner.	
-Scripts.Player.Guild.BannerNone:			Your guild does not own a guild banner.	
-Scripts.Player.Guild.BannerNotAfford:			You need 50,000 bounty points to purchase a guild banner!	
-Scripts.Player.Guild.BannerSummoned:			You have summoned your guild banner.	
-Scripts.Player.Guild.BannerUnsummoned:			You have unsummoned your guild banner.	
-Scripts.Player.Guild.BannerNotRvR:			You need to be in an RvR zone to summon a guild banner!
-Scripts.Player.Guild.BuffActivated:			[Guild Buff] {0} has spent 1000 Guild Merit Points and activated a Guild Buff!	
-Scripts.Player.Guild.BuffBountyPoints:			Your guild will now gain 5% bonus to bounty points for 24 hours!	
-Scripts.Player.Guild.BuffBPActivated:			[Guild Buff] Your guild will now get a bonus to bounty points for 24 hours!	
-Scripts.Player.Guild.BuffMPActivated:			[Guild Buff] Your guild will now get a bonus to merit points for 24 hours!	
-Scripts.Player.Guild.BuffRealmPoints:			Your guild will now gain 5% bonus to realm points for 24 hours!	
+Scripts.Player.Guild.AMotdSet:				You have set the alliance motd for the guild.
 Scripts.Player.Guild.ClaimNotNear:			You must be near a keep to claim it.	
-Scripts.Player.Guild.ConfirmLeave:			Do you really want to leave {0}?	
-Scripts.Player.Guild.DemotedHigherThanPlayer:		You can only demote to ranks below your own.	
+Scripts.Player.Guild.ConfirmLeave:			Do you really want to leave {0}?		
 Scripts.Player.Guild.DemotedOther:			{0} has been demoted to {1}.	
 Scripts.Player.Guild.DemotedSelf:			You have been demoted to {0}.	
 Scripts.Player.Guild.DepositAmount:			You deposit {0} into your guilds bank account.	
@@ -464,29 +453,8 @@ Scripts.Player.Guild.OMotdSet:				You have set the officer motd for the guild.
 Scripts.Player.Guild.PlayerNotFound:			That player could not be found in the game.	
 Scripts.Player.Guild.PromotedOther:			{0} has been promoted to {1}.	
 Scripts.Player.Guild.PromotedSelf:			You have been promoted to {0}.	
-Scripts.Player.Guild.PromoteHigherThanPlayer:		You can only promote to ranks below your own.	
 Scripts.Player.Guild.PromoteHaveToUseDemote:	You can't demote the GuildRank of this players with promote commands. Use /demote <ranklevel> players.
-Scripts.Player.Guild.Purged:				{0} has been purged.	
-Scripts.Player.Guild.RankACHearSet:			You have {0} the ACHear of the rank {1}.	
-Scripts.Player.Guild.RankACSpeakSet:			You have {0} the ACSpeak of the rank {1}.	
-Scripts.Player.Guild.RankAlliSet:			You have {0} the Alliance of the rank {1}.	
-Scripts.Player.Guild.RankBuffSet:			You have {0} the Buff of the rank {1}.	
-Scripts.Player.Guild.RankClaimSet:			You have {0} the Claim of the rank {1}.	
-Scripts.Player.Guild.RankDuesSet:			You have {0} the Dues of the rank {1}.	
-Scripts.Player.Guild.RankEmblemSet:			You have {0} the emblem of the rank {1}.	
-Scripts.Player.Guild.RankGCHearSet:			You have {0} the GCHear of the rank {1}.	
-Scripts.Player.Guild.RankGCSpeakSet:			You have {0} the GCSpeak of the rank {1}.	
-Scripts.Player.Guild.RankInviteSet:			You have {0} the Invite of the rank {1}.	
-Scripts.Player.Guild.RankLevelSet:			You have set the level of the rank to {0}.	
-Scripts.Player.Guild.RankOCHearSet:			You have {0} the OCHear of the rank {1}.	
-Scripts.Player.Guild.RankOCSpeakSet:			You have {0} the OCSpeak of the rank {1}.	
-Scripts.Player.Guild.RankPromoteSet:			You have {0} the Promote of the rank {1}.	
-Scripts.Player.Guild.RankReleaseSet:			You have {0} the Release of the rank {1}.	
-Scripts.Player.Guild.RankRemoveSet:				You have {0} the Remove of the rank {1}.	
-Scripts.Player.Guild.RankTitleSet:				You have set the title of the rank to {0}.	
-Scripts.Player.Guild.RankUpgradeSet:			You have {0} the Upgrade of the rank {1}.	
-Scripts.Player.Guild.RankViewSet:				You have {0} the View of the rank {1}.	
-Scripts.Player.Guild.RankWithdrawSet:			You have {0} the Withdraw of the rank {1}.	
+Scripts.Player.Guild.Purged:				{0} has been purged.		
 Scripts.Player.Guild.ThirdArgNotNum:			The third argument must be a number.	
 Scripts.Player.Guild.UnableToCreate:			The guild {0} was unable to be created.	
 Scripts.Player.Guild.UnableToCreateLead:		The guild {0} was unable to be created {1} as leader.	

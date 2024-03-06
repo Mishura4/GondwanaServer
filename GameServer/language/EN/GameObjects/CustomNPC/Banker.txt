@@ -1,5 +1,25 @@
+Banker.AccountCreate:			You have just created a bank account!
+Banker.DontHaveAmount:			You don't have this amount on you!
+Banker.Mithril:					{0} Mithril
+Banker.Platinum:				{0} Platinum
+Banker.Gold:					{0} Gold
+Banker.Silver:					{0} Silver
+Banker.Copper:					{0} Copper
 Banker.InteractOutlaw:			I don't deal with outlaws!
 Banker.InteractText01:			Hello sir, you don't have any bank account yet.
 Banker.InteractText02:			In order to open an account just give me some money or a check, the account will be created automatically!
-Banker.Nomoney:				You don't have any money in your bank account.
-Banker.Moneyamount:			You have {0} in your bank account.
+Banker.Nomoney:					You don't have any money in your bank account.
+Banker.Moneyamount:				You have {0} in your bank account.
+Banker.Greetings1:				Hello {0}, you have
+Banker.Greetings2:				on your account.
+Banker.Greetings3:				What do you want to do?
+Banker.Greetings4:				[withdraw money]
+Banker.Greetings5:				[write a check]
+Banker.Greetings6:				[cash a check]
+Banker.HowMuchWithdraw:			How much would you like to withdraw?
+Banker.WithdrawAmount:			[everything] [some coins]
+Banker.NoAccountYet1:			Hello, you don't have an account yet.
+Banker.NoAccountYet2:			To create an account, just give me some money, the account will be created automatically!
+Banker.WithdrawSomeCoins:		To withdraw some coins, simply select me and type the command /banque.
+Banker.WriteCheck:				To write a check, simply select me and type the command /banque cheque.
+Banker.CashCheck:				To cash a check, just give it to me.

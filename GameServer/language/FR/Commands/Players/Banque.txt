@@ -1,3 +1,16 @@
-Commands.Players.Banque.Description:	Pour récupérer de l'argent à la banque.
-Commands.Players.Banque.Usage:			/banque <Cuivre> <Argent> <Or> <Platine>
+Commands.Players.Banque.Description:			Pour récupérer de l'argent à la banque.
+Commands.Players.Banque.Usage:					/banque <Cuivre> <Argent> <Or> <Platine>
 Commands.Players.Banque.Usage.Cheque:			/banque cheque <Cuivre> <Argent> <Or> <Platine>
+
+Banque.Cheque.NoAccount:						Vous n'avez pas de compte, vous ne pouvez donc pas faire de chèque !
+Banque.Cheque.MaxValue:							Vous pouvez faire un chèque de maximum 100 platines !
+Banque.Cheque.NoMoney:							Vous n'avez pas assez d'argent à la banque !
+Banque.Cheque.Description1:						Ce chèque peut être échangé contre la somme de " {0} " au banquier.
+Banque.Cheque.Description2:						Attention: la vente du chèque ne vous donnerait que la moitié de sa valeur !
+Banque.Cheque.Name:								Chèque de {0}
+Banque.Cheque.InventoryFull:					Vous n'avez pas assez de place dans votre sac et dans votre coffre pour le chèque !
+Banque.Cheque.MovedToVault:						Vous n'avez plus de place dans votre sac, j'ai donné le chèque au gardien des coffres.
+Banque.AccountOverview:							Vous avez maintenant " {0} " dans votre compte.
+Banque.Withdraw.NoAccount:						Vous n'avez pas de compte, vous ne pouvez donc pas récupérer d'argent !
+Banque.Withdraw.NoMoney:						Vous n'avez pas assez d'argent à la banque !
+Banque.Withdraw.SelectNPC:						Vous devez sélectionner un banquier pour récupérer de l'argent !

@@ -68,7 +68,7 @@ namespace Amte
             var player = source as GamePlayer;
             if (!base.WhisperReceive(source, text) || player == null)
                 return false;
-            if (text != "prendre le contrôle")
+            if (text != "prendre le contrôle" && text != "seize control")
                 return true;
             if (player.InCombat)
             {

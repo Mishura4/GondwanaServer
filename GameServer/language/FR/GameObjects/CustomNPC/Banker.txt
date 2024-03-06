@@ -1,5 +1,25 @@
+Banker.AccountCreate:			Vous venez de créer un compte à la banque.
+Banker.DontHaveAmount:			Vous n'avez pas cette somme sur vous !
+Banker.Mithril:					{0} Mithril
+Banker.Platinum:				{0} Platine
+Banker.Gold:					{0} Gold
+Banker.Silver:					{0} Argent
+Banker.Copper:					{0} Cuivre
 Banker.InteractOutlaw:			Je ne traite pas avec les hors-la-loi !
 Banker.InteractText01:			Bonjour, vous n'avez pas encore de compte.
 Banker.InteractText02:			Pour créer un compte il suffit de me donner de l'argent ou un chèque, le compte sera créé automatiquement !
-Banker.Nomoney:				Vous n'avez pas d'argent dans votre compte.
-Banker.Moneyamount:			Vous avez {0} dans votre compte.
+Banker.Nomoney:					Vous n'avez pas d'argent dans votre compte.
+Banker.Moneyamount:				Vous avez {0} dans votre compte.
+Banker.Greetings1:				Bonjour {0} , vous avez
+Banker.Greetings2:				sur votre compte.
+Banker.Greetings3:				Que voulez-vous faire ?
+Banker.Greetings4:				[retirer de l'argent]
+Banker.Greetings5:				[faire un chèque]
+Banker.Greetings6:				[encaisser un chèque]
+Banker.HowMuchWithdraw:			Combien voulez-vous retirer ?
+Banker.WithdrawAmount:			[La totalité] [quelques pièces]
+Banker.NoAccountYet1:			Bonjour, vous n'avez pas encore de compte.
+Banker.NoAccountYet2:			Pour créer un compte il suffit de me donner de l'argent, le compte sera créé automatiquement !
+Banker.WithdrawSomeCoins:		Pour retirer quelques pièces, il suffit de me sélectionner et de taper la commande /banque.
+Banker.WriteCheck:				Pour faire un chèque, il suffit de me sélectionner et de taper la commande /banque cheque.
+Banker.CashCheck:				Pour encaisser un chèque, il suffit de me le donner.

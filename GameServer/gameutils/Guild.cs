@@ -658,21 +658,21 @@ namespace DOL.GS
                     {
                         string msg = LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.LevelUp", Name, newLevel);
                         player.Out.SendMessage(msg, eChatType.CT_ScreenCenter, eChatLoc.CL_SystemWindow);
-                        player.Out.SendMessage(msg, eChatType.CT_Guild, eChatLoc.CL_ChatWindow);
+                        player.Out.SendMessage(msg, eChatType.CT_Guild, eChatLoc.CL_PopupWindow);
                         if (newCommands != null)
                         {
                             if (newLevel is 1 or 7)
                             {
-                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.CommandsAvailable", newCommands), eChatType.CT_Guild, eChatLoc.CL_ChatWindow);
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.CommandsAvailable", newCommands), eChatType.CT_Guild, eChatLoc.CL_PopupWindow);
                             }
                             else
                             {
-                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.CommandAvailable", newCommands), eChatType.CT_Guild, eChatLoc.CL_ChatWindow);
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.CommandAvailable", newCommands), eChatType.CT_Guild, eChatLoc.CL_PopupWindow);
                             }
                         }
                         if (Properties.GUILD_NEW_DUES_SYSTEM)
                         {
-                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MaxDuesAvailable", newLevel * 5), eChatType.CT_Guild, eChatLoc.CL_ChatWindow);
+                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MaxDuesAvailable", newLevel * 5), eChatType.CT_Guild, eChatLoc.CL_PopupWindow);
                         }
                     }
 

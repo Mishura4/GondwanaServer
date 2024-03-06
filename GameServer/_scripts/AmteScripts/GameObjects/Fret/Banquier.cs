@@ -31,7 +31,7 @@ namespace DOL.GS.Scripts
             DBBanque bank = GameServer.Database.FindObjectByKey<DBBanque>(player.InternalID);
             if (bank == null)
             {
-                player.Out.SendMessage("Vous venez de créer un compte à la banque.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.AccountCreate"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 bank = new DBBanque(player.InternalID);
                 GameServer.Database.AddObject(bank);
             }
@@ -40,7 +40,7 @@ namespace DOL.GS.Scripts
             {
                 if (!player.RemoveMoney(Currency.Copper.Mint(money)))
                 {
-                    player.Out.SendMessage("Vous n'avez pas cette somme sur vous !", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.DontHaveAmount"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                     return false;
                 }
                 InventoryLogging.LogInventoryAction(source, this, eInventoryActionType.Other, money);
@@ -51,15 +51,15 @@ namespace DOL.GS.Scripts
 
             string message = "";
             if (Money.GetMithril(bank.Money) != 0)
-                message += Money.GetMithril(bank.Money) + "M ";
+                message += LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.Mithril", Money.GetMithril(bank.Money)) + " ";
             if (Money.GetPlatinum(bank.Money) != 0)
-                message += Money.GetPlatinum(bank.Money) + "P ";
+                message += LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.Platinum", Money.GetPlatinum(bank.Money)) + " ";
             if (Money.GetGold(bank.Money) != 0)
-                message += Money.GetGold(bank.Money) + "O ";
+                message += LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.Gold", Money.GetGold(bank.Money)) + " ";
             if (Money.GetSilver(bank.Money) != 0)
-                message += Money.GetSilver(bank.Money) + "A ";
+                message += LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.Silver", Money.GetSilver(bank.Money)) + " ";
             if (Money.GetCopper(bank.Money) != 0)
-                message += Money.GetCopper(bank.Money) + "C ";
+                message += LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.Copper", Money.GetCopper(bank.Money)) + " ";
 
             if (message != "")
                 message += LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.Moneyamount", message);
@@ -110,19 +110,19 @@ namespace DOL.GS.Scripts
                 return true;
             }
 
-            string message = "Bonjour " + player.Name + ", vous avez ";
+            string message = LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.Greetings1", player.Name) + " ";
             if (Money.GetMithril(bank.Money) != 0)
-                message += Money.GetMithril(bank.Money) + "M ";
+                message += LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.Mithril", Money.GetMithril(bank.Money)) + " ";
             if (Money.GetPlatinum(bank.Money) != 0)
-                message += Money.GetPlatinum(bank.Money) + "P ";
+                message += LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.Platinum", Money.GetPlatinum(bank.Money)) + " ";
             if (Money.GetGold(bank.Money) != 0)
-                message += Money.GetGold(bank.Money) + "O ";
+                message += LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.Gold", Money.GetGold(bank.Money)) + " ";
             if (Money.GetSilver(bank.Money) != 0)
-                message += Money.GetSilver(bank.Money) + "A ";
+                message += LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.Silver", Money.GetSilver(bank.Money)) + " ";
             if (Money.GetCopper(bank.Money) != 0)
-                message += Money.GetCopper(bank.Money) + "C ";
-            message += "sur votre compte.\r\n";
-            message += "Que voulez-vous faire ?\n\n[retirer de l'argent]\n[faire un chèque]\n[encaisser un chèque]";
+                message += LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.Copper", Money.GetCopper(bank.Money)) + " ";
+            message += LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.Greetings2") + "\r\n";
+            message += LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.Greetings3") + "\n\n" + LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.Greetings4") + "\n" + LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.Greetings5") + "\n" + LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.Greetings6");
             player.Out.SendMessage(message, eChatType.CT_System, eChatLoc.CL_PopupWindow);
             return true;
         }
@@ -144,30 +144,31 @@ namespace DOL.GS.Scripts
             DBBanque bank = GameServer.Database.FindObjectByKey<DBBanque>(player.InternalID);
             if (bank == null)
             {
-                player.Out.SendMessage("Bonjour, vous n'avez pas encore de compte.\r\nPour créer un compte il suffit de me donner de l'argent, le compte sera créé automatiquement !", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.NoAccountYet1") + "\r\n" + LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.NoAccountYet2"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 return true;
             }
 
             switch (str.ToLower())
             {
                 case "retirer de l'argent":
-                    player.Out.SendMessage("Combien voulez-vous retirer ?\r\n[La totalité] [quelques pièces]", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                case "withdraw money":
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.HowMuchWithdraw") + "\r\n" + LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.WithdrawAmount"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                     break;
                 case "la totalité":
-                case "la totalite":
+                case "everything":
                     WithdrawMoney(bank, player, bank.Money);
                     break;
                 case "quelques pièces":
-                case "quelques pieces":
-                    player.Out.SendMessage("Pour retirer quelques pièces, il suffit de me sélectionner et de taper la commande /banque.", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                case "some coins":
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.WithdrawSomeCoins"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                     break;
                 case "faire un chèque":
-                case "faire un cheque":
-                    player.Out.SendMessage("Pour faire un chèque, il suffit de me sélectionner et de taper la commande /banque cheque.", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                case "write a check":
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.WriteCheck"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                     break;
                 case "encaisser un chèque":
-                case "encaisser un cheque":
-                    player.Out.SendMessage("Pour encaisser un chèque, il suffit de me le donner.", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                case "cash a check":
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.CashCheck"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                     break;
             }
             return true;

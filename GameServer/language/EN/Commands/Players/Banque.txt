@@ -1,3 +1,16 @@
 Commands.Players.Banque.Description:	To do some operations with your banker.
 Commands.Players.Banque.Usage:			/banque <Copper> <Silver> <Gold> <Platinum>' Add money in your bank account
 Commands.Players.Banque.Usage.Cheque:			/banque cheque <Copper> <Silver> <Gold> <Platinum>' Write a check
+
+Banque.Cheque.NoAccount:						You don't have an account, so you can't write a check!
+Banque.Cheque.MaxValue:							You can write a check for a maximum value of 100 platinum!
+Banque.Cheque.NoMoney:							You don't have enough money in the bank!
+Banque.Cheque.Description1:						This check can be exchanged for the sum of "{0}" with a banker.
+Banque.Cheque.Description2:						Warning: selling the check would only give you half its value!
+Banque.Cheque.Name:								Check of {0}
+Banque.Cheque.InventoryFull:					You don't have enough space in your bag and in your vault to get a check!
+Banque.Cheque.MovedToVault:						You have no more space in your bag, I gave the check to the vault keeper.
+Banque.AccountOverview:							You now have "{0}" in your account.
+Banque.Withdraw.NoAccount:						You don't have an account, so you can't get any money back!
+Banque.Withdraw.NoMoney:						You don't have enough money in the bank!
+Banque.Withdraw.SelectNPC:						You must select a banker to collect money!
