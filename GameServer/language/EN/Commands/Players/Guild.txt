@@ -216,7 +216,7 @@ Commands.Players.Guild.OMotdSet:				The officers' message is now updated.
 Commands.Players.Guild.PlayerNotFound:			This player is not online or is in another realm.
 Commands.Players.Guild.PromotedOther:			{0} has been promoted to rank {1}.
 Commands.Players.Guild.PromotedSelf:			You are promoted to rank {0}.
-Commands.Players.Guild.Promote
+Commands.Players.Guild.PromoteHigherThanPlayer:	You can only promote a player below your rank.
 Commands.Players.Guild.PromoteHaveToUseDemote:	You cannot downgrade this player's rank with the promote command. Use '/gc demote player <rank#>'.
 Commands.Players.Guild.Purged:					{0} has been purged.
 Commands.Players.Guild.SetEnabled:				enabled
@@ -451,8 +451,7 @@ Scripts.Player.Guild.NotInYourGuild:			That player is not in your guild.
 Scripts.Player.Guild.NotMember:				You must be in a guild before you can use any guild commands.	
 Scripts.Player.Guild.OMotdSet:				You have set the officer motd for the guild.	
 Scripts.Player.Guild.PlayerNotFound:			That player could not be found in the game.	
-Scripts.Player.Guild.PromotedOther:			{0} has been promoted to {1}.	
-Scripts.Player.Guild.PromotedSelf:			You have been promoted to {0}.	
+Scripts.Player.Guild.PromotedOther:			{0} has been promoted to {1}.
 Scripts.Player.Guild.PromoteHaveToUseDemote:	You can't demote the GuildRank of this players with promote commands. Use /demote <ranklevel> players.
 Scripts.Player.Guild.Purged:				{0} has been purged.		
 Scripts.Player.Guild.ThirdArgNotNum:			The third argument must be a number.	
