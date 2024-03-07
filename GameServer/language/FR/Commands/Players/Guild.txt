@@ -125,8 +125,9 @@ Commands.Players.Guild.Help.GuildEditTitle:		'/gc edit <rang#> title <text>' # 
 Commands.Players.Guild.Help.GuildEditUpgrade:		'/gc edit <rang#> upgrade <y|n>' # Permet au chef de guilde d'accorder à un rang la possibilité d'intégrer ou quitter une alliance.
 Commands.Players.Guild.Help.GuildEditView:		'/gc edit <rang#> view <y|n>' # Permet au rang choisi de pouvoir voir les membres de l'alliance.
 Commands.Players.Guild.Help.GuildEditWithdraw:	'/gc edit <rang#> withdraw <y|n>' # Permet de donner l'autorisation de retirer les fonds de votre caisse de guilde.
+Commands.Players.Guild.Help.GuildEditVault:		'/gc edit <rang#> vault <banque#> <view|deposit|withdraw> <y|n>' # Permet de régler l'accès d'un rang à la banque de guilde.
 Commands.Players.Guild.Help.GuildEditBuyBanner:	'/gc edit <rang#> buybanner <y|n>' # Permet de donner l'autorisation d'acheter une bannière de guilde.
-Commands.Players.Guild.Help.GuildEditSummon:	'/gc edit <rang#> withdraw <y|n>' # Permet de donner l'autorisation d'invoquer la bannière de guilde.
+Commands.Players.Guild.Help.GuildEditSummon:	'/gc edit <rang#> summon <y|n>' # Permet de donner l'autorisation d'invoquer la bannière de guilde.
 Commands.Players.Guild.Help.GuildEmail:			'/gc email <contact@guildpage.com>' # Affiche l'adresse internet des contacts au sein de la guilde.
 Commands.Players.Guild.Help.GuildEmblem:			'/gc emblem' # Présentation de l'emblème.
 Commands.Players.Guild.Help.TerritoryBanner:			'/gc territorybanner' # Permet de montrer sa bannière de guilde dans un territoire conquis, réduit les coûts d'entretien du territoire, et améliore sa défense.
@@ -241,6 +242,9 @@ Commands.Players.Guild.RankTitleSet:			Vous avez {0} pour changer les titres de 
 Commands.Players.Guild.RankUpgradeSet:			Vous avez {0} les mise à jour des forts au rang {1}.
 Commands.Players.Guild.RankViewSet:				Vous avez {0} l'apperçu de la guilde au rang {1}.
 Commands.Players.Guild.RankWithdrawSet:			Vous avez {0} la caisse de guilde au rang {1}.
+Commands.Players.Guild.RankVaultViewSet:		Vous avez {0} le droit de voir la banque #{1} au rang {2}.
+Commands.Players.Guild.RankVaultDepositSet:		Vous avez {0} le droit de déposer dans la banque #{1} au rang {2}.
+Commands.Players.Guild.RankVaultWithdrawSet:	Vous avez {0} le droit de retirer de la banque #{1} au rang {2}.
 Commands.Players.Guild.RankBuyBannerSet:		Vous avez {0} l'achat de bannière au rang {1}.
 Commands.Players.Guild.RankSummonSet:			Vous avez {0} l'invocation de bannière au rang {1}.
 Commands.Players.Guild.Rank.ErrorChanging:      Erreur durant le changement de rang.

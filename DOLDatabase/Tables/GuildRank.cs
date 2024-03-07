@@ -53,6 +53,7 @@ namespace DOL.Database
         private bool m_withdraw;
         private bool m_buybanner;
         private bool m_summon;
+        private int m_vaultflags;
 
         /// <summary>
         /// create rank rules
@@ -76,6 +77,7 @@ namespace DOL.Database
             m_buff = false;
             m_dues = false;
             m_withdraw = false;
+            m_vaultflags = 0;
         }
 
         /// <summary>
@@ -455,6 +457,95 @@ namespace DOL.Database
                 Dirty = true;
                 m_summon = value;
             }
+        }
+
+        /// <summary>
+        /// Vault flags
+        /// </summary>
+        [DataElement(AllowDbNull = false)]
+        public int VaultFlags
+        {
+            get
+            {
+                return m_vaultflags;
+            }
+            set
+            {
+                Dirty = true;
+                m_vaultflags = value;
+            }
+        }
+
+        public bool CanViewVault(int vault)
+        {
+            if (vault is < 0 or > 8)
+            {
+                return false;
+            }
+            if (RankLevel == 0)
+            {
+                return true;
+            }
+            int bit = (vault * 4);
+            return (VaultFlags & (1 << bit)) != 0;
+        }
+
+        public bool CanDepositInVault(int vault)
+        {
+            if (vault is < 0 or > 8)
+            {
+                return false;
+            }
+            if (RankLevel == 0)
+            {
+                return true;
+            }
+            int bit = (vault * 4) + 1;
+            return (VaultFlags & (1 << bit)) != 0;
+        }
+
+        public bool CanWithdrawFromVault(int vault)
+        {
+            if (vault is < 0 or > 8)
+            {
+                return false;
+            }
+            if (RankLevel == 0)
+            {
+                return true;
+            }
+            int bit = (vault * 4) + 2;
+            return (VaultFlags & (1 << bit)) != 0;
+        }
+
+        public void SetViewVault(int vault, bool value)
+        {
+            if (vault is < 0 or > 8)
+            {
+                return;
+            }
+            int bit = (vault * 4);
+            VaultFlags = value ? VaultFlags | (1 << bit) : VaultFlags & ~(1 << bit);
+        }
+
+        public void SetDepositInVault(int vault, bool value)
+        {
+            if (vault is < 0 or > 8)
+            {
+                return;
+            }
+            int bit = (vault * 4) + 1;
+            VaultFlags = value ? VaultFlags | (1 << bit) : VaultFlags & ~(1 << bit);
+        }
+
+        public void SetWithdrawFromVault(int vault, bool value)
+        {
+            if (vault is < 0 or > 8)
+            {
+                return;
+            }
+            int bit = (vault * 4) + 2;
+            VaultFlags = value ? VaultFlags | (1 << bit) : VaultFlags & ~(1 << bit);
         }
     }
 }

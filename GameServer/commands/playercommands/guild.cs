@@ -3598,16 +3598,32 @@ namespace DOL.GS.Commands
             }
 
             bool reponse = true;
+            int vault = 0;
             if (args.Length > 4)
             {
-                if (args[4].StartsWith("y"))
-                    reponse = true;
-                else if (args[4].StartsWith("n"))
-                    reponse = false;
-                else if (args[3] != "title" && args[3] != "ranklevel")
+                if (args[3] == "vault")
                 {
-                    DisplayEditHelp(client);
-                    return 1;
+                    if (args.Length < 7 || !Int32.TryParse(args[4], out vault) || vault <= 0 || vault > GuildVault.NUM_VAULTS)
+                    {
+                        DisplayEditHelp(client);
+                        return 1;
+                    }
+                    if (args[6].StartsWith('y'))
+                        reponse = true;
+                    else if (args[6].StartsWith('n'))
+                        reponse = false;
+                }
+                else
+                {
+                    if (args[4].StartsWith("y"))
+                        reponse = true;
+                    else if (args[4].StartsWith("n"))
+                        reponse = false;
+                    else if (args[3] is not ("title" or "ranklevel"))
+                    {
+                        DisplayEditHelp(client);
+                        return 1;
+                    }
                 }
             }
             string status = reponse ? "Commands.Players.Guild.SetEnabled" : "Commands.Players.Guild.SetDisabled";
@@ -3773,6 +3789,41 @@ namespace DOL.GS.Commands
                     {
                         client.Player.Guild.GetRankByID(number).Summon = reponse;
                         client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankSummonSet", LanguageMgr.GetTranslation(client.Account.Language, status), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                    }
+                    break;
+                case "vault":
+                    {
+                        if (vault is < 1 or > 3)
+                        {
+                            DisplayEditHelp(client);
+                            return 1;
+                        }
+                        switch (args[5])
+                        {
+                            case "view":
+                                {
+                                    client.Player.Guild.GetRankByID(number).SetViewVault(vault - 1, reponse);
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankVaultViewSet", LanguageMgr.GetTranslation(client.Account.Language, status), vault, number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                                }
+                                break;
+                            case "deposit":
+                                {
+                                    client.Player.Guild.GetRankByID(number).SetDepositInVault(vault - 1, reponse);
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankVaultDepositSet", LanguageMgr.GetTranslation(client.Account.Language, status), vault, number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                                }
+                                break;
+                            case "withdraw":
+                                {
+                                    client.Player.Guild.GetRankByID(number).SetWithdrawFromVault(vault - 1, reponse);
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankVaultWithdrawSet", LanguageMgr.GetTranslation(client.Account.Language, status), vault, number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                                }
+                                break;
+                            default:
+                                {
+                                    DisplayEditHelp(client);
+                                    return 0;
+                                }
+                        }
                     }
                     break;
                 default:
@@ -3971,6 +4022,7 @@ namespace DOL.GS.Commands
             client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.CombatZone"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
             client.Out.SendMessage("/gc edit <ranknum> buff <y/n>", eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
             client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditWithdraw"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditVault"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
             client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditBuyBanner"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
             client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditSummon"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
         }

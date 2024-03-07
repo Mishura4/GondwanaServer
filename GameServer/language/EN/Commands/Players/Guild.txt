@@ -125,6 +125,7 @@ Commands.Players.Guild.Help.GuildEditTitle:		'/gc edit <rank#> title <text>' # 
 Commands.Players.Guild.Help.GuildEditUpgrade:		'/gc edit <rank#> upgrade <y|n>' # Allows the guild leader to grant to a rank the ability to join or leave an alliance.
 Commands.Players.Guild.Help.GuildEditView:		'/gc edit <rank#> view <y|n>' # Allows a selected rank to be able to see the members of the alliance.
 Commands.Players.Guild.Help.GuildEditWithdraw:	'/gc edit <rank#> withdraw <y|n>' # Allows a rank to be able to withdraw funds from your guild bank.
+Commands.Players.Guild.Help.GuildEditVault:		'/gc edit <rank#> vault <vault#> <view|withdraw|deposit> <y|n>' # Controls the access of a rank to guild vaults.
 Commands.Players.Guild.Help.GuildEditBuyBanner:	'/gc edit <rank#> buybanner <y|n>' # Allows a rank to be able to buy a guild banner.
 Commands.Players.Guild.Help.GuildEditSummon:	'/gc edit <rank#> summon <y|n>' # Allows a rank to be able to summon the guild banner.
 Commands.Players.Guild.Help.GuildEmail:			'/gc email <contact@guildpage.com>' # Displays the web address of contacts within the guild.
@@ -241,6 +242,9 @@ Commands.Players.Guild.RankTitleSet:			You have {0} access to change guild rank 
 Commands.Players.Guild.RankUpgradeSet:			You have {0} access to keeps updates at rank {1}.
 Commands.Players.Guild.RankViewSet:				You have {0} access to the guild overview at rank {1}.
 Commands.Players.Guild.RankWithdrawSet:			You have {0} access to the guild's bank at rank {1}.
+Commands.Players.Guild.RankVaultViewSet:		You have {0} the right to view the vault #{1} at rank {2}.
+Commands.Players.Guild.RankVaultDepositSet:		You have {0} the right to deposit to the vault #{1} at rank {2}.
+Commands.Players.Guild.RankVaultWithdrawSet:	You have {0} the right to withdraw from the vault #{1} at rank {2}.
 Commands.Players.Guild.RankBuyBannerSet:		You have {0} buying a guild banner at rank {1}.
 Commands.Players.Guild.RankSummonSet:			You have {0} summoning the guild banner at rank {1}.
 Commands.Players.Guild.Rank.ErrorChanging:      Error while charging the rank.

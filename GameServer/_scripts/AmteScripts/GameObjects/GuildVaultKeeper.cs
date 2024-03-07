@@ -15,19 +15,7 @@ namespace DOL.GS
             if (!base.Interact(player))
                 return false;
 
-            /*if (player.HCFlag)
-            {
-                SayTo(player,$"I'm sorry {player.Name}, my vault is not Hardcore enough for you.");
-                return false;
-            }*/
-
-            // if (player.Level <= 1)
-            // {
-            //     SayTo(player,$"I'm sorry {player.Name}, come back if you are venerable to use my services.");
-            //     return false;
-            // }
-
-            if (player.Guild == null)
+            if (player.Guild == null || player.GuildRank == null)
             {
                 player.Out.SendMessage($"I'm sorry {player.Name}, I cannot do anything for you without a guild.", eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                 return true;
@@ -39,15 +27,64 @@ namespace DOL.GS
                 return true;
             }
 
-            string message = $"Greetings {player.Name}, nice meeting you.\n";
+            string message;
+            ItemTemplate vaultItem;
+            GuildVault vault;
 
-            message += "I am happy to offer you my services.\n\n";
-
-            message += "You can browse the [first], [second] or [third] page of " + player.Guild.Name + "'s vault.";
+            if (player.GuildRank.CanViewVault(0))
+            {
+                vaultItem = GetDummyVaultItem(player);
+                vault = new GuildVault(player, 0, vaultItem);
+                message = $"Greetings {player.Name}, nice meeting you.\nI am happy to offer you my services.\n\n";
+                if (player.GuildRank.CanViewVault(1))
+                {
+                    if (player.GuildRank.CanViewVault(2))
+                    {
+                        message += "You can browse the [first], [second] or [third] page of " + player.Guild.Name + "'s vault.";
+                    }
+                    else
+                    {
+                        message += "You can browse the [first] or [second] page of " + player.Guild.Name + "'s vault.";
+                    }
+                }
+                else
+                {
+                    if (player.GuildRank.CanViewVault(2))
+                    {
+                        message += "You can browse the [first] or [third] page of " + player.Guild.Name + "'s vault.";
+                    }
+                    else
+                    {
+                        message += "You can browse the [first] page of " + player.Guild.Name + "'s vault.";
+                    }
+                }
+            }
+            else if (player.GuildRank.CanViewVault(1))
+            {
+                vaultItem = GetDummyVaultItem(player);
+                vault = new GuildVault(player, 1, vaultItem);
+                message = $"Greetings {player.Name}, nice meeting you.\nI am happy to offer you my services.\n\n";
+                if (player.GuildRank.CanViewVault(2))
+                {
+                    message += "You can browse the [second] or [third] page of " + player.Guild.Name + "'s vault.";
+                }
+                else
+                {
+                    message += "You can browse the [second] page of " + player.Guild.Name + "'s vault.";
+                }
+            }
+            else if (player.GuildRank.CanViewVault(2))
+            {
+                vaultItem = GetDummyVaultItem(player);
+                vault = new GuildVault(player, 2, vaultItem);
+                message = $"Greetings {player.Name}, nice meeting you.\nI am happy to offer you my services.\n\nYou can browse the [third] page of {player.Guild.Name}'s vault.";
+            }
+            else
+            {
+                player.Out.SendMessage($"Sorry {player.Name}, you do not have permission to access the guild vaults.", eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                return true;
+            }
             player.Out.SendMessage(message, eChatType.CT_Say, eChatLoc.CL_PopupWindow);
-
-            ItemTemplate vaultItem = GetDummyVaultItem(player);
-            GuildVault vault = new GuildVault(player, 0, vaultItem);
             player.ActiveInventoryObject = vault;
             player.Out.SendInventoryItemsUpdate(vault.GetClientInventory(player), eInventoryWindowType.HouseVault);
             return true;
@@ -123,6 +160,8 @@ namespace DOL.GS
     {
         private readonly int m_vaultNumber = 0;
 
+        public const int NUM_VAULTS = 3;
+
         public Guild Guild { get; init; }
 
         /// <summary>
@@ -138,6 +177,30 @@ namespace DOL.GS
             Guild = player.Guild;
             m_vaultNumber = vaultNumber;
             Name = (player.Guild?.Name ?? "unknown") + "'s Vault";
+        }
+
+        /// <inheritdoc />
+        public override bool CanView(GamePlayer player)
+        {
+            if (player.Guild != Guild || player.GuildRank == null)
+                return false;
+            return player.GuildRank.CanViewVault(m_vaultNumber);
+        }
+
+        /// <inheritdoc />
+        public override bool CanAddItem(GamePlayer player, InventoryItem item)
+        {
+            if (player.Guild != Guild || player.GuildRank == null)
+                return false;
+            return player.GuildRank.CanDepositInVault(m_vaultNumber);
+        }
+
+        /// <inheritdoc />
+        public override bool CanRemoveItem(GamePlayer player, InventoryItem item)
+        {
+            if (player.Guild != Guild || player.GuildRank == null)
+                return false;
+            return player.GuildRank.CanWithdrawFromVault(m_vaultNumber);
         }
 
         public override string GetOwner(GamePlayer player)
