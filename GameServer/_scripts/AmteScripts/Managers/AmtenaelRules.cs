@@ -25,7 +25,7 @@ namespace DOL.GS.ServerRules
         public static ushort HousingRegionID = 202;
         public static ushort[] UnsafeRegions = new ushort[] { 181 };
 
-        private readonly List<ushort> BannerDisabledRegionIDs = new List<ushort>();
+        private static readonly List<ushort> BannerDisabledRegionIDs = new List<ushort>();
 
         /// <summary>
         /// Holds the delegate called when PvE invulnerability is expired
