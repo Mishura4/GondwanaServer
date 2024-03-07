@@ -138,7 +138,7 @@ namespace DOL.GS
                 {
                     if (!inventory.ContainsKey(item.SlotPosition + slotOffset))
                     {
-                        inventory.Add(item.SlotPosition + slotOffset, item);
+                        inventory.Add(item.SlotPosition + slotOffset, GameInventoryItem.Create(item) ?? item);
                     }
                     else
                     {

@@ -67,28 +67,6 @@ namespace DOL.GS
             }
         }
 
-        public override Dictionary<int, InventoryItem> GetClientInventory(GamePlayer player)
-        {
-            var items = new Dictionary<int, InventoryItem>();
-            int slotOffset = -FirstDBSlot + (int)(eInventorySlot.HousingInventory_First);
-            foreach (InventoryItem item in DBItems(player))
-            {
-                if (item != null)
-                {
-                    if (!items.ContainsKey(item.SlotPosition + slotOffset))
-                    {
-                        items.Add(item.SlotPosition + slotOffset, item);
-                    }
-                    else
-                    {
-                       log.ErrorFormat("GAMECUSTOMVAULT: Duplicate item {0}, owner {1}, position {2}", item.Name, item.OwnerID, (item.SlotPosition + slotOffset));
-                    }
-                }
-            }
-
-            return items;
-        }
-
         /// <summary>
         /// Move an item from, to or inside a house vault.  From IGameInventoryObject
         /// </summary>
