@@ -88,7 +88,7 @@ namespace DOL.GS
             //Prevent exploit shift+clicking quiver exploit
             if (fromVault)
             {
-                if (fromSlot < (ushort)eInventorySlot.HousingInventory_First || fromSlot > (ushort) eInventorySlot.HousingInventory_Last) return false;
+                if (!IsVaultInventorySlot(fromSlot)) return false;
             }
 
             GameVault gameVault = player.ActiveInventoryObject as GameVault;
@@ -100,10 +100,11 @@ namespace DOL.GS
 
             InventoryItem itemInToSlot = null;
             InventoryItem itemInFromSlot = null;
+            var myInventory = GetClientInventory(player);
 
             if (toVault)
             {
-                itemInToSlot = player.Inventory.GetItem((eInventorySlot)toSlot);
+                myInventory.TryGetValue(toSlot, out itemInToSlot);
                 if (itemInToSlot != null)
                 {
                     if (!gameVault.CanRemoveItem(player, itemInToSlot))
@@ -118,15 +119,23 @@ namespace DOL.GS
                     return false;
                 }
             }
+            else
+            {
+                itemInToSlot = player.Inventory.GetItem((eInventorySlot)toSlot);
+            }
 
             if (fromVault)
             {
-                itemInFromSlot = player.Inventory.GetItem((eInventorySlot)fromSlot);
+                myInventory.TryGetValue(toSlot, out itemInFromSlot);
                 if (!gameVault.CanRemoveItem(player, player.Inventory.GetItem((eInventorySlot)fromSlot)))
                 {
                     player.Out.SendMessage("You don't have permission to remove items!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     return false;
                 }
+            }
+            else
+            {
+                itemInFromSlot = player.Inventory.GetItem((eInventorySlot)fromSlot);
             }
 
             // Check for a swap to get around not allowing non-tradables in a housing vault - Tolakram
