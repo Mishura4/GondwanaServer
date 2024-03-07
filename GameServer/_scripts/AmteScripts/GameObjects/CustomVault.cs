@@ -94,7 +94,7 @@ namespace DOL.GS
             GameVault gameVault = player.ActiveInventoryObject as GameVault;
             if (gameVault == null)
             {
-                player.Out.SendMessage("You are not actively viewing a vault!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                player.SendTranslatedMessage("GameUtils.CustomVault.NoVault", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return false;
             }
 
@@ -109,13 +109,13 @@ namespace DOL.GS
                 {
                     if (!gameVault.CanRemoveItem(player, itemInToSlot))
                     {
-                        player.Out.SendMessage("You don't have permission to remove this item!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        player.SendTranslatedMessage(fromVault ? "GameUtils.CustomVault.NoMove" : "GameUtils.CustomVault.NoRemove", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                         return false;
                     }
                 }
                 if (!gameVault.CanAddItem(player, player.Inventory.GetItem((eInventorySlot)fromSlot)))
                 {
-                    player.Out.SendMessage("You don't have permission to add items!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    player.SendTranslatedMessage(fromVault ? "GameUtils.CustomVault.NoMove" : "GameUtils.CustomVault.NoAdd", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     return false;
                 }
             }
@@ -129,7 +129,7 @@ namespace DOL.GS
                 myInventory.TryGetValue(toSlot, out itemInFromSlot);
                 if (!gameVault.CanRemoveItem(player, player.Inventory.GetItem((eInventorySlot)fromSlot)))
                 {
-                    player.Out.SendMessage("You don't have permission to remove items!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    player.SendTranslatedMessage("GameUtils.CustomVault.NoRemove", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     return false;
                 }
             }
@@ -141,7 +141,7 @@ namespace DOL.GS
             // Check for a swap to get around not allowing non-tradables in a housing vault - Tolakram
             if (fromVault && itemInToSlot is { IsTradable: false })
             {
-                player.Out.SendMessage("You cannot swap with an untradable item!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                player.SendTranslatedMessage("GameUtils.CustomVault.ItemSwapUntradeable", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 //log.DebugFormat("GameVault: {0} attempted to swap untradable item {2} with {1}", player.Name, itemInFromSlot.Name, itemInToSlot.Name);
                 return false;
             }
@@ -152,7 +152,7 @@ namespace DOL.GS
             {
                 /* DOL: if (itemInFromSlot.Id_nb != ServerProperties.Properties.ALT_CURRENCY_ID) */
                 {
-                    player.Out.SendMessage("You can not put this item into a Vault!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    player.SendTranslatedMessage("GameUtils.CustomVault.ItemUntradeable", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     return false;
                 }
             }

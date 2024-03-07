@@ -225,7 +225,7 @@ namespace DOL.GS.Scripts
             StorageBagVault gameVault = player.ActiveInventoryObject as StorageBagVault;
             if (gameVault == null)
             {
-                player.Out.SendMessage("You are not actively viewing a bag!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                player.SendTranslatedMessage("Items.Specialitems.StorageBag.NoBag", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 player.Out.SendInventoryItemsUpdate(null);
                 return false;
             }
@@ -234,7 +234,7 @@ namespace DOL.GS.Scripts
             {
                 if (!gameVault.CanAddItem(player, player.Inventory.GetItem((eInventorySlot)fromSlot)))
                 {
-                    player.Out.SendMessage("You cannot put this item in this bag!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    player.SendTranslatedMessage("Items.Specialitems.StorageBag.BadItem", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     return false;
                 }
             }

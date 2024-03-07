@@ -28,3 +28,6 @@ Items.Specialitems.MiniPetNoCast:					You cannot cast this spell here!
 
 Items.Specialitems.FirecampNoSit:					Do not sit close to a bonfire to remove this effect.
 Items.Specialitems.FirecampHeatRegen:				The warmth of the bonfire allows you to recover your health faster.
+
+Items.Specialitems.StorageBag.NoBag:				You are not viewing a bag!
+Items.Specialitems.StorageBag.BadItem:				You cannot put this item in this bag!

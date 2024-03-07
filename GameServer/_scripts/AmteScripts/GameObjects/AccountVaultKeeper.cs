@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using DOL.Database;
 using DOL.GS.Housing;
 using DOL.GS.PacketHandler;
+using DOL.Language;
 
 namespace DOL.GS
 {
@@ -26,11 +27,8 @@ namespace DOL.GS
             //     return false;
             // }
 
-            string message = $"Greetings {player.Name}, nice meeting you.\n";
-
-            message += "I am happy to offer you my services.\n\n";
-
-            message += "You can browse the [first] or [second] page of your Account Vault.";
+            string message = LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.AccountVault.Keeper.Greetings", player.Name) + "\n\n";
+            message += LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.AccountVault.Keeper.Access");
             player.Out.SendMessage(message, eChatType.CT_Say, eChatLoc.CL_PopupWindow);
 
             ItemTemplate vaultItem = GetDummyVaultItem(player);
@@ -50,13 +48,13 @@ namespace DOL.GS
             if (player == null)
                 return false;
 
-            if (text == "first")
+            if (text is ("first" or "première"))
             {
                 AccountVault vault = new AccountVault(player, 0, GetDummyVaultItem(player));
                 player.ActiveInventoryObject = vault;
                 player.Out.SendInventoryItemsUpdate(vault.GetClientInventory(player), eInventoryWindowType.HouseVault);
             }
-            else if (text == "second")
+            else if (text is ("second" or "troisième"))
             {
                 AccountVault vault = new AccountVault(player, 1, GetDummyVaultItem(player));
                 player.ActiveInventoryObject = vault;
@@ -107,7 +105,7 @@ namespace DOL.GS
             : base(player, player.Client.Account.Name + "_" + player.Realm.ToString(), vaultNumber, dummyTemplate)
         {
             m_vaultNumber = vaultNumber;
-            Name = "Account Vault";
+            TranslationId = "GameUtils.AccountVault.Item.Name";
         }
 
         public override string GetOwner(GamePlayer player)

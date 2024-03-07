@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using DOL.Database;
 using DOL.GS.Housing;
 using DOL.GS.PacketHandler;
+using DOL.Language;
 
 namespace DOL.GS
 {
@@ -14,23 +15,9 @@ namespace DOL.GS
             if (!base.Interact(player))
                 return false;
 
-            /*if (player.HCFlag)
-            {
-                SayTo(player,$"I'm sorry {player.Name}, my vault is not Hardcore enough for you.");
-                return false;
-            }*/
 
-            // if (player.Level <= 1)
-            // {
-            //     SayTo(player,$"I'm sorry {player.Name}, come back if you are venerable to use my services.");
-            //     return false;
-            // }
-
-            string message = $"Greetings {player.Name}, nice meeting you.\n";
-
-            message += "I am happy to offer you my services.\n\n";
-
-            message += "You can browse the [first] or [second] page of your Personal Vault.";
+            string message = LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.AccountVault.Keeper.Greetings", player.Name) + "\n\n";
+            message += LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.AccountVault.Keeper.Access");
             player.Out.SendMessage(message, eChatType.CT_Say, eChatLoc.CL_PopupWindow);
 
             ItemTemplate vaultItem = GetDummyVaultItem(player);
@@ -107,7 +94,7 @@ namespace DOL.GS
             : base(player, player.InternalID, vaultNumber, dummyTemplate)
         {
             m_vaultNumber = vaultNumber;
-            Name = player.Name + "'s Vault";
+            Name = LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.CharacterVault.Item.Name", player.Name);
         }
 
         public override string GetOwner(GamePlayer player)

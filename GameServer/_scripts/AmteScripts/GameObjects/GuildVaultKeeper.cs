@@ -3,6 +3,7 @@ using System.Numerics;
 using DOL.Database;
 using DOL.GS.Housing;
 using DOL.GS.PacketHandler;
+using DOL.Language;
 
 namespace DOL.GS
 {
@@ -17,13 +18,13 @@ namespace DOL.GS
 
             if (player.Guild == null || player.GuildRank == null)
             {
-                player.Out.SendMessage($"I'm sorry {player.Name}, I cannot do anything for you without a guild.", eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                player.SendTranslatedMessage("GameUtils.GuildVault.Keeper.NoGuild", eChatType.CT_Say, eChatLoc.CL_PopupWindow, player.Name);
                 return true;
             }
 
             if (player.Guild.IsSystemGuild)
             {
-                player.Out.SendMessage($"I'm sorry {player.Name}, your guild does not have a vault.", eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                player.SendTranslatedMessage("GameUtils.GuildVault.Keeper.BadGuild", eChatType.CT_Say, eChatLoc.CL_PopupWindow, player.Name);
                 return true;
             }
 
@@ -35,27 +36,26 @@ namespace DOL.GS
             {
                 vaultItem = GetDummyVaultItem(player);
                 vault = new GuildVault(player, 0, vaultItem);
-                message = $"Greetings {player.Name}, nice meeting you.\nI am happy to offer you my services.\n\n";
                 if (player.GuildRank.CanViewVault(1))
                 {
                     if (player.GuildRank.CanViewVault(2))
                     {
-                        message += "You can browse the [first], [second] or [third] page of " + player.Guild.Name + "'s vault.";
+                        message = LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.GuildVault.Keeper.Access123", player.Guild.Name);
                     }
                     else
                     {
-                        message += "You can browse the [first] or [second] page of " + player.Guild.Name + "'s vault.";
+                        message = LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.GuildVault.Keeper.Access12", player.Guild.Name);
                     }
                 }
                 else
                 {
                     if (player.GuildRank.CanViewVault(2))
                     {
-                        message += "You can browse the [first] or [third] page of " + player.Guild.Name + "'s vault.";
+                        message = LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.GuildVault.Keeper.Access13", player.Guild.Name);
                     }
                     else
                     {
-                        message += "You can browse the [first] page of " + player.Guild.Name + "'s vault.";
+                        message = LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.GuildVault.Keeper.Access1", player.Guild.Name);
                     }
                 }
             }
@@ -63,27 +63,27 @@ namespace DOL.GS
             {
                 vaultItem = GetDummyVaultItem(player);
                 vault = new GuildVault(player, 1, vaultItem);
-                message = $"Greetings {player.Name}, nice meeting you.\nI am happy to offer you my services.\n\n";
                 if (player.GuildRank.CanViewVault(2))
                 {
-                    message += "You can browse the [second] or [third] page of " + player.Guild.Name + "'s vault.";
+                    message = LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.GuildVault.Keeper.Access23", player.Guild.Name);
                 }
                 else
                 {
-                    message += "You can browse the [second] page of " + player.Guild.Name + "'s vault.";
+                    message = LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.GuildVault.Keeper.Access2", player.Guild.Name);
                 }
             }
             else if (player.GuildRank.CanViewVault(2))
             {
                 vaultItem = GetDummyVaultItem(player);
                 vault = new GuildVault(player, 2, vaultItem);
-                message = $"Greetings {player.Name}, nice meeting you.\nI am happy to offer you my services.\n\nYou can browse the [third] page of {player.Guild.Name}'s vault.";
+                message = LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.GuildVault.Keeper.Access3", player.Guild.Name);
             }
             else
             {
-                player.Out.SendMessage($"Sorry {player.Name}, you do not have permission to access the guild vaults.", eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                player.SendTranslatedMessage("GameUtils.GuildVault.Keeper.NoPermissions", eChatType.CT_Say, eChatLoc.CL_PopupWindow, player.Name);
                 return true;
             }
+            message = LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.GuildVault.Keeper.Greetings", player.Name) + "\n\n" + message;
             player.Out.SendMessage(message, eChatType.CT_Say, eChatLoc.CL_PopupWindow);
             player.ActiveInventoryObject = vault;
             player.Out.SendInventoryItemsUpdate(vault.GetClientInventory(player), eInventoryWindowType.HouseVault);
@@ -176,7 +176,7 @@ namespace DOL.GS
         {
             Guild = player.Guild;
             m_vaultNumber = vaultNumber;
-            Name = (player.Guild?.Name ?? "unknown") + "'s Vault";
+            Name = LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.GuildVault.Item.Name", player.Guild?.Name ?? "unknown");
         }
 
         /// <inheritdoc />

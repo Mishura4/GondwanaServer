@@ -69,12 +69,14 @@
     <Content Include="language\EN\Commands\Players\sell.txt" />
     <Content Include="language\EN\GameObjects\CustomNPC\MoneyEventNPC.txt" />
     <Content Include="language\EN\GameUtils\Guild.txt" />
+    <Content Include="language\en\gameutils\Vault.txt" />
     <Content Include="language\EN\spells\SpellReflectionHandler.txt" />
     <Content Include="language\FR\Commands\GM\AreaEffect.txt" />
     <Content Include="language\FR\Commands\GM\Coffre.txt" />
     <Content Include="language\FR\Commands\GM\TPPoint.txt" />
     <Content Include="language\FR\GameObjects\CustomNPC\MoneyEventNPC.txt" />
     <Content Include="language\FR\GameUtils\Guild.txt" />
+    <Content Include="language\FR\GameUtils\Vault.txt" />
     <Content Include="language\FR\spells\SpellReflectionHandler.txt" />
   </ItemGroup>
   <Target Name="CopyFiles" AfterTargets="AfterBuild">

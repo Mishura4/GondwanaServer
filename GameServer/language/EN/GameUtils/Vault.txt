@@ -1,0 +1,28 @@
+GameUtils.CustomVault.NoVault:				You are not viewing a vault!
+GameUtils.CustomVault.NoView:				You do not have the permission to view this vault!
+GameUtils.CustomVault.NoAdd:				You do not have the permission to add this item!
+GameUtils.CustomVault.NoRemove:				You do not have the permission to remove this item!
+GameUtils.CustomVault.NoMove:				You do not have the permission to move this item!
+GameUtils.CustomVault.ItemSwapUntradeable:	You cannot swap with an untradable item!
+GameUtils.CustomVault.ItemUntradeable:		You cannot put this item in a vault!
+
+GameUtils.AccountVault.Keeper.Greetings:	Greetings {0}, nice meeting you. I am happy to offer you my services.
+GameUtils.AccountVault.Keeper.Access:		You can browse the [first] or [second] page of your Account Vault.
+GameUtils.AccountVault.Item.Name:			Account Vault
+
+GameUtils.CharacterVault.Keeper.Greetings:	Greetings {0}, nice meeting you. I am happy to offer you my services.
+GameUtils.CharacterVault.Keeper.Access:		You can browse the [first] or [second] page of your Personal Vault.
+GameUtils.CharacterVault.Item.Name:			{0}'s Vault
+
+GameUtils.GuildVault.Keeper.Greetings:		Greetings {0}, nice meeting you. I am happy to offer you my services.
+GameUtils.GuildVault.Keeper.Access123:		You can browse the [first], [second] or [third] page of {0}'s Vault.
+GameUtils.GuildVault.Keeper.Access13:		You can browse the [first] or [third] page of your {0}'s Vault.
+GameUtils.GuildVault.Keeper.Access12:		You can browse the [first] or [second] page of your {0}'s Vault.
+GameUtils.GuildVault.Keeper.Access23:		You can browse the [second] or [third] page of your {0}'s Vault.
+GameUtils.GuildVault.Keeper.Access1:		You can browse the [first] page of your {0}'s Vault.
+GameUtils.GuildVault.Keeper.Access2:		You can browse the [second] page of your {0}'s Vault.
+GameUtils.GuildVault.Keeper.Access3:		You can browse the [third] page of your {0}'s Vault.
+GameUtils.GuildVault.Keeper.NoGuild:		I'm sorry {0}, I cannot do anything for you without a guild.
+GameUtils.GuildVault.Keeper.BadGuild:		I'm sorry {0}, your guild does not have a vault.
+GameUtils.GuildVault.Keeper.NoPermissions:	I'm sorry {0}, your guild did not grant you permission to view the guild vault.
+GameUtils.GuildVault.Item.Name:				{0}'s Vault
