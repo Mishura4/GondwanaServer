@@ -256,7 +256,7 @@ namespace DOL.GS.Scripts
         /// <inheritdoc />
         public override string GetOwner(GamePlayer player = null)
         {
-            return BagItem.Id_nb;
+            return BagItem.ObjectId;
         }
 
         /// <summary>
@@ -264,7 +264,7 @@ namespace DOL.GS.Scripts
         /// </summary>
         public override IList<InventoryItem> DBItems(GamePlayer player = null)
         {
-            return GameServer.Database.SelectObjects<InventoryItem>(DB.Column("OwnerID").IsEqualTo(BagItem.Id_nb).And(DB.Column("SlotPosition").IsGreaterOrEqualTo(FirstDBSlot).And(DB.Column("SlotPosition").IsLessOrEqualTo(LastDBSlot))));
+            return GameServer.Database.SelectObjects<InventoryItem>(DB.Column("OwnerID").IsEqualTo(BagItem.ObjectId).And(DB.Column("SlotPosition").IsGreaterOrEqualTo(FirstDBSlot).And(DB.Column("SlotPosition").IsLessOrEqualTo(LastDBSlot))));
         }
     }
 }
