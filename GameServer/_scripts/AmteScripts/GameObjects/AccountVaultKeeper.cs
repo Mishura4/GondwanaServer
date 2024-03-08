@@ -54,7 +54,7 @@ namespace DOL.GS
                 player.ActiveInventoryObject = vault;
                 player.Out.SendInventoryItemsUpdate(vault.GetClientInventory(player), eInventoryWindowType.HouseVault);
             }
-            else if (text is ("second" or "troisième"))
+            else if (text is ("second" or "deuxième"))
             {
                 AccountVault vault = new AccountVault(player, 1, GetDummyVaultItem(player));
                 player.ActiveInventoryObject = vault;

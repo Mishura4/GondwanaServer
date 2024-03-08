@@ -1,28 +1,28 @@
-GameUtils.CustomVault.NoVault:				Vous n'avez pas de banque ouverte!
-GameUtils.CustomVault.NoView:				Vous n'avez pas la permission de visionner cette banque!
-GameUtils.CustomVault.NoAdd:				Vous n'avez pas la permission de mettre cet objet dans cette banque!
-GameUtils.CustomVault.NoRemove:				Vous n'avez pas la permission de retirer cet objet de cette banque!
-GameUtils.CustomVault.NoMove:				Vous n'avez pas la permission de déplacer des objets dans cette banque!
+GameUtils.CustomVault.NoVault:				Vous n'avez pas de coffre ouvert!
+GameUtils.CustomVault.NoView:				Vous n'avez pas la permission de visionner ce coffre!
+GameUtils.CustomVault.NoAdd:				Vous n'avez pas la permission de mettre cet objet dans ce coffre!
+GameUtils.CustomVault.NoRemove:				Vous n'avez pas la permission de retirer cet objet de ce coffre!
+GameUtils.CustomVault.NoMove:				Vous n'avez pas la permission de déplacer des objets dans ce coffre!
 GameUtils.CustomVault.ItemSwapUntradeable:	Vous ne pouvez pas échanger un objet non-échangeable!
-GameUtils.CustomVault.ItemUntradeable:		Vous ne pouvez pas mettre un objet non-échangeable dans une banque!
+GameUtils.CustomVault.ItemUntradeable:		Vous ne pouvez pas mettre un objet non-échangeable dans ce coffre!
 
 GameUtils.AccountVault.Keeper.Greetings:	Bonjour {0}, ravi de vous rencontrer. Je vous offre chaleureusement mes services.
-GameUtils.AccountVault.Keeper.Access:		Vous pouvez regarder la [première] ou la [seconde] page de votre Banque de Compte.
-GameUtils.AccountVault.Item.Name:			Banque de Compte
+GameUtils.AccountVault.Keeper.Access:		Vous pouvez regarder la [première] ou la [deuxième] page de votre Coffre de Compte.
+GameUtils.AccountVault.Item.Name:			Coffre de Compte
 
 GameUtils.CharacterVault.Keeper.Greetings:	Bonjour {0}, ravi de vous rencontrer. Je vous offre chaleureusement mes services.
-GameUtils.CharacterVault.Keeper.Access:		Vous pouvez regarder la [première] ou la [seconde] page de votre Banque Personelle.
-GameUtils.CharacterVault.Item.Name:			Banque de {0}
+GameUtils.CharacterVault.Keeper.Access:		Vous pouvez regarder la [première] ou la [deuxième] page de votre Coffre Personel.
+GameUtils.CharacterVault.Item.Name:			Coffre de {0}
 
 GameUtils.GuildVault.Keeper.Greetings:		Bonjour {0}, ravi de vous rencontrer. Je vous offre chaleureusement mes services.
-GameUtils.GuildVault.Keeper.Access123:		Vous pouvez regarder la [première], la [seconde] ou la [troisième] page de la Banque de {0}.
-GameUtils.GuildVault.Keeper.Access13:		Vous pouvez regarder la [première] ou la [troisième] page de la Banque de {0}.
-GameUtils.GuildVault.Keeper.Access12:		Vous pouvez regarder la [première] ou la [seconde] page de la Banque de {0}.
-GameUtils.GuildVault.Keeper.Access23:		Vous pouvez regarder la [seconde] ou la [troisième] page de la Banque de {0}.
-GameUtils.GuildVault.Keeper.Access1:		Vous pouvez regarder la [première] page de la Banque de {0}.
-GameUtils.GuildVault.Keeper.Access2:		Vous pouvez regarder la [seconde] page de la Banque de {0}.
-GameUtils.GuildVault.Keeper.Access3:		Vous pouvez regarder la [troisième] page de la Banque de {0}.
+GameUtils.GuildVault.Keeper.Access123:		Vous pouvez regarder la [première], la [deuxième] ou la [troisième] page du Coffre de {0}.
+GameUtils.GuildVault.Keeper.Access13:		Vous pouvez regarder la [première] ou la [troisième] page du Coffre de {0}.
+GameUtils.GuildVault.Keeper.Access12:		Vous pouvez regarder la [première] ou la [deuxième] page du Coffre de {0}.
+GameUtils.GuildVault.Keeper.Access23:		Vous pouvez regarder la [deuxième] ou la [troisième] page du Coffre de {0}.
+GameUtils.GuildVault.Keeper.Access1:		Vous pouvez regarder la [première] page du Coffre de {0}.
+GameUtils.GuildVault.Keeper.Access2:		Vous pouvez regarder la [deuxième] page du Coffre de {0}.
+GameUtils.GuildVault.Keeper.Access3:		Vous pouvez regarder la [troisième] page du Coffre de {0}.
 GameUtils.GuildVault.Keeper.NoGuild:		Mes excuses {0}, je ne peux rien faire pour vous sans guilde.
-GameUtils.GuildVault.Keeper.BadGuild:		Mes excuses {0}, votre guilde n'a pas de banque.
-GameUtils.GuildVault.Keeper.NoPermissions:	Mes excuses {0}, votre guilde ne vous a pas donné la permission de regarder la banque.
-GameUtils.GuildVault.Item.Name:				Banque de {0}
+GameUtils.GuildVault.Keeper.BadGuild:		Mes excuses {0}, votre guilde n'a pas de coffre.
+GameUtils.GuildVault.Keeper.NoPermissions:	Mes excuses {0}, votre guilde ne vous a pas donné la permission de regarder son coffre.
+GameUtils.GuildVault.Item.Name:				Coffre de {0}

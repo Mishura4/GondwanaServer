@@ -37,13 +37,13 @@ namespace DOL.GS
             if (player == null)
                 return false;
 
-            if (text == "first")
+            if (text is ("first" or "première"))
             {
                 CharacterVault vault = new CharacterVault(player, 0, GetDummyVaultItem(player));
                 player.ActiveInventoryObject = vault;
                 player.Out.SendInventoryItemsUpdate(vault.GetClientInventory(player), eInventoryWindowType.HouseVault);
             }
-            else if (text == "second")
+            else if (text is ("second" or "deuxième"))
             {
                 CharacterVault vault = new CharacterVault(player, 1, GetDummyVaultItem(player));
                 player.ActiveInventoryObject = vault;
