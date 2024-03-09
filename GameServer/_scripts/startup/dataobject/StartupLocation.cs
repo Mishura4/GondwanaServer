@@ -40,6 +40,7 @@ namespace DOL.GS.GameEvents
         protected int m_raceID;
         protected int m_classID;
         protected int m_clientRegionID;
+        protected string m_guildid;
 
         /// <summary>
         /// Primary Key Auto Increment ID.
@@ -214,6 +215,22 @@ namespace DOL.GS.GameEvents
             set
             {
                 Dirty = true; m_clientRegionID = value;
+            }
+        }
+
+        /// <summary>
+        /// Guild ID for this startup Location.
+        /// </summary>
+        [DataElement(AllowDbNull = false)]
+        public string GuildID
+        {
+            get
+            {
+                return m_guildid;
+            }
+            set
+            {
+                Dirty = true; m_guildid = value;
             }
         }
     }

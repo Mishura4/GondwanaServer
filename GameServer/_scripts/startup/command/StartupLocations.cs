@@ -129,6 +129,9 @@ namespace DOL.GS.GameEvents
                     ch.Zpos = dbStartupLocation.ZPos;
                     ch.Region = dbStartupLocation.Region;
                     ch.Direction = dbStartupLocation.Heading;
+                    ch.GuildID = dbStartupLocation.GuildID;  // Set the starting guild ID
+                    ch.GuildRank = 9; // Set the guild rank to 9
+
                     BindCharacter(ch);
                 }
             }
