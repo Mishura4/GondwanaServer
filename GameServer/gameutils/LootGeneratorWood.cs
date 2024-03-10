@@ -49,11 +49,60 @@ namespace DOL.GS
         {
             this._wooden_boards = GameServer.Database.SelectObjects<ItemTemplate>(it => _wooden_boardTemplateIds.Contains(it.Id_nb)).ToArray();
         }
-        private int Chance(int mobLevel, string wooden_board)
+
+        private int CalculateWoodenBoardChance(int mobLevel, float woodenBoardValue)
         {
-            if (!_wooden_boardValue.TryGetValue(wooden_board, out float value))
-                return 0;
-            return (int)(MathF.Sin((mobLevel + (50 - value)) / 45 * ((50 - value) / 50)) * 1000);
+            // Calculate the chance based on player and wooden board level
+            int levelDifference = mobLevel - (int)woodenBoardValue;
+            if (mobLevel > 45)
+            {
+                int additionalChance = (mobLevel - 45) * 10;
+                int widenedLevelDifference = (mobLevel - 45) + 5;
+
+                if (levelDifference >= -4 && levelDifference <= widenedLevelDifference)
+                {
+                    return 650 + additionalChance;
+                }
+                else if (levelDifference >= 5 && levelDifference <= 9)
+                {
+                    return 180 - additionalChance;
+                }
+                else if (levelDifference >= -9 && levelDifference <= -5)
+                {
+                    return 140 - additionalChance;
+                }
+                else if (levelDifference < -9)
+                {
+                    return 0;
+                }
+                else
+                {
+                    return 30 - additionalChance;
+                }
+            }
+            else
+            {
+                if (levelDifference >= -4 && levelDifference <= 4)
+                {
+                    return 650;
+                }
+                else if (levelDifference >= 5 && levelDifference <= 9)
+                {
+                    return 180;
+                }
+                else if (levelDifference >= -9 && levelDifference <= -5)
+                {
+                    return 140;
+                }
+                else if (levelDifference < -9)
+                {
+                    return 0;
+                }
+                else
+                {
+                    return 30;
+                }
+            }
         }
 
         public override LootList GenerateLoot(GameNPC mob, GameObject killer)
@@ -62,12 +111,19 @@ namespace DOL.GS
             if (Util.Chance(90))
                 return loot;
 
-            var wooden_boards = new LootList(1);
-            foreach (var item in _wooden_boards)
-                wooden_boards.AddRandom(Chance(mob.Level, item.Id_nb), item, 1);
+            var woodenBoards = new LootList(1);
+            foreach (var woodenBoard in _wooden_boards)
+            {
+                if (_wooden_boardValue.TryGetValue(woodenBoard.Id_nb, out float value))
+                {
+                    int chance = CalculateWoodenBoardChance(mob.Level, value);
+                    woodenBoards.AddRandom(chance, woodenBoard, 1);
+                }
+            }
 
-            foreach (var item in wooden_boards.GetLoot())
-                loot.AddFixed(item, 1);
+            foreach (var woodenBoard in woodenBoards.GetLoot())
+                loot.AddFixed(woodenBoard, 1);
+
             return loot;
         }
     }

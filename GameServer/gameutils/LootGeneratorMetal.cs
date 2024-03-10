@@ -49,11 +49,60 @@ namespace DOL.GS
         {
             this._metal_bars = GameServer.Database.SelectObjects<ItemTemplate>(it => _metal_barTemplateIds.Contains(it.Id_nb)).ToArray();
         }
-        private int Chance(int mobLevel, string metal_bar)
+
+        private int CalculateMetalBarChance(int mobLevel, float metalBarValue)
         {
-            if (!_metal_barValue.TryGetValue(metal_bar, out float value))
-                return 0;
-            return (int)(MathF.Sin((mobLevel + (50 - value)) / 45 * ((50 - value) / 50)) * 1000);
+            // Calculate the chance based on player and metal bar level
+            int levelDifference = mobLevel - (int)metalBarValue;
+            if (mobLevel > 45)
+            {
+                int additionalChance = (mobLevel - 45) * 10;
+                int widenedLevelDifference = (mobLevel - 45) + 5;
+
+                if (levelDifference >= -4 && levelDifference <= widenedLevelDifference)
+                {
+                    return 650 + additionalChance;
+                }
+                else if (levelDifference >= 5 && levelDifference <= 9)
+                {
+                    return 180 - additionalChance;
+                }
+                else if (levelDifference >= -9 && levelDifference <= -5)
+                {
+                    return 140 - additionalChance;
+                }
+                else if (levelDifference < -9)
+                {
+                    return 0;
+                }
+                else
+                {
+                    return 30 - additionalChance;
+                }
+            }
+            else
+            {
+                if (levelDifference >= -4 && levelDifference <= 4)
+                {
+                    return 650;
+                }
+                else if (levelDifference >= 5 && levelDifference <= 9)
+                {
+                    return 180;
+                }
+                else if (levelDifference >= -9 && levelDifference <= -5)
+                {
+                    return 140;
+                }
+                else if (levelDifference < -9)
+                {
+                    return 0;
+                }
+                else
+                {
+                    return 30;
+                }
+            }
         }
 
         public override LootList GenerateLoot(GameNPC mob, GameObject killer)
@@ -62,12 +111,19 @@ namespace DOL.GS
             if (Util.Chance(90))
                 return loot;
 
-            var metal_bars = new LootList(1);
-            foreach (var item in _metal_bars)
-                metal_bars.AddRandom(Chance(mob.Level, item.Id_nb), item, 1);
+            var metalBars = new LootList(1);
+            foreach (var metalBar in _metal_bars)
+            {
+                if (_metal_barValue.TryGetValue(metalBar.Id_nb, out float value))
+                {
+                    int chance = CalculateMetalBarChance(mob.Level, value);
+                    metalBars.AddRandom(chance, metalBar, 1);
+                }
+            }
 
-            foreach (var item in metal_bars.GetLoot())
-                loot.AddFixed(item, 1);
+            foreach (var metalBar in metalBars.GetLoot())
+                loot.AddFixed(metalBar, 1);
+
             return loot;
         }
     }

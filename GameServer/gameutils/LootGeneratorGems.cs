@@ -49,11 +49,60 @@ namespace DOL.GS
         {
             this._gems = GameServer.Database.SelectObjects<ItemTemplate>(it => _gemTemplateIds.Contains(it.Id_nb)).ToArray();
         }
-        private int Chance(int mobLevel, string gem)
+
+        private int CalculateGemChance(int mobLevel, float gemValue)
         {
-            if (!_gemValue.TryGetValue(gem, out float value))
-                return 0;
-            return (int)(MathF.Sin((mobLevel + (50 - value)) / 45 * ((50 - value) / 50)) * 1000);
+            // Calculate the chance based on player and gem level
+            int levelDifference = mobLevel - (int)gemValue;
+            if (mobLevel > 45)
+            {
+                int additionalChance = (mobLevel - 45) * 10;
+                int widenedLevelDifference = (mobLevel - 45) + 5;
+
+                if (levelDifference >= -4 && levelDifference <= widenedLevelDifference)
+                {
+                    return 650 + additionalChance;
+                }
+                else if (levelDifference >= 5 && levelDifference <= 9)
+                {
+                    return 180 - additionalChance;
+                }
+                else if (levelDifference >= -9 && levelDifference <= -5)
+                {
+                    return 140 - additionalChance;
+                }
+                else if (levelDifference < -9)
+                {
+                    return 0;
+                }
+                else
+                {
+                    return 30 - additionalChance;
+                }
+            }
+            else
+            {
+                if (levelDifference >= -4 && levelDifference <= 4)
+                {
+                    return 650;
+                }
+                else if (levelDifference >= 5 && levelDifference <= 9)
+                {
+                    return 180;
+                }
+                else if (levelDifference >= -9 && levelDifference <= -5)
+                {
+                    return 140;
+                }
+                else if (levelDifference < -9)
+                {
+                    return 0;
+                }
+                else
+                {
+                    return 30;
+                }
+            }
         }
 
         public override LootList GenerateLoot(GameNPC mob, GameObject killer)
@@ -63,11 +112,18 @@ namespace DOL.GS
                 return loot;
 
             var gems = new LootList(1);
-            foreach (var item in _gems)
-                gems.AddRandom(Chance(mob.Level, item.Id_nb), item, 1);
+            foreach (var gem in _gems)
+            {
+                if ( _gemValue.TryGetValue(gem.Id_nb, out float value))
+                {
+                    int chance = CalculateGemChance(mob.Level, value);
+                    gems.AddRandom(chance, gem, 1);
+                }
+            }
 
-            foreach (var item in gems.GetLoot())
-                loot.AddFixed(item, 1);
+            foreach (var gem in gems.GetLoot())
+                loot.AddFixed(gem, 1);
+
             return loot;
         }
     }
