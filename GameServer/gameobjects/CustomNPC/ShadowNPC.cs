@@ -281,6 +281,12 @@ namespace DOL.gameobjects.CustomNPC
             m_isMainPet = false;
         }
 
+        /// <inheritdoc />
+        public override void UpdatePetWindow()
+        {
+            // don't
+        }
+
         public override GameLiving GetLivingOwner()
         {
             return Owner;
