@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using DOL.Database;
 using DOL.GS.PacketHandler;
+using DOL.GS.Scripts;
 
 namespace DOL.GS
 {
@@ -250,7 +251,7 @@ namespace DOL.GS
             }
 
             // Check for a swap to get around not allowing non-tradables in a housing vault - Tolakram
-            if (fromHousing && itemInToSlot != null && itemInToSlot.IsTradable == false)
+            if (fromHousing && !CanHoldItem(itemInToSlot))
             {
                 player.Out.SendMessage("You cannot swap with an untradable item!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 log.DebugFormat("GameVault: {0} attempted to swap untradable item {2} with {1}", player.Name, itemInFromSlot.Name, itemInToSlot.Name);
@@ -260,7 +261,7 @@ namespace DOL.GS
 
             // Allow people to get untradables out of their house vaults (old bug) but 
             // block placing untradables into housing vaults from any source - Tolakram
-            if (toHousing && itemInFromSlot != null && itemInFromSlot.IsTradable == false)
+            if (toHousing && !CanHoldItem(itemInFromSlot))
             {
                 player.Out.SendMessage("You can not put this item into a House Vault!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 player.Out.SendInventoryItemsUpdate(null);
@@ -272,6 +273,31 @@ namespace DOL.GS
             lock (m_vaultSync)
             {
                 this.NotifyPlayers(this, player, _observers, this.MoveItem(player, (eInventorySlot)fromSlot, (eInventorySlot)toSlot, count));
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Whether a vault has the ability to hold the item at any point (not counting e.g. current vault space)
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public virtual bool CanHoldItem(InventoryItem item)
+        {
+            if (item == null)
+            {
+                return false;
+            }
+
+            if (item is StorageBagItem) // Prevent storing bags in vaults
+            {
+                return false;
+            }
+
+            if (!item.IsTradable) // Prevent storing untradable items
+            {
+                return false;
             }
 
             return true;

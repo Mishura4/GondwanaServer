@@ -3,8 +3,8 @@ GameUtils.CustomVault.NoView:				You do not have the permission to view this vau
 GameUtils.CustomVault.NoAdd:				You do not have the permission to add this item!
 GameUtils.CustomVault.NoRemove:				You do not have the permission to remove this item!
 GameUtils.CustomVault.NoMove:				You do not have the permission to move this item!
-GameUtils.CustomVault.ItemSwapUntradeable:	You cannot swap with an untradable item!
-GameUtils.CustomVault.ItemUntradeable:		You cannot put this item in a vault!
+GameUtils.CustomVault.ItemSwapUntradeable:	You cannot swap with this item!
+GameUtils.CustomVault.InvalidItem:			You cannot put this item in a vault!
 
 GameUtils.AccountVault.Keeper.Greetings:	Greetings {0}, nice meeting you. I am happy to offer you my services.
 GameUtils.AccountVault.Keeper.Access:		You can browse the [first] or [second] page of your Account Vault.

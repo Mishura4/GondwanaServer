@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using DOL.Database;
 using DOL.GS.Housing;
 using DOL.GS.PacketHandler;
+using DOL.GS.Scripts;
 using DOL.Language;
 
 namespace DOL.GS
@@ -100,6 +101,23 @@ namespace DOL.GS
         public override string GetOwner(GamePlayer player)
         {
             return (player.InternalID);
+        }
+
+        /// <inheritdoc />
+        public override bool CanHoldItem(InventoryItem item)
+        {
+            if (item == null)
+            {
+                return false;
+            }
+
+            if (item is StorageBagItem)
+            {
+                return false;
+            }
+
+            // Character vaults can hold untradable items
+            return true;
         }
 
         public override int FirstDBSlot

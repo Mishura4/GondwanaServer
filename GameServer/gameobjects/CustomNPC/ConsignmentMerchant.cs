@@ -25,6 +25,7 @@ using DOL.GS.Finance;
 using DOL.GS.Housing;
 using DOL.GS.PacketHandler;
 using DOL.GS.PacketHandler.Client.v168;
+using DOL.GS.Scripts;
 using log4net;
 
 namespace DOL.GS
@@ -258,6 +259,31 @@ namespace DOL.GS
         }
 
         /// <summary>
+        /// Whether a merchant has the ability to hold the item at any point
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public virtual bool CanHoldItem(InventoryItem item)
+        {
+            if (item == null)
+            {
+                return false;
+            }
+
+            if (item is StorageBagItem) // Prevent storing bags in vaults
+            {
+                return false;
+            }
+
+            if (!item.IsTradable) // Prevent storing untradable items
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
         /// Is this a move request for a consigment merchant?
         /// </summary>
         /// <param name="playerInventory"></param>
@@ -332,8 +358,8 @@ namespace DOL.GS
                 }
                 else if (toClientSlot >= FirstClientSlot && toClientSlot <= LastClientSlot)
                 {
-                    // moving an item from the client to the consignment merchant
-                    if (HasPermissionToMove(player))
+                    InventoryItem itemInFromSlot = player.Inventory.GetItem((eInventorySlot)fromClientSlot);
+                    if (HasPermissionToMove(player) && CanHoldItem(itemInFromSlot))
                     {
                         if (GetClientInventory(player).TryGetValue(toClientSlot, out _))
                         {
@@ -541,7 +567,6 @@ namespace DOL.GS
 
             BuyItem(player, true);
         }
-
 
         protected virtual void BuyItem(GamePlayer player, bool usingMarketExplorer = false)
         {

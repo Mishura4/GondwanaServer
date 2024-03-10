@@ -127,7 +127,7 @@ namespace DOL.GS
             if (fromVault)
             {
                 myInventory.TryGetValue(toSlot, out itemInFromSlot);
-                if (!gameVault.CanRemoveItem(player, player.Inventory.GetItem((eInventorySlot)fromSlot)))
+                if (!gameVault.CanRemoveItem(player, itemInFromSlot))
                 {
                     player.SendTranslatedMessage("GameUtils.CustomVault.NoRemove", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     return false;
@@ -139,7 +139,7 @@ namespace DOL.GS
             }
 
             // Check for a swap to get around not allowing non-tradables in a housing vault - Tolakram
-            if (fromVault && itemInToSlot is { IsTradable: false })
+            if (fromVault && itemInToSlot != null && !CanHoldItem(itemInToSlot))
             {
                 player.SendTranslatedMessage("GameUtils.CustomVault.ItemSwapUntradeable", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 //log.DebugFormat("GameVault: {0} attempted to swap untradable item {2} with {1}", player.Name, itemInFromSlot.Name, itemInToSlot.Name);
@@ -148,11 +148,11 @@ namespace DOL.GS
 
             // Allow people to get untradables out of their house vaults (old bug) but 
             // block placing untradables into housing vaults from any source - Tolakram
-            if (toVault && itemInFromSlot is { IsTradable: false })
+            if (toVault && itemInFromSlot != null && !CanHoldItem(itemInFromSlot))
             {
                 /* DOL: if (itemInFromSlot.Id_nb != ServerProperties.Properties.ALT_CURRENCY_ID) */
                 {
-                    player.SendTranslatedMessage("GameUtils.CustomVault.ItemUntradeable", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    player.SendTranslatedMessage("GameUtils.CustomVault.InvalidItem", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     return false;
                 }
             }

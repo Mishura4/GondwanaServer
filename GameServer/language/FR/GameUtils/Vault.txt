@@ -3,8 +3,8 @@ GameUtils.CustomVault.NoView:				Vous n'avez pas la permission de visionner ce c
 GameUtils.CustomVault.NoAdd:				Vous n'avez pas la permission de mettre cet objet dans ce coffre!
 GameUtils.CustomVault.NoRemove:				Vous n'avez pas la permission de retirer cet objet de ce coffre!
 GameUtils.CustomVault.NoMove:				Vous n'avez pas la permission de déplacer des objets dans ce coffre!
-GameUtils.CustomVault.ItemSwapUntradeable:	Vous ne pouvez pas échanger un objet non-échangeable!
-GameUtils.CustomVault.ItemUntradeable:		Vous ne pouvez pas mettre un objet non-échangeable dans ce coffre!
+GameUtils.CustomVault.ItemSwapUntradeable:	Vous ne pouvez pas échanger cet objet!
+GameUtils.CustomVault.InvalidItem:			Vous ne pouvez pas mettre cet objet dans ce coffre!
 
 GameUtils.AccountVault.Keeper.Greetings:	Bonjour {0}, ravi de vous rencontrer. Je vous offre chaleureusement mes services.
 GameUtils.AccountVault.Keeper.Access:		Vous pouvez regarder la [première] ou la [deuxième] page de votre Coffre de Compte.

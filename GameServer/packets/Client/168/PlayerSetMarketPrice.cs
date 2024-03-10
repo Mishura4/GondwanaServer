@@ -43,10 +43,10 @@ namespace DOL.GS.PacketHandler.Client.v168
             uint price = packet.ReadInt();
 
             // only IGameInventoryObjects can handle set price commands
-            if (client.Player.TargetObject == null || (client.Player.TargetObject is IGameInventoryObject) == false)
+            if (client.Player.TargetObject is not IGameInventoryObject inventory)
                 return;
 
-            (client.Player.TargetObject as IGameInventoryObject).SetSellPrice(client.Player, (ushort)slot, price);
+            inventory.SetSellPrice(client.Player, (ushort)slot, price);
         }
     }
 }
