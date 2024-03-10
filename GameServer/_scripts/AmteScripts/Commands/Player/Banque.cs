@@ -119,11 +119,11 @@ namespace DOL.GS.Commands
             int P = 0;
             if (int.TryParse(args[offset], out C))
             {
-                if (int.TryParse(args[offset + 1], out S))
+                if (args.Length > offset + 1 && int.TryParse(args[offset + 1], out S))
                 {
-                    if (int.TryParse(args[offset + 2], out G))
+                    if (args.Length > offset + 2 && int.TryParse(args[offset + 2], out G))
                     {
-                        if (int.TryParse(args[offset + 3], out P))
+                        if (args.Length > offset + 3 && int.TryParse(args[offset + 3], out P))
                             P = Math.Max(0, Math.Min(P, 999));
                         G = Math.Max(0, Math.Min(G, 999));
                     }
