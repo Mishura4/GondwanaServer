@@ -54,7 +54,7 @@ namespace DOL.GS
             return true;
         }
 
-        private static ItemTemplate GetDummyVaultItem(GamePlayer player)
+        public static ItemTemplate GetDummyVaultItem(GamePlayer player)
         {
             ItemTemplate vaultItem = new ItemTemplate();
             vaultItem.Object_Type = (int)eObjectType.HouseVault;
@@ -96,6 +96,35 @@ namespace DOL.GS
         {
             m_vaultNumber = vaultNumber;
             Name = LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.CharacterVault.Item.Name", player.Name);
+        }
+
+        /// <inheritdoc />
+        public override bool AddItem(GamePlayer player, InventoryItem item, bool quiet = false)
+        {
+            if (!CanAddItem(player, item))
+            {
+                if (!quiet)
+                {
+                    player.Out.SendMessage("GameUtils.CustomVault.NoAdd", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                }
+                return false;
+            }
+
+            var updated = GameInventoryObjectExtensions.AddItem(this, player, item);
+            if (updated.Count == 0)
+            {
+                if (!quiet)
+                {
+                    player.Out.SendMessage("GameUtils.CharacterVault.Full", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                }
+                return false;
+            }
+
+            lock (m_vaultSync)
+            {
+                this.NotifyPlayers(this, player, _observers, updated);
+            }
+            return true;
         }
 
         public override string GetOwner(GamePlayer player)

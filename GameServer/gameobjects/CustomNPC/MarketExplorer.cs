@@ -205,6 +205,12 @@ namespace DOL.GS
             return false;
         }
 
+        /// <inheritdoc />
+        public virtual bool AddItem(GamePlayer player, InventoryItem item, bool quiet = false)
+        {
+            return false; // not applicable
+        }
+
         /// <summary>
         /// Add an item to this object
         /// </summary>

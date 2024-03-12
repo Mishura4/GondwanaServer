@@ -380,6 +380,12 @@ namespace DOL.GS
             return true;
         }
 
+        /// <inheritdoc />
+        public virtual bool AddItem(GamePlayer player, InventoryItem item, bool quiet = false)
+        {
+            throw new NotImplementedException();
+        }
+
 
         /// <summary>
         /// Add an item to this object

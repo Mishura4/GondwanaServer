@@ -3,6 +3,8 @@ using DOL.Database;
 using DOL.GS.PacketHandler;
 using DOL.GS.Scripts;
 using DOL.Language;
+using System.Collections.Generic;
+using System.Linq;
 
 
 namespace DOL.GS.Commands
@@ -62,15 +64,22 @@ namespace DOL.GS.Commands
                         GameServer.Database.AddObject(item);
 
                         string message = "";
-                        if (!client.Player.Inventory.AddTemplate(GameInventoryItem.Create(item), 1, eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack))
+                        GameInventoryItem inventoryItem = GameInventoryItem.Create(item);
+                        if (!client.Player.Inventory.AddTemplate(inventoryItem, 1, eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack))
                         {
-                            if (!client.Player.Inventory.AddTemplate(GameInventoryItem.Create(item), 1, eInventorySlot.FirstVault, eInventorySlot.LastVault))
+                            ItemTemplate dummyVault = CharacterVaultKeeper.GetDummyVaultItem(client.Player);
+                            CharacterVault vault = new CharacterVault(client.Player, 0, dummyVault);
+                            if (!vault.AddItem(client.Player, inventoryItem, true))
                             {
-                                bank.Money += newMoney;
-                                GameServer.Database.SaveObject(bank);
-                                GameServer.Database.DeleteObject(item);
-                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Banque.Cheque.InventoryFull"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                                return;
+                                vault = new CharacterVault(client.Player, 1, dummyVault);
+                                if (!vault.AddItem(client.Player, inventoryItem, true))
+                                {
+                                    bank.Money += newMoney;
+                                    GameServer.Database.SaveObject(bank);
+                                    GameServer.Database.DeleteObject(item);
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Banque.Cheque.InventoryFull"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    return;
+                                }
                             }
                             message += LanguageMgr.GetTranslation(client.Account.Language, "Banque.Cheque.MovedToVault") + "\n";
                         }

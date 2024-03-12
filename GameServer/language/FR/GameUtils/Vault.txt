@@ -3,6 +3,7 @@ GameUtils.CustomVault.NoView:				Vous n'avez pas la permission de visionner ce c
 GameUtils.CustomVault.NoAdd:				Vous n'avez pas la permission de mettre cet objet dans ce coffre!
 GameUtils.CustomVault.NoRemove:				Vous n'avez pas la permission de retirer cet objet de ce coffre!
 GameUtils.CustomVault.NoMove:				Vous n'avez pas la permission de déplacer des objets dans ce coffre!
+GameUtils.CustomVault.Full:					Ce coffre est plein!
 GameUtils.CustomVault.ItemSwapUntradeable:	Vous ne pouvez pas échanger cet objet!
 GameUtils.CustomVault.InvalidItem:			Vous ne pouvez pas mettre cet objet dans ce coffre!
 
@@ -13,6 +14,7 @@ GameUtils.AccountVault.Item.Name:			Coffre de Compte
 GameUtils.CharacterVault.Keeper.Greetings:	Bonjour {0}, ravi de vous rencontrer. Je vous offre chaleureusement mes services.
 GameUtils.CharacterVault.Keeper.Access:		Vous pouvez regarder la [première] ou la [deuxième] page de votre Coffre Personel.
 GameUtils.CharacterVault.Item.Name:			Coffre de {0}
+GameUtils.CharacterVault.Full:				Votre coffre personel est plein!
 
 GameUtils.GuildVault.Keeper.Greetings:		Bonjour {0}, ravi de vous rencontrer. Je vous offre chaleureusement mes services.
 GameUtils.GuildVault.Keeper.Access123:		Vous pouvez regarder la [première], la [deuxième] ou la [troisième] page du Coffre de {0}.

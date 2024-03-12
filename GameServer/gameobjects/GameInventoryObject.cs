@@ -58,6 +58,15 @@ namespace DOL.GS
         /// <returns></returns>
         bool MoveItem(GamePlayer player, ushort fromClientSlot, ushort toClientSlot, ushort itemCount);
 
+        /// <summary>
+        /// Add an item to an empty slot
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="item"></param>
+        /// <param name="quiet"></param>
+        /// <returns></returns>
+        bool AddItem(GamePlayer player, InventoryItem item, bool quiet = false);
+
         bool IsVaultInventorySlot(ushort clientSlot);
 
         bool OnAddItem(GamePlayer player, InventoryItem item);
@@ -200,6 +209,46 @@ namespace DOL.GS
             // Remove inactive observers.
             foreach (string observerName in inactiveList)
                 observers.Remove(observerName);
+        }
+
+        public static IDictionary<int, InventoryItem> AddItem(this IGameInventoryObject thisObject, GamePlayer player, InventoryItem item)
+        {
+            int FindEmptySlot()
+            {
+                var vaultItems = thisObject.DBItems(player);
+                bool[] hasItem = new bool[thisObject.LastDBSlot - thisObject.FirstDBSlot];
+                foreach (InventoryItem itemInVault in vaultItems)
+                {
+                    if (itemInVault.SlotPosition >= thisObject.FirstDBSlot && itemInVault.SlotPosition <= thisObject.LastDBSlot)
+                    {
+                        hasItem[itemInVault.SlotPosition - thisObject.FirstDBSlot] = true;
+                    }
+                }
+                for (int i = 0; i < hasItem.Length; ++i)
+                {
+                    if (!hasItem[i])
+                    {
+                        return thisObject.FirstDBSlot + i;
+                    }
+                }
+                return 0;
+            }
+
+            int emptySlot = FindEmptySlot();
+            if (emptySlot == 0)
+            {
+                return new Dictionary<int, InventoryItem>();
+            }
+            item.SlotPosition = emptySlot;
+            item.OwnerID = thisObject.GetOwner(player);
+
+            if (!GameServer.Database.AddObject(item))
+            {
+                SendErrorMessage(player, nameof(AddItem), 0, (eInventorySlot)emptySlot, item, null, (ushort)item.Count);
+                return new Dictionary<int, InventoryItem>();
+            }
+
+            return new Dictionary<int, InventoryItem>{{ emptySlot, item }};
         }
 
         private static void MoveItemToEmptySlot(this IGameInventoryObject thisObject, GamePlayer player, eInventorySlot fromClientSlot, eInventorySlot toClientSlot, InventoryItem fromItem, ushort count, Dictionary<int, InventoryItem> updatedItems)
