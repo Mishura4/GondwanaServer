@@ -108,7 +108,7 @@ namespace DOL.GS
         public override LootList GenerateLoot(GameNPC mob, GameObject killer)
         {
             LootList loot = base.GenerateLoot(mob, killer);
-            if (Util.Chance(90))
+            if (Util.Chance(20))
                 return loot;
 
             var woodenBoards = new LootList(1);
