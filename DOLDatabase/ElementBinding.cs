@@ -76,16 +76,34 @@ namespace DOL.Database
             switch (Member.MemberType)
             {
                 case MemberTypes.Property:
-                    var property = Member as PropertyInfo;
-                    ValueType = property.PropertyType;
-                    GetValue = obj => property.GetValue(obj, null);
-                    SetValue = (obj, val) => property.SetValue(obj, val, null);
+                    {
+                        var property = Member as PropertyInfo;
+                        if (property.PropertyType is { IsGenericType: true } genericType && genericType.GetGenericTypeDefinition() == typeof(Nullable<>))
+                        {
+                            ValueType = Nullable.GetUnderlyingType(genericType);
+                        }
+                        else
+                        {
+                            ValueType = property.PropertyType;
+                        }
+                        GetValue = obj => property.GetValue(obj, null);
+                        SetValue = (obj, val) => property.SetValue(obj, val, null);
+                    }
                     break;
                 case MemberTypes.Field:
-                    var field = Member as FieldInfo;
-                    ValueType = field.FieldType;
-                    GetValue = field.GetValue;
-                    SetValue = field.SetValue;
+                    {
+                        var field = Member as FieldInfo;
+                        if (field.FieldType is { IsGenericType: true } genericType && genericType.GetGenericTypeDefinition() == typeof(Nullable))
+                        {
+                            ValueType = Nullable.GetUnderlyingType(genericType);
+                        }
+                        else
+                        {
+                            ValueType = field.FieldType;
+                        }
+                        GetValue = field.GetValue;
+                        SetValue = field.SetValue;
+                    }
                     break;
                 default:
                     return;

@@ -120,6 +120,8 @@ namespace DOL.GS
 
         protected List<PlayerRace> m_eligibleRaces;
 
+        protected float m_maxTensionFactor = 0.0f;
+
         protected struct ClassOverride
         {
             public byte ClassID;
@@ -128,6 +130,7 @@ namespace DOL.GS
             public int BaseWeaponSkill;
             public List<string> AutotrainableSkills;
             public List<PlayerRace> EligibleRaces;
+            public float? MaxTensionFactor;
         }
 
         protected static Dictionary<byte, ClassOverride> m_classOverride = new Dictionary<byte, ClassOverride>(0);
@@ -192,7 +195,8 @@ namespace DOL.GS
                     ClassID = (byte)dbClassOverride.ID,
                     SpecializationMultiplier = dbClassOverride.SpecPointMultiplier,
                     BaseHP = dbClassOverride.BaseHP,
-                    BaseWeaponSkill = dbClassOverride.BaseWeaponSkill
+                    BaseWeaponSkill = dbClassOverride.BaseWeaponSkill,
+                    MaxTensionFactor = dbClassOverride.MaxTensionFactor
                 };
 
                 classOverride.AutotrainableSkills = new(0);
@@ -232,6 +236,11 @@ namespace DOL.GS
 
                 if (cOverride.EligibleRaces.Count > 0)
                     m_eligibleRaces = cOverride.EligibleRaces;
+
+                if (cOverride.MaxTensionFactor != null)
+                {
+                    m_maxTensionFactor = (float)cOverride.MaxTensionFactor;
+                }
             }
         }
 

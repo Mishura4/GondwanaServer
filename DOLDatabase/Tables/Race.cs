@@ -38,6 +38,7 @@ namespace DOL.Database
         protected sbyte m_ResistSpirit;
         protected sbyte m_ResistThrust;
         protected sbyte m_DamageType;
+        protected float m_MaxTensionFactor;
 
         public Race() : base()
         {
@@ -173,6 +174,17 @@ namespace DOL.Database
             {
                 Dirty = true;
                 m_ResistThrust = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public float MaxTensionFactor
+        {
+            get { return m_MaxTensionFactor; }
+            set
+            {
+                Dirty = true;
+                m_MaxTensionFactor = value;
             }
         }
     }

@@ -40,6 +40,7 @@ namespace DOL.Database
         private byte manaStat;
         private bool canUseLeftHandedWeapon;
         private byte maxPulsingSpells;
+        private float? maxTensionFactor;
 
         [PrimaryKey]
         public byte ID
@@ -226,6 +227,17 @@ namespace DOL.Database
             {
                 Dirty = true;
                 maxPulsingSpells = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = true)]
+        public float? MaxTensionFactor
+        {
+            get { return maxTensionFactor; }
+            set
+            {
+                Dirty = true;
+                maxTensionFactor = value;
             }
         }
     }
