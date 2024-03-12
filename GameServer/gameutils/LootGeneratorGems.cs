@@ -61,15 +61,15 @@ namespace DOL.GS
 
                 if (levelDifference >= -4 && levelDifference <= widenedLevelDifference)
                 {
-                    return 650 + additionalChance;
+                    return 65 + additionalChance;
                 }
                 else if (levelDifference >= 5 && levelDifference <= 9)
                 {
-                    return 180 - additionalChance;
+                    return 18 - additionalChance;
                 }
                 else if (levelDifference >= -9 && levelDifference <= -5)
                 {
-                    return 140 - additionalChance;
+                    return 14 - additionalChance;
                 }
                 else if (levelDifference < -9)
                 {
@@ -77,22 +77,22 @@ namespace DOL.GS
                 }
                 else
                 {
-                    return 30 - additionalChance;
+                    return 3 - additionalChance;
                 }
             }
             else
             {
                 if (levelDifference >= -4 && levelDifference <= 4)
                 {
-                    return 650;
+                    return 65;
                 }
                 else if (levelDifference >= 5 && levelDifference <= 9)
                 {
-                    return 180;
+                    return 18;
                 }
                 else if (levelDifference >= -9 && levelDifference <= -5)
                 {
-                    return 140;
+                    return 14;
                 }
                 else if (levelDifference < -9)
                 {
@@ -100,7 +100,7 @@ namespace DOL.GS
                 }
                 else
                 {
-                    return 30;
+                    return 3;
                 }
             }
         }
@@ -117,7 +117,10 @@ namespace DOL.GS
                 if ( _gemValue.TryGetValue(gem.Id_nb, out float value))
                 {
                     int chance = CalculateGemChance(mob.Level, value);
-                    gems.AddRandom(chance, gem, 1);
+                    if (chance > 0)
+                    {
+                        gems.AddRandom(chance, gem, 1);
+                    }
                 }
             }
 

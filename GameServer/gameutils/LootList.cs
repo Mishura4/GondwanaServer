@@ -133,7 +133,8 @@ namespace DOL.GS
                 var lootCandidates = new List<LootEntry>();
                 foreach (LootEntry lootEntry in m_randomItemDrops)
                 {
-                    if (lootEntry.Chance >= Util.Random(1, 100))
+                    var rand = Util.Random(1, 100);
+                    if (lootEntry.Chance >= rand)
                         lootCandidates.Add(lootEntry);
                 }
                 // At this point, the candidate list is filled with items that passed
