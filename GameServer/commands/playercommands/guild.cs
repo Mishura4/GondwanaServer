@@ -1168,9 +1168,20 @@ namespace DOL.GS.Commands
                                 return;
                             }
 
-                            if (client.Player.Guild.MeritPoints < 1000)
+                            int guildLevel = (int)client.Player.Guild.GuildLevel;
+                            int meritPointCost = 1000;
+
+                            if (guildLevel >= 8 && guildLevel <= 15)
                             {
-                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.MeritPointReq"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                meritPointCost = 2000;
+                            }
+                            else if (guildLevel >= 16)
+                            {
+                                meritPointCost = 3000;
+                            }
+                            if (client.Player.Guild.MeritPoints < meritPointCost)
+                            {
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.MeritPointReq", (Math.Max(0, meritPointCost - client.Player.Guild.MeritPoints)), meritPointCost), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 return;
                             }
 
@@ -1184,7 +1195,8 @@ namespace DOL.GS.Commands
                                         client.Out.SendCustomDialog(
                                             LanguageMgr.GetTranslation(
                                                 client.Account.Language,
-                                                "Commands.Players.Guild.Buff.Activate.RP"
+                                                "Commands.Players.Guild.Buff.Activate.RP",
+                                                meritPointCost
                                             ),
                                             ConfirmBuffBuy);
                                     }
@@ -1208,7 +1220,8 @@ namespace DOL.GS.Commands
                                         client.Out.SendCustomDialog(
                                             LanguageMgr.GetTranslation(
                                                 client.Account.Language,
-                                                "Commands.Players.Guild.Buff.Buy"
+                                                "Commands.Players.Guild.Buff.Buy",
+                                                meritPointCost
                                             ),
                                             ConfirmBuffBuy);
                                     }
@@ -1232,7 +1245,8 @@ namespace DOL.GS.Commands
                                         client.Out.SendCustomDialog(
                                             LanguageMgr.GetTranslation(
                                                 client.Account.Language,
-                                                "Commands.Players.Guild.Buff.Activate.Crafting"
+                                                "Commands.Players.Guild.Buff.Activate.Crafting",
+                                                meritPointCost
                                             ),
                                             ConfirmBuffBuy);
                                     }
@@ -1256,7 +1270,8 @@ namespace DOL.GS.Commands
                                         client.Out.SendCustomDialog(
                                             LanguageMgr.GetTranslation(
                                                 client.Account.Language,
-                                                "Commands.Players.Guild.Buff.Activate.XP"
+                                                "Commands.Players.Guild.Buff.Activate.XP",
+                                                meritPointCost
                                             ),
                                             ConfirmBuffBuy);
                                     }
@@ -1279,7 +1294,8 @@ namespace DOL.GS.Commands
                                         client.Out.SendCustomDialog(
                                             LanguageMgr.GetTranslation(
                                                 client.Account.Language,
-                                                "Commands.Players.Guild.Buff.Activate.Artifact"
+                                                "Commands.Players.Guild.Buff.Activate.Artifact",
+                                                meritPointCost
                                             ),
                                             ConfirmBuffBuy);
                                     }
@@ -3422,7 +3438,6 @@ namespace DOL.GS.Commands
 
         }
 
-
         private const string GUILD_BUFF_TYPE = "GUILD_BUFF_TYPE";
 
         protected void ConfirmBuffBuy(GamePlayer player, byte response)
@@ -3430,21 +3445,36 @@ namespace DOL.GS.Commands
             if (response != 0x01)
                 return;
 
+            if (player == null || player.Guild == null)
+                return;
+
+            int guildLevel = (int)player.Guild.GuildLevel;
+            int meritPointCost = 1000;
+
+            if (guildLevel >= 8 && guildLevel <= 15)
+            {
+                meritPointCost = 2000;
+            }
+            else if (guildLevel >= 16)
+            {
+                meritPointCost = 3000;
+            }
+
             Guild.eBonusType buffType = player.TempProperties.getProperty<Guild.eBonusType>(GUILD_BUFF_TYPE, Guild.eBonusType.None);
             player.TempProperties.removeProperty(GUILD_BUFF_TYPE);
 
-            if (buffType == Guild.eBonusType.None || player.Guild.MeritPoints < 1000 || player.Guild.BonusType != Guild.eBonusType.None)
+            if (buffType == Guild.eBonusType.None || player.Guild.MeritPoints < meritPointCost || player.Guild.BonusType != Guild.eBonusType.None)
                 return;
 
             player.Guild.BonusType = buffType;
-            player.Guild.RemoveMeritPoints(1000);
+            player.Guild.RemoveMeritPoints(meritPointCost);
             player.Guild.BonusStartTime = DateTime.Now;
 
             string buffName = Guild.BonusTypeToName(buffType);
 
             foreach (GamePlayer ply in player.Guild.GetListOfOnlineMembers())
             {
-                ply.Out.SendMessage(LanguageMgr.GetTranslation(ply.Client.Account.Language, "Commands.Players.Guild.BuffActivated", player.Name, buffName), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                ply.Out.SendMessage(LanguageMgr.GetTranslation(ply.Client.Account.Language, "Commands.Players.Guild.BuffActivated", player.Name, buffName, meritPointCost), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
             }
             player.Guild.UpdateGuildWindow();
         }

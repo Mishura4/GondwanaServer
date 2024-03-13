@@ -32,7 +32,7 @@ Commands.Players.Guild.BannerGroupSummoned:	    Quelqu'un dans votre groupe a d�
 Commands.Players.Guild.BannerGuildSummoned:	    Quelqu'un dans votre guilde a déjà invoqué la bannière de guilde.
 Commands.Players.Guild.BannerNoGroup:			    Vous avez besoin d'un groupe pour invoquer une bannière.
 Commands.Players.Guild.BannerNone:			    Votre guilde ne possède pas de bannière de guilde.
-Commands.Players.Guild.BannerNotAfford:		    Vous avez besoin de {0} points de mérite supplémentaires pour acheter une bannière de guilde !
+Commands.Players.Guild.BannerNotAfford:		    Votre guilde a besoin de {0} points de mérite supplémentaires pour acheter une bannière de guilde !
 Commands.Players.Guild.BannerSummoned.You:		    Vous avez invoqué votre bannière de guilde.
 Commands.Players.Guild.BannerSummoned:				{0} a invoqué la bannière de guilde.
 Commands.Players.Guild.BannerUnsummoned.You:		Vous avez retiré votre bannière de guilde.
@@ -48,7 +48,7 @@ Commands.Players.Guild.BannerCantInDungeon:			Vous ne pouvez pas invoquer une ba
 Commands.Players.Guild.Banner.BuyPrice:             Vous devez payer la somme de {0} pour acheter une bannière.
 Commands.Players.Guild.Banner.LostMinutes           Votre bannière a été prise par l'ennemi. Vous devez attendre {0} minute(s) !
 Commands.Players.Guild.Banner.LostHours:            Votre bannière a été prise par l'ennemi. Vous devez attendre {0} Heure(s) !
-Commands.Players.Guild.BuffActivated:			    {0} a activé une Amélioration de Guilde : "{1}" ayant coûté 1000 Points de Mérite.
+Commands.Players.Guild.BuffActivated:			    {0} a activé une Amélioration de Guilde : "{1}" ayant coûté {2} Points de Mérite.
 Commands.Players.Guild.BuffBountyPoints:		    Votre guilde gagnera maintenant 5 % aux primes de royaume de plus pendant 6 heures !
 Commands.Players.Guild.BuffBPActivated:		    [Guild Buff] Votre guilde recevra un bonus aux primes de royaume pendant 6 heures !
 Commands.Players.Guild.BuffMPActivated:		    [Guild Buff] Votre guilde recevra un bonus aux points de mérite de guilde pendant 6 heures !
@@ -195,13 +195,13 @@ Commands.Players.Guild.MadeLeaderOther:			{0} a été promu nouveau chef de la g
 Commands.Players.Guild.MemberLogin:				{0} est maintenant connecté(e).
 Commands.Players.Guild.MemberLogoff:			{0} est maintenant déconnecté(e).
 Commands.Players.Guild.MemberRemoved:			{0} a retiré {1} de la guilde.
-Commands.Players.Guild.MeritPointReq:			Votre guilde ne possède pas les points de mérite nécessaires à cette action.
-Commands.Players.Guild.Buff.Activate.RP:        Etes-vous sûr de vouloir activer un buff de guilde RP pour 1000 points de mérite ?
+Commands.Players.Guild.MeritPointReq:			Votre guilde a besoin de {0} points de mérite supplémentaires pour activer un buff de guilde ! (Points de mérite total nécessaires à cette action : {1})
+Commands.Players.Guild.Buff.Activate.RP:        Etes-vous sûr de vouloir activer un buff de guilde RP pour {0} points de mérite ?
 Commands.Players.Guild.Buff.NotAvailable:       Ce type de buff n'est pas disponible.
-Commands.Players.Guild.Buff.Buy:                Etes-vous sûr de vouloir activer un buff de guilde BP pour 1000 points de mérite ?
-Commands.Players.Guild.Buff.Activate.Crafting:  Etes-vous sûr de vouloir activer un buff de guilde Hâte de Craft pour 1000 points de mérite ?
-Commands.Players.Guild.Buff.Activate.XP:        Etes-vous sûr de vouloir activer un buff de guilde XP pour 1000 points de mérite ?
-Commands.Players.Guild.Buff.Activate.Artifact:  Etes-vous sûr de vouloir activer un buff de guilde Artefact XP pour 1000 points de mérite ?
+Commands.Players.Guild.Buff.Buy:                Etes-vous sûr de vouloir activer un buff de guilde BP pour {0} points de mérite ?
+Commands.Players.Guild.Buff.Activate.Crafting:  Etes-vous sûr de vouloir activer un buff de guilde Hâte de Craft pour {0} points de mérite ?
+Commands.Players.Guild.Buff.Activate.XP:        Etes-vous sûr de vouloir activer un buff de guilde XP pour {0} points de mérite ?
+Commands.Players.Guild.Buff.Activate.Artifact:  Etes-vous sûr de vouloir activer un buff de guilde Artefact XP pour {0} points de mérite ?
 Commands.Players.Guild.Buff.NotImplemented:     Ce buff n'a pas été implémenté.
 Commands.Players.Guild.MotdSet:					Vous changez le message du jour de la guilde.
 Commands.Players.Guild.NoKeep:					Vous n'avez pas de fort actuellement pour pouvoir utiliser cette commande.

@@ -1,0 +1,6 @@
+﻿GuildEvent.EarnedMeritPoints:		Vous avez gagné {0} points de mérite pour votre guilde !
+GuildEvent.MeritPointsAward:		Votre guilde reçoit {0} points de mérite !
+GuildEvent.GuildbonusXP:			Vous obtenez un bonus de {0} Points d'Expérience supplémentaires grâce à votre buff guilde !
+GuildEvent.GuildbonusRP:			Vous obtenez un bonus de {0} Points de Royaume supplémentaires grâce à votre buff guilde !
+GuildEvent.GuildbonusBP:			Vous obtenez un bonus de {0} Prime de Royaume supplémentaires grâce à votre buff guilde !
+GuildEvent.GuildBuffEnd:			[Buff de Guilde] Le buff de votre guilde est maintenant terminé !

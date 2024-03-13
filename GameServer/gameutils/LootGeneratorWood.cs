@@ -54,7 +54,7 @@ namespace DOL.GS
         {
             // Calculate the chance based on player and wooden board level
             int levelDifference = mobLevel - (int)woodenBoardValue;
-            if (mobLevel > 45)
+            if (mobLevel > 45 && mobLevel <= 59)
             {
                 int additionalChance = (mobLevel - 45) * 10;
                 int widenedLevelDifference = (mobLevel - 45) + 5;
@@ -78,6 +78,17 @@ namespace DOL.GS
                 else
                 {
                     return 3 - additionalChance;
+                }
+            }
+            else if (mobLevel > 59)
+            {
+                if ((int)woodenBoardValue == 45)
+                {
+                    return 100;
+                }
+                else
+                {
+                    return 0; 
                 }
             }
             else
@@ -108,7 +119,7 @@ namespace DOL.GS
         public override LootList GenerateLoot(GameNPC mob, GameObject killer)
         {
             LootList loot = base.GenerateLoot(mob, killer);
-            if (Util.Chance(20))
+            if (Util.Chance(60))
                 return loot;
 
             var woodenBoards = new LootList(1);

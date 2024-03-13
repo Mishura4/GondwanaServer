@@ -1,0 +1,6 @@
+﻿GuildEvent.EarnedMeritPoints:		You have earned {0} merit points for your guild!
+GuildEvent.MeritPointsAward:		Your guild is awarded {0} merit points!
+GuildEvent.GuildbonusXP:			You gain an additional {0} experience due to your guild's buff!
+GuildEvent.GuildbonusRP:			You get an additional {0} realm points due to your guild's buff!
+GuildEvent.GuildbonusBP:			You get an additional {0} bounty points due to your guild's buff!
+GuildEvent.GuildBuffEnd:			[Guild Buff] Your guild buff has now worn off!

@@ -32,7 +32,7 @@ Commands.Players.Guild.BannerGroupSummoned:	    Someone in your group has alread
 Commands.Players.Guild.BannerGuildSummoned:	    Someone in your guild has already summoned the guild banner.
 Commands.Players.Guild.BannerNoGroup:			    You need a group to summon a banner.
 Commands.Players.Guild.BannerNone:			    Your guild does not have a guild banner.
-Commands.Players.Guild.BannerNotAfford:		    You need {0} more merit points to buy a guild banner!
+Commands.Players.Guild.BannerNotAfford:		    Your guild need {0} more merit points to buy a guild banner!
 Commands.Players.Guild.BannerSummoned.You:		    You have summoned your guild banner.
 Commands.Players.Guild.BannerSummoned:		    {0} has summoned the guild banner.
 Commands.Players.Guild.BannerUnsummoned.You:		You have put away your guild banner.
@@ -48,7 +48,7 @@ Commands.Players.Guild.BannerCantInDungeon:			You cannot summon a banner in a du
 Commands.Players.Guild.Banner.BuyPrice:             You must pay the amount of {0} to buy a banner.
 Commands.Players.Guild.Banner.LostMinutes           Your banner has been lost to the enemy. You must wait {0} minute(s)!
 Commands.Players.Guild.Banner.LostHours:            Your banner has been lost to the enemy. You must wait {0} Hour(s)!
-Commands.Players.Guild.BuffActivated:			    {0} has activated a Guild Buff: "{1}" which costs 1000 Guild Merit Points.
+Commands.Players.Guild.BuffActivated:			    {0} has activated a Guild Buff: "{1}" which costs {2} Guild Merit Points.
 Commands.Players.Guild.BuffBountyPoints:		    Your guild will now earn 5 % more bounty points for 6 hours!
 Commands.Players.Guild.BuffBPActivated:		    [Guild Buff] Your guild will receive a realm points bonus for 6 hours!
 Commands.Players.Guild.BuffMPActivated:		    [Guild Buff] Your guild will receive a merit points bonus for 6 hours!
@@ -195,13 +195,13 @@ Commands.Players.Guild.MadeLeaderOther:			{0} has been promoted as the new leade
 Commands.Players.Guild.MemberLogin:				{0} is now connected.
 Commands.Players.Guild.MemberLogoff:			{0} is now disconnected.
 Commands.Players.Guild.MemberRemoved:			{0} has removed {1} from the guild.
-Commands.Players.Guild.MeritPointReq:			Your guild does not have the merit points required for this action.
-Commands.Players.Guild.Buff.Activate.RP:        Are you sure you want to activate a Realm Points guild buff for 1000 merit points?
+Commands.Players.Guild.MeritPointReq:			Your guild need {0} more merit points to activate a guild buff! (Total merit points amount required for this action: {1}).
+Commands.Players.Guild.Buff.Activate.RP:        Are you sure you want to activate a Realm Points guild buff for {0} merit points?
 Commands.Players.Guild.Buff.NotAvailable:       This buff type is not available.
-Commands.Players.Guild.Buff.Buy:                Are you sure you want to activate a Bounty Points guild buff for 1000 merit points?
-Commands.Players.Guild.Buff.Activate.Crafting:  Are you sure you want to activate a Crafting speed guild buff for 1000 merit points?
-Commands.Players.Guild.Buff.Activate.XP:        Are you sure you want to activate an XP guild buff for 1000 merit points?
-Commands.Players.Guild.Buff.Activate.Artifact:  Are you sure you want to activate an Artifact XP guild buff for 1000 merit points?
+Commands.Players.Guild.Buff.Buy:                Are you sure you want to activate a Bounty Points guild buff for {0} merit points?
+Commands.Players.Guild.Buff.Activate.Crafting:  Are you sure you want to activate a Crafting speed guild buff for {0} merit points?
+Commands.Players.Guild.Buff.Activate.XP:        Are you sure you want to activate an XP guild buff for {0} merit points?
+Commands.Players.Guild.Buff.Activate.Artifact:  Are you sure you want to activate an Artifact XP guild buff for {0} merit points?
 Commands.Players.Guild.Buff.NotImplemented:     This buff has not been implemented
 Commands.Players.Guild.MotdSet:					You change the guild's Message of th Day.
 Commands.Players.Guild.NoKeep:					You currently do not have a keep to use this command.

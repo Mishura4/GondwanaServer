@@ -2619,6 +2619,12 @@ namespace DOL.GS.ServerProperties
         public static ushort GUILD_BUFF_MASTERLEVEL_XP;
 
         /// <summary>
+        /// Guild masterlevel XP Buff bonus amount
+        /// </summary>
+        [ServerProperty("guild", "guild_buff_duration_hours", "Duration in hours for all guild buffs.", (ushort)5)]
+        public static ushort GUILD_BUFF_DURATION_HOURS;
+
+        /// <summary>
         /// How much merit to reward guild when dragon is killed, if any.
         /// </summary>
         [ServerProperty("guild", "guild_merit_on_dragon_kill", "How much merit to reward guild when dragon is killed, if any.", (ushort)0)]
