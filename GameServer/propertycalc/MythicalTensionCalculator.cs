@@ -36,7 +36,7 @@ namespace DOL.GS.PropertyCalc
                 value += Math.Min(75, living.ItemBonus[(int)property]); // cap 75% from items
             }
             value -= living.DebuffCategory[eProperty.MythicalTension];
-            return Math.Max(0, value);
+            return Math.Max(-100, value);
         }
     }
 }
