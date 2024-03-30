@@ -369,12 +369,6 @@ namespace DOL.GS
             set { m_regionData.IsFrontier = value; }
         }
 
-        public virtual float TensionRate
-        {
-            get { return m_regionData.TensionRate; }
-            set { m_regionData.TensionRate = value; }
-        }
-
         /// <summary>
         /// Is the Region a temporary instance
         /// </summary>

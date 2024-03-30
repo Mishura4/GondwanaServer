@@ -2995,7 +2995,7 @@ namespace DOL.GS
                 rate *= 1.10f;
             }
 
-            rate *= CurrentRegion.TensionRate;
+            rate *= CurrentZone.TensionRate;
 
             if (source is { AttackType: AttackData.eAttackType.Spell, Damage: 0, SpellHandler: not AbstractCCSpellHandler }) // Non-damaging spells that are not CCs are assumed to be stat debuffs
             {

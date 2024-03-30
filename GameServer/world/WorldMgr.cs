@@ -385,7 +385,6 @@ namespace DOL.GS
                 data.WaterLevel = dbRegion.WaterLevel;
                 data.ClassType = dbRegion.ClassType;
                 data.IsFrontier = dbRegion.IsFrontier;
-                data.TensionRate = dbRegion.TensionRate;
 
                 hasFrontierRegion |= data.IsFrontier;
 
@@ -458,9 +457,10 @@ namespace DOL.GS
                 zoneData.IsLava = dbZone.IsLava;
                 zoneData.AllowMagicalItem = dbZone.AllowMagicalItem;
                 zoneData.AllowReputation = dbZone.AllowReputation;
+                zoneData.TensionRate = dbZone.TensionRate;
 
                 RegisterZone(zoneData, zoneData.ZoneID, zoneData.RegionID, zoneData.Description,
-                             dbZone.Experience, dbZone.Realmpoints, dbZone.Bountypoints, dbZone.Coin, dbZone.Realm, dbZone.AllowMagicalItem, dbZone.AllowReputation);
+                             dbZone.Experience, dbZone.Realmpoints, dbZone.Bountypoints, dbZone.Coin, dbZone.Realm, dbZone.AllowMagicalItem, dbZone.AllowReputation, dbZone.TensionRate);
 
                 //Save the zonedata.
                 if (!m_zonesData.ContainsKey(zoneData.RegionID))
@@ -886,7 +886,7 @@ namespace DOL.GS
         /// <summary>
         /// Registers a Zone into a Region
         /// </summary>
-        public static void RegisterZone(ZoneData zoneData, ushort zoneID, ushort regionID, string zoneName, int xpBonus, int rpBonus, int bpBonus, int coinBonus, byte realm, bool allowMagicalItem, bool allowReputation)
+        public static void RegisterZone(ZoneData zoneData, ushort zoneID, ushort regionID, string zoneName, int xpBonus, int rpBonus, int bpBonus, int coinBonus, byte realm, bool allowMagicalItem, bool allowReputation, float tensionRate)
         {
             Region region = GetRegion(regionID);
             if (region == null)
@@ -929,7 +929,8 @@ namespace DOL.GS
                 coinBonus,
                 realm,
                 allowMagicalItem,
-                allowReputation);
+                allowReputation,
+                tensionRate);
 
             //Dinberg:Instances
             //ZoneID will always be constant as last parameter, because ZoneSkinID will effectively be a bluff, to remember
@@ -2112,7 +2113,7 @@ namespace DOL.GS
                                                   return true;
                                               }))
                 {
-                    RegisterZone(dat, (ushort)zoneID, ID, $"{dat.Description} (Instance)", 0, 0, 0, 0, 0, dat.AllowMagicalItem, dat.AllowReputation);
+                    RegisterZone(dat, (ushort)zoneID, ID, $"{dat.Description} (Instance)", 0, 0, 0, 0, 0, dat.AllowMagicalItem, dat.AllowReputation, dat.TensionRate);
                 }
             }
 

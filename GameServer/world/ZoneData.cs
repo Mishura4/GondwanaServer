@@ -64,12 +64,15 @@ namespace DOL.GS
 
         public bool AllowReputation { get; set; }
 
+        public float TensionRate { get => m_tensionRate; set => m_tensionRate = value; }
+
         private byte m_OffX, m_OffY, m_Height, m_Width;
         private ushort m_ZoneID, m_RegionID;
         private string m_description;
         private int m_waterLevel;
         private byte m_divingFlag;
         private bool m_IsLava;
+        private float m_tensionRate = 1.0f;
 
         public ZoneData() { }
         public ZoneData(Zones z)
@@ -86,6 +89,7 @@ namespace DOL.GS
             IsLava = z.IsLava;
             AllowMagicalItem = z.AllowMagicalItem;
             AllowReputation = z.AllowReputation;
+            TensionRate = z.TensionRate;
         }
     }
 }
