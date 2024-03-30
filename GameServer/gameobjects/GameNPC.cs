@@ -291,9 +291,19 @@ namespace DOL.GS
 
             int level_difference = source.Attacker.EffectiveLevel - this.EffectiveLevel;
 
-            if (level_difference <= -5)
+            if (this.Level < 52)
             {
-                return;
+                if (level_difference <= -5)
+                {
+                    return;
+                }
+            }
+            else // Bosses gain tension even from lower level players
+            {
+                if (source.Attacker.EffectiveLevel < 38)
+                {
+                    return;
+                }
             }
 
             int tension = level_difference switch
@@ -305,14 +315,19 @@ namespace DOL.GS
                 > 15 => 8
             };
 
+            float rate = (1.00f + ((float)GetModified(eProperty.MythicalTension)) / 100);
+
+            if (rate < 0.0f)
+            {
+                return;
+            }
+
             if (IsRenaissance)
             {
-                tension = (int)(Properties.MOB_TENSION_RATE * tension * source.TensionRate * 1.10f);
+                rate *= 1.10f;
             }
-            else
-            {
-                tension = (int)(Properties.MOB_TENSION_RATE * tension * source.TensionRate);
-            }
+
+            tension = (int)((Properties.MOB_TENSION_RATE * tension * source.TensionRate * rate) + 0.5f); // Round up
 
 
             Tension += tension;

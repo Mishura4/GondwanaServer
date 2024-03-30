@@ -5745,7 +5745,14 @@ namespace DOL.GS
                 > 15 => 8
             };
 
-            tension = (int)(Properties.MOB_TENSION_RATE * tension * source.TensionRate);
+            float rate = (1.00f + ((float)GetModified(eProperty.MythicalTension)) / 100);
+
+            if (rate < 0.0f)
+            {
+                return;
+            }
+
+            tension = (int)((Properties.MOB_TENSION_RATE * tension * source.TensionRate * rate) + 0.5f); // Round up
 
 
             Tension += tension;
