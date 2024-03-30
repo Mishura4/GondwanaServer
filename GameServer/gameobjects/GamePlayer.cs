@@ -2983,7 +2983,7 @@ namespace DOL.GS
                 server_rate = (float)Properties.PVE_TENSION_RATE;
             }
 
-            float rate = (1.00f + ((float)GetModified(eProperty.MythicalTension)) / 100) * (1.00f - CurrentRegion.TensionRate);
+            float rate = (1.00f + ((float)GetModified(eProperty.MythicalTension)) / 100);
 
             if (rate < 0.0f)
             {
@@ -2992,8 +2992,10 @@ namespace DOL.GS
 
             if (IsRenaissance)
             {
-                rate *= 0.10f;
+                rate *= 1.10f;
             }
+
+            rate *= CurrentRegion.TensionRate;
 
             if (source is { AttackType: AttackData.eAttackType.Spell, Damage: 0, SpellHandler: not AbstractCCSpellHandler }) // Non-damaging spells that are not CCs are assumed to be stat debuffs
             {
