@@ -3260,6 +3260,7 @@ namespace DOL.GS
             Endurance = MaxEndurance;
             Position = m_spawnPoint;
             Heading = m_spawnHeading;
+            Tension = 0;
             ambientXNbUse = new Dictionary<MobXAmbientBehaviour, short>();
 
             return AddToWorld();

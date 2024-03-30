@@ -8354,6 +8354,8 @@ namespace DOL.GS
                 UpdatePlayerStatus();
             }
 
+            // Lose 40% tension
+            Tension = (int)(Tension * 0.40 + 0.5);
             // then buffs drop messages
             base.Die(killer);
 
