@@ -7,6 +7,7 @@ using System;
 
 namespace DOL.GS.Spells
 {
+    [SpellHandler("TensionBuff")]
     public class TensionBuff : SingleStatBuff
     {
         /// <inheritdoc />
@@ -25,5 +26,7 @@ namespace DOL.GS.Spells
         {
             get => eBuffBonusCategory.Other;
         }
+
+        public override string ShortDescription => $"Increases the target's {ConvertPropertyToText(Property1).ToLower()} by {Spell.Value}%.";
     }
 }

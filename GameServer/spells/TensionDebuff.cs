@@ -7,6 +7,7 @@ using System;
 
 namespace DOL.GS.Spells
 {
+    [SpellHandler("TensionDebuff")]
     public class TensionDebuff : SingleStatDebuff
     {
         /// <inheritdoc />
@@ -25,5 +26,7 @@ namespace DOL.GS.Spells
         {
             get => eBuffBonusCategory.Debuff;
         }
+
+        public override string ShortDescription => $"Decreases the target's {ConvertPropertyToText(Property1).ToLower()} by {Spell.Value}%.";
     }
 }
