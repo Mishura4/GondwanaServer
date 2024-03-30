@@ -2929,14 +2929,14 @@ namespace DOL.GS
             }
         }
 
-        protected override void GainTension(AttackData source)
+        protected override void GainTension(AttackData ad)
         {
-            if (source.Attacker == null || MaxTension <= 0)
+            if (ad.Attacker == null || MaxTension <= 0)
             {
                 return;
             }
 
-            int level_difference = source.Attacker.EffectiveLevel - this.EffectiveLevel;
+            int level_difference = ad.Attacker.EffectiveLevel - this.EffectiveLevel;
 
             if (level_difference <= -5)
             {
@@ -2954,7 +2954,7 @@ namespace DOL.GS
 
             float tension;
             float server_rate;
-            if (source is GamePlayer)
+            if (ad.Attacker is GamePlayer)
             {
                 tension = level_difference switch
                 {
@@ -2995,7 +2995,7 @@ namespace DOL.GS
                 rate *= 1.10f;
             }
 
-            tension = (int)((server_rate * tension * source.TensionRate * rate) + 0.5f); // Round up
+            tension = (int)((server_rate * tension * ad.TensionRate * rate) + 0.5f); // Round up
 
             Tension += (int)tension;
         }
