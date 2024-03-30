@@ -90,6 +90,12 @@ namespace DOL.GS
             set;
         }
 
+        public double TensionRate
+        {
+            get;
+            set;
+        } = 1.0;
+
         /// <summary>
         /// Constructs new AttackData
         /// </summary>

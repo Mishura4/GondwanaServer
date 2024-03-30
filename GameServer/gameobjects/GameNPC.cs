@@ -305,13 +305,13 @@ namespace DOL.GS
                 > 15 => 8
             };
 
-            if (source is { AttackType: AttackData.eAttackType.Spell, Damage: 0, SpellHandler: not AbstractCCSpellHandler }) // Non-damaging spells that are not CCs are assumed to be stat debuffs
+            if (IsRenaissance)
             {
-                tension = (int)(Properties.MOB_TENSION_RATE * (IsRenaissance ? 1.10f * tension : tension) / 4);
+                tension = (int)(Properties.MOB_TENSION_RATE * tension * source.TensionRate * 1.10f);
             }
             else
             {
-                tension = (int)(Properties.MOB_TENSION_RATE * (IsRenaissance ? 1.10f * tension : tension));
+                tension = (int)(Properties.MOB_TENSION_RATE * tension * source.TensionRate);
             }
 
 

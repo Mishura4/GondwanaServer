@@ -58,6 +58,15 @@ namespace DOL.GS.Spells
             }
         }
 
+        /// <inheritdoc />
+        public override AttackData CalculateInitialAttack(GameLiving target, double effectiveness)
+        {
+            AttackData ad = base.CalculateInitialAttack(target, effectiveness);
+
+            ad.TensionRate = 0.25;
+            return ad;
+        }
+
         protected override int CalculateEffectDuration(GameLiving target, double effectiveness)
         {
             double duration = Spell.Duration;

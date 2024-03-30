@@ -2957,13 +2957,7 @@ namespace DOL.GS.Spells
 
             if (!HasPositiveEffect)
             {
-                AttackData ad = new AttackData();
-                ad.Attacker = Caster;
-                ad.Target = target;
-                ad.AttackType = AttackData.eAttackType.Spell;
-                ad.SpellHandler = this;
-                ad.AttackResult = GameLiving.eAttackResult.HitUnstyled;
-                ad.IsSpellResisted = false;
+                AttackData ad = CalculateInitialAttack(target, effectiveness);
                 target.OnAttackedByEnemy(ad);
 
                 m_lastAttackData = ad;
@@ -2974,6 +2968,24 @@ namespace DOL.GS.Spells
                     aggroBrain.AddToAggroList(Caster, 1);
                 }
             }
+        }
+
+        /// <summary>
+        /// Calculates the initial attack generated for a duration effect.
+        /// </summary>
+        /// <param name="target"></param>
+        /// <param name="effectiveness"></param>
+        /// <returns></returns>
+        public virtual AttackData CalculateInitialAttack(GameLiving target, double effectiveness)
+        {
+            AttackData ad = new AttackData();
+            ad.Attacker = Caster;
+            ad.Target = target;
+            ad.AttackType = AttackData.eAttackType.Spell;
+            ad.SpellHandler = this;
+            ad.AttackResult = GameLiving.eAttackResult.HitUnstyled;
+            ad.IsSpellResisted = false;
+            return ad;
         }
 
         /// <summary>
