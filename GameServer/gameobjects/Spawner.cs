@@ -514,22 +514,18 @@ namespace DOL.GS
         {
             if (addsGroupmobId != null && MobGroupManager.Instance.Groups.ContainsKey(this.addsGroupmobId))
             {
-                MobGroupManager.Instance.Groups[this.addsGroupmobId].NPCs.ForEach(n =>
+                lock (loadedAdds)
                 {
-                    //if npc is spawner it will call this method (see Die)
-                    n.Die(this);
-                });
+                    loadedAdds.ForEach(n => n.Die(this));
+                    lock (loadedAdds)
+                    {
+                        loadedAdds = null;
+                    }
+                }
 
                 if (!isAddsGroupMasterGroup)
                 {
                     this.ClearNPCTemplatesOldMobs();
-                }
-                else
-                {
-                    lock(loadedAdds)
-                    {
-                        loadedAdds = null;
-                    }
                 }
             }
         }

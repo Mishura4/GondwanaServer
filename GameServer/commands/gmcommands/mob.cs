@@ -3258,10 +3258,10 @@ namespace DOL.GS.Commands
                 text.Add("");
             }
 
-            if (targetMob.IsReturningHome || targetMob.IsReturningToSpawnPoint)
+            if (targetMob.IsReturningHome || targetMob.IsResetting)
             {
                 text.Add("IsReturningHome: " + targetMob.IsReturningHome);
-                text.Add("IsReturningToSpawnPoint: " + targetMob.IsReturningToSpawnPoint);
+                text.Add("IsReturningToSpawnPoint: " + targetMob.IsResetting);
                 text.Add("");
             }
 
