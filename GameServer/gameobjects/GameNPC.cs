@@ -1404,7 +1404,7 @@ namespace DOL.GS
 
         protected void _OnArrivedAtTarget()
         {
-            var arriveAtSpawnPoint = IsReturningToSpawnPoint;
+            var arriveAtSpawnPoint = IsResetting;
             StopMoving();
 
             Notify(GameNPCEvent.ArriveAtTarget, this);
@@ -1494,7 +1494,7 @@ namespace DOL.GS
         {
             CancelWalkToTimer();
             IsReturningHome = false;
-            IsReturningToSpawnPoint = false;
+            IsResetting = false;
         }
 
         /// <summary>
@@ -1514,7 +1514,7 @@ namespace DOL.GS
                 return;
 
             IsReturningHome = true;
-            IsReturningToSpawnPoint = true;
+            IsResetting = true;
             if (TPPoint != null)
                 PathTo(new Vector3((float)TPPoint.Position.X, (float)TPPoint.Position.Y, (float)TPPoint.Position.Z), speed);
             else
@@ -1681,7 +1681,7 @@ namespace DOL.GS
         /// </summary>
         public void StopMoving()
         {
-            bool wasResetting = IsReturningToSpawnPoint;
+            bool wasResetting = IsResetting;
             CancelWalkToSpawn();
 
             if (IsMoving)
@@ -1723,7 +1723,7 @@ namespace DOL.GS
             if (!IsMoving)
                 return;
 
-            if (CurrentSpeed > MaxSpeed || !IsReturningToSpawnPoint)
+            if (CurrentSpeed > MaxSpeed || !IsResetting)
             {
                 Position = Position;
                 CurrentSpeed = MaxSpeed;
@@ -1957,7 +1957,7 @@ namespace DOL.GS
         /// with SMB and IsReturningHome. Also, to prevent outside classes
         /// from interfering the setter is now protected.]
         /// </summary>
-        public bool IsReturningToSpawnPoint { get; protected set; }
+        public bool IsResetting { get; protected set; }
 
         /// <summary>
         /// Gets if npc moving on path
@@ -2026,6 +2026,10 @@ namespace DOL.GS
             if (!IsMovingOnPath)
                 return;
 
+            if (IsResetting)
+            {
+                Reset();
+            }
             GameEventMgr.RemoveHandler(this, GameNPCEvent.ArriveAtTarget, OnArriveAtWaypoint);
             Notify(GameNPCEvent.PathMoveEnds, this);
             m_IsMovingOnPath = false;
@@ -2042,6 +2046,10 @@ namespace DOL.GS
             if (!IsMovingOnPath || n != this)
                 return;
 
+            if (IsResetting)
+            {
+                Reset();
+            }
             if (CurrentWayPoint != null)
             {
                 WaypointDelayAction waitTimer = new WaypointDelayAction(this);
@@ -3260,35 +3268,45 @@ namespace DOL.GS
         /// </summary>
         public virtual void Reset()
         {
-            if (!Util.IsNearDistance(Position, SpawnPoint, GameNPC.CONST_WALKTOTOLERANCE))
+            if (MaxSpeedBase > 0)
             {
-                WalkToSpawn();
-            }
-            else
-            {
-                if (Heading != SpawnHeading)
-                    Heading = SpawnHeading;
-
                 //If the Mob has a Path assigned he will now walk on it!
-                if (MaxSpeedBase > 0 && CurrentSpellHandler == null && !IsMoving
-                    && !AttackState && !InCombat && !IsMovingOnPath && !IsReturningHome
-                    && PathID != null && PathID != "" && PathID != "NULL")
+                if (PathID != null && PathID != "" && PathID != "NULL")
                 {
-                    PathPoint path = MovementMgr.LoadPath(PathID);
-                    if (path != null)
+                    if (!IsMovingOnPath || !this.IsWithinRadius(CurrentWayPoint.Position, GameNPC.CONST_WALKTOTOLERANCE))
                     {
-                        var p = path.GetNearestNextPoint(Position);
-                        CurrentWayPoint = p;
-                        MoveOnPath((short)p.MaxSpeed);
+                        IsReturningHome = true;
+                        IsResetting = true;
+                        PathPoint path = MovementMgr.LoadPath(PathID);
+                        if (path != null)
+                        {
+                            var p = path.GetNearestNextPoint(Position);
+                            CurrentWayPoint = p;
+                            MoveOnPath((short)p.MaxSpeed);
+                        }
+                        return;
                     }
                 }
-
-                MovementStartTick = GameTimer.GetTickCount();
-                TargetPosition = Vector3.Zero;
-                CurrentSpeed = 0;
-
-                Notify(GameNPCEvent.NPCReset, this, EventArgs.Empty);
+                //If the npc is not at it's spawn position, we tell it to walk to it's spawn position
+                //Satyr: If we use a tolerance to stop their Way back home we also need the same
+                //Tolerance to check if we need to go home AGAIN, otherwise we might be told to go home
+                //for a few units only and this may end before the next Arrive-At-Target Event is fired and in this case
+                //We would never lose the state "IsReturningHome", which is then followed by other erros related to agro again to players
+                else if (!Util.IsNearDistance(Position, SpawnPoint, GameNPC.CONST_WALKTOTOLERANCE))
+                {
+                    WalkToSpawn();
+                    return;
+                }
             }
+
+            if (Heading != SpawnHeading)
+                Heading = SpawnHeading;
+
+            MovementStartTick = GameTimer.GetTickCount();
+            TargetPosition = Vector3.Zero;
+            CurrentSpeed = 0;
+
+            Notify(GameNPCEvent.NPCReset, this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -5868,10 +5886,10 @@ namespace DOL.GS
 
             if (e == GameNPCEvent.ArriveAtTarget)
             {
-                if (IsReturningToSpawnPoint)
+                if (IsResetting)
                 {
                     TurnTo(SpawnHeading);
-                    IsReturningToSpawnPoint = false;
+                    IsResetting = false;
                 }
             }
         }

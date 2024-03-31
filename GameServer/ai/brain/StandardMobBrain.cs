@@ -52,6 +52,11 @@ namespace DOL.AI.Brain
         public List<GamePlayer> PlayersSeen = new List<GamePlayer>();
 
         /// <summary>
+        /// Was the mob in combat last tick?
+        /// </summary>
+        private bool m_wasInCombat = false;
+
+        /// <summary>
         /// Constructs a new StandardMobBrain
         /// </summary>
         public StandardMobBrain()
@@ -100,6 +105,9 @@ namespace DOL.AI.Brain
             //For NOW i made the aggro working the following way (close to live but not yet 100% equal):
             //Mobs will not aggro on their way back home (in fact they should even under some special circumstances)
             //They will completly forget all Aggro when respawned and returned Home.
+
+            bool wasInCombat = m_wasInCombat;
+            m_wasInCombat = Body.InCombat;
 
             // If the NPC is tethered and has been pulled too far it will
             // de-aggro and return to its spawn point.
@@ -150,40 +158,14 @@ namespace DOL.AI.Brain
 
                 Body.FireAmbientSentence(GameNPC.eAmbientTrigger.roaming);
             }
-            //If the npc can move, and the npc is not casting, not moving, and not attacking or in combat
-            else if (Body.MaxSpeedBase > 0 && Body.CurrentSpellHandler == null && !Body.IsMoving && !Body.AttackState && !Body.InCombat && !Body.IsMovingOnPath)
+            //If the npc can move, and the npc is not casting, and just dropped combat
+            else if (Body.MaxSpeedBase > 0 && Body.CurrentSpellHandler == null && !Body.AttackState && !Body.InCombat && wasInCombat)
             {
-                //If the npc is not at it's spawn position, we tell it to walk to it's spawn position
-                //Satyr: If we use a tolerance to stop their Way back home we also need the same
-                //Tolerance to check if we need to go home AGAIN, otherwise we might be told to go home
-                //for a few units only and this may end before the next Arrive-At-Target Event is fired and in this case
-                //We would never lose the state "IsReturningHome", which is then followed by other erros related to agro again to players
                 Body.Reset();
-            }
-
-            //Mob will now always walk on their path
-            if (Body.MaxSpeedBase > 0 && Body.CurrentSpellHandler == null && !Body.IsMoving
-                && !Body.AttackState && !Body.InCombat && !Body.IsMovingOnPath
-                && Body.PathID != null && Body.PathID != "" && Body.PathID != "NULL")
-            {
-                PathPoint path = MovementMgr.LoadPath(Body.PathID);
-                if (path != null)
+                if (Body.IsWithinRadius(Body.IsMovingOnPath ? Body.TargetPosition : Body.SpawnPoint, 500))
                 {
-                    var p = path.GetNearestNextPoint(Body.Position);
-                    Body.CurrentWayPoint = p;
-                    Body.MoveOnPath((short)p.MaxSpeed);
+                    Body.IsReturningHome = false; // We are returning to spawn but not the long walk home, so aggro still possible
                 }
-                else
-                {
-                    log.ErrorFormat("Path {0} not found for mob {1}.", Body.PathID, Body.Name);
-                }
-            }
-
-            //If we are not attacking, and not casting, and not moving, and we aren't facing our spawn heading, we turn to the spawn heading
-            if (!Body.IsMovingOnPath && !Body.InCombat && !Body.AttackState && !Body.IsCasting && !Body.IsMoving && Body.IsWithinRadius(Body.SpawnPoint, 500) == false)
-            {
-                Body.Reset(); // Mobs do not walk back at 2x their speed..
-                Body.IsReturningHome = false; // We are returning to spawn but not the long walk home, so aggro still possible
             }
 
             if (Body.IsReturningHome == false)
@@ -1203,7 +1185,7 @@ namespace DOL.AI.Brain
                     if (spell_rec.Count > 0)
                     {
                         spellToCast = (Spell)spell_rec[Util.Random((spell_rec.Count - 1))];
-                        if (!Body.IsReturningToSpawnPoint)
+                        if (!Body.IsResetting)
                         {
                             if ((spellToCast.Uninterruptible || Body.canQuickCast) && CheckDefensiveSpells(spellToCast))
                                 casted = true;
