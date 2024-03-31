@@ -218,7 +218,6 @@ namespace DOL.GS
                     player.Out.SendTrainerWindow();
                     player.SaveIntoDatabase();
                 }
-
             }
 
             //Now we turn the npc into the direction of the person
