@@ -46,6 +46,18 @@ namespace DOL.GS.Spells
         }
     }
 
+    [SpellHandler("BattleFeverDurationBuff")]
+    public class BattleFeverDurationBuffHandler : SpellHandler
+    {
+        /// <inheritdoc />
+        public BattleFeverDurationBuffHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine)
+        {
+        }
+
+        public override string ShortDescription => $"Increases Battle Fever duration by {Spell.Value}%.";
+    }
+
+
     public abstract class AdrenalineSpellHandler : SpellHandler
     {
         public static readonly int RANGED_ADRENALINE_SPELL_ID = 28003;
@@ -73,6 +85,17 @@ namespace DOL.GS.Spells
                     gsp.Cancel(false);
                 }
             }
+        }
+
+        /// <inheritdoc />
+        protected override int CalculateEffectDuration(GameLiving target, double effectiveness)
+        {
+            var baseDuration =  base.CalculateEffectDuration(target, effectiveness);
+            double rate = 1.00f;
+
+            target.FindEffectsOnTarget(typeof(BattleFeverDurationBuffHandler)).ForEach(e => rate += e.Spell.Value / 100);
+
+            return (int)(baseDuration * rate + 0.5f);
         }
 
         /// <inheritdoc />
