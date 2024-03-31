@@ -1,2 +1,12 @@
-Commands.GM.Heal.Description:	Soigne votre cible (health, endu, mana)
-Commands.GM.Heal.Usage:			Usage : '/heal <health|endu|mana>'
+Commands.GM.Heal.Description:		Soigne votre cible (health, endu, mana)
+Commands.GM.Heal.Usage:				Usage : '/heal <me> <#> <health|endu|mana>' (exemple: '/heal me 100 health' ou '/heal 50%')
+Commands.GM.Heal.Dead:				Votre cible est morte!
+Commands.GM.Heal.BadTarget:			Votre cible est invalide.
+Commands.GM.Heal:					{0} est soigné(e) pour {1} points de vie, endurance et mana.
+Commands.GM.Heal.Percent:			{0} est soigné(e) pour {1}% de ses points de vie, endurance et mana.
+Commands.GM.Heal.Health:			{0} est soigné(e) pour {1} points de vie.
+Commands.GM.Heal.Endu:				{0} est soigné(e) pour {1} points d'endurance.
+Commands.GM.Heal.Mana:				{0} est soigné(e) pour {1} points de mana.
+Commands.GM.Heal.Health.Percent:	{0} est soigné(e) pour {1}% de ses points de vie.
+Commands.GM.Heal.Endu.Percent:		{0} est soigné(e) pour {1}% de ses points d'endurance.
+Commands.GM.Heal.Mana.Percent:		{0} est soigné(e) pour {1}% de ses points de mana.

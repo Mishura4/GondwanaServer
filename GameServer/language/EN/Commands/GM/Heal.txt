@@ -1,2 +1,12 @@
-Commands.GM.Heal.Description:	Heals your target (health, endu, mana).
-Commands.GM.Heal.Usage:			Usage : '/heal <health|endu|mana>'
+Commands.GM.Heal.Description:		Heals your target (health, endu, mana).
+Commands.GM.Heal.Usage:				Usage : '/heal <me> <#> <health|endu|mana>' (example: '/heal me 100 health' or '/heal 50%')
+Commands.GM.Heal.Dead:				Your target is dead!
+Commands.GM.Heal.BadTarget:			Your target is invalid.
+Commands.GM.Heal:					{0} was healed {1} health, endurance and mana points.
+Commands.GM.Heal.Percent:			{0} was healed to {1}% health, endurance and mana.
+Commands.GM.Heal.Health:			{0} was healed {1} health points.
+Commands.GM.Heal.Endu:				{0} was healed {1} endurance points.
+Commands.GM.Heal.Mana:				{0} was healed {1} mana points.
+Commands.GM.Heal.Health.Percent:	{0} was healed to {1}% health.
+Commands.GM.Heal.Endu.Percent:		{0} was healed to {1}% endurance.
+Commands.GM.Heal.Mana.Percent:		{0} was healed to {1}% mana.
