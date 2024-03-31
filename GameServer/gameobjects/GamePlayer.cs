@@ -2995,7 +2995,7 @@ namespace DOL.GS
                 rate *= 1.10f;
             }
 
-            tension = (int)((server_rate * tension * ad.TensionRate * rate) + 0.5f); // Round up
+            tension = (int)((server_rate * tension * ad.TensionRate * rate * CurrentZone.TensionRate) + 0.5f); // Round up
 
             Tension += (int)tension;
         }
