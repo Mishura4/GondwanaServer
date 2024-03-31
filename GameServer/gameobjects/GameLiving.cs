@@ -44,6 +44,7 @@ using DOL.GS.ServerProperties;
 using static DOL.GS.ScriptMgr;
 using System.Threading.Tasks;
 using DOL.GameEvents;
+using System.Collections.Immutable;
 
 namespace DOL.GS
 {
@@ -1353,112 +1354,112 @@ namespace DOL.GS
         /// </summary>
         public static readonly long[] XPForLiving =
         {
-			// noret: first 52 are from exp table, think mythic has changed some values
-			// cause they don't fit the formula; rest are calculated.
-			// with this formula group with 8 lv50 players should hit cap on lv67 mobs what looks about correct
-			// http://www.daocweave.com/daoc/general/experience_table.htm
-			5,					// xp for level 0
-			10,					// xp for level 1
-			20,					// xp for level 2
-			40,					// xp for level 3
-			80,					// xp for level 4
-			160,				// xp for level 5
-			320,				// xp for level 6
-			640,				// xp for level 7
-			1280,				// xp for level 8
-			2560,				// xp for level 9
-			5120,				// xp for level 10
-			7240,				// xp for level 11
-			10240,				// xp for level 12
-			14480,				// xp for level 13
-			20480,				// xp for level 14
-			28980,				// xp for level 15
-			40960,				// xp for level 16
-			57930,				// xp for level 17
-			81920,				// xp for level 18
-			115850,				// xp for level 19
-			163840,				// xp for level 20
-			206435,				// xp for level 21
-			231705,				// xp for level 22
-			327680,				// xp for level 23
-			412850,				// xp for level 24
-			520160,				// xp for level 25
-			655360,				// xp for level 26
-			825702,				// xp for level 27
-			1040319,			// xp for level 28
-			1310720,			// xp for level 29
-			1651404,			// xp for level 30
-			2080638,			// xp for level 31
-			2621440,			// xp for level 32
-			3302807,			// xp for level 33
-			4161277,			// xp for level 34
-			5242880,			// xp for level 35
-			6022488,			// xp for level 36
-			6918022,			// xp for level 37
-			7946720,			// xp for level 38
-			9128384,			// xp for level 39
-			10485760,			// xp for level 40
-			12044975,			// xp for level 41
-			13836043,			// xp for level 42
-			15893440,			// xp for level 43
-			18258769,			// xp for level 44
-			20971520,			// xp for level 45
-			24089951,			// xp for level 46
-			27672087,			// xp for level 47
-			31625241,			// xp for level 48; sshot505.tga
-			36513537,			// xp for level 49
-			41943040,			// xp for level 50
-			48179911,			// xp for level 51
-			52428800,			// xp for level 52
-			63573760,			// xp for level 53
-			73027074,			// xp for level 54
-			83886080,			// xp for level 55
-			96359802,			// xp for level 56
-			110688346,			// xp for level 57
-			127147521,			// xp for level 58
-			146054148,			// xp for level 59
-			167772160,			// xp for level 60
-			192719604,			// xp for level 61
-			221376692,			// xp for level 62
-			254295042,			// xp for level 63
-			292108296,			// xp for level 64
-			335544320,			// xp for level 65
-			385439208,			// xp for level 66
-			442753384,			// xp for level 67
-			508590084,			// xp for level 68
-			584216593,			// xp for level 69
-			671088640,			// xp for level 70
-			770878416,			// xp for level 71
-			885506769,			// xp for level 72
-			1017180169,			// xp for level 73
-			1168433187,			// xp for level 74
-			1342177280,			// xp for level 75
-			1541756833,			// xp for level 76
-			1771013538,			// xp for level 77
-			2034360338,			// xp for level 78
-			2336866374,			// xp for level 79
-			2684354560,			// xp for level 80
-			3083513667,			// xp for level 81
-			3542027077,			// xp for level 82
-			4068720676,			// xp for level 83
-			4673732748,			// xp for level 84
-			5368709120,			// xp for level 85
-			6167027334,			// xp for level 86
-			7084054154,			// xp for level 87
-			8137441353,			// xp for level 88
-			9347465497,			// xp for level 89
-			10737418240,		// xp for level 90
-			12334054669,		// xp for level 91
-			14168108308,		// xp for level 92
-			16274882707,		// xp for level 93
-			18694930994,		// xp for level 94
-			21474836480,		// xp for level 95
-			24668109338,		// xp for level 96
-			28336216617,		// xp for level 97
-			32549765415,		// xp for level 98
-			37389861988,		// xp for level 99
-			42949672960			// xp for level 100
-		};
+            // noret: first 52 are from exp table, think mythic has changed some values
+            // cause they don't fit the formula; rest are calculated.
+            // with this formula group with 8 lv50 players should hit cap on lv67 mobs what looks about correct
+            // http://www.daocweave.com/daoc/general/experience_table.htm
+            5,					// xp for level 0
+            10,					// xp for level 1
+            20,					// xp for level 2
+            40,					// xp for level 3
+            80,					// xp for level 4
+            160,				// xp for level 5
+            320,				// xp for level 6
+            640,				// xp for level 7
+            1280,				// xp for level 8
+            2560,				// xp for level 9
+            5120,				// xp for level 10
+            7240,				// xp for level 11
+            10240,				// xp for level 12
+            14480,				// xp for level 13
+            20480,				// xp for level 14
+            28980,				// xp for level 15
+            40960,				// xp for level 16
+            57930,				// xp for level 17
+            81920,				// xp for level 18
+            115850,				// xp for level 19
+            163840,				// xp for level 20
+            206435,				// xp for level 21
+            231705,				// xp for level 22
+            327680,				// xp for level 23
+            412850,				// xp for level 24
+            520160,				// xp for level 25
+            655360,				// xp for level 26
+            825702,				// xp for level 27
+            1040319,			// xp for level 28
+            1310720,			// xp for level 29
+            1651404,			// xp for level 30
+            2080638,			// xp for level 31
+            2621440,			// xp for level 32
+            3302807,			// xp for level 33
+            4161277,			// xp for level 34
+            5242880,			// xp for level 35
+            6022488,			// xp for level 36
+            6918022,			// xp for level 37
+            7946720,			// xp for level 38
+            9128384,			// xp for level 39
+            10485760,			// xp for level 40
+            12044975,			// xp for level 41
+            13836043,			// xp for level 42
+            15893440,			// xp for level 43
+            18258769,			// xp for level 44
+            20971520,			// xp for level 45
+            24089951,			// xp for level 46
+            27672087,			// xp for level 47
+            31625241,			// xp for level 48; sshot505.tga
+            36513537,			// xp for level 49
+            41943040,			// xp for level 50
+            48179911,			// xp for level 51
+            52428800,			// xp for level 52
+            63573760,			// xp for level 53
+            73027074,			// xp for level 54
+            83886080,			// xp for level 55
+            96359802,			// xp for level 56
+            110688346,			// xp for level 57
+            127147521,			// xp for level 58
+            146054148,			// xp for level 59
+            167772160,			// xp for level 60
+            192719604,			// xp for level 61
+            221376692,			// xp for level 62
+            254295042,			// xp for level 63
+            292108296,			// xp for level 64
+            335544320,			// xp for level 65
+            385439208,			// xp for level 66
+            442753384,			// xp for level 67
+            508590084,			// xp for level 68
+            584216593,			// xp for level 69
+            671088640,			// xp for level 70
+            770878416,			// xp for level 71
+            885506769,			// xp for level 72
+            1017180169,			// xp for level 73
+            1168433187,			// xp for level 74
+            1342177280,			// xp for level 75
+            1541756833,			// xp for level 76
+            1771013538,			// xp for level 77
+            2034360338,			// xp for level 78
+            2336866374,			// xp for level 79
+            2684354560,			// xp for level 80
+            3083513667,			// xp for level 81
+            3542027077,			// xp for level 82
+            4068720676,			// xp for level 83
+            4673732748,			// xp for level 84
+            5368709120,			// xp for level 85
+            6167027334,			// xp for level 86
+            7084054154,			// xp for level 87
+            8137441353,			// xp for level 88
+            9347465497,			// xp for level 89
+            10737418240,		// xp for level 90
+            12334054669,		// xp for level 91
+            14168108308,		// xp for level 92
+            16274882707,		// xp for level 93
+            18694930994,		// xp for level 94
+            21474836480,		// xp for level 95
+            24668109338,		// xp for level 96
+            28336216617,		// xp for level 97
+            32549765415,		// xp for level 98
+            37389861988,		// xp for level 99
+            42949672960			// xp for level 100
+        };
 
         /// <summary>
         /// Holds the level of target at which no exp is given
@@ -1466,57 +1467,57 @@ namespace DOL.GS
         public static readonly int[] NoXPForLevel =
         {
             -3,		//for level 0
-			-2,		//for level 1
-			-1,		//for level 2
-			0,		//for level 3
-			1,		//for level 4
-			2,		//for level 5
-			3,		//for level 6
-			4,		//for level 7
-			5,		//for level 8
-			6,		//for level 9
-			6,		//for level 10
-			6,		//for level 11
-			6,		//for level 12
-			7,		//for level 13
-			8,		//for level 14
-			9,		//for level 15
-			10,		//for level 16
-			11,		//for level 17
-			12,		//for level 18
-			13,		//for level 19
-			13,		//for level 20
-			13,		//for level 21
-			13,		//for level 22
-			14,		//for level 23
-			15,		//for level 24
-			16,		//for level 25
-			17,		//for level 26
-			18,		//for level 27
-			19,		//for level 28
-			20,		//for level 29
-			21,		//for level 30
-			22,		//for level 31
-			23,		//for level 32
-			24,		//for level 33
-			25,		//for level 34
-			25,		//for level 35
-			25,		//for level 36
-			25,		//for level 37
-			25,		//for level 38
-			25,		//for level 39
-			25,		//for level 40
-			26,		//for level 41
-			27,		//for level 42
-			28,		//for level 43
-			29,		//for level 44
-			30,		//for level 45
-			31,		//for level 46
-			32,		//for level 47
-			33,		//for level 48
-			34,		//for level 49
-			35,		//for level 50
-		};
+            -2,		//for level 1
+            -1,		//for level 2
+            0,		//for level 3
+            1,		//for level 4
+            2,		//for level 5
+            3,		//for level 6
+            4,		//for level 7
+            5,		//for level 8
+            6,		//for level 9
+            6,		//for level 10
+            6,		//for level 11
+            6,		//for level 12
+            7,		//for level 13
+            8,		//for level 14
+            9,		//for level 15
+            10,		//for level 16
+            11,		//for level 17
+            12,		//for level 18
+            13,		//for level 19
+            13,		//for level 20
+            13,		//for level 21
+            13,		//for level 22
+            14,		//for level 23
+            15,		//for level 24
+            16,		//for level 25
+            17,		//for level 26
+            18,		//for level 27
+            19,		//for level 28
+            20,		//for level 29
+            21,		//for level 30
+            22,		//for level 31
+            23,		//for level 32
+            24,		//for level 33
+            25,		//for level 34
+            25,		//for level 35
+            25,		//for level 36
+            25,		//for level 37
+            25,		//for level 38
+            25,		//for level 39
+            25,		//for level 40
+            26,		//for level 41
+            27,		//for level 42
+            28,		//for level 43
+            29,		//for level 44
+            30,		//for level 45
+            31,		//for level 46
+            32,		//for level 47
+            33,		//for level 48
+            34,		//for level 49
+            35,		//for level 50
+        };
 
         #endregion
 
@@ -1717,6 +1718,7 @@ namespace DOL.GS
                 return ad;
             }
 
+            this.Notify(GameLivingEvent.AttackStarted, this, new AttackStartedEventArgs(ad));
 
             //Calculate our attack result and attack damage
             ad.AttackResult = ad.Target.CalculateEnemyAttackResult(ad, weapon);
@@ -2186,6 +2188,14 @@ namespace DOL.GS
                 InterruptAction = 0;
                 return;
             }
+
+            if (EffectList.GetOfType<AdrenalineMageSpellEffect>() != null)
+            {
+                InterruptTime = 0;
+                InterruptAction = 0;
+                return;
+            }
+
             if (InterruptTime < CurrentRegion.Time + duration)
                 InterruptTime = CurrentRegion.Time + duration;
 
@@ -2847,6 +2857,9 @@ namespace DOL.GS
 
                 owner.TempProperties.setProperty(LAST_ATTACK_DATA, mainHandAD);
 
+                //Notify ourself about the attack
+                owner.Notify(GameLivingEvent.AttackFinished, owner, new AttackFinishedEventArgs(mainHandAD));
+
                 //Notify the target of our attack (sends damage messages, should be before damage)
                 // ...but certainly not if the attack never took place, like when the living
                 // is out of range!
@@ -2900,9 +2913,6 @@ namespace DOL.GS
                 //Send the proper attacking messages to ourself
                 owner.SendAttackingCombatMessages(mainHandAD);
 
-                //Notify ourself about the attack
-                owner.Notify(GameLivingEvent.AttackFinished, owner, new AttackFinishedEventArgs(mainHandAD));
-
                 // remove the left-hand AttackData from the previous attack
                 owner.TempProperties.removeProperty(LAST_ATTACK_DATA_LH);
 
@@ -2928,6 +2938,9 @@ namespace DOL.GS
                                 else
                                     leftHandAD = owner.MakeAttack(m_target, mainWeapon, null, leftHandEffectiveness, m_interruptDuration, true);
 
+                                //Notify ourself about the attack
+                                owner.Notify(GameLivingEvent.AttackFinished, owner, new AttackFinishedEventArgs(leftHandAD));
+
                                 //Notify the target of our attack (sends damage messages, should be before damage)
                                 if (leftHandAD.Target != null)
                                     leftHandAD.Target.OnAttackedByEnemy(leftHandAD);
@@ -2946,9 +2959,6 @@ namespace DOL.GS
 
                                 //Send messages about our left hand attack now
                                 owner.SendAttackingCombatMessages(leftHandAD);
-
-                                //Notify ourself about the attack
-                                owner.Notify(GameLivingEvent.AttackFinished, owner, new AttackFinishedEventArgs(leftHandAD));
                             }
                             break;
                     }
@@ -3319,7 +3329,7 @@ namespace DOL.GS
         /// <returns>The amount of critical damage.</returns>
         public virtual int GetMeleeCriticalDamage(AttackData attackData, InventoryItem weapon)
         {
-            if (Util.Chance(AttackCriticalChance(weapon)))
+            if (Util.Chance(AttackCriticalChance(weapon) + attackData.criticalChance))
             {
                 int maxCriticalDamage = (attackData.Target is GamePlayer)
                     ? attackData.Damage / 2
@@ -3387,7 +3397,7 @@ namespace DOL.GS
             GameSpellEffect brittleguard = null;
 
             AttackData lastAD = TempProperties.getProperty<AttackData>(LAST_ATTACK_DATA, null);
-            bool defenseDisabled = ad.Target.IsMezzed | ad.Target.IsStunned | ad.Target.IsSitting;
+            bool defenseDisabled = ad.Target.IsMezzed || ad.Target.IsStunned || ad.Target.IsSitting;
 
             // If berserk is on, no defensive skills may be used: evade, parry, ...
             // unfortunately this as to be check for every action itself to kepp oder of actions the same.
@@ -3465,6 +3475,8 @@ namespace DOL.GS
                 }
             }
 
+            this.Notify(GameLivingEvent.IncomingAttack, this, new IncomingAttackEventArgs(ad));
+
             bool stealthStyle = false;
             if (ad.Style != null && ad.Style.StealthRequirement && ad.Attacker is GamePlayer && StyleProcessor.CanUseStyle((GamePlayer)ad.Attacker, ad.Style, weapon))
             {
@@ -3511,7 +3523,7 @@ namespace DOL.GS
 
             if (phaseshift != null)
             {
-                ad.missChance = 100;
+                ad.MissChance = 100;
                 return eAttackResult.Missed;
             }
 
@@ -3525,7 +3537,7 @@ namespace DOL.GS
                 if (ad.Attacker is GamePlayer)
                     ((GamePlayer)ad.Attacker).Out.SendMessage(LanguageMgr.GetTranslation(((GamePlayer)ad.Attacker).Client.Account.Language, "GameLiving.CalculateEnemyAttackResult.StrikeIntercepted"), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
                 brittleguard.Cancel(false);
-                ad.missChance = 100;
+                ad.MissChance = 100;
                 return eAttackResult.Missed;
             }
 
@@ -3546,35 +3558,29 @@ namespace DOL.GS
 
             if (!defenseDisabled)
             {
-                double evadeChance = TryEvade(ad, lastAD, attackerConLevel, attackerCount);
-
-                if (Util.ChanceDouble(evadeChance))
+                ad.EvadeChance ??= TryEvade(ad, lastAD, attackerConLevel, attackerCount);
+                if (Util.ChanceDouble((double)ad.EvadeChance))
                 {
-                    ad.evadeChance = evadeChance;
                     return eAttackResult.Evaded;
                 }
 
                 if (ad.IsMeleeAttack)
                 {
-                    double parryChance = TryParry(ad, lastAD, attackerConLevel, attackerCount);
+                    ad.ParryChance ??= TryParry(ad, lastAD, attackerConLevel, attackerCount);
 
-                    if (Util.ChanceDouble(parryChance))
+                    if (Util.ChanceDouble((double)ad.ParryChance))
                     {
-                        ad.parryChance = parryChance;
                         return eAttackResult.Parried;
                     }
                 }
 
-                double blockChance = TryBlock(ad, lastAD, attackerConLevel, attackerCount, engage);
-
-                if (Util.ChanceDouble(blockChance))
+                ad.BlockChance ??= TryBlock(ad, lastAD, attackerConLevel, attackerCount, engage);
+                if (Util.ChanceDouble((double)ad.BlockChance))
                 {
                     // reactive effects on block moved to GamePlayer
-                    ad.blockChance = blockChance;
                     return eAttackResult.Blocked;
                 }
             }
-
 
             // Guard
             if (guard != null &&
@@ -3625,7 +3631,7 @@ namespace DOL.GS
                         if (Util.ChanceDouble(guardchance))
                         {
                             ad.Target = guard.GuardSource;
-                            ad.blockChance = guardchance;
+                            ad.BlockChance = guardchance;
                             return eAttackResult.Blocked;
                         }
                     }
@@ -3679,13 +3685,13 @@ namespace DOL.GS
                         if (Util.ChanceDouble(guardchance))
                         {
                             ad.Target = dashing.GuardSource;
-                            ad.blockChance = guardchance;
+                            ad.BlockChance = guardchance;
                             return eAttackResult.Blocked;
                         }
                         else if (Util.ChanceDouble(parrychance))
                         {
                             ad.Target = dashing.GuardSource;
-                            ad.parryChance = parrychance;
+                            ad.ParryChance = parrychance;
                             return eAttackResult.Parried;
                         }
                     }
@@ -3705,7 +3711,7 @@ namespace DOL.GS
                         if (Util.ChanceDouble(parrychance))
                         {
                             ad.Target = dashing.GuardSource;
-                            ad.parryChance = parrychance;
+                            ad.ParryChance = parrychance;
                             return eAttackResult.Parried;
                         }
                     }
@@ -3713,94 +3719,92 @@ namespace DOL.GS
             }
 
             // Missrate
-            int missrate = (ad.Attacker is GamePlayer) ? 20 : 25; //player vs player tests show 20% miss on any level
-            missrate -= ad.Attacker.GetModified(eProperty.ToHitBonus);
-            if (this is GamePlayer && ad.Attacker is GamePlayer)
+            if (ad.MissChance == null)
             {
-                missrate = (int)(missrate * ServerProperties.Properties.PVP_BASE_MISS_MULTIPLIER);
-            }
-            else
-            {
-                missrate = (int)(missrate * ServerProperties.Properties.PVE_BASE_MISS_MULTIPLIER);
-            }
-            // PVE group missrate
-            if (this is GameNPC && ad.Attacker is GamePlayer &&
-                ((GamePlayer)ad.Attacker).Group != null &&
-                (int)(0.90 * ((GamePlayer)ad.Attacker).Group.Leader.Level) >= ad.Attacker.Level &&
-                ad.Attacker.IsWithinRadius(((GamePlayer)ad.Attacker).Group.Leader, 3000))
-            {
-                missrate -= (int)(5 * ((GamePlayer)ad.Attacker).Group.Leader.GetConLevel(this));
-            }
-            else if (this is GameNPC || ad.Attacker is GameNPC) // if target is not player use level mod
-            {
-                missrate += (int)(5 * ad.Attacker.GetConLevel(this));
-            }
+                int missrate = (ad.Attacker is GamePlayer) ? 20 : 25; //player vs player tests show 20% miss on any level
+                missrate -= ad.Attacker.GetModified(eProperty.ToHitBonus);
+                if (this is GamePlayer && ad.Attacker is GamePlayer)
+                {
+                    missrate = (int)(missrate * ServerProperties.Properties.PVP_BASE_MISS_MULTIPLIER);
+                }
+                else
+                {
+                    missrate = (int)(missrate * ServerProperties.Properties.PVE_BASE_MISS_MULTIPLIER);
+                }
+                // PVE group missrate
+                if (this is GameNPC && ad.Attacker is GamePlayer &&
+                    ((GamePlayer)ad.Attacker).Group != null &&
+                    (int)(0.90 * ((GamePlayer)ad.Attacker).Group.Leader.Level) >= ad.Attacker.Level &&
+                    ad.Attacker.IsWithinRadius(((GamePlayer)ad.Attacker).Group.Leader, 3000))
+                {
+                    missrate -= (int)(5 * ((GamePlayer)ad.Attacker).Group.Leader.GetConLevel(this));
+                }
+                else if (this is GameNPC || ad.Attacker is GameNPC) // if target is not player use level mod
+                {
+                    missrate += (int)(5 * ad.Attacker.GetConLevel(this));
+                }
 
-            // experimental missrate adjustment for number of attackers
-            if ((this is GamePlayer && ad.Attacker is GamePlayer) == false)
-            {
-                missrate -= (Math.Max(0, Attackers.Count - 1) * ServerProperties.Properties.MISSRATE_REDUCTION_PER_ATTACKERS);
-            }
+                // experimental missrate adjustment for number of attackers
+                if ((this is GamePlayer && ad.Attacker is GamePlayer) == false)
+                {
+                    missrate -= (Math.Max(0, Attackers.Count - 1) * ServerProperties.Properties.MISSRATE_REDUCTION_PER_ATTACKERS);
+                }
 
-            // weapon/armor bonus
-            int armorBonus = 0;
-            if (ad.Target is GamePlayer)
-            {
-                ad.ArmorHitLocation = ((GamePlayer)ad.Target).CalculateArmorHitLocation(ad);
-                InventoryItem armor = null;
-                if (ad.Target.Inventory != null)
-                    armor = ad.Target.Inventory.GetItem((eInventorySlot)ad.ArmorHitLocation);
-                if (armor != null)
-                    armorBonus = armor.Bonus;
-            }
-            if (weapon != null)
-            {
-                armorBonus -= weapon.Bonus;
-            }
-            if (ad.Target is GamePlayer && ad.Attacker is GamePlayer)
-            {
-                missrate += armorBonus;
-            }
-            else
-            {
-                missrate += missrate * armorBonus / 100;
-            }
-            if (ad.Style != null)
-            {
-                missrate -= ad.Style.BonusToHit; // add style bonus
-            }
-            if (lastAD != null && lastAD.AttackResult == eAttackResult.HitStyle && lastAD.Style != null)
-            {
-                // add defence bonus from last executed style if any
-                missrate += lastAD.Style.BonusToDefense;
-            }
-            if (this is GamePlayer && ad.Attacker is GamePlayer && weapon != null)
-            {
-                missrate -= (int)((ad.Attacker.WeaponSpecLevel(weapon) - 1) * 0.1);
-            }
-            if (ad.Attacker.ActiveWeaponSlot == eActiveWeaponSlot.Distance)
-            {
-                InventoryItem ammo = RangeAttackAmmo;
-                if (ammo != null)
-                    switch ((ammo.SPD_ABS >> 4) & 0x3)
-                    {
-                        // http://rothwellhome.org/guides/archery.htm
-                        case 0: missrate += 15; break; // Rough
-                                                       //						case 1: missrate -= 0; break;
-                        case 2: missrate -= 15; break; // doesn't exist (?)
-                        case 3: missrate -= 25; break; // Footed
-                    }
-            }
-            if (this is GamePlayer && ((GamePlayer)this).IsSitting)
-            {
-                missrate >>= 1; //halved
-            }
+                // weapon/armor bonus
+                int armorBonus = 0;
+                if (ad.Target is GamePlayer)
+                {
+                    ad.ArmorHitLocation = ((GamePlayer)ad.Target).CalculateArmorHitLocation(ad);
+                    InventoryItem armor = null;
+                    if (ad.Target.Inventory != null)
+                        armor = ad.Target.Inventory.GetItem((eInventorySlot)ad.ArmorHitLocation);
+                    if (armor != null)
+                        armorBonus = armor.Bonus;
+                }
+                if (weapon != null)
+                {
+                    armorBonus -= weapon.Bonus;
+                }
+                if (ad.Target is GamePlayer && ad.Attacker is GamePlayer)
+                {
+                    missrate += armorBonus;
+                }
+                else
+                {
+                    missrate += missrate * armorBonus / 100;
+                }
+                if (ad.Style != null)
+                {
+                    missrate -= ad.Style.BonusToHit; // add style bonus
+                }
+                if (lastAD != null && lastAD.AttackResult == eAttackResult.HitStyle && lastAD.Style != null)
+                {
+                    // add defence bonus from last executed style if any
+                    missrate += lastAD.Style.BonusToDefense;
+                }
+                if (this is GamePlayer && ad.Attacker is GamePlayer && weapon != null)
+                {
+                    missrate -= (int)((ad.Attacker.WeaponSpecLevel(weapon) - 1) * 0.1);
+                }
+                if (ad.Attacker.ActiveWeaponSlot == eActiveWeaponSlot.Distance)
+                {
+                    InventoryItem ammo = RangeAttackAmmo;
+                    if (ammo != null)
+                        switch ((ammo.SPD_ABS >> 4) & 0x3)
+                        {
+                            // http://rothwellhome.org/guides/archery.htm
+                            case 0: missrate += 15; break; // Rough
+                                                           //						case 1: missrate -= 0; break;
+                            case 2: missrate -= 15; break; // doesn't exist (?)
+                            case 3: missrate -= 25; break; // Footed
+                        }
+                }
+                if (this is GamePlayer { IsSitting: true })
+                {
+                    missrate >>= 1; //halved
+                }
 
-            missrate = Math.Min(95, missrate); // cap the missrate
-            if (Util.Chance(missrate))
-            {
-                ad.missChance = missrate;
-                return eAttackResult.Missed;
+                ad.MissChance = ((double)Math.Min(95, missrate) / 100); // cap the missrate
             }
 
             if (ad.IsRandomFumble)
@@ -3813,15 +3817,15 @@ namespace DOL.GS
             // Bladeturn
             // TODO: high level mob attackers penetrate bt, players are tested and do not penetrate (lv30 vs lv20)
             /*
-			 * http://www.camelotherald.com/more/31.shtml
-			 * - Bladeturns can now be penetrated by attacks from higher level monsters and
-			 * players. The chance of the bladeturn deflecting a higher level attack is
-			 * approximately the caster's level / the attacker's level.
-			 * Please be aware that everything in the game is
-			 * level/chance based - nothing works 100% of the time in all cases.
-			 * It was a bug that caused it to work 100% of the time - now it takes the
-			 * levels of the players involved into account.
-			 */
+             * http://www.camelotherald.com/more/31.shtml
+             * - Bladeturns can now be penetrated by attacks from higher level monsters and
+             * players. The chance of the bladeturn deflecting a higher level attack is
+             * approximately the caster's level / the attacker's level.
+             * Please be aware that everything in the game is
+             * level/chance based - nothing works 100% of the time in all cases.
+             * It was a bug that caused it to work 100% of the time - now it takes the
+             * levels of the players involved into account.
+             */
             // "The blow penetrated the magical barrier!"
             if (bladeturn != null)
             {
@@ -3848,7 +3852,7 @@ namespace DOL.GS
                     if (ad.Attacker is GamePlayer) ((GamePlayer)ad.Attacker).Out.SendMessage(LanguageMgr.GetTranslation(((GamePlayer)ad.Attacker).Client.Account.Language, "GameLiving.CalculateEnemyAttackResult.StrikeAbsorbed"), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
                     bladeturn.Cancel(false);
                     Stealth(false);
-                    ad.missChance = missChance;
+                    ad.MissChance = missChance;
                     return eAttackResult.Missed;
                 }
             }
@@ -4337,6 +4341,11 @@ namespace DOL.GS
                     LastAttackedByEnemyTickPvP = CurrentRegion.Time;
                     ad.Attacker.LastAttackTickPvP = CurrentRegion.Time;
                 }
+            }
+
+            if (ad is { AttackResult: eAttackResult.HitStyle or eAttackResult.HitUnstyled, AttackType: not AttackData.eAttackType.DoT and not AttackData.eAttackType.Unknown })
+            {
+                GainTension(ad);
             }
         }
 
@@ -5152,7 +5161,7 @@ namespace DOL.GS
         /// </summary>
         protected static readonly eProperty[] m_damageTypeToResistBonusConversion = new eProperty[] {
             eProperty.Resist_Natural, //0,
-			eProperty.Resist_Crush,
+            eProperty.Resist_Crush,
             eProperty.Resist_Slash,
             eProperty.Resist_Thrust,
             0, 0, 0, 0, 0, 0,
@@ -5624,8 +5633,7 @@ namespace DOL.GS
                 int maxmana = MaxMana;
                 m_mana = Math.Min(value, maxmana);
                 m_mana = Math.Max(m_mana, 0);
-                if (IsAlive && (m_mana < maxmana || (this is GamePlayer && ((GamePlayer)this).CharacterClass.ID == (int)eCharacterClass.Vampiir)
-                                || (this is GamePlayer && ((GamePlayer)this).CharacterClass.ID > 59 && ((GamePlayer)this).CharacterClass.ID < 63)))
+                if (IsAlive && (m_mana < maxmana || (this is GamePlayer { CharacterClass.ID: (int)eCharacterClass.Vampiir or (> 59 and < 63) })))
                 {
                     StartPowerRegeneration();
                 }
@@ -5686,6 +5694,97 @@ namespace DOL.GS
             get
             {
                 return (byte)(MaxEndurance <= 0 ? 0 : ((Endurance * 100) / MaxEndurance));
+            }
+        }
+
+        protected int m_tension = 0;
+
+        public virtual int Tension
+        {
+            get { return m_tension; }
+            set
+            {
+                int newTension = value;
+                int maxtension = MaxTension;
+                if (newTension <= 0)
+                {
+                    m_tension = 0;
+                }
+                else if (newTension >= maxtension)
+                {
+                    m_tension = maxtension;
+                    OnAdrenalineFull();
+                }
+                else
+                {
+                    m_tension = newTension;
+                }
+            }
+        }
+
+        protected virtual void GainTension(AttackData source)
+        {
+            if (source.Attacker == null || MaxTension <= 0)
+            {
+                return;
+            }
+
+            int level_difference = source.Attacker.EffectiveLevel - this.EffectiveLevel;
+
+            if (level_difference <= -5)
+            {
+                return;
+            }
+
+            int tension = level_difference switch
+            {
+                <= -2 => 1,
+                <= 2 => 2,
+                <= 6 => 3,
+                <= 15 => 5,
+                > 15 => 8
+            };
+
+            float rate = (1.00f + ((float)GetModified(eProperty.MythicalTension)) / 100);
+
+            if (rate < 0.0f)
+            {
+                return;
+            }
+
+            tension = (int)((Properties.MOB_TENSION_RATE * tension * source.TensionRate * rate) + 0.5f); // Round up
+
+
+            Tension += tension;
+        }
+
+        protected virtual void OnAdrenalineFull()
+        {
+            Ability ab = SkillBase.GetAbility(Abilities.Adrenaline);
+            ab.Execute(this);
+            m_tension = 0;
+        }
+
+        public virtual int MaxTension
+        {
+            get;
+            set;
+        } = 0;
+
+        public virtual Spell AdrenalineSpell
+        {
+            get;
+            protected set;
+        }
+
+        /// <summary>
+        /// Gets the Tension in percent 0..100
+        /// </summary>
+        public virtual byte TensionPercent
+        {
+            get
+            {
+                return (byte)(MaxTension <= 0 ? 0 : Tension * 100 / MaxTension);
             }
         }
 

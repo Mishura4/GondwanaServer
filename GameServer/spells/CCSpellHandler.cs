@@ -34,6 +34,12 @@ namespace DOL.GS.Spells
                 MessageToCaster(m_caster.GetPersonalizedName(target) + " is immune to this effect!", eChatType.CT_SpellResisted);
                 return;
             }
+            if (target.EffectList.GetOfType<AdrenalineSpellEffect>() != null)
+            {
+                (m_caster as GamePlayer)?.SendTranslatedMessage("Adrenaline.Target.Immune", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow, m_caster.GetPersonalizedName(target));
+                (target as GamePlayer)?.SendTranslatedMessage("Adrenaline.Self.Immune", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
+                return;
+            }
             if (target.EffectList.GetOfType<ChargeEffect>() != null || target.TempProperties.getProperty("Charging", false))
             {
                 MessageToCaster(m_caster.GetPersonalizedName(target) + " is moving too fast for this spell to have any effect!", eChatType.CT_SpellResisted);
@@ -376,7 +382,7 @@ namespace DOL.GS.Spells
 
             bool remove = false;
 
-            if (attackArgs.AttackData.AttackType != AttackData.eAttackType.Spell)
+            if (attackArgs.AttackData is { AttackType: not AttackData.eAttackType.Spell and not AttackData.eAttackType.DoT })
             {
                 switch (attackArgs.AttackData.AttackResult)
                 {

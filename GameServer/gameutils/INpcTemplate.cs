@@ -99,6 +99,7 @@ namespace DOL.GS
         short Intelligence { get; }
         short Empathy { get; }
         short Charisma { get; }
+        int MaxTension { get; }
 
         /// <summary>
         /// Gets the template npc aggro values
@@ -126,5 +127,10 @@ namespace DOL.GS
         /// What object ClassType should this template use?
         /// </summary>
         string ClassType { get; }
+
+        /// <summary>
+        /// What Spell to cast when adrenaline is full
+        /// </summary>
+        int AdrenalineSpellID { get; }
     }
 }

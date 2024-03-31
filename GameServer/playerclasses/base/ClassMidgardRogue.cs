@@ -18,6 +18,7 @@
  */
 using System.Collections.Generic;
 using DOL.GS.Realm;
+using DOL.GS.Spells;
 
 namespace DOL.GS.PlayerClass
 {
@@ -34,6 +35,8 @@ namespace DOL.GS.PlayerClass
             m_baseWeaponSkill = 360; //higher than alb/hib stealthers
             m_baseHP = 720;
             m_eligibleRaces = DefaultEligibleRaces;
+            m_maxTensionFactor = 1.03f;
+            m_adrenalineSpellID = StealthAdrenalineSpellHandler.RANGED_ADRENALINE_SPELL_ID;
         }
         public override eClassType ClassType
         {

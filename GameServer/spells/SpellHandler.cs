@@ -2766,27 +2766,6 @@ namespace DOL.GS.Spells
             {
                 OnDirectEffect(target, effectiveness);
             }
-
-            if (!HasPositiveEffect)
-            {
-                AttackData ad = new AttackData();
-                ad.Attacker = Caster;
-                ad.Target = target;
-                ad.AttackType = AttackData.eAttackType.Spell;
-                ad.SpellHandler = this;
-                ad.AttackResult = GameLiving.eAttackResult.HitUnstyled;
-                ad.IsSpellResisted = false;
-
-                m_lastAttackData = ad;
-
-                // Treat non-damaging effects as attacks to trigger an immediate response and BAF
-                if (ad.Damage == 0 && ad.Target is GameNPC)
-                {
-                    IOldAggressiveBrain aggroBrain = ((GameNPC)ad.Target).Brain as IOldAggressiveBrain;
-                    if (aggroBrain != null)
-                        aggroBrain.AddToAggroList(Caster, 1);
-                }
-            }
         }
 
         /// <summary>
@@ -2975,6 +2954,38 @@ namespace DOL.GS.Spells
             {
                 target.EffectList.CommitChanges();
             }
+
+            if (!HasPositiveEffect)
+            {
+                AttackData ad = CalculateInitialAttack(target, effectiveness);
+                target.OnAttackedByEnemy(ad);
+
+                m_lastAttackData = ad;
+
+                // Treat non-damaging effects as attacks to trigger an immediate response and BAF
+                if (ad.Damage == 0 && ad.Target is GameNPC { Brain: IOldAggressiveBrain aggroBrain })
+                {
+                    aggroBrain.AddToAggroList(Caster, 1);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Calculates the initial attack generated for a duration effect.
+        /// </summary>
+        /// <param name="target"></param>
+        /// <param name="effectiveness"></param>
+        /// <returns></returns>
+        public virtual AttackData CalculateInitialAttack(GameLiving target, double effectiveness)
+        {
+            AttackData ad = new AttackData();
+            ad.Attacker = Caster;
+            ad.Target = target;
+            ad.AttackType = AttackData.eAttackType.Spell;
+            ad.SpellHandler = this;
+            ad.AttackResult = GameLiving.eAttackResult.HitUnstyled;
+            ad.IsSpellResisted = false;
+            return ad;
         }
 
         /// <summary>
@@ -3810,6 +3821,12 @@ namespace DOL.GS.Spells
             {
                 missrate = (int)(missrate * ServerProperties.Properties.PVE_BASE_MISS_MULTIPLIER);
             }
+
+            if (caster.EffectList.GetOfType<AdrenalineMageSpellEffect>() != null)
+            {
+                missrate -= AdrenalineMageSpellEffect.HIT_BONUS;
+            }
+
             int hitchance = 100 - missrate + ((spellLevel - target.Level) / 2) + bonustohit;
 
             if (!(caster is GamePlayer && target is GamePlayer))
@@ -4118,11 +4135,10 @@ namespace DOL.GS.Spells
             }
 
             ad.Attacker.DealDamage(ad);
-            if (ad.Damage == 0 && ad.Target is GameNPC)
+            // Treat non-damaging effects as attacks to trigger an immediate response and BAF
+            if (ad.Damage == 0 && ad.Target is GameNPC { Brain: IOldAggressiveBrain aggroBrain })
             {
-                IOldAggressiveBrain aggroBrain = ((GameNPC)ad.Target).Brain as IOldAggressiveBrain;
-                if (aggroBrain != null)
-                    aggroBrain.AddToAggroList(Caster, 1);
+                aggroBrain.AddToAggroList(Caster, 1);
             }
 
             m_lastAttackData = ad;

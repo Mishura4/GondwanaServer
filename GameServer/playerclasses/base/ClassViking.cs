@@ -18,6 +18,7 @@
  */
 using System.Collections.Generic;
 using DOL.GS.Realm;
+using DOL.GS.Spells;
 
 namespace DOL.GS.PlayerClass
 {
@@ -35,6 +36,8 @@ namespace DOL.GS.PlayerClass
             m_baseWeaponSkill = 440;
             m_baseHP = 880;
             m_eligibleRaces = DefaultEligibleRaces;
+            m_maxTensionFactor = 1.05f;
+            m_adrenalineSpellID = AdrenalineSpellHandler.TANK_ADRENALINE_SPELL_ID;
         }
 
         public override eClassType ClassType

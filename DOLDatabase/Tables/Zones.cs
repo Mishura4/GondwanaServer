@@ -46,6 +46,7 @@ namespace DOL
             private byte m_realm;
             private bool m_allowMagicalItem;
             private bool m_allowReputation;
+            private float m_tensionRate = 1.0f;
 
             public Zones()
             {
@@ -293,6 +294,21 @@ namespace DOL
                 set
                 {
                     m_allowReputation = value;
+                    Dirty = true;
+                }
+            }
+
+            [DataElement(AllowDbNull = false)]
+            public float TensionRate
+            {
+                get
+                {
+                    return m_tensionRate;
+                }
+
+                set
+                {
+                    m_tensionRate = value;
                     Dirty = true;
                 }
             }

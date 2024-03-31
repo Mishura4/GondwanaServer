@@ -282,6 +282,57 @@ namespace DOL.GS
             set;
         }
 
+        protected override void GainTension(AttackData source)
+        {
+            if (source.Attacker == null || MaxTension <= 0)
+            {
+                return;
+            }
+
+            int level_difference = source.Attacker.EffectiveLevel - this.EffectiveLevel;
+
+            if (this.Level < 52)
+            {
+                if (level_difference <= -5)
+                {
+                    return;
+                }
+            }
+            else // Bosses gain tension even from lower level players
+            {
+                if (source.Attacker.EffectiveLevel < 38)
+                {
+                    return;
+                }
+            }
+
+            int tension = level_difference switch
+            {
+                <= -2 => 1,
+                <= 2 => 2,
+                <= 6 => 3,
+                <= 15 => 5,
+                > 15 => 8
+            };
+
+            float rate = (1.00f + ((float)GetModified(eProperty.MythicalTension)) / 100);
+
+            if (rate < 0.0f)
+            {
+                return;
+            }
+
+            if (IsRenaissance)
+            {
+                rate *= 1.10f;
+            }
+
+            tension = (int)((Properties.MOB_TENSION_RATE * tension * source.TensionRate * rate) + 0.5f); // Round up
+
+
+            Tension += tension;
+        }
+
         /// <summary>
         /// Gets or sets the heading of this NPC
         /// </summary>
@@ -2170,6 +2221,7 @@ namespace DOL.GS
             m_Heading = (ushort)(dbMob.Heading & 0xFFF);
             m_maxSpeedBase = (short)dbMob.Speed;
             m_currentSpeed = 0;
+            m_tension = 0;
             CurrentRegionID = dbMob.Region;
             Realm = (eRealm)dbMob.Realm;
             Model = dbMob.Model;
@@ -2284,8 +2336,8 @@ namespace DOL.GS
 
             LoadTemplate(NPCTemplate);
             /*
-                        if (Inventory != null)
-                            SwitchWeapon(ActiveWeaponSlot);
+                if (Inventory != null)
+                    SwitchWeapon(ActiveWeaponSlot);
             */
         }
 
@@ -2454,6 +2506,7 @@ namespace DOL.GS
             this.EvadeChance = template.EvadeChance;
             this.BlockChance = template.BlockChance;
             this.LeftHandSwingChance = template.LeftHandSwingChance;
+            this.MaxTension = template.MaxTension;
 
             // We need level set before assigning spells to scale pet spells
             if (template.ReplaceMobValues)
@@ -2475,6 +2528,31 @@ namespace DOL.GS
                 {
                     foreach (Ability ab in template.Abilities)
                         m_abilities[ab.KeyName] = ab;
+                }
+            }
+
+            if (template.AdrenalineSpellID != 0)
+            {
+                if (template.MaxTension == 0)
+                {
+                    log.Warn($"NPCTemplate {template.TemplateId} has Adrenaline spell {template.AdrenalineSpellID} but MaxTension is 0, it will never be called");
+                }
+                Spell sp = SkillBase.GetSpellByID(template.AdrenalineSpellID);
+                if (sp != null)
+                {
+                    AdrenalineSpell = sp;
+                }
+                else
+                {
+                    log.Error($"NPCTemplate {template.TemplateId} has unknown Adrenaline spell {template.AdrenalineSpellID} ");
+                }
+            }
+            else if (template.MaxTension > 0) /* && data.AdrenalineSpellID == 0 */
+            {
+                AdrenalineSpell = this is MageMob ? SkillBase.GetSpellByID(AdrenalineSpellHandler.MAGE_ADRENALINE_SPELL_ID) : SkillBase.GetSpellByID(AdrenalineSpellHandler.TANK_ADRENALINE_SPELL_ID);
+                if (AdrenalineSpell == null)
+                {
+                    log.Error($"Could not load default adrenaline spell for NPCTemplate {template.TemplateId}");
                 }
             }
 
@@ -3182,6 +3260,7 @@ namespace DOL.GS
             Endurance = MaxEndurance;
             Position = m_spawnPoint;
             Heading = m_spawnHeading;
+            Tension = 0;
             ambientXNbUse = new Dictionary<MobXAmbientBehaviour, short>();
 
             return AddToWorld();

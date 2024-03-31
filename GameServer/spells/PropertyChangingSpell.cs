@@ -66,6 +66,15 @@ namespace DOL.GS.Spells
         {
             // vampiir, they cannot be buffed except with resists/armor factor/ haste / power regen
             GamePlayer player = target as GamePlayer;
+            if (!HasPositiveEffect)
+            {
+                if (target.EffectList.GetOfType<AdrenalineSpellEffect>() != null)
+                {
+                    (m_caster as GamePlayer)?.SendTranslatedMessage("Adrenaline.Target.Immune", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow, m_caster.GetPersonalizedName(target));
+                    (target as GamePlayer)?.SendTranslatedMessage("Adrenaline.Self.Immune", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
+                    return;
+                }
+            }
             if (player != null)
             {
                 if (HasPositiveEffect && player.CharacterClass.ID == (int)eCharacterClass.Vampiir && m_caster != player)
@@ -356,7 +365,6 @@ namespace DOL.GS.Spells
             eff.Var2 = (int)(Spell.Value * e.Effectiveness);
             eff.SpellLine = SpellLine.KeyName;
             return eff;
-
         }
 
         public PropertyChangingSpell(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line)
@@ -388,6 +396,8 @@ namespace DOL.GS.Spells
             {eProperty.Resist_Spirit, "Spirit" },
             {eProperty.Resist_Energy, "Energy" },
             {eProperty.Resist_Natural, "Essence" },
+
+            {eProperty.MythicalTension, "Tension gains" },
         };
 
         protected string ConvertPropertyToText(eProperty propertyID)

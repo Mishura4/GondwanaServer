@@ -79,8 +79,6 @@ namespace DOL.GS.Spells
             }
 
             base.ApplyEffectOnTarget(target, effectiveness);
-            if (Spell.Target == "enemy" && (LastAttackData.AttackResult == GameLiving.eAttackResult.HitUnstyled || LastAttackData.AttackResult == GameLiving.eAttackResult.HitStyle))
-                target.Notify(GameLivingEvent.AttackedByEnemy, target, new AttackedByEnemyEventArgs(LastAttackData));
         }
 
         public override bool IsOverwritable(GameSpellEffect compare)

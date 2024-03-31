@@ -4,6 +4,8 @@ using DOL.GS;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
 using DOL.AI.Brain;
+using ICSharpCode.SharpZipLib.Checksum;
+
 namespace DOL.GS.Spells
 {
 
@@ -23,6 +25,15 @@ namespace DOL.GS.Spells
         public override double GetLevelModFactor()
         {
             return 0;
+        }
+
+        /// <inheritdoc />
+        public override AttackData CalculateInitialAttack(GameLiving target, double effectiveness)
+        {
+            AttackData ad = base.CalculateInitialAttack(target, effectiveness);
+
+            ad.TensionRate = 0.25;
+            return ad;
         }
 
         public override bool IsOverwritable(GameSpellEffect compare)

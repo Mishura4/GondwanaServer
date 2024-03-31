@@ -25,13 +25,14 @@ using DOL.GS.PacketHandler;
 using DOL.Language;
 using DOL.GS.Realm;
 using DOL.Database;
+using static DOL.Database.ArtifactBonus;
 
 namespace DOL.GS
 {
     /// <summary>
     /// The Base class for all Character Classes in DOL
     /// </summary>
-	public class CharacterClassBase : ICharacterClass
+    public class CharacterClassBase : ICharacterClass
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -63,51 +64,62 @@ namespace DOL.GS
         /// <summary>
         /// multiplier for specialization points per level in 10th
         /// </summary>
-		protected int m_specializationMultiplier;
+        protected int m_specializationMultiplier;
 
         /// <summary>
         /// BaseHP for hp calculation
         /// </summary>
-		protected int m_baseHP;
+        protected int m_baseHP;
 
         /// <summary>
         /// Stat gained every level.
         ///	see eStat consts
         /// </summary>
-		protected eStat m_primaryStat;
+        protected eStat m_primaryStat;
 
         /// <summary>
         /// Stat gained every second level.
         /// see eStat consts
         /// </summary>
-		protected eStat m_secondaryStat;
+        protected eStat m_secondaryStat;
 
         /// <summary>
         /// Stat gained every third level.
         /// see eStat consts
         /// </summary>
-		protected eStat m_tertiaryStat;
+        protected eStat m_tertiaryStat;
 
         /// <summary>
         /// Stat that affects the power/mana pool.
         /// Do not set if they do not have a power pool/spells
         /// </summary>
-		protected eStat m_manaStat;
+        protected eStat m_manaStat;
 
         /// <summary>
         /// Weapon Skill Base value to influence weapon skill calc
         /// </summary>
-		protected int m_baseWeaponSkill;
+        protected int m_baseWeaponSkill;
 
         /// <summary>
         /// Weapon Skill Base value to influence ranged weapon skill calc
         /// </summary>
-		protected int m_baseWeaponSkillRanged;
+        protected int m_baseWeaponSkillRanged;
 
         /// <summary>
         /// How many chants can be run at once
         /// </summary>
         protected ushort m_maxPulsingSpells;
+
+        /// <summary>
+        /// ID of the spell cast when Adrenaline is full
+        /// </summary>
+        protected int m_adrenalineSpellID = 0;
+
+        public Spell AdrenalineSpell
+        {
+            get;
+            private set;
+        }
 
         /// <summary>
         /// The GamePlayer for this character
@@ -120,7 +132,7 @@ namespace DOL.GS
 
         protected List<PlayerRace> m_eligibleRaces;
 
-        protected float m_maxTensionFactor = 0.0f;
+        protected float m_maxTensionFactor = 1.0f;
 
         protected struct ClassOverride
         {
@@ -131,6 +143,7 @@ namespace DOL.GS
             public List<string> AutotrainableSkills;
             public List<PlayerRace> EligibleRaces;
             public float? MaxTensionFactor;
+            public int? AdrenalineSpellID;
         }
 
         protected static Dictionary<byte, ClassOverride> m_classOverride = new Dictionary<byte, ClassOverride>(0);
@@ -196,7 +209,8 @@ namespace DOL.GS
                     SpecializationMultiplier = dbClassOverride.SpecPointMultiplier,
                     BaseHP = dbClassOverride.BaseHP,
                     BaseWeaponSkill = dbClassOverride.BaseWeaponSkill,
-                    MaxTensionFactor = dbClassOverride.MaxTensionFactor
+                    MaxTensionFactor = dbClassOverride.MaxTensionFactor,
+                    AdrenalineSpellID = dbClassOverride.AdrenalineSpellID
                 };
 
                 classOverride.AutotrainableSkills = new(0);
@@ -241,6 +255,11 @@ namespace DOL.GS
                 {
                     m_maxTensionFactor = (float)cOverride.MaxTensionFactor;
                 }
+
+                if (cOverride.AdrenalineSpellID != null)
+                {
+                    m_adrenalineSpellID = (int)cOverride.AdrenalineSpellID;
+                }
             }
         }
 
@@ -251,6 +270,15 @@ namespace DOL.GS
                 log.WarnFormat("Character Class initializing Player when it was already initialized ! Old Player : {0} New Player : {1}", Player, player);
 
             Player = player;
+
+            if (m_adrenalineSpellID != 0)
+            {
+                AdrenalineSpell = SkillBase.GetSpellByID(m_adrenalineSpellID);
+                if (AdrenalineSpell == null)
+                {
+                    log.Error($"Class {ID} aka {Name} has invalid Adrenaline Spell ID {m_adrenalineSpellID}");
+                }
+            }
         }
 
         public List<PlayerRace> EligibleRaces => m_eligibleRaces;
@@ -325,6 +353,11 @@ namespace DOL.GS
             get { return m_manaStat; }
         }
 
+        public float MaxTensionFactor
+        {
+            get { return m_maxTensionFactor; }
+        }
+
         public int WeaponSkillBase
         {
             get { return m_baseWeaponSkill; }
@@ -343,9 +376,18 @@ namespace DOL.GS
         /// <summary>
         /// Maximum number of pulsing spells that can be active simultaneously
         /// </summary>
-		public ushort MaxPulsingSpells
+        public ushort MaxPulsingSpells
         {
             get { return m_maxPulsingSpells; }
+        }
+
+        /// <inheritdoc />
+        public int AdrenalineSpellID
+        {
+            get
+            {
+                return m_adrenalineSpellID;
+            }
         }
 
         public string GetTitle(GamePlayer player, int level)
@@ -373,7 +415,7 @@ namespace DOL.GS
         /// can train in.  Added by Echostorm for RAs
         /// </summary>
         /// <returns></returns>
-		public IList<string> GetAutotrainableSkills()
+        public IList<string> GetAutotrainableSkills()
         {
             return m_autotrainableSkills;
         }

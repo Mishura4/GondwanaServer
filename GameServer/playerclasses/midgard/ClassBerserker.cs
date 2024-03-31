@@ -18,6 +18,7 @@
  */
 using System.Collections.Generic;
 using DOL.GS.Realm;
+using DOL.GS.Spells;
 
 namespace DOL.GS.PlayerClass
 {
@@ -38,6 +39,8 @@ namespace DOL.GS.PlayerClass
             m_secondaryStat = eStat.DEX;
             m_tertiaryStat = eStat.CON;
             m_eligibleRaces = DefaultEligibleRaces;
+            m_maxTensionFactor = 1.16f;
+            m_adrenalineSpellID = AdrenalineSpellHandler.TANK_ADRENALINE_SPELL_ID;
         }
 
         public override int WeaponSkillFactor(eObjectType type)

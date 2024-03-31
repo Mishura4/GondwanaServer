@@ -206,6 +206,8 @@ namespace DOL.GS
         private int m_bonusBP = 0;
         private int m_bonusCoin = 0;
 
+        private float m_tensionRate = 0;
+
         private eRealm m_realm;
         #endregion
 
@@ -222,7 +224,7 @@ namespace DOL.GS
         /// <param name="width">the Width of this zone</param>
         /// <param name="height">the Height of this zone</param>
         /// <param name="zoneskinID">For clientside positioning in instances: The 'fake' zoneid we send to clients.</param>
-        public Zone(Region region, ushort id, string desc, int xoff, int yoff, int width, int height, ushort zoneskinID, bool isDivingEnabled, int waterlevel, bool islava, int xpBonus, int rpBonus, int bpBonus, int coinBonus, byte realm, bool allowMagicalItem, bool allowReputation)
+        public Zone(Region region, ushort id, string desc, int xoff, int yoff, int width, int height, ushort zoneskinID, bool isDivingEnabled, int waterlevel, bool islava, int xpBonus, int rpBonus, int bpBonus, int coinBonus, byte realm, bool allowMagicalItem, bool allowReputation, float tensionRate)
         {
             m_Region = region;
             m_ID = id;
@@ -241,6 +243,8 @@ namespace DOL.GS
             m_bonusBP = bpBonus;
             m_bonusCoin = coinBonus;
             AllowMagicalItem = allowMagicalItem;
+
+            m_tensionRate = tensionRate;
 
             // initialise subzone objects and counters
             m_subZoneElements = new SubNodeElement[SUBZONE_NBR][];
@@ -460,6 +464,7 @@ namespace DOL.GS
         }
 
         public bool IsPathingEnabled { get; set; } = false;
+
         #endregion
 
         #region New subzone Management function
@@ -1357,6 +1362,14 @@ namespace DOL.GS
         }
 
         public bool AllowReputation { get => m_allowReputation; set => m_allowReputation = value; }
+
+        /// <summary>
+        /// Rate to multiply player tension gains by
+        /// </summary>
+        public float TensionRate
+        {
+            get => m_tensionRate;
+        }
 
         #endregion
     }

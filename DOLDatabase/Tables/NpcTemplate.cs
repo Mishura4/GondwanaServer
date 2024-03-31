@@ -67,6 +67,7 @@ namespace DOL.Database
         private short m_piety = 0;
         private short m_empathy = 0;
         private short m_charisma = 0;
+        private int m_maxTension = 0;
 
         private int m_weapondps = 0;
         private int m_weaponspd = 30;
@@ -82,6 +83,7 @@ namespace DOL.Database
         private byte m_visibleWeaponSlots = 0;
         private bool m_replaceMobValues = false;
         private string m_packageID = string.Empty;
+        private int m_adrenalineSpellID;
         #endregion Variables
 
         /// <summary>
@@ -515,6 +517,17 @@ namespace DOL.Database
         }
 
         [DataElement(AllowDbNull = false)]
+        public int MaxTension
+        {
+            get { return m_maxTension; }
+            set
+            {
+                Dirty = true;
+                m_maxTension = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false)]
         public int WeaponDps
         {
             get { return m_weapondps; }
@@ -677,6 +690,17 @@ namespace DOL.Database
             {
                 Dirty = true;
                 m_replaceMobValues = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = true)]
+        public int AdrenalineSpellID
+        {
+            get { return m_adrenalineSpellID; }
+            set
+            {
+                Dirty = true;
+                m_adrenalineSpellID = value;
             }
         }
 

@@ -91,6 +91,11 @@ namespace DOL.GS
         eStat ManaStat { get; }
 
         /// <summary>
+        /// Class Factor to multiply MaxTension by
+        /// </summary>
+        float MaxTensionFactor { get; }
+
+        /// <summary>
         /// Class Weapon Skill Base
         /// </summary>
         int WeaponSkillBase { get; }
@@ -126,6 +131,11 @@ namespace DOL.GS
         /// Group Health Percent Window Override
         /// </summary>
         byte HealthPercentGroupWindow { get; }
+
+        /// <summary>
+        /// ID of the spell cast when adrenaline gauge is full
+        /// </summary>
+        Spell AdrenalineSpell { get; }
 
         string GetTitle(GamePlayer player, int level);
         void OnLevelUp(GamePlayer player, int previousLevel);

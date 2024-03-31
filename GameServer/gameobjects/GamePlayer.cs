@@ -52,6 +52,7 @@ using DOL.Language;
 using DOL.Territory;
 using DOL.GameEvents;
 using DOL.GS.GameEvents;
+using DOL.GS.Realm;
 using DOL.GS.Scripts;
 using log4net;
 
@@ -2913,6 +2914,92 @@ namespace DOL.GS
             }
         }
 
+        /// <inheritdoc />
+        public override int Tension
+        {
+            get => DBCharacter != null ? DBCharacter.Tension : base.Tension;
+            set
+            {
+                if (base.Tension == value) // No change, ignore
+                {
+                    return;
+                }
+                base.Tension = value;
+                DBCharacter.Tension = base.Tension;
+            }
+        }
+
+        protected override void GainTension(AttackData ad)
+        {
+            if (ad.Attacker == null || MaxTension <= 0)
+            {
+                return;
+            }
+
+            int level_difference = ad.Attacker.EffectiveLevel - this.EffectiveLevel;
+
+            if (level_difference <= -5)
+            {
+                return;
+            }
+
+            lock (EffectList)
+            {
+                // Players under Resurrection sickness, Damnation or Reanimate Corpse cannot gain tension
+                if (EffectList.Any(e => e is GameSpellEffect { SpellHandler: AbstractIllnessSpellHandler or DamnationSpellHandler or SummonMonster }))
+                {
+                    return;
+                }
+            }
+
+            float tension;
+            float server_rate;
+            if (ad.Attacker is GamePlayer)
+            {
+                tension = level_difference switch
+                {
+                    <= -2 => 20,
+                    <= 2 => 50,
+                    <= 6 => 100,
+                    <= 15 => 150,
+                    <= 30 => 200,
+                    > 30 => 250
+                };
+
+                server_rate = (float)Properties.PVP_TENSION_RATE;
+            }
+            else
+            {
+                tension = level_difference switch
+                {
+                    <= -2 => 40,
+                    <= 2 => 100,
+                    <= 6 => 200,
+                    <= 15 => 300,
+                    <= 30 => 400,
+                    > 30 => 500
+                };
+
+                server_rate = (float)Properties.PVE_TENSION_RATE;
+            }
+
+            float rate = (1.00f + ((float)GetModified(eProperty.MythicalTension)) / 100);
+
+            if (rate < 0.0f)
+            {
+                return;
+            }
+
+            if (IsRenaissance)
+            {
+                rate *= 1.10f;
+            }
+
+            tension = (int)((server_rate * tension * ad.TensionRate * rate * CurrentZone.TensionRate) + 0.5f); // Round up
+
+            Tension += (int)tension;
+        }
+
         /// <summary>
         /// Gets the concentration left
         /// </summary>
@@ -3032,6 +3119,17 @@ namespace DOL.GS
             m_characterClass.Init(this);
 
             DBCharacter.Class = m_characterClass.ID;
+
+            float maxTension = Properties.PLAYER_BASE_MAXTENSION;
+            Race race = DOLDB<Race>.SelectObject(DB.Column(nameof(Database.Race.ID)).IsEqualTo(Race));
+            if (race != null)
+            {
+                maxTension *= race.MaxTensionFactor;
+            }
+            maxTension *= CharacterClass.MaxTensionFactor;
+            DBCharacter.MaxTension = (int)maxTension;
+            MaxTension = DBCharacter.MaxTension;
+            AdrenalineSpell = CharacterClass.AdrenalineSpell;
 
             if (Group != null)
             {
@@ -6928,7 +7026,7 @@ namespace DOL.GS
                         //30% chance to miss
                         if (IsStrafing && ad.Target is GamePlayer && Util.Chance(30))
                         {
-                            ad.missChance = 30;
+                            ad.MissChance = 30;
                             ad.AttackResult = eAttackResult.Missed;
                             Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Attack.StrafMiss"), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
                             break;
@@ -7093,7 +7191,7 @@ namespace DOL.GS
         /// <returns>The amount of critical damage</returns>
         public override int GetMeleeCriticalDamage(AttackData ad, InventoryItem weapon)
         {
-            if (Util.Chance(AttackCriticalChance(weapon)))
+            if (Util.Chance(AttackCriticalChance(weapon) + ad.criticalChance))
             {
                 // triple wield prevents critical hits
                 if (ad.Target.EffectList.GetOfType<TripleWieldEffect>() != null) return 0;
@@ -7170,10 +7268,10 @@ namespace DOL.GS
                         break;
                     if (ad.Attacker is GameNPC)
                         Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Attack.Missed", ad.Attacker.GetName(0, true, Client.Account.Language, (ad.Attacker as GameNPC)))
-                        + (ad.missChance > 0 ? " (" + ad.missChance + "%)" : ""), eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
+                        + (ad.MissChance > 0 ? " (" + (int)(ad.MissChance * 100) + "%)" : ""), eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
                     else
                         Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Attack.Missed", GetPersonalizedName(ad.Attacker))
-                        + (ad.missChance > 0 ? " (" + ad.missChance + "%)" : ""), eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
+                        + (ad.MissChance > 0 ? " (" + (int)(ad.MissChance * 100) + "%)" : ""), eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
                     break;
                 case eAttackResult.HitStyle:
                 case eAttackResult.HitUnstyled:
@@ -7196,7 +7294,8 @@ namespace DOL.GS
                             case eArmorSlot.FEET: hitLocName = LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Attack.Location.Foot"); break;
                         }
                         string modmessage = "";
-                        if (ad.Attacker is GamePlayer == false) // if attacked by player, don't show resists (?)
+
+                        if (ad.Attacker is not GamePlayer) // if attacked by player, don't show resists (?)
                         {
                             if (ad.Modifier > 0) modmessage = " (+" + ad.Modifier + ")";
                             if (ad.Modifier < 0) modmessage = " (" + ad.Modifier + ")";
@@ -8014,10 +8113,18 @@ namespace DOL.GS
                 speed *= (1.0 - (qui - 60) * 0.002) * 0.01 * GetModified(eProperty.MeleeSpeed);
             }
 
+
             // apply speed cap
-            if (speed < 15)
+            if (IsInRvR)
             {
-                speed = 15;
+                if (speed < 15)
+                {
+                    speed = 15;
+                }
+            }
+            else if (speed < 9)
+            {
+                speed = 9;
             }
             return (int)(speed * 100);
         }
@@ -8247,6 +8354,8 @@ namespace DOL.GS
                 UpdatePlayerStatus();
             }
 
+            // Lose 40% tension
+            Tension = (int)(Tension * 0.40 + 0.5);
             // then buffs drop messages
             base.Die(killer);
 
@@ -13980,6 +14089,12 @@ namespace DOL.GS
             if (enemy.Client.Account.PrivLevel > 1)
                 return false;
 
+            //everyone can see your own group stealthed
+            if (enemy.Group != null && Group != null && enemy.Group == Group)
+            {
+                return this.IsWithinRadius(enemy, 2500);
+            }
+
             /*
              * http://www.critshot.com/forums/showthread.php?threadid=3142
              * The person doing the looking has a chance to find them based on their level, minus the stealthed person's stealth spec.
@@ -14045,7 +14160,7 @@ namespace DOL.GS
             }
 
             // Apply Lookout effect
-            GameSpellEffect iSpymasterEffect2 = SpellHandler.FindEffectOnTarget((GameLiving)this, "Loockout");
+            GameSpellEffect iSpymasterEffect2 = SpellHandler.FindEffectOnTarget((GameLiving)this, "Lookout");
             if (iSpymasterEffect2 != null)
                 range += (int)iSpymasterEffect2.Spell.Value;
 
@@ -14054,14 +14169,24 @@ namespace DOL.GS
             if (iConvokerEffect != null)
                 range += (int)iConvokerEffect.Spell.Value;
 
+            if (this.EffectList.GetOfType<AdrenalineStealthSpellEffect>() != null)
+            {
+                if (enemy.EffectList.GetOfType<AdrenalineStealthSpellEffect>() == null)
+                {
+                    // Detector has increased stealth detection
+                    range = (int)(((double)range) * 1.3);
+                }
+                // else We have 30% increase and 30% decrease, do nothing
+            }
+            else if (enemy.EffectList.GetOfType<AdrenalineStealthSpellEffect>() != null)
+            {
+                // Enemy has increased stealth
+                range = (int)(((double)range) * 0.7);
+            }
+
             //Hard cap is 1900
             if (range > 1900)
                 range = 1900;
-            //everyone can see your own group stealthed
-            else if (enemy.Group != null && Group != null && enemy.Group == Group)
-            {
-                range = 2500;
-            }
 
             // Fin
             // vampiir stealth range, uncomment when add eproperty stealthrange i suppose
