@@ -77,19 +77,19 @@ namespace DOL.AI.Brain
 
                 if (guard.GetDistance2DTo(guard.SpawnPoint) > 50)
                 {
-                    guard.WalkToSpawn();
+                    guard.Reset();
                 }
             }
             //Eden - Portal Keeps Guards max distance
             if (guard.Level > 200 && !guard.IsWithinRadius(guard.SpawnPoint, 2000))
             {
                 ClearAggroList();
-                guard.WalkToSpawn();
+                guard.Reset();
             }
             else if (guard.InCombat == false && guard.IsWithinRadius(guard.SpawnPoint, 6000) == false)
             {
                 ClearAggroList();
-                guard.WalkToSpawn();
+                guard.Reset();
             }
 
             // We want guards to check aggro even when they are returning home, which StandardMobBrain does not, so add checks here

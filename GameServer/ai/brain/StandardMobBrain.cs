@@ -105,7 +105,7 @@ namespace DOL.AI.Brain
             // de-aggro and return to its spawn point.
             if (Body.IsOutOfTetherRange && !Body.InCombat)
             {
-                Body.WalkToSpawn();
+                Body.Reset();
                 return;
             }
             // If the NPC is Moving on path, it can detect closed doors and open them
@@ -124,14 +124,14 @@ namespace DOL.AI.Brain
                 int maxdistance = Body.MaxDistance > 0 ? Body.MaxDistance : -Body.MaxDistance * AggroRange / 100;
                 if (maxdistance > 0 && distance > maxdistance)
                 {
-                    Body.WalkToSpawn();
+                    Body.Reset();
                     return;
                 }
             }
 
             if (Body.MaxDistance == 0 && Body.AttackState && (Body.CurrentRegion.Time - Body.LastCombatTick) > 40000)
             {
-                Body.WalkToSpawn();
+                Body.Reset();
                 return;
             }
 
@@ -158,10 +158,7 @@ namespace DOL.AI.Brain
                 //Tolerance to check if we need to go home AGAIN, otherwise we might be told to go home
                 //for a few units only and this may end before the next Arrive-At-Target Event is fired and in this case
                 //We would never lose the state "IsReturningHome", which is then followed by other erros related to agro again to players
-                if (!Util.IsNearDistance(Body.Position, Body.SpawnPoint, GameNPC.CONST_WALKTOTOLERANCE))
-                    Body.WalkToSpawn();
-                else if (Body.Heading != Body.SpawnHeading)
-                    Body.Heading = Body.SpawnHeading;
+                Body.Reset();
             }
 
             //Mob will now always walk on their path
@@ -185,7 +182,7 @@ namespace DOL.AI.Brain
             //If we are not attacking, and not casting, and not moving, and we aren't facing our spawn heading, we turn to the spawn heading
             if (!Body.IsMovingOnPath && !Body.InCombat && !Body.AttackState && !Body.IsCasting && !Body.IsMoving && Body.IsWithinRadius(Body.SpawnPoint, 500) == false)
             {
-                Body.WalkToSpawn(); // Mobs do not walk back at 2x their speed..
+                Body.Reset(); // Mobs do not walk back at 2x their speed..
                 Body.IsReturningHome = false; // We are returning to spawn but not the long walk home, so aggro still possible
             }
 
@@ -920,7 +917,7 @@ namespace DOL.AI.Brain
         {
             AttackMostWanted();
             if (!Body.AttackState)
-                Body.WalkToSpawn();
+                Body.Reset();
         }
 
         /// <summary>

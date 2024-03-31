@@ -114,6 +114,10 @@ namespace DOL.Events
         /// </summary>
         public static readonly GameNPCEvent OutOfTetherRange = new GameNPCEvent("GameNPC.OutOfTetherRange");
         /// <summary>
+        /// Fired whenever pet is out of tether range (necromancer).
+        /// </summary>
+        public static readonly GameNPCEvent NPCReset = new GameNPCEvent("GameNPC.NPCReset");
+        /// <summary>
         /// Fired when pet is lost (necromancer).
         /// </summary>
         public static readonly GameNPCEvent PetLost = new GameNPCEvent("GameNPC.PetLost");

@@ -92,10 +92,10 @@ namespace DOL.GS.Scripts
         }
         #endregion
 
-        public void Reset()
+        public override void Reset()
         {
             StopFollowing();
-            WalkToSpawn();
+            base.Reset();
         }
 
         public override void StartAttack(GameObject attackTarget)
@@ -144,7 +144,7 @@ namespace DOL.GS.Scripts
             {
                 StopFollowing();
                 Notify(GameNPCEvent.FollowLostTarget, this, new FollowLostTargetEventArgs(followTarget));
-                WalkToSpawn();
+                Reset();
                 return 0;
             }
 
@@ -164,7 +164,7 @@ namespace DOL.GS.Scripts
                         StopFollowing();
                         Notify(GameNPCEvent.FollowLostTarget, this, new FollowLostTargetEventArgs(followTarget));
                         brain.ClearAggroList();
-                        WalkToSpawn();
+                        Reset();
                         return 0;
                     }
                 }
@@ -282,7 +282,7 @@ namespace DOL.AI.Brain
             if ((Body as FollowingMob)?.MobFollow != null)
                 Body.Follow(((FollowingMob)Body).MobFollow, 10, 3000);
             else
-                Body.WalkToSpawn();
+                Body.Reset();
         }
 
         private void SetMobByMobID()

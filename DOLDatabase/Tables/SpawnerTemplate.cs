@@ -27,6 +27,7 @@ namespace DOLDatabase.Tables
         private string m_masterGroupId;
         private int m_addRespawnTimerSecs;
         private int m_percentageOfPlayerInRadius;
+        private int m_lifePercentTriggerSpawn;
 
         [DataElement(AllowDbNull = false, Varchar = 255, Index = true)]
         public string MobID
@@ -121,6 +122,13 @@ namespace DOLDatabase.Tables
         {
             get => m_isAggroType;
             set { Dirty = true; m_isAggroType = value; }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public int LifePercentTriggerSpawn
+        {
+            get => m_lifePercentTriggerSpawn;
+            set { Dirty = true; m_lifePercentTriggerSpawn = value; }
         }
 
         [DataElement(AllowDbNull = false)]

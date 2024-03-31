@@ -397,7 +397,7 @@ namespace DOL.GS.Spells
                             }
                             else
                             {
-                                npc.WalkToSpawn();
+                                npc.Reset();
                             }
 
                         }

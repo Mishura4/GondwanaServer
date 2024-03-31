@@ -313,8 +313,8 @@ namespace DOL.GS.Scripts
 
             if (PlayerFollow == null)
             {
-                WalkToSpawn();
                 Notify(GameNPCEvent.FollowLostTarget, this, new FollowLostTargetEventArgs(null));
+                Reset();
                 return 0;
             }
 
@@ -328,7 +328,7 @@ namespace DOL.GS.Scripts
                     PlayerFollow = null;
                     StopFollowing();
                     Notify(GameNPCEvent.FollowLostTarget, this, new FollowLostTargetEventArgs(playerFollow));
-                    WalkToSpawn();
+                    Reset();
                     return 0;
                 }
 
@@ -338,7 +338,7 @@ namespace DOL.GS.Scripts
                     PlayerFollow = null;
                     StopFollowing();
                     Notify(GameNPCEvent.FollowLostTarget, this, new FollowLostTargetEventArgs(playerFollow));
-                    ResetFriendMobs();
+                    Reset();
                     return 0;
                 }
             }
@@ -376,7 +376,7 @@ namespace DOL.GS.Scripts
                     PlayerFollow = null;
                     StopFollowing();
                     Notify(GameNPCEvent.FollowLostTarget, this, new FollowLostTargetEventArgs(followTarget));
-                    WalkToSpawn();
+                    Reset();
                     return 0;
                 }
             }

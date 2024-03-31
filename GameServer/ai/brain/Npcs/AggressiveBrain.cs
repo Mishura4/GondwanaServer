@@ -219,7 +219,7 @@ namespace DOL.AI.Brain
                 Aggression.Clear();
                 Body.TargetObject = null;
                 AttackBehaviour = PassiveBehaviour;
-                Body.WalkToSpawn();
+                Body.Reset();
             }
             else
             {

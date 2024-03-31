@@ -100,7 +100,7 @@ namespace DOL.AI.Brain
                 }
 
                 // ClearAggroList();
-                Body.WalkToSpawn();
+                Body.Reset();
                 return;
             }
 

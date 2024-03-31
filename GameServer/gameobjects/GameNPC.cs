@@ -1681,19 +1681,22 @@ namespace DOL.GS
         /// </summary>
         public void StopMoving()
         {
+            bool wasResetting = IsReturningToSpawnPoint;
             CancelWalkToSpawn();
 
-            if (!IsMoving)
-                return;
-            if (MovementElapsedTicks > (Vector3.Distance(_basePosition, TargetPosition) * 1000 / CurrentSpeed))
+            if (IsMoving)
             {
-                Position = TargetPosition;
+                if (MovementElapsedTicks > (Vector3.Distance(_basePosition, TargetPosition) * 1000 / CurrentSpeed))
+                {
+                    Position = TargetPosition;
+                }
+                else
+                    Position = _basePosition + MovementElapsedTicks * Velocity;
             }
-            else
-                Position = _basePosition + MovementElapsedTicks * Velocity;
-            MovementStartTick = GameTimer.GetTickCount();
-            TargetPosition = Vector3.Zero;
-            CurrentSpeed = 0;
+            if (wasResetting)
+            {
+                Reset();
+            }
             BroadcastUpdate();
         }
 
@@ -1842,7 +1845,7 @@ namespace DOL.GS
             {
                 StopFollowing();
                 Notify(GameNPCEvent.FollowLostTarget, this, new FollowLostTargetEventArgs(followTarget));
-                this.WalkToSpawn();
+                Reset();
                 return 0;
             }
             float newX, newY, newZ;
@@ -1864,7 +1867,7 @@ namespace DOL.GS
                             //StopFollow();
                             Notify(GameNPCEvent.FollowLostTarget, this, new FollowLostTargetEventArgs(followTarget));
                             //brain.ClearAggroList();
-                            this.WalkToSpawn();
+                            Reset();
                             return 0;
                         }
                     }
@@ -3166,21 +3169,6 @@ namespace DOL.GS
                 StartPowerRegeneration();
             StartEnduranceRegeneration();
 
-            //If the Mob has a Path assigned he will now walk on it!
-            if (MaxSpeedBase > 0 && CurrentSpellHandler == null && !IsMoving
-                && !AttackState && !InCombat && !IsMovingOnPath && !IsReturningHome
-                //Check everything otherwise the Server will crash
-                && PathID != null && PathID != "" && PathID != "NULL")
-            {
-                PathPoint path = MovementMgr.LoadPath(PathID);
-                if (path != null)
-                {
-                    var p = path.GetNearestNextPoint(Position);
-                    CurrentWayPoint = p;
-                    MoveOnPath((short)p.MaxSpeed);
-                }
-            }
-
             if (m_houseNumber > 0 && !(this is GameConsignmentMerchant))
             {
                 log.Info("NPC '" + Name + "' added to house " + m_houseNumber);
@@ -3236,13 +3224,14 @@ namespace DOL.GS
                 this.GuildName = territory.GuildOwner;
             }
 
+            Reset();
+
             return true;
         }
 
         public virtual bool Spawn()
         {
-            int dummy;
-            CurrentRegion.MobsRespawning.TryRemove(this, out dummy);
+            CurrentRegion.MobsRespawning.TryRemove(this, out _);
 
             lock (m_respawnTimerLock)
             {
@@ -3264,6 +3253,42 @@ namespace DOL.GS
             ambientXNbUse = new Dictionary<MobXAmbientBehaviour, short>();
 
             return AddToWorld();
+        }
+
+        /// <summary>
+        /// Start the process of resetting the mob, for example walk to spawn and reset position or other combat data after leaving combat
+        /// </summary>
+        public virtual void Reset()
+        {
+            if (!Util.IsNearDistance(Position, SpawnPoint, GameNPC.CONST_WALKTOTOLERANCE))
+            {
+                WalkToSpawn();
+            }
+            else
+            {
+                if (Heading != SpawnHeading)
+                    Heading = SpawnHeading;
+
+                //If the Mob has a Path assigned he will now walk on it!
+                if (MaxSpeedBase > 0 && CurrentSpellHandler == null && !IsMoving
+                    && !AttackState && !InCombat && !IsMovingOnPath && !IsReturningHome
+                    && PathID != null && PathID != "" && PathID != "NULL")
+                {
+                    PathPoint path = MovementMgr.LoadPath(PathID);
+                    if (path != null)
+                    {
+                        var p = path.GetNearestNextPoint(Position);
+                        CurrentWayPoint = p;
+                        MoveOnPath((short)p.MaxSpeed);
+                    }
+                }
+
+                MovementStartTick = GameTimer.GetTickCount();
+                TargetPosition = Vector3.Zero;
+                CurrentSpeed = 0;
+
+                Notify(GameNPCEvent.NPCReset, this, EventArgs.Empty);
+            }
         }
 
         /// <summary>
@@ -4802,6 +4827,7 @@ namespace DOL.GS
                 }
             }
         }
+
         protected virtual int RespawnTimerCallback(RegionTimer respawnTimer)
         {
             Spawn();

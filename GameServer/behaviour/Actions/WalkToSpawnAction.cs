@@ -44,7 +44,7 @@ namespace DOL.GS.Behaviour.Actions
 
         public override void Perform(DOLEvent e, object sender, EventArgs args)
         {
-            P.WalkToSpawn();
+            P.Reset();
         }
     }
 }

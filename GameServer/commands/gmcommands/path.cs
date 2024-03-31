@@ -239,7 +239,7 @@ namespace DOL.GS.Commands
 
             // clear any current path
             ((GameNPC)client.Player.TargetObject).CurrentWayPoint = null;
-            ((GameNPC)client.Player.TargetObject).WalkToSpawn();
+            ((GameNPC)client.Player.TargetObject).Reset();
 
             DisplayMessage(client, "{0} told to walk to spawn!", client.Player.TargetObject.Name);
         }
