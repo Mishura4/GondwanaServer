@@ -85,7 +85,7 @@ namespace DOLDatabase.Tables
             set { Dirty = true; m_masterGroupId = value; }
         }
 
-        [DataElement(AllowDbNull = true)]
+        [DataElement(AllowDbNull = false)]
         public int PercentageOfPlayerInRadius
         {
             get { return m_percentageOfPlayerInRadius; }

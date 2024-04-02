@@ -46,6 +46,8 @@ namespace DOL.GS
         private int addRespawnTimerSecs;
         private DateTime? npcAddsNextPopupTimeStamp;
 
+        private readonly object m_addsLock = new object();
+
         /// <summary>
         /// If > 0, the spawner will spawn (percentageOfPlayersInRadius% of players in a radius of 1000) mobs randomly picked between the valid templates
         /// If <= 0, up to 6 mobs will be spawned, each for every valid template
@@ -212,7 +214,7 @@ namespace DOL.GS
             if (this.addsGroupmobId != null && this.loadedAdds != null && MobGroupManager.Instance.Groups.ContainsKey(this.addsGroupmobId))
             {
                 MobGroupManager.Instance.RemoveGroupsAndMobs(this.addsGroupmobId, true);
-                lock (loadedAdds)
+                lock (m_addsLock)
                 {
                     loadedAdds = null;
                 }
@@ -274,7 +276,7 @@ namespace DOL.GS
                         }
                     }
                 }
-                lock (loadedAdds)
+                lock (m_addsLock)
                 {
                     loadedAdds = npcs.Where(n => n != null).ToList();
                 }
@@ -468,7 +470,7 @@ namespace DOL.GS
                     await Task.Delay(500);
                     if (IsAlive)
                     {
-                        lock (loadedAdds)
+                        lock (m_addsLock)
                         {
                             loadedAdds.ForEach(n =>
                             {
@@ -514,11 +516,11 @@ namespace DOL.GS
         {
             if (addsGroupmobId != null && MobGroupManager.Instance.Groups.ContainsKey(this.addsGroupmobId))
             {
-                lock (loadedAdds)
+                lock (m_addsLock)
                 {
-                    loadedAdds.ForEach(n => n.Die(this));
-                    lock (loadedAdds)
+                    if (loadedAdds != null)
                     {
+                        loadedAdds.ForEach(n => n.Die(this));
                         loadedAdds = null;
                     }
                 }
@@ -621,7 +623,7 @@ namespace DOL.GS
                     MobGroupManager.Instance.GroupsToRemoveOnServerLoad.Add(this.addsGroupmobId);
                 }
 
-                lock (loadedAdds)
+                lock (m_addsLock)
                 {
                     loadedAdds = null;
                 }
