@@ -472,7 +472,7 @@ namespace DOL.GS
                     {
                         lock (m_addsLock)
                         {
-                            loadedAdds.ForEach(n =>
+                            loadedAdds?.ForEach(n =>
                             {
                                 if (n.IsAlive && n.Brain is StandardMobBrain friendBrain && this.Brain is StandardMobBrain myBrain)
                                 {

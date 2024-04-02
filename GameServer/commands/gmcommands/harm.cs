@@ -45,7 +45,18 @@ namespace DOL.GS.Commands
                 amount = Convert.ToInt16(args[1]);
                 GameLiving living = client.Player.TargetObject as GameLiving;
                 if (living != null)
-                    living.TakeDamage(client.Player, eDamageType.GM, amount, 0);
+                {
+                    AttackData ad = new AttackData
+                    {
+                        Attacker = client.Player,
+                        Target = living,
+                        DamageType = eDamageType.GM,
+                        AttackType = AttackData.eAttackType.Unknown,
+                        Damage = amount,
+                        AttackResult = GameLiving.eAttackResult.HitUnstyled,
+                    };
+                    living.TakeDamage(ad);
+                }
                 else
                     DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Harm.InvalidTarget"));
             }
