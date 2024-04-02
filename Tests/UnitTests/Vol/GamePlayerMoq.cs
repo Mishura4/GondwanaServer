@@ -14,11 +14,11 @@ namespace DOL.Vol
 
         public bool IsAllowToVolInThisArea { get; set; }
 
-        public bool IsStealthed { get; }
+        public bool IsStealthed { get; set; }
 
         public string GuildID { get; set; }
 
-        public Group Group { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public Group Group { get; set; }
 
         public int GetBaseSpecLevel(string keyname)
         {
