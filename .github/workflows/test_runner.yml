@@ -34,11 +34,11 @@ jobs:
           dotnet-version: '6.0.x'
       - name: Build
         run: |
-          dotnet build -c ${{ matrix.build_target }} "NetCore/Tests/Tests.csproj" --verbosity normal
+          dotnet build -c ${{ matrix.build_target }} "NetCore/DOLdotnet.sln" --verbosity normal
       - name: Test
         run: |
-          dotnet test ./NetCore/build/Tests/${{ matrix.build_target }}/lib/Tests.dll -v n --filter "DOL.UnitTests&TestCategory!=Explicit"
-          dotnet test ./NetCore/build/Tests/${{ matrix.build_target }}/lib/Tests.dll -v n --filter "DOL.Integration&TestCategory!=Explicit"
+          dotnet test .\NetCore\build\Tests\${{ matrix.build_target }}\lib\Tests.dll -v n --filter "DOL.UnitTests&TestCategory!=Explicit"
+          dotnet test .\NetCore\build\Tests\${{ matrix.build_target }}\lib\Tests.dll -v n --filter "DOL.Integration&TestCategory!=Explicit"
 
   test_netcore_windows:
     name: NetCore Tests on Windows
