@@ -8527,13 +8527,19 @@ namespace DOL.GS
         /// <summary>
         /// Player head as an item template
         /// </summary>
-        protected ItemTemplate m_headTemplate;
-
+        protected ItemTemplate m_headTemplate = null;
 
         /// <summary>
         /// Player head as an item template
         /// </summary>
-        public ItemTemplate HeadTemplate { get; }
+        public ItemTemplate HeadTemplate
+        {
+            get
+            {
+                m_headTemplate ??= (GameServer.Database.FindObjectByKey<ItemTemplate>("head_blacklist") ?? new ItemTemplate());
+                return m_headTemplate;
+            }
+        }
 
         public long m_lastHeadDropTime = 0;
 
@@ -16947,8 +16953,6 @@ namespace DOL.GS
             CreateStatistics();
             this.ConfigureReputationTimer();
             shadowNPC = new ShadowNPC(this);
-
-            HeadTemplate = GameServer.Database.FindObjectByKey<ItemTemplate>("head_blacklist") ?? new ItemTemplate();
         }
 
         /// <summary>

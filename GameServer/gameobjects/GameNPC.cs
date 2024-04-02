@@ -3831,7 +3831,7 @@ namespace DOL.GS
         /// <summary>
         /// The ambient texts
         /// </summary>
-        public IList<MobXAmbientBehaviour> ambientTexts;
+        public IList<MobXAmbientBehaviour> ambientTexts = new List<MobXAmbientBehaviour>();
 
         /// <summary>
         /// This function is called from the ObjectInteractRequestHandler
