@@ -2,9 +2,20 @@ name: Test Runner
 
 on:
   push:
-    branches: [ master ]
+    branches:
+      - '**'
+    paths:
+      - '**Dockerfile'
+      - '**.cs'
+      - '**.csproj'
+      - '**test_runner.yml'
   pull_request:
-    branches: [ master ]
+    paths:
+      - '**Dockerfile'
+      - '**.cs'
+      - '**.csproj'
+      - '**test_runner.yml'
+
   workflow_dispatch:
 
 jobs:
