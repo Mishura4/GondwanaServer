@@ -3273,7 +3273,7 @@ namespace DOL.GS
                 //If the Mob has a Path assigned he will now walk on it!
                 if (PathID != null && PathID != "" && PathID != "NULL")
                 {
-                    if (!IsMovingOnPath || !this.IsWithinRadius(CurrentWayPoint.Position, GameNPC.CONST_WALKTOTOLERANCE))
+                    if (!IsMovingOnPath && (CurrentWayPoint == null || !this.IsWithinRadius(CurrentWayPoint.Position, GameNPC.CONST_WALKTOTOLERANCE)))
                     {
                         IsReturningHome = true;
                         IsResetting = true;
