@@ -38,9 +38,10 @@ namespace DOL.GS
         /// </summary>
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        private static Dictionary<string, Artifact> m_artifacts;
-        private static Dictionary<string, List<ArtifactXItem>> m_artifactVersions;
-        private static List<ArtifactBonus> m_artifactBonuses;
+        private static Dictionary<string, Artifact> m_artifacts = new();
+        private static Dictionary<string, List<ArtifactXItem>> m_artifactVersions = new();
+        private static List<ArtifactBonus> m_artifactBonuses = new();
+        private static readonly Object m_versionsLock = new object();
 
         public enum Book { NoPage = 0x0, Page1 = 0x1, Page2 = 0x2, Page3 = 0x4, AllPages = 0x7 };
 
@@ -110,7 +111,7 @@ namespace DOL.GS
             }
 
             string artifactID = null;
-            lock (m_artifactVersions)
+            lock (m_versionsLock)
             {
                 foreach (List<ArtifactXItem> list in m_artifactVersions.Values)
                 {
@@ -217,7 +218,7 @@ namespace DOL.GS
                 return true;
             }
 
-            lock (m_artifactVersions)
+            lock (m_versionsLock)
             {
                 foreach (List<ArtifactXItem> versions in m_artifactVersions.Values)
                 {
@@ -452,7 +453,7 @@ namespace DOL.GS
             List<ArtifactXItem> versions = new List<ArtifactXItem>();
             if (artifactID != null)
             {
-                lock (m_artifactVersions)
+                lock (m_versionsLock)
                 {
                     if (m_artifactVersions.ContainsKey(artifactID))
                     {

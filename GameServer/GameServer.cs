@@ -16,6 +16,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
+using AmteScripts.Managers;
 using System;
 using System.Linq;
 using System.Collections;
@@ -228,7 +229,10 @@ namespace DOL.GS
 
         #region Initialization
 
-        public static void LoadTestDouble(GameServer server) { m_instance = server; }
+        public static void LoadTestDouble(GameServer server)
+        {
+            m_instance = server;
+        }
 
         public static void CreateInstance(GameServerConfiguration config)
         {

@@ -10751,6 +10751,13 @@ namespace DOL.GS
                 return false;
             }
 
+            if (RvrManager.WinnerRealm == Realm)
+            {
+                BaseBuffBonusCategory[eProperty.MythicalCoin] += 5;
+                BaseBuffBonusCategory[eProperty.XpPoints] += 10;
+                BaseBuffBonusCategory[eProperty.RealmPoints] += 5;
+            }
+
             IsJumping = false;
             m_invulnerabilityTick = 0;
             m_pve_invulnerabilityTick = 0;
@@ -16942,12 +16949,6 @@ namespace DOL.GS
             shadowNPC = new ShadowNPC(this);
 
             HeadTemplate = GameServer.Database.FindObjectByKey<ItemTemplate>("head_blacklist") ?? new ItemTemplate();
-            if (RvrManager.WinnerRealm == Realm)
-            {
-                BaseBuffBonusCategory[eProperty.MythicalCoin] += 5;
-                BaseBuffBonusCategory[eProperty.XpPoints] += 10;
-                BaseBuffBonusCategory[eProperty.RealmPoints] += 5;
-            }
         }
 
         /// <summary>
