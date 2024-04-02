@@ -4012,6 +4012,12 @@ namespace DOL.GS
             if (target == null)
                 return;
 
+            if (IsResetting)
+            {
+                IsResetting = false;
+                IsReturningHome = false;
+            }
+
             TargetObject = target;
 
             long lastTick = this.TempProperties.getProperty<long>(LAST_LOS_TICK_PROPERTY);
