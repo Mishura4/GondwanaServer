@@ -25,6 +25,12 @@ namespace DOL.Vol
             target = new GamePlayerMoq();
         }
 
+        [SetUp]
+        public void Setup()
+        {
+            stealer.IsStealthed = true;
+        }
+
         [Test]
         public void ShouldLowLevelPlayerCanNotVol()
         {

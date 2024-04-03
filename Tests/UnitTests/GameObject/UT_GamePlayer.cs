@@ -1,4 +1,6 @@
-﻿using DOL.GS;
+﻿using DOL.Database;
+using DOL.GS;
+using DOL.Integration;
 using NUnit.Framework;
 
 namespace DOL.UnitTests.Gameserver
@@ -141,6 +143,19 @@ namespace DOL.UnitTests.Gameserver
             int actual = player.Constitution;
 
             Assert.AreEqual(81, actual);
+        }
+
+        [OneTimeSetUp]
+        public void SetupFakeServer()
+        {
+            var sqliteDB = Create.TemporarySQLiteDB();
+            sqliteDB.RegisterDataObject(typeof(Race));
+            sqliteDB.RegisterDataObject(typeof(DOLCharacters));
+            sqliteDB.RegisterDataObject(typeof(ItemTemplate));
+
+            var fakeServer = new FakeServer();
+            fakeServer.SetDatabase(sqliteDB);
+            GameServer.LoadTestDouble(fakeServer);
         }
 
         private static GamePlayer CreatePlayer()

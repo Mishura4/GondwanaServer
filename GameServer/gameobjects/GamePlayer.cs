@@ -3121,7 +3121,7 @@ namespace DOL.GS
             DBCharacter.Class = m_characterClass.ID;
 
             float maxTension = Properties.PLAYER_BASE_MAXTENSION;
-            Race race = DOLDB<Race>.SelectObject(DB.Column(nameof(Database.Race.ID)).IsEqualTo(Race));
+            Race race = GameServer.Database.SelectObject<Race>(DB.Column(nameof(Database.Race.ID)).IsEqualTo(Race));
             if (race != null)
             {
                 maxTension *= race.MaxTensionFactor;
@@ -8527,13 +8527,19 @@ namespace DOL.GS
         /// <summary>
         /// Player head as an item template
         /// </summary>
-        protected ItemTemplate m_headTemplate;
-
+        protected ItemTemplate m_headTemplate = null;
 
         /// <summary>
         /// Player head as an item template
         /// </summary>
-        public ItemTemplate HeadTemplate { get; }
+        public ItemTemplate HeadTemplate
+        {
+            get
+            {
+                m_headTemplate ??= (GameServer.Database.FindObjectByKey<ItemTemplate>("head_blacklist") ?? new ItemTemplate());
+                return m_headTemplate;
+            }
+        }
 
         public long m_lastHeadDropTime = 0;
 
@@ -10749,6 +10755,13 @@ namespace DOL.GS
             {
                 log.Error("Failed to add player to world: " + Name);
                 return false;
+            }
+
+            if (RvrManager.WinnerRealm == Realm)
+            {
+                BaseBuffBonusCategory[eProperty.MythicalCoin] += 5;
+                BaseBuffBonusCategory[eProperty.XpPoints] += 10;
+                BaseBuffBonusCategory[eProperty.RealmPoints] += 5;
             }
 
             IsJumping = false;
@@ -16940,14 +16953,6 @@ namespace DOL.GS
             CreateStatistics();
             this.ConfigureReputationTimer();
             shadowNPC = new ShadowNPC(this);
-
-            HeadTemplate = GameServer.Database.FindObjectByKey<ItemTemplate>("head_blacklist") ?? new ItemTemplate();
-            if (RvrManager.WinnerRealm == Realm)
-            {
-                BaseBuffBonusCategory[eProperty.MythicalCoin] += 5;
-                BaseBuffBonusCategory[eProperty.XpPoints] += 10;
-                BaseBuffBonusCategory[eProperty.RealmPoints] += 5;
-            }
         }
 
         /// <summary>

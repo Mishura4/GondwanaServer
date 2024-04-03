@@ -89,7 +89,7 @@ namespace DOL.GS.Commands
                 return false;
             }
 
-            if (stealer.GuildID == target.GuildID && stealer.GuildID != string.Empty)
+            if (stealer.GuildID == target.GuildID && !String.IsNullOrEmpty(target.GuildID))
             {
                 return false;
             }
