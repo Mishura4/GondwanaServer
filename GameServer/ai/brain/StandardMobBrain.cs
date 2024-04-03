@@ -125,7 +125,7 @@ namespace DOL.AI.Brain
 
             // Note: Offensive spells are checked in GameNPC:SpellAction timer
 
-            // check for returning to home if to far away
+            // check for returning to home if to far away or lost combat
             if (Body.MaxDistance != 0 && !Body.IsReturningHome)
             {
                 var distance = Vector3.Distance(Body.Position, Body.SpawnPoint);
@@ -137,40 +137,18 @@ namespace DOL.AI.Brain
                 }
             }
 
-            if (Body.MaxDistance == 0 && Body.AttackState && (Body.CurrentRegion.Time - Body.LastCombatTick) > 40000)
+            if (!Body.IsReturningHome && Body.AttackState)
             {
-                Body.Reset();
-                return;
-            }
-
-            //If this NPC can randomly walk around, we allow it to walk around
-            if (!Body.AttackState && CanRandomWalk && !Body.IsRoaming && Util.Chance(DOL.GS.ServerProperties.Properties.GAMENPC_RANDOMWALK_CHANCE))
-            {
-                var target = CalcRandomWalkTarget();
-                if (Util.IsNearDistance(target, Body.Position, GameNPC.CONST_WALKTOTOLERANCE))
+                if (Body.CurrentRegion.Time - Body.LastCombatTick > 40000)
                 {
-                    Body.TurnTo(target.X, target.Y);
-                }
-                else
-                {
-                    Body.PathTo(target, 50);
-                }
-
-                Body.FireAmbientSentence(GameNPC.eAmbientTrigger.roaming);
-            }
-            //If the npc can move, and the npc is not casting, and just dropped combat
-            else if (Body.MaxSpeedBase > 0 && Body.CurrentSpellHandler == null && !Body.AttackState && !Body.InCombat && wasInCombat)
-            {
-                Body.Reset();
-                if (Body.IsWithinRadius(Body.IsMovingOnPath ? Body.TargetPosition : Body.SpawnPoint, 500))
-                {
-                    Body.IsReturningHome = false; // We are returning to spawn but not the long walk home, so aggro still possible
+                    Body.Reset();
+                    return;
                 }
             }
 
-            if (Body.IsReturningHome == false)
+            if (!Body.IsReturningHome && !Body.AttackState)
             {
-                if (!Body.AttackState && AggroRange > 0)
+                if (AggroRange > 0)
                 {
                     var currentPlayersSeen = new List<GamePlayer>();
                     foreach (GamePlayer player in Body.GetPlayersInRadius((ushort)AggroRange, true))
@@ -187,7 +165,6 @@ namespace DOL.AI.Brain
                     {
                         if (!currentPlayersSeen.Contains(PlayersSeen[i])) PlayersSeen.RemoveAt(i);
                     }
-
                 }
 
                 //If we have an aggrolevel above 0, we check for players and npcs in the area to attack
@@ -203,16 +180,30 @@ namespace DOL.AI.Brain
                     AttackMostWanted();
                     return;
                 }
-                else
+
+                if (Body.AttackState)
+                    Body.StopAttack();
+
+                //If this NPC can randomly walk around, we allow it to walk around
+                if (CanRandomWalk && !Body.IsRoaming && Util.Chance(DOL.GS.ServerProperties.Properties.GAMENPC_RANDOMWALK_CHANCE))
                 {
-                    if (Body.AttackState)
-                        Body.StopAttack();
+                    var target = CalcRandomWalkTarget();
+                    if (Util.IsNearDistance(target, Body.Position, GameNPC.CONST_WALKTOTOLERANCE))
+                    {
+                        Body.TurnTo(target.X, target.Y);
+                    }
+                    else
+                    {
+                        Body.PathTo(target, 50);
+                    }
 
-                    Body.TargetObject = null;
+                    Body.FireAmbientSentence(GameNPC.eAmbientTrigger.roaming);
                 }
-            }
 
-            CheckStealth();
+                Body.TargetObject = null;
+
+                CheckStealth();
+            }
         }
 
         /// <summary>
