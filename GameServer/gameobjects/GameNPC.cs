@@ -1697,6 +1697,12 @@ namespace DOL.GS
             {
                 Reset();
             }
+            else
+            {
+                MovementStartTick = GameTimer.GetTickCount();
+                TargetPosition = Vector3.Zero;
+                CurrentSpeed = 0;
+            }
             BroadcastUpdate();
         }
 
