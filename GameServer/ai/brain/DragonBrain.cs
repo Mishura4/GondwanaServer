@@ -58,7 +58,7 @@ namespace DOL.AI.Brain
             // Don't call base.Think() for now, I don't trust it...
             // While returning to the spawn point we don't need to think.
 
-            if (Body.IsReturningHome) return;
+            if (Body.IsResetting) return;
 
             // When dragon regenerates to full health reset stage to 10.
 

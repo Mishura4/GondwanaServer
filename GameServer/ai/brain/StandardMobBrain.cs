@@ -75,6 +75,18 @@ namespace DOL.AI.Brain
             return base.ToString() + ", m_aggroLevel=" + AggroLevel.ToString() + ", m_aggroMaxRange=" + AggroRange.ToString();
         }
 
+        /// <inheritdoc />
+        public override bool Start()
+        {
+            if (!base.Start())
+            {
+                return false;
+            }
+
+            m_wasInCombat = false;
+            return true;
+        }
+
         public override bool Stop()
         {
             // tolakram - when the brain stops, due to either death or no players in the vicinity, clear the aggro list
@@ -125,8 +137,14 @@ namespace DOL.AI.Brain
 
             // Note: Offensive spells are checked in GameNPC:SpellAction timer
 
-            // check for returning to home if to far away or lost combat
-            if (Body.MaxDistance != 0 && !Body.IsReturningHome)
+            // If NPC doing a full reset, we don't think further
+            if (Body.IsResetting)
+            {
+                return;
+            }
+
+            // If NPC has a max distance and we are outside, full reset
+            if (Body.MaxDistance != 0)
             {
                 var distance = Vector3.Distance(Body.Position, Body.SpawnPoint);
                 int maxdistance = Body.MaxDistance > 0 ? Body.MaxDistance : -Body.MaxDistance * AggroRange / 100;
@@ -137,73 +155,77 @@ namespace DOL.AI.Brain
                 }
             }
 
-            if (!Body.IsReturningHome && Body.AttackState)
+            // Recently dropped out of combat, reset
+            if (wasInCombat && !Body.InCombat)
             {
-                if (Body.CurrentRegion.Time - Body.LastCombatTick > 40000)
+                Body.Reset();
+                if (Body.IsWithinRadius(Body.IsMovingOnPath ? Body.CurrentWayPoint.Position : Body.SpawnPoint, 500))
                 {
-                    Body.Reset();
+                    // Not very far - keep thinking, aggro, etc
+                    Body.IsResetting = false;
+                }
+                else
+                {
                     return;
                 }
             }
 
-            if (!Body.IsReturningHome && !Body.AttackState)
+            if (AggroRange > 0)
             {
-                if (AggroRange > 0)
+                var currentPlayersSeen = new List<GamePlayer>();
+                foreach (GamePlayer player in Body.GetPlayersInRadius((ushort)AggroRange, true))
                 {
-                    var currentPlayersSeen = new List<GamePlayer>();
-                    foreach (GamePlayer player in Body.GetPlayersInRadius((ushort)AggroRange, true))
+                    if (!PlayersSeen.Contains(player))
                     {
-                        if (!PlayersSeen.Contains(player))
-                        {
-                            Body.FireAmbientSentence(GameNPC.eAmbientTrigger.seeing, player as GameLiving);
-                            PlayersSeen.Add(player);
-                        }
-                        currentPlayersSeen.Add(player);
+                        Body.FireAmbientSentence(GameNPC.eAmbientTrigger.seeing, player as GameLiving);
+                        PlayersSeen.Add(player);
                     }
-
-                    for (int i = 0; i < PlayersSeen.Count; i++)
-                    {
-                        if (!currentPlayersSeen.Contains(PlayersSeen[i])) PlayersSeen.RemoveAt(i);
-                    }
+                    currentPlayersSeen.Add(player);
                 }
 
-                //If we have an aggrolevel above 0, we check for players and npcs in the area to attack
-                if (!Body.AttackState && AggroLevel > 0)
+                for (int i = 0; i < PlayersSeen.Count; i++)
                 {
-                    CheckPlayerAggro();
-                    CheckNPCAggro();
+                    if (!currentPlayersSeen.Contains(PlayersSeen[i])) PlayersSeen.RemoveAt(i);
                 }
-
-                if (HasAggro)
-                {
-                    Body.FireAmbientSentence(GameNPC.eAmbientTrigger.fighting, Body.TargetObject as GameLiving);
-                    AttackMostWanted();
-                    return;
-                }
-
-                if (Body.AttackState)
-                    Body.StopAttack();
-
-                //If this NPC can randomly walk around, we allow it to walk around
-                if (CanRandomWalk && !Body.IsRoaming && Util.Chance(DOL.GS.ServerProperties.Properties.GAMENPC_RANDOMWALK_CHANCE))
-                {
-                    var target = CalcRandomWalkTarget();
-                    if (Util.IsNearDistance(target, Body.Position, GameNPC.CONST_WALKTOTOLERANCE))
-                    {
-                        Body.TurnTo(target.X, target.Y);
-                    }
-                    else
-                    {
-                        Body.PathTo(target, 50);
-                    }
-
-                    Body.FireAmbientSentence(GameNPC.eAmbientTrigger.roaming);
-                }
-
-                Body.TargetObject = null;
-
-                CheckStealth();
             }
+
+            //If we have an aggrolevel above 0, we check for players and npcs in the area to attack
+            if (!Body.AttackState && AggroLevel > 0)
+            {
+                CheckPlayerAggro();
+                CheckNPCAggro();
+            }
+
+            // If we found a target to aggro, stop thinking and attack
+            if (HasAggro)
+            {
+                Body.FireAmbientSentence(GameNPC.eAmbientTrigger.fighting, Body.TargetObject as GameLiving);
+                AttackMostWanted();
+                return;
+            }
+
+            // Reset target
+            Body.TargetObject = null;
+            if (Body.AttackState)
+                Body.StopAttack();
+
+            //If this NPC can randomly walk around, we allow it to walk around
+            if (CanRandomWalk && !Body.IsRoaming && Util.Chance(DOL.GS.ServerProperties.Properties.GAMENPC_RANDOMWALK_CHANCE))
+            {
+                var target = CalcRandomWalkTarget();
+                if (Util.IsNearDistance(target, Body.Position, GameNPC.CONST_WALKTOTOLERANCE))
+                {
+                    Body.TurnTo(target.X, target.Y);
+                }
+                else
+                {
+                    Body.PathTo(target, 50);
+                }
+
+                Body.FireAmbientSentence(GameNPC.eAmbientTrigger.roaming);
+            }
+
+            CheckStealth();
         }
 
         /// <summary>
@@ -1176,7 +1198,7 @@ namespace DOL.AI.Brain
                     if (spell_rec.Count > 0)
                     {
                         spellToCast = (Spell)spell_rec[Util.Random((spell_rec.Count - 1))];
-                        if (!Body.IsResetting)
+                        if (!Body.IsReturningHome)
                         {
                             if ((spellToCast.Uninterruptible || Body.canQuickCast) && CheckDefensiveSpells(spellToCast))
                                 casted = true;

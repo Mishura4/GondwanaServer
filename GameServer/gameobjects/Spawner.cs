@@ -436,6 +436,11 @@ namespace DOL.GS
         {
             base.TakeDamage(ad);
 
+            if (!ad.CausesCombat)
+            {
+                return;
+            }
+
             if (!this.isAggroType && IsAlive)
             {
                 if (CanSpawnAdds())
@@ -490,9 +495,27 @@ namespace DOL.GS
         {
             if (isAddsGroupMasterGroup)
             {
-                if (this.addsGroupmobId != null && MobGroupManager.Instance.Groups.ContainsKey(this.addsGroupmobId))
+                if (this.addsGroupmobId != null && MobGroupManager.Instance.Groups.TryGetValue(this.addsGroupmobId, out MobGroup mobGroup))
                 {
-                    MobGroupManager.Instance.Groups[this.addsGroupmobId].ReloadMobsFromDatabase();
+                    mobGroup.ReloadMobsFromDatabase();
+                    loadedAdds = mobGroup.NPCs;
+
+                    Task.Run(async () =>
+                    {
+                        //Delay animation on mob added to world
+                        await Task.Delay(500);
+                        if (IsAlive && Brain is StandardMobBrain { HasAggro: true } myBrain)
+                        {
+                            mobGroup.ResetGroupInfo(true);
+                            mobGroup.NPCs.ForEach(n =>
+                            {
+                                if (n.IsAlive && n.Brain is StandardMobBrain friendBrain)
+                                {
+                                    myBrain.AddAggroListTo(friendBrain);
+                                }
+                            });
+                        }
+                    });
                 }
             }
             else
@@ -506,30 +529,53 @@ namespace DOL.GS
         public override void Reset()
         {
             base.Reset();
-            this.npcAddsNextPopupTimeStamp = null;
-            this.addsRespawnCurrentCount = 0;
-            this.isAddsActiveStatus = false;
-            RemoveAdds();
-        }
 
-        private void RemoveAdds()
-        {
-            if (addsGroupmobId != null && MobGroupManager.Instance.Groups.ContainsKey(this.addsGroupmobId))
+            if (this.isAddsGroupMasterGroup && addsGroupmobId != null)
             {
-                lock (m_addsLock)
+                //remove mastergroup mob if present
+                if (MobGroupManager.Instance.Groups.TryGetValue(this.addsGroupmobId, out var mobGroup))
                 {
-                    if (loadedAdds != null)
+                    mobGroup.NPCs.ForEach(n =>
                     {
-                        loadedAdds.ForEach(n => n.Die(this));
-                        loadedAdds = null;
-                    }
+                        n.RemoveFromWorld();
+                        n.Delete();
+                    });
+                }
+                else
+                {
+                    //on server load add groups to remove list
+                    MobGroupManager.Instance.GroupsToRemoveOnServerLoad.Add(this.addsGroupmobId);
                 }
 
-                if (!isAddsGroupMasterGroup)
+                //reset groupinfo
+                if (MobGroupManager.Instance.Groups.TryGetValue(this.SpawnerGroupId, out var spawnerGroup))
                 {
-                    this.ClearNPCTemplatesOldMobs();
+                    spawnerGroup.ResetGroupInfo(true);
                 }
             }
+            else
+            {
+                //Handle repop by clearing npctemplate pops
+                this.ClearNPCTemplatesOldMobs();
+            }
+
+            // Cleanup previous adds
+            lock (m_addsLock)
+            {
+                if (loadedAdds != null)
+                {
+                    loadedAdds.ForEach(add =>
+                    {
+                        add.RemoveFromWorld();
+                        add.Delete();;
+                    });
+                }
+                loadedAdds = null;
+            }
+            //reset adds currentCount respawn
+            this.addsRespawnCurrentCount = 0;
+            this.npcAddsNextPopupTimeStamp = null;
+            this.isAddsActiveStatus = false;
         }
 
         public void OnGroupMobDead(DOLEvent e, object sender, EventArgs arguments)
@@ -567,9 +613,19 @@ namespace DOL.GS
         public override void Die(GameObject killer)
         {
             base.Die(killer);
-            this.npcAddsNextPopupTimeStamp = null;
-            this.isAddsActiveStatus = false;
-            this.RemoveAdds();
+
+            lock (m_addsLock)
+            {
+                if (loadedAdds != null)
+                {
+                    loadedAdds.ForEach(n =>
+                    {
+                        n.CanRespawn = false;
+                        n.Die(this);
+                    });
+                    loadedAdds = null;
+                }
+            }
         }
 
 
@@ -605,43 +661,6 @@ namespace DOL.GS
         public override bool AddToWorld()
         {
             base.AddToWorld();
-
-            if (this.isAddsGroupMasterGroup && addsGroupmobId != null)
-            {
-                //remove mastergroup mob if present
-                if (MobGroupManager.Instance.Groups.ContainsKey(this.addsGroupmobId))
-                {
-                    MobGroupManager.Instance.Groups[this.addsGroupmobId].NPCs.ForEach(n =>
-                    {
-                        n.RemoveFromWorld();
-                        n.Delete();
-                    });
-                }
-                else
-                {
-                    //on server load add groups to remove list
-                    MobGroupManager.Instance.GroupsToRemoveOnServerLoad.Add(this.addsGroupmobId);
-                }
-
-                lock (m_addsLock)
-                {
-                    loadedAdds = null;
-                }
-
-                //reset groupinfo
-                if (MobGroupManager.Instance.Groups.ContainsKey(this.SpawnerGroupId))
-                {
-                    MobGroupManager.Instance.Groups[this.SpawnerGroupId].ResetGroupInfo(true);
-                }
-            }
-            else
-            {
-                //Handle repop by clearing npctemplate pops       
-                this.ClearNPCTemplatesOldMobs();
-            }
-
-            //reset adds currentCount respawn
-            this.addsRespawnCurrentCount = 0;
 
             //register handler
             GameEventMgr.AddHandler(GameEvents.GroupMobEvent.MobGroupDead, this.OnGroupMobDead);

@@ -1527,9 +1527,6 @@ namespace DOL.GS.Commands
                         {
                             if (!(player.IsAlive))
                             {
-                                player.Health = player.MaxHealth;
-                                player.Mana = player.MaxMana;
-                                player.Endurance = player.MaxEndurance;
                                 player.MoveTo(client.Player.CurrentRegionID, client.Player.Position, client.Player.Heading);
 
                                 client.Out.SendMessage("You resurrected " + player.Name + " successfully!", eChatType.CT_Important,
@@ -1543,6 +1540,10 @@ namespace DOL.GS.Commands
                                                        eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 player.Notify(GamePlayerEvent.Revive, player);
                                 player.Notify(GamePlayerEvent.Released, player);
+                                player.Health = player.MaxHealth;
+                                player.Mana = player.MaxMana;
+                                player.Endurance = player.MaxEndurance;
+                                client.Player.TargetObject = player;
                             }
                             else
                             {

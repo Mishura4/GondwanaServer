@@ -98,7 +98,7 @@ namespace DOL.AI.Brain
                 CheckPlayerAggro();
                 CheckNPCAggro();
 
-                if (HasAggro && Body.IsReturningHome)
+                if (HasAggro && Body.IsResetting)
                 {
                     Body.StopMoving();
                     AttackMostWanted();

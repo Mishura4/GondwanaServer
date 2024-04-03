@@ -61,7 +61,7 @@ namespace DOL.AI.Brain
         /// </summary>
         public override void Think()
         {
-            if (Body.IsIncapacitated || Body.IsResetting)
+            if (Body.IsIncapacitated || Body.IsReturningHome)
                 return;
 
             if (IsEngaged)
@@ -252,7 +252,7 @@ namespace DOL.AI.Brain
 
             if (attackData.Target == Body)
             {
-                if (Body.IsResetting)
+                if (Body.IsReturningHome)
                     Body.CancelWalkToSpawn();
 
                 if (!attackData.IsMeleeAttack)

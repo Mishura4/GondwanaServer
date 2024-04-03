@@ -54,6 +54,7 @@ namespace DOL.GS.Commands
                         AttackType = AttackData.eAttackType.Unknown,
                         Damage = amount,
                         AttackResult = GameLiving.eAttackResult.HitUnstyled,
+                        CausesCombat = true
                     };
                     living.TakeDamage(ad);
                 }

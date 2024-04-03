@@ -101,7 +101,7 @@ namespace DOL.GS
 
         public override bool HasAbility(string keyName)
         {
-            if (IsReturningHome && keyName == DOL.GS.Abilities.CCImmunity)
+            if (IsResetting && keyName == DOL.GS.Abilities.CCImmunity)
                 return true;
 
             return base.HasAbility(keyName);

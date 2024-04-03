@@ -237,10 +237,10 @@ namespace DOL.GS.Commands
                     */
                     info.Add("");
                     info.Add(" ------ State ------");
-                    if (target.IsReturningHome || target.IsResetting)
+                    if (target.IsResetting || target.IsReturningHome)
                     {
-                        info.Add("IsReturningHome: " + target.IsReturningHome);
-                        info.Add("IsReturningToSpawnPoint: " + target.IsResetting);
+                        info.Add("IsReturningHome: " + target.IsResetting);
+                        info.Add("IsReturningToSpawnPoint: " + target.IsReturningHome);
                         info.Add("");
                     }
 

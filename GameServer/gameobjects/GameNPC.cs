@@ -1404,7 +1404,7 @@ namespace DOL.GS
 
         protected void _OnArrivedAtTarget()
         {
-            var arriveAtSpawnPoint = IsResetting;
+            var arriveAtSpawnPoint = IsReturningHome;
             StopMoving();
 
             Notify(GameNPCEvent.ArriveAtTarget, this);
@@ -1493,8 +1493,8 @@ namespace DOL.GS
         public virtual void CancelWalkToSpawn()
         {
             CancelWalkToTimer();
-            IsReturningHome = false;
             IsResetting = false;
+            IsReturningHome = false;
         }
 
         /// <summary>
@@ -1513,8 +1513,8 @@ namespace DOL.GS
             if (Brain is IControlledBrain)
                 return;
 
-            IsReturningHome = true;
             IsResetting = true;
+            IsReturningHome = true;
             if (TPPoint != null)
                 PathTo(new Vector3((float)TPPoint.Position.X, (float)TPPoint.Position.Y, (float)TPPoint.Position.Z), speed);
             else
@@ -1681,7 +1681,7 @@ namespace DOL.GS
         /// </summary>
         public void StopMoving()
         {
-            bool wasResetting = IsResetting;
+            bool wasResetting = IsReturningHome;
             CancelWalkToSpawn();
 
             if (IsMoving)
@@ -1729,7 +1729,7 @@ namespace DOL.GS
             if (!IsMoving)
                 return;
 
-            if (CurrentSpeed > MaxSpeed || !IsResetting)
+            if (CurrentSpeed > MaxSpeed || !IsReturningHome)
             {
                 Position = Position;
                 CurrentSpeed = MaxSpeed;
@@ -1947,23 +1947,20 @@ namespace DOL.GS
         }
 
         /// <summary>
-        /// Is the NPC returning home, if so, we don't want it to think
+        /// Is the NPC having a full reset, if so, we don't want it to think
         /// </summary>
-        public bool IsReturningHome
+        public bool IsResetting
         {
-            get { return m_isReturningHome; }
-            set { m_isReturningHome = value; }
+            get { return m_isResetting; }
+            set { m_isResetting = value; }
         }
 
-        protected bool m_isReturningHome = false;
+        protected bool m_isResetting = false;
 
         /// <summary>
-        /// Whether or not the NPC is on its way back to the spawn point.
-        /// [Aredhel: I decided to add this property in order not to mess
-        /// with SMB and IsReturningHome. Also, to prevent outside classes
-        /// from interfering the setter is now protected.]
+        /// Whether or not the NPC is on its way back to the spawn point or path.
         /// </summary>
-        public bool IsResetting { get; protected set; }
+        public bool IsReturningHome { get; protected set; }
 
         /// <summary>
         /// Gets if npc moving on path
@@ -2032,7 +2029,7 @@ namespace DOL.GS
             if (!IsMovingOnPath)
                 return;
 
-            if (IsResetting)
+            if (IsReturningHome)
             {
                 Reset();
             }
@@ -2052,7 +2049,7 @@ namespace DOL.GS
             if (!IsMovingOnPath || n != this)
                 return;
 
-            if (IsResetting)
+            if (IsReturningHome)
             {
                 Reset();
             }
@@ -3281,8 +3278,8 @@ namespace DOL.GS
                 {
                     if (!IsMovingOnPath && (CurrentWayPoint == null || !this.IsWithinRadius(CurrentWayPoint.Position, GameNPC.CONST_WALKTOTOLERANCE)))
                     {
-                        IsReturningHome = true;
                         IsResetting = true;
+                        IsReturningHome = true;
                         PathPoint path = MovementMgr.LoadPath(PathID);
                         if (path != null)
                         {
@@ -3305,12 +3302,15 @@ namespace DOL.GS
                 }
             }
 
-            if (Heading != SpawnHeading)
-                Heading = SpawnHeading;
+            if (AttackState)
+                StopAttack();
 
             MovementStartTick = GameTimer.GetTickCount();
             TargetPosition = Vector3.Zero;
             CurrentSpeed = 0;
+
+            if (Heading != m_spawnHeading)
+                TurnTo(m_spawnHeading);
 
             Notify(GameNPCEvent.NPCReset, this, EventArgs.Empty);
         }
@@ -4018,10 +4018,10 @@ namespace DOL.GS
             if (target == null)
                 return;
 
-            if (IsResetting)
+            if (IsReturningHome)
             {
-                IsResetting = false;
                 IsReturningHome = false;
+                IsResetting = false;
             }
 
             TargetObject = target;
@@ -4550,7 +4550,7 @@ namespace DOL.GS
             // remove temp properties
             TempProperties.removeAllProperties();
 
-            if (!(this is GamePet) && (this.EventID == null || (CanRespawnWithinEvent && !isStoppingEvent)))
+            if (CanRespawn && !(this is GamePet) && (this.EventID == null || (CanRespawnWithinEvent && !isStoppingEvent)))
                 StartRespawn();
         }
 
@@ -4825,6 +4825,11 @@ namespace DOL.GS
                 return m_respawnTimer.IsAlive;
             }
         }
+
+        /// <summary>
+        /// Can the mob respawn?
+        /// </summary>
+        public bool CanRespawn { get; set; } = true;
 
         /// <summary>
         /// Starts the Respawn Timer
@@ -5898,10 +5903,10 @@ namespace DOL.GS
 
             if (e == GameNPCEvent.ArriveAtTarget)
             {
-                if (IsResetting)
+                if (IsReturningHome)
                 {
                     TurnTo(SpawnHeading);
-                    IsResetting = false;
+                    IsReturningHome = false;
                 }
             }
         }
