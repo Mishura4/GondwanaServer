@@ -422,8 +422,15 @@ namespace DOL.MobGroups
                     if (mob != null)
                     {
                         npc.LoadFromDatabase(mob);
-                        npc.AddToWorld();
                     }
+                }
+                if (!npc.IsAlive)
+                {
+                    npc.Spawn();
+                }
+                else
+                {
+                    npc.AddToWorld();
                 }
             }
 
