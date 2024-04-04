@@ -656,7 +656,7 @@ namespace DOL.GS
                 if (addsRespawnCountTotal > 0 && addsRespawnCurrentCount < addsRespawnCountTotal && respawnValueIsCorrect)
                 {
                     addsRespawnCurrentCount++;
-                    foreach (var npc in MobGroupManager.Instance.Groups[addsGroupmobId].NPCs)
+                    foreach (var npc in senderGroup.NPCs)
                     {
                         npc.RespawnInterval = respawnTimeInMs;
                         npc.StartRespawn();
@@ -716,7 +716,7 @@ namespace DOL.GS
         public override bool AddToWorld()
         {
             base.AddToWorld();
-
+            Cleanup();
             //register handler
             GameEventMgr.AddHandler(GameEvents.GroupMobEvent.MobGroupDead, OnGroupMobDead);
             return true;
