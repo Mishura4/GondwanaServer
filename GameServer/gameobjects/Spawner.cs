@@ -21,7 +21,7 @@ namespace DOL.GS
     public class Spawner
         : AmteMob
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         private readonly string inactiveDefaultGroupStatusAddsKey = "Spawner_inactive_adds";
         private readonly string activeDefaultGroupStatusAddsKey = "Spawner_active_adds";
@@ -49,6 +49,16 @@ namespace DOL.GS
         private readonly object m_addsLock = new object();
 
         /// <summary>
+        /// Timer to reset the adds after a reset
+        /// </summary>
+        private RegionTimer addsResetTimer;
+
+        /// <summary>
+        /// On resetting, time to keep the adds alive before despawning
+        /// </summary>
+        private static readonly int MILLISECONDS_BEFORE_RESET_ADDS = 20 * 60 * 1000; // 20 minutes
+
+        /// <summary>
         /// If > 0, the spawner will spawn (percentageOfPlayersInRadius% of players in a radius of 1000) mobs randomly picked between the valid templates
         /// If <= 0, up to 6 mobs will be spawned, each for every valid template
         /// </summary>
@@ -69,7 +79,7 @@ namespace DOL.GS
         {
             get
             {
-                return "spwn_" + (this.dbId != null ? this.dbId.Substring(0, 8) : Guid.NewGuid().ToString().Substring(0, 8));
+                return "spwn_" + (dbId != null ? dbId.Substring(0, 8) : Guid.NewGuid().ToString().Substring(0, 8));
             }
         }
 
@@ -112,54 +122,54 @@ namespace DOL.GS
 
                 if (db != null)
                 {
-                    this.dbId = db.ObjectId;
-                    this.percentLifeAddsActivity = db.PercentLifeAddsActivity;
-                    this.lifePercentTriggerSpawn = db.LifePercentTriggerSpawn;
-                    this.addRespawnTimerSecs = db.AddRespawnTimerSecs;
-                    this.percentageOfPlayersInRadius = db.PercentageOfPlayerInRadius;
-                    this.isAggroType = db.IsAggroType;
-                    this.npcTemplate1 = db.NpcTemplate1;
-                    this.npcTemplate2 = db.NpcTemplate2;
-                    this.npcTemplate3 = db.NpcTemplate3;
-                    this.npcTemplate4 = db.NpcTemplate4;
-                    this.npcTemplate5 = db.NpcTemplate5;
-                    this.npcTemplate6 = db.NpcTemplate6;
-                    if (this.isAggroType && lifePercentTriggerSpawn is > 0 and < 100)
+                    dbId = db.ObjectId;
+                    percentLifeAddsActivity = db.PercentLifeAddsActivity;
+                    lifePercentTriggerSpawn = db.LifePercentTriggerSpawn;
+                    addRespawnTimerSecs = db.AddRespawnTimerSecs;
+                    percentageOfPlayersInRadius = db.PercentageOfPlayerInRadius;
+                    isAggroType = db.IsAggroType;
+                    npcTemplate1 = db.NpcTemplate1;
+                    npcTemplate2 = db.NpcTemplate2;
+                    npcTemplate3 = db.NpcTemplate3;
+                    npcTemplate4 = db.NpcTemplate4;
+                    npcTemplate5 = db.NpcTemplate5;
+                    npcTemplate6 = db.NpcTemplate6;
+                    if (isAggroType && lifePercentTriggerSpawn is > 0 and < 100)
                     {
-                        log.Warn($"spawner {this.InternalID} is marked as spawning on aggro, but also has a lifePercentTriggerSpawn; it will be set to not spawn on aggro");
-                        this.isAggroType = false;
+                        log.Warn($"spawner {InternalID} is marked as spawning on aggro, but also has a lifePercentTriggerSpawn; it will be set to not spawn on aggro");
+                        isAggroType = false;
                     }
 
                     if (db.MasterGroupId != null)
                     {
-                        this.npcTemplate1 = -1;
-                        this.npcTemplate2 = -1;
-                        this.npcTemplate3 = -1;
-                        this.npcTemplate4 = -1;
-                        this.npcTemplate5 = -1;
-                        this.npcTemplate6 = -1;
-                        this.isAddsGroupMasterGroup = true;
-                        this.addsGroupmobId = db.MasterGroupId;
+                        npcTemplate1 = -1;
+                        npcTemplate2 = -1;
+                        npcTemplate3 = -1;
+                        npcTemplate4 = -1;
+                        npcTemplate5 = -1;
+                        npcTemplate6 = -1;
+                        isAddsGroupMasterGroup = true;
+                        addsGroupmobId = db.MasterGroupId;
 
                         //add Spawner to GroupMob for interractions
-                        var spawnerGroup = GameServer.Database.SelectObjects<GroupMobDb>(DB.Column("GroupId").IsEqualTo(this.SpawnerGroupId)).FirstOrDefault();
+                        var spawnerGroup = GameServer.Database.SelectObjects<GroupMobDb>(DB.Column("GroupId").IsEqualTo(SpawnerGroupId)).FirstOrDefault();
 
                         if (spawnerGroup == null)
                         {
-                            this.AddSpawnerToMobGroup();
+                            AddSpawnerToMobGroup();
                         }
 
-                        this.UpdateMasterGroupInDatabase();
+                        UpdateMasterGroupInDatabase();
                     }
 
-                    this.addsRespawnCountTotal = db.AddsRespawnCount;
-                    this.addsRespawnCurrentCount = 0;
+                    addsRespawnCountTotal = db.AddsRespawnCount;
+                    addsRespawnCurrentCount = 0;
 
                     if (db.ActiveStatusId != null)
-                        this.activeGroupStatusAddsKey = db.ActiveStatusId;
+                        activeGroupStatusAddsKey = db.ActiveStatusId;
 
                     if (db.InactiveStatusId != null)
-                        this.inactiveGroupStatusAddsKey = db.InactiveStatusId;
+                        inactiveGroupStatusAddsKey = db.InactiveStatusId;
                 }
             }
         }
@@ -168,7 +178,7 @@ namespace DOL.GS
         {
             base.SaveIntoDatabase();
 
-            var result = GameServer.Database.SelectObjects<SpawnerTemplate>(DB.Column("MobID").IsEqualTo(this.dbId));
+            var result = GameServer.Database.SelectObjects<SpawnerTemplate>(DB.Column("MobID").IsEqualTo(dbId));
 
             if (result != null)
             {
@@ -176,28 +186,28 @@ namespace DOL.GS
 
                 if (db != null)
                 {
-                    db.IsAggroType = this.isAggroType;
-                    db.NpcTemplate1 = this.npcTemplate1;
-                    db.NpcTemplate2 = this.npcTemplate2;
-                    db.NpcTemplate3 = this.npcTemplate3;
-                    db.NpcTemplate4 = this.npcTemplate4;
-                    db.NpcTemplate5 = this.npcTemplate5;
-                    db.NpcTemplate6 = this.npcTemplate6;
-                    db.AddRespawnTimerSecs = this.addRespawnTimerSecs;
-                    db.MasterGroupId = this.isAddsGroupMasterGroup ? this.addsGroupmobId : null;
-                    db.AddsRespawnCount = this.addsRespawnCountTotal;
-                    db.PercentLifeAddsActivity = this.percentLifeAddsActivity;
-                    db.LifePercentTriggerSpawn = this.lifePercentTriggerSpawn;
-                    db.PercentageOfPlayerInRadius = this.percentageOfPlayersInRadius;
+                    db.IsAggroType = isAggroType;
+                    db.NpcTemplate1 = npcTemplate1;
+                    db.NpcTemplate2 = npcTemplate2;
+                    db.NpcTemplate3 = npcTemplate3;
+                    db.NpcTemplate4 = npcTemplate4;
+                    db.NpcTemplate5 = npcTemplate5;
+                    db.NpcTemplate6 = npcTemplate6;
+                    db.AddRespawnTimerSecs = addRespawnTimerSecs;
+                    db.MasterGroupId = isAddsGroupMasterGroup ? addsGroupmobId : null;
+                    db.AddsRespawnCount = addsRespawnCountTotal;
+                    db.PercentLifeAddsActivity = percentLifeAddsActivity;
+                    db.LifePercentTriggerSpawn = lifePercentTriggerSpawn;
+                    db.PercentageOfPlayerInRadius = percentageOfPlayersInRadius;
 
-                    if (!this.ActiveGroupStatusAddsKey.Equals(this.activeDefaultGroupStatusAddsKey))
+                    if (!ActiveGroupStatusAddsKey.Equals(activeDefaultGroupStatusAddsKey))
                     {
-                        db.ActiveStatusId = this.ActiveGroupStatusAddsKey;
+                        db.ActiveStatusId = ActiveGroupStatusAddsKey;
                     }
 
-                    if (!this.InactiveGroupStatusAddsKey.Equals(this.inactiveDefaultGroupStatusAddsKey))
+                    if (!InactiveGroupStatusAddsKey.Equals(inactiveDefaultGroupStatusAddsKey))
                     {
-                        db.InactiveStatusId = this.InactiveGroupStatusAddsKey;
+                        db.InactiveStatusId = InactiveGroupStatusAddsKey;
                     }
 
                     GameServer.Database.SaveObject(db);
@@ -211,9 +221,9 @@ namespace DOL.GS
         /// </summary>
         private void ClearNPCTemplatesOldMobs()
         {
-            if (this.addsGroupmobId != null && this.loadedAdds != null && MobGroupManager.Instance.Groups.ContainsKey(this.addsGroupmobId))
+            if (addsGroupmobId != null && loadedAdds != null && MobGroupManager.Instance.Groups.ContainsKey(addsGroupmobId))
             {
-                MobGroupManager.Instance.RemoveGroupsAndMobs(this.addsGroupmobId, true);
+                MobGroupManager.Instance.RemoveGroupsAndMobs(addsGroupmobId, true);
                 lock (m_addsLock)
                 {
                     loadedAdds = null;
@@ -223,10 +233,10 @@ namespace DOL.GS
 
         private void UpdateMasterGroupInDatabase()
         {
-            var masterGroup = GameServer.Database.SelectObjects<GroupMobDb>(DB.Column("GroupId").IsEqualTo(this.addsGroupmobId)).FirstOrDefault();
+            var masterGroup = GameServer.Database.SelectObjects<GroupMobDb>(DB.Column("GroupId").IsEqualTo(addsGroupmobId)).FirstOrDefault();
             if (masterGroup != null)
             {
-                masterGroup.SlaveGroupId = this.SpawnerGroupId;
+                masterGroup.SlaveGroupId = SpawnerGroupId;
 
                 //Set default interract if null
                 if (masterGroup.GroupMobInteract_FK_Id == null)
@@ -272,7 +282,7 @@ namespace DOL.GS
                         }
                         if (npcs[i] == null)
                         {
-                            log.Warn($"couldn't create class {templates[i].ClassType} for template {templates[i].TemplateId} for Spawner {this.InternalID}");
+                            log.Warn($"couldn't create class {templates[i].ClassType} for template {templates[i].TemplateId} for Spawner {InternalID}");
                         }
                     }
                 }
@@ -313,7 +323,7 @@ namespace DOL.GS
                     }
                     if (npcs[i] == null)
                     {
-                        log.Warn($"couldn't create class {template.ClassType} for template {template.TemplateId} for Spawner {this.InternalID}");
+                        log.Warn($"couldn't create class {template.ClassType} for template {template.TemplateId} for Spawner {InternalID}");
                     }
                     if (!(spawnsInTemplate < maxSpawnsPerTemplate))
                     {
@@ -350,51 +360,51 @@ namespace DOL.GS
             float xOffset = (float)Math.Cos(angle) * distance;
             float yOffset = (float)Math.Sin(angle) * distance;
 
-            npc.Position = new System.Numerics.Vector3(this.Position.X + xOffset, this.Position.Y + yOffset, this.Position.Z);
-            npc.Heading = this.Heading;
+            npc.Position = new System.Numerics.Vector3(Position.X + xOffset, Position.Y + yOffset, Position.Z);
+            npc.Heading = Heading;
             npc.RespawnInterval = -1;
-            npc.CurrentRegion = WorldMgr.GetRegion(this.CurrentRegionID);
+            npc.CurrentRegion = WorldMgr.GetRegion(CurrentRegionID);
             npc.AddToWorld();
-            npc.OwnerID = this.InternalID;
-            if (this.Faction != null)
+            npc.OwnerID = InternalID;
+            if (Faction != null)
             {
-                npc.Faction = FactionMgr.GetFactionByID(this.Faction.ID);
+                npc.Faction = FactionMgr.GetFactionByID(Faction.ID);
             }
         }
 
         private void AddSpawnerToMobGroup()
         {
-            if (!MobGroupManager.Instance.Groups.ContainsKey(this.SpawnerGroupId))
+            if (!MobGroupManager.Instance.Groups.ContainsKey(SpawnerGroupId))
             {
-                MobGroupManager.Instance.AddMobToGroup(this, this.SpawnerGroupId, false);
+                MobGroupManager.Instance.AddMobToGroup(this, SpawnerGroupId, false);
             }
         }
 
         private void AddToMobGroupToNPCTemplates(IEnumerable<GameNPC> npcs)
         {
-            this.addsGroupmobId = "spwn_add_" + (this.dbId != null ? this.dbId.Substring(0, 8) : Guid.NewGuid().ToString().Substring(0, 8));
+            addsGroupmobId = "spwn_add_" + (dbId != null ? dbId.Substring(0, 8) : Guid.NewGuid().ToString().Substring(0, 8));
             foreach (var npc in npcs)
             {
-                MobGroupManager.Instance.AddMobToGroup(npc, this.addsGroupmobId, true);
+                MobGroupManager.Instance.AddMobToGroup(npc, addsGroupmobId, true);
             }
 
             GroupMobStatusDb status;
-            bool active = this.percentLifeAddsActivity == 0 || this.HealthPercent <= this.percentLifeAddsActivity;
+            bool active = percentLifeAddsActivity == 0 || HealthPercent <= percentLifeAddsActivity;
             if (active)
             {
-                status = this.GetActiveStatus();
+                status = GetActiveStatus();
                 isAddsActiveStatus = true;
             }
             else
             {
-                status = this.GetInativeStatus();
+                status = GetInativeStatus();
             }
 
             Task.Run(async () =>
             {
                 //Delay animation on mob added to world
                 await Task.Delay(500);
-                MobGroupManager.Instance.Groups[this.addsGroupmobId].SetGroupInfo(status, true, true);
+                MobGroupManager.Instance.Groups[addsGroupmobId].SetGroupInfo(status, true, true);
                 if (active && IsAlive && Brain is StandardMobBrain { HasAggro: true } myBrain)
                 {
                     lock (m_addsLock)
@@ -428,9 +438,14 @@ namespace DOL.GS
 
             lock (m_addsLock)
             {
+                if (addsResetTimer != null)
+                {
+                    addsResetTimer.Stop();
+                    addsResetTimer = null;
+                }
                 if (isAggroType && CanSpawnAdds())
                 {
-                    this.LoadAdds();
+                    LoadAdds();
                 }
             }
         }
@@ -444,16 +459,22 @@ namespace DOL.GS
                 return;
             }
 
-            if (!this.isAggroType && IsAlive)
+            if (!isAggroType && IsAlive)
             {
                 lock (m_addsLock)
                 {
-                    if (CanSpawnAdds())
+                    if (addsResetTimer != null)
                     {
-                        this.LoadAdds();
+                        addsResetTimer.Stop();
+                        addsResetTimer = null;
                     }
 
-                    if (!isAddsActiveStatus && (this.percentLifeAddsActivity == 0 || this.HealthPercent <= this.percentLifeAddsActivity))
+                    if (CanSpawnAdds())
+                    {
+                        LoadAdds();
+                    }
+
+                    if (!isAddsActiveStatus && (percentLifeAddsActivity == 0 || HealthPercent <= percentLifeAddsActivity))
                     {
                         ActivateAdds();
                     }
@@ -465,14 +486,14 @@ namespace DOL.GS
         {
             if (addsGroupmobId != null && MobGroupManager.Instance.Groups.ContainsKey(addsGroupmobId))
             {
-                this.isAddsActiveStatus = true;
-                if (this.isAddsGroupMasterGroup)
+                isAddsActiveStatus = true;
+                if (isAddsGroupMasterGroup)
                 {
-                    MobGroupManager.Instance.Groups[this.addsGroupmobId].ResetGroupInfo(true);
+                    MobGroupManager.Instance.Groups[addsGroupmobId].ResetGroupInfo(true);
                 }
                 else
                 {
-                    MobGroupManager.Instance.Groups[this.addsGroupmobId].SetGroupInfo(this.GetActiveStatus(), false, true);
+                    MobGroupManager.Instance.Groups[addsGroupmobId].SetGroupInfo(GetActiveStatus(), false, true);
                 }
 
                 Task.Run(async () =>
@@ -485,7 +506,7 @@ namespace DOL.GS
                         {
                             loadedAdds?.ForEach(n =>
                             {
-                                if (n.IsAlive && n.Brain is StandardMobBrain friendBrain && this.Brain is StandardMobBrain myBrain)
+                                if (n.IsAlive && n.Brain is StandardMobBrain friendBrain && Brain is StandardMobBrain myBrain)
                                 {
                                     myBrain.AddAggroListTo(friendBrain);
                                 }
@@ -501,12 +522,10 @@ namespace DOL.GS
         {
             if (isAddsGroupMasterGroup)
             {
-                if (this.addsGroupmobId != null && MobGroupManager.Instance.Groups.TryGetValue(this.addsGroupmobId, out MobGroup mobGroup))
+                if (addsGroupmobId != null && MobGroupManager.Instance.Groups.TryGetValue(addsGroupmobId, out MobGroup mobGroup))
                 {
                     mobGroup.ReloadMobsFromDatabase();
                     loadedAdds = mobGroup.NPCs;
-                    loadedAdds.ForEach(n => n.Spawn());
-
                     Task.Run(async () =>
                     {
                         //Delay animation on mob added to world
@@ -530,10 +549,16 @@ namespace DOL.GS
             }
             else
             {
-                this.InstanciateMobs();
+                InstanciateMobs();
             }
 
-            this.npcAddsNextPopupTimeStamp = DateTime.Now.AddSeconds(this.addRespawnTimerSecs);
+            if (loadedAdds is { Count: >0 })
+            {
+                this.Group = new Group(this);
+                loadedAdds.ForEach(n => this.Group.AddMember(n));
+            }
+
+            npcAddsNextPopupTimeStamp = DateTime.Now.AddSeconds(addRespawnTimerSecs);
         }
 
         protected void Cleanup()
@@ -541,8 +566,19 @@ namespace DOL.GS
             // Cleanup previous adds
             lock (m_addsLock)
             {
+                //reset adds currentCount respawn
+                addsRespawnCurrentCount = 0;
+                npcAddsNextPopupTimeStamp = null;
+                isAddsActiveStatus = false;
+                if (addsResetTimer != null)
+                {
+                    addsResetTimer.Stop();
+                    addsResetTimer = null;
+                }
                 if (loadedAdds != null)
                 {
+                    this.Group.DisbandGroup();
+                    this.Group = null;
                     loadedAdds.ForEach(add =>
                     {
                         add.RemoveFromWorld();
@@ -550,25 +586,33 @@ namespace DOL.GS
                     });
                     loadedAdds = null;
                 }
-                if (this.isAddsGroupMasterGroup && addsGroupmobId != null)
+                if (isAddsGroupMasterGroup && addsGroupmobId != null)
                 {
                     //remove mastergroup mob if present
-                    if (!MobGroupManager.Instance.Groups.ContainsKey(this.addsGroupmobId))
+                    if (MobGroupManager.Instance.Groups.TryGetValue(this.addsGroupmobId, out var mobGroup))
+                    {
+                        mobGroup.NPCs.ForEach(n =>
+                        {
+                            n.RemoveFromWorld();
+                            n.Delete();
+                        });
+                    }
+                    else
                     {
                         //on server load add groups to remove list
-                        MobGroupManager.Instance.GroupsToRemoveOnServerLoad.Add(this.addsGroupmobId);
-                    }
-
-                    //reset groupinfo
-                    if (MobGroupManager.Instance.Groups.TryGetValue(this.SpawnerGroupId, out var spawnerGroup))
-                    {
-                        spawnerGroup.ResetGroupInfo(true);
+                        MobGroupManager.Instance.GroupsToRemoveOnServerLoad.Add(addsGroupmobId);
                     }
                 }
                 else
                 {
                     //Handle repop by clearing npctemplate pops
-                    this.ClearNPCTemplatesOldMobs();
+                    ClearNPCTemplatesOldMobs();
+                }
+
+                //reset groupinfo
+                if (MobGroupManager.Instance.Groups.TryGetValue(SpawnerGroupId, out var spawnerGroup))
+                {
+                    spawnerGroup.ResetGroupInfo(true);
                 }
             }
         }
@@ -576,11 +620,18 @@ namespace DOL.GS
         public override void Reset()
         {
             base.Reset();
-            Cleanup();
-            //reset adds currentCount respawn
-            this.addsRespawnCurrentCount = 0;
-            this.npcAddsNextPopupTimeStamp = null;
-            this.isAddsActiveStatus = false;
+
+            lock (m_addsLock)
+            {
+                if (loadedAdds != null && addsResetTimer == null)
+                {
+                    addsResetTimer = new RegionTimer(this, timer =>
+                    {
+                        Cleanup();
+                        return 0;
+                    }, MILLISECONDS_BEFORE_RESET_ADDS);
+                }
+            }
         }
 
         public void OnGroupMobDead(DOLEvent e, object sender, EventArgs arguments)
@@ -589,10 +640,10 @@ namespace DOL.GS
             MobGroup senderGroup = sender as MobGroup;
 
             //Check is npc is in combat to allow respawn only in this case
-            if (senderGroup != null && senderGroup.GroupId.Equals(this.addsGroupmobId) && this.InCombat)
+            if (senderGroup != null && senderGroup.GroupId.Equals(addsGroupmobId) && InCombat)
             {
                 //own group is dead
-                this.isAddsActiveStatus = false;
+                isAddsActiveStatus = false;
 
                 bool respawnValueIsCorrect = false;
                 int respawnTimeInMs = addRespawnTimerSecs * 1000;
@@ -602,10 +653,10 @@ namespace DOL.GS
                 }
 
                 //Check if group can respawn
-                if (this.addsRespawnCountTotal > 0 && this.addsRespawnCurrentCount < this.addsRespawnCountTotal && respawnValueIsCorrect)
+                if (addsRespawnCountTotal > 0 && addsRespawnCurrentCount < addsRespawnCountTotal && respawnValueIsCorrect)
                 {
-                    this.addsRespawnCurrentCount++;
-                    foreach (var npc in MobGroupManager.Instance.Groups[this.addsGroupmobId].NPCs)
+                    addsRespawnCurrentCount++;
+                    foreach (var npc in MobGroupManager.Instance.Groups[addsGroupmobId].NPCs)
                     {
                         npc.RespawnInterval = respawnTimeInMs;
                         npc.StartRespawn();
@@ -635,14 +686,14 @@ namespace DOL.GS
 
         private GroupMobStatusDb GetInativeStatus()
         {
-            var result = GameServer.Database.SelectObjects<GroupMobStatusDb>(DB.Column("GroupStatusId").IsEqualTo(this.InactiveGroupStatusAddsKey));
+            var result = GameServer.Database.SelectObjects<GroupMobStatusDb>(DB.Column("GroupStatusId").IsEqualTo(InactiveGroupStatusAddsKey));
 
             if (result != null && result.Any())
             {
                 return result.First();
             }
             //Default
-            var inactiveDefaultList = GameServer.Database.SelectObjects<GroupMobStatusDb>(DB.Column("GroupStatusId").IsEqualTo(this.inactiveDefaultGroupStatusAddsKey));
+            var inactiveDefaultList = GameServer.Database.SelectObjects<GroupMobStatusDb>(DB.Column("GroupStatusId").IsEqualTo(inactiveDefaultGroupStatusAddsKey));
             GroupMobStatusDb inactiveStatus = inactiveDefaultList?.FirstOrDefault();
 
             if (inactiveStatus == null)
@@ -653,7 +704,7 @@ namespace DOL.GS
                 {
                     Flag = (int)f,
                     SetInvincible = true.ToString(),
-                    GroupStatusId = this.InactiveGroupStatusAddsKey
+                    GroupStatusId = InactiveGroupStatusAddsKey
                 };
                 GameServer.Database.AddObject(inactiveStatus);
             }
@@ -667,7 +718,7 @@ namespace DOL.GS
             base.AddToWorld();
 
             //register handler
-            GameEventMgr.AddHandler(GameEvents.GroupMobEvent.MobGroupDead, this.OnGroupMobDead);
+            GameEventMgr.AddHandler(GameEvents.GroupMobEvent.MobGroupDead, OnGroupMobDead);
             return true;
         }
 
@@ -682,20 +733,20 @@ namespace DOL.GS
         public override bool RemoveFromWorld()
         {
             Cleanup();
-            GameEventMgr.RemoveHandler(GameEvents.GroupMobEvent.MobGroupDead, this.OnGroupMobDead);
+            GameEventMgr.RemoveHandler(GameEvents.GroupMobEvent.MobGroupDead, OnGroupMobDead);
             return base.RemoveFromWorld();
         }
 
 
         private GroupMobStatusDb GetActiveStatus()
         {
-            var result = GameServer.Database.SelectObjects<GroupMobStatusDb>(DB.Column("GroupStatusId").IsEqualTo(this.ActiveGroupStatusAddsKey));
+            var result = GameServer.Database.SelectObjects<GroupMobStatusDb>(DB.Column("GroupStatusId").IsEqualTo(ActiveGroupStatusAddsKey));
             if (result != null && result.Any())
             {
                 return result.First();
             }
 
-            var activeDefaultList = GameServer.Database.SelectObjects<GroupMobStatusDb>(DB.Column("GroupStatusId").IsEqualTo(this.activeDefaultGroupStatusAddsKey));
+            var activeDefaultList = GameServer.Database.SelectObjects<GroupMobStatusDb>(DB.Column("GroupStatusId").IsEqualTo(activeDefaultGroupStatusAddsKey));
             GroupMobStatusDb activeStatus = activeDefaultList?.FirstOrDefault();
 
             if (activeStatus == null)
@@ -704,7 +755,7 @@ namespace DOL.GS
                 {
                     SetInvincible = false.ToString(),
                     Flag = 0,
-                    GroupStatusId = this.ActiveGroupStatusAddsKey
+                    GroupStatusId = ActiveGroupStatusAddsKey
                 };
                 GameServer.Database.AddObject(activeStatus);
             }
