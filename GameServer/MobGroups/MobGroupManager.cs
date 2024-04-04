@@ -1,5 +1,6 @@
 ﻿using DOL.Database;
 using DOL.Events;
+using DOL.GameEvents;
 using DOL.GS;
 using DOL.GS.GameEvents;
 using DOLDatabase.Tables;
@@ -36,33 +37,33 @@ namespace DOL.MobGroups
             get;
         }
 
-        public bool IsAllOthersGroupMobDead(GameNPC npc)
+        public void HandleNpcDeath(GameNPC npc, GameObject killer)
         {
-            if (npc == null || npc.CurrentGroupMob == null)
+            if (npc.CurrentGroupMob == null)
             {
-                return false;
+                return;
             }
 
-            if (!this.Groups.ContainsKey(npc.CurrentGroupMob.GroupId))
-            {
-                return false;
-            }
-
-            bool allDead = this.Groups[npc.CurrentGroupMob.GroupId].NPCs.All(m => npc == m || !m.IsAlive);
-
-            if (allDead)
+            if (npc.CurrentGroupMob.IsAllDead(npc))
             {
                 //Handle interaction if any slave group
-                this.HandleInteraction(this.Groups[npc.CurrentGroupMob.GroupId]);
+                this.HandleInteraction(npc.CurrentGroupMob);
 
                 //Reset GroupInfo
-                this.Groups[npc.CurrentGroupMob.GroupId].ResetGroupInfo();
+                npc.CurrentGroupMob.ResetGroupInfo();
 
                 //Notify
-                GameEventMgr.Notify(GroupMobEvent.MobGroupDead, this.Groups[npc.CurrentGroupMob.GroupId]);
+                GameEventMgr.Notify(GroupMobEvent.MobGroupDead, npc.CurrentGroupMob);
+                var mobGroupEvent = GameEventManager.Instance.Events.FirstOrDefault(e =>
+                                                                                        e.KillStartingGroupMobId?.Equals(npc.CurrentGroupMob.GroupId) == true &&
+                                                                                        !e.StartedTime.HasValue &&
+                                                                                        e.Status == EventStatus.NotOver &&
+                                                                                        e.StartConditionType == StartingConditionType.Kill);
+                if (mobGroupEvent != null)
+                {
+                    Task.Run(() => GameEventManager.Instance.StartEvent(mobGroupEvent, null, killer as GamePlayer));
+                }
             }
-
-            return allDead;
         }
 
         private void HandleInteraction(MobGroup master)

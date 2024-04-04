@@ -4502,7 +4502,6 @@ namespace DOL.GS
                 base.Die(killer);
             }
 
-            bool isStoppingEvent = false;
             if (this.EventID != null)
             {
                 var ev = GameEventManager.Instance.Events.FirstOrDefault(e => e.ID.Equals(this.EventID));
@@ -4522,36 +4521,27 @@ namespace DOL.GS
                                 controller = living.ControlledBrain.Owner as GamePlayer;
                             if (player != null || controller != null)
                                 ev.Owner = player ?? controller;
-                            isStoppingEvent = true;
                             Task.Run(() => GameEventManager.Instance.StopEvent(ev, EndingConditionType.Kill));
                         }
                     }
                 }
             }
 
+            Delete();
+
             //Check if killed mob starts event
             if (this.CurrentGroupMob != null)
             {
-                bool isAllOthersGroupMobDead = MobGroupManager.Instance.IsAllOthersGroupMobDead(this);
-                var mobGroupEvent = GameEventManager.Instance.Events.FirstOrDefault(e =>
-                e.KillStartingGroupMobId?.Equals(this.CurrentGroupMob.GroupId) == true &&
-               !e.StartedTime.HasValue &&
-                e.Status == EventStatus.NotOver &&
-                e.StartConditionType == StartingConditionType.Kill);
-
-                if (isAllOthersGroupMobDead && mobGroupEvent != null)
-                {
-                    Task.Run(() => GameEventManager.Instance.StartEvent(mobGroupEvent, null, killer as GamePlayer));
-                }
+                MobGroupManager.Instance.HandleNpcDeath(this, killer);
             }
-
-            Delete();
 
             // remove temp properties
             TempProperties.removeAllProperties();
 
-            if (CanRespawn && !(this is GamePet) && (this.EventID == null || (CanRespawnWithinEvent && !isStoppingEvent)))
+            if (AutoRespawn)
+            {
                 StartRespawn();
+            }
         }
 
         /// <summary>
@@ -4826,19 +4816,37 @@ namespace DOL.GS
             }
         }
 
+        private bool m_autoRespawn = true;
+
         /// <summary>
-        /// Can the mob respawn?
+        /// Will the mob automatically respawn on death?
         /// </summary>
-        public bool CanRespawn { get; set; } = true;
+        public bool AutoRespawn
+        {
+            get => m_autoRespawn;
+            set
+            {
+                bool prev = m_autoRespawn;
+                m_autoRespawn = value;
+                if (prev && !m_autoRespawn)
+                {
+                    StartRespawn();
+                }
+            }
+        }
 
         /// <summary>
         /// Starts the Respawn Timer
         /// </summary>
         public virtual void StartRespawn()
         {
-            if (IsAlive) return;
+            if (IsAlive)
+                return;
 
             if (this.Brain is IControlledBrain)
+                return;
+
+            if (this.EventID != null && !CanRespawnWithinEvent)
                 return;
 
             int respawnInt = RespawnInterval;

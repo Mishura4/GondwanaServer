@@ -71,7 +71,7 @@ namespace DOL.GS.Quests
                 var killed = killedArgs.Target;
 
                 if (killed == null
-                || !(killed is GameNPC npc && MobGroupManager.Instance.GetGroupIdFromMobId(npc.InternalID) == m_targetName && MobGroupManager.Instance.IsAllOthersGroupMobDead(npc))
+                || !(killed is GameNPC npc && MobGroupManager.Instance.GetGroupIdFromMobId(npc.InternalID) == m_targetName && npc.CurrentGroupMob?.IsAllDead(npc) == true)
                 || m_region != killed.CurrentRegion
                 || (hasArea && !m_area.IsContaining(killed.Position, false)))
                     return;

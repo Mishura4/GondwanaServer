@@ -362,7 +362,6 @@ namespace DOL.GS
 
             npc.Position = new System.Numerics.Vector3(Position.X + xOffset, Position.Y + yOffset, Position.Z);
             npc.Heading = Heading;
-            npc.RespawnInterval = -1;
             npc.CurrentRegion = WorldMgr.GetRegion(CurrentRegionID);
             npc.AddToWorld();
             npc.OwnerID = InternalID;
@@ -517,7 +516,9 @@ namespace DOL.GS
             }
         }
 
-        //Load adds if respawn is passed
+        /// <summary>
+        /// Load adds - all preconditions must be met
+        /// </summary>
         public void LoadAdds()
         {
             if (isAddsGroupMasterGroup)
@@ -554,8 +555,14 @@ namespace DOL.GS
 
             if (loadedAdds is { Count: >0 })
             {
-                this.Group = new Group(this);
-                loadedAdds.ForEach(n => this.Group.AddMember(n));
+                GameEventMgr.AddHandler(GameEvents.GroupMobEvent.MobGroupDead, OnGroupMobDead);
+                this.Group ??= new Group(this);
+                loadedAdds.ForEach(n =>
+                {
+                    Group.AddMember(n);
+                    n.AutoRespawn = false;
+                    n.RespawnInterval = addRespawnTimerSecs * 1000;
+                });
             }
 
             npcAddsNextPopupTimeStamp = DateTime.Now.AddSeconds(addRespawnTimerSecs);
@@ -577,8 +584,12 @@ namespace DOL.GS
                 }
                 if (loadedAdds != null)
                 {
-                    this.Group.DisbandGroup();
-                    this.Group = null;
+                    GameEventMgr.RemoveHandler(GameEvents.GroupMobEvent.MobGroupDead, OnGroupMobDead);
+                    if (this.Group != null && this.Group.LivingLeader == this)
+                    {
+                        this.Group.DisbandGroup();
+                        this.Group = null;
+                    } 
                     loadedAdds.ForEach(add =>
                     {
                         add.RemoveFromWorld();
@@ -637,30 +648,28 @@ namespace DOL.GS
         public void OnGroupMobDead(DOLEvent e, object sender, EventArgs arguments)
         {
             //check group
-            MobGroup senderGroup = sender as MobGroup;
+            if (sender is not MobGroup senderGroup)
+            {
+                return;
+            }
 
             //Check is npc is in combat to allow respawn only in this case
-            if (senderGroup != null && senderGroup.GroupId.Equals(addsGroupmobId) && InCombat)
+            if (true && String.Equals(senderGroup.GroupId, addsGroupmobId))
             {
-                //own group is dead
-                isAddsActiveStatus = false;
-
-                bool respawnValueIsCorrect = false;
-                int respawnTimeInMs = addRespawnTimerSecs * 1000;
-                if (respawnTimeInMs > 0 && respawnTimeInMs < int.MaxValue)
-                {
-                    respawnValueIsCorrect = true;
-                }
-
                 //Check if group can respawn
-                if (addsRespawnCountTotal > 0 && addsRespawnCurrentCount < addsRespawnCountTotal && respawnValueIsCorrect)
+                if (addsRespawnCountTotal > 0 && addRespawnTimerSecs > 0 && addsRespawnCurrentCount < addsRespawnCountTotal)
                 {
                     addsRespawnCurrentCount++;
                     foreach (var npc in senderGroup.NPCs)
                     {
-                        npc.RespawnInterval = respawnTimeInMs;
                         npc.StartRespawn();
-                        npc.RespawnInterval = -1;
+                    }
+                }
+                else
+                {
+                    lock (m_addsLock)
+                    {
+                        loadedAdds = null;
                     }
                 }
             }
@@ -672,12 +681,18 @@ namespace DOL.GS
             {
                 if (loadedAdds != null)
                 {
+                    GameEventMgr.RemoveHandler(GameEvents.GroupMobEvent.MobGroupDead, OnGroupMobDead);
                     loadedAdds.ForEach(n =>
                     {
-                        n.CanRespawn = false;
-                        n.Die(this);
+                        if (n.IsAlive)
+                        {
+                            n.Die(this);
+                        }
                     });
                     loadedAdds = null;
+                    addsRespawnCurrentCount = 0;
+                    npcAddsNextPopupTimeStamp = null;
+                    isAddsActiveStatus = false;
                 }
             }
             base.Die(killer);
@@ -718,22 +733,13 @@ namespace DOL.GS
             base.AddToWorld();
             Cleanup();
             //register handler
-            GameEventMgr.AddHandler(GameEvents.GroupMobEvent.MobGroupDead, OnGroupMobDead);
             return true;
-        }
-
-
-        /// <inheritdoc />
-        public override void Delete()
-        {
-            base.Delete();
         }
 
         /// <inheritdoc />
         public override bool RemoveFromWorld()
         {
             Cleanup();
-            GameEventMgr.RemoveHandler(GameEvents.GroupMobEvent.MobGroupDead, OnGroupMobDead);
             return base.RemoveFromWorld();
         }
 

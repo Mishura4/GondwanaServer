@@ -193,6 +193,11 @@ namespace DOL.MobGroups
             return true;
         }
 
+        public bool IsAllDead(GameNPC exclude = null)
+        {
+            return NPCs.All(m => exclude == m || !m.IsAlive);
+        }
+
         public string mobGroupInterfactFk
         {
             get;
