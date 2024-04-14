@@ -77,12 +77,11 @@ namespace DOL.GS.Scripts
         public override void Die(GameObject killer)
         {
             base.Die(killer);
-            GamePlayer player = killer as GamePlayer;
 
-            if (player is { Guild.GuildType: Guild.eGuildType.PlayerGuild })
+            if (killer is GamePlayer { Guild: { GuildType: Guild.eGuildType.PlayerGuild } guild })
             {
                 this.GuildName = killer.GuildName;
-                TerritoryManager.Instance.ChangeGuildOwner(this, player.Guild);
+                TerritoryManager.Instance.ChangeGuildOwner(this, guild);
             }
         }
 
