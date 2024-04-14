@@ -29,7 +29,7 @@ namespace DOL.GS
         private string activeGroupStatusAddsKey;
         private string dbId;
         private List<GameNPC> loadedAdds;
-        private bool isAddsGroupMasterGroup;
+        private bool isPredefinedSpawns;
         private string addsGroupmobId;
         private bool isAddsActiveStatus;
         private int lifePercentTriggerSpawn;
@@ -148,7 +148,7 @@ namespace DOL.GS
                         npcTemplate4 = -1;
                         npcTemplate5 = -1;
                         npcTemplate6 = -1;
-                        isAddsGroupMasterGroup = true;
+                        isPredefinedSpawns = true;
                         addsGroupmobId = db.MasterGroupId;
 
                         //add Spawner to GroupMob for interractions
@@ -157,6 +157,21 @@ namespace DOL.GS
                         if (spawnerGroup == null)
                         {
                             AddSpawnerToMobGroup();
+                        }
+
+                        //remove mastergroup mob if present
+                        if (MobGroupManager.Instance.Groups.TryGetValue(this.addsGroupmobId, out var mobGroup))
+                        {
+                            mobGroup.NPCs.ForEach(n =>
+                            {
+                                n.RemoveFromWorld();
+                                n.Delete();
+                            });
+                        }
+                        else
+                        {
+                            //on server load add groups to remove list
+                            MobGroupManager.Instance.GroupsToRemoveOnServerLoad.Add(addsGroupmobId);
                         }
 
                         UpdateMasterGroupInDatabase();
@@ -170,6 +185,9 @@ namespace DOL.GS
 
                     if (db.InactiveStatusId != null)
                         inactiveGroupStatusAddsKey = db.InactiveStatusId;
+
+                    loadedAdds = null;
+                    Cleanup();
                 }
             }
         }
@@ -194,7 +212,7 @@ namespace DOL.GS
                     db.NpcTemplate5 = npcTemplate5;
                     db.NpcTemplate6 = npcTemplate6;
                     db.AddRespawnTimerSecs = addRespawnTimerSecs;
-                    db.MasterGroupId = isAddsGroupMasterGroup ? addsGroupmobId : null;
+                    db.MasterGroupId = isPredefinedSpawns ? addsGroupmobId : null;
                     db.AddsRespawnCount = addsRespawnCountTotal;
                     db.PercentLifeAddsActivity = percentLifeAddsActivity;
                     db.LifePercentTriggerSpawn = lifePercentTriggerSpawn;
@@ -211,22 +229,6 @@ namespace DOL.GS
                     }
 
                     GameServer.Database.SaveObject(db);
-                }
-            }
-        }
-
-
-        /// <summary>
-        /// Method effective for NpcTemplates pops only
-        /// </summary>
-        private void ClearNPCTemplatesOldMobs()
-        {
-            if (addsGroupmobId != null && loadedAdds != null && MobGroupManager.Instance.Groups.ContainsKey(addsGroupmobId))
-            {
-                MobGroupManager.Instance.RemoveGroupsAndMobs(addsGroupmobId, true);
-                lock (m_addsLock)
-                {
-                    loadedAdds = null;
                 }
             }
         }
@@ -363,6 +365,7 @@ namespace DOL.GS
             npc.Position = new System.Numerics.Vector3(Position.X + xOffset, Position.Y + yOffset, Position.Z);
             npc.Heading = Heading;
             npc.CurrentRegion = WorldMgr.GetRegion(CurrentRegionID);
+            npc.LoadedFromScript = true;
             npc.AddToWorld();
             npc.OwnerID = InternalID;
             if (Faction != null)
@@ -393,31 +396,31 @@ namespace DOL.GS
             {
                 status = GetActiveStatus();
                 isAddsActiveStatus = true;
+                Task.Run(async () =>
+                {
+                    //Delay animation on mob added to world
+                    await Task.Delay(500);
+                    if (IsAlive && Brain is StandardMobBrain { HasAggro: true } myBrain)
+                    {
+                        lock (m_addsLock)
+                        {
+                            loadedAdds.ForEach(n =>
+                            {
+                                if (n.IsAlive && n.Brain is StandardMobBrain friendBrain)
+                                {
+                                    myBrain.AddAggroListTo(friendBrain);
+                                }
+                            });
+                        }
+                    }
+                });
             }
             else
             {
                 status = GetInativeStatus();
             }
 
-            Task.Run(async () =>
-            {
-                //Delay animation on mob added to world
-                await Task.Delay(500);
-                MobGroupManager.Instance.Groups[addsGroupmobId].SetGroupInfo(status, true, true);
-                if (active && IsAlive && Brain is StandardMobBrain { HasAggro: true } myBrain)
-                {
-                    lock (m_addsLock)
-                    {
-                        loadedAdds.ForEach(n =>
-                        {
-                            if (n.IsAlive && n.Brain is StandardMobBrain friendBrain)
-                            {
-                                myBrain.AddAggroListTo(friendBrain);
-                            }
-                        });
-                    }
-                }
-            });
+            MobGroupManager.Instance.Groups[addsGroupmobId].SetGroupInfo(status, true, true);
         }
 
         private bool CanSpawnAdds()
@@ -483,37 +486,37 @@ namespace DOL.GS
 
         private void ActivateAdds()
         {
-            if (addsGroupmobId != null && MobGroupManager.Instance.Groups.ContainsKey(addsGroupmobId))
-            {
-                isAddsActiveStatus = true;
-                if (isAddsGroupMasterGroup)
-                {
-                    MobGroupManager.Instance.Groups[addsGroupmobId].ResetGroupInfo(true);
-                }
-                else
-                {
-                    MobGroupManager.Instance.Groups[addsGroupmobId].SetGroupInfo(GetActiveStatus(), false, true);
-                }
+            if (addsGroupmobId == null || !MobGroupManager.Instance.Groups.TryGetValue(addsGroupmobId, out MobGroup mobGroup))
+                return;
 
-                Task.Run(async () =>
-                {
-                    // Delay attacks
-                    await Task.Delay(500);
-                    if (IsAlive)
-                    {
-                        lock (m_addsLock)
-                        {
-                            loadedAdds?.ForEach(n =>
-                            {
-                                if (n.IsAlive && n.Brain is StandardMobBrain friendBrain && Brain is StandardMobBrain myBrain)
-                                {
-                                    myBrain.AddAggroListTo(friendBrain);
-                                }
-                            });
-                        }
-                    }
-                });
+            isAddsActiveStatus = true;
+            if (isPredefinedSpawns)
+            {
+                mobGroup.ResetGroupInfo(true);
             }
+            else
+            {
+                mobGroup.SetGroupInfo(GetActiveStatus(), true, true);
+            }
+
+            Task.Run(async () =>
+            {
+                // Delay attacks
+                await Task.Delay(500);
+                if (IsAlive)
+                {
+                    lock (m_addsLock)
+                    {
+                        loadedAdds?.ForEach(n =>
+                        {
+                            if (n.IsAlive && n.Brain is StandardMobBrain friendBrain && Brain is StandardMobBrain myBrain)
+                            {
+                                myBrain.AddAggroListTo(friendBrain);
+                            }
+                        });
+                    }
+                }
+            });
         }
 
         /// <summary>
@@ -521,7 +524,7 @@ namespace DOL.GS
         /// </summary>
         public void LoadAdds()
         {
-            if (isAddsGroupMasterGroup)
+            if (isPredefinedSpawns)
             {
                 if (addsGroupmobId != null && MobGroupManager.Instance.Groups.TryGetValue(addsGroupmobId, out MobGroup mobGroup))
                 {
@@ -568,6 +571,29 @@ namespace DOL.GS
             npcAddsNextPopupTimeStamp = DateTime.Now.AddSeconds(addRespawnTimerSecs);
         }
 
+        private void CleanupAddsUnsafe()
+        {
+            if (loadedAdds != null)
+            {
+                if (addsGroupmobId != null && !isPredefinedSpawns)
+                {
+                    MobGroupManager.Instance.RemoveGroupsAndMobs(addsGroupmobId, true);
+                }
+                GameEventMgr.RemoveHandler(GameEvents.GroupMobEvent.MobGroupDead, OnGroupMobDead);
+                if (this.Group != null && this.Group.LivingLeader == this)
+                {
+                    this.Group.DisbandGroup();
+                    this.Group = null;
+                }
+                loadedAdds.ForEach(add =>
+                {
+                    add.RemoveFromWorld();
+                    add.Delete();
+                });
+                loadedAdds = null;
+            }
+        }
+
         protected void Cleanup()
         {
             // Cleanup previous adds
@@ -582,43 +608,7 @@ namespace DOL.GS
                     addsResetTimer.Stop();
                     addsResetTimer = null;
                 }
-                if (loadedAdds != null)
-                {
-                    GameEventMgr.RemoveHandler(GameEvents.GroupMobEvent.MobGroupDead, OnGroupMobDead);
-                    if (this.Group != null && this.Group.LivingLeader == this)
-                    {
-                        this.Group.DisbandGroup();
-                        this.Group = null;
-                    } 
-                    loadedAdds.ForEach(add =>
-                    {
-                        add.RemoveFromWorld();
-                        add.Delete();
-                    });
-                    loadedAdds = null;
-                }
-                if (isAddsGroupMasterGroup && addsGroupmobId != null)
-                {
-                    //remove mastergroup mob if present
-                    if (MobGroupManager.Instance.Groups.TryGetValue(this.addsGroupmobId, out var mobGroup))
-                    {
-                        mobGroup.NPCs.ForEach(n =>
-                        {
-                            n.RemoveFromWorld();
-                            n.Delete();
-                        });
-                    }
-                    else
-                    {
-                        //on server load add groups to remove list
-                        MobGroupManager.Instance.GroupsToRemoveOnServerLoad.Add(addsGroupmobId);
-                    }
-                }
-                else
-                {
-                    //Handle repop by clearing npctemplate pops
-                    ClearNPCTemplatesOldMobs();
-                }
+                CleanupAddsUnsafe();
 
                 //reset groupinfo
                 if (MobGroupManager.Instance.Groups.TryGetValue(SpawnerGroupId, out var spawnerGroup))
@@ -669,7 +659,7 @@ namespace DOL.GS
                 {
                     lock (m_addsLock)
                     {
-                        loadedAdds = null;
+                        CleanupAddsUnsafe();
                     }
                 }
             }
@@ -689,7 +679,6 @@ namespace DOL.GS
                             n.Die(this);
                         }
                     });
-                    loadedAdds = null;
                     addsRespawnCurrentCount = 0;
                     npcAddsNextPopupTimeStamp = null;
                     isAddsActiveStatus = false;
