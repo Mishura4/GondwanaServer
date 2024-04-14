@@ -485,9 +485,9 @@ namespace DOL.GS
             {
                 foreach (var area in m_DBguild.Territories.Split(new char[] { '|' }))
                 {
-                    var territory = TerritoryManager.Instance.Territories.FirstOrDefault(t => t.AreaId.Equals(area));
+                    var territory = TerritoryManager.Instance.Territories.FirstOrDefault(t => t.AreaId.Equals(area) && string.Equals(t.GuildOwner, Name));
 
-                    if (territory != null && string.IsNullOrEmpty(territory.GuildOwner))
+                    if (territory != null)
                     {
                         TerritoryManager.Instance.ChangeGuildOwner(this, territory);
                     }
