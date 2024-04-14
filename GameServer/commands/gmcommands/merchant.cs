@@ -125,6 +125,7 @@ namespace DOL.GS.Commands
                         merchant.Size = 50;
                         merchant.IsRenaissance = isRenaissance;
                         merchant.AddToWorld();
+                        merchant.LoadedFromScript = false; // allow saving
                         merchant.SaveIntoDatabase();
                         DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Merchant.Create.Created", merchant.ObjectID));
                         break;
@@ -294,6 +295,12 @@ namespace DOL.GS.Commands
                                             {
                                                 item.ItemTemplateID = templateID;
                                                 GameServer.Database.SaveObject(item);
+                                            }
+                                            if (!targetMerchant.LoadedFromScript)
+                                            {
+                                                targetMerchant.RemoveFromWorld();
+                                                targetMerchant.LoadFromDatabase(GameServer.Database.FindObjectByKey<Mob>(targetMerchant.InternalID));
+                                                targetMerchant.AddToWorld();
                                             }
                                             DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Merchant.Articles.Add.ItemAdded"));
                                         }

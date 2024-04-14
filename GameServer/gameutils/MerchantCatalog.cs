@@ -126,7 +126,7 @@ namespace DOL.GS.Profession
 
         private MerchantCatalog() { }
 
-        public static MerchantCatalog Create() => new MerchantCatalog();
+        public static MerchantCatalog Create() => Create(Guid.NewGuid().ToString());
 
         public static MerchantCatalog Create(string itemListId) => new MerchantCatalog() { ItemListId = itemListId };
 
