@@ -41,6 +41,7 @@ using DOL.GS.Profession;
 using log4net;
 using DOL.GS.ServerProperties;
 using System.Numerics;
+using DOL.MobGroups;
 
 namespace DOL.GS.PacketHandler
 {
@@ -773,9 +774,19 @@ namespace DOL.GS.PacketHandler
             {
                 var npc = obj as GameNPC;
                 flags = (byte)(GameServer.ServerRules.GetLivingRealm(m_gameClient.Player, npc) << 6);
-                var npcFlags = npc.Flags;
-                if (MobGroups.MobGroup.IsQuestCompleted(npc, m_gameClient.Player) && npc.CurrentGroupMob.CompletedQuestNPCFlags != null)
-                    npcFlags = (GameNPC.eFlags)int.Parse(npc.CurrentGroupMob.CompletedQuestNPCFlags);
+                GameNPC.eFlags npcFlags;
+
+                var mobGroupsWithFlags = npc.MobGroups?.Where(g => g.CompletedQuestNPCFlags != null).ToList();
+                if (mobGroupsWithFlags is { Count: > 0 })
+                {
+                    npcFlags = 0;
+                    foreach (var g in mobGroupsWithFlags)
+                    {
+                        npcFlags = (GameNPC.eFlags)((uint)npcFlags | uint.Parse(g.CompletedQuestNPCFlags));
+                    }
+                }
+                else
+                    npcFlags = npc.Flags;
 
                 if (m_gameClient.Account.PrivLevel < 2)
                 {
@@ -1012,10 +1023,24 @@ namespace DOL.GS.PacketHandler
 
         public void SendModelAndSizeChange(GameObject obj, ushort newModel, byte newSize)
         {
-            if (obj is GameNPC gameNPC && gameNPC.CurrentGroupMob != null && MobGroups.MobGroup.IsQuestCompleted(gameNPC, m_gameClient.Player))
-                SendModelAndSizeChange((ushort)obj.ObjectID, gameNPC.CurrentGroupMob.CompletedQuestNPCModel, (byte)gameNPC.CurrentGroupMob.CompletedQuestNPCSize);
-            else
-                SendModelAndSizeChange((ushort)obj.ObjectID, newModel, newSize);
+            var model = newModel;
+            var size = newSize;
+            if (obj is GameNPC { MobGroups: { Count: > 0 } mobGroups })
+            {
+                /*
+                 * Mishura:
+                 * I have a feeling this shouldn't be here? Like, this method shouldn't override the model we are asking to update here, this logic should be BEFORE calling this method
+                 * I am only updating the code to support several MobGroups instead of just 1, but this feels a bit spaghetti and could use a rewrite
+                 */
+                foreach (MobGroup g in mobGroups.Where(g => g.HasPlayerCompletedQuests(m_gameClient.Player)))
+                {
+                    if (g.CompletedQuestNPCModel != 0)
+                        model = g.CompletedQuestNPCModel;
+                    if (g.CompletedQuestNPCSize != 0)
+                        size = (byte)g.CompletedQuestNPCSize;
+                }
+            }
+            SendModelAndSizeChange((ushort)obj.ObjectID, model, size);
         }
 
         public virtual void SendModelAndSizeChange(ushort objectId, ushort newModel, byte newSize)
@@ -1068,23 +1093,37 @@ namespace DOL.GS.PacketHandler
                 pak.WriteInt((uint)npc.Position.Y);
                 pak.WriteShort(speedZ);
 
-                var gameNPC = npc as GameNPC;
-                if (gameNPC.CurrentGroupMob != null && MobGroups.MobGroup.IsQuestCompleted(gameNPC, m_gameClient.Player))
+                var model = npc.Model;
+                var size = npc.Size;
+                if (npc is { MobGroups: { Count: > 0 } mobGroups })
                 {
-                    pak.WriteShort(gameNPC.CurrentGroupMob.CompletedQuestNPCModel);
-                    pak.WriteByte((byte)gameNPC.CurrentGroupMob.CompletedQuestNPCSize);
+                    foreach (MobGroup g in mobGroups.Where(g => g.HasPlayerCompletedQuests(m_gameClient.Player)))
+                    {
+                        if (g.CompletedQuestNPCModel != 0)
+                            model = g.CompletedQuestNPCModel;
+                        if (g.CompletedQuestNPCSize != 0)
+                            size = (byte)g.CompletedQuestNPCSize;
+                    }
                 }
-                else
-                {
-                    pak.WriteShort(npc.Model);
-                    pak.WriteByte(npc.Size);
-                }
+                pak.WriteShort(model);
+                pak.WriteByte(size);
+
                 pak.WriteByte(npc.GetDisplayLevel(m_gameClient.Player));
 
                 var flags = (byte)(GameServer.ServerRules.GetLivingRealm(m_gameClient.Player, npc) << 6);
-                var npcFlags = npc.Flags;
-                if (MobGroups.MobGroup.IsQuestCompleted(npc, m_gameClient.Player) && npc.CurrentGroupMob.CompletedQuestNPCFlags != null)
-                    npcFlags = (GameNPC.eFlags)int.Parse(npc.CurrentGroupMob.CompletedQuestNPCFlags);
+                GameNPC.eFlags npcFlags;
+
+                var mobGroupsWithFlags = npc.MobGroups?.Where(g => g.CompletedQuestNPCFlags != null).ToList();
+                if (mobGroupsWithFlags is { Count: > 0 })
+                {
+                    npcFlags = 0;
+                    foreach (var g in mobGroupsWithFlags)
+                    {
+                        npcFlags = (GameNPC.eFlags)((uint)npcFlags | uint.Parse(g.CompletedQuestNPCFlags));
+                    }
+                }
+                else
+                    npcFlags = npc.Flags;
                 if ((npcFlags & GameNPC.eFlags.GHOST) != 0) flags |= 0x01;
                 if (npc.Inventory != null)
                     flags |= 0x02; //If mob has equipment, then only show it after the client gets the 0xBD packet

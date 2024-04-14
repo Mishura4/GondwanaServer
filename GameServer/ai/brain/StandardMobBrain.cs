@@ -32,6 +32,7 @@ using log4net;
 using System.Numerics;
 using DOL.gameobjects.CustomNPC;
 using DOL.GS.Scripts;
+using DOL.MobGroups;
 
 namespace DOL.AI.Brain
 {
@@ -240,23 +241,30 @@ namespace DOL.AI.Brain
         public int GetGroupMobAggroMultiplier(GamePlayer player)
         {
             int multiplier = 1;
-            if (Body.CurrentGroupMob != null)
+            if (Body.MobGroups is { Count: >0 })
             {
-                if (MobGroups.MobGroup.IsQuestCompleted(Body, player))
+                foreach (MobGroup group in Body.MobGroups)
                 {
-                    return 1 * Body.CurrentGroupMob.CompletedQuestAggro;
+                    if (!group.IsQuestConditionFriendly && group.HasPlayerCompletedQuests(player))
+                    {
+                        multiplier *= group.CompletedQuestAggro;
+                    }
                 }
             }
             return multiplier;
         }
+
         public int GetGroupMobRangeMultiplier(GamePlayer player)
         {
             int multiplier = 1;
-            if (Body.CurrentGroupMob != null)
+            if (Body.MobGroups is { Count: > 0 })
             {
-                if (MobGroups.MobGroup.IsQuestCompleted(Body, player))
+                foreach (MobGroup group in Body.MobGroups)
                 {
-                    return 1 * Body.CurrentGroupMob.CompletedQuestRange;
+                    if (!group.IsQuestConditionFriendly && group.HasPlayerCompletedQuests(player))
+                    {
+                        multiplier *= group.CompletedQuestRange;
+                    }
                 }
             }
             return multiplier;

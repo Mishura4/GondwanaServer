@@ -116,13 +116,10 @@ namespace DOL.GS.Spells
                 return;
 
 
-            if (Caster is GamePlayer && ad.Target is GameNPC npc)
+            if (Caster is GamePlayer && (ad.Target as GameNPC)?.IsInvincible(ad.DamageType) == true)
             {
-                if (npc.CurrentGroupMob != null && npc.CurrentGroupMob.GroupInfos.IsInvincible == true)
-                {
-                    ad.Damage = 0;
-                    ad.CriticalDamage = 0;
-                }
+                ad.Damage = 0;
+                ad.CriticalDamage = 0;
             }
 
             if (Spell.Name.StartsWith("Proc"))

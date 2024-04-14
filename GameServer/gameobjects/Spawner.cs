@@ -653,8 +653,8 @@ namespace DOL.GS
                 return;
             }
 
-            //Check is npc is in combat to allow respawn only in this case
-            if (true && String.Equals(senderGroup.GroupId, addsGroupmobId))
+            //Check if npc is in combat to allow respawn only in this case
+            if (InCombat && String.Equals(senderGroup.GroupId, addsGroupmobId))
             {
                 //Check if group can respawn
                 if (addsRespawnCountTotal > 0 && addRespawnTimerSecs > 0 && addsRespawnCurrentCount < addsRespawnCountTotal)

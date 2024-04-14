@@ -4060,7 +4060,7 @@ namespace DOL.GS.Spells
             //Update value if npc is Invincible Group
             if (Caster is GamePlayer && ad.Target is GameNPC npc)
             {
-                if ((npc.CurrentGroupMob != null && npc.CurrentGroupMob.GroupInfos.IsInvincible == true) || (npc.ImunityDomage != eDamageType.GM && ad.DamageType == npc.ImunityDomage))
+                if (npc.IsInvincible(ad.DamageType))
                 {
                     ad.Damage = 0;
                     ad.CriticalDamage = 0;
@@ -4115,8 +4115,8 @@ namespace DOL.GS.Spells
 
             if (ad.Target is GameNPC npc)
             {
-                //Check if enemy is invincible by GroupMob
-                if (npc.CurrentGroupMob != null && npc.CurrentGroupMob.GroupInfos.IsInvincible == true)
+                //Check if enemy is invincible
+                if (npc.IsInvincible(ad.DamageType))
                 {
                     ad.Damage = 0;
                     ad.CriticalDamage = 0;

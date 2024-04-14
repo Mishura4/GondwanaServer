@@ -864,17 +864,23 @@ namespace DOL.GameEvents
                 var db = GameServer.Database.FindObjectByKey<Mob>(mob.InternalID);
                 mob.LoadFromDatabase(db);
 
-                var groupMob = GameServer.Database.SelectObjects<GroupMobXMobs>(DB.Column("MobID").IsEqualTo(mob.InternalID))?.FirstOrDefault();
+                var dbGroupMob = GameServer.Database.SelectObjects<GroupMobXMobs>(DB.Column("MobID").IsEqualTo(mob.InternalID))?.FirstOrDefault();
 
-                if (groupMob != null)
+                if (dbGroupMob != null)
                 {
-                    if (MobGroupManager.Instance.Groups.ContainsKey(groupMob.GroupId))
+                    MobGroup mobGroup;
+                    if (MobGroupManager.Instance.Groups.TryGetValue(dbGroupMob.GroupId, out mobGroup))
                     {
-                        mob.CurrentGroupMob = MobGroupManager.Instance.Groups[groupMob.GroupId];
+                        mob.AddToMobGroup(mobGroup);
+                        if (!mobGroup.NPCs.Contains(mob))
+                        {
+                            mobGroup.NPCs.Add(mob);
+                            mobGroup.ApplyGroupInfos();
+                        }
                     }
                     else
                     {
-                        var mobgroupDb = GameServer.Database.FindObjectByKey<GroupMobDb>(groupMob.GroupId);
+                        var mobgroupDb = GameServer.Database.FindObjectByKey<GroupMobDb>(dbGroupMob.GroupId);
                         if (mobgroupDb != null)
                         {
                             var groupInteraction = mobgroupDb.GroupMobInteract_FK_Id != null ?
@@ -882,15 +888,12 @@ namespace DOL.GameEvents
 
                             var groupOriginStatus = mobgroupDb.GroupMobOrigin_FK_Id != null ?
                             GameServer.Database.SelectObjects<GroupMobStatusDb>(DB.Column("GroupStatusId").IsEqualTo(mobgroupDb.GroupMobOrigin_FK_Id))?.FirstOrDefault() : null;
-                            mob.CurrentGroupMob = new MobGroup(mobgroupDb, groupInteraction, groupOriginStatus);
-                            MobGroupManager.Instance.Groups.Add(groupMob.GroupId, mob.CurrentGroupMob);
+                            mobGroup = new MobGroup(mobgroupDb, groupInteraction, groupOriginStatus);
+                            MobGroupManager.Instance.Groups.Add(dbGroupMob.MobID, mobGroup);
+                            mobGroup.NPCs.Add(mob);
+                            mob.AddToMobGroup(mobGroup);
+                            mobGroup.ApplyGroupInfos();
                         }
-                    }
-
-                    if (!MobGroupManager.Instance.Groups[groupMob.GroupId].NPCs.Contains(mob))
-                    {
-                        MobGroupManager.Instance.Groups[groupMob.GroupId].NPCs.Add(mob);
-                        MobGroupManager.Instance.Groups[groupMob.GroupId].ApplyGroupInfos();
                     }
                 }
 

@@ -50,6 +50,7 @@ using DOLDatabase.Tables;
 using DOL.GS.Scripts;
 using System.Timers;
 using System.Text.RegularExpressions;
+using log4net;
 
 namespace DOL.GS
 {
@@ -253,10 +254,42 @@ namespace DOL.GS
         /// <summary>
         /// If this mob is a Member of GroupMob
         /// </summary>
-        public MobGroup CurrentGroupMob
+        public List<MobGroup> MobGroups
         {
             get;
-            set;
+            private set;
+        }
+
+        public void AddToMobGroup(MobGroup mobGroup)
+        {
+            if (MobGroups == null)
+            {
+                MobGroups = new List<MobGroup> { mobGroup };
+            }
+            else
+            {
+                MobGroups.Add(mobGroup);
+            }
+        }
+
+        public void RemoveFromMobGroup(MobGroup mobGroup)
+        {
+            if (MobGroups != null)
+            {
+                MobGroups.Remove(mobGroup);
+                if (MobGroups.Count == 0)
+                    MobGroups = null;
+            }
+        }
+
+        public bool IsInvincible(eDamageType type)
+        {
+            return IsInvincible() || (ImunityDomage != eDamageType.GM && type == ImunityDomage);
+        }
+
+        public bool IsInvincible()
+        {
+            return MobGroups?.Exists(g => g.GroupInfos.IsInvincible == true) == true;
         }
 
         /// <summary>
@@ -2424,7 +2457,7 @@ namespace DOL.GS
             mob.Realm = (byte)Realm;
 
             //If mob is part of GroupMob we need to save the changing properties from PropertyDb which contains original value from db or new values from Commands
-            if (this.CurrentGroupMob == null)
+            if (this.MobGroups is { Count: 0 })
             {
                 mob.Model = Model;
                 mob.Race = Race;
@@ -3221,11 +3254,14 @@ namespace DOL.GS
             }
 
             //On Groupmob repop handle slave status
-            if (this.CurrentGroupMob?.SlaveGroupId != null)
+            if (MobGroups != null)
             {
-                if (MobGroupManager.Instance.Groups.ContainsKey(this.CurrentGroupMob.SlaveGroupId))
+                foreach (MobGroup mobGroup in MobGroups.Where(g => g.SlaveGroupId != null))
                 {
-                    MobGroupManager.Instance.Groups[this.CurrentGroupMob.SlaveGroupId].ResetGroupInfo();
+                    if (MobGroupManager.Instance.Groups.TryGetValue(mobGroup.SlaveGroupId, out MobGroup slaveGroup))
+                    {
+                        slaveGroup.ResetGroupInfo();
+                    }
                 }
             }
 
@@ -4529,11 +4565,7 @@ namespace DOL.GS
 
             Delete();
 
-            //Check if killed mob starts event
-            if (this.CurrentGroupMob != null)
-            {
-                MobGroupManager.Instance.HandleNpcDeath(this, killer);
-            }
+            MobGroupManager.Instance.HandleNpcDeath(this, killer);
 
             // remove temp properties
             TempProperties.removeAllProperties();

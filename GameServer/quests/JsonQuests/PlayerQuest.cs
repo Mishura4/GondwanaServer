@@ -180,12 +180,12 @@ namespace DOL.GS.Quests
             Owner.Out.SendMessage(LanguageMgr.GetTranslation(Owner.Client, "AbstractQuest.AbortQuest", Quest.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
             UpdateGroupMob(Owner);
         }
+
         public void UpdateGroupMob(GamePlayer owner)
         {
-            var mobs = owner.GetNPCsInRadius(WorldMgr.VISIBILITY_DISTANCE);
-            foreach (var mob in mobs)
+            foreach (var mob in owner.GetNPCsInRadius(WorldMgr.VISIBILITY_DISTANCE))
             {
-                if (mob is GameNPC groupMob && groupMob.CurrentGroupMob != null)
+                if (mob is GameNPC { MobGroups.Count: >0 } groupMob)
                 {
                     owner.Out.SendNPCCreate(groupMob);
                     owner.Out.SendModelChange(groupMob, groupMob.Model);

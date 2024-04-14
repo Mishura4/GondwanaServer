@@ -1288,7 +1288,14 @@ namespace DOL.GS.Commands
             info.Add(" + Tension: " + targetMob.Tension + "/" + targetMob.MaxTension);
             info.Add(" + IsRenaissance: " + targetMob.IsRenaissance);
             info.Add(" + EventId: " + targetMob.EventID);
-            info.Add(" + GroupMobId: " + (targetMob?.CurrentGroupMob?.GroupId ?? "-"));
+
+            if (targetMob.MobGroups is { Count: > 0 } mobGroups)
+            {
+                info.Add(" + GroupMobs:");
+                mobGroups.ForEach(g => info.Add("  - " + g.GroupId));
+            }
+            else
+                info.Add(" + GroupMobs: None");
 
             if (targetMob.DamageRvRMemory > 0)
                 info.Add("  - Damage RvR Memory: " + targetMob.DamageRvRMemory);
@@ -2686,10 +2693,13 @@ namespace DOL.GS.Commands
             }
 
             //copy groupmob
-            mob.CurrentGroupMob = targetMob.CurrentGroupMob;
-            if (mob.CurrentGroupMob != null && MobGroupManager.Instance.Groups.ContainsKey(mob.CurrentGroupMob.GroupId))
+            if (mob.MobGroups is { Count: > 0 })
             {
-                MobGroupManager.Instance.AddMobToGroup(mob, mob.CurrentGroupMob.GroupId);
+                foreach (MobGroup mobGroup in mob.MobGroups)
+                {
+                    if (MobGroupManager.Instance.Groups.ContainsKey(mobGroup.GroupId))
+                        MobGroupManager.Instance.AddMobToGroup(mob, mobGroup.GroupId);
+                }
             }
 
             client.Out.SendMessage("Mob created: OID=" + mob.ObjectID, eChatType.CT_System, eChatLoc.CL_SystemWindow);

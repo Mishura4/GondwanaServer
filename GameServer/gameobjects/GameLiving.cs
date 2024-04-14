@@ -1656,14 +1656,11 @@ namespace DOL.GS
             }
 
             //Check if target is npc and is invicible
-            if (ad.Target is GameNPC npc && npc.CurrentGroupMob != null)
+            if (ad.Target is GameNPC npc && npc.MobGroups?.Exists(g => g.GroupInfos.IsInvincible == true) == true)
             {
-                if (npc.CurrentGroupMob.GroupInfos.IsInvincible == true)
-                {
-                    ad.AttackResult = eAttackResult.HitUnstyled;
-                    ad.Damage = 0;
-                    return ad;
-                }
+                ad.AttackResult = eAttackResult.HitUnstyled;
+                ad.Damage = 0;
+                return ad;
             }
 
             //Target is dead already

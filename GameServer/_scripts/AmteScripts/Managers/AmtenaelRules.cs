@@ -526,7 +526,7 @@ namespace DOL.GS.ServerRules
             // "friendly" NPCs can't be attacked by "friendly" players
             if (attacker is GameNPC && attacker.Realm != 0 && defender.Realm != 0 && attacker is GameKeepGuard == false)
             {
-                if (attackerNpc.CurrentGroupMob != null && playerDefender != null && MobGroups.MobGroup.IsQuestAggresive(attackerNpc, playerDefender))
+                if (MobGroups.MobGroup.IsQuestAggresive(attackerNpc, playerDefender))
                 {
                     return true;
                 }
@@ -543,36 +543,27 @@ namespace DOL.GS.ServerRules
                 return false;
 
             var targetPlayer = target as GamePlayer;
-            if (source is GuardNPC && targetPlayer != null && targetPlayer.Reputation >= 0)
+            if (source is GuardNPC && targetPlayer is { Reputation: >= 0 })
             {
                 return true;
             }
 
-            var targetNpc = target as GameNPC;
-            if (targetNpc != null)
+            if (target is GameNPC targetNpc)
             {
-                var sourcePlayer = source as GamePlayer;
-                if (sourcePlayer != null && targetNpc.CurrentGroupMob != null)
+                if (source is GamePlayer sourcePlayer && MobGroups.MobGroup.IsQuestAggresive(targetNpc, sourcePlayer))
                 {
-                    if (MobGroups.MobGroup.IsQuestAggresive(targetNpc, sourcePlayer))
-                    {
-                        return false;
-                    }
+                    return false;
                 }
                 if (targetNpc.IsPeaceful)
                     return true;
 
             }
 
-            var sourceNpc = source as GameNPC;
-            if (sourceNpc != null)
+            if (source is GameNPC sourceNpc)
             {
-                if (sourceNpc.CurrentGroupMob != null && targetPlayer != null)
+                if (targetPlayer != null && MobGroups.MobGroup.IsQuestAggresive(sourceNpc, targetPlayer))
                 {
-                    if (MobGroups.MobGroup.IsQuestAggresive(sourceNpc, targetPlayer))
-                    {
-                        return false;
-                    }
+                    return false;
                 }
                 if (sourceNpc.IsPeaceful)
                     return true;
@@ -711,9 +702,9 @@ namespace DOL.GS.ServerRules
         }
         private bool IsPeacefulNPC(GameNPC attackerNpc, GameNPC defenderNpc, GamePlayer player)
         {
-            if (attackerNpc != null && attackerNpc.IsPeaceful)
+            if (attackerNpc is { IsPeaceful: true })
             {
-                if (attackerNpc.CurrentGroupMob != null && MobGroups.MobGroup.IsQuestAggresive(attackerNpc, player))
+                if (MobGroups.MobGroup.IsQuestAggresive(attackerNpc, player))
                 {
                     return false;
                 }
@@ -721,9 +712,9 @@ namespace DOL.GS.ServerRules
                 return true;
             }
 
-            if (defenderNpc != null && (defenderNpc.IsPeaceful))
+            if (defenderNpc is { IsPeaceful: true })
             {
-                if (defenderNpc.CurrentGroupMob != null && MobGroups.MobGroup.IsQuestAggresive(defenderNpc, player))
+                if (MobGroups.MobGroup.IsQuestAggresive(defenderNpc, player))
                 {
                     return false;
                 }

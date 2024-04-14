@@ -65,33 +65,7 @@ namespace DOL.MobGroups
         /// <returns></returns>
         public static bool IsQuestCompleted(GameNPC npc, GamePlayer player)
         {
-            if (npc.CurrentGroupMob != null && npc.CurrentGroupMob.CompletedQuestID > 0)
-            {
-                if (npc.CurrentGroupMob.CompletedQuestCount > 0)
-                {
-                    var finishedCount = player.QuestListFinished.Where(q => q.QuestId == npc.CurrentGroupMob.CompletedQuestID).Count();
-                    if (finishedCount >= npc.CurrentGroupMob.CompletedQuestCount)
-                    {
-                        return true;
-                    }
-                }
-
-                if (npc.CurrentGroupMob.CompletedStepQuestID > 0)
-                {
-                    var currentQuest = player.QuestList.FirstOrDefault(q => q.QuestId == npc.CurrentGroupMob.CompletedQuestID
-                    && q.Goals.Any(g => g is GenericDataQuestGoal jgoal && jgoal.Goal.GoalId == npc.CurrentGroupMob.CompletedStepQuestID));
-
-                    if (currentQuest != null)
-                    {
-                        var currentGoal = currentQuest.Goals.FirstOrDefault(g => g is GenericDataQuestGoal jgoal && jgoal.Goal.GoalId == npc.CurrentGroupMob.CompletedStepQuestID);
-                        if (currentGoal != null && currentGoal.Status == eQuestGoalStatus.Active)
-                        {
-                            return true;
-                        }
-                    }
-                }
-            }
-            return false;
+            return npc.MobGroups?.TrueForAll(g => g.HasPlayerCompletedQuests(player)) == true;
         }
 
         /// <summary>
@@ -102,11 +76,21 @@ namespace DOL.MobGroups
         /// <returns></returns>
         public static bool IsQuestFriendly(GameNPC npc, GamePlayer player)
         {
-            if (IsQuestCompleted(npc, player))
+            if (npc.MobGroups == null)
+                return false;
+
+            bool hasObjectives = false;
+            bool hasUnsatisfiedObjectives = false;
+            foreach (MobGroup group in npc.MobGroups.Where(g => g.CompletedQuestID >= 0 && g.IsQuestConditionFriendly))
             {
-                return npc.CurrentGroupMob.IsQuestConditionFriendly;
+                hasObjectives = true;
+                if (!group.HasPlayerCompletedQuests(player))
+                {
+                    hasUnsatisfiedObjectives = true;
+                    break;
+                }
             }
-            return false;
+            return hasObjectives && !hasUnsatisfiedObjectives;
         }
 
 
@@ -118,11 +102,21 @@ namespace DOL.MobGroups
         /// <returns></returns>
         public static bool IsQuestAggresive(GameNPC npc, GamePlayer player)
         {
-            if (IsQuestCompleted(npc, player))
+            if (npc.MobGroups == null)
+                return false;
+
+            bool hasObjectives = false;
+            bool hasUnsatisfiedObjectives = false;
+            foreach (MobGroup group in npc.MobGroups.Where(g => g.CompletedQuestID >= 0 && !g.IsQuestConditionFriendly))
             {
-                return !npc.CurrentGroupMob.IsQuestConditionFriendly;
+                hasObjectives = true;
+                if (!group.HasPlayerCompletedQuests(player))
+                {
+                    hasUnsatisfiedObjectives = true;
+                    break;
+                }
             }
-            return false;
+            return hasObjectives && !hasUnsatisfiedObjectives;
         }
 
 
@@ -196,6 +190,37 @@ namespace DOL.MobGroups
         public bool IsAllDead(GameNPC exclude = null)
         {
             return NPCs.All(m => exclude == m || !m.IsAlive);
+        }
+
+        public bool HasPlayerCompletedQuests(GamePlayer player)
+        {
+            if (CompletedQuestID <= 0)
+                return true;
+
+            if (CompletedQuestCount > 0)
+            {
+                var finishedCount = player.QuestListFinished.Where(q => q.QuestId == CompletedQuestID).Count();
+                if (finishedCount >= CompletedQuestCount)
+                {
+                    return true;
+                }
+            }
+
+            if (CompletedStepQuestID > 0)
+            {
+                var currentQuest = player.QuestList.FirstOrDefault(q => q.QuestId == CompletedQuestID
+                                                                       && q.Goals.Any(g => g is GenericDataQuestGoal jgoal && jgoal.Goal.GoalId == CompletedStepQuestID));
+
+                if (currentQuest != null)
+                {
+                    var currentGoal = currentQuest.Goals.FirstOrDefault(g => g is GenericDataQuestGoal jgoal && jgoal.Goal.GoalId == CompletedStepQuestID);
+                    if (currentGoal is { Status: eQuestGoalStatus.Active })
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
         public string mobGroupInterfactFk

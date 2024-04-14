@@ -39,23 +39,23 @@ namespace DOL.MobGroups
 
         public void HandleNpcDeath(GameNPC npc, GameObject killer)
         {
-            if (npc.CurrentGroupMob == null)
+            if (npc.MobGroups == null)
             {
                 return;
             }
 
-            if (npc.CurrentGroupMob.IsAllDead(npc))
+            foreach (MobGroup group in npc.MobGroups.Where(g => g.IsAllDead(npc)))
             {
                 //Handle interaction if any slave group
-                this.HandleInteraction(npc.CurrentGroupMob);
+                this.HandleInteraction(group);
 
                 //Reset GroupInfo
-                npc.CurrentGroupMob.ResetGroupInfo();
+                group.ResetGroupInfo();
 
                 //Notify
-                GameEventMgr.Notify(GroupMobEvent.MobGroupDead, npc.CurrentGroupMob);
+                GameEventMgr.Notify(GroupMobEvent.MobGroupDead, group);
                 var mobGroupEvent = GameEventManager.Instance.Events.FirstOrDefault(e =>
-                                                                                        e.KillStartingGroupMobId?.Equals(npc.CurrentGroupMob.GroupId) == true &&
+                                                                                        e.KillStartingGroupMobId?.Equals(group.GroupId) == true &&
                                                                                         !e.StartedTime.HasValue &&
                                                                                         e.Status == EventStatus.NotOver &&
                                                                                         e.StartConditionType == StartingConditionType.Kill);
@@ -68,10 +68,8 @@ namespace DOL.MobGroups
 
         private void HandleInteraction(MobGroup master)
         {
-            if (master.SlaveGroupId != null && this.Groups.ContainsKey(master.SlaveGroupId) && master.GroupInteractions != null)
+            if (master.SlaveGroupId != null && master.GroupInteractions != null && this.Groups.TryGetValue(master.SlaveGroupId, out MobGroup slave))
             {
-                var slave = this.Groups[master.SlaveGroupId];
-
                 slave.GroupInfos = MobGroup.CopyGroupInfo(master.GroupInteractions);
                 slave.SaveToDabatase();
                 slave.ApplyGroupInfos(slave.GroupId.StartsWith("spwn_add_"));
@@ -207,12 +205,12 @@ namespace DOL.MobGroups
                     {
                         var mobInWorld = WorldMgr.Regions[group.RegionID].Objects?.FirstOrDefault(o => o?.InternalID?.Equals(group.MobID) == true && o is GameNPC) as GameNPC;
 
-                        if (mobInWorld != null && this.Groups.ContainsKey(group.GroupId))
+                        if (mobInWorld != null && this.Groups.TryGetValue(group.GroupId, out MobGroup mobGroup))
                         {
-                            if (this.Groups[group.GroupId].NPCs.FirstOrDefault(m => m.InternalID.Equals(mobInWorld.InternalID)) == null)
+                            if (!mobGroup.NPCs.Exists(m => m.InternalID.Equals(mobInWorld.InternalID)))
                             {
-                                this.Groups[group.GroupId].NPCs.Add(mobInWorld);
-                                mobInWorld.CurrentGroupMob = this.Groups[group.GroupId];
+                                mobGroup.NPCs.Add(mobInWorld);
+                                mobInWorld.AddToMobGroup(mobGroup);
                             }
                         }
                     }
@@ -244,20 +242,22 @@ namespace DOL.MobGroups
             }
 
             bool isnew = false;
-            if (!this.Groups.ContainsKey(groupId))
+            MobGroup mobGroup;
+            if (!this.Groups.TryGetValue(groupId, out mobGroup))
             {
-                this.Groups.Add(groupId, new MobGroup(groupId, isLoadedFromScript));
+                mobGroup = new MobGroup(groupId, isLoadedFromScript);
+                this.Groups.Add(groupId, mobGroup);
                 isnew = true;
             }
 
-            this.Groups[groupId].NPCs.Add(npc);
-            npc.CurrentGroupMob = this.Groups[groupId];
+            mobGroup.NPCs.Add(npc);
+            npc.AddToMobGroup(mobGroup);
 
             if (isnew && !isLoadedFromScript)
             {
                 var newGroup = new GroupMobDb() { GroupId = groupId };
                 GameServer.Database.AddObject(newGroup);
-                this.Groups[groupId].InternalId = newGroup.ObjectId;
+                mobGroup.InternalId = newGroup.ObjectId;
 
                 GameServer.Database.AddObject(new GroupMobXMobs()
                 {
@@ -299,14 +299,14 @@ namespace DOL.MobGroups
                 return false;
             }
 
-            if (!this.Groups.ContainsKey(groupId))
+            if (!this.Groups.TryGetValue(groupId, out MobGroup group))
             {
                 log.Error($"Impossible to remove Group because inmemory Groups does not contain groupId: {groupId}");
                 return false;
             }
 
 
-            if (!this.Groups[groupId].NPCs.Remove(npc))
+            if (!group.NPCs.Remove(npc))
             {
                 log.Error($"Impossible to remove NPC {npc.InternalID} from groupId: {groupId}");
                 return false;
@@ -317,12 +317,12 @@ namespace DOL.MobGroups
             if (grp == null)
             {
                 log.Error($"Impossible to remove GroupMobXMobs entry with MobId: {npc.InternalID} and groupId: {groupId}");
-                this.Groups[groupId].NPCs.Add(npc);
+                group.NPCs.Add(npc);
                 return false;
             }
             else
             {
-                npc.CurrentGroupMob = null;
+                npc.RemoveFromMobGroup(group);
                 return GameServer.Database.DeleteObject(grp);
             }
         }

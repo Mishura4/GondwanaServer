@@ -37,7 +37,7 @@ using DOL.GS.Quests;
 using DOL.GS.RealmAbilities;
 using DOL.GS.Spells;
 using DOL.GS.Styles;
-
+using DOL.MobGroups;
 using log4net;
 
 
@@ -173,9 +173,19 @@ namespace DOL.GS.PacketHandler
             {
                 int speed = 0;
                 ushort speedZ = 0;
-                var npcFlags = npc.Flags;
-                if (MobGroups.MobGroup.IsQuestCompleted(npc, m_gameClient.Player) && npc.CurrentGroupMob.CompletedQuestNPCFlags != null)
-                    npcFlags = (GameNPC.eFlags)int.Parse(npc.CurrentGroupMob.CompletedQuestNPCFlags);
+                GameNPC.eFlags npcFlags;
+
+                var mobGroupsWithFlags = npc.MobGroups?.Where(g => g.CompletedQuestNPCFlags != null).ToList();
+                if (mobGroupsWithFlags is { Count: > 0 })
+                {
+                    npcFlags = 0;
+                    foreach (var g in mobGroupsWithFlags)
+                    {
+                        npcFlags = (GameNPC.eFlags)((uint)npcFlags | uint.Parse(g.CompletedQuestNPCFlags));
+                    }
+                }
+                else
+                    npcFlags = npc.Flags;
 
                 if (npc == null)
                     return;
@@ -192,17 +202,21 @@ namespace DOL.GS.PacketHandler
                 pak.WriteInt((uint)npc.Position.Y);
                 pak.WriteShort(speedZ);
 
-                var gameNPC = npc as GameNPC;
-                if (gameNPC.CurrentGroupMob != null && MobGroups.MobGroup.IsQuestCompleted(gameNPC, m_gameClient.Player))
+                var model = npc.Model;
+                var size = npc.Size;
+                if (npc is { MobGroups: { Count: > 0 } mobGroups } )
                 {
-                    pak.WriteShort(gameNPC.CurrentGroupMob.CompletedQuestNPCModel);
-                    pak.WriteByte((byte)gameNPC.CurrentGroupMob.CompletedQuestNPCSize);
+                    foreach (MobGroup g in mobGroups.Where(g => g.HasPlayerCompletedQuests(m_gameClient.Player)))
+                    {
+                        if (g.CompletedQuestNPCModel != 0)
+                            model = g.CompletedQuestNPCModel;
+                        if (g.CompletedQuestNPCSize != 0)
+                            size = (byte)g.CompletedQuestNPCSize;
+                    }
                 }
-                else
-                {
-                    pak.WriteShort(npc.Model);
-                    pak.WriteByte(npc.Size);
-                }
+                pak.WriteShort(model);
+                pak.WriteByte(size);
+
                 byte level = npc.GetDisplayLevel(m_gameClient.Player);
                 if ((npcFlags & GameNPC.eFlags.STATUE) != 0)
                 {

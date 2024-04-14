@@ -71,10 +71,13 @@ namespace DOL.GS.Quests
                 var killed = killedArgs.Target;
 
                 if (killed == null
-                || !(killed is GameNPC npc && MobGroupManager.Instance.GetGroupIdFromMobId(npc.InternalID) == m_targetName && npc.CurrentGroupMob?.IsAllDead(npc) == true)
                 || m_region != killed.CurrentRegion
                 || (hasArea && !m_area.IsContaining(killed.Position, false)))
                     return;
+
+                if (killed is GameNPC killedNpc && MobGroupManager.Instance.Groups.TryGetValue(m_targetName, out MobGroup targetGroup) && !targetGroup.IsAllDead(killedNpc))
+                    return;
+
                 AdvanceGoal(quest, goal);
             }
         }

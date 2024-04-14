@@ -9,6 +9,7 @@ using DOL.Events;
 using DOL.GS;
 using DOL.GS.PacketHandler;
 using DOL.GS.Scripts;
+using DOL.MobGroups;
 using DOLDatabase.Tables;
 using static DOL.GS.GameObject;
 
@@ -217,14 +218,15 @@ namespace DOL.GS.Scripts
 
         public void ResetFriendMobs()
         {
-            if (CurrentGroupMob != null)
+            if (MobGroups != null)
             {
-                var mobs = WorldMgr.GetNPCsFromRegion(CurrentRegion.ID).Where(c => c is FollowingFriendMob &&
-                    c.CurrentGroupMob != null && c.CurrentGroupMob == CurrentGroupMob).ToList();
-                foreach (FollowingFriendMob mob in mobs)
+                foreach (MobGroup group in MobGroups)
                 {
-                    if (mob.PlayerFollow != null)
-                        mob.ResetFriendMob();
+                    foreach (FollowingFriendMob mob in group.NPCs.OfType<FollowingFriendMob>())
+                    {
+                        if (mob.PlayerFollow != null)
+                            mob.ResetFriendMob();
+                    }
                 }
             }
 
