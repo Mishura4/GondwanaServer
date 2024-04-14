@@ -33,9 +33,14 @@ namespace DOL.GS.Spells
             int end = (int)(Spell.Damage);
             target.ChangeEndurance(target, GameLiving.eEnduranceChangeType.Spell, (-end));
 
-            if (target is GamePlayer)
-                ((GamePlayer)target).Out.SendMessage(" You lose " + end + " endurance!", eChatType.CT_YouWereHit, eChatLoc.CL_SystemWindow);
-            (m_caster as GamePlayer).Out.SendMessage("" + (m_caster as GamePlayer).GetPersonalizedName(target) + " loses " + end + " endurance!", eChatType.CT_YouWereHit, eChatLoc.CL_SystemWindow);
+            if (target is GamePlayer targetPlayer)
+            {
+                targetPlayer.Out.SendMessage(" You lose " + end + " endurance!", eChatType.CT_YouWereHit, eChatLoc.CL_SystemWindow);
+            }
+            if (m_caster is GamePlayer casterPlayer)
+            {
+                casterPlayer.Out.SendMessage("" + casterPlayer.GetPersonalizedName(target) + " loses " + end + " endurance!", eChatType.CT_YouWereHit, eChatLoc.CL_SystemWindow);
+            }
 
             target.StartInterruptTimer(target.SpellInterruptDuration, AttackData.eAttackType.Spell, Caster);
         }

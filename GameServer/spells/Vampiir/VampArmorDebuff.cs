@@ -65,7 +65,7 @@ namespace DOL.GS.Spells
             foreach (GamePlayer visPlayer in player.GetPlayersInRadius((ushort)WorldMgr.VISIBILITY_DISTANCE))
             {
                 string msg = GlobalConstants.SlotToName(player.Client, (int)m_slot);
-                MessageToCaster("You debuff " + (Caster as GamePlayer).GetPersonalizedName(player) + "'s " + msg + "", eChatType.CT_Spell);
+                MessageToCaster("You debuff " + Caster.GetPersonalizedName(player) + "'s " + msg + "", eChatType.CT_Spell);
                 visPlayer.Out.SendSpellEffectAnimation(player, player, (ushort)(13180 + slot), 0, false, 0x01);
             }
 

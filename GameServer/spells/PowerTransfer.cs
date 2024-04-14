@@ -63,18 +63,15 @@ namespace DOL.GS.Spells
             if (powerHealed <= 0)
             {
                 SendEffectAnimation(target, 0, false, 0);
-                owner.Out.SendMessage(String.Format("{0} is at full power already!",
-                    owner.GetPersonalizedName(target)), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
+                owner.Out.SendMessage($"{owner.GetPersonalizedName(target)} is at full power already!", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
             }
             else
             {
                 SendEffectAnimation(target, 0, false, 1);
-                owner.Out.SendMessage(String.Format("You transfer {0} power to {1}!",
-                    powerHealed, owner.GetPersonalizedName(target)), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                owner.Out.SendMessage($"You transfer {powerHealed} power to {owner.GetPersonalizedName(target)}!", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
 
-                if (target is GamePlayer)
-                    (target as GamePlayer).Out.SendMessage(String.Format("{0} transfers {1} power to you!",
-                        (target as GamePlayer).GetPersonalizedName(owner), powerHealed), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                if (target is GamePlayer playerTarget)
+                    playerTarget.Out.SendMessage($"{playerTarget.GetPersonalizedName(owner)} transfers {powerHealed} power to you!", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
             }
         }
 

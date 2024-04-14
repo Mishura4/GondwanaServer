@@ -25,7 +25,7 @@ namespace DOL.GS.Spells
             if (damnationEffect != null)
             {
                 if (Caster is GamePlayer player)
-                    MessageToCaster(LanguageMgr.GetTranslation(player.Client, "Damnation.Target.Resist", (Caster as GamePlayer).GetPersonalizedName(target)), eChatType.CT_SpellResisted);
+                    MessageToCaster(LanguageMgr.GetTranslation(player.Client, "Damnation.Target.Resist", player.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
                 return;
             }
             base.ApplyEffectOnTarget(target, effectiveness);

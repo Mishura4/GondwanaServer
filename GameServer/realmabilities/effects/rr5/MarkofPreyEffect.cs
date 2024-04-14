@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using DOL.Events;
+using DOL.GS.PacketHandler;
 
 namespace DOL.GS.Effects
 {
@@ -115,10 +116,10 @@ namespace DOL.GS.Effects
             ad.AttackResult = GameLiving.eAttackResult.HitUnstyled;
             target.OnAttackedByEnemy(ad);
             EffectCaster.ChangeMana(EffectOwner, GameLiving.eManaChangeType.Spell, (int)ad.Damage);
-            if (attacker is GamePlayer && target is GamePlayer)
-                (attacker as GamePlayer).Out.SendMessage(string.Format("You hit {0} for {1} extra damage!", (attacker as GamePlayer).GetPersonalizedName((target as GamePlayer)), ad.Damage), DOL.GS.PacketHandler.eChatType.CT_Spell, DOL.GS.PacketHandler.eChatLoc.CL_SystemWindow);
-            else if (attacker is GamePlayer)
-                (attacker as GamePlayer).Out.SendMessage(string.Format("You hit {0} for {1} extra damage!", target.Name, ad.Damage), DOL.GS.PacketHandler.eChatType.CT_Spell, DOL.GS.PacketHandler.eChatLoc.CL_SystemWindow);
+            if (attacker is GamePlayer attackerPlayer)
+            {
+                attackerPlayer.Out.SendMessage($"You hit {attackerPlayer.GetPersonalizedName(target)} for {ad.Damage} extra damage!", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+            }
             attacker.DealDamage(ad);
         }
 

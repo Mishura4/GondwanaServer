@@ -4073,8 +4073,8 @@ namespace DOL.GS.Spells
                 modmessage = " (+" + ad.Modifier + ")";
             if (ad.Modifier < 0)
                 modmessage = " (" + ad.Modifier + ")";
-            if (Caster is GamePlayer || Caster is NecromancerPet)
-                MessageToCaster(string.Format("You hit {0} for {1}{2} damage!", (Caster as GamePlayer).GetPersonalizedName(ad.Target), ad.Damage, modmessage), eChatType.CT_YouHit);
+            if (Caster is GamePlayer or NecromancerPet)
+                MessageToCaster(string.Format("You hit {0} for {1}{2} damage!", Caster.GetPersonalizedName(ad.Target), ad.Damage, modmessage), eChatType.CT_YouHit);
             else if (Caster is GameNPC)
                 MessageToCaster(string.Format("Your " + Caster.Name + " hits {0} for {1}{2} damage!",
                                               ad.Target.GetName(0, false), ad.Damage, modmessage), eChatType.CT_YouHit);

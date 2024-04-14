@@ -89,8 +89,7 @@ namespace DOL.GS.Spells
                     return;
 
                 int power = 0;
-
-                if (target is GameNPC || target.Mana > 0)
+                if (target.Mana > 0)
                 {
                     if (target is GameNPC)
                         power = (int)Math.Round(((double)(target.Level) * (double)(m_handler.Spell.Value) * 2) / 100);
@@ -103,19 +102,22 @@ namespace DOL.GS.Spells
                     caster.Mana += power;
 
                     target.Mana -= power;
-                    if (target is GamePlayer)
+                }
+                if (power > 0 && target is GamePlayer targetPlayer)
+                {
+                    targetPlayer.Out.SendMessage(targetPlayer.GetPersonalizedName(caster) + " takes " + power + " power!", eChatType.CT_YouWereHit, eChatLoc.CL_SystemWindow);
+                }
+                if (caster is GamePlayer casterPlayer)
+                {
+                    if (power > 0)
                     {
-                        ((GamePlayer)target).Out.SendMessage((target as GamePlayer).GetPersonalizedName(caster) + " takes " + power + " power!", eChatType.CT_YouWereHit, eChatLoc.CL_SystemWindow);
+                        casterPlayer.Out.SendMessage("You receive " + power + " power from " + casterPlayer.GetPersonalizedName(target) + "!", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
                     }
-
-                    if (caster is GamePlayer)
+                    else
                     {
-                        ((GamePlayer)caster).Out.SendMessage("You receive " + power + " power from " + (caster as GamePlayer).GetPersonalizedName(target) + "!", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                        casterPlayer.Out.SendMessage("You did not receive any power from " + casterPlayer.GetPersonalizedName(target) + "!", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
                     }
                 }
-                else
-                    ((GamePlayer)caster).Out.SendMessage("You did not receive any power from " + (caster as GamePlayer).GetPersonalizedName(target) + "!", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
-
                 //Place the caster in combat
                 if (target is GamePlayer)
                     caster.LastAttackTickPvP = caster.CurrentRegion.Time;

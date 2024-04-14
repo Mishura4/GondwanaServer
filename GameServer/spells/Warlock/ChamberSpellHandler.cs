@@ -183,22 +183,20 @@ namespace DOL.GS.Spells
                 }
                 if (PhaseShift != null)
                 {
-                    MessageToCaster((Caster as GamePlayer).GetPersonalizedName(m_spellTarget) + " is Phaseshifted and can't be attacked!", eChatType.CT_System); return false;
+                    MessageToCaster(Caster.GetPersonalizedName(m_spellTarget) + " is Phaseshifted and can't be attacked!", eChatType.CT_System); return false;
                 }
                 if (SelectiveBlindness != null)
                 {
                     GameLiving EffectOwner = SelectiveBlindness.EffectSource;
                     if (EffectOwner == m_spellTarget)
                     {
-                        if (m_caster is GamePlayer)
-                            ((GamePlayer)m_caster).Out.SendMessage(string.Format("{0} is invisible to you!", m_spellTarget.GetName(0, true)), eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
-
+                        (m_caster as GamePlayer)?.Out.SendMessage(string.Format("{0} is invisible to you!", m_spellTarget.GetName(0, true)), eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
                         return false;
                     }
                 }
                 if (m_spellTarget.HasAbility(Abilities.DamageImmunity))
                 {
-                    MessageToCaster((Caster as GamePlayer).GetPersonalizedName(m_spellTarget) + " is immune to this effect!", eChatType.CT_SpellResisted);
+                    MessageToCaster(Caster.GetPersonalizedName(m_spellTarget) + " is immune to this effect!", eChatType.CT_SpellResisted);
                     return false;
                 }
                 if (GameServer.ServerRules.IsAllowedToAttack(Caster, m_spellTarget, true) && chamber.PrimarySpell.Target.ToLower() == "realm")

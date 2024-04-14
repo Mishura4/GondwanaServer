@@ -29,7 +29,7 @@ namespace DOL.GS.Spells
         {
             if (target.HasAbility(Abilities.CCImmunity) || target.HasAbility(Abilities.RootImmunity))
             {
-                MessageToCaster((Caster as GamePlayer).GetPersonalizedName(target) + " is immune to this effect!", eChatType.CT_SpellResisted);
+                MessageToCaster(m_caster.GetPersonalizedName(target) + " is immune to this effect!", eChatType.CT_SpellResisted);
                 return;
             }
             if (target.EffectList.GetOfType<AdrenalineSpellEffect>() != null)
@@ -40,7 +40,7 @@ namespace DOL.GS.Spells
             }
             if (target.EffectList.GetOfType<ChargeEffect>() != null)
             {
-                MessageToCaster((Caster as GamePlayer).GetPersonalizedName(target) + " is moving to fast for this spell to have any effect!", eChatType.CT_SpellResisted);
+                MessageToCaster(m_caster.GetPersonalizedName(target) + " is moving to fast for this spell to have any effect!", eChatType.CT_SpellResisted);
                 return;
             }
 
