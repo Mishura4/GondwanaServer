@@ -29,6 +29,7 @@ using DOL.Database;
 using DOL.Events;
 using DOL.GS.PacketHandler;
 using DOL.GS.ServerProperties;
+using DOL.Language;
 using DOL.Network;
 
 using log4net;
@@ -788,6 +789,16 @@ namespace DOL.GS
                 if (log.IsErrorEnabled)
                     log.Error("SavePlayer", e);
             }
+        }
+
+        public void SendTranslation(string translationKey, eChatType type = eChatType.CT_System, eChatLoc loc = eChatLoc.CL_SystemWindow)
+        {
+            Out.SendMessage(LanguageMgr.GetTranslation(Account.Language, translationKey), type, loc);
+        }
+
+        public void SendTranslation(string translationKey, eChatType type, eChatLoc loc, params object[] args)
+        {
+            Out.SendMessage(LanguageMgr.GetTranslation(Account.Language, translationKey, args), type, loc);
         }
 
         /// <summary>

@@ -1732,7 +1732,6 @@ namespace DOL.GS.Commands
                     #region Territorybanner
                     case "territorybanner":
                         {
-
                             if (client.Player.Guild == null)
                             {
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NotMember"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
@@ -1754,29 +1753,38 @@ namespace DOL.GS.Commands
                                 }
                             }
 
-                            bool owned = TerritoryManager.Instance.DoesPlayerOwnsTerritory(client.Player);
-                            if (owned)
+                            if (TerritoryManager.Instance.DoesPlayerOwnsTerritory(client.Player))
                             {
                                 var territory = TerritoryManager.Instance.GetCurrentTerritory(client.Player.CurrentAreas);
 
-                                if (!client.Player.GuildRank.Claim && client.Account.PrivLevel == 1)
+                                if (client.Player.GuildRank.RankLevel > 2 && client.Account.PrivLevel == 1)
                                 {
-                                    client.Out.SendMessage("Vous devez etre au moins de rang 2 pour poser une bannière", eChatType.CT_System, eChatLoc.CL_PopupWindow);
-                                    break;
+                                    client.SendTranslation("Commands.Players.Guild.TerritoryBanner.Denied");
+                                    return;
                                 }
 
-                                client.Out.SendCustomDialog(string.Format("L'ajout d'une bannière à ce clan coûtera {0} points de merite à votre guilde", Properties.GUILD_BANNER_MERIT_PRICE), (GamePlayer player, byte response) =>
+                                if (territory.IsBannerSummoned && client.Account.PrivLevel == 1)
+                                {
+                                    client.SendTranslation("Commands.Players.Guild.TerritoryBanner.AlreadySummoned");
+                                    return;
+                                }
+
+                                client.Out.SendCustomDialog(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.TerritoryBanner.ConfirmCost", Properties.GUILD_BANNER_MERIT_PRICE), (GamePlayer player, byte response) =>
                                 {
                                     if (response == 1)
                                     {
                                         if (player.Guild.MeritPoints < (long)Properties.GUILD_BANNER_MERIT_PRICE)
                                         {
-                                            client.Out.SendMessage(string.Format("Votre guilde doit avoir {0} points de merite pour faire cela.", Properties.GUILD_BANNER_MERIT_PRICE), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                            client.SendTranslation("Commands.Players.Guild.TerritoryBanner.NotEnoughMerit", eChatType.CT_System, eChatLoc.CL_SystemWindow, Properties.GUILD_BANNER_MERIT_PRICE);
                                             return;
                                         }
 
                                         player.Guild.RemoveMeritPoints(Properties.GUILD_BANNER_MERIT_PRICE);
                                         TerritoryManager.ApplyEmblemToTerritory(territory, player.Guild, true);
+                                        foreach (GamePlayer guildPlayer in player.Guild.GetListOfOnlineMembers())
+                                        {
+                                            guildPlayer.SendTranslatedMessage("Commands.Players.Guild.TerritoryBanner.Summoned", eChatType.CT_Guild, eChatLoc.CL_SystemWindow, guildPlayer.GetPersonalizedName(player), territory.Name);
+                                        }
                                     }
                                 });
                             }
@@ -3434,7 +3442,7 @@ namespace DOL.GS.Commands
 
                     #region territories
                     case "territories":
-                        if (client.Player.Guild == null || (client.Player.Guild.IsSystemGuild == true && client.Account.PrivLevel <= 1))
+                        if (client.Player.Guild == null || (client.Player.Guild.IsSystemGuild && client.Account.PrivLevel <= 1))
                         {
                             client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.TerritoryBeGuilded"), eChatType.CT_System, eChatLoc.CL_ChatWindow);
                             break;

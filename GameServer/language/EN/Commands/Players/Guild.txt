@@ -277,6 +277,12 @@ Commands.Players.Guild.JailRelease.ConfirmCost:			Releasing {0} from jail will c
 Commands.Players.Guild.JailRelease.NotEnoughMoney:		Your guild bank do not have enough money to release {0}.
 Commands.Players.Guild.JailRelease.Released:			{0} was released from jail by {1}.
 
+Commands.Players.Guild.TerritoryBanner.Denied:			You must be rank 2 or lower in your guild to summon territory banners.
+Commands.Players.Guild.TerritoryBanner.ConfirmCost:		Summoning your guild banners in this territory will cost {0} merit points. Confirm?
+Commands.Players.Guild.TerritoryBanner.NotEnoughMerit:	Your guild must have {0} merit points to summon territory banners.
+Commands.Players.Guild.TerritoryBanner.Summoned:		{0} has summoned the guild banners in {1}!
+Commands.Players.Guild.TerritoryBanner.AlreadySummoned:	This territory already has the guild banners.
+
 Commands.Players.Guild.TerritoryPortal.NoGuild:			You must be in a guild to summon a guild portal.
 Commands.Players.Guild.TerritoryPortal.Denied:			You must be rank 4 or lower in your guild to summon a guild portal.
 Commands.Players.Guild.TerritoryPortal.ConfirmCost:		Summoning a guild portal will cost {0} merit points. Confirm?

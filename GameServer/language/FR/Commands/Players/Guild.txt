@@ -285,6 +285,12 @@ Commands.Players.Guild.TerritoryMeritPoints:   L'occupation de vos territoires v
 Commands.Players.Guild.TerritoryBeGuilded:	Vous devez etre dans une guilde pour voir les territoires occupés.
 Commands.Players.Guild.TerritoryWindowTitle:	[ TERRITOIRES ]
 
+Commands.Players.Guild.TerritoryBanner.Denied:			Vous devez être au moins rang 2 pour invoquer un portail de guilde.
+Commands.Players.Guild.TerritoryBanner.ConfirmCost:		Invoquer vos bannières dans ce territoire coûtera {0} points de mérite à votre guilde. Confirmer?
+Commands.Players.Guild.TerritoryBanner.NotEnoughMerit:	Votre guilde doit avoir {0} points de mérite pour invoquer les bannières de territoire.
+Commands.Players.Guild.TerritoryBanner.Summoned:		{0} a invoqué les bannières dans {1}!
+Commands.Players.Guild.TerritoryBanner.AlreadySummoned:	Ce territoire a déjà des bannières.
+
 Commands.Players.Guild.TerritoryPortal.NoGuild:			Vous devez faire parti d'une guilde pour invoquer un portail de guilde.
 Commands.Players.Guild.TerritoryPortal.Denied:			Vous devez être au moins rang 4 pour invoquer un portail de guilde.
 Commands.Players.Guild.TerritoryPortal.ConfirmCost:		Invoquer un portail de guilde coûtera {0} points de mérite à votre guilde. Confirmer?
