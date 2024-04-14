@@ -290,7 +290,7 @@ namespace DOL.GS
             }
             else
             {
-                int npcCount = (int)(GetPlayersInRadius(1000).Cast<GamePlayer>().Count() / 100.0 * percentageOfPlayersInRadius + 0.5);
+                int npcCount = (int)(GetPlayersInRadius(1000).Cast<GamePlayer>().Count(p => p.Client.Account.PrivLevel <= 1) / 100.0 * percentageOfPlayersInRadius + 0.5);
                 List<NpcTemplate> validTemplates = templates.Where(t => t != null).ToList();
                 if (npcCount <= 0 || !validTemplates.Any())
                 {
