@@ -401,7 +401,7 @@ namespace DOL.GS.Scripts
 
             NotifyPresence();
             //check area reached
-            var area = followTarget.CurrentRegion.GetAreasOfSpot(Position).OfType<AbstractArea>().FirstOrDefault(a => a.DbArea != null && a.DbArea.ObjectId == AreaToEnter);
+            var area = followTarget.CurrentAreas?.OfType<AbstractArea>().FirstOrDefault(a => a.DbArea != null && a.DbArea.ObjectId == AreaToEnter);
             if (area != null && !WaitingInArea)
             {
                 StopFollowing();

@@ -124,7 +124,7 @@ namespace DOL.GS.Commands
 
                             ISpellHandler spellHandler = ScriptMgr.CreateSpellHandler(client.Player, spell, line);
                             if (spellHandler != null)
-                                spellHandler.StartSpell(target);
+                                spellHandler.StartSpell(target, true);
                         }
                         else
                         {

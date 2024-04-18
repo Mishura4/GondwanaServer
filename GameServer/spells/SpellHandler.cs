@@ -2208,7 +2208,8 @@ namespace DOL.GS.Spells
                     {
                         if (Spell.SpellType.ToLower() != "TurretPBAoE".ToLower() && (target == null || Spell.Range == 0))
                             target = Caster;
-                        if (target == null) return null;
+                        if (target == null)
+                            return null;
                         foreach (GamePlayer player in target.GetPlayersInRadius(modifiedRadius))
                         {
                             if (GameServer.ServerRules.ShouldAOEHitTarget(Spell, Caster, player) || force)

@@ -55,6 +55,7 @@ using DOL.GS.GameEvents;
 using DOL.GS.Realm;
 using DOL.GS.Scripts;
 using log4net;
+using System.Collections.Immutable;
 
 namespace DOL.GS
 {
@@ -14297,7 +14298,7 @@ namespace DOL.GS
             get
             {
                 lock (m_questList)
-                    return m_questList.ToList();
+                    return m_questList.ToImmutableList();
             }
         }
 
@@ -14309,7 +14310,7 @@ namespace DOL.GS
             get
             {
                 lock(m_questListFinished)
-                    return m_questListFinished.ToList();
+                    return m_questListFinished.ToImmutableList();
             }
         }
 
