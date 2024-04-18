@@ -14323,6 +14323,10 @@ namespace DOL.GS
             {
                 m_questListFinished.Add(quest);
             }
+            lock (m_questList)
+            {
+                m_questList.Remove(quest);
+            }
         }
 
         /// <summary>
