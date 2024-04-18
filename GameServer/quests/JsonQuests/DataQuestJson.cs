@@ -204,6 +204,7 @@ namespace DOL.GS.Quests
 
         public DataQuestJson(DBDataQuestJson db)
         {
+            _db = db;
             Id = db.Id;
             Name = db.Name;
             Description = db.Description;
