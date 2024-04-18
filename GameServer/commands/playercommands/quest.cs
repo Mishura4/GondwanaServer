@@ -58,7 +58,7 @@ namespace DOL.GS.Commands
                 // We'll do an easy sloppy chop at 1500 characters (packet limit is 2048)
                 foreach (var quest in client.Player.QuestListFinished)
                 {
-                    message += quest.Quest.Name + LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Quest.QuestCompletedk") + "\n";
+                    message += quest.Quest.Name + LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Quest.QuestCompleted") + "\n";
 
                     if (message.Length > 1500)
                     {
