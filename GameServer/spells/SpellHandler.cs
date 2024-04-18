@@ -2928,6 +2928,21 @@ namespace DOL.GS.Spells
                 }
             }
 
+            // Send the attack before starting the effect to avoid effects proccing off themselves
+            if (!HasPositiveEffect)
+            {
+                AttackData ad = CalculateInitialAttack(target, effectiveness);
+                target.OnAttackedByEnemy(ad);
+
+                m_lastAttackData = ad;
+
+                // Treat non-damaging effects as attacks to trigger an immediate response and BAF
+                if (ad.Damage == 0 && ad.Target is GameNPC { Brain: IOldAggressiveBrain aggroBrain })
+                {
+                    aggroBrain.AddToAggroList(Caster, 1);
+                }
+            }
+
             // Register Effect list Changes
             target.EffectList.BeginChanges();
             try
@@ -2954,20 +2969,6 @@ namespace DOL.GS.Spells
             finally
             {
                 target.EffectList.CommitChanges();
-            }
-
-            if (!HasPositiveEffect)
-            {
-                AttackData ad = CalculateInitialAttack(target, effectiveness);
-                target.OnAttackedByEnemy(ad);
-
-                m_lastAttackData = ad;
-
-                // Treat non-damaging effects as attacks to trigger an immediate response and BAF
-                if (ad.Damage == 0 && ad.Target is GameNPC { Brain: IOldAggressiveBrain aggroBrain })
-                {
-                    aggroBrain.AddToAggroList(Caster, 1);
-                }
             }
         }
 

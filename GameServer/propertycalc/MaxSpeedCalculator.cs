@@ -66,9 +66,10 @@ namespace DOL.GS.PropertyCalc
                 if (horseSpeed > 1.0 && speed > 1.0)
                     speed = 1.0; // cancel any buff
 
-                if (ServerProperties.Properties.ENABLE_PVE_SPEED)
+                if (ServerProperties.Properties.ENABLE_PVE_SPEED &&
+                    !player.InCombat && !player.IsStealthed && !player.CurrentRegion.IsRvR)
                 {
-                    if (speed < 1.25 && speed > 1 && !player.InCombat && !player.IsStealthed && !player.CurrentRegion.IsRvR)
+                    if (speed < 1.25 && speed >= 1)
                         speed = 1.25; // new run speed is 125% when no buff
                 }
 
