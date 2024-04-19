@@ -445,6 +445,19 @@ namespace DOL.GS
                     addsResetTimer.Stop();
                     addsResetTimer = null;
                 }
+                if (loadedAdds != null && Brain is StandardMobBrain myBrain)
+                {
+                    loadedAdds.ForEach(n =>
+                    {
+                        if (n.IsAlive && n.Brain is StandardMobBrain friendBrain)
+                        {
+                            foreach (var aggroEntry in myBrain.AggroTable)
+                            {
+                                friendBrain.AggroTable.TryAdd(aggroEntry.Key, aggroEntry.Value);
+                            }
+                        }
+                    });
+                }
                 if (isAggroType && CanSpawnAdds())
                 {
                     LoadAdds();
@@ -543,7 +556,10 @@ namespace DOL.GS
                                 {
                                     if (n.IsAlive && n.Brain is StandardMobBrain friendBrain)
                                     {
-                                        myBrain.AddAggroListTo(friendBrain);
+                                        foreach (var aggroEntry in myBrain.AggroTable)
+                                        {
+                                            friendBrain.AggroTable.TryAdd(aggroEntry.Key, aggroEntry.Value);
+                                        }
                                     }
                                 });
                             }
@@ -559,7 +575,11 @@ namespace DOL.GS
             if (loadedAdds is { Count: >0 })
             {
                 GameEventMgr.AddHandler(GameEvents.GroupMobEvent.MobGroupDead, OnGroupMobDead);
-                this.Group ??= new Group(this);
+                if (Group == null)
+                {
+                    Group = new Group(this);
+                    Group.AddMember(this);
+                }
                 loadedAdds.ForEach(n =>
                 {
                     Group.AddMember(n);
