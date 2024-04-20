@@ -189,6 +189,7 @@ namespace DOL.Territories
 
             return null;
         }
+
         public void ChangeGuildOwner(Guild guild, Territory territory)
         {
             if (guild == null || territory == null)
@@ -306,30 +307,28 @@ namespace DOL.Territories
 
         public static void ClearEmblem(Territory territory, GameNPC initNpc = null)
         {
-            bool wasBannerSummoned = territory.IsBannerSummoned;
-
             Guild guild = GuildMgr.GetGuildByName(territory.GuildOwner);
             int guildLevel = (int)(guild != null ? guild.GuildLevel : 0);
-            int mobBannerResist = Properties.TERRITORYMOB_BANNER_RESIST + (guildLevel >= 15 ? 15 : 0);
+            int mobBannerResist = territory.CurrentBannerResist;
 
             territory.IsBannerSummoned = false;
             foreach (var mob in territory.Mobs)
             {
                 RestoreOriginalEmblem(mob);
-                if (wasBannerSummoned)
+                if (mobBannerResist > 0)
                 {
                     // Unapply magic and physical resistance bonus
                     Instance.ChangeMagicAndPhysicalResistance(mob, mobBannerResist, true);
                 }
             }
 
-            if (wasBannerSummoned)
+            if (mobBannerResist > 0)
             {
                 Instance.ChangeMagicAndPhysicalResistance(territory.Boss, mobBannerResist, true);
             }
             RestoreOriginalEmblem(territory.Boss);
 
-            var firstMob = initNpc ?? territory.Mobs.FirstOrDefault() ?? territory.Boss;
+            var firstMob = initNpc ?? territory.Mobs.FirstOrDefault(m => m.CurrentZone != null);
             foreach (GameObject item in firstMob.CurrentZone.GetObjectsInRadius(Zone.eGameObjectType.ITEM, firstMob.Position.X, firstMob.Position.Y, firstMob.Position.Z, WorldMgr.VISIBILITY_DISTANCE, new System.Collections.ArrayList(), true))
             {
                 if (item is TerritoryBanner ban)
@@ -537,9 +536,10 @@ namespace DOL.Territories
 
             // Apply magic and physical resistance bonus
             ChangeMagicAndPhysicalResistance(territory.Boss, mobBannerResist, false);
+            territory.CurrentBannerResist = mobBannerResist;
             ApplyNewEmblem(guild.Name, territory.Boss);
 
-            var firstMob = initSearchNPC ?? territory.Mobs.FirstOrDefault();
+            var firstMob = initSearchNPC ?? territory.Mobs.FirstOrDefault(m => m.CurrentZone != null);
             foreach (GameObject item in firstMob.CurrentZone.GetObjectsInRadius(Zone.eGameObjectType.ITEM, firstMob.Position.X, firstMob.Position.Y, firstMob.Position.Z, WorldMgr.VISIBILITY_DISTANCE, new System.Collections.ArrayList(), true))
             {
                 if (item is TerritoryBanner ban)

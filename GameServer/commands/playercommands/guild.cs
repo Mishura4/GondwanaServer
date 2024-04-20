@@ -1780,6 +1780,8 @@ namespace DOL.GS.Commands
                                         }
 
                                         player.Guild.RemoveMeritPoints(Properties.GUILD_BANNER_MERIT_PRICE);
+                                        if (territory.IsBannerSummoned)
+                                            TerritoryManager.ClearEmblem(territory);
                                         TerritoryManager.ApplyEmblemToTerritory(territory, player.Guild, true);
                                         foreach (GamePlayer guildPlayer in player.Guild.GetListOfOnlineMembers())
                                         {

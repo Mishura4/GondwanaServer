@@ -151,6 +151,12 @@ namespace DOL.Territories
             set;
         }
 
+        public int CurrentBannerResist
+        {
+            get;
+            set;
+        }
+
         private void LoadBonus(string raw)
         {
             if (raw != null)
@@ -272,6 +278,18 @@ namespace DOL.Territories
             }
         }
 
+        public void OnGuildLevelUp(Guild guild, long newLevel, long previousLevel)
+        {
+            if (!string.Equals(guild.Name, GuildOwner))
+                return;
+
+            if (IsBannerSummoned && (previousLevel - 15 < 0) != (newLevel - 15 < 0)) // Went above or below 15
+            {
+                TerritoryManager.ClearEmblem(this);
+                TerritoryManager.ApplyEmblemToTerritory(this, guild, true);
+            }
+        }
+
         public void SpawnPortalNpc(GamePlayer spawner)
         {
 
@@ -369,7 +387,6 @@ namespace DOL.Territories
                  string.Join("\n", this.Mobs.Select(m => " * Name: " + m.Name + " |  Id: " + m.InternalID))
             };
         }
-
 
         public virtual void SaveIntoDatabase()
         {

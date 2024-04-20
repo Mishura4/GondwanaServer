@@ -145,6 +145,11 @@ namespace DOL.GS
         protected ushort m_id;
 
         /// <summary>
+        /// Lock for territories
+        /// </summary>
+        private readonly object m_territoryLock = new object();
+
+        /// <summary>
         /// Territories List
         /// </summary>
         private List<Territory> territories;
@@ -200,7 +205,14 @@ namespace DOL.GS
             }
         }
 
-        public IEnumerable<Territory> Territories => this.territories.ToImmutableList();
+        public IEnumerable<Territory> Territories
+        {
+            get
+            {
+                lock (m_territoryLock)
+                    return this.territories.ToImmutableList();
+            }
+        }
 
         public DBRank[] Ranks
         {
@@ -312,24 +324,27 @@ namespace DOL.GS
             if (territory == null)
                 return;
 
-            if (!territories.Contains(territory))
+            lock (m_territoryLock)
             {
-                this.territories.Add(territory);
-
-                if (saveChanges)
+                if (!territories.Contains(territory))
                 {
-                    this.m_DBguild.Territories = string.Join("|", this.territories);
-                    this.SaveIntoDatabase();
-                }
+                    this.territories.Add(territory);
 
-                if (territories.Count < 6)
-                {
-                    UpdateTerritoryResists();
+                    if (saveChanges)
+                    {
+                        this.m_DBguild.Territories = string.Join("|", this.territories.Select(t => t.AreaId));
+                        this.SaveIntoDatabase();
+                    }
+
+                    if (territories.Count < 6)
+                    {
+                        UpdateTerritoryResists();
+                    }
                 }
             }
         }
 
-        public void UpdateTerritoryResists()
+        private void UpdateTerritoryResists()
         {
             this.TerritoryResists.Clear();
 
@@ -352,14 +367,17 @@ namespace DOL.GS
             if (territory == null)
                 return;
 
-            if (this.territories.Remove(territory))
+            lock (m_territoryLock)
             {
-                this.m_DBguild.Territories = this.territories.Any() ? string.Join("|", this.territories.Select(t => t.AreaId)) : null;
-                this.SaveIntoDatabase();
-
-                if (this.territories.Count < 6)
+                if (this.territories.Remove(territory))
                 {
-                    UpdateTerritoryResists();
+                    this.m_DBguild.Territories = this.territories.Any() ? string.Join("|", this.territories.Select(t => t.AreaId)) : null;
+                    this.SaveIntoDatabase();
+
+                    if (this.territories.Count < 6)
+                    {
+                        UpdateTerritoryResists();
+                    }
                 }
             }
         }
@@ -372,12 +390,20 @@ namespace DOL.GS
 
         public bool DoesGuildOwnTerritory(Territory territory)
         {
-            return territory != null && this.territories.Contains(territory);
+            if (territory == null)
+                return false;
+
+            lock (m_territoryLock)
+                return this.territories.Contains(territory);
         }
 
         public bool DoesGuildOwnTerritory(string area)
         {
-            return !String.IsNullOrEmpty(area) && this.territories.Any(t => String.Equals(t.AreaId, area));
+            if (String.IsNullOrEmpty(area))
+                return false;
+
+            lock (m_territoryLock)
+                return this.territories.Any(t => String.Equals(t.AreaId, area));
         }
 
         public void SetGuildDuesMaxPercent(long dues)
@@ -658,6 +684,13 @@ namespace DOL.GS
                 var previousLevel = GuildLevel;
                 this.m_DBguild.RealmPoints = value;
                 var newLevel = GuildLevel;
+                if (newLevel == previousLevel)
+                    return;
+
+                lock (m_territoryLock)
+                {
+                    territories.ForEach(t => t.OnGuildLevelUp(this, newLevel, previousLevel));
+                }
                 if (newLevel > previousLevel)
                 {
                     string newCommands = (newLevel switch
