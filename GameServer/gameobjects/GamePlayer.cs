@@ -49,7 +49,7 @@ using DOL.GS.Spells;
 using DOL.GS.Styles;
 using DOL.GS.Utils;
 using DOL.Language;
-using DOL.Territory;
+using DOL.Territories;
 using DOL.GameEvents;
 using DOL.GS.GameEvents;
 using DOL.GS.Realm;
@@ -8201,7 +8201,7 @@ namespace DOL.GS
             if (mob == null)
                 return !IsInPvP && !IsInRvR;
             string classType = killer.GetType().Name;
-            Territory.Territory territory = TerritoryManager.Instance.GetCurrentTerritory(CurrentAreas);
+            Territories.Territory territory = TerritoryManager.Instance.GetCurrentTerritory(CurrentAreas);
             return classType != "GuardNPC" && classType != "GuardOutlaw" && territory == null && !mob.IsInTerritory && !IsInPvP && !IsInRvR;
         }
 
@@ -8550,7 +8550,7 @@ namespace DOL.GS
                 return;
             //old system
             //var inBL = IsBlacklisted(victim);
-            if (GameServer.ServerRules.IsInPvPArea(this) || Territory.TerritoryManager.Instance.IsTerritoryArea(CurrentAreas))
+            if (GameServer.ServerRules.IsInPvPArea(this) || Territories.TerritoryManager.Instance.IsTerritoryArea(CurrentAreas))
             {
                 return;
             }

@@ -22,7 +22,7 @@ using System.Timers;
 using static DOL.GS.Area;
 using static DOL.GS.GameObject;
 
-namespace DOL.Territory
+namespace DOL.Territories
 {
     public class TerritoryManager
     {
@@ -261,7 +261,7 @@ namespace DOL.Territory
 
                 if (oldOwner != null)
                 {
-                    oldOwner.RemoveTerritory(territory.AreaId);
+                    oldOwner.RemoveTerritory(territory);
                 }
             }
 
@@ -480,13 +480,13 @@ namespace DOL.Territory
 
                 if (oldGuild != null)
                 {
-                    oldGuild.RemoveTerritory(territory.AreaId);
+                    oldGuild.RemoveTerritory(territory);
                 }
                 ClearEmblem(territory);
                 territory.ClearPortal();
             }
 
-            guild.AddTerritory(territory.AreaId, saveChange);
+            guild.AddTerritory(territory, saveChange);
             territory.GuildOwner = guild.Name;
 
             territory.Mobs.ForEach(m => m.GuildName = guild.Name);

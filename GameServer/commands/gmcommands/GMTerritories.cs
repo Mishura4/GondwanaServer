@@ -5,7 +5,7 @@ using DOL.GS;
 using DOL.GS.Commands;
 using DOL.GS.PacketHandler;
 using DOL.MobGroups;
-using DOL.Territory;
+using DOL.Territories;
 using DOLDatabase.Tables;
 using System;
 using System.Collections.Generic;
@@ -31,7 +31,7 @@ namespace DOL.commands.gmcommands
     {
         public void OnCommand(GameClient client, string[] args)
         {
-            Territory.Territory territory = null;
+            Territories.Territory territory = null;
 
             if (args.Length < 2)
             {
@@ -220,8 +220,8 @@ namespace DOL.commands.gmcommands
 
                             if (guild != null)
                             {
-                                guild.RemoveTerritory(territory.AreaId);
-                                guild.AddTerritory(territory.AreaId, true);
+                                guild.RemoveTerritory(territory);
+                                guild.AddTerritory(territory, true);
                             }
                         }
 
@@ -245,8 +245,8 @@ namespace DOL.commands.gmcommands
 
                                 if (guild != null)
                                 {
-                                    guild.RemoveTerritory(territory.AreaId);
-                                    guild.AddTerritory(territory.AreaId, true);
+                                    guild.RemoveTerritory(territory);
+                                    guild.AddTerritory(territory, true);
                                 }
                             }
 

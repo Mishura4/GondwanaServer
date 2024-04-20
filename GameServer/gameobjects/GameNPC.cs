@@ -43,7 +43,7 @@ using System.Threading.Tasks;
 using System.Numerics;
 using DOL.GameEvents;
 using DOL.MobGroups;
-using DOL.Territory;
+using DOL.Territories;
 using static DOL.GS.ScriptMgr;
 using DOL.GS.Finance;
 using DOLDatabase.Tables;
@@ -4380,7 +4380,7 @@ namespace DOL.GS
         {
             if (source is GameLiving living)
             {
-                Territory.Territory currentTerritory = TerritoryManager.Instance.GetCurrentTerritory(living.CurrentAreas);
+                Territories.Territory currentTerritory = TerritoryManager.Instance.GetCurrentTerritory(living.CurrentAreas);
                 if (currentTerritory != null && currentTerritory.GuildOwner == GuildName && ((living is GamePlayer player && player.GuildName != GuildName) || (living.ControlledBrain != null && living.ControlledBrain.Owner.GuildName != GuildName)))
                     TerritoryManager.Instance.TerritoryAttacked(currentTerritory);
 

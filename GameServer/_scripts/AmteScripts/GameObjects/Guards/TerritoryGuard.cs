@@ -4,7 +4,7 @@ using DOL.Events;
 using DOL.GS;
 using DOL.GS.PacketHandler;
 using DOL.Language;
-using DOL.Territory;
+using DOL.Territories;
 using System;
 using System.Collections.Generic;
 using System.Linq;

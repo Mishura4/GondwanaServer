@@ -340,7 +340,7 @@ namespace DOL.GS.Spells
             var targetPlayer = target as GamePlayer;
             if (Caster is GamePlayer && targetPlayer != null && m_spell.SpellType.ToLowerInvariant().Equals("mesmerize"))
             {
-                if (!(targetPlayer.isInBG || targetPlayer.CurrentRegion.IsRvR || targetPlayer.IsInPvP || Territory.TerritoryManager.Instance.IsTerritoryArea(targetPlayer.CurrentAreas)))
+                if (!(targetPlayer.isInBG || targetPlayer.CurrentRegion.IsRvR || targetPlayer.IsInPvP || Territories.TerritoryManager.Instance.IsTerritoryArea(targetPlayer.CurrentAreas)))
                 {
                     targetPlayer.TempProperties.setProperty(GamePlayer.PLAYER_MEZZED_BY_OTHER_PLAYER_ID, Caster.InternalID);
                 }

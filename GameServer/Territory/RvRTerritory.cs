@@ -7,7 +7,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DOL.Territory
+namespace DOL.Territories
 {
     public class RvRTerritory
         : Territory

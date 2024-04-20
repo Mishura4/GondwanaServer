@@ -690,7 +690,7 @@ namespace DOL.GS
         /// <param name="sender"></param>
         private static void DayReset(object sender)
         {
-            Territory.TerritoryManager.Instance.ProceedPayments();
+            Territories.TerritoryManager.Instance.ProceedPayments();
             m_dayStartTick = GameTimer.GetTickCount();
             foreach (GameClient client in GetAllPlayingClients())
             {

@@ -366,7 +366,7 @@ namespace DOL.GS.ServerRules
                 }
 
                 //Forbids attack on territory
-                var ownsTerritory = Territory.TerritoryManager.Instance.DoesPlayerOwnsTerritory(playerAttacker);
+                var ownsTerritory = Territories.TerritoryManager.Instance.DoesPlayerOwnsTerritory(playerAttacker);
                 if (ownsTerritory)
                 {
                     return false;

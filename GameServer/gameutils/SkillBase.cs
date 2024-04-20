@@ -30,7 +30,7 @@ using DOL.GS.RealmAbilities;
 using DOL.GS.Styles;
 using DOL.Language;
 using log4net;
-using DOL.Territory;
+using DOL.Territories;
 
 namespace DOL.GS
 {

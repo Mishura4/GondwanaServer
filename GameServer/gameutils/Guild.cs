@@ -28,8 +28,9 @@ using System.Linq;
 using DOL.GS.Housing;
 using DOL.GS.PacketHandler;
 using DOL.GS.ServerProperties;
-using DOL.Territory;
+using DOL.Territories;
 using DOL.GS.Finance;
+using System.Collections.Immutable;
 using System.Timers;
 using System.Numerics;
 
@@ -144,9 +145,9 @@ namespace DOL.GS
         protected ushort m_id;
 
         /// <summary>
-        /// Territories List containing Area Ids
+        /// Territories List
         /// </summary>
-        private List<string> territories;
+        private List<Territory> territories;
 
         /// <summary>
         /// Territory Resists based on owned Territories
@@ -199,7 +200,7 @@ namespace DOL.GS
             }
         }
 
-        public IEnumerable<string> Territories => this.territories.ToList();
+        public IEnumerable<Territory> Territories => this.territories.ToImmutableList();
 
         public DBRank[] Ranks
         {
@@ -306,89 +307,77 @@ namespace DOL.GS
             m_DBguild.Dues = dues;
         }
 
-        public void AddTerritory(string area, bool saveChanges)
+        public void AddTerritory(Territory territory, bool saveChanges)
         {
-            if (!territories.Contains(area))
+            if (territory == null)
+                return;
+
+            if (!territories.Contains(territory))
             {
-                this.territories.Add(area);
+                this.territories.Add(territory);
+
                 if (saveChanges)
                 {
                     this.m_DBguild.Territories = string.Join("|", this.territories);
                     this.SaveIntoDatabase();
                 }
-            }
 
-            var territory = TerritoryManager.Instance.Territories.FirstOrDefault(t => t.AreaId.Equals(area));
-
-            if (territory != null)
-            {
                 if (territories.Count < 6)
                 {
-                    AddResistsFromTerritory(territory);
+                    UpdateTerritoryResists();
                 }
             }
         }
 
-        private void AddResistsFromTerritory(Territory.Territory territory)
+        public void UpdateTerritoryResists()
         {
-            foreach (var resist in territory.Bonus)
+            this.TerritoryResists.Clear();
+
+            foreach (Territory t in territories)
             {
-                if (this.TerritoryResists.ContainsKey(resist))
+                foreach (var resist in t.Bonus)
                 {
-                    this.TerritoryResists[resist] += 1;
-                }
-                else
-                {
-                    this.TerritoryResists.Add(resist, 1);
+                    if (!this.TerritoryResists.TryAdd(resist, 1))
+                    {
+                        this.TerritoryResists[resist] += 1;
+                    }
                 }
             }
 
             this.m_onlineGuildPlayers.Values.Foreach(p => p.Out.SendCharResistsUpdate());
         }
 
-        public void RemoveTerritory(string area)
+        public void RemoveTerritory(Territory territory)
         {
-            if (territories.Contains(area))
+            if (territory == null)
+                return;
+
+            if (this.territories.Remove(territory))
             {
-                this.territories.Remove(area);
-                this.m_DBguild.Territories = this.territories.Any() ? string.Join("|", this.territories) : null;
+                this.m_DBguild.Territories = this.territories.Any() ? string.Join("|", this.territories.Select(t => t.AreaId)) : null;
                 this.SaveIntoDatabase();
 
-                var territory = TerritoryManager.Instance.Territories.FirstOrDefault(t => t.AreaId.Equals(area));
-
-                if (territory != null)
+                if (this.territories.Count < 6)
                 {
-                    foreach (var resist in territory.Bonus)
-                    {
-                        if (TerritoryResists.ContainsKey(resist))
-                        {
-                            TerritoryResists.Remove(resist);
-                        }
-                    }
-
-                    this.m_onlineGuildPlayers.Values.Foreach(p => p.Out.SendCharResistsUpdate());
+                    UpdateTerritoryResists();
                 }
             }
         }
 
         public int GetResistFromTerritories(eResist resist)
         {
-            if (this.TerritoryResists.ContainsKey(resist))
-            {
-                return this.TerritoryResists[resist];
-            }
+            return this.TerritoryResists.GetValueOrDefault(resist, 0);
 
-            return 0;
+        }
+
+        public bool DoesGuildOwnTerritory(Territory territory)
+        {
+            return territory != null && this.territories.Contains(territory);
         }
 
         public bool DoesGuildOwnTerritory(string area)
         {
-            if (area == null)
-            {
-                return false;
-            }
-
-            return this.territories.Contains(area);
+            return !String.IsNullOrEmpty(area) && this.territories.Any(t => String.Equals(t.AreaId, area));
         }
 
         public void SetGuildDuesMaxPercent(long dues)
@@ -402,8 +391,9 @@ namespace DOL.GS
                 this.m_DBguild.DuesPercent = 0;
             }
         }
+
         /// <summary>
-        /// Set guild bank command 
+        /// Set guild bank command
         /// </summary>
         /// <param name="donating"></param>
         /// <param name="amount"></param>
@@ -467,6 +457,7 @@ namespace DOL.GS
             player.Guild.SaveIntoDatabase();
             return;
         }
+
         /// <summary>
         /// Creates an empty Guild. Don't use this, use
         /// GuildMgr.CreateGuild() to create a guild
@@ -475,7 +466,7 @@ namespace DOL.GS
         {
             this.m_DBguild = dbGuild;
             bannerStatus = "None";
-            this.territories = new List<string>();
+            this.territories = new List<Territory>();
             this.TerritoryResists = new Dictionary<eResist, int>();
         }
 

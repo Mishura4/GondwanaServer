@@ -11,7 +11,7 @@ using DOL.GS;
 using DOL.GS.PacketHandler;
 using DOL.GS.ServerProperties;
 using DOL.Language;
-using DOL.Territory;
+using DOL.Territories;
 using DOL.GS.Keeps;
 using log4net;
 

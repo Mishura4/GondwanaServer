@@ -9,7 +9,7 @@ using DOL.GS.Quests;
 using DOL.GS.Scripts;
 using log4net;
 using DOL.GS.Spells;
-using DOL.Territory;
+using DOL.Territories;
 using System.Numerics;
 
 namespace DOL.GS
@@ -20,19 +20,19 @@ namespace DOL.GS
 
         public Guild OwningGuild { get; init; }
 
-        public Territory.Territory LinkedTerritory { get; init; }
+        public Territories.Territory LinkedTerritory { get; init; }
 
         private readonly object m_coordinatesLockObject = new();
 
         private Dictionary<GamePlayer, SavedCoordinates> m_savedCoordinates = new();
 
-        private GuildPortalNPC(Territory.Territory territory, GamePlayer spawner) : base()
+        private GuildPortalNPC(Territories.Territory territory, GamePlayer spawner) : base()
         {
             OwningGuild = spawner.Guild;
             LinkedTerritory = territory;
         }
 
-        public static GuildPortalNPC Create(Territory.Territory territory, GamePlayer spawner)
+        public static GuildPortalNPC Create(Territories.Territory territory, GamePlayer spawner)
         {
             GuildPortalNPC portalNpc = new GuildPortalNPC(territory, spawner);
             portalNpc.LoadedFromScript = true;

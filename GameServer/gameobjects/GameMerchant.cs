@@ -27,7 +27,7 @@ using DOL.Language;
 using DOL.GS.PacketHandler;
 using DOL.Events;
 using DOL.GS.Quests;
-using DOL.Territory;
+using DOL.Territories;
 using DOL.GS.Finance;
 using DOL.GS.Profession;
 
@@ -428,7 +428,7 @@ namespace DOL.GS
 
             if (IsInTerritory)
             {
-                Territory.Territory territory = TerritoryManager.Instance.GetCurrentTerritory(CurrentAreas);
+                Territories.Territory territory = TerritoryManager.Instance.GetCurrentTerritory(CurrentAreas);
                 if (!string.IsNullOrEmpty(territory.GuildOwner) && player.GuildName != territory.GuildOwner)
                 {
                     player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameMerchant.Interact.Territory.NotSameGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);

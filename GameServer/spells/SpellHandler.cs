@@ -4126,7 +4126,7 @@ namespace DOL.GS.Spells
                 else if (Caster is GamePlayer player)
                 {
                     //Check if is Territory and owns it to cancel dmg
-                    bool doesPlayerOwnsTerritory = Territory.TerritoryManager.Instance.DoesPlayerOwnsTerritory(player);
+                    bool doesPlayerOwnsTerritory = Territories.TerritoryManager.Instance.DoesPlayerOwnsTerritory(player);
 
                     if (doesPlayerOwnsTerritory)
                     {

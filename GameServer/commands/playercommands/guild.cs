@@ -27,7 +27,7 @@ using DOL.GS.Keeps;
 using DOL.GS.PacketHandler;
 using DOL.GS.ServerProperties;
 using DOL.Language;
-using DOL.Territory;
+using DOL.Territories;
 using DOL.GS.Finance;
 using DOL.GS.Scripts;
 using System.Numerics;

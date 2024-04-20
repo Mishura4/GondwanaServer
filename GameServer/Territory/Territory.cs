@@ -15,7 +15,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static DOL.GS.Area;
 
-namespace DOL.Territory
+namespace DOL.Territories
 {
     public class Territory
     {
