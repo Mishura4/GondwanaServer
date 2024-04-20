@@ -47,7 +47,10 @@ namespace DOL.GS.PropertyCalc
             }
             int buff = CalcValueFromBuffs(living, property);
             int item = CalcValueFromItems(living, property);
-            return Math.Max(0, 100 + (buff + item) - debuff);
+            int value = Math.Max(0, 100 + (buff + item) - debuff);
+            if (value > 0 && living is GamePlayer { Guild: { TerritorySpellRangeBonus: > 0 } guild })
+                value += guild.TerritorySpellRangeBonus;
+            return value;
         }
 
         public override int CalcValueFromBuffs(GameLiving living, eProperty property)

@@ -160,6 +160,51 @@ namespace DOL.GS
         private Dictionary<eResist, int> TerritoryResists;
 
         /// <summary>
+        /// Melee damage % reduced based on owned Territories
+        /// </summary>
+        public int TerritoryMeleeAbsorption
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// Spell direct damage % reduced based on owned Territories
+        /// </summary>
+        public int TerritorySpellAbsorption
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// DoT damage % reduced based on owned Territories
+        /// </summary>
+        public int TerritoryDotAbsorption
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// Debuff duration % reduced based on owned Territories
+        /// </summary>
+        public int TerritoryDebuffDurationReduction
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// Spell range % increased based on owned Territories
+        /// </summary>
+        public int TerritorySpellRangeBonus
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
         /// Stores claimed keeps (unique)
         /// </summary>
         protected List<AbstractGameKeep> m_claimedKeeps = new List<AbstractGameKeep>();
@@ -347,16 +392,30 @@ namespace DOL.GS
         private void UpdateTerritoryResists()
         {
             this.TerritoryResists.Clear();
-
+            this.TerritoryMeleeAbsorption = 0;
+            this.TerritorySpellAbsorption = 0;
+            this.TerritoryDotAbsorption = 0;
+            this.TerritoryDebuffDurationReduction = 0;
+            this.TerritorySpellRangeBonus = 0;
             foreach (Territory t in territories)
             {
-                foreach (var resist in t.Bonus)
+                foreach (var resist in t.BonusResist)
                 {
                     if (!this.TerritoryResists.TryAdd(resist, 1))
                     {
                         this.TerritoryResists[resist] += 1;
                     }
                 }
+                if (t.BonusMeleeAbsorption)
+                    this.TerritoryMeleeAbsorption += 1;
+                if (t.BonusSpellAbsorption)
+                    this.TerritorySpellAbsorption += 1;
+                if (t.BonusDoTAbsorption)
+                    this.TerritoryDotAbsorption += 1;
+                if (t.BonusReducedDebuffDuration)
+                    this.TerritoryDebuffDurationReduction += 1;
+                if (t.BonusSpellRange)
+                    this.TerritorySpellRangeBonus += 1;
             }
 
             this.m_onlineGuildPlayers.Values.Foreach(p => p.Out.SendCharResistsUpdate());

@@ -37,7 +37,7 @@ namespace DOL.Territories
             this.Coordinates = TerritoryManager.GetCoordinates(area);
             this.Radius = this.GetRadius();
             this.OriginalGuilds = new Dictionary<string, string>();
-            this.Bonus = new List<eResist>();
+            this.BonusResist = new List<eResist>();
             this.Mobs = this.GetMobsInTerritory();
             this.SetBossAndMobsInEventInTerritory();
             this.SaveOriginalGuilds();
@@ -54,9 +54,39 @@ namespace DOL.Territories
             get;
         }
 
-        public List<eResist> Bonus
+        public List<eResist> BonusResist
         {
             get;
+        }
+
+        public bool BonusMeleeAbsorption
+        {
+            get;
+            set;
+        }
+
+        public bool BonusSpellAbsorption
+        {
+            get;
+            set;
+        }
+
+        public bool BonusDoTAbsorption
+        {
+            get;
+            set;
+        }
+
+        public bool BonusReducedDebuffDuration
+        {
+            get;
+            set;
+        }
+
+        public bool BonusSpellRange
+        {
+            get;
+            set;
         }
 
         public string AreaId
@@ -161,11 +191,32 @@ namespace DOL.Territories
         {
             if (raw != null)
             {
-                foreach (var item in raw.Split(new char[] { '|' }))
+                foreach (var item in raw.Split('|'))
                 {
                     if (Enum.TryParse(item, out eResist resist))
                     {
-                        this.Bonus.Add(resist);
+                        this.BonusResist.Add(resist);
+                    } else switch (item)
+                    {
+                        case "melee":
+                            BonusMeleeAbsorption = true;
+                            break;
+
+                        case "spell":
+                            BonusSpellAbsorption = true;
+                            break;
+
+                        case "dot":
+                            BonusDoTAbsorption = true;
+                            break;
+
+                        case "debuffduration":
+                            BonusReducedDebuffDuration = true;
+                            break;
+
+                        case "spellrange":
+                            BonusSpellRange = true;
+                            break;
                     }
                 }
             }
@@ -173,7 +224,20 @@ namespace DOL.Territories
 
         private string SaveBonus()
         {
-            return !this.Bonus.Any() ? null : string.Join("|", this.Bonus.Select(b => (byte)b));
+            List<string> resists = this.BonusResist.Select(b => ((byte)b).ToString()).ToList();
+
+            if (BonusMeleeAbsorption)
+                resists.Add("melee");
+            if (BonusSpellAbsorption)
+                resists.Add("spell");
+            if (BonusDoTAbsorption)
+                resists.Add("dot");
+            if (BonusReducedDebuffDuration)
+                resists.Add("debuffduration");
+            if (BonusSpellRange)
+                resists.Add("spellrange");
+
+            return resists.Count > 0 ? string.Join('|', resists) : null;
         }
 
         private void SetBossAndMobsInEventInTerritory()
@@ -370,6 +434,18 @@ namespace DOL.Territories
         /// <returns></returns>
         public IList<string> GetInformations()
         {
+            List<string> bonuses = this.BonusResist.Select(b => b.ToString()).ToList();
+
+            if (this.BonusMeleeAbsorption)
+                bonuses.Add("Melee");
+            if (this.BonusSpellAbsorption)
+                bonuses.Add("Spell");
+            if (this.BonusDoTAbsorption)
+                bonuses.Add("DoT");
+            if (this.BonusReducedDebuffDuration)
+                bonuses.Add("DebuffDuration");
+            if (this.BonusSpellRange)
+                bonuses.Add("SpellRange");
             return new string[]
             {
                 " Area Id: " + this.AreaId,
@@ -379,7 +455,7 @@ namespace DOL.Territories
                 " Region: " + this.RegionId,
                 " Zone: " + this.ZoneId,
                 " Guild Owner: " + (this.GuildOwner ?? "None"),
-                " Bonus: " + (this.Bonus?.Any() == true ? (string.Join(" | ", this.Bonus.Select(b => b.ToString()))) : "-"),
+                " Bonus: " + (bonuses.Any() ? string.Join(" | ", bonuses) : "-"),
                 "",
                 " Mobs -- Count( " + this.Mobs.Count() + " )",
                 " Is Banner Summoned: " + this.IsBannerSummoned,

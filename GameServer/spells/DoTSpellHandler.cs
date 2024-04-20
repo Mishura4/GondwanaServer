@@ -153,7 +153,7 @@ namespace DOL.GS.Spells
         protected override GameSpellEffect CreateSpellEffect(GameLiving target, double effectiveness)
         {
             // damage is not reduced with distance
-            return new GameSpellEffect(this, m_spell.Duration, m_spell.Frequency, effectiveness);
+            return new GameSpellEffect(this, CalculateEffectDuration(target, effectiveness), m_spell.Frequency, effectiveness);
         }
 
         public override void OnEffectStart(GameSpellEffect effect)

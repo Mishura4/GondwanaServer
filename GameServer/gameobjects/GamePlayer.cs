@@ -7463,7 +7463,6 @@ namespace DOL.GS
 
         public override void TakeDamage(GameObject source, eDamageType damageType, int damageAmount, int criticalAmount)
         {
-
             #region PVP DAMAGE
 
             if (source is GamePlayer || (source is GameNPC && (source as GameNPC).Brain is IControlledBrain && ((source as GameNPC).Brain as IControlledBrain).GetPlayerOwner() != null))
@@ -7478,6 +7477,47 @@ namespace DOL.GS
             if (this.HasAbility(Abilities.DefensiveCombatPowerRegeneration))
             {
                 this.Mana += (int)((damageAmount + criticalAmount) * 0.25);
+            }
+        }
+
+        /// <inheritdoc />
+        public override void ModifyAttack(AttackData attackData)
+        {
+            base.ModifyAttack(attackData);
+
+            if (attackData.AttackResult is eAttackResult.HitStyle or eAttackResult.HitUnstyled && Guild != null)
+            {
+                switch (attackData.AttackType)
+                {
+                    case AttackData.eAttackType.MeleeOneHand:
+                    case AttackData.eAttackType.MeleeDualWield:
+                    case AttackData.eAttackType.MeleeTwoHand:
+                        if (Guild.TerritoryMeleeAbsorption > 0)
+                        {
+                            double absorption = Guild.TerritoryMeleeAbsorption;
+                            attackData.Damage = (int)((double)attackData.Damage * (1 - absorption / 100) + 0.5);
+                            attackData.CriticalDamage = (int)((double)attackData.CriticalDamage * (1 - absorption / 100) + 0.5);
+                        }
+                        break;
+
+                    case AttackData.eAttackType.Spell:
+                        if (Guild.TerritorySpellAbsorption > 0)
+                        {
+                            double absorption = Guild.TerritorySpellAbsorption;
+                            attackData.Damage = (int)((double)attackData.Damage * (1 - absorption / 100) + 0.5);
+                            attackData.CriticalDamage = (int)((double)attackData.CriticalDamage * (1 - absorption / 100) + 0.5);
+                        }
+                        break;
+
+                    case AttackData.eAttackType.DoT:
+                        if (Guild.TerritoryDotAbsorption > 0)
+                        {
+                            double absorption = Guild.TerritoryDotAbsorption;
+                            attackData.Damage = (int)((double)attackData.Damage * (1 - absorption / 100) + 0.5);
+                            attackData.CriticalDamage = (int)((double)attackData.CriticalDamage * (1 - absorption / 100) + 0.5);
+                        }
+                        break;
+                }
             }
         }
 

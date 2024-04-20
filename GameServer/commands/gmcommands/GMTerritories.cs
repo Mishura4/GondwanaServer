@@ -194,10 +194,11 @@ namespace DOL.commands.gmcommands
                     }
 
                     string action = args[2].ToLowerInvariant();
-                    var bonus = this.GetResist(args[3].ToLowerInvariant());
+                    var arg3 = args[3].ToLowerInvariant();
+                    var bonus = this.GetResist(arg3);
                     areaId = args[4];
 
-                    if (string.IsNullOrEmpty(areaId) || !bonus.HasValue)
+                    if (string.IsNullOrEmpty(areaId))
                     {
                         DisplaySyntax(client);
                         break;
@@ -213,7 +214,35 @@ namespace DOL.commands.gmcommands
 
                     if (action == "add")
                     {
-                        territory.Bonus.Add(bonus.Value);
+                        if (bonus != null)
+                            territory.BonusResist.Add(bonus.Value);
+                        else switch (arg3)
+                        {
+                            case "melee":
+                                territory.BonusMeleeAbsorption = true;
+                                break;
+
+                            case "spell":
+                                territory.BonusSpellAbsorption = true;
+                                break;
+
+                            case "dot":
+                                territory.BonusDoTAbsorption = true;
+                                break;
+
+                            case "debuffduration":
+                                territory.BonusReducedDebuffDuration = true;
+                                break;
+
+                            case "spellrange":
+                                territory.BonusSpellRange = true;
+                                break;
+
+                            default:
+                                DisplaySyntax(client);
+                                return;
+                        }
+
                         if (territory.GuildOwner != null)
                         {
                             var guild = GuildMgr.GetGuildByName(territory.GuildOwner);
@@ -227,33 +256,65 @@ namespace DOL.commands.gmcommands
 
                         territory.SaveIntoDatabase();
 
-                        client.Out.SendMessage("Le Territoire avec AreaId " + areaId + " a désormais un bonus suppmémentaire de " + bonus.Value.ToString(), eChatType.CT_System, eChatLoc.CL_ChatWindow);
+                        client.Out.SendMessage("Le Territoire avec AreaId " + areaId + " a désormais un bonus supplémentaire de " + (bonus?.ToString() ?? arg3), eChatType.CT_System, eChatLoc.CL_ChatWindow);
                         break;
                     }
                     else if (action == "remove")
                     {
                         int index;
-                        index = territory.Bonus.FindIndex(b => b == bonus.Value);
 
-                        if (index != -1)
+                        if (bonus != null)
                         {
-                            territory.Bonus.RemoveAt(index);
+                            index = territory.BonusResist.FindIndex(b => b == bonus.Value);
 
-                            if (territory.GuildOwner != null)
+                            if (index != -1)
                             {
-                                var guild = GuildMgr.GetGuildByName(territory.GuildOwner);
-
-                                if (guild != null)
-                                {
-                                    guild.RemoveTerritory(territory);
-                                    guild.AddTerritory(territory, true);
-                                }
+                                territory.BonusResist.RemoveAt(index);
                             }
-
-                            territory.SaveIntoDatabase();
-
-                            client.Out.SendMessage("Le bonus de " + bonus.Value.ToString() + " a été retiré de Territoire avec AreaId " + areaId, eChatType.CT_System, eChatLoc.CL_ChatWindow);
+                            else
+                                return;
                         }
+                        else switch (arg3)
+                        {
+                            case "melee":
+                                territory.BonusMeleeAbsorption = false;
+                                break;
+
+                            case "spell":
+                                territory.BonusSpellAbsorption = false;
+                                break;
+
+                            case "dot":
+                                territory.BonusDoTAbsorption = false;
+                                break;
+
+                            case "debuffduration":
+                                territory.BonusReducedDebuffDuration = false;
+                                break;
+
+                            case "spellrange":
+                                territory.BonusSpellRange = false;
+                                break;
+
+                            default:
+                                DisplaySyntax(client);
+                                return;
+                        }
+
+                        if (territory.GuildOwner != null)
+                        {
+                            var guild = GuildMgr.GetGuildByName(territory.GuildOwner);
+
+                            if (guild != null)
+                            {
+                                guild.RemoveTerritory(territory);
+                                guild.AddTerritory(territory, true);
+                            }
+                        }
+
+                        territory.SaveIntoDatabase();
+
+                        client.Out.SendMessage("Le bonus de " + (bonus?.ToString() ?? arg3) + " a été retiré de Territoire avec AreaId " + areaId, eChatType.CT_System, eChatLoc.CL_ChatWindow);
                     }
 
                     break;

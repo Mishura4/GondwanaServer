@@ -2656,6 +2656,10 @@ namespace DOL.GS.Spells
                     duration *= instrument.Condition / (double)instrument.MaxCondition * instrument.Quality / 100;
                 }
             }
+            if (!HasPositiveEffect && target is GamePlayer { Guild: { TerritoryDebuffDurationReduction: > 0 } guild } && this is not (AbstractCCSpellHandler or StyleSpeedDecrease or StyleBleeding or StyleCombatSpeedDebuff or DamageShieldSpellHandler or SlowSpellHandler or UnbreakableSpeedDecreaseSpellHandler))
+            {
+                duration = (duration * (100 - guild.TerritoryDebuffDurationReduction)) / 100;
+            }
 
             duration *= effectiveness;
             if (duration < 1)
