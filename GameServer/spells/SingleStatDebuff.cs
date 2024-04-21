@@ -77,6 +77,14 @@ namespace DOL.GS.Spells
                 duration = 1;
             else if (duration > (Spell.Duration * 4))
                 duration = (Spell.Duration * 4);
+
+
+            if (target is GamePlayer { Guild: not null } targetPlayer)
+            {
+                int guildReduction = targetPlayer.Guild.GetDebuffDurationReduction(this);
+                if (guildReduction != 0)
+                    duration = (duration * (100 - Math.Min(100, guildReduction))) / 100;
+            }
             return (int)duration;
         }
 

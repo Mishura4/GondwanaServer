@@ -7492,29 +7492,38 @@ namespace DOL.GS
                     case AttackData.eAttackType.MeleeOneHand:
                     case AttackData.eAttackType.MeleeDualWield:
                     case AttackData.eAttackType.MeleeTwoHand:
-                        if (Guild.TerritoryMeleeAbsorption > 0)
+                        if (Guild.TerritoryMeleeAbsorption != 0)
                         {
                             double absorption = Math.Min(100, Guild.TerritoryMeleeAbsorption);
-                            attackData.Damage = (int)((double)attackData.Damage * (1 - absorption / 100) + 0.5);
-                            attackData.CriticalDamage = (int)((double)attackData.CriticalDamage * (1 - absorption / 100) + 0.5);
+                            int absorbedDamage = (int)((double)attackData.Damage * (absorption / 100) + 0.5);
+                            int absorbedCrit = (int)((double)attackData.CriticalDamage * (absorption / 100) + 0.5);
+                            attackData.Damage -= absorbedDamage;
+                            attackData.CriticalDamage -= absorbedCrit;
+                            attackData.Modifier -= absorbedDamage + absorbedCrit;
                         }
                         break;
 
                     case AttackData.eAttackType.Spell:
-                        if (Guild.TerritorySpellAbsorption > 0)
+                        if (Guild.TerritorySpellAbsorption != 0)
                         {
                             double absorption = Math.Min(100, Guild.TerritorySpellAbsorption);
-                            attackData.Damage = (int)((double)attackData.Damage * (1 - absorption / 100) + 0.5);
-                            attackData.CriticalDamage = (int)((double)attackData.CriticalDamage * (1 - absorption / 100) + 0.5);
+                            int absorbedDamage = (int)((double)attackData.Damage * (absorption / 100) + 0.5);
+                            int absorbedCrit = (int)((double)attackData.CriticalDamage * (absorption / 100) + 0.5);
+                            attackData.Damage -= absorbedDamage;
+                            attackData.CriticalDamage -= absorbedCrit;
+                            attackData.Modifier -= absorbedDamage + absorbedCrit;
                         }
                         break;
 
                     case AttackData.eAttackType.DoT:
-                        if (Guild.TerritoryDotAbsorption > 0)
+                        if (Guild.TerritoryDotAbsorption != 0)
                         {
                             double absorption = Math.Min(100, Guild.TerritoryDotAbsorption);
-                            attackData.Damage = (int)((double)attackData.Damage * (1 - absorption / 100) + 0.5);
-                            attackData.CriticalDamage = (int)((double)attackData.CriticalDamage * (1 - absorption / 100) + 0.5);
+                            int absorbedDamage = (int)((double)attackData.Damage * (absorption / 100) + 0.5);
+                            int absorbedCrit = (int)((double)attackData.CriticalDamage * (absorption / 100) + 0.5);
+                            attackData.Damage -= absorbedDamage;
+                            attackData.CriticalDamage -= absorbedCrit;
+                            attackData.Modifier -= absorbedDamage + absorbedCrit;
                         }
                         break;
                 }

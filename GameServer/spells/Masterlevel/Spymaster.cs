@@ -269,7 +269,15 @@ namespace DOL.GS.Spells
         public override int CalculateSpellResistChance(GameLiving target) { return 0; }
         protected override GameSpellEffect CreateSpellEffect(GameLiving target, double effectiveness)
         {
-            return new GameSpellEffect(this, m_spell.Duration, m_spellLine.IsBaseLine ? 5000 : 4000, effectiveness);
+            int duration = m_spell.Duration;
+
+            if (target is GamePlayer { Guild: not null } targetPlayer)
+            {
+                int guildReduction = targetPlayer.Guild.GetDebuffDurationReduction(this);
+                if (guildReduction != 0)
+                    duration = (int)((double)duration * (100 - Math.Min(100, guildReduction))) / 100;
+            }
+            return new GameSpellEffect(this, duration, m_spellLine.IsBaseLine ? 5000 : 4000, effectiveness);
         }
     }
     #endregion

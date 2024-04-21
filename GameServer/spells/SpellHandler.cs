@@ -2656,9 +2656,12 @@ namespace DOL.GS.Spells
                     duration *= instrument.Condition / (double)instrument.MaxCondition * instrument.Quality / 100;
                 }
             }
-            if (!HasPositiveEffect && target is GamePlayer { Guild: { TerritoryDebuffDurationReduction: > 0 } guild } && this is not (AbstractCCSpellHandler or StyleSpeedDecrease or StyleBleeding or StyleCombatSpeedDebuff or DamageShieldSpellHandler or SlowSpellHandler or UnbreakableSpeedDecreaseSpellHandler))
+
+            if (target is GamePlayer { Guild: not null } targetPlayer)
             {
-                duration = (duration * (100 - Math.Min(100, guild.TerritoryDebuffDurationReduction))) / 100;
+                int guildReduction = targetPlayer.Guild.GetDebuffDurationReduction(this);
+                if (guildReduction != 0)
+                    duration = (duration * (100 - Math.Min(100, guildReduction))) / 100;
             }
 
             duration *= effectiveness;

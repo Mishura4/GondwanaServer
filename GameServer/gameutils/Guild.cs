@@ -30,6 +30,7 @@ using DOL.GS.PacketHandler;
 using DOL.GS.ServerProperties;
 using DOL.Territories;
 using DOL.GS.Finance;
+using DOL.GS.Spells;
 using System.Collections.Immutable;
 using System.Timers;
 using System.Numerics;
@@ -414,6 +415,17 @@ namespace DOL.GS
             }
 
             this.m_onlineGuildPlayers.Values.Foreach(p => p.Out.SendCharResistsUpdate());
+        }
+
+        public int GetDebuffDurationReduction(ISpellHandler handler)
+        {
+            if (handler.HasPositiveEffect || this.TerritoryDebuffDurationReduction == 0)
+                return 0;
+
+            if (handler is AbstractCCSpellHandler or StyleSpeedDecrease or StyleBleeding or StyleCombatSpeedDebuff or DamageShieldSpellHandler or SlowSpellHandler or UnbreakableSpeedDecreaseSpellHandler)
+                return 0;
+
+            return this.TerritoryDebuffDurationReduction;
         }
 
         public void RemoveTerritory(Territory territory)

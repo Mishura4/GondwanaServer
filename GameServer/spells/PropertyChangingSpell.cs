@@ -59,6 +59,13 @@ namespace DOL.GS.Spells
                 return (int)duration;
             }
             duration = base.CalculateEffectDuration(target, effectiveness);
+
+            if (target is GamePlayer { Guild: not null } targetPlayer)
+            {
+                int guildReduction = targetPlayer.Guild.GetDebuffDurationReduction(this);
+                if (guildReduction != 0)
+                    duration = (duration * (100 - Math.Min(100, guildReduction))) / 100;
+            }
             return (int)duration;
         }
 
