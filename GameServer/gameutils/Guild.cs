@@ -401,21 +401,16 @@ namespace DOL.GS
             {
                 foreach (var resist in t.BonusResist)
                 {
-                    if (!this.TerritoryResists.TryAdd(resist, 1))
+                    if (!this.TerritoryResists.TryAdd(resist.Key, resist.Value))
                     {
-                        this.TerritoryResists[resist] += 1;
+                        this.TerritoryResists[resist.Key] += resist.Value;
                     }
                 }
-                if (t.BonusMeleeAbsorption)
-                    this.TerritoryMeleeAbsorption += 1;
-                if (t.BonusSpellAbsorption)
-                    this.TerritorySpellAbsorption += 1;
-                if (t.BonusDoTAbsorption)
-                    this.TerritoryDotAbsorption += 1;
-                if (t.BonusReducedDebuffDuration)
-                    this.TerritoryDebuffDurationReduction += 1;
-                if (t.BonusSpellRange)
-                    this.TerritorySpellRangeBonus += 1;
+                this.TerritoryMeleeAbsorption += t.BonusMeleeAbsorption;
+                this.TerritorySpellAbsorption += t.BonusSpellAbsorption;
+                this.TerritoryDotAbsorption += t.BonusDoTAbsorption;
+                this.TerritoryDebuffDurationReduction += t.BonusReducedDebuffDuration;
+                this.TerritorySpellRangeBonus += t.BonusSpellRange;
             }
 
             this.m_onlineGuildPlayers.Values.Foreach(p => p.Out.SendCharResistsUpdate());

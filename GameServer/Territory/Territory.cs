@@ -37,7 +37,7 @@ namespace DOL.Territories
             this.Coordinates = TerritoryManager.GetCoordinates(area);
             this.Radius = this.GetRadius();
             this.OriginalGuilds = new Dictionary<string, string>();
-            this.BonusResist = new List<eResist>();
+            this.BonusResist = new();
             this.Mobs = this.GetMobsInTerritory();
             this.SetBossAndMobsInEventInTerritory();
             this.SaveOriginalGuilds();
@@ -54,36 +54,36 @@ namespace DOL.Territories
             get;
         }
 
-        public List<eResist> BonusResist
+        public Dictionary<eResist, int> BonusResist
         {
             get;
         }
 
-        public bool BonusMeleeAbsorption
-        {
-            get;
-            set;
-        }
-
-        public bool BonusSpellAbsorption
+        public int BonusMeleeAbsorption
         {
             get;
             set;
         }
 
-        public bool BonusDoTAbsorption
+        public int BonusSpellAbsorption
         {
             get;
             set;
         }
 
-        public bool BonusReducedDebuffDuration
+        public int BonusDoTAbsorption
         {
             get;
             set;
         }
 
-        public bool BonusSpellRange
+        public int BonusReducedDebuffDuration
+        {
+            get;
+            set;
+        }
+
+        public int BonusSpellRange
         {
             get;
             set;
@@ -193,29 +193,37 @@ namespace DOL.Territories
             {
                 foreach (var item in raw.Split('|'))
                 {
+                    var parsedItem = item.Split(':');
+                    int amount = 1;
+                    if (parsedItem.Length > 1) {
+                        if (!int.TryParse(parsedItem[1], out amount) || amount == 0)
+                            continue;
+                    }
                     if (Enum.TryParse(item, out eResist resist))
                     {
-                        this.BonusResist.Add(resist);
+                        int current = 0;
+                        this.BonusResist.TryGetValue(resist, out current);
+                        this.BonusResist[resist] = current + amount;
                     } else switch (item)
                     {
                         case "melee":
-                            BonusMeleeAbsorption = true;
+                            BonusMeleeAbsorption += amount;
                             break;
 
                         case "spell":
-                            BonusSpellAbsorption = true;
+                            BonusSpellAbsorption += amount;
                             break;
 
                         case "dot":
-                            BonusDoTAbsorption = true;
+                            BonusDoTAbsorption += amount;
                             break;
 
                         case "debuffduration":
-                            BonusReducedDebuffDuration = true;
+                            BonusReducedDebuffDuration += amount;
                             break;
 
                         case "spellrange":
-                            BonusSpellRange = true;
+                            BonusSpellRange += amount;
                             break;
                     }
                 }
@@ -224,18 +232,18 @@ namespace DOL.Territories
 
         private string SaveBonus()
         {
-            List<string> resists = this.BonusResist.Select(b => ((byte)b).ToString()).ToList();
+            List<string> resists = this.BonusResist.Where(e => e.Value != 0).Select(p => ((byte)p.Key).ToString() + ':' + p.Value).ToList();
 
-            if (BonusMeleeAbsorption)
-                resists.Add("melee");
-            if (BonusSpellAbsorption)
-                resists.Add("spell");
-            if (BonusDoTAbsorption)
-                resists.Add("dot");
-            if (BonusReducedDebuffDuration)
-                resists.Add("debuffduration");
-            if (BonusSpellRange)
-                resists.Add("spellrange");
+            if (BonusMeleeAbsorption != 0)
+                resists.Add("melee:" + BonusMeleeAbsorption);
+            if (BonusSpellAbsorption != 0)
+                resists.Add("spell:" + BonusSpellAbsorption);
+            if (BonusDoTAbsorption != 0)
+                resists.Add("dot:" + BonusDoTAbsorption);
+            if (BonusReducedDebuffDuration != 0)
+                resists.Add("debuffduration:" + BonusReducedDebuffDuration);
+            if (BonusSpellRange != 0)
+                resists.Add("spellrange:" + BonusSpellRange);
 
             return resists.Count > 0 ? string.Join('|', resists) : null;
         }
@@ -434,18 +442,18 @@ namespace DOL.Territories
         /// <returns></returns>
         public IList<string> GetInformations()
         {
-            List<string> bonuses = this.BonusResist.Select(b => b.ToString()).ToList();
+            List<string> bonuses = this.BonusResist.Where(p => p.Value != 0).Select(p => p.Value.ToString() + ' ' + p.Key.ToString()).ToList();
 
-            if (this.BonusMeleeAbsorption)
-                bonuses.Add("Melee");
-            if (this.BonusSpellAbsorption)
-                bonuses.Add("Spell");
-            if (this.BonusDoTAbsorption)
-                bonuses.Add("DoT");
-            if (this.BonusReducedDebuffDuration)
-                bonuses.Add("DebuffDuration");
-            if (this.BonusSpellRange)
-                bonuses.Add("SpellRange");
+            if (this.BonusMeleeAbsorption != 0)
+                bonuses.Add(this.BonusMeleeAbsorption + " Melee");
+            if (this.BonusSpellAbsorption != 0)
+                bonuses.Add(this.BonusSpellAbsorption + " Spell");
+            if (this.BonusDoTAbsorption != 0)
+                bonuses.Add(this.BonusDoTAbsorption + " DoT");
+            if (this.BonusReducedDebuffDuration != 0)
+                bonuses.Add(this.BonusReducedDebuffDuration + " DebuffDuration");
+            if (this.BonusSpellRange != 0)
+                bonuses.Add(this.BonusSpellRange + " SpellRange");
             return new string[]
             {
                 " Area Id: " + this.AreaId,

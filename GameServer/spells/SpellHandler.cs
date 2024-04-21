@@ -2658,7 +2658,7 @@ namespace DOL.GS.Spells
             }
             if (!HasPositiveEffect && target is GamePlayer { Guild: { TerritoryDebuffDurationReduction: > 0 } guild } && this is not (AbstractCCSpellHandler or StyleSpeedDecrease or StyleBleeding or StyleCombatSpeedDebuff or DamageShieldSpellHandler or SlowSpellHandler or UnbreakableSpeedDecreaseSpellHandler))
             {
-                duration = (duration * (100 - guild.TerritoryDebuffDurationReduction)) / 100;
+                duration = (duration * (100 - Math.Min(100, guild.TerritoryDebuffDurationReduction))) / 100;
             }
 
             duration *= effectiveness;

@@ -215,27 +215,31 @@ namespace DOL.commands.gmcommands
                     if (action == "add")
                     {
                         if (bonus != null)
-                            territory.BonusResist.Add(bonus.Value);
+                        {
+                            int current = 0;
+                            territory.BonusResist.TryGetValue(bonus.Value, out current);
+                            territory.BonusResist[bonus.Value] = current + 1;
+                        }
                         else switch (arg3)
                         {
                             case "melee":
-                                territory.BonusMeleeAbsorption = true;
+                                territory.BonusMeleeAbsorption += 1;
                                 break;
 
                             case "spell":
-                                territory.BonusSpellAbsorption = true;
+                                territory.BonusSpellAbsorption += 1;
                                 break;
 
                             case "dot":
-                                territory.BonusDoTAbsorption = true;
+                                territory.BonusDoTAbsorption += 1;
                                 break;
 
                             case "debuffduration":
-                                territory.BonusReducedDebuffDuration = true;
+                                territory.BonusReducedDebuffDuration += 1;
                                 break;
 
                             case "spellrange":
-                                territory.BonusSpellRange = true;
+                                territory.BonusSpellRange += 1;
                                 break;
 
                             default:
@@ -265,35 +269,36 @@ namespace DOL.commands.gmcommands
 
                         if (bonus != null)
                         {
-                            index = territory.BonusResist.FindIndex(b => b == bonus.Value);
+                            if (!territory.BonusResist.TryGetValue(bonus.Value, out int current))
+                                return;
 
-                            if (index != -1)
+                            if (current == 1)
                             {
-                                territory.BonusResist.RemoveAt(index);
+                                territory.BonusResist.Remove(bonus.Value);
                             }
                             else
-                                return;
+                                territory.BonusResist[bonus.Value] = current - 1;
                         }
                         else switch (arg3)
                         {
                             case "melee":
-                                territory.BonusMeleeAbsorption = false;
+                                territory.BonusMeleeAbsorption -= 1;
                                 break;
 
                             case "spell":
-                                territory.BonusSpellAbsorption = false;
-                                break;
+                                territory.BonusSpellAbsorption -= 1;
+break;
 
                             case "dot":
-                                territory.BonusDoTAbsorption = false;
+                                territory.BonusDoTAbsorption -= 1;
                                 break;
 
                             case "debuffduration":
-                                territory.BonusReducedDebuffDuration = false;
+                                territory.BonusReducedDebuffDuration -= 1;
                                 break;
 
                             case "spellrange":
-                                territory.BonusSpellRange = false;
+                                territory.BonusSpellRange -= 1;
                                 break;
 
                             default:
@@ -319,7 +324,7 @@ namespace DOL.commands.gmcommands
 
                     break;
 
-                /*        <nature|crush|slash|thrust|body|cold|energy|heat|matter|spirit>      
+                /*  <nature|crush|slash|thrust|body|cold|energy|heat|matter|spirit>
                  * 	Natural = eProperty.Resist_Natural,
                     Crush = eProperty.Resist_Crush,
                     Slash = eProperty.Resist_Slash,
@@ -329,8 +334,8 @@ namespace DOL.commands.gmcommands
                     Energy = eProperty.Resist_Energy,
                     Heat = eProperty.Resist_Heat,
                     Matter = eProperty.Resist_Matter,
-                    Spirit = eProperty.Resist_Spirit               
-                 * 
+                    Spirit = eProperty.Resist_Spirit
+                 *
                  * */
 
 

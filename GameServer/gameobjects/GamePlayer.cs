@@ -7494,7 +7494,7 @@ namespace DOL.GS
                     case AttackData.eAttackType.MeleeTwoHand:
                         if (Guild.TerritoryMeleeAbsorption > 0)
                         {
-                            double absorption = Guild.TerritoryMeleeAbsorption;
+                            double absorption = Math.Min(100, Guild.TerritoryMeleeAbsorption);
                             attackData.Damage = (int)((double)attackData.Damage * (1 - absorption / 100) + 0.5);
                             attackData.CriticalDamage = (int)((double)attackData.CriticalDamage * (1 - absorption / 100) + 0.5);
                         }
@@ -7503,7 +7503,7 @@ namespace DOL.GS
                     case AttackData.eAttackType.Spell:
                         if (Guild.TerritorySpellAbsorption > 0)
                         {
-                            double absorption = Guild.TerritorySpellAbsorption;
+                            double absorption = Math.Min(100, Guild.TerritorySpellAbsorption);
                             attackData.Damage = (int)((double)attackData.Damage * (1 - absorption / 100) + 0.5);
                             attackData.CriticalDamage = (int)((double)attackData.CriticalDamage * (1 - absorption / 100) + 0.5);
                         }
@@ -7512,7 +7512,7 @@ namespace DOL.GS
                     case AttackData.eAttackType.DoT:
                         if (Guild.TerritoryDotAbsorption > 0)
                         {
-                            double absorption = Guild.TerritoryDotAbsorption;
+                            double absorption = Math.Min(100, Guild.TerritoryDotAbsorption);
                             attackData.Damage = (int)((double)attackData.Damage * (1 - absorption / 100) + 0.5);
                             attackData.CriticalDamage = (int)((double)attackData.CriticalDamage * (1 - absorption / 100) + 0.5);
                         }
