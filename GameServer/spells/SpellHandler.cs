@@ -3899,9 +3899,6 @@ namespace DOL.GS.Spells
             ad.SpellHandler = this;
             ad.AttackResult = GameLiving.eAttackResult.HitUnstyled;
 
-            // Attacked living may modify the attack data.  Primarily used for keep doors and components.
-            ad.Target.ModifyAttack(ad);
-
             m_lastAttackData = ad;
 
             double minVariance;
@@ -4034,9 +4031,6 @@ namespace DOL.GS.Spells
             ad.DamageType = damageType;
             ad.Modifier = resistModifier;
 
-            // Attacked living may modify the attack data.  Primarily used for keep doors and components.
-            ad.Target.ModifyAttack(ad);
-
             m_lastAttackData = ad;
             return ad;
         }
@@ -4107,6 +4101,10 @@ namespace DOL.GS.Spells
         public virtual void DamageTarget(AttackData ad, bool showEffectAnimation, int attackResult)
         {
             ad.AttackResult = GameLiving.eAttackResult.HitUnstyled;
+
+            // Attacked living may modify the attack data.  Primarily used for keep doors and components.
+            ad.Target.ModifyAttack(ad);
+
             if (showEffectAnimation)
             {
                 SendEffectAnimation(ad.Target, 0, false, 1);

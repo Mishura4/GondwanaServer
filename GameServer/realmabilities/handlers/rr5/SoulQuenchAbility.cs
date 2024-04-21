@@ -57,12 +57,6 @@ namespace DOL.GS.RealmAbilities
                 modheal = heal;
             caster.Health += modheal;
 
-            GamePlayer player = caster as GamePlayer;
-            if (player != null)
-                player.Out.SendMessage("You hit " + target.Name + " for " + damage + "(" + resist + ") points of damage!", eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
-            if (caster is GamePlayer && modheal > 0)
-                ((GamePlayer)caster).Out.SendMessage("Your Soul Quench returns " + modheal + " lifepoints to you", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
-
             foreach (GamePlayer p in target.GetPlayersInRadius(false, WorldMgr.VISIBILITY_DISTANCE))
             {
                 p.Out.SendSpellEffectAnimation(caster, target, 1145, 0, false, 1);
@@ -76,7 +70,15 @@ namespace DOL.GS.RealmAbilities
             ad.Target = target;
             ad.DamageType = eDamageType.Spirit;
             ad.Damage = damage;
+            target.ModifyAttack(ad);
             target.OnAttackedByEnemy(ad);
+
+            GamePlayer player = caster as GamePlayer;
+            if (player != null)
+                player.Out.SendMessage("You hit " + target.Name + " for " + damage + "(" + resist + ") points of damage!", eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
+            if (caster is GamePlayer && modheal > 0)
+                ((GamePlayer)caster).Out.SendMessage("Your Soul Quench returns " + modheal + " lifepoints to you", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+
             caster.DealDamage(ad);
 
 

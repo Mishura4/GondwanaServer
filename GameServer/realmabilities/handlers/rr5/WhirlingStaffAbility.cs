@@ -50,10 +50,6 @@ namespace DOL.GS.RealmAbilities
             int resist = 251 * target.GetResist(eDamageType.Crush) / -100;
             int damage = 251 + resist;
 
-            GamePlayer player = caster as GamePlayer;
-            if (player != null)
-                player.Out.SendMessage("You hit " + target.Name + " for " + damage + "(" + resist + ") points of damage!", eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
-
             foreach (GamePlayer p in target.GetPlayersInRadius(false, WorldMgr.VISIBILITY_DISTANCE))
             {
                 p.Out.SendSpellEffectAnimation(caster, target, 7043, 0, false, 1);
@@ -67,7 +63,13 @@ namespace DOL.GS.RealmAbilities
             ad.Target = target;
             ad.DamageType = eDamageType.Crush;
             ad.Damage = damage;
+            target.ModifyAttack(ad);
             target.OnAttackedByEnemy(ad);
+
+            GamePlayer player = caster as GamePlayer;
+            if (player != null)
+                player.Out.SendMessage("You hit " + target.Name + " for " + damage + "(" + resist + ") points of damage!", eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
+
             caster.DealDamage(ad);
 
             if (target.EffectList.GetOfType<WhirlingStaffEffect>() == null)

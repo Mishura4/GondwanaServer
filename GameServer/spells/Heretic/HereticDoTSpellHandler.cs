@@ -157,6 +157,7 @@ namespace DOL.GS.Spells
         public virtual void DamageTarget(AttackData ad)
         {
             ad.AttackResult = GameLiving.eAttackResult.HitUnstyled;
+            ad.Target.ModifyAttack(ad);
             ad.Target.OnAttackedByEnemy(ad);
             ad.Attacker.DealDamage(ad);
             foreach (GamePlayer player in ad.Attacker.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))

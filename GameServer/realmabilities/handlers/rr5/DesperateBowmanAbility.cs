@@ -49,17 +49,19 @@ namespace DOL.GS.RealmAbilities
 
             int damage = 300;
 
-            GamePlayer player = caster as GamePlayer;
-            if (player != null)
-                player.Out.SendMessage("You hit " + target.Name + " for " + damage + " points of damage!", eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
-
             AttackData ad = new AttackData();
             ad.AttackResult = GameLiving.eAttackResult.HitUnstyled;
             ad.Attacker = caster;
             ad.Target = target;
             ad.DamageType = eDamageType.Crush;
             ad.Damage = damage;
+            target.ModifyAttack(ad);
             target.OnAttackedByEnemy(ad);
+
+            GamePlayer player = caster as GamePlayer;
+            if (player != null)
+                player.Out.SendMessage("You hit " + target.Name + " for " + damage + " points of damage!", eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
+
             caster.DealDamage(ad);
         }
 

@@ -98,10 +98,6 @@ namespace DOL.GS.RealmAbilities
             resist = basedamage * target.GetResist(eDamageType.Energy) / -100;
             damage = basedamage + resist;
 
-            GamePlayer player = caster as GamePlayer;
-            if (player != null)
-                player.Out.SendMessage("You hit " + target.Name + " for " + damage + "(" + resist + ") points of damage!", eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
-
             foreach (GamePlayer p in target.GetPlayersInRadius(false, WorldMgr.VISIBILITY_DISTANCE))
             {
                 p.Out.SendSpellEffectAnimation(caster, target, 3505, 0, false, 1);
@@ -115,7 +111,13 @@ namespace DOL.GS.RealmAbilities
             ad.Target = target;
             ad.DamageType = eDamageType.Energy;
             ad.Damage = damage;
+            target.ModifyAttack(ad);
             target.OnAttackedByEnemy(ad);
+
+            GamePlayer player = caster as GamePlayer;
+            if (player != null)
+                player.Out.SendMessage("You hit " + target.Name + " for " + damage + "(" + resist + ") points of damage!", eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
+
             caster.DealDamage(ad);
         }
         public override int GetReUseDelay(int level)

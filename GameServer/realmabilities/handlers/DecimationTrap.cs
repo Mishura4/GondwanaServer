@@ -172,6 +172,14 @@ namespace DOL.GS.RealmAbilities
             int resist = (int)(basedamage * target.GetModified(eProperty.Resist_Energy) * -0.01);
             int damage = basedamage + resist;
 
+            AttackData ad = new AttackData();
+            ad.AttackResult = GameLiving.eAttackResult.HitUnstyled;
+            ad.Attacker = owner;
+            ad.Target = target;
+            ad.DamageType = eDamageType.Energy;
+            ad.Damage = damage;
+            target.ModifyAttack(ad);
+            target.OnAttackedByEnemy(ad);
 
             GamePlayer player = owner as GamePlayer;
             if (player != null)
@@ -188,14 +196,6 @@ namespace DOL.GS.RealmAbilities
                 p.Out.SendCombatAnimation(owner, target, 0, 0, 0, 0, 0x14, target.HealthPercent);
             }
 
-            //target.TakeDamage(owner, eDamageType.Energy, damage, 0);
-            AttackData ad = new AttackData();
-            ad.AttackResult = GameLiving.eAttackResult.HitUnstyled;
-            ad.Attacker = owner;
-            ad.Target = target;
-            ad.DamageType = eDamageType.Energy;
-            ad.Damage = damage;
-            target.OnAttackedByEnemy(ad);
             owner.DealDamage(ad);
         }
 

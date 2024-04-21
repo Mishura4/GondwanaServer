@@ -430,6 +430,7 @@ namespace DOL.GS.Spells
             }
 
             // send animation before dealing damage else dead livings show no animation
+            ad.Target.ModifyAttack(ad);
             ad.Target.OnAttackedByEnemy(ad);
             ad.Attacker.DealDamage(ad);
             if (ad.Damage == 0 && ad.Target is GameNPC)
