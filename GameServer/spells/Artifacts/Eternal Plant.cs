@@ -15,6 +15,7 @@ namespace DOL.GS.Spells
         {
             AttackData ad = CalculateDamageToTarget(target, effectiveness);
             base.OnDirectEffect(target, effectiveness);
+
             foreach (GameSpellEffect effect in target.EffectList.GetAllOfType(typeof(GameSpellEffect)))
             {
                 if (effect.SpellHandler.Spell.SpellType.Equals("ShadesOfMist") ||
@@ -27,6 +28,10 @@ namespace DOL.GS.Spells
                 {
                     ad.Damage = (int)Spell.Damage;
                     effect.Cancel(false);
+
+                    // Attacked living may modify the attack data.
+                    ad.Target.ModifyAttack(ad);
+
                     SendEffectAnimation(target, 0, false, 1);
                     SendDamageMessages(ad);
                     DamageTarget(ad);

@@ -30,6 +30,10 @@ namespace DOL.GS.Spells
             if (!target.IsAlive || target.ObjectState != GameLiving.eObjectState.Active) return;
 
             AttackData ad = CalculateDamageToTarget(target, effectiveness);
+
+            // Attacked living may modify the attack data.
+            ad.Target.ModifyAttack(ad);
+
             SendDamageMessages(ad);
             DamageTarget(ad, true);
             DrainPower(target, ad);

@@ -65,8 +65,6 @@ namespace DOL.GS.Spells
 
         public override void DamageTarget(AttackData ad, bool showEffectAnimation)
         {
-            ad.Target.ModifyAttack(ad);
-
             if (ad.Damage > 0 && ad.Target is GameNPC)
             {
                 if (!(Caster is GamePlayer)) return;

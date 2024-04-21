@@ -58,6 +58,9 @@ namespace DOL.GS.Spells
 
             AttackData ad = CalculateDamageToTarget(effect.Owner, 1.0);
 
+            // Attacked living may modify the attack data.
+            ad.Target.ModifyAttack(ad);
+
             SendDamageMessages(ad);
 
             // attacker must be null, attack result is 0x0A

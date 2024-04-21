@@ -107,12 +107,11 @@ namespace DOL.GS.Spells
         {
             // Graveen: only GamePlayer should receive messages :p
             GamePlayer PlayerReceivingMessages = null;
-            if (m_caster is GamePlayer)
-                PlayerReceivingMessages = m_caster as GamePlayer;
-            if (m_caster is GamePet)
-                if ((m_caster as GamePet).Brain is IControlledBrain)
-                    PlayerReceivingMessages = ((m_caster as GamePet).Brain as IControlledBrain).GetPlayerOwner();
-            if (PlayerReceivingMessages == null)
+            if (m_caster is GamePlayer casterPlayer)
+                PlayerReceivingMessages = casterPlayer;
+            else if (m_caster is GamePet { Brain: IControlledBrain { Owner: GamePlayer owningPlayer } })
+                PlayerReceivingMessages = owningPlayer;
+            else
                 return;
 
 
@@ -211,6 +210,10 @@ namespace DOL.GS.Spells
             // no interrupts on DoT direct effect
             // calc damage
             AttackData ad = CalculateDamageToTarget(target, effectiveness);
+
+            // Attacked living may modify the attack data.
+            ad.Target.ModifyAttack(ad);
+
             SendDamageMessages(ad);
             DamageTarget(ad, false);
         }

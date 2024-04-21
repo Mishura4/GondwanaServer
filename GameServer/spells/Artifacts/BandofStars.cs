@@ -97,6 +97,10 @@ namespace DOL.GS.Spells
 
                 AttackData ad = m_handler.CalculateDamageToTarget(target, 1);
                 ad.Damage = (int)m_handler.Spell.Damage;
+
+                // Attacked living may modify the attack data.
+                ad.Target.ModifyAttack(ad);
+
                 m_handler.SendDamageMessages(ad);
                 m_handler.DamageTarget(ad, false);
 

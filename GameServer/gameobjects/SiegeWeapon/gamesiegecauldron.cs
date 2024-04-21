@@ -134,6 +134,10 @@ namespace DOL.GS.Spells
         public override AttackData CalculateDamageToTarget(GameLiving target, double effectiveness)
         {
             AttackData ad = base.CalculateDamageToTarget(target, effectiveness);
+
+            // Attacked living may modify the attack data.
+            ad.Target.ModifyAttack(ad);
+
             if (target is GamePlayer)
             {
                 GamePlayer player = target as GamePlayer;

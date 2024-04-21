@@ -149,6 +149,10 @@ namespace DOL.GS.Spells
             // no interrupts on DoT direct effect
             // calc damage
             AttackData ad = CalculateDamageToTarget(target, effectiveness);
+
+            // Attacked living may modify the attack data.
+            ad.Target.ModifyAttack(ad);
+
             SendDamageMessages(ad);
             DamageTarget(ad);
         }
@@ -157,7 +161,6 @@ namespace DOL.GS.Spells
         public virtual void DamageTarget(AttackData ad)
         {
             ad.AttackResult = GameLiving.eAttackResult.HitUnstyled;
-            ad.Target.ModifyAttack(ad);
             ad.Target.OnAttackedByEnemy(ad);
             ad.Attacker.DealDamage(ad);
             foreach (GamePlayer player in ad.Attacker.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))

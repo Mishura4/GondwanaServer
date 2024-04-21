@@ -361,6 +361,10 @@ namespace DOL.GS.Spells
 
             // calc damage
             AttackData ad = CalculateDamageToTarget(target, effectiveness);
+
+            // Attacked living may modify the attack data.
+            ad.Target.ModifyAttack(ad);
+
             DamageTarget(ad, true);
             SendDamageMessages(ad);
             target.StartInterruptTimer(target.SpellInterruptDuration, ad.AttackType, Caster);
@@ -430,7 +434,6 @@ namespace DOL.GS.Spells
             }
 
             // send animation before dealing damage else dead livings show no animation
-            ad.Target.ModifyAttack(ad);
             ad.Target.OnAttackedByEnemy(ad);
             ad.Attacker.DealDamage(ad);
             if (ad.Damage == 0 && ad.Target is GameNPC)

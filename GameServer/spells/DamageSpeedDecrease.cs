@@ -45,6 +45,10 @@ namespace DOL.GS.Spells
             base.OnDirectEffect(target, effectiveness);
             // calc damage
             AttackData ad = CalculateDamageToTarget(target, effectiveness);
+
+            // Attacked living may modify the attack data.
+            ad.Target.ModifyAttack(ad);
+
             SendDamageMessages(ad);
             DamageTarget(ad, true);
             if (Spell.LifeDrainReturn != 0)

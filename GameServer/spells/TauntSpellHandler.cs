@@ -45,6 +45,10 @@ namespace DOL.GS.Spells
 
             // Create attack data.
             AttackData ad = CalculateDamageToTarget(target, effectiveness);
+
+            // Attacked living may modify the attack data.
+            ad.Target.ModifyAttack(ad);
+
             DamageTarget(ad, false);
 
             // Interrupt only if target is actually casting

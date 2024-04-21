@@ -201,8 +201,12 @@ namespace DOL.GS.Spells
 
             AttackData ad = CalculateDamageToTarget(target, effectiveness);
             ad.Damage += (int)(ad.Damage * damageIncreaseInPercent);
-            DamageTarget(ad, true);
+
+            // Attacked living may modify the attack data.
+            ad.Target.ModifyAttack(ad);
+
             SendDamageMessages(ad);
+            DamageTarget(ad, true);
             target.StartInterruptTimer(target.SpellInterruptDuration, ad.AttackType, Caster);
         }
 

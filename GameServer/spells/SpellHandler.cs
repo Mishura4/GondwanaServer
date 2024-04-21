@@ -4102,9 +4102,6 @@ namespace DOL.GS.Spells
         {
             ad.AttackResult = GameLiving.eAttackResult.HitUnstyled;
 
-            // Attacked living may modify the attack data.  Primarily used for keep doors and components.
-            ad.Target.ModifyAttack(ad);
-
             if (showEffectAnimation)
             {
                 SendEffectAnimation(ad.Target, 0, false, 1);
