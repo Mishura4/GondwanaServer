@@ -204,7 +204,7 @@ namespace DOL.Territories
                         int current = 0;
                         this.BonusResist.TryGetValue(resist, out current);
                         this.BonusResist[resist] = current + amount;
-                    } else switch (item)
+                    } else switch (parsedItem[0])
                     {
                         case "melee":
                             BonusMeleeAbsorption += amount;
