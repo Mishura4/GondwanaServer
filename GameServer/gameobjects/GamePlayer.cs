@@ -7277,7 +7277,7 @@ namespace DOL.GS
                 case eAttackResult.HitStyle:
                 case eAttackResult.HitUnstyled:
                     {
-                        if (ad.Damage == -1)
+                        if (ad is { Damage: -1 } or { AttackType: AttackData.eAttackType.Spell, Damage: 0, CriticalDamage: 0, Modifier: 0 })
                             break;
 
                         #region Messages
