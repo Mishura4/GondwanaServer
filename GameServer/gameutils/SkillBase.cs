@@ -3186,9 +3186,6 @@ namespace DOL.GS
                 {
                     resistValue += 3;
                 }
-
-                if (player.Guild != null)
-                    resistValue += player.Guild.GetResistFromTerritories(type);
             }
 
             return resistValue;

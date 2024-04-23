@@ -17,6 +17,7 @@
  *
  */
 using System;
+using System.Numerics;
 
 namespace DOL.GS.PropertyCalc
 {
@@ -65,12 +66,18 @@ namespace DOL.GS.PropertyCalc
 
             buffBonus -= Math.Abs(debuff);
 
-            // Apply debuffs. 100% Effectiveness for player buffs, but only 50%
-            // effectiveness for item bonuses.
-            if (living is GamePlayer && buffBonus < 0)
+            if (living is GamePlayer player)
             {
-                itemBonus += buffBonus / 2;
-                buffBonus = 0;
+                // Apply debuffs. 100% Effectiveness for player buffs, but only 50%
+                // effectiveness for item bonuses.
+                if (buffBonus < 0)
+                {
+                    itemBonus += buffBonus / 2;
+                    buffBonus = 0;
+                }
+
+                if (player.Guild != null)
+                    buffBonus += player.Guild.GetResistFromTerritories((eResist)property);
             }
 
             // Add up and apply hardcap.
@@ -82,7 +89,7 @@ namespace DOL.GS.PropertyCalc
         {
             int propertyIndex = (int)property;
             int debuff = Math.Abs(living.DebuffCategory[propertyIndex]);
-            int racialBonus = (living is GamePlayer player) ? SkillBase.GetRaceResist(player.Race, (eResist)property, player) : 0;
+            int racialBonus = 0;
             int itemBonus = CalcValueFromItems(living, property);
             int buffBonus = CalcValueFromBuffs(living, property);
             switch (property)
@@ -126,11 +133,20 @@ namespace DOL.GS.PropertyCalc
 
             buffBonus -= Math.Abs(debuff);
 
-            if (living is GamePlayer && buffBonus < 0)
+            if (living is GamePlayer player)
             {
-                itemBonus += buffBonus / 2;
-                buffBonus = 0;
-                if (itemBonus < 0) itemBonus = 0;
+                racialBonus = SkillBase.GetRaceResist(player.Race, (eResist)property, player);
+
+                // Apply debuffs. 100% Effectiveness for player buffs, but only 50%
+                // effectiveness for item bonuses.
+                if (buffBonus < 0)
+                {
+                    itemBonus += buffBonus / 2;
+                    buffBonus = 0;
+                    if (itemBonus < 0) itemBonus = 0;
+                }
+
+                // Note: do not apply guild territory bonuses here because this function is used for CC duration
             }
             return Math.Min(itemBonus + buffBonus + racialBonus, HardCap);
         }
@@ -244,6 +260,7 @@ namespace DOL.GS.PropertyCalc
 
             return (itemBonus + buffBonus + abilityBonus);
         }
+
         public override int CalcValueFromBuffs(GameLiving living, eProperty property)
         {
             int buffBonus = living.BaseBuffBonusCategory[(int)property]
