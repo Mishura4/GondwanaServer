@@ -199,7 +199,7 @@ namespace DOL.Territories
                         if (!int.TryParse(parsedItem[1], out amount) || amount == 0)
                             continue;
                     }
-                    if (Enum.TryParse(item, out eResist resist))
+                    if (Enum.TryParse(parsedItem[0], out eResist resist))
                     {
                         int current = 0;
                         this.BonusResist.TryGetValue(resist, out current);
