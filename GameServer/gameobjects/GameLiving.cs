@@ -1784,9 +1784,9 @@ namespace DOL.GS
                 double damageMod = myEffectiveLevel
                     * weaponSkillFactor / 10.0
                     * (1 + 0.01 * dmgStat)
-                    * (0.75 + 0.5 * Math.Min(ad.Target.Level + 1.0, weaponSpecLevel) / (ad.Target.Level + 1.0) + 0.01 * Util.Random(minVariance, maxVariance))
-                    / Math.Max(1, enemyArmorFactor);
-                damageMod = damageMod.Clamp(0.01, 3);
+                    * (0.75 + 0.5 * Math.Min(ad.Target.Level + 1.0, weaponSpecLevel) / (ad.Target.Level + 1.0) + 0.01 * Util.Random(minVariance, maxVariance));
+                double armorMod = Math.Max(1, enemyArmorFactor);
+                damageMod = damageMod.Clamp(0.01, 3) / armorMod;
 
 
                 double weaponDamage;
