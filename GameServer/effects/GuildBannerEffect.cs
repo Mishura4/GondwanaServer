@@ -379,7 +379,7 @@ namespace DOL.GS.Effects
         #endregion
 
         #region ctor
-        public BannerOfBesiegingEffect(double effectiveness) : base(effectiveness * 6) { }
+        public BannerOfBesiegingEffect(double effectiveness) : base(effectiveness * 20) { }
         #endregion
     }
 
