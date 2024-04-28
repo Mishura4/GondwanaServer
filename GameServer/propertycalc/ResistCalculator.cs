@@ -65,6 +65,7 @@ namespace DOL.GS.PropertyCalc
             }
 
             buffBonus -= Math.Abs(debuff);
+            int territoryBonus = 0;
 
             if (living is GamePlayer player)
             {
@@ -77,12 +78,12 @@ namespace DOL.GS.PropertyCalc
                 }
 
                 if (player.Guild != null)
-                    buffBonus += player.Guild.GetResistFromTerritories((eResist)property);
+                    territoryBonus += player.Guild.GetResistFromTerritories((eResist)property);
             }
 
             // Add up and apply hardcap.
 
-            return Math.Min(itemBonus + buffBonus + abilityBonus + racialBonus, HardCap);
+            return Math.Min(Math.Min(itemBonus + buffBonus + abilityBonus + racialBonus, HardCap) + territoryBonus, 100);
         }
 
         public override int CalcValueBase(GameLiving living, eProperty property)

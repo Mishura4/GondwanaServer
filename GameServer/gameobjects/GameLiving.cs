@@ -1875,7 +1875,7 @@ namespace DOL.GS
                 ad.Modifier = -(int)(baseDamage - ad.Damage);
 
                 // Tolakram - let's go ahead and make it 1 damage rather than spamming a possible error
-                if (ad.Damage == 0)
+                /*if (ad.Damage == 0)
                 {
                     ad.Damage = 1;
 
@@ -1886,7 +1886,7 @@ namespace DOL.GS
                     //}
 
                     //ad.AttackResult = eAttackResult.Missed;
-                }
+                }*/
             }
 
             //Add styled damage if style hits and remove endurance if missed
