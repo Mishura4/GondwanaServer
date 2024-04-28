@@ -422,7 +422,7 @@ namespace DOL.GS
             if (handler.HasPositiveEffect || this.TerritoryDebuffDurationReduction == 0)
                 return 0;
 
-            if (handler is AbstractCCSpellHandler or StyleSpeedDecrease or StyleBleeding or StyleCombatSpeedDebuff or DamageShieldSpellHandler or SlowSpellHandler or UnbreakableSpeedDecreaseSpellHandler)
+            if (handler is AbstractCCSpellHandler or StyleSpeedDecrease or StyleBleeding or StyleCombatSpeedDebuff or DamageShieldSpellHandler or SlowSpellHandler or UnbreakableSpeedDecreaseSpellHandler or PetrifySpellHandler)
                 return 0;
 
             return this.TerritoryDebuffDurationReduction;
