@@ -5865,6 +5865,15 @@ namespace DOL.GS
                 effect.Cancel(false);
             }
         }
+        public void CancelAllSpeedOrPulseEffects()
+        {
+            List<GameSpellEffect> toRemove;
+            lock (EffectList)
+            {
+                toRemove = new List<GameSpellEffect>(EffectList.OfType<GameSpellEffect>().Where(e => e.SpellHandler is SpellHandler spellHandler && (spellHandler.HasPositiveOrSpeedEffect() || spellHandler.Spell.Pulse > 0)));
+            }
+            toRemove.ForEach(e => e.Cancel(false));
+        }
 
         #endregion
         #region Speed/Heading/Target/GroundTarget/GuildName/SitState/Level

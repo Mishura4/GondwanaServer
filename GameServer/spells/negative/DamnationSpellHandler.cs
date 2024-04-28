@@ -34,12 +34,8 @@ namespace DOL.GS.Spells
         public override void OnEffectStart(GameSpellEffect effect)
         {
             GameLiving living = effect.Owner;
-            foreach (GameSpellEffect activeEffect in living.EffectList.ToList())
-            {
-                if (activeEffect.SpellHandler is SpellHandler spell && spell.HasPositiveOrSpeedEffect())
-                    activeEffect.Cancel(false);
-            }
 
+            living.CancelAllSpeedOrPulseEffects();
             if (living is GamePlayer player)
             {
                 living.TempProperties.setProperty("OriginalModel", living.Model);

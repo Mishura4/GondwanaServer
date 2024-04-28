@@ -179,6 +179,7 @@ namespace DOL.Territories
         {
             foreach (var item in areas)
             {
+                // TODO: Fix race condition while loading territories
                 var matched = this.Territories.FirstOrDefault(t => t.Area.ID.Equals(item.ID));
 
                 if (matched != null)
