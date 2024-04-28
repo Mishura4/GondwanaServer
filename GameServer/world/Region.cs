@@ -1597,6 +1597,11 @@ namespace DOL.GS
 
         public virtual IList<IArea> GetAreasOfZone(Zone zone, int x, int y, int z)
         {
+            return GetAreasOfZone(zone, area => area.IsContaining(x, y, z));
+        }
+
+        public virtual IList<IArea> GetAreasOfZone(Zone zone)
+        {
             lock (m_lockAreas)
             {
                 int zoneIndex = Zones.IndexOf(zone);
@@ -1608,8 +1613,33 @@ namespace DOL.GS
                     {
                         for (int i = 0; i < m_ZoneAreasCount[zoneIndex]; i++)
                         {
-                            IArea area = (IArea)m_Areas[m_ZoneAreas[zoneIndex][i]];
-                            if (area.IsContaining(x, y, z))
+                            areas.Add(m_Areas[m_ZoneAreas[zoneIndex][i]]);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        log.Error("GetArea exception.Area count " + m_ZoneAreasCount[zoneIndex], e);
+                    }
+                }
+                return areas;
+            }
+        }
+
+        public virtual IList<IArea> GetAreasOfZone(Zone zone, Predicate<IArea> predicate)
+        {
+            lock (m_lockAreas)
+            {
+                int zoneIndex = Zones.IndexOf(zone);
+                var areas = new List<IArea>();
+
+                if (zoneIndex >= 0)
+                {
+                    try
+                    {
+                        for (int i = 0; i < m_ZoneAreasCount[zoneIndex]; i++)
+                        {
+                            IArea area = m_Areas[m_ZoneAreas[zoneIndex][i]];
+                            if (predicate.Invoke(area))
                                 areas.Add(area);
                         }
                     }

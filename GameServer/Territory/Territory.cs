@@ -490,8 +490,6 @@ namespace DOL.Territories
             if (db != null)
             {
                 db.AreaId = this.AreaId;
-                db.AreaX = this.Coordinates.X;
-                db.AreaY = this.Coordinates.Y;
                 db.BossMobId = this.BossId;
                 db.GroupId = this.GroupId;
                 db.GuidldOwner = this.GuildOwner;

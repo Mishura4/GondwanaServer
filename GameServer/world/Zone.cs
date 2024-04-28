@@ -1159,6 +1159,16 @@ namespace DOL.GS
             return m_Region.GetAreasOfZone(this, spot, checkZ);
         }
 
+        public IList<IArea> GetAreas()
+        {
+            return m_Region.GetAreasOfZone(this);
+        }
+
+        public IList<IArea> GetAreas(Predicate<IArea> predicate)
+        {
+            return m_Region.GetAreasOfZone(this, predicate);
+        }
+
         #endregion
 
         #region Get random NPC

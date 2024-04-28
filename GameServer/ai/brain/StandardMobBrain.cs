@@ -339,7 +339,8 @@ namespace DOL.AI.Brain
         /// </summary>
         protected virtual void CheckNPCAggro()
         {
-            if (HasAggro) return;
+            if (HasAggro || Body.CurrentZone == null) return;
+
             foreach (GameNPC npc in Body.GetNPCsInRadius((ushort)(AggroRange), Body.CurrentRegion.IsDungeon ? false : true))
             {
                 TryAggro(npc);
@@ -351,7 +352,7 @@ namespace DOL.AI.Brain
         /// </summary>
         protected virtual void CheckPlayerAggro()
         {
-            if (HasAggro) return;
+            if (HasAggro || Body.CurrentZone == null) return;
 
             foreach (GamePlayer player in Body.GetPlayersInRadius(MAX_AGGRO_DISTANCE, Body.CurrentZone.IsDungeon ? false : true))
             {

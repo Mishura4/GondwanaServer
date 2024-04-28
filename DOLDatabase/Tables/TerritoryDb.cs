@@ -129,36 +129,6 @@ namespace DOLDatabase.Tables
         }
 
         [DataElement(AllowDbNull = false)]
-        public float AreaX
-        {
-            get
-            {
-                return m_areaX;
-            }
-
-            set
-            {
-                m_areaX = value;
-                Dirty = true;
-            }
-        }
-
-        [DataElement(AllowDbNull = false)]
-        public float AreaY
-        {
-            get
-            {
-                return m_areaY;
-            }
-
-            set
-            {
-                m_areaY = value;
-                Dirty = true;
-            }
-        }
-
-        [DataElement(AllowDbNull = false)]
         public bool IsBannerSummoned
         {
             get => m_IsBannerSummoned;

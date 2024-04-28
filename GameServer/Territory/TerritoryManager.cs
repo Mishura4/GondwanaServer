@@ -97,7 +97,7 @@ namespace DOL.Territories
                                 continue;
                             }
 
-                            var area = zone.GetAreasOfSpot(new System.Numerics.Vector3(territoryDb.AreaX, territoryDb.AreaY, 0), false)?.FirstOrDefault(a => ((AbstractArea)a).Description.Equals(areaDb.Description));
+                            var area = zone.GetAreas(a => a is AbstractArea area && string.Equals(area.Description, areaDb.Description)).FirstOrDefault();
 
                             if (area != null)
                             {
