@@ -125,13 +125,12 @@ namespace DOL.GS.Effects
         }
 
         #region Properties
-        double m_effectiveness;
         /// <summary>
         /// Returns the effectiveness of this GuildBannerEffect to be compareable.
         /// </summary>
-        public double Effectiveness
+        public double Value
         {
-            get { return m_effectiveness; }
+            get;
         }
         #endregion
 
@@ -154,7 +153,7 @@ namespace DOL.GS.Effects
         #region ctor
         public GuildBannerEffect(double effectiveness) : base(duration)
         {
-            m_effectiveness = effectiveness;
+            Value = effectiveness;
         }
         #endregion
     }
@@ -172,13 +171,13 @@ namespace DOL.GS.Effects
         {
             get
             {
-                return LanguageMgr.GetTranslation(((GamePlayer)Owner).Client, "Effects.BannerOfWardingEffect.Name");
+                return LanguageMgr.GetTranslation(((GamePlayer)Owner).Client, "Effects.BannerOfWardingEffect.Name", Value);
             }
         }
 
         protected override string Description
         {
-            get { return LanguageMgr.GetTranslation(((GamePlayer)Owner).Client, "Effects.BannerOfWardingEffect.Description"); }
+            get { return LanguageMgr.GetTranslation(((GamePlayer)Owner).Client, "Effects.BannerOfWardingEffect.Description", Value); }
         }
 
         //5949,Spell Resist Banner,54,0,0,0,0,0,0,0,0,0,0,0,13,0,332,,,
@@ -194,7 +193,7 @@ namespace DOL.GS.Effects
         #region effect
         public override void Start(GameLiving m_owner)
         {
-            int effValue = (int)(Effectiveness * 10);
+            int effValue = (int)(Value);
             base.Start(m_owner);
             m_owner.BuffBonusCategory4[(int)eProperty.Resist_Body] += effValue;
             m_owner.BuffBonusCategory4[(int)eProperty.Resist_Cold] += effValue;
@@ -207,7 +206,7 @@ namespace DOL.GS.Effects
 
         public override void Stop()
         {
-            int effValue = (int)(Effectiveness * 10);
+            int effValue = (int)(Value);
             m_owner.BuffBonusCategory4[(int)eProperty.Resist_Body] -= effValue;
             m_owner.BuffBonusCategory4[(int)eProperty.Resist_Cold] -= effValue;
             m_owner.BuffBonusCategory4[(int)eProperty.Resist_Energy] -= effValue;
@@ -220,7 +219,7 @@ namespace DOL.GS.Effects
         #endregion
 
         #region ctor
-        public BannerOfWardingEffect(double effectiveness) : base(effectiveness) { }
+        public BannerOfWardingEffect(double effectiveness) : base(effectiveness * 10) { }
         #endregion
     }
 
@@ -237,13 +236,16 @@ namespace DOL.GS.Effects
         {
             get
             {
-                return LanguageMgr.GetTranslation(((GamePlayer)Owner).Client, "Effects.BannerOfShieldingEffect.Name");
+                return LanguageMgr.GetTranslation(Owner as GamePlayer, "Effects.BannerOfShieldingEffect.Name", Value);
             }
         }
 
         protected override string Description
         {
-            get { return LanguageMgr.GetTranslation(((GamePlayer)Owner).Client, "Effects.BannerOfShieldingEffect.Description"); }
+            get
+            {
+                return LanguageMgr.GetTranslation(Owner as GamePlayer, "Effects.BannerOfShieldingEffect.Description", Value);
+            }
         }
 
         //5950,Melee Resist Banner,49,0,0,0,0,0,0,0,0,0,0,0,13,0,332,,,
@@ -260,7 +262,7 @@ namespace DOL.GS.Effects
         public override void Start(GameLiving target)
         {
             base.Start(target);
-            int effValue = (int)(Effectiveness * 6);
+            int effValue = (int)(Value);
             m_owner.BuffBonusCategory4[(int)eProperty.Resist_Crush] += effValue;
             m_owner.BuffBonusCategory4[(int)eProperty.Resist_Slash] += effValue;
             m_owner.BuffBonusCategory4[(int)eProperty.Resist_Thrust] += effValue;
@@ -269,7 +271,7 @@ namespace DOL.GS.Effects
 
         public override void Stop()
         {
-            int effValue = (int)(Effectiveness * 6);
+            int effValue = (int)(Value);
             m_owner.BuffBonusCategory4[(int)eProperty.Resist_Crush] -= effValue;
             m_owner.BuffBonusCategory4[(int)eProperty.Resist_Slash] -= effValue;
             m_owner.BuffBonusCategory4[(int)eProperty.Resist_Thrust] -= effValue;
@@ -279,7 +281,7 @@ namespace DOL.GS.Effects
         #endregion
 
         #region ctor
-        public BannerOfShieldingEffect(double effectiveness) : base(effectiveness) { }
+        public BannerOfShieldingEffect(double effectiveness) : base(effectiveness * 6) { }
         #endregion
     }
 
@@ -296,13 +298,13 @@ namespace DOL.GS.Effects
         {
             get
             {
-                return LanguageMgr.GetTranslation(((GamePlayer)Owner).Client, "Effects.BannerOfFreedomEffect.Name");
+                return LanguageMgr.GetTranslation(Owner as GamePlayer, "Effects.BannerOfFreedomEffect.Name", Value);
             }
         }
 
         protected override string Description
         {
-            get { return LanguageMgr.GetTranslation(((GamePlayer)Owner).Client, "Effects.BannerOfFreedomEffect.Description"); }
+            get { return LanguageMgr.GetTranslation(Owner as GamePlayer, "Effects.BannerOfFreedomEffect.Description", Value); }
         }
 
         //5951,CC Duration Banner,2309,0,0,0,0,0,0,0,0,0,0,0,13,0,332,,,
@@ -319,7 +321,7 @@ namespace DOL.GS.Effects
         public override void Start(GameLiving target)
         {
             base.Start(target);
-            int effValue = (int)(Effectiveness * 6);
+            int effValue = (int)(Value);
             m_owner.BaseBuffBonusCategory[(int)eProperty.MesmerizeDurationReduction] += effValue;
             m_owner.BaseBuffBonusCategory[(int)eProperty.SpeedDecreaseDurationReduction] += effValue;
             m_owner.BaseBuffBonusCategory[(int)eProperty.StunDurationReduction] += effValue;
@@ -328,7 +330,7 @@ namespace DOL.GS.Effects
 
         public override void Stop()
         {
-            int effValue = (int)(Effectiveness * 6);
+            int effValue = (int)(Value);
             m_owner.BaseBuffBonusCategory[(int)eProperty.MesmerizeDurationReduction] -= effValue;
             m_owner.BaseBuffBonusCategory[(int)eProperty.SpeedDecreaseDurationReduction] -= effValue;
             m_owner.BaseBuffBonusCategory[(int)eProperty.StunDurationReduction] -= effValue;
@@ -338,7 +340,7 @@ namespace DOL.GS.Effects
         #endregion
 
         #region ctor
-        public BannerOfFreedomEffect(double effectiveness) : base(effectiveness) { }
+        public BannerOfFreedomEffect(double effectiveness) : base(effectiveness * 6) { }
         #endregion
     }
 
@@ -353,13 +355,13 @@ namespace DOL.GS.Effects
         {
             get
             {
-                return LanguageMgr.GetTranslation(((GamePlayer)Owner).Client, "Effects.BannerOfBesiegingEffect.Name");
+                return LanguageMgr.GetTranslation(Owner as GamePlayer, "Effects.BannerOfBesiegingEffect.Name", Value);
             }
         }
 
         protected override string Description
         {
-            get { return LanguageMgr.GetTranslation(((GamePlayer)Owner).Client, "Effects.BannerOfBesiegingEffect.Description"); }
+            get { return LanguageMgr.GetTranslation(Owner as GamePlayer, "Effects.BannerOfBesiegingEffect.Description", Value); }
         }
 
         //5952,Siege Banner,1419,0,0,0,0,0,0,0,0,0,0,0,13,0,332,,,
@@ -377,7 +379,7 @@ namespace DOL.GS.Effects
         #endregion
 
         #region ctor
-        public BannerOfBesiegingEffect(double effectiveness) : base(effectiveness) { }
+        public BannerOfBesiegingEffect(double effectiveness) : base(effectiveness * 6) { }
         #endregion
     }
 

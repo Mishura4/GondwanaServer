@@ -46,7 +46,7 @@ namespace DOL.Language
                 return false;
             }
 
-            if (Util.IsEmpty(language) || !m_translations.ContainsKey(language))
+            if (language == null || Util.IsEmpty(language) || !m_translations.ContainsKey(language))
             {
                 language = DefaultLanguage;
             }
@@ -525,10 +525,17 @@ namespace DOL.Language
             return translation;
         }
 
+        public static string GetTranslation(GamePlayer player, string translationId, params object[] args)
+        {
+            string translation;
+            TryGetTranslation(out translation, player?.Client.Account.Language, translationId, args);
+            return translation;
+        }
+
         public static string GetTranslation(GameClient client, string translationId, params object[] args)
         {
             string translation;
-            TryGetTranslation(out translation, client, translationId, args);
+            TryGetTranslation(out translation, client?.Account.Language, translationId, args);
             return translation;
         }
 
@@ -543,13 +550,7 @@ namespace DOL.Language
         #region TryGetTranslation
         public static bool TryGetTranslation(out LanguageDataObject translation, GameClient client, ITranslatableObject obj)
         {
-            if (client == null)
-            {
-                translation = null;
-                return false;
-            }
-
-            return TryGetTranslation(out translation, (client.Account == null ? String.Empty : client.Account.Language), obj);
+            return TryGetTranslation(out translation, (client?.Account == null ? String.Empty : client.Account.Language), obj);
         }
 
         public static bool TryGetTranslation(out LanguageDataObject translation, string language, ITranslatableObject obj)
@@ -572,24 +573,15 @@ namespace DOL.Language
 
         public static bool TryGetTranslation(out string translation, GameClient client, string translationId, params object[] args)
         {
-            if (client == null)
-            {
-                translation = TRANSLATION_NULL;
-                return true;
-            }
+            bool result = TryGetTranslation(out translation, client?.Account?.Language, translationId, args);
 
-            bool result = TryGetTranslation(out translation, (client.Account == null ? DefaultLanguage : client.Account.Language), translationId, args);
-
-            if (client.Account != null)
+            if (client?.Account?.PrivLevel > 1 && client.Player != null && result)
             {
-                if (client.Account.PrivLevel > 1 && client.Player != null && result)
+                if (client.ClientState == GameClient.eClientState.Playing)
                 {
-                    if (client.ClientState == GameClient.eClientState.Playing)
-                    {
-                        bool debug = client.Player.TempProperties.getProperty("LANGUAGEMGR-DEBUG", false);
-                        if (debug)
-                            translation = ("Id is " + translationId + " " + translation);
-                    }
+                    bool debug = client.Player.TempProperties.getProperty("LANGUAGEMGR-DEBUG", false);
+                    if (debug)
+                        translation = ("Id is " + translationId + " " + translation);
                 }
             }
 

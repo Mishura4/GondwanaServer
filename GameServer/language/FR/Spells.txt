@@ -15,6 +15,7 @@ DelveInfo.PowerCost:            Coût en mana : {0}
 DelveInfo.HealthCost:           Coût en vie : {0}
 DelveInfo.Radius:               Rayon d'effet : {0}
 DelveInfo.Range:                Portée : {0}
+DelveInfo.RangeModified:		Portée : {0} {1}
 DelveInfo.RecastTime:           Délai de réutilisation: 
 DelveInfo.Target:               Cible : {0}
 DelveInfo.Value:                Valeur : {0}

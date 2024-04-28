@@ -49,17 +49,17 @@ Effects.GuardEffect.GuardedByName:				{0} guarded by {1}
 Effects.GuardEffect.Name:						Guard
 Effects.GuardEffect.XIsGuardingY:				{0} is guarding {1}
 
-Effects.BannerOfWardingEffect.Name:				Banner of Warding
-Effects.BannerOfWardingEffect.Description:		Grants a 10% bonus to all magical resists.
+Effects.BannerOfWardingEffect.Name:				Banner of Warding (+{0}% magic resistance)
+Effects.BannerOfWardingEffect.Description:		Increases resistance to magic damage by {0}%.
 
-Effects.BannerOfShieldingEffect.Name			Banner of Shielding
-Effects.BannerOfShieldingEffect.Description:	Grants a 6% bonus to all melee resists.
+Effects.BannerOfShieldingEffect.Name:			Banner of Shielding (+{0}% physical resistance)
+Effects.BannerOfShieldingEffect.Description:	Increases resistance to physical damage by {0}%.
 
-Effects.BannerOfFreedomEffect.Name				Banner of Freedom
-Effects.BannerOfFreedomEffect.Description:		Reduces all Crowd Controls by 6%.
+Effects.BannerOfFreedomEffect.Name:				Banner of Freedom (+{0}% crowd control resistance)
+Effects.BannerOfFreedomEffect.Description:		Reduces the duration of crowd control effects by (0}%.
 
-Effects.BannerOfBesiegingEffect.Name:			Banner of Besieging
-Effects.BannerOfBesiegingEffect.Description:	Reduces the fireing speed of siegeweapons by 6%.
+Effects.BannerOfBesiegingEffect.Name:			Banner of Besieging (+{0}% siege weapon attack speed)
+Effects.BannerOfBesiegingEffect.Description:	Increases the attack speed of siege weapons by {0}%.
 
 Effects.InterceptEffect.YouAttemtInterceptYBut:	You are now attempting to intercept an attack for {0}, but you must stand closer.
 Effects.InterceptEffect.XAttemtInterceptYouBut:	{0} is now attempting to intercept an attack for you, but you must stand closer.

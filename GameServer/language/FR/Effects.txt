@@ -52,18 +52,17 @@ Effects.GuardEffect.GuardedByName:          {0} est gardé par {1}
 Effects.GuardEffect.Name:                   Garder
 Effects.GuardEffect.XIsGuardingY:           {0} garde {1}
 
-#TODO
-Effects.BannerOfWardingEffect.Name:             Banner of Warding
-Effects.BannerOfWardingEffect.Description:      Accorde un bonus de 10% dans toutes les résistances magiques.
+Effects.BannerOfWardingEffect.Name:             Bannière de Protection (+{0}% résistances magiques)
+Effects.BannerOfWardingEffect.Description:      Augmente de {0}% les résistances magiques.
 
-Effects.BannerOfShieldingEffect.Name            Bannière de protection
-Effects.BannerOfShieldingEffect.Description:    Accorde un bonus de 6% dans toutes les résistances physiques.
+Effects.BannerOfShieldingEffect.Name:           Bannière de Bouclier (+{0}% résistances physiques)
+Effects.BannerOfShieldingEffect.Description:    Augmente de {0}% les résistances physiques.
 
-Effects.BannerOfFreedomEffect.Name:            	Bannière de la liberté
-Effects.BannerOfFreedomEffect.Description:      Reduces all Crowd Controls by 6%.
+Effects.BannerOfFreedomEffect.Name:            	Bannière de Liberté  (+{0}% résistances d'effets de contrôle)
+Effects.BannerOfFreedomEffect.Description:      Réduit la durée des effets de contrôle de {0}%.
 
-Effects.BannerOfBesiegingEffect.Name:           Bannière de siège
-Effects.BannerOfBesiegingEffect.Description:    Réduit la vitesse d'attaque des armes de siège de 6%.
+Effects.BannerOfBesiegingEffect.Name:           Bannière de Siège (+{0}% vitesse d'attaque d'arme de siège)
+Effects.BannerOfBesiegingEffect.Description:    Augmente la vitesse d'attaque des armes de siège de {0}%.
 
 Effects.InterceptEffect.YouAttemtInterceptYBut: Vous essayez maintenant d'intercepter une attaque visant {0}, mais vous devez rester proche.
 Effects.InterceptEffect.XAttemtInterceptYouBut: {0} essaye maintenant d'intercepter une attaque vous visant, mais vous devez rester proche.

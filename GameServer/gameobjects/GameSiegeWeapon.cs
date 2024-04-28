@@ -421,7 +421,7 @@ namespace DOL.GS
             {
                 BannerOfBesiegingEffect eff = Owner.EffectList.GetOfType<BannerOfBesiegingEffect>();
                 if (eff != null)
-                    delay = (int)(delay * (1 - 0.06 * eff.Effectiveness));
+                    delay = (int)(delay * (1 - eff.Value / 100));
 
             }
             return delay;

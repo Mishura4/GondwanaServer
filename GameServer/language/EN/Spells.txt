@@ -18,6 +18,7 @@ DelveInfo.PowerCost:					Power cost: {0}
 DelveInfo.HealthCost:					Health cost: {0}
 DelveInfo.Radius:					Radius: {0}
 DelveInfo.Range:					Range: {0}
+DelveInfo.RangeModified:					Range: {0} {1}
 DelveInfo.RecastTime:					Recast time: 
 DelveInfo.Target:					Target: {0}
 DelveInfo.Value:					Value: {0}
