@@ -117,7 +117,10 @@ namespace DOL.GS.Effects
                 case eCharacterClass.Druid:
                 case eCharacterClass.Bard:
                 case eCharacterClass.Bainshee:
-                    return new BannerOfBesiegingEffect(effectiveness);
+                    if (carrier.IsInRvR)
+                        return new BannerOfBesiegingEffect(effectiveness);
+                    else
+                        return new BannerOfHasteEffect(effectiveness);
                 default: return null;
                     #endregion
             }
@@ -380,6 +383,65 @@ namespace DOL.GS.Effects
 
         #region ctor
         public BannerOfBesiegingEffect(double effectiveness) : base(effectiveness * 20) { }
+        #endregion
+    }
+
+
+    /// <summary>
+    /// Banner of Haste Effect
+    /// </summary>
+    public class BannerOfHasteEffect : GuildBannerEffect
+    {
+        // - Haste Banner - Banner of Haste: Increases attack & cast speed by 8%. (Note: This stacks with other effects.)
+
+        #region visual overrides
+        public override string Name
+        {
+            get
+            {
+                return LanguageMgr.GetTranslation(((GamePlayer)Owner).Client, "Effects.BannerOfHasteEffect.Name", Value);
+            }
+        }
+
+        protected override string Description
+        {
+            get { return LanguageMgr.GetTranslation(((GamePlayer)Owner).Client, "Effects.BannerOfHasteEffect.Description", Value); }
+        }
+
+        //5949,Spell Resist Banner,54,0,0,0,0,0,0,0,0,0,0,0,13,0,332,,,
+        public override ushort Icon
+        {
+            get
+            {
+                return 54;
+            }
+        }
+        #endregion
+
+        #region effect
+        public override void Start(GameLiving m_owner)
+        {
+            int effValue = (int)(Value);
+            base.Start(m_owner);
+            m_owner.BuffBonusCategory4[(int)eProperty.CastingSpeed] += effValue;
+            m_owner.BuffBonusCategory4[(int)eProperty.ArcherySpeed] += effValue;
+            m_owner.BaseBuffBonusCategory[(int)eProperty.MeleeSpeed] += effValue;
+            SendUpdates(m_owner);
+        }
+
+        public override void Stop()
+        {
+            int effValue = (int)(Value);
+            m_owner.BuffBonusCategory4[(int)eProperty.CastingSpeed] -= effValue;
+            m_owner.BuffBonusCategory4[(int)eProperty.ArcherySpeed] -= effValue;
+            m_owner.BaseBuffBonusCategory[(int)eProperty.MeleeSpeed] -= effValue;
+            base.Stop();
+            SendUpdates(m_owner);
+        }
+        #endregion
+
+        #region ctor
+        public BannerOfHasteEffect(double effectiveness) : base(effectiveness * 8) { }
         #endregion
     }
 

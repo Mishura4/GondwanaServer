@@ -64,6 +64,9 @@ Effects.BannerOfFreedomEffect.Description:      Réduit la durée des effets de 
 Effects.BannerOfBesiegingEffect.Name:           Bannière de Siège (+{0}% vitesse d'attaque d'arme de siège)
 Effects.BannerOfBesiegingEffect.Description:    Augmente la vitesse d'attaque des armes de siège de {0}%.
 
+Effects.BannerOfHasteEffect.Name:				Bannière de Hâte (+{0}% vitesse d'attaque et d'incantation)
+Effects.BannerOfHasteEffect.Description:		Augmente de {0}% les vitesses d'attaque et d'incantation.
+
 Effects.InterceptEffect.YouAttemtInterceptYBut: Vous essayez maintenant d'intercepter une attaque visant {0}, mais vous devez rester proche.
 Effects.InterceptEffect.XAttemtInterceptYouBut: {0} essaye maintenant d'intercepter une attaque vous visant, mais vous devez rester proche.
 Effects.InterceptEffect.YouAttemtInterceptY:    Vous essayez maintenant d'intercepter une attaque visant {0}.

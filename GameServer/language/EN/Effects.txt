@@ -61,6 +61,9 @@ Effects.BannerOfFreedomEffect.Description:		Reduces the duration of crowd contro
 Effects.BannerOfBesiegingEffect.Name:			Banner of Besieging (+{0}% siege weapon attack speed)
 Effects.BannerOfBesiegingEffect.Description:	Increases the attack speed of siege weapons by {0}%.
 
+Effects.BannerOfHasteEffect.Name:				Banner of Haste (+{0}% casting/attack speed)
+Effects.BannerOfHasteEffect.Description:		Increases the casting and attack speed by {0}%.
+
 Effects.InterceptEffect.YouAttemtInterceptYBut:	You are now attempting to intercept an attack for {0}, but you must stand closer.
 Effects.InterceptEffect.XAttemtInterceptYouBut:	{0} is now attempting to intercept an attack for you, but you must stand closer.
 Effects.InterceptEffect.YouAttemtInterceptY:	You are now attempting to intercept an attack for {0}.
