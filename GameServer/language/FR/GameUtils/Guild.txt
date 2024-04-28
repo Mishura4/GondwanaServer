@@ -24,10 +24,10 @@ GameUtils.Guild.MiscInfos05:		En utilisant la commande /gc jailrelease, un membr
 GameUtils.Guild.MiscInfos06:		Les commandes /gc buybanner et /gc summon permettent à un membre de la guilde de convoquer et d'utiliser des bannières qui sont destinées à être des points de rassemblement sur le champ de bataille. Ces bannières, qui peuvent être achetées via la fenêtre de l'interface sociale, fournissent divers effets bénéfiques aux membres de la guilde et aux membres du groupe se trouvant à proximité.
 GameUtils.Guild.MiscInfos07:		- Tous les bonus des buffs de guilde sont désormais améliorés de 50%, cependant l'utilisation d'un buff de guilde coûte désormais 2000 points de Mérite de guilde au lieu de 1000.
 GameUtils.Guild.MiscInfos08:		- L'utilisation de /gc territorybanner a été améliorée pour fournir un bonus de 10% aux dégâts magiques et de mêlée pour tous les gardes du territoire, tout en augmentant également leur chance de coup critique de 5%.
-GameUtils.Guild.MiscInfos09:		- Les effets bénéfiques de la bannière de guilde sont désormais améliorés de 10% pour le porteur de la bannière ainsi que pour les joueurs environnants.
+GameUtils.Guild.MiscInfos09:		- Les effets bénéfiques de la bannière de guilde sont désormais améliorés de 15% pour le porteur de la bannière ainsi que pour les joueurs environnants.
 GameUtils.Guild.MiscInfos10:		- L'utilisation de /gc territorybanner a été améliorée ; les gardes du territoire bénéficieront désormais d'un bonus d'absorption de dégâts supplémentaire de 15% contre les attaques magiques et les attaques en mêlée, en plus du bonus existant de {0}%.
 GameUtils.Guild.MiscInfos11:		- Tous les bonus des buffs de guilde sont désormais améliorés de 50%, cependant l'utilisation d'un buff de guilde coûte désormais 3000 points de Mérite de guilde au lieu des 1000 points d'origine.
-GameUtils.Guild.MiscInfos12:		- Les effets bénéfiques de la bannière de guilde sont désormais améliorés de 20% pour le porteur de la bannière ainsi que pour les joueurs environnants.
+GameUtils.Guild.MiscInfos12:		- Les effets bénéfiques de la bannière de guilde sont désormais améliorés de 30% pour le porteur de la bannière ainsi que pour les joueurs environnants.
 GameUtils.Guild.MiscInfos13:		- L'utilisation de /gc territorybanner a été améliorée pour fournir un bonus de 15% aux dégâts magiques et de mêlée pour tous les gardes du territoire, tout en augmentant également leur chance de coup critique de 10%.
 
 GameUtils.Guild.Banner.BannerInGroup:			Quelqu'un dans votre groupe a déjà une bannière active!

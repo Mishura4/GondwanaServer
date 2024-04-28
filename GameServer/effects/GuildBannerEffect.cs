@@ -68,6 +68,19 @@ namespace DOL.GS.Effects
             else if (carrier.Group != null && carrier.Group.IsInTheGroup(target))
                 effectiveness = 0.5;
 
+            var guildLevel = carrier.Guild?.GuildLevel ?? 0;
+            if (guildLevel >= 13)
+            {
+                if (guildLevel >= 18)
+                {
+                    effectiveness *= 1.30;
+                }
+                else
+                {
+                    effectiveness *= 1.15;
+                }
+            }
+
             #region Get new classdependend effect
             switch ((eCharacterClass)carrier.CharacterClass.ID)
             {

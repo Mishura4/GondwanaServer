@@ -24,10 +24,10 @@ GameUtils.Guild.MiscInfos05:		By using the /gc jailrelease command, a guild memb
 GameUtils.Guild.MiscInfos06:		The commands /gc buybanner and /gc summon allows a guild member to summon and utilize banners which are intended to be rally points on the battlefield. These banners, which can be purchased through the social interface window, provide various beneficial effects to nearby guild members and groupmates.
 GameUtils.Guild.MiscInfos07:		- All Guild buff Bonuses are now improved by 50%, however the use of a guild buff now cost 2000 Guild Merit points instead of 1000.
 GameUtils.Guild.MiscInfos08:		- /gc territorybanner usage has been upgraded to provide a 10% bonus to spell and melee damages for all territory guards, while also increasing their critical hit chance by 5%.
-GameUtils.Guild.MiscInfos09:		- Guild banner’s beneficial effects are now improved by 10% for the banner’s carrier and surrounding players.
+GameUtils.Guild.MiscInfos09:		- Guild banner’s beneficial effects are now improved by 15% for the banner’s carrier and surrounding players.
 GameUtils.Guild.MiscInfos10:		- /gc territorybanner usage has been upgraded, territory guards will now benefit from an additional 15% damage absorption bonus against both spells and melee attacks, alongside the existing {0}% bonus.
 GameUtils.Guild.MiscInfos11:		- All Guild buff Bonuses are now improved by 100%, however the use of a guild buff now cost 3000 Guild Merit points instead of 1000 originally.
-GameUtils.Guild.MiscInfos12:		- Guild banner’s beneficial effects are now improved by 20% for the banner’s carrier and surrounding players.
+GameUtils.Guild.MiscInfos12:		- Guild banner’s beneficial effects are now improved by 30% for the banner’s carrier and surrounding players.
 GameUtils.Guild.MiscInfos13:		- /gc territorybanner usage has been upgraded to provide a 15% bonus to spell and melee damages for all territory guards, while also increasing their critical hit chance by 10%.
 
 GameUtils.Guild.Banner.BannerInGroup:			Someone in your group already has a guild banner active!
