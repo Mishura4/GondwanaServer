@@ -277,14 +277,6 @@ Commands.Players.Guild.JailRelease.ConfirmCost:			Relâcher {0} de prison coûte
 Commands.Players.Guild.JailRelease.NotEnoughMoney:		Votre banque de guilde n'a pas assez d'or pour relâcher {0}.
 Commands.Players.Guild.JailRelease.Released:			{0} a été relâché(e) de prison par {1}.
 
-Commands.Players.Guild.InviteNotThis:			Vous ne pouvez pas inviter un membre de ce royaume dans votre guilde.
-Commands.Players.Guild.Help.GuildTerritories:   '/gc territories' Affiche les territoires ainsi que leurs occupations.
-Commands.Players.Guild.TerritoryPaid:           La somme de {0} a été retirée de la banque de votre guilde pour financer vos territoires.
-Commands.Players.Guild.TerritoryNoMoney:        Votre guilde n'a pas pu honorer ses dettes et vous avez perdu vos territoires conquis.
-Commands.Players.Guild.TerritoryMeritPoints:   L'occupation de vos territoires vous rapporte {0} points de mérite.
-Commands.Players.Guild.TerritoryBeGuilded:	Vous devez etre dans une guilde pour voir les territoires occupés.
-Commands.Players.Guild.TerritoryWindowTitle:	[ TERRITOIRES ]
-
 Commands.Players.Guild.TerritoryBanner.Denied:			Vous devez être au moins rang 2 pour invoquer un portail de guilde.
 Commands.Players.Guild.TerritoryBanner.ConfirmCost:		Invoquer vos bannières dans ce territoire coûtera {0} points de mérite à votre guilde. Confirmer?
 Commands.Players.Guild.TerritoryBanner.NotEnoughMerit:	Votre guilde doit avoir {0} points de mérite pour invoquer les bannières de territoire.
@@ -311,5 +303,24 @@ Commands.Players.Guild.CombatZone.ConfirmCost:		Établir une zone de combat coû
 Commands.Players.Guild.CombatZone.Cooldown:			Vous devez attendre {0} heures {1} minutes et {2} secondes pour établir une zone de combat.
 Commands.Players.Guild.CombatZone.NotEnoughMerit:	Votre guilde doit avoir {0} points de mérite pour établir une zone de combat.
 Commands.Players.Guild.CombatZone.AreaName:			Zone de combat de {0}
+
+Commands.Players.Guild.InviteNotThis:			Vous ne pouvez pas inviter un membre de ce royaume dans votre guilde.
+Commands.Players.Guild.Help.GuildTerritories:   '/gc territories' Affiche les territoires ainsi que leurs occupations.
+Commands.Players.Guild.TerritoryPaid:           La somme de {0} a été retirée de la banque de votre guilde pour financer vos territoires.
+Commands.Players.Guild.TerritoryNoMoney:        Votre guilde n'a pas pu honorer ses dettes et vous avez perdu vos territoires conquis.
+Commands.Players.Guild.TerritoryMeritPoints:   L'occupation de vos territoires vous rapporte {0} points de mérite.
+Commands.Players.Guild.TerritoryBeGuilded:	Vous devez etre dans une guilde pour voir les territoires occupés.
+
+Commands.Players.Guild.Territories.WindowTitle:			[ TERRITOIRES ]
+Commands.Players.Guild.Territories.TerritoriesOwned:	---- Territoires de {0} ----
+Commands.Players.Guild.Territories.TerritoriesOther:	---- Autres territoires ----
+Commands.Players.Guild.Territories.TerritoriesList:		---- Territoires ----
+Commands.Players.Guild.Territories.TerritoryNeutral:	Neutre
+Commands.Players.Guild.Territories.GuildInfo:			---- Information des territoires de guilde ----
+Commands.Players.Guild.Territories.DailyRent:			Total de la taxe journalière: {0}
+Commands.Players.Guild.Territories.DailyMeritPoints:	Total des points de mérite journaliers: {0}
+Commands.Players.Guild.Territories.TimeBeforeRent:		Temps avant le prochain paiement: {0}
+Commands.Players.Guild.Territories.TotalXPBonus:		Bonus total d'expérience: {0}%
+Commands.Players.Guild.Territories.TotalBPBonus:		Bonus total de points de butin pour mobs Nv65+: {0}%
 
 Commands.Players.Guild.TotalMemberOnline:   Nombre de joueurs en ligne dans la guilde.

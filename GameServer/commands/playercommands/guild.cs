@@ -3444,14 +3444,8 @@ namespace DOL.GS.Commands
 
                     #region territories
                     case "territories":
-                        if (client.Player.Guild == null || (client.Player.Guild.IsSystemGuild && client.Account.PrivLevel <= 1))
-                        {
-                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.TerritoryBeGuilded"), eChatType.CT_System, eChatLoc.CL_ChatWindow);
-                            break;
-                        }
-
-                        IList<string> infos = TerritoryManager.Instance.GetTerritoriesInformations();
-                        client.Out.SendCustomTextWindow(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.TerritoryWindowTitle"), infos);
+                        IList<string> infos = TerritoryManager.Instance.GetTerritoriesInformations(client.Player);
+                        client.Out.SendCustomTextWindow(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Territories.WindowTitle"), infos);
                         break;
                     #endregion
 

@@ -666,6 +666,67 @@ namespace DOL.Language
             return missing;
         }
 
+        public static string TranslateTimeShort(string language, uint hours, uint minutes = 0, uint seconds = 0)
+        {
+            string retval = "";
+            string translation;
+            bool padMinutesWithZeros = false;
+            bool padSecondsWithZeros = false;
+            if (hours != 0)
+            {
+                padMinutesWithZeros = true;
+                if (!TryGetTranslation(out translation, language, "Language.Hours.Short", hours))
+                {
+                    return "(TRANSLATION ERROR)";
+                }
+                retval += translation;
+            }
+            if (minutes != 0 || (hours != 0 && seconds != 0))
+            {
+                padSecondsWithZeros = true;
+                if (!TryGetTranslation(out translation, language, "Language.Minutes.Short", minutes))
+                {
+                    return "(TRANSLATION ERROR)";
+                }
+                if (retval.Length > 0)
+                {
+                    retval += ' ';
+                }
+                if (padMinutesWithZeros && minutes < 10)
+                {
+                    retval += "0";
+                }
+                retval += translation;
+            }
+            if (seconds != 0)
+            {
+                if (!TryGetTranslation(out translation, language, "Language.Seconds.Short", seconds))
+                {
+                    return "(TRANSLATION ERROR)";
+                }
+                if (retval.Length > 0)
+                {
+                    retval += ' ';
+                }
+                if (padSecondsWithZeros && seconds < 10)
+                {
+                    retval += "0";
+                }
+                retval += translation;
+            }
+            return retval;
+        }
+
+        public static string TranslateTimeShort(GameClient client, uint hours, uint minutes = 0, uint seconds = 0)
+        {
+            return TranslateTimeShort(client.Account.Language, hours, minutes, seconds);
+        }
+
+        public static string TranslateTimeShort(GamePlayer player, uint hours, uint minutes = 0, uint seconds = 0)
+        {
+            return TranslateTimeShort(player.Client.Account.Language, hours, minutes, seconds);
+        }
+
         #endregion
 
         #region RegisterLanguageDataObject / UnregisterLanguageDataObject

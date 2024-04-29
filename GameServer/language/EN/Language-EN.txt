@@ -1,3 +1,11 @@
+# Miscellaneous Language
+Language.Hours.Short:								h
+Language.Minutes.Short:								min
+Language.Seconds.Short:								s
+Language.Hours.Long:								hours
+Language.Minutes.Short:								minutes
+Language.Seconds.Short:								seconds
+
 # KEEPS
 # Managers/Player Manager
 PlayerManager.BroadcastCapture.Captured:		The forces of {0} have captured {1}!

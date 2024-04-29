@@ -550,8 +550,8 @@ namespace DOL.GS
                 m_WorldUpdateThread.Start();
 
                 m_dayIncrement = Math.Max(0, Math.Min(1000, ServerProperties.Properties.WORLD_DAY_INCREMENT)); // increments > 1000 do not render smoothly on clients
-                m_dayStartTick = GameTimer.GetTickCount() - (DAY / Math.Max(1, m_dayIncrement) / 2); // set start time to 12pm
-                m_dayResetTimer = new Timer(new TimerCallback(DayReset), null, DAY / Math.Max(1, m_dayIncrement) / 2, DAY / Math.Max(1, m_dayIncrement));
+                m_dayStartTick = GameTimer.GetTickCount() - GetDayDuration() / 2; // set start time to 12pm
+                m_dayResetTimer = new Timer(new TimerCallback(DayReset), null, GetDayDuration() / 2, GetDayDuration());
 
                 m_pingCheckTimer = new Timer(new TimerCallback(PingCheck), null, 10 * 1000, 0); // every 10s a check
 
@@ -762,6 +762,32 @@ namespace DOL.GS
                 var curTime = diff * m_dayIncrement;
                 return curTime % DAY;
             }
+        }
+
+        /// <summary>
+        /// Gets the tick at which the day started
+        /// </summary>
+        /// <returns>day start time</returns>
+        public static uint GetDayStartTime()
+        {
+            return m_dayStartTick;
+        }
+
+        /// <summary>
+        /// Gets the duration of a day
+        /// </summary>
+        /// <returns>day duration</returns>
+        public static uint GetDayDuration()
+        {
+            return DAY / Math.Max(1, m_dayIncrement);
+        }
+
+        /// <summary>
+        /// Get the number of real milliseconds before next in-game day
+        /// </summary>
+        public static uint GetTimeBeforeNextDay()
+        {
+            return GetDayDuration() - (GameTimer.GetTickCount() - GetDayStartTime());
         }
 
         /// <summary>

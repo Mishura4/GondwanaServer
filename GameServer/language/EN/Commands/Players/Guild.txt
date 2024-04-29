@@ -304,12 +304,23 @@ Commands.Players.Guild.CombatZone.Cooldown:			You must wait {0} hours {1} minute
 Commands.Players.Guild.CombatZone.NotEnoughMerit:	Your guild must have {0} merit points to summon a combat zone.
 Commands.Players.Guild.CombatZone.AreaName:			Combat zone of {0}.
 
-Commands.Players.Guild.InviteNotThis:			You cannot invite a member of this realm to your guild.
-Commands.Players.Guild.Help.GuildTerritories:   '/gc territories' Displays the guild territories and their occupations.
-Commands.Players.Guild.TerritoryPaid:           The amount of {0} has been withdrawn from your guild's bank to fund your territories.
-Commands.Players.Guild.TerritoryNoMoney:        Your guild could not honor its debts and lost its conquered territories.  
-Commands.Players.Guild.TerritoryMeritPoints:   Territories occupation earns your guild {0} merit points.
-Commands.Players.Guild.TerritoryBeGuilded:	You must belong to a guild to see occupied territories.
-Commands.Players.Guild.TerritoryWindowTitle:	[ TERRITORIES ]
+Commands.Players.Guild.InviteNotThis:				You cannot invite a member of this realm to your guild.
+Commands.Players.Guild.Help.GuildTerritories:		'/gc territories' Displays the guild territories and their occupations.
+Commands.Players.Guild.TerritoryPaid:				The amount of {0} has been withdrawn from your guild's bank to fund your territories.
+Commands.Players.Guild.TerritoryNoMoney:			Your guild could not honor its debts and lost its conquered territories.  
+Commands.Players.Guild.TerritoryMeritPoints:		Territories occupation earns your guild {0} merit points.
+Commands.Players.Guild.TerritoryBeGuilded:			You must belong to a guild to see occupied territories.
+
+Commands.Players.Guild.Territories.WindowTitle:			[ TERRITORIES ]
+Commands.Players.Guild.Territories.TerritoriesOwned:	---- Territories owned by {0} ----
+Commands.Players.Guild.Territories.TerritoriesOther:	---- Other territories ----
+Commands.Players.Guild.Territories.TerritoriesList:		---- Territories ----
+Commands.Players.Guild.Territories.TerritoryNeutral:	Neutral
+Commands.Players.Guild.Territories.GuildInfo:			---- Guild Territories Info ----
+Commands.Players.Guild.Territories.DailyRent:			Total daily rent price: {0}
+Commands.Players.Guild.Territories.DailyMeritPoints:	Total daily merit points: {0}
+Commands.Players.Guild.Territories.TimeBeforeRent:		Time before rental payment: {0}
+Commands.Players.Guild.Territories.TotalXPBonus:		Total bonus XP: {0}%
+Commands.Players.Guild.Territories.TotalBPBonus:		Total bonus bounty points for Lv65+ mobs: {0}%
 
 Commands.Players.Guild.TotalMemberOnline:   Number of online players in the guild.
