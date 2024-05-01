@@ -1345,10 +1345,7 @@ namespace DOL.GS.Commands
                         }
 
                         if (player == null)
-                        {
-                            client.Out.SendMessage("You need a valid target!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                            return;
-                        }
+                            player = client.Player;
 
                         m_hasEffect = false;
 
@@ -1361,7 +1358,7 @@ namespace DOL.GS.Commands
                             }
                         }
 
-                        if (!m_hasEffect)
+                        if (m_hasEffect)
                         {
                             SendResistEffect(player);
                             return;
