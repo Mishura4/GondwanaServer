@@ -668,6 +668,9 @@ namespace DOL.GS.ServerRules
         /// <returns></returns>
         public virtual bool IsAllowedToSummonBanner(GamePlayer player, bool quiet)
         {
+            if (player.Client.Account.PrivLevel > (uint)ePrivLevel.Player)
+                return true;
+
             if (!player.IsInRvR)
             {
                 if (!quiet)

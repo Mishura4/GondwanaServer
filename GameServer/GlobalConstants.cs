@@ -717,8 +717,17 @@ namespace DOL.GS
         MeleeDamage = 173,
         RangedDamage = 174,
         FumbleChance = 175,
+        /// <summary>
+        /// When retrieving the value, this is total mezz duration. Buffs with a positive value reduce the duration. Yes it is confusing
+        /// </summary>
         MesmerizeDurationReduction = 176,
+        /// <summary>
+        /// When retrieving the value, this is total stun duration. Buffs with a positive value reduce the duration. Yes it is confusing
+        /// </summary>
         StunDurationReduction = 177,
+        /// <summary>
+        /// When retrieving the value, this is total slow duration. Buffs with a positive value reduce the duration. Yes it is confusing
+        /// </summary>
         SpeedDecreaseDurationReduction = 178,
         BladeturnReinforcement = 179,
         DefensiveBonus = 180,

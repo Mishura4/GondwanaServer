@@ -4,6 +4,7 @@ using DOL.GS;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
 using DOL.Language;
+using Google.Protobuf.WellKnownTypes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +30,32 @@ namespace DOL.GS.Spells
                 return;
             }
             base.ApplyEffectOnTarget(target, effectiveness);
+        }
+
+        /// <inheritdoc />
+        public override int CalculateSpellResistChance(GameLiving target)
+        {
+            // If stun duration is 0, just resist the spell
+            return target.GetModified(eProperty.StunDurationReduction) <= 0 ? 100 : base.CalculateSpellResistChance(target);
+        }
+
+        /// <inheritdoc />
+        protected override int CalculateEffectDuration(GameLiving target, double effectiveness)
+        {
+            int duration = Spell.Duration;
+            int modifiedStunDuration = target.GetModified(eProperty.StunDurationReduction);
+            if (modifiedStunDuration != 100)
+            {
+                if (modifiedStunDuration <= 0) // Shouldn't happen because CalculateSpellResistChance but better safe than sending a duration of 0 (infinite)
+                {
+                    duration = 1;
+                }
+                else
+                {
+                    duration = (int)(duration * (modifiedStunDuration / 100d) + 0.5d);
+                }
+            }
+            return duration;
         }
 
         public override void OnEffectStart(GameSpellEffect effect)

@@ -58,7 +58,7 @@ Effects.BannerOfWardingEffect.Description:      Augmente de {0}% les résistance
 Effects.BannerOfShieldingEffect.Name:           Bannière de Bouclier (+{0}% résistances physiques)
 Effects.BannerOfShieldingEffect.Description:    Augmente de {0}% les résistances physiques.
 
-Effects.BannerOfFreedomEffect.Name:            	Bannière de Liberté  (+{0}% résistances d'effets de contrôle)
+Effects.BannerOfFreedomEffect.Name:            	Bannière de Liberté  (-{0}% durée d'effets de contrôle énemis)
 Effects.BannerOfFreedomEffect.Description:      Réduit la durée des effets de contrôle de {0}%.
 
 Effects.BannerOfBesiegingEffect.Name:           Bannière de Siège (+{0}% vitesse d'attaque d'arme de siège)

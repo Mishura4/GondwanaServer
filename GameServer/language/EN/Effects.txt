@@ -55,7 +55,7 @@ Effects.BannerOfWardingEffect.Description:		Increases resistance to magic damage
 Effects.BannerOfShieldingEffect.Name:			Banner of Shielding (+{0}% physical resistance)
 Effects.BannerOfShieldingEffect.Description:	Increases resistance to physical damage by {0}%.
 
-Effects.BannerOfFreedomEffect.Name:				Banner of Freedom (+{0}% crowd control resistance)
+Effects.BannerOfFreedomEffect.Name:				Banner of Freedom (-{0}% enemy crowd control duration)
 Effects.BannerOfFreedomEffect.Description:		Reduces the duration of crowd control effects by (0}%.
 
 Effects.BannerOfBesiegingEffect.Name:			Banner of Besieging (+{0}% siege weapon attack speed)

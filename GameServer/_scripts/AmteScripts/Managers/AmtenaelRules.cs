@@ -780,6 +780,9 @@ namespace DOL.GS.ServerRules
         /// <returns></returns>
         public override bool IsAllowedToSummonBanner(GamePlayer player, bool quiet)
         {
+            if (player.Client.Account.PrivLevel > (uint)ePrivLevel.Player)
+                return true;
+
             lock (BannerDisabledRegionIDs)
             {
                 if (BannerDisabledRegionIDs.Contains(player.CurrentRegionID))
