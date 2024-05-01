@@ -449,14 +449,23 @@ namespace DOL.Territories
             infos.AddRange(otherTerritories);
 
             infos.Add(string.Empty);
-            var nextPayment = WorldMgr.GetTimeBeforeNextDay() / 1000;
-            var seconds = nextPayment % 60;
-            var minutes = nextPayment / 60 % 60;
-            var hours = nextPayment / 3600;
             infos.Add(LanguageMgr.GetTranslation(player, "Commands.Players.Guild.Territories.GuildInfo"));
             infos.Add(LanguageMgr.GetTranslation(player, "Commands.Players.Guild.Territories.DailyRent", CalculateGuildTerritoryTax(player.Guild)));
             infos.Add(LanguageMgr.GetTranslation(player, "Commands.Players.Guild.Territories.DailyMeritPoints", ownedTerritories.Count * DAILY_MERIT_POINTS));
-            infos.Add(LanguageMgr.GetTranslation(player, "Commands.Players.Guild.Territories.TimeBeforeRent", LanguageMgr.TranslateTimeShort(player, hours, minutes, seconds)));
+            string timeBeforeRent;
+            if (ownedTerritories.Count == 0)
+            {
+                timeBeforeRent = LanguageMgr.GetTranslation(player, "Language.NotApplicable");
+            }
+            else
+            {
+                var nextPayment = WorldMgr.GetTimeBeforeNextDay() / 1000;
+                var seconds = nextPayment % 60;
+                var minutes = nextPayment / 60 % 60;
+                var hours = nextPayment / 3600;
+                timeBeforeRent = LanguageMgr.TranslateTimeShort(player, hours, minutes, seconds);
+            }
+            infos.Add(LanguageMgr.GetTranslation(player, "Commands.Players.Guild.Territories.TimeBeforeRent", timeBeforeRent));
             infos.Add(LanguageMgr.GetTranslation(player, "Commands.Players.Guild.Territories.TotalXPBonus", Math.Min(10, ownedTerritories.Count * 2)));
             return infos;
         }

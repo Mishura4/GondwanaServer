@@ -1,10 +1,11 @@
 # Miscellaneous Language
-Language.Hours.Short:								h
-Language.Minutes.Short:								min
-Language.Seconds.Short:								s
-Language.Hours.Long:								hours
-Language.Minutes.Short:								minutes
-Language.Seconds.Short:								seconds
+Language.Hours.Short:								{0}h
+Language.Minutes.Short:								{0}min
+Language.Seconds.Short:								{0}s
+Language.Hours.Long:								{0} hours
+Language.Minutes.Short:								{0} minutes
+Language.Seconds.Short:								{0} seconds
+Language.NotApplicable:								N/A
 
 # KEEPS
 # Managers/Player Manager

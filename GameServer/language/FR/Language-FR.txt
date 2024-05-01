@@ -20,8 +20,9 @@ System.LanguagesName.IT:					Italien
 Language.Hours.Short:								{0}h
 Language.Minutes.Short:								{0}min
 Language.Seconds.Short:								{0}s
-Language.Hours.Long:								{0}heures
-Language.Minutes.Short:								{0}minutes
-Language.Seconds.Short:								{0}secondes
+Language.Hours.Long:								{0} heures
+Language.Minutes.Short:								{0} minutes
+Language.Seconds.Short:								{0} secondes
+Language.NotApplicable:								N/A
 
 PlayerPickUpRequestHandler.HandlePacket.Target:		Vous devez avoir une cible valide à ramasser.
