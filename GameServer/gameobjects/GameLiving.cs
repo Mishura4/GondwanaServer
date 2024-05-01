@@ -2042,10 +2042,9 @@ namespace DOL.GS
             }
 
             #region Prevent Flight
-            if (ad.Attacker is GamePlayer)
+            if (ad.Attacker is GamePlayer attackerPlayer)
             {
-                GamePlayer attacker = ad.Attacker as GamePlayer;
-                if (attacker.HasAbility(Abilities.PreventFlight) && Util.Chance(10))
+                if (attackerPlayer.HasAbility(Abilities.PreventFlight) && Util.Chance(10))
                 {
                     if (IsObjectInFront(ad.Target, 120) && ad.Target.IsMoving)
                     {
@@ -2076,87 +2075,71 @@ namespace DOL.GS
 
             #region controlled messages
 
-            if (ad.Attacker is GameNPC)
+            if (ad.Attacker is GameNPC { Brain: IControlledBrain { Owner: GamePlayer realAttacker } })
             {
-                IControlledBrain brain = ((GameNPC)ad.Attacker).Brain as IControlledBrain;
-                if (brain != null)
+                excludes.Add(realAttacker);
+                switch (ad.AttackResult)
                 {
-                    GamePlayer owner = brain.GetPlayerOwner();
-                    if (owner != null)
-                    {
-                        excludes.Add(owner);
-                        switch (ad.AttackResult)
+                    case eAttackResult.HitStyle:
+                    case eAttackResult.HitUnstyled:
                         {
-                            case eAttackResult.HitStyle:
-                            case eAttackResult.HitUnstyled:
-                                {
-                                    string modmessage = "";
-                                    if (ad.Modifier > 0) modmessage = " (+" + ad.Modifier + ")";
-                                    if (ad.Modifier < 0) modmessage = " (" + ad.Modifier + ")";
-                                    string attackTypeMsg = "attacks";
-                                    if (ad.Attacker.ActiveWeaponSlot == eActiveWeaponSlot.Distance)
-                                    {
-                                        attackTypeMsg = "shoots";
-                                    }
-                                    owner.Out.SendMessage(string.Format(LanguageMgr.GetTranslation(owner.Client.Account.Language, "GameLiving.AttackData.YourHits"), owner.GetPersonalizedName(ad.Attacker), attackTypeMsg, owner.GetPersonalizedName(ad.Target), ad.Damage, modmessage), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
-                                    if (ad.CriticalDamage > 0)
-                                    {
-                                        owner.Out.SendMessage(string.Format(LanguageMgr.GetTranslation(owner.Client.Account.Language, "GameLiving.AttackData.YourCriticallyHits"), owner.GetPersonalizedName(ad.Attacker), owner.GetPersonalizedName(ad.Target), ad.CriticalDamage), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
-                                    }
+                            string modmessage = "";
+                            if (ad.Modifier > 0) modmessage = " (+" + ad.Modifier + ")";
+                            if (ad.Modifier < 0) modmessage = " (" + ad.Modifier + ")";
+                            string attackTypeMsg = "attacks";
+                            if (ad.Attacker.ActiveWeaponSlot == eActiveWeaponSlot.Distance)
+                            {
+                                attackTypeMsg = "shoots";
+                            }
+                            realAttacker.Out.SendMessage(string.Format(LanguageMgr.GetTranslation(realAttacker.Client.Account.Language, "GameLiving.AttackData.YourHits"), realAttacker.GetPersonalizedName(ad.Attacker), attackTypeMsg, realAttacker.GetPersonalizedName(ad.Target), ad.Damage, modmessage), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
+                            if (ad.CriticalDamage > 0)
+                            {
+                                realAttacker.Out.SendMessage(string.Format(LanguageMgr.GetTranslation(realAttacker.Client.Account.Language, "GameLiving.AttackData.YourCriticallyHits"), realAttacker.GetPersonalizedName(ad.Attacker), realAttacker.GetPersonalizedName(ad.Target), ad.CriticalDamage), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
+                            }
 
-                                    break;
-                                }
-                            default:
-                                owner.Out.SendMessage(message, eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
-                                break;
+                            break;
                         }
-                    }
+                    default:
+                        realAttacker.Out.SendMessage(message, eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
+                        break;
                 }
             }
 
-            if (ad.Target is GameNPC)
+            if (ad.Target is GameNPC { Brain: IControlledBrain { Owner: GamePlayer realTarget }})
             {
-                IControlledBrain brain = ((GameNPC)ad.Target).Brain as IControlledBrain;
-                if (brain != null)
+                excludes.Add(realTarget);
+                switch (ad.AttackResult)
                 {
-                    GameLiving owner_living = brain.GetLivingOwner();
-                    excludes.Add(owner_living);
-                    if (owner_living is GamePlayer owner && ad.Target == owner.ControlledBody)
-                    {
-                        switch (ad.AttackResult)
+                    case eAttackResult.Blocked:
+                        realTarget.Out.SendMessage(string.Format(LanguageMgr.GetTranslation(realTarget.Client.Account.Language, "GameLiving.AttackData.Blocked"), ad.Attacker.GetName(0, true), ad.Target.Name), eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
+                        break;
+                    case eAttackResult.Parried:
+                        realTarget.Out.SendMessage(string.Format(LanguageMgr.GetTranslation(realTarget.Client.Account.Language, "GameLiving.AttackData.Parried"), ad.Attacker.GetName(0, true), ad.Target.Name), eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
+                        break;
+                    case eAttackResult.Evaded:
+                        realTarget.Out.SendMessage(string.Format(LanguageMgr.GetTranslation(realTarget.Client.Account.Language, "GameLiving.AttackData.Evaded"), ad.Attacker.GetName(0, true), ad.Target.Name), eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
+                        break;
+                    case eAttackResult.Fumbled:
+                        realTarget.Out.SendMessage(string.Format(LanguageMgr.GetTranslation(realTarget.Client.Account.Language, "GameLiving.AttackData.Fumbled"), ad.Attacker.GetName(0, true)), eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
+                        break;
+                    case eAttackResult.Missed:
+                        if (ad.AttackType != AttackData.eAttackType.Spell)
+                            realTarget.Out.SendMessage(string.Format(LanguageMgr.GetTranslation(realTarget.Client.Account.Language, "GameLiving.AttackData.Misses"), ad.Attacker.GetName(0, true), ad.Target.Name), eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
+                        break;
+                    case eAttackResult.HitStyle:
+                    case eAttackResult.HitUnstyled:
                         {
-                            case eAttackResult.Blocked:
-                                owner.Out.SendMessage(string.Format(LanguageMgr.GetTranslation(owner.Client.Account.Language, "GameLiving.AttackData.Blocked"), ad.Attacker.GetName(0, true), ad.Target.Name), eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
-                                break;
-                            case eAttackResult.Parried:
-                                owner.Out.SendMessage(string.Format(LanguageMgr.GetTranslation(owner.Client.Account.Language, "GameLiving.AttackData.Parried"), ad.Attacker.GetName(0, true), ad.Target.Name), eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
-                                break;
-                            case eAttackResult.Evaded:
-                                owner.Out.SendMessage(string.Format(LanguageMgr.GetTranslation(owner.Client.Account.Language, "GameLiving.AttackData.Evaded"), ad.Attacker.GetName(0, true), ad.Target.Name), eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
-                                break;
-                            case eAttackResult.Fumbled:
-                                owner.Out.SendMessage(string.Format(LanguageMgr.GetTranslation(owner.Client.Account.Language, "GameLiving.AttackData.Fumbled"), ad.Attacker.GetName(0, true)), eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
-                                break;
-                            case eAttackResult.Missed:
-                                if (ad.AttackType != AttackData.eAttackType.Spell)
-                                    owner.Out.SendMessage(string.Format(LanguageMgr.GetTranslation(owner.Client.Account.Language, "GameLiving.AttackData.Misses"), ad.Attacker.GetName(0, true), ad.Target.Name), eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
-                                break;
-                            case eAttackResult.HitStyle:
-                            case eAttackResult.HitUnstyled:
-                                {
-                                    string modmessage = "";
-                                    if (ad.Modifier > 0) modmessage = " (+" + ad.Modifier + ")";
-                                    if (ad.Modifier < 0) modmessage = " (" + ad.Modifier + ")";
-                                    owner.Out.SendMessage(string.Format(LanguageMgr.GetTranslation(owner.Client.Account.Language, "GameLiving.AttackData.HitsForDamage"), ad.Attacker.GetName(0, true), ad.Target.Name, ad.Damage, modmessage), eChatType.CT_Damaged, eChatLoc.CL_SystemWindow);
-                                    if (ad.CriticalDamage > 0)
-                                    {
-                                        owner.Out.SendMessage(string.Format(LanguageMgr.GetTranslation(owner.Client.Account.Language, "GameLiving.AttackData.CriticallyHitsForDamage"), ad.Attacker.GetName(0, true), ad.Target.Name, ad.CriticalDamage), eChatType.CT_Damaged, eChatLoc.CL_SystemWindow);
-                                    }
-                                    break;
-                                }
-                            default: break;
+                            string modmessage = "";
+                            if (ad.Modifier > 0) modmessage = " (+" + ad.Modifier + ")";
+                            if (ad.Modifier < 0) modmessage = " (" + ad.Modifier + ")";
+                            realTarget.Out.SendMessage(string.Format(LanguageMgr.GetTranslation(realTarget.Client.Account.Language, "GameLiving.AttackData.HitsForDamage"), ad.Attacker.GetName(0, true), ad.Target.Name, ad.Damage, modmessage), eChatType.CT_Damaged, eChatLoc.CL_SystemWindow);
+                            if (ad.CriticalDamage > 0)
+                            {
+                                realTarget.Out.SendMessage(string.Format(LanguageMgr.GetTranslation(realTarget.Client.Account.Language, "GameLiving.AttackData.CriticallyHitsForDamage"), ad.Attacker.GetName(0, true), ad.Target.Name, ad.CriticalDamage), eChatType.CT_Damaged, eChatLoc.CL_SystemWindow);
+                            }
+                            break;
                         }
-                    }
+                    default: break;
                 }
             }
 

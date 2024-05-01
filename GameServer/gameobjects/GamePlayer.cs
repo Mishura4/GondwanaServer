@@ -2199,7 +2199,15 @@ namespace DOL.GS
             if (gameObject == null)
                 return "";
 
-            if (Client == null || !(gameObject is GamePlayer player) || player == this)
+            if (Client == null)
+            {
+                return gameObject.Name;
+            }
+
+            if (gameObject is GameNPC npc)
+                return npc.GetName(0, true, Client.Account.Language, npc);
+
+            if (!(gameObject is GamePlayer player) || player == this)
                 return gameObject.Name;
 
             if (!DOL.GS.ServerProperties.Properties.HIDE_PLAYER_NAME || player.Client.Account.PrivLevel > 1 || Client.Account.PrivLevel > 1)
@@ -6485,11 +6493,6 @@ namespace DOL.GS
             {
                 if (attackTarget == null)
                     Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.StartAttack.CombatNoTarget"), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
-                else if (attackTarget is GameNPC)
-                {
-                    Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.StartAttack.CombatTarget",
-                        attackTarget.GetName(0, false, Client.Account.Language, (attackTarget as GameNPC))), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
-                }
                 else
                 {
                     Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.StartAttack.CombatTarget", GetPersonalizedName(attackTarget)), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
@@ -7247,32 +7250,19 @@ namespace DOL.GS
                 // is done in game living because of guard
                 //case eAttackResult.Blocked : Out.SendMessage(ad.Attacker.GetName(0, true) + " attacks you and you block the blow!", eChatType.CT_Missed, eChatLoc.CL_SystemWindow); break;
                 case eAttackResult.Parried:
-                    if (ad.Attacker is GameNPC)
-                        Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Attack.Parry", ad.Attacker.GetName(0, true, Client.Account.Language, (ad.Attacker as GameNPC))), eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
-                    else
-                        Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Attack.Parry", GetPersonalizedName(ad.Attacker)), eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
+                    Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Attack.Parry", GetPersonalizedName(ad.Attacker)), eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
                     break;
                 case eAttackResult.Evaded:
-                    if (ad.Attacker is GameNPC)
-                        Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Attack.Evade", ad.Attacker.GetName(0, true, Client.Account.Language, (ad.Attacker as GameNPC))), eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
-                    else
-                        Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Attack.Evade", GetPersonalizedName(ad.Attacker)), eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
+                    Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Attack.Evade", GetPersonalizedName(ad.Attacker)), eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
                     break;
                 case eAttackResult.Fumbled:
-                    if (ad.Attacker is GameNPC)
-                        Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Attack.Fumbled", ad.Attacker.GetName(0, true, Client.Account.Language, (ad.Attacker as GameNPC))), eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
-                    else
-                        Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Attack.Fumbled", GetPersonalizedName(ad.Attacker)), eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
+                    Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Attack.Fumbled", GetPersonalizedName(ad.Attacker)), eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
                     break;
                 case eAttackResult.Missed:
                     if (ad.AttackType == AttackData.eAttackType.Spell)
                         break;
-                    if (ad.Attacker is GameNPC)
-                        Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Attack.Missed", ad.Attacker.GetName(0, true, Client.Account.Language, (ad.Attacker as GameNPC)))
-                        + (ad.MissChance > 0 ? " (" + (int)(ad.MissChance * 100) + "%)" : ""), eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
-                    else
-                        Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Attack.Missed", GetPersonalizedName(ad.Attacker))
-                        + (ad.MissChance > 0 ? " (" + (int)(ad.MissChance * 100) + "%)" : ""), eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
+                    Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Attack.Missed", GetPersonalizedName(ad.Attacker))
+                                    + (ad.MissChance > 0 ? " (" + (int)(ad.MissChance * 100) + "%)" : ""), eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
                     break;
                 case eAttackResult.HitStyle:
                 case eAttackResult.HitUnstyled:
