@@ -49,20 +49,20 @@ Effects.GuardEffect.GuardedByName:				{0} guarded by {1}
 Effects.GuardEffect.Name:						Guard
 Effects.GuardEffect.XIsGuardingY:				{0} is guarding {1}
 
-Effects.BannerOfWardingEffect.Name:				Banner of Warding (+{0}% magic resistance)
-Effects.BannerOfWardingEffect.Description:		Increases resistance to magic damage by {0}%.
+Effects.BannerOfWardingEffect.Name:				Banner of Warding (+{0:0.##}% magic resistance)
+Effects.BannerOfWardingEffect.Description:		Increases resistance to magic damage by {0:0.##}%.
 
-Effects.BannerOfShieldingEffect.Name:			Banner of Shielding (+{0}% physical resistance)
-Effects.BannerOfShieldingEffect.Description:	Increases resistance to physical damage by {0}%.
+Effects.BannerOfShieldingEffect.Name:			Banner of Shielding (+{0:0.##}% physical resistance)
+Effects.BannerOfShieldingEffect.Description:	Increases resistance to physical damage by {0:0.##}%.
 
-Effects.BannerOfFreedomEffect.Name:				Banner of Freedom (-{0}% enemy crowd control duration)
-Effects.BannerOfFreedomEffect.Description:		Reduces the duration of crowd control effects by (0}%.
+Effects.BannerOfFreedomEffect.Name:				Banner of Freedom (-{0:0.##}% enemy crowd control duration)
+Effects.BannerOfFreedomEffect.Description:		Reduces the duration of crowd control effects by (0:0.##}%.
 
-Effects.BannerOfBesiegingEffect.Name:			Banner of Besieging (+{0}% siege weapon attack speed)
-Effects.BannerOfBesiegingEffect.Description:	Increases the attack speed of siege weapons by {0}%.
+Effects.BannerOfBesiegingEffect.Name:			Banner of Besieging (+{0:0.##}% siege weapon attack speed)
+Effects.BannerOfBesiegingEffect.Description:	Increases the attack speed of siege weapons by {0:0.##}%.
 
-Effects.BannerOfHasteEffect.Name:				Banner of Haste (+{0}% casting/attack speed)
-Effects.BannerOfHasteEffect.Description:		Increases the casting and attack speed by {0}%.
+Effects.BannerOfHasteEffect.Name:				Banner of Haste (+{0:0.##}% casting/attack speed)
+Effects.BannerOfHasteEffect.Description:		Increases the casting and attack speed by {0:0.##}%.
 
 Effects.InterceptEffect.YouAttemtInterceptYBut:	You are now attempting to intercept an attack for {0}, but you must stand closer.
 Effects.InterceptEffect.XAttemtInterceptYouBut:	{0} is now attempting to intercept an attack for you, but you must stand closer.
