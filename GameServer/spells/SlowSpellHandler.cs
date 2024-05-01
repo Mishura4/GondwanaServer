@@ -38,7 +38,7 @@ namespace DOL.GS.Spells
         public override int CalculateSpellResistChance(GameLiving target)
         {
             // If slow duration is 0, just resist the spell
-            return target.GetModified(eProperty.SpeedDecreaseDurationReduction) >= 100 ? 100 : 0;
+            return target.GetModified(eProperty.SpeedDecreaseDurationReduction) <= 0 ? 100 : 0;
         }
 
         /// <summary>
