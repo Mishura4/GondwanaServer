@@ -1354,13 +1354,10 @@ namespace DOL.GS.Commands
 
                         lock (player.EffectList)
                         {
-                            foreach (GameSpellEffect effect in player.EffectList)
+                            foreach (GameSpellEffect effect in player.EffectList.OfType<GameSpellEffect>().Where(e => !e.SpellHandler.HasPositiveEffect))
                             {
-                                if (!effect.SpellHandler.HasPositiveEffect)
-                                {
-                                    m_hasEffect = true;
-                                    break;
-                                }
+                                effect.Cancel(false);
+                                m_hasEffect = true;
                             }
                         }
 
@@ -1368,17 +1365,6 @@ namespace DOL.GS.Commands
                         {
                             SendResistEffect(player);
                             return;
-                        }
-
-                        lock (player.EffectList)
-                        {
-                            foreach (GameSpellEffect effect in player.EffectList)
-                            {
-                                if (!effect.SpellHandler.HasPositiveEffect)
-                                {
-                                    effect.Cancel(false);
-                                }
-                            }
                         }
                     }
                     break;
