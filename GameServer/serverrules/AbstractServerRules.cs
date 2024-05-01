@@ -1319,34 +1319,10 @@ namespace DOL.GS.ServerRules
                     bountyPoints = (int)(npcBPValue * damagePercent);
                 }
 
-                if (player != null && player.Guild != null && player.Guild.Territories.Any())
+                if (killedNPC.Level >= 45 && player is { Guild: { GuildType: Guild.eGuildType.PlayerGuild} })
                 {
-                    int territoryCount = player.Guild.Territories.Count();
-                    int multiplier = 0;
-
-                    if (killedNPC.Level < 45)
-                    {
-                        multiplier = 0;
-                    }
-                    else if (killedNPC.Level < 65)
-                    {
-                        multiplier = 1;
-                    }
-                    else
-                    {
-                        multiplier = 2;
-                    }
-
-                    int bonusBP = 0;
-
-                    if (territoryCount < 5)
-                    {
-                        bonusBP = territoryCount * multiplier;
-                    }
-                    else
-                    {
-                        bonusBP = 5 * multiplier;
-                    }
+                    int multiplier = killedNPC.Level >= 65 ? 2 : 1;
+                    int bonusBP = player.Guild.TerritoryBonusBountyPoints * multiplier;
 
                     bountyPoints += bonusBP;
                     player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameObjects.GamePlayer.GainBountyPoints.TerritoryBonus", bonusBP), eChatType.CT_Important, eChatLoc.CL_SystemWindow);

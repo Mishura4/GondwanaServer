@@ -206,6 +206,15 @@ namespace DOL.GS
         }
 
         /// <summary>
+        /// Spell range % increased based on owned Territories
+        /// </summary>
+        public int TerritoryBonusBountyPoints
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
         /// Stores claimed keeps (unique)
         /// </summary>
         protected List<AbstractGameKeep> m_claimedKeeps = new List<AbstractGameKeep>();
@@ -386,6 +395,7 @@ namespace DOL.GS
                     {
                         UpdateTerritoryResists();
                     }
+                    this.TerritoryBonusBountyPoints = Math.Min(territories.Count, 5);
                 }
             }
         }
@@ -398,6 +408,7 @@ namespace DOL.GS
             this.TerritoryDotAbsorption = 0;
             this.TerritoryDebuffDurationReduction = 0;
             this.TerritorySpellRangeBonus = 0;
+            this.TerritoryBonusBountyPoints = 0;
             foreach (Territory t in territories)
             {
                 foreach (var resist in t.BonusResist)

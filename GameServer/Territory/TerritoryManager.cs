@@ -448,9 +448,9 @@ namespace DOL.Territories
                 infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.TerritoriesList"));
             }
             infos.AddRange(otherTerritories);
-            infos.Add(string.Empty);
 
             // ---- Guild Territories Info ----
+            infos.Add(string.Empty);
             infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.GuildInfo"));
             infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.DailyRent", CalculateGuildTerritoryTax(player.Guild)));
             infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.DailyMeritPoints", ownedTerritories.Count * DAILY_MERIT_POINTS));
@@ -469,9 +469,10 @@ namespace DOL.Territories
             }
             infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.TimeBeforeRent", timeBeforeRent));
             infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.TotalXPBonus", Math.Min(10, ownedTerritories.Count * 2)));
-            infos.Add(string.Empty);
+            infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.TotalBPBonus", ownedTerritories.Count == 0 ? 0 : player.Guild.TerritoryBonusBountyPoints * 2));
 
             // ---- Territory Bonuses ----
+            infos.Add(string.Empty);
             infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.Bonuses"));
             infos.Add(LanguageMgr.GetTranslation(language, "Language.Resists") + ':');
             infos.Add("-- " + GetInfoResist(language, eResist.Natural, player.Guild, ownedTerritories.Count));
