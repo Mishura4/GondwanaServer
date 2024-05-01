@@ -404,7 +404,8 @@ namespace DOL.Territories
             List<string> infos = new List<string>();
             List<string> ownedTerritories = new List<string>();
             List<string> otherTerritories = new List<string>();
-            string neutral = LanguageMgr.GetTranslation(player, "Commands.Players.Guild.Territories.TerritoryNeutral");
+            string language = player.Client?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            string neutral = LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.TerritoryNeutral");
 
             foreach (var territory in this.Territories)
             {
@@ -437,25 +438,26 @@ namespace DOL.Territories
             }
             if (ownedTerritories.Any())
             {
-                infos.Add(LanguageMgr.GetTranslation(player, "Commands.Players.Guild.Territories.TerritoriesOwned", player.Guild.Name));
+                infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.TerritoriesOwned", player.Guild.Name));
                 infos.AddRange(ownedTerritories);
                 infos.Add(string.Empty);
-                infos.Add(LanguageMgr.GetTranslation(player, "Commands.Players.Guild.Territories.TerritoriesOther"));
+                infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.TerritoriesOther"));
             }
             else
             {
-                infos.Add(LanguageMgr.GetTranslation(player, "Commands.Players.Guild.Territories.TerritoriesList"));
+                infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.TerritoriesList"));
             }
             infos.AddRange(otherTerritories);
-
             infos.Add(string.Empty);
-            infos.Add(LanguageMgr.GetTranslation(player, "Commands.Players.Guild.Territories.GuildInfo"));
-            infos.Add(LanguageMgr.GetTranslation(player, "Commands.Players.Guild.Territories.DailyRent", CalculateGuildTerritoryTax(player.Guild)));
-            infos.Add(LanguageMgr.GetTranslation(player, "Commands.Players.Guild.Territories.DailyMeritPoints", ownedTerritories.Count * DAILY_MERIT_POINTS));
+
+            // ---- Guild Territories Info ----
+            infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.GuildInfo"));
+            infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.DailyRent", CalculateGuildTerritoryTax(player.Guild)));
+            infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.DailyMeritPoints", ownedTerritories.Count * DAILY_MERIT_POINTS));
             string timeBeforeRent;
             if (ownedTerritories.Count == 0)
             {
-                timeBeforeRent = LanguageMgr.GetTranslation(player, "Language.NotApplicable");
+                timeBeforeRent = LanguageMgr.GetTranslation(language, "Language.NotApplicable");
             }
             else
             {
@@ -465,9 +467,41 @@ namespace DOL.Territories
                 var hours = nextPayment / 3600;
                 timeBeforeRent = LanguageMgr.TranslateTimeShort(player, hours, minutes, seconds);
             }
-            infos.Add(LanguageMgr.GetTranslation(player, "Commands.Players.Guild.Territories.TimeBeforeRent", timeBeforeRent));
-            infos.Add(LanguageMgr.GetTranslation(player, "Commands.Players.Guild.Territories.TotalXPBonus", Math.Min(10, ownedTerritories.Count * 2)));
+            infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.TimeBeforeRent", timeBeforeRent));
+            infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.TotalXPBonus", Math.Min(10, ownedTerritories.Count * 2)));
+            infos.Add(string.Empty);
+
+            // ---- Territory Bonuses ----
+            infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.Bonuses"));
+            infos.Add(LanguageMgr.GetTranslation(language, "Language.Resists") + ':');
+            infos.Add("-- " + GetInfoResist(language, eResist.Natural, player.Guild, ownedTerritories.Count));
+            infos.Add("-- " + GetInfoResist(language, eResist.Spirit, player.Guild, ownedTerritories.Count));
+            infos.Add("-- " + GetInfoResist(language, eResist.Crush, player.Guild, ownedTerritories.Count));
+            infos.Add("-- " + GetInfoResist(language, eResist.Slash, player.Guild, ownedTerritories.Count));
+            infos.Add("-- " + GetInfoResist(language, eResist.Thrust, player.Guild, ownedTerritories.Count));
+            infos.Add("-- " + GetInfoResist(language, eResist.Body, player.Guild, ownedTerritories.Count));
+            infos.Add("-- " + GetInfoResist(language, eResist.Cold, player.Guild, ownedTerritories.Count));
+            infos.Add("-- " + GetInfoResist(language, eResist.Heat, player.Guild, ownedTerritories.Count));
+            infos.Add("-- " + GetInfoResist(language, eResist.Energy, player.Guild, ownedTerritories.Count));
+            infos.Add("-- " + GetInfoResist(language, eResist.Matter, player.Guild, ownedTerritories.Count));
+            infos.Add("-- " + LanguageMgr.GetTranslation(language, "Language.DamageType.Melee.Noun") + (ownedTerritories.Count == 0 ? ": 0%" : $": {player.Guild.TerritoryMeleeAbsorption}%"));
+            infos.Add("-- " + LanguageMgr.GetTranslation(language, "Language.DamageType.Spell.Noun") + (ownedTerritories.Count == 0 ? ": 0%" : $": {player.Guild.TerritorySpellAbsorption}%"));
+            infos.Add("-- " + LanguageMgr.GetTranslation(language, "Language.DamageType.DoT.Noun") + (ownedTerritories.Count == 0 ? ": 0%" : $": {player.Guild.TerritoryDotAbsorption}%"));
+            infos.Add("-- " + LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.DebuffDuration") + (ownedTerritories.Count == 0 ? ": 0%" : $": {player.Guild.TerritoryDebuffDurationReduction}%"));
+            infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.SpellRange") + (ownedTerritories.Count == 0 ? ": 0%" : $": {player.Guild.TerritorySpellRangeBonus}%"));
             return infos;
+        }
+
+        private string GetInfoResist(string language, eResist resist, Guild guild, int numTerritories)
+        {
+            if (numTerritories == 0)
+            {
+                return LanguageMgr.GetResistNoun(language, resist) + ": 0%";
+            }
+            else
+            {
+                return LanguageMgr.GetResistNoun(language, resist) + $": {guild.GetResistFromTerritories(resist)}%";
+            }
         }
 
 

@@ -20,6 +20,8 @@ using System;
 using System.Collections.Generic;
 using DOL.Database;
 using DOL.Language;
+using log4net;
+using System.Diagnostics;
 
 namespace DOL.GS
 {
@@ -1119,6 +1121,70 @@ namespace DOL.GS
             }
 
             return 0;
+        }
+
+        /// <summary>
+        /// this field is just for convinience and speed purposes
+        /// converts the damage types to resist fields
+        /// </summary>
+        public static readonly eResist[] DamageTypeToResistance = {
+            eResist.Natural, // 0
+            eResist.Crush, // 1
+            eResist.Slash, // 2
+            eResist.Thrust, // 3
+            0, // 4
+            0, // 5
+            0, // 6
+            0, // 7
+            0, // 8
+            0, // 9
+            eResist.Body, // 10
+            eResist.Cold, // 11
+            eResist.Energy, // 12
+            eResist.Heat, // 13
+            eResist.Matter, // 14
+            eResist.Spirit // 15
+        };
+
+        /// <summary>
+        /// Gets the resistance by damage type, refer to eDamageType for constants
+        /// </summary>
+        /// <param name="damageType"></param>
+        /// <returns></returns>
+        public static eResist GetResistTypeForDamage(eDamageType damageType)
+        {
+            if ((int)damageType < DamageTypeToResistance.Length)
+            {
+                return DamageTypeToResistance[(int)damageType];
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// Gets the resistance by damage type, refer to eDamageType for constants
+        /// </summary>
+        /// <param name="damageType"></param>
+        /// <returns></returns>
+        public static eDamageType GetDamageTypeForResist(eResist resist)
+        {
+            return resist switch
+            {
+
+                eResist.Natural => eDamageType.Natural,
+                eResist.Crush => eDamageType.Crush,
+                eResist.Slash => eDamageType.Slash,
+                eResist.Thrust => eDamageType.Thrust,
+                eResist.Body => eDamageType.Body,
+                eResist.Cold => eDamageType.Cold,
+                eResist.Energy => eDamageType.Energy,
+                eResist.Heat => eDamageType.Heat,
+                eResist.Matter => eDamageType.Matter,
+                eResist.Spirit => eDamageType.Spirit,
+                _ => eDamageType.GM
+            };
         }
 
         public static bool IsExpansionEnabled(int expansion)

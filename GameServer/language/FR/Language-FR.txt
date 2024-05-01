@@ -25,4 +25,40 @@ Language.Minutes.Short:								{0} minutes
 Language.Seconds.Short:								{0} secondes
 Language.NotApplicable:								N/A
 
+# Stats
+Language.Resists:								Résistances
+Language.DamageType.Natural.Noun:				Naturel
+Language.DamageType.Crush.Noun:					Concassant
+Language.DamageType.Slash.Noun:					Tranchant
+Language.DamageType.Thrust.Noun:				Force
+Language.DamageType.Body.Noun:					Corps
+Language.DamageType.Cold.Noun:					Froid
+Language.DamageType.Energy.Noun:				Énergie
+Language.DamageType.Heat.Noun:					Chaleur
+Language.DamageType.Matter.Noun:				Matière
+Language.DamageType.Spirit.Noun:				Esprit
+Language.DamageType.Falling.Noun:				Chute
+Language.DamageType.GM.Noun:					Brut
+
+Language.DamageType.Melee.Noun:					Mélée
+Language.DamageType.Spell.Noun:					Sorts
+Language.DamageType.DoT.Noun:					Dégâts d'effets néfastes
+
+Language.DamageType.Natural.Damage:				dégâts naturels
+Language.DamageType.Crush.Damage:				dégâts concassant
+Language.DamageType.Slash.Damage:				dégâts tranchant
+Language.DamageType.Thrust.Damage:				dégâts de force
+Language.DamageType.Body.Damage:				dégâts de corps
+Language.DamageType.Cold.Damage:				dégâts de froid
+Language.DamageType.Energy.Damage:				dégâts d'énergie
+Language.DamageType.Heat.Damage:				dégâts de chaleur
+Language.DamageType.Matter.Damage:				dégâts de matière
+Language.DamageType.Spirit.Damage:				dégâts d'esprit
+Language.DamageType.Falling.Damage:				dégâts de chute
+Language.DamageType.GM.Damage:					dégâts bruts
+
+Language.DamageType.Melee.Damage:				dégâts de mélée
+Language.DamageType.Spell.Damage:				dégâts des sorts
+Language.DamageType.DoT.Damage:					dégâts de durée
+
 PlayerPickUpRequestHandler.HandlePacket.Target:		Vous devez avoir une cible valide à ramasser.

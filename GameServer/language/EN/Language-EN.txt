@@ -7,6 +7,42 @@ Language.Minutes.Short:								{0} minutes
 Language.Seconds.Short:								{0} seconds
 Language.NotApplicable:								N/A
 
+# Stats
+Language.Resists:								Resists
+Language.DamageType.Natural.Noun:				Natural
+Language.DamageType.Crush.Noun:					Crush
+Language.DamageType.Slash.Noun:					Slash
+Language.DamageType.Thrust.Noun:				Thrust
+Language.DamageType.Body.Noun:					Body
+Language.DamageType.Cold.Noun:					Cold
+Language.DamageType.Energy.Noun:				Energy
+Language.DamageType.Heat.Noun:					Heat
+Language.DamageType.Matter.Noun:				Matter
+Language.DamageType.Spirit.Noun:				Spirit
+Language.DamageType.Falling.Noun:				Falling
+Language.DamageType.GM.Noun:					Raw
+
+Language.DamageType.Melee.Noun:					Melee
+Language.DamageType.Spell.Noun:					Spell
+Language.DamageType.DoT.Noun:					Damage from nefarious effects
+
+Language.DamageType.Natural.Damage:				natural damage
+Language.DamageType.Crush.Damage:				crush damage
+Language.DamageType.Slash.Damage:				slash damage
+Language.DamageType.Thrust.Damage:				thrust damage
+Language.DamageType.Body.Damage:				body damage
+Language.DamageType.Cold.Damage:				cold damage
+Language.DamageType.Energy.Damage:				energy damage
+Language.DamageType.Heat.Damage:				heat damage
+Language.DamageType.Matter.Damage:				matter damage
+Language.DamageType.Spirit.Damage:				spirit damage
+Language.DamageType.Falling.Damage:				falling damage
+Language.DamageType.GM.Damage:					raw damage
+
+Language.DamageType.Melee.Damage:				melee damage
+Language.DamageType.Spell.Damage:				spell damage
+Language.DamageType.DoT.Damage:					damage-over-time
+
 # KEEPS
 # Managers/Player Manager
 PlayerManager.BroadcastCapture.Captured:		The forces of {0} have captured {1}!

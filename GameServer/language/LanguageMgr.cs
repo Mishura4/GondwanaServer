@@ -27,6 +27,8 @@ using System.Text;
 using DOL.Database;
 using DOL.GS;
 using log4net;
+using System.Diagnostics;
+using System.Transactions;
 
 namespace DOL.Language
 {
@@ -544,6 +546,36 @@ namespace DOL.Language
             string translation;
             TryGetTranslation(out translation, language, translationId, args);
             return translation;
+        }
+
+        public static string GetDamageTypeNoun(string language, eDamageType resist)
+        {
+            string translationKey = resist switch
+            {
+                eDamageType.Natural => "Language.DamageType.Natural.Noun",
+                eDamageType.Crush => "Language.DamageType.Crush.Noun",
+                eDamageType.Slash => "Language.DamageType.Slash.Noun",
+                eDamageType.Thrust => "Language.DamageType.Thrust.Noun",
+                eDamageType.Body => "Language.DamageType.Body.Noun",
+                eDamageType.Cold => "Language.DamageType.Cold.Noun",
+                eDamageType.Energy => "Language.DamageType.Energy.Noun",
+                eDamageType.Heat => "Language.DamageType.Heat.Noun",
+                eDamageType.Matter => "Language.DamageType.Matter.Noun",
+                eDamageType.Spirit => "Language.DamageType.Spirit.Noun",
+                eDamageType.Falling => "Language.DamageType.Falling.Noun",
+                eDamageType.GM => "Language.DamageType.GM.Noun",
+                _ => "Language.DamageType.GM.Noun"
+            };
+            if (!TryGetTranslation(out string translation, language, translationKey))
+            {
+                return "(unknown)";
+            }
+            return translation;
+        }
+
+        public static string GetResistNoun(string language, eResist resist)
+        {
+            return GetDamageTypeNoun(language, GlobalConstants.GetDamageTypeForResist(resist));
         }
         #endregion GetTranslation
 

@@ -322,5 +322,9 @@ Commands.Players.Guild.Territories.DailyMeritPoints:	Total des points de mérite
 Commands.Players.Guild.Territories.TimeBeforeRent:		Temps avant le prochain paiement: {0}
 Commands.Players.Guild.Territories.TotalXPBonus:		Bonus total d'expérience: {0}%
 Commands.Players.Guild.Territories.TotalBPBonus:		Bonus total de points de butin pour mobs Nv65+: {0}%
+Commands.Players.Guild.Territories.Bonuses:				---- Bonus des territoires ----
+Commands.Players.Guild.Territories.DebuffDuration:		Durée d'effets néfastes
+Commands.Players.Guild.Territories.SpellRange:			Portée des sorts
+
 
 Commands.Players.Guild.TotalMemberOnline:   Nombre de joueurs en ligne dans la guilde.

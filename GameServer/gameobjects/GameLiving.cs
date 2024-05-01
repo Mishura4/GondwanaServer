@@ -5163,32 +5163,15 @@ namespace DOL.GS
         }
 
         /// <summary>
-        /// this field is just for convinience and speed purposes
-        /// converts the damage types to resist fields
-        /// </summary>
-        protected static readonly eProperty[] m_damageTypeToResistBonusConversion = new eProperty[] {
-            eProperty.Resist_Natural, //0,
-            eProperty.Resist_Crush,
-            eProperty.Resist_Slash,
-            eProperty.Resist_Thrust,
-            0, 0, 0, 0, 0, 0,
-            eProperty.Resist_Body,
-            eProperty.Resist_Cold,
-            eProperty.Resist_Energy,
-            eProperty.Resist_Heat,
-            eProperty.Resist_Matter,
-            eProperty.Resist_Spirit
-        };
-        /// <summary>
         /// gets the resistance value by damage type, refer to eDamageType for constants
         /// </summary>
         /// <param name="damageType"></param>
         /// <returns></returns>
         public virtual eProperty GetResistTypeForDamage(eDamageType damageType)
         {
-            if ((int)damageType < m_damageTypeToResistBonusConversion.Length)
+            if ((int)damageType < GlobalConstants.DamageTypeToResistance.Length)
             {
-                return m_damageTypeToResistBonusConversion[(int)damageType];
+                return (eProperty)GlobalConstants.DamageTypeToResistance[(int)damageType];
             }
             else
             {
@@ -5196,6 +5179,7 @@ namespace DOL.GS
                 return 0;
             }
         }
+
         /// <summary>
         /// gets the resistance value by damage types
         /// </summary>

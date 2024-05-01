@@ -322,5 +322,9 @@ Commands.Players.Guild.Territories.DailyMeritPoints:	Total daily merit points: {
 Commands.Players.Guild.Territories.TimeBeforeRent:		Time before rental payment: {0}
 Commands.Players.Guild.Territories.TotalXPBonus:		Total bonus XP: {0}%
 Commands.Players.Guild.Territories.TotalBPBonus:		Total bonus bounty points for Lv65+ mobs: {0}%
+Commands.Players.Guild.Territories.Bonuses:				---- Territory Bonuses ----
+Commands.Players.Guild.Territories.DebuffDuration:		Nefarious effect duration
+Commands.Players.Guild.Territories.SpellRange:			Spell range
+
 
 Commands.Players.Guild.TotalMemberOnline:   Number of online players in the guild.
