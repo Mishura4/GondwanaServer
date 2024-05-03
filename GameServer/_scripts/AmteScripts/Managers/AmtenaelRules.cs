@@ -364,13 +364,12 @@ namespace DOL.GS.ServerRules
                     {
                         return false;
                     }
-                }
 
-                //Forbids attack on territory
-                if (TerritoryManager.GetCurrentTerritory(playerAttacker)?.IsOwnedBy(playerAttacker) == true)
-                {
-                    // Is this right? No attacks at all on friendly territory? Wouldn't this prevent defending?
-                    return false;
+                    // Forbid attacks against a player's own territory NPCs
+                    if (defenderNpc.CurrentTerritory?.IsOwnedBy(playerAttacker) == true)
+                    {
+                        return false;
+                    }
                 }
 
                 // PVE Timer
@@ -543,37 +542,71 @@ namespace DOL.GS.ServerRules
             if (source == null || target == null)
                 return false;
 
-            var targetPlayer = target as GamePlayer;
-            if (source is GuardNPC && targetPlayer is { Reputation: >= 0 })
-            {
-                return true;
-            }
+            GameLiving realSource = source;
+            GameLiving realTarget = target;
 
-            if (target is GameNPC targetNpc)
+            if (realSource is GameNPC { Brain: IControlledBrain sourceBrain })
+                realSource = sourceBrain.Owner;
+
+            if (realTarget is GameNPC { Brain: IControlledBrain targetBrain })
+                realTarget = targetBrain.Owner;
+            
+            var targetPlayer = realTarget as GamePlayer;
+            var sourcePlayer = realSource as GamePlayer;
+
+            var targetNpc = realTarget as GameNPC;
+            var sourceNpc = realSource as GameNPC;
+
+            if (sourceNpc != null)
             {
-                if (source is GamePlayer sourcePlayer && MobGroups.MobGroup.IsQuestAggresive(targetNpc, sourcePlayer))
+                if (targetPlayer != null)
                 {
-                    return false;
+                    if (MobGroups.MobGroup.IsQuestAggresive(sourceNpc, targetPlayer))
+                    {
+                        return false;
+                    }
+                    if (realSource is GuardNPC && targetPlayer.Reputation >= 0)
+                    {
+                        return true;
+                    }
+                    if (sourceNpc.CurrentTerritory?.IsOwnedBy(targetPlayer) == true)
+                    {
+                        return true;
+                    }
                 }
-                if (targetNpc.IsPeaceful)
-                    return true;
-
-            }
-
-            if (source is GameNPC sourceNpc)
-            {
-                if (targetPlayer != null && MobGroups.MobGroup.IsQuestAggresive(sourceNpc, targetPlayer))
+                else if (targetNpc != null)
                 {
-                    return false;
+                    if (sourceNpc.CurrentTerritory != null && sourceNpc.CurrentTerritory == targetNpc.CurrentTerritory)
+                    {
+                        return true;
+                    }
                 }
+
                 if (sourceNpc.IsPeaceful)
                     return true;
             }
+            else if (sourcePlayer != null)
+            {
+                if (targetNpc != null)
+                {
+                    if (MobGroups.MobGroup.IsQuestAggresive(targetNpc, sourcePlayer))
+                    {
+                        return false;
+                    }
+                    if (targetNpc.CurrentTerritory?.IsOwnedBy(targetPlayer) == true)
+                    {
+                        return true;
+                    }
 
-            if (RvrManager.Instance != null && (RvrManager.Instance.IsInRvr(source) || RvrManager.Instance.IsInRvr(target)))
-                return source.Realm == target.Realm;
+                    if (targetNpc.IsPeaceful)
+                        return true;
+                }
+            }
 
-            if (source.Attackers != null && source.Attackers.Contains(target))
+            if (RvrManager.Instance != null && (RvrManager.Instance.IsInRvr(realSource) || RvrManager.Instance.IsInRvr(realTarget)))
+                return realSource.Realm == realTarget.Realm;
+
+            if (realSource.Attackers != null && realTarget.Attackers.Contains(realTarget))
                 return false;
 
             return base.IsSameRealm(source, target, quiet);

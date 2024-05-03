@@ -4126,16 +4126,6 @@ namespace DOL.GS.Spells
                     ad.Damage = 0;
                     ad.CriticalDamage = 0;
                 }
-                else if (Caster is GamePlayer player)
-                {
-                    //Check if is Territory and owns it to cancel dmg
-                    // ^ Is this right? Wouldn't this prevent defending?
-                    if (TerritoryManager.GetCurrentTerritory(player)?.IsOwnedBy(player) == true)
-                    {
-                        ad.Damage = 0;
-                        ad.CriticalDamage = 0;
-                    }
-                }
             }
 
             ad.Attacker.DealDamage(ad);

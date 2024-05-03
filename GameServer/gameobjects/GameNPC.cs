@@ -2239,7 +2239,9 @@ namespace DOL.GS
         public virtual void RestoreOriginalGuildName() { }
 
 
-        public bool IsInTerritory
+        public bool IsInTerritory => CurrentTerritory != null;
+
+        public Territory? CurrentTerritory
         {
             get;
             set;
@@ -3266,7 +3268,7 @@ namespace DOL.GS
             }
 
             var territory = TerritoryManager.GetCurrentTerritory(this);
-            if (territory?.OwnerGuild != null)
+            if (territory?.Mobs.Contains(this) == true)
             {
                 this.GuildName = territory.OwnerGuild.Name;
             }
@@ -4378,9 +4380,10 @@ namespace DOL.GS
 
         private void WarnTerritory(GameLiving attacker)
         {
-            Territory territory = TerritoryManager.GetCurrentTerritory(this);
-            if (territory == null)
+            if (CurrentTerritory == null)
+            {
                 return;
+            }
 
             if (attacker is GamePlayer playerAttacker)
             {
@@ -4394,10 +4397,9 @@ namespace DOL.GS
                 return;
             }
 
-            // Todo: find a better way to determine if the mob is an ally
-            if (string.Equals(this.GuildName, territory.OwnerGuild.Name) && !territory.IsOwnedBy(playerAttacker))
+            if (!CurrentTerritory.IsOwnedBy(playerAttacker))
             {
-                TerritoryManager.Instance.TerritoryAttacked(territory);
+                TerritoryManager.Instance.TerritoryAttacked(CurrentTerritory);
             }
         }
 

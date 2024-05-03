@@ -512,13 +512,8 @@ namespace DOL.Territories
         {
             if (this.Boss != null)
             {
-                this.Boss.IsInTerritory = true;
-                var gameEvent = GameEvents.GameEventManager.Instance.Events.FirstOrDefault(e => e.ID.Equals(this.Boss.EventID));
-
-                if (gameEvent?.Mobs?.Any() == true)
-                {
-                    gameEvent.Mobs.ForEach(m => m.IsInTerritory = true);
-                }
+                this.Boss.CurrentTerritory = this;
+                GameEventManager.Instance.Events.Where(e => e.ID.Equals(this.Boss.EventID)).SelectMany(e => e.Mobs).ForEach(m => m.CurrentTerritory = this);
             }
         }
 
@@ -604,7 +599,7 @@ namespace DOL.Territories
                 }
             }
 
-            mobs.ForEach(m => m.IsInTerritory = true);
+            mobs.ForEach(m => m.CurrentTerritory = this);
             return mobs;
         }
 
