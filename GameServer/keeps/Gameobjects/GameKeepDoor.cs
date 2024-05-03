@@ -723,14 +723,26 @@ namespace DOL.GS.Keeps
         /// </summary>
         public void Open(GameLiving opener = null)
         {
-            //do nothing because gamekeep must be destroyed to be open
+            // GMs can open
+            if (opener is GamePlayer player && player.Client.Account.PrivLevel >= 1 && this.State == eDoorState.Closed)
+            {
+                this.State = eDoorState.Open;
+
+                BroadcastDoorStatus();
+            }
+            // else do nothing because gamekeep must be destroyed to be open
         }
         /// <summary>
         /// call when player try to close door
         /// </summary>
         public void Close(GameLiving closer = null)
         {
-            //do nothing because gamekeep must be destroyed to be open
+            // GMs can close
+            if (closer is GamePlayer player && player.Client.Account.PrivLevel >= 1 && this.State == eDoorState.Open)
+            {
+                CloseDoor();
+            }
+            // else do nothing because gamekeep must be destroyed to be open
         }
 
         /// <summary>
@@ -812,10 +824,24 @@ namespace DOL.GS.Keeps
             if (!base.WhisperReceive(source, str))
                 return false;
 
-            if (source is GamePlayer == false)
+            if (source is not GamePlayer player)
                 return false;
 
             str = str.ToLower();
+
+            if (player.Client.Account.PrivLevel > 1)
+            {
+                if (str.Contains("open"))
+                {
+                    Open(player);
+                    return true;
+                }
+                if (str.Contains("close"))
+                {
+                    Close(player);
+                    return true;
+                }
+            }
 
             if (str.Contains("enter") || str.Contains("exit"))
                 Interact(source as GamePlayer);
@@ -827,10 +853,24 @@ namespace DOL.GS.Keeps
             if (!base.SayReceive(source, str))
                 return false;
 
-            if (source is GamePlayer == false)
+            if (source is not GamePlayer player)
                 return false;
 
             str = str.ToLower();
+
+            if (player.Client.Account.PrivLevel > 1)
+            {
+                if (str.Contains("open"))
+                {
+                    Open(player);
+                    return true;
+                }
+                if (str.Contains("close"))
+                {
+                    Close(player);
+                    return true;
+                }
+            }
 
             if (str.Contains("enter") || str.Contains("exit"))
                 Interact(source as GamePlayer);
