@@ -221,9 +221,11 @@ namespace DOL.commands.gmcommands
                     }
                     else
                     {
-                        position = client.Player.Position;
+                        var playerPosition = client.Player.Position;
+                        position = new Vector3((int)playerPosition.X, (int)playerPosition.Y, (int)playerPosition.Z);
                     }
                     territory.PortalPosition = position;
+                    territory.SaveIntoDatabase();
                     client.SendTranslation("Commands.GM.GMTerritories.PortalSet", eChatType.CT_System, eChatLoc.CL_SystemWindow, territory.Name, position.X, position.Y, position.Z);
                     break;
 

@@ -14,5 +14,5 @@ Commands.GM.GMTerritories.NotInTerritory:				Vous n'êtes pas dans un territoire
 Commands.GM.GMTerritories.Cleared:						Le territoire {0} a été relâché de force et est de nouveau neutre.
 Commands.GM.GMTerritories.Claimed:						Le territoire {0} a été pris de force et appartient maintenant à {1}.
 Commands.GM.GMTerritories.BadCoordinate:				'{0}' n'est pas une coordonnée valide.
-Commands.GM.GMTerritories.PortalSet:					Le portail du territoire {0} apparaîtra aux coordonnées x={1} y={2} z={3}.
+Commands.GM.GMTerritories.PortalSet:					Le portail du territoire {0} apparaîtra aux coordonnées x={1:0} y={2:0} z={3:0}.
 Commands.GM.GMTerritories.PortalRemoved:				Le portail du territoire {0} a été désactivé.

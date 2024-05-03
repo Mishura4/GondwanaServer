@@ -38,7 +38,7 @@ namespace DOL.Territories
             }
             else
             {
-                this.PortalPosition = new Vector3(db.PortalX.Value, db.PortalY.Value, db.PortalY.Value);
+                this.PortalPosition = new Vector3(db.PortalX.Value, db.PortalY.Value, db.PortalZ.Value);
             }
             this.Zone = zone;
             this.RegionId = db.RegionId;
@@ -751,6 +751,18 @@ namespace DOL.Territories
                 db.ZoneId = this.Zone.ID;
                 db.Bonus = this.SaveBonus();
                 db.IsBannerSummoned = this.IsBannerSummoned;
+                if (this.PortalPosition != null)
+                {
+                    db.PortalX = (int)this.PortalPosition.Value.X;
+                    db.PortalY = (int)this.PortalPosition.Value.Y;
+                    db.PortalZ = (int)this.PortalPosition.Value.Z;
+                }
+                else
+                {
+                    db.PortalX = null;
+                    db.PortalY = null;
+                    db.PortalZ = null;
+                }
 
                 if (isNew)
                 {
