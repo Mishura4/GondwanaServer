@@ -105,7 +105,7 @@ namespace DOL.GS.Scripts
             else
             {
                 if (!RvrManager.Instance.IsOpen || RvrManager.Instance.IsInRvr(player))
-                    RvrManager.Instance.RemovePlayer(player);
+                    RvrManager.Instance.RemovePlayer(player, true);
                 else
                     RvrManager.Instance.AddPlayer(player);
             }

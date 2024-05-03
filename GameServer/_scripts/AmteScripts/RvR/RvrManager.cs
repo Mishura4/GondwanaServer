@@ -419,7 +419,7 @@ namespace AmteScripts.Managers
             DateTime currentTime = DateTime.Now;
             if (!_isOpen)
             {
-                _regions.Foreach(id => WorldMgr.GetClientsOfRegion(id).Foreach(RemovePlayer));
+                _regions.Foreach(id => WorldMgr.GetClientsOfRegion(id).Foreach(p => RemovePlayer(p, false)));
                 if (DateTime.Now >= _startTime && DateTime.Now < _endTime)
                     Open(false);
             }
@@ -434,7 +434,10 @@ namespace AmteScripts.Managers
                     {
                         if (cl.Player.Guild == null)
                         {
-                            RemovePlayer(cl.Player);
+                            if (cl.Account.PrivLevel <= 1)
+                            {
+                                RemovePlayer(cl.Player);
+                            }
                         }
                         else
                         {
@@ -447,7 +450,7 @@ namespace AmteScripts.Managers
                 if (!_isForcedOpen)
                 {
                     if ((currentTime < _startTime || currentTime > _endTime) && !Close())
-                        _regions.Foreach(id => WorldMgr.GetClientsOfRegion(id).Foreach(RemovePlayer));
+                        _regions.Foreach(id => WorldMgr.GetClientsOfRegion(id).Foreach(c => RemovePlayer(c, false)));
                 }
 
                 // check the Score every minutes and if the number of player is less than 8 pending 5 minutes stop count the point 
@@ -608,8 +611,19 @@ namespace AmteScripts.Managers
 
             this._maps.Values.GroupBy(v => v.Location.RegionID).ForEach(region =>
             {
-                WorldMgr.GetClientsOfRegion(region.Key).Where(player => player.Player != null).Foreach(RemovePlayer);
-                GameServer.Database.SelectObjects<DOLCharacters>(c => c.Region == +region.Key).Foreach(RemovePlayer);
+                var characters = GameServer.Database.SelectObjects<DOLCharacters>(c => c.Region == +region.Key);
+                foreach (DOLCharacters chr in characters)
+                {
+                    var client = WorldMgr.GetClientByPlayerID(chr.ObjectId, true, false);
+                    if (client != null)
+                    {
+                        RemovePlayer(client);
+                    }
+                    else
+                    {
+                        RemovePlayer(chr);
+                    }
+                }
             });
 
             string message = string.Format("RvR Scores for the {0} :\n", DateTime.Now.Date.ToString("MM/dd/yyyy"));
@@ -811,17 +825,25 @@ namespace AmteScripts.Managers
             }
         }
 
-        public void RemovePlayer(GameClient client)
+        public void RemovePlayer(GameClient client, bool force = false)
         {
             if (client.Player != null)
                 RemovePlayer(client.Player);
         }
 
-        private void RemovePlayer(GamePlayer player, RvrPlayer rvrPlayer)
+        private void RemovePlayer(GamePlayer player, RvrPlayer rvrPlayer, bool force = false)
         {
             if (rvrPlayer == null)
             {
-                GameServer.Instance.Logger.Error("Player " + player.Name + " (" + player.InternalID + ") logged into RvR but RvR data was not found, potentially lost their guild info");
+                if (player.Client.Account.PrivLevel <= 1)
+                {
+                    GameServer.Instance.Logger.Error("Player " + player.Name + " (" + player.InternalID + ") logged into RvR but RvR data was not found, potentially lost their guild info");
+                }
+                else if (!force) // By default, don't boot GMs
+                {
+                    return;
+                }
+
                 player.MoveTo(_stuckSpawn);
                 if (player.Guild != null && player.Guild.GuildType == Guild.eGuildType.RvRGuild)
                     player.Guild.RemovePlayer("RVR", player);
@@ -831,7 +853,8 @@ namespace AmteScripts.Managers
             else
             {
                 rvrPlayer.ResetCharacter(player);
-                player.MoveTo((ushort)rvrPlayer.OldRegion, rvrPlayer.OldX, rvrPlayer.OldY, rvrPlayer.OldZ, (ushort)rvrPlayer.OldHeading);
+                if (player.Client.Account.PrivLevel <= 1 || force)
+                    player.MoveTo((ushort)rvrPlayer.OldRegion, rvrPlayer.OldX, rvrPlayer.OldY, rvrPlayer.OldZ, (ushort)rvrPlayer.OldHeading);
                 if (player.Guild != null)
                     player.Guild.RemovePlayer("RVR", player);
                 player.RealGuild = null;
@@ -851,7 +874,7 @@ namespace AmteScripts.Managers
             }
         }
 
-        public void RemovePlayer(GamePlayer player)
+        public void RemovePlayer(GamePlayer player, bool force = false)
         {
             player.IsInRvR = false;
             if (player.Client.Account.PrivLevel == (uint)ePrivLevel.GM)
