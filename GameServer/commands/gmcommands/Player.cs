@@ -1502,8 +1502,13 @@ namespace DOL.GS.Commands
 
                         if (player == null && args.Length == 2)
                         {
-                            client.Out.SendMessage("You need a valid target!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                            return;
+                            if (!client.Player.IsAlive)
+                                player = client.Player;
+                            else
+                            {
+                                client.Out.SendMessage("You need a valid target!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                return;
+                            }
                         }
 
                         if (args.Length == 2 && player != null)
