@@ -166,7 +166,7 @@ namespace DOL.Territories
 
         public IEnumerable<GameNPC> Mobs
         {
-            get;
+            get; private set;
         }
 
         public string BossId
@@ -573,6 +573,18 @@ namespace DOL.Territories
             return string.IsNullOrEmpty(guild_id);
         }
 
+        public void AddArea(AbstractArea area)
+        {
+            lock (m_lockObject)
+            {
+                this.Areas.Add(area);
+                this.Mobs = GetMobsInTerritory();
+                bool banner = IsBannerSummoned;
+                ToggleBannerUnsafe(false);
+                if (banner)
+                    ToggleBannerUnsafe(true);
+            }
+        }
 
         private IEnumerable<GameNPC> GetMobsInTerritory()
         {

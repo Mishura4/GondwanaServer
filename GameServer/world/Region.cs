@@ -1392,7 +1392,13 @@ namespace DOL.GS
                 foreach (Zone zone in Zones)
                 {
                     if (area.IsIntersectingZone(zone))
+                    {
                         m_ZoneAreas[zonePos][m_ZoneAreasCount[zonePos]++] = area.ID;
+                        if (area is AbstractArea abstractArea)
+                        {
+                            abstractArea.ZoneIn = zone;
+                        }
+                    }
 
                     zonePos++;
                 }
@@ -1414,6 +1420,10 @@ namespace DOL.GS
                 }
 
                 m_Areas.Remove(area.ID);
+                if (area is AbstractArea abstractArea)
+                {
+                    abstractArea.ZoneIn = null;
+                }
                 int ZoneCount = Zones.Count;
 
                 for (int zonePos = 0; zonePos < ZoneCount; zonePos++)

@@ -193,6 +193,8 @@ namespace DOL.GS
         /// </summary>
         public bool IsTemporary { get; init; } = false;
 
+        public Zone ZoneIn { get;  set; }
+
         #region Event handling
 
         public void UnRegisterPlayerEnter(DOLEventHandler callback)

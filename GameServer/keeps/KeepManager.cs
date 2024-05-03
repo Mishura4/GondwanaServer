@@ -589,7 +589,7 @@ namespace DOL.GS.Keeps
         /// <returns>true if the player is an enemy of the keep</returns>
         public virtual bool IsEnemy(AbstractGameKeep keep, GamePlayer target, bool checkGroup)
         {
-            if (target.Client.Account.PrivLevel != 1)
+            if (target.Client.Account.PrivLevel > 1)
                 return false;
 
             if (GameServer.Instance.Configuration.ServerType == eGameServerType.GST_PvP)

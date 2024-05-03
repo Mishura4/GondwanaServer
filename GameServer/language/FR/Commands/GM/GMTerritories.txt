@@ -1,5 +1,6 @@
 Commands.GM.GMTerritories.Description:					Commande GM pour la création de territoires
-Commands.GM.GMTerritories.Usage.Add:					'/GMTerritories add <areaId> <zoneId> <name> <groupId>' Ajoute un territoire en spécifant l'<areaId>, la <zoneId>, le <name> et le <groupId> à utiliser et pour ce territoire
+Commands.GM.GMTerritories.Usage.Create:					'/GMTerritories create <name> <areaID> <groupID>' Crée un territoire <name> avec area <areaID> et MobGroup <groupID>
+Commands.GM.GMTerritories.Usage.Add:					'/GMTerritories add <areaID> to <territoryID>' Ajoute l'area <areaID> au territoire <territoryID>
 Commands.GM.GMTerritories.Usage.Info:					'/GMTerritories info <areaID|territoryID>' Affiche les informations d'un territoire
 Commands.GM.GMTerritories.Usage.Clear:					'/GMTerritories clear <areaID|territoryID>' Remet un territoire en état neutre
 Commands.GM.GMTerritories.Usage.Claim:					'/GMTerritories claim <areadID|territoryID>' Prend un territoire pour votre guilde
@@ -10,6 +11,17 @@ Commands.GM.GMTerritories.Resist:						resist: <nature|crush|slash|thrust|body|c
 
 Commands.GM.GMTerritories.TerritoryNotFound:			Impossible de trouver le territoire avec ID ou areaID '{0}'
 Commands.GM.GMTerritories.NotInTerritory:				Vous n'êtes pas dans un territoire! Veuillez spécifier un ID de territoire ou d'area.
+Commands.GM.GMTerritories.NoSuchArea:					Impossible de trouver l'area '{0}'
+Commands.GM.GMTerritories.AreaBadRegion:				L'area avec ID '{0}' a une région invalide ('{1}')
+Commands.GM.GMTerritories.NoZoneForArea:				Impossible de trouver une zone contenant l'area avec ID '{0}'
+Commands.GM.GMTerritories.BadGroupID:					Impossible de trouver un MobGroup avec ID '{0}'
+Commands.GM.GMTerritories.SaveFailed:					Une erreur est survenue lors de la sauvegarde du territoire '{0}'.
+Commands.GM.GMTerritories.Saved:						Le territoire '{0}' a été créé avec area '{1}'.
+
+Commands.GM.GMTerritories.Add.WrongRegion:				Un territoire dans la région {0} ne peut pas avoir une area dans la région {1}!
+Commands.GM.GMTerritories.Add.WrongZone:				Impossible de trouver l'area '{0}' dans la zone {1} dont fait parti le territoire '{2}'.
+Commands.GM.GMTerritories.Add.AlreadyHas:				L'area '{0}' fait déjà parti du territoire '{1}'.
+Commands.GM.GMTerritories.Add.Added:					L'area '{0}' a été ajoutée au territoire '{1}'.
 
 Commands.GM.GMTerritories.Cleared:						Le territoire {0} a été relâché de force et est de nouveau neutre.
 Commands.GM.GMTerritories.Claimed:						Le territoire {0} a été pris de force et appartient maintenant à {1}.

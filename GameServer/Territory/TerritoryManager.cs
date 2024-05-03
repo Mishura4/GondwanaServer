@@ -155,6 +155,11 @@ namespace DOL.Territories
             return Instance.Territories.FirstOrDefault(t => t.Areas.OfType<AbstractArea>().Any(a => string.Equals(a.DbArea.ObjectId, areaID)));
         }
 
+        public static Territory GetTerritoryAtArea(IArea area)
+        {
+            return Instance.Territories.FirstOrDefault(t => t.Areas.Contains(area));
+        }
+
         public static Territory GetTerritoryByID(string ID)
         {
             return Instance.Territories.FirstOrDefault(t => string.Equals(t.ID, ID));

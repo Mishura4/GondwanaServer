@@ -21,6 +21,7 @@ namespace DOL.commands.gmcommands
         "&GMTerritories",
         ePrivLevel.GM,
         "Commands.GM.GMTerritories.Description",
+        "Commands.GM.GMTerritories.Usage.Create",
         "Commands.GM.GMTerritories.Usage.Add",
         "Commands.GM.GMTerritories.Usage.Info",
         "Commands.GM.GMTerritories.Usage.Clear",
@@ -46,73 +47,57 @@ namespace DOL.commands.gmcommands
 
             switch (args[1].ToLowerInvariant())
             {
-                case "add":
-
-                    if (args.Length < 6)
+                case "create":
                     {
-                        DisplaySyntax(client);
-                        return;
-                    }
+                        if (args.Length < 5)
+                        {
+                            DisplaySyntax(client);
+                            return;
+                        }
 
-                    areaId = args[2];
-                    ushort zoneId = 0;
-                    string name = args[4];
-                    string groupId = args[5];
+                        areaId = args[3];
+                        string name = args[2];
+                        string groupId = args[4];
 
-                    if (string.IsNullOrEmpty(areaId) || string.IsNullOrEmpty(name) || string.IsNullOrEmpty(groupId))
-                    {
-                        DisplaySyntax(client);
-                        break;
-                    }
+                        if (string.IsNullOrEmpty(areaId) || string.IsNullOrEmpty(name) || string.IsNullOrEmpty(groupId))
+                        {
+                            DisplaySyntax(client);
+                            break;
+                        }
 
-                    if (ushort.TryParse(args[3], out zoneId))
-                    {
-                        var areaDb = GameServer.Database.SelectObjects<DBArea>(DB.Column("id").IsEqualTo(areaId))?.FirstOrDefault();
-
+                        var areaDb = GameServer.Database.SelectObject<DBArea>(DB.Column("Area_ID").IsEqualTo(areaId));
                         if (areaDb == null)
                         {
-                            client.Out.SendMessage("Impossible de trouver l'area avec l'id : " + areaId, eChatType.CT_System, eChatLoc.CL_ChatWindow);
+                            client.SendTranslation("Commands.GM.GMTerritories.NoSuchArea", eChatType.CT_System, eChatLoc.CL_SystemWindow, areaId);
                             break;
                         }
 
-                        if (!WorldMgr.Regions.ContainsKey(areaDb.Region))
+                        if (!WorldMgr.Regions.TryGetValue(areaDb.Region, out GS.Region region))
                         {
-                            client.Out.SendMessage("Impossible de trouver la region : " + areaDb.Region, eChatType.CT_System, eChatLoc.CL_ChatWindow);
-                            break;
+                            client.SendTranslation("Commands.GM.GMTerritories.AreaBadRegion", eChatType.CT_System, eChatLoc.CL_SystemWindow, areaId, areaDb.Region);
+                            return;
                         }
 
-                        var zone = WorldMgr.Regions[areaDb.Region].Zones.FirstOrDefault(z => z.ID.Equals(zoneId));
-
-                        if (zone == null)
-                        {
-                            client.Out.SendMessage("Impossible de trouver la zone : " + zoneId + " dans la region " + areaDb.Region, eChatType.CT_System, eChatLoc.CL_ChatWindow);
-                            break;
-                        }
-
-                        if (!MobGroupManager.Instance.Groups.ContainsKey(groupId))
-                        {
-                            client.Out.SendMessage("Impossible de trouver le groupeId : " + groupId, eChatType.CT_System, eChatLoc.CL_ChatWindow);
-                            break;
-                        }
-
-                        var areas = WorldMgr.Regions[areaDb.Region].GetAreasOfZone(zone, new System.Numerics.Vector3(areaDb.X, areaDb.Y, 0), false);
-
-                        if (areas == null)
-                        {
-                            client.Out.SendMessage("Impossible de trouver des areas dans la zone : " + zone.ID, eChatType.CT_System, eChatLoc.CL_ChatWindow);
-                            break;
-                        }
-
-                        var area = areas.FirstOrDefault(a => ((AbstractArea)a).Description.Equals(areaDb.Description));
-
+                        AbstractArea area = region.Zones.SelectMany(z => z.GetAreas().OfType<AbstractArea>()).FirstOrDefault(a => string.Equals(a.DbArea?.ObjectId, areaId));
                         if (area == null)
                         {
-                            client.Out.SendMessage($"Impossible de trouver des l'area {areaDb.Description} dans la zone {zone.ID}", eChatType.CT_System, eChatLoc.CL_ChatWindow);
+                            client.SendTranslation("Commands.GM.GMTerritories.NoSuchArea", eChatType.CT_System, eChatLoc.CL_SystemWindow, areaId);
+                            break;
+                        }
+
+                        if (area.ZoneIn == null)
+                        {
+                            client.SendTranslation("Commands.GM.GMTerritories.NoZoneForArea", eChatType.CT_System, eChatLoc.CL_SystemWindow, areaId);
+                            return;
+                        }
+
+                        if (!MobGroupManager.Instance.Groups.TryGetValue(groupId, out MobGroup group))
+                        {
+                            client.SendTranslation("Commands.GM.GMTerritories.BadGroupID", eChatType.CT_System, eChatLoc.CL_SystemWindow, groupId);
                             break;
                         }
 
                         var mobinfo = TerritoryManager.Instance.FindBossFromGroupId(groupId);
-
                         if (mobinfo.Error != null)
                         {
                             client.Out.SendMessage(mobinfo.Error, eChatType.CT_System, eChatLoc.CL_ChatWindow);
@@ -120,17 +105,97 @@ namespace DOL.commands.gmcommands
                         }
 
                         bool saved = TerritoryManager.Instance.AddTerritory(area, areaId, areaDb.Region, groupId, mobinfo.Mob);
-
                         if (!saved)
                         {
-                            client.Out.SendMessage("Le Territoire " + name + " n'a pas pu etre sauvegardé dans la base de données.", eChatType.CT_System, eChatLoc.CL_ChatWindow);
+                            client.SendTranslation("Commands.GM.GMTerritories.SaveFailed", eChatType.CT_System, eChatLoc.CL_SystemWindow, name);
+                            break;
+                        }
+                        client.SendTranslation("Commands.GM.GMTerritories.Saved", eChatType.CT_System, eChatLoc.CL_SystemWindow, name, area.Description);
+                        break;
+                    }
+
+                case "add":
+                    {
+                        if (args.Length < 3)
+                        {
+                            DisplaySyntax(client, "add");
                             break;
                         }
 
-                        client.Out.SendMessage("Le Territoire " + name + " a été créé correctement.", eChatType.CT_System, eChatLoc.CL_ChatWindow);
-                    }
+                        areaId = args[2];
+                        var areaDb = GameServer.Database.SelectObject<DBArea>(DB.Column("Area_Id").IsEqualTo(args[2]));
+                        if (areaDb == null)
+                        {
+                            client.SendTranslation("Commands.GM.GMTerritories.NoSuchArea", eChatType.CT_System, eChatLoc.CL_SystemWindow, areaId);
+                            break;
+                        }
 
-                    break;
+                        if (args.Length > 3)
+                        {
+                            if (!string.Equals(args[3], "to") || args.Length != 5)
+                            {
+                                DisplaySyntax(client, "add");
+                                break;
+                            }
+
+                            string id = args[4];
+                            territory = TerritoryManager.GetTerritoryByID(id);
+                            if (territory == null)
+                            {
+                                territory = TerritoryManager.GetTerritoryAtArea(id);
+                                if (territory == null)
+                                {
+                                    client.SendTranslation("Commands.GM.GMTerritories.TerritoryNotFound", eChatType.CT_System, eChatLoc.CL_SystemWindow, id);
+                                    return;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            territory = TerritoryManager.GetCurrentTerritory(client.Player);
+                            if (territory == null)
+                            {
+                                client.SendTranslation("Commands.GM.GMTerritories.NotInTerritory");
+                                return;
+                            }
+                        }
+
+                        if (areaDb.Region != territory.RegionId)
+                        {
+                            client.SendTranslation("Commands.GM.GMTerritories.Add.WrongRegion", eChatType.CT_System, eChatLoc.CL_SystemWindow, territory.RegionId, areaDb.Region);
+                            return;
+                        }
+
+                        if (!WorldMgr.Regions.TryGetValue(areaDb.Region, out GS.Region region))
+                        {
+                            client.SendTranslation("Commands.GM.GMTerritories.AreaBadRegion", eChatType.CT_System, eChatLoc.CL_SystemWindow, areaId, areaDb.Region);
+                            return;
+                        }
+
+                        var area = territory.Zone.GetAreas().OfType<AbstractArea>().FirstOrDefault(a => string.Equals(a.DbArea?.ObjectId, areaId));
+                        if (area == null)
+                        {
+                            client.SendTranslation("Commands.GM.GMTerritories.Add.WrongZone", eChatType.CT_System, eChatLoc.CL_SystemWindow, areaId, territory.Name, territory.Zone.ID);
+                            return;
+                        }
+                        var territoryAtArea = TerritoryManager.GetTerritoryAtArea(area);
+                        if (territoryAtArea != null)
+                        {
+                            client.SendTranslation("Commands.GM.GMTerritories.Add.AlreadyHas", eChatType.CT_System, eChatLoc.CL_SystemWindow, area.Description, territoryAtArea.Name);
+                            return;
+                        }
+                        territory.AddArea(area);
+                        Guild oldGuild = territory.OwnerGuild;
+                        if (oldGuild != null)
+                        {
+                            // Quick way to refresh guild names, emblems, etc
+                            territory.OwnerGuild = null;
+                            territory.OwnerGuild = oldGuild;
+                        }
+                        territory.SaveIntoDatabase();
+                        client.SendTranslation("Commands.GM.GMTerritories.Add.Added", eChatType.CT_System, eChatLoc.CL_SystemWindow, area.Description, territory.Name);
+                        break;
+                    }
 
                 case "info":
                     if (args.Length > 2)
