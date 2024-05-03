@@ -1753,9 +1753,9 @@ namespace DOL.GS.Commands
                                 }
                             }
 
-                            if (TerritoryManager.Instance.DoesPlayerOwnsTerritory(client.Player))
+                            var territory = TerritoryManager.GetCurrentTerritory(client.Player);
+                            if (territory?.IsOwnedBy(client.Player) == true)
                             {
-                                var territory = TerritoryManager.Instance.GetCurrentTerritory(client.Player.CurrentAreas);
 
                                 if (client.Player.GuildRank.RankLevel > 2 && client.Account.PrivLevel == 1)
                                 {
@@ -1781,8 +1781,8 @@ namespace DOL.GS.Commands
 
                                         player.Guild.RemoveMeritPoints(Properties.GUILD_BANNER_MERIT_PRICE);
                                         if (territory.IsBannerSummoned)
-                                            TerritoryManager.ClearEmblem(territory);
-                                        TerritoryManager.ApplyEmblemToTerritory(territory, player.Guild, true);
+                                            territory.ToggleBanner(false);
+                                        territory.ToggleBanner(true);
                                         foreach (GamePlayer guildPlayer in player.Guild.GetListOfOnlineMembers())
                                         {
                                             guildPlayer.SendTranslatedMessage("Commands.Players.Guild.TerritoryBanner.Summoned", eChatType.CT_Guild, eChatLoc.CL_SystemWindow, guildPlayer.GetPersonalizedName(player), territory.Name);
@@ -1825,10 +1825,14 @@ namespace DOL.GS.Commands
                             }
 
                             Guild guild = player.Guild;
-                            if (TerritoryManager.Instance.DoesPlayerOwnsTerritory(player) && GameServer.ServerRules.IsInPvPArea(player))
+                            var territory = TerritoryManager.GetCurrentTerritory(player);
+                            if (territory?.IsOwnedBy(player) == true && GameServer.ServerRules.IsInPvPArea(player))
                             {
-                                var territory = TerritoryManager.Instance.GetCurrentTerritory(player.CurrentAreas);
-
+                                if (territory.PortalPosition == null)
+                                {
+                                    client.SendTranslation("Commands.Players.Guild.TerritoryPortal.NotSupported");
+                                    return;
+                                }
                                 if (client.Account.PrivLevel == 1)
                                 {
                                     if (player.GuildRank.RankLevel > 4)

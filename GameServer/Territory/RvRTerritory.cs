@@ -1,5 +1,6 @@
 ﻿using DOL.GS;
 using DOL.GS.Keeps;
+using DOLDatabase.Tables;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,14 +13,14 @@ namespace DOL.Territories
     public class RvRTerritory
         : Territory
     {
-        public RvRTerritory(IArea area, string areaId, Vector3 center, ushort regionId, ushort zoneId, GameNPC boss)
-            : base(area, areaId, center, regionId, zoneId, null, boss, false)
+        /// <inheritdoc />
+        public RvRTerritory(Zone zone, List<IArea> areas, string name, GameNPC boss, Vector3? portalPosition, ushort regionID, string groupId) : base(zone, areas, name, boss, portalPosition, regionID, groupId)
         {
-            //add new area to region
+            //add new areas to region
             //only in memory
-            if (WorldMgr.Regions.ContainsKey(this.RegionId))
+            if (WorldMgr.Regions.TryGetValue(this.RegionId, out Region region))
             {
-                WorldMgr.Regions[this.RegionId].AddArea(this.Area);
+                areas.ForEach(a => region.AddArea(a));
             }
         }
 
@@ -39,20 +40,7 @@ namespace DOL.Territories
 
         public void Reset()
         {
-            this.Boss.RestoreOriginalGuildName();
-            this.Boss.Realm = eRealm.None;
-            foreach (var mob in this.Mobs)
-            {
-                mob.Realm = eRealm.None;
-                if (this.OriginalGuilds.ContainsKey(mob.InternalID))
-                {
-                    mob.GuildName = this.OriginalGuilds[mob.InternalID];
-                }
-                else
-                {
-                    mob.GuildName = null;
-                }
-            }
+            OwnerGuild = null;
             // reset keep
             AbstractGameKeep keep = GameServer.KeepManager.GetKeepCloseToSpot(RegionId, Boss.Position, 100000);
             keep.TempRealm = eRealm.None;
@@ -62,7 +50,6 @@ namespace DOL.Territories
             {
                 door.Reset((eRealm)6);
             }
-            ClearPortal();
         }
     }
 }

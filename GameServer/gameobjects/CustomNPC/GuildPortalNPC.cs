@@ -36,7 +36,7 @@ namespace DOL.GS
         {
             GuildPortalNPC portalNpc = new GuildPortalNPC(territory, spawner);
             portalNpc.LoadedFromScript = true;
-            portalNpc.Position = territory.Center;
+            portalNpc.Position = territory.PortalPosition.Value;
             portalNpc.CurrentRegionID = territory.RegionId;
             portalNpc.Heading = 1000;
             portalNpc.Model = 1438;

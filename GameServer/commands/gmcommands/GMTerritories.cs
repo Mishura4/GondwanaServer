@@ -13,6 +13,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vector3 = System.Numerics.Vector3;
 
 namespace DOL.commands.gmcommands
 {
@@ -20,9 +21,11 @@ namespace DOL.commands.gmcommands
         "&GMTerritories",
         ePrivLevel.GM,
         "Commands.GM.GMTerritories.Description",
-        "Commands.GM.GMTerritories.Usage.GroupMob",
-        "Commands.GM.GMTerritories.Usage.Key",
-        "Commands.GM.GMTerritories.Usage.KeyChance",
+        "Commands.GM.GMTerritories.Usage.Add",
+        "Commands.GM.GMTerritories.Usage.Info",
+        "Commands.GM.GMTerritories.Usage.Clear",
+        "Commands.GM.GMTerritories.Usage.Claim",
+        "Commands.GM.GMTerritories.Usage.SetPortal",
         "Commands.GM.GMTerritories.Usage.BonusAdd",
         "Commands.GM.GMTerritories.Usage.BonusRemove",
          "Commands.GM.GMTerritories.Resist")]
@@ -43,7 +46,6 @@ namespace DOL.commands.gmcommands
 
             switch (args[1].ToLowerInvariant())
             {
-
                 case "add":
 
                     if (args.Length < 6)
@@ -131,63 +133,168 @@ namespace DOL.commands.gmcommands
                     break;
 
                 case "info":
-                    if (args.Length == 3)
+                    if (args.Length > 2)
                     {
-                        areaId = args[2];
-
-                        if (string.IsNullOrEmpty(areaId))
-                        {
-                            DisplaySyntax(client);
-                            break;
-                        }
-
-                        territory = TerritoryManager.Instance.Territories.FirstOrDefault(t => t.AreaId.Equals(areaId));
-
+                        string id = args[2];
+                        territory = TerritoryManager.GetTerritoryByID(id);
                         if (territory == null)
                         {
-                            client.Out.SendMessage("Le Territoire avec AreaId " + areaId + " n'a pas été trouvé.", eChatType.CT_System, eChatLoc.CL_ChatWindow);
-                            break;
+                            territory = TerritoryManager.GetTerritoryAtArea(id);
+                            if (territory == null)
+                            {
+                                client.SendTranslation("Commands.GM.GMTerritories.TerritoryNotFound", eChatType.CT_System, eChatLoc.CL_SystemWindow, id);
+                                return;
+                            }
                         }
-
-                        IList<string> infos = territory.GetInformations();
-
-                        client.Out.SendCustomTextWindow($"[ Territoire {territory.Name} ]", infos);
-                        break;
+                    }
+                    else
+                    {
+                        territory = TerritoryManager.GetCurrentTerritory(client.Player);
+                        if (territory == null)
+                        {
+                            client.SendTranslation("Commands.GM.GMTerritories.NotInTerritory");
+                            return;
+                        }
                     }
 
-                    DisplaySyntax(client);
+                    IList<string> infos = territory.GetInformations();
+
+                    client.Out.SendCustomTextWindow($"[ Territoire {territory.Name} ]", infos);
+                    break;
+
+                case "setportal":
+                    int arg = 2;
+                    if (args.Length > arg)
+                    {
+                        string id = args[arg];
+                        territory = TerritoryManager.GetTerritoryByID(id);
+                        if (territory == null)
+                        {
+                            territory = TerritoryManager.GetTerritoryAtArea(id);
+                            if (territory == null)
+                            {
+                                client.SendTranslation("Commands.GM.GMTerritories.TerritoryNotFound", eChatType.CT_System, eChatLoc.CL_SystemWindow, id);
+                                return;
+                            }
+                        }
+                        ++arg;
+                    }
+                    else
+                    {
+                        territory = TerritoryManager.GetCurrentTerritory(client.Player);
+                        if (territory == null)
+                        {
+                            client.SendTranslation("Commands.GM.GMTerritories.NotInTerritory");
+                            return;
+                        }
+                    }
+                    Vector3 position;
+                    if (args.Length > arg)
+                    {
+                        if (string.Equals(args[arg], "remove"))
+                        {
+                            territory.PortalPosition = null;
+                            client.SendTranslation("Commands.GM.GMTerritories.PortalRemoved", eChatType.CT_System, eChatLoc.CL_SystemWindow, territory.Name);
+                            return;
+                        }
+                        if (args.Length < arg + 3)
+                        {
+                            DisplaySyntax(client);
+                            return;
+                        }
+                        if (!int.TryParse(args[arg], out int x))
+                        {
+                            client.SendTranslation("Commands.GM.GMTerritories.BadCoordinate", eChatType.CT_System, eChatLoc.CL_SystemWindow, args[arg]);
+                            return;
+                        }
+                        if (!int.TryParse(args[arg + 1], out int y))
+                        {
+                            client.SendTranslation("Commands.GM.GMTerritories.BadCoordinate", eChatType.CT_System, eChatLoc.CL_SystemWindow, args[arg + 1]);
+                            return;
+                        }
+                        if (!int.TryParse(args[arg + 2], out int z))
+                        {
+                            client.SendTranslation("Commands.GM.GMTerritories.BadCoordinate", eChatType.CT_System, eChatLoc.CL_SystemWindow, args[arg + 2]);
+                            return;
+                        }
+                        position = new Vector3(x, y, z);
+                    }
+                    else
+                    {
+                        position = client.Player.Position;
+                    }
+                    territory.PortalPosition = position;
+                    client.SendTranslation("Commands.GM.GMTerritories.PortalSet", eChatType.CT_System, eChatLoc.CL_SystemWindow, territory.Name, position.X, position.Y, position.Z);
                     break;
 
                 case "clear":
-                    if (args.Length == 3)
+                    if (args.Length > 2)
                     {
-                        areaId = args[2];
-
-                        if (string.IsNullOrEmpty(areaId))
-                        {
-                            DisplaySyntax(client);
-                            break;
-                        }
-
-                        territory = TerritoryManager.Instance.Territories.FirstOrDefault(t => t.AreaId.Equals(areaId));
-
+                        string id = args[2];
+                        territory = TerritoryManager.GetTerritoryByID(id);
                         if (territory == null)
                         {
-                            client.Out.SendMessage("Le Territoire avec AreaId " + areaId + " n'a pas été trouvé.", eChatType.CT_System, eChatLoc.CL_ChatWindow);
-                            break;
+                            territory = TerritoryManager.GetTerritoryAtArea(id);
+                            if (territory == null)
+                            {
+                                client.SendTranslation("Commands.GM.GMTerritories.TerritoryNotFound", eChatType.CT_System, eChatLoc.CL_SystemWindow, id);
+                                return;
+                            }
                         }
-
-                        TerritoryManager.Instance.RestoreTerritoryGuildNames(territory);
-                        TerritoryManager.ClearEmblem(territory);
-                        territory.ClearPortal();
-                        client.Out.SendMessage("Le Territoire avec AreaId " + areaId + " est de nouveau neutre.", eChatType.CT_System, eChatLoc.CL_ChatWindow);
+                    }
+                    else
+                    {
+                        territory = TerritoryManager.GetCurrentTerritory(client.Player);
+                        if (territory == null)
+                        {
+                            client.SendTranslation("Commands.GM.GMTerritories.NotInTerritory");
+                            return;
+                        }
                     }
 
+                    territory.OwnerGuild = null;
+                    client.SendTranslation("Commands.GM.GMTerritories.Cleared", eChatType.CT_System, eChatLoc.CL_SystemWindow, territory.Name);
+                    break;
+
+                case "claim":
+                    if (args.Length > 2)
+                    {
+                        string id = args[2];
+                        territory = TerritoryManager.GetTerritoryByID(id);
+                        if (territory == null)
+                        {
+                            territory = TerritoryManager.GetTerritoryAtArea(id);
+                            if (territory == null)
+                            {
+                                client.SendTranslation("Commands.GM.GMTerritories.TerritoryNotFound", eChatType.CT_System, eChatLoc.CL_SystemWindow, id);
+                                return;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        territory = TerritoryManager.GetCurrentTerritory(client.Player);
+                        if (territory == null)
+                        {
+                            client.SendTranslation("Commands.GM.GMTerritories.NotInTerritory");
+                            return;
+                        }
+                    }
+
+                    territory.OwnerGuild = client.Player.Guild;
+                    if (client.Player.Guild == null)
+                    {
+                        client.SendTranslation("Commands.GM.GMTerritories.Cleared", eChatType.CT_System, eChatLoc.CL_SystemWindow, territory.Name);
+                    }
+                    else
+                    {
+                        client.SendTranslation("Commands.GM.GMTerritories.Claimed", eChatType.CT_System, eChatLoc.CL_SystemWindow, territory.Name, client.Player.Guild.Name);
+                    }
                     break;
 
                 case "bonus":
 
-                    if (args.Length != 5)
+                    if (args.Length < 4)
                     {
                         DisplaySyntax(client);
                         break;
@@ -196,20 +303,28 @@ namespace DOL.commands.gmcommands
                     string action = args[2].ToLowerInvariant();
                     var arg3 = args[3].ToLowerInvariant();
                     var bonus = this.GetResist(arg3);
-                    areaId = args[4];
-
-                    if (string.IsNullOrEmpty(areaId))
+                    if (args.Length > 4)
                     {
-                        DisplaySyntax(client);
-                        break;
+                        string id = args[4];
+                        territory = TerritoryManager.GetTerritoryByID(id);
+                        if (territory == null)
+                        {
+                            territory = TerritoryManager.GetTerritoryAtArea(id);
+                            if (territory == null)
+                            {
+                                client.SendTranslation("Commands.GM.GMTerritories.TerritoryNotFound", eChatType.CT_System, eChatLoc.CL_SystemWindow, id);
+                                return;
+                            }
+                        }
                     }
-
-                    territory = TerritoryManager.Instance.Territories.FirstOrDefault(t => t.AreaId.Equals(areaId));
-
-                    if (territory == null)
+                    else
                     {
-                        client.Out.SendMessage("Le Territoire avec AreaId " + areaId + " n'a pas été trouvé.", eChatType.CT_System, eChatLoc.CL_ChatWindow);
-                        break;
+                        territory = TerritoryManager.GetCurrentTerritory(client.Player);
+                        if (territory == null)
+                        {
+                            client.SendTranslation("Commands.GM.GMTerritories.NotInTerritory");
+                            return;
+                        }
                     }
 
                     if (action == "add")
@@ -247,15 +362,10 @@ namespace DOL.commands.gmcommands
                                 return;
                         }
 
-                        if (territory.GuildOwner != null)
+                        if (territory.OwnerGuild != null)
                         {
-                            var guild = GuildMgr.GetGuildByName(territory.GuildOwner);
-
-                            if (guild != null)
-                            {
-                                guild.RemoveTerritory(territory);
-                                guild.AddTerritory(territory, true);
-                            }
+                            territory.OwnerGuild.RemoveTerritory(territory);
+                            territory.OwnerGuild.AddTerritory(territory, true);
                         }
 
                         territory.SaveIntoDatabase();
@@ -306,15 +416,10 @@ break;
                                 return;
                         }
 
-                        if (territory.GuildOwner != null)
+                        if (territory.OwnerGuild != null)
                         {
-                            var guild = GuildMgr.GetGuildByName(territory.GuildOwner);
-
-                            if (guild != null)
-                            {
-                                guild.RemoveTerritory(territory);
-                                guild.AddTerritory(territory, true);
-                            }
+                            territory.OwnerGuild.RemoveTerritory(territory);
+                            territory.OwnerGuild.AddTerritory(territory, true);
                         }
 
                         territory.SaveIntoDatabase();

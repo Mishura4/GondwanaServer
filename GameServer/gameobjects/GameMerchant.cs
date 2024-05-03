@@ -428,17 +428,20 @@ namespace DOL.GS
 
             if (IsInTerritory)
             {
-                Territories.Territory territory = TerritoryManager.Instance.GetCurrentTerritory(CurrentAreas);
-                if (!string.IsNullOrEmpty(territory.GuildOwner) && player.GuildName != territory.GuildOwner)
+                Territory territory = TerritoryManager.GetCurrentTerritory(this);
+                if (territory.IsNeutral())
+                {
+                    if (player.Reputation < 0)
+                    {
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameMerchant.Interact.Territory.Outlaws"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+
+                        Notify(GameObjectEvent.InteractFailed, this, new InteractEventArgs(player));
+                        return false;
+                    }
+                }
+                else if (!territory.IsOwnedBy(player))
                 {
                     player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameMerchant.Interact.Territory.NotSameGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-
-                    Notify(GameObjectEvent.InteractFailed, this, new InteractEventArgs(player));
-                    return false;
-                }
-                else if (string.IsNullOrEmpty(territory.GuildOwner) && player.Reputation < 0)
-                {
-                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameMerchant.Interact.Territory.Outlaws"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 
                     Notify(GameObjectEvent.InteractFailed, this, new InteractEventArgs(player));
                     return false;

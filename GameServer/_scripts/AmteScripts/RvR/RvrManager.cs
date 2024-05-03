@@ -160,19 +160,19 @@ namespace AmteScripts.Managers
 
         public void OnControlChange(string lordId, Guild guild)
         {
-            var territory = _maps.Values.FirstOrDefault(m => m.RvRTerritory != null && m.RvRTerritory.BossId.Equals(lordId));
+            var map = _maps.Values.FirstOrDefault(m => m.RvRTerritory != null && m.RvRTerritory.BossId.Equals(lordId));
 
-            if (territory != null && territory.RvRTerritory != null)
+            if (map != null)
             {
-                TerritoryManager.ApplyEmblemToTerritory(territory.RvRTerritory, guild, true, territory.RvRTerritory.Boss);
-                territory.RvRTerritory.Mobs.ForEach(m =>
+                map.RvRTerritory.OwnerGuild = guild;
+                map.RvRTerritory.ToggleBanner(true);
+                map.RvRTerritory.Mobs.ForEach(m =>
                 {
                     m.GuildName = guild.Name;
                     m.Realm = guild.Realm;
                 });
-                territory.RvRTerritory.GuildOwner = guild.Name;
-                territory.RvRTerritory.Boss.Realm = guild.Realm;
-                AbstractGameKeep keep = GameServer.KeepManager.GetKeepCloseToSpot(territory.RvRTerritory.RegionId, territory.RvRTerritory.Boss.Position, 100000);
+                map.RvRTerritory.Boss.Realm = guild.Realm;
+                AbstractGameKeep keep = GameServer.KeepManager.GetKeepCloseToSpot(map.RvRTerritory.RegionId, map.RvRTerritory.Boss.Position, 100000);
                 keep.TempRealm = guild.Realm;
                 keep.Reset(guild.Realm);
                 // reset all doors
@@ -358,7 +358,7 @@ namespace AmteScripts.Managers
             RvRTerritory rvrTerritory = null;
             if (!_maps.Values.Any(v => v.Location.RegionID.Equals(initNpc.CurrentRegionID)))
             {
-                var lord = initNpc.CurrentRegion.Objects.FirstOrDefault(o => o != null && o is LordRvR) as LordRvR;
+                var lord = (LordRvR)(initNpc.CurrentRegion.Objects.FirstOrDefault(o => o is LordRvR));
 
                 if (lord == null)
                 {
@@ -368,7 +368,7 @@ namespace AmteScripts.Managers
 
                 var areaName = string.IsNullOrEmpty(lord.GuildName) ? initNpc.Name : lord.GuildName;
                 var area = new Area.Circle(areaName, lord.Position.X, lord.Position.Y, lord.Position.Z, RVR_RADIUS);
-                rvrTerritory = new RvRTerritory(area, area.Description, area.Position, lord.CurrentRegionID, lord.CurrentZone.ID, lord);
+                rvrTerritory = new RvRTerritory(lord.CurrentZone, new List<IArea>{area}, area.Description, lord,  area.Position, lord.CurrentRegionID, null);
             }
 
             return new RvRMap()
@@ -575,7 +575,7 @@ namespace AmteScripts.Managers
             {
                 ((LordRvR)m.Value.RvRTerritory.Boss).StartRvR();
                 m.Value.RvRTerritory.Reset();
-                TerritoryManager.ClearEmblem(m.Value.RvRTerritory, m.Value.RvRTerritory.Boss);
+                m.Value.RvRTerritory.ToggleBanner(false);
             });
 
             return true;
@@ -600,19 +600,10 @@ namespace AmteScripts.Managers
                 c.Out.SendMessage(message, eChatType.CT_Help, eChatLoc.CL_SystemWindow);
             });
 
-            this._maps.Where(m => m.Value.RvRTerritory != null).Foreach(m =>
+            this._maps.Select(m => m.Value).Where(m => m.RvRTerritory != null).Foreach(m =>
             {
-                ((LordRvR)m.Value.RvRTerritory.Boss).StopRvR();
-                TerritoryManager.ClearEmblem(m.Value.RvRTerritory, m.Value.RvRTerritory.Boss);
-                m.Value.RvRTerritory.ClearPortal();
-                AbstractGameKeep keep = GameServer.KeepManager.GetKeepCloseToSpot(m.Value.RvRTerritory.RegionId, m.Value.RvRTerritory.Boss.Position, 100000);
-                keep.TempRealm = 0;
-                keep.Reset(0);
-                // reset all doors
-                foreach (GameKeepDoor door in keep.Doors.Values)
-                {
-                    door.Reset((eRealm)6);
-                }
+                ((LordRvR)m.RvRTerritory.Boss).StopRvR();
+                m.RvRTerritory.Reset();
             });
 
             this._maps.Values.GroupBy(v => v.Location.RegionID).ForEach(region =>

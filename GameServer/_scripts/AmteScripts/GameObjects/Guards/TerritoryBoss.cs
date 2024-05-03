@@ -41,9 +41,9 @@ namespace DOL.GS.Scripts
 
             var territory = TerritoryManager.Instance.Territories.FirstOrDefault(t => t.BossId.Equals(this.InternalID));
 
-            if (territory != null && territory.GuildOwner != null)
+            if (territory != null && territory.OwnerGuild != null)
             {
-                this.GuildName = territory.GuildOwner;
+                this.GuildName = territory.OwnerGuild.Name;
             }
 
             return true;

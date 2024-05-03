@@ -289,6 +289,7 @@ Commands.Players.Guild.TerritoryPortal.ConfirmCost:		Summoning a guild portal wi
 Commands.Players.Guild.TerritoryPortal.Cooldown:		You cannot summon a guild portal so soon after summoning one.
 Commands.Players.Guild.TerritoryPortal.NotEnoughMerit:	Your guild must have {0} merit points to summon a guild portal.
 Commands.Players.Guild.TerritoryPortal.NotInTerritory:	You cannot summon a guild portal outside of a territory owned by your guild.
+Commands.Players.Guild.TerritoryPortal.NotSupported:	You cannot summon a guild portal in this territory!
 
 Commands.Players.Guild.TerritoryPortal.Called:		You have been called by your guild to defend the territory {0}, will you answer the call?
 Commands.Players.Guild.TerritoryPortal.Expired:		The call to arms has expired!

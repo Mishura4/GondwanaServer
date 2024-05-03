@@ -16,6 +16,7 @@ using DOL.GS.PlayerClass;
 using DOL.gameobjects.CustomNPC;
 using DOL.GS.Finance;
 using DOL.Language;
+using DOL.Territories;
 
 namespace DOL.GS.ServerRules
 {
@@ -366,9 +367,9 @@ namespace DOL.GS.ServerRules
                 }
 
                 //Forbids attack on territory
-                var ownsTerritory = Territories.TerritoryManager.Instance.DoesPlayerOwnsTerritory(playerAttacker);
-                if (ownsTerritory)
+                if (TerritoryManager.GetCurrentTerritory(playerAttacker)?.IsOwnedBy(playerAttacker) == true)
                 {
+                    // Is this right? No attacks at all on friendly territory? Wouldn't this prevent defending?
                     return false;
                 }
 
@@ -968,11 +969,11 @@ namespace DOL.GS.ServerRules
                         var territory = RvrManager.Instance.GetRvRTerritory(killerPlayer.CurrentRegionID);
                         if (territory != null)
                         {
-                            if (killerPlayer.GuildName != null && killerPlayer.GuildName.Equals(territory.GuildOwner))
+                            if (territory.IsOwnedBy(killedPlayer))
                             {
                                 int bonus = 0;
                                 //Is Player inside the Territory Area?
-                                var isInsideTerritory = killedPlayer.CurrentAreas.Any(a => ((AbstractArea)a).Description.Equals(territory.AreaId));
+                                var isInsideTerritory = killedPlayer.CurrentAreas.Any(territory.IsInTerritory);
                                 if (isInsideTerritory)
                                 {
                                     bonus = Properties.RvR_INSIDE_AREA_RP_BONUS;

@@ -37,6 +37,7 @@ using DOL.gameobjects.CustomNPC;
 using System.Numerics;
 using static DOL.GS.GameTimer;
 using DOL.GS.Scripts;
+using DOL.Territories;
 
 namespace DOL.GS.Spells
 {
@@ -4128,9 +4129,8 @@ namespace DOL.GS.Spells
                 else if (Caster is GamePlayer player)
                 {
                     //Check if is Territory and owns it to cancel dmg
-                    bool doesPlayerOwnsTerritory = Territories.TerritoryManager.Instance.DoesPlayerOwnsTerritory(player);
-
-                    if (doesPlayerOwnsTerritory)
+                    // ^ Is this right? Wouldn't this prevent defending?
+                    if (TerritoryManager.GetCurrentTerritory(player)?.IsOwnedBy(player) == true)
                     {
                         ad.Damage = 0;
                         ad.CriticalDamage = 0;

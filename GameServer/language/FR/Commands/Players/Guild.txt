@@ -289,6 +289,7 @@ Commands.Players.Guild.TerritoryPortal.ConfirmCost:		Invoquer un portail de guil
 Commands.Players.Guild.TerritoryPortal.Cooldown:		Vous ne pouvez pas invoquer un portail de guilde si tôt après en avoir invoqué un.
 Commands.Players.Guild.TerritoryPortal.NotEnoughMerit:	Votre guilde doit avoir {0} points de mérite pour invoquer un portail de guilde.
 Commands.Players.Guild.TerritoryPortal.NotInTerritory:	Vous ne pouvez pas invoquer un portail de guilde en dehors d'un territoire contrôlé par votre guilde.
+Commands.Players.Guild.TerritoryPortal.NotSupported:	Vous ne pouvez pas invoquer un portail de guilde dans ce territoire!
 
 Commands.Players.Guild.TerritoryPortal.Called:		Vous avez été appelé(e) par votre guilde pour défendre {0}, allez-vous répondre à l'appel?
 Commands.Players.Guild.TerritoryPortal.Expired:		L'appel aux armes a éxpiré!

@@ -3265,10 +3265,10 @@ namespace DOL.GS
                 }
             }
 
-            var territory = TerritoryManager.Instance.GetCurrentTerritory(this.CurrentAreas);
-            if (territory?.GuildOwner != null)
+            var territory = TerritoryManager.GetCurrentTerritory(this);
+            if (territory?.OwnerGuild != null)
             {
-                this.GuildName = territory.GuildOwner;
+                this.GuildName = territory.OwnerGuild.Name;
             }
 
             Reset();
@@ -4376,16 +4376,39 @@ namespace DOL.GS
             base.TakeDamage(ad);
         }
 
+        private void WarnTerritory(GameLiving attacker)
+        {
+            Territory territory = TerritoryManager.GetCurrentTerritory(this);
+            if (territory == null)
+                return;
+
+            if (attacker is GamePlayer playerAttacker)
+            {
+            }
+            else if (attacker is GameNPC { Brain: IControlledBrain { Owner: GamePlayer ownerPlayer } })
+            {
+                playerAttacker = ownerPlayer;
+            }
+            else
+            {
+                return;
+            }
+
+            // Todo: find a better way to determine if the mob is an ally
+            if (string.Equals(this.GuildName, territory.OwnerGuild.Name) && !territory.IsOwnedBy(playerAttacker))
+            {
+                TerritoryManager.Instance.TerritoryAttacked(territory);
+            }
+        }
+
         public override void TakeDamage(GameObject source, eDamageType damageType, int damageAmount, int criticalAmount)
         {
-            if (source is GameLiving living)
+            if (source is GameLiving livingSource)
             {
-                Territories.Territory currentTerritory = TerritoryManager.Instance.GetCurrentTerritory(living.CurrentAreas);
-                if (currentTerritory != null && currentTerritory.GuildOwner == GuildName && ((living is GamePlayer player && player.GuildName != GuildName) || (living.ControlledBrain != null && living.ControlledBrain.Owner.GuildName != GuildName)))
-                    TerritoryManager.Instance.TerritoryAttacked(currentTerritory);
+                WarnTerritory(livingSource);
 
                 if (damageAmount > 0)
-                    FireAmbientSentence(eAmbientTrigger.hurting, living);
+                    FireAmbientSentence(eAmbientTrigger.hurting, livingSource);
             }
             base.TakeDamage(source, damageType, damageAmount, criticalAmount);
         }

@@ -1,49 +1,95 @@
 ﻿using Discord;
+using DOL.Database;
+using DOL.GameEvents;
 using DOL.GS;
 using DOL.GS.PacketHandler;
+using DOL.GS.PropertyCalc;
 using DOL.GS.ServerProperties;
 using DOL.GS.Spells;
 using DOL.Language;
 using DOLDatabase.Tables;
 using log4net;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Numerics;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using static DOL.GS.Area;
+using static DOL.GS.GameObject;
 
 namespace DOL.Territories
 {
     public class Territory
     {
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        private string id;
+        private string guild_id;
 
-        public Territory(IArea area, string areaId, Vector3 center, ushort regionId, ushort zoneId, string groupId, GameNPC boss, bool IsBannerSummoned, string guild = null, string bonus = null, string id = null)
+        public Territory(Zone zone, List<IArea> areas, GameNPC boss, TerritoryDb db)
         {
-            this.id = id;
-            this.Area = area;
-            this.Center = center;
-            this.RegionId = regionId;
-            this.Name = ((AbstractArea)area).Description;
-            this.ZoneId = zoneId;
-            this.AreaId = areaId;
-            this.GroupId = groupId;
+            this.ID = db.ObjectId;
+            this.Areas = areas;
+            if (db.PortalX == null || db.PortalY == null || db.PortalZ == null)
+            {
+                this.PortalPosition = null;
+            }
+            else
+            {
+                this.PortalPosition = new Vector3(db.PortalX.Value, db.PortalY.Value, db.PortalY.Value);
+            }
+            this.Zone = zone;
+            this.RegionId = db.RegionId;
+            this.Name = db.Name;
+            this.GroupId = db.GroupId;
             this.BossId = boss?.InternalID;
             this.Boss = boss;
-            this.Coordinates = TerritoryManager.GetCoordinates(area);
-            this.Radius = this.GetRadius();
             this.OriginalGuilds = new Dictionary<string, string>();
             this.BonusResist = new();
             this.Mobs = this.GetMobsInTerritory();
             this.SetBossAndMobsInEventInTerritory();
             this.SaveOriginalGuilds();
-            this.LoadBonus(bonus);
-            this.IsBannerSummoned = IsBannerSummoned;
-            GuildOwner = guild;
+            this.LoadBonus(db.Bonus);
+            this.IsBannerSummoned = db.IsBannerSummoned;
+            guild_id = db.OwnerGuildID;
+
+            if (!IsNeutral())
+            {
+                OwnerGuild = GuildMgr.GetGuildByGuildID(guild_id);
+                if (OwnerGuild == null)
+                {
+                    log.Error($"Territory Manager cant find guild {guild_id}");
+                }
+                else
+                {
+                    if (IsBannerSummoned)
+                    {
+                        ToggleBanner(true);
+                    }
+                }
+            }
+        }
+
+        public Territory(Zone zone, List<IArea> areas, string name, GameNPC boss, Vector3? portalPosition, ushort regionID, string groupId)
+        {
+            this.ID = Guid.NewGuid().ToString();
+            this.Areas = areas;
+            this.PortalPosition = portalPosition;
+            this.Zone = zone;
+            this.RegionId = regionID;
+            this.Name = name;
+            this.GroupId = groupId;
+            this.BossId = boss?.InternalID;
+            this.Boss = boss;
+            this.OriginalGuilds = new Dictionary<string, string>();
+            this.BonusResist = new();
+            this.Mobs = this.GetMobsInTerritory();
+            this.SetBossAndMobsInEventInTerritory();
+            this.SaveOriginalGuilds();
+            this.IsBannerSummoned = false;
+            guild_id = null;
         }
 
         /// <summary>
@@ -89,19 +135,7 @@ namespace DOL.Territories
             set;
         }
 
-        public string AreaId
-        {
-            get;
-            set;
-        }
-
         public string Name
-        {
-            get;
-            set;
-        }
-
-        public string GuildOwner
         {
             get;
             set;
@@ -113,21 +147,21 @@ namespace DOL.Territories
             set;
         }
 
-        public ushort ZoneId
+        public Zone Zone
         {
             get;
             set;
         }
 
-        public IArea Area
+        public List<IArea> Areas
         {
             get;
         }
 
-        public Vector3 Center
+        public Vector3? PortalPosition
         {
             get;
-            init;
+            set;
         }
 
         public IEnumerable<GameNPC> Mobs
@@ -159,22 +193,6 @@ namespace DOL.Territories
             private set;
         }
 
-        private RegionTimer m_portalTimer;
-
-        private readonly object m_portalLock = new();
-
-        public AreaCoordinate Coordinates
-        {
-            get;
-            set;
-        }
-
-        public ushort Radius
-        {
-            get;
-            set;
-        }
-
         public bool IsBannerSummoned
         {
             get;
@@ -186,6 +204,248 @@ namespace DOL.Territories
             get;
             set;
         }
+
+        public string ID
+        {
+            get;
+            private set;
+        }
+
+        private Object m_lockObject = new();
+
+        private Guild? m_ownerGuild;
+
+        public Guild? OwnerGuild
+        {
+            get
+            {
+                lock (m_lockObject)
+                {
+                    return m_ownerGuild;
+                }
+            }
+            set
+            {
+                lock (m_lockObject)
+                {
+                    if (value == null)
+                    {
+                        ReleaseTerritory();
+                    }
+                    else
+                    {
+                        if (value == m_ownerGuild)
+                        {
+                            return;
+                        }
+                        bool save = !string.Equals(value.GuildID, guild_id);
+                        SetGuildOwner(value, save);
+                        if (IsBannerSummoned)
+                            ToggleBanner(true);
+                    }
+                }
+            }
+        }
+
+        private void SetGuildOwner(Guild guild, bool saveChange)
+        {
+            //remove Territory from old Guild if any
+            if (m_ownerGuild != null)
+            {
+                m_ownerGuild.RemoveTerritory(this);
+                ToggleBanner(false);
+                ClearPortal();
+            }
+
+            guild.AddTerritory(this, saveChange);
+            guild_id = guild.GuildID;
+            m_ownerGuild = guild;
+
+            Mobs.ForEach(m => m.GuildName = guild.Name);
+            Boss.GuildName = guild.Name;
+
+            if (saveChange)
+                SaveIntoDatabase();
+        }
+
+        private void ChangeMagicAndPhysicalResistance(GameNPC mob, int value)
+        {
+            eProperty Property1 = eProperty.Resist_Heat;
+            eProperty Property2 = eProperty.Resist_Cold;
+            eProperty Property3 = eProperty.Resist_Matter;
+            eProperty Property4 = eProperty.Resist_Body;
+            eProperty Property5 = eProperty.Resist_Spirit;
+            eProperty Property6 = eProperty.Resist_Energy;
+            eProperty Property7 = eProperty.Resist_Crush;
+            eProperty Property8 = eProperty.Resist_Slash;
+            eProperty Property9 = eProperty.Resist_Thrust;
+            ApplyBonus(mob, Property1, value);
+            ApplyBonus(mob, Property2, value);
+            ApplyBonus(mob, Property3, value);
+            ApplyBonus(mob, Property4, value);
+            ApplyBonus(mob, Property5, value);
+            ApplyBonus(mob, Property6, value);
+            ApplyBonus(mob, Property7, value);
+            ApplyBonus(mob, Property8, value);
+            ApplyBonus(mob, Property9, value);
+        }
+
+        /// <summary>
+        /// Method used to apply bonuses
+        /// </summary>
+        /// <param name="owner"></param>
+        /// <param name="Property"></param>
+        /// <param name="Value"></param>
+        /// <param name="IsSubstracted"></param>
+        private void ApplyBonus(GameLiving owner, eProperty Property, int Value)
+        {
+            IPropertyIndexer tblBonusCat;
+            if (Property != eProperty.Undefined)
+            {
+                tblBonusCat = owner.BaseBuffBonusCategory;
+                tblBonusCat[(int)Property] += Value;
+            }
+        }
+
+        private void ToggleBannerUnsafe(bool add)
+        {
+            var cls = WorldMgr.GetAllPlayingClients().Where(c => c.Player.CurrentZone.ID.Equals(Zone.ID));
+            int mobBannerResist;
+
+            if (add)
+            {
+                IsBannerSummoned = true;
+                mobBannerResist = Properties.TERRITORYMOB_BANNER_RESIST + (OwnerGuild?.GuildLevel >= 15 ? 15 : 0);
+            }
+            else
+            {
+                IsBannerSummoned = false;
+                mobBannerResist = -CurrentBannerResist;
+            }
+
+            foreach (var mob in Mobs)
+            {
+                RefreshEmblem(mob);
+
+                // Update magic and physical resistance bonus
+                ChangeMagicAndPhysicalResistance(mob, mobBannerResist);
+
+                cls.Foreach(c => c.Out.SendLivingEquipmentUpdate(mob));
+            }
+
+            // Update magic and physical resistance bonus
+            ChangeMagicAndPhysicalResistance(Boss, mobBannerResist);
+            CurrentBannerResist += mobBannerResist;
+            RefreshEmblem(Boss);
+            cls.Foreach(c => c.Out.SendLivingEquipmentUpdate(Boss));
+
+
+            foreach (IArea iarea in Areas)
+            {
+                if (!(iarea is AbstractArea area))
+                {
+                    log.Error($"Impossible to get items from territory {this.Name}'s area {iarea.ID} because its type is not supported");
+                    continue;
+                }
+
+                if (area is Circle circle)
+                {
+                    Zone.GetObjectsInRadius(Zone.eGameObjectType.ITEM, circle.Position.X, circle.Position.Y, circle.Position.Z, (ushort)circle.Radius, new ArrayList(), true).OfType<TerritoryBanner>().ForEach(i => i.Emblem = OwnerGuild?.Emblem ?? i.OriginalEmblem);
+                }
+                else
+                {
+                    log.Error($"Impossible to get mobs items territory {this.Name}'s area {area.Description} ({iarea.ID}) because its type  is not supported");
+                    continue;
+                }
+            }
+        }
+
+        public void ToggleBanner(bool add)
+        {
+            lock (m_lockObject)
+            {
+                ToggleBannerUnsafe(add);
+                SaveIntoDatabase();
+            }
+        }
+
+        private void ReleaseTerritory()
+        {
+            m_ownerGuild = null;
+            ClearPortal();
+            ToggleBannerUnsafe(false);
+            if (Boss != null)
+            {
+                var gameEvents = GameEventManager.Instance.Events.FirstOrDefault(e => e.ID.Equals(Boss.EventID));
+
+                if (gameEvents?.Mobs?.Any() == true)
+                {
+                    gameEvents.Mobs.ForEach(m =>
+                    {
+                        if (OriginalGuilds.TryGetValue(m.InternalID, out var originalName))
+                        {
+                            m.GuildName = originalName;
+                        }
+                        else
+                        {
+                            m.GuildName = null;
+                        }
+                    });
+                }
+            }
+
+            if (m_ownerGuild != null)
+            {
+                m_ownerGuild.RemoveTerritory(this);
+            }
+
+            foreach (var mob in Mobs)
+            {
+                if (OriginalGuilds.ContainsKey(mob.InternalID))
+                {
+                    mob.GuildName = OriginalGuilds[mob.InternalID];
+                }
+                else
+                {
+                    mob.GuildName = null;
+                }
+            }
+
+            Boss.RestoreOriginalGuildName();
+            SaveIntoDatabase();
+        }
+
+        private void RefreshEmblem(GameNPC mob)
+        {
+            if (mob is not { ObjectState: eObjectState.Active, CurrentRegion: not null, Inventory: { VisibleItems: not null } })
+                return;
+
+            if (m_ownerGuild != null)
+            {
+                foreach (var item in mob.Inventory.VisibleItems.Where(i => i.SlotPosition == 26 || i.SlotPosition == 11))
+                {
+                    item.Emblem = m_ownerGuild.Emblem;
+                }
+            }
+            else
+            {
+                foreach (var item in mob.Inventory.VisibleItems.Where(i => i.SlotPosition == 11 || i.SlotPosition == 26))
+                {
+                    var equipment = GameServer.Database.SelectObjects<NPCEquipment>(DB.Column("TemplateID").IsEqualTo(mob.EquipmentTemplateID)
+                                                                                        .And(DB.Column("TemplateID").IsEqualTo(item.SlotPosition)))?.FirstOrDefault();
+
+                    if (equipment != null)
+                    {
+                        item.Emblem = equipment.Emblem;
+                    }
+                }
+            }
+            mob.BroadcastLivingEquipmentUpdate();
+        }
+
+        private RegionTimer m_portalTimer;
+
+        private readonly object m_portalLock = new();
 
         private void LoadBonus(string raw)
         {
@@ -288,83 +548,80 @@ namespace DOL.Territories
             }
         }
 
+        public bool IsInTerritory(IArea area)
+        {
+            return this.Areas.Any(a => a.ID == area.ID);
+        }
+
+        public bool IsOwnedBy(Guild guild)
+        {
+            if (guild == null)
+            {
+                return IsNeutral();
+            }
+            else
+            {
+                return guild == OwnerGuild || string.Equals(guild_id, guild.GuildID);
+            }
+        }
+
+        public bool IsOwnedBy(GamePlayer player)
+        {
+            if (player.Guild is not { GuildType: Guild.eGuildType.PlayerGuild })
+            {
+                return false;
+            }
+            return IsOwnedBy(player.Guild);
+        }
+
+        public bool IsNeutral()
+        {
+            return string.IsNullOrEmpty(guild_id);
+        }
+
 
         private IEnumerable<GameNPC> GetMobsInTerritory()
         {
             List<GameNPC> mobs = new List<GameNPC>();
-            if (this.Coordinates == null)
-            {
-                log.Error($"Impossible to get mobs from territory {this.Name} because Area with ID: {this.Area.ID} is not supported");
-                return null;
-            }
 
-            if (Radius == 0)
+            var region = WorldMgr.Regions[this.RegionId];
+            foreach (IArea iarea in Areas)
             {
-                return null;
-            }
-
-            var items = WorldMgr.Regions[this.RegionId].GetNPCsInRadius(this.Coordinates.X, this.Coordinates.Y, 0, this.Radius, false, true);
-
-            foreach (GameObject item in items.Cast<GameObject>())
-            {
-                if (item is GameNPC mob && !mob.IsCannotTarget)
+                if (!(iarea is AbstractArea area))
                 {
-                    mob.IsInTerritory = true;
-                    mobs.Add(mob);
-                }
-            }
-
-            return mobs;
-        }
-
-        private ushort GetRadius()
-        {
-            if (this.Area is Area.Circle circle)
-            {
-                return (ushort)circle.Radius;
-            }
-            else if (this.Area is Square sq)
-            {
-                if (sq.Height <= 0 || sq.Width <= 0)
-                {
-                    return 0;
+                    log.Error($"Impossible to get mobs from territory {this.Name}'s area {iarea.ID} because its type is not supported");
+                    continue;
                 }
 
-                if (sq.Height > sq.Width)
+                if (area is Circle circle)
                 {
-                    return (ushort)Math.Ceiling(sq.Height / 2D);
+                    mobs.AddRange(region.GetNPCsInRadius(circle.Position, (ushort)circle.Radius, false, true).Cast<GameNPC>().Where(n => !n.IsCannotTarget));
                 }
                 else
                 {
-                    return (ushort)Math.Ceiling(sq.Width / 2D);
+                    log.Error($"Impossible to get mobs from territory {this.Name}'s area {area.Description} ({iarea.ID}) because its type  is not supported");
+                    continue;
                 }
             }
-            else if (this.Area is Polygon poly)
-            {
-                return (ushort)poly.Radius;
-            }
-            else
-            {
-                log.Error($"Territory initialisation failed, cannot determine radius from Area. Area ID: {Area.ID} not supported ");
-                return 0;
-            }
+
+            mobs.ForEach(m => m.IsInTerritory = true);
+            return mobs;
         }
 
         public void OnGuildLevelUp(Guild guild, long newLevel, long previousLevel)
         {
-            if (!string.Equals(guild.Name, GuildOwner))
+            if (guild != OwnerGuild)
                 return;
 
             if (IsBannerSummoned && (previousLevel - 15 < 0) != (newLevel - 15 < 0)) // Went above or below 15
             {
-                TerritoryManager.ClearEmblem(this);
-                TerritoryManager.ApplyEmblemToTerritory(this, guild, true);
+                ToggleBanner(false);
+                ToggleBanner(true);
             }
         }
 
         public void SpawnPortalNpc(GamePlayer spawner)
         {
-
             Guild guild = spawner.Guild;
             GuildPortalNPC portalNpc = GuildPortalNPC.Create(this, spawner);
             portalNpc.AddToWorld();
@@ -442,6 +699,7 @@ namespace DOL.Territories
         /// <returns></returns>
         public IList<string> GetInformations()
         {
+            List<string> infos = new List<string>();
             List<string> bonuses = this.BonusResist.Where(p => p.Value != 0).Select(p => p.Value.ToString() + ' ' + p.Key.ToString()).ToList();
 
             if (this.BonusMeleeAbsorption != 0)
@@ -454,22 +712,22 @@ namespace DOL.Territories
                 bonuses.Add(this.BonusReducedDebuffDuration + " DebuffDuration");
             if (this.BonusSpellRange != 0)
                 bonuses.Add(this.BonusSpellRange + " SpellRange");
-            return new string[]
-            {
-                " Area Id: " + this.AreaId,
-                " Boss Id: " + this.BossId,
-                " Boss Name: " + this.Boss.Name,
-                " Group Id: " + this.GroupId,
-                " Region: " + this.RegionId,
-                " Zone: " + this.ZoneId,
-                " Guild Owner: " + (this.GuildOwner ?? "None"),
-                " Bonus: " + (bonuses.Any() ? string.Join(" | ", bonuses) : "-"),
-                "",
-                " Mobs -- Count( " + this.Mobs.Count() + " )",
-                " Is Banner Summoned: " + this.IsBannerSummoned,
-                "",
-                 string.Join("\n", this.Mobs.Select(m => " * Name: " + m.Name + " |  Id: " + m.InternalID))
-            };
+            infos.Add(" Name: " + this.Name);
+            infos.Add(" Area IDs:");
+            infos.AddRange(this.Areas.OfType<AbstractArea>().Select(a => "  - " + a.DbArea.ObjectId));
+            infos.Add(" Boss Id: " + this.BossId);
+            infos.Add(" Boss Name: " + this.Boss.Name);
+            infos.Add(" Group Id: " + this.GroupId);
+            infos.Add(" Region: " + this.RegionId);
+            infos.Add(" Zone: " + $"{this.Zone.Description} ({this.Zone.ID}) ");
+            infos.Add(" Guild Owner: " + (this.OwnerGuild != null ? (this.OwnerGuild.Name + $" ({this.OwnerGuild.ID})") : guild_id));
+            infos.Add(" Bonus: " + (bonuses.Any() ? string.Join(" | ", bonuses) : "-"));
+            infos.Add(string.Empty);
+            infos.Add(" Mobs -- Count( " + this.Mobs.Count() + " )");
+            infos.Add(" Is Banner Summoned: " + this.IsBannerSummoned);
+            infos.Add(string.Empty);
+            infos.AddRange(this.Mobs.Select(m => " * Name: " + m.Name + " |  Id: " + m.InternalID));
+            return infos;
         }
 
         public virtual void SaveIntoDatabase()
@@ -477,31 +735,32 @@ namespace DOL.Territories
             TerritoryDb db = null;
             bool isNew = false;
 
-            if (this.id == null)
+            if (this.ID == null)
             {
                 db = new TerritoryDb();
                 isNew = true;
             }
             else
             {
-                db = GameServer.Database.FindObjectByKey<TerritoryDb>(this.id);
+                db = GameServer.Database.FindObjectByKey<TerritoryDb>(this.ID);
             }
 
             if (db != null)
             {
-                db.AreaId = this.AreaId;
+                db.AreaIDs = String.Join('|', this.Areas.OfType<AbstractArea>().Select(a => a.DbArea.ObjectId));
+                db.Name = this.Name;
                 db.BossMobId = this.BossId;
                 db.GroupId = this.GroupId;
-                db.GuidldOwner = this.GuildOwner;
+                db.OwnerGuildID = this.guild_id;
                 db.RegionId = this.RegionId;
-                db.ZoneId = this.ZoneId;
+                db.ZoneId = this.Zone.ID;
                 db.Bonus = this.SaveBonus();
                 db.IsBannerSummoned = this.IsBannerSummoned;
 
                 if (isNew)
                 {
                     GameServer.Database.AddObject(db);
-                    id = db.ObjectId;
+                    this.ID = db.ObjectId;
                 }
                 else
                 {

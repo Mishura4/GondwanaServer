@@ -22,6 +22,7 @@ using DOL.GS.PacketHandler;
 using DOL.GS.Effects;
 using DOL.Events;
 using DOL.GS.RealmAbilities;
+using DOL.Territories;
 
 namespace DOL.GS.Spells
 {
@@ -340,7 +341,7 @@ namespace DOL.GS.Spells
             var targetPlayer = target as GamePlayer;
             if (Caster is GamePlayer && targetPlayer != null && m_spell.SpellType.ToLowerInvariant().Equals("mesmerize"))
             {
-                if (!(targetPlayer.isInBG || targetPlayer.CurrentRegion.IsRvR || targetPlayer.IsInPvP || Territories.TerritoryManager.Instance.IsTerritoryArea(targetPlayer.CurrentAreas)))
+                if (!(targetPlayer.isInBG || targetPlayer.CurrentRegion.IsRvR || targetPlayer.IsInPvP || TerritoryManager.GetCurrentTerritory(targetPlayer) != null))
                 {
                     targetPlayer.TempProperties.setProperty(GamePlayer.PLAYER_MEZZED_BY_OTHER_PLAYER_ID, Caster.InternalID);
                 }

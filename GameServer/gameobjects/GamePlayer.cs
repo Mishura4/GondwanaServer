@@ -8240,7 +8240,7 @@ namespace DOL.GS
             if (mob == null)
                 return !IsInPvP && !IsInRvR;
             string classType = killer.GetType().Name;
-            Territories.Territory territory = TerritoryManager.Instance.GetCurrentTerritory(CurrentAreas);
+            Territory territory = TerritoryManager.GetCurrentTerritory(this);
             return classType != "GuardNPC" && classType != "GuardOutlaw" && territory == null && !mob.IsInTerritory && !IsInPvP && !IsInRvR;
         }
 
@@ -8587,9 +8587,10 @@ namespace DOL.GS
         {
             if (this == killer)
                 return;
+
             //old system
             //var inBL = IsBlacklisted(victim);
-            if (GameServer.ServerRules.IsInPvPArea(this) || Territories.TerritoryManager.Instance.IsTerritoryArea(CurrentAreas))
+            if (GameServer.ServerRules.IsInPvPArea(this) || TerritoryManager.GetCurrentTerritory(this) != null)
             {
                 return;
             }

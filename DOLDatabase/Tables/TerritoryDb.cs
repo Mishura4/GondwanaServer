@@ -14,14 +14,18 @@ namespace DOLDatabase.Tables
     {
         private ushort m_regionId;
         private ushort m_zoneId;
-        private string m_areaId;
+        private string m_areaIDs;
+        private string m_name;
         private string m_bossMobId;
         private string m_groupId;
         private float m_areaX;
         private float m_areaY;
         private string m_bonus;
-        private string m_guildOwner;
+        private string m_ownerGuildID;
         private bool m_IsBannerSummoned;
+        private int? m_portalX;
+        private int? m_portalY;
+        private int? m_portalZ;
 
         [DataElement(AllowDbNull = false)]
         public ushort RegionId
@@ -54,16 +58,31 @@ namespace DOLDatabase.Tables
         }
 
         [DataElement(AllowDbNull = false, Varchar = 255)]
-        public string AreaId
+        public string AreaIDs
         {
             get
             {
-                return m_areaId;
+                return m_areaIDs;
             }
 
             set
             {
-                m_areaId = value;
+                m_areaIDs = value;
+                Dirty = true;
+            }
+        }
+
+        [DataElement(AllowDbNull = false, Varchar = 255)]
+        public string Name
+        {
+            get
+            {
+                return m_name;
+            }
+
+            set
+            {
+                m_name = value;
                 Dirty = true;
             }
         }
@@ -84,16 +103,16 @@ namespace DOLDatabase.Tables
         }
 
         [DataElement(AllowDbNull = true, Varchar = 255)]
-        public string GuidldOwner
+        public string OwnerGuildID
         {
             get
             {
-                return m_guildOwner;
+                return m_ownerGuildID;
             }
 
             set
             {
-                m_guildOwner = value;
+                m_ownerGuildID = value;
                 Dirty = true;
             }
         }
@@ -135,6 +154,39 @@ namespace DOLDatabase.Tables
             set
             {
                 m_IsBannerSummoned = value;
+                Dirty = true;
+            }
+        }
+
+        [DataElement(AllowDbNull = true)]
+        public int? PortalX
+        {
+            get => m_portalX;
+            set
+            {
+                m_portalX = value;
+                Dirty = true;
+            }
+        }
+
+        [DataElement(AllowDbNull = true)]
+        public int? PortalY
+        {
+            get => m_portalY;
+            set
+            {
+                m_portalY = value;
+                Dirty = true;
+            }
+        }
+
+        [DataElement(AllowDbNull = true)]
+        public int? PortalZ
+        {
+            get => m_portalZ;
+            set
+            {
+                m_portalZ = value;
                 Dirty = true;
             }
         }

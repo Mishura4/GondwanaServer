@@ -1,7 +1,18 @@
-Commands.GM.GMTerritories.Description:	GM territory creation commands:
-Commands.GM.GMTerritories.Usage.GroupMob:		'/GMTerritories add <areaId> <zoneId> <name> <groupId>' Add a territory by specifying the <areaId>, the <zoneId>, the <name> and the <groupId> to use for this territory
-Commands.GM.GMTerritories.Usage.Key:		'/GMTerritories info <areaId>' Gives informations related to the territory based on its <areaId>
-Commands.GM.GMTerritories.Usage.KeyChance:		'/GMTerritories clear <areadId>' Removes a territory selected by its <areaId>
-Commands.GM.GMTerritories.Usage.BonusAdd:		'/GMTerritories bonus add <resist> <areaId>' Add a resist to the territory based on the <areaId> selected (the same resist can be added several times on a territory)
-Commands.GM.GMTerritories.Usage.BonusRemove:		'/GMTerritories bonus remove <resist> <areaId>' Removes a resist from the territory based on the <areaId> selected
-Commands.GM.GMTerritories.Resist:	resist: <nature|crush|slash|thrust|body|cold|energy|heat|matter|spirit|melee|spell|dot|debuffduration|spellrange>
+Commands.GM.GMTerritories.Description:					GM territory creation commands:
+Commands.GM.GMTerritories.Usage.Add:					'/GMTerritories add <areaId> <zoneId> <name> <groupId>' Add a territory by specifying the <areaId>, the <zoneId>, the <name> and the <groupId> to use for this territory
+Commands.GM.GMTerritories.Usage.Info:					'/GMTerritories info <areaID|territoryID>' Gives informations related to a territory
+Commands.GM.GMTerritories.Usage.Clear:					'/GMTerritories clear <areadID|territoryID>' Clears a territory's ownership, resetting it to neutral
+Commands.GM.GMTerritories.Usage.Claim:					'/GMTerritories claim <areadID|territoryID>' Forcefully claim a territory for your guild
+Commands.GM.GMTerritories.Usage.SetPortal:				'/GMTerritories setportal <areadID|territoryID> <x> <y> <z>' or '/GMTerritories setportal <areadID|territoryID> remove' Sets or removes the location of the territory portal
+Commands.GM.GMTerritories.Usage.BonusAdd:				'/GMTerritories bonus add <resist> <areaID|territoryID>' Add a resist to the territory selected (the same resist can be added several times on a territory)
+Commands.GM.GMTerritories.Usage.BonusRemove:			'/GMTerritories bonus remove <resist> <areaID|territoryID>' Removes a resist from the territory
+Commands.GM.GMTerritories.Resist:						resist: <nature|crush|slash|thrust|body|cold|energy|heat|matter|spirit|melee|spell|dot|debuffduration|spellrange>
+
+Commands.GM.GMTerritories.TerritoryNotFound:			Could not find a territory with ID or areaID '{0}'
+Commands.GM.GMTerritories.NotInTerritory:				You are not in a territory! Please specify a territory or area ID.
+
+Commands.GM.GMTerritories.Cleared:						The territory {0} was forcefully cleared and is now neutral.
+Commands.GM.GMTerritories.Claimed:						The territory {0} was forcefully claimed and now belongs to {1}.
+Commands.GM.GMTerritories.BadCoordinate:				'{0}' is not a valid coordinate.
+Commands.GM.GMTerritories.PortalSet:					The portal for territory {0} will appear at coordinates x={1} y={2} z={3}.
+Commands.GM.GMTerritories.PortalRemoved:				The portal for territory {0} has been disabled.

@@ -387,7 +387,7 @@ namespace DOL.GS
 
                     if (saveChanges)
                     {
-                        this.m_DBguild.Territories = string.Join("|", this.territories.Select(t => t.AreaId));
+                        this.m_DBguild.Territories = string.Join("|", this.territories.Select(t => t.ID));
                         this.SaveIntoDatabase();
                     }
 
@@ -448,7 +448,7 @@ namespace DOL.GS
             {
                 if (this.territories.Remove(territory))
                 {
-                    this.m_DBguild.Territories = this.territories.Any() ? string.Join("|", this.territories.Select(t => t.AreaId)) : null;
+                    this.m_DBguild.Territories = this.territories.Any() ? string.Join("|", this.territories.Select(t => t.ID)) : null;
                     this.SaveIntoDatabase();
 
                     if (this.territories.Count < 6)
@@ -463,24 +463,6 @@ namespace DOL.GS
         {
             return this.TerritoryResists.GetValueOrDefault(resist, 0);
 
-        }
-
-        public bool DoesGuildOwnTerritory(Territory territory)
-        {
-            if (territory == null)
-                return false;
-
-            lock (m_territoryLock)
-                return this.territories.Contains(territory);
-        }
-
-        public bool DoesGuildOwnTerritory(string area)
-        {
-            if (String.IsNullOrEmpty(area))
-                return false;
-
-            lock (m_territoryLock)
-                return this.territories.Any(t => String.Equals(t.AreaId, area));
         }
 
         public void SetGuildDuesMaxPercent(long dues)
@@ -577,14 +559,15 @@ namespace DOL.GS
         {
             if (!string.IsNullOrEmpty(m_DBguild.Territories))
             {
-                foreach (var area in m_DBguild.Territories.Split(new char[] { '|' }))
+                foreach (var id in m_DBguild.Territories.Split(new char[] { '|' }))
                 {
-                    var territory = TerritoryManager.Instance.Territories.FirstOrDefault(t => t.AreaId.Equals(area) && string.Equals(t.GuildOwner, Name));
-
-                    if (territory != null)
+                    var territory = TerritoryManager.GetTerritoryByID(id);
+                    if (territory == null)
                     {
-                        TerritoryManager.Instance.ChangeGuildOwner(this, territory);
+                        log.Warn($"Guild {Name} ({GuildID} references territory {id} but no territory was found for that ID");
+                        continue;
                     }
+                    territory.OwnerGuild = this;
                 }
             }
         }

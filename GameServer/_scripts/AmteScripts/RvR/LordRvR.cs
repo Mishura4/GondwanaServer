@@ -138,14 +138,8 @@ namespace Amte
         {
             lastClaim = DateTime.Now;
             GuildName = player.GuildName;
-            var rvr = RvrManager.Instance.GetRvRTerritory(this.CurrentRegionID);
-            var defaultAreaName = string.Empty;
-            if (rvr != null)
-            {
-                defaultAreaName = ((AbstractArea)rvr.Area).Description;
-            }
-
-            string fortName = string.IsNullOrEmpty(this.originalGuildName) ? defaultAreaName : this.originalGuildName;
+            var territory = RvrManager.Instance.GetRvRTerritory(this.CurrentRegionID);
+            var fortName = string.IsNullOrEmpty(this.originalGuildName) ? (territory?.Name ?? string.Empty) : this.originalGuildName;
 
             foreach (GameClient client in WorldMgr.GetAllPlayingClients())
             {
