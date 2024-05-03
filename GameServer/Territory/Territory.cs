@@ -431,7 +431,7 @@ namespace DOL.Territories
                 foreach (var item in mob.Inventory.VisibleItems.Where(i => i.SlotPosition == 11 || i.SlotPosition == 26))
                 {
                     var equipment = GameServer.Database.SelectObjects<NPCEquipment>(DB.Column("TemplateID").IsEqualTo(mob.EquipmentTemplateID)
-                                                                                        .And(DB.Column("TemplateID").IsEqualTo(item.SlotPosition)))?.FirstOrDefault();
+                                                                                        .And(DB.Column("Slot").IsEqualTo(item.SlotPosition)))?.FirstOrDefault();
 
                     if (equipment != null)
                     {
