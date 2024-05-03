@@ -241,7 +241,7 @@ namespace DOL.Territories
                         bool save = !string.Equals(value.GuildID, guild_id);
                         SetGuildOwner(value, save);
                         if (IsBannerSummoned)
-                            ToggleBanner(true);
+                            ToggleBannerUnsafe(true);
                     }
                 }
             }
@@ -253,7 +253,7 @@ namespace DOL.Territories
             if (m_ownerGuild != null)
             {
                 m_ownerGuild.RemoveTerritory(this);
-                ToggleBanner(false);
+                ToggleBannerUnsafe(false);
                 ClearPortal();
             }
 
@@ -350,7 +350,7 @@ namespace DOL.Territories
 
                 if (area is Circle circle)
                 {
-                    Zone.GetObjectsInRadius(Zone.eGameObjectType.ITEM, circle.Position.X, circle.Position.Y, circle.Position.Z, (ushort)circle.Radius, new ArrayList(), true).OfType<TerritoryBanner>().ForEach(i => i.Emblem = OwnerGuild?.Emblem ?? i.OriginalEmblem);
+                    Zone.GetObjectsInRadius(Zone.eGameObjectType.ITEM, circle.Position.X, circle.Position.Y, circle.Position.Z, (ushort)circle.Radius, new ArrayList(), true).OfType<TerritoryBanner>().ForEach(i => i.Emblem = add && m_ownerGuild != null ? m_ownerGuild.Emblem : i.OriginalEmblem);
                 }
                 else
                 {
@@ -371,7 +371,11 @@ namespace DOL.Territories
 
         private void ReleaseTerritory()
         {
-            m_ownerGuild = null;
+            if (m_ownerGuild != null)
+            {
+                m_ownerGuild.RemoveTerritory(this);
+                m_ownerGuild = null;
+            }
             ClearPortal();
             ToggleBannerUnsafe(false);
             if (Boss != null)
@@ -392,11 +396,6 @@ namespace DOL.Territories
                         }
                     });
                 }
-            }
-
-            if (m_ownerGuild != null)
-            {
-                m_ownerGuild.RemoveTerritory(this);
             }
 
             foreach (var mob in Mobs)
@@ -420,7 +419,7 @@ namespace DOL.Territories
             if (mob is not { ObjectState: eObjectState.Active, CurrentRegion: not null, Inventory: { VisibleItems: not null } })
                 return;
 
-            if (m_ownerGuild != null)
+            if (IsBannerSummoned && m_ownerGuild != null)
             {
                 foreach (var item in mob.Inventory.VisibleItems.Where(i => i.SlotPosition == 26 || i.SlotPosition == 11))
                 {
