@@ -1,4 +1,5 @@
-﻿using DOL.GS;
+﻿using DOL.Database;
+using DOL.GS;
 using DOL.GS.Keeps;
 using DOLDatabase.Tables;
 using System;
@@ -49,6 +50,11 @@ namespace DOL.Territories
             foreach (GameKeepDoor door in keep.Doors.Values)
             {
                 door.Reset((eRealm)6);
+            }
+            // reset all mobs
+            foreach (GameNPC mob in Mobs)
+            {
+                mob.Realm = eRealm.None;
             }
         }
     }

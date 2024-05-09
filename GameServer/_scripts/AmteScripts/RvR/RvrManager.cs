@@ -175,10 +175,11 @@ namespace AmteScripts.Managers
                 AbstractGameKeep keep = GameServer.KeepManager.GetKeepCloseToSpot(map.RvRTerritory.RegionId, map.RvRTerritory.Boss.Position, 100000);
                 keep.TempRealm = guild.Realm;
                 keep.Reset(guild.Realm);
+                keep.Guild = guild;
                 // reset all doors
                 foreach (GameKeepDoor door in keep.Doors.Values)
                 {
-                    door.Reset((eRealm)6);
+                    door.Reset(guild.Realm);
                 }
             }
         }
