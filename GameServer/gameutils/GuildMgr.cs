@@ -28,6 +28,7 @@ using DOL.GS.PacketHandler;
 using log4net;
 using DOL.GS.Finance;
 using System.Collections;
+using DOL.Territories;
 
 namespace DOL.GS
 {
@@ -353,6 +354,11 @@ namespace DOL.GS
                 if (removeGuild == null)
                     return false;
 
+                var listCopy = new List<Territory>(removeGuild.Territories);
+                foreach (var territory in listCopy)
+                {
+                    territory.OwnerGuild = null;
+                }
                 var guilds = DOLDB<DBGuild>.SelectObjects(DB.Column(nameof(DBGuild.GuildID)).IsEqualTo(removeGuild.GuildID));
                 foreach (var guild in guilds)
                 {
