@@ -49,10 +49,43 @@ namespace DOL.Territories
             this.OriginalGuilds = new Dictionary<string, string>();
             this.BonusResist = new();
             this.Mobs = this.GetMobsInTerritory();
+            this.NumMercenaries = Mobs.Count(n => n.IsMercenary);
             this.SetBossAndMobsInEventInTerritory();
             this.SaveOriginalGuilds();
             this.LoadBonus(db.Bonus);
             this.IsBannerSummoned = db.IsBannerSummoned;
+            if (db.GuardNPCTemplate != null)
+            {
+                this.GuardNPCTemplate = NpcTemplateMgr.GetTemplate(db.GuardNPCTemplate.Value);
+                if (this.GuardNPCTemplate == null)
+                {
+                    log.Warn($"Guard NPCTemplate {db.GuardNPCTemplate.Value} not found for territory {Name}");
+                }
+            }
+            if (db.HealerNPCTemplate != null)
+            {
+                this.HealerNPCTemplate = NpcTemplateMgr.GetTemplate(db.HealerNPCTemplate.Value);
+                if (this.HealerNPCTemplate == null)
+                {
+                    log.Warn($"Healer NPCTemplate {db.HealerNPCTemplate.Value} not found for territory {Name}");
+                }
+            }
+            if (db.MageNPCTemplate != null)
+            {
+                this.MageNPCTemplate = NpcTemplateMgr.GetTemplate(db.MageNPCTemplate.Value);
+                if (this.MageNPCTemplate == null)
+                {
+                    log.Warn($"Mage NPCTemplate {db.MageNPCTemplate.Value} not found for territory {Name}");
+                }
+            }
+            if (db.ArcherNPCTemplate != null)
+            {
+                this.ArcherNPCTemplate = NpcTemplateMgr.GetTemplate(db.ArcherNPCTemplate.Value);
+                if (this.ArcherNPCTemplate == null)
+                {
+                    log.Warn($"Archer NPCTemplate {db.ArcherNPCTemplate.Value} not found for territory {Name}");
+                }
+            }
             guild_id = db.OwnerGuildID;
 
             if (!IsNeutral())
@@ -86,6 +119,7 @@ namespace DOL.Territories
             this.OriginalGuilds = new Dictionary<string, string>();
             this.BonusResist = new();
             this.Mobs = this.GetMobsInTerritory();
+            this.NumMercenaries = Mobs.Count(n => n.IsMercenary);
             this.SetBossAndMobsInEventInTerritory();
             this.SaveOriginalGuilds();
             this.IsBannerSummoned = false;
@@ -164,7 +198,7 @@ namespace DOL.Territories
             set;
         }
 
-        public IEnumerable<GameNPC> Mobs
+        public List<GameNPC> Mobs
         {
             get; private set;
         }
@@ -211,7 +245,37 @@ namespace DOL.Territories
             private set;
         }
 
-        private Object m_lockObject = new();
+        public NpcTemplate GuardNPCTemplate
+        {
+            get;
+            set;
+        }
+
+        public NpcTemplate HealerNPCTemplate
+        {
+            get;
+            set;
+        }
+
+        public NpcTemplate MageNPCTemplate
+        {
+            get;
+            set;
+        }
+
+        public NpcTemplate ArcherNPCTemplate
+        {
+            get;
+            set;
+        }
+
+        public int NumMercenaries
+        {
+            get;
+            private set;
+        }
+
+        private readonly Object m_lockObject = new();
 
         private Guild? m_ownerGuild;
 
@@ -255,6 +319,25 @@ namespace DOL.Territories
                 m_ownerGuild.RemoveTerritory(this);
                 ToggleBannerUnsafe(false);
                 ClearPortal();
+                List<GameNPC> toRemove = new List<GameNPC>();
+                foreach (var mob in Mobs)
+                {
+                    if (mob.IsMercenary)
+                    {
+                        toRemove.Add(mob);
+                    }
+                }
+                if (toRemove.Count > 0)
+                {
+                    Mobs.RemoveAll(toRemove.Contains);
+                    foreach (var mob in toRemove)
+                    {
+                        mob.RemoveFromWorld();
+                        mob.Delete();
+                        mob.DeleteFromDatabase();
+                    }
+                }
+                NumMercenaries = 0;
             }
 
             guild.AddTerritory(this, saveChange);
@@ -398,6 +481,7 @@ namespace DOL.Territories
                 }
             }
 
+            List<GameNPC> toRemove = new List<GameNPC>();
             foreach (var mob in Mobs)
             {
                 if (OriginalGuilds.ContainsKey(mob.InternalID))
@@ -406,17 +490,33 @@ namespace DOL.Territories
                 }
                 else
                 {
-                    mob.GuildName = null;
+                    mob.GuildName = string.Empty;
+                }
+
+                if (mob.IsMercenary)
+                {
+                    toRemove.Add(mob);
+                }
+            }
+            if (toRemove.Count > 0)
+            {
+                Mobs.RemoveAll(toRemove.Contains);
+                foreach (var mob in toRemove)
+                {
+                    mob.RemoveFromWorld();
+                    mob.Delete();
+                    mob.DeleteFromDatabase();
                 }
             }
 
+            NumMercenaries = 0;
             Boss.RestoreOriginalGuildName();
             SaveIntoDatabase();
         }
 
         private void RefreshEmblem(GameNPC mob)
         {
-            if (mob is not { ObjectState: eObjectState.Active, CurrentRegion: not null, Inventory: { VisibleItems: not null } })
+            if (mob is not { ObjectState: not eObjectState.Deleted, CurrentRegion: not null, Inventory: { VisibleItems: not null } })
                 return;
 
             if (IsBannerSummoned && m_ownerGuild != null)
@@ -439,7 +539,9 @@ namespace DOL.Territories
                     }
                 }
             }
-            mob.BroadcastLivingEquipmentUpdate();
+
+            if (mob.ObjectState == eObjectState.Active)
+                mob.BroadcastLivingEquipmentUpdate();
         }
 
         private RegionTimer m_portalTimer;
@@ -579,6 +681,7 @@ namespace DOL.Territories
             {
                 this.Areas.Add(area);
                 this.Mobs = GetMobsInTerritory();
+                this.NumMercenaries = Mobs.Count(n => n.IsMercenary);
                 bool banner = IsBannerSummoned;
                 ToggleBannerUnsafe(false);
                 if (banner)
@@ -586,7 +689,7 @@ namespace DOL.Territories
             }
         }
 
-        private IEnumerable<GameNPC> GetMobsInTerritory()
+        private List<GameNPC> GetMobsInTerritory()
         {
             List<GameNPC> mobs = new List<GameNPC>();
 
@@ -697,6 +800,45 @@ namespace DOL.Territories
             }
             timer.Stop();
             return 0;
+        }
+
+        public GameNPC AddMercenary(GamePlayer buyer, NpcTemplate template)
+        {
+            GameNPC npc;
+
+            lock (m_lockObject)
+            {
+                if (string.IsNullOrEmpty(template.ClassType))
+                {
+                    npc = new GameNPC(template);
+                }
+                else
+                {
+                    Assembly gasm = Assembly.GetAssembly(typeof(GameServer));
+                    npc = (GameNPC)gasm.CreateInstance(template.ClassType, false); // Propagate exception to the caller
+                    npc.LoadTemplate(template);
+                }
+                npc.MoveTo(buyer.CurrentRegionID, buyer.Position, buyer.Heading);
+                npc.GuildName = OwnerGuild?.Name ?? template.GuildName ?? string.Empty;
+                npc.Flags |= GameNPC.eFlags.MERCENARY | GameNPC.eFlags.NORESPAWN;
+                npc.FlagsDb = (uint)npc.Flags;
+                npc.LoadedFromScript = false;
+                npc.CurrentTerritory = this;
+                RefreshEmblem(npc);
+                npc.AddToWorld();
+                npc.SaveIntoDatabase();
+                Mobs.Add(npc);
+                NumMercenaries += 1;
+            }
+            return npc;
+        }
+
+        public void OnLivingDies(GameLiving dying, GameObject killer)
+        {
+            if (dying is GameNPC { IsMercenary: true, AutoRespawn: false } mercenary)
+            {
+                --NumMercenaries;
+            }
         }
 
         /// <summary>

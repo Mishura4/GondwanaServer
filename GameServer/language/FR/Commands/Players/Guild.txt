@@ -134,6 +134,8 @@ Commands.Players.Guild.Help.GuildEmail:			'/gc email <contact@guildpage.com>' #�
 Commands.Players.Guild.Help.GuildEmblem:			'/gc emblem' # Présentation de l'emblème.
 Commands.Players.Guild.Help.TerritoryBanner:			'/gc territorybanner' # Permet de montrer sa bannière de guilde dans un territoire conquis, réduit les coûts d'entretien du territoire, et améliore sa défense.
 Commands.Players.Guild.Help.TerritoryPortal:			'/gc territoryportal' # Permet d'invoquer un portail de guilde dans un territoire conquis et d'envoyer une notification à tous les joueurs en ligne de la guilde, leur permettant de se téléporter au territoire.
+Commands.Players.Guild.Help.BuyTerritoryDefender:			'/gc buyterritorydefender <guard|healer|mage|archer>' # Permet d'acheter un garde supplémentaire pour un territoire.
+Commands.Players.Guild.Help.MoveTerritoryDefender:			'/gc moveterritorydefender' # Permet de déplacer un garde de territoire acheté par votre guilde.
 Commands.Players.Guild.Help.CombatZone:			'/gc combatzone' # Établit une zone de combat PvP sur votre position, permettant de combattre des joueurs sans perte de réputation.
 Commands.Players.Guild.Help.GuildForm:			'/gc form <nom de guilde>' # Création d'une guilde (4 joueurs au minimum requis dans le groupe).
 Commands.Players.Guild.Help.GuildGMAddPlayer:		'/gc addplayer <nom de joueur> to <nom de guilde>' # Ajoute un joueur à la guilde.
@@ -291,9 +293,24 @@ Commands.Players.Guild.TerritoryPortal.NotEnoughMerit:	Votre guilde doit avoir {
 Commands.Players.Guild.TerritoryPortal.NotInTerritory:	Vous ne pouvez pas invoquer un portail de guilde en dehors d'un territoire contrôlé par votre guilde.
 Commands.Players.Guild.TerritoryPortal.NotSupported:	Vous ne pouvez pas invoquer un portail de guilde dans ce territoire!
 
-Commands.Players.Guild.TerritoryPortal.Called:		Vous avez été appelé(e) par votre guilde pour défendre {0}, allez-vous répondre à l'appel?
-Commands.Players.Guild.TerritoryPortal.Expired:		L'appel aux armes a éxpiré!
-Commands.Players.Guild.TerritoryPortal.Summoned:	Vous avez été téléporté(e) à {0}. Vous pouvez utiliser le portail au centre du territoire pour revenir à votre précédente position.
+Commands.Players.Guild.TerritoryPortal.Called:			Vous avez été appelé(e) par votre guilde pour défendre {0}, allez-vous répondre à l'appel?
+Commands.Players.Guild.TerritoryPortal.Expired:			L'appel aux armes a éxpiré!
+Commands.Players.Guild.TerritoryPortal.Summoned:		Vous avez été téléporté(e) à {0}. Vous pouvez utiliser le portail au centre du territoire pour revenir à votre précédente position.
+
+Commands.Players.Guild.BuyDefender.NoGuild:				Vous devez faire parti d'une guilde pour acheter un garde de territoire.
+Commands.Players.Guild.BuyDefender.AvailableDefenders:	Vous pouvez acheter {0} gardes supplémentaires.
+Commands.Players.Guild.BuyDefender.DefenderLimit:		Vous ne pouvez pas acheter de défenseurs supplémentaires pour le moment.
+Commands.Players.Guild.BuyDefender.NotInTerritory:		Vous ne pouvez pas acheter un garde en dehors d'un territoire contrôlé par votre guilde.
+Commands.Players.Guild.BuyDefender.UnsupportedType:		Le territoire {0} n'offre pas ce type de garde.
+Commands.Players.Guild.BuyDefender.NoMoney:				Vous devez avoir {0} pièces d'or dans votre banque de guilde pour acheter un garde!
+Commands.Players.Guild.BuyDefender.ConfirmCost:			Acheter un garde pour {0} coûtera {1} pièces d'or à votre guilde. Continuer?
+Commands.Players.Guild.BuyDefender.Bought:				Vous avez acheté les services de {0} pour le territoire {1}.
+
+Commands.Players.Guild.MoveDefender.NoTarget:			Vous devez cibler un personnage non-joueur pour utiliser cette commande!
+Commands.Players.Guild.MoveDefender.BadTarget:			La cible doit être un garde acheté par votre guilde!
+Commands.Players.Guild.MoveDefender.BadTerritory:		Vous devez vous tenir dans le territoire de ce garde!
+Commands.Players.Guild.MoveDefender.BadPosition:		Vous ne pouvez pas déplacer ce garde ici.
+Commands.Players.Guild.MoveDefender.Moved:				Vous avez déplacé {0} sur votre position.
 
 Commands.Players.Guild.CombatZone.NoGuild:			Vous devez faire parti d'une guilde pour établir une zone de combat.
 Commands.Players.Guild.CombatZone.CantInPvPRegion:	Vous ne pouvez pas établir une zone de combat dans une région PvP ou RvR.

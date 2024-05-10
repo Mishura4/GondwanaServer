@@ -134,6 +134,8 @@ Commands.Players.Guild.Help.GuildEmail:			'/gc email <contact@guildpage.com>' #�
 Commands.Players.Guild.Help.GuildEmblem:			'/gc emblem' # Presentation of the emblem.
 Commands.Players.Guild.Help.TerritoryBanner:			'/gc territorybanner' # Allows you to show your guild banner in a conquered territory, reduces the maintenance costs of the territory, and improves its defense.
 Commands.Players.Guild.Help.TerritoryPortal:			'/gc territoryportal' # Allows you to summon a guild portal in a conquered territory and send a notification to all players in the guild who are online, allowing them to teleport to the territory.
+Commands.Players.Guild.Help.BuyTerritoryDefender:			'/gc buyterritorydefender <guard|healer|mage|archer>' # Buys an additional defender for a territory owned by your guild.
+Commands.Players.Guild.Help.MoveTerritoryDefender:			'/gc moveterritorydefender' # Moves a defender bought by your guild to your current position.
 Commands.Players.Guild.Help.CombatZone:			'/gc combatzone' # Establishes a PvP combat zone on your position, allowing players to be fought without reputation loss in this specific area.
 Commands.Players.Guild.Help.GuildForm:			'/gc form <guild's name>' # Creation of a guild (at least 4 players required in the group).
 Commands.Players.Guild.Help.GuildGMAddPlayer:		'/gc addplayer <player's name> to <nom de la guilde>' # Add a player to the guild.
@@ -294,6 +296,21 @@ Commands.Players.Guild.TerritoryPortal.NotSupported:	You cannot summon a guild p
 Commands.Players.Guild.TerritoryPortal.Called:		You have been called by your guild to defend the territory {0}, will you answer the call?
 Commands.Players.Guild.TerritoryPortal.Expired:		The call to arms has expired!
 Commands.Players.Guild.TerritoryPortal.Summoned:	You have been teleported to defend {0}. You may use the portal to be teleported back to your previous location.
+
+Commands.Players.Guild.BuyDefender.NoGuild:				You must be in a guild to buy a defender.
+Commands.Players.Guild.BuyDefender.AvailableDefenders:	You can currently buy {0} additional guards.
+Commands.Players.Guild.BuyDefender.DefenderLimit:		You cannot currently buy an additional defender.
+Commands.Players.Guild.BuyDefender.NotInTerritory:		You cannot buy a territory defender outside of a territory belonging to your guild.
+Commands.Players.Guild.BuyDefender.UnsupportedType:		The territory '{0}' does not offer this type of defender.
+Commands.Players.Guild.BuyDefender.NoMoney:				You must have {0} gold coins to buy a territory defender!
+Commands.Players.Guild.BuyDefender.ConfirmCost:			Buying a defender for '{0}' will cost {1} gold coins to your guild. Confirm?
+Commands.Players.Guild.BuyDefender.Bought:				You have bought the services of '{0}' for territory '{1}'.
+
+Commands.Players.Guild.MoveDefender.NoTarget:			You must target a non-playing character to use this command.
+Commands.Players.Guild.MoveDefender.BadTarget:			Your target must be a territory defender bought by your guild!
+Commands.Players.Guild.MoveDefender.BadTerritory:		You must stand in the territory owning this defender!
+Commands.Players.Guild.MoveDefender.BadPosition:		You cannot move this defender here.
+Commands.Players.Guild.MoveDefender.Moved:				You moved {0} to your position.
 
 Commands.Players.Guild.CombatZone.NoGuild:			You must be in a guild to start a combat zone.
 Commands.Players.Guild.CombatZone.CantInPvPRegion:	You cannot start a combat zone in a PvP or RvR region.

@@ -820,19 +820,19 @@ namespace DOL.GS
         /// <returns>true if moved</returns>
         public virtual bool MoveTo(ushort regionID, float x, float y, float z, ushort heading)
         {
-            if (m_ObjectState != eObjectState.Active)
-                return false;
-
             Region rgn = WorldMgr.GetRegion(regionID);
             if (rgn == null)
                 return false;
             if (rgn.GetZone(x, y) == null)
                 return false;
 
-            Notify(GameObjectEvent.MoveTo, this, new MoveToEventArgs(regionID, x, y, z, heading));
+            if (m_ObjectState == eObjectState.Active)
+            {
+                Notify(GameObjectEvent.MoveTo, this, new MoveToEventArgs(regionID, x, y, z, heading));
+                if (!RemoveFromWorld())
+                    return false;
+            }
 
-            if (!RemoveFromWorld())
-                return false;
             Position = new Vector3(x, y, z);
             m_Heading = heading;
             CurrentRegionID = regionID;

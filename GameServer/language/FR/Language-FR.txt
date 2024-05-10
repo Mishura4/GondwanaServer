@@ -61,4 +61,6 @@ Language.DamageType.Melee.Damage:				dégâts de mélée
 Language.DamageType.Spell.Damage:				dégâts des sorts
 Language.DamageType.DoT.Damage:					dégâts de durée
 
+Language.InternalError:							Une erreur serveur est survenue lors de l'éxécution de cette action ; veuillez contacter le staff du serveur.
+
 PlayerPickUpRequestHandler.HandlePacket.Target:		Vous devez avoir une cible valide à ramasser.

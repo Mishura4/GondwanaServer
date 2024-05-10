@@ -2735,6 +2735,9 @@ namespace DOL.GS.ServerProperties
         [ServerProperty("territory", "territorymob_banner_resist", "Base Mob resistance in territories when Guild banner is set", 30)]
         public static int TERRITORYMOB_BANNER_RESIST;
 
+        [ServerProperty("territory", "territory_defender_price", "Price of a defender for a territory, in gold", 300)]
+        public static int TERRITORY_DEFENDER_PRICE;
+
         /// <summary>
         /// Crafting skill gain bonus in capital cities
         /// </summary>

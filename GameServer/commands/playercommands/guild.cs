@@ -1884,6 +1884,154 @@ namespace DOL.GS.Commands
                         }
                         break;
 
+                        case "buyterritorydefender":
+                        {
+                            if (args.Length < 3)
+                            {
+                                DisplaySyntax(client, "buyterritorydefender");
+                                return;
+                            }
+                            GamePlayer player = client.Player;
+
+                            if (player.Guild == null)
+                            {
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.BuyDefender.NoGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                return;
+                            }
+
+                            long guildLevel = player.Guild.GuildLevel;
+                            if (guildLevel < 3)
+                            {
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.BuyDefender.DefenderLimit"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                return;
+                            }
+
+                            var territory = TerritoryManager.GetCurrentTerritory(player);
+                            if (territory?.IsOwnedBy(player) != true)
+                            {
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.BuyDefender.NotInTerritory"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                return;
+                            }
+
+                            long maxDefenders = Math.Max(0, guildLevel - territory.NumMercenaries);
+                            if (maxDefenders == 0)
+                            {
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.BuyDefender.DefenderLimit", maxDefenders), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                return;
+                            }
+
+                            NpcTemplate npcTemplate;
+
+                            switch (args[2]) {
+                                default:
+                                    DisplaySyntax(client, "buyterritorydefender");
+                                    return;
+
+                                case "guard":
+                                    npcTemplate = territory.GuardNPCTemplate;
+                                    break;
+
+                                case "healer":
+                                    npcTemplate = territory.HealerNPCTemplate;
+                                    break;
+
+                                case "mage":
+                                    npcTemplate = territory.MageNPCTemplate;
+                                    break;
+
+                                case "archer":
+                                    npcTemplate = territory.ArcherNPCTemplate;
+                                    break;
+                            };
+
+                            if (npcTemplate == null)
+                            {
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.BuyDefender.UnsupportedType", territory.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                return;
+                            }
+
+                            int price = client.Account.PrivLevel > 1 ? 0 : Properties.TERRITORY_DEFENDER_PRICE;
+                            if (price > 0)
+                            {
+                                if (client.Player.Guild.GetGuildBank() < price * 10000)
+                                {
+                                    player.SendTranslatedMessage("Commands.Players.Guild.BuyDefender.NoMoney", eChatType.CT_System, eChatLoc.CL_ChatWindow, price);
+                                    return;
+                                }
+                                client.Out.SendCustomDialog(string.Format(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.BuyDefender.ConfirmCost"), territory.Name, price), (GamePlayer player, byte response) =>
+                                {
+                                    if (response == 1)
+                                    {
+                                        if (!player.Guild.WithdrawGuildBank(player, price * 10000, false))
+                                        {
+                                            player.SendTranslatedMessage("Commands.Players.Guild.BuyDefender.NoMoney", eChatType.CT_System, eChatLoc.CL_ChatWindow, price);
+                                            return;
+                                        }
+                                        try
+                                        {
+                                            GameNPC npc = territory.AddMercenary(player, npcTemplate);
+                                            player.SendTranslatedMessage("Commands.Players.Guild.BuyDefender.Bought", eChatType.CT_System, eChatLoc.CL_ChatWindow, player.GetPersonalizedName(npc), territory.Name);
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            player.SendTranslatedMessage("Language.InternalError");
+                                            throw;
+                                        }
+                                    }
+                                });
+
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    GameNPC npc = territory.AddMercenary(player, npcTemplate);
+                                    player.SendTranslatedMessage("Commands.Players.Guild.BuyDefender.Bought", eChatType.CT_System, eChatLoc.CL_ChatWindow, player.GetPersonalizedName(npc), territory.Name);
+                                }
+                                catch (Exception ex)
+                                {
+                                    player.SendTranslatedMessage("Language.InternalError");
+                                    throw;
+                                }
+                            }
+                            break;
+                        }
+
+                        case "moveterritorydefender":
+                        {
+                            GamePlayer player = client.Player;
+                            if (player.Guild == null)
+                            {
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.BuyDefender.NoGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                return;
+                            }
+
+                            var target = player.TargetObject as GameNPC;
+                            if (target == null || !target.IsMercenary || target.CurrentTerritory?.IsOwnedBy(player) != true)
+                            {
+                                player.SendTranslatedMessage("Commands.Players.Guild.MoveDefender.BadTarget", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                return;
+                            }
+
+                            var territory = TerritoryManager.GetCurrentTerritory(player);
+                            if (territory != target.CurrentTerritory)
+                            {
+                                player.SendTranslatedMessage("Commands.Players.Guild.MoveDefender.BadTerritory", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                return;
+                            }
+
+                            if (!target.MoveTo(player.CurrentRegionID, player.Position, player.Heading))
+                            {
+                                player.SendTranslatedMessage("Commands.Players.Guild.MoveDefender.BadPosition", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            }
+                            else
+                            {
+                                player.SendTranslatedMessage("Commands.Players.Guild.MoveDefender.Moved", eChatType.CT_System, eChatLoc.CL_SystemWindow, player.GetPersonalizedName(target));
+                                target.SaveIntoDatabase();
+                            }
+                            return;
+                        }
+
                     #endregion
                     #region CombatZone
 
@@ -3414,14 +3562,19 @@ namespace DOL.GS.Commands
                             {
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.WithdrawInvalid"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             }
-                            else if ((client.Player.Guild.GetGuildBank() - amount) < 0)
-                            {
-                                client.Player.Out.SendMessage(LanguageMgr.GetTranslation(client.Player.Client, "Commands.Players.Guild.WithdrawTooMuch"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-                                return;
-                            }
                             else
                             {
-                                client.Player.Guild.WithdrawGuildBank(client.Player, amount);
+                                if (client.Player.Guild.WithdrawGuildBank(client.Player, amount))
+                                {
+                                    client.Player.SendTranslatedMessage("Commands.Players.Guild.Withdrawamount", eChatType.CT_Guild, eChatLoc.CL_SystemWindow, Money.GetString(long.Parse(amount.ToString())));
+                                    client.Player.Guild.UpdateGuildWindow();
+                                    return;
+                                }
+                                else
+                                {
+                                    client.Player.Out.SendMessage(LanguageMgr.GetTranslation(client.Player.Client, "Commands.Players.Guild.WithdrawTooMuch"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                                    return;
+                                }
 
                             }
                             client.Player.Guild.UpdateGuildWindow();
@@ -3466,10 +3619,7 @@ namespace DOL.GS.Commands
             }
             catch (Exception e)
             {
-                if (ServerProperties.Properties.ENABLE_DEBUG)
-                {
-                    log.Debug("Error in /gc script, " + args[1] + " command: " + e.ToString());
-                }
+                log.Error("Error in /gc script, " + args[1] + " command: " + e.ToString());
 
                 DisplayHelp(client);
             }
@@ -3675,6 +3825,8 @@ namespace DOL.GS.Commands
             client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildTerritories"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
             client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.TerritoryBanner"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
             client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.TerritoryPortal"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.BuyTerritoryDefender"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.MoveTerritoryDefender"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
             client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.CombatZone"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
             client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.JailRelease"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
         }

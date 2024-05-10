@@ -907,7 +907,15 @@ namespace DOL.GS
             /// <summary>
             /// npc is swimming
             /// </summary>
-            SWIMMING = 0x100
+            SWIMMING = 0x100,
+            /// <summary>
+            /// npc is a mercenary, and will be removed on death or other conditions (e.g. hired territory guard removed on territory lost)
+            /// </summary>
+            MERCENARY = 0x200,
+            /// <summary>
+            /// normal respawn for this npc is disabled
+            /// </summary>
+            NORESPAWN = 0x400
         }
 
         /// <summary>
@@ -983,6 +991,7 @@ namespace DOL.GS
         public bool IsFlying => Flags.HasFlag(eFlags.FLYING);
         public bool IsTorchLit => Flags.HasFlag(eFlags.TORCH);
         public bool IsStatue => Flags.HasFlag(eFlags.STATUE);
+        public bool IsMercenary => Flags.HasFlag(eFlags.MERCENARY);
         public override bool IsUnderwater
             => Flags.HasFlag(eFlags.SWIMMING) || base.IsUnderwater;
 
@@ -2546,6 +2555,8 @@ namespace DOL.GS
             if (template == null)
                 return;
 
+            bool setMobValues = template.ReplaceMobValues || LoadedFromScript;
+
             // Save the template for later
             NPCTemplate = template as NpcTemplate;
 
@@ -2558,7 +2569,7 @@ namespace DOL.GS
             this.MaxTension = template.MaxTension;
 
             // We need level set before assigning spells to scale pet spells
-            if (template.ReplaceMobValues)
+            if (setMobValues)
             {
                 if (!Util.IsEmpty(template.Level))
                 {
@@ -2606,7 +2617,7 @@ namespace DOL.GS
             }
 
             // Everything below this point is already in the mob table
-            if (!template.ReplaceMobValues && !LoadedFromScript)
+            if (!setMobValues)
                 return;
 
             var m_templatedInventory = new List<string>();
@@ -2628,6 +2639,7 @@ namespace DOL.GS
                 var splitModel = Util.SplitCSV(template.Model, true);
                 ushort.TryParse(splitModel[Util.Random(0, splitModel.Count - 1)], out choosenModel);
                 this.Model = choosenModel;
+                this.ModelDb = choosenModel;
             }
 
             // Graveen: template.Gender is 0,1 or 2 for respectively eGender.Neutral("it"), eGender.Male ("he"), 
@@ -2654,9 +2666,11 @@ namespace DOL.GS
             #region Misc Stats
             this.MaxDistance = template.MaxDistance;
             this.Race = (short)template.Race;
+            this.RaceDb = (short)template.Race;
             this.BodyType = (ushort)template.BodyType;
             this.MaxSpeedBase = template.MaxSpeed;
             this.Flags = (eFlags)template.Flags;
+            this.FlagsDb = template.Flags;
             CanStealth = IsStealthed;
             this.MeleeDamageType = template.MeleeDamageType;
             #endregion
@@ -2740,7 +2754,12 @@ namespace DOL.GS
                 }
 
                 if (template.VisibleActiveWeaponSlot > 0)
+                {
                     this.VisibleActiveWeaponSlots = template.VisibleActiveWeaponSlot;
+                    this.VisibleWeaponsDb = this.VisibleActiveWeaponSlots;
+                }
+
+                this.EquipmentTemplateID = template.Inventory;
             }
             #endregion
 
@@ -4591,6 +4610,7 @@ namespace DOL.GS
             Delete();
 
             MobGroupManager.Instance.HandleNpcDeath(this, killer);
+            CurrentTerritory?.OnLivingDies(this, killer);
 
             // remove temp properties
             TempProperties.removeAllProperties();
@@ -4598,6 +4618,10 @@ namespace DOL.GS
             if (AutoRespawn)
             {
                 StartRespawn();
+            }
+            else if (IsMercenary && !LoadedFromScript)
+            {
+                DeleteFromDatabase();
             }
         }
 
@@ -4873,21 +4897,32 @@ namespace DOL.GS
             }
         }
 
-        private bool m_autoRespawn = true;
-
         /// <summary>
         /// Will the mob automatically respawn on death?
         /// </summary>
         public bool AutoRespawn
         {
-            get => m_autoRespawn;
+            get => !Flags.HasFlag(eFlags.NORESPAWN);
             set
             {
-                bool prev = m_autoRespawn;
-                m_autoRespawn = value;
-                if (prev && !m_autoRespawn)
+                bool prev = AutoRespawn;
+                if (value)
                 {
-                    StartRespawn();
+                    if (!prev)
+                    {
+                        Flags |= eFlags.NORESPAWN;
+                        if (m_respawnTimer?.IsAlive != true)
+                            StartRespawn();
+                    }
+                }
+                else
+                {
+                    if (prev)
+                    {
+                        Flags &= ~eFlags.NORESPAWN;
+                        if (m_respawnTimer?.IsAlive == true)
+                            m_respawnTimer.Stop();
+                    }
                 }
             }
         }

@@ -18,14 +18,16 @@ namespace DOLDatabase.Tables
         private string m_name;
         private string m_bossMobId;
         private string m_groupId;
-        private float m_areaX;
-        private float m_areaY;
         private string m_bonus;
         private string m_ownerGuildID;
         private bool m_IsBannerSummoned;
         private int? m_portalX;
         private int? m_portalY;
         private int? m_portalZ;
+        private int? m_guardTemplate;
+        private int? m_healerTemplate;
+        private int? m_mageTemplate;
+        private int? m_archerTemplate;
 
         [DataElement(AllowDbNull = false)]
         public ushort RegionId
@@ -187,6 +189,50 @@ namespace DOLDatabase.Tables
             set
             {
                 m_portalZ = value;
+                Dirty = true;
+            }
+        }
+
+        [DataElement(AllowDbNull = true)]
+        public int? GuardNPCTemplate
+        {
+            get => m_guardTemplate;
+            set
+            {
+                m_guardTemplate = value;
+                Dirty = true;
+            }
+        }
+
+        [DataElement(AllowDbNull = true)]
+        public int? HealerNPCTemplate
+        {
+            get => m_healerTemplate;
+            set
+            {
+                m_healerTemplate = value;
+                Dirty = true;
+            }
+        }
+
+        [DataElement(AllowDbNull = true)]
+        public int? MageNPCTemplate
+        {
+            get => m_mageTemplate;
+            set
+            {
+                m_mageTemplate = value;
+                Dirty = true;
+            }
+        }
+
+        [DataElement(AllowDbNull = true)]
+        public int? ArcherNPCTemplate
+        {
+            get => m_archerTemplate;
+            set
+            {
+                m_archerTemplate = value;
                 Dirty = true;
             }
         }

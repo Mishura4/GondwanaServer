@@ -514,24 +514,16 @@ namespace DOL.GS
             donating.Out.SendUpdatePlayer();
             return;
         }
-        public void WithdrawGuildBank(GamePlayer player, double amount, bool withdraw = true)
-        {
-            if (amount < 0)
-            {
-                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Commands.Players.Guild.WithdrawInvalid"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-                return;
-            }
-            else if ((player.Guild.GetGuildBank() - amount) < 0)
-            {
-                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Commands.Players.Guild.WithdrawTooMuch"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-                return;
-            }
 
-            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Commands.Players.Guild.Withdrawamount", Money.GetString(long.Parse(amount.ToString()))), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-            player.Guild.UpdateGuildWindow();
+        public bool WithdrawGuildBank(GamePlayer player, double amount, bool giveToPlayer = true)
+        {
+            if (amount > GetGuildBank())
+            {
+                return false;
+            }
             m_DBguild.Bank -= amount;
 
-            if (withdraw)
+            if (giveToPlayer)
             {
                 var amt = long.Parse(amount.ToString());
                 player.AddMoney(Currency.Copper.Mint(amt));
@@ -540,7 +532,8 @@ namespace DOL.GS
                 player.SaveIntoDatabase();
             }
             player.Guild.SaveIntoDatabase();
-            return;
+            UpdateGuildWindow();
+            return true;
         }
 
         /// <summary>
@@ -564,7 +557,7 @@ namespace DOL.GS
                     var territory = TerritoryManager.GetTerritoryByID(id);
                     if (territory == null)
                     {
-                        log.Warn($"Guild {Name} ({GuildID} references territory {id} but no territory was found for that ID");
+                        log.Warn($"Guild {Name} ({GuildID}) references territory {id} but no territory was found for that ID");
                         continue;
                     }
                     territory.OwnerGuild = this;

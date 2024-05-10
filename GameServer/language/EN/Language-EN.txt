@@ -43,6 +43,8 @@ Language.DamageType.Melee.Damage:				melee damage
 Language.DamageType.Spell.Damage:				spell damage
 Language.DamageType.DoT.Damage:					damage-over-time
 
+Language.InternalError:							A server error has occured while trying to complete this action; please contact server staff.
+
 # KEEPS
 # Managers/Player Manager
 PlayerManager.BroadcastCapture.Captured:		The forces of {0} have captured {1}!
