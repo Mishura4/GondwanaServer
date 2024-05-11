@@ -459,6 +459,7 @@ namespace DOL.Territories
                 m_ownerGuild.RemoveTerritory(this);
                 m_ownerGuild = null;
             }
+            guild_id = string.Empty;
             ClearPortal();
             ToggleBannerUnsafe(false);
             if (Boss != null)
