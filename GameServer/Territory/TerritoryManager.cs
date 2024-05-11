@@ -231,11 +231,11 @@ namespace DOL.Territories
 
             foreach (var territory in this.Territories)
             {
-                string line = territory.Name + " / " + territory.Zone.Description + " / ";
+                string line = territory.Name + " / " + territory.Zone.Description;
 
                 if (territory.IsNeutral())
                 {
-                    line += neutral;
+                    line += " / " + neutral;
                     otherTerritories.Add(line);
                 }
                 else
@@ -246,6 +246,7 @@ namespace DOL.Territories
                     }
                     else
                     {
+                        line += " / " + territory.OwnerGuild?.Name ?? "????";
                         otherTerritories.Add(line);
                     }
                 }
