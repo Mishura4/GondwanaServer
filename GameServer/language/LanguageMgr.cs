@@ -698,12 +698,22 @@ namespace DOL.Language
             return missing;
         }
 
-        public static string TranslateTimeShort(string language, uint hours, uint minutes = 0, uint seconds = 0)
+        public static string TranslateTimeShort(string language, long hours, long minutes = 0, long seconds = 0)
         {
             string retval = "";
             string translation;
             bool padMinutesWithZeros = false;
             bool padSecondsWithZeros = false;
+            if (seconds > 60)
+            {
+                minutes += seconds / 60;
+                seconds = seconds % 60;
+            }
+            if (minutes > 60)
+            {
+                hours += minutes / 60;
+                minutes = minutes % 60;
+            }
             if (hours != 0)
             {
                 padMinutesWithZeros = true;
@@ -749,12 +759,12 @@ namespace DOL.Language
             return retval;
         }
 
-        public static string TranslateTimeShort(GameClient client, uint hours, uint minutes = 0, uint seconds = 0)
+        public static string TranslateTimeShort(GameClient client, long hours, long minutes = 0, long seconds = 0)
         {
             return TranslateTimeShort(client.Account.Language, hours, minutes, seconds);
         }
 
-        public static string TranslateTimeShort(GamePlayer player, uint hours, uint minutes = 0, uint seconds = 0)
+        public static string TranslateTimeShort(GamePlayer player, long hours, long minutes = 0, long seconds = 0)
         {
             return TranslateTimeShort(player.Client.Account.Language, hours, minutes, seconds);
         }

@@ -91,23 +91,23 @@ namespace DOL.Territories
             }
             guild_id = db.OwnerGuildID;
             ClaimedTime = db.ClaimedTime;
+            m_expiration = db.Expiration;
 
             if (!IsNeutral())
             {
-                OwnerGuild = GuildMgr.GetGuildByGuildID(guild_id);
-                if (OwnerGuild == null)
+                Guild guild = GuildMgr.GetGuildByGuildID(guild_id);
+                if (guild == null)
                 {
                     log.Warn($"Territory {Name} ({db.ObjectId}) is owned by guild with ID {guild_id} in the database but no guild with this ID was found");
                 }
                 else
                 {
+                    SetGuildOwner(guild, false);
+                    StartExpireTimer();
                     if (IsBannerSummoned)
-                    {
-                        ToggleBanner(true);
-                    }
+                        ToggleBannerUnsafe(true);
                 }
             }
-            Expiration = db.Expiration;
         }
 
         public Territory(eType type, Zone zone, List<IArea> areas, string name, GameNPC boss, Vector3? portalPosition, ushort regionID, MobGroup group = null)
@@ -345,6 +345,7 @@ namespace DOL.Territories
                         }
                         bool save = !string.Equals(value.GuildID, guild_id);
                         SetGuildOwner(value, save);
+                        ClaimedTime = DateTime.Now;
                         StartExpireTimer();
                         if (IsBannerSummoned)
                             ToggleBannerUnsafe(true);
@@ -382,7 +383,6 @@ namespace DOL.Territories
                 NumMercenaries = 0;
             }
 
-            ClaimedTime = DateTime.Now;
             guild.AddTerritory(this, saveChange);
             guild_id = guild.GuildID;
             m_ownerGuild = guild;
@@ -998,6 +998,7 @@ namespace DOL.Territories
                 db.Bonus = this.SaveBonus();
                 db.IsBannerSummoned = this.IsBannerSummoned;
                 db.ClaimedTime = ClaimedTime;
+                db.Expiration = Expiration;
                 if (this.PortalPosition != null)
                 {
                     db.PortalX = (int)this.PortalPosition.Value.X;

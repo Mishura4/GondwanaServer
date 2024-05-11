@@ -28,3 +28,5 @@ Commands.GM.GMTerritories.Claimed:						Le territoire {0} a été pris de force 
 Commands.GM.GMTerritories.BadCoordinate:				'{0}' n'est pas une coordonnée valide.
 Commands.GM.GMTerritories.PortalSet:					Le portail du territoire {0} apparaîtra aux coordonnées x={1:0} y={2:0} z={3:0}.
 Commands.GM.GMTerritories.PortalRemoved:				Le portail du territoire {0} a été désactivé.
+Commands.GM.GMTerritories.ExpirationSet:				Le territoire {0} expire maintenant {1} après capture.
+Commands.GM.GMTerritories.ExpirationRemoved:			L'expiration du territoire {0} a été désactivée.

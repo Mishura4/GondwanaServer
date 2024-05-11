@@ -4,6 +4,7 @@ using DOL.Geometry;
 using DOL.GS;
 using DOL.GS.Commands;
 using DOL.GS.PacketHandler;
+using DOL.Language;
 using DOL.MobGroups;
 using DOL.Territories;
 using DOLDatabase.Tables;
@@ -281,71 +282,116 @@ namespace DOL.commands.gmcommands
                     client.Out.SendCustomTextWindow($"[ Territoire {territory.Name} ]", infos);
                     break;
 
-                case "setportal":
-                    int arg = 2;
-                    if (args.Length > arg)
+                case "expiration":
                     {
-                        string id = args[arg];
-                        territory = TerritoryManager.GetTerritoryByID(id);
-                        if (territory == null)
+                        if (args.Length < 3 || !long.TryParse(args[2], out long minutes))
                         {
-                            territory = TerritoryManager.GetTerritoryAtArea(id);
+                            DisplaySyntax(client, "expiration");
+                            return;
+                        }
+                        if (args.Length > 3)
+                        {
+                            string id = args[3];
+                            territory = TerritoryManager.GetTerritoryByID(id);
                             if (territory == null)
                             {
-                                client.SendTranslation("Commands.GM.GMTerritories.TerritoryNotFound", eChatType.CT_System, eChatLoc.CL_SystemWindow, id);
+                                territory = TerritoryManager.GetTerritoryAtArea(id);
+                                if (territory == null)
+                                {
+                                    client.SendTranslation("Commands.GM.GMTerritories.TerritoryNotFound", eChatType.CT_System, eChatLoc.CL_SystemWindow, id);
+                                    return;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            territory = TerritoryManager.GetCurrentTerritory(client.Player);
+                            if (territory == null)
+                            {
+                                client.SendTranslation("Commands.GM.GMTerritories.NotInTerritory");
                                 return;
                             }
                         }
-                        ++arg;
+                        territory.Expiration = minutes;
+                        if (minutes == 0)
+                        {
+                            client.SendTranslation("Commands.GM.GMTerritories.ExpirationRemoved", eChatType.CT_System, eChatLoc.CL_ChatWindow, territory.Name);
+                        }
+                        else
+                        {
+                            client.SendTranslation("Commands.GM.GMTerritories.ExpirationSet", eChatType.CT_System, eChatLoc.CL_ChatWindow, territory.Name, LanguageMgr.TranslateTimeShort(client.Player, 0, minutes));
+                        }
+                        territory.SaveIntoDatabase();
                     }
-                    else
+                    break;
+
+                case "setportal":
                     {
-                        territory = TerritoryManager.GetCurrentTerritory(client.Player);
-                        if (territory == null)
+                        int arg = 2;
+                        if (args.Length > arg)
                         {
-                            client.SendTranslation("Commands.GM.GMTerritories.NotInTerritory");
-                            return;
+                            string id = args[arg];
+                            territory = TerritoryManager.GetTerritoryByID(id);
+                            if (territory == null)
+                            {
+                                territory = TerritoryManager.GetTerritoryAtArea(id);
+                                if (territory == null)
+                                {
+                                    client.SendTranslation("Commands.GM.GMTerritories.TerritoryNotFound", eChatType.CT_System, eChatLoc.CL_SystemWindow, id);
+                                    return;
+                                }
+                            }
+                            ++arg;
                         }
+                        else
+                        {
+                            territory = TerritoryManager.GetCurrentTerritory(client.Player);
+                            if (territory == null)
+                            {
+                                client.SendTranslation("Commands.GM.GMTerritories.NotInTerritory");
+                                return;
+                            }
+                        }
+                        Vector3 position;
+                        if (args.Length > arg)
+                        {
+                            if (string.Equals(args[arg], "remove"))
+                            {
+                                territory.PortalPosition = null;
+                                client.SendTranslation("Commands.GM.GMTerritories.PortalRemoved", eChatType.CT_System, eChatLoc.CL_SystemWindow, territory.Name);
+                                return;
+                            }
+                            if (args.Length < arg + 3)
+                            {
+                                DisplaySyntax(client);
+                                return;
+                            }
+                            if (!int.TryParse(args[arg], out int x))
+                            {
+                                client.SendTranslation("Commands.GM.GMTerritories.BadCoordinate", eChatType.CT_System, eChatLoc.CL_SystemWindow, args[arg]);
+                                return;
+                            }
+                            if (!int.TryParse(args[arg + 1], out int y))
+                            {
+                                client.SendTranslation("Commands.GM.GMTerritories.BadCoordinate", eChatType.CT_System, eChatLoc.CL_SystemWindow, args[arg + 1]);
+                                return;
+                            }
+                            if (!int.TryParse(args[arg + 2], out int z))
+                            {
+                                client.SendTranslation("Commands.GM.GMTerritories.BadCoordinate", eChatType.CT_System, eChatLoc.CL_SystemWindow, args[arg + 2]);
+                                return;
+                            }
+                            position = new Vector3(x, y, z);
+                        }
+                        else
+                        {
+                            var playerPosition = client.Player.Position;
+                            position = new Vector3((int)playerPosition.X, (int)playerPosition.Y, (int)playerPosition.Z);
+                        }
+                        territory.PortalPosition = position;
+                        territory.SaveIntoDatabase();
+                        client.SendTranslation("Commands.GM.GMTerritories.PortalSet", eChatType.CT_System, eChatLoc.CL_SystemWindow, territory.Name, position.X, position.Y, position.Z);
                     }
-                    Vector3 position;
-                    if (args.Length > arg)
-                    {
-                        if (string.Equals(args[arg], "remove"))
-                        {
-                            territory.PortalPosition = null;
-                            client.SendTranslation("Commands.GM.GMTerritories.PortalRemoved", eChatType.CT_System, eChatLoc.CL_SystemWindow, territory.Name);
-                            return;
-                        }
-                        if (args.Length < arg + 3)
-                        {
-                            DisplaySyntax(client);
-                            return;
-                        }
-                        if (!int.TryParse(args[arg], out int x))
-                        {
-                            client.SendTranslation("Commands.GM.GMTerritories.BadCoordinate", eChatType.CT_System, eChatLoc.CL_SystemWindow, args[arg]);
-                            return;
-                        }
-                        if (!int.TryParse(args[arg + 1], out int y))
-                        {
-                            client.SendTranslation("Commands.GM.GMTerritories.BadCoordinate", eChatType.CT_System, eChatLoc.CL_SystemWindow, args[arg + 1]);
-                            return;
-                        }
-                        if (!int.TryParse(args[arg + 2], out int z))
-                        {
-                            client.SendTranslation("Commands.GM.GMTerritories.BadCoordinate", eChatType.CT_System, eChatLoc.CL_SystemWindow, args[arg + 2]);
-                            return;
-                        }
-                        position = new Vector3(x, y, z);
-                    }
-                    else
-                    {
-                        var playerPosition = client.Player.Position;
-                        position = new Vector3((int)playerPosition.X, (int)playerPosition.Y, (int)playerPosition.Z);
-                    }
-                    territory.PortalPosition = position;
-                    territory.SaveIntoDatabase();
-                    client.SendTranslation("Commands.GM.GMTerritories.PortalSet", eChatType.CT_System, eChatLoc.CL_SystemWindow, territory.Name, position.X, position.Y, position.Z);
                     break;
 
                 case "clear":
