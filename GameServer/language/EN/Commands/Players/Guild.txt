@@ -130,6 +130,7 @@ Commands.Players.Guild.Help.GuildEditWithdraw:	'/gc edit <rank#> withdraw <y|n>'
 Commands.Players.Guild.Help.GuildEditVault:		'/gc edit <rank#> vault <vault#> <view|withdraw|deposit> <y|n>' # Controls the access of a rank to guild vaults.
 Commands.Players.Guild.Help.GuildEditBuyBanner:	'/gc edit <rank#> buybanner <y|n>' # Allows a rank to be able to buy a guild banner.
 Commands.Players.Guild.Help.GuildEditSummon:	'/gc edit <rank#> summon <y|n>' # Allows a rank to be able to summon the guild banner.
+Commands.Players.Guild.Help.GuildEditTerritoryDefenders:	'/gc edit <rang#> territorydefenders <y|n>' # Allows a rank to be able to buy or move territory defenders.
 Commands.Players.Guild.Help.GuildEmail:			'/gc email <contact@guildpage.com>' # Displays the web address of contacts within the guild.
 Commands.Players.Guild.Help.GuildEmblem:			'/gc emblem' # Presentation of the emblem.
 Commands.Players.Guild.Help.TerritoryBanner:			'/gc territorybanner' # Allows you to show your guild banner in a conquered territory, reduces the maintenance costs of the territory, and improves its defense.
@@ -253,6 +254,7 @@ Commands.Players.Guild.RankVaultDepositSet:		You have {0} the right to deposit t
 Commands.Players.Guild.RankVaultWithdrawSet:	You have {0} the right to withdraw from the vault #{1} at rank {2}.
 Commands.Players.Guild.RankBuyBannerSet:		You have {0} buying a guild banner at rank {1}.
 Commands.Players.Guild.RankSummonSet:			You have {0} summoning the guild banner at rank {1}.
+Commands.Players.Guild.RankSummonSet:			You have {0} buying and moving territorydefenders at rank {1}.
 Commands.Players.Guild.Rank.ErrorChanging:      Error while charging the rank.
 Commands.Players.Guild.ThirdArgNotNum:			This argument is not a valid number. 
 Commands.Players.Guild.UnableToCreate:			The guild {0} has just been created.

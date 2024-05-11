@@ -53,6 +53,7 @@ namespace DOL.Database
         private bool m_withdraw;
         private bool m_buybanner;
         private bool m_summon;
+        private bool m_territoryDefenders;
         private int m_vaultflags;
 
         /// <summary>
@@ -77,6 +78,9 @@ namespace DOL.Database
             m_buff = false;
             m_dues = false;
             m_withdraw = false;
+            m_buybanner = false;
+            m_summon = false;
+            m_territoryDefenders = false;
             m_vaultflags = 0;
         }
 
@@ -456,6 +460,23 @@ namespace DOL.Database
             {
                 Dirty = true;
                 m_summon = value;
+            }
+        }
+
+        /// <summary>
+        /// Can player with this rank buy and move territory defenders
+        /// </summary>
+        [DataElement(AllowDbNull = false)]
+        public bool TerritoryDefenders
+        {
+            get
+            {
+                return m_territoryDefenders;
+            }
+            set
+            {
+                Dirty = true;
+                m_territoryDefenders = value;
             }
         }
 

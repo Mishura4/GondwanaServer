@@ -1899,6 +1899,12 @@ namespace DOL.GS.Commands
                                 return;
                             }
 
+                            if (!player.Guild.HasRank(client.Player, Guild.eRank.TerritoryDefenders))
+                            {
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NoPrivileges"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                return;
+                            }
+
                             long guildLevel = player.Guild.GuildLevel;
                             if (guildLevel < 3)
                             {
@@ -2003,6 +2009,12 @@ namespace DOL.GS.Commands
                             if (player.Guild == null)
                             {
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.BuyDefender.NoGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                return;
+                            }
+
+                            if (!player.Guild.HasRank(client.Player, Guild.eRank.TerritoryDefenders))
+                            {
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NoPrivileges"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 return;
                             }
 
@@ -4039,6 +4051,12 @@ namespace DOL.GS.Commands
                         client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankSummonSet", LanguageMgr.GetTranslation(client.Account.Language, status), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                     }
                     break;
+                case "territorydefenders":
+                    {
+                        client.Player.Guild.GetRankByID(number).TerritoryDefenders = reponse;
+                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.RankTerritoryDefendersSet", LanguageMgr.GetTranslation(client.Account.Language, status), number.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                    }
+                    break;
                 case "vault":
                     {
                         if (vault is < 1 or > 3)
@@ -4273,6 +4291,7 @@ namespace DOL.GS.Commands
             client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditVault"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
             client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditBuyBanner"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
             client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditSummon"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildEditTerritoryDefenders"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
         }
     }
 }

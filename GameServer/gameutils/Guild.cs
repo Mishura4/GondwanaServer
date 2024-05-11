@@ -67,7 +67,8 @@ namespace DOL.GS
             Dues,
             Withdraw,
             BuyBanner,
-            Summon
+            Summon,
+            TerritoryDefenders
         }
 
         public enum eBonusType : byte
@@ -1233,6 +1234,10 @@ namespace DOL.GS
                     case Guild.eRank.Summon:
                         {
                             return member.GuildRank.Summon;
+                        }
+                    case Guild.eRank.TerritoryDefenders:
+                        {
+                            return member.GuildRank.TerritoryDefenders;
                         }
                     default:
                         {
