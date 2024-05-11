@@ -16,10 +16,13 @@ namespace DOLDatabase.Tables
         private ushort m_zoneId;
         private string m_areaIDs;
         private string m_name;
+        private int m_type;
         private string m_bossMobId;
         private string m_groupId;
+        private long m_expiration;
         private string m_bonus;
         private string m_ownerGuildID;
+        private DateTime? m_claimedTime;
         private bool m_IsBannerSummoned;
         private int? m_portalX;
         private int? m_portalY;
@@ -89,6 +92,21 @@ namespace DOLDatabase.Tables
             }
         }
 
+        [DataElement(AllowDbNull = false)]
+        public int Type
+        {
+            get
+            {
+                return m_type;
+            }
+
+            set
+            {
+                m_type = value;
+                Dirty = true;
+            }
+        }
+
         [DataElement(AllowDbNull = true, Varchar = 255)]
         public string BossMobId
         {
@@ -119,6 +137,21 @@ namespace DOLDatabase.Tables
             }
         }
 
+        [DataElement(AllowDbNull = true)]
+        public DateTime? ClaimedTime
+        {
+            get
+            {
+                return m_claimedTime;
+            }
+
+            set
+            {
+                m_claimedTime = value;
+                Dirty = true;
+            }
+        }
+
         [DataElement(AllowDbNull = true, Varchar = 255)]
         public string Bonus
         {
@@ -145,6 +178,21 @@ namespace DOLDatabase.Tables
             set
             {
                 m_groupId = value;
+                Dirty = true;
+            }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public long Expiration
+        {
+            get
+            {
+                return m_expiration;
+            }
+
+            set
+            {
+                m_expiration = value;
                 Dirty = true;
             }
         }

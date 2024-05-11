@@ -30,6 +30,8 @@ GameUtils.Guild.MiscInfos11:		- Tous les bonus des buffs de guilde sont désorma
 GameUtils.Guild.MiscInfos12:		- Les effets bénéfiques de la bannière de guilde sont désormais améliorés de 30% pour le porteur de la bannière ainsi que pour les joueurs environnants.
 GameUtils.Guild.MiscInfos13:		- L'utilisation de /gc territorybanner a été améliorée pour fournir un bonus de 15% aux dégâts magiques et de mêlée pour tous les gardes du territoire, tout en augmentant également leur chance de coup critique de 10%.
 
+GameUtils.Guild.Territory.TerritoryExpired:        Your control over the territory {0} has ended!
+
 GameUtils.Guild.Banner.BannerInGroup:			Quelqu'un dans votre groupe a déjà une bannière active!
 GameUtils.Guild.Banner.BannerNoGroup:			Vous avez quitté le groupe et votre bannière disparaît!
 GameUtils.Guild.Banner.LeavesGroup:				Vous avez perdu les effets de la bannière de {0}!

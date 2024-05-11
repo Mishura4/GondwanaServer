@@ -1,6 +1,7 @@
 ﻿using DOL.Database;
 using DOL.GS;
 using DOL.GS.Keeps;
+using DOL.MobGroups;
 using DOLDatabase.Tables;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace DOL.Territories
         : Territory
     {
         /// <inheritdoc />
-        public RvRTerritory(Zone zone, List<IArea> areas, string name, GameNPC boss, Vector3? portalPosition, ushort regionID, string groupId) : base(zone, areas, name, boss, portalPosition, regionID, groupId)
+        public RvRTerritory(Zone zone, List<IArea> areas, string name, GameNPC boss, Vector3? portalPosition, ushort regionID, MobGroup group) : base(eType.Normal, zone, areas, name, boss, portalPosition, regionID, group)
         {
             //add new areas to region
             //only in memory

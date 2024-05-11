@@ -332,9 +332,9 @@ namespace DOL.Territories
             return null;
         }
 
-        public bool AddTerritory(IArea area, string areaId, ushort regionId, string groupId, GameNPC boss)
+        public bool AddTerritory(Territory.eType type, IArea area, string areaId, ushort regionId, MobGroup group = null, GameNPC boss = null)
         {
-            if (!WorldMgr.Regions.TryGetValue(regionId, out Region region) || groupId == null || boss == null || areaId == null)
+            if (!WorldMgr.Regions.TryGetValue(regionId, out Region region) || areaId == null)
             {
                 return false;
             }
@@ -351,7 +351,7 @@ namespace DOL.Territories
                 return false;
             }
 
-            var territory = new Territory(zone, new List<IArea>{area}, (area as AbstractArea)?.Description ?? "New territory", boss, new Vector3(coords.X, coords.Y, coords.Z), regionId, groupId);
+            var territory = new Territory(type, zone, new List<IArea>{area}, (area as AbstractArea)?.Description ?? "New territory", boss, new Vector3(coords.X, coords.Y, coords.Z), regionId, group);
             this.Territories.Add(territory);
 
             try

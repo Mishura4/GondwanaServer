@@ -30,6 +30,8 @@ GameUtils.Guild.MiscInfos11:		- All Guild buff Bonuses are now improved by 100%,
 GameUtils.Guild.MiscInfos12:		- Guild banner’s beneficial effects are now improved by 30% for the banner’s carrier and surrounding players.
 GameUtils.Guild.MiscInfos13:		- /gc territorybanner usage has been upgraded to provide a 15% bonus to spell and melee damages for all territory guards, while also increasing their critical hit chance by 10%.
 
+GameUtils.Guild.Territory.TerritoryExpired:     Your control over the territory {0} has ended!
+
 GameUtils.Guild.Banner.BannerInGroup:			Someone in your group already has a guild banner active!
 GameUtils.Guild.Banner.BannerNoGroup:			You have left the group and your guild banner disappears!
 GameUtils.Guild.Banner.LeavesGroup:				You have lost the effects of {0}'s guild banner!

@@ -7,6 +7,7 @@ using DOL.GS.PacketHandler;
 using DOL.MobGroups;
 using DOL.Territories;
 using DOLDatabase.Tables;
+using Microsoft.Diagnostics.Runtime;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -104,7 +105,7 @@ namespace DOL.commands.gmcommands
                             break;
                         }
 
-                        bool saved = TerritoryManager.Instance.AddTerritory(area, areaId, areaDb.Region, groupId, mobinfo.Mob);
+                        bool saved = TerritoryManager.Instance.AddTerritory(Territory.eType.Normal, area, areaId, areaDb.Region, group, mobinfo.Mob);
                         if (!saved)
                         {
                             client.SendTranslation("Commands.GM.GMTerritories.SaveFailed", eChatType.CT_System, eChatLoc.CL_SystemWindow, name);
@@ -113,6 +114,59 @@ namespace DOL.commands.gmcommands
                         client.SendTranslation("Commands.GM.GMTerritories.Saved", eChatType.CT_System, eChatLoc.CL_SystemWindow, name, area.Description);
                         break;
                     }
+
+                case "createsub":
+                    {
+                        if (args.Length < 5)
+                        {
+                            DisplaySyntax(client);
+                            return;
+                        }
+
+                        areaId = args[3];
+                        string name = args[2];
+
+                        if (string.IsNullOrEmpty(areaId) || string.IsNullOrEmpty(name))
+                        {
+                            DisplaySyntax(client);
+                            break;
+                        }
+
+                        var areaDb = GameServer.Database.SelectObject<DBArea>(DB.Column("Area_ID").IsEqualTo(areaId));
+                        if (areaDb == null)
+                        {
+                            client.SendTranslation("Commands.GM.GMTerritories.NoSuchArea", eChatType.CT_System, eChatLoc.CL_SystemWindow, areaId);
+                            break;
+                        }
+
+                        if (!WorldMgr.Regions.TryGetValue(areaDb.Region, out GS.Region region))
+                        {
+                            client.SendTranslation("Commands.GM.GMTerritories.AreaBadRegion", eChatType.CT_System, eChatLoc.CL_SystemWindow, areaId, areaDb.Region);
+                            return;
+                        }
+
+                        AbstractArea area = region.Zones.SelectMany(z => z.GetAreas().OfType<AbstractArea>()).FirstOrDefault(a => string.Equals(a.DbArea?.ObjectId, areaId));
+                        if (area == null)
+                        {
+                            client.SendTranslation("Commands.GM.GMTerritories.NoSuchArea", eChatType.CT_System, eChatLoc.CL_SystemWindow, areaId);
+                            break;
+                        }
+
+                        if (area.ZoneIn == null)
+                        {
+                            client.SendTranslation("Commands.GM.GMTerritories.NoZoneForArea", eChatType.CT_System, eChatLoc.CL_SystemWindow, areaId);
+                            return;
+                        }
+
+                        bool saved = TerritoryManager.Instance.AddTerritory(Territory.eType.Subterritory, area, areaId, areaDb.Region);
+                        if (!saved)
+                        {
+                            client.SendTranslation("Commands.GM.GMTerritories.SaveFailed", eChatType.CT_System, eChatLoc.CL_SystemWindow, name);
+                            break;
+                        }
+                        client.SendTranslation("Commands.GM.GMTerritories.Saved", eChatType.CT_System, eChatLoc.CL_SystemWindow, name, area.Description);
+                    }
+                    break;
 
                 case "add":
                     {

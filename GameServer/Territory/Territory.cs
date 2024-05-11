@@ -7,6 +7,7 @@ using DOL.GS.PropertyCalc;
 using DOL.GS.ServerProperties;
 using DOL.GS.Spells;
 using DOL.Language;
+using DOL.MobGroups;
 using DOLDatabase.Tables;
 using log4net;
 using System;
@@ -18,6 +19,7 @@ using System.Numerics;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 using static DOL.GS.Area;
 using static DOL.GS.GameObject;
 
@@ -50,6 +52,7 @@ namespace DOL.Territories
             this.BonusResist = new();
             this.Mobs = this.GetMobsInTerritory();
             this.NumMercenaries = Mobs.Count(n => n.IsMercenary);
+            this.Expiration = db.Expiration;
             this.SetBossAndMobsInEventInTerritory();
             this.SaveOriginalGuilds();
             this.LoadBonus(db.Bonus);
@@ -87,13 +90,14 @@ namespace DOL.Territories
                 }
             }
             guild_id = db.OwnerGuildID;
+            ClaimedTime = db.ClaimedTime;
 
             if (!IsNeutral())
             {
                 OwnerGuild = GuildMgr.GetGuildByGuildID(guild_id);
                 if (OwnerGuild == null)
                 {
-                    log.Error($"Territory Manager cant find guild {guild_id}");
+                    log.Warn($"Territory {Name} ({db.ObjectId}) is owned by guild with ID {guild_id} in the database but no guild with this ID was found");
                 }
                 else
                 {
@@ -103,17 +107,19 @@ namespace DOL.Territories
                     }
                 }
             }
+            Expiration = db.Expiration;
         }
 
-        public Territory(Zone zone, List<IArea> areas, string name, GameNPC boss, Vector3? portalPosition, ushort regionID, string groupId)
+        public Territory(eType type, Zone zone, List<IArea> areas, string name, GameNPC boss, Vector3? portalPosition, ushort regionID, MobGroup group = null)
         {
             this.ID = Guid.NewGuid().ToString();
+            this.Type = type;
             this.Areas = areas;
             this.PortalPosition = portalPosition;
             this.Zone = zone;
             this.RegionId = regionID;
             this.Name = name;
-            this.GroupId = groupId;
+            this.GroupId = group?.GroupId ?? string.Empty;
             this.BossId = boss?.InternalID;
             this.Boss = boss;
             this.OriginalGuilds = new Dictionary<string, string>();
@@ -124,6 +130,12 @@ namespace DOL.Territories
             this.SaveOriginalGuilds();
             this.IsBannerSummoned = false;
             guild_id = null;
+        }
+
+        public enum eType
+        {
+            Normal = 0,
+            Subterritory = 1
         }
 
         /// <summary>
@@ -182,6 +194,12 @@ namespace DOL.Territories
         }
 
         public Zone Zone
+        {
+            get;
+            set;
+        }
+
+        public eType Type
         {
             get;
             set;
@@ -275,6 +293,29 @@ namespace DOL.Territories
             private set;
         }
 
+        private long m_expiration;
+
+        public long Expiration // in minutes
+        {
+            get => m_expiration;
+            set
+            {
+                lock (m_lockObject)
+                {
+                    m_expiration = value;
+                    StartExpireTimer();
+                }
+            }
+        }
+
+        private Timer m_expirationTimer;
+
+        public DateTime? ClaimedTime
+        {
+            get;
+            set;
+        }
+
         private readonly Object m_lockObject = new();
 
         private Guild? m_ownerGuild;
@@ -304,6 +345,7 @@ namespace DOL.Territories
                         }
                         bool save = !string.Equals(value.GuildID, guild_id);
                         SetGuildOwner(value, save);
+                        StartExpireTimer();
                         if (IsBannerSummoned)
                             ToggleBannerUnsafe(true);
                     }
@@ -340,6 +382,7 @@ namespace DOL.Territories
                 NumMercenaries = 0;
             }
 
+            ClaimedTime = DateTime.Now;
             guild.AddTerritory(this, saveChange);
             guild_id = guild.GuildID;
             m_ownerGuild = guild;
@@ -348,7 +391,50 @@ namespace DOL.Territories
             Boss.GuildName = guild.Name;
 
             if (saveChange)
-                SaveIntoDatabase();
+                SaveIntoDatabaseUnsafe();
+        }
+
+        private void StartExpireTimer()
+        {
+            m_expirationTimer?.Stop();
+            if (!string.IsNullOrEmpty(guild_id) && m_expiration > 0)
+            {
+                DateTime now = DateTime.Now;
+                if (ClaimedTime == null)
+                {
+                    log.Warn($"Territory {Name} ({ID}) owned by guild {OwnerGuild?.Name} ({guild_id}) has an expiration but no claim timestamp ; timer starts now");
+                    ClaimedTime = DateTime.Now;
+                    SaveIntoDatabaseUnsafe();
+                }
+                DateTime expire = ClaimedTime.Value.AddMinutes(m_expiration);
+
+                if (expire <= now)
+                {
+                    OwnerGuild?.SendMessageToGuildMembersKey("GameUtils.Guild.Territory.TerritoryExpired", eChatType.CT_Guild, eChatLoc.CL_ChatWindow, Name);
+                    ReleaseTerritory();
+                }
+                else
+                {
+                    m_expirationTimer = new Timer();
+                    m_expirationTimer.Elapsed += ExpireTimerCallback;
+                    m_expirationTimer.Interval = (expire - now).TotalMilliseconds;
+                    m_expirationTimer.Start();
+                }
+            }
+        }
+
+        private void ExpireTimerCallback(object sender, ElapsedEventArgs args)
+        {
+            Guild guild;
+
+            lock (m_lockObject)
+            {
+                m_expirationTimer?.Stop();
+                m_expirationTimer = null;
+                guild = m_ownerGuild;
+                ReleaseTerritory();
+            }
+            guild?.SendMessageToGuildMembersKey("GameUtils.Guild.Territory.TerritoryExpired", eChatType.CT_Guild, eChatLoc.CL_ChatWindow);
         }
 
         private void ChangeMagicAndPhysicalResistance(GameNPC mob, int value)
@@ -448,7 +534,7 @@ namespace DOL.Territories
             lock (m_lockObject)
             {
                 ToggleBannerUnsafe(add);
-                SaveIntoDatabase();
+                SaveIntoDatabaseUnsafe();
             }
         }
 
@@ -459,6 +545,12 @@ namespace DOL.Territories
                 m_ownerGuild.RemoveTerritory(this);
                 m_ownerGuild = null;
             }
+            if (m_expirationTimer != null)
+            {
+                m_expirationTimer.Stop();
+                m_expirationTimer = null;
+            }
+            ClaimedTime = null;
             guild_id = string.Empty;
             ClearPortal();
             ToggleBannerUnsafe(false);
@@ -512,7 +604,7 @@ namespace DOL.Territories
 
             NumMercenaries = 0;
             Boss.RestoreOriginalGuildName();
-            SaveIntoDatabase();
+            SaveIntoDatabaseUnsafe();
         }
 
         private void RefreshEmblem(GameNPC mob)
@@ -879,7 +971,7 @@ namespace DOL.Territories
             return infos;
         }
 
-        public virtual void SaveIntoDatabase()
+        private void SaveIntoDatabaseUnsafe()
         {
             TerritoryDb db = null;
             bool isNew = false;
@@ -905,6 +997,7 @@ namespace DOL.Territories
                 db.ZoneId = this.Zone.ID;
                 db.Bonus = this.SaveBonus();
                 db.IsBannerSummoned = this.IsBannerSummoned;
+                db.ClaimedTime = ClaimedTime;
                 if (this.PortalPosition != null)
                 {
                     db.PortalX = (int)this.PortalPosition.Value.X;
@@ -927,6 +1020,14 @@ namespace DOL.Territories
                 {
                     GameServer.Database.SaveObject(db);
                 }
+            }
+        }
+
+        public virtual void SaveIntoDatabase()
+        {
+            lock (m_lockObject)
+            {
+                SaveIntoDatabaseUnsafe();
             }
         }
     }
