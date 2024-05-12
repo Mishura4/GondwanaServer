@@ -698,7 +698,7 @@ namespace DOL.Language
             return missing;
         }
 
-        public static string TranslateTimeShort(string language, long hours, long minutes = 0, long seconds = 0)
+        public static string TranslateTimeShort(string language, int hours, int minutes = 0, int seconds = 0)
         {
             string retval = "";
             string translation;
@@ -759,14 +759,69 @@ namespace DOL.Language
             return retval;
         }
 
-        public static string TranslateTimeShort(GameClient client, long hours, long minutes = 0, long seconds = 0)
+        public static string TranslateTimeShort(GameClient client, int hours, int minutes = 0, int seconds = 0)
         {
             return TranslateTimeShort(client.Account.Language, hours, minutes, seconds);
         }
 
-        public static string TranslateTimeShort(GamePlayer player, long hours, long minutes = 0, long seconds = 0)
+        public static string TranslateTimeShort(GamePlayer player, int hours, int minutes = 0, int seconds = 0)
         {
             return TranslateTimeShort(player.Client.Account.Language, hours, minutes, seconds);
+        }
+
+        public static string TranslateTimeShort(GameClient client, TimeSpan ts)
+        {
+            return TranslateTimeShort(client.Account.Language, ts.Hours, ts.Minutes, ts.Seconds);
+        }
+
+        public static string TranslateTimeShort(GamePlayer player, TimeSpan ts)
+        {
+            return TranslateTimeShort(player.Client.Account.Language, ts.Hours, ts.Minutes, ts.Seconds);
+        }
+
+        public static string TranslateTimeLong(string language, int hours, int minutes = 0, int seconds = 0)
+        {
+            return TranslateTimeLong(language, new TimeSpan(hours, minutes, seconds));
+        }
+
+        public static string TranslateTimeLong(GameClient client, int hours, int minutes = 0, int seconds = 0)
+        {
+            return TranslateTimeLong(client.Account.Language, hours, minutes, seconds);
+        }
+
+        public static string TranslateTimeLong(GamePlayer player, int hours, int minutes = 0, int seconds = 0)
+        {
+            return TranslateTimeLong(player.Client.Account.Language, hours, minutes, seconds);
+        }
+
+        public static string TranslateTimeLong(string language, TimeSpan ts)
+        {
+            string key = "Language.Time.Long";
+            string translation;
+
+            if ((int)ts.TotalHours > 0)
+            {
+                key += ((int)ts.TotalHours > 1) ? "H" : "m";
+            }
+            if (ts.Minutes > 0)
+            {
+                key += (ts.Minutes > 1) ? "M" : "m";
+            }
+            if (ts.Seconds > 0)
+            {
+                key += (ts.Seconds > 1) ? "S" : "s";
+            }
+            return TryGetTranslation(out translation, language, key, ts) ? translation : "(TRANSLATION ERROR)";
+        }
+
+        public static string TranslateTimeLong(GameClient client, TimeSpan ts)
+        {
+            return TranslateTimeLong(client.Account.Language, ts.Hours, ts.Minutes, ts.Seconds);
+        }
+
+        public static string TranslateTimeLong(GamePlayer player, TimeSpan ts)
+        {
+            return TranslateTimeLong(player.Client.Account.Language, ts.Hours, ts.Minutes, ts.Seconds);
         }
 
         #endregion

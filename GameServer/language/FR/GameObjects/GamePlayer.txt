@@ -447,6 +447,6 @@ GameObjects.GamePlayer.RvR.Occupied:                    Je suis occupé pour le 
 GameObjects.GamePlayer.RvR.Interrupt:                   Vous avez été interrompu.
 GameObjects.GamePlayer.RvR.Too.Far:                     Vous vous êtes trop éloigné.
 GameObjects.GamePlayer.RvR.Capture.Timer:               Prise du fort
-GameObjects.GamePlayer.RvR.Capture.Start:               {0} commence à prendre le contrôle du fort! 
+GameObjects.GamePlayer.RvR.Capture.Start:               {0} commence à prendre le contrôle du fort!
 
 GameObjects.GamePlayer.AddToWorld.SpecsPointsIncorrect:		Your Specs points total was incorrect. Now corrected, please train again.

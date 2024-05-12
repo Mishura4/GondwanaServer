@@ -11,6 +11,7 @@ Commands.GM.GMTerritories.Resist:						resist: <nature|crush|slash|thrust|body|c
 
 Commands.GM.GMTerritories.TerritoryNotFound:			Impossible de trouver le territoire avec ID ou areaID '{0}'
 Commands.GM.GMTerritories.NotInTerritory:				Vous n'êtes pas dans un territoire! Veuillez spécifier un ID de territoire ou d'area.
+Commands.GM.GMTerritories.NotASubterritory:				Cette commande requiert un sous-territoire créé avec `/gc createsub`!
 Commands.GM.GMTerritories.NoSuchArea:					Impossible de trouver l'area '{0}'
 Commands.GM.GMTerritories.AreaBadRegion:				L'area avec ID '{0}' a une région invalide ('{1}')
 Commands.GM.GMTerritories.NoZoneForArea:				Impossible de trouver une zone contenant l'area avec ID '{0}'

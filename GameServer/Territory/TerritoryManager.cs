@@ -280,7 +280,7 @@ namespace DOL.Territories
                 var seconds = nextPayment % 60;
                 var minutes = nextPayment / 60 % 60;
                 var hours = nextPayment / 3600;
-                timeBeforeRent = LanguageMgr.TranslateTimeShort(player, hours, minutes, seconds);
+                timeBeforeRent = LanguageMgr.TranslateTimeShort(player, (int)hours, (int)minutes, (int)seconds);
             }
             infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.TimeBeforeRent", timeBeforeRent));
             infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.TotalXPBonus", Math.Min(10, ownedTerritories.Count * 2)));

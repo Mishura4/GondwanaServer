@@ -118,7 +118,7 @@ namespace DOL.commands.gmcommands
 
                 case "createsub":
                     {
-                        if (args.Length < 5)
+                        if (args.Length < 4)
                         {
                             DisplaySyntax(client);
                             return;
@@ -166,6 +166,33 @@ namespace DOL.commands.gmcommands
                             break;
                         }
                         client.SendTranslation("Commands.GM.GMTerritories.Saved", eChatType.CT_System, eChatLoc.CL_SystemWindow, name, area.Description);
+                    }
+                    break;
+
+                case "createlord":
+                    {
+                        territory = TerritoryManager.GetCurrentTerritory(client.Player);
+                        if (territory == null)
+                        {
+                            client.SendTranslation("Commands.GM.GMTerritories.NotInTerritory");
+                            return;
+                        }
+                        if (territory.Type != Territory.eType.Subterritory)
+                        {
+                            client.SendTranslation("Commands.GM.GMTerritories.NotASubterritory");
+                            return;
+                        }
+                        TerritoryLord lord = new TerritoryLord();
+                        lord.Name = "Lord of " + territory.Name;
+                        lord.CurrentRegionID = client.Player.CurrentRegionID;
+                        lord.Position = client.Player.Position;
+                        lord.LoadedFromScript = false;
+                        lord.CurrentTerritory = territory;
+                        lord.AddToWorld();
+                        lord.SaveIntoDatabase();
+                        territory.Boss = lord;
+                        territory.BossId = lord.InternalID;
+                        territory.SaveIntoDatabase();
                     }
                     break;
 
@@ -319,7 +346,7 @@ namespace DOL.commands.gmcommands
                         }
                         else
                         {
-                            client.SendTranslation("Commands.GM.GMTerritories.ExpirationSet", eChatType.CT_System, eChatLoc.CL_ChatWindow, territory.Name, LanguageMgr.TranslateTimeShort(client.Player, 0, minutes));
+                            client.SendTranslation("Commands.GM.GMTerritories.ExpirationSet", eChatType.CT_System, eChatLoc.CL_ChatWindow, territory.Name, LanguageMgr.TranslateTimeShort(client, 0, (int)minutes));
                         }
                         territory.SaveIntoDatabase();
                     }

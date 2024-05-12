@@ -1,11 +1,35 @@
 # Miscellaneous Language
-Language.Hours.Short:								{0}h
-Language.Minutes.Short:								{0}min
-Language.Seconds.Short:								{0}s
-Language.Hours.Long:								{0} hours
-Language.Minutes.Short:								{0} minutes
-Language.Seconds.Short:								{0} seconds
-Language.NotApplicable:								N/A
+Language.Hours.Short:								 {0}h
+Language.Minutes.Short:								 {0}min
+Language.Seconds.Short:								 {0}s
+Language.Hours.Long:								 {0} hours
+Language.Minutes.Short:								 {0} minutes
+Language.Seconds.Short:								 {0} seconds
+Language.NotApplicable:								 N/A
+
+Language.Time.Long:                                  0 seconds
+Language.Time.LongH:                                {0:h} hours
+Language.Time.Longh:                                {0:h} hour
+Language.Time.LongHM:                               {0:h} hours and {0:m} minutes
+Language.Time.LongHm:                               {0:h} hours and {0:m} minute
+Language.Time.LonghM:                               {0:h} hour and {0:m} minutes
+Language.Time.Longhm:                               {0:h} hour and {0:m} minute
+Language.Time.LongHMS:                              {0:h} hours, {0:m} minutes and {0:s} seconds
+Language.Time.LongHMs:                              {0:h} hours, {0:m} minutes and {0:s} second
+Language.Time.LongHmS:                              {0:h} hours, {0:m} minute and {0:s} seconds
+Language.Time.LongHms:                              {0:h} hours, {0:m} minute and {0:s} second
+Language.Time.LonghMS:                              {0:h} hour, {0:m} minutes and {0:s} seconds
+Language.Time.LonghMs:                              {0:h} hour, {0:m} minutes and {0:s} second
+Language.Time.LonghmS:                              {0:h} hour, {0:m} minute and {0:s} seconds
+Language.Time.Longhms:                              {0:h} hour, {0:m} minute and {0:s} second
+Language.Time.LongM:                                {0:m} minutes
+Language.Time.Longm:                                {0:m} minute
+Language.Time.LongMS:                               {0:m} minutes and {0:s} seconds
+Language.Time.LongMs:                               {0:m} minutes and {0:s} second
+Language.Time.LongmS:                               {0:m} minute and {0:s} seconds
+Language.Time.Longms:                               {0:m} minute and {0:s} second
+Language.Time.LongS:                                {0:s} seconds
+Language.Time.Longs:                                {0:s} second
 
 # Stats
 Language.Resists:								Resists

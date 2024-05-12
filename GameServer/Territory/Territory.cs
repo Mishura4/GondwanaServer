@@ -1,6 +1,7 @@
 ﻿using Discord;
 using DOL.Database;
 using DOL.GameEvents;
+using DOL.gameobjects.CustomNPC;
 using DOL.GS;
 using DOL.GS.PacketHandler;
 using DOL.GS.PropertyCalc;
@@ -112,7 +113,6 @@ namespace DOL.Territories
 
         public Territory(eType type, Zone zone, List<IArea> areas, string name, GameNPC boss, Vector3? portalPosition, ushort regionID, MobGroup group = null)
         {
-            this.ID = Guid.NewGuid().ToString();
             this.Type = type;
             this.Areas = areas;
             this.PortalPosition = portalPosition;
@@ -434,7 +434,7 @@ namespace DOL.Territories
                 guild = m_ownerGuild;
                 ReleaseTerritory();
             }
-            guild?.SendMessageToGuildMembersKey("GameUtils.Guild.Territory.TerritoryExpired", eChatType.CT_Guild, eChatLoc.CL_ChatWindow);
+            guild?.SendMessageToGuildMembersKey("GameUtils.Guild.Territory.TerritoryExpired", eChatType.CT_Guild, eChatLoc.CL_ChatWindow, Name);
         }
 
         private void ChangeMagicAndPhysicalResistance(GameNPC mob, int value)
@@ -658,7 +658,8 @@ namespace DOL.Territories
                         int current = 0;
                         this.BonusResist.TryGetValue(resist, out current);
                         this.BonusResist[resist] = current + amount;
-                    } else switch (parsedItem[0])
+                    }
+                    else switch (parsedItem[0])
                     {
                         case "melee":
                             BonusMeleeAbsorption += amount;
@@ -797,7 +798,7 @@ namespace DOL.Territories
 
                 if (area is Circle circle)
                 {
-                    mobs.AddRange(region.GetNPCsInRadius(circle.Position, (ushort)circle.Radius, false, true).Cast<GameNPC>().Where(n => !n.IsCannotTarget));
+                    mobs.AddRange(region.GetNPCsInRadius(circle.Position, (ushort)circle.Radius, false, true).Cast<GameNPC>().Where(n => !n.IsCannotTarget && n is not ShadowNPC));
                 }
                 else
                 {
@@ -986,41 +987,38 @@ namespace DOL.Territories
                 db = GameServer.Database.FindObjectByKey<TerritoryDb>(this.ID);
             }
 
-            if (db != null)
+            db.AreaIDs = String.Join('|', this.Areas.OfType<AbstractArea>().Select(a => a.DbArea.ObjectId));
+            db.Name = this.Name;
+            db.BossMobId = this.BossId;
+            db.GroupId = this.GroupId;
+            db.OwnerGuildID = this.guild_id;
+            db.RegionId = this.RegionId;
+            db.ZoneId = this.Zone.ID;
+            db.Bonus = this.SaveBonus();
+            db.IsBannerSummoned = this.IsBannerSummoned;
+            db.ClaimedTime = ClaimedTime;
+            db.Expiration = Expiration;
+            if (this.PortalPosition != null)
             {
-                db.AreaIDs = String.Join('|', this.Areas.OfType<AbstractArea>().Select(a => a.DbArea.ObjectId));
-                db.Name = this.Name;
-                db.BossMobId = this.BossId;
-                db.GroupId = this.GroupId;
-                db.OwnerGuildID = this.guild_id;
-                db.RegionId = this.RegionId;
-                db.ZoneId = this.Zone.ID;
-                db.Bonus = this.SaveBonus();
-                db.IsBannerSummoned = this.IsBannerSummoned;
-                db.ClaimedTime = ClaimedTime;
-                db.Expiration = Expiration;
-                if (this.PortalPosition != null)
-                {
-                    db.PortalX = (int)this.PortalPosition.Value.X;
-                    db.PortalY = (int)this.PortalPosition.Value.Y;
-                    db.PortalZ = (int)this.PortalPosition.Value.Z;
-                }
-                else
-                {
-                    db.PortalX = null;
-                    db.PortalY = null;
-                    db.PortalZ = null;
-                }
+                db.PortalX = (int)this.PortalPosition.Value.X;
+                db.PortalY = (int)this.PortalPosition.Value.Y;
+                db.PortalZ = (int)this.PortalPosition.Value.Z;
+            }
+            else
+            {
+                db.PortalX = null;
+                db.PortalY = null;
+                db.PortalZ = null;
+            }
 
-                if (isNew)
-                {
-                    GameServer.Database.AddObject(db);
-                    this.ID = db.ObjectId;
-                }
-                else
-                {
-                    GameServer.Database.SaveObject(db);
-                }
+            if (isNew)
+            {
+                GameServer.Database.AddObject(db);
+                this.ID = db.ObjectId;
+            }
+            else
+            {
+                GameServer.Database.SaveObject(db);
             }
         }
 

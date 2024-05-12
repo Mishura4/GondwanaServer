@@ -6659,6 +6659,7 @@ namespace DOL.GS
             m_Realm = 0;
             m_name = "new mob";
             m_model = 408;
+            ModelDb = 408;
             //Fill the living variables
             //			CurrentSpeed = 0; // cause position addition recalculation
             MaxSpeedBase = 200;
