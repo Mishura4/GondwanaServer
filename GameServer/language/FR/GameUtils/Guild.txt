@@ -44,6 +44,8 @@ GameUtils.Guild.Territory.Capture.Timer:           Prise du territoire
 GameUtils.Guild.Territory.Capture.Start:           {0} commence à prendre le contrôle du territoire {1}!
 GameUtils.Guild.Territory.Capture.Captured:        {0} a pris le territoire {1}!
 GameUtils.Guild.Territory.Capture.Renewed:         {0} a renouvelé votre contrôle du territoire {1}!
+GameUtils.Guild.Territory.Capture.CapturedPvP:     {0} gagne {1} points de royaume pour avoir capturé {2} des mains de {3}!
+GameUtils.Guild.Territory.Capture.CapturedPvE:     {0} gagne {1} points de royaume pour avoir capturé {2}!
 
 GameUtils.Guild.Banner.BannerInGroup:			Quelqu'un dans votre groupe a déjà une bannière active!
 GameUtils.Guild.Banner.BannerNoGroup:			Vous avez quitté le groupe et votre bannière disparaît!

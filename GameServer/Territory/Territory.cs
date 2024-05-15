@@ -206,6 +206,8 @@ namespace DOL.Territories
             set;
         }
 
+        public bool IsSubterritory => Type == eType.Subterritory;
+
         public List<IArea> Areas
         {
             get;
@@ -353,19 +355,62 @@ namespace DOL.Territories
                     }
                     else
                     {
+                        ClaimedTime = DateTime.Now;
                         if (value == m_ownerGuild)
                         {
                             return;
                         }
-                        bool save = !string.Equals(value.GuildID, guild_id);
-                        ClaimedTime = DateTime.Now;
-                        SetGuildOwner(value, save);
+                        bool captured = !string.Equals(value.GuildID, guild_id);
+                        if (captured)
+                        {
+                            AwardCaptureBonuses(value);
+                        }
+                        SetGuildOwner(value, captured);
                         StartExpireTimer();
                         if (IsBannerSummoned)
                             ToggleBannerUnsafe(true);
                     }
                 }
             }
+        }
+
+        private void AwardCaptureBonuses(Guild guild)
+        {
+            if (OwnerGuild == guild)
+                return;
+
+            string key;
+            long realmPoints = 0;
+
+            if (OwnerGuild == null)
+            {
+                realmPoints = Type == eType.Subterritory ? 150 : 400;
+                guild.SendMessageToGuildMembersKey("GameUtils.Guild.Territory.Capture.CapturedPvE", eChatType.CT_Guild, eChatLoc.CL_ChatWindow, guild.Name, realmPoints, Name);
+            }
+            else
+            {
+                if (Type == eType.Subterritory)
+                {
+                    realmPoints = 250;
+                }
+                else
+                {
+                    realmPoints = OwnerGuild.GuildLevel switch
+                    {
+                        <8 => 500,
+                        <15 => 600,
+                        <20 => 700,
+                        >=20 => 800
+                    };
+
+                    if (IsBannerSummoned)
+                    {
+                        realmPoints += 100;
+                    }
+                }
+                guild.SendMessageToGuildMembersKey("GameUtils.Guild.Territory.Capture.CapturedPvP", eChatType.CT_Guild, eChatLoc.CL_ChatWindow, guild.Name, realmPoints, Name, OwnerGuild.Name);
+            }
+            guild.RealmPoints += realmPoints;
         }
 
         private void SetGuildOwner(Guild guild, bool saveChange)

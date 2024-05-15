@@ -44,6 +44,8 @@ GameUtils.Guild.Territory.Capture.Timer:           Territory capture
 GameUtils.Guild.Territory.Capture.Start:           {0} begins to take control of {1}!
 GameUtils.Guild.Territory.Capture.Captured:        {0} has taken control of {1}!
 GameUtils.Guild.Territory.Capture.Renewed:         {0} has renewed your control of {1}!
+GameUtils.Guild.Territory.Capture.CapturedPvP:     {0} earns {1} realm points for capturing {2} from {3}!
+GameUtils.Guild.Territory.Capture.CapturedPvE:     {0} earns {1} realm points for capturing {2}!
 
 GameUtils.Guild.Banner.BannerInGroup:			Someone in your group already has a guild banner active!
 GameUtils.Guild.Banner.BannerNoGroup:			You have left the group and your guild banner disappears!

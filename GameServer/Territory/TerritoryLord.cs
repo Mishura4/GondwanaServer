@@ -174,14 +174,13 @@ namespace DOL.Territories
             lastClaim = DateTime.Now;
             if (CurrentTerritory.OwnerGuild != player.Guild)
             {
+                player.Guild.SendMessageToGuildMembersKey("GameUtils.Guild.Territory.Capture.Captured", eChatType.CT_Guild, eChatLoc.CL_SystemWindow, player.Name, CurrentTerritory.Name);
                 CurrentTerritory.OwnerGuild = player.Guild;
 
                 foreach (GamePlayer pl in GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE).Cast<GamePlayer>())
                 {
                     pl.SendTranslatedMessage("GameUtils.Guild.Territory.Capture.Captured", eChatType.CT_Important, eChatLoc.CL_SystemWindow, player.GuildName, CurrentTerritory.Name);
                 }
-                player.Guild.SendMessageToGuildMembersKey("GameUtils.Guild.Territory.Capture.Captured", eChatType.CT_Guild, eChatLoc.CL_SystemWindow, player.Name, CurrentTerritory.Name);
-                player.GainGuildMeritPoints(800);
                 NewsMgr.CreateNews("GameUtils.Guild.Territory.Capture.Captured", 0, eNewsType.PvE, false, true, player.GuildName, CurrentTerritory.Name);
             }
             else
