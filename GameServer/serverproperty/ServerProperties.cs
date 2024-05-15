@@ -24,6 +24,7 @@ using System.Linq;
 
 using DOL.Database;
 using log4net;
+using System.Numerics;
 
 namespace DOL.GS.ServerProperties
 {
@@ -2737,6 +2738,15 @@ namespace DOL.GS.ServerProperties
 
         [ServerProperty("territory", "territory_defender_price", "Price of a defender for a territory, in gold", 300)]
         public static int TERRITORY_DEFENDER_PRICE;
+
+        [ServerProperty("territory", "territory_claim_timer_seconds", "For territories that run a timer for capture, how long to run the timer for, in seconds", 30)]
+        public static int TERRITORY_CLAIM_TIMER_SECONDS;
+
+        [ServerProperty("territory", "territory_claim_cooldown_seconds", "For territories that run a timer for capture, how long after a capture before another guild can capture it", 120)]
+        public static int TERRITORY_CLAIM_COOLDOWN_SECONDS;
+
+        [ServerProperty("territory", "territory_renew_percent", "For territories that expire, how much time needs to be left on the expiration timer before the guild can renew it, 0-100 (0 to disable)", (ushort)50)]
+        public static ushort TERRITORY_RENEW_PERCENT;
 
         /// <summary>
         /// Crafting skill gain bonus in capital cities

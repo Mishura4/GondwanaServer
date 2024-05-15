@@ -4,6 +4,7 @@ using DOL.Events;
 using DOL.GameEvents;
 using DOL.GS;
 using DOL.GS.PacketHandler;
+using DOL.GS.ServerProperties;
 using DOL.Language;
 using System;
 using System.Collections.Generic;
@@ -13,9 +14,6 @@ namespace DOL.Territories
 {
     public class TerritoryLord : GameNPC
     {
-        public static int CLAIM_TIME_SECONDS = 30;
-        public static int CLAIM_TIME_BETWEEN_SECONDS = 120;
-
         public DateTime lastClaim = new DateTime(1);
 
         private RegionTimer _claimTimer;
@@ -25,7 +23,7 @@ namespace DOL.Territories
         {
             get
             {
-                return lastClaim.AddSeconds(CLAIM_TIME_BETWEEN_SECONDS) - DateTime.Now;
+                return lastClaim.AddSeconds(Properties.TERRITORY_CLAIM_COOLDOWN_SECONDS) - DateTime.Now;
             }
         }
 
@@ -65,7 +63,8 @@ namespace DOL.Territories
             }
             else
             {
-                if (CurrentTerritory.ClaimedTime != null && CurrentTerritory.Expiration > 0)
+                var renewAvailable = CurrentTerritory.RenewAvailableTime;
+                if (renewAvailable != null && renewAvailable <= DateTime.Now)
                 {
                     string timeStr = LanguageMgr.TranslateTimeLong(player, CurrentTerritory.ClaimedTime.Value.AddMinutes(CurrentTerritory.Expiration) - DateTime.Now);
                     player.SendTranslatedMessage("GameUtils.Guild.Territory.Lord.Renewable", eChatType.CT_System, eChatLoc.CL_PopupWindow, timeStr);
@@ -134,7 +133,7 @@ namespace DOL.Territories
                         Whisper(player, LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.Territory.Lord.TooFar"));
                         return 0;
                     }
-                    if (ticks < CLAIM_TIME_SECONDS * 1000)
+                    if (ticks < Properties.TERRITORY_CLAIM_TIMER_SECONDS * 1000)
                         return 500;
 
                     player.Out.SendCloseTimerWindow();
@@ -145,7 +144,7 @@ namespace DOL.Territories
                 500
             );
 
-            player.Out.SendTimerWindow(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.Territory.Capture.Timer"), CLAIM_TIME_SECONDS);
+            player.Out.SendTimerWindow(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.Territory.Capture.Timer"), Properties.TERRITORY_CLAIM_TIMER_SECONDS);
 
             foreach (GamePlayer pl in GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE).Cast<GamePlayer>())
             {

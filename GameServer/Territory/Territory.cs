@@ -308,6 +308,19 @@ namespace DOL.Territories
             }
         }
 
+        public DateTime? ExpireTime => ClaimedTime?.AddMinutes(Expiration);
+
+        public DateTime? RenewAvailableTime
+        {
+            get
+            {
+                if (Properties.TERRITORY_RENEW_PERCENT == 0)
+                    return null;
+                return ClaimedTime?.AddMinutes(Expiration * (Properties.TERRITORY_RENEW_PERCENT / 100.0f));
+            }
+        }
+
+
         private Timer m_expirationTimer;
 
         public DateTime? ClaimedTime
