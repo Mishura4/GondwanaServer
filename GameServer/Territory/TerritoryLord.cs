@@ -98,7 +98,8 @@ namespace DOL.Territories
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.Territory.Lord.InCombat"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 return true;
             }
-            if (CurrentTerritory.OwnerGuild != null)
+
+            if (CurrentTerritory.OwnerGuild != null && CurrentTerritory.OwnerGuild != player.Guild)
             {
                 TimeSpan cooldown = TimeBeforeClaim;
                 if (cooldown.Ticks > 0)
@@ -174,6 +175,8 @@ namespace DOL.Territories
             else
             {
                 player.Guild.SendMessageToGuildMembersKey("GameUtils.Guild.Territory.Capture.Renewed", eChatType.CT_Guild, eChatLoc.CL_SystemWindow, player.Name, CurrentTerritory.Name);
+                CurrentTerritory.ClaimedTime = lastClaim;
+                CurrentTerritory.SaveIntoDatabase();
             }
         }
     }

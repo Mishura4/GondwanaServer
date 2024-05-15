@@ -344,8 +344,8 @@ namespace DOL.Territories
                             return;
                         }
                         bool save = !string.Equals(value.GuildID, guild_id);
-                        SetGuildOwner(value, save);
                         ClaimedTime = DateTime.Now;
+                        SetGuildOwner(value, save);
                         StartExpireTimer();
                         if (IsBannerSummoned)
                             ToggleBannerUnsafe(true);
