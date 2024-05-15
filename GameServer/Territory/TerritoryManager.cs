@@ -3,6 +3,7 @@ using DOL.events.server;
 using DOL.Events;
 using DOL.GameEvents;
 using DOL.GS;
+using DOL.GS.Commands;
 using DOL.GS.PacketHandler;
 using DOL.GS.PropertyCalc;
 using DOL.GS.ServerProperties;
@@ -115,25 +116,38 @@ namespace DOL.Territories
                     areas.Add(area);
                 }
 
-                var mobinfo = Instance.FindBossFromGroupId(territoryDb.GroupId);
-                if (mobinfo.Error == null)
+                MobInfo mobInfo = new();
+
+                if (!string.IsNullOrEmpty(territoryDb.GroupId))
                 {
-                    if (!territoryDb.BossMobId.Equals(mobinfo.Mob.InternalID))
+                    mobInfo = Instance.FindBossFromGroupId(territoryDb.GroupId);
+
+                    if (!territoryDb.BossMobId.Equals(mobInfo.Mob.InternalID))
                     {
-                        log.Error($"Boss Id does not match from GroupId {territoryDb.GroupId} and Found Bossid from groupId (event search) {mobinfo.Mob.InternalID} , {territoryDb.BossMobId} identified in database");
+                        log.Error($"Territory {territoryDb.Name} ({territoryDb.ObjectId}) has Boss ID {territoryDb.BossMobId} which does not match boss {mobInfo.Mob.InternalID} from GroupId {territoryDb.GroupId}");
                         continue;
                     }
-
-                    Territory territory = new Territory(zone, areas, mobinfo.Mob, territoryDb);
-
-                    Instance.Territories.Add(territory);
-
-                    count++;
                 }
-                else
+                else if (!string.IsNullOrEmpty(territoryDb.BossMobId))
                 {
-                    log.Error(mobinfo.Error);
+                    mobInfo.Mob = zone.GetNPCsOfZone(eRealm.None).FirstOrDefault(npc => npc.InternalID == territoryDb.BossMobId);
+                    if (mobInfo.Mob == null)
+                    {
+                        mobInfo.Error = $"Could not find boss with ID {territoryDb.BossMobId} for territory {territoryDb.Name} ({territoryDb.ObjectId})";
+                    }
                 }
+
+                if (mobInfo.Error != null)
+                {
+                    log.Error(mobInfo.Error);
+                    return;
+                }
+
+                Territory territory = new Territory(zone, areas, mobInfo.Mob, territoryDb);
+
+                Instance.Territories.Add(territory);
+
+                count++;
             }
 
             GuildMgr.GetAllGuilds().ForEach(g => g.LoadTerritories());
