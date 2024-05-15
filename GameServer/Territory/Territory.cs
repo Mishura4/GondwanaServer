@@ -58,6 +58,7 @@ namespace DOL.Territories
             this.SaveOriginalGuilds();
             this.LoadBonus(db.Bonus);
             this.IsBannerSummoned = db.IsBannerSummoned;
+            this.Type = (eType)db.Type;
             if (db.GuardNPCTemplate != null)
             {
                 this.GuardNPCTemplate = NpcTemplateMgr.GetTemplate(db.GuardNPCTemplate.Value);
@@ -373,7 +374,10 @@ namespace DOL.Territories
             if (m_ownerGuild != null)
             {
                 m_ownerGuild.RemoveTerritory(this);
-                ToggleBannerUnsafe(false);
+                if (Type != eType.Subterritory)
+                {
+                    ToggleBannerUnsafe(false);
+                }
                 ClearPortal();
                 List<GameNPC> toRemove = new List<GameNPC>();
                 foreach (var mob in Mobs)
@@ -399,6 +403,10 @@ namespace DOL.Territories
             guild.AddTerritory(this, saveChange);
             guild_id = guild.GuildID;
             m_ownerGuild = guild;
+            if (Type == eType.Subterritory)
+            {
+                ToggleBannerUnsafe(true);
+            }
 
             Mobs.ForEach(m => m.GuildName = guild.Name);
             Boss.GuildName = guild.Name;
@@ -491,13 +499,15 @@ namespace DOL.Territories
 
         private void ToggleBannerUnsafe(bool add)
         {
-            var cls = WorldMgr.GetAllPlayingClients().Where(c => c.Player.CurrentZone.ID.Equals(Zone.ID));
-            int mobBannerResist;
+            int mobBannerResist = 0;
 
             if (add)
             {
                 IsBannerSummoned = true;
-                mobBannerResist = Properties.TERRITORYMOB_BANNER_RESIST + (OwnerGuild?.GuildLevel >= 15 ? 15 : 0);
+                if (Type == eType.Normal)
+                {
+                    mobBannerResist = Properties.TERRITORYMOB_BANNER_RESIST + (OwnerGuild?.GuildLevel >= 15 ? 15 : 0);
+                }
             }
             else
             {
@@ -509,17 +519,17 @@ namespace DOL.Territories
             {
                 RefreshEmblem(mob);
 
-                // Update magic and physical resistance bonus
-                ChangeMagicAndPhysicalResistance(mob, mobBannerResist);
-
-                cls.Foreach(c => c.Out.SendLivingEquipmentUpdate(mob));
+                if (mobBannerResist != 0)
+                {
+                    // Update magic and physical resistance bonus
+                    ChangeMagicAndPhysicalResistance(mob, mobBannerResist);
+                }
             }
 
             // Update magic and physical resistance bonus
             ChangeMagicAndPhysicalResistance(Boss, mobBannerResist);
             CurrentBannerResist += mobBannerResist;
             RefreshEmblem(Boss);
-            cls.Foreach(c => c.Out.SendLivingEquipmentUpdate(Boss));
 
 
             foreach (IArea iarea in Areas)
@@ -625,11 +635,13 @@ namespace DOL.Territories
             if (mob is not { ObjectState: not eObjectState.Deleted, CurrentRegion: not null, Inventory: { VisibleItems: not null } })
                 return;
 
+            bool changed = false;
             if (IsBannerSummoned && m_ownerGuild != null)
             {
                 foreach (var item in mob.Inventory.VisibleItems.Where(i => i.SlotPosition == 26 || i.SlotPosition == 11))
                 {
                     item.Emblem = m_ownerGuild.Emblem;
+                    changed = true;
                 }
             }
             else
@@ -642,11 +654,12 @@ namespace DOL.Territories
                     if (equipment != null)
                     {
                         item.Emblem = equipment.Emblem;
+                        changed = true;
                     }
                 }
             }
 
-            if (mob.ObjectState == eObjectState.Active)
+            if (changed && mob.ObjectState == eObjectState.Active)
                 mob.BroadcastLivingEquipmentUpdate();
         }
 
