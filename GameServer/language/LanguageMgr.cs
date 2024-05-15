@@ -82,9 +82,10 @@ namespace DOL.Language
                 if (args.Length > 0)
                     translation = string.Format(translation, args);
             }
-            catch
+            catch (Exception ex)
             {
-                log.ErrorFormat("[Language-Manager] Parameter number incorrect: {0} for language {1}, Arg count = {2}, sentence = '{3}', args[0] = '{4}'", translationId, language, args.Length, translation, args.Length > 0 ? args[0] : "null");
+                log.ErrorFormat("[Language-Manager] Error in translating {0} for language {1}, Arg count = {2}, sentence = '{3}', args[0] = '{4}':\n", translationId, language, args.Length, translation, args.Length > 0 ? args[0] : "null");
+                log.Error(ex);
             }
             return true;
         }

@@ -26,28 +26,28 @@ Language.Seconds.Short:								{0} secondes
 Language.NotApplicable:								N/A
 
 Language.Time.Long:                             0 secondes
-Language.Time.LongH:                                {0:h} heures
-Language.Time.Longh:                                {0:h} heure
-Language.Time.LongHM:                               {0:h} heures et {0:m} minutes
-Language.Time.LongHm:                               {0:h} heures et {0:m} minute
-Language.Time.LonghM:                               {0:h} heure et {0:m} minutes
-Language.Time.Longhm:                               {0:h} heure et {0:m} minute
-Language.Time.LongHMS:                              {0:h} heures, {0:m} minutes et {0:s} secondes
-Language.Time.LongHMs:                              {0:h} heures, {0:m} minutes et {0:s} seconde
-Language.Time.LongHmS:                              {0:h} heures, {0:m} minute et {0:s} secondes
-Language.Time.LongHms:                              {0:h} heures, {0:m} minute et {0:s} seconde
-Language.Time.LonghMS:                              {0:h} heure, {0:m} minutes et {0:s} secondes
-Language.Time.LonghMs:                              {0:h} heure, {0:m} minutes et {0:s} seconde
-Language.Time.LonghmS:                              {0:h} heure, {0:m} minute et {0:s} secondes
-Language.Time.Longhms:                              {0:h} heure, {0:m} minute et {0:s} seconde
-Language.Time.LongM:                                {0:m} minutes
-Language.Time.Longm:                                {0:m} minute
-Language.Time.LongMS:                               {0:m} minutes et {0:s} secondes
-Language.Time.LongMs:                               {0:m} minutes et {0:s} seconde
-Language.Time.LongmS:                               {0:m} minute et {0:s} secondes
-Language.Time.Longms:                               {0:m} minute et {0:s} seconde
-Language.Time.LongS:                                {0:s} secondes
-Language.Time.Longs:                                {0:s} seconde
+Language.Time.LongH:                                {0:%h} heures
+Language.Time.Longh:                                {0:%h} heure
+Language.Time.LongHM:                               {0:%h} heures et {0:%m} minutes
+Language.Time.LongHm:                               {0:%h} heures et {0:%m} minute
+Language.Time.LonghM:                               {0:%h} heure et {0:%m} minutes
+Language.Time.Longhm:                               {0:%h} heure et {0:%m} minute
+Language.Time.LongHMS:                              {0:%h} heures, {0:%m} minutes et {0:%s} secondes
+Language.Time.LongHMs:                              {0:%h} heures, {0:%m} minutes et {0:%s} seconde
+Language.Time.LongHmS:                              {0:%h} heures, {0:%m} minute et {0:%s} secondes
+Language.Time.LongHms:                              {0:%h} heures, {0:%m} minute et {0:%s} seconde
+Language.Time.LonghMS:                              {0:%h} heure, {0:%m} minutes et {0:%s} secondes
+Language.Time.LonghMs:                              {0:%h} heure, {0:%m} minutes et {0:%s} seconde
+Language.Time.LonghmS:                              {0:%h} heure, {0:%m} minute et {0:%s} secondes
+Language.Time.Longhms:                              {0:%h} heure, {0:%m} minute et {0:%s} seconde
+Language.Time.LongM:                                {0:%m} minutes
+Language.Time.Longm:                                {0:%m} minute
+Language.Time.LongMS:                               {0:%m} minutes et {0:%s} secondes
+Language.Time.LongMs:                               {0:%m} minutes et {0:%s} seconde
+Language.Time.LongmS:                               {0:%m} minute et {0:%s} secondes
+Language.Time.Longms:                               {0:%m} minute et {0:%s} seconde
+Language.Time.LongS:                                {0:%s} secondes
+Language.Time.Longs:                                {0:%s} seconde
 
 # Stats
 Language.Resists:								Résistances
