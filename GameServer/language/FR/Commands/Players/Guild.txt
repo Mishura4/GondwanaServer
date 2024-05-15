@@ -267,6 +267,8 @@ Commands.Players.Guild.Withdrawamount:			Votre taxe de {0} va dans la caisse de 
 Commands.Players.Guild.WithdrawInvalid:			Ce n'est pas un montant valide.
 Commands.Players.Guild.WithdrawTooMuch:			Vous ne pouvez plus ajouter d'argent dans la caisse de guilde.
 
+Commands.Players.Guild.CantInSubterritory:		Vous ne pouvez pas utiliser cette commande dans un sous-territoire.
+
 Commands.Players.Guild.RealmPointsSet:			La guilde {0} a maintenant {1} points de royaume.
 Commands.Players.Guild.MeritPointsSet:			La guilde {0} a maintenant {1} points de mérite.
 Commands.Players.Guild.BountyPointsSet:			La guilde {0} a maintenant {1} points de butin.
@@ -281,6 +283,7 @@ Commands.Players.Guild.JailRelease.ConfirmCost:			Relâcher {0} de prison coûte
 Commands.Players.Guild.JailRelease.NotEnoughMoney:		Votre banque de guilde n'a pas assez d'or pour relâcher {0}.
 Commands.Players.Guild.JailRelease.Released:			{0} a été relâché(e) de prison par {1}.
 
+Commands.Players.Guild.TerritoryBanner.NotInTerritory:	Vous ne pouvez pas invoquer vos bannières de guilde en dehors d'un territoire contrôlé par votre guilde.
 Commands.Players.Guild.TerritoryBanner.Denied:			Vous devez être au moins rang 2 pour invoquer un portail de guilde.
 Commands.Players.Guild.TerritoryBanner.ConfirmCost:		Invoquer vos bannières dans ce territoire coûtera {0} points de mérite à votre guilde. Confirmer?
 Commands.Players.Guild.TerritoryBanner.NotEnoughMerit:	Votre guilde doit avoir {0} points de mérite pour invoquer les bannières de territoire.

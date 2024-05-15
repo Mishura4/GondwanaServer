@@ -1754,46 +1754,56 @@ namespace DOL.GS.Commands
                             }
 
                             var territory = TerritoryManager.GetCurrentTerritory(client.Player);
-                            if (territory?.IsOwnedBy(client.Player) == true)
+                            if (territory == null)
                             {
+                                client.SendTranslation("Commands.Players.Guild.TerritoryBanner.NotInTerritory");
+                                return;
+                            }
 
-                                if (client.Player.GuildRank.RankLevel > 2 && client.Account.PrivLevel == 1)
-                                {
-                                    client.SendTranslation("Commands.Players.Guild.TerritoryBanner.Denied");
-                                    return;
-                                }
+                            if (territory.Type == Territory.eType.Subterritory)
+                            {
+                                client.SendTranslation("Commands.Players.Guild.CantInSubterritory");
+                                return;
+                            }
 
-                                if (territory.IsBannerSummoned && client.Account.PrivLevel == 1)
-                                {
-                                    client.SendTranslation("Commands.Players.Guild.TerritoryBanner.AlreadySummoned");
-                                    return;
-                                }
+                            if (!territory.IsOwnedBy(client.Player))
+                            {
+                                client.SendTranslation("Commands.Players.Guild.TerritoryBanner.NotInTerritory");
+                                return;
+                            }
 
-                                client.Out.SendCustomDialog(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.TerritoryBanner.ConfirmCost", Properties.GUILD_BANNER_MERIT_PRICE), (GamePlayer player, byte response) =>
+                            if (client.Player.GuildRank.RankLevel > 2 && client.Account.PrivLevel == 1)
+                            {
+                                client.SendTranslation("Commands.Players.Guild.TerritoryBanner.Denied");
+                                return;
+                            }
+
+                            if (territory.IsBannerSummoned && client.Account.PrivLevel == 1)
+                            {
+                                client.SendTranslation("Commands.Players.Guild.TerritoryBanner.AlreadySummoned");
+                                return;
+                            }
+
+                            client.Out.SendCustomDialog(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.TerritoryBanner.ConfirmCost", Properties.GUILD_BANNER_MERIT_PRICE), (GamePlayer player, byte response) =>
+                            {
+                                if (response == 1)
                                 {
-                                    if (response == 1)
+                                    if (player.Guild.MeritPoints < (long)Properties.GUILD_BANNER_MERIT_PRICE)
                                     {
-                                        if (player.Guild.MeritPoints < (long)Properties.GUILD_BANNER_MERIT_PRICE)
-                                        {
-                                            client.SendTranslation("Commands.Players.Guild.TerritoryBanner.NotEnoughMerit", eChatType.CT_System, eChatLoc.CL_SystemWindow, Properties.GUILD_BANNER_MERIT_PRICE);
-                                            return;
-                                        }
-
-                                        player.Guild.RemoveMeritPoints(Properties.GUILD_BANNER_MERIT_PRICE);
-                                        if (territory.IsBannerSummoned)
-                                            territory.ToggleBanner(false);
-                                        territory.ToggleBanner(true);
-                                        foreach (GamePlayer guildPlayer in player.Guild.GetListOfOnlineMembers())
-                                        {
-                                            guildPlayer.SendTranslatedMessage("Commands.Players.Guild.TerritoryBanner.Summoned", eChatType.CT_Guild, eChatLoc.CL_SystemWindow, guildPlayer.GetPersonalizedName(player), territory.Name);
-                                        }
+                                        client.SendTranslation("Commands.Players.Guild.TerritoryBanner.NotEnoughMerit", eChatType.CT_System, eChatLoc.CL_SystemWindow, Properties.GUILD_BANNER_MERIT_PRICE);
+                                        return;
                                     }
-                                });
-                            }
-                            else
-                            {
-                                client.Out.SendMessage("Vous devez etre dans un Territoire et le posséder pour poser votre bannière", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                            }
+
+                                    player.Guild.RemoveMeritPoints(Properties.GUILD_BANNER_MERIT_PRICE);
+                                    if (territory.IsBannerSummoned)
+                                        territory.ToggleBanner(false);
+                                    territory.ToggleBanner(true);
+                                    foreach (GamePlayer guildPlayer in player.Guild.GetListOfOnlineMembers())
+                                    {
+                                        guildPlayer.SendTranslatedMessage("Commands.Players.Guild.TerritoryBanner.Summoned", eChatType.CT_Guild, eChatLoc.CL_SystemWindow, guildPlayer.GetPersonalizedName(player), territory.Name);
+                                    }
+                                }
+                            });
                         }
                         break;
 
@@ -1826,61 +1836,67 @@ namespace DOL.GS.Commands
 
                             Guild guild = player.Guild;
                             var territory = TerritoryManager.GetCurrentTerritory(player);
-                            if (territory?.IsOwnedBy(player) == true && GameServer.ServerRules.IsInPvPArea(player))
-                            {
-                                if (territory.PortalPosition == null)
-                                {
-                                    client.SendTranslation("Commands.Players.Guild.TerritoryPortal.NotSupported");
-                                    return;
-                                }
-                                if (client.Account.PrivLevel == 1)
-                                {
-                                    if (player.GuildRank.RankLevel > 4)
-                                    {
-                                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.TerritoryPortal.Denied"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                                        return;
-                                    }
-
-                                    var availableTick = guild.GuildPortalAvailableTick;
-                                    if (availableTick > GameServer.Instance.TickCount)
-                                    {
-                                        client.Out.SendMessage(string.Format(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.TerritoryPortal.Cooldown")), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                                        return;
-                                    }
-
-                                    if (guild.MeritPoints < (long)Properties.GUILD_PORTAL_MERIT_PRICE)
-                                    {
-                                        client.Out.SendMessage(string.Format(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.TerritoryPortal.NotEnoughMerit"), Properties.GUILD_PORTAL_MERIT_PRICE), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                                        return;
-                                    }
-                                }
-
-                                client.Out.SendCustomDialog(string.Format(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.TerritoryPortal.ConfirmCost"), client.Account.PrivLevel > 1 ? 0 : Properties.GUILD_PORTAL_MERIT_PRICE), (GamePlayer player, byte response) =>
-                                {
-                                    if (response == 1)
-                                    {
-                                        if (client.Account.PrivLevel == 1)
-                                        {
-                                            if (player.Guild.MeritPoints < (long)Properties.GUILD_PORTAL_MERIT_PRICE)
-                                            {
-                                                client.Out.SendMessage(string.Format(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.TerritoryPortal.NotEnoughMerit"), Properties.GUILD_PORTAL_MERIT_PRICE), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                                                return;
-                                            }
-
-                                            player.Guild.RemoveMeritPoints(Properties.GUILD_PORTAL_MERIT_PRICE);
-                                            if (Properties.GUILD_COMBAT_ZONE_COOLDOWN > 0)
-                                            {
-                                                player.Guild.GuildPortalAvailableTick = GameServer.Instance.TickCount + (uint)(Properties.GUILD_PORTAL_COOLDOWN) * 60 * 1000;
-                                            }
-                                        }
-                                        territory.SpawnPortalNpc(player);
-                                    }
-                                });
-                            }
-                            else
+                            if (territory == null)
                             {
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.TerritoryPortal.NotInTerritory"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                return;
                             }
+
+                            if (territory.PortalPosition == null)
+                            {
+                                client.SendTranslation("Commands.Players.Guild.TerritoryPortal.NotSupported");
+                                return;
+                            }
+
+                            if (!territory.IsOwnedBy(player) || !GameServer.ServerRules.IsInPvPArea(player))
+                            {
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.TerritoryPortal.NotInTerritory"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                return;
+                            }
+
+                            if (client.Account.PrivLevel == 1)
+                            {
+                                if (player.GuildRank.RankLevel > 4)
+                                {
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.TerritoryPortal.Denied"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    return;
+                                }
+
+                                var availableTick = guild.GuildPortalAvailableTick;
+                                if (availableTick > GameServer.Instance.TickCount)
+                                {
+                                    client.Out.SendMessage(string.Format(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.TerritoryPortal.Cooldown")), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    return;
+                                }
+
+                                if (guild.MeritPoints < (long)Properties.GUILD_PORTAL_MERIT_PRICE)
+                                {
+                                    client.Out.SendMessage(string.Format(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.TerritoryPortal.NotEnoughMerit"), Properties.GUILD_PORTAL_MERIT_PRICE), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    return;
+                                }
+                            }
+
+                            client.Out.SendCustomDialog(string.Format(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.TerritoryPortal.ConfirmCost"), client.Account.PrivLevel > 1 ? 0 : Properties.GUILD_PORTAL_MERIT_PRICE), (GamePlayer player, byte response) =>
+                            {
+                                if (response == 1)
+                                {
+                                    if (client.Account.PrivLevel == 1)
+                                    {
+                                        if (player.Guild.MeritPoints < (long)Properties.GUILD_PORTAL_MERIT_PRICE)
+                                        {
+                                            client.Out.SendMessage(string.Format(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.TerritoryPortal.NotEnoughMerit"), Properties.GUILD_PORTAL_MERIT_PRICE), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                            return;
+                                        }
+
+                                        player.Guild.RemoveMeritPoints(Properties.GUILD_PORTAL_MERIT_PRICE);
+                                        if (Properties.GUILD_COMBAT_ZONE_COOLDOWN > 0)
+                                        {
+                                            player.Guild.GuildPortalAvailableTick = GameServer.Instance.TickCount + (uint)(Properties.GUILD_PORTAL_COOLDOWN) * 60 * 1000;
+                                        }
+                                    }
+                                    territory.SpawnPortalNpc(player);
+                                }
+                            });
                         }
                         break;
 
@@ -1916,6 +1932,12 @@ namespace DOL.GS.Commands
                             if (territory?.IsOwnedBy(player) != true)
                             {
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.BuyDefender.NotInTerritory"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                return;
+                            }
+
+                            if (territory.Type == Territory.eType.Subterritory)
+                            {
+                                client.SendTranslation("Commands.Players.Guild.CantInSubterritory");
                                 return;
                             }
 

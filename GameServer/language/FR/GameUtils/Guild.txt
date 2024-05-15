@@ -30,7 +30,7 @@ GameUtils.Guild.MiscInfos11:		- Tous les bonus des buffs de guilde sont désorma
 GameUtils.Guild.MiscInfos12:		- Les effets bénéfiques de la bannière de guilde sont désormais améliorés de 30% pour le porteur de la bannière ainsi que pour les joueurs environnants.
 GameUtils.Guild.MiscInfos13:		- L'utilisation de /gc territorybanner a été améliorée pour fournir un bonus de 15% aux dégâts magiques et de mêlée pour tous les gardes du territoire, tout en augmentant également leur chance de coup critique de 10%.
 
-GameUtils.Guild.Territory.TerritoryExpired:        Your control over the territory {0} has ended!
+GameUtils.Guild.Territory.TerritoryExpired:        Votre contrôle du terroire {0} se termine!
 GameUtils.Guild.Territory.Lord.NoGuild:            Je n'ai rien à vous dire. Revenez quand vous ferez parti d'une guilde.
 GameUtils.Guild.Territory.Lord.Claimable:          Voulez-vous que mon clan devienne un vasseau de votre guilde? [oui] [non]
 GameUtils.Guild.Territory.Lord.NotClaimable:       Notre clan vient d'entrer dans une alliance avec {0}, attendez {1}!
