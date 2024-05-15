@@ -243,7 +243,7 @@ namespace DOL.Territories
             string language = player.Client?.Account?.Language ?? Properties.SERV_LANGUAGE;
             string neutral = LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.TerritoryNeutral");
 
-            foreach (var territory in this.Territories)
+            foreach (var territory in this.Territories.Where(t => t.Type != Territory.eType.Subterritory))
             {
                 string line = territory.Name + " / " + territory.Zone.Description;
 
