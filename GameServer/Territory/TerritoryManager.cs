@@ -456,7 +456,7 @@ namespace DOL.Territories
 
             int total = 0;
             int counter = 0;
-            foreach (var territory in guild.Territories)
+            foreach (var territory in guild.Territories.Where(t => !t.IsSubterritory))
             {
                 counter++;
                 int tax = counter >= 6 ? DAILY_TAX + 10 : DAILY_TAX;
@@ -467,7 +467,7 @@ namespace DOL.Territories
 
         public void ProceedPayments()
         {
-            foreach (var guildGroup in this.Territories.GroupBy(t => t.OwnerGuild))
+            foreach (var guildGroup in this.Territories.Where(t => !t.IsSubterritory).GroupBy(t => t.OwnerGuild))
             {
                 var guild = guildGroup.Key;
 

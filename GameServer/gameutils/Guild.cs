@@ -391,12 +391,13 @@ namespace DOL.GS
                         this.m_DBguild.Territories = string.Join("|", this.territories.Select(t => t.ID));
                         this.SaveIntoDatabase();
                     }
+                    var count = this.Territories.Count(t => !t.IsSubterritory);
 
-                    if (territories.Count < 6)
+                    if (count < 6)
                     {
                         UpdateTerritoryResists();
                     }
-                    this.TerritoryBonusBountyPoints = Math.Min(territories.Count, 5);
+                    this.TerritoryBonusBountyPoints = Math.Min(count, 5);
                 }
             }
         }
@@ -452,7 +453,9 @@ namespace DOL.GS
                     this.m_DBguild.Territories = this.territories.Any() ? string.Join("|", this.territories.Select(t => t.ID)) : null;
                     this.SaveIntoDatabase();
 
-                    if (this.territories.Count < 6)
+                    var count = this.Territories.Count(t => !t.IsSubterritory);
+
+                    if (count < 6)
                     {
                         UpdateTerritoryResists();
                     }
