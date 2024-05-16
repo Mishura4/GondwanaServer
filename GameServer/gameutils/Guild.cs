@@ -240,7 +240,15 @@ namespace DOL.GS
         /// <summary>
         /// Count of territories at which diminishing returns / penalties are suffered
         /// </summary>
-        public int MaxTerritories => 5;
+        public int MaxTerritories => GuildLevel switch
+        {
+            < 2 => 2,
+            < 4 => 3,
+            < 7 => 4,
+            < 10 => 5,
+            < 15 => 6,
+            >= 15 => 7
+        };
 
         public int TerritoryCount
         {
