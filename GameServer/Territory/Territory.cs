@@ -49,7 +49,7 @@ namespace DOL.Territories
             this.GroupId = db.GroupId;
             this.BossId = boss?.InternalID;
             this.Boss = boss;
-            this.OriginalGuilds = new Dictionary<string, string>();
+            this.OriginalGuilds = new Dictionary<int, string>();
             this.BonusResist = new();
             this.GatherMobsInTerritory();
             this.NumMercenaries = Mobs.Count(n => n.IsMercenary);
@@ -123,7 +123,7 @@ namespace DOL.Territories
             this.GroupId = group?.GroupId ?? string.Empty;
             this.BossId = boss?.InternalID;
             this.Boss = boss;
-            this.OriginalGuilds = new Dictionary<string, string>();
+            this.OriginalGuilds = new Dictionary<int, string>();
             this.BonusResist = new();
             this.GatherMobsInTerritory();
             this.NumMercenaries = Mobs.Count(n => n.IsMercenary);
@@ -142,7 +142,7 @@ namespace DOL.Territories
         /// <summary>
         /// Key: MobId | Value: Original GuildName
         /// </summary>
-        public Dictionary<string, string> OriginalGuilds
+        public Dictionary<int, string> OriginalGuilds
         {
             get;
         }
@@ -606,7 +606,7 @@ namespace DOL.Territories
                     return;
                 }
                 this.Mobs.Add(npc);
-                OriginalGuilds[npc.InternalID] = npc.GuildName;
+                OriginalGuilds[npc.ObjectID] = npc.GuildName ?? string.Empty;
                 if (OwnerGuild != null)
                 {
                     npc.GuildName = OwnerGuild.Name;
@@ -624,7 +624,7 @@ namespace DOL.Territories
                 {
                     return;
                 }
-                if (OriginalGuilds.Remove(npc.InternalID, out string ogGuild))
+                if (OriginalGuilds.Remove(npc.ObjectID, out string ogGuild))
                 {
                     npc.GuildName = ogGuild;
                 }
@@ -667,7 +667,7 @@ namespace DOL.Territories
                 {
                     gameEvents.Mobs.ForEach(m =>
                     {
-                        if (OriginalGuilds.TryGetValue(m.InternalID, out var originalName))
+                        if (OriginalGuilds.TryGetValue(m.ObjectID, out var originalName))
                         {
                             m.GuildName = originalName;
                         }
@@ -682,9 +682,9 @@ namespace DOL.Territories
             List<GameNPC> toRemove = new List<GameNPC>();
             foreach (var mob in Mobs)
             {
-                if (OriginalGuilds.ContainsKey(mob.InternalID))
+                if (OriginalGuilds.TryGetValue(mob.ObjectID, out string ogGuild))
                 {
-                    mob.GuildName = OriginalGuilds[mob.InternalID];
+                    mob.GuildName = ogGuild;
                 }
                 else
                 {
@@ -840,9 +840,9 @@ namespace DOL.Territories
 
         protected void SaveMobOriginalGuildname(GameNPC mob)
         {
-            if (!this.OriginalGuilds.ContainsKey(mob.InternalID))
+            if (!this.OriginalGuilds.ContainsKey(mob.ObjectID))
             {
-                this.OriginalGuilds.Add(mob.InternalID, mob.GuildName ?? string.Empty);
+                this.OriginalGuilds.Add(mob.ObjectID, mob.GuildName ?? string.Empty);
             }
         }
 
@@ -1032,16 +1032,16 @@ namespace DOL.Territories
                     npc = (GameNPC)gasm.CreateInstance(template.ClassType, false); // Propagate exception to the caller
                     npc.LoadTemplate(template);
                 }
-                npc.MoveTo(buyer.CurrentRegionID, buyer.Position, buyer.Heading);
+                npc.CurrentRegion = buyer.CurrentRegion;
+                npc.CurrentRegionID = buyer.CurrentRegionID;
+                npc.Position = buyer.Position;
+                npc.Heading = buyer.Heading;
                 npc.GuildName = OwnerGuild?.Name ?? template.GuildName ?? string.Empty;
                 npc.Flags |= GameNPC.eFlags.MERCENARY | GameNPC.eFlags.NORESPAWN;
                 npc.FlagsDb = (uint)npc.Flags;
                 npc.LoadedFromScript = false;
-                npc.CurrentTerritory = this;
-                RefreshEmblem(npc);
-                npc.AddToWorld();
                 npc.SaveIntoDatabase();
-                Mobs.Add(npc);
+                npc.AddToWorld();
                 NumMercenaries += 1;
             }
             return npc;
