@@ -237,6 +237,11 @@ namespace DOL.GS
             }
         }
 
+        /// <summary>
+        /// Count of territories at which diminishing returns / penalties are suffered
+        /// </summary>
+        public int MaxTerritories => 5;
+
         public eRealm Realm
         {
             get
@@ -391,13 +396,8 @@ namespace DOL.GS
                         this.m_DBguild.Territories = string.Join("|", this.territories.Select(t => t.ID));
                         this.SaveIntoDatabase();
                     }
-                    var count = this.Territories.Count(t => !t.IsSubterritory);
 
-                    if (count < 6)
-                    {
-                        UpdateTerritoryResists();
-                    }
-                    this.TerritoryBonusBountyPoints = Math.Min(count, 5);
+                    UpdateTerritoryResists();
                 }
             }
         }
@@ -411,21 +411,66 @@ namespace DOL.GS
             this.TerritoryDebuffDurationReduction = 0;
             this.TerritorySpellRangeBonus = 0;
             this.TerritoryBonusBountyPoints = 0;
+            int numWithBonuses = 0;
+            int numNormalTerritories = 0;
             foreach (Territory t in territories)
             {
+                if (t.Type == Territory.eType.Normal)
+                {
+                    ++numNormalTerritories;
+                }
+                bool hasBonus = false;
                 foreach (var resist in t.BonusResist)
                 {
                     if (!this.TerritoryResists.TryAdd(resist.Key, resist.Value))
                     {
                         this.TerritoryResists[resist.Key] += resist.Value;
                     }
+                    hasBonus = true;
                 }
-                this.TerritoryMeleeAbsorption += t.BonusMeleeAbsorption;
-                this.TerritorySpellAbsorption += t.BonusSpellAbsorption;
-                this.TerritoryDotAbsorption += t.BonusDoTAbsorption;
-                this.TerritoryDebuffDurationReduction += t.BonusReducedDebuffDuration;
-                this.TerritorySpellRangeBonus += t.BonusSpellRange;
+                if (t.BonusMeleeAbsorption != 0)
+                {
+                    this.TerritoryMeleeAbsorption += t.BonusMeleeAbsorption;
+                    hasBonus = true;
+                }
+                if (t.BonusSpellAbsorption != 0)
+                {
+                    this.TerritorySpellAbsorption += t.BonusSpellAbsorption;
+                    hasBonus = true;
+                }
+                if (t.BonusDoTAbsorption != 0)
+                {
+                    this.TerritoryDotAbsorption += t.BonusDoTAbsorption;
+                    hasBonus = true;
+                }
+                if (t.BonusReducedDebuffDuration != 0)
+                {
+                    this.TerritoryDebuffDurationReduction += t.BonusReducedDebuffDuration;
+                    hasBonus = true;
+                }
+                if (t.BonusSpellRange != 0)
+                {
+                    this.TerritorySpellRangeBonus += t.BonusSpellRange;
+                    hasBonus = true;
+                }
+                if (hasBonus)
+                {
+                    numWithBonuses++;
+                }
             }
+            if (numWithBonuses > MaxTerritories)
+            {
+                foreach (KeyValuePair<eResist, int> resist in this.TerritoryResists.ToList())
+                {
+                    this.TerritoryResists[resist.Key] = resist.Value * MaxTerritories / numWithBonuses;
+                }
+                TerritoryMeleeAbsorption = TerritoryMeleeAbsorption * MaxTerritories / numWithBonuses;
+                TerritorySpellAbsorption = TerritorySpellAbsorption * MaxTerritories / numWithBonuses;
+                TerritoryDotAbsorption = TerritoryDotAbsorption * MaxTerritories / numWithBonuses;
+                TerritoryDebuffDurationReduction = TerritoryDebuffDurationReduction * MaxTerritories / numWithBonuses;
+                TerritorySpellRangeBonus = TerritorySpellRangeBonus * MaxTerritories / numWithBonuses;
+            }
+            this.TerritoryBonusBountyPoints = Math.Min(MaxTerritories, numNormalTerritories);
 
             this.m_onlineGuildPlayers.Values.Foreach(p => p.Out.SendCharResistsUpdate());
         }
@@ -453,12 +498,7 @@ namespace DOL.GS
                     this.m_DBguild.Territories = this.territories.Any() ? string.Join("|", this.territories.Select(t => t.ID)) : null;
                     this.SaveIntoDatabase();
 
-                    var count = this.Territories.Count(t => !t.IsSubterritory);
-
-                    if (count < 6)
-                    {
-                        UpdateTerritoryResists();
-                    }
+                    UpdateTerritoryResists();
                 }
             }
         }
