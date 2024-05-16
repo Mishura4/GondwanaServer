@@ -250,6 +250,25 @@ namespace DOL.GS
             >= 15 => 7
         };
 
+        /// <summary>
+        /// Maximum count of hireable territory defenders per territory
+        /// </summary>
+        public int MaxTerritoryDefenders => GuildLevel switch
+        {
+            < 3 => 0,
+            3 => 2,
+            4 => 3,
+            5 => 3,
+            6 => 5,
+            7 => 5,
+            8 => 7,
+            9 => 7,
+            < 13 => 9,
+            < 15 => 12,
+            < 20 => 15,
+            >= 20 => 20
+        };
+
         public int TerritoryCount
         {
             get;

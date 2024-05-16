@@ -1904,9 +1904,10 @@ namespace DOL.GS.Commands
                         {
                             if (args.Length < 3)
                             {
-                                DisplaySyntax(client, "buyterritorydefender");
+                                client.Player.SendTranslatedMessage("Commands.Players.Guild.Help.BuyTerritoryDefender");
                                 return;
                             }
+
                             GamePlayer player = client.Player;
 
                             if (player.Guild == null)
@@ -1921,8 +1922,8 @@ namespace DOL.GS.Commands
                                 return;
                             }
 
-                            long guildLevel = player.Guild.GuildLevel;
-                            if (guildLevel < 3)
+                            long maxDefenders = player.Guild.MaxTerritoryDefenders;
+                            if (maxDefenders <= 0)
                             {
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.BuyDefender.DefenderLimit"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 return;
@@ -1941,8 +1942,7 @@ namespace DOL.GS.Commands
                                 return;
                             }
 
-                            long maxDefenders = Math.Max(0, guildLevel - territory.NumMercenaries);
-                            if (maxDefenders == 0)
+                            if (maxDefenders <= territory.NumMercenaries)
                             {
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.BuyDefender.DefenderLimit", maxDefenders), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 return;
