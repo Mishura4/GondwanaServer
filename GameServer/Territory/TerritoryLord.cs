@@ -43,6 +43,10 @@ namespace DOL.Territories
             {
                 if (CurrentTerritory == null)
                 {
+                    if (player.Client.Account.PrivLevel > 1)
+                    {
+                        Whisper(player, "This TerritoryLord is not part of a territory!");
+                    }
                     return false;
                 }
 
