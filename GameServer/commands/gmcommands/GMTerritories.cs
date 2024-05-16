@@ -24,6 +24,8 @@ namespace DOL.commands.gmcommands
         ePrivLevel.GM,
         "Commands.GM.GMTerritories.Description",
         "Commands.GM.GMTerritories.Usage.Create",
+        "Commands.GM.GMTerritories.Usage.CreateSub",
+        "Commands.GM.GMTerritories.Usage.CreateLord",
         "Commands.GM.GMTerritories.Usage.Add",
         "Commands.GM.GMTerritories.Usage.Info",
         "Commands.GM.GMTerritories.Usage.Clear",

@@ -1,5 +1,7 @@
 Commands.GM.GMTerritories.Description:					Commande GM pour la création de territoires
 Commands.GM.GMTerritories.Usage.Create:					'/GMTerritories create <name> <areaID> <groupID>' Crée un territoire <name> avec area <areaID> et MobGroup <groupID>
+Commands.GM.GMTerritories.Usage.CreateSub:				'/GMTerritories createsub <name>' Crée un sous-territoire <name> avec area <areaID>
+Commands.GM.GMTerritories.Usage.CreateLord:				'/GMTerritories createlord <areaID|territoryID>' Crée un seigneur de territoire pour le territoire actuel ou specifié
 Commands.GM.GMTerritories.Usage.Add:					'/GMTerritories add <areaID> to <territoryID>' Ajoute l'area <areaID> au territoire <territoryID>
 Commands.GM.GMTerritories.Usage.Info:					'/GMTerritories info <areaID|territoryID>' Affiche les informations d'un territoire
 Commands.GM.GMTerritories.Usage.Clear:					'/GMTerritories clear <areaID|territoryID>' Remet un territoire en état neutre

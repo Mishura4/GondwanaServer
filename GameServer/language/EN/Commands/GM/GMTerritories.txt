@@ -1,5 +1,7 @@
 Commands.GM.GMTerritories.Description:					GM territory creation commands:
-Commands.GM.GMTerritories.Usage.Create:					'/GMTerritories create <name> <areaID> <groupID>' Creates a territory <name> with area <areaID> abd MobGroup <groupID>
+Commands.GM.GMTerritories.Usage.Create:					'/GMTerritories create <name> <areaID> <groupID>' Creates a territory <name> with area <areaID> andd MobGroup <groupID>
+Commands.GM.GMTerritories.Usage.CreateSub:				'/GMTerritories createsub <name>' Creates a subterritory <name> with area <areaID>
+Commands.GM.GMTerritories.Usage.CreateLord:				'/GMTerritories createlord <areaID|territoryID>' Creates a lord for the current or specified territory
 Commands.GM.GMTerritories.Usage.Add:					'/GMTerritories add <areaID> to <territoryID>' Adds area <areaID> to territory <territoryID>
 Commands.GM.GMTerritories.Usage.Info:					'/GMTerritories info <areaID|territoryID>' Gives informations related to a territory
 Commands.GM.GMTerritories.Usage.Clear:					'/GMTerritories clear <areadID|territoryID>' Clears a territory's ownership, resetting it to neutral
