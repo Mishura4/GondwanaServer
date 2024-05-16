@@ -341,6 +341,7 @@ Commands.Players.Guild.Territories.TerritoriesOther:	---- Other territories ----
 Commands.Players.Guild.Territories.TerritoriesList:		---- Territories ----
 Commands.Players.Guild.Territories.TerritoryNeutral:	Neutral
 Commands.Players.Guild.Territories.GuildInfo:			---- Guild Territories Info ----
+Commands.Players.Guild.Territories.MaxTerritories:		Maximum count of territories before penalties: {0} (currently {1})
 Commands.Players.Guild.Territories.DailyRent:			Total daily rent price: {0}
 Commands.Players.Guild.Territories.DailyMeritPoints:	Total daily merit points: {0}
 Commands.Players.Guild.Territories.TimeBeforeRent:		Time before rental payment: {0}

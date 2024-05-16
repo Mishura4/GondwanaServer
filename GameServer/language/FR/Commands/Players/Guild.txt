@@ -341,6 +341,7 @@ Commands.Players.Guild.Territories.TerritoriesOther:	---- Autres territoires ---
 Commands.Players.Guild.Territories.TerritoriesList:		---- Territoires ----
 Commands.Players.Guild.Territories.TerritoryNeutral:	Neutre
 Commands.Players.Guild.Territories.GuildInfo:			---- Information des territoires de guilde ----
+Commands.Players.Guild.Territories.MaxTerritories:		Nombre maximal de territoires avant pénalités: {0} (actuellement {1})
 Commands.Players.Guild.Territories.DailyRent:			Total de la taxe journalière: {0}
 Commands.Players.Guild.Territories.DailyMeritPoints:	Total des points de mérite journaliers: {0}
 Commands.Players.Guild.Territories.TimeBeforeRent:		Temps avant le prochain paiement: {0}

@@ -287,6 +287,7 @@ namespace DOL.Territories
             // ---- Guild Territories Info ----
             infos.Add(string.Empty);
             infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.GuildInfo"));
+            infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.MaxTerritories", player.Guild.MaxTerritories, player.Guild.TerritoryCount));
             infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.DailyRent", CalculateGuildTerritoryTax(player.Guild)));
             infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.DailyMeritPoints", ownedTerritories.Count * DAILY_MERIT_POINTS));
             string timeBeforeRent;
@@ -459,7 +460,7 @@ namespace DOL.Territories
             foreach (var territory in guild.Territories.Where(t => !t.IsSubterritory))
             {
                 counter++;
-                int tax = counter >= 6 ? DAILY_TAX + 10 : DAILY_TAX;
+                int tax = counter >= guild.MaxTerritories ? DAILY_TAX + 10 : DAILY_TAX;
                 total += territory.IsBannerSummoned ? (int)Math.Round((tax * (1.0d - TERRITORY_BANNER_PERCENT_OFF / 100D))) : tax;
             }
             return total;
