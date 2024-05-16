@@ -167,7 +167,7 @@ namespace DOLDatabase.Tables
             }
         }
 
-        [DataElement(AllowDbNull = false, Varchar = 255)]
+        [DataElement(AllowDbNull = true, Varchar = 255)]
         public string GroupId
         {
             get
