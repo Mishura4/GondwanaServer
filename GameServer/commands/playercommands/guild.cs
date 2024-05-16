@@ -3640,6 +3640,13 @@ namespace DOL.GS.Commands
                         break;
                     #endregion
 
+                    #region subterritories
+                    case "subterritories":
+                        infos = TerritoryManager.Instance.GetSubterritoriesInformations(client.Player);
+                        client.Out.SendCustomTextWindow(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Subterritories.WindowTitle"), infos);
+                        break;
+                    #endregion
+
 
                     #region Default
                     default:

@@ -164,7 +164,9 @@ Commands.Players.Guild.Help.GuildRemove:			'/gc remove <nom du joueur>' # Retir
 Commands.Players.Guild.Help.GuildUsage:			Usage :
 Commands.Players.Guild.Help.GuildWebpage:			'/gc webpage <la.pagedeguilde.fr>' # Option non obligatoire qui permet d'indiquer le site de guilde aux membres et sur le herald officiel.
 Commands.Players.Guild.Help.GuildWho:			    '/gc who' # Montre les joueurs de la guilde connectés.
-Commands.Players.Guild.Help.GuildWithdraw:		'/gc withdraw <montant>' # Retire les fonds de votre caisse de guilde.
+Commands.Players.Guild.Help.GuildWithdraw:		    '/gc withdraw <montant>' # Retire les fonds de votre caisse de guilde.
+Commands.Players.Guild.Help.GuildTerritories:	    '/gc territories' Affiche les territoires et leur contrôle.
+Commands.Players.Guild.Help.GuildSubTerritories:    '/gc subterritories' Affiche les sous-territoires et leur contrôle.
 Commands.Players.Guild.InCombat:				    Vous ne pouvez pas invoquer la bannière de guilde en combat !
 Commands.Players.Guild.InfoAMotd:				    Message de l'alliance : {0}
 Commands.Players.Guild.InfoBanner.Lost:         La bannière est tombée entre les mains de l'ennemi.
@@ -328,7 +330,6 @@ Commands.Players.Guild.CombatZone.NotEnoughMerit:	Votre guilde doit avoir {0} po
 Commands.Players.Guild.CombatZone.AreaName:			Zone de combat de {0}
 
 Commands.Players.Guild.InviteNotThis:			Vous ne pouvez pas inviter un membre de ce royaume dans votre guilde.
-Commands.Players.Guild.Help.GuildTerritories:   '/gc territories' Affiche les territoires ainsi que leurs occupations.
 Commands.Players.Guild.TerritoryPaid:           La somme de {0} a été retirée de la banque de votre guilde pour financer vos territoires.
 Commands.Players.Guild.TerritoryNoMoney:        Votre guilde n'a pas pu honorer ses dettes et vous avez perdu vos territoires conquis.
 Commands.Players.Guild.TerritoryMeritPoints:   L'occupation de vos territoires vous rapporte {0} points de mérite.
@@ -348,6 +349,13 @@ Commands.Players.Guild.Territories.TotalBPBonus:		Bonus total de points de butin
 Commands.Players.Guild.Territories.Bonuses:				---- Bonus des territoires ----
 Commands.Players.Guild.Territories.DebuffDuration:		Durée d'effets néfastes
 Commands.Players.Guild.Territories.SpellRange:			Portée des sorts
+
+Commands.Players.Guild.Subterritories.WindowTitle:			[ SOUS-TERRITOIRES ]
+Commands.Players.Guild.Subterritories.TerritoriesOwned:		---- Sous-territories owned by {0} ----
+Commands.Players.Guild.Subterritories.TerritoriesOther:		---- Autres sous-territories ----
+Commands.Players.Guild.Subterritories.TerritoriesList:		---- Sous-territories ----
+Commands.Players.Guild.Subterritories.TerritoryNeutral:		Neutre
+Commands.Players.Guild.Subterritories.TerritoryExpiresIn:	Expire dans {0}
 
 
 Commands.Players.Guild.TotalMemberOnline:   Nombre de joueurs en ligne dans la guilde.

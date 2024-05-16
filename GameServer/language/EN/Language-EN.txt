@@ -1,13 +1,13 @@
 # Miscellaneous Language
-Language.Hours.Short:								 {0}h
-Language.Minutes.Short:								 {0}min
-Language.Seconds.Short:								 {0}s
-Language.Hours.Long:								 {0} hours
-Language.Minutes.Short:								 {0} minutes
-Language.Seconds.Short:								 {0} seconds
-Language.NotApplicable:								 N/A
+Language.Hours.Short:								{0}h
+Language.Minutes.Short:								{0}min
+Language.Seconds.Short:								{0}s
+Language.Hours.Long:								{0} hours
+Language.Minutes.Short:								{0} minutes
+Language.Seconds.Short:								{0} seconds
+Language.NotApplicable:								N/A
 
-Language.Time.Long:                                  0 seconds
+Language.Time.Long:                                 0 seconds
 Language.Time.LongH:                                {0:%h} hours
 Language.Time.Longh:                                {0:%h} hour
 Language.Time.LongHM:                               {0:%h} hours and {0:%m} minutes

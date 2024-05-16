@@ -165,6 +165,8 @@ Commands.Players.Guild.Help.GuildUsage:			Usage :
 Commands.Players.Guild.Help.GuildWebpage:			'/gc webpage <guildwebpage.com>' # Non-mandatory option that allows you to indicate the guild's website to members and on the official herald.
 Commands.Players.Guild.Help.GuildWho:			    '/gc who' # Shows connected guild members.
 Commands.Players.Guild.Help.GuildWithdraw:		'/gc withdraw <amount>' # Withdraw money from your guild bank.
+Commands.Players.Guild.Help.GuildTerritories:		'/gc territories' # Displays territories and their owners.
+Commands.Players.Guild.Help.GuildSubTerritories:    '/gc subterritories' # Displays subterritories and their owners.
 Commands.Players.Guild.InCombat:				    You cannot summon the guild banner while fighting!
 Commands.Players.Guild.InfoAMotd:				    Alliance message: {0}
 Commands.Players.Guild.InfoBanner.Lost:         The banner fell into the hands of the enemy.
@@ -328,7 +330,6 @@ Commands.Players.Guild.CombatZone.NotEnoughMerit:	Your guild must have {0} merit
 Commands.Players.Guild.CombatZone.AreaName:			Combat zone of {0}.
 
 Commands.Players.Guild.InviteNotThis:				You cannot invite a member of this realm to your guild.
-Commands.Players.Guild.Help.GuildTerritories:		'/gc territories' Displays the guild territories and their occupations.
 Commands.Players.Guild.TerritoryPaid:				The amount of {0} has been withdrawn from your guild's bank to fund your territories.
 Commands.Players.Guild.TerritoryNoMoney:			Your guild could not honor its debts and lost its conquered territories.  
 Commands.Players.Guild.TerritoryMeritPoints:		Territories occupation earns your guild {0} merit points.
@@ -348,6 +349,13 @@ Commands.Players.Guild.Territories.TotalBPBonus:		Total bonus bounty points for 
 Commands.Players.Guild.Territories.Bonuses:				---- Territory Bonuses ----
 Commands.Players.Guild.Territories.DebuffDuration:		Nefarious effect duration
 Commands.Players.Guild.Territories.SpellRange:			Spell range
+
+Commands.Players.Guild.Subterritories.WindowTitle:			[ SUBTERRITORIES ]
+Commands.Players.Guild.Subterritories.TerritoriesOwned:		---- Subterritories owned by {0} ----
+Commands.Players.Guild.Subterritories.TerritoriesOther:		---- Other subterritories ----
+Commands.Players.Guild.Subterritories.TerritoriesList:		---- Subterritories ----
+Commands.Players.Guild.Subterritories.TerritoryNeutral:		Neutral
+Commands.Players.Guild.Subterritories.TerritoryExpiresIn:	Expires in {0}
 
 
 Commands.Players.Guild.TotalMemberOnline:   Number of online players in the guild.

@@ -25,7 +25,7 @@ Language.Minutes.Short:								{0} minutes
 Language.Seconds.Short:								{0} secondes
 Language.NotApplicable:								N/A
 
-Language.Time.Long:                             0 secondes
+Language.Time.Long:									0 secondes
 Language.Time.LongH:                                {0:%h} heures
 Language.Time.Longh:                                {0:%h} heure
 Language.Time.LongHM:                               {0:%h} heures et {0:%m} minutes

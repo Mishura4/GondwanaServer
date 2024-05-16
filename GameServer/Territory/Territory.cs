@@ -311,7 +311,7 @@ namespace DOL.Territories
             }
         }
 
-        public DateTime? ExpireTime => ClaimedTime?.AddMinutes(Expiration);
+        public DateTime? ExpireTime => Expiration == 0 ? null : ClaimedTime?.AddMinutes(Expiration);
 
         public DateTime? RenewAvailableTime
         {

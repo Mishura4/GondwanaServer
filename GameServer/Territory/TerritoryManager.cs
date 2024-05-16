@@ -242,6 +242,7 @@ namespace DOL.Territories
             List<string> otherTerritories = new List<string>();
             string language = player.Client?.Account?.Language ?? Properties.SERV_LANGUAGE;
             string neutral = LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.TerritoryNeutral");
+            string expiresIn = LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Subterritories.TerritoryExpiresIn");
 
             foreach (var territory in this.Territories.Where(t => t.Type != Territory.eType.Subterritory))
             {
@@ -252,17 +253,18 @@ namespace DOL.Territories
                     line += " / " + neutral;
                     otherTerritories.Add(line);
                 }
+                else if (territory.IsOwnedBy(player))
+                {
+                    if (territory.ExpireTime != null)
+                    {
+                        line += " / " + string.Format(expiresIn, LanguageMgr.TranslateTimeLong(language, territory.ExpireTime.Value - DateTime.Now)); 
+                    }
+                    ownedTerritories.Add(line);
+                }
                 else
                 {
-                    if (territory.IsOwnedBy(player))
-                    {
-                        ownedTerritories.Add(line);
-                    }
-                    else
-                    {
-                        line += " / " + territory.OwnerGuild?.Name ?? "????";
-                        otherTerritories.Add(line);
-                    }
+                    line += " / " + territory.OwnerGuild?.Name ?? "????";
+                    otherTerritories.Add(line);
                 }
             }
             if (ownedTerritories.Any())
@@ -270,13 +272,17 @@ namespace DOL.Territories
                 infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.TerritoriesOwned", player.Guild.Name));
                 infos.AddRange(ownedTerritories);
                 infos.Add(string.Empty);
-                infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.TerritoriesOther"));
+                if (otherTerritories.Count > 0)
+                {
+                    infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.TerritoriesOther"));
+                    infos.AddRange(otherTerritories);
+                }
             }
             else
             {
                 infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.TerritoriesList"));
+                infos.AddRange(otherTerritories);
             }
-            infos.AddRange(otherTerritories);
 
             // ---- Guild Territories Info ----
             infos.Add(string.Empty);
@@ -319,6 +325,57 @@ namespace DOL.Territories
             infos.Add("-- " + LanguageMgr.GetTranslation(language, "Language.DamageType.DoT.Noun") + (ownedTerritories.Count == 0 ? ": 0%" : $": {player.Guild.TerritoryDotAbsorption}%"));
             infos.Add("-- " + LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.DebuffDuration") + (ownedTerritories.Count == 0 ? ": 0%" : $": {player.Guild.TerritoryDebuffDurationReduction}%"));
             infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.SpellRange") + (ownedTerritories.Count == 0 ? ": 0%" : $": {player.Guild.TerritorySpellRangeBonus}%"));
+            return infos;
+        }
+
+        public IList<string> GetSubterritoriesInformations(GamePlayer player)
+        {
+            List<string> infos = new List<string>();
+            List<string> ownedTerritories = new List<string>();
+            List<string> otherTerritories = new List<string>();
+            string language = player.Client?.Account?.Language ?? Properties.SERV_LANGUAGE;
+            string neutral = LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Subterritories.TerritoryNeutral");
+            string expiresIn = LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Subterritories.TerritoryExpiresIn");
+
+            foreach (var territory in this.Territories.Where(t => t.Type == Territory.eType.Subterritory))
+            {
+                string line = territory.Name + " / " + territory.Zone.Description;
+
+                if (territory.IsNeutral())
+                {
+                    line += " / " + neutral;
+                    otherTerritories.Add(line);
+                }
+                else if (territory.IsOwnedBy(player))
+                {
+                    if (territory.ExpireTime != null)
+                    {
+                        line += " / " + string.Format(expiresIn, LanguageMgr.TranslateTimeLong(language, territory.ExpireTime.Value - DateTime.Now));
+                    }
+                    ownedTerritories.Add(line);
+                }
+                else
+                {
+                    line += " / " + territory.OwnerGuild?.Name ?? "????";
+                    otherTerritories.Add(line);
+                }
+            }
+            if (ownedTerritories.Any())
+            {
+                infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.TerritoriesOwned", player.Guild.Name));
+                infos.AddRange(ownedTerritories);
+                infos.Add(string.Empty);
+                if (otherTerritories.Count > 0)
+                {
+                    infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.TerritoriesOther"));
+                    infos.AddRange(otherTerritories);
+                }
+            }
+            else
+            {
+                infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.TerritoriesList"));
+                infos.AddRange(otherTerritories);
+            }
             return infos;
         }
 
