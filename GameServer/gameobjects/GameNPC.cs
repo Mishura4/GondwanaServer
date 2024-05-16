@@ -2250,10 +2250,23 @@ namespace DOL.GS
 
         public bool IsInTerritory => CurrentTerritory != null;
 
+        private Territory? m_currentTerritory;
+
         public Territory? CurrentTerritory
         {
-            get;
-            set;
+            get => m_currentTerritory;
+            set
+            {
+                if (m_currentTerritory != null)
+                {
+                    m_currentTerritory.Remove(this);
+                }
+                m_currentTerritory = value;
+                if (m_currentTerritory != null)
+                {
+                    m_currentTerritory.Add(this);
+                }
+            }
         }
 
         /// <summary>
@@ -3286,10 +3299,23 @@ namespace DOL.GS
                 }
             }
 
-            var territory = TerritoryManager.GetCurrentTerritory(this);
-            if (territory?.Mobs.Contains(this) == true)
+            if (Realm == eRealm.None)
             {
-                this.GuildName = territory.OwnerGuild.Name;
+                if (Brain is IControlledBrain controlledBrain)
+                {
+                    if (controlledBrain.Owner is GameNPC ownerNPC)
+                    {
+                        CurrentTerritory = ownerNPC.CurrentTerritory;
+                    }
+                }
+                else
+                {
+                    var territory = TerritoryManager.GetCurrentTerritory(CurrentAreas);
+                    if (territory != null)
+                    {
+                        CurrentTerritory = territory;
+                    }
+                }
             }
 
             Reset();

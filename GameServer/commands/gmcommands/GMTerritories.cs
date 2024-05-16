@@ -189,7 +189,6 @@ namespace DOL.commands.gmcommands
                         lord.CurrentRegionID = client.Player.CurrentRegionID;
                         lord.Position = client.Player.Position;
                         lord.LoadedFromScript = false;
-                        lord.CurrentTerritory = territory;
                         lord.AddToWorld();
                         lord.SaveIntoDatabase();
                         territory.Boss = lord;

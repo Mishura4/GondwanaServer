@@ -51,7 +51,7 @@ namespace DOL.Territories
             this.Boss = boss;
             this.OriginalGuilds = new Dictionary<string, string>();
             this.BonusResist = new();
-            this.Mobs = this.GetMobsInTerritory();
+            this.GatherMobsInTerritory();
             this.NumMercenaries = Mobs.Count(n => n.IsMercenary);
             this.Expiration = db.Expiration;
             this.SetBossAndMobsInEventInTerritory();
@@ -125,7 +125,7 @@ namespace DOL.Territories
             this.Boss = boss;
             this.OriginalGuilds = new Dictionary<string, string>();
             this.BonusResist = new();
-            this.Mobs = this.GetMobsInTerritory();
+            this.GatherMobsInTerritory();
             this.NumMercenaries = Mobs.Count(n => n.IsMercenary);
             this.SetBossAndMobsInEventInTerritory();
             this.SaveOriginalGuilds();
@@ -597,6 +597,43 @@ namespace DOL.Territories
             }
         }
 
+        public void Add(GameNPC npc)
+        {
+            lock (m_lockObject)
+            {
+                if (this.Mobs.Contains(npc))
+                {
+                    return;
+                }
+                this.Mobs.Add(npc);
+                OriginalGuilds[npc.InternalID] = npc.GuildName;
+                if (OwnerGuild != null)
+                {
+                    npc.GuildName = OwnerGuild.Name;
+                }
+                ChangeMagicAndPhysicalResistance(npc, CurrentBannerResist);
+                RefreshEmblem(npc);
+            }
+        }
+
+        public void Remove(GameNPC npc)
+        {
+            lock (m_lockObject)
+            {
+                if (!this.Mobs.Remove(npc))
+                {
+                    return;
+                }
+                if (OriginalGuilds.Remove(npc.InternalID, out string ogGuild))
+                {
+                    npc.GuildName = ogGuild;
+                }
+                ChangeMagicAndPhysicalResistance(npc, -CurrentBannerResist);
+                RefreshEmblem(npc);
+            }
+        }
+
+
         public void ToggleBanner(bool add)
         {
             lock (m_lockObject)
@@ -844,19 +881,34 @@ namespace DOL.Territories
         {
             lock (m_lockObject)
             {
+                if (!WorldMgr.Regions.TryGetValue(RegionId, out GS.Region region))
+                {
+                    log.ErrorFormat("Could not find region {0} for territory {1} ({2})", RegionId, Name, ID);
+                    return;
+                }
                 this.Areas.Add(area);
-                this.Mobs = GetMobsInTerritory();
-                this.NumMercenaries = Mobs.Count(n => n.IsMercenary);
-                bool banner = IsBannerSummoned;
-                ToggleBannerUnsafe(false);
-                if (banner)
-                    ToggleBannerUnsafe(true);
+
+                IEnumerable<GameNPC> mobs;
+                if (area is Circle circle)
+                {
+                   mobs = region.GetNPCsInRadius(circle.Position, (ushort)circle.Radius, false, true).Cast<GameNPC>().Where(n => !n.IsCannotTarget && n is not ShadowNPC);
+                }
+                else
+                {
+                    log.Error($"Impossible to get mobs from territory {this.Name}'s area {area.Description} ({area.ID}) because its type  is not supported");
+                    return;
+                }
+
+                foreach (var mob in mobs)
+                {
+                    Add(mob);
+                }
             }
         }
 
-        private List<GameNPC> GetMobsInTerritory()
+        private void GatherMobsInTerritory()
         {
-            List<GameNPC> mobs = new List<GameNPC>();
+            Mobs = new List<GameNPC>();
 
             var region = WorldMgr.Regions[this.RegionId];
             foreach (IArea iarea in Areas)
@@ -869,7 +921,7 @@ namespace DOL.Territories
 
                 if (area is Circle circle)
                 {
-                    mobs.AddRange(region.GetNPCsInRadius(circle.Position, (ushort)circle.Radius, false, true).Cast<GameNPC>().Where(n => !n.IsCannotTarget && n is not ShadowNPC));
+                    region.GetNPCsInRadius(circle.Position, (ushort)circle.Radius, false, true).Cast<GameNPC>().Where(n => !n.IsCannotTarget && n is not ShadowNPC).Foreach(n => n.CurrentTerritory = this);
                 }
                 else
                 {
@@ -877,9 +929,6 @@ namespace DOL.Territories
                     continue;
                 }
             }
-
-            mobs.ForEach(m => m.CurrentTerritory = this);
-            return mobs;
         }
 
         public void OnGuildLevelUp(Guild guild, long newLevel, long previousLevel)
