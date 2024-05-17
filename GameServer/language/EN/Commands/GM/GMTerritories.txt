@@ -1,11 +1,12 @@
 Commands.GM.GMTerritories.Description:					GM territory creation commands:
 Commands.GM.GMTerritories.Usage.Create:					'/GMTerritories create <name> <areaID> <groupID>' Creates a territory <name> with area <areaID> andd MobGroup <groupID>
-Commands.GM.GMTerritories.Usage.CreateSub:				'/GMTerritories createsub <name>' Creates a subterritory <name> with area <areaID>
+Commands.GM.GMTerritories.Usage.CreateSub:				'/GMTerritories createsub <name> <areaID>' Creates a subterritory <name> with area <areaID> with control expiring after <expiration> minutes
 Commands.GM.GMTerritories.Usage.CreateLord:				'/GMTerritories createlord <areaID|territoryID>' Creates a lord for the current or specified territory
 Commands.GM.GMTerritories.Usage.Add:					'/GMTerritories add <areaID> to <territoryID>' Adds area <areaID> to territory <territoryID>
 Commands.GM.GMTerritories.Usage.Info:					'/GMTerritories info <areaID|territoryID>' Gives informations related to a territory
 Commands.GM.GMTerritories.Usage.Clear:					'/GMTerritories clear <areadID|territoryID>' Clears a territory's ownership, resetting it to neutral
 Commands.GM.GMTerritories.Usage.Claim:					'/GMTerritories claim <areadID|territoryID>' Forcefully claim a territory for your guild
+Commands.GM.GMTerritories.Usage.Expiration:				'/GMTerritories expiration <minutes>' Set the duration after which a guild's control over the territory expires
 Commands.GM.GMTerritories.Usage.SetPortal:				'/GMTerritories setportal <areadID|territoryID> <x> <y> <z>' or '/GMTerritories setportal <areadID|territoryID> remove' Sets or removes the location of the territory portal
 Commands.GM.GMTerritories.Usage.BonusAdd:				'/GMTerritories bonus add <resist> <areaID|territoryID>' Add a resist to the territory selected (the same resist can be added several times on a territory)
 Commands.GM.GMTerritories.Usage.BonusRemove:			'/GMTerritories bonus remove <resist> <areaID|territoryID>' Removes a resist from the territory

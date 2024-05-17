@@ -30,6 +30,7 @@ namespace DOL.commands.gmcommands
         "Commands.GM.GMTerritories.Usage.Info",
         "Commands.GM.GMTerritories.Usage.Clear",
         "Commands.GM.GMTerritories.Usage.Claim",
+        "Commands.GM.GMTerritories.Usage.Expiration",
         "Commands.GM.GMTerritories.Usage.SetPortal",
         "Commands.GM.GMTerritories.Usage.BonusAdd",
         "Commands.GM.GMTerritories.Usage.BonusRemove",
@@ -108,8 +109,8 @@ namespace DOL.commands.gmcommands
                             break;
                         }
 
-                        bool saved = TerritoryManager.Instance.AddTerritory(Territory.eType.Normal, area, areaId, areaDb.Region, group, mobinfo.Mob);
-                        if (!saved)
+                        territory = TerritoryManager.Instance.AddTerritory(Territory.eType.Normal, area, areaId, areaDb.Region, group, mobinfo.Mob);
+                        if (territory == null)
                         {
                             client.SendTranslation("Commands.GM.GMTerritories.SaveFailed", eChatType.CT_System, eChatLoc.CL_SystemWindow, name);
                             break;
@@ -122,7 +123,7 @@ namespace DOL.commands.gmcommands
                     {
                         if (args.Length < 4)
                         {
-                            DisplaySyntax(client);
+                            DisplaySyntax(client, "createsub");
                             return;
                         }
 
@@ -131,7 +132,14 @@ namespace DOL.commands.gmcommands
 
                         if (string.IsNullOrEmpty(areaId) || string.IsNullOrEmpty(name))
                         {
-                            DisplaySyntax(client);
+                            DisplaySyntax(client, "createsub");
+                            break;
+                        }
+
+                        int expiration = 0;
+                        if (args.Length >= 4 && !Int32.TryParse(args[4], out expiration))
+                        {
+                            DisplaySyntax(client, "createsub");
                             break;
                         }
 
@@ -161,11 +169,16 @@ namespace DOL.commands.gmcommands
                             return;
                         }
 
-                        bool saved = TerritoryManager.Instance.AddTerritory(Territory.eType.Subterritory, area, areaId, areaDb.Region);
-                        if (!saved)
+                        territory = TerritoryManager.Instance.AddTerritory(Territory.eType.Subterritory, area, areaId, areaDb.Region);
+                        if (territory == null)
                         {
                             client.SendTranslation("Commands.GM.GMTerritories.SaveFailed", eChatType.CT_System, eChatLoc.CL_SystemWindow, name);
                             break;
+                        }
+                        if (expiration > 0)
+                        {
+                            territory.Expiration = expiration;
+                            territory.SaveIntoDatabase();
                         }
                         client.SendTranslation("Commands.GM.GMTerritories.Saved", eChatType.CT_System, eChatLoc.CL_SystemWindow, name, area.Description);
                     }

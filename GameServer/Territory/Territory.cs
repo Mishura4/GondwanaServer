@@ -1118,6 +1118,7 @@ namespace DOL.Territories
             db.IsBannerSummoned = this.IsBannerSummoned;
             db.ClaimedTime = ClaimedTime;
             db.Expiration = Expiration;
+            db.Type = (int)Type;
             if (this.PortalPosition != null)
             {
                 db.PortalX = (int)this.PortalPosition.Value.X;

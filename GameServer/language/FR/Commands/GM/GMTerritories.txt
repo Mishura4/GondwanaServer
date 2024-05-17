@@ -1,11 +1,12 @@
 Commands.GM.GMTerritories.Description:					Commande GM pour la création de territoires
 Commands.GM.GMTerritories.Usage.Create:					'/GMTerritories create <name> <areaID> <groupID>' Crée un territoire <name> avec area <areaID> et MobGroup <groupID>
-Commands.GM.GMTerritories.Usage.CreateSub:				'/GMTerritories createsub <name>' Crée un sous-territoire <name> avec area <areaID>
+Commands.GM.GMTerritories.Usage.CreateSub:				'/GMTerritories createsub <name> <areaID> <expiration>' Crée un sous-territoire <name> avec area <areaID> avec une durée de contrôle de <expiration> minutes
 Commands.GM.GMTerritories.Usage.CreateLord:				'/GMTerritories createlord <areaID|territoryID>' Crée un seigneur de territoire pour le territoire actuel ou specifié
 Commands.GM.GMTerritories.Usage.Add:					'/GMTerritories add <areaID> to <territoryID>' Ajoute l'area <areaID> au territoire <territoryID>
 Commands.GM.GMTerritories.Usage.Info:					'/GMTerritories info <areaID|territoryID>' Affiche les informations d'un territoire
 Commands.GM.GMTerritories.Usage.Clear:					'/GMTerritories clear <areaID|territoryID>' Remet un territoire en état neutre
 Commands.GM.GMTerritories.Usage.Claim:					'/GMTerritories claim <areadID|territoryID>' Prend un territoire pour votre guilde
+Commands.GM.GMTerritories.Usage.Expiration:				'/GMTerritories expiration <minutes>' Règle la durée de contrôle du territoire (0 pour désactiver)
 Commands.GM.GMTerritories.Usage.SetPortal:				'/GMTerritories setportal <areadID|territoryID> <x> <y> <z>' ou '/GMTerritories setportal <areadID|territoryID> remove' Règle la position ou désactive le portail de guilde pour un territoire
 Commands.GM.GMTerritories.Usage.BonusAdd:				'/GMTerritories bonus add <resist> <areaID|territoryID>' Ajoute un résist pour l'<areaId> sélectionnée (le même résist peut être ajouté plusieurs fois)
 Commands.GM.GMTerritories.Usage.BonusRemove:			'/GMTerritories bonus remove <resist> <areaID|territoryID>' Supprime un resist pour l'<areaId> sélectionné
