@@ -249,7 +249,9 @@ namespace DOL.GS
         /// <summary>
         /// Count of territories at which diminishing returns / penalties are suffered
         /// </summary>
-        public int MaxTerritories => GuildLevel switch
+        public int MaxTerritories => MaxTerritoriesForLevel(GuildLevel);
+
+        public static int MaxTerritoriesForLevel(long level) => level switch
         {
             < 2 => 2,
             < 4 => 3,
@@ -262,7 +264,9 @@ namespace DOL.GS
         /// <summary>
         /// Maximum count of hireable territory defenders per territory
         /// </summary>
-        public int MaxTerritoryDefenders => GuildLevel switch
+        public int MaxTerritoryDefenders => MaxTerritoryDefendersForLevel(GuildLevel);
+
+        public static int MaxTerritoryDefendersForLevel(long level) => level switch
         {
             < 3 => 0,
             3 => 2,
@@ -816,136 +820,112 @@ namespace DOL.GS
                 }
                 if (newLevel > previousLevel)
                 {
-                    string newCommands = (newLevel switch
-                    {
-                        1 => "/gc buff",
-                        2 => "/gc dues",
-                        3 => "/gc territorybanner, /gc buyterritorydefender & /gc movedefender",
-                        4 => "/gc territoryportal",
-                        5 => "/gc combatzone",
-                        6 => "/gc jailrelease",
-                        7 => "/gc buybanner, /gc summon,  /gc unsummon, /gc edit buybanner & /gc edit summonbanner",
-                        _ => null
-                    })!;
-
-                    foreach (GamePlayer player in GetListOfOnlineMembers())
-                    {
-                        string msg = LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.LevelUp", Name, newLevel);
-                        player.Out.SendMessage(msg, eChatType.CT_ScreenCenter, eChatLoc.CL_SystemWindow);
-                        player.Out.SendMessage(msg, eChatType.CT_Guild, eChatLoc.CL_PopupWindow);
-                        player.Out.SendMessage(msg, eChatType.CT_Guild, eChatLoc.CL_ChatWindow);
-                        if (newCommands != null)
-                        {
-                            if (newLevel is 3 or 7)
-                            {
-                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.CommandsAvailable", newCommands), eChatType.CT_Guild, eChatLoc.CL_PopupWindow);
-                            }
-                            else
-                            {
-                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.CommandAvailable", newCommands), eChatType.CT_Guild, eChatLoc.CL_PopupWindow);
-                            }
-                        }
-
-                        string moreTerritories = newLevel switch
-                        {
-                            0 or 1 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MoreTerritories01"),
-                            3 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MoreTerritories02"),
-                            4 or 5 or 6 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MoreTerritories03"),
-                            7 or 8 or 9 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MoreTerritories04"),
-                            >= 10 and <= 13 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MoreTerritories05"),
-                            >= 14 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MoreTerritories06"),
-                            _ => null
-                        };
-                        string moreDefenders = newLevel switch
-                        {
-                            3 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MoreDefenders01"),
-                            4 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MoreDefenders02"),
-                            5 => null,
-                            6 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MoreDefenders03"),
-                            7 => null,
-                            8 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MoreDefenders04"),
-                            9 => null,
-                            10 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MoreDefenders05"),
-                            11 => null,
-                            12 => null,
-                            13 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MoreDefenders06"),
-                            14 => null,
-                            15 => null,
-                            16 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MoreDefenders07"),
-                            17 => null,
-                            18 => null,
-                            19 => null,
-                            20 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MoreDefenders08"),
-                            _ => null
-                        };
-                        string miscInfos = newLevel switch
-                        {
-                            2 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MiscInfos01"),
-                            3 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MiscInfos02", Properties.TERRITORY_BANNER_PERCENT_OFF, Properties.TERRITORYMOB_BANNER_RESIST),
-                            4 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MiscInfos03", Properties.GUILD_PORTAL_DURATION / 60),
-                            5 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MiscInfos04", Properties.GUILD_COMBAT_ZONE_DURATION / 60),
-                            6 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MiscInfos05"),
-                            7 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MiscInfos06"),
-                            8 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MiscInfos07"),
-                            11 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MiscInfos08"),
-                            13 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MiscInfos09"),
-                            15 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MiscInfos10", Properties.TERRITORYMOB_BANNER_RESIST),
-                            16 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MiscInfos11"),
-                            18 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MiscInfos12"),
-                            20 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MiscInfos13"),
-                            _ => null
-                        };
-
-                        if (!string.IsNullOrEmpty(miscInfos))
-                        {
-                            player.Out.SendMessage(miscInfos, eChatType.CT_Guild, eChatLoc.CL_PopupWindow);
-                        }
-                        if (!string.IsNullOrEmpty(moreTerritories))
-                        {
-                            player.Out.SendMessage(moreTerritories, eChatType.CT_Guild, eChatLoc.CL_PopupWindow);
-                        }
-                        if (!string.IsNullOrEmpty(moreDefenders))
-                        {
-                            player.Out.SendMessage(moreDefenders, eChatType.CT_Guild, eChatLoc.CL_PopupWindow);
-                        }
-                        if (Properties.GUILD_NEW_DUES_SYSTEM)
-                        {
-                            if (newLevel > 2 && newLevel < 13)
-                            {
-                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MaxDuesAvailable", (newLevel - 2) * 5), eChatType.CT_Guild, eChatLoc.CL_PopupWindow);
-                            }
-                            else if (newLevel == 2)
-                            {
-                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MaxDuesAvailable", newLevel), eChatType.CT_Guild, eChatLoc.CL_PopupWindow);
-                            }
-                            else if (newLevel >= 13)
-                            {
-                                int duesAvailable;
-                                if (Properties.GUILD_DUES_MAX_VALUE <= 50)
-                                {
-                                    duesAvailable = 50;
-                                }
-                                else
-                                {
-                                    int maxDuesValue = (int)Properties.GUILD_DUES_MAX_VALUE;
-                                    int additionalDues = (int)Math.Min((newLevel - 12) * 5, maxDuesValue - 50);
-                                    duesAvailable = 50 + additionalDues;
-                                    duesAvailable = Math.Min(duesAvailable, maxDuesValue);
-                                }
-
-                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MaxDuesAvailable", duesAvailable), eChatType.CT_Guild, eChatLoc.CL_PopupWindow);
-                            }
-                        }
-                    }
-
-                    NewsMgr.CreateNews("GameUtils.Guild.LevelUp", Realm, eNewsType.RvRGlobal, false, true, Name, newLevel);
-                    if (DOL.GS.ServerProperties.Properties.DISCORD_ACTIVE)
-                    {
-                        DolWebHook hook = new DolWebHook(DOL.GS.ServerProperties.Properties.DISCORD_WEBHOOK_ID);
-                        hook.SendMessage(LanguageMgr.GetTranslation(Properties.SERV_LANGUAGE, "GameUtils.Guild.LevelUp", Name, newLevel));
-                    }
+                    OnLevelUp(previousLevel, newLevel);
                 }
                 this.SaveIntoDatabase();
+            }
+        }
+
+        public void OnLevelUp(long previousLevel, long newLevel)
+        {
+            string newCommands = (newLevel switch
+            {
+                1 => "/gc buff",
+                2 => "/gc dues",
+                3 => "/gc territorybanner, /gc buyterritorydefender & /gc movedefender",
+                4 => "/gc territoryportal",
+                5 => "/gc combatzone",
+                6 => "/gc jailrelease",
+                7 => "/gc buybanner, /gc summon,  /gc unsummon, /gc edit buybanner & /gc edit summonbanner",
+                _ => null
+            })!;
+
+            foreach (GamePlayer player in GetListOfOnlineMembers())
+            {
+                string msg = LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.LevelUp", Name, newLevel);
+                player.Out.SendMessage(msg, eChatType.CT_ScreenCenter, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(msg, eChatType.CT_Guild, eChatLoc.CL_PopupWindow);
+                player.Out.SendMessage(msg, eChatType.CT_Guild, eChatLoc.CL_ChatWindow);
+                if (newCommands != null)
+                {
+                    if (newLevel is 3 or 7)
+                    {
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.CommandsAvailable", newCommands), eChatType.CT_Guild, eChatLoc.CL_PopupWindow);
+                    }
+                    else
+                    {
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.CommandAvailable", newCommands), eChatType.CT_Guild, eChatLoc.CL_PopupWindow);
+                    }
+                }
+
+                string miscInfos = newLevel switch
+                {
+                    2 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MiscInfos01"),
+                    3 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MiscInfos02", Properties.TERRITORY_BANNER_PERCENT_OFF, Properties.TERRITORYMOB_BANNER_RESIST),
+                    4 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MiscInfos03", Properties.GUILD_PORTAL_DURATION / 60),
+                    5 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MiscInfos04", Properties.GUILD_COMBAT_ZONE_DURATION / 60),
+                    6 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MiscInfos05"),
+                    7 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MiscInfos06"),
+                    8 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MiscInfos07"),
+                    11 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MiscInfos08"),
+                    13 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MiscInfos09"),
+                    15 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MiscInfos10", Properties.TERRITORYMOB_BANNER_RESIST),
+                    16 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MiscInfos11"),
+                    18 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MiscInfos12"),
+                    20 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MiscInfos13"),
+                    _ => null
+                };
+
+                if (!string.IsNullOrEmpty(miscInfos))
+                {
+                    player.Out.SendMessage(miscInfos, eChatType.CT_Guild, eChatLoc.CL_PopupWindow);
+                }
+                var newMaxTerritories = MaxTerritoriesForLevel(newLevel);
+                if (MaxTerritoriesForLevel(previousLevel) != newMaxTerritories)
+                {
+                    UpdateTerritoryStats();
+                    player.SendTranslatedMessage("GameUtils.Guild.MoreTerritories", eChatType.CT_Guild, eChatLoc.CL_PopupWindow, newMaxTerritories);
+                }
+                var newMaxDefenders = MaxTerritoryDefendersForLevel(newLevel);
+                if (MaxTerritoryDefendersForLevel(previousLevel) != newMaxDefenders)
+                {
+                    player.SendTranslatedMessage("GameUtils.Guild.MoreDefenders", eChatType.CT_Guild, eChatLoc.CL_PopupWindow, newMaxDefenders);
+                }
+                if (Properties.GUILD_NEW_DUES_SYSTEM)
+                {
+                    if (newLevel > 2 && newLevel < 13)
+                    {
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MaxDuesAvailable", (newLevel - 2) * 5), eChatType.CT_Guild, eChatLoc.CL_PopupWindow);
+                    }
+                    else if (newLevel == 2)
+                    {
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MaxDuesAvailable", newLevel), eChatType.CT_Guild, eChatLoc.CL_PopupWindow);
+                    }
+                    else if (newLevel >= 13)
+                    {
+                        int duesAvailable;
+                        if (Properties.GUILD_DUES_MAX_VALUE <= 50)
+                        {
+                            duesAvailable = 50;
+                        }
+                        else
+                        {
+                            int maxDuesValue = (int)Properties.GUILD_DUES_MAX_VALUE;
+                            int additionalDues = (int)Math.Min((newLevel - 12) * 5, maxDuesValue - 50);
+                            duesAvailable = 50 + additionalDues;
+                            duesAvailable = Math.Min(duesAvailable, maxDuesValue);
+                        }
+
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MaxDuesAvailable", duesAvailable), eChatType.CT_Guild, eChatLoc.CL_PopupWindow);
+                    }
+                }
+            }
+
+            NewsMgr.CreateNews("GameUtils.Guild.LevelUp", Realm, eNewsType.RvRGlobal, false, true, Name, newLevel);
+            if (DOL.GS.ServerProperties.Properties.DISCORD_ACTIVE)
+            {
+                DolWebHook hook = new DolWebHook(DOL.GS.ServerProperties.Properties.DISCORD_WEBHOOK_ID);
+                hook.SendMessage(LanguageMgr.GetTranslation(Properties.SERV_LANGUAGE, "GameUtils.Guild.LevelUp", Name, newLevel));
             }
         }
 
