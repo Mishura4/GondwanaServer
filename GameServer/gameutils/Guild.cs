@@ -282,6 +282,42 @@ namespace DOL.GS
             >= 20 => 20
         };
 
+        /// <summary>
+        /// Bonus resistance given to territory guards with territory banner
+        /// </summary>
+        public int TerritoryBannerResistanceBonus => TerritoryBannerResistanceBonusForLevel(GuildLevel);
+
+        public static int TerritoryBannerResistanceBonusForLevel(long level) => level switch
+        {
+            < 15 => Properties.TERRITORYMOB_BANNER_RESIST,
+            >= 15 => Properties.TERRITORYMOB_BANNER_RESIST + 15
+        };
+
+        /// <summary>
+        /// Bonus spell & melee given to territory guards with territory banner
+        /// </summary>
+        public int TerritoryBannerDamageBonus => TerritoryBannerDamageBonusForLevel(GuildLevel);
+
+        public static int TerritoryBannerDamageBonusForLevel(long level) => level switch
+        {
+            < 11 => 0,
+            < 20 => 10,
+            >= 20 => 15
+        };
+
+        /// <summary>
+        /// Bonus spell & melee given to territory guards with territory banner
+        /// </summary>
+        public int TerritoryBannerCriticalChanceBonus => TerritoryBannerCriticalChanceBonusForLevel(GuildLevel);
+
+        public static int TerritoryBannerCriticalChanceBonusForLevel(long level) => level switch
+        {
+            < 11 => 0,
+            < 20 => 5,
+            >= 20 => 10
+        };
+
+
         public int TerritoryCount
         {
             get;
@@ -814,20 +850,45 @@ namespace DOL.GS
                 if (newLevel == previousLevel)
                     return;
 
-                lock (m_territoryLock)
-                {
-                    territories.ForEach(t => t.OnGuildLevelUp(this, newLevel, previousLevel));
-                }
-                if (newLevel > previousLevel)
-                {
-                    OnLevelUp(previousLevel, newLevel);
-                }
+                OnLevelChange(previousLevel, newLevel);
                 this.SaveIntoDatabase();
             }
         }
 
-        public void OnLevelUp(long previousLevel, long newLevel)
+        private void OnLevelChange(long previousLevel, long newLevel)
         {
+
+            var newMaxTerritories = MaxTerritoriesForLevel(newLevel);
+            var previousMaxTerritories = MaxTerritoriesForLevel(previousLevel);
+            var newMaxDefenders = MaxTerritoryDefendersForLevel(newLevel);
+            var previousMaxDefenders = MaxTerritoryDefendersForLevel(previousLevel);
+            var newBannerDamage = TerritoryBannerDamageBonusForLevel(newLevel);
+            var previousBannerDamage = TerritoryBannerDamageBonusForLevel(previousLevel);
+            var newBannerCrit = TerritoryBannerCriticalChanceBonusForLevel(newLevel);
+            var previousBannerCrit = TerritoryBannerCriticalChanceBonusForLevel(previousLevel);
+            var newBannerResists = TerritoryBannerResistanceBonusForLevel(newLevel);
+            var previousBannerResists = TerritoryBannerResistanceBonusForLevel(previousLevel);
+            if (newMaxTerritories != previousMaxTerritories)
+            {
+                UpdateTerritoryStats();
+            }
+            if (newBannerDamage != previousBannerDamage || newBannerCrit != previousBannerCrit || newBannerResists != previousBannerResists)
+            {
+                lock (m_territoryLock)
+                {
+                    foreach (var territory in this.territories)
+                    {
+                        territory.RefreshBannerEffects();
+                    }
+                }
+            }
+
+            if (newLevel <= previousLevel)
+            {
+                // Level went down, likely due to GM action, don't display messages
+                return;
+            }
+
             string newCommands = (newLevel switch
             {
                 1 => "/gc buff",
@@ -839,7 +900,6 @@ namespace DOL.GS
                 7 => "/gc buybanner, /gc summon,  /gc unsummon, /gc edit buybanner & /gc edit summonbanner",
                 _ => null
             })!;
-
             foreach (GamePlayer player in GetListOfOnlineMembers())
             {
                 string msg = LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.LevelUp", Name, newLevel);
@@ -880,16 +940,21 @@ namespace DOL.GS
                 {
                     player.Out.SendMessage(miscInfos, eChatType.CT_Guild, eChatLoc.CL_PopupWindow);
                 }
-                var newMaxTerritories = MaxTerritoriesForLevel(newLevel);
-                if (MaxTerritoriesForLevel(previousLevel) != newMaxTerritories)
+                if (newMaxTerritories != previousMaxTerritories)
                 {
-                    UpdateTerritoryStats();
                     player.SendTranslatedMessage("GameUtils.Guild.MoreTerritories", eChatType.CT_Guild, eChatLoc.CL_PopupWindow, newMaxTerritories);
                 }
-                var newMaxDefenders = MaxTerritoryDefendersForLevel(newLevel);
-                if (MaxTerritoryDefendersForLevel(previousLevel) != newMaxDefenders)
+                if (newMaxDefenders != previousMaxDefenders)
                 {
                     player.SendTranslatedMessage("GameUtils.Guild.MoreDefenders", eChatType.CT_Guild, eChatLoc.CL_PopupWindow, newMaxDefenders);
+                }
+                if (newBannerDamage != previousBannerDamage || newBannerCrit != previousBannerCrit)
+                {
+                    player.SendTranslatedMessage("GameUtils.Guild.MoreBannerDamage", eChatType.CT_Guild, eChatLoc.CL_PopupWindow, newBannerDamage, newBannerCrit);
+                }
+                if (newBannerResists != previousBannerResists)
+                {
+                    player.SendTranslatedMessage("GameUtils.Guild.MoreBannerResists", eChatType.CT_Guild, eChatLoc.CL_PopupWindow, newBannerResists);
                 }
                 if (Properties.GUILD_NEW_DUES_SYSTEM)
                 {

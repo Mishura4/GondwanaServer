@@ -245,13 +245,25 @@ namespace DOL.Territories
         public bool IsBannerSummoned
         {
             get;
-            set;
+            private set;
         }
 
         public int CurrentBannerResist
         {
             get;
-            set;
+            private set;
+        }
+
+        public int CurrentBannerDamage
+        {
+            get;
+            private set;
+        }
+
+        public int CurrentBannerCrit
+        {
+            get;
+            private set;
         }
 
         public string ID
@@ -541,40 +553,64 @@ namespace DOL.Territories
             }
         }
 
-        private void ToggleBannerUnsafe(bool add)
+        public void RefreshBannerEffects()
         {
+            lock (m_lockObject)
+            {
+                if (!IsBannerSummoned || Type == eType.Subterritory)
+                {
+                    return;
+                }
+                SetBannerEffects(false);
+                SetBannerEffects(true);
+            }
+        }
+
+        private void SetBannerEffects(bool add)
+        {
+            if (Type != eType.Normal)
+                return;
+
             int mobBannerResist = 0;
+            int mobBannerCrit = 0;
+            int mobBannerDamage = 0;
 
             if (add)
             {
-                IsBannerSummoned = true;
-                if (Type == eType.Normal)
-                {
-                    mobBannerResist = Properties.TERRITORYMOB_BANNER_RESIST + (OwnerGuild?.GuildLevel >= 15 ? 15 : 0);
-                }
+                mobBannerResist = OwnerGuild.TerritoryBannerResistanceBonus;
+                mobBannerCrit = OwnerGuild.TerritoryBannerCriticalChanceBonus;
+                mobBannerDamage = OwnerGuild.TerritoryBannerDamageBonus;
             }
             else
             {
-                IsBannerSummoned = false;
                 mobBannerResist = -CurrentBannerResist;
+                mobBannerCrit = -CurrentBannerCrit;
+                mobBannerDamage = -CurrentBannerDamage;
             }
 
             foreach (var mob in Mobs)
             {
-                RefreshEmblem(mob);
-
-                if (mobBannerResist != 0)
-                {
-                    // Update magic and physical resistance bonus
-                    ChangeMagicAndPhysicalResistance(mob, mobBannerResist);
-                }
+                ChangeMagicAndPhysicalResistance(mob, mobBannerResist);
+                ApplyBonus(mob, eProperty.MeleeDamage, mobBannerDamage);
+                ApplyBonus(mob, eProperty.SpellDamage, mobBannerDamage);
+                ApplyBonus(mob, eProperty.CriticalMeleeHitChance, mobBannerCrit);
+                ApplyBonus(mob, eProperty.CriticalSpellHitChance, mobBannerCrit);
+                ApplyBonus(mob, eProperty.CriticalHealHitChance, mobBannerCrit);
+                ApplyBonus(mob, eProperty.CriticalArcheryHitChance, mobBannerCrit);
             }
 
-            // Update magic and physical resistance bonus
-            ChangeMagicAndPhysicalResistance(Boss, mobBannerResist);
             CurrentBannerResist += mobBannerResist;
-            RefreshEmblem(Boss);
+        }
 
+        private void ToggleBannerUnsafe(bool add)
+        {
+            SetBannerEffects(add);
+
+            foreach (var mob in Mobs)
+            {
+                RefreshEmblem(mob);
+            }
+            IsBannerSummoned = add;
 
             foreach (IArea iarea in Areas)
             {
@@ -816,6 +852,10 @@ namespace DOL.Territories
             {
                 this.Boss.CurrentTerritory = this;
                 GameEventManager.Instance.Events.Where(e => e.ID.Equals(this.Boss.EventID)).SelectMany(e => e.Mobs).ForEach(m => m.CurrentTerritory = this);
+                if (!this.Mobs.Contains(Boss))
+                {
+                    this.Mobs.Add(Boss);
+                }
             }
         }
 
@@ -927,6 +967,10 @@ namespace DOL.Territories
                     log.Error($"Impossible to get mobs from territory {this.Name}'s area {area.Description} ({iarea.ID}) because its type  is not supported");
                     continue;
                 }
+            }
+            if (Boss != null && !Mobs.Contains(Boss))
+            {
+                Mobs.Add(Boss);
             }
         }
 

@@ -1,9 +1,11 @@
 GameUtils.Guild.LevelUp:		{0} has reached level {1}!
 GameUtils.Guild.CommandAvailable:	- Guild command {0} is now available.
 GameUtils.Guild.CommandsAvailable:	- Guild commands {0} are now available.
-GameUtils.Guild.MaxDuesAvailable:	- Guild dues can now be set up to {0}%.	
+GameUtils.Guild.MaxDuesAvailable:	- Guild dues can now be set up to {0}%.
 GameUtils.Guild.MoreTerritories:	- Your guild can capture up to {0} territories without incurring overtax penalties and can accumulate bonuses for a maximum of {1} territories.
 GameUtils.Guild.MoreDefenders:	- After establishing a guild banner within a territory, up to {0} defenders can be bought and deployed to fortify its protection.
+GameUtils.Guild.MoreBannerDamage:	- Your territory banners now offer {0}% spell and melee damage as well as {1}% critical chance to defenders.
+GameUtils.Guild.MoreBannerResists:	- Your territory banners now offer {0}% bonus resistance to defenders.
 GameUtils.Guild.MiscInfos01:		The command /gc dues allows your guild to impose a tax on its member's earnings derived from monster kills, directing these funds to the guild's bank account to support raid endeavors and fulfill rental fees for owned territories.
 GameUtils.Guild.MiscInfos02:		The command /gc territorybanner enables your guild to fully assimilate a territory to your cause, showcasing your emblem to adversaries. Additionally, this action reduces territory rent fees by {0}% and enhances the resistance of territory guards by {1}% in combat and against spells. Meanwhile, the /gc buyterritorydefender command allows your guild to purchase and deploy a guard in a specified territory, thereby strengthening its defense.
 GameUtils.Guild.MiscInfos03:		With the /gc territoryportal command, a guild member with rank 4 minimum and within an owned territory can activate a guild portal and issue a call to all other connected guild members, requesting reinforcements in the event of a territory assault. The Guild portal costs 5000 Merit points and will stay open for {0} minutes.
