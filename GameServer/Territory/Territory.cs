@@ -101,13 +101,7 @@ namespace DOL.Territories
                 if (guild == null)
                 {
                     log.Warn($"Territory {Name} ({db.ObjectId}) is owned by guild with ID {guild_id} in the database but no guild with this ID was found");
-                }
-                else
-                {
-                    SetGuildOwner(guild, false);
-                    StartExpireTimer();
-                    if (IsBannerSummoned)
-                        ToggleBannerUnsafe(true);
+                    ReleaseTerritory();
                 }
             }
         }
@@ -333,6 +327,11 @@ namespace DOL.Territories
         }
 
         private readonly Object m_lockObject = new();
+
+        public string? OwnerGuildID
+        {
+            get => guild_id;
+        }
 
         private Guild? m_ownerGuild;
 

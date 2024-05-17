@@ -444,6 +444,33 @@ namespace DOL.GS
             }
         }
 
+        private void ApplyTerritoryBonus(Territory territory)
+        {
+            if (territory.Type == Territory.eType.Normal)
+            {
+                ++TerritoryCount;
+                if (TerritoryCount > MaxTerritories)
+                {
+                    return;
+                }
+                this.TerritoryBonusBountyPoints += 1;
+                this.TerritoryBonusExperienceFactor += 0.02;
+            }
+
+            foreach (var resist in territory.BonusResist)
+            {
+                if (!this.TerritoryResists.TryAdd(resist.Key, resist.Value))
+                {
+                    this.TerritoryResists[resist.Key] += resist.Value;
+                }
+            }
+            this.TerritoryMeleeAbsorption += territory.BonusMeleeAbsorption;
+            this.TerritorySpellAbsorption += territory.BonusSpellAbsorption;
+            this.TerritoryDotAbsorption += territory.BonusDoTAbsorption;
+            this.TerritoryDebuffDurationReduction += territory.BonusReducedDebuffDuration;
+            this.TerritorySpellRangeBonus += territory.BonusSpellRange;
+        }
+
         private void UpdateTerritoryStats()
         {
             this.TerritoryResists.Clear();
@@ -454,39 +481,8 @@ namespace DOL.GS
             this.TerritoryDebuffDurationReduction = 0;
             this.TerritorySpellRangeBonus = 0;
             this.TerritoryBonusBountyPoints = 0;
-            foreach (Territory t in territories)
-            {
-                if (t.Type == Territory.eType.Normal)
-                {
-                    ++TerritoryCount;
-                }
-                foreach (var resist in t.BonusResist)
-                {
-                    if (!this.TerritoryResists.TryAdd(resist.Key, resist.Value))
-                    {
-                        this.TerritoryResists[resist.Key] += resist.Value;
-                    }
-                }
-                this.TerritoryMeleeAbsorption += t.BonusMeleeAbsorption;
-                this.TerritorySpellAbsorption += t.BonusSpellAbsorption;
-                this.TerritoryDotAbsorption += t.BonusDoTAbsorption;
-                this.TerritoryDebuffDurationReduction += t.BonusReducedDebuffDuration;
-                this.TerritorySpellRangeBonus += t.BonusSpellRange;
-            }
-            if (TerritoryCount > MaxTerritories)
-            {
-                foreach (KeyValuePair<eResist, int> resist in this.TerritoryResists.ToList())
-                {
-                    this.TerritoryResists[resist.Key] = resist.Value * MaxTerritories / TerritoryCount;
-                }
-                TerritoryMeleeAbsorption = TerritoryMeleeAbsorption * MaxTerritories / TerritoryCount;
-                TerritorySpellAbsorption = TerritorySpellAbsorption * MaxTerritories / TerritoryCount;
-                TerritoryDotAbsorption = TerritoryDotAbsorption * MaxTerritories / TerritoryCount;
-                TerritoryDebuffDurationReduction = TerritoryDebuffDurationReduction * MaxTerritories / TerritoryCount;
-                TerritorySpellRangeBonus = TerritorySpellRangeBonus * MaxTerritories / TerritoryCount;
-            }
-            this.TerritoryBonusBountyPoints = Math.Min(MaxTerritories, TerritoryCount);
-            this.TerritoryBonusExperienceFactor = (Math.Min(MaxTerritories, TerritoryCount) * 2) / 100.0d;
+            this.TerritoryBonusExperienceFactor = 0.0d;
+            territories.ForEach(this.ApplyTerritoryBonus);
 
             this.m_onlineGuildPlayers.Values.Foreach(p => p.Out.SendCharResistsUpdate());
         }
@@ -627,6 +623,11 @@ namespace DOL.GS
                     if (territory == null)
                     {
                         log.Warn($"Guild {Name} ({GuildID}) references territory {id} but no territory was found for that ID");
+                        continue;
+                    }
+                    if (!String.Equals(territory.OwnerGuildID, GuildID))
+                    {
+                        log.Warn($"Guild {Name} ({GuildID}) references territory {id} but its owner in the database is {territory.OwnerGuildID}");
                         continue;
                     }
                     territory.OwnerGuild = this;
