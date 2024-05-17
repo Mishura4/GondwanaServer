@@ -345,7 +345,7 @@ Commands.Players.Guild.Territories.MaxTerritories:		Nombre maximal de territoire
 Commands.Players.Guild.Territories.DailyRent:			Total de la taxe journalière: {0}
 Commands.Players.Guild.Territories.DailyMeritPoints:	Total des points de mérite journaliers: {0}
 Commands.Players.Guild.Territories.TimeBeforeRent:		Temps avant le prochain paiement: {0}
-Commands.Players.Guild.Territories.TotalXPBonus:		Bonus total d'expérience: {0}%
+Commands.Players.Guild.Territories.TotalXPBonus:		Bonus total d'expérience: {0:0}%
 Commands.Players.Guild.Territories.TotalBPBonus:		Bonus total de points de butin pour mobs Nv65+: {0}
 Commands.Players.Guild.Territories.Bonuses:				---- Bonus des territoires ----
 Commands.Players.Guild.Territories.DebuffDuration:		Durée d'effets néfastes

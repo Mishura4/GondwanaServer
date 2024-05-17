@@ -5477,22 +5477,9 @@ namespace DOL.GS
                 expTotal += eventBonus;
             }
 
-            int territoryCount = 0;
-
-            if (this.Guild != null && this.Guild.Territories.Any())
+            if (Guild != null)
             {
-                territoryCount = this.Guild.Territories.Count();
-
-                if (territoryCount < 5)
-                {
-                    territoryExp = (int)Math.Round(expTotal * territoryCount * 2D / 100D);
-                }
-                else
-                {
-                    territoryExp = (int)Math.Round(expTotal * 10D / 100D);
-                }
-
-                expTotal += territoryExp;
+                expTotal += Guild.GetBonusXP(expTotal);
             }
 
             // Get Champion Experience too

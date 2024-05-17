@@ -304,7 +304,7 @@ namespace DOL.Territories
                 timeBeforeRent = LanguageMgr.TranslateTimeShort(player, (int)hours, (int)minutes, (int)seconds);
             }
             infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.TimeBeforeRent", timeBeforeRent));
-            infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.TotalXPBonus", Math.Min(10, ownedTerritories.Count * 2)));
+            infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.TotalXPBonus", ownedTerritories.Count == 0 ? 0 : player.Guild.TerritoryBonusExperienceFactor * 100));
             infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.TotalBPBonus", ownedTerritories.Count == 0 ? 0 : player.Guild.TerritoryBonusBountyPoints * 2));
 
             // ---- Territory Bonuses ----

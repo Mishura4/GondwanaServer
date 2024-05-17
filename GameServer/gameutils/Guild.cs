@@ -207,9 +207,18 @@ namespace DOL.GS
         }
 
         /// <summary>
-        /// Spell range % increased based on owned Territories
+        /// Bonus bounty points based on owned Territories (doubled for Lv65+ mobs)
         /// </summary>
         public int TerritoryBonusBountyPoints
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// Bonus experience based on owned Territories
+        /// </summary>
+        public double TerritoryBonusExperienceFactor
         {
             get;
             private set;
@@ -477,6 +486,7 @@ namespace DOL.GS
                 TerritorySpellRangeBonus = TerritorySpellRangeBonus * MaxTerritories / TerritoryCount;
             }
             this.TerritoryBonusBountyPoints = Math.Min(MaxTerritories, TerritoryCount);
+            this.TerritoryBonusExperienceFactor = (Math.Min(MaxTerritories, TerritoryCount) * 2) / 100.0d;
 
             this.m_onlineGuildPlayers.Values.Foreach(p => p.Out.SendCharResistsUpdate());
         }
@@ -490,6 +500,15 @@ namespace DOL.GS
                 return 0;
 
             return this.TerritoryDebuffDurationReduction;
+        }
+
+        public long GetBonusXP(long xp)
+        {
+            if (GuildType != eGuildType.PlayerGuild)
+                return 0;
+
+            double factor = 1.0d + TerritoryBonusExperienceFactor;
+            return (int)(factor * xp + 0.5d);
         }
 
         public void RemoveTerritory(Territory territory)
