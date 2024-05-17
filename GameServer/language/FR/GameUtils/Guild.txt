@@ -20,22 +20,31 @@ GameUtils.Guild.MiscInfos11:		- Tous les bonus des buffs de guilde sont désorma
 GameUtils.Guild.MiscInfos12:		- Les effets bénéfiques de la bannière de guilde sont désormais améliorés de 30% pour le porteur de la bannière ainsi que pour les joueurs environnants.
 GameUtils.Guild.MiscInfos13:		- L'utilisation de /gc territorybanner a été améliorée pour fournir un bonus de 15% aux dégâts magiques et de mêlée pour tous les gardes du territoire, tout en augmentant également leur chance de coup critique de 10%.
 
-GameUtils.Guild.Territory.TerritoryExpired:        Votre contrôle du terroire {0} se termine!
-GameUtils.Guild.Territory.Lord.NoGuild:            Je n'ai rien à vous dire. Revenez quand vous ferez parti d'une guilde.
-GameUtils.Guild.Territory.Lord.Claimable:          Voulez-vous que mon clan devienne un vasseau de votre guilde? [oui] [non]
-GameUtils.Guild.Territory.Lord.NotClaimable:       Notre clan vient d'entrer dans une alliance avec {0}, attendez {1}!
-GameUtils.Guild.Territory.Lord.Renewable:          Notre alliance arrivera à sa fin dans {0}. Voulez-vous la renouveler? [oui] [non]
-GameUtils.Guild.Territory.Lord.Hello:              Bien le bonjour, {0}. Nous sommes au service de {1}.
-GameUtils.Guild.Territory.Lord.InCombat:           Vous êtes encore en train de combattre!
-GameUtils.Guild.Territory.Lord.Occupied:           Je parle à quelqu'un d'autre, revenez plus tard.
-GameUtils.Guild.Territory.Lord.Interrupted:        On dirait qu'on a de la compagnie, revenez quand vous vous en serez débarassé.
-GameUtils.Guild.Territory.Lord.TooFar:             Revenez quand vous souhaiterez former une alliance.
-GameUtils.Guild.Territory.Capture.Timer:           Prise du territoire
-GameUtils.Guild.Territory.Capture.Start:           {0} commence à prendre le contrôle du territoire {1}!
-GameUtils.Guild.Territory.Capture.Captured:        {0} a pris le territoire {1}!
-GameUtils.Guild.Territory.Capture.Renewed:         {0} a renouvelé votre contrôle du territoire {1}!
-GameUtils.Guild.Territory.Capture.CapturedPvP:     {0} gagne {1} points de royaume pour avoir capturé {2} des mains de {3}!
-GameUtils.Guild.Territory.Capture.CapturedPvE:     {0} gagne {1} points de royaume pour avoir capturé {2}!
+GameUtils.Guild.Territory.TerritoryExpired:         Votre contrôle du terroire {0} se termine!
+GameUtils.Guild.Territory.Lord.NoGuild:             Je n'ai rien à vous dire. Revenez quand vous ferez parti d'une guilde.
+GameUtils.Guild.Territory.Lord.Claimable:           Voulez-vous que mon clan devienne un vasseau de votre guilde? [oui] [non]
+GameUtils.Guild.Territory.Lord.NotClaimable:        Notre clan vient d'entrer dans une alliance avec {0}, attendez {1}!
+GameUtils.Guild.Territory.Lord.Renewable:           Notre alliance arrivera à sa fin dans {0}. Voulez-vous la renouveler? [oui] [non]
+GameUtils.Guild.Territory.Lord.Hello:               Bien le bonjour, {0}. Nous sommes au service de {1}.
+GameUtils.Guild.Territory.Lord.InCombat:            Vous êtes encore en train de combattre!
+GameUtils.Guild.Territory.Lord.Occupied:            Je parle à quelqu'un d'autre, revenez plus tard.
+GameUtils.Guild.Territory.Lord.MoneyBribe:          Nous demandons la somme de {0} pour notre service. [payer]
+GameUtils.Guild.Territory.Lord.MoneyBribe.Accept:   Très bien, cela suffira pour une [alliance].
+GameUtils.Guild.Territory.Lord.BountyPoints:        Prouvez votre mérite en amassant {0} points de butin. [échanger]
+GameUtils.Guild.Territory.Lord.BountyPoints.Accept: Très bien, rejoindre votre [alliance] serait un honneur.
+GameUtils.Guild.Territory.Lord.ItemBribe:           Apportez-moi {0} {1} et nous vous offrirons notre service. [donner]
+GameUtils.Guild.Territory.Lord.ItemBribe.Accept:    Nous vous remercions pour votre contribution, et seront ravi de rejoindre votre [alliance].
+GameUtils.Guild.Territory.Lord.QuestCondition:      Complétez la quète {0} et nous vous offrirons notre service.
+GameUtils.Guild.Territory.Lord.TerritoryCondition:  Nous n'offrirons notre service qu'aux alliés de {0}.
+GameUtils.Guild.Territory.Lord.Interrupted:         On dirait qu'on a de la compagnie, revenez quand vous vous en serez débarassé.
+GameUtils.Guild.Territory.Lord.ConditionChanged:    J'ai changé d'avis. Parlez-moi à nouveau et on peut peut-être négocier.
+GameUtils.Guild.Territory.Lord.TooFar:              Revenez quand vous souhaiterez former une alliance.
+GameUtils.Guild.Territory.Capture.Timer:            Prise du territoire
+GameUtils.Guild.Territory.Capture.Start:            {0} commence à prendre le contrôle du territoire {1}!
+GameUtils.Guild.Territory.Capture.Captured:         {0} a pris le territoire {1}!
+GameUtils.Guild.Territory.Capture.Renewed:          {0} a renouvelé votre contrôle du territoire {1}!
+GameUtils.Guild.Territory.Capture.CapturedPvP:      {0} gagne {1} points de royaume pour avoir capturé {2} des mains de {3}!
+GameUtils.Guild.Territory.Capture.CapturedPvE:      {0} gagne {1} points de royaume pour avoir capturé {2}!
 
 GameUtils.Guild.Banner.BannerInGroup:			Quelqu'un dans votre groupe a déjà une bannière active!
 GameUtils.Guild.Banner.BannerNoGroup:			Vous avez quitté le groupe et votre bannière disparaît!

@@ -117,23 +117,30 @@ namespace DOL.Territories
                 }
 
                 MobInfo mobInfo = new();
+                string[] bossInfo = null;
+                string bossID = null;
+                if (!string.IsNullOrEmpty(territoryDb.BossMobId))
+                {
+                    bossInfo = territoryDb.BossMobId.Split('|');
+                    bossID = bossInfo[0];
+                }
 
                 if (!string.IsNullOrEmpty(territoryDb.GroupId))
                 {
                     mobInfo = Instance.FindBossFromGroupId(territoryDb.GroupId);
 
-                    if (!territoryDb.BossMobId.Equals(mobInfo.Mob.InternalID))
+                    if (!string.Equals(bossID, mobInfo.Mob.InternalID))
                     {
-                        log.Error($"Territory {territoryDb.Name} ({territoryDb.ObjectId}) has Boss ID {territoryDb.BossMobId} which does not match boss {mobInfo.Mob.InternalID} from GroupId {territoryDb.GroupId}");
+                        log.Error($"Territory {territoryDb.Name} ({territoryDb.ObjectId}) has Boss ID {bossID} which does not match boss {mobInfo.Mob.InternalID} from GroupId {territoryDb.GroupId}");
                         continue;
                     }
                 }
-                else if (!string.IsNullOrEmpty(territoryDb.BossMobId))
+                else if (!string.IsNullOrEmpty(bossID))
                 {
-                    mobInfo.Mob = zone.GetNPCsOfZone(eRealm.None).FirstOrDefault(npc => npc.InternalID == territoryDb.BossMobId);
+                    mobInfo.Mob = zone.GetNPCsOfZone(eRealm.None).FirstOrDefault(npc => npc.InternalID == bossID);
                     if (mobInfo.Mob == null)
                     {
-                        mobInfo.Error = $"Could not find boss with ID {territoryDb.BossMobId} for territory {territoryDb.Name} ({territoryDb.ObjectId})";
+                        mobInfo.Error = $"Could not find boss with ID {bossID} for territory {territoryDb.Name} ({territoryDb.ObjectId})";
                     }
                 }
 
@@ -141,6 +148,11 @@ namespace DOL.Territories
                 {
                     log.Error(mobInfo.Error);
                     return;
+                }
+
+                if (mobInfo.Mob is TerritoryLord lord)
+                {
+                    lord.ParseParameters(bossInfo);
                 }
 
                 Territory territory = new Territory(zone, areas, mobInfo.Mob, territoryDb);
@@ -357,7 +369,7 @@ namespace DOL.Territories
                 }
                 else
                 {
-                    line += " / " + territory.OwnerGuild?.Name ?? "????";
+                    line += " / " + (territory.OwnerGuild?.Name ?? "????");
                     otherTerritories.Add(line);
                 }
             }

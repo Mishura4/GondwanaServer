@@ -4,21 +4,30 @@ using DOL.Events;
 using DOL.GameEvents;
 using DOL.GS;
 using DOL.GS.PacketHandler;
+using DOL.GS.Quests;
 using DOL.GS.ServerProperties;
 using DOL.Language;
+using log4net;
+using SQLitePCL;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 
 namespace DOL.Territories
 {
     public class TerritoryLord : GameNPC
     {
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
         public DateTime lastClaim = new DateTime(1);
 
         private RegionTimer _claimTimer;
 
         private readonly object _lockObject = new object();
+
+        private readonly HashSet<string> _playersAuthorized = new();
 
 
         public TimeSpan TimeBeforeClaim
@@ -34,6 +43,205 @@ namespace DOL.Territories
             get => TimeBeforeClaim.Ticks > 0;
         }
 
+        private sealed class LazyTerritory
+        {
+            string _territoryID;
+            Territory? _territory;
+
+            public LazyTerritory(string ID)
+            {
+                _territoryID = ID;
+            }
+
+            public Territory Get()
+            {
+                if (_territory != null)
+                    return _territory;
+
+                _territory = TerritoryManager.GetTerritoryByID(_territoryID);
+                return _territory;
+            }
+        }
+
+        /// <summary>
+        /// Condition for capture. Can have parameters, see ParseParameters
+        /// </summary>
+        public enum eCaptureCondition
+        {
+            None = 0, // No parameters
+            MoneyBribe, // 1 parameter: amount of money
+            BountyPointsBribe, // 1 parameter: amount of BPs
+            ItemBribe, // 2 parameters: ItemTemplateID, (optional) amount
+            QuestCompletion, // 2 parameters: QuestID, (optional) amount
+            TerritoryOwned // 1 parameter: TerritoryID
+        }
+
+        public eCaptureCondition CaptureCondition
+        {
+            get;
+            private set;
+        }
+
+        public object CaptureParam1
+        {
+            get;
+            private set;
+        }
+
+        public object CaptureParam2
+        {
+            get;
+            private set;
+        }
+
+        public override bool AddToWorld()
+        {
+            if (CaptureCondition == eCaptureCondition.TerritoryOwned)
+            {
+                ((LazyTerritory)CaptureParam1).Get();
+            }
+            return base.AddToWorld();
+        }
+
+        /// <summary>
+        /// Parse the capture parameters from the DB.
+        /// </summary>
+        /// <param name="args">Parameters from the DB. [0] is mobID, [1] is condition, [2] is param1, [3] is param2</param>
+        public void ParseParameters(string[] args)
+        {
+            void SetNoCondition()
+            {
+                CaptureCondition = eCaptureCondition.None;
+                CaptureParam1 = null;
+                CaptureParam2 = null;
+            }
+
+            void EnforceParamLength(int amount)
+            {
+                if (args.Length < amount)
+                {
+                    throw new ArgumentException($"Bad parameters -- expected {amount}, got {args.Length}");
+                }
+            }
+
+            if (args.Length < 2)
+            {
+                SetNoCondition();
+                return;
+            }
+
+            eCaptureCondition condition = (eCaptureCondition)Enum.Parse(typeof(eCaptureCondition), args[1]);
+            if (condition == eCaptureCondition.None)
+            {
+                SetNoCondition();
+                return;
+            }
+
+            switch (condition)
+            {
+                case eCaptureCondition.None:
+                    SetNoCondition();
+                    break;
+
+                case eCaptureCondition.MoneyBribe:
+                case eCaptureCondition.BountyPointsBribe:
+                // Amount
+                    {
+                        EnforceParamLength(3);
+                        long amount = long.Parse(args[2]);
+                        CaptureCondition = condition;
+                        CaptureParam1 = amount;
+                    }
+                    break;
+
+                case eCaptureCondition.ItemBribe:
+                    {
+                        EnforceParamLength(3);
+                        long amount = 1;
+                        if (args.Length > 3)
+                        {
+                            amount = long.Parse(args[3]);
+                        }
+                        ItemTemplate tpl = DOLDB<ItemTemplate>.SelectObject(DB.Column("Id_nb").IsEqualTo(args[1]));
+                        if (tpl == null)
+                        {
+                            throw new ArgumentException($"ItemTemplate {args[2]} not found");
+                        }
+                        CaptureCondition = condition;
+                        CaptureParam1 = tpl;
+                        CaptureParam2 = amount;
+                    }
+                    break;
+
+                case eCaptureCondition.QuestCompletion:
+                    {
+                        EnforceParamLength(3);
+                        ushort questID = ushort.Parse(args[2]);
+                        long amount = 1;
+                        if (args.Length > 3)
+                        {
+                            amount = long.Parse(args[3]);
+                        }
+                        DataQuestJson quest = DataQuestJsonMgr.GetQuest(questID);
+                        if (quest == null)
+                        {
+                            throw new ArgumentException($"DataQuestJson {args[2]} not found");
+                        }
+                        CaptureCondition = condition;
+                        CaptureParam1 = args[2];
+                        CaptureParam2 = amount;
+                    }
+                    break;
+
+                case eCaptureCondition.TerritoryOwned:
+                // String
+                    {
+                        EnforceParamLength(3);
+                        CaptureCondition = condition;
+                        // Because this is called while loading territories we cannot check here. Instead we defer to AddToWorld.
+                        // This is not ideal but the alternative is to change how territories are loaded
+                        CaptureParam1 = new LazyTerritory(args[2]);
+                    }
+                    break;
+
+                default:
+                    throw new ArgumentException("Unknown capture condition " + args[1]);
+            }
+        }
+
+        private bool CanPlayerClaim(GamePlayer player)
+        {
+            try
+            {
+                switch (CaptureCondition)
+                {
+                    case eCaptureCondition.None:
+                        return true;
+
+                    case eCaptureCondition.MoneyBribe:
+                    case eCaptureCondition.BountyPointsBribe:
+                    case eCaptureCondition.ItemBribe:
+                        return _playersAuthorized.Contains(player.InternalID);
+
+
+                    case eCaptureCondition.QuestCompletion:
+                        return player.HasFinishedQuest((DataQuestJson)CaptureParam1) >= ((long)CaptureParam2);
+
+                    case eCaptureCondition.TerritoryOwned:
+                        return ((LazyTerritory)CaptureParam1).Get()?.IsOwnedBy(player) == true;
+
+                    default:
+                        log.Warn($"TerritoryLord {Name} ({InternalID}) has unknown capture condition {CaptureCondition} and will always refuse players");
+                        return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Warn($"TerritoryLord {Name} ({InternalID}) has broken capture condition {CaptureCondition}:\n{ex}");
+                return false;
+            }
+        }
+
         public override bool Interact(GamePlayer player)
         {
             if (!base.Interact(player))
@@ -43,9 +251,10 @@ namespace DOL.Territories
             {
                 if (CurrentTerritory == null)
                 {
+                    log.Warn($"TerritoryLord {Name} ({InternalID}) is not part of a territory");
                     if (player.Client.Account.PrivLevel > 1)
                     {
-                        Whisper(player, "This TerritoryLord is not part of a territory!");
+                        Whisper(player, "(GM) I am not part of a territory!");
                     }
                     return false;
                 }
@@ -86,6 +295,43 @@ namespace DOL.Territories
             }
         }
 
+        private bool AskCondition(GamePlayer player)
+        {
+            switch (CaptureCondition)
+            {
+                case eCaptureCondition.None:
+                    // This wouldn't happen normally
+                    throw new InvalidOperationException("TerritoryLord.AskCondition called with no capture condition");
+
+                case eCaptureCondition.MoneyBribe:
+                    player.SendTranslatedMessage("GameUtils.Guild.Territory.Lord.MoneyBribe", eChatType.CT_System, eChatLoc.CL_PopupWindow, (long)CaptureParam1);
+                    return true;
+
+                case eCaptureCondition.BountyPointsBribe:
+                    player.SendTranslatedMessage("GameUtils.Guild.Territory.Lord.BountyPointsBribe", eChatType.CT_System, eChatLoc.CL_PopupWindow, (long)CaptureParam1);
+                    return true;
+
+                case eCaptureCondition.ItemBribe:
+                    player.SendTranslatedMessage("GameUtils.Guild.Territory.Lord.ItemBribe", eChatType.CT_System, eChatLoc.CL_PopupWindow, (long)CaptureParam2, ((ItemTemplate)CaptureParam1).Name);
+                    return true;
+
+                case eCaptureCondition.QuestCompletion:
+                    player.SendTranslatedMessage("GameUtils.Guild.Territory.Lord.QuestCondition", eChatType.CT_System, eChatLoc.CL_PopupWindow, ((DataQuestJson)CaptureParam1).Name);
+                    return true;
+
+                case eCaptureCondition.TerritoryOwned:
+                    string name = ((LazyTerritory)CaptureParam1).Get()?.Name;
+                    if (name == null)
+                        throw new ArgumentException($"Unknown territory");
+                    player.SendTranslatedMessage("GameUtils.Guild.Territory.Lord.QuestCondition", eChatType.CT_System, eChatLoc.CL_PopupWindow, name);
+                    return true;
+
+                default:
+                    // This wouldn't happen normally
+                    throw new InvalidOperationException("TerritoryLord.AskCondition called with no capture condition");
+            }
+        }
+
         public override bool WhisperReceive(GameLiving source, string text)
         {
             var player = source as GamePlayer;
@@ -97,12 +343,14 @@ namespace DOL.Territories
             {
                 if (CurrentTerritory == null)
                     return false;
+
                 if (player is not { Guild: { GuildType: not Guild.eGuildType.ServerGuild } })
                 {
-                    return false;
+                    player.SendTranslatedMessage("GameUtils.Guild.Territory.Lord.NoGuild");
+                    return true;
                 }
 
-                if (text is not "oui" or "non" or "yes" or "no")
+                if (text is not "oui" or "yes" or "alliance")
                     return true;
 
                 if (player.InCombat)
@@ -120,6 +368,17 @@ namespace DOL.Territories
                         return true;
                     }
                 }
+
+                if (!CanPlayerClaim(player))
+                {
+                    if (text is "alliance")
+                    {
+                        Whisper(player, LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.Territory.Lord.ConditionChanged"));
+                        return true;
+                    }
+                    return AskCondition(player);
+                }
+
                 if (_claimTimer != null)
                 {
                     player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.Territory.Lord.Occupied"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
@@ -146,6 +405,13 @@ namespace DOL.Territories
                                 _claimTimer = null;
                                 player.Out.SendCloseTimerWindow();
                                 Whisper(player, LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.Territory.Lord.TooFar"));
+                                return 0;
+                            }
+                            if (!CanPlayerClaim(player))
+                            {
+                                _claimTimer = null;
+                                player.Out.SendCloseTimerWindow();
+                                Whisper(player, LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.Territory.Lord.ConditionChanged"));
                                 return 0;
                             }
                             if (ticks < Properties.TERRITORY_CLAIM_TIMER_SECONDS * 1000)

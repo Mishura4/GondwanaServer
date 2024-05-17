@@ -20,22 +20,31 @@ GameUtils.Guild.MiscInfos11:		- All Guild buff Bonuses are now improved by 100%,
 GameUtils.Guild.MiscInfos12:		- Guild banner’s beneficial effects are now improved by 30% for the banner’s carrier and surrounding players.
 GameUtils.Guild.MiscInfos13:		- /gc territorybanner usage has been upgraded to provide a 15% bonus to spell and melee damages for all territory guards, while also increasing their critical hit chance by 10%.
 
-GameUtils.Guild.Territory.TerritoryExpired:        Your control over the territory {0} has ended!
-GameUtils.Guild.Territory.Lord.NoGuild:            I have nothing to say to you. Come back when you are part of a guild.
-GameUtils.Guild.Territory.Lord.Claimable:          Do you want my clan to become a vassal to your guild? [yes] [no]
-GameUtils.Guild.Territory.Lord.NotClaimable:       Our clan just entered an alliance with {0}, wait {1}!
-GameUtils.Guild.Territory.Lord.Renewable:          Our alliance will end in {0}. Would you like to renew it? [yes] [no]
-GameUtils.Guild.Territory.Lord.Hello:              Greetings, {0}. We answer to {1}.
-GameUtils.Guild.Territory.Lord.InCombat:           You are in combat!
-GameUtils.Guild.Territory.Lord.Occupied:           I am currently talking to someone, come back later.
-GameUtils.Guild.Territory.Lord.Interrupted:        It looks like we have company, come back when you get rid of it.
-GameUtils.Guild.Territory.Lord.TooFar:             Come back when you want to form an alliance.
-GameUtils.Guild.Territory.Capture.Timer:           Territory capture
-GameUtils.Guild.Territory.Capture.Start:           {0} begins to take control of {1}!
-GameUtils.Guild.Territory.Capture.Captured:        {0} has taken control of {1}!
-GameUtils.Guild.Territory.Capture.Renewed:         {0} has renewed your control of {1}!
-GameUtils.Guild.Territory.Capture.CapturedPvP:     {0} earns {1} realm points for capturing {2} from {3}!
-GameUtils.Guild.Territory.Capture.CapturedPvE:     {0} earns {1} realm points for capturing {2}!
+GameUtils.Guild.Territory.TerritoryExpired:         Your control over the territory {0} has ended!
+GameUtils.Guild.Territory.Lord.NoGuild:             I have nothing to say to you. Come back when you are part of a guild.
+GameUtils.Guild.Territory.Lord.Claimable:           Do you want my clan to become a vassal to your guild? [yes] [no]
+GameUtils.Guild.Territory.Lord.NotClaimable:        Our clan just entered an alliance with {0}, wait {1}!
+GameUtils.Guild.Territory.Lord.Renewable:           Our alliance will end in {0}. Would you like to renew it? [yes] [no]
+GameUtils.Guild.Territory.Lord.Hello:               Greetings, {0}. We answer to {1}.
+GameUtils.Guild.Territory.Lord.InCombat:            You are in combat!
+GameUtils.Guild.Territory.Lord.Occupied:            I am currently talking to someone, come back later.
+GameUtils.Guild.Territory.Lord.MoneyBribe:          We ask for {0} for our service. [pay]
+GameUtils.Guild.Territory.Lord.MoneyBribe.Accept:   Very well, this will suffice for an [alliance].
+GameUtils.Guild.Territory.Lord.BountyPoints:        Prove your merit by gathering {0} bounty points. [exchange]
+GameUtils.Guild.Territory.Lord.BountyPoints.Accept: Very well, it would be an honor to join your [alliance].
+GameUtils.Guild.Territory.Lord.ItemBribe:           Bring me {0} {1} and we will offer our service to you. [give]
+GameUtils.Guild.Territory.Lord.ItemBribe.Accept:    We thank you for your contribution, and would be glad to join your alliance [alliance].
+GameUtils.Guild.Territory.Lord.QuestCondition:      Complete the quest {0} and we will offer you our service.
+GameUtils.Guild.Territory.Lord.TerritoryCondition:  We will only offer our service to allies of {0}.
+GameUtils.Guild.Territory.Lord.Interrupted:         It looks like we have company, come back when you get rid of it.
+GameUtils.Guild.Territory.Lord.TooFar:              Come back when you want to form an alliance.
+GameUtils.Guild.Territory.Lord.ConditionChanged:    I changed my mind. Talk to me again and we can figure it out.
+GameUtils.Guild.Territory.Capture.Timer:            Territory capture
+GameUtils.Guild.Territory.Capture.Start:            {0} begins to take control of {1}!
+GameUtils.Guild.Territory.Capture.Captured:         {0} has taken control of {1}!
+GameUtils.Guild.Territory.Capture.Renewed:          {0} has renewed your control of {1}!
+GameUtils.Guild.Territory.Capture.CapturedPvP:      {0} earns {1} realm points for capturing {2} from {3}!
+GameUtils.Guild.Territory.Capture.CapturedPvE:      {0} earns {1} realm points for capturing {2}!
 
 GameUtils.Guild.Banner.BannerInGroup:			Someone in your group already has a guild banner active!
 GameUtils.Guild.Banner.BannerNoGroup:			You have left the group and your guild banner disappears!
