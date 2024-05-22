@@ -172,6 +172,7 @@ namespace Amte
                 },
                 1000
             );
+            lastClaim = new DateTime(1);
         }
 
         public virtual void StopRvR()

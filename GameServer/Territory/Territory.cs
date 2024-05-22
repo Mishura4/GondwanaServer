@@ -606,11 +606,11 @@ namespace DOL.Territories
         {
             SetBannerEffects(add);
 
+            IsBannerSummoned = add;
             foreach (var mob in Mobs)
             {
                 RefreshEmblem(mob);
             }
-            IsBannerSummoned = add;
 
             foreach (IArea iarea in Areas)
             {
