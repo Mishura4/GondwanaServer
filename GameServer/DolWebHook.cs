@@ -49,16 +49,34 @@ namespace DOL.GS
 
         public bool SendMessage(string content)
         {
-            MultipartFormDataContent data = new MultipartFormDataContent();
+            try
+            {
+                MultipartFormDataContent data = new MultipartFormDataContent();
 
 
-            data.Add(new StringContent(content), "content");
+                data.Add(new StringContent(content), "content");
 
 
 
-            var resp = Client.PostAsync(Url, data).Result;
+                var resp = Client.PostAsync(Url, data).Result;
 
-            return resp.StatusCode == HttpStatusCode.NoContent;
+                return resp.StatusCode == HttpStatusCode.NoContent;
+            }
+            catch (AggregateException ex)
+            {
+                HttpRequestException httpEx = (HttpRequestException)ex.InnerExceptions.FirstOrDefault(e => e is HttpRequestException);
+                if (httpEx != null)
+                {
+                    GameServer.Instance.Logger.Warn("Error while sending Discord webhook message:\n" + httpEx.Message);
+                    return false;
+                }
+                GameServer.Instance.Logger.Error("Error while sending Discord webhook message:\n" + ex);
+            }
+            catch (Exception ex)
+            {
+                GameServer.Instance.Logger.Error("Error while sending Discord webhook message:\n" + ex);
+            }
+            return false;
         }
     }
 
