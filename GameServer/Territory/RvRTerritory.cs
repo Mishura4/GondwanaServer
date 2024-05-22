@@ -40,6 +40,12 @@ namespace DOL.Territories
             //No save allowed
         }
 
+        public override void SaveIntoDatabaseUnsafe()
+        {
+            //In memory RvR
+            //No save allowed
+        }
+
         public void Reset()
         {
             OwnerGuild = null;

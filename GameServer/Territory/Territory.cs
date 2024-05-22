@@ -1135,7 +1135,7 @@ namespace DOL.Territories
             return infos;
         }
 
-        private void SaveIntoDatabaseUnsafe()
+        private virtual void SaveIntoDatabaseUnsafe()
         {
             TerritoryDb db = null;
             bool isNew = false;
