@@ -162,7 +162,7 @@ namespace DOL.Territories
                         {
                             amount = long.Parse(args[3]);
                         }
-                        ItemTemplate tpl = DOLDB<ItemTemplate>.SelectObject(DB.Column("Id_nb").IsEqualTo(args[1]));
+                        ItemTemplate tpl = DOLDB<ItemTemplate>.SelectObject(DB.Column("Id_nb").IsEqualTo(args[2]));
                         if (tpl == null)
                         {
                             throw new ArgumentException($"ItemTemplate {args[2]} not found");
@@ -308,7 +308,7 @@ namespace DOL.Territories
                     return true;
 
                 case eCaptureCondition.BountyPointsBribe:
-                    player.SendTranslatedMessage("GameUtils.Guild.Territory.Lord.BountyPointsBribe", eChatType.CT_System, eChatLoc.CL_PopupWindow, (long)CaptureParam1);
+                    player.SendTranslatedMessage("GameUtils.Guild.Territory.Lord.BountyPoints", eChatType.CT_System, eChatLoc.CL_PopupWindow, (long)CaptureParam1);
                     return true;
 
                 case eCaptureCondition.ItemBribe:
