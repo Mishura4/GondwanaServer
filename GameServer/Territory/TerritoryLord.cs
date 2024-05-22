@@ -165,7 +165,9 @@ namespace DOL.Territories
                         ItemTemplate tpl = DOLDB<ItemTemplate>.SelectObject(DB.Column("Id_nb").IsEqualTo(args[2]));
                         if (tpl == null)
                         {
-                            throw new ArgumentException($"ItemTemplate {args[2]} not found");
+                            log.Error($"ItemTemplate {args[2]} not found for TerritoryLord {Name} ({InternalID})");
+                            SetNoCondition();
+                            return;
                         }
                         CaptureCondition = condition;
                         CaptureParam1 = tpl;
@@ -185,10 +187,12 @@ namespace DOL.Territories
                         DataQuestJson quest = DataQuestJsonMgr.GetQuest(questID);
                         if (quest == null)
                         {
-                            throw new ArgumentException($"DataQuestJson {args[2]} not found");
+                            log.Error($"DataQuestJson {args[2]} not found for TerritoryLord {Name} ({InternalID})");
+                            SetNoCondition();
+                            return;
                         }
                         CaptureCondition = condition;
-                        CaptureParam1 = args[2];
+                        CaptureParam1 = quest;
                         CaptureParam2 = amount;
                     }
                     break;
@@ -198,14 +202,17 @@ namespace DOL.Territories
                     {
                         EnforceParamLength(3);
                         CaptureCondition = condition;
-                        // Because this is called while loading territories we cannot check here. Instead we defer to AddToWorld.
+                        // Because this is called while loading territories we cannot check here,
+                        // as the territory requested might not be loaded yet. Instead we defer to AddToWorld.
                         // This is not ideal but the alternative is to change how territories are loaded
                         CaptureParam1 = new LazyTerritory(args[2]);
                     }
                     break;
 
                 default:
-                    throw new ArgumentException("Unknown capture condition " + args[1]);
+                    log.Error("Unknown capture condition " + args[1]);
+                    SetNoCondition();
+                    return;
             }
         }
 
