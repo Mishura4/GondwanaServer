@@ -302,7 +302,7 @@ namespace DOL.Territories
             }
         }
 
-        private bool AskCondition(GamePlayer player)
+        protected bool AskCondition(GamePlayer player)
         {
             switch (CaptureCondition)
             {
@@ -339,6 +339,126 @@ namespace DOL.Territories
             }
         }
 
+        protected virtual bool AskToJoin(GamePlayer player, bool isSecondAsk)
+        {
+            if (player.InCombat)
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.Territory.Lord.InCombat"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                return true;
+            }
+
+            if (CurrentTerritory.OwnerGuild != null && CurrentTerritory.OwnerGuild != player.Guild)
+            {
+                TimeSpan cooldown = TimeBeforeClaim;
+                if (cooldown.Ticks > 0)
+                {
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.Territory.Lord.NotClaimable", CurrentTerritory.OwnerGuild.Name, LanguageMgr.TranslateTimeLong(player, cooldown)), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                    return true;
+                }
+            }
+
+            if (!CanPlayerClaim(player))
+            {
+                if (isSecondAsk)
+                {
+                    Whisper(player, LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.Territory.Lord.ConditionChanged"));
+                    return true;
+                }
+                return AskCondition(player);
+            }
+
+            if (_claimTimer != null)
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.Territory.Lord.Occupied"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                return true;
+            }
+
+            int ticks = 0;
+            _claimTimer = new RegionTimer(
+                this,
+                timer =>
+                {
+                    lock (_lockObject)
+                    {
+                        ticks += 500;
+                        if (player.InCombat)
+                        {
+                            _claimTimer = null;
+                            player.Out.SendCloseTimerWindow();
+                            Whisper(player, LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.Territory.Lord.Interrupted"));
+                            return 0;
+                        }
+                        if (player.GetDistanceTo(this) > WorldMgr.GIVE_ITEM_DISTANCE)
+                        {
+                            _claimTimer = null;
+                            player.Out.SendCloseTimerWindow();
+                            Whisper(player, LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.Territory.Lord.TooFar"));
+                            return 0;
+                        }
+                        if (!CanPlayerClaim(player))
+                        {
+                            _claimTimer = null;
+                            player.Out.SendCloseTimerWindow();
+                            Whisper(player, LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.Territory.Lord.ConditionChanged"));
+                            return 0;
+                        }
+                        if (ticks < Properties.TERRITORY_CLAIM_TIMER_SECONDS * 1000)
+                            return 500;
+
+                        player.Out.SendCloseTimerWindow();
+                        TakeControl(player);
+                        _claimTimer = null;
+                        return 0;
+                    }
+                },
+                500
+            );
+
+            player.Out.SendTimerWindow(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.Territory.Capture.Timer"), Properties.TERRITORY_CLAIM_TIMER_SECONDS);
+
+            foreach (GamePlayer pl in GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE).Cast<GamePlayer>())
+            {
+                pl.SendTranslatedMessage("GameUtils.Guild.Territory.Capture.Start", eChatType.CT_Important, eChatLoc.CL_SystemWindow, player.GuildName, CurrentTerritory.Name);
+            }
+            return true;
+        }
+
+        protected bool TakeMoney(GamePlayer player)
+        {
+            if (CaptureCondition != eCaptureCondition.MoneyBribe)
+            {
+                player.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.Territory.Lord.ConditionChanged"), eChatType.CT_Chat, eChatLoc.CL_PopupWindow);
+                return true;
+            }
+            player.SendMessage("This is where I take your money! (not implemented)", eChatType.CT_Chat, eChatLoc.CL_PopupWindow);
+            player.SendTranslatedMessage("GameUtils.Guild.Territory.Lord.MoneyBribe.Accept", eChatType.CT_Chat, eChatLoc.CL_PopupWindow);
+            return true;
+        }
+
+        protected bool TakeItems(GamePlayer player)
+        {
+            if (CaptureCondition != eCaptureCondition.ItemBribe)
+            {
+                player.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.Territory.Lord.ConditionChanged"), eChatType.CT_Chat, eChatLoc.CL_PopupWindow);
+                return true;
+            }
+            player.SendMessage("This is where I take your items! (not implemented)", eChatType.CT_Chat, eChatLoc.CL_PopupWindow);
+            player.SendTranslatedMessage("GameUtils.Guild.Territory.Lord.ItemBribe.Accept", eChatType.CT_Chat, eChatLoc.CL_PopupWindow);
+            return true;
+        }
+
+        protected bool TakeBP(GamePlayer player)
+        {
+            if (CaptureCondition != eCaptureCondition.BountyPointsBribe)
+            {
+                player.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.Territory.Lord.ConditionChanged"), eChatType.CT_Chat, eChatLoc.CL_PopupWindow);
+                return true;
+            }
+            player.SendMessage("This is where I take your BPs! (not implemented)", eChatType.CT_Chat, eChatLoc.CL_PopupWindow);
+            player.SendTranslatedMessage("GameUtils.Guild.Territory.Lord.BountyPoints.Accept", eChatType.CT_Chat, eChatLoc.CL_PopupWindow);
+            return true;
+        }
+
         public override bool WhisperReceive(GameLiving source, string text)
         {
             var player = source as GamePlayer;
@@ -357,89 +477,34 @@ namespace DOL.Territories
                     return true;
                 }
 
-                if (text is not "oui" or "yes" or "alliance")
-                    return true;
-
-                if (player.InCombat)
+                switch (text.ToLower())
                 {
-                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.Territory.Lord.InCombat"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
-                    return true;
-                }
+                    case "oui":
+                    case "yes":
+                        return AskToJoin(player, false);
 
-                if (CurrentTerritory.OwnerGuild != null && CurrentTerritory.OwnerGuild != player.Guild)
-                {
-                    TimeSpan cooldown = TimeBeforeClaim;
-                    if (cooldown.Ticks > 0)
-                    {
-                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.Territory.Lord.NotClaimable", CurrentTerritory.OwnerGuild.Name, LanguageMgr.TranslateTimeLong(player, cooldown)), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                    case "alliance":
+                        return AskToJoin(player, true);
+
+                    case "pay":
+                    case "payer":
+                        return TakeMoney(player);
+
+                    case "exchange":
+                    case "échanger":
+                        return TakeBP(player);
+
+                    case "give":
+                    case "donner":
+                        return TakeItems(player);
+
+                    case "no":
+                    case "non":
                         return true;
-                    }
+
+                    default:
+                        return false;
                 }
-
-                if (!CanPlayerClaim(player))
-                {
-                    if (text is "alliance")
-                    {
-                        Whisper(player, LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.Territory.Lord.ConditionChanged"));
-                        return true;
-                    }
-                    return AskCondition(player);
-                }
-
-                if (_claimTimer != null)
-                {
-                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.Territory.Lord.Occupied"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
-                    return true;
-                }
-
-                int ticks = 0;
-                _claimTimer = new RegionTimer(
-                    this,
-                    timer =>
-                    {
-                        lock (_lockObject)
-                        {
-                            ticks += 500;
-                            if (player.InCombat)
-                            {
-                                _claimTimer = null;
-                                player.Out.SendCloseTimerWindow();
-                                Whisper(player, LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.Territory.Lord.Interrupted"));
-                                return 0;
-                            }
-                            if (player.GetDistanceTo(this) > WorldMgr.GIVE_ITEM_DISTANCE)
-                            {
-                                _claimTimer = null;
-                                player.Out.SendCloseTimerWindow();
-                                Whisper(player, LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.Territory.Lord.TooFar"));
-                                return 0;
-                            }
-                            if (!CanPlayerClaim(player))
-                            {
-                                _claimTimer = null;
-                                player.Out.SendCloseTimerWindow();
-                                Whisper(player, LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.Territory.Lord.ConditionChanged"));
-                                return 0;
-                            }
-                            if (ticks < Properties.TERRITORY_CLAIM_TIMER_SECONDS * 1000)
-                                return 500;
-
-                            player.Out.SendCloseTimerWindow();
-                            TakeControl(player);
-                            _claimTimer = null;
-                            return 0;
-                        }
-                    },
-                    500
-                );
-
-                player.Out.SendTimerWindow(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.Territory.Capture.Timer"), Properties.TERRITORY_CLAIM_TIMER_SECONDS);
-
-                foreach (GamePlayer pl in GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE).Cast<GamePlayer>())
-                {
-                    pl.SendTranslatedMessage("GameUtils.Guild.Territory.Capture.Start", eChatType.CT_Important, eChatLoc.CL_SystemWindow, player.GuildName, CurrentTerritory.Name);
-                }
-                return true;
             }
         }
 
