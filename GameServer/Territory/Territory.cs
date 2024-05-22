@@ -1150,7 +1150,7 @@ namespace DOL.Territories
                 db = GameServer.Database.FindObjectByKey<TerritoryDb>(this.ID);
             }
 
-            db.AreaIDs = String.Join('|', this.Areas.OfType<AbstractArea>().Select(a => a.DbArea.ObjectId));
+            db.AreaIDs = String.Join('|', this.Areas.OfType<AbstractArea>().Select(a => a.DbArea?.ObjectId));
             db.Name = this.Name;
             db.BossMobId = this.BossId;
             db.GroupId = this.GroupId;

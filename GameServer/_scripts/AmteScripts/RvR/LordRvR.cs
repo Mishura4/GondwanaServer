@@ -80,7 +80,7 @@ namespace Amte
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameObjects.GamePlayer.RvR.Open.UnClaimble", Math.Round(timeBeforeClaim, 1)), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 return true;
             }
-            if (_claimTimer != null)
+            if (_claimTimer is { IsAlive: true })
             {
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameObjects.GamePlayer.RvR.Occupied"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 return true;

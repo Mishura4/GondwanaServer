@@ -2005,78 +2005,78 @@ namespace DOL.GS
         /// </summary>
         public static readonly Dictionary<eRealm, List<eCharacterClass>> STARTING_CLASSES_DICT = new Dictionary<eRealm, List<eCharacterClass>>()
         {
-			// pre 1.93
-			{eRealm.Albion, new List<eCharacterClass>() {eCharacterClass.Fighter, eCharacterClass.Acolyte, eCharacterClass.Mage, eCharacterClass.Elementalist, eCharacterClass.AlbionRogue, eCharacterClass.Disciple,
-				// post 1.93
-				eCharacterClass.Paladin, 		// Paladin = 1,
-				eCharacterClass.Armsman, 		// Armsman = 2,
-				eCharacterClass.Scout, 	    // Scout = 3,
-				eCharacterClass.Minstrel, 	    // Minstrel = 4,
-				eCharacterClass.Theurgist, 	// Theurgist = 5,
-				eCharacterClass.Cleric, 		// Cleric = 6,
-				eCharacterClass.Wizard, 	    // Wizard = 7,
-				eCharacterClass.Sorcerer, 		// Sorcerer = 8,
-				eCharacterClass.Infiltrator, 	// Infiltrator = 9,
-				eCharacterClass.Friar, 		// Friar = 10,
-				eCharacterClass.Mercenary, 	// Mercenary = 11,
-				eCharacterClass.Necromancer, 	// Necromancer = 12,
-				eCharacterClass.Cabalist, 		// Cabalist = 13,
-				eCharacterClass.Fighter, 		// Fighter = 14,
-				eCharacterClass.Elementalist, 	// Elementalist = 15,
-				eCharacterClass.Acolyte, 		// Acolyte = 16,
-				eCharacterClass.AlbionRogue, 	// AlbionRogue = 17,
-				eCharacterClass.Mage, 			// Mage = 18,
-				eCharacterClass.Reaver, 		// Reaver = 19,
-				eCharacterClass.Disciple,		// Disciple = 20,
-				eCharacterClass.Heretic, 		// Heretic = 33,
-				eCharacterClass.MaulerAlb		// Mauler_Alb = 60,
-			}},
+            // pre 1.93
+            {eRealm.Albion, new List<eCharacterClass>() {eCharacterClass.Fighter, eCharacterClass.Acolyte, eCharacterClass.Mage, eCharacterClass.Elementalist, eCharacterClass.AlbionRogue, eCharacterClass.Disciple,
+                // post 1.93
+                eCharacterClass.Paladin, 		// Paladin = 1,
+                eCharacterClass.Armsman, 		// Armsman = 2,
+                eCharacterClass.Scout, 	    // Scout = 3,
+                eCharacterClass.Minstrel, 	    // Minstrel = 4,
+                eCharacterClass.Theurgist, 	// Theurgist = 5,
+                eCharacterClass.Cleric, 		// Cleric = 6,
+                eCharacterClass.Wizard, 	    // Wizard = 7,
+                eCharacterClass.Sorcerer, 		// Sorcerer = 8,
+                eCharacterClass.Infiltrator, 	// Infiltrator = 9,
+                eCharacterClass.Friar, 		// Friar = 10,
+                eCharacterClass.Mercenary, 	// Mercenary = 11,
+                eCharacterClass.Necromancer, 	// Necromancer = 12,
+                eCharacterClass.Cabalist, 		// Cabalist = 13,
+                eCharacterClass.Fighter, 		// Fighter = 14,
+                eCharacterClass.Elementalist, 	// Elementalist = 15,
+                eCharacterClass.Acolyte, 		// Acolyte = 16,
+                eCharacterClass.AlbionRogue, 	// AlbionRogue = 17,
+                eCharacterClass.Mage, 			// Mage = 18,
+                eCharacterClass.Reaver, 		// Reaver = 19,
+                eCharacterClass.Disciple,		// Disciple = 20,
+                eCharacterClass.Heretic, 		// Heretic = 33,
+                eCharacterClass.MaulerAlb		// Mauler_Alb = 60,
+            }},
             {eRealm.Midgard, new List<eCharacterClass>() {eCharacterClass.Viking, eCharacterClass.Mystic, eCharacterClass.Seer, eCharacterClass.MidgardRogue,
-				// post 1.93
-				eCharacterClass.Thane, 		// Thane = 21,
-				eCharacterClass.Warrior, 		// Warrior = 22,
-				eCharacterClass.Shadowblade, 	// Shadowblade = 23,
-				eCharacterClass.Skald, 		// Skald = 24,
-				eCharacterClass.Hunter, 	    // Hunter = 25,
-				eCharacterClass.Healer, 		// Healer = 26,
-				eCharacterClass.Spiritmaster,  // Spiritmaster = 27,
-				eCharacterClass.Shaman, 		// Shaman = 28,
-				eCharacterClass.Runemaster, 	// Runemaster = 29,
-				eCharacterClass.Bonedancer, 	// Bonedancer = 30,
-				eCharacterClass.Berserker, 	// Berserker = 31,
-				eCharacterClass.Savage, 		// Savage = 32,
-				eCharacterClass.Valkyrie, 		// Valkyrie = 34,
-				eCharacterClass.Viking, 		// Viking = 35,
-				eCharacterClass.Mystic, 		// Mystic = 36,
-				eCharacterClass.Seer, 			// Seer = 37,
-				eCharacterClass.MidgardRogue,	// MidgardRogue = 38,
-				eCharacterClass.Warlock, 		// Warlock = 59,
-				eCharacterClass.MaulerMid		// Mauler_Mid = 61,
-			}},
+                // post 1.93
+                eCharacterClass.Thane, 		// Thane = 21,
+                eCharacterClass.Warrior, 		// Warrior = 22,
+                eCharacterClass.Shadowblade, 	// Shadowblade = 23,
+                eCharacterClass.Skald, 		// Skald = 24,
+                eCharacterClass.Hunter, 	    // Hunter = 25,
+                eCharacterClass.Healer, 		// Healer = 26,
+                eCharacterClass.Spiritmaster,  // Spiritmaster = 27,
+                eCharacterClass.Shaman, 		// Shaman = 28,
+                eCharacterClass.Runemaster, 	// Runemaster = 29,
+                eCharacterClass.Bonedancer, 	// Bonedancer = 30,
+                eCharacterClass.Berserker, 	// Berserker = 31,
+                eCharacterClass.Savage, 		// Savage = 32,
+                eCharacterClass.Valkyrie, 		// Valkyrie = 34,
+                eCharacterClass.Viking, 		// Viking = 35,
+                eCharacterClass.Mystic, 		// Mystic = 36,
+                eCharacterClass.Seer, 			// Seer = 37,
+                eCharacterClass.MidgardRogue,	// MidgardRogue = 38,
+                eCharacterClass.Warlock, 		// Warlock = 59,
+                eCharacterClass.MaulerMid		// Mauler_Mid = 61,
+            }},
             {eRealm.Hibernia, new List<eCharacterClass>() {eCharacterClass.Guardian, eCharacterClass.Stalker, eCharacterClass.Naturalist, eCharacterClass.Magician, eCharacterClass.Forester,
-				// post 1.93
-				eCharacterClass.Bainshee, 		// Bainshee = 39,
-				eCharacterClass.Eldritch, 		// Eldritch = 40,
-				eCharacterClass.Enchanter, 	// Enchanter = 41,
-				eCharacterClass.Mentalist, 	// Mentalist = 42,
-				eCharacterClass.Blademaster, 	// Blademaster = 43,
-				eCharacterClass.Hero, 		    // Hero = 44,
-				eCharacterClass.Champion, 		// Champion = 45,
-				eCharacterClass.Warden, 	    // Warden = 46,
-				eCharacterClass.Druid, 	    // Druid = 47,
-				eCharacterClass.Bard, 	        // Bard = 48,
-				eCharacterClass.Nightshade, 	// Nightshade = 49,
-				eCharacterClass.Ranger, 		// Ranger = 50,
-				eCharacterClass.Magician, 		// Magician = 51,
-				eCharacterClass.Guardian, 		// Guardian = 52,
-				eCharacterClass.Naturalist, 	// Naturalist = 53,
-				eCharacterClass.Stalker, 		// Stalker = 54,
-				eCharacterClass.Animist, 		// Animist = 55,
-				eCharacterClass.Valewalker, 	// Valewalker = 56,
-				eCharacterClass.Forester, 		// Forester = 57,
-				eCharacterClass.Vampiir, 		// Vampiir = 58,
-				eCharacterClass.MaulerHib	 	// Mauler_Hib = 62,
-			}},
+                // post 1.93
+                eCharacterClass.Bainshee, 		// Bainshee = 39,
+                eCharacterClass.Eldritch, 		// Eldritch = 40,
+                eCharacterClass.Enchanter, 	// Enchanter = 41,
+                eCharacterClass.Mentalist, 	// Mentalist = 42,
+                eCharacterClass.Blademaster, 	// Blademaster = 43,
+                eCharacterClass.Hero, 		    // Hero = 44,
+                eCharacterClass.Champion, 		// Champion = 45,
+                eCharacterClass.Warden, 	    // Warden = 46,
+                eCharacterClass.Druid, 	    // Druid = 47,
+                eCharacterClass.Bard, 	        // Bard = 48,
+                eCharacterClass.Nightshade, 	// Nightshade = 49,
+                eCharacterClass.Ranger, 		// Ranger = 50,
+                eCharacterClass.Magician, 		// Magician = 51,
+                eCharacterClass.Guardian, 		// Guardian = 52,
+                eCharacterClass.Naturalist, 	// Naturalist = 53,
+                eCharacterClass.Stalker, 		// Stalker = 54,
+                eCharacterClass.Animist, 		// Animist = 55,
+                eCharacterClass.Valewalker, 	// Valewalker = 56,
+                eCharacterClass.Forester, 		// Forester = 57,
+                eCharacterClass.Vampiir, 		// Vampiir = 58,
+                eCharacterClass.MaulerHib	 	// Mauler_Hib = 62,
+            }},
         };
 
         /// <summary>
@@ -2104,10 +2104,10 @@ namespace DOL.GS
         /// </summary>
         public static string[,,] REALM_RANK_NAMES = new string[,,]
         {
-			// Albion
-			{
-				// Male
-				{
+            // Albion
+            {
+                // Male
+                {
                     "Guardian",
                     "Warder",
                     "Myrmidon",
@@ -2124,8 +2124,8 @@ namespace DOL.GS
                     "Arch Duke"
                 }
                 ,
-				// Female
-				{
+                // Female
+                {
                     "Guardian",
                     "Warder",
                     "Myrmidon",
@@ -2143,10 +2143,10 @@ namespace DOL.GS
                 }
             }
             ,
-			// Midgard
-			{
-				// Male
-				{
+            // Midgard
+            {
+                // Male
+                {
                     "Skiltvakten",
                     "Isen Vakten",
                     "Flammen Vakten",
@@ -2163,8 +2163,8 @@ namespace DOL.GS
                     "Stor Jarl"
                 }
                 ,
-				// Female
-				{
+                // Female
+                {
                     "Skiltvakten",
                     "Isen Vakten",
                     "Flammen Vakten",
@@ -2182,10 +2182,10 @@ namespace DOL.GS
                 }
             }
             ,
-			// Hibernia
-			{
-				// Male
-				{
+            // Hibernia
+            {
+                // Male
+                {
                     "Savant",
                     "Cosantoir",
                     "Brehon",
@@ -2202,8 +2202,8 @@ namespace DOL.GS
                     "Ard Diuc"
                 }
                 ,
-				// Female
-				{
+                // Female
+                {
                     "Savant",
                     "Cosantoir",
                     "Brehon",
