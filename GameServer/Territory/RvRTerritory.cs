@@ -40,7 +40,7 @@ namespace DOL.Territories
             //No save allowed
         }
 
-        public override void SaveIntoDatabaseUnsafe()
+        protected override void SaveIntoDatabaseUnsafe()
         {
             //In memory RvR
             //No save allowed
