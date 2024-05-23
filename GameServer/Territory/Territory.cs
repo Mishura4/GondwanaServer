@@ -600,6 +600,8 @@ namespace DOL.Territories
             }
 
             CurrentBannerResist += mobBannerResist;
+            CurrentBannerDamage += mobBannerDamage;
+            CurrentBannerCrit += mobBannerCrit;
         }
 
         private void ToggleBannerUnsafe(bool add)
