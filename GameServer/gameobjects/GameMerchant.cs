@@ -426,9 +426,9 @@ namespace DOL.GS
             player.Notify(GameObjectEvent.InteractWith, player, new InteractWithEventArgs(this));
 
 
-            if (IsInTerritory)
+            if (CurrentTerritory?.IsOwnedBy(player) == false)
             {
-                Territory territory = TerritoryManager.GetCurrentTerritory(this);
+                /*
                 if (territory.IsNeutral())
                 {
                     if (player.Reputation < 0)
@@ -439,13 +439,11 @@ namespace DOL.GS
                         return false;
                     }
                 }
-                else if (!territory.IsOwnedBy(player))
-                {
-                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameMerchant.Interact.Territory.NotSameGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                */
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameMerchant.Interact.Territory.NotSameGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 
-                    Notify(GameObjectEvent.InteractFailed, this, new InteractEventArgs(player));
-                    return false;
-                }
+                Notify(GameObjectEvent.InteractFailed, this, new InteractEventArgs(player));
+                return false;
             }
 
             FireAmbientSentence(eAmbientTrigger.interact, player);
