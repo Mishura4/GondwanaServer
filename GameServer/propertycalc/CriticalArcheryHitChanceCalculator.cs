@@ -19,7 +19,7 @@ namespace DOL.GS.PropertyCalc
 
         public override int CalcValue(GameLiving living, eProperty property)
         {
-            int chance = living.BuffBonusCategory4[(int)property] + living.AbilityBonus[(int)property];
+            int chance = living.BaseBuffBonusCategory[(int)property] + living.BuffBonusCategory4[(int)property] + living.AbilityBonus[(int)property];
 
             if (living is GamePet gamePet)
             {

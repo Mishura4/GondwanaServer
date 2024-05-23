@@ -48,7 +48,7 @@ namespace DOL.GS.PropertyCalc
             }
 
             // base 10% chance of critical for all with melee weapons plus ra bonus
-            int chance = living.BuffBonusCategory4[(int)property] + living.AbilityBonus[(int)property];
+            int chance = living.BaseBuffBonusCategory[(int)property] + living.BuffBonusCategory4[(int)property] + living.AbilityBonus[(int)property];
 
             if (living is NecromancerPet necroPet)
             {
