@@ -31,9 +31,6 @@ namespace DOL.Territories
         private static TerritoryManager instance;
         public static readonly ushort NEUTRAL_EMBLEM = 256;
         private readonly string BOSS_CLASS = "DOL.GS.Scripts.TerritoryBoss";
-        private static readonly int DAILY_TAX = GS.ServerProperties.Properties.DAILY_TAX;
-        private static readonly int TERRITORY_BANNER_PERCENT_OFF = GS.ServerProperties.Properties.TERRITORY_BANNER_PERCENT_OFF;
-        private static readonly int DAILY_MERIT_POINTS = GS.ServerProperties.Properties.DAILY_MERIT_POINTS;
         private static Dictionary<Timer, Territory> m_TerritoriesAttacked;
 
         public static TerritoryManager Instance => instance ?? (instance = new TerritoryManager());
@@ -301,7 +298,7 @@ namespace DOL.Territories
             infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.GuildInfo"));
             infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.MaxTerritories", player.Guild.MaxTerritories, player.Guild.TerritoryCount));
             infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.DailyRent", CalculateGuildTerritoryTax(player.Guild)));
-            infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.DailyMeritPoints", ownedTerritories.Count * DAILY_MERIT_POINTS));
+            infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.DailyMeritPoints", ownedTerritories.Count * Properties.DAILY_MERIT_POINTS));
             string timeBeforeRent;
             if (ownedTerritories.Count == 0)
             {
@@ -472,8 +469,8 @@ namespace DOL.Territories
             foreach (var territory in guild.Territories.Where(t => !t.IsSubterritory))
             {
                 counter++;
-                int tax = counter >= guild.MaxTerritories ? DAILY_TAX + 10 : DAILY_TAX;
-                total += territory.IsBannerSummoned ? (int)Math.Round((tax * (1.0d - TERRITORY_BANNER_PERCENT_OFF / 100D))) : tax;
+                int tax = counter >= guild.MaxTerritories ? Properties.DAILY_TAX + 10 : Properties.DAILY_TAX;
+                total += territory.IsBannerSummoned ? (int)Math.Round((tax * (1.0d - Properties.TERRITORY_BANNER_PERCENT_OFF / 100D))) : tax;
             }
             return total;
         }
@@ -497,7 +494,7 @@ namespace DOL.Territories
                 {
                     players.Foreach(p => p.Out.SendMessage(Language.LanguageMgr.GetTranslation(p.Client.Account.Language, "Commands.Players.Guild.TerritoryPaid", tax),
                                                            eChatType.CT_Guild, eChatLoc.CL_SystemWindow));
-                    int mp = count * DAILY_MERIT_POINTS;
+                    int mp = count * Properties.DAILY_MERIT_POINTS;
                     guild.GainMeritPoints(mp);
                     players.Foreach(p => p.Out.SendMessage(Language.LanguageMgr.GetTranslation(p.Client.Account.Language, "Commands.Players.Guild.TerritoryMeritPoints", mp),
                                                            eChatType.CT_Guild, eChatLoc.CL_SystemWindow));
