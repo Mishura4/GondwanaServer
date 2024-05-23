@@ -1380,8 +1380,8 @@ namespace DOL.GS.Commands
             info.Add(" + Block / Parry / Evade %:  " + targetMob.BlockChance + " / " + targetMob.ParryChance + " / " + targetMob.EvadeChance);
             info.Add(" + Attack Speed (Melee Speed Increase %):  " + targetMob.AttackSpeed(targetMob.AttackWeapon) + " (" + (100 - targetMob.GetModified(eProperty.MeleeSpeed)) + ")");
 
-            if (targetMob.GetModified(eProperty.MeleeDamage) != 0)
-                info.Add($" + Damage Bonus: {targetMob.GetModified(eProperty.MeleeDamage)}");
+            info.Add($" + Damage Bonus: {targetMob.GetModified(eProperty.MeleeDamage)}% melee / {targetMob.GetModified(eProperty.RangedDamage)}% ranged / {targetMob.GetModified(eProperty.SpellDamage)}% spell");
+            info.Add($" + Critical Hit Chance: {targetMob.GetModified(eProperty.CriticalMeleeHitChance)}% melee / {targetMob.GetModified(eProperty.CriticalArcheryHitChance)}% archery / {targetMob.GetModified(eProperty.CriticalSpellHitChance)}% spell / {targetMob.GetModified(eProperty.CriticalHealHitChance)}% heal");
 
             info.Add(" + Casting Speed Increase %:  " + targetMob.GetModified(eProperty.CastingSpeed));
 
