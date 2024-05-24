@@ -47,7 +47,7 @@ namespace DOL.Territories
             this.RegionId = db.RegionId;
             this.Name = db.Name;
             this.GroupId = db.GroupId;
-            this.BossId = boss?.InternalID;
+            this.BossId = db.BossMobId;
             this.Boss = boss;
             this.OriginalGuilds = new Dictionary<int, string>();
             this.BonusResist = new();
@@ -1122,8 +1122,12 @@ namespace DOL.Territories
             infos.Add(" Name: " + this.Name);
             infos.Add(" Area IDs:");
             infos.AddRange(this.Areas.OfType<AbstractArea>().Select(a => "  - " + a.DbArea.ObjectId));
-            infos.Add(" Boss Id: " + this.BossId);
+            infos.Add(" Boss Id: " + this.Boss?.InternalID);
             infos.Add(" Boss Name: " + this.Boss.Name);
+            if (Boss is TerritoryLord lord)
+            {
+                infos.AddRange(lord.GetInformations());
+            }
             infos.Add(" Group Id: " + this.GroupId);
             infos.Add(" Region: " + this.RegionId);
             infos.Add(" Zone: " + $"{this.Zone.Description} ({this.Zone.ID}) ");

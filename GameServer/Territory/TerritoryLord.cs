@@ -3,6 +3,7 @@ using DOL.Database;
 using DOL.Events;
 using DOL.GameEvents;
 using DOL.GS;
+using DOL.GS.Finance;
 using DOL.GS.PacketHandler;
 using DOL.GS.Quests;
 using DOL.GS.ServerProperties;
@@ -13,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Reflection;
 
 namespace DOL.Territories
@@ -27,7 +29,7 @@ namespace DOL.Territories
 
         private readonly object _lockObject = new object();
 
-        private readonly HashSet<string> _playersAuthorized = new();
+        private readonly Dictionary<string, long> _guildContributions = new();
 
 
         public TimeSpan TimeBeforeClaim
@@ -94,12 +96,18 @@ namespace DOL.Territories
             private set;
         }
 
+        public IList<string> GetInformations()
+        {
+            return new List<string>();
+        }
+
         public override bool AddToWorld()
         {
             if (CaptureCondition == eCaptureCondition.TerritoryOwned)
             {
                 ((LazyTerritory)CaptureParam1).Get();
             }
+            _guildContributions.Clear();
             return base.AddToWorld();
         }
 
@@ -160,7 +168,7 @@ namespace DOL.Territories
                         long amount = 1;
                         if (args.Length > 3)
                         {
-                            amount = long.Parse(args[3]);
+                            long.TryParse(args[3], out amount);
                         }
                         ItemTemplate tpl = DOLDB<ItemTemplate>.SelectObject(DB.Column("Id_nb").IsEqualTo(args[2]));
                         if (tpl == null)
@@ -218,6 +226,7 @@ namespace DOL.Territories
 
         private bool CanPlayerClaim(GamePlayer player)
         {
+            long amount;
             try
             {
                 switch (CaptureCondition)
@@ -227,8 +236,10 @@ namespace DOL.Territories
 
                     case eCaptureCondition.MoneyBribe:
                     case eCaptureCondition.BountyPointsBribe:
+                        return GetContribution(player) >= (long)CaptureParam1;
+
                     case eCaptureCondition.ItemBribe:
-                        return _playersAuthorized.Contains(player.InternalID);
+                        return GetContribution(player) >= (long)CaptureParam2;
 
 
                     case eCaptureCondition.QuestCompletion:
@@ -304,6 +315,8 @@ namespace DOL.Territories
 
         protected bool AskCondition(GamePlayer player)
         {
+            long contributed;
+
             switch (CaptureCondition)
             {
                 case eCaptureCondition.None:
@@ -311,15 +324,39 @@ namespace DOL.Territories
                     throw new InvalidOperationException("TerritoryLord.AskCondition called with no capture condition");
 
                 case eCaptureCondition.MoneyBribe:
-                    player.SendTranslatedMessage("GameUtils.Guild.Territory.Lord.MoneyBribe", eChatType.CT_System, eChatLoc.CL_PopupWindow, (long)CaptureParam1);
+                    contributed = GetContribution(player);
+                    if (contributed > 0)
+                    {
+                        player.SendTranslatedMessage("GameUtils.Guild.Territory.Lord.MoneyBribe.More", eChatType.CT_System, eChatLoc.CL_PopupWindow, contributed, (long)CaptureParam1 - contributed);
+                    }
+                    else
+                    {
+                        player.SendTranslatedMessage("GameUtils.Guild.Territory.Lord.MoneyBribe", eChatType.CT_System, eChatLoc.CL_PopupWindow, (long)CaptureParam1);
+                    }
                     return true;
 
                 case eCaptureCondition.BountyPointsBribe:
-                    player.SendTranslatedMessage("GameUtils.Guild.Territory.Lord.BountyPoints", eChatType.CT_System, eChatLoc.CL_PopupWindow, (long)CaptureParam1);
+                    contributed = GetContribution(player);
+                    if (contributed > 0)
+                    {
+                        player.SendTranslatedMessage("GameUtils.Guild.Territory.Lord.BountyPoints.More", eChatType.CT_System, eChatLoc.CL_PopupWindow, contributed, (long)CaptureParam1 - contributed);
+                    }
+                    else
+                    {
+                        player.SendTranslatedMessage("GameUtils.Guild.Territory.Lord.BountyPoints", eChatType.CT_System, eChatLoc.CL_PopupWindow, (long)CaptureParam1);
+                    }
                     return true;
 
                 case eCaptureCondition.ItemBribe:
-                    player.SendTranslatedMessage("GameUtils.Guild.Territory.Lord.ItemBribe", eChatType.CT_System, eChatLoc.CL_PopupWindow, (long)CaptureParam2, ((ItemTemplate)CaptureParam1).Name);
+                    contributed = GetContribution(player);
+                    if (contributed > 0)
+                    {
+                        player.SendTranslatedMessage("GameUtils.Guild.Territory.Lord.ItemBribe.More", eChatType.CT_System, eChatLoc.CL_PopupWindow, contributed, ((ItemTemplate)CaptureParam1).Name, (long)CaptureParam2 - contributed);
+                    }
+                    else
+                    {
+                        player.SendTranslatedMessage("GameUtils.Guild.Territory.Lord.ItemBribe", eChatType.CT_System, eChatLoc.CL_PopupWindow, (long)CaptureParam2, ((ItemTemplate)CaptureParam1).Name);
+                    }
                     return true;
 
                 case eCaptureCondition.QuestCompletion:
@@ -330,7 +367,7 @@ namespace DOL.Territories
                     string name = ((LazyTerritory)CaptureParam1).Get()?.Name;
                     if (name == null)
                         throw new ArgumentException($"Unknown territory");
-                    player.SendTranslatedMessage("GameUtils.Guild.Territory.Lord.QuestCondition", eChatType.CT_System, eChatLoc.CL_PopupWindow, name);
+                    player.SendTranslatedMessage("GameUtils.Guild.Territory.Lord.TerritoryCondition", eChatType.CT_System, eChatLoc.CL_PopupWindow, name);
                     return true;
 
                 default:
@@ -339,38 +376,12 @@ namespace DOL.Territories
             }
         }
 
-        protected virtual bool AskToJoin(GamePlayer player, bool isSecondAsk)
+        protected virtual bool StartClaimTimer(GamePlayer player)
         {
-            if (player.InCombat)
-            {
-                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.Territory.Lord.InCombat"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
-                return true;
-            }
-
-            if (CurrentTerritory.OwnerGuild != null && CurrentTerritory.OwnerGuild != player.Guild)
-            {
-                TimeSpan cooldown = TimeBeforeClaim;
-                if (cooldown.Ticks > 0)
-                {
-                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.Territory.Lord.NotClaimable", CurrentTerritory.OwnerGuild.Name, LanguageMgr.TranslateTimeLong(player, cooldown)), eChatType.CT_System, eChatLoc.CL_PopupWindow);
-                    return true;
-                }
-            }
-
-            if (!CanPlayerClaim(player))
-            {
-                if (isSecondAsk)
-                {
-                    Whisper(player, LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.Territory.Lord.ConditionChanged"));
-                    return true;
-                }
-                return AskCondition(player);
-            }
-
-            if (_claimTimer != null)
+            if (_claimTimer is { IsAlive: true })
             {
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.Territory.Lord.Occupied"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
-                return true;
+                return false;
             }
 
             int ticks = 0;
@@ -381,7 +392,13 @@ namespace DOL.Territories
                     lock (_lockObject)
                     {
                         ticks += 500;
-                        if (player.InCombat)
+                        if (!this.IsAlive || !player.IsAlive)
+                        {
+                            _claimTimer = null;
+                            player.Out.SendCloseTimerWindow();
+                            return 0;
+                        }
+                        if (player.InCombat || this.InCombat)
                         {
                             _claimTimer = null;
                             player.Out.SendCloseTimerWindow();
@@ -405,6 +422,7 @@ namespace DOL.Territories
                         if (ticks < Properties.TERRITORY_CLAIM_TIMER_SECONDS * 1000)
                             return 500;
 
+                        _guildContributions.Clear();
                         player.Out.SendCloseTimerWindow();
                         TakeControl(player);
                         _claimTimer = null;
@@ -423,6 +441,40 @@ namespace DOL.Territories
             return true;
         }
 
+        protected virtual bool AskToJoin(GamePlayer player, bool isSecondAsk)
+        {
+            if (player.InCombat)
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.Territory.Lord.InCombat"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                return true;
+            }
+
+            if (CurrentTerritory.OwnerGuild != null && CurrentTerritory.OwnerGuild != player.Guild)
+            {
+                TimeSpan cooldown = TimeBeforeClaim;
+                if (cooldown.Ticks > 0)
+                {
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.Territory.Lord.NotClaimable", CurrentTerritory.OwnerGuild.Name, LanguageMgr.TranslateTimeLong(player, cooldown)), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                    return true;
+                }
+            }
+
+            if (CanPlayerClaim(player))
+            {
+                StartClaimTimer(player);
+                return true;
+            }
+            else
+            {
+                if (isSecondAsk)
+                {
+                    Whisper(player, LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.Territory.Lord.ConditionChanged"));
+                    return true;
+                }
+                return AskCondition(player);
+            }
+        }
+
         protected bool TakeMoney(GamePlayer player)
         {
             if (CaptureCondition != eCaptureCondition.MoneyBribe)
@@ -430,8 +482,29 @@ namespace DOL.Territories
                 player.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.Territory.Lord.ConditionChanged"), eChatType.CT_Chat, eChatLoc.CL_PopupWindow);
                 return true;
             }
-            player.SendMessage("This is where I take your money! (not implemented)", eChatType.CT_Chat, eChatLoc.CL_PopupWindow);
+            var contributed = GetContribution(player);
+            var money = player.GetBalance(Currency.Copper);
+            var required = (long)CaptureParam1;
+            if (money.Amount + contributed < required)
+            {
+                if (money.Amount == 0)
+                {
+                    player.SendTranslatedMessage("GameUtils.Guild.Territory.Lord.MoneyBribe.Zero", eChatType.CT_Chat, eChatLoc.CL_PopupWindow);
+                }
+                else
+                {
+                    Contribute(player, money.Amount);
+                    player.RemoveMoney(money);
+                    player.SendTranslatedMessage("GameUtils.Guild.Territory.Lord.MoneyBribe.NotEnough", eChatType.CT_Chat, eChatLoc.CL_PopupWindow, required - money.Amount - contributed);
+                }
+                return true;
+            }
+            var paying = required - contributed;
+            Contribute(player, paying);
+            InventoryLogging.LogInventoryAction(player, this, eInventoryActionType.Other, paying);
+            player.RemoveMoney(Currency.Copper.Mint(paying));
             player.SendTranslatedMessage("GameUtils.Guild.Territory.Lord.MoneyBribe.Accept", eChatType.CT_Chat, eChatLoc.CL_PopupWindow);
+            StartClaimTimer(player);
             return true;
         }
 
@@ -442,9 +515,65 @@ namespace DOL.Territories
                 player.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.Territory.Lord.ConditionChanged"), eChatType.CT_Chat, eChatLoc.CL_PopupWindow);
                 return true;
             }
-            player.SendMessage("This is where I take your items! (not implemented)", eChatType.CT_Chat, eChatLoc.CL_PopupWindow);
-            player.SendTranslatedMessage("GameUtils.Guild.Territory.Lord.ItemBribe.Accept", eChatType.CT_Chat, eChatLoc.CL_PopupWindow);
-            return true;
+            var contributed = GetContribution(player);
+            var required = (long)CaptureParam2;
+            lock (player.Inventory)
+            {
+                var items = player.Inventory.GetItemRange(eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack).Where(i => string.Equals(i.Template.Id_nb, ((ItemTemplate)CaptureParam1).Id_nb));
+                if (!items.Any())
+                {
+                    player.SendTranslatedMessage("GameUtils.Guild.Territory.Lord.ItemBribe.Zero", eChatType.CT_Chat, eChatLoc.CL_PopupWindow);
+                    return true;
+                }
+                List<InventoryItem> removing = new();
+                long given = 0;
+                foreach (var item in items)
+                {
+                    long needed = required - contributed - given;
+
+                    if (needed <= 0)
+                        break;
+
+                    if (item.Count > needed)
+                    {
+                        item.Count -= (int)needed;
+                        given += needed;
+                        break;
+                    }
+
+                    given += item.Count;
+                    removing.Add(item);
+                }
+                removing.Foreach(item => player.Inventory.RemoveItem(item));
+                Contribute(player, given);
+                InventoryLogging.LogInventoryAction(player, this, eInventoryActionType.Other, ((ItemTemplate)CaptureParam1), (int)given);
+                if (contributed + given < required)
+                {
+                    player.SendTranslatedMessage("GameUtils.Guild.Territory.Lord.ItemBribe.NotEnough", eChatType.CT_Chat, eChatLoc.CL_PopupWindow, required - given - contributed);
+                }
+                else
+                {
+                    player.SendTranslatedMessage("GameUtils.Guild.Territory.Lord.ItemBribe.Accept", eChatType.CT_Chat, eChatLoc.CL_PopupWindow);
+                    StartClaimTimer(player);
+                }
+                return true;
+            }
+        }
+
+        protected long GetContribution(GamePlayer player)
+        {
+            long current = 0;
+            _guildContributions.TryGetValue(player.GuildID, out current);
+            return current;
+        }
+
+        protected void Contribute(GamePlayer player, long amount)
+        {
+            if (amount <= 0)
+                return;
+            long current = 0;
+            _guildContributions.TryGetValue(player.GuildID, out current);
+            _guildContributions[player.GuildID] = current + amount;
         }
 
         protected bool TakeBP(GamePlayer player)
@@ -454,8 +583,29 @@ namespace DOL.Territories
                 player.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.Territory.Lord.ConditionChanged"), eChatType.CT_Chat, eChatLoc.CL_PopupWindow);
                 return true;
             }
-            player.SendMessage("This is where I take your BPs! (not implemented)", eChatType.CT_Chat, eChatLoc.CL_PopupWindow);
+            var contributed = GetContribution(player);
+            var bountyPoints = player.GetBalance(Currency.BountyPoints);
+            var required = (long)CaptureParam1;
+            if (bountyPoints.Amount + contributed < required)
+            {
+                if (bountyPoints.Amount == 0)
+                {
+                    player.SendTranslatedMessage("GameUtils.Guild.Territory.Lord.BountyPoints.Zero", eChatType.CT_Chat, eChatLoc.CL_PopupWindow);
+                }
+                else
+                {
+                    Contribute(player, bountyPoints.Amount);
+                    player.RemoveMoney(bountyPoints);
+                    player.SendTranslatedMessage("GameUtils.Guild.Territory.Lord.BountyPoints.NotEnough", eChatType.CT_Chat, eChatLoc.CL_PopupWindow, required - bountyPoints.Amount - contributed);
+                }
+                return true;
+            }
+            var paying = required - contributed;
+            Contribute(player, paying);
+            InventoryLogging.LogInventoryAction(player, this, eInventoryActionType.Other, paying);
+            player.RemoveMoney(Currency.BountyPoints.Mint(paying));
             player.SendTranslatedMessage("GameUtils.Guild.Territory.Lord.BountyPoints.Accept", eChatType.CT_Chat, eChatLoc.CL_PopupWindow);
+            StartClaimTimer(player);
             return true;
         }
 
