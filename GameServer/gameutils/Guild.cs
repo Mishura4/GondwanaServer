@@ -942,7 +942,7 @@ namespace DOL.GS
                 }
                 if (newMaxTerritories != previousMaxTerritories)
                 {
-                    player.SendTranslatedMessage("GameUtils.Guild.MoreTerritories", eChatType.CT_Guild, eChatLoc.CL_PopupWindow, newMaxTerritories);
+                    player.SendTranslatedMessage("GameUtils.Guild.MoreTerritories", eChatType.CT_Guild, eChatLoc.CL_PopupWindow, newMaxTerritories, newMaxTerritories);
                 }
                 if (newMaxDefenders != previousMaxDefenders)
                 {
