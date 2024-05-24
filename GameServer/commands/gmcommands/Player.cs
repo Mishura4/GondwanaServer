@@ -667,66 +667,161 @@ namespace DOL.GS.Commands
                                 case "copp":
                                     {
                                         long amount = long.Parse(args[3]);
-                                        player.AddMoney(Currency.Copper.Mint(amount));
+                                        if (amount < 0)
+                                        {
+                                            var current = player.GetBalance(Currency.Copper);
+                                            if (-amount > current.Amount)
+                                                player.RemoveMoney(current);
+                                            else
+                                                player.RemoveMoney(Currency.Copper.Mint(-amount));
+                                            client.Out.SendMessage("You removed copper from " + player.Name + " successfully!", eChatType.CT_Important,
+                                                                   eChatLoc.CL_SystemWindow);
+                                            player.Out.SendMessage(
+                                                client.Player.Name + "(PrivLevel: " + client.Account.PrivLevel + ") has removed some copper from you!",
+                                                eChatType.CT_Important, eChatLoc.CL_SystemWindow
+                                            );
+                                        }
+                                        else
+                                        {
+                                            player.AddMoney(Currency.Copper.Mint(amount));
+                                            client.Out.SendMessage("You gave " + player.Name + " copper successfully!", eChatType.CT_Important,
+                                                                   eChatLoc.CL_SystemWindow);
+                                            player.Out.SendMessage(
+                                                client.Player.Name + "(PrivLevel: " + client.Account.PrivLevel + ") has given you some copper!",
+                                                eChatType.CT_Important, eChatLoc.CL_SystemWindow
+                                            );
+                                        }
                                         InventoryLogging.LogInventoryAction(client.Player, player, eInventoryActionType.Other, amount);
-                                        client.Out.SendMessage("You gave " + player.Name + " copper successfully!", eChatType.CT_Important,
-                                                               eChatLoc.CL_SystemWindow);
-                                        player.Out.SendMessage(
-                                            client.Player.Name + "(PrivLevel: " + client.Account.PrivLevel + ") has given you some copper!",
-                                            eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                                        return;
                                     }
-
+                                    break;
 
                                 case "silv":
                                     {
                                         long amount = long.Parse(args[3]) * 100;
-                                        player.AddMoney(Currency.Copper.Mint(amount));
+                                        if (amount < 0)
+                                        {
+                                            var current = player.GetBalance(Currency.Copper);
+                                            if (-amount > current.Amount)
+                                                player.RemoveMoney(current);
+                                            else
+                                                player.RemoveMoney(Currency.Copper.Mint(-amount));
+                                            client.Out.SendMessage("You removed silver from " + player.Name + " successfully!", eChatType.CT_Important,
+                                                                   eChatLoc.CL_SystemWindow);
+                                            player.Out.SendMessage(
+                                                client.Player.Name + "(PrivLevel: " + client.Account.PrivLevel + ") has removed some silver from you!",
+                                                eChatType.CT_Important, eChatLoc.CL_SystemWindow
+                                            );
+                                        }
+                                        else
+                                        {
+                                            player.AddMoney(Currency.Copper.Mint(amount));
+                                            client.Out.SendMessage("You gave " + player.Name + " silver successfully!", eChatType.CT_Important,
+                                                                   eChatLoc.CL_SystemWindow);
+                                            player.Out.SendMessage(
+                                                client.Player.Name + "(PrivLevel: " + client.Account.PrivLevel + ") has given you some silver!",
+                                                eChatType.CT_Important, eChatLoc.CL_SystemWindow
+                                            );
+                                        }
                                         InventoryLogging.LogInventoryAction(client.Player, player, eInventoryActionType.Other, amount);
-                                        client.Out.SendMessage("You gave " + player.Name + " silver successfully!", eChatType.CT_Important,
-                                                               eChatLoc.CL_SystemWindow);
-                                        player.Out.SendMessage(
-                                            client.Player.Name + "(PrivLevel: " + client.Account.PrivLevel + ") has given you some silver!",
-                                            eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                                        return;
                                     }
+                                    break;
 
                                 case "gold":
                                     {
                                         long amount = long.Parse(args[3]) * 100 * 100;
-                                        player.AddMoney(Currency.Copper.Mint(amount));
+                                        if (amount < 0)
+                                        {
+                                            var current = player.GetBalance(Currency.Copper);
+                                            if (-amount > current.Amount)
+                                                player.RemoveMoney(current);
+                                            else
+                                                player.RemoveMoney(Currency.Copper.Mint(-amount));
+                                            client.Out.SendMessage("You removed gold from " + player.Name + " successfully!", eChatType.CT_Important,
+                                                                   eChatLoc.CL_SystemWindow);
+                                            player.Out.SendMessage(
+                                                client.Player.Name + "(PrivLevel: " + client.Account.PrivLevel + ") has removed some gold from you!",
+                                                eChatType.CT_Important, eChatLoc.CL_SystemWindow
+                                            );
+                                        }
+                                        else
+                                        {
+                                            player.AddMoney(Currency.Copper.Mint(amount));
+                                            client.Out.SendMessage("You gave " + player.Name + " gold successfully!", eChatType.CT_Important,
+                                                                   eChatLoc.CL_SystemWindow);
+                                            player.Out.SendMessage(
+                                                client.Player.Name + "(PrivLevel: " + client.Account.PrivLevel + ") has given you some gold!",
+                                                eChatType.CT_Important, eChatLoc.CL_SystemWindow
+                                            );
+                                        }
                                         InventoryLogging.LogInventoryAction(client.Player, player, eInventoryActionType.Other, amount);
-                                        client.Out.SendMessage("You gave " + player.Name + " gold successfully!", eChatType.CT_Important,
-                                                               eChatLoc.CL_SystemWindow);
-                                        player.Out.SendMessage(
-                                            client.Player.Name + "(PrivLevel: " + client.Account.PrivLevel + ") has given you some gold!",
-                                            eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                                        return;
                                     }
+                                    break;
 
                                 case "plat":
                                     {
                                         long amount = long.Parse(args[3]) * 100 * 100 * 1000;
-                                        player.AddMoney(Currency.Copper.Mint(amount));
+                                        if (amount < 0)
+                                        {
+                                            var current = player.GetBalance(Currency.Copper);
+                                            if (-amount > current.Amount)
+                                                player.RemoveMoney(current);
+                                            else
+                                                player.RemoveMoney(Currency.Copper.Mint(-amount));
+                                            client.Out.SendMessage("You removed platinum from " + player.Name + " successfully!", eChatType.CT_Important,
+                                                                   eChatLoc.CL_SystemWindow);
+                                            player.Out.SendMessage(
+                                                client.Player.Name + "(PrivLevel: " + client.Account.PrivLevel + ") has removed some platinum from you!",
+                                                eChatType.CT_Important, eChatLoc.CL_SystemWindow
+                                            );
+                                        }
+                                        else
+                                        {
+                                            player.AddMoney(Currency.Copper.Mint(amount));
+                                            client.Out.SendMessage("You gave " + player.Name + " platinum successfully!", eChatType.CT_Important,
+                                                                   eChatLoc.CL_SystemWindow);
+                                            player.Out.SendMessage(
+                                                client.Player.Name + "(PrivLevel: " + client.Account.PrivLevel + ") has given you some platinum!",
+                                                eChatType.CT_Important, eChatLoc.CL_SystemWindow
+                                            );
+                                        }
                                         InventoryLogging.LogInventoryAction(client.Player, player, eInventoryActionType.Other, amount);
-                                        client.Out.SendMessage("You gave " + player.Name + " platinum successfully!", eChatType.CT_Important,
-                                                               eChatLoc.CL_SystemWindow);
-                                        player.Out.SendMessage(
-                                            client.Player.Name + "(PrivLevel: " + client.Account.PrivLevel + ") has given you some platinum!",
-                                            eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                                        return;
                                     }
+                                    break;
 
                                 case "mith":
                                     {
                                         long amount = long.Parse(args[3]) * 100 * 100 * 1000 * 1000;
-                                        player.AddMoney(Currency.Copper.Mint(amount));
+                                        if (amount < 0)
+                                        {
+                                            var current = player.GetBalance(Currency.Copper);
+                                            if (-amount > current.Amount)
+                                                player.RemoveMoney(current);
+                                            else
+                                                player.RemoveMoney(Currency.Copper.Mint(-amount));
+                                            client.Out.SendMessage("You removed mithril from " + player.Name + " successfully!", eChatType.CT_Important,
+                                                                   eChatLoc.CL_SystemWindow);
+                                            player.Out.SendMessage(
+                                                client.Player.Name + "(PrivLevel: " + client.Account.PrivLevel + ") has removed some mithril from you!",
+                                                eChatType.CT_Important, eChatLoc.CL_SystemWindow
+                                            );
+                                        }
+                                        else
+                                        {
+                                            player.AddMoney(Currency.Copper.Mint(amount));
+                                            client.Out.SendMessage("You gave " + player.Name + " mithril successfully!", eChatType.CT_Important,
+                                                                   eChatLoc.CL_SystemWindow);
+                                            player.Out.SendMessage(
+                                                client.Player.Name + "(PrivLevel: " + client.Account.PrivLevel + ") has given you some mithril!",
+                                                eChatType.CT_Important, eChatLoc.CL_SystemWindow
+                                            );
+                                        }
                                         InventoryLogging.LogInventoryAction(client.Player, player, eInventoryActionType.Other, amount);
-                                        client.Out.SendMessage("You gave " + player.Name + " mithril successfully!", eChatType.CT_Important,
-                                                               eChatLoc.CL_SystemWindow);
-                                        player.Out.SendMessage(
-                                            client.Player.Name + "(PrivLevel: " + client.Account.PrivLevel + ") has given you some mithril!",
-                                            eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                                    }
+                                    break;
+
+                                default:
+                                    {
+                                        player.Out.SendMessage("Unknown money type '" + args[2] + "'", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                         return;
                                     }
                             }
