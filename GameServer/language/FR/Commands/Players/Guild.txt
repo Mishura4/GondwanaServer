@@ -24,7 +24,7 @@ Commands.Players.Guild.Alliance.NoLeader:		    Il n'y a pas de chef d'alliance.
 Commands.Players.Guild.Alliance.NotLeader:		    Vous devez être la guilde du chef de l'alliance pour pouvoir enlever une guilde de l'alliance.
 Commands.Players.Guild.Alliance.NotMember:		    Vous devez être dans une Alliance pour pouvoir faire cela.
 Commands.Players.Guild.AlreadyInGuildName:		    {0} est un membre de votre guilde.
-Commands.Players.Guild.AlreadyInGuild:		    Il est déjà membre d'une guilde.
+Commands.Players.Guild.AlreadyInGuild:		    Ce joueur est déjà membre d'une guilde.
 Commands.Players.Guild.AMotdSet:				    Vous avez mis le message d'alliance à jour.
 Commands.Players.Guild.BannerAlready:			    Votre guilde possède déjà une bannière.
 Commands.Players.Guild.BannerBought:			    Vous avez acheté une bannière de guilde pour {0} points de mérite.
@@ -54,9 +54,9 @@ Commands.Players.Guild.BuffBPActivated:		    [Guild Buff] Votre guilde recevra u
 Commands.Players.Guild.BuffMPActivated:		    [Guild Buff] Votre guilde recevra un bonus aux points de mérite de guilde pendant 6 heures !
 Commands.Players.Guild.BuffRealmPoints:		    Votre guilde gagnera maintenant 5 % de points de royaume en plus pendant 6 heures !
 Commands.Players.Guild.ClaimNotNear:			    Vous devez être près du Lord pour revendiquer ce fort.
-Commands.Players.Guild.ConfirmLeave:			    Voulez-vous vraiment partir {0} ?
+Commands.Players.Guild.ConfirmLeave:			    Voulez-vous vraiment partir de {0} ?
 Commands.Players.Guild.DemotedHigherThanPlayer:   Vous pouvez seulement rétrograder les grades au-dessous du vôtre.
-Commands.Players.Guild.Demoted.Other:			    {0} a rétrogradé au rang {1}.
+Commands.Players.Guild.Demoted.Other:			    {0} a été rétrogradé(e) au rang {2} par {1}.
 Commands.Players.Guild.Demoted.Self:			    Vous avez été rétrogradé(e) au rang {0}.
 Commands.Players.Guild.DepositAmount:			    Vous déposez {0} dans la caisse de guilde.
 Commands.Players.Guild.DepositFull:			    La caisse de guilde semble être pleine.
@@ -193,7 +193,7 @@ Commands.Players.Guild.InviteDead:				Vous ne pouvez pas inviter un joueur mort 
 Commands.Players.Guild.InviteNoSelected:		Vous devez sélectionner un joueur.
 Commands.Players.Guild.InviteNoSelf:			Vous ne pouvez pas vous inviter.
 Commands.Players.Guild.InviteNotThis:			Ce membre ne peut être invité.
-Commands.Players.Guild.InviteRecieved:			{0} vous invite à rejoindre la guilde.
+Commands.Players.Guild.InviteRecieved:			Vous avez été invité(e) par {0} à rejoindre la guilde {1}.
 Commands.Players.Guild.InviteSent:				Vous lancez l'invitation à {0} afin de rejoindre la guilde.
 Commands.Players.Guild.Keep:					Votre guilde possède déjà un fort {0}.
 Commands.Players.Guild.LevelUp:					[Guilde] Votre guilde a atteint le niveau {0} !
@@ -201,8 +201,8 @@ Commands.Players.Guild.LoginsOff:				Vous avez désactivé la fonction qui vous 
 Commands.Players.Guild.LoginsOn:				Vous avez activé la fonction qui vous permet de voir les membres de la guilde se connecter, tapper '/gc logins' pour désactiver la fonction.
 Commands.Players.Guild.MadeLeader:				Vous êtes désormais le chef de {0}.
 Commands.Players.Guild.MadeLeaderOther:			{0} a été promu nouveau chef de la guilde {1}.
-Commands.Players.Guild.MemberLogin:				{0} est maintenant connecté(e).
-Commands.Players.Guild.MemberLogoff:			{0} est maintenant déconnecté(e).
+Commands.Players.Guild.MemberLogin:				{0} vient de se connecter.
+Commands.Players.Guild.MemberLogoff:			{0} vient de se déconnecter.
 Commands.Players.Guild.MemberRemoved:			{0} a retiré {1} de la guilde.
 Commands.Players.Guild.MeritPointReq:			Votre guilde a besoin de {0} points de mérite supplémentaires pour activer un buff de guilde ! (Points de mérite total nécessaires à cette action : {1})
 Commands.Players.Guild.Buff.Activate.RP:        Etes-vous sûr de vouloir activer un buff de guilde RP pour {0} points de mérite ?

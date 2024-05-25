@@ -2687,7 +2687,7 @@ namespace DOL.GS.Commands
                                     ch.GuildRank = newrank;
                                     GameServer.Database.SaveObject(ch);
                                 }
-                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Demoted.Other", plyName, newrank.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Demoted.Other", plyName, client.Player.Name, newrank.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                                 guild.UpdateGuildWindow();
                             }
                             catch

@@ -24,7 +24,7 @@ Commands.Players.Guild.Alliance.NoLeader:		    There is no Alliance leader.
 Commands.Players.Guild.Alliance.NotLeader:		    You must be from the Alliance Leader's Guild to be able to remove an Alliance Guild.
 Commands.Players.Guild.Alliance.NotMember:		    You have to be in an Alliance to do this.
 Commands.Players.Guild.AlreadyInGuildName:		    {0} is a member of your guild.
-Commands.Players.Guild.AlreadyInGuild:		    He is already a member of a guild.
+Commands.Players.Guild.AlreadyInGuild:		    This player is already in a guild.
 Commands.Players.Guild.AMotdSet:				    You have updated the alliance's message.
 Commands.Players.Guild.BannerAlready:			    Your guild already has a banner.
 Commands.Players.Guild.BannerBought:			    You purchased a Guild Banner for {0} Merit Points.
@@ -56,7 +56,7 @@ Commands.Players.Guild.BuffRealmPoints:		    Your guild will now earn 5 % more r
 Commands.Players.Guild.ClaimNotNear:			    You must be near the Lord to claim this keep.
 Commands.Players.Guild.ConfirmLeave:			    Do you really want to leave {0}?
 Commands.Players.Guild.DemotedHigherThanPlayer:   You can only downgrade grades below your own.
-Commands.Players.Guild.Demoted.Other:			    {0} demoted to rank {1}.
+Commands.Players.Guild.Demoted.Other:			    {0} was demoted to rank {2} by {1}.
 Commands.Players.Guild.Demoted.Self:			    You have been demoted to rank {0}.
 Commands.Players.Guild.DepositAmount:			    You deposit {0} in the guild bank.
 Commands.Players.Guild.DepositFull:			    Guild bank seems to be full.
@@ -193,16 +193,16 @@ Commands.Players.Guild.InviteDead:				You cannot invite a dead player to join th
 Commands.Players.Guild.InviteNoSelected:		You must select a player.
 Commands.Players.Guild.InviteNoSelf:			You cannot invite yourself.
 Commands.Players.Guild.InviteNotThis:			This member cannot be invited.
-Commands.Players.Guild.InviteRecieved:			{0} invites you to join the guild.
-Commands.Players.Guild.InviteSent:				You send the invitation for {0} to join the guild.
+Commands.Players.Guild.InviteRecieved:			You have been invited by {0} to join the guild {1}.
+Commands.Players.Guild.InviteSent:				You sent an invitation for {0} to join the guild.
 Commands.Players.Guild.Keep:					Your guild already has a keep {0}.
 Commands.Players.Guild.LevelUp:					[Guild] Your guild has reached the level {0}!
 Commands.Players.Guild.LoginsOff:				You have disabled the function that allows you to see guild members who log in, type '/gc logins' to activate the function.
 Commands.Players.Guild.LoginsOn:				You have enabled the function that allows you to see guild members who log in, type '/gc logins' to deactivate the function.
 Commands.Players.Guild.MadeLeader:				You are now the leader of {0}.
 Commands.Players.Guild.MadeLeaderOther:			{0} has been promoted as the new leader of the guild {1}.
-Commands.Players.Guild.MemberLogin:				{0} is now connected.
-Commands.Players.Guild.MemberLogoff:			{0} is now disconnected.
+Commands.Players.Guild.MemberLogin:				{0} has logged in.
+Commands.Players.Guild.MemberLogoff:			{0} has logged off.
 Commands.Players.Guild.MemberRemoved:			{0} has removed {1} from the guild.
 Commands.Players.Guild.MeritPointReq:			Your guild need {0} more merit points to activate a guild buff! (Total merit points amount required for this action: {1}).
 Commands.Players.Guild.Buff.Activate.RP:        Are you sure you want to activate a Realm Points guild buff for {0} merit points?
