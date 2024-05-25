@@ -44,6 +44,7 @@ GameUtils.Guild.Territory.Lord.ItemBribe.Accept:        Merci pour votre contrib
 GameUtils.Guild.Territory.Lord.ItemBribe.NotEnough:     J'accepte votre donation, mais il reste {1}.
 GameUtils.Guild.Territory.Lord.ItemBribe.Zero:          Vous d'avez pas les objets nécessaires.
 GameUtils.Guild.Territory.Lord.QuestCondition:          Complétez la quète {0} et nous vous offrirons notre service.
+GameUtils.Guild.Territory.Lord.QuestCondition.Many:     Complétez la quète {0} {1} fois et nous vous offrirons notre service.
 GameUtils.Guild.Territory.Lord.TerritoryCondition:      Nous n'offrirons notre service qu'aux alliés de {0}.
 GameUtils.Guild.Territory.Lord.Interrupted:             On dirait qu'on a de la compagnie, revenez quand vous vous en serez débarassé.
 GameUtils.Guild.Territory.Lord.ConditionChanged:        J'ai changé d'avis. Parlez-moi à nouveau et on peut peut-être négocier.

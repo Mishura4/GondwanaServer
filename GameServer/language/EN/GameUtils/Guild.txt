@@ -44,6 +44,7 @@ GameUtils.Guild.Territory.Lord.ItemBribe.Accept:        We thank you for your co
 GameUtils.Guild.Territory.Lord.ItemBribe.NotEnough:     I have taken your items, but you still need {0}.
 GameUtils.Guild.Territory.Lord.ItemBribe.Zero:          You do not have the items I requested.
 GameUtils.Guild.Territory.Lord.QuestCondition:          Complete the quest {0} and we will offer you our service.
+GameUtils.Guild.Territory.Lord.QuestCondition.Many:     Complete the quest {0} {1} times and we will offer you our service.
 GameUtils.Guild.Territory.Lord.TerritoryCondition:      We will only offer our service to allies of {0}.
 GameUtils.Guild.Territory.Lord.Interrupted:             It looks like we have company, come back when you get rid of it.
 GameUtils.Guild.Territory.Lord.TooFar:                  Come back when you want to form an alliance.

@@ -381,7 +381,14 @@ namespace DOL.Territories
                     return true;
 
                 case eCaptureCondition.QuestCompletion:
-                    player.SendTranslatedMessage("GameUtils.Guild.Territory.Lord.QuestCondition", eChatType.CT_System, eChatLoc.CL_PopupWindow, ((DataQuestJson)CaptureParam1).Name);
+                    if ((long)CaptureParam2 > 1)
+                    {
+                        player.SendTranslatedMessage("GameUtils.Guild.Territory.Lord.QuestCondition.Many", eChatType.CT_System, eChatLoc.CL_PopupWindow, ((DataQuestJson)CaptureParam1).Name, (long)CaptureParam2 - player.HasFinishedQuest((DataQuestJson)CaptureParam1));
+                    }
+                    else
+                    {
+                        player.SendTranslatedMessage("GameUtils.Guild.Territory.Lord.QuestCondition", eChatType.CT_System, eChatLoc.CL_PopupWindow, ((DataQuestJson)CaptureParam1).Name);
+                    }
                     return true;
 
                 case eCaptureCondition.TerritoryOwned:
