@@ -31,6 +31,12 @@ Language.Time.Longms:                               {0:%m} minute and {0:%s} sec
 Language.Time.LongS:                                {0:%s} seconds
 Language.Time.Longs:                                {0:%s} second
 
+Language.Mithril.Amount:                                   {0} Mithril
+Language.Platinum.Amount:                                  {0} Platinum
+Language.Gold.Amount:                                      {0} Gold
+Language.Silver.Amount:                                    {0} Silver
+Language.Copper.Amount:                                    {0} Copper
+
 # Stats
 Language.Resists:								Resists
 Language.DamageType.Natural.Noun:				Natural

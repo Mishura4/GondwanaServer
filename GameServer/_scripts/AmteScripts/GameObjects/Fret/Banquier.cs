@@ -24,10 +24,9 @@ namespace DOL.GS.Scripts
 
         public bool ReceiveMoney(GameLiving source, long money, bool removeMoney)
         {
-            if (source == null || money <= 0) return false;
-            if (!(source is GamePlayer))
+            if (source is not GamePlayer player)
                 return false;
-            GamePlayer player = source as GamePlayer;
+            if (money <= 0) return false;
             DBBanque bank = GameServer.Database.FindObjectByKey<DBBanque>(player.InternalID);
             if (bank == null)
             {
@@ -49,19 +48,9 @@ namespace DOL.GS.Scripts
 
             GameServer.Database.SaveObject(bank);
 
-            string message = "";
-            if (Money.GetMithril(bank.Money) != 0)
-                message += LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.Mithril", Money.GetMithril(bank.Money)) + " ";
-            if (Money.GetPlatinum(bank.Money) != 0)
-                message += LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.Platinum", Money.GetPlatinum(bank.Money)) + " ";
-            if (Money.GetGold(bank.Money) != 0)
-                message += LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.Gold", Money.GetGold(bank.Money)) + " ";
-            if (Money.GetSilver(bank.Money) != 0)
-                message += LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.Silver", Money.GetSilver(bank.Money)) + " ";
-            if (Money.GetCopper(bank.Money) != 0)
-                message += LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.Copper", Money.GetCopper(bank.Money)) + " ";
+            string message = LanguageMgr.TranslateMoneyLong(player, bank.Money);
 
-            if (message != "")
+            if (!string.IsNullOrEmpty(message))
                 message += LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.Moneyamount", message);
             else
                 message = LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.Nomoney");

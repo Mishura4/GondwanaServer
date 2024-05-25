@@ -327,11 +327,15 @@ namespace DOL.Territories
                     contributed = GetContribution(player);
                     if (contributed > 0)
                     {
-                        player.SendTranslatedMessage("GameUtils.Guild.Territory.Lord.MoneyBribe.More", eChatType.CT_System, eChatLoc.CL_PopupWindow, contributed, (long)CaptureParam1 - contributed);
+                        player.SendTranslatedMessage(
+                            "GameUtils.Guild.Territory.Lord.MoneyBribe.More", eChatType.CT_System, eChatLoc.CL_PopupWindow,
+                            LanguageMgr.TranslateMoneyLong(player, contributed),
+                            LanguageMgr.TranslateMoneyLong(player, (long)CaptureParam1 - contributed)
+                        );
                     }
                     else
                     {
-                        player.SendTranslatedMessage("GameUtils.Guild.Territory.Lord.MoneyBribe", eChatType.CT_System, eChatLoc.CL_PopupWindow, (long)CaptureParam1);
+                        player.SendTranslatedMessage("GameUtils.Guild.Territory.Lord.MoneyBribe", eChatType.CT_System, eChatLoc.CL_PopupWindow, LanguageMgr.TranslateMoneyLong(player, (long)CaptureParam1));
                     }
                     return true;
 
@@ -495,7 +499,7 @@ namespace DOL.Territories
                 {
                     Contribute(player, money.Amount);
                     player.RemoveMoney(money);
-                    player.SendTranslatedMessage("GameUtils.Guild.Territory.Lord.MoneyBribe.NotEnough", eChatType.CT_Chat, eChatLoc.CL_PopupWindow, required - money.Amount - contributed);
+                    player.SendTranslatedMessage("GameUtils.Guild.Territory.Lord.MoneyBribe.NotEnough", eChatType.CT_Chat, eChatLoc.CL_PopupWindow, LanguageMgr.TranslateMoneyLong(player, required - money.Amount - contributed));
                 }
                 return true;
             }

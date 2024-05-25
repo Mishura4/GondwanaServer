@@ -29,6 +29,9 @@ using DOL.GS;
 using log4net;
 using System.Diagnostics;
 using System.Transactions;
+using System.Numerics;
+using System.Linq;
+using DOL.GS.Finance;
 
 namespace DOL.Language
 {
@@ -823,6 +826,82 @@ namespace DOL.Language
         public static string TranslateTimeLong(GamePlayer player, TimeSpan ts)
         {
             return TranslateTimeLong(player.Client.Account.Language, ts.Hours, ts.Minutes, ts.Seconds);
+        }
+
+        public static string TranslateMoneyLong(string language, long money)
+        {
+            if (money == 0)
+            {
+                return string.Empty;
+            }
+            if (money < 0)
+            {
+                money *= -1;
+            }
+
+            List<string> messages = new List<string>(5);
+            string translation;
+
+            void Add(string key, long amount)
+            {
+                if (amount > 0)
+                {
+                    messages.Add(TryGetTranslation(out translation, language, key, amount) ? translation : $"{amount} (TRANSLATION ERROR)");
+                }
+            }
+
+            if (money < 100)
+            {
+                Add("Language.Copper.Amount", money);
+                return messages[0];
+            }
+            else
+            {
+                Add("Language.Copper.Amount", money % 100);
+            }
+            money /= 100;
+            if (money < 100)
+            {
+                Add("Language.Silver.Amount", money);
+                return string.Join(' ', messages.AsEnumerable().Reverse());
+            }
+            else
+            {
+                Add("Language.Silver.Amount", money % 100);
+            }
+            money /= 100;
+            if (money < 100)
+            {
+                Add("Language.Gold.Amount", money);
+                return string.Join(' ', messages.AsEnumerable().Reverse());
+            }
+            else
+            {
+                Add("Language.Gold.Amount", money % 100);
+            }
+            money /= 100;
+            if (money < 100)
+            {
+                Add("Language.Platinum.Amount", money);
+                return string.Join(' ', messages.AsEnumerable().Reverse());
+            }
+            else
+            {
+                Add("Language.Platinum.Amount", money % 100);
+            }
+            money /= 100;
+            Add("Language.Mithril.Amount", money);
+            return string.Join(' ', messages.AsEnumerable().Reverse());
+        }
+
+        public static string TranslateMoneyLong(GameClient client, long money)
+        {
+            return TranslateMoneyLong(client.Account.Language, money);
+        }
+
+        public static string TranslateMoneyLong(GamePlayer player, long money)
+        {
+            return TranslateMoneyLong(player.Client, money);
         }
 
         #endregion

@@ -1,10 +1,5 @@
 Banker.AccountCreate:			You have just created a bank account!
 Banker.DontHaveAmount:			You don't have this amount on you!
-Banker.Mithril:					{0} Mithril
-Banker.Platinum:				{0} Platinum
-Banker.Gold:					{0} Gold
-Banker.Silver:					{0} Silver
-Banker.Copper:					{0} Copper
 Banker.InteractOutlaw:			I don't deal with outlaws!
 Banker.InteractText01:			Hello sir, you don't have any bank account yet.
 Banker.InteractText02:			In order to open an account just give me some money or a check, the account will be created automatically!
