@@ -47,20 +47,20 @@ namespace DOL.Territories
 
         private sealed class LazyTerritory
         {
-            string _territoryID;
-            Territory? _territory;
-
-            public LazyTerritory(string ID)
+            public string TerritoryID
             {
-                _territoryID = ID;
+                get;
+                init;
             }
+
+            private Territory? _territory = null;
 
             public Territory Get()
             {
                 if (_territory != null)
                     return _territory;
 
-                _territory = TerritoryManager.GetTerritoryByID(_territoryID);
+                _territory = TerritoryManager.GetTerritoryByID(TerritoryID);
                 return _territory;
             }
         }
@@ -111,6 +111,29 @@ namespace DOL.Territories
             return base.AddToWorld();
         }
 
+        public string SerializeCondition()
+        {
+            switch (CaptureCondition)
+            {
+                case eCaptureCondition.None:
+                    return string.Empty;
+
+                case eCaptureCondition.MoneyBribe:
+                case eCaptureCondition.BountyPointsBribe:
+                    return CaptureCondition.ToString("d") + '|' + ((long)CaptureParam1);
+
+                case eCaptureCondition.ItemBribe:
+                    return CaptureCondition.ToString("d") + '|' + ((ItemTemplate)CaptureParam1).Id_nb + '|' + ((long)CaptureParam2);
+
+                case eCaptureCondition.QuestCompletion:
+                    return CaptureCondition.ToString("d") + '|' + ((DataQuestJson)CaptureParam1).Id + '|' + ((long)CaptureParam2);
+
+                case eCaptureCondition.TerritoryOwned:
+                    return CaptureCondition.ToString("d") + '|' + ((LazyTerritory)CaptureParam1).TerritoryID;
+            }
+            throw new InvalidOperationException("Unknown capture condition " + CaptureCondition);
+        }
+
         /// <summary>
         /// Parse the capture parameters from the DB.
         /// </summary>
@@ -132,13 +155,13 @@ namespace DOL.Territories
                 }
             }
 
-            if (args.Length < 2)
+            if (args.Length < 1)
             {
                 SetNoCondition();
                 return;
             }
 
-            eCaptureCondition condition = (eCaptureCondition)Enum.Parse(typeof(eCaptureCondition), args[1]);
+            eCaptureCondition condition = (eCaptureCondition)Enum.Parse(typeof(eCaptureCondition), args[0], true);
             if (condition == eCaptureCondition.None)
             {
                 SetNoCondition();
@@ -155,8 +178,8 @@ namespace DOL.Territories
                 case eCaptureCondition.BountyPointsBribe:
                 // Amount
                     {
-                        EnforceParamLength(3);
-                        long amount = long.Parse(args[2]);
+                        EnforceParamLength(2);
+                        long amount = long.Parse(args[1]);
                         CaptureCondition = condition;
                         CaptureParam1 = amount;
                     }
@@ -164,18 +187,16 @@ namespace DOL.Territories
 
                 case eCaptureCondition.ItemBribe:
                     {
-                        EnforceParamLength(3);
+                        EnforceParamLength(2);
                         long amount = 1;
-                        if (args.Length > 3)
+                        if (args.Length > 2)
                         {
-                            long.TryParse(args[3], out amount);
+                            long.TryParse(args[2], out amount);
                         }
-                        ItemTemplate tpl = DOLDB<ItemTemplate>.SelectObject(DB.Column("Id_nb").IsEqualTo(args[2]));
+                        ItemTemplate tpl = DOLDB<ItemTemplate>.SelectObject(DB.Column("Id_nb").IsEqualTo(args[1]));
                         if (tpl == null)
                         {
-                            log.Error($"ItemTemplate {args[2]} not found for TerritoryLord {Name} ({InternalID})");
-                            SetNoCondition();
-                            return;
+                            throw new ArgumentException($"ItemTemplate {args[1]} not found");
                         }
                         CaptureCondition = condition;
                         CaptureParam1 = tpl;
@@ -185,19 +206,17 @@ namespace DOL.Territories
 
                 case eCaptureCondition.QuestCompletion:
                     {
-                        EnforceParamLength(3);
-                        ushort questID = ushort.Parse(args[2]);
+                        EnforceParamLength(2);
+                        ushort questID = ushort.Parse(args[1]);
                         long amount = 1;
-                        if (args.Length > 3)
+                        if (args.Length > 2)
                         {
-                            amount = long.Parse(args[3]);
+                            amount = long.Parse(args[2]);
                         }
                         DataQuestJson quest = DataQuestJsonMgr.GetQuest(questID);
                         if (quest == null)
                         {
-                            log.Error($"DataQuestJson {args[2]} not found for TerritoryLord {Name} ({InternalID})");
-                            SetNoCondition();
-                            return;
+                            throw new ArgumentException($"DataQuestJson {args[1]} not found");
                         }
                         CaptureCondition = condition;
                         CaptureParam1 = quest;
@@ -208,19 +227,17 @@ namespace DOL.Territories
                 case eCaptureCondition.TerritoryOwned:
                 // String
                     {
-                        EnforceParamLength(3);
+                        EnforceParamLength(2);
                         CaptureCondition = condition;
                         // Because this is called while loading territories we cannot check here,
                         // as the territory requested might not be loaded yet. Instead we defer to AddToWorld.
                         // This is not ideal but the alternative is to change how territories are loaded
-                        CaptureParam1 = new LazyTerritory(args[2]);
+                        CaptureParam1 = new LazyTerritory{TerritoryID = args[1]};
                     }
                     break;
 
                 default:
-                    log.Error("Unknown capture condition " + args[1]);
-                    SetNoCondition();
-                    return;
+                    throw new ArgumentException("Unknown capture condition " + args[0]);
             }
         }
 

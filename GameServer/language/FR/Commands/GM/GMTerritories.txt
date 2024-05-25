@@ -1,7 +1,7 @@
 Commands.GM.GMTerritories.Description:					Commande GM pour la création de territoires
 Commands.GM.GMTerritories.Usage.Create:					'/GMTerritories create <name> <areaID> <groupID>' Crée un territoire <name> avec area <areaID> et MobGroup <groupID>
 Commands.GM.GMTerritories.Usage.CreateSub:				'/GMTerritories createsub <name> <areaID> <expiration>' Crée un sous-territoire <name> avec area <areaID> avec une durée de contrôle de <expiration> minutes
-Commands.GM.GMTerritories.Usage.CreateLord:				'/GMTerritories createlord <areaID|territoryID>' Crée un seigneur de territoire pour le territoire actuel ou specifié
+Commands.GM.GMTerritories.Usage.CreateLord:				'/GMTerritories createlord <areaID|territoryID> (optionel)<moneybribe <montant>|bountypointsbribe <montant>|itembribe <itemID> (optionel)<montant>|questcompletion <questID> (optionel)<montant>|territoryowned <territoryID>>' Crée un seigneur de territoire pour le territoire actuel ou specifié. Optionnellement une condition peut être spécifiée pour la capture.
 Commands.GM.GMTerritories.Usage.Add:					'/GMTerritories add <areaID> to <territoryID>' Ajoute l'area <areaID> au territoire <territoryID>
 Commands.GM.GMTerritories.Usage.Info:					'/GMTerritories info <areaID|territoryID>' Affiche les informations d'un territoire
 Commands.GM.GMTerritories.Usage.Clear:					'/GMTerritories clear <areaID|territoryID>' Remet un territoire en état neutre
@@ -34,3 +34,4 @@ Commands.GM.GMTerritories.PortalSet:					Le portail du territoire {0} apparaîtr
 Commands.GM.GMTerritories.PortalRemoved:				Le portail du territoire {0} a été désactivé.
 Commands.GM.GMTerritories.ExpirationSet:				Le territoire {0} expire maintenant {1} après capture.
 Commands.GM.GMTerritories.ExpirationRemoved:			L'expiration du territoire {0} a été désactivée.
+Commands.GM.GMTerritories.LordCreated:                  Un seigneur de territoire avec ID {0} a été créé pour {1}.

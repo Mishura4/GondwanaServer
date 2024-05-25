@@ -149,7 +149,14 @@ namespace DOL.Territories
 
                 if (mobInfo.Mob is TerritoryLord lord)
                 {
-                    lord.ParseParameters(bossInfo);
+                    try
+                    {
+                        lord.ParseParameters(bossInfo.Skip(1).ToArray());
+                    }
+                    catch (Exception ex)
+                    {
+                        log.Error($"Could not load TerritoryLoard parameters ${bossID} for territory {territoryDb.Name} {territoryDb.ObjectId}: {ex.Message}");
+                    }
                 }
 
                 Territory territory = new Territory(zone, areas, mobInfo.Mob, territoryDb);

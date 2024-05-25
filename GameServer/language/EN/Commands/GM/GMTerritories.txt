@@ -1,7 +1,7 @@
 Commands.GM.GMTerritories.Description:					GM territory creation commands:
 Commands.GM.GMTerritories.Usage.Create:					'/GMTerritories create <name> <areaID> <groupID>' Creates a territory <name> with area <areaID> andd MobGroup <groupID>
 Commands.GM.GMTerritories.Usage.CreateSub:				'/GMTerritories createsub <name> <areaID>' Creates a subterritory <name> with area <areaID> with control expiring after <expiration> minutes
-Commands.GM.GMTerritories.Usage.CreateLord:				'/GMTerritories createlord <areaID|territoryID>' Creates a lord for the current or specified territory
+Commands.GM.GMTerritories.Usage.CreateLord:				'/GMTerritories createlord <areaID|territoryID> (optional)<moneybribe <amount>|bountypointsbribe <amount>|itembribe <itemID> (optional)<amount>|questcompletion <questID> (optional)<amount>|territoryowned <territoryID>>' Creates a lord for the current or specified territory. Optionally a condition can be set for the capture.
 Commands.GM.GMTerritories.Usage.Add:					'/GMTerritories add <areaID> to <territoryID>' Adds area <areaID> to territory <territoryID>
 Commands.GM.GMTerritories.Usage.Info:					'/GMTerritories info <areaID|territoryID>' Gives informations related to a territory
 Commands.GM.GMTerritories.Usage.Clear:					'/GMTerritories clear <areadID|territoryID>' Clears a territory's ownership, resetting it to neutral
@@ -32,3 +32,4 @@ Commands.GM.GMTerritories.Claimed:						The territory {0} was forcefully claimed
 Commands.GM.GMTerritories.BadCoordinate:				'{0}' is not a valid coordinate.
 Commands.GM.GMTerritories.PortalSet:					The portal for territory {0} will appear at coordinates x={1:0} y={2:0} z={3:0}.
 Commands.GM.GMTerritories.PortalRemoved:				The portal for territory {0} has been disabled.
+Commands.GM.GMTerritories.LordCreated:                  A territory lord with ID {0} was created for {1}.

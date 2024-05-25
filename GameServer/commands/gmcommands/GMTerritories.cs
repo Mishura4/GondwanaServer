@@ -198,15 +198,31 @@ namespace DOL.commands.gmcommands
                             return;
                         }
                         TerritoryLord lord = new TerritoryLord();
+                        if (args.Length > 2)
+                        {
+                            try
+                            {
+                                lord.ParseParameters(args.Skip(2).ToArray());
+                            }
+                            catch (Exception ex)
+                            {
+                                DisplaySyntax(client, "createlord");
+                                client.Out.SendMessage(ex.Message, eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                return;
+                            }
+                        }
                         lord.Name = "Lord of " + territory.Name;
                         lord.CurrentRegionID = client.Player.CurrentRegionID;
                         lord.Position = client.Player.Position;
                         lord.LoadedFromScript = false;
                         lord.AddToWorld();
                         lord.SaveIntoDatabase();
+                         // Remove the condition on the older lord first -- data will be lost on territory reload, we just do it now so there is no surprise
+                        (territory.Boss as TerritoryLord)?.ParseParameters(Array.Empty<string>());
                         territory.Boss = lord;
-                        territory.BossId = lord.InternalID;
+                        territory.BossId = lord.CaptureCondition != TerritoryLord.eCaptureCondition.None ? lord.InternalID + '|' + lord.SerializeCondition() : lord.InternalID;
                         territory.SaveIntoDatabase();
+                        client.SendTranslation("Commands.GM.GMTerritories.LordCreated", eChatType.CT_System, eChatLoc.CL_SystemWindow, lord.ObjectID, territory.Name);
                     }
                     break;
 
