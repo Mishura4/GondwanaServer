@@ -43,6 +43,22 @@ HouseEnterLeave.CantEnter:					You cannot enter the house {0}.
 HousingDecorationRotate.Rotated:			A {0} degrees to {1} degrees turned interior object.
 
 # /HousingPlaceItemHandler
+HousingPickupItemHandler.GardenRemoved:			Garden object removed.
+HousingPickupItemHandler.PickUp:				You get {0} and put it in your backpack.
+HousingPlaceItemHandler.30objects:				Vous avez déjà placé 30 objets. Vous ne pouvez pas en placer plus.
+HousingPlaceItemHandler.40objects:				Vous avez déjà placé 40 objets. Vous ne pouvez pas en placer plus.
+HousingPlaceItemHandler.CantFloor:				Cet objet ne peut pas être placé sur le sol !
+HousingPlaceItemHandler.CantWall:				Cet objet ne peut pas être placé sur un mur !
+HousingPlaceItemHandler.DropOnFloor:			Vous déposez l'objet {0} sur le sol de votre maison.
+HousingPlaceItemHandler.DropOnGarden:			Vous déposez l'objet {0} dans votre jardin.
+HousingPlaceItemHandler.DropOnWall:				Vous déposez l'objet {0} sur le mur de votre maison.
+HousingPlaceItemHandler.GardenObjectPlaced:		Objet de jardin placé. {0} places restantes.
+HousingPlaceItemHandler.HasPorch:				Cette maison a déjà un porche !
+HousingPlaceItemHandler.HasNoPorch:				Cette maison n'a pas de porche !
+HousingPlaceItemHandler.IndoorObjectPlaced:		Objet intérieur placé. {0} places restantes.
+HousingPlaceItemHandler.NoHookpoint:			Il n'y a plus de point d'ancrage !
+HousingPlaceItemHandler.PutMoney:				Vous déposez de l'argent sur le compte de votre maison.
+
 Scripts.Player.Housing.BadShieldBanner:			That is not a valid shield or banner object.
 Scripts.Player.Housing.CantBeSold:			This item cannot be sold!
 Scripts.Player.Housing.CarpetsRemoved:			Your carpets have been removed.

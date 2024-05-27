@@ -18,8 +18,8 @@ SkillBase.RegisterPropertyNames.Axe:               Hache
 SkillBase.RegisterPropertyNames.Battlesongs:         Chants de guerre
 SkillBase.RegisterPropertyNames.BeastCraft:            Lien Animal
 SkillBase.RegisterPropertyNames.Blades:               Lames
-SkillBase.RegisterPropertyNames.BladeturnReinforcement:   Renforcement de la bulle protectrice {0}% (PvE Uniquement)
-SkillBase.RegisterPropertyNames.BlockChance:         Taux de blocage: {0}% (PvE Uniquement)
+SkillBase.RegisterPropertyNames.BladeturnReinforcement:   Renforcement de la bulle protectrice (PvE Uniquement)
+SkillBase.RegisterPropertyNames.BlockChance:         Chance de Blocage boucliers
 SkillBase.RegisterPropertyNames.Blunt:               Masse
 SkillBase.RegisterPropertyNames.Body:               Résistance au Corps
 SkillBase.RegisterPropertyNames.BodyMagic:            Altération
@@ -46,8 +46,8 @@ SkillBase.RegisterPropertyNames.Creeping:            Voie Sylvestre
 SkillBase.RegisterPropertyNames.CreepingPathFocus:      Focus : Voie Sylvestre
 SkillBase.RegisterPropertyNames.CriticalArcheryHit:      Bonus aux chances de critique Archerie
 SkillBase.RegisterPropertyNames.CriticalMeleeHit:      Bonus aux chances de critique en mêlée
-SkillBase.RegisterPropertyNames.CriticalSpellHit:		Bonus % chances de faire des dégâts critiques
-SkillBase.RegisterPropertyNames.CriticalHealHit:		Bonus % chances de soins critiques
+SkillBase.RegisterPropertyNames.CriticalSpellHit:		Bonus aux chances de faire des dégâts critiques
+SkillBase.RegisterPropertyNames.CriticalHealHit:		Bonus aux chances de soins critiques
 SkillBase.RegisterPropertyNames.CriticalStrike:         Attaques Sournoises
 SkillBase.RegisterPropertyNames.Crossbows:            Arbalètes
 SkillBase.RegisterPropertyNames.Crush:               Résistance Contondant
@@ -61,7 +61,7 @@ SkillBase.RegisterPropertyNames.DeathservantFocus:      Focus : Servitor Mortis
 SkillBase.RegisterPropertyNames.Deathsight:            Visio Mortis
 SkillBase.RegisterPropertyNames.DeathsightFocus:     Focus : Visio Mortis
 SkillBase.RegisterPropertyNames.DebuffEffectivness:      Réduction d'efficacité
-SkillBase.RegisterPropertyNames.DefensiveBonus:         Bonus de défense: {0}% (PvE Uniquement)
+SkillBase.RegisterPropertyNames.DefensiveBonus:         Bonus de défense (PvE Uniquement)
 SkillBase.RegisterPropertyNames.Dementia:            Démence
 SkillBase.RegisterPropertyNames.Dexterity:            Dexterité
 SkillBase.RegisterPropertyNames.DexterityBonusCap:      Bonus au cap de Dexterité
@@ -79,7 +79,7 @@ SkillBase.RegisterPropertyNames.Enhancement:         Bénédictions
 SkillBase.RegisterPropertyNames.Envenom:            Empoisonner
 SkillBase.RegisterPropertyNames.EtherealShriek:         Cri Ethéré
 SkillBase.RegisterPropertyNames.EtherealShriekFocus:   Focus : Cri Ethéré
-SkillBase.RegisterPropertyNames.EvadeChance:         Esquive :
+SkillBase.RegisterPropertyNames.EvadeChance:         Chance d'Esquive
 SkillBase.RegisterPropertyNames.ExperienceLoss:         Réduction de perte d'expérience
 SkillBase.RegisterPropertyNames.Fatigue:            Endurance
 SkillBase.RegisterPropertyNames.FireMagic:            Voie du Feu
@@ -124,7 +124,7 @@ SkillBase.RegisterPropertyNames.MindMagicFocus:         Focus : Âme
 SkillBase.RegisterPropertyNames.Music:               Musique
 SkillBase.RegisterPropertyNames.Nature:               Croissance
 SkillBase.RegisterPropertyNames.SpellFumbleChance:		Chance d'échapper aux sorts
-SkillBase.RegisterPropertyNames.NegativeReduction:    Réduction de la durée des effets négatifs: {0}% (PvE Uniquement)
+SkillBase.RegisterPropertyNames.NegativeReduction:    Réduction de la durée des effets négatifs (PvE Uniquement)
 SkillBase.RegisterPropertyNames.NightshadeMagic:      Magie de l'Ombre
 SkillBase.RegisterPropertyNames.Nurture:            Symbiose
 SkillBase.RegisterPropertyNames.OdinsWill:            Volonté d'Odin
@@ -132,11 +132,11 @@ SkillBase.RegisterPropertyNames.Pacification:         Apaisement
 SkillBase.RegisterPropertyNames.Painworking:         Dolor Inflictus
 SkillBase.RegisterPropertyNames.PainworkingFocus:      Focus : Dolor Inflictus
 SkillBase.RegisterPropertyNames.Parry:               Parade
-SkillBase.RegisterPropertyNames.ParryChance:         Parade: {0}% (PvE Uniquement)
+SkillBase.RegisterPropertyNames.ParryChance:         Chance de Parade
 SkillBase.RegisterPropertyNames.Pathfinding:         Art des Forêts
 SkillBase.RegisterPropertyNames.PhantasmalWail:         Lamentation Sépulcrale
 SkillBase.RegisterPropertyNames.PhantasmalWailFocus:   Focus : Lamentation Sépulcrale
-SkillBase.RegisterPropertyNames.PieceAblative:         Ablatif: {0}% (PvE Uniquement)
+SkillBase.RegisterPropertyNames.PieceAblative:         Ablatif (PvE Uniquement)
 SkillBase.RegisterPropertyNames.Piercing:            Perforant
 SkillBase.RegisterPropertyNames.Piety:               Piété
 SkillBase.RegisterPropertyNames.PietyBonusCap:         Bonus au cap de Piété
@@ -149,7 +149,7 @@ SkillBase.RegisterPropertyNames.PowerStrikes:         Coups Puissants
 SkillBase.RegisterPropertyNames.Quickness:            Vivacité
 SkillBase.RegisterPropertyNames.QuicknessBonusCap:      Bonus au cap de Vivacité
 SkillBase.RegisterPropertyNames.RangedDamage:         Tous dégâts à distance
-SkillBase.RegisterPropertyNames.ReactionaryStyleDamage:   Bonus aux styles réactionnels: {0}% (PvE Uniquement)
+SkillBase.RegisterPropertyNames.ReactionaryStyleDamage:   Bonus aux styles réactionnels (PvE Uniquement)
 SkillBase.RegisterPropertyNames.RecurvedBow:         Arc Recourbé
 SkillBase.RegisterPropertyNames.Regrowth:           Régénération
 SkillBase.RegisterPropertyNames.Rejuvenation:         Guérison
@@ -171,7 +171,7 @@ SkillBase.RegisterPropertyNames.SpectralForceFocus:      Focus : Force Spectrale
 SkillBase.RegisterPropertyNames.SpectralGuard:         Défense Spectrale
 SkillBase.RegisterPropertyNames.SpeedDecreaseDuration:   Durée de ralentissement de déplacement
 SkillBase.RegisterPropertyNames.SpellDuration:         Durée des sorts
-SkillBase.RegisterPropertyNames.SpellPowerCost:         Réduction des coûts en mana des sorts : {0}% (PvE Uniquement)
+SkillBase.RegisterPropertyNames.SpellPowerCost:         Réduction des coûts en mana des sorts (PvE Uniquement)
 SkillBase.RegisterPropertyNames.SpellRange:            Portée de sort
 SkillBase.RegisterPropertyNames.Spirit:               Résistance à l'Esprit
 SkillBase.RegisterPropertyNames.SpiritMagic:         Voie du Simulacre
@@ -183,7 +183,7 @@ SkillBase.RegisterPropertyNames.Stormcalling:         Ire de Thor
 SkillBase.RegisterPropertyNames.Strength:            Force
 SkillBase.RegisterPropertyNames.StrengthBonusCap:      Bonus au cap de Force
 SkillBase.RegisterPropertyNames.StunDuration:         Durée des Stun
-SkillBase.RegisterPropertyNames.StyleCostReduction:      Réduction des coûts d'endurance des styles de combat: {0} pts (PvE Uniquement)
+SkillBase.RegisterPropertyNames.StyleCostReduction:      Réduction des coûts d'endurance des styles de combat (PvE Uniquement)
 SkillBase.RegisterPropertyNames.StyleDamage:         Bonus aux dégâts des styles de combat
 SkillBase.RegisterPropertyNames.Summoning:            Servants de Hel
 SkillBase.RegisterPropertyNames.SummoningFocus:         Focus : Servants de Hel
@@ -193,7 +193,7 @@ SkillBase.RegisterPropertyNames.Sword:               Epée
 SkillBase.RegisterPropertyNames.ThrownWeapons:         Armes de Jet
 SkillBase.RegisterPropertyNames.Thrust:               Résistance à l'Estoc
 SkillBase.RegisterPropertyNames.Thrusting:            Estoc
-SkillBase.RegisterPropertyNames.ToHitBonus:            Chances de toucher: {0}% (PvE Uniquement)
+SkillBase.RegisterPropertyNames.ToHitBonus:            Chances de toucher (PvE Uniquement)
 SkillBase.RegisterPropertyNames.TwoHanded:            Deux Mains
 SkillBase.RegisterPropertyNames.Valor:               Vaillance
 SkillBase.RegisterPropertyNames.VampiiricEmbrace:      Etreinte
@@ -219,7 +219,7 @@ SkillBase.RegisterPropertyNames.Essence:				Résistance à l'Essence
 SkillBase.RegisterPropertyNames.CraftingSkillGain:		Bonus de gain en Artisanat
 SkillBase.RegisterPropertyNames.CraftingSpeed:			Vitesse de l'Artisanat
 SkillBase.RegisterPropertyNames.SecondarySpellChance:	Chance de Sort secondaire de style
-SkillBase.RegisterPropertyNames.RobberyResist:			Chance de détection des vols
+SkillBase.RegisterPropertyNames.RobberyResist:			Chance d'éviter les vols
 SkillBase.RegisterPropertyNames.MythicalStrCap:			Bonus Mythique cap de Force
 SkillBase.RegisterPropertyNames.MythicalDexCap:			Bonus Mythique cap de Dexterité
 SkillBase.RegisterPropertyNames.MythicalConCap:			Bonus Mythique cap de Constitution

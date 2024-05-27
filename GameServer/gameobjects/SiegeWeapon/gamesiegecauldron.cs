@@ -86,7 +86,7 @@ namespace DOL.GS
                     spell.Radius = 350;
                     spell.Range = WorldMgr.VISIBILITY_DISTANCE;
                     spell.SpellID = 50005;
-                    spell.Target = "Area";
+                    spell.Target = "area";
                     spell.Type = "SiegeDirectDamage";
                     m_OilSpell = new Spell(spell, 50);
                 }

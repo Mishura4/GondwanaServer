@@ -102,7 +102,7 @@ namespace DOL.GS.Trainer
                     }
                     else
                     {
-                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AcolyteTrainer.Cleric.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_ChatWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AcolyteTrainer.Cleric.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
                     return true;
                 case "Friar":
@@ -113,7 +113,7 @@ namespace DOL.GS.Trainer
                     }
                     else
                     {
-                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AcolyteTrainer.Friar.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_ChatWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AcolyteTrainer.Friar.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
                     return true;
                 case "Heretic":
@@ -124,7 +124,7 @@ namespace DOL.GS.Trainer
                     }
                     else
                     {
-                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AcolyteTrainer.Heretic.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_ChatWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AcolyteTrainer.Heretic.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
                     return true;
                 case "practice weapon":

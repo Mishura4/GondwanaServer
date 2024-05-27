@@ -96,7 +96,7 @@ namespace DOL.GS.Trainer
                     }
                     else
                     {
-                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MagicianTrainer.Eldritch.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_ChatWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MagicianTrainer.Eldritch.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
                     return true;
                 case "Enchanter":
@@ -107,7 +107,7 @@ namespace DOL.GS.Trainer
                     }
                     else
                     {
-                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MagicianTrainer.Enchanter.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_ChatWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MagicianTrainer.Enchanter.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
                     return true;
                 case "Mentalist":
@@ -118,7 +118,7 @@ namespace DOL.GS.Trainer
                     }
                     else
                     {
-                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MagicianTrainer.Mentalist.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_ChatWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MagicianTrainer.Mentalist.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
                     return true;
                 case "Bainshee":
@@ -129,7 +129,7 @@ namespace DOL.GS.Trainer
                     }
                     else
                     {
-                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MagicianTrainer.Bainshee.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_ChatWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MagicianTrainer.Bainshee.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
                     return true;
                 case "practice staff":

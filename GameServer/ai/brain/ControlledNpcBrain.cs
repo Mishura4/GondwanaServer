@@ -587,6 +587,12 @@ namespace DOL.AI.Brain
                 case "DEFENSIVEPROC":
                 case "DAMAGESHIELD":
                 case "BLADETURN":
+                case "BOTHABLATIVEARMOR":
+                case "SPELLREFLECTION":
+                case "ALLSTATSBUFF":
+                case "TRIGGERBUFF":
+                case "TENSIONBUFF":
+                case "BATTLEFEVERDURATIONBUFF":
                     {
                         String target;
 
@@ -599,10 +605,10 @@ namespace DOL.AI.Brain
 
                         target = spell.Target.ToUpper();
 
-                        if (target == "SELF")
+                        if (target == "self")
                             break;
 
-                        if (target == "REALM" || target == "GROUP")
+                        if (target == "realm" || target == "group")
                         {
                             owner = (this as IControlledBrain).Owner;
                             player = null;
@@ -736,7 +742,7 @@ namespace DOL.AI.Brain
                     String spellTarget = spell.Target.ToUpper();
                     int bodyPercent = Body.HealthPercent;
 
-                    if (spellTarget == "SELF")
+                    if (spellTarget == "self")
                     {
                         if (bodyPercent < GS.ServerProperties.Properties.NPC_HEAL_THRESHOLD && !spell.TargetHasEffect(Body))
                             Body.TargetObject = Body;
@@ -767,7 +773,7 @@ namespace DOL.AI.Brain
                     // Heal group
                     player = GetPlayerOwner();
                     ICollection<GamePlayer> playerGroup = null;
-                    if (player.Group != null && (spellTarget == "REALM" || spellTarget == "GROUP"))
+                    if (player.Group != null && (spellTarget == "realm" || spellTarget == "group"))
                     {
                         playerGroup = player.Group.GetPlayersInTheGroup();
 
@@ -784,7 +790,7 @@ namespace DOL.AI.Brain
 
                     // Now check for targets which aren't seriously injured
 
-                    if (spellTarget == "SELF")
+                    if (spellTarget == "self")
                     {
                         // if we have a self heal and health is less than 75% then heal, otherwise return false to try another spell or do nothing
                         if (bodyPercent < GS.ServerProperties.Properties.NPC_HEAL_THRESHOLD

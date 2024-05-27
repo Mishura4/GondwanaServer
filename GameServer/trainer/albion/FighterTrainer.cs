@@ -101,7 +101,7 @@ namespace DOL.GS.Trainer
                     }
                     else
                     {
-                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "FighterTrainer.Armsman.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_ChatWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "FighterTrainer.Armsman.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
                     return true;
                 case "Mercenary":
@@ -112,7 +112,7 @@ namespace DOL.GS.Trainer
                     }
                     else
                     {
-                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "FighterTrainer.Mercenary.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_ChatWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "FighterTrainer.Mercenary.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
                     return true;
                 case "Paladin":
@@ -122,7 +122,7 @@ namespace DOL.GS.Trainer
                     }
                     else
                     {
-                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "FighterTrainer.Paladin.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_ChatWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "FighterTrainer.Paladin.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
                     return true;
                 case "Reaver":
@@ -133,7 +133,7 @@ namespace DOL.GS.Trainer
                     }
                     else
                     {
-                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "FighterTrainer.Reaver.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_ChatWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "FighterTrainer.Reaver.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
                     return true;
                 case "Mauler":
@@ -144,7 +144,7 @@ namespace DOL.GS.Trainer
                     }
                     else
                     {
-                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Baseclass.Mauler.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_ChatWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Baseclass.Mauler.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
                     return true;                    
                 case "practice weapon":

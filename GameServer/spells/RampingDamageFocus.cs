@@ -250,7 +250,7 @@ namespace DOL.GS.Spells
             dbSpell.Icon = Spell.Icon;
             dbSpell.Type = "SpeedDecrease";
             dbSpell.Duration = (Spell.Radius == 0) ? 10 : 3;
-            dbSpell.Target = "Enemy";
+            dbSpell.Target = "enemy";
             dbSpell.Range = 1500;
             dbSpell.Value = Spell.Value;
             dbSpell.Name = Spell.Name + " Snare";

@@ -57,7 +57,7 @@ namespace DOL.GS.Effects
             tSpell.AllowAdd = false;
             tSpell.Description = "Damage the target.";
             tSpell.Name = "PBAoE damage";
-            tSpell.Target = "Enemy";
+            tSpell.Target = "enemy";
             tSpell.Radius = 0;
             tSpell.Range = WorldMgr.VISIBILITY_DISTANCE;
             tSpell.CastTime = 0;

@@ -58,7 +58,8 @@ Commands.Players.Guild.ConfirmLeave:			    Voulez-vous vraiment partir de {0} ?
 Commands.Players.Guild.DemotedHigherThanPlayer:   Vous pouvez seulement rétrograder les grades au-dessous du vôtre.
 Commands.Players.Guild.Demoted.Other:			    {0} a été rétrogradé(e) au rang {2} par {1}.
 Commands.Players.Guild.Demoted.Self:			    Vous avez été rétrogradé(e) au rang {0}.
-Commands.Players.Guild.DepositAmount:			    Vous déposez {0} dans la caisse de guilde.
+Commands.Players.Guild.DepositAmount:			Vous déposez {0} dans la caisse de guilde.
+Commands.Players.Guild.DepositTaxedAmount:			Votre taxe de {0} va dans la caisse de guilde.
 Commands.Players.Guild.DepositFull:			    La caisse de guilde semble être pleine.
 Commands.Players.Guild.DepositInvalid:			Ce n'est pas un dépôt valide.
 Commands.Players.Guild.DepositTooMuch:		    Vous n'avez pas assez d'argent pour le faire !
@@ -160,22 +161,22 @@ Commands.Players.Guild.Help.GuildPromote:			'/gc promote [name] <rang#>' # Prom
 Commands.Players.Guild.Help.GuildQuit:			'/gc quit' # Pour quitter une guilde.
 Commands.Players.Guild.Help.GuildRanks:			'/gc ranks' # Affiche les rangs de la guilde. Les chefs de guilde peuvent aussi utiliser cette commande pour modifier les rangs.
 Commands.Players.Guild.Help.GuildRemAccount:		'/gc removeaccount <nom du compte>' # Retire d'une guilde tous les personnages du compte lié au personnage sélectionné.
-Commands.Players.Guild.Help.GuildRemove:			'/gc remove <nom du joueur>' # Retire le joueur de la guilde.
-Commands.Players.Guild.Help.GuildUsage:			Usage :
-Commands.Players.Guild.Help.GuildWebpage:			'/gc webpage <la.pagedeguilde.fr>' # Option non obligatoire qui permet d'indiquer le site de guilde aux membres et sur le herald officiel.
-Commands.Players.Guild.Help.GuildWho:			    '/gc who' # Montre les joueurs de la guilde connectés.
-Commands.Players.Guild.Help.GuildWithdraw:		    '/gc withdraw <montant>' # Retire les fonds de votre caisse de guilde.
-Commands.Players.Guild.Help.GuildTerritories:	    '/gc territories' Affiche les territoires et leur contrôle.
-Commands.Players.Guild.Help.GuildSubTerritories:    '/gc subterritories' Affiche les sous-territoires et leur contrôle.
-Commands.Players.Guild.InCombat:				    Vous ne pouvez pas invoquer la bannière de guilde en combat !
-Commands.Players.Guild.InfoAMotd:				    Message de l'alliance : {0}
+Commands.Players.Guild.Help.GuildRemove:			'/gc remove <nom du joueur>' # Retire le joueur de la guilde.
+Commands.Players.Guild.Help.GuildUsage:			Usage :
+Commands.Players.Guild.Help.GuildWebpage:			'/gc webpage <la.pagedeguilde.fr>' # Option non obligatoire qui permet d'indiquer le site de guilde aux membres et sur le herald officiel.
+Commands.Players.Guild.Help.GuildWho:			    '/gc who' # Montre les joueurs de la guilde connectés.
+Commands.Players.Guild.Help.GuildWithdraw:		    '/gc withdraw <montant>' # Retire les fonds de votre caisse de guilde.
+Commands.Players.Guild.Help.GuildTerritories:	    '/gc territories' Affiche tous les territoires, leurs propriétaires, ainsi que tous les bonus et pénalités pour les territoires capturés.
+Commands.Players.Guild.Help.GuildSubTerritories:    '/gc subterritories' Affiche les sous-territoires, leurs propriétaires ainsi que leur compte à rebours avant expiration.
+Commands.Players.Guild.InCombat:				    Vous ne pouvez pas invoquer la bannière de guilde en combat !
+Commands.Players.Guild.InfoAMotd:				    Message de l'alliance : {0}
 Commands.Players.Guild.InfoBanner.Lost:         La bannière est tombée entre les mains de l'ennemi.
 Commands.Players.Guild.InfoBanner.PurchaseAvailable:    l'achat de bannière est disponible.
-Commands.Players.Guild.InfoCEmail:			    Email de contact : {0}
+Commands.Players.Guild.InfoCEmail:			    Email de contact : {0}
 Commands.Players.Guild.InfoGuildBank:			Banque de guilde : {0}
 Commands.Players.Guild.InfoGuildDues:			Taxe : {0}
-Commands.Players.Guild.InfoGuild:				    Informations de la guilde {0} :
-Commands.Players.Guild.InfoGuildLevel:			Niveau de la guilde : {0}
+Commands.Players.Guild.InfoGuild:				    Informations de la guilde {0} :
+Commands.Players.Guild.InfoGuildLevel:			Niveau de la guilde : {0}
 Commands.Players.Guild.InfoMotd:				    Message : {0}
 Commands.Players.Guild.InfoOMotd:				    Message des officiers : {0}
 Commands.Players.Guild.InfoRP:					Points de Royaume : {0}
@@ -196,7 +197,7 @@ Commands.Players.Guild.InviteNotThis:			Ce membre ne peut être invité.
 Commands.Players.Guild.InviteRecieved:			Vous avez été invité(e) par {0} à rejoindre la guilde {1}.
 Commands.Players.Guild.InviteSent:				Vous lancez l'invitation à {0} afin de rejoindre la guilde.
 Commands.Players.Guild.Keep:					Votre guilde possède déjà un fort {0}.
-Commands.Players.Guild.LevelUp:					[Guilde] Votre guilde a atteint le niveau {0} !
+Commands.Players.Guild.LevelUp:					[Guilde] Votre guilde a atteint le niveau {0} !
 Commands.Players.Guild.LoginsOff:				Vous avez désactivé la fonction qui vous permet de voir les membres de la guilde se connecter, tappez '/gc logins' pour activer la fonction.
 Commands.Players.Guild.LoginsOn:				Vous avez activé la fonction qui vous permet de voir les membres de la guilde se connecter, tapper '/gc logins' pour désactiver la fonction.
 Commands.Players.Guild.MadeLeader:				Vous êtes désormais le chef de {0}.
@@ -217,7 +218,7 @@ Commands.Players.Guild.NoKeep:					Vous n'avez pas de fort actuellement pour pou
 Commands.Players.Guild.NoPlayerSelected:		Sélectionnez un joueur.
 Commands.Players.Guild.NoPlayersInAcc:			Il n'y a aucun joueur du compte demandé dans votre guilde.
 Commands.Players.Guild.NoPrivileges:			Votre rang de guilde ne possède pas assez de privilèges pour utiliser cette commande.
-Commands.Players.Guild.NoteSet:					La note de guilde est : {0}
+Commands.Players.Guild.NoteSet:					La note de guilde est : {0}
 Commands.Players.Guild.NoPlayerWithName:        Il n'y a pas de joueur avec le nom {0}
 Commands.Players.Guild.NotInYourGuild:			Ce joueur n'est pas dans la guilde.
 Commands.Players.Guild.NotMember:				Vous devez être dans une guilde pour utiliser cette commande.
@@ -265,9 +266,9 @@ Commands.Players.Guild.UnknownCommand:			Commande Inconnue. Tappez '/gc help' po
 Commands.Players.Guild.UpgradeNoLevel:			Vous devez spécifier un niveau pour les améliorations des tours/forts.
 Commands.Players.Guild.UpgradeScndArg:			Le deuxième argument doit être un nombre.
 Commands.Players.Guild.WebpageSet:				Vous avez défini la page internet de la guilde comme {0}.
-Commands.Players.Guild.Withdrawamount:			Votre taxe de {0} va dans la caisse de guilde.
+Commands.Players.Guild.Withdrawamount:			Vous retirez {0} de votre caisse de guilde.
 Commands.Players.Guild.WithdrawInvalid:			Ce n'est pas un montant valide.
-Commands.Players.Guild.WithdrawTooMuch:			Vous ne pouvez plus ajouter d'argent dans la caisse de guilde.
+Commands.Players.Guild.WithdrawTooMuch:			Il n'y a pas assez d'argent dans la caisse de guilde !
 
 Commands.Players.Guild.CantInSubterritory:		Vous ne pouvez pas utiliser cette commande dans un sous-territoire.
 
@@ -275,7 +276,7 @@ Commands.Players.Guild.RealmPointsSet:			La guilde {0} a maintenant {1} points d
 Commands.Players.Guild.MeritPointsSet:			La guilde {0} a maintenant {1} points de mérite.
 Commands.Players.Guild.BountyPointsSet:			La guilde {0} a maintenant {1} points de butin.
 
-Commands.Players.Guild.JailRelease.NoGuild:				Vous devez faire parti d'une guilde pour utiliser cette commande.
+Commands.Players.Guild.JailRelease.NoGuild:				Vous devez faire partie d'une guilde pour utiliser cette commande.
 Commands.Players.Guild.JailRelease.GuildTooLow:			Votre guilde n'est pas assez haut niveau pour utiliser cette commande.
 Commands.Players.Guild.JailRelease.RankTooLow:			Votre rang de guilde est trop bas pour utiliser cette commande.
 Commands.Players.Guild.JailRelease.NotInJail:			{0} n'est pas en prison.
@@ -289,10 +290,10 @@ Commands.Players.Guild.TerritoryBanner.NotInTerritory:	Vous ne pouvez pas invoqu
 Commands.Players.Guild.TerritoryBanner.Denied:			Vous devez être au moins rang 2 pour invoquer un portail de guilde.
 Commands.Players.Guild.TerritoryBanner.ConfirmCost:		Invoquer vos bannières dans ce territoire coûtera {0} points de mérite à votre guilde. Confirmer?
 Commands.Players.Guild.TerritoryBanner.NotEnoughMerit:	Votre guilde doit avoir {0} points de mérite pour invoquer les bannières de territoire.
-Commands.Players.Guild.TerritoryBanner.Summoned:		{0} a invoqué les bannières dans {1}!
-Commands.Players.Guild.TerritoryBanner.AlreadySummoned:	Ce territoire a déjà des bannières.
+Commands.Players.Guild.TerritoryBanner.Summoned:		{0} a invoqué les bannières dans {1} !
+Commands.Players.Guild.TerritoryBanner.AlreadySummoned:	Les bannières de guilde sont déjà disposées dans ce territoire.
 
-Commands.Players.Guild.TerritoryPortal.NoGuild:			Vous devez faire parti d'une guilde pour invoquer un portail de guilde.
+Commands.Players.Guild.TerritoryPortal.NoGuild:			Vous devez faire partie d'une guilde pour invoquer un portail de guilde.
 Commands.Players.Guild.TerritoryPortal.Denied:			Vous devez être au moins rang 4 pour invoquer un portail de guilde.
 Commands.Players.Guild.TerritoryPortal.ConfirmCost:		Invoquer un portail de guilde coûtera {0} points de mérite à votre guilde. Confirmer?
 Commands.Players.Guild.TerritoryPortal.Cooldown:		Vous ne pouvez pas invoquer un portail de guilde si tôt après en avoir invoqué un.
@@ -301,21 +302,21 @@ Commands.Players.Guild.TerritoryPortal.NotInTerritory:	Vous ne pouvez pas invoqu
 Commands.Players.Guild.TerritoryPortal.NotSupported:	Vous ne pouvez pas invoquer un portail de guilde dans ce territoire!
 
 Commands.Players.Guild.TerritoryPortal.Called:			Vous avez été appelé(e) par votre guilde pour défendre {0}, allez-vous répondre à l'appel?
-Commands.Players.Guild.TerritoryPortal.Expired:			L'appel aux armes a éxpiré!
+Commands.Players.Guild.TerritoryPortal.Expired:			L'appel aux armes a expiré !
 Commands.Players.Guild.TerritoryPortal.Summoned:		Vous avez été téléporté(e) à {0}. Vous pouvez utiliser le portail au centre du territoire pour revenir à votre précédente position.
 
-Commands.Players.Guild.BuyDefender.NoGuild:				Vous devez faire parti d'une guilde pour acheter un garde de territoire.
+Commands.Players.Guild.BuyDefender.NoGuild:				Vous devez faire partie d'une guilde pour acheter un garde de territoire.
 Commands.Players.Guild.BuyDefender.AvailableDefenders:	Vous pouvez acheter {0} gardes supplémentaires.
-Commands.Players.Guild.BuyDefender.DefenderLimit:		Vous ne pouvez pas acheter de défenseurs supplémentaires pour le moment.
+Commands.Players.Guild.BuyDefender.DefenderLimit:		Votre niveau de guilde ne vous permet pas d'acheter de défenseurs supplémentaires sur ce territoire pour le moment.
 Commands.Players.Guild.BuyDefender.NotInTerritory:		Vous ne pouvez pas acheter un garde en dehors d'un territoire contrôlé par votre guilde.
 Commands.Players.Guild.BuyDefender.UnsupportedType:		Le territoire {0} n'offre pas ce type de garde.
-Commands.Players.Guild.BuyDefender.NoMoney:				Vous devez avoir {0} pièces d'or dans votre banque de guilde pour acheter un garde!
-Commands.Players.Guild.BuyDefender.ConfirmCost:			Acheter un garde pour {0} coûtera {1} pièces d'or à votre guilde. Continuer?
+Commands.Players.Guild.BuyDefender.NoMoney:				Vous devez avoir {0} pièces d'or dans votre banque de guilde pour acheter un garde !
+Commands.Players.Guild.BuyDefender.ConfirmCost:			Acheter un garde pour {0} coûtera {1} pièces d'or à votre guilde. Continuer ?
 Commands.Players.Guild.BuyDefender.Bought:				Vous avez acheté les services de {0} pour le territoire {1}.
 
-Commands.Players.Guild.MoveDefender.NoTarget:			Vous devez cibler un personnage non-joueur pour utiliser cette commande!
-Commands.Players.Guild.MoveDefender.BadTarget:			La cible doit être un garde acheté par votre guilde!
-Commands.Players.Guild.MoveDefender.BadTerritory:		Vous devez vous tenir dans le territoire de ce garde!
+Commands.Players.Guild.MoveDefender.NoTarget:			Vous devez cibler un personnage non-joueur pour utiliser cette commande !
+Commands.Players.Guild.MoveDefender.BadTarget:			La cible doit être un garde acheté par votre guilde !
+Commands.Players.Guild.MoveDefender.BadTerritory:		Vous devez vous tenir dans le territoire de ce garde !
 Commands.Players.Guild.MoveDefender.BadPosition:		Vous ne pouvez pas déplacer ce garde ici.
 Commands.Players.Guild.MoveDefender.Moved:				Vous avez déplacé {0} sur votre position.
 
@@ -324,7 +325,7 @@ Commands.Players.Guild.CombatZone.CantInPvPRegion:	Vous ne pouvez pas établir u
 Commands.Players.Guild.CombatZone.CantInDungeon:	Vous ne pouvez pas établir une zone de combat dans un donjon.
 Commands.Players.Guild.CombatZone.TooCloseToArea:	Vous ne pouvez pas établir une zone de combat si proche de {0}.
 Commands.Players.Guild.CombatZone.Denied:			Vous devez être au moins rang 2 pour établir une zone de combat.
-Commands.Players.Guild.CombatZone.ConfirmCost:		Établir une zone de combat coûtera {0} points de mérite à votre guilde. Confirmer?
+Commands.Players.Guild.CombatZone.ConfirmCost:		Établir une zone de combat coûtera {0} points de mérite à votre guilde. Confirmer ?
 Commands.Players.Guild.CombatZone.Cooldown:			Vous devez attendre {0} heures {1} minutes et {2} secondes pour établir une zone de combat.
 Commands.Players.Guild.CombatZone.NotEnoughMerit:	Votre guilde doit avoir {0} points de mérite pour établir une zone de combat.
 Commands.Players.Guild.CombatZone.AreaName:			Zone de combat de {0}
@@ -342,17 +343,17 @@ Commands.Players.Guild.Territories.TerritoriesList:		---- Territoires ----
 Commands.Players.Guild.Territories.TerritoryNeutral:	Neutre
 Commands.Players.Guild.Territories.GuildInfo:			---- Information des territoires de guilde ----
 Commands.Players.Guild.Territories.MaxTerritories:		Nombre maximal de territoires avant pénalités: {0} (actuellement {1})
-Commands.Players.Guild.Territories.DailyRent:			Total de la taxe journalière: {0}
-Commands.Players.Guild.Territories.DailyMeritPoints:	Total des points de mérite journaliers: {0}
-Commands.Players.Guild.Territories.TimeBeforeRent:		Temps avant le prochain paiement: {0}
-Commands.Players.Guild.Territories.TotalXPBonus:		Bonus total d'expérience: {0:0}%
-Commands.Players.Guild.Territories.TotalBPBonus:		Bonus total de points de butin pour mobs Nv65+: {0}
+Commands.Players.Guild.Territories.DailyRent:			Total de la taxe horaire : {0}
+Commands.Players.Guild.Territories.DailyMeritPoints:	Total des points de mérite horaires : {0}
+Commands.Players.Guild.Territories.TimeBeforeRent:		Temps restant avant paiement des loyers : {0}
+Commands.Players.Guild.Territories.TotalXPBonus:		Bonus total d'expérience : {0:0}%
+Commands.Players.Guild.Territories.TotalBPBonus:		Bonus total de points de butin pour mobs Nv65+ : {0}
 Commands.Players.Guild.Territories.Bonuses:				---- Bonus des territoires ----
-Commands.Players.Guild.Territories.DebuffDuration:		Durée d'effets néfastes
+Commands.Players.Guild.Territories.DebuffDuration:		Durée des effets négatifs
 Commands.Players.Guild.Territories.SpellRange:			Portée des sorts
 
 Commands.Players.Guild.Subterritories.WindowTitle:			[ SOUS-TERRITOIRES ]
-Commands.Players.Guild.Subterritories.TerritoriesOwned:		---- Sous-territories owned by {0} ----
+Commands.Players.Guild.Subterritories.TerritoriesOwned:		---- Sous-territoires possédés par {0} ----
 Commands.Players.Guild.Subterritories.TerritoriesOther:		---- Autres sous-territories ----
 Commands.Players.Guild.Subterritories.TerritoriesList:		---- Sous-territories ----
 Commands.Players.Guild.Subterritories.TerritoryNeutral:		Neutre

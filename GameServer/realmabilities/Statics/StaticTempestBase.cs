@@ -24,7 +24,7 @@ namespace DOL.GS.RealmAbilities.Statics
             dbs.ClientEffect = GetStaticEffect();
             dbs.Damage = 0;
             dbs.DamageType = (int)eDamageType.Energy;
-            dbs.Target = "Enemy";
+            dbs.Target = "enemy";
             dbs.Radius = 0;
             dbs.Type = "UnresistableStun";
             dbs.Value = 0;

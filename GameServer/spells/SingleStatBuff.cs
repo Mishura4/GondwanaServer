@@ -49,7 +49,7 @@ namespace DOL.GS.Spells
                     effectiveness *= (1.0 + m_caster.GetModified(eProperty.BuffEffectiveness) * 0.01);
                 }
             }
-            else if (Caster is GamePlayer && Spell.Level > 0 && Spell.Target == "Enemy")
+            else if (Caster is GamePlayer && Spell.Level > 0 && Spell.Target == "enemy")
             {
                 effectiveness = 0.75; // This section is for list casters stat debuffs.
                 if (((GamePlayer)Caster).CharacterClass.ClassType == eClassType.ListCaster)
@@ -171,7 +171,7 @@ namespace DOL.GS.Spells
         {
             get
             {
-                if (Spell.Target.Equals("Self", StringComparison.OrdinalIgnoreCase)) return eBuffBonusCategory.Other; // no caps for self buffs
+                if (Spell.Target.Equals("self", StringComparison.OrdinalIgnoreCase)) return eBuffBonusCategory.Other; // no caps for self buffs
                 if (m_spellLine.IsBaseLine) return eBuffBonusCategory.BaseBuff; // baseline cap
                 return eBuffBonusCategory.Other; // no caps for spec line buffs
             }
@@ -338,7 +338,7 @@ namespace DOL.GS.Spells
         {
             get
             {
-                if (Spell.Target == "Self") return eBuffBonusCategory.Other; // no caps for self buffs
+                if (Spell.Target == "self") return eBuffBonusCategory.Other; // no caps for self buffs
                 if (m_spellLine.IsBaseLine) return eBuffBonusCategory.BaseBuff; // baseline cap
                 return eBuffBonusCategory.Other; // no caps for spec line buffs
             }

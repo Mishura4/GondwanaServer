@@ -301,8 +301,8 @@ namespace DOL.GS
         public static int TerritoryBannerDamageBonusForLevel(long level) => level switch
         {
             < 11 => 0,
-            < 20 => 10,
-            >= 20 => 15
+            < 20 => 15,
+            >= 20 => 30
         };
 
         /// <summary>
@@ -313,8 +313,8 @@ namespace DOL.GS
         public static int TerritoryBannerCriticalChanceBonusForLevel(long level) => level switch
         {
             < 11 => 0,
-            < 20 => 5,
-            >= 20 => 10
+            < 20 => 10,
+            >= 20 => 20
         };
 
 
@@ -927,12 +927,9 @@ namespace DOL.GS
                     6 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MiscInfos05"),
                     7 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MiscInfos06"),
                     8 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MiscInfos07"),
-                    11 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MiscInfos08"),
-                    13 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MiscInfos09"),
-                    15 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MiscInfos10", Properties.TERRITORYMOB_BANNER_RESIST),
-                    16 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MiscInfos11"),
-                    18 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MiscInfos12"),
-                    20 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MiscInfos13"),
+                    13 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MiscInfos08"),
+                    16 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MiscInfos09"),
+                    18 => LanguageMgr.GetTranslation(player.Client.Account.Language, "GameUtils.Guild.MiscInfos10"),
                     _ => null
                 };
 
@@ -954,7 +951,7 @@ namespace DOL.GS
                 }
                 if (newBannerResists != previousBannerResists)
                 {
-                    player.SendTranslatedMessage("GameUtils.Guild.MoreBannerResists", eChatType.CT_Guild, eChatLoc.CL_PopupWindow, newBannerResists);
+                    player.SendTranslatedMessage("GameUtils.Guild.MoreBannerResists", eChatType.CT_Guild, eChatLoc.CL_PopupWindow, newBannerResists, Properties.TERRITORYMOB_BANNER_RESIST);
                 }
                 if (Properties.GUILD_NEW_DUES_SYSTEM)
                 {

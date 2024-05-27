@@ -216,7 +216,7 @@ namespace DOL.AI.Brain
                 // no attack directive from the owner it will start an attack
                 // after the cast has finished.
 
-                if (target != Body && spellArgs.Spell.Target == "Enemy")
+                if (target != Body && spellArgs.Spell.Target == "enemy")
                 {
                     if (target != null)
                     {

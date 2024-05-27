@@ -1945,9 +1945,9 @@ namespace DOL.GS.Spells
                 PulsingSpellEffect pulseeffect = new PulsingSpellEffect(this);
                 pulseeffect.Start();
                 // show animation on caster for positive spells, negative shows on every StartSpell
-                if (m_spell.Target == "Self" || m_spell.Target == "Group")
+                if (m_spell.Target == "self" || m_spell.Target == "group")
                     SendEffectAnimation(Caster, 0, false, 1);
-                if (m_spell.Target == "Pet")
+                if (m_spell.Target == "pet")
                     SendEffectAnimation(target, 0, false, 1);
             }
             StartSpell(target); // and action

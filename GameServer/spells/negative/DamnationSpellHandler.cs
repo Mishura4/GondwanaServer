@@ -40,7 +40,92 @@ namespace DOL.GS.Spells
             {
                 living.TempProperties.setProperty("OriginalModel", living.Model);
                 MessageToLiving(player, LanguageMgr.GetTranslation(player.Client, "Damnation.Self.Message2"), eChatType.CT_Spell);
-                player.Model = 110;
+                switch (living.Race)
+                {
+                    case 1:
+                    case 3:
+                    case 9:
+                    case 16:
+                        if (living.Gender == eGender.Female)
+                            living.Model = 443;
+                        else
+                            living.Model = 442;
+                        break;
+                    case 2:
+                    case 11:
+                        if (living.Gender == eGender.Female)
+                            living.Model = 451;
+                        else
+                            living.Model = 452;
+                        break;
+                    case 4:
+                    case 7:
+                        if (living.Gender == eGender.Female)
+                            living.Model = 468;
+                        else
+                            living.Model = 467;
+                        break;
+                    case 5:
+                    case 17:
+                        if (living.Gender == eGender.Female)
+                            living.Model = 445;
+                        else
+                            living.Model = 446;
+                        break;
+                    case 6:
+                        living.Model = 444;
+                        break;
+                    case 8:
+                        if (living.Gender == eGender.Female)
+                            living.Model = 682;
+                        else
+                            living.Model = 683;
+                        break;
+                    case 10:
+                        if (living.Gender == eGender.Female)
+                            living.Model = 681;
+                        else
+                            living.Model = 680;
+                        break;
+                    case 12:
+                        if (living.Gender == eGender.Female)
+                            living.Model = 1380;
+                        else
+                            living.Model = 1379;
+                        break;
+                    case 13:
+                        if (living.Gender == eGender.Female)
+                            living.Model = 1352;
+                        else
+                            living.Model = 1351;
+                        break;
+                    case 14:
+                        living.Model = 1210;
+                        break;
+                    case 15:
+                        if (living.Gender == eGender.Female)
+                            living.Model = 890;
+                        else
+                            living.Model = 889;
+                        break;
+                    case 18:
+                        if (living.Gender == eGender.Female)
+                            living.Model = 1386;
+                        else
+                            living.Model = 1385;
+                        break;
+                    case 19:
+                        living.Model = 1576;
+                        break;
+                    case 20:
+                        living.Model = 1579;
+                        break;
+                    case 21:
+                        living.Model = 1582;
+                        break;
+                    default:
+                        break;
+                }
                 player.Out.SendUpdatePlayer();
                 if (player.Group != null)
                 {

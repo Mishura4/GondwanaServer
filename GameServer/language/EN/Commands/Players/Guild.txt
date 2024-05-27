@@ -58,7 +58,8 @@ Commands.Players.Guild.ConfirmLeave:			    Do you really want to leave {0}?
 Commands.Players.Guild.DemotedHigherThanPlayer:   You can only downgrade grades below your own.
 Commands.Players.Guild.Demoted.Other:			    {0} was demoted to rank {2} by {1}.
 Commands.Players.Guild.Demoted.Self:			    You have been demoted to rank {0}.
-Commands.Players.Guild.DepositAmount:			    You deposit {0} in the guild bank.
+Commands.Players.Guild.DepositAmount:			You deposit {0} in the guild bank.
+Commands.Players.Guild.DepositTaxedAmount:		{0} has been deposited to the guild's bank account as taxed income.
 Commands.Players.Guild.DepositFull:			    Guild bank seems to be full.
 Commands.Players.Guild.DepositInvalid:			This is not a valid deposit.
 Commands.Players.Guild.DepositTooMuch:		    You don't have enough money to make the deposit!
@@ -165,8 +166,8 @@ Commands.Players.Guild.Help.GuildUsage:			Usage :
 Commands.Players.Guild.Help.GuildWebpage:			'/gc webpage <guildwebpage.com>' # Non-mandatory option that allows you to indicate the guild's website to members and on the official herald.
 Commands.Players.Guild.Help.GuildWho:			    '/gc who' # Shows connected guild members.
 Commands.Players.Guild.Help.GuildWithdraw:		'/gc withdraw <amount>' # Withdraw money from your guild bank.
-Commands.Players.Guild.Help.GuildTerritories:		'/gc territories' # Displays territories and their owners.
-Commands.Players.Guild.Help.GuildSubTerritories:    '/gc subterritories' # Displays subterritories and their owners.
+Commands.Players.Guild.Help.GuildTerritories:		'/gc territories' # Displays all territories, their owners, as well as all bonuses and penalties for captured territories.
+Commands.Players.Guild.Help.GuildSubTerritories:    '/gc subterritories' # Displays subterritories, their owners as well as their expiration timer.
 Commands.Players.Guild.InCombat:				    You cannot summon the guild banner while fighting!
 Commands.Players.Guild.InfoAMotd:				    Alliance message: {0}
 Commands.Players.Guild.InfoBanner.Lost:         The banner fell into the hands of the enemy.
@@ -265,9 +266,9 @@ Commands.Players.Guild.UnknownCommand:			Unknown command. Type '/gc help' for mo
 Commands.Players.Guild.UpgradeNoLevel:			You must specify a level for towers/keeps upgrades.
 Commands.Players.Guild.UpgradeScndArg:			The second argument must be a number.
 Commands.Players.Guild.WebpageSet:				You have defined the guild webpage as: {0}.
-Commands.Players.Guild.Withdrawamount:			Your {0} tax is transfered to the guild's bank.
+Commands.Players.Guild.Withdrawamount:			You withdraw {0} from the guild's bank.
 Commands.Players.Guild.WithdrawInvalid:			This is not a valid amount.
-Commands.Players.Guild.WithdrawTooMuch:			You can no longer add money to the guild's bank.
+Commands.Players.Guild.WithdrawTooMuch:			There is not enough money in the guild's bank!
 
 Commands.Players.Guild.CantInSubterritory:		You cannot use this command in a subterritory.
 
@@ -306,10 +307,10 @@ Commands.Players.Guild.TerritoryPortal.Summoned:	You have been teleported to def
 
 Commands.Players.Guild.BuyDefender.NoGuild:				You must be in a guild to buy a defender.
 Commands.Players.Guild.BuyDefender.AvailableDefenders:	You can currently buy {0} additional guards.
-Commands.Players.Guild.BuyDefender.DefenderLimit:		You cannot currently buy an additional defender.
+Commands.Players.Guild.BuyDefender.DefenderLimit:		Your guild level currently does not permit you to purchase an additional defender for this territory.
 Commands.Players.Guild.BuyDefender.NotInTerritory:		You cannot buy a territory defender outside of a territory belonging to your guild.
 Commands.Players.Guild.BuyDefender.UnsupportedType:		The territory '{0}' does not offer this type of defender.
-Commands.Players.Guild.BuyDefender.NoMoney:				You must have {0} gold coins to buy a territory defender!
+Commands.Players.Guild.BuyDefender.NoMoney:				You must have {0} gold coins in your guild bank account to buy a territory defender!
 Commands.Players.Guild.BuyDefender.ConfirmCost:			Buying a defender for '{0}' will cost {1} gold coins to your guild. Confirm?
 Commands.Players.Guild.BuyDefender.Bought:				You have bought the services of '{0}' for territory '{1}'.
 
@@ -342,9 +343,9 @@ Commands.Players.Guild.Territories.TerritoriesList:		---- Territories ----
 Commands.Players.Guild.Territories.TerritoryNeutral:	Neutral
 Commands.Players.Guild.Territories.GuildInfo:			---- Guild Territories Info ----
 Commands.Players.Guild.Territories.MaxTerritories:		Maximum count of territories before penalties: {0} (currently {1})
-Commands.Players.Guild.Territories.DailyRent:			Total daily rent price: {0}
-Commands.Players.Guild.Territories.DailyMeritPoints:	Total daily merit points: {0}
-Commands.Players.Guild.Territories.TimeBeforeRent:		Time before rental payment: {0}
+Commands.Players.Guild.Territories.DailyRent:			Total hourly rent price: {0}
+Commands.Players.Guild.Territories.DailyMeritPoints:	Total hourly merit points: {0}
+Commands.Players.Guild.Territories.TimeBeforeRent:		Time remaining before rental payment: {0}
 Commands.Players.Guild.Territories.TotalXPBonus:		Total bonus XP: {0:0}%
 Commands.Players.Guild.Territories.TotalBPBonus:		Total bonus bounty points for Lv65+ mobs: {0}
 Commands.Players.Guild.Territories.Bonuses:				---- Territory Bonuses ----

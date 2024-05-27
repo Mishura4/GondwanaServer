@@ -73,7 +73,7 @@ namespace DOL.GS.Spells
             dbs.ClientEffect = 7312;
             dbs.Damage = spell.Damage;
             dbs.DamageType = (int)spell.DamageType;
-            dbs.Target = "Enemy";
+            dbs.Target = "enemy";
             dbs.Radius = 0;
             dbs.Type = "Prescience";
             dbs.Value = spell.Value;
@@ -149,7 +149,7 @@ namespace DOL.GS.Spells
             dbs.ClientEffect = 7313;
             dbs.Damage = spell.Damage;
             dbs.DamageType = (int)spell.DamageType;
-            dbs.Target = "Enemy";
+            dbs.Target = "enemy";
             dbs.Radius = 0;
             dbs.Type = "PowerRend";
             dbs.Value = spell.Value;
@@ -201,7 +201,7 @@ namespace DOL.GS.Spells
             dbs.ClientEffect = 7237;
             dbs.Damage = spell.Damage;
             dbs.DamageType = (int)spell.DamageType;
-            dbs.Target = "Enemy";
+            dbs.Target = "enemy";
             dbs.Radius = 0;
             dbs.Type = "SpeedWrap";
             dbs.Value = spell.Value;

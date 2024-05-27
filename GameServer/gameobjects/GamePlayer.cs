@@ -3041,11 +3041,11 @@ namespace DOL.GS
 
             if (mythSafeFall > 0 & mythSafeFall < fallDamagePercent)
             {
-                Client.Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.PlayerPositionUpdateHandler.MythSafeFall"), eChatType.CT_Damaged, eChatLoc.CL_SystemWindow);
+                Client.Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "PlayerPositionUpdateHandler.MythSafeFall"), eChatType.CT_Damaged, eChatLoc.CL_SystemWindow);
                 fallDamagePercent = mythSafeFall;
             }
             if (safeFallLevel > 0 & mythSafeFall == 0)
-                Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.PlayerPositionUpdateHandler.SafeFall"), eChatType.CT_Damaged, eChatLoc.CL_SystemWindow);
+                Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "PlayerPositionUpdateHandler.SafeFall"), eChatType.CT_Damaged, eChatLoc.CL_SystemWindow);
 
             Endurance -= MaxEndurance * fallDamagePercent / 100;
             double damage = (0.01 * fallDamagePercent * (MaxHealth - 1));
@@ -3059,9 +3059,9 @@ namespace DOL.GS
             if (mythSafeFall != 0 && damage > mythSafeFall)
                 damage = ((MaxHealth - 1) * (mythSafeFall * 0.01));
 
-            Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.PlayerPositionUpdateHandler.FallingDamage"), eChatType.CT_Damaged, eChatLoc.CL_SystemWindow);
-            Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.PlayerPositionUpdateHandler.FallPercent", fallDamagePercent), eChatType.CT_Damaged, eChatLoc.CL_SystemWindow);
-            Out.SendMessage("You lose endurance.", eChatType.CT_Damaged, eChatLoc.CL_SystemWindow);
+            Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "PlayerPositionUpdateHandler.FallingDamage"), eChatType.CT_Damaged, eChatLoc.CL_SystemWindow);
+            Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "PlayerPositionUpdateHandler.FallPercent", fallDamagePercent), eChatType.CT_Damaged, eChatLoc.CL_SystemWindow);
+            Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "PlayerPositionUpdateHandler.Endurance"), eChatType.CT_Damaged, eChatLoc.CL_SystemWindow);
             TakeDamage(null, eDamageType.Falling, (int)damage, 0);
 
             //Update the player's health to all other players around

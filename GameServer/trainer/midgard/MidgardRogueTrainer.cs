@@ -97,7 +97,7 @@ namespace DOL.GS.Trainer
                     }
                     else
                     {
-                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MidgardRogueTrainer.Hunter.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_ChatWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MidgardRogueTrainer.Hunter.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
                     return true;
                 case "Shadowblade":
@@ -108,7 +108,7 @@ namespace DOL.GS.Trainer
                     }
                     else
                     {
-                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MidgardRogueTrainer.Shadowblade.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_ChatWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MidgardRogueTrainer.Shadowblade.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
                     return true;
                 case "practice weapon":

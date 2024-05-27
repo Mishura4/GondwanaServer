@@ -25,7 +25,7 @@ namespace DOL.GS.RealmAbilities
             m_dbspell.ClientEffect = 7023;
             m_dbspell.Damage = damage;
             m_dbspell.DamageType = 0;
-            m_dbspell.Target = "Group";
+            m_dbspell.Target = "group";
             m_dbspell.Radius = 0;
             m_dbspell.Type = "DamageAdd";
             m_dbspell.Value = 0;

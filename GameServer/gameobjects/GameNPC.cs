@@ -333,7 +333,7 @@ namespace DOL.GS
             }
             else // Bosses gain tension even from lower level players
             {
-                if (source.Attacker.EffectiveLevel < 38)
+                if (source.Attacker.EffectiveLevel < 42)
                 {
                     return;
                 }

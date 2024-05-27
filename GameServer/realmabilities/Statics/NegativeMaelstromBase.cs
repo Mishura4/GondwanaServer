@@ -26,7 +26,7 @@ namespace DOL.GS.RealmAbilities.Statics
             dbs.ClientEffect = GetStaticEffect();
             dbs.Damage = damage;
             dbs.DamageType = (int)eDamageType.Cold;
-            dbs.Target = "Enemy";
+            dbs.Target = "enemy";
             dbs.Radius = 0;
             dbs.Type = "DirectDamageNoVariance";
             dbs.Value = 0;

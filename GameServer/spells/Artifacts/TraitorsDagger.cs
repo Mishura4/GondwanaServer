@@ -118,7 +118,7 @@ namespace DOL.GS.Spells
             dbs.Icon = 11020;
             dbs.ClientEffect = 11020;
             dbs.DamageType = 10;
-            dbs.Target = "Enemy";
+            dbs.Target = "enemy";
             dbs.Radius = 0;
             dbs.Type = "PetLifedrain";
             dbs.Damage = 70;

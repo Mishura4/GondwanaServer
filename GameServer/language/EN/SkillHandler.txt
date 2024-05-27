@@ -21,9 +21,7 @@ SkillBase.RegisterPropertyNames.Axe:					Axe
 SkillBase.RegisterPropertyNames.Battlesongs:			Battlesongs
 SkillBase.RegisterPropertyNames.BeastCraft:				Beastcraft
 SkillBase.RegisterPropertyNames.Blades:					Blades
-SkillBase.RegisterPropertyNames.BladeturnReinforcement:	Bladeturn reinforcement: {0}% (PvE Only)
-#BlockChance has been commented out as a PvE-only bonus - line 1791 in GameServer\packets\Client\168\DetailDisplayHandler.cs
-#SkillBase.RegisterPropertyNames.BlockChance:			Block: {0}% (PvE Only)
+SkillBase.RegisterPropertyNames.BladeturnReinforcement:	Bladeturn reinforcement (PvE Only)
 SkillBase.RegisterPropertyNames.BlockChance:			Block chance
 SkillBase.RegisterPropertyNames.Blunt:					Blunt
 SkillBase.RegisterPropertyNames.Body:					Body Resist
@@ -66,7 +64,7 @@ SkillBase.RegisterPropertyNames.DeathservantFocus:		Deathservant Focus
 SkillBase.RegisterPropertyNames.Deathsight:				Deathsight
 SkillBase.RegisterPropertyNames.DeathsightFocus:		Deathsight Focus
 SkillBase.RegisterPropertyNames.DebuffEffectivness:		Debuff Effectivness
-SkillBase.RegisterPropertyNames.DefensiveBonus:			Defensive Bonus: {0}% (PvE Only)
+SkillBase.RegisterPropertyNames.DefensiveBonus:			Defensive Bonus (PvE Only)
 SkillBase.RegisterPropertyNames.Dementia:				Dementia
 SkillBase.RegisterPropertyNames.Dexterity:				Dexterity
 SkillBase.RegisterPropertyNames.DexterityBonusCap:		Bonus cap to Dexterity
@@ -84,8 +82,6 @@ SkillBase.RegisterPropertyNames.Enhancement:			Enhancement
 SkillBase.RegisterPropertyNames.Envenom:				Envenom
 SkillBase.RegisterPropertyNames.EtherealShriek:			Ethereal Shriek
 SkillBase.RegisterPropertyNames.EtherealShriekFocus:	Ethereal Shriek Focus
-#EvadeChance has been commented out as a PvE-only bonus - line 1793 in GameServer\packets\Client\168\DetailDisplayHandler.cs
-#SkillBase.RegisterPropertyNames.EvadeChance:			Evade: {0}% (PvE Only)
 SkillBase.RegisterPropertyNames.EvadeChance:			Evade chance
 SkillBase.RegisterPropertyNames.ExperienceLoss:			Death Experience Loss Reduction
 SkillBase.RegisterPropertyNames.Fatigue:				Fatigue
@@ -131,7 +127,7 @@ SkillBase.RegisterPropertyNames.MindMagicFocus:			Mind Magic Focus
 SkillBase.RegisterPropertyNames.Music:					Music
 SkillBase.RegisterPropertyNames.Nature:					Nature
 SkillBase.RegisterPropertyNames.SpellFumbleChance:		Spell Fumble Chance
-SkillBase.RegisterPropertyNames.NegativeReduction:		Negative effect duration reduction: {0}% (PvE Only)
+SkillBase.RegisterPropertyNames.NegativeReduction:		Negative effect duration reduction (PvE Only)
 SkillBase.RegisterPropertyNames.NightshadeMagic:		Nightshade Magic
 SkillBase.RegisterPropertyNames.Nurture:				Nurture
 SkillBase.RegisterPropertyNames.OdinsWill:				Odin's Will
@@ -139,13 +135,11 @@ SkillBase.RegisterPropertyNames.Pacification:			Pacification
 SkillBase.RegisterPropertyNames.Painworking:			Painworking
 SkillBase.RegisterPropertyNames.PainworkingFocus:		Painworking Focus
 SkillBase.RegisterPropertyNames.Parry:					Parry
-#ParryChance has been commented out as a PvE-only bonus - line 1792 in GameServer\packets\Client\168\DetailDisplayHandler.cs
-#SkillBase.RegisterPropertyNames.ParryChance:			Parry: {0}% (PvE Only)
 SkillBase.RegisterPropertyNames.ParryChance:			Parry chance
 SkillBase.RegisterPropertyNames.Pathfinding:			Pathfinding
 SkillBase.RegisterPropertyNames.PhantasmalWail:			Phantasmal Wail
 SkillBase.RegisterPropertyNames.PhantasmalWailFocus:	Phantasmal Wail Focus
-SkillBase.RegisterPropertyNames.PieceAblative:			Piece Ablative: {0}% (PvE Only)
+SkillBase.RegisterPropertyNames.PieceAblative:			Piece Ablative (PvE Only)
 SkillBase.RegisterPropertyNames.Piercing:				Piercing
 SkillBase.RegisterPropertyNames.Piety:					Piety
 SkillBase.RegisterPropertyNames.PietyBonusCap:			Bonus cap to Piety
@@ -158,7 +152,7 @@ SkillBase.RegisterPropertyNames.PowerStrikes:			Power Strikes
 SkillBase.RegisterPropertyNames.Quickness:				Quickness
 SkillBase.RegisterPropertyNames.QuicknessBonusCap:		Bonus cap to Quickness
 SkillBase.RegisterPropertyNames.RangedDamage:			All Ranged Damage
-SkillBase.RegisterPropertyNames.ReactionaryStyleDamage:	Reactionary Style Damage Bonus: {0}% (PvE Only)
+SkillBase.RegisterPropertyNames.ReactionaryStyleDamage:	Reactionary Style Damage Bonus (PvE Only)
 SkillBase.RegisterPropertyNames.RecurvedBow:			Recurved Bow
 SkillBase.RegisterPropertyNames.Regrowth:				Regrowth
 SkillBase.RegisterPropertyNames.Rejuvenation:			Rejuvenation
@@ -180,7 +174,7 @@ SkillBase.RegisterPropertyNames.SpectralForceFocus:		Spectral Force Focus
 SkillBase.RegisterPropertyNames.SpectralGuard:			Spectral Guard
 SkillBase.RegisterPropertyNames.SpeedDecreaseDuration:	Speed Decrease Duration
 SkillBase.RegisterPropertyNames.SpellDuration:			Spell Duration
-SkillBase.RegisterPropertyNames.SpellPowerCost:			Spell Power Cost Reduction: {0}% (PvE Only)
+SkillBase.RegisterPropertyNames.SpellPowerCost:			Spell Power Cost Reduction (PvE Only)
 SkillBase.RegisterPropertyNames.SpellRange:				Spell Range
 SkillBase.RegisterPropertyNames.Spirit:					Spirit Resist
 SkillBase.RegisterPropertyNames.SpiritMagic:			Spirit Magic
@@ -192,7 +186,7 @@ SkillBase.RegisterPropertyNames.Stormcalling:			Stormcalling
 SkillBase.RegisterPropertyNames.Strength:				Strength
 SkillBase.RegisterPropertyNames.StrengthBonusCap:		Bonus cap to Strength
 SkillBase.RegisterPropertyNames.StunDuration:			Stun Duration
-SkillBase.RegisterPropertyNames.StyleCostReduction:		Style Cost Reduction: {0} pts (PvE Only)
+SkillBase.RegisterPropertyNames.StyleCostReduction:		Style Cost Reduction (PvE Only)
 SkillBase.RegisterPropertyNames.StyleDamage:			Bonus to style damage
 SkillBase.RegisterPropertyNames.Summoning:				Summoning
 SkillBase.RegisterPropertyNames.SummoningFocus:			Summoning Focus
@@ -202,7 +196,7 @@ SkillBase.RegisterPropertyNames.Sword:					Sword
 SkillBase.RegisterPropertyNames.ThrownWeapons:			Thrown Weapons
 SkillBase.RegisterPropertyNames.Thrust:					Thrust Resist
 SkillBase.RegisterPropertyNames.Thrusting:				Thrusting
-SkillBase.RegisterPropertyNames.ToHitBonus:				To-hit bonus: {0}% (PvE Only)
+SkillBase.RegisterPropertyNames.ToHitBonus:				To-hit bonus (PvE Only)
 SkillBase.RegisterPropertyNames.TwoHanded:				Two Handed
 SkillBase.RegisterPropertyNames.Valor:					Valor
 SkillBase.RegisterPropertyNames.VampiiricEmbrace:		Vampiiric Embrace

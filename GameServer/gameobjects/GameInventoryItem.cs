@@ -1851,45 +1851,46 @@ namespace DOL.GS
         {
             if (bonusCat != 0 && bonusValue != 0 && !SkillBase.CheckPropertyType((eProperty)bonusCat, ePropertyType.Focus))
             {
-                if (IsPvEBonus((eProperty)bonusCat))
+                string singleUti = String.Format("{0:0.00}", GetSingleUtility(bonusCat, bonusValue));
+                //- Axe: 5 pts
+                //- Strength: 15 pts
+                //- Constitution: 15 pts
+                //- Hits: 40 pts
+                //- Fatigue: 8 pts
+                //- Heat: 7%
+                //Bonus to casting speed: 2%
+                //Bonus to armor factor (AF): 18
+                //Power: 6 % of power pool.
+                string bonusValueStr = bonusValue.ToString("0 ;-0;0 ");
+                string formattedLine = $"{singleUti} | {SkillBase.GetPropertyName(client, (eProperty)bonusCat)}: {bonusValueStr}";
+
+                if (bonusCat == (int)eProperty.PowerPool
+                    || (bonusCat >= (int)eProperty.Resist_First && bonusCat <= (int)eProperty.Resist_Last)
+                    || (bonusCat >= (int)eProperty.ResCapBonus_First && bonusCat <= (int)eProperty.ResCapBonus_Last)
+                    || bonusCat == (int)eProperty.Conversion
+                    || bonusCat == (int)eProperty.ExtraHP
+                    || bonusCat == (int)eProperty.RealmPoints
+                    || bonusCat == (int)eProperty.StyleAbsorb
+                    || bonusCat == (int)eProperty.ArcaneSyphon
+                    || bonusCat == (int)eProperty.BountyPoints
+                    || bonusCat == (int)eProperty.XpPoints
+                    || bonusCat == (int)eProperty.CraftingSkillGain
+                    || bonusCat == (int)eProperty.RobberyResist
+                    || (bonusCat >= 116 && bonusCat <= 119)
+                    || (bonusCat >= 145 && bonusCat <= 147)
+                    || (bonusCat >= 149 && bonusCat <= 155)
+                    || (bonusCat >= 169 && bonusCat <= 186)
+                    || (bonusCat >= 188 && bonusCat <= 200)
+                    || (bonusCat >= 230 && bonusCat <= 235)
+                    || (bonusCat >= 247 && bonusCat <= 254))
                 {
-                    // Evade: {0}% (PvE Only)
-                    list.Add(string.Format(SkillBase.GetPropertyName(client, (eProperty)bonusCat), bonusValue));
+                    formattedLine += "%";
                 }
                 else
                 {
-                    string singleUti = String.Format("{0:0.00}", GetSingleUtility(bonusCat, bonusValue));
-                    //- Axe: 5 pts
-                    //- Strength: 15 pts
-                    //- Constitution: 15 pts
-                    //- Hits: 40 pts
-                    //- Fatigue: 8 pts
-                    //- Heat: 7%
-                    //Bonus to casting speed: 2%
-                    //Bonus to armor factor (AF): 18
-                    //Power: 6 % of power pool.
-                    list.Add(singleUti + string.Format(
-                        " | {0}: {1}{2}",
-                        SkillBase.GetPropertyName(client, (eProperty)bonusCat),
-                        bonusValue.ToString("0 ;-0 ;0 "), //Eden
-                        ((bonusCat == (int)eProperty.PowerPool)
-                         || (bonusCat >= (int)eProperty.Resist_First && bonusCat <= (int)eProperty.Resist_Last)
-                         || (bonusCat >= (int)eProperty.ResCapBonus_First && bonusCat <= (int)eProperty.ResCapBonus_Last)
-                         || bonusCat == (int)eProperty.Conversion
-                         || bonusCat == (int)eProperty.ExtraHP
-                         || bonusCat == (int)eProperty.RealmPoints
-                         || bonusCat == (int)eProperty.StyleAbsorb
-                         || bonusCat == (int)eProperty.ArcaneSyphon
-                         || bonusCat == (int)eProperty.BountyPoints
-                         || bonusCat == (int)eProperty.XpPoints
-                         || (bonusCat >= 145 && bonusCat <= 156)
-                         || (bonusCat >= 169 && bonusCat <= 200)
-                         || (bonusCat >= 231 && bonusCat <= 235)
-                         || (bonusCat >= 247 && bonusCat <= 254))
-                        ? ((bonusCat == (int)eProperty.PowerPool) ? LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.WriteBonusLine.PowerPool") : "%")
-                        : LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.WriteBonusLine.Points")
-                    ));
+                    formattedLine += LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.WriteBonusLine.Points");
                 }
+                list.Add(formattedLine);
             }
         }
 

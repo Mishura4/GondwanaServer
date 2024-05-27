@@ -164,7 +164,7 @@ namespace DOL.GS
                     spell.RecastDelay = 10;
                     spell.DamageType = (int)eDamageType.Spirit;
                     spell.SpellID = 6021;
-                    spell.Target = "Enemy";
+                    spell.Target = "enemy";
                     spell.Type = "DirectDamage";
                     m_glareSpell = new Spell(spell, 70);
                     SkillBase.AddScriptedSpell(GlobalSpellsLines.Mob_Spells, m_glareSpell);
@@ -198,7 +198,7 @@ namespace DOL.GS
                     spell.Damage = 2000 * DragonDifficulty / 100;
                     spell.DamageType = (int)eDamageType.Spirit;
                     spell.SpellID = 6022;
-                    spell.Target = "Enemy";
+                    spell.Target = "enemy";
                     spell.Type = "DirectDamage";
                     m_breathSpell = new Spell(spell, 70);
                     SkillBase.AddScriptedSpell(GlobalSpellsLines.Mob_Spells, m_breathSpell);
@@ -231,7 +231,7 @@ namespace DOL.GS
                     spell.Damage = 0;
                     spell.DamageType = (int)eDamageType.Spirit;
                     spell.SpellID = 6023;
-                    spell.Target = "Enemy";
+                    spell.Target = "enemy";
                     spell.Type = "SpiritResistDebuff";
                     spell.Message1 = "You feel more vulnerable to spirit magic!";
                     spell.Message2 = "{0} seems vulnerable to spirit magic!";
@@ -269,7 +269,7 @@ namespace DOL.GS
                     spell.Damage = 0;
                     spell.DamageType = (int)eDamageType.Spirit;
                     spell.SpellID = 6003;
-                    spell.Target = "Enemy";
+                    spell.Target = "enemy";
                     spell.Type = "FumbleChanceDebuff";
                     m_meleeDebuffSpell = new Spell(spell, 70);
                     SkillBase.AddScriptedSpell(GlobalSpellsLines.Mob_Spells, m_meleeDebuffSpell);
@@ -305,7 +305,7 @@ namespace DOL.GS
                     spell.Damage = 0;
                     spell.DamageType = (int)eDamageType.Spirit;
                     spell.SpellID = 6003;
-                    spell.Target = "Enemy";
+                    spell.Target = "enemy";
                     spell.Type = "Nearsight";
                     spell.Message1 = "You are blinded!";
                     spell.Message2 = "{0} is blinded!";

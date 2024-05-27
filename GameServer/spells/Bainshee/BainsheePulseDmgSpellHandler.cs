@@ -97,7 +97,7 @@ namespace DOL.GS.Spells
             //cone spells
             if (Spell.Target == "Frontal" ||
                 //pbaoe
-                (Spell.Target == "Enemy" && Spell.Radius > 0 && Spell.Range == 0))
+                (Spell.Target == "enemy" && Spell.Radius > 0 && Spell.Range == 0))
                 spellOK = false;
 
             if (!spellOK || CheckLOS(Caster))

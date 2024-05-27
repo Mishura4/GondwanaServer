@@ -70,9 +70,9 @@ Language.DamageType.Spirit.Noun:				Esprit
 Language.DamageType.Falling.Noun:				Chute
 Language.DamageType.GM.Noun:					Brut
 
-Language.DamageType.Melee.Noun:					Mélée
-Language.DamageType.Spell.Noun:					Sorts
-Language.DamageType.DoT.Noun:					Dégâts d'effets néfastes
+Language.DamageType.Melee.Noun:					Tous Dommages de Mélée
+Language.DamageType.Spell.Noun:					Tous Dommages de Sorts
+Language.DamageType.DoT.Noun:					Dégâts des effets sur la durée
 
 Language.DamageType.Natural.Damage:				dégâts naturels
 Language.DamageType.Crush.Damage:				dégâts concassant
@@ -89,8 +89,6 @@ Language.DamageType.GM.Damage:					dégâts bruts
 
 Language.DamageType.Melee.Damage:				dégâts de mélée
 Language.DamageType.Spell.Damage:				dégâts des sorts
-Language.DamageType.DoT.Damage:					dégâts de durée
+Language.DamageType.DoT.Damage:					dégâts sur la durée
 
 Language.InternalError:							Une erreur serveur est survenue lors de l'éxécution de cette action ; veuillez contacter le staff du serveur.
-
-PlayerPickUpRequestHandler.HandlePacket.Target:		Vous devez avoir une cible valide à ramasser.

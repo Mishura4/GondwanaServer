@@ -221,7 +221,7 @@ namespace DOL.GS
         /// <summary>
         /// Returns an enumeration with all mounted Relics of an realm
         /// </summary>
-        /// <param name="Realm"></param>
+        /// <param name="realm"></param>
         /// <returns></returns>
         public static IEnumerable getRelics(eRealm Realm)
         {
@@ -241,7 +241,7 @@ namespace DOL.GS
         /// <summary>
         /// Returns an enumeration with all mounted Relics of an realm by a specified RelicType
         /// </summary>
-        /// <param name="Realm"></param>
+        /// <param name="realm"></param>
         /// <param name="RelicType"></param>
         /// <returns></returns>
         public static IEnumerable getRelics(eRealm Realm, eRelicType RelicType)

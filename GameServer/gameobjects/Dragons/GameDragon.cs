@@ -822,7 +822,7 @@ namespace DOL.GS
                     spell.DamageType = 13;
                     spell.RecastDelay = 10;
                     spell.SpellID = 6000;
-                    spell.Target = "Enemy";
+                    spell.Target = "enemy";
                     spell.Type = "Stun";
                     spell.Message1 = "You cannot move!";
                     spell.Message2 = "{0} cannot seem to move!";

@@ -896,7 +896,7 @@ namespace DOL.Database
         /// <summary>
         /// the serialized allowed classes of item
         /// </summary>
-        [DataElement(AllowDbNull = false)]
+        [DataElement(AllowDbNull = true)]
         public string AllowedClasses
         {
             get { return m_allowedClasses; }

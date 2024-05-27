@@ -1269,7 +1269,7 @@ namespace DOL.GS.Keeps
             {
                 DBSpell spell = BaseHealSpell;
                 spell.CastTime = 2;
-                spell.Target = "Self";
+                spell.Target = "self";
                 spell.Value = -2.5; // 2.5% of caster health instead of constant value
                 if (GameServer.Instance.Configuration.ServerType != eGameServerType.GST_PvE)
                     spell.Uninterruptible = true;
@@ -1284,7 +1284,7 @@ namespace DOL.GS.Keeps
                 DBSpell spell = BaseHealSpell;
                 spell.CastTime = 2;
                 spell.Value = 200;
-                spell.Target = "Realm";
+                spell.Target = "realm";
                 return spell;
             }
         }

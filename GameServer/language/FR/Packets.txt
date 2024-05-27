@@ -1,4 +1,8 @@
+
+# /packets/Client/168
 # /DetailDisplayHandler
+DetailDisplayHandler.HandlePacket.UniqueObject:	Objet Unique
+
 DetailDisplayHandler.GetShortItemInfo.CrafterName:			Artisan : {0}
 DetailDisplayHandler.GetShortItemInfo.NoDrop:				Ne peut être jeté.
 DetailDisplayHandler.GetShortItemInfo.NoSell:				Ne peut être vendu.
@@ -143,21 +147,6 @@ DetailDisplayHandler.WriteUsableClasses.UsableBy:			Utilisable par :
 
 # /DoorRequestHandler.cs
 DoorRequestHandler.OnTick.TooFarAway:			Vous êtes trop loin de {0} !
-HousingPickupItemHandler.GardenRemoved:			Objet de jardin retiré.
-HousingPickupItemHandler.PickUp:				Vous mettez {0} dans votre inventaire.
-HousingPlaceItemHandler.30objects:				Vous avez déjà placé 30 objets. Vous ne pouvez pas en placer plus.
-HousingPlaceItemHandler.40objects:				Vous avez déjà placé 40 objets. Vous ne pouvez pas en placer plus.
-HousingPlaceItemHandler.CantFloor:				Cet objet ne peut pas être placé sur le sol !
-HousingPlaceItemHandler.CantWall:				Cet objet ne peut pas être placé sur un mur !
-HousingPlaceItemHandler.DropOnFloor:			Vous déposez l'objet {0} sur le sol de votre maison.
-HousingPlaceItemHandler.DropOnGarden:			Vous déposez l'objet {0} dans votre jardin.
-HousingPlaceItemHandler.DropOnWall:				Vous déposez l'objet {0} sur le mur de votre maison.
-HousingPlaceItemHandler.GardenObjectPlaced:		Objet de jardin placé. {0} places restantes.
-HousingPlaceItemHandler.HasPorch:				Cette maison a déjà un porche !
-HousingPlaceItemHandler.HasNoPorch:				Cette maison n'a pas de porche !
-HousingPlaceItemHandler.IndoorObjectPlaced:		Objet intérieur placé. {0} places restantes.
-HousingPlaceItemHandler.NoHookpoint:			Il n'y a plus de point d'ancrage !
-HousingPlaceItemHandler.PutMoney:				Vous déposez de l'argent sur le compte de votre maison.
 
 # /PlayerBonusesListRequestHandler
 PlayerBonusesListRequestHandler.HandlePacket.Bonuses:	Bonus actuels
@@ -181,10 +170,16 @@ PlayerInitRequestHandler.SaferLocation:		Cette zone n'est actuellement pas sécu
 # /PlayerMoveItemRequestHandler
 PlayerMoveItemRequestHandler.TooFarAway:	Vous êtes trop loin pour donner quoi que ce soit à {0}.
 
+# /PlayerPickUpRequestHandler
+PlayerPickUpRequestHandler.HandlePacket.InvalidTarget:	Votre cible est invalide !
+PlayerPickUpRequestHandler.HandlePacket.Target:		Vous devez sélectionner une cible pour obtenir quelque chose !
+
 # /PlayerPositionUpdateHandler
 PlayerPositionUpdateHandler.Endurance:		Vous perdez de l'endurance !
-PlayerPositionUpdateHandler.Entered:		Vous êtes entré·e dans {0}.
 PlayerPositionUpdateHandler.FallingDamage:	Vous encaissez des dégats de chute !
 PlayerPositionUpdateHandler.FallPercent:	Vous perdez {0}% de votre total de points de vie.
 PlayerPositionUpdateHandler.SafeFall:		Les dommages ont été réduits grâce à votre abilité de chute contrôlée !
+PlayerPositionUpdateHandler.MythSafeFall:	Les dommages ont été réduits grâce à votre equipment!
+
+PlayerPositionUpdateHandler.Entered:		Vous êtes entré·e dans {0}.
 PlayerPositionUpdateHandler.UnknownZone:	Zone inconnue ! Vous êtes ramené à la pierre d'âme.

@@ -559,7 +559,7 @@ namespace DOL.GS
             String target;
             switch (Target)
             {
-                case "Enemy":
+                case "enemy":
                     target = "Targetted";
                     break;
                 default:

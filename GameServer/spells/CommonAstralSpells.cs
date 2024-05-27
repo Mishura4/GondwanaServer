@@ -205,7 +205,7 @@ namespace DOL.GS.Spells
             dbs.Icon = 4107;
             dbs.ClientEffect = 5435;
             dbs.DamageType = 15;
-            dbs.Target = "Enemy";
+            dbs.Target = "enemy";
             dbs.Radius = 0;
             dbs.Type = "DirectDamage";
             dbs.Damage = 80;

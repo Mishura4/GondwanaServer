@@ -82,7 +82,7 @@ namespace DOL.GS.Spells
 
             bool spellOK = true;
 
-            if (Spell.Target.ToLower() == "cone" || (Spell.Target == "Enemy" && Spell.Radius > 0 && Spell.Range == 0))
+            if (Spell.Target.ToLower() == "cone" || (Spell.Target == "enemy" && Spell.Radius > 0 && Spell.Range == 0))
             {
                 spellOK = false;
             }

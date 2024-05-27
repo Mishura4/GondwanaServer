@@ -326,7 +326,7 @@ namespace DOL.GS
                     spell.Damage = 0;
                     spell.DamageType = (int)eDamageType.Heat;
                     spell.SpellID = 6003;
-                    spell.Target = "Enemy";
+                    spell.Target = "enemy";
                     spell.Type = "DirectDamage";
                     m_flash = new Spell(spell, 70);
                     SkillBase.GetSpellList(GlobalSpellsLines.Mob_Spells).Add(m_flash);
@@ -351,7 +351,7 @@ namespace DOL.GS
                     spell.Damage = 600;
                     spell.DamageType = (int)eDamageType.Heat;
                     spell.SpellID = 6001;
-                    spell.Target = "Enemy";
+                    spell.Target = "enemy";
                     spell.Type = "DirectDamage";
                     m_glare = new Spell(spell, 70);
                     SkillBase.GetSpellList(GlobalSpellsLines.Mob_Spells).Add(m_glare);
@@ -378,7 +378,7 @@ namespace DOL.GS
                     spell.Damage = 800;
                     spell.DamageType = (int)eDamageType.Heat;
                     spell.SpellID = 6000;
-                    spell.Target = "Enemy";
+                    spell.Target = "enemy";
                     spell.Type = "DirectDamage";
                     m_nuke = new Spell(spell, 70);
                     SkillBase.GetSpellList(GlobalSpellsLines.Mob_Spells).Add(m_nuke);
@@ -406,7 +406,7 @@ namespace DOL.GS
                     spell.Damage = 500;
                     spell.DamageType = 13;
                     spell.SpellID = 6002;
-                    spell.Target = "Enemy";
+                    spell.Target = "enemy";
                     spell.Type = "Stun";
                     spell.Message1 = "You cannot move!";
                     spell.Message2 = "{0} cannot seem to move!";

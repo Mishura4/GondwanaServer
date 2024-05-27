@@ -173,7 +173,7 @@ namespace DOL.GS
                     spell.RecastDelay = 10;
                     spell.DamageType = (int)eDamageType.Cold;
                     spell.SpellID = 6001;
-                    spell.Target = "Enemy";
+                    spell.Target = "enemy";
                     spell.Type = "DirectDamage";
                     m_glareSpell = new Spell(spell, 70);
                     SkillBase.AddScriptedSpell(GlobalSpellsLines.Mob_Spells, m_glareSpell);
@@ -207,7 +207,7 @@ namespace DOL.GS
                     spell.Damage = 2000 * DragonDifficulty / 100;
                     spell.DamageType = (int)eDamageType.Cold;
                     spell.SpellID = 6012;
-                    spell.Target = "Enemy";
+                    spell.Target = "enemy";
                     spell.Type = "DirectDamage";
                     m_breathSpell = new Spell(spell, 70);
                     SkillBase.AddScriptedSpell(GlobalSpellsLines.Mob_Spells, m_breathSpell);
@@ -240,7 +240,7 @@ namespace DOL.GS
                     spell.Damage = 0;
                     spell.DamageType = (int)eDamageType.Cold;
                     spell.SpellID = 6013;
-                    spell.Target = "Enemy";
+                    spell.Target = "enemy";
                     spell.Type = "ColdResistDebuff";
                     spell.Message1 = "You feel more vulnerable to cold!";
                     spell.Message2 = "{0} seems vulnerable to cold!";
@@ -279,7 +279,7 @@ namespace DOL.GS
                     spell.Damage = 0;
                     spell.DamageType = (int)eDamageType.Cold;
                     spell.SpellID = 6003;
-                    spell.Target = "Enemy";
+                    spell.Target = "enemy";
                     spell.Type = "FumbleChanceDebuff";
                     m_meleeDebuffSpell = new Spell(spell, 70);
                     SkillBase.AddScriptedSpell(GlobalSpellsLines.Mob_Spells, m_meleeDebuffSpell);
@@ -316,7 +316,7 @@ namespace DOL.GS
                     spell.Damage = 0;
                     spell.DamageType = (int)eDamageType.Cold;
                     spell.SpellID = 6003;
-                    spell.Target = "Enemy";
+                    spell.Target = "enemy";
                     spell.Type = "Nearsight";
                     spell.Message1 = "You are blinded!";
                     spell.Message2 = "{0} is blinded!";

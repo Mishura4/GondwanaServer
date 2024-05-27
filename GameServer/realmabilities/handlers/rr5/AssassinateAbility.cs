@@ -26,7 +26,7 @@ namespace DOL.GS.RealmAbilities
             _dbspell = new DBSpell
             {
                 Name = "Assassinate",
-                Target = "Enemy",
+                Target = "enemy",
                 Type = "Assassinate",
                 CastTime = 15,
                 Range = 750

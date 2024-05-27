@@ -399,7 +399,7 @@ namespace DOL.GS.Trainer
                 }
                 if ((player.Inventory.CountItemTemplate(PRACTICE_SHIELD_ID2, eInventorySlot.MinEquipable, eInventorySlot.LastBackpack) == 0) && (player.CharacterClass.ID == (int)eCharacterClass.Naturalist || player.CharacterClass.ID == (int)eCharacterClass.Guardian))
                 {
-                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "VikingTrainer.Interact.Text2", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "VikingTrainer.Interact.Text3", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                 }
 
                 if ((player.Inventory.CountItemTemplate(PRACTICE_STAFF_ID1, eInventorySlot.MinEquipable, eInventorySlot.LastBackpack) == 0) && (player.CharacterClass.ID == (int)eCharacterClass.Magician || player.CharacterClass.ID == (int)eCharacterClass.Forester))
@@ -494,29 +494,165 @@ namespace DOL.GS.Trainer
 
             str = str.ToLower();
 
-            if (str == "yes" || str == "oui")
+            if ((str == "yes" || str == "oui") && playerLastClassOffers.ContainsKey(player))
             {
-                if (playerLastClassOffers.ContainsKey(player))
-                {
-                    HandleClassSelectionResponse(player, true);
-                    playerLastClassOffers.Remove(player);
-                }
-                else
-                {
-                    if (CanTrain(player))
+                string classOffer = playerLastClassOffers[player];
+                if (player.CharacterClass.ID == (int)eCharacterClass.Acolyte || player.CharacterClass.ID == (int)eCharacterClass.AlbionRogue || player.CharacterClass.ID == (int)eCharacterClass.Disciple || player.CharacterClass.ID == (int)eCharacterClass.Elementalist || player.CharacterClass.ID == (int)eCharacterClass.Fighter || player.CharacterClass.ID == (int)eCharacterClass.Mage || player.CharacterClass.ID == (int)eCharacterClass.Forester || player.CharacterClass.ID == (int)eCharacterClass.Guardian || player.CharacterClass.ID == (int)eCharacterClass.Magician || player.CharacterClass.ID == (int)eCharacterClass.Stalker || player.CharacterClass.ID == (int)eCharacterClass.Naturalist || player.CharacterClass.ID == (int)eCharacterClass.MidgardRogue || player.CharacterClass.ID == (int)eCharacterClass.Mystic || player.CharacterClass.ID == (int)eCharacterClass.Seer || player.CharacterClass.ID == (int)eCharacterClass.Viking)
+                    if (classOffer == "armsman")
                     {
-                        player.Out.SendMessage("There was no class selection to confirm. Please start over.", eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ArmsmanTrainer.Interact.Text4", this.Name, player.CharacterClass.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        playerWeaponOffers[player] = "arms_pending";
+                        playerLastClassOffers.Remove(player);
                         return true;
                     }
-                }
+                    else if (classOffer == "paladin")
+                    {
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "PaladinTrainer.Interact.Text4", this.Name, player.CharacterClass.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        playerWeaponOffers[player] = "pala_pending";
+                        playerLastClassOffers.Remove(player);
+                        return true;
+                    }
+                    else if (classOffer == "mercenary")
+                    {
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MercenaryTrainer.Interact.Text4", this.Name, player.CharacterClass.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        playerWeaponOffers[player] = "merc_pending";
+                        playerLastClassOffers.Remove(player);
+                        return true;
+                    }
+                    else if (classOffer == "reaver")
+                    {
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ReaverTrainer.Interact.Text4", this.Name, player.CharacterClass.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        playerWeaponOffers[player] = "reav_pending";
+                        playerLastClassOffers.Remove(player);
+                        return true;
+                    }
+                    else if (classOffer == "albmauler")
+                    {
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MaulerAlbTrainer.Interact.Text4", this.Name, player.CharacterClass.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        playerWeaponOffers[player] = "albmaul_pending";
+                        playerLastClassOffers.Remove(player);
+                        return true;
+                    }
+                    else if (classOffer == "heretic")
+                    {
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "HereticTrainer.Interact.Text4", this.Name, player.CharacterClass.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        playerWeaponOffers[player] = "here_pending";
+                        playerLastClassOffers.Remove(player);
+                        return true;
+                    }
+                    else if (classOffer == "infiltrator")
+                    {
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "InfiltratorTrainer.Interact.Text4", this.Name, player.CharacterClass.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        playerWeaponOffers[player] = "infi_pending";
+                        playerLastClassOffers.Remove(player);
+                        return true;
+                    }
+                    else if (classOffer == "hero")
+                    {
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "HeroTrainer.Interact.Text4", this.Name, player.CharacterClass.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        playerWeaponOffers[player] = "hero_pending";
+                        playerLastClassOffers.Remove(player);
+                        return true;
+                    }
+                    else if (classOffer == "champion")
+                    {
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ChampionTrainer.Interact.Text4", this.Name, player.CharacterClass.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        playerWeaponOffers[player] = "cham_pending";
+                        playerLastClassOffers.Remove(player);
+                        return true;
+                    }
+                    else if (classOffer == "blademaster")
+                    {
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "BlademasterTrainer.Interact.Text4", this.Name, player.CharacterClass.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        playerWeaponOffers[player] = "blad_pending";
+                        playerLastClassOffers.Remove(player);
+                        return true;
+                    }
+                    else if (classOffer == "hibmauler")
+                    {
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MaulerHibTrainer.Interact.Text4", this.Name, player.CharacterClass.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        playerWeaponOffers[player] = "hibmaul_pending";
+                        playerLastClassOffers.Remove(player);
+                        return true;
+                    }
+                    else if (classOffer == "nightshade")
+                    {
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "NightshadeTrainer.Interact.Text4", this.Name, player.CharacterClass.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        playerWeaponOffers[player] = "nigh_pending";
+                        playerLastClassOffers.Remove(player);
+                        return true;
+                    }
+                    else if (classOffer == "warden")
+                    {
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "WardenTrainer.Interact.Text4", this.Name, player.CharacterClass.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        playerWeaponOffers[player] = "ward_pending";
+                        playerLastClassOffers.Remove(player);
+                        return true;
+                    }
+                    else if (classOffer == "berserker")
+                    {
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "BerserkerTrainer.Interact.Text4", this.Name, player.CharacterClass.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        playerWeaponOffers[player] = "berz_pending";
+                        playerLastClassOffers.Remove(player);
+                        return true;
+                    }
+                    else if (classOffer == "savage")
+                    {
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "SavageTrainer.Interact.Text4", this.Name, player.CharacterClass.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        playerWeaponOffers[player] = "sava_pending";
+                        playerLastClassOffers.Remove(player);
+                        return true;
+                    }
+                    else if (classOffer == "skald")
+                    {
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "SkaldTrainer.Interact.Text4", this.Name, player.CharacterClass.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        playerWeaponOffers[player] = "skal_pending";
+                        playerLastClassOffers.Remove(player);
+                        return true;
+                    }
+                    else if (classOffer == "thane")
+                    {
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ThaneTrainer.Interact.Text4", this.Name, player.CharacterClass.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        playerWeaponOffers[player] = "than_pending";
+                        playerLastClassOffers.Remove(player);
+                        return true;
+                    }
+                    else if (classOffer == "warrior")
+                    {
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "WarriorTrainer.Interact.Text4", this.Name, player.CharacterClass.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        playerWeaponOffers[player] = "warr_pending";
+                        playerLastClassOffers.Remove(player);
+                        return true;
+                    }
+                    else if (classOffer == "valkyrie")
+                    {
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ValkyrieTrainer.Interact.Text4", this.Name, player.CharacterClass.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        playerWeaponOffers[player] = "valk_pending";
+                        playerLastClassOffers.Remove(player);
+                        return true;
+                    }
+                    else if (classOffer == "midmauler")
+                    {
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MaulerMidTrainer.Interact.Text4", this.Name, player.CharacterClass.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        playerWeaponOffers[player] = "midmaul_pending";
+                        playerLastClassOffers.Remove(player);
+                        return true;
+                    }
+                    else
+                    {
+                        HandleClassSelectionResponse(player, true);
+                        playerLastClassOffers.Remove(player);
+                        return true;
+                    }
             }
 
             if (str == "no" || str == "non")
             {
-                if (CanTrain(player))
+                if (player.CharacterClass.ID == (int)eCharacterClass.Acolyte || player.CharacterClass.ID == (int)eCharacterClass.AlbionRogue || player.CharacterClass.ID == (int)eCharacterClass.Disciple || player.CharacterClass.ID == (int)eCharacterClass.Elementalist || player.CharacterClass.ID == (int)eCharacterClass.Fighter || player.CharacterClass.ID == (int)eCharacterClass.Mage || player.CharacterClass.ID == (int)eCharacterClass.Forester || player.CharacterClass.ID == (int)eCharacterClass.Guardian || player.CharacterClass.ID == (int)eCharacterClass.Magician || player.CharacterClass.ID == (int)eCharacterClass.Stalker || player.CharacterClass.ID == (int)eCharacterClass.Naturalist || player.CharacterClass.ID == (int)eCharacterClass.MidgardRogue || player.CharacterClass.ID == (int)eCharacterClass.Mystic || player.CharacterClass.ID == (int)eCharacterClass.Seer || player.CharacterClass.ID == (int)eCharacterClass.Viking)
                 {
                     playerLastClassOffers.Remove(player);
-                    player.Out.SendMessage("Come back later if you change your mind.", eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                    playerWeaponOffers.Remove(player);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MasterTrainer.Interact.ChooseLater", this.Name, player.CharacterClass.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     return true;
                 }
             }
@@ -530,19 +666,43 @@ namespace DOL.GS.Trainer
                     {
                         case "cleric":
                         case "clerc":
-                            messageKey = "AcolyteTrainer.Cleric.Explain";
-                            playerLastClassOffers[player] = "cleric";
-                            break;
+                            if (player.Race == (int)eRace.Avalonian || player.Race == (int)eRace.Briton || player.Race == (int)eRace.Highlander)
+                            {
+                                messageKey = "AcolyteTrainer.Cleric.Explain";
+                                playerLastClassOffers[player] = "cleric";
+                                break;
+                            }
+                            else
+                            {
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AcolyteTrainer.Cleric.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                                return true;
+                            }
                         case "friar":
                         case "moine":
-                            messageKey = "AcolyteTrainer.Friar.Explain";
-                            playerLastClassOffers[player] = "friar";
-                            break;
+                            if (player.Race == (int)eRace.Avalonian || player.Race == (int)eRace.Briton || player.Race == (int)eRace.Highlander)
+                            {
+                                messageKey = "AcolyteTrainer.Friar.Explain";
+                                playerLastClassOffers[player] = "friar";
+                                break;
+                            }
+                            else
+                            {
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AcolyteTrainer.Friar.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                                return true;
+                            }
                         case "heretic":
                         case "hérétique":
-                            messageKey = "AcolyteTrainer.Heretic.Explain";
-                            playerLastClassOffers[player] = "heretic";
-                            break;
+                            if (player.Race == (int)eRace.Briton || player.Race == (int)eRace.Avalonian || player.Race == (int)eRace.Inconnu || player.Race == (int)eRace.AlbionMinotaur || player.Race == (int)eRace.Saracen || player.Race == (int)eRace.Highlander)
+                            {
+                                messageKey = "AcolyteTrainer.Heretic.Explain";
+                                playerLastClassOffers[player] = "heretic";
+                                break;
+                            }
+                            else
+                            {
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AcolyteTrainer.Heretic.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                                return true;
+                            }
                     }
                     break;
                 case eCharacterClass.AlbionRogue:
@@ -550,26 +710,58 @@ namespace DOL.GS.Trainer
                     {
                         case "infiltrator":
                         case "sicaire":
-                            messageKey = "AlbionRogueTrainer.Infiltrator.Explain";
-                            playerLastClassOffers[player] = "infiltrator";
-                            break;
+                            if (player.Race == (int)eRace.Briton || player.Race == (int)eRace.Highlander || player.Race == (int)eRace.Saracen || player.Race == (int)eRace.Inconnu)
+                            {
+                                messageKey = "AlbionRogueTrainer.Infiltrator.Explain";
+                                playerLastClassOffers[player] = "infiltrator";
+                                break;
+                            }
+                            else
+                            {
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AlbionRogueTrainer.Infiltrator.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                                return true;
+                            }
                         case "minstrel":
                         case "ménestrel":
-                            messageKey = "AlbionRogueTrainer.Minstrel.Explain";
-                            playerLastClassOffers[player] = "minstrel";
-                            break;
+                            if (player.Race == (int)eRace.Briton || player.Race == (int)eRace.Saracen || player.Race == (int)eRace.Highlander || player.Race == (int)eRace.Inconnu)
+                            {
+                                messageKey = "AlbionRogueTrainer.Minstrel.Explain";
+                                playerLastClassOffers[player] = "minstrel";
+                                break;
+                            }
+                            else
+                            {
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AlbionRogueTrainer.Minstrel.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                                return true;
+                            }
                         case "scout":
                         case "éclaireur":
-                            messageKey = "AlbionRogueTrainer.Scout.Explain";
-                            playerLastClassOffers[player] = "scout";
-                            break;
+                            if (player.Race == (int)eRace.Briton || player.Race == (int)eRace.Saracen || player.Race == (int)eRace.Highlander || player.Race == (int)eRace.Inconnu)
+                            {
+                                messageKey = "AlbionRogueTrainer.Scout.Explain";
+                                playerLastClassOffers[player] = "scout";
+                                break;
+                            }
+                            else
+                            {
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AlbionRogueTrainer.Scout.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                                return true;
+                            }
                     }
                     break;
                 case eCharacterClass.Disciple:
                     if (str is "necromancer" or "prêtre d'arawn")
                     {
-                        messageKey = "DiscipleTrainer.Necromancer.Explain";
-                        playerLastClassOffers[player] = "necromancer";
+                        if (player.Race == (int)eRace.Briton || player.Race == (int)eRace.Inconnu || player.Race == (int)eRace.Saracen || player.Race == (int)eRace.Avalonian)
+                        {
+                            messageKey = "DiscipleTrainer.Necromancer.Explain";
+                            playerLastClassOffers[player] = "necromancer";
+                        }
+                        else
+                        {
+                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "DiscipleTrainer.Necromancer.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                            return true;
+                        }
                     }
                     break;
                 case eCharacterClass.Elementalist:
@@ -577,14 +769,30 @@ namespace DOL.GS.Trainer
                     {
                         case "theurgist":
                         case "théurgiste":
-                            messageKey = "ElementalistTrainer.Theurgist.Explain";
-                            playerLastClassOffers[player] = "theurgist";
-                            break;
+                            if (player.Race == (int)eRace.Briton || player.Race == (int)eRace.Avalonian || player.Race == (int)eRace.HalfOgre)
+                            {
+                                messageKey = "ElementalistTrainer.Theurgist.Explain";
+                                playerLastClassOffers[player] = "theurgist";
+                                break;
+                            }
+                            else
+                            {
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ElementalistTrainer.Theurgist.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                                return true;
+                            }
                         case "wizard":
                         case "thaumaturge":
-                            messageKey = "ElementalistTrainer.Wizard.Explain";
-                            playerLastClassOffers[player] = "wizard";
-                            break;
+                            if (player.Race == (int)eRace.Briton || player.Race == (int)eRace.Avalonian || player.Race == (int)eRace.HalfOgre || player.Race == (int)eRace.Inconnu)
+                            {
+                                messageKey = "ElementalistTrainer.Wizard.Explain";
+                                playerLastClassOffers[player] = "wizard";
+                                break;
+                            }
+                            else
+                            {
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ElementalistTrainer.Wizard.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                                return true;
+                            }
                     }
                     break;
                 case eCharacterClass.Fighter:
@@ -592,28 +800,68 @@ namespace DOL.GS.Trainer
                     {
                         case "armsman":
                         case "maître d'armes":
-                            messageKey = "FighterTrainer.Armsman.Explain";
-                            playerLastClassOffers[player] = "armsman";
-                            break;
+                            if (player.Race == (int)eRace.Avalonian || player.Race == (int)eRace.Briton || player.Race == (int)eRace.HalfOgre || player.Race == (int)eRace.Highlander || player.Race == (int)eRace.Inconnu || player.Race == (int)eRace.Saracen || player.Race == (int)eRace.AlbionMinotaur)
+                            {
+                                messageKey = "FighterTrainer.Armsman.Explain";
+                                playerLastClassOffers[player] = "armsman";
+                                break;
+                            }
+                            else
+                            {
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "FighterTrainer.Armsman.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                                return true;
+                            }
                         case "mercenary":
                         case "mercenaire":
-                            messageKey = "FighterTrainer.Mercenary.Explain";
-                            playerLastClassOffers[player] = "mercenary";
-                            break;
+                            if (player.Race == (int)eRace.Avalonian || player.Race == (int)eRace.Briton || player.Race == (int)eRace.HalfOgre || player.Race == (int)eRace.Highlander || player.Race == (int)eRace.Inconnu || player.Race == (int)eRace.Saracen || player.Race == (int)eRace.AlbionMinotaur)
+                            {
+                                messageKey = "FighterTrainer.Mercenary.Explain";
+                                playerLastClassOffers[player] = "mercenary";
+                                break;
+                            }
+                            else
+                            {
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "FighterTrainer.Mercenary.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                                return true;
+                            }
                         case "paladin":
-                            messageKey = "FighterTrainer.Paladin.Explain";
-                            playerLastClassOffers[player] = "paladin";
-                            break;
+                            if (player.Race == (int)eRace.Avalonian || player.Race == (int)eRace.Briton || player.Race == (int)eRace.Highlander || player.Race == (int)eRace.Saracen)
+                            {
+                                messageKey = "FighterTrainer.Paladin.Explain";
+                                playerLastClassOffers[player] = "paladin";
+                                break;
+                            }
+                            else
+                            {
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "FighterTrainer.Paladin.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                                return true;
+                            }
                         case "reaver":
                         case "fléau d'arawn":
-                            messageKey = "FighterTrainer.Reaver.Explain";
-                            playerLastClassOffers[player] = "reaver";
-                            break;
+                            if (player.Race == (int)eRace.Inconnu || player.Race == (int)eRace.Briton || player.Race == (int)eRace.AlbionMinotaur || player.Race == (int)eRace.Saracen)
+                            {
+                                messageKey = "FighterTrainer.Reaver.Explain";
+                                playerLastClassOffers[player] = "reaver";
+                                break;
+                            }
+                            else
+                            {
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "FighterTrainer.Reaver.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                                return true;
+                            }
                         case "mauler":
                         case "kan-laresh":
-                            messageKey = "Baseclass.Mauler.Explain";
-                            playerLastClassOffers[player] = "albmauler";
-                            break;
+                            if (player.Race == (int)eRace.Inconnu || player.Race == (int)eRace.Briton || player.Race == (int)eRace.AlbionMinotaur || player.Race == (int)eRace.HalfOgre)
+                            {
+                                messageKey = "Baseclass.Mauler.Explain";
+                                playerLastClassOffers[player] = "albmauler";
+                                break;
+                            }
+                            else
+                            {
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Baseclass.Mauler.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                                return true;
+                            }
                     }
                     break;
                 case eCharacterClass.Mage:
@@ -621,14 +869,30 @@ namespace DOL.GS.Trainer
                     {
                         case "cabalist":
                         case "cabaliste":
-                            messageKey = "MageTrainer.Cabalist.Explain";
-                            playerLastClassOffers[player] = "cabalist";
-                            break;
+                            if (player.Race == (int)eRace.Avalonian || player.Race == (int)eRace.Briton || player.Race == (int)eRace.HalfOgre || player.Race == (int)eRace.Inconnu || player.Race == (int)eRace.Saracen)
+                            {
+                                messageKey = "MageTrainer.Cabalist.Explain";
+                                playerLastClassOffers[player] = "cabalist";
+                                break;
+                            }
+                            else
+                            {
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MageTrainer.Cabalist.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                                return true;
+                            }
                         case "sorcerer":
                         case "sorcier":
-                            messageKey = "MageTrainer.Sorcerer.Explain";
-                            playerLastClassOffers[player] = "sorcerer";
-                            break;
+                            if (player.Race == (int)eRace.Briton || player.Race == (int)eRace.Avalonian || player.Race == (int)eRace.HalfOgre || player.Race == (int)eRace.Inconnu || player.Race == (int)eRace.Saracen)
+                            {
+                                messageKey = "MageTrainer.Sorcerer.Explain";
+                                playerLastClassOffers[player] = "sorcerer";
+                                break;
+                            }
+                            else
+                            {
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MageTrainer.Sorcerer.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                                return true;
+                            }
                     }
                     break;
                 case eCharacterClass.Forester:
@@ -636,14 +900,30 @@ namespace DOL.GS.Trainer
                     {
                         case "animist":
                         case "animiste":
-                            messageKey = "ForesterTrainer.Animist.Explain";
-                            playerLastClassOffers[player] = "animist";
-                            break;
+                            if (player.Race == (int)eRace.Celt || player.Race == (int)eRace.Firbolg || player.Race == (int)eRace.Sylvan || player.Race == (int)eRace.Elf)
+                            {
+                                messageKey = "ForesterTrainer.Animist.Explain";
+                                playerLastClassOffers[player] = "animist";
+                                break;
+                            }
+                            else
+                            {
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ForesterTrainer.Animist.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                                return true;
+                            }
                         case "valewalker":
                         case "faucheur":
-                            messageKey = "ForesterTrainer.Valewalker.Explain";
-                            playerLastClassOffers[player] = "valewalker";
-                            break;
+                            if (player.Race == (int)eRace.Celt || player.Race == (int)eRace.Firbolg || player.Race == (int)eRace.Sylvan || player.Race == (int)eRace.HiberniaMinotaur)
+                            {
+                                messageKey = "ForesterTrainer.Valewalker.Explain";
+                                playerLastClassOffers[player] = "valewalker";
+                                break;
+                            }
+                            else
+                            {
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ForesterTrainer.Valewalker.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                                return true;
+                            }
                     }
                     break;
                 case eCharacterClass.Guardian:
@@ -651,47 +931,111 @@ namespace DOL.GS.Trainer
                     {
                         case "hero":
                         case "protecteur":
-                            messageKey = "GuardianTrainer.Hero.Explain";
-                            playerLastClassOffers[player] = "hero";
-                            break;
+                            if (player.Race == (int)eRace.Celt || player.Race == (int)eRace.Firbolg || player.Race == (int)eRace.Lurikeen || player.Race == (int)eRace.Shar || player.Race == (int)eRace.Sylvan || player.Race == (int)eRace.HiberniaMinotaur)
+                            {
+                                messageKey = "GuardianTrainer.Hero.Explain";
+                                playerLastClassOffers[player] = "hero";
+                                break;
+                            }
+                            else
+                            {
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GuardianTrainer.Hero.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                                return true;
+                            }
                         case "champion":
-                            messageKey = "GuardianTrainer.Champion.Explain";
-                            playerLastClassOffers[player] = "champion";
-                            break;
+                            if (player.Race == (int)eRace.Celt || player.Race == (int)eRace.Elf || player.Race == (int)eRace.Lurikeen || player.Race == (int)eRace.Shar || player.Race == (int)eRace.Sylvan || player.Race == (int)eRace.HiberniaMinotaur)
+                            {
+                                messageKey = "GuardianTrainer.Champion.Explain";
+                                playerLastClassOffers[player] = "champion";
+                                break;
+                            }
+                            else
+                            {
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GuardianTrainer.Champion.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                                return true;
+                            }
                         case "blademaster":
                         case "finelame":
-                            messageKey = "GuardianTrainer.Blademaster.Explain";
-                            playerLastClassOffers[player] = "blademaster";
-                            break;
+                            if (player.Race == (int)eRace.Celt || player.Race == (int)eRace.Elf || player.Race == (int)eRace.Firbolg || player.Race == (int)eRace.Shar || player.Race == (int)eRace.HiberniaMinotaur || player.Race == (int)eRace.Lurikeen)
+                            {
+                                messageKey = "GuardianTrainer.Blademaster.Explain";
+                                playerLastClassOffers[player] = "blademaster";
+                                break;
+                            }
+                            else
+                            {
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GuardianTrainer.Blademaster.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                                return true;
+                            }
                         case "mauler":
                         case "kan-laresh":
-                            messageKey = "Baseclass.Mauler.Explain";
-                            playerLastClassOffers[player] = "hibmauler";
-                            break;
+                            if (player.Race == (int)eRace.Celt || player.Race == (int)eRace.Firbolg || player.Race == (int)eRace.HiberniaMinotaur || player.Race == (int)eRace.Lurikeen)
+                            {
+                                messageKey = "Baseclass.Mauler.Explain";
+                                playerLastClassOffers[player] = "hibmauler";
+                                break;
+                            }
+                            else
+                            {
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Baseclass.Mauler.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                                return true;
+                            }
                     }
                     break;
                 case eCharacterClass.Magician:
                     switch (str)
                     {
                         case "eldritch":
-                            messageKey = "MagicianTrainer.Eldritch.Explain";
-                            playerLastClassOffers[player] = "eldritch";
-                            break;
+                            if (player.Race == (int)eRace.Elf || player.Race == (int)eRace.Lurikeen)
+                            {
+                                messageKey = "MagicianTrainer.Eldritch.Explain";
+                                playerLastClassOffers[player] = "eldritch";
+                                break;
+                            }
+                            else
+                            {
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MagicianTrainer.Eldritch.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                                return true;
+                            }
                         case "enchanter":
                         case "enchanteur":
-                            messageKey = "MagicianTrainer.Enchanter.Explain";
-                            playerLastClassOffers[player] = "enchanter";
-                            break;
+                            if (player.Race == (int)eRace.Elf || player.Race == (int)eRace.Lurikeen)
+                            {
+                                messageKey = "MagicianTrainer.Enchanter.Explain";
+                                playerLastClassOffers[player] = "enchanter";
+                                break;
+                            }
+                            else
+                            {
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MagicianTrainer.Enchanter.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                                return true;
+                            }
                         case "mentalist":
                         case "empathe":
-                            messageKey = "MagicianTrainer.Mentalist.Explain";
-                            playerLastClassOffers[player] = "mentalist";
-                            break;
+                            if (player.Race == (int)eRace.Celt || player.Race == (int)eRace.Elf || player.Race == (int)eRace.Lurikeen || player.Race == (int)eRace.Shar)
+                            {
+                                messageKey = "MagicianTrainer.Mentalist.Explain";
+                                playerLastClassOffers[player] = "mentalist";
+                                break;
+                            }
+                            else
+                            {
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MagicianTrainer.Mentalist.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                                return true;
+                            }
                         case "bainshee":
                         case "banshee":
-                            messageKey = "MagicianTrainer.Bainshee.Explain";
-                            playerLastClassOffers[player] = "bainshee";
-                            break;
+                            if ((player.Race == (int)eRace.Celt || player.Race == (int)eRace.Elf || player.Race == (int)eRace.Lurikeen) && player.Gender == eGender.Female)
+                            {
+                                messageKey = "MagicianTrainer.Bainshee.Explain";
+                                playerLastClassOffers[player] = "bainshee";
+                                break;
+                            }
+                            else
+                            {
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MagicianTrainer.Bainshee.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                                return true;
+                            }
                     }
                     break;
                 case eCharacterClass.Naturalist:
@@ -699,38 +1043,86 @@ namespace DOL.GS.Trainer
                     {
                         case "bard":
                         case "barde":
-                            messageKey = "NaturalistTrainer.Bard.Explain";
-                            playerLastClassOffers[player] = "bard";
-                            break;
+                            if (player.Race == (int)eRace.Celt || player.Race == (int)eRace.Firbolg)
+                            {
+                                messageKey = "NaturalistTrainer.Bard.Explain";
+                                playerLastClassOffers[player] = "bard";
+                                break;
+                            }
+                            else
+                            {
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "NaturalistTrainer.Bard.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                                return true;
+                            }
                         case "druid":
                         case "druide":
-                            messageKey = "NaturalistTrainer.Druid.Explain";
-                            playerLastClassOffers[player] = "druide";
-                            break;
+                            if (player.Race == (int)eRace.Celt || player.Race == (int)eRace.Firbolg || player.Race == (int)eRace.Sylvan)
+                            {
+                                messageKey = "NaturalistTrainer.Druid.Explain";
+                                playerLastClassOffers[player] = "druid";
+                                break;
+                            }
+                            else
+                            {
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "NaturalistTrainer.Druid.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                                return true;
+                            }
                         case "warden":
                         case "sentinelle":
-                            messageKey = "NaturalistTrainer.Warden.Explain";
-                            playerLastClassOffers[player] = "warden";
-                            break;
+                            if (player.Race == (int)eRace.Celt || player.Race == (int)eRace.Firbolg || player.Race == (int)eRace.Sylvan || player.Race == (int)eRace.HiberniaMinotaur || player.Race == (int)eRace.Shar)
+                            {
+                                messageKey = "NaturalistTrainer.Warden.Explain";
+                                playerLastClassOffers[player] = "warden";
+                                break;
+                            }
+                            else
+                            {
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "NaturalistTrainer.Warden.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                                return true;
+                            }
                     }
                     break;
                 case eCharacterClass.Stalker:
                     switch (str)
                     {
                         case "ranger":
-                            messageKey = "StalkerTrainer.Ranger.Explain";
-                            playerLastClassOffers[player] = "ranger";
-                            break;
+                            if (player.Race == (int)eRace.Celt || player.Race == (int)eRace.Elf || player.Race == (int)eRace.Lurikeen || player.Race == (int)eRace.Shar || player.Race == (int)eRace.Sylvan)
+                            {
+                                messageKey = "StalkerTrainer.Ranger.Explain";
+                                playerLastClassOffers[player] = "ranger";
+                                break;
+                            }
+                            else
+                            {
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "StalkerTrainer.Ranger.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                                return true;
+                            }
                         case "nightshade":
                         case "ombre":
-                            messageKey = "StalkerTrainer.Nightshade.Explain";
-                            playerLastClassOffers[player] = "nightshade";
-                            break;
+                            if (player.Race == (int)eRace.Elf || player.Race == (int)eRace.Lurikeen || player.Race == (int)eRace.Celt)
+                            {
+                                messageKey = "StalkerTrainer.Nightshade.Explain";
+                                playerLastClassOffers[player] = "nightshade";
+                                break;
+                            }
+                            else
+                            {
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "StalkerTrainer.Nightshade.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                                return true;
+                            }
                         case "vampiir":
                         case "séide de leanansidhe":
-                            messageKey = "StalkerTrainer.Vampiir.Explain";
-                            playerLastClassOffers[player] = "vampiir";
-                            break;
+                            if (player.Race == (int)eRace.Celt || player.Race == (int)eRace.Lurikeen || player.Race == (int)eRace.Shar)
+                            {
+                                messageKey = "StalkerTrainer.Vampiir.Explain";
+                                playerLastClassOffers[player] = "vampiir";
+                                break;
+                            }
+                            else
+                            {
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "StalkerTrainer.Vampiir.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                                return true;
+                            }
                     }
                     break;
                 case eCharacterClass.MidgardRogue:
@@ -738,14 +1130,30 @@ namespace DOL.GS.Trainer
                     {
                         case "hunter":
                         case "chasseur":
-                            messageKey = "MidgardRogueTrainer.Hunter.Explain";
-                            playerLastClassOffers[player] = "hunter";
-                            break;
+                            if (player.Race == (int)eRace.Dwarf || player.Race == (int)eRace.Kobold || player.Race == (int)eRace.Frostalf || player.Race == (int)eRace.Norseman || player.Race == (int)eRace.Valkyn)
+                            {
+                                messageKey = "MidgardRogueTrainer.Hunter.Explain";
+                                playerLastClassOffers[player] = "hunter";
+                                break;
+                            }
+                            else
+                            {
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MidgardRogueTrainer.Hunter.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                                return true;
+                            }
                         case "shadowblade":
                         case "assassin":
-                            messageKey = "MidgardRogueTrainer.Shadowblade.Explain";
-                            playerLastClassOffers[player] = "shadowblade";
-                            break;
+                            if (player.Race == (int)eRace.Kobold || player.Race == (int)eRace.Norseman || player.Race == (int)eRace.Valkyn || player.Race == (int)eRace.Dwarf || player.Race == (int)eRace.Frostalf)
+                            {
+                                messageKey = "MidgardRogueTrainer.Shadowblade.Explain";
+                                playerLastClassOffers[player] = "shadowblade";
+                                break;
+                            }
+                            else
+                            {
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MidgardRogueTrainer.Shadowblade.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                                return true;
+                            }
                     }
                     break;
                 case eCharacterClass.Mystic:
@@ -753,24 +1161,56 @@ namespace DOL.GS.Trainer
                     {
                         case "runemaster":
                         case "prêtre d'odin":
-                            messageKey = "MysticTrainer.Runemaster.Explain";
-                            playerLastClassOffers[player] = "runemaster";
-                            break;
+                            if (player.Race == (int)eRace.Frostalf || player.Race == (int)eRace.Kobold || player.Race == (int)eRace.Norseman || player.Race == (int)eRace.Dwarf)
+                            {
+                                messageKey = "MysticTrainer.Runemaster.Explain";
+                                playerLastClassOffers[player] = "runemaster";
+                                break;
+                            }
+                            else
+                            {
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MysticTrainer.Runemaster.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_ChatWindow);
+                                return true;
+                            }
                         case "spiritmaster":
                         case "prêtre de hel":
-                            messageKey = "MysticTrainer.Spiritmaster.Explain";
-                            playerLastClassOffers[player] = "spiritmaster";
-                            break;
+                            if (player.Race == (int)eRace.Kobold || player.Race == (int)eRace.Frostalf || player.Race == (int)eRace.Norseman)
+                            {
+                                messageKey = "MysticTrainer.Spiritmaster.Explain";
+                                playerLastClassOffers[player] = "spiritmaster";
+                                break;
+                            }
+                            else
+                            {
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MysticTrainer.Spiritmaster.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_ChatWindow);
+                                return true;
+                            }
                         case "bonedancer":
                         case "prêtre de bogdar":
-                            messageKey = "MysticTrainer.Bonedancer.Explain";
-                            playerLastClassOffers[player] = "bonedancer";
-                            break;
+                            if (player.Race == (int)eRace.Kobold || player.Race == (int)eRace.Frostalf || player.Race == (int)eRace.Troll || player.Race == (int)eRace.Valkyn)
+                            {
+                                messageKey = "MysticTrainer.Bonedancer.Explain";
+                                playerLastClassOffers[player] = "bonedancer";
+                                break;
+                            }
+                            else
+                            {
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MysticTrainer.Bonedancer.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_ChatWindow);
+                                return true;
+                            }
                         case "warlock":
                         case "helhaxa":
-                            messageKey = "MysticTrainer.Warlock.Explain";
-                            playerLastClassOffers[player] = "warlock";
-                            break;
+                            if (player.Race == (int)eRace.Kobold || player.Race == (int)eRace.Frostalf || player.Race == (int)eRace.Norseman || player.Race == (int)eRace.Troll)
+                            {
+                                messageKey = "MysticTrainer.Warlock.Explain";
+                                playerLastClassOffers[player] = "warlock";
+                                break;
+                            }
+                            else
+                            {
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MysticTrainer.Warlock.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_ChatWindow);
+                                return true;
+                            }
                     }
                     break;
                 case eCharacterClass.Seer:
@@ -778,14 +1218,30 @@ namespace DOL.GS.Trainer
                     {
                         case "shaman":
                         case "chaman":
-                            messageKey = "SeerTrainer.Shaman.Explain";
-                            playerLastClassOffers[player] = "shaman";
-                            break;
+                            if (player.Race == (int)eRace.Frostalf || player.Race == (int)eRace.Kobold || player.Race == (int)eRace.Troll || player.Race == (int)eRace.Dwarf)
+                            {
+                                messageKey = "SeerTrainer.Shaman.Explain";
+                                playerLastClassOffers[player] = "shaman";
+                                break;
+                            }
+                            else
+                            {
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "SeerTrainer.Shaman.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                                return true;
+                            }
                         case "healer":
                         case "guérisseur":
-                            messageKey = "SeerTrainer.Healer.Explain";
-                            playerLastClassOffers[player] = "healer";
-                            break;
+                            if (player.Race == (int)eRace.Dwarf || player.Race == (int)eRace.Frostalf || player.Race == (int)eRace.Norseman)
+                            {
+                                messageKey = "SeerTrainer.Healer.Explain";
+                                playerLastClassOffers[player] = "healer";
+                                break;
+                            }
+                            else
+                            {
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "SeerTrainer.Healer.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                                return true;
+                            }
                     }
                     break;
                 case eCharacterClass.Viking:
@@ -793,91 +1249,93 @@ namespace DOL.GS.Trainer
                     {
                         case "warrior":
                         case "guerrier":
-                            messageKey = "VikingTrainer.Warrior.Explain";
-                            playerLastClassOffers[player] = "warrior";
-                            break;
+                            if (player.Race == (int)eRace.Dwarf || player.Race == (int)eRace.Kobold || player.Race == (int)eRace.Norseman || player.Race == (int)eRace.Troll || player.Race == (int)eRace.Valkyn || player.Race == (int)eRace.MidgardMinotaur)
+                            {
+                                messageKey = "VikingTrainer.Warrior.Explain";
+                                playerLastClassOffers[player] = "warrior";
+                                break;
+                            }
+                            else
+                            {
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "VikingTrainer.Warrior.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                                return true;
+                            }
                         case "berserker":
-                            messageKey = "VikingTrainer.Berserker.Explain";
-                            playerLastClassOffers[player] = "berserker";
-                            break;
+                            if (player.Race == (int)eRace.Dwarf || player.Race == (int)eRace.Troll || player.Race == (int)eRace.Norseman || player.Race == (int)eRace.Valkyn || player.Race == (int)eRace.MidgardMinotaur)
+                            {
+                                messageKey = "VikingTrainer.Berserker.Explain";
+                                playerLastClassOffers[player] = "berserker";
+                                break;
+                            }
+                            else
+                            {
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "VikingTrainer.Berserker.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                                return true;
+                            }
                         case "skald":
-                            messageKey = "VikingTrainer.Skald.Explain";
-                            playerLastClassOffers[player] = "skald";
-                            break;
+                            if (player.Race == (int)eRace.Dwarf || player.Race == (int)eRace.Kobold || player.Race == (int)eRace.Norseman || player.Race == (int)eRace.Troll || player.Race == (int)eRace.MidgardMinotaur)
+                            {
+                                messageKey = "VikingTrainer.Skald.Explain";
+                                playerLastClassOffers[player] = "skald";
+                                break;
+                            }
+                            else
+                            {
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "VikingTrainer.Skald.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                                return true;
+                            }
                         case "thane":
-                            messageKey = "VikingTrainer.Thane.Explain";
-                            playerLastClassOffers[player] = "thane";
-                            break;
+                            if (player.Race == (int)eRace.Dwarf || player.Race == (int)eRace.Frostalf || player.Race == (int)eRace.Norseman || player.Race == (int)eRace.Troll || player.Race == (int)eRace.MidgardMinotaur || player.Race == (int)eRace.Valkyn)
+                            {
+                                messageKey = "VikingTrainer.Thane.Explain";
+                                playerLastClassOffers[player] = "thane";
+                                break;
+                            }
+                            else
+                            {
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "VikingTrainer.Thane.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                                return true;
+                            }
                         case "savage":
                         case "sauvage":
-                            messageKey = "VikingTrainer.Savage.Explain";
-                            playerLastClassOffers[player] = "savage";
-                            break;
+                            if (player.Race == (int)eRace.Dwarf || player.Race == (int)eRace.Kobold || player.Race == (int)eRace.Norseman || player.Race == (int)eRace.Troll || player.Race == (int)eRace.Valkyn)
+                            {
+                                messageKey = "VikingTrainer.Savage.Explain";
+                                playerLastClassOffers[player] = "savage";
+                                break;
+                            }
+                            else
+                            {
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "VikingTrainer.Savage.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                                return true;
+                            }
                         case "valkyrie":
-                            messageKey = "VikingTrainer.Valkyrie.Explain";
-                            playerLastClassOffers[player] = "valkyrie";
-                            break;
+                            if ((player.Race == (int)eRace.Dwarf || player.Race == (int)eRace.Valkyn || player.Race == (int)eRace.Norseman || player.Race == (int)eRace.Frostalf) && player.Gender == eGender.Female)
+                            {
+                                messageKey = "VikingTrainer.Valkyrie.Explain";
+                                playerLastClassOffers[player] = "valkyrie";
+                                break;
+                            }
+                            else
+                            {
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "VikingTrainer.Valkyrie.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                                return true;
+                            }
                         case "mauler":
                         case "kan-laresh":
-                            messageKey = "Baseclass.Mauler.Explain";
-                            playerLastClassOffers[player] = "midmauler";
-                            break;
+                            if (player.Race == (int)eRace.Kobold || player.Race == (int)eRace.Norseman || player.Race == (int)eRace.Troll || player.Race == (int)eRace.MidgardMinotaur)
+                            {
+                                messageKey = "Baseclass.Mauler.Explain";
+                                playerLastClassOffers[player] = "midmauler";
+                                break;
+                            }
+                            else
+                            {
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Baseclass.Mauler.Refuse", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                                return true;
+                            }
                     }
                     break;
-            }
-
-
-            // For Choosing a weapon:
-            if (player.CharacterClass.ID == (int)eCharacterClass.Fighter)
-            {
-                switch (str)
-                {
-                    case "slashing":
-                    case "tranchante":
-                        if (playerWeaponOffers.ContainsKey(player))
-                        {
-                            HandleWeaponChoiceResponse(player, true);
-                            playerWeaponOffers.Remove(player);
-                        }
-                        playerWeaponOffers[player] = "slashing";
-                        break;
-                    case "crushing":
-                    case "contondante":
-                        if (playerWeaponOffers.ContainsKey(player))
-                        {
-                            HandleWeaponChoiceResponse(player, true);
-                            playerWeaponOffers.Remove(player);
-                        }
-                        playerWeaponOffers[player] = "crushing";
-                        break;
-                    case "thrusting":
-                    case "perforante":
-                        if (playerWeaponOffers.ContainsKey(player))
-                        {
-                            HandleWeaponChoiceResponse(player, true);
-                            playerWeaponOffers.Remove(player);
-                        }
-                        playerWeaponOffers[player] = "thrusting";
-                        break;
-                    case "polearms":
-                    case "arme d'hast":
-                        if (playerWeaponOffers.ContainsKey(player))
-                        {
-                            HandleWeaponChoiceResponse(player, true);
-                            playerWeaponOffers.Remove(player);
-                        }
-                        playerWeaponOffers[player] = "polearms";
-                        break;
-                    case "two handed":
-                    case "deux mains":
-                        if (playerWeaponOffers.ContainsKey(player))
-                        {
-                            HandleWeaponChoiceResponse(player, true);
-                            playerWeaponOffers.Remove(player);
-                        }
-                        playerWeaponOffers[player] = "two handed";
-                        break;
-                }
             }
 
             if (HandleItemRequests(str, player))
@@ -887,11 +1345,114 @@ namespace DOL.GS.Trainer
 
             if (!string.IsNullOrEmpty(messageKey))
             {
-                string message = LanguageMgr.GetTranslation(player.Client.Account.Language, messageKey, this.Name) + "\r\n\n" + LanguageMgr.GetTranslation(player.Client.Account.Language, "MasterTrainer.Interact.ChooseClass");
+                string message = LanguageMgr.GetTranslation(player.Client.Account.Language, messageKey, this.Name) + "\r\n\n" + LanguageMgr.GetTranslation(player.Client.Account.Language, "MasterTrainer.Interact.ChooseClass", this.Name);
                 player.Out.SendMessage(message, eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                 return true;
             }
 
+            // Weapon choice handling for classes having weapon selection choice
+            if (playerWeaponOffers.ContainsKey(player) && playerWeaponOffers[player] == "arms_pending")
+            {
+                HandleArmsmanWeaponChoice(player, str);
+                return true;
+            }
+            if (playerWeaponOffers.ContainsKey(player) && playerWeaponOffers[player] == "pala_pending")
+            {
+                HandlePaladinWeaponChoice(player, str);
+                return true;
+            }
+            if (playerWeaponOffers.ContainsKey(player) && playerWeaponOffers[player] == "merc_pending")
+            {
+                HandleMercenaryWeaponChoice(player, str);
+                return true;
+            }
+            if (playerWeaponOffers.ContainsKey(player) && playerWeaponOffers[player] == "reav_pending")
+            {
+                HandleReaverWeaponChoice(player, str);
+                return true;
+            }
+            if (playerWeaponOffers.ContainsKey(player) && playerWeaponOffers[player] == "albmaul_pending")
+            {
+                HandleAlbmaulWeaponChoice(player, str);
+                return true;
+            }
+            if (playerWeaponOffers.ContainsKey(player) && playerWeaponOffers[player] == "here_pending")
+            {
+                HandleHereticWeaponChoice(player, str);
+                return true;
+            }
+            if (playerWeaponOffers.ContainsKey(player) && playerWeaponOffers[player] == "infi_pending")
+            {
+                HandleInfiltratorWeaponChoice(player, str);
+                return true;
+            }
+            if (playerWeaponOffers.ContainsKey(player) && playerWeaponOffers[player] == "Hero_pending")
+            {
+                HandleHeroWeaponChoice(player, str);
+                return true;
+            }
+            if (playerWeaponOffers.ContainsKey(player) && playerWeaponOffers[player] == "cham_pending")
+            {
+                HandleChampionWeaponChoice(player, str);
+                return true;
+            }
+            if (playerWeaponOffers.ContainsKey(player) && playerWeaponOffers[player] == "blad_pending")
+            {
+                HandleBlademasterWeaponChoice(player, str);
+                return true;
+            }
+            if (playerWeaponOffers.ContainsKey(player) && playerWeaponOffers[player] == "hibmaul_pending")
+            {
+                HandleHibmaulWeaponChoice(player, str);
+                return true;
+            }
+            if (playerWeaponOffers.ContainsKey(player) && playerWeaponOffers[player] == "nigh_pending")
+            {
+                HandleNightshadeWeaponChoice(player, str);
+                return true;
+            }
+            if (playerWeaponOffers.ContainsKey(player) && playerWeaponOffers[player] == "ward_pending")
+            {
+                HandleWardenWeaponChoice(player, str);
+                return true;
+            }
+            if (playerWeaponOffers.ContainsKey(player) && playerWeaponOffers[player] == "berz_pending")
+            {
+                HandleBerserkerWeaponChoice(player, str);
+                return true;
+            }
+            if (playerWeaponOffers.ContainsKey(player) && playerWeaponOffers[player] == "sava_pending")
+            {
+                HandleSavageWeaponChoice(player, str);
+                return true;
+            }
+            if (playerWeaponOffers.ContainsKey(player) && playerWeaponOffers[player] == "than_pending")
+            {
+                HandleThaneWeaponChoice(player, str);
+                return true;
+            }
+            if (playerWeaponOffers.ContainsKey(player) && playerWeaponOffers[player] == "skal_pending")
+            {
+                HandleSkaldWeaponChoice(player, str);
+                return true;
+            }
+            if (playerWeaponOffers.ContainsKey(player) && playerWeaponOffers[player] == "warr_pending")
+            {
+                HandleWarriorWeaponChoice(player, str);
+                return true;
+            }
+            if (playerWeaponOffers.ContainsKey(player) && playerWeaponOffers[player] == "valk_pending")
+            {
+                HandleValkyrieWeaponChoice(player, str);
+                return true;
+            }
+            if (playerWeaponOffers.ContainsKey(player) && playerWeaponOffers[player] == "midmaul_pending")
+            {
+                HandleMidmaulWeaponChoice(player, str);
+                return true;
+            }
+
+            HandleNewClassOrWeaponSelection(player, str);
             return true;
 
             #region Respecs
@@ -1271,20 +1832,6 @@ namespace DOL.GS.Trainer
                             player.ReceiveItem(this, FRIARARMOR_ID1, eInventoryActionType.Other);
                             player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameTrainer.PromotePlayer.Upgraded", player.CharacterClass.Name), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                             break;
-                        case "heretic":
-                            PromotePlayer(player, (int)eCharacterClass.Heretic, LanguageMgr.GetTranslation(player.Client.Account.Language, "MasterTrainer.Interact.GiveWeapon1", this.Name), null);
-                            player.ReceiveItem(this, ALBWEAPON_ID11, eInventoryActionType.Other);
-                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "HereticTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
-                            player.ReceiveItem(this, HEREARMOR_ID1, eInventoryActionType.Other);
-                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameTrainer.PromotePlayer.Upgraded", player.CharacterClass.Name), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                            break;
-                        case "infiltrator":
-                            PromotePlayer(player, (int)eCharacterClass.Infiltrator, LanguageMgr.GetTranslation(player.Client.Account.Language, "MasterTrainer.Interact.GiveWeapon1", this.Name), null);
-                            player.ReceiveItem(this, ALBWEAPON_ID3, eInventoryActionType.Other);
-                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "InfiltratorTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
-                            player.ReceiveItem(this, INFIARMOR_ID1, eInventoryActionType.Other);
-                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameTrainer.PromotePlayer.Upgraded", player.CharacterClass.Name), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                            break;
                         case "minstrel":
                             PromotePlayer(player, (int)eCharacterClass.Minstrel, LanguageMgr.GetTranslation(player.Client.Account.Language, "MasterTrainer.Interact.GiveWeapon3", this.Name), null);
                             player.ReceiveItem(this, ALBWEAPON_ID12, eInventoryActionType.Other);
@@ -1320,38 +1867,6 @@ namespace DOL.GS.Trainer
                             player.ReceiveItem(this, WIZARMOR_ID1, eInventoryActionType.Other);
                             player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameTrainer.PromotePlayer.Upgraded", player.CharacterClass.Name), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                             break;
-                        case "armsman":
-                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ArmsmanTrainer.Interact.Text4", this.Name, player.CharacterClass.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
-                            break;
-                        case "mercenary":
-                            PromotePlayer(player, (int)eCharacterClass.Mercenary, LanguageMgr.GetTranslation(player.Client.Account.Language, "MercenaryTrainer.WhisperReceive.Text1", this.Name), null);
-                            player.ReceiveItem(this, ALBWEAPON_ID1, eInventoryActionType.Other);
-                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MercenaryTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
-                            player.ReceiveItem(this, MERCARMOR_ID1, eInventoryActionType.Other);
-                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameTrainer.PromotePlayer.Upgraded", player.CharacterClass.Name), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                            break;
-                        case "paladin":
-                            PromotePlayer(player, (int)eCharacterClass.Paladin, LanguageMgr.GetTranslation(player.Client.Account.Language, "PaladinTrainer.WhisperReceive.Text1", this.Name), null);
-                            player.ReceiveItem(this, ALBWEAPON_ID1, eInventoryActionType.Other);
-                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "PaladinTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
-                            player.ReceiveItem(this, PALAARMOR_ID1, eInventoryActionType.Other);
-                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameTrainer.PromotePlayer.Upgraded", player.CharacterClass.Name), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                            break;
-                        case "reaver":
-                            PromotePlayer(player, (int)eCharacterClass.Reaver, LanguageMgr.GetTranslation(player.Client.Account.Language, "MasterTrainer.Interact.GiveWeapon1", this.Name), null);
-                            player.ReceiveItem(this, ALBWEAPON_ID11, eInventoryActionType.Other);
-                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ReaverTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
-                            player.ReceiveItem(this, REAVARMOR_ID1, eInventoryActionType.Other);
-                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameTrainer.PromotePlayer.Upgraded", player.CharacterClass.Name), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                            break;
-                        case "albmauler":
-                            PromotePlayer(player, (int)eCharacterClass.MaulerAlb, LanguageMgr.GetTranslation(player.Client.Account.Language, "MasterTrainer.Interact.GiveWeapon1", this.Name), null);
-                            player.ReceiveItem(this, ALBWEAPON_ID7, eInventoryActionType.Other);
-                            player.ReceiveItem(this, ALBWEAPON_ID7, eInventoryActionType.Other);
-                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MaulerAlbTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
-                            player.ReceiveItem(this, ALBMAULARMOR_ID1, eInventoryActionType.Other);
-                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameTrainer.PromotePlayer.Upgraded", player.CharacterClass.Name), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                            break;
                         case "cabalist":
                             PromotePlayer(player, (int)eCharacterClass.Cabalist, LanguageMgr.GetTranslation(player.Client.Account.Language, "MasterTrainer.Interact.GiveWeapon2", this.Name), null);
                             player.ReceiveItem(this, ALBWEAPON_ID8, eInventoryActionType.Other);
@@ -1379,34 +1894,6 @@ namespace DOL.GS.Trainer
                             player.ReceiveItem(this, HIBWEAPON_ID16, eInventoryActionType.Other);
                             player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ValewalkerTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                             player.ReceiveItem(this, ANIMARMOR_ID1, eInventoryActionType.Other);
-                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameTrainer.PromotePlayer.Upgraded", player.CharacterClass.Name), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                            break;
-                        case "hero":
-                            PromotePlayer(player, (int)eCharacterClass.Hero, LanguageMgr.GetTranslation(player.Client.Account.Language, "MasterTrainer.Interact.GiveWeapon1", this.Name), null);
-                            player.ReceiveItem(this, HIBWEAPON_ID14, eInventoryActionType.Other);
-                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "HeroTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
-                            player.ReceiveItem(this, HEROARMOR_ID1, eInventoryActionType.Other);
-                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameTrainer.PromotePlayer.Upgraded", player.CharacterClass.Name), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                            break;
-                        case "champion":
-                            PromotePlayer(player, (int)eCharacterClass.Champion, LanguageMgr.GetTranslation(player.Client.Account.Language, "MasterTrainer.Interact.GiveWeapon1", this.Name), null);
-                            player.ReceiveItem(this, HIBWEAPON_ID11, eInventoryActionType.Other);
-                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ChampionTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
-                            player.ReceiveItem(this, CHAMARMOR_ID1, eInventoryActionType.Other);
-                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameTrainer.PromotePlayer.Upgraded", player.CharacterClass.Name), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                            break;
-                        case "blademaster":
-                            PromotePlayer(player, (int)eCharacterClass.Blademaster, LanguageMgr.GetTranslation(player.Client.Account.Language, "MasterTrainer.Interact.GiveWeapon1", this.Name), null);
-                            player.ReceiveItem(this, HIBWEAPON_ID11, eInventoryActionType.Other);
-                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "BlademasterTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
-                            player.ReceiveItem(this, BLADARMOR_ID1, eInventoryActionType.Other);
-                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameTrainer.PromotePlayer.Upgraded", player.CharacterClass.Name), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                            break;
-                        case "hibmauler":
-                            PromotePlayer(player, (int)eCharacterClass.MaulerHib, LanguageMgr.GetTranslation(player.Client.Account.Language, "MasterTrainer.Interact.GiveWeapon2", this.Name), null);
-                            player.ReceiveItem(this, HIBWEAPON_ID7, eInventoryActionType.Other);
-                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MaulerHibTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
-                            player.ReceiveItem(this, HIBMAULARMOR_ID1, eInventoryActionType.Other);
                             player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameTrainer.PromotePlayer.Upgraded", player.CharacterClass.Name), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                             break;
                         case "eldritch":
@@ -1451,25 +1938,11 @@ namespace DOL.GS.Trainer
                             player.ReceiveItem(this, DRUIARMOR_ID1, eInventoryActionType.Other);
                             player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameTrainer.PromotePlayer.Upgraded", player.CharacterClass.Name), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                             break;
-                        case "warden":
-                            PromotePlayer(player, (int)eCharacterClass.Warden, LanguageMgr.GetTranslation(player.Client.Account.Language, "MasterTrainer.Interact.GiveWeapon1 ", this.Name), null);
-                            player.ReceiveItem(this, HIBWEAPON_ID10, eInventoryActionType.Other);
-                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "WardenTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
-                            player.ReceiveItem(this, WARDARMOR_ID1, eInventoryActionType.Other);
-                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameTrainer.PromotePlayer.Upgraded", player.CharacterClass.Name), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                            break;
                         case "ranger":
                             PromotePlayer(player, (int)eCharacterClass.Ranger, LanguageMgr.GetTranslation(player.Client.Account.Language, "MasterTrainer.Interact.GiveWeapon1 ", this.Name), null);
                             player.ReceiveItem(this, HIBWEAPON_ID15, eInventoryActionType.Other);
                             player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "RangerTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                             player.ReceiveItem(this, RANGARMOR_ID1, eInventoryActionType.Other);
-                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameTrainer.PromotePlayer.Upgraded", player.CharacterClass.Name), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                            break;
-                        case "nightshade":
-                            PromotePlayer(player, (int)eCharacterClass.Nightshade, LanguageMgr.GetTranslation(player.Client.Account.Language, "MasterTrainer.Interact.GiveWeapon1 ", this.Name), null);
-                            player.ReceiveItem(this, HIBWEAPON_ID12, eInventoryActionType.Other);
-                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "NightshadeTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
-                            player.ReceiveItem(this, NIGHARMOR_ID1, eInventoryActionType.Other);
                             player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameTrainer.PromotePlayer.Upgraded", player.CharacterClass.Name), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                             break;
                         case "vampiir":
@@ -1479,6 +1952,7 @@ namespace DOL.GS.Trainer
                             player.ReceiveItem(this, VAMPARMOR_ID1, eInventoryActionType.Other);
                             player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameTrainer.PromotePlayer.Upgraded", player.CharacterClass.Name), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                             break;
+                        // MIDGARD Classes
                         case "hunter":
                             PromotePlayer(player, (int)eCharacterClass.Hunter, LanguageMgr.GetTranslation(player.Client.Account.Language, "MasterTrainer.Interact.GiveWeapon1 ", this.Name), null);
                             player.ReceiveItem(this, MIDWEAPON_ID9, eInventoryActionType.Other);
@@ -1535,55 +2009,6 @@ namespace DOL.GS.Trainer
                             player.ReceiveItem(this, HEALARMOR_ID1, eInventoryActionType.Other);
                             player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameTrainer.PromotePlayer.Upgraded", player.CharacterClass.Name), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                             break;
-                        case "warrior":
-                            PromotePlayer(player, (int)eCharacterClass.Warrior, LanguageMgr.GetTranslation(player.Client.Account.Language, "MasterTrainer.Interact.GiveWeapon1 ", this.Name), null);
-                            player.ReceiveItem(this, MIDWEAPON_ID3, eInventoryActionType.Other);
-                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "WarriorTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
-                            player.ReceiveItem(this, WARRARMOR_ID1, eInventoryActionType.Other);
-                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameTrainer.PromotePlayer.Upgraded", player.CharacterClass.Name), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                            break;
-                        case "berserker":
-                            PromotePlayer(player, (int)eCharacterClass.Berserker, LanguageMgr.GetTranslation(player.Client.Account.Language, "MasterTrainer.Interact.GiveWeapon1 ", this.Name), null);
-                            player.ReceiveItem(this, MIDWEAPON_ID3, eInventoryActionType.Other);
-                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "BerserkerTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
-                            player.ReceiveItem(this, BERZARMOR_ID1, eInventoryActionType.Other);
-                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameTrainer.PromotePlayer.Upgraded", player.CharacterClass.Name), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                            break;
-                        case "skald":
-                            PromotePlayer(player, (int)eCharacterClass.Skald, LanguageMgr.GetTranslation(player.Client.Account.Language, "MasterTrainer.Interact.GiveWeapon1 ", this.Name), null);
-                            player.ReceiveItem(this, MIDWEAPON_ID3, eInventoryActionType.Other);
-                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "SkaldTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
-                            player.ReceiveItem(this, SKALARMOR_ID1, eInventoryActionType.Other);
-                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameTrainer.PromotePlayer.Upgraded", player.CharacterClass.Name), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                            break;
-                        case "thane":
-                            PromotePlayer(player, (int)eCharacterClass.Thane, LanguageMgr.GetTranslation(player.Client.Account.Language, "MasterTrainer.Interact.GiveWeapon1 ", this.Name), null);
-                            player.ReceiveItem(this, MIDWEAPON_ID2, eInventoryActionType.Other);
-                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ThaneTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
-                            player.ReceiveItem(this, THANARMOR_ID1, eInventoryActionType.Other);
-                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameTrainer.PromotePlayer.Upgraded", player.CharacterClass.Name), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                            break;
-                        case "savage":
-                            PromotePlayer(player, (int)eCharacterClass.Savage, LanguageMgr.GetTranslation(player.Client.Account.Language, "MasterTrainer.Interact.GiveWeapon1 ", this.Name), null);
-                            player.ReceiveItem(this, MIDWEAPON_ID6, eInventoryActionType.Other);
-                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "SavageTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
-                            player.ReceiveItem(this, SAVAARMOR_ID1, eInventoryActionType.Other);
-                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameTrainer.PromotePlayer.Upgraded", player.CharacterClass.Name), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                            break;
-                        case "valkyrie":
-                            PromotePlayer(player, (int)eCharacterClass.Valkyrie, LanguageMgr.GetTranslation(player.Client.Account.Language, "MasterTrainer.Interact.GiveWeapon1 ", this.Name), null);
-                            player.ReceiveItem(this, MIDWEAPON_ID5, eInventoryActionType.Other);
-                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ValkyrieTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
-                            player.ReceiveItem(this, VALKARMOR_ID1, eInventoryActionType.Other);
-                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameTrainer.PromotePlayer.Upgraded", player.CharacterClass.Name), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                            break;
-                        case "midmauler":
-                            PromotePlayer(player, (int)eCharacterClass.MaulerMid, LanguageMgr.GetTranslation(player.Client.Account.Language, "MasterTrainer.Interact.GiveWeapon2", this.Name), null);
-                            player.ReceiveItem(this, MIDWEAPON_ID10, eInventoryActionType.Other);
-                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MaulerMidTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
-                            player.ReceiveItem(this, MIDMAULARMOR_ID1, eInventoryActionType.Other);
-                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameTrainer.PromotePlayer.Upgraded", player.CharacterClass.Name), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                            break;
                     }
                 }
             }
@@ -1591,55 +2016,670 @@ namespace DOL.GS.Trainer
             {
                 if (CanTrain(player))
                 {
-                    player.Out.SendMessage("Come back later if you change your mind.", eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MasterTrainer.Interact.ChooseLater", this.Name, player.CharacterClass.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                 }
             }
         }
 
-        private void HandleWeaponChoiceResponse(GamePlayer player, bool choice)
+        private void HandleArmsmanWeaponChoice(GamePlayer player, string weaponChoice)
         {
-            if (choice)
-            {
-                string classOffer = playerLastClassOffers[player];
-                string weaponOffer = playerWeaponOffers[player];
-                switch (weaponOffer)
+            if (player.CharacterClass.ID == (int)eCharacterClass.Fighter)
+                switch (weaponChoice)
                 {
+                    case "tranchante":
                     case "slashing":
-                        GiveWeaponAndArmor(player, ALBWEAPON_ID1, ARMSARMOR_ID1);
+                        PromotePlayer(player, (int)eCharacterClass.Armsman, LanguageMgr.GetTranslation(player.Client.Account.Language, "ArmsmanTrainer.WhisperReceive.Text1", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, ALBWEAPON_ID1, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ArmsmanTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, ARMSARMOR_ID1, eInventoryActionType.Other);
                         break;
+                    case "contondante":
                     case "crushing":
-                        GiveWeaponAndArmor(player, ALBWEAPON_ID2, ARMSARMOR_ID1);
+                        PromotePlayer(player, (int)eCharacterClass.Armsman, LanguageMgr.GetTranslation(player.Client.Account.Language, "ArmsmanTrainer.WhisperReceive.Text2", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, ALBWEAPON_ID2, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ArmsmanTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, ARMSARMOR_ID1, eInventoryActionType.Other);
                         break;
+                    case "perforante":
                     case "thrusting":
-                        GiveWeaponAndArmor(player, ALBWEAPON_ID3, ARMSARMOR_ID1);
+                        PromotePlayer(player, (int)eCharacterClass.Armsman, LanguageMgr.GetTranslation(player.Client.Account.Language, "ArmsmanTrainer.WhisperReceive.Text3", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, ALBWEAPON_ID3, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ArmsmanTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, ARMSARMOR_ID1, eInventoryActionType.Other);
                         break;
-                    case "polearms" when classOffer == "armsman":
-                        GiveWeaponAndArmor(player, ALBWEAPON_ID4, ARMSARMOR_ID1);
+                    case "arme d'hast":
+                    case "polearms":
+                        PromotePlayer(player, (int)eCharacterClass.Armsman, LanguageMgr.GetTranslation(player.Client.Account.Language, "ArmsmanTrainer.WhisperReceive.Text4", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, ALBWEAPON_ID4, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ArmsmanTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, ARMSARMOR_ID1, eInventoryActionType.Other);
                         break;
+                    case "deux mains":
                     case "two handed":
-                        GiveWeaponAndArmor(player, ALBWEAPON_ID5, ARMSARMOR_ID1);
+                        PromotePlayer(player, (int)eCharacterClass.Armsman, LanguageMgr.GetTranslation(player.Client.Account.Language, "ArmsmanTrainer.WhisperReceive.Text5", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, ALBWEAPON_ID5, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ArmsmanTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, ARMSARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    default:
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MasterTrainer.Interact.WeaponNotRelated01", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        break;
+                }
+        }
+
+        private void HandlePaladinWeaponChoice(GamePlayer player, string weaponChoice)
+        {
+            if (player.CharacterClass.ID == (int)eCharacterClass.Fighter)
+                switch (weaponChoice)
+                {
+                    case "tranchante":
+                    case "slashing":
+                        PromotePlayer(player, (int)eCharacterClass.Paladin, LanguageMgr.GetTranslation(player.Client.Account.Language, "PaladinTrainer.WhisperReceive.Text1", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, ALBWEAPON_ID1, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "PaladinTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, PALAARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    case "contondante":
+                    case "crushing":
+                        PromotePlayer(player, (int)eCharacterClass.Paladin, LanguageMgr.GetTranslation(player.Client.Account.Language, "PaladinTrainer.WhisperReceive.Text2", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, ALBWEAPON_ID2, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "PaladinTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, PALAARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    case "perforante":
+                    case "thrusting":
+                        PromotePlayer(player, (int)eCharacterClass.Paladin, LanguageMgr.GetTranslation(player.Client.Account.Language, "PaladinTrainer.WhisperReceive.Text3", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, ALBWEAPON_ID3, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "PaladinTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, PALAARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    case "deux mains":
+                    case "two handed":
+                        PromotePlayer(player, (int)eCharacterClass.Paladin, LanguageMgr.GetTranslation(player.Client.Account.Language, "PaladinTrainer.WhisperReceive.Text4", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, ALBWEAPON_ID5, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "PaladinTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, PALAARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    default:
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MasterTrainer.Interact.WeaponNotRelated02", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        break;
+                }
+        }
+
+        private void HandleMercenaryWeaponChoice(GamePlayer player, string weaponChoice)
+        {
+            if (player.CharacterClass.ID == (int)eCharacterClass.Fighter)
+                switch (weaponChoice)
+                {
+                    case "tranchante":
+                    case "slashing":
+                        PromotePlayer(player, (int)eCharacterClass.Mercenary, LanguageMgr.GetTranslation(player.Client.Account.Language, "MercenaryTrainer.WhisperReceive.Text1", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, ALBWEAPON_ID1, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MercenaryTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, MERCARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    case "contondante":
+                    case "crushing":
+                        PromotePlayer(player, (int)eCharacterClass.Mercenary, LanguageMgr.GetTranslation(player.Client.Account.Language, "MercenaryTrainer.WhisperReceive.Text2", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, ALBWEAPON_ID2, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MercenaryTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, MERCARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    case "perforante":
+                    case "thrusting":
+                        PromotePlayer(player, (int)eCharacterClass.Mercenary, LanguageMgr.GetTranslation(player.Client.Account.Language, "MercenaryTrainer.WhisperReceive.Text3", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, ALBWEAPON_ID3, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MercenaryTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, MERCARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    default:
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MasterTrainer.Interact.WeaponNotRelated03", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        break;
+                }
+        }
+
+        private void HandleReaverWeaponChoice(GamePlayer player, string weaponChoice)
+        {
+            if (player.CharacterClass.ID == (int)eCharacterClass.Fighter)
+                switch (weaponChoice)
+                {
+                    case "tranchante":
+                    case "slashing":
+                        PromotePlayer(player, (int)eCharacterClass.Reaver, LanguageMgr.GetTranslation(player.Client.Account.Language, "ReaverTrainer.WhisperReceive.Text1", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, ALBWEAPON_ID1, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ReaverTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, REAVARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    case "contondante":
+                    case "crushing":
+                        PromotePlayer(player, (int)eCharacterClass.Reaver, LanguageMgr.GetTranslation(player.Client.Account.Language, "ReaverTrainer.WhisperReceive.Text2", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, ALBWEAPON_ID2, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ReaverTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, REAVARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    case "perforante":
+                    case "thrusting":
+                        PromotePlayer(player, (int)eCharacterClass.Reaver, LanguageMgr.GetTranslation(player.Client.Account.Language, "ReaverTrainer.WhisperReceive.Text3", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, ALBWEAPON_ID3, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ReaverTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, REAVARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    case "flexible":
+                        PromotePlayer(player, (int)eCharacterClass.Reaver, LanguageMgr.GetTranslation(player.Client.Account.Language, "ReaverTrainer.WhisperReceive.Text4", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, ALBWEAPON_ID11, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ReaverTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, REAVARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    default:
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MasterTrainer.Interact.WeaponNotRelated04", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        break;
+                }
+        }
+
+        private void HandleAlbmaulWeaponChoice(GamePlayer player, string weaponChoice)
+        {
+            if (player.CharacterClass.ID == (int)eCharacterClass.Fighter)
+                switch (weaponChoice)
+                {
+                    case "staff":
+                    case "bâton":
+                        PromotePlayer(player, (int)eCharacterClass.MaulerAlb, LanguageMgr.GetTranslation(player.Client.Account.Language, "MaulerAlbTrainer.WhisperReceive.Text1", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, ALBWEAPON_ID6, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MaulerAlbTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, ALBMAULARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    case "fists":
+                    case "poings":
+                        PromotePlayer(player, (int)eCharacterClass.MaulerAlb, LanguageMgr.GetTranslation(player.Client.Account.Language, "MaulerAlbTrainer.WhisperReceive.Text2", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, ALBWEAPON_ID7, eInventoryActionType.Other);
+                        player.ReceiveItem(this, ALBWEAPON_ID7, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MaulerAlbTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, ALBMAULARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    default:
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MasterTrainer.Interact.WeaponNotRelated05", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        break;
+                }
+        }
+
+        private void HandleHereticWeaponChoice(GamePlayer player, string weaponChoice)
+        {
+            if (player.CharacterClass.ID == (int)eCharacterClass.Acolyte)
+                switch (weaponChoice)
+                {
+                    case "contondante":
+                    case "crushing":
+                        PromotePlayer(player, (int)eCharacterClass.Heretic, LanguageMgr.GetTranslation(player.Client.Account.Language, "HereticTrainer.WhisperReceive.Text1", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, ALBWEAPON_ID9, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "HereticTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, HEREARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    case "flexible":
+                        PromotePlayer(player, (int)eCharacterClass.Heretic, LanguageMgr.GetTranslation(player.Client.Account.Language, "HereticTrainer.WhisperReceive.Text2", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, ALBWEAPON_ID11, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "HereticTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, HEREARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    default:
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MasterTrainer.Interact.WeaponNotRelated06", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        break;
+                }
+        }
+
+        private void HandleInfiltratorWeaponChoice(GamePlayer player, string weaponChoice)
+        {
+            if (player.CharacterClass.ID == (int)eCharacterClass.AlbionRogue)
+                switch (weaponChoice)
+                {
+                    case "tranchante":
+                    case "slashing":
+                        PromotePlayer(player, (int)eCharacterClass.Infiltrator, LanguageMgr.GetTranslation(player.Client.Account.Language, "InfiltratorTrainer.WhisperReceive.Text1", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, ALBWEAPON_ID1, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "InfiltratorTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, INFIARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    case "perforante":
+                    case "thrusting":
+                        PromotePlayer(player, (int)eCharacterClass.Infiltrator, LanguageMgr.GetTranslation(player.Client.Account.Language, "InfiltratorTrainer.WhisperReceive.Text3", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, ALBWEAPON_ID3, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "InfiltratorTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, INFIARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    default:
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MasterTrainer.Interact.WeaponNotRelated07", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        break;
+                }
+        }
+
+        private void HandleHeroWeaponChoice(GamePlayer player, string weaponChoice)
+        {
+            if (player.CharacterClass.ID == (int)eCharacterClass.Guardian)
+                switch (weaponChoice)
+                {
+                    case "blades":
+                    case "épées":
+                        PromotePlayer(player, (int)eCharacterClass.Hero, LanguageMgr.GetTranslation(player.Client.Account.Language, "HeroTrainer.WhisperReceive.Text1", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, HIBWEAPON_ID11, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "HeroTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, HEROARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    case "blunt":
+                    case "contondante":
+                        PromotePlayer(player, (int)eCharacterClass.Hero, LanguageMgr.GetTranslation(player.Client.Account.Language, "HeroTrainer.WhisperReceive.Text2", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, HIBWEAPON_ID10, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "HeroTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, HEROARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    case "piercing":
+                    case "perforante":
+                        PromotePlayer(player, (int)eCharacterClass.Hero, LanguageMgr.GetTranslation(player.Client.Account.Language, "HeroTrainer.WhisperReceive.Text3", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, HIBWEAPON_ID12, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "HeroTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, HEROARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    case "large weapons":
+                    case "grandes armes":
+                        PromotePlayer(player, (int)eCharacterClass.Hero, LanguageMgr.GetTranslation(player.Client.Account.Language, "HeroTrainer.WhisperReceive.Text4", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, HIBWEAPON_ID13, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "HeroTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, HEROARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    case "celtic spear":
+                    case "lance celtique":
+                        PromotePlayer(player, (int)eCharacterClass.Hero, LanguageMgr.GetTranslation(player.Client.Account.Language, "HeroTrainer.WhisperReceive.Text5", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, HIBWEAPON_ID14, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "HeroTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, HEROARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    default:
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MasterTrainer.Interact.WeaponNotRelated08", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        break;
+                }
+        }
+
+        private void HandleChampionWeaponChoice(GamePlayer player, string weaponChoice)
+        {
+            if (player.CharacterClass.ID == (int)eCharacterClass.Guardian)
+                switch (weaponChoice)
+                {
+                    case "blades":
+                    case "épées":
+                        PromotePlayer(player, (int)eCharacterClass.Champion, LanguageMgr.GetTranslation(player.Client.Account.Language, "ChampionTrainer.WhisperReceive.Text1", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, HIBWEAPON_ID11, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ChampionTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, CHAMARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    case "blunt":
+                    case "contondante":
+                        PromotePlayer(player, (int)eCharacterClass.Champion, LanguageMgr.GetTranslation(player.Client.Account.Language, "ChampionTrainer.WhisperReceive.Text2", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, HIBWEAPON_ID10, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ChampionTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, CHAMARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    case "piercing":
+                    case "perforante":
+                        PromotePlayer(player, (int)eCharacterClass.Champion, LanguageMgr.GetTranslation(player.Client.Account.Language, "ChampionTrainer.WhisperReceive.Text3", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, HIBWEAPON_ID12, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ChampionTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, CHAMARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    case "large weapons":
+                    case "grandes armes":
+                        PromotePlayer(player, (int)eCharacterClass.Champion, LanguageMgr.GetTranslation(player.Client.Account.Language, "ChampionTrainer.WhisperReceive.Text4", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, HIBWEAPON_ID13, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ChampionTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, CHAMARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    default:
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MasterTrainer.Interact.WeaponNotRelated09", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        break;
+                }
+        }
+
+        private void HandleBlademasterWeaponChoice(GamePlayer player, string weaponChoice)
+        {
+            if (player.CharacterClass.ID == (int)eCharacterClass.Guardian)
+                switch (weaponChoice)
+                {
+                    case "blades":
+                    case "épées":
+                        PromotePlayer(player, (int)eCharacterClass.Blademaster, LanguageMgr.GetTranslation(player.Client.Account.Language, "BlademasterTrainer.WhisperReceive.Text1", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, HIBWEAPON_ID11, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "BlademasterTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, BLADARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    case "blunt":
+                    case "contondante":
+                        PromotePlayer(player, (int)eCharacterClass.Blademaster, LanguageMgr.GetTranslation(player.Client.Account.Language, "BlademasterTrainer.WhisperReceive.Text2", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, HIBWEAPON_ID10, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "BlademasterTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, BLADARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    case "piercing":
+                    case "perforante":
+                        PromotePlayer(player, (int)eCharacterClass.Blademaster, LanguageMgr.GetTranslation(player.Client.Account.Language, "BlademasterTrainer.WhisperReceive.Text3", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, HIBWEAPON_ID12, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "BlademasterTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, BLADARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    default:
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MasterTrainer.Interact.WeaponNotRelated10", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        break;
+                }
+        }
+
+        private void HandleHibmaulWeaponChoice(GamePlayer player, string weaponChoice)
+        {
+            if (player.CharacterClass.ID == (int)eCharacterClass.Guardian)
+                switch (weaponChoice)
+                {
+                    case "staff":
+                    case "bâton":
+                        PromotePlayer(player, (int)eCharacterClass.MaulerHib, LanguageMgr.GetTranslation(player.Client.Account.Language, "MaulerHibTrainer.WhisperReceive.Text1", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, HIBWEAPON_ID7, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MaulerHibTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, HIBMAULARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    case "fists":
+                    case "poings":
+                        PromotePlayer(player, (int)eCharacterClass.MaulerHib, LanguageMgr.GetTranslation(player.Client.Account.Language, "MaulerHibTrainer.WhisperReceive.Text2", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, HIBWEAPON_ID8, eInventoryActionType.Other);
+                        player.ReceiveItem(this, HIBWEAPON_ID8, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MaulerHibTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, HIBMAULARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    default:
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MasterTrainer.Interact.WeaponNotRelated05", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        break;
+                }
+        }
+
+        private void HandleWardenWeaponChoice(GamePlayer player, string weaponChoice)
+        {
+            if (player.CharacterClass.ID == (int)eCharacterClass.Naturalist)
+                switch (weaponChoice)
+                {
+                    case "blades":
+                    case "épées":
+                        PromotePlayer(player, (int)eCharacterClass.Warden, LanguageMgr.GetTranslation(player.Client.Account.Language, "WardenTrainer.WhisperReceive.Text1", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, HIBWEAPON_ID11, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "WardenTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, WARDARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    case "blunt":
+                    case "contondante":
+                        PromotePlayer(player, (int)eCharacterClass.Warden, LanguageMgr.GetTranslation(player.Client.Account.Language, "WardenTrainer.WhisperReceive.Text2", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, HIBWEAPON_ID10, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "WardenTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, WARDARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    default:
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MasterTrainer.Interact.WeaponNotRelated11", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        break;
+                }
+        }
+
+        private void HandleNightshadeWeaponChoice(GamePlayer player, string weaponChoice)
+        {
+            if (player.CharacterClass.ID == (int)eCharacterClass.Stalker)
+                switch (weaponChoice)
+                {
+                    case "blades":
+                    case "épées":
+                        PromotePlayer(player, (int)eCharacterClass.Nightshade, LanguageMgr.GetTranslation(player.Client.Account.Language, "NightshadeTrainer.WhisperReceive.Text1", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, HIBWEAPON_ID11, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "NightshadeTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, NIGHARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    case "piercing":
+                    case "perforante":
+                        PromotePlayer(player, (int)eCharacterClass.Nightshade, LanguageMgr.GetTranslation(player.Client.Account.Language, "NightshadeTrainer.WhisperReceive.Text2", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, HIBWEAPON_ID12, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "NightshadeTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, NIGHARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    default:
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MasterTrainer.Interact.WeaponNotRelated12", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        break;
+                }
+        }
+
+        private void HandleBerserkerWeaponChoice(GamePlayer player, string weaponChoice)
+        {
+            if (player.CharacterClass.ID == (int)eCharacterClass.Viking)
+                switch (weaponChoice)
+                {
+                    case "sword":
+                    case "épée":
+                        PromotePlayer(player, (int)eCharacterClass.Berserker, LanguageMgr.GetTranslation(player.Client.Account.Language, "BerserkerTrainer.WhisperReceive.Text1", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, MIDWEAPON_ID1, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "BerserkerTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, BERZARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    case "hammer":
+                    case "marteau":
+                        PromotePlayer(player, (int)eCharacterClass.Berserker, LanguageMgr.GetTranslation(player.Client.Account.Language, "BerserkerTrainer.WhisperReceive.Text2", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, MIDWEAPON_ID2, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "BerserkerTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, BERZARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    case "axe":
+                    case "hache":
+                        PromotePlayer(player, (int)eCharacterClass.Berserker, LanguageMgr.GetTranslation(player.Client.Account.Language, "BerserkerTrainer.WhisperReceive.Text3", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, MIDWEAPON_ID3, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "BerserkerTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, BERZARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    case "left axe":
+                    case "hache main gauche":
+                        PromotePlayer(player, (int)eCharacterClass.Berserker, LanguageMgr.GetTranslation(player.Client.Account.Language, "BerserkerTrainer.WhisperReceive.Text4", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, MIDWEAPON_ID4, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "BerserkerTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, BERZARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    default:
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MasterTrainer.Interact.WeaponNotRelated13", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        break;
+                }
+        }
+
+        private void HandleSavageWeaponChoice(GamePlayer player, string weaponChoice)
+        {
+            if (player.CharacterClass.ID == (int)eCharacterClass.Viking)
+                switch (weaponChoice)
+                {
+                    case "sword":
+                    case "épée":
+                        PromotePlayer(player, (int)eCharacterClass.Savage, LanguageMgr.GetTranslation(player.Client.Account.Language, "SavageTrainer.WhisperReceive.Text1", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, MIDWEAPON_ID1, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "SavageTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, SAVAARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    case "hammer":
+                    case "marteau":
+                        PromotePlayer(player, (int)eCharacterClass.Savage, LanguageMgr.GetTranslation(player.Client.Account.Language, "SavageTrainer.WhisperReceive.Text2", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, MIDWEAPON_ID2, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "SavageTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, SAVAARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    case "axe":
+                    case "hache":
+                        PromotePlayer(player, (int)eCharacterClass.Savage, LanguageMgr.GetTranslation(player.Client.Account.Language, "SavageTrainer.WhisperReceive.Text3", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, MIDWEAPON_ID3, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "SavageTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, SAVAARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    case "hand to hand":
+                    case "griffe":
+                        PromotePlayer(player, (int)eCharacterClass.Savage, LanguageMgr.GetTranslation(player.Client.Account.Language, "SavageTrainer.WhisperReceive.Text4", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, MIDWEAPON_ID6, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "SavageTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, SAVAARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    default:
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MasterTrainer.Interact.WeaponNotRelated14", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        break;
+                }
+        }
+
+        private void HandleSkaldWeaponChoice(GamePlayer player, string weaponChoice)
+        {
+            if (player.CharacterClass.ID == (int)eCharacterClass.Viking)
+                switch (weaponChoice)
+                {
+                    case "sword":
+                    case "épée":
+                        PromotePlayer(player, (int)eCharacterClass.Skald, LanguageMgr.GetTranslation(player.Client.Account.Language, "SkaldTrainer.WhisperReceive.Text1", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, MIDWEAPON_ID1, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "SkaldTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, SKALARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    case "hammer":
+                    case "marteau":
+                        PromotePlayer(player, (int)eCharacterClass.Skald, LanguageMgr.GetTranslation(player.Client.Account.Language, "SkaldTrainer.WhisperReceive.Text2", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, MIDWEAPON_ID2, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "SkaldTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, SKALARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    case "axe":
+                    case "hache":
+                        PromotePlayer(player, (int)eCharacterClass.Skald, LanguageMgr.GetTranslation(player.Client.Account.Language, "SkaldTrainer.WhisperReceive.Text3", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, MIDWEAPON_ID3, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "SkaldTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, SKALARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    default:
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MasterTrainer.Interact.WeaponNotRelated15", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        break;
+                }
+        }
+
+        private void HandleThaneWeaponChoice(GamePlayer player, string weaponChoice)
+        {
+            if (player.CharacterClass.ID == (int)eCharacterClass.Viking)
+                switch (weaponChoice)
+                {
+                    case "sword":
+                    case "épée":
+                        PromotePlayer(player, (int)eCharacterClass.Thane, LanguageMgr.GetTranslation(player.Client.Account.Language, "ThaneTrainer.WhisperReceive.Text1", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, MIDWEAPON_ID1, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ThaneTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, THANARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    case "hammer":
+                    case "marteau":
+                        PromotePlayer(player, (int)eCharacterClass.Thane, LanguageMgr.GetTranslation(player.Client.Account.Language, "ThaneTrainer.WhisperReceive.Text2", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, MIDWEAPON_ID2, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ThaneTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, THANARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    case "axe":
+                    case "hache":
+                        PromotePlayer(player, (int)eCharacterClass.Thane, LanguageMgr.GetTranslation(player.Client.Account.Language, "ThaneTrainer.WhisperReceive.Text3", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, MIDWEAPON_ID3, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ThaneTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, THANARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    default:
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MasterTrainer.Interact.WeaponNotRelated15", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        break;
+                }
+        }
+
+        private void HandleWarriorWeaponChoice(GamePlayer player, string weaponChoice)
+        {
+            if (player.CharacterClass.ID == (int)eCharacterClass.Viking)
+                switch (weaponChoice)
+                {
+                    case "sword":
+                    case "épée":
+                        PromotePlayer(player, (int)eCharacterClass.Warrior, LanguageMgr.GetTranslation(player.Client.Account.Language, "WarriorTrainer.WhisperReceive.Text1", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, MIDWEAPON_ID1, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "WarriorTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, WARRARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    case "hammer":
+                    case "marteau":
+                        PromotePlayer(player, (int)eCharacterClass.Warrior, LanguageMgr.GetTranslation(player.Client.Account.Language, "WarriorTrainer.WhisperReceive.Text2", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, MIDWEAPON_ID2, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "WarriorTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, WARRARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    case "axe":
+                    case "hache":
+                        PromotePlayer(player, (int)eCharacterClass.Warrior, LanguageMgr.GetTranslation(player.Client.Account.Language, "WarriorTrainer.WhisperReceive.Text3", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, MIDWEAPON_ID3, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "WarriorTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, WARRARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    default:
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MasterTrainer.Interact.WeaponNotRelated15", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        break;
+                }
+        }
+
+        private void HandleValkyrieWeaponChoice(GamePlayer player, string weaponChoice)
+        {
+            if (player.CharacterClass.ID == (int)eCharacterClass.Viking)
+                switch (weaponChoice)
+                {
+                    case "sword":
+                    case "épée":
+                        PromotePlayer(player, (int)eCharacterClass.Valkyrie, LanguageMgr.GetTranslation(player.Client.Account.Language, "ValkyrieTrainer.WhisperReceive.Text1", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, MIDWEAPON_ID1, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ValkyrieTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, VALKARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    case "spear":
+                    case "lance":
+                        PromotePlayer(player, (int)eCharacterClass.Valkyrie, LanguageMgr.GetTranslation(player.Client.Account.Language, "ValkyrieTrainer.WhisperReceive.Text2", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, MIDWEAPON_ID5, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ValkyrieTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, VALKARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    default:
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MasterTrainer.Interact.WeaponNotRelated16", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        break;
+                }
+        }
+
+        private void HandleMidmaulWeaponChoice(GamePlayer player, string weaponChoice)
+        {
+            if (player.CharacterClass.ID == (int)eCharacterClass.Guardian)
+                switch (weaponChoice)
+                {
+                    case "staff":
+                    case "bâton":
+                        PromotePlayer(player, (int)eCharacterClass.MaulerMid, LanguageMgr.GetTranslation(player.Client.Account.Language, "MaulerMidTrainer.WhisperReceive.Text1", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, MIDWEAPON_ID10, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MaulerMidTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, MIDMAULARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    case "fists":
+                    case "poings":
+                        PromotePlayer(player, (int)eCharacterClass.MaulerMid, LanguageMgr.GetTranslation(player.Client.Account.Language, "MaulerMidTrainer.WhisperReceive.Text2", player.GetName(0, false)), null);
+                        player.ReceiveItem(this, MIDWEAPON_ID11, eInventoryActionType.Other);
+                        player.ReceiveItem(this, MIDWEAPON_ID11, eInventoryActionType.Other);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MaulerMidTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player.ReceiveItem(this, MIDMAULARMOR_ID1, eInventoryActionType.Other);
+                        break;
+                    default:
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MasterTrainer.Interact.WeaponNotRelated05", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        break;
+                }
+        }
+
+        private void HandleNewClassOrWeaponSelection(GamePlayer player, string input)
+        {
+            if ((player.CharacterClass.ID == (int)eCharacterClass.Acolyte || player.CharacterClass.ID == (int)eCharacterClass.AlbionRogue || player.CharacterClass.ID == (int)eCharacterClass.Disciple || player.CharacterClass.ID == (int)eCharacterClass.Elementalist || player.CharacterClass.ID == (int)eCharacterClass.Fighter || player.CharacterClass.ID == (int)eCharacterClass.Mage || player.CharacterClass.ID == (int)eCharacterClass.Forester || player.CharacterClass.ID == (int)eCharacterClass.Guardian || player.CharacterClass.ID == (int)eCharacterClass.Magician || player.CharacterClass.ID == (int)eCharacterClass.Stalker || player.CharacterClass.ID == (int)eCharacterClass.Naturalist || player.CharacterClass.ID == (int)eCharacterClass.MidgardRogue || player.CharacterClass.ID == (int)eCharacterClass.Mystic || player.CharacterClass.ID == (int)eCharacterClass.Seer || player.CharacterClass.ID == (int)eCharacterClass.Viking) && player.Level == 5)
+            {
+                switch (input)
+                {
+                    default:
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MasterTrainer.Interact.ChooseAgain", this.Name, player.CharacterClass.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                         break;
                 }
             }
-        }
-
-        private void GiveWeaponAndArmor(GamePlayer player, string weaponId, string armorId)
-        {
-            // Logic to promote player if needed
-            // Example:
-            // if (classOffer == "armsman")
-            // {
-            // Promote logic here
-            // }
-            PromotePlayer(player, (int)eCharacterClass.Armsman, LanguageMgr.GetTranslation(player.Client.Account.Language, "ArmsmanTrainer.WhisperReceive.Text4", player.GetName(0, false)), null);
-
-            player.ReceiveItem(this, weaponId, eInventoryActionType.Other); // Adjust as needed
-            PromotePlayer(player, (int)eCharacterClass.Armsman, LanguageMgr.GetTranslation(player.Client.Account.Language, "ArmsmanTrainer.WhisperReceive.Text1", player.GetName(0, false)), null);
-
-            player.ReceiveItem(this, armorId, eInventoryActionType.Other); // Adjust as needed
-            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ArmsmanTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
-
-            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameTrainer.PromotePlayer.Upgraded", player.CharacterClass.Name), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
         }
 
         #region TrainSpecLine

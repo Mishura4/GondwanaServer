@@ -29,7 +29,7 @@ namespace DOL.GS.RealmAbilities
                 Icon = 7073,
                 ClientEffect = 12011,
                 IsFocus = true,
-                Target = "Enemy",
+                Target = "enemy",
                 Type = "ShadowStrike",
                 CastTime = 10,
                 MoveCast = false,

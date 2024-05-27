@@ -127,7 +127,7 @@ namespace DOL.GS.Trainer
 
                     case "hand to hand":
                     case "griffe":
-                        PromotePlayer(player, (int)eCharacterClass.Savage, LanguageMgr.GetTranslation(player.Client.Account.Language, "SavageTrainer.WhisperReceive.Text5", player.GetName(0, false)), null);
+                        PromotePlayer(player, (int)eCharacterClass.Savage, LanguageMgr.GetTranslation(player.Client.Account.Language, "SavageTrainer.WhisperReceive.Text4", player.GetName(0, false)), null);
                         player.ReceiveItem(this, WEAPON_ID4, eInventoryActionType.Other);
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "SavageTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                         player.ReceiveItem(this, ARMOR_ID1, eInventoryActionType.Other);

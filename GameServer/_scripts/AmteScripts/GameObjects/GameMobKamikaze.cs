@@ -98,7 +98,7 @@ namespace DOL.GS
                     TheSpell.Range = WorldMgr.VISIBILITY_DISTANCE;
                     TheSpell.Radius = 0;
                     TheSpell.SpellID = 25668;
-                    TheSpell.Target = "Enemy";
+                    TheSpell.Target = "enemy";
                     TheSpell.Type = "KamiBomb";
                     m_KamiSpell = new Spell(TheSpell, 1);
                 }

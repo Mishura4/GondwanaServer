@@ -63,7 +63,7 @@ namespace DOL.GS.Effects
             tSpell.AllowAdd = false;
             tSpell.Description = "Target is stunned and can't move or do any action during spell duration.";
             tSpell.Name = "Rescue stun";
-            tSpell.Target = "Enemy";
+            tSpell.Target = "enemy";
             tSpell.Radius = 0;
             tSpell.Range = WorldMgr.VISIBILITY_DISTANCE;
             tSpell.CastTime = 0;

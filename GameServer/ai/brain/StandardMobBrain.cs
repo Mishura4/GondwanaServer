@@ -1318,8 +1318,13 @@ namespace DOL.AI.Brain
                 case "OFFENSIVEPROC":
                 case "DEFENSIVEPROC":
                 case "DAMAGESHIELD":
+                case "BLADETURN":
+                case "BOTHABLATIVEARMOR":
                 case "SPELLREFLECTION":
-                case "ALLSTATBUFF":
+                case "ALLSTATSBUFF":
+                case "TRIGGERBUFF":
+                case "TENSIONBUFF":
+                case "BATTLEFEVERDURATIONBUFF":
                     {
                         // Buff self, if not in melee, but not each and every mob
                         // at the same time, because it looks silly.
@@ -1469,12 +1474,24 @@ namespace DOL.AI.Brain
                     break;
                 #endregion
 
+                case "SummonWood":
+                    //Body.TargetObject = Body;
+                    break;
                 //case "SummonAnimistFnF":
                 //case "SummonAnimistPet":
                 case "SUMMONCOMMANDER":
                 case "SUMMONDRUIDPET":
                 case "SUMMONHUNTERPET":
                 case "SUMMONNECROPET":
+                case "SummonHunterPet":
+                case "SummonMastery":
+                case "SummonMercenary":
+                case "SummonMonster":
+                case "SummonNoveltyPet":
+                case "SummonSalamander":
+                case "SummonSiegeWeapon":
+                case "SummonWarcrystal":
+                case "SummonTitan":
                 case "SUMMONUNDERHILL":
                 case "SUMMONSIMULACRUM":
                 case "SUMMONSPIRITFIGHTER":
@@ -1545,18 +1562,42 @@ namespace DOL.AI.Brain
                 #region Enemy Spells
                 case "DirectDamage":
                 case "Lifedrain":
+                case "DirectDamageWithDebuff":
+                case "AcuityDebuff":
                 case "DexterityDebuff":
+                case "QuicknessDebuff":
+                case "ConstitutionDebuff":
+                case "MatterResistDebuff":
+                case "HeatResistDebuff":
+                case "ColdResistDebuff":
+                case "EnergyResistDebuff":
+                case "DexterityQuicknessDebuff":
                 case "StrengthConstitutionDebuff":
                 case "CombatSpeedDebuff":
+                case "ArmorAbsorptionDebuff":
+                case "ArmorFactorDebuff":
                 case "DamageOverTime":
                 case "MeleeDamageDebuff":
                 case "AllStatsPercentDebuff":
                 case "CrushSlashThrustDebuff":
+                case "WeaponSkillConstitutionDebuff":
                 case "EffectivenessDebuff":
+                case "FumbleChanceDebuff":
+                case "ToHitDebuff":
+                case "AllStatsDebuff":
+                case "FatigueConsumptionDebuff":
+                case "CastingSpeedDebuff":
                 case "Disease":
                 case "Stun":
                 case "Mez":
                 case "Taunt":
+                case "Slow":
+                case "Petrify":
+                case "Demi":
+                case "Quarter":
+                case "Morph":
+                case "Earthquake":
+                case "Damnation":
                     if (!LivingHasEffect(lastTarget as GameLiving, spell))
                     {
                         Body.TargetObject = lastTarget;
@@ -1572,7 +1613,6 @@ namespace DOL.AI.Brain
                 case "EnduranceRegenBuff":
                 case "CombatSpeedBuff":
                 case "AblativeArmor":
-                case "Bladeturn":
                 case "OffensiveProc":
                     if (!LivingHasEffect(Body, spell))
                     {

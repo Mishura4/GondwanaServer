@@ -340,8 +340,8 @@ namespace DOL.Territories
             infos.Add("-- " + LanguageMgr.GetTranslation(language, "Language.DamageType.Melee.Noun") + (ownedTerritories.Count == 0 ? ": 0%" : $": {player.Guild.TerritoryMeleeAbsorption}%"));
             infos.Add("-- " + LanguageMgr.GetTranslation(language, "Language.DamageType.Spell.Noun") + (ownedTerritories.Count == 0 ? ": 0%" : $": {player.Guild.TerritorySpellAbsorption}%"));
             infos.Add("-- " + LanguageMgr.GetTranslation(language, "Language.DamageType.DoT.Noun") + (ownedTerritories.Count == 0 ? ": 0%" : $": {player.Guild.TerritoryDotAbsorption}%"));
-            infos.Add("-- " + LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.DebuffDuration") + (ownedTerritories.Count == 0 ? ": 0%" : $": {player.Guild.TerritoryDebuffDurationReduction}%"));
-            infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.SpellRange") + (ownedTerritories.Count == 0 ? ": 0%" : $": {player.Guild.TerritorySpellRangeBonus}%"));
+            infos.Add("-- " + LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.DebuffDuration") + (ownedTerritories.Count == 0 ? ": 0%" : $": -{player.Guild.TerritoryDebuffDurationReduction}%"));
+            infos.Add("-- " + LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.SpellRange") + (ownedTerritories.Count == 0 ? ": 0%" : $": {player.Guild.TerritorySpellRangeBonus}%"));
             return infos;
         }
 
