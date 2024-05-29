@@ -53,8 +53,8 @@ Language.DamageType.Falling.Noun:				Falling
 Language.DamageType.GM.Noun:					Raw
 
 Language.DamageType.Melee.Noun:					All Melee Damages
-Language.DamageType.Spell.Noun:					All Spells Damages
-Language.DamageType.DoT.Noun:					Damages from DoT spells
+Language.DamageType.Spell.Noun:					All Spell Damages
+Language.DamageType.DoT.Noun:					Damage over Time spells
 
 Language.DamageType.Natural.Damage:				natural damage
 Language.DamageType.Crush.Damage:				crush damage

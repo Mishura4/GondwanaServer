@@ -265,7 +265,7 @@ InfiltratorTrainer.WhisperReceive.Text2:			Here is your weapon, the Rapier of th
 MercenaryTrainer.Interact.Text1:				{0} dit, "Do you wish to join the [Guilde des Ombres] and seek your fortune as a Mercenary?"
 MercenaryTrainer.Interact.Text2:				Souhaitez-vous vous entraîner?
 MercenaryTrainer.Interact.Text3:				{0} dit, "Notre voie n'est pas des plus simples, {1}. Je peux seulement vous entraîner dans les compétences de notre Ordre. Vous devrez acquérir la connaissance et la sagesse par vous-même."
-MercenaryTrainer.Interact.Text4:					{0} dit, "Very well. Choose a weapon, and you shall become one of us. Which would you have, [tranchante], [perforante] ou [perforante]?"
+MercenaryTrainer.Interact.Text4:					{0} dit, "Very well. Choose a weapon, and you shall become one of us. Which would you have, [tranchante], [contondante] ou [perforante]?"
 MercenaryTrainer.ReceiveArmor.Text1:				{0} dit, "We will now issue your Hauberk of the Neophyte, it will help you greatly in your quest. When you have reached the title of Pugilist, return it to me. We shall then see if you require another."
 MercenaryTrainer.ReceiveArmor.Text2:				{0} dit, "So, you reached the title of Pugilist, here is the Vest of the Pugilist, it will help you greatly in your quest. Come back to me when you have reached the title of Escaladar. We shall then see if you require another."
 MercenaryTrainer.ReceiveArmor.Text3:				{0} dit, "So, you reached the title of Escaladar, here is the Hauberk of the Escalader, it will help you greatly in your quest. Come back to me when you have reached the title of Swashbuckler. We shall then see if you require another."
