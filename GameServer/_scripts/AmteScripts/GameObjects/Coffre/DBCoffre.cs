@@ -85,6 +85,14 @@ namespace DOL.Database
         private int m_coffreOpeningInterval;
         private string m_eventID;
         private List<string> m_removedByEventID;
+        private ushort m_tpid;
+        private bool m_shouldrespawntotpid;
+        private bool m_pickontouch;
+        private int m_secondarymodel;
+        private int m_keyLoseDur;
+        private string m_switchFamily;
+        private int m_switchOrder;
+        private bool m_isSwitch;
 
         [DataElement(AllowDbNull = false)]
         public string Name
@@ -531,6 +539,126 @@ namespace DOL.Database
                 if(value!= null)
                     m_removedByEventID = value.Split('|').ToList();
                 Dirty = true;
+            }
+        }
+
+        [DataElement(AllowDbNull = true)]
+        public ushort TPID
+        {
+            get
+            {
+                return m_tpid;
+            }
+            set
+            {
+                Dirty = true;
+                m_tpid = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public bool ShouldRespawnToTPID
+        {
+            get
+            {
+                return m_shouldrespawntotpid;
+            }
+
+            set
+            {
+                Dirty = true;
+                m_shouldrespawntotpid = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public bool PickOnTouch
+        {
+            get
+            {
+                return m_pickontouch;
+            }
+
+            set
+            {
+                Dirty = true;
+                m_pickontouch = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public int SecondaryModel
+        {
+            get
+            {
+                return m_secondarymodel;
+            }
+            set
+            {
+                Dirty = true;
+                m_secondarymodel = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public bool IsOpenableOnce { get; set; }
+
+        [DataElement(AllowDbNull = false)]
+        public bool IsTerritoryLinked { get; set; }
+
+        [DataElement(AllowDbNull = true)]
+        public int KeyLoseDur
+        {
+            get
+            {
+                return m_keyLoseDur;
+            }
+            set
+            {
+                Dirty = true;
+                m_keyLoseDur = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = true)]
+        public string SwitchFamily
+        {
+            get
+            {
+                return m_switchFamily;
+            }
+            set
+            {
+                Dirty = true;
+                m_switchFamily = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = true)]
+        public int SwitchOrder
+        {
+            get
+            {
+                return m_switchOrder;
+            }
+            set
+            {
+                Dirty = true;
+                m_switchOrder = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = true)]
+        public bool IsSwitch
+        {
+            get
+            {
+                return m_isSwitch;
+            }
+            set
+            {
+                Dirty = true;
+                m_isSwitch = value;
             }
         }
     }

@@ -7,6 +7,9 @@ using DOL.Database;
 using DOL.GameEvents;
 using DOL.GS.PacketHandler;
 using DOL.Language;
+using DOL.Database.Attributes;
+using DOL.Territories;
+using log4net;
 
 namespace DOL.GS.Scripts
 {
@@ -17,7 +20,67 @@ namespace DOL.GS.Scripts
         public readonly int LARGE_ITEM_DIST = 500;
         private GamePlayer m_interactPlayer;
         private DateTime m_lastInteract;
+        public ushort TPID { get; set; }
+        public bool ShouldRespawnToTPID { get; set; }
+        public bool PickOnTouch { get; set; }
+        public int SecondaryModel { get; set; }
+        public bool IsOpenableOnce { get; set; }
+        public bool IsTerritoryLinked { get; set; }
+        public int KeyLoseDur { get; set; }
+        public string SwitchFamily { get; set; }
+        public int SwitchOrder { get; set; }
+        public bool IsSwitch { get; set; }
 
+        private Timer proximityTimer;
+
+        private void RespawnToTPID()
+        {
+            if (ShouldRespawnToTPID)
+            {
+                DBTP tp = GameServer.Database.SelectObject<DBTP>(DB.Column("TPID").IsEqualTo(this.TPID));
+                if (tp != null)
+                {
+                    Position = GetPositionFromTPID(tp);
+                }
+            }
+            AddToWorld();
+        }
+
+        private Vector3 GetPositionFromTPID(DBTP tp)
+        {
+            TPPoint currentTPPoint = new TPPoint(new Vector3(Position.X, Position.Y, Position.Z), (eTPPointType)tp.TPType);
+            TPPoint nextTPPoint = currentTPPoint.GetNextTPPoint();
+
+            return nextTPPoint != null ? new Vector3((float)nextTPPoint.Position.X, (float)nextTPPoint.Position.Y, (float)nextTPPoint.Position.Z) : Position;
+        }
+
+        private void ShowSecondaryModel()
+        {
+            if (SecondaryModel > 0 && ItemInterval > 0)
+            {
+                Model = (ushort)SecondaryModel;
+            }
+        }
+
+        private void RevertToPrimaryModel()
+        {
+            if (SecondaryModel > 0 && ItemInterval > 0)
+            {
+                Model = Coffre.Model;
+            }
+        }
+
+        private bool HasPlayerOpened(GamePlayer player)
+        {
+            var openedCoffre = GameServer.Database.SelectObject<CoffrexPlayer>(DB.Column("PlayerID").IsEqualTo(player.InternalID).And(DB.Column("CoffreID").IsEqualTo(this.InternalID)));
+            return openedCoffre != null;
+        }
+
+        private void MarkCoffreAsOpenedByPlayer(GamePlayer player)
+        {
+            var newEntry = new CoffrexPlayer { PlayerID = player.InternalID, CoffreID = this.InternalID };
+            GameServer.Database.AddObject(newEntry);
+        }
 
         #region Variables - Constructeur
         private DBCoffre Coffre;
@@ -214,15 +277,42 @@ namespace DOL.GS.Scripts
 
             Coffres.Add(this);
 
+            if (PickOnTouch || ItemInterval > 0)
+            {
+                proximityTimer = new Timer(1500);
+                proximityTimer.Elapsed += (sender, e) => CheckPlayerProximity();
+                proximityTimer.Start();
+            }
+
             return true;
         }
 
         public override bool RemoveFromWorld()
         {
+            if (proximityTimer != null)
+            {
+                proximityTimer.Stop();
+                proximityTimer.Dispose();
+                proximityTimer = null;
+            }
+
             Coffres.Remove(this);
             return base.RemoveFromWorld();
         }
 
+        private void CheckPlayerProximity()
+        {
+            if (PickOnTouch)
+            {
+                foreach (GamePlayer player in GetPlayersInRadius(90))
+                {
+                    if (player.IsAlive && IsWithinRadius(player, 90))
+                    {
+                        InteractEnd(player);
+                    }
+                }
+            }
+        }
 
         /// <summary>
         ///  Get Coffres and their new EventIds from Db
@@ -254,15 +344,43 @@ namespace DOL.GS.Scripts
 
         public void RespawnCoffre()
         {
-            base.AddToWorld();
+            if (ShouldRespawnToTPID)
+            {
+                RespawnToTPID();
+            }
+            else
+            {
+                base.AddToWorld();
+            }
         }
 
         #region Interact - GetRandomItem
         public override bool Interact(GamePlayer player)
         {
-            if (!base.Interact(player) || !player.IsAlive) return false;
+            if (PickOnTouch && this.IsWithinRadius(player, 90))
+            {
+                return InteractEnd(player);
+            }
 
+            if (IsOpenableOnce && HasPlayerOpened(player))
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.UniqueTreasureTaken"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                return false;
+            }
+
+            if (IsTerritoryLinked && !TerritoryManager.IsPlayerInOwnedTerritory(player, this))
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.TerritoryNotOwned"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                return false;
+            }
+
+            if (!base.Interact(player) || !player.IsAlive) return false;
             if (!this.IsWithinRadius(player, (IsLargeCoffre ? LARGE_ITEM_DIST : WorldMgr.GIVE_ITEM_DISTANCE + 60))) return false;
+
+            if (IsOpenableOnce)
+            {
+                MarkCoffreAsOpenedByPlayer(player);
+            }
 
             if (HasPickableAnim)
             {
@@ -282,11 +400,25 @@ namespace DOL.GS.Scripts
                 }
                 if (KeyItem != "" && player.Inventory.GetFirstItemByID(KeyItem, eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack) != null)
                 {
+                    InventoryItem it = player.Inventory.GetFirstItemByID(KeyItem, eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack);
                     if (!KeyItem.StartsWith("oneuse"))
+                    {
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.Oneuse") + player.Inventory.GetFirstItemByID(KeyItem, eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack).Name + ".", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                        if (KeyLoseDur > 0)
+                        {
+                            it.Durability -= KeyLoseDur;
+                            if (it.Durability <= 0)
+                            {
+                                player.Inventory.RemoveItem(it);
+                            }
+                            else
+                            {
+                                player.Out.SendInventoryItemsUpdate(new InventoryItem[] { it });
+                            }
+                        }
+                    }
                     else
                     {
-                        InventoryItem it = player.Inventory.GetFirstItemByID(KeyItem, eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack);
                         player.TempProperties.setProperty("CoffreItem", it);
                         player.Out.SendCustomDialog(LanguageMgr.GetTranslation(player.Client, "GameChest.UseItem", it.Name), OneUseOpen);
                         m_interactPlayer = player;
@@ -416,6 +548,8 @@ namespace DOL.GS.Scripts
                 }
             }
 
+            ShowSecondaryModel();
+
             if (gotItemOrUsedTeleporter && ItemInterval != 0)
             {
                 m_lastInteract = DateTime.MinValue;
@@ -505,6 +639,7 @@ namespace DOL.GS.Scripts
 
         private void Repop_Elapsed(object sender, ElapsedEventArgs e)
         {
+            RevertToPrimaryModel();
             AddToWorld();
         }
         #endregion
@@ -719,6 +854,16 @@ namespace DOL.GS.Scripts
             CoffreOpeningInterval = coffre.CoffreOpeningInterval;
             IsLargeCoffre = coffre.IsLargeCoffre;
             RemovedByEventID = coffre.RemovedByEventID;
+            Coffre.TPID = coffre.TPID;
+            Coffre.ShouldRespawnToTPID = coffre.ShouldRespawnToTPID;
+            PickOnTouch = coffre.PickOnTouch;
+            SecondaryModel = coffre.SecondaryModel;
+            IsOpenableOnce = coffre.IsOpenableOnce;
+            IsTerritoryLinked = coffre.IsTerritoryLinked;
+            KeyLoseDur = coffre.KeyLoseDur;
+            SwitchFamily = coffre.SwitchFamily;
+            SwitchOrder = coffre.SwitchOrder;
+            IsSwitch = coffre.IsSwitch;
 
             InitTimer();
 
@@ -780,6 +925,16 @@ namespace DOL.GS.Scripts
             Coffre.CoffreOpeningInterval = CoffreOpeningInterval;
             Coffre.IsLargeCoffre = IsLargeCoffre;
             Coffre.RemovedByEventID = RemovedByEventID;
+            Coffre.TPID = TPID;
+            Coffre.ShouldRespawnToTPID = ShouldRespawnToTPID;
+            Coffre.PickOnTouch = PickOnTouch;
+            Coffre.SecondaryModel = SecondaryModel;
+            Coffre.IsOpenableOnce = IsOpenableOnce;
+            Coffre.IsTerritoryLinked = IsTerritoryLinked;
+            Coffre.KeyLoseDur = KeyLoseDur;
+            Coffre.SwitchFamily = SwitchFamily;
+            Coffre.SwitchOrder = SwitchOrder;
+            Coffre.IsSwitch = IsSwitch;
 
             if (Items != null)
             {
@@ -857,7 +1012,14 @@ namespace DOL.GS.Scripts
                     " + Intervalle d'apparition d'un item: " + ItemInterval + " minutes",
                     " + Intervalle d'ouverture un coffre: " + this.CoffreOpeningInterval + " minutes",
                     " + Dernière fois que le coffre a été ouvert: " + LastOpen.ToShortDateString() + " " + LastOpen.ToShortTimeString(),
-                    " + IsLongDistance type: " + this.IsLargeCoffre
+                    " + IsLongDistance type: " + this.IsLargeCoffre,
+                    " + Respawn to TPID: " + ShouldRespawnToTPID,
+                    " + TPID: " + TPID,
+                    " + Pick on Touch: " + PickOnTouch,
+                    " + Secondary Model: " + SecondaryModel,
+                    " + Is Openable Once: " + IsOpenableOnce,
+                    " + Is Territory Linked: " + IsTerritoryLinked,
+                    " + KeyLoseDur: " + KeyLoseDur
                 };
             if (LockDifficult > 0)
                 text.Add(" + Difficulté pour crocheter le coffre: " + LockDifficult + "%");
@@ -903,6 +1065,12 @@ namespace DOL.GS.Scripts
             text.Add("IsOpeningRenaissanceType: " + this.IsOpeningRenaissanceType);
             text.Add("TpIsRenaissance: " + this.TpIsRenaissance);
             text.Add("PunishSpellId: " + this.PunishSpellId);
+
+            text.Add("");
+            text.Add("-- Is Switch Info --");
+            text.Add("IsSwitch: " + this.IsSwitch);
+            text.Add("Switch Family: " + this.SwitchFamily);
+            text.Add("Switch Order: " + this.SwitchOrder);
             return text;
         }
 
@@ -931,6 +1099,14 @@ namespace DOL.GS.Scripts
                 IsLargeCoffre = coffre.IsLargeCoffre;
                 ItemChance = coffre.ItemChance;
                 KeyItem = coffre.KeyItem;
+                PickOnTouch = coffre.PickOnTouch;
+                SecondaryModel = coffre.SecondaryModel;
+                IsOpenableOnce = coffre.IsOpenableOnce;
+                IsTerritoryLinked = coffre.IsTerritoryLinked;
+                KeyLoseDur = coffre.KeyLoseDur;
+                SwitchFamily = coffre.SwitchFamily;
+                SwitchOrder = coffre.SwitchOrder;
+                IsSwitch = coffre.IsSwitch;
                 InitTimer();
             }
         }

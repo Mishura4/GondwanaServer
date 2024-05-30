@@ -517,6 +517,17 @@ namespace DOL.Territories
                 }
             }
         }
+        public static bool IsPlayerInOwnedTerritory(GamePlayer player, GameObject obj)
+        {
+            var territory = GetCurrentTerritory(obj.CurrentAreas);
+
+            if (territory == null)
+            {
+                return false;
+            }
+
+            return territory.IsOwnedBy(player);
+        }
     }
 
     public class MobInfo

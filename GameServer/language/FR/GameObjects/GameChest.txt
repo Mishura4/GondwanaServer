@@ -16,3 +16,5 @@ GameChest.AlreadyOpen2:		Quelqu'un est déjà passé avant vous, revenez plus ta
 GameChest.Cannotteleport:	Cet objet ne parvient pas à vous téléporter. Vous devriez revenir plus tard.
 GameChest.GetItem:		Vous récupérez un objet!
 GameChest.GetItemBagFull:	Vous récupérez un objet mais votre sac-à-dos est plein.
+GameChest.UniqueTreasureTaken:	Vous avez déjà récupéré le Trésor de ce coffre !
+GameChest.TerritoryNotOwned:	Vous ne faites pas partie d'une guilde qui possède le territoire où se trouve ce coffre !

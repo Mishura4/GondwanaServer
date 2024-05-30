@@ -16,3 +16,5 @@ GameChest.AlreadyOpen2:		Someone already came here before you... Come back later
 GameChest.Cannotteleport:	This object fails to teleport you right now. You should come back later.
 GameChest.GetItem:		You get an item!
 GameChest.GetItemBagFull:	You pick up an item but your backpack is full.
+GameChest.UniqueTreasureTaken:	You have already taken the Treasure from that chest!
+GameChest.TerritoryNotOwned:	You are not in a guild that owns the territory where this chest is located!
