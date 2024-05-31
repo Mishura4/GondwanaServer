@@ -88,11 +88,13 @@ namespace DOL.Database
         private ushort m_tpid;
         private bool m_shouldrespawntotpid;
         private bool m_pickontouch;
-        private int m_secondarymodel;
         private int m_keyLoseDur;
         private string m_switchFamily;
         private int m_switchOrder;
         private bool m_isSwitch;
+        private int m_secondarymodel;
+        private int m_activatedDuration;
+        private string m_switchTriggerEventID;
 
         [DataElement(AllowDbNull = false)]
         public string Name
@@ -587,20 +589,6 @@ namespace DOL.Database
         }
 
         [DataElement(AllowDbNull = false)]
-        public int SecondaryModel
-        {
-            get
-            {
-                return m_secondarymodel;
-            }
-            set
-            {
-                Dirty = true;
-                m_secondarymodel = value;
-            }
-        }
-
-        [DataElement(AllowDbNull = false)]
         public bool IsOpenableOnce { get; set; }
 
         [DataElement(AllowDbNull = false)]
@@ -659,6 +647,42 @@ namespace DOL.Database
             {
                 Dirty = true;
                 m_isSwitch = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public int SecondaryModel
+        {
+            get
+            {
+                return m_secondarymodel;
+            }
+            set
+            {
+                Dirty = true;
+                m_secondarymodel = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = true)]
+        public int ActivatedDuration
+        {
+            get { return m_activatedDuration; }
+            set
+            {
+                Dirty = true;
+                m_activatedDuration = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = true, Varchar = 255)]
+        public string SwitchTriggerEventID
+        {
+            get => m_switchTriggerEventID;
+            set
+            {
+                Dirty = true;
+                m_switchTriggerEventID = value;
             }
         }
     }

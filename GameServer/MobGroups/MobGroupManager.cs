@@ -326,5 +326,20 @@ namespace DOL.MobGroups
                 return GameServer.Database.DeleteObject(grp);
             }
         }
+
+        public List<GameNPC> GetMobsBySwitchFamily(string switchFamily)
+        {
+            List<GameNPC> mobs = new List<GameNPC>();
+
+            foreach (var group in Groups.Values)
+            {
+                if (group.SwitchFamily == switchFamily)
+                {
+                    mobs.AddRange(group.NPCs);
+                }
+            }
+
+            return mobs;
+        }
     }
 }

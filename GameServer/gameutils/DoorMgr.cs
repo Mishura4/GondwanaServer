@@ -131,5 +131,33 @@ namespace DOL.GS
                 return new List<IDoor>();
             }
         }
+
+        public static List<GameDoor> GetDoorsBySwitchFamily(string switchFamily)
+        {
+            List<GameDoor> doors = new List<GameDoor>();
+
+            foreach (var doorList in m_doors.Values)
+            {
+                foreach (var door in doorList)
+                {
+                    if (door is GameDoor gameDoor && gameDoor.SwitchFamily == switchFamily)
+                    {
+                        doors.Add(gameDoor);
+                    }
+                }
+            }
+
+            return doors;
+        }
+
+        public static void UnlockDoorsBySwitchFamily(string switchFamily)
+        {
+            var doorsToUnlock = GetDoorsBySwitchFamily(switchFamily);
+            foreach (var door in doorsToUnlock)
+                if (door is GameDoor gameDoor)
+                {
+                    gameDoor.UnlockBySwitch();
+                }
+        }
     }
 }

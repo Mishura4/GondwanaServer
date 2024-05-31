@@ -17,6 +17,8 @@ namespace DOL.MobGroups
         private MobGroupInfo originalGroupInfo;
         private bool isLoadedFromScript;
 
+        public string SwitchFamily { get; set; }
+
         public MobGroup(string id, bool isLoadedFromScript)
         {
             this.GroupId = id;
@@ -24,6 +26,7 @@ namespace DOL.MobGroups
             this.NPCs = new List<GameNPC>();
             this.GroupInfos = new MobGroupInfo();
             this.HasOriginalStatus = false;
+            this.SwitchFamily = null;
         }
 
         public MobGroup(GroupMobDb db, GroupMobStatusDb groupInteract, GroupMobStatusDb originalStatus)
@@ -55,6 +58,7 @@ namespace DOL.MobGroups
             this.originalGroupInfo = GetMobInfoFromSource(originalStatus);
             this.SetGroupInteractions(groupInteract);
             this.HasOriginalStatus = IsStatusOriginal();
+            this.SwitchFamily = db.SwitchFamily;
         }
 
         /// <summary>
@@ -507,6 +511,7 @@ namespace DOL.MobGroups
             db.CompletedQuestAggro = this.CompletedQuestAggro;
             db.CompletedQuestRange = this.CompletedQuestRange;
             db.CompletedQuestNPCFlags = this.CompletedQuestNPCFlags;
+            db.SwitchFamily = this.SwitchFamily;
 
             if (isNew)
             {

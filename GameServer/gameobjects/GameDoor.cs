@@ -52,7 +52,20 @@ namespace DOL.GS
         private readonly object m_LockObject = new object();
         private uint m_flags = 0;
         private string m_group_mob_id;
+        private string m_switchFamily;
+        private int originalPunishSpellValue;
 
+        public string SwitchFamily
+        {
+            get
+            {
+                return m_switchFamily;
+            }
+            set
+            {
+                m_switchFamily = value;
+            }
+        }
 
         /// <summary>
         /// The time interval after which door will be closed, in milliseconds
@@ -104,6 +117,8 @@ namespace DOL.GS
             m_key_Chance = m_dbdoor.Key_Chance;
             m_isRenaissance = m_dbdoor.IsRenaissance;
             m_punishSpell = m_dbdoor.PunishSpell;
+            m_switchFamily = m_dbdoor.SwitchFamily;
+            originalPunishSpellValue = m_dbdoor.PunishSpell;
 
             // Open mile gates on PVE and PVP server types
             if (CurrentRegion.IsFrontier && (GameServer.Instance.Configuration.ServerType == eGameServerType.GST_PvE
@@ -137,6 +152,7 @@ namespace DOL.GS
             obj.Key_Chance = Key_Chance;
             obj.IsRenaissance = IsRenaissance;
             obj.PunishSpell = PunishSpell;
+            obj.SwitchFamily = this.SwitchFamily;
             if (InternalID == null)
             {
                 GameServer.Database.AddObject(obj);
@@ -242,6 +258,44 @@ namespace DOL.GS
                     if (opener is GamePlayer player)
                         player.Out.SendSpellEffectAnimation(opener, opener, (ushort)PunishSpell, 0, false, 5);
                     opener.TakeDamage(opener, eDamageType.Energy, (int)punishspell.Damage, 0);
+                }
+            }
+        }
+
+        public void UnlockBySwitch()
+        {
+            if (Locked == 1)
+            {
+                Locked = 0;
+                State = eDoorState.Open;
+                PunishSpell = 0;
+                SaveIntoDatabase();
+            }
+        }
+
+        public void LockBySwitch()
+        {
+            if (Locked == 0)
+            {
+                Locked = 1;
+                State = eDoorState.Closed;
+                PunishSpell = originalPunishSpellValue;
+                SaveIntoDatabase();
+            }
+        }
+
+        public void OpenBySwitch()
+        {
+            UnlockBySwitch();
+            if (HealthPercent > 40 || !m_openDead)
+            {
+                lock (m_LockObject)
+                {
+                    if (m_closeDoorAction == null)
+                    {
+                        m_closeDoorAction = new CloseDoorAction(this);
+                    }
+                    m_closeDoorAction.Start(CLOSE_DOOR_TIME);
                 }
             }
         }

@@ -1396,5 +1396,15 @@ namespace DOL.GameEvents
 
             return ev.Select(e => e.ID);
         }
+
+        /*public List<GameEvent> GetEventsBySwitchFamily(string switchFamily)
+        {
+            return Events.Where(e => e.SwitchFamily == switchFamily).ToList();
+        }*/
+
+        public GameEvent GetEventByID(string eventID)
+        {
+            return Events.FirstOrDefault(e => e.ID == eventID);
+        }
     }
 }

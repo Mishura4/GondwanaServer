@@ -18,3 +18,7 @@ GameChest.GetItem:		Vous récupérez un objet!
 GameChest.GetItemBagFull:	Vous récupérez un objet mais votre sac-à-dos est plein.
 GameChest.UniqueTreasureTaken:	Vous avez déjà récupéré le Trésor de ce coffre !
 GameChest.TerritoryNotOwned:	Vous ne faites pas partie d'une guilde qui possède le territoire où se trouve ce coffre !
+GameChest.KeyDestroyed:		Vous avez utilisé cet objet un trop grand nombre de fois, ce qui l'a dégradé au point qu'il n'est plus utilisable !
+GameChest.SwitchCannotActivate:	Vous ne pouvez pas activer cet interrupteur pour le moment.
+GameChest.SwitchActivated:		Interrupteur activé !
+GameChest.SwitchAllActivated:	Tous les interrupteurs de la série sont activés !

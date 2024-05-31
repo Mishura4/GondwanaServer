@@ -47,6 +47,7 @@ namespace DOL.Database
         private short m_key_Chance;
         private bool m_isRenaissance;
         private int m_punishSpell;
+        private string m_switchFamily;
 
         /// <summary>
         /// Create a door row
@@ -374,6 +375,20 @@ namespace DOL.Database
             {
                 Dirty = true;
                 m_punishSpell = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = true)]
+        public string SwitchFamily
+        {
+            get
+            {
+                return m_switchFamily;
+            }
+            set
+            {
+                Dirty = true;
+                m_switchFamily = value;
             }
         }
     }

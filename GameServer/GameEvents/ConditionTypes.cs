@@ -8,7 +8,8 @@
         Money,
         Interval,
         Areaxevent,
-        Quest
+        Quest,
+        Switch
     }
 
     public enum EndingConditionType
@@ -17,7 +18,8 @@
         Kill,
         StartingEvent,
         AreaEvent,
-        TextNPC
+        TextNPC,
+        Switch
     }
     public enum InstancedConditionTypes
     {

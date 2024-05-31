@@ -31,6 +31,7 @@ namespace DOLDatabase.Tables
         private ushort m_completedStepQuestID;
         private int m_completedQuestId;
         private int m_completedQuestCount;
+        private string m_switchFamily;
 
         [DataElement(AllowDbNull = false, Varchar = 255, Unique = true)]
         public string GroupId
@@ -162,6 +163,20 @@ namespace DOLDatabase.Tables
         {
             get => m_groupMobOrigin_FK_Id;
             set { Dirty = true; m_groupMobOrigin_FK_Id = value; }
+        }
+
+        [DataElement(AllowDbNull = true)]
+        public string SwitchFamily
+        {
+            get
+            {
+                return m_switchFamily;
+            }
+            set
+            {
+                Dirty = true;
+                m_switchFamily = value;
+            }
         }
     }
 }

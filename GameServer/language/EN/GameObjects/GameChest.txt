@@ -18,3 +18,7 @@ GameChest.GetItem:		You get an item!
 GameChest.GetItemBagFull:	You pick up an item but your backpack is full.
 GameChest.UniqueTreasureTaken:	You have already taken the Treasure from that chest!
 GameChest.TerritoryNotOwned:	You are not in a guild that owns the territory where this chest is located!
+GameChest.KeyDestroyed:		You have used this item too many times, which has degraded it to the point that it is no longer usable!
+GameChest.SwitchCannotActivate:	You cannot activate this switch yet.
+GameChest.SwitchActivated:		Switch activated!
+GameChest.SwitchAllActivated:	All linked switches are activated!

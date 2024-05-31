@@ -10,6 +10,9 @@ using DOL.Language;
 using DOL.Database.Attributes;
 using DOL.Territories;
 using log4net;
+using DOL.MobGroups;
+using DOL.Events;
+using DOL.GS.GameEvents;
 
 namespace DOL.GS.Scripts
 {
@@ -23,15 +26,19 @@ namespace DOL.GS.Scripts
         public ushort TPID { get; set; }
         public bool ShouldRespawnToTPID { get; set; }
         public bool PickOnTouch { get; set; }
-        public int SecondaryModel { get; set; }
         public bool IsOpenableOnce { get; set; }
         public bool IsTerritoryLinked { get; set; }
         public int KeyLoseDur { get; set; }
         public string SwitchFamily { get; set; }
         public int SwitchOrder { get; set; }
         public bool IsSwitch { get; set; }
+        public int SecondaryModel { get; set; }
+        public string SwitchTriggerEventID { get; set; }
 
+        private bool isActivated;
         private Timer proximityTimer;
+        private Timer activationTimer;
+        public int ActivatedDuration { get; set; }
 
         private void RespawnToTPID()
         {
@@ -56,7 +63,7 @@ namespace DOL.GS.Scripts
 
         private void ShowSecondaryModel()
         {
-            if (SecondaryModel > 0 && ItemInterval > 0)
+            if (SecondaryModel > 0 && IsSwitch)
             {
                 Model = (ushort)SecondaryModel;
             }
@@ -64,7 +71,7 @@ namespace DOL.GS.Scripts
 
         private void RevertToPrimaryModel()
         {
-            if (SecondaryModel > 0 && ItemInterval > 0)
+            if (SecondaryModel > 0)
             {
                 Model = Coffre.Model;
             }
@@ -97,7 +104,6 @@ namespace DOL.GS.Scripts
         }
 
         public static List<GameCoffre> Coffres;
-
 
         private int m_ItemChance;
         /// <summary>
@@ -245,7 +251,6 @@ namespace DOL.GS.Scripts
         /// Temps de réapparition d'un item (en minutes)
         /// </summary>
         public int ItemInterval;
-
         public string KeyItem = "";
         public int LockDifficult;
 
@@ -302,15 +307,133 @@ namespace DOL.GS.Scripts
 
         private void CheckPlayerProximity()
         {
-            if (PickOnTouch)
+           if (PickOnTouch)
             {
                 foreach (GamePlayer player in GetPlayersInRadius(90))
                 {
                     if (player.IsAlive && IsWithinRadius(player, 90))
                     {
-                        InteractEnd(player);
+                        if (IsSwitch)
+                        {
+                            CheckSwitchActivation(player);
+                        }
+                        else
+                        {
+                            InteractEnd(player);
+                        }
                     }
                 }
+            }
+        }
+
+        private void CheckSwitchActivation(GamePlayer player)
+        {
+            if (!IsSwitch || isActivated) return;
+
+            var switchesInFamily = Coffres.Where(c => c.SwitchFamily == SwitchFamily).OrderBy(c => c.SwitchOrder).ToList();
+            int currentIndex = switchesInFamily.IndexOf(this);
+
+            if (currentIndex == -1 || (currentIndex > 0 && !switchesInFamily[currentIndex - 1].isActivated))
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.SwitchCannotActivate"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return;
+            }
+
+            isActivated = true;
+            ShowSecondaryModel();
+            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.SwitchActivated"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+
+            if (switchesInFamily.All(c => c.isActivated))
+            {
+                ActivateSwitchFamily(player);
+            }
+        }
+
+        private void ActivateSwitchFamily(GamePlayer player)
+        {
+            OpenLinkedDoors();
+            /*StartLinkedEvents();*/
+            KillLinkedMobs();
+
+            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.SwitchAllActivated"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+
+            GameEventMgr.Notify(SwitchEvent.SwitchActivated, this);
+
+            if (!string.IsNullOrEmpty(SwitchTriggerEventID))
+            {
+                var gameEvent = GameEventManager.Instance.GetEventByID(SwitchTriggerEventID);
+                if (gameEvent != null)
+                {
+                    GameEventManager.Instance.StartEvent(gameEvent);
+                }
+            }
+
+            if (ActivatedDuration > 0)
+            {
+                activationTimer = new Timer(ActivatedDuration * 1000);
+                activationTimer.Elapsed += (sender, e) => DeactivateSwitchFamily();
+                activationTimer.Start();
+            }
+        }
+
+        private void OpenLinkedDoors()
+        {
+            var doorsToOpen = DoorMgr.GetDoorsBySwitchFamily(SwitchFamily);
+            foreach (var door in doorsToOpen)
+            {
+                if (door is GameDoor gameDoor)
+                {
+                    gameDoor.UnlockBySwitch();
+                }
+            }
+        }
+
+        private void DeactivateSwitchFamily()
+        {
+            activationTimer.Stop();
+
+            foreach (var switchCoffre in Coffres.Where(c => c.SwitchFamily == SwitchFamily))
+            {
+                switchCoffre.isActivated = false;
+                switchCoffre.RevertToPrimaryModel();
+            }
+
+            RevertDoors();
+
+            var mobsToRespawn = MobGroupManager.Instance.GetMobsBySwitchFamily(SwitchFamily);
+            foreach (var mob in mobsToRespawn)
+            {
+                mob.AddToWorld();
+            }
+        }
+
+        private void RevertDoors()
+        {
+            var doorsToRevert = DoorMgr.GetDoorsBySwitchFamily(SwitchFamily);
+            foreach (var door in doorsToRevert)
+            {
+                if (door is GameDoor gameDoor)
+                {
+                    gameDoor.LockBySwitch();
+                }
+            }
+        }
+
+        /*private void StartLinkedEvents()
+        {
+            var eventsToStart = GameEventManager.Instance.GetEventsBySwitchFamily(SwitchFamily);
+            foreach (var ev in eventsToStart)
+            {
+                GameEventManager.Instance.StartEvent(ev);
+            }
+        }*/
+
+        private void KillLinkedMobs()
+        {
+            var mobsToKill = MobGroupManager.Instance.GetMobsBySwitchFamily(SwitchFamily);
+            foreach (var mob in mobsToKill)
+            {
+                mob.Die(null);
             }
         }
 
@@ -357,9 +480,15 @@ namespace DOL.GS.Scripts
         #region Interact - GetRandomItem
         public override bool Interact(GamePlayer player)
         {
-            if (PickOnTouch && this.IsWithinRadius(player, 90))
+            if (PickOnTouch && this.IsWithinRadius(player, 80))
             {
                 return InteractEnd(player);
+            }
+
+            if (IsSwitch)
+            {
+                CheckSwitchActivation(player);
+                return true;
             }
 
             if (IsOpenableOnce && HasPlayerOpened(player))
@@ -410,6 +539,7 @@ namespace DOL.GS.Scripts
                             if (it.Durability <= 0)
                             {
                                 player.Inventory.RemoveItem(it);
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.KeyDestroyed"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                             }
                             else
                             {
@@ -857,13 +987,14 @@ namespace DOL.GS.Scripts
             Coffre.TPID = coffre.TPID;
             Coffre.ShouldRespawnToTPID = coffre.ShouldRespawnToTPID;
             PickOnTouch = coffre.PickOnTouch;
-            SecondaryModel = coffre.SecondaryModel;
             IsOpenableOnce = coffre.IsOpenableOnce;
             IsTerritoryLinked = coffre.IsTerritoryLinked;
             KeyLoseDur = coffre.KeyLoseDur;
             SwitchFamily = coffre.SwitchFamily;
             SwitchOrder = coffre.SwitchOrder;
             IsSwitch = coffre.IsSwitch;
+            ActivatedDuration = coffre.ActivatedDuration;
+            SecondaryModel = coffre.SecondaryModel;
 
             InitTimer();
 
@@ -928,13 +1059,14 @@ namespace DOL.GS.Scripts
             Coffre.TPID = TPID;
             Coffre.ShouldRespawnToTPID = ShouldRespawnToTPID;
             Coffre.PickOnTouch = PickOnTouch;
-            Coffre.SecondaryModel = SecondaryModel;
             Coffre.IsOpenableOnce = IsOpenableOnce;
             Coffre.IsTerritoryLinked = IsTerritoryLinked;
             Coffre.KeyLoseDur = KeyLoseDur;
             Coffre.SwitchFamily = SwitchFamily;
             Coffre.SwitchOrder = SwitchOrder;
             Coffre.IsSwitch = IsSwitch;
+            Coffre.ActivatedDuration = ActivatedDuration;
+            Coffre.SecondaryModel = SecondaryModel;
 
             if (Items != null)
             {
@@ -1071,6 +1203,7 @@ namespace DOL.GS.Scripts
             text.Add("IsSwitch: " + this.IsSwitch);
             text.Add("Switch Family: " + this.SwitchFamily);
             text.Add("Switch Order: " + this.SwitchOrder);
+            text.Add("Activated Duration: " + this.ActivatedDuration + " secondes");
             return text;
         }
 
@@ -1107,6 +1240,7 @@ namespace DOL.GS.Scripts
                 SwitchFamily = coffre.SwitchFamily;
                 SwitchOrder = coffre.SwitchOrder;
                 IsSwitch = coffre.IsSwitch;
+                ActivatedDuration = coffre.ActivatedDuration;
                 InitTimer();
             }
         }
