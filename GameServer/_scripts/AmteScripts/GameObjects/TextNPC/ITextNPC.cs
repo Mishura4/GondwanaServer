@@ -18,6 +18,8 @@ using log4net;
 using static DOL.Database.ArtifactBonus;
 using static DOL.GS.GameNPC;
 using static DOL.GS.Quests.DataQuestJsonGoal;
+using DOL.Territories;
+using DOL.Language;
 
 namespace DOL.GS.Scripts
 {
@@ -61,6 +63,7 @@ namespace DOL.GS.Scripts
         public TextNPCCondition Condition { get; private set; }
         public DBTextNPC TextDB { get; set; }
         public bool? IsOutlawFriendly { get; set; }
+        public bool? IsTerritoryLinked { get; set; }
 
         public Dictionary<string, EchangeurInfo> PlayerReferences;
 
@@ -109,6 +112,12 @@ namespace DOL.GS.Scripts
         {
             if ((!CheckQuestDialog(player) && string.IsNullOrEmpty(Interact_Text)) || !CheckAccess(player))
                 return false;
+
+            if (IsTerritoryLinked.HasValue && IsTerritoryLinked.Value && !TerritoryManager.IsPlayerInOwnedTerritory(player, _body))
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "TextNPC.NotInOwnedTerritory"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                return true;
+            }
 
             _body.TurnTo(player);
 
@@ -172,6 +181,12 @@ namespace DOL.GS.Scripts
             GamePlayer player = source as GamePlayer;
             if (!CheckAccess(player))
                 return false;
+
+            if (IsTerritoryLinked.HasValue && IsTerritoryLinked.Value && !TerritoryManager.IsPlayerInOwnedTerritory(player, _body))
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "TextNPC.NotInOwnedTerritory"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                return true;
+            }
 
             _body.TurnTo(player, 10000);
 
@@ -418,6 +433,12 @@ namespace DOL.GS.Scripts
             GamePlayer player = source as GamePlayer;
             if (!CheckAccess(player)) return false;
             _body.TurnTo(player);
+
+            if (IsTerritoryLinked.HasValue && IsTerritoryLinked.Value && !TerritoryManager.IsPlayerInOwnedTerritory(player, _body))
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "TextNPC.ExchangeNotInOwnedTerritory"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                return true;
+            }
 
             DBEchangeur EchItem = EchangeurDB[item.Id_nb];
             if (EchItem.ItemRecvCount > item.Count)
@@ -804,6 +825,7 @@ namespace DOL.GS.Scripts
                 log.Error("Cannot load IsOutlawFriendly Status because both values are set. Update database (DbTextNPC) for id: " + data.ObjectId + " npc: " + data.MobName);
             }
 
+            IsTerritoryLinked = data.IsTerritoryLinked;
 
             QuestTexts = new Dictionary<string, string>();
             if (TextDB.QuestTexts != null && TextDB.QuestTexts != "")
@@ -990,6 +1012,9 @@ namespace DOL.GS.Scripts
                 TextDB.IsOutlawFriendly = false;
                 TextDB.IsRegularFriendly = false;
             }
+
+            TextDB.IsTerritoryLinked = IsTerritoryLinked ?? false;
+
             //Sauve quest texts
             string questTexts = "";
             if (QuestTexts != null && QuestTexts.Count > 0)

@@ -11,6 +11,7 @@ using DOL.GS.PacketHandler;
 using System.Reflection;
 using log4net;
 using DOL.Language;
+using DOL.Territories;
 
 namespace DOL.GS.Scripts
 {
@@ -26,6 +27,7 @@ namespace DOL.GS.Scripts
         private string m_Text_Refuse = "Vous n'avez pas le niveau requis pour être téléporté.";
         protected DBTeleportNPC db;
         protected bool m_Occupe;
+        public bool IsTerritoryLinked { get; set; }
 
         public int Range
         {
@@ -70,6 +72,12 @@ namespace DOL.GS.Scripts
                 return true;
             }
 
+            if (IsTerritoryLinked && !TerritoryManager.IsPlayerInOwnedTerritory(player, this))
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "TeleportNPC.NotInOwnedTerritory"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                return true;
+            }
+
             string text;
             if (!this.IsInterractionAuthorized(player))
             {
@@ -98,6 +106,11 @@ namespace DOL.GS.Scripts
             if (!base.WhisperReceive(source, str) || !(source is GamePlayer)) return false;
             GamePlayer player = source as GamePlayer;
 
+            if (IsTerritoryLinked && !TerritoryManager.IsPlayerInOwnedTerritory(player, this))
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "TeleportNPC.NotInOwnedTerritory"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                return true;
+            }
 
             if (!this.IsInterractionAuthorized(player))
             {
@@ -137,6 +150,13 @@ namespace DOL.GS.Scripts
             if (!(source is GamePlayer) || item == null || String.IsNullOrEmpty(item.Id_nb))
                 return false;
             GamePlayer player = (GamePlayer)source;
+
+            if (IsTerritoryLinked && !TerritoryManager.IsPlayerInOwnedTerritory(player, this))
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "TeleportNPC.NotInOwnedTerritory"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                return false;
+            }
+
             foreach (JumpPos pos in JumpPositions.Values)
             {
                 if (pos.Conditions.Item.Equals(item.Id_nb, StringComparison.CurrentCultureIgnoreCase))
@@ -208,6 +228,7 @@ namespace DOL.GS.Scripts
             m_MinLevel = db.Level;
             m_Text = db.Text;
             m_Text_Refuse = db.Text_Refuse;
+            IsTerritoryLinked = db.IsTerritoryLinked;
 
             //Set this value only when OR Exclusive
             if (db.IsOutlawFriendly ^ db.IsRegularFriendly)
@@ -268,6 +289,7 @@ namespace DOL.GS.Scripts
             db.Range = m_Range;
             db.Text = m_Text;
             db.Text_Refuse = m_Text_Refuse;
+            db.IsTerritoryLinked = IsTerritoryLinked;
 
             if (IsOutlawFriendly.HasValue)
             {

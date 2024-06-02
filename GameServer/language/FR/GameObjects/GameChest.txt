@@ -22,3 +22,4 @@ GameChest.KeyDestroyed:		Vous avez utilisé cet objet un trop grand nombre de fo
 GameChest.SwitchCannotActivate:	Vous ne pouvez pas activer cet interrupteur pour le moment.
 GameChest.SwitchActivated:		Interrupteur activé !
 GameChest.SwitchAllActivated:	Tous les interrupteurs de la série sont activés !
+GameChest.SwitchOrderReset:		Vous avez affectué une mauvaise combinaison ! Tous les interrupteurs ont été désactivés !

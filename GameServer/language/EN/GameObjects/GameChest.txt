@@ -22,3 +22,4 @@ GameChest.KeyDestroyed:		You have used this item too many times, which has degra
 GameChest.SwitchCannotActivate:	You cannot activate this switch yet.
 GameChest.SwitchActivated:		Switch activated!
 GameChest.SwitchAllActivated:	All linked switches are activated!
+GameChest.SwitchOrderReset:		You made a wrong combination! All switches have been deactivated!

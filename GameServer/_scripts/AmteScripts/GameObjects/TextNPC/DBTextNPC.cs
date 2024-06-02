@@ -51,6 +51,7 @@ namespace DOL.Database
         private string m_GiveItem;
         private string m_ResponseStartEvent;
         private string m_ResponseStopEvent;
+        private bool m_IsTerritoryLinked;
 
 
         [DataElement(AllowDbNull = false)]
@@ -279,5 +280,15 @@ namespace DOL.Database
             }
         }
 
+        [DataElement(AllowDbNull = false)]
+        public bool IsTerritoryLinked
+        {
+            get { return m_IsTerritoryLinked; }
+            set
+            {
+                Dirty = true;
+                m_IsTerritoryLinked = value;
+            }
+        }
     }
 }

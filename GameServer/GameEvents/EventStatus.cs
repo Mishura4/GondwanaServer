@@ -8,5 +8,6 @@
         EndedByEventStarting,
         EndedByAreaEvent,
         EndedByTextNPC,
+        EndedBySwitch
     }
 }

@@ -59,7 +59,7 @@ namespace DOL.Territories
                 timer.Elapsed += TerritoryAttackedCallback;
                 timer.Enabled = true;
                 m_TerritoriesAttacked.Add(timer, territory);
-                territory.OwnerGuild?.SendMessageToGuildMembersKey("TerritoryManager.Territory.Attacked", eChatType.CT_YouWereHit, eChatLoc.CL_SystemWindow, territory.Name);
+                territory.OwnerGuild?.SendMessageToGuildMembersKey("TerritoryManager.Territory.Attacked", eChatType.CT_Important, eChatLoc.CL_SystemWindow, territory.Name);
             }
         }
 

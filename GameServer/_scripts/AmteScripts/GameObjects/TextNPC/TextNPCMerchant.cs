@@ -14,9 +14,12 @@
 */
 
 using System.Linq;
+using DOL.GS.PacketHandler;
 using DOL.AI.Brain;
 using DOL.Database;
 using DOL.GS.Quests;
+using DOL.Territories;
+using DOL.Language;
 
 namespace DOL.GS.Scripts
 {
@@ -49,13 +52,27 @@ namespace DOL.GS.Scripts
         {
             if (!TextNPCData.CheckAccess(player) || !base.Interact(player))
                 return false;
+
+            if (TextNPCData.IsTerritoryLinked.HasValue && TextNPCData.IsTerritoryLinked.Value && !TerritoryManager.IsPlayerInOwnedTerritory(player, this))
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "TextNPC.NotInOwnedTerritory"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                return true;
+            }
+
             return TextNPCData.Interact(player);
         }
 
         public override bool WhisperReceive(GameLiving source, string str)
         {
-            if (!base.WhisperReceive(source, str))
+            if (!(source is GamePlayer player) || !base.WhisperReceive(source, str))
                 return false;
+
+            if (TextNPCData.IsTerritoryLinked.HasValue && TextNPCData.IsTerritoryLinked.Value && !TerritoryManager.IsPlayerInOwnedTerritory(player, this))
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "TextNPC.NotInOwnedTerritory"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                return true;
+            }
+
             return TextNPCData.WhisperReceive(source, str);
         }
 

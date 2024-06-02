@@ -31,6 +31,7 @@ namespace DOL.Database
         private long m_price;
         private bool m_IsOutlawFriendly;
         private bool m_IsRegularFriendly;
+        private bool m_IsTerritoryLinked;
 
         [DataElement(AllowDbNull = false)]
         public string MobID
@@ -136,6 +137,21 @@ namespace DOL.Database
             {
                 Dirty = true;
                 m_IsRegularFriendly = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public bool IsTerritoryLinked
+        {
+            get
+            {
+                return m_IsTerritoryLinked;
+            }
+
+            set
+            {
+                Dirty = true;
+                m_IsTerritoryLinked = value;
             }
         }
     }

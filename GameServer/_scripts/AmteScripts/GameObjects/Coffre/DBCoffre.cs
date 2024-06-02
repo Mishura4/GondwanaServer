@@ -85,16 +85,21 @@ namespace DOL.Database
         private int m_coffreOpeningInterval;
         private string m_eventID;
         private List<string> m_removedByEventID;
-        private ushort m_tpid;
+        private int m_tpid;
         private bool m_shouldrespawntotpid;
+        protected int m_currentStep;
         private bool m_pickontouch;
         private int m_keyLoseDur;
         private string m_switchFamily;
         private int m_switchOrder;
         private bool m_isSwitch;
+        private bool m_wrongorderresetfamily;
         private int m_secondarymodel;
         private int m_activatedDuration;
-        private string m_switchTriggerEventID;
+        private string m_activatedbyswitchon;
+        private string m_activatedbyswitchoff;
+        private string m_resetbyswitchon;
+        private string m_resetbyswitchoff;
 
         [DataElement(AllowDbNull = false)]
         public string Name
@@ -545,7 +550,7 @@ namespace DOL.Database
         }
 
         [DataElement(AllowDbNull = true)]
-        public ushort TPID
+        public int TPID
         {
             get
             {
@@ -570,6 +575,17 @@ namespace DOL.Database
             {
                 Dirty = true;
                 m_shouldrespawntotpid = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = true)]
+        public int CurrentStep
+        {
+            get { return m_currentStep; }
+            set
+            {
+                Dirty = true;
+                m_currentStep = value;
             }
         }
 
@@ -651,6 +667,21 @@ namespace DOL.Database
         }
 
         [DataElement(AllowDbNull = false)]
+        public bool WrongOrderResetFamily
+        {
+            get
+            {
+                return m_wrongorderresetfamily;
+            }
+
+            set
+            {
+                Dirty = true;
+                m_wrongorderresetfamily = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false)]
         public int SecondaryModel
         {
             get
@@ -676,13 +707,46 @@ namespace DOL.Database
         }
 
         [DataElement(AllowDbNull = true, Varchar = 255)]
-        public string SwitchTriggerEventID
+        public string ActivatedBySwitchOn
         {
-            get => m_switchTriggerEventID;
+            get => m_activatedbyswitchon;
             set
             {
                 Dirty = true;
-                m_switchTriggerEventID = value;
+                m_activatedbyswitchon = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = true, Varchar = 255)]
+        public string ActivatedBySwitchOff
+        {
+            get => m_activatedbyswitchoff;
+            set
+            {
+                Dirty = true;
+                m_activatedbyswitchoff = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = true, Varchar = 255)]
+        public string ResetBySwitchOn
+        {
+            get => m_resetbyswitchon;
+            set
+            {
+                Dirty = true;
+                m_resetbyswitchon = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = true, Varchar = 255)]
+        public string ResetBySwitchOff
+        {
+            get => m_resetbyswitchoff;
+            set
+            {
+                Dirty = true;
+                m_resetbyswitchoff = value;
             }
         }
     }

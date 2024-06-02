@@ -484,7 +484,10 @@ namespace DOL.GameEvents
             return infos;
         }
 
-
+        public GameEvent GetEventByID(string eventID)
+        {
+            return Events.FirstOrDefault(e => e.ID == eventID);
+        }
 
         private void GetMainInformations(GameEvent e, List<string> infos)
         {
@@ -1098,6 +1101,12 @@ namespace DOL.GameEvents
                 await ShowEndEffects(e);
                 CleanEvent(e);
             }
+            else if (end == EndingConditionType.Switch)
+            {
+                e.Status = EventStatus.EndedBySwitch;
+                await ShowEndEffects(e);
+                CleanEvent(e);
+            }
 
             var eventsCount = GameEventManager.Instance.Events.Where(ev => ev.ID.Equals(e.ID)).Count();
             if (eventsCount == 1)
@@ -1395,16 +1404,6 @@ namespace DOL.GameEvents
             }
 
             return ev.Select(e => e.ID);
-        }
-
-        /*public List<GameEvent> GetEventsBySwitchFamily(string switchFamily)
-        {
-            return Events.Where(e => e.SwitchFamily == switchFamily).ToList();
-        }*/
-
-        public GameEvent GetEventByID(string eventID)
-        {
-            return Events.FirstOrDefault(e => e.ID == eventID);
         }
     }
 }

@@ -441,42 +441,46 @@ namespace DOL.GS
                 return false;
             }
 
-            if (player.TempProperties.removeAndGetProperty(ITEM_BEING_ADDED, out object result))
+            InventoryItem item;
+
+            if (player.TempProperties.removeAndGetProperty(ITEM_BEING_ADDED, out object result) && result is InventoryItem)
             {
-                if (result is not InventoryItem item)
-                    return false;
-
-                if (item.IsTradable)
-                {
-                    item.SellPrice = (int)price;
-                }
-                else
-                {
-                    // Unique DOL feature
-                    item.SellPrice = 0;
-                    player.Out.SendCustomDialog("This item is not tradable. You can store it here but cannot sell it.", null);
-                }
-
-                // Ideally `MoveItem` shouldn't notify observers before a price is set.
-                // But this is currently the case so we need to notify observers again, this time with the new price.
-                if (item.SellPrice > 0)
-                {
-                    Dictionary<int, InventoryItem> updateItem = new() { { item.SlotPosition + (FirstClientSlot - FirstDBSlot), item } };
-                    this.NotifyPlayers(this, player, _observers, updateItem);
-                }
-
-                item.OwnerLot = conMerchant.HouseNumber;
-                item.OwnerID = conMerchant.GetOwner(player);
-                GameServer.Database.SaveObject(item);
-                ChatUtil.SendDebugMessage(player, item.Name + " SellPrice=" + price + ", OwnerLot=" + item.OwnerLot + ", OwnerID=" + item.OwnerID);
-                player.Out.SendMessage("Price set!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-
-                if (ServerProperties.Properties.MARKET_ENABLE_LOG)
-                {
-                    log.DebugFormat("CM: {0}:{1} set sell price of '{2}' to {3} for consignment merchant on lot {4}.", player.Name, player.Client.Account.Name, item.Name, item.SellPrice, HouseNumber);
-                }
+                item = (InventoryItem)result;
+            }
+            else if (!conMerchant.GetClientInventory(player).TryGetValue(clientSlot + conMerchant.FirstClientSlot, out item))
+            {
+                return false;
             }
 
+            if (item.IsTradable)
+            {
+                item.SellPrice = (int)price;
+            }
+            else
+            {
+                // Unique DOL feature
+                item.SellPrice = 0;
+                player.Out.SendCustomDialog("This item is not tradable. You can store it here but cannot sell it.", null);
+            }
+
+            // Ideally `MoveItem` shouldn't notify observers before a price is set.
+            // But this is currently the case so we need to notify observers again, this time with the new price.
+            if (item.SellPrice > 0)
+            {
+                Dictionary<int, InventoryItem> updateItem = new() { { item.SlotPosition + (FirstClientSlot - FirstDBSlot), item } };
+                this.NotifyPlayers(this, player, _observers, updateItem);
+            }
+
+            item.OwnerLot = conMerchant.HouseNumber;
+            item.OwnerID = conMerchant.GetOwner(player);
+            GameServer.Database.SaveObject(item);
+            ChatUtil.SendDebugMessage(player, item.Name + " SellPrice=" + price + ", OwnerLot=" + item.OwnerLot + ", OwnerID=" + item.OwnerID);
+            player.Out.SendMessage("Price set!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+
+            if (ServerProperties.Properties.MARKET_ENABLE_LOG)
+            {
+                log.DebugFormat("CM: {0}:{1} set sell price of '{2}' to {3} for consignment merchant on lot {4}.", player.Name, player.Client.Account.Name, item.Name, item.SellPrice, HouseNumber);
+            }
             return true;
         }
 

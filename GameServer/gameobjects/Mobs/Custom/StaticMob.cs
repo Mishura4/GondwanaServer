@@ -16,17 +16,11 @@ namespace DOL.GS
         public StaticMob(ABrain aBrain)
             : base(aBrain)
         {
-            this.SetOwnBrain(aBrain);
         }
 
         public StaticMob()
             : base()
         {
-        }
-
-        public override ABrain SetOwnBrain(ABrain brain)
-        {
-            return base.SetOwnBrain(new StaticMobBrain());
         }
 
         public override bool IsBeingInterrupted => false;

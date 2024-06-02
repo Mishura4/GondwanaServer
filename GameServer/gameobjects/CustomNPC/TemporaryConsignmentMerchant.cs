@@ -59,8 +59,8 @@ namespace DOL.GS
                 return;
             }
 
-            string buyText = "Do you want to buy this Item? (Price after " + ServerProperties.Properties.TRADING_TAX + "% tax: "
-                            + Money.GetString((long)(fromItem.Price * (1 + (float)ServerProperties.Properties.TRADING_TAX / 100))) + ")";
+            string buyText = "Do you want to buy this Item?";// (Price after " + ServerProperties.Properties.TRADING_TAX + "% tax: "
+                                                             // + Money.GetString((long)(fromItem.Price * (1 + (float)ServerProperties.Properties.TRADING_TAX / 100))) + ")";
 
             if (player.TargetObject == this)
             {
@@ -103,7 +103,7 @@ namespace DOL.GS
                 }
 
                 int sellPrice = item.SellPrice;
-                int purchasePrice = (int)(sellPrice * (1 + (float)ServerProperties.Properties.TRADING_TAX / 100));
+                int purchasePrice = sellPrice; // (int)(sellPrice * (1 + (float)ServerProperties.Properties.TRADING_TAX / 100));
 
                 lock (player.Inventory)
                 {

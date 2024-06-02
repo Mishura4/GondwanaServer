@@ -1,0 +1,2 @@
+TextNPC.NotInOwnedTerritory:		Bonjour, messire. Je ne vois pas l'intérêt de traiter avec vous, car mon territoire n'est pas vassal de votre guilde !
+TextNPC.ExchangeNotInOwnedTerritory:	Je n'ai aucune raison d'échanger cet objet avec vous, mon territoire n'étant pas vassal de votre guilde !

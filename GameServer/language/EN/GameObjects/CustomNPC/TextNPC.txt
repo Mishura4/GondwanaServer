@@ -1,0 +1,2 @@
+TextNPC.NotInOwnedTerritory:		Good day, sir. I see no reason to deal with you, as my territory is not a vassal of your guild!
+TextNPC.ExchangeNotInOwnedTerritory:	I have no reason to trade this item with you, as my territory is not a vassal of your guild!

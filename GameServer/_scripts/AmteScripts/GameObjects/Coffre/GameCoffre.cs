@@ -23,8 +23,9 @@ namespace DOL.GS.Scripts
         public readonly int LARGE_ITEM_DIST = 500;
         private GamePlayer m_interactPlayer;
         private DateTime m_lastInteract;
-        public ushort TPID { get; set; }
+        public int TPID { get; set; }
         public bool ShouldRespawnToTPID { get; set; }
+        public int CurrentStep { get; set; }
         public bool PickOnTouch { get; set; }
         public bool IsOpenableOnce { get; set; }
         public bool IsTerritoryLinked { get; set; }
@@ -32,34 +33,17 @@ namespace DOL.GS.Scripts
         public string SwitchFamily { get; set; }
         public int SwitchOrder { get; set; }
         public bool IsSwitch { get; set; }
+        public bool WrongOrderResetFamily { get; set; }
         public int SecondaryModel { get; set; }
-        public string SwitchTriggerEventID { get; set; }
+        public string ActivatedBySwitchOn { get; set; }
+        public string ActivatedBySwitchOff { get; set; }
+        public string ResetBySwitchOn { get; set; }
+        public string ResetBySwitchOff { get; set; }
 
         private bool isActivated;
         private Timer proximityTimer;
         private Timer activationTimer;
         public int ActivatedDuration { get; set; }
-
-        private void RespawnToTPID()
-        {
-            if (ShouldRespawnToTPID)
-            {
-                DBTP tp = GameServer.Database.SelectObject<DBTP>(DB.Column("TPID").IsEqualTo(this.TPID));
-                if (tp != null)
-                {
-                    Position = GetPositionFromTPID(tp);
-                }
-            }
-            AddToWorld();
-        }
-
-        private Vector3 GetPositionFromTPID(DBTP tp)
-        {
-            TPPoint currentTPPoint = new TPPoint(new Vector3(Position.X, Position.Y, Position.Z), (eTPPointType)tp.TPType);
-            TPPoint nextTPPoint = currentTPPoint.GetNextTPPoint();
-
-            return nextTPPoint != null ? new Vector3((float)nextTPPoint.Position.X, (float)nextTPPoint.Position.Y, (float)nextTPPoint.Position.Z) : Position;
-        }
 
         private void ShowSecondaryModel()
         {
@@ -311,7 +295,7 @@ namespace DOL.GS.Scripts
             {
                 foreach (GamePlayer player in GetPlayersInRadius(90))
                 {
-                    if (player.IsAlive && IsWithinRadius(player, 90))
+                    if (player.IsAlive && IsWithinRadius(player, 90) && !HasPlayerOpened(player) && (this.CoffreOpeningInterval == 0 || !this.LastTimeChecked.HasValue || (DateTime.Now - this.LastTimeChecked.Value) > TimeSpan.FromMinutes(this.CoffreOpeningInterval)))
                     {
                         if (IsSwitch)
                         {
@@ -335,7 +319,20 @@ namespace DOL.GS.Scripts
 
             if (currentIndex == -1 || (currentIndex > 0 && !switchesInFamily[currentIndex - 1].isActivated))
             {
-                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.SwitchCannotActivate"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                if (WrongOrderResetFamily)
+                {
+                    // Reset the entire family order
+                    foreach (var switchCoffre in switchesInFamily)
+                    {
+                        switchCoffre.isActivated = false;
+                        switchCoffre.RevertToPrimaryModel();
+                    }
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.SwitchOrderReset"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                }
+                else
+                {
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.SwitchCannotActivate"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                }
                 return;
             }
 
@@ -352,19 +349,27 @@ namespace DOL.GS.Scripts
         private void ActivateSwitchFamily(GamePlayer player)
         {
             OpenLinkedDoors();
-            /*StartLinkedEvents();*/
             KillLinkedMobs();
 
             player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.SwitchAllActivated"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
 
             GameEventMgr.Notify(SwitchEvent.SwitchActivated, this);
 
-            if (!string.IsNullOrEmpty(SwitchTriggerEventID))
+            if (!string.IsNullOrEmpty(ActivatedBySwitchOn))
             {
-                var gameEvent = GameEventManager.Instance.GetEventByID(SwitchTriggerEventID);
+                var gameEvent = GameEventManager.Instance.GetEventByID(ActivatedBySwitchOn);
                 if (gameEvent != null)
                 {
                     GameEventManager.Instance.StartEvent(gameEvent);
+                }
+            }
+
+            if (!string.IsNullOrEmpty(ResetBySwitchOn))
+            {
+                var resetEvent = GameEventManager.Instance.GetEventByID(ResetBySwitchOn);
+                if (resetEvent != null)
+                {
+                    GameEventManager.Instance.StopEvent(resetEvent, EndingConditionType.Switch);
                 }
             }
 
@@ -405,6 +410,24 @@ namespace DOL.GS.Scripts
             {
                 mob.AddToWorld();
             }
+
+            if (!string.IsNullOrEmpty(ActivatedBySwitchOff))
+            {
+                var gameEvent = GameEventManager.Instance.GetEventByID(ActivatedBySwitchOff);
+                if (gameEvent != null)
+                {
+                    GameEventManager.Instance.StartEvent(gameEvent);
+                }
+            }
+
+            if (!string.IsNullOrEmpty(ResetBySwitchOff))
+            {
+                var resetEvent = GameEventManager.Instance.GetEventByID(ResetBySwitchOff);
+                if (resetEvent != null)
+                {
+                    GameEventManager.Instance.StopEvent(resetEvent, EndingConditionType.Switch);
+                }
+            }
         }
 
         private void RevertDoors()
@@ -418,15 +441,6 @@ namespace DOL.GS.Scripts
                 }
             }
         }
-
-        /*private void StartLinkedEvents()
-        {
-            var eventsToStart = GameEventManager.Instance.GetEventsBySwitchFamily(SwitchFamily);
-            foreach (var ev in eventsToStart)
-            {
-                GameEventManager.Instance.StartEvent(ev);
-            }
-        }*/
 
         private void KillLinkedMobs()
         {
@@ -465,22 +479,47 @@ namespace DOL.GS.Scripts
             return values;
         }
 
+        private TPPoint GetSmartNextTPPoint(IList<DBTPPoint> tpPoints)
+        {
+            TPPoint smartNextPoint = null;
+            int maxPlayerCount = 0;
+
+            foreach (var tpPoint in tpPoints)
+            {
+                int playerCount = WorldMgr.GetPlayersCloseToSpot(tpPoint.Region, (float)tpPoint.X, (float)tpPoint.Y, (float)tpPoint.Z, 1500).OfType<GamePlayer>().Count(); // Using 1500 directly
+                if (playerCount > maxPlayerCount)
+                {
+                    maxPlayerCount = playerCount;
+                    smartNextPoint = new TPPoint(tpPoint.Region, tpPoint.X, tpPoint.Y, tpPoint.Z, eTPPointType.Smart, tpPoint);
+                }
+            }
+
+            return smartNextPoint ?? new TPPoint(tpPoints.First().Region, tpPoints.First().X, tpPoints.First().Y, tpPoints.First().Z, eTPPointType.Smart, tpPoints.First());
+        }
+
+        private TPPoint GetLoopNextTPPoint(IList<DBTPPoint> tpPoints)
+        {
+            DBTPPoint currentDBTPPoint = tpPoints.FirstOrDefault(p => p.Step == CurrentStep) ?? tpPoints.First();
+            TPPoint tpPoint = new TPPoint(currentDBTPPoint.Region, currentDBTPPoint.X, currentDBTPPoint.Y, currentDBTPPoint.Z, eTPPointType.Loop, currentDBTPPoint);
+            CurrentStep = (CurrentStep % tpPoints.Count) + 1;
+            return tpPoint;
+        }
+
+        private TPPoint GetRandomTPPoint(IList<DBTPPoint> tpPoints)
+        {
+            DBTPPoint randomDBTPPoint = tpPoints[Util.Random(tpPoints.Count - 1)];
+            return new TPPoint(randomDBTPPoint.Region, randomDBTPPoint.X, randomDBTPPoint.Y, randomDBTPPoint.Z, eTPPointType.Random, randomDBTPPoint);
+        }
+
         public void RespawnCoffre()
         {
-            if (ShouldRespawnToTPID)
-            {
-                RespawnToTPID();
-            }
-            else
-            {
-                base.AddToWorld();
-            }
+            base.AddToWorld();
         }
 
         #region Interact - GetRandomItem
         public override bool Interact(GamePlayer player)
         {
-            if (PickOnTouch && this.IsWithinRadius(player, 80))
+            if (PickOnTouch && !HasPlayerOpened(player))
             {
                 return InteractEnd(player);
             }
@@ -489,6 +528,35 @@ namespace DOL.GS.Scripts
             {
                 CheckSwitchActivation(player);
                 return true;
+            }
+
+            if (ShouldRespawnToTPID && TPID > 0 && !IsSwitch)
+            {
+                IList<DBTPPoint> tpPoints = GameServer.Database.SelectObjects<DBTPPoint>(DB.Column("TPID").IsEqualTo(TPID));
+                DBTP dbtp = GameServer.Database.SelectObjects<DBTP>(DB.Column("TPID").IsEqualTo(TPID)).FirstOrDefault();
+
+                if (tpPoints != null && tpPoints.Count > 0 && dbtp != null)
+                {
+                    TPPoint tpPoint = null;
+                    switch ((eTPPointType)dbtp.TPType)
+                    {
+                        case eTPPointType.Loop:
+                            tpPoint = GetLoopNextTPPoint(tpPoints);
+                            break;
+
+                        case eTPPointType.Random:
+                            tpPoint = GetRandomTPPoint(tpPoints);
+                            break;
+
+                        case eTPPointType.Smart:
+                            tpPoint = GetSmartNextTPPoint(tpPoints);
+                            break;
+                    }
+                    if (tpPoint != null)
+                    {
+                        base.MoveTo(tpPoint.Region, (float)tpPoint.Position.X, (float)tpPoint.Position.Y, (float)tpPoint.Position.Z, Coffre.Heading);
+                    }
+                }
             }
 
             if (IsOpenableOnce && HasPlayerOpened(player))
@@ -769,7 +837,6 @@ namespace DOL.GS.Scripts
 
         private void Repop_Elapsed(object sender, ElapsedEventArgs e)
         {
-            RevertToPrimaryModel();
             AddToWorld();
         }
         #endregion
@@ -984,8 +1051,9 @@ namespace DOL.GS.Scripts
             CoffreOpeningInterval = coffre.CoffreOpeningInterval;
             IsLargeCoffre = coffre.IsLargeCoffre;
             RemovedByEventID = coffre.RemovedByEventID;
-            Coffre.TPID = coffre.TPID;
-            Coffre.ShouldRespawnToTPID = coffre.ShouldRespawnToTPID;
+            TPID = coffre.TPID;
+            ShouldRespawnToTPID = coffre.ShouldRespawnToTPID;
+            CurrentStep = coffre.CurrentStep;
             PickOnTouch = coffre.PickOnTouch;
             IsOpenableOnce = coffre.IsOpenableOnce;
             IsTerritoryLinked = coffre.IsTerritoryLinked;
@@ -993,8 +1061,13 @@ namespace DOL.GS.Scripts
             SwitchFamily = coffre.SwitchFamily;
             SwitchOrder = coffre.SwitchOrder;
             IsSwitch = coffre.IsSwitch;
+            WrongOrderResetFamily = coffre.WrongOrderResetFamily;
             ActivatedDuration = coffre.ActivatedDuration;
             SecondaryModel = coffre.SecondaryModel;
+            ActivatedBySwitchOn = coffre.ActivatedBySwitchOn;
+            ActivatedBySwitchOff = coffre.ActivatedBySwitchOff;
+            ResetBySwitchOn = coffre.ResetBySwitchOn;
+            ResetBySwitchOff = coffre.ResetBySwitchOff;
 
             InitTimer();
 
@@ -1058,6 +1131,7 @@ namespace DOL.GS.Scripts
             Coffre.RemovedByEventID = RemovedByEventID;
             Coffre.TPID = TPID;
             Coffre.ShouldRespawnToTPID = ShouldRespawnToTPID;
+            Coffre.CurrentStep = CurrentStep;
             Coffre.PickOnTouch = PickOnTouch;
             Coffre.IsOpenableOnce = IsOpenableOnce;
             Coffre.IsTerritoryLinked = IsTerritoryLinked;
@@ -1065,8 +1139,13 @@ namespace DOL.GS.Scripts
             Coffre.SwitchFamily = SwitchFamily;
             Coffre.SwitchOrder = SwitchOrder;
             Coffre.IsSwitch = IsSwitch;
+            Coffre.WrongOrderResetFamily = WrongOrderResetFamily;
             Coffre.ActivatedDuration = ActivatedDuration;
             Coffre.SecondaryModel = SecondaryModel;
+            Coffre.ActivatedBySwitchOn = ActivatedBySwitchOn;
+            Coffre.ActivatedBySwitchOff = ActivatedBySwitchOff;
+            Coffre.ResetBySwitchOn = ResetBySwitchOn;
+            Coffre.ResetBySwitchOff = ResetBySwitchOff;
 
             if (Items != null)
             {
@@ -1147,6 +1226,7 @@ namespace DOL.GS.Scripts
                     " + IsLongDistance type: " + this.IsLargeCoffre,
                     " + Respawn to TPID: " + ShouldRespawnToTPID,
                     " + TPID: " + TPID,
+                    " + Current TPPoint step: " + CurrentStep,
                     " + Pick on Touch: " + PickOnTouch,
                     " + Secondary Model: " + SecondaryModel,
                     " + Is Openable Once: " + IsOpenableOnce,
@@ -1203,7 +1283,12 @@ namespace DOL.GS.Scripts
             text.Add("IsSwitch: " + this.IsSwitch);
             text.Add("Switch Family: " + this.SwitchFamily);
             text.Add("Switch Order: " + this.SwitchOrder);
+            text.Add("Reset Switch if wrong Order: " + this.WrongOrderResetFamily);
             text.Add("Activated Duration: " + this.ActivatedDuration + " secondes");
+            text.Add("Switch ON activates EventID: " + this.ActivatedBySwitchOn);
+            text.Add("Switch OFF deactivates EventID: " + this.ActivatedBySwitchOff);
+            text.Add("Switch ON resets EventID: " + this.ResetBySwitchOn);
+            text.Add("Switch OFF resets EventID: " + this.ResetBySwitchOff);
             return text;
         }
 
@@ -1232,6 +1317,9 @@ namespace DOL.GS.Scripts
                 IsLargeCoffre = coffre.IsLargeCoffre;
                 ItemChance = coffre.ItemChance;
                 KeyItem = coffre.KeyItem;
+                TPID = coffre.TPID;
+                ShouldRespawnToTPID = coffre.ShouldRespawnToTPID;
+                CurrentStep = coffre.CurrentStep;
                 PickOnTouch = coffre.PickOnTouch;
                 SecondaryModel = coffre.SecondaryModel;
                 IsOpenableOnce = coffre.IsOpenableOnce;
@@ -1240,7 +1328,12 @@ namespace DOL.GS.Scripts
                 SwitchFamily = coffre.SwitchFamily;
                 SwitchOrder = coffre.SwitchOrder;
                 IsSwitch = coffre.IsSwitch;
+                WrongOrderResetFamily = coffre.WrongOrderResetFamily;
                 ActivatedDuration = coffre.ActivatedDuration;
+                ActivatedBySwitchOn = coffre.ActivatedBySwitchOn;
+                ActivatedBySwitchOff = coffre.ActivatedBySwitchOff;
+                ResetBySwitchOn = coffre.ResetBySwitchOn;
+                ResetBySwitchOff = coffre.ResetBySwitchOff;
                 InitTimer();
             }
         }

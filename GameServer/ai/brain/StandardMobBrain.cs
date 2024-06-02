@@ -1221,13 +1221,32 @@ namespace DOL.AI.Brain
                 {
                     foreach (Spell spell in Body.Spells)
                     {
-
-                        if (Body.GetSkillDisabledDuration(spell) == 0)
+                        if (Body.GetSkillDisabledDuration(spell) > 0)
                         {
-                            if (spell.CastTime > 0)
+                            continue;
+                        }
+                        if (spell.Target.ToLower() is not ("enemy" or "area" or "cone"))
+                        {
+                            continue;
+                        }
+
+                        if (LivingHasEffect(Body.TargetObject as GameLiving, spell) && spell.SpellType is not ("DirectDamage" or "DirectDamageWithDebuff"))
+                        {
+                            continue;
+                        }
+
+                        if (spell.CastTime > 0)
+                        {
+                            if (Body.CanCastHarmfulSpells)
                             {
-                                if (spell.Target.ToLower() == "enemy" || spell.Target.ToLower() == "area" || spell.Target.ToLower() == "cone")
-                                    spell_rec.Add(spell);
+                                spell_rec.Add(spell);
+                            }
+                        }
+                        else
+                        {
+                            if (Body.CanCastInstantHarmfulSpells)
+                            {
+                                spell_rec.Add(spell);
                             }
                         }
                     }
