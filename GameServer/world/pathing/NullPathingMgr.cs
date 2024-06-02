@@ -1,5 +1,5 @@
 ﻿using System.Numerics;
-using System.Threading.Tasks;
+using DOL.GS.Geometry;
 
 namespace DOL.GS
 {
@@ -17,17 +17,13 @@ namespace DOL.GS
         {
         }
 
-        public WrappedPathingResult GetPathStraight(Zone zone, Vector3 start, Vector3 end)
-        {
-            return new WrappedPathingResult() { Error = PathingError.NavmeshUnavailable };
-        }
+        public (LinePath, PathingError) GetPathStraightAsync(Zone zone, Coordinate start, Coordinate end)
+            => (new LinePath(), PathingError.NavmeshUnavailable);
 
-        public Vector3? GetRandomPoint(Zone zone, Vector3 position, float radius)
-        {
-            return null;
-        }
+        public Vector3? GetRandomPointAsync(Zone zone, Coordinate center, float radius)
+            => null;
 
-        public Vector3? GetClosestPoint(Zone zone, Vector3 position, float xRange = 256, float yRange = 256, float zRange = 256)
+        public Vector3? GetClosestPointAsync(Zone zone, Vector3 position, float xRange = 256, float yRange = 256, float zRange = 256)
         {
             return position;
         }

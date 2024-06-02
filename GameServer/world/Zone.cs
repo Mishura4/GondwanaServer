@@ -26,7 +26,7 @@ using DOL.Database;
 using DOL.Language;
 using DOL.GS.Utils;
 using log4net;
-using System.Numerics;
+using DOL.GS.Geometry;
 
 namespace DOL.GS
 {
@@ -39,7 +39,7 @@ namespace DOL.GS
         /* 
         This file has been extensively modified for the new subzone management system
         So for old version please have a look in old release
-		 */
+         */
 
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -161,14 +161,15 @@ namespace DOL.GS
         private string m_Description;
 
         /// <summary>
-        /// The XOffset of this Zone inside the region
+        /// The Offset of this Zone inside the region
         /// </summary>
-        private readonly int m_XOffset;
+        public Vector Offset { get; init; }
+        
+        [Obsolete("Use .Offset instead!")]
+        public int XOffset => Offset.X;
 
-        /// <summary>
-        /// The YOffset of this Zone inside the region
-        /// </summary>
-        private readonly int m_YOffset;
+        [Obsolete("Use .Offset instead!")]
+        public int YOffset => Offset.Y;
 
         /// <summary>
         /// The Width of the Zone in Coordinates
@@ -229,8 +230,7 @@ namespace DOL.GS
             m_Region = region;
             m_ID = id;
             m_Description = desc;
-            m_XOffset = xoff;
-            m_YOffset = yoff;
+            Offset = Vector.Create(xoff, yoff);
             m_Width = width;
             m_Height = height;
             m_zoneSkinID = zoneskinID;
@@ -401,22 +401,6 @@ namespace DOL.GS
         }
 
         /// <summary>
-        /// Returns the XOffset of this Zone
-        /// </summary>
-        public int XOffset
-        {
-            get { return m_XOffset; }
-        }
-
-        /// <summary>
-        /// Returns the YOffset of this Zone
-        /// </summary>
-        public int YOffset
-        {
-            get { return m_YOffset; }
-        }
-
-        /// <summary>
         /// Returns the Width of this Zone
         /// </summary>
         public int Width
@@ -481,37 +465,18 @@ namespace DOL.GS
         /// <param name="p_X">X position</param>
         /// <param name="p_Y">Y position</param>
         /// <returns>The SubZoneIndex</returns>
-        private short GetSubZoneIndex(float p_X, float p_Y)
+        private short GetSubZoneIndex(Coordinate loc)
         {
-            int xDiff = (int)(p_X - m_XOffset);
-            int yDiff = (int)(p_Y - m_YOffset);
+            int xDiff = loc.X - Offset.X;
+            int yDiff = loc.Y - Offset.Y;
 
-            if ((xDiff < 0) || (xDiff > 65535) || (yDiff < 0) || (yDiff > 65535))
-            {
-                // the object is out of the zone
+            var isOutOfZone = (xDiff < 0) || (xDiff > 65535) || (yDiff < 0) || (yDiff > 65535);
+            if (isOutOfZone)
                 return -1;
-            }
-            else
-            {
-                // the object is in the zone
-                //DOLConsole.WriteWarning("GetSubZoneIndex : " + SUBZONE_NBR_ON_ZONE_SIDE + ", " + SUBZONE_NBR + ", " + SUBZONE_SHIFT + ", " + SUBZONE_ARRAY_Y_SHIFT);
-
-                xDiff >>= SUBZONE_SHIFT;
-                yDiff >>= SUBZONE_SHIFT;
-
-                return GetSubZoneOffset(yDiff, xDiff);
-            }
-        }
-
-
-        /// <summary>
-        /// Get the index of the subzone from the GameObject position
-        /// </summary>
-        /// <param name="p_Obj">The GameObject</param>
-        /// <returns>The index of the subzone</returns>
-        private short GetSubZoneIndex(GameObject p_Obj)
-        {
-            return GetSubZoneIndex(p_Obj.Position.X, p_Obj.Position.Y);
+            
+            xDiff >>= SUBZONE_SHIFT;
+            yDiff >>= SUBZONE_SHIFT;
+            return GetSubZoneOffset(yDiff, xDiff);
         }
 
 
@@ -523,7 +488,7 @@ namespace DOL.GS
         {
 
             if (!m_initialized) InitializeZone();
-            int subZoneIndex = GetSubZoneIndex(p_Obj);
+            int subZoneIndex = GetSubZoneIndex(p_Obj.Coordinate);
             if ((subZoneIndex >= 0) && (subZoneIndex < SUBZONE_NBR))
             {
                 SubNodeElement element = new SubNodeElement();
@@ -570,7 +535,7 @@ namespace DOL.GS
         {
 
             if (!m_initialized) InitializeZone();
-            int subZoneIndex = GetSubZoneIndex(element.data);
+            int subZoneIndex = GetSubZoneIndex(element.data.Coordinate);
 
             if (log.IsDebugEnabled)
             {
@@ -603,16 +568,16 @@ namespace DOL.GS
         /// <param name="radius">the radius to check against</param>
         /// <param name="partialList">an initial (eventually empty but initialized, i.e. never null !!) list of objects</param>
         /// <returns>partialList augmented with the new objects verigying both type and radius in the current Zone</returns>
-        internal ArrayList GetObjectsInRadius(eGameObjectType type, float x, float y, float z, ushort radius, ArrayList partialList, bool ignoreZ)
+        internal ArrayList GetObjectsInRadius(eGameObjectType type, Coordinate coordinate, ushort radius, ArrayList partialList, bool ignoreZ)
         {
             if (!m_initialized) InitializeZone();
             // initialise parameters
             uint sqRadius = (uint)radius * (uint)radius;
-            int referenceSubzoneIndex = GetSubZoneIndex(x, y);
+            int referenceSubzoneIndex = GetSubZoneIndex(coordinate);
             int typeIndex = (int)type;
-
-            int xInZone = (int)(x - m_XOffset); // x in zone coordinates
-            int yInZone = (int)(y - m_YOffset); // y in zone coordinates
+            
+            int xInZone = coordinate.X - Offset.X; // x in zone coordinates
+            int yInZone = coordinate.Y - Offset.Y; // y in zone coordinates
 
             int cellNbr = (radius >> SUBZONE_SHIFT) + 1; // radius in terms of subzone number
             int xInCell = xInZone >> SUBZONE_SHIFT; // xInZone in terms of subzone coord
@@ -667,7 +632,7 @@ namespace DOL.GS
                             {
                                 // we are in the subzone of the observation point
                                 // => check all distances for all objects in the subzone
-                                UnsafeAddToListWithDistanceCheck(startElement, x, y, z, sqRadius, typeIndex, currentSubZoneIndex, partialList, inZoneElements, outOfZoneElements, ignoreZ);
+                                UnsafeAddToListWithDistanceCheck(startElement, coordinate, sqRadius, typeIndex, currentSubZoneIndex, partialList, inZoneElements, outOfZoneElements, ignoreZ);
                                 UnsafeUpdateSubZoneTimestamp(currentSubZoneIndex, typeIndex);
                             }
                         }
@@ -700,7 +665,7 @@ namespace DOL.GS
 
                                     lock (startElement)
                                     {
-                                        UnsafeAddToListWithDistanceCheck(startElement, x, y, z, sqRadius, typeIndex, currentSubZoneIndex, partialList, inZoneElements, outOfZoneElements, ignoreZ);
+                                        UnsafeAddToListWithDistanceCheck(startElement, coordinate, sqRadius, typeIndex, currentSubZoneIndex, partialList, inZoneElements, outOfZoneElements, ignoreZ);
                                         UnsafeUpdateSubZoneTimestamp(currentSubZoneIndex, typeIndex);
                                     }
                                 }
@@ -777,9 +742,7 @@ namespace DOL.GS
 
         private void UnsafeAddToListWithDistanceCheck(
             SubNodeElement startElement,
-            float x,
-            float y,
-            float z,
+            Coordinate coordinate,
             uint sqRadius,
             int typeIndex,
             int subZoneIndex,
@@ -813,7 +776,7 @@ namespace DOL.GS
                 }
                 else
                 {
-                    if (CheckSquareDistance(x, y, z, currentObject.Position.X, currentObject.Position.Y, currentObject.Position.Z, sqRadius, ignoreZ) && !partialList.Contains(currentObject))
+                    if (CheckSquareDistance(coordinate, currentObject.Coordinate, sqRadius, ignoreZ) && !partialList.Contains(currentObject))
                     {
                         // the current object exists, is Active and still in the current subzone
                         // moreover it is in the right range and not yet in the result set
@@ -938,7 +901,7 @@ namespace DOL.GS
             {
                 // the current object exists, is Active and still in the Region where this Zone is located
 
-                int currentElementSubzoneIndex = GetSubZoneIndex(currentObject.Position.X, currentObject.Position.Y);
+                int currentElementSubzoneIndex = GetSubZoneIndex(currentObject.Coordinate);
 
                 if (currentElementSubzoneIndex == -1)
                 {
@@ -1039,7 +1002,7 @@ namespace DOL.GS
                 for (int i = 0; i < currentList.Count; i++)
                 {
                     currentElement = (SubNodeElement)currentList[i];
-                    currentZone = ZoneRegion.GetZone(currentElement.data.Position);
+                    currentZone = ZoneRegion.GetZone(currentElement.data.Coordinate);
 
                     if (currentZone != null)
                     {
@@ -1062,11 +1025,27 @@ namespace DOL.GS
         /// <param name="z2">Z of Point2</param>
         /// <param name="sqDistance">the square distance to check for</param>
         /// <returns>The distance</returns>
-        public static bool CheckSquareDistance(float x1, float y1, float z1, float x2, float y2, float z2, uint sqDistance, bool ignoreZ)
+        public static bool CheckSquareDistance(Coordinate locA, Coordinate locB, uint squaredDistance, bool ignoreZ)
         {
-            if (ignoreZ)
-                return Vector2.DistanceSquared(new Vector2(x1, y1), new Vector2(x2, y2)) <= sqDistance;
-            return Vector3.DistanceSquared(new Vector3(x1, y1, z1), new Vector3(x2, y2, z2)) <= sqDistance;
+            int xDiff = locA.X - locB.X;
+            var dist = ((long)xDiff) * xDiff;
+
+            if (dist > squaredDistance) return false;
+
+            int yDiff = locA.Y - locB.Y;
+            dist += ((long)yDiff) * yDiff;
+
+            if (dist > squaredDistance) return false;
+
+            if (ignoreZ == false)
+            {
+                int zDiff = locA.Z - locB.Z;
+                dist += ((long)zDiff) * zDiff;
+            }
+
+            if (dist > squaredDistance) return false;
+
+            return true;
         }
 
 
@@ -1138,31 +1117,13 @@ namespace DOL.GS
 
         #region Area functions
 
-        /// <summary>
-        /// Convinientmethod for Region.GetAreasOfZone(),
-        /// since zone.Region.getAreasOfZone(zone,x,y,z) is a bit confusing ...
-        /// </summary>
-        /// <param name="spot"></param>
-        /// <returns></returns>
-        public IList<IArea> GetAreasOfSpot(System.Numerics.Vector3 spot)
-        {
-            return GetAreasOfSpot(spot, true);
-        }
-
-        public IList<IArea> GetAreasOfSpot(int x, int y, int z)
-        {
-            return m_Region.GetAreasOfZone(this, x, y, z);
-        }
-
-        public IList<IArea> GetAreasOfSpot(System.Numerics.Vector3 spot, bool checkZ)
-        {
-            return m_Region.GetAreasOfZone(this, spot, checkZ);
-        }
-
         public IList<IArea> GetAreas()
         {
             return m_Region.GetAreasOfZone(this);
         }
+        
+        public IList<IArea> GetAreasOfSpot(Coordinate spot)
+            => m_Region.GetAreasOfZone(this, spot, true);
 
         public IList<IArea> GetAreas(Predicate<IArea> predicate)
         {

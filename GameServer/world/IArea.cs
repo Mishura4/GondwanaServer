@@ -20,6 +20,7 @@
 using System;
 using System.Numerics;
 using DOL.Events;
+using DOL.GS.Geometry;
 using DOL.Language;
 
 namespace DOL.GS
@@ -61,15 +62,15 @@ namespace DOL.GS
         /// </summary>
         /// <param name="spot"></param>
         /// <returns></returns>
-        bool IsContaining(Vector3 spot);
+        bool IsContaining(Coordinate spot, bool ignoreZ = false);
+        
+        [Obsolete("Use .IsContaining(Coordinate[,bool]) instead!")]
+        bool IsContaining(int x, int y, int z);
+        
+        [Obsolete("Use .IsContaining(Coordinate[,bool]) instead!")]
+        bool IsContaining(int x, int y, int z, bool checkZ);
 
-        bool IsContaining(Vector3 spot, bool checkZ);
-
-        bool IsContaining(float x, float y, float z);
-
-        bool IsContaining(float x, float y, float z, bool checkZ);
-
-        float DistanceSquared(Vector3 position, bool checkZ);
+        float DistanceSquared(Coordinate position, bool checkZ);
 
         /// <summary>
         /// Called whenever a player leaves the given area

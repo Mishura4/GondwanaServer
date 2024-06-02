@@ -52,7 +52,7 @@ namespace DOL.GS.Commands
             //Create a new object
             GameStaticItem obj = new GameStaticItem();
             //Fill the object variables
-            obj.Position = pp.Position + Vector3.UnitZ; // raise a bit off of ground level
+            obj.Position = pp.Coordinate + Vector3.UnitZ; // raise a bit off of ground level
             obj.CurrentRegion = client.Player.CurrentRegion;
             obj.Heading = client.Player.Heading;
             obj.Name = name;

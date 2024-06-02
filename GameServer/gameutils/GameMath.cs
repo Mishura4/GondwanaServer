@@ -1,13 +1,11 @@
 using System;
-using System.Numerics;
 using DOL.GS;
+using DOL.GS.Geometry;
 
 namespace DOL
 {
     public static class GameMath
     {
-        public static Vector2 ToVector2(this Vector3 v) => new Vector2(v.X, v.Y);
-
         /// <summary>
         /// The factor to convert a heading value to radians
         /// </summary>
@@ -48,19 +46,13 @@ namespace DOL
         // The DOL Heading grid is 0 at the bottom of the Y-axis and increases clockwise.
         // General trigonometry and the System.Math library use the Cartesian grid.
 
-        public static ushort GetHeading(Vector2 origin, Vector3 target)
-            => GetHeading(origin, target.ToVector2());
-        public static ushort GetHeading(Vector3 origin, Vector3 target)
-            => GetHeading(origin.ToVector2(), target.ToVector2());
-        public static ushort GetHeading(Vector3 origin, Vector2 target)
-            => GetHeading(origin.ToVector2(), target);
         /// <summary>
         /// Get the heading to a point
         /// </summary>
         /// <param name="origin">Source point</param>
         /// <param name="target">Target point</param>
         /// <returns>Heading to target point</returns>
-        public static ushort GetHeading(Vector2 origin, Vector2 target)
+        public static ushort GetHeading(Coordinate origin, Coordinate target)
         {
             float dx = target.X - origin.X;
             float dy = target.Y - origin.Y;
@@ -74,8 +66,8 @@ namespace DOL
         }
 
         public static float GetAngle(GameObject origin, GameObject target)
-            => GetAngle(origin.Position.ToVector2(), origin.Heading, target.Position.ToVector2());
-        public static float GetAngle(Vector2 origin, ushort originHeading, Vector2 target)
+            => GetAngle(origin.Coordinate, origin.Heading, target.Coordinate);
+        public static float GetAngle(Coordinate origin, ushort originHeading, Coordinate target)
         {
             float headingDifference = (GetHeading(origin, target) & 0xFFF) - (originHeading & 0xFFF);
 
@@ -85,22 +77,15 @@ namespace DOL
             return (headingDifference * 360.0f / 4096.0f);
         }
 
-        public static Vector2 GetPointFromHeading(GameObject origin, float distance)
-            => GetPointFromHeading(origin.Position.ToVector2(), origin.Heading, distance);
-        public static Vector2 GetPointFromHeading(Vector3 origin, ushort heading, float distance)
-            => GetPointFromHeading(origin.ToVector2(), heading, distance);
-        public static Vector2 GetPointFromHeading(Vector2 origin, ushort heading, float distance)
+        public static Coordinate GetPointFromHeading(GameObject origin, float distance)
+            => GetPointFromHeading(origin.Coordinate, origin.Heading, distance);
+        public static Coordinate GetPointFromHeading(Coordinate origin, ushort heading, float distance)
         {
             float angle = heading * HEADING_TO_RADIAN;
             float targetX = origin.X - ((float)Math.Sin(angle) * distance);
             float targetY = origin.Y + ((float)Math.Cos(angle) * distance);
 
-            var point = new Vector2();
-            if (targetX > 0)
-                point.X = targetX;
-            if (targetY > 0)
-                point.Y = targetY;
-            return point;
+            return Coordinate.Create(int.Max((int)targetX, 0), int.Max((int)targetY, 0));
         }
 
         /// <summary>
@@ -113,46 +98,75 @@ namespace DOL
         /// <param name="b">Source point</param>
         /// <param name="a">Target point</param>
         /// <returns>Distance to point</returns>
-        public static float GetDistance2D(Vector3 a, Vector3 b)
-        {
-            var vec = (b - a);
-            vec.Z = 0; // 2D
-            return vec.Length();
-        }
+        public static float GetDistance2D(Coordinate a, Coordinate b) => (float)(b - a).Length2D;
+        
         public static float GetDistance2D(GameObject a, GameObject b)
         {
             if (a.CurrentRegion != b.CurrentRegion)
                 return float.MaxValue;
-            return GetDistance2D(a.Position, b.Position);
+            return GetDistance2D(a.Coordinate, b.Coordinate);
         }
+        
+        public static int GetDistance2DSquared(Coordinate a, Coordinate b)
+        {
+            int dX = b.X - a.X;
+            int dY = b.Y - a.Y;
+            return dX * dX + dY * dY;
+        }
+        
+        public static int GetDistance2DSquared(GameObject a, GameObject b)
+        {
+            if (a.CurrentRegion != b.CurrentRegion)
+                return int.MaxValue;
+            return GetDistance2DSquared(a.Coordinate, b.Coordinate);
+        }
+
+        public static float GetDistance(Coordinate a, Coordinate b) => (float)(b - a).Length;
 
         public static float GetDistance(GameObject a, GameObject b)
         {
             if (a.CurrentRegion != b.CurrentRegion)
                 return float.MaxValue;
-            return Vector3.Distance(a.Position, b.Position);
+            return GetDistance(a.Coordinate, b.Coordinate);
+        }
+        public static int GetDistanceSquared(Coordinate a, Coordinate b)
+        {
+            int dX = b.X - a.X;
+            int dY = b.Y - a.Y;
+            int dZ = b.Z - a.Z;
+            return dX * dX + dY * dY + dZ * dZ;
+        }
+        public static int GetDistanceSquared(GameObject a, GameObject b)
+        {
+            if (a.CurrentRegion != b.CurrentRegion)
+                return int.MaxValue;
+            return GetDistanceSquared(a.Coordinate, b.Coordinate);
         }
 
         public static bool IsWithinRadius(GameObject source, GameObject target, float distance)
         {
             if (source.CurrentRegion != target.CurrentRegion)
                 return false;
-            return Vector3.DistanceSquared(source.Position, target.Position) <= distance * distance;
+            return GetDistanceSquared(source.Coordinate, target.Coordinate) <= distance * distance;
         }
-        public static bool IsWithinRadius(GameObject source, Vector3 target, float distance)
-            => Vector3.DistanceSquared(source.Position, target) <= distance * distance;
-        public static bool IsWithinRadius(Vector3 source, Vector3 target, float distance)
-            => Vector3.DistanceSquared(source, target) <= distance * distance;
+        
+        public static bool IsWithinRadius(GameObject source, Coordinate target, float distance)
+            => GetDistanceSquared(source.Coordinate, target) <= distance * distance;
+        
+        public static bool IsWithinRadius(Coordinate source, Coordinate target, float distance)
+            => GetDistanceSquared(source, target) <= distance * distance;
 
         public static bool IsWithinRadius2D(GameObject source, GameObject target, float distance)
         {
             if (source.CurrentRegion != target.CurrentRegion)
                 return false;
-            return Vector2.DistanceSquared(source.Position.ToVector2(), target.Position.ToVector2()) <= distance * distance;
+            return GetDistance2DSquared(source.Coordinate, target.Coordinate) <= distance * distance;
         }
-        public static bool IsWithinRadius2D(GameObject source, Vector3 target, float distance)
-            => Vector2.DistanceSquared(source.Position.ToVector2(), target.ToVector2()) <= distance * distance;
-        public static bool IsWithinRadius2D(Vector3 source, Vector3 target, float distance)
-            => Vector2.DistanceSquared(source.ToVector2(), target.ToVector2()) <= distance * distance;
+        
+        public static bool IsWithinRadius2D(GameObject source, Coordinate target, float distance)
+            => GetDistance2DSquared(source.Coordinate, target) <= distance * distance;
+        
+        public static bool IsWithinRadius2D(Coordinate source, Coordinate target, float distance)
+            => GetDistance2DSquared(source, target) <= distance * distance;
     }
 }

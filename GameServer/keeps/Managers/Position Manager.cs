@@ -83,7 +83,7 @@ namespace DOL.GS.Keeps
         {
             LoadKeepItemPosition(pos, guard);
 
-            guard.SpawnPoint = guard.Position;
+            guard.SpawnPosition = guard.Position;
             guard.SpawnHeading = guard.Heading;
         }
 
@@ -344,7 +344,7 @@ namespace DOL.GS.Keeps
 
                 int x, y;
                 LoadXY(component, pp.X, pp.Y, out x, out y);
-                p.Position = new Vector3(x, y, component.Keep.Z + p.Position.Z);
+                p.Coordinate = new Vector3(x, y, component.Keep.Z + p.Coordinate.Z);
 
                 p.WaitTime = pp.WaitTime;
 
@@ -385,7 +385,7 @@ namespace DOL.GS.Keeps
             int i = 1;
             do
             {
-                DBPathPoint dbpp = new DBPathPoint((int)path.Position.X, (int)path.Position.Y, (int)path.Position.Z, path.MaxSpeed);
+                DBPathPoint dbpp = new DBPathPoint((int)path.Coordinate.X, (int)path.Coordinate.Y, (int)path.Coordinate.Z, path.MaxSpeed);
                 int x, y;
                 SaveXY(component, dbpp.X, dbpp.Y, out x, out y);
                 dbpp.X = x;

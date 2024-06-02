@@ -24,6 +24,7 @@ using DOL.Events;
 using DOL.GS;
 using DOL.GS.Spells;
 using DOL.GS.Effects;
+using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
 using DOL.GS.RealmAbilities;
 using DOL.GS.SkillHandler;
@@ -49,7 +50,7 @@ namespace DOL.AI.Brain
         public static readonly short MIN_ENEMY_FOLLOW_DIST = 90;
         public static readonly short MAX_ENEMY_FOLLOW_DIST = 512;
 
-        protected Vector3 m_temp = Vector3.Zero;
+        protected Coordinate m_temp = Coordinate.Nowhere;
 
         /// <summary>
         /// Holds the controlling player of this brain
@@ -196,7 +197,7 @@ namespace DOL.AI.Brain
                     Body.TargetObject = null;
                     if (WalkState == eWalkState.Follow)
                         FollowOwner();
-                    else if (m_temp.X > 0 && m_temp.Y > 0 && m_temp.Z > 0)
+                    else if (m_temp.Equals(Coordinate.Nowhere))
                         Body.PathTo(m_temp, Body.MaxSpeed);
                 }
                 AttackMostWanted();
@@ -236,7 +237,7 @@ namespace DOL.AI.Brain
         /// </summary>
         public virtual void Stay()
         {
-            m_temp = Body.Position;
+            m_temp = Body.Coordinate;
             WalkState = eWalkState.Stay;
             Body.StopFollowing();
         }
@@ -246,10 +247,10 @@ namespace DOL.AI.Brain
         /// </summary>
         public virtual void ComeHere()
         {
-            m_temp = Body.Position;
+            m_temp = Body.Coordinate;
             WalkState = eWalkState.ComeHere;
             Body.StopFollowing();
-            Body.PathTo(Owner.Position, Body.MaxSpeed);
+            Body.PathTo(Owner.Coordinate, Body.MaxSpeed);
         }
 
         /// <summary>
@@ -258,10 +259,10 @@ namespace DOL.AI.Brain
         /// <param name="target"></param>
         public virtual void Goto(GameObject target)
         {
-            m_temp = Body.Position;
+            m_temp = Body.Coordinate;
             WalkState = eWalkState.GoTarget;
             Body.StopFollowing();
-            Body.PathTo(target.Position, Body.MaxSpeed);
+            Body.PathTo(target.Coordinate, Body.MaxSpeed);
         }
 
         public virtual void SetAggressionState(eAggressionState state)
@@ -1068,7 +1069,7 @@ namespace DOL.AI.Brain
                 {
                     FollowOwner();
                 }
-                else if (m_temp.X > 0 && m_temp.Y > 0 && m_temp.Z > 0)
+                else if (!m_temp.Equals(Coordinate.Nowhere))
                 {
                     Body.PathTo(m_temp, Body.MaxSpeed);
                 }
@@ -1112,8 +1113,6 @@ namespace DOL.AI.Brain
         {
             // don't
         }
-
-        public override bool CheckFormation(ref float x, ref float y, ref float z) { return false; }
 
         #endregion
     }

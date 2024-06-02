@@ -191,8 +191,8 @@ namespace DOL.GS.Keeps
                     // we need to reposition the patrol at their spawn point plus variation
                     if (x == 0)
                     {
-                        x = guard.SpawnPoint.X;
-                        y = guard.SpawnPoint.Y;
+                        x = guard.SpawnPosition.X;
+                        y = guard.SpawnPosition.Y;
                     }
                     else
                     {
@@ -206,7 +206,7 @@ namespace DOL.GS.Keeps
                         if (guard.IsMovingOnPath)
                             guard.StopMovingOnPath();
 
-                        guard.MoveTo(guard.CurrentRegionID, x, y, guard.SpawnPoint.Z, guard.SpawnHeading);
+                        guard.MoveTo(guard.CurrentRegionID, x, y, guard.SpawnPosition.Z, guard.SpawnHeading);
                     }
 
                     guardsToKeep.Add(guard);

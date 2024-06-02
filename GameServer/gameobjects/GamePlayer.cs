@@ -56,6 +56,7 @@ using DOL.GS.Realm;
 using DOL.GS.Scripts;
 using log4net;
 using System.Collections.Immutable;
+using DOL.GS.Geometry;
 
 namespace DOL.GS
 {
@@ -557,54 +558,66 @@ namespace DOL.GS
             set { if (DBCharacter != null) DBCharacter.UsedLevelCommand = value; }
         }
 
+        public Position BindHousePosition
+        {
+            get
+            {
+                if (DBCharacter == null) return Position.Zero;
+
+                return Position.Create(
+                    (ushort)DBCharacter.BindHouseRegion,
+                    DBCharacter.BindHouseXpos,
+                    DBCharacter.BindHouseYpos,
+                    DBCharacter.BindHouseZpos,
+                    (ushort)DBCharacter.BindHouseHeading);
+            }
+            set
+            {
+                DBCharacter.BindHouseRegion = value.RegionID;
+                DBCharacter.BindHouseXpos = value.X;
+                DBCharacter.BindHouseYpos = value.Y;
+                DBCharacter.BindHouseZpos = value.Z;
+                DBCharacter.BindHouseHeading = value.Orientation.InHeading;
+            }
+        }
+
         /// <summary>
         /// Gets or sets the BindHouseRegion for this player
         /// (delegate to property in DBCharacter)
         /// </summary>
+        [Obsolete("Use BindHousePosition instead!")]
         public int BindHouseRegion
         {
-            get { return DBCharacter != null ? DBCharacter.BindHouseRegion : 0; }
-            set { if (DBCharacter != null) DBCharacter.BindHouseRegion = value; }
+            get => BindHousePosition.RegionID;
+            set => BindHousePosition.With(regionID: (ushort)value);
         }
-
-        /// <summary>
-        /// Gets or sets the BindHouseXpos for this player
-        /// (delegate to property in DBCharacter)
-        /// </summary>
+        
+        [Obsolete("Use BindHousePosition instead!")]
         public int BindHouseXpos
         {
-            get { return DBCharacter != null ? DBCharacter.BindHouseXpos : 0; }
-            set { if (DBCharacter != null) DBCharacter.BindHouseXpos = value; }
+            get => BindHousePosition.X;
+            set => BindHousePosition.With(x: value);
         }
-
-        /// <summary>
-        /// Gets or sets the BindHouseYpos for this player
-        /// (delegate to property in DBCharacter)
-        /// </summary>
+        
+        [Obsolete("Use BindHousePosition instead!")]
         public int BindHouseYpos
         {
-            get { return DBCharacter != null ? DBCharacter.BindHouseYpos : 0; }
-            set { if (DBCharacter != null) DBCharacter.BindHouseYpos = value; }
+            get => BindHousePosition.Y;
+            set => BindHousePosition.With(y: value);
         }
 
-        /// <summary>
-        /// Gets or sets BindHouseZpos for this player
-        /// (delegate to property in DBCharacter)
-        /// </summary>
+        [Obsolete("Use BindHousePosition instead!")]
         public int BindHouseZpos
         {
-            get { return DBCharacter != null ? DBCharacter.BindHouseZpos : 0; }
-            set { if (DBCharacter != null) DBCharacter.BindHouseZpos = value; }
+            get => BindHousePosition.Z;
+            set => BindHousePosition.With(z: value);
         }
 
-        /// <summary>
-        /// Gets or sets the BindHouseHeading for this player
-        /// (delegate to property in DBCharacter)
-        /// </summary>
+        [Obsolete("Use BindHousePosition instead!")]
         public int BindHouseHeading
         {
-            get { return DBCharacter != null ? DBCharacter.BindHouseHeading : 0; }
-            set { if (DBCharacter != null) DBCharacter.BindHouseHeading = value; }
+            get => BindHousePosition.Orientation.InHeading;
+            set => BindHousePosition.With(Angle.Heading(value));
         }
 
         /// <summary>
@@ -647,10 +660,27 @@ namespace DOL.GS
             set { if (DBCharacter != null) DBCharacter.ShowXFireInfo = value; }
         }
 
-        /// <summary>
-        /// Gets or sets the BindRegion for this player
-        /// (delegate to property in DBCharacter)
-        /// </summary>
+        public Position BindPosition
+        {
+            get
+            {
+                if(DBCharacter == null) return Position.Zero;
+
+                return DBCharacter.GetBindPosition();
+            }
+            set
+            {
+                if (DBCharacter == null) return;
+
+                DBCharacter.BindRegion = value.RegionID;
+                DBCharacter.BindXpos = value.X;
+                DBCharacter.BindYpos = value.Y;
+                DBCharacter.BindZpos = value.Z;
+                DBCharacter.BindHeading = value.Orientation.InHeading;
+            }
+        }
+
+        [Obsolete("Use BindPosition instead!")]
         public int BindRegion
         {
             get { return DBCharacter != null ? DBCharacter.BindRegion : 0; }
@@ -661,6 +691,7 @@ namespace DOL.GS
         /// Gets or sets the BindXpos for this player
         /// (delegate to property in DBCharacter)
         /// </summary>
+        [Obsolete("Use BindPosition instead!")]
         public int BindXpos
         {
             get { return DBCharacter != null ? DBCharacter.BindXpos : 0; }
@@ -671,6 +702,7 @@ namespace DOL.GS
         /// Gets or sets the BindYpos for this player
         /// (delegate to property in DBCharacter)
         /// </summary>
+        [Obsolete("Use BindPosition instead!")]
         public int BindYpos
         {
             get { return DBCharacter != null ? DBCharacter.BindYpos : 0; }
@@ -681,6 +713,7 @@ namespace DOL.GS
         /// Gets or sets the BindZpos for this player
         /// (delegate to property in DBCharacter)
         /// </summary>
+        [Obsolete("Use BindPosition instead!")]
         public int BindZpos
         {
             get { return DBCharacter != null ? DBCharacter.BindZpos : 0; }
@@ -691,6 +724,7 @@ namespace DOL.GS
         /// Gets or sets the BindHeading for this player
         /// (delegate to property in DBCharacter)
         /// </summary>
+        [Obsolete("Use BindPosition instead!")]
         public int BindHeading
         {
             get { return DBCharacter != null ? DBCharacter.BindHeading : 0; }
@@ -954,7 +988,7 @@ namespace DOL.GS
 
         private void CheckIfNearEnemyKeepAndAddToRvRLinkDeathListIfNecessary()
         {
-            AbstractGameKeep keep = GameServer.KeepManager.GetKeepCloseToSpot(this.CurrentRegionID, this.Position, WorldMgr.VISIBILITY_DISTANCE);
+            AbstractGameKeep keep = GameServer.KeepManager.GetKeepCloseToSpot(Position, WorldMgr.VISIBILITY_DISTANCE);
             if (keep != null && this.Client.Account.PrivLevel == 1 && GameServer.KeepManager.IsEnemy(keep, this))
             {
                 if (WorldMgr.RvRLinkDeadPlayers.ContainsKey(this.m_InternalID))
@@ -1030,11 +1064,7 @@ namespace DOL.GS
             // DamienOphyr: Overwrite current position with Bind position in database, MoveTo() is inoperant
             if (CurrentRegion.IsInstance)
             {
-                DBCharacter.Region = BindRegion;
-                DBCharacter.Xpos = BindXpos;
-                DBCharacter.Ypos = BindYpos;
-                DBCharacter.Zpos = BindZpos;
-                DBCharacter.Direction = BindHeading;
+                Position = BindPosition;
             }
 
             if (!this.CurrentRegion.IsRvR)
@@ -1321,11 +1351,7 @@ namespace DOL.GS
 
             if (forced)
             {
-                BindRegion = CurrentRegionID;
-                BindHeading = Heading;
-                BindXpos = (int)Position.X;
-                BindYpos = (int)Position.Y;
-                BindZpos = (int)Position.Z;
+                BindPosition = Position;
                 if (DBCharacter != null)
                     GameServer.Database.SaveObject(DBCharacter);
                 return;
@@ -1346,7 +1372,8 @@ namespace DOL.GS
                 return;
             }
 
-            string description = string.Format("in {0}", this.GetBindSpotDescription());
+            var spotDescription = WorldMgr.GetRegion(BindPosition.RegionID).GetTranslatedSpotDescription(Client, BindPosition.Coordinate);
+            string description = string.Format("in {0}", spotDescription);
             Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Bind.LastBindPoint", description), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 
             bool bound = false;
@@ -1355,11 +1382,7 @@ namespace DOL.GS
             if (bindarea != null)
             {
                 bound = true;
-                BindRegion = CurrentRegionID;
-                BindHeading = Heading;
-                BindXpos = (int)Position.X;
-                BindYpos = (int)Position.Y;
-                BindZpos = (int)Position.Z;
+                BindPosition = Position;
                 if (DBCharacter != null)
                     GameServer.Database.SaveObject(DBCharacter);
             }
@@ -1393,11 +1416,7 @@ namespace DOL.GS
                         int outsideX = (int)(house.Position.X + (0 * Math.Cos(angle) + 500 * Math.Sin(angle)));
                         int outsideY = (int)(house.Position.Y - (500 * Math.Cos(angle) - 0 * Math.Sin(angle)));
                         ushort outsideHeading = (ushort)((house.Heading < 180 ? house.Heading + 180 : house.Heading - 180) / 0.08789);
-                        BindHouseRegion = CurrentRegionID;
-                        BindHouseHeading = outsideHeading;
-                        BindHouseXpos = outsideX;
-                        BindHouseYpos = outsideY;
-                        BindHouseZpos = (int)house.Position.Z;
+                        BindHousePosition = house.OutdoorJumpPosition;
                         if (DBCharacter != null)
                             GameServer.Database.SaveObject(DBCharacter);
                     }
@@ -1611,27 +1630,18 @@ namespace DOL.GS
             {
                 m_releaseType = releaseCommand;
             }
-
-            int relX = 0, relY = 0, relZ = 0;
-            ushort relRegion = 0, relHeading = 0;
+            
+            var releasePosition = Position.Zero;
             switch (m_releaseType)
             {
                 case eReleaseType.Duel:
                     {
-                        relRegion = (ushort)character.Region;
-                        relX = character.Xpos;
-                        relY = character.Ypos;
-                        relZ = character.Zpos;
-                        relHeading = 2048;
+                        releasePosition = character.GetPosition().With(Angle.Degrees(180));
                         break;
                     }
                 case eReleaseType.House:
                     {
-                        relRegion = (ushort)BindHouseRegion;
-                        relX = BindHouseXpos;
-                        relY = BindHouseYpos;
-                        relZ = BindHouseZpos;
-                        relHeading = (ushort)BindHouseHeading;
+                        releasePosition = BindHousePosition;
                         break;
                     }
 
@@ -1639,27 +1649,18 @@ namespace DOL.GS
                     {
                         if (Realm == eRealm.Hibernia)
                         {
-                            relRegion = 51; // Hibernia
-                            relX = 426733;
-                            relY = 416856;
-                            relZ = 5712;
-                            relHeading = 2605;
+                            // Hibernia
+                            releasePosition = Position.Create(51, 426733, 416856, 5712, 2605);
                         }
                         else if (Realm == eRealm.Midgard)
                         {
-                            relRegion = 51; // Midgard
-                            relX = 403717;
-                            relY = 503227;
-                            relZ = 4680;
-                            relHeading = 434;
+                            // Midgard
+                            releasePosition = Position.Create(51, 403717, 503227, 4680, 434);
                         }
                         else
                         {
-                            relRegion = 51; // Albion
-                            relX = 526529;
-                            relY = 541975;
-                            relZ = 3168;
-                            relHeading = 1861;
+                            // Albion
+                            releasePosition = Position.Create(51, 526529, 541975, 3168, 1861);
                         }
                         break;
                     }
@@ -1669,18 +1670,14 @@ namespace DOL.GS
                         {
                             if (keep.IsPortalKeep && keep.OriginalRealm == Realm)
                             {
-                                relRegion = keep.CurrentRegion.ID;
-                                relX = keep.X;
-                                relY = keep.Y;
-                                relZ = keep.Z;
+                                releasePosition = Position.Create(keep.CurrentRegion.ID, keep.X, keep.Y, keep.Z);
                             }
                         }
 
                         //if we aren't releasing anywhere, release to the border keeps
-                        if (relX == 0)
+                        if (releasePosition.Coordinate == Coordinate.Zero)
                         {
-                            relRegion = CurrentRegion.ID;
-                            GameServer.KeepManager.GetBorderKeepLocation(((byte)Realm * 2) / 1, out relX, out relY, out relZ, out relHeading);
+                            releasePosition = GameServer.KeepManager.GetBorderKeepPosition(((byte)Realm * 2) / 1);
                         }
                         break;
                     }
@@ -1695,26 +1692,20 @@ namespace DOL.GS
                                 {
                                     case eRealm.Albion:
                                         {
-                                            relRegion = 1; // Cotswold
-                                            relX = 8192 + 553251;
-                                            relY = 8192 + 502936;
-                                            relZ = 2280;
+                                            // Cotswold
+                                            releasePosition = Position.Create(regionID: 1, x: 8192 + 553251, y: 8192 + 502936, z: 2280);
                                             break;
                                         }
                                     case eRealm.Midgard:
                                         {
-                                            relRegion = 100; // Mularn
-                                            relX = 8192 + 795621;
-                                            relY = 8192 + 719590;
-                                            relZ = 4680;
+                                            // Mularn
+                                            releasePosition = Position.Create(regionID: 100, x: 8192 + 795621, y: 8192 + 719590, z: 4680);
                                             break;
                                         }
                                     case eRealm.Hibernia:
                                         {
-                                            relRegion = 200; // MagMell
-                                            relX = 8192 + 338652;
-                                            relY = 8192 + 482335;
-                                            relZ = 5200;
+                                            // MagMell
+                                            releasePosition = Position.Create(regionID: 200, x: 8192 + 338652, y: 8192 + 482335, z: 5200);
                                             break;
                                         }
                                 }
@@ -1749,10 +1740,7 @@ namespace DOL.GS
                                     {
                                         if (keep.DBKeep.BaseLevel > 50 && keep.Realm == Realm)
                                         {
-                                            relRegion = (ushort)keep.Region;
-                                            relX = keep.X;
-                                            relY = keep.Y;
-                                            relZ = keep.Z;
+                                            releasePosition = Position.Create((ushort)keep.Region, x: keep.X, y: keep.Y, z: keep.Z);
                                             break;
                                         }
                                     }
@@ -1768,17 +1756,17 @@ namespace DOL.GS
                                         {
                                             case eRealm.Albion:
                                                 {
-                                                    GameServer.KeepManager.GetBorderKeepLocation(1, out relX, out relY, out relZ, out relHeading);
+                                                    releasePosition = GameServer.KeepManager.GetBorderKeepPosition(1);
                                                     break;
                                                 }
                                             case eRealm.Midgard:
                                                 {
-                                                    GameServer.KeepManager.GetBorderKeepLocation(3, out relX, out relY, out relZ, out relHeading);
+                                                    releasePosition = GameServer.KeepManager.GetBorderKeepPosition(3);
                                                     break;
                                                 }
                                             case eRealm.Hibernia:
                                                 {
-                                                    GameServer.KeepManager.GetBorderKeepLocation(5, out relX, out relY, out relZ, out relHeading);
+                                                    releasePosition = GameServer.KeepManager.GetBorderKeepPosition(5);
                                                     break;
                                                 }
                                         }
@@ -1786,11 +1774,7 @@ namespace DOL.GS
                                     }
                                     else
                                     {
-                                        relRegion = (ushort)BindRegion;
-                                        relX = BindXpos;
-                                        relY = BindYpos;
-                                        relZ = BindZpos;
-                                        relHeading = (ushort)BindHeading;
+                                        releasePosition = BindPosition;
                                     }
                                     break;
                                 }/*
@@ -1801,11 +1785,7 @@ namespace DOL.GS
                                 }*/
                             default:
                                 {
-                                    relRegion = (ushort)BindRegion;
-                                    relX = BindXpos;
-                                    relY = BindYpos;
-                                    relZ = BindZpos;
-                                    relHeading = (ushort)BindHeading;
+                                    releasePosition = BindPosition;
                                     break;
                                 }
                         }
@@ -1878,7 +1858,7 @@ namespace DOL.GS
             StartEnduranceRegeneration();
 
             Region region = null;
-            if ((region = WorldMgr.GetRegion((ushort)BindRegion)) != null && region.GetZone(BindXpos, BindYpos) != null)
+            if ((region = WorldMgr.GetRegion(BindPosition.RegionID)) != null && region.GetZone(BindPosition.Coordinate) != null)
             {
                 Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Release.SurroundingChange"), eChatType.CT_YouDied, eChatLoc.CL_SystemWindow);
             }
@@ -1895,7 +1875,7 @@ namespace DOL.GS
                 Out.SendPlayerRevive(this);
                 Out.SendUpdatePoints();
                 if (m_releaseType != eReleaseType.Jail)
-                    MoveTo(relRegion, relX, relY, relZ, relHeading);
+                    MoveTo(releasePosition);
             }
             else
             {
@@ -1904,7 +1884,7 @@ namespace DOL.GS
 
                 if (m_releaseType != eReleaseType.Jail)
                 {
-                    MoveTo(relRegion, relX, relY, relZ, relHeading);
+                    MoveTo(releasePosition);
                 }
 
                 //It is enough if we revive the player on this client only here
@@ -11334,7 +11314,7 @@ namespace DOL.GS
         public uint LastNPCUpdateTick = 0;
         public uint LastNPCUpdateAllTick = 0;
 
-        public override Vector3 Position
+        public override Position Position
         {
             get => IsMoving ? base.Position + MovementElapsedTicks * Velocity : base.Position;
             set

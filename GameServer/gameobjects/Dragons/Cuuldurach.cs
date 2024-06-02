@@ -98,7 +98,7 @@ namespace DOL.GS
                 case 2: return new Vector3(406158, 707745, 0);
                 case 3: return new Vector3(410302, 708563, 0);
                 case 4: return new Vector3(411117, 704696, 0);
-                default: return SpawnPoint;
+                default: return SpawnPosition;
             }
         }
 

@@ -19,6 +19,7 @@
 using System;
 using System.Numerics;
 using DOL.Database;
+using DOL.GS.Geometry;
 
 namespace DOL.GS.Movement
 {
@@ -34,15 +35,15 @@ namespace DOL.GS.Movement
         protected bool m_flag;
         protected int m_waitTime = 0;
 
-        public Vector3 Position { get; set; }
+        public Coordinate Coordinate { get; set; }
 
-        public PathPoint(PathPoint pp) : this(pp.Position, pp.MaxSpeed, pp.Type) { }
+        public PathPoint(PathPoint pp) : this(pp.Coordinate, pp.MaxSpeed, pp.Type) { }
 
-        public PathPoint(Vector3 p, int maxspeed, ePathType type) : this(p.X, p.Y, p.Z, maxspeed, type) { }
+        public PathPoint(Coordinate p, int maxspeed, ePathType type) : this(p.X, p.Y, p.Z, maxspeed, type) { }
 
-        public PathPoint(float x, float y, float z, int maxspeed, ePathType type)
+        public PathPoint(int x, int y, int z, int maxspeed, ePathType type)
         {
-            Position = new Vector3(x, y, z);
+            Coordinate = Coordinate.Create(x, y, z);
             m_maxspeed = maxspeed;
             m_type = type;
             m_flag = false;
@@ -103,16 +104,16 @@ namespace DOL.GS.Movement
             set { m_waitTime = value; }
         }
 
-        public PathPoint GetNearestNextPoint(Vector3 pos)
+        public PathPoint GetNearestNextPoint(Coordinate pos)
         {
             var nearest = this;
-            var dist = Vector3.Distance(nearest.Position, pos);
+            var dist = GameMath.GetDistanceSquared(nearest.Coordinate, pos);
 
             var pp = this;
             while (pp.Next != null)
             {
                 pp = pp.Next;
-                var d = Vector3.Distance(pp.Position, pos);
+                var d =  GameMath.GetDistanceSquared(pp.Coordinate, pos);
                 if (d < dist)
                 {
                     nearest = pp;

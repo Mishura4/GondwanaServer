@@ -17,121 +17,105 @@
  *
  */
 using System;
-using System.Numerics;
+using DOL.GS.Geometry;
 
 namespace DOL.GS
 {
-    /// <summary>
-    /// 
-    /// </summary>
+    [Obsolete("Use DOL.GS.Geometry.Position instead!")]
     public class GameLocation : IGameLocation
     {
-        protected ushort m_regionId;
-        protected ushort m_heading;
-        protected string m_name;
+        public GameLocation(String name, ushort regionId, ushort zoneId, int x, int y, int z, ushort heading)
+            : this(name, Position.Create(regionId, Coordinate.Create(x,y,z)+WorldMgr.GetZone(zoneId).Offset, heading)) { }
 
-        public GameLocation(string name, GameObject obj) : this(name, obj.CurrentRegionID, obj.Position, obj.Heading)
-        {
-        }
-        public GameLocation(string name, ushort regionId, float x, float y, float z, ushort heading)
-            : this(name, regionId, new Vector3(x, y, z), heading)
-        {
-        }
-        public GameLocation(string name, ushort regionId, ushort zoneId, float x, float y, float z, ushort heading)
-            : this(name, regionId, ConvertLocalXToGlobalX(x, zoneId), ConvertLocalYToGlobalY(y, zoneId), z, heading)
-        {
-        }
+        public GameLocation(String name, ushort regionId, int x, int y, int z)
+            : this(name, Position.Create(regionId, x, y, z, heading: 0)) { }
 
-        public GameLocation(string name, ushort regionId, float x, float y, float z) : this(name, regionId, x, y, z, 0)
+        public GameLocation(String name, ushort regionId, int x, int y, int z, ushort heading)
+            : this(name, Position.Create(regionId, x, y, z, heading)) { }
+
+        public GameLocation(String name, Position position)
         {
+            Position = position;
+            Name = name;
         }
 
-        public GameLocation(string name, ushort regionId, Vector3 position, ushort heading)
+        public GameLocation(Position position)
         {
-            m_regionId = regionId;
-            m_name = name;
-            m_heading = heading;
             Position = position;
         }
 
-        public Vector3 Position { get; set; }
+        public Position Position { get; set; } = Position.Zero;
 
-        /// <summary>
-        /// heading of this point
-        /// </summary>
+        public int X
+        {
+            get => Position.X;
+            set => Position.With(x: value);
+        }
+
+        public int Y
+        {
+            get => Position.Y;
+            set => Position.With(y: value);
+        }
+
+        public int Z
+        {
+            get => Position.Z;
+            set => Position.With(z: value);
+        }
+
         public ushort Heading
         {
-            get { return m_heading; }
-            set { m_heading = value; }
+            get => Position.Orientation.InHeading;
+            set => Position.With(heading: value);
         }
 
-        /// <summary>
-        /// RegionID of this point
-        /// </summary>
         public ushort RegionID
         {
-            get { return m_regionId; }
-            set { m_regionId = value; }
+            get => Position.RegionID;
+            set => Position.With(regionID: value);
         }
 
-        /// <summary>
-        /// Name of this point
-        /// </summary>
-        public string Name
+        public String Name { get; set; } = null;
+
+        public int GetDistance(IGameLocation location)
         {
-            get { return m_name; }
-            set { m_name = value; }
+            if (this.RegionID != location.RegionID) return -1;
+
+            return (int)Position.Coordinate.DistanceTo(location.Position.Coordinate);
         }
 
-        /// <summary>
-        /// calculates distance between 2 points
-        /// </summary>
-        /// <param name="p1"></param>
-        /// <param name="p2"></param>
-        /// <returns></returns>
-        public float GetDistance(IGameLocation location)
+		public static int ConvertLocalXToGlobalX(int localX, ushort zoneId)
+		{
+			Zone z = WorldMgr.GetZone(zoneId);
+			return z.Offset.X + localX;
+		}
+
+		public static int ConvertLocalYToGlobalY(int localY, ushort zoneId)
+		{
+			Zone z = WorldMgr.GetZone(zoneId);
+			return z.Offset.Y + localY;
+		}
+
+		public static int ConvertGlobalXToLocalX(int globalX, ushort zoneId)
+		{
+			Zone z = WorldMgr.GetZone(zoneId);
+			return globalX - z.Offset.X;
+		}
+
+		public static int ConvertGlobalYToLocalY(int globalY, ushort zoneId)
+		{
+			Zone z = WorldMgr.GetZone(zoneId);
+			return globalY - z.Offset.Y;
+		}
+
+        public static int GetDistance( int r1, int x1, int y1, int z1, int r2, int x2, int y2, int z2 )
         {
-            if (this.RegionID == location.RegionID)
-            {
-                return Vector3.Distance(Position, location.Position);
-            }
-            else
-            {
-                return -1;
-            }
-        }
+            if (r1 != r2) return -1;
+            var loc1 = Coordinate.Create(x1,y1,z1);
+            var loc2 = Coordinate.Create(x2,y2,z2);
 
-        public static float ConvertLocalXToGlobalX(float localX, ushort zoneId)
-        {
-            Zone z = WorldMgr.GetZone(zoneId);
-            return z.XOffset + localX;
+            return (int)loc1.DistanceTo(loc2);
         }
-
-        public static float ConvertLocalYToGlobalY(float localY, ushort zoneId)
-        {
-            Zone z = WorldMgr.GetZone(zoneId);
-            return z.YOffset + localY;
-        }
-
-        public static float ConvertGlobalXToLocalX(float globalX, ushort zoneId)
-        {
-            Zone z = WorldMgr.GetZone(zoneId);
-            return globalX - z.XOffset;
-        }
-
-        public static float ConvertGlobalYToLocalY(float globalY, ushort zoneId)
-        {
-            Zone z = WorldMgr.GetZone(zoneId);
-            return globalY - z.YOffset;
-        }
-
-        [Obsolete("Use instance method GetDistance( IGameLocation location )")]
-        public static float GetDistance(ushort r1, float x1, float y1, float z1, ushort r2, float x2, float y2, float z2)
-        {
-            GameLocation loc1 = new GameLocation("loc1", r1, x1, y1, z1);
-            GameLocation loc2 = new GameLocation("loc2", r2, x2, y2, z2);
-
-            return loc1.GetDistance(loc2);
-        }
-    }
+	}
 }

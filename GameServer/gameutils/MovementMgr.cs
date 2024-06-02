@@ -211,7 +211,7 @@ namespace DOL.GS.Movement
             int i = 1;
             do
             {
-                DBPathPoint dbpp = new DBPathPoint((int)path.Position.X, (int)path.Position.Y, (int)path.Position.Z, path.MaxSpeed);
+                DBPathPoint dbpp = new DBPathPoint((int)path.Coordinate.X, (int)path.Coordinate.Y, (int)path.Coordinate.Z, path.MaxSpeed);
                 dbpp.Step = i++;
                 dbpp.PathID = pathID;
                 dbpp.WaitTime = path.WaitTime;

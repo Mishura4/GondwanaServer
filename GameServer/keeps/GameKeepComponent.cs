@@ -559,7 +559,7 @@ namespace DOL.GS.Keeps
                     foreach (var guard in Keep.Guards.Values)
                     {
                         guard.MoveTo(guard.CurrentRegionID, guard.Position.X, guard.Position.Y, Keep.Z, guard.Heading);
-                        guard.SpawnPoint += Vector3.UnitZ * Keep.Z;
+                        guard.SpawnPosition += Vector3.UnitZ * Keep.Z;
                     }
                 }
             }

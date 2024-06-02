@@ -29,10 +29,12 @@ using DOL.GS.SkillHandler;
 using DOL.GS.Keeps;
 using DOL.Language;
 using log4net;
-using System.Numerics;
 using DOL.gameobjects.CustomNPC;
+using DOL.Geometry;
 using DOL.GS.Scripts;
 using DOL.MobGroups;
+using DOL.GS.Geometry;
+using Vector3 = System.Numerics.Vector3;
 
 namespace DOL.AI.Brain
 {
@@ -147,7 +149,7 @@ namespace DOL.AI.Brain
             // If NPC has a max distance and we are outside, full reset
             if (Body.MaxDistance != 0)
             {
-                var distance = Vector3.Distance(Body.Position, Body.SpawnPoint);
+                var distance = Body.Position.Coordinate.DistanceTo(Body.SpawnPosition);
                 int maxdistance = Body.MaxDistance > 0 ? Body.MaxDistance : -Body.MaxDistance * AggroRange / 100;
                 if (maxdistance > 0 && distance > maxdistance)
                 {
@@ -160,7 +162,7 @@ namespace DOL.AI.Brain
             if (wasInCombat && !Body.InCombat)
             {
                 Body.Reset();
-                if (Body.IsWithinRadius(Body.IsMovingOnPath ? Body.CurrentWayPoint.Position : Body.SpawnPoint, 500))
+                if (Body.IsWithinRadius(Body.IsMovingOnPath ? Body.CurrentWayPoint.Coordinate : Body.SpawnPosition.Coordinate, 500))
                 {
                     // Not very far - keep thinking, aggro, etc
                     Body.IsResetting = false;
@@ -213,8 +215,8 @@ namespace DOL.AI.Brain
             //If this NPC can randomly walk around, we allow it to walk around
             if (CanRandomWalk && !Body.IsRoaming && Util.Chance(DOL.GS.ServerProperties.Properties.GAMENPC_RANDOMWALK_CHANCE))
             {
-                var target = CalcRandomWalkTarget();
-                if (Util.IsNearDistance(target, Body.Position, GameNPC.CONST_WALKTOTOLERANCE))
+                var target = GetRandomWalkTarget();
+                if (Util.IsNearDistance(target, Body.Coordinate, GameNPC.CONST_WALKTOTOLERANCE))
                 {
                     Body.TurnTo(target.X, target.Y);
                 }
@@ -227,6 +229,17 @@ namespace DOL.AI.Brain
             }
 
             CheckStealth();
+        }
+
+        public virtual Coordinate GetFormationCoordinate(Coordinate loc)
+        {
+            var x = loc.X;
+            var y = loc.Y;
+            var z = loc.Z;
+            var isNotInFormation = !CheckFormation(ref x, ref y, ref z);
+            if(isNotInFormation) return Coordinate.Nowhere;
+
+            return Coordinate.Create(x,y,z);
         }
 
         /// <summary>
@@ -375,7 +388,7 @@ namespace DOL.AI.Brain
         /// <param name="x">The x-coordinate to refer to and change</param>
         /// <param name="y">The x-coordinate to refer to and change</param>
         /// <param name="z">The x-coordinate to refer to and change</param>
-        public virtual bool CheckFormation(ref float x, ref float y, ref float z)
+        public virtual bool CheckFormation(ref int x, ref int y, ref int z)
         {
             return false;
         }
@@ -710,7 +723,7 @@ namespace DOL.AI.Brain
                         && living.CurrentRegion == Body.CurrentRegion
                         && living.ObjectState == GameObject.eObjectState.Active)
                     {
-                        float distance = Vector3.Distance(Body.Position, living.Position);
+                        float distance = Body.GetDistanceTo(living.Position, 0);
                         int maxAggroDistance = (this is IControlledBrain) ? MAX_PET_AGGRO_DISTANCE : MAX_AGGRO_DISTANCE;
 
                         if (distance <= maxAggroDistance)
@@ -899,7 +912,7 @@ namespace DOL.AI.Brain
                 {
                     if (target is FollowingFriendMob { PlayerFollow: not null } followMob)
                     {
-                        float range = Body.CurrentRegion.IsDungeon ? Body.GetDistanceTo(target.Position) : Body.GetDistance2DTo(target.Position);
+                        float range = Body.CurrentRegion.IsDungeon ? Body.GetDistanceTo(target) : Body.GetDistance2DTo(target.Position);
                         if (!HasAggro && range < (AggroRange * GetGroupMobRangeMultiplier(followMob.PlayerFollow) *
                             followMob.AggroMultiplier))
                         {
@@ -1743,23 +1756,32 @@ namespace DOL.AI.Brain
             }
         }
 
-        public virtual Vector3 CalcRandomWalkTarget()
+        [Obsolete("Use GetRandomWalkTarget() instead.")]
+        public virtual IPoint3D CalcRandomWalkTarget()
         {
-            if (Body.CurrentZone.IsPathingEnabled)
+            var randomPos = GetRandomWalkTarget();
+            return new Point3D(randomPos.X, randomPos.Y, randomPos.Z);
+        }
+        
+        public virtual Coordinate GetRandomWalkTarget()
+        {
+            if (PathCalculator.IsSupported(Body))
             {
-                var pt = PathingMgr.Instance.GetRandomPoint(Body.CurrentZone, Body.SpawnPoint, Body.RoamingRange > 0 ? Body.RoamingRange : 200);
-                if (pt.HasValue)
-                    return pt.Value;
+                int radius = Body.RoamingRange > 0 ? Body.RoamingRange : 500;
+                var target = PathingMgr.Instance.GetRandomPointAsync(Body.CurrentZone, Body.Coordinate, radius);
+                if (target.HasValue)
+                    return Coordinate.Create(x: (int)target.Value.X, y: (int)target.Value.Y, z: (int)target.Value.Z);
             }
 
             int maxRoamingRadius = Body.CurrentRegion.IsDungeon ? 5 : 500;
+
             if (Body.RoamingRange > 0)
                 maxRoamingRadius = Body.RoamingRange;
 
-            var targetX = Body.SpawnPoint.X + Util.Random(-maxRoamingRadius, maxRoamingRadius);
-            var targetY = Body.SpawnPoint.Y + Util.Random(-maxRoamingRadius, maxRoamingRadius);
+            double targetX = Body.SpawnPosition.X + Util.Random(-maxRoamingRadius, maxRoamingRadius);
+            double targetY = Body.SpawnPosition.Y + Util.Random(-maxRoamingRadius, maxRoamingRadius);
 
-            return new Vector3(targetX, targetY, Body.SpawnPoint.Z);
+            return Coordinate.Create(x: (int)targetX, y: (int)targetY, z: Body.SpawnPosition.Z);
         }
 
         #endregion
@@ -1768,7 +1790,7 @@ namespace DOL.AI.Brain
         {
             ushort range = (ushort)((ThinkInterval / 800) * Body.CurrentWayPoint.MaxSpeed);
 
-            foreach (IDoor door in Body.CurrentRegion.GetDoorsInRadius(Body.Position, range, false))
+            foreach (IDoor door in Body.CurrentRegion.GetDoorsInRadius(Body.Coordinate, range, false))
             {
                 if (door is GameKeepDoor)
                 {

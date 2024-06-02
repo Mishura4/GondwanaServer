@@ -748,16 +748,9 @@ namespace DOL.GS
                     {
                         //Time playing
                         var connectedtime = DateTime.Now.Subtract(m_account.LastLogin).TotalMinutes;
-                        //Lets get our player from DB.
-                        var getp = GameServer.Database.FindObjectByKey<DOLCharacters>(m_player.InternalID);
-                        //Let get saved poistion from DB.
-                        int[] oldloc = { getp.Xpos, getp.Ypos, getp.Zpos, getp.Direction, getp.Region };
-                        //Lets get current player Gloc.
-                        int[] currentloc = { (int)m_player.Position.X, (int)m_player.Position.Y, (int)m_player.Position.Z, m_player.Heading, m_player.CurrentRegionID };
-                        //Compapre Old and Current.
-                        bool check = oldloc.SequenceEqual(currentloc);
-                        //If match
-                        if (check)
+                        var dbCharacter = GameServer.Database.FindObjectByKey<DOLCharacters>(m_player.InternalID);
+
+                        if (dbCharacter.GetPosition() == Player.Position)
                         {
                             if (connectedtime > Properties.KICK_IDLE_PLAYER_TIME)
                             {

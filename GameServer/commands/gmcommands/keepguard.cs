@@ -450,7 +450,7 @@ namespace DOL.GS.Commands
         private void CreateTempPathObject(GameClient client, PathPoint pp, string name)
         {
             GameStaticItem obj = new GameStaticItem();
-            obj.Position = pp.Position;
+            obj.Position = pp.Coordinate;
             obj.CurrentRegion = client.Player.CurrentRegion;
             obj.Heading = client.Player.Heading;
             obj.Name = name;

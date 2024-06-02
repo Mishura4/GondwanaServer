@@ -31,8 +31,8 @@ using DOL.GS.Keeps;
 using DOL.GS.Utils;
 using DOL.GS.ServerProperties;
 using log4net;
-using System.Numerics;
 using DOL.GameEvents;
+using DOL.GS.Geometry;
 
 namespace DOL.GS
 {
@@ -405,8 +405,8 @@ namespace DOL.GS
                     return false; //Dungeons only have 1 zone!
 
                 var zone = Zones[0];
-
-                if (zone.XOffset == dungeonOffset && zone.YOffset == dungeonOffset)
+                
+                if (zone.Offset.X == dungeonOffset && zone.Offset.Y == dungeonOffset)
                     return true; //Only dungeons got this offset
 
                 return false;
@@ -633,7 +633,7 @@ namespace DOL.GS
             return new GameKeepComponent();
         }
 
-        public virtual void CreateCombatZone(Guild owningGuild, Vector3 position)
+        public virtual void CreateCombatZone(Guild owningGuild, Position position)
         {
             Area.CombatZone zone = new(owningGuild, position);
 
@@ -1026,7 +1026,7 @@ namespace DOL.GS
         internal bool AddObject(GameObject obj)
         {
             //Thread.Sleep(10000);
-            Zone zone = GetZone(obj.Position);
+            Zone zone = GetZone(obj.Coordinate);
             if (zone == null)
             {
                 if (log.IsWarnEnabled)
@@ -1277,9 +1277,15 @@ namespace DOL.GS
         /// </summary>
         /// <param name="point">point for the zone you're retrieving</param>
         /// <returns>The zone you're retrieving or null if it couldn't be found</returns>
-        public Zone GetZone(Vector3 point)
+        public Zone GetZone(Coordinate coordinate)
         {
-            return this.GetZone((int)point.X, (int)point.Y);
+            foreach (var zone in m_zones)
+            {
+                var isInZone = zone.Offset.X <= coordinate.X && zone.Offset.Y <= coordinate.Y 
+                    && (zone.Offset.X + zone.Width) > coordinate.X && (zone.Offset.Y + zone.Height) > coordinate.Y;
+                if (isInZone) return zone;
+            }
+            return null;
         }
 
         /// <summary>
@@ -1288,14 +1294,9 @@ namespace DOL.GS
         /// <param name="x">X value for the zone you're retrieving</param>
         /// <param name="y">Y value for the zone you're retrieving</param>
         /// <returns>The zone you're retrieving or null if it couldn't be found</returns>
-        public Zone GetZone(float x, float y)
+        public Zone GetZone(int x, int y)
         {
-            foreach (Zone zone in m_zones)
-            {
-                if (zone.XOffset <= x && zone.YOffset <= y && (zone.XOffset + zone.Width) > x && (zone.YOffset + zone.Height) > y)
-                    return zone;
-            }
-            return null;
+            return GetZone(Coordinate.Create(x, y));
         }
 
         /// <summary>
@@ -1304,12 +1305,12 @@ namespace DOL.GS
         /// <param name="x">X value for the zone's offset you're retrieving</param>
         /// <param name="y">Y value for the zone's offset you're retrieving</param>
         /// <returns>The X offset of the zone you specified or 0 if it couldn't be found</returns>
-        public float GetXOffInZone(float x, float y)
+        public int GetXOffInZone(int x, int y)
         {
-            Zone z = GetZone(x, y);
+            Zone? z = GetZone(Coordinate.Create(x, y));
             if (z == null)
                 return 0;
-            return x - z.XOffset;
+            return x - z.Offset.X;
         }
 
         /// <summary>
@@ -1318,12 +1319,12 @@ namespace DOL.GS
         /// <param name="x">X value for the zone's offset you're retrieving</param>
         /// <param name="y">Y value for the zone's offset you're retrieving</param>
         /// <returns>The Y offset of the zone you specified or 0 if it couldn't be found</returns>
-        public float GetYOffInZone(float x, float y)
+        public int GetYOffInZone(int x, int y)
         {
-            Zone z = GetZone(x, y);
+            Zone? z = GetZone(Coordinate.Create(x, y));
             if (z == null)
                 return 0;
-            return y - z.YOffset;
+            return y - z.Offset.Y;
         }
 
         /// <summary>
@@ -1446,38 +1447,17 @@ namespace DOL.GS
                 }
             }
         }
-
+        
         /// <summary>
         /// Gets the areas for given location,
         /// less performant than getAreasOfZone so use other on if possible
         /// </summary>
         /// <param name="point"></param>
         /// <returns></returns>
-        public IList<IArea> GetAreasOfSpot(Vector3 point)
-        {
-            Zone zone = GetZone(point.X, point.Y);
-            return GetAreasOfZone(zone, point, true);
-        }
-
-        /// <summary>
-        /// Gets the areas for a certain spot,
-        /// less performant than getAreasOfZone so use other on if possible
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="z"></param>
-        /// <returns></returns>
-        public IList<IArea> GetAreasOfSpot(float x, float y, float z)
-        {
-            Zone zone = GetZone(x, y);
-            var p = new Vector3(x, y, z);
-            return GetAreasOfZone(zone, p, true);
-        }
-
-        public virtual IList<IArea> GetAreasOfZone(Zone zone, Vector3 vector3, Vector3 p)
-        {
-            return GetAreasOfZone(zone, p, true);
-        }
+        public IList<IArea> GetAreasOfSpot(Coordinate coordinate) => GetAreasOfZone(GetZone(coordinate), coordinate);
+        
+        public virtual IList<IArea> GetAreasOfZone(Zone zone, Coordinate spot)
+            => GetAreasOfZone(zone, spot, true);
 
         /// <summary>
         /// Gets the areas for a certain spot
@@ -1486,7 +1466,7 @@ namespace DOL.GS
         /// <param name="p"></param>
         /// <param name="checkZ"></param>
         /// <returns></returns>
-        public virtual IList<IArea> GetAreasOfZone(Zone zone, Vector3 p, bool checkZ)
+        public virtual IList<IArea> GetAreasOfZone(Zone zone, Coordinate spot, bool checkZ)
         {
             lock (m_lockAreas)
             {
@@ -1499,8 +1479,8 @@ namespace DOL.GS
                     {
                         for (int i = 0; i < m_ZoneAreasCount[zoneIndex]; i++)
                         {
-                            IArea area = (IArea)m_Areas[m_ZoneAreas[zoneIndex][i]];
-                            if (area.IsContaining(p, checkZ))
+                            var area = m_Areas[m_ZoneAreas[zoneIndex][i]];
+                            if (area.IsContaining(spot, checkZ))
                             {
                                 areas.Add(area);
                             }
@@ -1524,7 +1504,7 @@ namespace DOL.GS
         /// <param name="radius"></param>
         /// <param name="checkZ"></param>
         /// <returns></returns>
-        public virtual IList<IArea> GetAreasInRadius(Vector3 p, float radius, bool checkZ)
+        public virtual IList<IArea> GetAreasInRadius(Coordinate center, float radius, bool checkZ)
         {
             lock (m_lockAreas)
             {
@@ -1543,7 +1523,7 @@ namespace DOL.GS
                                 for (int i = 0; i < m_ZoneAreasCount[zoneIndex]; i++)
                                 {
                                     IArea area = (IArea)m_Areas[m_ZoneAreas[zoneIndex][i]];
-                                    if (area.DistanceSquared(p, checkZ) <= radiusSquared)
+                                    if (area.DistanceSquared(center, checkZ) <= radiusSquared)
                                     {
                                         areas.Add(area);
                                     }
@@ -1569,7 +1549,7 @@ namespace DOL.GS
         /// <param name="radius"></param>
         /// <param name="checkZ"></param>
         /// <returns></returns>
-        public virtual IArea FindAnyAreaInRadius(Vector3 p, float radius, bool checkZ)
+        public virtual IArea FindAnyAreaInRadius(Coordinate center, float radius, bool checkZ)
         {
             lock (m_lockAreas)
             {
@@ -1586,8 +1566,8 @@ namespace DOL.GS
                             {
                                 for (int i = 0; i < m_ZoneAreasCount[zoneIndex]; i++)
                                 {
-                                    IArea area = (IArea)m_Areas[m_ZoneAreas[zoneIndex][i]];
-                                    if (area.DistanceSquared(p, checkZ) <= radiusSquared)
+                                    IArea area = m_Areas[m_ZoneAreas[zoneIndex][i]];
+                                    if (area.DistanceSquared(center, checkZ) <= radiusSquared)
                                     {
                                         return area;
                                     }
@@ -1607,7 +1587,7 @@ namespace DOL.GS
 
         public virtual IList<IArea> GetAreasOfZone(Zone zone, int x, int y, int z)
         {
-            return GetAreasOfZone(zone, area => area.IsContaining(x, y, z));
+            return GetAreasOfZone(zone, Coordinate.Create(x, y, z));
         }
 
         public virtual IList<IArea> GetAreasOfZone(Zone zone)
@@ -1702,14 +1682,14 @@ namespace DOL.GS
         /// <param name="radius">radius around origin</param>
         /// <param name="withDistance">Get an ObjectDistance enumerator</param>
         /// <returns>IEnumerable to be used with foreach</returns>
-        protected IEnumerable GetInRadius(Zone.eGameObjectType type, float x, float y, float z, ushort radius, bool withDistance, bool ignoreZ)
+        protected IEnumerable GetInRadius(Zone.eGameObjectType type, Coordinate center, ushort radius, bool withDistance, bool ignoreZ)
         {
             // check if we are around borders of a zone
-            Zone startingZone = GetZone(x, y);
+            Zone startingZone = GetZone(center);
 
             if (startingZone != null)
             {
-                ArrayList res = startingZone.GetObjectsInRadius(type, x, y, z, radius, new ArrayList(), ignoreZ);
+                ArrayList res = startingZone.GetObjectsInRadius(type, center, radius, new ArrayList(), ignoreZ);
 
                 uint sqRadius = (uint)radius * radius;
 
@@ -1717,9 +1697,9 @@ namespace DOL.GS
                 {
                     if ((currentZone != startingZone)
                         && (currentZone.TotalNumberOfObjects > 0)
-                        && CheckShortestDistance(currentZone, x, y, sqRadius))
+                        && CheckShortestDistance(currentZone, center, sqRadius))
                     {
-                        res = currentZone.GetObjectsInRadius(type, x, y, z, radius, res, ignoreZ);
+                        res = currentZone.GetObjectsInRadius(type, center, radius, res, ignoreZ);
                     }
                 }
 
@@ -1730,16 +1710,16 @@ namespace DOL.GS
                     switch (type)
                     {
                         case Zone.eGameObjectType.ITEM:
-                            tmp = new ItemDistanceEnumerator(x, y, z, res);
+                            tmp = new ItemDistanceEnumerator(center, res);
                             break;
                         case Zone.eGameObjectType.NPC:
-                            tmp = new NPCDistanceEnumerator(x, y, z, res);
+                            tmp = new NPCDistanceEnumerator(center, res);
                             break;
                         case Zone.eGameObjectType.PLAYER:
-                            tmp = new PlayerDistanceEnumerator(x, y, z, res);
+                            tmp = new PlayerDistanceEnumerator(center, res);
                             break;
                         case Zone.eGameObjectType.DOOR:
-                            tmp = new DoorDistanceEnumerator(x, y, z, res);
+                            tmp = new DoorDistanceEnumerator(center, res);
                             break;
                         default:
                             tmp = new EmptyEnumerator();
@@ -1756,7 +1736,7 @@ namespace DOL.GS
             {
                 if (log.IsDebugEnabled)
                 {
-                    log.Error("GetInRadius starting zone is null for (" + type + ", " + x + ", " + y + ", " + z + ", " + radius + ") in Region ID=" + ID);
+                    log.Error("GetInRadius starting zone is null for (" + type + ", " + center + ", " + radius + ") in Region ID=" + ID);
                 }
                 return new EmptyEnumerator();
             }
@@ -1771,32 +1751,32 @@ namespace DOL.GS
         /// <param name="y">Y value of the point</param>
         /// <param name="squareRadius">The square radius to compare the distance with</param>
         /// <returns>True if the distance is shorter false either</returns>
-        private static bool CheckShortestDistance(Zone zone, float x, float y, uint squareRadius)
+        private static bool CheckShortestDistance(Zone zone, Coordinate coordinate, uint squareRadius)
         {
             //  coordinates of zone borders
-            int xLeft = zone.XOffset;
-            int xRight = zone.XOffset + zone.Width;
-            int yTop = zone.YOffset;
-            int yBottom = zone.YOffset + zone.Height;
+            int xLeft = zone.Offset.X;
+            int xRight = zone.Offset.X + zone.Width;
+            int yTop = zone.Offset.Y;
+            int yBottom = zone.Offset.Y + zone.Height;
             long distance = 0;
 
-            if ((y >= yTop) && (y <= yBottom))
+            if ((coordinate.Y >= yTop) && (coordinate.Y <= yBottom))
             {
-                var xdiff = Math.Min(FastMath.Abs(x - xLeft), FastMath.Abs(x - xRight));
-                distance = (long)(xdiff * xdiff);
+                int xdiff = Math.Min(FastMath.Abs(coordinate.X - xLeft), FastMath.Abs(coordinate.X - xRight));
+                distance = (long)xdiff * xdiff;
             }
             else
             {
-                if ((x >= xLeft) && (x <= xRight))
+                if ((coordinate.X >= xLeft) && (coordinate.X <= xRight))
                 {
-                    var ydiff = Math.Min(FastMath.Abs(y - yTop), FastMath.Abs(y - yBottom));
-                    distance = (long)(ydiff * ydiff);
+                    int ydiff = Math.Min(FastMath.Abs(coordinate.Y - yTop), FastMath.Abs(coordinate.Y - yBottom));
+                    distance = (long)ydiff * ydiff;
                 }
                 else
                 {
-                    var xdiff = Math.Min(FastMath.Abs(x - xLeft), FastMath.Abs(x - xRight));
-                    var ydiff = Math.Min(FastMath.Abs(y - yTop), FastMath.Abs(y - yBottom));
-                    distance = (long)(xdiff * xdiff) + (long)(ydiff * ydiff);
+                    int xdiff = Math.Min(FastMath.Abs(coordinate.X - xLeft), FastMath.Abs(coordinate.X - xRight));
+                    int ydiff = Math.Min(FastMath.Abs(coordinate.Y - yTop), FastMath.Abs(coordinate.Y - yBottom));
+                    distance = (long)xdiff * xdiff + (long)ydiff * ydiff;
                 }
             }
 
@@ -1812,12 +1792,12 @@ namespace DOL.GS
         /// <param name="radius">radius around origin</param>
         /// <param name="withDistance">Get an ObjectDistance enumerator</param>
         /// <returns>IEnumerable to be used with foreach</returns>
-        public IEnumerable GetItemsInRadius(float x, float y, float z, ushort radius, bool withDistance)
-        {
-            return GetInRadius(Zone.eGameObjectType.ITEM, x, y, z, radius, withDistance, false);
-        }
-        public IEnumerable GetItemsInRadius(Vector3 center, ushort radius, bool withDistance)
-            => GetInRadius(Zone.eGameObjectType.ITEM, center.X, center.Y, center.Z, radius, withDistance, false);
+        public IEnumerable GetItemsInRadius(Coordinate center, ushort radius, bool withDistance)
+            => GetInRadius(Zone.eGameObjectType.ITEM, center, radius, withDistance, false);
+
+        [Obsolete("Use .GetItemsInRadius(Coordinate,ushort,bool) instead!")]
+        public IEnumerable GetItemsInRadius(int x, int y, int z, ushort radius, bool withDistance)
+            => GetItemsInRadius(Coordinate.Create(x,y,z), radius, withDistance);
 
         /// <summary>
         /// Gets NPCs in a radius around a spot
@@ -1828,12 +1808,12 @@ namespace DOL.GS
         /// <param name="radius">radius around origin</param>
         /// <param name="withDistance">Get an ObjectDistance enumerator</param>
         /// <returns>IEnumerable to be used with foreach</returns>
-        public IEnumerable GetNPCsInRadius(float x, float y, float z, ushort radius, bool withDistance, bool ignoreZ)
-        {
-            return GetInRadius(Zone.eGameObjectType.NPC, x, y, z, radius, withDistance, ignoreZ);
-        }
-        public IEnumerable GetNPCsInRadius(Vector3 center, ushort radius, bool withDistance, bool ignoreZ)
-            => GetInRadius(Zone.eGameObjectType.NPC, center.X, center.Y, center.Z, radius, withDistance, ignoreZ);
+        public IEnumerable GetNPCsInRadius(Coordinate center, ushort radius, bool withDistance, bool ignoreZ)
+            => GetInRadius(Zone.eGameObjectType.NPC, center, radius, withDistance, ignoreZ);
+
+        [Obsolete("Use .GetNPCsInRadius(Coordinate,ushort,bool,bool) instead!")]
+        public IEnumerable GetNPCsInRadius(int x, int y, int z, ushort radius, bool withDistance, bool ignoreZ)
+            => GetNPCsInRadius(Coordinate.Create(x,y,z), radius, withDistance, ignoreZ);
 
         /// <summary>
         /// Gets Players in a radius around a spot
@@ -1844,12 +1824,12 @@ namespace DOL.GS
         /// <param name="radius">radius around origin</param>
         /// <param name="withDistance">Get an ObjectDistance enumerator</param>
         /// <returns>IEnumerable to be used with foreach</returns>
-        public IEnumerable GetPlayersInRadius(float x, float y, float z, ushort radius, bool withDistance, bool ignoreZ)
-        {
-            return GetInRadius(Zone.eGameObjectType.PLAYER, x, y, z, radius, withDistance, ignoreZ);
-        }
-        public IEnumerable GetPlayersInRadius(Vector3 center, ushort radius, bool withDistance, bool ignoreZ)
-            => GetInRadius(Zone.eGameObjectType.PLAYER, center.X, center.Y, center.Z, radius, withDistance, ignoreZ);
+        public IEnumerable GetPlayersInRadius(Coordinate coordinate, ushort radius, bool withDistance, bool ignoreZ)
+            => GetInRadius(Zone.eGameObjectType.PLAYER, coordinate, radius, withDistance, ignoreZ);
+
+        [Obsolete("Use .GetPlayersInRadius(Coordinate,ushort,bool,bool) instead!")]
+        public IEnumerable GetPlayersInRadius(int x, int y, int z, ushort radius, bool withDistance, bool ignoreZ)
+            => GetPlayersInRadius(Coordinate.Create(x,y,z), radius, withDistance, ignoreZ);
 
         /// <summary>
         /// Gets Doors in a radius around a spot
@@ -1860,12 +1840,12 @@ namespace DOL.GS
         /// <param name="radius">radius around origin</param>
         /// <param name="withDistance">Get an ObjectDistance enumerator</param>
         /// <returns>IEnumerable to be used with foreach</returns>
-        public virtual IEnumerable GetDoorsInRadius(float x, float y, float z, ushort radius, bool withDistance)
-        {
-            return GetInRadius(Zone.eGameObjectType.DOOR, x, y, z, radius, withDistance, false);
-        }
-        public IEnumerable GetDoorsInRadius(Vector3 center, ushort radius, bool withDistance)
-            => GetInRadius(Zone.eGameObjectType.DOOR, center.X, center.Y, center.Z, radius, withDistance, false);
+        public virtual IEnumerable GetDoorsInRadius(Coordinate center, ushort radius, bool withDistance)
+            => GetInRadius(Zone.eGameObjectType.DOOR, center, radius, withDistance, false);
+
+        [Obsolete("Use .GetDoorsInRadius(Coordinate,ushort,bool) instead!")]
+        public IEnumerable GetDoorsInRadius(int x, int y, int z, ushort radius, bool withDistance)
+            => GetDoorsInRadius(Coordinate.Create(x,y,z), radius, withDistance);
 
         #endregion
 
@@ -2004,95 +1984,86 @@ namespace DOL.GS
 
         public abstract class DistanceEnumerator : ObjectEnumerator
         {
-            protected float m_X;
-            protected float m_Y;
-            protected float m_Z;
+            protected Coordinate coordinate;
 
-            public DistanceEnumerator(float x, float y, float z, ArrayList elements)
+            public DistanceEnumerator(int x, int y, int z, ArrayList elements)
+                : this(Coordinate.Create(x, y, z), elements) { }
+
+            public DistanceEnumerator(Coordinate coordinate, ArrayList elements) 
                 : base(elements)
             {
-                m_X = x;
-                m_Y = y;
-                m_Z = z;
+                this.coordinate = coordinate;
             }
         }
 
-        /// <summary>
-        /// This enumerator returns the object and the distance towards the object
-        /// </summary>
         public class PlayerDistanceEnumerator : DistanceEnumerator
         {
-            public PlayerDistanceEnumerator(float x, float y, float z, ArrayList elements)
-                : base(x, y, z, elements)
-            {
-            }
+            public PlayerDistanceEnumerator(int x, int y, int z, ArrayList elements)
+                : base(Coordinate.Create(x, y, z), elements) { }
+
+            public PlayerDistanceEnumerator(Coordinate coordinate, ArrayList elements)
+                : base(coordinate,elements) { }
 
             public override object Current
             {
                 get
                 {
                     GamePlayer obj = (GamePlayer)m_currentObj;
-                    return new PlayerDistEntry(obj, Vector3.Distance(obj.Position, new Vector3(m_X, m_Y, m_Z)));
+                    return new PlayerDistEntry(obj, (int)obj.Coordinate.DistanceTo(coordinate));
                 }
             }
         }
 
-        /// <summary>
-        /// This enumerator returns the object and the distance towards the object
-        /// </summary>
         public class NPCDistanceEnumerator : DistanceEnumerator
         {
-            public NPCDistanceEnumerator(float x, float y, float z, ArrayList elements)
-                : base(x, y, z, elements)
-            {
-            }
+            public NPCDistanceEnumerator(int x, int y, int z, ArrayList elements)
+                : base(Coordinate.Create(x, y, z), elements) { }
+
+            public NPCDistanceEnumerator(Coordinate coordinate, ArrayList elements)
+                : base(coordinate,elements) { }
 
             public override object Current
             {
                 get
                 {
                     GameNPC obj = (GameNPC)m_currentObj;
-                    return new NPCDistEntry(obj, Vector3.Distance(obj.Position, new Vector3(m_X, m_Y, m_Z)));
+                    return new NPCDistEntry(obj, (int)obj.Coordinate.DistanceTo(coordinate));
                 }
             }
         }
 
-        /// <summary>
-        /// This enumerator returns the object and the distance towards the object
-        /// </summary>
         public class ItemDistanceEnumerator : DistanceEnumerator
         {
-            public ItemDistanceEnumerator(float x, float y, float z, ArrayList elements)
-                : base(x, y, z, elements)
-            {
-            }
+            public ItemDistanceEnumerator(int x, int y, int z, ArrayList elements)
+                : base(Coordinate.Create(x, y, z), elements) { }
+
+            public ItemDistanceEnumerator(Coordinate coordinate, ArrayList elements)
+                : base(coordinate,elements) { }
 
             public override object Current
             {
                 get
                 {
                     GameStaticItem obj = (GameStaticItem)m_currentObj;
-                    return new ItemDistEntry(obj, Vector3.Distance(obj.Position, new Vector3(m_X, m_Y, m_Z)));
+                    return new ItemDistEntry(obj, (int)obj.Coordinate.DistanceTo(coordinate));
                 }
             }
         }
 
-        /// <summary>
-        /// This enumerator returns the object and the distance towards the object
-        /// </summary>
         public class DoorDistanceEnumerator : DistanceEnumerator
         {
-            public DoorDistanceEnumerator(float x, float y, float z, ArrayList elements)
-                : base(x, y, z, elements)
-            {
-            }
+            public DoorDistanceEnumerator(int x, int y, int z, ArrayList elements)
+                : base(Coordinate.Create(x, y, z), elements) { }
+
+            public DoorDistanceEnumerator(Coordinate coordinate, ArrayList elements)
+                : base(coordinate,elements) { }
 
             public override object Current
             {
                 get
                 {
                     IDoor obj = (IDoor)m_currentObj;
-                    return new DoorDistEntry(obj, Vector3.Distance(obj.Position, new Vector3(m_X, m_Y, m_Z)));
+                    return new DoorDistEntry(obj, (int)obj.Coordinate.DistanceTo(coordinate));
                 }
             }
         }

@@ -27,8 +27,8 @@ namespace DOL.GS.Scripts
                 if (value == null)
                     return;
 
-                double DX = SpawnPoint.X - value.SpawnPoint.X;
-                double DY = SpawnPoint.Y - value.SpawnPoint.Y;
+                double DX = SpawnPosition.X - value.SpawnPosition.X;
+                double DY = SpawnPosition.Y - value.SpawnPosition.Y;
                 m_DistMob = (int)Math.Sqrt(DX * DX + DY * DY);
 
                 if (m_DistMob > 0)
@@ -267,7 +267,7 @@ namespace DOL.AI.Brain
             }
 
             if (!Body.AttackState && !Body.IsCasting && !Body.IsMoving
-                && Body.Heading != Body.SpawnHeading && Body.Position == Body.SpawnPoint)
+                && Body.Heading != Body.SpawnHeading && Body.Position == Body.SpawnPosition)
                 Body.TurnTo(Body.SpawnHeading);
 
             if (!Body.InCombat)
