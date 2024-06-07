@@ -210,6 +210,7 @@ namespace DOL.GS
             return (float)(offset.X * offset.X + offset.Y * offset.Y);
         }
         
+        public bool IsWithinRadius(Position target, float distance) => Position.Region == this.CurrentRegion && GameMath.IsWithinRadius(Coordinate, target.Coordinate, distance);
         public bool IsWithinRadius(GameObject target, float distance) => GameMath.IsWithinRadius(this, target, distance);
         public bool IsWithinRadius(Coordinate target, float distance) => GameMath.IsWithinRadius(Position.Coordinate, target, distance);
         public bool IsWithinRadius2D(GameObject target, float distance) => GameMath.IsWithinRadius2D(this, target, distance);

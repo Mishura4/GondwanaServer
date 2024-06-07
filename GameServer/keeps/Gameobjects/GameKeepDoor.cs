@@ -23,10 +23,12 @@ using System.Reflection;
 
 using DOL.Database;
 using DOL.Events;
+using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
 using DOL.GS.ServerProperties;
 
 using log4net;
+using Vector = DOL.GS.Geometry.Vector;
 
 
 namespace DOL.GS.Keeps
@@ -406,7 +408,7 @@ namespace DOL.GS.Keeps
 
             if (!GameServer.KeepManager.IsEnemy(this, player) || player.Client.Account.PrivLevel != 1)
             {
-                float keepz = Position.Z, distance = 0;
+                int keepz = Position.Z, distance = 0;
 
                 //calculate distance
                 //normal door
@@ -449,14 +451,14 @@ namespace DOL.GS.Keeps
                         {
                             if ((GameKeepComponent.eComponentSkin)c.Skin == GameKeepComponent.eComponentSkin.Keep)
                             {
-                                keepdistance = Vector3.Distance(Position, c.Position);
+                                keepdistance = (float)Coordinate.DistanceTo(c.Position);
                             }
                             if ((GameKeepComponent.eComponentSkin)c.Skin == GameKeepComponent.eComponentSkin.Gate)
                             {
-                                gatedistance = Vector3.Distance(Position, c.Position);
+                                gatedistance = (float)Coordinate.DistanceTo(c.Position);
                             }
                             //when these are filled we can stop the search
-                            if (keepdistance != int.MaxValue && gatedistance != int.MaxValue)
+                            if (keepdistance != float.MaxValue && gatedistance != float.MaxValue)
                                 break;
                         }
                         if (DoorIndex == 1 && keepdistance < gatedistance)
@@ -464,15 +466,13 @@ namespace DOL.GS.Keeps
                     }
                 }
 
-                Vector2 keepPoint;
+                Position keepPoint;
                 //calculate x y
-                if (IsObjectInFront(player, 180, false))
-                    keepPoint = GameMath.GetPointFromHeading(Position, Heading, -distance);
-                else
-                    keepPoint = GameMath.GetPointFromHeading(Position, Heading, distance);
+                if (IsObjectInFront(player, 180, false)) keepPoint = Position + Vector.Create(Orientation, -distance);
+                else keepPoint = Position + Vector.Create(Orientation, distance);
 
                 //move player
-                player.MoveTo(CurrentRegionID, keepPoint.X, keepPoint.Y, keepz, player.Heading);
+                player.MoveTo(keepPoint.With(z: keepz).With(player.Orientation));
             }
             return base.Interact(player);
         }
@@ -616,8 +616,7 @@ namespace DOL.GS.Keeps
             if (curZone == null) return;
             this.CurrentRegion = curZone.ZoneRegion;
             m_name = door.Name;
-            m_Heading = (ushort)door.Heading;
-            Position = new Vector3(door.X, door.Y, door.Z);
+            Position = Position.Create(regionID: CurrentRegion.ID, x: door.X, y: door.Y, z: door.Z, heading: (ushort)door.Heading);
             m_level = 0;
             m_model = 0xFFFF;
             m_doorID = door.InternalID;

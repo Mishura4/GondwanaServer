@@ -20,11 +20,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using System.Reflection;
 using DOL.Database;
+using DOL.Geometry;
+using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
 using log4net;
+using Vector3 = System.Numerics.Vector3;
 
 namespace DOL.GS.Keeps
 {
@@ -55,15 +57,19 @@ namespace DOL.GS.Keeps
         bool Load();
         bool IsNewKeepComponent(int skin);
         void RegisterKeep(int keepID, AbstractGameKeep keep);
-        AbstractGameKeep GetKeepByID(int id);
-        ICollection<AbstractGameKeep> GetKeepsCloseToSpot(ushort regionid, Vector3 point3d, int radius);
+        AbstractGameKeep GetKeepByID(int id);        [Obsolete("This is going to be removed.")]
+        IEnumerable GetKeepsCloseToSpot(ushort regionid, Vector3 point3d, int radius);
+        [Obsolete("This is going to be removed.")]
+        ICollection<AbstractGameKeep> GetKeepsCloseToSpot(ushort regionid, int x, int y, int z, int radius);
+        [Obsolete("Use .GetKeepCloseToSpot(Position, int) instead!")]
         AbstractGameKeep GetKeepCloseToSpot(ushort regionid, Vector3 point3d, int radius);
+        [Obsolete("Use .GetKeepCloseToSpot(Position, int) instead!")]
+        AbstractGameKeep GetKeepCloseToSpot(ushort regionid, int x, int y, int z, int radius);
+        AbstractGameKeep GetKeepCloseToSpot(Position position, int radius);
         ICollection<IGameKeep> GetKeepsByRealmMap(int map);
         AbstractGameKeep GetBGPK(GamePlayer player);
         ICollection<AbstractGameKeep> GetFrontierKeeps();
         ICollection<AbstractGameKeep> GetKeepsOfRegion(ushort region);
-        ICollection<AbstractGameKeep> GetKeepsCloseToSpot(ushort regionid, float x, float y, float z, int radius);
-        AbstractGameKeep GetKeepCloseToSpot(ushort regionid, float x, float y, float z, int radius);
         int GetTowerCountByRealm(eRealm realm);
         Dictionary<eRealm, int> GetTowerCountAllRealm();
         Dictionary<eRealm, int> GetTowerCountFromZones(List<int> zones);

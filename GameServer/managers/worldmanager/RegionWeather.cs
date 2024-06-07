@@ -89,8 +89,8 @@ namespace DOL.GS
         public RegionWeather(Region Region)
         {
             this.Region = Region;
-            WeatherMinPosition = (uint)Math.Max(0, Region.Zones.Any() ? Region.Zones.Min(z => z.XOffset) : 0);
-            WeatherMaxPosition = (uint)Math.Max(0, Region.Zones.Any() ? Region.Zones.Max(z => z.XOffset + z.Width) : 0);
+            WeatherMinPosition = (uint)Math.Max(0, Region.Zones.Min(z => z.Offset.X));
+            WeatherMaxPosition = (uint)Math.Max(0, Region.Zones.Max(z => z.Offset.X + z.Width));
         }
 
         /// <summary>

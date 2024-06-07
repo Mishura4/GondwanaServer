@@ -1,6 +1,7 @@
 using DOL.GS;
 using DOL.GS.PacketHandler;
 using DOL.Database;
+using DOL.GS.Geometry;
 
 namespace DOL.GS.Keeps
 {
@@ -69,9 +70,9 @@ namespace DOL.GS.Keeps
                     DbArea.Radius = this.Radius;
                     DbArea.Region = (ushort)this.Keep.Region;
                     DbArea.Sound = this.Sound;
-                    DbArea.X = (int)Position.X;
-                    DbArea.Y = (int)Position.Y;
-                    DbArea.Z = (int)Position.Z;
+                    DbArea.X = (int)Coordinate.X;
+                    DbArea.Y = (int)Coordinate.Y;
+                    DbArea.Z = (int)Coordinate.Z;
 
                     GameServer.Database.AddObject(DbArea);
                 }
@@ -82,7 +83,7 @@ namespace DOL.GS.Keeps
         {
             base.LoadFromDatabase(area);
             GameServer.KeepManager.Log.Debug("KeepArea " + area.Description + " LoadFromDatabase called");
-            GameServer.KeepManager.Log.Debug("X: " + area.X + "(" + Position.X + ") Y: " + area.Y + "(" + Position.Y + ") Region:" + area.Region + " Radius: " + m_Radius);
+            GameServer.KeepManager.Log.Debug("X: " + area.X + "(" + Coordinate.X + ") Y: " + area.Y + "(" + Coordinate.Y + ") Region:" + area.Region + " Radius: " + m_Radius);
         }
     }
 }

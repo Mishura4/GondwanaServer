@@ -64,9 +64,7 @@ namespace DOL.GS.Commands
                                     playerBoat.Name = LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Boat.Name.Scout_Boat", client.Player.Name);
                                     playerBoat.Position = client.Player.Position;
                                     playerBoat.Model = 2648;
-                                    playerBoat.Heading = client.Player.Heading;
                                     playerBoat.Realm = client.Player.Realm;
-                                    playerBoat.CurrentRegionID = client.Player.CurrentRegionID;
                                     playerBoat.OwnerID = client.Player.InternalID;
                                     playerBoat.MaxSpeedBase = 500;
                                     client.Player.Inventory.RemoveItem(item);
@@ -94,9 +92,7 @@ namespace DOL.GS.Commands
                                     playerBoat.Name = LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Boat.Name.Warship", client.Player.Name);
                                     playerBoat.Position = client.Player.Position;
                                     playerBoat.Model = 2647;
-                                    playerBoat.Heading = client.Player.Heading;
                                     playerBoat.Realm = client.Player.Realm;
-                                    playerBoat.CurrentRegionID = client.Player.CurrentRegionID;
                                     playerBoat.OwnerID = client.Player.InternalID;
                                     playerBoat.MaxSpeedBase = 400;
                                     client.Player.Inventory.RemoveItem(item);
@@ -122,9 +118,7 @@ namespace DOL.GS.Commands
                                     InventoryItem item = client.Player.Inventory.GetFirstItemByID("galleon", eInventorySlot.Min_Inv, eInventorySlot.Max_Inv);
                                     playerBoat.BoatID = System.Guid.NewGuid().ToString();
                                     playerBoat.Name = LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Boat.Name.Galleon", client.Player.Name);
-                                    playerBoat.Position = client.Player.Position;
                                     playerBoat.Model = 2646;
-                                    playerBoat.Heading = client.Player.Heading;
                                     playerBoat.Realm = client.Player.Realm;
                                     playerBoat.CurrentRegionID = client.Player.CurrentRegionID;
                                     playerBoat.OwnerID = client.Player.InternalID;
@@ -152,9 +146,7 @@ namespace DOL.GS.Commands
                                     InventoryItem item = client.Player.Inventory.GetFirstItemByID("skiff", eInventorySlot.Min_Inv, eInventorySlot.Max_Inv);
                                     playerBoat.BoatID = System.Guid.NewGuid().ToString();
                                     playerBoat.Name = LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Boat.Name.Skiff", client.Player.Name);
-                                    playerBoat.Position = client.Player.Position;
                                     playerBoat.Model = 1616;
-                                    playerBoat.Heading = client.Player.Heading;
                                     playerBoat.Realm = client.Player.Realm;
                                     playerBoat.CurrentRegionID = client.Player.CurrentRegionID;
                                     playerBoat.OwnerID = client.Player.InternalID;
@@ -182,9 +174,7 @@ namespace DOL.GS.Commands
                                     InventoryItem item = client.Player.Inventory.GetFirstItemByID("Viking_Longship", eInventorySlot.Min_Inv, eInventorySlot.Max_Inv);
                                     playerBoat.BoatID = System.Guid.NewGuid().ToString();
                                     playerBoat.Name = LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Boat.Name.Viking_Longship", client.Player.Name);
-                                    playerBoat.Position = client.Player.Position;
                                     playerBoat.Model = 1615;
-                                    playerBoat.Heading = client.Player.Heading;
                                     playerBoat.Realm = client.Player.Realm;
                                     playerBoat.CurrentRegionID = client.Player.CurrentRegionID;
                                     playerBoat.OwnerID = client.Player.InternalID;
@@ -212,9 +202,7 @@ namespace DOL.GS.Commands
                                     InventoryItem item = client.Player.Inventory.GetFirstItemByID("ps_longship", eInventorySlot.Min_Inv, eInventorySlot.Max_Inv);
                                     playerBoat.BoatID = System.Guid.NewGuid().ToString();
                                     playerBoat.Name = LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Boat.Name.Longship", client.Player.Name);
-                                    playerBoat.Position = client.Player.Position;
                                     playerBoat.Model = 1595;
-                                    playerBoat.Heading = client.Player.Heading;
                                     playerBoat.Realm = client.Player.Realm;
                                     playerBoat.CurrentRegionID = client.Player.CurrentRegionID;
                                     playerBoat.OwnerID = client.Player.InternalID;
@@ -242,9 +230,7 @@ namespace DOL.GS.Commands
                                     InventoryItem item = client.Player.Inventory.GetFirstItemByID("stygian_ship", eInventorySlot.Min_Inv, eInventorySlot.Max_Inv);
                                     playerBoat.BoatID = System.Guid.NewGuid().ToString();
                                     playerBoat.Name = LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Boat.Name.Stygian_Ship", client.Player.Name);
-                                    playerBoat.Position = client.Player.Position;
                                     playerBoat.Model = 1612;
-                                    playerBoat.Heading = client.Player.Heading;
                                     playerBoat.Realm = client.Player.Realm;
                                     playerBoat.CurrentRegionID = client.Player.CurrentRegionID;
                                     playerBoat.OwnerID = client.Player.InternalID;
@@ -272,9 +258,7 @@ namespace DOL.GS.Commands
                                     InventoryItem item = client.Player.Inventory.GetFirstItemByID("atlantean_ship", eInventorySlot.Min_Inv, eInventorySlot.Max_Inv);
                                     playerBoat.BoatID = System.Guid.NewGuid().ToString();
                                     playerBoat.Name = LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Boat.Name.Atlantean_Ship", client.Player.Name);
-                                    playerBoat.Position = client.Player.Position;
                                     playerBoat.Model = 1613;
-                                    playerBoat.Heading = client.Player.Heading;
                                     playerBoat.Realm = client.Player.Realm;
                                     playerBoat.CurrentRegionID = client.Player.CurrentRegionID;
                                     playerBoat.OwnerID = client.Player.InternalID;
@@ -302,9 +286,7 @@ namespace DOL.GS.Commands
                                     InventoryItem item = client.Player.Inventory.GetFirstItemByID("British_Cog", eInventorySlot.Min_Inv, eInventorySlot.Max_Inv);
                                     playerBoat.BoatID = System.Guid.NewGuid().ToString();
                                     playerBoat.Name = LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Boat.Name.British_Cog", client.Player.Name);
-                                    playerBoat.Position = client.Player.Position;
                                     playerBoat.Model = 1614;
-                                    playerBoat.Heading = client.Player.Heading;
                                     playerBoat.Realm = client.Player.Realm;
                                     playerBoat.CurrentRegionID = client.Player.CurrentRegionID;
                                     playerBoat.OwnerID = client.Player.InternalID;
@@ -344,9 +326,7 @@ namespace DOL.GS.Commands
                                 }
 
                                 curBoat.Position = client.Player.Position;
-                                curBoat.Heading = client.Player.Heading;
                                 curBoat.Realm = client.Player.Realm;
-                                curBoat.CurrentRegionID = client.Player.CurrentRegionID;
                                 curBoat.Riders = new GamePlayer[32];
                                 BlankBrain brain = new BlankBrain();
                                 curBoat.SetOwnBrain(brain);

@@ -20,11 +20,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using DOL.Database;
 using DOL.Events;
 using DOL.GameEvents;
 using DOL.Language;
+using DOL.GS.Geometry;
 
 namespace DOL.GS
 {
@@ -67,7 +67,6 @@ namespace DOL.GS
             item.EventID = EventID;
             item.Name = Name;
             item.ExamineArticle = ExamineArticle;
-            item.Heading = Heading;
             item.Level = Level;
             item.Realm = Realm;
             item.Position = Position;
@@ -232,20 +231,19 @@ namespace DOL.GS
             Model = item.Model;
             Emblem = item.Emblem;
             Realm = (eRealm)item.Realm;
-            Heading = item.Heading;
-            Position = new Vector3(item.X, item.Y, item.Z);
+            Position = Position.Create(item.Region, item.X, item.Y, item.Z, item.Heading);
             RespawnInterval = item.RespawnInterval;
         }
 
         /// <summary>
         /// Gets or sets the heading of this item
         /// </summary>
-        public override ushort Heading
+        public override Angle Orientation
         {
-            get { return base.Heading; }
+            get => base.Orientation;
             set
             {
-                base.Heading = value;
+                base.Orientation = value;
                 if (ObjectState == eObjectState.Active)
                 {
                     foreach (GamePlayer player in GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
@@ -310,11 +308,11 @@ namespace DOL.GS
             obj.Model = Model;
             obj.Emblem = Emblem;
             obj.Realm = (byte)Realm;
-            obj.Heading = Heading;
-            obj.Region = CurrentRegionID;
-            obj.X = (int)Position.X;
-            obj.Y = (int)Position.Y;
-            obj.Z = (int)Position.Z;
+            obj.Heading = Orientation.InHeading;
+            obj.Region = Position.RegionID;
+            obj.X = Position.X;
+            obj.Y = Position.Y;
+            obj.Z = Position.Z;
             obj.ClassType = this.GetType().ToString();
             obj.RespawnInterval = RespawnInterval;
 

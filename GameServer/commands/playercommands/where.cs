@@ -55,8 +55,8 @@ namespace DOL.GS.Commands
                     return;
                 }
                 GameNPC npc = npcs[0];
-                ushort heading = targetnpc.GetHeading(npc);
-                string directionstring = GetDirectionFromHeading(heading);
+                var orientation = targetnpc.Coordinate.GetOrientationTo(npc.Coordinate);
+                string directionstring = LanguageMgr.GetCardinalDirection(client.Account.Language, orientation);
                 directionstring = LanguageMgr.GetTranslation(
                                     client.Account.Language,
                                     "Commands.Players.Where." + directionstring);
@@ -161,29 +161,6 @@ namespace DOL.GS.Commands
                 return true;
             }
             return false;
-        }
-
-        public string GetDirectionFromHeading(ushort heading)
-        {
-            if (heading < 0)
-                heading += 4096;
-            if (heading >= 3840 || heading <= 256)
-                return "South";
-            else if (heading > 256 && heading < 768)
-                return "South West";
-            else if (heading >= 768 && heading <= 1280)
-                return "West";
-            else if (heading > 1280 && heading < 1792)
-                return "North West";
-            else if (heading >= 1792 && heading <= 2304)
-                return "North";
-            else if (heading > 2304 && heading < 2816)
-                return "North East";
-            else if (heading >= 2816 && heading <= 3328)
-                return "East";
-            else if (heading > 3328 && heading < 3840)
-                return "South East";
-            return "";
         }
     }
 }

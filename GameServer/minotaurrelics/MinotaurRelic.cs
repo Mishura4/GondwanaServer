@@ -25,6 +25,7 @@ using System.Threading;
 using DOL.Database;
 using DOL.Events;
 using DOL.GS.Effects;
+using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
 using DOL.GS.Spells;
 
@@ -48,11 +49,6 @@ namespace DOL.GS
         DBMinotaurRelic m_dbRelic;
         Timer timer = null;
         public RegionTimer respawntimer = null;
-        protected int m_spawny;
-        protected int m_spawnx;
-        protected int m_spawnz;
-        protected int m_spawnheading;
-        protected int m_spawnregion;
         protected int m_relicSpellID;
         protected Spell m_relicSpell;
         protected string m_relicTarget;
@@ -127,35 +123,7 @@ namespace DOL.GS
             set { m_relicTarget = value; }
         }
 
-        public int SpawnX
-        {
-            get { return m_spawnx; }
-            set { m_spawnx = value; }
-        }
-
-        public int SpawnY
-        {
-            get { return m_spawny; }
-            set { m_spawny = value; }
-        }
-
-        public int SpawnZ
-        {
-            get { return m_spawnz; }
-            set { m_spawnz = value; }
-        }
-
-        public int SpawnHeading
-        {
-            get { return m_spawnheading; }
-            set { m_spawnheading = value; }
-        }
-
-        public int SpawnRegion
-        {
-            get { return m_spawnregion; }
-            set { m_spawnregion = value; }
-        }
+        public Position SpawnPosition { get; set; }
 
         public int Effect
         {
@@ -175,16 +143,10 @@ namespace DOL.GS
             m_dbRelic = obj as DBMinotaurRelic;
             RelicID = m_dbRelic.RelicID;
 
-            Heading = (ushort)m_dbRelic.SpawnHeading;
-            CurrentRegionID = (ushort)m_dbRelic.SpawnRegion;
-            Position = new Vector3(m_dbRelic.SpawnX, m_dbRelic.SpawnY, m_dbRelic.SpawnZ);
+            SpawnPosition = Position.Create((ushort)m_dbRelic.SpawnRegion, m_dbRelic.SpawnX, m_dbRelic.SpawnY, m_dbRelic.SpawnZ, (ushort)m_dbRelic.SpawnHeading);
+            Position = SpawnPosition;
 
-            SpawnHeading = m_dbRelic.SpawnHeading;
-            SpawnRegion = m_dbRelic.SpawnRegion;
             Effect = m_dbRelic.Effect;
-            SpawnX = m_dbRelic.SpawnX;
-            SpawnY = m_dbRelic.SpawnY;
-            SpawnZ = m_dbRelic.SpawnZ;
 
             RelicSpellID = m_dbRelic.relicSpell;
             RelicSpell = SkillBase.GetSpellByID(m_dbRelic.relicSpell);
@@ -208,11 +170,11 @@ namespace DOL.GS
         /// </summary>
         public override void SaveIntoDatabase()
         {
-            m_dbRelic.SpawnHeading = Heading;
-            m_dbRelic.SpawnRegion = CurrentRegionID;
-            m_dbRelic.SpawnX = (int)Position.X;
-            m_dbRelic.SpawnY = (int)Position.Y;
-            m_dbRelic.SpawnZ = (int)Position.Z;
+            m_dbRelic.SpawnHeading = Orientation.InHeading;
+            m_dbRelic.SpawnRegion = Position.RegionID;
+            m_dbRelic.SpawnX = Position.X;
+            m_dbRelic.SpawnY = Position.Y;
+            m_dbRelic.SpawnZ = Position.Z;
 
             m_dbRelic.Effect = Effect;
 
@@ -511,9 +473,8 @@ namespace DOL.GS
             }
 
             if (ObjectState == eObjectState.Active) return 0;
-            Position = new Vector3(SpawnX, SpawnY, SpawnZ);
-            Heading = (ushort)SpawnHeading;
-            CurrentRegionID = (ushort)SpawnRegion;
+            
+            Position = SpawnPosition;
             XP = MinotaurRelicManager.MAX_RELIC_EXP;
             AddToWorld();
             return 0;
@@ -526,10 +487,10 @@ namespace DOL.GS
                 respawntimer.Stop();
                 respawntimer = null;
             }
+            
             if (ObjectState == eObjectState.Active) return;
-            Position = new Vector3(SpawnX, SpawnY, SpawnZ);
-            Heading = (ushort)SpawnHeading;
-            CurrentRegionID = (ushort)SpawnRegion;
+            
+            Position = SpawnPosition;
             XP = MinotaurRelicManager.MAX_RELIC_EXP;
             AddToWorld();
         }
@@ -541,14 +502,12 @@ namespace DOL.GS
         protected virtual void Update(GameLiving living)
         {
             if (living == null) return;
-            CurrentRegionID = living.CurrentRegionID;
             Position = living.Position;
-            Heading = living.Heading;
             foreach (GameClient clt in WorldMgr.GetClientsOfRegion(CurrentRegionID))
             {
                 if (clt == null || clt.Player == null) continue;
                 if (XP > 0)
-                    clt.Player.Out.SendMinotaurRelicMapUpdate((byte)RelicID, CurrentRegionID, (int)Position.X, (int)Position.Y, (int)Position.Z);
+                    clt.Player.Out.SendMinotaurRelicMapUpdate((byte)RelicID, Position);
                 else
                     clt.Player.Out.SendMinotaurRelicMapRemove((byte)RelicID);
             }
@@ -628,7 +587,7 @@ namespace DOL.GS
         {
             if (SpawnLocked)
             {
-                if ((int)Position.X == SpawnX && (int)Position.Y == SpawnY)
+                if (Position.Coordinate == SpawnPosition.Coordinate)
                 {
                     if (ProtectorClassType != string.Empty)
                     {

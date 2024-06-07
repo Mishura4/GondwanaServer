@@ -32,6 +32,7 @@ using System.Transactions;
 using System.Numerics;
 using System.Linq;
 using DOL.GS.Finance;
+using DOL.GS.Geometry;
 
 namespace DOL.Language
 {
@@ -575,6 +576,23 @@ namespace DOL.Language
                 return "(unknown)";
             }
             return translation;
+        }
+        
+        public static string GetCardinalDirection(string languageID, Angle direction)
+        {
+            var clockwiseDirectionIndexBeginningFromSouth = ((direction.InHeading + 256) % 4096) / 512;
+            switch (clockwiseDirectionIndexBeginningFromSouth)
+            {
+                case 0: return LanguageMgr.GetTranslation(languageID, "Language.CardinalDirection.South");
+                case 1: return LanguageMgr.GetTranslation(languageID, "Language.CardinalDirection.SouthWest");
+                case 2: return LanguageMgr.GetTranslation(languageID, "Language.CardinalDirection.West");
+                case 3: return LanguageMgr.GetTranslation(languageID, "Language.CardinalDirection.NorthWest");
+                case 4: return LanguageMgr.GetTranslation(languageID, "Language.CardinalDirection.North");
+                case 5: return LanguageMgr.GetTranslation(languageID, "Language.CardinalDirection.NorthEast");
+                case 6: return LanguageMgr.GetTranslation(languageID, "Language.CardinalDirection.East");
+                case 7: return LanguageMgr.GetTranslation(languageID, "Language.CardinalDirection.SouthEast");
+            }
+            return "(unknown)";
         }
 
         public static string GetResistNoun(string language, eResist resist)

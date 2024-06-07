@@ -21,6 +21,7 @@ using System.Collections;
 using DOL.AI.Brain;
 using DOL.Database;
 using DOL.Events;
+using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
 using DOL.Language;
 using DOL.GS.ServerProperties;
@@ -28,7 +29,6 @@ using System.Collections.Generic;
 using DOL.GS.Realm;
 using DOL.GS.PlayerClass;
 using System.Threading.Tasks;
-using System.Numerics;
 
 namespace DOL.GS.Keeps
 {
@@ -734,7 +734,8 @@ namespace DOL.GS.Keeps
                     {
                         CurrentWayPoint = guard.CurrentWayPoint;
                         m_changingPositions = true;
-                        MoveTo(guard.CurrentRegionID, guard.Position - new Vector3(Util.Random(200, 350), Util.Random(200, 350), 0), guard.Heading);
+                        var offset = Vector.Create(x: Util.Random(200, 350), y: Util.Random(200, 350));
+                        MoveTo(guard.Position - offset);
                         m_changingPositions = false;
                         foundGuard = true;
                         break;
@@ -968,8 +969,7 @@ namespace DOL.GS.Keeps
         public void MoveToPosition(DBKeepPosition position)
         {
             PositionMgr.LoadGuardPosition(position, this);
-            if (!InCombat)
-                MoveTo(CurrentRegionID, Position, Heading);
+            if (!InCombat) MoveTo(Position);
         }
         #endregion
 
@@ -1015,13 +1015,15 @@ namespace DOL.GS.Keeps
         /// <summary>
         /// Adding special handling for walking to a point for patrol guards to be in a formation
         /// </summary>
-        public override void WalkTo(Vector3 target, short speed)
+        public override void WalkTo(Coordinate destination, short speed)
         {
-            int offX = 0;
-            int offY = 0;
+            int offX = 0; int offY = 0;
             if (IsMovingOnPath && PatrolGroup != null)
+            {
                 PatrolGroup.GetMovementOffset(this, out offX, out offY);
-            base.WalkTo(target - new Vector3(offX, offY, 0), speed);
+            }
+            var offset = Vector.Create(x: offX, y: offY );
+            base.WalkTo(destination - offset, speed);
         }
 
         public override void WalkToSpawn(short speed)

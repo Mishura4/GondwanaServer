@@ -17,93 +17,43 @@
  *
  */
 using System;
-using System.Numerics;
 using DOL.Database;
 using DOL.GS.Geometry;
 
 namespace DOL.GS.Movement
 {
-    /// <summary>
-    /// represents a point in a way path
-    /// </summary>
     public class PathPoint
     {
-        protected int m_maxspeed;
-        protected PathPoint m_next = null;
-        protected PathPoint m_prev = null;
-        protected ePathType m_type;
-        protected bool m_flag;
-        protected int m_waitTime = 0;
-
         public Coordinate Coordinate { get; set; }
 
+        [Obsolete("Use .Coordinate instead!")]
+        public int X { get => Coordinate.X; set => Coordinate.With(x: value); }
+        [Obsolete("Use .Coordinate instead!")]
+        public int Y { get => Coordinate.Y; set => Coordinate.With(y: value); }
+        [Obsolete("Use .Coordinate instead!")]
+        public int Z { get => Coordinate.Z; set => Coordinate.With(z: value); }
+
+        [Obsolete("This is going to be removed.")]
         public PathPoint(PathPoint pp) : this(pp.Coordinate, pp.MaxSpeed, pp.Type) { }
 
-        public PathPoint(Coordinate p, int maxspeed, ePathType type) : this(p.X, p.Y, p.Z, maxspeed, type) { }
+        public PathPoint(Coordinate coordinate, int maxspeed, ePathType type)
+        {
+            Coordinate = coordinate;
+            MaxSpeed = maxspeed;
+            Type = type;
+        }
 
         public PathPoint(int x, int y, int z, int maxspeed, ePathType type)
-        {
-            Coordinate = Coordinate.Create(x, y, z);
-            m_maxspeed = maxspeed;
-            m_type = type;
-            m_flag = false;
-            m_waitTime = 0;
-        }
+            : this(Coordinate.Create(x, y, z), maxspeed, type) { }
 
-        /// <summary>
-        /// Speed allowed after that waypoint in forward direction
-        /// </summary>
-        public int MaxSpeed
+        public PathPoint(DBPathPoint dbEntry, ePathType type)
         {
-            get { return m_maxspeed; }
-            set { m_maxspeed = value; }
+            Coordinate = Coordinate.Create(dbEntry.X, dbEntry.Y, dbEntry.Z);
+            MaxSpeed = dbEntry.MaxSpeed;
+            WaitTime = dbEntry.WaitTime;
+            Type = type;
         }
-
-        /// <summary>
-        /// next waypoint in path
-        /// </summary>
-        public PathPoint Next
-        {
-            get { return m_next; }
-            set { m_next = value; }
-        }
-
-        /// <summary>
-        /// previous waypoint in path
-        /// </summary>
-        public PathPoint Prev
-        {
-            get { return m_prev; }
-            set { m_prev = value; }
-        }
-
-        /// <summary>
-        /// flag toggle when go through pathpoint
-        /// </summary>
-        public bool FiredFlag
-        {
-            get { return m_flag; }
-            set { m_flag = value; }
-        }
-
-        /// <summary>
-        /// path type
-        /// </summary>
-        public ePathType Type
-        {
-            get { return m_type; }
-            set { m_type = value; }
-        }
-
-        /// <summary>
-        /// path type
-        /// </summary>
-        public int WaitTime
-        {
-            get { return m_waitTime; }
-            set { m_waitTime = value; }
-        }
-
+        
         public PathPoint GetNearestNextPoint(Coordinate pos)
         {
             var nearest = this;
@@ -122,6 +72,34 @@ namespace DOL.GS.Movement
             }
 
             return nearest;
+        }
+        
+        public Angle AngleToNextPathPoint
+            => Coordinate.GetOrientationTo(Next.Coordinate);
+
+        public int MaxSpeed { get; set; }
+
+        public PathPoint Prev { get; set; }
+        public PathPoint Next { get; set; }
+
+        /// <summary>
+        /// flag toggle when go through pathpoint
+        /// </summary>
+        public bool FiredFlag { get; set; } = false;
+
+        public ePathType Type { get; set; }
+
+        public int WaitTime { get; set; } = 0;
+
+        public DBPathPoint GenerateDbEntry()
+        {
+            var dbPathPoint = new DBPathPoint();
+            dbPathPoint.X = Coordinate.X;
+            dbPathPoint.Y = Coordinate.Y;
+            dbPathPoint.Z = Coordinate.Z;
+            dbPathPoint.MaxSpeed = MaxSpeed;
+            dbPathPoint.WaitTime = WaitTime;
+            return dbPathPoint;
         }
     }
 }

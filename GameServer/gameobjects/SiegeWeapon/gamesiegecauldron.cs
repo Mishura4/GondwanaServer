@@ -19,10 +19,10 @@
 using System.Collections;
 
 using DOL.Database;
+using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
 using DOL.GS.Spells;
 using DOL.GS.Keeps;
-using System.Numerics;
 
 namespace DOL.GS
 {
@@ -43,7 +43,7 @@ namespace DOL.GS
             Effect = 0x8A1;
             Model = 0xA2F;
             CurrentState = eState.Aimed;
-            GroundTarget = Position - Vector3.UnitZ * 100;
+            GroundTargetPosition = Position - Vector.Create(z: 100);
             ActionDelay = new int[]
                 {
                     0, //none
@@ -56,7 +56,7 @@ namespace DOL.GS
 
         public override bool AddToWorld()
         {
-            GroundTarget = new Vector3(Position.ToVector2(), Component.Keep.Z);
+            GroundTargetPosition = Position.With(z: Component.Keep.Z);
             return base.AddToWorld();
         }
 

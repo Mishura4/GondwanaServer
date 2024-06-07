@@ -16,6 +16,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
+using DOL.GS.Geometry;
 using System.Numerics;
 
 namespace DOL.GS.PacketHandler.Client.v168
@@ -79,7 +80,7 @@ namespace DOL.GS.PacketHandler.Client.v168
             {
                 var player = (GamePlayer)m_actionSource;
                 player.GroundTargetInView = ((m_flag & 0x100) != 0);
-                player.GroundTarget = new Vector3(m_x, m_y, m_z);
+                player.GroundTargetPosition = Position.Create(player.Position.RegionID, m_x, m_y, m_z);
 
                 if (!player.GroundTargetInView)
                     player.Out.SendMessage("Your ground target is not visible!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
@@ -98,7 +99,7 @@ namespace DOL.GS.PacketHandler.Client.v168
                         if (player.Steed.OwnerID == player.InternalID)
                         {
                             player.Out.SendMessage("You usher your boat forward.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                            player.Steed.PathTo(player.GroundTarget.Value, player.Steed.MaxSpeed);
+                            player.Steed.PathTo(player.GroundTargetPosition.Coordinate, player.Steed.MaxSpeed);
                             return;
                         }
                     }
@@ -109,7 +110,7 @@ namespace DOL.GS.PacketHandler.Client.v168
                                                eChatType.CT_System, eChatLoc.CL_SystemWindow);
                         return;
                     }
-                    player.Steed.PathTo(player.GroundTarget.Value, player.Steed.MaxSpeed);
+                    player.Steed.PathTo(player.GroundTargetPosition.Coordinate, player.Steed.MaxSpeed);
                     return;
                 }
             }

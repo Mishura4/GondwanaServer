@@ -24,12 +24,14 @@ using System.Numerics;
 using System.Reflection;
 using DOL.Database;
 using DOL.GS.Finance;
+using DOL.GS.Geometry;
 using DOL.Language;
 using log4net;
+using Vector = DOL.GS.Geometry.Vector;
 
 namespace DOL.GS.Housing
 {
-    public class House : IGameLocation
+    public class House
     {
         /// <summary>
         /// Defines a logger for this class.
@@ -245,7 +247,7 @@ namespace DOL.GS.Housing
         {
             get
             {
-                foreach (GamePlayer player in WorldMgr.GetPlayersCloseToSpot(RegionID, Position.X, Position.Y, 25000, WorldMgr.VISIBILITY_DISTANCE))
+                foreach (GamePlayer player in WorldMgr.GetPlayersCloseToSpot(Position.With(z: 25000), WorldMgr.VISIBILITY_DISTANCE))
                 {
                     if (player.CurrentHouse == this && player.InHouse)
                     {
@@ -257,27 +259,57 @@ namespace DOL.GS.Housing
             }
         }
 
-        public Vector3 Position
+        public Position Position
         {
-            get => new Vector3(_databaseItem.X, _databaseItem.Y, _databaseItem.Z);
+            get => Position.Create(_databaseItem.RegionID, _databaseItem.X, _databaseItem.Y, _databaseItem.Z, (ushort)(_databaseItem.Heading/180.0*2048));
             set
             {
-                _databaseItem.X = (int)value.X;
-                _databaseItem.Y = (int)value.Y;
-                _databaseItem.Z = (int)value.Z;
+                _databaseItem.X = value.X;
+                _databaseItem.Y = value.Y;
+                _databaseItem.Z = value.Z;
+                _databaseItem.Heading = value.Orientation.InDegrees;
+                _databaseItem.RegionID = value.RegionID;
             }
+        }
+
+        [Obsolete("Use .Position instead!")]
+        public int X
+        {
+            get => Position.X;
+            set => Position = Position.With(x: value);
+        }
+
+        [Obsolete("Use .Position instead!")]
+        public int Y
+        {
+            get => Position.Y;
+            set => Position = Position.With(y: value);
+        }
+
+        [Obsolete("Use .Position instead!")]
+        public int Z
+        {
+            get => Position.Z;
+            set => Position = Position.With(z: value);
+        }
+
+        [Obsolete("Use either .Orientation (in degrees) or .Position.Heading instead!")]
+        public ushort Heading
+        {
+            get => (ushort)_databaseItem.Heading;
+            set => _databaseItem.Heading = value;
+        }
+
+        ///<remarks>House orientation in degrees.</remarks>
+        public ushort Orientation
+        {
+            get => (ushort)_databaseItem.Heading;
         }
 
         public ushort RegionID
         {
-            get { return _databaseItem.RegionID; }
-            set { _databaseItem.RegionID = value; }
-        }
-
-        public ushort Heading
-        {
-            get { return (ushort)_databaseItem.Heading; }
-            set { _databaseItem.Heading = value; }
+            get => Position.RegionID;
+            set => Position = Position.With(regionID: value);
         }
 
         public string Name
@@ -302,29 +334,23 @@ namespace DOL.GS.Housing
         {
             log.DebugFormat("House destructor called for House #{0} in region {1}", HouseNumber, RegionID);
         }
-
+        
+        [Obsolete("Use OutdoorJumpPosition instead!")]
+        public GameLocation OutdoorJumpPoint
+            => new GameLocation(OutdoorJumpPosition);
+        
         /// <summary>
         /// The spot you are teleported to when you exit this house.
         /// </summary>
-        public GameLocation OutdoorJumpPoint
-        {
-            get
-            {
-                double angle = Heading * ((Math.PI * 2) / 360); // angle*2pi/360;
-                var x = (float)(Position.X + (0 * Math.Cos(angle) + 500 * Math.Sin(angle)));
-                var y = (float)(Position.Y - (500 * Math.Cos(angle) - 0 * Math.Sin(angle)));
-                var heading = (ushort)((Heading < 180 ? Heading + 180 : Heading - 180) / 0.08789);
-
-                return new GameLocation("Housing", RegionID, x, y, Position.Z, heading);
-            }
-        }
+        public Position OutdoorJumpPosition
+            => (Position + Vector.Create(Position.Orientation + Angle.Degrees(180), length: 500)).TurnedAround();
 
         /// <summary>
         /// Sends a update of the house and the garden to all players in range
         /// </summary>
         public void SendUpdate()
         {
-            foreach (GamePlayer player in WorldMgr.GetPlayersCloseToSpot(this, HousingConstants.HouseViewingDistance))
+            foreach (GamePlayer player in WorldMgr.GetPlayersCloseToSpot(Position, HousingConstants.HouseViewingDistance))
             {
                 player.Out.SendHouse(this);
                 player.Out.SendGarden(this);
@@ -345,7 +371,7 @@ namespace DOL.GS.Housing
             IList<GamePlayer> list = GetAllPlayersInHouse();
             if (list.Count == 0)
             {
-                foreach (GamePlayer pl in WorldMgr.GetPlayersCloseToSpot(this, HousingConstants.HouseViewingDistance))
+                foreach (GamePlayer pl in WorldMgr.GetPlayersCloseToSpot(Position, HousingConstants.HouseViewingDistance))
                 {
                     pl.Out.SendHouseOccupied(this, true);
                 }
@@ -363,55 +389,55 @@ namespace DOL.GS.Housing
             {
                 //thx to sp4m
                 default:
-                    player.MoveTo(RegionID, Position.X, Position.Y, 25022, heading);
+                    player.MoveTo(Position.With(z: 25022, heading: 0));
                     break;
 
                 case 1:
-                    player.MoveTo(RegionID, Position.X + 80, Position.Y + 100, ((25025)), heading);
+                    player.MoveTo(Position.With(z: 25025, heading: 0) + Vector.Create(x: 80, y: 100));
                     break;
 
                 case 2:
-                    player.MoveTo(RegionID, Position.X - 260, Position.Y + 100, ((24910)), heading);
+                    player.MoveTo(Position.With(z: 24910, heading: 0) + Vector.Create(x: -260, y: 100));
                     break;
 
                 case 3:
-                    player.MoveTo(RegionID, Position.X - 200, Position.Y + 100, ((24800)), heading);
+                    player.MoveTo(Position.With(z: 24800, heading: 0) + Vector.Create(x: -200, y: 100));
                     break;
 
                 case 4:
-                    player.MoveTo(RegionID, Position.X - 350, Position.Y - 30, ((24660)), heading);
+                    player.MoveTo(Position.With(z: 24660, heading: 0) + Vector.Create(x: -350, y: -30));
                     break;
 
                 case 5:
-                    player.MoveTo(RegionID, Position.X + 230, Position.Y - 480, ((25100)), heading);
+                    player.MoveTo(Position.With(z: 25100, heading: 0) + Vector.Create(x: 230, y: -480));
                     break;
 
                 case 6:
-                    player.MoveTo(RegionID, Position.X - 80, Position.Y - 660, ((24700)), heading);
+                    player.MoveTo(Position.With(z: 24700, heading: 0) + Vector.Create(x: -80, y: -660));
                     break;
 
                 case 7:
-                    player.MoveTo(RegionID, Position.X - 80, Position.Y - 660, ((24700)), heading);
+                    player.MoveTo(Position.With(z: 24700, heading: 0) + Vector.Create(x: -80, y: -660));
                     break;
 
                 case 8:
-                    player.MoveTo(RegionID, Position.X - 90, Position.Y - 625, ((24670)), heading);
+                    player.MoveTo(Position.With(z: 24670, heading: 0) + Vector.Create(x: -90, y: -625));
                     break;
 
                 case 9:
-                    player.MoveTo(RegionID, Position.X + 400, Position.Y - 160, ((25150)), heading);
+                    player.MoveTo(Position.With(z: 25150, heading: 0) + Vector.Create(x: 400, y: -160));
                     break;
 
                 case 10:
-                    player.MoveTo(RegionID, Position.X + 400, Position.Y - 80, ((25060)), heading);
+                    player.MoveTo(Position.With(z: 25060, heading: 0) + Vector.Create(x: 400, y: -80));
                     break;
 
                 case 11:
-                    player.MoveTo(RegionID, Position.X + 400, Position.Y - 60, ((24900)), heading);
+                    player.MoveTo(Position.With(z: 24900, heading: 0) + Vector.Create(x: 400, y: -60));
                     break;
 
                 case 12:
-                    player.MoveTo(RegionID, Position.X, Position.Y - 620, ((24595)), heading);
+                    player.MoveTo(Position.With(z: 24595, heading: 0) + Vector.Create(y: -620));
                     break;
             }
 
@@ -425,7 +451,7 @@ namespace DOL.GS.Housing
         /// <param name="silent">text or not</param>
         public void Exit(GamePlayer player, bool silent)
         {
-            player.MoveTo(OutdoorJumpPoint);
+            player.MoveTo(OutdoorJumpPosition);
 
             if (!silent)
             {
@@ -437,7 +463,7 @@ namespace DOL.GS.Housing
             IList<GamePlayer> list = GetAllPlayersInHouse();
             if (list.Count == 0)
             {
-                foreach (GamePlayer pl in WorldMgr.GetPlayersCloseToSpot(this, HousingConstants.HouseViewingDistance))
+                foreach (GamePlayer pl in WorldMgr.GetPlayersCloseToSpot(Position, HousingConstants.HouseViewingDistance))
                 {
                     pl.Out.SendHouseOccupied(this, false);
                 }
@@ -545,7 +571,7 @@ namespace DOL.GS.Housing
         public IList<GamePlayer> GetAllPlayersInHouse()
         {
             var ret = new List<GamePlayer>();
-            foreach (GamePlayer player in WorldMgr.GetPlayersCloseToSpot(RegionID, Position.X, Position.Y, 25000, WorldMgr.VISIBILITY_DISTANCE))
+            foreach (GamePlayer player in WorldMgr.GetPlayersCloseToSpot(Position.With(z: 25000), WorldMgr.VISIBILITY_DISTANCE))
             {
                 if (player.CurrentHouse == this && player.InHouse)
                 {
@@ -614,21 +640,28 @@ namespace DOL.GS.Housing
                 AddNewOffset(o);
             }
         }
-
+        
+        [Obsolete("Use GetHookPointCoordinate(uint) instead!")]
         public Vector3? GetHookpointLocation(uint n)
         {
-            if (n > HousingConstants.MaxHookpointLocations)
-                return null;
-
-            int[] hookpointsCoords = HousingConstants.RelativeHookpointsCoords[Model][n];
-
-            if (hookpointsCoords == null)
-                return null;
-
-            return new Vector3(Position.X + hookpointsCoords[0], Position.Y + hookpointsCoords[1], 25000 + hookpointsCoords[2]);
+            var loc = GetHookPointCoordinate(n);
+            if(loc == Coordinate.Nowhere) return null;
+            else return loc.ToSysVector3();
         }
 
-        private int GetHookpointPosition(float objX, float objY, float _objZ)
+        public Coordinate GetHookPointCoordinate(uint number)
+        {
+            if (number > HousingConstants.MaxHookpointLocations) return Coordinate.Nowhere;
+
+            int[] hookpointsCoords = HousingConstants.RelativeHookpointsCoords[Model][number];
+
+            if (hookpointsCoords == null) return Coordinate.Nowhere;
+
+            var hookPointOffset = Vector.Create(x: hookpointsCoords[0], y: hookpointsCoords[1], z: hookpointsCoords[2]);
+            return Position.Coordinate.With(z: 25000) + hookPointOffset;
+        }
+        
+        private int GetHookpointPosition(Coordinate loc)
         {
             int position = -1;
 
@@ -636,8 +669,8 @@ namespace DOL.GS.Housing
             {
                 if (HousingConstants.RelativeHookpointsCoords[Model][i] != null)
                 {
-                    if (HousingConstants.RelativeHookpointsCoords[Model][i][0] + Position.X == objX &&
-                        HousingConstants.RelativeHookpointsCoords[Model][i][1] + Position.Y == objY)
+                    if (HousingConstants.RelativeHookpointsCoords[Model][i][0] + Position.X == loc.X &&
+                        HousingConstants.RelativeHookpointsCoords[Model][i][1] + Position.Y == loc.Y)
                     {
                         position = i;
                     }
@@ -657,7 +690,7 @@ namespace DOL.GS.Housing
             if (hookpointsCoords == null)
                 return 0;
 
-            return (ushort)(Heading + hookpointsCoords[3]);
+            return (ushort) (Orientation + hookpointsCoords[3]);
         }
 
         /// <summary>
@@ -675,9 +708,8 @@ namespace DOL.GS.Housing
                 return false;
 
             //get location from slot
-            var location = GetHookpointLocation(position);
-            if (location == null)
-                return false;
+            var coordinate = GetHookPointCoordinate(position);
+            if (coordinate == Coordinate.Nowhere) return false;
 
             GameObject hookpointObject = null;
 
@@ -692,7 +724,7 @@ namespace DOL.GS.Housing
                     }
                 case eObjectType.HouseNPC:
                     {
-                        hookpointObject = GameServer.ServerRules.PlaceHousingNPC(this, item, location.Value, GetHookpointHeading(position));
+                        hookpointObject = GameServer.ServerRules.PlaceHousingNPC(this, item, coordinate, GetHookpointHeading(position));
                         break;
                     }
                 case eObjectType.HouseBindstone:
@@ -700,9 +732,7 @@ namespace DOL.GS.Housing
                         hookpointObject = new GameStaticItem();
                         hookpointObject.CurrentHouse = this;
                         hookpointObject.OwnerID = templateID;
-                        hookpointObject.Position = location.Value;
-                        hookpointObject.Heading = heading;
-                        hookpointObject.CurrentRegionID = RegionID;
+                        hookpointObject.Position = Position.Create(RegionID, coordinate, heading);
                         hookpointObject.Name = item.Name;
                         hookpointObject.Model = (ushort)item.Model;
                         hookpointObject.AddToWorld();
@@ -712,7 +742,7 @@ namespace DOL.GS.Housing
                     }
                 case eObjectType.HouseInteriorObject:
                     {
-                        hookpointObject = GameServer.ServerRules.PlaceHousingInteriorItem(this, item, location.Value, heading);
+                        hookpointObject = GameServer.ServerRules.PlaceHousingInteriorItem(this, item, coordinate, heading);
                         break;
                     }
             }
@@ -734,7 +764,7 @@ namespace DOL.GS.Housing
                 return;
             }
 
-            int position = GetHookpointPosition(obj.Position.X, obj.Position.Y, obj.Position.Z);
+            int position = GetHookpointPosition(obj.Coordinate);
 
             if (position < 0)
             {
@@ -859,23 +889,18 @@ namespace DOL.GS.Housing
 
             float[] consignmentCoords = HousingConstants.ConsignmentPositioning[Model];
             double multi = consignmentCoords[0];
-            var range = consignmentCoords[1];
-            var zaddition = consignmentCoords[2];
-            var realm = consignmentCoords[3];
+            var range = (int) consignmentCoords[1];
+            var zaddition = (int) consignmentCoords[2];
+            var realm = (int) consignmentCoords[3];
 
-            double angle = Heading * ((Math.PI * 2) / 360); // angle*2pi/360;
-            var heading = (ushort)((Heading < 180 ? Heading + 180 : Heading - 180) / 0.08789);
-            var tX = (float)((Position.X + (500 * Math.Sin(angle))) - Math.Sin(angle - multi) * range);
-            var tY = (float)((Position.Y - (500 * Math.Cos(angle))) + Math.Cos(angle - multi) * range);
+            var merchantPosition = OutdoorJumpPosition + Vector.Create(Position.Orientation - Angle.Radians(multi), length: range, z: zaddition);
 
             GameConsignmentMerchant con = GameServer.ServerRules.CreateHousingConsignmentMerchant(this);
 
-            con.CurrentRegionID = RegionID;
-            con.Position = new Vector3(tX, tY, Position.Z - zaddition);
+            con.Position = merchantPosition;
             con.Level = 50;
             con.Realm = (eRealm)realm;
             con.HouseNumber = (ushort)HouseNumber;
-            con.Heading = heading;
             con.Model = 144;
 
             con.Flags |= GameNPC.eFlags.PEACE;

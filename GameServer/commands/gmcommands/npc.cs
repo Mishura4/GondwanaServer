@@ -18,6 +18,7 @@
  *
  */
 
+using DOL.GS.Geometry;
 using System;
 using System.Reflection;
 using System.Collections;
@@ -200,12 +201,12 @@ namespace DOL.GS.Commands
                             speed = Convert.ToInt16(args[3]);
                         }
 
-                        var pos = Vector3.Zero;
+                        var coordinate = Coordinate.Nowhere;
                         switch (args[2].ToLower())
                         {
                             case "me":
                                 {
-                                    pos = client.Player.Position;
+                                    coordinate = client.Player.Coordinate;
                                     break;
                                 }
 
@@ -216,7 +217,7 @@ namespace DOL.GS.Commands
                                     {
                                         if (targetplayer.Name.ToLower() == args[2].ToLower())
                                         {
-                                            pos = targetplayer.Position;
+                                            coordinate = targetplayer.Coordinate;
                                             break;
                                         }
                                     }
@@ -225,7 +226,7 @@ namespace DOL.GS.Commands
                                     {
                                         if (target.Name.ToLower() == args[2].ToLower())
                                         {
-                                            pos = target.Position;
+                                            coordinate = target.Coordinate;
                                             break;
                                         }
                                     }
@@ -233,13 +234,13 @@ namespace DOL.GS.Commands
                                 }
                         }
 
-                        if (pos == Vector3.Zero)
+                        if (coordinate == Coordinate.Nowhere)
                         {
                             client.Out.SendMessage("Can't find name " + args[2].ToLower() + " near your target.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             return;
                         }
 
-                        npc.PathTo(pos, speed);
+                        npc.PathTo(coordinate, speed);
                         client.Out.SendMessage("Your target is walking to your location!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                         break;
                     }

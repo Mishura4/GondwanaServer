@@ -58,6 +58,11 @@ public struct Coordinate
     public override string ToString()
         => $"{X}, {Y}, {Z}";
 
+    public System.Numerics.Vector3 ToSysVector3()
+    {
+        return new System.Numerics.Vector3(X, Y, Z);
+    }
+
     public readonly static Coordinate Nowhere = Create(-1, -1, -1);
     public readonly static Coordinate Zero = Create(0, 0, 0);
 }

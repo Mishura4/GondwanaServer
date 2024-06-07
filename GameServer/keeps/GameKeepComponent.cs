@@ -23,10 +23,12 @@ using System.Collections.Generic;
 using System.Text;
 using DOL.Database;
 using DOL.Events;
+using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
 using DOL.GS.ServerProperties;
 using log4net;
 using System.Numerics;
+using Vector = DOL.GS.Geometry.Vector;
 
 namespace DOL.GS.Keeps
 {
@@ -115,6 +117,12 @@ namespace DOL.GS.Keeps
         /// relative heading to keep ( 0, 1, 2, 3)
         /// </summary>
         public int ComponentHeading { get; set; }
+        
+        public Angle RelativeOrientationToKeep 
+        {
+            get => Angle.Degrees(ComponentHeading * 90);
+            set => ComponentHeading = value.InDegrees / 90;
+        }
 
         protected int m_oldMaxHealth;
 
@@ -151,7 +159,7 @@ namespace DOL.GS.Keeps
 
             if (player.Client.Account.PrivLevel > 1)
             {
-                list.Add(Name + " with a Z of " + Position.Z.ToString("F0"));
+                list.Add($"{Name} with a Z of {Position.Z}");
             }
 
             return list;
@@ -205,20 +213,17 @@ namespace DOL.GS.Keeps
             //this.DBKeepComponent = component;
             base.LoadFromDatabase(component);
             //this x and y is for get object in radius
-            double angle = keep.Heading * ((Math.PI * 2) / 360); // angle*2pi/360;
-            Position = new Vector3(
-                keep.X + (float)((sbyte)component.X * 148 * Math.Cos(angle) + (sbyte)component.Y * 148 * Math.Sin(angle)),
-                keep.Y - (float)((sbyte)component.Y * 148 * Math.Cos(angle) - (sbyte)component.X * 148 * Math.Sin(angle)),
-                keep.Z
-            );
+            var angle = keep.Orientation;
+            var offset = Vector.Create(148 * (sbyte)component.X, -148 * (sbyte)component.Y, 0)
+                .RotatedClockwise(angle);
+
+            //need check to be sure for heading
+            angle += Angle.Degrees(component.Heading * 90);
+            Position = keep.Position.With(angle) + offset;
             // and this one for packet sent
             ComponentX = component.X;
             ComponentY = component.Y;
             ComponentHeading = (ushort)component.Heading;
-            //need check to be sure for heading
-            angle = (component.Heading * 90 + keep.Heading);
-            if (angle > 360) angle -= 360;
-            Heading = (ushort)(angle / 0.08789);
             Name = keep.Name;
             Model = INVISIBLE_MODEL;
             Skin = component.Skin;
@@ -558,8 +563,8 @@ namespace DOL.GS.Keeps
 
                     foreach (var guard in Keep.Guards.Values)
                     {
-                        guard.MoveTo(guard.CurrentRegionID, guard.Position.X, guard.Position.Y, Keep.Z, guard.Heading);
-                        guard.SpawnPosition += Vector3.UnitZ * Keep.Z;
+                        guard.MoveTo(guard.Position);
+                        guard.SpawnPosition = guard.SpawnPosition.With(z: Keep.Z);
                     }
                 }
             }
@@ -716,8 +721,8 @@ namespace DOL.GS.Keeps
                 .Append(" ComponentID=").Append(ID)
                 .Append(" Skin=").Append(Skin)
                 .Append(" Height=").Append(Height)
-                .Append(" Heading=").Append(Heading)
-                .Append(" nComponentX=").Append((sbyte)ComponentX)
+                .Append(" Heading=").Append(Orientation.InHeading)
+                .Append(" ComponentX=").Append((sbyte)ComponentX)
                 .Append(" ComponentY=").Append((sbyte)ComponentY)
                 .Append(" ComponentHeading=").Append(ComponentHeading)
                 .ToString();

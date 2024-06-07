@@ -18,7 +18,7 @@
  */
 using DOL.AI;
 using DOL.AI.Brain;
-using System.Numerics;
+using DOL.GS.Geometry;
 
 namespace DOL.GS
 {
@@ -147,10 +147,9 @@ namespace DOL.GS
                     ushort sideHeading = (ushort)(Heading + 900);
                     if (Util.Random(1) < 1)
                         sideHeading += 1800;
-                    Vector2 point = GetPointFromHeading(sideHeading, PetSummonDistance);
-                    m_pet.Position = new Vector3(point, Position.Z);
+                    var petOrientationOffset = Util.Random(1) < 1 ? Angle.Heading(1800) : Angle.Heading(900);
+                    m_pet.Position = Position + Vector.Create(Orientation + petOrientationOffset, PetSummonDistance);
 
-                    m_pet.Heading = Heading;
                     m_pet.Realm = eRealm.None;
                     m_pet.LoadedFromScript = true;
                     m_pet.MaxDistance = PetMaxDistance;

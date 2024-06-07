@@ -20,7 +20,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using System.Reflection;
 
 using DOL.AI;
@@ -28,6 +27,7 @@ using DOL.AI.Brain;
 using DOL.Database;
 using DOL.GS;
 using DOL.GS.Effects;
+using DOL.GS.Geometry;
 using DOL.GS.Housing;
 using DOL.GS.Movement;
 using DOL.GS.PacketHandler;
@@ -370,8 +370,6 @@ namespace DOL.GS.Commands
 
             //Fill the object variables
             mob.Position = client.Player.Position;
-            mob.CurrentRegion = client.Player.CurrentRegion;
-            mob.Heading = client.Player.Heading;
             mob.Level = 1;
             mob.Realm = (eRealm)realm;
             mob.Name = "New Mob";
@@ -434,8 +432,6 @@ namespace DOL.GS.Commands
 
             //Fill the object variables
             mob.Position = client.Player.Position;
-            mob.CurrentRegion = client.Player.CurrentRegion;
-            mob.Heading = client.Player.Heading;
             mob.Level = level;
             mob.Realm = 0;
             mob.Name = name;
@@ -509,11 +505,8 @@ namespace DOL.GS.Commands
                 GameNPC mob = new GameNPC();
 
                 //Fill the object variables
-                var x = Math.Abs(client.Player.Position.X + Util.Random(-radius, radius));
-                var y = Math.Abs(client.Player.Position.Y + Util.Random(-radius, radius));
-                mob.Position = new Vector3(x, y, client.Player.Position.Z);
-                mob.CurrentRegion = client.Player.CurrentRegion;
-                mob.Heading = client.Player.Heading;
+                var offset = Vector.Create(x: DOL.GS.Util.Random(-radius, radius),y: DOL.GS.Util.Random(-radius, radius));
+                mob.Position = client.Player.Position + offset;
                 mob.Level = level;
                 mob.Realm = (eRealm)realm;
                 mob.Name = name;
@@ -567,11 +560,8 @@ namespace DOL.GS.Commands
                 GameNPC mob = new GameNPC();
 
                 //Fill the object variables
-                var x = Math.Abs(client.Player.Position.X + DOL.GS.Util.Random(-radius, radius));
-                var y = Math.Abs(client.Player.Position.Y + DOL.GS.Util.Random(-radius, radius));
-                mob.Position = new Vector3(x, y, client.Player.Position.Z);
-                mob.CurrentRegion = client.Player.CurrentRegion;
-                mob.Heading = client.Player.Heading;
+                var offset = Vector.Create(x: DOL.GS.Util.Random(-radius, radius),y: DOL.GS.Util.Random(-radius, radius));
+                mob.Position = client.Player.Position + offset;
                 mob.Level = (byte)Util.Random(10, 50);
                 mob.Realm = (eRealm)Util.Random(1, 3);
                 mob.Name = "rand_" + i;
@@ -1057,20 +1047,16 @@ namespace DOL.GS.Commands
 
         private void movehere(GameClient client, GameNPC targetMob, string[] args)
         {
-            targetMob.MoveTo(client.Player.CurrentRegionID, client.Player.Position, client.Player.Heading);
+            targetMob.MoveTo(client.Player.Position);
             targetMob.SaveIntoDatabase();
             client.Out.SendMessage("Target Mob '" + targetMob.Name + "' moved to your location!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
         }
+        private string PositionToText(Position pos)
+            => $"{pos.RegionID}, {pos.X}, {pos.Y}, {pos.Z}, {pos.Orientation.InHeading}";
 
         private void location(GameClient client, GameNPC targetMob, string[] args)
         {
-            client.Out.SendMessage("\"" + targetMob.Name + "\", " +
-                                   targetMob.CurrentRegionID + ", " +
-                                   targetMob.Position.X.ToString("F0") + ", " +
-                                   targetMob.Position.Y.ToString("F0") + ", " +
-                                   targetMob.Position.Z.ToString("F0") + ", " +
-                                   targetMob.Heading,
-                                   eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            client.Out.SendMessage("\"" + targetMob.Name + "\", " + PositionToText(targetMob.Position), eChatType.CT_System, eChatLoc.CL_SystemWindow);
         }
 
         private void remove(GameClient client, GameNPC targetMob, string[] args)
@@ -1182,8 +1168,7 @@ namespace DOL.GS.Commands
 
             targetMob.Flags ^= GameNPC.eFlags.FLYING;
 
-            if (targetMob.IsFlying)
-                targetMob.MoveTo(targetMob.CurrentRegionID, targetMob.Position + Vector3.UnitZ * height, targetMob.Heading);
+            if (targetMob.IsFlying) targetMob.MoveTo(targetMob.Position + Vector.Create(z: height));
 
             targetMob.FlagsDb = (uint)targetMob.Flags;
 
@@ -1368,7 +1353,7 @@ namespace DOL.GS.Commands
                     hours = respawn.Hours + " hours ";
 
                 info.Add(" + Respawn: " + days + hours + respawn.Minutes + " minutes " + respawn.Seconds + " seconds");
-                info.Add(" + SpawnPoint:  " + targetMob.SpawnPosition.X + " " + targetMob.SpawnPosition.Y + " " + targetMob.SpawnPosition.Z);
+                info.Add(" + SpawnPoint: " + targetMob.SpawnPosition.X + ", " + targetMob.SpawnPosition.Y + ", " + targetMob.SpawnPosition.Z);
             }
 
             info.Add(" ");
@@ -2446,8 +2431,6 @@ namespace DOL.GS.Commands
             targetMob.StopCurrentSpellcast();
 
             mob.Position = targetMob.Position;
-            mob.CurrentRegion = targetMob.CurrentRegion;
-            mob.Heading = targetMob.Heading;
             mob.Level = targetMob.Level;
             mob.Realm = targetMob.Realm;
             mob.Name = targetMob.Name;
@@ -2610,8 +2593,6 @@ namespace DOL.GS.Commands
 
             //Fill the object variables
             mob.Position = client.Player.Position;
-            mob.CurrentRegion = client.Player.CurrentRegion;
-            mob.Heading = client.Player.Heading;
             mob.Level = targetMob.Level;
             mob.Realm = targetMob.Realm;
             mob.Name = targetMob.Name;

@@ -28,8 +28,8 @@ using DOL.Events;
 using DOL.GS.ServerProperties;
 using DOL.AI.Brain;
 using DOL.gameobjects.CustomNPC;
-using System.Numerics;
 using System.Threading.Tasks;
+using DOL.GS.Geometry;
 
 namespace DOL.GS
 {
@@ -96,7 +96,7 @@ namespace DOL.GS
             String[] dragonName = Name.Split(new char[] { ' ' });
             WorldMgr.GetRegion(CurrentRegionID).AddArea(
                 new Area.Circle(String.Format("{0}'s Lair", dragonName[0]),
-                Position.X, Position.Y, 0, LairRadius + 200));
+                                Coordinate, LairRadius + 200));
         }
 
         public override bool HasAbility(string keyName)
@@ -382,11 +382,10 @@ namespace DOL.GS
         /// </summary>
         /// <param name="templateID"></param>
         /// <param name="level"></param>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
+        /// <param name="coordinate"></param>
         /// <param name="uptime"></param>
         /// <returns></returns>
-        protected GameNPC SpawnTimedAdd(int templateID, int level, float x, float y, int uptime, bool isRetriever)
+        protected GameNPC SpawnTimedAdd(int templateID, int level, Coordinate coordinate, int uptime, bool isRetriever)
         {
             GameNPC add = null;
 
@@ -408,10 +407,8 @@ namespace DOL.GS
                     {
                         add.SetOwnBrain(new RetrieverMobBrain());
                     }
-                    add.CurrentRegion = this.CurrentRegion;
-                    add.Heading = (ushort)(Util.Random(0, 4095));
+                    add.Position = Position.Create(CurrentRegion.ID, coordinate, Angle.Heading(Util.Random(0, 4095)));
                     add.Realm = 0;
-                    add.Position = Position;
                     add.Level = (byte)level;
                     add.RespawnInterval = -1;
                     add.AddToWorld();
@@ -616,7 +613,7 @@ namespace DOL.GS
 
             GameObject oldTarget = TargetObject;
             TargetObject = GlareTarget;
-            Position = new Vector3(Position.X, Position.Y, SpawnPosition.Z); // this is a fix to correct Z errors that sometimes happen during dragon fights
+            Position = Position.With(z: SpawnPosition.Z); // this is a fix to correct Z errors that sometimes happen during dragon fights
             TurnTo(GlareTarget);
             CastSpell(Glare, SkillBase.GetSpellLine(GlobalSpellsLines.Mob_Spells));
             GlareTarget = null;
@@ -764,15 +761,15 @@ namespace DOL.GS
 
             TurnTo(target);
 
-            Vector3 targetPosition = PositionOfTarget(target.Position, 700, Heading, Util.Random(300, 500));
+            var throwPosition = GetThrowPosition(target, 700, Orientation, Util.Random(300, 500) );
 
             if (target is GamePlayer)
             {
-                target.MoveTo(target.CurrentRegionID, targetPosition.X, targetPosition.Y, targetPosition.Z, target.Heading);
+                target.MoveTo(throwPosition);
             }
             else if (target is GameNPC)
             {
-                (target as GameNPC).MoveInRegion(target.CurrentRegionID, targetPosition.X, targetPosition.Y, targetPosition.Z, target.Heading, true);
+                (target as GameNPC).MoveWithoutRemovingFromWorld(throwPosition, true);
                 target.ChangeHealth(this, eHealthChangeType.Spell, (int)(target.Health * -0.35));
             }
         }
@@ -780,17 +777,13 @@ namespace DOL.GS
         /// <summary>
         /// Calculate the target position with given height and displacement.
         /// </summary>
-        /// <param name="x">Current object X position.</param>
-        /// <param name="y">Current object Y position.</param>
-        /// <param name="z">Current object Z position.</param>
+        /// <param name="target"></param>
         /// <param name="height">Height the object is to be lifted to.</param>
-        /// <param name="heading">The direction the object is displaced in.</param>
-        /// <param name="displacement">The amount the object is displaced by.</param>
+        /// <param name="orientation">The direction the object is displaced in.</param>
+        /// <param name="distance">The amount the object is displaced by.</param>
         /// <returns></returns>
-        private Vector3 PositionOfTarget(Vector3 target, int height, int heading, int displacement)
-        {
-            return new Vector3(GameMath.GetPointFromHeading(target, (ushort)heading, displacement), target.Z + height);
-        }
+        private Position GetThrowPosition(GameObject target, int height, Angle orientation, int distance)
+            => target.Position + Vector.Create(orientation, distance) + Vector.Create(z: height);
 
         #endregion
 

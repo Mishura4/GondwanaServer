@@ -53,7 +53,7 @@ namespace DOL.GS
                 };
 
         public static Func<GameObject, string> GetGameObjectString = obj =>
-            obj == null ? null : ($"({obj.Name};{obj.GetType()};{obj.Position.X:F0};{obj.Position.Y:F0};{obj.Position.Z:F0};{obj.CurrentRegionID})");
+            obj == null ? "(null)" : ("(" + obj.Name + ";" + obj.GetType() + ";" + obj.Coordinate + ";" + obj.Position.RegionID + ")");
 
         public static Func<ItemTemplate, int, string> GetItemTemplateString = (item, count) =>
             item == null ? null : ("(" + count + ";" + item.Name + ";" + item.Id_nb + ")");

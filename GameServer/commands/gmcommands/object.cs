@@ -106,8 +106,6 @@ namespace DOL.GS.Commands
             }
 
             obj.Position = client.Player.Position;
-            obj.CurrentRegion = client.Player.CurrentRegion;
-            obj.Heading = client.Player.Heading;
             obj.Level = targetObj.Level;
             obj.Name = targetObj.Name;
             obj.Model = targetObj.Model;
@@ -186,7 +184,7 @@ namespace DOL.GS.Commands
                         }
 
                         info.Add(" ");
-                        info.Add(" Location: " + targetObject.Position.ToString("F0"));
+                        info.Add(" Coordinate: X= " + targetObject.Position.X + " ,Y= " + targetObject.Position.Y + " ,Z= " + targetObject.Position.Z);
 
                         client.Out.SendCustomTextWindow("[ " + name + " ]", info);
                         break;
@@ -360,8 +358,6 @@ namespace DOL.GS.Commands
                             return;
                         }
                         item.Position = client.Player.Position;
-                        item.CurrentRegion = client.Player.CurrentRegion;
-                        item.Heading = client.Player.Heading;
                         item.Level = targetObject.Level;
                         item.Name = targetObject.Name;
                         item.Model = targetObject.Model;
@@ -485,8 +481,6 @@ namespace DOL.GS.Commands
             //Fill the object variables
             obj.LoadedFromScript = false;
             obj.Position = client.Player.Position;
-            obj.CurrentRegion = client.Player.CurrentRegion;
-            obj.Heading = client.Player.Heading;
             obj.Name = "New Object";
             obj.Model = 100;
             obj.Emblem = 0;

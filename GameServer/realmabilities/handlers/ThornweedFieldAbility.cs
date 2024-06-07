@@ -102,7 +102,7 @@ namespace DOL.GS.RealmAbilities
             if (m_player.IsMezzed || m_player.IsStunned || m_player.IsSitting)
                 return 0;
             Statics.ThornweedFieldBase twf = new Statics.ThornweedFieldBase(m_dmgValue);
-            twf.CreateStatic(m_player, m_player.GroundTarget.Value, m_duration, 3, 500);
+            twf.CreateStatic(m_player, m_player.GroundTargetPosition.Coordinate, m_duration, 3, 500);
             DisableSkill(m_player);
             timer.Stop();
             timer = null;

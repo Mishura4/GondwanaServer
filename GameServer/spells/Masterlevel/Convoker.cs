@@ -320,7 +320,7 @@ namespace DOL.GS.Spells
                     GameEventMgr.AddHandler(warder, GameLivingEvent.Dying, new DOLEventHandler(BattleWarderDie));
                     GameEventMgr.AddHandler(casterPlayer, GamePlayerEvent.CastStarting, new DOLEventHandler(PlayerMoves));
                     GameEventMgr.AddHandler(casterPlayer, GamePlayerEvent.AttackFinished, new DOLEventHandler(PlayerMoves));
-                    warder.Position = casterPlayer.GroundTarget.Value;
+                    warder.Position = casterplayer.GroundTargetPosition.Coordinate;
                     warder.AddBrain(new MLBrain());
                     warder.AddToWorld();
                 }

@@ -188,10 +188,10 @@ namespace DOL.GS.PacketHandler.Client.v168
             door.MaxHealth = 2545;
             door.Health = 2545;
             door.Locked = 0;
-            door.X = (int)player.Position.X;
-            door.Y = (int)player.Position.Y;
-            door.Z = (int)player.Position.Z;
-            door.Heading = player.Heading;
+            door.X = player.Position.X;
+            door.Y = player.Position.Y;
+            door.Z = player.Position.Z;
+            door.Heading = player.Orientation.InHeading;
             GameServer.Database.AddObject(door);
 
 
@@ -295,9 +295,8 @@ namespace DOL.GS.PacketHandler.Client.v168
                     //else basic quick hack
                     var door = new GameDoor();
                     door.DoorID = m_doorId;
-                    door.Position = player.Position;
+                    door.Position = player.Position.With(door.Orientation);
                     door.Realm = eRealm.Door;
-                    door.CurrentRegion = player.CurrentRegion;
                     door.Open(player);
                 }
             }

@@ -278,7 +278,6 @@ namespace DOL.GS.Keeps
             if (hookPointObj is GameSiegeWeapon)
                 ((GameSiegeWeapon)hookPointObj).EnableToMove = false;
             hookPointObj.Position = hookpoint.Position;
-            hookPointObj.Heading = hookpoint.Heading;
 
             if (hookPointObj is GameSiegeWeapon)
                 (hookPointObj as GameSiegeWeapon).HookPoint = hookpoint;
@@ -325,7 +324,6 @@ namespace DOL.GS.Keeps
                 ((GameSiegeWeapon)hookPointObj).EnableToMove = false;
 
             hookPointObj.Position = hookpoint.Position;
-            hookPointObj.Heading = hookpoint.Heading;
 
             if (hookPointObj is GameSiegeWeapon)
                 (hookPointObj as GameSiegeWeapon).HookPoint = hookpoint;

@@ -16,6 +16,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
+using DOL.GS.Geometry;
 using System.Numerics;
 using DOL.GS.PacketHandler;
 using DOL.Language;
@@ -34,9 +35,9 @@ namespace DOL.GS.Commands
             if (IsSpammingCommand(client.Player, "gtrange"))
                 return;
 
-            if (client.Player.GroundTarget != null)
+            if (client.Player.GroundTargetPosition != Position.Nowhere)
             {
-                var range = (int)Vector3.Distance(client.Player.Position, client.Player.GroundTarget.Value);
+                var range = (int)client.Player.Coordinate.DistanceTo(client.Player.GroundTargetPosition);
                 client.Out.SendMessage(
                     LanguageMgr.GetTranslation(
                         client.Account.Language,

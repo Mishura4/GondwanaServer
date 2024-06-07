@@ -29,7 +29,7 @@ using DOL.Language;
 using DOL.GS;
 using DOL.GS.PacketHandler;
 using log4net;
-using System.Numerics;
+using DOL.GS.Geometry;
 
 namespace DOL.GS.PacketHandler.Client.v168
 {
@@ -92,6 +92,10 @@ namespace DOL.GS.PacketHandler.Client.v168
             ushort xOffsetInZone = packet.ReadShort();
             ushort yOffsetInZone = packet.ReadShort();
             ushort currentZoneID = packet.ReadShort();
+            
+            var headingflag = packet.ReadShort();
+            var flyingflag = packet.ReadShort();
+            var flags = (byte)packet.ReadByte();
 
 
             //Dinberg - Instance considerations.

@@ -36,8 +36,7 @@ namespace DOL.GS.Commands
 
             House house = HouseMgr.GetHouse(housenumber);
 
-            ushort direction = client.Player.GetHeading(house.Position);
-            client.Player.Heading = direction;
+            client.Player.TurnTo(house.Position.Coordinate);
             client.Out.SendPlayerJump(true);
             DisplayMessage(client, LanguageMgr.GetTranslation(client, "Commands.Players.Houseface.Faced", housenumber));
         }

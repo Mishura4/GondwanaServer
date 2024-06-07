@@ -16,8 +16,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
+using DOL.GS.Geometry;
 using System;
-using System.Numerics;
 using DOL.GS.PacketHandler;
 
 namespace DOL.GS.Commands
@@ -80,7 +80,8 @@ namespace DOL.GS.Commands
                 return;
             }
 
-            targetNPC.PathTo(targetNPC.Position + new Vector3(xoff, yoff, zoff), speed);
+            var offset = Vector.Create(x: xoff, y: yoff, z: zoff);
+            targetNPC.WalkTo(targetNPC.Coordinate + offset, speed);
         }
     }
 }

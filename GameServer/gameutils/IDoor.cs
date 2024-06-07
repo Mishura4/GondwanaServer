@@ -19,6 +19,7 @@
 
 using System.Numerics;
 using DOL.Database;
+using DOL.GS.Geometry;
 
 namespace DOL.GS
 {
@@ -37,7 +38,9 @@ namespace DOL.GS
     {
         string Name { get; }
         uint Flag { get; }
-        Vector3 Position { get; }
+        Position Position { get; }
+        Coordinate Coordinate { get; }
+        Angle Orientation { get; }
         ushort Heading { get; }
         ushort ZoneID { get; }
         eRealm Realm { get; }

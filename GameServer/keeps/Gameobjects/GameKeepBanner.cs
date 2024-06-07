@@ -17,8 +17,9 @@
  *
  */
 using System;
-using System.Numerics;
 using DOL.Database;
+using DOL.Geometry;
+using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
 
 namespace DOL.GS.Keeps
@@ -167,14 +168,14 @@ namespace DOL.GS.Keeps
                     if (component.Keep.Guild != null)
                     {
                         ChangeGuild();
-                        Position += Vector3.UnitZ * 1500;
+                        Position += Vector.Create(z: 1500);
                         this.AddToWorld();
                     }
                 }
                 else
                 {
                     ChangeRealm();
-                    Position += Vector3.UnitZ * 1000;   // this works around an issue where all banners are at keep level instead of on top
+                    Position += Vector.Create(z: 1500); // this works around an issue where all banners are at keep level instead of on top
                                                         // with a z value > height of the keep the banners show correctly - tolakram
                     this.AddToWorld();
                 }
@@ -183,14 +184,14 @@ namespace DOL.GS.Keeps
                 log.Warn($"LoadFromPosition(): There is already a Banner with TemplateID {this.TemplateID} on KeepID {component.Keep.KeepID}, not adding Banner for KeepPosition_ID {pos.ObjectId} on KeepComponent_ID {component.InternalID}");
         }
 
+        [Obsolete("This is going to be removed!")]
         public void MoveToPosition(DBKeepPosition position)
         {
             PositionMgr.LoadKeepItemPosition(position, this);
             int zAdd = 1000;
-            if (BannerType == eBannerType.Guild)
-                zAdd = 1500;
+            if (BannerType == eBannerType.Guild) zAdd = 1500;
 
-            this.MoveTo(this.CurrentRegionID, Position + Vector3.UnitZ * zAdd, this.Heading);
+            this.MoveTo(Position + Vector.Create(z: zAdd));
         }
 
         public void ChangeRealm()

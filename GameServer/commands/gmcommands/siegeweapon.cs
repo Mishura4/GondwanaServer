@@ -43,7 +43,6 @@ namespace DOL.GS.Commands
                                 {
                                     GameSiegeRam ram = new GameSiegeRam();
                                     ram.Position = client.Player.Position;
-                                    ram.CurrentRegion = client.Player.CurrentRegion;
                                     ram.Model = 2605;
                                     ram.Level = 0;
                                     ram.Name = "mini ram";
@@ -55,7 +54,6 @@ namespace DOL.GS.Commands
                                 {
                                     GameSiegeRam ram = new GameSiegeRam();
                                     ram.Position = client.Player.Position;
-                                    ram.CurrentRegion = client.Player.CurrentRegion;
                                     ram.Model = 2600;
                                     ram.Level = 1;
                                     ram.Name = "light ram";
@@ -67,7 +65,6 @@ namespace DOL.GS.Commands
                                 {
                                     GameSiegeRam ram = new GameSiegeRam();
                                     ram.Position = client.Player.Position;
-                                    ram.CurrentRegion = client.Player.CurrentRegion;
                                     ram.Model = 2601;
                                     ram.Level = 2;
                                     ram.Name = "medium ram";
@@ -79,7 +76,6 @@ namespace DOL.GS.Commands
                                 {
                                     GameSiegeRam ram = new GameSiegeRam();
                                     ram.Position = client.Player.Position;
-                                    ram.CurrentRegion = client.Player.CurrentRegion;
                                     ram.Model = 2602;
                                     ram.Level = 3;
                                     ram.Name = "heavy ram";
@@ -91,7 +87,6 @@ namespace DOL.GS.Commands
                                 {
                                     GameSiegeCatapult cat = new GameSiegeCatapult();
                                     cat.Position = client.Player.Position;
-                                    cat.CurrentRegion = client.Player.CurrentRegion;
                                     cat.Model = 0xA26;
                                     cat.Level = 3;
                                     cat.Name = "catapult";
@@ -103,7 +98,6 @@ namespace DOL.GS.Commands
                                 {
                                     GameSiegeBallista bal = new GameSiegeBallista();
                                     bal.Position = client.Player.Position;
-                                    bal.CurrentRegion = client.Player.CurrentRegion;
                                     bal.Model = 0x0A55;
                                     bal.Level = 3;
                                     bal.Name = "field ballista";
@@ -115,7 +109,6 @@ namespace DOL.GS.Commands
                                 {
                                     GameSiegeRam ram = new GameSiegeRam();
                                     ram.Position = client.Player.Position;
-                                    ram.CurrentRegion = client.Player.CurrentRegion;
                                     ram.Model = 0xA2F;
                                     ram.Level = 3;
                                     ram.Name = "cauldron of boiling oil";
@@ -127,7 +120,6 @@ namespace DOL.GS.Commands
                                 {
                                     GameSiegeTrebuchet tre = new GameSiegeTrebuchet();
                                     tre.Position = client.Player.Position;
-                                    tre.CurrentRegion = client.Player.CurrentRegion;
                                     tre.Model = 0xA2E;
                                     tre.Level = 3;
                                     tre.Name = "trebuchet";

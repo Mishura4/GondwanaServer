@@ -2518,7 +2518,7 @@ namespace DOL.GS
                         }
                     }
 
-                    ticksToTarget = (int)(1 + Vector3.Distance(owner.Position, attackTarget.Position) * 100 / 150); // 150 units per 1/10s
+                    ticksToTarget = 1 + owner.GetDistanceTo( attackTarget ) * 100 / 150; // 150 units per 1/10s
                 }
                 else
                 {

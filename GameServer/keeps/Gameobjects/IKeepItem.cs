@@ -18,16 +18,16 @@
  */
 using System;
 using System.Collections;
-using System.Numerics;
 using DOL.Database;
+using DOL.GS.Geometry;
 
 
 namespace DOL.GS.Keeps
 {
     public interface IKeepItem
     {
+        Position Position { get; set; }
         ushort CurrentRegionID { get; set; }
-        Vector3 Position { get; set; }
         ushort Heading { get; set; }
         string TemplateID { get; }
         GameKeepComponent Component { get; set; }
