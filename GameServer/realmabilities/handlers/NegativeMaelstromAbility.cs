@@ -6,6 +6,7 @@ using DOL.GS.PacketHandler;
 using DOL.GS.Effects;
 using DOL.Events;
 using DOL.Database;
+using DOL.GS.Geometry;
 
 namespace DOL.GS.RealmAbilities
 {
@@ -28,7 +29,7 @@ namespace DOL.GS.RealmAbilities
                 return;
             }
 
-            if (caster.GroundTarget == null || !caster.IsWithinRadius(caster.GroundTarget.Value, 1500))
+            if (caster.GroundTargetPosition == Position.Nowhere || !caster.IsWithinRadius(caster.GroundTargetPosition, 1500))
             {
                 caster.Out.SendMessage("You groundtarget is too far away to use this ability!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;

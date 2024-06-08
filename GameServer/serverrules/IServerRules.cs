@@ -24,6 +24,7 @@ using DOL.GS.Styles;
 using DOL.GS.Keeps;
 using System.Numerics;
 using AmteScripts.Managers;
+using DOL.GS.Geometry;
 using System.Linq;
 
 namespace DOL.GS.ServerRules
@@ -292,9 +293,9 @@ namespace DOL.GS.ServerRules
         /// <summary>
         /// Invoked when a player teleports somewhere
         /// </summary>
-        /// <param name="player"></param>
-        /// <param name="source"></param>
-        /// <param name="destination"></param>
+        void OnPlayerTeleport(GamePlayer player, Teleport destination);
+
+        [Obsolete("Use .OnPlayerTeleport(GamePlayer,Teleport) instead!")]
         void OnPlayerTeleport(GamePlayer player, GameLocation source, Teleport destination);
 
         /// <summary>
@@ -494,21 +495,18 @@ namespace DOL.GS.ServerRules
         /// <summary>
         /// Get a housing hookpoint NPC
         /// </summary>
-        /// <param name="house"></param>
-        /// <param name="templateID"></param>
-        /// <param name="heading"></param>
-        /// <param name="index"></param>
         /// <returns></returns>
+        GameNPC PlaceHousingNPC(DOL.GS.Housing.House house, ItemTemplate item, Coordinate coordinate, ushort heading);
+        
+        [Obsolete("Use .PlayerHousingNPC(House,ItemTemplate,Coordinate,ushort) instead!")]
         GameNPC PlaceHousingNPC(DOL.GS.Housing.House house, ItemTemplate item, Vector3 location, ushort heading);
 
         /// <summary>
         /// Get a static interior object for a house hookpoint
         /// </summary>
-        /// <param name="house"></param>
-        /// <param name="item"></param>
-        /// <param name="location"></param>
-        /// <param name="heading"></param>
         /// <returns></returns>
+        GameStaticItem PlaceHousingInteriorItem(DOL.GS.Housing.House house, ItemTemplate item, Coordinate coordinate, ushort heading);
+        [Obsolete("Use .PlaceHousingInteriorItem(House,ItemTemplate,Coordinate,ushort) instead!")]
         GameStaticItem PlaceHousingInteriorItem(DOL.GS.Housing.House house, ItemTemplate item, Vector3 location, ushort heading);
 
         /// <summary>

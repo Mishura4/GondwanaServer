@@ -156,7 +156,7 @@ namespace DOL.GS
         {
 
 
-            foreach (GamePlayer Player in WorldMgr.GetPlayersCloseToSpot(this.CurrentRegionID, this.Position.X, this.Position.Y, this.Position.Z, Radius))
+            foreach (GamePlayer Player in WorldMgr.GetPlayersCloseToSpot(this.Position.X, this.Position.Y, this.Position.Z, Radius))
             {
                 if (Player.IsSitting)
                 {

@@ -16,6 +16,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
+using DOL.GS.Geometry;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -36,23 +37,21 @@ namespace DOL.GS.PacketHandler.Client.v168
 
         public void HandlePacket(GameClient client, GSPacketIn packet)
         {
+            var player = client.Player;
             if (client.Version >= GameClient.eClientVersion.Version1124)
             {
-                var x = packet.ReadFloatLowEndian();
-                var y = packet.ReadFloatLowEndian();
-                var z = packet.ReadFloatLowEndian();
-                var speed = packet.ReadFloatLowEndian();
+                var x = (int)packet.ReadFloatLowEndian();
+                var y = (int)packet.ReadFloatLowEndian();
+                var z = (int)packet.ReadFloatLowEndian();
+                player.CurrentSpeed = (short)packet.ReadFloatLowEndian();
                 var heading = packet.ReadShort();
-
-                client.Player.Position = new Vector3(x, y, z);
-                client.Player.SetCurrentSpeed((short)speed);
-                client.Player.Heading = heading;
+                player.Position = Position.Create(player.Position.RegionID, x, y, z, heading);
             }
             int flagSpeedData = packet.ReadShort();
             int index = packet.ReadByte();
             int type = packet.ReadByte();
 
-            new UseSkillAction(client.Player, flagSpeedData, index, type).Start(1);
+            new UseSkillAction(player, flagSpeedData, index, type).Start(1);
         }
 
         /// <summary>

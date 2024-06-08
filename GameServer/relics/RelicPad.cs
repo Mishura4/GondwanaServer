@@ -95,7 +95,7 @@ namespace DOL.GS.Relics
             private RelicPad m_relicPad;
 
             public Surface(RelicPad relicPad)
-                : base("", relicPad.Position, RelicPad.Radius)
+                : base("", relicPad.Coordinate, RelicPad.Radius)
             {
                 m_relicPad = relicPad;
             }

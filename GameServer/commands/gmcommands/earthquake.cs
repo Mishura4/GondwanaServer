@@ -23,7 +23,7 @@ namespace DOL.GS.Scripts
             intensity = 50.0f;
             duration = 1000.0f;
             int x, y, z = 0;
-            if (client.Player.GroundTarget == null)
+            if (client.Player.GroundTargetPosition == Position.Nowhere)
             {
                 x = (int)client.Player.Position.X;
                 y = (int)client.Player.Position.Y;
@@ -97,7 +97,7 @@ namespace DOL.GS.Scripts
                 pakBis.WriteIntLowEndian((uint)y);
                 pakBis.WriteIntLowEndian((uint)z);
                 pakBis.Write(BitConverter.GetBytes(radius), 0, sizeof(System.Single));
-                int distance = (int)System.Numerics.Vector3.Distance(player.Position, client.Player.Position);
+                int distance = (int)System.Numerics.(int)player.Coordinate.DistanceTo(client.Player.Position);
                 float newIntensity = intensity * (1 - distance / radius);
                 pakBis.Write(BitConverter.GetBytes(newIntensity), 0, sizeof(System.Single));
                 pakBis.Write(BitConverter.GetBytes(duration), 0, sizeof(System.Single));

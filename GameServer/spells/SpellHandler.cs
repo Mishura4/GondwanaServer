@@ -773,7 +773,7 @@ namespace DOL.GS.Spells
             }
             if (targetType == "area")
             {
-                if (!m_caster.IsWithinRadius(m_caster.GroundTarget.Value, CalculateSpellRange()))
+                if (!m_caster.IsWithinRadius(m_caster.GroundTargetPosition, CalculateSpellRange()))
                 {
                     if (!quiet) MessageToCaster("Your area target is out of range.  Select a closer target.", eChatType.CT_SpellResisted);
                     return false;
@@ -1045,7 +1045,7 @@ namespace DOL.GS.Spells
 
             if (m_spell.Target.ToLower() == "area")
             {
-                if (!m_caster.IsWithinRadius(m_caster.GroundTarget.Value, CalculateSpellRange()))
+                if (!m_caster.IsWithinRadius(m_caster.GroundTargetPosition, CalculateSpellRange()))
                 {
                     MessageToCaster("Your area target is out of range.  Select a closer target.", eChatType.CT_SpellResisted);
                     return false;
@@ -1221,7 +1221,7 @@ namespace DOL.GS.Spells
 
             if (m_spell.Target.ToLower() == "area")
             {
-                if (!m_caster.IsWithinRadius(m_caster.GroundTarget.Value, CalculateSpellRange()))
+                if (!m_caster.IsWithinRadius(m_caster.GroundTargetPosition, CalculateSpellRange()))
                 {
                     if (!quiet) MessageToCaster("Your area target is out of range.  Select a closer target.", eChatType.CT_SpellResisted);
                     return false;
@@ -1432,7 +1432,7 @@ namespace DOL.GS.Spells
 
             if (m_spell.Target.ToLower() == "area")
             {
-                if (!m_caster.IsWithinRadius(m_caster.GroundTarget.Value, CalculateSpellRange()))
+                if (!m_caster.IsWithinRadius(m_caster.GroundTargetPosition, CalculateSpellRange()))
                 {
                     if (!quiet) MessageToCaster("Your area target is out of range.  Select a closer target.", eChatType.CT_SpellResisted);
                     return false;
@@ -2105,7 +2105,7 @@ namespace DOL.GS.Spells
                     else
                         if (modifiedRadius > 0)
                     {
-                        foreach (GamePlayer player in WorldMgr.GetPlayersCloseToSpot(Caster.CurrentRegionID, Caster.GroundTarget.Value, modifiedRadius))
+                        foreach (GamePlayer player in WorldMgr.GetPlayersCloseToSpot(Caster.GroundTargetPosition, modifiedRadius))
                         {
                             if (GameServer.ServerRules.IsAllowedToAttack(Caster, player, true) || force)
                             {
@@ -2123,7 +2123,7 @@ namespace DOL.GS.Spells
                                 else list.Add(player);
                             }
                         }
-                        foreach (GameNPC npc in WorldMgr.GetNPCsCloseToSpot(Caster.CurrentRegionID, Caster.GroundTarget.Value, modifiedRadius))
+                        foreach (GameNPC npc in WorldMgr.GetNPCsCloseToSpot(Caster.GroundTargetPosition, modifiedRadius))
                         {
                             if (npc is GameStorm)
                                 list.Add(npc);
@@ -2597,20 +2597,20 @@ namespace DOL.GS.Spells
                 }
                 else if (Spell.Target.ToLower() == "area")
                 {
-                    var dist = Vector3.Distance(t.Position, Caster.GroundTarget.Value);
+                    int dist = (int)t.Coordinate.DistanceTo(Caster.GroundTargetPosition);
                     if (dist >= 0)
                         ApplyEffectOnTarget(t, (effectiveness - CalculateAreaVariance(t, dist, Spell.Radius)));
                 }
                 else if (Spell.Target.ToLower() == "cone")
                 {
-                    var dist = Vector3.Distance(t.Position, Caster.Position);
+                    var dist = (int)t.Coordinate.DistanceTo(Caster.Position);
                     //Cone spells use the range for their variance!
                     if (dist >= 0)
                         ApplyEffectOnTarget(t, (effectiveness - CalculateAreaVariance(t, dist, Spell.Range)));
                 }
                 else
                 {
-                    var dist = Vector3.Distance(t.Position, target.Position);
+                    var dist = (int)t.Coordinate.DistanceTo(target.Position);
                     if (dist >= 0)
                         ApplyEffectOnTarget(t, (effectiveness - CalculateAreaVariance(t, dist, Spell.Radius)));
                 }

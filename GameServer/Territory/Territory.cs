@@ -932,7 +932,7 @@ namespace DOL.Territories
                 IEnumerable<GameNPC> mobs;
                 if (area is Circle circle)
                 {
-                   mobs = region.GetNPCsInRadius(circle.Position, (ushort)circle.Radius, false, true).Cast<GameNPC>().Where(n => !n.IsCannotTarget && n is not ShadowNPC);
+                   mobs = region.GetNPCsInRadius(circle.Coordinate, (ushort)circle.Radius, false, true).Cast<GameNPC>().Where(n => !n.IsCannotTarget && n is not ShadowNPC);
                 }
                 else
                 {
@@ -962,7 +962,7 @@ namespace DOL.Territories
 
                 if (area is Circle circle)
                 {
-                    region.GetNPCsInRadius(circle.Position, (ushort)circle.Radius, false, true).Cast<GameNPC>().Where(n => !n.IsCannotTarget && n is not ShadowNPC).Foreach(n => n.CurrentTerritory = this);
+                    region.GetNPCsInRadius(circle.Coordinate, (ushort)circle.Radius, false, true).Cast<GameNPC>().Where(n => !n.IsCannotTarget && n is not ShadowNPC).Foreach(n => n.CurrentTerritory = this);
                 }
                 else
                 {

@@ -21,7 +21,7 @@ using DOL.GS;
 using DOL.GS.PacketHandler;
 using DOL.GS.Effects;
 using DOL.AI.Brain;
-using System.Numerics;
+using DOL.GS.Geometry;
 
 namespace DOL.GS.Spells
 {
@@ -53,16 +53,13 @@ namespace DOL.GS.Spells
                 return;
             }
 
-            Vector2 spawnPoint = Caster.GetPointFromHeading(Caster.Heading, 64);
+            var spawnPoint = Caster.Position.TurnedAround() + Vector.Create(Caster.Orientation, length: 64);
             int i = 0;
-            for (i = 0; i < 3; i++)
-            {
+            for(i=0;i<3;i++)
+            {               
                 deamons[i] = new ZoarkatPet(template);
                 deamons[i].SetOwnBrain(new ProcPetBrain(player));
-                var offset = new Vector2(Util.Random(20, 40) - Util.Random(20, 40), Util.Random(20, 40) - Util.Random(20, 40));
-                deamons[i].Position = new Vector3(spawnPoint + offset, Caster.Position.Z);
-                deamons[i].CurrentRegion = Caster.CurrentRegion;
-                deamons[i].Heading = (ushort)((Caster.Heading + 2048) % 4096);
+                deamons[i].Position = spawnPoint + Vector.Create(x: Util.Random(-20,20), y: Util.Random(-20,20));
                 deamons[i].Realm = Caster.Realm;
                 deamons[i].Level = 36;
                 deamons[i].Flags |= GameNPC.eFlags.FLYING;

@@ -635,7 +635,7 @@ namespace DOL.GS
 
         public virtual void CreateCombatZone(Guild owningGuild, Position position)
         {
-            Area.CombatZone zone = new(owningGuild, position);
+            Area.CombatZone zone = new(owningGuild, position.Coordinate);
 
             AddArea(zone);
             CombatZoneBanner banner = CombatZoneBanner.Create(owningGuild, zone);
@@ -1512,7 +1512,7 @@ namespace DOL.GS
                 var areas = new List<IArea>();
                 foreach (Zone zone in m_zones)
                 {
-                    if (zone.XOffset <= p.X + radius && (zone.XOffset + zone.Width) > p.X - radius && zone.YOffset <= p.Y + radius && (zone.YOffset + zone.Height) > p.Y - radius)
+                    if (zone.Offset.X <= center.X + radius && (zone.Offset.X + zone.Width) > center.X - radius && zone.Offset.Y <= center.Y + radius && (zone.Offset.Y + zone.Height) > center.Y - radius)
                     {
                         float radiusSquared = radius * radius;
 
@@ -1556,7 +1556,7 @@ namespace DOL.GS
                 int zoneIndex = 0;
                 foreach (Zone zone in m_zones)
                 {
-                    if (zone.XOffset <= p.X + radius && (zone.XOffset + zone.Width) > p.X - radius && zone.YOffset <= p.Y + radius && (zone.YOffset + zone.Height) > p.Y - radius)
+                    if (zone.Offset.X <= center.X + radius && (zone.Offset.X + zone.Width) > center.X - radius && zone.Offset.Y <= center.Y + radius && (zone.Offset.Y + zone.Height) > center.Y - radius)
                     {
                         float radiusSquared = radius * radius;
 

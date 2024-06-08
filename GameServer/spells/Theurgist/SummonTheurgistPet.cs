@@ -19,7 +19,7 @@
 using DOL.GS.PacketHandler;
 using DOL.AI.Brain;
 using DOL.GS.Effects;
-using System.Numerics;
+using DOL.GS.Geometry;
 
 namespace DOL.GS.Spells
 {
@@ -75,10 +75,7 @@ namespace DOL.GS.Spells
 
         protected override void SetBrainToOwner(IControlledBrain brain) { }
 
-        protected override void GetPetLocation(out Vector3 pos, out ushort heading, out Region region)
-        {
-            base.GetPetLocation(out pos, out heading, out region);
-            heading = Caster.Heading;
-        }
+        protected override Position GetSummonPosition()
+            => Caster.Position + Vector.Create(Caster.Orientation, length: 64);
     }
 }

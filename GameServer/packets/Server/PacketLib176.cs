@@ -109,7 +109,7 @@ namespace DOL.GS.PacketHandler
                 else
                     pak.WriteShort(0);
 
-                pak.WriteShort(obj.Heading);
+                pak.WriteShort(obj.Orientation.InHeading);
                 pak.WriteShort((ushort)obj.Position.Z);
                 pak.WriteInt((uint)obj.Position.X);
                 pak.WriteInt((uint)obj.Position.Y);
@@ -373,7 +373,7 @@ namespace DOL.GS.PacketHandler
                 pak.WriteShort((ushort)house.Position.Z);
                 pak.WriteInt((uint)house.Position.X);
                 pak.WriteInt((uint)house.Position.Y);
-                pak.WriteShort((ushort)house.Heading);
+                pak.WriteShort((ushort)house.Orientation);
                 pak.WriteShort((ushort)house.PorchRoofColor);
                 pak.WriteShort((ushort)(house.GetPorchAndGuildEmblemFlags() | (house.Emblem & 0x010000) >> 13));//new Guild Emblem
                 pak.WriteShort((ushort)house.Emblem);
@@ -403,7 +403,7 @@ namespace DOL.GS.PacketHandler
                 pak.WriteShort((ushort)25000);         //constant!
                 pak.WriteInt((uint)house.Position.X);
                 pak.WriteInt((uint)house.Position.Y);
-                pak.WriteShort((ushort)house.Heading); //useless/ignored by client.
+                pak.WriteShort((ushort)house.Orientation); //useless/ignored by client.
                 pak.WriteByte(0x00);
                 pak.WriteByte((byte)(house.GetGuildEmblemFlags() | (house.Emblem & 0x010000) >> 14));//new Guild Emblem
                 pak.WriteShort((ushort)house.Emblem);   //emblem

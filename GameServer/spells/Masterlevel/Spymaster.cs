@@ -96,8 +96,7 @@ namespace DOL.GS.Spells
             decoy = new GameDecoy();
             //Fill the object variables
             decoy.CurrentRegion = caster.CurrentRegion;
-            decoy.Heading = (ushort)((caster.Heading + 2048) % 4096);
-            decoy.Level = 50;
+            decoy.Position = caster.Position.TurnedAround();
             decoy.Realm = caster.Realm;
             decoy.Position = caster.Position;
             string TemplateId = "";
@@ -177,8 +176,6 @@ namespace DOL.GS.Spells
             mine.Name = spell.Name;
             mine.Realm = caster.Realm;
             mine.Position = caster.Position;
-            mine.CurrentRegionID = caster.CurrentRegionID;
-            mine.Heading = caster.Heading;
             mine.Owner = (GamePlayer)caster;
 
             // Construct the mine spell
@@ -228,8 +225,6 @@ namespace DOL.GS.Spells
             mine.Name = spell.Name;
             mine.Realm = caster.Realm;
             mine.Position = caster.Position;
-            mine.CurrentRegionID = caster.CurrentRegionID;
-            mine.Heading = caster.Heading;
             mine.Owner = (GamePlayer)caster;
 
             // Construct the mine spell
@@ -372,8 +367,6 @@ namespace DOL.GS.Spells
             mine.Realm = caster.Realm;
             mine.Position = caster.Position;
             mine.MaxSpeedBase = 0;
-            mine.CurrentRegionID = caster.CurrentRegionID;
-            mine.Heading = caster.Heading;
             mine.Owner = (GamePlayer)caster;
 
             // Construct the mine spell

@@ -20,11 +20,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Numerics;
 using System.Reflection;
 using DOL.AI.Brain;
 using DOL.Events;
 using DOL.GS.Effects;
+using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
 using DOL.Language;
 
@@ -87,13 +87,19 @@ namespace DOL.GS.Spells
 
         #region ApplyEffectOnTarget Gets
 
-        protected virtual void GetPetLocation(out Vector3 position, out ushort heading, out Region region)
+        [Obsolete("Use GetSummonPosition() instead!")]
+        protected virtual void GetPetLocation(out int x, out int y, out int z, out ushort heading, out Region region)
         {
-            Vector2 point = Caster.GetPointFromHeading(Caster.Heading, 64);
-            position = new Vector3(point, Caster.Position.Z);
-            heading = (ushort)((Caster.Heading + 2048) % 4096);
-            region = Caster.CurrentRegion;
+            var position = GetSummonPosition();
+            x = position.X;
+            y = position.Y;
+            z = position.Z;
+            heading = position.Orientation.InHeading;
+            region = WorldMgr.GetRegion(position.RegionID);
         }
+        
+        protected virtual Position GetSummonPosition()
+            => Caster.Position.TurnedAround() + Vector.Create(Caster.Orientation, length: 64);
 
         protected virtual GamePet GetGamePet(INpcTemplate template)
         {
@@ -153,16 +159,7 @@ namespace DOL.GS.Spells
 
             m_pet.SummonSpellDamage = Spell.Damage;
             m_pet.SummonSpellValue = Spell.Value;
-
-            Vector3 pos;
-            ushort heading;
-            Region region;
-
-            GetPetLocation(out pos, out heading, out region);
-
-            m_pet.Position = pos;
-            m_pet.Heading = heading;
-            m_pet.CurrentRegion = region;
+            m_pet.Position = GetSummonPosition();
 
             m_pet.Realm = Caster.Realm;
 

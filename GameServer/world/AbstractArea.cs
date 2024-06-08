@@ -22,7 +22,6 @@ using DOL.Database;
 using DOL.Events;
 using DOL.Language;
 using DOL.GS.PacketHandler;
-using System.Numerics;
 using DOL.GameEvents;
 using DOL.GS.Geometry;
 using System.Linq;
@@ -234,18 +233,13 @@ namespace DOL.GS
         /// <returns></returns>
         public abstract bool IsContaining(Coordinate spot, bool checkZ);
 
-        public bool IsContaining(Coordinate spot)
-        {
-            return IsContaining(spot, true);
-        }
-        public bool IsContaining(int x, int y, int z, bool checkZ)
-        {
-            return IsContaining(Coordinate.Create(x, y, z), checkZ);
-        }
-        public bool IsContaining(int x, int y, int z)
-        {
-            return IsContaining(Coordinate.Create(x, y, z), true);
-        }
+        public bool IsContaining(Coordinate spot) => IsContaining(spot, true);
+
+        [Obsolete("Use .IsContaining(Coordinate[,bool]) instead!")]
+        public bool IsContaining(int x, int y, int z, bool checkZ) => IsContaining(Coordinate.Create(x, y, z), checkZ);
+
+        [Obsolete("Use .IsContaining(Coordinate[,bool]) instead!")]
+        public bool IsContaining(int x, int y, int z) => IsContaining(Coordinate.Create(x, y, z), true);
 
         /// <summary>
         /// Get the distance to the closest edge of this area from a point

@@ -3,6 +3,7 @@ using System.Collections;
 using DOL.GS;
 using DOL.GS.Spells;
 using DOL.Events;
+using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
 using System.Numerics;
 
@@ -19,26 +20,26 @@ namespace DOL.GS.RealmAbilities.Statics
         protected uint m_pulseFrequency;
         int currentTick = 0;
         int currentPulse = 0;
-        protected int getCurrentPulse()
-        { return currentPulse; }
+		protected int getCurrentPulse ()
+		{return currentPulse;}
 
-        public void CreateStatic(GamePlayer caster, Vector3 gt, uint lifeTime, uint pulseFrequency, ushort radius)
+        public void CreateStatic(GamePlayer caster, Coordinate gt, uint lifeTime, uint pulseFrequency, ushort radius) 
         {
-            m_lifeTime = lifeTime;
-            m_caster = caster;
-            m_radius = radius;
-            m_pulseFrequency = pulseFrequency;
-            this.Name = GetStaticName();
-            this.Model = GetStaticModel();
-            this.Position = gt;
-            this.CurrentRegionID = m_caster.CurrentRegionID;
-            this.Level = caster.Level;
+			m_lifeTime = lifeTime;
+			m_caster = caster;
+			m_radius = radius;
+			m_pulseFrequency = pulseFrequency;
+			this.Name = GetStaticName();
+			this.Model = GetStaticModel();
+			Position = caster.Position.With(coordinate: gt);
+			this.Level = caster.Level;
             this.Realm = caster.Realm;
             this.AddToWorld();
-        }
-        public override bool AddToWorld()
+		}
+
+		public override bool AddToWorld() 
         {
-            new RegionTimer(this, new RegionTimerCallback(PulseTimer), 1000);
+			new RegionTimer(this, new RegionTimerCallback(PulseTimer),1000);
             GameEventMgr.AddHandler(m_caster, GamePlayerEvent.RemoveFromWorld, new DOLEventHandler(PlayerLeftWorld));
             return base.AddToWorld();
         }

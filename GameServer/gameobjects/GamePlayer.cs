@@ -21,7 +21,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using System.Reflection;
 using System.Text;
 
@@ -1906,18 +1905,6 @@ namespace DOL.GS
             }
 
             TempProperties.removeProperty(DEATH_CONSTITUTION_LOSS_PROPERTY);
-
-            //Reset last valide position array to prevent /stuck avec /release
-            lock (m_lastUniqueLocations)
-            {
-                for (int i = 0; i < m_lastUniqueLocations.Length; i++)
-                {
-                    GameLocation loc = m_lastUniqueLocations[i];
-                    loc.Position = Position;
-                    loc.Heading = Heading;
-                    loc.RegionID = CurrentRegionID;
-                }
-            }
 
             if (m_releaseType == eReleaseType.Jail)
             {
@@ -10822,7 +10809,7 @@ namespace DOL.GS
             if (ObjectState == eObjectState.Active)
             {
                 DismountSteed(true);
-                if (CurrentRegion.GetZone(Position) == null)
+                if (CurrentZone == null)
                 {
                     if (this is GamePlayer && this.Client.Account.PrivLevel < 3 && !(this as GamePlayer).TempProperties.getProperty("isbeingbanned", false))
                     {
@@ -10907,11 +10894,11 @@ namespace DOL.GS
         /// <param name="z">Z target coordinate (0 to put player on floor)</param>
         /// <param name="heading">Target heading</param>
         /// <returns>true if move succeeded, false if failed</returns>
-        public override bool MoveTo(ushort regionID, float x, float y, float z, ushort heading)
+        public override bool MoveTo(Position position)
         {
             //if we are jumping somewhere away from our house not using house.Exit
             //we need to make the server know we have left the house
-            if ((CurrentHouse != null || InHouse) && CurrentHouse.RegionID != regionID)
+            if ((CurrentHouse != null || InHouse) && CurrentHouse.RegionID != position.RegionID)
             {
                 CurrentHouse = null;
             }
@@ -10919,21 +10906,23 @@ namespace DOL.GS
             if (IsOnHorse)
                 IsOnHorse = false;
             //Get the destination region based on the ID
-            Region rgn = WorldMgr.GetRegion(regionID);
+            Region rgn = WorldMgr.GetRegion(position.RegionID);
             //If the region doesn't exist, return false or if they aren't allowed to zone here
             if (rgn == null || !GameServer.ServerRules.IsAllowedToZone(this, rgn))
                 return false;
             //If the x,y inside this region doesn't point to a zone
             //return false
-            if (rgn.GetZone(x, y) == null)
+            if (rgn.GetZone(position.Coordinate) == null)
                 return false;
 
             Diving(waterBreath.Normal);
 
             if (SiegeWeapon != null)
                 SiegeWeapon.ReleaseControl();
+            
+            var positionBeforePort = Position;
 
-            if (regionID != CurrentRegionID)
+            if (position.RegionID != positionBeforePort.RegionID)
             {
                 GameEventMgr.Notify(GamePlayerEvent.RegionChanging, this);
                 if (!RemoveFromWorld())
@@ -10978,14 +10967,12 @@ namespace DOL.GS
             //Current Speed = 0 when moved ... else X,Y,Z continue to be modified
             CurrentSpeed = 0;
             MovementStartTick = GameTimer.GetTickCount();
-            Vector3 originalPoint = Position;
-            Position = new Vector3(x, y, z);
-            Heading = heading;
+            Position = position;
 
             //Remove the last update tick property, to prevent speedhack messages during zoning and teleporting!
             TempProperties.removeProperty(PlayerPositionUpdateHandler.LASTMOVEMENTTICK);
             //If the destination is in another region
-            if (regionID != CurrentRegionID)
+            if (position.RegionID != positionBeforePort.RegionID)
             {
                 //Set our new region
                 CurrentRegionID = regionID;
@@ -11000,7 +10987,7 @@ namespace DOL.GS
                 Out.SendPlayerJump(false);
 
                 // are we jumping far enough to force a complete refresh?
-                if (Vector3.Distance(Position, originalPoint) > WorldMgr.REFRESH_DISTANCE)
+                if (Coordinate.DistanceTo(positionBeforePort) > WorldMgr.REFRESH_DISTANCE)
                 {
                     RefreshWorld();
                 }
@@ -11025,17 +11012,16 @@ namespace DOL.GS
 
                 if (hasPetToMove)
                 {
-                    Vector2 point = GameMath.GetPointFromHeading(Position, Heading, 64);
-
                     if (ControlledBody is GameNPC petBody)
                     {
-                        petBody.MoveInRegion(CurrentRegionID, point.X, point.Y, this.Position.Z + 10, (ushort)((this.Heading + 2048) % 4096), false);
+                        var destination = Position.TurnedAround() + Vector.Create(Orientation, length: 64, z: 10);
+                        petBody.MoveWithoutRemovingFromWorld(destination, false);
 
                         if (petBody.ControlledNpcList != null)
                             foreach (IControlledBrain icb in petBody.ControlledNpcList)
                                 if (icb != null && icb.Body is GameNPC petBody2
-                                        && petBody2.IsWithinRadius(originalPoint, 500))
-                                    petBody2.MoveInRegion(CurrentRegionID, point.X, point.Y, this.Position.Z + 10, (ushort)((this.Heading + 2048) % 4096), false);
+                                    && petBody2.Coordinate.DistanceTo(positionBeforePort) < 500)
+                                    petBody2.MoveWithoutRemovingFromWorld(destination, false);
                     }
                 }
                 shadowNPC.MoveToPlayer();
@@ -11077,11 +11063,11 @@ namespace DOL.GS
         //Eden - Move to bind, and check if the loc is allowed
         public virtual bool MoveToBind()
         {
-            Region rgn = WorldMgr.GetRegion((ushort)BindRegion);
-            if (rgn == null || rgn.GetZone(BindXpos, BindYpos) == null)
+            Region rgn = WorldMgr.GetRegion(BindPosition.RegionID);
+            if (rgn == null || rgn.GetZone(BindPosition.Coordinate) == null)
             {
                 if (log.IsErrorEnabled)
-                    log.Error("Player: " + Name + " unknown bind point : (R/X/Y) " + BindRegion + "/" + BindXpos + "/" + BindYpos);
+                    log.Error("Player: " + Name + " unknown bind point : (R/X/Y) " + BindPosition.RegionID + "/" + BindPosition.X + "/" + BindPosition.Y);
                 //Kick the player, avoid server freeze
                 Client.Out.SendPlayerQuit(true);
                 SaveIntoDatabase();
@@ -11095,7 +11081,7 @@ namespace DOL.GS
                     b.Account = Client.Account.Name;
                     b.DateBan = DateTime.Now;
                     b.Type = "B";
-                    b.Reason = "X/Y/Zone : " + Position.X + "/" + Position.Y + "/" + CurrentRegion.ID;
+                    b.Reason = "X/Y/RegionID : " + Position.X + "/" + Position.Y + "/" + Position.RegionID;
                     GameServer.Database.AddObject(b);
                     GameServer.Database.SaveObject(b);
                     string message = "Unknown bind point, your account is banned, contact a GM.";
@@ -11106,7 +11092,7 @@ namespace DOL.GS
             }
 
             if (GameServer.ServerRules.IsAllowedToMoveToBind(this))
-                return MoveTo((ushort)BindRegion, BindXpos, BindYpos, BindZpos, (ushort)BindHeading);
+                return MoveTo(BindPosition);
 
             return false;
         }
@@ -11316,17 +11302,10 @@ namespace DOL.GS
 
         public override Position Position
         {
-            get => IsMoving ? base.Position + MovementElapsedTicks * Velocity : base.Position;
             set
             {
                 base.Position = value;
-                if (DBCharacter != null)
-                {
-                    var p = base.Position;
-                    DBCharacter.Xpos = (int)p.X;
-                    DBCharacter.Ypos = (int)p.Y;
-                    DBCharacter.Zpos = (int)p.Z;
-                }
+                if(DBCharacter != null) DBCharacter.SetPosition(value);
             }
         }
 
@@ -11366,29 +11345,8 @@ namespace DOL.GS
             set { m_lastPositionUpdateZone = value; }
         }
 
-
-        private uint m_lastPositionUpdateTick = 0;
-
-        /// <summary>
-        /// The environment tick count when this players position was last updated
-        /// </summary>
-        public uint LastPositionUpdateTick
-        {
-            get { return m_lastPositionUpdateTick; }
-            set { m_lastPositionUpdateTick = value; }
-        }
-
-        private Vector3 m_lastPositionUpdatePoint = new Vector3(0, 0, 0);
-
-        /// <summary>
-        /// The last recorded position of this player
-        /// </summary>
-        public Vector3 LastPositionUpdatePoint
-        {
-            get { return m_lastPositionUpdatePoint; }
-            set { m_lastPositionUpdatePoint = value; }
-        }
-
+        public Coordinate LastUpdateCoordinate => Motion.Start.Coordinate;
+        
         /// <summary>
         /// Gets or sets the players max Z for fall damage
         /// </summary>
@@ -11407,15 +11365,12 @@ namespace DOL.GS
             }
         }
 
-        /// <summary>
-        /// Gets or sets the heading of this player
-        /// </summary>
-        public override ushort Heading
+        public override Angle Orientation
         {
             set
             {
-                base.Heading = value;
-                if (DBCharacter != null) DBCharacter.Direction = value;
+                base.Orientation = value;
+                if (DBCharacter != null) DBCharacter.Direction = value.InHeading;
 
                 if (AttackState && ActiveWeaponSlot != eActiveWeaponSlot.Distance)
                 {
@@ -11901,33 +11856,17 @@ namespace DOL.GS
             UpdatePlayerStatus();
         }
 
-        /// <summary>
-        /// Sets the Living's ground-target Coordinates inside the current Region
-        /// </summary>
-        public override Vector3? GroundTarget
+        public override Position GroundTargetPosition
         {
             set
             {
-                base.GroundTarget = value;
-                if (value.HasValue)
-                    Out.SendMessage(String.Format("You ground-target {0}", value), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                if (SiegeWeapon != null)
-                    SiegeWeapon.GroundTarget = value;
+                base.GroundTargetPosition = value;
+                Out.SendMessage(String.Format("You ground-target {0},{1},{2}", value.X, value.Y, value.Z), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                if (SiegeWeapon != null) SiegeWeapon.GroundTargetPosition = value;
             }
         }
 
-        /// <summary>
-        /// Holds unique locations array
-        /// </summary>
-        protected readonly GameLocation[] m_lastUniqueLocations;
-
-        /// <summary>
-        /// Gets unique locations array
-        /// </summary>
-        public GameLocation[] LastUniqueLocations
-        {
-            get { return m_lastUniqueLocations; }
-        }
+        public Position[] LastUniquePositions { get; } = new Position[4];
 
         /// <summary>
         /// Updates Health, Mana, Sitting, Endurance, Concentration and Alive status to client
@@ -12684,11 +12623,7 @@ namespace DOL.GS
             else
             {
                 gameItem = new WorldInventoryItem(item);
-
-                var itemloc = GameMath.GetPointFromHeading(this.Position, this.Heading, 30);
-                gameItem.Position = new Vector3(itemloc, 0);
-                gameItem.Heading = Heading;
-                gameItem.CurrentRegionID = CurrentRegionID;
+                gameItem.Position = Position + Vector.Create(Orientation, length: 30);
 
                 gameItem.AddOwner(this);
                 gameItem.AddToWorld();
@@ -12725,8 +12660,8 @@ namespace DOL.GS
                 {
                     log.DebugFormat("Pickup error: {0}  object x{1}, y{2}, z{3}, r{4} - player x{5}, y{6}, z{7}, r{8}",
                                     Name,
-                                    floorObject.Position.X, floorObject.Position.Y, floorObject.Position.Z, floorObject.CurrentRegionID,
-                                    Position.X, Position.Y, Position.Z, CurrentRegionID);
+                                    floorObject.Position.X, floorObject.Position.Y, floorObject.Position.Z, floorObject.Position.RegionID,
+                                    Position.X, Position.Y, Position.Z, Position.RegionID);
                 }
                 catch
                 {
@@ -13447,23 +13382,21 @@ namespace DOL.GS
             #endregion
 
             #region setting world-init-position (delegate to PlayerCharacter dont make sense)
-            Position = new Vector3(DBCharacter.Xpos, DBCharacter.Ypos, DBCharacter.Zpos);
-            m_Heading = (ushort)DBCharacter.Direction;
+            Position = DBCharacter.GetPosition();
 
             //important, use CurrentRegion property
             //instead because it sets the Region too
             CurrentRegionID = (ushort)DBCharacter.Region;
-            if (CurrentRegion == null || CurrentRegion.GetZone(Position) == null)
+            if (CurrentRegion == null || CurrentRegion.GetZone(Coordinate) == null)
             {
-                log.WarnFormat("Invalid region/zone on char load ({0}): x={1:N0} y={2:N0} z={3:N0} reg={4}; moving to bind point.", DBCharacter.Name, Position.X, Position.Y, Position.Z, DBCharacter.Region);
-                Position = new Vector3(DBCharacter.BindXpos, DBCharacter.BindYpos, DBCharacter.BindZpos);
-                m_Heading = (ushort)DBCharacter.BindHeading;
-                CurrentRegionID = (ushort)DBCharacter.BindRegion;
+                log.WarnFormat("Invalid region/zone on char load ({0}): x={1} y={2} z={3} reg={4}; moving to bind point."
+                               , DBCharacter.Name, Coordinate.X, Coordinate.Y, Coordinate.Z, DBCharacter.Region);
+                Position = DBCharacter.GetBindPosition();
             }
 
-            for (int i = 0; i < m_lastUniqueLocations.Length; i++)
+            for (int i = 0; i < LastUniquePositions.Length; i++)
             {
-                m_lastUniqueLocations[i] = new GameLocation(null, CurrentRegionID, Position.X, Position.Y, Position.Z);
+                LastUniquePositions[i] = Position;
             }
             #endregion
 
@@ -13600,9 +13533,9 @@ namespace DOL.GS
                 DBCharacter.ActiveWeaponSlot = (byte)((byte)ActiveWeaponSlot | (byte)ActiveQuiverSlot);
                 if (m_stuckFlag)
                 {
-                    lock (m_lastUniqueLocations)
+                    lock (LastUniquePositions)
                     {
-                        GameLocation loc = m_lastUniqueLocations[m_lastUniqueLocations.Length - 1];
+                        DBCharacter.SetPosition(LastUniquePositions[LastUniquePositions.Length - 1]);
                         DBCharacter.Xpos = (int)loc.Position.X;
                         DBCharacter.Ypos = (int)loc.Position.Y;
                         DBCharacter.Zpos = (int)loc.Position.Z;
@@ -14031,17 +13964,17 @@ namespace DOL.GS
                         fieldOfListen += (npc.Level - player.Level) * 3;
                     }
 
-                    double angle = GameMath.GetAngle(npc, player);
+                    var angle = npc.GetAngleTo(player.Coordinate);
 
                     //player in front
                     fieldOfView /= 2.0;
-                    bool canSeePlayer = (angle >= 360 - fieldOfView || angle < fieldOfView);
+                    bool canSeePlayer = (angle.InDegrees >= 360 - fieldOfView || angle.InDegrees < fieldOfView);
 
                     //If npc can not see nor hear the player, continue the loop
                     fieldOfListen /= 2.0;
                     if (canSeePlayer == false &&
-                        !(angle >= (45 + 60) - fieldOfListen && angle < (45 + 60) + fieldOfListen) &&
-                        !(angle >= (360 - 45 - 60) - fieldOfListen && angle < (360 - 45 - 60) + fieldOfListen))
+                        !(angle.InDegrees >= (45 + 60) - fieldOfListen && angle.InDegrees < (45 + 60) + fieldOfListen) &&
+                        !(angle.InDegrees >= (360 - 45 - 60) - fieldOfListen && angle.InDegrees < (360 - 45 - 60) + fieldOfListen))
                         continue;
 
                     double chanceMod = 1.0;
@@ -16942,7 +16875,6 @@ namespace DOL.GS
             m_debuffBonus = new PropertyIndexer((int)eProperty.MaxProperty);
             m_buff4Bonus = new PropertyIndexer((int)eProperty.MaxProperty);
             m_itemBonus = new PropertyIndexer((int)eProperty.MaxProperty);
-            m_lastUniqueLocations = new GameLocation[4];
             m_canFly = false;
             m_wanted = false;
             m_reputation = 0;

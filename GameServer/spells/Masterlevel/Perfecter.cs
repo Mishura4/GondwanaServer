@@ -50,8 +50,6 @@ namespace DOL.GS.Spells
             font.Name = spell.Name;
             font.Realm = caster.Realm;
             font.Position = caster.Position;
-            font.CurrentRegionID = caster.CurrentRegionID;
-            font.Heading = caster.Heading;
             font.Owner = (GamePlayer)caster;
 
             // Construct the font spell
@@ -104,8 +102,6 @@ namespace DOL.GS.Spells
             font.Name = spell.Name;
             font.Realm = caster.Realm;
             font.Position = caster.Position;
-            font.CurrentRegionID = caster.CurrentRegionID;
-            font.Heading = caster.Heading;
             font.Owner = (GamePlayer)caster;
 
             // Construct the font spell
@@ -157,8 +153,6 @@ namespace DOL.GS.Spells
             font.Name = spell.Name;
             font.Realm = caster.Realm;
             font.Position = caster.Position;
-            font.CurrentRegionID = caster.CurrentRegionID;
-            font.Heading = caster.Heading;
             font.Owner = (GamePlayer)caster;
 
             // Construct the font spell
@@ -227,8 +221,6 @@ namespace DOL.GS.Spells
             font.Name = spell.Name;
             font.Realm = caster.Realm;
             font.Position = caster.Position;
-            font.CurrentRegionID = caster.CurrentRegionID;
-            font.Heading = caster.Heading;
             font.Owner = (GamePlayer)caster;
 
             // Construct the font spell

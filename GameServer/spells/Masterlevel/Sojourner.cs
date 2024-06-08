@@ -7,8 +7,9 @@ using DOL.GS.PacketHandler;
 using DOL.AI.Brain;
 using DOL.GS;
 using DOL.Events;
+using DOL.Geometry;
+using DOL.GS.Geometry;
 using System.Collections.Specialized;
-using System.Numerics;
 using DOL.GS.Profession;
 
 namespace DOL.GS.Spells
@@ -101,9 +102,8 @@ namespace DOL.GS.Spells
                 GamePlayer casterPlayer = caster as GamePlayer;
                 merchant = new GameMerchant();
                 //Fill the object variables
-                merchant.Position = casterPlayer.Position + new Vector3(Util.Random(20, 40) - Util.Random(20, 40), Util.Random(20, 40) - Util.Random(20, 40), 0);
-                merchant.CurrentRegion = casterPlayer.CurrentRegion;
-                merchant.Heading = (ushort)((casterPlayer.Heading + 2048) % 4096);
+                merchant.Position = casterPlayer.Position.TurnedAround() 
+                    + Vector.Create(Util.Random(-20, 20), Util.Random(-20, 20));
                 merchant.Level = 1;
                 merchant.Realm = casterPlayer.Realm;
                 merchant.Name = "Ancient Transmuter";
@@ -175,7 +175,7 @@ namespace DOL.GS.Spells
         protected RegionTimer m_expireTimer;
         protected GameNPC m_npc;
         protected GamePlayer m_target;
-        protected Vector3 m_loc;
+        protected Coordinate m_loc;
 
         public override void OnDirectEffect(GameLiving target, double effectiveness)
         {
@@ -314,19 +314,18 @@ namespace DOL.GS.Spells
             if (Caster is GamePlayer)
             {
                 //Calculate random target
-                m_loc = GetTargetLoc();
+                m_loc = m_npc.Coordinate + Vector.Create(x: Util.Random(-1500, 1500), y: Util.Random(-1500, 1500));;
                 (Caster as GamePlayer).Out.SendCheckLOS((Caster as GamePlayer), m_npc, new CheckLOSResponse(ZephyrCheckLOS));
             }
         }
         public void ZephyrCheckLOS(GamePlayer player, ushort response, ushort targetOID)
         {
-            if ((response & 0x100) == 0x100)
-                m_npc.PathTo(m_loc.X, m_loc.Y, m_loc.Z, 100);
+            if ((response & 0x100) == 0x100) m_npc.WalkTo(m_loc, 100);
         }
 
-        public virtual Vector3 GetTargetLoc()
+        public virtual Coordinate GetTargetLoc()
         {
-            return m_npc.Position + new Vector3(Util.Random(-1500, 1500), Util.Random(-1500, 1500), 0);
+            return m_npc.Coordinate + Vector.Create(Util.Random(-1500, 1500), Util.Random(-1500, 1500), 0);
         }
 
         public override int CalculateSpellResistChance(GameLiving target)

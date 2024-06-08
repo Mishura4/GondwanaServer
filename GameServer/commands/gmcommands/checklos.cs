@@ -35,7 +35,7 @@ namespace DOL.GS.Commands
     {
         public async void OnCommand(GameClient client, string[] args)
         {
-            if (client.Player?.TargetObject == null && client.Player?.GroundTarget == null)
+            if (client.Player?.TargetObject == null && client.Player?.GroundTargetPosition == Position.Nowhere)
             {
                 DisplayMessage(client, "You need a target to use this command.");
                 return;
@@ -45,7 +45,7 @@ namespace DOL.GS.Commands
             if (client.Player.TargetObject != null)
             {
                 var target = client.Player.TargetObject;
-                text.Add($"Target: {target.Name} (OID: {target.ObjectID}, distance: {Vector3.Distance(target.Position, client.Player.Position)})");
+                text.Add($"Target: {target.Name} (OID: {target.ObjectID}, distance: {(int)target.Coordinate.DistanceTo(client.Player.Position)})");
                 text.Add($"Target in view (player's cache): {client.Player.TargetInView}");
 
                 var stats = new RaycastStats();

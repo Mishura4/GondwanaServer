@@ -25,9 +25,9 @@ using DOL.GS.PacketHandler;
 using DOL.GS.Quests;
 using DOL.Database;
 using DOL.AI.Brain;
+using DOL.GS.Geometry;
 using DOL.GS.Keeps;
 using DOL.GS.Housing;
-using System.Numerics;
 using DOL.GS.Profession;
 
 namespace DOL.Tests
@@ -628,11 +628,11 @@ namespace DOL.Tests
         {
             if (SendChangeTargetMethod != null) SendChangeTargetMethod(this, newTarget);
         }
-        public Action<TestPacketLib, Vector3> SendChangeGroundTargetMethod { get; set; }
-        public void SendChangeGroundTarget(Vector3 newTarget)
-        {
-            if (SendChangeGroundTargetMethod != null) SendChangeGroundTargetMethod(this, newTarget);
-        }
+        public Action<TestPacketLib, Coordinate> SendChangeGroundTargetMethod { get; set; }
+        [Obsolete("Use .SendChangeGroundTarget(Coordinate) instead!")]
+        public void SendChangeGroundTarget(System.Numerics.Vector3 newTarget)
+            => SendChangeGroundTarget(Coordinate.Create((int)newTarget.X, (int)newTarget.Y, (int)newTarget.Z));
+        public void SendChangeGroundTarget(Coordinate newTarget) => SendChangeGroundTargetMethod?.Invoke(this, newTarget);
         public Action<TestPacketLib, GameLiving, ePetWindowAction, eAggressionState, eWalkState> SendPetWindowMethod { get; set; }
         public void SendPetWindow(GameLiving pet, ePetWindowAction windowAction, eAggressionState aggroState, eWalkState walkState)
         {
@@ -689,6 +689,7 @@ namespace DOL.Tests
             if (SendLivingDataUpdateMethod != null) SendLivingDataUpdateMethod(this, living, updateStrings);
         }
         public Action<TestPacketLib, ushort, ushort, ushort, ushort, ushort, ushort> SendSoundEffectMethod { get; set; }
+        public void SendSoundEffect(ushort soundId, Position position, ushort radius) { }
         public void SendSoundEffect(ushort soundId, ushort zoneId, ushort x, ushort y, ushort z, ushort radius)
         {
             if (SendSoundEffectMethod != null) SendSoundEffectMethod(this, soundId, zoneId, x, y, z, radius);
@@ -914,6 +915,10 @@ namespace DOL.Tests
             if (SendMinotaurRelicMapRemoveMethod != null) SendMinotaurRelicMapRemoveMethod(this, id);
         }
         public Action<TestPacketLib, byte, ushort, int, int, int> SendMinotaurRelicMapUpdateMethod { get; set; }
+        public void SendMinotaurRelicMapUpdate(byte id, Position position)
+        {
+            if (SendMinotaurRelicMapUpdateMethod != null) SendMinotaurRelicMapUpdateMethod(this, id, position.RegionID, position.X, position.Y, position.Z);
+        }
         public void SendMinotaurRelicMapUpdate(byte id, ushort region, int x, int y, int z)
         {
             if (SendMinotaurRelicMapUpdateMethod != null) SendMinotaurRelicMapUpdateMethod(this, id, region, x, y, z);

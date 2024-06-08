@@ -24,6 +24,7 @@ using System.Reflection;
 using DOL.Language;
 using DOL.Database;
 using DOL.GS.Effects;
+using DOL.GS.Geometry;
 using DOL.GS.Keeps;
 using DOL.GS.PlayerTitles;
 using DOL.GS.Spells;
@@ -117,7 +118,8 @@ namespace DOL.GS.PacketHandler
                                 Region reg = WorldMgr.GetRegion((ushort)characters[j].Region);
                                 if (reg != null)
                                 {
-                                    var description = m_gameClient.GetTranslatedSpotDescription(reg, characters[j].Xpos, characters[j].Ypos, characters[j].Zpos);
+                                    var coordinate = characters[j].GetPosition().Coordinate;
+                                    var description = GamePlayerUtils.GetTranslatedSpotDescription(reg, m_gameClient, coordinate);
                                     pak.FillString(description, 24);
                                 }
                                 else
@@ -286,9 +288,9 @@ namespace DOL.GS.PacketHandler
                 pak.WriteShort((ushort)playerToCreate.Position.Z);
                 //Dinberg:Instances - zoneSkinID for object positioning clientside (as zones are hardcoded).
                 pak.WriteShort(playerZone.ZoneSkinID);
-                pak.WriteShort((ushort)playerRegion.GetXOffInZone(playerToCreate.Position.X, playerToCreate.Position.Y));
-                pak.WriteShort((ushort)playerRegion.GetYOffInZone(playerToCreate.Position.X, playerToCreate.Position.Y));
-                pak.WriteShort(playerToCreate.Heading);
+                pak.WriteShort(GetXOffsetInZone(playerToCreate));
+                pak.WriteShort(GetYOffsetInZone(playerToCreate));
+                pak.WriteShort(playerToCreate.Orientation.InHeading);
 
                 pak.WriteByte(playerToCreate.GetFaceAttribute(eCharFacePart.EyeSize)); //1-4 = Eye Size / 5-8 = Nose Size
                 pak.WriteByte(playerToCreate.GetFaceAttribute(eCharFacePart.LipSize)); //1-4 = Ear size / 5-8 = Kin size
@@ -332,7 +334,7 @@ namespace DOL.GS.PacketHandler
                 pak.WriteShort((ushort)m_gameClient.Player.Position.Z);
                 pak.WriteInt((uint)m_gameClient.Player.Position.X);
                 pak.WriteInt((uint)m_gameClient.Player.Position.Y);
-                pak.WriteShort(m_gameClient.Player.Heading);
+                pak.WriteShort(m_gameClient.Player.Orientation.InHeading);
 
                 int flags = 0;
                 Zone zone = m_gameClient.Player.CurrentZone;
@@ -347,8 +349,8 @@ namespace DOL.GS.PacketHandler
 
                 if (zone.IsDungeon)
                 {
-                    pak.WriteShort((ushort)(zone.XOffset / 0x2000));
-                    pak.WriteShort((ushort)(zone.YOffset / 0x2000));
+                    pak.WriteShort((ushort)(zone.Offset.X / 0x2000));
+                    pak.WriteShort((ushort)(zone.Offset.Y / 0x2000));
                 }
                 else
                 {
@@ -380,8 +382,9 @@ namespace DOL.GS.PacketHandler
                 pak.WriteByte((byte)(0x40 | living.GroupIndex));
                 //Dinberg - ZoneSkinID for group members aswell.
                 pak.WriteShort(zone.ZoneSkinID);
-                pak.WriteShort((ushort)(living.Position.X - zone.XOffset));
-                pak.WriteShort((ushort)(living.Position.Y - zone.YOffset));
+                var zoneCoord = living.Coordinate - zone.Offset;
+                pak.WriteShort((ushort)(zoneCoord.X));
+                pak.WriteShort((ushort)(zoneCoord.Y));
             }
         }
 

@@ -1031,6 +1031,17 @@ namespace DOL.GS
         
         public short ZSpeedFactor
             => (short)((Motion.Destination.Z - Motion.Start.Z) / Motion.FullDistance);
+        
+        protected override Motion Motion
+        {
+            set
+            {
+                base.Motion = value;
+                BroadcastUpdate();
+            }
+        }
+
+        public Coordinate Destination => Motion.Destination;
 
         /// <summary>
         /// Stores the currentwaypoint that npc has to wander to
@@ -1236,7 +1247,7 @@ namespace DOL.GS
         /// <summary>
         /// True if the mob is at its target position, else false.
         /// </summary>
-        public bool IsAtTargetPosition => Motion.Destination.Equals(Coordinate);
+        public bool IsAtTargetLocation => Motion.Destination.Equals(Coordinate);
         
         public override void TurnTo(Coordinate coordinate, bool sendUpdate = true)
         {

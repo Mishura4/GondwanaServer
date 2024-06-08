@@ -16,10 +16,10 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
+using DOL.GS.Geometry;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Numerics;
 using System.Reflection;
 using log4net;
 
@@ -43,15 +43,13 @@ namespace DOL.GS.PacketHandler.Client.v168
             int spellLineIndex;
             if (client.Version >= GameClient.eClientVersion.Version1124)
             {
-                var x = packet.ReadFloatLowEndian();
-                var y = packet.ReadFloatLowEndian();
-                var z = packet.ReadFloatLowEndian();
-                var speed = packet.ReadFloatLowEndian();
+                var x = (int)packet.ReadFloatLowEndian();
+                var y = (int)packet.ReadFloatLowEndian();
+                var z = (int)packet.ReadFloatLowEndian();
+                var speed = (short)packet.ReadFloatLowEndian();
                 var heading = packet.ReadShort();
-
-                client.Player.Position = new Vector3(x, y, z);
-                client.Player.SetCurrentSpeed((short)speed);
-                client.Player.Heading = heading;
+                client.Player.Position = Position.Create(client.Player.CurrentRegionID, x, y, z, heading);
+                client.Player.CurrentSpeed = speed;
                 flagSpeedData = packet.ReadShort(); // target visible ? 0xA000 : 0x0000
                 spellLevel = packet.ReadByte();
                 spellLineIndex = packet.ReadByte();
@@ -76,15 +74,20 @@ namespace DOL.GS.PacketHandler.Client.v168
                     }
                     else
                     {
-                        client.Player.Position = new Vector3(newZone.XOffset + xOffsetInZone, newZone.YOffset + yOffsetInZone, realZ);
-                        client.Player.MovementStartTick = GameTimer.GetTickCount();
+                        client.Player.Position = Position.Create(
+                            client.Player.CurrentRegionID,
+                            newZone.Offset.X + xOffsetInZone,
+                            newZone.Offset.Y + yOffsetInZone,
+                            realZ,
+                            client.Player.Orientation
+                        );
                     }
                 }
 
                 spellLevel = packet.ReadByte();
                 spellLineIndex = packet.ReadByte();
 
-                client.Player.Heading = (ushort)(heading & 0xfff);
+                client.Player.Orientation = Angle.Heading(heading);
             }
 
             new UseSpellAction(client.Player, flagSpeedData, spellLevel, spellLineIndex).Start(1);

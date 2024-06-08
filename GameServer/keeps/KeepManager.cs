@@ -426,6 +426,7 @@ namespace DOL.GS.Keeps
 
             return closeKeeps;
         }
+        
         public virtual AbstractGameKeep GetKeepCloseToSpot(ushort regionid, int x, int y, int z, int radius)
             => GetKeepCloseToSpot(Position.Create(regionid,x,y), radius);
 

@@ -277,7 +277,7 @@ namespace DOL.GS
         {
             if (!CanUse()) return;
             if (!m_enableToMove) return;
-            if (Owner == null || Owner.GroundTarget == null) return;
+            if (Owner == null || Owner.GroundTargetPosition == Position.Nowhere) return;
             if (Owner == null || Owner.GroundTargetPosition == Position.Nowhere) return;
             if (Coordinate.DistanceTo(Owner.GroundTargetPosition) > 1000)
             {

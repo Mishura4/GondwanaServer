@@ -60,8 +60,6 @@ namespace DOL.GS.Keeps
         AbstractGameKeep GetKeepByID(int id);        [Obsolete("This is going to be removed.")]
         IEnumerable GetKeepsCloseToSpot(ushort regionid, Vector3 point3d, int radius);
         [Obsolete("This is going to be removed.")]
-        ICollection<AbstractGameKeep> GetKeepsCloseToSpot(ushort regionid, int x, int y, int z, int radius);
-        [Obsolete("Use .GetKeepCloseToSpot(Position, int) instead!")]
         AbstractGameKeep GetKeepCloseToSpot(ushort regionid, Vector3 point3d, int radius);
         [Obsolete("Use .GetKeepCloseToSpot(Position, int) instead!")]
         AbstractGameKeep GetKeepCloseToSpot(ushort regionid, int x, int y, int z, int radius);
@@ -82,6 +80,8 @@ namespace DOL.GS.Keeps
         bool IsEnemy(GameKeepDoor checker, GamePlayer target);
         bool IsEnemy(GameKeepComponent checker, GamePlayer target);
         byte GetHeightFromLevel(byte level);
+        Position GetBorderKeepPosition(int keepid);
+        [Obsolete("Use GetBorderKeepPosition(int) instead!")]
         void GetBorderKeepLocation(int keepid, out int x, out int y, out int z, out ushort heading);
         int GetRealmKeepBonusLevel(eRealm realm);
         int GetRealmTowerBonusLevel(eRealm realm);

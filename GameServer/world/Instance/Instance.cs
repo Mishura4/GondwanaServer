@@ -27,7 +27,7 @@ using System.Reflection;
 using DOL.Database;
 using DOL.GS.Utils;
 using log4net;
-using System.Numerics;
+using DOL.GS.Geometry;
 
 namespace DOL.GS
 {
@@ -54,13 +54,13 @@ namespace DOL.GS
 
         #region Entrance
 
-        protected GameLocation m_entranceLocation = null;
+        [Obsolete("Use .InstanceEntranceName or .EntrancePosition instead!")]
+        public GameLocation InstanceEntranceLocation => new GameLocation(EntrancePosition);
 
-        /// <summary>
-        /// Returns the entrance location into this instance.
-        /// </summary>
-        public GameLocation InstanceEntranceLocation
-        { get { return m_entranceLocation; } }
+        [Obsolete("This is going to be removed.")]
+        public string InstanceEntranceName { get; set; } = null;
+
+        public Position EntrancePosition { get; set; } = Position.Nowhere;
 
         #endregion
 
@@ -95,7 +95,7 @@ namespace DOL.GS
                     case "entrance":
                         {
                             //create the entrance, then move to the next.
-                            m_entranceLocation = new GameLocation(instanceName + "entranceRegion" + ID, ID, entry.X, entry.Y, entry.Z, entry.Heading);
+                            EntrancePosition = Position.Create(regionID: ID, entry.X, entry.Y, entry.Z, entry.Heading);
                             //move to the next entry, nothing more to do here...
                             continue;
                         }
@@ -119,7 +119,7 @@ namespace DOL.GS
 
 
                 //We now have an object that isnt null. Lets place it at the location, in this region.
-                obj.Position = new Vector3(entry.X, entry.Y, entry.Z);
+                obj.Position = Position.Create(regionID: ID, entry.X, entry.Y, entry.Z, entry.Heading);
                 obj.Heading = entry.Heading;
                 obj.CurrentRegionID = ID;
 

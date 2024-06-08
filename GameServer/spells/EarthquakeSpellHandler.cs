@@ -27,7 +27,7 @@ namespace DOL.GS.Spells
                 MessageToCaster("Your spell was cancelled.", eChatType.CT_SpellExpires);
                 return false;
             }
-            if (Caster.GroundTarget == null)
+            if (Caster.GroundTargetPosition == Position.Nowhere)
             {
                 x = (int)Caster.Position.X;
                 y = (int)Caster.Position.Y;
@@ -81,7 +81,7 @@ namespace DOL.GS.Spells
 
             if (Caster is GamePlayer player)
             {
-                int distance = (int)System.Numerics.Vector3.Distance(player.Position, new System.Numerics.Vector3(x, y, player.Position.Z));
+                int distance = (int)System.Numerics.(int)player.Coordinate.DistanceTo(new System.Numerics.Vector3(x, y, player.Position.Z));
                 float newIntensity = intensity * (1 - distance / radius);
                 GSTCPPacketOut pak = new GSTCPPacketOut(0x47);
                 pak.WriteIntLowEndian(unk1);
@@ -130,7 +130,7 @@ namespace DOL.GS.Spells
 
                 if (Caster is GamePlayer player)
                 {
-                    int distance = (int)System.Numerics.Vector3.Distance(player.Position, new System.Numerics.Vector3(x, y, player.Position.Z));
+                    int distance = (int)System.Numerics.(int)player.Coordinate.DistanceTo(new System.Numerics.Vector3(x, y, player.Position.Z));
                     float newIntensity = intensity * (1 - distance / radius);
                     GSTCPPacketOut pak = new GSTCPPacketOut(0x47);
                     pak.WriteIntLowEndian(unk1);
@@ -158,7 +158,7 @@ namespace DOL.GS.Spells
 
         public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
-            int distance = (int)System.Numerics.Vector3.Distance(target.Position, new System.Numerics.Vector3(x, y, target.Position.Z));
+            int distance = (int)System.Numerics.(int)target.Coordinate.DistanceTo(new System.Numerics.Vector3(x, y, target.Position.Z));
             if (distance > radius)
             {
                 CancelPulsingSpell(target, Spell.SpellType);

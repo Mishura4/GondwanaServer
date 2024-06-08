@@ -19,7 +19,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Numerics;
 using System.Reflection;
 
 using DOL.AI.Brain;
@@ -27,6 +26,7 @@ using DOL.Database;
 using DOL.Events;
 using DOL.GS;
 using DOL.GS.Effects;
+using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
 using DOL.GS.Spells;
 using DOL.Language;
@@ -123,15 +123,13 @@ namespace DOL.GS.Spells
             }
 
             beffect = CreateSpellEffect(target, effectiveness);
-            var summonloc = GameMath.GetPointFromHeading(target, 64);
+            var summonPosition = target.Position.TurnedAround() + Vector.Create(target.Orientation, length: 64);
 
             BrittleBrain controlledBrain = new BrittleBrain(player);
             controlledBrain.IsMainPet = false;
             summoned = new GameNPC(template);
             summoned.SetOwnBrain(controlledBrain);
-            summoned.Position = new Vector3(summonloc, target.Position.Z);
-            summoned.CurrentRegion = target.CurrentRegion;
-            summoned.Heading = (ushort)((target.Heading + 2048) % 4096);
+            summoned.Position = summonPosition;
             summoned.Realm = target.Realm;
             summoned.Level = Caster.Level;
             summoned.Size = 50;
