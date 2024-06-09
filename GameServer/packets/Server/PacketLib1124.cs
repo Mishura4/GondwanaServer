@@ -199,8 +199,6 @@ namespace DOL.GS.PacketHandler
                 pak.WriteInt((uint)npc.Position.X);
                 pak.WriteInt((uint)npc.Position.Y);
                 pak.WriteShort(speedZ);
-                pak.WriteShort(npc.Model);
-                pak.WriteByte(npc.Size);
 
                 var model = npc.Model;
                 var size = npc.Size;

@@ -1283,7 +1283,10 @@ namespace DOL.GS
             {
                 var isInZone = zone.Offset.X <= coordinate.X && zone.Offset.Y <= coordinate.Y 
                     && (zone.Offset.X + zone.Width) > coordinate.X && (zone.Offset.Y + zone.Height) > coordinate.Y;
-                if (isInZone) return zone;
+                if (isInZone)
+                {
+                    return zone;
+                }
             }
             return null;
         }

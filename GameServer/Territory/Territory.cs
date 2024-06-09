@@ -1078,10 +1078,7 @@ namespace DOL.Territories
                     npc = (GameNPC)gasm.CreateInstance(template.ClassType, false); // Propagate exception to the caller
                     npc.LoadTemplate(template);
                 }
-                npc.CurrentRegion = buyer.CurrentRegion;
-                npc.CurrentRegionID = buyer.CurrentRegionID;
                 npc.Position = buyer.Position;
-                npc.Heading = buyer.Heading;
                 npc.GuildName = OwnerGuild?.Name ?? template.GuildName ?? string.Empty;
                 npc.Flags |= GameNPC.eFlags.MERCENARY | GameNPC.eFlags.NORESPAWN;
                 npc.FlagsDb = (uint)npc.Flags;

@@ -1455,13 +1455,18 @@ namespace DOL.GS
             if (speed <= 0)
                 return;
 
+            Motion = Motion.Create(Position, destination, speed);
+
             if ((int)Motion.RemainingDistance == 0)
             {
                 _OnArrivedAtTarget();
                 return;
             }
+            
+            CancelWalkToTimer();
 
-            _StartWalk(destination, speed);
+            Notify(GameNPCEvent.WalkTo, this, new WalkToEventArgs(destination, speed));
+            StartArriveAtTargetAction((int)(Motion.RemainingDistance * 1000 / speed));
         }
 
         private void StartArriveAtTargetAction(int requiredTicks)
@@ -1567,37 +1572,7 @@ namespace DOL.GS
             }
 
             // Do the actual pathing bit: Walk towards the next pathing node
-            _WalkToPathNode(nextMotionTarget, speed);
-        }
-
-        private void _WalkToPathNode(Coordinate node, short speed)
-        {
-            if (IsTurningDisabled)
-                return;
-
-            if (speed > MaxSpeed)
-                speed = MaxSpeed;
-
-            if (speed <= 0)
-                return;
-
-            _StartWalk(node, speed);
-        }
-
-        private void _StartWalk(Coordinate target, short speed)
-        {
-            CancelWalkToTimer();
-
-            if (IsMoving)
-            {
-                Position = Position;
-            }
-
-            Motion = Motion.Create(Position, target, speed);
-
-            var notifyDestination = TargetObject != null ? TargetObject.Coordinate : Coordinate.Nowhere;
-            Notify(GameNPCEvent.WalkTo, this, new WalkToEventArgs(notifyDestination, speed));
-            StartArriveAtTargetAction((int)(Motion.RemainingDistance * 1000 / speed));
+            WalkTo(nextMotionTarget, speed, npc => npc.PathTo(destination, speed));
         }
         
         private void WalkTo(Coordinate destination, short speed, Action<GameNPC> goToNextNodeCallback)
@@ -1611,7 +1586,7 @@ namespace DOL.GS
             if (speed <= 0)
                 return;
 
-            Motion = Geometry.Motion.Create(Position, destination,speed);
+            Motion = Geometry.Motion.Create(Position, destination, speed);
 
             if ((int)Motion.RemainingDistance == 0)
             {
@@ -3250,7 +3225,7 @@ namespace DOL.GS
                 //Tolerance to check if we need to go home AGAIN, otherwise we might be told to go home
                 //for a few units only and this may end before the next Arrive-At-Target Event is fired and in this case
                 //We would never lose the state "IsReturningHome", which is then followed by other erros related to agro again to players
-                else if (!Util.IsNearDistance(Position.Coordinate, SpawnPosition.Coordinate, GameNPC.CONST_WALKTOTOLERANCE))
+                else if (!IsWithinRadius(SpawnPosition.Coordinate, GameNPC.CONST_WALKTOTOLERANCE))
                 {
                     WalkToSpawn();
                     return;
@@ -3264,6 +3239,9 @@ namespace DOL.GS
 
             if (Orientation != SpawnPosition.Orientation)
                 TurnTo(SpawnPosition.Orientation);
+
+            IsReturningHome = false;
+            IsResetting = false;
 
             Notify(GameNPCEvent.NPCReset, this, EventArgs.Empty);
         }

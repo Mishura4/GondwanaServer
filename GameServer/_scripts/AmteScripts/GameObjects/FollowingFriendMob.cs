@@ -93,7 +93,7 @@ namespace DOL.GS.Scripts
                         player.Out.SendMessage(text, eChatType.CT_System, eChatLoc.CL_PopupWindow);
                     }
                     Notify(GameNPCEvent.FollowLostTarget, this, new FollowLostTargetEventArgs(player));
-                    Reset();
+                    ResetFollow();
                 }
             }
             else
@@ -112,6 +112,7 @@ namespace DOL.GS.Scripts
             }
             return true;
         }
+        
         public override bool AddToWorld()
         {
             WaitingInArea = false;
@@ -213,10 +214,10 @@ namespace DOL.GS.Scripts
 
         private void ResetTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            ResetFriendMobs();
+            ResetFollow();
         }
 
-        public void ResetFriendMobs()
+        public void ResetFollow()
         {
             if (MobGroups != null)
             {
@@ -225,15 +226,15 @@ namespace DOL.GS.Scripts
                     foreach (FollowingFriendMob mob in group.NPCs.OfType<FollowingFriendMob>())
                     {
                         if (mob.PlayerFollow != null)
-                            mob.ResetFriendMob();
+                            mob.ResetSelf();
                     }
                 }
             }
-
-            ResetFriendMob();
+            
+            ResetSelf();
         }
 
-        public void ResetFriendMob()
+        private void ResetSelf()
         {
             if (WaitingInArea == true && PlayerFollow != null)
             {
@@ -248,16 +249,12 @@ namespace DOL.GS.Scripts
             AddToWorld();
         }
 
-        public override void Reset()
-        {
-            ResetFriendMobs();
-        }
-
         public override void Die(GameObject killer)
         {
             base.Die(killer);
-            ResetFriendMobs();
+            ResetFollow();
         }
+        
         public override void SaveIntoDatabase()
         {
             base.SaveIntoDatabase();
@@ -316,7 +313,7 @@ namespace DOL.GS.Scripts
             if (PlayerFollow == null)
             {
                 Notify(GameNPCEvent.FollowLostTarget, this, new FollowLostTargetEventArgs(null));
-                Reset();
+                ResetFollow();
                 return 0;
             }
 
@@ -330,7 +327,7 @@ namespace DOL.GS.Scripts
                     PlayerFollow = null;
                     StopFollowing();
                     Notify(GameNPCEvent.FollowLostTarget, this, new FollowLostTargetEventArgs(playerFollow));
-                    Reset();
+                    ResetFollow();
                     return 0;
                 }
 
@@ -340,7 +337,7 @@ namespace DOL.GS.Scripts
                     PlayerFollow = null;
                     StopFollowing();
                     Notify(GameNPCEvent.FollowLostTarget, this, new FollowLostTargetEventArgs(playerFollow));
-                    Reset();
+                    ResetFollow();
                     return 0;
                 }
             }
@@ -361,7 +358,7 @@ namespace DOL.GS.Scripts
                 if (distanceToTarget <= m_followMinDist)
                 {
                     // Within minimum distance, nothing to do
-                    //StopMoving();
+                    StopMoving();
                     TurnTo(followTarget);
 
                     if (!wasInRange)
@@ -387,6 +384,7 @@ namespace DOL.GS.Scripts
                 if (distanceToTarget <= m_followMinDist)
                 {
                     // Within minimum distance, nothing to do
+                    StopMoving();
                     TurnTo(followTarget);
 
                     if (!wasInRange)
@@ -411,7 +409,7 @@ namespace DOL.GS.Scripts
                 targetPos += Vector.Create(Angle.Radians(angle), Util.Random(200, 300));
                 WaitingInArea = true;
                 followTarget.Notify(GameLivingEvent.BringAFriend, followTarget, new BringAFriendArgs(this, true));
-                PathTo(targetPos, 130);
+                WalkTo(targetPos, 130);
                 return 0;
             }
             else if (WaitingInArea)
@@ -420,18 +418,19 @@ namespace DOL.GS.Scripts
             }
 
             // follow on distance
-            diff = (diff / distanceToTarget) * m_followMinDist;
-            var newPos = followTarget.Coordinate - diff;
+            var distanceFactor = m_followMinDist / distanceToTarget;
+            var followOffset = diff * distanceFactor;
+            var newPos = followTarget.Coordinate - followOffset;
 
             if (followTarget == PlayerFollow)
             {
                 var speed = MaxSpeed;
                 if (IsWithinRadius(followTarget, 200))
                     speed = 0;
-                PathTo(newPos, speed);
+                WalkTo(newPos, speed);
             }
             else
-                PathTo(newPos, MaxSpeed);
+                WalkTo(newPos, MaxSpeed);
             return ServerProperties.Properties.GAMENPC_FOLLOWCHECK_TIME;
         }
 
@@ -509,9 +508,9 @@ namespace DOL.AI.Brain
             FollowingFriendMob body = (FollowingFriendMob)Body;
 
             //if player quits the game
-            if (body.PlayerFollow != null && body.PlayerFollow.ObjectState == eObjectState.Deleted)
+            if (body.PlayerFollow is { ObjectState: eObjectState.Deleted })
             {
-                body.ResetFriendMobs();
+                body.ResetFollow();
                 return;
             }
             if (!Body.IsCasting && CheckSpells(eCheckSpellType.Defensive))

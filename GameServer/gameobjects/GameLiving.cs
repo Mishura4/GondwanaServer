@@ -6004,6 +6004,12 @@ namespace DOL.GS
         /// </summary>
         public int MovementStartTick
             => Motion.StartTimeInMilliSeconds;
+        
+        public override Position Position
+        {
+            get => Motion.CurrentPosition;
+            set => Motion = Motion.Create(value, Motion.Destination, Motion.Speed);
+        }
 
         /// <summary>
         /// True if the living is moving, else false.

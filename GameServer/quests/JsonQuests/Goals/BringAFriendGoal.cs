@@ -60,9 +60,7 @@ namespace DOL.GS.Quests
         public override void AbortGoal(PlayerQuest questData)
         {
             if (lastFriend != null)
-                if (hasMobGroup)
-                    lastFriend.ResetFriendMobs();
-                else lastFriend.ResetFriendMob();
+                lastFriend.ResetFollow();
             base.AbortGoal(questData);
         }
 
