@@ -3,6 +3,7 @@ using DOL.Database;
 using DOL.GameEvents;
 using DOL.gameobjects.CustomNPC;
 using DOL.GS;
+using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
 using DOL.GS.PropertyCalc;
 using DOL.GS.ServerProperties;
@@ -37,11 +38,11 @@ namespace DOL.Territories
             this.Areas = areas;
             if (db.PortalX == null || db.PortalY == null || db.PortalZ == null)
             {
-                this.PortalPosition = null;
+                this.PortalCoordinate = null;
             }
             else
             {
-                this.PortalPosition = new Vector3(db.PortalX.Value, db.PortalY.Value, db.PortalZ.Value);
+                this.PortalCoordinate = Coordinate.Create(db.PortalX.Value, db.PortalY.Value, db.PortalZ.Value);
             }
             this.Zone = zone;
             this.RegionId = db.RegionId;
@@ -106,11 +107,11 @@ namespace DOL.Territories
             }
         }
 
-        public Territory(eType type, Zone zone, List<IArea> areas, string name, GameNPC boss, Vector3? portalPosition, ushort regionID, MobGroup group = null)
+        public Territory(eType type, Zone zone, List<IArea> areas, string name, GameNPC boss, Coordinate? portalCoordinate, ushort regionID, MobGroup group = null)
         {
             this.Type = type;
             this.Areas = areas;
-            this.PortalPosition = portalPosition;
+            this.PortalCoordinate = portalCoordinate;
             this.Zone = zone;
             this.RegionId = regionID;
             this.Name = name;
@@ -207,7 +208,7 @@ namespace DOL.Territories
             get;
         }
 
-        public Vector3? PortalPosition
+        public Coordinate? PortalCoordinate
         {
             get;
             set;
@@ -624,7 +625,7 @@ namespace DOL.Territories
 
                 if (area is Circle circle)
                 {
-                    Zone.GetObjectsInRadius(Zone.eGameObjectType.ITEM, circle.Position.X, circle.Position.Y, circle.Position.Z, (ushort)circle.Radius, new ArrayList(), true).OfType<TerritoryBanner>().ForEach(i => i.Emblem = add && m_ownerGuild != null ? m_ownerGuild.Emblem : i.OriginalEmblem);
+                    Zone.GetObjectsInRadius(Zone.eGameObjectType.ITEM, circle.Coordinate, (ushort)circle.Radius, new ArrayList(), true).OfType<TerritoryBanner>().ForEach(i => i.Emblem = add && m_ownerGuild != null ? m_ownerGuild.Emblem : i.OriginalEmblem);
                 }
                 else
                 {
@@ -1168,11 +1169,11 @@ namespace DOL.Territories
             db.ClaimedTime = ClaimedTime;
             db.Expiration = Expiration;
             db.Type = (int)Type;
-            if (this.PortalPosition != null)
+            if (this.PortalCoordinate != null)
             {
-                db.PortalX = (int)this.PortalPosition.Value.X;
-                db.PortalY = (int)this.PortalPosition.Value.Y;
-                db.PortalZ = (int)this.PortalPosition.Value.Z;
+                db.PortalX = (int)this.PortalCoordinate.Value.X;
+                db.PortalY = (int)this.PortalCoordinate.Value.Y;
+                db.PortalZ = (int)this.PortalCoordinate.Value.Z;
             }
             else
             {

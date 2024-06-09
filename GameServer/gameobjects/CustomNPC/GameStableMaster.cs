@@ -27,6 +27,7 @@ using System.Collections;
 using log4net;
 using System.Linq;
 using DOL.GS.Finance;
+using DOL.GS.Geometry;
 
 namespace DOL.GS
 {

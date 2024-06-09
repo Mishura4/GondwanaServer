@@ -75,6 +75,11 @@ namespace DOL.GS
         public bool DidFindPath { get; private set; }
 
         /// <summary>
+        /// True if this path should be visualized
+        /// </summary>
+        public bool VisualizePath { get; set; }
+
+        /// <summary>
         /// Creates a path calculator for the given NPC
         /// </summary>
         /// <param name="owner"></param>

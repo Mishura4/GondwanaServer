@@ -56,20 +56,6 @@ namespace DOL.Database
             }
         }
 
-        [DataElement(AllowDbNull = false)]
-        public DateTime LastTimeRowUpdated
-        {
-            get
-            {
-                return m_lasttimerowupdated;
-            }
-            set
-            {
-                Dirty = true;
-                m_lasttimerowupdated = value;
-            }
-        }
-
         public CoffrexPlayer()
         {
         }

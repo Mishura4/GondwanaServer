@@ -14,6 +14,7 @@ using DOL.GS.PacketHandler;
 using DOL.Database;
 using DOL.Events;
 using DOL.Language;
+using Vector = DOL.GS.Geometry.Vector;
 
 namespace DOL.GS.Scripts
 {
@@ -158,7 +159,7 @@ namespace DOL.GS.Scripts
                     Level = 1,
                     Model = 1,
                     Realm = 0,
-                    Position = obj.Position + new Vector3(0, 0, 800),
+                    Position = obj.Position + Vector.Create(0, 0, 800),
                     CurrentRegion = obj.CurrentRegion
                 };
 
@@ -171,26 +172,26 @@ namespace DOL.GS.Scripts
 
             //Pyramide:
             //Base
-            mobs[2].Position += new Vector3(250, 250, 0);
-            mobs[3].Position += new Vector3(250, 0, 0);
-            mobs[4].Position += new Vector3(250, -250, 0);
-            mobs[5].Position += new Vector3(0, -250, 0);
-            mobs[6].Position -= new Vector3(250, 250, 0);
-            mobs[7].Position -= new Vector3(250, 0, 0);
-            mobs[8].Position += new Vector3(-250, 250, 0);
-            mobs[9].Position += new Vector3(0, 250, 0);
+            mobs[2].Position += Vector.Create(250, 250, 0);
+            mobs[3].Position += Vector.Create(250, 0, 0);
+            mobs[4].Position += Vector.Create(250, -250, 0);
+            mobs[5].Position += Vector.Create(0, -250, 0);
+            mobs[6].Position -= Vector.Create(250, 250, 0);
+            mobs[7].Position -= Vector.Create(250, 0, 0);
+            mobs[8].Position += Vector.Create(-250, 250, 0);
+            mobs[9].Position += Vector.Create(0, 250, 0);
 
             //2e étage
-            mobs[10].Position += new Vector3(+125, +125, 250);
-            mobs[11].Position += new Vector3(+125, -125, 250);
-            mobs[12].Position += new Vector3(-125, -125, 250);
-            mobs[13].Position += new Vector3(-125, +125, 250);
+            mobs[10].Position += Vector.Create(+125, +125, 250);
+            mobs[11].Position += Vector.Create(+125, -125, 250);
+            mobs[12].Position += Vector.Create(-125, -125, 250);
+            mobs[13].Position += Vector.Create(-125, +125, 250);
 
-            mobs[14].Position += new Vector3(0, 0, 250);
+            mobs[14].Position += Vector.Create(0, 0, 250);
             mobs[14].Size = 75;
 
             //Sommet
-            mobs[15].Position += new Vector3(0, 0, 500);
+            mobs[15].Position += Vector.Create(0, 0, 500);
             mobs[15].Size = 100;
 
             foreach (KeyValuePair<int, GameNPC> mob in mobs)

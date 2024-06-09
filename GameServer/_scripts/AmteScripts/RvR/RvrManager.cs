@@ -8,6 +8,7 @@ using AmteScripts.Utils;
 using DOL.Database;
 using DOL.Events;
 using DOL.GS;
+using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
 using DOL.GS.ServerProperties;
 using DOL.Language;
@@ -51,7 +52,7 @@ namespace AmteScripts.Managers
         private static DateTime _startTime = DateTime.Today.AddHours(23D).Add(TimeSpan.FromMinutes(5)); //20H00
         private static DateTime _endTime = _startTime.Add(TimeSpan.FromMinutes(20)); //2H00 + 1
         private const int _checkInterval = 30 * 1000; // 30 seconds
-        private static readonly GameLocation _stuckSpawn = new GameLocation("", 51, 434303, 493165, 3088, 1069);
+        private static readonly Position _stuckSpawn = Position.Create(51, 434303, 493165, 3088, 1069);
         private Dictionary<ushort, IList<string>> RvrStats = new Dictionary<ushort, IList<string>>();
         private Dictionary<string, int> Scores = new Dictionary<string, int>();
         private Dictionary<GamePlayer, short> kills = new Dictionary<GamePlayer, short>();
@@ -172,7 +173,7 @@ namespace AmteScripts.Managers
                     m.Realm = guild.Realm;
                 });
                 map.RvRTerritory.Boss.Realm = guild.Realm;
-                AbstractGameKeep keep = GameServer.KeepManager.GetKeepCloseToSpot(map.RvRTerritory.RegionId, map.RvRTerritory.Boss.Position, 100000);
+                AbstractGameKeep keep = GameServer.KeepManager.GetKeepCloseToSpot(map.RvRTerritory.Boss.Position, 100000);
                 keep.TempRealm = guild.Realm;
                 keep.Reset(guild.Realm);
                 keep.Guild = guild;
@@ -186,7 +187,7 @@ namespace AmteScripts.Managers
 
         public RvRTerritory GetRvRTerritory(ushort regionId)
         {
-            var map = this._maps.Values.FirstOrDefault(v => v.RvRTerritory != null && v.Location.RegionID.Equals(regionId));
+            var map = this._maps.Values.FirstOrDefault(v => v.RvRTerritory != null && v.Position.RegionID.Equals(regionId));
 
             if (map == null)
             {
@@ -348,16 +349,16 @@ namespace AmteScripts.Managers
             //    _maps.Add(name, map);
             //});
 
-            _regions = _maps.Values.GroupBy(v => v.Location.RegionID).Select(v => v.Key).OrderBy(v => v);
+            _regions = _maps.Values.GroupBy(v => v.Position.RegionID).Select(v => v.Key).OrderBy(v => v);
             _regions.Foreach(r => this.RvrStats.Add(r, new string[] { }));
 
-            return from m in _maps select m.Value.Location.RegionID;
+            return from m in _maps select m.Value.Position.RegionID;
         }
 
         private RvRMap BuildRvRMap(GameNPC initNpc)
         {
             RvRTerritory rvrTerritory = null;
-            if (!_maps.Values.Any(v => v.Location.RegionID.Equals(initNpc.CurrentRegionID)))
+            if (!_maps.Values.Any(v => v.Position.RegionID.Equals(initNpc.CurrentRegionID)))
             {
                 var lord = (LordRvR)(initNpc.CurrentRegion.Objects.FirstOrDefault(o => o is LordRvR));
 
@@ -369,12 +370,12 @@ namespace AmteScripts.Managers
 
                 var areaName = string.IsNullOrEmpty(lord.GuildName) ? initNpc.Name : lord.GuildName;
                 var area = new Area.Circle(areaName, lord.Position.X, lord.Position.Y, lord.Position.Z, RVR_RADIUS);
-                rvrTerritory = new RvRTerritory(lord.CurrentZone, new List<IArea>{area}, area.Description, lord,  area.Position, lord.CurrentRegionID, null);
+                rvrTerritory = new RvRTerritory(lord.CurrentZone, new List<IArea>{area}, area.Description, lord,  area.Coordinate, lord.CurrentRegionID, null);
             }
 
             return new RvRMap()
             {
-                Location = new GameLocation(initNpc.Name, initNpc.CurrentRegionID, initNpc.Position.X, initNpc.Position.Y, initNpc.Position.Z),
+                Position = initNpc.Position,
                 RvRTerritory = rvrTerritory
             };
         }
@@ -610,7 +611,7 @@ namespace AmteScripts.Managers
                 m.RvRTerritory.Reset();
             });
 
-            this._maps.Values.GroupBy(v => v.Location.RegionID).ForEach(region =>
+            this._maps.Values.GroupBy(v => v.Position.RegionID).ForEach(region =>
             {
                 var characters = GameServer.Database.SelectObjects<DOLCharacters>(c => c.Region == +region.Key);
                 foreach (DOLCharacters chr in characters)
@@ -815,7 +816,7 @@ namespace AmteScripts.Managers
                 //    }                 
                 //}
 
-                player.MoveTo(_maps[key].Location);
+                player.MoveTo(_maps[key].Position);
                 player.Bind(true);
                 return true;
             }
@@ -922,7 +923,7 @@ namespace AmteScripts.Managers
                 long prHib = clients.Where(c => c.Player.Realm == eRealm.Hibernia).Sum(c => c.Player.Guild.RealmPoints);
                 long prMid = clients.Where(c => c.Player.Realm == eRealm.Midgard).Sum(c => c.Player.Guild.RealmPoints);
 
-                var maps = this._maps.Values.Where(m => m.RvRTerritory != null && m.Location.RegionID.Equals(player.CurrentRegionID));
+                var maps = this._maps.Values.Where(m => m.RvRTerritory != null && m.Position.RegionID.Equals(player.CurrentRegionID));
 
                 if (maps != null)
                 {
@@ -977,7 +978,7 @@ namespace AmteScripts.Managers
 
         public bool IsRvRRegion(ushort id)
         {
-            return _maps.Values.Any(v => v.Location.RegionID.Equals(id));
+            return _maps.Values.Any(v => v.Position.RegionID.Equals(id));
         }
 
         private static void _MessageToLiving(GameLiving living, string message)
@@ -990,6 +991,6 @@ namespace AmteScripts.Managers
     public class RvRMap
     {
         public RvRTerritory RvRTerritory { get; set; }
-        public GameLocation Location { get; set; }
+        public Position Position { get; set; }
     }
 }

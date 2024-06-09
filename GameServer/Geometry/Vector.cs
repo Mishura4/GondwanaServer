@@ -70,6 +70,12 @@ public struct Vector
     public static Vector operator *(double factor, Vector vec)
         => vec * factor;
 
+    public static Vector operator /(Vector vec, double factor)
+        => Create((int)(vec.X / factor), (int)(vec.Y / factor), (int)(vec.Z / factor));
+
+    public static Vector operator /(double factor, Vector vec)
+        => vec / factor;
+
     public static Vector operator +(Vector vecA, Vector vecB)
         => Create(vecA.X + vecB.X, vecA.Y + vecB.Y, vecA.Z + vecB.Z);
 

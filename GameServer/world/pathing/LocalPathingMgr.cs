@@ -270,10 +270,10 @@ namespace DOL.GS
         /// <summary>
         /// Returns the closest point on the navmesh (UNTESTED! EXPERIMENTAL! WILL GO SUPERNOVA ON USE! MAYBE!?)
         /// </summary>
-        public Vector3? GetClosestPointAsync(Zone zone, Vector3 position, float xRange = 256f, float yRange = 256f, float zRange = 256f)
+        public Vector3? GetClosestPointAsync(Zone zone, Coordinate position, float xRange = 256f, float yRange = 256f, float zRange = 256f)
         {
             if (!_navmeshPtrs.ContainsKey(zone.ID))
-                return position; // Assume the point is safe if we don't have a navmesh
+                return position.ToSysVector3(); // Assume the point is safe if we don't have a navmesh
                                  //GSStatistics.Paths.Inc();
 
             Vector3? result = null;
@@ -284,7 +284,7 @@ namespace DOL.GS
                 _navmeshQueries.Value.Add(zone.ID, query);
             }
             var ptrs = _navmeshPtrs[zone.ID];
-            var center = ToRecastFloats(position + Vector3.UnitZ * 8);
+            var center = ToRecastFloats(position.ToSysVector3() + Vector3.UnitZ * 8);
             var outVec = new float[3];
 
             var defaultInclude = (dtPolyFlags.ALL ^ dtPolyFlags.DISABLED);

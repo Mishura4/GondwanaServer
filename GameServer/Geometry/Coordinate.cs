@@ -8,6 +8,8 @@ public struct Coordinate
     public int Y => coordinate.Y;
     public int Z => coordinate.Z;
 
+    public static Coordinate Create(System.Numerics.Vector3 v) => new () { coordinate = Vector.Create((int)v.X, (int)v.Y, (int)v.Z) };
+
     public static Coordinate Create(int x = 0, int y = 0, int z = 0)
         => new() { coordinate = Vector.Create(x, y, z) };
 

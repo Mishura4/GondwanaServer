@@ -26,6 +26,7 @@ using DOL.GS.Movement;
 using DOL.GS.PacketHandler;
 using log4net;
 using DOL.GS.Finance;
+using DOL.GS.Geometry;
 
 namespace DOL.GS
 {

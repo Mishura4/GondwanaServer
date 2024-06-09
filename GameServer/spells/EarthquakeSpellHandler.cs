@@ -1,5 +1,6 @@
 ﻿using DOL.Geometry;
 using DOL.GS.Effects;
+using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
 using DOL.GS.PlayerClass;
 using System;
@@ -11,7 +12,11 @@ namespace DOL.GS.Spells
     {
         uint unk1 = 0;
         float radius, intensity, duration, delay = 0;
-        int x, y, z = 0;
+        private Coordinate Coordinate
+        {
+            get;
+            set;
+        }
 
         public EarthquakeSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine)
         {
@@ -29,14 +34,11 @@ namespace DOL.GS.Spells
             }
             if (Caster.GroundTargetPosition == Position.Nowhere)
             {
-                x = (int)Caster.Position.X;
-                y = (int)Caster.Position.Y;
+                Coordinate = Caster.Coordinate;
             }
             else
             {
-                x = (int)Caster.Position.X;
-                y = (int)Caster.Position.Y;
-                z = (int)Caster.Position.Z;
+                Coordinate = Caster.GroundTargetPosition.Coordinate;
             }
             /*if (args.Length > 1)
             {
@@ -81,13 +83,13 @@ namespace DOL.GS.Spells
 
             if (Caster is GamePlayer player)
             {
-                int distance = (int)System.Numerics.(int)player.Coordinate.DistanceTo(new System.Numerics.Vector3(x, y, player.Position.Z));
+                int distance = (int)player.Coordinate.DistanceTo(Coordinate, true);
                 float newIntensity = intensity * (1 - distance / radius);
                 GSTCPPacketOut pak = new GSTCPPacketOut(0x47);
                 pak.WriteIntLowEndian(unk1);
-                pak.WriteIntLowEndian((uint)x);
-                pak.WriteIntLowEndian((uint)y);
-                pak.WriteIntLowEndian((uint)z);
+                pak.WriteIntLowEndian((uint)Coordinate.X);
+                pak.WriteIntLowEndian((uint)Coordinate.Y);
+                pak.WriteIntLowEndian((uint)Coordinate.Z);
                 pak.Write(BitConverter.GetBytes(radius), 0, sizeof(float));
                 pak.Write(BitConverter.GetBytes(newIntensity), 0, sizeof(float));
                 pak.Write(BitConverter.GetBytes(duration), 0, sizeof(float));
@@ -130,13 +132,13 @@ namespace DOL.GS.Spells
 
                 if (Caster is GamePlayer player)
                 {
-                    int distance = (int)System.Numerics.(int)player.Coordinate.DistanceTo(new System.Numerics.Vector3(x, y, player.Position.Z));
+                    int distance = (int)player.Coordinate.DistanceTo(Coordinate, true);
                     float newIntensity = intensity * (1 - distance / radius);
                     GSTCPPacketOut pak = new GSTCPPacketOut(0x47);
                     pak.WriteIntLowEndian(unk1);
-                    pak.WriteIntLowEndian((uint)x);
-                    pak.WriteIntLowEndian((uint)y);
-                    pak.WriteIntLowEndian((uint)z);
+                    pak.WriteIntLowEndian((uint)Coordinate.X);
+                    pak.WriteIntLowEndian((uint)Coordinate.Y);
+                    pak.WriteIntLowEndian((uint)Coordinate.Z);
                     pak.Write(BitConverter.GetBytes(radius), 0, sizeof(float));
                     pak.Write(BitConverter.GetBytes(newIntensity), 0, sizeof(float));
                     pak.Write(BitConverter.GetBytes(duration), 0, sizeof(float));
@@ -158,7 +160,7 @@ namespace DOL.GS.Spells
 
         public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
-            int distance = (int)System.Numerics.(int)target.Coordinate.DistanceTo(new System.Numerics.Vector3(x, y, target.Position.Z));
+            int distance = (int)target.Coordinate.DistanceTo(Coordinate, true);
             if (distance > radius)
             {
                 CancelPulsingSpell(target, Spell.SpellType);
@@ -173,9 +175,9 @@ namespace DOL.GS.Spells
                     return;
                 GSTCPPacketOut pakBis = new GSTCPPacketOut(0x47);
                 pakBis.WriteIntLowEndian(unk1);
-                pakBis.WriteIntLowEndian((uint)x);
-                pakBis.WriteIntLowEndian((uint)y);
-                pakBis.WriteIntLowEndian((uint)z);
+                pakBis.WriteIntLowEndian((uint)Coordinate.X);
+                pakBis.WriteIntLowEndian((uint)Coordinate.Y);
+                pakBis.WriteIntLowEndian((uint)Coordinate.Z);
                 pakBis.Write(BitConverter.GetBytes(radius), 0, sizeof(float));
                 pakBis.Write(BitConverter.GetBytes(newIntensity), 0, sizeof(float));
                 pakBis.Write(BitConverter.GetBytes(duration), 0, sizeof(float));

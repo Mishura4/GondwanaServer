@@ -312,8 +312,9 @@ namespace DOL.GS
         {
             get
             {
-                    return CurrentZone?.GetAreasOfSpot(Coordinate) ?? new List<IArea>();
+                return CurrentZone?.GetAreasOfSpot(Coordinate) ?? new List<IArea>();
             }
+            set { }
         }
 
 

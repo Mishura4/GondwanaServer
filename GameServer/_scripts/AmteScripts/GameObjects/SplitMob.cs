@@ -8,6 +8,7 @@ using DOL.AI.Brain;
 using DOL.Events;
 using DOL.Database;
 using DOL.GS.PacketHandler;
+using DOL.GS.Geometry;
 
 using log4net;
 namespace DOL.GS.Scripts
@@ -56,11 +57,10 @@ namespace DOL.GS.Scripts
 
 
         }
+        
         public void SetVariables(GameNPC mob)
         {
-            mob.Position = new System.Numerics.Vector3(this.Position.X + 10, this.Position.Y + 10, this.Position.Z);
-            mob.CurrentRegion = this.CurrentRegion;
-            mob.Heading = this.Heading;
+            mob.Position = Position.With(Coordinate.Create(this.Coordinate.X + 10, this.Coordinate.Y + 10, this.Coordinate.Z));
             mob.Level = this.Level;
             mob.Realm = this.Realm;
             mob.Name = "Split's Minion";

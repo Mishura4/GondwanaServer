@@ -95,7 +95,7 @@ namespace DOL.GS
         }
 
         public DBTPPoint DbTPPoint { get => dbTPPoint; set => dbTPPoint = value; }
-        public ushort Region { get => region; set => region = value; }
+        public ushort Region { get => Position.RegionID; }
 
         public TPPoint GetNextTPPoint()
         {

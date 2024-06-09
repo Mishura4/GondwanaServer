@@ -44,7 +44,7 @@ namespace DOL.GS.Spells
                 return false;
             }
 
-            foreach (GameNPC npc in Caster.CurrentRegion.GetNPCsInRadius(Caster.GroundTargetCoordinate.Coordinate, (ushort)Properties.TURRET_AREA_CAP_RADIUS, false, true))
+            foreach (GameNPC npc in Caster.CurrentRegion.GetNPCsInRadius(Caster.GroundTargetPosition.Coordinate, (ushort)Properties.TURRET_AREA_CAP_RADIUS, false, true))
                 if (npc.Brain is TurretFNFBrain)
                     nCount++;
 

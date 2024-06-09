@@ -1,11 +1,14 @@
 using System;
 using DOL.GS;
 using DOL.GS.Geometry;
+using System.Numerics;
 
 namespace DOL
 {
     public static class GameMath
     {
+        public static Vector2 ToVector2(this Vector3 v) => new Vector2(v.X, v.Y);
+        
         /// <summary>
         /// The factor to convert a heading value to radians
         /// </summary>

@@ -22,7 +22,6 @@ using DOL.Database;
 using DOL.Language;
 using DOL.GS.PacketHandler;
 using AmteScripts.Managers;
-using DOL.Language;
 
 namespace DOL.GS.Spells
 {

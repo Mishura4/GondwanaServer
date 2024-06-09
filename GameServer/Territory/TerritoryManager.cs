@@ -4,6 +4,7 @@ using DOL.Events;
 using DOL.GameEvents;
 using DOL.GS;
 using DOL.GS.Commands;
+using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
 using DOL.GS.PropertyCalc;
 using DOL.GS.ServerProperties;
@@ -428,18 +429,18 @@ namespace DOL.Territories
             }
 
             var coords = GetCoordinates(area);
-            if (coords == null)
+            if (coords == Coordinate.Nowhere)
             {
                 return null;
             }
 
-            var zone = region.GetZone(coords.X, coords.Y);
+            var zone = region.GetZone(coords);
             if (zone == null)
             {
                 return null;
             }
 
-            var territory = new Territory(type, zone, new List<IArea>{area}, (area as AbstractArea)?.Description ?? "New territory", boss, new Vector3(coords.X, coords.Y, coords.Z), regionId, group);
+            var territory = new Territory(type, zone, new List<IArea>{area}, (area as AbstractArea)?.Description ?? "New territory", boss, coords, regionId, group);
 
             try
             {
@@ -455,14 +456,14 @@ namespace DOL.Territories
             return territory;
         }
 
-        public static AreaCoordinate GetCoordinates(IArea area)
+        public static Coordinate GetCoordinates(IArea area)
         {
             return area switch
             {
-                DOL.GS.Area.Circle circle => new AreaCoordinate() { X = circle.Position.X, Y = circle.Position.Y, Z = circle.Position.Z },
-                Square sq => new AreaCoordinate() { X = sq.Position.X, Y = sq.Position.Y, Z = sq.Position.Z },
-                Polygon poly => new AreaCoordinate() { X = poly.Position.X, Y = poly.Position.Y, Z = poly.Position.Z },
-                _ => null
+                DOL.GS.Area.Circle circle => circle.Coordinate,
+                Square sq => sq.Coordinate,
+                Polygon poly => poly.Coordinate,
+                _ => Coordinate.Nowhere
             };
         }
 

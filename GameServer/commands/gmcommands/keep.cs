@@ -18,6 +18,7 @@
  */
 using System;
 using DOL.Database;
+using DOL.GS.Geometry;
 using DOL.GS.Keeps;
 using DOL.Language;
 
@@ -93,7 +94,7 @@ namespace DOL.GS.Commands
 
             AbstractGameKeep myKeep = (AbstractGameKeep)client.Player.TempProperties.getProperty<object>(TEMP_KEEP_LAST, null);
             if (myKeep == null) myKeep = (client.Player.TargetObject as GameKeepComponent)?.Keep;
-            if (myKeep == null) myKeep = GameServer.KeepManager.GetKeepCloseToSpot(client.Player.CurrentRegionID, client.Player, 10000);
+            if (myKeep == null) myKeep = GameServer.KeepManager.GetKeepCloseToSpot(client.Player.Position, 10000);
 
 
             switch (args[1])

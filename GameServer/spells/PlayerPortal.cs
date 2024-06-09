@@ -92,12 +92,8 @@ namespace DOL.GS.Spells
             secondPortalNPC = CreatePortalNPC(secondPortalNPC, player);
 
             // set to player bind location
-            secondPortal.CurrentRegion = WorldMgr.GetRegion((ushort)player.BindRegion);
-            secondPortal.Position = new Vector3(player.BindXpos, player.BindYpos, player.BindZpos);
-            secondPortal.Heading = (ushort)player.BindHeading;
-            secondPortalNPC.CurrentRegion = WorldMgr.GetRegion((ushort)player.BindRegion);
-            secondPortalNPC.Position = new Vector3(player.BindXpos, player.BindYpos, player.BindZpos);
-            secondPortalNPC.Heading = (ushort)player.BindHeading;
+            secondPortal.Position = player.BindPosition;
+            secondPortalNPC.Position = player.BindPosition;
 
             if (player == null)
                 return;

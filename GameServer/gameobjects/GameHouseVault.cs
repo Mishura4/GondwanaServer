@@ -21,6 +21,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DOL.Database;
 using DOL.GS.Housing;
+using DOL.GS.Geometry;
 
 namespace DOL.GS
 {

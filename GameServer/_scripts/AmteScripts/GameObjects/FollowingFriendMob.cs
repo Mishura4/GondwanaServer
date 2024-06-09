@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using System.Timers;
 using DOL.AI.Brain;
 using DOL.Database;
 using DOL.Events;
 using DOL.GS;
+using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
 using DOL.GS.Scripts;
 using DOL.MobGroups;
@@ -59,7 +59,7 @@ namespace DOL.GS.Scripts
         {
             if (!base.Interact(player) && (IsPeaceful || WaitingInArea ||
             (((StandardMobBrain)Brain).AggroLevel == 0 && ((StandardMobBrain)Brain).AggroRange == 0))
-            && CurrentRegion.GetAreasOfSpot(Position).OfType<AbstractArea>().FirstOrDefault(a => a.DbArea != null && a.DbArea.ObjectId == AreaToEnter) != null)
+            && CurrentRegion.GetAreasOfSpot(Coordinate).OfType<AbstractArea>().FirstOrDefault(a => a.DbArea != null && a.DbArea.ObjectId == AreaToEnter) != null)
                 return false;
             if (PlayerFollow != null && PlayerFollow == player)
             {
@@ -248,7 +248,7 @@ namespace DOL.GS.Scripts
             AddToWorld();
         }
 
-        public void Reset()
+        public override void Reset()
         {
             ResetFriendMobs();
         }
@@ -346,14 +346,14 @@ namespace DOL.GS.Scripts
             }
 
             //Calculate the difference between our position and the players position
-            var diff = followTarget.Position - Position;
-
+            var diff = followTarget.Coordinate - Coordinate;
+            
             //SH: Removed Z checks when one of the two Z values is zero(on ground)
             float distanceToTarget;
             if (followTarget.Position.Z == 0 || Position.Z == 0)
-                distanceToTarget = (float)Math.Sqrt(diff.X * diff.X + diff.Y * diff.Y);
+                distanceToTarget = GetDistance2DTo(followTarget);
             else
-                distanceToTarget = (float)Math.Sqrt(diff.X * diff.X + diff.Y * diff.Y + diff.Z * diff.Z);
+                distanceToTarget = GetDistanceTo(followTarget);
 
             //Are we in range still?
             if (followTarget == PlayerFollow)
@@ -405,10 +405,10 @@ namespace DOL.GS.Scripts
             if (area != null && !WaitingInArea)
             {
                 StopFollowing();
-                var targetPos = new Vector3(area.DbArea.X, area.DbArea.Y, area.DbArea.Z);
+                var targetPos = Coordinate.Create(area.DbArea.X, area.DbArea.Y, area.DbArea.Z);
                 var angle = Math.Atan2(targetPos.Y - Position.Y, targetPos.X - Position.X);
-                targetPos.X = area.DbArea.X + (float)Math.Cos(angle) * Util.Random(200, 300);
-                targetPos.Y = area.DbArea.Y + (float)Math.Sin(angle) * Util.Random(200, 300);
+
+                targetPos += Vector.Create(Angle.Radians(angle), Util.Random(200, 300));
                 WaitingInArea = true;
                 followTarget.Notify(GameLivingEvent.BringAFriend, followTarget, new BringAFriendArgs(this, true));
                 PathTo(targetPos, 130);
@@ -421,12 +421,12 @@ namespace DOL.GS.Scripts
 
             // follow on distance
             diff = (diff / distanceToTarget) * m_followMinDist;
-            var newPos = followTarget.Position - diff;
+            var newPos = followTarget.Coordinate - diff;
 
             if (followTarget == PlayerFollow)
             {
                 var speed = MaxSpeed;
-                if (GameMath.GetDistance2D(Position, followTarget.Position) < 200)
+                if (IsWithinRadius(followTarget, 200))
                     speed = 0;
                 PathTo(newPos, speed);
             }

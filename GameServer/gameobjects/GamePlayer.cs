@@ -1750,7 +1750,6 @@ namespace DOL.GS
                                 {
                                     if (BindRegion != 163)
                                     {
-                                        relRegion = 163;
                                         switch (Realm)
                                         {
                                             case eRealm.Albion:
@@ -1869,7 +1868,7 @@ namespace DOL.GS
 
             int oldRegion = CurrentRegionID;
 
-            if (oldRegion != relRegion)
+            if (oldRegion != releasePosition.RegionID)
             {
                 Out.SendPlayerRevive(this);
                 Out.SendUpdatePoints();
@@ -10953,8 +10952,6 @@ namespace DOL.GS
                 IsJumping = true;
             }
             bool hasPetToMove = false;
-            //Remove the last update tick property, to prevent speedhack messages during zoning and teleporting!
-            LastPositionUpdateTick = 0;
 
             if (ControlledBrain != null && ControlledBrain.WalkState != eWalkState.Stay)
             {
@@ -10966,7 +10963,6 @@ namespace DOL.GS
             //Set the new destination
             //Current Speed = 0 when moved ... else X,Y,Z continue to be modified
             CurrentSpeed = 0;
-            MovementStartTick = GameTimer.GetTickCount();
             Position = position;
 
             //Remove the last update tick property, to prevent speedhack messages during zoning and teleporting!
@@ -10974,9 +10970,6 @@ namespace DOL.GS
             //If the destination is in another region
             if (position.RegionID != positionBeforePort.RegionID)
             {
-                //Set our new region
-                CurrentRegionID = regionID;
-
                 //Send the region update packet, the rest will be handled
                 //by the packethandlers
                 Out.SendRegionChanged();
@@ -13536,11 +13529,6 @@ namespace DOL.GS
                     lock (LastUniquePositions)
                     {
                         DBCharacter.SetPosition(LastUniquePositions[LastUniquePositions.Length - 1]);
-                        DBCharacter.Xpos = (int)loc.Position.X;
-                        DBCharacter.Ypos = (int)loc.Position.Y;
-                        DBCharacter.Zpos = (int)loc.Position.Z;
-                        DBCharacter.Region = loc.RegionID;
-                        DBCharacter.Direction = loc.Heading;
                     }
                 }
                 GameServer.Database.SaveObject(DBCharacter);

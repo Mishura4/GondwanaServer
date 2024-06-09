@@ -1,5 +1,6 @@
 ﻿using DOL.Events;
 using DOL.GS.Behaviour;
+using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
 using System;
 using System.Collections.Generic;
@@ -20,19 +21,19 @@ namespace DOL.GS.Quests
         public EnterAreaGoal(DataQuestJson quest, int goalId, dynamic db) : base(quest, goalId, (object)db)
         {
             m_text = db.Text;
-            m_area = new Area.Circle($"{quest.Name} EnterAreaGoal {goalId}", new Vector3((float)db.AreaCenter.X, (float)db.AreaCenter.Y, (float)db.AreaCenter.Z), (int)db.AreaRadius);
+            m_area = new Area.Circle($"{quest.Name} EnterAreaGoal {goalId}", Coordinate.Create((int)((float)db.AreaCenter.X), (int)((float)db.AreaCenter.Y), (int)((float)db.AreaCenter.Z)), (int)db.AreaRadius);
             m_area.DisplayMessage = false;
             m_areaRegion = db.AreaRegion;
 
             var reg = WorldMgr.GetRegion(m_areaRegion);
             reg.AddArea(m_area);
-            PointA = new QuestZonePoint(reg.GetZone(m_area.Position), m_area.Position);
+            PointA = new QuestZonePoint(reg.GetZone(m_area.Coordinate), m_area.Coordinate);
         }
 
         public override Dictionary<string, object> GetDatabaseJsonObject()
         {
             var dict = base.GetDatabaseJsonObject();
-            dict.Add("AreaCenter", m_area.Position);
+            dict.Add("AreaCenter", m_area.Coordinate);
             dict.Add("AreaRadius", m_area.Radius);
             dict.Add("AreaRegion", m_areaRegion);
             dict.Add("Text", m_text);

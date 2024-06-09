@@ -25,7 +25,7 @@ namespace DOL.GS
         ///   Returns the closest point on the navmesh, if available, or no point found.
         ///   Returns the input position if no navmesh is available
         /// </summary>
-        Vector3? GetClosestPointAsync(Zone zone, Vector3 position, float xRange = 256f, float yRange = 256f, float zRange = 256f);
+        Vector3? GetClosestPointAsync(Zone zone, Coordinate position, float xRange = 256f, float yRange = 256f, float zRange = 256f);
 
         /// <summary>
         ///   True if pathing is enabled for the specified zone

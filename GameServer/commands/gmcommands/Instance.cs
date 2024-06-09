@@ -306,8 +306,7 @@ namespace DOL.GS.Commands
                             }
 
                             // save current position for use with /instance exit
-                            GameLocation saveLocation = new GameLocation(player.Name + "_exit", player.CurrentRegionID, player.Position, player.Heading);
-                            player.TempProperties.setProperty(saveLocation.Name, saveLocation);
+                            player.TempProperties.setProperty(player.Name + "_exit", player.Position);
 
                             bool success = true;
 

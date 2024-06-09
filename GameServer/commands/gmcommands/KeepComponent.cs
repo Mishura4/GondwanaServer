@@ -166,14 +166,8 @@ namespace DOL.GS.Commands
                             .With(Angle.Heading(component.ComponentHeading * 1024) + myKeep.Orientation);
                         component.ComponentHeading = (client.Player.Orientation - myKeep.Orientation).InDegrees / 90;
                         component.Keep = myKeep;
-                        //todo good formula
-                        //component.ComponentX = (component.X - myKeep.X) / 148;
-                        //component.ComponentY = (myKeep.Y - component.Y) / 148;
-
-                        //component.ComponentX = (int)((148 * Math.Sin(angle) * myKeep.X - 148 * Math.Sin(angle) * client.Player.X + client.Player.Y - myKeep.Y)
-                        //    / (148 * Math.Sin(angle) - 148 * 148 * 2 * Math.Sin(angle) * Math.Cos(angle)));
-                        //component.ComponentY = (int)((myKeep.Y - client.Player.Y + 148 * Math.Sin(angle) * component.ComponentX) / (148 * Math.Cos(angle)));
-
+                        
+                        var angle = myKeep.Orientation.InRadians;
                         component.ComponentX = CalcCX(client.Player, myKeep, angle);
                         component.ComponentY = CalcCY(client.Player, myKeep, angle);
 
@@ -356,6 +350,5 @@ namespace DOL.GS.Commands
                 return (int)((keepPos.Y - playerPos.Y + 148 * Math.Sin(angle) * cx) / (148 * Math.Cos(angle)));
             }
         }
-    }
     }
 }

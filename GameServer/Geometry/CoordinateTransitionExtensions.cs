@@ -15,5 +15,5 @@ public static class CoordinateTransitionExtensions
 
     [Obsolete("This extension is transitional and going to be removed.")]
     public static Coordinate ToCoordinate(this IPoint3D point)
-            => Coordinate.Create(point.X, point.Y, point.Z);
+            => Coordinate.Create((int)point.Position.X, (int)point.Position.Y, (int)point.Position.Z);
 }

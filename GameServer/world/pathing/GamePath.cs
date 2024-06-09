@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Numerics;
+﻿using DOL.GS.Geometry;
+using System.Collections.Generic;
 
 namespace DOL.GS
 {
@@ -17,7 +17,7 @@ namespace DOL.GS
         public string Name;
         public Region Region;
         public bool HasLavaEffect = false;
-        public List<(GameLocation point, short speed, MarkerModel model)> Points = new List<(GameLocation point, short speed, MarkerModel model)>();
+        public List<(Coordinate point, short speed, MarkerModel model)> Points = new List<(Coordinate point, short speed, MarkerModel model)>();
 
         public List<GameStaticItem> DebugObjs = new List<GameStaticItem>();
 
@@ -27,7 +27,7 @@ namespace DOL.GS
             Region = region;
         }
 
-        public void Append(GameLocation point, short speed, MarkerModel model = MarkerModel.Brown)
+        public void Append(Coordinate point, short speed, MarkerModel model = MarkerModel.Brown)
         {
             Points.Add((point, speed, model));
         }
@@ -40,10 +40,9 @@ namespace DOL.GS
             {
                 //Create a new object
                 var obj = new GameStaticItem();
-                obj.Position = pt.Position + Vector3.UnitZ;
+                obj.Position = Position.Create(Region.ID, pt);
                 obj.CurrentRegion = Region;
-                obj.Heading = pt.Heading;
-                obj.Name = $"{pt.Name}--{speed} spd";
+                obj.Name = $"{pt.ToString()}--{speed} spd";
                 obj.Model = 2965;
                 switch (model)
                 {

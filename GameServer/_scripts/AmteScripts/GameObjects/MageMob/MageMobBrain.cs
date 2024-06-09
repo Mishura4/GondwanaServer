@@ -4,6 +4,7 @@ using DOL.gameobjects.CustomNPC;
 using DOL.GS;
 using DOL.GS.Scripts;
 using System.Numerics;
+using DOL.GS.Geometry;
 
 namespace DOL.AI.Brain
 {
@@ -38,13 +39,13 @@ namespace DOL.AI.Brain
         ///<param name="target">The target to flee.</param>
         protected virtual void CalculateFleeTarget(GameLiving target)
         {
-            ushort TargetAngle = (ushort)((Body.GetHeading(target) + 2048) % 4096);
+            ushort TargetAngle = Body.GetAngleTo(target.Coordinate).InHeading;
 
             var fleePoint = Body.GetPointFromHeading(TargetAngle, 300);
-            var point = PathingMgr.Instance.GetClosestPoint(Body.CurrentZone, new Vector3(fleePoint, Body.Position.Z), 128, 128, 256);
+            var point = PathingMgr.Instance.GetClosestPointAsync(Body.CurrentZone, Coordinate.Create(fleePoint.X, fleePoint.Y, Body.Position.Z), 128, 128, 256);
             Body.StopFollowing();
             Body.StopAttack();
-            Body.PathTo(point.HasValue ? point.Value : new Vector3(fleePoint, Body.Position.Z), Body.MaxSpeed);
+            Body.PathTo(point.HasValue ? Coordinate.Create(point.Value) : Coordinate.Create(fleePoint.X, fleePoint.Y, Body.Position.Z), Body.MaxSpeed);
         }
 
     }

@@ -10,7 +10,7 @@ namespace DOL.GS.Spells
         public TeleportSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine)
         {
             TPPoint tPPoint = TeleportMgr.LoadTP((ushort)Spell.LifeDrainReturn);
-            zoneName = WorldMgr.GetRegion(tPPoint.Region).GetZone((float)tPPoint.Position.X, (float)tPPoint.Position.Y).Description;
+            zoneName = WorldMgr.GetRegion(tPPoint.Region).GetZone(tPPoint.Position.Coordinate).Description;
         }
 
         public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
@@ -37,7 +37,7 @@ namespace DOL.GS.Spells
                     }
                 }
                 target.TPPoint = tPPoint;
-                target.MoveTo(tPPoint.Region, (float)tPPoint.Position.X, (float)tPPoint.Position.Y, (float)tPPoint.Position.Z, target.GetHeading(target));
+                target.MoveTo(tPPoint.Position.With(target.Orientation));
             }
         }
         public override string ShortDescription

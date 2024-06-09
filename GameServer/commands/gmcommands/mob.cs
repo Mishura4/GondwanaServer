@@ -1436,7 +1436,7 @@ namespace DOL.GS.Commands
 
             info.Add(" ");
 
-            info.Add(" + Position (X, Y, Z, H): " + targetMob.Position.ToString("F0") + ", " + targetMob.Heading);
+            info.Add(" + Position (X, Y, Z, H): " + targetMob.Position);
 
             if (targetMob.GuildName != null && targetMob.GuildName.Length > 0)
                 info.Add(" + Guild: " + targetMob.GuildName);

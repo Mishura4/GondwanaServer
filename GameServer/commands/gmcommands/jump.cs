@@ -344,7 +344,7 @@ namespace DOL.GS.Commands
                 {
                     Stack<Position> positions;
 
-                    positions = client.Player.TempProperties.getProperty<object>(TEMP_KEY_JUMP, null) as Stack<GameLocation>;
+                    positions = client.Player.TempProperties.getProperty<object>(TEMP_KEY_JUMP, null) as Stack<Position>;
 
                     if (positions == null)
                     {

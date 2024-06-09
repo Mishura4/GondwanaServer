@@ -4,13 +4,13 @@ using DOL.Database;
 using DOL.Events;
 using DOL.Geometry;
 using DOL.GS;
+using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
 using DOL.Language;
 using DOLDatabase.Tables;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -60,16 +60,14 @@ namespace DOL.gameobjects.CustomNPC
             this.player = player;
             IControlledBrain brain = new ShadowBrain(player);
             SetOwnBrain(brain as AI.ABrain);
-            int x, y, z;
-            ushort heading;
-            Region region;
-
-            GetPlayerLocation(out x, out y, out z, out heading, out region);
-
-            Position = new System.Numerics.Vector3(x, y, z);
-            Heading = heading;
-            CurrentRegion = region;
             AddToWorld();
+        }
+
+        /// <inheritdoc />
+        public override bool AddToWorld()
+        {
+            Position = GetPlayerPosition();
+            return base.AddToWorld();
         }
 
         public override string Name { get => "Combine List"; set => base.Name = value; }
@@ -244,25 +242,15 @@ namespace DOL.gameobjects.CustomNPC
             return result;
         }
 
-        protected virtual void GetPlayerLocation(out int x, out int y, out int z, out ushort heading, out Region region)
+        protected virtual Position GetPlayerPosition()
         {
-            Vector2 point = player.GetPointFromHeading(player.Heading, 64);
-            x = (int)point.X;
-            y = (int)point.Y;
-            z = (int)player.Position.Z;
-            heading = (ushort)((player.Heading + 2048) % 4096);
-            region = player.CurrentRegion;
+            var point = player.GetPointFromHeading(player.Orientation.InHeading, 64);
+            return Position.Create(player.Position.RegionID, point.X, point.Y, player.Position.Z, player.Orientation.InHeading).TurnedAround();
         }
 
         public virtual void MoveToPlayer()
         {
-            int x, y, z;
-            ushort heading;
-            Region region;
-
-            GetPlayerLocation(out x, out y, out z, out heading, out region);
-
-            MoveTo(region.ID, x, y, z, heading);
+            MoveTo(GetPlayerPosition());
         }
 
         public void Interact(string message)

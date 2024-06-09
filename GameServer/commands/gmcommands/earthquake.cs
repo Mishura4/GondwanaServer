@@ -2,6 +2,7 @@
 using DOL.GS.PacketHandler;
 using DOL.GS.Commands;
 using DOL.Geometry;
+using DOL.GS.Geometry;
 using DOL.Language;
 
 namespace DOL.GS.Scripts
@@ -31,7 +32,7 @@ namespace DOL.GS.Scripts
             }
             else
             {
-                var tempGroundTarget = client.Player.GroundTarget ?? System.Numerics.Vector3.Zero;// as System.Numerics.Vector3;
+                var tempGroundTarget = client.Player.GroundTargetPosition;// as System.Numerics.Vector3;
                 x = (int)tempGroundTarget.X;
                 y = (int)tempGroundTarget.Y;
                 z = (int)tempGroundTarget.Z;
@@ -97,7 +98,7 @@ namespace DOL.GS.Scripts
                 pakBis.WriteIntLowEndian((uint)y);
                 pakBis.WriteIntLowEndian((uint)z);
                 pakBis.Write(BitConverter.GetBytes(radius), 0, sizeof(System.Single));
-                int distance = (int)System.Numerics.(int)player.Coordinate.DistanceTo(client.Player.Position);
+                int distance = (int)player.Coordinate.DistanceTo(client.Player.Position);
                 float newIntensity = intensity * (1 - distance / radius);
                 pakBis.Write(BitConverter.GetBytes(newIntensity), 0, sizeof(System.Single));
                 pakBis.Write(BitConverter.GetBytes(duration), 0, sizeof(System.Single));
