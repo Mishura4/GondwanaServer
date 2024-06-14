@@ -780,7 +780,7 @@ namespace DOL.GS
             // Should it be the case, currentZone will be null as well.
             if (CurrentZone == null || m_ObjectState == eObjectState.Active)
             {
-                Console.WriteLine($"AddToWorld: Zone does not exist ({this.GetType()} ID: {InternalID})");
+                log.Error($"AddToWorld: Zone does not exist ({this.GetType()} ID: {InternalID} Coordinate: {Coordinate} Region: {CurrentRegionID})");
                 return false;
             }
 
