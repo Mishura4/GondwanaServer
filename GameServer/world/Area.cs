@@ -26,6 +26,7 @@ using DOL.GS.Geometry;
 using DOL.Language;
 using System.Numerics;
 using static DOL.GS.WarMapMgr;
+using System.Drawing;
 
 namespace DOL.GS
 {
@@ -244,10 +245,10 @@ namespace DOL.GS
                 var diff = point - Coordinate;
 
                 // check if spot is in circle
-                var m_distSq = diff.X * diff.X + diff.Y * diff.Y;
+                double m_distSq = (double)diff.X * diff.X + (double)diff.Y * diff.Y;
                 if (Coordinate.Z != 0 && point.Z != 0 && checkZ)
                 {
-                    int m_zdiff = point.Z - Coordinate.Z;
+                    double m_zdiff = point.Z - Coordinate.Z;
                     m_distSq += m_zdiff * m_zdiff;
                 }
 
@@ -257,15 +258,20 @@ namespace DOL.GS
             /// <inheritdoc />
             public override float DistanceSquared(Coordinate position, bool checkZ)
             {
-                var direction = position - Coordinate;
-                float radiusSquared = Radius * Radius;
-                var distanceToCenterSquared = (float)(checkZ ? direction.Length : direction.Length2D);
+                var diff = position - Coordinate;
+                double radiusSquared = Radius * Radius;
+                double m_distSq = (double)diff.X * diff.X + (double)diff.Y * diff.Y;
+                if (Coordinate.Z != 0 && position.Z != 0 && checkZ)
+                {
+                    double m_zdiff = position.Z - Coordinate.Z;
+                    m_distSq += m_zdiff * m_zdiff;
+                }
 
-                if (distanceToCenterSquared < radiusSquared) // Inside
+                if (m_distSq < radiusSquared) // Inside
                 {
                     return 0.0f;
                 }
-                return distanceToCenterSquared - radiusSquared;
+                return (float)(m_distSq - radiusSquared);
             }
 
             public override void LoadFromDatabase(DBArea area)
