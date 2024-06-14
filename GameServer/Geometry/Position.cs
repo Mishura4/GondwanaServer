@@ -10,7 +10,20 @@ public struct Position
     public int Y => Coordinate.Y;
     public int Z => Coordinate.Z;
 
-    public Region Region => WorldMgr.GetRegion(RegionID);
+    private Region m_region = null;
+
+    public Region Region
+    {
+        get
+        {
+            if (m_region?.ID == RegionID)
+            {
+                return m_region;
+            }
+            m_region = WorldMgr.GetRegion(RegionID);
+            return m_region;
+        }
+    }
 
     public Position() { }
 
