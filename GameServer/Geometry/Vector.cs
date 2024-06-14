@@ -8,8 +8,8 @@ public struct Vector
     public int Y { get; init; }
     public int Z { get; init; }
 
-    public double Length => Math.Sqrt(X * X + Y * Y + Z * Z);
-    public double Length2D => Math.Sqrt(X * X + Y * Y);
+    public double Length => Math.Sqrt((double)X * X + (double)Y * Y + (double)Z * Z);
+    public double Length2D => Math.Sqrt((double)X * X + (double)Y * Y);
     public Angle Orientation => Angle.Radians(-Math.Atan2(X,Y));
 
     public static Vector Create(int x = 0, int y = 0, int z = 0)
