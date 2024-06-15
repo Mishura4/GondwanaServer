@@ -175,7 +175,7 @@ namespace DOL.GS.PacketHandler
                 ushort speedZ = 0;
                 GameNPC.eFlags npcFlags;
 
-                var mobGroupsWithFlags = npc.MobGroups?.Where(g => g.CompletedQuestNPCFlags != null).ToList();
+                var mobGroupsWithFlags = npc.MobGroups?.Where(g => g.CompletedQuestNPCFlags != null && g.HasPlayerCompletedQuests(m_gameClient.Player)).ToList();
                 if (mobGroupsWithFlags is { Count: > 0 })
                 {
                     npcFlags = 0;
