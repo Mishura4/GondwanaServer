@@ -4,6 +4,7 @@ using DOL.Database;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
 using DOL.Events;
+using DOL.GS.Geometry;
 using System.Numerics;
 
 namespace DOL.GS.RealmAbilities
@@ -59,12 +60,11 @@ namespace DOL.GS.RealmAbilities
                 }
             }
 
-            if (living.GroundTarget == null)
+            if (living.GroundTargetPosition == Position.Nowhere)
                 return;
-            if (!living.IsWithinRadius(living.GroundTarget.Value, 1500))
+            if (living.Coordinate.DistanceTo(living.GroundTargetPosition) > 1500 )
                 return;
-            GamePlayer player = living as GamePlayer;
-            if (player == null)
+            if (living is not GamePlayer player)
                 return;
 
             if (player.RealmAbilityCastTimer != null)
@@ -92,7 +92,7 @@ namespace DOL.GS.RealmAbilities
             if (!owner.IsAlive)
                 return 0;
 
-            traparea = new Area.Circle("decimation trap", owner.Position, 50);
+            traparea = new Area.Circle("decimation trap", owner.Coordinate, 50);
 
             owner.CurrentRegion.AddArea(traparea);
             region = owner.CurrentRegionID;
@@ -136,14 +136,14 @@ namespace DOL.GS.RealmAbilities
 
         private void getTargets()
         {
-            foreach (GamePlayer target in WorldMgr.GetPlayersCloseToSpot(region, traparea.Position, 350))
+            foreach (GamePlayer target in WorldMgr.GetPlayersCloseToSpot(Position.Create(region, traparea.Coordinate), 350))
             {
                 if (GameServer.ServerRules.IsAllowedToAttack(owner, target, true))
                 {
                     DamageTarget(target);
                 }
             }
-            foreach (GameNPC target in WorldMgr.GetNPCsCloseToSpot(region, traparea.Position, 350))
+            foreach (GameNPC target in WorldMgr.GetNPCsCloseToSpot(Position.Create(region, traparea.Coordinate), 350))
             {
                 if (GameServer.ServerRules.IsAllowedToAttack(owner, target, true))
                 {
@@ -163,7 +163,7 @@ namespace DOL.GS.RealmAbilities
                 ticktimer.Stop();
                 removeHandlers();
             }
-            var dist = Vector3.Distance(target.Position, traparea.Position);
+            var dist = (int)target.Coordinate.DistanceTo(traparea.Coordinate);
             double mod = 1;
             if (dist > 0)
                 mod = 1 - ((double)dist / 350);

@@ -24,11 +24,12 @@ using System.Linq;
 using log4net;
 using System.Threading.Tasks;
 using System.IO;
-using System.Numerics;
 using System.Globalization;
 using DOL.GS.Geometry;
+using System.Numerics;
 using System.Threading;
 using System.Diagnostics;
+using Vector3 = System.Numerics.Vector3;
 
 namespace DOL.GS
 {
@@ -71,9 +72,18 @@ namespace DOL.GS
         {
             if (origin.CurrentRegion != target.CurrentRegion)
                 return float.PositiveInfinity;
-            var height = new Vector3(0, 0, 64); // maybe we should calculate that from the model id and size -- 64inch seems to be okay-ish for players
-            return GetCollisionDistance(origin.CurrentRegion, origin.Position + height, target.Position + height, ref stats);
+            var height = DOL.GS.Geometry.Vector.Create(0, 0, 64); // maybe we should calculate that from the model id and size -- 64inch seems to be okay-ish for players
+            return GetCollisionDistance(origin.CurrentRegion, (origin.Coordinate + height).ToSysVector3(), (target.Coordinate + height).ToSysVector3(), ref stats);
         }
+
+        public static float GetCollisionDistance(Region region, Coordinate origin, Coordinate target, ref RaycastStats stats)
+        {
+            var height = DOL.GS.Geometry.Vector.Create(0, 0, 64); // maybe we should calculate that from the model id and size -- 64inch seems to be okay-ish for players
+            return GetCollisionDistance(region, (origin + height).ToSysVector3(), (target + height).ToSysVector3(), ref stats);
+        }
+        
+        
+        
         public static float GetCollisionDistance(Region region, Vector3 origin, Vector3 target, ref RaycastStats stats)
         {
             return GetCollisionDistance(region.ID, origin, target, ref stats);
@@ -147,14 +157,14 @@ namespace DOL.GS
             var objects = reg.Objects.Where(o => o != null).ToList();
             foreach (var o1 in objects.Take(1000))
                 foreach (var o2 in objects.Skip(1000).Take(1000))
-                    GetCollisionDistance(o1.CurrentRegion, o1.Position, o2.Position, ref stats);
+                    GetCollisionDistance(o1.CurrentRegion, o1.Coordinate, o2.Coordinate, ref stats);
 
             var sw = new Stopwatch();
             sw.Start();
             stats = new RaycastStats();
             foreach (var o1 in objects)
                 foreach (var o2 in objects)
-                    GetCollisionDistance(o1.CurrentRegion, o1.Position, o2.Position, ref stats);
+                    GetCollisionDistance(o1.CurrentRegion, o1.Coordinate, o2.Coordinate, ref stats);
             sw.Stop();
             long count = objects.Count * objects.Count;
             var raySeconds = stats.nbTests * 1000 / sw.ElapsedMilliseconds;
@@ -167,7 +177,7 @@ namespace DOL.GS
             stats = new RaycastStats();
             foreach (var o1 in objects)
                 foreach (var o2 in objects)
-                    GetCollisionDistance(o1.CurrentRegion, o1.Position, o2.Position, ref stats);
+                    GetCollisionDistance(o1.CurrentRegion, o1.Coordinate, o2.Coordinate, ref stats);
             sw.Stop();
             count = objects.Count * objects.Count;
             raySeconds = stats.nbTests * 1000 / sw.ElapsedMilliseconds;

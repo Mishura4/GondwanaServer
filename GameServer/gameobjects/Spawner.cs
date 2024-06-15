@@ -1,6 +1,7 @@
 ﻿using DOL.AI.Brain;
 using DOL.Database;
 using DOL.Events;
+using DOL.GS.Geometry;
 using DOL.GS.Styles;
 using DOL.MobGroups;
 using DOLDatabase.Tables;
@@ -359,12 +360,8 @@ namespace DOL.GS
         private void SetCircularPosition(GameNPC npc, int index, int total, float distance)
         {
             double angle = (Math.PI * 2 * index) / total;
-            float xOffset = (float)Math.Cos(angle) * distance;
-            float yOffset = (float)Math.Sin(angle) * distance;
 
-            npc.Position = new System.Numerics.Vector3(Position.X + xOffset, Position.Y + yOffset, Position.Z);
-            npc.Heading = Heading;
-            npc.CurrentRegion = WorldMgr.GetRegion(CurrentRegionID);
+            npc.Position = Position + Vector.Create(Angle.Radians(angle), distance);
             npc.LoadedFromScript = true;
             npc.AddToWorld();
             npc.OwnerID = InternalID;

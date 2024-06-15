@@ -23,6 +23,7 @@
  * Desc:	Implements /facegloc command
  * 
  */
+using DOL.GS.Geometry;
 using System;
 using System.Numerics;
 using DOL.GS.PacketHandler;
@@ -74,8 +75,7 @@ namespace DOL.GS.Commands
                 return;
             }
 
-            ushort direction = client.Player.GetHeading(new Vector2(x, y));
-            client.Player.Heading = direction;
+            client.Player.TurnTo(Coordinate.Create(x: x, y: y ));
             client.Out.SendPlayerJump(true);
         }
     }

@@ -1,4 +1,5 @@
 ﻿using DOL.Events;
+using DOL.GS.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,13 +29,13 @@ namespace DOL.GS.Quests
             if (db.AreaRadius != null && db.AreaRadius != "" && db.AreaRegion != null && db.AreaRegion != "" && db.AreaCenter != null)
             {
                 hasArea = true;
-                m_area = new Area.Circle($"{quest.Name} KillPlayerGoal {goalId}", new Vector3((float)db.AreaCenter.X, (float)db.AreaCenter.Y, (float)db.AreaCenter.Z), (int)db.AreaRadius);
+                m_area = new Area.Circle($"{quest.Name} KillPlayerGoal {goalId}", Coordinate.Create((int)((float)db.AreaCenter.X), (int)((float)db.AreaCenter.Y), (int)((float)db.AreaCenter.Z)), (int)db.AreaRadius);
                 m_area.DisplayMessage = false;
                 m_areaRegion = db.AreaRegion;
 
                 var reg = WorldMgr.GetRegion(m_areaRegion);
                 reg.AddArea(m_area);
-                PointA = new QuestZonePoint(reg.GetZone(m_area.Position), m_area.Position);
+                PointA = new QuestZonePoint(reg.GetZone(m_area.Coordinate), m_area.Coordinate);
             }
         }
 
@@ -43,7 +44,7 @@ namespace DOL.GS.Quests
             var dict = base.GetDatabaseJsonObject();
             dict.Add("TargetRegion", m_regionId);
             dict.Add("KillCount", m_killCount);
-            dict.Add("AreaCenter", m_area.Position);
+            dict.Add("AreaCenter", m_area.Coordinate);
             dict.Add("AreaRadius", m_area.Radius);
             dict.Add("AreaRegion", m_areaRegion);
             return dict;
@@ -60,7 +61,7 @@ namespace DOL.GS.Quests
                 var killed = killedArgs.Target;
                 if (killed == null || (m_region != null && m_region != killed.CurrentRegion)
                     || !(killed is GamePlayer)
-                    || (hasArea && !m_area.IsContaining(killed.Position, false)))
+                    || (hasArea && !m_area.IsContaining(killed.Coordinate, false)))
                     return;
                 AdvanceGoal(quest, goal);
             }

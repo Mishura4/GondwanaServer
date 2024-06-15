@@ -22,8 +22,8 @@ using DOL.Database;
 using DOL.Events;
 using DOL.Language;
 using DOL.GS.PacketHandler;
-using System.Numerics;
 using DOL.GameEvents;
+using DOL.GS.Geometry;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -231,20 +231,15 @@ namespace DOL.GS
         /// <param name="spot"></param>
         /// <param name="checkZ"></param>
         /// <returns></returns>
-        public abstract bool IsContaining(Vector3 spot, bool checkZ);
+        public abstract bool IsContaining(Coordinate spot, bool checkZ);
 
-        public bool IsContaining(Vector3 spot)
-        {
-            return IsContaining(spot, true);
-        }
-        public bool IsContaining(float x, float y, float z, bool checkZ)
-        {
-            return IsContaining(new Vector3(x, y, z), checkZ);
-        }
-        public bool IsContaining(float x, float y, float z)
-        {
-            return IsContaining(new Vector3(x, y, z), true);
-        }
+        public bool IsContaining(Coordinate spot) => IsContaining(spot, true);
+
+        [Obsolete("Use .IsContaining(Coordinate[,bool]) instead!")]
+        public bool IsContaining(int x, int y, int z, bool checkZ) => IsContaining(Coordinate.Create(x, y, z), checkZ);
+
+        [Obsolete("Use .IsContaining(Coordinate[,bool]) instead!")]
+        public bool IsContaining(int x, int y, int z) => IsContaining(Coordinate.Create(x, y, z), true);
 
         /// <summary>
         /// Get the distance to the closest edge of this area from a point
@@ -252,7 +247,7 @@ namespace DOL.GS
         /// <param name="position">Position to calculate the distance from</param>
         /// <param name="checkZ">Whether to take Z into account</param>
         /// <returns></returns>
-        public abstract float DistanceSquared(Vector3 position, bool checkZ);
+        public abstract float DistanceSquared(Coordinate position, bool checkZ);
 
         public bool CanVol { get; protected set; }
 

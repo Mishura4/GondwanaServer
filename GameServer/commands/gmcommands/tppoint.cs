@@ -19,6 +19,7 @@
 using System;
 using System.Collections;
 using DOL.Database;
+using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
 using DOL.Language;
 
@@ -47,9 +48,7 @@ namespace DOL.GS.Commands
             GameStaticItem obj = new GameStaticItem();
 
             // Fill the object variables
-            obj.Position = new System.Numerics.Vector3((float)pp.Position.X, (float)pp.Position.Y, (float)pp.Position.Z + 1);// raise a bit off of ground level
-            obj.CurrentRegion = client.Player.CurrentRegion;
-            obj.Heading = client.Player.Heading;
+            obj.Position = Position.Create(pp.Region, pp.Position.X, pp.Position.Y, pp.Position.Z + 1);// raise a bit off of ground level
             obj.Name = name;
             obj.Model = 488;
             obj.Emblem = 0;

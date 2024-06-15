@@ -193,7 +193,7 @@ namespace DOL.GS.GameEvents
                                             PathPoint path = MovementMgr.LoadPath(npc.PathID);
                                             if (path != null)
                                             {
-                                                var p = path.GetNearestNextPoint(npc.Position);
+                                                var p = path.GetNearestNextPoint(npc.Coordinate);
                                                 npc.CurrentWayPoint = p;
                                                 npc.MoveOnPath((short)p.MaxSpeed);
                                             }
@@ -203,16 +203,18 @@ namespace DOL.GS.GameEvents
                                             npc.SetOwnBrain(brain);
                                             npc.Brain.Start();
                                         }
-                                        catch (Exception e)
+                                        catch(Exception e)
                                         {
-                                            log.Error("Can't restart Brain in RegionTimerResynch, NPC Name = " + npc.Name + " Position=" + npc.Position.ToString("F0") + "/R=" + npc.CurrentRegion.ID + " " + e);
+                                            log.Error("Can't restart Brain in RegionTimerResynch, NPC Name = "+npc.Name
+                                                      +" X="+npc.Position.X+"/Y="+npc.Position.Y+"/Z="+npc.Position.Z+"/R="+npc.Position.RegionID+" "+e);
                                             try
                                             {
                                                 npc.Die(null);
                                             }
-                                            catch (Exception ee)
+                                            catch(Exception ee)
                                             {
-                                                log.Error("Can't restart Brain and Kill NPC in RegionTimerResynch, NPC Name = " + npc.Name + " Position=" + npc.Position.ToString("F0") + "/R=" + npc.CurrentRegion.ID + " " + ee);
+                                                log.Error("Can't restart Brain and Kill NPC in RegionTimerResynch, NPC Name = "+npc.Name
+                                                          +" X="+npc.Position.X+"/Y="+npc.Position.Y+"/Z="+npc.Position.Z+"/R="+npc.Position.RegionID+" "+ee);
                                             }
                                         }
                                     }

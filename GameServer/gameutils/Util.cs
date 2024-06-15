@@ -16,6 +16,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
+using DOL.GS.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -485,7 +486,7 @@ namespace DOL.GS
         /// <param name="compareToCompare"></param>
         /// <param name="tolerance"></param>
         /// <returns></returns>
-        public static bool IsNearValue(float valueToHave, float compareToCompare, ushort tolerance)
+        public static bool IsNearValue(int valueToHave, int compareToCompare, ushort tolerance)
         {
             return FastMath.Abs(valueToHave - compareToCompare) <= FastMath.Abs(tolerance);
         }
@@ -501,11 +502,11 @@ namespace DOL.GS
         /// <param name="zC">Z coord value to compare</param>
         /// <param name="tolerance">Tolerance distance between two coords</param>
         /// <returns></returns>
-        public static bool IsNearDistance(float xH, float yH, float zH, float xC, float yC, float zC, ushort tolerance)
+        public static bool IsNearDistance(int xH, int yH, int zH, int xC, int yC, int zC, ushort tolerance)
         {
             return IsNearValue(xH, xC, tolerance) && IsNearValue(yH, yC, tolerance) && IsNearValue(zH, zC, tolerance);
         }
-        public static bool IsNearDistance(Vector3 origin, Vector3 target, ushort tolerance)
+        public static bool IsNearDistance(Coordinate origin, Coordinate target, ushort tolerance)
             => IsNearDistance(origin.X, origin.Y, origin.Z, target.X, target.Y, target.Z, tolerance);
 
         #region Collection Utils

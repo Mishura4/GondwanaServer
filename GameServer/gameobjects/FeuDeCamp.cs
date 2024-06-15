@@ -140,10 +140,8 @@ namespace DOL.GS
             m_RealFeu = new GameStaticItem();
 
             m_RealFeu.Name = Name = "Feu de Camp";
-            m_RealFeu.Position = new System.Numerics.Vector3(Position.X, Position.Y, Position.Z);
+            m_RealFeu.Position = Position;
             m_RealFeu.Model = Model;
-            m_RealFeu.CurrentRegion = CurrentRegion;
-            m_RealFeu.Heading = Heading;
 
             m_RealFeu.AddToWorld();
 
@@ -156,7 +154,7 @@ namespace DOL.GS
         {
 
 
-            foreach (GamePlayer Player in WorldMgr.GetPlayersCloseToSpot(this.CurrentRegionID, this.Position.X, this.Position.Y, this.Position.Z, Radius))
+            foreach (GamePlayer Player in WorldMgr.GetPlayersCloseToSpot(this.Position, Radius))
             {
                 if (Player.IsSitting)
                 {
@@ -301,12 +299,10 @@ namespace DOL.GS
                     ManaTrapDamagePercent = Feu.ManaTrapDamagePercent,
                     HealthTrapDamagePercent = Feu.HealthTrapDamagePercent,
                     IsEnduranceType = Feu.IsEnduranceType,
-                    HealthPercentRate = Feu.HealthPercentRate
+                    HealthPercentRate = Feu.HealthPercentRate,
+                    Position = Player.Position
                 };
 
-                firecamp.Position = new System.Numerics.Vector3(Player.Position.X, Player.Position.Y, Player.Position.Z);
-                firecamp.CurrentRegion = Player.CurrentRegion;
-                firecamp.Heading = Player.Heading;
                 firecamp.AddToWorld();
 
                 Args.GroundItem.Delete();

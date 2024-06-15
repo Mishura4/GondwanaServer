@@ -17,104 +17,103 @@
  *
  */
 using System;
-using System.Numerics;
 using DOL.Events;
 using DOL.GS;
+using DOL.GS.Geometry;
 using NUnit.Framework;
 
 namespace DOL.Integration.Server
 {
-    [TestFixture]
-    public class RegionTest : ServerTests
-    {
-        public static bool notified = false;
+	[TestFixture]
+	public class RegionTest : ServerTests
+	{		
+		public static bool notified = false;
 
-        public RegionTest()
-        {
-        }
+		public RegionTest()
+		{
+		}		
 
-        [Test, Explicit]
-        public void AddObject()
-        {
-            Region region = WorldMgr.GetRegion(1);
-            GameObject obj = new GameNPC();
-            obj.Name = "TestObject";
-            obj.Position = new Vector3(400000, 200000, 2000);
-            obj.CurrentRegion = region;
+		[Test, Explicit]
+		public void AddObject()
+		{
+			GameObject obj = new GameNPC();
+			obj.Name="TestObject";
+            obj.Position = Position.Create(regionID: 1, x: 400000, y: 200000, z: 2000);
 
-            obj.AddToWorld();
+			obj.AddToWorld();
 
-            if (obj.ObjectID < 0)
-                Assert.Fail("Failed to add object to Region. ObjectId < 0");
+			if (obj.ObjectID<0)
+				Assert.Fail("Failed to add object to Region. ObjectId < 0");
 
-            Assert.AreEqual(region.GetObject((ushort)obj.ObjectID), obj);
-        }
+			Assert.AreEqual(obj.CurrentRegion.GetObject((ushort)obj.ObjectID),obj);
+		}
 
 
-        [Test, Explicit]
-        public void AddArea()
-        {
-            Region region = WorldMgr.GetRegion(1);
-            IArea insertArea = region.AddArea(new Area.Circle(null, 1000, 1000, 0, 500));
+		[Test, Explicit]
+		public void AddArea()
+		{
+			Region region = WorldMgr.GetRegion(1);
+            var circleLocation = Coordinate.Create(1000,1000,0);
+			IArea insertArea = region.AddArea(new Area.Circle(null,circleLocation,500));
 
-            Assert.IsNotNull(insertArea);
+			Assert.IsNotNull(insertArea);
 
-            var areas = region.GetAreasOfSpot(501, 1000, 0);
-            Assert.IsTrue(areas.Count > 0);
+			var areas = region.GetAreasOfSpot(Coordinate.Create(501,1000,0));
+			Assert.IsTrue(areas.Count>0);
 
-            bool found = false;
-            foreach (IArea ar in areas)
-            {
-                if (ar == insertArea)
-                {
-                    found = true;
-                    break;
-                }
-            }
-            Assert.IsTrue(found);
+			bool found = false;
+			foreach( IArea ar in areas)
+			{
+				if (ar == insertArea)
+				{
+					found = true;
+					break;
+				}
+			}
+			Assert.IsTrue(found);
 
-            //
-            areas = region.GetAreasOfSpot(1499, 1000, 2000);
-            Assert.IsTrue(areas.Count > 0);
+			//
+			areas = region.GetAreasOfSpot(Coordinate.Create(1499,1000,2000));
+			Assert.IsTrue(areas.Count>0);
 
-            found = false;
-            foreach (IArea ar in areas)
-            {
-                if (ar == insertArea)
-                {
-                    found = true;
-                    break;
-                }
-            }
-            Assert.IsTrue(found);
+			found = false;
+			foreach( IArea ar in areas)
+			{
+				if (ar == insertArea) 
+				{
+					found = true;	
+					break;
+				}
+			}
+			Assert.IsTrue(found);
 
 
-            //Notify test
-            notified = false;
+			//Notify test
+			notified=false;
 
-            GamePlayer player = CreateMockGamePlayer();
+			GamePlayer player = CreateMockGamePlayer();
+			
+			insertArea.RegisterPlayerEnter(new DOLEventHandler(NotifyTest));
+			insertArea.OnPlayerEnter(player);
 
-            insertArea.RegisterPlayerEnter(new DOLEventHandler(NotifyTest));
-            insertArea.OnPlayerEnter(player);
+			Assert.IsTrue(notified);
 
-            Assert.IsTrue(notified);
+			region.RemoveArea(insertArea);
 
-            region.RemoveArea(insertArea);
+			areas = region.GetAreasOfSpot(Coordinate.Create(1499,1000,2000));
+			Assert.IsTrue(areas.Count==0);
 
-            areas = region.GetAreasOfSpot(1499, 1000, 2000);
-            Assert.IsTrue(areas.Count == 0);
+		}
 
-        }
+		public static void NotifyTest(DOLEvent e, object sender, EventArgs args)
+		{
+			Console.WriteLine("notified");
+			notified = true;
+		}
 
-        public static void NotifyTest(DOLEvent e, object sender, EventArgs args)
-        {
-            Console.WriteLine("notified");
-            notified = true;
-        }
-
-        [Test]
-        public void RemoveObject()
-        {
-        }
-    }
+		[Test]
+		public void RemoveObject()
+		{			
+		}
+	}
 }

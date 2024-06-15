@@ -23,7 +23,8 @@ using DOL.GS.PacketHandler;
 using DOL.Events;
 using DOL.GS.Behaviour.Attributes;
 using DOL.GS.Behaviour;
-using System.Numerics;
+using DOL.GS.Geometry;
+using Vector3 = System.Numerics.Vector3;
 
 namespace DOL.GS.Behaviour.Actions
 {
@@ -45,8 +46,17 @@ namespace DOL.GS.Behaviour.Actions
         public override void Perform(DOLEvent e, object sender, EventArgs args)
         {
             GamePlayer player = BehaviourUtils.GuessGamePlayerFromNotify(e, sender, args);
-            var location = P.HasValue ? P.Value : player.Position;
-            Q.PathTo(location, Q.CurrentSpeed);
+            Coordinate c;
+
+            if (P.HasValue)
+            {
+                c = Coordinate.Create((int)P.Value.X, (int)P.Value.Y, (int)P.Value.Z);
+            }
+            else
+            {
+                c = player.Coordinate;
+            }
+            Q.WalkTo(c, Q.CurrentSpeed);
         }
     }
 }

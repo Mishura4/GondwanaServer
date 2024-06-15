@@ -23,10 +23,10 @@ using System.Collections.Generic;
 using DOL.AI.Brain;
 using DOL.Events;
 using DOL.Database;
+using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
 using DOL.GS.RealmAbilities;
 using DOL.GS.Spells;
-using System.Numerics;
 
 namespace DOL.GS.Effects
 {
@@ -117,8 +117,6 @@ namespace DOL.GS.Effects
         private void SummonSpirit(int spiritId, GamePlayer targetPlayer)
         {
             spirits[spiritId] = new GameNPC();
-            spirits[spiritId].CurrentRegion = EffectOwner.CurrentRegion;
-            spirits[spiritId].Heading = (ushort)((EffectOwner.Heading + 2048) % 4096);
             spirits[spiritId].Level = spiritLevel;
             spirits[spiritId].Realm = EffectOwner.Realm;
             spirits[spiritId].Name = spiritName;
@@ -126,8 +124,8 @@ namespace DOL.GS.Effects
             spirits[spiritId].MaxSpeedBase = spiritSpeed;
             spirits[spiritId].GuildName = "";
             spirits[spiritId].Size = 50;
-            var rand = new Vector3(Util.Random(20, 40) - Util.Random(20, 40), Util.Random(20, 40) - Util.Random(20, 40), 0);
-            spirits[spiritId].Position = EffectOwner.Position + rand;
+            spirits[spiritId].Position = EffectOwner.Position.TurnedAround()
+                + Vector.Create(x: Util.Random(-20, 20), y: Util.Random(-20, 20));
             spirits[spiritId].Flags |= GameNPC.eFlags.DONTSHOWNAME;
             spirits[spiritId].SetOwnBrain(new StandardMobBrain());
             spirits[spiritId].AddToWorld();

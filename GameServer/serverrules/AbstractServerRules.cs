@@ -28,6 +28,7 @@ using DOL.Database;
 using DOL.Events;
 using DOL.gameobjects.CustomNPC;
 using DOL.GS.Finance;
+using DOL.GS.Geometry;
 using DOL.GS.Housing;
 using DOL.GS.Keeps;
 using DOL.GS.PacketHandler;
@@ -252,16 +253,22 @@ namespace DOL.GS.ServerRules
             GamePlayer player = (GamePlayer)sender;
             StartImmunityTimer(player, ServerProperties.Properties.TIMER_KILLED_BY_MOB * 1000);//When Killed by a Mob
         }
-
+        
         /// <summary>
         /// Should be called whenever a player teleports to a new location
         /// </summary>
         /// <param name="player"></param>
         /// <param name="source"></param>
         /// <param name="destination"></param>
+        public virtual void OnPlayerTeleport(GamePlayer player, Teleport destination)
+        {
+        }
+
+        [Obsolete("Use .OnPlayerTeleport(GamePlayer,Teleport) instead!")]
+
         public virtual void OnPlayerTeleport(GamePlayer player, GameLocation source, Teleport destination)
         {
-            // override this in order to do something, like set immunity, when a player teleports
+            OnPlayerTeleport(player, destination);
         }
 
         /// <summary>
@@ -1443,7 +1450,7 @@ namespace DOL.GS.ServerRules
                 if (player != null)
                 {
                     AbstractGameKeep keep =
-                        GameServer.KeepManager.GetKeepCloseToSpot(living.CurrentRegionID, living.Position, 16000);
+                        GameServer.KeepManager.GetKeepCloseToSpot(living.Position, 16000);
                     if (keep != null)
                     {
                         byte bonus = 0;
@@ -1801,7 +1808,7 @@ namespace DOL.GS.ServerRules
 
                 if (!BG && living is GamePlayer)
                 {
-                    AbstractGameKeep keep = GameServer.KeepManager.GetKeepCloseToSpot(living.CurrentRegionID, living.Position, 16000);
+                    AbstractGameKeep keep = GameServer.KeepManager.GetKeepCloseToSpot(living.Position, 16000);
                     if (keep != null)
                     {
                         byte bonus = 0;
@@ -2368,16 +2375,15 @@ namespace DOL.GS.ServerRules
             GameMerchant.OnPlayerBuy(player, slot, count, items);
         }
 
+        [Obsolete("Use .PlaceHousingNPC(House, ItemTemplate, Coordinate, ushort) instead!")]
+        public virtual GameNPC PlaceHousingNPC(DOL.GS.Housing.House house, ItemTemplate item, Vector3 location, ushort heading)
+            => PlaceHousingNPC(house, item, Coordinate.Create((int)location.X, (int)location.Y, (int)location.Z), heading);
 
         /// <summary>
         /// Get a housing hookpoint NPC
         /// </summary>
-        /// <param name="house"></param>
-        /// <param name="templateID"></param>
-        /// <param name="heading"></param>
-        /// <param name="index"></param>
         /// <returns></returns>
-        public virtual GameNPC PlaceHousingNPC(DOL.GS.Housing.House house, ItemTemplate item, Vector3 location, ushort heading)
+        public virtual GameNPC PlaceHousingNPC(DOL.GS.Housing.House house, ItemTemplate item, Coordinate coordinate, ushort heading)
         {
             NpcTemplate npcTemplate = NpcTemplateMgr.GetTemplate(item.Bonus);
 
@@ -2446,9 +2452,7 @@ namespace DOL.GS.ServerRules
                 npc.Name = item.Name;
                 npc.CurrentHouse = house;
                 npc.OwnerID = item.Id_nb;
-                npc.Position = location;
-                npc.Heading = heading;
-                npc.CurrentRegionID = house.RegionID;
+                npc.Position = Position.Create(house.RegionID, coordinate, heading);
                 if (!npc.IsPeaceful)
                 {
                     npc.Flags ^= GameNPC.eFlags.PEACE;
@@ -2464,15 +2468,16 @@ namespace DOL.GS.ServerRules
             return null;
         }
 
-
+        [Obsolete("Use .PlaceHousingInteriorItem(House, ItemTemplate, Coordinate, ushort) instead!")]
         public virtual GameStaticItem PlaceHousingInteriorItem(DOL.GS.Housing.House house, ItemTemplate item, Vector3 location, ushort heading)
+            => PlaceHousingInteriorItem(house, item, Coordinate.Create((int)location.X, (int)location.Y, (int)location.Z), heading);
+
+        public virtual GameStaticItem PlaceHousingInteriorItem(DOL.GS.Housing.House house, ItemTemplate item, Coordinate coordinate, ushort heading)
         {
             GameStaticItem hookpointObject = new GameStaticItem();
             hookpointObject.CurrentHouse = house;
             hookpointObject.OwnerID = item.Id_nb;
-            hookpointObject.Position = location;
-            hookpointObject.Heading = heading;
-            hookpointObject.CurrentRegionID = house.RegionID;
+            hookpointObject.Position = Position.Create(house.RegionID, coordinate, heading);
             hookpointObject.Name = item.Name;
             hookpointObject.Model = (ushort)item.Model;
             hookpointObject.AddToWorld();

@@ -17,6 +17,7 @@
  *
  */
 using DOL.AI.Brain;
+using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
 using DOL.Language;
 using System.Numerics;
@@ -30,7 +31,7 @@ namespace DOL.GS.Spells
 
         public override bool CheckBeginCast(GameLiving selectedTarget)
         {
-            if (Caster.GroundTarget == null)
+            if (Caster.GroundTargetPosition == Position.Nowhere)
             {
                 if (Caster is GamePlayer)
                     MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "SummonAnimistPet.CheckBeginCast.GroundTargetNull"), eChatType.CT_SpellResisted);
@@ -44,7 +45,7 @@ namespace DOL.GS.Spells
                 return false;
             }
 
-            if (!Caster.IsWithinRadius(Caster.GroundTarget.Value, CalculateSpellRange()))
+            if (!Caster.IsWithinRadius(Caster.GroundTargetPosition, CalculateSpellRange()))
             {
                 if (Caster is GamePlayer)
                     MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "SummonAnimistPet.CheckBeginCast.GroundTargetNotInSpellRange"), eChatType.CT_SpellResisted);
@@ -55,7 +56,7 @@ namespace DOL.GS.Spells
         }
         public override void FinishSpellCast(GameLiving target)
         {
-            if (Caster.GroundTarget == null)
+            if (Caster.GroundTargetPosition == Position.Nowhere)
             {
                 if (Caster is GamePlayer)
                     MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "SummonAnimistPet.CheckBeginCast.GroundTargetNull"), eChatType.CT_SpellResisted);
@@ -76,7 +77,7 @@ namespace DOL.GS.Spells
                 return;
             }
 
-            if (!Caster.IsWithinRadius(Caster.GroundTarget.Value, CalculateSpellRange()))
+            if (!Caster.IsWithinRadius(Caster.GroundTargetPosition, CalculateSpellRange()))
             {
                 if (Caster is GamePlayer)
                     MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "SummonAnimistPet.CheckBeginCast.GroundTargetNotInSpellRange"), eChatType.CT_SpellResisted);
@@ -112,12 +113,8 @@ namespace DOL.GS.Spells
             return new TurretBrain(owner);
         }
 
-        protected override void GetPetLocation(out Vector3 pos, out ushort heading, out Region region)
-        {
-            pos = Caster.GroundTarget.Value;
-            heading = Caster.Heading;
-            region = Caster.CurrentRegion;
-        }
+        protected override Position GetSummonPosition()
+            => Caster.GroundTargetPosition;
 
         /// <summary>
         /// Do not trigger SubSpells

@@ -349,13 +349,13 @@ namespace DOL.GS
                 merchant = new Mob();
 
             merchant.Name = Name;
-            merchant.Guild = GuildName;
-            merchant.X = (int)Position.X;
-            merchant.Y = (int)Position.Y;
-            merchant.Z = (int)Position.Z;
-            merchant.Heading = Heading;
+            merchant.Guild = GuildName;;
+            merchant.X = Position.X;
+            merchant.Y = Position.Y;
+            merchant.Z = Position.Z;
+            merchant.Heading = Orientation.InHeading;
+            merchant.Region = Position.RegionID;
             merchant.Speed = MaxSpeedBase;
-            merchant.Region = CurrentRegionID;
             merchant.Realm = (byte)Realm;
             merchant.RoamingRange = RoamingRange;
             merchant.Model = Model;

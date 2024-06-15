@@ -22,6 +22,7 @@ using System.Collections.Generic;
 
 using DOL.Events;
 using DOL.Database;
+using DOL.GS.Geometry;
 using System.Numerics;
 
 namespace DOL.GS.GameEvents
@@ -50,7 +51,7 @@ namespace DOL.GS.GameEvents
 
             // processing all the ZP
             IList<ZonePoint> zonePoints = GameServer.Database.SelectAllObjects<ZonePoint>();
-            foreach (ZonePoint z in zonePoints)
+            foreach (var z in zonePoints)
             {
                 if (z.SourceRegion == 0) continue;
 
@@ -64,8 +65,7 @@ namespace DOL.GS.GameEvents
 
                 GameNPC npc = new GameNPC(zp);
 
-                npc.CurrentRegionID = z.SourceRegion;
-                npc.Position = new Vector3(z.SourceX, z.SourceY, z.SourceZ);
+                npc.Position = z.GetSourcePosition().With(npc.Orientation);
                 npc.Name = r.Description;
                 npc.GuildName = "ZonePoint (Open)";
                 if (r.IsDisabled) npc.GuildName = "ZonePoint (Closed)";

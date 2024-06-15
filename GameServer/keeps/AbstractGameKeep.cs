@@ -24,6 +24,7 @@ using System.Linq;
 
 using DOL.Database;
 using DOL.Events;
+using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
 
 using log4net;
@@ -195,7 +196,7 @@ namespace DOL.GS.Keeps
             {
                 if (CurrentRegion != null)
                 {
-                    return CurrentRegion.GetZone(X, Y);
+                    return CurrentRegion.GetZone(Position.Coordinate);
                 }
                 return null;
             }
@@ -349,49 +350,47 @@ namespace DOL.GS.Keeps
             set { DBKeep.Name = value; }
         }
 
-        /// <summary>
-        /// The Keep Region ID linked to the DBKeep
-        /// </summary>
+        public Position Position
+        {
+            get => DBKeep.GetPosition();
+            set => DBKeep.SetPosition(value);
+        }
+
         public ushort Region
         {
-            get { return DBKeep.Region; }
-            set { DBKeep.Region = value; }
+            get	=> Position.RegionID;
+            set	=> Position = Position.With(regionID: value);
         }
 
-        /// <summary>
-        /// The Keep X linked to the DBKeep
-        /// </summary>
         public int X
         {
-            get { return DBKeep.X; }
-            set { DBKeep.X = value; }
+            get	=> Position.X;
+            set	=> Position = Position.With(x: value);
         }
 
-        /// <summary>
-        /// The Keep Y linked to the DBKeep
-        /// </summary>
         public int Y
         {
-            get { return DBKeep.Y; }
-            set { DBKeep.Y = value; }
+            get	=> Position.Y;
+            set	=> Position = Position.With(y: value);
         }
 
-        /// <summary>
-        /// The Keep Z linked to the DBKeep
-        /// </summary>
         public int Z
         {
-            get { return DBKeep.Z; }
-            set { DBKeep.Z = value; }
+            get	=> Position.Z;
+            set	=> Position = Position.With(z: value);
         }
 
-        /// <summary>
-        /// The Keep Heading linked to the DBKeep
-        /// </summary>
+        [Obsolete("Use .Orientation instead!")]
         public ushort Heading
         {
-            get { return DBKeep.Heading; }
-            set { DBKeep.Heading = value; }
+            get	=> (ushort)Position.Orientation.InDegrees;
+            set	=> Position = Position.With(orientation: Angle.Degrees(value));
+        }
+
+        public Angle Orientation
+        {
+            get	=> Position.Orientation;
+            set	=> Position = Position.With(orientation: value);
         }
 
         /// <summary>
@@ -467,7 +466,7 @@ namespace DOL.GS.Keeps
             GameEventMgr.AddHandler(CurrentRegion, RegionEvent.PlayerEnter, new DOLEventHandler(SendKeepInit));
             KeepArea area = null;
             //see if any keep areas for this keep have already been added via DBArea
-            foreach (AbstractArea a in CurrentRegion.GetAreasOfSpot(keep.X, keep.Y, keep.Z))
+            foreach (AbstractArea a in CurrentRegion.GetAreasOfSpot(keep.GetPosition().Coordinate))
             {
                 if (a is KeepArea && a.Description == keep.Name)
                 {
@@ -514,9 +513,7 @@ namespace DOL.GS.Keeps
             {
                 door.Delete();
                 GameDoor d = new GameDoor();
-                d.CurrentRegionID = door.CurrentRegionID;
                 d.DoorID = door.DoorID;
-                d.Heading = door.Heading;
                 d.Level = door.Level;
                 d.Model = door.Model;
                 d.Name = "door";
@@ -668,7 +665,7 @@ namespace DOL.GS.Keeps
                 int count = 0;
                 foreach (GamePlayer p in player.Group.GetPlayersInTheGroup())
                 {
-                    if (GameServer.KeepManager.GetKeepCloseToSpot(p.CurrentRegionID, p.Position, WorldMgr.VISIBILITY_DISTANCE) == this)
+                    if (GameServer.KeepManager.GetKeepCloseToSpot(p.Position, WorldMgr.VISIBILITY_DISTANCE) == this)
                         count++;
                 }
 
@@ -1191,16 +1188,15 @@ namespace DOL.GS.Keeps
             DBKeepHookPoint hp = DOLDB<DBKeepHookPoint>.SelectObject(DB.Column(nameof(DBKeepHookPoint.HookPointID)).IsEqualTo(97).And(DB.Column(nameof(DBKeepHookPoint.Height)).IsEqualTo(Height)));
             if (hp == null)
                 return;
-            float z = component.Position.Z + hp.Z;
+            int z = component.Position.Z + hp.Z;
 
             foreach (GamePlayer player in component.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
             {
-                var d = player.GetDistanceTo(hookpoint.Position);
+                int d = (int)hookpoint.Position.Coordinate.DistanceTo(player.Coordinate, ignoreZ: true);
                 if (d > distance)
                     continue;
 
-                if (player.Position.Z > z)
-                    player.MoveTo(player.CurrentRegionID, player.Position.X, player.Position.Y, z, player.Heading);
+                if (player.Position.Z > z) player.MoveTo(player.Position.With(z: z));
             }
         }
 

@@ -30,10 +30,10 @@ using DOL.Database;
 using DOL.GS.PacketHandler;
 using DOL.GS.Utils;
 using DOL.Config;
+using DOL.GS.Geometry;
 using DOL.GS.Housing;
 
 using log4net;
-using System.Numerics;
 
 namespace DOL.GS
 {
@@ -983,11 +983,7 @@ namespace DOL.GS
         /// <returns>true</returns>
         public static bool StartRegionMgrs()
         {
-            m_regions.FreezeWhile(dict =>
-            {
-                foreach (Region reg in dict.Values)
-                    reg.StartRegionMgr();
-            });
+            m_regions.FreezeWhile(dict => dict.Values.ToList()).ForEach(r => r.StartRegionMgr());
             return true;
         }
 
@@ -998,13 +994,8 @@ namespace DOL.GS
         {
             if (log.IsDebugEnabled)
                 log.Debug("Stopping region managers...");
-
-            m_regions.FreezeWhile(dict =>
-            {
-                foreach (Region reg in dict.Values)
-                    reg.StopRegionMgr();
-
-            });
+            
+            m_regions.FreezeWhile(dict => dict.Values.ToList()).ForEach(r => r.StopRegionMgr());
 
             if (log.IsDebugEnabled)
                 log.Debug("Region managers stopped.");
@@ -1276,145 +1267,6 @@ namespace DOL.GS
             client.Player = null;
             return;
         }
-
-        //Various functions to get a list of players/mobs/items
-        #region getdistance
-        /// <summary>
-        /// Get's the distance of two GameObjects
-        /// </summary>
-        /// <param name="obj1">Object1</param>
-        /// <param name="obj2">Object2</param>
-        /// <returns>The distance in units or -1 if they are not the same Region</returns>
-        [Obsolete("Use Point3D.GetDistance")]
-        public static float GetDistance(GameObject obj1, GameObject obj2)
-        {
-            if (obj1 == null || obj2 == null || obj1.CurrentRegion != obj2.CurrentRegion)
-                return -1;
-            return GetDistance(obj1.X, obj1.Y, obj1.Z, obj2.X, obj2.Y, obj2.Z);
-        }
-
-        /// <summary>
-        /// Get's the distance of two GameObjects
-        /// </summary>
-        /// <param name="obj1">Object1</param>
-        /// <param name="obj2">Object2</param>
-        /// <param name="zfactor">Factor for Z distance use lower 0..1 to lower Z influence</param>
-        /// <returns>The distance in units or -1 if they are not the same Region</returns>
-        [Obsolete("Use Point3D.GetDistance")]
-        public static float GetDistance(GameObject obj1, GameObject obj2, float zfactor)
-        {
-            if (obj1 == null || obj2 == null || obj1.CurrentRegion != obj2.CurrentRegion)
-                return -1;
-            return GetDistance(obj1.X, obj1.Y, obj1.Z, obj2.X, obj2.Y, obj2.Z, zfactor);
-        }
-
-        /// <summary>
-        /// Gets the distance of two arbitary points in space
-        /// </summary>
-        /// <param name="x1">X of Point1</param>
-        /// <param name="y1">Y of Point1</param>
-        /// <param name="z1">Z of Point1</param>
-        /// <param name="x2">X of Point2</param>
-        /// <param name="y2">Y of Point2</param>
-        /// <param name="z2">Z of Point2</param>
-        /// <returns>The distance</returns>
-        [Obsolete("Use Point3D.GetDistance")]
-        public static float GetDistance(float x1, float y1, float z1, float x2, float y2, float z2)
-        {
-            var xdiff = x1 - x2;
-            var ydiff = y1 - y2;
-            var zdiff = z1 - z2;
-            return (float)Math.Sqrt(xdiff * xdiff + ydiff * ydiff + zdiff * zdiff);
-        }
-
-        /// <summary>
-        /// Gets the distance of two arbitary points in space
-        /// </summary>
-        /// <param name="x1">X of Point1</param>
-        /// <param name="y1">Y of Point1</param>
-        /// <param name="z1">Z of Point1</param>
-        /// <param name="x2">X of Point2</param>
-        /// <param name="y2">Y of Point2</param>
-        /// <param name="z2">Z of Point2</param>
-        /// <param name="zfactor">Factor for Z distance use lower 0..1 to lower Z influence</param>
-        /// <returns>The distance</returns>
-        [Obsolete("Use Point3D.GetDistance")]
-        public static float GetDistance(float x1, float y1, float z1, float x2, float y2, float z2, float zfactor)
-        {
-            var xdiff = x1 - x2;
-            var ydiff = y1 - y2;
-            var zdiff = ((z1 - z2) * zfactor);
-            return (float)Math.Sqrt(xdiff * xdiff + ydiff * ydiff + zdiff * zdiff);
-        }
-
-        /// <summary>
-        /// Gets the distance of an Object to an arbitary point
-        /// </summary>
-        /// <param name="obj">GameObject used as Point1</param>
-        /// <param name="x">X of Point2</param>
-        /// <param name="y">Y of Point2</param>
-        /// <param name="z">Z of Point2</param>
-        /// <returns>The distance</returns>
-        [Obsolete("Use Point3D.GetDistance")]
-        public static float GetDistance(GameObject obj, float x, float y, float z)
-        {
-            return GetDistance(obj.X, obj.Y, obj.Z, x, y, z);
-        }
-        #endregion get distance
-
-        #region check distance
-        [Obsolete("Use Point3D.IsWithinRadius")]
-        public static bool CheckDistance(float x1, float y1, float z1, float x2, float y2, float z2, int radius)
-        {
-            return CheckSquareDistance(x1, y1, z1, x2, y2, z2, radius * radius);
-        }
-        [Obsolete("Use Point3D.IsWithinRadius")]
-        public static bool CheckDistance(Vector3 obj, Vector3 obj2, int radius)
-        {
-            return CheckDistance(obj.X, obj.Y, obj.Z, obj2.X, obj2.Y, obj2.Z, radius);
-        }
-        [Obsolete("Use Point3D.IsWithinRadius")]
-        public static bool CheckDistance(GameObject obj, float x2, float y2, float z2, int radius)
-        {
-            return CheckDistance(obj.X, obj.Y, obj.Z, x2, y2, z2, radius);
-        }
-        [Obsolete("Use Point3D.IsWithinRadius")]
-        public static bool CheckDistance(GameObject obj, GameObject obj2, int radius)
-        {
-            if (obj == null || obj2 == null)
-                return false;
-            if (obj.CurrentRegion != obj2.CurrentRegion)
-                return false;
-            return CheckDistance(obj.X, obj.Y, obj.Z, obj2.X, obj2.Y, obj2.Z, radius);
-        }
-        #endregion
-        #region check square distance
-        [Obsolete("Use Point3D.IsWithinRadius")]
-        private static bool CheckSquareDistance(float x1, float y1, float z1, float x2, float y2, float z2, int squareRadius)
-        {
-            var xdiff = x1 - x2;
-            var ydiff = y1 - y2;
-            var zdiff = z1 - z2;
-            return (xdiff * xdiff + ydiff * ydiff + zdiff * zdiff <= squareRadius);
-        }
-        [Obsolete("Use Point3D.IsWithinRadius")]
-        private static bool CheckSquareDistance(Vector3 obj, Vector3 obj2, int squareRadius)
-        {
-            return CheckSquareDistance(obj.X, obj.Y, obj.Z, obj2.X, obj2.Y, obj2.Z, squareRadius);
-        }
-        [Obsolete("Use Point3D.IsWithinRadius")]
-        private static bool CheckSquareDistance(GameObject obj, float x2, float y2, float z2, int squareRadius)
-        {
-            return CheckSquareDistance(obj.X, obj.Y, obj.Z, x2, y2, z2, squareRadius);
-        }
-        [Obsolete("Use Point3D.IsWithinRadius")]
-        private static bool CheckSquareDistance(GameObject obj, GameObject obj2, int squareRadius)
-        {
-            if (obj.CurrentRegion != obj2.CurrentRegion)
-                return false;
-            return CheckSquareDistance(obj.X, obj.Y, obj.Z, obj2.X, obj2.Y, obj2.Z, squareRadius);
-        }
-        #endregion
 
         /// <summary>
         /// Returns the number of playing Clients inside a realm
@@ -1811,123 +1663,50 @@ namespace DOL.GS
             return obj;
         }
 
-        /// <summary>
-        /// Returns an IEnumerator of GamePlayers that are close to a certain
-        /// spot in the region
-        /// </summary>
-        /// <param name="regionid">Region to search</param>
-        /// <param name="x">X inside region</param>
-        /// <param name="y">Y inside region</param>
-        /// <param name="z">Z inside region</param>
-        /// <param name="withDistance">Wether or not to return the objects with distance</param>
-        /// <param name="radiusToCheck">Radius to sarch for GameClients</param>
-        /// <returns>IEnumerator that can be used to go through all players</returns>
-        public static IEnumerable GetPlayersCloseToSpot(ushort regionid, float x, float y, float z, ushort radiusToCheck, bool withDistance)
+        [Obsolete("Use GetPlayersCloseToSpot(Position,ushort) instead!")]
+        public static IEnumerable GetPlayersCloseToSpot(ushort regionid, int x, int y, int z, ushort radiusToCheck, bool withDistance = false)
+            => GetPlayersCloseToSpot(Position.Create(regionid, x, y, z), radiusToCheck);
+        
+        [Obsolete("Use GetPlayersCloseToSpot(Position,ushort) instead!")]
+        public static IEnumerable GetPlayersCloseToSpot(IGameLocation location, ushort radiusToCheck, bool withDistance = false)
+            => GetPlayersCloseToSpot(location.Position, radiusToCheck);
+
+        public static IEnumerable GetPlayersCloseToSpot(Position position, ushort radiusToCheck, bool withDistance = false)
         {
-            Region reg = GetRegion(regionid);
+            Region reg = GetRegion(position.RegionID);
             if (reg == null)
                 return new Region.EmptyEnumerator();
-            return reg.GetPlayersInRadius(x, y, z, radiusToCheck, withDistance, false);
+            return reg.GetPlayersInRadius(position.Coordinate, radiusToCheck, false, withDistance);
         }
 
-        /// <summary>
-        /// Returns an IEnumerator of GamePlayers that are close to a certain
-        /// spot in the region
-        /// </summary>
-        /// <param name="location">the game location to search from</param>
-        /// <param name="radiusToCheck">Radius to sarch for GameClients</param>
-        /// <returns>IEnumerator that can be used to go through all players</returns>
-        public static IEnumerable GetPlayersCloseToSpot(IGameLocation location, ushort radiusToCheck)
+        [Obsolete("Use GetNPCsCloseToSpot(Position,ushort) instead!")]
+        public static IEnumerable GetNPCsCloseToSpot(ushort regionid, int x, int y, int z, ushort radiusToCheck, bool withDistance = false)
+            => GetNPCsCloseToSpot(Position.Create(regionid, x, y, z), radiusToCheck);
+        
+        [Obsolete("Use GetNPCsCloseToSpot(Position,ushort) instead!")]
+        public static IEnumerable GetNPCsCloseToSpot(IGameLocation location, ushort radiusToCheck, bool withDistance = false)
+            => GetNPCsCloseToSpot(location.Position, radiusToCheck);
+
+        public static IEnumerable GetNPCsCloseToSpot(Position position, ushort radiusToCheck, bool withDistance = false)
         {
-            var p = location.Position;
-            return GetPlayersCloseToSpot(location.RegionID, p.X, p.Y, p.Z, radiusToCheck, false);
+            Region reg = GetRegion(position.RegionID);
+            if (reg == null) return new Region.EmptyEnumerator();
+            return reg.GetNPCsInRadius(position.Coordinate, radiusToCheck, false, withDistance);
         }
 
-        /// <summary>
-        /// Returns an IEnumerator of GamePlayers that are close to a certain
-        /// spot in the region
-        /// </summary>
-        /// <param name="regionid">Region to search</param>
-        /// <param name="point">the 3D point to search from</param>
-        /// <param name="radiusToCheck">Radius to sarch for GameClients</param>
-        /// <returns>IEnumerator that can be used to go through all players</returns>
-        public static IEnumerable GetPlayersCloseToSpot(ushort regionid, Vector3 point, ushort radiusToCheck)
+        [Obsolete("Use GetItemsCloseToSpot(Position,ushort) instead!")]
+        public static IEnumerable GetItemsCloseToSpot(ushort regionid, int x, int y, int z, ushort radiusToCheck, bool withDistance = false)
+            => GetNPCsCloseToSpot(Position.Create(regionid, x, y, z), radiusToCheck);
+        
+        [Obsolete("Use GetItemsCloseToSpot(Position,ushort) instead!")]
+        public static IEnumerable GetItemsCloseToSpot(IGameLocation location, ushort radiusToCheck, bool withDistance = false)
+            => GetItemsCloseToSpot(location.Position, radiusToCheck);
+
+        public static IEnumerable GetItemsCloseToSpot(Position position, ushort radiusToCheck, bool withDistance = false)
         {
-            return GetPlayersCloseToSpot(regionid, point.X, point.Y, point.Z, radiusToCheck, false);
-        }
-
-        /// <summary>
-        /// Returns an IEnumerator of GamePlayers that are close to a certain
-        /// spot in the region
-        /// </summary>
-        /// <param name="regionid">Region to search</param>
-        /// <param name="x">X inside region</param>
-        /// <param name="y">Y inside region</param>
-        /// <param name="z">Z inside region</param>
-        /// <param name="radiusToCheck">Radius to sarch for GameClients</param>
-        /// <returns>IEnumerator that can be used to go through all players</returns>
-        public static IEnumerable GetPlayersCloseToSpot(ushort regionid, float x, float y, float z, ushort radiusToCheck)
-        {
-            return GetPlayersCloseToSpot(regionid, x, y, z, radiusToCheck, false);
-        }
-
-        /// <summary>
-        /// Returns an IEnumerator of GameNPCs that are close to a certain
-        /// spot in the region
-        /// </summary>
-        /// <param name="regionid">Region to search</param>
-        /// <param name="x">X inside region</param>
-        /// <param name="y">Y inside region</param>
-        /// <param name="z">Z inside region</param>
-        /// <param name="radiusToCheck">Radius to sarch for GameNPCs</param>
-        /// <param name="withDistance">Wether or not to return the objects with distance</param>
-        /// <returns>IEnumerator that can be used to go through all NPCs</returns>
-        public static IEnumerable GetNPCsCloseToSpot(ushort regionid, float x, float y, float z, ushort radiusToCheck, bool withDistance)
-        {
-            Region reg = GetRegion(regionid);
-            if (reg == null)
-                return new Region.EmptyEnumerator();
-            return reg.GetNPCsInRadius(x, y, z, radiusToCheck, withDistance, false);
-        }
-
-        /// <summary>
-        /// Returns an IEnumerator of GameNPCs that are close to a certain
-        /// spot in the region
-        /// </summary>
-        /// <param name="regionid">Region to search</param>
-        /// <param name="x">X inside region</param>
-        /// <param name="y">Y inside region</param>
-        /// <param name="z">Z inside region</param>
-        /// <param name="radiusToCheck">Radius to sarch for GameNPCs</param>
-        /// <returns>IEnumerator that can be used to go through all NPCs</returns>
-        public static IEnumerable GetNPCsCloseToSpot(ushort regionid, float x, float y, float z, ushort radiusToCheck)
-        {
-            return GetNPCsCloseToSpot(regionid, x, y, z, radiusToCheck, false);
-        }
-
-        public static IEnumerable GetNPCsCloseToSpot(ushort regionid, Vector3 pos, ushort radiusToCheck, bool withDistance)
-            => GetNPCsCloseToSpot(regionid, pos.X, pos.Y, pos.Z, radiusToCheck, withDistance);
-        public static IEnumerable GetNPCsCloseToSpot(ushort regionid, Vector3 pos, ushort radiusToCheck)
-            => GetNPCsCloseToSpot(regionid, pos.X, pos.Y, pos.Z, radiusToCheck, false);
-
-        /// <summary>
-        /// Returns an IEnumerator of GameItems that are close to a certain
-        /// spot in the region
-        /// </summary>
-        /// <param name="regionid">Region to search</param>
-        /// <param name="x">X inside region</param>
-        /// <param name="y">Y inside region</param>
-        /// <param name="z">Z inside region</param>
-        /// <param name="radiusToCheck">Radius to sarch for GameItems</param>
-        /// <param name="withDistance">Wether or not to return the objects with distance</param>
-        /// <returns>IEnumerator that can be used to go through all items</returns>
-        public static IEnumerable GetItemsCloseToSpot(ushort regionid, float x, float y, float z, ushort radiusToCheck, bool withDistance)
-        {
-            Region reg = GetRegion(regionid);
-            if (reg == null)
-                return new Region.EmptyEnumerator();
-
-            return reg.GetItemsInRadius(x, y, z, radiusToCheck, withDistance);
+            Region reg = GetRegion(position.RegionID);
+            if (reg == null) return new Region.EmptyEnumerator();
+            return reg.GetItemsInRadius(position.Coordinate, radiusToCheck, withDistance);
         }
 
         /// <summary>

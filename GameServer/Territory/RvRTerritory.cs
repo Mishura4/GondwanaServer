@@ -1,5 +1,6 @@
 ﻿using DOL.Database;
 using DOL.GS;
+using DOL.GS.Geometry;
 using DOL.GS.Keeps;
 using DOL.MobGroups;
 using DOLDatabase.Tables;
@@ -16,7 +17,7 @@ namespace DOL.Territories
         : Territory
     {
         /// <inheritdoc />
-        public RvRTerritory(Zone zone, List<IArea> areas, string name, GameNPC boss, Vector3? portalPosition, ushort regionID, MobGroup group) : base(eType.Normal, zone, areas, name, boss, portalPosition, regionID, group)
+        public RvRTerritory(Zone zone, List<IArea> areas, string name, GameNPC boss, Coordinate? portalCoordinate, ushort regionID, MobGroup group) : base(eType.Normal, zone, areas, name, boss, portalCoordinate, regionID, group)
         {
             //add new areas to region
             //only in memory
@@ -50,7 +51,7 @@ namespace DOL.Territories
         {
             OwnerGuild = null;
             // reset keep
-            AbstractGameKeep keep = GameServer.KeepManager.GetKeepCloseToSpot(RegionId, Boss.Position, 100000);
+            AbstractGameKeep keep = GameServer.KeepManager.GetKeepCloseToSpot(Boss.Position, 100000);
             keep.TempRealm = eRealm.None;
             keep.Reset(keep.TempRealm);
             // reset all doors

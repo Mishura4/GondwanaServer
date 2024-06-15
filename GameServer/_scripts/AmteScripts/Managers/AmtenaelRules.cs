@@ -156,15 +156,15 @@ namespace DOL.GS.ServerRules
         /// <param name="player"></param>
         /// <param name="source"></param>
         /// <param name="destination"></param>
-        public override void OnPlayerTeleport(GamePlayer player, GameLocation source, Teleport destination)
+        public override void OnPlayerTeleport(GamePlayer player, Teleport destination)
         {
             // Since region change already starts an immunity timer we only want to do this if a player
             // is teleporting within the same region
-            if (source.RegionID == destination.RegionID)
+            if (player.CurrentRegionID == destination.RegionID)
             {
                 StartPVEImmunityTimer(player, Properties.TIMER_PVE_TELEPORT * 1000);
             }
-            base.OnPlayerTeleport(player, source, destination);
+            base.OnPlayerTeleport(player, destination);
         }
 
         /// <summary>
@@ -1073,7 +1073,7 @@ namespace DOL.GS.ServerRules
 
                 if (!BG && living is GamePlayer)
                 {
-                    AbstractGameKeep keep = GameServer.KeepManager.GetKeepCloseToSpot(living.CurrentRegionID, living.Position, 16000);
+                    AbstractGameKeep keep = GameServer.KeepManager.GetKeepCloseToSpot(living.Position, 16000);
                     if (keep != null)
                     {
                         byte bonus = 0;

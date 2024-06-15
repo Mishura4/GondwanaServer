@@ -72,8 +72,7 @@ namespace DOL.GS
             cat.Level = Convert.ToByte(Level);
             cat.Name = Name;
             cat.Model = (ushort)Model;
-            cat.Position = new System.Numerics.Vector3(player.Position.X, player.Position.Y, player.Position.Z);
-            cat.CurrentRegion = player.CurrentRegion;
+            cat.Position = player.Position;
             cat.Realm = player.Realm;
             cat.AddToWorld();
 

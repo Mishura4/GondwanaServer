@@ -25,10 +25,10 @@ using DOL.Events;
 using DOL.Language;
 using DOL.GS.PacketHandler;
 using DOL.Database;
+using DOL.GS.Geometry;
 using DOL.GS.Spells;
 using log4net;
 using System.Linq;
-using System.Numerics;
 
 namespace DOL.GS
 {
@@ -233,8 +233,7 @@ namespace DOL.GS
             WorldInventoryItem item = new WorldInventoryItem(this);
             GamePlayer player = Banner.OwningPlayer;
 
-            var point = player.GetPointFromHeading(player.Heading, 30);
-            item.Position = new Vector3(point, player.Position.Z);
+            item.Position = player.Position + Vector.Create(player.Orientation, length: 30);
             item.Heading = player.Heading;
             item.CurrentRegionID = player.CurrentRegionID;
             return item;

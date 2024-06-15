@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using System.Timers;
 using DOL.AI.Brain;
 using DOL.Database;
 using DOL.Events;
 using DOL.GS;
+using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
 using DOL.GS.Scripts;
 using DOL.MobGroups;
@@ -59,7 +59,7 @@ namespace DOL.GS.Scripts
         {
             if (!base.Interact(player) && (IsPeaceful || WaitingInArea ||
             (((StandardMobBrain)Brain).AggroLevel == 0 && ((StandardMobBrain)Brain).AggroRange == 0))
-            && CurrentRegion.GetAreasOfSpot(Position).OfType<AbstractArea>().FirstOrDefault(a => a.DbArea != null && a.DbArea.ObjectId == AreaToEnter) != null)
+            && CurrentRegion.GetAreasOfSpot(Coordinate).OfType<AbstractArea>().FirstOrDefault(a => a.DbArea != null && a.DbArea.ObjectId == AreaToEnter) != null)
                 return false;
             if (PlayerFollow != null && PlayerFollow == player)
             {
@@ -93,7 +93,7 @@ namespace DOL.GS.Scripts
                         player.Out.SendMessage(text, eChatType.CT_System, eChatLoc.CL_PopupWindow);
                     }
                     Notify(GameNPCEvent.FollowLostTarget, this, new FollowLostTargetEventArgs(player));
-                    Reset();
+                    ResetFollow();
                 }
             }
             else
@@ -112,6 +112,7 @@ namespace DOL.GS.Scripts
             }
             return true;
         }
+        
         public override bool AddToWorld()
         {
             WaitingInArea = false;
@@ -213,10 +214,10 @@ namespace DOL.GS.Scripts
 
         private void ResetTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            ResetFriendMobs();
+            ResetFollow();
         }
 
-        public void ResetFriendMobs()
+        public void ResetFollow()
         {
             if (MobGroups != null)
             {
@@ -225,15 +226,15 @@ namespace DOL.GS.Scripts
                     foreach (FollowingFriendMob mob in group.NPCs.OfType<FollowingFriendMob>())
                     {
                         if (mob.PlayerFollow != null)
-                            mob.ResetFriendMob();
+                            mob.ResetSelf();
                     }
                 }
             }
-
-            ResetFriendMob();
+            
+            ResetSelf();
         }
 
-        public void ResetFriendMob()
+        private void ResetSelf()
         {
             if (WaitingInArea == true && PlayerFollow != null)
             {
@@ -248,16 +249,12 @@ namespace DOL.GS.Scripts
             AddToWorld();
         }
 
-        public void Reset()
-        {
-            ResetFriendMobs();
-        }
-
         public override void Die(GameObject killer)
         {
             base.Die(killer);
-            ResetFriendMobs();
+            ResetFollow();
         }
+        
         public override void SaveIntoDatabase()
         {
             base.SaveIntoDatabase();
@@ -316,7 +313,7 @@ namespace DOL.GS.Scripts
             if (PlayerFollow == null)
             {
                 Notify(GameNPCEvent.FollowLostTarget, this, new FollowLostTargetEventArgs(null));
-                Reset();
+                ResetFollow();
                 return 0;
             }
 
@@ -330,7 +327,7 @@ namespace DOL.GS.Scripts
                     PlayerFollow = null;
                     StopFollowing();
                     Notify(GameNPCEvent.FollowLostTarget, this, new FollowLostTargetEventArgs(playerFollow));
-                    Reset();
+                    ResetFollow();
                     return 0;
                 }
 
@@ -340,20 +337,20 @@ namespace DOL.GS.Scripts
                     PlayerFollow = null;
                     StopFollowing();
                     Notify(GameNPCEvent.FollowLostTarget, this, new FollowLostTargetEventArgs(playerFollow));
-                    Reset();
+                    ResetFollow();
                     return 0;
                 }
             }
 
             //Calculate the difference between our position and the players position
-            var diff = followTarget.Position - Position;
-
+            var diff = followTarget.Coordinate - Coordinate;
+            
             //SH: Removed Z checks when one of the two Z values is zero(on ground)
             float distanceToTarget;
             if (followTarget.Position.Z == 0 || Position.Z == 0)
-                distanceToTarget = (float)Math.Sqrt(diff.X * diff.X + diff.Y * diff.Y);
+                distanceToTarget = GetDistance2DTo(followTarget);
             else
-                distanceToTarget = (float)Math.Sqrt(diff.X * diff.X + diff.Y * diff.Y + diff.Z * diff.Z);
+                distanceToTarget = GetDistanceTo(followTarget);
 
             //Are we in range still?
             if (followTarget == PlayerFollow)
@@ -361,7 +358,7 @@ namespace DOL.GS.Scripts
                 if (distanceToTarget <= m_followMinDist)
                 {
                     // Within minimum distance, nothing to do
-                    //StopMoving();
+                    StopMoving();
                     TurnTo(followTarget);
 
                     if (!wasInRange)
@@ -387,6 +384,7 @@ namespace DOL.GS.Scripts
                 if (distanceToTarget <= m_followMinDist)
                 {
                     // Within minimum distance, nothing to do
+                    StopMoving();
                     TurnTo(followTarget);
 
                     if (!wasInRange)
@@ -405,13 +403,13 @@ namespace DOL.GS.Scripts
             if (area != null && !WaitingInArea)
             {
                 StopFollowing();
-                var targetPos = new Vector3(area.DbArea.X, area.DbArea.Y, area.DbArea.Z);
+                var targetPos = Coordinate.Create(area.DbArea.X, area.DbArea.Y, area.DbArea.Z);
                 var angle = Math.Atan2(targetPos.Y - Position.Y, targetPos.X - Position.X);
-                targetPos.X = area.DbArea.X + (float)Math.Cos(angle) * Util.Random(200, 300);
-                targetPos.Y = area.DbArea.Y + (float)Math.Sin(angle) * Util.Random(200, 300);
+
+                targetPos += Vector.Create(Angle.Radians(angle), Util.Random(200, 300));
                 WaitingInArea = true;
                 followTarget.Notify(GameLivingEvent.BringAFriend, followTarget, new BringAFriendArgs(this, true));
-                PathTo(targetPos, 130);
+                WalkTo(targetPos, 130);
                 return 0;
             }
             else if (WaitingInArea)
@@ -420,18 +418,19 @@ namespace DOL.GS.Scripts
             }
 
             // follow on distance
-            diff = (diff / distanceToTarget) * m_followMinDist;
-            var newPos = followTarget.Position - diff;
+            var distanceFactor = m_followMinDist / distanceToTarget;
+            var followOffset = diff * distanceFactor;
+            var newPos = followTarget.Coordinate - followOffset;
 
             if (followTarget == PlayerFollow)
             {
                 var speed = MaxSpeed;
-                if (GameMath.GetDistance2D(Position, followTarget.Position) < 200)
+                if (IsWithinRadius(followTarget, 200))
                     speed = 0;
-                PathTo(newPos, speed);
+                WalkTo(newPos, speed);
             }
             else
-                PathTo(newPos, MaxSpeed);
+                WalkTo(newPos, MaxSpeed);
             return ServerProperties.Properties.GAMENPC_FOLLOWCHECK_TIME;
         }
 
@@ -509,9 +508,9 @@ namespace DOL.AI.Brain
             FollowingFriendMob body = (FollowingFriendMob)Body;
 
             //if player quits the game
-            if (body.PlayerFollow != null && body.PlayerFollow.ObjectState == eObjectState.Deleted)
+            if (body.PlayerFollow is { ObjectState: eObjectState.Deleted })
             {
-                body.ResetFriendMobs();
+                body.ResetFollow();
                 return;
             }
             if (!Body.IsCasting && CheckSpells(eCheckSpellType.Defensive))
@@ -524,7 +523,7 @@ namespace DOL.AI.Brain
             }
 
             if (!Body.AttackState && !Body.IsCasting && !Body.IsMoving
-                && Body.Heading != Body.SpawnHeading && Body.Position == Body.SpawnPoint)
+                && Body.Heading != Body.SpawnHeading && Body.Position == Body.SpawnPosition)
                 Body.TurnTo(Body.SpawnHeading);
 
             if (!Body.InCombat)

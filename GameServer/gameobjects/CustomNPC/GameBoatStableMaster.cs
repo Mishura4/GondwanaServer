@@ -26,6 +26,7 @@ using DOL.GS.Movement;
 using DOL.GS.PacketHandler;
 using log4net;
 using DOL.GS.Finance;
+using DOL.GS.Geometry;
 
 namespace DOL.GS
 {
@@ -137,7 +138,7 @@ namespace DOL.GS
                     String destination = item.Name.Substring(LanguageMgr.GetTranslation(ServerProperties.Properties.DB_LANGUAGE, "GameStableMaster.ReceiveItem.TicketTo").Length);
                     PathPoint path = MovementMgr.LoadPath(item.Id_nb);
                     //PathPoint path = MovementMgr.Instance.LoadPath(this.Name + "=>" + destination);
-                    if ((path != null) && IsWithinRadius2D(path.Position, 500))
+                    if ((path != null) && ((Math.Abs(path.Coordinate.X - Coordinate.X)) < 500) && ((Math.Abs(path.Coordinate.Y - Coordinate.Y)) < 500))
                     {
                         player.Inventory.RemoveCountFromStack(item, 1);
                         InventoryLogging.LogInventoryAction(player, this, eInventoryActionType.Merchant, item, 1);
@@ -145,9 +146,7 @@ namespace DOL.GS
                         GameTaxiBoat boat = new GameTaxiBoat();
                         boat.Name = "Boat to " + destination;
                         boat.Realm = source.Realm;
-                        boat.Position = path.Position;
-                        boat.CurrentRegion = CurrentRegion;
-                        boat.Heading = GameMath.GetHeading(path.Position, path.Next.Position);
+                        boat.Position = Position.Create(CurrentRegion.ID, path.Coordinate, path.AngleToNextPathPoint);
                         boat.AddToWorld();
                         boat.CurrentWayPoint = path;
                         GameEventMgr.AddHandler(boat, GameNPCEvent.PathMoveEnds, new DOLEventHandler(OnHorseAtPathEnd));

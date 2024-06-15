@@ -21,9 +21,12 @@ using System.Collections.Generic;
 using DOL.Events;
 using DOL.GS.PacketHandler;
 using DOL.Database;
+using DOL.GS.Geometry;
 using DOL.Language;
 using System.Numerics;
 using static DOL.GS.WarMapMgr;
+using System.Drawing;
+using Vector = DOL.GS.Geometry.Vector;
 
 namespace DOL.GS
 {
@@ -39,25 +42,25 @@ namespace DOL.GS
             /// <summary>
             /// The center coordinate of this Area
             /// </summary>
-            public Vector3 Position { get; private set; }
+            public Coordinate Coordinate { get; private set; }
 
             /// <summary>
             /// The width of this Area 
             /// </summary>
-            protected float m_Width;
+            protected int m_Width;
 
             /// <summary>
             /// The height of this Area 
             /// </summary>
-            protected float m_Height;
+            protected int m_Height;
 
             public Square()
                 : base()
             { }
 
-            public Square(string desc, float x, float y, float z, float width, float height, bool isPvp) : base(desc)
+            public Square(string desc, int x, int y, int z, int width, int height, bool isPvp) : base(desc)
             {
-                Position = new Vector3(x, y, z);
+                Coordinate = Coordinate.Create(x, y, z);
                 m_Height = height;
                 m_Width = width;
                 IsPvP = isPvp;
@@ -66,7 +69,7 @@ namespace DOL.GS
             /// <summary>
             /// Returns the Width of this Area
             /// </summary>
-            public float Width
+            public int Width
             {
                 get { return m_Width; }
             }
@@ -74,7 +77,7 @@ namespace DOL.GS
             /// <summary>
             /// Returns the Height of this Area
             /// </summary>
-            public float Height
+            public int Height
             {
                 get { return m_Height; }
             }
@@ -86,13 +89,13 @@ namespace DOL.GS
             /// <returns></returns>
             public override bool IsIntersectingZone(Zone zone)
             {
-                if (Position.X + Width < zone.XOffset)
+                if (Coordinate.X + Width < zone.Offset.X)
                     return false;
-                if (Position.X - Width >= zone.XOffset + 65536)
+                if (Coordinate.X - Width >= zone.Offset.X + 65536)
                     return false;
-                if (Position.Y + Height < zone.YOffset)
+                if (Coordinate.Y + Height < zone.Offset.Y)
                     return false;
-                if (Position.Y - Height >= zone.YOffset + 65536)
+                if (Coordinate.Y - Height >= zone.Offset.Y + 65536)
                     return false;
 
                 return true;
@@ -103,13 +106,13 @@ namespace DOL.GS
             /// </summary>
             /// <param name="p"></param>
             /// <returns></returns>
-            public override bool IsContaining(Vector3 p, bool checkZ)
+            public override bool IsContaining(Coordinate p, bool checkZ)
             {
-                var m_xdiff = p.X - Position.X;
+                var m_xdiff = p.X - Coordinate.X;
                 if (m_xdiff < 0 || m_xdiff > Width)
                     return false;
 
-                var m_ydiff = p.Y - Position.Y;
+                var m_ydiff = p.Y - Coordinate.Y;
                 if (m_ydiff < 0 || m_ydiff > Height)
                     return false;
 
@@ -127,34 +130,36 @@ namespace DOL.GS
             }
 
             /// <inheritdoc />
-            public override float DistanceSquared(Vector3 position, bool checkZ)
+            public override float DistanceSquared(Coordinate position, bool checkZ)
             {
-                Vector3 direction = position - Position;
-                Vector3 intersection = new Vector3();
+                int dirX = position.X - Coordinate.X;
+                int dirY = position.X - Coordinate.X;
+                int interX;
+                int interY;
 
-                if (Math.Abs(direction.X) < Width && Math.Abs(direction.Y) < Height) // Inside
+                if (Math.Abs(dirX) < Width && Math.Abs(dirY) < Height) // Inside
                 {
                     return 0.0f;
                 }
-                if (direction.X > 0)
+                if (dirX > 0)
                 {
-                    intersection.X = position.X + Math.Min(Width, direction.X);
+                    interX = Coordinate.X + Math.Min(Width, dirX);
                 }
                 else
                 {
-                    intersection.X = position.X - Math.Max(-Width, direction.X);
+                    interX = Coordinate.X - Math.Max(-Width, dirX);
                 }
 
-                if (direction.Y > 0)
+                if (dirY > 0)
                 {
-                    intersection.Y = position.Y + Math.Min(Height, direction.Y);
+                    interY = Coordinate.Y + Math.Min(Height, dirY);
                 }
                 else
                 {
-                    intersection.Y = position.Y - Math.Max(-Height, direction.Y);
+                    interY = Coordinate.Y - Math.Max(-Height, dirY);
                 }
-                float dx = position.X - intersection.X;
-                float dy = position.Y - intersection.Y;
+                float dx = Coordinate.X - interX;
+                float dy = Coordinate.Y - interY;
                 return dx * dx + dy * dy;
             }
 
@@ -163,7 +168,7 @@ namespace DOL.GS
                 DbArea = area;
                 m_translationId = area.TranslationId;
                 m_Description = area.Description;
-                Position = new Vector3(area.X, area.Y, area.Z);
+                Coordinate = Coordinate.Create(area.X, area.Y, area.Z);
                 m_Width = area.Radius;
                 m_Height = area.Radius;
                 this.CanVol = area.AllowVol;
@@ -186,19 +191,19 @@ namespace DOL.GS
             {
             }
 
-            public Circle(string desc, Vector3 center, int radius) : base(desc)
+            public Circle(string desc, Coordinate center, int radius) : base(desc)
             {
                 m_Description = desc;
-                Position = center;
+                Coordinate = center;
                 m_Radius = radius;
                 m_RadiusRadius = radius * radius;
             }
 
-            public Circle(string desc, float x, float y, float z, int radius) : this(desc, new Vector3(x, y, z), radius)
+            public Circle(string desc, int x, int y, int z, int radius) : this(desc, Coordinate.Create(x, y, z), radius)
             {
             }
 
-            public Vector3 Position { get; private set; }
+            public Coordinate Coordinate { get; private set; }
 
             /// <summary>
             /// Returns the Height of this Area
@@ -222,28 +227,28 @@ namespace DOL.GS
             /// <returns></returns>
             public override bool IsIntersectingZone(Zone zone)
             {
-                if (Position.X + Radius < zone.XOffset)
+                if (Coordinate.X + Radius < zone.Offset.X)
                     return false;
-                if (Position.X - Radius >= zone.XOffset + 65536)
+                if (Coordinate.X - Radius >= zone.Offset.X + 65536)
                     return false;
-                if (Position.Y + Radius < zone.YOffset)
+                if (Coordinate.Y + Radius < zone.Offset.Y)
                     return false;
-                if (Position.Y - Radius >= zone.YOffset + 65536)
+                if (Coordinate.Y - Radius >= zone.Offset.Y + 65536)
                     return false;
 
                 return true;
             }
 
-            public override bool IsContaining(Vector3 point, bool checkZ)
+            public override bool IsContaining(Coordinate point, bool checkZ)
             {
                 // spot is not in square around circle no need to check for circle...
-                var diff = point - Position;
+                var diff = point - Coordinate;
 
                 // check if spot is in circle
-                var m_distSq = diff.ToVector2().LengthSquared();
-                if (Position.Z != 0 && point.Z != 0 && checkZ)
+                double m_distSq = (double)diff.X * diff.X + (double)diff.Y * diff.Y;
+                if (Coordinate.Z != 0 && point.Z != 0 && checkZ)
                 {
-                    float m_zdiff = point.Z - Position.Z;
+                    double m_zdiff = point.Z - Coordinate.Z;
                     m_distSq += m_zdiff * m_zdiff;
                 }
 
@@ -251,17 +256,22 @@ namespace DOL.GS
             }
 
             /// <inheritdoc />
-            public override float DistanceSquared(Vector3 position, bool checkZ)
+            public override float DistanceSquared(Coordinate position, bool checkZ)
             {
-                Vector3 direction = position - Position;
-                float radiusSquared = Radius * Radius;
-                float distanceToCenterSquared = direction.LengthSquared();
+                var diff = position - Coordinate;
+                double radiusSquared = Radius * Radius;
+                double m_distSq = (double)diff.X * diff.X + (double)diff.Y * diff.Y;
+                if (Coordinate.Z != 0 && position.Z != 0 && checkZ)
+                {
+                    double m_zdiff = position.Z - Coordinate.Z;
+                    m_distSq += m_zdiff * m_zdiff;
+                }
 
-                if (direction.LengthSquared() < radiusSquared) // Inside
+                if (m_distSq < radiusSquared) // Inside
                 {
                     return 0.0f;
                 }
-                return distanceToCenterSquared - radiusSquared;
+                return (float)(m_distSq - radiusSquared);
             }
 
             public override void LoadFromDatabase(DBArea area)
@@ -269,7 +279,7 @@ namespace DOL.GS
                 DbArea = area;
                 m_translationId = area.TranslationId;
                 m_Description = area.Description;
-                Position = new Vector3(area.X, area.Y, area.Z);
+                Coordinate = Coordinate.Create(area.X, area.Y, area.Z);
                 m_Radius = area.Radius;
                 m_RadiusRadius = area.Radius * area.Radius;
                 this.CanVol = area.AllowVol;
@@ -283,7 +293,7 @@ namespace DOL.GS
             /// <summary>
             /// The center coordinate of this Area
             /// </summary>
-            public Vector3 Position { get; private set; }
+            public Coordinate Coordinate { get; private set; }
 
             /// <summary>
             /// Returns the Height of this Area
@@ -306,18 +316,18 @@ namespace DOL.GS
             /// <summary>
             /// The Points list
             /// </summary>
-            protected IList<Vector2> m_points;
+            protected IList<Vector> m_points;
 
             public Polygon()
                 : base()
             {
             }
 
-            public Polygon(string desc, float x, float y, float z, int radius, string points)
+            public Polygon(string desc, int x, int y, int z, int radius, string points)
                 : base(desc)
             {
                 m_Description = desc;
-                Position = new Vector3(x, y, z);
+                Coordinate = Coordinate.Create(x, y, z);
                 m_Radius = radius;
                 StringPoints = points;
             }
@@ -334,7 +344,7 @@ namespace DOL.GS
                 set
                 {
                     m_stringpoints = value;
-                    m_points = new List<Vector2>();
+                    m_points = new List<Vector>();
                     if (m_stringpoints.Length < 1) return;
                     string[] points = m_stringpoints.Split('|');
                     foreach (string point in points)
@@ -343,7 +353,7 @@ namespace DOL.GS
                         if (pts.Length != 2) continue;
                         int x = Convert.ToInt32(pts[0]);
                         int y = Convert.ToInt32(pts[1]);
-                        Vector2 p = new Vector2(x, y);
+                        Vector p = Vector.Create(x, y);
                         if (!m_points.Contains(p)) m_points.Add(p);
                     }
                 }
@@ -357,29 +367,29 @@ namespace DOL.GS
             public override bool IsIntersectingZone(Zone zone)
             {
                 // TODO if needed
-                if (Position.X + Radius < zone.XOffset)
+                if (Coordinate.X + Radius < zone.Offset.X)
                     return false;
-                if (Position.X - Radius >= zone.XOffset + 65536)
+                if (Coordinate.X - Radius >= zone.Offset.X + 65536)
                     return false;
-                if (Position.Y + Radius < zone.YOffset)
+                if (Coordinate.Y + Radius < zone.Offset.Y)
                     return false;
-                if (Position.Y - Radius >= zone.YOffset + 65536)
+                if (Coordinate.Y - Radius >= zone.Offset.Y + 65536)
                     return false;
 
                 return true;
             }
 
-            public override bool IsContaining(Vector3 obj, bool _checkZ)
+            public override bool IsContaining(Coordinate obj, bool _checkZ)
             {
                 if (m_points.Count < 3) return false;
-                Vector2 p1, p2;
+                Vector p1, p2;
                 bool inside = false;
 
-                Vector2 oldpt = new Vector2(m_points[m_points.Count - 1].X, m_points[m_points.Count - 1].Y);
+                Vector oldpt = Vector.Create(m_points[m_points.Count - 1].X, m_points[m_points.Count - 1].Y);
 
-                foreach (Vector2 pt in m_points)
+                foreach (var pt in m_points)
                 {
-                    Vector2 newpt = new Vector2(pt.X, pt.Y);
+                    Vector newpt = Vector.Create(pt.X, pt.Y);
 
                     if (newpt.X > oldpt.X) { p1 = oldpt; p2 = newpt; }
                     else { p1 = newpt; p2 = oldpt; }
@@ -394,17 +404,13 @@ namespace DOL.GS
             }
 
             /// <inheritdoc />
-            public override float DistanceSquared(Vector3 position, bool checkZ)
+            public override float DistanceSquared(Coordinate position, bool checkZ)
             {
-                Vector3 direction = position - Position;
+                var direction = position - Coordinate;
                 float radiusSquared = Radius * Radius;
-                if (!checkZ)
-                {
-                    direction.Z = 0;
-                }
-                float distanceToCenterSquared = direction.LengthSquared();
+                var distanceToCenterSquared = (float)(checkZ ? direction.Length : direction.Length2D);
 
-                if (direction.LengthSquared() < radiusSquared) // Inside
+                if (distanceToCenterSquared < radiusSquared) // Inside
                 {
                     return 0.0f;
                 }
@@ -416,7 +422,7 @@ namespace DOL.GS
                 DbArea = area;
                 m_translationId = area.TranslationId;
                 m_Description = area.Description;
-                Position = new Vector3(area.X, area.Y, area.Z);
+                Coordinate = Coordinate.Create(area.X, area.Y, area.Z);
                 m_Radius = area.Radius;
                 StringPoints = area.Points;
                 this.CanVol = area.AllowVol;
@@ -482,7 +488,7 @@ namespace DOL.GS
             {
             }
 
-            public CombatZone(Guild owningGuild, Vector3 position)
+            public CombatZone(Guild owningGuild, Coordinate position)
             : base("", position, ServerProperties.Properties.GUILD_COMBAT_ZONE_RADIUS)
             {
                 CanVol = true;

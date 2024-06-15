@@ -59,7 +59,7 @@ namespace DOL.GS
             return true;
         }
 
-        protected void AddObserver(GamePlayer player)
+        public override void AddObserver(GamePlayer player)
         {
             lock (_vaultLock)
             {

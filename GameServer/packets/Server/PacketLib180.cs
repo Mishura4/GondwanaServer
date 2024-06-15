@@ -160,9 +160,9 @@ namespace DOL.GS.PacketHandler
                 pak.WriteShort((ushort)playerToCreate.Position.Z);
                 //Dinberg:Instances - send out the 'fake' zone ID to the client for positioning purposes.
                 pak.WriteShort(playerZone.ZoneSkinID);
-                pak.WriteShort((ushort)playerRegion.GetXOffInZone(playerToCreate.Position.X, playerToCreate.Position.Y));
-                pak.WriteShort((ushort)playerRegion.GetYOffInZone(playerToCreate.Position.X, playerToCreate.Position.Y));
-                pak.WriteShort(playerToCreate.Heading);
+                pak.WriteShort(GetXOffsetInZone(playerToCreate));
+                pak.WriteShort(GetYOffsetInZone(playerToCreate));
+                pak.WriteShort(playerToCreate.Orientation.InHeading);
 
                 pak.WriteByte(playerToCreate.GetFaceAttribute(eCharFacePart.EyeSize)); //1-4 = Eye Size / 5-8 = Nose Size
                 pak.WriteByte(playerToCreate.GetFaceAttribute(eCharFacePart.LipSize)); //1-4 = Ear size / 5-8 = Kin size

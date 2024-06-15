@@ -1,8 +1,8 @@
 ﻿using DOL.Database;
 using DOL.GameEvents;
-using DOL.Geometry;
 using DOL.GS;
 using DOL.GS.Commands;
+using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
 using DOL.Language;
 using DOL.MobGroups;
@@ -409,12 +409,12 @@ namespace DOL.commands.gmcommands
                                 return;
                             }
                         }
-                        Vector3 position;
+                        Coordinate position;
                         if (args.Length > arg)
                         {
                             if (string.Equals(args[arg], "remove"))
                             {
-                                territory.PortalPosition = null;
+                                territory.PortalCoordinate = null;
                                 client.SendTranslation("Commands.GM.GMTerritories.PortalRemoved", eChatType.CT_System, eChatLoc.CL_SystemWindow, territory.Name);
                                 return;
                             }
@@ -438,14 +438,13 @@ namespace DOL.commands.gmcommands
                                 client.SendTranslation("Commands.GM.GMTerritories.BadCoordinate", eChatType.CT_System, eChatLoc.CL_SystemWindow, args[arg + 2]);
                                 return;
                             }
-                            position = new Vector3(x, y, z);
+                            position = Coordinate.Create(x, y, z);
                         }
                         else
                         {
-                            var playerPosition = client.Player.Position;
-                            position = new Vector3((int)playerPosition.X, (int)playerPosition.Y, (int)playerPosition.Z);
+                            position = client.Player.Coordinate;
                         }
-                        territory.PortalPosition = position;
+                        territory.PortalCoordinate = position;
                         territory.SaveIntoDatabase();
                         client.SendTranslation("Commands.GM.GMTerritories.PortalSet", eChatType.CT_System, eChatLoc.CL_SystemWindow, territory.Name, position.X, position.Y, position.Z);
                     }

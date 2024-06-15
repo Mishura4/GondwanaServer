@@ -12,6 +12,8 @@ using DOL.Database;
 using DOL.GS.RealmAbilities;
 using System.Numerics;
 using DOL;
+using DOL.GS.Geometry;
+using Vector = DOL.GS.Geometry.Vector;
 
 namespace DOL.GS.Spells
 {
@@ -62,8 +64,6 @@ namespace DOL.GS.Spells
             font.Name = spell.Name;
             font.Realm = caster.Realm;
             font.Position = caster.Position;
-            font.CurrentRegionID = caster.CurrentRegionID;
-            font.Heading = caster.Heading;
             font.Owner = (GamePlayer)caster;
 
             // Construct the font spell
@@ -138,8 +138,6 @@ namespace DOL.GS.Spells
             mine.Name = spell.Name;
             mine.Realm = caster.Realm;
             mine.Position = caster.Position;
-            mine.CurrentRegionID = caster.CurrentRegionID;
-            mine.Heading = caster.Heading;
             mine.Owner = (GamePlayer)caster;
 
             // Construct the mine spell
@@ -190,8 +188,6 @@ namespace DOL.GS.Spells
             font.Name = spell.Name;
             font.Realm = caster.Realm;
             font.Position = caster.Position;
-            font.CurrentRegionID = caster.CurrentRegionID;
-            font.Heading = caster.Heading;
             font.Owner = (GamePlayer)caster;
 
             // Construct the mine spell
@@ -314,13 +310,13 @@ namespace DOL.GS.Spells
             if ((effect.Owner is GamePlayer))
             {
                 GamePlayer casterPlayer = effect.Owner as GamePlayer;
-                if (casterPlayer.GroundTarget != null && casterPlayer.GroundTargetInView)
+                if (casterPlayer.GroundTargetPosition != Position.Nowhere && casterPlayer.GroundTargetInView)
                 {
                     GameEventMgr.AddHandler(casterPlayer, GamePlayerEvent.Moving, new DOLEventHandler(PlayerMoves));
                     GameEventMgr.AddHandler(warder, GameLivingEvent.Dying, new DOLEventHandler(BattleWarderDie));
                     GameEventMgr.AddHandler(casterPlayer, GamePlayerEvent.CastStarting, new DOLEventHandler(PlayerMoves));
                     GameEventMgr.AddHandler(casterPlayer, GamePlayerEvent.AttackFinished, new DOLEventHandler(PlayerMoves));
-                    warder.Position = casterPlayer.GroundTarget.Value;
+                    warder.Position = casterPlayer.GroundTargetPosition;
                     warder.AddBrain(new MLBrain());
                     warder.AddToWorld();
                 }
@@ -379,7 +375,7 @@ namespace DOL.GS.Spells
         public override bool CheckBeginCast(GameLiving selectedTarget)
         {
             if (!base.CheckBeginCast(selectedTarget)) return false;
-            if (!(m_caster.GroundTarget != null && m_caster.GroundTargetInView))
+            if (!(m_caster.GroundTargetPosition != Position.Nowhere && m_caster.GroundTargetInView))
             {
                 MessageToCaster("Your area target is out of range.  Set a closer ground position.", eChatType.CT_SpellResisted);
                 return false;
@@ -393,7 +389,7 @@ namespace DOL.GS.Spells
             warder = new GameNPC();
             //Fill the object variables
             warder.CurrentRegion = caster.CurrentRegion;
-            warder.Heading = (ushort)((caster.Heading + 2048) % 4096);
+            warder.Orientation = caster.Orientation + Angle.Degrees(180);
             warder.Level = 70;
             warder.Realm = caster.Realm;
             warder.Name = "Battle Warder";
@@ -423,8 +419,6 @@ namespace DOL.GS.Spells
             mine.Name = spell.Name;
             mine.Realm = caster.Realm;
             mine.Position = caster.Position;
-            mine.CurrentRegionID = caster.CurrentRegionID;
-            mine.Heading = caster.Heading;
             mine.Owner = (GamePlayer)caster;
 
             // Construct the mine spell
@@ -511,9 +505,7 @@ namespace DOL.GS.Spells
             controlledBrain.IsMainPet = false;
             summoned = new GameNPC(template);
             summoned.SetOwnBrain(controlledBrain);
-            summoned.Position = new Vector3(summonloc, target.Position.Z);
-            summoned.CurrentRegion = target.CurrentRegion;
-            summoned.Heading = (ushort)((target.Heading + 2048) % 4096);
+            summoned.Position = summoned.Position.TurnedAround() + Vector.Create(target.Orientation, length: 64);
             summoned.Realm = target.Realm;
             summoned.Level = 1;
             summoned.Size = 10;
@@ -626,7 +618,7 @@ namespace DOL.GS.Spells
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        private float x, y, z;
+        private Position position = Position.Nowhere;
         GameNPC summoned = null;
         RegionTimer m_growTimer;
         private const int C_GROWTIMER = 2000;
@@ -635,7 +627,7 @@ namespace DOL.GS.Spells
 
         public override bool CheckBeginCast(GameLiving selectedTarget)
         {
-            if (!CheckCastLocation())
+            if (!CheckCastCoordinate())
                 return false;
             return base.CheckBeginCast(selectedTarget);
         }
@@ -678,11 +670,9 @@ namespace DOL.GS.Spells
             summoned.SetOwnBrain(controlledBrain);
             //Suncheck:
             //	Is needed, else it can cause error (i.e. /cast-command)
-            if (x == 0 || y == 0)
-                CheckCastLocation();
-            summoned.Position = new Vector3(x, y, z);
-            summoned.CurrentRegion = player.CurrentRegion;
-            summoned.Heading = (ushort)((player.Heading + 2048) % 4096);
+            if (position == Position.Nowhere) CheckCastCoordinate();
+
+            summoned.Position = position.With(orientation: Caster.Orientation + Angle.Degrees(180));
             summoned.Realm = player.Realm;
             summoned.Size = 10;
             summoned.Level = 100;
@@ -710,22 +700,18 @@ namespace DOL.GS.Spells
             return 0;
         }
 
-        private bool CheckCastLocation()
+        private bool CheckCastCoordinate()
         {
-            x = Caster.Position.X;
-            y = Caster.Position.Y;
-            z = Caster.Position.Z;
+            position = Caster.Position;
             if (Spell.Target.ToLower() == "area")
             {
-                if (Caster.GroundTargetInView && Caster.GroundTarget != null)
+                if (Caster.GroundTargetInView && Caster.GroundTargetPosition != Position.Nowhere)
                 {
-                    x = Caster.GroundTarget.Value.X;
-                    y = Caster.GroundTarget.Value.Y;
-                    z = Caster.GroundTarget.Value.Z;
+                    position = Caster.GroundTargetPosition;
                 }
                 else
                 {
-                    if (Caster.GroundTarget == null)
+                    if (Caster.GroundTargetPosition == Position.Nowhere)
                     {
                         MessageToCaster("You must set a groundtarget!", eChatType.CT_SpellResisted);
                         return false;
@@ -739,6 +725,7 @@ namespace DOL.GS.Spells
             }
             return true;
         }
+        
         /// <summary>
         /// When an applied effect expires.
         /// Duration spells only.

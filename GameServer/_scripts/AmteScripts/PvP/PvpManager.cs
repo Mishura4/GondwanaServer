@@ -7,6 +7,7 @@ using AmteScripts.Utils;
 using DOL.Database;
 using DOL.Events;
 using DOL.GS;
+using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
 using log4net;
 
@@ -17,7 +18,7 @@ namespace AmteScripts.Managers
         private static readonly TimeSpan _startTime = new TimeSpan(14, 0, 0);
         private static readonly TimeSpan _endTime = _startTime.Add(TimeSpan.FromHours(8));
         private const int _checkInterval = 30 * 1000; // 30 seconds
-        private static readonly GameLocation _stuckSpawn = new GameLocation("", 51, 434303, 493165, 3088, 1069);
+        private static readonly Position _stuckSpawn = Position.Create(51, 434303, 493165, 3088, 1069);
 
         #region Static part
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
@@ -57,7 +58,7 @@ namespace AmteScripts.Managers
         /// <summary>
         /// &lt;regionID, Tuple&lt;TPs, spawnAlb, spawnMid, spawnHib&gt;&gt;
         /// </summary>
-        private readonly Dictionary<ushort, Tuple<GameNPC, GameLocation>> _maps = new Dictionary<ushort, Tuple<GameNPC, GameLocation>>();
+        private readonly Dictionary<ushort, Tuple<GameNPC, Position>> _maps = new();
 
         private PvpManager()
         {
@@ -83,7 +84,7 @@ namespace AmteScripts.Managers
                 var spawn = WorldMgr.GetNPCsByNameFromRegion("SPAWN", id, eRealm.None).FirstOrDefault();
                 if (spawn == null)
                     continue;
-                _maps.Add(id, new Tuple<GameNPC, GameLocation>(spawn, new GameLocation("Spawn", spawn)));
+                _maps.Add(id, new Tuple<GameNPC, Position>(spawn, spawn.Position));
             }
             return (from m in _maps select m.Key);
         }

@@ -17,7 +17,7 @@
  *
  */
 
-using System.Numerics;
+using DOL.GS.Geometry;
 
 namespace DOL.GS.PacketHandler.Client.v168
 {
@@ -29,23 +29,21 @@ namespace DOL.GS.PacketHandler.Client.v168
     {
         public void HandlePacket(GameClient client, GSPacketIn packet)
         {
+            var player = client.Player;
             if (client.Version >= GameClient.eClientVersion.Version1124)
             {
-                var x = packet.ReadFloatLowEndian();
-                var y = packet.ReadFloatLowEndian();
-                var z = packet.ReadFloatLowEndian();
-                var speed = packet.ReadFloatLowEndian();
+                var x = (int)packet.ReadFloatLowEndian();
+                var y = (int)packet.ReadFloatLowEndian();
+                var z = (int)packet.ReadFloatLowEndian();
+                player.CurrentSpeed = (short)packet.ReadFloatLowEndian();
                 var heading = packet.ReadShort();
-
-                client.Player.Position = new Vector3(x, y, z);
-                client.Player.SetCurrentSpeed((short)speed);
-                client.Player.Heading = heading;
+                player.Position = Position.Create(player.Position.RegionID, x, y, z, heading);
             }
             int flagSpeedData = packet.ReadShort();
             int slot = packet.ReadByte();
             int type = packet.ReadByte();
 
-            new UseSlotAction(client.Player, flagSpeedData, slot, type).Start(1);
+            new UseSlotAction(player, flagSpeedData, slot, type).Start(1);
         }
 
         /// <summary>

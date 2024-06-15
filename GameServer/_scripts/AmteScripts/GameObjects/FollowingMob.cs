@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
 using DOL.AI.Brain;
 using DOL.Database;
 using DOL.Events;
 using DOL.GS;
+using DOL.GS.Geometry;
 using DOL.GS.Scripts;
 
 namespace DOL.GS.Scripts
@@ -27,8 +27,8 @@ namespace DOL.GS.Scripts
                 if (value == null)
                     return;
 
-                double DX = SpawnPoint.X - value.SpawnPoint.X;
-                double DY = SpawnPoint.Y - value.SpawnPoint.Y;
+                double DX = SpawnPosition.X - value.SpawnPosition.X;
+                double DY = SpawnPosition.Y - value.SpawnPosition.Y;
                 m_DistMob = (int)Math.Sqrt(DX * DX + DY * DY);
 
                 if (m_DistMob > 0)
@@ -130,14 +130,15 @@ namespace DOL.GS.Scripts
             }
 
             //Calculate the difference between our position and the players position
-            var diff = followTarget.Position - Position;
+            var diff = followTarget.Coordinate - Coordinate;
 
             //SH: Removed Z checks when one of the two Z values is zero(on ground)
             float distance;
             if (followTarget.Position.Z == 0 || Position.Z == 0)
-                distance = (float)Math.Sqrt(diff.X * diff.X + diff.Y * diff.Y);
+                distance = GetDistance2DTo(followTarget);
             else
-                distance = (float)Math.Sqrt(diff.X * diff.X + diff.Y * diff.Y + diff.Z * diff.Z);
+                distance = GetDistanceTo(followTarget);
+
 
             //if distance is greater then the max follow distance, stop following and return home
             if (distance > m_followMaxDist)
@@ -188,22 +189,21 @@ namespace DOL.GS.Scripts
 
             // follow on distance
             diff = (diff / distance) * m_followMinDist;
-            var newPos = followTarget.Position - diff;
+            var newCoordinate = followTarget.Coordinate - diff;
 
             if (followTarget == MobFollow)
             {
                 var angle = (m_Angle + followTarget.Heading / GameMath.RADIAN_TO_HEADING) % (Math.PI * 2);
+                Vector direction = Vector.Create(Angle.Radians(angle), m_DistMob);
 
-                newPos.X = followTarget.Position.X + (float)Math.Cos(angle) * m_DistMob;
-                newPos.Y = followTarget.Position.Y + (float)Math.Sin(angle) * m_DistMob;
-
+                newCoordinate += direction;
                 var speed = MaxSpeed;
-                if (GameMath.GetDistance2D(Position, newPos) < 500)
+                if (GameMath.GetDistance2D(Coordinate, newCoordinate) < 500)
                     speed = (short)Math.Min(MaxSpeed, MobFollow.CurrentSpeed + 6);
-                PathTo(newPos, speed);
+                PathTo(newCoordinate, speed);
             }
             else
-                PathTo(newPos, MaxSpeed);
+                PathTo(newCoordinate, MaxSpeed);
             return ServerProperties.Properties.GAMENPC_FOLLOWCHECK_TIME;
         }
 
@@ -267,7 +267,7 @@ namespace DOL.AI.Brain
             }
 
             if (!Body.AttackState && !Body.IsCasting && !Body.IsMoving
-                && Body.Heading != Body.SpawnHeading && Body.Position == Body.SpawnPoint)
+                && Body.Heading != Body.SpawnHeading && Body.Position == Body.SpawnPosition)
                 Body.TurnTo(Body.SpawnHeading);
 
             if (!Body.InCombat)

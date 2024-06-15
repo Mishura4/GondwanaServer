@@ -42,7 +42,7 @@ namespace DOL.GS.Commands
                         "Commands.Players.Range.NeedTarget"));
             else if (living == null || (living != null && client.Account.PrivLevel > 1))
             {
-                var range = client.Player.GetDistanceTo(client.Player.TargetObject.Position);
+                var range = client.Player.GetDistanceTo(client.Player.TargetObject);
                 DisplayMessage(
                     client,
                     LanguageMgr.GetTranslation(

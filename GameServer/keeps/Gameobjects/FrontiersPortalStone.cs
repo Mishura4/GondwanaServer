@@ -19,7 +19,9 @@
 using System.Collections;
 
 using DOL.Database;
+using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
+using System;
 
 namespace DOL.GS.Keeps
 {
@@ -64,7 +66,7 @@ namespace DOL.GS.Keeps
             {
                 if (m_component != null)
                     return m_component.Keep.Realm;
-                if (m_CurrentRegion.ID == 163)
+                if (CurrentRegion.ID == 163)
                     return CurrentZone.Realm;
                 return base.Realm;
             }
@@ -125,15 +127,13 @@ namespace DOL.GS.Keeps
             return true;
         }
 
+        [Obsolete("This is going to be removed.")]
         public void GetTeleportLocation(out int x, out int y)
         {
-            ushort originalHeading = m_Heading;
-            m_Heading = (ushort)Util.Random((m_Heading - 500), (m_Heading + 500));
-            int distance = Util.Random(50, 150);
-            var portloc = GameMath.GetPointFromHeading(Position, Heading, distance);
-            x = (int)portloc.X;
-            y = (int)portloc.Y;
-            m_Heading = originalHeading;
+            var angle = Orientation + Angle.Heading(Util.Random(- 500, 500));
+            var portPosition = Position + Vector.Create(angle, length: Util.Random(50, 150));
+            x = portPosition.X;
+            y = portPosition.Y;
         }
 
         public class TeleporterEffect : GameNPC
@@ -157,9 +157,7 @@ namespace DOL.GS.Keeps
         {
             if (!base.AddToWorld()) return false;
             TeleporterEffect mob = new TeleporterEffect();
-            mob.CurrentRegion = this.CurrentRegion;
             mob.Position = this.Position;
-            mob.Heading = this.Heading;
             mob.Health = mob.MaxHealth;
             mob.MaxSpeedBase = 0;
             if (mob.AddToWorld())

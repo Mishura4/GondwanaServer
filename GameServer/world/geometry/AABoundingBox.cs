@@ -6,7 +6,7 @@ namespace DOL.GS.Geometry
     public readonly struct AABoundingBox : ICollider
     {
         public readonly Vector3 Min;
-        public readonly Vector3 Max;
+        public readonly System.Numerics.Vector3 Max;
         public AABoundingBox Box => this;
 
         public AABoundingBox(Vector3 min, Vector3 max)

@@ -7,7 +7,7 @@ using DOL.GS.Keeps;
 using DOL.GS.PacketHandler;
 using DOL.Database;
 using log4net;
-using System.Numerics;
+using DOL.GS.Geometry;
 
 namespace DOL.GS
 {
@@ -193,9 +193,8 @@ namespace DOL.GS
         {
             if (m_item == null || m_currentCarrier == null)
                 return;
-            CurrentRegionID = m_currentCarrier.CurrentRegionID;
+            
             Position = m_currentCarrier.Position;
-            Heading = m_currentCarrier.Heading;
         }
 
 
@@ -224,7 +223,7 @@ namespace DOL.GS
 
             if (IsMounted)
             {
-                AbstractGameKeep keep = GameServer.KeepManager.GetKeepCloseToSpot(m_currentRelicPad.CurrentRegionID, m_currentRelicPad.Position, WorldMgr.VISIBILITY_DISTANCE);
+                AbstractGameKeep keep = GameServer.KeepManager.GetKeepCloseToSpot(m_currentRelicPad.Position, WorldMgr.VISIBILITY_DISTANCE);
 
                 log.DebugFormat("keep {0}", keep);
 
@@ -490,9 +489,7 @@ namespace DOL.GS
         {
             InternalID = obj.ObjectId;
             m_dbRelic = obj as DBRelic;
-            CurrentRegionID = (ushort)m_dbRelic.Region;
-            Position = new Vector3(m_dbRelic.X, m_dbRelic.Y, m_dbRelic.Z);
-            Heading = (ushort)m_dbRelic.Heading;
+            Position = Position.Create((ushort)m_dbRelic.Region, m_dbRelic.X, m_dbRelic.Y, m_dbRelic.Z, (ushort)m_dbRelic.Heading);
             m_relicType = (eRelicType)m_dbRelic.relicType;
             Realm = (eRealm)m_dbRelic.Realm;
             m_originalRealm = (eRealm)m_dbRelic.OriginalRealm;
@@ -536,12 +533,12 @@ namespace DOL.GS
             m_dbRelic.Realm = (int)Realm;
             m_dbRelic.OriginalRealm = (int)OriginalRealm;
             m_dbRelic.LastRealm = (int)m_lastRealm;
-            m_dbRelic.Heading = (int)Heading;
-            m_dbRelic.Region = (int)CurrentRegionID;
+            m_dbRelic.Heading = Orientation.InHeading;
+            m_dbRelic.Region = Position.RegionID;
             m_dbRelic.relicType = (int)RelicType;
-            m_dbRelic.X = (int)Position.X;
-            m_dbRelic.Y = (int)Position.Y;
-            m_dbRelic.Z = (int)Position.Z;
+            m_dbRelic.X = Position.X;
+            m_dbRelic.Y = Position.Y;
+            m_dbRelic.Z = Position.Z;
 
             if (InternalID == null)
             {

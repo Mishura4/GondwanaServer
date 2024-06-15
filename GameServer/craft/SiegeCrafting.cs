@@ -100,8 +100,6 @@ namespace DOL.GS
             siegeweapon.ItemId = product.Id_nb;
 
             siegeweapon.LoadFromDatabase(product);
-            siegeweapon.CurrentRegion = player.CurrentRegion;
-            siegeweapon.Heading = player.Heading;
             siegeweapon.Position = player.Position;
             siegeweapon.Realm = player.Realm;
             siegeweapon.AddToWorld();

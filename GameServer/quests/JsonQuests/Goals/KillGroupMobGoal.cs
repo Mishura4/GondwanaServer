@@ -1,5 +1,6 @@
 ﻿using DOL.Database;
 using DOL.Events;
+using DOL.GS.Geometry;
 using DOL.MobGroups;
 using DOLDatabase.Tables;
 using System;
@@ -32,17 +33,17 @@ namespace DOL.GS.Quests
             if (db.AreaRadius != null && db.AreaRadius != "" && db.AreaRegion != null && db.AreaRegion != "" && db.AreaCenter != null)
             {
                 hasArea = true;
-                m_area = new Area.Circle($"{quest.Name} KillGroupMobGoal {goalId}", new Vector3((float)db.AreaCenter.X, (float)db.AreaCenter.Y, (float)db.AreaCenter.Z), (int)db.AreaRadius);
+                m_area = new Area.Circle($"{quest.Name} KillGroupMobGoal {goalId}", Coordinate.Create((int)((float)db.AreaCenter.X), (int)((float)db.AreaCenter.Y), (int)((float)db.AreaCenter.Z)), (int)db.AreaRadius);
                 m_area.DisplayMessage = !false;
                 m_areaRegion = db.AreaRegion;
 
                 var reg = WorldMgr.GetRegion(m_areaRegion);
                 reg.AddArea(m_area);
-                PointA = new QuestZonePoint(reg.GetZone(m_area.Position), m_area.Position);
+                PointA = new QuestZonePoint(reg.GetZone(m_area.Coordinate), m_area.Coordinate);
             }
             else if (m_region != null && db.AreaCenter != null)
             {
-                var pos = new Vector3((float)db.AreaCenter.X, (float)db.AreaCenter.Y, (float)db.AreaCenter.Z);
+                var pos = Coordinate.Create((int)((float)db.AreaCenter.X), (int)((float)db.AreaCenter.Y), (int)((float)db.AreaCenter.Z));
                 PointA = new QuestZonePoint(m_region.GetZone(pos), pos);
             }
         }
@@ -52,7 +53,7 @@ namespace DOL.GS.Quests
             var dict = base.GetDatabaseJsonObject();
             dict.Add("TargetName", m_targetName);
             dict.Add("TargetRegion", m_regionId);
-            dict.Add("AreaCenter", m_area.Position);
+            dict.Add("AreaCenter", m_area.Coordinate);
             dict.Add("AreaRadius", m_area.Radius);
             dict.Add("AreaRegion", m_areaRegion);
             return dict;
@@ -72,7 +73,7 @@ namespace DOL.GS.Quests
 
                 if (killed == null
                 || m_region != killed.CurrentRegion
-                || (hasArea && !m_area.IsContaining(killed.Position, false)))
+                || (hasArea && !m_area.IsContaining(killed.Coordinate, false)))
                     return;
 
                 if (killed is GameNPC killedNpc && MobGroupManager.Instance.Groups.TryGetValue(m_targetName, out MobGroup targetGroup) && !targetGroup.IsAllDead(killedNpc))

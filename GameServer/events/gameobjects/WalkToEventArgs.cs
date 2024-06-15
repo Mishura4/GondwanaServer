@@ -19,6 +19,7 @@
 using System;
 using System.Numerics;
 using DOL.GS;
+using DOL.GS.Geometry;
 
 namespace DOL.Events
 {
@@ -27,7 +28,7 @@ namespace DOL.Events
     /// </summary>
     public class WalkToEventArgs : EventArgs
     {
-        public WalkToEventArgs(Vector3 target, int speed)
+        public WalkToEventArgs(Coordinate target, int speed)
         {
             Target = target;
             Speed = speed;
@@ -36,7 +37,7 @@ namespace DOL.Events
         /// <summary>
         /// The spot to walk to.
         /// </summary>
-        public Vector3 Target { get; private set; }
+        public Coordinate Target { get; private set; }
 
         /// <summary>
         /// The speed to walk at.

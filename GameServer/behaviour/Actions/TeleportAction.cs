@@ -16,6 +16,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
+using DOL.Database;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -24,12 +25,12 @@ using DOL.Events;
 using DOL.GS.Behaviour.Attributes;
 using DOL.GS.Behaviour;
 using DOL.Language;
-using System.Numerics;
+using DOL.GS.Geometry;
 
 namespace DOL.GS.Behaviour.Actions
 {
     [ActionAttribute(ActionType = eActionType.Teleport, DefaultValueQ = 0)]
-    public class TeleportAction : AbstractAction<GameLocation, int>
+    public class TeleportAction : AbstractAction<Teleport, int>
     {
 
         public TeleportAction(GameNPC defaultNPC, Object p, Object q)
@@ -38,7 +39,7 @@ namespace DOL.GS.Behaviour.Actions
         }
 
 
-        public TeleportAction(GameNPC defaultNPC, GameLocation location, int fuzzyRadius)
+        public TeleportAction(GameNPC defaultNPC, Teleport location, int fuzzyRadius)
             : this(defaultNPC, (object)location, (object)fuzzyRadius) { }
 
 
@@ -46,16 +47,16 @@ namespace DOL.GS.Behaviour.Actions
         public override void Perform(DOLEvent e, object sender, EventArgs args)
         {
             GamePlayer player = BehaviourUtils.GuessGamePlayerFromNotify(e, sender, args);
-            GameLocation location = P;
+            Teleport location = P;
             int radius = Q;
 
-            if (location.Name != null)
+            if (location.TeleportID != null)
             {
-                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Behaviour.TeleportAction.TeleportedToLoc", player, location.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Behaviour.TeleportAction.TeleportedToLoc", player, location.TeleportID), eChatType.CT_System, eChatLoc.CL_SystemWindow);
             }
-
-            location.Position += new Vector3(Util.Random(-radius, radius), Util.Random(-radius, radius), 0);
-            player.MoveTo(location);
+            
+            var randomOffset = Vector.Create(x: Util.Random(-radius, radius), y: Util.Random(-radius, radius));
+            player.MoveTo(location.GetPosition() + randomOffset);
         }
     }
 }

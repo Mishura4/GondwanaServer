@@ -75,18 +75,18 @@ namespace DOL.AI.Brain
                 // Tolakram - always clear the aggro list so if this is done by mistake the list will correctly re-fill on next think
                 ClearAggroList();
 
-                if (guard.GetDistance2DTo(guard.SpawnPoint) > 50)
+                if (guard.GetDistance2DTo(guard.SpawnPosition) > 50)
                 {
                     guard.Reset();
                 }
             }
             //Eden - Portal Keeps Guards max distance
-            if (guard.Level > 200 && !guard.IsWithinRadius(guard.SpawnPoint, 2000))
+            if (guard.Level > 200 && !guard.IsWithinRadius(guard.SpawnPosition.Coordinate, 2000))
             {
                 ClearAggroList();
                 guard.Reset();
             }
-            else if (guard.InCombat == false && guard.IsWithinRadius(guard.SpawnPoint, 6000) == false)
+            else if (guard.InCombat == false && guard.IsWithinRadius(guard.SpawnPosition.Coordinate, 6000) == false)
             {
                 ClearAggroList();
                 guard.Reset();
@@ -127,7 +127,7 @@ namespace DOL.AI.Brain
                     if (Body is GuardStealther == false && player.IsStealthed)
                         continue;
 
-                    WarMapMgr.AddGroup((byte)player.CurrentZone.ID, (int)player.Position.X, (int)player.Position.Y, player.Name, (byte)player.Realm);
+                    WarMapMgr.AddGroup(player.Position, player.Name, (byte)player.Realm);
 
                     if (DOL.GS.ServerProperties.Properties.ENABLE_DEBUG)
                     {
@@ -164,7 +164,7 @@ namespace DOL.AI.Brain
                         continue;
                     }
 
-                    WarMapMgr.AddGroup((byte)player.CurrentZone.ID, (int)player.Position.X, (int)player.Position.Y, player.Name, (byte)player.Realm);
+                    WarMapMgr.AddGroup(player.Position, player.Name, (byte)player.Realm);
 
                     if (DOL.GS.ServerProperties.Properties.ENABLE_DEBUG)
                     {

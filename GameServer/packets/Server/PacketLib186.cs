@@ -16,6 +16,7 @@
 * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 *
 */
+using DOL.GS.Geometry;
 using System;
 using log4net;
 using DOL.GS.Quests;
@@ -113,16 +114,16 @@ namespace DOL.GS.PacketHandler
             }
         }
 
-        public override void SendMinotaurRelicMapUpdate(byte id, ushort region, int x, int y, int z)
+        public override void SendMinotaurRelicMapUpdate(byte id, Position position)
         {
             using (GSTCPPacketOut pak = new GSTCPPacketOut(GetPacketCode(eServerPackets.MinotaurRelicMapUpdate)))
             {
 
                 pak.WriteIntLowEndian((uint)id);
-                pak.WriteIntLowEndian((uint)region);
-                pak.WriteIntLowEndian((uint)x);
-                pak.WriteIntLowEndian((uint)y);
-                pak.WriteIntLowEndian((uint)z);
+                pak.WriteIntLowEndian((uint)position.RegionID);
+                pak.WriteIntLowEndian((uint)position.X);
+                pak.WriteIntLowEndian((uint)position.Y);
+                pak.WriteIntLowEndian((uint)position.Z);
 
                 SendTCP(pak);
             }

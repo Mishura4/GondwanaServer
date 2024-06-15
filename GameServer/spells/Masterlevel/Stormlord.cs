@@ -23,9 +23,9 @@ using DOL.GS.PacketHandler;
 using DOL.GS.Effects;
 using DOL.Database;
 using DOL.Events;
+using DOL.GS.Geometry;
 using System.Collections;
 using System.Collections.Generic;
-using System.Numerics;
 
 namespace DOL.GS.Spells
 {
@@ -43,8 +43,6 @@ namespace DOL.GS.Spells
             storm = new GameStorm();
             storm.Realm = caster.Realm;
             storm.Position = caster.Position;
-            storm.CurrentRegionID = caster.CurrentRegionID;
-            storm.Heading = caster.Heading;
             storm.Owner = (GamePlayer)caster;
             storm.Movable = true;
 
@@ -155,8 +153,8 @@ namespace DOL.GS.Spells
                     GameNPC targetNPC = targetStorm as GameNPC;
                     int range = Util.Random(0, 750);
                     double angle = Util.RandomDouble() * 2 * Math.PI;
-                    var rand = new Vector3(range * (float)Math.Cos(angle), range * (float)Math.Sin(angle), 0);
-                    targetNPC.PathTo(targetNPC.Position + rand, targetNPC.MaxSpeed);
+                    var offset = Vector.Create(x: (int)(range * Math.Cos(angle)), y: (int)(range * Math.Sin(angle)) );
+                    targetNPC.WalkTo(targetNPC.Coordinate + offset, targetNPC.MaxSpeed);
                 }
             }
         }
@@ -181,8 +179,6 @@ namespace DOL.GS.Spells
             storm = new GameStorm();
             storm.Realm = caster.Realm;
             storm.Position = caster.Position;
-            storm.CurrentRegionID = caster.CurrentRegionID;
-            storm.Heading = caster.Heading;
             storm.Owner = (GamePlayer)caster;
             storm.Movable = true;
 
@@ -266,8 +262,6 @@ namespace DOL.GS.Spells
             storm = new GameStorm();
             storm.Realm = caster.Realm;
             storm.Position = caster.Position;
-            storm.CurrentRegionID = caster.CurrentRegionID;
-            storm.Heading = caster.Heading;
             storm.Owner = (GamePlayer)caster;
             storm.Movable = true;
 
@@ -347,8 +341,6 @@ namespace DOL.GS.Spells
             storm = new GameStorm();
             storm.Realm = caster.Realm;
             storm.Position = caster.Position;
-            storm.CurrentRegionID = caster.CurrentRegionID;
-            storm.Heading = caster.Heading;
             storm.Owner = (GamePlayer)caster;
             storm.Movable = true;
 
@@ -505,8 +497,6 @@ namespace DOL.GS.Spells
             storm = new GameStorm();
             storm.Realm = caster.Realm;
             storm.Position = caster.Position;
-            storm.CurrentRegionID = caster.CurrentRegionID;
-            storm.Heading = caster.Heading;
             storm.Owner = (GamePlayer)caster;
             storm.Movable = true;
 
@@ -586,8 +576,6 @@ namespace DOL.GS.Spells
             storm = new GameStorm();
             storm.Realm = caster.Realm;
             storm.Position = caster.Position;
-            storm.CurrentRegionID = caster.CurrentRegionID;
-            storm.Heading = caster.Heading;
             storm.Owner = (GamePlayer)caster;
             storm.Movable = true;
 
@@ -666,8 +654,6 @@ namespace DOL.GS.Spells
             storm = new GameStorm();
             storm.Realm = caster.Realm;
             storm.Position = caster.Position;
-            storm.CurrentRegionID = caster.CurrentRegionID;
-            storm.Heading = caster.Heading;
             storm.Owner = (GamePlayer)caster;
             storm.Movable = true;
 

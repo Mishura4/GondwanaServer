@@ -21,6 +21,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DOL.Database;
 using DOL.GS.Housing;
+using DOL.GS.Geometry;
 
 namespace DOL.GS
 {
@@ -124,14 +125,11 @@ namespace DOL.GS
 
             _hookedItem = hookedItem;
 
-            var position = house.GetHookpointLocation(hookedItem.HookpointID);
-            if (position == null)
-                return false;
+            var coordinate = house.GetHookPointCoordinate(hookedItem.HookpointID);
+            if (coordinate == Coordinate.Nowhere) return false;
 
             CurrentHouse = house;
-            CurrentRegionID = house.RegionID;
-            Position = position.Value;
-            Heading = (ushort)(hookedItem.Heading % 4096);
+            Position = Position.Create(house.RegionID, coordinate, hookedItem.Heading);
             AddToWorld();
 
             return true;

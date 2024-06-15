@@ -74,8 +74,6 @@ namespace DOL.GS
         public GameMoney(long copperValue, GameObject dropper) : this(copperValue)
         {
             Position = dropper.Position;
-            Heading = dropper.Heading;
-            CurrentRegion = dropper.CurrentRegion;
         }
         /// <summary>
         /// Returns the number of mithril pieces in this bag

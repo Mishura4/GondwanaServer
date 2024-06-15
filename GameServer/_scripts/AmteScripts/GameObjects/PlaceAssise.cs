@@ -3,6 +3,7 @@ using DOL.AI.Brain;
 using DOL.Database;
 using DOL.GS.PacketHandler;
 using DOL.Language;
+using DOL.GS.Geometry;
 
 namespace DOL.GS.Scripts
 {
@@ -59,8 +60,7 @@ namespace DOL.GS.Scripts
             Mob npc = (Mob)obj;
             Name = npc.Name;
             GuildName = npc.Guild;
-            Position = new Vector3(npc.X, npc.Y, npc.Z);
-            m_Heading = (ushort)(npc.Heading & 0xFFF);
+            Position = Position.Create(npc.Region, npc.X, npc.Y, npc.Z, (ushort)(npc.Heading & 0xFFF));
             m_maxSpeedBase = (short)npc.Speed;  // TODO db has currently senseless information here, mob type db required
             if (m_maxSpeedBase == 0)
                 m_maxSpeedBase = 600;
@@ -86,7 +86,7 @@ namespace DOL.GS.Scripts
             mob.X = (int)Position.X;
             mob.Y = (int)Position.Y;
             mob.Z = (int)Position.Z;
-            mob.Heading = Heading;
+            mob.Heading = Position.Orientation.InHeading;
             mob.Speed = MaxSpeedBase;
             mob.Region = CurrentRegionID;
             mob.Realm = (byte)Realm;

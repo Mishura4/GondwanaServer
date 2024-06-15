@@ -20,22 +20,8 @@ using System;
 using DOL.Database;
 using DOL.GS.PacketHandler;
 using DOL.Language;
-using System.Collections;
-using System.Collections.Generic;
-using System.Reflection;
-using DOL.GS.Utils;
-using DOL.GS.Quests;
 using System.Threading;
-using DOL.AI.Brain;
-using DOL.Events;
-using DOL.GS.Effects;
-using DOL.GS.Keeps;
-using DOL.GS.PropertyCalc;
-using DOL.GS.SkillHandler;
-using DOL.GS.Spells;
-using DOL.GS.Styles;
-using DOL.GS.PacketHandler.Client.v168;
-using System.Numerics;
+using DOL.GS.Geometry;
 using DOL.MobGroups;
 using System.Linq;
 
@@ -100,8 +86,7 @@ namespace DOL.GS
             if (curZone == null) return;
             this.CurrentRegion = curZone.ZoneRegion;
             m_name = m_dbdoor.Name;
-            m_Heading = (ushort)m_dbdoor.Heading;
-            Position = new Vector3(m_dbdoor.X, m_dbdoor.Y, m_dbdoor.Z);
+            Position = Position.Create(regionID: CurrentRegion.ID, x: m_dbdoor.X, y: m_dbdoor.Y, z: m_dbdoor.Z, heading: (ushort)m_dbdoor.Heading );
             m_level = 0;
             m_model = 0xFFFF;
             m_doorID = m_dbdoor.InternalID;
@@ -446,16 +431,6 @@ namespace DOL.GS
         {
             base.Die(killer);
             StartHealthRegeneration();
-        }
-
-        /// <summary>
-        /// Broadcasts the Door Update to all players around
-        /// </summary>
-        public override void BroadcastUpdate()
-        {
-            base.BroadcastUpdate();
-
-            m_lastUpdateTickCount = GameTimer.GetTickCount();
         }
 
         private static long m_healthregentimer = 0;

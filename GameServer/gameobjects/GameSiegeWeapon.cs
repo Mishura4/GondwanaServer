@@ -23,6 +23,7 @@ using DOL.GS.PacketHandler;
 using DOL.AI.Brain;
 using DOL.Database;
 using DOL.Events;
+using DOL.GS.Geometry;
 using DOL.GS.Keeps;
 using System.Numerics;
 
@@ -185,7 +186,20 @@ namespace DOL.GS
             get { return m_itemId; }
             set { m_itemId = value; }
         }
+        
+        public Coordinate AimCoordinate
+        {
+            get
+            {
+                var targetPosition = Position.Zero;
+                if(TargetObject != null) targetPosition = TargetObject.Position;
+                else if(GroundTargetPosition != Position.Nowhere) targetPosition = GroundTargetPosition;
+                return targetPosition.Coordinate;
+            }
+        }
+        
         #endregion
+        
         #region public methode
         public void TakeControl(GamePlayer player)
         {
@@ -236,10 +250,10 @@ namespace DOL.GS
             if (Owner.TargetObject == null) return;
             if (!GameServer.ServerRules.IsAllowedToAttack(Owner, ((GameLiving)Owner.TargetObject), true)) return;
             CurrentState &= ~eState.Aimed;
-            GroundTarget = Owner.TargetObject.Position;
+            GroundTargetPosition = Owner.TargetObject.Position;
             TargetObject = Owner.TargetObject;
             SiegeWeaponTimer.CurrentAction = SiegeTimer.eAction.Aiming;
-            Heading = GetHeading(Owner.TargetObject.Position);
+            TurnTo(GroundTargetPosition.Coordinate);
             PreAction();
             if (Owner != null)
             {
@@ -263,9 +277,9 @@ namespace DOL.GS
         {
             if (!CanUse()) return;
             if (!m_enableToMove) return;
-            if (Owner == null || Owner.GroundTarget == null) return;
-            var groundTarget = Owner.GroundTarget.Value;
-            if (!this.IsWithinRadius(groundTarget, 1000))
+            if (Owner == null || Owner.GroundTargetPosition == Position.Nowhere) return;
+            if (Owner == null || Owner.GroundTargetPosition == Position.Nowhere) return;
+            if (Coordinate.DistanceTo(Owner.GroundTargetPosition) > 1000)
             {
                 Owner.Out.SendMessage("Ground target is too far away to move to!", eChatType.CT_System,
                                       eChatLoc.CL_SystemWindow);
@@ -279,7 +293,7 @@ namespace DOL.GS
             }
 
             //let's check if we are trying to move too close to a door, if we are, don't move
-            foreach (IDoor door in Owner.CurrentRegion.GetDoorsInRadius(groundTarget.X, groundTarget.Y, groundTarget.Z, (ushort)(AttackRange - 50), false))
+            foreach (IDoor door in Owner.CurrentRegion.GetDoorsInRadius(Owner.GroundTargetPosition.Coordinate, (ushort)(AttackRange - 50), false))
             {
                 if (door is GameKeepDoor)
                 {
@@ -290,7 +304,7 @@ namespace DOL.GS
 
             //unarmed siege weapon
             CurrentState &= ~eState.Armed;
-            PathTo(groundTarget, 100);
+            PathTo(Owner.GroundTargetPosition.Coordinate, 100);
         }
 
         public void StopMove()
@@ -331,10 +345,8 @@ namespace DOL.GS
                 }
                 return;
             }
-            if (TargetObject != null)
-                GroundTarget = TargetObject.Position;
-            if (GroundTarget == null)
-                return;
+            if (TargetObject != null) GroundTargetPosition = TargetObject.Position;
+            if (GroundTargetPosition == Position.Nowhere) return;
             new RegionTimer(this, new RegionTimerCallback(MakeDelayedDamage), GetActionDelay(SiegeTimer.eAction.Fire));
             BroadcastFireAnimation(GetActionDelay(SiegeTimer.eAction.Fire));
             if (Owner != null)

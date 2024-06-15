@@ -1842,7 +1842,7 @@ namespace DOL.GS.Commands
                                 return;
                             }
 
-                            if (territory.PortalPosition == null)
+                            if (territory.PortalCoordinate == null)
                             {
                                 client.SendTranslation("Commands.Players.Guild.TerritoryPortal.NotSupported");
                                 return;
@@ -2054,7 +2054,7 @@ namespace DOL.GS.Commands
                                 return;
                             }
 
-                            if (!target.MoveTo(player.CurrentRegionID, player.Position, player.Heading))
+                            if (!target.MoveTo(player.Position))
                             {
                                 player.SendTranslatedMessage("Commands.Players.Guild.MoveDefender.BadPosition", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             }
@@ -2135,7 +2135,7 @@ namespace DOL.GS.Commands
 
                                 if (Properties.GUILD_COMBAT_ZONE_DISTANCE_FROM_AREAS > 0)
                                 {
-                                    AbstractArea closeArea = (AbstractArea)region.FindAnyAreaInRadius(player.Position, Properties.GUILD_COMBAT_ZONE_DISTANCE_FROM_AREAS, true);
+                                    AbstractArea closeArea = (AbstractArea)region.FindAnyAreaInRadius(player.Coordinate, Properties.GUILD_COMBAT_ZONE_DISTANCE_FROM_AREAS, true);
                                     if (closeArea != null)
                                     {
                                         client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.CombatZone.TooCloseToArea", closeArea.GetDescriptionForPlayer(player)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
@@ -3323,7 +3323,7 @@ namespace DOL.GS.Commands
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NotMember"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 return;
                             }
-                            AbstractGameKeep keep = GameServer.KeepManager.GetKeepCloseToSpot(client.Player.CurrentRegionID, client.Player.Position, WorldMgr.VISIBILITY_DISTANCE);
+                            AbstractGameKeep keep = GameServer.KeepManager.GetKeepCloseToSpot(client.Player.Position, WorldMgr.VISIBILITY_DISTANCE);
                             if (keep == null)
                             {
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.ClaimNotNear"), eChatType.CT_System, eChatLoc.CL_SystemWindow);

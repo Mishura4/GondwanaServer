@@ -21,6 +21,7 @@ using System.Reflection;
 
 using DOL.GS;
 using DOL.Database;
+using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
 
 namespace DOL.GS
@@ -52,9 +53,8 @@ namespace DOL.GS
             if (player.InCombat == false && GameRelic.IsPlayerCarryingRelic(player) == false)
             {
                 player.LeaveHouse();
-                GameLocation currentLocation = new GameLocation("TeleportStart", player.CurrentRegionID, player.Position, player.Heading);
-                player.MoveTo((ushort)destination.RegionID, destination.X, destination.Y, destination.Z, (ushort)destination.Heading);
-                GameServer.ServerRules.OnPlayerTeleport(player, currentLocation, destination);
+                player.MoveTo(destination.GetPosition());
+                GameServer.ServerRules.OnPlayerTeleport(player, destination);
             }
         }
 
@@ -66,5 +66,7 @@ namespace DOL.GS
     /// </summary>	
     public class TeleportPillarArea : TeleportArea
     {
+        public override bool IsContaining(Coordinate spot, bool ignoreZ)
+            => base.IsContaining(spot, checkZ: false);
     }
 }

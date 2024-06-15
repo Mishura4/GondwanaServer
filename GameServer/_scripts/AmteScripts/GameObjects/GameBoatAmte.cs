@@ -1,8 +1,8 @@
-using System.Numerics;
 using DOL.AI.Brain;
 using DOL.Database;
 using DOL.GS.PacketHandler;
 using DOL.GS.Movement;
+using DOL.GS.Geometry;
 
 namespace DOL.GS
 {
@@ -79,11 +79,10 @@ namespace DOL.GS
         {
             if (!base.AddToWorld()) return false;
             SetOwnBrain(new BlankBrain());
-            Reset();
             return true;
         }
 
-        public void Reset()
+        public override void Reset()
         {
             if (IsMoving)
                 StopMoving();
@@ -104,13 +103,11 @@ namespace DOL.GS
             Mob npc = (Mob)obj;
             Name = npc.Name;
             GuildName = npc.Guild;
-            Position = new Vector3(npc.X, npc.Y, npc.Z);
-            m_Heading = (ushort)(npc.Heading & 0xFFF);
+            Position = Position.Create(npc.Region, npc.X, npc.Y, npc.Z, npc.Heading);
             m_maxSpeedBase = (short)npc.Speed;	// TODO db has currently senseless information here, mob type db required
             if (m_maxSpeedBase == 0)
                 m_maxSpeedBase = 600;
             m_currentSpeed = 0;
-            CurrentRegionID = npc.Region;
             Realm = (eRealm)npc.Realm;
             Model = npc.Model;
             Size = npc.Size;

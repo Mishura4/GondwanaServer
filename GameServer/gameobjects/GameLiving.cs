@@ -44,7 +44,9 @@ using DOL.GS.ServerProperties;
 using static DOL.GS.ScriptMgr;
 using System.Threading.Tasks;
 using DOL.GameEvents;
+using DOL.GS.Geometry;
 using System.Collections.Immutable;
+using Vector3 = System.Numerics.Vector3;
 
 namespace DOL.GS
 {
@@ -2051,8 +2053,8 @@ namespace DOL.GS
                         bool preCheck = false;
                         if (ad.Target is GamePlayer) //only start if we are behind the player
                         {
-                            float angle = GameMath.GetAngle(ad.Target, ad.Attacker);
-                            if (angle >= 150 && angle < 210) preCheck = true;
+                            var angle = ad.Target.GetAngleTo(ad.Attacker.Coordinate);
+                            if (angle.InDegrees >= 150 && angle.InDegrees < 210) preCheck = true;
                         }
                         else preCheck = true;
 
@@ -2515,7 +2517,7 @@ namespace DOL.GS
                         }
                     }
 
-                    ticksToTarget = (int)(1 + Vector3.Distance(owner.Position, attackTarget.Position) * 100 / 150); // 150 units per 1/10s
+                    ticksToTarget = (int)(1 + owner.GetDistanceTo( attackTarget ) * 100 / 150); // 150 units per 1/10s
                 }
                 else
                 {
@@ -5860,21 +5862,6 @@ namespace DOL.GS
         /// </summary>
         protected short m_maxSpeedBase;
 
-        /// <summary>
-        /// Gets the current direction the Object is facing
-        /// </summary>
-        public override ushort Heading
-        {
-            get { return base.Heading; }
-            set
-            {
-                ushort oldHeading = base.Heading;
-                base.Heading = value;
-                if (base.Heading != oldHeading)
-                    UpdateTickSpeed();
-            }
-        }
-
         private bool m_fixedSpeed = false;
 
         /// <summary>
@@ -5889,14 +5876,10 @@ namespace DOL.GS
         /// <summary>
         /// Gets or sets the current speed of this living
         /// </summary>
-        public short CurrentSpeed
+        public virtual short CurrentSpeed
         {
-            get => m_currentSpeed;
-            protected set
-            {
-                m_currentSpeed = value;
-                UpdateTickSpeed();
-            }
+            get => Motion.Speed;
+            set => Motion = Geometry.Motion.Create(Position, Motion.Destination, value);
         }
 
         /// <summary>
@@ -5940,16 +5923,21 @@ namespace DOL.GS
                 m_targetObjectWeakReference.Target = value;
             }
         }
+        public virtual void TurnTo(Coordinate coordinate, bool sendUpdate = true)
+            => Orientation = Coordinate.GetOrientationTo(coordinate);
+        
         public virtual bool IsSitting
         {
             get { return false; }
             set { }
         }
-        /// <summary>
-        /// Gets or Sets the Living's ground-target Coordinate inside the current Region
-        /// </summary>
-        public virtual Vector3? GroundTarget { get; set; } = new Vector3(0, 0, 0);
 
+        [Obsolete("Use GroundTargetPosition_set instead!")]
+        public virtual void SetGroundTarget(int groundX, int groundY, int groundZ)
+            => GroundTargetPosition = Position.Create(Position.RegionID, groundX, groundY, groundZ);
+
+        public virtual Position GroundTargetPosition { get; set; } = Position.Nowhere;
+        
         /// <summary>
         /// Gets or Sets the current level of the Object
         /// </summary>
@@ -5990,32 +5978,6 @@ namespace DOL.GS
 
         #endregion
         #region Movement
-        /// <summary>
-        /// The tick speed
-        /// </summary>
-        public Vector3 Velocity { get; private set; }
-
-        /// <summary>
-        /// Updates tick speed for this living.
-        /// </summary>
-        protected virtual void UpdateTickSpeed(Vector3? target = null)
-        {
-            int speed = CurrentSpeed;
-
-            if (speed == 0)
-                Velocity = Vector3.Zero;
-            else
-            {
-                // Living will move in the direction it is currently heading.
-
-                var heading = Heading * GameMath.HEADING_TO_RADIAN;
-                var v = new Vector3(-MathF.Sin(heading), MathF.Cos(heading), 0);
-                if (target.HasValue && target.Value.Z != 0 && target != Position)
-                    v.Z = (target.Value.Z - Position.Z) / Math.Max(1, Vector2.Distance(target.Value.ToVector2(), Position.ToVector2()));
-                Debug.Assert(float.IsNormal(v.X) || float.IsNormal(v.Y));
-                Velocity = v * speed * 0.001f;
-            }
-        }
 
         public virtual void UpdateHealthManaEndu()
         {
@@ -6033,64 +5995,34 @@ namespace DOL.GS
         }
 
         /// <summary>
-        /// Set the tick speed, that is the distance covered in one tick.
-        /// </summary>
-        /// <param name="dx"></param>
-        /// <param name="dy"></param>
-        /// <param name="dz"></param>
-        protected void SetTickSpeed(float dx, float dy, float dz)
-        {
-            Velocity = new Vector3(dx, dy, dz);
-        }
-
-        /// <summary>
-        /// Set the tick speed, that is the distance covered in one tick.
-        /// </summary>
-        /// <param name="dx"></param>
-        /// <param name="dy"></param>
-        /// <param name="dz"></param>
-        /// <param name="speed"></param>
-        protected void SetTickSpeed(float dx, float dy, float dz, float speed)
-        {
-            float tickSpeed = speed * 0.001f;
-            SetTickSpeed(dx * tickSpeed, dy * tickSpeed, dz * tickSpeed);
-        }
-
-
-        protected void SetTickSpeed(Vector3 velocity) => Velocity = velocity;
-        protected void SetTickSpeed(Vector3 heading, float speed) => Velocity = heading * speed * 0.001f;
-
-        /// <summary>
         /// The tick at which the movement started.
         /// </summary>
-        public uint MovementStartTick { get; set; }
-
-        /// <summary>
-        /// Elapsed ticks since movement started.
-        /// </summary>
-        protected uint MovementElapsedTicks => GameTimer.GetTickCount() - MovementStartTick;
+        public int MovementStartTick
+            => Motion.StartTimeInMilliSeconds;
+        
+        public override Position Position
+        {
+            get => Motion.CurrentPosition;
+            set => Motion = Motion.Create(value, Motion.Destination, Motion.Speed);
+        }
 
         /// <summary>
         /// True if the living is moving, else false.
         /// </summary>
-        public virtual bool IsMoving => m_currentSpeed != 0;
-
-        /// <summary>
-        /// Moves the item from one spot to another spot, possible even
-        /// over region boundaries
-        /// </summary>
-        /// <param name="regionID">new regionid</param>
-        /// <param name="x">new x</param>
-        /// <param name="y">new y</param>
-        /// <param name="z">new z</param>
-        /// <param name="heading">new heading</param>
-        /// <returns>true if moved</returns>
-        public override bool MoveTo(ushort regionID, float x, float y, float z, ushort heading)
+        public virtual bool IsMoving => CurrentSpeed != 0;
+        
+        protected virtual Motion Motion { get; set; } = new Motion();
+        
+        public override Angle Orientation
         {
-            if (regionID != CurrentRegionID)
-                CancelAllConcentrationEffects();
+            get => Position.Orientation;
+            set => Position = Motion.Start.With(orientation: value);
+        }
 
-            return base.MoveTo(regionID, x, y, z, heading);
+        public override bool MoveTo(Position position)
+        {
+            if (position.RegionID != CurrentRegionID) CancelAllConcentrationEffects();
+            return base.MoveTo(position);
         }
         #endregion
         #region Stealth
@@ -7160,8 +7092,6 @@ namespace DOL.GS
         public GameLiving()
             : base()
         {
-            Velocity = Vector3.Zero;
-
             m_guildName = string.Empty;
             m_targetObjectWeakReference = new WeakRef(null);
 

@@ -16,12 +16,12 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
+using DOL.GS.Geometry;
 using System;
 using DOL.GS.Housing;
 using DOL.GS.PacketHandler;
 using DOL.Language;
 using System.Collections.Generic;
-using System.Numerics;
 
 namespace DOL.GS.Commands
 {
@@ -65,15 +65,14 @@ namespace DOL.GS.Commands
                 {
                     var target = client.Player.TargetObject;
                     var player = client.Player;
-                    player.MoveTo(target.CurrentRegionID, target.Position.X, target.Position.Y, target.Position.Z, target.Heading);
+                    player.MoveTo(target.Position);
                     return;
                 }
                 #endregion
                 #region Jump to GT
                 if (args.Length == 3 && args[1].ToLower() == "to" && args[2].ToLower() == "gt")
                 {
-                    if (client.Player.GroundTarget.HasValue)
-                        client.Player.MoveTo(client.Player.CurrentRegionID, client.Player.GroundTarget.Value, client.Player.Heading);
+                    client.Player.MoveTo(client.Player.GroundTargetPosition.With(orientation: client.Player.Orientation));
                     return;
                 }
                 #endregion Jump to GT
@@ -91,7 +90,7 @@ namespace DOL.GS.Commands
                     }
                     if (house != null)
                     {
-                        client.Player.MoveTo(house.OutdoorJumpPoint);
+                        client.Player.MoveTo(house.OutdoorJumpPosition);
                     }
                     else
                     {
@@ -103,7 +102,7 @@ namespace DOL.GS.Commands
                 #region Jump t region #
                 if (args.Length == 4 && args[1] == "to" && args[2] == "region")
                 {
-                    client.Player.MoveTo(Convert.ToUInt16(args[3]), client.Player.Position, client.Player.Heading);
+                    client.Player.MoveTo(client.Player.Position.With(regionID: Convert.ToUInt16(args[3])));
                     return;
                 }
                 #endregion Jump t region #
@@ -152,7 +151,7 @@ namespace DOL.GS.Commands
                             }
                             else
                             {
-                                client.Player.MoveTo(jumpTarget.CurrentRegionID, jumpTarget.Position, jumpTarget.Heading);
+                                client.Player.MoveTo(jumpTarget.Position);
                             }
                             return;
                         }
@@ -167,7 +166,7 @@ namespace DOL.GS.Commands
                         if (clientc.Player.CurrentHouse != null && clientc.Player.InHouse)
                             clientc.Player.CurrentHouse.Enter(client.Player);
                         else
-                            client.Player.MoveTo(clientc.Player.CurrentRegionID, clientc.Player.Position, client.Player.Heading);
+                            client.Player.MoveTo(clientc.Player.Position.With(client.Player.Orientation));
                         return;
                     }
 
@@ -203,7 +202,7 @@ namespace DOL.GS.Commands
                             }
 
                             client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Jump.JumpToX", npcs[0].CurrentRegion.Description), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                            client.Player.MoveTo(jumpTarget.CurrentRegionID, jumpTarget.Position, jumpTarget.Heading);
+                            client.Player.MoveTo(jumpTarget.Position);
                             return;
                         }
 
@@ -221,7 +220,10 @@ namespace DOL.GS.Commands
                         if (clientc.Player.CurrentHouse != null && clientc.Player.InHouse)
                             clientc.Player.CurrentHouse.Enter(client.Player);
                         else
-                            client.Player.MoveTo(clientc.Player.CurrentRegionID, clientc.Player.Position, client.Player.Heading);
+                        {
+                            var jumpPosition = clientc.Player.Position.With(client.Player.Orientation);
+                            client.Player.MoveTo(jumpPosition);
+                        }
                         return;
                     }
                     return;
@@ -230,16 +232,21 @@ namespace DOL.GS.Commands
                 #region Jump to X Y Z
                 else if (args.Length == 5 && args[1] == "to")
                 {
-                    client.Player.MoveTo(client.Player.CurrentRegionID, Convert.ToInt32(args[2]), Convert.ToInt32(args[3]), Convert.ToInt32(args[4]), client.Player.Heading);
+                    var jumpPosition = Position.Create(
+                        client.Player.CurrentRegionID,
+                        x: Convert.ToInt32(args[2]),
+                        y: Convert.ToInt32(args[3]),
+                        z: Convert.ToInt32(args[4]),
+                        client.Player.Orientation);
+                    client.Player.MoveTo(jumpPosition);
                     return;
                 }
                 #endregion Jump to X Y Z
                 #region Jump rel +/-X +/-Y +/-Z
                 else if (args.Length == 5 && args[1] == "rel")
                 {
-                    client.Player.MoveTo(client.Player.CurrentRegionID,
-                                         client.Player.Position + new Vector3(Convert.ToInt32(args[2]), Convert.ToInt32(args[3]), Convert.ToInt32(args[4])),
-                                         client.Player.Heading);
+                    var offset = Vector.Create(x:Convert.ToInt32(args[2]), y: Convert.ToInt32(args[3]), z: Convert.ToInt32(args[4]));
+                    client.Player.MoveTo(client.Player.Position + offset);
                     return;
                 }
                 #endregion Jump rel +/-X +/-Y +/-Z
@@ -248,7 +255,13 @@ namespace DOL.GS.Commands
                 {
                     if (CheckExpansion(client, client, (ushort)Convert.ToUInt16(args[5])))
                     {
-                        client.Player.MoveTo(Convert.ToUInt16(args[5]), Convert.ToInt32(args[2]), Convert.ToInt32(args[3]), Convert.ToInt32(args[4]), client.Player.Heading);
+                        var jumpPosition = Position.Create(
+                            regionID: Convert.ToUInt16(args[5]),
+                            x: Convert.ToInt32(args[2]),
+                            y: Convert.ToInt32(args[3]),
+                            z: Convert.ToInt32(args[4]),
+                            client.Player.Orientation);
+                        client.Player.MoveTo(jumpPosition);
                         return;
                     }
                     return;
@@ -280,7 +293,8 @@ namespace DOL.GS.Commands
                     }
                     if (CheckExpansion(clientc, clientc, (ushort)Convert.ToUInt16(args[6])))
                     {
-                        clientc.Player.MoveTo(Convert.ToUInt16(args[6]), Convert.ToInt32(args[3]), Convert.ToInt32(args[4]), Convert.ToInt32(args[5]), clientc.Player.Heading);
+                        var jumpPosition = Position.Create(clientc.Player.CurrentRegionID, x: Convert.ToInt32(args[3]), y: Convert.ToInt32(args[4]), z: Convert.ToInt32(args[5]), clientc.Player.Orientation);
+                        clientc.Player.MoveTo(jumpPosition);
                         return;
                     }
                     return;
@@ -318,7 +332,7 @@ namespace DOL.GS.Commands
                             if (clientto.Player.CurrentHouse != null && clientto.Player.InHouse)
                                 clientto.Player.CurrentHouse.Enter(clientc.Player);
                             else
-                                clientc.Player.MoveTo(clientto.Player.CurrentRegionID, clientto.Player.Position, clientto.Player.Heading);
+                                clientc.Player.MoveTo(clientto.Player.Position);
                             return;
                         }
                         return;
@@ -328,22 +342,22 @@ namespace DOL.GS.Commands
                 #region push/pop
                 else if (args.Length > 1 && args[1] == "push")
                 {
-                    Stack<GameLocation> locations;
+                    Stack<Position> positions;
 
-                    locations = client.Player.TempProperties.getProperty<object>(TEMP_KEY_JUMP, null) as Stack<GameLocation>;
+                    positions = client.Player.TempProperties.getProperty<object>(TEMP_KEY_JUMP, null) as Stack<Position>;
 
-                    if (locations == null)
+                    if (positions == null)
                     {
-                        locations = new Stack<GameLocation>(3);
-                        client.Player.TempProperties.setProperty(TEMP_KEY_JUMP, locations);
+                        positions = new Stack<Position>(3);
+                        client.Player.TempProperties.setProperty(TEMP_KEY_JUMP, positions);
                     }
 
-                    locations.Push(new GameLocation("temploc", client.Player.CurrentRegionID, client.Player.Position, client.Player.Heading));
+                    positions.Push(client.Player.Position);
 
                     string message = LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Jump.Pushed");
 
-                    if (locations.Count > 1)
-                        message += " " + LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Jump.PushedTotal", locations.Count);
+                    if (positions.Count > 1)
+                        message += " " + LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Jump.PushedTotal", positions.Count);
 
                     message += " - " + LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Jump.PopInstructions");
 
@@ -351,23 +365,23 @@ namespace DOL.GS.Commands
                 }
                 else if (args.Length > 1 && args[1] == "pop")
                 {
-                    Stack<GameLocation> locations;
+                    Stack<Position> positions;
 
-                    locations = client.Player.TempProperties.getProperty<object>(TEMP_KEY_JUMP, null) as Stack<GameLocation>;
+                    positions = client.Player.TempProperties.getProperty<object>(TEMP_KEY_JUMP, null) as Stack<Position>;
 
-                    if (locations == null || locations.Count < 1)
+                    if (positions == null || positions.Count < 1)
                     {
                         client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Jump.NothingPushed"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                         return;
                     }
 
-                    GameLocation jumploc = locations.Pop();
+                    var jumploc = positions.Pop();
 
                     // slight abuse of the stack principle, but convenient to always have your last popped loc jumpable
-                    if (locations.Count < 1)
-                        locations.Push(jumploc);
+                    if (positions.Count < 1)
+                        positions.Push(jumploc);
 
-                    client.Player.MoveTo(jumploc.RegionID, jumploc.Position, jumploc.Heading);
+                    client.Player.MoveTo(jumploc);
                 }
                 #endregion push/pop
                 #region DisplaySyntax

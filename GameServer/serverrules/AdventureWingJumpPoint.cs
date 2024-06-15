@@ -18,6 +18,7 @@
  */
 
 using DOL.Database;
+using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
 using System.Collections;
 using System.Collections.Generic;
@@ -46,7 +47,7 @@ namespace DOL.GS.ServerRules
         {
 
             //Handles zoning INTO an instance.
-            GameLocation loc = null;
+            Position position = Position.Nowhere;
             AdventureWingInstance previousInstance = null;
 
             // Do we have a group ?
@@ -116,11 +117,6 @@ namespace DOL.GS.ServerRules
             {
                 // I have no instance to go to, create one !
                 previousInstance = (AdventureWingInstance)WorldMgr.CreateInstance(targetPoint.TargetRegion, typeof(AdventureWingInstance));
-                if (targetPoint.SourceRegion != 0 && targetPoint.SourceRegion == player.CurrentRegionID)
-                {
-                    //source loc seems legit...
-                    previousInstance.SourceEntrance = new GameLocation("source", targetPoint.SourceRegion, targetPoint.SourceX, targetPoint.SourceY, targetPoint.SourceZ);
-                }
 
                 if (player.Group != null)
                 {
@@ -192,18 +188,12 @@ namespace DOL.GS.ServerRules
             }
 
 
-            //get loc of instance
-            if (previousInstance != null)
-            {
-                loc = new GameLocation(previousInstance.Description + " (instance)", previousInstance.ID, targetPoint.TargetX, targetPoint.TargetY, targetPoint.TargetZ, targetPoint.TargetHeading);
-            }
-
-
-            if (loc != null)
+            position = targetPoint.GetTargetPosition().With(regionID: previousInstance.ID);
+            if (position != Position.Nowhere)
             {
 
                 // Move Player, changing target destination is failing !!
-                player.MoveTo(loc);
+                player.MoveTo(position);
                 return false;
             }
 

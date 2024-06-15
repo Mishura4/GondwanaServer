@@ -20,6 +20,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using DOL.Database;
+using DOL.GS.Geometry;
 
 
 namespace DOL.GS.Keeps
@@ -36,11 +37,12 @@ namespace DOL.GS.Keeps
 
 
         ushort KeepID { get; }
-
+        Position Position { get; }
         int X { get; }
         int Y { get; }
         int Z { get; }
         ushort Heading { get; }
+        Angle Orientation { get; }
         Region CurrentRegion { get; }
 
         Guild Guild { get; }

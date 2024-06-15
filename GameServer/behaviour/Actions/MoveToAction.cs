@@ -23,32 +23,33 @@ using DOL.GS.PacketHandler;
 using DOL.Events;
 using DOL.GS.Behaviour.Attributes;
 using DOL.GS.Behaviour;
+using DOL.GS.Geometry;
 
 namespace DOL.GS.Behaviour.Actions
 {
     [ActionAttribute(ActionType = eActionType.MoveTo)]
-    public class MoveToAction : AbstractAction<GameLocation, GameLiving>
+    public class MoveToAction : AbstractAction<Position, GameLiving>
     {
 
         public MoveToAction(GameNPC defaultNPC, Object p, Object q)
             : base(defaultNPC, eActionType.MoveTo, p, q)
         { }
 
-        public MoveToAction(GameNPC defaultNPC, GameLocation location, GameLiving npc)
-            : this(defaultNPC, (object)location, (object)npc) { }
+        public MoveToAction(GameNPC defaultNPC, Position position, GameLiving npc)
+            : this(defaultNPC, (object)position, (object)npc) { }
 
         public override void Perform(DOLEvent e, object sender, EventArgs args)
         {
             GameLiving npc = Q;
 
-            if (P is GameLocation location)
+            if (P is Position position)
             {
-                npc.MoveTo(location);
+                npc.MoveTo(position);
             }
             else
             {
                 GamePlayer player = BehaviourUtils.GuessGamePlayerFromNotify(e, sender, args);
-                npc.MoveTo(player.CurrentRegionID, player.Position, player.Heading);
+                npc.MoveTo(player.Position);
             }
         }
     }

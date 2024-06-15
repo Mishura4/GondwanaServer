@@ -10,21 +10,19 @@ using DOL.GS.Scripts;
 using log4net;
 using DOL.GS.Spells;
 using DOL.Territories;
-using System.Numerics;
+using DOL.GS.Geometry;
 
 namespace DOL.GS
 {
     public class GuildPortalNPC : GameNPC
     {
-        public readonly record struct SavedCoordinates(ushort RegionID, Vector3 Position, ushort Heading);
-
         public Guild OwningGuild { get; init; }
 
         public Territories.Territory LinkedTerritory { get; init; }
 
         private readonly object m_coordinatesLockObject = new();
 
-        private Dictionary<GamePlayer, SavedCoordinates> m_savedCoordinates = new();
+        private readonly Dictionary<GamePlayer, Position> m_savedCoordinates = new();
 
         private GuildPortalNPC(Territories.Territory territory, GamePlayer spawner) : base()
         {
@@ -36,7 +34,7 @@ namespace DOL.GS
         {
             GuildPortalNPC portalNpc = new GuildPortalNPC(territory, spawner);
             portalNpc.LoadedFromScript = true;
-            portalNpc.Position = territory.PortalPosition.Value;
+            portalNpc.Position = Position.Create(territory.RegionId, territory.PortalCoordinate.Value, Angle.Zero);
             portalNpc.CurrentRegionID = territory.RegionId;
             portalNpc.Heading = 1000;
             portalNpc.Model = 1438;
@@ -54,7 +52,7 @@ namespace DOL.GS
                 pl.Out.SendSpellEffectAnimation(player, player, 4310, 0, false, 1);
             lock (m_coordinatesLockObject)
             {
-                m_savedCoordinates.TryAdd(player, new SavedCoordinates(player.CurrentRegionID, player.Position, player.Heading));
+                m_savedCoordinates.TryAdd(player, player.Position);
             }
             player.MoveTo(CurrentRegionID, Position.X, Position.Y, Position.Z, Heading);
             player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Commands.Players.Guild.TerritoryPortal.Summoned", LinkedTerritory.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
@@ -62,7 +60,7 @@ namespace DOL.GS
 
         public override bool Interact(GamePlayer player)
         {
-            SavedCoordinates returnCoordinates;
+            Position returnCoordinates;
 
             lock (m_coordinatesLockObject)
             {
@@ -73,7 +71,7 @@ namespace DOL.GS
             }
             foreach (GamePlayer pl in player.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
                 pl.Out.SendSpellEffectAnimation(player, player, 4310, 0, false, 1);
-            player.MoveTo(returnCoordinates.RegionID, returnCoordinates.Position.X, returnCoordinates.Position.Y, returnCoordinates.Position.Z, returnCoordinates.Heading);
+            player.MoveTo(returnCoordinates);
             return true;
         }
     }

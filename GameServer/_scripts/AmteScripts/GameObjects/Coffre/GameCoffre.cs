@@ -13,6 +13,7 @@ using log4net;
 using DOL.MobGroups;
 using DOL.Events;
 using DOL.GS.GameEvents;
+using DOL.GS.Geometry;
 
 namespace DOL.GS.Scripts
 {
@@ -486,7 +487,7 @@ namespace DOL.GS.Scripts
 
             foreach (var tpPoint in tpPoints)
             {
-                int playerCount = WorldMgr.GetPlayersCloseToSpot(tpPoint.Region, (float)tpPoint.X, (float)tpPoint.Y, (float)tpPoint.Z, 1500).OfType<GamePlayer>().Count(); // Using 1500 directly
+                int playerCount = WorldMgr.GetPlayersCloseToSpot(Position.Create(tpPoint.Region, tpPoint.X, tpPoint.Y, tpPoint.Z), 1500).OfType<GamePlayer>().Count(); // Using 1500 directly
                 if (playerCount > maxPlayerCount)
                 {
                     maxPlayerCount = playerCount;
@@ -820,10 +821,7 @@ namespace DOL.GS.Scripts
                     {
                         var mob = new AmteMob(new NpcTemplate(template))
                         {
-                            Position = new Vector3(Position.X, Position.Y, Position.Z),
-                            Heading = Heading,
-                            CurrentRegionID = CurrentRegionID,
-                            CurrentRegion = CurrentRegion,
+                            Position = this.Position,
                             Size = 50,
                             Name = template.Name
                         };
@@ -1022,10 +1020,8 @@ namespace DOL.GS.Scripts
             DBCoffre coffre = obj as DBCoffre;
             if (coffre == null) return;
             Name = coffre.Name;
-            Position = new Vector3(coffre.X, coffre.Y, coffre.Z);
-            Heading = (ushort)(coffre.Heading & 0xFFF);
+            Position = Position.Create(coffre.Region, coffre.X, coffre.Y, coffre.Z, coffre.Heading);
             HasPickableAnim = coffre.HasPickableAnim;
-            CurrentRegionID = coffre.Region;
             Model = coffre.Model;
             LastOpen = coffre.LastOpen;
             ItemInterval = coffre.ItemInterval;

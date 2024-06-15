@@ -77,9 +77,9 @@ namespace DOL.GS.Commands
                         }
                         area.Sound = byte.Parse(args[6]);
                         area.Region = client.Player.CurrentRegionID;
-                        area.X = (int)client.Player.Position.X;
-                        area.Y = (int)client.Player.Position.Y;
-                        area.Z = (int)client.Player.Position.Z;
+                        area.X = client.Player.Position.X;
+                        area.Y = client.Player.Position.Y;
+                        area.Z = client.Player.Position.Z;
                         area.ObjectId = area.Description;
 
                         if (args.Length == 8 && bool.TryParse(args[7], out bool canVol))

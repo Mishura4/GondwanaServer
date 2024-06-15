@@ -10,7 +10,6 @@ using log4net;
 using DOL.GS.Effects;
 using DOL.GS.ServerProperties;
 using System.Linq;
-using System.Numerics;
 
 namespace DOL.GS
 {
