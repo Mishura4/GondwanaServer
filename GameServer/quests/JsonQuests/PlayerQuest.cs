@@ -173,7 +173,7 @@ namespace DOL.GS.Quests
             GameServer.Database.DeleteObject(DbQuest);
 
             Owner.Out.SendQuestListUpdate();
-            foreach (GameNPC mob in WorldMgr.GetRegion(Owner.CurrentRegionID)?.Objects?.Where(o => o != null && o is GameNPC))
+            foreach (GameNPC mob in Owner.GetNPCsInRadius(WorldMgr.VISIBILITY_DISTANCE))
             {
                 Owner.Out.SendNPCsQuestEffect(mob, mob.GetQuestIndicator(Owner));
             }
@@ -188,6 +188,8 @@ namespace DOL.GS.Quests
                 if (mob is GameNPC { MobGroups.Count: >0 } groupMob)
                 {
                     owner.Out.SendNPCCreate(groupMob);
+                    if (groupMob.Inventory != null)
+                        owner.Out.SendLivingEquipmentUpdate(groupMob);
                     owner.Out.SendModelChange(groupMob, groupMob.Model);
                 }
             }
