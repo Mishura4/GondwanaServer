@@ -11707,6 +11707,21 @@ namespace DOL.GS
             }
             get { return m_strafing; }
         }
+        
+        /// <summary>
+        /// Gets or sets the current speed of this player
+        /// </summary>
+        public override short CurrentSpeed
+        {
+            set
+            {
+                base.CurrentSpeed = value;
+                if (value != 0)
+                {
+                    OnPlayerMove();
+                }
+            }
+        }
 
         public virtual void OnPlayerMove()
         {
