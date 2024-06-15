@@ -1396,7 +1396,10 @@ namespace DOL.GS
                 npc.Notify(GameNPCEvent.ArriveAtTarget, npc);
 
                 if (arriveAtSpawnPoint)
+                {
+                    npc.Notify(GameNPCEvent.NPCReset, npc, EventArgs.Empty);
                     npc.Notify(GameNPCEvent.ArriveAtSpawnPoint, npc);
+                }
             }
         }
 
@@ -1606,10 +1609,6 @@ namespace DOL.GS
             if (IsMoving)
             {
                 CurrentSpeed = 0;
-            }
-            if (wasResetting)
-            {
-                Reset();
             }
         }
 
@@ -3213,6 +3212,14 @@ namespace DOL.GS
                 }
             }
 
+            Notify(GameNPCEvent.NPCReset, this, EventArgs.Empty);
+        }
+
+        /// <summary>
+        /// Called when the NPC arrives at spawn point when resetting
+        /// </summary>
+        protected virtual void OnReset()
+        {
             if (AttackState)
                 StopAttack();
 
@@ -3223,8 +3230,6 @@ namespace DOL.GS
 
             IsReturningHome = false;
             IsResetting = false;
-
-            Notify(GameNPCEvent.NPCReset, this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -5850,18 +5855,15 @@ namespace DOL.GS
         {
             base.Notify(e, sender, args);
 
+            if (e == GameNPCEvent.NPCReset)
+            {
+                OnReset();
+            }
+
             ABrain brain = Brain;
+            
             if (brain != null)
                 brain.Notify(e, sender, args);
-
-            if (e == GameNPCEvent.ArriveAtTarget)
-            {
-                if (IsReturningHome)
-                {
-                    TurnTo(SpawnPosition.Orientation);
-                    IsReturningHome = false;
-                }
-            }
         }
 
         /// <inheritdoc />
