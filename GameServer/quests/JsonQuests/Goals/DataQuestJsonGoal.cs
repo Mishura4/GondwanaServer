@@ -6,6 +6,7 @@ using System.Linq;
 using DOL.GS.Behaviour;
 using DOL.GameEvents;
 using System.Threading.Tasks;
+using DOL.MobGroups;
 
 namespace DOL.GS.Quests
 {
@@ -275,7 +276,13 @@ namespace DOL.GS.Quests
                     System.Threading.Tasks.Task.Run(() => GameEventManager.Instance.ResetEvent(questEvent));
                 }
             }
-            questData.UpdateGroupMob(questData.Owner);
+            if (Quest.RelatedMobGroups != null)
+            {
+                foreach (MobGroup group in Quest.RelatedMobGroups.Where(g => g.CompletedStepQuestID == goalData.GoalId))
+                {
+                    questData.UpdateGroupMob(group);
+                }
+            }
         }
 
         public virtual IQuestGoal ToQuestGoal(PlayerQuest questData, PlayerGoalState goalData)

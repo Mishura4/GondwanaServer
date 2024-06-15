@@ -12,6 +12,7 @@ using DOL.GameEvents;
 using System.Threading.Tasks;
 using DOL.Language;
 using DOL.GS.Behaviour;
+using DOL.MobGroups;
 
 namespace DOL.GS.Quests;
 
@@ -204,7 +205,13 @@ public static class DataQuestJsonMgr
                 System.Threading.Tasks.Task.Run(() => GameEventManager.Instance.ResetEvent(questEvent));
             }
         }
-        dq.UpdateGroupMob(player);
+        if (quest.RelatedMobGroups != null)
+        {
+            foreach (MobGroup group in quest.RelatedMobGroups)
+            {
+                dq.UpdateGroupMob(group);
+            }
+        }
     }
 
     public static (PlayerQuest quest, PlayerGoalState goal) FindQuestAndGoalFromPlayer(GamePlayer player, ushort questId, int goalId)

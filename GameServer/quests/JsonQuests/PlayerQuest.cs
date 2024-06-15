@@ -7,6 +7,8 @@ using System.Linq;
 using DOL.GS.PacketHandler;
 using DOL.Language;
 using DOL.GameEvents;
+using DOL.MobGroups;
+using DOLDatabase.Tables;
 
 namespace DOL.GS.Quests
 {
@@ -36,6 +38,7 @@ namespace DOL.GS.Quests
         public GamePlayer Owner { get; }
         public DBQuest DbQuest;
 
+        public List<MobGroup> AffectedMobGroups { get; init; }
 
         public eQuestStatus Status => (eQuestStatus)DbQuest.Step;
 
@@ -58,6 +61,7 @@ namespace DOL.GS.Quests
         {
             Owner = owner;
         }
+        
         public PlayerQuest(GamePlayer owner, DBQuest dbquest)
         {
             Owner = owner;
@@ -162,12 +166,20 @@ namespace DOL.GS.Quests
                     System.Threading.Tasks.Task.Run(() => GameEventManager.Instance.ResetEvent(questEvent));
                 }
             }
-            UpdateGroupMob(Owner);
+            if (Quest.RelatedMobGroups != null)
+            {
+                foreach (MobGroup group in Quest.RelatedMobGroups.Where(g => g.CompletedStepQuestID == 0))
+                {
+                    UpdateGroupMob(group);
+                }
+            }
         }
+        
         public void AbortQuest()
         {
             foreach (var goal in Quest.Goals.Values)
                 goal.AbortGoal(this);
+            int step = DbQuest.Step;
             DbQuest.Step = (int)eQuestStatus.Done;
             Owner.RemoveQuest(this);
             GameServer.Database.DeleteObject(DbQuest);
@@ -178,20 +190,27 @@ namespace DOL.GS.Quests
                 Owner.Out.SendNPCsQuestEffect(mob, mob.GetQuestIndicator(Owner));
             }
             Owner.Out.SendMessage(LanguageMgr.GetTranslation(Owner.Client, "AbstractQuest.AbortQuest", Quest.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-            UpdateGroupMob(Owner);
+            if (Quest.RelatedMobGroups != null)
+            {
+                foreach (MobGroup group in Quest.RelatedMobGroups)
+                {
+                    UpdateGroupMob(group);
+                }
+            }
         }
 
-        public void UpdateGroupMob(GamePlayer owner)
+        public void UpdateGroupMob(MobGroup group)
         {
-            foreach (var mob in owner.GetNPCsInRadius(WorldMgr.VISIBILITY_DISTANCE))
+            foreach (var npc in group.NPCs)
             {
-                if (mob is GameNPC { MobGroups.Count: >0 } groupMob)
+                if (!npc.IsWithinRadius2D(Owner, WorldMgr.VISIBILITY_DISTANCE))
                 {
-                    owner.Out.SendNPCCreate(groupMob);
-                    if (groupMob.Inventory != null)
-                        owner.Out.SendLivingEquipmentUpdate(groupMob);
-                    owner.Out.SendModelChange(groupMob, groupMob.Model);
+                    continue;
                 }
+
+                Owner.Out.SendNPCCreate(npc);
+                if (npc.Inventory != null)
+                    Owner.Out.SendLivingEquipmentUpdate(npc);
             }
         }
 

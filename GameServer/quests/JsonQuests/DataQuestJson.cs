@@ -10,6 +10,7 @@ using System.Linq;
 using System.Reflection;
 using DOL.Language;
 using DOL.GS.Finance;
+using DOL.MobGroups;
 
 namespace DOL.GS.Quests
 {
@@ -56,6 +57,8 @@ namespace DOL.GS.Quests
         public bool EndResetEvent;
         public string StartEventId;
         public string EndEventId;
+
+        public List<MobGroup> RelatedMobGroups { get; init; }
 
         /// <summary>
         /// GoalID to DataQuestJsonGoal
@@ -284,6 +287,8 @@ namespace DOL.GS.Quests
                         EndWhenGoalsDone = (List<int>)null,
                     }));
             }
+
+            RelatedMobGroups = MobGroupManager.Instance.Groups.Values.Where(g => g.CompletedQuestID == Id).ToList();
 
             Npc.AddQuestToGive(this);
         }
