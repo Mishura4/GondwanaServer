@@ -58,7 +58,7 @@ namespace DOL.GS.Quests
         public string StartEventId;
         public string EndEventId;
 
-        public List<MobGroup> RelatedMobGroups { get; init; }
+        public List<MobGroup> RelatedMobGroups { get; private set; }
 
         /// <summary>
         /// GoalID to DataQuestJsonGoal
@@ -204,9 +204,19 @@ namespace DOL.GS.Quests
             }
         }
 
-
-        public DataQuestJson(DBDataQuestJson db)
+        public virtual void LoadFromDatabase()
         {
+            var db = GameServer.Database.SelectObject<DBDataQuestJson>(q => q.Id == Id);
+
+            if (db != null)
+            {
+                LoadFromDatabase(db);
+            }
+        }
+
+        protected void LoadFromDatabase(DBDataQuestJson db)
+        {
+            Unload();
             _db = db;
             Id = db.Id;
             Name = db.Name;
@@ -271,6 +281,7 @@ namespace DOL.GS.Quests
                     throw new Exception($"Quest {db.Id}: can't load the goal id {id}, the goal is null");
                 Goals.Add(id, goal);
             }
+            
             if (!Goals.Values.Any(g => g is EndGoal))
             {
                 var id = Goals.Keys.Max() + 1;
@@ -291,6 +302,11 @@ namespace DOL.GS.Quests
             RelatedMobGroups = MobGroupManager.Instance.Groups.Values.Where(g => g.CompletedQuestID == Id).ToList();
 
             Npc.AddQuestToGive(this);
+        }
+
+        public DataQuestJson(DBDataQuestJson db)
+        {
+            LoadFromDatabase(db);
         }
 
         public void Unload()

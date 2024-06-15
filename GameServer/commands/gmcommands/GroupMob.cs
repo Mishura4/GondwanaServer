@@ -1,6 +1,7 @@
 ﻿using DOL.Database;
 using DOL.GS;
 using DOL.GS.Commands;
+using DOL.GS.Quests;
 using DOL.MobGroups;
 using DOLDatabase.Tables;
 using System;
@@ -401,6 +402,15 @@ namespace DOL.commands.gmcommands
                                 break;
                             }
                             MobGroupManager.Instance.Groups[groupId].CompletedStepQuestID = questStep;
+                        }
+                        var quest = DataQuestJsonMgr.GetQuest((ushort)questId);
+                        if (quest == null)
+                        {
+                            DisplayMessage(client, "La quête {0} n'a pas pu être trouvée", questId);
+                        }
+                        else
+                        {
+                            quest.Unload();
                         }
                         DisplayMessage(client, string.Format("La Quest {0} a bien été associée au GroupMob {1}", questId, groupId));
                     }
