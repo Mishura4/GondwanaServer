@@ -33,6 +33,7 @@ using DOL.gameobjects.CustomNPC;
 using DOL.GS.Scripts;
 using DOL.MobGroups;
 using DOL.GS.Geometry;
+using System.Linq;
 using Vector3 = System.Numerics.Vector3;
 
 namespace DOL.AI.Brain
@@ -830,7 +831,7 @@ namespace DOL.AI.Brain
             {
                 if (e == GameObjectEvent.TakeDamage)
                 {
-                    if (args is not TakeDamageEventArgs eArgs || eArgs.DamageSource is GameLiving == false) return;
+                    if (args is not TakeDamageEventArgs eArgs || eArgs.DamageSource is not GameLiving living || !GameServer.ServerRules.IsAllowedToAttack(Body, living, true)) return;
 
                     int aggro = eArgs.DamageAmount + eArgs.CriticalAmount;
                     if (eArgs.DamageSource is GameNPC)

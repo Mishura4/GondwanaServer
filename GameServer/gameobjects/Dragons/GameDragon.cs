@@ -352,6 +352,7 @@ namespace DOL.GS
             foreach (GamePlayer player in GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
             {
                 player.KillsDragon++;
+                player.SaveIntoDatabase();
                 count++;
             }
             return count;
@@ -583,7 +584,7 @@ namespace DOL.GS
         /// <returns>Whether or not the spell was cast.</returns>
         public bool CheckGlare(GameLiving target)
         {
-            if (target == null || target is ShadowNPC || GlareTarget != null) return false;
+            if (target == null || !GameServer.ServerRules.IsAllowedToAttack(this, target, true) || GlareTarget != null) return false;
             bool success = Util.Chance(GlareChance);
             if (success)
                 GlareTarget = target;

@@ -25,6 +25,7 @@ using DOL.GS.Effects;
 using log4net;
 using System.Reflection;
 using DOL.Events;
+using DOL.GS.ServerRules;
 
 
 namespace DOL.AI.Brain
@@ -240,10 +241,10 @@ namespace DOL.AI.Brain
         }
 
         /// <summary>
-		/// Actions to be taken into consideration when health drops.
-		/// </summary>
-		/// <returns>Whether any action was taken.</returns>
-		private bool CheckHealth()
+        /// Actions to be taken into consideration when health drops.
+        /// </summary>
+        /// <returns>Whether any action was taken.</returns>
+        private bool CheckHealth()
         {
             GameDragon dragon = Body as GameDragon;
             if (dragon == null) return false;
@@ -313,7 +314,7 @@ namespace DOL.AI.Brain
                 {
                     GameLiving living = enumerator.Current.Key;
                     if (living != null &&
-                        living.IsAlive &&
+                        GameServer.ServerRules.IsAllowedToAttack(Body, living, true) &&
                         living.EffectList.GetOfType<NecromancerShadeEffect>() == null &&
                         !dragon.IsWithinRadius(living, dragon.AttackRange))
                     {
