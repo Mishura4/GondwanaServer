@@ -32,7 +32,6 @@ using DOL.GS.Housing;
 using DOL.GS.PacketHandler;
 using System.Threading.Tasks;
 using DOL.GS.Utils;
-using DOL.Geometry;
 
 using log4net;
 
@@ -214,10 +213,8 @@ namespace DOL.GS
         public bool IsWithinRadius(GameObject target, float distance) => GameMath.IsWithinRadius(this, target, distance);
         public bool IsWithinRadius(Coordinate target, float distance) => GameMath.IsWithinRadius(Position.Coordinate, target, distance);
         public bool IsWithinRadius2D(GameObject target, float distance) => GameMath.IsWithinRadius2D(this, target, distance);
-        public Point2D GetPointFromHeading(ushort heading, float distance) => (Coordinate + Vector.Create(Angle.Heading(heading), distance)).ToPoint2D();
         public ushort GetHeading(GameObject target) => GetHeading(target.Coordinate);
         public ushort GetHeading(Coordinate target) => Position.Coordinate.GetOrientationTo(target).InHeading;
-        public ushort GetHeading(Point2D target) => GetHeading(Coordinate.Create(target.X, target.Y));
         public Angle GetAngleTo(Coordinate coordinate)
             => Coordinate.GetOrientationTo(coordinate) - Orientation;
         
@@ -856,9 +853,6 @@ namespace DOL.GS
             Position = position;
             return AddToWorld();
         }
-        
-        [Obsolete("Use MoveTo(Position) instead!")]
-        public bool MoveTo(ushort regionID, Vector3 pos, ushort heading) => MoveTo(Position.Create(regionID, (int)pos.X, (int)pos.Y, (int)pos.Z, heading));
 
         /// <summary>
         /// Marks this object as deleted!

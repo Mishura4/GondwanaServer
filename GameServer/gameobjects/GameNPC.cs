@@ -41,7 +41,6 @@ using DOL.GS.ServerProperties;
 using System.Threading;
 using System.Threading.Tasks;
 using DOL.GameEvents;
-using DOL.Geometry;
 using DOL.MobGroups;
 using DOL.Territories;
 using static DOL.GS.ScriptMgr;
@@ -1014,13 +1013,6 @@ namespace DOL.GS
             get;
             set;
         } = Position.Nowhere;
-        
-        [Obsolete("Use SpawnPosition instead!")]
-        public Point3D SpawnPoint
-        {
-            get => SpawnPosition.Coordinate.ToPoint3D();
-            set => SpawnPosition = Position.Create(CurrentRegionID, value.ToCoordinate(), SpawnPosition.Orientation.InHeading);
-        }
 
         [Obsolete("Use SpawnPosition.Heading instead!")]
         public ushort SpawnHeading
@@ -1422,17 +1414,6 @@ namespace DOL.GS
         {
             m_arriveAtTargetAction?.Stop();
             m_arriveAtTargetAction = null;
-        }
-
-        /// <summary>
-        /// Ticks required to arrive at a given spot.
-        /// </summary>
-        /// <param name="target"></param>
-        /// <param name="speed"></param>
-        /// <returns></returns>
-        public virtual int GetTicksToArriveAt(IPoint3D target, int speed)
-        {
-            return (int)Coordinate.DistanceTo(target.ToCoordinate()) * 1000 / speed;
         }
 
         [Obsolete("Use WalkTo(Coordinate, short) instead!")]

@@ -31,13 +31,13 @@ namespace DOL.AI.Brain
         ///<param name="target">The target to flee.</param>
         protected override void CalculateFleeTarget(GameLiving target)
         {
-            ushort TargetAngle = Body.GetAngleTo(target.Coordinate).InHeading;
+            var TargetAngle = Body.GetAngleTo(target.Coordinate);
 
-            var fleePoint = Body.GetPointFromHeading(TargetAngle, 450);
-            var point = PathingMgr.Instance.GetClosestPointAsync(Body.CurrentZone, Coordinate.Create(fleePoint.X, fleePoint.Y, Body.Position.Z), 128, 128, 256);
+            var fleePoint = Body.Coordinate + Vector.Create(TargetAngle, 300);
+            var point = PathingMgr.Instance.GetClosestPointAsync(Body.CurrentZone, fleePoint, 128, 128, 256);
             Body.StopFollowing();
             Body.StopAttack();
-            Body.PathTo(point.HasValue ? Coordinate.Create(point.Value) : Coordinate.Create(fleePoint.X, fleePoint.Y, Body.Position.Z), Body.MaxSpeed);
+            Body.PathTo(point.HasValue ? Coordinate.Create(point.Value) : fleePoint, Body.MaxSpeed);
             //set speed to 130%
             m_maxSpeedBuff = (short)(Body.MaxSpeedBase * 0.3);
             Body.MaxSpeedBase = (short)(Body.MaxSpeedBase * 1.3);

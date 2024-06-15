@@ -23,11 +23,9 @@ using System.Linq;
 using System.Numerics;
 using System.Reflection;
 using DOL.Database;
-using DOL.Geometry;
 using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
 using log4net;
-using Vector3 = DOL.Geometry.Vector3;
 
 namespace DOL.GS.Keeps
 {

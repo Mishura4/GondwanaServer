@@ -21,7 +21,6 @@ using System.Collections.Generic;
 using System.Text;
 using DOL.GS.PacketHandler;
 using DOL.Events;
-using DOL.Geometry;
 using DOL.GS.Behaviour.Attributes;
 using DOL.GS.Behaviour;
 using DOL.GS.Geometry;

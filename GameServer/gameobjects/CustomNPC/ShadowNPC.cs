@@ -2,7 +2,6 @@
 using DOL.commands.playercommands;
 using DOL.Database;
 using DOL.Events;
-using DOL.Geometry;
 using DOL.GS;
 using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
@@ -244,8 +243,7 @@ namespace DOL.gameobjects.CustomNPC
 
         protected virtual Position GetPlayerPosition()
         {
-            var point = player.GetPointFromHeading(player.Orientation.InHeading, 64);
-            return Position.Create(player.Position.RegionID, point.X, point.Y, player.Position.Z, player.Orientation.InHeading).TurnedAround();
+            return Position.Create(player.Position.RegionID, player.Coordinate + Vector.Create(Orientation, 64), player.Orientation.InHeading).TurnedAround();
         }
 
         public virtual void MoveToPlayer()

@@ -233,14 +233,14 @@ namespace DOL.GS.Commands
                         for (int i = 0; i < setupmobs.Count / 2; i++)
                         {
                             ushort h = (ushort)(4096 / (setupmobs.Count / 2) * i);
-                            var loc = client.Player.GetPointFromHeading(h, 150);
+                            var loc = client.Player.Coordinate + Vector.Create(Angle.Heading(h), 150);
                             spawnsetupmob(client, setupmobs[i], realm, (int)loc.X, (int)loc.Y, h);
 
                         }
                         for (int i = setupmobs.Count / 2; i < setupmobs.Count; i++)
                         {
                             ushort h = (ushort)(4096 / (setupmobs.Count - setupmobs.Count / 2) * i);
-                            var loc = client.Player.GetPointFromHeading(h, 250);
+                            var loc = client.Player.Coordinate + Vector.Create(Angle.Heading(h), 250);
                             spawnsetupmob(client, setupmobs[i], realm, (int)loc.X, (int)loc.Y, h);
                         }
                         client.Out.SendMessage(setupmobs.Count + " setup mob spawned!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);

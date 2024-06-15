@@ -20,7 +20,6 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using DOL.Database;
-using DOL.Geometry;
 using DOL.GS.Geometry;
 
 namespace DOL.GS

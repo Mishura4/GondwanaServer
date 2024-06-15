@@ -1,7 +1,6 @@
 ﻿using System;
 using DOL.GS.PacketHandler;
 using DOL.GS.Commands;
-using DOL.Geometry;
 using DOL.GS.Geometry;
 using DOL.Language;
 

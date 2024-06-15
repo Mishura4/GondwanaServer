@@ -1,6 +1,5 @@
 ﻿using DOL.Database;
 using DOL.GameEvents;
-using DOL.Geometry;
 using DOL.GS;
 using DOL.GS.Commands;
 using DOL.GS.Geometry;

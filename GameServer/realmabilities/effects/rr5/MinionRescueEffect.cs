@@ -23,7 +23,6 @@ using System.Collections.Generic;
 using DOL.AI.Brain;
 using DOL.Events;
 using DOL.Database;
-using DOL.Geometry;
 using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
 using DOL.GS.RealmAbilities;

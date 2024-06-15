@@ -44,7 +44,6 @@ using DOL.GS.ServerProperties;
 using static DOL.GS.ScriptMgr;
 using System.Threading.Tasks;
 using DOL.GameEvents;
-using DOL.Geometry;
 using DOL.GS.Geometry;
 using System.Collections.Immutable;
 using Vector3 = System.Numerics.Vector3;
@@ -5932,10 +5931,6 @@ namespace DOL.GS
             get { return false; }
             set { }
         }
-        
-        [Obsolete("Use GroundTargetPosition instead!")]
-        public virtual Point3D GroundTarget
-            => GroundTargetPosition.Coordinate.ToPoint3D();
 
         [Obsolete("Use GroundTargetPosition_set instead!")]
         public virtual void SetGroundTarget(int groundX, int groundY, int groundZ)

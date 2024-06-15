@@ -21,12 +21,12 @@ using System.Collections.Generic;
 using DOL.Events;
 using DOL.GS.PacketHandler;
 using DOL.Database;
-using DOL.Geometry;
 using DOL.GS.Geometry;
 using DOL.Language;
 using System.Numerics;
 using static DOL.GS.WarMapMgr;
 using System.Drawing;
+using Vector = DOL.GS.Geometry.Vector;
 
 namespace DOL.GS
 {
@@ -316,7 +316,7 @@ namespace DOL.GS
             /// <summary>
             /// The Points list
             /// </summary>
-            protected IList<Point2D> m_points;
+            protected IList<Vector> m_points;
 
             public Polygon()
                 : base()
@@ -344,7 +344,7 @@ namespace DOL.GS
                 set
                 {
                     m_stringpoints = value;
-                    m_points = new List<Point2D>();
+                    m_points = new List<Vector>();
                     if (m_stringpoints.Length < 1) return;
                     string[] points = m_stringpoints.Split('|');
                     foreach (string point in points)
@@ -353,7 +353,7 @@ namespace DOL.GS
                         if (pts.Length != 2) continue;
                         int x = Convert.ToInt32(pts[0]);
                         int y = Convert.ToInt32(pts[1]);
-                        Point2D p = new Point2D(x, y);
+                        Vector p = Vector.Create(x, y);
                         if (!m_points.Contains(p)) m_points.Add(p);
                     }
                 }
@@ -382,14 +382,14 @@ namespace DOL.GS
             public override bool IsContaining(Coordinate obj, bool _checkZ)
             {
                 if (m_points.Count < 3) return false;
-                Point2D p1, p2;
+                Vector p1, p2;
                 bool inside = false;
 
-                Point2D oldpt = new Point2D(m_points[m_points.Count - 1].X, m_points[m_points.Count - 1].Y);
+                Vector oldpt = Vector.Create(m_points[m_points.Count - 1].X, m_points[m_points.Count - 1].Y);
 
-                foreach (Point2D pt in m_points)
+                foreach (var pt in m_points)
                 {
-                    Point2D newpt = new Point2D(pt.X, pt.Y);
+                    Vector newpt = Vector.Create(pt.X, pt.Y);
 
                     if (newpt.X > oldpt.X) { p1 = oldpt; p2 = newpt; }
                     else { p1 = newpt; p2 = oldpt; }

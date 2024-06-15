@@ -30,7 +30,6 @@ using DOL.GS.Keeps;
 using DOL.Language;
 using log4net;
 using DOL.gameobjects.CustomNPC;
-using DOL.Geometry;
 using DOL.GS.Scripts;
 using DOL.MobGroups;
 using DOL.GS.Geometry;
@@ -1754,13 +1753,6 @@ namespace DOL.AI.Brain
                     return false;
                 return true;
             }
-        }
-
-        [Obsolete("Use GetRandomWalkTarget() instead.")]
-        public virtual IPoint3D CalcRandomWalkTarget()
-        {
-            var randomPos = GetRandomWalkTarget();
-            return new Point3D(randomPos.X, randomPos.Y, randomPos.Z);
         }
         
         public virtual Coordinate GetRandomWalkTarget()

@@ -43,7 +43,6 @@ using log4net;
 using DOL.GS.ServerProperties;
 using System.Numerics;
 using DOL.MobGroups;
-using DOL.Geometry;
 
 namespace DOL.GS.PacketHandler
 {

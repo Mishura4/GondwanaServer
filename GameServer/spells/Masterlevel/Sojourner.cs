@@ -7,7 +7,6 @@ using DOL.GS.PacketHandler;
 using DOL.AI.Brain;
 using DOL.GS;
 using DOL.Events;
-using DOL.Geometry;
 using DOL.GS.Geometry;
 using System.Collections.Specialized;
 using DOL.GS.Profession;

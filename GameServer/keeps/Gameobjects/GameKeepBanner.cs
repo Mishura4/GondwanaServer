@@ -18,7 +18,6 @@
  */
 using System;
 using DOL.Database;
-using DOL.Geometry;
 using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
 

@@ -1,5 +1,4 @@
-﻿using DOL.Geometry;
-using DOL.GS.Effects;
+﻿using DOL.GS.Effects;
 using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
 using DOL.GS.PlayerClass;

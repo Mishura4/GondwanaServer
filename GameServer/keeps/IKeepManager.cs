@@ -22,7 +22,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using DOL.Database;
-using DOL.Geometry;
 using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
 using log4net;

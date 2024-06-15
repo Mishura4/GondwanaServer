@@ -61,7 +61,7 @@ namespace DOL.GS.Commands
             }
             else
             {
-                var ground = client.Player.GroundTarget;
+                var ground = client.Player.GroundTargetPosition;
                 text.Add($"Ground target: {ground}");
                 text.Add($"Target in view (player's cache): {client.Player.GroundTargetInView}");
                 // TODO
