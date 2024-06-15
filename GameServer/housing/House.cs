@@ -381,6 +381,7 @@ namespace DOL.GS.Housing
             player.Out.SendEnterHouse(this);
             player.Out.SendFurniture(this);
 
+            player.InHouse = true;
             player.CurrentHouse = this;
 
             ushort heading = 0;
@@ -731,6 +732,7 @@ namespace DOL.GS.Housing
                     {
                         hookpointObject = new GameStaticItem();
                         hookpointObject.CurrentHouse = this;
+                        hookpointObject.InHouse = true;
                         hookpointObject.OwnerID = templateID;
                         hookpointObject.Position = Position.Create(RegionID, coordinate, heading);
                         hookpointObject.Name = item.Name;

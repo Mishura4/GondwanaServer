@@ -279,7 +279,7 @@ namespace DOL.GS.PacketHandler.Client.v168
                 {
                     case 1: // GARDEN OBJECT
                         {
-                            if (!client.Player.InHouse)
+                            if (client.Player.InHouse)
                             {
                                 client.Out.SendInventorySlotsUpdate(new[] { slot });
                                 return;

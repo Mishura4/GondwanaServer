@@ -10899,6 +10899,7 @@ namespace DOL.GS
             //we need to make the server know we have left the house
             if ((CurrentHouse != null || InHouse) && CurrentHouse.RegionID != position.RegionID)
             {
+                InHouse = false;
                 CurrentHouse = null;
             }
             //if we send a jump, we get off the horse
@@ -14905,10 +14906,12 @@ namespace DOL.GS
         {
             if (CurrentHouse == null || (!InHouse))
             {
+                InHouse = false;
                 return;
             }
 
             House house = CurrentHouse;
+            InHouse = false;
             CurrentHouse = null;
 
             house.Exit(this, false);

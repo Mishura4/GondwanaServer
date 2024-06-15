@@ -325,7 +325,7 @@ namespace DOL.GS
             set { m_currentHouse = value; }
         }
 
-        public bool InHouse => CurrentHouse != null;
+        public virtual bool InHouse { get; set; }
 
         /// <summary>
         /// Is this object visible to another?
@@ -337,7 +337,8 @@ namespace DOL.GS
         {
             if (checkObject == null ||
                 CurrentRegion != checkObject.CurrentRegion ||
-                CurrentHouse != checkObject.CurrentHouse)
+                (!InHouse && checkObject.InHouse) ||
+                (InHouse && (!checkObject.InHouse || CurrentHouse != checkObject.CurrentHouse)))
             {
                 return false;
             }
