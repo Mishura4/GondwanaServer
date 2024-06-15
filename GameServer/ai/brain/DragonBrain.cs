@@ -88,10 +88,13 @@ namespace DOL.AI.Brain
                     Body.TargetObject = null;
                 }
             }
+            
+            bool wasInCombat = m_wasInCombat;
+            m_wasInCombat = Body.InCombat;
+
 
             // If dragon has run out of tether range, clear aggro list and let it 
             // return to its spawn point.
-
             if (CheckTether())
             {
                 Body.StopFollowing();
@@ -104,6 +107,21 @@ namespace DOL.AI.Brain
                 // ClearAggroList();
                 Body.Reset();
                 return;
+            }
+
+            // Recently dropped out of combat, reset
+            if (wasInCombat && !Body.InCombat)
+            {
+                Body.Reset();
+                if (Body.IsWithinRadius(Body.IsMovingOnPath ? Body.CurrentWayPoint.Coordinate : Body.SpawnPosition.Coordinate, 500))
+                {
+                    // Not very far - keep thinking, aggro, etc
+                    Body.IsResetting = false;
+                }
+                else
+                {
+                    return;
+                }
             }
 
             if (CheckHealth()) return;

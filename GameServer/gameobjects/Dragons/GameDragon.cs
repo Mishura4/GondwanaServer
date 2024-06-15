@@ -259,7 +259,7 @@ namespace DOL.GS
         /// Return to spawn point, dragon can't be attacked while it's
         /// on it's way.
         /// </summary>
-        public override void WalkToSpawn(short _speed)
+        public override void WalkToSpawn()
         {
             EvadeChance = 100;
             WalkToSpawn(MaxSpeed);
@@ -284,7 +284,7 @@ namespace DOL.GS
 
             // When dragon arrives at its spawn point, make it vulnerable again.
 
-            if (e == GameNPCEvent.ArriveAtTarget)
+            if (e == GameNPCEvent.NPCReset)
                 EvadeChance = 0;
         }
 

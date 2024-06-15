@@ -57,7 +57,7 @@ namespace DOL.AI.Brain
         /// <summary>
         /// Was the mob in combat last tick?
         /// </summary>
-        private bool m_wasInCombat = false;
+        protected bool m_wasInCombat = false;
 
         /// <summary>
         /// Constructs a new StandardMobBrain
