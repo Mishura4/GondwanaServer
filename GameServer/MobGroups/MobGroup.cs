@@ -199,32 +199,28 @@ namespace DOL.MobGroups
         public bool HasPlayerCompletedQuests(GamePlayer player)
         {
             if (CompletedQuestID <= 0)
-                return true;
+                return false;
 
             if (CompletedQuestCount > 0)
             {
                 var finishedCount = player.QuestListFinished.Where(q => q.QuestId == CompletedQuestID).Count();
-                if (finishedCount >= CompletedQuestCount)
+                if (finishedCount < CompletedQuestCount)
                 {
-                    return true;
+                    return false;
                 }
             }
 
             if (CompletedStepQuestID > 0)
             {
-                var currentQuest = player.QuestList.FirstOrDefault(q => q.QuestId == CompletedQuestID
-                                                                       && q.Goals.Any(g => g is GenericDataQuestGoal jgoal && jgoal.Goal.GoalId == CompletedStepQuestID));
 
-                if (currentQuest != null)
+                var currentQuest = player.QuestList.Where(q => q.QuestId == CompletedQuestID).Select(q => q.Goals).OfType<GenericDataQuestGoal>().Any(jgoal => jgoal.Goal.GoalId == CompletedStepQuestID && jgoal.Status == eQuestGoalStatus.Active);
+
+                if (currentQuest == null)
                 {
-                    var currentGoal = currentQuest.Goals.FirstOrDefault(g => g is GenericDataQuestGoal jgoal && jgoal.Goal.GoalId == CompletedStepQuestID);
-                    if (currentGoal is { Status: eQuestGoalStatus.Active })
-                    {
-                        return true;
-                    }
+                    return false;
                 }
             }
-            return false;
+            return true;
         }
 
         public string mobGroupInterfactFk
