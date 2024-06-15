@@ -983,11 +983,7 @@ namespace DOL.GS
         /// <returns>true</returns>
         public static bool StartRegionMgrs()
         {
-            m_regions.FreezeWhile(dict =>
-            {
-                foreach (Region reg in dict.Values)
-                    reg.StartRegionMgr();
-            });
+            m_regions.FreezeWhile(dict => dict.Values.ToList()).ForEach(r => r.StartRegionMgr());
             return true;
         }
 
@@ -998,13 +994,8 @@ namespace DOL.GS
         {
             if (log.IsDebugEnabled)
                 log.Debug("Stopping region managers...");
-
-            m_regions.FreezeWhile(dict =>
-            {
-                foreach (Region reg in dict.Values)
-                    reg.StopRegionMgr();
-
-            });
+            
+            m_regions.FreezeWhile(dict => dict.Values.ToList()).ForEach(r => r.StopRegionMgr());
 
             if (log.IsDebugEnabled)
                 log.Debug("Region managers stopped.");

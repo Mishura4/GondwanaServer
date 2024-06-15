@@ -10,28 +10,15 @@ public struct Position
     public int Y => Coordinate.Y;
     public int Z => Coordinate.Z;
 
-    private Region m_region = null;
-
-    public Region Region
-    {
-        get
-        {
-            if (m_region?.ID == RegionID)
-            {
-                return m_region;
-            }
-            m_region = WorldMgr.GetRegion(RegionID);
-            return m_region;
-        }
-    }
+    public Region Region { get; init; } = null;
 
     public Position() { }
 
     public static Position Create(ushort regionID, int x, int y, int z, ushort heading)
-        => new() { RegionID = regionID, Coordinate = Coordinate.Create(x, y, z), Orientation = Angle.Heading(heading) };
+        => new() { RegionID = regionID, Coordinate = Coordinate.Create(x, y, z), Orientation = Angle.Heading(heading), Region = WorldMgr.GetRegion(regionID) };
 
     public static Position Create(ushort regionID, int x = 0, int y = 0, int z = 0, Angle? orientation = null)
-        => new() { RegionID = regionID, Coordinate = Coordinate.Create(x, y, z), Orientation = orientation ?? Angle.Zero };
+        => new() { RegionID = regionID, Coordinate = Coordinate.Create(x, y, z), Orientation = orientation ?? Angle.Zero, Region = WorldMgr.GetRegion(regionID) };
 
     public static Position CreateInZone(ushort zoneID, int x = 0, int y = 0, int z = 0, ushort heading = 0)
     {
@@ -40,10 +27,10 @@ public struct Position
     }
 
     public static Position Create(ushort regionID, Coordinate coordinate, ushort heading = 0)
-        => new() { RegionID = regionID, Coordinate = coordinate, Orientation = Angle.Heading(heading) };
+        => new() { RegionID = regionID, Coordinate = coordinate, Orientation = Angle.Heading(heading), Region = WorldMgr.GetRegion(regionID) };
 
     public static Position Create(ushort regionID, Coordinate coordinate, Angle orientation)
-        => new() { RegionID = regionID, Coordinate = coordinate, Orientation = orientation };
+        => new() { RegionID = regionID, Coordinate = coordinate, Orientation = orientation, Region = WorldMgr.GetRegion(regionID) };
 
     public Position With(ushort? regionID = null, int? x = null, int? y = null, int? z = null, ushort? heading = null)
     {

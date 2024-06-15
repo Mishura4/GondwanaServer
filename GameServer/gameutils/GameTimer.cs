@@ -598,10 +598,10 @@ namespace DOL.GS
                             {
                                 while (!m_timeThread.Join(2000))
                                 {
-                                    log.ErrorFormat("Timer Thread ({0}) can't stop after abort... maybe remaining threads going... trying again !", m_name);
-
                                     try
                                     {
+                                        log.ErrorFormat("Timer Thread ({0}) can't stop after abort... maybe remaining threads going... trying again !", m_name);
+
                                         m_timeThread.Interrupt();
                                     }
                                     catch
