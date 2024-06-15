@@ -26,6 +26,7 @@ using log4net;
 using System.Reflection;
 using DOL.Events;
 using DOL.GS.ServerRules;
+using System.Numerics;
 
 
 namespace DOL.AI.Brain
@@ -347,7 +348,7 @@ namespace DOL.AI.Brain
             ArrayList inRangeLiving = new ArrayList();
             foreach (GamePlayer player in dragon.GetPlayersInRadius((ushort)dragon.AttackRange))
             {
-                if (player.IsAlive && player.EffectList.GetOfType<NecromancerShadeEffect>() == null)
+                if (player.IsAlive && player.EffectList.GetOfType<NecromancerShadeEffect>() == null && GameServer.ServerRules.IsAllowedToAttack(Body, player, true))
                 {
                     inRangeLiving.Add(player);
                 }
@@ -355,7 +356,7 @@ namespace DOL.AI.Brain
 
             foreach (GameNPC npc in dragon.GetNPCsInRadius((ushort)dragon.AttackRange))
             {
-                if (npc.IsAlive && npc.Brain != null && npc.Brain is IControlledBrain)
+                if (npc.IsAlive && npc.Brain is IControlledBrain && GameServer.ServerRules.IsAllowedToAttack(Body, npc, true))
                 {
                     inRangeLiving.Add(npc);
                 }
