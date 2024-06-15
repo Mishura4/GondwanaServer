@@ -63,6 +63,7 @@ namespace DOL.GS.Commands
 
                     if (target.NPCTemplate != null)
                         info.Add(" + NPCTemplate: " + "[" + target.NPCTemplate.TemplateId + "] " + target.NPCTemplate.Name);
+                    info.Add(" + Position : " + target.Position);
                     info.Add(" + Class: " + target.GetType().ToString());
                     info.Add(" + Brain: " + (target.Brain == null ? "(null)" : target.Brain.GetType().ToString()));
                     if (target.LoadedFromScript)
@@ -325,6 +326,7 @@ namespace DOL.GS.Commands
 
                     info.Add("PLAYER INFORMATION (Client # " + target.Client.SessionID + ")");
                     info.Add("- Name : " + target.Name);
+                    info.Add("- Position : " + target.Position);
                     info.Add("- Lastname : " + target.LastName);
                     info.Add("- Realm : " + GlobalConstants.RealmToName(target.Realm));
                     info.Add("- Level : " + target.Level);
@@ -422,10 +424,11 @@ namespace DOL.GS.Commands
                 /********************* OBJECT ************************/
                 if (client.Player.TargetObject is GameStaticItem)
                 {
-                    var target = client.Player.TargetObject as GameStaticItem;
+                    var target = (GameStaticItem)client.Player.TargetObject;
 
                     info.Add("  ------- OBJECT ------\n");
                     info.Add(" Name: " + name);
+                    info.Add(" Position : " + target.Position);
                     info.Add(" Model: " + target.Model);
                     info.Add(" Emblem: " + target.Emblem);
                     info.Add(" Realm: " + target.Realm);
@@ -453,9 +456,9 @@ namespace DOL.GS.Commands
                 #region Door
 
                 /********************* DOOR ************************/
-                if (client.Player.TargetObject is GameDoor)
+                if (client.Player.TargetObject is IDoor)
                 {
-                    var target = client.Player.TargetObject as GameDoor;
+                    var target = client.Player.TargetObject as IDoor;
 
                     string Realmname = "";
                     string statut = "";
@@ -477,21 +480,25 @@ namespace DOL.GS.Commands
                     if (target.Realm == eRealm.Door)
                         Realmname = "All";
 
-                    if (target.Locked == 1)
-                        statut = " Locked";
-
-                    if (target.Locked == 0)
-                        statut = " Unlocked";
-
                     info.Add("  ------- DOOR ------\n");
                     info.Add(" ");
                     info.Add(" + Name : " + target.Name);
                     info.Add(" + ID : " + target.DoorID);
                     info.Add(" + Realm : " + (int)target.Realm + " : " + Realmname);
-                    info.Add(" + Level : " + target.Level);
-                    info.Add(" + Guild : " + target.GuildName);
-                    info.Add(" + Health : " + target.Health + " / " + target.MaxHealth);
-                    info.Add(" + Statut : " + statut);
+                    if (target is GameDoor gameDoor)
+                    {
+                        info.Add(" + Level : " + gameDoor.Level);
+                        info.Add(" + Guild : " + gameDoor.GuildName);
+                        info.Add(" + Health : " + gameDoor.Health + " / " + gameDoor.MaxHealth);
+                        info.Add(" + Statut : " + (gameDoor.Locked != 0 ? "Locked" : "Unlocked"));
+                    }
+                    else if (target is GameKeepDoor keepDoor)
+                    {
+                        info.Add(" + Level : " + keepDoor.Level);
+                        info.Add(" + Guild : " + keepDoor.GuildName);
+                        info.Add(" + Health : " + keepDoor.Health + " / " + keepDoor.MaxHealth);
+                        info.Add(" + Attackable : " + (keepDoor.IsAttackableDoor ? "Yes" : "No"));
+                    }
                     info.Add(" + Type : " + DoorRequestHandler.m_handlerDoorID / 100000000);
                     info.Add(" ");
                     info.Add(" + Position : " + target.Coordinate);
