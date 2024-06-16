@@ -52,6 +52,8 @@ using System.Timers;
 using System.Text.RegularExpressions;
 using log4net;
 using Vector3 = System.Numerics.Vector3;
+using AmteScripts.Managers;
+using DOL.GS.Commands;
 
 namespace DOL.GS
 {
@@ -4409,7 +4411,10 @@ namespace DOL.GS
                     }
                 }
                 if (killer is GamePlayer killerPlayer)
+                {
                     killerPlayer.Out.SendMessage(killerPlayer.GetPersonalizedName(this) + " dies!", eChatType.CT_PlayerDied, eChatLoc.CL_SystemWindow);
+                    IncrementTaskPoints(killerPlayer);
+                }
             }
             StopFollowing();
 
@@ -4483,6 +4488,177 @@ namespace DOL.GS
             {
                 DeleteFromDatabase();
             }
+        }
+
+        public bool IsInSafeArea()
+        {
+            foreach (var area in CurrentAreas)
+            {
+                if (area is Area.SafeArea)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool HasAdrenalineBuff()
+        {
+            return EffectList.GetOfType<AdrenalineSpellEffect>() != null;
+        }
+
+        public int GetConLevel(GameLiving target)
+        {
+            int levelDiff = target.Level - this.Level;
+            if (levelDiff <= -10)
+                return -3; // Grey
+            if (levelDiff <= -5)
+                return -2; // Green
+            if (levelDiff <= -1)
+                return -1; // Blue
+            if (levelDiff <= 0)
+                return 0;  // Yellow
+            if (levelDiff <= 4)
+                return 1;  // Orange
+            if (levelDiff <= 9)
+                return 2;  // Red
+            return 3;      // Purple
+        }
+
+        private void IncrementTaskPoints(GamePlayer killerPlayer)
+        {
+            if (killerPlayer.IsInSafeArea())
+                return;
+
+            if (Brain is IControlledBrain)
+                return;
+
+            int conLevel = GetConLevel(killerPlayer);
+            if (conLevel <= -3)
+                return;
+
+            var currentTerritory = TerritoryManager.GetCurrentTerritory(this);
+            var rvrTerritory = RvrManager.Instance.GetRvRTerritory(this.CurrentRegionID);
+
+            if (currentTerritory != null)
+            {
+                switch (GetType().FullName)
+                {
+                    case "AmteMob":
+                    case "DOL.GS.Scripts.MageMob":
+                    case "DOL.GS.Scripts.TerritoryGuard":
+                    case "DOL.GS.Scripts.GuardNPC":
+                        TaskManager.UpdateTaskProgress(killerPlayer, "KillTerritoryGuards", 1);
+                        return;
+                    case "DOL.GS.Scripts.TerritoryBoss":
+                        if (killerPlayer.Guild != null && killerPlayer.Guild.GuildType == Guild.eGuildType.PlayerGuild)
+                        {
+                            TaskManager.UpdateTaskProgress(killerPlayer, "KillTerritoryBoss", 1);
+                        }
+                        return;
+                    default:
+                        return;
+                }
+            }
+            else if (rvrTerritory != null)
+            {
+                var keepArea = rvrTerritory.Areas.FirstOrDefault();
+                if (keepArea != null && keepArea.IsContaining(killerPlayer.Coordinate, true))
+                {
+                    switch (GetType().FullName)
+                    {
+                        case "AmteMob":
+                        case "DOL.GS.Scripts.MageMob":
+                        case "DOL.GS.Scripts.GuardNPC":
+                        case "GuardArcher":
+                        case "GuardFighter":
+                            TaskManager.UpdateTaskProgress(killerPlayer, "KillKeepGuards", 1);
+                            return;
+                    }
+                }
+            }
+            else
+            {
+                if (IsDungeonCreature())
+                {
+                    TaskManager.UpdateTaskProgress(killerPlayer, "KillCreaturesInDungeons", 1);
+                }
+                else if (IsOutdoorCreature())
+                {
+                    TaskManager.UpdateTaskProgress(killerPlayer, "KillOutdoorsCreatures", 1);
+                }
+            }
+            IncrementBodyTypeTaskPoints(killerPlayer);
+
+            if (killerPlayer.HasAdrenalineBuff())
+            {
+                TaskManager.UpdateTaskProgress(killerPlayer, "EnemiesKilledInAdrenalineMode", 1);
+            }
+        }
+
+        private void IncrementBodyTypeTaskPoints(GamePlayer killerPlayer)
+        {
+            var activeCreatureTypes = TaskCommandHandler.GetActiveCreatureTypes();
+
+            switch ((NpcTemplateMgr.eBodyType)BodyType)
+            {
+                case NpcTemplateMgr.eBodyType.Animal:
+                    if (activeCreatureTypes.Contains("KillAnimalCreatures"))
+                        TaskManager.UpdateTaskProgress(killerPlayer, "KillAnimalCreatures", 1);
+                    break;
+                case NpcTemplateMgr.eBodyType.Demon:
+                    if (activeCreatureTypes.Contains("KillDemonCreatures"))
+                        TaskManager.UpdateTaskProgress(killerPlayer, "KillDemonCreatures", 1);
+                    break;
+                case NpcTemplateMgr.eBodyType.Dragon:
+                    if (activeCreatureTypes.Contains("KillDragonCreatures"))
+                        TaskManager.UpdateTaskProgress(killerPlayer, "KillDragonCreatures", 1);
+                    break;
+                case NpcTemplateMgr.eBodyType.Elemental:
+                    if (activeCreatureTypes.Contains("KillElementalCreatures"))
+                        TaskManager.UpdateTaskProgress(killerPlayer, "KillElementalCreatures", 1);
+                    break;
+                case NpcTemplateMgr.eBodyType.Giant:
+                    if (activeCreatureTypes.Contains("KillGiantCreatures"))
+                        TaskManager.UpdateTaskProgress(killerPlayer, "KillGiantCreatures", 1);
+                    break;
+                case NpcTemplateMgr.eBodyType.Humanoid:
+                    if (activeCreatureTypes.Contains("KillHumanoidCreatures"))
+                        TaskManager.UpdateTaskProgress(killerPlayer, "KillHumanoidCreatures", 1);
+                    break;
+                case NpcTemplateMgr.eBodyType.Insect:
+                    if (activeCreatureTypes.Contains("KillInsectCreatures"))
+                        TaskManager.UpdateTaskProgress(killerPlayer, "KillInsectCreatures", 1);
+                    break;
+                case NpcTemplateMgr.eBodyType.Magical:
+                    if (activeCreatureTypes.Contains("KillMagicalCreatures"))
+                        TaskManager.UpdateTaskProgress(killerPlayer, "KillMagicalCreatures", 1);
+                    break;
+                case NpcTemplateMgr.eBodyType.Reptile:
+                    if (activeCreatureTypes.Contains("KillReptileCreatures"))
+                        TaskManager.UpdateTaskProgress(killerPlayer, "KillReptileCreatures", 1);
+                    break;
+                case NpcTemplateMgr.eBodyType.Plant:
+                    if (activeCreatureTypes.Contains("KillPlantCreatures"))
+                        TaskManager.UpdateTaskProgress(killerPlayer, "KillPlantCreatures", 1);
+                    break;
+                case NpcTemplateMgr.eBodyType.Undead:
+                    if (activeCreatureTypes.Contains("KillUndeadCreatures"))
+                        TaskManager.UpdateTaskProgress(killerPlayer, "KillUndeadCreatures", 1);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private bool IsDungeonCreature()
+        {
+            return CurrentZone != null && CurrentZone.IsDungeon;
+        }
+
+        private bool IsOutdoorCreature()
+        {
+            return CurrentZone != null && !CurrentZone.IsDungeon;
         }
 
         /// <summary>

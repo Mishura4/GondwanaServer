@@ -184,6 +184,13 @@ PlayerInitRequestHandler.OfficerMessage:		Officer Message: {0}
 PlayerInitRequestHandler.SaferLocation:			This area isn't currently secure and you are being transported to a safer location.
 
 # /PlayerMoveItemRequestHandler
+PlayerMoveItemRequestHandler.InvalidTradeTarget:	Invalid trade target. ({0})
+PlayerMoveItemRequestHandler.CantTradeInactive:	Can't trade with inactive players.
+PlayerMoveItemRequestHandler.CantTradeYourself:	You can't trade with yourself, silly!
+PlayerMoveItemRequestHandler.CantRemoveItem:	You can not remove this item!
+PlayerMoveItemRequestHandler.InvalidItem:		Invalid item (slot# {0}).
+PlayerMoveItemRequestHandler.CantDropItem:		You can not drop this item!
+PlayerMoveItemRequestHandler.YouDropItem:		You drop {0} on the ground!
 PlayerMoveItemRequestHandler.TooFarAway:		You are too far away to give anything to {0}.
 
 # /PlayerPickUpRequestHandler

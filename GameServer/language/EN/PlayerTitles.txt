@@ -1,5 +1,5 @@
-#All
-PlayerClass.GetTitle.none:		none
+# /Playerclasses
+PlayerClass.GetTitle.none:		None
 
 PlayerClass.Mauler.GetTitle.50:		Master Mauler
 PlayerClass.Mauler.GetTitle.45:		Scrapper
@@ -499,3 +499,119 @@ PlayerClass.Warden.GetTitle.15:		Guardian
 PlayerClass.Warden.GetTitle.10:		Woodsman
 PlayerClass.Warden.GetTitle.5:		Watcher
 
+
+# /Relics
+Titles.Reliques.PorteurRelique:     Relic Carrier
+Titles.Reliques.ProtecteurReliques: Relic Defender
+
+# /Claim
+Titles.Claim.Frontier.FrontierChallenger:		Frontier Challenger
+Titles.Claim.Frontier.FrontierVindicator:		Frontier Vindicator
+Titles.Claim.Stronghold.StrongholdChief:		Stronghold Chief
+Titles.Claim.Stronghold.StrongholdSoldier:		Stronghold Soldier
+
+# /Deathblows
+Titles.Deathblows.BattleEnforcer:			Battle Enforcer
+Titles.Deathblows.BattleMaster:				Battle Master
+
+# /Kills
+Titles.Kills.All.MasterAssassine:			Master Assassine
+Titles.Kills.All.MasterEnforcer:			Master Enforcer
+Titles.Kills.All.MasterSoldier:				Master Soldier
+
+Titles.Kills.Demon.DemonBane:				Demon Bane
+Titles.Kills.Demon.DemonScourge:			Demon Scourge
+Titles.Kills.Demon.DemonSlayer:				Demon Slayer
+Titles.Kills.Demon.DreadVanquisher:			Dread Vanquisher
+Titles.Kills.Dragon.DragonFoe:				Dragon Foe
+Titles.Kills.Dragon.DragonScourge:			Dragon Scourge
+Titles.Kills.Dragon.DragonSlayer:			Dragon Slayer
+Titles.Kills.Epic.EpicChallenger:			Epic Challenger
+Titles.Kills.Epic.EpicVictor:				Epic Victor
+
+Titles.Kills.Albion.BaneOfAlbion:			Bane of Albion
+Titles.Kills.Albion.ScourgeOfAlbion:			Scourge of Albion
+Titles.Kills.Midgard.BaneOfMidgard:			Bane of Midgard
+Titles.Kills.Midgard.ScourgeOfMidgard:			Scourge of Midgard
+Titles.Kills.Hibernia.BaneOfHibernia:			Bane of Hibernia
+Titles.Kills.Hibernia.ScourgeOfHibernia:		Scourge of Hibernia
+
+# /Level
+Titles.Level.Level20Info:				Level 20+
+Titles.Level.Level20:					Level {0}
+
+# /PrivLevel
+Titles.PrivLevel.Administrator:				Administrator
+Titles.PrivLevel.Gamemaster:				Gamemaster
+
+# /Solokills
+Titles.Solokills.DuelMaster:				Duel Master
+Titles.Solokills.LoneEnforcer:				Lone Enforcer
+
+# /Time
+Titles.Time.Account.ElderTitle:				Elder
+Titles.Time.Character.Veteran:				Veteran
+
+# /CL
+Titles.CL.Level1:					Seeker
+Titles.CL.Level2:					Enforcer
+Titles.CL.Level3:					Outrider
+Titles.CL.Level4:					Lightbringer
+Titles.CL.Level5:					King's Champion
+Titles.CL.Level6:					King´s Emissary
+Titles.CL.Level7:					Patron of Minotaur
+Titles.CL.Level8:					Visionary
+Titles.CL.Level9:					Gladiator
+Titles.CL.Level10:					Labyrinthian
+
+# /ML
+Titles.ML.Line1:					Banelord
+Titles.ML.Line2:					Battlemaster
+Titles.ML.Line3:					Convoker
+Titles.ML.Line4:					Perfecter
+Titles.ML.Line5:					Sojourner
+Titles.ML.Line6:					Spymaster
+Titles.ML.Line7:					Stormlord
+Titles.ML.Line8:					Warlord
+
+# /Demonslayer
+Titles.Demonslayer.Level1:				Drake Defeater
+Titles.Demonslayer.Level2:				Fiend Feller
+Titles.Demonslayer.Level3:				Golem Grinder
+Titles.Demonslayer.Level4:				Titan Wrecker
+Titles.Demonslayer.Level5:				Mythical Behemoth Slayer
+
+# /Trader
+Titles.Trader.Level1:					Trade Initiate
+Titles.Trader.Level2:					Deal Maker
+Titles.Trader.Level3:					Trade Magnate
+Titles.Trader.Level4:					Mercantile Mastermind
+Titles.Trader.Level5:					Merchant’s Guildmaster
+
+# /Thief
+Titles.Thief.Level1:					Lurking Lightfinger
+Titles.Thief.Level2:					Silent Snatcher
+Titles.Thief.Level3:					Grand Grifter
+Titles.Thief.Level4:					Phantom Pilferer
+Titles.Thief.Level5:					Heist Master
+
+# /Bountyhunter
+Titles.Bountyhunter.Level1:				Bounty Beginner
+Titles.Bountyhunter.Level2:				Outlaw Overcomer
+Titles.Bountyhunter.Level3:				Sheriff
+Titles.Bountyhunter.Level4:				Fugitive's Fear
+Titles.Bountyhunter.Level5:				Bounty Baron
+
+# /Wrath
+Titles.Wrath.Level1:					Rage Rookie
+Titles.Wrath.Level2:					Frenzy Fighter
+Titles.Wrath.Level3:					Wrath Avenger
+Titles.Wrath.Level4:					Fury's Apex
+Titles.Wrath.Level5:					Mad Max
+
+# /Adventurer
+Titles.Adventurer.Level1:				Discovery Dabbler
+Titles.Adventurer.Level2:				Wanderlust Wayfarer
+Titles.Adventurer.Level3:				Vanguard Voyager
+Titles.Adventurer.Level4:				Great Adventurer
+Titles.Adventurer.Level5:				Legendary Explorer

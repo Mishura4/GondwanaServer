@@ -120,7 +120,7 @@ namespace DOL.GS.ServerRules
             if (player.ObjectState != GameObject.eObjectState.Active) return;
             if (player.Client.IsPlaying == false) return;
 
-            player.Out.SendMessage("Your pve temporary invulnerability timer has expired.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ServerRules.AmtenaelRules.PveInvTimerExpired"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 
             return;
         }
@@ -882,8 +882,8 @@ namespace DOL.GS.ServerRules
                 {
                     if (de.Key is GamePlayer pl)
                     {
-                        pl.Out.SendMessage(pl.GetPersonalizedName(killedPlayer) + " has been killed recently and is worth no realm points!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                        pl.Out.SendMessage(pl.GetPersonalizedName(killedPlayer) + " has been killed recently and is worth no experience!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                        pl.Out.SendMessage(LanguageMgr.GetTranslation(pl.Client.Account.Language, "ServerRules.AbstractServerRules.RecentPlayerKillNoRP", pl.GetPersonalizedName(killedPlayer)), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                        pl.Out.SendMessage(LanguageMgr.GetTranslation(pl.Client.Account.Language, "ServerRules.AbstractServerRules.RecentPlayerKillNoXP", pl.GetPersonalizedName(killedPlayer)), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                     }
                 }
                 return;
@@ -915,7 +915,7 @@ namespace DOL.GS.ServerRules
                 {
                     GamePlayer player = de.Key as GamePlayer;
                     if (player != null)
-                        player.Out.SendMessage("You gain no experience from this kill!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ServerRules.AbstractServerRules.NoXPKill"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 }
 
                 return;
@@ -1016,7 +1016,7 @@ namespace DOL.GS.ServerRules
                                     //otherwise give small bonus
                                     bonus = Properties.RvR_OUTSIDE_AREA_RP_BONUS;
                                 }
-                                killerPlayer.Out.SendMessage(string.Format("Vous obtenez un bonus aux RP de {0}% grâce à votre capture du fort.", bonus), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                killerPlayer.Out.SendMessage(LanguageMgr.GetTranslation(killerPlayer.Client.Account.Language, "ServerRules.AmtenaelRules.RPBonusKeepCapture", bonus), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 realmPoints += realmPoints * bonus / 100;
                             }
                         }

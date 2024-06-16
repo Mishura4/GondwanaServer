@@ -27,7 +27,7 @@ namespace DOL.GS.PlayerClass
     {
         private static readonly List<PlayerRace> DefaultEligibleRaces = new()
         {
-             PlayerRace.Dwarf, PlayerRace.Deifrang, PlayerRace.Norseman, PlayerRace.Troll, PlayerRace.Valkyn,
+             PlayerRace.Dwarf, PlayerRace.Deifrang, PlayerRace.Norseman, PlayerRace.Troll, PlayerRace.Valkyn, PlayerRace.Kobold,
         };
 
         public ClassBerserker()

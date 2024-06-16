@@ -1,3 +1,11 @@
+# LANGUAGEMGR
+System.LanguagesName.EN:					English
+System.LanguagesName.FR:					French
+System.LanguagesName.DE:					German
+System.LanguagesName.ES:					Spanish
+System.LanguagesName.CZ:					Czech
+System.LanguagesName.IT:					Italian
+
 # Miscellaneous Language
 Language.Hours.Short:								{0}h
 Language.Minutes.Short:								{0}min
@@ -75,202 +83,14 @@ Language.DamageType.DoT.Damage:					damage-over-time
 
 Language.InternalError:							A server error has occured while trying to complete this action; please contact server staff.
 
-# KEEPS
-# Managers/Player Manager
-PlayerManager.BroadcastCapture.Captured:		The forces of {0} have captured {1}!
-PlayerManager.BroadcastCapture.CapturedR0:		{0} has been captured!
-PlayerManager.BroadcastClaim.Claimed:			{0} has claimed {1}!
-PlayerManager.BroadcastRaize.Razed:			{0} has been razed by the forces of {1}!
-PlayerManager.BroadcastRelease.LostControl:		{0} has lost control of {1}!
-
-# Relics/GameRelicPad
-GameRelicPad.MountRelic.Captured:			{0} has captured the {1}.
-GameRelicPad.MountRelic.Stored:				{0} from {1} has stored the {2} to the {3}.
-GameRelicPad.OnPlayerEnter.EmptyRelicPad:		You need to find an empty {0} relic pad in order to place this relic.
-GameRelicPad.RemoveRelic.Removed:			{0} from {1} has removed the {2} from the {3}.
-
-# STYLES
-# /StyleProcessor
-StyleProcessor.ExecuteStyle.BackStrike:			You inflict a critical strike in the back of your target 
-StyleProcessor.ExecuteStyle.ExecuteFail:		You fail to execute your {0} perfectly!
-StyleProcessor.ExecuteStyle.PerformPerfectly:		You perform your {0} perfectly! {1}
-StyleProcessor.ExecuteStyle.PerformsPerfectly:		Your {0} performs its {1} perfectly.{2}
-StyleProcessor.ExecuteStyle.ThroatStrike:		You inflict a critical strike in the throat of your target 
-StyleProcessor.TryToUseStyle.AlreadyPreparing:		You are already preparing to use this style! Type /cancelstyle to enable style cancelling.
-StyleProcessor.TryToUseStyle.AlreadySelectedStyles:	You have already selected your styles for this round!
-StyleProcessor.TryToUseStyle.BackupStyle:		You are now preparing to perform a {0} style as a backup for {1}!
-StyleProcessor.TryToUseStyle.CantCombatMode:		You can't enter combat mode while lying down!
-StyleProcessor.TryToUseStyle.CantMeleeCombat:		You can't enter melee combat mode with a fired weapon!
-StyleProcessor.TryToUseStyle.DualWielding:		You must be dual wielding to use this style!
-StyleProcessor.TryToUseStyle.Fatigued:			You are too fatigued to use this style!
-StyleProcessor.TryToUseStyle.MustHaveTarget:		You must have a target for your next attack style!
-StyleProcessor.TryToUseStyle.NoLongerPreparing:		You are no longer preparing to use your {0} style!
-StyleProcessor.TryToUseStyle.PerformStyleBefore:	You must perform the {0} style before this one!
-StyleProcessor.TryToUseStyle.PreparePerform:		You prepare to perform a {0}!
-StyleProcessor.TryToUseStyle.StyleRequires:		This style requires a {0} weapon!
-
-# REALMABILITIES
-# /Handlers
-# /DashingDefenseAbility
-DashingDefenseAbility.AddEffectsInfo.Info1:		
-DashingDefenseAbility.AddEffectsInfo.Info2:		Target: Self
-DashingDefenseAbility.AddEffectsInfo.Info3:		Casting time: instant
-DashingDefenseAbility.Execute.AlreadyEffect:		You already an effect of that type!
-DashingDefenseAbility.Execute.MustInGroup:		You must be in a group to use this ability!
-
-# /FirstAidAbility
-FirstAidAbility.AddEffectsInfo.Info1:			Level 1: Value: 25%
-FirstAidAbility.AddEffectsInfo.Info2:			Level 2: Value: 60%
-FirstAidAbility.AddEffectsInfo.Info3:			Level 3: Value: 100%
-FirstAidAbility.AddEffectsInfo.Info4:			Target: Self
-FirstAidAbility.AddEffectsInfo.Info5:			Casting time: instant
-FirstAidAbility.AddEffectsInfo.Info6:			
-FirstAidAbility.Execute.FullyHealed:			You are fully healed.
-FirstAidAbility.Execute.HealYourself:			You heal yourself for {0} hit points.
-
-# /PurgeAbility
-PurgeAbility.AddEffectsInfo.Info1:			Level 1 of this ability has a five second delay when triggering this ability before it activates. Higher levels of Purge do not have this delay.
-PurgeAbility.AddEffectsInfo.Info2:			Target: Self
-PurgeAbility.AddEffectsInfo.Info3:			Casting time: instant
-PurgeAbility.OnTick.PurgeActivate:			Purge activates in {0} seconds!
-PurgeAbility.RemoveNegativeEffects.FallFromYou:		All negative effects fall from you.
-
-# /RealmAbility
-RealmAbility.AddReUseDelayInfo.Every:			Level {0}: Can use every: {1}
-RealmAbility..CheckPreconditions.BeInCombat:		You must be in combat recently to use this ability!
-RealmAbility..CheckPreconditions.BeInGroup:		You must be in a group use this ability!
-RealmAbility..CheckPreconditions.Combat:		You have been in combat recently and cannot use this ability!
-RealmAbility..CheckPreconditions.Dead:			You cannot use this ability while dead!
-RealmAbility..CheckPreconditions.Mesmerized:		You cannot use this ability while mesmerized!
-RealmAbility..CheckPreconditions.Sitting:		You cannot use this ability while sitting!
-RealmAbility..CheckPreconditions.Stealthed:		You cannot use this ability while stealthed!
-RealmAbility..CheckPreconditions.Stunned:		You cannot use this ability while stunned!
-RealmAbility.SendCasterSpellEffectAndCastMessage.Caster:{0} casts a spell!
-RealmAbility.SendCasterSpellEffectAndCastMessage.You:	You cast a {0} Spell!
-RealmAbility.SendCastMessage.PlayerCasts:		{0} casts a spell!
-RealmAbility.SendCastMessage.YouCast:			You cast a {0} Spell!
-
-# WORLD
-# /AbstractArea
-AbstractArea.Entered:					(Region) You have entered {0}.
-AbstractArea.Left:					(Region) You have left {0}.
-
-# SCRIPTS
-# GameEvents
-# /Playerenterexit
-Scripts.Events.PlayerEnterExit.Entered:			{0} just entered the game!
-Scripts.Events.PlayerEnterExit.Left:			{0} just left the game!
-Scripts.Events.PlayerEnterExit.Staff:			[Staff Member] {0}
-
-# TITLES
-# /Claim
-Titles.Claim.Frontier.FrontierChallenger:		Frontier Challenger
-Titles.Claim.Frontier.FrontierVindicator:		Frontier Vindicator
-Titles.Claim.Stronghold.StrongholdChief:		Stronghold Chief
-Titles.Claim.Stronghold.StrongholdSoldier:		Stronghold Soldier
-
-# /Deathblows
-Titles.Deathblows.BattleEnforcer:			Battle Enforcer
-Titles.Deathblows.BattleMaster:				Battle Master
-
-# /Kills
-Titles.Kills.Albion.BaneOfAlbion:			Bane of Albion
-Titles.Kills.Albion.ScourgeOfAlbion:			Scourge of Albion
-Titles.Kills.All.MasterAssassine:			Master Assassine
-Titles.Kills.All.MasterEnforcer:			Master Enforcer
-Titles.Kills.All.MasterSoldier:				Master Soldier
-Titles.Kills.Demon.DemonBane:				Demon Bane
-Titles.Kills.Demon.DemonScourge:			Demon Scourge
-Titles.Kills.Demon.DemonSlayer:				Demon Slayer
-Titles.Kills.Demon.DreadVanquisher:			Dread Vanquisher
-Titles.Kills.Dragon.DragonFoe:				Dragon Foe
-Titles.Kills.Dragon.DragonScourge:			Dragon Scourge
-Titles.Kills.Dragon.DragonSlayer:			Dragon Slayer
-Titles.Kills.Epic.EpicChallenger:			Epic Challenger
-Titles.Kills.Epic.EpicVictor:				Epic Victor
-Titles.Kills.Hibernia.BaneOfHibernia:			Bane of Hibernia
-Titles.Kills.Hibernia.ScourgeOfHibernia:		Scourge of Hibernia
-Titles.Kills.Midgard.BaneOfMidgard:			Bane of Midgard
-Titles.Kills.Midgard.ScourgeOfMidgard:			Scourge of Midgard
-
-# /Level
-Titles.Level.Level20Info:				Level 20+
-Titles.Level.Level20:					Level {0}
-
-# /PrivLevel
-Titles.PrivLevel.Administrator:				Administrator
-Titles.PrivLevel.Gamemaster:				Gamemaster
-
-# /Solokills
-Titles.Solokills.DuelMaster:				Duel Master
-Titles.Solokills.LoneEnforcer:				Lone Enforcer
-
-# /Time
-Titles.Time.Account.ElderTitle:				Elder
-Titles.Time.Character.Veteran:				Veteran
-
-# /CL
-Titles.CL.Level1:					Seeker
-Titles.CL.Level2:					Enforcer
-Titles.CL.Level3:					Outrider
-Titles.CL.Level4:					Lightbringer
-Titles.CL.Level5:					King's Champion
-Titles.CL.Level6:					King´s Emissary
-Titles.CL.Level7:					Patron of Minotaur
-Titles.CL.Level8:					Visionary
-Titles.CL.Level9:					Gladiator
-Titles.CL.Level10:					Labyrinthian
-
-# /ML
-Titles.ML.Line1:					Banelord
-Titles.ML.Line2:					Battlemaster
-Titles.ML.Line3:					Convoker
-Titles.ML.Line4:					Perfecter
-Titles.ML.Line5:					Sojourner
-Titles.ML.Line6:					Spymaster
-Titles.ML.Line7:					Stormlord
-Titles.ML.Line8:					Warlord
-
-# VIEWREPORTS
-Scripts.Player.ViewReport.Usage: 			Usage:
-Scripts.Player.ViewReport.Help.Close:			'/viewreport close <report #>' Will close the report of id #.
-Scripts.Player.ViewReport.Help.Delete:			'/viewreport delete <report #' Deletes a report of id #.
-Scripts.Player.ViewReport.InvalidReport:		That is not a valid report.
-Scripts.Player.ViewReport.UnknownCommand:		That is not a valid command.
-Scripts.Player.ViewReport.ReportDeleted:		Report {0} has been deleted.
-Scripts.Player.ViewReport.NoPriv:			You do not have the privilages to edit reports.
 
 # /horse
-HorseEmote.MustBeOnMount:					You can only do that while mounted.
-HorseEmote.You:							you
-HorseEmote.courbette.ToOthers:				-
-HorseEmote.courbette.ToSource:				-
-HorseEmote.courbette.NoTargetToOthers:			{0}'s mount performs a courbette.
-HorseEmote.courbette.NoTargetToSource:			Your mount performs a courbette.
-HorseEmote.graze.ToOthers:					-
-HorseEmote.graze.ToSource:					-
 HorseEmote.graze.NoTargetToOthers:				{0} lets {1} mount graze.
 HorseEmote.graze.NoTargetToSource:				You let your mount graze.
-HorseEmote.halt.ToOthers:					{0} orders {1} to halt.
-HorseEmote.halt.ToSource:					You order {0} to halt.
-HorseEmote.halt.NoTargetToOthers:				{0} orders everyone to halt.
-HorseEmote.halt.NoTargetToSource:				You order everyone to halt.
-HorseEmote.nod.ToOthers:						{0}'s mount nods at {1}.
-HorseEmote.nod.ToSource:						Your mount nods at {0}.
-HorseEmote.nod.NoTargetToOthers:				{0}'s mount nods.
-HorseEmote.nod.NoTargetToSource:				Your mount nods.
-HorseEmote.pet.ToOthers:						-
-HorseEmote.pet.ToSource:						-
+
 HorseEmote.pet.NoTargetToOthers:				{0} pets {1} mount.
 HorseEmote.pet.NoTargetToSource:				You pet your mount.
-HorseEmote.rear.ToOthers:					{0}'s mount rears at the sight of {1}.
-HorseEmote.rear.ToSource:					Your mount rears at the sight of {0}.
-HorseEmote.rear.NoTargetToOthers:				{0}'s mount rears.
-HorseEmote.rear.NoTargetToSource:				Your mount rears.
-HorseEmote.startle.ToOthers:					{0}'s mount is startled by {1}.
-HorseEmote.startle.ToSource:					Your mount is startled by {0}.
-HorseEmote.startle.NoTargetToOthers:			{0}'s mount is startled.
-HorseEmote.startle.NoTargetToSource:			Your mount is startled.
+
 HorseEmote.trick.ToOthers:					{0} stands on {2} mount to impress {1}.
 HorseEmote.trick.ToSource:					You stand on your mount to impress {0}.
 HorseEmote.trick.NoTargetToOthers:				{0} stands on {1} mount to impress everyone.

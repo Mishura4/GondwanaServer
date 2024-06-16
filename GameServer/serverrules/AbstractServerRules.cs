@@ -298,7 +298,7 @@ namespace DOL.GS.ServerRules
             if (player.ObjectState != GameObject.eObjectState.Active) return;
             if (player.Client.IsPlaying == false) return;
 
-            player.Out.SendMessage("Your temporary invulnerability timer has expired.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ServerRules.PvpRules.InvTimerExp"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 
             return;
         }
@@ -605,7 +605,7 @@ namespace DOL.GS.ServerRules
                 }
 
                 if (!isAllowed && caster is GamePlayer)
-                    (caster as GamePlayer).Client.Out.SendMessage("You can't cast this spell on the " + target.Name, eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    (caster as GamePlayer).Client.Out.SendMessage(LanguageMgr.GetTranslation((caster as GamePlayer).Client.Account.Language, "ServerRules.AbstractServerRules.CantCastSpell", target.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 
                 return isAllowed;
             }
@@ -1326,14 +1326,38 @@ namespace DOL.GS.ServerRules
                     bountyPoints = (int)(npcBPValue * damagePercent);
                 }
 
-                if (killedNPC.Level >= 45 && player is { Guild: { GuildType: Guild.eGuildType.PlayerGuild} })
+                double guildBuffMultiplier = Properties.GUILD_BUFF_BP / 100.0;
+
+                if (killedNPC.Level >= 45 && player is { Guild: { GuildType: Guild.eGuildType.PlayerGuild } })
                 {
+                    if (player.Guild != null && player.Guild.BonusType == Guild.eBonusType.BountyPoints)
+                    {
+                        double guildBuffBonus = Properties.GUILD_BUFF_BP;
+                        int guildLevel = (int)player.Guild.GuildLevel;
+
+                        if (guildLevel >= 8 && guildLevel <= 15)
+                        {
+                            guildBuffBonus *= 1.5;
+                        }
+                        else if (guildLevel > 15)
+                        {
+                            guildBuffBonus *= 2.0;
+                        }
+
+                        guildBuffMultiplier *= (1.0 + guildBuffBonus * 0.01);
+                    }
                     int multiplier = killedNPC.Level >= 65 ? 2 : 1;
-                    int bonusBP = player.Guild.TerritoryBonusBountyPoints * multiplier;
+                    int bonusBP = (int)((player.Guild.TerritoryBonusBountyPoints * multiplier) + guildBuffMultiplier);
 
                     bountyPoints += bonusBP;
-                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameObjects.GamePlayer.GainBountyPoints.TerritoryBonus", bonusBP), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                    if (bonusBP > 0)
+                    {
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameObjects.GamePlayer.GainBountyPoints.TerritoryBonus", bonusBP), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                        player.AddBountyPoints(bonusBP);
+                    }
                 }
+
+                bountyPoints = (int)(bountyPoints * guildBuffMultiplier);
 
                 if (bountyPoints > bpCap && !(killedNPC is Doppelganger))
                     bountyPoints = bpCap;
@@ -1641,8 +1665,8 @@ namespace DOL.GS.ServerRules
                 {
                     if (de.Key is GamePlayer player)
                     {
-                        player.Out.SendMessage(killedPlayer.Name + " has been killed recently and is worth no realm points!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                        player.Out.SendMessage(killedPlayer.Name + " has been killed recently and is worth no experience!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ServerRules.AbstractServerRules.RecentPlayerKillNoRP", killedPlayer.Name), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ServerRules.AbstractServerRules.RecentPlayerKillNoXP", killedPlayer.Name), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                     }
                 }
                 return;
@@ -1674,7 +1698,7 @@ namespace DOL.GS.ServerRules
                 {
                     GamePlayer player = de.Key as GamePlayer;
                     if (player != null)
-                        player.Out.SendMessage("You gain no experience from this kill!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ServerRules.AbstractServerRules.NoXPKill"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 }
 
                 return;

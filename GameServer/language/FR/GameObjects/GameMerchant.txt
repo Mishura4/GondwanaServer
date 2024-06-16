@@ -22,4 +22,6 @@ GameMerchant.OnPlayerWithdraw:		           	Vous retirez {0} de votre marchand.
 
 # GameTerritoryMerchant
 GameMerchant.Interact.Territory.NotSameGuild:	Je n'ai rien à vous vendre !
-GameMerchant.Interact.Territory.Outlaws:	Je ne vends rien aux hors-la-loi
+GameMerchant.Interact.Territory.Outlaws:	Je ne vends rien aux hors-la-loi...
+GameMerchant.Interact.Territory.AgainstOutlaws:		Je ne fais pas affaire avec des criminels tels que vous... Partez sur-le-champ, ou j'alerte les gardes !
+GameMerchant.Interact.Territory.AgainstNonOutlaws:	Vous avez l'audace de venir ici exiger ma marchandise ? Vous pourriez préférer le goût de ma lame ! Partez avant que je ne me ravise !

@@ -1086,7 +1086,7 @@ namespace DOL.GS.Commands
                                         player.ChangeBaseStat(eStat.CON, value);
                                         player.Out.SendMessage(
                                             client.Player.Name + "(PrivLevel: " + client.Account.PrivLevel + ") has given you " + value +
-                                            " consititution!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                                            " constitution!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                                         client.Out.SendMessage("You gave " + player.Name + " " + value + " constitution successfully!",
                                                                eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                                     }

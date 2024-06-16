@@ -16,20 +16,18 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
-/*
- * LightBringer Task System
- * Author:	LightBringer
- * Date:	20040817
-*/
-/*
- * Suncheck: Bring the /task-System more like real servers
- */
 
-using System.Collections;
 using System.Collections.Generic;
 using DOL.GS.PacketHandler;
 using DOL.GS.Quests;
+using DOL.GS.ServerProperties;
+using DOL.Database;
+using DOL.GS.PacketHandler;
+using DOLDatabase.Tables;
 using DOL.Language;
+using System.Linq;
+using System.Timers;
+using System;
 
 namespace DOL.GS.Commands
 {
@@ -41,149 +39,199 @@ namespace DOL.GS.Commands
         "Commands.Players.Task.Usage")]
     public class TaskCommandHandler : AbstractCommandHandler, ICommandHandler
     {
+        private static List<string> allCreatureTypes = new List<string>
+        {
+            "KillAnimalCreatures",
+            "KillDemonCreatures",
+            "KillDragonCreatures",
+            "KillElementalCreatures",
+            "KillGiantCreatures",
+            "KillHumanoidCreatures",
+            "KillInsectCreatures",
+            "KillMagicalCreatures",
+            "KillReptileCreatures",
+            "KillPlantCreatures",
+            "KillUndeadCreatures"
+        };
+
+        private static List<string> activeCreatureTypes = new List<string>();
+        private static Timer rotationTimer;
+
+        static TaskCommandHandler()
+        {
+            InitializeTimer();
+            RotateCreatureTypes(null, null);
+        }
+
+        private static void InitializeTimer()
+        {
+            rotationTimer = new Timer(Properties.TASK_PVE_MOBTYPE_ROTATION * 60 * 1000);
+            rotationTimer.Elapsed += RotateCreatureTypes;
+            rotationTimer.AutoReset = true;
+            rotationTimer.Enabled = true;
+        }
+
+        private static void RotateCreatureTypes(object source, ElapsedEventArgs e)
+        {
+            var random = new Random();
+            activeCreatureTypes = allCreatureTypes.OrderBy(x => random.Next()).Take(4).ToList();
+        }
+
+        public static List<string> GetActiveCreatureTypes()
+        {
+            return new List<string>(activeCreatureTypes);
+        }
+
         public void OnCommand(GameClient client, string[] args)
         {
+            if (!Properties.ENABLE_TASK_SYSTEM)
+            {
+                client.Player.Out.SendMessage(LanguageMgr.GetTranslation(client, "Tasks.SystemDisabled"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return;
+            }
+
             if (IsSpammingCommand(client.Player, "task"))
                 return;
 
+            GamePlayer player = client.Player;
+            string playerName = player.Name;
+            var taskData = GameServer.Database.SelectObject<TaskXPlayer>($"PlayerName = '{playerName}'");
 
-            client.Player.Out.SendMessage("", eChatType.CT_System, eChatLoc.CL_PopupWindow);
-            /* if (args.Length > 1)
-             {
-                 if (args[1] == "abort")
-                 {
-                     if (client.Player.Task != null && client.Player.Task.TaskActive)
-                         client.Player.Task.ExpireTask();
-                 }
-             }
-             else
-             {
-                 GamePlayer player = client.Player;
-                 //TaskCommand(client.Player);
-                 if (player.Task != null)
-                     player.Task.CheckTaskExpired();
+            if (taskData == null)
+            {
+                taskData = new TaskXPlayer
+                {
+                    PlayerName = player.Name,
+                    KillEnemyPlayersGroup = "0|0",
+                    KillEnemyPlayersAlone = "0|0",
+                    KillKeepGuards = "0|0",
+                    TakeKeeps = "0|0",
+                    RvRChampionOfTheDay = "0|0",
+                    KillTerritoryGuards = "0|0",
+                    KillTerritoryBoss = "0|0",
+                    TurnInPvPGvGTaskToken = "0|0",
+                    KillCreaturesInDungeons = "0|0",
+                    KillOutdoorsCreatures = "0|0",
+                    KillAnimalCreatures = "0|0",
+                    KillDemonCreatures = "0|0",
+                    KillDragonCreatures = "0|0",
+                    KillElementalCreatures = "0|0",
+                    KillGiantCreatures = "0|0",
+                    KillHumanoidCreatures = "0|0",
+                    KillInsectCreatures = "0|0",
+                    KillMagicalCreatures = "0|0",
+                    KillReptileCreatures = "0|0",
+                    KillPlantCreatures = "0|0",
+                    KillUndeadCreatures = "0|0",
+                    TurnInPvETaskToken = "0|0",
+                    SuccessfulItemCombinations = "0|0",
+                    MasteredCrafts = "0|0",
+                    MasterpieceCrafted = "0|0",
+                    TurnInCraftingTaskToken = "0|0",
+                    EpicBossesSlaughtered = "0|0",
+                    ItemsSoldToPlayers = "0|0",
+                    SuccessfulPvPThefts = "0|0",
+                    OutlawPlayersSentToJail = "0|0",
+                    EnemiesKilledInAdrenalineMode = "0|0",
+                    QuestsCompleted = "0|0"
+                };
+                GameServer.Database.AddObject(taskData);
+            }
 
-                 AbstractTask task = player.Task;
+            var messages = new List<string>
+            {
+                LanguageMgr.GetTranslation(player.Client.Account.Language, "Tasks.PvPRvRGvGTasks"),
+                FormatTaskStatus(player, "KillEnemyPlayersGroup", taskData.KillEnemyPlayersGroup),
+                FormatTaskStatus(player, "KillEnemyPlayersAlone", taskData.KillEnemyPlayersAlone),
+                FormatTaskStatus(player, "KillKeepGuards", taskData.KillKeepGuards),
+                FormatTaskStatus(player, "TakeKeeps", taskData.TakeKeeps),
+                FormatTaskStatus(player, "RvRChampionOfTheDay", taskData.RvRChampionOfTheDay),
+                "",
+                FormatTaskStatus(player, "KillTerritoryGuards", taskData.KillTerritoryGuards),
+                FormatTaskStatus(player, "KillTerritoryBoss", taskData.KillTerritoryBoss),
+                "",
+                FormatTaskStatus(player, "TurnInPvPGvGTaskToken", taskData.TurnInPvPGvGTaskToken),
+                "",
+                "",
+                LanguageMgr.GetTranslation(player.Client.Account.Language, "Tasks.PvETasks"),
+                FormatTaskStatus(player, "KillCreaturesInDungeons", taskData.KillCreaturesInDungeons),
+                FormatTaskStatus(player, "KillOutdoorsCreatures", taskData.KillOutdoorsCreatures),
+                "",
+            };
 
-                 if (task != null && task.TaskActive)
-                 {
-                     var messages = new List<string>();
-                     messages.Add(
-                         LanguageMgr.GetTranslation(
-                             client.Account.Language,
-                             "Commands.Players.Task.YouAreOn",
-                             task.Name));
-                     messages.Add(
-                         LanguageMgr.GetTranslation(
-                             client.Account.Language,
-                             "Commands.Players.Task.WhatTodo",
-                             task.Description));
-                     messages.Add(" ");
-                     messages.Add(
-                         LanguageMgr.GetTranslation(
-                             client.Account.Language,
-                             "Commands.Players.Task.WillExpire",
-                             task.TimeOut.ToShortTimeString()));
-                     messages.Add(
-                         LanguageMgr.GetTranslation(
-                             client.Account.Language,
-                             "Commands.Players.Task.YouHaveDone",
-                             AbstractTask.MaxTasksDone(player.Level)));
+            foreach (var creatureType in activeCreatureTypes)
+            {
+                messages.Add(FormatTaskStatus(player, creatureType, taskData.GetType().GetProperty(creatureType).GetValue(taskData).ToString()));
+            }
 
-                     player.Out.SendCustomTextWindow(
-                         LanguageMgr.GetTranslation(
-                             client.Account.Language,
-                             "Commands.Players.Task.Snapshot"),
-                             messages);
-                 }
-                 else if (task != null && task.TasksDone >= AbstractTask.MaxTasksDone(player.Level))
-                 {
-                     player.Out.SendMessage(
-                         LanguageMgr.GetTranslation(
-                             client.Account.Language,
-                             "Commands.Players.Task.NoMore"),
-                         eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                 }
-                 else
-                 {
-                     player.Out.SendMessage(
-                         LanguageMgr.GetTranslation(
-                             client.Account.Language,
-                             "Commands.Players.Task.NoPending"),
-                         eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                 }
-             }*/
+            messages.Add("");
+            messages.Add(FormatTaskStatus(player, "TurnInPvETaskToken", taskData.TurnInPvETaskToken));
+            messages.Add("");
+            messages.Add("");
+            messages.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "Tasks.CraftingTasks"));
+            messages.Add(FormatTaskStatus(player, "SuccessfulItemCombinations", taskData.SuccessfulItemCombinations));
+            messages.Add(FormatTaskStatus(player, "MasteredCrafts", taskData.MasteredCrafts));
+            messages.Add(FormatTaskStatus(player, "MasterpieceCrafted", taskData.MasterpieceCrafted));
+            messages.Add("");
+            messages.Add(FormatTaskStatus(player, "TurnInCraftingTaskToken", taskData.TurnInCraftingTaskToken));
+            messages.Add("");
+            messages.Add("");
+            messages.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "Tasks.SpecialTasks"));
+            messages.Add(FormatTaskStatus(player, "EpicBossesSlaughtered", taskData.EpicBossesSlaughtered));
+            messages.Add(FormatTaskStatus(player, "ItemsSoldToPlayers", taskData.ItemsSoldToPlayers));
+            // Conditionally add "SuccessfulPvPThefts" task
+            if (IsClassAllowedToSteal(player))
+            {
+                messages.Add(FormatTaskStatus(player, "SuccessfulPvPThefts", taskData.SuccessfulPvPThefts));
+            }
+            messages.Add(FormatTaskStatus(player, "OutlawPlayersSentToJail", taskData.OutlawPlayersSentToJail));
+            messages.Add(FormatTaskStatus(player, "EnemiesKilledInAdrenalineMode", taskData.EnemiesKilledInAdrenalineMode));
+            messages.Add(FormatTaskStatus(player, "QuestsCompleted", taskData.QuestsCompleted));
+            messages.Add("");
+            messages.Add("");
+            messages.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "Tasks.TaskCompletionTokenInfo"));
+            messages.Add("");
+            messages.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "Tasks.SpecialTaskCompletionTokenInfo"));
+            messages.Add("");
+            messages.Add("");
+
+            player.Out.SendCustomTextWindow(LanguageMgr.GetTranslation(player.Client.Account.Language, "Tasks.SnapshotTitle"), messages);
         }
 
-        /// <summary>
-        /// Execute /Task Command
-        /// Same if Player write /Task or press TaskButtom
-        /// </summary>
-        /// <param name="player">The GamePlayer Object</param>
-        /// <returns>True if Command Execute Succesfully</returns>
-        /*public static bool TaskCommand(GamePlayer player)
-		{
-			if (player.Task != null)
-				player.Task.CheckTaskExpired();
+        private string FormatTaskStatus(GamePlayer player, string taskName, string taskData)
+        {
+            var parts = taskData.Split('|');
+            var level = int.Parse(parts[0]);
+            var currentProgress = int.Parse(parts[1]);
+            var maxLevel = TaskManager.GetMaxLevel(taskName);
+            string language = player.Client.Account.Language;
+            if (level >= maxLevel)
+            {
+                return $"+ {LanguageMgr.GetTranslation(language, $"Tasks.{taskName.Replace(" ", "")}")} ({LanguageMgr.GetTranslation(language, "Tasks.MaxLevelReached")})";
+            }
+            var maxProgress = TaskManager.GetNextLevelThreshold(player, taskName, level);
+            return $"+ {LanguageMgr.GetTranslation(language, $"Tasks.{taskName.Replace(" ", "")}")} ({LanguageMgr.GetTranslation(language, "Tasks.Level", level)}) : {currentProgress}/{maxProgress}";
+        }
 
-			if (player.TargetObject == null || player.TargetObject == player)
-			{
-				//TaskMgr.UpdateDiaryWindow(Player);
-				AbstractTask task = player.Task;
+        private bool IsClassAllowedToSteal(GamePlayer player)
+        {
+            switch (player.CharacterClass.ID)
+            {
+                case (byte)eCharacterClass.AlbionRogue:
+                case (byte)eCharacterClass.MidgardRogue:
+                case (byte)eCharacterClass.Stalker:
+                case (byte)eCharacterClass.Minstrel:
+                case (byte)eCharacterClass.Infiltrator:
+                case (byte)eCharacterClass.Scout:
+                case (byte)eCharacterClass.Hunter:
+                case (byte)eCharacterClass.Shadowblade:
+                case (byte)eCharacterClass.Ranger:
+                case (byte)eCharacterClass.Nightshade:
+                    return true;
 
-				if (task != null && task.TaskActive)
-				{
-					IList messages = new ArrayList(4);
-					messages.Add("You are on " + task.Name);
-					messages.Add("What to do: " + task.Description);
-					messages.Add(" ");
-					messages.Add("Task will expire at " + task.TimeOut.ToShortTimeString());
-					messages.Add("You have done " + task.TasksDone + " tasks out of " + AbstractTask.MaxTasksDone(player.Level) + " until now.");
-					player.Out.SendCustomTextWindow("Tasks (Snapshot)", messages);
-				}
-				else if (task != null && task.TasksDone >= AbstractTask.MaxTasksDone(player.Level))
-				{
-					player.Out.SendMessage("You can do no more tasks at your current level", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-				}
-				else
-				{
-					player.Out.SendMessage("You have currently no pending task", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-				}
-				return true;
-			}
-			else
-			{
-				if (WorldMgr.GetDistance(player.X, player.Y, 0, player.TargetObject.X, player.TargetObject.Y, 0) <= WorldMgr.WHISPER_DISTANCE)
-					//ToDo: Use follow Line instead of Above when Dol will support Mob with a Z coordinate.
-					//foreach(GameNPC mob in WorldMgr.GetNPCsCloseToObject(Player, WorldMgr.WHISPER_DISTANCE))
-				{
-					if (player.TargetObject is GameLiving)
-					{
-						if (KillTask.CheckAvailability(player, (GameLiving) player.TargetObject))
-						{
-							KillTask.BuildTask(player, (GameLiving) player.TargetObject);
-							return true;
-						}
-						else if (MoneyTask.CheckAvailability(player, (GameLiving) player.TargetObject))
-						{
-							MoneyTask.BuildTask(player, (GameLiving) player.TargetObject);
-							return true;
-						}
-						else if (CraftTask.CheckAvailability(player, (GameLiving) player.TargetObject))
-						{
-							CraftTask.BuildTask(player, (GameLiving) player.TargetObject);
-							return true;
-						}
-					}
-					return false;
-				}
-				else
-				{
-					player.Out.SendMessage(player.TargetObject.GetName(0, true) + " is too far away to interact", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-					return false;
-				}
-			}
-		}*/
+                default:
+                    return false;
+            }
+        }
     }
-
 }

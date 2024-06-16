@@ -21,8 +21,8 @@ Commands.Players.HorseEmote.nod.ToOthers:					La monture de {0} incline la tête
 Commands.Players.HorseEmote.nod.ToSource:					Votre monture incline la tête devant {0}.
 Commands.Players.HorseEmote.pet.NoTargetToOthers:			{0} caresse sa monture.
 Commands.Players.HorseEmote.pet.NoTargetToSource:			Vous caressez votre monture.
-Commands.Players.HorseEmote.pet.ToOthers:					-
-Commands.Players.HorseEmote.pet.ToSource:					-
+Commands.Players.HorseEmote.pet.ToOthers:				{0} caresse sa monture en face de {1}.
+Commands.Players.HorseEmote.pet.ToSource:				Vous caressez votre monture en face de {0}.
 Commands.Players.HorseEmote.rear.NoTargetToOthers:			La monture de {0} se cabre.
 Commands.Players.HorseEmote.rear.NoTargetToSource:			Votre monture se cabre.
 Commands.Players.HorseEmote.rear.ToOthers:					La monture de {0} se cabre face à {1} !

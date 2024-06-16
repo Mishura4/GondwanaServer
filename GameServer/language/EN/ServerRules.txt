@@ -1,34 +1,20 @@
+
 # SERVERRULES
-# /AbstractServerRules/PlayerStatistics
-# /Kills
-PlayerStatistic.Kill.Title:				Kill Report
-PlayerStatistic.Kill.AlbionPlayer:			Albion Players Killed
-PlayerStatistic.Kill.HiberniaPlayer:			Hibernia Players Killed
-PlayerStatistic.Kill.MidgardPlayer:			Midgard Players Killed
-PlayerStatistic.Kill.TotalPlayers:			Total Players Killed
+# /AmtenaelRules
+ServerRules.AmtenaelRules.PveInvTimerExpired:		Your pve temporary invulnerability timer has expired.
+ServerRules.AmtenaelRules.PlayerIsConnecting:		{0} is connecting, you cannot attack him at this time.
+ServerRules.AmtenaelRules.PvpInvTimerWearsOff:		You can't attack players until your PvP invulnerability timer wears off!
+ServerRules.AmtenaelRules.RPBonusKeepCapture:		You receive a {0}% RP bonus for capturing the keep!
 
-# /Deathblows
-PlayerStatistic.Deathblows.AlbionPlayer:		Albion Deathblows
-PlayerStatistic.Deathblows.HiberniaPlayer:		Hibernia Deathblows
-PlayerStatistic.Deathblows.MidgardPlayer:		Midgard Deathblows
-PlayerStatistic.Deathblows.TotalPlayers:		Total Deathblows
+# /PvPServerRules
+ServerRules.PvpRules.InvTimerExpFlagON:			Your temporary invulnerability timer has expired, but your /safety flag is still on.
+ServerRules.PvpRules.InvTimerExp:			Your temporary invulnerability timer has expired.
 
-# /Solo
-PlayerStatistic.Solo.AlbionPlayer:			Albion Solo Killed
-PlayerStatistic.Solo.HiberniaPlayer:			Hibernia Solo Killed
-PlayerStatistic.Solo.MidgardPlayer:			Midgard Solo Killed
-PlayerStatistic.Solo.TotalPlayers:			Total Solo Killed
-
-# /Capture
-PlayerStatistic.Capture.Title:				Capture Report
-PlayerStatistic.Capture.Keeps:				Total Keeps Captured
-PlayerStatistic.Capture.Towers:				Total Towers Captured
-
-# /PvE
-PlayerStatistic.PvE.Title:				PvE Report
-PlayerStatistic.PvE.KillsDragon:			Dragon Kills
-PlayerStatistic.PvE.KillsEpic:				Epic Boss Kills
-PlayerStatistic.PvE.KillsLegion:			Legion Kills
+# /AbstractServerRules
+ServerRules.AbstractServerRules.CantCastSpell:		You can't cast this spell on the {0}.
+ServerRules.AbstractServerRules.RecentPlayerKillNoRP:	{0} has been killed recently and is worth no realm points!
+ServerRules.AbstractServerRules.RecentPlayerKillNoXP:	{0} has been killed recently and is worth no experience!
+ServerRules.AbstractServerRules.NoXPKill:		You gain no experience from this kill!
 
 # /DemonsBreachJumpPoint
 DemonsBreachJumpPoint.Requirements:			You do not meet the requirements to enter this region!

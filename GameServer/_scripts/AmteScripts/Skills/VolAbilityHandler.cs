@@ -84,8 +84,11 @@ namespace DOL.GS.SkillHandler
             switch (player.CharacterClass.ID)
             {
                 case (byte)eCharacterClass.AlbionRogue:
+                case (byte)eCharacterClass.MidgardRogue:
+                case (byte)eCharacterClass.Stalker:
                 case (byte)eCharacterClass.Minstrel:
                 case (byte)eCharacterClass.Infiltrator:
+                case (byte)eCharacterClass.Scout:
                 case (byte)eCharacterClass.Hunter:
                 case (byte)eCharacterClass.Shadowblade:
                 case (byte)eCharacterClass.Ranger:

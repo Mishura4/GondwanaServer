@@ -1,0 +1,68 @@
+
+Tasks.SystemDisabled: The task system is currently disabled.
+Tasks.PvPRvRGvGTasks: ==== PvP/RvR/GvG TASKS ====
+Tasks.PvETasks: ===== PvE TASKS =====
+Tasks.CraftingTasks: ===== CRAFTING TASKS =====
+Tasks.SpecialTasks: ===== SPECIAL TASKS =====
+Tasks.TaskCompletionTokenInfo: Each task completion token for PvP, RvR, GvG, PvE, or crafting tasks should be returned to the Taskmaster to receive rewards.
+Tasks.SpecialTaskCompletionTokenInfo: Special task completion tokens are specific to each task. These tokens unlock new player titles and provide special bonuses associated with those titles.
+Tasks.SnapshotTitle: TASKS
+Tasks.KillEnemyPlayersGroup: Kill Enemy Players while in a group
+Tasks.KillEnemyPlayersAlone: Kill Enemy Players Alone
+Tasks.KillKeepGuards: Kill Keep Guards
+Tasks.TakeKeeps: Take Keeps
+Tasks.RvRChampionOfTheDay: Become RvR Champion of the Day
+Tasks.KillTerritoryGuards: Kill Territory Guards
+Tasks.KillTerritoryBoss: Territory Capture
+Tasks.TurnInPvPGvGTaskToken: Turn in PvP/RvR/GvG Task completion token
+Tasks.KillCreaturesInDungeons: Kill Creatures in Dungeons
+Tasks.KillOutdoorsCreatures: Kill Outdoors Creatures
+Tasks.KillAnimalCreatures: Kill Animal Creatures
+Tasks.KillDemonCreatures: Kill Demon Creatures
+Tasks.KillDragonCreatures: Kill Dragon Creatures
+Tasks.KillElementalCreatures: Kill Elemental Creatures
+Tasks.KillGiantCreatures: Kill Giant Creatures
+Tasks.KillHumanoidCreatures: Kill Humanoid Creatures
+Tasks.KillInsectCreatures: Kill Insect Creatures
+Tasks.KillMagicalCreatures: Kill Magical Creatures
+Tasks.KillReptileCreatures: Kill Reptile Creatures
+Tasks.KillPlantCreatures: Kill Plant Creatures
+Tasks.KillUndeadCreatures: Kill Undead Creatures
+Tasks.TurnInPvETaskToken: Turn in PvE Task Completion Token
+Tasks.SuccessfulItemCombinations: Successful Item Combinations
+Tasks.MasteredCrafts: Mastered Crafts
+Tasks.MasterpieceCrafted: Masterpiece crafted
+Tasks.TurnInCraftingTaskToken: Turn in Crafting Task completion token
+Tasks.EpicBossesSlaughtered: Epic Bosses Slaughtered
+Tasks.ItemsSoldToPlayers: Successful Player Market Trades
+Tasks.SuccessfulPvPThefts: Successful Player thefts
+Tasks.OutlawPlayersSentToJail: Kill Outlaw Players
+Tasks.EnemiesKilledInAdrenalineMode: Enemies killed in Adrenaline Mode
+Tasks.QuestsCompleted: Quests completed
+Tasks.MaxLevelReached: Max level
+Tasks.Level: Level {0}
+
+Tasks.KillEnemyPlayersGroupLog: Kill Enemy Players while in a group: {0}/{1}
+Tasks.KillEnemyPlayersAloneLog: Kill Enemy Players Alone: {0}/{1}
+Tasks.KillKeepGuardsLog: Kill Keep Guards: {0}/{1}
+Tasks.TakeKeepsLog: Take Keeps: {0}/{1}
+Tasks.KillTerritoryGuardsLog: Kill Territory Guards: {0}/{1}
+Tasks.KillTerritoryBossLog: Territory Capture: {0}/{1}
+Tasks.SuccessfulItemCombinationsLog: Successful Item Combinations: {0}/{1}
+Tasks.MasteredCraftsLog: Mastered Crafts: {0}/{1}
+Tasks.MasterpieceCraftedLog: Masterpiece crafted: {0}/{1}
+Tasks.EpicBossesSlaughteredLog: Epic Bosses Slaughtered: {0}/{1}
+Tasks.ItemsSoldToPlayersLog: Successful Player Market Trades: {0}/{1}
+Tasks.SuccessfulPvPTheftsLog: Successful Player thefts: {0}/{1}
+Tasks.OutlawPlayersSentToJailLog: Kill Outlaw Players: {0}/{1}
+Tasks.EnemiesKilledInAdrenalineModeLog: Enemies killed in Adrenaline Mode: {0}/{1}
+Tasks.QuestsCompletedLog: Quests completed: {0}/{1}
+Tasks.TurnInPvPGvGTaskTokenMessage: Task: You get a PvP/RvR/GvG Task completion token - level {0}
+Tasks.TurnInPvETaskTokenMessage: Task: You get a PvE Task completion token - level {0}
+Tasks.TurnInCraftingTaskTokenMessage: Task: You get a Crafting Task completion token - level {0}
+Tasks.EpicBossesSlaughteredSpecialToken: Task: You get a 'Demon Slayer' Special token - level {0}
+Tasks.ItemsSoldToPlayersSpecialToken: Task: You get a 'Trader' Special token - level {0}
+Tasks.SuccessfulPvPTheftsSpecialToken: Task: You get a 'Thief' Special token - level {0}
+Tasks.OutlawPlayersSentToJailSpecialToken: Task: You get a 'Bounty Hunter' Special token - level {0}
+Tasks.EnemiesKilledInAdrenalineModeSpecialToken: Task: You get a 'Wrath' Special token - level {0}
+Tasks.QuestsCompletedSpecialToken: Task: You get an 'Adventurer' Special token - level {0}

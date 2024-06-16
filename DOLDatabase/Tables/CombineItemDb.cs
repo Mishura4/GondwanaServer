@@ -28,6 +28,7 @@ namespace DOLDatabase.Tables
         private string m_toolKit;
         private short m_ToolLoseDur;
         private string m_CombinationID;
+        private bool m_allowVersion;
 
         [DataElement(AllowDbNull = false)]
         public string ItemsIds
@@ -248,6 +249,17 @@ namespace DOLDatabase.Tables
             {
                 Dirty = true;
                 m_CombinationID = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false)] // New property
+        public bool AllowVersion
+        {
+            get => m_allowVersion;
+            set
+            {
+                Dirty = true;
+                m_allowVersion = value;
             }
         }
     }

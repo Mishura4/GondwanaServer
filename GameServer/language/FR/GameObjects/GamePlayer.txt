@@ -415,6 +415,8 @@ GameObjects.GamePlayer.UseSlot.CantSeeTarget:			Vous ne voyez pas votre cible.
 GameObjects.GamePlayer.UseSlot.CantSummonRvR:			Vous ne pouvez pas utiliser cette monture dans une zone RvR.
 GameObjects.GamePlayer.UseSlot.CantUseFromBackpack:	    Vous ne pouvez pas utiliser cet objet directement dans votre sac à dos. Equipez-le avant.
 GameObjects.GamePlayer.UseSlot.CantUseInCombat:			Vous ne pouvez pas utiliser cet objet en combat.
+GameObjects.GamePlayer.UseSlot.CantUseWhileSitting:		Vous ne pouvez pas utiliser cet objet en étant assis !
+GameObjects.GamePlayer.UseSlot.CantUseHere:			Vous ne pouvez pas utiliser cela ici !
 GameObjects.GamePlayer.UseSlot.IllegalSourceObject:		Objet source incorrect. Readied {0}.
 GameObjects.GamePlayer.UseSlot.MustDismountBefore:		Vous devez d'abord descendre de votre cheval.
 GameObjects.GamePlayer.UseSlot.NoAutoReleaseShotReload:	Vous ne tirerez ou ne rechargerez plus automatiquement.
@@ -426,7 +428,14 @@ GameObjects.GamePlayer.UseSlot.WhistleMount:			Vous sifflez votre monture.
 GameObjects.GamePlayer.UseSlot.MustWaitBeforeUse:		Vous devez attendre {0} secondes de plus avant d'utiliser cet objet.
 GameObjects.GamePlayer.UseSlot.CantUseState:			Vous ne pouvez pas utiliser {0} dans votre état actuel.
 GameObjects.GamePlayer.UseSlot.Used:			        Vous utilisez {0}.
-GameObjects.GamePlayer.UseSlot.CantUseCast:				Vous devez finir votre action en cours pour utiliser votre {0}.
+GameObjects.GamePlayer.UseSlot.CantUseCast:			Vous devez finir votre action en cours pour utiliser votre {0}.
+GameObjects.GamePlayer.UseSlot.WrongTarget:		    	Il vous faut une cible pour utiliser cette capacité !
+GameObjects.GamePlayer.UseSlot.QuiverSlotEmpty:			L'emplacement du carquois {0} est vide !
+GameObjects.GamePlayer.UseSlot.PotionNotImplemented:		L'effet de la potion ID {0} n'est pas encore implémenté.
+GameObjects.GamePlayer.UseSlot.PotionLineNotFound:		Ligne d'effet de la potion introuvable.
+GameObjects.GamePlayer.UseSlot.PotionSpellNotFound:		Le sort de la potion ID {0} est introuvable.
+GameObjects.GamePlayer.UseSlot.CantDischargeInState:		Dans votre état actuel, vous ne pouvez décharger aucun objet.
+GameObjects.GamePlayer.UseSlot.WaitBeforeDischarge:		Vous devez attendre encore {0} seconde(s) avant de décharger {1} !
 
 GameObjects.GamePlayer.Whisper.SelectTarget:			Sélectionnez une cible à qui chuchoter.
 GameObjects.GamePlayer.Murder:							Vous avez perdu 1 point de réputation pour avoir tué {0}.
@@ -437,7 +446,7 @@ GameObjects.GamePlayer.Jailed.Unknown:                      {0} a été mis en p
 GameObjects.GamePlayer.Released:                            {0} a été relâché(e) de prison.
 GameObjects.GamePlayer.RvR:                                 - Nombre total de joueurs tués : {0} -
 GameObjects.GamePlayer.RvR.Champion:                        - Nombre total de joueurs tués : {0} - Champion du jour : {1} ( {2} attaquants ennemis tués )
-GameObjects.GamePlayer.RvR.Control:                         Le Rvr {1} est sous le contrôle de {0}!
+GameObjects.GamePlayer.RvR.Control:                         Le Rvr {1} est sous le contrôle de {0} !
 
 GameObjects.GamePlayer.RvR.Open.Claimable:              Voulez vous [prendre le contrôle] du fort?
 GameObjects.GamePlayer.RvR.Open.UnClaimble:             Vous devez attendre {0} secondes avant de pouvoir pretendre au contrôle du fort.
@@ -447,6 +456,10 @@ GameObjects.GamePlayer.RvR.Occupied:                    Je suis occupé pour le 
 GameObjects.GamePlayer.RvR.Interrupt:                   Vous avez été interrompu.
 GameObjects.GamePlayer.RvR.Too.Far:                     Vous vous êtes trop éloigné.
 GameObjects.GamePlayer.RvR.Capture.Timer:               Prise du fort
-GameObjects.GamePlayer.RvR.Capture.Start:               {0} commence à prendre le contrôle du fort!
+GameObjects.GamePlayer.RvR.Capture.Start:               {0} commence à prendre le contrôle du fort !
+
+GameObjects.GamePlayer.Champion.LevelUp:				You have gained one champion level!
+
+GameObjects.GamePlayer.Reputation.Zero:					Votre réputation est désormais neutre.
 
 GameObjects.GamePlayer.AddToWorld.SpecsPointsIncorrect:		Your Specs points total was incorrect. Now corrected, please train again.

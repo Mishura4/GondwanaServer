@@ -22,7 +22,7 @@ using DOL.GS.Spells;
 
 namespace DOL.GS.PlayerClass
 {
-    [CharacterClass((int)eCharacterClass.MidgardRogue, "Rogue", "Rogue")]
+    [CharacterClass((int)eCharacterClass.MidgardRogue, "MidgardRogue", "MidgardRogue")]
     public class ClassMidgardRogue : CharacterClassBase
     {
         private static readonly List<PlayerRace> DefaultEligibleRaces = new()

@@ -1,1 +1,19 @@
-Spell.CombineItemSpellHandler.Toolkit:	Vous avez besoin de {0} pour combiner cet objet. 
+Spell.CombineItemSpellHandler.Toolkit:			Vous avez besoin de {0} pour combiner cet objet.
+Spell.CombineItemSpellHandler.CantCombineHere:		Vous ne pouvez pas combiner ces ingrédients à cet endroit.
+Spell.CombineItemSpellHandler.NoCombinePossible:	Aucune combinaison possible n'a été trouvée.
+Spell.CombineItemSpellHandler.CraftingSkillTooLow:	Votre niveau en {0} doit être au moins de {1}.
+Spell.CombineItemSpellHandler.NeedTool:			Il faut {0} pour combiner cet objet.
+Spell.CombineItemSpellHandler.NeedToApproach:		Il faut vous rapprocher de {0} pour {1}
+Spell.CombineItemSpellHandler.PerformCombination:	effectuer la combinaison.
+Spell.CombineItemSpellHandler.YouFailedCombine:		Vous échouez à combiner les objets.
+Spell.CombineItemSpellHandler.YouCreatedItem:		Vous avez créé {0} en combinant {1} ainsi que {2} autres objets.
+
+ToolName.Forge:			une forge
+ToolName.Tannery:		une tannerie
+ToolName.Weaver:		une fileuse
+ToolName.CarpentryWorkshop:	un atelier de menuiserie
+ToolName.Cauldron:		un chaudron
+ToolName.AlchemyTable:		une table d'alchimie
+ToolName.Fire:			un feu de camp
+ToolName.Chest:			un coffre
+ToolName.Object:		un objet

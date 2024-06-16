@@ -11,6 +11,7 @@ namespace DOL.Database
     public class FeuxCampXItem : DataObject
     {
         private string m_feuxCampXItemId_nb;
+        private int m_realm;
         private int m_radius;
         private int m_enduranceRatePercent;
         private int m_lifetime;
@@ -23,6 +24,7 @@ namespace DOL.Database
         private int m_healthTrapDamagePercent;
         private int m_healthRatePercent;
         private int m_manaRatePercent;
+        private bool m_ownerImmuneToTrap;
 
         public FeuxCampXItem()
         {
@@ -51,6 +53,21 @@ namespace DOL.Database
             {
                 Dirty = true;
                 m_feuxCampXItemId_nb = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public int Realm // New property for Realm
+        {
+            get
+            {
+                return m_realm;
+            }
+
+            set
+            {
+                Dirty = true;
+                m_realm = value;
             }
         }
 
@@ -235,6 +252,21 @@ namespace DOL.Database
             {
                 Dirty = true;
                 m_manaTrapDamagePercent = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public bool OwnerImmuneToTrap
+        {
+            get
+            {
+                return m_ownerImmuneToTrap;
+            }
+
+            set
+            {
+                Dirty = true;
+                m_ownerImmuneToTrap = value;
             }
         }
     }

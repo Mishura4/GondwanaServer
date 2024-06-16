@@ -7,6 +7,7 @@ using DOL.Events;
 using log4net;
 using System.Timers;
 using GameServerScripts.Utils;
+using System.Numerics;
 
 namespace DOL.GS
 {
@@ -30,84 +31,22 @@ namespace DOL.GS
 
         GameStaticItem m_RealFeu;
 
-        public string Template_ID
-        {
-            get;
-            set;
-        }
-
-        public ushort Radius
-        {
-            get;
-            set;
-        }
-
-        public double Lifetime
-        {
-            get;
-            set;
-        }
-
-        public int EndurancePercentRate
-        {
-            get;
-            set;
-        }
-
-        public int HealthPercentRate
-        {
-            get;
-            set;
-        }
-
-        public int ManaPercentRate
-        {
-            get;
-            set;
-        }
-
-
-        public bool IsHealthType
-        {
-            get;
-            set;
-        }
-
-        public bool IsManaType
-        {
-            get;
-            set;
-        }
-
-        public bool IsHealthTrapType
-        {
-            get;
-            set;
-        }
-
-        public bool IsManaTrapType
-        {
-            get;
-            set;
-        }
-
-        public bool IsEnduranceType
-        {
-            get;
-            set;
-        }
-
-        public int HealthTrapDamagePercent
-        {
-            get;
-            set;
-        }
-
-        public int ManaTrapDamagePercent
-        {
-            get;
-            set;
-        }
+        public string Template_ID { get; set; }
+        public ushort Radius { get; set; }
+        public double Lifetime { get; set; }
+        public int EndurancePercentRate { get; set; }
+        public int HealthPercentRate { get; set; }
+        public int ManaPercentRate { get; set; }
+        public bool IsHealthType { get; set; }
+        public bool IsManaType { get; set; }
+        public bool IsHealthTrapType { get; set; }
+        public bool IsManaTrapType { get; set; }
+        public bool IsEnduranceType { get; set; }
+        public int HealthTrapDamagePercent { get; set; }
+        public int ManaTrapDamagePercent { get; set; }
+        public new int Realm { get; set; }
+        public string OwnerID { get; set; }
+        public bool OwnerImmuneToTrap { get; set; }
 
 
         public override bool AddToWorld()
@@ -142,6 +81,8 @@ namespace DOL.GS
             m_RealFeu.Name = Name = "Feu de Camp";
             m_RealFeu.Position = Position;
             m_RealFeu.Model = Model;
+            m_RealFeu.Realm = (eRealm)Realm;
+            m_RealFeu.OwnerID = OwnerID;
 
             m_RealFeu.AddToWorld();
 
@@ -156,6 +97,11 @@ namespace DOL.GS
 
             foreach (GamePlayer Player in WorldMgr.GetPlayersCloseToSpot(this.Position, Radius))
             {
+                if (Player.InternalID == OwnerID && OwnerImmuneToTrap)
+                {
+                    continue;
+                }
+
                 if (Player.IsSitting)
                 {
                     if (IsHealthType)
@@ -275,37 +221,40 @@ namespace DOL.GS
             }
         }
 
-        public static void EventPlayerDropItem(DOLEvent e, object sender,
-            EventArgs args)
+        public static void EventPlayerDropItem(DOLEvent e, object sender, EventArgs args)
         {
-            ItemDroppedEventArgs Args = args as ItemDroppedEventArgs;
-            GamePlayer Player = sender as GamePlayer;
-            var Feu = FeuxCampMgr.Instance.m_firecamps.Values.FirstOrDefault(f => f.Template_ID == Args.SourceItem.Id_nb);
+            ItemDroppedEventArgs dropArgs = args as ItemDroppedEventArgs;
+            GamePlayer player = sender as GamePlayer;
+            var feu = FeuxCampMgr.Instance.m_firecamps.Values.FirstOrDefault(f => f.Template_ID == dropArgs.SourceItem.Id_nb);
 
-            if (Player != null && Feu != null)
+            if (player != null && feu != null)
             {
+                ItemTemplate itemTemplate = GameServer.Database.FindObjectByKey<ItemTemplate>(dropArgs.SourceItem.Id_nb);
+
                 var firecamp = new FeuDeCamp()
                 {
-                    Template_ID = Feu.Template_ID,
-                    Model = Feu.Model,
-                    Radius = Feu.Radius,
-                    Lifetime = Feu.Lifetime,
-                    EndurancePercentRate = Feu.EndurancePercentRate,
-                    ManaPercentRate = Feu.ManaPercentRate,
-                    IsHealthType = Feu.IsHealthType,
-                    IsManaType = Feu.IsManaType,
-                    IsManaTrapType = Feu.IsManaTrapType,
-                    IsHealthTrapType = Feu.IsHealthType,
-                    ManaTrapDamagePercent = Feu.ManaTrapDamagePercent,
-                    HealthTrapDamagePercent = Feu.HealthTrapDamagePercent,
-                    IsEnduranceType = Feu.IsEnduranceType,
-                    HealthPercentRate = Feu.HealthPercentRate,
-                    Position = Player.Position
+                    Template_ID = feu.Template_ID,
+                    Realm = itemTemplate.Realm,
+                    Model = feu.Model,
+                    Radius = feu.Radius,
+                    Lifetime = feu.Lifetime,
+                    EndurancePercentRate = feu.EndurancePercentRate,
+                    ManaPercentRate = feu.ManaPercentRate,
+                    IsHealthType = feu.IsHealthType,
+                    IsManaType = feu.IsManaType,
+                    IsManaTrapType = feu.IsManaTrapType,
+                    IsHealthTrapType = feu.IsHealthType,
+                    ManaTrapDamagePercent = feu.ManaTrapDamagePercent,
+                    HealthTrapDamagePercent = feu.HealthTrapDamagePercent,
+                    IsEnduranceType = feu.IsEnduranceType,
+                    HealthPercentRate = feu.HealthPercentRate,
+                    Position = player.Position,
+                    OwnerID = player.InternalID,
+                    OwnerImmuneToTrap = feu.OwnerImmuneToTrap
                 };
 
                 firecamp.AddToWorld();
-
-                Args.GroundItem.Delete();
+                dropArgs.GroundItem.Delete();
             }
         }
     }

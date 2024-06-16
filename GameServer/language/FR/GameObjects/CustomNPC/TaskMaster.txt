@@ -1,3 +1,21 @@
 # TaskMaster NPC
-TaskMaster.Greetings:	Mes salutations, {0}, peut-être puis-je vous aider ? J'ai vent de toutes les nouvelles du royaume, je suis a l'affût des bruits qui circulent, et je peux vous transmettre des informations concernant les personnes ayant besoin de petits services dans la région ! Cela vous intéresse ?
-TaskMaster.Taskline:	Voici les [tâches] que vous pouvez effectuer actuellement.
+TaskMaster.Greetings:		Mes salutations, {0}, peut-être puis-je vous aider ? J'ai vent de toutes les nouvelles du royaume, je suis à l'affût des bruits qui circulent, et je peux vous transmettre des informations concernant les personnes ayant besoin de petits services dans la région ! Cela vous intéresse ?
+TaskMaster.BonusInfo:		À travers le royaume et au-delà, il y a de nombreuses tâches à accomplir qui vous permettront de gagner des [jetons] précieux. Ces jetons peuvent être échangés contre de grands bonus et de nouveaux titres.
+TaskMaster.Taskline:		Voici quelques [services] dont j'ai entendu dire que les gens de cette région pourraient avoir besoin...
+TaskMaster.TokenInfo:		Les jetons de tâches sont des objets précieux gagnés en accomplissant des actions spécifiques. Chaque type de jetons offre des récompenses uniques :
+TaskMaster.PvPTokens:		+ Jetons PvP-GvG-RvR : Complétez diverses tâches et combattez pour votre royaume ou votre guilde pour gagner ces jetons, qui accordent des bonus de Points de Royaume.
+TaskMaster.PvETokens:		+ Jetons PvE : Tuez des monstres à travers le royaume pour gagner ces jetons, qui offrent des bonus d'expérience.
+TaskMaster.CraftTokens:		+ Jetons d'Artisanat : Fabriquez ou combinez des objets pour gagner ces jetons, qui offrent des améliorations temporaires de l'artisanat. Vous pouvez également remettre ces jetons à votre Maître Artisan.
+TaskMaster.SpecialTokens:	+ Jetons Spéciaux :
+TaskMaster.DemonSlayerTokens:	Jetons Tueur de Démons : Atteignez un statut légendaire en tuant des monstres épiques pour gagner ces jetons. Chaque jeton débloque des titres prestigieux et accorde des bonus puissants qui vous distinguent comme un véritable héros du royaume.
+TaskMaster.TraderTokens:	Jetons Marchand : Maîtrisez le marché et réalisez des échanges fructueux pour gagner ces jetons convoités. Avec chaque jeton, vous obtenez des titres exclusifs et des réductions auprès de tous les marchands du royaume, vous marquant comme un marchand distingué d'une compétence inégalée. Vous pouvez également remettre ces jetons au Maître de la Guilde Marchande.
+TaskMaster.ThiefTokens:		Jetons Voleur : Aiguisez votre furtivité et votre ruse pour voler des joueurs et gagner ces jetons insaisissables. Chaque jeton accorde de nouveaux titres et des bonus uniques, célébrant votre talent de maître voleur opérant dans l'ombre.
+TaskMaster.BountyHunterTokens:	Jetons Chasseur de Primes : Traquez et éliminez les joueurs hors-la-loi pour gagner ces jetons prestigieux. Ces jetons vous récompensent avec de nouveaux titres et des bonus spéciaux, honorant votre quête incessante de justice et d'ordre.
+TaskMaster.WrathTokens:		Jetons Fièvre de Combat : Embrassez la fureur de la bataille et vainquez les ennemis en mode Adrénaline pour gagner ces jetons. Chaque jeton vous attribue de nouveaux titres et des bonus formidables, montrant votre domination et votre colère implacable sur le champ de bataille.
+TaskMaster.AdventurerTokens:	Jetons d'Aventurier : Embarquez dans des quêtes audacieuses et complétez-les pour gagner ces jeton héroïques. Chaque jeton vous accorde de nouveaux titres et des bonus uniques, mettant en valeur votre esprit aventureux et votre détermination inébranlable.
+TaskMaster.TokensToDeliver:	Remettez-moi les jetons pour réclamer vos récompenses. Gardez un œil averti sur les tâches en cours permettant de gagner ces jetons précieux !
+TaskMaster.GiveTitle:		Vous avez reçu le titre de {0} !
+TaskMaster.GainExperience:	Vous avez gagné {0}% des points d'expérience de votre niveau.
+TaskMaster.GainRealmPoints:	Vous avez gagné {0}% de points de royaume correspondant à votre niveau RL.
+TaskMaster.NoProfession:	Vous n'avez pas encore choisi de profession d'artisanat. Veuillez chercher un Maître Artisan pour choisir une profession et revenez ici avec le jeton pour recevoir vos bonus d'artisanat.
+TaskMaster.GainCraftingPoints:	Vous avez gagné {0} points dans votre compétence principale d'artisanat et {1} points dans vos compétences secondaires d'artisanat.

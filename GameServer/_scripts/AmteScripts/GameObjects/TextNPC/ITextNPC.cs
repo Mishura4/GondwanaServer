@@ -443,13 +443,13 @@ namespace DOL.GS.Scripts
             DBEchangeur EchItem = EchangeurDB[item.Id_nb];
             if (EchItem.ItemRecvCount > item.Count)
             {
-                player.Out.SendMessage("Vous devez donner " + EchItem.ItemRecvCount + " " + item.Name + ".", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "TextNPC.YouMustGive", EchItem.ItemRecvCount, item.Name), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 return false;
             }
 
             if (EchItem.MoneyPrice > 0 && player.CopperBalance < EchItem.MoneyPrice)
             {
-                player.Out.SendMessage(string.Format("Vous avez besoin de {0} pour échanger cet objet", Money.GetString(EchItem.MoneyPrice)), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                player.Out.SendMessage(string.Format(LanguageMgr.GetTranslation(player.Client.Account.Language, "TextNPC.YouNeedToExchange", Money.GetString(EchItem.MoneyPrice))), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 return false;
             }
 
@@ -701,7 +701,7 @@ namespace DOL.GS.Scripts
             if (echItem.GiveTemplate != null)
                 if (!player.Inventory.AddTemplate(GameInventoryItem.Create(echItem.GiveTemplate), echItem.ItemGiveCount, eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack))
                 {
-                    player.Out.SendMessage("Votre inventaire est plein, l'objet est déposé au sol.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "TextNPC.InventoryFullItemGround"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     var invItem = GameInventoryItem.Create(echItem.GiveTemplate);
                     invItem.Count = echItem.ItemGiveCount;
                     player.CreateItemOnTheGround(invItem);

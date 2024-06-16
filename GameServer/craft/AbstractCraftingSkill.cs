@@ -133,6 +133,22 @@ namespace DOL.GS
 
             var chanceToMakeItem = CalculateChanceToMakeItem(player, recipe.Level);
             player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AbstractCraftingSkill.CraftItem.BeginWork", recipe.Product.Name, chanceToMakeItem.ToString()), eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
+            if (player.Guild != null && player.Guild.BonusType == Guild.eBonusType.CraftingHaste)
+            {
+                double guildCraftBonus = Properties.GUILD_BUFF_CRAFTING;
+                int guildLevel = (int)player.Guild.GuildLevel;
+
+                if (guildLevel >= 8 && guildLevel <= 15)
+                {
+                    guildCraftBonus *= 1.5;
+                }
+                else if (guildLevel > 15)
+                {
+                    guildCraftBonus *= 2.0;
+                }
+
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AbstractCraftingSkill.GuildbonusCraftingSpeed", guildCraftBonus), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            }
             player.Out.SendTimerWindow(LanguageMgr.GetTranslation(player.Client.Account.Language, "AbstractCraftingSkill.CraftItem.CurrentlyMaking", recipe.Product.Name), craftingTime);
 
             player.Stealth(false);
@@ -539,17 +555,26 @@ namespace DOL.GS
                 }
 
                 player.Inventory.CommitChanges();
-
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AbstractCraftingSkill.BuildCraftedItem.Successfully", product.Name, newItem.Quality), eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
+
+                int con = GetItemCon(player.GetCraftingSkillValue(m_eskill), recipe.Level);
 
                 if (recipe.IsForUniqueProduct && newItem.Quality == 100)
                 {
                     player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AbstractCraftingSkill.BuildCraftedItem.Masterpiece"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                     player.Out.SendPlaySound(eSoundType.Craft, 0x04);
+                    if (con > -3)
+                    {
+                        TaskManager.UpdateTaskProgress(player, "MasterpieceCrafted", 1);
+                    }
                 }
                 else
                 {
                     player.Out.SendPlaySound(eSoundType.Craft, 0x03);
+                    if (con > -2)
+                    {
+                        TaskManager.UpdateTaskProgress(player, "MasteredCrafts", 1);
+                    }
                 }
             }
         }

@@ -353,6 +353,12 @@ namespace DOL.GS.ServerProperties
         [ServerProperty("system", "use_npcguildscripts", "Use the NPC Guild Scripts", true)]
         public static bool USE_NPCGUILDSCRIPTS;
 
+        /// <summary>
+        /// Use the NPC Guild Scripts
+        /// </summary>
+        [ServerProperty("system", "enable_task_system", "Enable or disable the task system", true)]
+        public static bool ENABLE_TASK_SYSTEM;
+
         #endregion
 
         #region LOGGING
@@ -1129,6 +1135,12 @@ namespace DOL.GS.ServerProperties
         /// </summary>
         [ServerProperty("rates", "relic_owning_bonus", "Relic Owning Bonus in percent per relic (default 10%) in effect when owning enemy relic", (short)10)]
         public static short RELIC_OWNING_BONUS;
+
+        /// <summary>
+        /// Interval for rotating PvE mob types in the task system (in minutes)
+        /// </summary>
+        [ServerProperty("task_system", "task_pve_mobtype_rotation", "Interval for rotating PvE mob types in the task system (in minutes)", 120)]
+        public static int TASK_PVE_MOBTYPE_ROTATION;
 
         #endregion
 
@@ -2642,6 +2654,18 @@ namespace DOL.GS.ServerProperties
         /// </summary>
         [ServerProperty("guild", "guild_buff_masterlevel_xp", "Extra masterlevel XP gain percent for the guild masterlevel XP buff?", (ushort)20)]
         public static ushort GUILD_BUFF_MASTERLEVEL_XP;
+
+        /// <summary>
+        /// Guild masterlevel XP Buff bonus amount
+        /// </summary>
+        [ServerProperty("guild", "guild_buff_coin", "Extra Money gain percentage when killing mobs with this guild buff?", (ushort)5)]
+        public static ushort GUILD_BUFF_COIN;
+
+        /// <summary>
+        /// Guild masterlevel XP Buff bonus amount
+        /// </summary>
+        [ServerProperty("guild", "guild_buff_tension", "Extra Tension gain percentage for players to be in Adrenaline mode with this guild buff?", (ushort)5)]
+        public static ushort GUILD_BUFF_TENSION;
 
         /// <summary>
         /// Guild masterlevel XP Buff bonus amount

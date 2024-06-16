@@ -168,6 +168,10 @@ namespace DOL.GS
                     this.NotifyPlayers(this, player, _observers, this.MoveItem(player, fromClientSlot, toClientSlot, (ushort)item.Count));
                 }
             }
+            if (playerOwner != null && playerOwner != player)
+            {
+                TaskManager.UpdateTaskProgress(playerOwner, "ItemsSoldToPlayers", 1);
+            }
         }
         public GamePlayer playerOwner;
         public GameTradingTable tableModel;

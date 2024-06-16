@@ -100,7 +100,7 @@ Commands.Players.Guild.Help.GuildAutoRemove:		'/gc autoremove <player's name>' #
 Commands.Players.Guild.Help.GuildAutoRemoveAcc:	'/gc autoremove account <player's name>' # Kick all characters on the same account from the guild.
 Commands.Players.Guild.Help.GuildBannerSummon:	'/gc summon' # Summons Guild's Banner.
 Commands.Players.Guild.Help.GuildBannerUnsummon:	'/gc unsummon' # Unsummons Guild's Banner and remove its effects on the surrounding players.
-Commands.Players.Guild.Help.GuildBuff:			'/gc buff <artifact|crafting|rps|bps|xp|mlxp>' # Buy a Guild Merit Bonus.
+Commands.Players.Guild.Help.GuildBuff:			'/gc buff <artifact|crafting|rps|bps|xp|coin|tension>' # Buy a Guild Merit Bonus.
 Commands.Players.Guild.Help.GuildBuyBanner:		'/gc buybanner' # Buy a guild banner.
 Commands.Players.Guild.Help.GuildCancel:			'/gc cancel <option> <player>' # Cancel all previous commands.
 Commands.Players.Guild.Help.GuildClaim:			'/gc claim' # Claim a tower or a keep for the guild.

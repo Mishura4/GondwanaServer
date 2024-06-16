@@ -4877,6 +4877,11 @@ namespace DOL.GS
                 Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.GainBountyPoints.YouGet", amount.ToString()), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
         }
 
+        public void AddBountyPoints(long amount)
+        {
+            Wallet.AddMoney(Currency.BountyPoints.Mint(amount));
+        }
+
         /// <summary>
         /// Holds realm points needed for special realm level
         /// </summary>
@@ -8202,6 +8207,28 @@ namespace DOL.GS
         /// </summary>
         public GameObject LastKiller { get; set; }
 
+        public bool IsInSafeArea()
+        {
+            foreach (var area in CurrentAreas)
+            {
+                if (area is Area.SafeArea)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool IsInPvPArea()
+        {
+            return CurrentAreas.Any(area => area.IsPvP);
+        }
+
+        public bool HasAdrenalineBuff()
+        {
+            return EffectList.GetOfType<AdrenalineSpellEffect>() != null;
+        }
+
         /// <summary>
         /// Called when the player dies
         /// </summary>
@@ -8292,6 +8319,30 @@ namespace DOL.GS
 
             if (killer is GamePlayer killerPlayer && killer != this)
             {
+                if (!IsInRvR && !IsInPvP && Reputation < 0 && !IsInPvPArea() && !killerPlayer.IsInSafeArea())
+                {
+                    TaskManager.UpdateTaskProgress(killerPlayer, "OutlawPlayersSentToJail", 1);
+                }
+                else if (this.CurrentRegion.IsRvR || this.IsInPvP || IsInPvPArea())
+                {
+                    if (!killerPlayer.IsInSafeArea())
+                    {
+                        if (killerPlayer.Group != null)
+                        {
+                            TaskManager.UpdateTaskProgress(killerPlayer, "KillEnemyPlayersGroup", 1);
+                        }
+                        else
+                        {
+                            TaskManager.UpdateTaskProgress(killerPlayer, "KillEnemyPlayersAlone", 1);
+                        }
+                    }
+                }
+
+                if (killerPlayer.HasAdrenalineBuff())
+                {
+                    TaskManager.UpdateTaskProgress(killerPlayer, "EnemiesKilledInAdrenalineMode", 1);
+                }
+
                 killerPlayer.Out.SendMessage(LanguageMgr.GetTranslation(killerPlayer.Client.Account.Language, "GameObjects.GamePlayer.Die.YouKilled", killerPlayer.GetPersonalizedName(this)), eChatType.CT_PlayerDied, eChatLoc.CL_SystemWindow);
             }
 
@@ -9491,7 +9542,7 @@ namespace DOL.GS
                 {
                     if ((slot >= Slot.FIRSTQUIVER) && (slot <= Slot.FOURTHQUIVER))
                     {
-                        Out.SendMessage("The quiver slot " + (slot - (Slot.FIRSTQUIVER) + 1) + " is empty!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.UseSlot.QuiverSlotEmpty", (slot - (Slot.FIRSTQUIVER) + 1)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     }
                     else
                     {
@@ -9534,7 +9585,7 @@ namespace DOL.GS
 
                 if (unauthorized)
                 {
-                    Out.SendMessage("Vous ne pouvez pas utiliser cela ici !", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.UseSlot.CantUseHere"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     return;
                 }
 
@@ -9696,7 +9747,7 @@ namespace DOL.GS
                 {
                     if (IsSitting)
                     {
-                        Out.SendMessage("You can't use an item while sitting!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.UseSlot.CantUseWhileSitting"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                         return;
                     }
 
@@ -9718,7 +9769,7 @@ namespace DOL.GS
                         (type == 2 && useItem.SpellID1 > 0 && useItem.Charges1 < 1 && useItem.MaxCharges1 > -1 && !(useItem is InventoryArtifact)) ||
                         (useItem.PoisonSpellID > 0 && useItem.PoisonCharges < 1))
                     {
-                        Out.SendMessage("The " + useItem.Name + " is out of charges.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.UseSlot.OutOfCharges", useItem.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                         return;
                     }
                     else
@@ -9749,6 +9800,23 @@ namespace DOL.GS
 
                             if (spell != null && !IsInvulnerableToAttack)
                             {
+                                var handler = new ItemchargeXRacesHandler();
+                                double raceMultiplier = handler.GetRaceMultiplier(this, useItem.Id_nb);
+
+                                var (alternativeSpellID, effectiveMultiplier) = handler.GetAlternativeSpellIDAndMultiplier(raceMultiplier, spell.ID);
+                                if (alternativeSpellID != spell.ID)
+                                {
+                                    spell = SkillBase.FindSpell(alternativeSpellID, potionEffectLine);
+                                }
+
+                                spell.Value *= effectiveMultiplier;
+                                spell.Damage *= effectiveMultiplier;
+
+                                if (handler.IsDurationMultiplied(useItem.Id_nb))
+                                {
+                                    spell.Duration = (int)(spell.Duration * effectiveMultiplier);
+                                }
+
                                 // For potions most can be used by any player level except a few higher level ones.
                                 // So for the case of potions we will only restrict the level of usage if LevelRequirement is >0 for the item
 
@@ -9794,7 +9862,7 @@ namespace DOL.GS
                                                         if (!GameServer.ServerRules.IsAllowedToAttack(this, target, true))
                                                         {
                                                             // not allowed to attack, so they are not an enemy.
-                                                            Out.SendMessage("You need a target for this ability!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                                            Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.UseSlot.WrongTarget"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                                             return;
                                                         }
                                                     }
@@ -9844,7 +9912,7 @@ namespace DOL.GS
                                                 }
                                                 else
                                                 {
-                                                    Out.SendMessage("Potion effect ID " + spell.ID + " is not implemented yet.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                                    Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.UseSlot.PotionNotImplemented", spell.ID), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                                 }
                                             }
                                         }
@@ -9855,13 +9923,13 @@ namespace DOL.GS
                                     }
                                     else
                                     {
-                                        Out.SendMessage("Potion effect line not found", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                        Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.UseSlot.PotionLineNotFound"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                     }
                                 }
                             }
                             else
                             {
-                                Out.SendMessage("Potion effect spell ID " + useItem.SpellID + " not found.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.UseSlot.PotionSpellNotFound", useItem.SpellID), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             }
                         }
                         else if (type > 0)
@@ -9881,11 +9949,11 @@ namespace DOL.GS
 
                                 if ((IsStunned && !(Steed != null && Steed.Name == "Forceful Zephyr")) || IsMezzed || !IsAlive)
                                 {
-                                    Out.SendMessage("In your state you can't discharge any object.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.UseSlot.CantDischargeInState"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 }
                                 else if (Client.Account.PrivLevel == 1 && (CurrentRegion.Time - itemdelay) < itemreuse) //2 minutes reuse timer
                                 {
-                                    Out.SendMessage("You must wait " + (itemreuse - (CurrentRegion.Time - itemdelay)) / 1000 + " more second before discharge " + useItem.Name + "!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                    Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.UseSlot.WaitBeforeDischarge", (itemreuse - (CurrentRegion.Time - itemdelay)) / 1000, useItem.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 
                                     return;
                                 }
@@ -14427,6 +14495,19 @@ namespace DOL.GS
             }
         }
 
+        public virtual double CraftingSkillGain
+        {
+            get
+            {
+                double gainMultiplier = 1.0;
+
+                gainMultiplier += BuffBonusCategory4[eProperty.CraftingSkillGain] * 0.01;
+                gainMultiplier += ItemBonus[(int)eProperty.CraftingSkillGain] * 0.01;
+
+                return gainMultiplier;
+            }
+        }
+
         /// <summary>
         /// Increase the specified player crafting skill
         /// </summary>
@@ -14443,6 +14524,7 @@ namespace DOL.GS
                 count = CalculGainCraftingSkill(skill, count, fromMaster);
                 if (craftingSkill != null && count > 0)
                 {
+                    count = (int)(count * CraftingSkillGain);
                     m_craftingSkills[skill] = count + m_craftingSkills[skill];
                     Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.GainCraftingSkill.GainSkill", craftingSkill.Name, m_craftingSkills[skill]), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                     int currentSkillLevel = GetCraftingSkillValue(skill);
@@ -14559,9 +14641,24 @@ namespace DOL.GS
                 if (speed <= 0)
                     speed = 1.0;
 
+                speed *= (1.0 + BuffBonusCategory4[eProperty.CraftingSpeed] * .01);
+                speed *= (1.0 + ItemBonus[(int)eProperty.CraftingSpeed] * .01);
+
                 if (Guild != null && Guild.BonusType == Guild.eBonusType.CraftingHaste)
                 {
-                    speed *= (1.0 + Properties.GUILD_BUFF_CRAFTING * .01);
+                    double guildCraftBonus = Properties.GUILD_BUFF_CRAFTING;
+                    int guildLevel = (int)Guild.GuildLevel;
+
+                    if (guildLevel >= 8 && guildLevel <= 15)
+                    {
+                        guildCraftBonus *= 1.5;
+                    }
+                    else if (guildLevel > 15)
+                    {
+                        guildCraftBonus *= 2.0;
+                    }
+
+                    speed *= (1.0 + guildCraftBonus * .01);
                 }
 
                 if (CurrentRegion.IsCapitalCity && Properties.CAPITAL_CITY_CRAFTING_SPEED_BONUS > 0)
@@ -16539,7 +16636,7 @@ namespace DOL.GS
             Out.SendUpdatePlayerSkills();
 
             Notify(GamePlayerEvent.ChampionLevelUp, this);
-            Out.SendMessage("You have gained one champion level!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+            Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Champion.LevelUp"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
             Out.SendUpdatePlayer();
             Out.SendUpdatePoints();
             UpdatePlayerStatus();
@@ -17169,12 +17266,12 @@ namespace DOL.GS
             if (Reputation + amount >= 0)
             {
                 Reputation = 0;
-                Out.SendMessage("Votre r�putation est d�sormais de 0.", eChatType.CT_Staff, eChatLoc.CL_SystemWindow);
+                Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Reputation.Zero"), eChatType.CT_Staff, eChatLoc.CL_SystemWindow);
             }
             else
             {
                 Reputation += amount;
-                Out.SendMessage(string.Format("Vous gagnez {0} " + (Math.Abs(amount) > 1 ? "points" : "point") + " de r�putation. Vous avez d�sormais {1} points", amount, Reputation), eChatType.CT_Staff, eChatLoc.CL_SystemWindow);
+                Out.SendMessage(string.Format("Vous gagnez {0} " + (Math.Abs(amount) > 1 ? "points" : "point") + " de réputation. Vous avez désormais {1} points", amount, Reputation), eChatType.CT_Staff, eChatLoc.CL_SystemWindow);
             }
         }
 

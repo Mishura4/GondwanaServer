@@ -649,6 +649,11 @@ namespace AmteScripts.Managers
             }
             if (!string.IsNullOrEmpty(champion))
             {
+                var championPlayer = Kills.FirstOrDefault(kvp => kvp.Key.Name == champion).Key;
+                if (championPlayer != null)
+                {
+                    TaskManager.UpdateTaskProgress(championPlayer, "RvRChampionOfTheDay", 1); // Increment RvRChampionOfTheDay task progress
+                }
                 NewsMgr.CreateNews("GameObjects.GamePlayer.RvR.Champion", 0, eNewsType.RvRGlobal, false, true, countKilledPlayers, champion, maxKills);
                 message += string.Format(LanguageMgr.GetTranslation("EN", "GameObjects.GamePlayer.RvR.Champion", countKilledPlayers, champion, maxKills));
             }

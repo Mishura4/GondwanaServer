@@ -20,6 +20,7 @@ using System;
 using log4net;
 using DOL.GS.Quests;
 using System.Reflection;
+using DOL.GS.ServerProperties;
 
 namespace DOL.GS.PacketHandler
 {
@@ -80,8 +81,11 @@ namespace DOL.GS.PacketHandler
 
         protected override void SendTaskInfo()
         {
-            string name = "use /task to see a list of your active tasks";
-            //string name = BuildTaskString();
+            string name = BuildTaskString();
+            if (Properties.ENABLE_TASK_SYSTEM)
+            {
+                name = "use /task to see a list of your active tasks";
+            }
 
             using (GSTCPPacketOut pak = new GSTCPPacketOut(GetPacketCode(eServerPackets.QuestEntry)))
             {

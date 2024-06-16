@@ -168,7 +168,14 @@ PlayerInitRequestHandler.OfficerMessage:	Message Officiers : {0}
 PlayerInitRequestHandler.SaferLocation:		Cette zone n'est actuellement pas sécurisée et vous êtes transporté(e) vers un endroit plus sûr.
 
 # /PlayerMoveItemRequestHandler
-PlayerMoveItemRequestHandler.TooFarAway:	Vous êtes trop loin pour donner quoi que ce soit à {0}.
+PlayerMoveItemRequestHandler.InvalidTradeTarget:	Cible d'échange invalide. ({0})
+PlayerMoveItemRequestHandler.CantTradeInactive:	Vous ne pouvez pas échanger avec des joueurs inactifs.
+PlayerMoveItemRequestHandler.CantTradeYourself:	Vous ne pouvez pas échanger avec vous-même, voyons !
+PlayerMoveItemRequestHandler.CantRemoveItem:	Vous ne pouvez pas retirer cet objet !
+PlayerMoveItemRequestHandler.InvalidItem:		Objet invalide (emplacement# {0}).
+PlayerMoveItemRequestHandler.CantDropItem:		Vous ne pouvez pas déposer cet objet au sol !
+PlayerMoveItemRequestHandler.YouDropItem:		Vous déposez {0} au sol !
+PlayerMoveItemRequestHandler.TooFarAway:		Vous êtes trop loin pour donner quoi que ce soit à {0}.
 
 # /PlayerPickUpRequestHandler
 PlayerPickUpRequestHandler.HandlePacket.InvalidTarget:	Votre cible est invalide !

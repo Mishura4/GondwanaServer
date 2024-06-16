@@ -122,7 +122,7 @@ AblativeArmor.DelveInfo.CastingTime:			Instantanné
 # Petrify
 Petrify.Target.Absorbs:  Votre cible est pétrifiée et absorbe {0} dommages.
 Petrify.Target.Resist:    {0} est pétrifiée et est insensible à ce sort.
-Petrify.Self.Message:	La cilbe est pétrifiée.
+Petrify.Self.Message:	La cible est pétrifiée.
 Petrify.Self.Absorb:		Vous êtes pétrifié(e) et absorbez {0} dommages.
 Petrify.Self.Unpetrify:		Vous êtes libéré(e) de votre pétrification.
 

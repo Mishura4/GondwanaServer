@@ -30,6 +30,7 @@ using DOL.GS.Quests;
 using DOL.Territories;
 using DOL.GS.Finance;
 using DOL.GS.Profession;
+using DOL.GS.Scripts;
 
 namespace DOL.GS
 {
@@ -71,6 +72,31 @@ namespace DOL.GS
                 TurnTo(player, 5000);
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameMerchant.Interact.Territory.Outlaws"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return false;
+            }
+
+            if (this is ITextNPC textNPC)
+            {
+                var policy = textNPC.GetTextNPCPolicy(player);
+
+                if (policy.IsOutlawFriendly.HasValue)
+                {
+                    if (policy.IsOutlawFriendly.Value && player.Reputation >= 0 && player.Client.Account.PrivLevel == 1)
+                    {
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameMerchant.Interact.Territory.AgainstOutlaws"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                        return false;
+                    }
+                    else if (!policy.IsOutlawFriendly.Value && player.Reputation < 0 && player.Client.Account.PrivLevel == 1)
+                    {
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameMerchant.Interact.Territory.AgainstNonOutlaws"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                        return false;
+                    }
+                }
+
+                if (policy.IsTerritoryLinked.HasValue && policy.IsTerritoryLinked.Value && !TerritoryManager.IsPlayerInOwnedTerritory(player, this))
+                {
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "TextNPC.NotInOwnedTerritory"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                    return false;
+                }
             }
 
             TurnTo(player, 10000);

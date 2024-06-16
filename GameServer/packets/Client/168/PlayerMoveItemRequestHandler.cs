@@ -53,7 +53,7 @@ namespace DOL.GS.PacketHandler.Client.v168
                 if (obj == null || obj.ObjectState != GameObject.eObjectState.Active)
                 {
                     client.Out.SendInventorySlotsUpdate(new int[] { fromClientSlot });
-                    client.Out.SendMessage("Invalid trade target. (" + objectID + ")", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "PlayerMoveItemRequestHandler.InvalidTradeTarget", objectID), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     return;
                 }
 
@@ -65,13 +65,13 @@ namespace DOL.GS.PacketHandler.Client.v168
                     if (tradeTarget.Client.ClientState != GameClient.eClientState.Playing)
                     {
                         client.Out.SendInventorySlotsUpdate(new int[] { fromClientSlot });
-                        client.Out.SendMessage("Can't trade with inactive players.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "PlayerMoveItemRequestHandler.CantTradeInactive"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                         return;
                     }
                     if (tradeTarget == client.Player)
                     {
                         client.Out.SendInventorySlotsUpdate(new int[] { fromClientSlot });
-                        client.Out.SendMessage("You can't trade with yourself, silly!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "PlayerMoveItemRequestHandler.CantTradeYourself"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                         return;
                     }
                     if (!GameServer.ServerRules.IsAllowedToTrade(client.Player, tradeTarget, false))
@@ -132,7 +132,7 @@ namespace DOL.GS.PacketHandler.Client.v168
                         if (!item.IsDropable && !(obj is GameNPC && (obj is Blacksmith || obj is Recharger || (obj as GameNPC).CanTradeAnyItem)))
                         {
                             client.Out.SendInventorySlotsUpdate(new int[] { fromClientSlot });
-                            client.Out.SendMessage("You can not remove this item!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "PlayerMoveItemRequestHandler.CantRemoveItem"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             return;
                         }
                     }
@@ -251,7 +251,7 @@ namespace DOL.GS.PacketHandler.Client.v168
                     if (item == null)
                     {
                         client.Out.SendInventorySlotsUpdate(new int[] { fromClientSlot });
-                        client.Out.SendMessage("Invalid item (slot# " + fromClientSlot + ").", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "PlayerMoveItemRequestHandler.InvalidItem", fromClientSlot), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                         return;
                     }
                     if (fromClientSlot < (ushort)eInventorySlot.FirstBackpack)
@@ -262,13 +262,13 @@ namespace DOL.GS.PacketHandler.Client.v168
                     if (!item.IsDropable)
                     {
                         client.Out.SendInventorySlotsUpdate(new int[] { fromClientSlot });
-                        client.Out.SendMessage("You can not drop this item!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "PlayerMoveItemRequestHandler.CantDropItem"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                         return;
                     }
 
                     if (client.Player.DropItem((eInventorySlot)fromClientSlot))
                     {
-                        client.Out.SendMessage("You drop " + item.GetName(0, false) + " on the ground!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "PlayerMoveItemRequestHandler.YouDropItem", item.GetName(0, false)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                         return;
                     }
                     client.Out.SendInventoryItemsUpdate(null);

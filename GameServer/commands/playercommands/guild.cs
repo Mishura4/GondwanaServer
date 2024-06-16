@@ -885,6 +885,18 @@ namespace DOL.GS.Commands
                                         case Guild.eBonusType.BountyPoints:
                                             bonusPercentage = ServerProperties.Properties.GUILD_BUFF_BP;
                                             break;
+                                        case Guild.eBonusType.CraftingHaste:
+                                            bonusPercentage = ServerProperties.Properties.GUILD_BUFF_CRAFTING;
+                                            break;
+                                        case Guild.eBonusType.ArtifactXP:
+                                            bonusPercentage = ServerProperties.Properties.GUILD_BUFF_ARTIFACT_XP;
+                                            break;
+                                        case Guild.eBonusType.Coin:
+                                            bonusPercentage = ServerProperties.Properties.GUILD_BUFF_COIN;
+                                            break;
+                                        case Guild.eBonusType.Tension:
+                                            bonusPercentage = ServerProperties.Properties.GUILD_BUFF_TENSION;
+                                            break;
                                     }
 
                                     if (guildLevel >= 8 && guildLevel <= 15)
@@ -1380,6 +1392,62 @@ namespace DOL.GS.Commands
 
                                     return;
                                 }
+                                else if (args[2] == "coin")
+                                {
+                                    if (Properties.GUILD_BUFF_COIN > 0)
+                                    {
+                                        client.Out.SendMessage(
+                                            LanguageMgr.GetTranslation(
+                                                client.Account.Language,
+                                                "Commands.Players.Guild.Buff.NotImplemented"
+                                            ),
+                                            eChatType.CT_System,
+                                            eChatLoc.CL_SystemWindow);
+                                        //client.Player.TempProperties.setProperty(GUILD_BUFF_TYPE, Guild.eBonusType.Coin);
+                                        //client.Out.SendCustomDialog("Are you sure you want to activate a guild Coin buff for 1000 merit points?", ConfirmBuffBuy);
+                                        return;
+
+                                    }
+                                    else
+                                    {
+                                        client.Out.SendMessage(
+                                            LanguageMgr.GetTranslation(
+                                                client.Account.Language,
+                                                "Commands.Players.Guild.Buff.NotAvailable"),
+                                            eChatType.CT_System,
+                                            eChatLoc.CL_SystemWindow);
+                                    }
+
+                                    return;
+                                }
+                                else if (args[2] == "tension")
+                                {
+                                    if (Properties.GUILD_BUFF_TENSION > 0)
+                                    {
+                                        client.Out.SendMessage(
+                                            LanguageMgr.GetTranslation(
+                                                client.Account.Language,
+                                                "Commands.Players.Guild.Buff.NotImplemented"
+                                            ),
+                                            eChatType.CT_System,
+                                            eChatLoc.CL_SystemWindow);
+                                        //client.Player.TempProperties.setProperty(GUILD_BUFF_TYPE, Guild.eBonusType.Tension);
+                                        //client.Out.SendCustomDialog("Are you sure you want to activate a guild Tension buff for 1000 merit points?", ConfirmBuffBuy);
+                                        return;
+
+                                    }
+                                    else
+                                    {
+                                        client.Out.SendMessage(
+                                            LanguageMgr.GetTranslation(
+                                                client.Account.Language,
+                                                "Commands.Players.Guild.Buff.NotAvailable"),
+                                            eChatType.CT_System,
+                                            eChatLoc.CL_SystemWindow);
+                                    }
+
+                                    return;
+                                }
                                 else
                                 {
                                     client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Help.GuildBuff"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
@@ -1419,11 +1487,17 @@ namespace DOL.GS.Commands
                             if (ServerProperties.Properties.GUILD_BUFF_XP > 0)
                                 client.Out.SendMessage(string.Format("{0}: {1}%", Guild.BonusTypeToName(Guild.eBonusType.Experience), (ServerProperties.Properties.GUILD_BUFF_XP * bonusMultiplier)), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
 
-                            //if (ServerProperties.Properties.GUILD_BUFF_MASTERLEVEL_XP > 0)
-                            //    client.Out.SendMessage(string.Format("{0}: {1}%", Guild.BonusTypeToName(Guild.eBonusType.MasterLevelXP), ServerProperties.Properties.GUILD_BUFF_MASTERLEVEL_XP), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-
                             if (ServerProperties.Properties.GUILD_BUFF_RP > 0)
                                 client.Out.SendMessage(string.Format("{0}: {1}%", Guild.BonusTypeToName(Guild.eBonusType.RealmPoints), (ServerProperties.Properties.GUILD_BUFF_RP * bonusMultiplier)), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+
+                            //if (ServerProperties.Properties.GUILD_BUFF_COIN > 0)
+                            //    client.Out.SendMessage(string.Format("{0}: {1}%", Guild.BonusTypeToName(Guild.eBonusType.Coin), (ServerProperties.Properties.GUILD_BUFF_COIN * bonusMultiplier)), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+
+                            //if (ServerProperties.Properties.GUILD_BUFF_TENSION > 0)
+                            //    client.Out.SendMessage(string.Format("{0}: {1}%", Guild.BonusTypeToName(Guild.eBonusType.Tension), (ServerProperties.Properties.GUILD_BUFF_TENSION * bonusMultiplier)), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+
+                            //if (ServerProperties.Properties.GUILD_BUFF_MASTERLEVEL_XP > 0)
+                            //    client.Out.SendMessage(string.Format("{0}: {1}%", Guild.BonusTypeToName(Guild.eBonusType.MasterLevelXP), ServerProperties.Properties.GUILD_BUFF_MASTERLEVEL_XP), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
 
                             return;
                         }

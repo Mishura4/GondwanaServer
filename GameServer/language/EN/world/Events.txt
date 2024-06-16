@@ -1,0 +1,11 @@
+# GameEvents
+# /Playerenterexit
+Scripts.Events.PlayerEnterExit.Entered:			{0} just entered the game!
+Scripts.Events.PlayerEnterExit.Left:			{0} just left the game!
+Scripts.Events.PlayerEnterExit.Staff:			[Staff Member] {0}
+
+# ZONE BONUSES
+ZoneBonus.AdditionalXP:			You gain an additional {0} experience for adventuring in this zone!
+ZoneBonus.AdditionalRP:			You gain an additional {0} realmpoints for adventuring in this zone!
+ZoneBonus.AdditionalBP:			You gain an additional {0} bountypoints for adventuring in this zone!
+ZoneBonus.AdditionalCoin:		You gain additional coins for adventuring in this zone!

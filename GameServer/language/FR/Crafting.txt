@@ -109,7 +109,7 @@ AbstractCraftingSkill.BuildCraftedItem.Successfully:   Vous avez correctement fa
 AbstractCraftingSkill.CheckRawMaterial.NoIngredients:   Vous n'avez pas les ingrédients pour faire le {0}.
 AbstractCraftingSkill.CheckRawMaterial.RawMaterial:     Impossible de trouver l'objet avec l'ID de {0}, veuillez nous contacter !
 AbstractCraftingSkill.CheckRawMaterial.YouAreMissing:   Il vous manque :
-AdvancedCraftingSkill.IsAllowedToCombine.NoGoodCombine:	Cet objet ne peut pas être imprégner de cette teinture!
+AdvancedCraftingSkill.IsAllowedToCombine.NoGoodCombine:	Cet objet ne peut pas être imprégné par cette teinture!
 AdvancedCraftingSkill.IsAllowedToCombine.ProblemCombine:	L'object est mal configuré, prévenez un gm!
 
 AbstractCraftingSkill.CheckSecondCraftingSkillRequirement.NoClothworkingSkill:      Vous n'avez pas le niveau minimum dans la compétence Tissage ({0}) Pour confectionner le {1} !
@@ -120,9 +120,10 @@ AbstractCraftingSkill.CheckSecondCraftingSkillRequirement.Rawmaterial:          
 
 AbstractCraftingSkill.CraftItem.CantCraftInCombat:   Vous ne pouvez pas faire d'artisanat, vous étiez en combat récemment.
 AbstractCraftingSkill.CraftItem.BeginWork:      Vous commencez à travailler sur le {0} ({1}%).
+AbstractCraftingSkill.GuildbonusCraftingSpeed:	Votre vitesse de fabrication est augmentée de {0}% grâce à votre buff de guilde !
 AbstractCraftingSkill.CraftItem.ChanceToGainPoint:   Chance de gagner des points sur votre compétence primaire {0}%.
 AbstractCraftingSkill.CraftItem.CurrentlyMaking:   Artisanat en cours: {0}
-AbstractCraftingSkill.CraftItem.MoveAndInterrupt:   Vous bougez et interrompé votre travail.
+AbstractCraftingSkill.CraftItem.MoveAndInterrupt:   Vous bougez et interrompez votre travail.
 AbstractCraftingSkill.CraftItem.StopWork:      Vous arrêtez votre travail.
 AbstractCraftingSkill.LooseRawMaterial.Count:      Vous perdez ({0}) {1}.
 AbstractCraftingSkill.LooseRawMaterial.Materials:   Vous n'arrivez pas à faire le {0}, et perdez des matériaux !
@@ -131,9 +132,9 @@ AbstractCraftingSkill.MakeItem.NotAllMaterials:      Vous n'avez pas tout les co
 
 # /AdvancedCraftingSkill
 AdvancedCraftingSkill.CombineItems.OnlyCombine:             Vous pouvez seulement combiner vos gemmes dans un objet !
-AdvancedCraftingSkill.IsAllowedToCombine.CraftedItems:      Seulement les objets construits par des artisants peuvent être enchantés !
+AdvancedCraftingSkill.IsAllowedToCombine.CraftedItems:      Seulement les objets fabriqués par des artisans peuvent être enchantés !
 AdvancedCraftingSkill.IsAllowedToCombine.Imbue:             Vous avez besoin de quelque chose pour imprégner {0} !
-AdvancedCraftingSkill.IsAllowedToCombine.NoEnchanted:	Cet objet ne peut pas être enchanté!
+AdvancedCraftingSkill.IsAllowedToCombine.NoEnchanted:	Cet objet ne peut pas être enchanté !
 AdvancedCraftingSkill.IsAllowedToCombine.NoGoodCombine:		Cet objet ne peut pas être imprégner de cette teinture !
 AdvancedCraftingSkill.IsAllowedToCombine.ProblemCombine:	L'objet est mal configuré, contactez un GM !
 
@@ -147,12 +148,12 @@ Repair.BeginWork.BeginRepair:				Vous commencez à réparer {0}.
 Repair.BeginWork.BeginRepairing1:			Vous commencez à réparer {0} ({1}%).
 Repair.BeginWork.BeginRepairing2:			{0} commence à réparer {1}.
 Repair.BeginWork.Repairing:				Réparation: {0}
-Repair.BeginWork.StopRepair1:				    Vous bougez et interrompé la réparation de : {0}.
-Repair.BeginWork.StopRepair2:				{0} bouge et arrête la réparation de: {1}.
+Repair.BeginWork.StopRepair1:				    Vous bougez et interrompez la réparation de : {0}.
+Repair.BeginWork.StopRepair2:				{0} bouge et arrête la réparation de : {1}.
 Repair.IsAllowedToBeginWork.BackpackItems:		Vous pouvez seulement réparer des objets étant dans votre sac à dos !
 Repair.IsAllowedToBeginWork.CantRepair:			Vous ne pouvez pas réparer {0} !
 Repair.IsAllowedToBeginWork.EndCurrentAction:	Vous devez finir votre action avant de lancer une réparation !
-Repair.IsAllowedToBeginWork.FullyRepaired:		{0} est entierement réparé !
+Repair.IsAllowedToBeginWork.FullyRepaired:		{0} est entièrement réparé !
 Repair.IsAllowedToBeginWork.NotEnoughSkill:		Vous ne possédez pas les compétences pour réparer {0} !
 Repair.IsAllowedToBeginWork.WeaponCrafter:		Vous devez être un Forgeron pour réparer les armes de sièges.
 Repair.Proceed.FailImprove1:				Vous n'arrivez pas à réparer {0}.

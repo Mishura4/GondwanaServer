@@ -141,6 +141,7 @@ namespace DOL.GS.Quests
 
             data.FinishQuest();
             player.Out.SendNPCsQuestEffect(Npc, Npc.GetQuestIndicator(player));
+            TaskManager.UpdateTaskProgress(player, "QuestsCompleted", 1);
         }
 
         private static void GiveItem(DataQuestJson quest, GamePlayer player, ItemTemplate itemTemplate)

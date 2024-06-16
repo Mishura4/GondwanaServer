@@ -29,6 +29,7 @@ namespace GameServerScripts.Utils
                     var firecamp = new FeuDeCamp()
                     {
                         Template_ID = firecampItem.FeuxCampItemId_nb,
+                        Realm = template.Realm,
                         Model = (ushort)template.Model,
                         Radius = (ushort)firecampItem.Radius,
                         Lifetime = firecampItem.Lifetime,
@@ -41,7 +42,8 @@ namespace GameServerScripts.Utils
                         HealthTrapDamagePercent = firecampItem.HealthTrapDamagePercent,
                         IsEnduranceType = firecampItem.IsEnduranceType,
                         HealthPercentRate = firecampItem.HealthRatePercent,
-                        ManaPercentRate = firecampItem.ManaRatePercent
+                        ManaPercentRate = firecampItem.ManaRatePercent,
+                        OwnerImmuneToTrap = firecampItem.OwnerImmuneToTrap
                     };
 
                     if (m_firecamps.ContainsKey(firecampItem.FeuxCampXItem_ID))
@@ -57,7 +59,5 @@ namespace GameServerScripts.Utils
 
             return true;
         }
-
-
     }
 }

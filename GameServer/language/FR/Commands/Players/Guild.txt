@@ -100,7 +100,7 @@ Commands.Players.Guild.Help.GuildAutoRemove:		'/gc autoremove <nom du joueur>' #
 Commands.Players.Guild.Help.GuildAutoRemoveAcc:	'/gc autoremove account <nom du joueur>' # Expulse de la guilde tous les personnages d'un compte.
 Commands.Players.Guild.Help.GuildBannerSummon:	'/gc summon' # Invoque la bannière de guilde.
 Commands.Players.Guild.Help.GuildBannerUnsummon:	'/gc unsummon' # Annule l'invocation de la bannière de guilde et retire ses effets sur les joueurs environnants.
-Commands.Players.Guild.Help.GuildBuff:			'/gc buff <artifact|crafting|rps|bps|xp|mlxp>' # Achète un bonus de mérite de guilde.
+Commands.Players.Guild.Help.GuildBuff:			'/gc buff <artifact|crafting|rps|bps|xp|coin|tension>' # Achète un bonus de mérite de guilde.
 Commands.Players.Guild.Help.GuildBuyBanner:		'/gc buybanner' # Achète une bannière de guilde.
 Commands.Players.Guild.Help.GuildCancel:			'/gc cancel <option> <joueur>' # Annule toutes les commandes précédentes.
 Commands.Players.Guild.Help.GuildClaim:			'/gc claim' # Réclame une tour ou un fort pour la guilde.

@@ -79,7 +79,9 @@ namespace DOL.GS
             MasterLevelXP = 3,  // Not implemented
             CraftingHaste = 4,
             ArtifactXP = 5,
-            Experience = 6
+            Experience = 6,
+            Coin = 7,
+            Tension = 8
         }
 
         public static string BonusTypeToName(eBonusType bonusType)
@@ -105,6 +107,12 @@ namespace DOL.GS
                     break;
                 case Guild.eBonusType.RealmPoints:
                     bonusName = "Realm Points";
+                    break;
+                case Guild.eBonusType.Coin:
+                    bonusName = "Money per kill";
+                    break;
+                case Guild.eBonusType.Tension:
+                    bonusName = "Tension";
                     break;
             }
 

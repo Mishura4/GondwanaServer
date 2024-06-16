@@ -1,0 +1,68 @@
+
+Tasks.SystemDisabled: Le système de tâches est actuellement désactivé.
+Tasks.PvPRvRGvGTasks: ==== TACHES PvP/RvR/GvG ====
+Tasks.PvETasks: ===== TACHES PvE =====
+Tasks.CraftingTasks: ===== TACHES D'ARTISANAT =====
+Tasks.SpecialTasks: ===== TACHES SPECIALES =====
+Tasks.TaskCompletionTokenInfo: Chaque jeton de tâches PvP, RvR, GvG, PvE ou d'Artisanat doit être remis au Maître des Tâches pour recevoir des récompenses.
+Tasks.SpecialTaskCompletionTokenInfo: Les jetons de tâches spéciales sont spécifiques à chaque tâche. Ces jetons débloquent de nouveaux titres de joueur auxquels ont associés des bonus spéciaux.
+Tasks.SnapshotTitle: TACHES
+Tasks.KillEnemyPlayersGroup: Tuez des joueurs ennemis en étant groupé
+Tasks.KillEnemyPlayersAlone: Tuez des joueurs ennemis en solo
+Tasks.KillKeepGuards: Tuez des gardes de forts
+Tasks.TakeKeeps: Prise de forts
+Tasks.RvRChampionOfTheDay: Devenez Champion du jour en RvR
+Tasks.KillTerritoryGuards: Tuez des gardes de territoires
+Tasks.KillTerritoryBoss: Capture de territoires
+Tasks.TurnInPvPGvGTaskToken: Jeton de Tâche PvP/RvR/GvG
+Tasks.KillCreaturesInDungeons: Tuez des créatures dans les donjons
+Tasks.KillOutdoorsCreatures: Tuez des créatures en extérieur
+Tasks.KillAnimalCreatures: Tuez des créatures animales
+Tasks.KillDemonCreatures: Tuez des créatures démoniaques
+Tasks.KillDragonCreatures: Tuez des créatures draconiques
+Tasks.KillElementalCreatures: Tuez des créatures élémentaires
+Tasks.KillGiantCreatures: Tuez des créatures géantes
+Tasks.KillHumanoidCreatures: Tuez des créatures humanoïdes
+Tasks.KillInsectCreatures: Tuez des créatures insectoïdes
+Tasks.KillMagicalCreatures: Tuez des créatures magiques
+Tasks.KillReptileCreatures: Tuez des créatures reptiliennes
+Tasks.KillPlantCreatures: Tuez des créatures végétales
+Tasks.KillUndeadCreatures: Tuez des créatures mortes-vivantes
+Tasks.TurnInPvETaskToken: Jeton de Tâche PvE
+Tasks.SuccessfulItemCombinations: Combinaisons d'objets réussies
+Tasks.MasteredCrafts: Objets fabriqués via l'Artisanat
+Tasks.MasterpieceCrafted: Chef-d'œuvre fabriqué
+Tasks.TurnInCraftingTaskToken: Jeton de Tâche d'Artisanat
+Tasks.EpicBossesSlaughtered: Boss épiques abattus
+Tasks.ItemsSoldToPlayers: Transactions réussies via le marché
+Tasks.SuccessfulPvPThefts: Vols réussis contre des joueurs
+Tasks.OutlawPlayersSentToJail: Neutralisez des Hors-la-loi
+Tasks.EnemiesKilledInAdrenalineMode: Ennemis tués en mode adrénaline
+Tasks.QuestsCompleted: Quêtes terminées
+Tasks.MaxLevelReached: Niveau max
+Tasks.Level: Niveau {0}
+
+Tasks.KillEnemyPlayersGroupLog: Tuez des joueurs ennemis en étant groupé : {0}/{1}
+Tasks.KillEnemyPlayersAloneLog: Tuez des joueurs ennemis en solo : {0}/{1}
+Tasks.KillKeepGuardsLog: Tuez des gardes de forts : {0}/{1}
+Tasks.TakeKeepsLog: Prise de forts : {0}/{1}
+Tasks.KillTerritoryGuardsLog: Tuez des gardes de territoires : {0}/{1}
+Tasks.KillTerritoryBossLog: Capture de territoires : {0}/{1}
+Tasks.SuccessfulItemCombinationsLog: Combinaisons d'objets réussies : {0}/{1}
+Tasks.MasteredCraftsLog: Objets fabriqués via l'Artisanat : {0}/{1}
+Tasks.MasterpieceCraftedLog: Chef-d'œuvre fabriqué : {0}/{1}
+Tasks.EpicBossesSlaughteredLog: Boss épiques abattus : {0}/{1}
+Tasks.ItemsSoldToPlayersLog: Transactions réussies via le marché : {0}/{1}
+Tasks.SuccessfulPvPTheftsLog: Vols réussis contre des joueurs : {0}/{1}
+Tasks.OutlawPlayersSentToJailLog: Neutralisez des Hors-la-loi : {0}/{1}
+Tasks.EnemiesKilledInAdrenalineModeLog: Ennemis tués en mode adrénaline : {0}/{1}
+Tasks.QuestsCompletedLog: Quêtes terminées : {0}/{1}
+Tasks.TurnInPvPGvGTaskTokenMessage: Tâche : Vous obtenez un jeton de tâche PvP/RvR/GvG - niveau {0}
+Tasks.TurnInPvETaskTokenMessage: Tâche : Vous obtenez un jeton de tâche PvE - niveau {0}
+Tasks.TurnInCraftingTaskTokenMessage: Tâche : Vous obtenez un jeton de tâche d'Artisanat - niveau {0}
+Tasks.EpicBossesSlaughteredSpecialToken: Tâche : Vous obtenez un jeton spécial 'Tueur de Démon' - niveau {0}
+Tasks.ItemsSoldToPlayersSpecialToken: Tâche : Vous obtenez un jeton spécial 'Marchand' - niveau {0}
+Tasks.SuccessfulPvPTheftsSpecialToken: Tâche : Vous obtenez un jeton spécial 'Voleur' - niveau {0}
+Tasks.OutlawPlayersSentToJailSpecialToken: Tâche : Vous obtenez un jeton spécial 'Chasseur de Prime' - niveau {0}
+Tasks.EnemiesKilledInAdrenalineModeSpecialToken: Tâche : Vous obtenez un jeton spécial 'Fièvre de Combat' - niveau {0}
+Tasks.QuestsCompletedSpecialToken: Tâche : Vous obtenez un jeton spécial 'Aventurier' - niveau {0}

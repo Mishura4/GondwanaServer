@@ -1,2 +1,5 @@
 TextNPC.NotInOwnedTerritory:		Bonjour, messire. Je ne vois pas l'intérêt de traiter avec vous, car mon territoire n'est pas vassal de votre guilde !
 TextNPC.ExchangeNotInOwnedTerritory:	Je n'ai aucune raison d'échanger cet objet avec vous, mon territoire n'étant pas vassal de votre guilde !
+TextNPC.InventoryFullItemGround:	Votre inventaire est plein, l'objet est déposé au sol.
+TextNPC.YouMustGive:			Vous devez donner {0} {1}.
+TextNPC.YouNeedToExchange:		Vous avez besoin de {0} pour échanger cet objet.

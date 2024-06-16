@@ -4,4 +4,5 @@ CraftNPC.Interact.NotMaster:				Je ne suis pas votre maître crafteur. Vous pouv
 CraftNPC.Interact.NoRespec:					Je ne peux pas accepter cet objet.
 CraftNPC.Interact.Promoted:                 Vous êtes promu au rang de {0}.
 CraftNPC.Interact.NoToken:					Vous n'avez pas de jeton de respécialisation! Revenez quand vous en aurez un.
+CraftNPC.Interact.RefuseToken:		Vous devez consulter votre Maître Artisan pour recevoir les bonus de vos jetons d'Artisanat.
 CraftNPC.WhisperReceive.WishToJoin:         Êtes-vous sur de vouloir rejoindre notre ordre? Vous pouvez donner un jeton de respécialisation à un maître d'un autre ordre pour réinitialiser votre choix.

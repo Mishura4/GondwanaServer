@@ -322,7 +322,26 @@ namespace DOL.Territories
             }
             infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.TimeBeforeRent", timeBeforeRent));
             infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.TotalXPBonus", ownedTerritories.Count == 0 ? 0 : player.Guild.TerritoryBonusExperienceFactor * 100));
-            infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.TotalBPBonus", ownedTerritories.Count == 0 ? 0 : player.Guild.TerritoryBonusBountyPoints * 2));
+
+            double guildBuffMultiplier = Properties.GUILD_BUFF_BP / 100.0;
+            if (player.Guild != null && player.Guild.BonusType == Guild.eBonusType.BountyPoints)
+            {
+                double guildBuffBonus = Properties.GUILD_BUFF_BP;
+                int guildLevel = (int)player.Guild.GuildLevel;
+
+                if (guildLevel >= 8 && guildLevel <= 15)
+                {
+                    guildBuffBonus *= 1.5;
+                }
+                else if (guildLevel > 15)
+                {
+                    guildBuffBonus *= 2.0;
+                }
+
+                guildBuffMultiplier *= (1.0 + guildBuffBonus * 0.01);
+            }
+
+            infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.TotalBPBonus", ownedTerritories.Count == 0 ? 0 : (int)((player.Guild.TerritoryBonusBountyPoints * 2) + guildBuffMultiplier)));
 
             // ---- Territory Bonuses ----
             infos.Add(string.Empty);

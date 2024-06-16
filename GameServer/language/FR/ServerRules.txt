@@ -1,0 +1,20 @@
+
+# SERVERRULES
+# /AmtenaelRules
+ServerRules.AmtenaelRules.PveInvTimerExpired:		Votre timer d'invulnérabilité temporaire en PvE a expiré.
+ServerRules.AmtenaelRules.PlayerIsConnecting:		{0} est en train de se connecter, vous ne pouvez pas l'attaquer pour l'instant.
+ServerRules.AmtenaelRules.PvpInvTimerWearsOff:		Vous ne pouvez pas attaquer de joueurs tant que votre timer d'invulnérabilité en PvP n'a pas expiré !
+ServerRules.AmtenaelRules.RPBonusKeepCapture:		Vous obtenez un bonus aux RP de {0}% grâce à votre capture du fort !
+
+# /PvPServerRules
+ServerRules.PvpRules.InvTimerExpFlagON:			Votre timer d'invulnérabilité temporaire a expiré, mais votre indicateur "/safety" est toujours activé.
+ServerRules.PvpRules.InvTimerExp:			Votre timer d'invulnérabilité temporaire a expiré.
+
+# /AbstractServerRules
+ServerRules.AbstractServerRules.CantCastSpell:		Vous ne pouvez pas lancer ce sort sur le {0}.
+ServerRules.AbstractServerRules.RecentPlayerKillNoRP:	{0} a été tué récemment et ne rapporte aucun point de royaume !
+ServerRules.AbstractServerRules.RecentPlayerKillNoXP:	{0} a été tué récemment et ne rapporte aucune expérience !
+ServerRules.AbstractServerRules.NoXPKill:		Ce combat ne vous rapporte aucune expérience !
+
+# /DemonsBreachJumpPoint
+DemonsBreachJumpPoint.Requirements:			Vous ne remplissez pas les conditions pour entrer dans cette région !

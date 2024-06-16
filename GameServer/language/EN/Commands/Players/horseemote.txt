@@ -3,35 +3,35 @@ Commands.Players.HorseEmote.Help:							Available emote: halt, pet, trick, courb
 Commands.Players.HorseEmote.MustBeOnMount:					You must ride your mount to use this command!
 Commands.Players.HorseEmote.Usage:							'/horse <emote>'
 Commands.Players.HorseEmote.You:							You
-Commands.Players.HorseEmote.courbette.NoTargetToOthers:		{0}'s mount does a courbette.
-Commands.Players.HorseEmote.courbette.NoTargetToSource:		Your mount does a courbette.
-Commands.Players.HorseEmote.courbette.ToOthers:				{0}'s mount does a courbette.
-Commands.Players.HorseEmote.courbette.ToSource:				Your mount is doing a courbette in front of {0}.
+Commands.Players.HorseEmote.courbette.NoTargetToOthers:		{0}'s mount performs a courbette.
+Commands.Players.HorseEmote.courbette.NoTargetToSource:		Your mount performs a courbette.
+Commands.Players.HorseEmote.courbette.ToOthers:				{0}'s mount performs a courbette.
+Commands.Players.HorseEmote.courbette.ToSource:				Your mount is performing a courbette in front of {0}.
 Commands.Players.HorseEmote.graze.NoTargetToOthers:			{0} let his mount graze.
 Commands.Players.HorseEmote.graze.NoTargetToSource:			You let your mount graze.
 Commands.Players.HorseEmote.graze.ToOthers:					{0}'s mount is grazing in front of {1}.
 Commands.Players.HorseEmote.graze.ToSource:					Your mount is grazing in front of {0}.
-Commands.Players.HorseEmote.halt.NoTargetToOthers:			{0} flag to everyone to halt.
-Commands.Players.HorseEmote.halt.NoTargetToSource:			You flag to everyone to halt.
-Commands.Players.HorseEmote.halt.ToOthers:					{0} flag to {1} to halt.
-Commands.Players.HorseEmote.halt.ToSource:					You flag to {0} to halt.
+Commands.Players.HorseEmote.halt.NoTargetToOthers:			{0} orders everyone to halt.
+Commands.Players.HorseEmote.halt.NoTargetToSource:			You order everyone to halt.
+Commands.Players.HorseEmote.halt.ToOthers:					{0} orders {1} to halt.
+Commands.Players.HorseEmote.halt.ToSource:					You order {0} to halt.
 Commands.Players.HorseEmote.nod.NoTargetToOthers:			{0}'s mount nods its head.
 Commands.Players.HorseEmote.nod.NoTargetToSource:			Your mount nods its head.
-Commands.Players.HorseEmote.nod.ToOthers:					{0}'s mount nods its head in front of {1}!
-Commands.Players.HorseEmote.nod.ToSource:					Your mount nods its head in front of {0}.
+Commands.Players.HorseEmote.nod.ToOthers:					{0}'s mount nods at {1}!
+Commands.Players.HorseEmote.nod.ToSource:					Your mount nods at {0}.
 Commands.Players.HorseEmote.pet.NoTargetToOthers:			{0} pet his mount.
 Commands.Players.HorseEmote.pet.NoTargetToSource:			You pet your mount.
-Commands.Players.HorseEmote.pet.ToOthers:					-
-Commands.Players.HorseEmote.pet.ToSource:					-
+Commands.Players.HorseEmote.pet.ToOthers:				{0} pet his mount in front of {1}.
+Commands.Players.HorseEmote.pet.ToSource:				You pet your mount in front of {0}.
 Commands.Players.HorseEmote.rear.NoTargetToOthers:			{0}'s mount rears up
 Commands.Players.HorseEmote.rear.NoTargetToSource:			Your mount rears up.
-Commands.Players.HorseEmote.rear.ToOthers:					{0}'s mount rears up in front of {1}!
-Commands.Players.HorseEmote.rear.ToSource:					Your mount rears up in front of {0}.
+Commands.Players.HorseEmote.rear.ToOthers:					{0}'s mount rears at the sight of {1}!
+Commands.Players.HorseEmote.rear.ToSource:					Your mount rears at the sight of {0}.
 Commands.Players.HorseEmote.startle.NoTargetToOthers:		{0}'s mount is startled.
 Commands.Players.HorseEmote.startle.NoTargetToSource:		Your mount is startled.
-Commands.Players.HorseEmote.startle.ToOthers:				{0}'s mount is startled in front of {1}!
-Commands.Players.HorseEmote.startle.ToSource:				Your mount is startled in front of {0}.
-Commands.Players.HorseEmote.trick.NoTargetToOthers:			{0} stand on his mount to trick his audience.
-Commands.Players.HorseEmote.trick.NoTargetToSource:			You stand on your mount to trick your audience.
-Commands.Players.HorseEmote.trick.ToOthers:					{0} stand on his mount to trick {1}!
-Commands.Players.HorseEmote.trick.ToSource:					You stand on your mount to trick {0}.
+Commands.Players.HorseEmote.startle.ToOthers:				{0}'s mount is startled by {1}!
+Commands.Players.HorseEmote.startle.ToSource:				Your mount is startled by {0}.
+Commands.Players.HorseEmote.trick.NoTargetToOthers:			{0} stand on his mount to impress his audience.
+Commands.Players.HorseEmote.trick.NoTargetToSource:			You stand on your mount to impress your audience.
+Commands.Players.HorseEmote.trick.ToOthers:					{0} stand on his mount to impress {1}!
+Commands.Players.HorseEmote.trick.ToSource:					You stand on your mount to impress {0}.

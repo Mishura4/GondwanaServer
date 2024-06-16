@@ -414,7 +414,9 @@ GameObjects.GamePlayer.UseSlot.CantMountRelicCarrier:		You can't mount while car
 GameObjects.GamePlayer.UseSlot.CantSeeTarget:				You can't see your target!		
 GameObjects.GamePlayer.UseSlot.CantSummonRvR:				You cannot summon that mount in RvR zones.		
 GameObjects.GamePlayer.UseSlot.CantUseFromBackpack:	    	You can't use this item from your backpack. Equip it before!			
-GameObjects.GamePlayer.UseSlot.CantUseInCombat:				You can't use this item in combat!		
+GameObjects.GamePlayer.UseSlot.CantUseInCombat:				You can't use this item in combat!
+GameObjects.GamePlayer.UseSlot.CantUseWhileSitting:			You can't use this item while sitting!
+GameObjects.GamePlayer.UseSlot.CantUseHere:				You can't use this here!
 GameObjects.GamePlayer.UseSlot.IllegalSourceObject:			Illegal source object. Readied {0}.
 GameObjects.GamePlayer.UseSlot.MustDismountBefore:			You must to dismount before.		
 GameObjects.GamePlayer.UseSlot.NoAutoReleaseShotReload:		You will no longer automatically release your shot or reload.			
@@ -427,6 +429,13 @@ GameObjects.GamePlayer.UseSlot.MustWaitBeforeUse:			You must wait {0} more secon
 GameObjects.GamePlayer.UseSlot.CantUseState:			    You can't use {0} in your state.	
 GameObjects.GamePlayer.UseSlot.Used:			            {0} has been used.
 GameObjects.GamePlayer.UseSlot.CantUseCast:		    		You need to finish your current action for use your {0}!
+GameObjects.GamePlayer.UseSlot.WrongTarget:		    		You need a target for this ability!
+GameObjects.GamePlayer.UseSlot.QuiverSlotEmpty:		    		The quiver slot {0} is empty!
+GameObjects.GamePlayer.UseSlot.PotionNotImplemented:			Potion effect ID {0} is not implemented yet.
+GameObjects.GamePlayer.UseSlot.PotionLineNotFound:			Potion effect line not found.
+GameObjects.GamePlayer.UseSlot.PotionSpellNotFound:			Potion effect spell ID {0} not found.
+GameObjects.GamePlayer.UseSlot.CantDischargeInState:			In your state you can't discharge any object.
+GameObjects.GamePlayer.UseSlot.WaitBeforeDischarge:			You must wait {0} more second before discharge {1}!
 
 GameObjects.GamePlayer.Whisper.SelectTarget:				Select a target to whisper to!
 GameObjects.GamePlayer.Murder:								You have lost 1 reputation point due to killing {0}.
@@ -447,6 +456,10 @@ GameObjects.GamePlayer.RvR.Occupied:                    I'm busy right now, come
 GameObjects.GamePlayer.RvR.Interrupt:                   You have been interrupted.
 GameObjects.GamePlayer.RvR.Too.Far:                     You have strayed too far.
 GameObjects.GamePlayer.RvR.Capture.Timer:               Keep capture
-GameObjects.GamePlayer.RvR.Capture.Start:               {0} begins to take control of the keep! 
+GameObjects.GamePlayer.RvR.Capture.Start:               {0} begins to take control of the keep!
+
+GameObjects.GamePlayer.Champion.LevelUp:				You have gained one champion level!
+
+GameObjects.GamePlayer.Reputation.Zero:					Your reputation is now neutral.
 
 GameObjects.GamePlayer.AddToWorld.SpecsPointsIncorrect:		Your Specs points total was incorrect. Now corrected, please train again.

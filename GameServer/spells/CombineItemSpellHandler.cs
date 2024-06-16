@@ -2,12 +2,15 @@
 using DOL.Events;
 using DOL.GS;
 using DOL.GS.PacketHandler;
+using DOL.GS.ServerProperties;
 using DOL.GS.Spells;
 using DOL.Language;
 using DOLDatabase.Tables;
+using log4net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -116,8 +119,7 @@ namespace DOL.spells
 
             if (match == null)
             {
-                // It missed a message to inform the player
-                player.Out.SendMessage("Aucune combinaison possible n'a été trouvée", eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Spell.CombineItemSpellHandler.NoCombinePossible"), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
                 return false;
             }
 
@@ -132,7 +134,7 @@ namespace DOL.spells
                 {
                     if (player.CraftingSkills[match.CraftingSkill] < match.CraftValue)
                     {
-                        player.Out.SendMessage($"Votre niveau en {match.CraftingSkill.ToString()} doit etre au moins de {match.CraftValue} ", eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Spell.CombineItemSpellHandler.CraftingSkillTooLow", match.CraftingSkill.ToString(), match.CraftValue), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
                         return false;
                     }
                 }
@@ -142,7 +144,7 @@ namespace DOL.spells
             if (!removeItems.ContainsKey(useItem))
                 removeItems.Add(useItem, match.Items[useItem.Id_nb]);
 
-            combined = WorldInventoryItem.CreateFromTemplate(match.TemplateId);
+            combined = CreateCombinedItem(match, player);
 
             if (combined == null)
             {
@@ -160,7 +162,7 @@ namespace DOL.spells
                         checkAreaId = true;
                 if (!checkAreaId)
                 {
-                    player.Out.SendMessage("Vous ne pouvez pas combiner ces ingrédients à cet endroit", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Spell.CombineItemSpellHandler.CantCombineHere"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     return false;
                 }
             }
@@ -171,9 +173,10 @@ namespace DOL.spells
             if (!CheckToolKit(player, match.ToolKit))
                 return false;
 
-            if (match.Duration > 0)
+            int adjustedDuration = AdjustDurationForCraftingBonuses(player, match.Duration);
+            if (adjustedDuration > 0)
             {
-                player.Out.SendTimerWindow("Combinaison en cours: " + combined.Item.Name, match.Duration);
+                player.Out.SendTimerWindow("Combinaison en cours: " + combined.Item.Name, adjustedDuration);
                 GameEventMgr.RemoveHandler(Caster, GameLivingEvent.Moving, new DOLEventHandler(EventManager));
                 GameEventMgr.RemoveHandler(Caster, GameLivingEvent.AttackedByEnemy, new DOLEventHandler(EventManager));
                 GameEventMgr.AddHandler(Caster, GameLivingEvent.Moving, new DOLEventHandler(EventManager));
@@ -219,7 +222,7 @@ namespace DOL.spells
 
         public override int CalculateCastingTime()
         {
-            return match.Duration * 1000;
+            return AdjustDurationForCraftingBonuses((GamePlayer)Caster, match.Duration) * 1000;
         }
 
         private void EventManager(DOLEvent e, object sender, EventArgs args)
@@ -251,10 +254,22 @@ namespace DOL.spells
             int modelCase = 0;
             bool differentModels = false;
 
-            string toolName;
-            string endString = "combiner cet objet";
+            string toolName = LanguageMgr.GetTranslation(player.Client, "ToolName.Object");
+            string endString = LanguageMgr.GetTranslation(player.Client, "Spell.CombineItemSpellHandler.PerformCombination");
 
-            List<int> mergeModelList = new List<int>(models.Select(model => int.Parse(model)));
+            List<int> mergeModelList = new List<int>();
+
+            foreach (var model in models)
+            {
+                var modelParts = model.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                foreach (var part in modelParts)
+                {
+                    if (int.TryParse(part, out int modelNumber))
+                    {
+                        mergeModelList.Add(modelNumber);
+                    }
+                }
+            }
 
             if (mergeModelList.Intersect(modelForge).Count() > 0)
             {
@@ -328,36 +343,36 @@ namespace DOL.spells
             switch (modelCase)
             {
                 case 1:
-                    toolName = "une forge";
+                    toolName = LanguageMgr.GetTranslation(player.Client, "ToolName.Forge");
                     break;
                 case 2:
-                    toolName = "une tannerie";
+                    toolName = LanguageMgr.GetTranslation(player.Client, "ToolName.Tannery");
                     break;
                 case 3:
-                    toolName = "une fileuse";
+                    toolName = LanguageMgr.GetTranslation(player.Client, "ToolName.Weaver");
                     break;
                 case 4:
-                    toolName = "un atelier de menuiserie";
+                    toolName = LanguageMgr.GetTranslation(player.Client, "ToolName.CarpentryWorkshop");
                     break;
                 case 5:
-                    toolName = "un chaudron";
+                    toolName = LanguageMgr.GetTranslation(player.Client, "ToolName.Cauldron");
                     break;
                 case 6:
-                    toolName = "une table d'alchimie";
+                    toolName = LanguageMgr.GetTranslation(player.Client, "ToolName.AlchemyTable");
                     break;
                 case 7:
-                    toolName = "un feu de camp";
+                    toolName = LanguageMgr.GetTranslation(player.Client, "ToolName.Fire");
                     break;
                 case 8:
-                    toolName = "un coffre";
+                    toolName = LanguageMgr.GetTranslation(player.Client, "ToolName.Chest");
                     break;
                 default:
-                    toolName = "un objet";
-                    endString = "effectuer la combinaison";
+                    toolName = LanguageMgr.GetTranslation(player.Client, "ToolName.Object");
+                    endString = LanguageMgr.GetTranslation(player.Client, "Spell.CombineItemSpellHandler.PerformCombination");
                     break;
             }
 
-            player.Out.SendMessage("Il faut vous rapprocher d'" + toolName + " pour pouvoir " + endString, eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Spell.CombineItemSpellHandler.NeedToApproach", toolName, endString), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 
 #if (RELEASE)
             if (player.Client.Account.PrivLevel > 1)
@@ -396,7 +411,7 @@ namespace DOL.spells
             // Check if player fail to combine
             if (Util.Chance(match.ChanceFailCombine))
             {
-                player.Out.SendMessage("Vous échouez à combiner les objets", eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Spell.CombineItemSpellHandler.YouFailedCombine"), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
                 if (match.PunishSpell != 0)
                 {
                     var punishSpell = GameServer.Database.SelectObject<DBSpell>(DB.Column("SpellID").IsEqualTo(match.PunishSpell));
@@ -453,7 +468,7 @@ namespace DOL.spells
             }
 
             player.Out.SendSpellEffectAnimation(player, player, (ushort)match.SpellEfect, 0, false, 1);
-            player.Out.SendMessage($"Vous avez créé {newItem.Name} en combinant {useItem.Name} ainsi que {match.Items.Count() - 1} autres objects.", eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
+            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Spell.CombineItemSpellHandler.YouCreatedItem", newItem.Name, useItem.Name, match.Items.Count() - 1), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
             RemoveItems(player, removeItems);
 
             if (match.RewardCraftingSkills > 0)
@@ -480,12 +495,13 @@ namespace DOL.spells
                 }
             }
 
-
             if (!player.ReceiveItem(player, newItem))
             {
                 player.CreateItemOnTheGround(newItem);
                 player.Out.SendDialogBox(eDialogCode.SimpleWarning, 0, 0, 0, 0, eDialogType.Ok, true, LanguageMgr.GetTranslation(player.Client.Account.Language, "AbstractCraftingSkill.BuildCraftedItem.BackpackFull", newItem.Name));
             }
+
+            TaskManager.UpdateTaskProgress(player, "SuccessfulItemCombinations", 1);
         }
 
         private IEnumerable<Combinable> GetCombinableItems(string usedItemId)
@@ -528,7 +544,8 @@ namespace DOL.spells
                         ApplyRewardCraftingSkillsSystem = c.ApplyRewardCraftingSkillsSystem,
                         ToolKit = c.ToolKit,
                         ToolLoseDur = c.ToolLoseDur,
-                        CombinationId = c.CombinationId
+                        CombinationId = c.CombinationId,
+                        AllowVersion = c.AllowVersion
                     };
                 });
 
@@ -572,6 +589,33 @@ namespace DOL.spells
             return skills;
         }
 
+        private int AdjustDurationForCraftingBonuses(GamePlayer player, int baseDuration)
+        {
+            double speedMultiplier = 1.0;
+
+            speedMultiplier *= (1.0 + player.BuffBonusCategory4[eProperty.CraftingSpeed] * 0.01);
+            speedMultiplier *= (1.0 + player.ItemBonus[(int)eProperty.CraftingSpeed] * 0.01);
+
+            if (player.Guild != null && player.Guild.BonusType == Guild.eBonusType.CraftingHaste)
+            {
+                double guildCraftBonus = Properties.GUILD_BUFF_CRAFTING;
+                int guildLevel = (int)player.Guild.GuildLevel;
+
+                if (guildLevel >= 8 && guildLevel <= 15)
+                {
+                    guildCraftBonus *= 1.5;
+                }
+                else if (guildLevel > 15)
+                {
+                    guildCraftBonus *= 2.0;
+                }
+
+                speedMultiplier *= (1.0 + guildCraftBonus * 0.01);
+            }
+
+            return (int)(baseDuration / speedMultiplier);
+        }
+
         /// <summary>
         /// Remove the needed items to combine
         /// </summary>
@@ -588,8 +632,113 @@ namespace DOL.spells
                 player.Inventory.RemoveCountFromStack(item, removeItems[item]);
             }
         }
-    }
 
+        private WorldInventoryItem CreateCombinedItem(Combinable combinable, GamePlayer player)
+        {
+            if (combinable.AllowVersion)
+            {
+                string baseTemplateId = combinable.TemplateId;
+                string classSpecificTemplateId = GetClassSpecificTemplateId(baseTemplateId, (eCharacterClass)player.CharacterClass.ID);
+
+                var combinedItem = WorldInventoryItem.CreateFromTemplate(classSpecificTemplateId);
+                if (combinedItem == null)
+                {
+                    log.Warn($"Missing item in ItemTemplate table '{classSpecificTemplateId}' for CombineItem spell");
+                    return null;
+                }
+
+                return combinedItem;
+            }
+            else
+            {
+                return WorldInventoryItem.CreateFromTemplate(combinable.TemplateId);
+            }
+        }
+
+        private string GetClassSpecificTemplateId(string baseTemplateId, eCharacterClass characterClass)
+        {
+            string prefix = GetArmorPrefix(characterClass);
+            return $"{baseTemplateId}_{prefix}";
+        }
+
+        private string GetArmorPrefix(eCharacterClass characterClass)
+        {
+            switch (characterClass)
+            {
+                case eCharacterClass.Paladin:
+                case eCharacterClass.Armsman:
+                    return "plate";
+                case eCharacterClass.Hero:
+                case eCharacterClass.Champion:
+                case eCharacterClass.Warden:
+                case eCharacterClass.Druid:
+                    return "scale";
+                case eCharacterClass.Mercenary:
+                case eCharacterClass.Cleric:
+                case eCharacterClass.Reaver:
+                case eCharacterClass.Thane:
+                case eCharacterClass.Warrior:
+                case eCharacterClass.Valkyrie:
+                case eCharacterClass.Healer:
+                case eCharacterClass.Shaman:
+                case eCharacterClass.Skald:
+                    return "chain";
+                case eCharacterClass.Blademaster:
+                case eCharacterClass.Nightshade:
+                case eCharacterClass.Ranger:
+                case eCharacterClass.Bard:
+                case eCharacterClass.Guardian:
+                    return "reinforced";
+                case eCharacterClass.Infiltrator:
+                case eCharacterClass.Scout:
+                case eCharacterClass.Minstrel:
+                case eCharacterClass.Naturalist:
+                case eCharacterClass.Berserker:
+                case eCharacterClass.Hunter:
+                case eCharacterClass.Shadowblade:
+                case eCharacterClass.Savage:
+                case eCharacterClass.Viking:
+                case eCharacterClass.Fighter:
+                    return "studded";
+                case eCharacterClass.Vampiir:
+                case eCharacterClass.MaulerAlb:
+                case eCharacterClass.MaulerMid:
+                case eCharacterClass.MaulerHib:
+                case eCharacterClass.Heretic:
+                case eCharacterClass.Friar:
+                case eCharacterClass.Stalker:
+                case eCharacterClass.MidgardRogue:
+                case eCharacterClass.AlbionRogue:
+                    return "leather";
+                case eCharacterClass.Wizard:
+                case eCharacterClass.Sorcerer:
+                case eCharacterClass.Theurgist:
+                case eCharacterClass.Necromancer:
+                case eCharacterClass.Cabalist:
+                case eCharacterClass.Acolyte:
+                case eCharacterClass.Spiritmaster:
+                case eCharacterClass.Runemaster:
+                case eCharacterClass.Bonedancer:
+                case eCharacterClass.Warlock:
+                case eCharacterClass.Bainshee:
+                case eCharacterClass.Eldritch:
+                case eCharacterClass.Enchanter:
+                case eCharacterClass.Mentalist:
+                case eCharacterClass.Animist:
+                case eCharacterClass.Valewalker:
+                case eCharacterClass.Mage:
+                case eCharacterClass.Elementalist:
+                case eCharacterClass.Magician:
+                case eCharacterClass.Forester:
+                case eCharacterClass.Mystic:
+                case eCharacterClass.Seer:
+                case eCharacterClass.Disciple:
+                    return "cloth";
+                default:
+                    return "generic";
+            }
+        }
+    }
 
     public class Combinable
     {
@@ -662,9 +811,8 @@ namespace DOL.spells
         /// Combination id to reference it in player list
         /// </summary>
         public string CombinationId { get; set; }
+        public bool AllowVersion { get; set; }
     }
 
 }
-
-
 

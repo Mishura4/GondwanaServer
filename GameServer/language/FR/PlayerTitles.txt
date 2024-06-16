@@ -1,5 +1,5 @@
-#All
-PlayerClass.GetTitle.none:		none
+# /Playerclasses
+PlayerClass.GetTitle.none:		Aucun
 
 PlayerClass.Mauler.GetTitle.50: Exalté de Laresh
 PlayerClass.Mauler.GetTitle.45: Cogneur
@@ -499,7 +499,6 @@ PlayerClass.Warden.GetTitle.15:		Gardien de la Forêt
 PlayerClass.Warden.GetTitle.10:		Gardien du Bois
 PlayerClass.Warden.GetTitle.5:		Gardien du Bosquet
 
-# TITLES
 
 # /Reliques
 Titles.Reliques.PorteurRelique:     Porteur de Reliques
@@ -515,10 +514,7 @@ Titles.Claim.Stronghold.StrongholdSoldier:  Assiégeant de Forts
 Titles.Deathblows.BattleEnforcer:   Combattant Redoutable
 Titles.Deathblows.BattleMaster:     Maître des Batailles
 
-
 # /Kills
-Titles.Kills.Albion.BaneOfAlbion:       Fléau d'Albion
-Titles.Kills.Albion.ScourgeOfAlbion:    Calamité d'Albion
 Titles.Kills.All.MasterAssassine:       Maître Assassin
 Titles.Kills.All.MasterEnforcer:        Maître Commandant
 Titles.Kills.All.MasterSoldier:         Maître Assaillant
@@ -527,17 +523,16 @@ Titles.Kills.Demon.DemonBane:       Menace des Démons
 Titles.Kills.Demon.DemonScourge:    Tueur de Démons
 Titles.Kills.Demon.DemonSlayer:     Chasseur de Démons
 Titles.Kills.Demon.DreadVanquisher: Terreur des Démons
-
 Titles.Kills.Dragon.DragonFoe:      Chasseur de Dragons
 Titles.Kills.Dragon.DragonScourge:  Menace des Dragons
 Titles.Kills.Dragon.DragonSlayer:   Tueur de Dragons
-
 Titles.Kills.Epic.EpicChallenger:   Chasseur de Légendes
 Titles.Kills.Epic.EpicVictor:       Donjons épiques
 
+Titles.Kills.Albion.BaneOfAlbion:       Fléau d'Albion
+Titles.Kills.Albion.ScourgeOfAlbion:    Calamité d'Albion
 Titles.Kills.Hibernia.BaneOfHibernia:       Fléau d'Hibernia
 Titles.Kills.Hibernia.ScourgeOfHibernia:    Calamité d'Hibernia
-
 Titles.Kills.Midgard.BaneOfMidgard:     Fléau de Midgard
 Titles.Kills.Midgard.ScourgeOfMidgard:  Calamité de Midgard
 
@@ -578,3 +573,45 @@ Titles.ML.Line5:    Nomade
 Titles.ML.Line6:    Agent de l'Ombre
 Titles.ML.Line7:    Seigneur des Orages
 Titles.ML.Line8:    Stratège
+
+# /Demonslayer
+Titles.Demonslayer.Level1:				Vainqueur de Drake
+Titles.Demonslayer.Level2:				Pourfendeur de Démons
+Titles.Demonslayer.Level3:				Broyeur de Golems
+Titles.Demonslayer.Level4:				Destructeur de Titans
+Titles.Demonslayer.Level5:				Pourfendeur de Béhémoth
+
+# /Trader
+Titles.Trader.Level1:					Initié du Commerce
+Titles.Trader.Level2:					Négociateur
+Titles.Trader.Level3:					Tycoon du Commerce
+Titles.Trader.Level4:					Stratège Commercial
+Titles.Trader.Level5:					Maître de la Guilde Marchande
+
+# /Thief
+Titles.Thief.Level1:					Voleur à la Main Leste
+Titles.Thief.Level2:					Ravisseur Silencieux
+Titles.Thief.Level3:					Grand Escroc
+Titles.Thief.Level4:					Pilleur de l'Ombre
+Titles.Thief.Level5:					Seigneur des Larcins
+
+# /Bountyhunter
+Titles.Bountyhunter.Level1:				Apprenti Chasseur de Primes
+Titles.Bountyhunter.Level2:				Dompteur de Hors-la-loi
+Titles.Bountyhunter.Level3:				Shérif
+Titles.Bountyhunter.Level4:				Terreur des Fugitifs
+Titles.Bountyhunter.Level5:				Baron de la Prime
+
+# /Wrath
+Titles.Wrath.Level1:					Jeune enragé
+Titles.Wrath.Level2:					Furieux Combattant
+Titles.Wrath.Level3:					Vengeur de la Colère
+Titles.Wrath.Level4:					Apogée de Fureur
+Titles.Wrath.Level5:					Mad Max
+
+# /Adventurer
+Titles.Adventurer.Level1:				Amateur de Découvertes
+Titles.Adventurer.Level2:				Vagabond Curieux
+Titles.Adventurer.Level3:				Voyageur de l'Avant-Garde
+Titles.Adventurer.Level4:				Aventurier Émérite
+Titles.Adventurer.Level5:				Explorateur Légendaire
