@@ -82,6 +82,7 @@ namespace DOL.Database
         private byte m_gender = 0;
         private List<string> m_removedByEventID;
         private string m_eventID;
+        private bool m_isBoss;
 
         public static readonly string DEFAULT_NPC_CLASSTYPE = "DOL.GS.GameNPC";
         #endregion Variables
@@ -114,7 +115,7 @@ namespace DOL.Database
             m_roamingRange = -1;
             m_gender = 0;
             m_removedByEventID = new List<string>();
-        }
+    }
 
         #region Properties
         /// <summary>
@@ -870,7 +871,6 @@ namespace DOL.Database
             }
         }
 
-
         [DataElement(AllowDbNull = true, Index = true)]
         public string EventID
         {
@@ -885,7 +885,22 @@ namespace DOL.Database
                 m_eventID = value;
             }
         }
-        #endregion Properties
+
+        [DataElement(AllowDbNull = false)]
+        public bool IsBoss
+        {
+            get
+            {
+                return m_isBoss;
+            }
+
+            set
+            {
+                Dirty = true;
+                m_isBoss = value;
+            }
+        }
+    #endregion Properties
     }
 }
 

@@ -2904,6 +2904,21 @@ namespace DOL.GS
             }
         }
 
+        public bool IsPlayerGreyCon(GamePlayer killer, GamePlayer target)
+        {
+            int killerLevel = killer.Level;
+            int targetLevel = target.Level;
+
+            if (killerLevel < GameLiving.NoXPForLevel.Length)
+            {
+                return targetLevel <= GameLiving.NoXPForLevel[killerLevel];
+            }
+            else
+            {
+                return killer.GetConLevel(target) <= -3;
+            }
+        }
+
         protected override void GainTension(AttackData ad)
         {
             if (ad.Attacker == null || MaxTension <= 0)
@@ -2911,9 +2926,7 @@ namespace DOL.GS
                 return;
             }
 
-            int level_difference = ad.Attacker.EffectiveLevel - this.EffectiveLevel;
-
-            if (level_difference <= -5)
+            if (ad.Attacker is GamePlayer attackerPlayer && IsPlayerGreyCon(attackerPlayer, this))
             {
                 return;
             }
@@ -2927,32 +2940,36 @@ namespace DOL.GS
                 }
             }
 
+            int conLevel = (int)GetConLevel(ad.Attacker as GameLiving);
             float tension;
             float server_rate;
+
             if (ad.Attacker is GamePlayer)
             {
-                tension = level_difference switch
+                tension = conLevel switch
                 {
-                    <= -2 => 20,
-                    <= 2 => 50,
-                    <= 6 => 100,
-                    <= 15 => 150,
-                    <= 30 => 200,
-                    > 30 => 250
+                    <= -3 => 0,
+                    <= -2 => 15,
+                    <= -1 => 35,
+                    <= 0 => 75,
+                    <= 1 => 100,
+                    <= 2 => 150,
+                    >= 3 => 200
                 };
 
                 server_rate = (float)Properties.PVP_TENSION_RATE;
             }
             else
             {
-                tension = level_difference switch
+                tension = conLevel switch
                 {
-                    <= -2 => 40,
-                    <= 2 => 100,
-                    <= 6 => 200,
-                    <= 15 => 300,
-                    <= 30 => 400,
-                    > 30 => 500
+                    <= -3 => 0,
+                    <= -2 => 30,
+                    <= -1 => 70,
+                    <= 0 => 150,
+                    <= 1 => 200,
+                    <= 2 => 300,
+                    >= 3 => 400
                 };
 
                 server_rate = (float)Properties.PVE_TENSION_RATE;
@@ -2970,7 +2987,38 @@ namespace DOL.GS
                 rate *= 1.10f;
             }
 
-            tension = (int)((server_rate * tension * ad.TensionRate * rate * CurrentZone.TensionRate) + 0.5f); // Round up
+            float guildBuffMultiplier = 1.0f;
+            if (Guild != null && Guild.BonusType == Guild.eBonusType.Tension)
+            {
+                double guildTensionBonus = Properties.GUILD_BUFF_TENSION;
+                int guildLevel = (int)Guild.GuildLevel;
+
+                if (guildLevel >= 8 && guildLevel <= 15)
+                {
+                    guildTensionBonus *= 1.5;
+                }
+                else if (guildLevel > 15)
+                {
+                    guildTensionBonus *= 2.0;
+                }
+
+                guildBuffMultiplier *= (float)(1.0 + guildTensionBonus * 0.01);
+            }
+
+            eArmorSlot hitLocation = ad.ArmorHitLocation;
+            float armorMultiplier = hitLocation switch
+            {
+                eArmorSlot.TORSO => 0.9f,
+                eArmorSlot.LEGS => 0.8f,
+                eArmorSlot.ARMS => 0.6f,
+                eArmorSlot.HEAD => 0.7f,
+                eArmorSlot.HAND => 0.4f,
+                eArmorSlot.FEET => 0.5f,
+                _ => 1.0f
+            };
+
+            tension *= armorMultiplier;
+            tension = (int)((server_rate * tension * ad.TensionRate * rate * CurrentZone.TensionRate * guildBuffMultiplier) + 0.5f); // Round up
 
             Tension += (int)tension;
         }
@@ -8321,26 +8369,35 @@ namespace DOL.GS
             {
                 if (!IsInRvR && !IsInPvP && Reputation < 0 && !IsInPvPArea() && !killerPlayer.IsInSafeArea())
                 {
-                    TaskManager.UpdateTaskProgress(killerPlayer, "OutlawPlayersSentToJail", 1);
+                    if (!IsPlayerGreyCon(killerPlayer, this))
+                    {
+                        TaskManager.UpdateTaskProgress(killerPlayer, "OutlawPlayersSentToJail", 1);
+                    }
                 }
                 else if (this.CurrentRegion.IsRvR || this.IsInPvP || IsInPvPArea())
                 {
                     if (!killerPlayer.IsInSafeArea())
                     {
-                        if (killerPlayer.Group != null)
+                        if (!IsPlayerGreyCon(killerPlayer, this))
                         {
-                            TaskManager.UpdateTaskProgress(killerPlayer, "KillEnemyPlayersGroup", 1);
-                        }
-                        else
-                        {
-                            TaskManager.UpdateTaskProgress(killerPlayer, "KillEnemyPlayersAlone", 1);
+                            if (killerPlayer.Group != null)
+                            {
+                                TaskManager.UpdateTaskProgress(killerPlayer, "KillEnemyPlayersGroup", 1);
+                            }
+                            else
+                            {
+                                TaskManager.UpdateTaskProgress(killerPlayer, "KillEnemyPlayersAlone", 1);
+                            }
                         }
                     }
                 }
 
                 if (killerPlayer.HasAdrenalineBuff())
                 {
-                    TaskManager.UpdateTaskProgress(killerPlayer, "EnemiesKilledInAdrenalineMode", 1);
+                    if (!IsPlayerGreyCon(killerPlayer, this))
+                    {
+                        TaskManager.UpdateTaskProgress(killerPlayer, "EnemiesKilledInAdrenalineMode", 1);
+                    }
                 }
 
                 killerPlayer.Out.SendMessage(LanguageMgr.GetTranslation(killerPlayer.Client.Account.Language, "GameObjects.GamePlayer.Die.YouKilled", killerPlayer.GetPersonalizedName(this)), eChatType.CT_PlayerDied, eChatLoc.CL_SystemWindow);
@@ -12927,14 +12984,14 @@ namespace DOL.GS
                     }
                     else
                     {
-                        //Add money only to picking player
+                        // Add money only to picking player
                         if (Guild != null && Guild.IsGuildDuesOn() && moneyObject.TotalCopper > 0 && Guild.GetGuildDuesPercent() > 0)
                         {
                             long moneyToGuild = moneyObject.TotalCopper * Guild.GetGuildDuesPercent() / 100;
                             if (Guild.GetGuildDuesPercent() != 100)
                             {
-                                AddMoney(Currency.Copper.Mint(moneyObject.TotalCopper));
-                                SendSystemMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.PickupObject.YouPickUp", Money.GetString(moneyObject.TotalCopper)));
+                                AddMoney(Currency.Copper.Mint(moneyObject.TotalCopper - moneyToGuild));
+                                SendSystemMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.PickupObject.YouPickUp", Money.GetString(moneyObject.TotalCopper - moneyToGuild)));
                             }
                             else
                             {
@@ -12942,6 +12999,7 @@ namespace DOL.GS
                             }
                             InventoryLogging.LogInventoryAction("", "(ground)", this, eInventoryActionType.Loot, moneyObject.TotalCopper);
                             Guild.SetGuildBank(this, moneyToGuild);
+                            Out.SendMessage(LanguageMgr.GetTranslation(Client, "GameObjects.GamePlayer.PickupObject.GuildDueTax", Money.GetString(moneyToGuild)), eChatType.CT_Loot, eChatLoc.CL_SystemWindow);
                         }
                         else
                         {

@@ -136,7 +136,8 @@ namespace DOL.GS.Commands
          "'/mob trigger remove <id>' Remove a trigger.",
          "'/mob trigger help' More info about '/mob trigger' command",
          "'/mob ownerid <id>' Sets and saves the OwnerID for this mob.",
-         "'/mob isRenaissance <true|false> - set Mob isRenaissance.",
+         "'/mob isrenaissance <true|false> - set Mob isRenaissance.",
+         "'/mob isboss <true|false> - set Mob isEpicBoss.",
          "'/mob ownerid <id>' Sets and saves the OwnerID for this mob.",
          "'/mob debug' enable/disable pathing debug mode"
         )]
@@ -286,6 +287,8 @@ namespace DOL.GS.Commands
                     case "trigger": trigger(client, targetMob, args); break;
                     case "isrenaissance":
                     case "isRenaissance": Renaissance(client, targetMob, args); break;
+                    case "isboss":
+                    case "IsBoss": SetIsBoss(client, targetMob, args); break;
                     case "debug": targetMob.DebugMode = !targetMob.DebugMode; break;
                     default:
                         DisplaySyntax(client);
@@ -325,6 +328,31 @@ namespace DOL.GS.Commands
             }
         }
 
+        private void SetIsBoss(GameClient client, GameNPC targetMob, string[] args)
+        {
+            if (args.Length < 3)
+            {
+                DisplaySyntax(client);
+            }
+            else
+            {
+                if (targetMob == null)
+                {
+                    client.Out.SendMessage("You must select a mob to set IsBoss.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    return;
+                }
+
+                if (!bool.TryParse(args[2], out bool isBoss))
+                {
+                    DisplaySyntax(client);
+                }
+                else
+                {
+                    targetMob.IsBoss = isBoss;
+                    client.Out.SendMessage(targetMob.Name + " is now IsEpicBoss: " + isBoss, eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                }
+            }
+        }
 
         private void create(GameClient client, string[] args)
         {
@@ -1260,6 +1288,8 @@ namespace DOL.GS.Commands
             info.Add(" + Class: " + targetMob.GetType().ToString());
             info.Add(" + Brain: " + (targetMob.Brain == null ? "(null)" : targetMob.Brain.GetType().ToString()));
             info.Add(" ");
+            if (targetMob.IsBoss)
+                info.Add(" + Is Epic Boss: True");
             info.Add(" + Realm: " + GlobalConstants.RealmToName(targetMob.Realm));
 
             if (targetMob.Faction != null)
@@ -2662,6 +2692,8 @@ namespace DOL.GS.Commands
 
             mob.PackageID = targetMob.PackageID;
             mob.OwnerID = targetMob.OwnerID;
+            mob.IsRenaissance = targetMob.IsRenaissance;
+            mob.IsBoss = targetMob.IsBoss;
 
             mob.CustomCopy(targetMob);
 

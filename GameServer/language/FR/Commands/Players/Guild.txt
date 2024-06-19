@@ -59,7 +59,6 @@ Commands.Players.Guild.DemotedHigherThanPlayer:   Vous pouvez seulement rétrogr
 Commands.Players.Guild.Demoted.Other:			    {0} a été rétrogradé(e) au rang {2} par {1}.
 Commands.Players.Guild.Demoted.Self:			    Vous avez été rétrogradé(e) au rang {0}.
 Commands.Players.Guild.DepositAmount:			Vous déposez {0} dans la caisse de guilde.
-Commands.Players.Guild.DepositTaxedAmount:			Votre taxe de {0} va dans la caisse de guilde.
 Commands.Players.Guild.DepositFull:			    La caisse de guilde semble être pleine.
 Commands.Players.Guild.DepositInvalid:			Ce n'est pas un dépôt valide.
 Commands.Players.Guild.DepositTooMuch:		    Vous n'avez pas assez d'argent pour le faire !
@@ -208,10 +207,12 @@ Commands.Players.Guild.MemberRemoved:			{0} a retiré {1} de la guilde.
 Commands.Players.Guild.MeritPointReq:			Votre guilde a besoin de {0} points de mérite supplémentaires pour activer un buff de guilde ! (Points de mérite total nécessaires à cette action : {1})
 Commands.Players.Guild.Buff.Activate.RP:        Etes-vous sûr de vouloir activer un buff de guilde RP pour {0} points de mérite ?
 Commands.Players.Guild.Buff.NotAvailable:       Ce type de buff n'est pas disponible.
-Commands.Players.Guild.Buff.Buy:                Etes-vous sûr de vouloir activer un buff de guilde BP pour {0} points de mérite ?
-Commands.Players.Guild.Buff.Activate.Crafting:  Etes-vous sûr de vouloir activer un buff de guilde Hâte de Craft pour {0} points de mérite ?
-Commands.Players.Guild.Buff.Activate.XP:        Etes-vous sûr de vouloir activer un buff de guilde XP pour {0} points de mérite ?
-Commands.Players.Guild.Buff.Activate.Artifact:  Etes-vous sûr de vouloir activer un buff de guilde Artefact XP pour {0} points de mérite ?
+Commands.Players.Guild.Buff.Buy:                Etes-vous sûr de vouloir activer un buff de guilde "Primes de Royaume" (BP) pour {0} points de mérite ?
+Commands.Players.Guild.Buff.Activate.Crafting:  Etes-vous sûr de vouloir activer un buff de guilde "Hâte de Craft" pour {0} points de mérite ?
+Commands.Players.Guild.Buff.Activate.XP:        Etes-vous sûr de vouloir activer un buff de guilde "Experience PvE" pour {0} points de mérite ?
+Commands.Players.Guild.Buff.Activate.Artifact:  Etes-vous sûr de vouloir activer un buff de guilde "Experience Artefact" pour {0} points de mérite ?
+Commands.Players.Guild.Buff.Activate.Tension:	Etes-vous sûr de vouloir activer un buff de guilde "Gain de Tension" pour {0} points de mérite ?
+Commands.Players.Guild.Buff.Activate.Coin:		Etes-vous sûr de vouloir activer un buff de guilde "Gain de Butin" pour {0} points de mérite ?
 Commands.Players.Guild.Buff.NotImplemented:     Ce buff n'a pas été implémenté.
 Commands.Players.Guild.MotdSet:					Vous changez le message du jour de la guilde.
 Commands.Players.Guild.NoKeep:					Vous n'avez pas de fort actuellement pour pouvoir utiliser cette commande.

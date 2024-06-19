@@ -162,7 +162,7 @@ namespace DOL.GS
                     AssignTitle(player, new DemonslayerTitleLevel1());
                     titleKey = "Titles.Demonslayer.Level1";
                     break;
-                case "TaskToken_Demonslayer_lv2":
+                case "TaskToken_Demon_Slayer_lv2":
                     AssignTitle(player, new DemonslayerTitleLevel2());
                     titleKey = "Titles.Demonslayer.Level2";
                     break;

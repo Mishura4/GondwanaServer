@@ -1,5 +1,6 @@
 GameNPC.DropLoot.AdditionalMoney:			You find an additional {0} thanks to your realm owning outposts!
-GameNPC.DropLoot.ItemAdditionalMoney:		You get an additional {0} thanks to your equipment!
+GameNPC.DropLoot.ItemAdditionalMoney:		You get an additional {0} thanks to your Mythical Coin bonus from your equipment!
+GameNPC.DropLoot.GuildBuffMoney:			You get an additional {0} thanks to your Guild Coin buff!
 GameNPC.DropLoot.Drops:						{0} drops {1}.
 GameNPC.GetAggroLevelString.Aggressive1:	aggressive
 GameNPC.GetAggroLevelString.Aggressive2:	Aggressive

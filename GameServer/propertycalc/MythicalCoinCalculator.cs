@@ -30,11 +30,13 @@ namespace DOL.GS.PropertyCalc
     {
         public override int CalcValue(GameLiving living, eProperty property)
         {
+            int value = living.BuffBonusCategory4[eProperty.MythicalCoin];
             if (living is GamePlayer)
             {
-                return living.ItemBonus[(int)property];
+                value += Math.Min(50, living.ItemBonus[(int)property]); // cap 50% from items
             }
-            return 0;
+            value -= living.DebuffCategory[eProperty.MythicalCoin];
+            return Math.Max(-100, value);
         }
     }
 }

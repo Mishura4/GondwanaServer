@@ -248,6 +248,7 @@ GameObjects.GamePlayer.PickupObject.TooFarFromBoat:			Vous êtes trop loin du ba
 GameObjects.GamePlayer.PickupObject.YouGet:					Vous ramassez {0} et le mettez dans votre sac.
 GameObjects.GamePlayer.PickupObject.YouPickUp:				Vous ramassez {0}.
 GameObjects.GamePlayer.PickupObject.YourLootShare:			votre part du butin est de {0}.
+GameObjects.GamePlayer.PickupObject.GuildDueTax:			Votre taxe de {0} va dans la caisse de guilde.
 
 GameObjects.GamePlayer.Pray.AlreadyPraying:				Vous priez déjà.
 GameObjects.GamePlayer.Pray.Begin:						Vous commencez vos prières.

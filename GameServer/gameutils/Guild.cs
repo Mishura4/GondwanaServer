@@ -618,8 +618,6 @@ namespace DOL.GS
                 return;
             }
 
-            donating.Out.SendMessage(LanguageMgr.GetTranslation(donating.Client, "Commands.Players.Guild.DepositAmount", Money.GetString(long.Parse(amount.ToString()))), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-
             donating.Guild.UpdateGuildWindow();
             m_DBguild.Bank += amount;
 

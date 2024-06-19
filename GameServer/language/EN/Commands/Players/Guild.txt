@@ -59,7 +59,6 @@ Commands.Players.Guild.DemotedHigherThanPlayer:   You can only downgrade grades 
 Commands.Players.Guild.Demoted.Other:			    {0} was demoted to rank {2} by {1}.
 Commands.Players.Guild.Demoted.Self:			    You have been demoted to rank {0}.
 Commands.Players.Guild.DepositAmount:			You deposit {0} in the guild bank.
-Commands.Players.Guild.DepositTaxedAmount:		{0} has been deposited to the guild's bank account as taxed income.
 Commands.Players.Guild.DepositFull:			    Guild bank seems to be full.
 Commands.Players.Guild.DepositInvalid:			This is not a valid deposit.
 Commands.Players.Guild.DepositTooMuch:		    You don't have enough money to make the deposit!
@@ -212,6 +211,8 @@ Commands.Players.Guild.Buff.Buy:                Are you sure you want to activat
 Commands.Players.Guild.Buff.Activate.Crafting:  Are you sure you want to activate a Crafting speed guild buff for {0} merit points?
 Commands.Players.Guild.Buff.Activate.XP:        Are you sure you want to activate an XP guild buff for {0} merit points?
 Commands.Players.Guild.Buff.Activate.Artifact:  Are you sure you want to activate an Artifact XP guild buff for {0} merit points?
+Commands.Players.Guild.Buff.Activate.Tension:	Are you sure you want to activate a Tension guild buff for {0} merit points?
+Commands.Players.Guild.Buff.Activate.Coin:		Are you sure you want to activate a Coin guild buff for {0} merit points?
 Commands.Players.Guild.Buff.NotImplemented:     This buff has not been implemented
 Commands.Players.Guild.MotdSet:					You change the guild's Message of th Day.
 Commands.Players.Guild.NoKeep:					You currently do not have a keep to use this command.

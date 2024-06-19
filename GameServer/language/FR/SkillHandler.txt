@@ -245,7 +245,7 @@ SkillBase.RegisterPropertyNames.MythicalMaxSpeed: 		Mythical Max Speed
 SkillBase.RegisterPropertyNames.MythicalSpellReflect: 	Bonus Mythique de Renvoi de Sort
 SkillBase.RegisterPropertyNames.MythicalSafeFall: 		Bonus Mythique de résistance aux Chutes
 SkillBase.RegisterPropertyNames.MythicalDiscumbering:	Bonus Mythique Encombrement
-SkillBase.RegisterPropertyNames.MythicalCoin:			Bonus Mythique Gains en Or
+SkillBase.RegisterPropertyNames.MythicalCoin:			Bonus Mythique de Butin
 SkillBase.RegisterPropertyNames.SpellLevel:				Bonus de niveau des Sorts
 SkillBase.RegisterPropertyNames.Conversion:				Conversion
 SkillBase.RegisterPropertyNames.ExtraHp:				Bonus Mythique de points de vie

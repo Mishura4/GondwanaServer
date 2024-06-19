@@ -54,6 +54,7 @@ using log4net;
 using Vector3 = System.Numerics.Vector3;
 using AmteScripts.Managers;
 using DOL.GS.Commands;
+using System.Reflection.Metadata;
 
 namespace DOL.GS
 {
@@ -313,6 +314,12 @@ namespace DOL.GS
         }
 
         public bool IsRenaissance
+        {
+            get;
+            set;
+        }
+
+        public bool IsBoss
         {
             get;
             set;
@@ -2143,6 +2150,7 @@ namespace DOL.GS
             m_packageID = dbMob.PackageID;
             IsRenaissance = dbMob.IsRenaissance;
             EventID = dbMob.EventID;
+            IsBoss = dbMob.IsBoss;
 
             ModelDb = dbMob.Model;
             RaceDb = dbMob.Race;
@@ -2341,6 +2349,7 @@ namespace DOL.GS
             mob.Level = Level;
             mob.IsRenaissance = IsRenaissance;
             mob.EventID = EventID;
+            mob.IsBoss = IsBoss;
 
             // Stats
             mob.Constitution = Constitution;
@@ -4507,24 +4516,6 @@ namespace DOL.GS
             return EffectList.GetOfType<AdrenalineSpellEffect>() != null;
         }
 
-        public int GetConLevel(GameLiving target)
-        {
-            int levelDiff = target.Level - this.Level;
-            if (levelDiff <= -10)
-                return -3; // Grey
-            if (levelDiff <= -5)
-                return -2; // Green
-            if (levelDiff <= -1)
-                return -1; // Blue
-            if (levelDiff <= 0)
-                return 0;  // Yellow
-            if (levelDiff <= 4)
-                return 1;  // Orange
-            if (levelDiff <= 9)
-                return 2;  // Red
-            return 3;      // Purple
-        }
-
         private void IncrementTaskPoints(GamePlayer killerPlayer)
         {
             if (killerPlayer.IsInSafeArea())
@@ -4533,8 +4524,7 @@ namespace DOL.GS
             if (Brain is IControlledBrain)
                 return;
 
-            int conLevel = GetConLevel(killerPlayer);
-            if (conLevel <= -3)
+            if (IsObjectGreyCon(killerPlayer, this))
                 return;
 
             var currentTerritory = TerritoryManager.GetCurrentTerritory(this);
@@ -4589,6 +4579,11 @@ namespace DOL.GS
                 }
             }
             IncrementBodyTypeTaskPoints(killerPlayer);
+
+            if (IsBoss)
+            {
+                TaskManager.UpdateTaskProgress(killerPlayer, "EpicBossesSlaughtered", 1);
+            }
 
             if (killerPlayer.HasAdrenalineBuff())
             {
@@ -4659,6 +4654,21 @@ namespace DOL.GS
         private bool IsOutdoorCreature()
         {
             return CurrentZone != null && !CurrentZone.IsDungeon;
+        }
+
+        private bool IsObjectGreyCon(GamePlayer player, GameNPC mob)
+        {
+            int playerLevel = player.Level;
+            int mobLevel = mob.Level;
+
+            if (playerLevel < GameLiving.NoXPForLevel.Length)
+            {
+                return mobLevel <= GameLiving.NoXPForLevel[playerLevel];
+            }
+            else
+            {
+                return player.GetConLevel(mob) <= -3;
+            }
         }
 
         /// <summary>
@@ -5099,12 +5109,11 @@ namespace DOL.GS
                 if (GameMoney.IsItemMoney(lootTemplate.Name))
                 {
                     long value = lootTemplate.Price;
-                    //GamePlayer killerPlayer = killer as GamePlayer;
+                    GamePlayer killerPlayer = killer as GamePlayer;
 
-                    //[StephenxPimentel] - Zone Bonus XP Support
-                    if (ServerProperties.Properties.ENABLE_ZONE_BONUSES)
+                    // Zone Bonus XP Support
+                    if (Properties.ENABLE_ZONE_BONUSES)
                     {
-                        GamePlayer killerPlayer = killer as GamePlayer;
                         if (killer is GameNPC)
                         {
                             if (killer is GameNPC && ((killer as GameNPC).Brain is IControlledBrain))
@@ -5122,30 +5131,47 @@ namespace DOL.GS
                             InventoryLogging.LogInventoryAction(this, killerPlayer, eInventoryActionType.Loot, amount);
                         }
                     }
+
                     if (Keeps.KeepBonusMgr.RealmHasBonus(DOL.GS.Keeps.eKeepBonusType.Coin_Drop_5, (eRealm)killer.Realm))
                         value += (value / 100) * 5;
                     else if (Keeps.KeepBonusMgr.RealmHasBonus(DOL.GS.Keeps.eKeepBonusType.Coin_Drop_3, (eRealm)killer.Realm))
                         value += (value / 100) * 3;
 
-                    //this will need to be changed when the ML for increasing money is added
+                    // this will need to be changed when the ML for increasing money is added
                     if (value != lootTemplate.Price)
                     {
-                        GamePlayer killerPlayer = killer as GamePlayer;
                         if (killerPlayer != null)
                             killerPlayer.Out.SendMessage(LanguageMgr.GetTranslation(killerPlayer.Client, "GameNPC.DropLoot.AdditionalMoney", Money.GetString(value - lootTemplate.Price)), eChatType.CT_Loot, eChatLoc.CL_SystemWindow);
                     }
-                    //Mythical Coin bonus property (Can be used for any equipped item, bonus 235)
-                    if (killer is GamePlayer)
-                    {
-                        GamePlayer killerPlayer = killer as GamePlayer;
-                        if (killerPlayer.GetModified(eProperty.MythicalCoin) > 0)
-                        {
-                            ((WorldInventoryItem)loot).Item.Count = ((WorldInventoryItem)loot).Item.PackSize;
-                            value += (value * killerPlayer.GetModified(eProperty.MythicalCoin)) / 100;
-                            killerPlayer.Out.SendMessage(LanguageMgr.GetTranslation(killerPlayer.Client,
-                                                                                    "GameNPC.DropLoot.ItemAdditionalMoney", Money.GetString(value - lootTemplate.Price)), eChatType.CT_Loot, eChatLoc.CL_SystemWindow);
 
+                    // Mythical Coin bonus property (Can be used for any equipped item, bonus 235)
+                    if (killerPlayer != null && killerPlayer.GetModified(eProperty.MythicalCoin) > 0)
+                    {
+                        int mythicalCoinBonus = killerPlayer.GetModified(eProperty.MythicalCoin);
+                        long mythicalCoinValue = (value * mythicalCoinBonus) / 100;
+                        value += mythicalCoinValue;
+                        killerPlayer.Out.SendMessage(LanguageMgr.GetTranslation(killerPlayer.Client, "GameNPC.DropLoot.ItemAdditionalMoney", Money.GetString(mythicalCoinValue)), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
+                    }
+
+                    // Guild Coin Buff
+                    if (killerPlayer != null && killerPlayer.Guild != null && killerPlayer.Guild.BonusType == Guild.eBonusType.Coin)
+                    {
+                        double guildBuffBonus = Properties.GUILD_BUFF_COIN;
+                        int guildLevel = (int)killerPlayer.Guild.GuildLevel;
+
+                        if (guildLevel >= 8 && guildLevel <= 15)
+                        {
+                            guildBuffBonus *= 1.5;
                         }
+                        else if (guildLevel > 15)
+                        {
+                            guildBuffBonus *= 2.0;
+                        }
+
+                        double guildBuffMultiplier = guildBuffBonus / 100.0;
+                        long guildBuffValue = (long)(value * guildBuffMultiplier);
+                        value += guildBuffValue;
+                        killerPlayer.Out.SendMessage(LanguageMgr.GetTranslation(killerPlayer.Client, "GameNPC.DropLoot.GuildBuffMoney", Money.GetString(guildBuffValue)), eChatType.CT_Loot, eChatLoc.CL_SystemWindow);
                     }
 
                     loot = new GameMoney(value, this);
