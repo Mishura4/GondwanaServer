@@ -46,9 +46,35 @@ namespace DOL.Database
         /// </summary>
         protected ushort m_regionID = 0;
         /// <summary>
+        /// Trigger Mob Model
+        /// </summary>
+        protected string m_mobModel = string.Empty;
+        /// <summary>
+        /// Trigger Mob Bodytype
+        /// </summary>
+        protected string m_mobBodyType = string.Empty;
+        /// <summary>
+        /// Trigger Mob Race
+        /// </summary>
+        protected string m_mobRace = string.Empty;
+        /// <summary>
         /// Class of the Loot Generator
         /// </summary>
         protected string m_lootGeneratorClass = string.Empty;
+        /// <summary>
+        /// IsRenaissance
+        /// </summary>
+        protected bool m_isRenaissance = false;
+        /// <summary>
+        /// IsGoodReput
+        /// </summary>
+        protected bool m_isGoodReput = false;
+        /// <summary>
+        /// IsBadReput
+        /// </summary>
+        protected bool m_isBadReput = false;
+        protected bool m_isBoss = false;
+        protected bool m_condMustBeSetTogether = false;
         /// <summary>
         /// Exclusive Priority
         /// </summary>
@@ -114,6 +140,94 @@ namespace DOL.Database
             {
                 Dirty = true;
                 m_regionID = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = true, Unique = false)]
+        public string MobModel
+        {
+            get { return m_mobModel; }
+            set
+            {
+                Dirty = true;
+                m_mobModel = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = true, Unique = false)]
+        public string MobBodyType
+        {
+            get { return m_mobBodyType; }
+            set
+            {
+                Dirty = true;
+                m_mobBodyType = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = true, Unique = false)]
+        public string MobRace
+        {
+            get { return m_mobRace; }
+            set
+            {
+                Dirty = true;
+                m_mobRace = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false, Unique = false)]
+        public bool IsRenaissance
+        {
+            get { return m_isRenaissance; }
+            set
+            {
+                Dirty = true;
+                m_isRenaissance = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false, Unique = false)]
+        public bool IsGoodReput
+        {
+            get { return m_isGoodReput; }
+            set
+            {
+                Dirty = true;
+                m_isGoodReput = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false, Unique = false)]
+        public bool IsBadReput
+        {
+            get { return m_isBadReput; }
+            set
+            {
+                Dirty = true;
+                m_isBadReput = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public bool IsBoss
+        {
+            get { return m_isBoss; }
+            set
+            {
+                Dirty = true;
+                m_isBoss = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public bool CondMustBeSetTogether
+        {
+            get { return m_condMustBeSetTogether; }
+            set
+            {
+                Dirty = true;
+                m_condMustBeSetTogether = value;
             }
         }
 

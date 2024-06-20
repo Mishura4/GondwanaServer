@@ -31,7 +31,7 @@ Tasks.KillUndeadCreatures: Tuez des créatures mortes-vivantes
 Tasks.TurnInPvETaskToken: Jeton de Tâche PvE
 Tasks.SuccessfulItemCombinations: Combinaisons d'objets réussies
 Tasks.MasteredCrafts: Objets fabriqués via l'Artisanat
-Tasks.MasterpieceCrafted: Chef-d'œuvre fabriqué
+Tasks.MasterpieceCrafted: Chef-d'oeuvre fabriqué
 Tasks.TurnInCraftingTaskToken: Jeton de Tâche d'Artisanat
 Tasks.EpicBossesSlaughtered: Boss épiques abattus
 Tasks.ItemsSoldToPlayers: Transactions réussies via le marché
@@ -50,7 +50,7 @@ Tasks.KillTerritoryGuardsLog: Tuez des gardes de territoires : {0}/{1}
 Tasks.KillTerritoryBossLog: Capture de territoires : {0}/{1}
 Tasks.SuccessfulItemCombinationsLog: Combinaisons d'objets réussies : {0}/{1}
 Tasks.MasteredCraftsLog: Objets fabriqués via l'Artisanat : {0}/{1}
-Tasks.MasterpieceCraftedLog: Chef-d'œuvre fabriqué : {0}/{1}
+Tasks.MasterpieceCraftedLog: Chef-d'oeuvre fabriqué : {0}/{1}
 Tasks.EpicBossesSlaughteredLog: Boss épiques abattus : {0}/{1}
 Tasks.ItemsSoldToPlayersLog: Transactions réussies via le marché : {0}/{1}
 Tasks.SuccessfulPvPTheftsLog: Vols réussis contre des joueurs : {0}/{1}

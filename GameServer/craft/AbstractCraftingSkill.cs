@@ -561,7 +561,7 @@ namespace DOL.GS
 
                 if (recipe.IsForUniqueProduct && newItem.Quality == 100)
                 {
-                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AbstractCraftingSkill.BuildCraftedItem.Masterpiece"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AbstractCraftingSkill.BuildCraftedItem.Masterpiece"), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
                     player.Out.SendPlaySound(eSoundType.Craft, 0x04);
                     if (con > -3)
                     {

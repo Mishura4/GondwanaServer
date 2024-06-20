@@ -23,6 +23,7 @@ using System.Reflection;
 using DOL.Database;
 using log4net;
 using System.Collections.Generic;
+using System.Numerics;
 
 namespace DOL.GS
 {
@@ -66,6 +67,41 @@ namespace DOL.GS
         // /// List of Lootgenerators related by mobfaction
         // /// </summary>
         static readonly HybridDictionary m_mobFactionGenerators = new HybridDictionary();
+
+        /// <summary>
+        /// List of Lootgenerators related by mobmodel
+        /// </summary>
+        static readonly HybridDictionary m_mobModelGenerators = new HybridDictionary();
+
+        /// <summary>
+        /// List of Lootgenerators related by mobbodytype
+        /// </summary>
+        static readonly HybridDictionary m_mobBodyTypeGenerators = new HybridDictionary();
+
+        /// <summary>
+        /// List of Lootgenerators related by mobrace
+        /// </summary>
+        static readonly HybridDictionary m_mobRaceGenerators = new HybridDictionary();
+
+        /// <summary>
+        /// List of Lootgenerators related by isRenaissance
+        /// </summary>
+        static readonly HybridDictionary m_isRenaissanceGenerators = new HybridDictionary();
+
+        /// <summary>
+        /// List of Lootgenerators related by isGoodReput
+        /// </summary>
+        static readonly HybridDictionary m_isGoodReputGenerators = new HybridDictionary();
+
+        /// <summary>
+        /// List of Lootgenerators related by isBadReput
+        /// </summary>
+        static readonly HybridDictionary m_isBadReputGenerators = new HybridDictionary();
+
+        /// <summary>
+        /// List of Lootgenerators related by isBoss
+        /// </summary>
+        static readonly HybridDictionary m_isBossGenerators = new HybridDictionary();
 
         /// <summary>
         /// Initializes the LootMgr. This function must be called
@@ -117,7 +153,7 @@ namespace DOL.GS
 
                         PutGeneratorInCache(dbGenerator, generator);
                     }
-                    RegisterLootGenerator(generator, dbGenerator.MobName, dbGenerator.MobGuild, dbGenerator.MobFaction, dbGenerator.RegionID);
+                    RegisterLootGenerator(generator, dbGenerator.MobName, dbGenerator.MobGuild, dbGenerator.MobFaction, dbGenerator.RegionID, dbGenerator.MobModel, dbGenerator.MobBodyType, dbGenerator.MobRace, dbGenerator.IsRenaissance, dbGenerator.IsGoodReput, dbGenerator.IsBadReput, dbGenerator.IsBoss, dbGenerator.CondMustBeSetTogether);
                 }
             }
             if (log.IsDebugEnabled)
@@ -131,7 +167,7 @@ namespace DOL.GS
             if (m_globalGenerators.Count == 0 && m_mobNameGenerators.Count == 0 && m_globalGenerators.Count == 0)
             {
                 ILootGenerator baseGenerator = new LootGeneratorMoney();
-                RegisterLootGenerator(baseGenerator, null, null, null, 0);
+                RegisterLootGenerator(baseGenerator, null, null, null, 0, null, null, null, false, false, false, false, false);
                 if (log.IsInfoEnabled)
                     log.Info("No LootGenerator found, adding LootGeneratorMoney for all mobs as default.");
             }
@@ -167,7 +203,7 @@ namespace DOL.GS
 
         public static void UnRegisterLootGenerator(ILootGenerator generator, string mobname, string mobguild, string mobfaction)
         {
-            UnRegisterLootGenerator(generator, mobname, mobguild, mobfaction, 0);
+            UnRegisterLootGenerator(generator, mobname, mobguild, mobfaction, 0, null, null, null, false, false, false, false, false);
         }
 
         /// <summary>
@@ -177,7 +213,15 @@ namespace DOL.GS
         /// <param name="mobname"></param>
         /// <param name="mobguild"></param>
         /// <param name="mobfaction"></param>
-        public static void UnRegisterLootGenerator(ILootGenerator generator, string mobname, string mobguild, string mobfaction, int mobregion)
+        /// <param name="mobmodel"></param>
+        /// <param name="mobbodytype"></param>
+        /// <param name="mobrace"></param>
+        /// <param name="isRenaissance"></param>
+        /// <param name="isGoodReput"></param>
+        /// <param name="isBadReput"></param>
+        /// <param name="isBoss"></param>
+        /// <param name="condMustBeSetTogether"></param>
+        public static void UnRegisterLootGenerator(ILootGenerator generator, string mobname, string mobguild, string mobfaction, int mobregion, string mobmodel, string mobbodytype, string mobrace, bool isRenaissance, bool isGoodReput, bool isBadReput, bool isBoss, bool condMustBeSetTogether)
         {
             if (generator == null)
                 return;
@@ -271,6 +315,108 @@ namespace DOL.GS
                 }
             }
 
+            if (!Util.IsEmpty(mobmodel))
+            {
+                try
+                {
+                    List<string> mobModels = Util.SplitCSV(mobmodel);
+                    foreach (string model in mobModels)
+                    {
+                        if ((IList)m_mobModelGenerators[model] != null)
+                        {
+                            ((IList)m_mobModelGenerators[model]).Remove(generator);
+                        }
+                    }
+                }
+                catch
+                {
+                    if (log.IsDebugEnabled)
+                    {
+                        log.Debug("Could not Parse mobModels for Removing LootGenerator : " + generator.GetType().FullName);
+                    }
+                }
+            }
+
+            if (!Util.IsEmpty(mobbodytype))
+            {
+                try
+                {
+                    // Parse CSV
+                    List<string> mobBodyTypes = Util.SplitCSV(mobbodytype);
+
+                    foreach (string bodytype in mobBodyTypes)
+                    {
+                        if ((IList)m_mobBodyTypeGenerators[bodytype] != null)
+                        {
+                            ((IList)m_mobBodyTypeGenerators[bodytype]).Remove(generator);
+                        }
+                    }
+                }
+                catch
+                {
+                    if (log.IsDebugEnabled)
+                    {
+                        log.Debug("Could not Parse mobBodyTypes for Removing LootGenerator : " + generator.GetType().FullName);
+                    }
+                }
+            }
+
+            if (!Util.IsEmpty(mobrace))
+            {
+                try
+                {
+                    // Parse CSV
+                    List<string> mobRaces = Util.SplitCSV(mobrace);
+
+                    foreach (string race in mobRaces)
+                    {
+                        if ((IList)m_mobRaceGenerators[race] != null)
+                        {
+                            ((IList)m_mobRaceGenerators[race]).Remove(generator);
+                        }
+                    }
+                }
+                catch
+                {
+                    if (log.IsDebugEnabled)
+                    {
+                        log.Debug("Could not Parse mobRaces for Removing LootGenerator : " + generator.GetType().FullName);
+                    }
+                }
+            }
+
+            if (isRenaissance)
+            {
+                if ((IList)m_isRenaissanceGenerators[isRenaissance.ToString()] != null)
+                {
+                    ((IList)m_isRenaissanceGenerators[isRenaissance.ToString()]).Remove(generator);
+                }
+            }
+
+            if (isGoodReput)
+            {
+                if ((IList)m_isGoodReputGenerators[isGoodReput.ToString()] != null)
+                {
+                    ((IList)m_isGoodReputGenerators[isGoodReput.ToString()]).Remove(generator);
+                }
+            }
+
+            if (isBadReput)
+            {
+                if ((IList)m_isBadReputGenerators[isBadReput.ToString()] != null)
+                {
+                    ((IList)m_isBadReputGenerators[isBadReput.ToString()]).Remove(generator);
+                }
+            }
+
+            if (isBoss)
+            {
+                if ((IList)m_isBossGenerators[isBoss.ToString()] != null)
+                {
+                    ((IList)m_isBossGenerators[isBoss.ToString()]).Remove(generator);
+                }
+            }
+
             // Loot Generator Region Indexed
             if (mobregion > 0)
             {
@@ -281,7 +427,7 @@ namespace DOL.GS
                 }
             }
 
-            if (Util.IsEmpty(mobname) && Util.IsEmpty(mobguild) && Util.IsEmpty(mobfaction) && mobregion == 0)
+            if (Util.IsEmpty(mobname) && Util.IsEmpty(mobguild) && Util.IsEmpty(mobfaction) && Util.IsEmpty(mobmodel) && Util.IsEmpty(mobbodytype) && Util.IsEmpty(mobrace) && !isRenaissance && !isGoodReput && !isBadReput && !isBoss && mobregion == 0)
             {
                 m_globalGenerators.Remove(generator);
             }
@@ -297,7 +443,15 @@ namespace DOL.GS
         /// <param name="mobguild"></param>
         /// <param name="mobfaction"></param>
         /// <param name="mobregion"></param>
-        public static void RegisterLootGenerator(ILootGenerator generator, string mobname, string mobguild, string mobfaction, int mobregion)
+        /// <param name="mobmodel"></param>
+        /// <param name="mobbodytype"></param>
+        /// <param name="mobrace"></param>
+        /// <param name="isRenaissance"></param>
+        /// <param name="isGoodReput"></param>
+        /// <param name="isBadReput"></param>
+        /// <param name="isBoss"></param>
+        /// <param name="condMustBeSetTogether"></param>
+        public static void RegisterLootGenerator(ILootGenerator generator, string mobname, string mobguild, string mobfaction, int mobregion, string mobmodel, string mobbodytype, string mobrace, bool isRenaissance, bool isGoodReput, bool isBadReput, bool isBoss, bool condMustBeSetTogether)
         {
             if (generator == null)
                 return;
@@ -389,6 +543,115 @@ namespace DOL.GS
                 }
             }
 
+            if (!Util.IsEmpty(mobmodel))
+            {
+                try
+                {
+                    List<string> mobModels = Util.SplitCSV(mobmodel);
+                    foreach (string model in mobModels)
+                    {
+                        if ((IList)m_mobModelGenerators[model] == null)
+                        {
+                            m_mobModelGenerators[model] = new ArrayList();
+                        }
+                        ((IList)m_mobModelGenerators[model]).Add(generator);
+                    }
+                }
+                catch
+                {
+                    if (log.IsDebugEnabled)
+                    {
+                        log.Debug("Could not Parse mobModels for Registering LootGenerator : " + generator.GetType().FullName);
+                    }
+                }
+            }
+
+            if (!Util.IsEmpty(mobbodytype))
+            {
+                // Parse CSV
+                try
+                {
+                    List<string> mobBodyTypes = Util.SplitCSV(mobbodytype);
+
+                    foreach (string bodytype in mobBodyTypes)
+                    {
+                        if ((IList)m_mobBodyTypeGenerators[bodytype] == null)
+                        {
+                            m_mobBodyTypeGenerators[bodytype] = new ArrayList();
+                        }
+                        ((IList)m_mobBodyTypeGenerators[bodytype]).Add(generator);
+                    }
+                }
+                catch
+                {
+                    if (log.IsDebugEnabled)
+                    {
+                        log.Debug("Could not Parse mobBodyTypes for Registering LootGenerator : " + generator.GetType().FullName);
+                    }
+                }
+            }
+
+            if (!Util.IsEmpty(mobrace))
+            {
+                // Parse CSV
+                try
+                {
+                    List<string> mobRaces = Util.SplitCSV(mobrace);
+
+                    foreach (string race in mobRaces)
+                    {
+                        if ((IList)m_mobRaceGenerators[race] == null)
+                        {
+                            m_mobRaceGenerators[race] = new ArrayList();
+                        }
+                        ((IList)m_mobRaceGenerators[race]).Add(generator);
+                    }
+                }
+                catch
+                {
+                    if (log.IsDebugEnabled)
+                    {
+                        log.Debug("Could not Parse mobRaces for Registering LootGenerator : " + generator.GetType().FullName);
+                    }
+                }
+            }
+
+            if (isRenaissance)
+            {
+                if ((IList)m_isRenaissanceGenerators[isRenaissance.ToString()] == null)
+                {
+                    m_isRenaissanceGenerators[isRenaissance.ToString()] = new ArrayList();
+                }
+                ((IList)m_isRenaissanceGenerators[isRenaissance.ToString()]).Add(generator);
+            }
+
+            if (isGoodReput)
+            {
+                if ((IList)m_isGoodReputGenerators[isGoodReput.ToString()] == null)
+                {
+                    m_isGoodReputGenerators[isGoodReput.ToString()] = new ArrayList();
+                }
+                ((IList)m_isGoodReputGenerators[isGoodReput.ToString()]).Add(generator);
+            }
+
+            if (isBadReput)
+            {
+                if ((IList)m_isBadReputGenerators[isBadReput.ToString()] == null)
+                {
+                    m_isBadReputGenerators[isBadReput.ToString()] = new ArrayList();
+                }
+                ((IList)m_isBadReputGenerators[isBadReput.ToString()]).Add(generator);
+            }
+
+            if (isBoss)
+            {
+                if ((IList)m_isBossGenerators[isBoss.ToString()] == null)
+                {
+                    m_isBossGenerators[isBoss.ToString()] = new ArrayList();
+                }
+                ((IList)m_isBossGenerators[isBoss.ToString()]).Add(generator);
+            }
+
             // Loot Generator Region Indexed
             if (mobregion > 0)
             {
@@ -401,7 +664,7 @@ namespace DOL.GS
                 regionList.Add(generator);
             }
 
-            if (Util.IsEmpty(mobname) && Util.IsEmpty(mobguild) && Util.IsEmpty(mobfaction) && mobregion == 0)
+            if (Util.IsEmpty(mobname) && Util.IsEmpty(mobguild) && Util.IsEmpty(mobfaction) && Util.IsEmpty(mobmodel) && Util.IsEmpty(mobbodytype) && Util.IsEmpty(mobrace) && !isRenaissance && !isGoodReput && !isBadReput && !isBoss && mobregion == 0)
             {
                 m_globalGenerators.Add(generator);
             }
@@ -432,8 +695,11 @@ namespace DOL.GS
         /// <returns></returns>
         public static ItemTemplate[] GetLoot(GameNPC mob, GameObject killer)
         {
+            if (killer is not GamePlayer player)
+                return Array.Empty<ItemTemplate>();
+
             LootList lootList = null;
-            IList generators = GetLootGenerators(mob);
+            IList generators = GetLootGenerators(mob, player);
             foreach (ILootGenerator generator in generators)
             {
                 try
@@ -460,7 +726,7 @@ namespace DOL.GS
         /// </summary>
         /// <param name="mob"></param>
         /// <returns></returns>
-        public static IList GetLootGenerators(GameNPC mob)
+        public static IList GetLootGenerators(GameNPC mob, GamePlayer player)
         {
             IList filteredGenerators = new ArrayList();
             ILootGenerator exclusiveGenerator = null;
@@ -471,6 +737,13 @@ namespace DOL.GS
             IList factionGenerators = null;
             if (mob.Faction != null)
                 factionGenerators = (IList)m_mobFactionGenerators[mob.Faction.ID];
+            IList modelGenerators = (IList)m_mobModelGenerators[mob.Model.ToString()];
+            IList bodyTypeGenerators = (IList)m_mobBodyTypeGenerators[mob.BodyType.ToString()];
+            IList raceGenerators = (IList)m_mobRaceGenerators[mob.Race.ToString()];
+            IList renaissanceGenerators = (IList)m_isRenaissanceGenerators[player.IsRenaissance.ToString()];
+            IList goodReputGenerators = player.Reputation == 0 ? (IList)m_isGoodReputGenerators["True"] : null;
+            IList badReputGenerators = player.Reputation < 0 ? (IList)m_isBadReputGenerators["True"] : null;
+            IList bossGenerators = (IList)m_isBossGenerators[mob.IsBoss.ToString()];
 
             ArrayList allGenerators = new ArrayList();
 
@@ -484,6 +757,20 @@ namespace DOL.GS
                 allGenerators.AddRange(regionGenerators);
             if (factionGenerators != null)
                 allGenerators.AddRange(factionGenerators);
+            if (modelGenerators != null)
+                allGenerators.AddRange(modelGenerators);
+            if (bodyTypeGenerators != null)
+                allGenerators.AddRange(bodyTypeGenerators);
+            if (raceGenerators != null)
+                allGenerators.AddRange(raceGenerators);
+            if (renaissanceGenerators != null)
+                allGenerators.AddRange(renaissanceGenerators);
+            if (goodReputGenerators != null)
+                allGenerators.AddRange(goodReputGenerators);
+            if (badReputGenerators != null)
+                allGenerators.AddRange(badReputGenerators);
+            if (bossGenerators != null)
+                allGenerators.AddRange(bossGenerators);
 
             foreach (ILootGenerator generator in allGenerators)
             {
@@ -497,6 +784,12 @@ namespace DOL.GS
                 if (exclusiveGenerator != null)
                     continue;
 
+                if (generator is LootGenerator lootGenerator && lootGenerator.CondMustBeSetTogether)
+                {
+                    if (!ConditionsMetTogether(lootGenerator, mob, player))
+                        continue;
+                }
+
                 if (!filteredGenerators.Contains(generator))
                     filteredGenerators.Add(generator);
             }
@@ -509,6 +802,28 @@ namespace DOL.GS
             }
 
             return filteredGenerators;
+        }
+
+        private static bool ConditionsMetTogether(LootGenerator generator, GameNPC mob, GamePlayer player)
+        {
+            var conditionsMet = true;
+
+            if (!Util.IsEmpty(generator.MobModel) && generator.MobModel != mob.Model.ToString())
+                conditionsMet = false;
+            if (!Util.IsEmpty(generator.MobBodyType) && generator.MobBodyType != mob.BodyType.ToString())
+                conditionsMet = false;
+            if (!Util.IsEmpty(generator.MobRace) && generator.MobRace != mob.Race.ToString())
+                conditionsMet = false;
+            if (generator.IsRenaissance && !player.IsRenaissance)
+                conditionsMet = false;
+            if (generator.IsGoodReput && player.Reputation != 0)
+                conditionsMet = false;
+            if (generator.IsBadReput && player.Reputation >= 0)
+                conditionsMet = false;
+            if (generator.IsBoss && !mob.IsBoss)
+                conditionsMet = false;
+
+            return conditionsMet;
         }
     }
 }

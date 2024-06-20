@@ -1,0 +1,21 @@
+# /ArtifactQuest
+ArtifactQuest.GiveItem.BackpackFull:			Your backpack is full, please make room and try again.
+
+# /ArtifactTurnInQuest
+ArtifactTurnInQuest.Init.ArtifactScholarMale:		Artifact Scholar
+ArtifactTurnInQuest.Init.ArtifactScholarFemale:		Artifact Scholar
+ArtifactTurnInQuest.FinishQuest.Completed:		You have completed the {0} quest!
+
+# /ArtifactManager
+Artifact.ArtifactMgr.InfoXP:					Slaying enemies and monsters found anywhere.
+Artifact.ArtifactMgr.LevelUp:					Your {0} has gained a level!
+Artifact.ArtifactMgr.GuildXPBuff:				Your {0} gains additional experience due to your guild's buff!
+Artifact.ArtifactMgr.XPGain:					Your {0} has gained experience.
+Artifact.ArtifactMgr.CurrentLevel:				Artifact (Current level: {0})
+Artifact.ArtifactMgr.ExpEarned:					- {0}% exp earned towards level {1}
+Artifact.ArtifactMgr.NewAbilitiesAtLevel:		- Artifact will gain new abilities at level {0}
+Artifact.ArtifactMgr.EarnsXP:					(Earns exp: {0})
+Artifact.ArtifactMgr.Artifact:					Artifact:
+Artifact.ArtifactMgr.CurrentLevelMax:			Current level: 10
+Artifact.ArtifactMgr.MagicalBonuses:			Magical Bonuses:
+Artifact.ArtifactMgr.CanUseItemEvery:			Can use item every {0} min

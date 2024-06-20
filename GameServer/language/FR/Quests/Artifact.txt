@@ -6,3 +6,16 @@ ArtifactTurnInQuest.Init.ArtifactScholarMale:		Artifact Scholar
 ArtifactTurnInQuest.Init.ArtifactScholarFemale:		Artifact Scholar
 ArtifactTurnInQuest.FinishQuest.Completed:		Vous avez terminé la quête: {0}!
 
+# /ArtifactManager
+Artifact.ArtifactMgr.InfoXP:					Tuez des ennemis et des monstres rencontrés en tout lieu.
+Artifact.ArtifactMgr.LevelUp:					Votre {0} a gagné un niveau !
+Artifact.ArtifactMgr.GuildXPBuff:				Votre {0} gagne de l'expérience supplémentaire grâce au bonus de votre guilde !
+Artifact.ArtifactMgr.XPGain:					Votre {0} a gagné de l'expérience.
+Artifact.ArtifactMgr.CurrentLevel:				Artefact (Niveau actuel : {0})
+Artifact.ArtifactMgr.ExpEarned:					- {0}% d'exp gagné vers le niveau {1}
+Artifact.ArtifactMgr.NewAbilitiesAtLevel:		- L'artefact gagnera de nouvelles capacités au niveau {0}
+Artifact.ArtifactMgr.EarnsXP:					(Gagne de l'exp : {0})
+Artifact.ArtifactMgr.Artifact:					Artefact :
+Artifact.ArtifactMgr.CurrentLevelMax:			Niveau actuel : 10
+Artifact.ArtifactMgr.MagicalBonuses:			Bonus magiques :
+Artifact.ArtifactMgr.CanUseItemEvery:			Peut utiliser l'objet toutes les {0} minutes

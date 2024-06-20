@@ -221,26 +221,28 @@ namespace DOL.GS
             // Artifact specific information.
             if (ArtifactLevel < 10)
             {
-                delve.Add(string.Format("Artifact (Current level: {0})", ArtifactLevel));
                 delve.Add(string.Format(
-                    "- {0}% exp earned towards level {1}",
-                                        ArtifactMgr.GetXPGainedForLevel(this), ArtifactLevel + 1));
+                    LanguageMgr.GetTranslation(player.Client.Account.Language, "Artifact.ArtifactMgr.CurrentLevel"),
+                    ArtifactLevel));
                 delve.Add(string.Format(
-                    "- Artifact will gain new abilities at level {0}",
-                                        GainsNewAbilityAtLevel()));
+                    LanguageMgr.GetTranslation(player.Client.Account.Language, "Artifact.ArtifactMgr.ExpEarned"),
+                    ArtifactMgr.GetXPGainedForLevel(this), ArtifactLevel + 1));
                 delve.Add(string.Format(
-                    "(Earns exp: {0})",
-                                        ArtifactMgr.GetEarnsXP(this)));
+                    LanguageMgr.GetTranslation(player.Client.Account.Language, "Artifact.ArtifactMgr.NewAbilitiesAtLevel"),
+                    GainsNewAbilityAtLevel()));
+                delve.Add(string.Format(
+                    LanguageMgr.GetTranslation(player.Client.Account.Language, "Artifact.ArtifactMgr.EarnsXP"),
+                    ArtifactMgr.GetEarnsXP(this, player.Client)));
             }
             else
             {
-                delve.Add("Artifact:");
-                delve.Add("Current level: 10");
+                delve.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "Artifact.ArtifactMgr.Artifact"));
+                delve.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "Artifact.ArtifactMgr.CurrentLevelMax"));
             }
 
             // Item bonuses.
             delve.Add(string.Empty);
-            delve.Add("Magical Bonuses:");
+            delve.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "Artifact.ArtifactMgr.MagicalBonuses"));
 
             for (ArtifactBonus.ID bonusID = ArtifactBonus.ID.MinStat; bonusID <= ArtifactBonus.ID.MaxStat; ++bonusID)
             {
@@ -288,8 +290,8 @@ namespace DOL.GS
                 TimeSpan reuseTimeSpan = new TimeSpan(0, 0, reuseTimer);
                 delve.Add(string.Empty);
                 delve.Add(string.Format(
-                    "Can use item every {0} min",
-                                        reuseTimeSpan.ToString().Substring(3)));
+                    LanguageMgr.GetTranslation(player.Client.Account.Language, "Artifact.ArtifactMgr.CanUseItemEvery"),
+                    reuseTimeSpan.ToString().Substring(3)));
             }
 
             if (player.Client.Account.PrivLevel > 1)

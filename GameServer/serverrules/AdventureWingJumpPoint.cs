@@ -145,7 +145,7 @@ namespace DOL.GS.ServerRules
                 }
 
                 //Attach Loot Generator
-                LootMgr.RegisterLootGenerator(new LootGeneratorAurulite(), null, null, null, previousInstance.ID);
+                LootMgr.RegisterLootGenerator(new LootGeneratorAurulite(), null, null, null, previousInstance.ID, null, null, null, false, false, false, false, false);
 
                 // Player created new instance
                 // Destroy all other instance that should be...

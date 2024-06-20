@@ -127,16 +127,13 @@ namespace DOL.spells
             {
                 if (!player.CraftingSkills.ContainsKey(match.CraftingSkill))
                 {
-                    log.Warn($"Combine Item: Crafting skill {match.CraftingSkill.ToString()}  not found in Player {player.InternalID}  Crafting Skill");
+                    log.Warn($"Combine Item: Crafting skill {match.CraftingSkill.ToString()} not found in Player {player.InternalID} Crafting Skill");
                     return false;
                 }
-                else
+                else if (player.CraftingSkills[match.CraftingSkill] < match.CraftValue && !match.ApplyRewardCraftingSkillsSystem)
                 {
-                    if (player.CraftingSkills[match.CraftingSkill] < match.CraftValue)
-                    {
-                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Spell.CombineItemSpellHandler.CraftingSkillTooLow", match.CraftingSkill.ToString(), match.CraftValue), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
-                        return false;
-                    }
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Spell.CombineItemSpellHandler.CraftingSkillTooLow", match.CraftingSkill.ToString(), match.CraftValue), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
+                    return false;
                 }
             }
 
@@ -384,6 +381,69 @@ namespace DOL.spells
             return false;
         }
 
+        private int GetQuality(GamePlayer player, int craftValue)
+        {
+            int con = GetItemCon(player.CraftingSkills[match.CraftingSkill], craftValue);
+            int[] chancePart;
+            int sum = 0;
+            int baseQuality;
+            int qualityRange;
+
+            switch (con)
+            {
+                case 3:
+                case 4:
+                    baseQuality = 78;
+                    chancePart = new int[] { 2, 6, 14, 32, 26, 13, 7 };
+                    qualityRange = 7;
+                    break;
+                case 2:
+                    baseQuality = 82;
+                    chancePart = new int[] { 1, 6, 12, 28, 30, 15, 8 };
+                    qualityRange = 7;
+                    break;
+                case 1:
+                    baseQuality = 86;
+                    chancePart = new int[] { 1, 5, 14, 28, 30, 15, 7 };
+                    qualityRange = 7;
+                    break;
+                case 0:
+                    baseQuality = 92;
+                    chancePart = new int[] { 6, 10, 13, 19, 20, 16, 15, 1 };
+                    qualityRange = 8;
+                    break;
+                case -1:
+                    baseQuality = 94;
+                    chancePart = new int[] { 17, 17, 18, 20, 18, 10 };
+                    qualityRange = 6;
+                    break;
+                case -2:
+                    baseQuality = 96;
+                    chancePart = new int[] { 18, 21, 25, 23, 13 };
+                    qualityRange = 5;
+                    break;
+                case -3:
+                case -4:
+                default:
+                    baseQuality = 97;
+                    chancePart = new int[] { 24, 27, 31, 18 };
+                    qualityRange = 4;
+                    break;
+            }
+
+            sum = chancePart.Sum();
+            int rand = Util.Random(sum);
+
+            for (int i = 0; i < qualityRange; i++)
+            {
+                if (rand < chancePart[i])
+                    return baseQuality + i;
+                rand -= chancePart[i];
+            }
+
+            return baseQuality;
+        }
+
         /// <summary>
         /// Do the combine.
         /// </summary>
@@ -409,14 +469,14 @@ namespace DOL.spells
             }
 
             // Check if player fail to combine
-            if (Util.Chance(match.ChanceFailCombine))
+            if (Util.Chance(CalculateChanceFailCombine(player)))
             {
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Spell.CombineItemSpellHandler.YouFailedCombine"), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
+                player.Out.SendPlaySound(eSoundType.Craft, 0x02);
                 if (match.PunishSpell != 0)
                 {
                     var punishSpell = GameServer.Database.SelectObject<DBSpell>(DB.Column("SpellID").IsEqualTo(match.PunishSpell));
 
-                    // check if the player is punished
                     if (punishSpell != null)
                     {
                         foreach (GamePlayer pl in player.GetPlayersInRadius(5000))
@@ -430,6 +490,7 @@ namespace DOL.spells
                 RemoveItems(player, removeItems);
                 return;
             }
+
             InventoryItem newItem = combined.Item;
             if (match.IsUnique)
             {
@@ -437,46 +498,96 @@ namespace DOL.spells
                 unique.IsTradable = true;
                 GameServer.Database.AddObject(unique);
                 newItem = GameInventoryItem.Create(unique);
-                int randomQuality = Util.Random(99);
-                if (randomQuality < 16)
+
+                if (match.ApplyRewardCraftingSkillsSystem)
                 {
-                    newItem.Quality = 95;
-                }
-                else if (randomQuality < 36)
-                {
-                    newItem.Quality = 96;
-                }
-                else if (randomQuality < 56)
-                {
-                    newItem.Quality = 97;
-                }
-                else if (randomQuality < 76)
-                {
-                    newItem.Quality = 98;
-                }
-                else if (randomQuality < 96)
-                {
-                    newItem.Quality = 99;
+                    // Calculate quality using the new method
+                    newItem.Quality = GetQuality(player, match.CraftValue);
                 }
                 else
                 {
-                    newItem.Quality = 100;
+                    // Calculate quality using the previous method
+                    int randomQuality = Util.Random(99);
+                    if (randomQuality < 16)
+                    {
+                        newItem.Quality = 95;
+                    }
+                    else if (randomQuality < 36)
+                    {
+                        newItem.Quality = 96;
+                    }
+                    else if (randomQuality < 56)
+                    {
+                        newItem.Quality = 97;
+                    }
+                    else if (randomQuality < 76)
+                    {
+                        newItem.Quality = 98;
+                    }
+                    else if (randomQuality < 96)
+                    {
+                        newItem.Quality = 99;
+                    }
+                    else
+                    {
+                        newItem.Quality = 100;
+                    }
                 }
+
                 newItem.IsCrafted = true;
                 newItem.Creator = player.Name;
                 newItem.Count = match.ItemsCount;
             }
 
             player.Out.SendSpellEffectAnimation(player, player, (ushort)match.SpellEfect, 0, false, 1);
-            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Spell.CombineItemSpellHandler.YouCreatedItem", newItem.Name, useItem.Name, match.Items.Count() - 1), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
+            int con = GetItemCon(player.CraftingSkills[match.CraftingSkill], match.CraftValue);
+            if (newItem.Quality == 100)
+            {
+                player.Out.SendPlaySound(eSoundType.Craft, 0x04);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "AbstractCraftingSkill.BuildCraftedItem.Masterpiece", newItem.Name, useItem.Name, match.Items.Count() - 1), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
+                if (match.ApplyRewardCraftingSkillsSystem)
+                {
+                    if (con > -3)
+                    {
+                        TaskManager.UpdateTaskProgress(player, "MasterpieceCrafted", 1);
+                    }
+                }
+                else
+                {
+                    if (con > -3)
+                    {
+                        TaskManager.UpdateTaskProgress(player, "MasterpieceCrafted", 1);
+                    }
+                }
+            }
+            else
+            {
+                player.Out.SendPlaySound(eSoundType.Craft, 0x03);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Spell.CombineItemSpellHandler.YouCreatedItem", newItem.Name, useItem.Name, match.Items.Count() - 1), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                if (match.ApplyRewardCraftingSkillsSystem)
+                {
+                    if (con > -2)
+                    {
+                        TaskManager.UpdateTaskProgress(player, "SuccessfulItemCombinations", 1);
+                    }
+                }
+                else
+                {
+                    if (con > -2)
+                    {
+                        TaskManager.UpdateTaskProgress(player, "SuccessfulItemCombinations", 1);
+                    }
+                }
+            }
             RemoveItems(player, removeItems);
 
             if (match.RewardCraftingSkills > 0)
             {
                 int gain = match.RewardCraftingSkills;
                 if (match.ApplyRewardCraftingSkillsSystem && player.CraftingSkills.ContainsKey(match.CraftingSkill))
-                    // round the result
-                    gain = (int)Math.Round(gain * ((double)match.CraftValue / (double)player.CraftingSkills[match.CraftingSkill]));
+                {
+                    gain = CalculateRewardCraftingSkill(player, match.CraftingSkill, match.CraftValue, match.RewardCraftingSkills);
+                }
                 player.GainCraftingSkill(match.CraftingSkill, gain);
                 player.Out.SendUpdateCraftingSkills();
             }
@@ -500,8 +611,109 @@ namespace DOL.spells
                 player.CreateItemOnTheGround(newItem);
                 player.Out.SendDialogBox(eDialogCode.SimpleWarning, 0, 0, 0, 0, eDialogType.Ok, true, LanguageMgr.GetTranslation(player.Client.Account.Language, "AbstractCraftingSkill.BuildCraftedItem.BackpackFull", newItem.Name));
             }
+        }
 
-            TaskManager.UpdateTaskProgress(player, "SuccessfulItemCombinations", 1);
+        private int CalculateRewardCraftingSkill(GamePlayer player, eCraftingSkill craftingSkill, int craftValue, int baseReward)
+        {
+            int con = GetItemCon(player.CraftingSkills[craftingSkill], craftValue);
+            int reward;
+
+            switch (con)
+            {
+                case -3:
+                    reward = (int)Math.Round(baseReward * 0.4);
+                    break;
+                case -2:
+                    reward = (int)Math.Round(baseReward * 0.7);
+                    break;
+                case -1:
+                    reward = (int)Math.Round(baseReward * 0.85);
+                    break;
+                case 0:
+                    reward = baseReward;
+                    break;
+                case 1:
+                    reward = (int)Math.Round(baseReward * 1.1);
+                    break;
+                case 2:
+                    reward = (int)Math.Round(baseReward * 1.2);
+                    break;
+                case 3:
+                    reward = (int)Math.Round(baseReward * 1.4);
+                    break;
+                case 4:
+                case -4:
+                default:
+                    reward = 0;
+                    break;
+            }
+
+            return reward;
+        }
+
+        private int CalculateChanceFailCombine(GamePlayer player)
+        {
+            if (!match.ApplyRewardCraftingSkillsSystem)
+                return match.ChanceFailCombine;
+
+            int con = GetItemCon(player.CraftingSkills[match.CraftingSkill], match.CraftValue);
+            int failChance = match.ChanceFailCombine;
+
+            switch (con)
+            {
+                case -4:
+                    failChance = Math.Min(100, failChance - (int)Math.Round(failChance * 0.9));
+                    break;
+                case -3:
+                    failChance = Math.Min(100, failChance - (int)Math.Round(failChance * 0.75));
+                    break;
+                case -2:
+                    failChance = Math.Min(100, failChance - (int)Math.Round(failChance * 0.4));
+                    break;
+                case -1:
+                    failChance = Math.Min(100, failChance - (int)Math.Round(failChance * 0.16));
+                    break;
+                case 0:
+                    break;
+                case 1:
+                    failChance = Math.Max(0, failChance + (int)Math.Round(failChance * 0.2));
+                    break;
+                case 2:
+                    failChance = Math.Max(0, failChance + (int)Math.Round(failChance * 0.4));
+                    break;
+                case 3:
+                    failChance = Math.Max(0, failChance + (int)Math.Round(failChance * 0.88));
+                    break;
+                case 4:
+                default:
+                    failChance = 100;
+                    break;
+            }
+
+            return failChance;
+        }
+
+        private int GetItemCon(int crafterSkill, int itemCraftingLevel)
+        {
+            int diff = itemCraftingLevel - crafterSkill;
+            if (diff <= -70)
+                return -4;
+            else if (diff <= -50)
+                return -3;
+            else if (diff <= -31)
+                return -2;
+            else if (diff <= -11)
+                return -1;
+            else if (diff <= 0)
+                return 0;
+            else if (diff <= 19)
+                return 1;
+            else if (diff <= 49)
+                return 2;
+            else if (diff <= 74)
+                return 3;
+            else
+                return 4;
         }
 
         private IEnumerable<Combinable> GetCombinableItems(string usedItemId)
@@ -742,77 +954,24 @@ namespace DOL.spells
 
     public class Combinable
     {
-        /// <summary>
-        /// List of Keys/Values with key = template id and value = number of items needed for this template
-        /// </summary>
         public Dictionary<string, int> Items { get; set; }
-
         public string TemplateId { get; set; }
-
-        /// <summary>
-        /// Number of item to generate
-        /// </summary>
         public int ItemsCount { get; set; }
-
         public int SpellEfect { get; set; }
-
         public eCraftingSkill CraftingSkill { get; set; }
-
         public int CraftValue { get; set; }
-
         public int RewardCraftingSkills { get; set; }
-
-        /// <summary>
-        /// Area accesseur
-        /// </summary>
         public string AreaId { get; set; }
-
-        /// <summary>
-        /// Chance to faill combinaiton
-        /// </summary>
         public int ChanceFailCombine { get; set; }
-
-        /// <summary>
-        /// Punish Spell if fail
-        /// </summary>
         public int PunishSpell { get; set; }
-
-        /// <summary>
-        /// Time to combine
-        /// </summary>
         public int Duration { get; set; }
-
-        /// <summary>
-        /// Tool Models to Combine the Object
-        /// </summary>
         public string CombinexObjectModel { get; set; }
-
-        /// <summary>
-        /// If is unique item
-        /// </summary>
         public bool IsUnique { get; set; }
-
-        /// <summary>
-        /// If is unique item
-        /// </summary>
         public bool ApplyRewardCraftingSkillsSystem { get; set; }
-
-        /// <summary>
-        /// Toolkit template to Combine the Object
-        /// </summary>
         public string ToolKit { get; set; }
-
-        /// <summary>
-        /// Point of durability lost per combination
-        /// </summary>
         public short ToolLoseDur { get; set; }
-
-        /// <summary>
-        /// Combination id to reference it in player list
-        /// </summary>
         public string CombinationId { get; set; }
         public bool AllowVersion { get; set; }
     }
-
 }
 

@@ -12990,8 +12990,8 @@ namespace DOL.GS
                             long moneyToGuild = moneyObject.TotalCopper * Guild.GetGuildDuesPercent() / 100;
                             if (Guild.GetGuildDuesPercent() != 100)
                             {
-                                AddMoney(Currency.Copper.Mint(moneyObject.TotalCopper - moneyToGuild));
-                                SendSystemMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.PickupObject.YouPickUp", Money.GetString(moneyObject.TotalCopper - moneyToGuild)));
+                                AddMoney(Currency.Copper.Mint(moneyObject.TotalCopper));
+                                SendSystemMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.PickupObject.YouPickUp", Money.GetString(moneyObject.TotalCopper)));
                             }
                             else
                             {

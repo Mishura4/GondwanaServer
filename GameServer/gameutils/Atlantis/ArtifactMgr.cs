@@ -24,6 +24,7 @@ using log4net;
 using DOL.GS.PacketHandler;
 using DOL.GS.Quests;
 using DOL.Events;
+using DOL.Language;
 
 namespace DOL.GS
 {
@@ -320,9 +321,9 @@ namespace DOL.GS
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public static string GetEarnsXP(InventoryArtifact item)
+        public static string GetEarnsXP(InventoryArtifact item, GameClient client)
         {
-            return "Slaying enemies and monsters found anywhere.";
+            return LanguageMgr.GetTranslation(client.Account.Language, "Artifact.ArtifactMgr.InfoXP");
         }
 
         /// <summary>
@@ -390,7 +391,7 @@ namespace DOL.GS
             {
                 while (item.ArtifactLevel < 10)
                 {
-                    player.Out.SendMessage(string.Format("Your {0} has gained a level!", item.Name), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Artifact.ArtifactMgr.LevelUp", item.Name), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                     item.OnLevelGained(player, item.ArtifactLevel + 1);
                 }
 
@@ -401,7 +402,7 @@ namespace DOL.GS
             {
                 long xpBonus = (long)(xpAmount * ServerProperties.Properties.GUILD_BUFF_ARTIFACT_XP * .01);
                 xpAmount += xpBonus;
-                player.Out.SendMessage(string.Format("Your {0} gains additional experience due to your guild's buff!", item.Name), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Artifact.ArtifactMgr.GuildXPBuff", item.Name), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
             }
 
             // All artifacts share the same XP table, we make them level
@@ -422,7 +423,7 @@ namespace DOL.GS
             long artifactXPNew = (long)(artifactXPOld + (xpAmount * xpRate) / ServerProperties.Properties.ARTIFACT_XP_RATE);
             item.Experience = artifactXPNew;
 
-            player.Out.SendMessage(string.Format("Your {0} has gained experience.", item.Name), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Artifact.ArtifactMgr.XPGain", item.Name), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
 
             // Now let's see if this artifact has gained a new level yet.
             for (int level = 1; level <= 10; ++level)
@@ -437,7 +438,7 @@ namespace DOL.GS
                     continue;
                 }
 
-                player.Out.SendMessage(string.Format("Your {0} has gained a level!", item.Name), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Artifact.ArtifactMgr.LevelUp", item.Name), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                 item.OnLevelGained(player, level);
             }
         }
