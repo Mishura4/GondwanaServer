@@ -83,6 +83,8 @@ namespace DOL.GS
 
         private ShadowNPC shadowNPC;
 
+        private TaskXPlayer taskXPlayer;
+
         #region Client/Character/VariousFlags
 
         /// <summary>
@@ -362,6 +364,12 @@ namespace DOL.GS
         {
             get;
             set;
+        }
+
+        public TaskXPlayer TaskXPlayer
+        {
+            get { return taskXPlayer; }
+            set { taskXPlayer = value; }
         }
 
         #region DoorCache
@@ -13642,6 +13650,10 @@ namespace DOL.GS
             // check the account for the Muted flag
             if (Client.Account.IsMuted)
                 IsMuted = true;
+
+            // Ensure TaskXPlayer data is loaded
+            TaskManager.EnsureTaskData(this);
+            TaskXPlayer = GameServer.Database.SelectObject<TaskXPlayer>($"PlayerName = '{this.Name}'");
         }
 
         /// <summary>
@@ -13704,6 +13716,12 @@ namespace DOL.GS
                 if (log.IsInfoEnabled)
                     log.InfoFormat("{0} saved!", DBCharacter.Name);
                 Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.SaveIntoDatabase.CharacterSaved"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+
+                // Save TaskXPlayer data
+                if (TaskXPlayer != null)
+                {
+                    GameServer.Database.SaveObject(TaskXPlayer);
+                }
             }
             catch (Exception e)
             {

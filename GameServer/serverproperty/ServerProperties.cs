@@ -359,6 +359,11 @@ namespace DOL.GS.ServerProperties
         [ServerProperty("system", "enable_task_system", "Enable or disable the task system", true)]
         public static bool ENABLE_TASK_SYSTEM;
 
+        /// <summary>
+        /// Show New server player statistics based on Tasks
+        /// </summary>
+        [ServerProperty("system", "new_player_stats", "Enable new player stats. If true, shows new statistics based on Tasks; otherwise, shows old statistics.", true)]
+        public static bool SHOW_NEW_PLAYER_STATS;
         #endregion
 
         #region LOGGING

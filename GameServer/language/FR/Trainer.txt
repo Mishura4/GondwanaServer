@@ -44,29 +44,31 @@ BardTrainer.ReceiveArmor.Text4:	{0} dit, "Vous avez fait beaucoup de progrès da
 # /BlademasterTrainer
 BlademasterTrainer.Interact.Text1:				{0} dit, "Do you choose to walk the [Voie de l'Harmonie] and defend our realm as a Blademaster?"
 BlademasterTrainer.Interact.Text2:				Voulez-vous vous entraîner ?
-BlademasterTrainer.Interact.Text3:				{0} dit, "Do you wish to learn some more, {1}? Step up and receive your training!!"
-BlademasterTrainer.Interact.Text4:					{0} dit, "Very well, {1}. I gladly take your training into my hands. Congratulations, from this day forth, you are a Blademaster. Here, choose a weapon to aid you: [épées], [contondante] ou [perforante]."
-BlademasterTrainer.ReceiveArmor.Text1:				{0} dit, "We will now issue your Vest of the Neophyte, it will help you greatly in your quest. When you have reached the title of Stylist, return it to me. We shall then see if you require another."
-BlademasterTrainer.ReceiveArmor.Text2:				{0} dit, "So, you reached the title of Stylist, here is the Stylist's Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Sabreur. We shall then see if you require another."
-BlademasterTrainer.ReceiveArmor.Text3:				{0} dit, "So, you reached the title of Sabreur, here is the Sabreur's Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Blade Weaver. We shall then see if you require another."
-BlademasterTrainer.ReceiveArmor.Text4:				{0} dit, "So, you have come a long way in your training and achieved the title of Blade Weaver, here is the Bladeweaver's Vest, it will help you greatly in your quest. You are now ready to fight for our Realm by following our teachings."
-BlademasterTrainer.WhisperReceive.Text1:			Here is your Blade of the Initiate. Welcome to the Defenders of Hibernia!
-BlademasterTrainer.WhisperReceive.Text2:			Here is your Mace of the Initiate. Welcome to the Defenders of Hibernia!
-BlademasterTrainer.WhisperReceive.Text3:			Here is your Dagger of the Initiate. Welcome to the Defenders of Hibernia!
+BlademasterTrainer.Interact.Text3:				BlademasterTrainer.Interact.Text1:				{0} dit, "Souhaitez-vous suivre la [Voie de l'Harmonie] et défendre notre royaume en tant que Maître des Lames ?"
+BlademasterTrainer.Interact.Text2:				Voulez-vous vous entraîner ?
+BlademasterTrainer.Interact.Text3:				{0} dit, "Souhaitez-vous en apprendre davantage, {1} ? Approchez et recevez votre entraînement !!"
+BlademasterTrainer.Interact.Text4:		{0} dit, "Très bien, {1}. Je prends volontiers votre entraînement en main. Félicitations, à partir de ce jour, vous êtes un Maître des Lames. Voici, choisissez une arme pour vous aider : [épées], [contondante] ou [perforante]."
+BlademasterTrainer.ReceiveArmor.Text1:	{0} dit, "Nous allons maintenant vous remettre votre Veste de Néophyte, elle vous aidera grandement dans votre quête. Lorsque vous aurez atteint le titre de Styliste, retournez-la moi. Nous verrons alors s'il est nécessaire d'améliorer votre équipement."
+BlademasterTrainer.ReceiveArmor.Text2:	{0} dit, "Donc, vous avez atteint le titre de Styliste, voici la Veste de Styliste, elle vous aidera grandement dans votre quête. Revenez me voir lorsque vous aurez atteint le titre de Sabreur. Nous verrons alors s'il est nécessaire d'améliorer votre équipement."
+BlademasterTrainer.ReceiveArmor.Text3:	{0} dit, "Donc, vous avez atteint le titre de Sabreur, voici la Veste de Sabreur, elle vous aidera grandement dans votre quête. Revenez me voir lorsque vous aurez atteint le titre de Tisseur de Lames. Nous verrons alors s'il est nécessaire d'améliorer votre équipement."
+BlademasterTrainer.ReceiveArmor.Text4:	{0} dit, "Vous avez fait beaucoup de progrès dans votre entraînement et atteint le titre de Tisseur de Lames, voici la Veste de Tisseur de Lames, elle vous aidera grandement dans votre quête. Vous êtes maintenant prêt à combattre pour notre royaume en suivant nos enseignements."
+BlademasterTrainer.WhisperReceive.Text1:	Voici votre Lame de l'Initié. Bienvenue parmi les Défenseurs d'Hibernia !
+BlademasterTrainer.WhisperReceive.Text2:	Voici votre Masse de l'Initié. Bienvenue parmi les Défenseurs d'Hibernia !
+BlademasterTrainer.WhisperReceive.Text3:	Voici votre Dague de l'Initié. Bienvenue parmi les Défenseurs d'Hibernia !
 
 # /ChampionTrainer
-ChampionTrainer.Interact.Text1:				{0} dit, "Champions follow the [Voie de l'Essence]. Choose now to become a Champion, and I will train you in our ways, and the ways of the Path we follow."
+ChampionTrainer.Interact.Text1:				{0} dit, "Les Grands Champions dur royaume suivent la [Voie de l'Essence]. Optez pour devenir Champion, et je vous formerai selon nos traditions et les préceptes de la Voie que nous suivons."
 ChampionTrainer.Interact.Text2:				Voulez-vous vous entraîner ?
-ChampionTrainer.Interact.Text3:				{0} dit, "I'm glad to see you taking an interest in your training, {1}. There is always room to grow and learn!"
-ChampionTrainer.Interact.Text4:					{0} dit, "Welcome {1}. Let us see if you will become a worthy Champion. Choose a weapon: [épées], [contondante], [perforante] ou [grandes armes]. It is to aid you while you grow into a true Champion."
-ChampionTrainer.ReceiveArmor.Text1:				{0} dit, "We will now issue your Vest of the Neophyte, it will help you greatly in your quest. When you have reached the title of Charger, return it to me. We shall then see if you require another."
-ChampionTrainer.ReceiveArmor.Text2:				{0} dit, "So, you reached the title of Charger, here is the Charger's Vest, it will help you greatly in your quest. Come back to me when you have reached the title of Propugner. We shall then see if you require another."
-ChampionTrainer.ReceiveArmor.Text3:				{0} dit, "So, you reached the title of Propugner, here is the Vest of the Propugner, it will help you greatly in your quest. Come back to me when you have reached the title of Valiant. We shall then see if you require another."
-ChampionTrainer.ReceiveArmor.Text4:				{0} dit, "So, you have come a long way in your training and achieved the title of Valiant, here is the Hauberk of the Valiant, it will help you greatly in your quest. You are now ready to fight for our Realm by following our teachings."
-ChampionTrainer.WhisperReceive.Text1:			Here is your Blade of the Initiate. Welcome to the Defenders of Hibernia!
-ChampionTrainer.WhisperReceive.Text2:			Here is your Mace of the Initiate. Welcome to the Defenders of Hibernia!
-ChampionTrainer.WhisperReceive.Text3:			Here is your Dagger of the Initiate. Welcome to the Defenders of Hibernia!
-ChampionTrainer.WhisperReceive.Text4:			Here is your Great Sword of the Initiate. Welcome to the Defenders of Hibernia!
+ChampionTrainer.Interact.Text3:				{0} dit, "Je suis heureux de voir que vous prenez votre entraînement au sérieux, {1}. Il y a toujours des opportunités pour grandir et apprendre !"
+ChampionTrainer.Interact.Text4:		{0} dit, "Bienvenue {1}. Voyons si vous deviendrez un Champion digne de ce nom. Choisissez une arme : [épées], [contondante], [perforante] ou [grandes armes]. Cela vous aidera à devenir un vrai Champion."
+ChampionTrainer.ReceiveArmor.Text1:	{0} dit, "Nous allons maintenant vous remettre votre Veste de Néophyte, elle vous aidera grandement dans votre quête. Lorsque vous aurez atteint le titre de Chargeur, retournez-la moi. Nous verrons alors s'il est nécessaire d'améliorer votre équipement."
+ChampionTrainer.ReceiveArmor.Text2:	{0} dit, "Donc, vous avez atteint le titre de Chargeur, voici la Veste de Chargeur, elle vous aidera grandement dans votre quête. Revenez me voir lorsque vous aurez atteint le titre de Propugner. Nous verrons alors s'il est nécessaire d'améliorer votre équipement."
+ChampionTrainer.ReceiveArmor.Text3:	{0} dit, "Donc, vous avez atteint le titre de Propugner, voici la Veste de Propugner, elle vous aidera grandement dans votre quête. Revenez me voir lorsque vous aurez atteint le titre de Vaillant. Nous verrons alors s'il est nécessaire d'améliorer votre équipement."
+ChampionTrainer.ReceiveArmor.Text4:	{0} dit, "Vous avez fait beaucoup de progrès dans votre entraînement et atteint le titre de Vaillant, voici le Haubert de Vaillant, il vous aidera grandement dans votre quête. Vous êtes maintenant prêt à combattre pour notre royaume en suivant nos enseignements."
+ChampionTrainer.WhisperReceive.Text1:	Voici votre Lame de l'Initié. Bienvenue parmi les Défenseurs d'Hibernia !
+ChampionTrainer.WhisperReceive.Text2:	Voici votre Masse de l'Initié. Bienvenue parmi les Défenseurs d'Hibernia !
+ChampionTrainer.WhisperReceive.Text3:	Voici votre Dague de l'Initié. Bienvenue parmi les Défenseurs d'Hibernia !
+ChampionTrainer.WhisperReceive.Text4:	Voici votre Grande Épée de l'Initié. Bienvenue parmi les Défenseurs d'Hibernia !
 
 # /DruidTrainer
 DruidTrainer.Interact.Text1:				{0} dit, "Do you wish to walk the [Voie de l'Harmonie] and learn the ways of the Druid?"

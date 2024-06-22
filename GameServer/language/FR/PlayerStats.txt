@@ -1,9 +1,9 @@
 
 # PLAYER STATISTICS
 # /Kills
-PlayerStatistic.Kill.Title:			Ennemis tués
+PlayerStatistic.Kill.Title:				Ennemis tués:
 PlayerStatistic.Kill.AlbionPlayer:		Albionnais tués
-PlayerStatistic.Kill.HiberniaPlayer:		Hiberniens tués
+PlayerStatistic.Kill.HiberniaPlayer:	Hiberniens tués
 PlayerStatistic.Kill.MidgardPlayer:		Midgardiens tués
 PlayerStatistic.Kill.TotalPlayers:		Total d'ennemis tués
 
@@ -15,19 +15,63 @@ PlayerStatistic.Deathblows.TotalPlayers:	Total Coups fatals
 
 # /Solo
 PlayerStatistic.Solo.AlbionPlayer:		Albionnais tués seul
-PlayerStatistic.Solo.HiberniaPlayer:		Hiberniens tués seul
+PlayerStatistic.Solo.HiberniaPlayer:	Hiberniens tués seul
 PlayerStatistic.Solo.MidgardPlayer:		Midgardiens tués seul
 PlayerStatistic.Solo.TotalPlayers:		Total d'ennemis tués seul
 
 # /Capture
-PlayerStatistic.Capture.Title:			Captures de fort
+PlayerStatistic.Capture.Title:			Captures de fort:
 PlayerStatistic.Capture.Keeps:			Forts capturés
 PlayerStatistic.Capture.Towers:			Tours capturées
 
 # /PvE
-PlayerStatistic.PvE.Title:			Reports PvE
+PlayerStatistic.PvE.Title:				Rapports PvE:
 PlayerStatistic.PvE.KillsDragon:		Nombre de Dragons tués
 PlayerStatistic.PvE.KillsEpic:			Nombre de Boss épiques tués
 PlayerStatistic.PvE.KillsLegion:		Nombre de Legion tués
 
+# /Nouvelles stats
+PlayerStatistic.TitleNone:					Aucun
+PlayerStatistic.TitleAssigned:				Titre Assigné
+PlayerStatistic.TitleSpecialBonus:			Bonus Spéciaux
+PlayerStatistic.StatsPVP:					Rapports PvP :
+PlayerStatistic.StatsRVR:					Rapports RvR :
+PlayerStatistic.StatsGVG:					Rapports de Territoires GvG :
+PlayerStatistic.StatsPVE:					Rapports PvE :
+PlayerStatistic.StatsCrafting:				Rapports d'Artisanat :
+PlayerStatistic.StatsGreatAchievements:		Grandes Réalisations :
+PlayerStatistic.StatsSpecialAchievements:	Réalisations Spéciales :
+PlayerStatistic.TotalCreaturesKilled:		Total des Créatures tuées:
+PlayerStatistic.TotalCraftPerformed:		Total des Objets fabriqués:
 
+# /Bonus de titres
+PlayerStatistic.Bonus.DemonslayerTitleLevel1:	+2% DPS en mêlée / +3% dégâts des sorts
+PlayerStatistic.Bonus.DemonslayerTitleLevel2:	+4% DPS en mêlée / +6% dégâts des sorts
+PlayerStatistic.Bonus.DemonslayerTitleLevel3:	+6% DPS en mêlée / +9% dégâts des sorts
+PlayerStatistic.Bonus.DemonslayerTitleLevel4:	+8% DPS en mêlée / +12% dégâts des sorts
+PlayerStatistic.Bonus.DemonslayerTitleLevel5:	+10% DPS en mêlée / +15% dégâts des sorts
+PlayerStatistic.Bonus.TraderTitleLevel1:		5% de réduction avec tous les marchands
+PlayerStatistic.Bonus.TraderTitleLevel2:		10% de réduction avec tous les marchands
+PlayerStatistic.Bonus.TraderTitleLevel3:		15% de réduction avec tous les marchands
+PlayerStatistic.Bonus.TraderTitleLevel4:		20% de réduction avec tous les marchands
+PlayerStatistic.Bonus.TraderTitleLevel5:		25% de réduction avec tous les marchands
+PlayerStatistic.Bonus.ThiefTitleLevel1:			+5% chance de vol
+PlayerStatistic.Bonus.ThiefTitleLevel2:			+10% chance de vol
+PlayerStatistic.Bonus.ThiefTitleLevel3:			+15% chance de vol
+PlayerStatistic.Bonus.ThiefTitleLevel4:			+20% chance de vol
+PlayerStatistic.Bonus.ThiefTitleLevel5:			+25% chance de vol
+PlayerStatistic.Bonus.BountyhunterTitleLevel1:	+5% résistance au vol / +2% détection de furtivité
+PlayerStatistic.Bonus.BountyhunterTitleLevel2:	+10% résistance au vol / +4% détection de furtivité
+PlayerStatistic.Bonus.BountyhunterTitleLevel3:	+15% résistance au vol / +6% détection de furtivité
+PlayerStatistic.Bonus.BountyhunterTitleLevel4:	+20% résistance au vol / +8% détection de furtivité
+PlayerStatistic.Bonus.BountyhunterTitleLevel5:	+25% résistance au vol / +10% détection de furtivité
+PlayerStatistic.Bonus.WrathTitleLevel1:			+3% augmentation de tension / -5% perte de tension à la mort
+PlayerStatistic.Bonus.WrathTitleLevel2:			+6% augmentation de tension / -10% perte de tension à la mort
+PlayerStatistic.Bonus.WrathTitleLevel3:			+9% augmentation de tension / -15% perte de tension à la mort
+PlayerStatistic.Bonus.WrathTitleLevel4:			+12% augmentation de tension / -20% perte de tension à la mort
+PlayerStatistic.Bonus.WrathTitleLevel5:			+15% augmentation de tension / -25% perte de tension à la mort
+PlayerStatistic.Bonus.AdventurerTitleLevel1:	+3% vitesse max de marche & de nage / +2% de portée des Sorts-Archerie
+PlayerStatistic.Bonus.AdventurerTitleLevel2:	+6% vitesse max de marche & de nage / +4% de portée des Sorts-Archerie
+PlayerStatistic.Bonus.AdventurerTitleLevel3:	+9% vitesse max de marche & de nage / +6% de portée des Sorts-Archerie
+PlayerStatistic.Bonus.AdventurerTitleLevel4:	+12% vitesse max de marche & de nage / +8% de portée des Sorts-Archerie
+PlayerStatistic.Bonus.AdventurerTitleLevel5:	+15% vitesse max de marche & de nage / +10% de portée des Sorts-Archerie

@@ -105,8 +105,61 @@ namespace DOL.GS
             var maxLevel = GetMaxLevel(taskName);
             var nextLevelThreshold = GetNextLevelThreshold(player, taskName, level);
 
+            switch (taskName)
+            {
+                case "KillEnemyPlayersGroup":
+                    taskData.KillEnemyPlayersGroupStats++;
+                    break;
+                case "KillEnemyPlayersAlone":
+                    taskData.KillEnemyPlayersAloneStats++;
+                    break;
+                case "KillKeepGuards":
+                    taskData.KillKeepGuardsStats++;
+                    break;
+                case "RvRChampionOfTheDay":
+                    taskData.RvRChampionOfTheDayStats++;
+                    break;
+                case "KillTerritoryGuards":
+                    taskData.KillTerritoryGuardsStats++;
+                    break;
+                case "KillTerritoryBoss":
+                    taskData.KillTerritoryBossStats++;
+                    break;
+                case "KillCreaturesInDungeons":
+                    taskData.KillCreaturesInDungeonsStats++;
+                    break;
+                case "KillOutdoorsCreatures":
+                    taskData.KillOutdoorsCreaturesStats++;
+                    break;
+                case "SuccessfulItemCombinations":
+                    taskData.SuccessfulItemCombinationsStats++;
+                    break;
+                case "MasteredCrafts":
+                    taskData.MasteredCraftsStats++;
+                    break;
+                case "MasterpieceCrafted":
+                    taskData.MasterpieceCraftedStats++;
+                    break;
+                case "ItemsSoldToPlayers":
+                    taskData.ItemsSoldToPlayersStats++;
+                    break;
+                case "SuccessfulPvPThefts":
+                    taskData.SuccessfulPvPTheftsStats++;
+                    break;
+                case "OutlawPlayersSentToJail":
+                    taskData.OutlawPlayersSentToJailStats++;
+                    break;
+                case "EnemiesKilledInAdrenalineMode":
+                    taskData.EnemiesKilledInAdrenalineModeStats++;
+                    break;
+                case "QuestsCompleted":
+                    taskData.QuestsCompletedStats++;
+                    break;
+            }
+
             if (level >= maxLevel)
             {
+                GameServer.Database.SaveObject(taskData);
                 return;
             }
 

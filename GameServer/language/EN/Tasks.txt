@@ -7,11 +7,11 @@ Tasks.SpecialTasks: ===== SPECIAL TASKS =====
 Tasks.TaskCompletionTokenInfo: Each task completion token for PvP, RvR, GvG, PvE, or crafting tasks should be returned to the Taskmaster to receive rewards.
 Tasks.SpecialTaskCompletionTokenInfo: Special task completion tokens are specific to each task. These tokens unlock new player titles and provide special bonuses associated with those titles.
 Tasks.SnapshotTitle: TASKS
-Tasks.KillEnemyPlayersGroup: Kill Enemy Players while in a group
+Tasks.KillEnemyPlayersGroup: Kill Enemy Players Grouped
 Tasks.KillEnemyPlayersAlone: Kill Enemy Players Alone
 Tasks.KillKeepGuards: Kill Keep Guards
 Tasks.TakeKeeps: Take Keeps
-Tasks.RvRChampionOfTheDay: Become RvR Champion of the Day
+Tasks.RvRChampionOfTheDay: Be RvR Champion of the Day
 Tasks.KillTerritoryGuards: Kill Territory Guards
 Tasks.KillTerritoryBoss: Territory Capture
 Tasks.TurnInPvPGvGTaskToken: Turn in PvP/RvR/GvG Task completion token
@@ -34,15 +34,15 @@ Tasks.MasteredCrafts: Mastered Crafts
 Tasks.MasterpieceCrafted: Masterpiece crafted
 Tasks.TurnInCraftingTaskToken: Turn in Crafting Task completion token
 Tasks.EpicBossesSlaughtered: Epic Bosses Slaughtered
-Tasks.ItemsSoldToPlayers: Successful Player Market Trades
+Tasks.ItemsSoldToPlayers: Successful Market Trades
 Tasks.SuccessfulPvPThefts: Successful Player thefts
 Tasks.OutlawPlayersSentToJail: Kill Outlaw Players
-Tasks.EnemiesKilledInAdrenalineMode: Enemies killed in Adrenaline Mode
+Tasks.EnemiesKilledInAdrenalineMode: Enemies killed in Adrenaline
 Tasks.QuestsCompleted: Quests completed
 Tasks.MaxLevelReached: Max level
 Tasks.Level: Level {0}
 
-Tasks.KillEnemyPlayersGroupLog: Kill Enemy Players while in a group: {0}/{1}
+Tasks.KillEnemyPlayersGroupLog: Kill Enemy Players Grouped: {0}/{1}
 Tasks.KillEnemyPlayersAloneLog: Kill Enemy Players Alone: {0}/{1}
 Tasks.KillKeepGuardsLog: Kill Keep Guards: {0}/{1}
 Tasks.TakeKeepsLog: Take Keeps: {0}/{1}
@@ -52,10 +52,10 @@ Tasks.SuccessfulItemCombinationsLog: Successful Item Combinations: {0}/{1}
 Tasks.MasteredCraftsLog: Mastered Crafts: {0}/{1}
 Tasks.MasterpieceCraftedLog: Masterpiece crafted: {0}/{1}
 Tasks.EpicBossesSlaughteredLog: Epic Bosses Slaughtered: {0}/{1}
-Tasks.ItemsSoldToPlayersLog: Successful Player Market Trades: {0}/{1}
+Tasks.ItemsSoldToPlayersLog: Successful Market Trades: {0}/{1}
 Tasks.SuccessfulPvPTheftsLog: Successful Player thefts: {0}/{1}
 Tasks.OutlawPlayersSentToJailLog: Kill Outlaw Players: {0}/{1}
-Tasks.EnemiesKilledInAdrenalineModeLog: Enemies killed in Adrenaline Mode: {0}/{1}
+Tasks.EnemiesKilledInAdrenalineModeLog: Enemies killed in Adrenaline: {0}/{1}
 Tasks.QuestsCompletedLog: Quests completed: {0}/{1}
 Tasks.TurnInPvPGvGTaskTokenMessage: Task: You get a PvP/RvR/GvG Task completion token - level {0}
 Tasks.TurnInPvETaskTokenMessage: Task: You get a PvE Task completion token - level {0}

@@ -540,7 +540,13 @@ namespace DOL.spells
             }
 
             player.Out.SendSpellEffectAnimation(player, player, (ushort)match.SpellEfect, 0, false, 1);
-            int con = GetItemCon(player.CraftingSkills[match.CraftingSkill], match.CraftValue);
+
+            int con = 0;
+            if (match.CraftingSkill != eCraftingSkill.NoCrafting)
+            {
+                con = GetItemCon(player.CraftingSkills[match.CraftingSkill], match.CraftValue);
+            }
+
             if (newItem.Quality == 100)
             {
                 player.Out.SendPlaySound(eSoundType.Craft, 0x04);

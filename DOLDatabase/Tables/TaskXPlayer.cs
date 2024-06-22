@@ -43,6 +43,22 @@ namespace DOL.Database
         private string m_outlawPlayersSentToJail = "0|0";
         private string m_enemiesKilledInAdrenalineMode = "0|0";
         private string m_questsCompleted = "0|0";
+        private int m_killEnemyPlayersGroupStats;
+        private int m_killEnemyPlayersAloneStats;
+        private int m_killKeepGuardsStats;
+        private int m_rvRChampionOfTheDayStats;
+        private int m_killTerritoryGuardsStats;
+        private int m_killTerritoryBossStats;
+        private int m_killCreaturesInDungeonsStats;
+        private int m_killOutdoorsCreaturesStats;
+        private int m_successfulItemCombinationsStats;
+        private int m_masteredCraftsStats;
+        private int m_masterpieceCraftedStats;
+        private int m_itemsSoldToPlayersStats;
+        private int m_successfulPvPTheftsStats;
+        private int m_outlawPlayersSentToJailStats;
+        private int m_enemiesKilledInAdrenalineModeStats;
+        private int m_questsCompletedStats;
 
         [DataElement(AllowDbNull = false)]
         public string PlayerName
@@ -404,6 +420,182 @@ namespace DOL.Database
             {
                 Dirty = true;
                 m_questsCompleted = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public int KillEnemyPlayersGroupStats
+        {
+            get { return m_killEnemyPlayersGroupStats; }
+            set
+            {
+                Dirty = true;
+                m_killEnemyPlayersGroupStats = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public int KillEnemyPlayersAloneStats
+        {
+            get { return m_killEnemyPlayersAloneStats; }
+            set
+            {
+                Dirty = true;
+                m_killEnemyPlayersAloneStats = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public int KillKeepGuardsStats
+        {
+            get { return m_killKeepGuardsStats; }
+            set
+            {
+                Dirty = true;
+                m_killKeepGuardsStats = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public int RvRChampionOfTheDayStats
+        {
+            get { return m_rvRChampionOfTheDayStats; }
+            set
+            {
+                Dirty = true;
+                m_rvRChampionOfTheDayStats = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public int KillTerritoryGuardsStats
+        {
+            get { return m_killTerritoryGuardsStats; }
+            set
+            {
+                Dirty = true;
+                m_killTerritoryGuardsStats = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public int KillTerritoryBossStats
+        {
+            get { return m_killTerritoryBossStats; }
+            set
+            {
+                Dirty = true;
+                m_killTerritoryBossStats = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public int KillCreaturesInDungeonsStats
+        {
+            get { return m_killCreaturesInDungeonsStats; }
+            set
+            {
+                Dirty = true;
+                m_killCreaturesInDungeonsStats = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public int KillOutdoorsCreaturesStats
+        {
+            get { return m_killOutdoorsCreaturesStats; }
+            set
+            {
+                Dirty = true;
+                m_killOutdoorsCreaturesStats = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public int SuccessfulItemCombinationsStats
+        {
+            get { return m_successfulItemCombinationsStats; }
+            set
+            {
+                Dirty = true;
+                m_successfulItemCombinationsStats = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public int MasteredCraftsStats
+        {
+            get { return m_masteredCraftsStats; }
+            set
+            {
+                Dirty = true;
+                m_masteredCraftsStats = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public int MasterpieceCraftedStats
+        {
+            get { return m_masterpieceCraftedStats; }
+            set
+            {
+                Dirty = true;
+                m_masterpieceCraftedStats = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public int ItemsSoldToPlayersStats
+        {
+            get { return m_itemsSoldToPlayersStats; }
+            set
+            {
+                Dirty = true;
+                m_itemsSoldToPlayersStats = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public int SuccessfulPvPTheftsStats
+        {
+            get { return m_successfulPvPTheftsStats; }
+            set
+            {
+                Dirty = true;
+                m_successfulPvPTheftsStats = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public int OutlawPlayersSentToJailStats
+        {
+            get { return m_outlawPlayersSentToJailStats; }
+            set
+            {
+                Dirty = true;
+                m_outlawPlayersSentToJailStats = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public int EnemiesKilledInAdrenalineModeStats
+        {
+            get { return m_enemiesKilledInAdrenalineModeStats; }
+            set
+            {
+                Dirty = true;
+                m_enemiesKilledInAdrenalineModeStats = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public int QuestsCompletedStats
+        {
+            get { return m_questsCompletedStats; }
+            set
+            {
+                Dirty = true;
+                m_questsCompletedStats = value;
             }
         }
     }
