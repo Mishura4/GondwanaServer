@@ -14,3 +14,9 @@ Commands.GM.GroupMob.Usage.Status.Quest.Size:		'/GroupMob quest size <GroupId> <
 Commands.GM.GroupMob.Usage.Status.Quest.Aggro:		'/GroupMob quest aggro <GroupId> <New Aggro>' Change l'AGGRO des mobs d'un groupmob après avoir complété une quête
 Commands.GM.GroupMob.Usage.Status.Quest.Range:		'/GroupMob quest range <GroupId> <New Range>' Change l'AGGRO RANGE des mobs d'un groupmob après avoir complété une quête
 Commands.GM.GroupMob.Usage.Status.Reset:		'/GroupMob status reset <GroupId>'  Reset le status ainsi que ses interractions
+Commands.GM.GroupMob.Usage.Assist:              '/GroupMob assist <GroupId> <portée>' Change la portée d'assistance du groupe en cas d'attaque
+
+Commands.GM.GroupMob.BadID:                            Aucun MobGroup avec ID {0} n'a été trouvé
+Commands.GM.GroupMob.Assist.VisibilityDistance:        Le MobGroup {0} assistera maintenant tout membre se faisant attaquer
+Commands.GM.GroupMob.Assist.RangeSet:                  Le MobGroup {0} assistera maintenant tout membre à {1} unités de distance
+Commands.GM.GroupMob.Assist.Never:                     Le MobGroup {0} n'assistera pas ses membres

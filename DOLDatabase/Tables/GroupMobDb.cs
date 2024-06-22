@@ -32,6 +32,7 @@ namespace DOLDatabase.Tables
         private int m_completedQuestId;
         private int m_completedQuestCount;
         private string m_switchFamily;
+        private int m_assistRange;
 
         [DataElement(AllowDbNull = false, Varchar = 255, Unique = true)]
         public string GroupId
@@ -176,6 +177,20 @@ namespace DOLDatabase.Tables
             {
                 Dirty = true;
                 m_switchFamily = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public int AssistRange
+        {
+            get
+            {
+                return m_assistRange;
+            }
+            set
+            {
+                Dirty = true;
+                m_assistRange = value;
             }
         }
     }

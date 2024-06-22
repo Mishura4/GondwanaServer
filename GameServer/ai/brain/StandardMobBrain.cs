@@ -192,6 +192,25 @@ namespace DOL.AI.Brain
                     if (!currentPlayersSeen.Contains(PlayersSeen[i])) PlayersSeen.RemoveAt(i);
                 }
             }
+            
+            // First, if we are part of a MobGroup under attack, help them
+            Body.MobGroups?.Where(g => g.AssistRange != 0).ForEach(group =>
+            {
+                if (group.AssistRange < 0)
+                {
+                    group.NPCs.ForEach(friend =>
+                    {
+                        TryHelp(friend);
+                    });
+                }
+                else
+                {
+                    group.NPCs.Where(friend => friend.IsWithinRadius(this.Body.Coordinate, (float)group.AssistRange)).ForEach(friend =>
+                    {
+                        TryHelp(friend);
+                    });
+                }
+            });
 
             //If we have an aggrolevel above 0, we check for players and npcs in the area to attack
             if (!Body.AttackState && AggroLevel > 0)
@@ -284,26 +303,28 @@ namespace DOL.AI.Brain
             return multiplier;
         }
 
-        /// <summary>
-        /// Try aggroing an NPC
-        /// </summary>
-        /// <param name="npc"></param>
-        protected virtual void TryAggro(GameNPC npc)
+        protected virtual bool TryHelp(GameNPC npc)
         {
-            if (!GameServer.ServerRules.IsAllowedToAttack(Body, npc, true))
-                return;
-            if (m_aggroTable.ContainsKey(npc))
-                return; // add only new NPCs
-            if (!npc.IsAlive || npc.ObjectState != GameObject.eObjectState.Active)
-                return;
-            if (npc is GameTaxi)
-                return; //do not attack horses
-            if (CalculateAggroLevelToTarget(npc) > 0)
+            if (npc.Brain is StandardMobBrain stdBrain)
             {
-                if (npc.Brain is ControlledNpcBrain or FollowingFriendMobBrain) // This is a pet or charmed creature, checkLOS
-                    AddToAggroList(npc, 1, true);
-                else
-                    AddToAggroList(npc, 1);
+                stdBrain.AddAggroListTo(this);
+                return true;
+            }
+            else
+            {
+                bool found = false;
+                foreach (var attacker in npc.Attackers.OfType<GameLiving>())
+                {
+                    if (attacker is GameNPC npcAttacker)
+                    {
+                        found = found || TryAggro(npcAttacker);
+                    }
+                    else if (attacker is GamePlayer playerAttacker)
+                    {
+                        found = found || TryAggro(playerAttacker);
+                    }
+                }
+                return found;
             }
         }
 
@@ -311,17 +332,46 @@ namespace DOL.AI.Brain
         /// Try aggroing an NPC
         /// </summary>
         /// <param name="npc"></param>
-        protected virtual void TryAggro(GamePlayer player)
+        protected virtual bool TryAggro(GameNPC npc)
+        {
+            if (!GameServer.ServerRules.IsAllowedToAttack(Body, npc, true))
+                return false;
+
+            if (m_aggroTable.ContainsKey(npc))
+                return false;
+
+            if (!npc.IsAlive || npc.ObjectState != GameObject.eObjectState.Active)
+                return false;
+
+            if (npc is GameTaxi)
+                return false;
+
+            if (CalculateAggroLevelToTarget(npc) > 0)
+            {
+                if (npc.Brain is ControlledNpcBrain or FollowingFriendMobBrain) // This is a pet or charmed creature, checkLOS
+                    AddToAggroList(npc, 1, true);
+                else
+                    AddToAggroList(npc, 1);
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Try aggroing an NPC
+        /// </summary>
+        /// <param name="npc"></param>
+        protected virtual bool TryAggro(GamePlayer player)
         {
             // Don't aggro on immune players.
             if (!GameServer.ServerRules.IsAllowedToAttack(Body, player, true))
-                return;
+                return false;
 
             if (Body.GetDistanceTo(player) > (ushort)AggroRange * GetGroupMobRangeMultiplier(player))
-                return;
+                return false;
 
             if (player.EffectList.GetOfType<NecromancerShadeEffect>() != null)
-                return;
+                return false;
 
             int aggrolevel = 0;
 
@@ -333,19 +383,23 @@ namespace DOL.AI.Brain
             }
 
             if (aggrolevel <= 0 && AggroLevel <= 0)
-                return;
+                return false;
 
             if (m_aggroTable.ContainsKey(player))
-                return; // add only new players
+                return false;
+
             if (!player.IsAlive || player.ObjectState != GameObject.eObjectState.Active || player.IsStealthed)
-                return;
+                return false;
+
             if (player.Steed != null)
-                return; //do not attack players on steed
+                return false;
 
             if (CalculateAggroLevelToTarget(player) > 0)
             {
                 AddToAggroList(player, 1, true);
+                return true;
             }
+            return false;
         }
 
         /// <summary>

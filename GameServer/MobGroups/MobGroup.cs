@@ -59,6 +59,7 @@ namespace DOL.MobGroups
             this.SetGroupInteractions(groupInteract);
             this.HasOriginalStatus = IsStatusOriginal();
             this.SwitchFamily = db.SwitchFamily;
+            this.AssistRange = db.AssistRange;
         }
 
         /// <summary>
@@ -302,6 +303,12 @@ namespace DOL.MobGroups
             set;
         }
 
+        public int AssistRange
+        {
+            get;
+            set;
+        } = WorldMgr.INFO_DISTANCE;
+
         public bool HasOriginalStatus
         {
             get;
@@ -508,6 +515,7 @@ namespace DOL.MobGroups
             db.CompletedQuestRange = this.CompletedQuestRange;
             db.CompletedQuestNPCFlags = this.CompletedQuestNPCFlags;
             db.SwitchFamily = this.SwitchFamily;
+            db.AssistRange = this.AssistRange;
 
             if (isNew)
             {

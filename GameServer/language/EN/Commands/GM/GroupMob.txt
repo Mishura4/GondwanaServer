@@ -14,3 +14,9 @@ Commands.GM.GroupMob.Usage.Status.Quest.Size:		'/GroupMob quest size <GroupId> <
 Commands.GM.GroupMob.Usage.Status.Quest.Aggro:		'/GroupMob quest aggro <GroupId> <New Aggro>' To add a new aggro for groupmob after completing a quest
 Commands.GM.GroupMob.Usage.Status.Quest.Range:		'/GroupMob quest range <GroupId> <New Range>' To add a new range for groupmob after completing a quest
 Commands.GM.GroupMob.Usage.Status.Reset:		'/GroupMob status reset <GroupId> <GroupId>'  Reset the GroupMob Status as well as its interactions
+Commands.GM.GroupMob.Usage.Assist:              '/GroupMob assist <GroupID> <range>' Changes the range at which members of the MobGroup will assist each other if attacked
+
+Commands.GM.GroupMob.BadID:                            No MobGroup with ID {0} was found
+Commands.GM.GroupMob.Assist.VisibilityDistance:        MobGroup {0} will now assist any member being attacked
+Commands.GM.GroupMob.Assist.RangeSet:                  MobGroup {0} will now assist any member within {1} units of distance
+Commands.GM.GroupMob.Assist.Never:                     MobGroup {0} will not assist members

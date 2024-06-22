@@ -12,6 +12,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DOL.GS
@@ -46,6 +47,8 @@ namespace DOL.GS
         private int addsRespawnCurrentCount;
         private int addRespawnTimerSecs;
         private DateTime? npcAddsNextPopupTimeStamp;
+
+        private MobGroup? addsGroup;
 
         private readonly object m_addsLock = new object();
 
@@ -384,7 +387,7 @@ namespace DOL.GS
             addsGroupmobId = "spwn_add_" + (dbId != null ? dbId.Substring(0, 8) : Guid.NewGuid().ToString().Substring(0, 8));
             foreach (var npc in npcs)
             {
-                MobGroupManager.Instance.AddMobToGroup(npc, addsGroupmobId, true);
+                addsGroup = MobGroupManager.Instance.AddMobToGroup(npc, addsGroupmobId, true);
             }
 
             GroupMobStatusDb status;
@@ -393,31 +396,17 @@ namespace DOL.GS
             {
                 status = GetActiveStatus();
                 isAddsActiveStatus = true;
-                Task.Run(async () =>
-                {
-                    //Delay animation on mob added to world
-                    await Task.Delay(500);
-                    if (IsAlive && Brain is StandardMobBrain { HasAggro: true } myBrain)
-                    {
-                        lock (m_addsLock)
-                        {
-                            loadedAdds.ForEach(n =>
-                            {
-                                if (n.IsAlive && n.Brain is StandardMobBrain friendBrain)
-                                {
-                                    myBrain.AddAggroListTo(friendBrain);
-                                }
-                            });
-                        }
-                    }
-                });
             }
             else
             {
                 status = GetInativeStatus();
             }
 
-            MobGroupManager.Instance.Groups[addsGroupmobId].SetGroupInfo(status, true, true);
+            if (addsGroup != null)
+            {
+                addsGroup.AssistRange = -1;
+                addsGroup.SetGroupInfo(status, true, true);
+            }
         }
 
         private bool CanSpawnAdds()
@@ -441,19 +430,6 @@ namespace DOL.GS
                 {
                     addsResetTimer.Stop();
                     addsResetTimer = null;
-                }
-                if (loadedAdds != null && Brain is StandardMobBrain myBrain)
-                {
-                    loadedAdds.ForEach(n =>
-                    {
-                        if (n.IsAlive && n.Brain is StandardMobBrain friendBrain)
-                        {
-                            foreach (var aggroEntry in myBrain.AggroTable)
-                            {
-                                friendBrain.AggroTable.TryAdd(aggroEntry.Key, aggroEntry.Value);
-                            }
-                        }
-                    });
                 }
                 if (isAggroType && CanSpawnAdds())
                 {
@@ -485,11 +461,26 @@ namespace DOL.GS
                     {
                         LoadAdds();
                     }
+                }
+            }
+        }
 
-                    if (!isAddsActiveStatus && (percentLifeAddsActivity == 0 || HealthPercent <= percentLifeAddsActivity))
-                    {
-                        ActivateAdds();
-                    }
+        /// <inheritdoc />
+        public override int Health
+        {
+            get => base.Health;
+            set
+            {
+                base.Health = value;
+                var percent = base.HealthPercent;
+                if (isAddsActiveStatus && percent > percentLifeAddsActivity)
+                {
+                    addsGroup?.SetGroupInfo(GetInativeStatus(), true, true);
+                    isAddsActiveStatus = false;
+                }
+                else if (!isAddsActiveStatus && (percentLifeAddsActivity == 0 || percent <= percentLifeAddsActivity))
+                {
+                    ActivateAdds();
                 }
             }
         }
@@ -508,25 +499,6 @@ namespace DOL.GS
             {
                 mobGroup.SetGroupInfo(GetActiveStatus(), true, true);
             }
-
-            Task.Run(async () =>
-            {
-                // Delay attacks
-                await Task.Delay(500);
-                if (IsAlive)
-                {
-                    lock (m_addsLock)
-                    {
-                        loadedAdds?.ForEach(n =>
-                        {
-                            if (n.IsAlive && n.Brain is StandardMobBrain friendBrain && Brain is StandardMobBrain myBrain)
-                            {
-                                myBrain.AddAggroListTo(friendBrain);
-                            }
-                        });
-                    }
-                }
-            });
         }
 
         /// <summary>
@@ -546,20 +518,7 @@ namespace DOL.GS
                         await Task.Delay(500);
                         if (IsAlive && Brain is StandardMobBrain { HasAggro: true } myBrain)
                         {
-                            lock (m_addsLock)
-                            {
-                                mobGroup.ResetGroupInfo(true);
-                                loadedAdds.ForEach(n =>
-                                {
-                                    if (n.IsAlive && n.Brain is StandardMobBrain friendBrain)
-                                    {
-                                        foreach (var aggroEntry in myBrain.AggroTable)
-                                        {
-                                            friendBrain.AggroTable.TryAdd(aggroEntry.Key, aggroEntry.Value);
-                                        }
-                                    }
-                                });
-                            }
+                            mobGroup.ResetGroupInfo(true);
                         }
                     });
                 }
@@ -572,14 +531,8 @@ namespace DOL.GS
             if (loadedAdds is { Count: >0 })
             {
                 GameEventMgr.AddHandler(GameEvents.GroupMobEvent.MobGroupDead, OnGroupMobDead);
-                if (Group == null)
-                {
-                    Group = new Group(this);
-                    Group.AddMember(this);
-                }
                 loadedAdds.ForEach(n =>
                 {
-                    Group.AddMember(n);
                     n.AutoRespawn = false;
                     n.RespawnInterval = addRespawnTimerSecs * 1000;
                 });

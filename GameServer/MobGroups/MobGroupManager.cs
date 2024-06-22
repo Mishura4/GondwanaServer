@@ -234,11 +234,11 @@ namespace DOL.MobGroups
             return true;
         }
 
-        public bool AddMobToGroup(GameNPC npc, string groupId, bool isLoadedFromScript = false)
+        public MobGroup? AddMobToGroup(GameNPC npc, string groupId, bool isLoadedFromScript = false)
         {
             if (npc == null || groupId == null)
             {
-                return false;
+                return null;
             }
 
             bool isnew = false;
@@ -288,7 +288,7 @@ namespace DOL.MobGroups
                 }
             }
 
-            return true;
+            return mobGroup;
         }
 
 

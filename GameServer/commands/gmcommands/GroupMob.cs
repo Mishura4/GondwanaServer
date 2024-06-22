@@ -1,6 +1,7 @@
 ﻿using DOL.Database;
 using DOL.GS;
 using DOL.GS.Commands;
+using DOL.GS.PacketHandler;
 using DOL.GS.Quests;
 using DOL.MobGroups;
 using DOLDatabase.Tables;
@@ -8,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using static DOL.GS.GameNPC;
 
@@ -31,7 +33,8 @@ namespace DOL.commands.gmcommands
           "Commands.GM.GroupMob.Usage.Status.Quest.Size",
           "Commands.GM.GroupMob.Usage.Status.Quest.Aggro",
           "Commands.GM.GroupMob.Usage.Status.Quest.Range",
-          "Commands.GM.GroupMob.Usage.Status.Reset")]
+          "Commands.GM.GroupMob.Usage.Status.Reset",
+          "Commands.GM.GroupMob.Usage.Assist")]
 
     public class GroupMob
           : AbstractCommandHandler, ICommandHandler
@@ -87,7 +90,7 @@ namespace DOL.commands.gmcommands
 
                     if (args.Length == 3 && target != null)
                     {
-                        bool added = MobGroupManager.Instance.AddMobToGroup(target, groupId);
+                        bool added = MobGroupManager.Instance.AddMobToGroup(target, groupId) != null;
                         if (added)
                         {
                             client.Out.SendMessage($"le mob {target.Name} a été ajouté au groupe {groupId}", GS.PacketHandler.eChatType.CT_System, GS.PacketHandler.eChatLoc.CL_ChatWindow);
@@ -143,14 +146,15 @@ namespace DOL.commands.gmcommands
 
                         string spawnKey = "spwn_" + spawner.ObjectId.Substring(0, 8);
 
-                        if (!MobGroupManager.Instance.Groups.ContainsKey(spawnKey))
+                        MobGroup group;
+                        if (!MobGroupManager.Instance.Groups.TryGetValue(spawnKey, out group))
                         {
-                            MobGroupManager.Instance.AddMobToGroup(target, spawnKey, false);
+                            group = MobGroupManager.Instance.AddMobToGroup(target, spawnKey, false);
                             client.Out.SendMessage($"Le MobGroup du Spawner a été créé avec le GroupId {spawnKey}", GS.PacketHandler.eChatType.CT_System, GS.PacketHandler.eChatLoc.CL_ChatWindow);
                         }
 
                         //Add to world will remove mobs from the world (see spawner class)
-                        MobGroupManager.Instance.Groups[spawnKey].NPCs.ForEach(n =>
+                        group.NPCs.ForEach(n =>
                         {
                             if (n.InternalID.Equals(spawner.MobID))
                             {
@@ -416,6 +420,41 @@ namespace DOL.commands.gmcommands
                     }
                     MobGroupManager.Instance.Groups[groupId].SaveToDabatase();
                     break;
+
+                case "assist":
+                    {
+                        if (args.Length < 4 || !Int32.TryParse(args[3], out int range))
+                        {
+                            DisplaySyntax(client);
+                            break;
+                        }
+
+                        MobGroup group;
+                        if (!MobGroupManager.Instance.Groups.TryGetValue(groupId, out group) || group == null)
+                        {
+                            client.SendTranslation("Commands.GM.GroupMob.BadID", eChatType.CT_System, eChatLoc.CL_SystemWindow, groupId);
+                            break;
+                        }
+                        group.AssistRange = range;
+                        group.SaveToDabatase();
+                        switch (range)
+                        {
+                            case < 0:
+                                client.SendTranslation("Commands.GM.GroupMob.Assist.VisibilityDistance", eChatType.CT_System, eChatLoc.CL_SystemWindow, group.GroupId);
+                                break;
+                            
+                            case 0:
+                                client.SendTranslation("Commands.GM.GroupMob.Assist.Never", eChatType.CT_System, eChatLoc.CL_SystemWindow, group.GroupId);
+                                break;
+                            
+                            case > 0:
+                                client.SendTranslation("Commands.GM.GroupMob.Assist.RangeSet", eChatType.CT_System, eChatLoc.CL_SystemWindow, group.GroupId, range);
+                                break;
+                        }
+                    }
+                    break;
+                    
+                
                 default:
                     DisplaySyntax(client);
                     break;
