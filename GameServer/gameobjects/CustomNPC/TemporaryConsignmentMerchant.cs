@@ -198,19 +198,15 @@ namespace DOL.GS
             tableModel.consignmentMerchant = this;
             tableModel.LoadedFromScript = false;
             tableModel.Position = playerOwner.Position;
-            tableModel.CurrentRegion = playerOwner.CurrentRegion;
-            tableModel.Heading = playerOwner.Heading;
             tableModel.Name = "Market";
             tableModel.Model = 1494;
             tableModel.Realm = 0;
             tableModel.AddToWorld();
 
             //create merchant
-            this.CurrentRegionID = playerOwner.CurrentRegionID;
             this.Position = playerOwner.Position;
             this.Level = 70;
             this.Realm = (eRealm)playerOwner.Realm;
-            this.Heading = playerOwner.Heading;
             this.HouseNumber = 0;
             this.Name = "Market";
             this.Model = 667;

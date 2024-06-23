@@ -190,7 +190,7 @@ namespace DOL.GS
         /// </summary>
         public virtual IList<InventoryItem> DBItems(GamePlayer player = null)
         {
-            return MarketCache.Items.Where(item => item.OwnerID == OwnerID).ToList();
+            return MarketCache.Items.Where(item => item.OwnerID == GetOwner(player)).ToList();
         }
 
         /// <summary>
@@ -515,8 +515,10 @@ namespace DOL.GS
                 log.ErrorFormat("CM: {0}:{1} can't find item to buy in slot {2} on consignment merchant on lot {3}.", player.Name, player.Client.Account, (int)fromClientSlot, HouseNumber);
                 return;
             }
-
-            string buyText = "Do you want to buy this Item?";
+            
+            float tax = 1 + (float)ServerProperties.Properties.TRADING_TAX / 100;
+            string buyText = "Do you want to buy this Item? (Price after " + ServerProperties.Properties.TRADING_TAX + "% tax: "
+                + Money.GetString((long)(fromItem.SellPrice * tax)) + ")";
 
             // If the player has a marketExplorer activated they will be charged a commission
             if (player.TargetObject is MarketExplorer)
@@ -605,7 +607,7 @@ namespace DOL.GS
                 }
 
                 int sellPrice = item.SellPrice;
-                int purchasePrice = sellPrice;
+                int purchasePrice = sellPrice + (int)(sellPrice * (1 + (float)ServerProperties.Properties.TRADING_TAX / 100));
 
                 if (usingMarketExplorer && ServerProperties.Properties.MARKET_FEE_PERCENT > 0)
                 {
@@ -767,7 +769,7 @@ namespace DOL.GS
             House house = HouseMgr.GetHouse(CurrentRegionID, HouseNumber);
             if (houseRequired && house == null)
                 return false;
-            if ((!houseRequired && OwnerID == player.ObjectId) || (house != null && house.CanUseConsignmentMerchant(player, ConsignmentPermissions.Any)))
+            if ((!houseRequired && GetOwner(player) == player.ObjectId) || (house != null && house.CanUseConsignmentMerchant(player, ConsignmentPermissions.Any)))
             {
                 player.Out.SendInventoryItemsUpdate(GetClientInventory(player), eInventoryWindowType.ConsignmentOwner);
 
