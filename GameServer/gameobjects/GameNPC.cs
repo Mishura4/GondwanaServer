@@ -271,7 +271,7 @@ namespace DOL.GS
             {
                 MobGroups = new List<MobGroup> { mobGroup };
             }
-            else
+            else if (!MobGroups.Contains(mobGroup))
             {
                 MobGroups.Add(mobGroup);
             }
@@ -915,21 +915,35 @@ namespace DOL.GS
             /// <summary>
             /// npc is swimming
             /// </summary>
-            SWIMMING = 0x100,
-            /// <summary>
-            /// npc is a mercenary, and will be removed on death or other conditions (e.g. hired territory guard removed on territory lost)
-            /// </summary>
-            MERCENARY = 0x200,
-            /// <summary>
-            /// normal respawn for this npc is disabled
-            /// </summary>
-            NORESPAWN = 0x400
+            SWIMMING = 0x100
         }
 
         /// <summary>
         /// Holds various flags of this npc
         /// </summary>
         protected eFlags m_flags;
+
+        [Flags]
+        public enum eSpawnFlags : uint
+        {
+            /// <summary>
+            /// npc is a mercenary, and will be removed from database on death or other conditions (e.g. hired territory guard removed on territory lost)
+            /// </summary>
+            MERCENARY = 0x001,
+            /// <summary>
+            /// normal respawn for this npc is disabled
+            /// </summary>
+            NORESPAWN = 0x002
+        }
+
+        /// <summary>
+        /// Flags related to a spawn, not affected by visual changes like groupmob flags
+        /// </summary>
+        public eSpawnFlags SpawnFlags
+        {
+            get;
+            protected set;
+        }
 
         /// <summary>
         /// package ID defined form this NPC
@@ -986,7 +1000,6 @@ namespace DOL.GS
         public bool IsFlying => Flags.HasFlag(eFlags.FLYING);
         public bool IsTorchLit => Flags.HasFlag(eFlags.TORCH);
         public bool IsStatue => Flags.HasFlag(eFlags.STATUE);
-        public bool IsMercenary => Flags.HasFlag(eFlags.MERCENARY);
         public override bool IsUnderwater
             => Flags.HasFlag(eFlags.SWIMMING) || base.IsUnderwater;
 
@@ -3146,9 +3159,9 @@ namespace DOL.GS
             //On Groupmob repop handle slave status
             if (MobGroups != null)
             {
-                foreach (MobGroup mobGroup in MobGroups.Where(g => g.SlaveGroupId != null))
+                foreach (MobGroup mobGroup in MobGroups)
                 {
-                    if (MobGroupManager.Instance.Groups.TryGetValue(mobGroup.SlaveGroupId, out MobGroup slaveGroup))
+                    if (mobGroup.SlaveGroupId != null && MobGroupManager.Instance.Groups.TryGetValue(mobGroup.SlaveGroupId, out MobGroup slaveGroup))
                     {
                         slaveGroup.ResetGroupInfo();
                     }
@@ -3159,6 +3172,8 @@ namespace DOL.GS
             {
                 if (Brain is IControlledBrain controlledBrain)
                 {
+                    // Important: do not mix this condition with the one above
+                    // If this a pet owned by a non-NPC we do NOT want to set the territory
                     if (controlledBrain.Owner is GameNPC ownerNPC)
                     {
                         CurrentTerritory = ownerNPC.CurrentTerritory;
@@ -4965,7 +4980,7 @@ namespace DOL.GS
         /// </summary>
         public bool AutoRespawn
         {
-            get => !Flags.HasFlag(eFlags.NORESPAWN);
+            get => !SpawnFlags.HasFlag(eSpawnFlags.NORESPAWN);
             set
             {
                 bool prev = AutoRespawn;
@@ -4973,7 +4988,7 @@ namespace DOL.GS
                 {
                     if (!prev)
                     {
-                        Flags |= eFlags.NORESPAWN;
+                        SpawnFlags &= ~eSpawnFlags.NORESPAWN;
                         if (m_respawnTimer?.IsAlive != true)
                             StartRespawn();
                     }
@@ -4982,12 +4997,19 @@ namespace DOL.GS
                 {
                     if (prev)
                     {
-                        Flags &= ~eFlags.NORESPAWN;
+                        SpawnFlags |= eSpawnFlags.NORESPAWN;
                         if (m_respawnTimer?.IsAlive == true)
                             m_respawnTimer.Stop();
                     }
                 }
             }
+        }
+
+
+        public bool IsMercenary
+        {
+            get => SpawnFlags.HasFlag(eSpawnFlags.MERCENARY);
+            set => SpawnFlags = value ? SpawnFlags | eSpawnFlags.NORESPAWN : SpawnFlags & ~eSpawnFlags.NORESPAWN;
         }
 
         /// <summary>

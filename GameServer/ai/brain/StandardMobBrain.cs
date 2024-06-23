@@ -303,7 +303,7 @@ namespace DOL.AI.Brain
             return multiplier;
         }
 
-        protected virtual bool TryHelp(GameNPC npc)
+        public virtual bool TryHelp(GameNPC npc)
         {
             if (npc.Brain is StandardMobBrain stdBrain)
             {

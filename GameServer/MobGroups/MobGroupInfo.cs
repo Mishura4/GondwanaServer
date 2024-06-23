@@ -16,7 +16,7 @@ namespace DOL.MobGroups
             set;
         }
 
-        public eFlags? Flag
+        public long? Flag
         {
             get;
             set;

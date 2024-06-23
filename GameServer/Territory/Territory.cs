@@ -3,6 +3,7 @@ using DOL.Database;
 using DOL.GameEvents;
 using DOL.gameobjects.CustomNPC;
 using DOL.GS;
+using DOL.GS.Effects;
 using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
 using DOL.GS.PropertyCalc;
@@ -1080,7 +1081,8 @@ namespace DOL.Territories
                 }
                 npc.Position = buyer.Position;
                 npc.GuildName = OwnerGuild?.Name ?? template.GuildName ?? string.Empty;
-                npc.Flags |= GameNPC.eFlags.MERCENARY | GameNPC.eFlags.NORESPAWN;
+                npc.AutoRespawn = false;
+                npc.IsMercenary = true;
                 npc.FlagsDb = (uint)npc.Flags;
                 npc.LoadedFromScript = false;
                 npc.SaveIntoDatabase();

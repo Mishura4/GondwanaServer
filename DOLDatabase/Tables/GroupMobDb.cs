@@ -14,7 +14,7 @@ namespace DOLDatabase.Tables
     {
         private string m_groupId;
         private string m_IsInvincible;
-        private int m_flag;
+        private long? m_flag;
         private string m_visibleSlot;
         private string m_race;
         private string m_model;
@@ -49,7 +49,7 @@ namespace DOLDatabase.Tables
         }
 
         [DataElement(AllowDbNull = true, Varchar = 255)]
-        public int Flag
+        public long? Flag
         {
             get => m_flag;
             set { Dirty = true; m_flag = value; }

@@ -73,7 +73,6 @@ namespace DOL.MobGroups
                 slave.GroupInfos = MobGroup.CopyGroupInfo(master.GroupInteractions);
                 slave.SaveToDabatase();
                 slave.ApplyGroupInfos(slave.GroupId.StartsWith("spwn_add_"));
-                slave.HasOriginalStatus = false;
             }
         }
 
@@ -248,6 +247,11 @@ namespace DOL.MobGroups
                 mobGroup = new MobGroup(groupId, isLoadedFromScript);
                 this.Groups.Add(groupId, mobGroup);
                 isnew = true;
+            }
+            else if (mobGroup.NPCs.Contains(npc))
+            {
+                npc.AddToMobGroup(mobGroup);
+                return mobGroup;
             }
 
             mobGroup.NPCs.Add(npc);
