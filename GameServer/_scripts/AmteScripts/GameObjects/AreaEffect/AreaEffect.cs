@@ -75,7 +75,9 @@ namespace DOL.GS.Scripts
                 if (Util.Chance(MissChance)) continue;
 
                 var health = HealHarm + (HealHarm * Util.Random(-5, 5) / 100);
-                if (health < 0 && player.Client.Account.PrivLevel == 1)
+                bool isOwner = (player.ObjectId == OwnerID);
+
+                if (health < 0 && !isOwner && player.Client.Account.PrivLevel == 1)
                 {
                     player.TakeDamage(this, eDamageType.Natural, -health, 0);
                 }
@@ -88,9 +90,18 @@ namespace DOL.GS.Scripts
 
                 if (Message != "" && (health != 0 || AddMana != 0 || AddEndurance != 0))
                 {
-                    player.Out.SendMessage(
+                    if (!isOwner)
+                    {
+                        player.Out.SendMessage(
                         string.Format(Message, Math.Abs(health), Math.Abs(AddMana), Math.Abs(AddEndurance)),
                         eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                    }
+                    else if (health > 0 && isOwner)
+                    {
+                        player.Out.SendMessage(
+                        string.Format(Message, Math.Abs(health), Math.Abs(AddMana), Math.Abs(AddEndurance)),
+                        eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                    }
                 }
 
                 if (player.Client.Account.PrivLevel == 1)

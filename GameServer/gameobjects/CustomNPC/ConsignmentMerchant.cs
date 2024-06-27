@@ -607,7 +607,7 @@ namespace DOL.GS
                 }
 
                 int sellPrice = item.SellPrice;
-                int purchasePrice = sellPrice + (int)(sellPrice * (1 + (float)ServerProperties.Properties.TRADING_TAX / 100));
+                int purchasePrice = (int)(sellPrice * (1 + (float)ServerProperties.Properties.TRADING_TAX / 100));
 
                 if (usingMarketExplorer && ServerProperties.Properties.MARKET_FEE_PERCENT > 0)
                 {

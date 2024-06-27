@@ -26,6 +26,7 @@ namespace DOL.MobGroups
             this.isLoadedFromScript = isLoadedFromScript;
             this.NPCs = new List<GameNPC>();
             this.GroupInfos = new MobGroupInfo();
+            this.HasOriginalStatus = false;
             this.SwitchFamily = null;
         }
 
@@ -44,23 +45,20 @@ namespace DOL.MobGroups
             this.CompletedQuestID = db.CompletedQuestID;
             this.CompletedQuestCount = db.CompletedQuestCount;
             this.NPCs = new List<GameNPC>();
-            var originalInfo = GetMobInfoFromSource(originalStatus);
             this.GroupInfos = new MobGroupInfo()
             {
-                Effect = db.Effect != null ? int.TryParse(db.Effect, out int effect) ? effect : (int?)null : originalInfo?.Effect,
-                Flag = db.Flag ?? originalInfo?.Effect,
-                IsInvincible = db.IsInvincible != null ? bool.TryParse(db.IsInvincible, out bool dbInv) ? dbInv : (bool?)null : originalInfo?.IsInvincible,
-                Model = db.Model != null ? int.TryParse(db.Model, out int model) ? model : (int?)null : originalInfo?.Model,
-                Race = db.Race != null ? Enum.TryParse(db.Race, out eRace race) ? race : (eRace?)null : originalInfo?.Race,
-                VisibleSlot = db.VisibleSlot != null ? byte.TryParse(db.VisibleSlot, out byte slot) ? slot : (byte?)null : originalInfo?.VisibleSlot
+                Effect = db.Effect != null ? int.TryParse(db.Effect, out int effect) ? effect : (int?)null : (int?)null,
+                Flag = db.Flag > 0 ? (long?)db.Flag : (long?)null,
+                IsInvincible = db.IsInvincible != null ? bool.TryParse(db.IsInvincible, out bool dbInv) ? dbInv : (bool?)null : (bool?)null,
+                Model = db.Model != null ? int.TryParse(db.Model, out int model) ? model : (int?)null : (int?)null,
+                Race = db.Race != null ? Enum.TryParse(db.Race, out eRace race) ? race : (eRace?)null : (eRace?)null,
+                VisibleSlot = db.VisibleSlot != null ? byte.TryParse(db.VisibleSlot, out byte slot) ? slot : (byte?)null : (byte?)null
             };
-            if (originalInfo == null)
-            {
-                this.originalGroupInfo = GroupInfos;
-            }
 
             this.mobGroupOriginFk = originalStatus?.GroupStatusId;
+            this.originalGroupInfo = GetMobInfoFromSource(originalStatus);
             this.SetGroupInteractions(groupInteract);
+            this.HasOriginalStatus = IsStatusOriginal();
             this.SwitchFamily = db.SwitchFamily;
             this.AssistRange = db.AssistRange;
         }
@@ -314,7 +312,8 @@ namespace DOL.MobGroups
 
         public bool HasOriginalStatus
         {
-            get => IsStatusOriginal();
+            get;
+            set;
         }
 
         public MobGroupInfo GroupInfos
@@ -344,16 +343,10 @@ namespace DOL.MobGroups
         public void SetGroupInfo(GroupMobStatusDb status, bool isOriginalStatus, bool isLoadedFromScript = false)
         {
             this.GroupInfos = GetMobInfoFromSource(status);
-            if (isOriginalStatus)
-            {
-                this.mobGroupOriginFk = status?.GroupStatusId;
-                this.originalGroupInfo = CopyGroupInfo(this.GroupInfos);
-            }
+            this.mobGroupOriginFk = status?.GroupStatusId;
+            this.HasOriginalStatus = isOriginalStatus;
+            this.originalGroupInfo = GetMobInfoFromSource(status);
             this.ApplyGroupInfos(isLoadedFromScript);
-            if (!isLoadedFromScript)
-            {
-                this.SaveToDabatase();
-            }
         }
 
         public void ApplyGroupInfos(GameNPC npc, bool isLoadedFromScript = false)
@@ -428,7 +421,13 @@ namespace DOL.MobGroups
             if (this.originalGroupInfo != null && (force || !this.HasOriginalStatus))
             {
                 this.GroupInfos = CopyGroupInfo(this.originalGroupInfo);
+                this.HasOriginalStatus = true;
                 this.ApplyGroupInfos();
+
+                if (!isLoadedFromScript)
+                {
+                    this.SaveToDabatase();
+                }
             }
         }
 
@@ -441,6 +440,7 @@ namespace DOL.MobGroups
             this.CompletedQuestID = 0;
             this.CompletedStepQuestID = 0;
             this.IsQuestConditionFriendly = false;
+            this.HasOriginalStatus = true;
             this.SlaveGroupId = null;
             this.CompletedQuestNPCFlags = null;
             this.CompletedQuestNPCModel = 0;
@@ -505,17 +505,14 @@ namespace DOL.MobGroups
                 }
             }
 
-            if (this.originalGroupInfo == null)
-            {
-                db.Flag = this.GroupInfos.Flag.HasValue ? (int)this.GroupInfos.Flag.Value : 0;
-                db.Race = this.GroupInfos.Race?.ToString();
-                db.VisibleSlot = this.GroupInfos.VisibleSlot?.ToString();
-                db.Effect = this.GroupInfos.Effect?.ToString();
-                db.Model = this.GroupInfos.Model?.ToString();
-                db.IsInvincible = this.GroupInfos.IsInvincible?.ToString();
-            }
+            db.Flag = this.GroupInfos.Flag.HasValue ? (int)this.GroupInfos.Flag.Value : 0;
+            db.Race = this.GroupInfos.Race?.ToString();
+            db.VisibleSlot = this.GroupInfos.VisibleSlot?.ToString();
+            db.Effect = this.GroupInfos.Effect?.ToString();
+            db.Model = this.GroupInfos.Model?.ToString();
             db.GroupId = this.GroupId;
             db.SlaveGroupId = this.SlaveGroupId;
+            db.IsInvincible = this.GroupInfos.IsInvincible?.ToString();
             db.ObjectId = this.InternalId;
             db.GroupMobInteract_FK_Id = this.mobGroupInterfactFk;
             db.GroupMobOrigin_FK_Id = this.mobGroupOriginFk;

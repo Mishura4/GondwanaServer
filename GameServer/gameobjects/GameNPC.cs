@@ -4615,6 +4615,8 @@ namespace DOL.GS
             if (IsBoss)
             {
                 TaskManager.UpdateTaskProgress(killerPlayer, "EpicBossesSlaughtered", 1);
+                killerPlayer.KillsEpicBoss++;
+                GameEventMgr.Notify(GamePlayerEvent.KillsEpicBossChanged, killerPlayer);
             }
 
             if (killerPlayer.HasAdrenalineBuff())

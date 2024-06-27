@@ -147,6 +147,7 @@ namespace Amte
             }
             player.GainGuildMeritPoints(800);
             TaskManager.UpdateTaskProgress(player, "TakeKeeps", 1);
+            player.CapturedKeeps++;
             NewsMgr.CreateNews("GameObjects.GamePlayer.RvR.Control", 0, eNewsType.RvRGlobal, false, true, player.GuildName, fortName);
 
             RvrManager.Instance.OnControlChange(this.InternalID, player.Guild);

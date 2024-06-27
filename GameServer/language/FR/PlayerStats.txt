@@ -41,8 +41,8 @@ PlayerStatistic.StatsPVE:					Rapports PvE :
 PlayerStatistic.StatsCrafting:				Rapports d'Artisanat :
 PlayerStatistic.StatsGreatAchievements:		Grandes Réalisations :
 PlayerStatistic.StatsSpecialAchievements:	Réalisations Spéciales :
-PlayerStatistic.TotalCreaturesKilled:		Total des Créatures tuées:
-PlayerStatistic.TotalCraftPerformed:		Total des Objets fabriqués:
+PlayerStatistic.TotalCreaturesKilled:		Total des Créatures tuées
+PlayerStatistic.TotalCraftPerformed:		Total des Objets fabriqués
 
 # /Bonus de titres
 PlayerStatistic.Bonus.DemonslayerTitleLevel1:	+2% DPS en mêlée / +3% dégâts des sorts

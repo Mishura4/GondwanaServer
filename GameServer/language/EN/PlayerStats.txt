@@ -41,8 +41,8 @@ PlayerStatistic.StatsPVE:					PvE Statistics:
 PlayerStatistic.StatsCrafting:				Crafting Statistics:
 PlayerStatistic.StatsGreatAchievements:		Great Achievements:
 PlayerStatistic.StatsSpecialAchievements:	Special Achievements:
-PlayerStatistic.TotalCreaturesKilled:		Total Creatures killed:
-PlayerStatistic.TotalCraftPerformed:		Total Item created:
+PlayerStatistic.TotalCreaturesKilled:		Total Creatures killed
+PlayerStatistic.TotalCraftPerformed:		Total Item created
 
 # /Title bonuses
 PlayerStatistic.Bonus.DemonslayerTitleLevel1:	+2% DPS in melee / +3% spell dmg
