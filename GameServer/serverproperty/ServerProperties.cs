@@ -929,6 +929,12 @@ namespace DOL.GS.ServerProperties
         public static double RvR_XP_RATE;
 
         /// <summary>
+        /// The Experience Rate
+        /// </summary>
+        [ServerProperty("rates", "xp_copper_rate", "The Rate at which experience gains will be converted to copper at max level", 1.0)]
+        public static double XP_TO_COPPER_RATE;
+
+        /// <summary>
         /// RvR RARIUS AREA DEFAULT
         /// </summary>
         [ServerProperty("rvr", "rvr_area_radius", "The RvR radius area default value", 6000)]

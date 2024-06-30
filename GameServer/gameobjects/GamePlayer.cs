@@ -4836,6 +4836,40 @@ namespace DOL.GS
             Out.SendUpdatePoints();
         }
 
+        /// <summary>
+        /// Get the total RP factor 
+        /// </summary>
+        /// <returns></returns>
+        
+        public double GetRPFactor(bool enableZone = true)
+        {
+            double factor = 1.0d;
+
+            if (enableZone && ServerProperties.Properties.ENABLE_ZONE_BONUSES && CurrentZone != null)
+            {
+                factor *= 1.0d + (ZoneBonus.GetRPBonus(this) / 100.0d);
+            }
+
+            if (enableZone && Properties.ENABLE_AREA_BONUSES)
+            {
+                //Area RP Bonus
+                double areapoints = 0;
+                foreach (var area in this.CurrentAreas)
+                {
+                    areapoints += area.RealmPoints;
+                }
+                areapoints /= 100.0d;
+                factor *= 1.0d + areapoints;
+            }
+
+            factor *= ServerProperties.Properties.RP_RATE;
+
+            var toaBonus = GetModified(eProperty.RealmPoints);
+            factor *= toaBonus != 0 ? 1.0d + toaBonus / 100.0d : 1.0d;
+
+            return factor;
+        }
+
         [Obsolete("Use RemoveMoney(Money) instead.")]
         public bool RemoveBountyPoints(long amount)
         {
@@ -5083,7 +5117,7 @@ namespace DOL.GS
         /// </summary>
         /// <param name="realmLevel">realm level</param>
         /// <returns>amount of realm points</returns>
-        protected virtual long CalculateRPsFromRealmLevel(int realmLevel)
+        public virtual long CalculateRPsFromRealmLevel(int realmLevel)
         {
             if (realmLevel < REALMPOINTS_FOR_LEVEL.Length)
                 return REALMPOINTS_FOR_LEVEL[realmLevel];
@@ -5616,6 +5650,60 @@ namespace DOL.GS
                 }
             }
             Out.SendUpdatePoints();
+        }
+
+        /// <summary>
+        /// Get the total XP factor
+        /// </summary>
+        /// <returns></returns>
+        public double GetXPFactor(bool enableZone = true)
+        {
+            double factor = 1.0d;
+            
+            if (enableZone && ServerProperties.Properties.ENABLE_ZONE_BONUSES && CurrentZone != null)
+            {
+                factor += (ZoneBonus.GetXPBonus(this) / 100.0d);
+            }
+            
+            factor *= IsInRvR ? ServerProperties.Properties.RvR_XP_RATE : ServerProperties.Properties.XP_RATE;
+            
+
+            var toaBonus = GetModified(eProperty.XpPoints);
+            factor += toaBonus != 0 ? toaBonus / 100.0d : 0;
+            
+            if (this.IsRenaissance)
+            {
+                factor *= Level < 40 ? 1.5d : 0.5d;
+            }
+            
+            if (Guild != null)
+            {
+                factor += Guild.TerritoryBonusExperienceFactor * 100;
+            }
+
+            //catacombs characters get 50% boost if they are elligable for slash level
+            switch ((eCharacterClass)CharacterClass.ID)
+            {
+                case eCharacterClass.Heretic:
+                case eCharacterClass.Valkyrie:
+                case eCharacterClass.Warlock:
+                case eCharacterClass.Bainshee:
+                case eCharacterClass.Vampiir:
+                case eCharacterClass.MaulerAlb:
+                case eCharacterClass.MaulerHib:
+                case eCharacterClass.MaulerMid:
+                    {
+                        //we don't want to allow catacombs classes to use free levels and
+                        //have a 50% bonus
+                        if (!ServerProperties.Properties.ALLOW_CATA_SLASH_LEVEL && CanUseSlashLevel && Level < 20)
+                        {
+                            factor *= 1.5;
+                        }
+                        break;
+                    }
+            }
+            
+            return factor;
         }
 
         /// <summary>
