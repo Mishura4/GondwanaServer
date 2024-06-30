@@ -23,6 +23,8 @@ namespace DOLDatabase.Tables
         private int m_percentLifeAddsActivity;
         private string m_inactiveStatusId;
         private string m_activeStatusId;
+        private string m_inactiveBossStatusId;
+        private string m_activeBossStatusId;
         private int m_addsRespawnCount;
         private string m_masterGroupId;
         private int m_addRespawnTimerSecs;
@@ -108,6 +110,20 @@ namespace DOLDatabase.Tables
         {
             get => m_activeStatusId;
             set { Dirty = true; m_activeStatusId = value; }
+        }
+
+        [DataElement(AllowDbNull = true, Varchar = 255)]
+        public string InactiveBossStatusId
+        {
+            get => m_inactiveBossStatusId;
+            set { Dirty = true; m_inactiveBossStatusId = value; }
+        }
+
+        [DataElement(AllowDbNull = true, Varchar = 255)]
+        public string ActiveBossStatusId
+        {
+            get => m_activeBossStatusId;
+            set { Dirty = true; m_activeBossStatusId = value; }
         }
 
         [DataElement(AllowDbNull = false)]
