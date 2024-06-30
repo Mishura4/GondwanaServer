@@ -2287,6 +2287,7 @@ namespace DOL.GS
 
             if (InternalID != null)
             {
+                GameServer.Database.DeleteObject(GameServer.Database.SelectObjects<GroupMobXMobs>(DB.Column("MobID").IsEqualTo(InternalID)));
                 Mob mob = GameServer.Database.FindObjectByKey<Mob>(InternalID);
                 if (mob != null)
                     GameServer.Database.DeleteObject(mob);
@@ -4520,6 +4521,7 @@ namespace DOL.GS
 
             // remove temp properties
             TempProperties.removeAllProperties();
+
 
             if (AutoRespawn)
             {

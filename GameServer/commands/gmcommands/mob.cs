@@ -1116,9 +1116,24 @@ namespace DOL.GS.Commands
 
             if (typeOfMob == "DOL.GS.Scripts.AreaEffect")
                 GameServer.Database.DeleteObject(GameServer.Database.SelectObjects<DBAreaEffect>(DB.Column("MobID").IsEqualTo(targetMob.InternalID)));
-            IList<GroupMobXMobs> GroupMobs = GameServer.Database.SelectObjects<GroupMobXMobs>(DB.Column("MobID").IsEqualTo(targetMob.InternalID));
-            if(GroupMobs.Count > 0)
-                GameServer.Database.DeleteObject(GroupMobs);
+
+            if (targetMob.MobGroups != null)
+            {
+                foreach (MobGroup group in targetMob.MobGroups)
+                {
+                    MobGroupManager.Instance.RemoveMobFromGroup(targetMob, group.GroupId);
+                    if (group.NPCs.Count == 0)
+                    {
+                        client.Out.SendCustomDialog($"MobGroup {group.GroupId} is empty. Delete?", ((player, response) =>
+                        {
+                            if (response != 0x01)
+                                return;
+
+                            client.Out.SendMessage(MobGroupManager.Instance.RemoveGroupsAndMobs(group.GroupId) ? $"MobGroup {group.GroupId} deleted." : $"There was an error while trying to delete MobGroup {group.GroupId}.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        }));
+                    }
+                }
+            }
 
             client.Out.SendMessage("Target Mob removed from DB.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
         }
@@ -2711,7 +2726,7 @@ namespace DOL.GS.Commands
             {
                 foreach (MobGroup mobGroup in targetMob.MobGroups)
                 {
-                    mob.AddToMobGroup(mobGroup);
+                    MobGroupManager.Instance.AddMobToGroup(mob, mobGroup);
                 }
             }
 
