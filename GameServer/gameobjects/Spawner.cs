@@ -479,18 +479,7 @@ namespace DOL.GS
                 addsGroup = MobGroupManager.Instance.AddMobToGroup(npc, addsGroupmobId, true);
             }
 
-            GroupMobStatusDb status;
-            bool active = percentLifeAddsActivity == 0 || HealthPercent <= percentLifeAddsActivity;
-            if (active)
-            {
-                isAddsActiveStatus = true;
-                addsGroup?.SetGroupInfo(activeAddsStatus, true, true);
-            }
-            else
-            {
-                isAddsActiveStatus = false;
-                addsGroup?.SetGroupInfo(inactiveAddsStatus, true, true);
-            }
+            RefreshAddsActiveStatus(true);
         }
 
         private bool CanSpawnAdds()
@@ -560,42 +549,49 @@ namespace DOL.GS
             }
         }
 
-        private void RefreshAddsActiveStatus()
+        private void RefreshAddsActiveStatus(bool force = false)
         {
-            if (addsGroup == null)
+            if (addsGroup == null || percentLifeAddsActivity == 0)
                 return;
             
-            if (percentLifeAddsActivity != 0)
-            {
-                var percent = base.HealthPercent;
-                if (percent == 0)
-                    return;
+            var percent = base.HealthPercent;
+            if (percent == 0)
+                return;
                 
-                if (isAddsActiveStatus && percent > percentLifeAddsActivity)
+            if ((isAddsActiveStatus || force) && percent > percentLifeAddsActivity)
+            {
+                lock (m_addsLock)
                 {
-                    lock (m_addsLock)
-                    {
-                        if (inactiveBossStatus != null)
-                        {
-                            SpawnerGroup?.SetGroupInfo(inactiveBossStatus, false, true);
-                        }
-                        addsGroup.SetGroupInfo(inactiveAddsStatus, !isPredefinedSpawns, true);
-                        isAddsActiveStatus = false;
-                    }
-                }
-                else if (!isAddsActiveStatus && percent <= percentLifeAddsActivity)
-                {
-                    lock (m_addsLock)
-                    {
-                        if (activeBossStatus != null && addsAlive)
-                        {
-                            SpawnerGroup?.SetGroupInfo(activeBossStatus, false, true);
-                        }
-                        addsGroup.SetGroupInfo(activeAddsStatus, !isPredefinedSpawns, true);
-                        isAddsActiveStatus = true;
-                    }
+                    ApplyInactiveStatus();
                 }
             }
+            else if ((!isAddsActiveStatus || force) && percent <= percentLifeAddsActivity)
+            {
+                lock (m_addsLock)
+                {
+                    ApplyActiveStatus();
+                }
+            }
+        }
+
+        private void ApplyActiveStatus()
+        {
+            if (addsAlive && activeBossStatus != null)
+            {
+                SpawnerGroup?.SetGroupInfo(activeBossStatus, false, true);
+            }
+            addsGroup.SetGroupInfo(activeAddsStatus, !isPredefinedSpawns, true);
+            isAddsActiveStatus = true;
+        }
+
+        private void ApplyInactiveStatus()
+        {
+            if (inactiveBossStatus != null)
+            {
+                SpawnerGroup?.SetGroupInfo(inactiveBossStatus, false, true);
+            }
+            addsGroup.SetGroupInfo(inactiveAddsStatus, !isPredefinedSpawns, true);
+            isAddsActiveStatus = false;
         }
 
         private void SetAddsRespawn()
