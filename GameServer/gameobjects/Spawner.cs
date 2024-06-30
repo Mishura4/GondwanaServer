@@ -584,14 +584,7 @@ namespace DOL.GS
                         {
                             SpawnerGroup?.SetGroupInfo(activeBossStatus, false, true);
                         }
-                        if (isPredefinedSpawns)
-                        {
-                            addsGroup.ResetGroupInfo(true);
-                        }
-                        else
-                        {
-                            addsGroup.SetGroupInfo(activeAddsStatus, true, true);
-                        }
+                        addsGroup.SetGroupInfo(activeAddsStatus, !isPredefinedSpawns, true);
                         isAddsActiveStatus = true;
                     }
                 }
