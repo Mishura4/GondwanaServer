@@ -225,7 +225,14 @@ namespace DOL.GS
             LoadGroupStatus();
 
             loadedAdds = null;
-            Cleanup();
+        }
+
+        private void OnServerStart(DOLEvent e, object sender, EventArgs args)
+        {
+            if (inactiveBossStatus != null)
+            {
+                SpawnerGroup?.SetGroupInfo(inactiveBossStatus, false, true);
+            }
         }
         
         private void LoadGroupStatus()
@@ -804,6 +811,7 @@ namespace DOL.GS
         public override bool AddToWorld()
         {
             base.AddToWorld();
+            GameEventMgr.AddHandler(GameServerEvent.Started, OnServerStart);
             Cleanup();
             //register handler
             return true;
@@ -813,6 +821,7 @@ namespace DOL.GS
         public override bool RemoveFromWorld()
         {
             Cleanup();
+            GameEventMgr.RemoveHandler(GameServerEvent.Started, OnServerStart);
             return base.RemoveFromWorld();
         }
     }
