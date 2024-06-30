@@ -575,7 +575,7 @@ namespace DOL.GS
                 {
                     lock (m_addsLock)
                     {
-                        if (inactiveBossStatus != null && !addsAlive)
+                        if (inactiveBossStatus != null)
                         {
                             SpawnerGroup?.SetGroupInfo(inactiveBossStatus, false, true);
                         }
@@ -697,11 +697,6 @@ namespace DOL.GS
             if (loadedAdds != null)
             {
                 GameEventMgr.RemoveHandler(GameEvents.GroupMobEvent.MobGroupDead, OnGroupMobDead);
-                if (this.Group != null && this.Group.LivingLeader == this)
-                {
-                    this.Group.DisbandGroup();
-                    this.Group = null;
-                }
                 loadedAdds.ForEach(add =>
                 {
                     add.RemoveFromWorld();
@@ -709,6 +704,7 @@ namespace DOL.GS
                 });
                 loadedAdds = null;
             }
+            addsAlive = false;
         }
 
         protected void Cleanup()
@@ -726,9 +722,6 @@ namespace DOL.GS
                     addsResetTimer = null;
                 }
                 CleanupAddsUnsafe();
-
-                //reset groupinfo
-                SpawnerGroup?.ResetGroupInfo(true);
             }
         }
 
@@ -813,6 +806,15 @@ namespace DOL.GS
             base.AddToWorld();
             GameEventMgr.AddHandler(GameServerEvent.Started, OnServerStart);
             Cleanup();
+            if (inactiveBossStatus != null)
+            {
+                SpawnerGroup?.SetGroupInfo(inactiveBossStatus, false, true);
+            }
+            else
+            {
+                //reset groupinfo
+                SpawnerGroup?.ResetGroupInfo(true);
+            }
             //register handler
             return true;
         }
