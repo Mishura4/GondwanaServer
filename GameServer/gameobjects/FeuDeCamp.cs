@@ -302,6 +302,9 @@ namespace DOL.GS
             
             var feu = FeuxCampMgr.Instance.m_firecamps.Values.FirstOrDefault(f => f.Template_ID == dropArgs.SourceItem.Id_nb);
             
+            if (feu == null)
+                return;
+            
             ItemTemplate itemTemplate = GameServer.Database.FindObjectByKey<ItemTemplate>(dropArgs.SourceItem.Id_nb);
 
             var firecamp = new FeuDeCamp()
