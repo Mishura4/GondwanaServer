@@ -22,7 +22,13 @@ namespace DOL.GS.Scripts
          "Commands.GM.TeleportNPC.Usage.Conditions.Item",
          "Commands.GM.TeleportNPC.Usage.Conditions.Niveaux",
          "Commands.GM.TeleportNPC.Usage.Conditions.Bind",
-         "Commands.GM.TeleportNPC.Usage.AdditionalDescription")]
+         "Commands.GM.TeleportNPC.Usage.AdditionalDescription",
+         "Commands.GM.TeleportNPC.Usage.Conditions.Hours",
+         "Commands.GM.TeleportNPC.Usage.Conditions.RequiredWhisper",
+         "Commands.GM.TeleportNPC.Usage.Conditions.CompletedQuest",
+         "Commands.GM.TeleportNPC.Usage.Conditions.QuestStep",
+         "Commands.GM.TeleportNPC.Usage.TerritoryLinked",
+         "Commands.GM.TeleportNPC.Usage.ShowTeleporterIndicator")]
     public class TeleportNPCCommandHandler : AbstractCommandHandler, ICommandHandler
     {
         public void OnCommand(GameClient client, string[] args)
@@ -259,6 +265,44 @@ namespace DOL.GS.Scripts
                     break;
                 #endregion
 
+                case "territorylinked":
+                    if (npc == null || args.Length < 3)
+                    {
+                        DisplaySyntax(client);
+                        return;
+                    }
+                    if (args[2].Equals("on", StringComparison.CurrentCultureIgnoreCase))
+                        npc.IsTerritoryLinked = true;
+                    else if (args[2].Equals("off", StringComparison.CurrentCultureIgnoreCase))
+                        npc.IsTerritoryLinked = false;
+                    else
+                    {
+                        DisplaySyntax(client);
+                        return;
+                    }
+                    npc.SaveIntoDatabase();
+                    player.Out.SendMessage("Territory linked set to " + npc.IsTerritoryLinked + ".", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    break;
+
+                case "showindicator":
+                    if (npc == null || args.Length < 3)
+                    {
+                        DisplaySyntax(client);
+                        return;
+                    }
+                    if (args[2].Equals("on", StringComparison.CurrentCultureIgnoreCase))
+                        npc.ShowTPIndicator = true;
+                    else if (args[2].Equals("off", StringComparison.CurrentCultureIgnoreCase))
+                        npc.ShowTPIndicator = false;
+                    else
+                    {
+                        DisplaySyntax(client);
+                        return;
+                    }
+                    npc.SaveIntoDatabase();
+                    player.Out.SendMessage("Show teleporter indicator set to " + npc.ShowTPIndicator + ".", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    break;
+
                 default:
                     DisplaySyntax(client);
                     break;
@@ -278,7 +322,7 @@ namespace DOL.GS.Scripts
                 return;
             }
             TeleportNPC.JumpPos jump = npc.JumpPositions[args[2]];
-            int min;
+            int min, max, questID, stepID;
             switch (args[3].ToLower())
             {
                 #region visible
@@ -312,17 +356,17 @@ namespace DOL.GS.Scripts
                 case "niveaux":
                     if (int.TryParse(args[4], out min))
                     {
-                        int max = jump.Conditions.LevelMax;
-                        if (args.Length > 5 && !int.TryParse(args[5], out max))
+                        int maxLevel = jump.Conditions.LevelMax;
+                        if (args.Length > 5 && !int.TryParse(args[5], out maxLevel))
                         {
                             DisplaySyntax(client);
                             return;
                         }
                         jump.Conditions.LevelMin = min;
-                        jump.Conditions.LevelMax = max;
+                        jump.Conditions.LevelMax = maxLevel;
                         DisplayMessage(client,
                                        "Le jump \"" + jump.Name + "\" demande un niveau compris entre " + min + " et "
-                                       + max + ".");
+                                       + maxLevel + ".");
                     }
                     else
                     {
@@ -346,6 +390,63 @@ namespace DOL.GS.Scripts
                         DisplaySyntax(client);
                         return;
                     }
+                    break;
+
+                #region hours
+                case "hours":
+                    if (int.TryParse(args[4], out min) && int.TryParse(args[5], out max))
+                    {
+                        jump.Conditions.HourMin = min;
+                        jump.Conditions.HourMax = max;
+                        DisplayMessage(client, "Le jump \"" + jump.Name + "\" est disponible entre " + min + "h et " + max + "h.");
+                    }
+                    else
+                    {
+                        DisplaySyntax(client);
+                        return;
+                    }
+                    break;
+                #endregion
+
+                #region requiredwhisper
+                case "requiredwhisper":
+                    jump.Conditions.RequiredWhisper = string.Join(" ", args, 4, args.Length - 4);
+                    DisplayMessage(client, "Le jump \"" + jump.Name + "\" nécessite le chuchotement : \"" + jump.Conditions.RequiredWhisper + "\".");
+                    break;
+                #endregion
+
+                #region completedquest
+                case "completedquest":
+                    if (int.TryParse(args[4], out questID))
+                    {
+                        jump.Conditions.RequiredCompletedQuestID = questID;
+                        DisplayMessage(client, "Le jump \"" + jump.Name + "\" nécessite la quête complétée avec ID : " + questID + ".");
+                    }
+                    else
+                    {
+                        DisplaySyntax(client);
+                        return;
+                    }
+                    break;
+                #endregion
+
+                #region queststep
+                case "queststep":
+                    if (int.TryParse(args[4], out questID) && int.TryParse(args[5], out stepID))
+                    {
+                        jump.Conditions.RequiredQuestStepID = stepID;
+                        DisplayMessage(client, "Le jump \"" + jump.Name + "\" nécessite la quête ID : " + questID + ", étape : " + stepID + ".");
+                    }
+                    else
+                    {
+                        DisplaySyntax(client);
+                        return;
+                    }
+                    break;
+                #endregion
+
+                default:
+                    DisplaySyntax(client);
                     break;
             }
             npc.SaveIntoDatabase();

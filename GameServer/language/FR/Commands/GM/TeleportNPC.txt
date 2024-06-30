@@ -13,3 +13,9 @@ Commands.GM.TeleportNPC.Usage.Conditions.Item:				'/teleportnpc conditions <nom 
 Commands.GM.TeleportNPC.Usage.Conditions.Niveaux:		'/teleportnpc conditions <nom du jump> niveaux <min> [max]' Niveau mini et max du jump
 Commands.GM.TeleportNPC.Usage.Conditions.Bind:		'/teleportnpc conditions <nom du jump> bind <on/off>' Bind le joueur après l'avoir téléporté
 Commands.GM.TeleportNPC.Usage.AdditionalDescription:		Dans chaque texte: {0} = nom du joueur, {1} = nom de famille, {2} = nom de sa guilde, {3} = nom de sa classe, {4} = nom de sa race, {5} liste des jumps (sauf refuse)
+Commands.GM.TeleportNPC.Usage.TerritoryLinked:				/teleportnpc territorylinked <on/off> Active ou désactive le lien du téléporteur à la propriété du territoire.
+Commands.GM.TeleportNPC.Usage.ShowTeleporterIndicator:		/teleportnpc showindicator <on/off> Active ou désactive la visibilité de l'indicateur du téléporteur.
+Commands.GM.TeleportNPC.Usage.Conditions.Hours:				/teleportnpc conditions <nom du jump> heures <hourmin> <hourmax> Définit les horaires autorisant la téléportation.
+Commands.GM.TeleportNPC.Usage.Conditions.RequiredWhisper:	/teleportnpc conditions <nom du jump> requiredwhisper <phrase> Définit le chuchotement requis pour activer la téléportation.
+Commands.GM.TeleportNPC.Usage.Conditions.CompletedQuest:	/teleportnpc conditions <nom du jump> completedquest <questID> Définit l'ID de quête terminée requis.
+Commands.GM.TeleportNPC.Usage.Conditions.QuestStep:			/teleportnpc conditions <nom du jump> queststep <questID> <stepID> Définit l'ID de l'étape de quête requis pour la téléportation.

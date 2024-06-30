@@ -53,7 +53,7 @@ namespace DOL.GS.Commands
                     int count = 0;
                     foreach (int value in Enum.GetValues(typeof(eCraftingSkill)))
                     {
-                        if (++count < 16) // get rid of duplicate due to _Last
+                        if (++count < 17) // get rid of duplicate due to _Last
                             list.Add(value + " = " + Enum.GetName(typeof(eCraftingSkill), value));
                     }
 

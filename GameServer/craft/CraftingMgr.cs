@@ -45,7 +45,8 @@ namespace DOL.GS
         SpellCrafting = 13,
         WoodWorking = 14,
         BasicCrafting = 15,
-        _Last = 15,
+        BountyCrafting = 16,
+        _Last = 16,
     }
 
     /// <summary>
@@ -94,6 +95,7 @@ namespace DOL.GS
             m_craftingskills[(int)eCraftingSkill.MetalWorking - 1] = new MetalWorking();
             m_craftingskills[(int)eCraftingSkill.WoodWorking - 1] = new WoodWorking();
             m_craftingskills[(int)eCraftingSkill.BasicCrafting - 1] = new BasicCrafting();
+            m_craftingskills[(int)eCraftingSkill.BountyCrafting - 1] = new BountyCrafting();
 
             //Advanced skill
             m_craftingskills[(int)eCraftingSkill.Alchemy - 1] = new Alchemy();

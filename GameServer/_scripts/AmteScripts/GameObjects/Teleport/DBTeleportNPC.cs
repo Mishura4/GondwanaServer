@@ -32,6 +32,7 @@ namespace DOL.Database
         private bool m_IsOutlawFriendly;
         private bool m_IsRegularFriendly;
         private bool m_IsTerritoryLinked;
+        private bool m_ShowTPIndicator;
 
         [DataElement(AllowDbNull = false)]
         public string MobID
@@ -152,6 +153,17 @@ namespace DOL.Database
             {
                 Dirty = true;
                 m_IsTerritoryLinked = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public bool ShowTPIndicator
+        {
+            get { return m_ShowTPIndicator; }
+            set
+            {
+                Dirty = true;
+                m_ShowTPIndicator = value;
             }
         }
     }

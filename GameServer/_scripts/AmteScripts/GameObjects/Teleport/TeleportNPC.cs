@@ -12,6 +12,9 @@ using System.Reflection;
 using log4net;
 using DOL.Language;
 using DOL.Territories;
+using DOL.GS.Geometry;
+using System.Linq;
+using DOL.GS.Quests;
 
 namespace DOL.GS.Scripts
 {
@@ -58,6 +61,9 @@ namespace DOL.GS.Scripts
             get;
             set;
         }
+
+        public bool ShowTPIndicator { get; set; }
+        private static Dictionary<GamePlayer, string> WhisperTracker = new Dictionary<GamePlayer, string>();
 
         #endregion
 
@@ -123,6 +129,8 @@ namespace DOL.GS.Scripts
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"TeleportNPC.Busy"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 return true;
             }
+
+            WhisperTracker[player] = str;
 
             if (!JumpPositions.ContainsKey(str))
             {
@@ -229,6 +237,7 @@ namespace DOL.GS.Scripts
             m_Text = db.Text;
             m_Text_Refuse = db.Text_Refuse;
             IsTerritoryLinked = db.IsTerritoryLinked;
+            ShowTPIndicator = db.ShowTPIndicator;
 
             //Set this value only when OR Exclusive
             if (db.IsOutlawFriendly ^ db.IsRegularFriendly)
@@ -395,7 +404,35 @@ namespace DOL.GS.Scripts
 
             if (!(Brain is TeleportNPCBrain))
                 SetOwnBrain(new TeleportNPCBrain());
+
+            if (ShowTPIndicator)
+            {
+                if (m_teleporterIndicator == null)
+                {
+                    m_teleporterIndicator = new GameNPC();
+                    m_teleporterIndicator.Name = "";
+                    m_teleporterIndicator.Model = 1923;  // Set your model ID here
+                    m_teleporterIndicator.Flags ^= eFlags.PEACE;
+                    m_teleporterIndicator.Flags ^= eFlags.CANTTARGET;
+                    m_teleporterIndicator.Flags ^= eFlags.DONTSHOWNAME;
+                    m_teleporterIndicator.Flags ^= eFlags.FLYING;
+                    m_teleporterIndicator.Position = Position + Vector.Create(z: 1);
+                    m_teleporterIndicator.CurrentRegionID = CurrentRegionID;
+                    m_teleporterIndicator.AddToWorld();
+                }
+            }
+
             return true;
+        }
+
+        public override bool RemoveFromWorld()
+        {
+            if (m_teleporterIndicator != null)
+            {
+                m_teleporterIndicator.RemoveFromWorld();
+                m_teleporterIndicator = null;
+            }
+            return base.RemoveFromWorld();
         }
 
         public class JumpPos
@@ -407,6 +444,9 @@ namespace DOL.GS.Scripts
             public ushort RegionID;
             public string Name;
             public TeleportCondition Conditions;
+            public string RequiredWhisper;
+            public int RequiredCompletedQuestID;
+            public int RequiredQuestStepID;
 
             public JumpPos(string SaveStr)
             {
@@ -420,6 +460,7 @@ namespace DOL.GS.Scripts
                     Heading = ushort.Parse(args[4]);
                     RegionID = ushort.Parse(args[5]);
                     Conditions = new TeleportCondition(args.Length > 6 ? args[6] : "");
+                    RequiredWhisper = args.Length > 7 ? args[7] : null;
                 }
                 catch
                 {
@@ -450,11 +491,31 @@ namespace DOL.GS.Scripts
 
             public bool CanJump(GamePlayer player)
             {
+                int currentHour = DateTime.Now.Hour;
+                if (currentHour < Conditions.HourMin || currentHour > Conditions.HourMax)
+                    return false;
                 if (player.Level < Conditions.LevelMin || player.Level > Conditions.LevelMax)
                     return false;
                 if (!string.IsNullOrEmpty(Conditions.Item) && player.Inventory.GetFirstItemByID(Conditions.Item, eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack) == null)
                     return false;
+                if (!string.IsNullOrEmpty(RequiredWhisper) && WhisperTracker.TryGetValue(player, out var lastWhisper) && lastWhisper != RequiredWhisper)
+                    return false;
+                if (RequiredCompletedQuestID > 0 && player.HasFinishedQuest(DataQuestJsonMgr.GetQuest((ushort)RequiredCompletedQuestID)) == 0)
+                    return false;
+                if (RequiredQuestStepID > 0 && !IsPlayerOnQuestStep(player, RequiredCompletedQuestID, RequiredQuestStepID))
+                    return false;
                 return true;
+            }
+
+            private bool IsPlayerOnQuestStep(GamePlayer player, int questID, int stepID)
+            {
+                var quest = player.IsDoingQuest(DataQuestJsonMgr.GetQuest((ushort)questID));
+                if (quest != null)
+                {
+                    // Ensure the quest has started and check if any of its goals match the given stepID and are active
+                    return quest.GoalStates.Any(g => g.GoalId == stepID && g.IsActive);
+                }
+                return false;
             }
 
             public void Jump(GameLiving source, GamePlayer player)
@@ -491,7 +552,12 @@ namespace DOL.GS.Scripts
             }
             public int LevelMin;
             public int LevelMax = 50;
+            public int HourMin;
+            public int HourMax;
             public ItemTemplate ItemTemplate { get; private set; }
+            public string RequiredWhisper { get; set; }
+            public int RequiredCompletedQuestID { get; set; }
+            public int RequiredQuestStepID { get; set; }
 
             public TeleportCondition(string db)
             {
@@ -519,6 +585,21 @@ namespace DOL.GS.Scripts
                                     break;
                                 case "LevelMax":
                                     LevelMax = int.Parse(arg[1]);
+                                    break;
+                                case "HourMin":
+                                    HourMin = int.Parse(arg[1]);
+                                    break;
+                                case "HourMax":
+                                    HourMax = int.Parse(arg[1]);
+                                    break;
+                                case "RequiredWhisper":
+                                    RequiredWhisper = arg[1];
+                                    break;
+                                case "RequiredCompletedQuestID":
+                                    RequiredCompletedQuestID = int.Parse(arg[1]);
+                                    break;
+                                case "RequiredQuestStepID":
+                                    RequiredQuestStepID = int.Parse(arg[1]);
                                     break;
                             }
                         }
@@ -563,6 +644,36 @@ namespace DOL.GS.Scripts
                     sb.Append("LevelMax=");
                     sb.Append(LevelMax);
                 }
+                if (HourMin >= 0)
+                {
+                    if (sb.Length > 0) sb.Append("/");
+                    sb.Append("HourMin=");
+                    sb.Append(HourMin);
+                }
+                if (HourMax >= 0)
+                {
+                    if (sb.Length > 0) sb.Append("/");
+                    sb.Append("HourMax=");
+                    sb.Append(HourMax);
+                }
+                if (!string.IsNullOrEmpty(RequiredWhisper))
+                {
+                    if (sb.Length > 0) sb.Append("/");
+                    sb.Append("RequiredWhisper=");
+                    sb.Append(RequiredWhisper);
+                }
+                if (RequiredCompletedQuestID != 0)
+                {
+                    if (sb.Length > 0) sb.Append("/");
+                    sb.Append("RequiredCompletedQuestID=");
+                    sb.Append(RequiredCompletedQuestID);
+                }
+                if (RequiredQuestStepID != 0)
+                {
+                    if (sb.Length > 0) sb.Append("/");
+                    sb.Append("RequiredQuestStepID=");
+                    sb.Append(RequiredQuestStepID);
+                }
                 return sb.ToString();
             }
 
@@ -586,6 +697,32 @@ namespace DOL.GS.Scripts
                     sb.Append(LevelMin);
                     sb.Append(" et ");
                     sb.Append(LevelMax);
+                }
+                if (HourMin >= 0 || HourMax >= 0)
+                {
+                    if (sb.Length > 0) sb.Append("\n");
+                    sb.Append("Heures entre ");
+                    sb.Append(HourMin);
+                    sb.Append(" et ");
+                    sb.Append(HourMax);
+                }
+                if (!string.IsNullOrEmpty(RequiredWhisper))
+                {
+                    if (sb.Length > 0) sb.Append("\n");
+                    sb.Append("Required whisper: ");
+                    sb.Append(RequiredWhisper);
+                }
+                if (RequiredCompletedQuestID != 0)
+                {
+                    if (sb.Length > 0) sb.Append("\n");
+                    sb.Append("Required completed quest ID: ");
+                    sb.Append(RequiredCompletedQuestID);
+                }
+                if (RequiredQuestStepID != 0)
+                {
+                    if (sb.Length > 0) sb.Append("\n");
+                    sb.Append("Required quest step ID: ");
+                    sb.Append(RequiredQuestStepID);
                 }
                 return sb.ToString();
             }

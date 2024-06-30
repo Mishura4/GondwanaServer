@@ -35,6 +35,7 @@ Crafting.Name.Siegecraft:				Siegecraft
 Crafting.Name.Tailoring:				Tailoring
 Crafting.Name.Weaponcraft:				Weaponcraft
 Crafting.Name.Woodworking:				Woodworking
+Crafting.Name.BountyCrafing:			Bountycraft
 Crafting.Respec.Confirm:				Are you sure you want to reset your crafting skills? You will lose all of your crafting skills as well as your crafting titles!
 Crafting.Respec.SkillsReset:			Your crafting skills have been reset.
 
