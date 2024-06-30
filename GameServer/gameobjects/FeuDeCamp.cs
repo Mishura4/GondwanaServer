@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DOL.AI.Brain;
+using System;
 using System.Reflection;
 using System.Linq;
 
@@ -45,8 +46,34 @@ namespace DOL.GS
         public int HealthTrapDamagePercent { get; set; }
         public int ManaTrapDamagePercent { get; set; }
         public new int Realm { get; set; }
-        public string OwnerID { get; set; }
         public bool OwnerImmuneToTrap { get; set; }
+        
+        /// <inheritdoc />
+        public override string OwnerID
+        {
+            get => base.OwnerID;
+            set
+            {
+                base.OwnerID = value;
+                
+                if (m_RealFeu != null)
+                {
+                    m_RealFeu.OwnerID = value;
+                }
+            }
+        }
+
+        private GamePlayer m_owner;
+
+        public GamePlayer Owner
+        {
+            get => m_owner;
+            set
+            {
+                OwnerID = value.InternalID;
+                m_owner = value;
+            }
+        }
 
 
         public override bool AddToWorld()
@@ -91,13 +118,70 @@ namespace DOL.GS
             return base.AddToWorld();
         }
 
+        public bool IsImmune(GameLiving living)
+        {
+            if (living == null)
+            {
+                return true;
+            }
+            
+            GameNPC? npc = living as GameNPC;
+            if (npc is { Brain: IControlledBrain controlledBrain })
+            {
+                return IsImmune(controlledBrain.Owner);
+            }
+
+            if (Owner == null)
+                return OwnerID != null && string.Equals(living.InternalID, OwnerID);
+            
+            if (living == Owner)
+            {
+                return true;
+            }
+
+            if (Owner.Group?.IsInTheGroup(living) == true)
+            {
+                return true;
+            }
+
+            GamePlayer? player = living as GamePlayer;
+            if (Owner.Guild != null)
+            {
+                if (npc != null)
+                {
+                    if (npc.CurrentTerritory?.IsOwnedBy(Owner.Guild) == true)
+                    {
+                        return true;
+                    }
+                    
+                    if (!string.IsNullOrEmpty(npc.GuildName) && string.Equals(npc.GuildName, Owner.Guild.Name))
+                    {
+                        return true;
+                    }
+                }
+                else if (player != null)
+                {
+                    if (player.Guild == Owner.Guild)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            if (Owner.BattleGroup != null && player.BattleGroup == Owner.BattleGroup)
+            {
+                return true;
+            }
+            return false;
+        }
+
         void ProximityCheck(object sender, ElapsedEventArgs e)
         {
 
 
             foreach (GamePlayer Player in WorldMgr.GetPlayersCloseToSpot(this.Position, Radius))
             {
-                if (Player.InternalID == OwnerID && OwnerImmuneToTrap)
+                if (IsImmune(Player))
                 {
                     continue;
                 }
@@ -120,23 +204,27 @@ namespace DOL.GS
                     }
                 }
 
-                if (!Player.IsInvulnerableToAttack)
+                if (GameServer.ServerRules.IsAllowedToAttack(Owner, Player, true))
                 {
+                    AttackData ad = new AttackData
+                    {
+                        Attacker = Owner,
+                        AttackResult = eAttackResult.HitUnstyled,
+                        AttackType = AttackData.eAttackType.Spell,
+                        CausesCombat = false,
+                        Target = Player
+                    };
+                    
                     if (IsHealthTrapType)
                     {
-                        Player.Health -= (HealthTrapDamagePercent * Player.MaxHealth) / 100;
-
-                        if (Player.Health <= 0)
-                        {
-                            Player.Health = 0;
-                            Player.Die(null);
-                        }
+                        ad.Damage = (HealthTrapDamagePercent * Player.MaxHealth) / 100;
                     }
 
                     if (IsManaTrapType)
                     {
                         Player.Mana -= (ManaTrapDamagePercent * Player.MaxMana) / 100;
                     }
+                    Player.TakeDamage(ad);
                 }
             }
         }
@@ -206,34 +294,35 @@ namespace DOL.GS
 
         public static void EventPlayerDropItem(DOLEvent e, object sender, EventArgs args)
         {
-            ItemDroppedEventArgs dropArgs = args as ItemDroppedEventArgs;
-            GamePlayer player = sender as GamePlayer;
+            if (sender is not GamePlayer player)
+                return;
+
+            if (args is not ItemDroppedEventArgs { SourceItem: not null } dropArgs)
+                return;
+            
             var feu = FeuxCampMgr.Instance.m_firecamps.Values.FirstOrDefault(f => f.Template_ID == dropArgs.SourceItem.Id_nb);
+            
+            ItemTemplate itemTemplate = GameServer.Database.FindObjectByKey<ItemTemplate>(dropArgs.SourceItem.Id_nb);
 
-            if (player != null && feu != null)
+            var firecamp = new FeuDeCamp()
             {
-                ItemTemplate itemTemplate = GameServer.Database.FindObjectByKey<ItemTemplate>(dropArgs.SourceItem.Id_nb);
+                Template_ID = feu.Template_ID,
+                Realm = itemTemplate.Realm,
+                Model = feu.Model,
+                Radius = feu.Radius,
+                Lifetime = feu.Lifetime,
+                EndurancePercentRate = feu.EndurancePercentRate,
+                ManaPercentRate = feu.ManaPercentRate,
+                ManaTrapDamagePercent = feu.ManaTrapDamagePercent,
+                HealthTrapDamagePercent = feu.HealthTrapDamagePercent,
+                HealthPercentRate = feu.HealthPercentRate,
+                Position = player.Position,
+                Owner = player,
+                OwnerImmuneToTrap = feu.OwnerImmuneToTrap
+            };
 
-                var firecamp = new FeuDeCamp()
-                {
-                    Template_ID = feu.Template_ID,
-                    Realm = itemTemplate.Realm,
-                    Model = feu.Model,
-                    Radius = feu.Radius,
-                    Lifetime = feu.Lifetime,
-                    EndurancePercentRate = feu.EndurancePercentRate,
-                    ManaPercentRate = feu.ManaPercentRate,
-                    ManaTrapDamagePercent = feu.ManaTrapDamagePercent,
-                    HealthTrapDamagePercent = feu.HealthTrapDamagePercent,
-                    HealthPercentRate = feu.HealthPercentRate,
-                    Position = player.Position,
-                    OwnerID = player.InternalID,
-                    OwnerImmuneToTrap = feu.OwnerImmuneToTrap
-                };
-
-                firecamp.AddToWorld();
-                dropArgs.GroundItem.Delete();
-            }
+            firecamp.AddToWorld();
+            dropArgs.GroundItem.Delete();
         }
     }
 }

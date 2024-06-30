@@ -39,7 +39,7 @@ namespace GameServerScripts.Utils
                     HealthTrapDamagePercent = firecampItem.HealthTrapDamagePercent,
                     HealthPercentRate = firecampItem.HealthRatePercent,
                     ManaPercentRate = firecampItem.ManaRatePercent,
-                    OwnerImmuneToTrap = firecampItem.OwnerImmuneToTrap
+                    OwnerImmuneToTrap = firecampItem.OwnerImmuneToTrap,
                 };
 
                 m_firecamps[firecampItem.FeuxCampXItem_ID] = firecamp;

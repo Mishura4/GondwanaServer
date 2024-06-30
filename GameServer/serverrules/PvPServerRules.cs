@@ -358,42 +358,44 @@ namespace DOL.GS.ServerRules
             if (source == target)
                 return true;
 
-            // clients with priv level > 1 are considered friendly by anyone
-            if (target is GamePlayer && ((GamePlayer)target).Client.Account.PrivLevel > 1 && !Properties.ALLOW_GM_ATTACK) return true;
-            // checking as a gm, targets are considered friendly
-            if (source is GamePlayer && ((GamePlayer)source).Client.Account.PrivLevel > 1 && !Properties.ALLOW_GM_ATTACK) return true;
-
             // mobs can heal mobs, players heal players/NPC
             if (source.Realm == 0 && target.Realm == 0) return true;
 
+            GamePlayer? sourcePlayer = source as GamePlayer;
+            GamePlayer? targetPlayer = target as GamePlayer;
+            // clients with priv level > 1 are considered friendly by anyone
+            if (targetPlayer != null && targetPlayer.Client.Account.PrivLevel > 1 && !Properties.ALLOW_GM_ATTACK) return true;
+            // checking as a gm, targets are considered friendly
+            if (sourcePlayer != null && sourcePlayer.Client.Account.PrivLevel > 1 && !Properties.ALLOW_GM_ATTACK) return true;
+
             //keep guards
-            if (source is GameKeepGuard && target is GamePlayer)
+            if (source is GameKeepGuard sourceGuard && targetPlayer != null)
             {
-                if (!GameServer.KeepManager.IsEnemy(source as GameKeepGuard, target as GamePlayer))
+                if (!GameServer.KeepManager.IsEnemy(sourceGuard, targetPlayer))
                     return true;
             }
 
-            if (target is GameKeepGuard && source is GamePlayer)
+            if (target is GameKeepGuard targetGuard && sourcePlayer != null)
             {
-                if (!GameServer.KeepManager.IsEnemy(target as GameKeepGuard, source as GamePlayer))
+                if (!GameServer.KeepManager.IsEnemy(targetGuard, sourcePlayer))
                     return true;
             }
 
             //doors need special handling
-            if (target is GameKeepDoor && source is GamePlayer)
-                return GameServer.KeepManager.IsEnemy(target as GameKeepDoor, source as GamePlayer);
+            if (target is GameKeepDoor targetDoor && sourcePlayer != null)
+                return GameServer.KeepManager.IsEnemy(targetDoor, sourcePlayer);
 
-            if (source is GameKeepDoor && target is GamePlayer)
-                return GameServer.KeepManager.IsEnemy(source as GameKeepDoor, target as GamePlayer);
+            if (source is GameKeepDoor sourceDoor && targetPlayer != null)
+                return GameServer.KeepManager.IsEnemy(sourceDoor, targetPlayer);
 
             //components need special handling
-            if (target is GameKeepComponent && source is GamePlayer)
-                return GameServer.KeepManager.IsEnemy(target as GameKeepComponent, source as GamePlayer);
+            if (target is GameKeepComponent targetComponent && sourcePlayer != null)
+                return GameServer.KeepManager.IsEnemy(targetComponent, sourcePlayer);
 
             if (target is GameNPC targetNpc)
             {
                 //CheckMobGroup
-                if (source is GamePlayer sourcePlayer)
+                if (sourcePlayer != null)
                 {
                     if (MobGroups.MobGroup.IsQuestFriendly(targetNpc, sourcePlayer))
                     {
@@ -401,29 +403,29 @@ namespace DOL.GS.ServerRules
                     }
                 }
                 //Peace flag NPCs are same realm
-                if (((GameNPC)target).IsPeaceful)
+                if (targetNpc.IsPeaceful)
                     return true;
             }
 
             if (source is GameNPC sourceNpc)
             {
                 //CheckMobGroup
-                if (target is GamePlayer targetPlayer)
+                if (targetPlayer != null)
                 {
                     if (MobGroups.MobGroup.IsQuestFriendly(sourceNpc, targetPlayer))
                     {
                         return true;
                     }
                 }
-                if (((GameNPC)source).IsPeaceful)
+                if (sourceNpc.IsPeaceful)
                     return true;
             }
 
 
-            if (source is GamePlayer && target is GamePlayer)
+            if (sourcePlayer != null && targetPlayer != null)
                 return true;
 
-            if (source is GamePlayer && target is GameNPC && target.Realm != 0)
+            if (sourcePlayer != null && target is GameNPC && target.Realm != 0)
                 return true;
 
             if (quiet == false) MessageToLiving(source, target.GetName(0, true) + " is not a member of your realm!");

@@ -89,7 +89,7 @@ namespace DOL.GS
                 }
                 m_battlegroupMembers.Add(player, leader);
 
-                player.isInBG = true; //Xarik: Player is in BG
+                player.BattleGroup = this; //Xarik: Player is in BG
             }
             return true;
         }
@@ -228,7 +228,7 @@ namespace DOL.GS
                     }
                 }
 
-                player.isInBG = false; //Xarik: Player is no more in the BG
+                player.BattleGroup = null; //Xarik: Player is no more in the BG
             }
             return true;
         }
