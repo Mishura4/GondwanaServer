@@ -24,37 +24,25 @@ namespace GameServerScripts.Utils
             {
                 var template = GameServer.Database.FindObjectByKey<ItemTemplate>(firecampItem.FeuxCampItemId_nb);
 
-                if (template != null)
+                if (template == null)
+                    continue;
+                
+                var firecamp = new FeuDeCamp()
                 {
-                    var firecamp = new FeuDeCamp()
-                    {
-                        Template_ID = firecampItem.FeuxCampItemId_nb,
-                        Realm = template.Realm,
-                        Model = (ushort)template.Model,
-                        Radius = (ushort)firecampItem.Radius,
-                        Lifetime = firecampItem.Lifetime,
-                        EndurancePercentRate = firecampItem.EnduranceRatePercent,
-                        IsHealthType = firecampItem.IsHealthType,
-                        IsManaType = firecampItem.IsManaType,
-                        IsManaTrapType = firecampItem.IsManaTrapType,
-                        IsHealthTrapType = firecampItem.IsHealthType,
-                        ManaTrapDamagePercent = firecampItem.ManaTrapDamagePercent,
-                        HealthTrapDamagePercent = firecampItem.HealthTrapDamagePercent,
-                        IsEnduranceType = firecampItem.IsEnduranceType,
-                        HealthPercentRate = firecampItem.HealthRatePercent,
-                        ManaPercentRate = firecampItem.ManaRatePercent,
-                        OwnerImmuneToTrap = firecampItem.OwnerImmuneToTrap
-                    };
+                    Template_ID = firecampItem.FeuxCampItemId_nb,
+                    Realm = template.Realm,
+                    Model = (ushort)template.Model,
+                    Radius = (ushort)firecampItem.Radius,
+                    Lifetime = firecampItem.Lifetime,
+                    EndurancePercentRate = firecampItem.EnduranceRatePercent,
+                    ManaTrapDamagePercent = firecampItem.ManaTrapDamagePercent,
+                    HealthTrapDamagePercent = firecampItem.HealthTrapDamagePercent,
+                    HealthPercentRate = firecampItem.HealthRatePercent,
+                    ManaPercentRate = firecampItem.ManaRatePercent,
+                    OwnerImmuneToTrap = firecampItem.OwnerImmuneToTrap
+                };
 
-                    if (m_firecamps.ContainsKey(firecampItem.FeuxCampXItem_ID))
-                    {
-                        m_firecamps[firecampItem.FeuxCampXItem_ID] = firecamp;
-                    }
-                    else
-                    {
-                        m_firecamps.Add(firecampItem.FeuxCampXItem_ID, firecamp);
-                    }
-                }
+                m_firecamps[firecampItem.FeuxCampXItem_ID] = firecamp;
             }
 
             return true;

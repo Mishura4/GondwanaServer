@@ -37,11 +37,11 @@ namespace DOL.GS
         public int EndurancePercentRate { get; set; }
         public int HealthPercentRate { get; set; }
         public int ManaPercentRate { get; set; }
-        public bool IsHealthType { get; set; }
-        public bool IsManaType { get; set; }
-        public bool IsHealthTrapType { get; set; }
-        public bool IsManaTrapType { get; set; }
-        public bool IsEnduranceType { get; set; }
+        public bool IsHealthType { get => HealthPercentRate > 0; }
+        public bool IsManaType { get => ManaPercentRate > 0; }
+        public bool IsHealthTrapType { get => HealthTrapDamagePercent > 0; }
+        public bool IsManaTrapType { get => ManaTrapDamagePercent > 0; }
+        public bool IsEnduranceType { get => EndurancePercentRate > 0; }
         public int HealthTrapDamagePercent { get; set; }
         public int ManaTrapDamagePercent { get; set; }
         public new int Realm { get; set; }
@@ -106,53 +106,36 @@ namespace DOL.GS
                 {
                     if (IsHealthType)
                     {
-                        Player.Health += HealthPercentRate * (Player.MaxHealth / 100);
-
-                        if (Player.Health > Player.MaxHealth)
-                        {
-                            Player.Health = Player.MaxHealth;
-                        }
+                        Player.Health += (HealthPercentRate * Player.MaxHealth) / 100;
                     }
 
                     if (IsEnduranceType)
                     {
-                        Player.Endurance += EndurancePercentRate * (Player.MaxEndurance / 100);
-
-                        if (Player.Endurance > Player.Endurance)
-                        {
-                            Player.Endurance = Player.MaxEndurance;
-                        }
+                        Player.Endurance += (EndurancePercentRate * Player.MaxEndurance) / 100;
                     }
 
                     if (IsManaType)
                     {
-                        Player.Mana += ManaPercentRate * (Player.MaxMana / 100);
+                        Player.Mana += (ManaPercentRate * Player.MaxMana) / 100;
+                    }
+                }
 
-                        if (Player.Mana > Player.MaxMana)
+                if (!Player.IsInvulnerableToAttack)
+                {
+                    if (IsHealthTrapType)
+                    {
+                        Player.Health -= (HealthTrapDamagePercent * Player.MaxHealth) / 100;
+
+                        if (Player.Health <= 0)
                         {
-                            Player.Mana = Player.MaxMana;
+                            Player.Health = 0;
+                            Player.Die(null);
                         }
                     }
-                }
 
-                if (IsHealthTrapType && HealthTrapDamagePercent > 0)
-                {
-                    Player.Health -= HealthTrapDamagePercent * (Player.MaxHealth / 100);
-
-                    if (Player.Health <= 0)
+                    if (IsManaTrapType)
                     {
-                        Player.Health = 0;
-                        Player.Die(null);
-                    }
-                }
-
-                if (IsManaTrapType && ManaTrapDamagePercent > 0)
-                {
-                    Player.Mana -= ManaTrapDamagePercent * (Player.MaxMana / 100);
-
-                    if (Player.Mana < 0)
-                    {
-                        Player.Mana = 0;
+                        Player.Mana -= (ManaTrapDamagePercent * Player.MaxMana) / 100;
                     }
                 }
             }
@@ -240,13 +223,8 @@ namespace DOL.GS
                     Lifetime = feu.Lifetime,
                     EndurancePercentRate = feu.EndurancePercentRate,
                     ManaPercentRate = feu.ManaPercentRate,
-                    IsHealthType = feu.IsHealthType,
-                    IsManaType = feu.IsManaType,
-                    IsManaTrapType = feu.IsManaTrapType,
-                    IsHealthTrapType = feu.IsHealthType,
                     ManaTrapDamagePercent = feu.ManaTrapDamagePercent,
                     HealthTrapDamagePercent = feu.HealthTrapDamagePercent,
-                    IsEnduranceType = feu.IsEnduranceType,
                     HealthPercentRate = feu.HealthPercentRate,
                     Position = player.Position,
                     OwnerID = player.InternalID,
