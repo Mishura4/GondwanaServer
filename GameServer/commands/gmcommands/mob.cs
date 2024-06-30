@@ -2707,12 +2707,11 @@ namespace DOL.GS.Commands
             }
 
             //copy groupmob
-            if (mob.MobGroups is { Count: > 0 })
+            if (targetMob.MobGroups is { Count: > 0 })
             {
-                foreach (MobGroup mobGroup in mob.MobGroups)
+                foreach (MobGroup mobGroup in targetMob.MobGroups)
                 {
-                    if (MobGroupManager.Instance.Groups.ContainsKey(mobGroup.GroupId))
-                        MobGroupManager.Instance.AddMobToGroup(mob, mobGroup.GroupId);
+                    mob.AddToMobGroup(mobGroup);
                 }
             }
 
