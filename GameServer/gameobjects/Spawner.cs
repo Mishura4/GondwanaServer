@@ -642,6 +642,7 @@ namespace DOL.GS
                 {
                     allGroup = MobGroupManager.Instance.AddMobToGroup(mob, AllGroupId, true);
                 }
+                allGroup.AssistRange = -1;
                 GameEventMgr.AddHandler(GameEvents.GroupMobEvent.MobGroupDead, OnGroupMobDead);
             }
 
