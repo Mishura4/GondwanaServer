@@ -22,6 +22,8 @@ namespace DOL.GS.Finance
         internal static Money Mint(long amount, Currency currency)
             => new Money(amount, currency);
 
+        internal static Money XpToCopper(long xp) => Mint((long)Math.Round(xp * Properties.XP_TO_COPPER_RATE), Currency.Copper);
+
         public string ToText()
         {
             if (Currency.Equals(Currency.Copper))

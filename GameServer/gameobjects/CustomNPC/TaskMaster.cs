@@ -335,11 +335,6 @@ namespace DOL.GS
             {
                 return false;
             }
-
-            if (player.Level >= player.MaxLevel)
-            {
-                return false;
-            }
             
             try
             {
@@ -347,6 +342,19 @@ namespace DOL.GS
                 if (factor <= 0)
                 {
                     return false;
+                }
+                
+                if (player.Level >= player.MaxLevel)
+                {
+                    if (Properties.XP_TO_COPPER_RATE <= 0)
+                        return false;
+                    
+                    // Arbitrary number for 50 to 51
+                    var imaginaryXpToNextLevel = 200000000000L;
+                    var copper = Finance.Money.XpToCopper((long)(Math.Round(imaginaryXpToNextLevel * factor)));
+                    player.AddMoney(copper);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "TaskMaster.GainMoney", LanguageMgr.TranslateMoneyLong(player, copper.Amount)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    return true;
                 }
                 
                 long xpNeeded = (long)Math.Round((player.ExperienceForNextLevel - player.ExperienceForCurrentLevel) * factor);

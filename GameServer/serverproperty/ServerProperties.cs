@@ -931,7 +931,7 @@ namespace DOL.GS.ServerProperties
         /// <summary>
         /// The Experience Rate
         /// </summary>
-        [ServerProperty("rates", "xp_copper_rate", "The Rate at which experience gains will be converted to copper at max level", 1.0)]
+        [ServerProperty("rates", "xp_copper_rate", "The Rate at which experience gains will be converted to copper at max level", 0.000001)]
         public static double XP_TO_COPPER_RATE;
 
         /// <summary>

@@ -17,7 +17,6 @@ TaskMaster.TokensToDeliver:	Remettez-moi les jetons pour réclamer vos récompen
 TaskMaster.GiveTitle:		Vous avez reçu le titre de {0} !
 TaskMaster.GainExperience:	Vous avez gagné {0:0.##}% des points d'expérience de votre niveau.
 TaskMaster.GainRealmPoints:	Vous avez gagné {0:0.##}% de points de royaume correspondant à votre niveau RL.
-TaskMaster.GainMoney:		Vous avez gagné {0} pour cette tâche.
 TaskMaster.Disabled:		Je ne peux pas accepter cela pour le moment.
 TaskMaster.NoProfession:	Vous n'avez pas encore choisi de profession d'artisanat. Veuillez chercher un Maître Artisan pour choisir une profession et revenez ici avec le jeton pour recevoir vos bonus d'artisanat.
 TaskMaster.GainCraftingPoints:	Vous avez gagné {0} points dans votre compétence principale d'artisanat et {1} points dans vos compétences secondaires d'artisanat.
