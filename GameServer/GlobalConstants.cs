@@ -672,7 +672,7 @@ namespace DOL.GS
         Focus_Light = 128,
         Focus_Body = 129,
         Focus_Matter = 130,
-        MythicalMaxSpeed = 131,
+        Skill_BlueMagic = 131,
         Focus_Mind = 132,
         Focus_Void = 133,
         Focus_Mana = 134,

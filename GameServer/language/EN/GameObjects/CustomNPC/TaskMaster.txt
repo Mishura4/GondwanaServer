@@ -16,7 +16,7 @@ TaskMaster.AdventurerTokens:	Adventurer Tokens: Embark on daring quests and comp
 TaskMaster.TokensToDeliver:	Return tokens to me to claim your rewards. Keep an eye out for tasks that offer these valuable tokens!
 TaskMaster.GiveTitle:		You have received the title of {0}!
 TaskMaster.GainExperience:	You have gained {0:0.##}% of your level's experience points.
-TaskMaster.GainRealmPoints:	You have gained {0:0.##}% of Realm Points for your Realm level.
+TaskMaster.GainRealmPoints:	You have increased your current Realm Rank by {0:0.##}% in Realm Points.
 TaskMaster.GainMoney:		You have gained {0} for this task.
 TaskMaster.Disabled:		I cannot take this from you at this time.
 TaskMaster.NoProfession:	You have not yet chosen a crafting profession. Please Look for a Craft Master to choose a profession and come back here with the token to receive your crafting bonuses.

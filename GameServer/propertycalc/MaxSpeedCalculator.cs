@@ -23,6 +23,8 @@ using DOL.GS.Effects;
 using DOL.GS.RealmAbilities;
 using DOL.GS.Spells;
 using System.Linq;
+using DOL.Language;
+using System.Numerics;
 
 namespace DOL.GS.PropertyCalc
 {
@@ -32,7 +34,7 @@ namespace DOL.GS.PropertyCalc
     /// BuffBonusCategory1 unused
     /// BuffBonusCategory2 unused
     /// BuffBonusCategory3 unused
-    /// BuffBonusCategory4 unused
+    /// BuffBonusCategory4 used for item bonuses
     /// BuffBonusMultCategory1 used for all multiplicative speed bonuses
     /// </summary>
     [PropertyCalculator(eProperty.MaxSpeed)]
@@ -49,6 +51,8 @@ namespace DOL.GS.PropertyCalc
             if (living.IsMezzed || living.IsStunned) return 0;
 
             double speed = living.BuffBonusMultCategory1.Get((int)property);
+            int itemSpeedBonus = living.ItemBonus[(int)property];
+            itemSpeedBonus = Math.Min(250, itemSpeedBonus); // Cap item bonus at 250pts
 
             if (living is GamePlayer)
             {
@@ -82,7 +86,7 @@ namespace DOL.GS.PropertyCalc
                         if (speed <= 0)
                         {
                             speed = 0;
-                            player.Out.SendMessage("You are encumbered and cannot move.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "PropertyCalc.MaxSpeed.YouAreEncumbered"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                         }
                     }
                     else
@@ -125,6 +129,11 @@ namespace DOL.GS.PropertyCalc
                 }
 
                 speed *= horseSpeed;
+
+                if (player.IsSwimming)
+                {
+                    itemSpeedBonus = 0;
+                }
             }
             else if (living is GameNPC)
             {
@@ -164,6 +173,7 @@ namespace DOL.GS.PropertyCalc
             }
 
             speed = living.MaxSpeedBase * speed + 0.5; // 0.5 is to fix the rounding error when converting to int so root results in speed 2 (191*0.01=1.91+0.5=2.41)
+            speed += itemSpeedBonus;
 
             GameSpellEffect iConvokerEffect = SpellHandler.FindEffectOnTarget(living, "SpeedWrap");
             if (iConvokerEffect != null && living.EffectList.GetOfType<ChargeEffect>() == null)

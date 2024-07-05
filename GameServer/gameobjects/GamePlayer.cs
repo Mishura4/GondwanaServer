@@ -3062,32 +3062,44 @@ namespace DOL.GS
             int safeFallLevel = GetAbilityLevel(Abilities.SafeFall);
             int mythSafeFall = GetModified(eProperty.MythicalSafeFall);
 
-            if (mythSafeFall > 0 & mythSafeFall < fallDamagePercent)
+            double initialDamage = (0.01 * fallDamagePercent * (MaxHealth - 1));
+            double damage = initialDamage;
+            double totalReduction = 0;
+
+            // Apply Safe Fall ability reduction
+            if (safeFallLevel > 0)
             {
-                Client.Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "PlayerPositionUpdateHandler.MythSafeFall"), eChatType.CT_Damaged, eChatLoc.CL_SystemWindow);
-                fallDamagePercent = mythSafeFall;
+                double safeFallReduction = safeFallLevel * 0.05; // Example: each level reduces by 5%
+                totalReduction += safeFallReduction;
+                Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "PlayerPositionUpdateHandler.SafeFall"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
             }
-            if (safeFallLevel > 0 & mythSafeFall == 0)
-                Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "PlayerPositionUpdateHandler.SafeFall"), eChatType.CT_Damaged, eChatLoc.CL_SystemWindow);
 
-            Endurance -= MaxEndurance * fallDamagePercent / 100;
-            double damage = (0.01 * fallDamagePercent * (MaxHealth - 1));
+            // Apply Mythical Safe Fall reduction
+            if (mythSafeFall > 0)
+            {
+                totalReduction += mythSafeFall * 0.01;
+                Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "PlayerPositionUpdateHandler.MythSafeFall"), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
+            }
 
-            // [Freya] Nidel: CloudSong falling damage reduction
+            // Apply Cloudsong Fall reduction
             GameSpellEffect cloudSongFall = SpellHandler.FindEffectOnTarget(this, "CloudsongFall");
             if (cloudSongFall != null)
-                damage -= (damage * cloudSongFall.Spell.Value) * 0.01;
+            {
+                totalReduction += cloudSongFall.Spell.Value * 0.01;
+                Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "PlayerPositionUpdateHandler.CloudsongFall"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            }
 
-            //Mattress: SafeFall property for Mythirians, the value of the MythicalSafeFall property represents the percent damage taken in a fall.
-            if (mythSafeFall != 0 && damage > mythSafeFall)
-                damage = ((MaxHealth - 1) * (mythSafeFall * 0.01));
+            damage = initialDamage * (1 - totalReduction);
+            Endurance -= MaxEndurance * fallDamagePercent / 100;
+            double effectiveFallDamagePercent = fallDamagePercent * (1 - totalReduction);
 
             Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "PlayerPositionUpdateHandler.FallingDamage"), eChatType.CT_Damaged, eChatLoc.CL_SystemWindow);
-            Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "PlayerPositionUpdateHandler.FallPercent", fallDamagePercent), eChatType.CT_Damaged, eChatLoc.CL_SystemWindow);
+            Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "PlayerPositionUpdateHandler.FallPercent", effectiveFallDamagePercent), eChatType.CT_Damaged, eChatLoc.CL_SystemWindow);
             Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "PlayerPositionUpdateHandler.Endurance"), eChatType.CT_Damaged, eChatLoc.CL_SystemWindow);
+
             TakeDamage(null, eDamageType.Falling, (int)damage, 0);
 
-            //Update the player's health to all other players around
+            // Update the player's health to all other players around
             foreach (GamePlayer player in GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
                 Out.SendCombatAnimation(null, Client.Player, 0, 0, 0, 0, 0, HealthPercent);
 
@@ -12391,6 +12403,34 @@ namespace DOL.GS
                 if (item.ExtraBonusType < 20 || item.ExtraBonusType == 119 || (item.ExtraBonusType >= 147 && item.ExtraBonusType <= 156) || (item.ExtraBonusType >= 169 && item.ExtraBonusType <= 171) || item.ExtraBonusType == 181 || item.ExtraBonusType == 175 || item.ExtraBonusType == 197 || item.ExtraBonusType == 249)
                     Out.SendMessage(string.Format(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.OnItemEquipped.Increased", ItemBonusName(item.ExtraBonusType))), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
             }
+
+            if (item.Bonus1 != 0) ItemBonus[item.Bonus1Type] += item.Bonus1;
+            if (item.Bonus2 != 0) ItemBonus[item.Bonus2Type] += item.Bonus2;
+            if (item.Bonus3 != 0) ItemBonus[item.Bonus3Type] += item.Bonus3;
+            if (item.Bonus4 != 0) ItemBonus[item.Bonus4Type] += item.Bonus4;
+            if (item.Bonus5 != 0) ItemBonus[item.Bonus5Type] += item.Bonus5;
+            if (item.Bonus6 != 0) ItemBonus[item.Bonus6Type] += item.Bonus6;
+            if (item.Bonus7 != 0) ItemBonus[item.Bonus7Type] += item.Bonus7;
+            if (item.Bonus8 != 0) ItemBonus[item.Bonus8Type] += item.Bonus8;
+            if (item.Bonus9 != 0) ItemBonus[item.Bonus9Type] += item.Bonus9;
+            if (item.Bonus10 != 0) ItemBonus[item.Bonus10Type] += item.Bonus10;
+            if (item.ExtraBonus != 0) ItemBonus[item.ExtraBonusType] += item.ExtraBonus;
+
+            if (item.Bonus1Type == (int)eProperty.MythicalSpellReflect ||
+                item.Bonus2Type == (int)eProperty.MythicalSpellReflect ||
+                item.Bonus3Type == (int)eProperty.MythicalSpellReflect ||
+                item.Bonus4Type == (int)eProperty.MythicalSpellReflect ||
+                item.Bonus5Type == (int)eProperty.MythicalSpellReflect ||
+                item.Bonus6Type == (int)eProperty.MythicalSpellReflect ||
+                item.Bonus7Type == (int)eProperty.MythicalSpellReflect ||
+                item.Bonus8Type == (int)eProperty.MythicalSpellReflect ||
+                item.Bonus9Type == (int)eProperty.MythicalSpellReflect ||
+                item.Bonus10Type == (int)eProperty.MythicalSpellReflect ||
+                item.ExtraBonusType == (int)eProperty.MythicalSpellReflect)
+            {
+                GameEventMgr.AddHandler(this, GameLivingEvent.AttackedByEnemy, new DOLEventHandler(MythicalSpellReflectHandler.ApplyEffect));
+            }
+
             //Check null on client.player bypass region change
             if (Client.Account.PrivLevel == (uint)ePrivLevel.Player && Client.Player != null && Client.Player.ObjectState == eObjectState.Active)
                 if (item.SpellID > 0 || item.SpellID1 > 0)
@@ -12547,9 +12587,36 @@ namespace DOL.GS
                     Out.SendMessage(string.Format(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.OnItemUnequipped.Decreased", ItemBonusName(item.ExtraBonusType))), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
             }
 
+            if (item.Bonus1 != 0) ItemBonus[item.Bonus1Type] -= item.Bonus1;
+            if (item.Bonus2 != 0) ItemBonus[item.Bonus2Type] -= item.Bonus2;
+            if (item.Bonus3 != 0) ItemBonus[item.Bonus3Type] -= item.Bonus3;
+            if (item.Bonus4 != 0) ItemBonus[item.Bonus4Type] -= item.Bonus4;
+            if (item.Bonus5 != 0) ItemBonus[item.Bonus5Type] -= item.Bonus5;
+            if (item.Bonus6 != 0) ItemBonus[item.Bonus6Type] -= item.Bonus6;
+            if (item.Bonus7 != 0) ItemBonus[item.Bonus7Type] -= item.Bonus7;
+            if (item.Bonus8 != 0) ItemBonus[item.Bonus8Type] -= item.Bonus8;
+            if (item.Bonus9 != 0) ItemBonus[item.Bonus9Type] -= item.Bonus9;
+            if (item.Bonus10 != 0) ItemBonus[item.Bonus10Type] -= item.Bonus10;
+            if (item.ExtraBonus != 0) ItemBonus[item.ExtraBonusType] -= item.ExtraBonus;
+
             if (item is IGameInventoryItem)
             {
                 (item as IGameInventoryItem).OnUnEquipped(this);
+            }
+
+            if (item.Bonus1Type == (int)eProperty.MythicalSpellReflect ||
+                item.Bonus2Type == (int)eProperty.MythicalSpellReflect ||
+                item.Bonus3Type == (int)eProperty.MythicalSpellReflect ||
+                item.Bonus4Type == (int)eProperty.MythicalSpellReflect ||
+                item.Bonus5Type == (int)eProperty.MythicalSpellReflect ||
+                item.Bonus6Type == (int)eProperty.MythicalSpellReflect ||
+                item.Bonus7Type == (int)eProperty.MythicalSpellReflect ||
+                item.Bonus8Type == (int)eProperty.MythicalSpellReflect ||
+                item.Bonus9Type == (int)eProperty.MythicalSpellReflect ||
+                item.Bonus10Type == (int)eProperty.MythicalSpellReflect ||
+                item.ExtraBonusType == (int)eProperty.MythicalSpellReflect)
+            {
+                GameEventMgr.RemoveHandler(this, GameLivingEvent.AttackedByEnemy, new DOLEventHandler(MythicalSpellReflectHandler.ApplyEffect));
             }
 
             if (ObjectState == eObjectState.Active)

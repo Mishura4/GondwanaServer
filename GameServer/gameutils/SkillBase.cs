@@ -1579,8 +1579,8 @@ namespace DOL.GS
                     return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MythicalRegen");
                 case eProperty.MythicalTension:
                     return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MythicalTension");
-                case eProperty.MythicalMaxSpeed:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MythicalMaxSpeed");
+                case eProperty.Skill_BlueMagic:
+                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.BlueMagic");
                 case eProperty.MythicalSpellReflect:
                     return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MythicalSpellReflect");
                 case eProperty.BodyResCapBonus:

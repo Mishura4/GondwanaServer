@@ -244,7 +244,7 @@ SkillBase.RegisterPropertyNames.ThrustCap:				Bonus to Thrust Resist cap
 SkillBase.RegisterPropertyNames.MythicalCrowdDuration:	Mythical Crowd Control Duration decrease
 SkillBase.RegisterPropertyNames.MythicalRegen: 			Mythical Regeneration Bonus
 SkillBase.RegisterPropertyNames.MythicalTension: 		Mythical Tension Bonus
-SkillBase.RegisterPropertyNames.MythicalMaxSpeed: 		Mythical Max Speed
+SkillBase.RegisterPropertyNames.BlueMagic:				Blue Magic
 SkillBase.RegisterPropertyNames.MythicalSpellReflect: 	Mythical Spell Reflection Chance
 SkillBase.RegisterPropertyNames.MythicalSafeFall: 		Mythical Safe Fall
 SkillBase.RegisterPropertyNames.MythicalDiscumbering:	Mythical Discumbering

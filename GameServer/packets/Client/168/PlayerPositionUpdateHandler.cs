@@ -1095,18 +1095,22 @@ namespace DOL.GS.PacketHandler.Client.v168
                         var fallSpeed = (newPlayerZSpeed * -1) - (100 * safeFallLevel);
 
                         int fallDivide = 15;
+                        int fallMinSpeed = 500;
 
-                        var fallPercent = (int)Math.Min(99, (fallSpeed - 501) / fallDivide);
+                        var fallPercent = (int)Math.Min(99, (fallSpeed - (fallMinSpeed + 1)) / fallDivide);
 
-                        if (fallSpeed > 500)
+                        if (fallSpeed > fallMinSpeed)
                         {
+                            fallPercent = Math.Max(0, fallPercent - safeFallLevel);
                             client.Player.CalcFallDamage(fallPercent);
                         }
 
                         client.Player.MaxLastZ = client.Player.Position.Z;
                     }
                     else if (maxLastZ < client.Player.Position.Z || client.Player.IsRiding || newPlayerZSpeed > -150) // is riding, for dragonflys
+                    {
                         client.Player.MaxLastZ = client.Player.Position.Z;
+                    }
                 }
                 catch
                 {

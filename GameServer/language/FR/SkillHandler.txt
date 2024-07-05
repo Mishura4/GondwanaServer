@@ -213,7 +213,7 @@ SkillBase.RegisterPropertyNames.MagicAbsorption:		Absorption Magique
 SkillBase.RegisterPropertyNames.MaxHealth:				Points de vie Max
 SkillBase.RegisterPropertyNames.MaxMana:				Points de mana Max
 SkillBase.RegisterPropertyNames.MissHit:				Bonus de coup manqué
-SkillBase.RegisterPropertyNames.WaterSpeed:				Bonus to Vitesse à la nage
+SkillBase.RegisterPropertyNames.WaterSpeed:				Bonus de Vitesse de nage
 
 SkillBase.RegisterPropertyNames.Essence:				Résistance à l'Essence
 SkillBase.RegisterPropertyNames.CraftingSkillGain:		Bonus de gain en Artisanat
@@ -241,7 +241,7 @@ SkillBase.RegisterPropertyNames.ThrustCap:				Bonus au cap Résistance à l'Esto
 SkillBase.RegisterPropertyNames.MythicalCrowdDuration:	Mythical Crowd Control Duration decrease
 SkillBase.RegisterPropertyNames.MythicalRegen: 			Bonus Mythique de Récupération Vie et Mana
 SkillBase.RegisterPropertyNames.MythicalTension: 		Bonus Mythique de Tension
-SkillBase.RegisterPropertyNames.MythicalMaxSpeed: 		Mythical Max Speed
+SkillBase.RegisterPropertyNames.BlueMagic:				Magie Bleue
 SkillBase.RegisterPropertyNames.MythicalSpellReflect: 	Bonus Mythique de Renvoi de Sort
 SkillBase.RegisterPropertyNames.MythicalSafeFall: 		Bonus Mythique de résistance aux Chutes
 SkillBase.RegisterPropertyNames.MythicalDiscumbering:	Bonus Mythique Encombrement

@@ -399,7 +399,7 @@ namespace DOL.GS
                     return false;
                 }
 
-                long rpToAdd = (long)Math.Round(CalculateRPsToGainRealmLevel(player) * factor);
+                long rpToAdd = (long)Math.Round(CalculateRPsToGainRealmLevel(player) * factor * 10);
 
                 player.GainRealmPoints(rpToAdd, false);
 

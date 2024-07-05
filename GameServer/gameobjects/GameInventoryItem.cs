@@ -971,7 +971,7 @@ namespace DOL.GS
             //117 == Secondary style spell chance = *2
             //118 == Mythical regeneration = *5
             //119 == Tension gain = *2
-            //145 == MaxSpeed = *2
+            //145 == MaxSpeed = *1
             //146 == SpellReflectionChance = *2
             //147 == MaxConcentration = *2
             //148 == ArmorFactor = *1
@@ -1017,7 +1017,7 @@ namespace DOL.GS
                 {
                     totalUti += Bonus1 * .6667;
                 }
-                else if (Bonus1Type == 9 || Bonus1Type == 148)
+                else if (Bonus1Type == 145 || Bonus1Type == 148)
                 {
                     totalUti += Bonus1;
                 }
@@ -1025,13 +1025,16 @@ namespace DOL.GS
                 {
                     totalUti += Bonus1 * .25;
                 }
-                else if (Bonus1Type < 20
+                else if (Bonus1Type == 9
+                    || Bonus1Type >= 11 && Bonus1Type <= 19
                     || Bonus1Type == 59
                     || Bonus1Type == 71
                     || Bonus1Type == 116
                     || Bonus1Type == 117
                     || Bonus1Type == 119
-                    || Bonus1Type >= 145 && Bonus1Type <= 149
+                    || Bonus1Type == 146
+                    || Bonus1Type == 147
+                    || Bonus1Type == 149
                     || Bonus1Type >= 169 && Bonus1Type <= 172
                     || Bonus1Type >= 175 && Bonus1Type <= 186
                     || Bonus1Type == 189
@@ -1052,11 +1055,11 @@ namespace DOL.GS
                 {
                     totalUti += Bonus1 * 4;
                 }
-                else if (Bonus1Type >= 20 && Bonus1Type <= 58 || Bonus1Type >= 60 && Bonus1Type <= 70 || Bonus1Type >= 72 && Bonus1Type <= 115)
-                {
-                    totalUti += Bonus1 * 5;
-                }
-                else if (Bonus1Type == 118
+                else if (Bonus1Type >= 20 && Bonus1Type <= 58
+                  || Bonus1Type >= 60 && Bonus1Type <= 70
+                  || Bonus1Type >= 72 && Bonus1Type <= 115
+                  || Bonus1Type == 118
+                  || Bonus1Type == 131
                   || Bonus1Type >= 150 && Bonus1Type <= 155
                   || Bonus1Type >= 163 && Bonus1Type <= 168
                   || Bonus1Type == 173
@@ -1082,7 +1085,7 @@ namespace DOL.GS
                 {
                     totalUti += Bonus2 * .6667;
                 }
-                else if (Bonus2Type == 9 || Bonus2Type == 148)
+                else if (Bonus2Type == 145 || Bonus2Type == 148)
                 {
                     totalUti += Bonus2;
                 }
@@ -1090,13 +1093,16 @@ namespace DOL.GS
                 {
                     totalUti += Bonus2 * .25;
                 }
-                else if (Bonus2Type < 20
+                else if (Bonus2Type == 9
+                    || Bonus2Type >= 11 && Bonus2Type <= 19
                     || Bonus2Type == 59
                     || Bonus2Type == 71
                     || Bonus2Type == 116
                     || Bonus2Type == 117
                     || Bonus2Type == 119
-                    || Bonus2Type >= 145 && Bonus2Type <= 149
+                    || Bonus2Type == 146
+                    || Bonus2Type == 147
+                    || Bonus2Type == 149
                     || Bonus2Type >= 169 && Bonus2Type <= 172
                     || Bonus2Type >= 175 && Bonus2Type <= 186
                     || Bonus2Type == 189
@@ -1117,11 +1123,11 @@ namespace DOL.GS
                 {
                     totalUti += Bonus2 * 4;
                 }
-                else if (Bonus2Type >= 20 && Bonus2Type <= 58 || Bonus2Type >= 60 && Bonus2Type <= 70 || Bonus2Type >= 72 && Bonus2Type <= 115)
-                {
-                    totalUti += Bonus2 * 5;
-                }
-                else if (Bonus2Type == 118
+                else if (Bonus2Type >= 20 && Bonus2Type <= 58
+                  || Bonus2Type >= 60 && Bonus2Type <= 70
+                  || Bonus2Type >= 72 && Bonus2Type <= 115
+                  || Bonus2Type == 118
+                  || Bonus2Type == 131
                   || Bonus2Type >= 150 && Bonus2Type <= 155
                   || Bonus2Type >= 163 && Bonus2Type <= 168
                   || Bonus2Type == 173
@@ -1147,7 +1153,7 @@ namespace DOL.GS
                 {
                     totalUti += Bonus3 * .6667;
                 }
-                else if (Bonus3Type == 9 || Bonus3Type == 148)
+                else if (Bonus3Type == 145 || Bonus3Type == 148)
                 {
                     totalUti += Bonus3;
                 }
@@ -1155,13 +1161,16 @@ namespace DOL.GS
                 {
                     totalUti += Bonus3 * .25;
                 }
-                else if (Bonus3Type < 20
+                else if (Bonus3Type == 9
+                    || Bonus3Type >= 11 && Bonus3Type <= 19
                     || Bonus3Type == 59
                     || Bonus3Type == 71
                     || Bonus3Type == 116
                     || Bonus3Type == 117
                     || Bonus3Type == 119
-                    || Bonus3Type >= 145 && Bonus3Type <= 149
+                    || Bonus3Type == 146
+                    || Bonus3Type == 147
+                    || Bonus3Type == 149
                     || Bonus3Type >= 169 && Bonus3Type <= 172
                     || Bonus3Type >= 175 && Bonus3Type <= 186
                     || Bonus3Type == 189
@@ -1182,11 +1191,11 @@ namespace DOL.GS
                 {
                     totalUti += Bonus3 * 4;
                 }
-                else if (Bonus3Type >= 20 && Bonus3Type <= 58 || Bonus3Type >= 60 && Bonus3Type <= 70 || Bonus3Type >= 72 && Bonus3Type <= 115)
-                {
-                    totalUti += Bonus3 * 5;
-                }
-                else if (Bonus3Type == 118
+                else if (Bonus3Type >= 20 && Bonus3Type <= 58
+                  || Bonus3Type >= 60 && Bonus3Type <= 70
+                  || Bonus3Type >= 72 && Bonus3Type <= 115
+                  || Bonus3Type == 118
+                  || Bonus3Type == 131
                   || Bonus3Type >= 150 && Bonus3Type <= 155
                   || Bonus3Type >= 163 && Bonus3Type <= 168
                   || Bonus3Type == 173
@@ -1213,7 +1222,7 @@ namespace DOL.GS
                 {
                     totalUti += Bonus4 * .6667;
                 }
-                else if (Bonus4Type == 9 || Bonus4Type == 148)
+                else if (Bonus4Type == 145 || Bonus4Type == 148)
                 {
                     totalUti += Bonus4;
                 }
@@ -1221,13 +1230,16 @@ namespace DOL.GS
                 {
                     totalUti += Bonus4 * .25;
                 }
-                else if (Bonus4Type < 20
+                else if (Bonus4Type == 9
+                    || Bonus4Type >= 11 && Bonus4Type <= 19
                     || Bonus4Type == 59
                     || Bonus4Type == 71
                     || Bonus4Type == 116
                     || Bonus4Type == 117
                     || Bonus4Type == 119
-                    || Bonus4Type >= 145 && Bonus4Type <= 149
+                    || Bonus4Type == 146
+                    || Bonus4Type == 147
+                    || Bonus4Type == 149
                     || Bonus4Type >= 169 && Bonus4Type <= 172
                     || Bonus4Type >= 175 && Bonus4Type <= 186
                     || Bonus4Type == 189
@@ -1248,11 +1260,11 @@ namespace DOL.GS
                 {
                     totalUti += Bonus4 * 4;
                 }
-                else if (Bonus4Type >= 20 && Bonus4Type <= 58 || Bonus4Type >= 60 && Bonus4Type <= 70 || Bonus4Type >= 72 && Bonus4Type <= 115)
-                {
-                    totalUti += Bonus4 * 5;
-                }
-                else if (Bonus4Type == 118
+                else if (Bonus4Type >= 20 && Bonus4Type <= 58
+                  || Bonus4Type >= 60 && Bonus4Type <= 70
+                  || Bonus4Type >= 72 && Bonus4Type <= 115
+                  || Bonus4Type == 118
+                  || Bonus4Type == 131
                   || Bonus4Type >= 150 && Bonus4Type <= 155
                   || Bonus4Type >= 163 && Bonus4Type <= 168
                   || Bonus4Type == 173
@@ -1279,7 +1291,7 @@ namespace DOL.GS
                 {
                     totalUti += Bonus5 * .6667;
                 }
-                else if (Bonus5Type == 9 || Bonus5Type == 148)
+                else if (Bonus5Type == 145 || Bonus5Type == 148)
                 {
                     totalUti += Bonus5;
                 }
@@ -1287,13 +1299,16 @@ namespace DOL.GS
                 {
                     totalUti += Bonus5 * .25;
                 }
-                else if (Bonus5Type < 20
+                else if (Bonus5Type == 9
+                    || Bonus5Type >= 11 && Bonus5Type <= 19
                     || Bonus5Type == 59
                     || Bonus5Type == 71
                     || Bonus5Type == 116
                     || Bonus5Type == 117
                     || Bonus5Type == 119
-                    || Bonus5Type >= 145 && Bonus5Type <= 149
+                    || Bonus5Type == 146
+                    || Bonus5Type == 147
+                    || Bonus5Type == 149
                     || Bonus5Type >= 169 && Bonus5Type <= 172
                     || Bonus5Type >= 175 && Bonus5Type <= 186
                     || Bonus5Type == 189
@@ -1314,11 +1329,11 @@ namespace DOL.GS
                 {
                     totalUti += Bonus5 * 4;
                 }
-                else if (Bonus5Type >= 20 && Bonus5Type <= 58 || Bonus5Type >= 60 && Bonus5Type <= 70 || Bonus5Type >= 72 && Bonus5Type <= 115)
-                {
-                    totalUti += Bonus5 * 5;
-                }
-                else if (Bonus5Type == 118
+                else if (Bonus5Type >= 20 && Bonus5Type <= 58
+                  || Bonus5Type >= 60 && Bonus5Type <= 70
+                  || Bonus5Type >= 72 && Bonus5Type <= 115
+                  || Bonus5Type == 118
+                  || Bonus5Type == 131
                   || Bonus5Type >= 150 && Bonus5Type <= 155
                   || Bonus5Type >= 163 && Bonus5Type <= 168
                   || Bonus5Type == 173
@@ -1345,7 +1360,7 @@ namespace DOL.GS
                 {
                     totalUti += Bonus6 * .6667;
                 }
-                else if (Bonus6Type == 9 || Bonus6Type == 148)
+                else if (Bonus6Type == 145 || Bonus6Type == 148)
                 {
                     totalUti += Bonus6;
                 }
@@ -1353,13 +1368,16 @@ namespace DOL.GS
                 {
                     totalUti += Bonus6 * .25;
                 }
-                else if (Bonus6Type < 20
+                else if (Bonus6Type == 9
+                    || Bonus6Type >= 11 && Bonus6Type <= 19
                     || Bonus6Type == 59
                     || Bonus6Type == 71
                     || Bonus6Type == 116
                     || Bonus6Type == 117
                     || Bonus6Type == 119
-                    || Bonus6Type >= 145 && Bonus6Type <= 149
+                    || Bonus6Type == 146
+                    || Bonus6Type == 147
+                    || Bonus6Type == 149
                     || Bonus6Type >= 169 && Bonus6Type <= 172
                     || Bonus6Type >= 175 && Bonus6Type <= 186
                     || Bonus6Type == 189
@@ -1380,11 +1398,11 @@ namespace DOL.GS
                 {
                     totalUti += Bonus6 * 4;
                 }
-                else if (Bonus6Type >= 20 && Bonus6Type <= 58 || Bonus6Type >= 60 && Bonus6Type <= 70 || Bonus6Type >= 72 && Bonus6Type <= 115)
-                {
-                    totalUti += Bonus6 * 5;
-                }
-                else if (Bonus6Type == 118
+                else if (Bonus6Type >= 20 && Bonus6Type <= 58
+                  || Bonus6Type >= 60 && Bonus6Type <= 70
+                  || Bonus6Type >= 72 && Bonus6Type <= 115
+                  || Bonus6Type == 118
+                  || Bonus6Type == 131
                   || Bonus6Type >= 150 && Bonus6Type <= 155
                   || Bonus6Type >= 163 && Bonus6Type <= 168
                   || Bonus6Type == 173
@@ -1410,7 +1428,7 @@ namespace DOL.GS
                 {
                     totalUti += Bonus7 * .6667;
                 }
-                else if (Bonus7Type == 9 || Bonus7Type == 148)
+                else if (Bonus7Type == 145 || Bonus7Type == 148)
                 {
                     totalUti += Bonus7;
                 }
@@ -1418,13 +1436,16 @@ namespace DOL.GS
                 {
                     totalUti += Bonus7 * .25;
                 }
-                else if (Bonus7Type < 20
+                else if (Bonus7Type == 9
+                    || Bonus7Type >= 11 && Bonus7Type <= 19
                     || Bonus7Type == 59
                     || Bonus7Type == 71
                     || Bonus7Type == 116
                     || Bonus7Type == 117
                     || Bonus7Type == 119
-                    || Bonus7Type >= 145 && Bonus7Type <= 149
+                    || Bonus7Type == 146
+                    || Bonus7Type == 147
+                    || Bonus7Type == 149
                     || Bonus7Type >= 169 && Bonus7Type <= 172
                     || Bonus7Type >= 175 && Bonus7Type <= 186
                     || Bonus7Type == 189
@@ -1445,11 +1466,11 @@ namespace DOL.GS
                 {
                     totalUti += Bonus7 * 4;
                 }
-                else if (Bonus7Type >= 20 && Bonus7Type <= 58 || Bonus7Type >= 60 && Bonus7Type <= 70 || Bonus7Type >= 72 && Bonus7Type <= 115)
-                {
-                    totalUti += Bonus7 * 5;
-                }
-                else if (Bonus7Type == 118
+                else if (Bonus7Type >= 20 && Bonus7Type <= 58
+                  || Bonus7Type >= 60 && Bonus7Type <= 70
+                  || Bonus7Type >= 72 && Bonus7Type <= 115
+                  || Bonus7Type == 118
+                  || Bonus7Type == 131
                   || Bonus7Type >= 150 && Bonus7Type <= 155
                   || Bonus7Type >= 163 && Bonus7Type <= 168
                   || Bonus7Type == 173
@@ -1474,7 +1495,7 @@ namespace DOL.GS
                 {
                     totalUti += Bonus8 * .6667;
                 }
-                else if (Bonus8Type == 9 || Bonus8Type == 148)
+                else if (Bonus8Type == 145 || Bonus8Type == 148)
                 {
                     totalUti += Bonus8;
                 }
@@ -1482,13 +1503,16 @@ namespace DOL.GS
                 {
                     totalUti += Bonus8 * .25;
                 }
-                else if (Bonus8Type < 20
+                else if (Bonus8Type == 9
+                    || Bonus8Type >= 11 && Bonus8Type <= 19
                     || Bonus8Type == 59
                     || Bonus8Type == 71
                     || Bonus8Type == 116
                     || Bonus8Type == 117
                     || Bonus8Type == 119
-                    || Bonus8Type >= 145 && Bonus8Type <= 149
+                    || Bonus8Type == 146
+                    || Bonus8Type == 147
+                    || Bonus8Type == 149
                     || Bonus8Type >= 169 && Bonus8Type <= 172
                     || Bonus8Type >= 175 && Bonus8Type <= 186
                     || Bonus8Type == 189
@@ -1509,11 +1533,11 @@ namespace DOL.GS
                 {
                     totalUti += Bonus8 * 4;
                 }
-                else if (Bonus8Type >= 20 && Bonus8Type <= 58 || Bonus8Type >= 60 && Bonus8Type <= 70 || Bonus8Type >= 72 && Bonus8Type <= 115)
-                {
-                    totalUti += Bonus8 * 5;
-                }
-                else if (Bonus8Type == 118
+                else if (Bonus8Type >= 20 && Bonus8Type <= 58
+                  || Bonus8Type >= 60 && Bonus8Type <= 70
+                  || Bonus8Type >= 72 && Bonus8Type <= 115
+                  || Bonus8Type == 118
+                  || Bonus8Type == 131
                   || Bonus8Type >= 150 && Bonus8Type <= 155
                   || Bonus8Type >= 163 && Bonus8Type <= 168
                   || Bonus8Type == 173
@@ -1538,7 +1562,7 @@ namespace DOL.GS
                 {
                     totalUti += Bonus9 * .6667;
                 }
-                else if (Bonus9Type == 9 || Bonus9Type == 148)
+                else if (Bonus9Type == 145 || Bonus9Type == 148)
                 {
                     totalUti += Bonus9;
                 }
@@ -1546,13 +1570,16 @@ namespace DOL.GS
                 {
                     totalUti += Bonus9 * .25;
                 }
-                else if (Bonus9Type < 20
+                else if (Bonus9Type == 9
+                    || Bonus9Type >= 11 && Bonus9Type <= 19
                     || Bonus9Type == 59
                     || Bonus9Type == 71
                     || Bonus9Type == 116
                     || Bonus9Type == 117
                     || Bonus9Type == 119
-                    || Bonus9Type >= 145 && Bonus9Type <= 149
+                    || Bonus9Type == 146
+                    || Bonus9Type == 147
+                    || Bonus9Type == 149
                     || Bonus9Type >= 169 && Bonus9Type <= 172
                     || Bonus9Type >= 175 && Bonus9Type <= 186
                     || Bonus9Type == 189
@@ -1573,11 +1600,11 @@ namespace DOL.GS
                 {
                     totalUti += Bonus9 * 4;
                 }
-                else if (Bonus9Type >= 20 && Bonus9Type <= 58 || Bonus9Type >= 60 && Bonus9Type <= 70 || Bonus9Type >= 72 && Bonus9Type <= 115)
-                {
-                    totalUti += Bonus9 * 5;
-                }
-                else if (Bonus9Type == 118
+                else if (Bonus9Type >= 20 && Bonus9Type <= 58
+                  || Bonus9Type >= 60 && Bonus9Type <= 70
+                  || Bonus9Type >= 72 && Bonus9Type <= 115
+                  || Bonus9Type == 118
+                  || Bonus9Type == 131
                   || Bonus9Type >= 150 && Bonus9Type <= 155
                   || Bonus9Type >= 163 && Bonus9Type <= 168
                   || Bonus9Type == 173
@@ -1602,7 +1629,7 @@ namespace DOL.GS
                 {
                     totalUti += Bonus10 * .6667;
                 }
-                else if (Bonus10Type == 9 || Bonus10Type == 148)
+                else if (Bonus10Type == 145 || Bonus10Type == 148)
                 {
                     totalUti += Bonus10;
                 }
@@ -1610,13 +1637,16 @@ namespace DOL.GS
                 {
                     totalUti += Bonus10 * .25;
                 }
-                else if (Bonus10Type < 20
+                else if (Bonus10Type == 9
+                    || Bonus10Type >= 11 && Bonus10Type <= 19
                     || Bonus10Type == 59
                     || Bonus10Type == 71
                     || Bonus10Type == 116
                     || Bonus10Type == 117
                     || Bonus10Type == 119
-                    || Bonus10Type >= 145 && Bonus10Type <= 149
+                    || Bonus10Type == 146
+                    || Bonus10Type == 147
+                    || Bonus10Type == 149
                     || Bonus10Type >= 169 && Bonus10Type <= 172
                     || Bonus10Type >= 175 && Bonus10Type <= 186
                     || Bonus10Type == 189
@@ -1637,11 +1667,11 @@ namespace DOL.GS
                 {
                     totalUti += Bonus10 * 4;
                 }
-                else if (Bonus10Type >= 20 && Bonus10Type <= 58 || Bonus10Type >= 60 && Bonus10Type <= 70 || Bonus10Type >= 72 && Bonus10Type <= 115)
-                {
-                    totalUti += Bonus10 * 5;
-                }
-                else if (Bonus10Type == 118
+                else if (Bonus10Type >= 20 && Bonus10Type <= 58
+                  || Bonus10Type >= 60 && Bonus10Type <= 70
+                  || Bonus10Type >= 72 && Bonus10Type <= 115
+                  || Bonus10Type == 118
+                  || Bonus10Type == 131
                   || Bonus10Type >= 150 && Bonus10Type <= 155
                   || Bonus10Type >= 163 && Bonus10Type <= 168
                   || Bonus10Type == 173
@@ -1666,7 +1696,7 @@ namespace DOL.GS
                 {
                     totalUti += ExtraBonus * .6667;
                 }
-                else if (ExtraBonusType == 9 || ExtraBonusType == 148)
+                else if (ExtraBonusType == 145 || ExtraBonusType == 148)
                 {
                     totalUti += ExtraBonus;
                 }
@@ -1674,13 +1704,16 @@ namespace DOL.GS
                 {
                     totalUti += ExtraBonus * .25;
                 }
-                else if (ExtraBonusType < 20
+                else if (ExtraBonusType == 9
+                    || ExtraBonusType >= 11 && ExtraBonusType <= 19
                     || ExtraBonusType == 59
                     || ExtraBonusType == 71
                     || ExtraBonusType == 116
                     || ExtraBonusType == 117
                     || ExtraBonusType == 119
-                    || ExtraBonusType >= 145 && ExtraBonusType <= 149
+                    || ExtraBonusType == 146
+                    || ExtraBonusType == 147
+                    || ExtraBonusType == 149
                     || ExtraBonusType >= 169 && ExtraBonusType <= 172
                     || ExtraBonusType >= 175 && ExtraBonusType <= 186
                     || ExtraBonusType == 189
@@ -1701,11 +1734,11 @@ namespace DOL.GS
                 {
                     totalUti += ExtraBonus * 4;
                 }
-                else if (ExtraBonusType >= 20 && ExtraBonusType <= 58 || ExtraBonusType >= 60 && ExtraBonusType <= 70 || ExtraBonusType >= 72 && ExtraBonusType <= 115)
-                {
-                    totalUti += ExtraBonus * 5;
-                }
-                else if (ExtraBonusType == 118
+                else if (ExtraBonusType >= 20 && ExtraBonusType <= 58
+                  || ExtraBonusType >= 60 && ExtraBonusType <= 70
+                  || ExtraBonusType >= 72 && ExtraBonusType <= 115
+                  || ExtraBonusType == 118
+                  || ExtraBonusType == 131
                   || ExtraBonusType >= 150 && ExtraBonusType <= 155
                   || ExtraBonusType >= 163 && ExtraBonusType <= 168
                   || ExtraBonusType == 173
@@ -1720,7 +1753,7 @@ namespace DOL.GS
                   || ExtraBonusType >= 247 && ExtraBonusType <= 250
                   || ExtraBonusType >= 253 && ExtraBonusType <= 255)
                 {
-                    totalUti += ExtraBonus * 10;
+                    totalUti += ExtraBonus * 5;
                 }
             }
 
@@ -1738,7 +1771,7 @@ namespace DOL.GS
                 {
                     totalUti += Bonus * .6667;
                 }
-                else if (BonusType == 9 || BonusType == 148)
+                else if (BonusType == 145 || BonusType == 148)
                 {
                     totalUti += Bonus;
                 }
@@ -1746,13 +1779,16 @@ namespace DOL.GS
                 {
                     totalUti += Bonus * .25;
                 }
-                else if (BonusType < 20
+                else if (BonusType == 9
+                    || BonusType >= 11 && BonusType <= 19
                     || BonusType == 59
                     || BonusType == 71
                     || BonusType == 116
                     || BonusType == 117
                     || BonusType == 119
-                    || BonusType >= 145 && BonusType <= 149
+                    || BonusType == 146
+                    || BonusType == 147
+                    || BonusType == 149
                     || BonusType >= 169 && BonusType <= 172
                     || BonusType >= 175 && BonusType <= 186
                     || BonusType == 189
@@ -1773,11 +1809,11 @@ namespace DOL.GS
                 {
                     totalUti += Bonus * 4;
                 }
-                else if (BonusType >= 20 && BonusType <= 58 || BonusType >= 60 && BonusType <= 70 || BonusType >= 72 && BonusType <= 115)
-                {
-                    totalUti += Bonus * 5;
-                }
-                else if (BonusType == 118
+                else if (BonusType >= 20 && BonusType <= 58
+                  || BonusType >= 60 && BonusType <= 70
+                  || BonusType >= 72 && BonusType <= 115
+                  || BonusType == 118
+                  || BonusType == 131
                   || BonusType >= 150 && BonusType <= 155
                   || BonusType >= 163 && BonusType <= 168
                   || BonusType == 173
@@ -1874,12 +1910,13 @@ namespace DOL.GS
                     || bonusCat == (int)eProperty.XpPoints
                     || bonusCat == (int)eProperty.CraftingSkillGain
                     || bonusCat == (int)eProperty.RobberyResist
+                    || bonusCat == (int)eProperty.MythicalCoin
                     || (bonusCat >= 116 && bonusCat <= 119)
-                    || (bonusCat >= 145 && bonusCat <= 147)
+                    || (bonusCat >= 146 && bonusCat <= 147)
                     || (bonusCat >= 149 && bonusCat <= 155)
                     || (bonusCat >= 169 && bonusCat <= 186)
                     || (bonusCat >= 188 && bonusCat <= 200)
-                    || (bonusCat >= 231 && bonusCat <= 235)
+                    || (bonusCat >= 232 && bonusCat <= 233)
                     || (bonusCat >= 247 && bonusCat <= 254))
                 {
                     formattedLine += "%";
