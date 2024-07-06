@@ -13809,8 +13809,7 @@ namespace DOL.GS
                 IsMuted = true;
 
             // Ensure TaskXPlayer data is loaded
-            TaskManager.EnsureTaskData(this);
-            TaskXPlayer = GameServer.Database.SelectObject<TaskXPlayer>(t => t.PlayerId == this.InternalID);
+            TaskXPlayer = TaskManager.EnsureTaskData(this);
         }
 
         /// <summary>

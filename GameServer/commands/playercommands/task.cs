@@ -95,49 +95,7 @@ namespace DOL.GS.Commands
 
             GamePlayer player = client.Player;
             string playerName = player.Name;
-            var taskData = GameServer.Database.SelectObject<TaskXPlayer>(t => t.PlayerId == player.InternalID);
-
-            if (taskData == null)
-            {
-                taskData = new TaskXPlayer
-                {
-                    PlayerId = player.InternalID,
-                    PlayerName = player.Name,
-                    KillEnemyPlayersGroup = "0|0",
-                    KillEnemyPlayersAlone = "0|0",
-                    KillKeepGuards = "0|0",
-                    TakeKeeps = "0|0",
-                    RvRChampionOfTheDay = "0|0",
-                    KillTerritoryGuards = "0|0",
-                    KillTerritoryBoss = "0|0",
-                    TurnInPvPGvGTaskToken = "0|0",
-                    KillCreaturesInDungeons = "0|0",
-                    KillOutdoorsCreatures = "0|0",
-                    KillAnimalCreatures = "0|0",
-                    KillDemonCreatures = "0|0",
-                    KillDragonCreatures = "0|0",
-                    KillElementalCreatures = "0|0",
-                    KillGiantCreatures = "0|0",
-                    KillHumanoidCreatures = "0|0",
-                    KillInsectCreatures = "0|0",
-                    KillMagicalCreatures = "0|0",
-                    KillReptileCreatures = "0|0",
-                    KillPlantCreatures = "0|0",
-                    KillUndeadCreatures = "0|0",
-                    TurnInPvETaskToken = "0|0",
-                    SuccessfulItemCombinations = "0|0",
-                    MasteredCrafts = "0|0",
-                    MasterpieceCrafted = "0|0",
-                    TurnInCraftingTaskToken = "0|0",
-                    EpicBossesSlaughtered = "0|0",
-                    ItemsSoldToPlayers = "0|0",
-                    SuccessfulPvPThefts = "0|0",
-                    OutlawPlayersSentToJail = "0|0",
-                    EnemiesKilledInAdrenalineMode = "0|0",
-                    QuestsCompleted = "0|0"
-                };
-                GameServer.Database.AddObject(taskData);
-            }
+            var taskData = player.TaskXPlayer ?? TaskManager.EnsureTaskData(player);
 
             var messages = new List<string>
             {
