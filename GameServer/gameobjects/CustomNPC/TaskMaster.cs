@@ -118,6 +118,7 @@ namespace DOL.GS
 
             string titleKey = null;
             bool success = false;
+            bool remove = true;
 
             switch (item.Id_nb)
             {
@@ -282,18 +283,23 @@ namespace DOL.GS
                 // Crafting Tokens
                 case "TaskToken_Crafting_lv1":
                     success = GrantCraftingPoints(player, 15, 8, 4, item);
+                    remove = false;
                     break;
                 case "TaskToken_Crafting_lv2":
                     success = GrantCraftingPoints(player, 25, 13, 6, item);
+                    remove = false;
                     break;
                 case "TaskToken_Crafting_lv3":
                     success = GrantCraftingPoints(player, 45, 23, 11, item);
+                    remove = false;
                     break;
                 case "TaskToken_Crafting_lv4":
                     success = GrantCraftingPoints(player, 70, 35, 17, item);
+                    remove = false;
                     break;
                 case "TaskToken_Crafting_lv5":
                     success = GrantCraftingPoints(player, 99, 50, 25, item);
+                    remove = false;
                     break;
 
                 default:
@@ -313,7 +319,10 @@ namespace DOL.GS
                 player.Out.SendMessage(message, eChatType.CT_ScreenCenterSmaller, eChatLoc.CL_SystemWindow);
             }
 
-            player.Inventory.RemoveItem(item);
+            if (remove)
+            {
+                player.Inventory.RemoveItem(item);
+            }
             return true;
         }
 
