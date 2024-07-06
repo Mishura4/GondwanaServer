@@ -10,6 +10,7 @@ namespace DOL.Database
     [DataTable(TableName = "TaskXPlayer")]
     public class TaskXPlayer : DataObject
     {
+        private string m_playerId = string.Empty;
         private string m_playerName;
         private string m_killEnemyPlayersGroup = "0|0";
         private string m_killEnemyPlayersAlone = "0|0";
@@ -59,6 +60,17 @@ namespace DOL.Database
         private int m_outlawPlayersSentToJailStats;
         private int m_enemiesKilledInAdrenalineModeStats;
         private int m_questsCompletedStats;
+
+        [DataElement(AllowDbNull = false, Unique = true)]
+        public string PlayerId
+        {
+            get { return m_playerId; }
+            set
+            {
+                Dirty = true;
+                m_playerId = value;
+            }
+        }
 
         [DataElement(AllowDbNull = false)]
         public string PlayerName

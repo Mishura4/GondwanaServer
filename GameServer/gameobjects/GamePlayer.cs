@@ -13810,7 +13810,7 @@ namespace DOL.GS
 
             // Ensure TaskXPlayer data is loaded
             TaskManager.EnsureTaskData(this);
-            TaskXPlayer = GameServer.Database.SelectObject<TaskXPlayer>($"PlayerName = '{this.Name}'");
+            TaskXPlayer = GameServer.Database.SelectObject<TaskXPlayer>(t => t.PlayerId == this.InternalID);
         }
 
         /// <summary>

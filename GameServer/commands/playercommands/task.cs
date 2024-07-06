@@ -95,12 +95,13 @@ namespace DOL.GS.Commands
 
             GamePlayer player = client.Player;
             string playerName = player.Name;
-            var taskData = GameServer.Database.SelectObject<TaskXPlayer>($"PlayerName = '{playerName}'");
+            var taskData = GameServer.Database.SelectObject<TaskXPlayer>(t => t.PlayerId == player.InternalID);
 
             if (taskData == null)
             {
                 taskData = new TaskXPlayer
                 {
+                    PlayerId = player.InternalID,
                     PlayerName = player.Name,
                     KillEnemyPlayersGroup = "0|0",
                     KillEnemyPlayersAlone = "0|0",
