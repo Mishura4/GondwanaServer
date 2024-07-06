@@ -2935,7 +2935,7 @@ namespace DOL.GS
                 return;
             }
 
-            if (ad.Attacker is GamePlayer attackerPlayer && IsPlayerGreyCon(attackerPlayer, this))
+            if (ad.Attacker is GamePlayer attackerPlayer && IsPlayerGreyCon(this, attackerPlayer))
             {
                 return;
             }
