@@ -2913,9 +2913,9 @@ namespace DOL.GS
             }
         }
 
-        public bool IsPlayerGreyCon(GamePlayer killer, GamePlayer target)
+        public bool IsPlayerGreyCon(GamePlayer target)
         {
-            int killerLevel = killer.Level;
+            int killerLevel = this.Level;
             int targetLevel = target.Level;
 
             if (killerLevel < GameLiving.NoXPForLevel.Length)
@@ -2924,7 +2924,7 @@ namespace DOL.GS
             }
             else
             {
-                return killer.GetConLevel(target) <= -3;
+                return this.GetConLevel(target) <= -3;
             }
         }
 
@@ -2935,7 +2935,7 @@ namespace DOL.GS
                 return;
             }
 
-            if (ad.Attacker is GamePlayer attackerPlayer && IsPlayerGreyCon(this, attackerPlayer))
+            if (ad.Attacker is GamePlayer attackerPlayer && IsPlayerGreyCon(attackerPlayer))
             {
                 return;
             }
@@ -8478,7 +8478,7 @@ namespace DOL.GS
             {
                 if (!IsInRvR && !IsInPvP && Reputation < 0 && !IsInPvPArea() && !killerPlayer.IsInSafeArea())
                 {
-                    if (!IsPlayerGreyCon(killerPlayer, this))
+                    if (!killerPlayer.IsPlayerGreyCon(this))
                     {
                         TaskManager.UpdateTaskProgress(killerPlayer, "OutlawPlayersSentToJail", 1);
                     }
@@ -8487,7 +8487,7 @@ namespace DOL.GS
                 {
                     if (!killerPlayer.IsInSafeArea())
                     {
-                        if (!IsPlayerGreyCon(killerPlayer, this))
+                        if (!killerPlayer.IsPlayerGreyCon(this))
                         {
                             if (killerPlayer.Group != null)
                             {
@@ -8503,7 +8503,7 @@ namespace DOL.GS
 
                 if (killerPlayer.HasAdrenalineBuff())
                 {
-                    if (!IsPlayerGreyCon(killerPlayer, this))
+                    if (!killerPlayer.IsPlayerGreyCon(this))
                     {
                         TaskManager.UpdateTaskProgress(killerPlayer, "EnemiesKilledInAdrenalineMode", 1);
                     }
