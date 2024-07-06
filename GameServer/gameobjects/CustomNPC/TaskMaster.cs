@@ -399,7 +399,7 @@ namespace DOL.GS
                     return false;
                 }
 
-                long rpToAdd = (long)Math.Round(CalculateRPsToGainRealmLevel(player) * factor * 10);
+                long rpToAdd = (long)Math.Round(CalculateRPsToGainRealmRank(player) * factor);
 
                 player.GainRealmPoints(rpToAdd, false);
 
@@ -413,11 +413,11 @@ namespace DOL.GS
             }
         }
 
-        protected virtual long CalculateRPsToGainRealmLevel(GamePlayer player)
+        protected virtual long CalculateRPsToGainRealmRank(GamePlayer player)
         {
-            int currentRealmLevel = Math.Max(player.RealmLevel, 1);
+            int currentRealmRank = Math.Max(player.RealmLevel / 10, 1);
             
-            return player.CalculateRPsFromRealmLevel(currentRealmLevel + 1) - player.CalculateRPsFromRealmLevel(currentRealmLevel);
+            return player.CalculateRPsFromRealmLevel((currentRealmRank + 1) * 10) - player.CalculateRPsFromRealmLevel(currentRealmRank * 10);
         }
 
         private bool GrantCraftingPoints(GamePlayer player, int mainPoints, int secondaryPoints, int tertiaryPoints, InventoryItem oldItem)
