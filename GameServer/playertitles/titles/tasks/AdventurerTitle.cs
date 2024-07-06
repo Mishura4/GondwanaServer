@@ -23,60 +23,35 @@ using DOL.Language;
 
 namespace DOL.GS.PlayerTitles
 {
-    public abstract class AdventurerTitle : EventPlayerTitle
+    public abstract class AdventurerTitle : TaskTitle
     {
-        public abstract string TitleKey { get; }
-
-        public override string GetDescription(GamePlayer player)
-        {
-            return LanguageMgr.TryTranslateOrDefault(player, TitleKey, TitleKey);
-        }
-
-        public override string GetValue(GamePlayer source, GamePlayer player)
-        {
-            return LanguageMgr.TryTranslateOrDefault(source, TitleKey, TitleKey);
-        }
-
-        public override DOLEvent Event => GamePlayerEvent.GiveItem;
-
-        public override bool IsSuitable(GamePlayer player)
-        {
-            // This will be managed by the TaskMaster script
-            return false;
-        }
-
-        protected override void EventCallback(DOLEvent e, object sender, EventArgs arguments)
-        {
-            GamePlayer p = sender as GamePlayer;
-            if (p != null && p.Titles.Contains(this))
-            {
-                p.UpdateCurrentTitle();
-                return;
-            }
-            base.EventCallback(e, sender, arguments);
-        }
     }
 
+    [TaskTitleFlag(eTitleFlags.Adventurer1)]
     public class AdventurerTitleLevel1 : AdventurerTitle
     {
         public override string TitleKey => "Titles.Adventurer.Level1";
     }
-
+    
+    [TaskTitleFlag(eTitleFlags.Adventurer2)]
     public class AdventurerTitleLevel2 : AdventurerTitle
     {
         public override string TitleKey => "Titles.Adventurer.Level2";
     }
-
+    
+    [TaskTitleFlag(eTitleFlags.Adventurer3)]
     public class AdventurerTitleLevel3 : AdventurerTitle
     {
         public override string TitleKey => "Titles.Adventurer.Level3";
     }
-
+    
+    [TaskTitleFlag(eTitleFlags.Adventurer4)]
     public class AdventurerTitleLevel4 : AdventurerTitle
     {
         public override string TitleKey => "Titles.Adventurer.Level4";
     }
-
+    
+    [TaskTitleFlag(eTitleFlags.Adventurer5)]
     public class AdventurerTitleLevel5 : AdventurerTitle
     {
         public override string TitleKey => "Titles.Adventurer.Level5";

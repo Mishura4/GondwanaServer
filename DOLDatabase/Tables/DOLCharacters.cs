@@ -139,6 +139,7 @@ namespace DOL.Database
         private string m_askNameList = string.Empty; //comma seperated string of friends
         private string m_ignoreList = string.Empty; //comma seperated string of ignored Players
         private string m_playerTitleType = string.Empty;
+        private ulong m_playerTaskTitleFlags = 0;
 
         private bool m_flagClassName = true;
         private ushort m_guildRank;
@@ -1862,6 +1863,16 @@ namespace DOL.Database
         {
             get { return m_playerTitleType; }
             set { m_playerTitleType = value; Dirty = true; }
+        }
+        
+        /// <summary>
+        /// Gets/sets task title flags
+        /// </summary>
+        [DataElement(AllowDbNull = true)]
+        public ulong TaskTitleFlags
+        {
+            get { return m_playerTaskTitleFlags; }
+            set { m_playerTaskTitleFlags = value; Dirty = true; }
         }
 
         #region Statistics

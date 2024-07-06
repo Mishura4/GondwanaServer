@@ -13780,6 +13780,7 @@ namespace DOL.GS
             // Has to be updated on load to ensure time offline isn't added to character /played.
             DBCharacter.LastPlayed = DateTime.Now;
 
+            TaskTitleFlags = (TaskTitle.eTitleFlags)DBCharacter.TaskTitleFlags;
             m_titles.Clear();
             foreach (IPlayerTitle ttl in PlayerTitleMgr.GetPlayerTitles(this))
                 m_titles.Add(ttl);
@@ -13832,6 +13833,7 @@ namespace DOL.GS
                 DBCharacter.IsRenaissance = IsRenaissance;
                 DBCharacter.Reputation = Reputation;
                 DBCharacter.IsWanted = Wanted;
+                DBCharacter.TaskTitleFlags = (ulong)TaskTitleFlags;
 
                 DBCharacter.ActiveWeaponSlot = (byte)((byte)ActiveWeaponSlot | (byte)ActiveQuiverSlot);
                 if (m_stuckFlag)
@@ -16046,6 +16048,11 @@ namespace DOL.GS
                 UpdateCurrentTitle();
             }
         }
+        
+        /// <summary>
+        /// Bitflag representing all the task titles available to this player
+        /// </summary>
+        public TaskTitle.eTitleFlags TaskTitleFlags { get; set; }
 
         /// <summary>
         /// Adds the title to player.

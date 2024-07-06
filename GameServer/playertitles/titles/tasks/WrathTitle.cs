@@ -20,63 +20,39 @@
 using System;
 using DOL.Events;
 using DOL.Language;
+using static DOL.GS.PlayerTitles.TaskTitle;
 
 namespace DOL.GS.PlayerTitles
 {
-    public abstract class WrathTitle : EventPlayerTitle
+    public abstract class WrathTitle : TaskTitle
     {
-        public abstract string TitleKey { get; }
-
-        public override string GetDescription(GamePlayer player)
-        {
-            return LanguageMgr.TryTranslateOrDefault(player, TitleKey, TitleKey);
-        }
-
-        public override string GetValue(GamePlayer source, GamePlayer player)
-        {
-            return LanguageMgr.TryTranslateOrDefault(source, TitleKey, TitleKey);
-        }
-
-        public override DOLEvent Event => GamePlayerEvent.GiveItem;
-
-        public override bool IsSuitable(GamePlayer player)
-        {
-            // This will be managed by the TaskMaster script
-            return false;
-        }
-
-        protected override void EventCallback(DOLEvent e, object sender, EventArgs arguments)
-        {
-            GamePlayer p = sender as GamePlayer;
-            if (p != null && p.Titles.Contains(this))
-            {
-                p.UpdateCurrentTitle();
-                return;
-            }
-            base.EventCallback(e, sender, arguments);
-        }
     }
-
+    
+    [TaskTitleFlag(eTitleFlags.Wrath1)]
     public class WrathTitleLevel1 : WrathTitle
     {
         public override string TitleKey => "Titles.Wrath.Level1";
     }
-
+    
+    [TaskTitleFlag(eTitleFlags.Wrath2)]
     public class WrathTitleLevel2 : WrathTitle
     {
         public override string TitleKey => "Titles.Wrath.Level2";
     }
-
+    
+    [TaskTitleFlag(eTitleFlags.Wrath3)]
     public class WrathTitleLevel3 : WrathTitle
     {
         public override string TitleKey => "Titles.Wrath.Level3";
     }
-
+    
+    [TaskTitleFlag(eTitleFlags.Wrath4)]
     public class WrathTitleLevel4 : WrathTitle
     {
         public override string TitleKey => "Titles.Wrath.Level4";
     }
-
+    
+    [TaskTitleFlag(eTitleFlags.Wrath5)]
     public class WrathTitleLevel5 : WrathTitle
     {
         public override string TitleKey => "Titles.Wrath.Level5";

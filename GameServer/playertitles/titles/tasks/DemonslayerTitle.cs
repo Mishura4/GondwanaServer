@@ -23,60 +23,35 @@ using DOL.Language;
 
 namespace DOL.GS.PlayerTitles
 {
-    public abstract class DemonslayerTitle : EventPlayerTitle
+    public abstract class DemonslayerTitle : TaskTitle
     {
-        public abstract string TitleKey { get; }
-
-        public override string GetDescription(GamePlayer player)
-        {
-            return LanguageMgr.TryTranslateOrDefault(player, TitleKey, TitleKey);
-        }
-
-        public override string GetValue(GamePlayer source, GamePlayer player)
-        {
-            return LanguageMgr.TryTranslateOrDefault(source, TitleKey, TitleKey);
-        }
-
-        public override DOLEvent Event => GamePlayerEvent.GiveItem;
-
-        public override bool IsSuitable(GamePlayer player)
-        {
-            // This will be managed by the TaskMaster script
-            return false;
-        }
-
-        protected override void EventCallback(DOLEvent e, object sender, EventArgs arguments)
-        {
-            GamePlayer p = sender as GamePlayer;
-            if (p != null && p.Titles.Contains(this))
-            {
-                p.UpdateCurrentTitle();
-                return;
-            }
-            base.EventCallback(e, sender, arguments);
-        }
     }
 
+    [TaskTitleFlag(eTitleFlags.DemonSlayer1)]
     public class DemonslayerTitleLevel1 : DemonslayerTitle
     {
         public override string TitleKey => "Titles.Demonslayer.Level1";
     }
-
+    
+    [TaskTitleFlag(eTitleFlags.DemonSlayer2)]
     public class DemonslayerTitleLevel2 : DemonslayerTitle
     {
         public override string TitleKey => "Titles.Demonslayer.Level2";
     }
-
+    
+    [TaskTitleFlag(eTitleFlags.DemonSlayer3)]
     public class DemonslayerTitleLevel3 : DemonslayerTitle
     {
         public override string TitleKey => "Titles.Demonslayer.Level3";
     }
-
+    
+    [TaskTitleFlag(eTitleFlags.DemonSlayer4)]
     public class DemonslayerTitleLevel4 : DemonslayerTitle
     {
         public override string TitleKey => "Titles.Demonslayer.Level4";
     }
-
+    
+    [TaskTitleFlag(eTitleFlags.DemonSlayer5)]
     public class DemonslayerTitleLevel5 : DemonslayerTitle
     {
         public override string TitleKey => "Titles.Demonslayer.Level5";

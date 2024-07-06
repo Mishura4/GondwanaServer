@@ -23,60 +23,35 @@ using DOL.Events;
 
 namespace DOL.GS.PlayerTitles
 {
-    public abstract class ThiefTitle : EventPlayerTitle
+    public abstract class ThiefTitle : TaskTitle
     {
-        public abstract string TitleKey { get; }
-
-        public override string GetDescription(GamePlayer player)
-        {
-            return LanguageMgr.TryTranslateOrDefault(player, TitleKey, TitleKey);
-        }
-
-        public override string GetValue(GamePlayer source, GamePlayer player)
-        {
-            return LanguageMgr.TryTranslateOrDefault(source, TitleKey, TitleKey);
-        }
-
-        public override DOLEvent Event => GamePlayerEvent.GiveItem;
-
-        public override bool IsSuitable(GamePlayer player)
-        {
-            // This will be managed by the TaskMaster script
-            return false;
-        }
-
-        protected override void EventCallback(DOLEvent e, object sender, EventArgs arguments)
-        {
-            GamePlayer p = sender as GamePlayer;
-            if (p != null && p.Titles.Contains(this))
-            {
-                p.UpdateCurrentTitle();
-                return;
-            }
-            base.EventCallback(e, sender, arguments);
-        }
     }
-
+    
+    [TaskTitleFlag(eTitleFlags.Thief1)]
     public class ThiefTitleLevel1 : ThiefTitle
     {
         public override string TitleKey => "Titles.Thief.Level1";
     }
-
+    
+    [TaskTitleFlag(eTitleFlags.Thief2)]
     public class ThiefTitleLevel2 : ThiefTitle
     {
         public override string TitleKey => "Titles.Thief.Level2";
     }
-
+    
+    [TaskTitleFlag(eTitleFlags.Thief3)]
     public class ThiefTitleLevel3 : ThiefTitle
     {
         public override string TitleKey => "Titles.Thief.Level3";
     }
-
+    
+    [TaskTitleFlag(eTitleFlags.Thief4)]
     public class ThiefTitleLevel4 : ThiefTitle
     {
         public override string TitleKey => "Titles.Thief.Level4";
     }
-
+    
+    [TaskTitleFlag(eTitleFlags.Thief5)]
     public class ThiefTitleLevel5 : ThiefTitle
     {
         public override string TitleKey => "Titles.Thief.Level5";

@@ -23,60 +23,35 @@ using DOL.Events;
 
 namespace DOL.GS.PlayerTitles
 {
-    public abstract class TraderTitle : EventPlayerTitle
+    public abstract class TraderTitle : TaskTitle
     {
-        public abstract string TitleKey { get; }
-
-        public override string GetDescription(GamePlayer player)
-        {
-            return LanguageMgr.TryTranslateOrDefault(player, TitleKey, TitleKey);
-        }
-
-        public override string GetValue(GamePlayer source, GamePlayer player)
-        {
-            return LanguageMgr.TryTranslateOrDefault(source, TitleKey, TitleKey);
-        }
-
-        public override DOLEvent Event => GamePlayerEvent.GiveItem;
-
-        public override bool IsSuitable(GamePlayer player)
-        {
-            // This will be managed by the TaskMaster script
-            return false;
-        }
-
-        protected override void EventCallback(DOLEvent e, object sender, EventArgs arguments)
-        {
-            GamePlayer p = sender as GamePlayer;
-            if (p != null && p.Titles.Contains(this))
-            {
-                p.UpdateCurrentTitle();
-                return;
-            }
-            base.EventCallback(e, sender, arguments);
-        }
     }
-
+    
+    [TaskTitleFlag(eTitleFlags.Trader1)]
     public class TraderTitleLevel1 : TraderTitle
     {
         public override string TitleKey => "Titles.Trader.Level1";
     }
-
+    
+    [TaskTitleFlag(eTitleFlags.Trader2)]
     public class TraderTitleLevel2 : TraderTitle
     {
         public override string TitleKey => "Titles.Trader.Level2";
     }
-
+    
+    [TaskTitleFlag(eTitleFlags.Trader3)]
     public class TraderTitleLevel3 : TraderTitle
     {
         public override string TitleKey => "Titles.Trader.Level3";
     }
-
+    
+    [TaskTitleFlag(eTitleFlags.Trader4)]
     public class TraderTitleLevel4 : TraderTitle
     {
         public override string TitleKey => "Titles.Trader.Level4";
     }
-
+    
+    [TaskTitleFlag(eTitleFlags.Trader5)]
     public class TraderTitleLevel5 : TraderTitle
     {
         public override string TitleKey => "Titles.Trader.Level5";

@@ -19,7 +19,7 @@ namespace DOL.GS
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         public TextNPCCondition Condition { get; private set; }
-
+        
         public override eQuestIndicator GetQuestIndicator(GamePlayer player)
         {
             if (player.Reputation >= 0)

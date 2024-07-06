@@ -23,60 +23,35 @@ using DOL.Language;
 
 namespace DOL.GS.PlayerTitles
 {
-    public abstract class BountyhunterTitle : EventPlayerTitle
+    public abstract class BountyhunterTitle : TaskTitle
     {
-        public abstract string TitleKey { get; }
-
-        public override string GetDescription(GamePlayer player)
-        {
-            return LanguageMgr.TryTranslateOrDefault(player, TitleKey, TitleKey);
-        }
-
-        public override string GetValue(GamePlayer source, GamePlayer player)
-        {
-            return LanguageMgr.TryTranslateOrDefault(source, TitleKey, TitleKey);
-        }
-
-        public override DOLEvent Event => GamePlayerEvent.GiveItem;
-
-        public override bool IsSuitable(GamePlayer player)
-        {
-            // This will be managed by the TaskMaster script
-            return false;
-        }
-
-        protected override void EventCallback(DOLEvent e, object sender, EventArgs arguments)
-        {
-            GamePlayer p = sender as GamePlayer;
-            if (p != null && p.Titles.Contains(this))
-            {
-                p.UpdateCurrentTitle();
-                return;
-            }
-            base.EventCallback(e, sender, arguments);
-        }
     }
 
+    [TaskTitleFlag(eTitleFlags.BountyHunter1)]
     public class BountyhunterTitleLevel1 : BountyhunterTitle
     {
         public override string TitleKey => "Titles.Bountyhunter.Level1";
     }
-
+    
+    [TaskTitleFlag(eTitleFlags.BountyHunter2)]
     public class BountyhunterTitleLevel2 : BountyhunterTitle
     {
         public override string TitleKey => "Titles.Bountyhunter.Level2";
     }
-
+    
+    [TaskTitleFlag(eTitleFlags.BountyHunter3)]
     public class BountyhunterTitleLevel3 : BountyhunterTitle
     {
         public override string TitleKey => "Titles.Bountyhunter.Level3";
     }
-
+    
+    [TaskTitleFlag(eTitleFlags.BountyHunter4)]
     public class BountyhunterTitleLevel4 : BountyhunterTitle
     {
         public override string TitleKey => "Titles.Bountyhunter.Level4";
     }
-
+    
+    [TaskTitleFlag(eTitleFlags.BountyHunter5)]
     public class BountyhunterTitleLevel5 : BountyhunterTitle
     {
         public override string TitleKey => "Titles.Bountyhunter.Level5";
