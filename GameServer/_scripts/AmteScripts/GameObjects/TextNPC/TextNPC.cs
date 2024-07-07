@@ -49,7 +49,7 @@ namespace DOL.GS.Scripts
             if (!TextNPCData.CheckAccess(player) || !base.Interact(player))
                 return false;
 
-            if (IsTerritoryLinked.HasValue && IsTerritoryLinked.Value && !TerritoryManager.IsPlayerInOwnedTerritory(player, this))
+            if (IsTerritoryLinked == true && !TerritoryManager.IsPlayerInOwnedTerritory(player, this))
             {
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "TextNPC.NotInOwnedTerritory"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 return true;
@@ -62,7 +62,7 @@ namespace DOL.GS.Scripts
             if (!(source is GamePlayer player) || !base.WhisperReceive(source, str))
                 return false;
 
-            if (IsTerritoryLinked.HasValue && IsTerritoryLinked.Value && !TerritoryManager.IsPlayerInOwnedTerritory(player, this))
+            if (IsTerritoryLinked == true && !TerritoryManager.IsPlayerInOwnedTerritory(player, this))
             {
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "TextNPC.NotInOwnedTerritory"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 return true;
@@ -107,6 +107,9 @@ namespace DOL.GS.Scripts
 
         public override eQuestIndicator GetQuestIndicator(GamePlayer player)
         {
+            if (IsTerritoryLinked == true && CurrentTerritory?.IsOwnedBy(player) != true)
+                return eQuestIndicator.None;
+            
             var result = base.GetQuestIndicator(player);
             if (result != eQuestIndicator.None)
                 return result;
