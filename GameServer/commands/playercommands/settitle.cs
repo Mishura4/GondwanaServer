@@ -58,6 +58,7 @@ namespace DOL.GS.Commands
                         client.Player.CurrentTitle = PlayerTitleMgr.ClearTitle;
                     else
                         client.Player.CurrentTitle = (IPlayerTitle)titles[index];
+                    client.Out.SendPlayerTitles();
                 }
             }
             else
