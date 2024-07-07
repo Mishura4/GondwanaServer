@@ -5517,7 +5517,7 @@ namespace DOL.GS
                 //[StephenxPimentel] - Zone Bonus XP Support
                 if (ServerProperties.Properties.ENABLE_ZONE_BONUSES)
                 {
-                    int zoneBonus = (((int)expTotal * ZoneBonus.GetXPBonus(this)) / 100);
+                    int zoneBonus = (long)expTotal * (ZoneBonus.GetXPBonus(this) / 100.0d);
                     if (zoneBonus > 0)
                     {
                         Out.SendMessage(ZoneBonus.GetBonusMessage(this, (int)(zoneBonus * ServerProperties.Properties.XP_RATE), ZoneBonus.eZoneBonusType.XP),
@@ -5550,34 +5550,35 @@ namespace DOL.GS
 
             }
 
-            int bonusRenaissance = 0;
-            int territoryExp = 0;
+            long bonusRenaissance = 0;
+            long territoryExp = 0;
 
             if (this.IsRenaissance)
             {
                 if (this.Level < 40)
                 {
-                    bonusRenaissance = (int)Math.Round(expTotal * 1.5D);
+                    bonusRenaissance = (long)Math.Round(expTotal * 1.5D);
                 }
                 else
                 {
                     //Remove 50% points from levl > 40
-                    bonusRenaissance = (int)Math.Round(expTotal / 2D) * -1;
+                    bonusRenaissance = (long)Math.Round(expTotal / 2D) * -1;
                 }
 
                 expTotal += bonusRenaissance;
             }
 
-            int eventBonus = 0;
+            long eventBonus = 0;
             if (eventMultiplicator > 1)
             {
-                eventBonus = (int)expTotal * eventMultiplicator;
+                eventBonus = expTotal * eventMultiplicator;
                 expTotal += eventBonus;
             }
 
-            if (Guild != null)
+            if (Guild is (Guild.eGuildType.PlayerGuild))
             {
-                expTotal += Guild.GetBonusXP(expTotal);
+                territoryExp = (long)Math.Round(expTotal * Guild.TerritoryBonusExperienceFactor);
+                expTotal += territoryExp;
             }
 
             // Get Champion Experience too
@@ -5599,7 +5600,7 @@ namespace DOL.GS
                         //have a 50% bonus
                         if (!ServerProperties.Properties.ALLOW_CATA_SLASH_LEVEL && CanUseSlashLevel && Level < 20)
                         {
-                            expTotal = (long)(expTotal * 1.5);
+                            expTotal = (long)Math.Round(expTotal * 1.5);
                         }
                         break;
                     }
