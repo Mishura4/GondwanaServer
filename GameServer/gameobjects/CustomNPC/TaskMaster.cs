@@ -22,85 +22,6 @@ namespace DOL.GS
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         public TextNPCCondition Condition { get; private set; }
 
-        internal sealed class Titles
-        {
-            public AdventurerTitle[] Adventurer { get; init; }
-
-            public BountyhunterTitle[] Bountyhunter { get; init; }
-
-            public DemonslayerTitle[] Demonslayer { get; init; }
-
-            public ThiefTitle[] Thief { get; init; }
-
-            public TraderTitle[] Trader { get; init; }
-
-            public WrathTitle[] Wrath { get; init; }
-
-            public Titles()
-            {
-                Adventurer = new[]
-                {
-                    PlayerTitleMgr.GetTitleByTypeName(typeof(AdventurerTitleLevel1).FullName) as AdventurerTitle,
-                    PlayerTitleMgr.GetTitleByTypeName(typeof(AdventurerTitleLevel2).FullName) as AdventurerTitle,
-                    PlayerTitleMgr.GetTitleByTypeName(typeof(AdventurerTitleLevel3).FullName) as AdventurerTitle,
-                    PlayerTitleMgr.GetTitleByTypeName(typeof(AdventurerTitleLevel4).FullName) as AdventurerTitle,
-                    PlayerTitleMgr.GetTitleByTypeName(typeof(AdventurerTitleLevel5).FullName) as AdventurerTitle,
-                };
-                
-                Bountyhunter = new[]
-                {
-                    PlayerTitleMgr.GetTitleByTypeName(typeof(BountyhunterTitleLevel1).FullName) as BountyhunterTitle,
-                    PlayerTitleMgr.GetTitleByTypeName(typeof(BountyhunterTitleLevel2).FullName) as BountyhunterTitle,
-                    PlayerTitleMgr.GetTitleByTypeName(typeof(BountyhunterTitleLevel3).FullName) as BountyhunterTitle,
-                    PlayerTitleMgr.GetTitleByTypeName(typeof(BountyhunterTitleLevel4).FullName) as BountyhunterTitle,
-                    PlayerTitleMgr.GetTitleByTypeName(typeof(BountyhunterTitleLevel5).FullName) as BountyhunterTitle,
-                };
-                
-                Demonslayer = new[]
-                {
-                    PlayerTitleMgr.GetTitleByTypeName(typeof(DemonslayerTitleLevel1).FullName) as DemonslayerTitle,
-                    PlayerTitleMgr.GetTitleByTypeName(typeof(DemonslayerTitleLevel2).FullName) as DemonslayerTitle,
-                    PlayerTitleMgr.GetTitleByTypeName(typeof(DemonslayerTitleLevel3).FullName) as DemonslayerTitle,
-                    PlayerTitleMgr.GetTitleByTypeName(typeof(DemonslayerTitleLevel4).FullName) as DemonslayerTitle,
-                    PlayerTitleMgr.GetTitleByTypeName(typeof(DemonslayerTitleLevel5).FullName) as DemonslayerTitle,
-                };
-                
-                Thief = new[]
-                {
-                    PlayerTitleMgr.GetTitleByTypeName(typeof(ThiefTitleLevel1).FullName) as ThiefTitle,
-                    PlayerTitleMgr.GetTitleByTypeName(typeof(ThiefTitleLevel2).FullName) as ThiefTitle,
-                    PlayerTitleMgr.GetTitleByTypeName(typeof(ThiefTitleLevel3).FullName) as ThiefTitle,
-                    PlayerTitleMgr.GetTitleByTypeName(typeof(ThiefTitleLevel4).FullName) as ThiefTitle,
-                    PlayerTitleMgr.GetTitleByTypeName(typeof(ThiefTitleLevel5).FullName) as ThiefTitle,
-                };
-                
-                Trader = new[]
-                {
-                    PlayerTitleMgr.GetTitleByTypeName(typeof(TraderTitleLevel1).FullName) as TraderTitle,
-                    PlayerTitleMgr.GetTitleByTypeName(typeof(TraderTitleLevel2).FullName) as TraderTitle,
-                    PlayerTitleMgr.GetTitleByTypeName(typeof(TraderTitleLevel3).FullName) as TraderTitle,
-                    PlayerTitleMgr.GetTitleByTypeName(typeof(TraderTitleLevel4).FullName) as TraderTitle,
-                    PlayerTitleMgr.GetTitleByTypeName(typeof(TraderTitleLevel5).FullName) as TraderTitle,
-                };
-                
-                Wrath = new[]
-                {
-                    PlayerTitleMgr.GetTitleByTypeName(typeof(WrathTitleLevel1).FullName) as WrathTitle,
-                    PlayerTitleMgr.GetTitleByTypeName(typeof(WrathTitleLevel2).FullName) as WrathTitle,
-                    PlayerTitleMgr.GetTitleByTypeName(typeof(WrathTitleLevel3).FullName) as WrathTitle,
-                    PlayerTitleMgr.GetTitleByTypeName(typeof(WrathTitleLevel4).FullName) as WrathTitle,
-                    PlayerTitleMgr.GetTitleByTypeName(typeof(WrathTitleLevel5).FullName) as WrathTitle,
-                };
-            }
-        }
-
-        private static Titles titles;
-
-        public static void LoadTitles()
-        {
-            titles = new Titles();
-        }
-
         public override eQuestIndicator GetQuestIndicator(GamePlayer player)
         {
             if (player.Reputation >= 0)
@@ -230,22 +151,22 @@ namespace DOL.GS
             switch (key)
             {
                 case "TaskToken_Thief":
-                    success = AssignTitle(player, titles.Thief, level, "Titles.Thief");
+                    success = AssignTitle(player, PlayerTitleMgr.TaskTitles.Thief, level, "Titles.Thief");
                     break;
                 case "TaskToken_Trader":
-                    success = AssignTitle(player, titles.Trader, level, "Titles.Trader");
+                    success = AssignTitle(player, PlayerTitleMgr.TaskTitles.Trader, level, "Titles.Trader");
                     break;
                 case "TaskToken_Demon_Slayer":
-                    success = AssignTitle(player, titles.Demonslayer, level, "Titles.Demonslayer");
+                    success = AssignTitle(player, PlayerTitleMgr.TaskTitles.Demonslayer, level, "Titles.Demonslayer");
                     break;
                 case "TaskToken_Bounty_Hunter":
-                    success = AssignTitle(player, titles.Bountyhunter, level, "Titles.Bountyhunter");
+                    success = AssignTitle(player, PlayerTitleMgr.TaskTitles.Bountyhunter, level, "Titles.Bountyhunter");
                     break;
                 case "TaskToken_Wrath":
-                    success = AssignTitle(player, titles.Wrath, level, "Titles.Wrath");
+                    success = AssignTitle(player, PlayerTitleMgr.TaskTitles.Wrath, level, "Titles.Wrath");
                     break;
                 case "TaskToken_Adventurer":
-                    success = AssignTitle(player, titles.Adventurer, level, "Titles.Adventurer");
+                    success = AssignTitle(player, PlayerTitleMgr.TaskTitles.Adventurer, level, "Titles.Adventurer");
                     break;
 
                 // PvE Tokens

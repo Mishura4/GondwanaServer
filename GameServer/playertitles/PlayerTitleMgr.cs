@@ -45,6 +45,80 @@ namespace DOL.GS.PlayerTitles
         /// </summary>
         public static readonly ClearTitle ClearTitle = new ClearTitle();
 
+        public sealed class TaskTitleHolder
+        {
+            public AdventurerTitle[] Adventurer { get; init; }
+
+            public BountyhunterTitle[] Bountyhunter { get; init; }
+
+            public DemonslayerTitle[] Demonslayer { get; init; }
+
+            public ThiefTitle[] Thief { get; init; }
+
+            public TraderTitle[] Trader { get; init; }
+
+            public WrathTitle[] Wrath { get; init; }
+
+            internal TaskTitleHolder()
+            {
+                Adventurer = new[]
+                {
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(AdventurerTitleLevel1).FullName) as AdventurerTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(AdventurerTitleLevel2).FullName) as AdventurerTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(AdventurerTitleLevel3).FullName) as AdventurerTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(AdventurerTitleLevel4).FullName) as AdventurerTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(AdventurerTitleLevel5).FullName) as AdventurerTitle,
+                };
+                
+                Bountyhunter = new[]
+                {
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(BountyhunterTitleLevel1).FullName) as BountyhunterTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(BountyhunterTitleLevel2).FullName) as BountyhunterTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(BountyhunterTitleLevel3).FullName) as BountyhunterTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(BountyhunterTitleLevel4).FullName) as BountyhunterTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(BountyhunterTitleLevel5).FullName) as BountyhunterTitle,
+                };
+                
+                Demonslayer = new[]
+                {
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(DemonslayerTitleLevel1).FullName) as DemonslayerTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(DemonslayerTitleLevel2).FullName) as DemonslayerTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(DemonslayerTitleLevel3).FullName) as DemonslayerTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(DemonslayerTitleLevel4).FullName) as DemonslayerTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(DemonslayerTitleLevel5).FullName) as DemonslayerTitle,
+                };
+                
+                Thief = new[]
+                {
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(ThiefTitleLevel1).FullName) as ThiefTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(ThiefTitleLevel2).FullName) as ThiefTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(ThiefTitleLevel3).FullName) as ThiefTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(ThiefTitleLevel4).FullName) as ThiefTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(ThiefTitleLevel5).FullName) as ThiefTitle,
+                };
+                
+                Trader = new[]
+                {
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(TraderTitleLevel1).FullName) as TraderTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(TraderTitleLevel2).FullName) as TraderTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(TraderTitleLevel3).FullName) as TraderTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(TraderTitleLevel4).FullName) as TraderTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(TraderTitleLevel5).FullName) as TraderTitle,
+                };
+                
+                Wrath = new[]
+                {
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(WrathTitleLevel1).FullName) as WrathTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(WrathTitleLevel2).FullName) as WrathTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(WrathTitleLevel3).FullName) as WrathTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(WrathTitleLevel4).FullName) as WrathTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(WrathTitleLevel5).FullName) as WrathTitle,
+                };
+            }
+        }
+        
+        public static TaskTitleHolder TaskTitles { get; private set; }
+
         /// <summary>
         /// Initializes/loads all known player titles.
         /// </summary>
@@ -73,7 +147,7 @@ namespace DOL.GS.PlayerTitles
 
             log.InfoFormat("Loaded {0} player titles", m_titles.Count);
 
-            TaskMaster.LoadTitles();
+            TaskTitles = new TaskTitleHolder();
 
             return true;
         }
