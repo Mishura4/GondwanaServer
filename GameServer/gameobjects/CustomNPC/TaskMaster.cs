@@ -110,7 +110,7 @@ namespace DOL.GS
             return true;
         }
 
-        private bool RefuseItem(GamePlayer source, InventoryItem item)
+        public static bool RefuseItem(GamePlayer source, InventoryItem item)
         {
             source.SendTranslatedMessage("TaskMaster.Disabled", eChatType.CT_Chat, eChatLoc.CL_ChatWindow);
             return true;
@@ -210,9 +210,10 @@ namespace DOL.GS
             return true;
         }
 
-        private bool AssignTitle<T>(GamePlayer player, T[] titleArray, int level, string translation) where T : IPlayerTitle
+        public static bool AssignTitle<T>(GamePlayer player, T[] titleArray, int level, string translation) where T : IPlayerTitle
         {
-            IPlayerTitle? title = level > titleArray.Length ? null : titleArray[level - 1];
+            level -= 1;
+            IPlayerTitle? title = level < 0 || level > titleArray.Length ? null : titleArray[level];
             if (title == null)
             {
                 return false;
@@ -229,7 +230,7 @@ namespace DOL.GS
             return false;
         }
 
-        private bool GrantTaskExperience(GamePlayer player, int level)
+        private static bool GrantTaskExperience(GamePlayer player, int level)
         {
             int percentage = level switch
             {
@@ -245,7 +246,7 @@ namespace DOL.GS
             return GrantPvEExperience(player, percentage);
         }
 
-        private bool GrantPvEExperience(GamePlayer player, int percentage)
+        private static bool GrantPvEExperience(GamePlayer player, int percentage)
         {
             if (!player.GainXP || percentage <= 0)
             {

@@ -85,54 +85,27 @@ namespace DOL.GS
 
         private bool HandleTradingTaskTokens(GamePlayer player, InventoryItem item)
         {
-            string titleKey = null;
-
-            switch (item.Id_nb)
+            int level = item.Id_nb switch
             {
-                case "TaskToken_Trader_lv1":
-                    AssignTitle(player, new TraderTitleLevel1());
-                    titleKey = "Titles.Trader.Level1";
-                    break;
-                case "TaskToken_Trader_lv2":
-                    AssignTitle(player, new TraderTitleLevel2());
-                    titleKey = "Titles.Trader.Level2";
-                    break;
-                case "TaskToken_Trader_lv3":
-                    AssignTitle(player, new TraderTitleLevel3());
-                    titleKey = "Titles.Trader.Level3";
-                    break;
-                case "TaskToken_Trader_lv4":
-                    AssignTitle(player, new TraderTitleLevel4());
-                    titleKey = "Titles.Trader.Level4";
-                    break;
-                case "TaskToken_Trader_lv5":
-                    AssignTitle(player, new TraderTitleLevel5());
-                    titleKey = "Titles.Trader.Level5";
-                    break;
-                default:
-                    return false;
-            }
+                "TaskToken_Trader" => 1,
+                "TaskToken_Trader_lv1" => 1,
+                "TaskToken_Trader_lv2" => 2,
+                "TaskToken_Trader_lv3" => 3,
+                "TaskToken_Trader_lv4" => 4,
+                "TaskToken_Trader_lv5" => 5,
+                _ => 0
+            };
 
-            if (titleKey != null)
+            if (TaskMaster.AssignTitle(player, PlayerTitleMgr.TaskTitles.Trader, level, "Titles.Trader"))
             {
-                string titleName = LanguageMgr.GetTranslation(player.Client.Account.Language, titleKey);
-                string message = LanguageMgr.GetTranslation(player.Client.Account.Language, "TaskMaster.GiveTitle", titleName);
-                player.Out.SendMessage(message, eChatType.CT_ScreenCenterSmaller, eChatLoc.CL_SystemWindow);
+                player.Inventory.RemoveItem(item);
             }
-
-            player.Inventory.RemoveItem(item);
+            else
+            {
+                return TaskMaster.RefuseItem(player, item);
+            }
 
             return true;
-        }
-
-        private void AssignTitle(GamePlayer player, IPlayerTitle title)
-        {
-            if (!player.Titles.Contains(title))
-            {
-                player.Titles.Add(title);
-                title.OnTitleGained(player);
-                player.UpdateCurrentTitle();
-            }
         }
 
         public override eQuestIndicator GetQuestIndicator(GamePlayer player)
