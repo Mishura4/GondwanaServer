@@ -437,14 +437,7 @@ namespace DOL.Territories
                     ToggleBannerUnsafe(false);
                 }
                 ClearPortal();
-                List<GameNPC> toRemove = new List<GameNPC>();
-                foreach (var mob in Mobs)
-                {
-                    if (mob.IsMercenary)
-                    {
-                        toRemove.Add(mob);
-                    }
-                }
+                List<GameNPC> toRemove = Mobs.Where(mob => mob.IsMercenary).ToList();
                 if (toRemove.Count > 0)
                 {
                     Mobs.RemoveAll(toRemove.Contains);

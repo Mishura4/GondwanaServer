@@ -64,6 +64,8 @@ namespace DOL.GS.Scripts
         public DBTextNPC TextDB { get; set; }
         public bool? IsOutlawFriendly { get; set; }
         public bool? IsTerritoryLinked { get; set; }
+        
+        public int RequiredModel { get; set; }
 
         public Dictionary<string, EchangeurInfo> PlayerReferences;
 
@@ -110,14 +112,20 @@ namespace DOL.GS.Scripts
 
         public bool Interact(GamePlayer player)
         {
-            if ((!CheckQuestDialog(player) && string.IsNullOrEmpty(Interact_Text)) || !CheckAccess(player))
-                return false;
-
             if (IsTerritoryLinked.HasValue && IsTerritoryLinked.Value && !TerritoryManager.IsPlayerInOwnedTerritory(player, _body))
             {
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "TextNPC.NotInOwnedTerritory"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 return true;
             }
+
+            if (RequiredModel != 0 && player.Model != RequiredModel)
+            {
+                player.Out.SendMessage("...", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                return true;
+            }
+            
+            if ((!CheckQuestDialog(player) && string.IsNullOrEmpty(Interact_Text)) || !CheckAccess(player))
+                return false;
 
             _body.TurnTo(player);
 
@@ -988,6 +996,8 @@ namespace DOL.GS.Scripts
             RandomPhrases = table4;
             PhraseInterval = TextDB.PhraseInterval;
 
+            RequiredModel = TextDB.RequiredModel;
+
 
             //Chargement des conditions
             Condition = new TextNPCCondition(TextDB.Condition);
@@ -1132,6 +1142,8 @@ namespace DOL.GS.Scripts
                 }
             }
             TextDB.ResponseStopEvent = reponse;
+
+            TextDB.RequiredModel = RequiredModel;
 
             //Sauve les conditions
             if (Condition != null)

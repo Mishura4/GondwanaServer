@@ -52,6 +52,7 @@ namespace DOL.Database
         private string m_ResponseStartEvent;
         private string m_ResponseStopEvent;
         private bool m_IsTerritoryLinked;
+        private int m_RequiredModel;
 
 
         [DataElement(AllowDbNull = false)]
@@ -288,6 +289,17 @@ namespace DOL.Database
             {
                 Dirty = true;
                 m_IsTerritoryLinked = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public int RequiredModel
+        {
+            get { return m_RequiredModel; }
+            set
+            {
+                Dirty = true;
+                m_RequiredModel = value;
             }
         }
     }
