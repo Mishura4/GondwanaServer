@@ -1,3 +1,6 @@
 SpellReflection.Self.Message:		Vous lancer un sort de réflection sur la cible.
-SpellReflection.Self.Absorb:		Vous absorbez {0} dommages avant de retourner le sort.
-SpellReflection.Target.Absorbs:		La cible absorbe {0} dommages avant de retourner le sort.
+SpellReflection.Self.Absorb:		Vous absorbez {0} dommages avant de renvoyer le sort.
+SpellReflection.Target.Absorbs:		La cible absorbe {0} dommages avant de renvoyer le sort.
+
+MythicalSpellReflect.Self.Absorb:		Vous absorbez {0} dommages grâce à votre équipement avant de renvoyer le sort.
+MythicalSpellReflect.Target.Absorbs:		La cible absorbe {0} dommages grâce à son équipement avant de renvoyer le sort.

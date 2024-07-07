@@ -1438,6 +1438,7 @@ namespace DOL.GS
             m_propertyTypes[(int)eProperty.Skill_Cross_Bows] = ePropertyType.Skill;
             m_propertyTypes[(int)eProperty.Skill_ShortBow] = ePropertyType.Skill;
             m_propertyTypes[(int)eProperty.Skill_Envenom] = ePropertyType.Skill;
+            m_propertyTypes[(int)eProperty.Skill_Learning] = ePropertyType.Skill;
             m_propertyTypes[(int)eProperty.Skill_Archery] = ePropertyType.Skill | ePropertyType.SkillArchery;
 
             #endregion
@@ -1579,8 +1580,8 @@ namespace DOL.GS
                     return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MythicalRegen");
                 case eProperty.MythicalTension:
                     return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MythicalTension");
-                case eProperty.Skill_BlueMagic:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.BlueMagic");
+                case eProperty.Skill_Learning:
+                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Learning");
                 case eProperty.MythicalSpellReflect:
                     return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MythicalSpellReflect");
                 case eProperty.BodyResCapBonus:

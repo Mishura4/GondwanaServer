@@ -241,7 +241,7 @@ SkillBase.RegisterPropertyNames.ThrustCap:				Bonus au cap Résistance à l'Esto
 SkillBase.RegisterPropertyNames.MythicalCrowdDuration:	Mythical Crowd Control Duration decrease
 SkillBase.RegisterPropertyNames.MythicalRegen: 			Bonus Mythique de Récupération Vie et Mana
 SkillBase.RegisterPropertyNames.MythicalTension: 		Bonus Mythique de Tension
-SkillBase.RegisterPropertyNames.BlueMagic:				Magie Bleue
+SkillBase.RegisterPropertyNames.Skill_Learning:			Apprentissage
 SkillBase.RegisterPropertyNames.MythicalSpellReflect: 	Bonus Mythique de Renvoi de Sort
 SkillBase.RegisterPropertyNames.MythicalSafeFall: 		Bonus Mythique de résistance aux Chutes
 SkillBase.RegisterPropertyNames.MythicalDiscumbering:	Bonus Mythique Encombrement

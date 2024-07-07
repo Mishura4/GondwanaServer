@@ -1,3 +1,6 @@
 SpellReflection.Self.Message:		You cast a spell reflect at the target.
-SpellReflection.Self.Absorb:		You absorb {0} damages before return the spell.
-SpellReflection.Target.Absorbs:		The target absorbs {0} damage before return the spell.
+SpellReflection.Self.Absorb:		You absorb {0} damages before returning the spell.
+SpellReflection.Target.Absorbs:		The target absorbs {0} damages before returning the spell.
+
+MythicalSpellReflect.Self.Absorb:		You absorb {0} damages thanks to your equipement bonuses before returning the spell.
+MythicalSpellReflect.Target.Absorbs:		The target absorbs {0} damages thanks to its equipement bonuses before returning the spell.
