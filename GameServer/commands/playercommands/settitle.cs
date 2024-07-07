@@ -39,32 +39,22 @@ namespace DOL.GS.Commands
                 return;
 
             int index = -1;
-            if (args.Length > 1)
+            if (args.Length < 2 || !int.TryParse(args[1], out index))
             {
-                try { index = int.Parse(args[1]); }
-                catch { }
-
-                IPlayerTitle current = client.Player.CurrentTitle;
-                if (current != null && current.IsForced(client.Player))
-                    client.Out.SendMessage(
-                        LanguageMgr.GetTranslation(
-                            client.Account.Language,
-                            "Commands.Players.Settitle.Cannot"),
-                        eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                else
-                {
-                    var titles = client.Player.Titles.ToArray();
-                    if (index < 0 || index >= titles.Length)
-                        client.Player.CurrentTitle = PlayerTitleMgr.ClearTitle;
-                    else
-                        client.Player.CurrentTitle = (IPlayerTitle)titles[index];
-                    client.Out.SendPlayerTitles();
-                }
+                DisplaySyntax(client);
+                return;
             }
+            
+            if (client.Player.CurrentTitle?.IsForced(client.Player) == true)
+            {
+                client.SendTranslation("Commands.Players.Settitle.Cannot", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return;
+            }
+            var titles = client.Player.Titles.ToArray();
+            if (index < 0 || index >= titles.Length)
+                client.Player.CurrentTitle = PlayerTitleMgr.ClearTitle;
             else
-            {
-                client.Out.SendPlayerTitles();
-            }
+                client.Player.CurrentTitle = (IPlayerTitle)titles[index];
         }
     }
 }
