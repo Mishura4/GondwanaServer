@@ -120,13 +120,20 @@ namespace DOL.GS.Quests
             }
 
             player.Out.SendSoundEffect(11, 0, 0, 0, 0, 0);
-            player.GainExperience(GameLiving.eXPSource.Quest, RewardXP);
+            long xp = RewardXP;
+            if (xp < 0)
+            {
+                xp = player.GetExperienceNeededForNextLevel((int)(-1L * xp));
+            }
+            player.GainExperience(GameLiving.eXPSource.Quest, xp);
             player.AddMoney(Currency.Copper.Mint(RewardMoney));
             InventoryLogging.LogInventoryAction(_db.ObjectId, "(QUEST;" + Name + ")", player, eInventoryActionType.Quest, RewardMoney);
             if (RewardBP > 0)
                 player.GainBountyPoints(RewardBP);
             if (RewardRP > 0)
                 player.GainRealmPoints(RewardRP);
+            else if (RewardRP < 0)
+                player.GainRealmPoints(player.CalculateRPsToGainRealmRank(RewardRP * -1));
 
             foreach (var item in FinalRewardItemTemplates)
                 GiveItem(this, player, item);

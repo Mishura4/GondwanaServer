@@ -5137,6 +5137,18 @@ namespace DOL.GS
             // thanks to Linulo from http://daoc.foren.4players.de/viewtopic.php?t=40839&postdays=0&postorder=asc&start=0
             return (long)(25.0 / 3.0 * (realmLevel * realmLevel * realmLevel) - 25.0 / 2.0 * (realmLevel * realmLevel) + 25.0 / 6.0 * realmLevel);
         }
+        
+        public long CalculateRPsToGainRealmRank()
+        {
+            int currentRealmRank = RealmLevel < 10 ? 1 : RealmLevel / 10 + 1;
+            
+            return CalculateRPsFromRealmLevel((currentRealmRank + 1) * 10) - CalculateRPsFromRealmLevel(currentRealmRank * 10);
+        }
+        
+        public long CalculateRPsToGainRealmRank(int percentage)
+        {
+            return (long) Math.Ceiling(percentage / 100.0d * CalculateRPsToGainRealmRank());
+        }
 
         /// <summary>
         /// Calculates realm level from realm points. SLOW.
@@ -5301,6 +5313,18 @@ namespace DOL.GS
                 return GetExperienceAmountForLevel(0);
 
             return GetExperienceAmountForLevel(level - 1);
+        }
+
+        public virtual long GetExperienceNeededForNextLevel()
+        {
+            int currentLevel = Math.Min(MaxLevel - 1, Level);
+
+            return GetExperienceNeededForLevel(currentLevel + 1) - GetExperienceNeededForLevel(currentLevel);
+        }
+
+        public virtual long GetExperienceNeededForNextLevel(int percentage)
+        {
+            return (long)Math.Ceiling(percentage / 100.0d * GetExperienceNeededForNextLevel());
         }
 
         /// <summary>
