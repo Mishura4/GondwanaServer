@@ -212,8 +212,7 @@ namespace DOL.GS
 
         public static bool AssignTitle<T>(GamePlayer player, T[] titleArray, int level, string translation) where T : IPlayerTitle
         {
-            level -= 1;
-            IPlayerTitle? title = level < 0 || level > titleArray.Length ? null : titleArray[level];
+            IPlayerTitle? title = level <= 0 || level > titleArray.Length ? null : titleArray[level - 1];
             if (title == null)
             {
                 return false;
@@ -234,14 +233,13 @@ namespace DOL.GS
         {
             int percentage = level switch
             {
-                0 => 0,
+                <= 0 => 0,
                 1 => 15,
                 2 => 25,
                 3 => 40,
                 4 => 60,
                 5 => 85,
-                6 => 125
-                
+                >= 6 => 125
             };
             return GrantPvEExperience(player, percentage);
         }
@@ -255,7 +253,7 @@ namespace DOL.GS
             
             try
             {
-                double factor = (percentage / 100.0d) * player.GetXPFactor(false);
+                double factor = (percentage / 100.0d) * player.GetXPFactor(false, false);
                 if (factor <= 0)
                 {
                     return false;

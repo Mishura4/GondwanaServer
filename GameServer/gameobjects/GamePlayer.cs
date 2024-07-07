@@ -5693,7 +5693,7 @@ namespace DOL.GS
         /// Get the total XP factor
         /// </summary>
         /// <returns></returns>
-        public double GetXPFactor(bool enableZone = true)
+        public double GetXPFactor(bool enableZone = true, bool enableRenaissance = true)
         {
             double factor = 1.0d;
             
@@ -5708,7 +5708,7 @@ namespace DOL.GS
             var toaBonus = GetModified(eProperty.XpPoints);
             factor += toaBonus != 0 ? toaBonus / 100.0d : 0;
             
-            if (this.IsRenaissance)
+            if (enableRenaissance && this.IsRenaissance)
             {
                 factor *= Level < 40 ? 1.5d : 0.5d;
             }
