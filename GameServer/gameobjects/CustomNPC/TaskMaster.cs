@@ -227,7 +227,7 @@ namespace DOL.GS
             string titleName = LanguageMgr.GetTranslation(player.Client.Account.Language, translation + ".Level" + level);
             string message = LanguageMgr.GetTranslation(player.Client.Account.Language, "TaskMaster.GiveTitle", titleName);
             player.Out.SendMessage(message, eChatType.CT_ScreenCenterSmaller, eChatLoc.CL_SystemWindow);
-            return false;
+            return true;
         }
 
         private static bool GrantTaskExperience(GamePlayer player, int level)
