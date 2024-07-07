@@ -59,7 +59,7 @@ namespace DOL.GS
         }
         #endregion
         #region Get Bonus Message
-        public static string GetBonusMessage(GamePlayer player, int bonusAmount, eZoneBonusType type)
+        public static string GetBonusMessage(GamePlayer player, long bonusAmount, eZoneBonusType type)
         {
             switch (type)
             {

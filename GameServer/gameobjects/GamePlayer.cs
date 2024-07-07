@@ -5517,10 +5517,10 @@ namespace DOL.GS
                 //[StephenxPimentel] - Zone Bonus XP Support
                 if (ServerProperties.Properties.ENABLE_ZONE_BONUSES)
                 {
-                    int zoneBonus = (long)expTotal * (ZoneBonus.GetXPBonus(this) / 100.0d);
+                    long zoneBonus = (long)Math.Round(expTotal * (ZoneBonus.GetXPBonus(this) / 100.0d));
                     if (zoneBonus > 0)
                     {
-                        Out.SendMessage(ZoneBonus.GetBonusMessage(this, (int)(zoneBonus * ServerProperties.Properties.XP_RATE), ZoneBonus.eZoneBonusType.XP),
+                        Out.SendMessage(ZoneBonus.GetBonusMessage(this, (long)(zoneBonus * ServerProperties.Properties.XP_RATE), ZoneBonus.eZoneBonusType.XP),
                                         eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                         GainExperience(eXPSource.Other, (long)(zoneBonus * ServerProperties.Properties.XP_RATE), 0, 0, 0, false, false, false, 1);
                     }
@@ -5575,7 +5575,7 @@ namespace DOL.GS
                 expTotal += eventBonus;
             }
 
-            if (Guild is (Guild.eGuildType.PlayerGuild))
+            if (Guild is { GuildType: Guild.eGuildType.PlayerGuild, TerritoryBonusExperienceFactor: not 0.0d })
             {
                 territoryExp = (long)Math.Round(expTotal * Guild.TerritoryBonusExperienceFactor);
                 expTotal += territoryExp;
