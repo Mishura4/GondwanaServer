@@ -551,8 +551,7 @@ namespace DOL.GS
             if (GuildType != eGuildType.PlayerGuild)
                 return 0;
 
-            double factor = 1.0d + TerritoryBonusExperienceFactor;
-            return (int)(factor * xp + 0.5d);
+            return (long)(TerritoryBonusExperienceFactor * xp + 0.5d);
         }
 
         public void RemoveTerritory(Territory territory)
