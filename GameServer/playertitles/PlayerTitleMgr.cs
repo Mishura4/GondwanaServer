@@ -73,6 +73,8 @@ namespace DOL.GS.PlayerTitles
 
             log.InfoFormat("Loaded {0} player titles", m_titles.Count);
 
+            TaskMaster.LoadTitles();
+
             return true;
         }
 
