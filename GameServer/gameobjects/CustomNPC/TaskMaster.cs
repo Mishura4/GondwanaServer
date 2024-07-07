@@ -13,6 +13,7 @@ using Discord;
 using DOL.AI;
 using DOL.GS.Finance;
 using DOL.GS.ServerProperties;
+using System.Diagnostics;
 
 namespace DOL.GS
 {
@@ -23,72 +24,73 @@ namespace DOL.GS
 
         internal sealed class Titles
         {
-            public AdventurerTitleLevel1 Adventurer1 { get; init; }
+            public AdventurerTitle[] Adventurer { get; init; }
 
-            public AdventurerTitleLevel2 Adventurer2 { get; init; }
+            public BountyhunterTitle[] Bountyhunter { get; init; }
 
-            public AdventurerTitleLevel3 Adventurer3 { get; init; }
+            public DemonslayerTitle[] Demonslayer { get; init; }
 
-            public AdventurerTitleLevel4 Adventurer4 { get; init; }
+            public ThiefTitle[] Thief { get; init; }
 
-            public AdventurerTitleLevel5 Adventurer5 { get; init; }
+            public TraderTitle[] Trader { get; init; }
 
-            public BountyhunterTitleLevel1 Bountyhunter1 { get; init; }
-
-            public BountyhunterTitleLevel2 Bountyhunter2 { get; init; }
-
-            public BountyhunterTitleLevel3 Bountyhunter3 { get; init; }
-
-            public BountyhunterTitleLevel4 Bountyhunter4 { get; init; }
-
-            public BountyhunterTitleLevel5 Bountyhunter5 { get; init; }
-
-            public DemonslayerTitleLevel1 Demonslayer1 { get; init; }
-
-            public DemonslayerTitleLevel2 Demonslayer2 { get; init; }
-
-            public DemonslayerTitleLevel3 Demonslayer3 { get; init; }
-
-            public DemonslayerTitleLevel4 Demonslayer4 { get; init; }
-
-            public DemonslayerTitleLevel5 Demonslayer5 { get; init; }
-
-            public ThiefTitleLevel1 Thief1 { get; init; }
-
-            public ThiefTitleLevel2 Thief2 { get; init; }
-
-            public ThiefTitleLevel3 Thief3 { get; init; }
-
-            public ThiefTitleLevel4 Thief4 { get; init; }
-
-            public ThiefTitleLevel5 Thief5 { get; init; }
-
-            public TraderTitleLevel1 Trader1 { get; init; }
-
-            public TraderTitleLevel2 Trader2 { get; init; }
-
-            public TraderTitleLevel3 Trader3 { get; init; }
-
-            public TraderTitleLevel4 Trader4 { get; init; }
-
-            public TraderTitleLevel5 Trader5 { get; init; }
-
-            public WrathTitleLevel1 Wrath1 { get; init; }
-
-            public WrathTitleLevel2 Wrath2 { get; init; }
-
-            public WrathTitleLevel3 Wrath3 { get; init; }
-
-            public WrathTitleLevel4 Wrath4 { get; init; }
-
-            public WrathTitleLevel5 Wrath5 { get; init; }
+            public WrathTitle[] Wrath { get; init; }
 
             public Titles()
             {
-                foreach (PropertyInfo info in typeof(Titles).GetProperties())
+                Adventurer = new[]
                 {
-                    info.SetValue(this, PlayerTitleMgr.GetTitleByTypeName(info.PropertyType.FullName));
-                }
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(AdventurerTitleLevel1).FullName) as AdventurerTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(AdventurerTitleLevel2).FullName) as AdventurerTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(AdventurerTitleLevel3).FullName) as AdventurerTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(AdventurerTitleLevel4).FullName) as AdventurerTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(AdventurerTitleLevel5).FullName) as AdventurerTitle,
+                };
+                
+                Bountyhunter = new[]
+                {
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(BountyhunterTitleLevel1).FullName) as BountyhunterTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(BountyhunterTitleLevel2).FullName) as BountyhunterTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(BountyhunterTitleLevel3).FullName) as BountyhunterTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(BountyhunterTitleLevel4).FullName) as BountyhunterTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(BountyhunterTitleLevel5).FullName) as BountyhunterTitle,
+                };
+                
+                Demonslayer = new[]
+                {
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(DemonslayerTitleLevel1).FullName) as DemonslayerTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(DemonslayerTitleLevel2).FullName) as DemonslayerTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(DemonslayerTitleLevel3).FullName) as DemonslayerTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(DemonslayerTitleLevel4).FullName) as DemonslayerTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(DemonslayerTitleLevel5).FullName) as DemonslayerTitle,
+                };
+                
+                Thief = new[]
+                {
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(ThiefTitleLevel1).FullName) as ThiefTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(ThiefTitleLevel2).FullName) as ThiefTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(ThiefTitleLevel3).FullName) as ThiefTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(ThiefTitleLevel4).FullName) as ThiefTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(ThiefTitleLevel5).FullName) as ThiefTitle,
+                };
+                
+                Trader = new[]
+                {
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(TraderTitleLevel1).FullName) as TraderTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(TraderTitleLevel2).FullName) as TraderTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(TraderTitleLevel3).FullName) as TraderTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(TraderTitleLevel4).FullName) as TraderTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(TraderTitleLevel5).FullName) as TraderTitle,
+                };
+                
+                Wrath = new[]
+                {
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(WrathTitleLevel1).FullName) as WrathTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(WrathTitleLevel2).FullName) as WrathTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(WrathTitleLevel3).FullName) as WrathTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(WrathTitleLevel4).FullName) as WrathTitle,
+                    PlayerTitleMgr.GetTitleByTypeName(typeof(WrathTitleLevel5).FullName) as WrathTitle,
+                };
             }
         }
 
@@ -187,6 +189,12 @@ namespace DOL.GS
             return true;
         }
 
+        private bool RefuseItem(GamePlayer source, InventoryItem item)
+        {
+            source.SendTranslatedMessage("TaskMaster.Disabled", eChatType.CT_Chat, eChatLoc.CL_ChatWindow);
+            return true;
+        }
+
         public override bool ReceiveItem(GameLiving source, InventoryItem item)
         {
             var player = source as GamePlayer;
@@ -198,186 +206,69 @@ namespace DOL.GS
             string titleKey = null;
             bool success = false;
             bool remove = true;
-
-            switch (item.Id_nb)
+            int indexOfEnd = item.Id_nb.LastIndexOf('_');
+            if (indexOfEnd == -1)
             {
-                case "TaskToken_Thief_lv1":
-                    success = AssignTitle(player, titles.Thief1);
-                    titleKey = "titles.Thief.Level1";
+                return RefuseItem(player, item);
+            }
+            string end = item.Id_nb.Substring(indexOfEnd + 1);
+            string key;
+            int level = 1;
+            if (end.StartsWith("lv"))
+            {
+                if (!Int32.TryParse(end.Substring(2), out level))
+                {
+                    return RefuseItem(player, item);
+                }
+                key = item.Id_nb.Substring(0, indexOfEnd);
+            }
+            else
+            {
+                key = item.Id_nb;
+            }
+            
+            switch (key)
+            {
+                case "TaskToken_Thief":
+                    success = AssignTitle(player, titles.Thief, level, "Titles.Thief");
                     break;
-                case "TaskToken_Thief_lv2":
-                    success = AssignTitle(player, titles.Thief2);
-                    titleKey = "titles.Thief.Level2";
+                case "TaskToken_Trader":
+                    success = AssignTitle(player, titles.Trader, level, "Titles.Trader");
                     break;
-                case "TaskToken_Thief_lv3":
-                    success = AssignTitle(player, titles.Thief3);
-                    titleKey = "titles.Thief.Level3";
+                case "TaskToken_Demon_Slayer":
+                    success = AssignTitle(player, titles.Demonslayer, level, "Titles.Demonslayer");
                     break;
-                case "TaskToken_Thief_lv4":
-                    success = AssignTitle(player, titles.Thief4);
-                    titleKey = "titles.Thief.Level4";
+                case "TaskToken_Bounty_Hunter":
+                    success = AssignTitle(player, titles.Bountyhunter, level, "Titles.Bountyhunter");
                     break;
-                case "TaskToken_Thief_lv5":
-                    success = AssignTitle(player, titles.Thief5);
-                    titleKey = "titles.Thief.Level5";
+                case "TaskToken_Wrath":
+                    success = AssignTitle(player, titles.Wrath, level, "Titles.Wrath");
                     break;
-                case "TaskToken_Trader_lv1":
-                    success = AssignTitle(player, titles.Trader1);
-                    titleKey = "titles.Trader.Level1";
-                    break;
-                case "TaskToken_Trader_lv2":
-                    success = AssignTitle(player, titles.Trader2);
-                    titleKey = "titles.Trader.Level2";
-                    break;
-                case "TaskToken_Trader_lv3":
-                    success = AssignTitle(player, titles.Trader3);
-                    titleKey = "titles.Trader.Level3";
-                    break;
-                case "TaskToken_Trader_lv4":
-                    success = AssignTitle(player, titles.Trader4);
-                    titleKey = "titles.Trader.Level4";
-                    break;
-                case "TaskToken_Trader_lv5":
-                    success = AssignTitle(player, titles.Trader5);
-                    titleKey = "titles.Trader.Level5";
-                    break;
-                case "TaskToken_Demon_Slayer_lv1":
-                    success = AssignTitle(player, titles.Demonslayer1);
-                    titleKey = "titles.Demonslayer.Level1";
-                    break;
-                case "TaskToken_Demon_Slayer_lv2":
-                    success = AssignTitle(player, titles.Demonslayer2);
-                    titleKey = "titles.Demonslayer.Level2";
-                    break;
-                case "TaskToken_Demon_Slayer_lv3":
-                    success = AssignTitle(player, titles.Demonslayer3);
-                    titleKey = "titles.Demonslayer.Level3";
-                    break;
-                case "TaskToken_Demon_Slayer_lv4":
-                    success = AssignTitle(player, titles.Demonslayer4);
-                    titleKey = "titles.Demonslayer.Level4";
-                    break;
-                case "TaskToken_Demon_Slayer_lv5":
-                    success = AssignTitle(player, titles.Demonslayer5);
-                    titleKey = "titles.Demonslayer.Level5";
-                    break;
-                case "TaskToken_Bounty_Hunter_lv1":
-                    success = AssignTitle(player, titles.Bountyhunter1);
-                    titleKey = "titles.Bountyhunter.Level1";
-                    break;
-                case "TaskToken_Bounty_Hunter_lv2":
-                    success = AssignTitle(player, titles.Bountyhunter2);
-                    titleKey = "titles.Bountyhunter.Level2";
-                    break;
-                case "TaskToken_Bounty_Hunter_lv3":
-                    success = AssignTitle(player, titles.Bountyhunter3);
-                    titleKey = "titles.Bountyhunter.Level3";
-                    break;
-                case "TaskToken_Bounty_Hunter_lv4":
-                    success = AssignTitle(player, titles.Bountyhunter4);
-                    titleKey = "titles.Bountyhunter.Level4";
-                    break;
-                case "TaskToken_Bounty_Hunter_lv5":
-                    success = AssignTitle(player, titles.Bountyhunter5);
-                    titleKey = "titles.Bountyhunter.Level5";
-                    break;
-                case "TaskToken_Wrath_lv1":
-                    success = AssignTitle(player, titles.Wrath1);
-                    titleKey = "titles.Wrath.Level1";
-                    break;
-                case "TaskToken_Wrath_lv2":
-                    success = AssignTitle(player, titles.Wrath2);
-                    titleKey = "titles.Wrath.Level2";
-                    break;
-                case "TaskToken_Wrath_lv3":
-                    success = AssignTitle(player, titles.Wrath3);
-                    titleKey = "titles.Wrath.Level3";
-                    break;
-                case "TaskToken_Wrath_lv4":
-                    success = AssignTitle(player, titles.Wrath4);
-                    titleKey = "titles.Wrath.Level4";
-                    break;
-                case "TaskToken_Wrath_lv5":
-                    success = AssignTitle(player, titles.Wrath5);
-                    titleKey = "titles.Wrath.Level5";
-                    break;
-                case "TaskToken_Adventurer_lv1":
-                    success = AssignTitle(player, titles.Adventurer1);
-                    titleKey = "titles.Adventurer.Level1";
-                    break;
-                case "TaskToken_Adventurer_lv2":
-                    success = AssignTitle(player, titles.Adventurer2);
-                    titleKey = "titles.Adventurer.Level2";
-                    break;
-                case "TaskToken_Adventurer_lv3":
-                    success = AssignTitle(player, titles.Adventurer3);
-                    titleKey = "titles.Adventurer.Level3";
-                    break;
-                case "TaskToken_Adventurer_lv4":
-                    success = AssignTitle(player, titles.Adventurer4);
-                    titleKey = "titles.Adventurer.Level4";
-                    break;
-                case "TaskToken_Adventurer_lv5":
-                    success = AssignTitle(player, titles.Adventurer5);
-                    titleKey = "titles.Adventurer.Level5";
+                case "TaskToken_Adventurer":
+                    success = AssignTitle(player, titles.Adventurer, level, "Titles.Adventurer");
                     break;
 
                 // PvE Tokens
-                case "TaskToken_PvE_lv1":
-                    success = GrantPvEExperience(player, 15);
-                    break;
-                case "TaskToken_PvE_lv2":
-                    success = GrantPvEExperience(player, 25);
-                    break;
-                case "TaskToken_PvE_lv3":
-                    success = GrantPvEExperience(player, 40);
-                    break;
-                case "TaskToken_PvE_lv4":
-                    success = GrantPvEExperience(player, 60);
-                    break;
-                case "TaskToken_PvE_lv5":
-                    success = GrantPvEExperience(player, 85);
-                    break;
-                case "TaskToken_PvE_lv6":
-                    success = GrantPvEExperience(player, 125);
+                case "TaskToken_PvE":
+                    success = GrantTaskExperience(player, level);
                     break;
 
                 // PvPGvG Realm Point Tokens
-                case "TaskToken_PvPGvG_lv1":
-                    success = GrantRealmPoints(player, 15);
-                    break;
-                case "TaskToken_PvPGvG_lv2":
-                    success = GrantRealmPoints(player, 25);
-                    break;
-                case "TaskToken_PvPGvG_lv3":
-                    success = GrantRealmPoints(player, 45);
-                    break;
-                case "TaskToken_PvPGvG_lv4":
-                    success = GrantRealmPoints(player, 70);
-                    break;
-                case "TaskToken_PvPGvG_lv5":
-                    success = GrantRealmPoints(player, 100);
+                case "TaskToken_PvPGvG":
+                    success = GrantTaskRealmPoints(player, level);
                     break;
 
                 // Crafting Tokens
-                case "TaskToken_Crafting_lv1":
-                    success = GrantCraftingPoints(player, 15, 8, 4, item);
-                    remove = false;
-                    break;
-                case "TaskToken_Crafting_lv2":
-                    success = GrantCraftingPoints(player, 25, 13, 6, item);
-                    remove = false;
-                    break;
-                case "TaskToken_Crafting_lv3":
-                    success = GrantCraftingPoints(player, 45, 23, 11, item);
-                    remove = false;
-                    break;
-                case "TaskToken_Crafting_lv4":
-                    success = GrantCraftingPoints(player, 70, 35, 17, item);
-                    remove = false;
-                    break;
-                case "TaskToken_Crafting_lv5":
-                    success = GrantCraftingPoints(player, 99, 50, 25, item);
+                case "TaskToken_Crafting":
+                    success = level switch
+                    {
+                        0 => false,
+                        1 => GrantCraftingPoints(player, 15, 8, 4, item),
+                        2 => GrantCraftingPoints(player, 25, 13, 6, item),
+                        3 => GrantCraftingPoints(player, 45, 23, 11, item),
+                        4 => GrantCraftingPoints(player, 70, 35, 17, item),
+                        >= 5 => GrantCraftingPoints(player, 99, 50, 25, item)
+                    };
                     remove = false;
                     break;
 
@@ -391,13 +282,6 @@ namespace DOL.GS
                 return true;
             }
 
-            if (titleKey != null)
-            {
-                string titleName = LanguageMgr.GetTranslation(player.Client.Account.Language, titleKey);
-                string message = LanguageMgr.GetTranslation(player.Client.Account.Language, "TaskMaster.GiveTitle", titleName);
-                player.Out.SendMessage(message, eChatType.CT_ScreenCenterSmaller, eChatLoc.CL_SystemWindow);
-            }
-
             if (remove)
             {
                 player.Inventory.RemoveItem(item);
@@ -405,20 +289,44 @@ namespace DOL.GS
             return true;
         }
 
-        private bool AssignTitle(GamePlayer player, IPlayerTitle title)
+        private bool AssignTitle<T>(GamePlayer player, T[] titleArray, int level, string translation) where T : IPlayerTitle
         {
-            if (title != null && player.Titles.Add(title))
+            IPlayerTitle? title = level > titleArray.Length ? null : titleArray[level - 1];
+            if (title == null)
             {
-                title.OnTitleGained(player);
-                player.UpdateCurrentTitle();
-                return true;
+                return false;
             }
+            else if (!player.Titles.Add(title))
+            {
+                return GrantTaskExperience(player, level);
+            }
+            title.OnTitleGained(player);
+            player.UpdateCurrentTitle();
+            string titleName = LanguageMgr.GetTranslation(player.Client.Account.Language, translation + ".Level" + level);
+            string message = LanguageMgr.GetTranslation(player.Client.Account.Language, "TaskMaster.GiveTitle", titleName);
+            player.Out.SendMessage(message, eChatType.CT_ScreenCenterSmaller, eChatLoc.CL_SystemWindow);
             return false;
+        }
+
+        private bool GrantTaskExperience(GamePlayer player, int level)
+        {
+            int percentage = level switch
+            {
+                0 => 0,
+                1 => 15,
+                2 => 25,
+                3 => 40,
+                4 => 60,
+                5 => 85,
+                6 => 125
+                
+            };
+            return GrantPvEExperience(player, percentage);
         }
 
         private bool GrantPvEExperience(GamePlayer player, int percentage)
         {
-            if (!player.GainXP)
+            if (!player.GainXP || percentage <= 0)
             {
                 return false;
             }
@@ -469,6 +377,21 @@ namespace DOL.GS
                 log.Error("OverflowException in GrantPvEExperience: " + ex.Message);
                 return false;
             }
+        }
+
+        private bool GrantTaskRealmPoints(GamePlayer player, int level)
+        {
+            int percentage = level switch
+            {
+                0 => 0,
+                1 => 15,
+                2 => 25,
+                3 => 45,
+                4 => 75,
+                >= 5 => 100
+                
+            };
+            return GrantRealmPoints(player, percentage);
         }
 
         private bool GrantRealmPoints(GamePlayer player, int percentage)
