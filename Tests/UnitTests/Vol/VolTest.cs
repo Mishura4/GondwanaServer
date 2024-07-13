@@ -9,26 +9,44 @@ using System.Threading.Tasks;
 using DOL.Database;
 using DOL.Network;
 using DOL.Config;
+using DOL.UnitTests.Gameserver;
 
 namespace DOL.Vol
 {
     [TestFixture]
     public class VolTests
     {
-        GamePlayerMoq stealer;
-        GamePlayerMoq target;
+        internal class StealTestPlayer : FakePlayer
+        {
+            public bool m_isStealthed;
+            
+            /// <inheritdoc />
+            public override bool IsStealthed
+            {
+                get => m_isStealthed;
+            }
+            
+
+            public override bool HasAbility(string keyName)
+            {
+                return true;
+            }
+        }
+        
+        StealTestPlayer stealer;
+        StealTestPlayer target;
 
         [OneTimeSetUp]
         public void Init()
         {
-            stealer = new GamePlayerMoq();
-            target = new GamePlayerMoq();
+            stealer = new StealTestPlayer();
+            target = new StealTestPlayer();
         }
 
         [SetUp]
         public void Setup()
         {
-            stealer.IsStealthed = true;
+            stealer.m_isStealthed = true;
         }
 
         [Test]

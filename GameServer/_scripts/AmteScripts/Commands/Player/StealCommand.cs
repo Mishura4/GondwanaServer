@@ -68,7 +68,7 @@ namespace DOL.GS.Commands
             }
         }
 
-        public static bool CanVol(IGamePlayer stealer, IGamePlayer target)
+        public static bool CanVol(GamePlayer stealer, GamePlayer target)
         {
             if (target == null || (target is GameNPC))
             {
@@ -103,7 +103,7 @@ namespace DOL.GS.Commands
             return true;
         }
 
-        public static StealResult Vol(IGamePlayer stealer, IGamePlayer target)
+        public static StealResult Vol(GamePlayer stealer, GamePlayer target)
         {
             var result = new StealResult();
             int deltaLevel = Math.Abs(stealer.Level - target.Level);
