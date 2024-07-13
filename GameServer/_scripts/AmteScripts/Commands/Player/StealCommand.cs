@@ -9,17 +9,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace DOL.GS.Commands
 {
-    [CmdAttribute(
-      "&steal",
-      ePrivLevel.Player,
-      "Commands.Players.Steal.Description",
-      "Commands.Players.Steal.Usage")]
-    public class StealCommandHandler : AbstractCommandHandler, ICommandHandler
+    public class StealCommandHandlerBase : AbstractCommandHandler, ICommandHandler
     {
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -107,18 +103,16 @@ namespace DOL.GS.Commands
             return true;
         }
 
-
-        public static VolResult Vol(IGamePlayer stealer, IGamePlayer target)
+        public static StealResult Vol(IGamePlayer stealer, IGamePlayer target)
         {
-
-            var result = new VolResult();
+            var result = new StealResult();
             int deltaLevel = Math.Abs(stealer.Level - target.Level);
             bool shouldTryToSteal = false;
             if (deltaLevel > 10)
             {
                 if (target.Level > stealer.Level)
                 {
-                    result.Status = deltaLevel >= 20 ? VolResultStatus.STEALTHLOST : VolResultStatus.FAILED;
+                    result.Status = deltaLevel >= 20 ? StealResultStatus.STEALTHLOST : StealResultStatus.FAILED;
 
                 }
                 else
@@ -139,13 +133,13 @@ namespace DOL.GS.Commands
 
                 if (rand.Next(1, 101) > chance)
                 {
-                    result.Status = VolResultStatus.FAILED;
+                    result.Status = StealResultStatus.FAILED;
                     return result;
                 }
 
-                result.Status = rand.Next(1, 101) <= 70 ? VolResultStatus.SUCCESS_MONEY : VolResultStatus.SUSSCES_ITEM;
+                result.Status = rand.Next(1, 101) <= 70 ? StealResultStatus.SUCCESS_MONEY : StealResultStatus.SUSSCES_ITEM;
 
-                if (result.Status == VolResultStatus.SUCCESS_MONEY)
+                if (result.Status == StealResultStatus.SUCCESS_MONEY)
                 {
                     var moneyPerc = rand.Next(10, 41);
                     result.Money = ((target.GetCurrentMoney() * moneyPerc) / 100);
@@ -319,14 +313,14 @@ namespace DOL.GS.Commands
                 }
             }
 
-            VolResult result = Vol(stealer, target);
-            if (result.Status == VolResultStatus.STEALTHLOST)
+            StealResult result = Vol(stealer, target);
+            if (result.Status == StealResultStatus.STEALTHLOST)
             {
                 stealer.Out.SendMessage(LanguageMgr.GetTranslation(stealer.Client.Account.Language, "Commands.Players.Vol.Fail"),
                     eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                 stealer.Stealth(false);
             }
-            else if (result.Status == VolResultStatus.FAILED)
+            else if (result.Status == StealResultStatus.FAILED)
             {
                 stealer.Out.SendMessage(LanguageMgr.GetTranslation(stealer.Client.Account.Language, "Commands.Players.Vol.Fail"),
                     eChatType.CT_Important, eChatLoc.CL_SystemWindow);
@@ -349,9 +343,9 @@ namespace DOL.GS.Commands
             return 0;
         }
 
-        private void PerformVolAction(GamePlayer stealer, GamePlayer target, VolResult vol)
+        private void PerformVolAction(GamePlayer stealer, GamePlayer target, StealResult vol)
         {
-            if (vol.Status == VolResultStatus.SUCCESS_MONEY)
+            if (vol.Status == StealResultStatus.SUCCESS_MONEY)
             {
                 stealer.AddMoney(Currency.Copper.Mint(vol.Money));
                 target.RemoveMoney(Currency.Copper.Mint(vol.Money));
@@ -359,7 +353,7 @@ namespace DOL.GS.Commands
                 stealer.Out.SendMessage(LanguageMgr.GetTranslation(stealer.Client.Account.Language, "Commands.Players.Vol.StealGain", Money.GetString(vol.Money)), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                 TaskManager.UpdateTaskProgress(stealer, "SuccessfulPvPThefts", 1);
             }
-            else if (vol.Status == VolResultStatus.SUSSCES_ITEM)
+            else if (vol.Status == StealResultStatus.SUSSCES_ITEM)
             {
 
                 if (!stealer.Inventory.IsSlotsFree(1, eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack))
@@ -422,5 +416,23 @@ namespace DOL.GS.Commands
 
         public long Money { get; set; }
 
+    }
+
+    [CmdAttribute(
+        "&steal",
+        ePrivLevel.Player,
+        "Commands.Players.Steal.Description",
+        "Commands.Players.Steal.Usage")]
+    public class StealCommandHandler : StealCommandHandlerBase
+    {
+    }
+    
+    [CmdAttribute(
+        "&vol",
+        ePrivLevel.Player,
+        "Commands.Players.Vol.Description",
+        "Commands.Players.Vol.Usage")]
+    public class VolCommandHandler : StealCommandHandlerBase
+    {
     }
 }

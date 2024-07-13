@@ -35,27 +35,27 @@ namespace DOL.GS.SkillHandler
 
             if (player.IsMezzed)
             {
-                player.Out.SendMessage("Vous ne pouvez voler étant hypnotisé !",
+                player.Out.SendMessage("Vous ne pouvez voler en étant hypnotisé!",
                     eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
             }
 
             if (player.IsStunned)
             {
-                player.Out.SendMessage("Vous ne pouvez voler étant assomé !",
+                player.Out.SendMessage("Vous ne pouvez pas voler en étant assomé(e)!",
                     eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
             }
             if (player.PlayerAfkMessage != null)
             {
-                player.Out.SendMessage("Vous ne pouvez voler lorsque vous " +
-                    "êtes afk ! Tapez /afk pour le désactiver.",
+                player.Out.SendMessage("Vous ne pouvez pas voler lorsque vous " +
+                    "êtes afk! Tapez /afk pour le désactiver.",
                     eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
             }
             if (!player.IsAlive)
             {
-                player.Out.SendMessage("Vous ne pouvez voler étant mort !",
+                player.Out.SendMessage("Vous ne pouvez voler en étant mort(e)!",
                     eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
             }
@@ -63,18 +63,18 @@ namespace DOL.GS.SkillHandler
             if (player.TargetObject != null && player.TargetObject is GamePlayer)
             {
                 if (log.IsDebugEnabled)
-                    log.Debug("VOL : Entering VolCommandHandler.OnCommand()");
+                    log.Debug("VOL : Entering StealCommandHandler.OnCommand()");
 
-                new VolCommandHandler().OnCommand(player.Client,
+                new StealCommandHandler().OnCommand(player.Client,
                     new string[] { "/vol" });
 
                 if (log.IsDebugEnabled)
-                    log.Debug("VOL : VolCommandHandler.OnCommand() exited");
+                    log.Debug("VOL : StealCommandHandler.OnCommand() exited");
             }
             else
             {
                 player.Out.SendMessage("Vous devez sélectionner un " +
-                    "personnage joueur !",
+                    "personnage joueur!",
                     eChatType.CT_System, eChatLoc.CL_SystemWindow);
             }
         }

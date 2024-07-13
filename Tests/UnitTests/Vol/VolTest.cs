@@ -37,7 +37,7 @@ namespace DOL.Vol
             stealer.Level = 15;
             target.Level = 15;
 
-            Assert.AreEqual(false, VolCommandHandler.CanVol(stealer, target));
+            Assert.AreEqual(false, StealCommandHandler.CanVol(stealer, target));
         }
 
         [Test]
@@ -46,7 +46,7 @@ namespace DOL.Vol
             stealer.Level = 25;
             target.Level = 15;
 
-            Assert.AreEqual(false, VolCommandHandler.CanVol(stealer, target));
+            Assert.AreEqual(false, StealCommandHandler.CanVol(stealer, target));
         }
 
         [Test]
@@ -55,7 +55,7 @@ namespace DOL.Vol
             stealer.Level = 25;
             target.Level = 30;
 
-            Assert.AreEqual(true, VolCommandHandler.CanVol(stealer, target));
+            Assert.AreEqual(true, StealCommandHandler.CanVol(stealer, target));
         }
 
         [Test]
@@ -63,8 +63,8 @@ namespace DOL.Vol
         {
             stealer.Level = 45;
             target.Level = 24;
-            var res = VolCommandHandler.Vol(stealer, target);
-            Assert.AreEqual(true, res.Status != VolResultStatus.STEALTHLOST);
+            var res = StealCommandHandler.Vol(stealer, target);
+            Assert.AreEqual(true, res.Status != StealResultStatus.STEALTHLOST);
         }
 
         [Test]
@@ -73,7 +73,7 @@ namespace DOL.Vol
             stealer.Level = 25;
             target.Level = 48;
 
-            Assert.AreEqual(VolResultStatus.STEALTHLOST, VolCommandHandler.Vol(stealer, target).Status);
+            Assert.AreEqual(StealResultStatus.STEALTHLOST, StealCommandHandler.Vol(stealer, target).Status);
         }
 
         [Test]
@@ -82,8 +82,8 @@ namespace DOL.Vol
             stealer.Level = 48;
             target.Level = 25;
 
-            var res = VolCommandHandler.Vol(stealer, target);
-            Assert.AreEqual(true, res.Status != VolResultStatus.STEALTHLOST);
+            var res = StealCommandHandler.Vol(stealer, target);
+            Assert.AreEqual(true, res.Status != StealResultStatus.STEALTHLOST);
         }
 
         [Test]
@@ -92,7 +92,7 @@ namespace DOL.Vol
             stealer.Level = 25;
             target.Level = 48;
 
-            Assert.AreEqual(VolResultStatus.STEALTHLOST, VolCommandHandler.Vol(stealer, target).Status);
+            Assert.AreEqual(StealResultStatus.STEALTHLOST, StealCommandHandler.Vol(stealer, target).Status);
         }
 
         /*   
@@ -111,9 +111,9 @@ namespace DOL.Vol
             stealer.Level = 30;
             target.Level = 35;
 
-            var result = VolCommandHandler.Vol(stealer, target);
+            var result = StealCommandHandler.Vol(stealer, target);
 
-            Assert.AreNotEqual(VolResultStatus.STEALTHLOST, result.Status);
+            Assert.AreNotEqual(StealResultStatus.STEALTHLOST, result.Status);
         }
 
 
