@@ -39,7 +39,13 @@ namespace DOL.GS.Commands
                 return;
 
             int index = -1;
-            if (args.Length < 2 || !int.TryParse(args[1], out index))
+            if (args.Length < 2)
+            {
+                client.Out.SendPlayerTitles();
+                return;
+            }
+
+            if (!int.TryParse(args[1], out index))
             {
                 DisplaySyntax(client);
                 return;
@@ -55,6 +61,7 @@ namespace DOL.GS.Commands
                 client.Player.CurrentTitle = PlayerTitleMgr.ClearTitle;
             else
                 client.Player.CurrentTitle = (IPlayerTitle)titles[index];
+            client.Out.SendPlayerTitles();
         }
     }
 }
