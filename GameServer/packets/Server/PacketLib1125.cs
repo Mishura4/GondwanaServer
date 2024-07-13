@@ -703,7 +703,7 @@ namespace DOL.GS.PacketHandler
                             }
 
                             pak.WriteShortLowEndian((ushort)value2);
-                            pak.WriteIntLowEndian((uint)entry.CurrencyAmount);
+                            pak.WriteIntLowEndian((uint)entry.GetCurrencyFor(m_gameClient.Player));
                             pak.WriteShortLowEndian((ushort)item.Model);
                             pak.WritePascalStringIntLE(item.Name, 0x30);
                         }

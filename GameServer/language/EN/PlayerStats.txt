@@ -45,16 +45,8 @@ PlayerStatistic.TotalCreaturesKilled:		Total Creatures killed
 PlayerStatistic.TotalCraftPerformed:		Total Item created
 
 # /Title bonuses
-PlayerStatistic.Bonus.DemonslayerTitleLevel1:	+2% DPS in melee / +3% spell dmg
-PlayerStatistic.Bonus.DemonslayerTitleLevel2:	+4% DPS in melee / +6% spell dmg
-PlayerStatistic.Bonus.DemonslayerTitleLevel3:	+6% DPS in melee / +9% spell dmg
-PlayerStatistic.Bonus.DemonslayerTitleLevel4:	+8% DPS in melee / +12% spell dmg
-PlayerStatistic.Bonus.DemonslayerTitleLevel5:	+10% DPS in melee / +15% spell dmg
-PlayerStatistic.Bonus.TraderTitleLevel1:		5% discount with all merchants
-PlayerStatistic.Bonus.TraderTitleLevel2:		10% discount with all merchants
-PlayerStatistic.Bonus.TraderTitleLevel3:		15% discount with all merchants
-PlayerStatistic.Bonus.TraderTitleLevel4:		20% discount with all merchants
-PlayerStatistic.Bonus.TraderTitleLevel5:		25% discount with all merchants
+PlayerStatistic.Bonus.DemonslayerTitle:         +{0}% DPS in melee / +{1}% spell dmg / +{2}% critical strike chance
+PlayerStatistic.Bonus.TraderTitle:              {0:0.##}% discount with all merchants
 PlayerStatistic.Bonus.ThiefTitleLevel1:			+5% Robbery Chance
 PlayerStatistic.Bonus.ThiefTitleLevel2:			+10% Robbery Chance
 PlayerStatistic.Bonus.ThiefTitleLevel3:			+15% Robbery Chance

@@ -25,35 +25,81 @@ namespace DOL.GS.PlayerTitles
 {
     public abstract class TraderTitle : TaskTitle
     {
+        public double TradeFactor { get; init; }
+
+        public TraderTitle(int level)
+        {
+            TradeFactor = -0.05 * level;
+        }
+
+        /// <inheritdoc />
+        public override void OnTitleSelect(GamePlayer player)
+        {
+            player.NPCTradeFactor += TradeFactor;
+            base.OnTitleSelect(player);
+        }
+
+        /// <inheritdoc />
+        public override void OnTitleDeselect(GamePlayer player)
+        {
+            player.NPCTradeFactor -= TradeFactor;
+            base.OnTitleDeselect(player);
+        }
+
+        /// <inheritdoc />
+        public override string GetStatsTranslation(string language)
+        {
+            return LanguageMgr.GetTranslation(language, "PlayerStatistic.Bonus.TraderTitle", TradeFactor * -100);
+        }
     }
     
     [TaskTitleFlag(eTitleFlags.Trader1)]
-    public class TraderTitleLevel1 : TraderTitle
+    public sealed class TraderTitleLevel1 : TraderTitle
     {
         public override string TitleKey => "Titles.Trader.Level1";
+
+        public TraderTitleLevel1() : base(1)
+        {
+        }
     }
     
     [TaskTitleFlag(eTitleFlags.Trader2)]
-    public class TraderTitleLevel2 : TraderTitle
+    public sealed class TraderTitleLevel2 : TraderTitle
     {
         public override string TitleKey => "Titles.Trader.Level2";
+
+        public TraderTitleLevel2() : base(2)
+        {
+        }
     }
     
     [TaskTitleFlag(eTitleFlags.Trader3)]
-    public class TraderTitleLevel3 : TraderTitle
+    public sealed class TraderTitleLevel3 : TraderTitle
     {
         public override string TitleKey => "Titles.Trader.Level3";
+
+        public TraderTitleLevel3() : base(3)
+        {
+        }
     }
     
     [TaskTitleFlag(eTitleFlags.Trader4)]
-    public class TraderTitleLevel4 : TraderTitle
+    public sealed class TraderTitleLevel4 : TraderTitle
     {
         public override string TitleKey => "Titles.Trader.Level4";
+
+        public TraderTitleLevel4() : base(4)
+        {
+        }
     }
     
     [TaskTitleFlag(eTitleFlags.Trader5)]
-    public class TraderTitleLevel5 : TraderTitle
+    public sealed class TraderTitleLevel5 : TraderTitle
     {
         public override string TitleKey => "Titles.Trader.Level5";
+
+        public TraderTitleLevel5() : base(5)
+        {
+        }
     }
 }

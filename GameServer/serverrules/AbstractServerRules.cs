@@ -2222,7 +2222,7 @@ namespace DOL.GS.ServerRules
             return stat;
         }
 
-        private string GetSpecialBonus(IPlayerTitle title, GamePlayer player)
+        protected virtual string GetSpecialBonus(IPlayerTitle title, GamePlayer player)
         {
             if (title == null || title == PlayerTitleMgr.ClearTitle)
             {
@@ -2231,26 +2231,6 @@ namespace DOL.GS.ServerRules
 
             switch (title.GetType().FullName)
             {
-                case "DOL.GS.PlayerTitles.DemonslayerTitleLevel1":
-                    return LanguageMgr.GetTranslation(player.Client.Account.Language, "PlayerStatistic.Bonus.DemonslayerTitleLevel1");
-                case "DOL.GS.PlayerTitles.DemonslayerTitleLevel2":
-                    return LanguageMgr.GetTranslation(player.Client.Account.Language, "PlayerStatistic.Bonus.DemonslayerTitleLevel2");
-                case "DOL.GS.PlayerTitles.DemonslayerTitleLevel3":
-                    return LanguageMgr.GetTranslation(player.Client.Account.Language, "PlayerStatistic.Bonus.DemonslayerTitleLevel3");
-                case "DOL.GS.PlayerTitles.DemonslayerTitleLevel4":
-                    return LanguageMgr.GetTranslation(player.Client.Account.Language, "PlayerStatistic.Bonus.DemonslayerTitleLevel4");
-                case "DOL.GS.PlayerTitles.DemonslayerTitleLevel5":
-                    return LanguageMgr.GetTranslation(player.Client.Account.Language, "PlayerStatistic.Bonus.DemonslayerTitleLevel5");
-                case "DOL.GS.PlayerTitles.TraderTitleLevel1":
-                    return LanguageMgr.GetTranslation(player.Client.Account.Language, "PlayerStatistic.Bonus.TraderTitleLevel1");
-                case "DOL.GS.PlayerTitles.TraderTitleLevel2":
-                    return LanguageMgr.GetTranslation(player.Client.Account.Language, "PlayerStatistic.Bonus.TraderTitleLevel2");
-                case "DOL.GS.PlayerTitles.TraderTitleLevel3":
-                    return LanguageMgr.GetTranslation(player.Client.Account.Language, "PlayerStatistic.Bonus.TraderTitleLevel3");
-                case "DOL.GS.PlayerTitles.TraderTitleLevel4":
-                    return LanguageMgr.GetTranslation(player.Client.Account.Language, "PlayerStatistic.Bonus.TraderTitleLevel4");
-                case "DOL.GS.PlayerTitles.TraderTitleLevel5":
-                    return LanguageMgr.GetTranslation(player.Client.Account.Language, "PlayerStatistic.Bonus.TraderTitleLevel5");
                 case "DOL.GS.PlayerTitles.ThiefTitleLevel1":
                     return LanguageMgr.GetTranslation(player.Client.Account.Language, "PlayerStatistic.Bonus.ThiefTitleLevel1");
                 case "DOL.GS.PlayerTitles.ThiefTitleLevel2":
@@ -2292,7 +2272,7 @@ namespace DOL.GS.ServerRules
                 case "DOL.GS.PlayerTitles.AdventurerTitleLevel5":
                     return LanguageMgr.GetTranslation(player.Client.Account.Language, "PlayerStatistic.Bonus.AdventurerTitleLevel5");
                 default:
-                    return LanguageMgr.GetTranslation(player.Client.Account.Language, "PlayerStatistic.TitleNone");
+                    return title.GetStatsTranslation(player.Client.Account.Language);
             }
         }
 

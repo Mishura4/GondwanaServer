@@ -1957,7 +1957,7 @@ namespace DOL.GS.PacketHandler
                                 pak.WriteByte(0x01);
                             pak.WriteShort((ushort)value2);
                             //Item Price
-                            pak.WriteInt((uint)entry.CurrencyAmount);
+                            pak.WriteInt((uint)entry.GetCurrencyFor(m_gameClient.Player));
                             pak.WriteShort((ushort)item.Model);
                             pak.WritePascalString(item.Name);
                         }

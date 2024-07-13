@@ -13814,6 +13814,7 @@ namespace DOL.GS
             if (t == null)
                 t = PlayerTitleMgr.ClearTitle;
             m_currentTitle = t;
+            m_currentTitle.OnTitleSelect(this);
 
             //let's only check if we can use /level once shall we,
             //this is nice because i want to check the property often for the new catacombs classes
@@ -15731,6 +15732,15 @@ namespace DOL.GS
         }
 
         /// <summary>
+        /// Factor to apply to NPC trades
+        /// </summary>
+        public double NPCTradeFactor
+        {
+            get;
+            set;
+        } = 1.0d;
+
+        /// <summary>
         /// Whether the player is wanted or not, thread-unsafe
         /// </summary>
         private bool WantedUnsafe
@@ -16058,7 +16068,10 @@ namespace DOL.GS
             {
                 if (value == null)
                     value = PlayerTitleMgr.ClearTitle;
+                m_currentTitle.OnTitleDeselect(this);
                 m_currentTitle = value;
+                value.OnTitleSelect(this);
+                
                 if (DBCharacter != null) DBCharacter.CurrentTitleType = value.GetType().FullName;
 
                 //update newTitle for all players if client is playing

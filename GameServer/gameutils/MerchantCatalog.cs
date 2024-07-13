@@ -31,6 +31,16 @@ namespace DOL.GS.Profession
         public ItemTemplate Item { get; }
         public long CurrencyAmount { get; } = 0;
 
+        public long GetCurrencyFor(GamePlayer player)
+        {
+            return GetCurrencyFor(player, CurrencyAmount);
+        }
+
+        public static long GetCurrencyFor(GamePlayer player, long value)
+        {
+            return player is { NPCTradeFactor: not 1.0 } ? (long)Math.Round(player.NPCTradeFactor * value) : value;
+        }
+
         public MerchantCatalogEntry(byte slotPosition, byte page, ItemTemplate itemTemplate, long currencyAmount)
         {
             SlotPosition = slotPosition;

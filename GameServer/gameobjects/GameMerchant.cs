@@ -170,7 +170,7 @@ namespace DOL.GS
 
             if (amountToBuy <= 0) return;
 
-            long cost = amountToBuy * articleToBuy.CurrencyAmount;
+            long cost = amountToBuy * articleToBuy.GetCurrencyFor(player);
 
             lock (player.Inventory)
             {
@@ -211,7 +211,7 @@ namespace DOL.GS
 
             if (amountToBuy <= 0) return;
 
-            var totalCost = Currency.Copper.Mint(number * template.Price);
+            var totalCost = Currency.Copper.Mint(number * MerchantCatalogEntry.GetCurrencyFor(player, template.Price));
 
             lock (player.Inventory)
             {

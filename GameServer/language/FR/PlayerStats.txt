@@ -45,16 +45,8 @@ PlayerStatistic.TotalCreaturesKilled:		Total des Créatures tuées
 PlayerStatistic.TotalCraftPerformed:		Total des Objets fabriqués
 
 # /Bonus de titres
-PlayerStatistic.Bonus.DemonslayerTitleLevel1:	+2% DPS en mêlée / +3% dégâts des sorts
-PlayerStatistic.Bonus.DemonslayerTitleLevel2:	+4% DPS en mêlée / +6% dégâts des sorts
-PlayerStatistic.Bonus.DemonslayerTitleLevel3:	+6% DPS en mêlée / +9% dégâts des sorts
-PlayerStatistic.Bonus.DemonslayerTitleLevel4:	+8% DPS en mêlée / +12% dégâts des sorts
-PlayerStatistic.Bonus.DemonslayerTitleLevel5:	+10% DPS en mêlée / +15% dégâts des sorts
-PlayerStatistic.Bonus.TraderTitleLevel1:		5% de réduction avec tous les marchands
-PlayerStatistic.Bonus.TraderTitleLevel2:		10% de réduction avec tous les marchands
-PlayerStatistic.Bonus.TraderTitleLevel3:		15% de réduction avec tous les marchands
-PlayerStatistic.Bonus.TraderTitleLevel4:		20% de réduction avec tous les marchands
-PlayerStatistic.Bonus.TraderTitleLevel5:		25% de réduction avec tous les marchands
+PlayerStatistic.Bonus.DemonslayerTitle:         +{0}% DPS en mêlée / +{1}% dégâts des sorts / +{2}% chance de coups critiques
+PlayerStatistic.Bonus.TraderTitle:              {0:0.##}% de réduction avec tous les marchands
 PlayerStatistic.Bonus.ThiefTitleLevel1:			+5% chance de vol
 PlayerStatistic.Bonus.ThiefTitleLevel2:			+10% chance de vol
 PlayerStatistic.Bonus.ThiefTitleLevel3:			+15% chance de vol

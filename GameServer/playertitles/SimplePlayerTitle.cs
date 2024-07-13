@@ -16,6 +16,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
+using DOL.Language;
 using System;
 
 namespace DOL.GS.PlayerTitles
@@ -71,6 +72,22 @@ namespace DOL.GS.PlayerTitles
         /// <param name="player">The player that lost a title.</param>
         public virtual void OnTitleLost(GamePlayer player)
         {
+        }
+        
+        /// <inheritdoc />
+        public virtual void OnTitleSelect(GamePlayer player)
+        {
+        }
+        
+        /// <inheritdoc />
+        public virtual void OnTitleDeselect(GamePlayer player)
+        {
+        }
+
+        /// <inheritdoc />
+        public virtual string GetStatsTranslation(string language)
+        {
+            return LanguageMgr.GetTranslation(language, "PlayerStatistic.TitleNone");
         }
     }
 }

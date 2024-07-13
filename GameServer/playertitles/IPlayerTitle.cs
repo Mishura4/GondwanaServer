@@ -31,6 +31,7 @@ namespace DOL.GS.PlayerTitles
         /// <param name="player">The title owner.</param>
         /// <returns>The title description.</returns>
         string GetDescription(GamePlayer player);
+
         /// <summary>
         /// The title value, shown over player's head.
         /// </summary>
@@ -38,27 +39,45 @@ namespace DOL.GS.PlayerTitles
         /// <param name="player">The title owner.</param>
         /// <returns>The title value.</returns>
         string GetValue(GamePlayer source, GamePlayer player);
+
         /// <summary>
         /// Checks whether this title can be changed by the player.
         /// </summary>
         /// <param name="player">The title owner.</param>
         /// <returns>True if player can not change the title.</returns>
         bool IsForced(GamePlayer player);
+
         /// <summary>
         /// Verify whether the player is suitable for this title.
         /// </summary>
         /// <param name="player">The player to check.</param>
         /// <returns>true if the player is suitable for this title.</returns>
         bool IsSuitable(GamePlayer player);
+
         /// <summary>
         /// Callback for when player gains this title.
         /// </summary>
         /// <param name="player">The player that gained a title.</param>
         void OnTitleGained(GamePlayer player);
+
         /// <summary>
         /// Callback for when player loose this title.
         /// </summary>
         /// <param name="player">The player that lost a title.</param>
         void OnTitleLost(GamePlayer player);
+
+        /// <summary>
+        /// Called when a title is selected by a player
+        /// </summary>
+        void OnTitleSelect(GamePlayer player);
+
+        /// <summary>
+        /// Called when a title is deselected by a player
+        /// </summary>
+        void OnTitleDeselect(GamePlayer player);
+
+        /// <summary>
+        /// </summary>
+        string GetStatsTranslation(string language);
     }
 }

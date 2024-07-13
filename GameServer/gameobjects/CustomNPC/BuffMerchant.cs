@@ -911,7 +911,7 @@ namespace DOL.GS
 
                 if (amountToBuy <= 0) return;
 
-                long totalValue = number * (template.Price);
+                long totalValue = number * MerchantCatalogEntry.GetCurrencyFor(player, template.Price);
 
                 lock (player.Inventory)
                 {
@@ -947,7 +947,7 @@ namespace DOL.GS
 
                 if (amountToBuy <= 0) return;
 
-                var totalCost = Currency.Copper.Mint(number * template.Price);
+                var totalCost = Currency.Copper.Mint(number * MerchantCatalogEntry.GetCurrencyFor(player, template.Price));
 
                 lock (player.Inventory)
                 {
@@ -995,7 +995,7 @@ namespace DOL.GS
             }
             if (t != null && item != null)
             {
-                if (item.Id_nb == "Full_Buffs_Token" || item.Id_nb == "BPFull_Buffs_Token")
+                if (item.Id_nb is "Full_Buffs_Token" or "BPFull_Buffs_Token")
                 {
                     if (t.CharacterClass.ClassType == eClassType.ListCaster)
                     {
