@@ -254,3 +254,8 @@ SkillBase.RegisterPropertyNames.ArcaneSyphon:			Arcane Syphon
 SkillBase.RegisterPropertyNames.RealmPoints:			Bonus Mythique Points de Royaume
 SkillBase.RegisterPropertyNames.BountyPoints:			Bonus Mythique Gains en Bounty Points
 SkillBase.RegisterPropertyNames.ExperiencePoints:		Bonus Mythique Expérience
+
+SkillBase.RegisterPropertyNames.RobberyChanceBonus:         Bonus Chance de Vol
+SkillBase.RegisterPropertyNames.RobberyDelayReduction:      Réduction de temps de recharge de Vol
+SkillBase.RegisterPropertyNames.StealthEffectivenessBonus:  Bonus Furtivité
+SkillBase.RegisterPropertyNames.StealthDetectionBonus:      Bonus détection de Furtivité

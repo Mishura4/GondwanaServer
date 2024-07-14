@@ -2045,6 +2045,16 @@ namespace DOL.GS
                     return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.DPS");
                 case eProperty.MagicAbsorption:
                     return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MagicAbsorption");
+                case eProperty.RobberyChanceBonus:
+                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.RobberyChanceBonus");
+                case eProperty.RobberyDelayReduction:
+                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.RobberyDelayReduction");
+                case eProperty.StealthEffectivenessBonus:
+                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.StealthEffectivenessBonus");
+                case eProperty.StealthDetectionBonus:
+                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.StealthDetectionBonus");
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(prop), prop, null);
             }
             return "";
         }

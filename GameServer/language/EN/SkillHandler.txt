@@ -257,3 +257,8 @@ SkillBase.RegisterPropertyNames.ArcaneSyphon:			Arcane Syphon
 SkillBase.RegisterPropertyNames.RealmPoints:			Bonus to Realm Points
 SkillBase.RegisterPropertyNames.BountyPoints:			Bonus to Bounty Points
 SkillBase.RegisterPropertyNames.ExperiencePoints:		Bonus to Experience Points
+
+SkillBase.RegisterPropertyNames.RobberyChanceBonus:         Bonus Robbery Chance
+SkillBase.RegisterPropertyNames.RobberyDelayReduction:      Robbery Cooldown Reduction
+SkillBase.RegisterPropertyNames.StealthEffectivenessBonus:  Bonus Stealth
+SkillBase.RegisterPropertyNames.StealthDetectionBonus:      Bonus Stealth Detection
