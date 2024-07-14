@@ -7113,6 +7113,11 @@ namespace DOL.GS
                         break;
                 }
             }
+
+            if (Client.Account.PrivLevel > 1 && ServerProperties.Properties.ENABLE_DEBUG)
+            {
+                SendAttackDetails(ad);
+            }
         }
 
         /// <summary>
@@ -7137,11 +7142,6 @@ namespace DOL.GS
 
             if (CombatInfo)
                 Out.SendMessage($"CombatInfo: result:{ad.AttackResult} dmg={ad.Damage} crits={ad.CriticalDamage} style dmg={ad.StyleDamage} uncap dmg={ad.UncappedDamage} weapon dmg={ad.weaponDamage:F1} mod={ad.dmgMod:F1}", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-
-            if (Client.Account.PrivLevel > 1 && ServerProperties.Properties.ENABLE_DEBUG)
-            {
-                SendAttackDetails(ad);
-            }
 
             //Clear the styles for the next round!
             NextCombatStyle = null;
@@ -7520,7 +7520,7 @@ namespace DOL.GS
         {
             Client.Out.SendMessage($"---- Attack ({ad.AttackType}) {ad.Attacker?.Name} => {ad.Target?.Name} ----", eChatType.CT_System, eChatLoc.CL_SystemWindow);
             Client.Out.SendMessage($"DEBUG: Damage {ad.Damage} {ad.DamageType} (uncapped {ad.UncappedDamage}) - Critical {ad.CriticalDamage} ({ad.criticalChance}%)", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-            Client.Out.SendMessage($"DEBUG: Miss {(ad.MissChance ?? 0):0.##}% - Parry {(ad.ParryChance ?? 0):0.##}% - Evade {(ad.EvadeChance ?? 0):0.##}% - Block {(ad.BlockChance ?? 0):0.##}% - Fumble {(ad.FumbleChance ?? 0):0.##}%", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            Client.Out.SendMessage($"DEBUG: Miss {(ad.MissChance ?? ad.Target?.ChanceToBeMissed ?? 0) * 100:0.}% - Parry {(ad.ParryChance ?? 0) * 100:0.}% - Evade {(ad.EvadeChance ?? 0) * 100:0.}% - Block {(ad.BlockChance ?? 0) * 100:0.}% - Fumble {(ad.FumbleChance ?? ad.Attacker.ChanceToFumble) * 100:0.}%", eChatType.CT_System, eChatLoc.CL_SystemWindow);
             Client.Out.SendMessage($"DEBUG: Weapon damage {ad.weaponDamage} - Style damage {ad.StyleDamage}", eChatType.CT_System, eChatLoc.CL_SystemWindow);
             Client.Out.SendMessage($"DEBUG: Wep stat {ad.weaponStat} Wep skill {ad.weaponSkillFactor} AF {ad.enemyAF:0.##} ABS {ad.enemyABS:0.##} Res {ad.enemyResist:0.##} => Damage * {ad.dmgMod}", eChatType.CT_System, eChatLoc.CL_SystemWindow);
             Client.Out.SendMessage($"DEBUG: Tension rate {ad.TensionRate:0.##}", eChatType.CT_System, eChatLoc.CL_SystemWindow);
@@ -8041,27 +8041,26 @@ namespace DOL.GS
                 if (DPS > cap)
                     DPS = cap;
 
-                double result = DPS * (GetModified(eProperty.DPS) * 0.01) * weapon.SPD_ABS * 0.03 * (0.94 + 0.003 * weapon.SPD_ABS);
-
+                double result = DPS * (1 + GetModified(eProperty.DPS) * 0.01) * weapon.SPD_ABS * 0.03 * (0.94 + 0.003 * weapon.SPD_ABS);
+                
+                double effectiveness = 1.0;
                 if (weapon.Hand == 1) //2h
                 {
-                    result *= 1.1 + (WeaponSpecLevel(weapon) - 1) * 0.005;
+                    effectiveness += 1.1 + (WeaponSpecLevel(weapon) - 1) * 0.005;
                     if (weapon.Item_Type == Slot.RANGED)
                     {
                         // http://home.comcast.net/~shadowspawn3/bowdmg.html
                         //ammo damage bonus
-                        double ammoDamageBonus = 1;
                         if (RangeAttackAmmo != null)
                         {
                             switch ((RangeAttackAmmo.SPD_ABS) & 0x3)
                             {
-                                case 0: ammoDamageBonus = 0.85; break;  //Blunt       (light) -15%
-                                case 1: ammoDamageBonus = 1; break;     //Bodkin     (medium)   0%
-                                case 2: ammoDamageBonus = 1.15; break;  //doesn't exist on live
-                                case 3: ammoDamageBonus = 1.25; break;  //Broadhead (X-heavy) +25%
+                                case 0: effectiveness += -0.15; break;  //Blunt       (light) -15%
+                                case 1: break;     //Bodkin     (medium)   0%
+                                case 2: effectiveness += 0.15; break;  //doesn't exist on live
+                                case 3: effectiveness += 0.25; break;  //Broadhead (X-heavy) +25%
                             }
                         }
-                        result *= ammoDamageBonus;
                     }
                 }
 
@@ -8069,32 +8068,31 @@ namespace DOL.GS
                 {
                     if (ServerProperties.Properties.ALLOW_OLD_ARCHERY == true)
                     {
-                        result += GetModified(eProperty.RangedDamage) * 0.01;
+                        effectiveness += GetModified(eProperty.RangedDamage) * 0.01;
                     }
                     else if (ServerProperties.Properties.ALLOW_OLD_ARCHERY == false)
                     {
-                        result += GetModified(eProperty.SpellDamage) * 0.01;
-                        result += GetModified(eProperty.RangedDamage) * 0.01;
+                        effectiveness += GetModified(eProperty.SpellDamage) * 0.01;
+                        effectiveness += GetModified(eProperty.RangedDamage) * 0.01;
                     }
                 }
                 else if (weapon.Item_Type == Slot.RANGED)
                 {
                     //Ranged damage buff,debuff,Relic,RA
-                    result += GetModified(eProperty.RangedDamage) * 0.01;
+                    effectiveness += GetModified(eProperty.RangedDamage) * 0.01;
                 }
                 else if (weapon.Item_Type == Slot.RIGHTHAND || weapon.Item_Type == Slot.LEFTHAND || weapon.Item_Type == Slot.TWOHAND)
                 {
-                    result += GetModified(eProperty.MeleeDamage) * 0.01;
+                    effectiveness += GetModified(eProperty.MeleeDamage) * 0.01;
                 }
 
-                return result;
+                return effectiveness * result;
             }
             else
             { // TODO: whats the damage cap without weapon?
                 return
                     (AttackDamage(weapon) * 3 * (1 + (AttackSpeed(weapon) * 0.001 - 2) * .03))
-                    * GetModified(eProperty.MeleeDamage) * 0.01
-                    * GetModified(eProperty.DPS) * 0.01;
+                    * (1 + GetModified(eProperty.DPS) * 0.01);
             }
         }
 
@@ -8349,7 +8347,7 @@ namespace DOL.GS
             {
                 // twohanded used weapons get 2H-Bonus = 10% + (Skill / 2)%
                 int spec = WeaponSpecLevel(weapon) - 1;
-                damage *= 1.1 + spec * 0.005;
+                effectiveness += 0.1 + spec * 0.005;
             }
 
             if (weapon.Item_Type == Slot.RANGED)
@@ -8359,10 +8357,10 @@ namespace DOL.GS
                 {
                     switch ((RangeAttackAmmo.SPD_ABS) & 0x3)
                     {
-                        case 0: damage *= 0.85; break; //Blunt       (light) -15%
+                        case 0: effectiveness += -0.15; break; //Blunt       (light) -15%
                                                        //case 1: damage *= 1;	break; //Bodkin     (medium)   0%
-                        case 2: damage *= 1.15; break; //doesn't exist on live
-                        case 3: damage *= 1.25; break; //Broadhead (X-heavy) +25%
+                        case 2: effectiveness += 0.15; break; //doesn't exist on live
+                        case 3: effectiveness += 0.25; break; //Broadhead (X-heavy) +25%
                     }
                 }
                 //Ranged damage buff,debuff,Relic,RA
