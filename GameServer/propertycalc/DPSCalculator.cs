@@ -38,8 +38,8 @@ namespace DOL.GS.PropertyCalc
 
         public override int CalcValue(GameLiving living, eProperty property)
         {
-            return (int)(
-                +living.BaseBuffBonusCategory[(int)property]
+            return living.CurrentRegion?.IsRvR == true ? 0 :
+                (int)(living.BaseBuffBonusCategory[(int)property]
                 + living.SpecBuffBonusCategory[(int)property]
                 + living.ItemBonus[(int)property]
                 - living.DebuffCategory[(int)property]
