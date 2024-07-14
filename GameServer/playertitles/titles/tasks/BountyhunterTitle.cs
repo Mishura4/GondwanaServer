@@ -25,35 +25,86 @@ namespace DOL.GS.PlayerTitles
 {
     public abstract class BountyhunterTitle : TaskTitle
     {
+        public int RobberyResistBonus { get; init; }
+        
+        public int StealthDetectionBonus { get; init; }
+        
+        protected BountyhunterTitle(int level)
+        {
+            RobberyResistBonus = 5 * level;
+            StealthDetectionBonus = 2 * level;
+        }
+
+        /// <inheritdoc />
+        public override void OnTitleSelect(GamePlayer player)
+        {
+            player.BaseBuffBonusCategory[eProperty.RobberyResist] += RobberyResistBonus;
+            player.BaseBuffBonusCategory[eProperty.StealthDetectionBonus] += StealthDetectionBonus;
+            base.OnTitleSelect(player);
+        }
+
+        /// <inheritdoc />
+        public override void OnTitleDeselect(GamePlayer player)
+        {
+            player.BaseBuffBonusCategory[eProperty.RobberyResist] -= RobberyResistBonus;
+            player.BaseBuffBonusCategory[eProperty.StealthDetectionBonus] -= StealthDetectionBonus;
+            base.OnTitleDeselect(player);
+        }
+
+        /// <inheritdoc />
+        public override string GetStatsTranslation(string language)
+        {
+            return LanguageMgr.GetTranslation(language, "PlayerStatistic.Bonus.BountyhunterTitle", RobberyResistBonus, StealthDetectionBonus);
+        }
     }
 
     [TaskTitleFlag(eTitleFlags.BountyHunter1)]
     public class BountyhunterTitleLevel1 : BountyhunterTitle
     {
         public override string TitleKey => "Titles.Bountyhunter.Level1";
+
+        public BountyhunterTitleLevel1() : base(1)
+        {
+        }
     }
     
     [TaskTitleFlag(eTitleFlags.BountyHunter2)]
     public class BountyhunterTitleLevel2 : BountyhunterTitle
     {
         public override string TitleKey => "Titles.Bountyhunter.Level2";
+
+        public BountyhunterTitleLevel2() : base(2)
+        {
+        }
     }
     
     [TaskTitleFlag(eTitleFlags.BountyHunter3)]
     public class BountyhunterTitleLevel3 : BountyhunterTitle
     {
         public override string TitleKey => "Titles.Bountyhunter.Level3";
+
+        public BountyhunterTitleLevel3() : base(3)
+        {
+        }
     }
     
     [TaskTitleFlag(eTitleFlags.BountyHunter4)]
     public class BountyhunterTitleLevel4 : BountyhunterTitle
     {
         public override string TitleKey => "Titles.Bountyhunter.Level4";
+
+        public BountyhunterTitleLevel4() : base(4)
+        {
+        }
     }
     
     [TaskTitleFlag(eTitleFlags.BountyHunter5)]
     public class BountyhunterTitleLevel5 : BountyhunterTitle
     {
         public override string TitleKey => "Titles.Bountyhunter.Level5";
+
+        public BountyhunterTitleLevel5() : base(5)
+        {
+        }
     }
 }

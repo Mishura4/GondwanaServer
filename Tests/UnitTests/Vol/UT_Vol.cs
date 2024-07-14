@@ -9,12 +9,13 @@ using System.Threading.Tasks;
 using DOL.Database;
 using DOL.Network;
 using DOL.Config;
+using DOL.GS.Finance;
 using DOL.UnitTests.Gameserver;
 
-namespace DOL.Vol
+namespace DOL.UnitTests.Gameserver.Vol
 {
     [TestFixture]
-    public class VolTests
+    public class UT_Vol
     {
         internal class StealTestPlayer : FakePlayer
         {
@@ -30,6 +31,12 @@ namespace DOL.Vol
             public override bool HasAbility(string keyName)
             {
                 return true;
+            }
+
+            /// <inheritdoc />
+            public override int GetBaseSpecLevel(string keyName)
+            {
+                return 10;
             }
         }
         
@@ -47,6 +54,7 @@ namespace DOL.Vol
         public void Setup()
         {
             stealer.m_isStealthed = true;
+            target.AddMoney(Currency.Copper.Mint(100));
         }
 
         [Test]

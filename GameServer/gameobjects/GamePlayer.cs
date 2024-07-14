@@ -14454,19 +14454,10 @@ namespace DOL.GS
             if (iConvokerEffect != null)
                 range += (int)iConvokerEffect.Spell.Value;
 
-            if (this.EffectList.GetOfType<AdrenalineStealthSpellEffect>() != null)
+            int modifier = GetModified(eProperty.StealthDetectionBonus) - enemy.GetModified(eProperty.StealthEffectivenessBonus);
+            if (modifier != 0)
             {
-                if (enemy.EffectList.GetOfType<AdrenalineStealthSpellEffect>() == null)
-                {
-                    // Detector has increased stealth detection
-                    range = (int)(((double)range) * 1.3);
-                }
-                // else We have 30% increase and 30% decrease, do nothing
-            }
-            else if (enemy.EffectList.GetOfType<AdrenalineStealthSpellEffect>() != null)
-            {
-                // Enemy has increased stealth
-                range = (int)(((double)range) * 0.7);
+                range = (int)(range * (modifier / 100.0f));
             }
 
             //Hard cap is 1900

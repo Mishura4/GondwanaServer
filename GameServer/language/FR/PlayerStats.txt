@@ -47,16 +47,8 @@ PlayerStatistic.TotalCraftPerformed:		Total des Objets fabriqués
 # /Bonus de titres
 PlayerStatistic.Bonus.DemonslayerTitle:         +{0}% DPS en mêlée / +{1}% dégâts des sorts / +{2}% chance de coups critiques
 PlayerStatistic.Bonus.TraderTitle:              {0:0.##}% de réduction avec tous les marchands
-PlayerStatistic.Bonus.ThiefTitleLevel1:			+5% chance de vol
-PlayerStatistic.Bonus.ThiefTitleLevel2:			+10% chance de vol
-PlayerStatistic.Bonus.ThiefTitleLevel3:			+15% chance de vol
-PlayerStatistic.Bonus.ThiefTitleLevel4:			+20% chance de vol
-PlayerStatistic.Bonus.ThiefTitleLevel5:			+25% chance de vol
-PlayerStatistic.Bonus.BountyhunterTitleLevel1:	+5% résistance au vol / +2% détection de furtivité
-PlayerStatistic.Bonus.BountyhunterTitleLevel2:	+10% résistance au vol / +4% détection de furtivité
-PlayerStatistic.Bonus.BountyhunterTitleLevel3:	+15% résistance au vol / +6% détection de furtivité
-PlayerStatistic.Bonus.BountyhunterTitleLevel4:	+20% résistance au vol / +8% détection de furtivité
-PlayerStatistic.Bonus.BountyhunterTitleLevel5:	+25% résistance au vol / +10% détection de furtivité
+PlayerStatistic.Bonus.ThiefTitle:               +{0}% chance de vol / -{1}% temps de recharge de vol
+PlayerStatistic.Bonus.BountyhunterTitle:        +{0}% résistance au vol / +{1}% détection de furtivité
 PlayerStatistic.Bonus.WrathTitleLevel1:			+3% augmentation de tension / -5% perte de tension à la mort
 PlayerStatistic.Bonus.WrathTitleLevel2:			+6% augmentation de tension / -10% perte de tension à la mort
 PlayerStatistic.Bonus.WrathTitleLevel3:			+9% augmentation de tension / -15% perte de tension à la mort

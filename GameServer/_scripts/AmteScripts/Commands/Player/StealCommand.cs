@@ -8,6 +8,7 @@ using log4net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
@@ -130,6 +131,10 @@ namespace DOL.GS.Commands
                 int specLevel = stealer.GetBaseSpecLevel("Stealth");
                 float chance = (specLevel * 100) / stealer.Level;
                 var rand = new Random(DateTime.Now.Millisecond);
+                float resist = target.GetModified(eProperty.RobberyResist) / 100.0f;
+                float bonusChance = target.GetModified(eProperty.RobberyChanceBonus);
+                chance += bonusChance;
+                chance *= 1.0f - resist;
 
                 if (rand.Next(1, 101) > chance)
                 {
@@ -155,14 +160,19 @@ namespace DOL.GS.Commands
                 Player.TempProperties.getProperty<object>(PLAYER_VOL_TIMER, null) as RegionTimer);
         }
 
+        private static void DisableRobbing(GamePlayer player, int duration)
+        {
+            int reduction = player.GetModified(eProperty.RobberyDelayReduction);
+            int dur = reduction == 0 ? duration : (int)(duration * ((100.0f - reduction) / 100.0f));
+
+            player.TempProperties.setProperty(VolAbilityHandler.DISABLE_PROPERTY, player.CurrentRegion.Time + dur);
+            player.DisableSkill(SkillBase.GetAbility(Abilities.Vol), dur);
+        }
+
         public static void CancelVol(GamePlayer Player, RegionTimer Timer)
         {
-            Player.TempProperties.setProperty(
-                VolAbilityHandler.DISABLE_PROPERTY,
-                Player.CurrentRegion.Time);
-            Player.DisableSkill(SkillBase.GetAbility(Abilities.Vol),
-                VolAbilityHandler.DISABLE_DURATION);
-
+            DisableRobbing(Player, VolAbilityHandler.DISABLE_DURATION);
+            
             Timer.Stop();
 
             Player.Out.SendCloseTimerWindow();
@@ -277,9 +287,7 @@ namespace DOL.GS.Commands
                 Target.TempProperties.setProperty(PLAYER_STEALER, Player);
                 Player.TempProperties.setProperty(PLAYER_VOL_TIMER, Timer);
 
-                Player.TempProperties.setProperty(
-                    VolAbilityHandler.DISABLE_PROPERTY,
-                    Player.CurrentRegion.Time);
+                DisableRobbing(Player, VolAbilityHandler.DISABLE_DURATION);
             }
             else
             {

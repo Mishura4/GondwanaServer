@@ -47,16 +47,8 @@ PlayerStatistic.TotalCraftPerformed:		Total Item created
 # /Title bonuses
 PlayerStatistic.Bonus.DemonslayerTitle:         +{0}% DPS in melee / +{1}% spell dmg / +{2}% critical strike chance
 PlayerStatistic.Bonus.TraderTitle:              {0:0.##}% discount with all merchants
-PlayerStatistic.Bonus.ThiefTitleLevel1:			+5% Robbery Chance
-PlayerStatistic.Bonus.ThiefTitleLevel2:			+10% Robbery Chance
-PlayerStatistic.Bonus.ThiefTitleLevel3:			+15% Robbery Chance
-PlayerStatistic.Bonus.ThiefTitleLevel4:			+20% Robbery Chance
-PlayerStatistic.Bonus.ThiefTitleLevel5:			+25% Robbery Chance
-PlayerStatistic.Bonus.BountyhunterTitleLevel1:	+5% Robbery Resist / +2% Stealth detection
-PlayerStatistic.Bonus.BountyhunterTitleLevel2:	+10% Robbery Resist / +4% Stealth detection
-PlayerStatistic.Bonus.BountyhunterTitleLevel3:	+15% Robbery Resist / +6% Stealth detection
-PlayerStatistic.Bonus.BountyhunterTitleLevel4:	+20% Robbery Resist / +8% Stealth detection
-PlayerStatistic.Bonus.BountyhunterTitleLevel5:	+25% Robbery Resist / +10% Stealth detection
+PlayerStatistic.Bonus.ThiefTitle:               +{0}% Robbery Chance / -{1}% Robbery Cooldown
+PlayerStatistic.Bonus.BountyhunterTitle:        +{0}% Robbery Resist / +{1}% Stealth Detection
 PlayerStatistic.Bonus.WrathTitleLevel1:			+3% Tension Increase / -5% tension loss at death
 PlayerStatistic.Bonus.WrathTitleLevel2:			+6% Tension Increase / -10% tension loss at death
 PlayerStatistic.Bonus.WrathTitleLevel3:			+9% Tension Increase / -15% tension loss at death

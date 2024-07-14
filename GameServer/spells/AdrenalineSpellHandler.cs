@@ -283,6 +283,8 @@ namespace DOL.GS.Spells
         public readonly int MELEESPEED_BONUS = 30;
         public readonly int RANGEDSPEED_BONUS = 20;
         public readonly double MAXSPEED_BONUS = 1.25;
+        public readonly int STEALTHEFFECTIVENESS_BONUS = 30;
+        public readonly int STEALTHDETECTION_BONUS = 30;
 
         /// <inheritdoc />
         public override string ShortDescription => "You are taken over by battle fever! Your styled attacks against evenly matched enemies cannot miss and your defense, stealth, melee and ranged power are greatly enhanced!";
@@ -305,6 +307,8 @@ namespace DOL.GS.Spells
 
             effect.Owner.BaseBuffBonusCategory[(int)eProperty.MeleeSpeed] += MELEESPEED_BONUS;
             effect.Owner.BaseBuffBonusCategory[(int)eProperty.ArcherySpeed] += RANGEDSPEED_BONUS;
+            effect.Owner.BaseBuffBonusCategory[(int)eProperty.StealthEffectivenessBonus] += STEALTHEFFECTIVENESS_BONUS;
+            effect.Owner.BaseBuffBonusCategory[(int)eProperty.StealthDetectionBonus] += STEALTHDETECTION_BONUS;
             effect.Owner.BuffBonusMultCategory1.Set((int)eProperty.MaxSpeed, this, MAXSPEED_BONUS);
             if (effect.Owner is GamePlayer player)
             {
@@ -323,6 +327,8 @@ namespace DOL.GS.Spells
 
             effect.Owner.BaseBuffBonusCategory[(int)eProperty.MeleeSpeed] -= MELEESPEED_BONUS;
             effect.Owner.BaseBuffBonusCategory[(int)eProperty.ArcherySpeed] -= RANGEDSPEED_BONUS;
+            effect.Owner.BaseBuffBonusCategory[(int)eProperty.StealthEffectivenessBonus] -= STEALTHEFFECTIVENESS_BONUS;
+            effect.Owner.BaseBuffBonusCategory[(int)eProperty.StealthDetectionBonus] -= STEALTHDETECTION_BONUS;
             effect.Owner.BuffBonusMultCategory1.Remove((int)eProperty.MaxSpeed, this);
             if (effect.Owner is GamePlayer player)
             {

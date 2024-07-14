@@ -347,16 +347,16 @@ namespace DOL.GS
     public enum eStat : byte
     {
         UNDEFINED = 0,
-        _First = eProperty.Stat_First,
-        STR = eProperty.Strength,
-        DEX = eProperty.Dexterity,
-        CON = eProperty.Constitution,
-        QUI = eProperty.Quickness,
-        INT = eProperty.Intelligence,
-        PIE = eProperty.Piety,
-        EMP = eProperty.Empathy,
-        CHR = eProperty.Charisma,
-        _Last = eProperty.Stat_Last,
+        _First = (byte)eProperty.Stat_First,
+        STR = (byte)eProperty.Strength,
+        DEX = (byte)eProperty.Dexterity,
+        CON = (byte)eProperty.Constitution,
+        QUI = (byte)eProperty.Quickness,
+        INT = (byte)eProperty.Intelligence,
+        PIE = (byte)eProperty.Piety,
+        EMP = (byte)eProperty.Empathy,
+        CHR = (byte)eProperty.Charisma,
+        _Last = (byte)eProperty.Stat_Last,
     }
 
     /// <summary>
@@ -364,16 +364,16 @@ namespace DOL.GS
     /// </summary>
     public enum eResist : byte
     {
-        Natural = eProperty.Resist_Natural,
-        Crush = eProperty.Resist_Crush,
-        Slash = eProperty.Resist_Slash,
-        Thrust = eProperty.Resist_Thrust,
-        Body = eProperty.Resist_Body,
-        Cold = eProperty.Resist_Cold,
-        Energy = eProperty.Resist_Energy,
-        Heat = eProperty.Resist_Heat,
-        Matter = eProperty.Resist_Matter,
-        Spirit = eProperty.Resist_Spirit
+        Natural = (byte)eProperty.Resist_Natural,
+        Crush = (byte)eProperty.Resist_Crush,
+        Slash = (byte)eProperty.Resist_Slash,
+        Thrust = (byte)eProperty.Resist_Thrust,
+        Body = (byte)eProperty.Resist_Body,
+        Cold = (byte)eProperty.Resist_Cold,
+        Energy = (byte)eProperty.Resist_Energy,
+        Heat = (byte)eProperty.Resist_Heat,
+        Matter = (byte)eProperty.Resist_Matter,
+        Spirit = (byte)eProperty.Resist_Spirit
     }
 
     /// <summary>
@@ -516,7 +516,7 @@ namespace DOL.GS
     /// <summary>
     /// all available and buffable/bonusable properties on livings
     /// </summary>
-    public enum eProperty : byte
+    public enum eProperty : ushort
     {
         Undefined = 0,
         // Note, these are set in the ItemDB now.  Changing
@@ -830,7 +830,11 @@ namespace DOL.GS
         RealmPoints = 253,
         ArcaneSyphon = 254,
         LivingEffectiveness = 255,
-        MaxProperty = 255
+        RobberyChanceBonus = 256,
+        RobberyDelayReduction = 257,
+        StealthEffectivenessBonus = 258,
+        StealthDetectionBonus = 259,
+        MaxProperty = 259
     }
 
     /// <summary>

@@ -2231,26 +2231,6 @@ namespace DOL.GS.ServerRules
 
             switch (title.GetType().FullName)
             {
-                case "DOL.GS.PlayerTitles.ThiefTitleLevel1":
-                    return LanguageMgr.GetTranslation(player.Client.Account.Language, "PlayerStatistic.Bonus.ThiefTitleLevel1");
-                case "DOL.GS.PlayerTitles.ThiefTitleLevel2":
-                    return LanguageMgr.GetTranslation(player.Client.Account.Language, "PlayerStatistic.Bonus.ThiefTitleLevel2");
-                case "DOL.GS.PlayerTitles.ThiefTitleLevel3":
-                    return LanguageMgr.GetTranslation(player.Client.Account.Language, "PlayerStatistic.Bonus.ThiefTitleLevel3");
-                case "DOL.GS.PlayerTitles.ThiefTitleLevel4":
-                    return LanguageMgr.GetTranslation(player.Client.Account.Language, "PlayerStatistic.Bonus.ThiefTitleLevel4");
-                case "DOL.GS.PlayerTitles.ThiefTitleLevel5":
-                    return LanguageMgr.GetTranslation(player.Client.Account.Language, "PlayerStatistic.Bonus.ThiefTitleLevel5");
-                case "DOL.GS.PlayerTitles.BountyhunterTitleLevel1":
-                    return LanguageMgr.GetTranslation(player.Client.Account.Language, "PlayerStatistic.Bonus.BountyhunterTitleLevel1");
-                case "DOL.GS.PlayerTitles.BountyhunterTitleLevel2":
-                    return LanguageMgr.GetTranslation(player.Client.Account.Language, "PlayerStatistic.Bonus.BountyhunterTitleLevel2");
-                case "DOL.GS.PlayerTitles.BountyhunterTitleLevel3":
-                    return LanguageMgr.GetTranslation(player.Client.Account.Language, "PlayerStatistic.Bonus.BountyhunterTitleLevel3");
-                case "DOL.GS.PlayerTitles.BountyhunterTitleLevel4":
-                    return LanguageMgr.GetTranslation(player.Client.Account.Language, "PlayerStatistic.Bonus.BountyhunterTitleLevel4");
-                case "DOL.GS.PlayerTitles.BountyhunterTitleLevel5":
-                    return LanguageMgr.GetTranslation(player.Client.Account.Language, "PlayerStatistic.Bonus.BountyhunterTitleLevel5");
                 case "DOL.GS.PlayerTitles.WrathTitleLevel1":
                     return LanguageMgr.GetTranslation(player.Client.Account.Language, "PlayerStatistic.Bonus.WrathTitleLevel1");
                 case "DOL.GS.PlayerTitles.WrathTitleLevel2":
