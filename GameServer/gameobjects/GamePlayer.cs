@@ -8021,7 +8021,7 @@ namespace DOL.GS
                 if (DPS > cap)
                     DPS = cap;
 
-                double result = DPS * weapon.SPD_ABS * 0.03 * (0.94 + 0.003 * weapon.SPD_ABS);
+                double result = DPS * (GetModified(eProperty.DPS) * 0.01) * weapon.SPD_ABS * 0.03 * (0.94 + 0.003 * weapon.SPD_ABS);
 
                 if (weapon.Hand == 1) //2h
                 {
@@ -8071,7 +8071,10 @@ namespace DOL.GS
             }
             else
             { // TODO: whats the damage cap without weapon?
-                return (AttackDamage(weapon) * 3 * (1 + (AttackSpeed(weapon) * 0.001 - 2) * .03)) * GetModified(eProperty.MeleeDamage) * 0.01;
+                return
+                    (AttackDamage(weapon) * 3 * (1 + (AttackSpeed(weapon) * 0.001 - 2) * .03))
+                    * GetModified(eProperty.MeleeDamage) * 0.01
+                    * GetModified(eProperty.DPS) * 0.01;
             }
         }
 
