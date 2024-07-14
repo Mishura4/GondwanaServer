@@ -3026,10 +3026,7 @@ namespace DOL.GS
                 _ => 1.0f
             };
 
-            tension *= armorMultiplier;
-            tension = (int)((server_rate * tension * ad.TensionRate * rate * CurrentZone.TensionRate * guildBuffMultiplier) + 0.5f); // Round up
-
-            Tension += (int)tension;
+            Tension += (int)Math.Round(server_rate * tension * armorMultiplier * ad.TensionRate * rate * CurrentZone.TensionRate * guildBuffMultiplier);
         }
 
         /// <summary>
@@ -8614,7 +8611,7 @@ namespace DOL.GS
             int lossReduction = GetModified(eProperty.TensionConservationBonus);
             if (lossReduction <= 100)
             {
-                Tension = (int)(Tension * (0.40 * (100 - lossReduction) / 100) + 0.5);
+                Tension -= (int)(Tension * (0.40 * (100 - lossReduction) / 100) + 0.5);
             }
 
             // then buffs drop messages
