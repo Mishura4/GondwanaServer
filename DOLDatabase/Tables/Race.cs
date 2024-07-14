@@ -38,7 +38,7 @@ namespace DOL.Database
         protected sbyte m_ResistSpirit;
         protected sbyte m_ResistThrust;
         protected sbyte m_DamageType;
-        protected float m_MaxTensionFactor;
+        protected float? m_MaxTensionFactor;
 
         public Race() : base()
         {
@@ -177,8 +177,8 @@ namespace DOL.Database
             }
         }
 
-        [DataElement(AllowDbNull = false)]
-        public float MaxTensionFactor
+        [DataElement(AllowDbNull = true)]
+        public float? MaxTensionFactor
         {
             get { return m_MaxTensionFactor; }
             set

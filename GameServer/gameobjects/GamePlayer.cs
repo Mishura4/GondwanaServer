@@ -3166,9 +3166,9 @@ namespace DOL.GS
 
             float maxTension = Properties.PLAYER_BASE_MAXTENSION;
             Race race = GameServer.Database.SelectObject<Race>(DB.Column(nameof(Database.Race.ID)).IsEqualTo(Race));
-            if (race != null)
+            if (race?.MaxTensionFactor != null)
             {
-                maxTension *= race.MaxTensionFactor;
+                maxTension *= race.MaxTensionFactor.Value;
             }
             maxTension *= CharacterClass.MaxTensionFactor;
             DBCharacter.MaxTension = (int)maxTension;
