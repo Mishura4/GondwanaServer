@@ -2228,32 +2228,8 @@ namespace DOL.GS.ServerRules
             {
                 return LanguageMgr.GetTranslation(player.Client.Account.Language, "PlayerStatistic.TitleNone");
             }
-
-            switch (title.GetType().FullName)
-            {
-                case "DOL.GS.PlayerTitles.WrathTitleLevel1":
-                    return LanguageMgr.GetTranslation(player.Client.Account.Language, "PlayerStatistic.Bonus.WrathTitleLevel1");
-                case "DOL.GS.PlayerTitles.WrathTitleLevel2":
-                    return LanguageMgr.GetTranslation(player.Client.Account.Language, "PlayerStatistic.Bonus.WrathTitleLevel2");
-                case "DOL.GS.PlayerTitles.WrathTitleLevel3":
-                    return LanguageMgr.GetTranslation(player.Client.Account.Language, "PlayerStatistic.Bonus.WrathTitleLevel3");
-                case "DOL.GS.PlayerTitles.WrathTitleLevel4":
-                    return LanguageMgr.GetTranslation(player.Client.Account.Language, "PlayerStatistic.Bonus.WrathTitleLevel4");
-                case "DOL.GS.PlayerTitles.WrathTitleLevel5":
-                    return LanguageMgr.GetTranslation(player.Client.Account.Language, "PlayerStatistic.Bonus.WrathTitleLevel5");
-                case "DOL.GS.PlayerTitles.AdventurerTitleLevel1":
-                    return LanguageMgr.GetTranslation(player.Client.Account.Language, "PlayerStatistic.Bonus.AdventurerTitleLevel1");
-                case "DOL.GS.PlayerTitles.AdventurerTitleLevel2":
-                    return LanguageMgr.GetTranslation(player.Client.Account.Language, "PlayerStatistic.Bonus.AdventurerTitleLevel2");
-                case "DOL.GS.PlayerTitles.AdventurerTitleLevel3":
-                    return LanguageMgr.GetTranslation(player.Client.Account.Language, "PlayerStatistic.Bonus.AdventurerTitleLevel3");
-                case "DOL.GS.PlayerTitles.AdventurerTitleLevel4":
-                    return LanguageMgr.GetTranslation(player.Client.Account.Language, "PlayerStatistic.Bonus.AdventurerTitleLevel4");
-                case "DOL.GS.PlayerTitles.AdventurerTitleLevel5":
-                    return LanguageMgr.GetTranslation(player.Client.Account.Language, "PlayerStatistic.Bonus.AdventurerTitleLevel5");
-                default:
-                    return title.GetStatsTranslation(player.Client.Account.Language);
-            }
+            
+            return title.GetStatsTranslation(player.Client.Account.Language);
         }
 
         /// <summary>

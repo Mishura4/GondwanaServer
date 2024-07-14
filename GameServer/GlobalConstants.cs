@@ -834,7 +834,8 @@ namespace DOL.GS
         RobberyDelayReduction = 257,
         StealthEffectivenessBonus = 258,
         StealthDetectionBonus = 259,
-        MaxProperty = 259
+        TensionConservationBonus = 260,
+        MaxProperty = 260
     }
 
     /// <summary>

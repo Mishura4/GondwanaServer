@@ -8611,7 +8611,12 @@ namespace DOL.GS
             }
 
             // Lose 40% tension
-            Tension = (int)(Tension * 0.40 + 0.5);
+            int lossReduction = GetModified(eProperty.TensionConservationBonus);
+            if (lossReduction <= 100)
+            {
+                Tension = (int)(Tension * (0.40 * (100 - lossReduction) / 100) + 0.5);
+            }
+
             // then buffs drop messages
             base.Die(killer);
 

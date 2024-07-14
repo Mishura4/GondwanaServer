@@ -49,13 +49,5 @@ PlayerStatistic.Bonus.DemonslayerTitle:         +{0}% DPS in melee / +{1}% spell
 PlayerStatistic.Bonus.TraderTitle:              {0:0.##}% discount with all merchants
 PlayerStatistic.Bonus.ThiefTitle:               +{0}% Robbery Chance / -{1}% Robbery Cooldown
 PlayerStatistic.Bonus.BountyhunterTitle:        +{0}% Robbery Resist / +{1}% Stealth Detection
-PlayerStatistic.Bonus.WrathTitleLevel1:			+3% Tension Increase / -5% tension loss at death
-PlayerStatistic.Bonus.WrathTitleLevel2:			+6% Tension Increase / -10% tension loss at death
-PlayerStatistic.Bonus.WrathTitleLevel3:			+9% Tension Increase / -15% tension loss at death
-PlayerStatistic.Bonus.WrathTitleLevel4:			+12% Tension Increase / -20% tension loss at death
-PlayerStatistic.Bonus.WrathTitleLevel5:			+15% Tension Increase / -25% tension loss at death
-PlayerStatistic.Bonus.AdventurerTitleLevel1:	+3% walking & swimming Max Speed / +2% Casting-Archery range
-PlayerStatistic.Bonus.AdventurerTitleLevel2:	+6% walking & swimming Max Speed / +4% Casting-Archery range
-PlayerStatistic.Bonus.AdventurerTitleLevel3:	+9% walking & swimming Max Speed / +6% Casting-Archery range
-PlayerStatistic.Bonus.AdventurerTitleLevel4:	+12% walking & swimming Max Speed / +8% Casting-Archery range
-PlayerStatistic.Bonus.AdventurerTitleLevel5:	+15% walking & swimming Max Speed / +10% Casting-Archery range
+PlayerStatistic.Bonus.WrathTitle:               +{0}% Tension Increase / -{1}% Tension lost on death
+PlayerStatistic.Bonus.Adventurer:               +{0}% walking & swimming Max Speed / +{1}% Casting-Archery range
