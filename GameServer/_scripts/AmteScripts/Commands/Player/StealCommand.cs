@@ -132,7 +132,7 @@ namespace DOL.GS.Commands
                 float chance = (specLevel * 100) / stealer.Level;
                 var rand = new Random(DateTime.Now.Millisecond);
                 float resist = target.GetModified(eProperty.RobberyResist) / 100.0f;
-                float bonusChance = target.GetModified(eProperty.RobberyChanceBonus);
+                float bonusChance = stealer.GetModified(eProperty.RobberyChanceBonus);
                 chance += bonusChance;
                 chance *= 1.0f - resist;
 
