@@ -20,6 +20,7 @@ using System;
 using DOL.AI.Brain;
 using DOL.GS.PacketHandler;
 using DOL.GS.Effects;
+using DOL.GS.PlayerTitles;
 using DOL.GS.RealmAbilities;
 using DOL.GS.Spells;
 using System.Linq;
@@ -51,8 +52,7 @@ namespace DOL.GS.PropertyCalc
             if (living.IsMezzed || living.IsStunned) return 0;
 
             double speed = living.BuffBonusMultCategory1.Get((int)property);
-            int itemSpeedBonus = living.ItemBonus[(int)property];
-            itemSpeedBonus = Math.Min(250, itemSpeedBonus); // Cap item bonus at 250pts
+            int itemSpeedBonus = Math.Min(250, living.ItemBonus[(int)property]); // Cap item bonus at 250pts
 
             if (living is GamePlayer)
             {
@@ -75,6 +75,11 @@ namespace DOL.GS.PropertyCalc
                 {
                     if (speed < 1.25 && speed >= 1)
                         speed = 1.25; // new run speed is 125% when no buff
+                }
+
+                if (player.CurrentTitle is AdventurerTitle title)
+                {
+                    speed *= 1.0 + (title.MaxSpeedBonus / 100.0f);
                 }
 
                 if (player.IsOverencumbered && player.Client.Account.PrivLevel < 2 && ServerProperties.Properties.ENABLE_ENCUMBERANCE_SPEED_LOSS)

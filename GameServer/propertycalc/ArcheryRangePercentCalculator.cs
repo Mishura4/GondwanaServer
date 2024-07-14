@@ -45,6 +45,7 @@ namespace DOL.GS.PropertyCalc
 
             int item = Math.Max(0, 100
                 - debuff
+                + living.BaseBuffBonusCategory[(int)property]
                 + Math.Min(10, living.ItemBonus[(int)property]));// http://www.camelotherald.com/more/1325.shtml
 
             int ra = 0;

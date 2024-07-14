@@ -16082,21 +16082,28 @@ namespace DOL.GS
             {
                 if (value == null)
                     value = PlayerTitleMgr.ClearTitle;
-                m_currentTitle.OnTitleDeselect(this);
-                m_currentTitle = value;
-                value.OnTitleSelect(this);
-                
-                if (DBCharacter != null) DBCharacter.CurrentTitleType = value.GetType().FullName;
-
-                //update newTitle for all players if client is playing
-                if (ObjectState == eObjectState.Active)
+                var old = m_currentTitle;
+                if (old != value)
                 {
-                    if (value == PlayerTitleMgr.ClearTitle)
-                        Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.CurrentTitle.TitleCleared"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                    else
-                        Out.SendMessage("Your title has been set to " + value.GetDescription(this) + '.', eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    m_currentTitle = value;
+                    
+                    old.OnTitleDeselect(this);
+                    value.OnTitleSelect(this);
+                
+                    if (DBCharacter != null) DBCharacter.CurrentTitleType = value.GetType().FullName;
+
+                    //update newTitle for all players if client is playing
+                    if (ObjectState == eObjectState.Active)
+                    {
+                        if (value == PlayerTitleMgr.ClearTitle)
+                            Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.CurrentTitle.TitleCleared"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        else
+                            Out.SendMessage("Your title has been set to " + value.GetDescription(this) + '.', eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    }
+                    UpdateCurrentTitle();
                 }
-                UpdateCurrentTitle();
+                else
+                    Out.SendMessage("Your title has been set to " + value.GetDescription(this) + '.', eChatType.CT_System, eChatLoc.CL_SystemWindow);
             }
         }
         
