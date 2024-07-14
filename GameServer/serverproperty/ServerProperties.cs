@@ -205,6 +205,7 @@ namespace DOL.GS.ServerProperties
         /// </summary>
         [ServerProperty("system", "debug_load_regions", "Serialized list of region IDs that will load objects, separated by semi-colon (leave this blank to load all regions normally)", "")]
         public static string DEBUG_LOAD_REGIONS;
+        
 
         /// <summary>
         /// A serialised list of disabled expansion IDs

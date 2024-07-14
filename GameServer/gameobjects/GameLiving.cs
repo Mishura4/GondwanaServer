@@ -1842,6 +1842,7 @@ namespace DOL.GS
                 ad.dmgMod = Math.Round(damageMod, 3);
                 ad.enemyAF = Math.Round(enemyArmorFactor, 3);
                 ad.enemyABS = Math.Round(enemyArmorAbsorb, 3);
+                ad.weaponSkillFactor = Math.Round(weaponSkillFactor, 3);
                 ad.weaponStat = Math.Round(dmgStat, 3);
 
 

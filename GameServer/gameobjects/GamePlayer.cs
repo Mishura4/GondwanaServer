@@ -7138,6 +7138,11 @@ namespace DOL.GS
             if (CombatInfo)
                 Out.SendMessage($"CombatInfo: result:{ad.AttackResult} dmg={ad.Damage} crits={ad.CriticalDamage} style dmg={ad.StyleDamage} uncap dmg={ad.UncappedDamage} weapon dmg={ad.weaponDamage:F1} mod={ad.dmgMod:F1}", eChatType.CT_System, eChatLoc.CL_SystemWindow);
 
+            if (Client.Account.PrivLevel > 1 && ServerProperties.Properties.ENABLE_DEBUG)
+            {
+                SendAttackDetails(ad);
+            }
+
             //Clear the styles for the next round!
             NextCombatStyle = null;
             NextCombatBackupStyle = null;
@@ -7504,6 +7509,21 @@ namespace DOL.GS
                 Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Attack.InterruptedCrafting"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 StopCrafting();
             }
+
+            if (Client.Account.PrivLevel > 1 && ServerProperties.Properties.ENABLE_DEBUG)
+            {
+                SendAttackDetails(ad);
+            }
+        }
+
+        private void SendAttackDetails(AttackData ad)
+        {
+            Client.Out.SendMessage($"---- Attack ({ad.AttackType}) {ad.Attacker?.Name} => {ad.Target?.Name} ----", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            Client.Out.SendMessage($"DEBUG: Damage {ad.Damage} {ad.DamageType} (uncapped {ad.UncappedDamage}) - Critical {ad.CriticalDamage} ({ad.criticalChance}%)", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            Client.Out.SendMessage($"DEBUG: Miss {(ad.MissChance ?? 0):0.##}% - Parry {(ad.ParryChance ?? 0):0.##}% - Evade {(ad.EvadeChance ?? 0):0.##}% - Block {(ad.BlockChance ?? 0):0.##}% - Fumble {(ad.FumbleChance ?? 0):0.##}%", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            Client.Out.SendMessage($"DEBUG: Weapon damage {ad.weaponDamage} - Style damage {ad.StyleDamage}", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            Client.Out.SendMessage($"DEBUG: Wep stat {ad.weaponStat} Wep skill {ad.weaponSkillFactor} AF {ad.enemyAF:0.##} ABS {ad.enemyABS:0.##} Res {ad.enemyResist:0.##} => Damage * {ad.dmgMod}", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            Client.Out.SendMessage($"DEBUG: Tension rate {ad.TensionRate:0.##}", eChatType.CT_System, eChatLoc.CL_SystemWindow);
         }
 
 

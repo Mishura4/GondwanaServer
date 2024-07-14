@@ -58,6 +58,7 @@ namespace DOL.GS
         public double enemyResist = 0;
         public double weaponStat = 0;
         public int criticalChance = 0;
+        public double weaponSkillFactor = 0;
 
         // attack fail chances
         public double? FumbleChance
