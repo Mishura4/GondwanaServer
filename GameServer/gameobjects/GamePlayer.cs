@@ -8071,7 +8071,7 @@ namespace DOL.GS
             }
             else
             { // TODO: whats the damage cap without weapon?
-                return AttackDamage(weapon) * 3 * (1 + (AttackSpeed(weapon) * 0.001 - 2) * .03);
+                return (AttackDamage(weapon) * 3 * (1 + (AttackSpeed(weapon) * 0.001 - 2) * .03)) * GetModified(eProperty.MeleeDamage) * 0.01;
             }
         }
 
