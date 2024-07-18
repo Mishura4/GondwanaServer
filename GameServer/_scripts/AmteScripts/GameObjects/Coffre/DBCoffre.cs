@@ -100,6 +100,10 @@ namespace DOL.Database
         private string m_activatedbyswitchoff;
         private string m_resetbyswitchon;
         private string m_resetbyswitchoff;
+        private int m_switchonsound;
+        private int m_wrongfamilyordersound;
+        private int m_activatedfamilysound;
+        private int m_deactivatedfamilysound;
 
         [DataElement(AllowDbNull = false)]
         public string Name
@@ -747,6 +751,50 @@ namespace DOL.Database
             {
                 Dirty = true;
                 m_resetbyswitchoff = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = true)]
+        public int SwitchOnSound
+        {
+            get { return m_switchonsound; }
+            set
+            {
+                Dirty = true;
+                m_switchonsound = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = true)]
+        public int WrongFamilyOrderSound
+        {
+            get { return m_wrongfamilyordersound; }
+            set
+            {
+                Dirty = true;
+                m_wrongfamilyordersound = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = true)]
+        public int ActivatedFamilySound
+        {
+            get { return m_activatedfamilysound; }
+            set
+            {
+                Dirty = true;
+                m_activatedfamilysound = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = true)]
+        public int DeactivatedFamilySound
+        {
+            get { return m_deactivatedfamilysound; }
+            set
+            {
+                Dirty = true;
+                m_deactivatedfamilysound = value;
             }
         }
     }

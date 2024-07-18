@@ -16,6 +16,7 @@ namespace DOLDatabase.Tables
         private int m_spellEffect;
         private string m_itemTemplateId;
         private int m_craftingSkill;
+        private string m_secondaryCraftingSkill;
         private int m_craftingValue;
         private int m_rewardCraftingSkills;
         private string m_areaId;
@@ -29,6 +30,7 @@ namespace DOLDatabase.Tables
         private short m_ToolLoseDur;
         private string m_CombinationID;
         private bool m_allowVersion;
+        private bool m_doNotUpdateTask;
 
         [DataElement(AllowDbNull = false)]
         public string ItemsIds
@@ -78,6 +80,17 @@ namespace DOLDatabase.Tables
             {
                 m_craftingSkill = value;
                 Dirty = true;
+            }
+        }
+
+        [DataElement(AllowDbNull = true)]
+        public string SecondaryCraftingSkill
+        {
+            get => m_secondaryCraftingSkill;
+            set
+            {
+                Dirty = true;
+                m_secondaryCraftingSkill = value;
             }
         }
 
@@ -260,6 +273,17 @@ namespace DOLDatabase.Tables
             {
                 Dirty = true;
                 m_allowVersion = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public bool DoNotUpdateTask
+        {
+            get => m_doNotUpdateTask;
+            set
+            {
+                Dirty = true;
+                m_doNotUpdateTask = value;
             }
         }
     }

@@ -27,6 +27,7 @@ using DOL.GS.PacketHandler.Client.v168;
 using DOL.AI.Brain;
 using log4net;
 using DOL.GS.Finance;
+using System.Numerics;
 
 namespace DOL.GS
 {
@@ -217,12 +218,13 @@ namespace DOL.GS
 
             houseRequired = false;
             base.AddToWorld();
-
+            playerOwner.Out.SendSoundEffect(9205, playerOwner.Position, 0);
             return true;
         }
 
         public override void Delete()
         {
+            playerOwner.Out.SendSoundEffect(923, playerOwner.Position, 0);
             tableModel.Delete();
             base.Delete();
         }

@@ -82,31 +82,31 @@ namespace DOL.GS.Scripts
                 {
                     cost = 450;
                     time = TimeSpan.FromHours(16);
-                    reason = "Hors-la-loi";
+                    reason = LanguageMgr.GetTranslation(args.GamePlayer.Client.Account.Language, "GameJail.ReputNeg01");
                 }
                 else if (args.OriginalReputation == -2)
                 {
                     cost = 900;
                     time = TimeSpan.FromHours(32);
-                    reason = "Bandit";
+                    reason = LanguageMgr.GetTranslation(args.GamePlayer.Client.Account.Language, "GameJail.ReputNeg02");
                 }
                 else if (args.OriginalReputation == -3)
                 {
                     cost = 1800;
                     time = TimeSpan.FromHours(48);
-                    reason = "Bandit-Lieutenant";
+                    reason = LanguageMgr.GetTranslation(args.GamePlayer.Client.Account.Language, "GameJail.ReputNeg03");
                 }
                 else if (args.OriginalReputation == -4)
                 {
                     cost = 3600;
                     time = TimeSpan.FromHours(72);
-                    reason = "Consiglière";
+                    reason = LanguageMgr.GetTranslation(args.GamePlayer.Client.Account.Language, "GameJail.ReputNeg04");
                 }
                 else if (args.OriginalReputation <= -5)
                 {
                     cost = 7200;
                     time = TimeSpan.FromHours(96);
-                    reason = "Parrain";
+                    reason = LanguageMgr.GetTranslation(args.GamePlayer.Client.Account.Language, "GameJail.ReputNeg05");
                 }
                 else
                 {
@@ -272,8 +272,9 @@ namespace DOL.GS.Scripts
             Animation(player);
 
             if (JailRP)
-                player.Out.SendMessage("Vous avez été mis en prison pour vos actes" + (jailer != null ? " par " + jailer : "") + ". Votre caution s'éleve à " + cost + " Or. Pour sortir, demandez à quelqu'un de payer votre caution à Stronghold, le gardien de la prison.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-            else player.Out.SendMessage("Vous avez été mis en prison pour HRP" + (jailer != null ? " par " + jailer : "") + ". Vous devez attendre la fin de votre durée d'emprisonnement en temps réel pour sortir automatiquement.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameJail.JailedRP", jailer, cost), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+            else
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameJail.JailedHRP", jailer), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
 
 
             string message = "";

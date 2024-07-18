@@ -165,6 +165,11 @@ namespace DOL.GameEvents
             AreaStartingId = !string.IsNullOrEmpty(db.AreaStartingId) ? db.AreaStartingId : null;
             QuestStartingId = !string.IsNullOrEmpty(db.QuestStartingId) ? db.QuestStartingId : null;
             ParallelLaunch = db.ParallelLaunch;
+            StartEventSound = db.StartEventSound;
+            RandomEventSound = db.RandomEventSound;
+            RemainingTimeEvSound = db.RemainingTimeEvSound;
+            EndEventSound = db.EndEventSound;
+            TPPointID = db.TPPointID;
 
             // get kes from string[] db.EventFamily, and set values to false 
             if (db.EventFamily != null)
@@ -217,9 +222,24 @@ namespace DOL.GameEvents
             }
         }
 
+        private IEnumerable<GamePlayer> GetPlayersInEventZones(IEnumerable<string> eventZones)
+        {
+            return WorldMgr.GetAllPlayingClients()
+                .Where(c => eventZones.Contains(c.Player.CurrentZone.ID.ToString()))
+                .Select(c => c.Player);
+        }
+
         private void RemainingTimeTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             GameEventManager.NotifyPlayersInEventZones(this.AnnonceType, this.RemainingTimeText, this.EventZones);
+
+            if (this.RemainingTimeEvSound > 0)
+            {
+                foreach (var player in GetPlayersInEventZones(this.EventZones))
+                {
+                    player.Out.SendSoundEffect((ushort)this.RemainingTimeEvSound, player.Position, 0);
+                }
+            }
         }
 
         private void RandomTextTimer_Elapsed(object sender, ElapsedEventArgs e)
@@ -228,6 +248,16 @@ namespace DOL.GameEvents
             int index = rand.Next(0, this.RandomText.Count());
 
             GameEventManager.NotifyPlayersInEventZones(this.AnnonceType, RandomText.ElementAt(index), this.EventZones);
+
+            if (!string.IsNullOrEmpty(this.RandomEventSound))
+            {
+                var sounds = this.RandomEventSound.Split('|').Select(int.Parse).ToArray();
+                int soundIndex = rand.Next(0, sounds.Length);
+                foreach (var player in GetPlayersInEventZones(this.EventZones))
+                {
+                    player.Out.SendSoundEffect((ushort)sounds[soundIndex], player.Position, 0);
+                }
+            }
         }
 
         private void ResetFamilyTimer_Elapsed(object sender, ElapsedEventArgs e)
@@ -400,6 +430,8 @@ namespace DOL.GameEvents
             set;
         }
 
+        public int StartEventSound { get; set; }
+
         public string EndActionStartEventID
         {
             get;
@@ -418,6 +450,8 @@ namespace DOL.GameEvents
             set;
         }
 
+        public string RandomEventSound { get; set; }
+
         public TimeSpan? RandTextInterval
         {
             get;
@@ -430,6 +464,8 @@ namespace DOL.GameEvents
             set;
         }
 
+        public int RemainingTimeEvSound { get; set; }
+
         public TimeSpan? RemainingTimeInterval
         {
             get;
@@ -441,6 +477,8 @@ namespace DOL.GameEvents
             get;
             set;
         }
+
+        public int EndEventSound { get; set; }
 
         public EventStatus Status
         {
@@ -508,6 +546,8 @@ namespace DOL.GameEvents
             set;
         }
 
+        public int? TPPointID { get; set; }
+
         public GamePlayer Owner { get => owner; set => owner = value; }
 
         public void Clean()
@@ -567,6 +607,11 @@ namespace DOL.GameEvents
             db.InstancedConditionType = (int)InstancedConditionType;
             db.AreaStartingId = AreaStartingId;
             db.QuestStartingId = QuestStartingId;
+            db.StartEventSound = StartEventSound;
+            db.RandomEventSound = RandomEventSound;
+            db.RemainingTimeEvSound = RemainingTimeEvSound;
+            db.EndEventSound = EndEventSound;
+            db.TPPointID = TPPointID;
 
             if (ID == null)
             {

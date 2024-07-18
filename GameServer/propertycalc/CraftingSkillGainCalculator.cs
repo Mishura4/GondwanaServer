@@ -33,7 +33,7 @@ namespace DOL.GS.PropertyCalc
             int value = living.BuffBonusCategory4[eProperty.CraftingSkillGain];
             if (living is GamePlayer)
             {
-                value += Math.Min(100, living.ItemBonus[(int)property]); // cap 100% from items
+                value += Math.Min(200, living.ItemBonus[(int)property]); // cap 200% from items
             }
             value -= living.DebuffCategory[eProperty.CraftingSkillGain];
             return Math.Max(0, value); // Ensuring the gain is not negative

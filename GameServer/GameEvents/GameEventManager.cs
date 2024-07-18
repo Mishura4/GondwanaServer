@@ -2,6 +2,7 @@
 using DOL.events.server;
 using DOL.Events;
 using DOL.GS;
+using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
 using DOL.GS.ServerProperties;
 using DOL.MobGroups;
@@ -11,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Numerics;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -701,6 +703,13 @@ namespace DOL.GameEvents
             ev.SaveToDatabase();
         }
 
+        private IEnumerable<GamePlayer> GetPlayersInEventZones(IEnumerable<string> eventZones)
+        {
+            return WorldMgr.GetAllPlayingClients()
+                .Where(c => eventZones.Contains(c.Player.CurrentZone.ID.ToString()))
+                .Select(c => c.Player);
+        }
+
         public async Task<bool> StartEvent(GameEvent ev, AreaGameEvent areaEvent = null, GamePlayer startingPlayer = null)
         {
             //temporarly disable
@@ -819,6 +828,14 @@ namespace DOL.GameEvents
             foreach (var e in events)
             {
                 StartEventSetup(e);
+
+                if (e.StartEventSound > 0)
+                {
+                    foreach (var player in GetPlayersInEventZones(e.EventZones))
+                    {
+                        player.Out.SendSoundEffect((ushort)e.StartEventSound, player.Position, 0);
+                    }
+                }
             }
 
             //need give more time to client after addtoworld to perform animation
@@ -1065,6 +1082,14 @@ namespace DOL.GameEvents
                     SendEventNotification(e, message, (e.Discord == 2 || e.Discord == 3));
                 }
 
+                foreach (var player in GetPlayersInEventZones(e.EventZones))
+                {
+                    if (e.EndEventSound > 0)
+                    {
+                        player.Out.SendSoundEffect((ushort)e.EndEventSound, player.Position, 0);
+                    }
+                }
+
                 //Enjoy the message
                 await Task.Delay(TimeSpan.FromSeconds(5));
             }
@@ -1193,6 +1218,46 @@ namespace DOL.GameEvents
                 return;
             }
 
+            if (action == EndingAction.JumpToTPPoint)
+            {
+                if (!startingEvent.TPPointID.HasValue)
+                {
+                    log.Error($"Event {startingEvent.ID} has JumpToTPPoint action but no TPPointID is set.");
+                    return;
+                }
+
+                IList<DBTPPoint> tpPoints = GameServer.Database.SelectObjects<DBTPPoint>(DB.Column("TPID").IsEqualTo(startingEvent.TPPointID.Value));
+                DBTP dbtp = GameServer.Database.SelectObjects<DBTP>(DB.Column("TPID").IsEqualTo(startingEvent.TPPointID.Value)).FirstOrDefault();
+
+                if (tpPoints != null && tpPoints.Count > 0 && dbtp != null)
+                {
+                    TPPoint tpPoint = null;
+                    switch ((eTPPointType)dbtp.TPType)
+                    {
+                        case eTPPointType.Loop:
+                            tpPoint = GetLoopNextTPPoint(dbtp.TPID, tpPoints);
+                            break;
+
+                        case eTPPointType.Random:
+                            tpPoint = GetRandomTPPoint(tpPoints);
+                            break;
+
+                        case eTPPointType.Smart:
+                            tpPoint = GetSmartNextTPPoint(tpPoints);
+                            break;
+                    }
+
+                    if (tpPoint != null)
+                    {
+                        foreach (var cl in WorldMgr.GetAllPlayingClients().Where(c => zones.Contains(c.Player.CurrentZone.ID.ToString())))
+                        {
+                            cl.Player.MoveTo(Position.Create(tpPoint.Region, tpPoint.Position.X, tpPoint.Position.Y, tpPoint.Position.Z));
+                        }
+                    }
+                }
+                return;
+            }
+
             if (startEventId != null && startingEvent.Status != EventStatus.EndedByTimer)
             {
                 var ev = Instance.Events.FirstOrDefault(e => e.ID.Equals(startEventId));
@@ -1265,6 +1330,46 @@ namespace DOL.GameEvents
                     this.ResetEventsFromId(resetEventId);
                 }
             }
+        }
+
+        private Dictionary<int, int> tpPointSteps = new Dictionary<int, int>();
+
+        private TPPoint GetSmartNextTPPoint(IList<DBTPPoint> tpPoints)
+        {
+            TPPoint smartNextPoint = null;
+            int maxPlayerCount = 0;
+
+            foreach (var tpPoint in tpPoints)
+            {
+                int playerCount = WorldMgr.GetPlayersCloseToSpot(Position.Create(tpPoint.Region, tpPoint.X, tpPoint.Y, tpPoint.Z), 1500).OfType<GamePlayer>().Count(); // Using 1500 directly
+                if (playerCount > maxPlayerCount)
+                {
+                    maxPlayerCount = playerCount;
+                    smartNextPoint = new TPPoint(tpPoint.Region, tpPoint.X, tpPoint.Y, tpPoint.Z, eTPPointType.Smart, tpPoint);
+                }
+            }
+
+            return smartNextPoint ?? new TPPoint(tpPoints.First().Region, tpPoints.First().X, tpPoints.First().Y, tpPoints.First().Z, eTPPointType.Smart, tpPoints.First());
+        }
+
+        private TPPoint GetLoopNextTPPoint(int tpid, IList<DBTPPoint> tpPoints)
+        {
+            if (!tpPointSteps.ContainsKey(tpid))
+            {
+                tpPointSteps[tpid] = 1;
+            }
+
+            int currentStep = tpPointSteps[tpid];
+            DBTPPoint currentDBTPPoint = tpPoints.FirstOrDefault(p => p.Step == currentStep) ?? tpPoints.First();
+            TPPoint tpPoint = new TPPoint(currentDBTPPoint.Region, currentDBTPPoint.X, currentDBTPPoint.Y, currentDBTPPoint.Z, eTPPointType.Loop, currentDBTPPoint);
+            tpPointSteps[tpid] = (currentStep % tpPoints.Count) + 1;
+            return tpPoint;
+        }
+
+        private TPPoint GetRandomTPPoint(IList<DBTPPoint> tpPoints)
+        {
+            DBTPPoint randomDBTPPoint = tpPoints[Util.Random(tpPoints.Count - 1)];
+            return new TPPoint(randomDBTPPoint.Region, randomDBTPPoint.X, randomDBTPPoint.Y, randomDBTPPoint.Z, eTPPointType.Random, randomDBTPPoint);
         }
 
         public static void NotifyPlayersInEventZones(AnnonceType annonceType, string message, IEnumerable<string> zones)

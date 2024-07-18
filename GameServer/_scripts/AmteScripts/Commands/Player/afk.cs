@@ -48,17 +48,17 @@ namespace DOL.GS.Commands
                 {
                     client.Player.PlayerAfkMessage = string.Join(" ",
                         args, 1, args.Length - 1);
-                    client.Out.SendMessage("Vous etes désormais afk avec le message: " + client.Player.PlayerAfkMessage, PacketHandler.eChatType.CT_Chat, PacketHandler.eChatLoc.CL_SystemWindow);
+                    client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.Players.Afk.Message", client.Player.PlayerAfkMessage), PacketHandler.eChatType.CT_Chat, PacketHandler.eChatLoc.CL_SystemWindow);
                 }
                 else
                 {
                     client.Player.PlayerAfkMessage = "AFK";
-                    client.Out.SendMessage("Vous êtes en mode AFK, déplacez-vous à nouveau pour le désactiver.", PacketHandler.eChatType.CT_Chat, PacketHandler.eChatLoc.CL_SystemWindow);
+                    client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.Players.Afk.Mode"), PacketHandler.eChatType.CT_Chat, PacketHandler.eChatLoc.CL_SystemWindow);
                 }
             }
             else
             {
-                client.Out.SendMessage("Vous devez attendre avant de pouvoir etre afk de nouveau.", PacketHandler.eChatType.CT_Chat, PacketHandler.eChatLoc.CL_SystemWindow);
+                client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.Players.Afk.Wait"), PacketHandler.eChatType.CT_Chat, PacketHandler.eChatLoc.CL_SystemWindow);
             }
         }
     }

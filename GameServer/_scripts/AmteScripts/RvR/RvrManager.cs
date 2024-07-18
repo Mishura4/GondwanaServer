@@ -136,8 +136,7 @@ namespace AmteScripts.Managers
         /// <summary>
         /// &lt;regionID, Tuple&lt;TPs, spawnAlb, spawnMid, spawnHib&gt;&gt;
         /// </summary>
-        private readonly Dictionary<string, RvRMap> _maps =
-            new Dictionary<string, RvRMap>();
+        private readonly Dictionary<string, RvRMap> _maps = new Dictionary<string, RvRMap>();
 
         private RvrManager()
         {
@@ -370,7 +369,7 @@ namespace AmteScripts.Managers
 
                 var areaName = string.IsNullOrEmpty(lord.GuildName) ? initNpc.Name : lord.GuildName;
                 var area = new Area.Circle(areaName, lord.Position.X, lord.Position.Y, lord.Position.Z, RVR_RADIUS);
-                rvrTerritory = new RvRTerritory(lord.CurrentZone, new List<IArea>{area}, area.Description, lord,  area.Coordinate, lord.CurrentRegionID, null);
+                rvrTerritory = new RvRTerritory(lord.CurrentZone, new List<IArea> { area }, area.Description, lord, area.Coordinate, lord.CurrentRegionID, null);
             }
 
             return new RvRMap()
@@ -652,7 +651,7 @@ namespace AmteScripts.Managers
                 var championPlayer = Kills.FirstOrDefault(kvp => kvp.Key.Name == champion).Key;
                 if (championPlayer != null)
                 {
-                    TaskManager.UpdateTaskProgress(championPlayer, "RvRChampionOfTheDay", 1); // Increment RvRChampionOfTheDay task progress
+                    TaskManager.UpdateTaskProgress(championPlayer, "RvRChampionOfTheDay", 1);
                 }
                 NewsMgr.CreateNews("GameObjects.GamePlayer.RvR.Champion", 0, eNewsType.RvRGlobal, false, true, countKilledPlayers, champion, maxKills);
                 message += string.Format(LanguageMgr.GetTranslation("EN", "GameObjects.GamePlayer.RvR.Champion", countKilledPlayers, champion, maxKills));
@@ -714,7 +713,7 @@ namespace AmteScripts.Managers
                 return false;
             if (player.Client.Account.PrivLevel == (uint)ePrivLevel.GM)
             {
-                player.Out.SendMessage("Casse-toi connard de GM !", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.GMNotAllowed"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 return false;
             }
             RvrPlayer rvr = new RvrPlayer(player);
@@ -730,7 +729,7 @@ namespace AmteScripts.Managers
 
             if (player.Level < 20)
             {
-                player.Out.SendMessage("Reviens quand tu auras plus d'expérience !", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.LowLevel"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 return isAdded;
             }
             else
@@ -861,7 +860,7 @@ namespace AmteScripts.Managers
             {
                 rvrPlayer.ResetCharacter(player);
                 if (player.Client.Account.PrivLevel <= 1 || force)
-                    player.MoveTo((ushort)rvrPlayer.OldRegion, rvrPlayer.OldX, rvrPlayer.OldY, rvrPlayer.OldZ, (ushort)rvrPlayer.OldHeading);
+                    player.MoveTo(Position.Create((ushort)rvrPlayer.OldRegion, rvrPlayer.OldX, rvrPlayer.OldY, rvrPlayer.OldZ, (ushort)rvrPlayer.OldHeading));
                 if (player.Guild != null)
                     player.Guild.RemovePlayer("RVR", player);
                 player.RealGuild = null;
@@ -911,9 +910,21 @@ namespace AmteScripts.Managers
 
         public IList<string> GetStatistics(GamePlayer player)
         {
-            if (!IsInRvr(player))
+            var statList = new List<string>();
+
+            if (!_isOpen && WinnerRealm == player.Realm)
             {
-                return new string[] { "Vous n'etes pas dans un RvR actuellement." };
+                statList.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.WinnerBonuses"));
+                statList.Add("");
+                statList.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.BonusGold"));
+                statList.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.BonusExperience"));
+                statList.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.BonusRealmPoints"));
+                return statList;
+            }
+            else if (!_isOpen && WinnerRealm != player.Realm)
+            {
+                statList.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.LoserNoBonuses"));
+                return statList;
             }
 
             if (DateTime.Now.Subtract(_statLastCacheUpdate) >= new TimeSpan(0, 0, 30))
@@ -938,31 +949,64 @@ namespace AmteScripts.Managers
                     {
                         this.RvrStats[player.CurrentRegionID] = new List<string>
                         {
-                            "Statistiques du RvR:",
+                            LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.Statistics"),
                             " - Albion: ",
-                            (_isOpen ? albCount : 0) + " joueurs",
-                            (_isOpen ? prAlb : 0) + " PR",
+                            (_isOpen ? albCount : 0) + " " + LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.Players"),
+                            (_isOpen ? prAlb : 0) + " " + LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.RealmPoints"),
                             " - Midgard: ",
-                             (_isOpen ? midCount : 0) + " joueurs",
-                              (_isOpen ? prMid : 0) + " PR",
+                            (_isOpen ? midCount : 0) + " " + LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.Players"),
+                            (_isOpen ? prMid : 0) + " " + LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.RealmPoints"),
                             " - Hibernia: ",
-                             (_isOpen ? hibCount : 0) + " joueurs",
-                              (_isOpen ? prHib : 0) + " PR",
+                            (_isOpen ? hibCount : 0) + " " + LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.Players"),
+                            (_isOpen ? prHib : 0) + " " + LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.RealmPoints"),
                             "",
                             " - Total: ",
-                            (IsOpen ? clients.Count : 0) + " joueurs",
-                            (IsOpen ? prAlb + prMid + prHib : 0) + " PR",
+                            (IsOpen ? clients.Count : 0) + " " + LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.Players"),
+                            (IsOpen ? prAlb + prMid + prHib : 0) + " " + LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.RealmPoints"),
                             "",
-                            string.Join("\n", lords.Select(l => l.GetScores())),
+                            string.Join("\n", lords.Select(l => l.GetScores(player.Client.Account.Language))),
+                            LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.TotalScores"),
+                            "Albion: " + Scores[ALBION] + " points",
+                            "Midgard: " + Scores[MIDGARD] + " points",
+                            "Hibernia: " + Scores[HIBERNIA] + " points",
                             "",
-                            "Le rvr est " + (_isOpen ? "ouvert" : "fermé") + ".",
-                            "(Mise à jour toutes les 30 secondes)"
-
+                            LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.CurrentChampion") + GetCurrentChampion(player.Client.Account.Language)
                         };
+
+                        if (player.Client.Account.PrivLevel > 1)
+                        {
+                            statList.Add("");
+                            statList.Add("");
+                            statList.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.Status") + (_isOpen ? "ouvert" : "fermé") + ".");
+                            statList.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "RvRManager.UpdateFrequency"));
+                        }
                     }
                 }
             }
             return this.RvrStats[player.CurrentRegionID];
+        }
+
+        private string GetCurrentChampion(string language)
+        {
+            string champion = "";
+            short maxKills = 0;
+            bool tie = false;
+
+            foreach (KeyValuePair<GamePlayer, short> killsPerPlayer in Kills)
+            {
+                if (killsPerPlayer.Value > maxKills)
+                {
+                    maxKills = killsPerPlayer.Value;
+                    champion = killsPerPlayer.Key.Name;
+                    tie = false;
+                }
+                else if (killsPerPlayer.Value == maxKills)
+                {
+                    tie = true;
+                }
+            }
+
+            return tie ? LanguageMgr.GetTranslation(language, "RvRManager.None") : champion;
         }
 
         public bool IsInRvr(GameLiving obj)
@@ -975,7 +1019,7 @@ namespace AmteScripts.Managers
             if (attacker.Realm == defender.Realm)
             {
                 if (!quiet)
-                    _MessageToLiving(attacker, "Vous ne pouvez pas attaquer un membre de votre royaume !");
+                    _MessageToLiving(attacker, "RvRManager.CannotAttackRealmMember");
                 return false;
             }
             return true;

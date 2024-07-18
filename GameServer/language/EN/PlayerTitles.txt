@@ -110,7 +110,7 @@ PlayerClass.Necromancer.GetTitle.25:	Deathstalker
 PlayerClass.Necromancer.GetTitle.20:	Adept of Arawn
 PlayerClass.Necromancer.GetTitle.15:	Summoner
 PlayerClass.Necromancer.GetTitle.10:	Servant of Arawn
-PlayerClass.Necromancer.GetTitle.5:	Apprentice Necromancer
+PlayerClass.Necromancer.GetTitle.5:		Apprentice Necromancer
 
 PlayerClass.Paladin.GetTitle.50:	Templar
 PlayerClass.Paladin.GetTitle.45:	Champion
@@ -254,7 +254,7 @@ PlayerClass.Shadowblade.GetTitle.25:	Loki's Nightblade
 PlayerClass.Shadowblade.GetTitle.20:	Shadow Lurker
 PlayerClass.Shadowblade.GetTitle.15:	Deceiver
 PlayerClass.Shadowblade.GetTitle.10:	Dark Seeker
-PlayerClass.Shadowblade.GetTitle.5:	Initiate Stalker
+PlayerClass.Shadowblade.GetTitle.5:		Initiate Stalker
 
 PlayerClass.Shaman.GetTitle.50:		Hand of Ymir
 PlayerClass.Shaman.GetTitle.45:		Oracle of Ymir
@@ -376,7 +376,7 @@ PlayerClass.Blademaster.GetTitle.25:	Gallant
 PlayerClass.Blademaster.GetTitle.20:	Blade Weaver
 PlayerClass.Blademaster.GetTitle.15:	Sabreur
 PlayerClass.Blademaster.GetTitle.10:	Stylist
-PlayerClass.Blademaster.GetTitle.5:	Bladist
+PlayerClass.Blademaster.GetTitle.5:		Bladist
 
 PlayerClass.Champion.GetTitle.50:	Archon
 PlayerClass.Champion.GetTitle.45:	Hero
@@ -530,11 +530,11 @@ Titles.Kills.Epic.EpicChallenger:			Epic Challenger
 Titles.Kills.Epic.EpicVictor:				Epic Victor
 
 Titles.Kills.Albion.BaneOfAlbion:			Bane of Albion
-Titles.Kills.Albion.ScourgeOfAlbion:			Scourge of Albion
+Titles.Kills.Albion.ScourgeOfAlbion:		Scourge of Albion
 Titles.Kills.Midgard.BaneOfMidgard:			Bane of Midgard
-Titles.Kills.Midgard.ScourgeOfMidgard:			Scourge of Midgard
-Titles.Kills.Hibernia.BaneOfHibernia:			Bane of Hibernia
-Titles.Kills.Hibernia.ScourgeOfHibernia:		Scourge of Hibernia
+Titles.Kills.Midgard.ScourgeOfMidgard:		Scourge of Midgard
+Titles.Kills.Hibernia.BaneOfHibernia:		Bane of Hibernia
+Titles.Kills.Hibernia.ScourgeOfHibernia:	Scourge of Hibernia
 
 # /Level
 Titles.Level.Level20Info:				Level 20+
@@ -586,7 +586,7 @@ Titles.Trader.Level1:					Trade Initiate
 Titles.Trader.Level2:					Deal Maker
 Titles.Trader.Level3:					Trade Magnate
 Titles.Trader.Level4:					Mercantile Mastermind
-Titles.Trader.Level5:					Merchant’s Guildmaster
+Titles.Trader.Level5:					Merchant's Guildmaster
 
 # /Thief
 Titles.Thief.Level1:					Lurking Lightfinger

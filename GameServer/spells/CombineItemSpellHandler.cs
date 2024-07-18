@@ -17,8 +17,7 @@ using System.Threading.Tasks;
 namespace DOL.spells
 {
     [SpellHandler("CombineItem")]
-    public class CombineItemSpellHandler
-        : SpellHandler
+    public class CombineItemSpellHandler : SpellHandler
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -394,39 +393,39 @@ namespace DOL.spells
                 case 3:
                 case 4:
                     baseQuality = 78;
-                    chancePart = new int[] { 2, 6, 14, 32, 26, 13, 7 };
-                    qualityRange = 7;
+                    chancePart = new int[] { 1, 2, 2, 3, 3, 4, 5, 6, 7, 8, 10, 12, 12, 11, 8, 6 };
+                    qualityRange = 16;
                     break;
                 case 2:
                     baseQuality = 82;
-                    chancePart = new int[] { 1, 6, 12, 28, 30, 15, 8 };
-                    qualityRange = 7;
+                    chancePart = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 10, 8, 7, 5, 2 };
+                    qualityRange = 16;
                     break;
                 case 1:
                     baseQuality = 86;
-                    chancePart = new int[] { 1, 5, 14, 28, 30, 15, 7 };
-                    qualityRange = 7;
+                    chancePart = new int[] { 1, 3, 4, 6, 8, 9, 10, 12, 13, 12, 10, 6, 4, 2 };
+                    qualityRange = 14;
                     break;
                 case 0:
                     baseQuality = 92;
-                    chancePart = new int[] { 6, 10, 13, 19, 20, 16, 15, 1 };
-                    qualityRange = 8;
+                    chancePart = new int[] { 6, 10, 13, 18, 20, 16, 11, 5, 1 };
+                    qualityRange = 9;
                     break;
                 case -1:
                     baseQuality = 94;
-                    chancePart = new int[] { 17, 17, 18, 20, 18, 10 };
-                    qualityRange = 6;
+                    chancePart = new int[] { 13, 17, 19, 22, 19, 8, 2 };
+                    qualityRange = 7;
                     break;
                 case -2:
                     baseQuality = 96;
-                    chancePart = new int[] { 18, 21, 25, 23, 13 };
+                    chancePart = new int[] { 19, 23, 29, 26, 3 };
                     qualityRange = 5;
                     break;
                 case -3:
                 case -4:
                 default:
                     baseQuality = 97;
-                    chancePart = new int[] { 24, 27, 31, 18 };
+                    chancePart = new int[] { 26, 31, 35, 8 };
                     qualityRange = 4;
                     break;
             }
@@ -551,18 +550,21 @@ namespace DOL.spells
             {
                 player.Out.SendPlaySound(eSoundType.Craft, 0x04);
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "AbstractCraftingSkill.BuildCraftedItem.Masterpiece", newItem.Name, useItem.Name, match.Items.Count() - 1), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
-                if (match.ApplyRewardCraftingSkillsSystem)
+                if (!match.DoNotUpdateTask)
                 {
-                    if (con > -3)
+                    if (match.ApplyRewardCraftingSkillsSystem)
                     {
-                        TaskManager.UpdateTaskProgress(player, "MasterpieceCrafted", 1);
+                        if (con > -3)
+                        {
+                            TaskManager.UpdateTaskProgress(player, "MasterpieceCrafted", 1);
+                        }
                     }
-                }
-                else
-                {
-                    if (con > -3)
+                    else
                     {
-                        TaskManager.UpdateTaskProgress(player, "MasterpieceCrafted", 1);
+                        if (con > -3)
+                        {
+                            TaskManager.UpdateTaskProgress(player, "MasterpieceCrafted", 1);
+                        }
                     }
                 }
             }
@@ -570,22 +572,30 @@ namespace DOL.spells
             {
                 player.Out.SendPlaySound(eSoundType.Craft, 0x03);
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Spell.CombineItemSpellHandler.YouCreatedItem", newItem.Name, useItem.Name, match.Items.Count() - 1), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                if (match.ApplyRewardCraftingSkillsSystem)
+                if (!match.DoNotUpdateTask)
                 {
-                    if (con > -2)
+                    if (match.ApplyRewardCraftingSkillsSystem)
                     {
-                        TaskManager.UpdateTaskProgress(player, "SuccessfulItemCombinations", 1);
+                        if (con > -2)
+                        {
+                            TaskManager.UpdateTaskProgress(player, "SuccessfulItemCombinations", 1);
+                        }
                     }
-                }
-                else
-                {
-                    if (con > -2)
+                    else
                     {
-                        TaskManager.UpdateTaskProgress(player, "SuccessfulItemCombinations", 1);
+                        if (con > -2)
+                        {
+                            TaskManager.UpdateTaskProgress(player, "SuccessfulItemCombinations", 1);
+                        }
                     }
                 }
             }
             RemoveItems(player, removeItems);
+
+            int rewardCraftingSkill = match.RewardCraftingSkills;
+            double craftingSkillGainMultiplier = player.CraftingSkillGain;
+
+            rewardCraftingSkill = (int)(rewardCraftingSkill * (1 + craftingSkillGainMultiplier / 100.0));
 
             if (match.RewardCraftingSkills > 0)
             {
@@ -596,6 +606,23 @@ namespace DOL.spells
                 }
                 player.GainCraftingSkill(match.CraftingSkill, gain);
                 player.Out.SendUpdateCraftingSkills();
+            }
+
+            if (match.SecondaryCraftingSkill != null && match.SecondaryCraftingSkill.Length > 0)
+            {
+                var secondarySkills = match.SecondaryCraftingSkill.Split('|').Select(s => (eCraftingSkill)Enum.Parse(typeof(eCraftingSkill), s)).ToArray();
+                int secondarySkillGain = match.RewardCraftingSkills / 2;
+                if (match.ApplyRewardCraftingSkillsSystem)
+                {
+                    secondarySkillGain = CalculateRewardCraftingSkill(player, match.CraftingSkill, match.CraftValue, match.RewardCraftingSkills) / 2;
+                }
+
+                secondarySkillGain = (int)(secondarySkillGain * (1 + craftingSkillGainMultiplier / 100.0));
+
+                foreach (var skill in secondarySkills)
+                {
+                    player.GainCraftingSkill(skill, secondarySkillGain);
+                }
             }
 
             if (!string.IsNullOrEmpty(match.ToolKit) && match.ToolLoseDur > 0)
@@ -704,11 +731,11 @@ namespace DOL.spells
             int diff = itemCraftingLevel - crafterSkill;
             if (diff <= -70)
                 return -4;
-            else if (diff <= -50)
+            else if (diff <= -56)
                 return -3;
-            else if (diff <= -31)
+            else if (diff <= -33)
                 return -2;
-            else if (diff <= -11)
+            else if (diff <= -12)
                 return -1;
             else if (diff <= 0)
                 return 0;
@@ -763,7 +790,9 @@ namespace DOL.spells
                         ToolKit = c.ToolKit,
                         ToolLoseDur = c.ToolLoseDur,
                         CombinationId = c.CombinationId,
-                        AllowVersion = c.AllowVersion
+                        AllowVersion = c.AllowVersion,
+                        SecondaryCraftingSkill = c.SecondaryCraftingSkill,
+                        DoNotUpdateTask = c.DoNotUpdateTask
                     };
                 });
 
@@ -978,6 +1007,8 @@ namespace DOL.spells
         public short ToolLoseDur { get; set; }
         public string CombinationId { get; set; }
         public bool AllowVersion { get; set; }
+        public string SecondaryCraftingSkill { get; set; }
+        public bool DoNotUpdateTask { get; set; }
     }
 }
 

@@ -1,0 +1,30 @@
+# JAILMGR
+GameJail.ReputNeg01:			Fugitive Outlaw
+GameJail.ReputNeg02:			Brigand
+GameJail.ReputNeg03:			Shadow Lieutenant
+GameJail.ReputNeg04:			Machinator
+GameJail.ReputNeg05:			Regent of Sin
+GameJail.JailedRP:			You have been imprisoned for your actions by {0}. Your bail is set at {1} Gold. To get out, ask someone to pay your bail to Stronghold, the prison warden. You can also ask help from your Guild through "/gc jailrelease" command.
+GameJail.JailedHRP:			You have been imprisoned for OOC by {0}. You must wait until your imprisonment time is over in real time to be released automatically.
+
+# GEOLIER
+GameJail.Interact.Prisoner:		Hello {0}, do you want to know your [sentence] in prison?!
+GameJail.Interact.NonPrisoner:		Do you want to go to prison?
+GameJail.Reason:			Reason for the sentence: {0}
+GameJail.RPWait:			Wait until {0} around {1}h or ask someone to pay your bail.
+GameJail.RPReason:			{0}
+GameJail.NonRPWait:			Wait until {0} around {1}h.
+
+# PRISONGARDIAN
+GameJail.PrisonGardian.GMMenuDeactivate:      (GM Menu) [Désactivation Gardien]
+GameJail.PrisonGardian.FreePrisonersPart1:    For a few gold coins, I can free the prisoners ...
+GameJail.PrisonGardian.FreePrisonersPart2:    Here is the list of prisoners:
+GameJail.PrisonGardian.PrisonerList:          [{0}] (Cost: {1} Gold)
+GameJail.PrisonGardian.NoPrisonersCurrently:  Sorry, there are no prisoners in this world currently.
+GameJail.PrisonGardian.NoPrisoners:           There are no prisoners currently.
+GameJail.PrisonGardian.WantToEnter:           Do you want to enter as well?
+GameJail.PrisonGardian.GuardianActive:        Guardian active.
+GameJail.PrisonGardian.GuardianInactive:      Guardian inactive.
+GameJail.PrisonGardian.PrisonerNotFound:      This prisoner cannot be found.
+GameJail.PrisonGardian.NotEnoughMoney:        You don't have enough money...
+GameJail.PrisonGardian.PrisonerReleased:      You have just released {0} for {1} Gold.

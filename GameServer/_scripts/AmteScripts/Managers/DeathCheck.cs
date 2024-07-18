@@ -50,7 +50,7 @@ namespace GameServerScripts.Amtescripts.Managers
                     if (killerClient != null) // killer is online
                     {
                         --killerClient.Player.Reputation;
-                        killerClient.Out.SendMessage(LanguageMgr.GetTranslation(killerClient.Account.Language, "GameObjects.GamePlayer.Murder", killerClient.Player.GetPersonalizedName(victim)), DOL.GS.PacketHandler.eChatType.CT_System, DOL.GS.PacketHandler.eChatLoc.CL_SystemWindow);
+                        killerClient.Out.SendMessage(LanguageMgr.GetTranslation(killerClient.Account.Language, "GameObjects.GamePlayer.Murder", killerClient.Player.GetPersonalizedName(victim)), DOL.GS.PacketHandler.eChatType.CT_YouDied, DOL.GS.PacketHandler.eChatLoc.CL_SystemWindow);
                         if (!killerClient.Player.Wanted)
                         {
                             killerClient.Player.Wanted = true;

@@ -32,9 +32,9 @@ namespace DOL.GS.Commands
             {
                 case "open":
                     if (RvrManager.Instance.Open(true))
-                        DisplayMessage(client, "Les rvr ont été ouverts avec les régions " + string.Join("-", RvrManager.Instance.Regions.OrderBy(r => r)) + ".");
+                        DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "RvRManager.RvROpened", string.Join("-", RvrManager.Instance.Regions.OrderBy(r => r))));
                     else
-                        DisplayMessage(client, "Les rvr n'ont pas pu être ouverts.");
+                        DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "RvRManager.RvRNotOpened"));
                     break;
                 case "openpvp":
                     if (args.Length >= 3 && !ushort.TryParse(args[2], out region))
@@ -43,53 +43,53 @@ namespace DOL.GS.Commands
                         return;
                     }
                     if (PvpManager.Instance.Open(region, true))
-                        DisplayMessage(client, "Le pvp a été ouvert avec la région " + PvpManager.Instance.Region + ".");
+                        DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "RvRManager.PvPOpened", PvpManager.Instance.Region));
                     else
-                        DisplayMessage(client, "Le pvp n'a pas pu être ouvert sur la région " + region + ".");
+                        DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "RvRManager.PvPNotOpened", region));
                     break;
 
                 case "close":
-                    DisplayMessage(client, RvrManager.Instance.Close() ? "Le rvr a été fermé." : "Le rvr n'a pas pu être fermé.");
+                    DisplayMessage(client, RvrManager.Instance.Close() ? LanguageMgr.GetTranslation(client.Account.Language, "RvRManager.RvRClosed") : LanguageMgr.GetTranslation(client.Account.Language, "RvRManager.RvRNotClosed"));
                     break;
 
                 case "closepvp":
-                    DisplayMessage(client, PvpManager.Instance.Close() ? "Le pvp a été fermé." : "Le pvp n'a pas pu être fermé.");
+                    DisplayMessage(client, PvpManager.Instance.Close() ? LanguageMgr.GetTranslation(client.Account.Language, "RvRManager.PvPClosed") : LanguageMgr.GetTranslation(client.Account.Language, "RvRManager.PvPNotClosed"));
                     break;
 
                 case "unforce":
                     if (!RvrManager.Instance.IsOpen)
                     {
-                        DisplayMessage(client, "Le rvr doit être ouvert pour le unforce.");
+                        DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "RvRManager.RvRUnforceNotPossible"));
                         break;
                     }
                     RvrManager.Instance.Open(false);
-                    DisplayMessage(client, "Le rvr sera fermé automatiquement s'il n'est plus dans les bonnes horaires.");
+                    DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "RvRManager.RvRWillCloseAutomatically"));
                     break;
 
                 case "unforcepvp":
                     if (!PvpManager.Instance.IsOpen)
                     {
-                        DisplayMessage(client, "Le pvp doit être ouvert pour le unforce.");
+                        DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "RvRManager.PvPUnforceNotPossible"));
                         break;
                     }
                     PvpManager.Instance.Open(0, false);
-                    DisplayMessage(client, "Le pvp sera fermé automatiquement s'il n'est plus dans les bonnes horaires.");
+                    DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "RvRManager.PvPWillCloseAutomatically"));
                     break;
 
                 case "status":
-                    DisplayMessage(client, "Les RvR sont actuellement: " + (RvrManager.Instance.IsOpen ? "open, les regions sont: " + string.Join("-", RvrManager.Instance.Regions) + "." : "close"));
-                    DisplayMessage(client, "Les regions PvP sont actuellement: " + (PvpManager.Instance.IsOpen ? "open, les regions sont: " + string.Join(",", PvpManager.Instance.Maps) + "." : "close"));
+                    DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "RvRManager.RvRStatus", RvrManager.Instance.IsOpen ? "open, les regions sont: " + string.Join("-", RvrManager.Instance.Regions) + "." : "close"));
+                    DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "RvRManager.PvPStatus", PvpManager.Instance.IsOpen ? "open, les regions sont: " + string.Join(",", PvpManager.Instance.Maps) + "." : "close"));
                     break;
 
                 case "refresh":
                     if (RvrManager.Instance.IsOpen || PvpManager.Instance.IsOpen)
                     {
-                        DisplayMessage(client, "Les rvr et le pvp doivent être fermés pour rafraichir la liste des maps disponibles.");
+                        DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "RvRManager.RvRAndPvPMustBeClosed"));
                         break;
                     }
                     var rvr = string.Join(", ", RvrManager.Instance.InitMapsAndTerritories());
                     var pvp = string.Join(", ", PvpManager.Instance.FindPvPMaps());
-                    DisplayMessage(client, string.Format("Le rvr utilise les maps: {0}, le pvp utilise les maps: {1}.", rvr, pvp));
+                    DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "RvRManager.MapsUsed", rvr, pvp));
                     break;
                 case "reset":
                     PvpManager.Instance.Close();
@@ -97,7 +97,7 @@ namespace DOL.GS.Commands
                     RvrManager.Instance.Open(false);
                     PvpManager.Instance.Open(0, false);
 
-                    DisplayMessage(client, "Les rvr et le pvp ont été réinitialisés.");
+                    DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "RvRManager.RvRPvPReset"));
                     break;
             }
         }

@@ -52,7 +52,7 @@ namespace DOL.Territories
             return true;
         }
 
-        public void TerritoryAttacked(Territory territory)
+        public void TerritoryAttacked(Territory territory, GamePlayer player)
         {
             if (!m_TerritoriesAttacked.ContainsValue(territory))
             {
@@ -61,6 +61,18 @@ namespace DOL.Territories
                 timer.Enabled = true;
                 m_TerritoriesAttacked.Add(timer, territory);
                 territory.OwnerGuild?.SendMessageToGuildMembersKey("TerritoryManager.Territory.Attacked", eChatType.CT_Important, eChatLoc.CL_SystemWindow, territory.Name);
+
+                if (territory.OwnerGuild != null)
+                {
+                    foreach (var client in WorldMgr.GetAllPlayingClients())
+                    {
+                        if (client.Player.Guild == territory.OwnerGuild)
+                        {
+                            client.Player.Out.SendSoundEffect(9213, client.Player.Position, 0);
+                        }
+                    }
+                }
+
             }
         }
 
@@ -528,8 +540,12 @@ namespace DOL.Territories
                 }
                 else
                 {
-                    players.Foreach(p => p.Out.SendMessage(Language.LanguageMgr.GetTranslation(p.Client.Account.Language, "Commands.Players.Guild.TerritoryNoMoney"),
-                                                           eChatType.CT_Guild, eChatLoc.CL_SystemWindow));
+                    players.Foreach(p =>
+                    {
+                        p.Out.SendMessage(Language.LanguageMgr.GetTranslation(p.Client.Account.Language, "Commands.Players.Guild.TerritoryNoMoney"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                        p.Out.SendSoundEffect(9214, p.Position, 0);
+                    });
+
                     foreach (var territory in guildGroup)
                     {
                         territory.OwnerGuild = null;

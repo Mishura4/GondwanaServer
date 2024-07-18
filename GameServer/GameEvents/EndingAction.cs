@@ -5,6 +5,7 @@
         None,
         BindStone,
         Event,
-        Reset
+        Reset,
+        JumpToTPPoint
     }
 }

@@ -119,7 +119,7 @@ namespace DOL.GS.Quests
                 return;
             }
 
-            player.Out.SendSoundEffect(11, 0, 0, 0, 0, 0);
+            player.Out.SendSoundEffect(11, player.Position, 0);
             long xp = RewardXP;
             if (xp < 0)
             {

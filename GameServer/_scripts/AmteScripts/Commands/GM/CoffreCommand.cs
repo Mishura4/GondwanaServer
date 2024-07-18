@@ -36,7 +36,28 @@ namespace DOL.GS.Scripts
          "Commands.GM.Coffre.Usage.PunishSpellId",
          "Commands.GM.Coffre.Usage.PickableAnim",
          "Commands.GM.Coffre.Usage.InfoInterval",
-         "Commands.GM.Coffre.Usage.LongDistance")]
+         "Commands.GM.Coffre.Usage.LongDistance",
+         "Commands.GM.Coffre.Usage.TPID",
+         "Commands.GM.Coffre.Usage.ShouldRespawnToTPID",
+         "Commands.GM.Coffre.Usage.CurrentStep",
+         "Commands.GM.Coffre.Usage.PickOnTouch",
+         "Commands.GM.Coffre.Usage.SecondaryModel",
+         "Commands.GM.Coffre.Usage.IsOpenableOnce",
+         "Commands.GM.Coffre.Usage.IsTerritoryLinked",
+         "Commands.GM.Coffre.Usage.KeyLoseDur",
+         "Commands.GM.Coffre.Usage.SwitchFamily",
+         "Commands.GM.Coffre.Usage.SwitchOrder",
+         "Commands.GM.Coffre.Usage.IsSwitch",
+         "Commands.GM.Coffre.Usage.WrongOrderResetFamily",
+         "Commands.GM.Coffre.Usage.ActivatedDuration",
+         "Commands.GM.Coffre.Usage.ActivatedBySwitchOn",
+         "Commands.GM.Coffre.Usage.ActivatedBySwitchOff",
+         "Commands.GM.Coffre.Usage.ResetBySwitchOn",
+         "Commands.GM.Coffre.Usage.ResetBySwitchOff",
+         "Commands.GM.Coffre.Usage.SwitchOnSound",
+         "Commands.GM.Coffre.Usage.WrongFamilyOrderSound",
+         "Commands.GM.Coffre.Usage.ActivatedFamilySound",
+         "Commands.GM.Coffre.Usage.DeactivatedFamilySound")]
     public class CoffreCommandHandler : AbstractCommandHandler, ICommandHandler
     {
         public void OnCommand(GameClient client, string[] args)
@@ -312,7 +333,29 @@ namespace DOL.GS.Scripts
                     coffre2.IsTeleporter = coffre.IsTeleporter;
                     coffre2.CoffreOpeningInterval = coffre.CoffreOpeningInterval;
                     coffre2.IsLargeCoffre = coffre.IsLargeCoffre;
+                    coffre2.ItemChance = coffre.ItemChance;
                     coffre2.KeyItem = coffre.KeyItem;
+                    coffre2.TPID = coffre.TPID;
+                    coffre2.ShouldRespawnToTPID = coffre.ShouldRespawnToTPID;
+                    coffre2.CurrentStep = coffre.CurrentStep;
+                    coffre2.PickOnTouch = coffre.PickOnTouch;
+                    coffre2.SecondaryModel = coffre.SecondaryModel;
+                    coffre2.IsOpenableOnce = coffre.IsOpenableOnce;
+                    coffre2.IsTerritoryLinked = coffre.IsTerritoryLinked;
+                    coffre2.KeyLoseDur = coffre.KeyLoseDur;
+                    coffre2.SwitchFamily = coffre.SwitchFamily;
+                    coffre2.SwitchOrder = coffre.SwitchOrder;
+                    coffre2.IsSwitch = coffre.IsSwitch;
+                    coffre2.WrongOrderResetFamily = coffre.WrongOrderResetFamily;
+                    coffre2.ActivatedDuration = coffre.ActivatedDuration;
+                    coffre2.ActivatedBySwitchOn = coffre.ActivatedBySwitchOn;
+                    coffre2.ActivatedBySwitchOff = coffre.ActivatedBySwitchOff;
+                    coffre2.ResetBySwitchOn = coffre.ResetBySwitchOn;
+                    coffre2.ResetBySwitchOff = coffre.ResetBySwitchOff;
+                    coffre2.SwitchOnSound = coffre.SwitchOnSound;
+                    coffre2.WrongFamilyOrderSound = coffre.WrongFamilyOrderSound;
+                    coffre2.ActivatedFamilySound = coffre.ActivatedFamilySound;
+                    coffre2.DeactivatedFamilySound = coffre.DeactivatedFamilySound;
                     coffre2.InitTimer();
 
                     coffre2.ItemChance = coffre.ItemChance;
@@ -649,6 +692,405 @@ namespace DOL.GS.Scripts
                         break;
                     }
                     ChatUtil.SendSystemMessage(client, "Le statut IsRenaissance du coffre \"" + coffre.Name + "\" est maitenant: " + coffre.TpIsRenaissance);
+                    break;
+
+                case "pickontouch":
+                    if (coffre == null || args.Length != 2)
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    try
+                    {
+                        coffre.PickOnTouch = !coffre.PickOnTouch;
+                        coffre.SaveIntoDatabase();
+                    }
+                    catch
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    ChatUtil.SendSystemMessage(client, "Le statut PickOnTouch du coffre \"" + coffre.Name + "\" est maintenant: " + coffre.PickOnTouch);
+                    break;
+
+                case "secondarymodel":
+                    if (coffre == null || args.Length < 4)
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    try
+                    {
+                        coffre.SecondaryModel = int.Parse(args[2] + args[3]);
+                        coffre.SaveIntoDatabase();
+                    }
+                    catch
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    ChatUtil.SendSystemMessage(client, "Le coffre \"" + coffre.Name + "\" a maintenant le modèle secondaire: " + coffre.SecondaryModel);
+                    break;
+
+                case "isopenableonce":
+                    if (coffre == null || args.Length != 2)
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    try
+                    {
+                        coffre.IsOpenableOnce = !coffre.IsOpenableOnce;
+                        coffre.SaveIntoDatabase();
+                    }
+                    catch
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    ChatUtil.SendSystemMessage(client, "Le statut IsOpenableOnce du coffre \"" + coffre.Name + "\" est maintenant: " + coffre.IsOpenableOnce);
+                    break;
+
+                case "isterritorylinked":
+                    if (coffre == null || args.Length != 2)
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    try
+                    {
+                        coffre.IsTerritoryLinked = !coffre.IsTerritoryLinked;
+                        coffre.SaveIntoDatabase();
+                    }
+                    catch
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    ChatUtil.SendSystemMessage(client, "Le statut IsTerritoryLinked du coffre \"" + coffre.Name + "\" est maintenant: " + coffre.IsTerritoryLinked);
+                    break;
+
+                case "keylosedur":
+                    if (coffre == null || args.Length < 3)
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    try
+                    {
+                        coffre.KeyLoseDur = int.Parse(args[2]);
+                        coffre.SaveIntoDatabase();
+                    }
+                    catch
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    ChatUtil.SendSystemMessage(client, "La durabilité de la clé du coffre \"" + coffre.Name + "\" est maintenant: " + coffre.KeyLoseDur);
+                    break;
+
+                case "tpid":
+                    if (coffre == null || args.Length < 4)
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    try
+                    {
+                        coffre.TPID = int.Parse(args[2] + args[3]);
+                        coffre.SaveIntoDatabase();
+                    }
+                    catch
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    ChatUtil.SendSystemMessage(client, "Le TPID du coffre \"" + coffre.Name + "\" est maintenant: " + coffre.TPID);
+                    break;
+
+                case "shouldrespawntotpid":
+                    if (coffre == null || args.Length != 2)
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    try
+                    {
+                        coffre.ShouldRespawnToTPID = !coffre.ShouldRespawnToTPID;
+                        coffre.SaveIntoDatabase();
+                    }
+                    catch
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    ChatUtil.SendSystemMessage(client, "Le statut ShouldRespawnToTPID du coffre \"" + coffre.Name + "\" est maintenant: " + coffre.ShouldRespawnToTPID);
+                    break;
+
+                case "currentstep":
+                    if (coffre == null || args.Length < 3)
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    try
+                    {
+                        coffre.CurrentStep = int.Parse(args[2]);
+                        coffre.SaveIntoDatabase();
+                    }
+                    catch
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    ChatUtil.SendSystemMessage(client, "Le CurrentStep du coffre \"" + coffre.Name + "\" est maintenant: " + coffre.CurrentStep);
+                    break;
+
+                case "switchfamily":
+                    if (coffre == null || args.Length < 4)
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    try
+                    {
+                        coffre.SwitchFamily = args[2];
+                        coffre.SaveIntoDatabase();
+                    }
+                    catch
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    ChatUtil.SendSystemMessage(client, "La famille de switch du coffre \"" + coffre.Name + "\" est maintenant: " + coffre.SwitchFamily);
+                    break;
+
+                case "switchorder":
+                    if (coffre == null || args.Length < 3)
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    try
+                    {
+                        coffre.SwitchOrder = int.Parse(args[2]);
+                        coffre.SaveIntoDatabase();
+                    }
+                    catch
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    ChatUtil.SendSystemMessage(client, "L'ordre de switch du coffre \"" + coffre.Name + "\" est maintenant: " + coffre.SwitchOrder);
+                    break;
+
+                case "isswitch":
+                    if (coffre == null || args.Length != 2)
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    try
+                    {
+                        coffre.IsSwitch = !coffre.IsSwitch;
+                        coffre.SaveIntoDatabase();
+                    }
+                    catch
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    ChatUtil.SendSystemMessage(client, "Le statut IsSwitch du coffre \"" + coffre.Name + "\" est maintenant: " + coffre.IsSwitch);
+                    break;
+
+                case "wrongorderresetfamily":
+                    if (coffre == null || args.Length != 2)
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    try
+                    {
+                        coffre.WrongOrderResetFamily = !coffre.WrongOrderResetFamily;
+                        coffre.SaveIntoDatabase();
+                    }
+                    catch
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    ChatUtil.SendSystemMessage(client, "Le statut WrongOrderResetFamily du coffre \"" + coffre.Name + "\" est maintenant: " + coffre.WrongOrderResetFamily);
+                    break;
+
+                case "activatedduration":
+                    if (coffre == null || args.Length < 4)
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    try
+                    {
+                        coffre.ActivatedDuration = int.Parse(args[2] + args[3]);
+                        coffre.SaveIntoDatabase();
+                    }
+                    catch
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    ChatUtil.SendSystemMessage(client, "La durée d'activation du coffre \"" + coffre.Name + "\" est maintenant: " + coffre.ActivatedDuration + " secondes");
+                    break;
+
+                case "activatedbyswitchon":
+                    if (coffre == null || args.Length < 4)
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    try
+                    {
+                        coffre.ActivatedBySwitchOn = args[2];
+                        coffre.SaveIntoDatabase();
+                    }
+                    catch
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    ChatUtil.SendSystemMessage(client, "L'event activé par le switch du coffre \"" + coffre.Name + "\" est maintenant: " + coffre.ActivatedBySwitchOn);
+                    break;
+
+                case "activatedbyswitchoff":
+                    if (coffre == null || args.Length < 4)
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    try
+                    {
+                        coffre.ActivatedBySwitchOff = args[2];
+                        coffre.SaveIntoDatabase();
+                    }
+                    catch
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    ChatUtil.SendSystemMessage(client, "L'event désactivé par le switch du coffre \"" + coffre.Name + "\" est maintenant: " + coffre.ActivatedBySwitchOff);
+                    break;
+
+                case "resetbyswitchon":
+                    if (coffre == null || args.Length < 4)
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    try
+                    {
+                        coffre.ResetBySwitchOn = args[2];
+                        coffre.SaveIntoDatabase();
+                    }
+                    catch
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    ChatUtil.SendSystemMessage(client, "L'event reset par le switch du coffre \"" + coffre.Name + "\" est maintenant: " + coffre.ResetBySwitchOn);
+                    break;
+
+                case "resetbyswitchoff":
+                    if (coffre == null || args.Length < 4)
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    try
+                    {
+                        coffre.ResetBySwitchOff = args[2];
+                        coffre.SaveIntoDatabase();
+                    }
+                    catch
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    ChatUtil.SendSystemMessage(client, "L'event reset par le switch du coffre \"" + coffre.Name + "\" est maintenant: " + coffre.ResetBySwitchOff);
+                    break;
+
+                case "switchonsound":
+                    if (coffre == null || args.Length < 4)
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    try
+                    {
+                        coffre.SwitchOnSound = int.Parse(args[2] + args[3]);
+                        coffre.SaveIntoDatabase();
+                    }
+                    catch
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    ChatUtil.SendSystemMessage(client, "Le son du switch ON du coffre \"" + coffre.Name + "\" est maintenant: " + coffre.SwitchOnSound);
+                    break;
+
+                case "wrongfamilyordersound":
+                    if (coffre == null || args.Length < 4)
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    try
+                    {
+                        coffre.WrongFamilyOrderSound = int.Parse(args[2] + args[3]);
+                        coffre.SaveIntoDatabase();
+                    }
+                    catch
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    ChatUtil.SendSystemMessage(client, "Le son d'ordre incorrect du switch du coffre \"" + coffre.Name + "\" est maintenant: " + coffre.WrongFamilyOrderSound);
+                    break;
+
+                case "activatedfamilysound":
+                    if (coffre == null || args.Length < 4)
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    try
+                    {
+                        coffre.ActivatedFamilySound = int.Parse(args[2] + args[3]);
+                        coffre.SaveIntoDatabase();
+                    }
+                    catch
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    ChatUtil.SendSystemMessage(client, "Le son de famille activée du switch du coffre \"" + coffre.Name + "\" est maintenant: " + coffre.ActivatedFamilySound);
+                    break;
+
+                case "deactivatedfamilysound":
+                    if (coffre == null || args.Length < 4)
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    try
+                    {
+                        coffre.DeactivatedFamilySound = int.Parse(args[2] + args[3]);
+                        coffre.SaveIntoDatabase();
+                    }
+                    catch
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    ChatUtil.SendSystemMessage(client, "Le son de famille désactivée du switch du coffre \"" + coffre.Name + "\" est maintenant: " + coffre.DeactivatedFamilySound);
                     break;
                     #endregion
             }

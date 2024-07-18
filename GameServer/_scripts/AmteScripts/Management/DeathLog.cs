@@ -67,7 +67,7 @@ namespace DOL.GS.GameEvents
                             playerKiller.Wanted = true;
                         }
                         GameServer.Database.AddObject(new DBDeathLog(playerVictim, playerKiller, true));
-                        playerKiller.Out.SendMessage(LanguageMgr.GetTranslation(playerKiller.Client, "GameObjects.GamePlayer.Multiplekills", playerKiller.GetPersonalizedName(playerVictim)), PacketHandler.eChatType.CT_System, PacketHandler.eChatLoc.CL_SystemWindow);
+                        playerKiller.Out.SendMessage(LanguageMgr.GetTranslation(playerKiller.Client, "GameObjects.GamePlayer.Multiplekills", playerKiller.GetPersonalizedName(playerVictim)), PacketHandler.eChatType.CT_YouDied, PacketHandler.eChatLoc.CL_SystemWindow);
                     }
                     else
                     {
@@ -104,7 +104,7 @@ namespace DOL.GS.GameEvents
             {
                 player.Reputation--;
                 player.SaveIntoDatabase();
-                player.Out.SendMessage("Vous avez perdu 1 points de réputation pour cause d'assassinat de garde", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameObjects.GamePlayer.GuardKill"), eChatType.CT_YouDied, eChatLoc.CL_SystemWindow);
             }
         }
     }

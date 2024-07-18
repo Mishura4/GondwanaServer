@@ -7,6 +7,7 @@ using DOL.GS.PacketHandler;
 using DOL.Language;
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 
 namespace Amte
 {
@@ -27,7 +28,6 @@ namespace Amte
             { eRealm.Midgard, new TimeSpan(0) },
             { eRealm.Hibernia, new TimeSpan(0) },
         };
-
 
         public double timeBeforeClaim
         {
@@ -148,6 +148,7 @@ namespace Amte
             player.GainGuildMeritPoints(800);
             TaskManager.UpdateTaskProgress(player, "TakeKeeps", 1);
             player.CapturedKeeps++;
+            player.Out.SendSoundEffect(9202, player.Position, 0);
             NewsMgr.CreateNews("GameObjects.GamePlayer.RvR.Control", 0, eNewsType.RvRGlobal, false, true, player.GuildName, fortName);
 
             RvrManager.Instance.OnControlChange(this.InternalID, player.Guild);
@@ -182,13 +183,16 @@ namespace Amte
             if (_scoreTimer != null)
                 _scoreTimer.Stop();
             _scoreTimer = null;
+            _scores[eRealm.Albion] = new TimeSpan(0);
+            _scores[eRealm.Midgard] = new TimeSpan(0);
+            _scores[eRealm.Hibernia] = new TimeSpan(0);
         }
 
-        public virtual string GetScores()
+        public virtual string GetScores(string language)
         {
-            var str = " - Temps de détention du fort :\n";
+            var str = LanguageMgr.GetTranslation(language, "RvRManager.HoldingTime") + "\n";
             foreach (var kvp in _scores)
-                str += GlobalConstants.RealmToName(kvp.Key) + ": " + Math.Round(kvp.Value.TotalSeconds, 1) + " secondes\n";
+                str += GlobalConstants.RealmToName(kvp.Key) + ": " + Math.Round(kvp.Value.TotalSeconds, 1) + " " + LanguageMgr.GetTranslation(language, "RvRManager.Seconds") + "\n";
             return str;
         }
     }

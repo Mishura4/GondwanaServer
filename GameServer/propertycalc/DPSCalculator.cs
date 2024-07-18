@@ -38,12 +38,18 @@ namespace DOL.GS.PropertyCalc
 
         public override int CalcValue(GameLiving living, eProperty property)
         {
-            return living.CurrentRegion?.IsRvR == true ? 0 :
-                (int)(living.BaseBuffBonusCategory[(int)property]
+            int baseValue = living.BaseBuffBonusCategory[(int)property]
                 + living.SpecBuffBonusCategory[(int)property]
-                + living.ItemBonus[(int)property]
                 - living.DebuffCategory[(int)property]
-                + living.BuffBonusCategory4[(int)property]);
+                + living.BuffBonusCategory4[(int)property];
+
+            int itemBonus = living.ItemBonus[(int)property];
+            if (living is GamePlayer)
+            {
+                itemBonus = Math.Min(40, itemBonus); // Cap of 20 for item bonuses
+            }
+
+            return living.CurrentRegion?.IsRvR == true ? 0 : baseValue + itemBonus;
         }
     }
 }

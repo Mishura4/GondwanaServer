@@ -1,6 +1,7 @@
 using AmteScripts.Managers;
 using DOL.AI.Brain;
 using DOL.GS.PacketHandler;
+using DOL.Language;
 using System;
 
 namespace DOL.GS.Scripts
@@ -28,18 +29,17 @@ namespace DOL.GS.Scripts
         {
             if (_isBusy)
             {
-                player.Out.SendMessage("Je suis occupé pour le moment !", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "TeleporterRvR.Busy"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 return true;
             }
 
             TurnTo(player);
 
             if (!RvrManager.Instance.IsInRvr(player) &&
-                (!RvrManager.Instance.IsOpen || player.Level < 20 || (str != "Pret" && str != "Prêt" && str != "Partir")))
+                (!RvrManager.Instance.IsOpen || player.Level < 20 || (str != "Pret" && str != "Prêt" && str != "Partir" && str != "Ready" && str != "Leave")))
             {
-                player.Out.SendMessage(
-                    "Bonjour " + player.Name + ", je ne peux rien faire pour vous pour le moment !\r\nRevenez plus tard !",
-                    eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "TeleporterRvR.CannotHelpPart1", player.Name), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "TeleporterRvR.CannotHelpPart2"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 return true;
             }
             return false;
@@ -58,14 +58,14 @@ namespace DOL.GS.Scripts
             }
 
             if (RvrManager.Instance.IsInRvr(player))
-                player.Out.SendMessage(
-                    "Pff, tu es trop une poule mouillée pour rester ?!\r\n[Partir]",
-                    eChatType.CT_System, eChatLoc.CL_PopupWindow);
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "TeleporterRvR.ChickenOutPart1"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "TeleporterRvR.ChickenOutPart2"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+            }
             else
-                player.Out.SendMessage(string.Concat(
-                        "Bonjour " + player.Name + ", je peux vous envoyer au combat ! [Prêt] ?!\n\n - ",
-                        string.Join("\n - ", rvrs)),
-                        eChatType.CT_System, eChatLoc.CL_PopupWindow);
+            {
+                player.Out.SendMessage(string.Concat(LanguageMgr.GetTranslation(player.Client.Account.Language, "TeleporterRvR.SendToCombat", player.Name), "\n\n - ", string.Join("\n - ", rvrs)), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+            }
 
             return true;
         }
@@ -100,8 +100,7 @@ namespace DOL.GS.Scripts
             GamePlayer player = timer.Properties.getProperty<GamePlayer>("player", null);
             if (player == null) return 0;
             if (player.InCombat)
-                player.Out.SendMessage("Vous ne pouvez pas être téléporté en étant en combat !",
-                    eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "TeleporterRvR.InCombat"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
             else
             {
                 if (!RvrManager.Instance.IsOpen || RvrManager.Instance.IsInRvr(player))

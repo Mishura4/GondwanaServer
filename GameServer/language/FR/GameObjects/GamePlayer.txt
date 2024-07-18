@@ -440,7 +440,8 @@ GameObjects.GamePlayer.UseSlot.WaitBeforeDischarge:		Vous devez attendre encore 
 
 GameObjects.GamePlayer.Whisper.SelectTarget:			Sélectionnez une cible à qui chuchoter.
 GameObjects.GamePlayer.Murder:							Vous avez perdu 1 point de réputation pour avoir tué {0}.
-GameObjects.GamePlayer.Multiplekills:						Vous avez perdu 1 point de réputation pour cause d'assassinats multiples envers {0}.
+GameObjects.GamePlayer.Multiplekills:					Vous avez perdu 1 point de réputation pour cause d'assassinats multiples envers {0}.
+GameObjects.GamePlayer.GuardKill:						Vous avez perdu 1 point de réputation pour cause d'assassinat de garde.
 GameObjects.GamePlayer.Wanted:                              {0} est maintenant recherché pour ses crimes.
 GameObjects.GamePlayer.Jailed:                              {0} a été mis en prison par {1}.
 GameObjects.GamePlayer.Jailed.Unknown:                      {0} a été mis en prison par les gardes.

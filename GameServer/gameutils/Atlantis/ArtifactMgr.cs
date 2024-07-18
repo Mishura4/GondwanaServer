@@ -251,6 +251,17 @@ namespace DOL.GS
             500000000 // xp to level 10
         };
 
+        private static long AdjustXPForItem(InventoryArtifact item, long baseXP)
+        {
+            int itemLevel = item.Level;
+            int itemQuality = item.Quality;
+
+            double levelFactor = 1.0 + (itemLevel - 50) * 0.02;
+            double qualityFactor = 1.0 - (100 - itemQuality) * 0.03;
+
+            return (long)(baseXP * levelFactor * qualityFactor);
+        }
+
         /// <summary>
         /// Determine artifact level from total XP.
         /// </summary>
@@ -262,7 +273,7 @@ namespace DOL.GS
             {
                 for (int level = 10; level >= 0; --level)
                 {
-                    if (item.Experience >= m_xpForLevel[level])
+                    if (item.Experience >= AdjustXPForItem(item, m_xpForLevel[level]))
                     {
                         return level;
                     }
@@ -284,8 +295,8 @@ namespace DOL.GS
                 int level = GetCurrentLevel(item);
                 if (level < 10)
                 {
-                    double xpGained = item.Experience - m_xpForLevel[level];
-                    double xpNeeded = m_xpForLevel[level + 1] - m_xpForLevel[level];
+                    double xpGained = item.Experience - AdjustXPForItem(item, m_xpForLevel[level]);
+                    double xpNeeded = AdjustXPForItem(item, m_xpForLevel[level + 1]) - AdjustXPForItem(item, m_xpForLevel[level]);
                     return (int)(xpGained * 100 / xpNeeded);
                 }
             }
@@ -387,7 +398,7 @@ namespace DOL.GS
             long artifactXPOld = item.Experience;
 
             // Can't go past level 10, but check to make sure we are level 10 if we have the XP
-            if (artifactXPOld >= m_xpForLevel[10])
+            if (artifactXPOld >= AdjustXPForItem(item, m_xpForLevel[10]))
             {
                 while (item.ArtifactLevel < 10)
                 {
@@ -428,12 +439,12 @@ namespace DOL.GS
             // Now let's see if this artifact has gained a new level yet.
             for (int level = 1; level <= 10; ++level)
             {
-                if (artifactXPNew < m_xpForLevel[level])
+                if (artifactXPNew < AdjustXPForItem(item, m_xpForLevel[level]))
                 {
                     break;
                 }
 
-                if (artifactXPOld > m_xpForLevel[level])
+                if (artifactXPOld > AdjustXPForItem(item, m_xpForLevel[level]))
                 {
                     continue;
                 }

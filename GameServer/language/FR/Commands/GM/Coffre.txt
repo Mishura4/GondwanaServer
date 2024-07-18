@@ -1,57 +1,78 @@
-Commands.GM.Coffre.Description:	Gestion des coffres
-Commands.GM.Coffre.Usage.Create:		'/coffre create' crée un nouveau coffre (100% chance d'apparition, 1h d'intervalle entre les items)
-Commands.GM.Coffre.Usage.Model:	'/coffre model <model>' change le skin du coffre selectionné
-Commands.GM.Coffre.Usage.Item:		'/coffre item <chance> <interval>' change le nombre de chances d'apparition d'un item, interval d'apparition d'un item en minutes
-Commands.GM.Coffre.Usage.Add:	'/coffre add <id_nb> <chance>' ajoute ou modifie un item (id_nb) avec son taux de chance d'apparition au coffre sélectionné
-Commands.GM.Coffre.Usage.Remove:		'/coffre remove <id_nb>' retire un item (id_nb) du coffre sélectionné
-Commands.GM.Coffre.Usage.Name:	'/coffre name <name>' change le nom du coffre sélectionné
-Commands.GM.Coffre.Usage.Movehere:		'/coffre movehere' déplace le coffre sélectionné à votre position
-Commands.GM.Coffre.Usage.Delete:	'/coffre delete' supprime le coffre sélectionné
-Commands.GM.Coffre.Usage.Reset:		'/coffre reset' remet à zéro la dernière fois que le coffre a été ouvert
-Commands.GM.Coffre.Usage.Info:	'/coffre info' donne toutes les informations du coffre sélectionné
-Commands.GM.Coffre.Usage.Copy:		'/coffre copy' copie le coffre sélectionné à votre position
-Commands.GM.Coffre.Usage.RandomCopy:	'/coffre randomcopy' copie le coffre sélectionné à votre position mais change les valeurs de plus ou moins 10%
-Commands.GM.Coffre.Usage.Key:		'/coffre key <id_nb>' Id_nb de la clef nécessaire à l'ouverture du coffre (\"nokey\" pour retirer la clé)
-Commands.GM.Coffre.Usage.Difficult:	'/coffre difficult <difficulté>' difficulté pour crocheter le coffre (en %) si 0, le coffre ne peut pas être crocheté
-Commands.GM.Coffre.Usage.traprate:		'/coffre traprate <value>' Configure la valeur du TrapRate, qui est le pourcentage de faire pop un mob
-Commands.GM.Coffre.Usage.NPCTemplate:	'/coffre npctemplate <value>' Configure le npctemplate associé au pop mob de ce coffre
-Commands.GM.Coffre.Usage.Respawn:		'/coffre respawn <name>' Respawn un coffre en donnant son nom (reset du timer à 0)
-Commands.GM.Coffre.Usage.IsTeleport:	'/coffre isteleporter' Alterne l'état IsTeleporter du coffre
-Commands.GM.Coffre.Usage.Teleporter:		'/coffre teleporter <X> <Y> <Z> <heading> <RegionID>' Définit la destination du Téléporteur de ce coffre
-Commands.GM.Coffre.Usage.TPrequirement:	'/coffre tprequirement <level>' Définit le Level minimum pour pouvoir utiliser le Téléporteur de ce coffre
-Commands.GM.Coffre.Usage.TPEffect:		'/coffre tpeffect <SpellID>' Définit l'effect utilisé par la téléportation de ce coffre basé sur son SpellID
-Commands.GM.Coffre.Usage.TPIsRenaissance:	'/coffre tpisrenaissance' Alterne l'état IsRenaissance du coffre
-Commands.GM.Coffre.Usage.IsOpeningRenaissance:		'/coffre isOpeningRenaissance' Alterne l'état isOpeningRenaissanceType du coffre
-Commands.GM.Coffre.Usage.PunishSpellId:		'/coffre punishSpellId <SpellId>' Définit le SpellID pour punir le joueur si il n'est pas Isrenaissance
-Commands.GM.Coffre.Usage.PickableAnim:	'/coffre pickableAnim' Alterne l'état de HasPickableAnim ou Activer ou désactiver l'emote pickup
-Commands.GM.Coffre.Usage.InfoInterval:		'/coffre interval <minutes>' Change l'intervalle d'ouverture d'un coffre en minutes
-Commands.GM.Coffre.Usage.LongDistance:	'/coffre longdistance <true|false>' Change la distance d'interaction du coffre. (utile pour les gros coffres)
+Commands.GM.Coffre.Description:					Gestion des coffres
+Commands.GM.Coffre.Usage.Create:				'/coffre create' crée un nouveau coffre (100% chance d'apparition, 1h d'intervalle entre les items)
+Commands.GM.Coffre.Usage.Model:					'/coffre model <model>' change le skin du coffre selectionné
+Commands.GM.Coffre.Usage.Item:					'/coffre item <chance> <interval>' change le nombre de chances d'apparition d'un item, interval d'apparition d'un item en minutes
+Commands.GM.Coffre.Usage.Add:					'/coffre add <id_nb> <chance>' ajoute ou modifie un item (id_nb) avec son taux de chance d'apparition au coffre sélectionné
+Commands.GM.Coffre.Usage.Remove:				'/coffre remove <id_nb>' retire un item (id_nb) du coffre sélectionné
+Commands.GM.Coffre.Usage.Name:					'/coffre name <name>' change le nom du coffre sélectionné
+Commands.GM.Coffre.Usage.Movehere:				'/coffre movehere' déplace le coffre sélectionné à votre position
+Commands.GM.Coffre.Usage.Delete:				'/coffre delete' supprime le coffre sélectionné
+Commands.GM.Coffre.Usage.Reset:					'/coffre reset' remet à zéro la dernière fois que le coffre a été ouvert
+Commands.GM.Coffre.Usage.Info:					'/coffre info' donne toutes les informations du coffre sélectionné
+Commands.GM.Coffre.Usage.Copy:					'/coffre copy' copie le coffre sélectionné à votre position
+Commands.GM.Coffre.Usage.RandomCopy:			'/coffre randomcopy' copie le coffre sélectionné à votre position mais change les valeurs de plus ou moins 10%
+Commands.GM.Coffre.Usage.Key:					'/coffre key <id_nb>' Id_nb de la clef nécessaire à l'ouverture du coffre (\"nokey\" pour retirer la clé)
+Commands.GM.Coffre.Usage.Difficult:				'/coffre difficult <difficulté>' difficulté pour crocheter le coffre (en %) si 0, le coffre ne peut pas être crocheté
+Commands.GM.Coffre.Usage.traprate:				'/coffre traprate <value>' Configure la valeur du TrapRate, qui est le pourcentage de faire pop un mob
+Commands.GM.Coffre.Usage.NPCTemplate:			'/coffre npctemplate <value>' Configure le npctemplate associé au pop mob de ce coffre
+Commands.GM.Coffre.Usage.Respawn:				'/coffre respawn <name>' Respawn un coffre en donnant son nom (reset du timer à 0)
+Commands.GM.Coffre.Usage.IsTeleport:			'/coffre isteleporter' Alterne l'état IsTeleporter du coffre
+Commands.GM.Coffre.Usage.Teleporter:			'/coffre teleporter <X> <Y> <Z> <heading> <RegionID>' Définit la destination du Téléporteur de ce coffre
+Commands.GM.Coffre.Usage.TPrequirement:			'/coffre tprequirement <level>' Définit le Level minimum pour pouvoir utiliser le Téléporteur de ce coffre
+Commands.GM.Coffre.Usage.TPEffect:				'/coffre tpeffect <SpellID>' Définit l'effect utilisé par la téléportation de ce coffre basé sur son SpellID
+Commands.GM.Coffre.Usage.TPIsRenaissance:		'/coffre tpisrenaissance' Alterne l'état IsRenaissance du coffre
+Commands.GM.Coffre.Usage.IsOpeningRenaissance:	'/coffre isOpeningRenaissance' Alterne l'état isOpeningRenaissanceType du coffre
+Commands.GM.Coffre.Usage.PunishSpellId:			'/coffre punishSpellId <SpellId>' Définit le SpellID pour punir le joueur si il n'est pas Isrenaissance
+Commands.GM.Coffre.Usage.PickableAnim:			'/coffre pickableAnim' Alterne l'état de HasPickableAnim ou Activer ou désactiver l'emote pickup
+Commands.GM.Coffre.Usage.InfoInterval:			'/coffre interval <minutes>' Change l'intervalle d'ouverture d'un coffre en minutes
+Commands.GM.Coffre.Usage.LongDistance:			'/coffre longdistance <true|false>' Change la distance d'intéraction du coffre. (utile pour les gros coffres)
+Commands.GM.Coffre.Usage.TPID:					'/coffre tpid <value>' Définit l'ID du TPPoint du coffre sélectionné
+Commands.GM.Coffre.Usage.ShouldRespawnToTPID:	'/coffre shouldrespawntotpid' Alterne (on/off) le statut "Respawn à un TPPoint" du coffre sélectionné
+Commands.GM.Coffre.Usage.CurrentStep:			'/coffre currentstep <value>' Définit l'étape précise dans le TPPoint du coffre sélectionné
+Commands.GM.Coffre.Usage.PickOnTouch:			'/coffre pickontouch' Alterne l'état de PickOnTouch du coffre
+Commands.GM.Coffre.Usage.SecondaryModel:		'/coffre secondarymodel' <model> Définit le modèle secondaire du coffre
+Commands.GM.Coffre.Usage.IsOpenableOnce:		'/coffre isopenableonce' Alterne l'état "Est ouvrable une seule fois par joueur" du coffre
+Commands.GM.Coffre.Usage.IsTerritoryLinked:		'/coffre isterritorylinked' Alterne l'état "Lié au territoire" du coffre
+Commands.GM.Coffre.Usage.KeyLoseDur:			'/coffre keylosedur <dur>' Définit la durabilité perdue de la clé à chaque utilisation
+Commands.GM.Coffre.Usage.SwitchFamily:			'/coffre switchfamily <family>' Définit la famille de switch du coffre
+Commands.GM.Coffre.Usage.SwitchOrder:			'/coffre switchorder <order>' Définit l'ordre de l'interrupteur du coffre
+Commands.GM.Coffre.Usage.IsSwitch:				'/coffre isswitch' Alterne l'état IsSwitch (interrupteur) du coffre
+Commands.GM.Coffre.Usage.WrongOrderResetFamily:	'/coffre wrongorderresetfamily' Alterne l'état "Dépend de l'ordre dans la Famille" de l'interrupteur du coffre
+Commands.GM.Coffre.Usage.ActivatedDuration:		'/coffre activatedduration <seconds>' Définit la durée d'activation de l'interrupteur du coffre
+Commands.GM.Coffre.Usage.ActivatedBySwitchOn:	'/coffre activatedbyswitchon <eventID>' Définit l'ID de l'évènement activé par l'interrupteur On
+Commands.GM.Coffre.Usage.ActivatedBySwitchOff:	'/coffre activatedbyswitchoff <eventID>' Définit l'ID de l'évènement activé par l'interrupteur Off
+Commands.GM.Coffre.Usage.ResetBySwitchOn:		'/coffre resetbyswitchon <eventID>' Définit l'ID de l'évènement réinitialisé par l'interrupteur On
+Commands.GM.Coffre.Usage.ResetBySwitchOff:		'/coffre resetbyswitchoff <eventID>' Définit l'ID de l'évènement réinitialisé par l'interrupteur Off
+Commands.GM.Coffre.Usage.SwitchOnSound:			'/coffre switchonsound <soundID>' Définit le son de l'interrupteur On
+Commands.GM.Coffre.Usage.WrongFamilyOrderSound:	'/coffre wrongfamilyordersound <soundID>' Définit le son généré si ordre incorrect dans la famille de l'interrupteur
+Commands.GM.Coffre.Usage.ActivatedFamilySound:	'/coffre activatedfamilysound <soundID>' Définit le son généré s'il y a activation de la famille de l'interrupteur
+Commands.GM.Coffre.Usage.DeactivatedFamilySound:	'/coffre deactivatedfamilysound <soundID>' Définit le son de la désactivation de la famille de l'interrupteur
 
-Commands.GM.Chest.Description:	Gestion des coffres
-Commands.GM.Chest.Usage.Create:		'/chest create' crée un nouveau chest (100% chance d'apparition, 1h d'intervalle entre les items)
-Commands.GM.Chest.Usage.Model:	'/chest model <model>' change le skin du chest sélectionné
-Commands.GM.Chest.Usage.Item:		'/chest item <chance> <interval>' change le nombre de chances d'apparition d'un item, interval d'apparition d'un item en minutes
-Commands.GM.Chest.Usage.Add:	'/chest add <id_nb> <chance>' ajoute ou modifie un item (id_nb) avec son taux de chance d'apparition au chest sélectionné
-Commands.GM.Chest.Usage.Remove:		'/chest remove <id_nb>' retire un item (id_nb) du chest sélectionné
-Commands.GM.Chest.Usage.Name:	'/chest name <name>' change le nom du chest sélectionné
-Commands.GM.Chest.Usage.Movehere:		'/chest movehere' déplace le chest sélectionné à votre position
-Commands.GM.Chest.Usage.Delete:	'/chest delete' supprime le chest sélectionné
-Commands.GM.Chest.Usage.Reset:		'/chest reset' remet à zéro la dernière fois que le chest a été ouvert
-Commands.GM.Chest.Usage.Info:	'/chest info' donne toutes les informations du chest sélectionné
-Commands.GM.Chest.Usage.Copy:		'/chest copy' copie le chest sélectionné à votre position
-Commands.GM.Chest.Usage.RandomCopy:	'/chest randomcopy' copie le chest sélectionné à votre position mais change les valeurs de plus ou moin 10%
-Commands.GM.Chest.Usage.Key:		'/chest key <id_nb>' Id_nb de la clef nécessaire à l'ouverture du chest (\"nokey\" pour retirer la clé)
-Commands.GM.Chest.Usage.Difficult:	'/chest difficult <difficulté>' difficulté pour crocheter le chest (en %) si 0, le chest ne peut pas être crocheté
-Commands.GM.Chest.Usage.traprate:		'/chest traprate <value>' Configure la valeur du TrapRate, qui est le pourcentage de faire pop un mob
-Commands.GM.Chest.Usage.NPCTemplate:	'/chest npctemplate <value>' Configure le npctemplate associé au pop mob de ce chest
-Commands.GM.Chest.Usage.Respawn:		'/chest respawn <name>' Respawn un chest en donnant son nom (reset du timer à 0)
-Commands.GM.Chest.Usage.IsTeleport:	'/chest isteleporter' Alterne l'état IsTeleporter du chest
-Commands.GM.Chest.Usage.Teleporter:		'/chest teleporter <X> <Y> <Z> <heading> <RegionID>' Définit la destination du Téléporteur de ce chest
-Commands.GM.Chest.Usage.TPrequirement:	'/chest tprequirement <level>' Définit le Level minimum pour pouvoir utiliser le Téléporteur de ce chest
-Commands.GM.Chest.Usage.TPEffect:		'/chest tpeffect <SpellID>' Définit l'effect utilisé par la téléportation de ce chest basé sur son SpellID
-Commands.GM.Chest.Usage.TPIsRenaissance:	'/chest tpisrenaissance' Alterne l'état IsRenaissance du chest
-Commands.GM.Chest.Usage.IsOpeningRenaissance:		'/chest isOpeningRenaissance' Alterne l'état isOpeningRenaissanceType du chest
-Commands.GM.Chest.Usage.PunishSpellId:		'/chest punishSpellId <SpellId>' Définit le SpellID pour punir le joueur si il n'est pas Isrenaissance
-Commands.GM.Chest.Usage.PickableAnim:	'/chest pickableAnim' Alterne l'état de HasPickableAnim ou Activer ou désactiver l'emote pickup
-Commands.GM.Chest.Usage.InfoInterval:		'/chest interval <minutes>' Change l'intervalle d'ouverture d'un chest en minutes
-Commands.GM.Chest.Usage.LongDistance:	'/chest longdistance <true|false>' Change la distance d'interaction du coffre. (utile pour les gros coffres)
+Commands.GM.Chest.Description:					Gestion des coffres
+Commands.GM.Chest.Usage.Create:					'/chest create' crée un nouveau chest (100% chance d'apparition, 1h d'intervalle entre les items)
+Commands.GM.Chest.Usage.Model:					'/chest model <model>' change le skin du chest sélectionné
+Commands.GM.Chest.Usage.Item:					'/chest item <chance> <interval>' change le nombre de chances d'apparition d'un item, interval d'apparition d'un item en minutes
+Commands.GM.Chest.Usage.Add:					'/chest add <id_nb> <chance>' ajoute ou modifie un item (id_nb) avec son taux de chance d'apparition au chest sélectionné
+Commands.GM.Chest.Usage.Remove:					'/chest remove <id_nb>' retire un item (id_nb) du chest sélectionné
+Commands.GM.Chest.Usage.Name:					'/chest name <name>' change le nom du chest sélectionné
+Commands.GM.Chest.Usage.Movehere:				'/chest movehere' déplace le chest sélectionné à votre position
+Commands.GM.Chest.Usage.Delete:					'/chest delete' supprime le chest sélectionné
+Commands.GM.Chest.Usage.Reset:					'/chest reset' remet à zéro la dernière fois que le chest a été ouvert
+Commands.GM.Chest.Usage.Info:					'/chest info' donne toutes les informations du chest sélectionné
+Commands.GM.Chest.Usage.Copy:					'/chest copy' copie le chest sélectionné à votre position
+Commands.GM.Chest.Usage.RandomCopy:				'/chest randomcopy' copie le chest sélectionné à votre position mais change les valeurs de plus ou moin 10%
+Commands.GM.Chest.Usage.Key:					'/chest key <id_nb>' Id_nb de la clef nécessaire à l'ouverture du chest (\"nokey\" pour retirer la clé)
+Commands.GM.Chest.Usage.Difficult:				'/chest difficult <difficulté>' difficulté pour crocheter le chest (en %) si 0, le chest ne peut pas être crocheté
+Commands.GM.Chest.Usage.traprate:				'/chest traprate <value>' Configure la valeur du TrapRate, qui est le pourcentage de faire pop un mob
+Commands.GM.Chest.Usage.NPCTemplate:			'/chest npctemplate <value>' Configure le npctemplate associé au pop mob de ce chest
+Commands.GM.Chest.Usage.Respawn:				'/chest respawn <name>' Respawn un chest en donnant son nom (reset du timer à 0)
+Commands.GM.Chest.Usage.IsTeleport:				'/chest isteleporter' Alterne l'état IsTeleporter du chest
+Commands.GM.Chest.Usage.Teleporter:				'/chest teleporter <X> <Y> <Z> <heading> <RegionID>' Définit la destination du Téléporteur de ce chest
+Commands.GM.Chest.Usage.TPrequirement:			'/chest tprequirement <level>' Définit le Level minimum pour pouvoir utiliser le Téléporteur de ce chest
+Commands.GM.Chest.Usage.TPEffect:				'/chest tpeffect <SpellID>' Définit l'effect utilisé par la téléportation de ce chest basé sur son SpellID
+Commands.GM.Chest.Usage.TPIsRenaissance:		'/chest tpisrenaissance' Alterne l'état IsRenaissance du chest
+Commands.GM.Chest.Usage.IsOpeningRenaissance:	'/chest isOpeningRenaissance' Alterne l'état isOpeningRenaissanceType du chest
+Commands.GM.Chest.Usage.PunishSpellId:			'/chest punishSpellId <SpellId>' Définit le SpellID pour punir le joueur si il n'est pas Isrenaissance
+Commands.GM.Chest.Usage.PickableAnim:			'/chest pickableAnim' Alterne l'état de HasPickableAnim ou Activer ou désactiver l'emote pickup
+Commands.GM.Chest.Usage.InfoInterval:			'/chest interval <minutes>' Change l'intervalle d'ouverture d'un chest en minutes
+Commands.GM.Chest.Usage.LongDistance:			'/chest longdistance <true|false>' Change la distance d'interaction du coffre. (utile pour les gros coffres)

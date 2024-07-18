@@ -332,7 +332,7 @@ Commands.Players.Guild.CombatZone.NotEnoughMerit:	Your guild must have {0} merit
 Commands.Players.Guild.CombatZone.AreaName:			Combat zone of {0}.
 
 Commands.Players.Guild.InviteNotThis:				You cannot invite a member of this realm to your guild.
-Commands.Players.Guild.TerritoryPaid:				The amount of {0} has been withdrawn from your guild's bank to fund your territories.
+Commands.Players.Guild.TerritoryPaid:				The amount of {0} Gold has been withdrawn from your guild's bank to fund your territories.
 Commands.Players.Guild.TerritoryNoMoney:			Your guild could not honor its debts and lost its conquered territories.  
 Commands.Players.Guild.TerritoryMeritPoints:		Territories occupation earns your guild {0} merit points.
 Commands.Players.Guild.TerritoryBeGuilded:			You must belong to a guild to see occupied territories.
@@ -344,7 +344,7 @@ Commands.Players.Guild.Territories.TerritoriesList:		---- Territories ----
 Commands.Players.Guild.Territories.TerritoryNeutral:	Neutral
 Commands.Players.Guild.Territories.GuildInfo:			---- Guild Territories Info ----
 Commands.Players.Guild.Territories.MaxTerritories:		Maximum count of territories before penalties: {0} (currently {1})
-Commands.Players.Guild.Territories.DailyRent:			Total hourly rent price: {0}
+Commands.Players.Guild.Territories.DailyRent:			Total hourly rent price: {0} Gold
 Commands.Players.Guild.Territories.DailyMeritPoints:	Total hourly merit points: {0}
 Commands.Players.Guild.Territories.TimeBeforeRent:		Time remaining before rental payment: {0}
 Commands.Players.Guild.Territories.TotalXPBonus:		Total bonus XP: {0:0}%

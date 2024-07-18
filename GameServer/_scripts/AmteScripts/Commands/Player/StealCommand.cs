@@ -304,7 +304,7 @@ namespace DOL.GS.Commands
             if (mezzerId != null)
             {
                 stealer.Reputation--;
-                stealer.Out.SendMessage(LanguageMgr.GetTranslation(stealer.Client.Account.Language, "Commands.Players.Vol.StealSleeping"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                stealer.Out.SendMessage(LanguageMgr.GetTranslation(stealer.Client.Account.Language, "Commands.Players.Vol.StealSleeping"), eChatType.CT_YouDied, eChatLoc.CL_SystemWindow);
                 stealer.SaveIntoDatabase();
 
                 Random rand = new Random(DateTime.UtcNow.Millisecond);
@@ -315,7 +315,7 @@ namespace DOL.GS.Commands
                     if (mezzerClient != null)
                     {
                         mezzerClient.Player.Reputation--;
-                        mezzerClient.Out.SendMessage(LanguageMgr.GetTranslation(mezzerClient.Account.Language, "Commands.Players.Vol.StealSleapingPartner"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        mezzerClient.Out.SendMessage(LanguageMgr.GetTranslation(mezzerClient.Account.Language, "Commands.Players.Vol.StealSleapingPartner"), eChatType.CT_YouDied, eChatLoc.CL_SystemWindow);
                         mezzerClient.Player.SaveIntoDatabase();
                     }
                 }
@@ -342,7 +342,7 @@ namespace DOL.GS.Commands
             if (newRand.Next() > 30)
             {
                 stealer.Reputation--;
-                stealer.Out.SendMessage(LanguageMgr.GetTranslation(stealer.Client.Account.Language, "Commands.Players.Vol.LostRep"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                stealer.Out.SendMessage(LanguageMgr.GetTranslation(stealer.Client.Account.Language, "Commands.Players.Vol.LostRep"), eChatType.CT_YouDied, eChatLoc.CL_SystemWindow);
                 stealer.SaveIntoDatabase();
             }
 

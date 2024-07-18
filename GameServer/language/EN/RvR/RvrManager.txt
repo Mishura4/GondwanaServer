@@ -1,3 +1,42 @@
 RvrManager.Score.Title:		--- RvR End ---
-RvrManager.Score.NoWinner:	Winner: No winner - no sufficient participation !
-RvrManager.Score.Winner:	Winner 
+RvrManager.Score.NoWinner:	Winner: No winner - no sufficient participation!
+RvrManager.Score.Winner:	Winner
+
+RvRManager.GMNotAllowed:			Go away, stupid Game Master!
+RvRManager.LowLevel:				Come back when you get more experience!
+RvRManager.WinnerBonuses:			Your realm has won the last RvR session and now benefit from these bonuses:
+RvRManager.BonusGold:				- Bonus in gold when killing monsters: 5%
+RvRManager.BonusExperience:			- Experience bonus when killing monsters: 10%
+RvRManager.BonusRealmPoints:		- Realm point bonus when killing players and territory guards: 5%
+RvRManager.LoserNoBonuses:			Your realm has lost the last RvR session and does not benefit from any bonuses.
+RvRManager.Statistics:				- RvR Statistics:
+RvRManager.HoldingTime:				- Keep occupation duration:
+RvRManager.TotalScores:				- Total RvR scores of the day:
+RvRManager.CurrentChampion:			- Current RvR champion: 
+RvRManager.Status:					The rvr is 
+RvRManager.UpdateFrequency:			(Statistics updated 30 seconds)
+RvRManager.CannotAttackRealmMember:	You cannot attack a member of your own realm!
+RvRManager.Players:					players
+RvRManager.RealmPoints:				RP
+RvRManager.Open:					open
+RvRManager.Closed:					closed
+RvRManager.None:					none
+RvRManager.Seconds:					seconds
+
+RvRManager.RvROpened:					The RvR zones have been opened with regions {0}.
+RvRManager.RvRNotOpened:				The RvR zones could not be opened.
+RvRManager.PvPOpened:					The PvP zone has been opened with region {0}.
+RvRManager.PvPNotOpened:				The PvP zone could not be opened in region {0}.
+RvRManager.RvRClosed:					The RvR zone has been closed.
+RvRManager.RvRNotClosed:				The RvR zone could not be closed.
+RvRManager.PvPClosed:					The PvP zone has been closed.
+RvRManager.PvPNotClosed:				The PvP zone could not be closed.
+RvRManager.RvRUnforceNotPossible:		RvR must be open for the unforce.
+RvRManager.RvRWillCloseAutomatically:	The RvR zone will automatically close if it is outside the allowed hours.
+RvRManager.PvPUnforceNotPossible:		PvP must be open to allow the unforce.
+RvRManager.PvPWillCloseAutomatically:	The PvP zone will automatically close if it is outside the allowed hours.
+RvRManager.RvRStatus:					The current RvR status is: {0}
+RvRManager.PvPStatus:					The current PvP regions status is: {0}
+RvRManager.RvRAndPvPMustBeClosed:		RvR and PvP zones must be closed to refresh the list of available maps.
+RvRManager.MapsUsed:					RvR uses maps: {0}, PvP uses maps: {1}.
+RvRManager.RvRPvPReset:					RvR and PvP have been reset.

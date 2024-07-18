@@ -701,6 +701,7 @@ namespace DOL.Territories
                 {
                     pl.SendTranslatedMessage("GameUtils.Guild.Territory.Capture.Captured", eChatType.CT_Important, eChatLoc.CL_SystemWindow, player.GuildName, CurrentTerritory.Name);
                 }
+                player.Out.SendSoundEffect(9207, player.Position, 0);
                 NewsMgr.CreateNews("GameUtils.Guild.Territory.Capture.Captured", 0, eNewsType.PvE, false, true, player.GuildName, CurrentTerritory.Name);
             }
             else

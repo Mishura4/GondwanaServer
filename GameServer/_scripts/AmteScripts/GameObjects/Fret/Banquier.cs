@@ -99,19 +99,8 @@ namespace DOL.GS.Scripts
                 return true;
             }
 
-            string message = LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.Greetings1", player.Name) + " ";
-            if (Money.GetMithril(bank.Money) != 0)
-                message += LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.Mithril", Money.GetMithril(bank.Money)) + " ";
-            if (Money.GetPlatinum(bank.Money) != 0)
-                message += LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.Platinum", Money.GetPlatinum(bank.Money)) + " ";
-            if (Money.GetGold(bank.Money) != 0)
-                message += LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.Gold", Money.GetGold(bank.Money)) + " ";
-            if (Money.GetSilver(bank.Money) != 0)
-                message += LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.Silver", Money.GetSilver(bank.Money)) + " ";
-            if (Money.GetCopper(bank.Money) != 0)
-                message += LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.Copper", Money.GetCopper(bank.Money)) + " ";
-            message += LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.Greetings2") + "\r\n";
-            message += LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.Greetings3") + "\n\n" + LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.Greetings4") + "\n" + LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.Greetings5") + "\n" + LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.Greetings6");
+            string message = LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.Greetings1", player.Name, Money.GetString(bank.Money)) + " " + "\r\n";
+            message += LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.Greetings2") + "\n\n" + LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.Greetings3") + "\n" + LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.Greetings4") + "\n" + LanguageMgr.GetTranslation(player.Client.Account.Language,"Banker.Greetings5");
             player.Out.SendMessage(message, eChatType.CT_System, eChatLoc.CL_PopupWindow);
             return true;
         }

@@ -146,7 +146,7 @@ public static class DataQuestJsonMgr
             return;
         }
         ChatUtil.SendScreenCenter(player, $"Quest \"{quest.Name}\" accepted!");
-        player.Out.SendSoundEffect(7, 0, 0, 0, 0, 0);
+        player.Out.SendSoundEffect(7, player.Position, 0);
         var dbQuest = new DBQuest
         {
             Character_ID = player.InternalID,

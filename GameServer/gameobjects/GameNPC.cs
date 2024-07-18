@@ -4322,7 +4322,7 @@ namespace DOL.GS
 
             if (!CurrentTerritory.IsOwnedBy(playerAttacker))
             {
-                TerritoryManager.Instance.TerritoryAttacked(CurrentTerritory);
+                TerritoryManager.Instance.TerritoryAttacked(CurrentTerritory, playerAttacker);
             }
         }
 

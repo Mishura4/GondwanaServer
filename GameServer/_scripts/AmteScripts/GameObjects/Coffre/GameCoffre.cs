@@ -40,6 +40,10 @@ namespace DOL.GS.Scripts
         public string ActivatedBySwitchOff { get; set; }
         public string ResetBySwitchOn { get; set; }
         public string ResetBySwitchOff { get; set; }
+        public int SwitchOnSound { get; set; }
+        public int WrongFamilyOrderSound { get; set; }
+        public int ActivatedFamilySound { get; set; }
+        public int DeactivatedFamilySound { get; set; }
 
         private bool isActivated;
         private Timer proximityTimer;
@@ -329,6 +333,7 @@ namespace DOL.GS.Scripts
                         switchCoffre.RevertToPrimaryModel();
                     }
                     player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.SwitchOrderReset"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    player.Out.SendSoundEffect((ushort)WrongFamilyOrderSound, Position, 0);
                 }
                 else
                 {
@@ -340,6 +345,7 @@ namespace DOL.GS.Scripts
             isActivated = true;
             ShowSecondaryModel();
             player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.SwitchActivated"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+            player.Out.SendSoundEffect((ushort)SwitchOnSound, Position, 0);
 
             if (switchesInFamily.All(c => c.isActivated))
             {
@@ -353,6 +359,7 @@ namespace DOL.GS.Scripts
             KillLinkedMobs();
 
             player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.SwitchAllActivated"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+            player.Out.SendSoundEffect((ushort)ActivatedFamilySound, Position, 0);
 
             GameEventMgr.Notify(SwitchEvent.SwitchActivated, this);
 
@@ -410,6 +417,14 @@ namespace DOL.GS.Scripts
             foreach (var mob in mobsToRespawn)
             {
                 mob.AddToWorld();
+            }
+
+            foreach (var obj in GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+            {
+                if (obj is GamePlayer player)
+                {
+                    player.Out.SendSoundEffect((ushort)DeactivatedFamilySound, Position, 0);
+                }
             }
 
             if (!string.IsNullOrEmpty(ActivatedBySwitchOff))
@@ -1064,6 +1079,10 @@ namespace DOL.GS.Scripts
             ActivatedBySwitchOff = coffre.ActivatedBySwitchOff;
             ResetBySwitchOn = coffre.ResetBySwitchOn;
             ResetBySwitchOff = coffre.ResetBySwitchOff;
+            SwitchOnSound = coffre.SwitchOnSound;
+            WrongFamilyOrderSound = coffre.WrongFamilyOrderSound;
+            ActivatedFamilySound = coffre.ActivatedFamilySound;
+            DeactivatedFamilySound = coffre.DeactivatedFamilySound;
 
             InitTimer();
 
@@ -1142,6 +1161,10 @@ namespace DOL.GS.Scripts
             Coffre.ActivatedBySwitchOff = ActivatedBySwitchOff;
             Coffre.ResetBySwitchOn = ResetBySwitchOn;
             Coffre.ResetBySwitchOff = ResetBySwitchOff;
+            Coffre.SwitchOnSound = SwitchOnSound;
+            Coffre.WrongFamilyOrderSound = WrongFamilyOrderSound;
+            Coffre.ActivatedFamilySound = ActivatedFamilySound;
+            Coffre.DeactivatedFamilySound = DeactivatedFamilySound;
 
             if (Items != null)
             {
@@ -1285,6 +1308,10 @@ namespace DOL.GS.Scripts
             text.Add("Switch OFF deactivates EventID: " + this.ActivatedBySwitchOff);
             text.Add("Switch ON resets EventID: " + this.ResetBySwitchOn);
             text.Add("Switch OFF resets EventID: " + this.ResetBySwitchOff);
+            text.Add("Switch ON Sound Effect: " + this.SwitchOnSound);
+            text.Add("Wrong Family Order Sound Effect: " + this.WrongFamilyOrderSound);
+            text.Add("Switch Activated by Family Sound Effect: " + this.ActivatedFamilySound);
+            text.Add("Switch Family Timer ENDS Sound Effect: " + this.DeactivatedFamilySound);
             return text;
         }
 
@@ -1330,6 +1357,10 @@ namespace DOL.GS.Scripts
                 ActivatedBySwitchOff = coffre.ActivatedBySwitchOff;
                 ResetBySwitchOn = coffre.ResetBySwitchOn;
                 ResetBySwitchOff = coffre.ResetBySwitchOff;
+                SwitchOnSound = coffre.SwitchOnSound;
+                WrongFamilyOrderSound = coffre.WrongFamilyOrderSound;
+                ActivatedFamilySound = coffre.ActivatedFamilySound;
+                DeactivatedFamilySound = coffre.DeactivatedFamilySound;
                 InitTimer();
             }
         }

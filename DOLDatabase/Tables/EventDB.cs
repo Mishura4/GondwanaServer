@@ -15,11 +15,15 @@ namespace DOLDatabase.Tables
         private int m_startConditionType;
         private int m_eventChance;
         private string m_DebutText;
+        private int m_startEventSound;
         private string m_RandomText;
+        private string m_randomEventSound;
         private long m_RandTextInterval;
         private string m_remainingTimeText;
+        private int m_remainingTimeEvSound;
         private long m_remainingTimeInterval;
         private string m_endText;
+        private int m_endEventSound;
         private int m_status;
         private int m_endingActionB;
         private int m_endingActionA;
@@ -44,6 +48,7 @@ namespace DOLDatabase.Tables
         private bool m_parallelLaunch;
         private string m_eventFamily;
         private int m_timerBeforeReset;
+        private int? m_tppointid;
 
         [DataElement(AllowDbNull = false, Varchar = 255)]
         public string EventName
@@ -273,6 +278,17 @@ namespace DOLDatabase.Tables
             }
         }
 
+        [DataElement(AllowDbNull = true)]
+        public int StartEventSound
+        {
+            get => m_startEventSound;
+            set
+            {
+                m_startEventSound = value;
+                Dirty = true;
+            }
+        }
+
         [DataElement(AllowDbNull = true, Varchar = 255)]
         public string RandomText
         {
@@ -284,6 +300,17 @@ namespace DOLDatabase.Tables
             set
             {
                 m_RandomText = value;
+                Dirty = true;
+            }
+        }
+
+        [DataElement(AllowDbNull = true, Varchar = 255)]
+        public string RandomEventSound
+        {
+            get => m_randomEventSound;
+            set
+            {
+                m_randomEventSound = value;
                 Dirty = true;
             }
         }
@@ -318,6 +345,17 @@ namespace DOLDatabase.Tables
             }
         }
 
+        [DataElement(AllowDbNull = true)]
+        public int RemainingTimeEvSound
+        {
+            get => m_remainingTimeEvSound;
+            set
+            {
+                m_remainingTimeEvSound = value;
+                Dirty = true;
+            }
+        }
+
         [DataElement(AllowDbNull = false)]
         public long RemainingTimeInterval
         {
@@ -334,7 +372,7 @@ namespace DOLDatabase.Tables
         }
 
 
-        [DataElement(AllowDbNull = false, Varchar = 255)]
+        [DataElement(AllowDbNull = true, Varchar = 255)]
         public string EndText
         {
             get
@@ -349,7 +387,16 @@ namespace DOLDatabase.Tables
             }
         }
 
-
+        [DataElement(AllowDbNull = true)]
+        public int EndEventSound
+        {
+            get => m_endEventSound;
+            set
+            {
+                m_endEventSound = value;
+                Dirty = true;
+            }
+        }
 
         [DataElement(AllowDbNull = false)]
         public int Status
@@ -569,5 +616,16 @@ namespace DOLDatabase.Tables
             }
         }
 
+        [DataElement(AllowDbNull = true)]
+        public int? TPPointID
+        {
+            get => m_tppointid;
+
+            set
+            {
+                m_tppointid = value;
+                Dirty = true;
+            }
+        }
     }
 }

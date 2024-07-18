@@ -1,5 +1,6 @@
 using DOL.Database;
 using DOL.GS.PacketHandler;
+using DOL.Language;
 
 namespace DOL.GS.Scripts
 {
@@ -12,9 +13,9 @@ namespace DOL.GS.Scripts
 
             string message;
             if (JailMgr.IsPrisoner(player))
-                message = "Bonjour " + player.Name + ", tu veux  connaitre ta [peine] de prison ?!";
+                message = LanguageMgr.GetTranslation(player.Client.Account.Language, "GameJail.Interact.Prisoner", player.Name);
             else
-                message = "Vous voulez aller en prison ?";
+                message = LanguageMgr.GetTranslation(player.Client.Account.Language, "GameJail.Interact.NonPrisoner");
             player.Out.SendMessage(message, eChatType.CT_System, eChatLoc.CL_PopupWindow);
             return true;
         }
@@ -30,19 +31,20 @@ namespace DOL.GS.Scripts
             switch (str)
             {
                 case "peine":
+                case "sentence":
                     Prisoner prison = JailMgr.GetPrisoner(player);
                     if (prison == null) return Interact(player);
 
                     string reason = string.Empty;
                     if (prison.IsOutLaw)
                     {
-                        reason = "Raison de la peine: " + prison.Raison;
+                        reason = LanguageMgr.GetTranslation(player.Client.Account.Language, "GameJail.Reason", prison.Raison);
                     }
 
                     if (prison.RP)
-                        player.Out.SendMessage("Attends le " + prison.Sortie.ToShortDateString() + " vers " + prison.Sortie.Hour + "h ou demande à quelqu'un de payer ta caution.\n\n" + reason, eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameJail.RPWait", prison.Sortie.ToShortDateString(), prison.Sortie.Hour) + "\n\n" + LanguageMgr.GetTranslation(player.Client.Account.Language, "GameJail.RPReason", reason), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                     else
-                        player.Out.SendMessage("Attends le " + prison.Sortie.ToShortDateString() + " vers " + prison.Sortie.Hour + "h.", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameJail.NonRPWait", prison.Sortie.ToShortDateString(), prison.Sortie.Hour), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                     break;
 
                 default: return Interact(player);

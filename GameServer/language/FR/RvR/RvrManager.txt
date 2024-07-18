@@ -1,3 +1,42 @@
 RvrManager.Score.Title:		--- Fin du RvR ---
 RvrManager.Score.NoWinner:	Vainqueur: Aucun - Pas assez de joueur ayant participe !
-RvrManager.Score.Winner:	Vainqueur 
+RvrManager.Score.Winner:	Vainqueur
+
+RvRManager.GMNotAllowed:			Casse-toi connard de GM !
+RvRManager.LowLevel:				Reviens quand tu auras plus d'expérience !
+RvRManager.WinnerBonuses:			Votre royaume a remporté la dernière session RvR et bénéficie maintenant de ces bonus :
+RvRManager.BonusGold:				- Bonus en or lorsque vous tuez des monstres : 5%
+RvRManager.BonusExperience:			- Bonus d'expérience lorsque vous tuez des monstres : 10%
+RvRManager.BonusRealmPoints:		- Bonus de points de royaume lorsque vous tuez des joueurs et des gardes de territoires : 5%
+RvRManager.LoserNoBonuses:			Votre royaume a perdu la dernière session RvR et ne bénéficie d'aucun bonus.
+RvRManager.Statistics:				- Statistiques du RvR :
+RvRManager.HoldingTime:				- Temps de détention du fort :
+RvRManager.TotalScores:				- Scores totaux du RvR de la journée :
+RvRManager.CurrentChampion:			- Champion RvR actuel : 
+RvRManager.Status:					Le rvr est 
+RvRManager.UpdateFrequency:			(Mise à jour des stats toutes les 30 secondes)
+RvRManager.CannotAttackRealmMember:	Vous ne pouvez pas attaquer un membre de votre royaume !
+RvRManager.Players:					joueurs
+RvRManager.RealmPoints:				PR
+RvRManager.Open:					ouvert
+RvRManager.Closed:					fermé
+RvRManager.None:					aucun
+RvRManager.Seconds:					secondes
+
+RvRManager.RvROpened:					Les RvR ont été ouverts avec les régions {0}.
+RvRManager.RvRNotOpened:				Les RvR n'ont pas pu être ouverts.
+RvRManager.PvPOpened:					Le PvP a été ouvert avec la région {0}.
+RvRManager.PvPNotOpened:				Le PvP n'a pas pu être ouvert sur la région {0}.
+RvRManager.RvRClosed:					Le RvR a été fermé.
+RvRManager.RvRNotClosed:				Le RvR n'a pas pu être fermé.
+RvRManager.PvPClosed:					Le PvP a été fermé.
+RvRManager.PvPNotClosed:				Le PvP n'a pas pu être fermé.
+RvRManager.RvRUnforceNotPossible:		Le RvR doit être ouvert pour permettre le unforce.
+RvRManager.RvRWillCloseAutomatically:	Le RvR sera fermé automatiquement s'il n'est plus dans les bonnes horaires.
+RvRManager.PvPUnforceNotPossible:		Le PvP doit être ouvert pour le unforce.
+RvRManager.PvPWillCloseAutomatically:	Le PvP sera fermé automatiquement s'il n'est plus dans les bonnes horaires.
+RvRManager.RvRStatus:					Les RvR sont actuellement: {0}
+RvRManager.PvPStatus:					Les regions PvP sont actuellement: {0}
+RvRManager.RvRAndPvPMustBeClosed:		Les RvR et le PvP doivent être fermés pour rafraichir la liste des maps disponibles.
+RvRManager.MapsUsed:					Le RvR utilise les maps: {0}, le pvp utilise les maps: {1}.
+RvRManager.RvRPvPReset:					Les RvR et le PvP ont été réinitialisés.

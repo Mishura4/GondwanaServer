@@ -1867,6 +1867,7 @@ namespace DOL.GS.Commands
                                     foreach (GamePlayer guildPlayer in player.Guild.GetListOfOnlineMembers())
                                     {
                                         guildPlayer.SendTranslatedMessage("Commands.Players.Guild.TerritoryBanner.Summoned", eChatType.CT_Guild, eChatLoc.CL_SystemWindow, guildPlayer.GetPersonalizedName(player), territory.Name);
+                                        guildPlayer.Out.SendSoundEffect(9209, guildPlayer.Position, 0);
                                     }
                                 }
                             });
@@ -1961,6 +1962,7 @@ namespace DOL.GS.Commands
                                         }
                                     }
                                     territory.SpawnPortalNpc(player);
+                                    player.Out.SendSoundEffect(9218, player.Position, 0);
                                 }
                             });
                         }
@@ -2065,6 +2067,7 @@ namespace DOL.GS.Commands
                                         {
                                             GameNPC npc = territory.AddMercenary(player, npcTemplate);
                                             player.SendTranslatedMessage("Commands.Players.Guild.BuyDefender.Bought", eChatType.CT_System, eChatLoc.CL_ChatWindow, player.GetPersonalizedName(npc), territory.Name);
+                                            player.Out.SendSoundEffect(9215, player.Position, 0);
                                         }
                                         catch (Exception ex)
                                         {
@@ -2081,6 +2084,7 @@ namespace DOL.GS.Commands
                                 {
                                     GameNPC npc = territory.AddMercenary(player, npcTemplate);
                                     player.SendTranslatedMessage("Commands.Players.Guild.BuyDefender.Bought", eChatType.CT_System, eChatLoc.CL_ChatWindow, player.GetPersonalizedName(npc), territory.Name);
+                                    player.Out.SendSoundEffect(9215, player.Position, 0);
                                 }
                                 catch (Exception ex)
                                 {
@@ -2225,6 +2229,7 @@ namespace DOL.GS.Commands
                                             player.Guild.GuildCombatZoneAvailableTick = GameServer.Instance.TickCount + (uint)(Properties.GUILD_COMBAT_ZONE_COOLDOWN) * 60 * 1000;
                                         }
                                         region.CreateCombatZone(guild, player.Position);
+                                        player.Out.SendSoundEffect(9217, player.Position, 0);
                                     }
                                 });
                             }
@@ -2232,6 +2237,7 @@ namespace DOL.GS.Commands
                             {
                                 // GMs can spawn it anywhere for free except PVP RVR & dungeons
                                 region.CreateCombatZone(guild, player.Position);
+                                player.Out.SendSoundEffect(9217, player.Position, 0);
                             }
                         }
                         break;
@@ -3799,6 +3805,7 @@ namespace DOL.GS.Commands
             foreach (GamePlayer ply in player.Guild.GetListOfOnlineMembers())
             {
                 ply.Out.SendMessage(LanguageMgr.GetTranslation(ply.Client.Account.Language, "Commands.Players.Guild.BuffActivated", player.Name, buffName, meritPointCost), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                ply.Out.SendSoundEffect(9216, ply.Position, 0);
             }
             player.Guild.UpdateGuildWindow();
         }

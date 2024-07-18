@@ -332,7 +332,7 @@ Commands.Players.Guild.CombatZone.NotEnoughMerit:	Votre guilde doit avoir {0} po
 Commands.Players.Guild.CombatZone.AreaName:			Zone de combat de {0}
 
 Commands.Players.Guild.InviteNotThis:			Vous ne pouvez pas inviter un membre de ce royaume dans votre guilde.
-Commands.Players.Guild.TerritoryPaid:           La somme de {0} a été retirée de la banque de votre guilde pour financer vos territoires.
+Commands.Players.Guild.TerritoryPaid:           La somme de {0} Or a été retirée de la banque de votre guilde pour financer vos territoires.
 Commands.Players.Guild.TerritoryNoMoney:        Votre guilde n'a pas pu honorer ses dettes et vous avez perdu vos territoires conquis.
 Commands.Players.Guild.TerritoryMeritPoints:   L'occupation de vos territoires vous rapporte {0} points de mérite.
 Commands.Players.Guild.TerritoryBeGuilded:	Vous devez etre dans une guilde pour voir les territoires occupés.
@@ -344,7 +344,7 @@ Commands.Players.Guild.Territories.TerritoriesList:		---- Territoires ----
 Commands.Players.Guild.Territories.TerritoryNeutral:	Neutre
 Commands.Players.Guild.Territories.GuildInfo:			---- Information des territoires de guilde ----
 Commands.Players.Guild.Territories.MaxTerritories:		Nombre maximal de territoires avant pénalités: {0} (actuellement {1})
-Commands.Players.Guild.Territories.DailyRent:			Total de la taxe horaire : {0}
+Commands.Players.Guild.Territories.DailyRent:			Total de la taxe horaire : {0} Or
 Commands.Players.Guild.Territories.DailyMeritPoints:	Total des points de mérite horaires : {0}
 Commands.Players.Guild.Territories.TimeBeforeRent:		Temps restant avant paiement des loyers : {0}
 Commands.Players.Guild.Territories.TotalXPBonus:		Bonus total d'expérience : {0:0}%

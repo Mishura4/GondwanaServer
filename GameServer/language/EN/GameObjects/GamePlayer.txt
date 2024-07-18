@@ -441,6 +441,7 @@ GameObjects.GamePlayer.UseSlot.WaitBeforeDischarge:			You must wait {0} more sec
 GameObjects.GamePlayer.Whisper.SelectTarget:				Select a target to whisper to!
 GameObjects.GamePlayer.Murder:								You have lost 1 reputation point due to killing {0}.
 GameObjects.GamePlayer.Multiplekills:						You have lost 1 reputation point due to killing {0} multiple times.
+GameObjects.GamePlayer.GuardKill:							You have lost 1 reputation point for having killed a city guard.
 GameObjects.GamePlayer.Wanted:                              {0} is now wanted for his crimes and his felony.
 GameObjects.GamePlayer.Jailed:                              {0} has been put in jail by {1}.
 GameObjects.GamePlayer.Jailed.Unknown:                      {0} has been put in jail by the guards.

@@ -41,7 +41,7 @@ namespace DOL.GS.Scripts
                         theScroll = GetBookFromTitle(ScrollTitle);
                         if (theScroll == null)
                         {
-                            player.Out.SendMessage("Le livre \"" + ScrollTitle + "\" n'existe pas !", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                            player.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.Players.Book.NotExist", ScrollTitle), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                             return;
                         }
 
@@ -61,14 +61,14 @@ namespace DOL.GS.Scripts
 
                         if (item == null || (item.Id_nb != "scroll") || (item.Name != "Parchemin vierge"))
                         {
-                            player.Out.SendMessage("Vous devez posseder un parchemin vierge dans le dernier emplacement de votre inventaire pour créer un livre.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                            player.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.Players.Book.NeedBlankScroll"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                             return;
                         }
 
                         var book = GameServer.Database.SelectObject<DBBook>(b => b.Title == ScrollTitle);
                         if (book != null)
                         {
-                            player.Out.SendMessage("Ce livre existe déjà.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                            player.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.Players.Book.Exists"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                             return;
                         }
 
@@ -95,7 +95,7 @@ namespace DOL.GS.Scripts
                         };
                         GameServer.Database.AddObject(iu);
                         player.Inventory.AddItem(eInventorySlot.LastBackpack, GameInventoryItem.Create(iu));
-                        player.Out.SendMessage("Vous créez un livre.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.Players.Book.Created"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                         break;
                     #endregion
                     #region Ecriture
@@ -111,7 +111,7 @@ namespace DOL.GS.Scripts
 
                         DecInk(player, theScroll.InkId);
                         theScroll.Save();
-                        player.Out.SendMessage("Vous ecrivez quelques lignes sur \"" + ScrollTitle + "\".", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.Players.Book.Writing", ScrollTitle), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                         break;
                     #endregion
                     #region Suppression
@@ -126,14 +126,14 @@ namespace DOL.GS.Scripts
                             }
                         }
                         GameServer.Database.DeleteObject(theScroll);
-                        player.Out.SendMessage("Vous brûlez avec peine le dernier exemplaire de l'oeuvre nommée \"" + ScrollTitle + "\"...", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.Players.Book.Burned", ScrollTitle), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                         break;
                     #endregion
                     #region Correction
                     case "correct":
                         if (theScroll.Text.IndexOf("\n") == -1)
                         {
-                            player.Out.SendMessage("Vous ne pouvez pas effacer un parchemin vide !", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                            player.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.Players.Book.EmptyScroll"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                             return;
                         }
                         if (!HaveAcid(player))
@@ -143,7 +143,7 @@ namespace DOL.GS.Scripts
                         theScroll.Text = theScroll.Text.Substring(0, theScroll.Text.LastIndexOf('\n') + 1);
 
                         theScroll.Save();
-                        player.Out.SendMessage("Vous effacez la dernière ligne de \"" + ScrollTitle + "\".", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.Players.Book.LastLineErased", ScrollTitle), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                         break;
                         #endregion
                 }
@@ -175,7 +175,7 @@ namespace DOL.GS.Scripts
                     if ((ItemName.StartsWith("ink_")) || (ItemName.StartsWith("blood_")))
                         return player.Inventory.GetItem(i).Name.Replace("(Special) ", "");
                 }
-            return "Encre Inconnue";
+            return LanguageMgr.GetTranslation(player.Client.Account.Language, "Commands.Players.Book.UnknownInk");
         }
 
         /// <summary>
@@ -191,7 +191,7 @@ namespace DOL.GS.Scripts
                     if ((itemId.StartsWith("ink_")) || (itemId.StartsWith("blood_")))
                         return itemId;
                 }
-            return "Encre Inconnue";
+            return LanguageMgr.GetTranslation(player.Client.Account.Language, "Commands.Players.Book.UnknownInk");
         }
 
         /// <summary>
@@ -225,7 +225,7 @@ namespace DOL.GS.Scripts
         {
             if (theScroll.PlayerID != player.InternalID)
             {
-                player.Out.SendMessage("Vous n'etes pas l'auteur de \"" + theScroll.Title + "\".", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Commands.Players.Book.NotAuthor", theScroll.Title), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                 return false;
             }
             return true;
@@ -241,7 +241,7 @@ namespace DOL.GS.Scripts
                     if (player.Inventory.GetItem(i).Id_nb == "feather" ||
                         player.Inventory.GetItem(i).Id_nb.StartsWith("feather_"))
                         return true;
-            player.Out.SendMessage("Vous devez posseder une plume d'écrivain pour ecrire sur un parchemin.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Commands.Players.Book.NeedFeather"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
             return false;
         }
 
@@ -255,7 +255,7 @@ namespace DOL.GS.Scripts
                     if (player.Inventory.GetItem(i).Id_nb.StartsWith("ink_") ||
                         player.Inventory.GetItem(i).Id_nb.StartsWith("blood_"))
                         return true;
-            player.Out.SendMessage("Vous devez posseder de l'encre ou du sang pour ecrire sur un parchemin.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Commands.Players.Book.NeedInk"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
             return false;
         }
 
@@ -268,7 +268,7 @@ namespace DOL.GS.Scripts
                 if (player.Inventory.GetItem(i) != null)
                     if (player.Inventory.GetItem(i).Id_nb == "corrector")
                         return true;
-            player.Out.SendMessage("Vous devez posseder un correcteur pour effacer les lignes d'un parchemin.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Commands.Players.Book.NeedCorrector"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
             return false;
         }
 
@@ -283,7 +283,7 @@ namespace DOL.GS.Scripts
                 if (player.Inventory.GetItem(i) != null &&
                     player.Inventory.GetItem(i).Id_nb == ink)
                     return true;
-            player.Out.SendMessage("Vous devez posseder de l'encre de type \"" + ink + "\" pour continuer l'écriture de ce parchemin.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Commands.Players.Book.NeedRightInk", ink), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
             return false;
         }
 
@@ -292,13 +292,13 @@ namespace DOL.GS.Scripts
         /// </summary>
         public void Aide(GamePlayer player)
         {
-            player.Out.SendMessage("Utilisation du /book :", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-            player.Out.SendMessage("- /book create \"Titre\" : Crée un livre à partir d'un parchemin vierge. (En dernier slot de l'inventaire)", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-            player.Out.SendMessage("- /book write \"Titre\" <Texte à écrire> : Ecrit du texte sur un parchemin.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-            player.Out.SendMessage("-- (Si vous possedez plusieurs type d'encre, la première de votre inventaire sera utilisée)", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-            player.Out.SendMessage("- /book remove \"Titre\" : Détruire totalement un livre. (Auteur seulement)", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-            player.Out.SendMessage("- /book correct \"Titre\" : Efface la dernière ligne d'un parchemin.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-            player.Out.SendMessage("- /use (Apres clic droit sur le livre) : Ouvre une fenetre de lecture.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Commands.Players.Book.HelpTitle"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Commands.Players.Book.HelpCreate"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Commands.Players.Book.HelpWrite"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Commands.Players.Book.HelpWriteNote"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Commands.Players.Book.HelpRemove"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Commands.Players.Book.HelpCorrect"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Commands.Players.Book.HelpUse"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
         }
     }
 }
