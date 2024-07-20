@@ -37,7 +37,6 @@ namespace DOL.GS.Scripts
         }
 
         public bool? IsOutlawFriendly { get; set; }
-        public bool? IsTerritoryLinked { get; set; }
 
         #region TextNPCPolicy
         public void SayRandomPhrase()
@@ -47,27 +46,17 @@ namespace DOL.GS.Scripts
 
         public override bool Interact(GamePlayer player)
         {
-            if (!TextNPCData.CheckAccess(player) || !base.Interact(player))
+            if (!base.Interact(player))
                 return false;
 
-            if (IsTerritoryLinked == true && !TerritoryManager.IsPlayerInOwnedTerritory(player, this))
-            {
-                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "TextNPC.NotInOwnedTerritory"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
-                return true;
-            }
             return TextNPCData.Interact(player);
         }
 
         public override bool WhisperReceive(GameLiving source, string str)
         {
-            if (!(source is GamePlayer player) || !base.WhisperReceive(source, str))
+            if (!base.WhisperReceive(source, str))
                 return false;
 
-            if (IsTerritoryLinked == true && !TerritoryManager.IsPlayerInOwnedTerritory(player, this))
-            {
-                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "TextNPC.NotInOwnedTerritory"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
-                return true;
-            }
             return TextNPCData.WhisperReceive(source, str);
         }
 
@@ -108,17 +97,20 @@ namespace DOL.GS.Scripts
 
         public override eQuestIndicator GetQuestIndicator(GamePlayer player)
         {
-            if (IsTerritoryLinked == true && CurrentTerritory?.IsOwnedBy(player) != true)
+            var policy = GetTextNPCPolicy(player) ?? GetTextNPCPolicy();
+            if (policy == null)
+                return base.GetQuestIndicator(player);
+            
+            if (!policy.CanInteractWith(player) || !policy.WillTalkTo(player, true))
+            {
                 return eQuestIndicator.None;
-
-            if (!TextNPCData.Condition.CheckAccess(player))
-                return eQuestIndicator.None;
+            }
             
             var result = base.GetQuestIndicator(player);
             if (result != eQuestIndicator.None)
                 return result;
 
-            return TextNPCData.Condition.CanGiveQuest;
+            return policy.Condition.CanGiveQuest;
         }
         #endregion
     }

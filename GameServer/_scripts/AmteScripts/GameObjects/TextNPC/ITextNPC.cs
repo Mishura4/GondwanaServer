@@ -20,6 +20,7 @@ using static DOL.GS.GameNPC;
 using static DOL.GS.Quests.DataQuestJsonGoal;
 using DOL.Territories;
 using DOL.Language;
+using System.Numerics;
 
 namespace DOL.GS.Scripts
 {
@@ -110,44 +111,20 @@ namespace DOL.GS.Scripts
             SaveIntoDatabase();
         }
 
+        public void TurnTo(GameLiving living)
+        {
+            _body.TurnTo(living, 10000);
+        }
+
         public bool Interact(GamePlayer player)
         {
-            if (IsTerritoryLinked.HasValue && IsTerritoryLinked.Value && !TerritoryManager.IsPlayerInOwnedTerritory(player, _body))
-            {
-                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "TextNPC.NotInOwnedTerritory"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
-                return true;
-            }
-
-            if (RequiredModel != 0 && player.Model != RequiredModel)
-            {
-                player.Out.SendMessage("...", eChatType.CT_System, eChatLoc.CL_PopupWindow);
-                return true;
-            }
-            
-            if ((!CheckQuestDialog(player) && string.IsNullOrEmpty(Interact_Text)) || !CheckAccess(player))
+            if ((!CheckQuestDialog(player) && string.IsNullOrEmpty(Interact_Text)) || !CanInteractWith(player))
                 return false;
 
-            _body.TurnTo(player);
+            TurnTo(player);
 
-            if (this.IsOutlawFriendly.HasValue)
-            {
-                if (this.IsOutlawFriendly.Value)
-                {
-                    if (player.Reputation >= 0 && player.Client.Account.PrivLevel == 1)
-                    {
-                        player.Out.SendMessage("...", eChatType.CT_System, eChatLoc.CL_PopupWindow);
-                        return true;
-                    }
-                }
-                else
-                {
-                    if (player.Reputation < 0 && player.Client.Account.PrivLevel == 1)
-                    {
-                        player.Out.SendMessage("...", eChatType.CT_System, eChatLoc.CL_PopupWindow);
-                        return true;
-                    }
-                }
-            }
+            if (!WillTalkTo(player))
+                return true;
 
             //Message
             if (QuestReponseKey != null)
@@ -184,37 +161,16 @@ namespace DOL.GS.Scripts
 
         public bool WhisperReceive(GameLiving source, string str)
         {
-            if (!(source is GamePlayer))
+            if (!(source is GamePlayer player))
                 return false;
-            GamePlayer player = source as GamePlayer;
-            if (!CheckAccess(player))
+            
+            if (!CanInteractWith(player))
                 return false;
 
-            if (IsTerritoryLinked.HasValue && IsTerritoryLinked.Value && !TerritoryManager.IsPlayerInOwnedTerritory(player, _body))
-            {
-                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "TextNPC.NotInOwnedTerritory"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
-                return true;
-            }
+            TurnTo(player);
 
-            _body.TurnTo(player, 10000);
-
-            if (this.IsOutlawFriendly.HasValue)
-            {
-                if (this.IsOutlawFriendly.Value)
-                {
-                    if (player.Reputation >= 0 && player.Client.Account.PrivLevel == 1)
-                    {
-                        return true;
-                    }
-                }
-                else
-                {
-                    if (player.Reputation <= 0 && player.Client.Account.PrivLevel == 1)
-                    {
-                        return true;
-                    }
-                }
-            }
+            if (!WillTalkTo(player))
+                return false;
 
             //Message
             if (Reponses != null && Reponses.ContainsKey(str))
@@ -431,22 +387,21 @@ namespace DOL.GS.Scripts
 
         public bool ReceiveItem(GameLiving source, InventoryItem item)
         {
-            if (source == null || item == null)
-                return false;
-            _body.Notify(GameObjectEvent.ReceiveItem, _body, new ReceiveItemEventArgs(source, _body, item));
-
-            if (!(source is GamePlayer) || !EchangeurDB.ContainsKey(item.Id_nb))
+            if (source is not GamePlayer player || item == null)
                 return false;
 
-            GamePlayer player = source as GamePlayer;
-            if (!CheckAccess(player)) return false;
-            _body.TurnTo(player);
+            if (!CanInteractWith(player))
+                return false;
 
-            if (IsTerritoryLinked.HasValue && IsTerritoryLinked.Value && !TerritoryManager.IsPlayerInOwnedTerritory(player, _body))
-            {
-                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "TextNPC.ExchangeNotInOwnedTerritory"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+            if (!EchangeurDB.ContainsKey(item.Id_nb))
+                return false;
+
+            TurnTo(player);
+
+            if (!WillTalkTo(player))
                 return true;
-            }
+            
+            _body.Notify(GameObjectEvent.ReceiveItem, _body, new ReceiveItemEventArgs(source, _body, item));
 
             DBEchangeur EchItem = EchangeurDB[item.Id_nb];
             if (EchItem.ItemRecvCount > item.Count)
@@ -751,9 +706,79 @@ namespace DOL.GS.Scripts
             return true;
         }
 
-        public bool CheckAccess(GamePlayer player)
+        /// <summary>
+        /// Checks whether the NPC can even be interacted with, that is, whether right clicking will trigger dialogue
+        /// </summary>
+        /// <param name="player"></param>
+        /// <returns></returns>
+        public bool CanInteractWith(GamePlayer player)
         {
             return Condition.CheckAccess(player);
+        }
+
+        /// <summary>
+        /// Checks whether the NPC will talk to a player if true, or respond with some variance of "I hate you!" to the player if false
+        /// </summary>
+        /// <param name="player"></param>
+        /// <returns></returns>
+        public bool WillTalkTo(GamePlayer player, bool silent = false)
+        {
+            if (IsTerritoryLinked == true)
+            {
+                switch (_body.CurrentTerritory?.IsOwnedBy(player))
+                {
+                    case true:
+                        break;
+                    
+                    case null:
+                        log.Warn($"TextNPC {_body.Name} (${_body.InternalID}) has `IsTerritoryLinked = true`, but is not in a territory");
+                        goto case false;
+                        
+                    case false:
+                        if (!silent)
+                        {
+                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "TextNPC.NotInOwnedTerritory"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                        }
+                        return false;
+                }
+            }
+
+            if (RequiredModel != 0 && player.Model != RequiredModel)
+            {
+                if (!silent)
+                {
+                    player.Out.SendMessage("...", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                }
+                return false;
+            }
+
+            if (this.IsOutlawFriendly.HasValue)
+            {
+                if (this.IsOutlawFriendly.Value)
+                {
+                    if (player.Reputation >= 0 && player.Client.Account.PrivLevel == 1)
+                    {
+                        if (!silent)
+                        {
+                            player.Out.SendMessage("...", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                        }
+                        return false;
+                    }
+                }
+                else
+                {
+                    if (player.Reputation < 0 && player.Client.Account.PrivLevel == 1)
+                    {
+                        if (!silent)
+                        {
+                            player.Out.SendMessage("...", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                        }
+                        return false;
+                    }
+                }
+            }
+
+            return true;
         }
 
         public virtual void SayRandomPhrase()

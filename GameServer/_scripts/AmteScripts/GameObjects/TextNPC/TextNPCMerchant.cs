@@ -50,7 +50,7 @@ namespace DOL.GS.Scripts
 
         public override bool Interact(GamePlayer player)
         {
-            if (!TextNPCData.CheckAccess(player) || !base.Interact(player))
+            if (!TextNPCData.CanInteractWith(player) || !base.Interact(player))
                 return false;
 
             if (TextNPCData.IsTerritoryLinked.HasValue && TextNPCData.IsTerritoryLinked.Value && !TerritoryManager.IsPlayerInOwnedTerritory(player, this))
