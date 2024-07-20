@@ -45,7 +45,7 @@ namespace DOL.GS.Quests
         public IList<IQuestGoal> Goals => Quest.Goals.Values.Select(g => g.ToQuestGoal(this, GoalStates.Find(gs => gs.GoalId == g.GoalId))).ToList();
         public IList<IQuestGoal> VisibleGoals => Quest.GetVisibleGoals(this);
 
-        public IQuestRewards FinalRewards => new QuestRewards(Quest);
+        public IQuestRewards FinalRewards { get; set; }
 
         public static PlayerQuest CreateQuestPreview(DataQuestJson quest, GamePlayer owner)
         {
@@ -54,6 +54,7 @@ namespace DOL.GS.Quests
             {
                 m_questId = quest.Id,
                 DbQuest = dbQuest,
+                FinalRewards = new QuestRewards(quest)
             };
         }
 
@@ -70,7 +71,8 @@ namespace DOL.GS.Quests
             m_questId = json.QuestId;
             if (!DataQuestJsonMgr.Quests.ContainsKey(m_questId))
                 DataQuestJsonMgr.Quests.Add(m_questId, new DataQuestJson { Name = "ERROR" });
-
+            
+            FinalRewards = new QuestRewards(Quest);
             if (json.Goals != null)
                 GoalStates = json.Goals;
             else

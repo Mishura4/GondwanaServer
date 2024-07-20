@@ -278,6 +278,7 @@ namespace DOL.GS.Scripts
 
             return true;
         }
+        
         void HandleQuestInteraction(GamePlayer player, string response)
         {
             var possibleQuests = _body.QuestIdListToGive;

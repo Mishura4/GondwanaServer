@@ -113,7 +113,14 @@ namespace DOL.GS.PacketHandler
                 }
                 pak.WriteByte(quest.Quest.MinLevel);
                 pak.WriteByte(0); // Money percent level
-                pak.WriteByte((byte)GamePlayerUtils.GetExperiencePercentForCurrentLevel(player, quest.FinalRewards.Experience));
+                if (quest.FinalRewards.Experience > 0)
+                {
+                    pak.WriteByte((byte)GamePlayerUtils.GetExperiencePercentForCurrentLevel(player, quest.FinalRewards.Experience));
+                }
+                else
+                {
+                    pak.WriteByte((byte)(-1 * long.Clamp(quest.FinalRewards.Experience, -100, 0)));
+                }
                 pak.WriteByte((byte)quest.FinalRewards.BasicItems.Count);
                 foreach (ItemTemplate reward in quest.FinalRewards.BasicItems)
                     WriteTemplateData(pak, reward, 1);

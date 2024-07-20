@@ -95,7 +95,14 @@ namespace DOL.GS.PacketHandler
                     pak.WritePascalString(String.Format("{0}\r", goal.Description));
                 }
                 pak.WriteInt((uint)(quest.FinalRewards.Money)); // unknown, new in 1.94
-                pak.WriteByte((byte)GamePlayerUtils.GetExperiencePercentForCurrentLevel(player, quest.FinalRewards.Experience));
+                if (quest.FinalRewards.Experience > 0)
+                {
+                    pak.WriteByte((byte)GamePlayerUtils.GetExperiencePercentForCurrentLevel(player, quest.FinalRewards.Experience));
+                }
+                else
+                {
+                    pak.WriteByte((byte)(-1 * long.Clamp(quest.FinalRewards.Experience, -100, 0)));
+                }
                 pak.WriteByte((byte)quest.FinalRewards.BasicItems.Count);
                 foreach (ItemTemplate reward in quest.FinalRewards.BasicItems)
                 {
