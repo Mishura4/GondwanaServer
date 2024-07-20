@@ -2251,26 +2251,28 @@ namespace DOL.GS
             }
             set
             {
-                if (base.Model != value)
+                if (base.Model == value)
+                    return;
+                
+                base.Model = value;
+
+                // Only GM's can persist model changes - Tolakram
+                if (Client.Account.PrivLevel > (int)ePrivLevel.Player && DBCharacter != null && DBCharacter.CurrentModel != base.Model)
                 {
-                    base.Model = value;
+                    DBCharacter.CurrentModel = base.Model;
+                }
 
-                    // Only GM's can persist model changes - Tolakram
-                    if (Client.Account.PrivLevel > (int)ePrivLevel.Player && DBCharacter != null && DBCharacter.CurrentModel != base.Model)
+                if (ObjectState == eObjectState.Active)
+                {
+                    Notify(GamePlayerEvent.ModelChanged, this);
+
+                    foreach (GamePlayer player in GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
                     {
-                        DBCharacter.CurrentModel = base.Model;
+                        if (player == null) continue;
+                        player.Out.SendModelChange(this, Model);
                     }
-
-                    if (ObjectState == eObjectState.Active)
-                    {
-                        Notify(GamePlayerEvent.ModelChanged, this);
-
-                        foreach (GamePlayer player in GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
-                        {
-                            if (player == null) continue;
-                            player.Out.SendModelChange(this, Model);
-                        }
-                    }
+                        
+                    RefreshQuestNPCs();
                 }
             }
         }
