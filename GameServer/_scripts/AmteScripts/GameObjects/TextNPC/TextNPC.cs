@@ -11,6 +11,7 @@ using DOL.GS.PacketHandler;
 using DOL.GS.Quests;
 using DOL.Language;
 using DOL.Territories;
+using System.Collections;
 using static System.Net.Mime.MediaTypeNames;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -49,7 +50,7 @@ namespace DOL.GS.Scripts
             if (!base.Interact(player))
                 return false;
 
-            return TextNPCData.Interact(player);
+            return GetTextNPCPolicy(player).Interact(player);
         }
 
         public override bool WhisperReceive(GameLiving source, string str)
@@ -57,12 +58,12 @@ namespace DOL.GS.Scripts
             if (!base.WhisperReceive(source, str))
                 return false;
 
-            return TextNPCData.WhisperReceive(source, str);
+            return GetTextNPCPolicy(source as GamePlayer).WhisperReceive(source, str);
         }
 
         public override bool ReceiveItem(GameLiving source, InventoryItem item)
         {
-            return TextNPCData.ReceiveItem(source, item);
+            return GetTextNPCPolicy(source as GamePlayer).ReceiveItem(source, item);
         }
 
         public override void LoadFromDatabase(DataObject obj)
@@ -112,6 +113,21 @@ namespace DOL.GS.Scripts
 
             return policy.Condition.CanGiveQuest;
         }
+
+        /// <inheritdoc />
+        public override void OnTerritoryOwnerChange(Guild? newOwner)
+        {
+            if (IsMercenary) // Assume we are about to be removed, don't need to send indicators
+                return;
+            
+            var newGuildPlayers = newOwner == null ? Enumerable.Empty<GamePlayer>() : newOwner.GetListOfOnlineMembers();
+            var oldGuildPlayers = CurrentTerritory?.OwnerGuild == null ? Enumerable.Empty<GamePlayer>() : CurrentTerritory.OwnerGuild.GetListOfOnlineMembers();
+            foreach (GamePlayer player in oldGuildPlayers.Concat(newGuildPlayers).Where(p => p.GetDistanceSquaredTo(this) <= WorldMgr.VISIBILITY_DISTANCE * WorldMgr.VISIBILITY_DISTANCE && this.IsVisibleTo(p)))
+            {
+                player.Out.SendNPCsQuestEffect(this, GetQuestIndicator(player));
+            }
+        }
+
         #endregion
     }
 

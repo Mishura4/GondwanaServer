@@ -2125,12 +2125,17 @@ namespace DOL.GS
                 {
                     m_currentTerritory.Remove(this);
                 }
+                var prev = m_currentTerritory;
                 m_currentTerritory = value;
                 if (m_currentTerritory != null)
                 {
                     m_currentTerritory.Add(this);
                 }
             }
+        }
+
+        public virtual void OnTerritoryOwnerChange(Guild? newOwner)
+        {
         }
 
         /// <summary>

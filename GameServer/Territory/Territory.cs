@@ -459,7 +459,11 @@ namespace DOL.Territories
                 ToggleBannerUnsafe(true);
             }
 
-            Mobs.ForEach(m => m.GuildName = guild.Name);
+            Mobs.ForEach(m =>
+            {
+                m.GuildName = guild.Name;
+                m.OnTerritoryOwnerChange(guild);
+            });
             Boss.GuildName = guild.Name;
 
             if (saveChange)
@@ -707,6 +711,7 @@ namespace DOL.Territories
                         {
                             m.GuildName = null;
                         }
+                        m.OnTerritoryOwnerChange(null);
                     });
                 }
             }
@@ -722,7 +727,9 @@ namespace DOL.Territories
                 {
                     mob.GuildName = string.Empty;
                 }
-
+                
+                mob.OnTerritoryOwnerChange(null);
+                
                 if (mob.IsMercenary)
                 {
                     toRemove.Add(mob);
