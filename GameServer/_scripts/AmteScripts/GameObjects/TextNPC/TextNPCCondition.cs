@@ -205,7 +205,27 @@ namespace DOL.GS.Scripts
 
             return txt.ToString();
         }
+        
+        public bool CanInteractAtTick(uint tick)
+        {
+            if (Heure_min <= 0 && Heure_max >= 24)
+            {
+                return true;
+            }
+            
+            uint minTick = ((uint)Heure_min) * 60 * 60 * 1000;
+            uint maxTick = ((uint)Heure_max) * 60 * 60 * 1000;
 
+            //Heure
+            if (maxTick < minTick && (minTick > tick || tick <= maxTick))
+                return false;
+            if (maxTick > minTick && (minTick > tick || tick >= maxTick))
+                return false;
+            if (maxTick == minTick && tick != minTick)
+                return false;
+            return true;
+        }
+        
         public bool CheckAccess(GamePlayer player)
         {
             //level
@@ -228,14 +248,9 @@ namespace DOL.GS.Scripts
             if (Races.Contains(player.RaceName.ToLower()))
                 return false;
 
-            //Heure
-            int heure = (int)(WorldMgr.GetCurrentGameTime() / 1000 / 60 / 60);
-            if (Heure_max < Heure_min && (Heure_min > heure || heure <= Heure_max))
+            if (!CanInteractAtTick(WorldMgr.GetCurrentGameTime(player)))
                 return false;
-            if (Heure_max > Heure_min && (Heure_min > heure || heure >= Heure_max))
-                return false;
-            if (Heure_max == Heure_min && heure != Heure_min)
-                return false;
+
             return true;
         }
     }
