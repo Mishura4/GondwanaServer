@@ -12,8 +12,6 @@ namespace DOL.GS.Quests
 {
     public class UseItemGoal : DataQuestJsonGoal
     {
-        private readonly GameNPC m_target;
-        public override GameNPC Target { get => m_target; }
         private readonly string m_text;
         private readonly ItemTemplate m_item;
 
@@ -25,7 +23,6 @@ namespace DOL.GS.Quests
         private readonly bool hasArea = false;
         private readonly bool destroyItem = false;
         public override QuestZonePoint PointA { get; }
-        public override bool hasInteraction { get; set; } = false;
 
         public UseItemGoal(DataQuestJson quest, int goalId, dynamic db) : base(quest, goalId, (object)db)
         {
@@ -46,7 +43,7 @@ namespace DOL.GS.Quests
             if (db.TargetName != null && db.TargetName != "" && db.TargetRegion != null && db.TargetRegion != "")
             {
                 hasInteraction = true;
-                m_target = WorldMgr.GetNPCsByNameFromRegion((string)db.TargetName ?? "", (ushort)db.TargetRegion, eRealm.None)
+                Target = WorldMgr.GetNPCsByNameFromRegion((string)db.TargetName ?? "", (ushort)db.TargetRegion, eRealm.None)
                     .FirstOrDefault(quest.Npc);
             }
             if (db.DestroyItem != null && db.DestroyItem != "")
@@ -59,9 +56,9 @@ namespace DOL.GS.Quests
         {
             var dict = base.GetDatabaseJsonObject();
             dict.Add("Item", m_item.Id_nb);
-            dict.Add("TargetName", m_target.Name);
+            dict.Add("TargetName", Target.Name);
             dict.Add("DestroyItem", destroyItem);
-            dict.Add("TargetRegion", m_target.CurrentRegionID);
+            dict.Add("TargetRegion", Target.CurrentRegionID);
             dict.Add("AreaCenter", m_area.Coordinate);
             dict.Add("AreaRadius", m_area.Radius);
             dict.Add("AreaRegion", m_areaRegion);
@@ -75,7 +72,7 @@ namespace DOL.GS.Quests
             if ((!hasArea || (hasArea && m_area.IsContaining(player.Coordinate, false))) && e == GamePlayerEvent.UseSlot && args is UseSlotEventArgs useSlot)
             {
                 var usedItem = player.Inventory.GetItem((eInventorySlot)useSlot.Slot);
-                if (usedItem.Id_nb == QuestItem.Id_nb && (m_target == null || player.TargetObject == m_target))
+                if (usedItem.Id_nb == QuestItem.Id_nb && (Target == null || player.TargetObject == Target))
                 {
                     if (destroyItem)
                     {

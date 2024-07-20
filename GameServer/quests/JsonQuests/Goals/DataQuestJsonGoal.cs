@@ -16,7 +16,7 @@ namespace DOL.GS.Quests
         public DataQuestJson Quest => DataQuestJsonMgr.GetQuest(QuestId);
         public readonly int GoalId;
 
-        public virtual GameNPC Target { get; set; }
+        public GameNPC Target { get; set; }
         public string Description { get; set; }
         public abstract eQuestGoalType Type { get; }
         public abstract int ProgressTotal { get; }
@@ -26,7 +26,7 @@ namespace DOL.GS.Quests
         public virtual bool Visible => true;
         public ItemTemplate GiveItemTemplate { get; set; }
         public ItemTemplate StartItemTemplate { get; set; }
-        public virtual bool hasInteraction { get; set; } = false;
+        public bool hasInteraction { get; set; } = false;
 
         public string MessageStarted { get; set; }
         public string MessageAborted { get; set; }

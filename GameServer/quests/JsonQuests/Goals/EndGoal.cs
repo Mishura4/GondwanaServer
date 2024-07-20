@@ -13,8 +13,6 @@ namespace DOL.GS.Quests
         public override eQuestGoalType Type => eQuestGoalType.Unknown;
         public override int ProgressTotal => 1;
 
-        public override GameNPC Target { get; set; }
-
         public override bool CanInteractWith(PlayerQuest questData, PlayerGoalState state, GameObject target)
             => state?.IsActive == true && target.Name == Target.Name && target.CurrentRegion == Target.CurrentRegion;
 
@@ -22,6 +20,10 @@ namespace DOL.GS.Quests
         {
             Target = WorldMgr.GetNPCsByNameFromRegion((string)db.TargetName ?? "", (ushort)(db.TargetRegion ?? 0), eRealm.None)
                 .FirstOrDefault(quest.Npc);
+            if (Target != null)
+            {
+                hasInteraction = true;
+            }
         }
 
         public override Dictionary<string, object> GetDatabaseJsonObject()

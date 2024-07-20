@@ -6,6 +6,7 @@ using System.Linq;
 using System.Numerics;
 using DOL.AI.Brain;
 using DOL.Database;
+using DOL.Events;
 using DOL.GS.PacketHandler;
 using DOL.GS.Quests;
 using DOL.Language;
@@ -109,23 +110,15 @@ namespace DOL.GS.Scripts
         {
             if (IsTerritoryLinked == true && CurrentTerritory?.IsOwnedBy(player) != true)
                 return eQuestIndicator.None;
+
+            if (!TextNPCData.Condition.CheckAccess(player))
+                return eQuestIndicator.None;
             
             var result = base.GetQuestIndicator(player);
             if (result != eQuestIndicator.None)
                 return result;
 
-            foreach (var qid in QuestIdListToGive)
-            {
-                var quest = player.QuestList.OfType<PlayerQuest>().FirstOrDefault(pq => pq.QuestId == qid);
-                if (quest == null)
-                    continue;
-                if (quest.VisibleGoals.OfType<DataQuestJsonGoal.GenericDataQuestGoal>().Any(g => g.Goal is EndGoal end && end.Target == this))
-                    return eQuestIndicator.Finish;
-            }
-
-            return TextNPCData.Condition.CanGiveQuest != eQuestIndicator.None && TextNPCData.Condition.CheckAccess(player)
-                ? TextNPCData.Condition.CanGiveQuest
-                : eQuestIndicator.None;
+            return TextNPCData.Condition.CanGiveQuest;
         }
         #endregion
     }

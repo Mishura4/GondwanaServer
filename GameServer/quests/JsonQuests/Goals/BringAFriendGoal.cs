@@ -19,7 +19,6 @@ namespace DOL.GS.Quests
         public override int ProgressTotal => m_friendCount;
         private readonly int m_friendCount = 1;
         public override QuestZonePoint PointA { get; }
-        public override bool hasInteraction { get; set; } = true;
         private readonly Area.Circle m_area;
         private readonly ushort m_areaRegion;
         public FollowingFriendMob lastFriend;
@@ -28,6 +27,7 @@ namespace DOL.GS.Quests
         public BringAFriendGoal(DataQuestJson quest, int goalId, dynamic db) : base(quest, goalId, (object)db)
         {
             m_target = db.TargetName;
+            hasInteraction = true;
             GroupMobDb mobGroup = GameServer.Database.SelectObject<GroupMobDb>(t => t.GroupId == m_target);
             if (mobGroup != null)
             {

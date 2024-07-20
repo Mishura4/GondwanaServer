@@ -2841,9 +2841,9 @@ namespace DOL.GS
             return false;
         }
 
-        public bool IsRelatedToQuest(DataQuestJson quest)
+        public virtual bool IsRelatedToQuest(DataQuestJson quest)
         {
-            if (quest.Goals.Select(p => p.Value).Any(g => g.hasInteraction && g.Target == this))
+            if (quest.Goals.Select(p => p.Value).Any(g => g.Target == this))
                 return true;
             
             lock (m_questIdListToGive)
