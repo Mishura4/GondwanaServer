@@ -63,11 +63,11 @@ namespace DOL.GS.Commands
 
             if (client.Player != null)
             {
-                uint cTime = WorldMgr.GetCurrentGameTime(client.Player);
+                uint cTime = WorldMgr.GetCurrentGameTime(client.Player) / 1000;
 
-                uint hour = cTime / 1000 / 60 / 60;
-                uint minute = cTime / 1000 / 60 % 60;
-                uint seconds = cTime / 1000 % 60;
+                uint hour = cTime / 60 / 60;
+                uint minute = cTime / 60 % 60;
+                uint seconds = cTime % 60;
                 bool pm = false;
 
                 if (hour == 0)

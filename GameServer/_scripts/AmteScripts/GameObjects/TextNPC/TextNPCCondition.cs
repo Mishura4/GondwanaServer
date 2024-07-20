@@ -229,7 +229,7 @@ namespace DOL.GS.Scripts
                 return false;
 
             //Heure
-            int heure = (int)(WorldMgr.GetCurrentGameTime() / 1000 / 60 / 54);
+            int heure = (int)(WorldMgr.GetCurrentGameTime() / 1000 / 60 / 60);
             if (Heure_max < Heure_min && (Heure_min > heure || heure <= Heure_max))
                 return false;
             if (Heure_max > Heure_min && (Heure_min > heure || heure >= Heure_max))
