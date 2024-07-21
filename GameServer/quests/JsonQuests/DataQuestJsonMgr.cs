@@ -104,8 +104,8 @@ public static class DataQuestJsonMgr
         var possibleQuests = sender is GameNPC npc ? npc.QuestIdListToGive : Array.Empty<ushort>();
         if (possibleQuests.Count == 0)
             return;
-            if (player.QuestList.Any(q => possibleQuests.Contains(q.QuestId) || q.CanInteractWith(sender)))
-                return; // Quest in progress
+        if (player.QuestList.Any(q => possibleQuests.Contains(q.QuestId) || q.CanInteractWith(sender)))
+            return; // Quest in progress
         foreach (var questId in possibleQuests)
         {
             var quest = GetQuest(questId);

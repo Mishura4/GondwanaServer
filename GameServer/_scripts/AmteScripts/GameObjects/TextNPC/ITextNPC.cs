@@ -38,7 +38,7 @@ namespace DOL.GS.Scripts
         }
     }
 
-    public class TextNPCPolicy
+    public sealed class TextNPCPolicy
     {
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -118,27 +118,27 @@ namespace DOL.GS.Scripts
 
         public bool Interact(GamePlayer player)
         {
-            if ((!CheckQuestDialog(player) && string.IsNullOrEmpty(Interact_Text)) || !CanInteractWith(player))
+            if (!CanInteractWith(player))
                 return false;
 
             TurnTo(player);
 
             if (!WillTalkTo(player))
-                return true;
+                return false;
 
             //Message
-            if (QuestReponseKey != null)
+            if (CheckQuestDialog(player) && QuestReponseKey != null)
             {
                 //get text from QuestTexts specific to current QuestReponseKey
                 string text = QuestTexts.ContainsKey(QuestReponses[QuestReponseKey]) ? QuestTexts[QuestReponses[QuestReponseKey]] : "";
                 text = string.Format(text, player.Name, player.LastName, player.GuildName, player.CharacterClass.Name, player.RaceName);
-                if (text != "")
+                if (!string.IsNullOrEmpty(text))
                     player.Out.SendMessage(text, eChatType.CT_System, eChatLoc.CL_PopupWindow);
             }
-            else
+            else if (!string.IsNullOrEmpty(Interact_Text))
             {
                 string text = string.Format(Interact_Text, player.Name, player.LastName, player.GuildName, player.CharacterClass.Name, player.RaceName);
-                if (text != "")
+                if (!string.IsNullOrEmpty(text))
                     player.Out.SendMessage(text, eChatType.CT_System, eChatLoc.CL_PopupWindow);
             }
 
@@ -161,7 +161,7 @@ namespace DOL.GS.Scripts
 
         public bool WhisperReceive(GameLiving source, string str)
         {
-            if (!(source is GamePlayer player))
+            if (source is not GamePlayer player)
                 return false;
             
             if (!CanInteractWith(player))
@@ -181,12 +181,13 @@ namespace DOL.GS.Scripts
             }
 
             //Spell
-            if (SpellReponses != null && SpellReponses.ContainsKey(str))
-                if (SpellReponsesCast.ContainsKey(str) && SpellReponsesCast[str])
+            if (SpellReponses?.TryGetValue(str, out var spellId) == true)
+            {
+                if (SpellReponsesCast.TryGetValue(str, out bool castSpell) && castSpell)
                 {
                     //cast spell on player
                     SpellLine spellLine = SkillBase.GetSpellLine(GlobalSpellsLines.Mob_Spells);
-                    Spell spell = SkillBase.GetSpellByID(SpellReponses[str]);
+                    Spell spell = SkillBase.GetSpellByID(spellId);
                     if (spellLine != null && spell != null)
                     {
                         _body.ApplyAttackRules = false;
@@ -199,6 +200,7 @@ namespace DOL.GS.Scripts
                     foreach (GamePlayer plr in _body.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
                         plr.Out.SendSpellEffectAnimation(_body, player, SpellReponses[str], 0, false, 1);
                 }
+            }
 
             //Quest
             if (QuestReponses != null && QuestReponseKey != null && QuestReponseKey.LastIndexOf('-') != -1 && QuestReponses.ContainsKey(QuestReponseKey.Remove(QuestReponseKey.LastIndexOf('-')) + "-" + str))
@@ -282,25 +284,25 @@ namespace DOL.GS.Scripts
         void HandleQuestInteraction(GamePlayer player, string response)
         {
             var possibleQuests = _body.QuestIdListToGive;
-            if (QuestReponsesValues[response].Item2 == 0 && !player.QuestList.Any(q => possibleQuests.Contains(q.QuestId)))
+            var questItem = QuestReponsesValues[response].Item2;
+            if (questItem == 0 && !player.QuestList.Any(q => possibleQuests.Contains(q.QuestId)))
             {
                 // Quest not in progress
                 var questName = QuestReponsesValues[response].Item1;
 
                 foreach (var questId in possibleQuests)
                 {
-                    var quest = DataQuestJsonMgr.GetQuest(QuestReponsesValues[response].Item1);
-                    if (quest != null && quest.CheckQuestQualification(player))
+                    if (DataQuestJsonMgr.Quests.TryGetValue(questId, out var quest) && quest?.CheckQuestQualification(player) == true)
                     {
                         player.Out.SendQuestOfferWindow(quest.Npc, player, PlayerQuest.CreateQuestPreview(quest, player));
                         return;
                     }
                 }
             }
-            else if (QuestReponsesValues[response].Item2 != 0)
+            else if (questItem != 0)
             {
                 // Quest in progress
-                var goalId = QuestReponsesValues[response].Item2;
+                var goalId = questItem;
                 var currentQuest = player.QuestList.FirstOrDefault(q => q.Quest.Name == QuestReponsesValues[response].Item1 && q.VisibleGoals.Any(g => g is GenericDataQuestGoal jgoal && jgoal.Goal.GoalId == goalId));
                 if (currentQuest != null)
                 {
@@ -334,6 +336,7 @@ namespace DOL.GS.Scripts
                 }
             }
         }
+        
         public bool CheckQuestDialog(GamePlayer player)
         {
             QuestReponseKey = null;
@@ -394,17 +397,19 @@ namespace DOL.GS.Scripts
             if (!CanInteractWith(player))
                 return false;
 
-            if (!EchangeurDB.ContainsKey(item.Id_nb))
+            if (!EchangeurDB.TryGetValue(item.Id_nb, out var EchItem))
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameLiving.ReceiveItem", _body.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return false;
+            }
 
             TurnTo(player);
 
             if (!WillTalkTo(player))
-                return true;
+                return false;
             
             _body.Notify(GameObjectEvent.ReceiveItem, _body, new ReceiveItemEventArgs(source, _body, item));
 
-            DBEchangeur EchItem = EchangeurDB[item.Id_nb];
             if (EchItem.ItemRecvCount > item.Count)
             {
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "TextNPC.YouMustGive", EchItem.ItemRecvCount, item.Name), eChatType.CT_System, eChatLoc.CL_PopupWindow);
@@ -782,7 +787,7 @@ namespace DOL.GS.Scripts
             return true;
         }
 
-        public virtual void SayRandomPhrase()
+        public void SayRandomPhrase()
         {
             if (RandomPhrases == null || RandomPhrases.Count < 1)
                 return;

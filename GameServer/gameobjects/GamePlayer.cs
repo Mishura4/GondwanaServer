@@ -11305,6 +11305,24 @@ namespace DOL.GS
 
             return true;
         }
+        
+        /// <summary>
+        /// This function is called from the ObjectInteractRequestHandler
+        /// </summary>
+        /// <param name="obj">Object to interact with</param>
+        /// <returns>false if interaction is prevented</returns>
+        public void InteractWith(GameObject obj)
+        {
+            if (obj.Interact(this))
+            {
+                obj.Notify(GameObjectEvent.Interact, obj, new InteractEventArgs(this));
+                this.Notify(GameObjectEvent.InteractWith, this, new InteractWithEventArgs(obj));
+            }
+            else
+            {
+                obj.Notify(GameObjectEvent.InteractFailed, obj, new InteractEventArgs(this));
+            }
+        }
 
         /// <summary>
         /// Refresh all objects around the player

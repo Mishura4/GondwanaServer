@@ -37,8 +37,6 @@ namespace DOL.GS.Scripts
             SetOwnBrain(new TextNPCBrain());
         }
 
-        public bool? IsOutlawFriendly { get; set; }
-
         #region TextNPCPolicy
         public void SayRandomPhrase()
         {

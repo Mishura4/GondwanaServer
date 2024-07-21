@@ -61,17 +61,24 @@ namespace DOL.GS.Scripts
             (((StandardMobBrain)Brain).AggroLevel == 0 && ((StandardMobBrain)Brain).AggroRange == 0))
             && CurrentRegion.GetAreasOfSpot(Coordinate).OfType<AbstractArea>().FirstOrDefault(a => a.DbArea != null && a.DbArea.ObjectId == AreaToEnter) != null)
                 return false;
-            if (PlayerFollow != null && PlayerFollow == player)
+
+            if (PlayerFollow != null)
             {
+                if (PlayerFollow != player)
+                    return false;
+                
                 if (TextNPCFollowing == null)
                     return false;
 
                 return TextNPCFollowing.Interact(player);
             }
+            
             if (TextNPCIdle == null)
                 return false;
+            
             return TextNPCIdle.Interact(player);
         }
+        
         public override bool WhisperReceive(GameLiving source, string str)
         {
             if (!base.WhisperReceive(source, str))

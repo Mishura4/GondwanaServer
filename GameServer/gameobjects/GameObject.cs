@@ -901,12 +901,8 @@ namespace DOL.GS
             if (player.Client.Account.PrivLevel == 1 && !this.IsWithinRadius(player, InteractDistance))
             {
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameObject.Interact.TooFarAway", GetName(0, true)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                Notify(GameObjectEvent.InteractFailed, this, new InteractEventArgs(player));
                 return false;
             }
-
-            Notify(GameObjectEvent.Interact, this, new InteractEventArgs(player));
-            player.Notify(GameObjectEvent.InteractWith, player, new InteractWithEventArgs(this));
             return true;
         }
 

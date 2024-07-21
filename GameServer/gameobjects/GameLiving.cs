@@ -6193,10 +6193,8 @@ namespace DOL.GS
                 return false;
             }
 
-            GamePlayer player = null;
-            if (source != null && source is GamePlayer)
+            if (source is GamePlayer player)
             {
-                player = source as GamePlayer;
                 long whisperdelay = player.TempProperties.getProperty<long>("WHISPERDELAY");
                 if (whisperdelay > 0 && (CurrentRegion.Time - 1500) < whisperdelay && player.Client.Account.PrivLevel == 1)
                 {
@@ -6232,15 +6230,17 @@ namespace DOL.GS
 
             if (this is GamePlayer)
                 GameEventManager.AreaWhisperEvent((GamePlayer)this, str);
-            Notify(GameLivingEvent.Whisper, this, new WhisperEventArgs(target, str));
 
             if (target is GameLiving)
             {
                 return ((GameLiving)target).WhisperReceive(this, str);
             }
+            
+            Notify(GameLivingEvent.Whisper, this, new WhisperEventArgs(target, str));
 
             return false;
         }
+        
         /// <summary>
         /// Makes this living do an emote-animation
         /// </summary>
@@ -6298,9 +6298,9 @@ namespace DOL.GS
 
             if (base.ReceiveItem(source, item) == false)
             {
-                if (source is GamePlayer)
+                if (source is GamePlayer player)
                 {
-                    ((GamePlayer)source).Out.SendMessage(LanguageMgr.GetTranslation(((GamePlayer)source).Client.Account.Language, "GameLiving.ReceiveItem", Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameLiving.ReceiveItem", Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 }
 
                 return false;

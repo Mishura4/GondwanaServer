@@ -67,7 +67,7 @@ namespace DOL.GS.PacketHandler.Client.v168
                 if (obj == null || !player.IsWithinRadius(obj, WorldMgr.OBJ_UPDATE_DISTANCE))
                     player.Out.SendObjectDelete(m_targetOid);
                 else
-                    obj.Interact(player);
+                    player.InteractWith(obj);
             }
         }
     }

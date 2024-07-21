@@ -38,8 +38,7 @@ namespace DOL.GS.Scripts
 
         public override bool WhisperReceive(GameLiving source, string text)
         {
-            var player = source as GamePlayer;
-            if (!base.WhisperReceive(source, text) || player == null)  //|| BlacklistMgr.IsBlacklisted(player))
+            if (source is not GamePlayer player || !base.WhisperReceive(source, text))  //|| BlacklistMgr.IsBlacklisted(player))
                 return false;
 
             switch (text)
