@@ -206,7 +206,7 @@ namespace DOL.GS.Scripts
             return txt.ToString();
         }
         
-        public bool CanInteractAtTick(uint tick)
+        public bool IsActiveAtTick(uint tick)
         {
             if (Heure_min <= 0 && Heure_max >= 24)
             {
@@ -248,7 +248,7 @@ namespace DOL.GS.Scripts
             if (Races.Contains(player.RaceName.ToLower()))
                 return false;
 
-            if (!CanInteractAtTick(WorldMgr.GetCurrentGameTime(player)))
+            if (!IsActiveAtTick(WorldMgr.GetCurrentGameTime(player)))
                 return false;
 
             return true;

@@ -28,7 +28,7 @@ namespace DOL.AI.Brain
 
             var policy = iTextNpc.GetTextNPCPolicy();
             // Note: this will not work for per-player policies (iTextNpc.GetTextNPCPolicy(player))
-            if (policy?.Condition != null && policy.Condition.CanInteractAtTick(m_previousTick) != policy.Condition.CanInteractAtTick(currentTick))
+            if (policy?.Condition != null && policy.Condition.IsActiveAtTick(m_previousTick) != policy.Condition.IsActiveAtTick(currentTick))
             {
                 foreach (var player in Body.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE, true).Cast<GamePlayer>())
                 {

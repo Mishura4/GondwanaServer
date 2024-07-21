@@ -796,14 +796,10 @@ namespace DOL.GS.Scripts
                 return;
             _lastPhrase = DateTime.Now.Ticks / 10000;
 
-            //Heure
-            int heure = (int)(WorldMgr.GetCurrentGameTime() / 1000 / 60 / 54);
-            if (Condition.Heure_max < Condition.Heure_min && (Condition.Heure_min > heure || heure <= Condition.Heure_max))
+            if (!Condition.IsActiveAtTick(WorldMgr.GetCurrentGameTime()))
+            {
                 return;
-            if (Condition.Heure_max > Condition.Heure_min && (Condition.Heure_min > heure || heure >= Condition.Heure_max))
-                return;
-            if (Condition.Heure_max == Condition.Heure_min && heure != Condition.Heure_min)
-                return;
+            }
 
             int phrase = Util.Random(0, RandomPhrases.Count - 1);
             int i = 0;
