@@ -86,9 +86,10 @@ namespace DOL.GS.Scripts
 
             if (!string.IsNullOrEmpty(m_Text))
             {
-                var text = string.Format(m_Text, player.Name, player.LastName, player.GuildName, player.CharacterClass.Name, player.RaceName, GetList(player));
-                if (!string.IsNullOrEmpty(text))
+                var list = GetList(player);
+                if (!string.IsNullOrEmpty(list))
                 {
+                    var text = string.Format(m_Text, player.Name, player.LastName, player.GuildName, player.CharacterClass.Name, player.RaceName, GetList(player));
                     player.Out.SendMessage(text, eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 }
             }
@@ -522,8 +523,7 @@ namespace DOL.GS.Scripts
 
             public bool CanJump(GamePlayer player)
             {
-                int currentHour = DateTime.Now.Hour;
-                if (currentHour < Conditions.HourMin || currentHour > Conditions.HourMax)
+                if (!Conditions.IsActiveAtTick(WorldMgr.GetCurrentGameTime(player)))
                     return false;
                 if (player.Level < Conditions.LevelMin || player.Level > Conditions.LevelMax)
                     return false;
@@ -587,11 +587,31 @@ namespace DOL.GS.Scripts
             public int LevelMin;
             public int LevelMax = 50;
             public int HourMin;
-            public int HourMax;
+            public int HourMax = 24;
             public ItemTemplate ItemTemplate { get; private set; }
             public string RequiredWhisper { get; set; }
             public int RequiredCompletedQuestID { get; set; }
             public int RequiredQuestStepID { get; set; }
+        
+            public bool IsActiveAtTick(uint tick)
+            {
+                if (HourMin <= 0 && HourMax >= 24)
+                {
+                    return true;
+                }
+            
+                uint minTick = ((uint)HourMin) * 60 * 60 * 1000;
+                uint maxTick = ((uint)HourMax) * 60 * 60 * 1000;
+
+                //Heure
+                if (maxTick < minTick && (minTick > tick || tick <= maxTick))
+                    return false;
+                if (maxTick > minTick && (minTick > tick || tick >= maxTick))
+                    return false;
+                if (maxTick == minTick && tick != minTick)
+                    return false;
+                return true;
+            }
 
             public TeleportCondition(string db)
             {
