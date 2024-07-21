@@ -475,9 +475,6 @@ namespace DOL.GS.Scripts
             public Position Position = Position.Nowhere;
             public string Name;
             public TeleportCondition Conditions;
-            public string RequiredWhisper;
-            public int RequiredCompletedQuestID;
-            public int RequiredQuestStepID;
 
             public JumpPos(string SaveStr)
             {
@@ -493,7 +490,7 @@ namespace DOL.GS.Scripts
                         heading: ushort.Parse(args[4])
                     );
                     Conditions = new TeleportCondition(args.Length > 6 ? args[6] : "");
-                    RequiredWhisper = args.Length > 7 ? args[7] : null;
+                    Conditions.RequiredWhisper = args.Length > 7 ? args[7] : null;
                 }
                 catch
                 {
@@ -529,13 +526,13 @@ namespace DOL.GS.Scripts
                     return false;
                 if (!string.IsNullOrEmpty(Conditions.Item) && player.Inventory.GetFirstItemByID(Conditions.Item, eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack) == null)
                     return false;
-                if (!string.IsNullOrEmpty(RequiredWhisper) && WhisperTracker.TryGetValue(player, out var lastWhisper) && lastWhisper != RequiredWhisper)
+                if (!string.IsNullOrEmpty(Conditions.RequiredWhisper) && WhisperTracker.TryGetValue(player, out var lastWhisper) && lastWhisper != Conditions.RequiredWhisper)
                     return false;
-                if (RequiredCompletedQuestID > 0)
+                if (Conditions.RequiredCompletedQuestID > 0)
                 {
-                    if (RequiredQuestStepID > 0 && !IsPlayerOnQuestStep(player, RequiredCompletedQuestID, RequiredQuestStepID))
+                    if (Conditions.RequiredQuestStepID > 0 && !IsPlayerOnQuestStep(player, Conditions.RequiredCompletedQuestID, Conditions.RequiredQuestStepID))
                         return false;
-                    if (player.HasFinishedQuest(DataQuestJsonMgr.GetQuest((ushort)RequiredCompletedQuestID)) == 0)
+                    if (player.HasFinishedQuest(DataQuestJsonMgr.GetQuest((ushort)Conditions.RequiredCompletedQuestID)) == 0)
                         return false;
                 }
                 return true;
