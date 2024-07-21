@@ -15,6 +15,7 @@ using DOL.Territories;
 using DOL.GS.Geometry;
 using System.Linq;
 using DOL.GS.Quests;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace DOL.GS.Scripts
 {
@@ -29,8 +30,10 @@ namespace DOL.GS.Scripts
         private string m_Text = "{5}";
         private string m_Text_Refuse = "Vous n'avez pas le niveau requis pour être téléporté.";
         protected DBTeleportNPC db;
-        protected bool m_Occupe;
+        protected bool m_busy;
         public bool IsTerritoryLinked { get; set; }
+        
+        public ushort RequiredModel { get; set; }
 
         public int Range
         {
@@ -72,92 +75,140 @@ namespace DOL.GS.Scripts
         {
             if (!base.Interact(player)) return false;
 
-            if (m_Occupe)
+            if (!WillTalkTo(player))
+                return false;
+
+            if (m_busy)
             {
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"TeleportNPC.Busy"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
-                return true;
+                return false;
             }
 
-            if (IsTerritoryLinked && !TerritoryManager.IsPlayerInOwnedTerritory(player, this))
+            var text = string.Format(m_Text, player.Name, player.LastName, player.GuildName, player.CharacterClass.Name, player.RaceName, "\n" + GetList(player));
+            player.Out.SendMessage(text, eChatType.CT_System, eChatLoc.CL_PopupWindow);
+
+            return true;
+        }
+
+        /// <summary>
+        /// Checks whether the NPC will talk to a player if true, or respond with some variance of "I hate you!" to the player if false
+        /// </summary>
+        /// <param name="player"></param>
+        /// <returns></returns>
+        public bool WillTalkTo(GamePlayer player, bool silent = false)
+        {
+            if (IsTerritoryLinked == true)
             {
-                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "TeleportNPC.NotInOwnedTerritory"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
-                return true;
+                switch (CurrentTerritory?.IsOwnedBy(player))
+                {
+                    case true:
+                        break;
+                    
+                    case null:
+                        log.Warn($"TextNPC {Name} (${InternalID}) has `IsTerritoryLinked = true`, but is not in a territory");
+                        goto case false;
+                        
+                    case false:
+                        if (!silent)
+                        {
+                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "TeleportNPC.NotInOwnedTerritory"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                        }
+                        return false;
+                }
             }
 
-            string text;
-            if (!this.IsInterractionAuthorized(player))
+            if (RequiredModel != 0 && player.Model != RequiredModel)
             {
-                text = string.Format(m_Text_Refuse, player.Name, player.LastName, player.GuildName, player.CharacterClass.Name, player.RaceName);
-                if (text != "")
-                    player.Out.SendMessage(text, eChatType.CT_System, eChatLoc.CL_PopupWindow);
-                return true;
+                if (!silent)
+                {
+                    player.Out.SendMessage("...", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                }
+                return false;
+            }
+
+            if (this.IsOutlawFriendly.HasValue)
+            {
+                if (this.IsOutlawFriendly.Value)
+                {
+                    if (player.Reputation >= 0 && player.Client.Account.PrivLevel == 1)
+                    {
+                        if (!silent)
+                        {
+                            var text = string.Format(m_Text_Refuse, player.Name, player.LastName, player.GuildName, player.CharacterClass.Name, player.RaceName);
+                            player.Out.SendMessage(text, eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                        }
+                        return false;
+                    }
+                }
+                else
+                {
+                    if (player.Reputation < 0 && player.Client.Account.PrivLevel == 1)
+                    {
+                        if (!silent)
+                        {
+                            var text = string.Format(m_Text_Refuse, player.Name, player.LastName, player.GuildName, player.CharacterClass.Name, player.RaceName);
+                            player.Out.SendMessage(text, eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                        }
+                        return false;
+                    }
+                }
             }
 
             if (player.Level < m_MinLevel || m_Range > 0)
             {
-                text = string.Format(m_Text_Refuse, player.Name, player.LastName, player.GuildName, player.CharacterClass.Name, player.RaceName);
-                if (text != "")
+                if (!string.IsNullOrEmpty(m_Text_Refuse))
+                {
+                    var text = string.Format(m_Text_Refuse, player.Name, player.LastName, player.GuildName, player.CharacterClass.Name, player.RaceName);
                     player.Out.SendMessage(text, eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                }
                 return false;
             }
-
-            text = string.Format(m_Text, player.Name, player.LastName, player.GuildName, player.CharacterClass.Name, player.RaceName, "\n" + GetList(player));
-            player.Out.SendMessage(text, eChatType.CT_System, eChatLoc.CL_PopupWindow);
 
             return true;
         }
 
         public override bool WhisperReceive(GameLiving source, string str)
         {
-            if (!base.WhisperReceive(source, str) || !(source is GamePlayer)) return false;
-            GamePlayer player = source as GamePlayer;
+            if (!base.WhisperReceive(source, str) || source is not GamePlayer player) return false;
 
-            if (IsTerritoryLinked && !TerritoryManager.IsPlayerInOwnedTerritory(player, this))
+            if (!WillTalkTo(player))
             {
-                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "TeleportNPC.NotInOwnedTerritory"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
-                return true;
-            }
-
-            if (!this.IsInterractionAuthorized(player))
-            {
-                player.Out.SendMessage("...", eChatType.CT_System, eChatLoc.CL_PopupWindow);
-                return true;
-            }
-
-            if (m_Occupe)
-            {
-                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"TeleportNPC.Busy"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
-                return true;
-            }
-
-            WhisperTracker[player] = str;
-
-            if (!JumpPositions.ContainsKey(str))
-            {
-                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"TeleportNPC.UnknownDestination"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 return false;
             }
 
+            if (m_busy)
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"TeleportNPC.Busy"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                return false;
+            }
+
+            if (!JumpPositions.TryGetValue(str, out var jumpPos) || !jumpPos.CanJump(player))
+            {
+                WhisperTracker[player] = str;
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"TeleportNPC.UnknownDestination"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                return false;
+            }
+            
+            WhisperTracker[player] = str;
 
             RegionTimer TimerTL = new RegionTimer(this, Teleportation);
-            TimerTL.Properties.setProperty("TP", JumpPositions[str]);
+            TimerTL.Properties.setProperty("TP", jumpPos);
             TimerTL.Properties.setProperty("player", player);
             TimerTL.Start(3000);
             foreach (GamePlayer players in player.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
             {
-                players.Out.SendSpellCastAnimation(this, 1, 20);
+                players.Out.SendSpellCastAnimation(this, 1, 120);
                 players.Out.SendEmoteAnimation(player, eEmote.Bind);
             }
-            m_Occupe = true;
+            m_busy = true;
 
             return true;
         }
 
         public override bool ReceiveItem(GameLiving source, InventoryItem item)
         {
-            if (!(source is GamePlayer) || item == null || String.IsNullOrEmpty(item.Id_nb))
+            if (!(source is GamePlayer player) || String.IsNullOrEmpty(item?.Id_nb))
                 return false;
-            GamePlayer player = (GamePlayer)source;
 
             if (IsTerritoryLinked && !TerritoryManager.IsPlayerInOwnedTerritory(player, this))
             {
@@ -178,7 +229,7 @@ namespace DOL.GS.Scripts
                         players.Out.SendSpellCastAnimation(this, 1, 20);
                         players.Out.SendEmoteAnimation(player, eEmote.Bind);
                     }
-                    m_Occupe = true;
+                    m_busy = true;
                     return false;
                 }
             }
@@ -187,7 +238,6 @@ namespace DOL.GS.Scripts
 
         protected virtual int Teleportation(RegionTimer timer)
         {
-            m_Occupe = false;
             JumpPos pos = timer.Properties.getProperty<JumpPos>("TP", null);
             GamePlayer player = timer.Properties.getProperty<GamePlayer>("player", null);
             if (pos == null || player == null) return 0;
@@ -196,6 +246,7 @@ namespace DOL.GS.Scripts
                                        eChatLoc.CL_SystemWindow);
             else
                 pos.Jump(this, player);
+            m_busy = false;
             return 0;
         }
         #endregion
@@ -259,30 +310,6 @@ namespace DOL.GS.Scripts
 
             LoadJumpPos();
         }
-
-        private bool IsInterractionAuthorized(GamePlayer player)
-        {
-            if (this.IsOutlawFriendly.HasValue)
-            {
-                if (this.IsOutlawFriendly.Value)
-                {
-                    if (player.Reputation >= 0 && player.Client.Account.PrivLevel == 1)
-                    {
-                        return false;
-                    }
-                }
-                else
-                {
-                    if (player.Reputation < 0 && player.Client.Account.PrivLevel == 1)
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
-        }
-
 
         public override void SaveIntoDatabase()
         {
@@ -437,11 +464,7 @@ namespace DOL.GS.Scripts
 
         public class JumpPos
         {
-            public int X;
-            public int Y;
-            public int Z;
-            public ushort Heading;
-            public ushort RegionID;
+            public Position Position = Position.Nowhere;
             public string Name;
             public TeleportCondition Conditions;
             public string RequiredWhisper;
@@ -454,11 +477,13 @@ namespace DOL.GS.Scripts
                 {
                     string[] args = SaveStr.Split(';');
                     Name = args[0];
-                    X = int.Parse(args[1]);
-                    Y = int.Parse(args[2]);
-                    Z = int.Parse(args[3]);
-                    Heading = ushort.Parse(args[4]);
-                    RegionID = ushort.Parse(args[5]);
+                    Position = Position.Create(
+                        regionID: ushort.Parse(args[5]),
+                        x: int.Parse(args[1]),
+                        y: int.Parse(args[2]),
+                        z: int.Parse(args[3]),
+                        heading: ushort.Parse(args[4])
+                    );
                     Conditions = new TeleportCondition(args.Length > 6 ? args[6] : "");
                     RequiredWhisper = args.Length > 7 ? args[7] : null;
                 }
@@ -471,17 +496,16 @@ namespace DOL.GS.Scripts
             public JumpPos(string name, int x, int y, int z, ushort heading, ushort regionID)
             {
                 Name = name;
-                X = x;
-                Y = y;
-                Z = z;
-                Heading = heading;
-                RegionID = regionID;
+                Position = Position.Create(
+                    regionID, x, y, z, heading
+                );
                 Conditions = new TeleportCondition("");
             }
 
             public override string ToString()
             {
-                return Name + ";" + X + ";" + Y + ";" + Z + ";" + Heading + ";" + RegionID + ";" + Conditions.GetStringDB();
+                return Name + ";" + Position.X + ";" + Position.Y + ";" + Position.Z + ";" +
+                    Position.Orientation.InHeading + ";" + Position.RegionID + ";" + Conditions.GetStringDB();
             }
 
             public bool IsInList(GamePlayer player)
@@ -500,10 +524,13 @@ namespace DOL.GS.Scripts
                     return false;
                 if (!string.IsNullOrEmpty(RequiredWhisper) && WhisperTracker.TryGetValue(player, out var lastWhisper) && lastWhisper != RequiredWhisper)
                     return false;
-                if (RequiredCompletedQuestID > 0 && player.HasFinishedQuest(DataQuestJsonMgr.GetQuest((ushort)RequiredCompletedQuestID)) == 0)
-                    return false;
-                if (RequiredQuestStepID > 0 && !IsPlayerOnQuestStep(player, RequiredCompletedQuestID, RequiredQuestStepID))
-                    return false;
+                if (RequiredCompletedQuestID > 0)
+                {
+                    if (RequiredQuestStepID > 0 && !IsPlayerOnQuestStep(player, RequiredCompletedQuestID, RequiredQuestStepID))
+                        return false;
+                    if (player.HasFinishedQuest(DataQuestJsonMgr.GetQuest((ushort)RequiredCompletedQuestID)) == 0)
+                        return false;
+                }
                 return true;
             }
 
@@ -528,7 +555,7 @@ namespace DOL.GS.Scripts
                         return;
                     InventoryLogging.LogInventoryAction(player, source, eInventoryActionType.Other, Conditions.ItemTemplate, 1);
                 }
-                player.MoveTo(RegionID, X, Y, Z, Heading);
+                player.MoveTo(Position);
                 if (Conditions.Bind)
                     player.Bind(true);
             }

@@ -36,6 +36,7 @@ namespace DOL.GS
 
             return true;
         }
+        
         private void SendReply(GamePlayer target, string msg)
         {
             target.Client.Out.SendMessage(
@@ -43,6 +44,7 @@ namespace DOL.GS
                eChatType.CT_Say, eChatLoc.CL_PopupWindow);
 
         }
+        
         public override bool WhisperReceive(GameLiving source, string str)
         {
             var player = source as GamePlayer;
@@ -59,7 +61,7 @@ namespace DOL.GS
                 }
                 else
                 {
-                    if (m_Occupe)
+                    if (m_busy)
                     {
                         player.Out.SendMessage("Je suis occupé pour le moment.", eChatType.CT_System, eChatLoc.CL_PopupWindow);
                         return true;
@@ -80,7 +82,7 @@ namespace DOL.GS
                         players.Out.SendSpellCastAnimation(this, 1, 20);
                         players.Out.SendEmoteAnimation(player, eEmote.Bind);
                     }
-                    m_Occupe = true;
+                    m_busy = true;
                 }
             }
             return true;

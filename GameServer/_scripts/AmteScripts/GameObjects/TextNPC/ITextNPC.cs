@@ -374,6 +374,7 @@ namespace DOL.GS.Scripts
             }
             return false;
         }
+        
         public bool CheckQuestAvailable(string Name, int goalId = 0)
         {
             foreach (var kvp in QuestReponsesValues)

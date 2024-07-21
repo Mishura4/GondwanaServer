@@ -249,7 +249,7 @@ namespace DOL.GS.Scripts
                     }
                     foreach (TeleportNPC.JumpPos pos in npc.GetJumpList())
                     {
-                        text += pos.Name + ": X:" + pos.X + " Y:" + pos.Y + " Z:" + pos.Z + " Heading:" + pos.Heading + " Region:" + pos.RegionID + "\n";
+                        text += pos.Name + ": " + pos.Position + "\n";
                         text += " -> " + pos.Conditions + "\n";
                     }
                     if (text == "")
