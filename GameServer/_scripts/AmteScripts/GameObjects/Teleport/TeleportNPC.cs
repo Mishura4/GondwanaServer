@@ -378,6 +378,7 @@ namespace DOL.GS.Scripts
             db.Text_Refuse = m_Text_Refuse;
             db.IsTerritoryLinked = IsTerritoryLinked;
             db.WhisperPassword = WhisperPassword;
+            db.ShowTPIndicator = ShowTPIndicator;
 
             if (IsOutlawFriendly.HasValue)
             {
