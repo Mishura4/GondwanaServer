@@ -84,8 +84,14 @@ namespace DOL.GS.Scripts
                 return false;
             }
 
-            var text = string.Format(m_Text, player.Name, player.LastName, player.GuildName, player.CharacterClass.Name, player.RaceName, "\n" + GetList(player));
-            player.Out.SendMessage(text, eChatType.CT_System, eChatLoc.CL_PopupWindow);
+            if (!string.IsNullOrEmpty(m_Text))
+            {
+                var text = string.Format(m_Text, player.Name, player.LastName, player.GuildName, player.CharacterClass.Name, player.RaceName, GetList(player));
+                if (!string.IsNullOrEmpty(text))
+                {
+                    player.Out.SendMessage(text, eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                }
+            }
 
             return true;
         }
@@ -390,9 +396,10 @@ namespace DOL.GS.Scripts
             {
                 if (pos.IsInList(player))
                 {
+                    sb.Append('\n');
                     sb.Append('[');
                     sb.Append(pos.Name);
-                    sb.Append("] \n");
+                    sb.Append("]");
                 }
             }
             return sb.ToString();
