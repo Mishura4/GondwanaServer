@@ -417,6 +417,10 @@ namespace DOL.GS.Scripts
                     JumpPos pos = new JumpPos(S_pos);
                     if (!string.IsNullOrEmpty(pos.Name))
                         JumpPositions.Add(pos.Name, pos);
+                    if (pos.Conditions.RequiredQuestStepID > 0 && pos.Conditions.RequiredCompletedQuestID == 0)
+                    {
+                        log.Warn($"TeleportNPC {Name} ({InternalID}) condition \"{pos.Name}\" has RequiredQuestStepID != 0 but RequiredCompletedQuestID == 0, can't know which quest we are talking about");
+                    }
                 }
                 catch { }
             }
