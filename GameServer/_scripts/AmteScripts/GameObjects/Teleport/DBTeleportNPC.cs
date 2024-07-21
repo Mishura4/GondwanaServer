@@ -33,6 +33,7 @@ namespace DOL.Database
         private bool m_IsRegularFriendly;
         private bool m_IsTerritoryLinked;
         private bool m_ShowTPIndicator;
+        private string m_whisperPassword = String.Empty;
 
         [DataElement(AllowDbNull = false)]
         public string MobID
@@ -164,6 +165,17 @@ namespace DOL.Database
             {
                 Dirty = true;
                 m_ShowTPIndicator = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false, Varchar = 255)]
+        public string WhisperPassword
+        {
+            get { return m_whisperPassword; }
+            set
+            {
+                Dirty = true;
+                m_whisperPassword = value;
             }
         }
     }

@@ -1,5 +1,8 @@
-TeleportNPC.RequiredLevel:		You don't have the required level to be teleported.
-TeleportNPC.Busy:			I'm busy at the moment.
-TeleportNPC.UnknownDestination:		I don't know this destination.
-TeleportNPC.NoTPCombat:			You can't be teleported while in combat!
-TeleportNPC.NotInOwnedTerritory:	Good day, my lord. I regret to inform you that I must refuse you my services, as our territory is not a vassal of your guild!
+TeleportNPC.RequiredLevel:              You don't have the required level to be teleported.
+TeleportNPC.Busy:                       I'm busy at the moment.
+TeleportNPC.YouAreOutlaw:               I do not speak to criminals.
+TeleportNPC.YouAreNotOutlaw:            Move along, there is nothing to see here.
+TeleportNPC.NoPassword:                 Good day, my lord. How can I help you?
+TeleportNPC.UnknownDestination:         I do not know this destination.
+TeleportNPC.NoTPCombat:                 You can't be teleported while in combat!
+TeleportNPC.NotInOwnedTerritory:        Good day, my lord. I regret to inform you that I must refuse you my services, as our territory is not a vassal of your guild!

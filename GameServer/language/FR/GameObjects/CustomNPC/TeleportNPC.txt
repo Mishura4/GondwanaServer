@@ -1,5 +1,8 @@
-TeleportNPC.RequiredLevel:		Vous n'avez pas le niveau requis pour être téléporté.
-TeleportNPC.Busy:			Je suis occupé pour le moment.
-TeleportNPC.UnknownDestination:		Je ne connais pas cette destination.
-TeleportNPC.NoTPCombat:			Vous ne pouvez pas être téléporté en étant en combat !
-TeleportNPC.NotInOwnedTerritory:	Bien le bonjour, messire. Je suis navré de devoir vous refuser mes services, car notre territoire n'est point vassal de votre guilde !
+TeleportNPC.RequiredLevel:              Vous n'avez pas le niveau requis pour être téléporté.
+TeleportNPC.Busy:                       Je suis occupé pour le moment.
+TeleportNPC.YouAreOutlaw:               Je ne parle pas aux criminels.
+TeleportNPC.YouAreNotOutlaw:            Circulez, vous n'avez n'a rien à voir ici.
+TeleportNPC.NoPassword:                 Bien le bonjour, messire. Comment puis-je vous aider?
+TeleportNPC.UnknownDestination:         Je ne connais pas cette destination.
+TeleportNPC.NoTPCombat:                 Vous ne pouvez pas être téléporté en étant en combat !
+TeleportNPC.NotInOwnedTerritory:        Bien le bonjour, messire. Je suis navré de devoir vous refuser mes services, car notre territoire n'est point vassal de votre guilde !

@@ -303,6 +303,28 @@ namespace DOL.GS.Scripts
                     player.Out.SendMessage("Show teleporter indicator set to " + npc.ShowTPIndicator + ".", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     break;
 
+                #region password
+                case "password":
+                    if (npc == null || args.Length < 2)
+                    {
+                        DisplaySyntax(client);
+                        return;
+                    }
+                    if (args.Length > 2)
+                    {
+                        npc.WhisperPassword = string.Join(" ", args, 2, args.Length - 2);
+                        npc.SaveIntoDatabase();
+                        DisplayMessage(client, "Teleporter password set to : \"" + npc.WhisperPassword + "\".");
+                    }
+                    else
+                    {
+                        npc.WhisperPassword = string.Empty;
+                        npc.SaveIntoDatabase();
+                        DisplayMessage(client, "Teleporter password removed.");
+                    }
+                    break;
+                #endregion
+
                 default:
                     DisplaySyntax(client);
                     break;
@@ -405,13 +427,6 @@ namespace DOL.GS.Scripts
                         DisplaySyntax(client);
                         return;
                     }
-                    break;
-                #endregion
-
-                #region requiredwhisper
-                case "requiredwhisper":
-                    jump.Conditions.RequiredWhisper = string.Join(" ", args, 4, args.Length - 4);
-                    DisplayMessage(client, "Le jump \"" + jump.Name + "\" nécessite le chuchotement : \"" + jump.Conditions.RequiredWhisper + "\".");
                     break;
                 #endregion
 

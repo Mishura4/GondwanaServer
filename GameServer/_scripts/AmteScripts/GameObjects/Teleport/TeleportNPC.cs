@@ -27,7 +27,7 @@ namespace DOL.GS.Scripts
         public Dictionary<string, JumpPos> JumpPositions;
         private int m_Range;
         private byte m_MinLevel;
-        private string m_Text = "{5}";
+        private string m_Text = String.Empty;
         private string m_Text_Refuse = "Vous n'avez pas le niveau requis pour être téléporté.";
         protected DBTeleportNPC db;
         protected bool m_busy;
@@ -66,7 +66,10 @@ namespace DOL.GS.Scripts
         }
 
         public bool ShowTPIndicator { get; set; }
-        private static Dictionary<GamePlayer, string> WhisperTracker = new Dictionary<GamePlayer, string>();
+        
+        public string WhisperPassword { get; set; } = String.Empty;
+        
+        private static HashSet<GamePlayer> AuthorizedPlayers = new ();
 
         #endregion
 
@@ -77,13 +80,24 @@ namespace DOL.GS.Scripts
 
             if (!WillTalkTo(player))
                 return false;
-
-            if (m_busy)
+            
+            if (!string.IsNullOrEmpty(WhisperPassword))
             {
-                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"TeleportNPC.Busy"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
-                return false;
+                lock (AuthorizedPlayers)
+                {
+                    if (!AuthorizedPlayers.Contains(player))
+                    {
+                        return true;
+                    }
+                }
             }
+            
+            SendList(player);
+            return true;
+        }
 
+        private void SendList(GamePlayer player)
+        {
             if (!string.IsNullOrEmpty(m_Text))
             {
                 var list = GetList(player);
@@ -93,8 +107,10 @@ namespace DOL.GS.Scripts
                     player.Out.SendMessage(text, eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 }
             }
-
-            return true;
+            else
+            {
+                player.Out.SendMessage(GetList(player), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+            }
         }
 
         /// <summary>
@@ -141,8 +157,7 @@ namespace DOL.GS.Scripts
                     {
                         if (!silent)
                         {
-                            var text = string.Format(m_Text_Refuse, player.Name, player.LastName, player.GuildName, player.CharacterClass.Name, player.RaceName);
-                            player.Out.SendMessage(text, eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                            player.SendTranslatedMessage("TeleportNPC.YouAreNotOutlaw", eChatType.CT_System, eChatLoc.CL_PopupWindow);
                         }
                         return false;
                     }
@@ -153,21 +168,16 @@ namespace DOL.GS.Scripts
                     {
                         if (!silent)
                         {
-                            var text = string.Format(m_Text_Refuse, player.Name, player.LastName, player.GuildName, player.CharacterClass.Name, player.RaceName);
-                            player.Out.SendMessage(text, eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                            player.SendTranslatedMessage("TeleportNPC.YouAreOutlaw", eChatType.CT_System, eChatLoc.CL_PopupWindow);
                         }
                         return false;
                     }
                 }
             }
 
-            if (player.Level < m_MinLevel || m_Range > 0)
+            if (player.Level < m_MinLevel)
             {
-                if (!string.IsNullOrEmpty(m_Text_Refuse))
-                {
-                    var text = string.Format(m_Text_Refuse, player.Name, player.LastName, player.GuildName, player.CharacterClass.Name, player.RaceName);
-                    player.Out.SendMessage(text, eChatType.CT_System, eChatLoc.CL_PopupWindow);
-                }
+                player.SendTranslatedMessage("TeleportNPC.RequiredLevel", eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 return false;
             }
 
@@ -183,33 +193,65 @@ namespace DOL.GS.Scripts
                 return false;
             }
 
-            if (m_busy)
+            bool saidPassword = false;
+            if (!string.IsNullOrEmpty(WhisperPassword))
             {
-                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"TeleportNPC.Busy"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
-                return false;
-            }
-
-            if (!JumpPositions.TryGetValue(str, out var jumpPos) || !jumpPos.CanJump(player))
-            {
-                WhisperTracker[player] = str;
-                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"TeleportNPC.UnknownDestination"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
-                return false;
+                if (!string.Equals(str, WhisperPassword))
+                {
+                    lock (AuthorizedPlayers)
+                    {
+                        if (!AuthorizedPlayers.Contains(player))
+                        {
+                            return false;
+                        }
+                    }
+                }
+                else
+                {
+                    saidPassword = true;
+                    lock (AuthorizedPlayers)
+                    {
+                        AuthorizedPlayers.Add(player);
+                        // Clean up eventually?
+                        
+                        SendList(player);
+                        return true;
+                    }
+                }
             }
             
-            WhisperTracker[player] = str;
-
-            RegionTimer TimerTL = new RegionTimer(this, Teleportation);
-            TimerTL.Properties.setProperty("TP", jumpPos);
-            TimerTL.Properties.setProperty("player", player);
-            TimerTL.Start(3000);
-            foreach (GamePlayer players in player.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+            if (JumpPositions.TryGetValue(str, out var jumpPos) && jumpPos.CanJump(player))
             {
-                players.Out.SendSpellCastAnimation(this, 1, 120);
-                players.Out.SendEmoteAnimation(player, eEmote.Bind);
+                if (m_busy)
+                {
+                    player.SendTranslatedMessage("TeleportNPC.Busy", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                    return true;
+                }
+                
+                RegionTimer TimerTL = new RegionTimer(this, Teleportation);
+                TimerTL.Properties.setProperty("TP", jumpPos);
+                TimerTL.Properties.setProperty("player", player);
+                TimerTL.Start(3000);
+                foreach (GamePlayer players in player.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+                {
+                    players.Out.SendSpellCastAnimation(this, 1, 120);
+                    players.Out.SendEmoteAnimation(player, eEmote.Bind);
+                }
+                m_busy = true;
+                return true;
             }
-            m_busy = true;
-
-            return true;
+            else
+            {
+                if (saidPassword)
+                {
+                    SendList(player);
+                }
+                else
+                {
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"TeleportNPC.UnknownDestination"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                }
+                return true;
+            }
         }
 
         public override bool ReceiveItem(GameLiving source, InventoryItem item)
@@ -296,6 +338,7 @@ namespace DOL.GS.Scripts
             m_Text_Refuse = db.Text_Refuse;
             IsTerritoryLinked = db.IsTerritoryLinked;
             ShowTPIndicator = db.ShowTPIndicator;
+            WhisperPassword = db.WhisperPassword;
 
             //Set this value only when OR Exclusive
             if (db.IsOutlawFriendly ^ db.IsRegularFriendly)
@@ -333,6 +376,7 @@ namespace DOL.GS.Scripts
             db.Text = m_Text;
             db.Text_Refuse = m_Text_Refuse;
             db.IsTerritoryLinked = IsTerritoryLinked;
+            db.WhisperPassword = WhisperPassword;
 
             if (IsOutlawFriendly.HasValue)
             {
@@ -361,7 +405,7 @@ namespace DOL.GS.Scripts
         private void LoadJumpPos()
         {
             string[] objs = db.JumpPosition.Split('|');
-            JumpPositions = new Dictionary<string, JumpPos>(Math.Max(objs.Length, 1));
+            JumpPositions = new Dictionary<string, JumpPos>(objs.Length);
 
             foreach (string S_pos in objs)
             {
@@ -382,10 +426,7 @@ namespace DOL.GS.Scripts
             if (JumpPositions == null || JumpPositions.Count == 0)
                 return "";
 
-            string str = "";
-            foreach (JumpPos pos in JumpPositions.Values)
-                str += pos + "|";
-            return str;
+            return string.Join('|', JumpPositions.Values);
         }
         #endregion
 
@@ -490,7 +531,6 @@ namespace DOL.GS.Scripts
                         heading: ushort.Parse(args[4])
                     );
                     Conditions = new TeleportCondition(args.Length > 6 ? args[6] : "");
-                    Conditions.RequiredWhisper = args.Length > 7 ? args[7] : null;
                 }
                 catch
                 {
@@ -525,8 +565,6 @@ namespace DOL.GS.Scripts
                 if (player.Level < Conditions.LevelMin || player.Level > Conditions.LevelMax)
                     return false;
                 if (!string.IsNullOrEmpty(Conditions.Item) && player.Inventory.GetFirstItemByID(Conditions.Item, eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack) == null)
-                    return false;
-                if (!string.IsNullOrEmpty(Conditions.RequiredWhisper) && WhisperTracker.TryGetValue(player, out var lastWhisper) && lastWhisper != Conditions.RequiredWhisper)
                     return false;
                 if (Conditions.RequiredCompletedQuestID > 0)
                 {
@@ -586,7 +624,6 @@ namespace DOL.GS.Scripts
             public int HourMin;
             public int HourMax = 24;
             public ItemTemplate ItemTemplate { get; private set; }
-            public string RequiredWhisper { get; set; }
             public int RequiredCompletedQuestID { get; set; }
             public int RequiredQuestStepID { get; set; }
         
@@ -642,9 +679,6 @@ namespace DOL.GS.Scripts
                                     break;
                                 case "HourMax":
                                     HourMax = int.Parse(arg[1]);
-                                    break;
-                                case "RequiredWhisper":
-                                    RequiredWhisper = arg[1];
                                     break;
                                 case "RequiredCompletedQuestID":
                                     RequiredCompletedQuestID = int.Parse(arg[1]);
@@ -707,12 +741,6 @@ namespace DOL.GS.Scripts
                     sb.Append("HourMax=");
                     sb.Append(HourMax);
                 }
-                if (!string.IsNullOrEmpty(RequiredWhisper))
-                {
-                    if (sb.Length > 0) sb.Append("/");
-                    sb.Append("RequiredWhisper=");
-                    sb.Append(RequiredWhisper);
-                }
                 if (RequiredCompletedQuestID != 0)
                 {
                     if (sb.Length > 0) sb.Append("/");
@@ -756,12 +784,6 @@ namespace DOL.GS.Scripts
                     sb.Append(HourMin);
                     sb.Append(" et ");
                     sb.Append(HourMax);
-                }
-                if (!string.IsNullOrEmpty(RequiredWhisper))
-                {
-                    if (sb.Length > 0) sb.Append("\n");
-                    sb.Append("Required whisper: ");
-                    sb.Append(RequiredWhisper);
                 }
                 if (RequiredCompletedQuestID != 0)
                 {
