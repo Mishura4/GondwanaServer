@@ -28,7 +28,7 @@ namespace DOL.GS.Scripts
         private int m_Range;
         private byte m_MinLevel;
         private string m_Text = String.Empty;
-        private string m_Text_Refuse = "Vous n'avez pas le niveau requis pour être téléporté.";
+        private string m_Text_Refuse = String.Empty;
         protected DBTeleportNPC db;
         protected bool m_busy;
         public bool IsTerritoryLinked { get; set; }
@@ -177,7 +177,8 @@ namespace DOL.GS.Scripts
 
             if (player.Level < m_MinLevel)
             {
-                player.SendTranslatedMessage("TeleportNPC.RequiredLevel", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                var text = string.IsNullOrEmpty(m_Text_Refuse) ? LanguageMgr.GetTranslation(player, "TeleportNPC.RequiredLevel") : m_Text_Refuse;
+                player.SendMessage(text, eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 return false;
             }
 
