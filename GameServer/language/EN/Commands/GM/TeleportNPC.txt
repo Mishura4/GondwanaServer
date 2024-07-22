@@ -8,6 +8,7 @@ Commands.GM.TeleportNPC.Usage.Level:			'/teleportnpc level <min level>' Sets the
 Commands.GM.TeleportNPC.Usage.AddJump:			'/teleportnpc addjump <X> <Y> <Z> <Heading> <RegionID> <Name>' Add a jump (WARNING Gloc, use \"Area\" as jump name to make an automatic teleporter)
 Commands.GM.TeleportNPC.Usage.Jump:			'/teleportnpc jump' Listed jumps with their conditions
 Commands.GM.TeleportNPC.Usage.RemoveJump:			'/teleportnpc removejump <Name>' Removes a jump from the teleport list
+Commands.GM.TeleportNPC.Usage.Password:				'/teleportnpc password <sentence>' Sets a required password sentence to enable access to the NPC.
 Commands.GM.TeleportNPC.Usage.Conditions.Visible:		'/teleportnpc conditions <name of the jump> visible <on/off>' Shows if a jump can appear on the list while the player interacts with the NPC
 Commands.GM.TeleportNPC.Usage.Conditions.Item:				'/teleportnpc conditions <name of the jump> item <ItemTemplate>' Required item in player's inventory to be teleported
 Commands.GM.TeleportNPC.Usage.Conditions.Niveaux:		'/teleportnpc conditions <name of the jump> levels <min> <max>' Minimum and maximum player levels allowed for the jump
@@ -20,3 +21,4 @@ Commands.GM.TeleportNPC.Usage.Conditions.Hours:				'/teleportnpc conditions <nam
 Commands.GM.TeleportNPC.Usage.Conditions.RequiredWhisper:	'/teleportnpc conditions <name of the jump> requiredwhisper <phrase>' Sets the required whisper for activating the teleport.
 Commands.GM.TeleportNPC.Usage.Conditions.CompletedQuest:	'/teleportnpc conditions <name of the jump> completedquest <questID>' Sets the required completed quest ID.
 Commands.GM.TeleportNPC.Usage.Conditions.QuestStep:			'/teleportnpc conditions <name of the jump> queststep <questID> <stepID>' Sets the required quest step ID for teleportation.
+Commands.GM.TeleportNPC.Usage.Conditions.Event:				'/teleportnpc conditions <name of the jump> event <eventID>' Sets an event required to be active for teleportation.

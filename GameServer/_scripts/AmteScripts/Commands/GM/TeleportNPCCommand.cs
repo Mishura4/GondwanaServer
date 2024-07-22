@@ -18,13 +18,14 @@ namespace DOL.GS.Scripts
          "Commands.GM.TeleportNPC.Usage.AddJump",
          "Commands.GM.TeleportNPC.Usage.Jump",
          "Commands.GM.TeleportNPC.Usage.RemoveJump",
+         "Commands.GM.TeleportNPC.Usage.Password",
          "Commands.GM.TeleportNPC.Usage.Conditions.Visible",
          "Commands.GM.TeleportNPC.Usage.Conditions.Item",
          "Commands.GM.TeleportNPC.Usage.Conditions.Niveaux",
          "Commands.GM.TeleportNPC.Usage.Conditions.Bind",
          "Commands.GM.TeleportNPC.Usage.AdditionalDescription",
          "Commands.GM.TeleportNPC.Usage.Conditions.Hours",
-         "Commands.GM.TeleportNPC.Usage.Conditions.RequiredWhisper",
+         "Commands.GM.TeleportNPC.Usage.Conditions.Event",
          "Commands.GM.TeleportNPC.Usage.Conditions.CompletedQuest",
          "Commands.GM.TeleportNPC.Usage.Conditions.QuestStep",
          "Commands.GM.TeleportNPC.Usage.TerritoryLinked",
@@ -456,6 +457,28 @@ namespace DOL.GS.Scripts
                     {
                         DisplaySyntax(client);
                         return;
+                    }
+                    break;
+                #endregion
+
+                #region event
+                case "event":
+                    if (npc == null || args.Length < 4)
+                    {
+                        DisplaySyntax(client);
+                        return;
+                    }
+                    if (args.Length > 4)
+                    {
+                        jump.Conditions.ActiveEventId = args[4];
+                        npc.SaveIntoDatabase();
+                        DisplayMessage(client, "Teleporter required event set to : \"" + jump.Conditions.ActiveEventId + "\".");
+                    }
+                    else
+                    {
+                        jump.Conditions.ActiveEventId = string.Empty;
+                        npc.SaveIntoDatabase();
+                        DisplayMessage(client, "Teleporter required event removed.");
                     }
                     break;
                 #endregion

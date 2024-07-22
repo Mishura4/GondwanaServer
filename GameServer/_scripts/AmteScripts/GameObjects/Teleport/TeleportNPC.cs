@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using DOL.AI.Brain;
 using DOL.Database;
+using DOL.GameEvents;
 using DOL.GS.PacketHandler;
 using System.Reflection;
 using log4net;
@@ -214,9 +215,6 @@ namespace DOL.GS.Scripts
                     {
                         AuthorizedPlayers.Add(player);
                         // Clean up eventually?
-                        
-                        SendList(player);
-                        return true;
                     }
                 }
             }
@@ -572,6 +570,8 @@ namespace DOL.GS.Scripts
                     return false;
                 if (!string.IsNullOrEmpty(Conditions.Item) && player.Inventory.GetFirstItemByID(Conditions.Item, eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack) == null)
                     return false;
+                if (!string.IsNullOrEmpty(Conditions.ActiveEventId) && GameEventManager.Instance.GetEventByID(Conditions.ActiveEventId)?.Status == EventStatus.NotOver)
+                    return false;
                 if (Conditions.RequiredCompletedQuestID > 0)
                 {
                     if (Conditions.RequiredQuestStepID > 0 && !IsPlayerOnQuestStep(player, Conditions.RequiredCompletedQuestID, Conditions.RequiredQuestStepID))
@@ -629,6 +629,7 @@ namespace DOL.GS.Scripts
             public int LevelMax = 50;
             public int HourMin;
             public int HourMax = 24;
+            public string ActiveEventId = String.Empty;
             public ItemTemplate ItemTemplate { get; private set; }
             public int RequiredCompletedQuestID { get; set; }
             public int RequiredQuestStepID { get; set; }
@@ -691,6 +692,9 @@ namespace DOL.GS.Scripts
                                     break;
                                 case "RequiredQuestStepID":
                                     RequiredQuestStepID = int.Parse(arg[1]);
+                                    break;
+                                case "EventID":
+                                    ActiveEventId = arg[1];
                                     break;
                             }
                         }
@@ -759,6 +763,12 @@ namespace DOL.GS.Scripts
                     sb.Append("RequiredQuestStepID=");
                     sb.Append(RequiredQuestStepID);
                 }
+                if (!string.IsNullOrEmpty(ActiveEventId))
+                {
+                    if (sb.Length > 0) sb.Append("/");
+                    sb.Append("EventID=");
+                    sb.Append(ActiveEventId);
+                }
                 return sb.ToString();
             }
 
@@ -802,6 +812,12 @@ namespace DOL.GS.Scripts
                     if (sb.Length > 0) sb.Append("\n");
                     sb.Append("Required quest step ID: ");
                     sb.Append(RequiredQuestStepID);
+                }
+                if (!String.IsNullOrEmpty(ActiveEventId))
+                {
+                    if (sb.Length > 0) sb.Append("\n");
+                    sb.Append("Required active event ID: ");
+                    sb.Append(ActiveEventId);
                 }
                 return sb.ToString();
             }
