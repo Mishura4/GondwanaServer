@@ -21,6 +21,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DOL.GS.PacketHandler;
 using DOL.AI.Brain;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -65,7 +66,10 @@ namespace DOL.GS.Spells
             int heal = (ad.Damage + ad.CriticalDamage) * Spell.LifeDrainReturn / 100; // % factor on all drains
             if (m_caster.IsDiseased)
             {
-                MessageToCaster("You are diseased!", eChatType.CT_SpellResisted);
+                if (Caster is GamePlayer player)
+                {
+                    MessageToCaster(LanguageMgr.GetTranslation(player.Client.Account.Language, "Spell.OmniLifeDrain.CasterDiseased"), eChatType.CT_SpellResisted);
+                }
                 heal >>= 1;
             }
 
@@ -73,7 +77,10 @@ namespace DOL.GS.Spells
 
             if (heal > 0)
             {
-                MessageToCaster("You steal " + heal + " hit point" + (heal == 1 ? "." : "s."), eChatType.CT_Spell);
+                if (Caster is GamePlayer player)
+                {
+                    MessageToCaster(LanguageMgr.GetTranslation(player.Client.Account.Language, "Spell.OmniLifeDrain.StealHealth", heal, (heal == 1 ? " " : "s")), eChatType.CT_Spell);
+                }
 
 
                 #region PVP DAMAGE
@@ -89,14 +96,17 @@ namespace DOL.GS.Spells
             }
             else
             {
-                MessageToCaster("You cannot absorb any more life.", eChatType.CT_SpellResisted);
+                if (Caster is GamePlayer player)
+                {
+                    MessageToCaster(LanguageMgr.GetTranslation(player.Client.Account.Language, "Spell.OmniLifeDrain.CannotAbsorb"), eChatType.CT_SpellResisted);
+                }
 
                 #region PVP DAMAGE
 
                 if (m_caster is NecromancerPet && ((m_caster as NecromancerPet).Brain as IControlledBrain).GetPlayerOwner() != null || m_caster is GamePlayer)
                 {
                     if (m_caster.DamageRvRMemory > 0)
-                        m_caster.DamageRvRMemory = 0; //Remise a z�ro compteur dommages/heal rps
+                        m_caster.DamageRvRMemory = 0; //Remise a zéro compteur dommages/heal rps
                 }
                 #endregion PVP DAMAGE
             }
@@ -113,11 +123,17 @@ namespace DOL.GS.Spells
             renew = m_caster.ChangeEndurance(m_caster, GameLiving.eEnduranceChangeType.Spell, renew);
             if (renew > 0)
             {
-                MessageToCaster("You steal " + renew + " endurance.", eChatType.CT_Spell);
+                if (Caster is GamePlayer player)
+                {
+                    MessageToCaster(LanguageMgr.GetTranslation(player.Client.Account.Language, "Spell.OmniLifeDrain.StealEndurance", renew), eChatType.CT_Spell);
+                }
             }
             else
             {
-                MessageToCaster("You cannot steal any more endurance.", eChatType.CT_SpellResisted);
+                if (Caster is GamePlayer player)
+                {
+                    MessageToCaster(LanguageMgr.GetTranslation(player.Client.Account.Language, "Spell.OmniLifeDrain.CannotStealEndurance"), eChatType.CT_SpellResisted);
+                }
             }
         }
         /// <summary>
@@ -132,11 +148,17 @@ namespace DOL.GS.Spells
             replenish = m_caster.ChangeMana(m_caster, GameLiving.eManaChangeType.Spell, replenish);
             if (replenish > 0)
             {
-                MessageToCaster("You steal " + replenish + " power.", eChatType.CT_Spell);
+                if (Caster is GamePlayer player)
+                {
+                    MessageToCaster(LanguageMgr.GetTranslation(player.Client.Account.Language, "Spell.OmniLifeDrain.StealPower", replenish), eChatType.CT_Spell);
+                }
             }
             else
             {
-                MessageToCaster("Your power is already full.", eChatType.CT_SpellResisted);
+                if (Caster is GamePlayer player)
+                {
+                    MessageToCaster(LanguageMgr.GetTranslation(player.Client.Account.Language, "Spell.OmniLifeDrain.PowerFull"), eChatType.CT_SpellResisted);
+                }
             }
         }
 

@@ -1,9 +1,16 @@
 #Game Event
-Commands.Players.Event.Description:          Informations regarding current events:
-Commands.Players.Event.EventStarted:         The event with id {0} has started 
-Commands.Players.Event.EventNotFound:        The event with id {0} was not found
-Commands.Players.Event.EventAlreadyStarted:  The event with id {0} has already started. You can force it to reset instead
-Commands.Players.Event.ItemAdded:            {0} has been successfully added to the event {1}
-Commands.Players.Event.ItemNotFound:         Item with id {0} was not found
-Commands.Players.Event.ItemModified:         Item with name: {0} has been successfully modified
-Commands.Players.Instance.Changed:           Instance successfully changed to: {0} 
+Commands.Players.Event.Description:		Informations regarding current events:
+Commands.Players.Event.EventStarted:		The event with id {0} has started.
+Commands.Players.Event.EventNotFound:		The event with id {0} was not found.
+Commands.Players.Event.EventAlreadyStarted:	The event with id {0} has already started. You can force it to reset instead.
+Commands.Players.Event.ItemAdded:		{0} has been successfully added to the event {1}.
+Commands.Players.Event.ItemNotFound:		Item with id {0} was not found.
+Commands.Players.Event.ItemModified:		Item with name: {0} has been successfully modified.
+Commands.Players.Instance.Changed:		Instance successfully changed to: {0}.
+
+Commands.Players.Event.Info.WindowTitle:	[ ONGOING EVENTS ]
+Commands.Players.Event.Info.Name:		-- Event Name:
+Commands.Players.Event.Info.EventArea:		-- Event Zone Name:
+Commands.Players.Event.Info.EventZone:		-- Event Zone ID:
+Commands.Players.Event.Info.StartedTime:	-- Started Time:
+Commands.Players.Event.Info.RemainingTime:	-- Remaining Time:

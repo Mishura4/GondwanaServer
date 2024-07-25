@@ -1053,6 +1053,17 @@ namespace DOL.GS.PacketHandler
             }
         }
 
+        public void SendModelUpdate(GamePlayer player, GameNPC npc, ushort model)
+        {
+            using (var pak = new GSTCPPacketOut(GetPacketCode(eServerPackets.ModelChange)))
+            {
+                pak.WriteShort((ushort)npc.ObjectID);
+                pak.WriteShort(model);
+                pak.WriteIntLowEndian(npc.Size);
+                player.Out.SendTCP(pak);
+            }
+        }
+
         public virtual void SendEmoteAnimation(GameObject obj, eEmote emote)
         {
             using (var pak = new GSTCPPacketOut(GetPacketCode(eServerPackets.EmoteAnimation)))

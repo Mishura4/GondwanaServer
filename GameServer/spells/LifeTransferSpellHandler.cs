@@ -21,6 +21,7 @@ using System;
 using DOL.GS.PacketHandler;
 using DOL.AI.Brain;
 using DOL.GS.Scripts;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -65,7 +66,10 @@ namespace DOL.GS.Spells
             {
                 if (target.IsDiseased)
                 {
-                    MessageToCaster("Your target is diseased!", eChatType.CT_SpellResisted);
+                    if (Caster is GamePlayer player)
+                    {
+                        MessageToCaster(LanguageMgr.GetTranslation(player.Client.Account.Language, "Spell.LifeTransfer.TargetDiseased"), eChatType.CT_SpellResisted);
+                    }
                     healed |= HealTarget(healTarget, (transferHeal >>= 1));
                 }
 
@@ -117,19 +121,28 @@ namespace DOL.GS.Spells
 
             if (!target.IsAlive)
             {
-                MessageToCaster(target.GetName(0, true) + " is dead!", eChatType.CT_SpellResisted);
+                if (Caster is GamePlayer player)
+                {
+                    MessageToCaster(LanguageMgr.GetTranslation(player.Client.Account.Language, "Spell.LifeTransfer.TargetDead", target.GetName(0, true)), eChatType.CT_SpellResisted);
+                }
                 return false;
             }
 
             if (m_caster == target)
             {
-                MessageToCaster("You cannot transfer life to yourself.", eChatType.CT_SpellResisted);
+                if (Caster is GamePlayer player)
+                {
+                    MessageToCaster(LanguageMgr.GetTranslation(player.Client.Account.Language, "Spell.LifeTransfer.SelfTransfer"), eChatType.CT_SpellResisted);
+                }
                 return false;
             }
 
             if (amount <= 0) //Player does not have enough health to transfer
             {
-                MessageToCaster("You do not have enough health to transfer.", eChatType.CT_SpellResisted);
+                if (Caster is GamePlayer player)
+                {
+                    MessageToCaster(LanguageMgr.GetTranslation(player.Client.Account.Language, "Spell.LifeTransfer.InsufficientHealth"), eChatType.CT_SpellResisted);
+                }
                 return false;
             }
 
@@ -160,7 +173,7 @@ namespace DOL.GS.Spells
             {
                 GamePlayer joueur_a_considerer = (m_caster is NecromancerPet ? ((m_caster as NecromancerPet).Brain as IControlledBrain).GetPlayerOwner() : m_caster as GamePlayer);
 
-                int POURCENTAGE_SOIN_RP = ServerProperties.Properties.HEAL_PVP_DAMAGE_VALUE_RP; // ...% de bonus RP pour les soins effectu�s
+                int POURCENTAGE_SOIN_RP = ServerProperties.Properties.HEAL_PVP_DAMAGE_VALUE_RP; // ...% de bonus RP pour les soins effectués
                 long Bonus_RP_Soin = Convert.ToInt64((double)healedrp * POURCENTAGE_SOIN_RP / 100);
 
                 if (Bonus_RP_Soin >= 1)
@@ -174,7 +187,8 @@ namespace DOL.GS.Spells
                     }
 
                     joueur_a_considerer.GainRealmPoints(Bonus_RP_Soin, false);
-                    joueur_a_considerer.Out.SendMessage("Vous gagnez " + Bonus_RP_Soin.ToString() + " points de royaume pour avoir soign� un membre de votre royaume.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                    joueur_a_considerer.Out.SendMessage(LanguageMgr.GetTranslation(joueur_a_considerer.Client.Account.Language, "GameObjects.GamePlayer.GainRealmPoints.LifeTransferSpell", Bonus_RP_Soin), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+
                 }
             }
 
@@ -184,17 +198,28 @@ namespace DOL.GS.Spells
             {
                 if (Spell.Pulse == 0)
                 {
-                    MessageToCaster(target.GetName(0, true) + " is fully healed.", eChatType.CT_SpellResisted);
+                    if (Caster is GamePlayer player)
+                    {
+                        MessageToCaster(LanguageMgr.GetTranslation(player.Client.Account.Language, "Spell.LifeTransfer.TargetFullyHealed", target.GetName(0, true)), eChatType.CT_SpellResisted);
+                    }
                 }
 
                 return false;
             }
 
-
-            MessageToCaster("You heal " + m_caster.GetPersonalizedName(target) + " for " + heal + " hit points!", eChatType.CT_Spell);
-            MessageToLiving(target, "You are healed by " + target.GetPersonalizedName(m_caster) + " for " + heal + " hit points.", eChatType.CT_Spell);
+            if (Caster is GamePlayer playercaster)
+            {
+                MessageToCaster(LanguageMgr.GetTranslation(playercaster.Client.Account.Language, "Spell.LifeTransfer.HealCaster", m_caster.GetPersonalizedName(target), heal), eChatType.CT_Spell);
+            }
+            if (target is GamePlayer targetplayer)
+            {
+                MessageToLiving(target, LanguageMgr.GetTranslation(targetplayer.Client.Account.Language, "Spell.LifeTransfer.HealTarget", target.GetPersonalizedName(m_caster), heal), eChatType.CT_Spell);
+            }
             if (heal < amount)
-                MessageToCaster(target.GetName(0, true) + " is fully healed.", eChatType.CT_Spell);
+                if (Caster is GamePlayer player)
+                {
+                    MessageToCaster(LanguageMgr.GetTranslation(player.Client.Account.Language, "Spell.LifeTransfer.TargetFullyHealed", target.GetName(0, true)), eChatType.CT_Spell);
+                }
 
             return true;
         }

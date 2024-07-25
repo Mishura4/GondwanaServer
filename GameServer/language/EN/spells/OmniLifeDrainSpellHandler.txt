@@ -1,0 +1,8 @@
+
+Spell.OmniLifeDrain.CasterDiseased:		You are diseased!
+Spell.OmniLifeDrain.CannotAbsorb:		You cannot absorb any more life.
+Spell.OmniLifeDrain.StealHealth:		You steal {0} hit point{1}.
+Spell.OmniLifeDrain.StealEndurance:		You steal {0} endurance.
+Spell.OmniLifeDrain.CannotStealEndurance:	You cannot steal any more endurance.
+Spell.OmniLifeDrain.StealPower:			You steal {0} power.
+Spell.OmniLifeDrain.PowerFull:			Your power is already full!

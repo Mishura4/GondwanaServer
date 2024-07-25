@@ -162,8 +162,14 @@ namespace DOL.GS.Spells
 
         public override int CalculateToHitChance(GameLiving target)
         {
+            var HitChanceFactor = 3.3;
+
             if (target is GameNPC npc && npc.BodyType == (ushort)NpcTemplateMgr.eBodyType.Undead)
                 return 0;
+
+            if (target is GameNPC gameNPC && gameNPC.IsBoss)
+                return base.CalculateToHitChance(target) / (int)HitChanceFactor;
+
             return base.CalculateToHitChance(target);
         }
 

@@ -1,9 +1,16 @@
 #Game Event
-Commands.Players.Event.Description:          Informations sur les Events en cours:
-Commands.Players.Event.EventStarted:         L'évènement avec l'id {0} a été lancé 
-Commands.Players.Event.EventNotFound:        L'évènement avec l'id {0} n'a pas été trouvé
-Commands.Players.Event.EventAlreadyStarted:  L'évènement avec l'id {0} a déja démarré. Vous pouvez forcer le reset à la place
-Commands.Players.Event.ItemAdded:            {0} a été ajouté avec succès à l'event {1}
-Commands.Players.Event.ItemNotFound:         L'item avec l'id {0} n'a pas été trouvé
-Commands.Players.Event.ItemModified:         L'item Nom: {0} a bien été modifié
-Commands.Players.Instance.Changed:           L'instance a bien été remplacée par : {0} 
+Commands.Players.Event.Description:		Informations sur les Events en cours:
+Commands.Players.Event.EventStarted:		L'évènement avec l'id {0} a été lancé.
+Commands.Players.Event.EventNotFound:		L'évènement avec l'id {0} n'a pas été trouvé.
+Commands.Players.Event.EventAlreadyStarted:	L'évènement avec l'id {0} a déja démarré. Vous pouvez forcer le reset à la place.
+Commands.Players.Event.ItemAdded:		{0} a été ajouté avec succès à l'évènement {1}.
+Commands.Players.Event.ItemNotFound:		L'item avec l'id {0} n'a pas été trouvé.
+Commands.Players.Event.ItemModified:		L'item Nom: {0} a bien été modifié.
+Commands.Players.Instance.Changed:		L'instance a bien été remplacée par : {0}.
+
+Commands.Players.Event.Info.WindowTitle:	[ EVENEMENTS EN COURS ]
+Commands.Players.Event.Info.Name:		-- Nom de l'évènement :
+Commands.Players.Event.Info.EventArea:		-- Localisation de l'évènement :
+Commands.Players.Event.Info.EventZone:		-- ID de la zone d'évènement :
+Commands.Players.Event.Info.StartedTime:	-- Heure de début d'évènement :
+Commands.Players.Event.Info.RemainingTime:	-- Heure de fin :

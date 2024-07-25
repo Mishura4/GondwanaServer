@@ -1685,6 +1685,7 @@ namespace DOL.AI.Brain
                 case "Morph":
                 case "Earthquake":
                 case "Damnation":
+                case "DeathClaw":
                 case "CallAreaEffect":
                 case "BumpSpell":
                     if (!LivingHasEffect(lastTarget as GameLiving, spell))

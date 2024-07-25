@@ -1,0 +1,10 @@
+
+Spell.CharmSpell.SelectTarget:		Vous devez sélectionner une cible pour lancer ce sort !
+Spell.CharmSpell.WrongType:		Ce sort ne charme pas ce type de créature !
+Spell.CharmSpell.AlreadyCharmed:	Vous avez déjà une créature sous votre contrôle, libérez-la d'abord !
+Spell.CharmSpell.CannotCharm:		Cette cible ne peut pas être charmée !
+Spell.CharmSpell.InvalidTarget:		Votre cible n'est pas valide.
+Spell.CharmSpell.TooStrong:		{0} est trop puissant pour être charmé !
+Spell.CharmSpell.ResistCharm:		{0} résiste au charme !
+Spell.CharmSpell.Control:		{0} est désormais sous votre contrôle.
+Spell.CharmSpell.LostControl:		Vous perdez le contrôle de {0} !

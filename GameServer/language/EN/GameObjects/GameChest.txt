@@ -23,3 +23,6 @@ GameChest.SwitchCannotActivate:	You cannot activate this switch yet.
 GameChest.SwitchActivated:		Switch activated!
 GameChest.SwitchAllActivated:	All linked switches are activated!
 GameChest.SwitchOrderReset:		You made a wrong combination! All switches have been deactivated!
+GameChest.SwitchUnlocked:		The switch has been unlocked.
+GameChest.SwitchUnlockFailed:	Failed to unlock the switch.
+GameChest.KeyRequired:			An item is required to unlock this switch.

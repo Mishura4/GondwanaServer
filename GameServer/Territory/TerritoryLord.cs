@@ -707,6 +707,7 @@ namespace DOL.Territories
             else
             {
                 player.Guild.SendMessageToGuildMembersKey("GameUtils.Guild.Territory.Capture.Renewed", eChatType.CT_Guild, eChatLoc.CL_SystemWindow, player.Name, CurrentTerritory.Name);
+                player.Out.SendSoundEffect(9207, player.Position, 0);
                 CurrentTerritory.ClaimedTime = lastClaim;
                 CurrentTerritory.SaveIntoDatabase();
             }

@@ -30,9 +30,6 @@ using System.Numerics;
 namespace DOL.GS
 {
     #region GameSiegeweapon
-    /// <summary>
-    /// Description r�sum�e de GameSiegeWeapon.
-    /// </summary>
     public class GameSiegeWeapon : GameMovingObject
     {
         public GameSiegeWeapon()

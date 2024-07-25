@@ -21,9 +21,6 @@ using System.Collections.Specialized;
 using DOL.GS.PacketHandler;
 namespace DOL.GS
 {
-    /// <summary>
-    /// Description r�sum�e de ChatGroup.
-    /// </summary>
     public class ChatGroup
     {
         public const string CHATGROUP_PROPERTY = "chatgroup";

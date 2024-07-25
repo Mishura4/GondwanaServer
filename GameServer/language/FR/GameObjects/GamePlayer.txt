@@ -9,7 +9,8 @@ GameObjects.GamePlayer.ApplyPoison.CantPoisonWeapon:	    Vous ne pouvez pas util
 GameObjects.GamePlayer.ApplyPoison.CantUsePoison:		    Vous ne pouvez pas utiliser ce poison.
 GameObjects.GamePlayer.ApplyPoison.CantUsePoisons:		    Vous ne pouvez pas utiliser ces poisons.
 GameObjects.GamePlayer.ApplyPoison.PoisonsAppliedWeapons:   Les poisons ne peuvent être appliqués que sur des armes.
-GameObjects.GamePlayer.ApplyPoison.CantReapplyPoison:	Vous ne pouvez pas réappliquer du poison sur cette arme.
+GameObjects.GamePlayer.ApplyPoison.CantReapplyPoison:		Vous ne pouvez pas réappliquer du poison sur cette arme.
+GameObjects.GamePlayer.ApplyPoison.CannotPoison:			Vous ne pouvez pas empoisonner votre {0} !
 
 GameObjects.GamePlayer.Attack.AlreadyDead:	    {0} est déjà mort·e.
 GameObjects.GamePlayer.Attack.Blocked:		    {0} bloque votre attaque.
@@ -18,14 +19,14 @@ GameObjects.GamePlayer.Attack.CantCritical:	    Vous ne pouvez pas faire de coup
 GameObjects.GamePlayer.Attack.CantSeeTarget:    Vous ne voyez pas votre cible.
 GameObjects.GamePlayer.Attack.CantUseQuiver:    Vous ne pouvez pas utiliser les munitions sélectionnées avec cette arme.
 GameObjects.GamePlayer.Attack.CouldRepair:	    Votre {0} peut être réparé·e.
-GameObjects.GamePlayer.Attack.Critical:		    Vous donnez un coup critique à {0} pour {1} dommages additionels !
+GameObjects.GamePlayer.Attack.Critical:		    Vous donnez un coup critique à {0} pour {1} dommages additionels !
 GameObjects.GamePlayer.Attack.Evade:		    {0} vous attaque, mais vous esquivez le coup !
 GameObjects.GamePlayer.Attack.Evaded:		    {0} évite votre attaque !
 GameObjects.GamePlayer.Attack.Fumble:		    Vous trébuchez et prenez le temps de récupérer !
 GameObjects.GamePlayer.Attack.Fumbled:		    {0} trébuche !
 GameObjects.GamePlayer.Attack.HitsYour:		    {0} frappe votre {1} pour {2}{3} points de dommages !
 GameObjects.GamePlayer.Attack.HitsYou:		    {0} vous frappe pour {1}{2} points de dommages !
-GameObjects.GamePlayer.Attack.HitsYouCritical:  {0} vous frappe de manière critique pour {1} points de dommages additionnels !
+GameObjects.GamePlayer.Attack.HitsYouCritical:  {0} vous frappe de manière critique pour {1} points de dommages additionnels !
 GameObjects.GamePlayer.Attack.Intercepted:	    {0} se place devant {1} et reçoit le coup !
 GameObjects.GamePlayer.Attack.InterceptedHit:   {0} {1}{2} mais touchez {3} pour {4}{5} points de dommages !
 GameObjects.GamePlayer.Attack.InterceptHit:	    {0} {1}{2} et touchez pour {3}{4} points de dommages !
@@ -78,6 +79,7 @@ GameObjects.GamePlayer.CastSpell.SelectSecondSpell:			Sélectionnez le deuxième
 GameObjects.GamePlayer.CastSpell.SpellInChamber:			Vous chargez {0} dans votre {1}.
 GameObjects.GamePlayer.CastSpell.SpellNotInChamber:			Ce sort ne peut pas être stocké dans cette chambre.
 GameObjects.GamePlayer.CastSpell.OnlyASecondarySpell:		Seul un sort secondaire peut suivre le sort que vous lancez !
+GameObjects.GamePlayer.CastSpell.AlreadyCastingSpell:		Vous êtes déjà en train de lancer un sort.
 
 GameObjects.GamePlayer.CommandNpcAttack.TooFarAwayForPet:			Votre cible est trop loin pour être attaquée par votre familier.
 GameObjects.GamePlayer.CommandNpcGoTarget.MustSelectDestination:	Vous devez sélectionner une destination pour votre créature.
@@ -108,7 +110,7 @@ GameObjects.GamePlayer.Die.LoseExperience:	    Vous perdez de l'experience.
 GameObjects.GamePlayer.Die.ReleaseToReturn:	    Vous êtes mort·e.  Tapez '/release' pour retourner à votre pierre d'âmes.
 GameObjects.GamePlayer.Die.YouKilled:		    Vous venez de tuer {0}.
 
-GameObjects.GamePlayer.DrowningTimerCallback.CannotBreath:  Vous ne pouvez pas respirer sous l'eau et buvez la tasse !
+GameObjects.GamePlayer.DrowningTimerCallback.CannotBreath:  Vous ne pouvez pas respirer sous l'eau et buvez la tasse !
 GameObjects.GamePlayer.DrowningTimerCallback.Take5%Damage:  Vous perdez 5% de votre total de points de vie.
 
 GameObjects.GamePlayer.DuelStop.DuelEnds:				            Votre duel se termine.
@@ -123,23 +125,25 @@ GameObjects.GamePlayer.GainExperience.CampBonus:                    ({0} bonus d
 GameObjects.GamePlayer.GainExperience.CannotRaise:		            Vous ne pouvez pas atteindre le niveau 6 tant que vous n'avez pas choisi une spécialisation. 
 GameObjects.GamePlayer.GainExperience.GroupBonus:                   ({0} bonus de groupe)
 GameObjects.GamePlayer.GainExperience.OutpostBonus:                 ({0} bonus de forts)
-GameObjects.GamePlayer.GainExperience.RoyaumesouspeupleBonus:       Vous gagnez un bonus de {0} de royaume sous peuplé !
-GameObjects.GamePlayer.GainExperience.TalkToTrainer:	            Parlez à votre entraineur pour plus d'informations.
+GameObjects.GamePlayer.GainExperience.RoyaumesouspeupleBonus:       Vous gagnez un bonus de {0} de royaume sous-peuplé !
+GameObjects.GamePlayer.GainExperience.TalkToTrainer:	            Parlez à votre entraîneur pour plus d'informations.
 GameObjects.GamePlayer.GainExperience.YouGet:			            Vous obtenez {0} points d'expérience.
 GameObjects.GamePlayer.GainExperience.BonusRenaissance:             dont {0} points bonus de Renaissance
 GameObjects.GamePlayer.GainExperience.BonusTerritory:               dont {0} points bonus de Territoires
 GameObjects.GamePlayer.GainExperience.BonusGameEvent:               dont {0} points bonus d'Evenements
 
 GameObjects.GamePlayer.GainRealmPoints.Earned:			            {0} a gagné 1,000,000 de points de royaume dans {1}
-GameObjects.GamePlayer.GainRealmPoints.GainBonus:		            Vous gagnez un bonus de +{0} dans toutes vos spécialisations !
+GameObjects.GamePlayer.GainRealmPoints.GainBonus:		            Vous gagnez un bonus de +{0} dans toutes vos spécialisations !
 GameObjects.GamePlayer.GainRealmPoints.GainedLevel:		            Vous avez gagné un niveau de royaume !
-GameObjects.GamePlayer.GainRealmPoints.GainedRank:		            Vous avez gagné un nouveau rang et un nouveau titre de royaume !
+GameObjects.GamePlayer.GainRealmPoints.GainedRank:		            Vous avez gagné un nouveau rang et un nouveau titre de royaume !
 GameObjects.GamePlayer.GainRealmPoints.NewRealmTitle:	            Votre nouveau titre de royaume est {0}
 GameObjects.GamePlayer.GainRealmPoints.ReachedRank:		            Vous venez d'atteindre le Rang de Royaume {0}L0!
 GameObjects.GamePlayer.GainRealmPoints.ReachedRankNews:		        {0} a atteint le rang de royaume {1:#L#} dans {2}!
 GameObjects.GamePlayer.GainRealmPoints.YouGet:			            Vous gagnez {0} points de royaume !
+GameObjects.GamePlayer.GainRealmPoints.AreaBonusRP:					Vous obtenez {0} points de royaume de bonus grâce aux bonus d'area !
+GameObjects.GamePlayer.GainRealmPoints.LifeTransferSpell:			Vous gagnez {0} points de royaume pour avoir soigné un membre de votre royaume !
 
-GameObjects.GamePlayer.GetExamineMessages.EnemyRealmMember:	        Vous observez {0}. {1} est membre d'un royaume ennemi !
+GameObjects.GamePlayer.GetExamineMessages.EnemyRealmMember:	        Vous observez {0}. {1} est membre d'un royaume ennemi !
 GameObjects.GamePlayer.GetExamineMessages.NeutralMember:	        Vous observez {0}. {1} ne fait partie d'aucune guilde.
 GameObjects.GamePlayer.GetExamineMessages.OtherGuildMember:	        Vous observez {0}. {1} est membre de la guilde: {2}.
 GameObjects.GamePlayer.GetExamineMessages.RealmMember:		        Vous observez {0}. {1} est un membre de la classe {2} de votre royaume.
@@ -157,6 +161,8 @@ GameObjects.GamePlayer.IsHelmInvisible.Visible:                     Vous voyez m
 
 GameObjects.GamePlayer.IsOnHorse.DismountSteed:			            Vous descendez de votre monture.
 GameObjects.GamePlayer.IsOnHorse.MountSteed:			            Vous montez sur votre monture.
+GameObjects.GamePlayer.IsOnHorse.NeedHorseEquipped:					Vous devez être équipé d'un cheval.
+GameObjects.GamePlayer.IsOnHorse.NeedToBeOnHorse:					Vous devez être sur votre cheval pour utiliser cet inventaire.
 
 GameObjects.GamePlayer.ItemBonusName.Bonus1:    Force
 GameObjects.GamePlayer.ItemBonusName.Bonus2:    Dextérité
@@ -211,14 +217,14 @@ GameObjects.GamePlayer.OnItemUnequipped.LeftHandFree:	Vous rengainez {0} de votr
 GameObjects.GamePlayer.OnItemUnequipped.RightHandFree:	Vous rengainez {0} de votre main droite.
 
 GameObjects.GamePlayer.OnLevelUp.AttainedRank:			Vous avez atteint le rang de {0} !
-GameObjects.GamePlayer.OnLevelUp.FreeLevelEligible:		Vous êtes éligible pour un niveau gratuit! Cliquez sur votre entraineur pour le recevoir (ou tapez '/freelevel decline' pour refuser votre niveau gratuit.)
+GameObjects.GamePlayer.OnLevelUp.FreeLevelEligible:		Vous êtes éligible pour un niveau gratuit! Cliquez sur votre entraîneur pour le recevoir (ou tapez '/freelevel decline' pour refuser votre niveau gratuit.)
 GameObjects.GamePlayer.OnLevelUp.HitsRaise:				Vos points de vie ont augmenté de {0}.
 GameObjects.GamePlayer.OnLevelUp.PowerRaise:			Vos points de mana ont augmenté de {0}.
 GameObjects.GamePlayer.OnLevelUp.Reached:				{0} a atteint le niveau {1} dans {2} !
 GameObjects.GamePlayer.OnLevelUp.SecondStage:			Vous avez atteint la deuxième étape de votre niveau {0} !
 GameObjects.GamePlayer.OnLevelUp.StatRaise:				Vos statistiques augmentent !
 GameObjects.GamePlayer.OnLevelUp.YouAchieved:			Vous avez achevé le niveau {0} !
-GameObjects.GamePlayer.OnLevelUp.YouGetSpec:			Vous obtenez {0} points de spécialisation à dépenser pour ce niveau !
+GameObjects.GamePlayer.OnLevelUp.YouGetSpec:			Vous obtenez {0} points de spécialisation à dépenser pour ce niveau !
 GameObjects.GamePlayer.OnLevelUp.YouRaise:				Vous avez atteint le niveau {0} !
 GameObjects.GamePlayer.OnRenaissance:				    Vous venez d'accomplir votre renaissance ! 
 
@@ -249,6 +255,8 @@ GameObjects.GamePlayer.PickupObject.YouGet:					Vous ramassez {0} et le mettez d
 GameObjects.GamePlayer.PickupObject.YouPickUp:				Vous ramassez {0}.
 GameObjects.GamePlayer.PickupObject.YourLootShare:			votre part du butin est de {0}.
 GameObjects.GamePlayer.PickupObject.GuildDueTax:			Votre taxe de {0} va dans la caisse de guilde.
+GameObjects.GamePlayer.PickupObject.CannotDepositHere:		{0} ne peut pas être déposé ici !
+GameObjects.GamePlayer.PickupObject.WaitToPickup:			Vous devez attendre encore {0} secondes pour ramasser {1} !
 
 GameObjects.GamePlayer.Pray.AlreadyPraying:				Vous priez déjà.
 GameObjects.GamePlayer.Pray.Begin:						Vous commencez vos prières.
@@ -302,7 +310,7 @@ GameObjects.GamePlayer.RefreshSpec.TargetParried:		Ce style est mieux utilisé a
 GameObjects.GamePlayer.RefreshSpec.TargetStyle:			Ce style est mieux utilisé après que la dernière attaque de votre cible soit un style.
 GameObjects.GamePlayer.RefreshSpec.YouLearn:			Vous apprenez le style de combat {0}.
 
-GameObjects.GamePlayer.Release.CantReleaseDuel:			Vous ne pouvez altérer votre résurrection pour une mort en duel !
+GameObjects.GamePlayer.Release.CantReleaseDuel:			Vous ne pouvez altérer votre résurrection pour une mort en duel !
 GameObjects.GamePlayer.Release.GraveErected:			Une tombe est apparue sur le lieu de votre mort.
 GameObjects.GamePlayer.Release.LostConstitution:		Vous avez perdu des points de constitution. Allez voir un guérisseur pour la restaurer.
 GameObjects.GamePlayer.Release.NoLongerReleaseAuto:		Vous ne ressusciterez plus automatiquement ({0} secondes restantes)
@@ -437,6 +445,15 @@ GameObjects.GamePlayer.UseSlot.PotionLineNotFound:		Ligne d'effet de la potion i
 GameObjects.GamePlayer.UseSlot.PotionSpellNotFound:		Le sort de la potion ID {0} est introuvable.
 GameObjects.GamePlayer.UseSlot.CantDischargeInState:		Dans votre état actuel, vous ne pouvez décharger aucun objet.
 GameObjects.GamePlayer.UseSlot.WaitBeforeDischarge:		Vous devez attendre encore {0} seconde(s) avant de décharger {1} !
+GameObjects.GamePlayer.UseSlot.Cooldown:					Vous devez attendre {0} pour utiliser cet objet !
+GameObjects.GamePlayer.UseSlot.Cooldown.Seconds:			encore {0} secondes
+GameObjects.GamePlayer.UseSlot.Cooldown.MinutesAndSeconds:	encore {0} minutes et {1} secondes
+GameObjects.GamePlayer.UseSlot.NoMagicItemZone:				L'utilisation d'objets magiques n'est pas permise dans cette zone.
+GameObjects.GamePlayer.UseSlot.CannotUseInState:			Vous ne pouvez rien utiliser dans votre état.
+GameObjects.GamePlayer.UseSlot.NotPowerfulEnough:			Vous n'êtes pas assez puissant pour utiliser le sort de cet objet.
+GameObjects.GamePlayer.UseSlot.CannotUseInventory:			Vous ne pouvez pas utiliser cet inventaire.
+GameObjects.GamePlayer.UseSlot.ChargeEffectNotImplemented:	L'effet de charge ID {0} n'est pas encore implémenté.
+GameObjects.GamePlayer.UseSlot.ChargeEffectNotFound:		L'effet de charge ID {0} non trouvé.
 
 GameObjects.GamePlayer.Whisper.SelectTarget:			Sélectionnez une cible à qui chuchoter.
 GameObjects.GamePlayer.Murder:							Vous avez perdu 1 point de réputation pour avoir tué {0}.
@@ -460,8 +477,17 @@ GameObjects.GamePlayer.RvR.Too.Far:                     Vous vous êtes trop él
 GameObjects.GamePlayer.RvR.Capture.Timer:               Prise du fort
 GameObjects.GamePlayer.RvR.Capture.Start:               {0} commence à prendre le contrôle du fort !
 
-GameObjects.GamePlayer.Champion.LevelUp:				You have gained one champion level!
+GameObjects.GamePlayer.Champion.LevelUp:				Vous avez gagné un niveau de Champion supplémentaire !
+GameObjects.GamePlayer.Champion.NeedToBeChampion:		Vous devez être un Champion pour utiliser cet inventaire.
+
+GameObjects.GamePlayer.SaddleBag.CL2:				Cette sacoche nécessite le niveau de champion 2 !
+GameObjects.GamePlayer.SaddleBag.CL3:				Cette sacoche nécessite le niveau de champion 3 !
+GameObjects.GamePlayer.SaddleBag.CL4:				Cette sacoche nécessite le niveau de champion 4 !
+GameObjects.GamePlayer.SaddleBag.CL5:				Cette sacoche nécessite le niveau de champion 5 !
+GameObjects.GamePlayer.SaddleBag.Activated:			Vous avez activé une sacoche !
+GameObjects.GamePlayer.SaddleBag.ActivateError:		Une erreur est survenue lors de l'activation de cette sacoche !
+GameObjects.GamePlayer.SaddleBag.AlreadyActivated:	Vous avez déjà activé cette sacoche !
 
 GameObjects.GamePlayer.Reputation.Zero:					Votre réputation est désormais neutre.
 
-GameObjects.GamePlayer.AddToWorld.SpecsPointsIncorrect:		Your Specs points total was incorrect. Now corrected, please train again.
+GameObjects.GamePlayer.AddToWorld.SpecsPointsIncorrect:		Votre total de points de Spécialisation était incorrect. Désormais corrigé, veuillez vous entraîner à nouveau.

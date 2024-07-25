@@ -26,9 +26,6 @@ using log4net;
 
 namespace DOL.GS
 {
-    /// <summary>
-    /// Description r�sume de ITradeWindow.
-    /// </summary>
     public interface ITradeWindow
     {
         ArrayList TradeItems { get; set; }

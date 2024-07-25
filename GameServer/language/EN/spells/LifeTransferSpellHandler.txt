@@ -1,0 +1,8 @@
+
+Spell.LifeTransfer.TargetDiseased:	Your target is diseased!
+Spell.LifeTransfer.TargetDead:		{0} is dead!
+Spell.LifeTransfer.SelfTransfer:	You cannot transfer life to yourself.
+Spell.LifeTransfer.InsufficientHealth:	You do not have enough health to transfer.
+Spell.LifeTransfer.TargetFullyHealed:	{0} is fully healed.
+Spell.LifeTransfer.HealCaster:		You heal {0} for {1} hit points!
+Spell.LifeTransfer.HealTarget:		You are healed by {0} for {1} hit points.

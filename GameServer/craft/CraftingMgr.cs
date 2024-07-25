@@ -49,9 +49,6 @@ namespace DOL.GS
         _Last = 16,
     }
 
-    /// <summary>
-    /// Description r�sum�e de CraftingMgr.
-    /// </summary>
     public class CraftingMgr
     {
         /// <summary>

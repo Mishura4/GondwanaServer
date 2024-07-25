@@ -39,7 +39,7 @@ namespace DOL.GS.RealmAbilities
 
         public override void AddEffectsInfo(IList<string> list)
         {
-            list.Add("Gives you a 50% 360� evade buff but also reduces your movement and melee damage by 50%");
+            list.Add("Gives you a 50% 360° evade buff but also reduces your movement and melee damage by 50%");
             list.Add("");
             list.Add("Target: Self");
             list.Add("Duration: 30 sec");

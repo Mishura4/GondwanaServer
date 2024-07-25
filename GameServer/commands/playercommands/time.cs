@@ -53,11 +53,9 @@ namespace DOL.GS.Commands
                 }
                 catch
                 {
-                    client.Out.SendMessage(
-                        LanguageMgr.GetTranslation(
-                            client.Account.Language,
-                            "Commands.Players.Time.Usage.Admin"),
-                                            eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Time.Usage01.Admin"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Time.Usage02.Admin"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Time.Usage03.Admin"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 }
             }
 

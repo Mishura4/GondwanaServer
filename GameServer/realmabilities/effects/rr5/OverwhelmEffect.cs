@@ -90,7 +90,7 @@ namespace DOL.GS.Effects
             get
             {
                 var list = new List<string>();
-                list.Add("a 15% increased chance to bypass their target�s block, parry, and evade defenses for 30 seconds.");
+                list.Add("a 15% increased chance to bypass their target's block, parry, and evade defenses for 30 seconds.");
                 return list;
             }
         }

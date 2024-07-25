@@ -97,14 +97,16 @@ namespace DOL.GS.Spells
             // check cast target
             if (selectedTarget == null || (selectedTarget != null && !selectedTarget.IsAlive))
             {
-                MessageToCaster("You must select a target for this spell!", eChatType.CT_SpellResisted);
+                if (Caster is GamePlayer playerCaster)
+                    MessageToCaster(LanguageMgr.GetTranslation(playerCaster.Client.Account.Language, "Spell.CharmSpell.SelectTarget"), eChatType.CT_SpellResisted);
                 return false;
             }
 
             if (selectedTarget is GameNPC == false)
             {
                 //proper message?
-                MessageToCaster("This spell does not charm this type of creature!", eChatType.CT_SpellResisted);
+                if (Caster is GamePlayer playerCaster)
+                    MessageToCaster(LanguageMgr.GetTranslation(playerCaster.Client.Account.Language, "Spell.CharmSpell.WrongType"), eChatType.CT_SpellResisted);
                 return false;
             }
 
@@ -117,9 +119,9 @@ namespace DOL.GS.Spells
             if (!base.CheckBeginCast(selectedTarget))
                 return false;
 
-            if (Caster is GamePlayer && ((GamePlayer)Caster).ControlledBrain != null)
+            if (Caster is GamePlayer player && ((GamePlayer)Caster).ControlledBrain != null)
             {
-                MessageToCaster("You already have a charmed creature, release it first!", eChatType.CT_SpellResisted);
+                MessageToCaster(LanguageMgr.GetTranslation(player.Client.Account.Language, "Spell.CharmSpell.AlreadyCharmed"), eChatType.CT_SpellResisted);
                 return false;
             }
 
@@ -132,7 +134,8 @@ namespace DOL.GS.Spells
             // This prevent most of type casting errors
             if (target is GameNPC == false)
             {
-                MessageToCaster("This target cannot be charmed!", eChatType.CT_SpellResisted);
+                if (Caster is GamePlayer playerCaster)
+                    MessageToCaster(LanguageMgr.GetTranslation(playerCaster.Client.Account.Language, "Spell.CharmSpell.CannotCharm"), eChatType.CT_SpellResisted);
                 return;
             }
 
@@ -143,28 +146,32 @@ namespace DOL.GS.Spells
                 if (((GameNPC)target).Brain != null && ((GameNPC)target).Brain is IControlledBrain && (((IControlledBrain)((GameNPC)target).Brain).Owner as GamePlayer) != Caster)
                 {
                     // TODO: proper message
-                    MessageToCaster("Your target is not valid.", eChatType.CT_SpellResisted);
+                    if (Caster is GamePlayer playerCaster)
+                        MessageToCaster(LanguageMgr.GetTranslation(playerCaster.Client.Account.Language, "Spell.CharmSpell.InvalidTarget"), eChatType.CT_SpellResisted);
                     return;
                 }
 
                 // Already have a pet...
                 if (Caster.ControlledBrain != null)
                 {
-                    MessageToCaster("You already have a charmed creature, release it first!", eChatType.CT_SpellResisted);
+                    if (Caster is GamePlayer playerCaster)
+                        MessageToCaster(LanguageMgr.GetTranslation(playerCaster.Client.Account.Language, "Spell.CharmSpell.AlreadyCharmed"), eChatType.CT_SpellResisted);
                     return;
                 }
 
                 // Body Type None (0) is used to make mobs un-charmable , Realm Guards or NPC cannot be charmed.
                 if (target.Realm != 0 || ((GameNPC)target).BodyType == (ushort)NpcTemplateMgr.eBodyType.None)
                 {
-                    MessageToCaster("This creature cannot be charmed!", eChatType.CT_SpellResisted);
+                    if (Caster is GamePlayer playerCaster)
+                        MessageToCaster(LanguageMgr.GetTranslation(playerCaster.Client.Account.Language, "Spell.CharmSpell.CannotCharm"), eChatType.CT_SpellResisted);
                     return;
                 }
 
                 // If server properties prevent Named charm.
                 if (ServerProperties.Properties.SPELL_CHARM_NAMED_CHECK != 0 && !target.Name[0].ToString().ToLower().Equals(target.Name[0].ToString()))
                 {
-                    MessageToCaster("This creature cannot be charmed!", eChatType.CT_SpellResisted);
+                    if (Caster is GamePlayer playerCaster)
+                        MessageToCaster(LanguageMgr.GetTranslation(playerCaster.Client.Account.Language, "Spell.CharmSpell.CannotCharm"), eChatType.CT_SpellResisted);
                     return;
                 }
 
@@ -214,7 +221,8 @@ namespace DOL.GS.Spells
                     // The NPC type doesn't match spell charm types.
                     if (!charmable)
                     {
-                        MessageToCaster("This spell does not charm this type of creature!", eChatType.CT_SpellResisted);
+                        if (Caster is GamePlayer playerCaster)
+                            MessageToCaster(LanguageMgr.GetTranslation(playerCaster.Client.Account.Language, "Spell.CharmSpell.WrongType"), eChatType.CT_SpellResisted);
                         return;
                     }
 
@@ -225,7 +233,8 @@ namespace DOL.GS.Spells
             // Spell.Value == Max Level this spell can charm, Spell.Damage == Max percent of the caster level this spell can charm
             if (target.Level > Spell.Value || target.Level > Caster.Level * Spell.Damage / 100)
             {
-                MessageToCaster(target.GetName(0, true) + " is too strong for you to charm!", eChatType.CT_SpellResisted);
+                if (Caster is GamePlayer playerCaster)
+                    MessageToCaster(LanguageMgr.GetTranslation(playerCaster.Client.Account.Language, "Spell.CharmSpell.TooStrong", target.GetName(0, true)), eChatType.CT_SpellResisted);
                 return;
             }
 
@@ -266,8 +275,8 @@ namespace DOL.GS.Spells
 
                 if (Util.Chance(resistChance))
                 {
-
-                    MessageToCaster(target.GetName(0, true) + " resists the charm!", eChatType.CT_SpellResisted);
+                    if (Caster is GamePlayer playerCaster)
+                        MessageToCaster(LanguageMgr.GetTranslation(playerCaster.Client.Account.Language, "Spell.CharmSpell.ResistCharm", target.GetName(0, true)), eChatType.CT_SpellResisted);
                     return;
                 }
             }
@@ -309,7 +318,8 @@ namespace DOL.GS.Spells
                                 player1.GetPersonalizedName(effect.Owner)), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
                         }
                     }
-                    MessageToCaster(npc.GetName(0, true) + " is now under your control.", eChatType.CT_Spell);
+                    if (Caster is GamePlayer playerCaster)
+                        MessageToCaster(LanguageMgr.GetTranslation(playerCaster.Client.Account.Language, "Spell.CharmSpell.Control", npc.GetName(0, true)), eChatType.CT_Spell);
 
                     player.SetControlledBrain(m_controlledBrain);
 
@@ -375,7 +385,8 @@ namespace DOL.GS.Spells
                     GameEventMgr.RemoveHandler(npc, GameLivingEvent.PetReleased, new DOLEventHandler(ReleaseEventHandler));
 
                     player.SetControlledBrain(null);
-                    MessageToCaster("You lose control of " + npc.GetName(0, false) + "!", eChatType.CT_SpellExpires);
+                    if (Caster is GamePlayer playerCaster)
+                        MessageToCaster(LanguageMgr.GetTranslation(playerCaster.Client.Account.Language, "Spell.CharmSpell.LostControl", npc.GetName(0, false)), eChatType.CT_SpellExpires);
 
                     lock (npc.BrainSync)
                     {
@@ -544,7 +555,7 @@ namespace DOL.GS.Spells
 
         ... Can you please explain what the max level pet a hunter can charm if they are fully Beastcraft specd? The community feels its no higher then 41, but the builder says max level 50.
 
-        A: Sayeth the Oracle: �It's 82% of the caster's level for the highest charm in beastcraft; or level 41 if the caster is 50. Spec doesn't determine the level of the pet - it's purely based on the spell.�
+        A: Sayeth the Oracle: "It's 82% of the caster's level for the highest charm in beastcraft; or level 41 if the caster is 50. Spec doesn't determine the level of the pet - it's purely based on the spell."
 
 
 

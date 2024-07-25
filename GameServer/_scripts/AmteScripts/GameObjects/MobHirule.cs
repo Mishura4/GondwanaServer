@@ -186,7 +186,7 @@ namespace DOL.GS
             if (ObjectState != eObjectState.Active) return;
             GameLiving t = (GameLiving)source;
             float range = this.GetDistanceTo(t);
-            if (range >= 1000) //�vite la technique du serpent
+            if (range >= 1000) //évite la technique du serpent
             {
                 m_hiruleTarget = t;
                 PickAction();

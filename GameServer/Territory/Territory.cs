@@ -511,6 +511,11 @@ namespace DOL.Territories
                 ReleaseTerritory();
             }
             guild?.SendMessageToGuildMembersKey("GameUtils.Guild.Territory.TerritoryExpired", eChatType.CT_Guild, eChatLoc.CL_ChatWindow, Name);
+
+            foreach (var player in guild.GetListOfOnlineMembers())
+            {
+                player.Out.SendSoundEffect(9219, player.Position, 0);
+            }
         }
 
         private void ChangeMagicAndPhysicalResistance(GameNPC mob, int value)

@@ -111,7 +111,7 @@ namespace DOL.GS.Commands
             }
 
             /* First char of lastname must be uppercase */
-            //if (!Char.IsUpper(NewLastname, 0)) /* IsUpper() use unicode characters, it doesn't catch all accented uppercase letters like �, �, �, ecc.. that are invalid! */
+            //if (!Char.IsUpper(NewLastname, 0)) /* IsUpper() use unicode characters, it doesn't catch all accented uppercase letters like Ê, ecc.. that are invalid! */
             if (NewLastname[0] < 'A' || NewLastname[0] > 'Z')
             {
                 client.Out.SendMessage(
@@ -161,7 +161,7 @@ namespace DOL.GS.Commands
         {
             foreach (Char c in name)
             {
-                //if (!Char.IsLetter(c)) /* IsLetter() use unicode characters, it doesn't catch all accented letters like �, �, �, �, ecc.. that are invalid! */
+                //if (!Char.IsLetter(c)) /* IsLetter() use unicode characters, it doesn't catch all accented letters like é, è, à, ù, ecc.. that are invalid! */
                 if (c < 'A' || (c > 'Z' && c < 'a') || c > 'z')
                     return true;
             }

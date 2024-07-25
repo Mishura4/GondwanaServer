@@ -1,0 +1,8 @@
+
+Spell.LifeTransfer.TargetDiseased:	Votre cible est malade !
+Spell.LifeTransfer.TargetDead:		{0} est mort(e) !
+Spell.LifeTransfer.SelfTransfer:	Vous ne pouvez pas transférer des points de vie à vous-même.
+Spell.LifeTransfer.InsufficientHealth:	Vous n'avez pas assez de points de vie à transférer.
+Spell.LifeTransfer.TargetFullyHealed:	{0} est complètement guéri(e).
+Spell.LifeTransfer.HealCaster:		Vous soignez {0} de {1} points de vie !
+Spell.LifeTransfer.HealTarget:		Vous êtes soigné(e) par {0} de {1} points de vie.

@@ -464,8 +464,6 @@ namespace DOL.GameEvents
                 events = events.Where(e => e.ShowEvent);
             }
 
-            infos.Add(" --  EVENT -- ");
-
             foreach (var e in events)
             {
                 infos.Add("");
@@ -493,9 +491,9 @@ namespace DOL.GameEvents
 
         private void GetMainInformations(GameEvent e, List<string> infos)
         {
-            infos.Add(" -- Name: " + e.EventName);
-            infos.Add(" -- EventArea: " + (e.EventAreas != null ? string.Join(",", e.EventAreas) : string.Empty));
-            infos.Add(" -- EventZone: " + (e.EventZones != null ? string.Join(",", e.EventZones) : string.Empty));
+            infos.Add(" -- Event Name: " + e.EventName);
+            infos.Add(" -- Event Zone Name: " + (e.EventAreas != null ? string.Join(",", e.EventAreas) : string.Empty));
+            infos.Add(" -- Event Zone ID: " + (e.EventZones != null ? string.Join(",", e.EventZones) : string.Empty));
             infos.Add(" -- Started Time: " + (e.StartedTime.HasValue ? e.StartedTime.Value.ToLocalTime().ToString() : string.Empty));
 
             if (e.EndingConditionTypes.Contains(EndingConditionType.Timer) && e.EndTime.HasValue)

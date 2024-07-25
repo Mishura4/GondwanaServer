@@ -17,6 +17,7 @@ using DOL.GS.Geometry;
 using System.Linq;
 using DOL.GS.Quests;
 using static System.Net.Mime.MediaTypeNames;
+using DOLDatabase.Tables;
 
 namespace DOL.GS.Scripts
 {
@@ -92,9 +93,32 @@ namespace DOL.GS.Scripts
                     }
                 }
             }
-            
+
+            if (m_teleporterIndicator != null)
+            {
+                if (ShouldShowInvisibleModel(player))
+                {
+                    SendModelUpdate(player, m_teleporterIndicator, 1923);
+                }
+                else
+                {
+                    SendModelUpdate(player, m_teleporterIndicator, 667);
+                }
+            }
+
             SendList(player);
             return true;
+        }
+
+        public void SendModelUpdate(GamePlayer player, GameNPC npc, ushort model)
+        {
+            using (var pak = new GSTCPPacketOut((int)eServerPackets.ModelChange))
+            {
+                pak.WriteShort((ushort)npc.ObjectID);
+                pak.WriteShort(model);
+                pak.WriteIntLowEndian(npc.Size);
+                player.Out.SendTCP(pak);
+            }
         }
 
         private void SendList(GamePlayer player)
@@ -218,26 +242,35 @@ namespace DOL.GS.Scripts
                     }
                 }
             }
-            
-            if (JumpPositions.TryGetValue(str, out var jumpPos) && jumpPos.CanJump(player))
+
+            if (JumpPositions.TryGetValue(str, out var jumpPos))
             {
-                if (m_busy)
+                var conditionsNotMet = CheckConditionsNotMet(player, jumpPos);
+
+                if (conditionsNotMet.Count == 0)
                 {
-                    player.SendTranslatedMessage("TeleportNPC.Busy", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                    if (m_busy)
+                    {
+                        player.SendTranslatedMessage("TeleportNPC.Busy", eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                        return true;
+                    }
+
+                    RegionTimer TimerTL = new RegionTimer(this, Teleportation);
+                    TimerTL.Properties.setProperty("TP", jumpPos);
+                    TimerTL.Properties.setProperty("player", player);
+                    TimerTL.Start(3000);
+                    foreach (GamePlayer players in player.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+                    {
+                        players.Out.SendSpellCastAnimation(this, 1, 120);
+                        players.Out.SendEmoteAnimation(player, eEmote.Bind);
+                    }
+                    m_busy = true;
                     return true;
                 }
-                
-                RegionTimer TimerTL = new RegionTimer(this, Teleportation);
-                TimerTL.Properties.setProperty("TP", jumpPos);
-                TimerTL.Properties.setProperty("player", player);
-                TimerTL.Start(3000);
-                foreach (GamePlayer players in player.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+                else
                 {
-                    players.Out.SendSpellCastAnimation(this, 1, 120);
-                    players.Out.SendEmoteAnimation(player, eEmote.Bind);
+                    SendConditionsNotMetMessage(player, conditionsNotMet);
                 }
-                m_busy = true;
-                return true;
             }
             else
             {
@@ -247,10 +280,10 @@ namespace DOL.GS.Scripts
                 }
                 else
                 {
-                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language,"TeleportNPC.UnknownDestination"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "TeleportNPC.UnknownDestination"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 }
-                return true;
             }
+            return true;
         }
 
         public override bool ReceiveItem(GameLiving source, InventoryItem item)
@@ -282,6 +315,86 @@ namespace DOL.GS.Scripts
                 }
             }
             return false;
+        }
+
+        private List<string> CheckConditionsNotMet(GamePlayer player, JumpPos jumpPos)
+        {
+            var conditionsNotMet = new List<string>();
+            var eventName = GetEventName(jumpPos.Conditions.ActiveEventId);
+
+            if (!string.IsNullOrEmpty(jumpPos.Conditions.ActiveEventId) && GameEventManager.Instance.GetEventByID(jumpPos.Conditions.ActiveEventId)?.Status == EventStatus.NotOver)
+            {
+                conditionsNotMet.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "TeleportNPC.EventNotOccurred", eventName));
+            }
+            if (player.Level < jumpPos.Conditions.LevelMin)
+            {
+                conditionsNotMet.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "TeleportNPC.TooLittleExperience"));
+            }
+            if (player.Level > jumpPos.Conditions.LevelMax)
+            {
+                conditionsNotMet.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "TeleportNPC.TooMuchExperience"));
+            }
+            if (!string.IsNullOrEmpty(jumpPos.Conditions.Item) && player.Inventory.GetFirstItemByID(jumpPos.Conditions.Item, eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack) == null)
+            {
+                conditionsNotMet.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "TeleportNPC.ItemRequired"));
+            }
+            uint currentHour = (uint)DateTime.Now.Hour;
+            if (currentHour < jumpPos.Conditions.HourMin || currentHour > jumpPos.Conditions.HourMax)
+            {
+                conditionsNotMet.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "TeleportNPC.WrongTime"));
+            }
+            if (jumpPos.Conditions.RequiredCompletedQuestID > 0)
+            {
+                var questName = GetQuestName(jumpPos.Conditions.RequiredCompletedQuestID);
+                if (player.HasFinishedQuest(DataQuestJsonMgr.GetQuest((ushort)jumpPos.Conditions.RequiredCompletedQuestID)) == 0)
+                {
+                    conditionsNotMet.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "TeleportNPC.QuestNotCompleted", questName));
+                }
+            }
+            if (jumpPos.Conditions.RequiredQuestStepID > 0)
+            {
+                var questName = GetQuestName(jumpPos.Conditions.RequiredCompletedQuestID);
+                if (!IsPlayerOnQuestStep(player, jumpPos.Conditions.RequiredCompletedQuestID, jumpPos.Conditions.RequiredQuestStepID))
+                {
+                    conditionsNotMet.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "TeleportNPC.QuestStepNotCompleted", questName, jumpPos.Conditions.RequiredQuestStepID));
+                }
+            }
+            if (conditionsNotMet.Count > 1)
+            {
+                return new List<string> { LanguageMgr.GetTranslation(player.Client.Account.Language, "TeleportNPC.ConditionsNotMet") };
+            }
+
+            return conditionsNotMet;
+        }
+
+        private void SendConditionsNotMetMessage(GamePlayer player, List<string> conditionsNotMet)
+        {
+            foreach (var message in conditionsNotMet)
+            {
+                player.Out.SendMessage(message, eChatType.CT_System, eChatLoc.CL_PopupWindow);
+            }
+        }
+
+        private bool IsPlayerOnQuestStep(GamePlayer player, int questID, int stepID)
+        {
+            var quest = player.IsDoingQuest(DataQuestJsonMgr.GetQuest((ushort)questID));
+            if (quest != null)
+            {
+                return quest.GoalStates.Any(g => g.GoalId == stepID && g.IsActive);
+            }
+            return false;
+        }
+
+        private string GetEventName(string eventId)
+        {
+            var eventDb = GameServer.Database.SelectObject<EventDB>(DB.Column("Event_ID").IsEqualTo(eventId));
+            return eventDb?.EventName ?? eventId;
+        }
+
+        private string GetQuestName(int questId)
+        {
+            var questDb = GameServer.Database.SelectObject<DBDataQuestJson>(DB.Column("Id").IsEqualTo(questId));
+            return questDb?.Name ?? $"Quest {questId}";
         }
 
         protected virtual int Teleportation(RegionTimer timer)
@@ -491,13 +604,12 @@ namespace DOL.GS.Scripts
                 {
                     m_teleporterIndicator = new GameNPC();
                     m_teleporterIndicator.Name = "";
-                    m_teleporterIndicator.Model = 1923;  // Set your model ID here
+                    m_teleporterIndicator.Model = 1923;
                     m_teleporterIndicator.Flags ^= eFlags.PEACE;
                     m_teleporterIndicator.Flags ^= eFlags.CANTTARGET;
                     m_teleporterIndicator.Flags ^= eFlags.DONTSHOWNAME;
                     m_teleporterIndicator.Flags ^= eFlags.FLYING;
                     m_teleporterIndicator.Position = Position + Vector.Create(z: 1);
-                    m_teleporterIndicator.CurrentRegionID = CurrentRegionID;
                     m_teleporterIndicator.AddToWorld();
                 }
             }
@@ -513,6 +625,46 @@ namespace DOL.GS.Scripts
                 m_teleporterIndicator = null;
             }
             return base.RemoveFromWorld();
+        }
+
+        public bool ShouldShowInvisibleModel(GamePlayer player)
+        {
+            if (IsTerritoryLinked && !TerritoryManager.IsPlayerInOwnedTerritory(player, this))
+            {
+                return false;
+            }
+
+            var jumpPos = JumpPositions.Values.FirstOrDefault();
+            if (jumpPos == null) return false;
+
+            var conditions = jumpPos.Conditions;
+
+            if (!string.IsNullOrEmpty(conditions.ActiveEventId) && GameEventManager.Instance.GetEventByID(conditions.ActiveEventId)?.Status != EventStatus.NotOver)
+            {
+                return false;
+            }
+            if (player.Level < conditions.LevelMin || player.Level > conditions.LevelMax)
+            {
+                return false;
+            }
+            uint currentHour = (uint)DateTime.Now.Hour;
+            if (currentHour < conditions.HourMin || currentHour > conditions.HourMax)
+            {
+                return false;
+            }
+            if (conditions.RequiredCompletedQuestID > 0)
+            {
+                if (conditions.RequiredQuestStepID > 0 && !IsPlayerOnQuestStep(player, conditions.RequiredCompletedQuestID, conditions.RequiredQuestStepID))
+                {
+                    return false;
+                }
+                if (player.HasFinishedQuest(DataQuestJsonMgr.GetQuest((ushort)conditions.RequiredCompletedQuestID)) == 0)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         public class JumpPos

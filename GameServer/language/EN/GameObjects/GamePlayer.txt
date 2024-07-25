@@ -9,7 +9,8 @@ GameObjects.GamePlayer.ApplyPoison.CantPoisonWeapon:		You can't poison this weap
 GameObjects.GamePlayer.ApplyPoison.CantUsePoison:			You can't use this poison.		
 GameObjects.GamePlayer.ApplyPoison.CantUsePoisons:			You can't use poisons.		
 GameObjects.GamePlayer.ApplyPoison.PoisonsAppliedWeapons:	Poisons can be applied only to weapons.
-GameObjects.GamePlayer.ApplyPoison.CantReapplyPoison:	Poisons can't be re-applied on this weapon.
+GameObjects.GamePlayer.ApplyPoison.CantReapplyPoison:		Poisons can't be re-applied on this weapon.
+GameObjects.GamePlayer.ApplyPoison.CannotPoison:			You can't poison your {0}!
 
 GameObjects.GamePlayer.Attack.AlreadyDead:				{0} is already dead!
 GameObjects.GamePlayer.Attack.Blocked:					{0} blocks your attack! 
@@ -78,6 +79,7 @@ GameObjects.GamePlayer.CastSpell.SelectSecondSpell:			Select the second spell fo
 GameObjects.GamePlayer.CastSpell.SpellInChamber:			You load {0} into your {1}.
 GameObjects.GamePlayer.CastSpell.SpellNotInChamber:			This spell cannot be stored in this chamber.
 GameObjects.GamePlayer.CastSpell.OnlyASecondarySpell:		Only a secondary spell can follow up the spell your are casting!
+GameObjects.GamePlayer.CastSpell.AlreadyCastingSpell:		You are already casting a spell.
 
 GameObjects.GamePlayer.CommandNpcAttack.TooFarAwayForPet:		Your target is too far away to attack by your pet!
 GameObjects.GamePlayer.CommandNpcGoTarget.MustSelectDestination:    You must select a destination for your controlled creature.
@@ -136,8 +138,10 @@ GameObjects.GamePlayer.GainRealmPoints.GainedLevel:			You have gained a realm le
 GameObjects.GamePlayer.GainRealmPoints.GainedRank:			You have gained a new rank and a new realm title!		
 GameObjects.GamePlayer.GainRealmPoints.NewRealmTitle:		Your new realm title is {0}!			
 GameObjects.GamePlayer.GainRealmPoints.ReachedRank:			You reached realm rank {0}L0!
-GameObjects.GamePlayer.GainRealmPoints.ReachedRankNews:			{0} reached realm rank {1:#L#} in {2}!		
-GameObjects.GamePlayer.GainRealmPoints.YouGet:				You get {0} realm points!		
+GameObjects.GamePlayer.GainRealmPoints.ReachedRankNews:		{0} reached realm rank {1:#L#} in {2}!		
+GameObjects.GamePlayer.GainRealmPoints.YouGet:				You get {0} realm points!
+GameObjects.GamePlayer.GainRealmPoints.AreaBonusRP:			You gain {0} realm points from area bonuses!
+GameObjects.GamePlayer.GainRealmPoints.LifeTransferSpell:	You gain {0} realm points for healing a member of your realm!
 
 GameObjects.GamePlayer.GetExamineMessages.EnemyRealmMember:		You examine {0}. {1} is a member of an enemy realm!
 GameObjects.GamePlayer.GetExamineMessages.NeutralMember:		You examine {0}. {1} is a neutral member with no guild allegiance.
@@ -157,6 +161,8 @@ GameObjects.GamePlayer.IsHelmInvisible.Visible:					You will now see your helm.
 
 GameObjects.GamePlayer.IsOnHorse.DismountSteed:			You dismount your steed.
 GameObjects.GamePlayer.IsOnHorse.MountSteed:			You mount your steed.
+GameObjects.GamePlayer.IsOnHorse.NeedHorseEquipped:		You must be equipped with a horse.
+GameObjects.GamePlayer.IsOnHorse.NeedToBeOnHorse:		You must be on your steed to use this inventory.
 
 GameObjects.GamePlayer.ItemBonusName.Bonus1:			Strength
 GameObjects.GamePlayer.ItemBonusName.Bonus2:			Dexterity
@@ -249,6 +255,8 @@ GameObjects.GamePlayer.PickupObject.YouGet:					You get {0} and put it in your b
 GameObjects.GamePlayer.PickupObject.YouPickUp:				You pick up {0}.
 GameObjects.GamePlayer.PickupObject.YourLootShare:			Your share of the loot is {0}.
 GameObjects.GamePlayer.PickupObject.GuildDueTax:			{0} has been deposited to the guild's bank account as taxed income.
+GameObjects.GamePlayer.PickupObject.CannotDepositHere:		{0} cannot be dropped here!
+GameObjects.GamePlayer.PickupObject.WaitToPickup:			You must wait another {0} seconds to pick up {1}!
 
 GameObjects.GamePlayer.Pray.AlreadyPraying:					You are already praying!	
 GameObjects.GamePlayer.Pray.Begin:							You begin your prayers!
@@ -437,6 +445,15 @@ GameObjects.GamePlayer.UseSlot.PotionLineNotFound:			Potion effect line not foun
 GameObjects.GamePlayer.UseSlot.PotionSpellNotFound:			Potion effect spell ID {0} not found.
 GameObjects.GamePlayer.UseSlot.CantDischargeInState:			In your state you can't discharge any object.
 GameObjects.GamePlayer.UseSlot.WaitBeforeDischarge:			You must wait {0} more second before discharge {1}!
+GameObjects.GamePlayer.UseSlot.Cooldown:					You must wait {0} to use this item!
+GameObjects.GamePlayer.UseSlot.Cooldown.Seconds:			{0} seconds
+GameObjects.GamePlayer.UseSlot.Cooldown.MinutesAndSeconds:	{0} minutes and {1} seconds
+GameObjects.GamePlayer.UseSlot.NoMagicItemZone:				Using magical items is not allowed in this zone.
+GameObjects.GamePlayer.UseSlot.CannotUseInState:			You cannot use anything in your current state.
+GameObjects.GamePlayer.UseSlot.NotPowerfulEnough:			You are not powerful enough to use this item's spell.
+GameObjects.GamePlayer.UseSlot.CannotUseInventory:			You can't use this inventory.
+GameObjects.GamePlayer.UseSlot.ChargeEffectNotImplemented:	Charge effect ID {0} is not implemented yet.
+GameObjects.GamePlayer.UseSlot.ChargeEffectNotFound:		Charge effect ID {0} not found.
 
 GameObjects.GamePlayer.Whisper.SelectTarget:				Select a target to whisper to!
 GameObjects.GamePlayer.Murder:								You have lost 1 reputation point due to killing {0}.
@@ -460,7 +477,16 @@ GameObjects.GamePlayer.RvR.Too.Far:                     You have strayed too far
 GameObjects.GamePlayer.RvR.Capture.Timer:               Keep capture
 GameObjects.GamePlayer.RvR.Capture.Start:               {0} begins to take control of the keep!
 
-GameObjects.GamePlayer.Champion.LevelUp:				You have gained one champion level!
+GameObjects.GamePlayer.Champion.LevelUp:				You have gained one Champion level!
+GameObjects.GamePlayer.Champion.NeedToBeChampion:		You must be a Champion to use this inventory.
+
+GameObjects.GamePlayer.SaddleBag.CL2:				This saddlebag requires Champion Level 2!
+GameObjects.GamePlayer.SaddleBag.CL3:				This saddlebag requires Champion Level 3!
+GameObjects.GamePlayer.SaddleBag.CL4:				This saddlebag requires Champion Level 4!
+GameObjects.GamePlayer.SaddleBag.CL5:				This saddlebag requires Champion Level 5!
+GameObjects.GamePlayer.SaddleBag.Activated:			You've activated a saddlebag!
+GameObjects.GamePlayer.SaddleBag.ActivateError:		An error occurred while trying to activate this saddlebag!
+GameObjects.GamePlayer.SaddleBag.AlreadyActivated:	You've already activated this saddlebag!
 
 GameObjects.GamePlayer.Reputation.Zero:					Your reputation is now neutral.
 

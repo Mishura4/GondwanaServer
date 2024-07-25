@@ -1,0 +1,10 @@
+
+Spell.CharmSpell.SelectTarget:		You must select a target for this spell!
+Spell.CharmSpell.WrongType:		This spell does not charm this type of creature!
+Spell.CharmSpell.AlreadyCharmed:	You already have a charmed creature, release it first!
+Spell.CharmSpell.CannotCharm:		This target cannot be charmed!
+Spell.CharmSpell.InvalidTarget:		Your target is not valid.
+Spell.CharmSpell.TooStrong:		{0} is too strong for you to charm!
+Spell.CharmSpell.ResistCharm:		{0} resists the charm!
+Spell.CharmSpell.Control:		{0} is now under your control.
+Spell.CharmSpell.LostControl:		You lose control of {0}!

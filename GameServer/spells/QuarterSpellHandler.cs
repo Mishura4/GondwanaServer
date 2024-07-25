@@ -42,11 +42,18 @@ namespace DOL.GS.Spells
         {
             if (Spell.AmnesiaChance > 0 && target.Level > Spell.AmnesiaChance)
                 return 100;
-            if ((target is GameNPC npc && (npc.Flags.HasFlag(GameNPC.eFlags.GHOST) || npc.BodyType == (ushort)NpcTemplateMgr.eBodyType.Undead))
-                || (target is GamePlayer player && (player.CharacterClass is ClassNecromancer || player.CharacterClass is ClassBainshee || player.CharacterClass is ClassVampiir)))
-                return base.CalculateSpellResistChance(target) * 3;
+
+            var ResistChanceFactor = 2.6;
+            bool isGhostOrUndead = (target is GameNPC npc && (npc.Flags.HasFlag(GameNPC.eFlags.GHOST) || npc.BodyType == (ushort)NpcTemplateMgr.eBodyType.Undead));
+            bool isSpecialClass = (target is GamePlayer player && (player.CharacterClass is ClassNecromancer || player.CharacterClass is ClassBainshee || player.CharacterClass is ClassVampiir));
+            bool isBoss = target is GameNPC gameNPC && gameNPC.IsBoss;
+
+            if (isGhostOrUndead || isSpecialClass || isBoss)
+                return base.CalculateSpellResistChance(target) * (int)ResistChanceFactor;
+
             return base.CalculateSpellResistChance(target);
         }
+
         public override string ShortDescription
             => $"{Spell.Name} reduces enemy's life to a quarter, it doesn't affect weak enemies or enemies having a level above {Spell.AmnesiaChance}. This spell rarely affect ghosts, demons, necromancers, bainshee and vampiirs.";
 

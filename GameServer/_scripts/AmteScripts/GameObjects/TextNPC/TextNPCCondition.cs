@@ -131,7 +131,7 @@ namespace DOL.GS.Scripts
 
                             break;
 
-                        case "heure":
+                        case "hour":
                             try
                             {
                                 Heure_min = int.Parse(condition[1]);

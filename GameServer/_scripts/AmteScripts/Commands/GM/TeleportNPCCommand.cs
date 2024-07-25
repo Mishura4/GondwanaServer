@@ -1,4 +1,5 @@
 using System;
+using DOL.Database;
 using DOL.GS.Commands;
 using DOL.GS.PacketHandler;
 using DOL.Language;
@@ -302,6 +303,8 @@ namespace DOL.GS.Scripts
                     }
                     npc.SaveIntoDatabase();
                     player.Out.SendMessage("Show teleporter indicator set to " + npc.ShowTPIndicator + ".", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+
+                    ReloadTeleportNPC(client, npc);
                     break;
 
                 #region password
@@ -329,6 +332,35 @@ namespace DOL.GS.Scripts
                 default:
                     DisplaySyntax(client);
                     break;
+            }
+        }
+
+        private void ReloadTeleportNPC(GameClient client, TeleportNPC targetMob)
+        {
+            if (targetMob == null)
+            {
+                client.Player.Out.SendMessage("No target selected or target is not a TeleportNPC.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return;
+            }
+
+            if (targetMob.LoadedFromScript == false)
+            {
+                targetMob.RemoveFromWorld();
+                DBTeleportNPC dbTeleportNPC = GameServer.Database.SelectObject<DBTeleportNPC>(DB.Column("MobID").IsEqualTo(targetMob.InternalID));
+                if (dbTeleportNPC != null)
+                {
+                    targetMob.LoadFromDatabase(GameServer.Database.FindObjectByKey<Mob>(targetMob.InternalID));
+                    targetMob.AddToWorld();
+                    client.Player.Out.SendMessage(targetMob.Name + " reloaded!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                }
+                else
+                {
+                    client.Player.Out.SendMessage("Failed to reload TeleportNPC. Database entry not found.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                }
+            }
+            else
+            {
+                client.Player.Out.SendMessage(targetMob.Name + " is loaded from a script and can't be reloaded!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
             }
         }
 

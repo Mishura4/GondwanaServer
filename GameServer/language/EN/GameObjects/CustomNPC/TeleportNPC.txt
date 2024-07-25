@@ -6,3 +6,11 @@ TeleportNPC.NoPassword:                 Good day, my lord. How can I help you?
 TeleportNPC.UnknownDestination:         I do not know this destination.
 TeleportNPC.NoTPCombat:                 You can't be teleported while in combat!
 TeleportNPC.NotInOwnedTerritory:        Good day, my lord. I regret to inform you that I must refuse you my services, as our territory is not a vassal of your guild!
+TeleportNPC.EventNotOccurred:			The event "{0}" has not yet occurred.
+TeleportNPC.TooLittleExperience:		You have too little experience to go there, come back later!
+TeleportNPC.TooMuchExperience:			You have quite a lot of experience and knowledge about the world, you won't find anything there!
+TeleportNPC.ItemRequired:				You need to give me an item for me to let you go to this place.
+TeleportNPC.WrongTime:					You have chosen the wrong time to come here, this destination is not accessible now. Come back later!
+TeleportNPC.QuestNotCompleted:			You must have completed the quest "{0}" to show you're worthy enough to go to this place!
+TeleportNPC.QuestStepNotCompleted:		You must currently be doing the quest "{0}" (step {1}) to let me teleport you to this place!
+TeleportNPC.ConditionsNotMet:			I can't let you go to this location yet!

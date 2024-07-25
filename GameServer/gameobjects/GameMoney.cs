@@ -23,9 +23,6 @@ using DOL.Database;
 
 namespace DOL.GS
 {
-    /// <summary>
-    /// Zusammenfassung f�r GameLoot.
-    /// </summary>
     public class GameMoney : GameStaticItemTimed
     {
         /// <summary>

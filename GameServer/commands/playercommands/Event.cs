@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DOL.Language;
 
 namespace DOL.GS.Commands
 {
@@ -22,7 +23,7 @@ namespace DOL.GS.Commands
 
         private void ShowEvents(GameClient client)
         {
-            client.Out.SendCustomTextWindow("[ EVENTS ]", GameEventManager.Instance.GetEventsInfos(true, false));
+            client.Out.SendCustomTextWindow(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Event.Info.WindowTitle"), GameEventManager.Instance.GetEventsInfos(true, false));
         }
     }
 }

@@ -18,7 +18,6 @@ Commands.GM.TeleportNPC.Usage.TerritoryLinked:				'/teleportnpc territorylinked 
 Commands.GM.TeleportNPC.Usage.ShowTeleporterIndicator:		'/teleportnpc showindicator <on/off>' Toggles the visibility of the teleporter indicator.
 Commands.GM.TeleportNPC.Usage.Conditions.HourMin:			'/teleportnpc hourmin <hour>' Sets the minimum hour for teleportation.
 Commands.GM.TeleportNPC.Usage.Conditions.Hours:				'/teleportnpc conditions <name of the jump> hours <hourmin> <hourmax> Defines hours allowing players to be teleported.
-Commands.GM.TeleportNPC.Usage.Conditions.RequiredWhisper:	'/teleportnpc conditions <name of the jump> requiredwhisper <phrase>' Sets the required whisper for activating the teleport.
 Commands.GM.TeleportNPC.Usage.Conditions.CompletedQuest:	'/teleportnpc conditions <name of the jump> completedquest <questID>' Sets the required completed quest ID.
 Commands.GM.TeleportNPC.Usage.Conditions.QuestStep:			'/teleportnpc conditions <name of the jump> queststep <questID> <stepID>' Sets the required quest step ID for teleportation.
 Commands.GM.TeleportNPC.Usage.Conditions.Event:				'/teleportnpc conditions <name of the jump> event <eventID>' Sets an event required to be active for teleportation.

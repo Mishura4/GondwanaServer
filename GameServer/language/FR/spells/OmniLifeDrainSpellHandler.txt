@@ -1,0 +1,8 @@
+
+Spell.OmniLifeDrain.CasterDiseased:		Vous êtes malade !
+Spell.OmniLifeDrain.CannotAbsorb:		Vous ne pouvez pas absorber plus de points de vie.
+Spell.OmniLifeDrain.StealHealth:		Vous volez {0} point{1} de vie.
+Spell.OmniLifeDrain.StealEndurance:		Vous volez {0} d'endurance.
+Spell.OmniLifeDrain.CannotStealEndurance:	Vous ne pouvez pas voler plus d'endurance.
+Spell.OmniLifeDrain.StealPower:			Vous volez {0} de mana.
+Spell.OmniLifeDrain.PowerFull:			Votre jauge de mana est déjà pleine !

@@ -37,7 +37,7 @@ namespace DOL.GS.RealmAbilities
 
         public override void AddEffectsInfo(IList<string> list)
         {
-            list.Add("Gives you a 90% 360� Parry buff which is broken if the Effect Owner attacks");
+            list.Add("Gives you a 90% 360° Parry buff which is broken if the Effect Owner attacks");
             list.Add("");
             list.Add("Target: Self");
             list.Add("Duration: 30 sec");

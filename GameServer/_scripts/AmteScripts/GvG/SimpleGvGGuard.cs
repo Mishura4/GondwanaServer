@@ -75,7 +75,7 @@ namespace DOL.GS.Scripts
 
             var cloaks = GameServer.Database.SelectObjects<NPCEquipment>(DB.Column("TemplateID").IsLike("gvg_guard_%").And(DB.Column("Slot").IsEqualTo(26)));
             player.Out.SendMessage(
-                string.Format("Bonjour {0}, vous pouvez modifier l'�quippement que je porte, s�lectionner l'ensemble que vous souhaitez :\n", player.Name) +
+                string.Format("Bonjour {0}, vous pouvez modifier l'équipement que je porte, sélectionnez l'ensemble que vous souhaitez :\n", player.Name) +
                 string.Join("\n", cloaks.Select(c => string.Format("[{0}]", c.TemplateID.Substring(10)))),
                 eChatType.CT_System,
                 eChatLoc.CL_PopupWindow
@@ -132,7 +132,7 @@ namespace DOL.GS.Scripts
                 }
 
                 guild.SendMessageToGuildMembers(
-                    string.Format("{0}: un garde vient d'�tre tu� par {1}.", captainName, name),
+                    string.Format("{0}: un garde vient d'être tué par {1}.", captainName, name),
                     eChatType.CT_Guild,
                     eChatLoc.CL_ChatWindow
                 );

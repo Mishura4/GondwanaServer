@@ -45,10 +45,15 @@ namespace DOL.GS.Scripts
         public int ActivatedFamilySound { get; set; }
         public int DeactivatedFamilySound { get; set; }
 
-        private bool isActivated;
+        public bool isActivated;
         private Timer proximityTimer;
         private Timer activationTimer;
         public int ActivatedDuration { get; set; }
+
+        public static void Init(DOLEvent e, object sender, EventArgs args)
+        {
+            GameEventMgr.AddHandler(SwitchEvent.SwitchActivated, new DOLEventHandler(new SwitchEventHandler().Notify));
+        }
 
         private void ShowSecondaryModel()
         {
@@ -304,6 +309,10 @@ namespace DOL.GS.Scripts
                     {
                         if (IsSwitch)
                         {
+                            if (!isActivated && !HandleLockedSwitch(player))
+                            {
+                                continue;
+                            }
                             CheckSwitchActivation(player);
                         }
                         else
@@ -313,6 +322,60 @@ namespace DOL.GS.Scripts
                     }
                 }
             }
+        }
+
+        private bool HandleLockedSwitch(GamePlayer player)
+        {
+            if (!string.IsNullOrEmpty(KeyItem))
+            {
+                InventoryItem key = player.Inventory.GetFirstItemByID(KeyItem, eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack);
+                if (key != null)
+                {
+                    if (Util.Chance(ItemChance))
+                    {
+                        // Successfully unlocked
+                        if (KeyLoseDur > 0)
+                        {
+                            key.Durability -= KeyLoseDur;
+                            if (key.Durability <= 0)
+                            {
+                                player.Inventory.RemoveItem(key);
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.KeyDestroyed"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                            }
+                            else
+                            {
+                                player.Out.SendInventoryItemsUpdate(new InventoryItem[] { key });
+                            }
+                        }
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.SwitchUnlocked"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                        return true;
+                    }
+                    else
+                    {
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.SwitchUnlockFailed"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                        if (KeyLoseDur > 0)
+                        {
+                            key.Durability -= KeyLoseDur / 2;
+                            if (key.Durability <= 0)
+                            {
+                                player.Inventory.RemoveItem(key);
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.KeyDestroyed"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                            }
+                            else
+                            {
+                                player.Out.SendInventoryItemsUpdate(new InventoryItem[] { key });
+                            }
+                        }
+                        return false;
+                    }
+                }
+                else
+                {
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.KeyRequired"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                    return false;
+                }
+            }
+            return true;
         }
 
         private void CheckSwitchActivation(GamePlayer player)
@@ -346,6 +409,8 @@ namespace DOL.GS.Scripts
             ShowSecondaryModel();
             player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.SwitchActivated"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
             player.Out.SendSoundEffect((ushort)SwitchOnSound, Position, 0);
+
+            GameEventMgr.Notify(SwitchEvent.SwitchActivated, this, new SwitchEventArgs(this, player));
 
             if (switchesInFamily.All(c => c.isActivated))
             {
@@ -542,6 +607,10 @@ namespace DOL.GS.Scripts
 
             if (IsSwitch)
             {
+                if (!isActivated && !HandleLockedSwitch(player))
+                {
+                    return false;
+                }
                 CheckSwitchActivation(player);
                 return true;
             }

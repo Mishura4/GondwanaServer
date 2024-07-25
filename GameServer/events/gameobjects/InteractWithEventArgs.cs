@@ -21,9 +21,6 @@ using DOL.GS;
 
 namespace DOL.Events
 {
-    /// <summary>
-    /// Description r�sum�e de InteractWithEventArgs.
-    /// </summary>
     public class InteractWithEventArgs : EventArgs
     {
         private GameObject m_target;
