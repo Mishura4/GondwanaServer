@@ -64,16 +64,12 @@ namespace DOL.Database
         /// <summary>
         /// IsRenaissance
         /// </summary>
-        protected bool m_isRenaissance = false;
+        protected bool? m_isRenaissance = null;
         /// <summary>
         /// IsGoodReput
         /// </summary>
-        protected bool m_isGoodReput = false;
-        /// <summary>
-        /// IsBadReput
-        /// </summary>
-        protected bool m_isBadReput = false;
-        protected bool m_isBoss = false;
+        protected bool? m_isGoodReput = null;
+        protected bool? m_isBoss = null;
         protected bool m_condMustBeSetTogether = false;
         /// <summary>
         /// Exclusive Priority
@@ -176,8 +172,8 @@ namespace DOL.Database
             }
         }
 
-        [DataElement(AllowDbNull = false, Unique = false)]
-        public bool IsRenaissance
+        [DataElement(AllowDbNull = true, Unique = false)]
+        public bool? IsRenaissance
         {
             get { return m_isRenaissance; }
             set
@@ -187,8 +183,8 @@ namespace DOL.Database
             }
         }
 
-        [DataElement(AllowDbNull = false, Unique = false)]
-        public bool IsGoodReput
+        [DataElement(AllowDbNull = true, Unique = false)]
+        public bool? IsGoodReput
         {
             get { return m_isGoodReput; }
             set
@@ -198,19 +194,8 @@ namespace DOL.Database
             }
         }
 
-        [DataElement(AllowDbNull = false, Unique = false)]
-        public bool IsBadReput
-        {
-            get { return m_isBadReput; }
-            set
-            {
-                Dirty = true;
-                m_isBadReput = value;
-            }
-        }
-
-        [DataElement(AllowDbNull = false)]
-        public bool IsBoss
+        [DataElement(AllowDbNull = true)]
+        public bool? IsBoss
         {
             get { return m_isBoss; }
             set
