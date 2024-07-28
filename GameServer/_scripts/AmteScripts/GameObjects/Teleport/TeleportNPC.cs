@@ -335,8 +335,7 @@ namespace DOL.GS.Scripts
             {
                 conditionsNotMet.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "TeleportNPC.ItemRequired"));
             }
-            uint currentHour = (uint)DateTime.Now.Hour;
-            if (currentHour < jumpPos.Conditions.HourMin || currentHour > jumpPos.Conditions.HourMax)
+            if (!jumpPos.Conditions.IsActiveAtTick(WorldMgr.GetCurrentGameTime(player)))
             {
                 conditionsNotMet.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "TeleportNPC.WrongTime"));
             }
