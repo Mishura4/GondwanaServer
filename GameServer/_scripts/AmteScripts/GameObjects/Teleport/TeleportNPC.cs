@@ -33,6 +33,9 @@ namespace DOL.GS.Scripts
         private string m_Text_Refuse = String.Empty;
         protected DBTeleportNPC db;
         protected bool m_busy;
+        
+        public bool HasHourConditions { get; private set; }
+        
         public bool IsTerritoryLinked { get; set; }
         
         public ushort RequiredModel { get; set; }
@@ -94,31 +97,25 @@ namespace DOL.GS.Scripts
                 }
             }
 
-            if (m_teleporterIndicator != null)
-            {
-                if (ShouldShowInvisibleModel(player))
-                {
-                    SendModelUpdate(player, m_teleporterIndicator, 1923);
-                }
-                else
-                {
-                    SendModelUpdate(player, m_teleporterIndicator, 667);
-                }
-            }
-
             SendList(player);
             return true;
         }
 
-        public void SendModelUpdate(GamePlayer player, GameNPC npc, ushort model)
+        public void SendModelUpdate(GamePlayer player)
         {
-            using (var pak = new GSTCPPacketOut((int)eServerPackets.ModelChange))
+            if (m_teleporterIndicator == null)
             {
-                pak.WriteShort((ushort)npc.ObjectID);
-                pak.WriteShort(model);
-                pak.WriteIntLowEndian(npc.Size);
-                player.Out.SendTCP(pak);
+                return;
             }
+            
+            player.Out.SendModelChange(m_teleporterIndicator, m_teleporterIndicator.GetModelForPlayer(player));
+        }
+
+        /// <inheritdoc />
+        public override void RefreshEffects(GamePlayer player)
+        {
+            base.RefreshEffects(player);
+            SendModelUpdate(player);
         }
 
         private void SendList(GamePlayer player)
@@ -592,17 +589,21 @@ namespace DOL.GS.Scripts
         public override bool AddToWorld()
         {
             if (!base.AddToWorld()) return false;
+            
             if (JumpPositions == null)
                 JumpPositions = new Dictionary<string, JumpPos>();
+            
+            else if (JumpPositions.Values.Any(j => j.Conditions.HourMin >= 0 || j.Conditions.HourMax <= 24))
+                HasHourConditions = true;
 
-            if (!(Brain is TeleportNPCBrain))
+            if (Brain is not TeleportNPCBrain)
                 SetOwnBrain(new TeleportNPCBrain());
 
             if (ShowTPIndicator)
             {
                 if (m_teleporterIndicator == null)
                 {
-                    m_teleporterIndicator = new GameNPC();
+                    m_teleporterIndicator = new TeleportIndicator(this);
                     m_teleporterIndicator.Name = "";
                     m_teleporterIndicator.Model = 1923;
                     m_teleporterIndicator.Flags ^= eFlags.PEACE;
@@ -614,6 +615,17 @@ namespace DOL.GS.Scripts
                 }
             }
 
+            return true;
+        }
+
+        /// <inheritdoc />
+        public override bool MoveTo(Position position)
+        {
+            if (!base.MoveTo(position))
+            {
+                return false;
+            }
+            m_teleporterIndicator?.MoveTo(position + Vector.Create(z: 1));
             return true;
         }
 
@@ -634,37 +646,7 @@ namespace DOL.GS.Scripts
                 return false;
             }
 
-            var jumpPos = JumpPositions.Values.FirstOrDefault();
-            if (jumpPos == null) return false;
-
-            var conditions = jumpPos.Conditions;
-
-            if (!string.IsNullOrEmpty(conditions.ActiveEventId) && GameEventManager.Instance.GetEventByID(conditions.ActiveEventId)?.Status != EventStatus.NotOver)
-            {
-                return false;
-            }
-            if (player.Level < conditions.LevelMin || player.Level > conditions.LevelMax)
-            {
-                return false;
-            }
-            uint currentHour = (uint)DateTime.Now.Hour;
-            if (currentHour < conditions.HourMin || currentHour > conditions.HourMax)
-            {
-                return false;
-            }
-            if (conditions.RequiredCompletedQuestID > 0)
-            {
-                if (conditions.RequiredQuestStepID > 0 && !IsPlayerOnQuestStep(player, conditions.RequiredCompletedQuestID, conditions.RequiredQuestStepID))
-                {
-                    return false;
-                }
-                if (player.HasFinishedQuest(DataQuestJsonMgr.GetQuest((ushort)conditions.RequiredCompletedQuestID)) == 0)
-                {
-                    return false;
-                }
-            }
-
-            return true;
+            return JumpPositions.Values.Any(c => c.CanJump(player));
         }
 
         public class JumpPos

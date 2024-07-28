@@ -453,6 +453,8 @@ namespace DOL.GS.Scripts
                     {
                         jump.Conditions.HourMin = min;
                         jump.Conditions.HourMax = max;
+                        npc.RemoveFromWorld();
+                        npc.AddToWorld();
                         DisplayMessage(client, "Le jump \"" + jump.Name + "\" est disponible entre " + min + "h et " + max + "h.");
                     }
                     else

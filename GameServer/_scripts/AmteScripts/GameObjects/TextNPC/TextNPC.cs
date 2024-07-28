@@ -112,20 +112,6 @@ namespace DOL.GS.Scripts
             return policy.Condition.CanGiveQuest;
         }
 
-        /// <inheritdoc />
-        public override void OnTerritoryOwnerChange(Guild? newOwner)
-        {
-            if (IsMercenary) // Assume we are about to be removed, don't need to send indicators
-                return;
-            
-            var newGuildPlayers = newOwner == null ? Enumerable.Empty<GamePlayer>() : newOwner.GetListOfOnlineMembers();
-            var oldGuildPlayers = CurrentTerritory?.OwnerGuild == null ? Enumerable.Empty<GamePlayer>() : CurrentTerritory.OwnerGuild.GetListOfOnlineMembers();
-            foreach (GamePlayer player in oldGuildPlayers.Concat(newGuildPlayers).Where(p => p.GetDistanceSquaredTo(this) <= WorldMgr.VISIBILITY_DISTANCE * WorldMgr.VISIBILITY_DISTANCE && this.IsVisibleTo(p)))
-            {
-                player.Out.SendNPCsQuestEffect(this, GetQuestIndicator(player));
-            }
-        }
-
         #endregion
     }
 

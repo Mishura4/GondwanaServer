@@ -32,7 +32,7 @@ namespace DOL.AI.Brain
             {
                 foreach (var player in Body.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE, true).Cast<GamePlayer>())
                 {
-                    player.Out.SendNPCsQuestEffect(Body, Body.GetQuestIndicator(player));
+                    Body.RefreshEffects(player);
                 }
             }
             

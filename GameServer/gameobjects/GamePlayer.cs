@@ -5949,9 +5949,10 @@ namespace DOL.GS
                 Task.TasksDone = 0;
                 Task.SaveIntoDatabase();
             }
+            
             //refresh npc quests according to new level
-
             this.RefreshQuestNPCs();
+            
             // Level up pets and subpets
             if (DOL.GS.ServerProperties.Properties.PET_LEVELS_WITH_OWNER &&
                 ControlledBrain is ControlledNpcBrain brain && brain.Body is GamePet pet)
@@ -11357,9 +11358,9 @@ namespace DOL.GS
         /// </summary>
         public void RefreshQuestNPCs()
         {
-            foreach (GameNPC mob in GetNPCsInRadius(WorldMgr.VISIBILITY_DISTANCE).Cast<GameNPC>().Where(npc => npc.QuestIdListToGive.Any() || this.QuestList.SelectMany(q => q.Goals).OfType<DataQuestJsonGoal>().Any(g => g.hasInteraction && g.Target == npc)))
+            foreach (GameNPC mob in GetNPCsInRadius(WorldMgr.VISIBILITY_DISTANCE).Cast<GameNPC>())
             {
-                this.Out.SendNPCsQuestEffect(mob, mob.GetQuestIndicator(this));
+                mob.RefreshEffects(this);
             }
         }
 

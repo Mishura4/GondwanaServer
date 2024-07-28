@@ -1033,8 +1033,6 @@ namespace DOL.GS.PacketHandler
                  */
                 foreach (MobGroup g in mobGroups.Where(g => g.HasPlayerCompletedQuests(m_gameClient.Player)))
                 {
-                    if (g.CompletedQuestNPCModel != 0)
-                        model = g.CompletedQuestNPCModel;
                     if (g.CompletedQuestNPCSize != 0)
                         size = (byte)g.CompletedQuestNPCSize;
                 }
@@ -1103,14 +1101,12 @@ namespace DOL.GS.PacketHandler
                 pak.WriteInt((uint) npc.Position.Y);
                 pak.WriteShort(speedZ);
 
-                var model = npc.Model;
+                var model = npc.GetModelForPlayer(m_gameClient.Player);
                 var size = npc.Size;
                 if (npc is { MobGroups: { Count: > 0 } mobGroups })
                 {
                     foreach (MobGroup g in mobGroups.Where(g => g.HasPlayerCompletedQuests(m_gameClient.Player)))
                     {
-                        if (g.CompletedQuestNPCModel != 0)
-                            model = g.CompletedQuestNPCModel;
                         if (g.CompletedQuestNPCSize != 0)
                             size = (byte)g.CompletedQuestNPCSize;
                     }

@@ -183,7 +183,7 @@ namespace DOL.GS
                 if (ObjectState == eObjectState.Active)
                 {
                     foreach (GamePlayer player in GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
-                        player.Out.SendModelAndSizeChange(this, Model, value);
+                        player.Out.SendModelAndSizeChange(this, GetModelForPlayer(player), value);
                     //					BroadcastUpdate();
                 }
             }
@@ -309,9 +309,22 @@ namespace DOL.GS
                 if (ObjectState == eObjectState.Active)
                 {
                     foreach (GamePlayer player in GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
-                        player.Out.SendModelChange(this, Model);
+                        player.Out.SendModelChange(this, GetModelForPlayer(player));
                 }
             }
+        }
+
+        public virtual ushort GetModelForPlayer(GamePlayer player)
+        {
+            if (MobGroups is { Count: > 0 } mobGroups )
+            {
+                foreach (MobGroup g in mobGroups.Where(g => g.HasPlayerCompletedQuests(player)))
+                {
+                    if (g.CompletedQuestNPCModel != 0)
+                        return g.CompletedQuestNPCModel;
+                }
+            }
+            return Model;
         }
 
         public bool IsRenaissance
@@ -2136,6 +2149,23 @@ namespace DOL.GS
 
         public virtual void OnTerritoryOwnerChange(Guild? newOwner)
         {
+            if (IsMercenary) // Assume we are about to be removed, don't need to send indicators
+                return;
+            
+            var newGuildPlayers = newOwner == null ? Enumerable.Empty<GamePlayer>() : newOwner.GetListOfOnlineMembers();
+            var oldGuildPlayers = CurrentTerritory?.OwnerGuild == null ? Enumerable.Empty<GamePlayer>() : CurrentTerritory.OwnerGuild.GetListOfOnlineMembers();
+            foreach (GamePlayer player in oldGuildPlayers.Concat(newGuildPlayers).Where(p => p.GetDistanceSquaredTo(this) <= WorldMgr.VISIBILITY_DISTANCE * WorldMgr.VISIBILITY_DISTANCE && this.IsVisibleTo(p)))
+            {
+                RefreshEffects(player);
+            }
+        }
+
+        public virtual void RefreshEffects(GamePlayer player)
+        {
+            if (QuestIdListToGive.Any() || player.QuestList.SelectMany(q => q.Goals).OfType<DataQuestJsonGoal>().Any(g => g.hasInteraction && g.Target == this))
+            {
+                player.Out.SendNPCsQuestEffect(this, this.GetQuestIndicator(player));
+            }
         }
 
         /// <summary>
