@@ -772,7 +772,11 @@ namespace DOL.GS
         public virtual bool AddToWorld()
         {
             if (!float.IsNormal(Position.X) || !float.IsNormal(Position.Y) || !float.IsNormal(Position.Z))
+            {
+                log.Error($"AddToWorld: Invalid position ({this.GetType()} ID: {InternalID} Coordinate: {Coordinate} Region: {CurrentRegionID})");
                 return false;
+            }
+
             /****** MODIFIED BY KONIK & WITCHKING *******/
             // CurrentZone checks for null Region.
             // Should it be the case, currentZone will be null as well.
@@ -784,7 +788,7 @@ namespace DOL.GS
 
             if (m_ObjectState == eObjectState.Active)
             {
-                log.Error($"AddToWorld: Object already in world ({this.GetType()} ID: {InternalID}))");
+                log.Warn($"AddToWorld: Object already in world ({this.GetType()} ID: {InternalID}))");
                 return false;
             }
 
@@ -792,6 +796,7 @@ namespace DOL.GS
             {
                 return false;
             }
+
             Notify(GameObjectEvent.AddToWorld, this);
             ObjectState = eObjectState.Active;
 
