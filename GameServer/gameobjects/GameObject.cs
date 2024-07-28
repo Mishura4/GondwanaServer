@@ -776,9 +776,15 @@ namespace DOL.GS
             /****** MODIFIED BY KONIK & WITCHKING *******/
             // CurrentZone checks for null Region.
             // Should it be the case, currentZone will be null as well.
-            if (CurrentZone == null || m_ObjectState == eObjectState.Active)
+            if (CurrentZone == null)
             {
                 log.Error($"AddToWorld: Zone does not exist ({this.GetType()} ID: {InternalID} Coordinate: {Coordinate} Region: {CurrentRegionID})");
+                return false;
+            }
+
+            if (m_ObjectState == eObjectState.Active)
+            {
+                log.Error($"AddToWorld: Object already in world ({this.GetType()} ID: {InternalID}))");
                 return false;
             }
 

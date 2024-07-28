@@ -25,6 +25,9 @@ namespace DOL.GS.Spells
     [SpellHandler("UnbreakableSpeedDecrease")]
     public class UnbreakableSpeedDecreaseSpellHandler : ImmunityEffectSpellHandler
     {
+        /// <inheritdoc />
+        public override bool HasPositiveEffect => false;
+
         public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             if (target.HasAbility(Abilities.CCImmunity) || target.HasAbility(Abilities.RootImmunity))
