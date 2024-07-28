@@ -33,6 +33,10 @@ namespace DOL.GS.Spells
         protected int IntDebuff = 0;
         protected int ChaDebuff = 0;
         protected int PieDebuff = 0;
+        
+        /// <inheritdoc />
+        public override bool HasPositiveEffect => false;
+
 
         public override int CalculateSpellResistChance(GameLiving target)
         {

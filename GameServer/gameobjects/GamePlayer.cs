@@ -10034,7 +10034,7 @@ namespace DOL.GS
                                 // For potions most can be used by any player level except a few higher level ones.
                                 // So for the case of potions we will only restrict the level of usage if LevelRequirement is >0 for the item
 
-                                long nextPotionAvailTime = !useItem.Id_nb.ToUpper().Contains("PARCH") ? TempProperties.getProperty<long>(NEXT_POTION_AVAIL_TIME + "_Type" + (spell.SharedTimerGroup)) : TempProperties.getProperty<long>(NEXT_PARCH_AVAIL_TIME + "_Type" + (spell.SharedTimerGroup));
+                                long nextPotionAvailTime = !useItem.Id_nb.Contains("PARCH", StringComparison.InvariantCultureIgnoreCase) ? TempProperties.getProperty<long>(NEXT_POTION_AVAIL_TIME + "_Type" + (spell.SharedTimerGroup)) : TempProperties.getProperty<long>(NEXT_PARCH_AVAIL_TIME + "_Type" + (spell.SharedTimerGroup));
 
                                 if (Client.Account.PrivLevel == 1 && nextPotionAvailTime > CurrentRegion.Time)
                                 {
@@ -10092,7 +10092,7 @@ namespace DOL.GS
                                                     }
 
                                                     bool test = false;
-                                                    if (useItem.Id_nb.ToUpper().Contains("PARCH"))
+                                                    if (useItem.Id_nb.Contains("PARCH", StringComparison.InvariantCultureIgnoreCase))
                                                         test = spellHandler.CastSpell(target, useItem);
                                                     else
                                                         test = spellHandler.StartSpell(target, useItem);

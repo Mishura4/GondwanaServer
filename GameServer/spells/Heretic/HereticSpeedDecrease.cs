@@ -138,6 +138,9 @@ namespace DOL.GS.Spells
     {
         private readonly object TIMER_PROPERTY;
         private const string EFFECT_PROPERTY = "Effect";
+        
+        /// <inheritdoc />
+        public override bool HasPositiveEffect => false;
 
         public override void OnEffectStart(GameSpellEffect effect)
         {

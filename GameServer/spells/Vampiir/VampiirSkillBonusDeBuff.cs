@@ -32,6 +32,9 @@ namespace DOL.GS.Spells
             base.FinishSpellCast(target);
         }
 
+        /// <inheritdoc />
+        public override bool HasPositiveEffect => false;
+
 
         public override void OnEffectStart(GameSpellEffect effect)
         {

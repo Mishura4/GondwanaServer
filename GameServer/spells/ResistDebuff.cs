@@ -31,6 +31,9 @@ namespace DOL.GS.Spells
 
         public override eBuffBonusCategory BonusCategory1 { get { return eBuffBonusCategory.Debuff; } }
 
+        /// <inheritdoc />
+        public override bool HasPositiveEffect => false;
+
         protected override int CalculateEffectDuration(GameLiving target, double effectiveness)
         {
             double duration = Spell.Duration;

@@ -29,6 +29,9 @@ namespace DOL.GS.Spells
     {
         public override eBuffBonusCategory BonusCategory1 { get { return eBuffBonusCategory.Debuff; } }
 
+        /// <inheritdoc />
+        public override bool HasPositiveEffect => false;
+
         public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             if (target.EffectList.GetOfType<AdrenalineSpellEffect>() != null)

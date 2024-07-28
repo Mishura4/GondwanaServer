@@ -18,6 +18,9 @@ namespace DOL.GS.Spells
             m_spellTypesToRemove = new List<string> { "SpellReflection" };
         }
 
+        /// <inheritdoc />
+        public override bool HasPositiveEffect => false;
+
         public override string ShortDescription
             => $"{Spell.Name} removes the magic deflection shield of the target.";
     }

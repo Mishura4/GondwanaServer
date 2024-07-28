@@ -25,6 +25,9 @@ namespace DOL.GS.Spells.Atlantis
     [SpellHandler("AllStatsDebuff")]
     public class AllStatsDebuff : SpellHandler
     {
+        /// <inheritdoc />
+        public override bool HasPositiveEffect => false;
+
         public override int CalculateSpellResistChance(GameLiving target)
         {
             return 0;

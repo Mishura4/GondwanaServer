@@ -34,7 +34,9 @@ namespace DOL.GS.Spells
             m_caster.Mana -= PowerCost(target);
             base.FinishSpellCast(target);
         }
-
+        
+        /// <inheritdoc />
+        public override bool HasPositiveEffect => false;
 
         public override void OnEffectStart(GameSpellEffect effect)
         {

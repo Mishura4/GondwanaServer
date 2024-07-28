@@ -35,6 +35,9 @@ namespace DOL.GS.Spells
         private GameLiving Target;
         private int pulseCount = 0;
         private ISpellHandler snareSubSpell;
+        
+        /// <inheritdoc />
+        public override bool HasPositiveEffect => false;
 
         public RampingDamageFocus(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, new FocusSpell(spell), spellLine)
         {

@@ -35,7 +35,9 @@ namespace DOL.GS.Spells
         private int old_item_abs = 0;
         private InventoryItem item = null;
         protected GamePlayer player = null;
-
+        
+        /// <inheritdoc />
+        public override bool HasPositiveEffect => false;
         public override void FinishSpellCast(GameLiving target)
         {
             m_caster.Mana -= PowerCost(target);

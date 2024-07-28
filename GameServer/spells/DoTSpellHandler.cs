@@ -48,6 +48,9 @@ namespace DOL.GS.Spells
             return Spell.SpellType == compare.Spell.SpellType && Spell.DamageType == compare.Spell.DamageType && SpellLine.IsBaseLine == compare.SpellHandler.SpellLine.IsBaseLine;
         }
 
+        /// <inheritdoc />
+        public override bool HasPositiveEffect => false;
+
         public override AttackData CalculateDamageToTarget(GameLiving target, double effectiveness)
         {
             AttackData ad = base.CalculateDamageToTarget(target, effectiveness);
