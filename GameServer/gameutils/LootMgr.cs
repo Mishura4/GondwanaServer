@@ -52,7 +52,7 @@ namespace DOL.GS
 
             public bool? IsMobGuildMet(GameLiving victim) => MobGuild is null ? null : !string.IsNullOrEmpty(victim.GuildName) && MobGuild.Contains(victim.GuildName.ToLowerInvariant());
 
-            public bool? IsMobFactionMet(GameLiving victim) => MobFaction is null ? null : victim is GameNPC { Faction: { } faction } && MobFaction.Contains(faction.ID);
+            public bool? IsMobFactionMet(GameLiving victim) => MobFaction is null ? null : victim is GameNPC npc && MobFaction.Contains(npc.Faction?.ID ?? 0);
 
             public bool? IsRegionMet(GameLiving victim) => RegionIDs?.Contains(victim.CurrentRegionID);
             
@@ -293,7 +293,7 @@ namespace DOL.GS
                 // Parse CSV
                 try
                 {
-                    mobGuilds = Util.SplitCSV(mobguild);
+                    mobGuilds = Util.SplitCSV(mobguild.ToLowerInvariant());
                 }
                 catch
                 {
