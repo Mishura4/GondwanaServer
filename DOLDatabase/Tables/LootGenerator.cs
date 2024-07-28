@@ -44,7 +44,7 @@ namespace DOL.Database
         /// <summary>
         /// Trigger Region
         /// </summary>
-        protected ushort m_regionID = 0;
+        protected string m_regionID = string.Empty;
         /// <summary>
         /// Trigger Mob Model
         /// </summary>
@@ -129,7 +129,7 @@ namespace DOL.Database
         /// Mobs Region ID
         /// </summary>
         [DataElement(AllowDbNull = false, Unique = false)]
-        public ushort RegionID
+        public string RegionID
         {
             get { return m_regionID; }
             set
