@@ -26,6 +26,7 @@ namespace DOL.GameEvents
         public Dictionary<string, ushort> EndEffects;
         public Dictionary<string, GameNPC> RemovedMobs { get; }
         public Dictionary<string, GameStaticItem> RemovedCoffres { get; }
+        public List<GameNPC> RelatedNPCs { get; } = new();
 
         public GameEvent(GameEvent ev)
         {

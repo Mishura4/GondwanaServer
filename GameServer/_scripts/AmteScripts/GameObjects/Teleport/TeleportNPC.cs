@@ -18,6 +18,7 @@ using System.Linq;
 using DOL.GS.Quests;
 using static System.Net.Mime.MediaTypeNames;
 using DOLDatabase.Tables;
+using Grpc.Core;
 
 namespace DOL.GS.Scripts
 {
@@ -318,10 +319,15 @@ namespace DOL.GS.Scripts
         {
             var conditionsNotMet = new List<string>();
             var eventName = GetEventName(jumpPos.Conditions.ActiveEventId);
-
-            if (!string.IsNullOrEmpty(jumpPos.Conditions.ActiveEventId) && GameEventManager.Instance.GetEventByID(jumpPos.Conditions.ActiveEventId)?.Status == EventStatus.NotOver)
+            
+            if (!string.IsNullOrEmpty(jumpPos.Conditions.ActiveEventId))
             {
-                conditionsNotMet.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "TeleportNPC.EventNotOccurred", eventName));
+                var e = GameEventManager.Instance.GetEventByID(jumpPos.Conditions.ActiveEventId);
+                var now = DateTimeOffset.UtcNow;
+                if (e.StartedTime == null || e.StartedTime > now || (e.EndTime != null && e.EndTime < now))
+                {
+                    conditionsNotMet.Add(LanguageMgr.GetTranslation(player.Client.Account.Language, "TeleportNPC.EventNotOccurred", eventName));
+                }
             }
             if (player.Level < jumpPos.Conditions.LevelMin)
             {
@@ -597,6 +603,22 @@ namespace DOL.GS.Scripts
 
             if (Brain is not TeleportNPCBrain)
                 SetOwnBrain(new TeleportNPCBrain());
+            
+            foreach (var jump in JumpPositions.Values.Where(j => !string.IsNullOrEmpty(j.Conditions.ActiveEventId)))
+            {
+                var e = GameEventManager.Instance.GetEventByID(jump.Conditions.ActiveEventId);
+
+                if (e == null)
+                {
+                    log.Warn($"TeleportNPC {Name} ({InternalID}) has jump {jump.Name} referencing event {jump.Conditions.ActiveEventId} which was not found");
+                    continue;
+                }
+
+                lock (e.RelatedNPCs)
+                {
+                    e.RelatedNPCs.Add(this);
+                }
+            }
 
             if (ShowTPIndicator)
             {
@@ -640,7 +662,7 @@ namespace DOL.GS.Scripts
 
         public bool ShouldShowInvisibleModel(GamePlayer player)
         {
-            if (IsTerritoryLinked && !TerritoryManager.IsPlayerInOwnedTerritory(player, this))
+            if (IsTerritoryLinked && CurrentTerritory?.IsOwnedBy(player) == false)
             {
                 return false;
             }
@@ -703,8 +725,15 @@ namespace DOL.GS.Scripts
                     return false;
                 if (!string.IsNullOrEmpty(Conditions.Item) && player.Inventory.GetFirstItemByID(Conditions.Item, eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack) == null)
                     return false;
-                if (!string.IsNullOrEmpty(Conditions.ActiveEventId) && GameEventManager.Instance.GetEventByID(Conditions.ActiveEventId)?.Status == EventStatus.NotOver)
-                    return false;
+                if (!string.IsNullOrEmpty(Conditions.ActiveEventId))
+                {
+                    var e = GameEventManager.Instance.GetEventByID(Conditions.ActiveEventId);
+                    var now = DateTimeOffset.UtcNow;
+                    if (e.StartedTime == null || e.StartedTime > now || (e.EndTime != null && e.EndTime < now))
+                    {
+                        return false;
+                    }
+                }
                 if (Conditions.RequiredCompletedQuestID > 0)
                 {
                     if (Conditions.RequiredQuestStepID > 0 && !IsPlayerOnQuestStep(player, Conditions.RequiredCompletedQuestID, Conditions.RequiredQuestStepID))

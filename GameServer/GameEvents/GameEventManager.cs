@@ -982,6 +982,16 @@ namespace DOL.GameEvents
                 }
             }
 
+            List<GameNPC> npc;
+            lock (e.RelatedNPCs)
+            {
+                npc = new List<GameNPC>(e.RelatedNPCs);
+            }
+            foreach (var mob in npc)
+            {
+                mob.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE).Cast<GamePlayer>().ForEach(mob.RefreshEffects);
+            }
+
             if (!string.IsNullOrEmpty(e.StartActionStopEventID))
             {
                 await FinishEventByEventById(e.ID, e.StartActionStopEventID);
@@ -1431,6 +1441,16 @@ namespace DOL.GameEvents
             }
 
             e.Clean();
+            
+            List<GameNPC> npc;
+            lock (e.RelatedNPCs)
+            {
+                npc = new List<GameNPC>(e.RelatedNPCs);
+            }
+            foreach (var mob in npc)
+            {
+                mob.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE).Cast<GamePlayer>().ForEach(mob.RefreshEffects);
+            }
         }
 
         public IEnumerable<string> GetDependentEventsFromRootEvent(string id)

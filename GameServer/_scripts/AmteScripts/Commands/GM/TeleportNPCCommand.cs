@@ -1,8 +1,10 @@
 using System;
 using DOL.Database;
+using DOL.GameEvents;
 using DOL.GS.Commands;
 using DOL.GS.PacketHandler;
 using DOL.Language;
+using System.Linq;
 
 namespace DOL.GS.Scripts
 {
@@ -453,8 +455,6 @@ namespace DOL.GS.Scripts
                     {
                         jump.Conditions.HourMin = min;
                         jump.Conditions.HourMax = max;
-                        npc.RemoveFromWorld();
-                        npc.AddToWorld();
                         DisplayMessage(client, "Le jump \"" + jump.Name + "\" est disponible entre " + min + "h et " + max + "h.");
                     }
                     else
@@ -502,16 +502,38 @@ namespace DOL.GS.Scripts
                         DisplaySyntax(client);
                         return;
                     }
+                    GameEvent e;
                     if (args.Length > 4)
                     {
-                        jump.Conditions.ActiveEventId = args[4];
-                        npc.SaveIntoDatabase();
-                        DisplayMessage(client, "Teleporter required event set to : \"" + jump.Conditions.ActiveEventId + "\".");
+                        e = GameEventManager.Instance.GetEventByID(args[4]);
+                        if (e == null)
+                        {
+                            DisplayMessage(client, $"Event ID {args[4]} not found.");
+                        }
+                        else
+                        {
+                            jump.Conditions.ActiveEventId = e.ID;
+                            lock (e.RelatedNPCs)
+                            {
+                                e.RelatedNPCs.Add(npc);
+                            }
+                            DisplayMessage(client, "Teleporter required event set to : \"" + jump.Conditions.ActiveEventId + "\".");
+                        }
                     }
                     else
                     {
+                        if (!string.IsNullOrEmpty(jump.Conditions.ActiveEventId))
+                        {
+                            e = GameEventManager.Instance.GetEventByID(jump.Conditions.ActiveEventId);
+                            if (e != null)
+                            {
+                                lock (e.RelatedNPCs)
+                                {
+                                    e.RelatedNPCs.Remove(npc);
+                                }
+                            }
+                        }
                         jump.Conditions.ActiveEventId = string.Empty;
-                        npc.SaveIntoDatabase();
                         DisplayMessage(client, "Teleporter required event removed.");
                     }
                     break;
@@ -519,9 +541,11 @@ namespace DOL.GS.Scripts
 
                 default:
                     DisplaySyntax(client);
-                    break;
+                    return;
             }
             npc.SaveIntoDatabase();
+            npc.RemoveFromWorld();
+            npc.AddToWorld();
         }
     }
 }
