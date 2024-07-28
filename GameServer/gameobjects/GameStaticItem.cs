@@ -355,8 +355,16 @@ namespace DOL.GS
         public override bool AddToWorld()
         {
             if (!base.AddToWorld()) return false;
+
+            if (m_respawnTimer is { IsAlive: true })
+            {
+                m_respawnTimer.Stop();
+                m_respawnTimer = null;
+            }
+            
             foreach (GamePlayer player in GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
                 player.Out.SendObjectCreate(this);
+
             return true;
         }
 
@@ -445,8 +453,6 @@ namespace DOL.GS
             {
                 if (m_respawnTimer != null)
                 {
-                    m_respawnTimer.Stop();
-                    m_respawnTimer = null;
                     AddToWorld();
                 }
             }

@@ -91,12 +91,6 @@ namespace DOL.GS.Scripts
             get { return m_Items; }
         }
 
-        public Timer RespawnTimer
-        {
-            get;
-            set;
-        }
-
         public static List<GameCoffre> Coffres;
 
         private int m_ItemChance;
@@ -244,14 +238,13 @@ namespace DOL.GS.Scripts
         /// <summary>
         /// Temps de réapparition d'un item (en minutes)
         /// </summary>
-        public int ItemInterval;
         public string KeyItem = "";
         public int LockDifficult;
 
         public GameCoffre()
         {
             LastOpen = DateTime.MinValue;
-            ItemInterval = 5;
+            RespawnInterval = 5 * 60;
             m_Items = new List<CoffreItem>();
         }
 
@@ -260,7 +253,7 @@ namespace DOL.GS.Scripts
             HasPickableAnim = true;
             LastOpen = DateTime.MinValue;
             HasPickableAnim = true;
-            ItemInterval = 5;
+            RespawnInterval = 5 * 60;
             m_Items = Items;
         }
         #endregion
@@ -276,7 +269,7 @@ namespace DOL.GS.Scripts
 
             Coffres.Add(this);
 
-            if (PickOnTouch || ItemInterval > 0)
+            if (PickOnTouch)
             {
                 proximityTimer = new Timer(1500);
                 proximityTimer.Elapsed += (sender, e) => CheckPlayerProximity();
@@ -833,15 +826,11 @@ namespace DOL.GS.Scripts
 
             ShowSecondaryModel();
 
-            if (gotItemOrUsedTeleporter && ItemInterval != 0)
+            if (gotItemOrUsedTeleporter && RespawnInterval != 0)
             {
                 m_lastInteract = DateTime.MinValue;
                 LastOpen = DateTime.Now;
-                RemoveFromWorld(ItemInterval * 60);
-                if (this.EventID == null || (CanRespawnWithinEvent))
-                {
-                    RespawnTimer.Start();
-                }
+                RemoveFromWorld(this.EventID != null && !CanRespawnWithinEvent ? 0 : RespawnInterval);
                 SaveIntoDatabase();
             }
 
@@ -1108,7 +1097,7 @@ namespace DOL.GS.Scripts
             HasPickableAnim = coffre.HasPickableAnim;
             Model = coffre.Model;
             LastOpen = coffre.LastOpen;
-            ItemInterval = coffre.ItemInterval;
+            RespawnInterval = coffre.ItemInterval * 60;
             InternalID = coffre.ObjectId;
             ItemChance = coffre.ItemChance;
             KeyItem = coffre.KeyItem;
@@ -1153,29 +1142,10 @@ namespace DOL.GS.Scripts
             ActivatedFamilySound = coffre.ActivatedFamilySound;
             DeactivatedFamilySound = coffre.DeactivatedFamilySound;
 
-            InitTimer();
-
             m_Items = new List<CoffreItem>();
             if (coffre.ItemList != "")
                 foreach (string item in coffre.ItemList.Split(';'))
                     m_Items.Add(new CoffreItem(item));
-        }
-
-        public void InitTimer()
-        {
-            double interval = (double)ItemInterval * 60D * 1000D;
-            if (interval > int.MaxValue)
-            {
-                interval = (double)int.MaxValue;
-            }
-
-            if (interval == 0)
-            {
-                interval = 1;
-            }
-
-            RespawnTimer = new Timer(interval);
-            RespawnTimer.Elapsed += Repop_Elapsed;
         }
 
         public override void SaveIntoDatabase()
@@ -1191,7 +1161,7 @@ namespace DOL.GS.Scripts
             Coffre.Region = CurrentRegionID;
             Coffre.Model = Model;
             Coffre.LastOpen = LastOpen;
-            Coffre.ItemInterval = ItemInterval;
+            Coffre.ItemInterval = RespawnInterval / 60;
             Coffre.ItemChance = ItemChance;
             Coffre.KeyItem = KeyItem;
             Coffre.LockDifficult = LockDifficult;
@@ -1308,7 +1278,7 @@ namespace DOL.GS.Scripts
                     "",
                     "-- Coffre --",
                     " + Chance d'apparition d'un item: " + ItemChance + "%",
-                    " + Intervalle d'apparition d'un item: " + ItemInterval + " minutes",
+                    " + Intervalle d'apparition d'un item: " + RespawnInterval / 60 + " minutes",
                     " + Intervalle d'ouverture un coffre: " + this.CoffreOpeningInterval + " minutes",
                     " + Dernière fois que le coffre a été ouvert: " + LastOpen.ToShortDateString() + " " + LastOpen.ToShortTimeString(),
                     " + IsLongDistance type: " + this.IsLargeCoffre,
@@ -1392,7 +1362,7 @@ namespace DOL.GS.Scripts
             {
                 m_Items = coffre.Items;
                 Name = coffre.Name + "_cpy";
-                ItemInterval = coffre.ItemInterval;
+                RespawnInterval = coffre.RespawnInterval;
                 TpEffect = coffre.TpEffect;
                 TpIsRenaissance = coffre.TpIsRenaissance;
                 TpLevelRequirement = coffre.TpLevelRequirement;
@@ -1430,7 +1400,6 @@ namespace DOL.GS.Scripts
                 WrongFamilyOrderSound = coffre.WrongFamilyOrderSound;
                 ActivatedFamilySound = coffre.ActivatedFamilySound;
                 DeactivatedFamilySound = coffre.DeactivatedFamilySound;
-                InitTimer();
             }
         }
     }

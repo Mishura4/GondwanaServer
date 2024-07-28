@@ -9,35 +9,108 @@ namespace DOL.GS.Scripts
     [CmdAttribute(
          "&chest",
          ePrivLevel.GM,
-         "Commands.GM.Chest.Description",
-         "Commands.GM.Chest.Usage.Create",
-         "Commands.GM.Chest.Usage.Model",
-         "Commands.GM.Chest.Usage.Item",
-         "Commands.GM.Chest.Usage.Add",
-         "Commands.GM.Chest.Usage.Remove",
-         "Commands.GM.Chest.Usage.Name",
-         "Commands.GM.Chest.Usage.Movehere",
-         "Commands.GM.Chest.Usage.Delete",
-         "Commands.GM.Chest.Usage.Reset",
-         "Commands.GM.Chest.Usage.Info",
-         "Commands.GM.Chest.Usage.Copy",
-         "Commands.GM.Chest.Usage.RandomCopy",
-         "Commands.GM.Chest.Usage.Key",
-         "Commands.GM.Chest.Usage.Difficult",
-         "Commands.GM.Chest.Usage.traprate",
-         "Commands.GM.Chest.Usage.NPCTemplate",
-         "Commands.GM.Chest.Usage.Respawn",
-         "Commands.GM.Chest.Usage.IsTeleport",
-         "Commands.GM.Chest.Usage.Teleporter",
-         "Commands.GM.Chest.Usage.TPrequirement",
-         "Commands.GM.Chest.Usage.TPEffect",
-         "Commands.GM.Chest.Usage.TPIsRenaissance",
-         "Commands.GM.Chest.Usage.IsOpeningRenaissance",
-         "Commands.GM.Chest.Usage.PunishSpellId",
-         "Commands.GM.Chest.Usage.PickableAnim",
-         "Commands.GM.Chest.Usage.InfoInterval",
-         "Commands.GM.Chest.Usage.LongDistance")]
-    public class ChestCommandHandler : AbstractCommandHandler, ICommandHandler
+         "Commands.GM.Coffre.Description",
+         "Commands.GM.Coffre.Usage.Create",
+         "Commands.GM.Coffre.Usage.Model",
+         "Commands.GM.Coffre.Usage.Item",
+         "Commands.GM.Coffre.Usage.Add",
+         "Commands.GM.Coffre.Usage.Remove",
+         "Commands.GM.Coffre.Usage.Name",
+         "Commands.GM.Coffre.Usage.Movehere",
+         "Commands.GM.Coffre.Usage.Delete",
+         "Commands.GM.Coffre.Usage.Reset",
+         "Commands.GM.Coffre.Usage.Info",
+         "Commands.GM.Coffre.Usage.Copy",
+         "Commands.GM.Coffre.Usage.RandomCopy",
+         "Commands.GM.Coffre.Usage.Key",
+         "Commands.GM.Coffre.Usage.Difficult",
+         "Commands.GM.Coffre.Usage.traprate",
+         "Commands.GM.Coffre.Usage.NPCTemplate",
+         "Commands.GM.Coffre.Usage.Respawn",
+         "Commands.GM.Coffre.Usage.IsTeleport",
+         "Commands.GM.Coffre.Usage.Teleporter",
+         "Commands.GM.Coffre.Usage.TPrequirement",
+         "Commands.GM.Coffre.Usage.TPEffect",
+         "Commands.GM.Coffre.Usage.TPIsRenaissance",
+         "Commands.GM.Coffre.Usage.IsOpeningRenaissance",
+         "Commands.GM.Coffre.Usage.PunishSpellId",
+         "Commands.GM.Coffre.Usage.PickableAnim",
+         "Commands.GM.Coffre.Usage.InfoInterval",
+         "Commands.GM.Coffre.Usage.LongDistance",
+         "Commands.GM.Coffre.Usage.TPID",
+         "Commands.GM.Coffre.Usage.ShouldRespawnToTPID",
+         "Commands.GM.Coffre.Usage.CurrentStep",
+         "Commands.GM.Coffre.Usage.PickOnTouch",
+         "Commands.GM.Coffre.Usage.SecondaryModel",
+         "Commands.GM.Coffre.Usage.IsOpenableOnce",
+         "Commands.GM.Coffre.Usage.IsTerritoryLinked",
+         "Commands.GM.Coffre.Usage.KeyLoseDur",
+         "Commands.GM.Coffre.Usage.SwitchFamily",
+         "Commands.GM.Coffre.Usage.SwitchOrder",
+         "Commands.GM.Coffre.Usage.IsSwitch",
+         "Commands.GM.Coffre.Usage.WrongOrderResetFamily",
+         "Commands.GM.Coffre.Usage.ActivatedDuration",
+         "Commands.GM.Coffre.Usage.ActivatedBySwitchOn",
+         "Commands.GM.Coffre.Usage.ActivatedBySwitchOff",
+         "Commands.GM.Coffre.Usage.ResetBySwitchOn",
+         "Commands.GM.Coffre.Usage.ResetBySwitchOff",
+         "Commands.GM.Coffre.Usage.SwitchOnSound",
+         "Commands.GM.Coffre.Usage.WrongFamilyOrderSound",
+         "Commands.GM.Coffre.Usage.ActivatedFamilySound",
+         "Commands.GM.Coffre.Usage.DeactivatedFamilySound")]
+    [CmdAttribute(
+         "&coffre",
+         ePrivLevel.GM,
+         "Commands.GM.Coffre.Description",
+         "Commands.GM.Coffre.Usage.Create",
+         "Commands.GM.Coffre.Usage.Model",
+         "Commands.GM.Coffre.Usage.Item",
+         "Commands.GM.Coffre.Usage.Add",
+         "Commands.GM.Coffre.Usage.Remove",
+         "Commands.GM.Coffre.Usage.Name",
+         "Commands.GM.Coffre.Usage.Movehere",
+         "Commands.GM.Coffre.Usage.Delete",
+         "Commands.GM.Coffre.Usage.Reset",
+         "Commands.GM.Coffre.Usage.Info",
+         "Commands.GM.Coffre.Usage.Copy",
+         "Commands.GM.Coffre.Usage.RandomCopy",
+         "Commands.GM.Coffre.Usage.Key",
+         "Commands.GM.Coffre.Usage.Difficult",
+         "Commands.GM.Coffre.Usage.traprate",
+         "Commands.GM.Coffre.Usage.NPCTemplate",
+         "Commands.GM.Coffre.Usage.Respawn",
+         "Commands.GM.Coffre.Usage.IsTeleport",
+         "Commands.GM.Coffre.Usage.Teleporter",
+         "Commands.GM.Coffre.Usage.TPrequirement",
+         "Commands.GM.Coffre.Usage.TPEffect",
+         "Commands.GM.Coffre.Usage.TPIsRenaissance",
+         "Commands.GM.Coffre.Usage.IsOpeningRenaissance",
+         "Commands.GM.Coffre.Usage.PunishSpellId",
+         "Commands.GM.Coffre.Usage.PickableAnim",
+         "Commands.GM.Coffre.Usage.InfoInterval",
+         "Commands.GM.Coffre.Usage.LongDistance",
+         "Commands.GM.Coffre.Usage.TPID",
+         "Commands.GM.Coffre.Usage.ShouldRespawnToTPID",
+         "Commands.GM.Coffre.Usage.CurrentStep",
+         "Commands.GM.Coffre.Usage.PickOnTouch",
+         "Commands.GM.Coffre.Usage.SecondaryModel",
+         "Commands.GM.Coffre.Usage.IsOpenableOnce",
+         "Commands.GM.Coffre.Usage.IsTerritoryLinked",
+         "Commands.GM.Coffre.Usage.KeyLoseDur",
+         "Commands.GM.Coffre.Usage.SwitchFamily",
+         "Commands.GM.Coffre.Usage.SwitchOrder",
+         "Commands.GM.Coffre.Usage.IsSwitch",
+         "Commands.GM.Coffre.Usage.WrongOrderResetFamily",
+         "Commands.GM.Coffre.Usage.ActivatedDuration",
+         "Commands.GM.Coffre.Usage.ActivatedBySwitchOn",
+         "Commands.GM.Coffre.Usage.ActivatedBySwitchOff",
+         "Commands.GM.Coffre.Usage.ResetBySwitchOn",
+         "Commands.GM.Coffre.Usage.ResetBySwitchOff",
+         "Commands.GM.Coffre.Usage.SwitchOnSound",
+         "Commands.GM.Coffre.Usage.WrongFamilyOrderSound",
+         "Commands.GM.Coffre.Usage.ActivatedFamilySound",
+         "Commands.GM.Coffre.Usage.DeactivatedFamilySound")]
+    public class CoffreCommandHandler : AbstractCommandHandler, ICommandHandler
     {
         public void OnCommand(GameClient client, string[] args)
         {
@@ -57,15 +130,14 @@ namespace DOL.GS.Scripts
                 case "create":
                     coffre = new GameCoffre
                     {
-                        Name = "Chest",
+                        Name = "Coffre",
                         Model = 1596,
                         Position = player.Position,
                         Heading = player.Heading,
                         CurrentRegionID = player.CurrentRegionID,
-                        ItemInterval = 60,
+                        RespawnInterval = 60 * 60,
                         ItemChance = 100
                     };
-                    coffre.InitTimer();
                     coffre.LoadedFromScript = false;
                     coffre.AddToWorld();
                     coffre.SaveIntoDatabase();
@@ -88,7 +160,7 @@ namespace DOL.GS.Scripts
                         DisplaySyntax(client);
                         break;
                     }
-                    ChatUtil.SendSystemMessage(client, "The chest \"" + coffre.Name + "\" now has the model " + coffre.Model);
+                    ChatUtil.SendSystemMessage(client, "Le coffre \"" + coffre.Name + "\" a maintenant le model " + coffre.Model);
                     break;
                 #endregion
 
@@ -99,7 +171,7 @@ namespace DOL.GS.Scripts
                     {
                         coffre.CoffreOpeningInterval = min;
                         coffre.SaveIntoDatabase();
-                        ChatUtil.SendSystemMessage(client, "The chest \"" + coffre.Name + "\" has now an opening interval of " + min + " minutes");
+                        ChatUtil.SendSystemMessage(client, "Le coffre \"" + coffre.Name + "\" a maintenant l'interval d'ouverture de " + min + " minutes");
                     }
                     else
                     {
@@ -115,7 +187,7 @@ namespace DOL.GS.Scripts
                     {
                         coffre.IsLargeCoffre = isLongDitance;
                         coffre.SaveIntoDatabase();
-                        ChatUtil.SendSystemMessage(client, "LongDistance value of the chest \"" + coffre.Name + " is now: " + isLongDitance);
+                        ChatUtil.SendSystemMessage(client, "La valeur LongDistance du coffre \"" + coffre.Name + " est maintenant de: " + isLongDitance);
                     }
                     else
                     {
@@ -134,8 +206,7 @@ namespace DOL.GS.Scripts
                     try
                     {
                         coffre.ItemChance = int.Parse(args[2]);
-                        coffre.ItemInterval = int.Parse(args[3]);
-                        coffre.InitTimer();
+                        coffre.RespawnInterval = int.Parse(args[3]) * 60;
                         coffre.SaveIntoDatabase();
                     }
                     catch
@@ -143,7 +214,7 @@ namespace DOL.GS.Scripts
                         DisplaySyntax(client);
                         break;
                     }
-                    ChatUtil.SendSystemMessage(client, "The chest \"" + coffre.Name + "\" now has " + coffre.ItemChance + " chances to create an item every " + coffre.ItemInterval + " minutes.");
+                    ChatUtil.SendSystemMessage(client, "Le coffre \"" + coffre.Name + "\" a maintenant " + coffre.ItemChance + " chances de faire apparaitre un item toutes les " + coffre.RespawnInterval / 60 + " minutes.");
                     break;
 
                 case "add":
@@ -156,7 +227,7 @@ namespace DOL.GS.Scripts
                     {
                         if (!coffre.ModifyItemList(args[2], int.Parse(args[3])))
                         {
-                            ChatUtil.SendSystemMessage(client, "The item \"" + args[2] + "\" does not exist!");
+                            ChatUtil.SendSystemMessage(client, "L'item \"" + args[2] + "\" n'existe pas !");
                             break;
                         }
                         coffre.SaveIntoDatabase();
@@ -166,7 +237,7 @@ namespace DOL.GS.Scripts
                         DisplaySyntax(client);
                         break;
                     }
-                    ChatUtil.SendSystemMessage(client, "The chest \"" + coffre.Name + "\" can generate an item \"" + args[2] + "\" with a chance rate of " + args[3]);
+                    ChatUtil.SendSystemMessage(client, "Le coffre \"" + coffre.Name + "\" peut faire apparaitre un item \"" + args[2] + "\" avec un taux de chance de " + args[3]);
                     break;
                 case "remove":
                     if (coffre == null || args.Length < 3)
@@ -178,7 +249,7 @@ namespace DOL.GS.Scripts
                     {
                         if (!coffre.DeleteItemFromItemList(args[2]))
                         {
-                            ChatUtil.SendSystemMessage(client, "The item \"" + args[2] + "\" does not exist!");
+                            ChatUtil.SendSystemMessage(client, "L'item \"" + args[2] + "\" n'existe pas !");
                             break;
                         }
                         coffre.SaveIntoDatabase();
@@ -188,7 +259,7 @@ namespace DOL.GS.Scripts
                         DisplaySyntax(client);
                         break;
                     }
-                    ChatUtil.SendSystemMessage(client, "The chest \"" + coffre.Name + "\" cannot anymore generate the item \"" + args[2] + "\"");
+                    ChatUtil.SendSystemMessage(client, "Le coffre \"" + coffre.Name + "\" ne peut plus faire apparaitre l'item \"" + args[2] + "\"");
                     break;
                 #endregion
 
@@ -213,7 +284,7 @@ namespace DOL.GS.Scripts
                     coffre.Position = player.Position;
                     coffre.Heading = player.Heading;
                     coffre.SaveIntoDatabase();
-                    ChatUtil.SendSystemMessage(client, "The selected chest has been moved to your position.");
+                    ChatUtil.SendSystemMessage(client, "Le coffre selectionné a été déplacé à votre position.");
                     break;
 
                 case "delete":
@@ -224,7 +295,7 @@ namespace DOL.GS.Scripts
                     }
                     coffre.Delete();
                     coffre.DeleteFromDatabase();
-                    ChatUtil.SendSystemMessage(client, "The selected chest has been deleted.");
+                    ChatUtil.SendSystemMessage(client, "Le coffre selectionné a été supprimé.");
                     break;
                 #endregion
 
@@ -237,12 +308,12 @@ namespace DOL.GS.Scripts
                     }
                     GameCoffre oldCoffre = coffre;
                     coffre = new GameCoffre();
-                    coffre.Name = "Chest";
+                    coffre.Name = "Coffre";
                     coffre.Model = 1596;
                     coffre.Position = oldCoffre.Position;
                     coffre.Heading = oldCoffre.Heading;
                     coffre.CurrentRegionID = oldCoffre.CurrentRegionID;
-                    coffre.ItemInterval = 60;
+                    coffre.RespawnInterval = 60 * 60;
                     coffre.ItemChance = 100;
                     coffre.LastOpen = DateTime.MinValue;
                     oldCoffre.RemoveFromWorld();
@@ -250,7 +321,7 @@ namespace DOL.GS.Scripts
                     coffre.AddToWorld();
 
                     coffre.SaveIntoDatabase();
-                    ChatUtil.SendSystemMessage(client, "The selected chest has been re-initialized.");
+                    ChatUtil.SendSystemMessage(client, "Le coffre selectionné a été remit à zéro.");
                     break;
 
                 case "info":
@@ -297,7 +368,7 @@ namespace DOL.GS.Scripts
                     coffre2.Heading = player.Heading;
                     coffre2.CurrentRegion = player.CurrentRegion;
                     coffre2.Model = coffre.Model;
-                    coffre2.ItemInterval = coffre.ItemInterval;
+                    coffre2.RespawnInterval = coffre.RespawnInterval;
                     coffre2.TpEffect = coffre.TpEffect;
                     coffre2.TpIsRenaissance = coffre.TpIsRenaissance;
                     coffre2.TpLevelRequirement = coffre.TpLevelRequirement;
@@ -312,20 +383,43 @@ namespace DOL.GS.Scripts
                     coffre2.IsTeleporter = coffre.IsTeleporter;
                     coffre2.CoffreOpeningInterval = coffre.CoffreOpeningInterval;
                     coffre2.IsLargeCoffre = coffre.IsLargeCoffre;
+                    coffre2.ItemChance = coffre.ItemChance;
                     coffre2.KeyItem = coffre.KeyItem;
-                    coffre2.InitTimer();
+                    coffre2.TPID = coffre.TPID;
+                    coffre2.ShouldRespawnToTPID = coffre.ShouldRespawnToTPID;
+                    coffre2.CurrentStep = coffre.CurrentStep;
+                    coffre2.PickOnTouch = coffre.PickOnTouch;
+                    coffre2.SecondaryModel = coffre.SecondaryModel;
+                    coffre2.IsOpenableOnce = coffre.IsOpenableOnce;
+                    coffre2.IsTerritoryLinked = coffre.IsTerritoryLinked;
+                    coffre2.KeyLoseDur = coffre.KeyLoseDur;
+                    coffre2.SwitchFamily = coffre.SwitchFamily;
+                    coffre2.SwitchOrder = coffre.SwitchOrder;
+                    coffre2.IsSwitch = coffre.IsSwitch;
+                    coffre2.WrongOrderResetFamily = coffre.WrongOrderResetFamily;
+                    coffre2.ActivatedDuration = coffre.ActivatedDuration;
+                    coffre2.ActivatedBySwitchOn = coffre.ActivatedBySwitchOn;
+                    coffre2.ActivatedBySwitchOff = coffre.ActivatedBySwitchOff;
+                    coffre2.ResetBySwitchOn = coffre.ResetBySwitchOn;
+                    coffre2.ResetBySwitchOff = coffre.ResetBySwitchOff;
+                    coffre2.SwitchOnSound = coffre.SwitchOnSound;
+                    coffre2.WrongFamilyOrderSound = coffre.WrongFamilyOrderSound;
+                    coffre2.ActivatedFamilySound = coffre.ActivatedFamilySound;
+                    coffre2.DeactivatedFamilySound = coffre.DeactivatedFamilySound;
 
                     coffre2.ItemChance = coffre.ItemChance;
                     if (args[1].ToLower() == "randomcopy")
                     {
+                        var minutes = coffre2.RespawnInterval / 60;
                         if (Util.Chance(50))
-                            coffre2.ItemInterval += (int)(coffre2.ItemInterval * Util.RandomDouble() / 10);
-                        else if (coffre2.ItemInterval > 1)
+                            minutes += (int)(minutes * Util.RandomDouble() / 10);
+                        else if (minutes > 1)
                         {
-                            coffre2.ItemInterval -= (int)(coffre2.ItemInterval * Util.RandomDouble() / 10);
-                            if (coffre2.ItemInterval < 1)
-                                coffre2.ItemInterval = 1;
+                            minutes -= (int)(minutes * Util.RandomDouble() / 10);
+                            if (minutes < 1)
+                                minutes = 1;
                         }
+                        coffre2.RespawnInterval = minutes * 60;
                         if (Util.Chance(50) && coffre2.ItemChance < 100)
                         {
                             coffre2.ItemChance += (int)(coffre2.ItemChance * Util.RandomDouble() / 10);
@@ -341,7 +435,7 @@ namespace DOL.GS.Scripts
                     }
                     coffre2.AddToWorld();
                     coffre2.SaveIntoDatabase();
-                    ChatUtil.SendSystemMessage(client, "You created a chest (OID:" + coffre2.ObjectID + ")");
+                    ChatUtil.SendSystemMessage(client, "Vous avez créé un coffre (OID:" + coffre2.ObjectID + ")");
                     break;
                 #endregion
 
@@ -358,7 +452,7 @@ namespace DOL.GS.Scripts
                     {
                         if (GameServer.Database.FindObjectByKey<ItemTemplate>(args[2]) == null)
                         {
-                            ChatUtil.SendSystemMessage(client, "The key having id_nb \"" + args[2] + "\" does not exist.");
+                            ChatUtil.SendSystemMessage(client, "La clef ayant l'id_nb \"" + args[2] + "\" n'existe pas.");
                             break;
                         }
                         coffre.KeyItem = args[2];
@@ -366,9 +460,9 @@ namespace DOL.GS.Scripts
                     coffre.SaveIntoDatabase();
 
                     if (coffre.KeyItem == "")
-                        ChatUtil.SendSystemMessage(client, "The chest \"" + coffre.Name + "\" doesn't need a key anymore to be opened.");
+                        ChatUtil.SendSystemMessage(client, "Le coffre \"" + coffre.Name + "\" n'a plus besoin de clef pour être ouvert.");
                     else
-                        ChatUtil.SendSystemMessage(client, "The chest \"" + coffre.Name + "\" needs a key having id_nb \"" + coffre.KeyItem + "\" in order to be opened.");
+                        ChatUtil.SendSystemMessage(client, "Le coffre \"" + coffre.Name + "\" a besoin de la clef ayant l'id_nb \"" + coffre.KeyItem + "\" pour être ouvert.");
                     break;
 
                 case "difficult":
@@ -393,9 +487,9 @@ namespace DOL.GS.Scripts
                         break;
                     }
                     if (coffre.LockDifficult > 0)
-                        ChatUtil.SendSystemMessage(client, "The chest \"" + coffre.Name + "\" has now a difficulty rate do be hooked of " + coffre.LockDifficult + "%.");
+                        ChatUtil.SendSystemMessage(client, "Le coffre \"" + coffre.Name + "\" a maintenant une difficulté pour être crocheter de " + coffre.LockDifficult + "%.");
                     else
-                        ChatUtil.SendSystemMessage(client, "The chest \"" + coffre.Name + "\" cannot be hooked anymore.");
+                        ChatUtil.SendSystemMessage(client, "Le coffre \"" + coffre.Name + "\" ne peut plus être crocheté.");
                     break;
 
                 case "traprate":
@@ -414,7 +508,7 @@ namespace DOL.GS.Scripts
                         DisplaySyntax(client);
                         break;
                     }
-                    ChatUtil.SendSystemMessage(client, "The chest \"" + coffre.Name + "\" now has a traprate of " + coffre.TrapRate);
+                    ChatUtil.SendSystemMessage(client, "Le coffre \"" + coffre.Name + "\" a maintenant le traprate de " + coffre.TrapRate);
                     break;
 
                 case "npctemplate":
@@ -433,7 +527,7 @@ namespace DOL.GS.Scripts
                         DisplaySyntax(client);
                         break;
                     }
-                    ChatUtil.SendSystemMessage(client, "The chest \"" + coffre.Name + "\" now has NPCtemplate of " + coffre.NpctemplateId);
+                    ChatUtil.SendSystemMessage(client, "Le coffre \"" + coffre.Name + "\" a maintenant le npctemplate de " + coffre.NpctemplateId);
                     break;
 
                 case "isteleporter":
@@ -452,7 +546,7 @@ namespace DOL.GS.Scripts
                         DisplaySyntax(client);
                         break;
                     }
-                    ChatUtil.SendSystemMessage(client, "The IsTeleporter option of the chest \"" + coffre.Name + "\" is now: " + coffre.IsTeleporter);
+                    ChatUtil.SendSystemMessage(client, "Le statut IsTeleporter du coffre \"" + coffre.Name + "\" est maitenant: " + coffre.IsTeleporter);
                     break;
 
                 case "pickableanim":
@@ -471,7 +565,7 @@ namespace DOL.GS.Scripts
                         DisplaySyntax(client);
                         break;
                     }
-                    ChatUtil.SendSystemMessage(client, "The HasPickbleAnim option of the chest \"" + coffre.Name + "\" is now: " + coffre.HasPickableAnim);
+                    ChatUtil.SendSystemMessage(client, "Le statut HasPickbleAnim du coffre \"" + coffre.Name + "\" est maitenant: " + coffre.HasPickableAnim);
                     break;
 
                 case "isopeningrenaissance":
@@ -490,7 +584,7 @@ namespace DOL.GS.Scripts
                         DisplaySyntax(client);
                         break;
                     }
-                    ChatUtil.SendSystemMessage(client, "The IsOpeningRenaissanceType option of the chest \"" + coffre.Name + "\" is now: " + coffre.IsOpeningRenaissanceType);
+                    ChatUtil.SendSystemMessage(client, "Le statut IsOpeningRenaissanceType du coffre \"" + coffre.Name + "\" est maitenant: " + coffre.IsOpeningRenaissanceType);
                     break;
 
                 case "respawn":
@@ -516,12 +610,11 @@ namespace DOL.GS.Scripts
 
                         if (selectedCoffre == null)
                         {
-                            ChatUtil.SendSystemMessage(client, "The chest \"" + name + "\" has not been found or other chests with same name exist already.");
+                            ChatUtil.SendSystemMessage(client, "Le coffre \"" + name + "\" n'a pas été trouvé ou plusieurs coffres avec le meme nom existent.");
                             break;
                         }
                         else
                         {
-                            selectedCoffre.RespawnTimer.Stop();
                             selectedCoffre.RespawnCoffre();
                         }
                     }
@@ -530,7 +623,7 @@ namespace DOL.GS.Scripts
                         DisplaySyntax(client);
                         break;
                     }
-                    ChatUtil.SendSystemMessage(client, "The chest \"" + selectedCoffre.Name + "\" appears in front of you.");
+                    ChatUtil.SendSystemMessage(client, "Le coffre \"" + selectedCoffre.Name + "\" apparait devant vous.");
                     break;
 
                 case "teleporter":
@@ -560,11 +653,11 @@ namespace DOL.GS.Scripts
                     coffre.TpRegion = RegionID;
                     coffre.TPHeading = heading;
                     coffre.SaveIntoDatabase();
-                    player.Out.SendMessage("The chest \"" + coffre + "\" has got a new teleportation destination", PacketHandler.eChatType.CT_System, PacketHandler.eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage("Le Coffre \"" + coffre + "\" a recu une nouvelle destination de téléportation", PacketHandler.eChatType.CT_System, PacketHandler.eChatLoc.CL_SystemWindow);
 
                     if (!coffre.IsTeleporter)
                     {
-                        player.Out.SendMessage("The IsTeleporter option of the chest \"" + coffre + "\" is not activated, plase change it to activate chest's teleportation option.", PacketHandler.eChatType.CT_System, PacketHandler.eChatLoc.CL_SystemWindow);
+                        player.Out.SendMessage("Le statut IsTeleporter du Coffre \"" + coffre + "\" n'est pas activé, changez le pour activer la téléportation.", PacketHandler.eChatType.CT_System, PacketHandler.eChatLoc.CL_SystemWindow);
                     }
                     break;
 
@@ -590,7 +683,7 @@ namespace DOL.GS.Scripts
                         DisplaySyntax(client);
                         break;
                     }
-                    ChatUtil.SendSystemMessage(client, "The minimum level to use the teleport option of the chest \"" + coffre.Name + "\" is now: " + coffre.TpLevelRequirement);
+                    ChatUtil.SendSystemMessage(client, "Le Niveau minimum pour utiliser le téléporteur du coffre \"" + coffre.Name + "\" est maitenant: " + coffre.TpLevelRequirement);
                     break;
 
                 case "punishspellid":
@@ -610,7 +703,7 @@ namespace DOL.GS.Scripts
                         DisplaySyntax(client);
                         break;
                     }
-                    ChatUtil.SendSystemMessage(client, "The PunishSpellID of the chest \"" + coffre.Name + "\" is now: " + coffre.PunishSpellId);
+                    ChatUtil.SendSystemMessage(client, "Le PunishSpellID du coffre \"" + coffre.Name + "\" est maitenant: " + coffre.PunishSpellId);
                     break;
 
                 case "tpeffect":
@@ -629,7 +722,7 @@ namespace DOL.GS.Scripts
                         DisplaySyntax(client);
                         break;
                     }
-                    ChatUtil.SendSystemMessage(client, "The visual effect used by the chest \"" + coffre.Name + "\" teleporter is now linked to SpellID: " + coffre.TpEffect);
+                    ChatUtil.SendSystemMessage(client, "L'effet utilisé pour le téléporteur du coffre \"" + coffre.Name + "\" est maitenant lié au SpellID: " + coffre.TpEffect);
                     break;
 
                 case "tpisrenaissance":
@@ -648,7 +741,406 @@ namespace DOL.GS.Scripts
                         DisplaySyntax(client);
                         break;
                     }
-                    ChatUtil.SendSystemMessage(client, "The IsRenaissance option of the chest \"" + coffre.Name + "\" is now: " + coffre.TpIsRenaissance);
+                    ChatUtil.SendSystemMessage(client, "Le statut IsRenaissance du coffre \"" + coffre.Name + "\" est maitenant: " + coffre.TpIsRenaissance);
+                    break;
+
+                case "pickontouch":
+                    if (coffre == null || args.Length != 2)
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    try
+                    {
+                        coffre.PickOnTouch = !coffre.PickOnTouch;
+                        coffre.SaveIntoDatabase();
+                    }
+                    catch
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    ChatUtil.SendSystemMessage(client, "Le statut PickOnTouch du coffre \"" + coffre.Name + "\" est maintenant: " + coffre.PickOnTouch);
+                    break;
+
+                case "secondarymodel":
+                    if (coffre == null || args.Length < 4)
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    try
+                    {
+                        coffre.SecondaryModel = int.Parse(args[2] + args[3]);
+                        coffre.SaveIntoDatabase();
+                    }
+                    catch
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    ChatUtil.SendSystemMessage(client, "Le coffre \"" + coffre.Name + "\" a maintenant le modèle secondaire: " + coffre.SecondaryModel);
+                    break;
+
+                case "isopenableonce":
+                    if (coffre == null || args.Length != 2)
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    try
+                    {
+                        coffre.IsOpenableOnce = !coffre.IsOpenableOnce;
+                        coffre.SaveIntoDatabase();
+                    }
+                    catch
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    ChatUtil.SendSystemMessage(client, "Le statut IsOpenableOnce du coffre \"" + coffre.Name + "\" est maintenant: " + coffre.IsOpenableOnce);
+                    break;
+
+                case "isterritorylinked":
+                    if (coffre == null || args.Length != 2)
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    try
+                    {
+                        coffre.IsTerritoryLinked = !coffre.IsTerritoryLinked;
+                        coffre.SaveIntoDatabase();
+                    }
+                    catch
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    ChatUtil.SendSystemMessage(client, "Le statut IsTerritoryLinked du coffre \"" + coffre.Name + "\" est maintenant: " + coffre.IsTerritoryLinked);
+                    break;
+
+                case "keylosedur":
+                    if (coffre == null || args.Length < 3)
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    try
+                    {
+                        coffre.KeyLoseDur = int.Parse(args[2]);
+                        coffre.SaveIntoDatabase();
+                    }
+                    catch
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    ChatUtil.SendSystemMessage(client, "La durabilité de la clé du coffre \"" + coffre.Name + "\" est maintenant: " + coffre.KeyLoseDur);
+                    break;
+
+                case "tpid":
+                    if (coffre == null || args.Length < 4)
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    try
+                    {
+                        coffre.TPID = int.Parse(args[2] + args[3]);
+                        coffre.SaveIntoDatabase();
+                    }
+                    catch
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    ChatUtil.SendSystemMessage(client, "Le TPID du coffre \"" + coffre.Name + "\" est maintenant: " + coffre.TPID);
+                    break;
+
+                case "shouldrespawntotpid":
+                    if (coffre == null || args.Length != 2)
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    try
+                    {
+                        coffre.ShouldRespawnToTPID = !coffre.ShouldRespawnToTPID;
+                        coffre.SaveIntoDatabase();
+                    }
+                    catch
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    ChatUtil.SendSystemMessage(client, "Le statut ShouldRespawnToTPID du coffre \"" + coffre.Name + "\" est maintenant: " + coffre.ShouldRespawnToTPID);
+                    break;
+
+                case "currentstep":
+                    if (coffre == null || args.Length < 3)
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    try
+                    {
+                        coffre.CurrentStep = int.Parse(args[2]);
+                        coffre.SaveIntoDatabase();
+                    }
+                    catch
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    ChatUtil.SendSystemMessage(client, "Le CurrentStep du coffre \"" + coffre.Name + "\" est maintenant: " + coffre.CurrentStep);
+                    break;
+
+                case "switchfamily":
+                    if (coffre == null || args.Length < 4)
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    try
+                    {
+                        coffre.SwitchFamily = args[2];
+                        coffre.SaveIntoDatabase();
+                    }
+                    catch
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    ChatUtil.SendSystemMessage(client, "La famille de switch du coffre \"" + coffre.Name + "\" est maintenant: " + coffre.SwitchFamily);
+                    break;
+
+                case "switchorder":
+                    if (coffre == null || args.Length < 3)
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    try
+                    {
+                        coffre.SwitchOrder = int.Parse(args[2]);
+                        coffre.SaveIntoDatabase();
+                    }
+                    catch
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    ChatUtil.SendSystemMessage(client, "L'ordre de switch du coffre \"" + coffre.Name + "\" est maintenant: " + coffre.SwitchOrder);
+                    break;
+
+                case "isswitch":
+                    if (coffre == null || args.Length != 2)
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    try
+                    {
+                        coffre.IsSwitch = !coffre.IsSwitch;
+                        coffre.SaveIntoDatabase();
+                    }
+                    catch
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    ChatUtil.SendSystemMessage(client, "Le statut IsSwitch du coffre \"" + coffre.Name + "\" est maintenant: " + coffre.IsSwitch);
+                    break;
+
+                case "wrongorderresetfamily":
+                    if (coffre == null || args.Length != 2)
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    try
+                    {
+                        coffre.WrongOrderResetFamily = !coffre.WrongOrderResetFamily;
+                        coffre.SaveIntoDatabase();
+                    }
+                    catch
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    ChatUtil.SendSystemMessage(client, "Le statut WrongOrderResetFamily du coffre \"" + coffre.Name + "\" est maintenant: " + coffre.WrongOrderResetFamily);
+                    break;
+
+                case "activatedduration":
+                    if (coffre == null || args.Length < 4)
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    try
+                    {
+                        coffre.ActivatedDuration = int.Parse(args[2] + args[3]);
+                        coffre.SaveIntoDatabase();
+                    }
+                    catch
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    ChatUtil.SendSystemMessage(client, "La durée d'activation du coffre \"" + coffre.Name + "\" est maintenant: " + coffre.ActivatedDuration + " secondes");
+                    break;
+
+                case "activatedbyswitchon":
+                    if (coffre == null || args.Length < 4)
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    try
+                    {
+                        coffre.ActivatedBySwitchOn = args[2];
+                        coffre.SaveIntoDatabase();
+                    }
+                    catch
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    ChatUtil.SendSystemMessage(client, "L'event activé par le switch du coffre \"" + coffre.Name + "\" est maintenant: " + coffre.ActivatedBySwitchOn);
+                    break;
+
+                case "activatedbyswitchoff":
+                    if (coffre == null || args.Length < 4)
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    try
+                    {
+                        coffre.ActivatedBySwitchOff = args[2];
+                        coffre.SaveIntoDatabase();
+                    }
+                    catch
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    ChatUtil.SendSystemMessage(client, "L'event désactivé par le switch du coffre \"" + coffre.Name + "\" est maintenant: " + coffre.ActivatedBySwitchOff);
+                    break;
+
+                case "resetbyswitchon":
+                    if (coffre == null || args.Length < 4)
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    try
+                    {
+                        coffre.ResetBySwitchOn = args[2];
+                        coffre.SaveIntoDatabase();
+                    }
+                    catch
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    ChatUtil.SendSystemMessage(client, "L'event reset par le switch du coffre \"" + coffre.Name + "\" est maintenant: " + coffre.ResetBySwitchOn);
+                    break;
+
+                case "resetbyswitchoff":
+                    if (coffre == null || args.Length < 4)
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    try
+                    {
+                        coffre.ResetBySwitchOff = args[2];
+                        coffre.SaveIntoDatabase();
+                    }
+                    catch
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    ChatUtil.SendSystemMessage(client, "L'event reset par le switch du coffre \"" + coffre.Name + "\" est maintenant: " + coffre.ResetBySwitchOff);
+                    break;
+
+                case "switchonsound":
+                    if (coffre == null || args.Length < 4)
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    try
+                    {
+                        coffre.SwitchOnSound = int.Parse(args[2] + args[3]);
+                        coffre.SaveIntoDatabase();
+                    }
+                    catch
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    ChatUtil.SendSystemMessage(client, "Le son du switch ON du coffre \"" + coffre.Name + "\" est maintenant: " + coffre.SwitchOnSound);
+                    break;
+
+                case "wrongfamilyordersound":
+                    if (coffre == null || args.Length < 4)
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    try
+                    {
+                        coffre.WrongFamilyOrderSound = int.Parse(args[2] + args[3]);
+                        coffre.SaveIntoDatabase();
+                    }
+                    catch
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    ChatUtil.SendSystemMessage(client, "Le son d'ordre incorrect du switch du coffre \"" + coffre.Name + "\" est maintenant: " + coffre.WrongFamilyOrderSound);
+                    break;
+
+                case "activatedfamilysound":
+                    if (coffre == null || args.Length < 4)
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    try
+                    {
+                        coffre.ActivatedFamilySound = int.Parse(args[2] + args[3]);
+                        coffre.SaveIntoDatabase();
+                    }
+                    catch
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    ChatUtil.SendSystemMessage(client, "Le son de famille activée du switch du coffre \"" + coffre.Name + "\" est maintenant: " + coffre.ActivatedFamilySound);
+                    break;
+
+                case "deactivatedfamilysound":
+                    if (coffre == null || args.Length < 4)
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    try
+                    {
+                        coffre.DeactivatedFamilySound = int.Parse(args[2] + args[3]);
+                        coffre.SaveIntoDatabase();
+                    }
+                    catch
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+                    ChatUtil.SendSystemMessage(client, "Le son de famille désactivée du switch du coffre \"" + coffre.Name + "\" est maintenant: " + coffre.DeactivatedFamilySound);
                     break;
                     #endregion
             }
