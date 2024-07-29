@@ -715,63 +715,9 @@ namespace DOL.GS.Scripts
             InteractEnd(player);
         }
 
-        private bool InteractEnd(GamePlayer player)
+        private bool TryOpen(GamePlayer player)
         {
-            bool gotItemOrUsedTeleporter = false;
-            if (!IsTeleporter)
-            {
-                if (this.CoffreOpeningInterval == 0 || !this.LastTimeChecked.HasValue || (DateTime.Now - this.LastTimeChecked.Value) > TimeSpan.FromMinutes(this.CoffreOpeningInterval))
-                {
-                    this.LastTimeChecked = DateTime.Now;
-                    CoffreItem coffre = GetRandomItem();
-                    if (coffre.Id_nb == "" || coffre.Chance == 0)
-                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.NothingInteresting1"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                    else
-                    {
-                        ItemTemplate item = GameServer.Database.SelectObject<ItemTemplate>(DB.Column("Id_nb").IsEqualTo(GameServer.Database.Escape(coffre.Id_nb)));
-                        if (item == null)
-                        {
-                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.NothingInteresting2"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                        }
-                        else
-                        {
-                            if (!IsOpeningRenaissanceType)
-                            {
-                                gotItemOrUsedTeleporter = GetItem(player, item);
-                            }
-                            else
-                            {
-                                if (player.IsRenaissance)
-                                {
-                                    gotItemOrUsedTeleporter = GetItem(player, item);
-                                }
-                                else
-                                {
-                                    if (PunishSpellId > 0)
-                                    {
-                                        var spell = GameServer.Database.SelectObject<DBSpell>(DB.Column("SpellID").IsEqualTo(PunishSpellId));
-
-                                        if (spell != null)
-                                        {
-                                            foreach (GamePlayer pl in this.GetPlayersInRadius(5000))
-                                            {
-                                                pl.Out.SendSpellEffectAnimation(pl, pl, (ushort)PunishSpellId, 0, false, 5);
-                                            }
-                                            player.TakeDamage(this, eDamageType.Energy, (int)spell.Damage, 0);
-                                        }
-                                    }
-                                }
-                            }
-                            HandlePopMob();
-                        }
-                    }
-                }
-                else
-                {
-                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.AlreadyOpen2"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                }
-            }
-            else
+            if (IsTeleporter)
             {
                 bool failed = false;
                 if (TpLevelRequirement > 0 && player.Level < TpLevelRequirement)
@@ -787,21 +733,64 @@ namespace DOL.GS.Scripts
                 if (failed)
                 {
                     player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.Cannotteleport"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                    return false;
+                }
+                HandleTeleporter(player);
+                return true;
+            }
+            
+            if (this.CoffreOpeningInterval != 0 && this.LastTimeChecked.HasValue && (DateTime.Now - this.LastTimeChecked.Value) <= TimeSpan.FromMinutes(this.CoffreOpeningInterval))
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.AlreadyOpen2"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                return false;
+            }
+
+            if (IsOpeningRenaissanceType && !player.IsRenaissance)
+            {
+                if (PunishSpellId > 0)
+                {
+                    var spell = GameServer.Database.SelectObject<DBSpell>(DB.Column("SpellID").IsEqualTo(PunishSpellId));
+
+                    if (spell != null)
+                    {
+                        foreach (GamePlayer pl in this.GetPlayersInRadius(5000))
+                        {
+                            pl.Out.SendSpellEffectAnimation(pl, pl, (ushort)PunishSpellId, 0, false, 5);
+                        }
+                        player.TakeDamage(this, eDamageType.Energy, (int)spell.Damage, 0);
+                    }
+                }
+                HandlePopMob();
+                return false;
+            }
+            this.LastTimeChecked = DateTime.Now;
+            CoffreItem coffre = GetRandomItem();
+            if (coffre.Id_nb == "" || coffre.Chance == 0)
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.NothingInteresting1"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+            }
+            else
+            {
+                ItemTemplate item = GameServer.Database.SelectObject<ItemTemplate>(DB.Column("Id_nb").IsEqualTo(GameServer.Database.Escape(coffre.Id_nb)));
+                if (item == null)
+                {
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.NothingInteresting2"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                 }
                 else
                 {
-                    HandleTeleporter(player);
-                    gotItemOrUsedTeleporter = true;
+                    GetItem(player, item);
                 }
             }
+            HandlePopMob();
+            return true;
+        }
 
-            ShowSecondaryModel();
-
-            if (gotItemOrUsedTeleporter)
+        private bool InteractEnd(GamePlayer player)
+        {
+            if (TryOpen(player))
             {
                 m_lastInteract = DateTime.MinValue;
                 LastOpen = DateTime.Now;
-
                 if (ShouldRespawnToTPID && TPID > 0 && !IsSwitch)
                 {
                     IList<DBTPPoint> tpPoints = GameServer.Database.SelectObjects<DBTPPoint>(DB.Column("TPID").IsEqualTo(TPID));
@@ -837,10 +826,12 @@ namespace DOL.GS.Scripts
                 
                     RemoveFromWorld(respawnInterval);
                 }
-                SaveIntoDatabase();
             }
 
+            ShowSecondaryModel();
+
             m_interactPlayer = null;
+            SaveIntoDatabase();
 
             return true;
         }
