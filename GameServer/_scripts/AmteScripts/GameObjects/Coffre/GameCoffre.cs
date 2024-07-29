@@ -724,7 +724,7 @@ namespace DOL.GS.Scripts
                 {
                     this.LastTimeChecked = DateTime.Now;
                     CoffreItem coffre = GetRandomItem();
-                    if (coffre.Id_nb == "" && coffre.Chance == 0)
+                    if (coffre.Id_nb == "" || coffre.Chance == 0)
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.NothingInteresting1"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                     else
                     {
@@ -732,7 +732,6 @@ namespace DOL.GS.Scripts
                         if (item == null)
                         {
                             player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.NothingInteresting2"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                            coffre.Chance = 0;
                         }
                         else
                         {
