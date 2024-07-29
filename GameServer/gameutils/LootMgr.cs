@@ -519,7 +519,7 @@ namespace DOL.GS
                 return;
 
             LootConditions? condition = ParseLootConditions(generator, mobname, mobguild, mobfaction, mobregion, mobmodel, mobbodytype, mobrace, isRenaissance, isGoodReput, isBoss);
-            RegisterLootGenerator(generator, condition);
+            RegisterLootGenerator(generator, condition, condMustBeSetTogether);
         }
         
         public static void RegisterLootGenerator(ILootGenerator generator, LootConditions? condition, bool condMustBeSetTogether = false)
