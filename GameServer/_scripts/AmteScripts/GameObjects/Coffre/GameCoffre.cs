@@ -608,35 +608,6 @@ namespace DOL.GS.Scripts
                 return true;
             }
 
-            if (ShouldRespawnToTPID && TPID > 0 && !IsSwitch)
-            {
-                IList<DBTPPoint> tpPoints = GameServer.Database.SelectObjects<DBTPPoint>(DB.Column("TPID").IsEqualTo(TPID));
-                DBTP dbtp = GameServer.Database.SelectObjects<DBTP>(DB.Column("TPID").IsEqualTo(TPID)).FirstOrDefault();
-
-                if (tpPoints != null && tpPoints.Count > 0 && dbtp != null)
-                {
-                    TPPoint tpPoint = null;
-                    switch ((eTPPointType)dbtp.TPType)
-                    {
-                        case eTPPointType.Loop:
-                            tpPoint = GetLoopNextTPPoint(tpPoints);
-                            break;
-
-                        case eTPPointType.Random:
-                            tpPoint = GetRandomTPPoint(tpPoints);
-                            break;
-
-                        case eTPPointType.Smart:
-                            tpPoint = GetSmartNextTPPoint(tpPoints);
-                            break;
-                    }
-                    if (tpPoint != null)
-                    {
-                        base.MoveTo(tpPoint.Region, (float)tpPoint.Position.X, (float)tpPoint.Position.Y, (float)tpPoint.Position.Z, Coffre.Heading);
-                    }
-                }
-            }
-
             if (IsOpenableOnce && HasPlayerOpened(player))
             {
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.UniqueTreasureTaken"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
@@ -650,6 +621,7 @@ namespace DOL.GS.Scripts
             }
 
             if (!base.Interact(player) || !player.IsAlive) return false;
+            
             if (!this.IsWithinRadius(player, (IsLargeCoffre ? LARGE_ITEM_DIST : WorldMgr.GIVE_ITEM_DISTANCE + 60))) return false;
 
             if (IsOpenableOnce)
@@ -671,14 +643,14 @@ namespace DOL.GS.Scripts
                 if (m_interactPlayer != null && player != m_interactPlayer && (m_lastInteract.Ticks + 200000000) > DateTime.Now.Ticks)
                 {
                     player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.AlreadyOpen"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                    return true;
+                    return false;
                 }
-                if (KeyItem != "" && player.Inventory.GetFirstItemByID(KeyItem, eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack) != null)
+                InventoryItem it = player.Inventory.GetFirstItemByID(KeyItem, eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack);
+                if (KeyItem != "" && it != null)
                 {
-                    InventoryItem it = player.Inventory.GetFirstItemByID(KeyItem, eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack);
                     if (!KeyItem.StartsWith("oneuse"))
                     {
-                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.Oneuse") + player.Inventory.GetFirstItemByID(KeyItem, eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack).Name + ".", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.Oneuse") + it.Name + ".", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                         if (KeyLoseDur > 0)
                         {
                             it.Durability -= KeyLoseDur;
@@ -717,7 +689,7 @@ namespace DOL.GS.Scripts
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.LockDifficult2"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                     else
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.LockDifficult3"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                    return true;
+                    return false;
                 }
             }
 
@@ -826,11 +798,46 @@ namespace DOL.GS.Scripts
 
             ShowSecondaryModel();
 
-            if (gotItemOrUsedTeleporter && RespawnInterval != 0)
+            if (gotItemOrUsedTeleporter)
             {
                 m_lastInteract = DateTime.MinValue;
                 LastOpen = DateTime.Now;
-                RemoveFromWorld(this.EventID != null && !CanRespawnWithinEvent ? 0 : RespawnInterval);
+
+                if (ShouldRespawnToTPID && TPID > 0 && !IsSwitch)
+                {
+                    IList<DBTPPoint> tpPoints = GameServer.Database.SelectObjects<DBTPPoint>(DB.Column("TPID").IsEqualTo(TPID));
+                    DBTP dbtp = GameServer.Database.SelectObjects<DBTP>(DB.Column("TPID").IsEqualTo(TPID)).FirstOrDefault();
+
+                    if (tpPoints != null && tpPoints.Count > 0 && dbtp != null)
+                    {
+                        TPPoint tpPoint = null;
+                        switch ((eTPPointType)dbtp.TPType)
+                        {
+                            case eTPPointType.Loop:
+                                tpPoint = GetLoopNextTPPoint(tpPoints);
+                                break;
+
+                            case eTPPointType.Random:
+                                tpPoint = GetRandomTPPoint(tpPoints);
+                                break;
+
+                            case eTPPointType.Smart:
+                                tpPoint = GetSmartNextTPPoint(tpPoints);
+                                break;
+                        }
+                        if (tpPoint != null)
+                        {
+                            base.MoveTo(tpPoint.Region, (float)tpPoint.Position.X, (float)tpPoint.Position.Y, (float)tpPoint.Position.Z, Coffre.Heading);
+                        }
+                    }
+                }
+
+                if (RespawnInterval != 0)
+                {
+                    var respawnInterval = this.EventID != null && !CanRespawnWithinEvent ? 0 : RespawnInterval;
+                
+                    RemoveFromWorld(respawnInterval);
+                }
                 SaveIntoDatabase();
             }
 
