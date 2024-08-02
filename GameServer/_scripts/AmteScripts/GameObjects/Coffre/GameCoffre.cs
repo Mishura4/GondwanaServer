@@ -1337,8 +1337,11 @@ namespace DOL.GS.Scripts
                     " + Secondary Model: " + SecondaryModel,
                     " + Is Openable Once: " + IsOpenableOnce,
                     " + Is Territory Linked: " + IsTerritoryLinked,
-                    " + KeyLoseDur: " + KeyLoseDur
+                    " + KeyLoseDur: " + KeyLoseDur, 
+                    " + LootGenerators: "
                 };
+            if (LootGenerators != null)
+                text.AddRange(LootGenerators.Select(g => "   - " + g.DatabaseId));
             if (LockDifficult > 0)
                 text.Add(" + Difficulté pour crocheter le coffre: " + LockDifficult + "%");
             else

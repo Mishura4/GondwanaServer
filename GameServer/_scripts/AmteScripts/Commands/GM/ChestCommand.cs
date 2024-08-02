@@ -302,6 +302,7 @@ namespace DOL.GS.Scripts
                     coffre2.WrongFamilyOrderSound = coffre.WrongFamilyOrderSound;
                     coffre2.ActivatedFamilySound = coffre.ActivatedFamilySound;
                     coffre2.DeactivatedFamilySound = coffre.DeactivatedFamilySound;
+                    coffre2.LootGenerators = coffre.LootGenerators == null ? null : new List<ILootGenerator>(coffre.LootGenerators);
 
                     coffre2.ItemChance = coffre.ItemChance;
                     if (args[1].ToLower() == "randomcopy")
