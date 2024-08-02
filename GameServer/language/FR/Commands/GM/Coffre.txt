@@ -47,6 +47,7 @@ Commands.GM.Coffre.Usage.SwitchOnSound:			'/coffre switchonsound <soundID>' Déf
 Commands.GM.Coffre.Usage.WrongFamilyOrderSound:	'/coffre wrongfamilyordersound <soundID>' Définit le son généré si ordre incorrect dans la famille de l'interrupteur
 Commands.GM.Coffre.Usage.ActivatedFamilySound:	'/coffre activatedfamilysound <soundID>' Définit le son généré s'il y a activation de la famille de l'interrupteur
 Commands.GM.Coffre.Usage.DeactivatedFamilySound:	'/coffre deactivatedfamilysound <soundID>' Définit le son de la désactivation de la famille de l'interrupteur
+Commands.GM.Coffre.Usage.LootGenerator:			'/coffre lootgenerator <add|remove|list> <id>' Liste ou change les générateurs de butin pour ce coffre
 
 Commands.GM.Chest.Description:					Gestion des coffres
 Commands.GM.Chest.Usage.Create:					'/chest create' crée un nouveau chest (100% chance d'apparition, 1h d'intervalle entre les items)
@@ -76,3 +77,4 @@ Commands.GM.Chest.Usage.PunishSpellId:			'/chest punishSpellId <SpellId>' Défin
 Commands.GM.Chest.Usage.PickableAnim:			'/chest pickableAnim' Alterne l'état de HasPickableAnim ou Activer ou désactiver l'emote pickup
 Commands.GM.Chest.Usage.InfoInterval:			'/chest interval <minutes>' Change l'intervalle d'ouverture d'un chest en minutes
 Commands.GM.Chest.Usage.LongDistance:			'/chest longdistance <true|false>' Change la distance d'interaction du coffre. (utile pour les gros coffres)
+Commands.GM.Chest.Usage.LootGenerator:			'/chest lootgenerator <add|remove|list> <id>' Liste ou change les générateurs de butin pour ce coffre

@@ -888,7 +888,7 @@ namespace DOL.GS.Scripts
                     break;
 
                 case "activatedbyswitchon":
-                    if (coffre == null || args.Length < 4)
+                    if (coffre == null || args.Length < 3)
                     {
                         DisplaySyntax(client);
                         break;
@@ -907,7 +907,7 @@ namespace DOL.GS.Scripts
                     break;
 
                 case "activatedbyswitchoff":
-                    if (coffre == null || args.Length < 4)
+                    if (coffre == null || args.Length < 3)
                     {
                         DisplaySyntax(client);
                         break;
@@ -926,7 +926,7 @@ namespace DOL.GS.Scripts
                     break;
 
                 case "resetbyswitchon":
-                    if (coffre == null || args.Length < 4)
+                    if (coffre == null || args.Length < 3)
                     {
                         DisplaySyntax(client);
                         break;
@@ -945,7 +945,7 @@ namespace DOL.GS.Scripts
                     break;
 
                 case "resetbyswitchoff":
-                    if (coffre == null || args.Length < 4)
+                    if (coffre == null || args.Length < 3)
                     {
                         DisplaySyntax(client);
                         break;

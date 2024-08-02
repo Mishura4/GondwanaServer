@@ -47,6 +47,7 @@ Commands.GM.Coffre.Usage.SwitchOnSound:			'/coffre switchonsound <soundID>' Set 
 Commands.GM.Coffre.Usage.WrongFamilyOrderSound:	'/coffre wrongfamilyordersound <soundID>' Set the wrong family order sound
 Commands.GM.Coffre.Usage.ActivatedFamilySound:	'/coffre activatedfamilysound <soundID>' Set the activated family sound
 Commands.GM.Coffre.Usage.DeactivatedFamilySound:	'/coffre deactivatedfamilysound <soundID>' Set the deactivated family sound
+Commands.GM.Coffre.Usage.LootGenerator:			'/coffre lootgenerator <add|remove|list> <id>' List or change the loot generators used by this chest
 
 Commands.GM.Chest.Description:					Chest management:
 Commands.GM.Chest.Usage.Create:					'/chest create' Create a new chest (100% chance of item drop, 1h interval between each item)
@@ -76,3 +77,4 @@ Commands.GM.Chest.Usage.PunishSpellId:			'/chest punishSpellId <SpellId>' Define
 Commands.GM.Chest.Usage.PickableAnim:			'/chest pickableAnim' Activate/Deactivate pickup emote on the player while opening this chest
 Commands.GM.Chest.Usage.InfoInterval:			'/chest interval <minutes>' Change the opening interval of this chest in minutes (interval while the chest is considered as empty)
 Commands.GM.Chest.Usage.LongDistance:			'/chest longdistance <true|false>' Change interaction radius distance of this chest to 400 (useful for large chests and boats)
+Commands.GM.Chest.Usage.LootGenerator:			'/chest lootgenerator <add|remove|list> <id>' List or change the loot generators used by this chest
