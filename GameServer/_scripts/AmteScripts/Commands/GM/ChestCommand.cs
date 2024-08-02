@@ -660,14 +660,14 @@ namespace DOL.GS.Scripts
                     break;
 
                 case "secondarymodel":
-                    if (coffre == null || args.Length < 4)
+                    if (coffre == null || args.Length < 3)
                     {
                         DisplaySyntax(client);
                         break;
                     }
                     try
                     {
-                        coffre.SecondaryModel = int.Parse(args[2] + args[3]);
+                        coffre.SecondaryModel = int.Parse(args[2].Substring(0, 5));
                         coffre.SaveIntoDatabase();
                     }
                     catch
@@ -736,14 +736,14 @@ namespace DOL.GS.Scripts
                     break;
 
                 case "tpid":
-                    if (coffre == null || args.Length < 4)
+                    if (coffre == null || args.Length < 3)
                     {
                         DisplaySyntax(client);
                         break;
                     }
                     try
                     {
-                        coffre.TPID = int.Parse(args[2] + args[3]);
+                        coffre.TPID = int.Parse(args[2].Substring(0, 5));
                         coffre.SaveIntoDatabase();
                     }
                     catch
@@ -869,14 +869,14 @@ namespace DOL.GS.Scripts
                     break;
 
                 case "activatedduration":
-                    if (coffre == null || args.Length < 4)
+                    if (coffre == null || args.Length < 3)
                     {
                         DisplaySyntax(client);
                         break;
                     }
                     try
                     {
-                        coffre.ActivatedDuration = int.Parse(args[2] + args[3]);
+                        coffre.ActivatedDuration = int.Parse(args[2].Substring(0, 5));
                         coffre.SaveIntoDatabase();
                     }
                     catch
@@ -964,14 +964,14 @@ namespace DOL.GS.Scripts
                     break;
 
                 case "switchonsound":
-                    if (coffre == null || args.Length < 4)
+                    if (coffre == null || args.Length < 3)
                     {
                         DisplaySyntax(client);
                         break;
                     }
                     try
                     {
-                        coffre.SwitchOnSound = int.Parse(args[2] + args[3]);
+                        coffre.SwitchOnSound = int.Parse(args[2].Substring(0, 5));
                         coffre.SaveIntoDatabase();
                     }
                     catch
@@ -983,14 +983,14 @@ namespace DOL.GS.Scripts
                     break;
 
                 case "wrongfamilyordersound":
-                    if (coffre == null || args.Length < 4)
+                    if (coffre == null || args.Length < 3)
                     {
                         DisplaySyntax(client);
                         break;
                     }
                     try
                     {
-                        coffre.WrongFamilyOrderSound = int.Parse(args[2] + args[3]);
+                        coffre.WrongFamilyOrderSound = int.Parse(args[2].Substring(0, 5));
                         coffre.SaveIntoDatabase();
                     }
                     catch
@@ -1002,14 +1002,14 @@ namespace DOL.GS.Scripts
                     break;
 
                 case "activatedfamilysound":
-                    if (coffre == null || args.Length < 4)
+                    if (coffre == null || args.Length < 3)
                     {
                         DisplaySyntax(client);
                         break;
                     }
                     try
                     {
-                        coffre.ActivatedFamilySound = int.Parse(args[2] + args[3]);
+                        coffre.ActivatedFamilySound = int.Parse(args[2].Substring(0, 5));
                         coffre.SaveIntoDatabase();
                     }
                     catch
@@ -1021,14 +1021,14 @@ namespace DOL.GS.Scripts
                     break;
 
                 case "deactivatedfamilysound":
-                    if (coffre == null || args.Length < 4)
+                    if (coffre == null || args.Length < 3)
                     {
                         DisplaySyntax(client);
                         break;
                     }
                     try
                     {
-                        coffre.DeactivatedFamilySound = int.Parse(args[2] + args[3]);
+                        coffre.DeactivatedFamilySound = int.Parse(args[2].Substring(0, 5));
                         coffre.SaveIntoDatabase();
                     }
                     catch
