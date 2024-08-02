@@ -14,7 +14,7 @@ GameChest.NothingInteresting1:	Vous ne trouvez rien d'intéressant.
 GameChest.NothingInteresting2:	Vous ne trouvez rien d'intéressant. (Erreur de donnée, veuillez le signaler à un GameMaster)
 GameChest.AlreadyOpen2:		Quelqu'un est déjà passé avant vous, revenez plus tard.
 GameChest.Cannotteleport:	Cet objet ne parvient pas à vous téléporter. Vous devriez revenir plus tard.
-GameChest.GetItem:		Vous récupérez un objet!
+GameChest.GetItem:		Vous récupérez {0}!
 GameChest.GetItemBagFull:	Vous récupérez un objet mais votre sac-à-dos est plein.
 GameChest.UniqueTreasureTaken:	Vous avez déjà récupéré le Trésor de ce coffre !
 GameChest.TerritoryNotOwned:	Vous ne faites pas partie d'une guilde qui possède le territoire où se trouve ce coffre !

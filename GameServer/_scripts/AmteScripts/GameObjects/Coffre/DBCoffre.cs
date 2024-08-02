@@ -104,6 +104,7 @@ namespace DOL.Database
         private int m_wrongfamilyordersound;
         private int m_activatedfamilysound;
         private int m_deactivatedfamilysound;
+        private string m_lootGenerator;
 
         [DataElement(AllowDbNull = false)]
         public string Name
@@ -795,6 +796,20 @@ namespace DOL.Database
             {
                 Dirty = true;
                 m_deactivatedfamilysound = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false, Varchar = 255)]
+        public string LootGenerator
+        {
+            get
+            {
+                return m_lootGenerator;
+            }
+            set
+            {
+                Dirty = true;
+                m_lootGenerator = value;
             }
         }
     }

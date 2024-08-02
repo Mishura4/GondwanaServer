@@ -41,6 +41,13 @@ namespace DOL.GS
             set { m_exclusivePriority = value; }
         }
 
+        /// <inheritdoc />
+        public string DatabaseId
+        {
+            get;
+            set;
+        }
+
         public virtual void Refresh(GameNPC mob)
         {
         }
@@ -51,7 +58,7 @@ namespace DOL.GS
         /// <param name="mob"></param>
         /// <param name="killer"></param>
         /// <returns></returns>
-        public virtual LootList GenerateLoot(GameNPC mob, GameObject killer)
+        public virtual LootList GenerateLoot(GameObject mob, GameObject killer)
         {
             LootList loot = new LootList();
             return loot;

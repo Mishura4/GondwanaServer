@@ -605,6 +605,7 @@ namespace DOL.GS
         {
             get { return m_activeWeaponSlot; }
         }
+
         /// <summary>
         /// Gets a hashtable holding
         /// gameobject->float
@@ -612,6 +613,12 @@ namespace DOL.GS
         /// XP these objects get when this n
         /// </summary>
         public ConcurrentDictionary<GameObject, float> XPGainers { get; } = new();
+
+        /// <inheritdoc />
+        public override ICollection<GameObject> GetRewardCandidates()
+        {
+            return XPGainers.Keys;
+        }
 
         /// <summary>
         /// Create a pet for this living

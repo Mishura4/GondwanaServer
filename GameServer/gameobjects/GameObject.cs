@@ -34,6 +34,7 @@ using System.Threading.Tasks;
 using DOL.GS.Utils;
 
 using log4net;
+using Microsoft.VisualBasic;
 
 namespace DOL.GS
 {
@@ -1349,6 +1350,15 @@ namespace DOL.GS
         {
             get { return eGender.Neutral; }
             set { }
+        }
+
+        /// <summary>
+        /// Objects which can receive a reward from this object, for example loot
+        /// </summary>
+        /// <returns></returns>
+        public virtual ICollection<GameObject> GetRewardCandidates()
+        {
+            return Array.Empty<GameObject>();
         }
 
         #region Broadcast Utils

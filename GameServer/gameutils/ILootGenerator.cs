@@ -41,14 +41,20 @@ namespace DOL.GS
             set;
         }
 
+        string DatabaseId
+        {
+            get;
+            set;
+        }
+
         void Refresh(GameNPC mob);
 
         /// <summary>
         /// Generates a list of ItemTemplates that this mob should drop
-        /// </summary>		
+        /// </summary>
         /// <param name="mob">Mob that drops loot</param>
         /// <param name="killer"></param>
         /// <returns>List of ItemTemplates</returns>
-        LootList GenerateLoot(GameNPC mob, GameObject killer);
+        LootList GenerateLoot(GameObject mob, GameObject killer);
     }
 }

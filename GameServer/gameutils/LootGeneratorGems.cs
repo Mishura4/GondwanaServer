@@ -116,7 +116,7 @@ namespace DOL.GS
             }
         }
 
-        public override LootList GenerateLoot(GameNPC mob, GameObject killer)
+        public override LootList GenerateLoot(GameObject mob, GameObject killer)
         {
             LootList loot = base.GenerateLoot(mob, killer);
             if (mob.Level > 59)
@@ -124,7 +124,7 @@ namespace DOL.GS
                 if (Util.Chance(30))
                     return loot;
             }
-                else
+            else
             {
                 if (Util.Chance(60))
                     return loot;

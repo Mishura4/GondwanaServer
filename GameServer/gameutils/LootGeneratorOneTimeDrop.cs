@@ -159,7 +159,7 @@ namespace DOL.GS
         }
 
 
-        public override LootList GenerateLoot(GameNPC mob, GameObject killer)
+        public override LootList GenerateLoot(GameObject mob, GameObject killer)
         {
             LootList loot = base.GenerateLoot(mob, killer);
             List<LootOTD> lootOTDs = null;
@@ -171,64 +171,53 @@ namespace DOL.GS
                     lootOTDs = m_mobOTDList[mob.Name.ToLower()];
                 }
 
-                if (lootOTDs != null)
+                if (lootOTDs == null)
                 {
-                    foreach (GameObject gainer in mob.XPGainers.Keys)
+                    return loot;
+                }
+                
+                foreach (GameObject gainer in mob.GetRewardCandidates())
+                {
+                    if (gainer is not GamePlayer player)
                     {
-                        GamePlayer player = null;
+                        player = gainer is GameNPC { Brain: IControlledBrain brain } ? brain.GetPlayerOwner() : null;
+                    }
 
-                        if (gainer is GamePlayer)
+                    if (player == null)
+                        continue;
+
+                    foreach (LootOTD drop in lootOTDs)
+                    {
+                        if (drop.MinLevel > player.Level)
+                            continue;
+                        
+                        var hasDrop = DOLDB<CharacterXOneTimeDrop>.SelectObject(DB.Column(nameof(CharacterXOneTimeDrop.CharacterID)).IsEqualTo(player.InternalID).And(DB.Column(nameof(CharacterXOneTimeDrop.ItemTemplateID)).IsEqualTo(drop.ItemTemplateID)));
+                        if (hasDrop != null)
+                            continue;
+                        
+                        ItemTemplate item = GameServer.Database.FindObjectByKey<ItemTemplate>(drop.ItemTemplateID);
+                        if (item == null)
                         {
-                            player = gainer as GamePlayer;
+                            log.ErrorFormat("Error trying to drop ItemTemplate {0} from {1}.  Item not found.", drop.ItemTemplateID, drop.MobName);
+                            continue;
                         }
-                        else if (gainer is GameNPC)
+                        
+                        if (player.Inventory.AddItem(eInventorySlot.FirstEmptyBackpack, GameInventoryItem.Create(item)))
                         {
-                            IControlledBrain brain = ((GameNPC)gainer).Brain as IControlledBrain;
-                            if (brain != null)
-                            {
-                                player = brain.GetPlayerOwner();
-                            }
+                            CharacterXOneTimeDrop charXDrop = new CharacterXOneTimeDrop();
+                            charXDrop.CharacterID = player.InternalID;
+                            charXDrop.ItemTemplateID = drop.ItemTemplateID;
+                            GameServer.Database.AddObject(charXDrop);
+
+                            player.Out.SendMessage(string.Format("You receive {0} from {1}!", item.GetName(1, false), mob.GetName(1, false)), eChatType.CT_Loot, eChatLoc.CL_SystemWindow);
+                            InventoryLogging.LogInventoryAction(mob, player, eInventoryActionType.Loot, item);
                         }
-
-                        if (player != null)
+                        else
                         {
-                            foreach (LootOTD drop in lootOTDs)
-                            {
-                                if (drop.MinLevel <= player.Level)
-                                {
-                                    var hasDrop = DOLDB<CharacterXOneTimeDrop>.SelectObject(DB.Column(nameof(CharacterXOneTimeDrop.CharacterID)).IsEqualTo(player.InternalID).And(DB.Column(nameof(CharacterXOneTimeDrop.ItemTemplateID)).IsEqualTo(drop.ItemTemplateID)));
-
-                                    if (hasDrop == null)
-                                    {
-                                        ItemTemplate item = GameServer.Database.FindObjectByKey<ItemTemplate>(drop.ItemTemplateID);
-
-                                        if (item != null)
-                                        {
-                                            if (player.Inventory.AddItem(eInventorySlot.FirstEmptyBackpack, GameInventoryItem.Create(item)))
-                                            {
-                                                CharacterXOneTimeDrop charXDrop = new CharacterXOneTimeDrop();
-                                                charXDrop.CharacterID = player.InternalID;
-                                                charXDrop.ItemTemplateID = drop.ItemTemplateID;
-                                                GameServer.Database.AddObject(charXDrop);
-
-                                                player.Out.SendMessage(string.Format("You receive {0} from {1}!", item.GetName(1, false), mob.GetName(1, false)), eChatType.CT_Loot, eChatLoc.CL_SystemWindow);
-                                                InventoryLogging.LogInventoryAction(mob, player, eInventoryActionType.Loot, item);
-                                            }
-                                            else
-                                            {
-                                                // do not drop, player will have to try again
-                                                player.Out.SendMessage("Your inventory is full and a one time drop cannot be added!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                                                log.DebugFormat("OTD Failed, Inventory full: {0} from mob {1} for player {2}.", drop.ItemTemplateID, drop.MobName, player.Name);
-                                                break;
-                                            }
-                                        }
-                                        else
-                                        {
-                                            log.ErrorFormat("Error trying to drop ItemTemplate {0} from {1}.  Item not found.", drop.ItemTemplateID, drop.MobName);
-                                        }
-                                    }
-                                }
-                            }
+                            // do not drop, player will have to try again
+                            player.Out.SendMessage("Your inventory is full and a one time drop cannot be added!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                            log.DebugFormat("OTD Failed, Inventory full: {0} from mob {1} for player {2}.", drop.ItemTemplateID, drop.MobName, player.Name);
+                            break;
                         }
                     }
                 }

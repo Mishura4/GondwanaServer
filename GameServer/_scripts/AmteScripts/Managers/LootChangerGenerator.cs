@@ -184,11 +184,11 @@ namespace DOL.GS
             return 1;
         }
 
-        public override LootList GenerateLoot(GameNPC mob, GameObject killer)
+        public override LootList GenerateLoot(GameObject mob, GameObject killer)
         {
             LootList loots = base.GenerateLoot(mob, killer);
-            if (killer is GameNPC && ((GameNPC)killer).Brain is IControlledBrain)
-                killer = ((IControlledBrain)((GameNPC)killer).Brain).Owner;
+            if (killer is GameNPC { Brain: IControlledBrain brain })
+                killer = brain.Owner;
             if (!m_MobXDB.ContainsKey(mob.Name) || !(killer is GamePlayer))
                 return loots;
             var pl = killer as GamePlayer;

@@ -198,6 +198,7 @@ namespace DOL.GS
                             continue;
                         }
                         generator = (ILootGenerator)Activator.CreateInstance(generatorType);
+                        generator.DatabaseId = dbGenerator.ObjectId;
 
                         PutGeneratorInCache(dbGenerator, generator);
                     }
@@ -240,7 +241,7 @@ namespace DOL.GS
         /// </summary>
         /// <param name="dbGenerator"></param>
         /// <returns></returns>
-        private static ILootGenerator GetGeneratorInCache(LootGenerator dbGenerator)
+        public static ILootGenerator GetGeneratorInCache(LootGenerator dbGenerator)
         {
             if (m_ClassGenerators[dbGenerator.LootGeneratorClass + dbGenerator.ExclusivePriority] != null)
             {

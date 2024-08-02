@@ -19,6 +19,11 @@ namespace DOL.GS.Scripts
 {
     public class GameCoffre : GameStaticItem
     {
+        /// <summary>
+        /// Defines a logger for this class.
+        /// </summary>
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         public const string CROCHET = "Crochet"; //Id_nb des crochets
         public const int UNLOCK_TIME = 10; //Temps pour crocheter une serrure en secondes
         public readonly int LARGE_ITEM_DIST = 500;
@@ -234,6 +239,13 @@ namespace DOL.GS.Scripts
                 return m_Items.Sum(item => item.Chance);
             }
         }
+
+        public List<ILootGenerator>? LootGenerators
+        {
+            get;
+            set;
+        }
+
         public DateTime LastOpen;
         /// <summary>
         /// Temps de réapparition d'un item (en minutes)
@@ -765,22 +777,37 @@ namespace DOL.GS.Scripts
             }
             this.LastTimeChecked = DateTime.Now;
             CoffreItem coffre = GetRandomItem();
-            if (coffre.Id_nb == "" || coffre.Chance == 0)
-            {
-                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.NothingInteresting1"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-            }
-            else
+            LootList loot = new LootList();
+            bool error = false;
+            if (!string.IsNullOrEmpty(coffre.Id_nb) && coffre.Chance != 0)
             {
                 ItemTemplate item = GameServer.Database.SelectObject<ItemTemplate>(DB.Column("Id_nb").IsEqualTo(GameServer.Database.Escape(coffre.Id_nb)));
                 if (item == null)
                 {
-                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.NothingInteresting2"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                    log.Warn($"Item generated in chest {InternalID} for player {player.Name} ({player.InternalID}) not found in DB with id {coffre.Id_nb}");
+                    error = true;
                 }
                 else
                 {
-                    GetItem(player, item);
+                    loot.AddFixed(item, 1);
                 }
             }
+
+            foreach (var lootgenerator in LootGenerators ?? new List<ILootGenerator>())
+            {
+                loot.AddAll(lootgenerator.GenerateLoot(this, player));
+            }
+
+            var items = loot.GetLoot();
+            if (items.Length > 0)
+            {
+                GetItems(player, items);
+            }
+            else
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, error ? "GameChest.NothingInteresting2" : "GameChest.NothingInteresting1"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+            }
+
             HandlePopMob();
             return true;
         }
@@ -836,18 +863,21 @@ namespace DOL.GS.Scripts
             return true;
         }
 
-        private bool GetItem(GamePlayer player, ItemTemplate item)
+        private bool GetItems(GamePlayer player, IEnumerable<ItemTemplate> items)
         {
-            if (player.Inventory.AddTemplate(GameInventoryItem.Create(item), 1, eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack))
+            int count = 0;
+            foreach (var item in items)
             {
-                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.GetItem"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                InventoryLogging.LogInventoryAction(this, player, eInventoryActionType.Loot, item, 1);
-                return true;
+                if (!player.Inventory.AddTemplate(GameInventoryItem.Create(item), 1, eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack))
+                {
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.GetItemBagFull"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                    break;
+                }
+                var name = !string.IsNullOrEmpty(item.TranslationId) ? LanguageMgr.GetTranslation(player.Client, item.TranslationId) : item.Name;
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.GetItem", name), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                ++count;
             }
-            else
-                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.GetItemBagFull"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-
-            return false;
+            return count > 0;
         }
 
         private void HandleTeleporter(GamePlayer player)
@@ -1139,6 +1169,33 @@ namespace DOL.GS.Scripts
             ActivatedFamilySound = coffre.ActivatedFamilySound;
             DeactivatedFamilySound = coffre.DeactivatedFamilySound;
 
+            if (!string.IsNullOrEmpty(coffre.LootGenerator))
+            {
+                LootGenerators = new List<ILootGenerator>();
+                foreach (var id in coffre.LootGenerator.Split(';'))
+                {
+                    var dbLootGenerator = GameServer.Database.SelectObject<LootGenerator>(DB.Column("LootGenerator_ID").IsEqualTo(id));
+                    if (dbLootGenerator != null)
+                    {
+                        var lootGenerator = LootMgr.GetGeneratorInCache(dbLootGenerator);
+                        if (lootGenerator != null)
+                        {
+                            LootGenerators.Add(lootGenerator);
+                        }
+                        else
+                        {
+                            log.Warn($"Loot generator {dbLootGenerator.ObjectId} not found in LootMgr cache for chest {InternalID}");
+                        }
+                    }
+                    else
+                    {
+                        log.Warn($"No loot generator with ID {coffre.LootGenerator} found in DB for chest {InternalID}");
+                    }
+                }
+            }
+            else
+                LootGenerators = null;
+
             m_Items = new List<CoffreItem>();
             if (coffre.ItemList != "")
                 foreach (string item in coffre.ItemList.Split(';'))
@@ -1201,17 +1258,11 @@ namespace DOL.GS.Scripts
             Coffre.WrongFamilyOrderSound = WrongFamilyOrderSound;
             Coffre.ActivatedFamilySound = ActivatedFamilySound;
             Coffre.DeactivatedFamilySound = DeactivatedFamilySound;
+            Coffre.LootGenerator = LootGenerators != null ? String.Join(';', LootGenerators.Select(g => g.DatabaseId)) : String.Empty;
 
             if (Items != null)
             {
-                string list = "";
-                foreach (CoffreItem item in m_Items)
-                {
-                    if (list.Length > 0)
-                        list += ";";
-                    list += item.Id_nb + "|" + item.Chance;
-                }
-                Coffre.ItemList = list;
+                Coffre.ItemList = String.Join(';', Items.Select(item => item.Id_nb + "|" + item.Chance));
             }
 
             if (InternalID == null)

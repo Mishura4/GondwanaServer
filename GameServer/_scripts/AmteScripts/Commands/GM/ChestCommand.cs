@@ -667,7 +667,7 @@ namespace DOL.GS.Scripts
                     }
                     try
                     {
-                        coffre.SecondaryModel = int.Parse(args[2].Substring(0, 5));
+                        coffre.SecondaryModel = int.Parse(args[2].Substring(0, Math.Min(5, args[2].Length)));
                         coffre.SaveIntoDatabase();
                     }
                     catch
@@ -743,7 +743,7 @@ namespace DOL.GS.Scripts
                     }
                     try
                     {
-                        coffre.TPID = int.Parse(args[2].Substring(0, 5));
+                        coffre.TPID = int.Parse(args[2].Substring(0, Math.Min(5, args[2].Length)));
                         coffre.SaveIntoDatabase();
                     }
                     catch
@@ -755,7 +755,7 @@ namespace DOL.GS.Scripts
                     break;
 
                 case "shouldrespawntotpid":
-                    if (coffre == null || args.Length != 2)
+                    if (coffre == null || args.Length < 3)
                     {
                         DisplaySyntax(client);
                         break;
@@ -793,7 +793,7 @@ namespace DOL.GS.Scripts
                     break;
 
                 case "switchfamily":
-                    if (coffre == null || args.Length < 4)
+                    if (coffre == null || args.Length < 3)
                     {
                         DisplaySyntax(client);
                         break;
@@ -876,7 +876,7 @@ namespace DOL.GS.Scripts
                     }
                     try
                     {
-                        coffre.ActivatedDuration = int.Parse(args[2].Substring(0, 5));
+                        coffre.ActivatedDuration = int.Parse(args[2].Substring(0, Math.Min(5, args[2].Length)));
                         coffre.SaveIntoDatabase();
                     }
                     catch
@@ -971,7 +971,7 @@ namespace DOL.GS.Scripts
                     }
                     try
                     {
-                        coffre.SwitchOnSound = int.Parse(args[2].Substring(0, 5));
+                        coffre.SwitchOnSound = int.Parse(args[2].Substring(0, Math.Min(5, args[2].Length)));
                         coffre.SaveIntoDatabase();
                     }
                     catch
@@ -990,7 +990,7 @@ namespace DOL.GS.Scripts
                     }
                     try
                     {
-                        coffre.WrongFamilyOrderSound = int.Parse(args[2].Substring(0, 5));
+                        coffre.WrongFamilyOrderSound = int.Parse(args[2].Substring(0, Math.Min(5, args[2].Length)));
                         coffre.SaveIntoDatabase();
                     }
                     catch
@@ -1009,7 +1009,7 @@ namespace DOL.GS.Scripts
                     }
                     try
                     {
-                        coffre.ActivatedFamilySound = int.Parse(args[2].Substring(0, 5));
+                        coffre.ActivatedFamilySound = int.Parse(args[2].Substring(0, Math.Min(5, args[2].Length)));
                         coffre.SaveIntoDatabase();
                     }
                     catch
@@ -1028,7 +1028,7 @@ namespace DOL.GS.Scripts
                     }
                     try
                     {
-                        coffre.DeactivatedFamilySound = int.Parse(args[2].Substring(0, 5));
+                        coffre.DeactivatedFamilySound = int.Parse(args[2].Substring(0, Math.Min(5, args[2].Length)));
                         coffre.SaveIntoDatabase();
                     }
                     catch
@@ -1037,6 +1037,67 @@ namespace DOL.GS.Scripts
                         break;
                     }
                     ChatUtil.SendSystemMessage(client, "Le son de famille désactivée du switch du coffre \"" + coffre.Name + "\" est maintenant: " + coffre.DeactivatedFamilySound);
+                    break;
+
+                case "lootgenerator":
+                    if (coffre == null)
+                    {
+                        DisplaySyntax(client);
+                        break;
+                    }
+
+                    if (args.Length < 3 || string.Equals(args[2], "list"))
+                    {
+                        ChatUtil.SendSystemMessage(client, string.Format("{0} générateurs pour ce coffre", coffre.LootGenerators?.Count ?? 0));
+                        foreach (ILootGenerator gen in coffre.LootGenerators ?? new List<ILootGenerator>())
+                        {
+                            ChatUtil.SendSystemMessage(client, "- " + gen.DatabaseId);
+                        }
+                        break;
+                    }
+
+                    switch (args[2])
+                    {
+                        case "add":
+                            {
+                                var dbLootGenerator = GameServer.Database.SelectObject<LootGenerator>(DB.Column("LootGenerator_ID").IsEqualTo(GameServer.Database.Escape(args[3])));
+                                if (dbLootGenerator == null)
+                                {
+                                    ChatUtil.SendSystemMessage(client, string.Format("Aucun générateur de butin n'a été trouvé pour l'ID {0}", args[3]));
+                                    break;
+                                }
+
+                                var lootGenerator = LootMgr.GetGeneratorInCache(dbLootGenerator);
+                                if (lootGenerator == null)
+                                {
+                                    ChatUtil.SendSystemMessage(client, string.Format("Le générateur {0} a une entrée dans la base de donnée mais n'est pas dans le cache, veuillez relancer le serveur", args[2]));
+                                    break;
+                                }
+
+                                (coffre.LootGenerators ??= new List<ILootGenerator>()).Add(lootGenerator);
+                                ChatUtil.SendSystemMessage(client, string.Format("Le coffre {0} utilise maintenant le générateur de butin {1}", coffre.InternalID, lootGenerator.DatabaseId));
+                            }
+                            break;
+                        
+                        case "remove":
+                            int idx = coffre.LootGenerators?.FindIndex(g => string.Equals(g.DatabaseId, args[3])) ?? -1;
+                            if (idx < 0)
+                            {
+                                ChatUtil.SendSystemMessage(client, string.Format("Impossible de trouver le générateur {0} dans ce coffre.", args[3]));
+                                break;
+                            }
+                            coffre.LootGenerators!.RemoveAt(idx);
+                            if (coffre.LootGenerators.Count == 0)
+                            {
+                                coffre.LootGenerators = null;
+                            }
+                            ChatUtil.SendSystemMessage(client, string.Format("Le générateur {0} a été supprimé de la liste du coffre {1}", args[3], coffre.InternalID));
+                            break;
+
+                        default:
+                            DisplaySyntax(client);
+                            break;
+                    }
                     break;
                     #endregion
             }
@@ -1094,7 +1155,8 @@ namespace DOL.GS.Scripts
          "Commands.GM.Coffre.Usage.SwitchOnSound",
          "Commands.GM.Coffre.Usage.WrongFamilyOrderSound",
          "Commands.GM.Coffre.Usage.ActivatedFamilySound",
-         "Commands.GM.Coffre.Usage.DeactivatedFamilySound")]
+         "Commands.GM.Coffre.Usage.DeactivatedFamilySound",
+         "Commands.GM.Coffre.Usage.LootGenerator")]
     public class CoffreCommandHandler : CoffreCommandHandlerBase
     {
         
@@ -1151,7 +1213,8 @@ namespace DOL.GS.Scripts
         "Commands.GM.Coffre.Usage.SwitchOnSound",
         "Commands.GM.Coffre.Usage.WrongFamilyOrderSound",
         "Commands.GM.Coffre.Usage.ActivatedFamilySound",
-        "Commands.GM.Coffre.Usage.DeactivatedFamilySound")]
+        "Commands.GM.Coffre.Usage.DeactivatedFamilySound",
+        "Commands.GM.Chest.Usage.LootGenerator")]
     public class ChestCommandHandler : CoffreCommandHandlerBase
     {
     }

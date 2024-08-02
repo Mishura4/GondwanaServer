@@ -4433,12 +4433,11 @@ namespace DOL.GS
                 if (Brain is IControlledBrain)
                     return false;
 
-                if (XPGainers.IsEmpty)
+                if (GetRewardCandidates().Count == 0)
                     return false;
 
-                foreach (var de in XPGainers)
+                foreach (var obj in GetRewardCandidates())
                 {
-                    GameObject obj = de.Key;
                     // If a player to which we are gray killed up we
                     // aren't worth anything either
                     if (obj is GameLiving living && living.IsObjectGreyCon(this))
@@ -5174,8 +5173,8 @@ namespace DOL.GS
             ArrayList autolootlist = new ArrayList();
             ArrayList aplayer = new ArrayList();
 
-            var gainers = XPGainers.ToArray();
-            if (gainers.Length == 0)
+            var gainers = GetRewardCandidates();
+            if (gainers.Count == 0)
                 return;
 
             ItemTemplate[] lootTemplates = LootMgr.GetLoot(this, killer);
@@ -5289,7 +5288,7 @@ namespace DOL.GS
                 }
 
                 GamePlayer playerAttacker = null;
-                foreach (var (gainer, _dmg) in gainers)
+                foreach (var gainer in gainers)
                 {
                     if (gainer is GamePlayer player)
                     {
@@ -5309,8 +5308,8 @@ namespace DOL.GS
 
                 droplist.Add(loot.GetName(1, false));
                 loot.AddToWorld();
-
-                foreach (var (gainer, _dmg) in gainers)
+                
+                foreach (var gainer in gainers)
                 {
                     if (gainer is GamePlayer player && player.Autoloot &&
                         loot.IsWithinRadius(player, 1500)) // should be large enough for most casters to autoloot
