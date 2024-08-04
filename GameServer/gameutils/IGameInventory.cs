@@ -148,6 +148,10 @@ namespace DOL.GS
         bool AddCountToStack(InventoryItem item, int count);
         bool AddTemplate(InventoryItem template, int count, eInventorySlot minSlot, eInventorySlot maxSlot);
         bool RemoveItem(InventoryItem item);
+        bool RemoveItem(InventoryItem item, int count);
+        bool RemoveItems(IEnumerable<InventoryItem> items);
+        bool RemoveItems(IEnumerable<eInventorySlot> slots);
+        bool RemoveItems(IEnumerable<(eInventorySlot slot, int count)> items);
         /// <summary>
         /// Remove an item from Inventory and update owner and position but do not remove from the database.
         /// This is use for transferring items.

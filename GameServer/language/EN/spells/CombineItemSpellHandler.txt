@@ -7,6 +7,7 @@ Spell.CombineItemSpellHandler.NeedToApproach:		You need to approach {0} to {1}.
 Spell.CombineItemSpellHandler.PerformCombination:	perform the combination.
 Spell.CombineItemSpellHandler.YouFailedCombine:		You failed to combine the items.
 Spell.CombineItemSpellHandler.YouCreatedItem:		You created {0} by combining {1} with {2} other items.
+Spell.CombineItemSpellHandler.InternalError:		An internal error has occured. The server will now attempt to restore your items.
 
 ToolName.Forge:			a forge
 ToolName.Tannery:		a tannery

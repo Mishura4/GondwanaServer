@@ -1,9 +1,11 @@
-﻿using DOL.Database;
+﻿using Discord;
+using DOL.Database;
 using DOL.Events;
 using DOL.GS;
 using DOL.GS.PacketHandler;
 using DOL.GS.ServerProperties;
 using DOL.GS.Spells;
+using DOL.GS.Trainer;
 using DOL.Language;
 using DOLDatabase.Tables;
 using log4net;
@@ -30,16 +32,86 @@ namespace DOL.spells
         private static readonly int[] modelFire = { 2656, 3460, 3470, 3549 };
         private static readonly int[] modelChest = { 1596, 4182, 4183, 4184 };
 
+        internal record ItemMatch(InventoryItem item, int Count);
+
+        internal record Combine(Combinable Recipe, List<ItemMatch> Matches);
+
+        private Combine currentCombine;
         private Combinable match;
         private WorldInventoryItem combined;
-        // Transfor the list to a dictionary to count the number of items to remove
-        private Dictionary<InventoryItem, int> removeItems;
         InventoryItem useItem;
 
 
         public CombineItemSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine)
             : base(caster, spell, spellLine)
         {
+        }
+
+        private Combine FindMatch(GamePlayer player, InventoryItem usedItem)
+        {
+            var possibleItems = this.GetCombinableItems(usedItem.Id_nb).ToList();
+
+            if (possibleItems == null || !possibleItems.Any())
+            {
+                return null;
+            }
+
+            var backpack = player.Inventory.GetItemRange(eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack);
+            foreach (var combinable in possibleItems)
+            {
+                var matchedItems = TryMatch(combinable, backpack, usedItem);
+                if (matchedItems != null)
+                {
+                    return new(combinable, matchedItems.Values.SelectMany(l => l).ToList());
+                }
+            }
+            return null;
+        }
+
+        private Dictionary<string, List<ItemMatch>> TryMatch(Combinable combinable, ICollection<InventoryItem> inventory, InventoryItem usedItem)
+        {
+            var matchedItems = new Dictionary<string, List<ItemMatch>>();
+            if (usedItem != null && combinable.Items.TryGetValue(usedItem.Id_nb, out int useCount))
+            {
+                matchedItems.Add(usedItem.Id_nb, new List<ItemMatch>{new ItemMatch(usedItem, Math.Min(useCount, usedItem.Count))});
+            }
+                
+            foreach (InventoryItem inventoryItem in inventory)
+            {
+                if (inventoryItem == null)
+                    continue;
+
+                if (!combinable.Items.TryGetValue(inventoryItem.Id_nb, out int totalNeededCount))
+                    continue;
+
+                int totalCount;
+                List<ItemMatch> countedItems;
+                if (matchedItems.TryGetValue(inventoryItem.Id_nb, out countedItems))
+                {
+                    totalCount = countedItems.Sum(i => i.Count);
+                }
+                else
+                {
+                    totalCount = 0;
+                    countedItems = new List<ItemMatch>();
+                    matchedItems[inventoryItem.Id_nb] = countedItems;
+                }
+                int thisSlotCount = Math.Min(totalNeededCount - totalCount, inventoryItem.Count);
+                if (thisSlotCount > 0 && inventoryItem != usedItem)
+                {
+                    countedItems.Add(new ItemMatch(inventoryItem, thisSlotCount));
+                }
+            }
+
+            foreach (var neededItem in combinable.Items)
+            {
+                int counted = matchedItems[neededItem.Key]?.Sum(i => i.Count) ?? 0;
+                if (counted < neededItem.Value)
+                {
+                    return null;
+                }
+            }
+            return matchedItems;
         }
 
         /// <summary>
@@ -64,63 +136,15 @@ namespace DOL.spells
             {
                 return false;
             }
-
-            var neededItems = this.GetCombinableItems(useItem.Id_nb);
-
-            if (neededItems == null || !neededItems.Any())
-            {
-                return false;
-            }
-
-            removeItems = new Dictionary<InventoryItem, int>();
-
-            var backpack = player.Inventory.GetItemRange(eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack);
-            match = null;
-
-            foreach (var combinable in neededItems)
-            {
-                List<string> ids = new List<string>();
-                Dictionary<string, int> countIterator = new Dictionary<string, int>();
-                foreach (InventoryItem item in backpack)
-                {
-                    // check if the number of item is greater or equal than needed
-                    if (item != null && combinable.Items.ContainsKey(item.Id_nb) && (item.Count >= combinable.Items[item.Id_nb] || (countIterator.ContainsKey(item.Id_nb) && (countIterator[item.Id_nb] + item.Count) >= combinable.Items[item.Id_nb])))
-                    {
-                        if (!ids.Contains(item.Id_nb))
-                        {
-                            ids.Add(item.Id_nb);
-                            // If items have already added in the remove list, substract the total of removed items, else add the number of items to delete
-                            if (countIterator.ContainsKey(item.Id_nb))
-                                removeItems.Add(item, combinable.Items[item.Id_nb] - countIterator[item.Id_nb]);
-                            else
-                                removeItems.Add(item, combinable.Items[item.Id_nb]);
-                        }
-                    }
-                    else if (item != null && combinable.Items.ContainsKey(item.Id_nb))
-                    {
-                        if (countIterator.ContainsKey(item.Id_nb))
-                            countIterator[item.Id_nb] += item.Count;
-                        else
-                            countIterator.Add(item.Id_nb, item.Count);
-                        // fix the issue when items take several slots
-                        removeItems.Add(item, item.Count);
-                    }
-                }
-
-                if (ids.Count == combinable.Items.Count())
-                {
-                    match = combinable;
-                    break;
-                }
-
-                removeItems.Clear();
-            }
-
-            if (match == null)
+            
+            var combine = FindMatch(player, useItem);
+            if (combine == null)
             {
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Spell.CombineItemSpellHandler.NoCombinePossible"), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
                 return false;
             }
+            currentCombine = combine;
+            match = combine.Recipe;
 
             if (match.CraftingSkill != eCraftingSkill.NoCrafting && match.CraftValue > 0)
             {
@@ -135,10 +159,6 @@ namespace DOL.spells
                     return false;
                 }
             }
-
-            // should not pass here but keep it in case where I'm wrong
-            if (!removeItems.ContainsKey(useItem))
-                removeItems.Add(useItem, match.Items[useItem.Id_nb]);
 
             combined = CreateCombinedItem(match, player);
 
@@ -466,10 +486,11 @@ namespace DOL.spells
                     GameServer.Database.AddObject(characterXCombineItem);
                 }
             }
-
+            
             // Check if player fail to combine
             if (Util.Chance(CalculateChanceFailCombine(player)))
             {
+                RemoveItems(player);
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Spell.CombineItemSpellHandler.YouFailedCombine"), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
                 player.Out.SendPlaySound(eSoundType.Craft, 0x02);
                 if (match.PunishSpell != 0)
@@ -486,163 +507,192 @@ namespace DOL.spells
                         player.TakeDamage(player, eDamageType.Energy, (int)punishSpell.Damage, 0);
                     }
                 }
-                RemoveItems(player, removeItems);
                 return;
             }
-
-            InventoryItem newItem = combined.Item;
-            if (match.IsUnique)
+            
+            if (!RemoveItems(player))
             {
-                ItemUnique unique = new ItemUnique(combined.Item.Template);
-                unique.IsTradable = true;
-                GameServer.Database.AddObject(unique);
-                newItem = GameInventoryItem.Create(unique);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Spell.CombineItemSpellHandler.YouFailedCombine"), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
+                player.Out.SendPlaySound(eSoundType.Craft, 0x02);
+            }
 
-                if (match.ApplyRewardCraftingSkillsSystem)
+            try
+            {
+                InventoryItem newItem = combined.Item;
+                if (match.IsUnique)
                 {
-                    // Calculate quality using the new method
-                    newItem.Quality = GetQuality(player, match.CraftValue);
+                    ItemUnique unique = new ItemUnique(combined.Item.Template);
+                    unique.IsTradable = true;
+                    GameServer.Database.AddObject(unique);
+                    newItem = GameInventoryItem.Create(unique);
+
+                    if (match.ApplyRewardCraftingSkillsSystem)
+                    {
+                        // Calculate quality using the new method
+                        newItem.Quality = GetQuality(player, match.CraftValue);
+                    }
+                    else
+                    {
+                        // Calculate quality using the previous method
+                        int randomQuality = Util.Random(99);
+                        if (randomQuality < 16)
+                        {
+                            newItem.Quality = 95;
+                        }
+                        else if (randomQuality < 36)
+                        {
+                            newItem.Quality = 96;
+                        }
+                        else if (randomQuality < 56)
+                        {
+                            newItem.Quality = 97;
+                        }
+                        else if (randomQuality < 76)
+                        {
+                            newItem.Quality = 98;
+                        }
+                        else if (randomQuality < 96)
+                        {
+                            newItem.Quality = 99;
+                        }
+                        else
+                        {
+                            newItem.Quality = 100;
+                        }
+                    }
+
+                    newItem.IsCrafted = true;
+                    newItem.Creator = player.Name;
+                    newItem.Count = match.ItemsCount;
+                }
+
+                player.Out.SendSpellEffectAnimation(player, player, (ushort)match.SpellEfect, 0, false, 1);
+
+                int con = 0;
+                if (match.CraftingSkill != eCraftingSkill.NoCrafting)
+                {
+                    con = GetItemCon(player.CraftingSkills[match.CraftingSkill], match.CraftValue);
+                }
+
+                if (newItem.Quality == 100)
+                {
+                    player.Out.SendPlaySound(eSoundType.Craft, 0x04);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "AbstractCraftingSkill.BuildCraftedItem.Masterpiece", newItem.Name, useItem.Name, match.Items.Count() - 1), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
+                    if (!match.DoNotUpdateTask)
+                    {
+                        if (match.ApplyRewardCraftingSkillsSystem)
+                        {
+                            if (con > -3)
+                            {
+                                TaskManager.UpdateTaskProgress(player, "MasterpieceCrafted", 1);
+                            }
+                        }
+                        else
+                        {
+                            if (con > -3)
+                            {
+                                TaskManager.UpdateTaskProgress(player, "MasterpieceCrafted", 1);
+                            }
+                        }
+                    }
                 }
                 else
                 {
-                    // Calculate quality using the previous method
-                    int randomQuality = Util.Random(99);
-                    if (randomQuality < 16)
+                    player.Out.SendPlaySound(eSoundType.Craft, 0x03);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Spell.CombineItemSpellHandler.YouCreatedItem", newItem.Name, useItem.Name, match.Items.Count() - 1), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                    if (!match.DoNotUpdateTask)
                     {
-                        newItem.Quality = 95;
-                    }
-                    else if (randomQuality < 36)
-                    {
-                        newItem.Quality = 96;
-                    }
-                    else if (randomQuality < 56)
-                    {
-                        newItem.Quality = 97;
-                    }
-                    else if (randomQuality < 76)
-                    {
-                        newItem.Quality = 98;
-                    }
-                    else if (randomQuality < 96)
-                    {
-                        newItem.Quality = 99;
-                    }
-                    else
-                    {
-                        newItem.Quality = 100;
+                        if (match.ApplyRewardCraftingSkillsSystem)
+                        {
+                            if (con > -2)
+                            {
+                                TaskManager.UpdateTaskProgress(player, "SuccessfulItemCombinations", 1);
+                            }
+                        }
+                        else
+                        {
+                            if (con > -2)
+                            {
+                                TaskManager.UpdateTaskProgress(player, "SuccessfulItemCombinations", 1);
+                            }
+                        }
                     }
                 }
 
-                newItem.IsCrafted = true;
-                newItem.Creator = player.Name;
-                newItem.Count = match.ItemsCount;
-            }
+                int rewardCraftingSkill = match.RewardCraftingSkills;
+                double craftingSkillGainMultiplier = player.CraftingSkillGain;
 
-            player.Out.SendSpellEffectAnimation(player, player, (ushort)match.SpellEfect, 0, false, 1);
+                rewardCraftingSkill = (int)(rewardCraftingSkill * (1 + craftingSkillGainMultiplier / 100.0));
 
-            int con = 0;
-            if (match.CraftingSkill != eCraftingSkill.NoCrafting)
-            {
-                con = GetItemCon(player.CraftingSkills[match.CraftingSkill], match.CraftValue);
-            }
-
-            if (newItem.Quality == 100)
-            {
-                player.Out.SendPlaySound(eSoundType.Craft, 0x04);
-                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "AbstractCraftingSkill.BuildCraftedItem.Masterpiece", newItem.Name, useItem.Name, match.Items.Count() - 1), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
-                if (!match.DoNotUpdateTask)
+                if (match.RewardCraftingSkills > 0)
                 {
+                    int gain = match.RewardCraftingSkills;
+                    if (match.ApplyRewardCraftingSkillsSystem && player.CraftingSkills.ContainsKey(match.CraftingSkill))
+                    {
+                        gain = CalculateRewardCraftingSkill(player, match.CraftingSkill, match.CraftValue, match.RewardCraftingSkills);
+                    }
+                    player.GainCraftingSkill(match.CraftingSkill, gain);
+                    player.Out.SendUpdateCraftingSkills();
+                }
+
+                if (match.SecondaryCraftingSkill != null && match.SecondaryCraftingSkill.Length > 0)
+                {
+                    var secondarySkills = match.SecondaryCraftingSkill.Split('|').Select(s => (eCraftingSkill)Enum.Parse(typeof(eCraftingSkill), s)).ToArray();
+                    int secondarySkillGain = match.RewardCraftingSkills / 2;
                     if (match.ApplyRewardCraftingSkillsSystem)
                     {
-                        if (con > -3)
-                        {
-                            TaskManager.UpdateTaskProgress(player, "MasterpieceCrafted", 1);
-                        }
+                        secondarySkillGain = CalculateRewardCraftingSkill(player, match.CraftingSkill, match.CraftValue, match.RewardCraftingSkills) / 2;
                     }
-                    else
+
+                    secondarySkillGain = (int)(secondarySkillGain * (1 + craftingSkillGainMultiplier / 100.0));
+
+                    foreach (var skill in secondarySkills)
                     {
-                        if (con > -3)
-                        {
-                            TaskManager.UpdateTaskProgress(player, "MasterpieceCrafted", 1);
-                        }
+                        player.GainCraftingSkill(skill, secondarySkillGain);
                     }
                 }
-            }
-            else
-            {
-                player.Out.SendPlaySound(eSoundType.Craft, 0x03);
-                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Spell.CombineItemSpellHandler.YouCreatedItem", newItem.Name, useItem.Name, match.Items.Count() - 1), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                if (!match.DoNotUpdateTask)
+
+                if (!string.IsNullOrEmpty(match.ToolKit) && match.ToolLoseDur > 0)
                 {
-                    if (match.ApplyRewardCraftingSkillsSystem)
+                    InventoryItem toolkit = player.Inventory.GetItemRange(eInventorySlot.MinEquipable, eInventorySlot.LastBackpack).Where(item => item.Id_nb == match.ToolKit).FirstOrDefault();
+                    if (toolkit != null)
                     {
-                        if (con > -2)
-                        {
-                            TaskManager.UpdateTaskProgress(player, "SuccessfulItemCombinations", 1);
-                        }
+                        toolkit.Durability -= match.ToolLoseDur;
+                        if (toolkit.Durability <= 0)
+                            player.Inventory.RemoveItem(toolkit);
+                        else
+                            player.Out.SendInventoryItemsUpdate(new InventoryItem[] { toolkit });
                     }
-                    else
+                }
+
+                if (!player.ReceiveItem(player, newItem))
+                {
+                    player.CreateItemOnTheGround(newItem);
+                    player.Out.SendDialogBox(eDialogCode.SimpleWarning, 0, 0, 0, 0, eDialogType.Ok, true, LanguageMgr.GetTranslation(player.Client.Account.Language, "AbstractCraftingSkill.BuildCraftedItem.BackpackFull", newItem.Name));
+                }
+            }
+            catch (Exception e)
+            {
+                log.Error($"Failed to create item for combine {match.DbId} for player {player.Name}: {e}");
+                log.Error("Attempting to restore items...");
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Spell.CombineItemSpellHandler.InternalError"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                foreach (var item in match.Items)
+                {
+                    var worldItem = WorldInventoryItem.CreateFromTemplate(item.Key);
+                    if (worldItem == null)
                     {
-                        if (con > -2)
-                        {
-                            TaskManager.UpdateTaskProgress(player, "SuccessfulItemCombinations", 1);
-                        }
+                        log.Error($"Could not create item \"{item.Key}\" for combine restoration for player {player.Name}");
+                        continue;
+                    }
+                    
+                    if (!player.ReceiveItem(player, worldItem))
+                    {
+                        worldItem.AddOwner(player);
+                        worldItem.Position = player.Position;
+                        worldItem.AddToWorld();
+                        player.Out.SendDialogBox(eDialogCode.SimpleWarning, 0, 0, 0, 0, eDialogType.Ok, true, LanguageMgr.GetTranslation(player.Client.Account.Language, "AbstractCraftingSkill.BuildCraftedItem.BackpackFull", worldItem.Name));
                     }
                 }
-            }
-            RemoveItems(player, removeItems);
-
-            int rewardCraftingSkill = match.RewardCraftingSkills;
-            double craftingSkillGainMultiplier = player.CraftingSkillGain;
-
-            rewardCraftingSkill = (int)(rewardCraftingSkill * (1 + craftingSkillGainMultiplier / 100.0));
-
-            if (match.RewardCraftingSkills > 0)
-            {
-                int gain = match.RewardCraftingSkills;
-                if (match.ApplyRewardCraftingSkillsSystem && player.CraftingSkills.ContainsKey(match.CraftingSkill))
-                {
-                    gain = CalculateRewardCraftingSkill(player, match.CraftingSkill, match.CraftValue, match.RewardCraftingSkills);
-                }
-                player.GainCraftingSkill(match.CraftingSkill, gain);
-                player.Out.SendUpdateCraftingSkills();
-            }
-
-            if (match.SecondaryCraftingSkill != null && match.SecondaryCraftingSkill.Length > 0)
-            {
-                var secondarySkills = match.SecondaryCraftingSkill.Split('|').Select(s => (eCraftingSkill)Enum.Parse(typeof(eCraftingSkill), s)).ToArray();
-                int secondarySkillGain = match.RewardCraftingSkills / 2;
-                if (match.ApplyRewardCraftingSkillsSystem)
-                {
-                    secondarySkillGain = CalculateRewardCraftingSkill(player, match.CraftingSkill, match.CraftValue, match.RewardCraftingSkills) / 2;
-                }
-
-                secondarySkillGain = (int)(secondarySkillGain * (1 + craftingSkillGainMultiplier / 100.0));
-
-                foreach (var skill in secondarySkills)
-                {
-                    player.GainCraftingSkill(skill, secondarySkillGain);
-                }
-            }
-
-            if (!string.IsNullOrEmpty(match.ToolKit) && match.ToolLoseDur > 0)
-            {
-
-                InventoryItem toolkit = player.Inventory.GetItemRange(eInventorySlot.MinEquipable, eInventorySlot.LastBackpack).Where(item => item.Id_nb == match.ToolKit).FirstOrDefault();
-                if (toolkit != null)
-                {
-                    toolkit.Durability -= match.ToolLoseDur;
-                    if (toolkit.Durability <= 0)
-                        player.Inventory.RemoveItem(toolkit);
-                    else
-                        player.Out.SendInventoryItemsUpdate(new InventoryItem[] { toolkit });
-                }
-            }
-
-            if (!player.ReceiveItem(player, newItem))
-            {
-                player.CreateItemOnTheGround(newItem);
-                player.Out.SendDialogBox(eDialogCode.SimpleWarning, 0, 0, 0, 0, eDialogType.Ok, true, LanguageMgr.GetTranslation(player.Client.Account.Language, "AbstractCraftingSkill.BuildCraftedItem.BackpackFull", newItem.Name));
             }
         }
 
@@ -751,6 +801,7 @@ namespace DOL.spells
 
         private IEnumerable<Combinable> GetCombinableItems(string usedItemId)
         {
+            // Should cache this whole thing
             var cbitems = GameServer.Database.SelectAllObjects<CombineItemDb>();
 
             if (cbitems == null || !cbitems.Any())
@@ -762,20 +813,30 @@ namespace DOL.spells
                 c =>
                 {
                     // Add the count of used items for a specific template to combine it with others templates
-                    string[] itemsNameCount = c.ItemsIds.Split(new char[] { ';' });
+                    string[] itemsNameCount = c.ItemsIds.Split(';');
                     Dictionary<string, int> items = new Dictionary<string, int>();
                     foreach (string item in itemsNameCount)
                     {
                         string[] itemNameCount = item.Split(new char[] { '|' });
-                        int count;
-                        if (int.TryParse(itemNameCount[1], out count))
-                            items.Add(itemNameCount[0], count);
+                        int count = 1;
+                        if (itemNameCount.Length > 1 && !int.TryParse(itemNameCount[1], out count))
+                        {
+                            log.Warn($"Invalid CombineItem count {itemNameCount[1]}");
+                        }
+                        items.Add(itemNameCount[0], count);
+                    }
+                    string[] rewardItemInfo = c.ItemTemplateId.Split('|');
+                    int rewardCount = 1;
+                    if (rewardItemInfo.Length > 1 && !int.TryParse(rewardItemInfo[1], out rewardCount))
+                    {
+                        log.Warn($"Invalid CombineItem count {rewardItemInfo[1]}");
                     }
                     return new Combinable()
                     {
+                        DbId = c.ObjectId,
                         Items = items,
-                        TemplateId = c.ItemTemplateId.Split(new char[] { '|' })[0],
-                        ItemsCount = int.Parse(c.ItemTemplateId.Split(new char[] { '|' })[1]),
+                        TemplateId = rewardItemInfo[0],
+                        ItemsCount = rewardCount,
                         SpellEfect = c.SpellEffect,
                         CraftingSkill = (eCraftingSkill)c.CraftingSkill,
                         CraftValue = c.CraftingValue,
@@ -792,7 +853,7 @@ namespace DOL.spells
                         CombinationId = c.CombinationId,
                         AllowVersion = c.AllowVersion,
                         SecondaryCraftingSkill = c.SecondaryCraftingSkill,
-                        DoNotUpdateTask = c.DoNotUpdateTask
+                        DoNotUpdateTask = c.DoNotUpdateTask,
                     };
                 });
 
@@ -868,16 +929,39 @@ namespace DOL.spells
         /// </summary>
         /// <param name="player"></param>
         /// <param name="removeItems"></param>
-        private void RemoveItems(GamePlayer player, Dictionary<InventoryItem, int> removeItems)
+        private bool RemoveItems(GamePlayer player)
         {
-            foreach (InventoryItem item in removeItems.Keys)
+            IEnumerable<ItemMatch> matches = currentCombine.Matches;
+            bool CheckAllItemsPresent()
             {
-                if (item.OwnerID == null)
-                    item.OwnerID = player.InternalID;
-
-                // Replace remove item by RemoveCountFromStack
-                player.Inventory.RemoveCountFromStack(item, removeItems[item]);
+                foreach (var (item, count) in matches)
+                {
+                    if (item == null || item.OwnerID != player.InternalID || item.Count < count)
+                        return false;
+                }
+                return true;
             }
+            
+            var backpack = player.Inventory.GetItemRange(eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack);
+            if (!CheckAllItemsPresent())
+            {
+                // Inventory layout changed, re-calculate
+                var usedItem = useItem.OwnerID == player.ObjectId ? useItem : null; // Re-check the item we were using is still there too
+                matches = TryMatch(match, backpack, usedItem)?.Values.SelectMany(i => i);
+                if (matches == null)
+                {
+                    log.Debug($"Could not find items for combine {match.DbId} for player {player.Name}");
+                    return false;
+                }
+            }
+            foreach (var (item, count) in matches)
+            {
+                if (item == null || item.OwnerID != player.InternalID || item.Count < count || !player.Inventory.RemoveItem(item))
+                {
+                    log.Warn($"POSSIBLE DUPE: Failed to remove item \"{item?.Id_nb}\"x{count} for combine {match.DbId} for player {player.Name}");
+                }
+            }
+            return true;
         }
 
         private WorldInventoryItem CreateCombinedItem(Combinable combinable, GamePlayer player)
@@ -989,6 +1073,7 @@ namespace DOL.spells
 
     public class Combinable
     {
+        public string DbId { get; set; }
         public Dictionary<string, int> Items { get; set; }
         public string TemplateId { get; set; }
         public int ItemsCount { get; set; }

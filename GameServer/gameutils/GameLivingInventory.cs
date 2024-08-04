@@ -664,6 +664,161 @@ namespace DOL.GS
             return false;
         }
 
+        /// <summary>
+        /// Removes an item from the inventory
+        /// </summary>
+        /// <param name="item">the item to remove</param>
+        /// <returns>true if successfull</returns>
+        public virtual bool RemoveItem(InventoryItem item, int count)
+        {
+            lock (m_items) // Mannen 10:56 PM 10/30/2006 - Fixing every lock(this)
+            {
+                if (item == null)
+                    return false;
+
+                var slot = (eInventorySlot)item.SlotPosition;
+
+                if (m_items.TryGetValue(slot, out InventoryItem inventoryItem))
+                {
+                    if (m_items.Count < count)
+                    {
+                        return false;
+                    }
+                    
+                    inventoryItem.Count -= count;
+                    if (inventoryItem.Count == 0)
+                    {
+                        m_items.Remove(slot);
+
+                        inventoryItem.OwnerID = null;
+                        inventoryItem.SlotPosition = (int)eInventorySlot.Invalid;
+                    }
+
+                    if (!m_changedSlots.Contains(slot))
+                        m_changedSlots.Add(slot);
+
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Removes items
+        /// </summary>
+        /// <param name="items">the items to remove</param>
+        /// <returns>true if successfull</returns>
+        public virtual bool RemoveItems(IEnumerable<InventoryItem> items)
+        {
+            bool err = false;
+            lock (m_items) // Mannen 10:56 PM 10/30/2006 - Fixing every lock(this)
+            {
+                foreach (var item in items)
+                {
+                    if (item == null)
+                    {
+                        err = true;
+                        continue;
+                    }
+
+                    var slot = (eInventorySlot)item.SlotPosition;
+
+                    if (m_items.ContainsKey(slot))
+                    {
+                        m_items.Remove(slot);
+
+                        if (!m_changedSlots.Contains(slot))
+                            m_changedSlots.Add(slot);
+
+                        item.OwnerID = null;
+                        item.SlotPosition = (int)eInventorySlot.Invalid;
+                    }
+                }
+                    
+                if (m_changesCounter <= 0)
+                    UpdateChangedSlots();
+            }
+
+            return !err;
+        }
+
+        /// <summary>
+        /// Removes items
+        /// </summary>
+        /// <param name="slots">the items to remove</param>
+        /// <returns>true if successfull</returns>
+        public virtual bool RemoveItems(IEnumerable<eInventorySlot> slots)
+        {
+            bool err = false;
+            lock (m_items) // Mannen 10:56 PM 10/30/2006 - Fixing every lock(this)
+            {
+                foreach (var slot in slots)
+                {
+                    if (m_items.Remove(slot, out InventoryItem item))
+                    {
+                        if (!m_changedSlots.Contains(slot))
+                            m_changedSlots.Add(slot);
+
+                        item.OwnerID = null;
+                        item.SlotPosition = (int)eInventorySlot.Invalid;
+                    }
+                    else
+                    {
+                        err = true;
+                        continue;
+                    }
+                }
+                    
+                if (m_changesCounter <= 0)
+                    UpdateChangedSlots();
+            }
+
+            return !err;
+        }
+
+        /// <summary>
+        /// Removes items
+        /// </summary>
+        /// <param name="items">the items to remove</param>
+        /// <returns>true if successfull</returns>
+        public virtual bool RemoveItems(IEnumerable<(eInventorySlot slot, int count)> items)
+        {
+            bool err = false;
+            
+            lock (m_items) // Mannen 10:56 PM 10/30/2006 - Fixing every lock(this)
+            {
+                foreach (var item in items)
+                {
+                    if (m_items.TryGetValue(item.slot, out InventoryItem inventoryItem))
+                    {
+                        if (m_items.Count < item.count)
+                        {
+                            m_items.Remove(item.slot);
+
+                            inventoryItem.OwnerID = null;
+                            inventoryItem.SlotPosition = (int)eInventorySlot.Invalid;
+                        }
+                        else
+                        {
+                            inventoryItem.Count -= item.count;
+                        }
+
+                        if (!m_changedSlots.Contains(item.slot))
+                            m_changedSlots.Add(item.slot);
+                    }
+                    else
+                    {
+                        err = true;
+                        continue;
+                    }
+                }
+                    
+                if (m_changesCounter <= 0)
+                    UpdateChangedSlots();
+            }
+
+            return !err;
+        }
 
         public virtual bool RemoveTradeItem(InventoryItem item)
         {

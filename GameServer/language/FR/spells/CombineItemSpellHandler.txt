@@ -7,6 +7,7 @@ Spell.CombineItemSpellHandler.NeedToApproach:		Il faut vous rapprocher de {0} po
 Spell.CombineItemSpellHandler.PerformCombination:	effectuer la combinaison.
 Spell.CombineItemSpellHandler.YouFailedCombine:		Vous échouez à combiner les objets.
 Spell.CombineItemSpellHandler.YouCreatedItem:		Vous avez créé {0} en combinant {1} ainsi que {2} autres objets.
+Spell.CombineItemSpellHandler.InternalError:		Une erreur serveur est survenue. Le serveur va maintenant essayer de restorer vos objets.
 
 ToolName.Forge:			une forge
 ToolName.Tannery:		une tannerie
