@@ -171,6 +171,22 @@ namespace DOL.GS.Spells
     [SpellHandlerAttribute("Zephyr")]
     public class FZSpellHandler : MasterlevelHandling
     {
+        public class ZephyrNPC : GameNPC
+        {
+            public FZSpellHandler SpellHandler { get; init; }
+
+            public ZephyrNPC(FZSpellHandler spellHandler) : base()
+            {
+                SpellHandler = spellHandler;
+            }
+            
+            /// <inheritdoc />
+            public override void FollowTargetInRange()
+            {
+                SpellHandler.OnArriveAtTarget();
+            }
+        }
+        
         protected RegionTimer m_expireTimer;
         protected GameNPC m_npc;
         protected GamePlayer m_target;
@@ -206,7 +222,7 @@ namespace DOL.GS.Spells
         private void Zephyr(GamePlayer target)
         {
             if (!target.IsAlive || target.ObjectState != GameLiving.eObjectState.Active) return;
-            GameNPC npc = new GameNPC();
+            GameNPC npc = new ZephyrNPC(this);
 
             m_npc = npc;
 
@@ -225,13 +241,11 @@ namespace DOL.GS.Spells
             npc.SetOwnBrain(brain);
             npc.AddToWorld();
             npc.TempProperties.setProperty("target", target);
-            GameEventMgr.AddHandler(npc, GameNPCEvent.ArriveAtTarget, new DOLEventHandler(ArriveAtTarget));
             npc.Follow(target, 10, 1500);
 
             m_target = target;
 
             StartTimer();
-
         }
 
         protected virtual void StartTimer()
@@ -284,16 +298,21 @@ namespace DOL.GS.Spells
             MessageToLiving(ad.Attacker, string.Format("Your target is in a Zephyr and can't be attacked!"), eChatType.CT_Spell);
         }
 
-        private void ArriveAtTarget(DOLEvent e, object obj, EventArgs args)
+        private void OnArriveAtTarget()
         {
-            GameNPC npc = obj as GameNPC;
-
+            GameNPC npc = m_npc;
+            
             if (npc == null) return;
 
+            if (npc.ObjectState != GameObject.eObjectState.Active)
+            {
+                m_npc = null;
+                return;
+            }
+            
             GamePlayer target = npc.TempProperties.getProperty<object>("target", null) as GamePlayer;
 
             if (target == null || !target.IsAlive) return;
-            GameEventMgr.RemoveHandler(npc, GameNPCEvent.ArriveAtTarget, new DOLEventHandler(ArriveAtTarget));
 
             GamePlayer player = target as GamePlayer;
             if (player == null) return;
@@ -305,6 +324,7 @@ namespace DOL.GS.Spells
             player.StopAttack();
             player.StopCurrentSpellcast();
             player.MountSteed(npc, true);
+            
             GameEventMgr.AddHandler(player, GamePlayerEvent.AttackedByEnemy, new DOLEventHandler(OnAttack));
 
             player.Out.SendMessage("You are picked up by a forceful zephyr!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
