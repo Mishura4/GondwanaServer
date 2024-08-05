@@ -658,8 +658,8 @@ namespace DOL.GS
         // 116 - 119 Available
 
         CraftingSpeed = 116,
-        SecondarySpellChance = 117,
-        MythicalRegen = 118,
+        CounterAttack = 117,
+        MythicalOmniRegen = 118,
         MythicalTension = 119,
         Focus_Darkness = 120,
         Focus_Suppression = 121,
@@ -672,7 +672,7 @@ namespace DOL.GS
         Focus_Light = 128,
         Focus_Body = 129,
         Focus_Matter = 130,
-        Skill_Learning = 131,
+        SpellShieldChance = 131,
         Focus_Mind = 132,
         Focus_Void = 133,
         Focus_Mana = 134,
@@ -800,6 +800,7 @@ namespace DOL.GS
         ResCapBonus_Last = 229,
         #endregion
 
+        #region Mythical and Special bonuses
         DPS = 230,
         MagicAbsorption = 231,
         CriticalHealHitChance = 232,
@@ -821,6 +822,7 @@ namespace DOL.GS
         MythicalStatCapBonus_Last = 244,
 
         MythicalCrowdDuration = 245,
+        LootChance = 246,
         BountyPoints = 247,
         XpPoints = 248,
         Resist_Natural = 249,
@@ -835,7 +837,51 @@ namespace DOL.GS
         StealthEffectivenessBonus = 258,
         StealthDetectionBonus = 259,
         TensionConservationBonus = 260,
-        MaxProperty = 260
+        #endregion
+
+        #region New Skills
+        Skill_Learning = 270,
+        Skill_BlueMage1 = 271,
+        Skill_BlueMage2 = 272,
+        Skill_BlueMage3 = 273,
+        Skill_RedMage1 = 274,
+        Skill_RedMage2 = 275,
+        Skill_RedMage3 = 276,
+        Skill_Geomancer1 = 277,
+        Skill_Geomancer2 = 278,
+        Skill_Geomancer3 = 279,
+        Skill_Reaper1 = 280,
+        Skill_Reaper2 = 281,
+        Skill_Reaper3 = 282,
+        Skill_WraithSummoner1 = 283,
+        Skill_WraithSummoner2 = 284,
+        Skill_WraithSummoner3 = 285,
+        Skill_Corsair1 = 286,
+        Skill_Corsair2 = 287,
+        Skill_Corsair3 = 288,
+        Skill_Dragoon1 = 289,
+        Skill_Dragoon2 = 290,
+        Skill_Dragoon3 = 291,
+        Skill_PuppetMaster1 = 292,
+        Skill_PuppetMaster2 = 293,
+        Skill_PuppetMaster3 = 294,
+        Skill_DarkKnight1 = 295,
+        Skill_DarkKnight2 = 296,
+        Skill_DarkKnight3 = 297,
+        Skill_Alchemist1 = 298,
+        Skill_Alchemist2 = 299,
+        Skill_Alchemist3 = 300,
+        Skill_Psion1 = 301,
+        Skill_Psion2 = 302,
+        Skill_Psion3 = 303,
+        Skill_ChaosMage1 = 304,
+        Skill_ChaosMage2 = 305,
+        Skill_ChaosMage3 = 306,
+        Skill_ElementalKnight1 = 307,
+        Skill_ElementalKnight2 = 308,
+        Skill_ElementalKnight3 = 309,
+        MaxProperty = 310
+        #endregion
     }
 
     /// <summary>

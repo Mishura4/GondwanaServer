@@ -11512,6 +11512,22 @@ namespace DOL.GS
         }
 
         /// <summary>
+        /// Apply loot chance from items & buffs
+        /// </summary>
+        public virtual int LootChance
+        {
+            get
+            {
+                int lootchance = 0;
+
+                lootchance += BuffBonusCategory4[eProperty.LootChance];
+                lootchance += ItemBonus[(int)eProperty.LootChance];
+
+                return Math.Max(0, lootchance);
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the IgnoreList of a Player
         /// (delegate to PlayerCharacter)
         /// </summary>

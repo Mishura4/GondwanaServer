@@ -77,4 +77,25 @@ Commands.GM.Chest.Usage.PunishSpellId:			'/chest punishSpellId <SpellId>' Define
 Commands.GM.Chest.Usage.PickableAnim:			'/chest pickableAnim' Activate/Deactivate pickup emote on the player while opening this chest
 Commands.GM.Chest.Usage.InfoInterval:			'/chest interval <minutes>' Change the opening interval of this chest in minutes (interval while the chest is considered as empty)
 Commands.GM.Chest.Usage.LongDistance:			'/chest longdistance <true|false>' Change interaction radius distance of this chest to 400 (useful for large chests and boats)
+Commands.GM.Chest.Usage.TPID:					'/chest tpid <value>' Sets the TPPoint ID of the selected chest
+Commands.GM.Chest.Usage.ShouldRespawnToTPID:	'/chest shouldrespawntotpid' Toggles (on/off) the "Should Respawn To TPPoint" status of the selected chest
+Commands.GM.Chest.Usage.CurrentStep:			'/chest currentstep <value>' Sets the current Step inside the related TPPoint of the selected chest
+Commands.GM.Chest.Usage.PickOnTouch:			'/chest pickontouch' Toggle the PickOnTouch state of the chest
+Commands.GM.Chest.Usage.SecondaryModel:		'/chest secondarymodel <model>' Set the secondary model of the chest
+Commands.GM.Chest.Usage.IsOpenableOnce:		'/chest isopenableonce' Toggle the IsOpenableOnce state of the chest
+Commands.GM.Chest.Usage.IsTerritoryLinked:		'/chest isterritorylinked' Toggle the IsTerritoryLinked state of the chest
+Commands.GM.Chest.Usage.KeyLoseDur:			'/chest keylosedur <dur>' Set the durability lost of the key each time it's used
+Commands.GM.Chest.Usage.SwitchFamily:			'/chest switchfamily <family>' Set the switch family of the chest
+Commands.GM.Chest.Usage.SwitchOrder:			'/chest switchorder <order>' Set the switch order of the chest
+Commands.GM.Chest.Usage.IsSwitch:				'/chest isswitch' Toggle the IsSwitch state of the chest
+Commands.GM.Chest.Usage.WrongOrderResetFamily:	'/chest wrongorderresetfamily' Toggle the "Depends On Family Order" state of the chest
+Commands.GM.Chest.Usage.ActivatedDuration:		'/chest activatedduration <seconds>' Set the activation duration of the chest switch
+Commands.GM.Chest.Usage.ActivatedBySwitchOn:	'/chest activatedbyswitchon <eventID>' Set the Event ID activated by switch On
+Commands.GM.Chest.Usage.ActivatedBySwitchOff:	'/chest activatedbyswitchoff <eventID>' Set the Event ID activated by switch Off
+Commands.GM.Chest.Usage.ResetBySwitchOn:		'/chest resetbyswitchon <eventID>' Set the Event ID reset by switch On
+Commands.GM.Chest.Usage.ResetBySwitchOff:		'/chest resetbyswitchoff <eventID>' Set the Event ID reset by switch Off
+Commands.GM.Chest.Usage.SwitchOnSound:			'/chest switchonsound <soundID>' Set the switch On sound
+Commands.GM.Chest.Usage.WrongFamilyOrderSound:	'/chest wrongfamilyordersound <soundID>' Set the wrong family order sound
+Commands.GM.Chest.Usage.ActivatedFamilySound:	'/chest activatedfamilysound <soundID>' Set the activated family sound
+Commands.GM.Chest.Usage.DeactivatedFamilySound:	'/chest deactivatedfamilysound <soundID>' Set the deactivated family sound
 Commands.GM.Chest.Usage.LootGenerator:			'/chest lootgenerator <add|remove|list> <id>' List or change the loot generators used by this chest
