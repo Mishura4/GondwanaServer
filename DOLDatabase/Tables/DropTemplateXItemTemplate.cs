@@ -29,9 +29,41 @@ namespace DOL.Database
     {
         public DropTemplateXItemTemplate()
         {
+            MinLevel = 0;
+            MaxLevel = 50;
+            HourMin = 0;
+            HourMax = 24;
+            QuestID = 0;
+            QuestStepID = 0;
+            ActiveEventId = string.Empty;
+            IsRenaissance = false;
         }
 
         [PrimaryKey(AutoIncrement = true)]
         public long ID { get; set; }
+
+        [DataElement(AllowDbNull = true, Unique = false)]
+        public int MinLevel { get; set; }
+
+        [DataElement(AllowDbNull = true, Unique = false)]
+        public int MaxLevel { get; set; }
+
+        [DataElement(AllowDbNull = true, Unique = false)]
+        public int HourMin { get; set; }
+
+        [DataElement(AllowDbNull = true, Unique = false)]
+        public int HourMax { get; set; }
+
+        [DataElement(AllowDbNull = true, Unique = false)]
+        public int QuestID { get; set; }
+
+        [DataElement(AllowDbNull = true, Unique = false)]
+        public int QuestStepID { get; set; }
+
+        [DataElement(AllowDbNull = true, Unique = false)]
+        public string ActiveEventId { get; set; }
+
+        [DataElement(AllowDbNull = false, Unique = false)]
+        public bool IsRenaissance { get; set; }
     }
 }

@@ -23,19 +23,19 @@ using System;
 namespace DOL.GS.PropertyCalc
 {
     /// <summary>
-    /// Calculator for Crafting Skill Gain
+    /// Calculator for CounterAttack
     /// </summary>
-    [PropertyCalculator(eProperty.LootChance)]
-    public class LootChanceCalculator : PropertyCalculator
+    [PropertyCalculator(eProperty.CounterAttack)]
+    public class CounterAttackCalculator : PropertyCalculator
     {
         public override int CalcValue(GameLiving living, eProperty property)
         {
-            int value = living.BuffBonusCategory4[eProperty.LootChance];
+            int value = living.BuffBonusCategory4[eProperty.CounterAttack];
             if (living is GamePlayer)
             {
                 value += Math.Min(25, living.ItemBonus[(int)property]); // cap 25% from items
             }
-            value -= living.DebuffCategory[eProperty.LootChance];
+            value -= living.DebuffCategory[eProperty.CounterAttack];
             return Math.Max(0, value); // Ensuring the gain is not negative
         }
     }

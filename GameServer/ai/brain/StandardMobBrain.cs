@@ -1412,6 +1412,7 @@ namespace DOL.AI.Brain
                 case "TRIGGERBUFF":
                 case "TENSIONBUFF":
                 case "BATTLEFEVERDURATIONBUFF":
+                case "SPELLSHIELD":
                     {
                         // Buff self, if not in melee, but not each and every mob
                         // at the same time, because it looks silly.

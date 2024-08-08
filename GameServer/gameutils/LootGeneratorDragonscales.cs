@@ -95,11 +95,13 @@ namespace DOL.GS
                         // Mobs range from 55 to 75, and we want an up to 10% bonus to drop chance based on that
                         // I dislike losing accuracy rounding things, and it's a lot faster to do this in 1/10ths 
                         //	of a percent than to convert to doubles and to multiply rather than divide.
-                        if (Util.Random(1000) < (10 * ServerProperties.Properties.LOOTGENERATOR_DRAGONSCALES_BASE_CHANCE
-                            + 5 * (mob.Level - 55)))
+                        int baseChance = 10 * ServerProperties.Properties.LOOTGENERATOR_DRAGONSCALES_BASE_CHANCE + 5 * (mob.Level - 55);
+                        int lootChanceModifier = player.LootChance;
+                        int finalChance = Math.Min(1000, baseChance + (lootChanceModifier * 10));
+
+                        if (Util.Random(1000) < finalChance)
                         {
-                            if (mob.Name.ToLower() != mob.Name)
-                                // Named critter
+                            if (mob is GameNPC npc && npc.IsBoss) // replaces "if (!mob.Name.ToLower().Equals(mob.Name))" -> Boss mobs drop more dragonscales
                                 iScaleCount = ServerProperties.Properties.LOOTGENERATOR_DRAGONSCALES_NAMED_COUNT;
                             else
                                 iScaleCount = 1;

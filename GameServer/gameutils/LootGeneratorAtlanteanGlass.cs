@@ -24,6 +24,7 @@ using DOL.AI.Brain;
 using DOL.Database;
 using DOL.Language;
 using log4net;
+using DOL.GS.Scripts;
 
 namespace DOL.GS
 {
@@ -105,13 +106,18 @@ namespace DOL.GS
                     maxcount = (int)Math.Round((double)(lvl / 10));
                 }
 
-                if (!mob.Name.ToLower().Equals(mob.Name))
+                if (mob is GameNPC npc && npc.IsBoss) // replaces "if (!mob.Name.ToLower().Equals(mob.Name))" -> Boss mobs drop more AtlanteanGlass
                 {
-                    //Named mob, more cash !
+                    //Named mob or Boss, more cash !
                     maxcount = (int)Math.Round(maxcount * ServerProperties.Properties.LOOTGENERATOR_ATLANTEANGLASS_NAMED_COUNT);
                 }
 
-                if (maxcount > 0 && Util.Chance(ServerProperties.Properties.LOOTGENERATOR_ATLANTEANGLASS_BASE_CHANCE + Math.Max(10, killedcon)))
+                // Calculate the base chance and apply the loot chance modifier
+                int baseChance = ServerProperties.Properties.LOOTGENERATOR_ATLANTEANGLASS_BASE_CHANCE + Math.Max(10, killedcon);
+                int lootChanceModifier = player.LootChance;
+                int finalChance = Math.Min(100, baseChance + lootChanceModifier);
+
+                if (maxcount > 0 && Util.Chance(finalChance))
                     loot.AddFixed(atlanteanGlass, maxcount);
             }
             catch
