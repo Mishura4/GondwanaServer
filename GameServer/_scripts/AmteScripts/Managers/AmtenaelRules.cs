@@ -831,9 +831,9 @@ namespace DOL.GS.ServerRules
             return true;
         }
 
-        public override string ReasonForDisallowMounting(GamePlayer player)
+        public override string ReasonForDisallowMounting(GameLiving living)
         {
-            return RvrManager.Instance.IsInRvr(player) ? "GameObjects.GamePlayer.UseSlot.CantCallMountRVR" : base.ReasonForDisallowMounting(player);
+            return RvrManager.Instance.IsInRvr(living) ? "GameObjects.GamePlayer.UseSlot.CantCallMountRVR" : base.ReasonForDisallowMounting(living);
         }
         public override string GetPlayerName(GamePlayer source, GamePlayer target)
         {

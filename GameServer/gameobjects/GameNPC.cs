@@ -1060,7 +1060,7 @@ namespace DOL.GS
         public short ZSpeedFactor
             => (short)((Motion.Destination.Z - Motion.Start.Z) / Motion.FullDistance);
         
-        protected override Motion Motion
+        public override Motion Motion
         {
             set
             {
@@ -1425,28 +1425,22 @@ namespace DOL.GS
                     m_goToNodeCallback(npc);
                     return;
                 }
-
-                bool arriveAtSpawnPoint = npc.IsReturningHome;
-
-                npc.StopMoving();
-                npc.Notify(GameNPCEvent.ArriveAtTarget, npc);
-
-                if (arriveAtSpawnPoint)
-                {
-                    npc.Notify(GameNPCEvent.NPCReset, npc, EventArgs.Empty);
-                    npc.Notify(GameNPCEvent.ArriveAtSpawnPoint, npc);
-                }
+                npc._OnArrivedAtTarget();
             }
         }
 
-        protected void _OnArrivedAtTarget()
+        protected virtual void _OnArrivedAtTarget()
         {
             var arriveAtSpawnPoint = IsReturningHome;
+                
             StopMoving();
-
             Notify(GameNPCEvent.ArriveAtTarget, this);
+
             if (arriveAtSpawnPoint)
+            {
+                Notify(GameNPCEvent.NPCReset, this, EventArgs.Empty);
                 Notify(GameNPCEvent.ArriveAtSpawnPoint, this);
+            }
         }
 
         public void CancelWalkToTimer()
@@ -2910,7 +2904,7 @@ namespace DOL.GS
         /// <summary>
         /// Holds the rider of this NPC as weak reference
         /// </summary>
-        public GamePlayer[] Riders;
+        public GameLiving[] Riders;
 
         /// <summary>
         /// This function is called when a rider mounts this npc
@@ -2918,10 +2912,10 @@ namespace DOL.GS
         /// GamePlayer.MountSteed function instead to make sure all
         /// callbacks are called correctly
         /// </summary>
-        /// <param name="rider">GamePlayer that is the rider</param>
+        /// <param name="rider">GameLiving that is the rider</param>
         /// <param name="forced">if true, mounting can't be prevented by handlers</param>
         /// <returns>true if mounted successfully</returns>
-        public virtual bool RiderMount(GamePlayer rider, bool forced)
+        public virtual bool RiderMount(GameLiving rider, bool forced)
         {
             int exists = RiderArrayLocation(rider);
             if (exists != -1)
@@ -2942,11 +2936,11 @@ namespace DOL.GS
         /// GamePlayer.MountSteed function instead to make sure all
         /// callbacks are called correctly
         /// </summary>
-        /// <param name="rider">GamePlayer that is the rider</param>
+        /// <param name="rider">GameLiving that is the rider</param>
         /// <param name="forced">if true, mounting can't be prevented by handlers</param>
         /// <param name="slot">The desired slot to mount</param>
         /// <returns>true if mounted successfully</returns>
-        public virtual bool RiderMount(GamePlayer rider, bool forced, int slot)
+        public virtual bool RiderMount(GameLiving rider, bool forced, int slot)
         {
             int exists = RiderArrayLocation(rider);
             if (exists != -1)
@@ -2972,7 +2966,7 @@ namespace DOL.GS
         /// <param name="forced">if true, the dismounting can't be prevented by handlers</param>
         /// <param name="player">the player that is dismounting</param>
         /// <returns>true if dismounted successfully</returns>
-        public virtual bool RiderDismount(bool forced, GamePlayer player)
+        public virtual bool RiderDismount(bool forced, GameLiving player)
         {
             if (Riders.Length <= 0)
                 return false;
@@ -3007,13 +3001,13 @@ namespace DOL.GS
         /// <summary>
         /// Get the riders array location
         /// </summary>
-        /// <param name="player">the player to get location of</param>
+        /// <param name="living">the player to get location of</param>
         /// <returns></returns>
-        public int RiderArrayLocation(GamePlayer player)
+        public int RiderArrayLocation(GameLiving living)
         {
             for (int i = 0; i < MAX_PASSENGERS; i++)
             {
-                if (Riders[i] == player)
+                if (Riders[i] == living)
                     return i;
             }
             return -1;
@@ -3022,11 +3016,11 @@ namespace DOL.GS
         /// <summary>
         /// Get the riders slot on the npc
         /// </summary>
-        /// <param name="player"></param>
+        /// <param name="living"></param>
         /// <returns></returns>
-        public int RiderSlot(GamePlayer player)
+        public int RiderSlot(GameLiving living)
         {
-            int location = RiderArrayLocation(player);
+            int location = RiderArrayLocation(living);
             if (location == -1)
                 return location;
             return location + SLOT_OFFSET;
@@ -3059,17 +3053,17 @@ namespace DOL.GS
         /// <summary>
         /// Gets a list of the current riders
         /// </summary>
-        public GamePlayer[] CurrentRiders
+        public GameLiving[] CurrentRiders
         {
             get
             {
-                List<GamePlayer> list = new List<GamePlayer>(MAX_PASSENGERS);
+                List<GameLiving> list = new List<GameLiving>(MAX_PASSENGERS);
                 for (int i = 0; i < MAX_PASSENGERS; i++)
                 {
                     if (Riders == null || i >= Riders.Length)
                         break;
 
-                    GamePlayer player = Riders[i];
+                    GameLiving player = Riders[i];
                     if (player != null)
                         list.Add(player);
                 }
@@ -3103,7 +3097,7 @@ namespace DOL.GS
             if (!base.AddToWorld()) return false;
 
             if (MAX_PASSENGERS > 0)
-                Riders = new GamePlayer[MAX_PASSENGERS];
+                Riders = new GameLiving[MAX_PASSENGERS];
 
             if (temporallyBrain != null)
             {
@@ -5980,14 +5974,14 @@ namespace DOL.GS
         /// <param name="spell"></param>
         /// <param name="line"></param>
         /// <param name="checkLOS"></param>
-        public virtual void CastSpell(Spell spell, SpellLine line, bool checkLOS)
+        public virtual bool CastSpell(Spell spell, SpellLine line, bool checkLOS)
         {
             if (IsIncapacitated)
-                return;
+                return false;
 
             if (checkLOS)
             {
-                CastSpell(spell, line);
+                return CastSpell(spell, line);
             }
             else
             {
@@ -6004,7 +5998,7 @@ namespace DOL.GS
                     spellToCast = spell;
                 }
 
-                base.CastSpell(spellToCast, line);
+                return base.CastSpell(spellToCast, line);
             }
         }
 

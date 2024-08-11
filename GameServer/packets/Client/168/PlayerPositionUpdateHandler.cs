@@ -541,7 +541,7 @@ namespace DOL.GS.PacketHandler.Client.v168
 
                     if (fallSpeed > fallMinSpeed)
                     {
-                        fallDamage = client.Player.CalcFallDamage((int)fallPercent);
+                        fallDamage = client.Player.TakeFallDamage((int)fallPercent);
                     }
 
                     client.Player.MaxLastZ = client.Player.Position.Z;
@@ -1102,7 +1102,7 @@ namespace DOL.GS.PacketHandler.Client.v168
                         if (fallSpeed > fallMinSpeed)
                         {
                             fallPercent = Math.Max(0, fallPercent - safeFallLevel);
-                            client.Player.CalcFallDamage(fallPercent);
+                            client.Player.TakeFallDamage(fallPercent);
                         }
 
                         client.Player.MaxLastZ = client.Player.Position.Z;

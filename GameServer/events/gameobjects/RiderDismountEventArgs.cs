@@ -30,7 +30,7 @@ namespace DOL.Events
         /// </summary>
         /// <param name="rider">the rider dismounting</param>
         /// <param name="steed">the steed the rider is dismounting from</param>
-        public RiderDismountEventArgs(GamePlayer rider, GameLiving steed) : base(rider, steed)
+        public RiderDismountEventArgs(GameLiving rider, GameLiving steed) : base(rider, steed)
         {
         }
     }

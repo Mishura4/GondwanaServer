@@ -207,9 +207,9 @@ namespace DOL.GS.ServerRules
         /// <summary>
         /// Is this player allowed to ride his personnal mount ?
         /// </summary>
-        /// <param name="player">player summoning the horse</param>
+        /// <param name="living"></param>
         /// <returns>empty string for mount allowed, any other for not allowed reason</returns>
-        string ReasonForDisallowMounting(GamePlayer player);
+        string ReasonForDisallowMounting(GameLiving living);
 
         /// <summary>
         /// Short description of server rules

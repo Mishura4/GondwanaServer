@@ -131,6 +131,10 @@ namespace DOL.AI.Brain
                 Body.Reset();
                 return;
             }
+
+            if (Body.IsIncapacitated)
+                return;
+
             // If the NPC is Moving on path, it can detect closed doors and open them
             if (Body.IsMovingOnPath) DetectDoor();
 

@@ -30,6 +30,7 @@ using DOL.AI.Brain;
 using DOL.gameobjects.CustomNPC;
 using System.Threading.Tasks;
 using DOL.GS.Geometry;
+using DOL.GS.Spells;
 
 namespace DOL.GS
 {
@@ -722,6 +723,39 @@ namespace DOL.GS
 
         #region Throw
 
+        protected Spell m_throwSpell;
+
+        public virtual Spell Throw
+        {
+            get
+            {
+                if (m_throwSpell == null)
+                {
+                    DBSpell spell = new DBSpell();
+                    spell.Type = ((SpellHandlerAttribute)Attribute.GetCustomAttribute(typeof(BumpSpellHandler), typeof(SpellHandlerAttribute)))?.SpellType;
+                    spell.AllowAdd = false;
+                    spell.CastTime = 0;
+                    spell.ClientEffect = 5701;
+                    spell.Description = "Throw";
+                    spell.Name = "Dragon Throw";
+                    spell.Range = 2500;
+                    spell.Radius = 700;
+                    spell.Damage = 2000 * DragonDifficulty / 100;
+                    spell.RecastDelay = 10;
+                    spell.DamageType = (int)eDamageType.Body;
+                    spell.SpellID = 6001;
+                    spell.Target = "enemy";
+                    spell.Type = "DirectDamage";
+                    spell.Value = 700; // Height
+                    spell.LifeDrainReturn = 300; // MinDistance
+                    spell.AmnesiaChance = 500; // MaxDistance
+                    m_throwSpell = new Spell(spell, 70);
+                    SkillBase.AddScriptedSpell(GlobalSpellsLines.Mob_Spells, m_throwSpell);
+                }
+                return m_throwSpell;
+            }
+        }
+
         private const int m_throwChance = 5;
 
         /// <summary>
@@ -745,7 +779,7 @@ namespace DOL.GS
             bool success = Util.Chance(ThrowChance);
 
             if (success)
-                ThrowLiving(target);
+                success = ThrowLiving(target);
 
             return success;
         }
@@ -754,25 +788,23 @@ namespace DOL.GS
         /// Hurl a player into the air.
         /// </summary>
         /// <param name="target">The player to hurl into the air.</param>
-        private void ThrowLiving(GameLiving target)
+        private bool ThrowLiving(GameLiving target)
         {
-            BroadcastMessage(String.Format("{0} is hurled into the air!", target.Name));
+            var previousTarget = target;
 
-            // Face the target, then push it 700 units up and 300 - 500 units backwards.
-
+            TargetObject = target;
             TurnTo(target);
-
-            var throwPosition = GetThrowPosition(target, 700, Orientation, Util.Random(300, 500) );
-
-            if (target is GamePlayer)
+            if (!CastSpell(Throw, SkillBase.GetSpellLine(GlobalSpellsLines.Mob_Spells), false))
             {
-                target.MoveTo(throwPosition);
+                TargetObject = previousTarget;
+                return false;
             }
-            else if (target is GameNPC)
+            if (target is GameNPC)
             {
-                (target as GameNPC).MoveWithoutRemovingFromWorld(throwPosition, true);
                 target.ChangeHealth(this, eHealthChangeType.Spell, (int)(target.Health * -0.35));
             }
+            TargetObject = previousTarget;
+            return false;
         }
 
         /// <summary>

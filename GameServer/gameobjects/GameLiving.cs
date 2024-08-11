@@ -47,6 +47,7 @@ using DOL.GameEvents;
 using DOL.GS.Geometry;
 using System.Collections.Immutable;
 using Vector3 = System.Numerics.Vector3;
+using DOL.GS.PacketHandler.Client.v168;
 
 namespace DOL.GS
 {
@@ -461,6 +462,20 @@ namespace DOL.GS
             get { return m_stunned; }
             set { m_stunned = value; }
         }
+
+        /// <summary>
+        /// Whether this living is frozen: incapacitated but can move
+        /// </summary>
+        protected bool m_frozen;
+        /// <summary>
+        /// Whether this living is frozen: incapacitated but can move
+        /// </summary>
+        public bool IsFrozen
+        {
+            get { return m_frozen; }
+            set { m_frozen = value; }
+        }
+
         /// <summary>
         /// say if player is mezzed or not
         /// </summary>
@@ -1163,7 +1178,7 @@ namespace DOL.GS
         {
             get
             {
-                return (ObjectState != eObjectState.Active || !IsAlive || IsStunned || IsMezzed);
+                return (ObjectState != eObjectState.Active || !IsAlive || IsStunned || IsMezzed || IsFrozen);
             }
         }
 
@@ -5853,6 +5868,72 @@ namespace DOL.GS
         }
 
         #endregion
+        
+        
+
+        #region Calculate Fall Damage
+
+        /// <summary>
+        /// Calculates fall damage taking fall damage reduction bonuses into account
+        /// </summary>
+        /// <returns></returns>
+        public virtual double TakeFallDamage(int fallDamagePercent)
+        {
+            if (fallDamagePercent <= 0)
+                return 0;
+
+            int safeFallLevel = GetAbilityLevel(Abilities.SafeFall);
+            int mythSafeFall = GetModified(eProperty.MythicalSafeFall);
+
+            double initialDamage = (0.01 * fallDamagePercent * (MaxHealth - 1));
+            double damage = initialDamage;
+            double totalReduction = 0;
+            GamePlayer asPlayer = this as GamePlayer;
+
+            // Apply Safe Fall ability reduction
+            if (safeFallLevel > 0)
+            {
+                double safeFallReduction = safeFallLevel * 0.05; // Example: each level reduces by 5%
+                totalReduction += safeFallReduction;
+                asPlayer?.SendTranslatedMessage("PlayerPositionUpdateHandler.SafeFall");
+            }
+
+            // Apply Mythical Safe Fall reduction
+            if (mythSafeFall > 0)
+            {
+                totalReduction += mythSafeFall * 0.01;
+                asPlayer?.SendTranslatedMessage("PlayerPositionUpdateHandler.MythSafeFall", eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
+            }
+
+            // Apply Cloudsong Fall reduction
+            GameSpellEffect cloudSongFall = SpellHandler.FindEffectOnTarget(this, "CloudsongFall");
+            if (cloudSongFall != null)
+            {
+                totalReduction += cloudSongFall.Spell.Value * 0.01;
+                asPlayer?.SendTranslatedMessage("PlayerPositionUpdateHandler.CloudsongFall", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            }
+
+            damage = initialDamage * (1 - totalReduction);
+            Endurance -= MaxEndurance * fallDamagePercent / 100;
+            double effectiveFallDamagePercent = fallDamagePercent * (1 - totalReduction);
+
+            if (asPlayer != null)
+            {
+                asPlayer.SendTranslatedMessage("PlayerPositionUpdateHandler.FallingDamage", eChatType.CT_Damaged, eChatLoc.CL_SystemWindow);
+                asPlayer.SendTranslatedMessage("PlayerPositionUpdateHandler.FallPercent", eChatType.CT_Damaged, eChatLoc.CL_SystemWindow, effectiveFallDamagePercent);
+                asPlayer.SendTranslatedMessage("PlayerPositionUpdateHandler.Endurance", eChatType.CT_Damaged, eChatLoc.CL_SystemWindow);
+            }
+
+            TakeDamage(null, eDamageType.Falling, (int)damage, 0);
+
+            // Update the player's health to all other players around
+            foreach (GamePlayer player in GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+                player.Out.SendCombatAnimation(null, this, 0, 0, 0, 0, 0, HealthPercent);
+            return damage;
+        }
+
+        #endregion
+        
         #region Speed/Heading/Target/GroundTarget/GuildName/SitState/Level
         /// <summary>
         /// The targetobject of this living
@@ -6019,7 +6100,7 @@ namespace DOL.GS
         /// </summary>
         public virtual bool IsMoving => CurrentSpeed != 0;
         
-        protected virtual Motion Motion { get; set; } = new Motion();
+        public virtual Motion Motion { get; set; } = new Motion();
         
         public override Angle Orientation
         {
@@ -6029,7 +6110,13 @@ namespace DOL.GS
 
         public override bool MoveTo(Position position)
         {
-            if (position.RegionID != CurrentRegionID) CancelAllConcentrationEffects();
+            if (position.RegionID != CurrentRegionID)
+            {
+                if (Steed != null)
+                    DismountSteed(true);
+
+                CancelAllConcentrationEffects();
+            }
             return base.MoveTo(position);
         }
         #endregion
@@ -6059,6 +6146,152 @@ namespace DOL.GS
         }
 
         #endregion
+        
+
+        #region Steed
+
+        /// <summary>
+        /// Holds the GameLiving that is the steed of this player as weakreference
+        /// </summary>
+        protected WeakReference m_steed;
+        /// <summary>
+        /// Holds the Steed of this player
+        /// </summary>
+        public GameNPC Steed
+        {
+            get { return m_steed.Target as GameNPC; }
+            set { m_steed.Target = value; }
+        }
+
+        /// <summary>
+        /// Delegate callback to be called when the player
+        /// tries to mount a steed
+        /// </summary>
+        public delegate bool MountSteedHandler(GameLiving rider, GameNPC steed, bool forced);
+
+        /// <summary>
+        /// Event will be fired whenever the player tries to
+        /// mount a steed
+        /// </summary>
+        public event MountSteedHandler OnMountSteed;
+        /// <summary>
+        /// Clears all MountSteed handlers
+        /// </summary>
+        public void ClearMountSteedHandlers()
+        {
+            OnMountSteed = null;
+        }
+
+        /// <summary>
+        /// Mounts the player onto a steed
+        /// </summary>
+        /// <param name="steed">the steed to mount</param>
+        /// <param name="forced">true if the mounting can not be prevented by handlers</param>
+        /// <returns>true if mounted successfully or false if not</returns>
+        public virtual bool MountSteed(GameNPC steed, bool forced)
+        {
+            // Sanity 'coherence' checks
+            if (Steed != null)
+                if (!DismountSteed(forced))
+                    return false;
+
+            if (this is GamePlayer { IsOnHorse: true } asPlayer)
+                asPlayer.IsOnHorse = false;
+
+            if (!steed.RiderMount(this, forced) && !forced)
+                return false;
+
+            if (OnMountSteed != null && !OnMountSteed(this, steed, forced) && !forced)
+                return false;
+
+            // Standard checks, as specified in rules
+            if (GameServer.ServerRules.ReasonForDisallowMounting(this) != string.Empty && !forced)
+                return false;
+
+            foreach (GamePlayer player in GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+            {
+                if (player == null) continue;
+                player.Out.SendRiding(this, steed, false);
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Delegate callback to be called whenever the player tries
+        /// to dismount from a steed
+        /// </summary>
+        public delegate bool DismountSteedHandler(GameLiving rider, GameLiving steed, bool forced);
+
+        /// <summary>
+        /// Event will be fired whenever the player tries to dismount
+        /// from a steed
+        /// </summary>
+        public event DismountSteedHandler OnDismountSteed;
+        /// <summary>
+        /// Clears all DismountSteed handlers
+        /// </summary>
+        public void ClearDismountSteedHandlers()
+        {
+            OnDismountSteed = null;
+        }
+
+        /// <summary>
+        /// Dismounts the player from it's steed.
+        /// </summary>
+        /// <param name="forced">true if the dismounting should not be prevented by handlers</param>
+        /// <returns>true if the dismount was successful, false if not</returns>
+        public virtual bool DismountSteed(bool forced)
+        {
+            if (Steed == null)
+                return false;
+            if (Steed.Name == "Forceful Zephyr" && !forced) return false;
+            if (OnDismountSteed != null && !OnDismountSteed(this, Steed, forced) && !forced)
+                return false;
+            GameObject steed = Steed;
+            if (!Steed.RiderDismount(forced, this) && !forced)
+                return false;
+
+            foreach (GamePlayer player in GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+            {
+                if (player == null) continue;
+                player.Out.SendRiding(this, steed, true);
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Returns if the player is riding or not
+        /// </summary>
+        /// <returns>true if on a steed, false if not</returns>
+        public virtual bool IsRiding
+        {
+            get { return Steed != null; }
+        }
+
+        public void SwitchSeat(int slot)
+        {
+            if (Steed == null)
+                return;
+
+            if (Steed.Riders[slot] != null)
+                return;
+
+            if (this is GamePlayer asPlayer)
+                asPlayer.Out.SendMessage("You switch to seat " + slot + ".", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+
+            GameNPC steed = Steed;
+            steed.RiderDismount(true, this);
+            steed.RiderMount(this, true, slot);
+            foreach (GamePlayer player in GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+            {
+                if (player == null) continue;
+                player.Out.SendRiding(this, steed, false);
+            }
+        }
+
+        #endregion
+        
         #region Say/Yell/Whisper/Emote/Messages
 
         private bool m_isSilent = false;
@@ -6725,6 +6958,10 @@ namespace DOL.GS
         /// </summary>
         public override bool RemoveFromWorld()
         {
+            if (ObjectState == eObjectState.Active)
+            {
+                DismountSteed(true);
+            }
             if (!base.RemoveFromWorld()) return false;
 
             StopAttack();
@@ -7100,6 +7337,7 @@ namespace DOL.GS
         public GameLiving()
             : base()
         {
+            m_steed = new WeakRef(null);
             m_guildName = string.Empty;
             m_targetObjectWeakReference = new WeakRef(null);
 

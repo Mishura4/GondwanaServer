@@ -182,7 +182,7 @@ namespace DOL.GS
             }
         }
 
-        public override bool RiderMount(GamePlayer rider, bool forced)
+        public override bool RiderMount(GameLiving rider, bool forced)
         {
             if (!base.RiderMount(rider, forced))
                 return false;
@@ -193,7 +193,7 @@ namespace DOL.GS
             return true;
         }
 
-        public override bool RiderDismount(bool forced, GamePlayer player)
+        public override bool RiderDismount(bool forced, GameLiving player)
         {
             if (!base.RiderDismount(forced, player))
                 return false;

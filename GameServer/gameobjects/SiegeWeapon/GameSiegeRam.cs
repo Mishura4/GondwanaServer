@@ -111,7 +111,7 @@ namespace DOL.GS
             base.DoDamage();
         }
 
-        public override bool RiderMount(GamePlayer rider, bool forced)
+        public override bool RiderMount(GameLiving rider, bool forced)
         {
             if (!base.RiderMount(rider, forced))
                 return false;
@@ -119,11 +119,11 @@ namespace DOL.GS
             return true;
         }
 
-        public override bool RiderDismount(bool forced, GamePlayer player)
+        public override bool RiderDismount(bool forced, GameLiving player)
         {
             if (!base.RiderDismount(forced, player))
                 return false;
-            if (player.SiegeWeapon == this)
+            if ((player as GamePlayer)?.SiegeWeapon == this)
                 ReleaseControl();
             UpdateRamStatus();
             return true;

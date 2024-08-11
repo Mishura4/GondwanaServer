@@ -361,12 +361,12 @@ namespace DOL.AI.Brain
         private bool PickThrowTarget()
         {
             GameDragon dragon = Body as GameDragon;
-            if (dragon == null) return false;
+            if (dragon == null || dragon.Throw == null) return false;
 
             ArrayList inRangeLiving = new ArrayList();
             foreach (GamePlayer player in dragon.GetPlayersInRadius((ushort)dragon.AttackRange))
             {
-                if (player.IsAlive && player.EffectList.GetOfType<NecromancerShadeEffect>() == null && GameServer.ServerRules.IsAllowedToAttack(Body, player, true))
+                if (player.IsAlive && player.EffectList.GetOfType<NecromancerShadeEffect>() == null)
                 {
                     inRangeLiving.Add(player);
                 }

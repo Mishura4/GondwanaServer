@@ -693,30 +693,31 @@ namespace DOL.GS.ServerRules
         /// <summary>
         /// is player allowed to ride his personal mount ?
         /// </summary>
-        /// <param name="player"></param>
+        /// <param name="living"></param>
         /// <returns>string representing why player is not allowed to mount, else empty string</returns>
-        public virtual string ReasonForDisallowMounting(GamePlayer player)
+        public virtual string ReasonForDisallowMounting(GameLiving living)
         {
             // pre conditions
-            if (!player.IsAlive) return "GameObjects.GamePlayer.UseSlot.CantMountWhileDead";
-            if (player.Steed != null) return "GameObjects.GamePlayer.UseSlot.MustDismountBefore";
+            if (!living.IsAlive) return "GameObjects.GamePlayer.UseSlot.CantMountWhileDead";
+            if (living.Steed != null) return "GameObjects.GamePlayer.UseSlot.MustDismountBefore";
 
+            GamePlayer player = living as GamePlayer;
             // gm/admin overrides the other checks
-            if (player.Client.Account.PrivLevel != (uint)ePrivLevel.Player) return string.Empty;
+            if (player?.Client.Account.PrivLevel > (uint)ePrivLevel.Player) return string.Empty;
 
             // player restrictions
-            if (player.IsMoving) return "GameObjects.GamePlayer.UseSlot.CantMountMoving";
-            if (player.InCombat) return "GameObjects.GamePlayer.UseSlot.CantMountCombat";
-            if (player.IsSitting) return "GameObjects.GamePlayer.UseSlot.CantCallMountSeated";
-            if (player.IsStealthed) return "GameObjects.GamePlayer.UseSlot.CantMountStealthed";
+            if (living.IsMoving) return "GameObjects.GamePlayer.UseSlot.CantMountMoving";
+            if (living.InCombat) return "GameObjects.GamePlayer.UseSlot.CantMountCombat";
+            if (living.IsSitting) return "GameObjects.GamePlayer.UseSlot.CantCallMountSeated";
+            if (living.IsStealthed) return "GameObjects.GamePlayer.UseSlot.CantMountStealthed";
 
             // You are carrying a relic ? You can't use a mount !
-            if (GameRelic.IsPlayerCarryingRelic(player))
+            if (player != null && GameRelic.IsPlayerCarryingRelic(player))
                 return "GameObjects.GamePlayer.UseSlot.CantMountRelicCarrier";
 
             // zones checks:
             // white list: always allows
-            string currentRegion = player.CurrentRegion.ID.ToString();
+            string currentRegion = living.CurrentRegion.ID.ToString();
             if (ServerProperties.Properties.ALLOW_PERSONNAL_MOUNT_IN_REGIONS.Contains(currentRegion))
             {
                 var regions = ServerProperties.Properties.ALLOW_PERSONNAL_MOUNT_IN_REGIONS.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
@@ -726,12 +727,12 @@ namespace DOL.GS.ServerRules
             }
 
             // restrictions: dungeons, instances, capitals, rvr horses
-            if (player.CurrentRegion.IsDungeon ||
-                player.CurrentRegion.IsInstance ||
-                player.CurrentRegion.IsCapitalCity)
+            if (living.CurrentRegion.IsDungeon ||
+                living.CurrentRegion.IsInstance ||
+                living.CurrentRegion.IsCapitalCity)
                 return "GameObjects.GamePlayer.UseSlot.CantMountHere";
             // perhaps need to be tweaked for PvPServerRules
-            if (player.CurrentRegion.IsRvR && !player.ActiveHorse.IsSummonRvR)
+            if (living.CurrentRegion.IsRvR && player?.ActiveHorse.IsSummonRvR == false)
                 return "GameObjects.GamePlayer.UseSlot.CantSummonRvR";
 
             // sounds good !

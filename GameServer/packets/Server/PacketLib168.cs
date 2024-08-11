@@ -1381,7 +1381,7 @@ namespace DOL.GS.PacketHandler
             int slot = 0;
             if (steed is GameNPC && rider is GamePlayer && dismount == false)
             {
-                slot = (steed as GameNPC).RiderSlot(rider as GamePlayer);
+                slot = (steed as GameNPC).RiderSlot(rider as GameLiving);
             }
             if (slot == -1)
                 log.Error("SendRiding error, slot is -1 with rider " + rider.Name + " steed " + steed.Name);
@@ -1602,6 +1602,7 @@ namespace DOL.GS.PacketHandler
                 old_callback = (CheckLOSResponse)m_gameClient.Player.TempProperties.getProperty<object>(key, null);
                 m_gameClient.Player.TempProperties.setProperty(key, callback);
             }
+
             if (old_callback != null)
                 old_callback(m_gameClient.Player, 0, 0); // not sure for this,  i want targetOID there
 

@@ -30,6 +30,7 @@ using System.Numerics;
 using System.Threading;
 using System.Diagnostics;
 using Vector3 = System.Numerics.Vector3;
+using System.Drawing;
 
 namespace DOL.GS
 {
@@ -115,6 +116,11 @@ namespace DOL.GS
             var reg = WorldMgr.GetAllRegions().FirstOrDefault();
             var zone = new Zone(reg, 0, "Test zone", 8, 8, 8, 8, 0, false, 0, false, 0, 0, 0, 0, 0, true, true, 1.0f);
             return _LoadZone(reg, zone, filename);
+        }
+
+        public static bool HasDataFor(Region region)
+        {
+            return _regionTriangles.ContainsKey(region.ID);
         }
 
         private static LosTreeType _LoadZone(Region region, Zone zone, string filename)
