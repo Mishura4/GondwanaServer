@@ -73,10 +73,13 @@ namespace DOL.GS
                                 * ServerProperties.Properties.LOOTGENERATOR_DREADEDSEALS_DROP_CHANCE_PER_LEVEL
                                 + ServerProperties.Properties.LOOTGENERATOR_DREADEDSEALS_BASE_CHANCE;
 
-                            if (!mob.Name.ToLower().Equals(mob.Name)) // Named mobs are more likely to drop a seal
+                            if (mob is GameNPC npc && npc.IsBoss) // replaces "if (!mob.Name.ToLower().Equals(mob.Name))" -> Boss mobs are more likely to drop seals
                                 iPercentDrop = (int)Math.Round(iPercentDrop * ServerProperties.Properties.LOOTGENERATOR_DREADEDSEALS_NAMED_CHANCE);
 
-                            if (Util.Random(9999) < iPercentDrop)
+                            int lootChanceModifier = player.LootChance;
+                            int finalChance = Math.Min(10000, iPercentDrop + (lootChanceModifier * 100));
+
+                            if (Util.Random(9999) < finalChance)
                                 loot.AddFixed(m_GlowingDreadedSeal, 1);
                         }
                         break;

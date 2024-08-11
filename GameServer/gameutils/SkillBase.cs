@@ -1552,8 +1552,8 @@ namespace DOL.GS
                     return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.CraftingSkillGain");
                 case eProperty.CraftingSpeed:
                     return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.CraftingSpeed");
-                case eProperty.SecondarySpellChance:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.SecondarySpellChance");
+                case eProperty.CounterAttack:
+                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.CounterAttack");
                 case eProperty.RobberyResist:
                     return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.RobberyResist");
                 case eProperty.MythicalStrCapBonus:
@@ -1576,12 +1576,14 @@ namespace DOL.GS
                     return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MythicalAcuCap");
                 case eProperty.MythicalCrowdDuration:
                     return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MythicalCrowdDuration");
-                case eProperty.MythicalRegen:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MythicalRegen");
+                case eProperty.LootChance:
+                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.LootChance");
+                case eProperty.MythicalOmniRegen:
+                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MythicalOmniRegen");
                 case eProperty.MythicalTension:
                     return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MythicalTension");
-                case eProperty.Skill_Learning:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Learning");
+                case eProperty.SpellShieldChance:
+                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.SpellShieldChance");
                 case eProperty.MythicalSpellReflect:
                     return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MythicalSpellReflect");
                 case eProperty.BodyResCapBonus:
@@ -2053,6 +2055,8 @@ namespace DOL.GS
                     return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.StealthEffectivenessBonus");
                 case eProperty.StealthDetectionBonus:
                     return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.StealthDetectionBonus");
+                case eProperty.Skill_Learning:
+                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Learning");
                 default:
                     throw new ArgumentOutOfRangeException(nameof(prop), prop, null);
             }

@@ -287,7 +287,7 @@ namespace DOL.GS
                 List<MobXLootTemplate> killedMobXLootTemplates = null;
 
                 // Graveen: we first privilegiate the loottemplate named 'templateid' if it exists	
-                if (mob is GameNPC { NPCTemplate: {} template} && m_mobXLootTemplates.ContainsKey(template.TemplateId.ToString()))
+                if (mob is GameNPC { NPCTemplate: { } template } && m_mobXLootTemplates.ContainsKey(template.TemplateId.ToString()))
                 {
                     killedMobXLootTemplates = m_mobXLootTemplates[template.TemplateId.ToString()];
                 }
@@ -328,9 +328,12 @@ namespace DOL.GS
 
                             if (drop != null && (drop.Realm == (int)player.Realm || drop.Realm == 0 || player.CanUseCrossRealmItems))
                             {
-                                loot.AddRandom(lootTemplate.Chance, drop, 1);
+                                int lootChanceModifier = player.LootChance;
+                                int finalChance = Math.Min(100, lootTemplate.Chance + lootChanceModifier);
+                                loot.AddRandom(finalChance, drop, 1);
                             }
                         }
+
                     }
                     return loot;
                 }
@@ -345,7 +348,7 @@ namespace DOL.GS
                     {
                         return loot;
                     }
-                    
+
                     foreach (LootTemplate lootTemplate in lootTemplatesToDrop.Values)
                     {
                         ItemTemplate drop = GameServer.Database.FindObjectByKey<ItemTemplate>(lootTemplate.ItemTemplateID);
@@ -353,13 +356,16 @@ namespace DOL.GS
                         if (drop == null || (drop.Realm != (int)player.Realm && drop.Realm != 0 && !player.CanUseCrossRealmItems))
                             continue;
 
-                        if (lootTemplate.Chance == 100)
+                        int lootChanceModifier = player.LootChance;
+                        int finalChance = Math.Min(100, lootTemplate.Chance + lootChanceModifier);
+
+                        if (finalChance == 100)
                         {
                             loot.AddFixed(drop, lootTemplate.Count);
                         }
                         else
                         {
-                            loot.AddRandom(lootTemplate.Chance, drop, 1);
+                            loot.AddRandom(finalChance, drop, 1);
                         }
                     }
                 }
@@ -403,7 +409,10 @@ namespace DOL.GS
 
                     if (drop != null && (drop.Realm == (int)player.Realm || drop.Realm == 0 || player.CanUseCrossRealmItems))
                     {
-                        if (lootTemplate.Chance == 100)
+                        int lootChanceModifier = player.LootChance;
+                        int finalChance = Math.Min(100, lootTemplate.Chance + lootChanceModifier);
+
+                        if (finalChance == 100)
                         {
                             // Added support for specifying drop count in LootTemplate rather than relying on MobXLootTemplate DropCount
                             if (lootTemplate.Count > 0)

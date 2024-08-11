@@ -21,6 +21,9 @@ using System;
 using System.Collections.Generic;
 using DOL.Database;
 using DOL.AI.Brain;
+using System.Linq;
+using DOL.GS.Quests;
+using DOL.GameEvents;
 
 namespace DOL.GS
 {
@@ -233,6 +236,39 @@ namespace DOL.GS
             }
         }
 
+        private static bool IsWithinHourRange(int hourMin, int hourMax, GamePlayer player)
+        {
+            uint currentTick = WorldMgr.GetCurrentGameTime(player);
+            uint minTick = ((uint)hourMin) * 60 * 60 * 1000;
+            uint maxTick = ((uint)hourMax) * 60 * 60 * 1000;
+
+            if (maxTick < minTick)
+                return currentTick >= minTick || currentTick <= maxTick;
+            else
+                return currentTick >= minTick && currentTick <= maxTick;
+        }
+
+        private static bool IsQuestStepCompleted(GamePlayer player, int questID, int questStepID)
+        {
+            var quest = DataQuestJsonMgr.GetQuest((ushort)questID);
+            if (quest == null) return false;
+
+            if (questID == 0 || questStepID == 0)
+            {
+                return true;
+            }
+
+            if (questStepID > 0)
+            {
+                var playerQuest = player.IsDoingQuest(quest);
+                return playerQuest != null && playerQuest.GoalStates.Any(g => g.GoalId == questStepID && g.IsActive);
+            }
+            else
+            {
+                return player.HasFinishedQuest(quest) == 1;
+            }
+        }
+
         public override LootList GenerateLoot(GameObject mob, GameObject killer)
         {
             LootList loot = base.GenerateLoot(mob, killer);
@@ -269,10 +305,27 @@ namespace DOL.GS
 
                             if (drop.Realm == (int)player.Realm || drop.Realm == 0 || player.CanUseCrossRealmItems)
                             {
-                                if (lootTemplate.Chance == 100)
-                                    loot.AddFixed(drop, lootTemplate.Count);
-                                else
-                                    loot.AddRandom(lootTemplate.Chance, drop, lootTemplate.Count);
+                                int lootChanceModifier = player.LootChance;
+                                int finalChance = Math.Min(100, lootTemplate.Chance + lootChanceModifier);
+
+                                if (!string.IsNullOrEmpty(lootTemplate.ActiveEventId))
+                                {
+                                    var activeEvent = GameEventManager.Instance.GetEventByID(lootTemplate.ActiveEventId);
+                                    if (activeEvent == null || !activeEvent.StartedTime.HasValue || (activeEvent.EndTime.HasValue && DateTimeOffset.UtcNow > activeEvent.EndTime.Value))
+                                    {
+                                        continue;
+                                    }
+                                }
+
+                                if (player.Level >= lootTemplate.MinLevel && player.Level <= lootTemplate.MaxLevel &&
+                                    IsWithinHourRange(lootTemplate.HourMin, lootTemplate.HourMax, player) &&
+                                    (lootTemplate.QuestID == 0 || IsQuestStepCompleted(player, lootTemplate.QuestID, lootTemplate.QuestStepID)) && (!lootTemplate.IsRenaissance || player.IsRenaissance))
+                                {
+                                    if (finalChance == 100)
+                                        loot.AddFixed(drop, lootTemplate.Count);
+                                    else
+                                        loot.AddRandom(finalChance, drop, lootTemplate.Count);
+                                }
                             }
                         }
                     }
@@ -293,7 +346,26 @@ namespace DOL.GS
                             ItemTemplate drop = GameServer.Database.FindObjectByKey<ItemTemplate>(lootTemplate.ItemTemplateID);
 
                             if (drop.Realm == (int)player.Realm || drop.Realm == 0 || player.CanUseCrossRealmItems)
-                                loot.AddRandom(lootTemplate.Chance, drop, lootTemplate.Count);
+                            {
+                                int lootChanceModifier = player.LootChance;
+                                int finalChance = Math.Min(100, lootTemplate.Chance + lootChanceModifier);
+
+                                if (!string.IsNullOrEmpty(lootTemplate.ActiveEventId))
+                                {
+                                    var activeEvent = GameEventManager.Instance.GetEventByID(lootTemplate.ActiveEventId);
+                                    if (activeEvent == null || !activeEvent.StartedTime.HasValue || (activeEvent.EndTime.HasValue && DateTimeOffset.UtcNow > activeEvent.EndTime.Value))
+                                    {
+                                        continue; // Skip loot if the event is not active
+                                    }
+                                }
+
+                                if (player.Level >= lootTemplate.MinLevel && player.Level <= lootTemplate.MaxLevel &&
+                                    IsWithinHourRange(lootTemplate.HourMin, lootTemplate.HourMax, player) &&
+                                    (lootTemplate.QuestID == 0 || IsQuestStepCompleted(player, lootTemplate.QuestID, lootTemplate.QuestStepID)) && (!lootTemplate.IsRenaissance || player.IsRenaissance))
+                                {
+                                    loot.AddRandom(finalChance, drop, lootTemplate.Count);
+                                }
+                            }
                         }
                     }
                 }
@@ -332,10 +404,27 @@ namespace DOL.GS
 
                     if (drop.Realm == (int)player.Realm || drop.Realm == 0 || player.CanUseCrossRealmItems)
                     {
-                        if (lootTemplate.Chance == 100)
-                            lootList.AddFixed(drop, lootTemplate.Count);
-                        else
-                            lootTemplates.Add(lootTemplate);
+                        int lootChanceModifier = player.LootChance;
+                        int finalChance = Math.Min(100, lootTemplate.Chance + lootChanceModifier);
+
+                        if (!string.IsNullOrEmpty(lootTemplate.ActiveEventId))
+                        {
+                            var activeEvent = GameEventManager.Instance.GetEventByID(lootTemplate.ActiveEventId);
+                            if (activeEvent == null || !activeEvent.StartedTime.HasValue || (activeEvent.EndTime.HasValue && DateTimeOffset.UtcNow > activeEvent.EndTime.Value))
+                            {
+                                continue; // Skip loot if the event is not active
+                            }
+                        }
+
+                        if (player.Level >= lootTemplate.MinLevel && player.Level <= lootTemplate.MaxLevel &&
+                            IsWithinHourRange(lootTemplate.HourMin, lootTemplate.HourMax, player) &&
+                            (lootTemplate.QuestID == 0 || IsQuestStepCompleted(player, lootTemplate.QuestID, lootTemplate.QuestStepID)) && (!lootTemplate.IsRenaissance || player.IsRenaissance))
+                        {
+                            if (finalChance == 100)
+                                lootList.AddFixed(drop, lootTemplate.Count);
+                            else
+                                lootTemplates.Add(lootTemplate);
+                        }
                     }
                 }
             }

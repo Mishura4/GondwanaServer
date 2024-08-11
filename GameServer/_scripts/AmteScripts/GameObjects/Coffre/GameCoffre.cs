@@ -776,7 +776,7 @@ namespace DOL.GS.Scripts
                 return false;
             }
             this.LastTimeChecked = DateTime.Now;
-            CoffreItem coffre = GetRandomItem();
+            CoffreItem coffre = GetRandomItem(player);
             LootList loot = new LootList();
             bool error = false;
             if (!string.IsNullOrEmpty(coffre.Id_nb) && coffre.Chance != 0)
@@ -1051,9 +1051,18 @@ namespace DOL.GS.Scripts
         #endregion
 
         #region Item aléatoire
-        private CoffreItem GetRandomItem()
+        private CoffreItem GetRandomItem(GamePlayer player)
         {
-            if (!Util.Chance(ItemChance))
+            // Calculate the combined chance
+            int combinedChance = ItemChance;
+            if (player != null)
+            {
+                // Add the player's loot chance to the combined chance
+                combinedChance += player.LootChance / 2;
+            }
+            combinedChance = Math.Min(combinedChance, 100);
+
+            if (!Util.Chance(combinedChance))
                 return new CoffreItem("", 0);
 
             int num = Util.Random(1, AllChance);

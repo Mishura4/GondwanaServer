@@ -7316,6 +7316,66 @@ namespace DOL.GS
             return 0;
         }
 
+        private void CounterAttackHandler(GameLiving attacker)
+        {
+            int counterAttackChance = CalculateCounterAttackChance();
+
+            if (Util.Chance(counterAttackChance))
+            {
+                DBStyle dbStyle = GetCounterAttackStyle(CharacterClass.ID);
+                if (dbStyle != null)
+                {
+                    Style counterStyle = new Style(dbStyle);
+                    InventoryItem weapon = AttackWeapon;
+
+                    if (StyleProcessor.CanUseStyle(this, counterStyle, weapon))
+                    {
+                        if (!AttackState)
+                        {
+                            StartAttack(attacker);
+                        }
+
+                        var attackData = new AttackData
+                        {
+                            Attacker = this,
+                            Target = attacker,
+                            Style = counterStyle,
+                            Weapon = weapon,
+                            Damage = 0,
+                            CriticalDamage = 0,
+                            AttackType = AttackData.eAttackType.MeleeOneHand
+                        };
+
+                        StyleProcessor.ExecuteStyle(this, attackData, weapon);
+                        Out.SendMessage($"You use {counterStyle.Name} to counterattack.", eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
+                    }
+                    else
+                    {
+                        Out.SendMessage("Cannot use the counterattack style with the current weapon.", eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
+                    }
+                }
+                else
+                {
+                    Out.SendMessage("No counterattack style found for your class.", eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
+                }
+            }
+        }
+
+        private int CalculateCounterAttackChance()
+        {
+            int value = BuffBonusCategory4[(int)eProperty.CounterAttack];
+            value += Math.Min(25, ItemBonus[(int)eProperty.CounterAttack]);
+            value -= DebuffCategory[(int)eProperty.CounterAttack];
+            return Math.Max(0, value);
+        }
+
+        private DBStyle GetCounterAttackStyle(int characterClassId)
+        {
+            var whereClause = DB.Column("SpecKeyName").IsEqualTo("CounterAttack").And(DB.Column("ClassId").IsEqualTo(characterClassId));
+            var dbStyles = GameServer.Database.SelectObjects<DBStyle>(whereClause);
+            return dbStyles.FirstOrDefault();
+        }
+
         /// <summary>
         /// This method is called at the end of the attack sequence to
         /// notify objects if they have been attacked/hit by an attack
@@ -7416,6 +7476,9 @@ namespace DOL.GS
                                 }
                             }
                         }
+
+                        ItemSpellShieldHandler.ApplyEffect(GameLivingEvent.AttackedByEnemy, this, new AttackedByEnemyEventArgs(ad));
+                        CounterAttackHandler(ad.Attacker);
                         break;
                     }
                 case eAttackResult.Blocked:
@@ -11305,6 +11368,22 @@ namespace DOL.GS
         {
             get { return m_autoSplitLoot; }
             set { m_autoSplitLoot = value; }
+        }
+
+        /// <summary>
+        /// Apply loot chance from items & buffs
+        /// </summary>
+        public virtual int LootChance
+        {
+            get
+            {
+                int lootchance = 0;
+
+                lootchance += BuffBonusCategory4[eProperty.LootChance];
+                lootchance += ItemBonus[(int)eProperty.LootChance];
+
+                return Math.Max(0, lootchance);
+            }
         }
 
         /// <summary>

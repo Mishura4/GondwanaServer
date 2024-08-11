@@ -221,8 +221,8 @@ SkillBase.RegisterPropertyNames.WaterSpeed:				Bonus to Swimming Speed
 SkillBase.RegisterPropertyNames.Essence:				Essence Resist
 SkillBase.RegisterPropertyNames.CraftingSkillGain:		Crafting Skill Gain Bonus
 SkillBase.RegisterPropertyNames.CraftingSpeed:			Crafting Speed
-SkillBase.RegisterPropertyNames.SecondarySpellChance:	Increased Secondary Style spell chance
-SkillBase.RegisterPropertyNames.RobberyResist:			Robbery Resist chance
+SkillBase.RegisterPropertyNames.CounterAttack:			Counter Attack Chance
+SkillBase.RegisterPropertyNames.RobberyResist:			Robbery Resist Chance
 SkillBase.RegisterPropertyNames.MythicalStrCap:			Mythical cap to Strength
 SkillBase.RegisterPropertyNames.MythicalDexCap:			Mythical cap to Dexterity
 SkillBase.RegisterPropertyNames.MythicalConCap:			Mythical cap to Constitution
@@ -241,10 +241,11 @@ SkillBase.RegisterPropertyNames.MatterCap:				Bonus to Matter Resist cap
 SkillBase.RegisterPropertyNames.SlashCap:				Bonus to Slash Resist cap
 SkillBase.RegisterPropertyNames.SpiritCap:				Bonus to Spirit Resist cap
 SkillBase.RegisterPropertyNames.ThrustCap:				Bonus to Thrust Resist cap
-SkillBase.RegisterPropertyNames.MythicalCrowdDuration:	Mythical Crowd Control Duration decrease
-SkillBase.RegisterPropertyNames.MythicalRegen: 			Mythical Regeneration Bonus
+SkillBase.RegisterPropertyNames.MythicalCrowdDuration:	Mythical Crowd Control Duration Decrease
+SkillBase.RegisterPropertyNames.LootChance:				Loot Chance
+SkillBase.RegisterPropertyNames.MythicalOmniRegen: 		Mythical Regeneration Bonus
 SkillBase.RegisterPropertyNames.MythicalTension: 		Mythical Tension Bonus
-SkillBase.RegisterPropertyNames.Skill_Learning:			Magic Learning
+SkillBase.RegisterPropertyNames.SpellShieldChance:		Spell Shield Chance
 SkillBase.RegisterPropertyNames.MythicalSpellReflect: 	Mythical Spell Reflection Chance
 SkillBase.RegisterPropertyNames.MythicalSafeFall: 		Mythical Safe Fall
 SkillBase.RegisterPropertyNames.MythicalDiscumbering:	Mythical Discumbering
@@ -262,3 +263,5 @@ SkillBase.RegisterPropertyNames.RobberyChanceBonus:         Bonus Robbery Chance
 SkillBase.RegisterPropertyNames.RobberyDelayReduction:      Robbery Cooldown Reduction
 SkillBase.RegisterPropertyNames.StealthEffectivenessBonus:  Bonus Stealth
 SkillBase.RegisterPropertyNames.StealthDetectionBonus:      Bonus Stealth Detection
+
+SkillBase.RegisterPropertyNames.Skill_Learning:			Magic Learning

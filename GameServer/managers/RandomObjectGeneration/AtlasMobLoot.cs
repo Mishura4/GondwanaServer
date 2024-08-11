@@ -15,7 +15,7 @@ namespace DOL.GS
     {
 
         //base chance in %
-        public static ushort BASE_ROG_CHANCE = 14;
+        public static ushort BASE_ROG_CHANCE = 13;
 
 
         /// <summary>
@@ -56,8 +56,10 @@ namespace DOL.GS
                     player = player.Group.Leader;
                 }
 
-                // chance to get a RoG Item
-                int chance = BASE_ROG_CHANCE + ((killedcon < 0 ? killedcon + 1 : killedcon) * 3);
+                // chance to get a RoG Item & addition of lootChanceModifier from items
+                int baseChance = BASE_ROG_CHANCE + ((killedcon < 0 ? killedcon + 1 : killedcon) * 3);
+                int lootChanceModifier = player.LootChance;
+                int finalChance = Math.Min(100, baseChance + lootChanceModifier);
 
                 //chance = 100;
 
@@ -69,7 +71,7 @@ namespace DOL.GS
                     if (maxDropCap < 1) maxDropCap = 1;
                     if (mob is GameDragon)
                         maxDropCap *= 2;
-                    chance = 2;
+                    int chance = 2;
 
                     int numDrops = 0;
                     foreach (GamePlayer bgMember in bg.Members.Keys)
@@ -97,17 +99,17 @@ namespace DOL.GS
                     int guaranteedDrop = mob.Level > 67 ? 1 : 0; //guarantee a drop for very high level mobs
 
                     if (mob.Level > 27)
-                        chance -= 3;
+                        finalChance -= 3;
 
                     if (mob.Level > 40)
-                        chance -= 3;
+                        finalChance -= 3;
 
                     if (mob.Level < 5)
                     {
-                        chance += 75;
+                        finalChance += 75;
                     }
                     else if (mob.Level < 10)
-                        chance += (100 - mob.Level * 10);
+                        finalChance += (100 - mob.Level * 10);
 
                     int numDrops = 0;
                     //roll for an item for each player in the group
@@ -116,7 +118,7 @@ namespace DOL.GS
                         if (groupPlayer.GetDistanceTo(player) > WorldMgr.VISIBILITY_DISTANCE)
                             continue;
 
-                        if (Util.Chance(chance) && numDrops < MaxDropCap)
+                        if (Util.Chance(finalChance) && numDrops < MaxDropCap)
                         {
                             classForLoot = GetRandomClassFromGroup(player.Group);
                             var item = GenerateItemTemplate(player, classForLoot, (byte)(mob.Level + 1), killedcon);
@@ -149,18 +151,18 @@ namespace DOL.GS
                         classForLoot = GetRandomClassFromRealm(player.Realm);
                     }
 
-                    chance += 10; //solo drop bonus
+                    finalChance += 10; //solo drop bonus
 
                     ItemTemplate item = null;
 
                     if (mob.Level < 5)
                     {
-                        chance += 75;
+                        finalChance += 75;
                     }
                     else if (mob.Level < 10)
-                        chance += (100 - mob.Level * 10);
+                        finalChance += (100 - mob.Level * 10);
 
-                    if (Util.Chance(chance))
+                    if (Util.Chance(finalChance))
                     {
                         GeneratedUniqueItem tmp = AtlasROGManager.GenerateMonsterLootROG(player.Realm, classForLoot, (byte)(mob.Level + 1), false);
                         item = tmp;

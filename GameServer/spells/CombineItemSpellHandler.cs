@@ -105,7 +105,7 @@ namespace DOL.spells
 
             foreach (var neededItem in combinable.Items)
             {
-                int counted = matchedItems[neededItem.Key]?.Sum(i => i.Count) ?? 0;
+                int counted = matchedItems.TryGetValue(neededItem.Key, out var itemMatches) ? itemMatches.Sum(i => i.Count) : 0;
                 if (counted < neededItem.Value)
                 {
                     return null;

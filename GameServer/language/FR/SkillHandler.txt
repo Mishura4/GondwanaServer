@@ -169,22 +169,22 @@ SkillBase.RegisterPropertyNames.Spear:               Lance
 SkillBase.RegisterPropertyNames.SpectralForce:         Force Spectrale
 SkillBase.RegisterPropertyNames.SpectralForceFocus:      Focus : Force Spectrale
 SkillBase.RegisterPropertyNames.SpectralGuard:         Défense Spectrale
-SkillBase.RegisterPropertyNames.SpeedDecreaseDuration:   Durée de ralentissement de déplacement
-SkillBase.RegisterPropertyNames.SpellDuration:         Durée des sorts
-SkillBase.RegisterPropertyNames.SpellPowerCost:         Réduction des coûts en mana des sorts (PvE Uniquement)
-SkillBase.RegisterPropertyNames.SpellRange:            Portée de sort
+SkillBase.RegisterPropertyNames.SpeedDecreaseDuration:   Durée de Ralentissement de Déplacement
+SkillBase.RegisterPropertyNames.SpellDuration:         Durée des Sorts
+SkillBase.RegisterPropertyNames.SpellPowerCost:         Réduction des Coûts en Mana des Sorts (PvE Uniquement)
+SkillBase.RegisterPropertyNames.SpellRange:            Portée de Sort
 SkillBase.RegisterPropertyNames.Spirit:               Résistance à l'Esprit
 SkillBase.RegisterPropertyNames.SpiritMagic:         Voie du Simulacre
 SkillBase.RegisterPropertyNames.SpiritMagicFocus:      Focus : Voie du Simulacre
 SkillBase.RegisterPropertyNames.Staff:               Bâton
-SkillBase.RegisterPropertyNames.StatBuffSpells:         Tous les sorts d'augmentation
+SkillBase.RegisterPropertyNames.StatBuffSpells:         Tous les Sorts d'Augmentation
 SkillBase.RegisterPropertyNames.Stealth:            Furtivité
 SkillBase.RegisterPropertyNames.Stormcalling:         Ire de Thor
 SkillBase.RegisterPropertyNames.Strength:            Force
 SkillBase.RegisterPropertyNames.StrengthBonusCap:      Bonus au cap de Force
 SkillBase.RegisterPropertyNames.StunDuration:         Durée des Stun
-SkillBase.RegisterPropertyNames.StyleCostReduction:      Réduction des coûts d'endurance des styles de combat (PvE Uniquement)
-SkillBase.RegisterPropertyNames.StyleDamage:         Bonus aux dégâts des styles de combat
+SkillBase.RegisterPropertyNames.StyleCostReduction:      Réduction des Coûts d'endurance des Styles de Combat (PvE Uniquement)
+SkillBase.RegisterPropertyNames.StyleDamage:         Bonus aux Dégâts des Styles de Combat
 SkillBase.RegisterPropertyNames.Summoning:            Servants de Hel
 SkillBase.RegisterPropertyNames.SummoningFocus:         Focus : Servants de Hel
 SkillBase.RegisterPropertyNames.Suppression:         Affaiblissement
@@ -210,46 +210,47 @@ SkillBase.RegisterPropertyNames.WitchcraftFocus:      Focus : Artifices
 SkillBase.RegisterPropertyNames.KeepDamage:				Bonus Dommages contre les Forts
 SkillBase.RegisterPropertyNames.DPS:					Augmentation du DPS
 SkillBase.RegisterPropertyNames.MagicAbsorption:		Absorption Magique
-SkillBase.RegisterPropertyNames.MaxHealth:				Points de vie Max
-SkillBase.RegisterPropertyNames.MaxMana:				Points de mana Max
-SkillBase.RegisterPropertyNames.MissHit:				Bonus de coup manqué
-SkillBase.RegisterPropertyNames.WaterSpeed:				Bonus de Vitesse de nage
+SkillBase.RegisterPropertyNames.MaxHealth:				Points de Vie Max
+SkillBase.RegisterPropertyNames.MaxMana:				Points de Mana Max
+SkillBase.RegisterPropertyNames.MissHit:				Bonus de Coup Manqué
+SkillBase.RegisterPropertyNames.WaterSpeed:				Bonus de Vitesse de Nage
 
 SkillBase.RegisterPropertyNames.Essence:				Résistance à l'Essence
-SkillBase.RegisterPropertyNames.CraftingSkillGain:		Bonus de gain en Artisanat
+SkillBase.RegisterPropertyNames.CraftingSkillGain:		Bonus de Gain en Artisanat
 SkillBase.RegisterPropertyNames.CraftingSpeed:			Vitesse de l'Artisanat
-SkillBase.RegisterPropertyNames.SecondarySpellChance:	Chance de Sort secondaire de style
-SkillBase.RegisterPropertyNames.RobberyResist:			Chance d'éviter les vols
-SkillBase.RegisterPropertyNames.MythicalStrCap:			Bonus Mythique cap de Force
-SkillBase.RegisterPropertyNames.MythicalDexCap:			Bonus Mythique cap de Dexterité
-SkillBase.RegisterPropertyNames.MythicalConCap:			Bonus Mythique cap de Constitution
-SkillBase.RegisterPropertyNames.MythicalQuiCap:			Bonus Mythique cap de Vivacité
-SkillBase.RegisterPropertyNames.MythicalIntCap:			Bonus Mythique cap d'Intelligence
-SkillBase.RegisterPropertyNames.MythicalPieCap:			Bonus Mythique cap de Piété
-SkillBase.RegisterPropertyNames.MythicalEmpCap:			Bonus Mythique cap d'Empathie
-SkillBase.RegisterPropertyNames.MythicalChaCap:			Bonus Mythique cap de Charisme
-SkillBase.RegisterPropertyNames.MythicalAcuCap:			Bonus Mythique cap d'Acuité
-SkillBase.RegisterPropertyNames.BodyCap:				Bonus au cap Résistance au Corps
-SkillBase.RegisterPropertyNames.ColdCap:				Bonus au cap Résistance au Froid
-SkillBase.RegisterPropertyNames.CrushCap:				Bonus au cap Résistance Contondant
-SkillBase.RegisterPropertyNames.EnergyCap:				Bonus au cap Résistance à l'Energie
-SkillBase.RegisterPropertyNames.HeatCap:				Bonus au cap Résistance à la Chaleur
-SkillBase.RegisterPropertyNames.MatterCap:				Bonus au cap Résistance à la Matière
-SkillBase.RegisterPropertyNames.SlashCap:				Bonus au cap Résistance Tranchant
-SkillBase.RegisterPropertyNames.SpiritCap:				Bonus au cap Résistance à l'Esprit
-SkillBase.RegisterPropertyNames.ThrustCap:				Bonus au cap Résistance à l'Estoc
-SkillBase.RegisterPropertyNames.MythicalCrowdDuration:	Mythical Crowd Control Duration decrease
-SkillBase.RegisterPropertyNames.MythicalRegen: 			Bonus Mythique de Récupération Vie et Mana
+SkillBase.RegisterPropertyNames.CounterAttack:			Chance de Contre-Attaque
+SkillBase.RegisterPropertyNames.RobberyResist:			Chance d'éviter les Vols
+SkillBase.RegisterPropertyNames.MythicalStrCap:			Bonus Mythique Cap de Force
+SkillBase.RegisterPropertyNames.MythicalDexCap:			Bonus Mythique Cap de Dexterité
+SkillBase.RegisterPropertyNames.MythicalConCap:			Bonus Mythique Cap de Constitution
+SkillBase.RegisterPropertyNames.MythicalQuiCap:			Bonus Mythique Cap de Vivacité
+SkillBase.RegisterPropertyNames.MythicalIntCap:			Bonus Mythique Cap d'Intelligence
+SkillBase.RegisterPropertyNames.MythicalPieCap:			Bonus Mythique Cap de Piété
+SkillBase.RegisterPropertyNames.MythicalEmpCap:			Bonus Mythique Cap d'Empathie
+SkillBase.RegisterPropertyNames.MythicalChaCap:			Bonus Mythique Cap de Charisme
+SkillBase.RegisterPropertyNames.MythicalAcuCap:			Bonus Mythique Cap d'Acuité
+SkillBase.RegisterPropertyNames.BodyCap:				Bonus au Cap Résistance au Corps
+SkillBase.RegisterPropertyNames.ColdCap:				Bonus au Cap Résistance au Froid
+SkillBase.RegisterPropertyNames.CrushCap:				Bonus au Cap Résistance Contondant
+SkillBase.RegisterPropertyNames.EnergyCap:				Bonus au Cap Résistance à l'Energie
+SkillBase.RegisterPropertyNames.HeatCap:				Bonus au Cap Résistance à la Chaleur
+SkillBase.RegisterPropertyNames.MatterCap:				Bonus au Cap Résistance à la Matière
+SkillBase.RegisterPropertyNames.SlashCap:				Bonus au Cap Résistance Tranchant
+SkillBase.RegisterPropertyNames.SpiritCap:				Bonus au Cap Résistance à l'Esprit
+SkillBase.RegisterPropertyNames.ThrustCap:				Bonus au Cap Résistance à l'Estoc
+SkillBase.RegisterPropertyNames.MythicalCrowdDuration:	Réduction Durée des Sorts de Contrôle
+SkillBase.RegisterPropertyNames.LootChance:				Chance de Loot
+SkillBase.RegisterPropertyNames.MythicalOmniRegen: 		Bonus Mythique de Régénération
 SkillBase.RegisterPropertyNames.MythicalTension: 		Bonus Mythique de Tension
-SkillBase.RegisterPropertyNames.Skill_Learning:			Apprentissage
+SkillBase.RegisterPropertyNames.SpellShieldChance:		Chance de Blindage Contre les Sorts
 SkillBase.RegisterPropertyNames.MythicalSpellReflect: 	Bonus Mythique de Renvoi de Sort
-SkillBase.RegisterPropertyNames.MythicalSafeFall: 		Bonus Mythique de résistance aux Chutes
+SkillBase.RegisterPropertyNames.MythicalSafeFall: 		Bonus Mythique de Résistance aux Chutes
 SkillBase.RegisterPropertyNames.MythicalDiscumbering:	Bonus Mythique Encombrement
 SkillBase.RegisterPropertyNames.MythicalCoin:			Bonus Mythique de Butin
 SkillBase.RegisterPropertyNames.SpellLevel:				Bonus de niveau des Sorts
 SkillBase.RegisterPropertyNames.Conversion:				Conversion
-SkillBase.RegisterPropertyNames.ExtraHp:				Bonus Mythique de points de vie
-SkillBase.RegisterPropertyNames.StyleAbsorb:			Bonus Mythique Absorption dégâts physiques
+SkillBase.RegisterPropertyNames.ExtraHp:				Bonus Mythique de Points de Vie
+SkillBase.RegisterPropertyNames.StyleAbsorb:			Bonus Mythique Absorption Dégâts Physiques
 SkillBase.RegisterPropertyNames.ArcaneSyphon:			Arcane Syphon
 SkillBase.RegisterPropertyNames.RealmPoints:			Bonus Mythique Points de Royaume
 SkillBase.RegisterPropertyNames.BountyPoints:			Bonus Mythique Gains en Bounty Points
@@ -259,3 +260,5 @@ SkillBase.RegisterPropertyNames.RobberyChanceBonus:         Bonus Chance de Vol
 SkillBase.RegisterPropertyNames.RobberyDelayReduction:      Réduction de temps de recharge de Vol
 SkillBase.RegisterPropertyNames.StealthEffectivenessBonus:  Bonus Furtivité
 SkillBase.RegisterPropertyNames.StealthDetectionBonus:      Bonus détection de Furtivité
+
+SkillBase.RegisterPropertyNames.Skill_Learning:			Apprentissage
