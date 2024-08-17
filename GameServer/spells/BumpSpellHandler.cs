@@ -18,6 +18,8 @@ namespace DOL.GS.Spells
     [SpellHandler("BumpSpell")]
     public class BumpSpellHandler : SpellHandler
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         public class BumpTrajectory
         {
             public record Point(Coordinate Coordinate, int Milliseconds);
@@ -223,16 +225,80 @@ namespace DOL.GS.Spells
             set;
         }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        private BumpNPC CreateBumpNPC(GameLiving owner)
         {
-            if (target == Caster || !target.IsAlive || target is ShadowNPC || target.EffectList.GetOfType<NecromancerShadeEffect>() != null)
-                return;
+            return new BumpNPC(this)
+            {
+                Realm = Caster.Realm,
+                Model = 667,
+                Position = owner.Position.With(Caster.Orientation),
+                Name = "Bump",
+                Level = Caster.Level,
+                Flags = GameNPC.eFlags.PEACE | GameNPC.eFlags.DONTSHOWNAME | GameNPC.eFlags.CANTTARGET | GameNPC.eFlags.FLYING,
+                MaxSpeedBase = 4000
+            };
+        }
 
-            if (IsSwimming(target) || IsPeaceful(target))
-                return;
-
+        private void DoBumpWithoutServerLos(GameLiving target, double effectiveness)
+        {
             // Calculate the bump distance
-            int bumpDistance = Util.Random(MinDistance, MaxDistance);
+            int bumpDistance = Util.Random((int)(MinDistance * effectiveness), (int)(MaxDistance * effectiveness));
+            int height = (int)(Height * effectiveness);
+
+            if (bumpDistance <= 0 && height <= 0)
+                return;
+            
+            GamePlayer losPlayer = target as GamePlayer ?? Caster as GamePlayer;
+            if (losPlayer is null)
+            {
+                log.Debug($"Cannot calculate LOS for BumpSpellHandler from ${Caster.Name} to ${target.Name}, neither is a player");
+                return;
+            }
+
+            BumpNPC npc = CreateBumpNPC(target);
+            npc.AddToWorld();
+            int maxTries = 4;
+            int tries = 1;
+            Vector v = Vector.Create(Caster.Position.Orientation, bumpDistance) + Vector.Create(0, 0, height);
+            npc.Position = target.Position + v;
+            losPlayer.Out.SendCheckLOS(target, npc, Callback);
+            void Callback(GamePlayer gamePlayer, ushort response, ushort sourceoid, ushort targetoid)
+            {
+                if ((response & 0x100) != 0x100)
+                {
+                    // LOS failed
+                    if (tries >= maxTries)
+                    {
+                        npc.RemoveFromWorld();
+                        npc.Delete();
+                        return;
+                    }
+                    ++tries;
+                    v = Vector.Create(Caster.Position.Orientation, (int)(bumpDistance / tries)) + Vector.Create(0, 0, (int)(height / tries));
+                    npc.Position = target.Position + v;
+                    losPlayer.Out.SendCheckLOS(target, npc, Callback);
+                    return;
+                }
+                
+                foreach (GamePlayer p in target.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE).Cast<GamePlayer>())
+                {
+                    p.Out.SendSpellEffectAnimation(m_caster, target, m_spell.ClientEffect, 0, false, 1);
+                }
+                target.MoveTo(npc.Position);
+                npc.RemoveFromWorld();
+                npc.Delete();
+            }
+        }
+
+        public void DoBumpWithServerLos(GameLiving target, double effectiveness)
+        {
+            // Calculate the bump distance
+            int bumpDistance = Util.Random((int)(MinDistance * effectiveness), (int)(MaxDistance * effectiveness));
+            int height = (int)(Height * effectiveness);
+
+            if (bumpDistance <= 0 && height <= 0)
+                return;
+
             BumpTrajectory trajectory;
             if (target is GamePlayer player)
             {
@@ -242,7 +308,7 @@ namespace DOL.GS.Spells
                     trajectory = _npcVictims.Find(t => GameMath.IsWithinRadius2D(t.Trajectory.Start.Coordinate, target.Coordinate, 8.0f))?.Trajectory;
                     if (trajectory == null || trajectory.Points.Count <= 1)
                     {
-                        trajectory = new BumpTrajectory(target.Position.With(Caster.Orientation), (short)Height, bumpDistance);
+                        trajectory = new BumpTrajectory(target.Position.With(Caster.Orientation), (short)height, bumpDistance);
                         if (trajectory.Points.Count <= 1)
                             return;
                     }
@@ -268,7 +334,7 @@ namespace DOL.GS.Spells
                 trajectory = _npcVictims.Find(t => GameMath.IsWithinRadius2D(t.Trajectory.Start.Coordinate, target.Coordinate, 8.0f))?.Trajectory;
                 if (trajectory == null || trajectory.Points.Count <= 1)
                 {
-                    trajectory = new BumpTrajectory(target.Position.With(Caster.Orientation), (short)Height, bumpDistance);
+                    trajectory = new BumpTrajectory(target.Position.With(Caster.Orientation), (short)height, bumpDistance);
                     if (trajectory.Points.Count <= 1)
                         return;
                 }
@@ -289,6 +355,25 @@ namespace DOL.GS.Spells
             foreach (GamePlayer p in target.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE).Cast<GamePlayer>())
             {
                 p.Out.SendSpellEffectAnimation(m_caster, target, m_spell.ClientEffect, 0, false, 1);
+            }
+        }
+
+        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        {
+            if (target == Caster || !target.IsAlive || target is ShadowNPC || target.EffectList.GetOfType<NecromancerShadeEffect>() != null)
+                return;
+
+            if (IsSwimming(target) || IsPeaceful(target))
+                return;
+
+            if (!LosCheckMgr.HasDataFor(target.CurrentRegion))
+            {
+                log.Warn($"BumpSpellHandler: LOSCheckManager has no data for region {target.CurrentRegion}, using simple technique of teleporting the target");
+                DoBumpWithoutServerLos(target, effectiveness);
+            }
+            else
+            {
+                DoBumpWithServerLos(target, effectiveness);
             }
         }
 
@@ -324,7 +409,7 @@ namespace DOL.GS.Spells
         {
             if (victim.IsBumpNpc)
             {
-                foreach (GamePlayer player in ((BumpNPC)victim.Npc).Victims)
+                foreach (GamePlayer player in ((BumpNPC)victim.Npc).Victims.Where(p => p.ObjectState == GameObject.eObjectState.Active && p.IsAlive))
                 {
                     player.IsStunned = false;
                     player.DismountSteed(true);
