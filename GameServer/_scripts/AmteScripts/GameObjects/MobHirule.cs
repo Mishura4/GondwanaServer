@@ -8,6 +8,7 @@ using DOL.GS.Scripts;
 using System.Threading;
 using log4net;
 using DOL.AI.Brain;
+using DOL.GS.Spells;
 
 namespace DOL.GS
 {
@@ -186,7 +187,7 @@ namespace DOL.GS
             if (ObjectState != eObjectState.Active) return;
             GameLiving t = (GameLiving)source;
             float range = this.GetDistanceTo(t);
-            if (range >= 1000) //évite la technique du serpent
+            if (true || range >= 1000) //évite la technique du serpent
             {
                 m_hiruleTarget = t;
                 PickAction();
@@ -261,7 +262,7 @@ namespace DOL.GS
 
         void PickAction()
         {
-            if (Util.Random(1) < 1)
+            if (false && Util.Random(1) < 1)
             {
                 //Glare
                 Timer timer = new Timer(new TimerCallback(HiruleGlare), null, 30, 0);
@@ -299,16 +300,45 @@ namespace DOL.GS
             if (!(target is GamePlayer)) return;
             if ((int)Realm == 5) return; // I don't want event dragons causing XP deaths
             HiruleBroadcast(Name + " jette " + m_hiruleTarget.Name + " dans les airs !");
-            m_hiruleTarget.MoveTo(m_hiruleTarget.CurrentRegionID,
-                m_hiruleTarget.Position.X,
-                m_hiruleTarget.Position.Y,
-                m_hiruleTarget.Position.Z + 750,
-                m_hiruleTarget.Heading);
+            CastSpell(Throw, SkillBase.GetSpellLine(GlobalSpellsLines.Mob_Spells));
         }
 
         #endregion
 
         #region Spells
+
+        protected Spell m_throwSpell;
+
+        public virtual Spell Throw
+        {
+            get
+            {
+                if (m_throwSpell == null)
+                {
+                    DBSpell spell = new DBSpell();
+                    spell.Type = ((SpellHandlerAttribute)Attribute.GetCustomAttribute(typeof(BumpSpellHandler), typeof(SpellHandlerAttribute)))?.SpellType;
+                    spell.AllowAdd = false;
+                    spell.CastTime = 0;
+                    spell.ClientEffect = 5701;
+                    spell.Description = "Throw";
+                    spell.Name = "Hirule Throw";
+                    spell.Range = 2500;
+                    spell.Radius = 700;
+                    spell.Damage = 300;
+                    spell.RecastDelay = 10;
+                    spell.DamageType = (int)eDamageType.Body;
+                    spell.SpellID = 6001;
+                    spell.Target = "enemy";
+                    spell.Type = "DirectDamage";
+                    spell.Value = 500; // Height
+                    spell.LifeDrainReturn = 200; // MinDistance
+                    spell.AmnesiaChance = 400; // MaxDistance
+                    m_throwSpell = new Spell(spell, 70);
+                    SkillBase.AddScriptedSpell(GlobalSpellsLines.Mob_Spells, m_throwSpell);
+                }
+                return m_throwSpell;
+            }
+        }
 
         protected static Spell m_flash;
         public static Spell Flash
