@@ -286,6 +286,10 @@ namespace DOL.GS.Spells
 
                 BroadcastMessage(npc, "is hurled into the air!");
             }
+            foreach (GamePlayer p in target.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE).Cast<GamePlayer>())
+            {
+                p.Out.SendSpellEffectAnimation(m_caster, target, m_spell.ClientEffect, 0, false, 1);
+            }
         }
 
         private void BroadcastMessage(GameLiving target, string message)
