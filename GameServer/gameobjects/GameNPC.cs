@@ -2904,7 +2904,7 @@ namespace DOL.GS
         /// <summary>
         /// Holds the rider of this NPC as weak reference
         /// </summary>
-        public GameLiving[] Riders;
+        public GamePlayer[] Riders;
 
         /// <summary>
         /// This function is called when a rider mounts this npc
@@ -2912,10 +2912,10 @@ namespace DOL.GS
         /// GamePlayer.MountSteed function instead to make sure all
         /// callbacks are called correctly
         /// </summary>
-        /// <param name="rider">GameLiving that is the rider</param>
+        /// <param name="rider">GamePlayer that is the rider</param>
         /// <param name="forced">if true, mounting can't be prevented by handlers</param>
         /// <returns>true if mounted successfully</returns>
-        public virtual bool RiderMount(GameLiving rider, bool forced)
+        public virtual bool RiderMount(GamePlayer rider, bool forced)
         {
             int exists = RiderArrayLocation(rider);
             if (exists != -1)
@@ -2940,7 +2940,7 @@ namespace DOL.GS
         /// <param name="forced">if true, mounting can't be prevented by handlers</param>
         /// <param name="slot">The desired slot to mount</param>
         /// <returns>true if mounted successfully</returns>
-        public virtual bool RiderMount(GameLiving rider, bool forced, int slot)
+        public virtual bool RiderMount(GamePlayer rider, bool forced, int slot)
         {
             int exists = RiderArrayLocation(rider);
             if (exists != -1)
@@ -2966,7 +2966,7 @@ namespace DOL.GS
         /// <param name="forced">if true, the dismounting can't be prevented by handlers</param>
         /// <param name="player">the player that is dismounting</param>
         /// <returns>true if dismounted successfully</returns>
-        public virtual bool RiderDismount(bool forced, GameLiving player)
+        public virtual bool RiderDismount(bool forced, GamePlayer player)
         {
             if (Riders.Length <= 0)
                 return false;
@@ -3003,7 +3003,7 @@ namespace DOL.GS
         /// </summary>
         /// <param name="living">the player to get location of</param>
         /// <returns></returns>
-        public int RiderArrayLocation(GameLiving living)
+        public int RiderArrayLocation(GamePlayer living)
         {
             for (int i = 0; i < MAX_PASSENGERS; i++)
             {
@@ -3018,7 +3018,7 @@ namespace DOL.GS
         /// </summary>
         /// <param name="living"></param>
         /// <returns></returns>
-        public int RiderSlot(GameLiving living)
+        public int RiderSlot(GamePlayer living)
         {
             int location = RiderArrayLocation(living);
             if (location == -1)
@@ -3053,17 +3053,17 @@ namespace DOL.GS
         /// <summary>
         /// Gets a list of the current riders
         /// </summary>
-        public GameLiving[] CurrentRiders
+        public GamePlayer[] CurrentRiders
         {
             get
             {
-                List<GameLiving> list = new List<GameLiving>(MAX_PASSENGERS);
+                List<GamePlayer> list = new List<GamePlayer>(MAX_PASSENGERS);
                 for (int i = 0; i < MAX_PASSENGERS; i++)
                 {
                     if (Riders == null || i >= Riders.Length)
                         break;
 
-                    GameLiving player = Riders[i];
+                    GamePlayer player = Riders[i];
                     if (player != null)
                         list.Add(player);
                 }
@@ -3097,7 +3097,7 @@ namespace DOL.GS
             if (!base.AddToWorld()) return false;
 
             if (MAX_PASSENGERS > 0)
-                Riders = new GameLiving[MAX_PASSENGERS];
+                Riders = new GamePlayer[MAX_PASSENGERS];
 
             if (temporallyBrain != null)
             {

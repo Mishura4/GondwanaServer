@@ -1379,9 +1379,9 @@ namespace DOL.GS.PacketHandler
         public virtual void SendRiding(GameObject rider, GameObject steed, bool dismount)
         {
             int slot = 0;
-            if (steed is GameNPC && rider is GamePlayer && dismount == false)
+            if (steed is GameNPC npc && rider is GamePlayer riderPlayer && dismount == false)
             {
-                slot = (steed as GameNPC).RiderSlot(rider as GameLiving);
+                slot = npc.RiderSlot(riderPlayer);
             }
             if (slot == -1)
                 log.Error("SendRiding error, slot is -1 with rider " + rider.Name + " steed " + steed.Name);

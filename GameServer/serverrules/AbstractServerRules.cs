@@ -699,7 +699,7 @@ namespace DOL.GS.ServerRules
         {
             // pre conditions
             if (!living.IsAlive) return "GameObjects.GamePlayer.UseSlot.CantMountWhileDead";
-            if (living.Steed != null) return "GameObjects.GamePlayer.UseSlot.MustDismountBefore";
+            if (living is GamePlayer { Steed: not null }) return "GameObjects.GamePlayer.UseSlot.MustDismountBefore";
 
             GamePlayer player = living as GamePlayer;
             // gm/admin overrides the other checks

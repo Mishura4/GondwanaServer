@@ -26,7 +26,7 @@ namespace DOL.Events
     /// </summary>
     public class RiderMountEventArgs : EventArgs
     {
-        private GameLiving rider;
+        private GamePlayer rider;
         private GameLiving steed;
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace DOL.Events
         /// </summary>
         /// <param name="rider">the rider mounting</param>
         /// <param name="steed">the steed being mounted</param>
-        public RiderMountEventArgs(GameLiving rider, GameLiving steed)
+        public RiderMountEventArgs(GamePlayer rider, GameLiving steed)
         {
             this.rider = rider;
             this.steed = steed;
@@ -43,7 +43,7 @@ namespace DOL.Events
         /// <summary>
         /// Gets the GamePlayer rider who is mounting the steed
         /// </summary>
-        public GameLiving Rider
+        public GamePlayer Rider
         {
             get { return rider; }
         }

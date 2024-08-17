@@ -10877,6 +10877,150 @@ namespace DOL.GS
 
         #endregion
 
+        #region Steed
+
+        /// <summary>
+        /// Holds the GameLiving that is the steed of this player as weakreference
+        /// </summary>
+        protected WeakReference m_steed;
+        /// <summary>
+        /// Holds the Steed of this player
+        /// </summary>
+        public GameNPC Steed
+        {
+            get { return m_steed.Target as GameNPC; }
+            set { m_steed.Target = value; }
+        }
+
+        /// <summary>
+        /// Delegate callback to be called when the player
+        /// tries to mount a steed
+        /// </summary>
+        public delegate bool MountSteedHandler(GameLiving rider, GameNPC steed, bool forced);
+
+        /// <summary>
+        /// Event will be fired whenever the player tries to
+        /// mount a steed
+        /// </summary>
+        public event MountSteedHandler OnMountSteed;
+        /// <summary>
+        /// Clears all MountSteed handlers
+        /// </summary>
+        public void ClearMountSteedHandlers()
+        {
+            OnMountSteed = null;
+        }
+
+        /// <summary>
+        /// Mounts the player onto a steed
+        /// </summary>
+        /// <param name="steed">the steed to mount</param>
+        /// <param name="forced">true if the mounting can not be prevented by handlers</param>
+        /// <returns>true if mounted successfully or false if not</returns>
+        public virtual bool MountSteed(GameNPC steed, bool forced)
+        {
+            // Sanity 'coherence' checks
+            if (Steed != null)
+                if (!DismountSteed(forced))
+                    return false;
+
+            if (this is GamePlayer { IsOnHorse: true } asPlayer)
+                asPlayer.IsOnHorse = false;
+
+            if (!steed.RiderMount(this, forced) && !forced)
+                return false;
+
+            if (OnMountSteed != null && !OnMountSteed(this, steed, forced) && !forced)
+                return false;
+
+            // Standard checks, as specified in rules
+            if (GameServer.ServerRules.ReasonForDisallowMounting(this) != string.Empty && !forced)
+                return false;
+
+            foreach (GamePlayer player in GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+            {
+                if (player == null) continue;
+                player.Out.SendRiding(this, steed, false);
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Delegate callback to be called whenever the player tries
+        /// to dismount from a steed
+        /// </summary>
+        public delegate bool DismountSteedHandler(GameLiving rider, GameLiving steed, bool forced);
+
+        /// <summary>
+        /// Event will be fired whenever the player tries to dismount
+        /// from a steed
+        /// </summary>
+        public event DismountSteedHandler OnDismountSteed;
+        /// <summary>
+        /// Clears all DismountSteed handlers
+        /// </summary>
+        public void ClearDismountSteedHandlers()
+        {
+            OnDismountSteed = null;
+        }
+
+        /// <summary>
+        /// Dismounts the player from it's steed.
+        /// </summary>
+        /// <param name="forced">true if the dismounting should not be prevented by handlers</param>
+        /// <returns>true if the dismount was successful, false if not</returns>
+        public virtual bool DismountSteed(bool forced)
+        {
+            if (Steed == null)
+                return false;
+            if (Steed.Name == "Forceful Zephyr" && !forced) return false;
+            if (OnDismountSteed != null && !OnDismountSteed(this, Steed, forced) && !forced)
+                return false;
+            GameObject steed = Steed;
+            if (!Steed.RiderDismount(forced, this) && !forced)
+                return false;
+
+            foreach (GamePlayer player in GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+            {
+                if (player == null) continue;
+                player.Out.SendRiding(this, steed, true);
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Returns if the player is riding or not
+        /// </summary>
+        /// <returns>true if on a steed, false if not</returns>
+        public virtual bool IsRiding
+        {
+            get { return Steed != null; }
+        }
+
+        public void SwitchSeat(int slot)
+        {
+            if (Steed == null)
+                return;
+
+            if (Steed.Riders[slot] != null)
+                return;
+
+            if (this is GamePlayer asPlayer)
+                asPlayer.Out.SendMessage("You switch to seat " + slot + ".", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+
+            GameNPC steed = Steed;
+            steed.RiderDismount(true, this);
+            steed.RiderMount(this, true, slot);
+            foreach (GamePlayer player in GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+            {
+                if (player == null) continue;
+                player.Out.SendRiding(this, steed, false);
+            }
+        }
+
+        #endregion
+
         #region Add/Move/Remove
 
         /// <summary>
@@ -10948,6 +11092,7 @@ namespace DOL.GS
 
             if (ObjectState == eObjectState.Active)
             {
+                DismountSteed(true);
                 if (CurrentZone == null)
                 {
                     if (this is GamePlayer && this.Client.Account.PrivLevel < 3 && !(this as GamePlayer).TempProperties.getProperty("isbeingbanned", false))
@@ -17165,6 +17310,7 @@ namespace DOL.GS
         {
             Wallet = new Wallet(this);
             IsJumping = false;
+            m_steed = new WeakRef(null);
             m_rangeAttackAmmo = new WeakRef(null);
             m_rangeAttackTarget = new WeakRef(null);
             m_client = client;
