@@ -53,6 +53,7 @@ namespace DOL.GS.Spells
                 HorizontalSpeed = (short)Math.Round(distance / airTime);
                 int msIncrement = Math.Max(1, (int)Math.Round((airTime * 1000) / NumSegments));
                 Coordinate currentPoint = Start.Coordinate;
+                AddPoint(new Point(currentPoint, 0));
                 int timeElapsed = 0;
                 for (int i = 0; i < MaxSegments; ++i)
                 {
@@ -304,7 +305,7 @@ namespace DOL.GS.Spells
             var fallSpeed = -speed - (100 * safeFallLevel);
 
             int fallDivide = 15;
-            int fallMinSpeed = 700;
+            int fallMinSpeed = 500;
 
             var fallPercent = (int)Math.Min(99, (fallSpeed - (fallMinSpeed + 1)) / fallDivide);
 
