@@ -330,6 +330,8 @@ namespace DOL.GS.Spells
                     player.DismountSteed(true);
                     DoFinalEffects(player, speed);
                 }
+                victim.Npc.RemoveFromWorld();
+                victim.Npc.Delete();
             }
             else
             {
