@@ -366,6 +366,23 @@ namespace DOL.GS.Spells
             if (IsSwimming(target) || IsPeaceful(target))
                 return;
 
+            if (target.HasAbility(Abilities.StunImmunity) || target.HasAbility(Abilities.CCImmunity))
+            {
+                MessageToCaster(m_caster.GetPersonalizedName(target) + " is immune to this effect!", eChatType.CT_SpellResisted);
+                return;
+            }
+            if (target.EffectList.GetOfType<AdrenalineSpellEffect>() != null)
+            {
+                (m_caster as GamePlayer)?.SendTranslatedMessage("Adrenaline.Target.Immune", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow, m_caster.GetPersonalizedName(target));
+                (target as GamePlayer)?.SendTranslatedMessage("Adrenaline.Self.Immune", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
+                return;
+            }
+            if (target.EffectList.GetOfType<ChargeEffect>() != null || target.TempProperties.getProperty("Charging", false))
+            {
+                MessageToCaster(m_caster.GetPersonalizedName(target) + " is moving too fast for this spell to have any effect!", eChatType.CT_SpellResisted);
+                return;
+            }
+
             if (!LosCheckMgr.HasDataFor(target.CurrentRegion))
             {
                 log.Warn($"BumpSpellHandler: LOSCheckManager has no data for region {target.CurrentRegion}, using simple technique of teleporting the target");
