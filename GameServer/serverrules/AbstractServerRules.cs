@@ -1335,7 +1335,6 @@ namespace DOL.GS.ServerRules
                     {
                         bountyPoints += bonusBP;
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameObjects.GamePlayer.GainBountyPoints.TerritoryBonus", bonusBP), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                        player.AddBountyPoints(bonusBP);
                     }
                 }
 

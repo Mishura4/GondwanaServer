@@ -232,7 +232,6 @@ namespace DOL.GS
 
             basePoints *= TerritoryBonusBountyPoints;
             basePoints *= GetBonusMultiplier(eBonusType.BountyPoints);
-            basePoints *= ServerProperties.Properties.BP_RATE;
             return (int)Math.Round(basePoints);
         }
 
