@@ -18,6 +18,8 @@
  *
  */
 
+using DOL.Database;
+using DOL.Events;
 using DOL.GS.Geometry;
 using System;
 using System.Reflection;
@@ -423,27 +425,52 @@ namespace DOL.GS.Commands
                             return;
                         }
 
+                        var spellID = Convert.ToInt32(args[3]);
                         SpellLine line = SkillBase.GetSpellLine(args[2]);
                         List<Spell> spells = SkillBase.GetSpellList(line.KeyName);
-                        if (spells.Count <= 0)
-                        {
-                            client.Out.SendMessage("No spells found in line " + args[2] + "!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                            return;
-                        }
-
-                        if (spells != null)
+                        if (spells != null && spells.Count > 0)
                         {
                             foreach (Spell spl in spells)
                             {
-                                if (spl.ID == Convert.ToInt32(args[3]))
+                                if (spl.ID == spellID)
                                 {
                                     npc.CastSpell(spl, line);
                                     return;
                                 }
                             }
                         }
+                        DBSpell dbSpell = GameServer.Database.SelectObject<DBSpell>(DB.Column("SpellID").IsEqualTo(spellID));
 
-                        client.Out.SendMessage("Spell with id " + Convert.ToInt16(args[3]) + " not found in db!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        if (dbSpell == null)
+                        {
+                            client.Out.SendMessage($"Spell with id {spellID} not found in db!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        }
+                        else
+                        {
+                            Spell spell = new Spell(dbSpell, 0);
+                            bool success;
+                            if (npc.TargetObject == null)
+                            {
+                                var oldAngle = npc.Orientation;
+                                npc.TargetObject = (spell.Target == "self" ? npc : client.Player);
+                                npc.TurnTo(npc.TargetObject);
+                                success = npc.CastSpell(spell, line, false);
+                                npc.TargetObject = null;
+                                npc.TurnTo(oldAngle);
+                            }
+                            else
+                            {
+                                success = npc.CastSpell(spell, line, false);
+                            }
+                            if (!success)
+                            {
+                                client.Out.SendMessage($"{npc.Name} failed to cast {dbSpell.Name}", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            }
+                            else
+                            {
+                                client.Out.SendMessage($"{npc.Name} successfully cast {dbSpell.Name}", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            }
+                        }
 
                         break;
                     }
