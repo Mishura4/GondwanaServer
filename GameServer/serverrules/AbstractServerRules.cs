@@ -1330,30 +1330,12 @@ namespace DOL.GS.ServerRules
 
                 double guildBuffMultiplier = Properties.GUILD_BUFF_BP / 100.0;
 
-                if (killedNPC.Level >= 45 && player is { Guild: { GuildType: Guild.eGuildType.PlayerGuild } })
+                if (player is { Guild: { GuildType: Guild.eGuildType.PlayerGuild } })
                 {
-                    if (player.Guild != null && player.Guild.BonusType == Guild.eBonusType.BountyPoints)
-                    {
-                        double guildBuffBonus = Properties.GUILD_BUFF_BP;
-                        int guildLevel = (int)player.Guild.GuildLevel;
-
-                        if (guildLevel >= 8 && guildLevel <= 15)
-                        {
-                            guildBuffBonus *= 1.5;
-                        }
-                        else if (guildLevel > 15)
-                        {
-                            guildBuffBonus *= 2.0;
-                        }
-
-                        guildBuffMultiplier *= (1.0 + guildBuffBonus * 0.01);
-                    }
-                    int multiplier = killedNPC.Level >= 65 ? 2 : 1;
-                    int bonusBP = (int)((player.Guild.TerritoryBonusBountyPoints * multiplier) + guildBuffMultiplier);
-
-                    bountyPoints += bonusBP;
+                    int bonusBP = player.Guild.CalcBPOnKill(killedNPC.Level);
                     if (bonusBP > 0)
                     {
+                        bountyPoints += bonusBP;
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameObjects.GamePlayer.GainBountyPoints.TerritoryBonus", bonusBP), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                         player.AddBountyPoints(bonusBP);
                     }

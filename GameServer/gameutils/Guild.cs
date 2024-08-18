@@ -223,6 +223,53 @@ namespace DOL.GS
             private set;
         }
 
+        public int CalcBPOnKill(int killedLevel)
+        {
+            if (killedLevel < 45)
+                return 0;
+
+            double basePoints = killedLevel >= 65 ? 2.0 : 1.0;
+
+            basePoints *= TerritoryBonusBountyPoints;
+            basePoints *= GetBonusMultiplier(eBonusType.BountyPoints);
+            return (int)Math.Round(basePoints);
+        }
+
+        public static double GetServerBaseBonusPercent(eBonusType type) => type switch
+        {
+            eBonusType.Experience => ServerProperties.Properties.GUILD_BUFF_XP,
+            eBonusType.RealmPoints => ServerProperties.Properties.GUILD_BUFF_RP,
+            eBonusType.BountyPoints => ServerProperties.Properties.GUILD_BUFF_BP,
+            eBonusType.CraftingHaste => ServerProperties.Properties.GUILD_BUFF_CRAFTING,
+            eBonusType.ArtifactXP => ServerProperties.Properties.GUILD_BUFF_ARTIFACT_XP,
+            eBonusType.Coin => ServerProperties.Properties.GUILD_BUFF_COIN,
+            eBonusType.Tension => ServerProperties.Properties.GUILD_BUFF_TENSION,
+            eBonusType.None => 0,
+            eBonusType.MasterLevelXP => 0,
+            _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
+        };
+
+        public double GetBonusMultiplier(eBonusType type)
+        {
+            if (BonusType != type)
+            {
+                return 1.0;
+            }
+
+            double buffValue = GetServerBaseBonusPercent(type);
+            int guildLevel = (int)GuildLevel;
+            
+            if (guildLevel is >= 8 and <= 15)
+            {
+                buffValue *= 1.5;
+            }
+            else if (guildLevel > 15)
+            {
+                buffValue *= 2.0;
+            }
+            return (1.0 + buffValue * 0.01);
+        }
+
         /// <summary>
         /// Bonus experience based on owned Territories
         /// </summary>
