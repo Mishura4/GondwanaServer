@@ -82,6 +82,8 @@ namespace DOL.GS.Spells
                         continue; // ignore immunity effects
                     if (gsp.SpellHandler is { HasPositiveEffect: true }) // only enemy spells are affected
                         continue;
+                    if (gsp.SpellHandler is { IsUnPurgeAble: true }) // do not purge unpurgeable
+                        continue;
                     gsp.Cancel(false);
                 }
             }

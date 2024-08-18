@@ -88,9 +88,11 @@ namespace DOL.GS.RealmAbilities
 
                         if (gsp == null)
                             continue;
-                        if (gsp is GameSpellAndImmunityEffect && ((GameSpellAndImmunityEffect)gsp).ImmunityState)
+                        if (gsp is GameSpellAndImmunityEffect { ImmunityState: true })
                             continue;
-                        if (gsp.SpellHandler.HasPositiveEffect)
+                        if (gsp.SpellHandler is { HasPositiveEffect: true }) // only enemy spells are affected
+                            continue;
+                        if (gsp.SpellHandler is { IsUnPurgeAble: true }) // do not purge unpurgeable effects
                             continue;
 
                         effects.Add(gsp);
@@ -106,9 +108,11 @@ namespace DOL.GS.RealmAbilities
                     GameSpellEffect gsp = effect as GameSpellEffect;
                     if (gsp == null)
                         continue;
-                    if (gsp is GameSpellAndImmunityEffect && ((GameSpellAndImmunityEffect)gsp).ImmunityState)
-                        continue; // ignore immunity effects
-                    if (gsp.SpellHandler.HasPositiveEffect)//only enemy spells are affected
+                    if (gsp is GameSpellAndImmunityEffect { ImmunityState: true })
+                        continue;
+                    if (gsp.SpellHandler is { HasPositiveEffect: true }) // only enemy spells are affected
+                        continue;
+                    if (gsp.SpellHandler is { IsUnPurgeAble: true }) // do not purge unpurgeable effects
                         continue;
                     /*
                     if (gsp.SpellHandler is RvRResurrectionIllness)
