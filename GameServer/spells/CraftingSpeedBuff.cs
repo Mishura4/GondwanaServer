@@ -9,7 +9,7 @@ namespace DOL.GS.Spells
     [SpellHandler("CraftingSpeedBuff")]
     public class CraftingSpeedBuff : SingleStatBuff
     {
-        public override bool HasPositiveEffect => false;
+        public override bool CanBeRightClicked => false;
 
         public CraftingSpeedBuff(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine)
         {

@@ -105,7 +105,13 @@ namespace DOL.GS.Spells
         /// </summary>
         /// <returns></returns>
         bool HasPositiveEffect { get; }
-
+        
+        /// <summary>
+        /// Whether a player with the effect of this SpellHandler can remove it
+        /// by right-clicking
+        /// </summary>
+        bool CanBeRightClicked { get; }
+        
         /// <summary>
         /// Gets wether this spellis Purgeable or not
         /// important for Masterlevels since they aren't purgeable

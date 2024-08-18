@@ -80,7 +80,7 @@ namespace DOL.GS.Spells
                         continue;
                     if (gsp is GameSpellAndImmunityEffect { ImmunityState: true })
                         continue; // ignore immunity effects
-                    if (gsp.SpellHandler.HasPositiveEffect) // only enemy spells are affected
+                    if (gsp.SpellHandler is { HasPositiveEffect: true }) // only enemy spells are affected
                         continue;
                     gsp.Cancel(false);
                 }

@@ -503,7 +503,7 @@ namespace DOL.GS.Effects
             lock (m_LockObject)
             {
                 // Player can't remove negative effect or Effect in Immunity State
-                if (playerCanceled && ((SpellHandler != null && !SpellHandler.HasPositiveEffect) || ImmunityState))
+                if (playerCanceled && (SpellHandler is { CanBeRightClicked: false } || ImmunityState))
                 {
                     GamePlayer player = Owner as GamePlayer;
                     if (player != null)
@@ -513,7 +513,7 @@ namespace DOL.GS.Effects
                 }
 
                 // Can't Cancel Immunity Effect from Alive Living
-                if (ImmunityState && Owner != null && Owner.IsAlive)
+                if (ImmunityState && Owner is { IsAlive: true })
                     return;
 
                 // Expire Effect

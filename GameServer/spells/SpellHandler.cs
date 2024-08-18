@@ -3327,6 +3327,8 @@ namespace DOL.GS.Spells
 
         public virtual bool HasPositiveEffect => m_spell.IsHelpful;
 
+        public virtual bool CanBeRightClicked => HasPositiveEffect;
+
         /// <summary>
         /// Is this Spell purgeable
         /// </summary>
