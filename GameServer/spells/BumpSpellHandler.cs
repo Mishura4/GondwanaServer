@@ -24,7 +24,7 @@ namespace DOL.GS.Spells
         {
             public record Point(Coordinate Coordinate, int Milliseconds);
             
-            public double Gravity => -500.0f;
+            public double Gravity => -750.0f;
 
             public int NumSegments => 9;
 
@@ -203,8 +203,7 @@ namespace DOL.GS.Spells
         public BumpSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine)
         {
             Height = (int)Spell.Value;
-            MinDistance = Spell.LifeDrainReturn;
-            MaxDistance = Spell.AmnesiaChance;
+            Distance = (int)Util.Random(Spell.LifeDrainReturn, Spell.AmnesiaChance);
         }
 
         public int Height
@@ -213,13 +212,7 @@ namespace DOL.GS.Spells
             set;
         }
 
-        public int MinDistance
-        {
-            get;
-            set;
-        }
-
-        public int MaxDistance
+        public int Distance
         {
             get;
             set;
@@ -242,7 +235,7 @@ namespace DOL.GS.Spells
         private void DoBumpWithoutServerLos(GameLiving target, double effectiveness)
         {
             // Calculate the bump distance
-            int bumpDistance = Util.Random((int)(MinDistance * effectiveness), (int)(MaxDistance * effectiveness));
+            int bumpDistance = (int)(Distance * effectiveness);
             int height = (int)(Height * effectiveness);
 
             if (bumpDistance <= 0 && height <= 0)
@@ -293,7 +286,7 @@ namespace DOL.GS.Spells
         public void DoBumpWithServerLos(GameLiving target, double effectiveness)
         {
             // Calculate the bump distance
-            int bumpDistance = Util.Random((int)(MinDistance * effectiveness), (int)(MaxDistance * effectiveness));
+            int bumpDistance = (int)(Distance * effectiveness);
             int height = (int)(Height * effectiveness);
 
             if (bumpDistance <= 0 && height <= 0)
