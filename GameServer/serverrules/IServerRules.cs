@@ -92,7 +92,7 @@ namespace DOL.GS.ServerRules
         /// <param name="attacker">living that makes attack</param>
         /// <param name="defender">attacker's target</param>
         /// <returns>true if target should be hit by aoe</returns>
-        bool ShouldAOEHitTarget(Spell spell, GameLiving attacker, GameLiving defender);
+        bool ShouldAOEHitTarget(Spell? spell, GameLiving attacker, GameLiving defender);
 
         /// <summary>
         /// Is caster allowed to cast a spell

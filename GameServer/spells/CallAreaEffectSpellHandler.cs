@@ -19,22 +19,21 @@ namespace DOL.GS.Spells
 
         public override bool CheckBeginCast(GameLiving selectedTarget)
         {
-            if (!(Caster is GamePlayer))
-            {
-                return false;
-            }
-
             if (selectedTarget == null)
             {
-                if (Caster is GamePlayer)
-                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "CallAreaEffect.CheckBeginCast.NoSelectedTarget"), eChatType.CT_SpellResisted);
+                if (Caster is GamePlayer player)
+                {
+                    MessageToCaster(LanguageMgr.GetTranslation(player.Client, "CallAreaEffect.CheckBeginCast.NoSelectedTarget"), eChatType.CT_SpellResisted);
+                }
                 return false;
             }
 
             if (!Caster.IsWithinRadius(selectedTarget, Spell.Range))
             {
-                if (Caster is GamePlayer)
-                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "CallAreaEffect.CheckBeginCast.TargetTooFarAway"), eChatType.CT_SpellResisted);
+                if (Caster is GamePlayer player)
+                {
+                    MessageToCaster(LanguageMgr.GetTranslation(player.Client, "CallAreaEffect.CheckBeginCast.TargetTooFarAway"), eChatType.CT_SpellResisted);
+                }
                 return false;
             }
             return base.CheckBeginCast(selectedTarget);
@@ -48,31 +47,31 @@ namespace DOL.GS.Spells
 
         public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
-            if (target != null && target.CurrentRegion != null)
+            if (target is not { ObjectState: GameObject.eObjectState.Active, CurrentRegion: not null })
+                return;
+            
+            int areaEffectFamily = Spell.LifeDrainReturn;
+            if (areaEffectFamily <= 0)
+                return;
+
+            List<DBAreaEffect> areaEffects = GameServer.Database.SelectObjects<DBAreaEffect>(
+                DB.Column("AreaEffectFamily").IsEqualTo(areaEffectFamily)).OrderBy(ae => ae.OrderInFamily).ToList();
+
+            if (areaEffects.Count <= 0)
+                return;
+
+            Position initialPosition = target.Position;
+            Mob initialMob = GameServer.Database.SelectObjects<Mob>(DB.Column("Mob_ID").IsEqualTo(areaEffects.First().MobID)).FirstOrDefault();
+            if (initialMob == null)
+                return;
+
+            SpawnAreaEffect(areaEffects.First(), target, initialPosition, Spell.Duration);
+
+            // Use initialPosition for subsequent AreaEffects
+            foreach (var areaEffect in areaEffects.Skip(1))
             {
-                int areaEffectFamily = Spell.LifeDrainReturn;
-                if (areaEffectFamily > 0)
-                {
-                    List<DBAreaEffect> areaEffects = GameServer.Database.SelectObjects<DBAreaEffect>(
-                        DB.Column("AreaEffectFamily").IsEqualTo(areaEffectFamily)).OrderBy(ae => ae.OrderInFamily).ToList();
-
-                    if (areaEffects.Count > 0)
-                    {
-                        Position initialPosition = target.Position;
-                        Mob initialMob = GameServer.Database.SelectObjects<Mob>(DB.Column("Mob_ID").IsEqualTo(areaEffects.First().MobID)).FirstOrDefault();
-                        if (initialMob != null)
-                        {
-                            SpawnAreaEffect(areaEffects.First(), target, initialPosition, Spell.Duration);
-
-                            // Use initialPosition for subsequent AreaEffects
-                            foreach (var areaEffect in areaEffects.Skip(1))
-                            {
-                                Position calculatedPosition = CalculateRelativePosition(initialPosition, areaEffects.First().MobID, areaEffect.MobID);
-                                SpawnAreaEffect(areaEffect, target, calculatedPosition, Spell.Duration);
-                            }
-                        }
-                    }
-                }
+                Position calculatedPosition = CalculateRelativePosition(initialPosition, areaEffects.First().MobID, areaEffect.MobID);
+                SpawnAreaEffect(areaEffect, target, calculatedPosition, Spell.Duration);
             }
         }
 
@@ -97,56 +96,14 @@ namespace DOL.GS.Spells
 
         private void SpawnAreaEffect(DBAreaEffect areaEffect, GameLiving target, Position position, int duration)
         {
-            Mob mob = GameServer.Database.SelectObjects<Mob>(DB.Column("Mob_ID").IsEqualTo(areaEffect.MobID)).FirstOrDefault();
-            if (mob != null)
-            {
-                // Ensure that the region is correctly set
-                position = position.With(regionID: target.CurrentRegion.ID);
+            var newAreaEffect = AreaEffect.CreateTemporary(Caster, areaEffect, target, position);
 
-                AreaEffect newAreaEffect = new AreaEffect
-                {
-                    Model = mob.Model,
-                    Name = mob.Name,
-                    Level = mob.Level,
-                    Position = position,
-                    Heading = target.Heading,
-                    CurrentRegion = target.CurrentRegion,
+            newAreaEffect.AddToWorld();
+            newAreaEffect.TempProperties.setProperty("AreaEffectDuration", duration);
 
-                    // Copy properties from DBAreaEffect to AreaEffect
-                    SpellEffect = areaEffect.Effect,
-                    IntervalMin = areaEffect.IntervalMin,
-                    IntervalMax = areaEffect.IntervalMax,
-                    HealHarm = areaEffect.HealHarm,
-                    MissChance = areaEffect.MissChance,
-                    Radius = areaEffect.Radius,
-                    Message = areaEffect.Message,
-                    Mana = areaEffect.Mana,
-                    Endurance = areaEffect.Endurance,
-                    SpellID = areaEffect.SpellID,
-                    OrderInFamily = areaEffect.OrderInFamily,
-                    OneUse = areaEffect.OnuUse
-                };
-
-                if (Caster is GamePlayer player)
-                {
-                    newAreaEffect.OwnerID = player.ObjectId;
-                }
-                else if (Caster is GameNPC npc)
-                {
-                    mob.FactionID = mob.FactionID;
-                }
-
-                newAreaEffect.AddToWorld();
-                newAreaEffect.TempProperties.setProperty("AreaEffectDuration", duration);
-
-                AreaEffectBrain brain = new AreaEffectBrain();
-                newAreaEffect.SetOwnBrain(brain);
-                newAreaEffect.Flags = GameNPC.eFlags.DONTSHOWNAME | GameNPC.eFlags.CANTTARGET | GameNPC.eFlags.FLYING;
-
-                // Set a timer to remove the AreaEffect after the duration
-                GameEventMgr.AddHandler(newAreaEffect, GameLivingEvent.RemoveFromWorld, new DOLEventHandler(OnRemoveFromWorld));
-                new RemoveAreaEffectTimer(newAreaEffect, duration).Start(duration);
-            }
+            // Set a timer to remove the AreaEffect after the duration
+            GameEventMgr.AddHandler(newAreaEffect, GameLivingEvent.RemoveFromWorld, new DOLEventHandler(OnRemoveFromWorld));
+            new RemoveAreaEffectTimer(newAreaEffect, duration).Start(duration);
         }
 
         private void OnRemoveFromWorld(DOLEvent e, object sender, EventArgs args)
@@ -167,7 +124,7 @@ namespace DOL.GS.Spells
             protected override void OnTick()
             {
                 AreaEffect areaEffect = (AreaEffect)m_actionSource;
-                if (areaEffect != null && areaEffect.ObjectState == GameObject.eObjectState.Active)
+                if (areaEffect is { ObjectState: GameObject.eObjectState.Active })
                 {
                     areaEffect.RemoveFromWorld();
                 }

@@ -177,15 +177,8 @@ namespace DOL.GS
 
         void ProximityCheck(object sender, ElapsedEventArgs e)
         {
-
-
             foreach (GamePlayer Player in WorldMgr.GetPlayersCloseToSpot(this.Position, Radius))
             {
-                if (IsImmune(Player))
-                {
-                    continue;
-                }
-
                 if (Player.IsSitting)
                 {
                     if (IsHealthType)
@@ -202,6 +195,11 @@ namespace DOL.GS
                     {
                         Player.Mana += (ManaPercentRate * Player.MaxMana) / 100;
                     }
+                }
+
+                if (IsImmune(Player))
+                {
+                    continue;
                 }
 
                 if (GameServer.ServerRules.IsAllowedToAttack(Owner, Player, true))

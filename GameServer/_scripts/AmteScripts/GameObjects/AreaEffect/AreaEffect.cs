@@ -6,11 +6,15 @@ using DOL.GS.PacketHandler;
 using DOL.MobGroups;
 using System.Collections.Generic;
 using DOL.GS.Spells;
+using System.Reflection.Metadata.Ecma335;
+using DOL.GS.Geometry;
 
 namespace DOL.GS.Scripts
 {
     public class AreaEffect : GameNPC
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         public int SpellEffect;
         public int IntervalMin;
         public int IntervalMax;
@@ -33,6 +37,8 @@ namespace DOL.GS.Scripts
         private bool enable;
         private bool disable;
 
+        public Spell _spell;
+
         protected static SpellLine m_mobSpellLine = SkillBase.GetSpellLine(GlobalSpellsLines.Mob_Spells);
 
         public bool Disable
@@ -45,10 +51,82 @@ namespace DOL.GS.Scripts
             }
         }
 
+        private GameLiving m_owner;
+
+        public GameLiving Owner
+        {
+            get => m_owner;
+            set
+            {
+                OwnerID = value.InternalID;
+                m_owner = value;
+            }
+        }
+
         public void CallAreaEffect()
         {
             enable = true;
             Brain.Think();
+        }
+
+        public bool IsImmune(GameLiving living)
+        {
+            if (living == null)
+            {
+                return true;
+            }
+            
+            GameNPC? npc = living as GameNPC;
+            if (npc is { Brain: IControlledBrain controlledBrain })
+            {
+                return IsImmune(controlledBrain.Owner);
+            }
+
+            if (Owner == null)
+                return OwnerID != null && string.Equals(living.InternalID, OwnerID);
+            
+            if (living == Owner)
+            {
+                return true;
+            }
+
+            if (Owner.Group?.IsInTheGroup(living) == true)
+            {
+                return true;
+            }
+
+            if (Owner is GamePlayer ownerPlayer)
+            {
+                GamePlayer? targetPlayer = living as GamePlayer;
+                if (ownerPlayer.Guild != null)
+                {
+                    if (npc != null)
+                    {
+                        if (npc.CurrentTerritory?.IsOwnedBy(ownerPlayer.Guild) == true)
+                        {
+                            return true;
+                        }
+                    
+                        if (!string.IsNullOrEmpty(npc.GuildName) && string.Equals(npc.GuildName, ownerPlayer.Guild.Name))
+                        {
+                            return true;
+                        }
+                    }
+                    else if (targetPlayer != null)
+                    {
+                        if (targetPlayer.Guild == ownerPlayer.Guild)
+                        {
+                            return true;
+                        }
+                    }
+                }
+
+                if (ownerPlayer.BattleGroup != null && targetPlayer.BattleGroup == ownerPlayer.BattleGroup)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         #region AddToWorld
@@ -75,39 +153,57 @@ namespace DOL.GS.Scripts
                 if (Util.Chance(MissChance)) continue;
 
                 var health = HealHarm + (HealHarm * Util.Random(-5, 5) / 100);
-                bool isOwner = (player.ObjectId == OwnerID);
+                bool affected = false;
 
-                if (health < 0 && !isOwner && player.Client.Account.PrivLevel == 1)
+                if (health < 0)
                 {
-                    player.TakeDamage(this, eDamageType.Natural, -health, 0);
-                }
-                if (health > 0 && player.Health < player.MaxHealth)
-                    player.Health += health;
-                if (AddMana > 0 && player.Mana < player.MaxMana)
-                    player.Mana += AddMana;
-                if (AddEndurance > 0 && player.Endurance < player.MaxEndurance)
-                    player.Endurance += AddEndurance;
-
-                if (Message != "" && (health != 0 || AddMana != 0 || AddEndurance != 0))
-                {
-                    if (!isOwner)
+                    if (!IsImmune(player) && GameServer.ServerRules.ShouldAOEHitTarget(null, Owner ?? this, player))
                     {
-                        player.Out.SendMessage(
-                        string.Format(Message, Math.Abs(health), Math.Abs(AddMana), Math.Abs(AddEndurance)),
-                        eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
-                    }
-                    else if (health > 0 && isOwner)
-                    {
-                        player.Out.SendMessage(
-                        string.Format(Message, Math.Abs(health), Math.Abs(AddMana), Math.Abs(AddEndurance)),
-                        eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                        AttackData ad = new AttackData
+                        {
+                            Attacker = Owner ?? this,
+                            AttackResult = eAttackResult.HitUnstyled,
+                            AttackType = AttackData.eAttackType.Spell,
+                            CausesCombat = false,
+                            Target = player,
+                            Damage = -health
+                        };
+                        player.TakeDamage(ad);
+                        affected = true;
                     }
                 }
+                if (GameServer.ServerRules.IsAllowedToHelp(Owner ?? this, player, true))
+                {
+                    if (health > 0)
+                    {
+                        player.Health += health;
+                        affected = true;
+                    }
+                    if (AddMana > 0)
+                    {
+                        player.Mana += AddMana;
+                        affected = true;
+                    }
+                    if (AddEndurance > 0)
+                    {
+                        affected = true;
+                        player.Endurance += AddEndurance;
+                    }
+                }
 
-                if (player.Client.Account.PrivLevel == 1)
+                if (affected)
+                {
+                    if (!string.IsNullOrEmpty(Message))
+                    {
+                        player.Out.SendMessage(
+                            string.Format(Message, Math.Abs(health), Math.Abs(AddMana), Math.Abs(AddEndurance)),
+                            eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                    }
                     foreach (GamePlayer plr in player.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
                         plr.Out.SendSpellEffectAnimation(this, player, (ushort)SpellEffect, 0, false, 1);
+                }
             }
+
             foreach (GamePlayer plr in GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
                 plr.Out.SendSpellEffectAnimation(this, this, (ushort)SpellEffect, 0, false, 1);
 
@@ -118,22 +214,31 @@ namespace DOL.GS.Scripts
         public void ApplySpell()
         {
             if (!enable) return;
-            if (Radius == 0 || SpellID == 0) return;
+            if (Radius == 0 || SpellID == 0 || _spell == null) return;
             if (LastApplyEffectTick > CurrentRegion.Time - Interval) return;
-            DBSpell dbspell = GameServer.Database.SelectObjects<DBSpell>(DB.Column("SpellID").IsEqualTo(SpellID)).FirstOrDefault();
-            Spell spell = new Spell(dbspell, 0);
-
+            
             foreach (GamePlayer player in GetPlayersInRadius((ushort)Radius))
             {
-                if ((spell.Duration == 0 || !player.HasEffect(spell) || spell.SpellType.ToUpper() == "DIRECTDAMAGEWITHDEBUFF"))
+                if (_spell.IsHarmful)
                 {
-                    TurnTo(player);
-
-                    this.CastSpellOnOwnerAndPets(player, spell, m_mobSpellLine);
+                    if (IsImmune(player) || !GameServer.ServerRules.ShouldAOEHitTarget(_spell, Owner ?? this, player))
+                        continue;
                 }
+                else
+                {
+                    if (!GameServer.ServerRules.IsAllowedToHelp(Owner ?? this, player, true))
+                        continue;
+                }
+
+                if ((_spell.Duration != 0 && player.HasEffect(_spell) && _spell.SpellType.ToUpper() != "DIRECTDAMAGEWITHDEBUFF"))
+                    continue;
+                
+                TurnTo(player);
+
+                this.CastSpellOnOwnerAndPets(player, _spell, m_mobSpellLine);
             }
             foreach (GamePlayer plr in GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
-                plr.Out.SendSpellEffectAnimation(this, this, spell.ClientEffect, 0, false, 1);
+                plr.Out.SendSpellEffectAnimation(this, this, _spell.ClientEffect, 0, false, 1);
             LastApplyEffectTick = CurrentRegion.Time;
             Interval = Util.Random(IntervalMin, Math.Max(IntervalMax, IntervalMin)) * 1000;
         }
@@ -229,8 +334,83 @@ namespace DOL.GS.Scripts
             Disable = AreaEffectDB.Disable;
             OrderInFamily = AreaEffectDB.OrderInFamily;
             OneUse = AreaEffectDB.OnuUse;
+            
+            _spell = null;
+            if (SpellID != 0)
+            {
+                DBSpell dbSpell = GameServer.Database.SelectObject<DBSpell>(DB.Column("SpellID").IsEqualTo(SpellID));
+
+                if (dbSpell == null)
+                {
+                    log.Error($"DBSpell {SpellID} not found for AreaEffect {data.ObjectId}");
+                }
+                else
+                {
+                    _spell = new Spell(dbSpell, 0);
+                }
+            }
         }
 
+        public static AreaEffect CreateTemporary(GameLiving owner, DBAreaEffect areaEffect, GameLiving target, Position position)
+        {
+            Mob mob = GameServer.Database.SelectObjects<Mob>(DB.Column("Mob_ID").IsEqualTo(areaEffect.MobID)).FirstOrDefault();
+            if (mob == null)
+                return null;
+
+            // Ensure that the region is correctly set
+            position = position.With(regionID: target.CurrentRegion.ID);
+
+            Spell spell = null;
+            if (areaEffect.SpellID != 0)
+            {
+                DBSpell dbSpell = GameServer.Database.SelectObject<DBSpell>(DB.Column("SpellID").IsEqualTo(areaEffect.SpellID));
+
+                if (dbSpell == null)
+                {
+                    log.Error($"DBSpell {areaEffect.SpellID} not found for AreaEffect {areaEffect.ObjectId}");
+                }
+                else
+                {
+                    spell = new Spell(dbSpell, 0);
+                }
+            }
+
+            AreaEffect newAreaEffect = new AreaEffect
+            {
+                Model = mob.Model,
+                Name = mob.Name,
+                Level = mob.Level,
+                Position = position,
+                Heading = target.Heading,
+                CurrentRegion = target.CurrentRegion,
+
+                // Copy properties from DBAreaEffect to AreaEffect
+                SpellEffect = areaEffect.Effect,
+                IntervalMin = areaEffect.IntervalMin,
+                IntervalMax = areaEffect.IntervalMax,
+                HealHarm = areaEffect.HealHarm,
+                MissChance = areaEffect.MissChance,
+                Radius = areaEffect.Radius,
+                Message = areaEffect.Message,
+                Mana = areaEffect.Mana,
+                Endurance = areaEffect.Endurance,
+                SpellID = areaEffect.SpellID,
+                OrderInFamily = areaEffect.OrderInFamily,
+                OneUse = areaEffect.OnuUse,
+                Owner = owner,
+                _spell = spell
+            };
+
+            if (owner is GameNPC npc)
+            {
+                mob.FactionID = mob.FactionID;
+            }
+
+            AreaEffectBrain brain = new AreaEffectBrain();
+            newAreaEffect.SetOwnBrain(brain);
+            newAreaEffect.Flags = GameNPC.eFlags.DONTSHOWNAME | GameNPC.eFlags.CANTTARGET | GameNPC.eFlags.FLYING;
+            return newAreaEffect;
+        }
 
         public override void SaveIntoDatabase()
         {
@@ -312,6 +492,7 @@ namespace DOL.GS.Scripts
                 Group_Mob_Turn = areaSource.Group_Mob_Turn;
                 Disable = areaSource.Disable;
                 OneUse = areaSource.OneUse;
+                _spell = areaSource._spell?.Copy();
             }
         }
     }
