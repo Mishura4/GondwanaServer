@@ -906,19 +906,7 @@ namespace DOL.spells
 
             if (player.Guild != null && player.Guild.BonusType == Guild.eBonusType.CraftingHaste)
             {
-                double guildCraftBonus = Properties.GUILD_BUFF_CRAFTING;
-                int guildLevel = (int)player.Guild.GuildLevel;
-
-                if (guildLevel >= 8 && guildLevel <= 15)
-                {
-                    guildCraftBonus *= 1.5;
-                }
-                else if (guildLevel > 15)
-                {
-                    guildCraftBonus *= 2.0;
-                }
-
-                speedMultiplier *= (1.0 + guildCraftBonus * 0.01);
+                speedMultiplier *= player.Guild.GetBonusMultiplier(Guild.eBonusType.CraftingHaste);
             }
 
             return (int)(baseDuration / speedMultiplier);

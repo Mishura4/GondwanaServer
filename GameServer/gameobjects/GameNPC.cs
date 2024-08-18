@@ -5225,21 +5225,9 @@ namespace DOL.GS
                     }
 
                     // Guild Coin Buff
-                    if (killerPlayer != null && killerPlayer.Guild != null && killerPlayer.Guild.BonusType == Guild.eBonusType.Coin)
+                    if (killerPlayer is { Guild.BonusType: Guild.eBonusType.Coin })
                     {
-                        double guildBuffBonus = Properties.GUILD_BUFF_COIN;
-                        int guildLevel = (int)killerPlayer.Guild.GuildLevel;
-
-                        if (guildLevel >= 8 && guildLevel <= 15)
-                        {
-                            guildBuffBonus *= 1.5;
-                        }
-                        else if (guildLevel > 15)
-                        {
-                            guildBuffBonus *= 2.0;
-                        }
-
-                        double guildBuffMultiplier = guildBuffBonus / 100.0;
+                        double guildBuffMultiplier = killerPlayer.Guild.GetBonusMultiplier(Guild.eBonusType.Coin);
                         long guildBuffValue = (long)(value * guildBuffMultiplier);
                         value += guildBuffValue;
                         killerPlayer.Out.SendMessage(LanguageMgr.GetTranslation(killerPlayer.Client, "GameNPC.DropLoot.GuildBuffMoney", Money.GetString(guildBuffValue)), eChatType.CT_Loot, eChatLoc.CL_SystemWindow);

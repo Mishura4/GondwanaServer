@@ -2998,23 +2998,7 @@ namespace DOL.GS
                 rate *= 1.10f;
             }
 
-            float guildBuffMultiplier = 1.0f;
-            if (Guild != null && Guild.BonusType == Guild.eBonusType.Tension)
-            {
-                double guildTensionBonus = Properties.GUILD_BUFF_TENSION;
-                int guildLevel = (int)Guild.GuildLevel;
-
-                if (guildLevel >= 8 && guildLevel <= 15)
-                {
-                    guildTensionBonus *= 1.5;
-                }
-                else if (guildLevel > 15)
-                {
-                    guildTensionBonus *= 2.0;
-                }
-
-                guildBuffMultiplier *= (float)(1.0 + guildTensionBonus * 0.01);
-            }
+            float guildBuffMultiplier = Guild?.GetBonusMultiplier(Guild.eBonusType.Tension) ?? 1.0;
 
             eArmorSlot hitLocation = ad.ArmorHitLocation;
             float armorMultiplier = hitLocation switch

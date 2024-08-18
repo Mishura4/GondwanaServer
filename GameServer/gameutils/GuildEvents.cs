@@ -209,21 +209,11 @@ namespace DOL.GS
 
             GainedExperienceEventArgs xpArgs = args as GainedExperienceEventArgs;
 
-            if (player.Guild != null && player.Guild.BonusType == Guild.eBonusType.Experience && xpArgs.XPSource == GameLiving.eXPSource.NPC)
+            if (player.Guild is { BonusType: Guild.eBonusType.Experience } && xpArgs.XPSource == GameLiving.eXPSource.NPC)
             {
-                int guildLevel = (int)player.Guild.GuildLevel;
-                double guildXPBonus = ServerProperties.Properties.GUILD_BUFF_XP;
+                double guildXPBonus = player.Guild.GetBonusMultiplier(Guild.eBonusType.Experience);
 
-                if (guildLevel >= 8 && guildLevel <= 15)
-                {
-                    guildXPBonus *= 1.5;
-                }
-                else if (guildLevel > 15)
-                {
-                    guildXPBonus *= 2.0;
-                }
-
-                long bonusXP = (long)Math.Ceiling((double)xpArgs.ExpBase * guildXPBonus / 100);
+                long bonusXP = (long)Math.Ceiling((double)xpArgs.ExpBase * guildXPBonus);
                 player.GainExperience(GameLiving.eXPSource.Other, bonusXP, 0, 0, 0, false, 1);
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GuildEvent.GuildbonusXP", bonusXP), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                 player.Guild.UpdateGuildWindow();
@@ -248,19 +238,10 @@ namespace DOL.GS
 
                 if (guild.BonusType == Guild.eBonusType.RealmPoints)
                 {
-                    int guildLevel = (int)player.Guild.GuildLevel;
-                    double guildRPBonus = ServerProperties.Properties.GUILD_BUFF_RP;
-
-                    if (guildLevel >= 8 && guildLevel <= 15)
-                    {
-                        guildRPBonus *= 1.5;
-                    }
-                    else if (guildLevel > 15)
-                    {
-                        guildRPBonus *= 2.0;
-                    }
+                    double guildRPBonus = player.Guild.GetBonusMultiplier(Guild.eBonusType.RealmPoints);
+                    
                     long oldGuildRealmPoints = guild.RealmPoints;
-                    long bonusRealmPoints = (long)Math.Ceiling((double)rpsArgs.RealmPoints * guildRPBonus / 100);
+                    long bonusRealmPoints = (long)Math.Ceiling((double)rpsArgs.RealmPoints * guildRPBonus);
 
                     player.GainRealmPoints(bonusRealmPoints, false, false, false);
                     player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GuildEvent.GuildbonusRP", bonusRealmPoints), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
