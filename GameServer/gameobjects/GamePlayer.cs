@@ -2998,7 +2998,7 @@ namespace DOL.GS
                 rate *= 1.10f;
             }
 
-            float guildBuffMultiplier = Guild?.GetBonusMultiplier(Guild.eBonusType.Tension) ?? 1.0;
+            double guildBuffMultiplier = Guild?.GetBonusMultiplier(Guild.eBonusType.Tension) ?? 1.0;
 
             eArmorSlot hitLocation = ad.ArmorHitLocation;
             float armorMultiplier = hitLocation switch
