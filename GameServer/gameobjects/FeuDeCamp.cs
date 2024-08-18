@@ -202,7 +202,7 @@ namespace DOL.GS
                     continue;
                 }
 
-                if (GameServer.ServerRules.IsAllowedToAttack(Owner, Player, true))
+                if (GameServer.ServerRules.ShouldAOEHitTarget(null, Owner, Player))
                 {
                     AttackData ad = new AttackData
                     {
