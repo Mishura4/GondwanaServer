@@ -1328,8 +1328,6 @@ namespace DOL.GS.ServerRules
                     bountyPoints = (int)(npcBPValue * damagePercent);
                 }
 
-                double guildBuffMultiplier = Properties.GUILD_BUFF_BP / 100.0;
-
                 if (player is { Guild: { GuildType: Guild.eGuildType.PlayerGuild } })
                 {
                     int bonusBP = player.Guild.CalcBPOnKill(killedNPC.Level);
@@ -1340,8 +1338,6 @@ namespace DOL.GS.ServerRules
                         player.AddBountyPoints(bonusBP);
                     }
                 }
-
-                bountyPoints = (int)(bountyPoints * guildBuffMultiplier);
 
                 if (bountyPoints > bpCap && !(killedNPC is Doppelganger))
                     bountyPoints = bpCap;
