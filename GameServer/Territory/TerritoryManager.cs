@@ -335,7 +335,18 @@ namespace DOL.Territories
             infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.TimeBeforeRent", timeBeforeRent));
             infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.TotalXPBonus", ownedTerritories.Count == 0 ? 0 : player.Guild.TerritoryBonusExperienceFactor * 100));
 
-            infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.TotalBPBonus", ownedTerritories.Count == 0 ? 0 : player.Guild.CalcBPOnKill(65)));
+            int guildBP = 0;
+            if (ownedTerritories.Count > 0)
+            {
+                guildBP = player.Guild.CalcBPOnKill(65);
+                if (Properties.BP_RATE >= 0)
+                    guildBP = (int)(guildBP * Properties.BP_RATE);
+                var playerBPBonus = player.GetModified(eProperty.BountyPoints);
+                if (playerBPBonus != 0)
+                    guildBP += (int)(playerBPBonus * 0.01 * guildBP);
+            }
+            
+            infos.Add(LanguageMgr.GetTranslation(language, "Commands.Players.Guild.Territories.TotalBPBonus", guildBP));
 
             // ---- Territory Bonuses ----
             infos.Add(string.Empty);
