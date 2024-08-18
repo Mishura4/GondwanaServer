@@ -50,6 +50,12 @@ namespace DOL.GS
 
         public static void Initialize()
         {
+            if (!ServerProperties.Properties.LOS_MGR_ENABLE)
+            {
+                log.Info("LosCheckMgr is disabled by a server property");
+                _regionTriangles.Clear();
+                return;
+            }
             LosTreeType.MaxObjectsPerNode = MAX_TRIANGLE_PER_TREE_NODE;
             Parallel.ForEach(WorldMgr.GetAllRegions(), region =>
             {

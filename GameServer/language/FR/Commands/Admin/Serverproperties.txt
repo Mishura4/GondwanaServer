@@ -1,4 +1,5 @@
-Commands.Admin.ServerProperties.DataBaseXML:			Désolé! XML utilise un cache, vous ne pouvez pas recharger les propriétés du serveur à moins d'utiliser MySQL.
-Commands.Admin.ServerProperties.Description:			Recharger les propriétés du serveur depuis la base de données.
-Commands.Admin.ServerProperties.PropertiesRefreshed:	Les propriétés du serveur ont été rechargées.
-Commands.Admin.ServerProperties.Usage:				/serverproperties
+AdminCommands.ServerProperties.DataBaseXML:			Désolé! XML utilise un cache, vous ne pouvez pas recharger les propriétés du serveur à moins d'utiliser MySQL.
+AdminCommands.ServerProperties.Description:			Recharger les propriétés du serveur depuis la base de données.
+AdminCommands.ServerProperties.PropertiesRefreshed:	Les propriétés du serveur ont été rechargées.
+AdminCommands.ServerProperties.LosCheckMgrChanged:		NOTE: Le LosCheckMgr ne peut pas être activé ou désactivé après avoir lancé le serveur.
+AdminCommands.ServerProperties.Usage:					/serverproperties

@@ -724,6 +724,13 @@ namespace DOL.GS.ServerProperties
         public static ushort LOS_PLAYER_CHECK_FREQUENCY;
 
         /// <summary>
+        /// Whether to enable the server-side LOS checks, which slows down server loading time massively
+        /// This property cannot be reloaded with /serverproperties and requires a server restart
+        /// </summary>
+        [ServerProperty("world", "los_mgr_enable", "Whether to enable server-side LOS check (NOTE: This cannot be reloaded with /serverproperties, and will need a server restart)", (bool)true)]
+        public static bool LOS_MGR_ENABLE;
+
+        /// <summary>
         /// HPs gained per champion's level
         /// </summary>
         [ServerProperty("world", "hps_per_championlevel", "The amount of extra HPs gained each time you reach a new Champion's Level", 40)]

@@ -18,6 +18,7 @@
  */
 using System;
 using DOL.GS.PacketHandler;
+using DOL.GS.ServerProperties;
 using DOL.Language;
 
 namespace DOL.GS.Commands
@@ -36,7 +37,10 @@ namespace DOL.GS.Commands
                 DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "AdminCommands.ServerProperties.DataBaseXML"));
                 return;
             }
+            bool wasLogMgrEnabled = Properties.LOS_MGR_ENABLE;
             ServerProperties.Properties.Refresh();
+            if (Properties.LOS_MGR_ENABLE)
+                DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "AdminCommands.ServerProperties.LosCheckMgrChanged"));
             DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "AdminCommands.ServerProperties.PropertiesRefreshed"));
         }
     }

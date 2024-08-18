@@ -2,3 +2,4 @@ AdminCommands.ServerProperties.Description:			Reloads server properties from the
 AdminCommands.ServerProperties.Usage:				/serverproperties
 AdminCommands.ServerProperties.DataBaseXML:			XML is cached sorry, you cannot refresh server properties unless using MySQL!
 AdminCommands.ServerProperties.PropertiesRefreshed:	Refreshed server properties!
+AdminCommands.ServerProperties.LosCheckMgrChanged:	NOTE: LosCheckMgr cannot be toggled after starting the server.
