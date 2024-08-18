@@ -232,11 +232,13 @@ namespace DOL.GS
 
             basePoints *= TerritoryBonusBountyPoints;
             basePoints *= GetBonusMultiplier(eBonusType.BountyPoints);
+            basePoints *= ServerProperties.Properties.BP_RATE;
             return (int)Math.Round(basePoints);
         }
 
         public static double GetServerBaseBonusPercent(eBonusType type) => type switch
         {
+            eBonusType.None => 0,
             eBonusType.Experience => ServerProperties.Properties.GUILD_BUFF_XP,
             eBonusType.RealmPoints => ServerProperties.Properties.GUILD_BUFF_RP,
             eBonusType.BountyPoints => ServerProperties.Properties.GUILD_BUFF_BP,
@@ -244,8 +246,7 @@ namespace DOL.GS
             eBonusType.ArtifactXP => ServerProperties.Properties.GUILD_BUFF_ARTIFACT_XP,
             eBonusType.Coin => ServerProperties.Properties.GUILD_BUFF_COIN,
             eBonusType.Tension => ServerProperties.Properties.GUILD_BUFF_TENSION,
-            eBonusType.None => 0,
-            eBonusType.MasterLevelXP => 0,
+            eBonusType.MasterLevelXP => Properties.GUILD_BUFF_MASTERLEVEL_XP,
             _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
         };
 

@@ -4499,14 +4499,6 @@ namespace DOL.GS
         #endregion
 
         #region Realm-/Region-/Bount-/Skillpoints...
-        [Obsolete("Use GetBalance(Currency.BountyPoints).Amount instead. "
-            + "The setter is going to be removed without replacement. Use Wallet.AddMoney/RemoveMoney instead.")]
-        public virtual long BountyPoints
-        {
-            get { return BountyPointBalance; }
-            set { Wallet.SetBalance(Currency.BountyPoints.Mint(value)); }
-        }
-
         /// <summary>
         /// Gets/sets player realm points
         /// (delegate to PlayerCharacter)
@@ -4818,26 +4810,6 @@ namespace DOL.GS
             factor *= toaBonus != 0 ? 1.0d + toaBonus / 100.0d : 1.0d;
 
             return factor;
-        }
-
-        [Obsolete("Use RemoveMoney(Money) instead.")]
-        public bool RemoveBountyPoints(long amount)
-        {
-            return RemoveBountyPoints(amount, null);
-        }
-
-        [Obsolete("Use RemoveMoney(Money) and SendSystemMessage(string) instead.")]
-        public bool RemoveBountyPoints(long amount, string str)
-        {
-            return RemoveBountyPoints(amount, str, eChatType.CT_Say, eChatLoc.CL_SystemWindow);
-        }
-
-        [Obsolete("Use RemoveMoney(Money) and SendMessage(string,eChatType,eChatLoc) instead.")]
-        public virtual bool RemoveBountyPoints(long amount, string str, eChatType type, eChatLoc loc)
-        {
-            var hasEnoughBps = Wallet.RemoveMoney(Currency.BountyPoints.Mint(amount));
-            if (hasEnoughBps && str != null && amount != 0) SendMessage(str, type, loc);
-            return hasEnoughBps;
         }
 
         /// <summary>
