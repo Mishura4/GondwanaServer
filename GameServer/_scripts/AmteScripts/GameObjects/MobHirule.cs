@@ -187,7 +187,7 @@ namespace DOL.GS
             if (ObjectState != eObjectState.Active) return;
             GameLiving t = (GameLiving)source;
             float range = this.GetDistanceTo(t);
-            if (true || range >= 1000) //évite la technique du serpent
+            if (range >= 1000) //évite la technique du serpent
             {
                 m_hiruleTarget = t;
                 PickAction();
@@ -262,7 +262,7 @@ namespace DOL.GS
 
         void PickAction()
         {
-            if (false && Util.Random(1) < 1)
+            if (Util.Random(1) < 1)
             {
                 //Glare
                 Timer timer = new Timer(new TimerCallback(HiruleGlare), null, 30, 0);
@@ -329,7 +329,6 @@ namespace DOL.GS
                     spell.DamageType = (int)eDamageType.Body;
                     spell.SpellID = 6001;
                     spell.Target = "enemy";
-                    spell.Type = "DirectDamage";
                     spell.Value = 500; // Height
                     spell.LifeDrainReturn = 200; // MinDistance
                     spell.AmnesiaChance = 400; // MaxDistance

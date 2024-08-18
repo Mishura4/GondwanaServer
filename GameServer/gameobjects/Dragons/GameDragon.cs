@@ -745,7 +745,6 @@ namespace DOL.GS
                     spell.DamageType = (int)eDamageType.Body;
                     spell.SpellID = 6001;
                     spell.Target = "enemy";
-                    spell.Type = "DirectDamage";
                     spell.Value = 700; // Height
                     spell.LifeDrainReturn = 300; // MinDistance
                     spell.AmnesiaChance = 500; // MaxDistance
