@@ -3,6 +3,8 @@ using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
 using DOL.GS.PlayerClass;
 using System;
+using System.Linq;
+using static DOL.GS.Region;
 
 namespace DOL.GS.Spells
 {
@@ -11,7 +13,7 @@ namespace DOL.GS.Spells
     {
         uint unk1 = 0;
         float radius, intensity, duration, delay = 0;
-        private Coordinate Coordinate
+        private Position Position
         {
             get;
             set;
@@ -24,20 +26,156 @@ namespace DOL.GS.Spells
             duration = 1000.0f;
         }
 
-        public override bool StartSpell(GameLiving targetObject)
+        private void SendPacketTo(GamePlayer player, float newIntensity)
+        {
+            GSTCPPacketOut pak = new GSTCPPacketOut(0x47);
+            pak.WriteIntLowEndian(unk1);
+            pak.WriteIntLowEndian((uint)Position.X);
+            pak.WriteIntLowEndian((uint)Position.Y);
+            pak.WriteIntLowEndian((uint)Position.Z);
+            pak.Write(BitConverter.GetBytes(radius), 0, sizeof(float));
+            pak.Write(BitConverter.GetBytes(newIntensity), 0, sizeof(float));
+            pak.Write(BitConverter.GetBytes(Spell.Pulse), 0, sizeof(float));
+            pak.Write(BitConverter.GetBytes(delay), 0, sizeof(float));
+            player.Out.SendTCP(pak);
+        }
+
+        private void SendPacketTo(GamePlayer player)
+        {
+            int distance = (int)player.Coordinate.DistanceTo(Position.Coordinate, true);
+            float newIntensity;
+            if (player != Caster)
+            {
+                if (distance > radius)
+                {
+                    return;
+                }
+                newIntensity = intensity * (1 - distance / radius);
+            }
+            else
+            {
+                newIntensity = distance > radius ? 0.10f : Math.Min(0.10f, intensity * (1 - distance / radius));
+            }
+            SendPacketTo(player, newIntensity);
+        }
+
+        public override void OnSpellPulse(PulsingSpellEffect effect)
+        {
+            if (Caster.ObjectState != GameObject.eObjectState.Active)
+            {
+                effect.Cancel(false);
+                return;
+            }
+            if (Caster.IsMoving && Spell.IsFocus || Caster.IsStunned || Caster.IsMezzed || !Caster.IsAlive)
+            {
+                MessageToCaster("Your spell was cancelled.", eChatType.CT_SpellExpires);
+                effect.Cancel(false);
+                return;
+            }
+
+            if (Caster.Mana < Spell.PulsePower)
+            {
+                if (Spell.IsFocus)
+                {
+                    FocusSpellAction(null, Caster, null);
+                }
+                MessageToCaster("You do not have enough mana and your spell was cancelled.", eChatType.CT_SpellExpires);
+                effect.Cancel(false);
+                return;
+            }
+
+            Caster.Mana -= Spell.PulsePower;
+            foreach (GameLiving living in SelectTargets(m_spellTarget))
+            {
+                var chances = CalculateToHitChance(living);
+                if (chances <= 0 || Util.Random(100) > chances)
+                {
+                    continue;
+                }
+
+                float distSq = living.GetDistanceSquaredTo(Position, 1.0f);
+                if (distSq > radius * radius)
+                    continue;
+                
+                double dist = Math.Sqrt(distSq);
+                var effectiveness = (1 - dist / radius);
+                ApplyEffectOnTarget(living, effectiveness);
+            }
+            
+            if (Caster is GamePlayer playerCaster)
+                SendPacketTo(playerCaster);
+        }
+
+        /// <inheritdoc />
+        public override void OnDurationEffectApply(GameLiving target, double effectiveness)
+        {
+            var hitIntensity = intensity * effectiveness;
+            int damage = Math.Max(0, (int)(hitIntensity));
+            if (target is GamePlayer player)
+                SendPacketTo(player, (float)hitIntensity);
+
+            AttackData ad = new AttackData();
+            ad.Attacker = Caster;
+            ad.Target = target;
+            ad.AttackType = AttackData.eAttackType.Spell;
+            ad.SpellHandler = this;
+            ad.AttackResult = GameLiving.eAttackResult.HitUnstyled;
+            ad.IsSpellResisted = false;
+            ad.Damage = damage;
+            target.TakeDamage(ad);
+
+            foreach (GamePlayer p in target.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE).Cast<GamePlayer>())
+            {
+                p.Out.SendSpellEffectAnimation(m_caster, target, m_spell.ClientEffect, 0, false, 1);
+            }
+
+            base.OnDirectEffect(target, effectiveness);
+        }
+
+        /// <inheritdoc />
+        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        {
+            var hitIntensity = intensity * effectiveness;
+            int damage = Math.Max(0, (int)(hitIntensity));
+            if (target is GamePlayer player)
+                SendPacketTo(player, (float)hitIntensity);
+
+            AttackData ad = new AttackData();
+            ad.Attacker = Caster;
+            ad.Target = target;
+            ad.AttackType = AttackData.eAttackType.Spell;
+            ad.SpellHandler = this;
+            ad.AttackResult = GameLiving.eAttackResult.HitUnstyled;
+            ad.IsSpellResisted = false;
+            ad.Damage = damage;
+            target.TakeDamage(ad);
+
+            foreach (GamePlayer p in target.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE).Cast<GamePlayer>())
+            {
+                p.Out.SendSpellEffectAnimation(m_caster, target, m_spell.ClientEffect, 0, false, 1);
+            }
+
+            base.OnDirectEffect(target, effectiveness);
+        }
+
+        public override bool StartSpell(GameLiving target, bool force)
         {
             if (Spell.Pulse != 0 && !Spell.IsFocus && CancelPulsingSpell(Caster, Spell.SpellType))
             {
                 MessageToCaster("Your spell was cancelled.", eChatType.CT_SpellExpires);
-                return false;
             }
-            if (Caster.GroundTargetPosition == Position.Nowhere)
+
+            var targetType = Spell.Target.ToLowerInvariant();
+            if (targetType == "area")
             {
-                Coordinate = Caster.Coordinate;
+                if (Caster.GroundTargetPosition == Position.Nowhere)
+                    Position = Caster.Position;
+                else
+                    Position = Caster.GroundTargetPosition;
             }
             else
             {
-                Coordinate = Caster.GroundTargetPosition.Coordinate;
+                Position = target.Position;
             }
             /*if (args.Length > 1)
             {
@@ -49,52 +187,26 @@ namespace DOL.GS.Spells
             }*/
             if (Spell.Radius > 0)
             {
-                try
-                {
-                    radius = Spell.Radius;
-                }
-                catch { }
+                radius = Spell.Radius;
             }
             if (Spell.Damage > 0)
             {
-                try
-                {
-                    intensity = (float)Spell.Damage;
-                }
-                catch { }
+                intensity = (float)Spell.Damage;
             }
             if (Spell.Duration > 0)
             {
-                try
-                {
-                    duration = Spell.Duration;
-                }
-                catch { }
+                duration = Spell.Duration;
             }
             if (Spell.CastTime > 0)
             {
-                try
-                {
-                    delay = Spell.CastTime;
-                }
-                catch { }
+                delay = Spell.CastTime;
             }
-
-            if (Caster is GamePlayer player)
-            {
-                int distance = (int)player.Coordinate.DistanceTo(Coordinate, true);
-                float newIntensity = intensity * (1 - distance / radius);
-                GSTCPPacketOut pak = new GSTCPPacketOut(0x47);
-                pak.WriteIntLowEndian(unk1);
-                pak.WriteIntLowEndian((uint)Coordinate.X);
-                pak.WriteIntLowEndian((uint)Coordinate.Y);
-                pak.WriteIntLowEndian((uint)Coordinate.Z);
-                pak.Write(BitConverter.GetBytes(radius), 0, sizeof(float));
-                pak.Write(BitConverter.GetBytes(newIntensity), 0, sizeof(float));
-                pak.Write(BitConverter.GetBytes(duration), 0, sizeof(float));
-                pak.Write(BitConverter.GetBytes(delay), 0, sizeof(float));
-                player.Out.SendTCP(pak);
-            }
+            
+            if (!base.StartSpell(target, force))
+                return false;
+            
+            if (Caster is GamePlayer caster)
+                SendPacketTo(caster);
 
             if (m_spell.Pulse != 0 && m_spell.Frequency > 0)
             {
@@ -102,101 +214,7 @@ namespace DOL.GS.Spells
                 PulsingSpellEffect pulseeffect = new PulsingSpellEffect(this);
                 pulseeffect.Start();
             }
-
-            return base.StartSpell(targetObject);
-        }
-
-        public override void OnSpellPulse(PulsingSpellEffect effect)
-        {
-            if (Caster.IsMoving && Spell.IsFocus)
-            {
-                MessageToCaster("Your spell was cancelled.", eChatType.CT_SpellExpires);
-                effect.Cancel(false);
-                return;
-            }
-            if (Caster.IsAlive == false)
-            {
-                effect.Cancel(false);
-                return;
-            }
-            if (Caster.ObjectState != GameObject.eObjectState.Active)
-                return;
-            if (Caster.IsStunned || Caster.IsMezzed)
-                return;
-
-
-            if (Caster.Mana >= Spell.PulsePower)
-            {
-                Caster.Mana -= Spell.PulsePower;
-
-                if (Caster is GamePlayer player)
-                {
-                    int distance = (int)player.Coordinate.DistanceTo(Coordinate, true);
-                    float newIntensity = intensity * (1 - distance / radius);
-                    GSTCPPacketOut pak = new GSTCPPacketOut(0x47);
-                    pak.WriteIntLowEndian(unk1);
-                    pak.WriteIntLowEndian((uint)Coordinate.X);
-                    pak.WriteIntLowEndian((uint)Coordinate.Y);
-                    pak.WriteIntLowEndian((uint)Coordinate.Z);
-                    pak.Write(BitConverter.GetBytes(radius), 0, sizeof(float));
-                    pak.Write(BitConverter.GetBytes(newIntensity), 0, sizeof(float));
-                    pak.Write(BitConverter.GetBytes(duration), 0, sizeof(float));
-                    pak.Write(BitConverter.GetBytes(delay), 0, sizeof(float));
-                    player.Out.SendTCP(pak);
-                }
-                base.StartSpell(m_spellTarget);
-            }
-            else
-            {
-                if (Spell.IsFocus)
-                {
-                    FocusSpellAction(null, Caster, null);
-                }
-                MessageToCaster("You do not have enough mana and your spell was cancelled.", eChatType.CT_SpellExpires);
-                effect.Cancel(false);
-            }
-        }
-
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
-        {
-            int distance = (int)target.Coordinate.DistanceTo(Coordinate, true);
-            if (distance > radius)
-            {
-                CancelPulsingSpell(target, Spell.SpellType);
-                return;
-            }
-
-            float newIntensity = intensity * (1 - distance / radius);
-            int damage = (int)newIntensity;
-            if (target is GamePlayer player)
-            {
-                if (player == Caster as GamePlayer)
-                    return;
-                GSTCPPacketOut pakBis = new GSTCPPacketOut(0x47);
-                pakBis.WriteIntLowEndian(unk1);
-                pakBis.WriteIntLowEndian((uint)Coordinate.X);
-                pakBis.WriteIntLowEndian((uint)Coordinate.Y);
-                pakBis.WriteIntLowEndian((uint)Coordinate.Z);
-                pakBis.Write(BitConverter.GetBytes(radius), 0, sizeof(float));
-                pakBis.Write(BitConverter.GetBytes(newIntensity), 0, sizeof(float));
-                pakBis.Write(BitConverter.GetBytes(duration), 0, sizeof(float));
-                pakBis.Write(BitConverter.GetBytes(delay), 0, sizeof(float));
-                player.Out.SendTCP(pakBis);
-            }
-
-            AttackData ad = new AttackData();
-            ad.Attacker = Caster;
-            ad.Target = target;
-            ad.AttackType = AttackData.eAttackType.Spell;
-            ad.SpellHandler = this;
-            ad.AttackResult = GameLiving.eAttackResult.HitUnstyled;
-            ad.IsSpellResisted = false;
-            ad.Damage = damage;
-
-            m_lastAttackData = ad;
-            SendDamageMessages(ad);
-            DamageTarget(ad, true);
-            target.StartInterruptTimer(target.SpellInterruptDuration, ad.AttackType, Caster);
+            return true;
         }
 
         public override int CalculateToHitChance(GameLiving target)
