@@ -735,7 +735,7 @@ namespace DOL.GS
                     spell.Type = ((SpellHandlerAttribute)Attribute.GetCustomAttribute(typeof(BumpSpellHandler), typeof(SpellHandlerAttribute)))?.SpellType;
                     spell.AllowAdd = false;
                     spell.CastTime = 0;
-                    spell.ClientEffect = 5701;
+                    spell.ClientEffect = 10578;
                     spell.Description = "Throw";
                     spell.Name = "Dragon Throw";
                     spell.Range = 2500;
@@ -743,7 +743,7 @@ namespace DOL.GS
                     spell.Damage = 2000 * DragonDifficulty / 100;
                     spell.RecastDelay = 10;
                     spell.DamageType = (int)eDamageType.Body;
-                    spell.SpellID = 6001;
+                    spell.SpellID = 6006;
                     spell.Target = "enemy";
                     spell.Value = 700; // Height
                     spell.LifeDrainReturn = 300; // MinDistance

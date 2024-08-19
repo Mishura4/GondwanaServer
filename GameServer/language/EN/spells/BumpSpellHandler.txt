@@ -1,0 +1,3 @@
+BumpSpell.Target.Hurled:	{0} is hurled into the air!
+BumpSpell.Target.Immune:	{0} is immune to this effect!
+BumpSpell.Target.TooFast:	{0} is moving too fast for this spell to have any effect!

@@ -520,14 +520,14 @@ Titles.Kills.All.MasterEnforcer:        Maître Commandant
 Titles.Kills.All.MasterSoldier:         Maître Assaillant
 
 Titles.Kills.Demon.DemonBane:       Menace des Démons
-Titles.Kills.Demon.DemonScourge:    Tueur de Démons
-Titles.Kills.Demon.DemonSlayer:     Chasseur de Démons
-Titles.Kills.Demon.DreadVanquisher: Terreur des Démons
-Titles.Kills.Dragon.DragonFoe:      Chasseur de Dragons
-Titles.Kills.Dragon.DragonScourge:  Menace des Dragons
-Titles.Kills.Dragon.DragonSlayer:   Tueur de Dragons
-Titles.Kills.Epic.EpicChallenger:   Chasseur de Légendes
-Titles.Kills.Epic.EpicVictor:       Donjons épiques
+Titles.Kills.Demon.DemonScourge:    Fléau des Démons
+Titles.Kills.Demon.DemonSlayer:     Massacreur de Démons
+Titles.Kills.Demon.DreadVanquisher: Calamité des Démons
+Titles.Kills.Dragon.DragonFoe:      Menace des Dragons
+Titles.Kills.Dragon.DragonScourge:  Fléau des Dragons
+Titles.Kills.Dragon.DragonSlayer:   Massacreur de Dragons
+Titles.Kills.Epic.EpicChallenger:   Chasseur épique
+Titles.Kills.Epic.EpicVictor:       Guerrier légendaire
 
 Titles.Kills.Albion.BaneOfAlbion:       Fléau d'Albion
 Titles.Kills.Albion.ScourgeOfAlbion:    Calamité d'Albion

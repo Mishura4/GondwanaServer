@@ -56,6 +56,9 @@ GameObjects.GamePlayer.Attack.Type.Throw:	    jet
 GameObjects.GamePlayer.Attack.WithYour:		    avec votre
 GameObjects.GamePlayer.Attack.YouAttack:	    Vous attaquez
 GameObjects.GamePlayer.Attack.YouShot:		    Vous tirez sur
+GameObjects.GamePlayer.Attack.CounterAttackSuccess:		Vous utilisez {0} pour contre-attaquer.
+GameObjects.GamePlayer.Attack.CounterAttackInvalidWeap:	Impossible d'utiliser le style de contre-attaque avec l'arme actuelle.
+GameObjects.GamePlayer.Attack.CounterAttackNoStyle:		Aucun style de contre-attaque trouvé pour votre classe.
 
 GameObjects.GamePlayer.Bind.Bound:          Votre esprit et maintenant lié à cette pierre d'âme.
 GameObjects.GamePlayer.Bind.CantBindDead:   La mort vous empêche de lier votre esprit à la pierre d'âme.
@@ -80,6 +83,7 @@ GameObjects.GamePlayer.CastSpell.SpellInChamber:			Vous chargez {0} dans votre {
 GameObjects.GamePlayer.CastSpell.SpellNotInChamber:			Ce sort ne peut pas être stocké dans cette chambre.
 GameObjects.GamePlayer.CastSpell.OnlyASecondarySpell:		Seul un sort secondaire peut suivre le sort que vous lancez !
 GameObjects.GamePlayer.CastSpell.AlreadyCastingSpell:		Vous êtes déjà en train de lancer un sort.
+GameObjects.GamePlayer.CastSpell.MustWaitBeforeCast:		Vous devez attendre {0} secondes pour lancer un sort !
 
 GameObjects.GamePlayer.CommandNpcAttack.TooFarAwayForPet:			Votre cible est trop loin pour être attaquée par votre familier.
 GameObjects.GamePlayer.CommandNpcGoTarget.MustSelectDestination:	Vous devez sélectionner une destination pour votre créature.

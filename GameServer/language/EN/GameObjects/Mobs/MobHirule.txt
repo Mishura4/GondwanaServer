@@ -1,0 +1,7 @@
+
+MobHirule.BattleCry:		{0} cries, "You may have won this battle, but the war has only just begun!"
+MobHirule.CastSpell:		{0} casts a spell on {1}.
+MobHirule.ThrowTarget:		{0} throws {1} into the air!
+MobHirule.Stage1Cry:		{0} cries, "The only thing you'll reach is Hell!"
+MobHirule.Stage3Cry:		{0} cries, "Are you not afraid of death?"
+MobHirule.Stage4Cry:		{0} cries, "Do you think you can escape so easily? HAHAHA!"

@@ -9,6 +9,7 @@ using System.Threading;
 using log4net;
 using DOL.AI.Brain;
 using DOL.GS.Spells;
+using DOL.Language;
 
 namespace DOL.GS
 {
@@ -170,7 +171,10 @@ namespace DOL.GS
             isDying = true;
             base.Die(killer);
             // dragon died message
-            HiruleBroadcast(Name + " crie, \"Vous remportez cette bataille, mais la Guerre ne fait que commencer !\"");
+            foreach (GamePlayer player in this.GetPlayersInRadius((ushort)(WorldMgr.VISIBILITY_DISTANCE + 1500)))
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "MobHirule.BattleCry", Name), eChatType.CT_Broadcast, eChatLoc.CL_ChatWindow);
+            }
             //Event dragons dont respawn
             if (RespawnInterval == -1)
             {
@@ -187,7 +191,7 @@ namespace DOL.GS
             if (ObjectState != eObjectState.Active) return;
             GameLiving t = (GameLiving)source;
             float range = this.GetDistanceTo(t);
-            if (range >= 1000) //évite la technique du serpent
+            if (true || range >= 1000) //évite la technique du serpent
             {
                 m_hiruleTarget = t;
                 PickAction();
@@ -262,7 +266,7 @@ namespace DOL.GS
 
         void PickAction()
         {
-            if (Util.Random(1) < 1)
+            if (false && Util.Random(1) < 1)
             {
                 //Glare
                 Timer timer = new Timer(new TimerCallback(HiruleGlare), null, 30, 0);
@@ -289,7 +293,10 @@ namespace DOL.GS
         void ActionHiruleGlare(GameLiving target)
         {
             // Let them know that they're about to die.
-            HiruleBroadcast(Name + " incante un sort sur " + target.Name);
+            if (target is GamePlayer targetPlayer)
+            {
+                HiruleBroadcast(LanguageMgr.GetTranslation(targetPlayer.Client, "MobHirule.CastSpell", Name, target.Name));
+            }
             TargetObject = m_hiruleTarget;
             //AOE Nuke			
             CastSpell(Glare, SkillBase.GetSpellLine(GlobalSpellsLines.Mob_Spells));
@@ -299,7 +306,10 @@ namespace DOL.GS
         {
             if (!(target is GamePlayer)) return;
             if ((int)Realm == 5) return; // I don't want event dragons causing XP deaths
-            HiruleBroadcast(Name + " jette " + m_hiruleTarget.Name + " dans les airs !");
+            foreach (GamePlayer player in this.GetPlayersInRadius((ushort)(WorldMgr.VISIBILITY_DISTANCE + 1500)))
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "MobHirule.ThrowTarget", Name, m_hiruleTarget.Name), eChatType.CT_Broadcast, eChatLoc.CL_ChatWindow);
+            }
             CastSpell(Throw, SkillBase.GetSpellLine(GlobalSpellsLines.Mob_Spells));
         }
 
@@ -319,7 +329,7 @@ namespace DOL.GS
                     spell.Type = ((SpellHandlerAttribute)Attribute.GetCustomAttribute(typeof(BumpSpellHandler), typeof(SpellHandlerAttribute)))?.SpellType;
                     spell.AllowAdd = false;
                     spell.CastTime = 0;
-                    spell.ClientEffect = 5701;
+                    spell.ClientEffect = 10578;
                     spell.Description = "Throw";
                     spell.Name = "Hirule Throw";
                     spell.Range = 2500;
@@ -327,7 +337,7 @@ namespace DOL.GS
                     spell.Damage = 300;
                     spell.RecastDelay = 10;
                     spell.DamageType = (int)eDamageType.Body;
-                    spell.SpellID = 6001;
+                    spell.SpellID = 6004;
                     spell.Target = "enemy";
                     spell.Value = 500; // Height
                     spell.LifeDrainReturn = 200; // MinDistance
@@ -474,8 +484,10 @@ namespace DOL.AI.Brain
             //Stage 1 < 75%
             else if (hirule.HealthPercent < 75 && hirule.HealthPercent > 50 && hirule.stage == 0)
             {
-
-                hirule.HiruleBroadcast(hirule.Name + " crie, \"La seule chose que vous atteindrez, c'est l'Enfer !\"");
+                foreach (GamePlayer player in hirule.GetPlayersInRadius((ushort)(WorldMgr.VISIBILITY_DISTANCE + 1500)))
+                {
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "MobHirule.Stage1Cry", hirule.Name), eChatType.CT_Broadcast, eChatLoc.CL_ChatWindow);
+                }
                 hirule.Model = 1189; //sale gorgone
                 hirule.Size = 80;
                 //ajouter un cast pour faire joli
@@ -524,8 +536,10 @@ namespace DOL.AI.Brain
             //Stage 3 < 25%
             else if (hirule.HealthPercent < 25 && hirule.HealthPercent > 10 && hirule.stage == 2)
             {
-
-                hirule.HiruleBroadcast(hirule.Name + " crie, \"La mort ne vous effraie donc pas ?\"");
+                foreach (GamePlayer player in hirule.GetPlayersInRadius((ushort)(WorldMgr.VISIBILITY_DISTANCE + 1500)))
+                {
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "MobHirule.Stage3Cry", hirule.Name), eChatType.CT_Broadcast, eChatLoc.CL_ChatWindow);
+                }
 
                 hirule.Model = 2175;///Azazael vraiment immense
 				hirule.Size = 100;
@@ -564,8 +578,10 @@ namespace DOL.AI.Brain
                 {
                     new RegionTimer(hirule, new RegionTimerCallback(hirule.HiruleNukeandStun), 5000);
                     hirule.stage = 4;
-                    hirule.HiruleBroadcast(hirule.Name + " crie, \"Vous pensez vous en sortir aussi facilement ? AHAHA !\"");
-
+                    foreach (GamePlayer player in hirule.GetPlayersInRadius((ushort)(WorldMgr.VISIBILITY_DISTANCE + 1500)))
+                    {
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "MobHirule.Stage4Cry", hirule.Name), eChatType.CT_Broadcast, eChatLoc.CL_ChatWindow);
+                    }
                 }
             }
             base.Think();

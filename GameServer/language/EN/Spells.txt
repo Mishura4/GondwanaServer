@@ -1,8 +1,3 @@
-SpellHandler.CancelEffect:	You cancel your effect.
-SpellHandler.CancelPulsingSpell:	You stop playing your song.
-SpellHandler.CasterMove:	You move and interrupt your spellcast!
-GamePlayer.CastSpell.MustWaitBeforeCast:	You need to wait {0} mores secondes for cast a spell!
-SpellHandler.DelveInfo.Sec:	sec
 
 # DelveInfo
 DelveInfo.CastingTime:					Casting time: {0}
@@ -12,17 +7,17 @@ DelveInfo.DamageType:					Damage Type: {0}
 DelveInfo.Duration:					Duration: 
 DelveInfo.Focus:					This is a focus spell. Cancels if you do any action.
 DelveInfo.Frequency:					Frequency: {0}
-DelveInfo.HealthReturned:				Health returned: {0}% of damage dealt
-DelveInfo.InstrumentRequire:				Instrument require: {0}
+DelveInfo.HealthReturned:				Health returned: {0}% of damage(s) dealt
+DelveInfo.InstrumentRequire:				Instrument required: {0}
 DelveInfo.PowerCost:					Power cost: {0}
 DelveInfo.HealthCost:					Health cost: {0}
 DelveInfo.Radius:					Radius: {0}
 DelveInfo.Range:					Range: {0}
-DelveInfo.RangeModified:					Range: {0} {1}
+DelveInfo.RangeModified:				Range: {0} {1}
 DelveInfo.RecastTime:					Recast time: 
 DelveInfo.Target:					Target: {0}
 DelveInfo.Value:					Value: {0}
-DelveInfo.ValueNegative:					Value: -{0}
+DelveInfo.ValueNegative:				Value: -{0}
 
 # AblativeArmor
 AblativeArmor.DelveInfo.Function:			Function: melee hitpoint buffer (?)
@@ -43,22 +38,22 @@ ResistDebuff.DelveInfo.Function:			Function: resistance decrease
 CharmSpellHandler.DelveInfo.Function:			Function: {0}
 
 # DamageAddAndShield
-DamageAddAndShield.EventHandlerDA.DamageToYou:		{0} does {1} extra damage to you!
-DamageAddAndShield.EventHandlerDA.YouHitExtra:		You hit {0} for {1} extra damage!
-DamageAddAndShield.EventHandlerDA.YouHitFor:		You hit {0} for {1} damage!
-DamageAddAndShield.EventHandlerDA.YourHitFor:		Your {0} hit {1} for {2} damage!
-DamageAddAndShield.EventHandlerDS.DamageToYou:		{0} does {1} extra damage to you!
-DamageAddAndShield.EventHandlerDS.YouHitFor:		You hit {0} for {1} damage!
-DamageAddAndShield.EventHandlerDS.YourHitFor:		Your {0} hit {1} for {2} damage!
+DamageAddAndShield.EventHandlerDA.DamageToYou:		{0} does {1} extra damage(s) to you!
+DamageAddAndShield.EventHandlerDA.YouHitExtra:		You hit {0} for {1} extra damage(s)!
+DamageAddAndShield.EventHandlerDA.YouHitFor:		You hit {0} for {1} extra damage(s)!
+DamageAddAndShield.EventHandlerDA.YourHitFor:		Your {0} hit {1} for {2} extra damage(s)!
+DamageAddAndShield.EventHandlerDS.DamageToYou:		{0} does {1} extra damage(s) to you!
+DamageAddAndShield.EventHandlerDS.YouHitFor:		You hit {0} for {1} extra damage(s)!
+DamageAddAndShield.EventHandlerDS.YourHitFor:		Your {0} hit {1} for {2} extra damage(s)!
 
 # DirectDamageDebuffSpellHandler
 DirectDamageDebuffSpellHandler.DelveInfo.Decrease:	Resist decrease ({0}): {1}%
 DirectDamageDebuffSpellHandler.DelveInfo.Function:	Function: dmg w/resist decrease
 
 # DoTSpellHandler
-DoTSpellHandler.SendDamageMessages.YouHitFor:		You hit {0} for {1} damage!
-DoTSpellHandler.SendDamageMessages.YourCriticallyHits:	Your {0} critically hits {1} for an additional {2} damage!
-DoTSpellHandler.SendDamageMessages.YourHitsFor:		Your {0} hits {1} for {2} damage!
+DoTSpellHandler.SendDamageMessages.YouHitFor:		You hit {0} for {1} damage(s)!
+DoTSpellHandler.SendDamageMessages.YourCriticallyHits:	Your {0} critically hits {1} for an additional {2} damage(s)!
+DoTSpellHandler.SendDamageMessages.YourHitsFor:		Your {0} hits {1} for {2} damage(s)!
 
 # NearsightSpellHandler
 NearsightSpellHandler.DelveInfo.Function:		Function: {0}
@@ -66,10 +61,10 @@ NearsightSpellHandler.DelveInfo.Function:		Function: {0}
 # ProcSpellHandler
 ProcSpellHandler.DelveInfo.Function:			Function: {0}
 
-Summon.CheckBeginCast.AlreadyHaveaPet:	You already have a charmed creature, release it first!
+Summon.CheckBeginCast.AlreadyHaveaPet:			You already have a charmed creature, release it first!
 
 # SummonCommanderPet
-SummonCommanderPet.CheckBeginCast.Text:			You already have a charmed creature, release it first!
+SummonCommanderPet.CheckBeginCast.Text:			You already have summoned a commander, release it first!
 SummonCommanderPet.DelveInfo.Text1:			Function: summon
 SummonCommanderPet.DelveInfo.Text2:			Summons a pet to serve the caster.
 SummonCommanderPet.DelveInfo.Text3:			Target: {0}
@@ -77,19 +72,19 @@ SummonCommanderPet.DelveInfo.Text4:			Power cost: {0}%
 SummonCommanderPet.DelveInfo.Text5:			Casting time: {0}
 
 #SummonMinionHandler
-SummonMinionHandler.CheckBeginCast.Text1:		You must have a controlled leader monster to summon into a group!
+SummonMinionHandler.CheckBeginCast.Text1:		You must already have summoned a commander, to summon a follower into a group!
 SummonMinionHandler.CheckBeginCast.Text2:		Your general already has as many followers as he can command!
 SummonMinionHandler.DelveInfo.Text1:			Target: {0}
 SummonMinionHandler.DelveInfo.Text2:			Power cost: {0}%
 SummonMinionHandler.DelveInfo.Text3:			Casting time: {0}
 
 #PetPBAOE
-PetPBAOE.CheckBeginCast.NoPet:		You must cast this spell on a creature you are controlling.
+PetPBAOE.CheckBeginCast.NoPet:				You must cast this spell on a creature you are controlling.
 
 #SummonAnimistFnF
 SummonAnimistFnF.CheckBeginCast.NoGroundTarget:		You can't summon Turret without ground-target !
-SummonAnimistFnF.CheckBeginCast.TurretAreaCap:	You can't summon anymore Turrets in this Area!
-SummonAnimistFnF.CheckBeginCast.TurretPlayerCap:	You cannot control anymore Turrets!
+SummonAnimistFnF.CheckBeginCast.TurretAreaCap:		You can't summon anymore Turrets in this Area!
+SummonAnimistFnF.CheckBeginCast.TurretPlayerCap:	You cannot control any more Turrets!
 
 #SummonAnimistPet
 SummonAnimistPet.CheckBeginCast.AlreadyHaveaPet:	You already have a charmed creature, release it first!
@@ -98,44 +93,44 @@ SummonAnimistPet.CheckBeginCast.GroundTargetNotInView:	Your ground target is not
 SummonAnimistPet.CheckBeginCast.GroundTargetNotInSpellRange:	You have to select a closer ground target.
 
 #TurretsRelease
-TurretsRelease.CheckBeginCast.NoSelectedTarget:	You must cast this spell on a creature you are controlling
-TurretsRelease.CheckBeginCast.TargetTooFarAway:	Your target is too far away
+TurretsRelease.CheckBeginCast.NoSelectedTarget:		You must cast this spell on a creature you are controlling.
+TurretsRelease.CheckBeginCast.TargetTooFarAway:		Your target is too far away.
 
 #PetSpellHandler
 PetSpellHandler.CheckBeginCast.NoControlledBrainForCast:	You must have a pet summoned to cast this spell!
 
 #SummonNecromancerPet
 SummonNecromancerPet.CheckBeginCast.ShadeEffectIsNotNull:	You are already a shade!
-SummonNecromancerPet.DelveInfo.Function:	Function: shade summon
-SummonNecromancerPet.DelveInfo.Description:	Summons an undead pet to serve the caster. The caster is transformed into a shade, and acts through the pet.
-SummonNecromancerPet.DelveInfo.Target:	Target: {0}
-SummonNecromancerPet.DelveInfo.Power:	Power cost: {0}%
-SummonNecromancerPet.DelveInfo.CastingTime:	Casting time: {0}
+SummonNecromancerPet.DelveInfo.Function:			Function: Shade Summon
+SummonNecromancerPet.DelveInfo.Description:			Summons an undead pet to serve the caster. The caster is transformed into a shade, and acts through the pet.
+SummonNecromancerPet.DelveInfo.Target:				Target: {0}
+SummonNecromancerPet.DelveInfo.Power:				Power cost: {0}%
+SummonNecromancerPet.DelveInfo.CastingTime:			Casting time: {0}
 
 #SavageEnduranceHeal
-SavageEnduranceHeal.CheckBeginCast.InsuffiscientHealth:	You do not have enough health to cast that!
+SavageEnduranceHeal.CheckBeginCast.InsuffiscientHealth:		You do not have enough health to cast that!
 
-#AblativeArmor
-AblativeArmor.Target:	Your ablative absorbs {0} damage!
-AblativeArmor.Attacker:	A barrier absorbs {0} damage of your attack!
+#AblativeArmorSpellHandler
+AblativeArmor.Target:	Your ablative barrier absorbs {0} damage(s)!
+AblativeArmor.Attacker:	A barrier absorbs {0} damage(s) of your attack!
 
 #Amnesia
 Amnesia.MessageToTarget:	Your mind goes blank and you forget what you were doing!
 
 # Petrify
-Petrify.Target.Absorbs:		The target is petrified and absorbs {0} damage!
+Petrify.Target.Absorbs:		The target is petrified and absorbs {0} damage(s)!
 Petrify.Target.Resist:		{0} is petrified and can't be effected by this Spell!
 Petrify.Self.Message:		The target is petrified.
-Petrify.Self.Absorb:		You're petrified and absorb {0} damage!
+Petrify.Self.Absorb:		You're petrified and absorb {0} damage(s)!
 Petrify.Self.Unpetrify:		Your petrification fades.
 
 # Damnation
 Damnation.Self.Message:		The target is damned
-Damnation.Self.Message2:	You're damned
+Damnation.Self.Message2:	You may not realize it, but you're already dead!
 Damnation.Target.Resist:	{0} is damned and can't be effected by this Spell!
 
 # Adrenaline
-Adrenaline.Target.Immune:		{0}'s battle fever renders them immune to this effect!
-Adrenaline.Target.Absorbs:		The target absorbs {0} damage from the attack!
+Adrenaline.Target.Immune:		{0}'s battle fever renders him/her immune to this effect!
+Adrenaline.Target.Absorbs:		The target absorbs {0} damage(s) from the attack!
 Adrenaline.Self.Immune:			Your battle fever makes you immune to the effect!
-Adrenaline.Self.Absorb:			You absorb {0} damage from the attack!
+Adrenaline.Self.Absorb:			You absorb {0} damage(s) from the attack!

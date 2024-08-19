@@ -33,7 +33,7 @@ namespace DOL.GS.PropertyCalc
             int value = living.BuffBonusCategory4[eProperty.CounterAttack];
             if (living is GamePlayer)
             {
-                value += Math.Min(25, living.ItemBonus[(int)property]); // cap 25% from items
+                value += Math.Min(30, living.ItemBonus[(int)property]); // cap 30% from items
             }
             value -= living.DebuffCategory[eProperty.CounterAttack];
             return Math.Max(0, value); // Ensuring the gain is not negative

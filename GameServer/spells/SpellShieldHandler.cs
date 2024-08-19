@@ -14,6 +14,8 @@ namespace DOL.GS.Spells
         {
         }
 
+        public override bool CanBeRightClicked => false;
+
         public override void OnEffectStart(GameSpellEffect effect)
         {
             GameLiving living = effect.Owner;

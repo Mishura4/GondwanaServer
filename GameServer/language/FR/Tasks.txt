@@ -11,9 +11,9 @@ Tasks.KillEnemyPlayersGroup: Tuez des joueurs ennemis en étant groupé
 Tasks.KillEnemyPlayersAlone: Tuez des joueurs ennemis seul
 Tasks.KillKeepGuards: Tuez des gardes de forts
 Tasks.TakeKeeps: Prise de forts
-Tasks.RvRChampionOfTheDay: Etre Champion du jour en RvR
+Tasks.RvRChampionOfTheDay: Etre Champion du Jour en RvR
 Tasks.KillTerritoryGuards: Tuez des gardes de territoires
-Tasks.KillTerritoryBoss: Capture de territoires
+Tasks.KillTerritoryBoss: Captures de territoires
 Tasks.TurnInPvPGvGTaskToken: Jeton de Tâche PvP/RvR/GvG
 Tasks.KillCreaturesInDungeons: Tuez des créatures de donjons
 Tasks.KillOutdoorsCreatures: Tuez des créatures d'extérieur
@@ -31,7 +31,7 @@ Tasks.KillUndeadCreatures: Tuez des créatures mortes-vivantes
 Tasks.TurnInPvETaskToken: Jeton de Tâche PvE
 Tasks.SuccessfulItemCombinations: Combinaisons d'objets réussies
 Tasks.MasteredCrafts: Objets fabriqués via l'Artisanat
-Tasks.MasterpieceCrafted: Chef-d'œuvre fabriqué
+Tasks.MasterpieceCrafted: Chef-d'œuvres fabriqués
 Tasks.TurnInCraftingTaskToken: Jeton de Tâche d'Artisanat
 Tasks.EpicBossesSlaughtered: Boss épiques abattus
 Tasks.ItemsSoldToPlayers: Transactions via le marché
@@ -47,10 +47,10 @@ Tasks.KillEnemyPlayersAloneLog: Tuez des joueurs ennemis seul : {0}/{1}
 Tasks.KillKeepGuardsLog: Tuez des gardes de forts : {0}/{1}
 Tasks.TakeKeepsLog: Prise de forts : {0}/{1}
 Tasks.KillTerritoryGuardsLog: Tuez des gardes de territoires : {0}/{1}
-Tasks.KillTerritoryBossLog: Capture de territoires : {0}/{1}
+Tasks.KillTerritoryBossLog: Captures de territoires : {0}/{1}
 Tasks.SuccessfulItemCombinationsLog: Combinaisons d'objets réussies : {0}/{1}
 Tasks.MasteredCraftsLog: Objets fabriqués via l'Artisanat : {0}/{1}
-Tasks.MasterpieceCraftedLog: Chef-d'œuvre fabriqué : {0}/{1}
+Tasks.MasterpieceCraftedLog: Chef-d'œuvres fabriqués : {0}/{1}
 Tasks.EpicBossesSlaughteredLog: Boss épiques abattus : {0}/{1}
 Tasks.ItemsSoldToPlayersLog: Transactions via le marché : {0}/{1}
 Tasks.SuccessfulPvPTheftsLog: Vols réussis de joueurs : {0}/{1}

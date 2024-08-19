@@ -1,0 +1,7 @@
+
+MobHirule.BattleCry:		{0} crie, "Vous remportez cette bataille, mais la Guerre ne fait que commencer !"
+MobHirule.CastSpell:		{0} incante un sort sur {1}.
+MobHirule.ThrowTarget:		{0} jette {1} dans les airs !
+MobHirule.Stage1Cry:		{0} crie, "La seule chose que vous atteindrez, c'est l'Enfer !"
+MobHirule.Stage3Cry:		{0} crie, "La mort ne vous effraie donc pas ?"
+MobHirule.Stage4Cry:		{0} crie, "Vous pensez vous en sortir aussi facilement ? AHAHA !"

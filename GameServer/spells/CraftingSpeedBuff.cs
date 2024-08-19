@@ -25,7 +25,7 @@ namespace DOL.GS.Spells
             get => eBuffBonusCategory.Other;
         }
 
-        public override string ShortDescription => $"Increases the target's {ConvertPropertyToText(Property1).ToLower()} by {Spell.Value}%.";
+        public override string ShortDescription => $"Increases the target's crafting speed by {Spell.Value}%.";
 
         public override void OnEffectStart(GameSpellEffect effect)
         {

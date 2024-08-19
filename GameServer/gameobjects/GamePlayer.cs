@@ -7303,16 +7303,16 @@ namespace DOL.GS
                         };
 
                         StyleProcessor.ExecuteStyle(this, attackData, weapon);
-                        Out.SendMessage($"You use {counterStyle.Name} to counterattack.", eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
+                        Out.SendMessage(LanguageMgr.GetTranslation(Client, "GameObjects.GamePlayer.Attack.CounterAttackSuccess", counterStyle.Name), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
                     }
                     else
                     {
-                        Out.SendMessage("Cannot use the counterattack style with the current weapon.", eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
+                        Out.SendMessage(LanguageMgr.GetTranslation(Client, "GameObjects.GamePlayer.Attack.CounterAttackInvalidWeapon"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     }
                 }
                 else
                 {
-                    Out.SendMessage("No counterattack style found for your class.", eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
+                    Out.SendMessage(LanguageMgr.GetTranslation(Client, "GameObjects.GamePlayer.Attack.CounterAttackNoStyle"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 }
             }
         }
@@ -7431,10 +7431,14 @@ namespace DOL.GS
                                     (item as GameInventoryItem).OnStruckByEnemy(this, ad.Attacker);
                                 }
                             }
+
+                            CounterAttackHandler(ad.Attacker);
+                        }
+                        else if (ad.ArmorHitLocation == eArmorSlot.NOTSET)
+                        {
+                            ItemSpellShieldHandler.ApplyEffect(GameLivingEvent.AttackedByEnemy, this, new AttackedByEnemyEventArgs(ad));
                         }
 
-                        ItemSpellShieldHandler.ApplyEffect(GameLivingEvent.AttackedByEnemy, this, new AttackedByEnemyEventArgs(ad));
-                        CounterAttackHandler(ad.Attacker);
                         break;
                     }
                 case eAttackResult.Blocked:
@@ -11169,7 +11173,10 @@ namespace DOL.GS
                 if (!RemoveFromWorld())
                     return false;
                 //notify event
-                CurrentRegion.Notify(RegionEvent.PlayerLeave, CurrentRegion, new RegionPlayerEventArgs(this));
+                if (CurrentRegion != null)
+                {
+                    CurrentRegion.Notify(RegionEvent.PlayerLeave, CurrentRegion, new RegionPlayerEventArgs(this));
+                }
 
                 CancelAllConcentrationEffects(true);
                 if (ControlledBrain != null)

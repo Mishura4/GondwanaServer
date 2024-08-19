@@ -56,6 +56,9 @@ GameObjects.GamePlayer.Attack.Type.Throw:				throw
 GameObjects.GamePlayer.Attack.WithYour:					with your	
 GameObjects.GamePlayer.Attack.YouAttack:				You attack	
 GameObjects.GamePlayer.Attack.YouShot:					You shot
+GameObjects.GamePlayer.Attack.CounterAttackSuccess:		You use {0} to counterattack.
+GameObjects.GamePlayer.Attack.CounterAttackInvalidWeap:	Cannot use the counterattack style with the current weapon.
+GameObjects.GamePlayer.Attack.CounterAttackNoStyle:		No counterattack style found for your class.
 
 GameObjects.GamePlayer.Bind.Bound:						You are now bound to this location.
 GameObjects.GamePlayer.Bind.CantBindDead:				You can not bind while dead!	
@@ -80,6 +83,7 @@ GameObjects.GamePlayer.CastSpell.SpellInChamber:			You load {0} into your {1}.
 GameObjects.GamePlayer.CastSpell.SpellNotInChamber:			This spell cannot be stored in this chamber.
 GameObjects.GamePlayer.CastSpell.OnlyASecondarySpell:		Only a secondary spell can follow up the spell your are casting!
 GameObjects.GamePlayer.CastSpell.AlreadyCastingSpell:		You are already casting a spell.
+GameObjects.GamePlayer.CastSpell.MustWaitBeforeCast:		You need to wait {0} more seconds to cast a spell!
 
 GameObjects.GamePlayer.CommandNpcAttack.TooFarAwayForPet:		Your target is too far away to attack by your pet!
 GameObjects.GamePlayer.CommandNpcGoTarget.MustSelectDestination:    You must select a destination for your controlled creature.

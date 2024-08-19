@@ -12,6 +12,7 @@ using DOL.GS.Effects;
 using System.Collections;
 using System.Linq;
 using log4net;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -351,6 +352,14 @@ namespace DOL.GS.Spells
             }
         }
 
+        private void BroadcastMessage(GameLiving target, string message)
+        {
+            if (Caster is GamePlayer casterPlayer)
+            {
+                casterPlayer.Out.SendMessage(LanguageMgr.GetTranslation(casterPlayer.Client, "BumpSpell.Target.Hurled", target.GetName(0, false)), eChatType.CT_Broadcast, eChatLoc.CL_SystemWindow);
+            }
+        }
+
         public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             if (target == Caster || !target.IsAlive || target is ShadowNPC || target.EffectList.GetOfType<NecromancerShadeEffect>() != null)
@@ -361,7 +370,7 @@ namespace DOL.GS.Spells
 
             if (target.HasAbility(Abilities.StunImmunity) || target.HasAbility(Abilities.CCImmunity))
             {
-                MessageToCaster(m_caster.GetPersonalizedName(target) + " is immune to this effect!", eChatType.CT_SpellResisted);
+                (m_caster as GamePlayer)?.SendTranslatedMessage("BumpSpell.Target.Immune", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow, m_caster.GetPersonalizedName(target));
                 return;
             }
             if (target.EffectList.GetOfType<AdrenalineSpellEffect>() != null)
@@ -372,7 +381,7 @@ namespace DOL.GS.Spells
             }
             if (target.EffectList.GetOfType<ChargeEffect>() != null || target.TempProperties.getProperty("Charging", false))
             {
-                MessageToCaster(m_caster.GetPersonalizedName(target) + " is moving too fast for this spell to have any effect!", eChatType.CT_SpellResisted);
+                (m_caster as GamePlayer)?.SendTranslatedMessage("BumpSpell.Target.TooFast", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow, m_caster.GetPersonalizedName(target));
                 return;
             }
 
@@ -384,14 +393,6 @@ namespace DOL.GS.Spells
             else
             {
                 DoBumpWithServerLos(target, effectiveness);
-            }
-        }
-
-        private void BroadcastMessage(GameLiving target, string message)
-        {
-            if (Caster is GamePlayer casterPlayer)
-            {
-                casterPlayer.Out.SendMessage($"{target.GetName(0, false)} {message}", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
             }
         }
 
@@ -411,6 +412,7 @@ namespace DOL.GS.Spells
             if (fallSpeed > fallMinSpeed)
             {
                 fallPercent = Math.Max(0, fallPercent - safeFallLevel);
+                fallPercent /= 2;
                 living.TakeFallDamage(fallPercent);
             }
         }

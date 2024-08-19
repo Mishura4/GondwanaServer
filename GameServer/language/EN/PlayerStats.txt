@@ -50,4 +50,4 @@ PlayerStatistic.Bonus.TraderTitle:              {0:0.##}% discount with all merc
 PlayerStatistic.Bonus.ThiefTitle:               +{0}% Robbery Chance / -{1}% Robbery Cooldown
 PlayerStatistic.Bonus.BountyhunterTitle:        +{0}% Robbery Resist / +{1}% Stealth Detection
 PlayerStatistic.Bonus.WrathTitle:               +{0}% Tension Increase / -{1}% Tension lost on death
-PlayerStatistic.Bonus.Adventurer:               +{0}% walking & swimming Max Speed / +{1}% Casting-Archery range
+PlayerStatistic.Bonus.AdventurerTitle:               +{0}% walking & swimming Max Speed / +{1}% Casting-Archery range

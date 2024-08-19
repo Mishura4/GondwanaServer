@@ -39,7 +39,7 @@ PlayerStatistic.StatsRVR:					Rapports RvR :
 PlayerStatistic.StatsGVG:					Rapports de Territoires GvG :
 PlayerStatistic.StatsPVE:					Rapports PvE :
 PlayerStatistic.StatsCrafting:				Rapports d'Artisanat :
-PlayerStatistic.StatsGreatAchievements:		Grandes Réalisations :
+PlayerStatistic.StatsGreatAchievements:		Hauts Faits :
 PlayerStatistic.StatsSpecialAchievements:	Réalisations Spéciales :
 PlayerStatistic.TotalCreaturesKilled:		Total des Créatures tuées
 PlayerStatistic.TotalCraftPerformed:		Total des Objets fabriqués

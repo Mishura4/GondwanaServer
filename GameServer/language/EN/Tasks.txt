@@ -31,7 +31,7 @@ Tasks.KillUndeadCreatures: Kill Undead Creatures
 Tasks.TurnInPvETaskToken: Turn in PvE Task Completion Token
 Tasks.SuccessfulItemCombinations: Successful Item Combinations
 Tasks.MasteredCrafts: Mastered Crafts
-Tasks.MasterpieceCrafted: Masterpiece crafted
+Tasks.MasterpieceCrafted: Masterpieces crafted
 Tasks.TurnInCraftingTaskToken: Turn in Crafting Task completion token
 Tasks.EpicBossesSlaughtered: Epic Bosses Slaughtered
 Tasks.ItemsSoldToPlayers: Successful Market Trades
@@ -50,7 +50,7 @@ Tasks.KillTerritoryGuardsLog: Kill Territory Guards: {0}/{1}
 Tasks.KillTerritoryBossLog: Territory Capture: {0}/{1}
 Tasks.SuccessfulItemCombinationsLog: Successful Item Combinations: {0}/{1}
 Tasks.MasteredCraftsLog: Mastered Crafts: {0}/{1}
-Tasks.MasterpieceCraftedLog: Masterpiece crafted: {0}/{1}
+Tasks.MasterpieceCraftedLog: Masterpieces crafted: {0}/{1}
 Tasks.EpicBossesSlaughteredLog: Epic Bosses Slaughtered: {0}/{1}
 Tasks.ItemsSoldToPlayersLog: Successful Market Trades: {0}/{1}
 Tasks.SuccessfulPvPTheftsLog: Successful Player thefts: {0}/{1}

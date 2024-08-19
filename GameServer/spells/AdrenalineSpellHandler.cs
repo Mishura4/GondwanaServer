@@ -66,6 +66,8 @@ namespace DOL.GS.Spells
 
         public AdrenalineSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine) { }
 
+        public override bool CanBeRightClicked => false;
+
         /// <inheritdoc />
         public override void OnEffectStart(GameSpellEffect effect)
         {

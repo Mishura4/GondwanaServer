@@ -1,0 +1,5 @@
+# SpellHandler
+SpellHandler.CancelEffect:			Vous désactivez votre effet.
+SpellHandler.CancelPulsingSpell:		Vous cessez de jouer votre mélodie.
+SpellHandler.CasterMove:			Vous bougez et interrompez votre sort !
+SpellHandler.DelveInfo.Sec:			sec
