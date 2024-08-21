@@ -1,5 +1,86 @@
 # SpellHandler
 SpellHandler.CancelEffect:			You cancel your effect.
-SpellHandler.CancelPulsingSpell:		You stop playing your song.
+SpellHandler.PulsingSpellCancelled:		Your spell was cancelled.
+SpellHandler.PulsingSpellNoMana:		You do not have enough mana and your spell was cancelled.
+SpellHandler.NoMoreMana:			You have exhausted all of your power and cannot cast spells!
+SpellHandler.StopPlayingSong:			You stop playing your song.
+SpellHandler.TooFarStopPlayingSong:		You are far away from the target. You stop playing your song.
 SpellHandler.CasterMove:			You move and interrupt your spellcast!
+SpellHandler.BeginCasting:			You begin casting a {0} spell!
+SpellHandler.BeginPlaying:			You begin playing {0}!
+SpellHandler.SpellInterrupted:			{0} attacks you and your spell is interrupted!
+SpellHandler.DamageImmunity:			{0} is immune to this effect!
+SpellHandler.Target.TooFast:			{0} is moving too fast for this spell to have any effect!
+SpellHandler.DeadCantCast:			You are dead and can't cast!
+SpellHandler.CantCastInSiegeram:		You can't cast in a siegeram!
+SpellHandler.SilencedCantCast:			You are silenced and cannot cast a spell right now.
+SpellHandler.PhaseshiftedCantCast:		You're phaseshifted and can't cast a spell.
+SpellHandler.PhaseshiftedCantBeAffected:	{0} is Phaseshifted and can't be affected by this Spell!
+SpellHandler.OnlyWorksOnDead:			This spell only works on dead members of your realm!
+SpellHandler.CantAttackSelf:			You can't attack yourself!
+SpellHandler.TargetNotInView:			Your target is not in view!
+SpellHandler.TargetNotInViewSpellFail:		Your target is not in view. The spell fails.
+SpellHandler.TargetNotVisible:			Your target is not visible!
+SpellHandler.TargetInvalid:			Invalid target.
+SpellHandler.MustSelectTarget:			You must select a target for this spell!
+SpellHandler.TargetTooFar:			That target is too far away!
+SpellHandler.AreaTargetOutOfRange:		Your area target is out of range. Select a closer target.
+SpellHandler.MustCastOnControlled:		You must cast this spell on a creature you are controlling.
+SpellHandler.SpellRequiresConcentration:	This spell requires {0} concentration points to cast!
+SpellHandler.MaxConcentrationSpells:		You can only cast up to 50 simultaneous concentration spells!
+SpellHandler.WrongInstrument:			You are not wielding the right type of instrument!
+SpellHandler.CantCastWhileSitting:		You can't cast while sitting!
+SpellHandler.CantCastWhileSitting2:		You can't cast this spell while sitting!
+SpellHandler.CantCastWhileMoving:		You must be standing still to cast this spell!
+SpellHandler.CantCastOnDead:			You cannot cast this spell on dead!
+SpellHandler.MustWaitBeforeUse:			You must wait {0} seconds to use this spell!
+SpellHandler.InteruptWaitBeforeCast:		You are interrupted and must wait {0} seconds to cast a spell!
+SpellHandler.NotEnoughPower:			You don't have enough power to cast that!
+SpellHandler.GroundTargetNotInView:		Your ground target is not in view!
+SpellHandler.OnlyWorksOnFriendlyTargets:	This spell only works on friendly targets!
+SpellHandler.LostFocusOnSpell:			You lose your focus on your {0} spell.
+SpellHandler.InterruptFocus:			You move and interrupt your focus!
+SpellHandler.YouResistEffect:			You resist the effect!
+SpellHandler.TargetResistsEffect:		{0} resists the effect!
+SpellHandler.PetResistsEffect:			Your {0} resists the effect!
+SpellHandler.NoEffectOnKeepComponent:		Your spell has no effect on the keep component!
+SpellHandler.NoEffectOnTarget:			Your spell has no effect on the {0}!
+SpellHandler.TargetAlreadyMezz:			Your target is already mezzed!
+SpellHandler.CantHaveEffectAgainYet:		You can't have that effect again yet!
+SpellHandler.AlreadyHaveEffectWait:		You already have that effect. Wait until it expires. Spell failed.
+SpellHandler.TargetCantHaveEffectAgainYet:	{0} can't have that effect again yet!
+SpellHandler.TargetAlreadyHasEffect:		{0} already has that effect.
+SpellHandler.WaitUntilExpires:			Wait until it expires. Spell has failed.
+SpellHandler.TargetImmune:			Your target is immune!
+SpellHandler.MezIntercepted:			Your item effect intercepts the mesmerization spell and fades!
+SpellHandler.CeremonialBracerInterceptMez:	Ceremonial Bracer intercepts your mez!
+SpellHandler.StunIntercepted:			Your item effect intercepts the stun spell and fades!
+
+SpellHandler.CheckLOSYouToPet.NotInView:	Your pet is not in view.
+SpellHandler.CheckLOSPlayerToTarget.LoSInterrupt:	LoS Interrupt in CheckLOSPlayerToTarget
+SpellHandler.CheckLOSPlayerToTarget.CantSeeTarget:	You can't see your target from here!
+SpellHandler.CheckLOSNPCToTarget.LoSInterrupt:	LoS Interrupt in CheckLOSNPCToTarget
+
+SpellHandler.GainPowerPoints:			You gain {0} power points.
+SpellHandler.GainEndurancePoints:		You gain {0} endurance points.
+SpellHandler.HitTarget:				You hit {0} for {1}{2} damage(s)!
+SpellHandler.NPCHitTarget:			Your {0} hits {1} for {2}{3} damage(s)!
+SpellHandler.CriticalHit:			You critically hit for an additional {0} damage(s)!
+SpellHandler.TargetPronoun.Your:		Your
+SpellHandler.TargetPronoun.Targets:		The target's
+
+SpellHandler.MustBeStealthedBow:		You must be stealthed and wielding a bow to use this ability!
+SpellHandler.MustWieldBow:			You must be wielding a bow to use this ability!
+SpellHandler.Archery.Prepare:			You prepare a {0}
+SpellHandler.Archery.DisarmedCantCast:		You're disarmed and can't cast a spell.
+SpellHandler.ChamberSpell.YouInvulnerable:	You're invunerable at the moment and cannot use that spell!
+SpellHandler.ChamberSpell.TargetInvulnerable:	Your target is invunerable at the moment and cannot be attacked!
+SpellHandler.SiegeArrow.InvalidTarget:		You must have a Keep Component targeted for this spell!
+SpellHandler.SiegeArrow.InvalidComponentTarget: Your target must be a Keep Component!
+SpellHandler.SiegeArrow.PrepareSpell:		You prepare {0}
+SpellHandler.BumpSpell.TargetHurled:		{0} is hurled into the air!
+SpellHandler.Convoker.AreaTargetOutOfRange:	Your area target is out of range. Select a closer ground position.
+SpellHandler.Convoker.AreaTargetNotInView:	Your area target is not in view.
+SpellHandler.Convoker.MustSetGroundTarget:	You must set a groundtarget!
+
 SpellHandler.DelveInfo.Sec:			sec

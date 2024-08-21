@@ -18,6 +18,7 @@
  */
 
 using DOL.Events;
+using DOL.Language;
 
 namespace DOL.GS.PacketHandler.Client.v168
 {
@@ -113,7 +114,7 @@ namespace DOL.GS.PacketHandler.Client.v168
                     // should be sent if targeted is using group panel to change the target
                     if (!m_targetInView)
                     {
-                        player.Out.SendMessage("Target is not in view.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "SpellHandler.TargetNotInView"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     }
 
                     if (!(myTarget is GamePlayer))
@@ -125,7 +126,7 @@ namespace DOL.GS.PacketHandler.Client.v168
                     var gravestone = myTarget as GameGravestone;
                     if (gravestone == null || !gravestone.InternalID.Equals(player.InternalID))
                     {
-                        player.Out.SendMessage("You are no longer targetting your grave. Your prayers fail.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "PlayerTargetHandler.Gravestone"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                         player.PrayTimerStop();
                     }
                 }

@@ -23,6 +23,7 @@ using DOL.GS.PacketHandler;
 using DOL.GS.Keeps;
 using DOL.Events;
 using DOL.GS.Effects;
+using DOL.Language;
 namespace DOL.GS.Spells
 {
     /// <summary>
@@ -75,7 +76,7 @@ namespace DOL.GS.Spells
             if (player == null) return;
             if (Spell.Pulse != 0 && CancelPulsingSpell(Caster, Spell.SpellType))
             {
-                MessageToCaster("You cancel your effect.", eChatType.CT_Spell);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.CancelEffect"), eChatType.CT_Spell);
                 return;
             }
         }

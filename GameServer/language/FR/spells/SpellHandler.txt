@@ -1,5 +1,86 @@
 # SpellHandler
 SpellHandler.CancelEffect:			Vous désactivez votre effet.
-SpellHandler.CancelPulsingSpell:		Vous cessez de jouer votre mélodie.
-SpellHandler.CasterMove:			Vous bougez et interrompez votre sort !
+SpellHandler.PulsingSpellCancelled:		Votre sort a été désactivé.
+SpellHandler.PulsingSpellNoMana:		Vous n'avez pas assez de Mana et votre sort a été désactivé.
+SpellHandler.NoMoreMana:			Vous avez épuisé toute votre Mana et ne pouvez plus lancer de sorts !
+SpellHandler.StopPlayingSong:			Vous cessez de jouer votre mélodie.
+SpellHandler.TooFarStopPlayingSong:		Vous êtes trop éloigné de la cible. Vous cessez de jouer votre mélodie.
+SpellHandler.CasterMove:			Vous bougez et interrompez votre incantation !
+SpellHandler.BeginCasting:			Vous commencez à lancer un sort de {0} !
+SpellHandler.BeginPlaying:			Vous commencez à jouer {0} !
+SpellHandler.SpellInterrupted:			{0} vous attaque et votre sort est interrompu !
+SpellHandler.DamageImmunity:			{0} est immunisé contre cet effet !
+SpellHandler.Target.TooFast:			{0} se déplace trop vite pour que ce sort l'affecte !
+SpellHandler.DeadCantCast:			Vous êtes mort et ne pouvez pas lancer de sort !
+SpellHandler.CantCastInSiegeram:		Vous ne pouvez pas lancer de sort dans un bélier !
+SpellHandler.SilencedCantCast:			Vous êtes réduit au silence et ne pouvez pas lancer de sort pour l'instant.
+SpellHandler.PhaseshiftedCantCast:		Vous êtes sous 'Transfert de Plan' et ne pouvez pas lancer de sort.
+SpellHandler.PhaseshiftedCantBeAffected:	{0} est sous 'Transfert de Plan' et ne peut pas être affecté par ce sort !
+SpellHandler.OnlyWorksOnDead:			Ce sort ne fonctionne que sur les membres morts de votre royaume !
+SpellHandler.CantAttackSelf:			Vous ne pouvez pas vous attaquer vous-même !
+SpellHandler.TargetNotInView:			Votre cible n'est pas en vue !
+SpellHandler.TargetNotInViewSpellFail:		Votre cible est hors de votre champ de vision. Le sort échoue !
+SpellHandler.TargetNotVisible:			Votre cible n'est pas visible !
+SpellHandler.TargetInvalid:			La cible est invalide.
+SpellHandler.MustSelectTarget:			Vous devez sélectionner une cible pour ce sort !
+SpellHandler.TargetTooFar:			Cette cible est trop loin !
+SpellHandler.AreaTargetOutOfRange:		Votre cible de zone est hors de portée. Sélectionnez une cible plus proche.
+SpellHandler.MustCastOnControlled:		Vous devez lancer ce sort sur une créature que vous contrôlez.
+SpellHandler.SpellRequiresConcentration:	Ce sort nécessite {0} points de concentration pour être lancé !
+SpellHandler.MaxConcentrationSpells:		Vous ne pouvez lancer que 50 sorts de concentration simultanés au maximum !
+SpellHandler.WrongInstrument:			Vous ne maniez pas le bon type d'instrument !
+SpellHandler.CantCastWhileSitting:		Vous ne pouvez pas lancer de sort en étant assis !
+SpellHandler.CantCastWhileSitting2:		Vous ne pouvez pas lancer ce sort en étant assis !
+SpellHandler.CantCastWhileMoving:		Vous devez rester immobile pour lancer ce sort !
+SpellHandler.CantCastOnDead:			Vous ne pouvez pas lancer ce sort sur un mort !
+SpellHandler.MustWaitBeforeUse:			Vous devez attendre {0} secondes avant d'utiliser ce sort !
+SpellHandler.InteruptWaitBeforeCast:		Vous avez été interrompu et devez attendre {0} secondes avant de pouvoir relancer un sort !
+SpellHandler.NotEnoughPower:			Vous n'avez pas assez de Mana pour lancer ce sort !
+SpellHandler.GroundTargetNotInView:		Votre cible au sol n'est pas en vue !
+SpellHandler.OnlyWorksOnFriendlyTargets:	Ce sort ne fonctionne que sur les cibles amies !
+SpellHandler.LostFocusOnSpell:			Vous perdez votre concentration sur votre sort {0}.
+SpellHandler.InterruptFocus:			Vous bougez et interrompez votre concentration !
+SpellHandler.YouResistEffect:			Vous résistez à l'effet !
+SpellHandler.TargetResistsEffect:		{0} résiste à l'effet !
+SpellHandler.PetResistsEffect:			Votre {0} résiste à l'effet !
+SpellHandler.NoEffectOnKeepComponent:		Votre sort n'a aucun effet sur le composant du fort !
+SpellHandler.NoEffectOnTarget:			Votre sort n'a aucun effet sur {0} !
+SpellHandler.TargetAlreadyMezz:			Votre cible est déjà sous l'effet d'un mezz !
+SpellHandler.CantHaveEffectAgainYet:		Vous ne pouvez pas avoir à nouveau cet effet pour le moment !
+SpellHandler.AlreadyHaveEffectWait:		Vous avez déjà cet effet, attendez qu'il expire ! Le sort a échoué.
+SpellHandler.TargetCantHaveEffectAgainYet:	{0} ne peut pas avoir à nouveau cet effet pour le moment !
+SpellHandler.TargetAlreadyHasEffect:		{0} a déjà cet effet.
+SpellHandler.WaitUntilExpires:			Attendez qu'il expire. Echec du sort.
+SpellHandler.TargetImmune:			Votre cible est immunisée !
+SpellHandler.MezIntercepted:			Votre effet défensif d'objet intercepte le sort de mezz et s'estompe !
+SpellHandler.CeremonialBracerInterceptMez:	Le Bracelet Cérémonial intercepte votre mezz !
+SpellHandler.StunIntercepted:			Votre effet défensif d'objet intercepte le sort d'étourdissement et s'estompe !
+
+SpellHandler.CheckLOSYouToPet.NotInView:	Votre familier n'est pas en vue.
+SpellHandler.CheckLOSPlayerToTarget.LoSInterrupt:	Interruption de la ligne de vue dans CheckLOSPlayerToTarget
+SpellHandler.CheckLOSPlayerToTarget.CantSeeTarget:	Vous ne pouvez pas voir votre cible d'ici !
+SpellHandler.CheckLOSNPCToTarget.LoSInterrupt:	Interruption de la ligne de vue dans CheckLOSNPCToTarget
+
+SpellHandler.GainPowerPoints:			Vous gagnez {0} points de Mana.
+SpellHandler.GainEndurancePoints:		Vous gagnez {0} points d'Endurance.
+SpellHandler.HitTarget:				Vous frappez {0} pour {1}{2} dégâts !
+SpellHandler.NPCHitTarget:			Votre {0} frappe {1} pour {2}{3} dégâts !
+SpellHandler.CriticalHit:			Vous infligez un coup critique pour {0} dégâts supplémentaires !
+SpellHandler.TargetPronoun.Your:		Votre
+SpellHandler.TargetPronoun.Targets:		La cible
+
+SpellHandler.MustBeStealthedBow:		Vous devez être en mode furtif et équipé d'un arc pour utiliser cette compétence !
+SpellHandler.MustWieldBow:			Vous devez être équipé d'un arc pour utiliser cette compétence !
+SpellHandler.Archery.Prepare:			Vous préparez un {0}
+SpellHandler.Archery.DisarmedCantCast:		Vous ne pouvez pas lancer de sort car vous êtes désarmé.
+SpellHandler.ChamberSpell.YouInvulnerable:	Vous êtes actuellement invulnérable et ne pouvez pas lancer ce sort !
+SpellHandler.ChamberSpell.TargetInvulnerable:	Votre cible est actuellement invulnérable et ne peut pas être attaquée !
+SpellHandler.SiegeArrow.InvalidTarget:		Vous devez cibler un composant de forteresse pour ce sort !
+SpellHandler.SiegeArrow.InvalidComponentTarget:	Votre cible doit être un composant de forteresse !
+SpellHandler.SiegeArrow.PrepareSpell:		Vous préparez {0}
+SpellHandler.BumpSpell.TargetHurled:		{0} est projeté en l'air !
+SpellHandler.Convoker.AreaTargetOutOfRange:	Votre cible de zone est hors de portée. Sélectionnez un point au sol plus proche.
+SpellHandler.Convoker.AreaTargetNotInView:	Votre cible de zone n'est pas en vue.
+SpellHandler.Convoker.MustSetGroundTarget:	Vous devez définir une cible au sol !
+
 SpellHandler.DelveInfo.Sec:			sec

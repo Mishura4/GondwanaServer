@@ -6,6 +6,8 @@ using DOL.GS.PacketHandler;
 using DOL.GS.Effects;
 using DOL.Events;
 using DOL.GS.Keeps;
+using DOL.Language;
+using System.Numerics;
 
 namespace DOL.GS.Spells
 {
@@ -22,15 +24,19 @@ namespace DOL.GS.Spells
 
         public override bool CheckBeginCast(GameLiving selectedTarget)
         {
-            if (Caster != null && Caster is GamePlayer && Caster.AttackWeapon != null && (Caster.AttackWeapon.Object_Type == 15 || Caster.AttackWeapon.Object_Type == 18 || Caster.AttackWeapon.Object_Type == 9))
+            if (Caster != null && Caster is GamePlayer player && Caster.AttackWeapon != null && (Caster.AttackWeapon.Object_Type == 15 || Caster.AttackWeapon.Object_Type == 18 || Caster.AttackWeapon.Object_Type == 9))
             {
                 if (!(selectedTarget is GameKeepComponent || selectedTarget is Keeps.GameKeepDoor))
                 {
-                    MessageToCaster("You must have a Keep Component targeted for this spell!", eChatType.CT_Spell);
+                    MessageToCaster(LanguageMgr.GetTranslation(player.Client, "SpellHandler.SiegeArrow.InvalidTarget"), eChatType.CT_Spell);
                     return false;
                 }
                 return base.CheckBeginCast(selectedTarget);
-                //if (!Caster.IsWithinRadius( selectedTarget, Spell.Range )) { MessageToCaster("That target is too far away!", eChatType.CT_Spell); return false; }
+                /*if (!Caster.IsWithinRadius(selectedTarget, Spell.Range))
+                {
+                    MessageToCaster(LanguageMgr.GetTranslation(player.Client, "SpellHandler.TargetTooFar"), eChatType.CT_Spell);
+                    return false;
+                }*/
             }
             return false;
         }
@@ -39,7 +45,7 @@ namespace DOL.GS.Spells
         {
             if (!(target is GameKeepComponent || target is Keeps.GameKeepDoor))
             {
-                MessageToCaster("Your target must be a Keep Component!", eChatType.CT_SpellResisted);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.SiegeArrow.InvalidComponentTarget"), eChatType.CT_SpellResisted);
                 return;
             }
 
@@ -49,7 +55,14 @@ namespace DOL.GS.Spells
             base.FinishSpellCast(target);
         }
 
-        public override void SendSpellMessages() { MessageToCaster("You prepare " + Spell.Name, eChatType.CT_Spell); }
+        public override void SendSpellMessages()
+        {
+            if (Caster is GamePlayer player)
+            {
+                MessageToCaster(LanguageMgr.GetTranslation(player.Client, "SpellHandler.SiegeArrow.PrepareSpell", Spell.Name), eChatType.CT_Spell);
+            }
+        }
+
         public override AttackData CalculateDamageToTarget(GameLiving target, double effectiveness)
         {
             AttackData ad = base.CalculateDamageToTarget(target, effectiveness);

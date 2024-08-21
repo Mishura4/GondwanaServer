@@ -18,6 +18,7 @@
  */
 using System;
 using DOL.GS.PacketHandler;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -59,7 +60,7 @@ namespace DOL.GS.Spells
         {
             if (target is Keeps.GameKeepDoor || target is Keeps.GameKeepComponent)
             {
-                MessageToCaster("Your spell has no effect on the keep component!", eChatType.CT_SpellResisted);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.NoEffectOnKeepComponent"), eChatType.CT_SpellResisted);
                 return;
             }
             base.FinishSpellCast(target);

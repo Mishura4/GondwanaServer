@@ -13,7 +13,8 @@ FirstAidAbility.AddEffectsInfo.Info1:			Niveau 1: Valeur: 25%
 FirstAidAbility.AddEffectsInfo.Info2:			Niveau 2: Valeur: 60%
 FirstAidAbility.AddEffectsInfo.Info3:			Niveau 3: Valeur: 100%
 FirstAidAbility.AddEffectsInfo.Info4:			Cible: Incantateur
-FirstAidAbility.AddEffectsInfo.Info5:			Temps d'Incantation: Instantané			
+FirstAidAbility.AddEffectsInfo.Info5:			Temps d'Incantation: Instantané
+FirstAidAbility.AddEffectsInfo.Info6:					
 FirstAidAbility.Execute.FullyHealed:			Vous êtes entièrement soigné.
 FirstAidAbility.Execute.HealYourself:			Vous vous soignez pour {0} points de vie.
 
@@ -26,19 +27,19 @@ PurgeAbility.RemoveNegativeEffects.FallFromYou:		Tous les effets negatifs s'esto
 
 # /RealmAbility
 RealmAbility.AddReUseDelayInfo.Every:			Niveau {0}: peut s'utiliser tout les: {1}
-RealmAbility..CheckPreconditions.BeInCombat:	Pour utiliser cette capacité, vous devez avoir combattu récemment !
-RealmAbility..CheckPreconditions.BeInGroup:		Vous devez être en groupe pour utiliser cette capacité !
-RealmAbility..CheckPreconditions.Combat:		Vous avez été en combat recemment et ne pouvez utiliser cette capacité !
-RealmAbility..CheckPreconditions.Dead:			Vous ne pouvez pas utiliser cette capacité en étant mort !
-RealmAbility..CheckPreconditions.Mesmerized:	Vous ne pouvez pas utiliser cette capacité quand Vous êtes hypnotisé·e !
-RealmAbility..CheckPreconditions.Sitting:		Vous ne pouvez pas utiliser cette capacité en étant assis !
-RealmAbility..CheckPreconditions.Stealthed:		Vous ne pouvez pas utiliser cette capacité en étant furtif !
-RealmAbility..CheckPreconditions.Stunned:		Vous ne pouvez pas utiliser cette capacité en étant étourdi·e !
+RealmAbility.CheckPreconditions.BeInCombat:	Pour utiliser cette capacité, vous devez avoir combattu récemment !
+RealmAbility.CheckPreconditions.BeInGroup:		Vous devez être en groupe pour utiliser cette capacité !
+RealmAbility.CheckPreconditions.Combat:		Vous avez été en combat recemment et ne pouvez utiliser cette capacité !
+RealmAbility.CheckPreconditions.Dead:			Vous ne pouvez pas utiliser cette capacité en étant mort !
+RealmAbility.CheckPreconditions.Mesmerized:	Vous ne pouvez pas utiliser cette capacité quand Vous êtes hypnotisé·e !
+RealmAbility.CheckPreconditions.Sitting:		Vous ne pouvez pas utiliser cette capacité en étant assis !
+RealmAbility.CheckPreconditions.Stealthed:		Vous ne pouvez pas utiliser cette capacité en étant furtif !
+RealmAbility.CheckPreconditions.Stunned:		Vous ne pouvez pas utiliser cette capacité en étant étourdi·e !
 
 RealmAbility.SendCasterSpellEffectAndCastMessage.Caster:	{0} lance un sort !
 RealmAbility.SendCasterSpellEffectAndCastMessage.You:	Vous lancez le sort: {0} !
 RealmAbility.SendCastMessage.PlayerCasts:		{0} lance un sort!
-RealmAbility.SendCastMessage.YouCast:			Vous lancez votre {0}!
+RealmAbility.SendCastMessage.YouCast:			Vous lancez {0}!
 
 # /AdrenalineRushAbility
 AdrenalineRushAbility.AddEffectsInfo.Info1:		
@@ -115,4 +116,6 @@ AssassinateAbility.Attacked:			Vous êtes attaqués et interrompez votre action 
 AssassinateAbility.Target:				Vous devez cibler un objet vivant pour utiliser cette compétence.
 AssassinateAbility.Preparing:			Vous vous préparez à assassiner
 
+# /TrueShot		
+TrueshotAbility.PrepareTrueshot:		Vous préparez un Tir Précis !
 

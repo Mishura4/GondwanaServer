@@ -22,6 +22,7 @@ using DOL.Database;
 using DOL.GS.PacketHandler;
 using DOL.GS.Effects;
 using DOL.GS.SkillHandler;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -33,7 +34,7 @@ namespace DOL.GS.Spells
             m_caster.Mana -= PowerCost(target);
             if ((target is Keeps.GameKeepDoor || target is Keeps.GameKeepComponent) && Spell.SpellType != "SiegeArrow")
             {
-                MessageToCaster(String.Format("Your spell has no effect on the {0}!", m_caster.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.NoEffectOnTarget", m_caster.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
                 return;
             }
             base.FinishSpellCast(target);

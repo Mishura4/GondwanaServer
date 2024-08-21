@@ -14,6 +14,7 @@ using System.Numerics;
 using DOL;
 using DOL.GS.Geometry;
 using Vector = DOL.GS.Geometry.Vector;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -322,7 +323,7 @@ namespace DOL.GS.Spells
                 }
                 else
                 {
-                    MessageToCaster("Your area target is out of range.  Set a closer ground position.", eChatType.CT_SpellResisted);
+                    MessageToCaster(LanguageMgr.GetTranslation(casterPlayer.Client, "SpellHandler.Convoker.AreaTargetOutOfRange"), eChatType.CT_SpellResisted);
                     effect.Cancel(false);
                 }
             }
@@ -377,7 +378,7 @@ namespace DOL.GS.Spells
             if (!base.CheckBeginCast(selectedTarget)) return false;
             if (!(m_caster.GroundTargetPosition != Position.Nowhere && m_caster.GroundTargetInView))
             {
-                MessageToCaster("Your area target is out of range.  Set a closer ground position.", eChatType.CT_SpellResisted);
+                MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.Convoker.AreaTargetOutOfRange"), eChatType.CT_SpellResisted);
                 return false;
             }
             return true;
@@ -713,12 +714,12 @@ namespace DOL.GS.Spells
                 {
                     if (Caster.GroundTargetPosition == Position.Nowhere)
                     {
-                        MessageToCaster("You must set a groundtarget!", eChatType.CT_SpellResisted);
+                        MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.Convoker.MustSetGroundTarget"), eChatType.CT_SpellResisted);
                         return false;
                     }
                     else
                     {
-                        MessageToCaster("Your area target is not in view.", eChatType.CT_SpellResisted);
+                        MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.Convoker.AreaTargetNotInView"), eChatType.CT_SpellResisted);
                         return false;
                     }
                 }

@@ -21,6 +21,7 @@ using DOL.GS;
 using DOL.GS.PacketHandler;
 using DOL.GS.Effects;
 using DOL.Events;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -51,17 +52,17 @@ namespace DOL.GS.Spells
             if (target.HasAbility(Abilities.CCImmunity) || target.HasAbility(Abilities.RootImmunity))
             {
                 if (m_caster is GamePlayer player)
-                    MessageToCaster(player.GetPersonalizedName(target) + " is immune to this effect!", eChatType.CT_SpellResisted);
+                    MessageToCaster(LanguageMgr.GetTranslation(player.Client, "SpellHandler.DamageImmunity", player.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
                 else
-                    MessageToCaster(target.Name + " is immune to this effect!", eChatType.CT_SpellResisted);
+                    MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.DamageImmunity", target.Name), eChatType.CT_SpellResisted);
                 return;
             }
             if (target.EffectList.GetOfType<ChargeEffect>() != null)
             {
                 if (m_caster is GamePlayer player)
-                    MessageToCaster(player.GetPersonalizedName(target) + " is moving to fast for this spell to have any effect!", eChatType.CT_SpellResisted);
+                    MessageToCaster(LanguageMgr.GetTranslation(player.Client, "SpellHandler.Target.TooFast", player.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
                 else
-                    MessageToCaster(target.Name + " is moving to fast for this spell to have any effect!", eChatType.CT_SpellResisted);
+                    MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.Target.TooFast", target.Name), eChatType.CT_SpellResisted);
                 return;
             }
             base.ApplyEffectOnTarget(target, effectiveness);

@@ -2,6 +2,7 @@
 using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
 using DOL.GS.PlayerClass;
+using DOL.Language;
 using System;
 using System.Linq;
 using static DOL.GS.Region;
@@ -68,7 +69,7 @@ namespace DOL.GS.Spells
             }
             if (Caster.IsMoving && Spell.IsFocus || Caster.IsStunned || Caster.IsMezzed || !Caster.IsAlive)
             {
-                MessageToCaster("Your spell was cancelled.", eChatType.CT_SpellExpires);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.PulsingSpellCancelled"), eChatType.CT_SpellExpires);
                 effect.Cancel(false);
                 return;
             }
@@ -79,7 +80,7 @@ namespace DOL.GS.Spells
                 {
                     FocusSpellAction(null, Caster, null);
                 }
-                MessageToCaster("You do not have enough mana and your spell was cancelled.", eChatType.CT_SpellExpires);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.PulsingSpellNoMana"), eChatType.CT_SpellExpires);
                 effect.Cancel(false);
                 return;
             }
@@ -162,7 +163,7 @@ namespace DOL.GS.Spells
         {
             if (Spell.Pulse != 0 && !Spell.IsFocus && CancelPulsingSpell(Caster, Spell.SpellType))
             {
-                MessageToCaster("Your spell was cancelled.", eChatType.CT_SpellExpires);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.PulsingSpellCancelled"), eChatType.CT_SpellExpires);
             }
 
             var targetType = Spell.Target.ToLowerInvariant();

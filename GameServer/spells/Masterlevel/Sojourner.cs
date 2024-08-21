@@ -10,6 +10,7 @@ using DOL.Events;
 using DOL.GS.Geometry;
 using System.Collections.Specialized;
 using DOL.GS.Profession;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -206,7 +207,7 @@ namespace DOL.GS.Spells
         {
             if (target == null)
             {
-                MessageToCaster("You must select a target for this spell!", eChatType.CT_SpellResisted);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.MustSelectTarget"), eChatType.CT_SpellResisted);
                 return false;
             }
 
@@ -401,7 +402,7 @@ namespace DOL.GS.Spells
                 ad.Damage = 0;
                 ad.CriticalDamage = 0;
                 GamePlayer player = ad.Attacker as GamePlayer;
-                player.Out.SendMessage(player.GetPersonalizedName(living) + " is Phaseshifted and can't be attacked!", eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Skill.Ability.TargetIsPhaseshifted", player.GetPersonalizedName(living)), eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
             }
         }
 

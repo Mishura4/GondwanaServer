@@ -7,6 +7,8 @@ using DOL.GS.Effects;
 using DOL.Events;
 using DOL.Database;
 using DOL.GS.Spells;
+using DOL.Language;
+using System.Numerics;
 
 namespace DOL.GS.RealmAbilities
 {
@@ -82,7 +84,7 @@ namespace DOL.GS.RealmAbilities
                 phaseshift = SpellHandler.FindEffectOnTarget(t_player, "Phaseshift");
                 if (phaseshift != null)
                 {
-                    caster.Out.SendMessage(t_player.Name + " is Phaseshifted and can't be effected by this Spell!", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
+                    caster.Out.SendMessage(LanguageMgr.GetTranslation(caster.Client, "SpellHandler.PhaseshiftedCantBeAffected", t_player.Name), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
                     continue;
                 }
 

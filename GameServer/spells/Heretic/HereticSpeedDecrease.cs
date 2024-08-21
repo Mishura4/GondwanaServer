@@ -6,6 +6,7 @@ using DOL.GS.Effects;
 using DOL.Events;
 using System.Text;
 using DOL.AI.Brain;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -50,12 +51,12 @@ namespace DOL.GS.Spells
             }
             if (target.HasAbility(Abilities.CCImmunity))
             {
-                MessageToCaster(target.Name + " is immune to this effect!", eChatType.CT_SpellResisted);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.DamageImmunity", target.Name), eChatType.CT_SpellResisted);
                 return;
             }
             if (target.TempProperties.getProperty("Charging", false))
             {
-                MessageToCaster(target.Name + " is moving to fast for this spell to have any effect!", eChatType.CT_SpellResisted);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.Target.TooFast", target.Name), eChatType.CT_SpellResisted);
                 return;
             }
             if (target.EffectList.GetOfType<AdrenalineSpellEffect>() != null)

@@ -22,6 +22,7 @@ using DOL.GS.PacketHandler;
 using DOL.GS.Effects;
 using DOL.Events;
 using DOL.AI.Brain;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -49,7 +50,7 @@ namespace DOL.GS.Spells
             if (m_caster.ObjectState != GameLiving.eObjectState.Active) return false;
             if (!m_caster.IsAlive)
             {
-                MessageToCaster("You are dead and can't cast!", eChatType.CT_System);
+                MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.DeadCantCast"), eChatType.CT_System);
                 return false;
             }
 
@@ -57,7 +58,7 @@ namespace DOL.GS.Spells
             GameSpellEffect Phaseshift = SpellHandler.FindEffectOnTarget(Caster, "Phaseshift");
             if (Phaseshift != null && (Spell.InstrumentRequirement == 0 || Spell.SpellType == "Mesmerize"))
             {
-                MessageToCaster("You're phaseshifted and can't cast a spell", eChatType.CT_System);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.PhaseshiftedCantCast"), eChatType.CT_System);
                 return false;
             }
 
@@ -65,7 +66,7 @@ namespace DOL.GS.Spells
             ShieldTripDisarmEffect shieldDisarm = Caster.EffectList.GetOfType<ShieldTripDisarmEffect>();
             if (shieldDisarm != null)
             {
-                MessageToCaster("You're disarmed and can't cast a spell", eChatType.CT_System);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.Archery.DisarmedCantCast"), eChatType.CT_System);
                 return false;
             }
 
@@ -77,8 +78,7 @@ namespace DOL.GS.Spells
                 if (EffectOwner == selectedTarget)
                 {
                     if (m_caster is GamePlayer player)
-                        player.Out.SendMessage(string.Format("{0} is invisible to you!", selectedTarget.GetName(0, true)), eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
-
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameLiving.AttackData.InvisibleToYou", selectedTarget.GetName(0, true)), eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
                     return false;
                 }
             }
@@ -86,13 +86,13 @@ namespace DOL.GS.Spells
             // Is immune ?
             if (selectedTarget != null && selectedTarget.HasAbility("DamageImmunity"))
             {
-                MessageToCaster(m_caster.GetPersonalizedName(selectedTarget) + " is immune to this effect!", eChatType.CT_SpellResisted);
+                MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.DamageImmunity", m_caster.GetPersonalizedName(selectedTarget)), eChatType.CT_SpellResisted);
                 return false;
             }
 
             if (m_caster.IsSitting)
             {
-                MessageToCaster("You can't cast while sitting!", eChatType.CT_SpellResisted);
+                MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.CantCastWhileSitting"), eChatType.CT_SpellResisted);
                 return false;
             }
             if (m_spell.RecastDelay > 0)
@@ -100,7 +100,7 @@ namespace DOL.GS.Spells
                 int left = m_caster.GetSkillDisabledDuration(m_spell);
                 if (left > 0)
                 {
-                    MessageToCaster("You must wait " + (left / 1000 + 1).ToString() + " seconds to use this spell!", eChatType.CT_System);
+                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.MustWaitBeforeUse", (left / 1000 + 1).ToString()), eChatType.CT_System);
                     return false;
                 }
             }
@@ -109,7 +109,7 @@ namespace DOL.GS.Spells
             {
                 if (!m_caster.IsWithinRadius(m_caster.GroundTargetPosition, CalculateSpellRange()))
                 {
-                    MessageToCaster("Your area target is out of range.  Select a closer target.", eChatType.CT_SpellResisted);
+                    MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.AreaTargetOutOfRange"), eChatType.CT_SpellResisted);
                     return false;
                 }
             }
@@ -118,14 +118,14 @@ namespace DOL.GS.Spells
             {
                 if (m_caster.IsObjectInFront(selectedTarget, 180) == false)
                 {
-                    MessageToCaster("Your target is not in view!", eChatType.CT_SpellResisted);
+                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.TargetNotInView"), eChatType.CT_SpellResisted);
                     Caster.Notify(GameLivingEvent.CastFailed, new CastFailedEventArgs(this, CastFailedEventArgs.Reasons.TargetNotInView));
                     return false;
                 }
 
                 if (m_caster.TargetInView == false)
                 {
-                    MessageToCaster("Your target is not visible!", eChatType.CT_SpellResisted);
+                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.TargetNotVisible"), eChatType.CT_SpellResisted);
                     Caster.Notify(GameLivingEvent.CastFailed, new CastFailedEventArgs(this, CastFailedEventArgs.Reasons.TargetNotInView));
                     return false;
                 }
@@ -135,7 +135,7 @@ namespace DOL.GS.Spells
             {
                 if (Spell.LifeDrainReturn == (int)eShotType.Critical && (!(Caster.IsStealthed)))
                 {
-                    MessageToCaster("You must be stealthed and wielding a bow to use this ability!", eChatType.CT_SpellResisted);
+                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.MustBeStealthedBow"), eChatType.CT_SpellResisted);
                     return false;
                 }
 
@@ -145,18 +145,18 @@ namespace DOL.GS.Spells
             {
                 if (Spell.LifeDrainReturn == (int)eShotType.Critical)
                 {
-                    MessageToCaster("You must be stealthed and wielding a bow to use this ability!", eChatType.CT_SpellResisted);
+                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.MustBeStealthedBow"), eChatType.CT_SpellResisted);
                     return false;
                 }
 
-                MessageToCaster("You must be wielding a bow to use this ability!", eChatType.CT_SpellResisted);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.MustWieldBow"), eChatType.CT_SpellResisted);
                 return false;
             }
         }
 
         public override void SendSpellMessages()
         {
-            MessageToCaster("You prepare a " + Spell.Name, eChatType.CT_YouHit);
+            MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.Archery.Prepare", Spell.Name), eChatType.CT_YouHit);
         }
 
 

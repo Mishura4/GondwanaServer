@@ -234,14 +234,14 @@ PurgeAbility.RemoveNegativeEffects.FallFromYou:		Alle negativen Auswirkungen fal
 
 # /RealmAbility
 RealmAbility.AddReUseDelayInfo.Every:			Stufe {0}: Nutzbar alle: {1}
-RealmAbility..CheckPreconditions.BeInCombat:		Dieser Zauberspruch kann nur während eines Kampfes ausgesprochen werden!
-RealmAbility..CheckPreconditions.BeInGroup:		Dieser Zauberspruch kann nur als Mitglied einer Gruppe ausgesprochen werden!
-RealmAbility..CheckPreconditions.Combat:		Dieser Zauberspruch kann nicht während eines Kampfes ausgesprochen werden!
-RealmAbility..CheckPreconditions.Dead:			Ihr könnt diese Fähigkeit nicht nutzen, da Ihr tot seid!
-RealmAbility..CheckPreconditions.Mesmerized:		Ihr könnt diese Fähigkeit nicht nutzen,while mesmerized!
-RealmAbility..CheckPreconditions.Sitting:		Ihr könnt diese Fähigkeit nicht nutzen,while sitting!
-RealmAbility..CheckPreconditions.Stealthed:		Ihr könnt diese Fähigkeit nicht nutzen,while stealthed!
-RealmAbility..CheckPreconditions.Stunned:		Ihr könnt diese Fähigkeit nicht nutzen,while stunned!
+RealmAbility.CheckPreconditions.BeInCombat:		Dieser Zauberspruch kann nur während eines Kampfes ausgesprochen werden!
+RealmAbility.CheckPreconditions.BeInGroup:		Dieser Zauberspruch kann nur als Mitglied einer Gruppe ausgesprochen werden!
+RealmAbility.CheckPreconditions.Combat:		Dieser Zauberspruch kann nicht während eines Kampfes ausgesprochen werden!
+RealmAbility.CheckPreconditions.Dead:			Ihr könnt diese Fähigkeit nicht nutzen, da Ihr tot seid!
+RealmAbility.CheckPreconditions.Mesmerized:		Ihr könnt diese Fähigkeit nicht nutzen,while mesmerized!
+RealmAbility.CheckPreconditions.Sitting:		Ihr könnt diese Fähigkeit nicht nutzen,while sitting!
+RealmAbility.CheckPreconditions.Stealthed:		Ihr könnt diese Fähigkeit nicht nutzen,while stealthed!
+RealmAbility.CheckPreconditions.Stunned:		Ihr könnt diese Fähigkeit nicht nutzen,while stunned!
 RealmAbility.SendCasterSpellEffectAndCastMessage.Caster:{0} zaubert!
 RealmAbility.SendCasterSpellEffectAndCastMessage.You:	Ihr bereitet den Zauber "{0}" vor...
 RealmAbility.SendCastMessage.PlayerCasts:		{0} zaubert!

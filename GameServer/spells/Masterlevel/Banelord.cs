@@ -6,6 +6,7 @@ using DOL.GS.PacketHandler;
 using System.Reflection;
 using DOL.AI.Brain;
 using DOL.Events;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -246,7 +247,7 @@ namespace DOL.GS.Spells
         {
             if (target.HasAbility(Abilities.CCImmunity) || target.HasAbility(Abilities.StunImmunity))
             {
-                MessageToCaster(target.Name + " is immune to this effect!", eChatType.CT_SpellResisted);
+                MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.DamageImmunity", target.Name), eChatType.CT_SpellResisted);
                 return;
             }
 

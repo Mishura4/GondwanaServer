@@ -19,7 +19,7 @@ GameLiving.AttackData.Fumbled:			{0} a loupé son attaque!
 GameLiving.AttackData.GainEndurancePoints:	Vous gagnez {0} points d'Endurance.
 GameLiving.AttackData.GainPowerPoints:		Vous gagnez {0} points de Mana
 GameLiving.AttackData.HitsForDamage:		{0} touche votre {1} pour {2}{3} domages.
-GameLiving.AttackData.InvisibleToYou:		{0} est invisible!
+GameLiving.AttackData.InvisibleToYou:		{0} est invisible !
 GameLiving.AttackData.Misses:			{0} attaque {1} et le manque !
 GameLiving.AttackData.Parried:			l'attaque de {0} est contrée par {1} 
 GameLiving.AttackData.StepsInFront:		{0} s'est placé devant vous et prends les domages !

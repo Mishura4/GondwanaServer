@@ -19,6 +19,7 @@
 using System.Text;
 using DOL.GS.PacketHandler;
 using DOL.GS.Effects;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -32,7 +33,7 @@ namespace DOL.GS.Spells
         {
             if (target.HasAbility(Abilities.CCImmunity) || target.HasAbility(Abilities.RootImmunity))
             {
-                MessageToCaster(m_caster.GetPersonalizedName(target) + " is immune to this effect!", eChatType.CT_SpellResisted);
+                MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.DamageImmunity", m_caster.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
                 return;
             }
             if (target.EffectList.GetOfType<AdrenalineSpellEffect>() != null)
@@ -43,7 +44,7 @@ namespace DOL.GS.Spells
             }
             if (target.EffectList.GetOfType<ChargeEffect>() != null)
             {
-                MessageToCaster(m_caster.GetPersonalizedName(target) + " is moving to fast for this spell to have any effect!", eChatType.CT_SpellResisted);
+                MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.Target.TooFast", m_caster.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
                 return;
             }
 

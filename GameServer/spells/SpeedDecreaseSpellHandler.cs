@@ -20,6 +20,7 @@ using System;
 using DOL.GS.PacketHandler;
 using DOL.GS.Effects;
 using DOL.Events;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -44,9 +45,9 @@ namespace DOL.GS.Spells
             if (effect.Owner.EffectList.GetOfType<ChargeEffect>() != null || effect.Owner.TempProperties.getProperty("Charging", false))
             {
                 if (m_caster is GamePlayer player)
-                    MessageToCaster(player.GetPersonalizedName(effect.Owner) + " is moving too fast for this spell to have any effect!", eChatType.CT_SpellResisted);
+                    MessageToCaster(LanguageMgr.GetTranslation(player.Client, "SpellHandler.Target.TooFast", player.GetPersonalizedName(effect.Owner)), eChatType.CT_SpellResisted);
                 else
-                    MessageToCaster(effect.Owner.Name + " is moving too fast for this spell to have any effect!", eChatType.CT_SpellResisted);
+                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.Target.TooFast", effect.Owner.Name), eChatType.CT_SpellResisted);
                 return;
             }
             base.OnEffectStart(effect);

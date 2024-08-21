@@ -27,14 +27,14 @@ PurgeAbility.RemoveNegativeEffects.FallFromYou:		All negative effects fall from 
 
 # /RealmAbility
 RealmAbility.AddReUseDelayInfo.Every:			Level {0}: Can use every: {1}
-RealmAbility..CheckPreconditions.BeInCombat:		You must be in combat recently to use this ability!
-RealmAbility..CheckPreconditions.BeInGroup:		You must be in a group use this ability!
-RealmAbility..CheckPreconditions.Combat:		You have been in combat recently and cannot use this ability!
-RealmAbility..CheckPreconditions.Dead:			You cannot use this ability while dead!
-RealmAbility..CheckPreconditions.Mesmerized:		You cannot use this ability while mesmerized!
-RealmAbility..CheckPreconditions.Sitting:		You cannot use this ability while sitting!
-RealmAbility..CheckPreconditions.Stealthed:		You cannot use this ability while stealthed!
-RealmAbility..CheckPreconditions.Stunned:		You cannot use this ability while stunned!
+RealmAbility.CheckPreconditions.BeInCombat:		You must be in combat recently to use this ability!
+RealmAbility.CheckPreconditions.BeInGroup:		You must be in a group use this ability!
+RealmAbility.CheckPreconditions.Combat:		You have been in combat recently and cannot use this ability!
+RealmAbility.CheckPreconditions.Dead:			You cannot use this ability while dead!
+RealmAbility.CheckPreconditions.Mesmerized:		You cannot use this ability while mesmerized!
+RealmAbility.CheckPreconditions.Sitting:		You cannot use this ability while sitting!
+RealmAbility.CheckPreconditions.Stealthed:		You cannot use this ability while stealthed!
+RealmAbility.CheckPreconditions.Stunned:		You cannot use this ability while stunned!
 
 RealmAbility.SendCasterSpellEffectAndCastMessage.Caster:{0} casts a spell!
 RealmAbility.SendCasterSpellEffectAndCastMessage.You:	You cast a {0} Spell!
@@ -82,7 +82,6 @@ MysticCrystalLoreAbility.AddEffectsInfo.Info2:	Level 2: Value: 60%
 MysticCrystalLoreAbility.AddEffectsInfo.Info3:	Level 3: Value: 90%
 MysticCrystalLoreAbility.AddEffectsInfo.Info4:	Target: Self
 MysticCrystalLoreAbility.AddEffectsInfo.Info5:	Casting time: instant
-MysticCrystalLoreAbility.AddEffectsInfo.Info6:
 
 # /NegativeMaelstromAbility
 NegativeMaelstromAbility.AddEffectsInfo.Info1:
@@ -117,3 +116,5 @@ AssassinateAbility.Attacked:			You're attacked and interrupt your action!
 AssassinateAbility.Target:				You need to target a living object to use this ability.
 AssassinateAbility.Preparing:			You're preparing to assassinate
 
+# /TrueShot		
+TrueshotAbility.PrepareTrueshot:		You prepare a Trueshot!

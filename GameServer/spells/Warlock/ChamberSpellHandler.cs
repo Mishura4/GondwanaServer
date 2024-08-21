@@ -18,6 +18,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
 using DOL.GS.SkillHandler;
@@ -120,32 +121,32 @@ namespace DOL.GS.Spells
                 int duration = caster.GetSkillDisabledDuration(m_spell);
                 if (duration > 0)
                 {
-                    MessageToCaster("You must wait " + (duration / 1000 + 1) + " seconds to use this spell!", eChatType.CT_System);
+                    MessageToCaster(LanguageMgr.GetTranslation(caster.Client, "SpellHandler.MustWaitBeforeUse", (duration / 1000 + 1)), eChatType.CT_System);
                     return false;
                 }
                 if (caster.IsMoving || caster.IsStrafing)
                 {
-                    MessageToCaster("You must be standing still to cast this spell!", eChatType.CT_System);
+                    MessageToCaster(LanguageMgr.GetTranslation(caster.Client, "SpellHandler.CantCastWhileMoving"), eChatType.CT_SpellResisted);
                     return false;
                 }
                 if (caster.IsSitting)
                 {
-                    MessageToCaster("You can't cast this spell while sitting!", eChatType.CT_System);
+                    MessageToCaster(LanguageMgr.GetTranslation(caster.Client, "SpellHandler.CantCastWhileSitting2"), eChatType.CT_SpellResisted);
                     return false;
                 }
                 if (m_spellTarget == null)
                 {
-                    MessageToCaster("You must have a target!", eChatType.CT_SpellResisted);
+                    MessageToCaster(LanguageMgr.GetTranslation(caster.Client, "SpellHandler.MustSelectTarget"), eChatType.CT_SpellResisted);
                     return false;
                 }
                 if (!caster.IsAlive)
                 {
-                    MessageToCaster("You cannot cast this dead!", eChatType.CT_SpellResisted);
+                    MessageToCaster(LanguageMgr.GetTranslation(caster.Client, "SpellHandler.DeadCantCast"), eChatType.CT_SpellResisted);
                     return false;
                 }
                 if (!m_spellTarget.IsAlive)
                 {
-                    MessageToCaster("You cannot cast this on the dead!", eChatType.CT_SpellResisted);
+                    MessageToCaster(LanguageMgr.GetTranslation(caster.Client, "SpellHandler.CantCastOnDead"), eChatType.CT_SpellResisted);
                     return false;
                 }
                 if (caster.IsMezzed || caster.IsStunned || caster.IsSilenced)
@@ -155,53 +156,58 @@ namespace DOL.GS.Spells
                 }
                 if (!caster.TargetInView)
                 {
-                    MessageToCaster("Your target is not visible!", eChatType.CT_SpellResisted);
+                    MessageToCaster(LanguageMgr.GetTranslation(caster.Client, "SpellHandler.TargetNotVisible"), eChatType.CT_SpellResisted);
                     return false;
                 }
                 if (caster.IsObjectInFront(m_spellTarget, 180) == false)
                 {
-                    MessageToCaster("Your target is not in view!", eChatType.CT_SpellResisted);
+                    MessageToCaster(LanguageMgr.GetTranslation(caster.Client, "SpellHandler.TargetNotInView"), eChatType.CT_SpellResisted);
                     return false;
                 }
                 if (caster.IsInvulnerableToAttack)
                 {
-                    MessageToCaster("Your invunerable at the momment and cannot use that spell!", eChatType.CT_System);
+                    MessageToCaster(LanguageMgr.GetTranslation(caster.Client, "SpellHandler.ChamberSpell.YouInvulnerable"), eChatType.CT_System);
                     return false;
                 }
                 if (m_spellTarget is GamePlayer)
                 {
                     if ((m_spellTarget as GamePlayer).IsInvulnerableToAttack)
                     {
-                        MessageToCaster("Your target is invunerable at the momment and cannot be attacked!", eChatType.CT_System);
+                        MessageToCaster(LanguageMgr.GetTranslation(caster.Client, "SpellHandler.ChamberSpell.TargetInvulnerable"), eChatType.CT_System);
                         return false;
                     }
                 }
                 if (!caster.IsWithinRadius(m_spellTarget, ((SpellHandler)spellhandler).CalculateSpellRange()))
                 {
-                    MessageToCaster("That target is too far away!", eChatType.CT_SpellResisted);
+                    MessageToCaster(LanguageMgr.GetTranslation(caster.Client, "SpellHandler.TargetTooFar"), eChatType.CT_SpellResisted);
                     return false;
                 }
                 if (PhaseShift != null)
                 {
-                    MessageToCaster(Caster.GetPersonalizedName(m_spellTarget) + " is Phaseshifted and can't be attacked!", eChatType.CT_System); return false;
+                    MessageToCaster(LanguageMgr.GetTranslation(caster.Client, "Skill.Ability.TargetIsPhaseshifted", Caster.GetPersonalizedName(m_spellTarget)), eChatType.CT_System);
+                    return false;
                 }
                 if (SelectiveBlindness != null)
                 {
                     GameLiving EffectOwner = SelectiveBlindness.EffectSource;
                     if (EffectOwner == m_spellTarget)
                     {
-                        (m_caster as GamePlayer)?.Out.SendMessage(string.Format("{0} is invisible to you!", m_spellTarget.GetName(0, true)), eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
+                        GamePlayer player = m_caster as GamePlayer;
+                        if (player != null)
+                        {
+                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameLiving.AttackData.InvisibleToYou", m_spellTarget.GetName(0, true)), eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
+                        }
                         return false;
                     }
                 }
                 if (m_spellTarget.HasAbility(Abilities.DamageImmunity))
                 {
-                    MessageToCaster(Caster.GetPersonalizedName(m_spellTarget) + " is immune to this effect!", eChatType.CT_SpellResisted);
+                    MessageToCaster(LanguageMgr.GetTranslation(caster.Client, "SpellHandler.DamageImmunity", Caster.GetPersonalizedName(m_spellTarget)), eChatType.CT_SpellResisted);
                     return false;
                 }
                 if (GameServer.ServerRules.IsAllowedToAttack(Caster, m_spellTarget, true) && chamber.PrimarySpell.Target.ToLower() == "realm")
                 {
-                    MessageToCaster("This spell only works on friendly targets!", eChatType.CT_System);
+                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.OnlyWorksOnFriendlyTargets"), eChatType.CT_SpellResisted);
                     return false;
                 }
                 if (!GameServer.ServerRules.IsAllowedToAttack(Caster, m_spellTarget, true) && chamber.PrimarySpell.Target.ToLower() != "realm")

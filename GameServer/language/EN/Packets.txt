@@ -206,3 +206,6 @@ PlayerPositionUpdateHandler.SafeFall:			The damage was lessened by your Safe Fal
 PlayerPositionUpdateHandler.MythSafeFall:		The damage was lessened by your equipment!
 PlayerPositionUpdateHandler.CloudsongFall:		Your weight, as light as a feather, greatly diminished the impact!
 PlayerPositionUpdateHandler.UnknownZone:		Unknown zone, moving to bind point.
+
+# /PlayerTargetHandler
+PlayerTargetHandler.Gravestone:				You are no longer targetting your grave. Your prayers fail.

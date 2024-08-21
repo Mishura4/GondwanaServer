@@ -183,11 +183,13 @@ PlayerPickUpRequestHandler.HandlePacket.Target:		Vous devez sélectionner une ci
 
 # /PlayerPositionUpdateHandler
 PlayerPositionUpdateHandler.Endurance:		Vous perdez de l'endurance !
+PlayerPositionUpdateHandler.Entered:		Vous êtes entré·e dans {0}.
 PlayerPositionUpdateHandler.FallingDamage:	Vous encaissez des dégats de chute !
 PlayerPositionUpdateHandler.FallPercent:	Vous perdez {0}% de votre total de points de vie.
 PlayerPositionUpdateHandler.SafeFall:		Les dommages ont été réduits grâce à votre abilité de chute contrôlée !
 PlayerPositionUpdateHandler.CloudsongFall:	Votre poids plume a fortement atténué l'impact !
 PlayerPositionUpdateHandler.MythSafeFall:	Les dommages ont été réduits grâce à votre equipment!
-
-PlayerPositionUpdateHandler.Entered:		Vous êtes entré·e dans {0}.
 PlayerPositionUpdateHandler.UnknownZone:	Zone inconnue ! Vous êtes ramené à la pierre d'âme.
+
+# /PlayerTargetHandler
+PlayerTargetHandler.Gravestone:			Vous avez cessé de cibler votre tombe. Vos prières échouent.

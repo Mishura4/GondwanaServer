@@ -75,7 +75,7 @@ SavageEnduranceHeal.CheckBeginCast.InsuffiscientHealth:	Ihr seid nicht gesund ge
 
 # SpellHandler
 SpellHandler.CancelEffect:				Ihr beendet Euren Effekt.
-SpellHandler.CancelPulsingSpell:			Ihr beendet Euer Lied.
+SpellHandler.StopPlayingSong:			Ihr beendet Euer Lied.
 SpellHandler.CasterMove:				Ihr bewegt Euch und unterbrecht damit Euren Zauberspruch!
 SpellHandler.DelveInfo.Sec:				Sekunde(n)
 

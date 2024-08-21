@@ -23,6 +23,7 @@ using System.Collections.Specialized;
 using DOL.Events;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -253,7 +254,7 @@ namespace DOL.GS.Spells
             //so I added another check here.
             if (m_caster.Mana < PowerCost(target))
             {
-                MessageToCaster("You don't have enough power to cast that!", eChatType.CT_SpellResisted);
+                MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.NotEnoughPower"), eChatType.CT_SpellResisted);
                 return false;
             }
 

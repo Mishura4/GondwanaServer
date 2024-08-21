@@ -23,6 +23,7 @@ using DOL.GS.Effects;
 using DOL.Events;
 using DOL.GS.RealmAbilities;
 using DOL.Territories;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -32,7 +33,7 @@ namespace DOL.GS.Spells
         {
             if (target.HasAbility(Abilities.CCImmunity))
             {
-                MessageToCaster(m_caster.GetPersonalizedName(target) + " is immune to this effect!", eChatType.CT_SpellResisted);
+                MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.DamageImmunity", m_caster.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
                 return;
             }
             if (target.EffectList.GetOfType<AdrenalineSpellEffect>() != null)
@@ -43,7 +44,7 @@ namespace DOL.GS.Spells
             }
             if (target.EffectList.GetOfType<ChargeEffect>() != null || target.TempProperties.getProperty("Charging", false))
             {
-                MessageToCaster(m_caster.GetPersonalizedName(target) + " is moving too fast for this spell to have any effect!", eChatType.CT_SpellResisted);
+                MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.Target.TooFast", m_caster.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
                 return;
             }
 
@@ -226,7 +227,7 @@ namespace DOL.GS.Spells
                     {
                         effect.Cancel(false);//call OnEffectExpires
                         CancelPulsingSpell(Caster, this.Spell.SpellType);
-                        MessageToCaster("You stop playing your song.", eChatType.CT_Spell);
+                        MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.StopPlayingSong"), eChatType.CT_Spell);
                     }
                     return;
                 }
@@ -244,7 +245,7 @@ namespace DOL.GS.Spells
             GameSpellEffect mezz = SpellHandler.FindEffectOnTarget(target, "Mesmerize");
             if (mezz != null)
             {
-                MessageToCaster("Your target is already mezzed!!!", eChatType.CT_SpellResisted);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.TargetAlreadyMezz"), eChatType.CT_SpellResisted);
                 return;
             }
 
@@ -261,7 +262,7 @@ namespace DOL.GS.Spells
                             if (immunity.ImmunityState
                                 && target == immunity.Owner)
                             {
-                                MessageToCaster(m_caster.GetPersonalizedName(immunity.Owner) + " can't have that effect again yet!!!", eChatType.CT_SpellPulse);
+                                MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.TargetCantHaveEffectAgainYet", m_caster.GetPersonalizedName(immunity.Owner)), eChatType.CT_SpellPulse);
                                 return;
                             }
                         }
@@ -269,7 +270,7 @@ namespace DOL.GS.Spells
                 }
             }
             SendEffectAnimation(target, 0, false, 0);
-            MessageToCaster(target.GetName(0, true) + " resists the effect!", eChatType.CT_SpellResisted);
+            MessageToCaster(LanguageMgr.GetTranslation("SpellHandler.TargetResistsEffect", target.GetName(0, true)), eChatType.CT_SpellResisted);
             target.StartInterruptTimer(target.SpellInterruptDuration, AttackData.eAttackType.Spell, Caster);
         }
 
@@ -288,7 +289,7 @@ namespace DOL.GS.Spells
                 if (Caster.IsWithinRadius(target, this.Spell.Range * 5) == false)
                 {
                     CancelPulsingSpell(Caster, this.Spell.SpellType);
-                    MessageToCaster("You are far away from the target. You stop playing your song.", eChatType.CT_Spell);
+                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.TooFarStopPlayingSong"), eChatType.CT_Spell);
                     return;
                 }
 
@@ -299,7 +300,7 @@ namespace DOL.GS.Spells
                     {
                         effect.Cancel(false);//call OnEffectExpires
                         CancelPulsingSpell(Caster, this.Spell.SpellType);
-                        MessageToCaster("You stop playing your song.", eChatType.CT_Spell);
+                        MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.StopPlayingSong"), eChatType.CT_Spell);
                     }
                     return;
                 }
@@ -317,14 +318,14 @@ namespace DOL.GS.Spells
 
             if (target.HasAbility(Abilities.MezzImmunity))
             {
-                MessageToCaster(m_caster.GetPersonalizedName(target) + " is immune to this effect!", eChatType.CT_SpellResisted);
+                MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.DamageImmunity", m_caster.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
                 SendEffectAnimation(target, 0, false, 0);
                 target.StartInterruptTimer(target.SpellInterruptDuration, AttackData.eAttackType.Spell, Caster);
                 return;
             }
             if (FindStaticEffectOnTarget(target, typeof(MezzRootImmunityEffect)) != null)
             {
-                MessageToCaster("Your target is immune!", eChatType.CT_System);
+                MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.TargetImmune"), eChatType.CT_System);
                 SendEffectAnimation(target, 0, false, 0);
                 target.StartInterruptTimer(target.SpellInterruptDuration, AttackData.eAttackType.Spell, Caster);
                 return;
@@ -333,7 +334,7 @@ namespace DOL.GS.Spells
             GameSpellEffect mezz = SpellHandler.FindEffectOnTarget(target, "Mesmerize");
             if (mezz != null)
             {
-                MessageToCaster("Your target is already mezzed!", eChatType.CT_SpellResisted);
+                MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.TargetAlreadyMezz"), eChatType.CT_SpellResisted);
                 //				SendEffectAnimation(target, 0, false, 0);
                 return;
             }
@@ -352,9 +353,8 @@ namespace DOL.GS.Spells
             {
                 mezblock.Cancel(false);
                 if (target is GamePlayer)
-                    (target as GamePlayer).Out.SendMessage("Your item effect intercepts the mesmerization spell and fades!", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
-                //inform caster
-                MessageToCaster("Ceremonial Bracer intercept your mez!", eChatType.CT_SpellResisted);
+                    (target as GamePlayer).Out.SendMessage(LanguageMgr.GetTranslation((target as GamePlayer)?.Client, "SpellHandler.MezIntercepted"), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
+                MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.CeremonialBracerInterceptMez"), eChatType.CT_SpellResisted);
                 SendEffectAnimation(target, 0, false, 0);
                 target.StartInterruptTimer(target.SpellInterruptDuration, AttackData.eAttackType.Spell, Caster);
                 return;
@@ -476,7 +476,7 @@ namespace DOL.GS.Spells
         {
             if (target.HasAbility(Abilities.StunImmunity))
             {
-                MessageToCaster(m_caster.GetPersonalizedName(target) + " is immune to this effect!", eChatType.CT_SpellResisted);
+                MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.DamageImmunity", m_caster.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
                 base.OnSpellResisted(target);
                 return;
             }
@@ -488,7 +488,7 @@ namespace DOL.GS.Spells
                 {
                     stunblock.Cancel(false);
                     if (target is GamePlayer)
-                        (target as GamePlayer).Out.SendMessage("Your item effect intercepts the stun spell and fades!", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
+                        (target as GamePlayer).Out.SendMessage(LanguageMgr.GetTranslation((target as GamePlayer)?.Client, "SpellHandler.StunIntercepted"), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
                     base.OnSpellResisted(target);
                     return;
                 }

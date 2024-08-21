@@ -99,7 +99,7 @@ namespace DOL.GS.Spells
             }
             else
             {
-                MessageToCaster("You do not have enough mana and your spell was cancelled.", eChatType.CT_SpellExpires);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.PulsingSpellNoMana"), eChatType.CT_SpellExpires);
                 FocusSpellAction(null, Caster, null);
                 effect.Cancel(false);
             }
@@ -120,8 +120,9 @@ namespace DOL.GS.Spells
             {
                 if (Caster.ChanceSpellInterrupt(attacker))
                 {
-                    Caster.LastInterruptMessage = attacker.GetName(0, true) + " attacks you and your spell is interrupted!";
-                    MessageToLiving(Caster, Caster.LastInterruptMessage, eChatType.CT_SpellResisted);
+                    string interruptMessage = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.SpellInterrupted", attacker.GetName(0, true));
+                    Caster.LastInterruptMessage = interruptMessage;
+                    MessageToLiving(Caster, interruptMessage, eChatType.CT_SpellResisted);
                     InterruptCasting(); // always interrupt at the moment
                     return true;
                 }
@@ -166,9 +167,9 @@ namespace DOL.GS.Spells
             currentEffect.Cancel(false);
 
             if (e == GameLivingEvent.Moving)
-                MessageToCaster("You move and interrupt your focus!", eChatType.CT_Important);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.InterruptFocus"), eChatType.CT_Important);
 
-            MessageToCaster(String.Format("You lose your focus on your {0} spell.", currentEffect.Spell.Name), eChatType.CT_SpellExpires);
+            MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.LostFocusOnSpell", currentEffect.Spell.Name), eChatType.CT_SpellExpires);
         }
 
         public override void OnDirectEffect(GameLiving target, double effectiveness)

@@ -5,6 +5,7 @@ using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
 using DOL.AI.Brain;
 using ICSharpCode.SharpZipLib.Checksum;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -230,15 +231,15 @@ namespace DOL.GS.Spells
                     GamePlayer owner = brain.GetPlayerOwner();
                     if (owner != null)
                     {
-                        MessageToLiving(owner, "Your " + owner.GetPersonalizedName(target) + " resists the effect!", eChatType.CT_SpellResisted);
+                        MessageToLiving(owner, LanguageMgr.GetTranslation(owner.Client, "SpellHandler.PetResistsEffect", owner.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
                     }
                 }
             }
-            else
+            else if (target is GamePlayer targetPlayer)
             {
-                MessageToLiving(target, "You resist the effect!", eChatType.CT_SpellResisted);
+                MessageToLiving(targetPlayer, LanguageMgr.GetTranslation(targetPlayer.Client, "SpellHandler.YouResistEffect"), eChatType.CT_SpellResisted);
             }
-            MessageToCaster(target.GetName(0, true) + " resists the effect!", eChatType.CT_SpellResisted);
+            MessageToCaster(LanguageMgr.GetTranslation("SpellHandler.TargetResistsEffect", target.GetName(0, true)), eChatType.CT_SpellResisted);
 
             if (Spell.Damage != 0)
             {

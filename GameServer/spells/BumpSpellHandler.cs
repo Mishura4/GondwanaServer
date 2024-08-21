@@ -356,7 +356,7 @@ namespace DOL.GS.Spells
         {
             if (Caster is GamePlayer casterPlayer)
             {
-                casterPlayer.Out.SendMessage(LanguageMgr.GetTranslation(casterPlayer.Client, "BumpSpell.Target.Hurled", target.GetName(0, false)), eChatType.CT_Broadcast, eChatLoc.CL_SystemWindow);
+                casterPlayer.Out.SendMessage(LanguageMgr.GetTranslation(casterPlayer.Client, "SpellHandler.BumpSpell.TargetHurled", target.GetName(0, false)), eChatType.CT_Broadcast, eChatLoc.CL_SystemWindow);
             }
         }
 
@@ -370,7 +370,7 @@ namespace DOL.GS.Spells
 
             if (target.HasAbility(Abilities.StunImmunity) || target.HasAbility(Abilities.CCImmunity))
             {
-                (m_caster as GamePlayer)?.SendTranslatedMessage("BumpSpell.Target.Immune", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow, m_caster.GetPersonalizedName(target));
+                (m_caster as GamePlayer)?.SendTranslatedMessage("SpellHandler.DamageImmunity", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow, m_caster.GetPersonalizedName(target));
                 return;
             }
             if (target.EffectList.GetOfType<AdrenalineSpellEffect>() != null)
@@ -381,7 +381,7 @@ namespace DOL.GS.Spells
             }
             if (target.EffectList.GetOfType<ChargeEffect>() != null || target.TempProperties.getProperty("Charging", false))
             {
-                (m_caster as GamePlayer)?.SendTranslatedMessage("BumpSpell.Target.TooFast", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow, m_caster.GetPersonalizedName(target));
+                (m_caster as GamePlayer)?.SendTranslatedMessage("SpellHandler.Target.TooFast", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow, m_caster.GetPersonalizedName(target));
                 return;
             }
 
