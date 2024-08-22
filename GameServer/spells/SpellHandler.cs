@@ -4044,8 +4044,8 @@ namespace DOL.GS.Spells
                 if (ad.Target.Endurance + enduconversion > ad.Target.MaxEndurance) enduconversion = ad.Target.MaxEndurance - ad.Target.Endurance;
                 if (manaconversion < 1) manaconversion = 0;
                 if (enduconversion < 1) enduconversion = 0;
-                if (manaconversion >= 1) (ad.Target as GamePlayer).Out.SendMessage(LanguageMgr.GetTranslation((ad.Target as GamePlayer)?.Client, "SpellHandler.GainPowerPoints", manaconversion), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
-                if (enduconversion >= 1) (ad.Target as GamePlayer).Out.SendMessage(LanguageMgr.GetTranslation((ad.Target as GamePlayer)?.Client, "SpellHandler.GainEndurancePoints", enduconversion), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                if (manaconversion >= 1) (ad.Target as GamePlayer).Out.SendMessage(LanguageMgr.GetTranslation((ad.Target as GamePlayer)?.Client, "GameLiving.AttackData.GainPowerPoints", manaconversion), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                if (enduconversion >= 1) (ad.Target as GamePlayer).Out.SendMessage(LanguageMgr.GetTranslation((ad.Target as GamePlayer)?.Client, "GameLiving.AttackData.GainEndurancePoints", enduconversion), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
                 ad.Target.Endurance += enduconversion; if (ad.Target.Endurance > ad.Target.MaxEndurance) ad.Target.Endurance = ad.Target.MaxEndurance;
                 ad.Target.Mana += manaconversion; if (ad.Target.Mana > ad.Target.MaxMana) ad.Target.Mana = ad.Target.MaxMana;
             }

@@ -55,14 +55,16 @@ SpellHandler.TargetImmune:			Your target is immune!
 SpellHandler.MezIntercepted:			Your item effect intercepts the mesmerization spell and fades!
 SpellHandler.CeremonialBracerInterceptMez:	Ceremonial Bracer intercepts your mez!
 SpellHandler.StunIntercepted:			Your item effect intercepts the stun spell and fades!
+SpellHandler.YouMiss:				You miss!
+SpellHandler.TargetMissed:			{0} missed!
+SpellHandler.EngageCannotBeUsed:		{0} has been attacked recently and you are unable to engage.
+SpellHandler.NotEnoughEndurance:		You concentrate on blocking the blow!
 
 SpellHandler.CheckLOSYouToPet.NotInView:	Your pet is not in view.
 SpellHandler.CheckLOSPlayerToTarget.LoSInterrupt:	LoS Interrupt in CheckLOSPlayerToTarget
 SpellHandler.CheckLOSPlayerToTarget.CantSeeTarget:	You can't see your target from here!
 SpellHandler.CheckLOSNPCToTarget.LoSInterrupt:	LoS Interrupt in CheckLOSNPCToTarget
 
-SpellHandler.GainPowerPoints:			You gain {0} power points.
-SpellHandler.GainEndurancePoints:		You gain {0} endurance points.
 SpellHandler.HitTarget:				You hit {0} for {1}{2} damage(s)!
 SpellHandler.NPCHitTarget:			Your {0} hits {1} for {2}{3} damage(s)!
 SpellHandler.CriticalHit:			You critically hit for an additional {0} damage(s)!
@@ -71,16 +73,101 @@ SpellHandler.TargetPronoun.Targets:		The target's
 
 SpellHandler.MustBeStealthedBow:		You must be stealthed and wielding a bow to use this ability!
 SpellHandler.MustWieldBow:			You must be wielding a bow to use this ability!
-SpellHandler.Archery.Prepare:			You prepare a {0}
+SpellHandler.Archery.Prepare:			You prepare a {0}.
 SpellHandler.Archery.DisarmedCantCast:		You're disarmed and can't cast a spell.
 SpellHandler.ChamberSpell.YouInvulnerable:	You're invunerable at the moment and cannot use that spell!
 SpellHandler.ChamberSpell.TargetInvulnerable:	Your target is invunerable at the moment and cannot be attacked!
 SpellHandler.SiegeArrow.InvalidTarget:		You must have a Keep Component targeted for this spell!
 SpellHandler.SiegeArrow.InvalidComponentTarget: Your target must be a Keep Component!
-SpellHandler.SiegeArrow.PrepareSpell:		You prepare {0}
+SpellHandler.SiegeArrow.PrepareSpell:		You prepare {0}.
 SpellHandler.BumpSpell.TargetHurled:		{0} is hurled into the air!
+
 SpellHandler.Convoker.AreaTargetOutOfRange:	Your area target is out of range. Select a closer ground position.
 SpellHandler.Convoker.AreaTargetNotInView:	Your area target is not in view.
 SpellHandler.Convoker.MustSetGroundTarget:	You must set a groundtarget!
+
+SpellHandler.IchorOfTheDeep.NoTarget:		You need a target for this ability!
+SpellHandler.IchorOfTheDeep.TargetTooFar:	{0} is too far away.
+SpellHandler.IchorOfTheDeep.AlreadyCasting:	You are already casting this ability.
+SpellHandler.IchorOfTheDeep.CastMessage:	You cast {0}!
+SpellHandler.IchorOfTheDeep.AreaCastMessage:	{0} casts a spell!
+SpellHandler.IchorOfTheDeep.HitMob:		You hit the {0} for {1} damage(s).
+SpellHandler.IchorOfTheDeep.HitPlayer:		You hit {0} for {1} damage(s).
+
+SpellHandler.OmniHeal.SelfHealed:		You gain {0} endurance and {1} power points.
+SpellHandler.OmniHeal.TargetHealed:		You heal {0} for {1} endurance and {2} power points.
+SpellHandler.OmniHeal.YouAreHealed:		You are healed by {0} for {1} endurance and {2} power points.
+
+SpellHandler.HealSpell.TargetDead:		{0} is dead!
+SpellHandler.HealSpell.NoHelp:			That player does not want assistance.
+SpellHandler.HealSpell.FullyHealedSelf:		You are fully healed.
+SpellHandler.HealSpell.FullyHealedTarget:	{0} is fully healed.
+SpellHandler.HealSpell.RealmPointsGained:	You gain {0} realm points for healing a realm mate.
+SpellHandler.HealSpell.SelfHealed:		You heal yourself for {0} hit points.
+SpellHandler.HealSpell.TargetHealed:		You heal {0} for {1} hit points!
+SpellHandler.HealSpell.YouAreHealed:		You are healed by {0} for {1} hit points.
+SpellHandler.HealSpell.CriticalHeal:		Your heal criticals for an extra {0} hit points!
+SpellHandler.HealSpell.EfficientHealingBuff:	Your Efficient Healing buff grants you an additional {0} in the Heal!
+SpellHandler.HealSpell.EfficientEnduranceBuff:	Your Efficient Endurance buff grants you {0} Endurance from the Heal!
+
+SpellHandler.Zephyr.NoAttackInZephyr:		You're in a Zephyr and can't be attacked!
+SpellHandler.Zephyr.TargetNoAttackInZephyr:	Your target is in a Zephyr and can't be attacked!
+SpellHandler.Zephyr.PickedUpByZephyr:		You are picked up by a forceful zephyr!
+SpellHandler.Phaseshift.NotEnoughEndurance:	You need 50% endurance for this spell!
+SpellHandler.Groupport.CannotUseAbilityHere:	You can't use this Ability here!
+SpellHandler.Groupport.BindInAnotherRegion:	Bind in another Region to use this Ability!
+SpellHandler.Groupport.GroupInCombat:		You can't teleport a group that is in combat!
+SpellHandler.Groupport.NotInGroup:		You are not a part of a group!
+SpellHandler.TargetNoLongerInRange:		Your target is no longer in range.
+SpellHandler.TargetNoLongerInView:		Your target is no longer in view.
+SpellHandler.SlowSpellHandler.TooFastForEffect:	{0} is moving too fast for this spell to have any effect!
+
+SpellHandler.VampiirBolt.CannotCastInCombat:	You cannot cast this spell in combat!
+SpellHandler.VampiirBolt.PowerTaken:		{0} takes {1} power!
+SpellHandler.VampiirBolt.PowerReceived:		You receive {0} power from {1}!
+SpellHandler.VampiirBolt.NoPowerReceived:	You did not receive any power from {0}!
+
+SpellHandler.WrathofChampions.CastSpell:	You cast {0}!
+SpellHandler.WrathofChampions.CastSpellFromArea:	{0} casts a spell!
+SpellHandler.WrathofChampions.HitMob:		You hit the {0} for {1} damage(s).
+SpellHandler.WrathofChampions.HitPlayer:	You hit {0} for {1} damage(s).
+SpellHandler.WrathofChampions.PlayerHitBy:	{0} hits you for {1} damage(s).
+
+SpellHandler.ResurrectSpellHandler.ResurrectDialog:		Do you allow {0} to resurrect you with {1} percent hits?
+SpellHandler.ResurrectSpellHandler.NoResurrectAttempt:		No one is currently trying to resurrect you.
+SpellHandler.ResurrectSpellHandler.ResurrectDeclined:		You decline to be resurrected.
+SpellHandler.ResurrectSpellHandler.ResurrectedBy:		You have been resurrected by {0}!
+SpellHandler.ResurrectSpellHandler.RezExpired:			Your resurrection spell has expired.
+SpellHandler.ResurrectSpellHandler.AlreadyConsideringResurrect:	Your target is already considering a resurrection!
+SpellHandler.ResurrectSpellHandler.NoRealmPoints1:		The player you resurrected was not worth realm points on death.
+SpellHandler.ResurrectSpellHandler.NoRealmPoints2:		You thus get no realm points for the resurrect.
+
+SpellHandler.Battlewarder.ConcentrationFades:	Your concentration fades.
+SpellHandler.Battlewarder.WarderFallen:		Your Battle Warder has fallen!
+SpellHandler.Convoker.TemplateNotFound:		NPC template {0} not found!
+SpellHandler.Convoker9.PetAlreadyHasAbility:	Your Pet already has an ability of this type active.
+SpellHandler.Convoker9.NecroCannotUseOnOwnPet:	You can't use this ability on your own Pet.
+
+SpellHandler.BoltSpell.PartialBlock:		You partially block {0}'s spell!
+SpellHandler.BoltSpell.Blocked:			{0} blocks!
+
+SpellHandler.Arrow.Block:			You block {0}'s arrow!
+SpellHandler.Arrow.ArrowBlocked:		{0} blocks your arrow!
+SpellHandler.Archery.PenetrateBarrier:		A shot penetrated your magic barrier!
+SpellHandler.Archery.StrikeAbsorbed:		Your strike was absorbed by a magical barrier!
+SpellHandler.Archery.BlowAbsorbed:		The blow was absorbed by a magical barrier!
+SpellHandler.Archery.Interrupted:		{0} attacks you and your shot is interrupted!
+
+SpellHandler.Chamber.CannotUseState:		You can't use that in your state.
+SpellHandler.Chamber.TargetNotAttackable:	That target isn't attackable at this time!
+SpellHandler.Chamber.SelectFirstSpell:		Select the first spell for your {0}.
+SpellHandler.Chamber.NoSpellsLoaded:		No spells were loaded into {0}.
+SpellHandler.Chamber.ReadyForUse:		Your {0} is ready for use.
+SpellHandler.Chamber.CastsSpell:		{0} casts a spell!
+
+SpellHandler.Lifedrain.Heal:			You steal {0} hit point{1}.
+SpellHandler.Lifedrain.NoAbsorb:		You cannot absorb any more life.
+SpellHandler.PowerDrain.PowerGain:		Your summon channels {0} power to you!
+SpellHandler.PowerDrain.NoAbsorb:		You cannot absorb any more power.
 
 SpellHandler.DelveInfo.Sec:			sec

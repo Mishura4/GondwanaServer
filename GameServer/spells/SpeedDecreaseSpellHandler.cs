@@ -33,7 +33,7 @@ namespace DOL.GS.Spells
             if (Spell.Value == 99 &&
                 FindStaticEffectOnTarget(target, typeof(MezzRootImmunityEffect)) != null)
             {
-                MessageToCaster("Your target is immune!", eChatType.CT_System);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.TargetImmune"), eChatType.CT_System);
                 return;
             }
             base.ApplyEffectOnTarget(target, effectiveness);

@@ -24,6 +24,7 @@ using DOL.AI.Brain;
 namespace DOL.GS.Spells
 {
     using DOL.GS.Scripts;
+    using DOL.Language;
     using Effects;
 
     /// <summary>
@@ -60,7 +61,7 @@ namespace DOL.GS.Spells
 
                 if (healTarget.IsDiseased)
                 {
-                    MessageToCaster("Your target is diseased!", eChatType.CT_SpellResisted);
+                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "Spell.LifeTransfer.TargetDiseased"), eChatType.CT_SpellResisted);
                     heal >>= 1;
                 }
 
@@ -115,7 +116,7 @@ namespace DOL.GS.Spells
             if (!target.IsAlive)
             {
                 //"You cannot heal the dead!" sshot550.tga
-                MessageToCaster(target.GetName(0, true) + " is dead!", eChatType.CT_SpellResisted);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.HealSpell.TargetDead", target.GetName(0, true)), eChatType.CT_SpellResisted);
                 return false;
             }
 
@@ -127,7 +128,7 @@ namespace DOL.GS.Spells
                     (Caster as GamePlayer).Group == null ||
                     (Caster as GamePlayer).Group != (target as GamePlayer).Group)
                 {
-                    MessageToCaster("That player does not want assistance", eChatType.CT_SpellResisted);
+                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.HealSpell.NoHelp"), eChatType.CT_SpellResisted);
                     return false;
                 }
             }
@@ -173,7 +174,7 @@ namespace DOL.GS.Spells
                 {
                     double HealBonus = amount * ((int)HealEffect.Spell.Value * 0.01);
                     amount += (int)HealBonus;
-                    playerTarget.Out.SendMessage("Your Efficient Healing buff grants you a additional" + HealBonus + " in the Heal!", eChatType.CT_Spell, eChatLoc.CL_ChatWindow);
+                    playerTarget.Out.SendMessage(LanguageMgr.GetTranslation(playerTarget.Client, "SpellHandler.HealSpell.EfficientHealingBuff", HealBonus), eChatType.CT_Spell, eChatLoc.CL_ChatWindow);
                 }
                 GameSpellEffect EndEffect = SpellHandler.FindEffectOnTarget(playerTarget, "EfficientEndurance");
                 if (EndEffect != null)
@@ -181,7 +182,7 @@ namespace DOL.GS.Spells
                     double EndBonus = amount * ((int)EndEffect.Spell.Value * 0.01);
                     //600 / 10 = 60end
                     playerTarget.Endurance += (int)EndBonus;
-                    playerTarget.Out.SendMessage("Your Efficient Endurance buff grants you " + EndBonus + " Endurance from the Heal!", eChatType.CT_Spell, eChatLoc.CL_ChatWindow);
+                    playerTarget.Out.SendMessage(LanguageMgr.GetTranslation(playerTarget.Client, "SpellHandler.HealSpell.EfficientEnduranceBuff", EndBonus), eChatType.CT_Spell, eChatLoc.CL_ChatWindow);
                 }
             }
 
@@ -212,9 +213,9 @@ namespace DOL.GS.Spells
                 if (Spell.Pulse == 0)
                 {
                     if (target == m_caster)
-                        MessageToCaster("You are fully healed.", eChatType.CT_SpellResisted);
+                        MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.HealSpell.FullyHealedSelf"), eChatType.CT_SpellResisted);
                     else
-                        MessageToCaster(m_caster.GetPersonalizedName(target) + " is fully healed.", eChatType.CT_SpellResisted);
+                        MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.HealSpell.FullyHealedTarget", m_caster.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
                 }
                 return false;
             }
@@ -249,7 +250,7 @@ namespace DOL.GS.Spells
                             }
 
                             player.GainRealmPoints(Bonus_RP_Soin, false);
-                            player.Out.SendMessage("Vous gagnez " + Bonus_RP_Soin.ToString() + " points de royaume pour avoir soigné un membre de votre royaume.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "SpellHandler.HealSpell.RealmPointsGained", Bonus_RP_Soin), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                         }
                     }
                 }
@@ -259,7 +260,7 @@ namespace DOL.GS.Spells
 
             if (m_caster == target)
             {
-                MessageToCaster("You heal yourself for " + heal + " hit points.", eChatType.CT_Spell);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.HealSpell.SelfHealed", heal), eChatType.CT_Spell);
                 if (heal < amount)
                 {
                     #region PVP DAMAGE
@@ -273,13 +274,13 @@ namespace DOL.GS.Spells
 
                     #endregion PVP DAMAGE
 
-                    MessageToCaster("You are fully healed.", eChatType.CT_Spell);
+                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.HealSpell.FullyHealedSelf"), eChatType.CT_Spell);
                 }
             }
             else
             {
-                MessageToCaster("You heal " + m_caster.GetPersonalizedName(target) + " for " + heal + " hit points!", eChatType.CT_Spell);
-                MessageToLiving(target, "You are healed by " + target.GetPersonalizedName(m_caster) + " for " + heal + " hit points.", eChatType.CT_Spell);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.HealSpell.TargetHealed", m_caster.GetPersonalizedName(target), heal), eChatType.CT_Spell);
+                MessageToLiving(target, LanguageMgr.GetTranslation((target as GamePlayer)?.Client, "SpellHandler.HealSpell.YouAreHealed", target.GetPersonalizedName(m_caster), heal), eChatType.CT_Spell);
                 if (heal < amount)
                 {
 
@@ -294,10 +295,10 @@ namespace DOL.GS.Spells
 
                     #endregion PVP DAMAGE
 
-                    MessageToCaster(m_caster.GetPersonalizedName(target) + " is fully healed.", eChatType.CT_Spell);
+                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.HealSpell.FullyHealedTarget", m_caster.GetPersonalizedName(target)), eChatType.CT_Spell);
                 }
                 if (heal > 0 && criticalvalue > 0)
-                    MessageToCaster("Your heal criticals for an extra " + criticalvalue + " amount of hit points!", eChatType.CT_Spell);
+                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.HealSpell.CriticalHeal", criticalvalue), eChatType.CT_Spell);
             }
 
             return true;
@@ -324,11 +325,11 @@ namespace DOL.GS.Spells
 
             if (m_caster == target && heal > 0)
             {
-                MessageToCaster("You heal yourself for " + heal + " hit points.", eChatType.CT_Spell);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.HealSpell.SelfHealed", heal), eChatType.CT_Spell);
 
                 if (heal < amount)
                 {
-                    MessageToCaster("You are fully healed.", eChatType.CT_Spell);
+                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.HealSpell.FullyHealedSelf"), eChatType.CT_Spell);
                     #region PVP DAMAGE
 
                     if (target is NecromancerPet &&
@@ -343,8 +344,8 @@ namespace DOL.GS.Spells
             }
             else if (heal > 0)
             {
-                MessageToCaster("You heal " + m_caster.GetPersonalizedName(target) + " for " + heal + " hit points!", eChatType.CT_Spell);
-                MessageToLiving(target, "You are healed by " + target.GetPersonalizedName(m_caster) + " for " + heal + " hit points.", eChatType.CT_Spell);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.HealSpell.TargetHealed", m_caster.GetPersonalizedName(target), heal), eChatType.CT_Spell);
+                MessageToLiving(target, LanguageMgr.GetTranslation((target as GamePlayer)?.Client, "SpellHandler.HealSpell.YouAreHealed", target.GetPersonalizedName(m_caster), heal), eChatType.CT_Spell);
 
                 #region PVP DAMAGE
 

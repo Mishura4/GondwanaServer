@@ -167,8 +167,8 @@ namespace DOL.GS.Spells
                 if (Util.Chance(missrate))
                 {
                     ad.AttackResult = GameLiving.eAttackResult.Missed;
-                    m_handler.MessageToCaster("You miss!", eChatType.CT_YouHit);
-                    m_handler.MessageToLiving(target, caster.GetName(0, false) + " missed!", eChatType.CT_Missed);
+                    m_handler.MessageToCaster(LanguageMgr.GetTranslation((caster as GamePlayer)?.Client, "SpellHandler.YouMiss"), eChatType.CT_YouHit);
+                    m_handler.MessageToLiving(target, LanguageMgr.GetTranslation((target as GamePlayer)?.Client, "SpellHandler.TargetMissed", caster.GetName(0, false)), eChatType.CT_Missed);
                     target.OnAttackedByEnemy(ad);
                     target.StartInterruptTimer(target.SpellInterruptDuration, ad.AttackType, caster);
                     if (target is GameNPC)
@@ -209,7 +209,7 @@ namespace DOL.GS.Spells
                                     if (engage.EngageTarget.LastAttackedByEnemyTick > engage.EngageTarget.CurrentRegion.Time - EngageAbilityHandler.ENGAGE_ATTACK_DELAY_TICK)
                                     {
                                         if (engage.Owner is GamePlayer)
-                                            (engage.Owner as GamePlayer).Out.SendMessage(engage.EngageTarget.GetName(0, true) + " has been attacked recently and you are unable to engage.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                            (engage.Owner as GamePlayer).Out.SendMessage(LanguageMgr.GetTranslation((engage.Owner as GamePlayer)?.Client, "SpellHandler.EngageCannotBeUsed", engage.EngageTarget.GetName(0, true)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                     }  // Check if player has enough endurance left to engage
                                     else if (engage.Owner.Endurance < EngageAbilityHandler.ENGAGE_DURATION_LOST)
                                     {
@@ -219,7 +219,7 @@ namespace DOL.GS.Spells
                                     {
                                         engage.Owner.Endurance -= EngageAbilityHandler.ENGAGE_DURATION_LOST;
                                         if (engage.Owner is GamePlayer)
-                                            (engage.Owner as GamePlayer).Out.SendMessage("You concentrate on blocking the blow!", eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
+                                            (engage.Owner as GamePlayer).Out.SendMessage(LanguageMgr.GetTranslation((engage.Owner as GamePlayer)?.Client, "SpellHandler.NotEnoughEndurance"), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
 
                                         if (blockchance < 85)
                                             blockchance = 85;
@@ -229,8 +229,8 @@ namespace DOL.GS.Spells
 
                             if (blockchance >= Util.Random(1, 100))
                             {
-                                m_handler.MessageToLiving(player, "You partially block " + caster.GetName(0, false) + "'s spell!", eChatType.CT_Missed);
-                                m_handler.MessageToCaster(player.GetName(0, true) + " blocks!", eChatType.CT_YouHit);
+                                m_handler.MessageToLiving(player, LanguageMgr.GetTranslation(player.Client, "SpellHandler.BoltSpell.PartialBlock", caster.GetName(0, false)), eChatType.CT_Missed);
+                                m_handler.MessageToCaster(LanguageMgr.GetTranslation((caster as GamePlayer)?.Client, "SpellHandler.BoltSpell.Blocked", player.GetName(0, true)), eChatType.CT_YouHit);
                                 blocked = true;
                             }
                         }

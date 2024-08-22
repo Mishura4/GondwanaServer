@@ -55,32 +55,119 @@ SpellHandler.TargetImmune:			Votre cible est immunisée !
 SpellHandler.MezIntercepted:			Votre effet défensif d'objet intercepte le sort de mezz et s'estompe !
 SpellHandler.CeremonialBracerInterceptMez:	Le Bracelet Cérémonial intercepte votre mezz !
 SpellHandler.StunIntercepted:			Votre effet défensif d'objet intercepte le sort d'étourdissement et s'estompe !
+SpellHandler.YouMiss:				Vous ratez votre cible !
+SpellHandler.TargetMissed:			{0} a raté sa cible !
+SpellHandler.EngageCannotBeUsed:		{0} a été attaqué récemment et vous ne pouvez pas engager.
+SpellHandler.NotEnoughEndurance:		Vous vous concentrez pour bloquer le coup !
 
 SpellHandler.CheckLOSYouToPet.NotInView:	Votre familier n'est pas en vue.
 SpellHandler.CheckLOSPlayerToTarget.LoSInterrupt:	Interruption de la ligne de vue dans CheckLOSPlayerToTarget
 SpellHandler.CheckLOSPlayerToTarget.CantSeeTarget:	Vous ne pouvez pas voir votre cible d'ici !
 SpellHandler.CheckLOSNPCToTarget.LoSInterrupt:	Interruption de la ligne de vue dans CheckLOSNPCToTarget
 
-SpellHandler.GainPowerPoints:			Vous gagnez {0} points de Mana.
-SpellHandler.GainEndurancePoints:		Vous gagnez {0} points d'Endurance.
-SpellHandler.HitTarget:				Vous frappez {0} pour {1}{2} dégâts !
-SpellHandler.NPCHitTarget:			Votre {0} frappe {1} pour {2}{3} dégâts !
-SpellHandler.CriticalHit:			Vous infligez un coup critique pour {0} dégâts supplémentaires !
+SpellHandler.HitTarget:				Vous frappez {0} pour {1}{2} dommages !
+SpellHandler.NPCHitTarget:			Votre {0} frappe {1} pour {2}{3} dommages !
+SpellHandler.CriticalHit:			Vous infligez un coup critique pour {0} dommages supplémentaires !
 SpellHandler.TargetPronoun.Your:		Votre
 SpellHandler.TargetPronoun.Targets:		La cible
 
 SpellHandler.MustBeStealthedBow:		Vous devez être en mode furtif et équipé d'un arc pour utiliser cette compétence !
 SpellHandler.MustWieldBow:			Vous devez être équipé d'un arc pour utiliser cette compétence !
-SpellHandler.Archery.Prepare:			Vous préparez un {0}
+SpellHandler.Archery.Prepare:			Vous préparez un {0}.
 SpellHandler.Archery.DisarmedCantCast:		Vous ne pouvez pas lancer de sort car vous êtes désarmé.
 SpellHandler.ChamberSpell.YouInvulnerable:	Vous êtes actuellement invulnérable et ne pouvez pas lancer ce sort !
 SpellHandler.ChamberSpell.TargetInvulnerable:	Votre cible est actuellement invulnérable et ne peut pas être attaquée !
 SpellHandler.SiegeArrow.InvalidTarget:		Vous devez cibler un composant de forteresse pour ce sort !
 SpellHandler.SiegeArrow.InvalidComponentTarget:	Votre cible doit être un composant de forteresse !
-SpellHandler.SiegeArrow.PrepareSpell:		Vous préparez {0}
+SpellHandler.SiegeArrow.PrepareSpell:		Vous préparez {0}.
 SpellHandler.BumpSpell.TargetHurled:		{0} est projeté en l'air !
+
 SpellHandler.Convoker.AreaTargetOutOfRange:	Votre cible de zone est hors de portée. Sélectionnez un point au sol plus proche.
 SpellHandler.Convoker.AreaTargetNotInView:	Votre cible de zone n'est pas en vue.
 SpellHandler.Convoker.MustSetGroundTarget:	Vous devez définir une cible au sol !
+
+SpellHandler.IchorOfTheDeep.NoTarget:		Vous avez besoin d'une cible pour cette compétence !
+SpellHandler.IchorOfTheDeep.TargetTooFar:	{0} est trop loin.
+SpellHandler.IchorOfTheDeep.AlreadyCasting:	Vous êtes déjà en train d'utiliser cette compétence.
+SpellHandler.IchorOfTheDeep.CastMessage:	Vous lancez {0} !
+SpellHandler.IchorOfTheDeep.AreaCastMessage:	{0} lance un sort !
+SpellHandler.IchorOfTheDeep.HitMob:		Vous frappez le {0} pour {1} dommages.
+SpellHandler.IchorOfTheDeep.HitPlayer:		Vous frappez {0} pour {1} dommages.
+
+SpellHandler.OmniHeal.SelfHealed:		Vous gagnez {0} points d'Endurance et {1} points de Mana.
+SpellHandler.OmniHeal.TargetHealed:		Vous soignez {0} pour {1} points d'Endurance et {2} points de Mana.
+SpellHandler.OmniHeal.YouAreHealed:		Vous êtes soigné par {0} pour {1} points d'Endurance et {2} points de Mana.
+
+SpellHandler.HealSpell.TargetDead:		{0} est mort !
+SpellHandler.HealSpell.NoHelp:			Ce joueur ne veut pas d'assistance.
+SpellHandler.HealSpell.FullyHealedSelf:		Vous êtes complètement soigné.
+SpellHandler.HealSpell.FullyHealedTarget:	{0} est complètement soigné.
+SpellHandler.HealSpell.RealmPointsGained:	Vous gagnez {0} points de royaume pour avoir soigné un membre de votre royaume.
+SpellHandler.HealSpell.SelfHealed:		Vous vous soignez de {0} points de vie.
+SpellHandler.HealSpell.TargetHealed:		Vous soignez {0} de {1} points de vie !
+SpellHandler.HealSpell.YouAreHealed:		Vous êtes soigné par {0} pour {1} points de vie.
+SpellHandler.HealSpell.CriticalHeal:		Vous réalisez un soin critique et récupérez {0} points de vie supplémentaires !
+SpellHandler.HealSpell.EfficientHealingBuff:	Votre buff de guérison efficace vous apporte {0} points de soin supplémentaires !
+SpellHandler.HealSpell.EfficientEnduranceBuff:	Votre buff d’endurance efficace vous apporte {0} points d’endurance supplémentaires lors du soin !
+
+SpellHandler.Zephyr.NoAttackInZephyr:		Vous êtes transporté par un Zéphyr et ne pouvez pas être attaqué !
+SpellHandler.Zephyr.TargetNoAttackInZephyr:	Votre cible est transportée par un Zéphyr et ne peut pas être attaquée !
+SpellHandler.Zephyr.PickedUpByZephyr:		Vous êtes emporté par un Zéphyr puissant !
+SpellHandler.Phaseshift.NotEnoughEndurance:	Vous avez besoin de 50 % d'endurance pour utilier ce sort !
+SpellHandler.Groupport.CannotUseAbilityHere:	Vous ne pouvez pas utiliser cette compétence ici !
+SpellHandler.Groupport.BindInAnotherRegion:	Liez-vous dans une autre région pour utiliser cette compétence !
+SpellHandler.Groupport.GroupInCombat:		Vous ne pouvez pas téléporter un groupe qui se trouve en combat !
+SpellHandler.Groupport.NotInGroup:		Vous ne faites pas partie d'un groupe !
+SpellHandler.TargetNoLongerInRange:		Votre cible n'est plus à portée.
+SpellHandler.TargetNoLongerInView:		Votre cible n'est plus en vue.
+SpellHandler.SlowSpellHandler.TooFastForEffect:	{0} se déplace trop vite pour que ce sort ait un effet !
+
+SpellHandler.VampiirBolt.CannotCastInCombat:	Vous ne pouvez pas lancer ce sort en combat !
+SpellHandler.VampiirBolt.PowerTaken:		{0} vous prend {1} de Mana !
+SpellHandler.VampiirBolt.PowerReceived:		Vous recevez {0} de Mana de {1} !
+SpellHandler.VampiirBolt.NoPowerReceived:	Vous n'avez récupéré aucune Mana de {0} !
+
+SpellHandler.WrathofChampions.CastSpell:	Vous lancez {0} !
+SpellHandler.WrathofChampions.CastSpellFromArea:	{0} lance un sort !
+SpellHandler.WrathofChampions.HitMob:		Vous frappez le {0} pour {1} dommages.
+SpellHandler.WrathofChampions.HitPlayer:	Vous frappez {0} pour {1} dommages.
+SpellHandler.WrathofChampions.PlayerHitBy:	{0} vous frappe pour {1} dommages.
+
+SpellHandler.ResurrectSpellHandler.ResurrectDialog:		Autorisez-vous {0} à vous ressusciter avec {1} pourcent de points de vie ?
+SpellHandler.ResurrectSpellHandler.NoResurrectAttempt:		Personne n'essaie actuellement de vous ressusciter.
+SpellHandler.ResurrectSpellHandler.ResurrectDeclined:		Vous refusez d'être ressuscité.
+SpellHandler.ResurrectSpellHandler.ResurrectedBy:		Vous avez été ressuscité par {0} !
+SpellHandler.ResurrectSpellHandler.RezExpired:			Votre sort de résurrection a expiré.
+SpellHandler.ResurrectSpellHandler.AlreadyConsideringResurrect:	Votre cible envisage déjà une résurrection !
+SpellHandler.ResurrectSpellHandler.NoRealmPoints1:		Le joueur que vous avez ressuscité ne valait aucun points de royaume à sa mort.
+SpellHandler.ResurrectSpellHandler.NoRealmPoints2:		Vous ne gagnez donc pas de points de royaume lors de sa résurrection.
+
+SpellHandler.Battlewarder.ConcentrationFades:	Votre concentration s'estompe.
+SpellHandler.Battlewarder.WarderFallen:		Votre Garde de Bataille est tombé !
+SpellHandler.Convoker.TemplateNotFound:		NPCTemplate {0} introuvable !
+SpellHandler.Convoker9.PetAlreadyHasAbility:	Votre familier a déjà une compétence de ce type active.
+SpellHandler.Convoker9.NecroCannotUseOnOwnPet:	Vous ne pouvez pas utiliser cette compétence sur votre propre familier.
+
+SpellHandler.BoltSpell.PartialBlock:		Vous bloquez partiellement le sort de {0} !
+SpellHandler.BoltSpell.Blocked:			{0} bloque !
+
+SpellHandler.Arrow.Block:			Vous bloquez la flèche de {0} !
+SpellHandler.Arrow.ArrowBlocked:		{0} bloque votre flèche !
+SpellHandler.Archery.PenetrateBarrier:		Un tir a pénétré votre barrière magique !
+SpellHandler.Archery.StrikeAbsorbed:		Votre tir a été absorbé par une barrière magique !
+SpellHandler.Archery.BlowAbsorbed:		Le coup a été absorbé par une barrière magique !
+SpellHandler.Archery.Interrupted:		{0} vous attaque et votre tir est interrompu !
+
+SpellHandler.Chamber.CannotUseState:		Vous ne pouvez pas utiliser cela dans votre état actuel.
+SpellHandler.Chamber.TargetNotAttackable:	Cette cible n'est pas attaquable pour le moment !
+SpellHandler.Chamber.SelectFirstSpell:		Sélectionnez le premier sort pour votre {0}.
+SpellHandler.Chamber.NoSpellsLoaded:		Aucun sort n'a été chargé dans {0}.
+SpellHandler.Chamber.ReadyForUse:		Votre {0} est prêt à être utilisé.
+SpellHandler.Chamber.CastsSpell:		{0} lance un sort !
+
+SpellHandler.Lifedrain.Heal:			Vous volez {0} point{1} de vie.
+SpellHandler.Lifedrain.NoAbsorb:		Vous ne pouvez plus absorber de vie.
+SpellHandler.PowerDrain.PowerGain:		Votre invocation canalise {0} Mana vers vous !
+SpellHandler.PowerDrain.NoAbsorb:		Vous ne pouvez pas absorber davantage de Mana.
 
 SpellHandler.DelveInfo.Sec:			sec

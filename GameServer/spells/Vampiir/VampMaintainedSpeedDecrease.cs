@@ -78,14 +78,14 @@ namespace DOL.GS.Spells
 
             if (!Caster.IsWithinRadius(m_originalTarget, CalculateSpellRange()))
             {
-                MessageToCaster("Your target is no longer in range.", eChatType.CT_SpellExpires);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.TargetNoLongerInRange"), eChatType.CT_SpellExpires);
                 effect.Cancel(false);
                 return;
             }
 
             if (!Caster.TargetInView)
             {
-                MessageToCaster("Your target is no longer in view.", eChatType.CT_SpellExpires);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.TargetNoLongerInView"), eChatType.CT_SpellExpires);
                 effect.Cancel(false);
                 return;
             }

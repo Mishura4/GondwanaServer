@@ -207,7 +207,7 @@ namespace DOL.GS.Spells
                         {
                             if (player != null)
                             {
-                                player.Out.SendMessage("A shot penetrated your magic barrier!", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "SpellHandler.Archery.PenetrateBarrier"), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
                             }
                             ad.AttackResult = GameLiving.eAttackResult.HitUnstyled;
                         }
@@ -216,7 +216,7 @@ namespace DOL.GS.Spells
                     case (int)eShotType.Power:
                         {
                             if (player != null)
-                                player.Out.SendMessage("A shot penetrated your magic barrier!", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "SpellHandler.Archery.PenetrateBarrier"), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
                             ad.AttackResult = GameLiving.eAttackResult.HitUnstyled;
                             bladeturn.Cancel(false);
                         }
@@ -227,11 +227,11 @@ namespace DOL.GS.Spells
                         {
                             if (Caster is GamePlayer pl)
                             {
-                                pl.Out.SendMessage("Your strike was absorbed by a magical barrier!", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
+                                pl.Out.SendMessage(LanguageMgr.GetTranslation(pl.Client, "SpellHandler.Archery.StrikeAbsorbed"), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
                             }
                             if (target != null)
                             {
-                                player.Out.SendMessage("The blow was absorbed by a magical barrier!", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "SpellHandler.Archery.BlowAbsorbed"), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
                             }
                             ad.MissChance = 100;
                             ad.AttackResult = GameLiving.eAttackResult.Missed;
@@ -399,7 +399,7 @@ namespace DOL.GS.Spells
                 if (Util.Chance((int)chance))
                 {
                     Caster.TempProperties.setProperty(INTERRUPT_TIMEOUT_PROPERTY, Caster.CurrentRegion.Time + Caster.SpellInterruptDuration);
-                    MessageToLiving(Caster, attacker.GetName(0, true) + " attacks you and your shot is interrupted!", eChatType.CT_SpellResisted);
+                    MessageToLiving(Caster, LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.Archery.Interrupted", attacker.GetName(0, true)), eChatType.CT_SpellResisted);
                     InterruptCasting();
                     return true;
                 }

@@ -29,7 +29,7 @@ namespace DOL.GS.Spells
         {
             if (Caster.InCombat == true)
             {
-                MessageToCaster("You cannot cast this spell in combat!", eChatType.CT_SpellResisted);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.VampiirBolt.CannotCastInCombat"), eChatType.CT_SpellResisted);
                 return false;
             }
             return base.CheckBeginCast(selectedTarget);
@@ -106,17 +106,17 @@ namespace DOL.GS.Spells
                 }
                 if (power > 0 && target is GamePlayer targetPlayer)
                 {
-                    targetPlayer.Out.SendMessage(targetPlayer.GetPersonalizedName(caster) + " takes " + power + " power!", eChatType.CT_YouWereHit, eChatLoc.CL_SystemWindow);
+                    targetPlayer.Out.SendMessage(LanguageMgr.GetTranslation(targetPlayer.Client, "SpellHandler.VampiirBolt.PowerTaken", targetPlayer.GetPersonalizedName(caster), power), eChatType.CT_YouWereHit, eChatLoc.CL_SystemWindow);
                 }
                 if (caster is GamePlayer casterPlayer)
                 {
                     if (power > 0)
                     {
-                        casterPlayer.Out.SendMessage("You receive " + power + " power from " + casterPlayer.GetPersonalizedName(target) + "!", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                        casterPlayer.Out.SendMessage(LanguageMgr.GetTranslation(casterPlayer.Client, "SpellHandler.VampiirBolt.PowerReceived", power, casterPlayer.GetPersonalizedName(target)), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
                     }
                     else
                     {
-                        casterPlayer.Out.SendMessage("You did not receive any power from " + casterPlayer.GetPersonalizedName(target) + "!", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                        casterPlayer.Out.SendMessage(LanguageMgr.GetTranslation(casterPlayer.Client, "SpellHandler.VampiirBolt.NoPowerReceived", casterPlayer.GetPersonalizedName(target)), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
                     }
                 }
                 //Place the caster in combat

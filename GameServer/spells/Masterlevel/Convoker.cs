@@ -355,7 +355,7 @@ namespace DOL.GS.Spells
             if (player == null) return;
             if (e == GamePlayerEvent.Moving)
             {
-                MessageToCaster("Your concentration fades", eChatType.CT_SpellExpires);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.Battlewarder.ConcentrationFades"), eChatType.CT_SpellExpires);
                 OnEffectExpires(m_effect, true);
                 return;
             }
@@ -368,7 +368,7 @@ namespace DOL.GS.Spells
             if (kWarder == null) return;
             if (e == GameLivingEvent.Dying)
             {
-                MessageToCaster("Your Battle Warder has fallen!", eChatType.CT_SpellExpires);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.Battlewarder.WarderFallen"), eChatType.CT_SpellExpires);
                 OnEffectExpires(m_effect, true);
                 return;
             }
@@ -494,7 +494,7 @@ namespace DOL.GS.Spells
             {
                 if (log.IsWarnEnabled)
                     log.WarnFormat("NPC template {0} not found! Spell: {1}", Spell.LifeDrainReturn, Spell.ToString());
-                MessageToCaster("NPC template " + Spell.LifeDrainReturn + " not found!", eChatType.CT_System);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.Convoker.TemplateNotFound", Spell.LifeDrainReturn), eChatType.CT_System);
                 return;
             }
 
@@ -563,7 +563,7 @@ namespace DOL.GS.Spells
             {
                 if (jg != null)
                 {
-                    MessageToCaster("Your Pet already has an ability of this type active", eChatType.CT_SpellResisted);
+                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.Convoker9.PetAlreadyHasAbility"), eChatType.CT_SpellResisted);
                     return;
                 }
             }
@@ -575,7 +575,7 @@ namespace DOL.GS.Spells
                 NecromancerPet necroPet = target as NecromancerPet;
                 if (necroPet == null || necroPet.Owner == m_player)
                 { // Caster is a Nekro and his Target is his Own Pet
-                    MessageToCaster("You cant use this ability on your own Pet", eChatType.CT_SpellResisted);
+                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.Convoker9.NecroCannotUseOnOwnPet"), eChatType.CT_SpellResisted);
                     return;
                 }
             }
@@ -660,7 +660,7 @@ namespace DOL.GS.Spells
             {
                 if (log.IsWarnEnabled)
                     log.WarnFormat("NPC template {0} not found! Spell: {1}", Spell.LifeDrainReturn, Spell.ToString());
-                MessageToCaster("NPC template " + Spell.LifeDrainReturn + " not found!", eChatType.CT_System);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.Convoker.TemplateNotFound", Spell.LifeDrainReturn), eChatType.CT_System);
                 return;
             }
             GameSpellEffect effect = CreateSpellEffect(target, effectiveness);

@@ -113,9 +113,9 @@ namespace DOL.GS.Spells
             if (effect.Owner.EffectList.GetOfType<ChargeEffect>() != null || effect.Owner.TempProperties.getProperty("Charging", false))
             {
                 if (m_caster is GamePlayer player)
-                    MessageToCaster(player.GetPersonalizedName(effect.Owner) + " is moving too fast for this spell to have any effect!", eChatType.CT_SpellResisted);
+                    MessageToCaster(LanguageMgr.GetTranslation(player.Client, "SpellHandler.SlowSpellHandler.TooFastForEffect", player.GetPersonalizedName(effect.Owner)), eChatType.CT_SpellResisted);
                 else
-                    MessageToCaster(effect.Owner.Name + " is moving too fast for this spell to have any effect!", eChatType.CT_SpellResisted);
+                    MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.SlowSpellHandler.TooFastForEffect", effect.Owner.Name), eChatType.CT_SpellResisted);
                 return;
             }
             effect.Owner.BuffBonusMultCategory1.Set((int)eProperty.MaxSpeed, effect, 1.0 - Spell.Value * 0.01);

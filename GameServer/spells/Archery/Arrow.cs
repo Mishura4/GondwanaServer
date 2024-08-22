@@ -25,6 +25,7 @@ using DOL.GS.Keeps;
 using DOL.GS.SkillHandler;
 using System.Collections;
 using System.Collections.Generic;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -184,8 +185,8 @@ namespace DOL.GS.Spells
                 {
                     ad.MissChance = missrate;
                     ad.AttackResult = GameLiving.eAttackResult.Missed;
-                    m_handler.MessageToCaster("You miss!", eChatType.CT_YouHit);
-                    m_handler.MessageToLiving(target, caster.GetName(0, false) + " missed!", eChatType.CT_Missed);
+                    m_handler.MessageToCaster(LanguageMgr.GetTranslation((caster as GamePlayer)?.Client, "SpellHandler.YouMiss"), eChatType.CT_YouHit);
+                    m_handler.MessageToLiving(target, LanguageMgr.GetTranslation((target as GamePlayer)?.Client, "SpellHandler.TargetMissed", caster.GetName(0, false)), eChatType.CT_Missed);
                     target.OnAttackedByEnemy(ad);
                     target.StartInterruptTimer(target.SpellInterruptDuration, ad.AttackType, caster);
                     if (target is GameNPC)
@@ -227,7 +228,7 @@ namespace DOL.GS.Spells
                                     if (engage.EngageTarget.LastAttackedByEnemyTick > engage.EngageTarget.CurrentRegion.Time - EngageAbilityHandler.ENGAGE_ATTACK_DELAY_TICK)
                                     {
                                         if (engage.Owner is GamePlayer ownerPlayer)
-                                            ownerPlayer.Out.SendMessage(ownerPlayer.GetPersonalizedName(engage.EngageTarget) + " has been attacked recently and you are unable to engage.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                            ownerPlayer.Out.SendMessage(LanguageMgr.GetTranslation(ownerPlayer.Client, "SpellHandler.EngageCannotBeUsed", ownerPlayer.GetPersonalizedName(engage.EngageTarget)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                     }  // Check if player has enough endurance left to engage
                                     else if (engage.Owner.Endurance < EngageAbilityHandler.ENGAGE_DURATION_LOST)
                                     {
@@ -237,7 +238,7 @@ namespace DOL.GS.Spells
                                     {
                                         engage.Owner.Endurance -= EngageAbilityHandler.ENGAGE_DURATION_LOST;
                                         if (engage.Owner is GamePlayer ownerPlayer)
-                                            ownerPlayer.Out.SendMessage("You concentrate on blocking the blow!", eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
+                                            ownerPlayer.Out.SendMessage(LanguageMgr.GetTranslation((ownerPlayer)?.Client, "SpellHandler.NotEnoughEndurance"), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
 
                                         if (blockchance < 85)
                                             blockchance = 85;
@@ -248,10 +249,10 @@ namespace DOL.GS.Spells
                             if (blockchance >= Util.Random(1, 100))
                             {
                                 arrowBlock = true;
-                                m_handler.MessageToLiving(player, "You block " + player.GetPersonalizedName(caster) + "'s arrow!", eChatType.CT_System);
+                                m_handler.MessageToLiving(player, LanguageMgr.GetTranslation(player.Client, "SpellHandler.Arrow.Block", player.GetPersonalizedName(caster)), eChatType.CT_System);
                                 if (m_handler.Spell.Target.ToLower() != "area")
                                 {
-                                    m_handler.MessageToCaster((caster as GamePlayer).GetPersonalizedName(player) + " blocks your arrow!", eChatType.CT_System);
+                                    m_handler.MessageToCaster(LanguageMgr.GetTranslation((caster as GamePlayer)?.Client, "SpellHandler.Arrow.ArrowBlocked", caster.GetPersonalizedName(player)), eChatType.CT_System);
                                     m_handler.DamageTarget(ad, false, 0x02);
                                 }
                             }

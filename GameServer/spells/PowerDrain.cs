@@ -18,6 +18,7 @@
  */
 using System;
 using DOL.GS.PacketHandler;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -56,10 +57,13 @@ namespace DOL.GS.Spells
             if (!(target is GamePlayer))
                 target.ChangeMana(m_caster, GameLiving.eManaChangeType.Spell, -powerGain);
 
-            if (powerGain > 0)
-                MessageToOwner(String.Format("Your summon channels {0} power to you!", powerGain), eChatType.CT_Spell);
-            else
-                MessageToOwner("You cannot absorb any more power.", eChatType.CT_SpellResisted);
+            if (owner is GamePlayer player && player.Client != null)
+            {
+                if (powerGain > 0)
+                    MessageToOwner(LanguageMgr.GetTranslation(player.Client, "SpellHandler.PowerDrain.PowerGain", powerGain), eChatType.CT_Spell);
+                else
+                    MessageToOwner(LanguageMgr.GetTranslation(player.Client, "SpellHandler.PowerDrain.NoAbsorb"), eChatType.CT_SpellResisted);
+            }
         }
 
         protected virtual GameLiving Owner()

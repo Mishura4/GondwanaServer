@@ -1,5 +1,6 @@
 ﻿using DOL.GS;
 using DOL.GS.PacketHandler;
+using DOL.Language;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,7 +36,7 @@ namespace DOL.GS.Spells
                 }
                 if (healTarget.IsDiseased)
                 {
-                    MessageToCaster("Your target is diseased!", eChatType.CT_SpellResisted);
+                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "Spell.LifeTransfer.TargetDiseased"), eChatType.CT_SpellResisted);
                     amountEndu /= 2;
                     amountMana /= 2;
                 }
@@ -43,12 +44,12 @@ namespace DOL.GS.Spells
                 int power = healTarget.ChangeMana(Caster, GameLiving.eManaChangeType.Spell, amountMana);
                 if (m_caster == healTarget)
                 {
-                    MessageToCaster("You gain for " + endurance + " endurance and " + power + " power points.", eChatType.CT_Spell);
+                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.OmniHeal.SelfHealed", endurance, power), eChatType.CT_Spell);
                 }
                 else
                 {
-                    MessageToCaster("You heal " + target.GetName(0, false) + " for " + endurance + " endurance and " + power + " power points.", eChatType.CT_Spell);
-                    MessageToLiving(target, "You are healed by " + m_caster.GetName(0, false) + " for " + endurance + " endurance and " + power + " power points.", eChatType.CT_Spell);
+                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.OmniHeal.TargetHealed", target.GetName(0, false), endurance, power), eChatType.CT_Spell);
+                    MessageToLiving(target, LanguageMgr.GetTranslation((target as GamePlayer)?.Client, "SpellHandler.OmniHeal.YouAreHealed", m_caster.GetName(0, false), endurance, power), eChatType.CT_Spell);
                 }
             }
 

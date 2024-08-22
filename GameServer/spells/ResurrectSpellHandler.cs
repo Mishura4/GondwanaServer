@@ -75,7 +75,7 @@ namespace DOL.GS.Spells
                 }
 
                 //send resurrect dialog
-                targetPlayer.Out.SendCustomDialog("Do you allow " + m_caster.GetName(0, true) + " to resurrected you\nwith " + m_spell.ResurrectHealth + " percent hits?", new CustomDialogResponse(ResurrectResponceHandler));
+                targetPlayer.Out.SendCustomDialog(LanguageMgr.GetTranslation(targetPlayer.Client, "SpellHandler.ResurrectSpellHandler.ResurrectDialog", m_caster.GetName(0, true), m_spell.ResurrectHealth), new CustomDialogResponse(ResurrectResponceHandler));
             }
         }
 
@@ -116,7 +116,7 @@ namespace DOL.GS.Spells
             {
                 if (rezzer == null)
                 {
-                    player.Out.SendMessage("No one is currently trying to resurrect you.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "SpellHandler.ResurrectSpellHandler.NoResurrectAttempt"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 }
                 else
                 {
@@ -143,7 +143,7 @@ namespace DOL.GS.Spells
                     }
                     else
                     {
-                        player.Out.SendMessage("You decline to be resurrected.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "SpellHandler.ResurrectSpellHandler.ResurrectDeclined"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                         //refund mana
                         m_caster.Mana += PowerCost(player);
                     }
@@ -190,7 +190,7 @@ namespace DOL.GS.Spells
                 player.StopReleaseTimer();
                 player.Out.SendPlayerRevive(player);
                 player.UpdatePlayerStatus();
-                player.Out.SendMessage("You have been resurrected by " + m_caster.GetName(0, false) + "!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "SpellHandler.ResurrectSpellHandler.ResurrectedBy", m_caster.GetName(0, false)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 player.Notify(GamePlayerEvent.Revive, player, new RevivedEventArgs(Caster, Spell));
 
                 //Lifeflight add this should make it so players who have been ressurected don't take damage for 5 seconds
@@ -219,8 +219,8 @@ namespace DOL.GS.Spells
                     }
                     else
                     {
-                        casterPlayer.Out.SendMessage("The player you resurrected was not worth realm points on death.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                        casterPlayer.Out.SendMessage("You thus get no realm points for the resurrect.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                        casterPlayer.Out.SendMessage(LanguageMgr.GetTranslation(casterPlayer.Client, "SpellHandler.ResurrectSpellHandler.NoRealmPoints1"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                        casterPlayer.Out.SendMessage(LanguageMgr.GetTranslation(casterPlayer.Client, "SpellHandler.ResurrectSpellHandler.NoRealmPoints2"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                     }
                 }
             }
@@ -236,7 +236,7 @@ namespace DOL.GS.Spells
             GamePlayer player = (GamePlayer)callingTimer.Properties.getProperty<object>("targetPlayer", null);
             if (player == null) return 0;
             player.TempProperties.removeProperty(RESURRECT_CASTER_PROPERTY);
-            player.Out.SendMessage("Your resurrection spell has expired.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "SpellHandler.ResurrectSpellHandler.RezExpired"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
             return 0;
         }
 
@@ -262,7 +262,7 @@ namespace DOL.GS.Spells
             if (resurrectionCaster != null)
             {
                 //already considering resurrection - do nothing
-                MessageToCaster("Your target is already considering a resurrection!", eChatType.CT_SpellResisted);
+                MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.ResurrectSpellHandler.AlreadyConsideringResurrect"), eChatType.CT_SpellResisted);
                 return false;
             }
 
@@ -280,7 +280,7 @@ namespace DOL.GS.Spells
             if (resurrectionCaster != null)
             {
                 //already considering resurrection - do nothing
-                MessageToCaster("Your target is already considering a resurrection!", eChatType.CT_SpellResisted);
+                MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.ResurrectSpellHandler.AlreadyConsideringResurrect"), eChatType.CT_SpellResisted);
                 return false;
             }
             return base.CheckEndCast(target);

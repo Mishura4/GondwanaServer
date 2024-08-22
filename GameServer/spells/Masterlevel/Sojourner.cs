@@ -295,8 +295,8 @@ namespace DOL.GS.Spells
             ad.Damage -= damageAbsorbed;
             ad.Damage -= spellAbsorbed;
 
-            MessageToLiving(ad.Target, string.Format("You're in a Zephyr and can't be attacked!"), eChatType.CT_Spell);
-            MessageToLiving(ad.Attacker, string.Format("Your target is in a Zephyr and can't be attacked!"), eChatType.CT_Spell);
+            MessageToLiving(ad.Target, LanguageMgr.GetTranslation((ad.Target as GamePlayer)?.Client, "SpellHandler.Zephyr.NoAttackInZephyr"), eChatType.CT_Spell);
+            MessageToLiving(ad.Attacker, LanguageMgr.GetTranslation((ad.Attacker as GamePlayer)?.Client, "SpellHandler.Zephyr.TargetNoAttackInZephyr"), eChatType.CT_Spell);
         }
 
         private void OnArriveAtTarget()
@@ -328,7 +328,7 @@ namespace DOL.GS.Spells
             
             GameEventMgr.AddHandler(player, GamePlayerEvent.AttackedByEnemy, new DOLEventHandler(OnAttack));
 
-            player.Out.SendMessage("You are picked up by a forceful zephyr!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "SpellHandler.Zephyr.PickedUpByZephyr"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
             npc.StopFollowing();
 
             if (Caster is GamePlayer)
@@ -374,7 +374,7 @@ namespace DOL.GS.Spells
 
             if (Caster.Endurance < endurance)
             {
-                MessageToCaster("You need 50% endurance for this spell!!", eChatType.CT_System);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.Phaseshift.NotEnoughEndurance"), eChatType.CT_System);
                 return false;
             }
 
@@ -446,12 +446,12 @@ namespace DOL.GS.Spells
             {
                 if (Caster.CurrentRegionID == 51)
                 {
-                    MessageToCaster("You can't use this Ability here", eChatType.CT_SpellResisted);
+                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.Groupport.CannotUseAbilityHere"), eChatType.CT_SpellResisted);
                     return false;
                 }
                 else
                 {
-                    MessageToCaster("Bind in another Region to use this Ability", eChatType.CT_SpellResisted);
+                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.Groupport.BindInAnotherRegion"), eChatType.CT_SpellResisted);
                     return false;
                 }
             }
@@ -473,7 +473,7 @@ namespace DOL.GS.Spells
             {
                 if (player.Group.IsGroupInCombat())
                 {
-                    player.Out.SendMessage("You can't teleport a group that is in combat!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "SpellHandler.Groupport.GroupInCombat"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     return;
                 }
                 else
@@ -490,7 +490,7 @@ namespace DOL.GS.Spells
             }
             else
             {
-                player.Out.SendMessage("You are not a part of a group!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "SpellHandler.Groupport.NotInGroup"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
             }
         }
 

@@ -151,7 +151,7 @@ namespace DOL.GS.Spells
                 }
                 if (caster.IsMezzed || caster.IsStunned || caster.IsSilenced)
                 {
-                    MessageToCaster("You can't use that in your state.", eChatType.CT_System);
+                    MessageToCaster(LanguageMgr.GetTranslation(caster.Client, "SpellHandler.Chamber.CannotUseState"), eChatType.CT_System);
                     return false;
                 }
                 if (!caster.TargetInView)
@@ -212,7 +212,7 @@ namespace DOL.GS.Spells
                 }
                 if (!GameServer.ServerRules.IsAllowedToAttack(Caster, m_spellTarget, true) && chamber.PrimarySpell.Target.ToLower() != "realm")
                 {
-                    MessageToCaster("That target isn't attackable at this time!", eChatType.CT_System);
+                    MessageToCaster(LanguageMgr.GetTranslation(caster.Client, "SpellHandler.Chamber.TargetNotAttackable"), eChatType.CT_System);
                     return false;
                 }
                 spellhandler.CastSpell();
@@ -241,7 +241,9 @@ namespace DOL.GS.Spells
                 base.CastSpell();
                 int duration = caster.GetSkillDisabledDuration(m_spell);
                 if (Caster is GamePlayer && duration == 0)
-                    ((GamePlayer)Caster).Out.SendMessage("Select the first spell for your " + Spell.Name + ".", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                {
+                    ((GamePlayer)Caster).Out.SendMessage(LanguageMgr.GetTranslation(((GamePlayer)Caster).Client, "SpellHandler.Chamber.SelectFirstSpell", Spell.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                }
             }
             return true;
         }
@@ -263,11 +265,11 @@ namespace DOL.GS.Spells
             {
                 if (SecondarySpell == null && PrimarySpell == null)
                 {
-                    MessageToCaster("No spells were loaded into " + m_spell.Name + ".", eChatType.CT_Spell);
+                    MessageToCaster(LanguageMgr.GetTranslation(caster.Client, "SpellHandler.Chamber.NoSpellsLoaded", m_spell.Name), eChatType.CT_Spell);
                 }
                 else
                 {
-                    MessageToCaster("Your " + m_spell.Name + " is ready for use.", eChatType.CT_Spell);
+                    MessageToCaster(LanguageMgr.GetTranslation(caster.Client, "SpellHandler.Chamber.ReadyForUse", m_spell.Name), eChatType.CT_Spell);
                     //StartSpell(target); // and action
                     GameSpellEffect neweffect = CreateSpellEffect(target, 1);
                     neweffect.Start(m_caster);
@@ -278,7 +280,7 @@ namespace DOL.GS.Spells
                 foreach (GamePlayer player in m_caster.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
                 {
                     if (player != m_caster)
-                        player.MessageFromArea(m_caster, player.GetPersonalizedName(m_caster) + " casts a spell!", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                        player.MessageFromArea(m_caster, LanguageMgr.GetTranslation(player.Client, "SpellHandler.Chamber.CastsSpell", player.GetPersonalizedName(m_caster)), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
                 }
             }
 

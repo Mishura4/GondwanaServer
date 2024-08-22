@@ -28,28 +28,28 @@ namespace DOL.GS.RealmAbilities
 
             if (caster.TargetObject == null)
             {
-                caster.Out.SendMessage("You need a target for this ability!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                caster.Out.SendMessage(LanguageMgr.GetTranslation(caster.Client, "SpellHandler.IchorOfTheDeep.NoTarget"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 caster.DisableSkill(this, 3 * 1000);
                 return;
             }
 
             if (!caster.TargetInView)
             {
-                caster.Out.SendMessage(caster.GetPersonalizedName((GamePlayer)caster.TargetObject) + " is not in view.", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
+                caster.Out.SendMessage(LanguageMgr.GetTranslation(caster.Client, "GameObjects.GamePlayer.Attack.NotInView", caster.GetPersonalizedName((GamePlayer)caster.TargetObject)), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
                 caster.DisableSkill(this, 3 * 1000);
                 return;
             }
 
             if (!caster.IsWithinRadius(caster.TargetObject, 1875))
             {
-                caster.Out.SendMessage(caster.GetPersonalizedName((GamePlayer)caster.TargetObject) + " is too far away.", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                caster.Out.SendMessage(LanguageMgr.GetTranslation(caster.Client, "SpellHandler.IchorOfTheDeep.TargetTooFar", caster.GetPersonalizedName((GamePlayer)caster.TargetObject)), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
                 caster.DisableSkill(this, 3 * 1000);
                 return;
             }
 
             if (m_expireTimerID != null && m_expireTimerID.IsAlive)
             {
-                caster.Out.SendMessage("You are already casting this ability.", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                caster.Out.SendMessage(LanguageMgr.GetTranslation(caster.Client, "SpellHandler.IchorOfTheDeep.AlreadyCasting"), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
                 caster.DisableSkill(this, 3 * 1000);
                 return;
             }
@@ -112,11 +112,11 @@ namespace DOL.GS.RealmAbilities
             {
                 if (i_player == caster)
                 {
-                    i_player.MessageToSelf("You cast " + this.Name + "!", eChatType.CT_Spell);
+                    i_player.MessageToSelf(LanguageMgr.GetTranslation(caster.Client, "SpellHandler.IchorOfTheDeep.CastMessage", this.Name), eChatType.CT_Spell);
                 }
                 else
                 {
-                    i_player.MessageFromArea(caster, i_player.GetPersonalizedName(caster) + " casts a spell!", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                    i_player.MessageFromArea(caster, LanguageMgr.GetTranslation(i_player.Client, "SpellHandler.IchorOfTheDeep.AreaCastMessage", i_player.GetPersonalizedName(caster)), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
                 }
 
                 i_player.Out.SendSpellCastAnimation(caster, 7029, 20);
@@ -129,7 +129,7 @@ namespace DOL.GS.RealmAbilities
         {
             if (caster.TargetObject == null)
             {
-                caster.Out.SendMessage("You need a target for this ability!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                caster.Out.SendMessage(LanguageMgr.GetTranslation(caster.Client, "SpellHandler.IchorOfTheDeep.NoTarget"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 caster.DisableSkill(this, 3 * 1000);
                 return 0;
             }
@@ -143,7 +143,7 @@ namespace DOL.GS.RealmAbilities
 
             if (!caster.IsWithinRadius(caster.TargetObject, 1875))
             {
-                caster.Out.SendMessage(caster.GetPersonalizedName((GamePlayer)caster.TargetObject) + " is too far away.", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                caster.Out.SendMessage(LanguageMgr.GetTranslation(caster.Client, "SpellHandler.IchorOfTheDeep.TargetTooFar", caster.GetPersonalizedName((GamePlayer)caster.TargetObject)), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
                 caster.DisableSkill(this, 3 * 1000);
                 return 0;
             }
@@ -192,7 +192,7 @@ namespace DOL.GS.RealmAbilities
                     SendUpdates(mob);
                 }
 
-                caster.Out.SendMessage("You hit the " + mob.Name + " for " + dmgValue + " damage.", eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
+                caster.Out.SendMessage(LanguageMgr.GetTranslation(caster.Client, "SpellHandler.IchorOfTheDeep.HitMob", mob.Name, dmgValue), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
 
                 foreach (GamePlayer player2 in living.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
                 {
@@ -219,7 +219,7 @@ namespace DOL.GS.RealmAbilities
                     SendUpdates(aeplayer);
                 }
 
-                caster.Out.SendMessage("You hit " + caster.GetPersonalizedName(aeplayer) + " for " + dmgValue + " damage.", eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
+                caster.Out.SendMessage(LanguageMgr.GetTranslation(caster.Client, "SpellHandler.IchorOfTheDeep.HitPlayer", caster.GetPersonalizedName(aeplayer), dmgValue), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
 
                 foreach (GamePlayer player3 in living.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
                 {

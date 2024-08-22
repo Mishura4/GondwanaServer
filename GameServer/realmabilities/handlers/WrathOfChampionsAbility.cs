@@ -51,11 +51,11 @@ namespace DOL.GS.RealmAbilities
             {
                 if (i_player == caster)
                 {
-                    i_player.MessageToSelf("You cast " + this.Name + "!", eChatType.CT_Spell);
+                    i_player.MessageToSelf(LanguageMgr.GetTranslation(caster.Client, "SpellHandler.WrathofChampions.CastSpell", this.Name), eChatType.CT_Spell);
                 }
                 else
                 {
-                    i_player.MessageFromArea(caster, i_player.GetPersonalizedName(caster) + " casts a spell!", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                    i_player.MessageFromArea(caster, LanguageMgr.GetTranslation(i_player.Client, "SpellHandler.WrathofChampions.CastSpellFromArea", caster.GetPersonalizedName(caster)), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
                 }
             }
 
@@ -65,7 +65,7 @@ namespace DOL.GS.RealmAbilities
                 if (GameServer.ServerRules.IsAllowedToAttack(caster, mob, true) == false) continue;
 
                 mob.TakeDamage(caster, eDamageType.Spirit, dmgValue, 0);
-                caster.Out.SendMessage("You hit the " + mob.Name + " for " + dmgValue + " damage.", eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
+                caster.Out.SendMessage(LanguageMgr.GetTranslation(caster.Client, "SpellHandler.WrathofChampions.HitMob", mob.Name, dmgValue), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
                 foreach (GamePlayer player2 in caster.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
                 {
                     player2.Out.SendSpellCastAnimation(caster, 4468, 0);
@@ -93,8 +93,8 @@ namespace DOL.GS.RealmAbilities
                 t_player.TakeDamage(caster, eDamageType.Spirit, dmgValue, 0);
 
                 // send a message
-                caster.Out.SendMessage("You hit " + t_player.Name + " for " + dmgValue + " damage.", eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
-                t_player.Out.SendMessage(caster.Name + " hits you for " + dmgValue + " damage.", eChatType.CT_YouWereHit, eChatLoc.CL_SystemWindow);
+                caster.Out.SendMessage(LanguageMgr.GetTranslation(caster.Client, "SpellHandler.WrathofChampions.HitPlayer", t_player.Name, dmgValue), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
+                t_player.Out.SendMessage(LanguageMgr.GetTranslation(t_player.Client, "SpellHandler.WrathofChampions.PlayerHitBy", caster.Name, dmgValue), eChatType.CT_YouWereHit, eChatLoc.CL_SystemWindow);
 
                 foreach (GamePlayer n_player in t_player.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
                 {
