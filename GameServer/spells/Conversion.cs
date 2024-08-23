@@ -22,6 +22,7 @@ using DOL.Events;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
 using DOL.AI.Brain;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -88,12 +89,12 @@ namespace DOL.GS.Spells
             }
 
             if (ad.Damage > 0)
-                MessageToLiving(ad.Target, string.Format("You convert {0} damage into " + damageConverted + " Health.", damageConverted), eChatType.CT_Spell);
-            MessageToLiving(ad.Attacker, string.Format("A magical spell absorbs {0} damage of your attack!", damageConverted), eChatType.CT_Spell);
+                MessageToLiving(ad.Target, LanguageMgr.GetTranslation((ad.Target as GamePlayer)?.Client, "SpellHandler.Conversion.ConvertToHealth", damageConverted), eChatType.CT_Spell);
+            MessageToLiving(ad.Attacker, LanguageMgr.GetTranslation((ad.Attacker as GamePlayer)?.Client, "SpellHandler.Conversion.MagicalAbsorption", damageConverted), eChatType.CT_Spell);
 
             if (Caster.Health != Caster.MaxHealth)
             {
-                MessageToCaster("You convert " + damageConverted + " damage into health.", eChatType.CT_Spell);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.Conversion.ConvertToHealth", damageConverted), eChatType.CT_Spell);
                 Caster.Health = Caster.Health + damageConverted;
 
                 #region PVP DAMAGE
@@ -111,26 +112,26 @@ namespace DOL.GS.Spells
             }
             else
             {
-                MessageToCaster("You cannot convert anymore health!", eChatType.CT_Spell);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.Conversion.CannotConvertMoreHealth"), eChatType.CT_Spell);
             }
 
             if (Caster.Endurance != Caster.MaxEndurance)
             {
-                MessageToCaster("You convert " + damageConverted + " damage into endurance", eChatType.CT_Spell);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.Conversion.ConvertToEndurance", damageConverted), eChatType.CT_Spell);
                 Caster.Endurance = Caster.Endurance + damageConverted;
             }
             else
             {
-                MessageToCaster("You cannot convert anymore endurance!", eChatType.CT_Spell);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.Conversion.CannotConvertMoreEndurance"), eChatType.CT_Spell);
             }
             if (Caster.Mana != Caster.MaxMana)
             {
-                MessageToCaster("You convert " + damageConverted + " damage into mana.", eChatType.CT_Spell);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.Conversion.ConvertToMana", damageConverted), eChatType.CT_Spell);
                 Caster.Mana = Caster.Mana + damageConverted;
             }
             else
             {
-                MessageToCaster("You cannot convert anymore mana!", eChatType.CT_Spell);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.Conversion.CannotConvertMoreMana"), eChatType.CT_Spell);
             }
 
             if (reduceddmg <= 0)
@@ -200,35 +201,35 @@ namespace DOL.GS.Spells
                                 if (effect != null)
                                     effect.Cancel(false);
                             }
-                            MessageToLiving(ad.Target, string.Format("You convert {0} damage into " + damageConverted + " Health.", damageConverted), eChatType.CT_Spell);
-                            MessageToLiving(ad.Attacker, string.Format("A magical spell absorbs {0} damage of your attack!", damageConverted), eChatType.CT_Spell);
+                            MessageToLiving(ad.Target, LanguageMgr.GetTranslation((ad.Target as GamePlayer)?.Client, "SpellHandler.Conversion.ConvertToHealth", damageConverted), eChatType.CT_Spell);
+                            MessageToLiving(ad.Attacker, LanguageMgr.GetTranslation((ad.Attacker as GamePlayer)?.Client, "SpellHandler.Conversion.MagicalAbsorption", damageConverted), eChatType.CT_Spell);
                             if (Caster.Health != Caster.MaxHealth)
                             {
-                                MessageToCaster("You convert " + damageConverted + " damage into health.", eChatType.CT_Spell);
+                                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.Conversion.ConvertToHealth", damageConverted), eChatType.CT_Spell);
                                 Caster.Health = Caster.Health + damageConverted;
                             }
                             else
                             {
-                                MessageToCaster("You cannot convert anymore health!", eChatType.CT_Spell);
+                                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.Conversion.CannotConvertMoreHealth"), eChatType.CT_Spell);
                             }
 
                             if (Caster.Endurance != Caster.MaxEndurance)
                             {
-                                MessageToCaster("You convert " + damageConverted + " damage into endurance", eChatType.CT_Spell);
+                                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.Conversion.ConvertToEndurance", damageConverted), eChatType.CT_Spell);
                                 Caster.Endurance = Caster.Endurance + damageConverted;
                             }
                             else
                             {
-                                MessageToCaster("You cannot convert anymore endurance!", eChatType.CT_Spell);
+                                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.Conversion.CannotConvertMoreEndurance"), eChatType.CT_Spell);
                             }
                             if (Caster.Mana != Caster.MaxMana)
                             {
-                                MessageToCaster("You convert " + damageConverted + " damage into mana.", eChatType.CT_Spell);
+                                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.Conversion.ConvertToMana", damageConverted), eChatType.CT_Spell);
                                 Caster.Mana = Caster.Mana + damageConverted;
                             }
                             else
                             {
-                                MessageToCaster("You cannot convert anymore mana!", eChatType.CT_Spell);
+                                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.Conversion.CannotConvertMoreMana"), eChatType.CT_Spell);
                             }
                         }
                         break;

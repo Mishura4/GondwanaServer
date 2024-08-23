@@ -26,6 +26,7 @@ using System.Collections.Generic;
 using DOL.AI.Brain;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -173,13 +174,13 @@ namespace DOL.GS.Spells
                     {
                         SendEffectAnimation(target, 0, false, 1);
                         effect.Cancel(false);
-                        MessageToCaster("Your spell rips away some of your target's enhancing magic.", eChatType.CT_Spell);
-                        MessageToLiving(target, "Some of your enhancing magic has been ripped away by a spell!", eChatType.CT_Spell);
+                        MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.BuffShear.ShearSuccess"), eChatType.CT_Spell);
+                        MessageToLiving(target, LanguageMgr.GetTranslation((target as GamePlayer)?.Client, "SpellHandler.BuffShear.EnhancingMagicRipped"), eChatType.CT_Spell);
                     }
                     else
                     {
                         SendEffectAnimation(target, 0, false, 0);
-                        MessageToCaster("The target's connection to their enhancement is too strong for you to remove.", eChatType.CT_SpellResisted);
+                        MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.BuffShear.ConnectionTooStrong"), eChatType.CT_SpellResisted);
                     }
 
                     return;
@@ -187,7 +188,7 @@ namespace DOL.GS.Spells
             }
 
             SendEffectAnimation(target, 0, false, 0);
-            MessageToCaster("No enhancement of that type found on the target.", eChatType.CT_SpellResisted);
+            MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.BuffShear.NoEnhancementFound"), eChatType.CT_SpellResisted);
 
             /*
 			if (!noMessages) 
@@ -299,15 +300,15 @@ namespace DOL.GS.Spells
                     {
                         SendEffectAnimation(target, 0, false, 1);
                         effect.Cancel(false);
-                        MessageToCaster("Your spell rips away some of your target's enhancing magic.", eChatType.CT_Spell);
-                        MessageToLiving(target, "Some of your enhancing magic has been ripped away by a spell!", eChatType.CT_Spell);
+                        MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.BuffShear.ShearSuccess"), eChatType.CT_Spell);
+                        MessageToLiving(target, LanguageMgr.GetTranslation((target as GamePlayer)?.Client, "SpellHandler.BuffShear.EnhancingMagicRipped"), eChatType.CT_Spell);
                         return;
                     }
                 }
             }
 
             SendEffectAnimation(target, 0, false, 0);
-            MessageToCaster("No enhancement of that type found on the target.", eChatType.CT_SpellResisted);
+            MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.BuffShear.NoEnhancementFound"), eChatType.CT_SpellResisted);
 
             /*
 			if (!noMessages) 

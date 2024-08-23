@@ -24,6 +24,7 @@ using DOL.GS.Keeps;
 using DOL.Events;
 using System.Collections.Generic;
 using DOL.GS.PlayerClass;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -154,7 +155,7 @@ namespace DOL.GS.Spells
                 if (Spell.Target.ToLower() == "enemy" && Spell.Radius == 0 && Spell.Range != 0)
                 {
                     m_castFailed = true;
-                    MessageToCaster("You can't see your target!", eChatType.CT_SpellResisted);
+                    MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.CheckLOSPlayerToTarget.CantSeeTarget"), eChatType.CT_SpellResisted);
                 }
             }
         }

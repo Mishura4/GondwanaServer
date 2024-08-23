@@ -18,6 +18,7 @@
  */
 using System;
 using System.Collections;
+using System.Numerics;
 using System.Reflection;
 using System.Text;
 using DOL.AI.Brain;
@@ -26,6 +27,7 @@ using DOL.Events;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
 using DOL.GS.SkillHandler;
+using DOL.Language;
 using log4net;
 
 namespace DOL.GS.Spells
@@ -59,8 +61,10 @@ namespace DOL.GS.Spells
 
         public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
         {
-            if (effect.Owner is GamePlayer && !noMessages)
-                ((GamePlayer)effect.Owner).Out.SendMessage("You modification spell effect has expired.", eChatType.CT_SpellExpires, eChatLoc.CL_SystemWindow);
+            if (effect.Owner is GamePlayer player && !noMessages)
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "SpellHandler.PrimerSpell.EffectExpired"), eChatType.CT_SpellExpires, eChatLoc.CL_SystemWindow);
+            }
 
             GameEventMgr.RemoveHandler(effect.Owner, GamePlayerEvent.Moving, new DOLEventHandler(OnMove));
 
@@ -85,7 +89,10 @@ namespace DOL.GS.Spells
                 if (effect != null)
                 {
                     effect.Cancel(false);
-                    ((GamePlayer)living).Out.SendMessage("You move and break your modification spell.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                    if (living is GamePlayer player)
+                    {
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "SpellHandler.PrimerSpell.MovementBreaksEffect"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                    }
                 }
             }
         }

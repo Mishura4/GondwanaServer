@@ -18,6 +18,7 @@
  */
 using System.Collections.Generic;
 using DOL.GS.PacketHandler;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -43,7 +44,7 @@ namespace DOL.GS.Spells
 
             if (target is GamePlayer)
             {
-                ((GamePlayer)target).Out.SendMessage(target.GetPersonalizedName(m_caster) + " steal you for " + end + " endurance!", eChatType.CT_YouWereHit, eChatLoc.CL_SystemWindow);
+                ((GamePlayer)target).Out.SendMessage(LanguageMgr.GetTranslation((target as GamePlayer)?.Client, "SpellHandler.EnduranceDrain.SpellHit", m_caster.GetPersonalizedName(target), end), eChatType.CT_YouWereHit, eChatLoc.CL_SystemWindow);
             }
 
             StealEndurance(target, end);
@@ -62,14 +63,14 @@ namespace DOL.GS.Spells
 
         public virtual void SendCasterMessage(GameLiving target, int end)
         {
-            MessageToCaster(string.Format("You steal {0} for {1} endurance!", m_caster.GetPersonalizedName(target), end), eChatType.CT_YouHit);
+            MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.EnduranceDrain.StealSuccess", m_caster.GetPersonalizedName(target), end), eChatType.CT_YouHit);
             if (end > 0)
             {
-                MessageToCaster("You steal " + end + " endurance point" + (end == 1 ? "." : "s."), eChatType.CT_Spell);
+                MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.EnduranceDrain.StealPoints", end, (end == 1 ? "." : "s.")), eChatType.CT_Spell);
             }
             else
             {
-                MessageToCaster("You cannot absorb any more endurance.", eChatType.CT_SpellResisted);
+                MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.EnduranceDrain.CannotAbsorbMore"), eChatType.CT_SpellResisted);
             }
         }
 

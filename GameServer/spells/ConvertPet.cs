@@ -17,6 +17,7 @@
  *
  */
 using DOL.GS.PacketHandler;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -42,9 +43,9 @@ namespace DOL.GS.Spells
             if (m_caster is GamePlayer)
             {
                 if (absorb > 0)
-                    MessageToCaster("You absorb " + absorb + " power points.", eChatType.CT_Spell);
+                    MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.PetConversion.AbsorbPower", absorb), eChatType.CT_Spell);
                 else
-                    MessageToCaster("Your mana is already full!", eChatType.CT_SpellResisted);
+                    MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.PetConversion.ManaFull"), eChatType.CT_SpellResisted);
                 ((GamePlayer)m_caster).CommandNpcRelease();
             }
 

@@ -20,6 +20,7 @@ using System;
 using System.Collections;
 using DOL.GS.PacketHandler;
 using DOL.GS.Scripts;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -108,7 +109,7 @@ namespace DOL.GS.Spells
             if (!target.IsAlive)
             {
                 //"You cannot heal the dead!" sshot550.tga
-                MessageToCaster(target.GetName(0, true) + " is dead!", eChatType.CT_SpellResisted);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "Spell.LifeTransfer.TargetDead", target.GetName(0, true)), eChatType.CT_SpellResisted);
                 return false;
             }
 
@@ -118,24 +119,24 @@ namespace DOL.GS.Spells
             {
                 if (Spell.Pulse == 0)
                 {
-                    if (target == m_caster) MessageToCaster("Your power is full.", eChatType.CT_SpellResisted);
-                    else MessageToCaster(target.GetName(0, true) + " power is full.", eChatType.CT_SpellResisted);
+                    if (target == m_caster) MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.PetConversion.ManaFull"), eChatType.CT_SpellResisted);
+                    else MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.PowerHeal.FullPowerOther", target.GetName(0, true)), eChatType.CT_SpellResisted);
                 }
                 return false;
             }
 
             if (m_caster == target)
             {
-                MessageToCaster("You restore " + heal + " power points.", eChatType.CT_Spell);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.PowerHeal.RestorePowerSelf", heal), eChatType.CT_Spell);
                 if (heal < amount)
-                    MessageToCaster("Your power is full.", eChatType.CT_Spell);
+                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.PowerHeal.FullPowerSelf"), eChatType.CT_Spell);
             }
             else
             {
-                MessageToCaster("You restore " + target.GetName(0, false) + " for " + heal + " power points!", eChatType.CT_Spell);
-                MessageToLiving(target, "Your power was restored by " + m_caster.GetName(0, false) + " for " + heal + " points.", eChatType.CT_Spell);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.PowerHeal.RestorePowerOther", target.GetName(0, false), heal), eChatType.CT_Spell);
+                MessageToLiving(target, LanguageMgr.GetTranslation((target as GamePlayer)?.Client, "SpellHandler.PowerHeal.PowerRestored", m_caster.GetName(0, false), heal), eChatType.CT_Spell);
                 if (heal < amount)
-                    MessageToCaster(target.GetName(0, true) + " mana is full.", eChatType.CT_Spell);
+                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.PowerHeal.FullPowerOther", target.GetName(0, true)), eChatType.CT_Spell);
             }
             return true;
         }

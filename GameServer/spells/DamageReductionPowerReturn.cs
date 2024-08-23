@@ -29,6 +29,7 @@ using System.Collections;
 using DOL.GS;
 using DOL.AI.Brain;
 using DOL.GS.Keeps;
+using DOL.Language;
 
 
 namespace DOL.GS.Spells
@@ -109,13 +110,13 @@ namespace DOL.GS.Spells
 
             //TODO correct messages
             if (ad.Damage > 0)
-                MessageToLiving(ad.Target, string.Format("The damage reduction absorbs {0} damage!", damageAbsorbed), eChatType.CT_Spell);
-            MessageToLiving(ad.Attacker, string.Format("A damage reduction absorbs {0} damage of your attack!", damageAbsorbed), eChatType.CT_Spell);
+                MessageToLiving(ad.Target, LanguageMgr.GetTranslation((ad.Target as GamePlayer)?.Client, "SpellHandler.DmgReductionAndPowerReturn.DamageAbsorbed", damageAbsorbed), eChatType.CT_Spell);
+            MessageToLiving(ad.Attacker, LanguageMgr.GetTranslation((ad.Attacker as GamePlayer)?.Client, "SpellHandler.DmgReductionAndPowerReturn.DamageReduced", damageAbsorbed), eChatType.CT_Spell);
             if (damageAbsorbed > 0)
-                MessageToCaster("The barrier returns " + damageAbsorbed + " mana back to you.", eChatType.CT_Spell);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.DmgReductionAndPowerReturn.ManaReturn", damageAbsorbed), eChatType.CT_Spell);
             Caster.Mana = Caster.Mana + damageAbsorbed;
             if (Caster.Mana == Caster.MaxMana)
-                MessageToCaster("You cannot absorb any more power.", eChatType.CT_SpellResisted);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.DamageToPower.NoMorePower"), eChatType.CT_SpellResisted);
 
             if (damagereduction <= 0)
             {

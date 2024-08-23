@@ -18,6 +18,7 @@
  */
 using System;
 using DOL.GS.PacketHandler;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -32,8 +33,7 @@ namespace DOL.GS.Spells
 
             if (selectedTarget == Caster || selectedTarget == owner)
             {
-                owner.Out.SendMessage("You cannot transfer power to yourself!",
-                    eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
+                owner.Out.SendMessage(LanguageMgr.GetTranslation(owner.Client, "SpellHandler.PowerTransfer.CannotTransferToSelf"), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
                 return false;
             }
 
@@ -63,15 +63,15 @@ namespace DOL.GS.Spells
             if (powerHealed <= 0)
             {
                 SendEffectAnimation(target, 0, false, 0);
-                owner.Out.SendMessage($"{owner.GetPersonalizedName(target)} is at full power already!", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
+                owner.Out.SendMessage(LanguageMgr.GetTranslation(owner.Client, "SpellHandler.PowerHeal.FullPowerOther", owner.GetPersonalizedName(target)), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
             }
             else
             {
                 SendEffectAnimation(target, 0, false, 1);
-                owner.Out.SendMessage($"You transfer {powerHealed} power to {owner.GetPersonalizedName(target)}!", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                owner.Out.SendMessage(LanguageMgr.GetTranslation(owner.Client, "SpellHandler.PowerTransfer.TransferSuccess", powerHealed, owner.GetPersonalizedName(target)), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
 
                 if (target is GamePlayer playerTarget)
-                    playerTarget.Out.SendMessage($"{playerTarget.GetPersonalizedName(owner)} transfers {powerHealed} power to you!", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                    playerTarget.Out.SendMessage(LanguageMgr.GetTranslation(playerTarget.Client, "SpellHandler.PowerTransfer.PowerReceived", playerTarget.GetPersonalizedName(owner), powerHealed), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
             }
         }
 

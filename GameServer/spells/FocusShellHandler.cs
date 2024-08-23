@@ -25,6 +25,7 @@ using DOL.GS;
 using DOL.GS.PacketHandler;
 using DOL.Events;
 using DOL.GS.Effects;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -47,7 +48,7 @@ namespace DOL.GS.Spells
                 //This spell doesn't work on pets or monsters
                 if (selectedTarget is GameNPC)
                 {
-                    MessageToCaster("This spell may not be cast on pets!", eChatType.CT_SpellResisted);
+                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.FocusShell.NoPets"), eChatType.CT_SpellResisted);
                     return false;
                 }
 
@@ -69,7 +70,7 @@ namespace DOL.GS.Spells
             }
             else
             {
-                MessageToCaster("This spell only works on members of your realm!", eChatType.CT_SpellResisted);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.FocusShell.SameRealm"), eChatType.CT_SpellResisted);
                 return false;
             }
 

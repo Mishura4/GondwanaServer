@@ -526,35 +526,24 @@ namespace DOL.GS.ServerRules
 
             GameLiving realAttacker = (attacker is GameNPC { Brain: IControlledBrain } petAttacker ? (petAttacker.Brain as IControlledBrain).Owner : attacker);
             GameLiving realDefender = (defender is GameNPC { Brain: IControlledBrain } petDefender ? (petDefender.Brain as IControlledBrain).Owner : defender);
-            var playerAttacker = realAttacker as GamePlayer;
-            var playerDefender = realDefender as GamePlayer;
+
             if (realDefender is GameNPC)
             {
                 GameNPC defenderNpc = realDefender as GameNPC;
 
                 if (defenderNpc.Brain is GuardNPCBrain defenderGuardBrain)
                 {
-                    if (playerAttacker != null)
+                    if (realAttacker is GamePlayer)
                     {
                         // Player vs Guard: guard only selected if the guard is in combat with the player or if the guard would normally range aggro the player
+                        var playerAttacker = realAttacker as GamePlayer;
+
                         return defenderGuardBrain.AggroTable.ContainsKey(attacker) || defenderGuardBrain.AggroTable.ContainsKey(realAttacker) || defenderGuardBrain.CalculateAggroLevelToTarget(playerAttacker) > 0;
                     }
                     else
                     {
                         // Npc (probably) vs Guard: guard only selected if the realm is different
                         return realAttacker.Realm != defenderNpc.Realm;
-                    }
-                }
-            }
-            if (playerDefender != null && playerAttacker != null && playerDefender != playerAttacker)
-            {
-                // PvP
-                if (!GameServer.ServerRules.IsInPvPArea(playerDefender)) // PVE zone
-                {
-                    if (playerAttacker.Reputation >= 0 && playerDefender.Reputation >= 0 && !playerAttacker.Attackers.Contains(playerDefender) && !playerDefender.Attackers.Contains(playerAttacker))
-                    {
-                        // Non-outlaws should not automatically target non-outlaws
-                        return false;
                     }
                 }
             }

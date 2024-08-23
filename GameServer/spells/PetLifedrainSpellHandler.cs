@@ -19,6 +19,7 @@
 namespace DOL.spells
 {
     using AI.Brain;
+    using DOL.Language;
     using GS;
     using GS.PacketHandler;
     using GS.Spells;
@@ -43,7 +44,7 @@ namespace DOL.spells
             int heal = ((ad.Damage + ad.CriticalDamage) * m_spell.LifeDrainReturn) / 100;
             if (player.IsDiseased)
             {
-                MessageToLiving(player, "You are diseased !", eChatType.CT_SpellResisted);
+                MessageToLiving(player, LanguageMgr.GetTranslation(player.Client, "Spell.LifeTransfer.TargetDiseased"), eChatType.CT_SpellResisted);
                 heal >>= 1;
             }
             if (heal <= 0) return;
@@ -51,11 +52,11 @@ namespace DOL.spells
             heal = player.ChangeHealth(player, GameLiving.eHealthChangeType.Spell, heal);
             if (heal > 0)
             {
-                MessageToLiving(player, "You steal " + heal + " hit point" + (heal == 1 ? "." : "s."), eChatType.CT_Spell);
+                MessageToLiving(player, LanguageMgr.GetTranslation(player.Client, "SpellHandler.DamageSpeedDecrease.LifeSteal", heal, (heal == 1 ? "." : "s.")), eChatType.CT_Spell);
             }
             else
             {
-                MessageToLiving(player, "You cannot absorb any more life.", eChatType.CT_SpellResisted);
+                MessageToLiving(player, LanguageMgr.GetTranslation(player.Client, "SpellHandler.DamageSpeedDecrease.NoMoreLife"), eChatType.CT_SpellResisted);
             }
         }
     }
