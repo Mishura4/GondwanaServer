@@ -226,6 +226,25 @@ namespace DOL.GS.Spells
 
         protected int m_minDamageSpread = 50;
 
+        private string GetFormattedMessage(GamePlayer player, string messageKey, params object[] args)
+        {
+            if (messageKey.StartsWith("Languages.DBSpells."))
+            {
+                string translationKey = messageKey;
+                string translation;
+
+                if (LanguageMgr.TryGetTranslation(out translation, player.Client.Account.Language, translationKey, args))
+                {
+                    return translation;
+                }
+                else
+                {
+                    return "(Translation not found)";
+                }
+            }
+            return string.Format(messageKey, args);
+        }
+
         public override void FinishSpellCast(GameLiving target)
         {
             m_caster.Mana -= PowerCost(target);
@@ -266,23 +285,32 @@ namespace DOL.GS.Spells
         public override void OnEffectStart(GameSpellEffect effect)
         {
             base.OnEffectStart(effect);
-            // "Your weapon is blessed by the gods!"
-            // "{0}'s weapon glows with the power of the gods!"
-            eChatType chatType = eChatType.CT_SpellPulse;
-            if (Spell.Pulse == 0)
+            eChatType chatType = (Spell.Pulse == 0) ? eChatType.CT_Spell : eChatType.CT_SpellPulse;
+
+            if (effect.Owner is GamePlayer ownerPlayer)
             {
-                chatType = eChatType.CT_Spell;
+                MessageToLiving(effect.Owner, GetFormattedMessage(ownerPlayer, Spell.Message1), chatType);
             }
-            bool upperCase = Spell.Message2.StartsWith("{0}");
-            MessageToLiving(effect.Owner, Spell.Message1, chatType);
+            else
+            {
+                MessageToLiving(effect.Owner, LanguageMgr.GetTranslation("ServerLanguageKey", Spell.Message1), chatType);
+            }
+
             foreach (GamePlayer player in effect.Owner.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
             {
                 if (!(effect.Owner == player))
                 {
-                    player.MessageFromArea(effect.Owner, Util.MakeSentence(Spell.Message2,
-                        player.GetPersonalizedName(effect.Owner)), chatType, eChatLoc.CL_SystemWindow);
+                    if (effect.Owner is GamePlayer targetPlayer)
+                    {
+                        player.MessageFromArea(effect.Owner, GetFormattedMessage(player, Spell.Message2, player.GetPersonalizedName(effect.Owner)), chatType, eChatLoc.CL_SystemWindow);
+                    }
+                    else
+                    {
+                        player.MessageFromArea(effect.Owner, LanguageMgr.GetTranslation("ServerLanguageKey", Spell.Message2), chatType, eChatLoc.CL_SystemWindow);
+                    }
                 }
             }
+
             GameEventMgr.AddHandler(effect.Owner, EventType, new DOLEventHandler(EventHandler));
         }
 
@@ -290,19 +318,31 @@ namespace DOL.GS.Spells
         {
             if (!noMessages && Spell.Pulse == 0)
             {
-                // "Your weapon returns to normal."
-                // "{0}'s weapon returns to normal."
-                bool upperCase = Spell.Message4.StartsWith("{0}");
-                MessageToLiving(effect.Owner, Spell.Message3, eChatType.CT_SpellExpires);
+                if (effect.Owner is GamePlayer ownerPlayer)
+                {
+                    MessageToLiving(effect.Owner, GetFormattedMessage(ownerPlayer, Spell.Message3), eChatType.CT_SpellExpires);
+                }
+                else
+                {
+                    MessageToLiving(effect.Owner, LanguageMgr.GetTranslation("ServerLanguageKey", Spell.Message3), eChatType.CT_SpellExpires);
+                }
+
                 foreach (GamePlayer player in effect.Owner.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
                 {
                     if (!(effect.Owner == player))
                     {
-                        player.MessageFromArea(effect.Owner, Util.MakeSentence(Spell.Message4,
-                            player.GetPersonalizedName(effect.Owner)), eChatType.CT_SpellExpires, eChatLoc.CL_SystemWindow);
+                        if (effect.Owner is GamePlayer targetPlayer)
+                        {
+                            player.MessageFromArea(effect.Owner, GetFormattedMessage(player, Spell.Message4, player.GetPersonalizedName(effect.Owner)), eChatType.CT_SpellExpires, eChatLoc.CL_SystemWindow);
+                        }
+                        else
+                        {
+                            player.MessageFromArea(effect.Owner, LanguageMgr.GetTranslation("ServerLanguageKey", Spell.Message4), eChatType.CT_SpellExpires, eChatLoc.CL_SystemWindow);
+                        }
                     }
                 }
             }
+
             GameEventMgr.RemoveHandler(effect.Owner, EventType, new DOLEventHandler(EventHandler));
             return 0;
         }

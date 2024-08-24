@@ -1,0 +1,39 @@
+
+Languages.DBSpells.YouMezzed:			Vous êtes hypnotisé.
+Languages.DBSpells.TargetMezzed:		{0} est hypnotisé.
+Languages.DBSpells.YouCoveredLava:		Vous êtes recouvert de lave !
+Languages.DBSpells.TargetCoveredLava:		{0} est enveloppé par la lave !
+Languages.DBSpells.YouCoveredAcid:		Un nuage acide vous enveloppe !
+Languages.DBSpells.TargetCoveredAcid:		{0} est enveloppé d'un nuage acide !
+Languages.DBSpells.YourSkinWounds:		Votre peau se couvre de plaies ouvertes !
+Languages.DBSpells.TargetSkinWounds:		La peau de {0} se couvre de plaies ouvertes !
+Languages.DBSpells.YouCrushedForce:		Vous êtes écrasé par une force invisible !
+Languages.DBSpells.TargetCrushedForce:		{0} subit la pression d'une force invisible !
+Languages.DBSpells.YouLarvaeFlake:		Des larves tombent de la peau de la créature et mordent votre peau !
+Languages.DBSpells.TargetLarvaeFlake:		{0} est infecté !
+Languages.DBSpells.YouPoisoned:			Vous êtes empoisonné !
+Languages.DBSpells.TargetPoisoned:		{0} est empoisonné !
+Languages.DBSpells.YourWrackedPain:		Vous êtes torturé par la douleur !
+Languages.DBSpells.TargetWrackedPain:		{0} est torturé par la douleur !
+Languages.DBSpells.YourInfected:		Une infection vous atteint !
+Languages.DBSpells.TargetInfected:		Une infection atteint {0} !
+Languages.DBSpells.YouFireyEmber:		Une braise ardente vous entoure !
+Languages.DBSpells.TargetFireyEmber:		{0} est enveloppé d'une braise ardente !
+Languages.DBSpells.YouMucusCover:		Vous êtes recouvert de mucus!
+Languages.DBSpells.TargetMucusCover:		{0} est recouvert de mucus!
+Languages.DBSpells.YouMucusDries:		Le mucus se déssèche et et se détache de votre peau.
+Languages.DBSpells.TargetYouMucusDries:		Le mucus se déssèche et et se détache de la peau de {0}.
+Languages.DBSpells.YouEvilEnergyFades:		L'énergie maléfique se dissipe et vous libère.
+Languages.DBSpells.TargetEvilEnergyFades:	L'énergie maléfique se dissipe et libère {0}.
+Languages.DBSpells.YouDestrEnergyFades:		L'énergie destructrice autour de vous s'estompe.
+Languages.DBSpells.TargetDestrEnergyFades:	L'énergie destructrice autour de {0} s'estompe.
+Languages.DBSpells.YouEnergyDischargeStun:	Une puissante décharge d'energie vous tétanise!
+Languages.DBSpells.TargetEnergyDischargeStun:	{0} est tétanisé par une puissante décharge d'énergie!
+Languages.DBSpells.YouHealthyNow:		Vous avez retrouvé la santé.
+Languages.DBSpells.TargetHealthyNow:		{0} a retrouvé la santé.
+Languages.DBSpells.YouInfectionClears:		Votre infection se résorbe.
+Languages.DBSpells.TargetInfectionClears:	L'infection de {0} se résorbe.
+Languages.DBSpells.YouLavaRemoved:		La lave glisse de votre peau.
+Languages.DBSpells.TargetLavaRemoved:		La lave glisse de la peau de {0}.
+Languages.DBSpells.YouAcidMistDisspates:	La brume acide qui vous entoure se dissipe.
+Languages.DBSpells.TargetAcidMistDisspates:	La brume acide qui entoure {0} se dissipe.

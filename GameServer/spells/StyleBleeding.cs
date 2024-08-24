@@ -18,6 +18,7 @@
  */
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -25,6 +26,25 @@ namespace DOL.GS.Spells
     public class StyleBleeding : SpellHandler
     {
         protected const string BLEED_VALUE_PROPERTY = "BleedValue";
+
+        private string GetFormattedMessage(GamePlayer player, string messageKey, params object[] args)
+        {
+            if (messageKey.StartsWith("Languages.DBSpells."))
+            {
+                string translationKey = messageKey;
+                string translation;
+
+                if (LanguageMgr.TryGetTranslation(out translation, player.Client.Account.Language, translationKey, args))
+                {
+                    return translation;
+                }
+                else
+                {
+                    return "(Translation not found)";
+                }
+            }
+            return string.Format(messageKey, args);
+        }
 
         public override void OnEffectStart(GameSpellEffect effect)
         {
@@ -44,13 +64,31 @@ namespace DOL.GS.Spells
         {
             base.OnEffectPulse(effect);
 
-            MessageToLiving(effect.Owner, Spell.Message1, eChatType.CT_YouWereHit);
+            GamePlayer ownerPlayer = effect.Owner as GamePlayer;
+
+            // Handle translation for player targets
+            if (ownerPlayer != null)
+            {
+                MessageToLiving(effect.Owner, GetFormattedMessage(ownerPlayer, Spell.Message1), eChatType.CT_YouWereHit);
+            }
+            else
+            {
+                MessageToLiving(effect.Owner, LanguageMgr.GetTranslation("ServerLanguageKey", Spell.Message1), eChatType.CT_YouWereHit);
+            }
+
+            // Notify nearby players
             foreach (GamePlayer player in effect.Owner.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
             {
                 if (!(effect.Owner == player))
                 {
-                    player.MessageFromArea(effect.Owner, Util.MakeSentence(Spell.Message2,
-                        player.GetPersonalizedName(effect.Owner)), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
+                    if (ownerPlayer != null)
+                    {
+                        player.MessageFromArea(effect.Owner, GetFormattedMessage(player, Spell.Message2, player.GetPersonalizedName(effect.Owner)), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
+                    }
+                    else
+                    {
+                        player.MessageFromArea(effect.Owner, LanguageMgr.GetTranslation("ServerLanguageKey", Spell.Message2), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
+                    }
                 }
             }
 

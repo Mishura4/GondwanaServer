@@ -109,7 +109,6 @@ namespace DOL.GS.Spells
         /// <param name="effect"></param>
         public override void OnEffectStart(GameSpellEffect effect)
         {
-            // Cannot apply if the effect owner has a charging effect
             if (effect.Owner.EffectList.GetOfType<ChargeEffect>() != null || effect.Owner.TempProperties.getProperty("Charging", false))
             {
                 if (m_caster is GamePlayer player)
@@ -120,22 +119,35 @@ namespace DOL.GS.Spells
             }
             effect.Owner.BuffBonusMultCategory1.Set((int)eProperty.MaxSpeed, effect, 1.0 - Spell.Value * 0.01);
             SendUpdates(effect.Owner);
-            MessageToLiving(effect.Owner, Spell.Message1, eChatType.CT_Spell);
+
+            GamePlayer ownerPlayer = effect.Owner as GamePlayer;
+
+            // Use GetFormattedMessage for localized messages
+            if (ownerPlayer != null)
+            {
+                MessageToLiving(effect.Owner, GetFormattedMessage(ownerPlayer, Spell.Message1), eChatType.CT_Spell);
+            }
+            else
+            {
+                MessageToLiving(effect.Owner, LanguageMgr.GetTranslation("ServerLanguageKey", Spell.Message1), eChatType.CT_Spell);
+            }
+
             foreach (GamePlayer player in effect.Owner.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
             {
                 if (!(effect.Owner == player))
                 {
-                    player.MessageFromArea(effect.Owner, Util.MakeSentence(Spell.Message2,
-                        player.GetPersonalizedName(effect.Owner)), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                    if (ownerPlayer != null)
+                    {
+                        player.MessageFromArea(effect.Owner, GetFormattedMessage(player, Spell.Message2, player.GetPersonalizedName(effect.Owner)), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                    }
+                    else
+                    {
+                        player.MessageFromArea(effect.Owner, LanguageMgr.GetTranslation("ServerLanguageKey", Spell.Message2), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                    }
                 }
             }
-
-
         }
 
-        /// <summary>
-        /// When an applied effect expires.
-        /// </summary>
         public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
         {
             base.OnEffectExpires(effect, noMessages);
@@ -144,17 +156,56 @@ namespace DOL.GS.Spells
             if (timer != null) timer.Stop();
             effect.Owner.BuffBonusMultCategory1.Remove((int)eProperty.MaxSpeed, effect);
             SendUpdates(effect.Owner);
-            MessageToLiving(effect.Owner, Spell.Message3, eChatType.CT_SpellExpires);
-            foreach (GamePlayer player in effect.Owner.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
+
+            if (!noMessages)
             {
-                if (!(effect.Owner == player))
+                GamePlayer ownerPlayer = effect.Owner as GamePlayer;
+
+                if (ownerPlayer != null)
                 {
-                    player.MessageFromArea(effect.Owner, Util.MakeSentence(Spell.Message4,
-                        player.GetPersonalizedName(effect.Owner)), eChatType.CT_SpellExpires, eChatLoc.CL_SystemWindow);
+                    MessageToLiving(effect.Owner, GetFormattedMessage(ownerPlayer, Spell.Message3), eChatType.CT_SpellExpires);
+                }
+                else
+                {
+                    MessageToLiving(effect.Owner, LanguageMgr.GetTranslation("ServerLanguageKey", Spell.Message3), eChatType.CT_SpellExpires);
+                }
+
+                foreach (GamePlayer player in effect.Owner.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
+                {
+                    if (!(effect.Owner == player))
+                    {
+                        if (ownerPlayer != null)
+                        {
+                            player.MessageFromArea(effect.Owner, GetFormattedMessage(player, Spell.Message4, player.GetPersonalizedName(effect.Owner)), eChatType.CT_SpellExpires, eChatLoc.CL_SystemWindow);
+                        }
+                        else
+                        {
+                            player.MessageFromArea(effect.Owner, LanguageMgr.GetTranslation("ServerLanguageKey", Spell.Message4), eChatType.CT_SpellExpires, eChatLoc.CL_SystemWindow);
+                        }
+                    }
                 }
             }
 
             return 0;
+        }
+
+        private string GetFormattedMessage(GamePlayer player, string messageKey, params object[] args)
+        {
+            if (messageKey.StartsWith("Languages.DBSpells."))
+            {
+                string translationKey = messageKey;
+                string translation;
+
+                if (LanguageMgr.TryGetTranslation(out translation, player.Client.Account.Language, translationKey, args))
+                {
+                    return translation;
+                }
+                else
+                {
+                    return "(Translation not found)";
+                }
+            }
+            return string.Format(messageKey, args);
         }
 
         // constructor

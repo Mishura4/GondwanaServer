@@ -81,6 +81,7 @@ SpellHandler.SiegeArrow.InvalidTarget:		You must have a Keep Component targeted 
 SpellHandler.SiegeArrow.InvalidComponentTarget: Your target must be a Keep Component!
 SpellHandler.SiegeArrow.PrepareSpell:		You prepare {0}.
 SpellHandler.BumpSpell.TargetHurled:		{0} is hurled into the air!
+SpellHandler.DualStatBuff.AlreadyHasEffect:	Your target already has an effect of that type!
 
 SpellHandler.Convoker.AreaTargetOutOfRange:	Your area target is out of range. Select a closer ground position.
 SpellHandler.Convoker.AreaTargetNotInView:	Your area target is not in view.
@@ -109,6 +110,7 @@ SpellHandler.HealSpell.YouAreHealed:		You are healed by {0} for {1} hit points.
 SpellHandler.HealSpell.CriticalHeal:		Your heal criticals for an extra {0} hit points!
 SpellHandler.HealSpell.EfficientHealingBuff:	Your Efficient Healing buff grants you an additional {0} in the Heal!
 SpellHandler.HealSpell.EfficientEnduranceBuff:	Your Efficient Endurance buff grants you {0} Endurance from the Heal!
+SpellHandler.SpreadHeal.GroupFullyHealed:	Your group is already fully healed!
 
 SpellHandler.Zephyr.NoAttackInZephyr:		You're in a Zephyr and can't be attacked!
 SpellHandler.Zephyr.TargetNoAttackInZephyr:	Your target is in a Zephyr and can't be attacked!
@@ -169,5 +171,63 @@ SpellHandler.Lifedrain.Heal:			You steal {0} hit point{1}.
 SpellHandler.Lifedrain.NoAbsorb:		You cannot absorb any more life.
 SpellHandler.PowerDrain.PowerGain:		Your summon channels {0} power to you!
 SpellHandler.PowerDrain.NoAbsorb:		You cannot absorb any more power.
+
+SpellHandler.PrimerSpell.EffectExpired:		Your modification spell effect has expired.
+SpellHandler.PrimerSpell.MovementBreaksEffect:	You move and break your modification spell.
+
+SpellHandler.BuffShear.ShearSuccess:		Your spell rips away some of your target's enhancing magic.
+SpellHandler.BuffShear.EnhancingMagicRipped:	Some of your enhancing magic has been ripped away by a spell!
+SpellHandler.BuffShear.ConnectionTooStrong:	The target's connection to their enhancement is too strong for you to remove.
+SpellHandler.BuffShear.NoEnhancementFound:	No enhancement of that type found on the target.
+
+SpellHandler.Conversion.MagicalAbsorption:	A magical spell absorbs {0} damage(s) of your attack!
+SpellHandler.Conversion.ConvertToHealth:	You convert {0} damage(s) into health.
+SpellHandler.Conversion.CannotConvertMoreHealth:	You cannot convert anymore health!
+SpellHandler.Conversion.ConvertToEndurance:	You convert {0} damage(s) into endurance.
+SpellHandler.Conversion.CannotConvertMoreEndurance:	You cannot convert anymore endurance!
+SpellHandler.Conversion.ConvertToMana:		You convert {0} damage(s) into power.
+SpellHandler.Conversion.CannotConvertMoreMana:	You cannot convert anymore power!
+SpellHandler.PetConversion.AbsorbPower:		You absorb {0} power points.
+SpellHandler.PetConversion.ManaFull:		Your power jauge is already full!
+
+SpellHandler.DmgReductionAndPowerReturn.DamageAbsorbed:	The damage reduction barrier absorbs {0} damage(s)!
+SpellHandler.DmgReductionAndPowerReturn.DamageReduced:	A damage reduction barrier absorbs {0} damage(s) of your attack!
+SpellHandler.DmgReductionAndPowerReturn.ManaReturn:	The barrier returns {0} mana back to you.
+
+SpellHandler.DamageSpeedDecrease.LifeSteal:	You steal {0} hit point{1}.
+SpellHandler.DamageSpeedDecrease.NoMoreLife:	You cannot absorb any more life.
+SpellHandler.DamageToPower.PowerSteal:		You steal {0} power point{1}.
+SpellHandler.DamageToPower.NoMorePower:		You cannot absorb any more power.
+
+SpellHandler.EnduranceDrain.SpellHit:		{0} steals {1} endurance from you.
+SpellHandler.EnduranceDrain.StealSuccess:	You steal {0} for {1} endurance!
+SpellHandler.EnduranceDrain.StealPoints:	You steal {0} endurance point{1}.
+SpellHandler.EnduranceDrain.CannotAbsorbMore:	You cannot absorb any more endurance.
+SpellHandler.EnduranceHeal.CasterFull:		Your endurance jauge is full.
+SpellHandler.EnduranceHeal.TargetFull:		{0}'s endurance is full.
+SpellHandler.EnduranceHeal.CasterHealed:	You restore {0} endurance points.
+SpellHandler.EnduranceHeal.TargetHealed:	You restore {0} for {1} endurance points!
+SpellHandler.EnduranceHeal.TargetRestored:	Your endurance was restored by {0} for {1} points.
+SpellHandler.EnduranceHeal.TargetTooHigh:	You cannot cast an endurance heal the target has above 90% endurance!
+SpellHandler.HealthToEndurance.TransferLife:	You transfer {0} life to Endurance!
+
+SpellHandler.FocusShell.NoPets:			This spell may not be cast on pets!
+SpellHandler.FocusShell.SameRealm:		This spell only works on members of your realm!
+SpellHandler.SummonSpell.PetControl:		The {0} is now under your control.
+SpellHandler.SummonNoveltyPet.CannotCastHere:	You cannot cast this spell here!
+
+SpellHandler.PowerHeal.FullPowerOther:		{0} power jauge is full already!
+SpellHandler.PowerHeal.RestorePowerSelf:	You restore {0} power points.
+SpellHandler.PowerHeal.RestorePowerOther:	You restore {0} for {1} power points!
+SpellHandler.PowerHeal.PowerRestored:		Your power was restored by {0} for {1} points.
+SpellHandler.PowerTransfer.CannotTransferToSelf:	You cannot transfer power to yourself!
+SpellHandler.PowerTransfer.TransferSuccess:	You transfer {0} power to {1}!
+SpellHandler.PowerTransfer.PowerReceived:	{0} transfers {1} power to you!
+SpellHandler.PowerRegenBuff.NoEffect:		This spell has no effect on this class!
+
+SpellHandler.Silence.AlreadyAffected:		Your target already has an effect of that type!
+SpellHandler.SpeedEnhancement.CombatRecent:	You've been in combat recently, the spell has no effect on you!
+SpellHandler.WaterBreathing.StartEffect:	You find yourself able to move freely and breathe water like air!
+SpellHandler.WaterBreathing.EndEffect:		With a gulp and a gasp you realize that you are unable to breathe underwater any longer!
 
 SpellHandler.DelveInfo.Sec:			sec

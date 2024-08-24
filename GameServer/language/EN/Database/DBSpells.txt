@@ -1,0 +1,40 @@
+
+Languages.DBSpells.YouMezzed:			You are mesmerized.
+Languages.DBSpells.TargetMezzed:		{0} is entranced.
+Languages.DBSpells.YouCoveredLava:		You are covered in lava!
+Languages.DBSpells.TargetCoveredLava:		{0} is covered in lava!
+Languages.DBSpells.YouCoveredAcid:		An acidic cloud surrounds you!
+Languages.DBSpells.TargetCoveredAcid:		{0} is surrounded by an acidic cloud!
+Languages.DBSpells.YourSkinWounds:		Your skin erupts in open wounds!
+Languages.DBSpells.TargetSkinWounds:		{0}'s skin erupts in open wounds!
+Languages.DBSpells.YouCrushedForce:		You are being crushed by an invisible force!
+Languages.DBSpells.TargetCrushedForce:		{0} is being crushed by an invisible force!
+Languages.DBSpells.YouLarvaeFlake:		Larvae flake from the skin of the creature and bite at your skin!
+Languages.DBSpells.TargetLarvaeFlake:		{0} is infected!
+Languages.DBSpells.YouPoisoned:			You are poisoned!
+Languages.DBSpells.TargetPoisoned:		{0} has been poisoned!
+Languages.DBSpells.YourWrackedPain:		You are wracked with pain!
+Languages.DBSpells.TargetWrackedPain:		{0} is wracked with pain!
+Languages.DBSpells.YourInfected:		An infection affects you!
+Languages.DBSpells.TargetInfected:		An infection affects {0}!
+Languages.DBSpells.YouFireyEmber:		A firey ember surrounds you!
+Languages.DBSpells.TargetFireyEmber:		{0} is surrounded by a fiery ember!
+Languages.DBSpells.YouMucusCover:		You are covered in mucus!
+Languages.DBSpells.TargetMucusCover:		{0} is covered in mucus!!
+Languages.DBSpells.YouMucusDries:		The mucus dries up and peels off your skin.
+Languages.DBSpells.TargetYouMucusDries:		The mucus dries up and peels off {0}'s skin.
+Languages.DBSpells.YouEvilEnergyFades:		The evil energy fades away and releases you.
+Languages.DBSpells.TargetEvilEnergyFades:	The evil energy fades away and releases {0}.
+Languages.DBSpells.YouDestrEnergyFades:		The destructive energy around you fades.
+Languages.DBSpells.TargetDestrEnergyFades:	The destructive energy around {0} fades.
+Languages.DBSpells.YouEnergyDischargeStun:	You are paralyzed by a powerful energy surge!
+Languages.DBSpells.TargetEnergyDischargeStun:	{0} is paralyzed by a powerful energy surge!
+Languages.DBSpells.YouHealthyNow:		You look healthy again.
+Languages.DBSpells.TargetHealthyNow:		{0} looks healthy again.
+Languages.DBSpells.YouInfectionClears:		Your infection clears up.
+Languages.DBSpells.TargetInfectionClears:	{0}'s infection clears up.
+Languages.DBSpells.YouLavaRemoved:		The lava falls from your skin.
+Languages.DBSpells.TargetLavaRemoved:		The lava falls from {0}'s skin.
+Languages.DBSpells.YouAcidMistDisspates:	The acidic mist around you dissipates.
+Languages.DBSpells.TargetAcidMistDisspates:	The acidic mist around {0} dissipates.
+

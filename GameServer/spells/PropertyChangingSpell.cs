@@ -24,17 +24,37 @@ using log4net;
 using DOL.AI.Brain;
 using System;
 using System.Collections.Generic;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
     public abstract class PropertyChangingSpell : SpellHandler
     {
-        private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType);
 
         public override void FinishSpellCast(GameLiving target)
         {
             m_caster.Mana -= PowerCost(target);
             base.FinishSpellCast(target);
+        }
+
+        private string GetFormattedMessage(GamePlayer player, string messageKey, params object[] args)
+        {
+            if (messageKey.StartsWith("Languages.DBSpells."))
+            {
+                string translationKey = messageKey;
+                string translation;
+
+                if (LanguageMgr.TryGetTranslation(out translation, player.Client.Account.Language, translationKey, args))
+                {
+                    return translation;
+                }
+                else
+                {
+                    return "(Translation not found)";
+                }
+            }
+            return string.Format(messageKey, args);
         }
 
         protected override int CalculateEffectDuration(GameLiving target, double effectiveness)
@@ -166,34 +186,36 @@ namespace DOL.GS.Spells
 
             GameLiving player = null;
 
-            if (Caster is GameNPC && (Caster as GameNPC).Brain is IControlledBrain)
-                player = ((Caster as GameNPC).Brain as IControlledBrain).Owner;
-            else if (effect.Owner is GameNPC && (effect.Owner as GameNPC).Brain is IControlledBrain)
-                player = ((effect.Owner as GameNPC).Brain as IControlledBrain).Owner;
+            if (Caster is GameNPC && (Caster as GameNPC)?.Brain is IControlledBrain)
+                player = ((Caster as GameNPC)?.Brain as IControlledBrain)?.Owner;
+            else if (effect.Owner is GameNPC && (effect.Owner as GameNPC)?.Brain is IControlledBrain)
+                player = ((effect.Owner as GameNPC)?.Brain as IControlledBrain)?.Owner;
 
             if (player != null)
             {
-                // Controlled NPC. Show message in blue writing to owner...
-
-                MessageToLiving(player, String.Format(Spell.Message2,
-                                                      player.GetPersonalizedName(effect.Owner)), toLiving);
-
-                // ...and in white writing for everyone else.
+                MessageToLiving(player, GetFormattedMessage(player as GamePlayer, Spell.Message2, player.GetPersonalizedName(effect.Owner)), toLiving);
 
                 foreach (GamePlayer gamePlayer in effect.Owner.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
                     if (gamePlayer != player)
-                        MessageToLiving(gamePlayer, String.Format(Spell.Message2,
-                                                                  gamePlayer.GetPersonalizedName(effect.Owner)), toOther);
+                        MessageToLiving(gamePlayer, GetFormattedMessage(gamePlayer, Spell.Message2, gamePlayer.GetPersonalizedName(effect.Owner)), toOther);
             }
             else
             {
-                MessageToLiving(effect.Owner, Spell.Message1, toLiving);
+                GamePlayer ownerPlayer = effect.Owner as GamePlayer;
+                if (ownerPlayer != null)
+                {
+                    MessageToLiving(effect.Owner, GetFormattedMessage(ownerPlayer, Spell.Message1), toLiving);
+                }
+                else
+                {
+                    MessageToLiving(effect.Owner, LanguageMgr.GetTranslation("ServerLanguageKey", Spell.Message1), toLiving);
+                }
+
                 foreach (GamePlayer player1 in effect.Owner.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
                 {
                     if (!(effect.Owner == player1))
                     {
-                        player1.MessageFromArea(effect.Owner, Util.MakeSentence(Spell.Message2,
-                            player1.GetPersonalizedName(effect.Owner)), toOther, eChatLoc.CL_SystemWindow);
+                        player1.MessageFromArea(effect.Owner, GetFormattedMessage(player1, Spell.Message2, player1.GetPersonalizedName(effect.Owner)), toOther, eChatLoc.CL_SystemWindow);
                     }
                 }
             }
@@ -202,7 +224,6 @@ namespace DOL.GS.Spells
                 m_buffCheckAction = new BuffCheckAction(effect.SpellHandler.Caster, effect.Owner, effect);
                 m_buffCheckAction.Start(BuffCheckAction.BUFFCHECKINTERVAL);
             }
-
         }
 
         BuffCheckAction m_buffCheckAction = null;
@@ -211,13 +232,21 @@ namespace DOL.GS.Spells
         {
             if (!noMessages && Spell.Pulse == 0)
             {
-                MessageToLiving(effect.Owner, Spell.Message3, eChatType.CT_SpellExpires);
+                GamePlayer ownerPlayer = effect.Owner as GamePlayer;
+                if (ownerPlayer != null)
+                {
+                    MessageToLiving(effect.Owner, GetFormattedMessage(ownerPlayer, Spell.Message3), eChatType.CT_SpellExpires);
+                }
+                else
+                {
+                    MessageToLiving(effect.Owner, LanguageMgr.GetTranslation("ServerLanguageKey", Spell.Message3), eChatType.CT_SpellExpires);
+                }
+
                 foreach (GamePlayer player in effect.Owner.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
                 {
                     if (!(effect.Owner == player))
                     {
-                        player.MessageFromArea(effect.Owner, Util.MakeSentence(Spell.Message4,
-                            player.GetPersonalizedName(effect.Owner)), eChatType.CT_SpellExpires, eChatLoc.CL_SystemWindow);
+                        player.MessageFromArea(effect.Owner, GetFormattedMessage(player, Spell.Message4, player.GetPersonalizedName(effect.Owner)), eChatType.CT_SpellExpires, eChatLoc.CL_SystemWindow);
                     }
                 }
             }
@@ -232,7 +261,6 @@ namespace DOL.GS.Spells
             ApplyBonus(effect.Owner, BonusCategory8, Property8, (int)(Spell.Value * effect.Effectiveness), true);
             ApplyBonus(effect.Owner, BonusCategory9, Property9, (int)(Spell.Value * effect.Effectiveness), true);
             ApplyBonus(effect.Owner, BonusCategory10, Property10, (int)(Spell.Value * effect.Effectiveness), true);
-
 
             SendUpdates(effect.Owner);
 
@@ -323,13 +351,21 @@ namespace DOL.GS.Spells
         {
             if (!noMessages && Spell.Pulse == 0)
             {
-                MessageToLiving(effect.Owner, Spell.Message3, eChatType.CT_SpellExpires);
+                GamePlayer ownerPlayer = effect.Owner as GamePlayer;
+                if (ownerPlayer != null)
+                {
+                    MessageToLiving(effect.Owner, GetFormattedMessage(ownerPlayer, Spell.Message3), eChatType.CT_SpellExpires);
+                }
+                else
+                {
+                    MessageToLiving(effect.Owner, LanguageMgr.GetTranslation("ServerLanguageKey", Spell.Message3), eChatType.CT_SpellExpires);
+                }
+
                 foreach (GamePlayer player in effect.Owner.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
                 {
                     if (!(effect.Owner == player))
                     {
-                        player.MessageFromArea(effect.Owner, Util.MakeSentence(Spell.Message4,
-                            player.GetPersonalizedName(effect.Owner)), eChatType.CT_SpellExpires, eChatLoc.CL_SystemWindow);
+                        player.MessageFromArea(effect.Owner, GetFormattedMessage(player, Spell.Message4, player.GetPersonalizedName(effect.Owner)), eChatType.CT_SpellExpires, eChatLoc.CL_SystemWindow);
                     }
                 }
             }
@@ -344,7 +380,6 @@ namespace DOL.GS.Spells
             ApplyBonus(effect.Owner, BonusCategory8, Property8, vars[1], true);
             ApplyBonus(effect.Owner, BonusCategory9, Property9, vars[1], true);
             ApplyBonus(effect.Owner, BonusCategory10, Property10, vars[1], true);
-
 
             SendUpdates(effect.Owner);
             return 0;

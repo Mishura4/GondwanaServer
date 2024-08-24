@@ -19,6 +19,7 @@
 using System;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -39,7 +40,7 @@ namespace DOL.GS.Spells
             effect = SpellHandler.FindEffectOnTarget(target, "Silence");
             if (effect != null)
             {
-                MessageToCaster("Your target already have an effect of that type!", eChatType.CT_SpellResisted);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.Silence.AlreadyAffected"), eChatType.CT_SpellResisted);
                 return;
             }
             base.ApplyEffectOnTarget(target, effectiveness);

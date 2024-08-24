@@ -18,6 +18,7 @@
  */
 using System;
 using DOL.GS.PacketHandler;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -41,9 +42,9 @@ namespace DOL.GS.Spells
             target.ChangeMana(m_caster, GameLiving.eManaChangeType.Spell, -Spell.AmnesiaChance * target.MaxMana / 100);
 
             if (powerGain > 0)
-                MessageToOwner(String.Format("Your summon channels {0} power to you!", powerGain), eChatType.CT_Spell);
+                MessageToOwner(LanguageMgr.GetTranslation((owner as GamePlayer)?.Client, "SpellHandler.PowerDrain.PowerGain", powerGain), eChatType.CT_Spell);
             else
-                MessageToOwner("You cannot absorb any more power.", eChatType.CT_SpellResisted);
+                MessageToOwner(LanguageMgr.GetTranslation((owner as GamePlayer)?.Client, "SpellHandler.PowerDrain.NoAbsorb"), eChatType.CT_SpellResisted);
         }
 
         public RealPowerDrain(GameLiving caster, Spell spell, SpellLine line)

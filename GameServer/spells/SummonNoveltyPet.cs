@@ -25,6 +25,7 @@ using System.Text;
 using DOL.GS;
 using DOL.GS.Spells;
 using DOL.AI.Brain;
+using DOL.Language;
 
 
 namespace DOL.GS.Spells
@@ -61,7 +62,7 @@ namespace DOL.GS.Spells
         {
             if (Caster.CurrentRegion.IsRvR || Caster.CurrentRegion.IsHousing || Caster.CurrentRegion.IsCapitalCity)
             {
-                MessageToCaster("You cannot cast this spell here!", DOL.GS.PacketHandler.eChatType.CT_SpellResisted);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.SummonNoveltyPet.CannotCastHere"), DOL.GS.PacketHandler.eChatType.CT_SpellResisted);
                 return false;
             }
 

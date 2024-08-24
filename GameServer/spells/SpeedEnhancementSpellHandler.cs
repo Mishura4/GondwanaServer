@@ -22,6 +22,7 @@ using DOL.GS.PacketHandler;
 using DOL.Database;
 using DOL.GS.Effects;
 using DOL.Events;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -102,7 +103,7 @@ namespace DOL.GS.Spells
             // Graveen: archery speed shot
             if ((Spell.Pulse != 0 || Spell.CastTime != 0) && target.InCombat)
             {
-                MessageToLiving(target, "You've been in combat recently, the spell has no effect on you!", eChatType.CT_SpellResisted);
+                MessageToLiving(target, LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.SpeedEnhancement.CombatRecent"), eChatType.CT_SpellResisted);
                 return;
             }
             base.ApplyEffectOnTarget(target, effectiveness);

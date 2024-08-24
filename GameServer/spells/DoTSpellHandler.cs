@@ -177,15 +177,30 @@ namespace DOL.GS.Spells
 
             if (effect.Owner.IsAlive)
             {
-                // An acidic cloud surrounds you!
-                MessageToLiving(effect.Owner, Spell.Message1, eChatType.CT_Spell);
-                // {0} is surrounded by an acidic cloud!
+                GamePlayer ownerPlayer = effect.Owner as GamePlayer;
+                // Handle translation for player targets
+                if (ownerPlayer != null)
+                {
+                    MessageToLiving(effect.Owner, GetFormattedMessage(ownerPlayer, Spell.Message1), eChatType.CT_Spell);
+                }
+                else
+                {
+                    // Handle non-player targets, such as NPCs
+                    MessageToLiving(effect.Owner, LanguageMgr.GetTranslation("ServerLanguageKey", Spell.Message1), eChatType.CT_Spell);
+                }
+
                 foreach (GamePlayer player in effect.Owner.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
                 {
                     if (!(effect.Owner == player))
                     {
-                        player.MessageFromArea(effect.Owner, Util.MakeSentence(Spell.Message2,
-                            player.GetPersonalizedName(effect.Owner)), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
+                        if (ownerPlayer != null)
+                        {
+                            player.MessageFromArea(effect.Owner, GetFormattedMessage(player, Spell.Message2, player.GetPersonalizedName(effect.Owner)), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
+                        }
+                        else
+                        {
+                            player.MessageFromArea(effect.Owner, LanguageMgr.GetTranslation("ServerLanguageKey", Spell.Message2), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
+                        }
                     }
                 }
 
@@ -198,15 +213,30 @@ namespace DOL.GS.Spells
             base.OnEffectExpires(effect, noMessages);
             if (!noMessages)
             {
-                // The acidic mist around you dissipates.
-                MessageToLiving(effect.Owner, Spell.Message3, eChatType.CT_SpellExpires);
-                // The acidic mist around {0} dissipates.
+                GamePlayer ownerPlayer = effect.Owner as GamePlayer;
+                // Handle translation for player targets
+                if (ownerPlayer != null)
+                {
+                    MessageToLiving(effect.Owner, GetFormattedMessage(ownerPlayer, Spell.Message3), eChatType.CT_SpellExpires);
+                }
+                else
+                {
+                    // Handle non-player targets, such as NPCs
+                    MessageToLiving(effect.Owner, LanguageMgr.GetTranslation("ServerLanguageKey", Spell.Message3), eChatType.CT_SpellExpires);
+                }
+
                 foreach (GamePlayer player in effect.Owner.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
                 {
                     if (!(effect.Owner == player))
                     {
-                        player.MessageFromArea(effect.Owner, Util.MakeSentence(Spell.Message4,
-                            player.GetPersonalizedName(effect.Owner)), eChatType.CT_SpellExpires, eChatLoc.CL_SystemWindow);
+                        if (ownerPlayer != null)
+                        {
+                            player.MessageFromArea(effect.Owner, GetFormattedMessage(player, Spell.Message4, player.GetPersonalizedName(effect.Owner)), eChatType.CT_SpellExpires, eChatLoc.CL_SystemWindow);
+                        }
+                        else
+                        {
+                            player.MessageFromArea(effect.Owner, LanguageMgr.GetTranslation("ServerLanguageKey", Spell.Message4), eChatType.CT_SpellExpires, eChatLoc.CL_SystemWindow);
+                        }
                     }
                 }
             }
@@ -227,6 +257,25 @@ namespace DOL.GS.Spells
 
             SendDamageMessages(ad);
             DamageTarget(ad, false);
+        }
+
+        private string GetFormattedMessage(GamePlayer player, string messageKey, params object[] args)
+        {
+            if (messageKey.StartsWith("Languages.DBSpells."))
+            {
+                string translationKey = messageKey;
+                string translation;
+
+                if (LanguageMgr.TryGetTranslation(out translation, player.Client.Account.Language, translationKey, args))
+                {
+                    return translation;
+                }
+                else
+                {
+                    return "(Translation not found)";
+                }
+            }
+            return string.Format(messageKey, args);
         }
 
         public DoTSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }

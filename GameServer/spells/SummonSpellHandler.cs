@@ -76,7 +76,7 @@ namespace DOL.GS.Spells
             {
                 if (m_isSilent == false)
                 {
-                    MessageToCaster(String.Format("The {0} is now under your control.", m_pet.Name), eChatType.CT_Spell);
+                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.SummonSpell.PetControl", m_pet.Name), eChatType.CT_Spell);
                 }
             }
             else
@@ -135,7 +135,7 @@ namespace DOL.GS.Spells
             {
                 if (log.IsWarnEnabled)
                     log.WarnFormat("NPC template {0} not found! Spell: {1}", Spell.LifeDrainReturn, Spell.ToString());
-                MessageToCaster("NPC template " + Spell.LifeDrainReturn + " not found!", eChatType.CT_System);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.Convoker.TemplateNotFound", Spell.LifeDrainReturn), eChatType.CT_System);
                 return;
             }
 

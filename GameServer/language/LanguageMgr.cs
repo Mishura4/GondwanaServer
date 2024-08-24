@@ -1049,5 +1049,31 @@ namespace DOL.Language
         #endregion UnregisterLanguageDataObject
 
         #endregion RegisterLanguageDataObject / UnregisterLanguageDataObject
+
+        #region Database translations
+
+        public static string GetSpellMessage(string language, string messageKey, params object[] args)
+        {
+            // Check if the messageKey starts with "Languages.DBSpells."
+            if (messageKey.StartsWith("Languages.DBSpells."))
+            {
+                string translation;
+                if (TryGetTranslation(out translation, language, messageKey, args))
+                {
+                    return translation;
+                }
+                else
+                {
+                    // If the translation is not found, return the translation key itself
+                    // or some fallback message
+                    return $"(Translation not found for {messageKey})";
+                }
+            }
+
+            // If the messageKey is plain text, return it as is
+            return string.Format(messageKey, args);
+        }
+
+        #endregion Database translations
     }
 }

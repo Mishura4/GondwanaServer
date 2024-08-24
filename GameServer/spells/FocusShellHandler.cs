@@ -58,7 +58,7 @@ namespace DOL.GS.Spells
 
                     if (currentEffect != null && currentEffect.SpellHandler is FocusShellHandler)
                     {
-                        (currentEffect.SpellHandler as FocusShellHandler).FocusSpellAction(null, Caster, null);
+                        (currentEffect.SpellHandler as FocusShellHandler)?.FocusSpellAction(null, Caster, null);
                     }
 
                     FSTarget = selectedTarget as GamePlayer;
@@ -79,23 +79,42 @@ namespace DOL.GS.Spells
 
         public override void OnEffectStart(GameSpellEffect effect)
         {
-            //Add the handler for when the target is attacked and we should reduce the damage
+            // Add the handler for when the target is attacked and we should reduce the damage
             GameEventMgr.AddHandler(FSTarget, GameLivingEvent.AttackedByEnemy, new DOLEventHandler(OnAttacked));
 
-            //Add handlers for the target attacking, casting, etc
-            //Don't need to add the handlers twice
+            // Add handlers for the target attacking, casting, etc
+            // Don't need to add the handlers twice
             if (FSTarget != Caster)
             {
                 GameEventMgr.AddHandler(FSTarget, GameLivingEvent.AttackFinished, new DOLEventHandler(CancelSpell));
                 GameEventMgr.AddHandler(FSTarget, GameLivingEvent.CastStarting, new DOLEventHandler(CancelSpell));
             }
 
-            //Send the spell messages
-            MessageToLiving(FSTarget, Spell.Message1, eChatType.CT_Spell);
+            // Send the spell messages
+            GamePlayer fsTargetPlayer = FSTarget as GamePlayer;
+
+            if (fsTargetPlayer != null)
+            {
+                MessageToLiving(FSTarget, GetFormattedMessage(fsTargetPlayer, Spell.Message1), eChatType.CT_Spell);
+            }
+            else
+            {
+                MessageToLiving(FSTarget, LanguageMgr.GetTranslation("ServerLanguageKey", Spell.Message1), eChatType.CT_Spell);
+            }
+
             foreach (GamePlayer player in FSTarget.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
             {
                 if (player != FSTarget)
-                    MessageToLiving(player, string.Format(Spell.Message3, player.GetPersonalizedName(FSTarget)), eChatType.CT_Spell);
+                {
+                    if (fsTargetPlayer != null)
+                    {
+                        MessageToLiving(player, GetFormattedMessage(player, Spell.Message3, player.GetPersonalizedName(FSTarget)), eChatType.CT_Spell);
+                    }
+                    else
+                    {
+                        MessageToLiving(player, LanguageMgr.GetTranslation("ServerLanguageKey", Spell.Message3), eChatType.CT_Spell);
+                    }
+                }
             }
 
             timer = new FSTimer(Caster, this);
@@ -106,7 +125,7 @@ namespace DOL.GS.Spells
 
         public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
         {
-            //Remove our handler
+            // Remove our handler
             GameEventMgr.RemoveHandler(FSTarget, GameLivingEvent.AttackedByEnemy, new DOLEventHandler(OnAttacked));
 
             if (FSTarget != Caster)
@@ -117,12 +136,31 @@ namespace DOL.GS.Spells
 
             timer.Stop();
 
-            //Send the spell messages
-            MessageToLiving(FSTarget, Spell.Message2, eChatType.CT_SpellExpires);
+            // Send the spell messages
+            GamePlayer fsTargetPlayer = FSTarget as GamePlayer;
+
+            if (fsTargetPlayer != null)
+            {
+                MessageToLiving(FSTarget, GetFormattedMessage(fsTargetPlayer, Spell.Message2), eChatType.CT_SpellExpires);
+            }
+            else
+            {
+                MessageToLiving(FSTarget, LanguageMgr.GetTranslation("ServerLanguageKey", Spell.Message2), eChatType.CT_SpellExpires);
+            }
+
             foreach (GamePlayer player in FSTarget.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
             {
                 if (player != FSTarget)
-                    MessageToLiving(player, string.Format(Spell.Message4, player.GetPersonalizedName(FSTarget)), eChatType.CT_System);
+                {
+                    if (fsTargetPlayer != null)
+                    {
+                        MessageToLiving(player, GetFormattedMessage(player, Spell.Message4, player.GetPersonalizedName(FSTarget)), eChatType.CT_System);
+                    }
+                    else
+                    {
+                        MessageToLiving(player, LanguageMgr.GetTranslation("ServerLanguageKey", Spell.Message4), eChatType.CT_System);
+                    }
+                }
             }
 
             return base.OnEffectExpires(effect, noMessages);
@@ -193,6 +231,25 @@ namespace DOL.GS.Spells
                     Stop();
                 }
             }
+        }
+
+        private string GetFormattedMessage(GamePlayer player, string messageKey, params object[] args)
+        {
+            if (messageKey.StartsWith("Languages.DBSpells."))
+            {
+                string translationKey = messageKey;
+                string translation;
+
+                if (LanguageMgr.TryGetTranslation(out translation, player.Client.Account.Language, translationKey, args))
+                {
+                    return translation;
+                }
+                else
+                {
+                    return "(Translation not found)";
+                }
+            }
+            return string.Format(messageKey, args);
         }
     }
 }

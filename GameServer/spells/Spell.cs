@@ -23,6 +23,7 @@ using System.Linq;
 
 using DOL.Database;
 using DOL.AI.Brain;
+using DOL.Language;
 
 namespace DOL.GS
 {
@@ -265,6 +266,26 @@ namespace DOL.GS
         public string Message2 { get { return m_message2; } }
         public string Message3 { get { return m_message3; } }
         public string Message4 { get { return m_message4; } }
+
+        public string GetFormattedMessage1(GamePlayer player)
+        {
+            return LanguageMgr.GetSpellMessage(player.Client.Account.Language, m_message1, player.Name);
+        }
+
+        public string GetFormattedMessage2(GamePlayer player, string targetName)
+        {
+            return LanguageMgr.GetSpellMessage(player.Client.Account.Language, m_message2, targetName);
+        }
+
+        public string GetFormattedMessage3(GamePlayer player)
+        {
+            return LanguageMgr.GetSpellMessage(player.Client.Account.Language, m_message3, player.Name);
+        }
+
+        public string GetFormattedMessage4(GamePlayer player, string targetName)
+        {
+            return LanguageMgr.GetSpellMessage(player.Client.Account.Language, m_message4, targetName);
+        }
 
         public override eSkillPage SkillType
         {

@@ -51,27 +51,72 @@ namespace DOL.GS.Spells
             base.ApplyEffectOnTarget(target, effectiveness);
         }
 
+        private string GetFormattedMessage(GamePlayer player, string messageKey, params object[] args)
+        {
+            if (messageKey.StartsWith("Languages.DBSpells."))
+            {
+                string translationKey = messageKey;
+                string translation;
+
+                if (LanguageMgr.TryGetTranslation(out translation, player.Client.Account.Language, translationKey, args))
+                {
+                    return translation;
+                }
+                else
+                {
+                    // Log an error or handle the fallback here
+                    return "(Translation not found)";
+                }
+            }
+            return string.Format(messageKey, args);
+        }
+
         public override void OnEffectStart(GameSpellEffect effect)
         {
             base.OnEffectStart(effect);
 
-            MessageToLiving(effect.Owner, Spell.Message1, eChatType.CT_Spell);
-            MessageToCaster(Util.MakeSentence(Spell.Message2, m_caster.GetPersonalizedName(effect.Owner)), eChatType.CT_Spell);
+            GamePlayer casterPlayer = m_caster as GamePlayer;
+            GamePlayer ownerPlayer = effect.Owner as GamePlayer;
+
+            // Handle translation for player targets
+            if (ownerPlayer != null)
+            {
+                // Use GetFormattedMessage1 for player targets
+                MessageToLiving(effect.Owner, Spell.GetFormattedMessage1(ownerPlayer), eChatType.CT_Spell);
+            }
+            else
+            {
+                // Handle non-player targets, such as NPCs
+                MessageToLiving(effect.Owner, LanguageMgr.GetTranslation("ServerLanguageKey", Spell.Message1), eChatType.CT_Spell);
+            }
+
+            // Handle caster message, checking if caster is a player
+            if (casterPlayer != null)
+            {
+                string messageToCaster = Spell.GetFormattedMessage2(casterPlayer, effect.Owner.GetName(0, false));
+                MessageToCaster(messageToCaster, eChatType.CT_Spell);
+            }
+
             foreach (GamePlayer player1 in effect.Owner.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
             {
                 if (!(effect.Owner == player1 || m_caster == player1))
                 {
-                    player1.MessageFromArea(effect.Owner, Util.MakeSentence(Spell.Message2,
-                        player1.GetPersonalizedName(effect.Owner)), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                    if (ownerPlayer != null)
+                    {
+                        player1.MessageFromArea(effect.Owner, string.Format(Spell.GetFormattedMessage2(player1, effect.Owner.GetName(0, false)), player1.GetPersonalizedName(effect.Owner)), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                    }
+                    else
+                    {
+                        player1.MessageFromArea(effect.Owner, LanguageMgr.GetTranslation("ServerLanguageKey", Spell.Message2), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                    }
                 }
             }
 
-            GamePlayer player = effect.Owner as GamePlayer;
-            if (player != null)
+            if (ownerPlayer != null)
             {
-                player.Client.Out.SendUpdateMaxSpeed();
-                if (player.Group != null)
-                    player.Group.UpdateMember(player, false, false);
+                ownerPlayer.Client.Out.SendUpdateMaxSpeed();
+                if (ownerPlayer.Group != null)
+                    ownerPlayer.Group.UpdateMember(ownerPlayer, false, false);
             }
             else
             {
@@ -270,7 +315,7 @@ namespace DOL.GS.Spells
                 }
             }
             SendEffectAnimation(target, 0, false, 0);
-            MessageToCaster(LanguageMgr.GetTranslation("SpellHandler.TargetResistsEffect", target.GetName(0, true)), eChatType.CT_SpellResisted);
+            MessageToCaster(LanguageMgr.GetTranslation((target as GamePlayer)?.Client, "SpellHandler.TargetResistsEffect", target.GetName(0, true)), eChatType.CT_SpellResisted);
             target.StartInterruptTimer(target.SpellInterruptDuration, AttackData.eAttackType.Spell, Caster);
         }
 

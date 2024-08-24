@@ -81,6 +81,7 @@ SpellHandler.SiegeArrow.InvalidTarget:		Vous devez cibler un composant de forter
 SpellHandler.SiegeArrow.InvalidComponentTarget:	Votre cible doit être un composant de forteresse !
 SpellHandler.SiegeArrow.PrepareSpell:		Vous préparez {0}.
 SpellHandler.BumpSpell.TargetHurled:		{0} est projeté en l'air !
+SpellHandler.DualStatBuff.AlreadyHasEffect:	Votre cible a déjà un effet de ce type !
 
 SpellHandler.Convoker.AreaTargetOutOfRange:	Votre cible de zone est hors de portée. Sélectionnez un point au sol plus proche.
 SpellHandler.Convoker.AreaTargetNotInView:	Votre cible de zone n'est pas en vue.
@@ -109,6 +110,7 @@ SpellHandler.HealSpell.YouAreHealed:		Vous êtes soigné par {0} pour {1} points
 SpellHandler.HealSpell.CriticalHeal:		Vous réalisez un soin critique et récupérez {0} points de vie supplémentaires !
 SpellHandler.HealSpell.EfficientHealingBuff:	Votre buff de guérison efficace vous apporte {0} points de soin supplémentaires !
 SpellHandler.HealSpell.EfficientEnduranceBuff:	Votre buff d’endurance efficace vous apporte {0} points d’endurance supplémentaires lors du soin !
+SpellHandler.SpreadHeal.GroupFullyHealed:	Votre groupe est déjà complètement soigné !
 
 SpellHandler.Zephyr.NoAttackInZephyr:		Vous êtes transporté par un Zéphyr et ne pouvez pas être attaqué !
 SpellHandler.Zephyr.TargetNoAttackInZephyr:	Votre cible est transportée par un Zéphyr et ne peut pas être attaquée !
@@ -166,8 +168,66 @@ SpellHandler.Chamber.ReadyForUse:		Votre {0} est prêt à être utilisé.
 SpellHandler.Chamber.CastsSpell:		{0} lance un sort !
 
 SpellHandler.Lifedrain.Heal:			Vous volez {0} point{1} de vie.
-SpellHandler.Lifedrain.NoAbsorb:		Vous ne pouvez plus absorber de vie.
+SpellHandler.Lifedrain.NoAbsorb:		Vous ne pouvez plus absorber davantage de points de Vie.
 SpellHandler.PowerDrain.PowerGain:		Votre invocation canalise {0} Mana vers vous !
 SpellHandler.PowerDrain.NoAbsorb:		Vous ne pouvez pas absorber davantage de Mana.
+
+SpellHandler.PrimerSpell.EffectExpired:		Votre effet de sort de modification a expiré.
+SpellHandler.PrimerSpell.MovementBreaksEffect:	Vous bougez et rompez votre sort de modification.
+
+SpellHandler.BuffShear.ShearSuccess:		Votre sort arrache une partie de la magie d'amélioration de votre cible.
+SpellHandler.BuffShear.EnhancingMagicRipped:	Une partie de votre magie d'amélioration a été arrachée par un sort !
+SpellHandler.BuffShear.ConnectionTooStrong:	La connexion de la cible à son amélioration est trop forte pour que vous puissiez la retirer.
+SpellHandler.BuffShear.NoEnhancementFound:	Aucune amélioration de ce type trouvée sur la cible.
+
+SpellHandler.Conversion.MagicalAbsorption:	Un sort magique absorbe {0} des dommages de votre attaque !
+SpellHandler.Conversion.ConvertToHealth:	Vous convertissez {0} de dommages en points de Vie.
+SpellHandler.Conversion.CannotConvertMoreHealth:	Vous ne pouvez plus convertir davantage en points de Vie !
+SpellHandler.Conversion.ConvertToEndurance:	Vous convertissez {0} des dommages en Endurance.
+SpellHandler.Conversion.CannotConvertMoreEndurance:	Vous ne pouvez plus convertir davantage en Endurance !
+SpellHandler.Conversion.ConvertToMana:		Vous convertissez {0} des dommages en points de Mana.
+SpellHandler.Conversion.CannotConvertMoreMana:	Vous ne pouvez plus convertir davantage en points de Mana !
+SpellHandler.PetConversion.AbsorbPower:		Vous absorbez {0} points de Mana.
+SpellHandler.PetConversion.ManaFull:		Votre jauge de Mana est déjà pleine !
+
+SpellHandler.DmgReductionAndPowerReturn.DamageAbsorbed:	La barrière de réduction des dégâts absorbe {0} points de dommages !
+SpellHandler.DmgReductionAndPowerReturn.DamageReduced:	Une barrière de réduction des dégâts absorbe {0} points de dommages de votre attaque !
+SpellHandler.DmgReductionAndPowerReturn.ManaReturn:	La barrière vous renvoie {0} points de Mana.
+
+SpellHandler.DamageSpeedDecrease.LifeSteal:	Vous volez {0} point{1} de Vie
+SpellHandler.DamageSpeedDecrease.NoMoreLife:	Vous ne pouvez plus absorber davantage de points de Vie.
+SpellHandler.DamageToPower.PowerSteal:		Vous volez {0} point{1} de Mana.
+SpellHandler.DamageToPower.NoMorePower:		Vous ne pouvez plus absorber davantage de Mana.
+
+SpellHandler.EnduranceDrain.SpellHit:		{0} vous vole {1} d'endurance !
+SpellHandler.EnduranceDrain.StealSuccess:	Vous volez {1} d'endurance à {0} !
+SpellHandler.EnduranceDrain.StealPoints:	Vous volez {0} point{1} d'endurance.
+SpellHandler.EnduranceDrain.CannotAbsorbMore:	Vous ne pouvez pas absorber davantage d'endurance.
+SpellHandler.EnduranceHeal.CasterFull:		Votre jauge d'endurance est pleine.
+SpellHandler.EnduranceHeal.TargetFull:		{0} a sa jauge d'endurance pleine.
+SpellHandler.EnduranceHeal.CasterHealed:	Vous restaurez {0} points d'endurance.
+SpellHandler.EnduranceHeal.TargetHealed:	Vous restaurez {0} pour {1} points d'endurance !
+SpellHandler.EnduranceHeal.TargetRestored:	Votre endurance a été restaurée de {1} points par {0}.
+SpellHandler.EnduranceHeal.TargetTooHigh:	Vous ne pouvez pas lancer une guérison d'endurance si la cible a plus de 90% de sa jauge d'endurance remplie !
+SpellHandler.HealthToEndurance.TransferLife:	Vous transférez {0} point(s) de vie en endurance !
+
+SpellHandler.FocusShell.NoPets:			Ce sort ne peut pas être lancé sur les familiers !
+SpellHandler.FocusShell.SameRealm:		Ce sort ne fonctionne que sur les membres de votre royaume !
+SpellHandler.SummonSpell.PetControl:		Le {0} est maintenant sous votre contrôle.
+SpellHandler.SummonNoveltyPet.CannotCastHere:	Vous ne pouvez pas lancer ce sort ici !
+
+SpellHandler.PowerHeal.FullPowerOther:		La jauge de Mana de {0} est pleine !
+SpellHandler.PowerHeal.RestorePowerSelf:	Vous restaurez {0} points de Mana.
+SpellHandler.PowerHeal.RestorePowerOther:	Vous restaurez {0} de {1} points de Mana !
+SpellHandler.PowerHeal.PowerRestored:		Votre Mana a été restaurée par {0} de {1} points.
+SpellHandler.PowerTransfer.CannotTransferToSelf:	Vous ne pouvez pas transférer de Mana à vous-même !
+SpellHandler.PowerTransfer.TransferSuccess:	Vous transférez {0} points de Mana à {1} !
+SpellHandler.PowerTransfer.PowerReceived:	{0} vous transfère {1} points de Mana !
+SpellHandler.PowerRegenBuff.NoEffect:		Ce sort n'a aucun effet sur cette classe !
+
+SpellHandler.Silence.AlreadyAffected:		Votre cible est déjà affectée par un effet de ce type !
+SpellHandler.SpeedEnhancement.CombatRecent:	Vous avez été en combat récemment, le sort n'a aucun effet sur vous !
+SpellHandler.WaterBreathing.StartEffect:	Vous vous trouvez capable de bouger librement et de respirer sous l'eau comme dans l'air !
+SpellHandler.WaterBreathing.EndEffect:		Vous buvez la tasse et réalisez soudain que vous n'êtes plus capable de respirer sous l'eau !
 
 SpellHandler.DelveInfo.Sec:			sec

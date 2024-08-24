@@ -23,6 +23,7 @@ using DOL.Database;
 using DOL.GS.Effects;
 using DOL.Events;
 using log4net;
+using DOL.Language;
 
 
 namespace DOL.GS.Spells
@@ -45,9 +46,27 @@ namespace DOL.GS.Spells
             return (int)duration;
         }
 
+        private string GetFormattedMessage(GamePlayer player, string messageKey, params object[] args)
+        {
+            if (messageKey.StartsWith("Languages.DBSpells."))
+            {
+                string translationKey = messageKey;
+                string translation;
+
+                if (LanguageMgr.TryGetTranslation(out translation, player.Client.Account.Language, translationKey, args))
+                {
+                    return translation;
+                }
+                else
+                {
+                    return "(Translation not found)";
+                }
+            }
+            return string.Format(messageKey, args);
+        }
+
         public override void OnEffectStart(GameSpellEffect effect)
         {
-
             GamePlayer player = effect.Owner as GamePlayer;
 
             if (player != null)
@@ -59,16 +78,28 @@ namespace DOL.GS.Spells
 
             eChatType toLiving = (Spell.Pulse == 0) ? eChatType.CT_Spell : eChatType.CT_SpellPulse;
             eChatType toOther = (Spell.Pulse == 0) ? eChatType.CT_System : eChatType.CT_SpellPulse;
-            if (Spell.Message2 != "")
+
+            if (!string.IsNullOrEmpty(Spell.Message2))
+            {
                 foreach (GamePlayer player1 in effect.Owner.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
                 {
                     if (!(effect.Owner == player1))
                     {
-                        player1.MessageFromArea(effect.Owner, Util.MakeSentence(Spell.Message2,
-                            player1.GetPersonalizedName(effect.Owner)), toOther, eChatLoc.CL_SystemWindow);
+                        player1.MessageFromArea(effect.Owner, GetFormattedMessage(player1, Spell.Message2, player1.GetPersonalizedName(effect.Owner)), toOther, eChatLoc.CL_SystemWindow);
                     }
                 }
-            MessageToLiving(effect.Owner, Spell.Message1 == "" ? "You find yourself able to move freely and breathe water like air!" : Spell.Message1, toLiving);
+            }
+
+            GamePlayer ownerPlayer = effect.Owner as GamePlayer;
+            if (ownerPlayer != null)
+            {
+                MessageToLiving(effect.Owner, GetFormattedMessage(ownerPlayer, Spell.Message1 == "" ? "SpellHandler.WaterBreathing.StartEffect" : Spell.Message1), toLiving);
+            }
+            else
+            {
+                MessageToLiving(effect.Owner, LanguageMgr.GetTranslation("ServerLanguageKey", Spell.Message1 == "" ? "SpellHandler.WaterBreathing.StartEffect" : Spell.Message1), toLiving);
+            }
+
             base.OnEffectStart(effect);
         }
 
@@ -87,7 +118,7 @@ namespace DOL.GS.Spells
                 player.BaseBuffBonusCategory[(int)eProperty.WaterSpeed] -= (int)Spell.Value;
                 player.Out.SendUpdateMaxSpeed();
                 if (player.IsDiving & player.CanBreathUnderWater == false)
-                    MessageToLiving(effect.Owner, "With a gulp and a gasp you realize that you are unable to breathe underwater any longer!", eChatType.CT_SpellExpires);
+                    MessageToLiving(effect.Owner, LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.WaterBreathing.EndEffect"), eChatType.CT_SpellExpires);
             }
             return base.OnEffectExpires(effect, noMessages);
         }

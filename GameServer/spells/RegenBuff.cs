@@ -21,6 +21,7 @@ using System.Collections.Specialized;
 using DOL.GS.Effects;
 using DOL.GS.PropertyCalc;
 using DOL.GS.PacketHandler;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -43,7 +44,11 @@ namespace DOL.GS.Spells
             if (target is GamePlayer && (((GamePlayer)target).CharacterClass.ID == (int)eCharacterClass.Vampiir
                 || ((GamePlayer)target).CharacterClass.ID == (int)eCharacterClass.MaulerAlb
                 || ((GamePlayer)target).CharacterClass.ID == (int)eCharacterClass.MaulerMid
-                || ((GamePlayer)target).CharacterClass.ID == (int)eCharacterClass.MaulerHib)) { MessageToCaster("This spell has no effect on this class!", eChatType.CT_Spell); return; }
+                || ((GamePlayer)target).CharacterClass.ID == (int)eCharacterClass.MaulerHib))
+            {
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.PowerRegenBuff.NoEffect"), eChatType.CT_Spell);
+                return;
+            }
             base.ApplyEffectOnTarget(target, effectiveness);
         }
         public override eBuffBonusCategory BonusCategory1 { get { return eBuffBonusCategory.BaseBuff; } }

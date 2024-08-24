@@ -21,6 +21,7 @@ using System.Reflection;
 using DOL.Events;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
+using DOL.Language;
 using log4net;
 
 namespace DOL.GS.Spells
@@ -104,7 +105,7 @@ namespace DOL.GS.Spells
         {
             if (target.HasAbility(Abilities.VampiirStrength))
             {
-                MessageToCaster("Your target already has an effect of that type!", eChatType.CT_Spell);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.Silence.AlreadyAffected"), eChatType.CT_Spell);
                 return;
             }
             base.ApplyEffectOnTarget(target, effectiveness);
@@ -121,7 +122,7 @@ namespace DOL.GS.Spells
         {
             if (target.HasAbility(Abilities.VampiirDexterity))
             {
-                MessageToCaster("Your target already has an effect of that type!", eChatType.CT_Spell);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.Silence.AlreadyAffected"), eChatType.CT_Spell);
                 return;
             }
             base.ApplyEffectOnTarget(target, effectiveness);
@@ -138,7 +139,7 @@ namespace DOL.GS.Spells
         {
             if (target.HasAbility(Abilities.VampiirConstitution))
             {
-                MessageToCaster("Your target already has an effect of that type!", eChatType.CT_Spell);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.Silence.AlreadyAffected"), eChatType.CT_Spell);
                 return;
             }
             base.ApplyEffectOnTarget(target, effectiveness);

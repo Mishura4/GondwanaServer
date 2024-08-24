@@ -20,6 +20,7 @@ using System;
 using System.Collections;
 using System.Reflection;
 using DOL.GS.PacketHandler;
+using DOL.Language;
 using log4net;
 
 namespace DOL.GS.Spells
@@ -100,7 +101,7 @@ namespace DOL.GS.Spells
             {
                 //all are healed, 1/2 power
                 SendEffectAnimation(target, 0, false, 0);
-                MessageToCaster("Your group is already fully healed!", eChatType.CT_SpellResisted);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.SpreadHeal.GroupFullyHealed"), eChatType.CT_SpellResisted);
                 return false;
             }
 

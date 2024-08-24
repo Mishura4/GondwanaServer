@@ -17,6 +17,7 @@
  *
  */
 using DOL.GS.PacketHandler;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -39,7 +40,7 @@ namespace DOL.GS.Spells
             if (target.HasAbility(Abilities.VampiirStrength)
                || target.HasAbility(Abilities.VampiirConstitution))
             {
-                MessageToCaster("Your target already has an effect of that type!", eChatType.CT_Spell);
+                MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.DualStatBuff.AlreadyHasEffect"), eChatType.CT_Spell);
                 return;
             }
             base.ApplyEffectOnTarget(target, effectiveness);
@@ -58,7 +59,7 @@ namespace DOL.GS.Spells
             if (target.HasAbility(Abilities.VampiirDexterity)
                || target.HasAbility(Abilities.VampiirQuickness))
             {
-                MessageToCaster("Your target already has an effect of that type!", eChatType.CT_Spell);
+                MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.DualStatBuff.AlreadyHasEffect"), eChatType.CT_Spell);
                 return;
             }
             base.ApplyEffectOnTarget(target, effectiveness);
