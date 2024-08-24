@@ -80,7 +80,12 @@ namespace DOL.AI
         public GameNPC Body
         {
             get { return m_body; }
-            set { m_body = value; }
+            set { SetBody(value); }
+        }
+
+        protected virtual void SetBody(GameNPC npc)
+        {
+            m_body = npc;
         }
 
         /// <summary>

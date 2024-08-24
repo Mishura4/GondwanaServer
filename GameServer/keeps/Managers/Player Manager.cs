@@ -207,10 +207,7 @@ namespace DOL.GS.Keeps
         {
             foreach (var de in lord.XPGainers)
             {
-                var player = de.Key as GamePlayer;
-                if (de.Key is GameNPC npc && npc.Brain is IControlledBrain brain)
-                    player = brain.GetPlayerOwner();
-                if (player != null)
+                if ((de.Key as GameLiving)?.GetController() is GamePlayer player)
                 {
                     if (lord.Component.Keep is GameKeep)
                         player.CapturedKeeps++;

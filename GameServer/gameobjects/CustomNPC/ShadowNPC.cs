@@ -7,6 +7,7 @@ using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
 using DOL.Language;
 using DOLDatabase.Tables;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,6 +58,7 @@ namespace DOL.gameobjects.CustomNPC
         public ShadowNPC(GamePlayer player) : base()
         {
             this.player = player;
+            this.Owner = player;
             IControlledBrain brain = new ShadowBrain(player);
             SetOwnBrain(brain as AI.ABrain);
             AddToWorld();
@@ -271,11 +273,6 @@ namespace DOL.gameobjects.CustomNPC
         public override void UpdatePetWindow()
         {
             // don't
-        }
-
-        public override GameLiving GetLivingOwner()
-        {
-            return Owner;
         }
     }
 }

@@ -19,22 +19,13 @@ namespace DOL.GS.Effects
         {
             m_living = living;
             //Send messages
-            if (m_living is GamePlayer)
+            if (m_living is GamePlayer player)
             {
-                ((GamePlayer)m_living).Out.SendMessage("You begin to charge wildly!", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                player.Out.SendMessage("You begin to charge wildly!", eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
             }
-            else if (m_living is GameNPC)
+            else if (m_living?.GetLivingOwner() is GamePlayer owner)
             {
-                IControlledBrain icb = ((GameNPC)m_living).Brain as IControlledBrain;
-                if (icb != null && icb.Body != null)
-                {
-                    GamePlayer playerowner = icb.GetPlayerOwner();
-
-                    if (playerowner != null)
-                    {
-                        playerowner.Out.SendMessage("The " + icb.Body.Name + " charges its prey!", eChatType.CT_Say, eChatLoc.CL_SystemWindow);
-                    }
-                }
+                owner.Out.SendMessage("The " + m_living.Name + " charges its prey!", eChatType.CT_Say, eChatLoc.CL_SystemWindow);
             }
             else
                 return;
@@ -73,24 +64,14 @@ namespace DOL.GS.Effects
             m_living.EffectList.Remove(this);
             m_living.BuffBonusMultCategory1.Remove((int)eProperty.MaxSpeed, this);
             //Send messages
-            if (m_living is GamePlayer)
+            if (m_living is GamePlayer player)
             {
-                GamePlayer player = m_living as GamePlayer;
                 player.Out.SendUpdateMaxSpeed();
                 player.Out.SendMessage("You no longer seem so crazy!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
             }
-            else if (m_living is GameNPC)
+            else if (m_living?.GetLivingOwner() is GamePlayer owner)
             {
-                IControlledBrain icb = ((GameNPC)m_living).Brain as IControlledBrain;
-                if (icb != null && icb.Body != null)
-                {
-                    GamePlayer playerowner = icb.GetPlayerOwner();
-
-                    if (playerowner != null)
-                    {
-                        playerowner.Out.SendMessage("The " + icb.Body.Name + " ceases its charge!", eChatType.CT_Say, eChatLoc.CL_SystemWindow);
-                    }
-                }
+                owner.Out.SendMessage("The " + m_living.Name + " ceases its charge!", eChatType.CT_Say, eChatLoc.CL_SystemWindow);
             }
             StopTimers();
         }

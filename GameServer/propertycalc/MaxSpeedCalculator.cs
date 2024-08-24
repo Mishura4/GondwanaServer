@@ -140,32 +140,25 @@ namespace DOL.GS.PropertyCalc
                     itemSpeedBonus = 0;
                 }
             }
-            else if (living is GameNPC)
+            else if (living is GameNPC { InCombat: false, Brain: IControlledBrain brain})
             {
-                if (!living.InCombat)
+                GameLiving owner = living.GetLivingOwner();
+                if (owner != null)
                 {
-                    IControlledBrain brain = ((GameNPC)living).Brain as IControlledBrain;
-                    if (brain != null)
+                    if (owner == brain.Body.CurrentFollowTarget)
                     {
-                        GameLiving owner = brain.GetLivingOwner();
-                        if (owner != null)
+                        speed *= 1.25;
+
+                        double ownerSpeedAdjust = (double)owner.MaxSpeed / (double)GamePlayer.PLAYER_BASE_SPEED;
+
+                        if (ownerSpeedAdjust > 1.0)
                         {
-                            if (owner == brain.Body.CurrentFollowTarget)
-                            {
-                                speed *= 1.25;
+                            speed *= ownerSpeedAdjust;
+                        }
 
-                                double ownerSpeedAdjust = (double)owner.MaxSpeed / (double)GamePlayer.PLAYER_BASE_SPEED;
-
-                                if (ownerSpeedAdjust > 1.0)
-                                {
-                                    speed *= ownerSpeedAdjust;
-                                }
-
-                                if (owner is GamePlayer && (owner as GamePlayer).IsOnHorse)
-                                {
-                                    speed *= 1.45;
-                                }
-                            }
+                        if (owner is GamePlayer { IsOnHorse: true })
+                        {
+                            speed *= 1.45;
                         }
                     }
                 }

@@ -82,12 +82,12 @@ namespace DOL.AI.Brain
                             if (spell.Target != "self")
                             {
 
-                                owner = (this as IControlledBrain).Owner;
+                                owner = Owner;
 
                                 //Buff owner
                                 if (owner != null)
                                 {
-                                    player = GetPlayerOwner();
+                                    player = Body.GetPlayerOwner();
 
                                     //Buff player
                                     if (player != null)

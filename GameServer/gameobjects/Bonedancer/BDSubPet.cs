@@ -64,7 +64,7 @@ namespace DOL.GS
             get
             {
                 // This is really inefficient, so only do it once, and only if we actually need it
-                if (m_PetSpecLine == null && Brain is IControlledBrain brain && brain.GetPlayerOwner() is GamePlayer player)
+                if (m_PetSpecLine == null && GetPlayerOwner() is GamePlayer player)
                 {
                     // Get the spell that summoned this pet
                     DBSpell dbSummoningSpell = DOLDB<DBSpell>.SelectObject(DB.Column(nameof(DBSpell.LifeDrainReturn)).IsEqualTo(NPCTemplate.TemplateId));
@@ -97,7 +97,7 @@ namespace DOL.GS
         {
             get
             {
-                return (Brain as IControlledBrain).Owner.MaxSpeed;
+                return Owner.MaxSpeed;
             }
         }
 
@@ -141,8 +141,7 @@ namespace DOL.GS
                 int scaleLevel = Level;
 
                 // Some minions have multiple spells, so only grab their owner's spec once per pet.
-                if (DOL.GS.ServerProperties.Properties.PET_CAP_BD_MINION_SPELL_SCALING_BY_SPEC
-                    && Brain is IControlledBrain brain && brain.GetPlayerOwner() is GamePlayer BD)
+                if (DOL.GS.ServerProperties.Properties.PET_CAP_BD_MINION_SPELL_SCALING_BY_SPEC && GetPlayerOwner() is GamePlayer BD)
                 {
                     int spec = BD.GetModifiedSpecLevel(PetSpecLine);
 
@@ -169,8 +168,7 @@ namespace DOL.GS
                 casterLevel = Level;
 
                 // Style procs and subspells can't be scaled in advance, so we need to check BD spec here as well				
-                if (DOL.GS.ServerProperties.Properties.PET_CAP_BD_MINION_SPELL_SCALING_BY_SPEC
-                    && Brain is IControlledBrain brain && brain.GetPlayerOwner() is GamePlayer BD)
+                if (DOL.GS.ServerProperties.Properties.PET_CAP_BD_MINION_SPELL_SCALING_BY_SPEC && GetPlayerOwner() is GamePlayer BD)
                 {
                     int spec = BD.GetModifiedSpecLevel(PetSpecLine);
 

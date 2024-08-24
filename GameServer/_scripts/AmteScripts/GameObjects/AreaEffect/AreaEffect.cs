@@ -51,18 +51,6 @@ namespace DOL.GS.Scripts
             }
         }
 
-        private GameLiving m_owner;
-
-        public GameLiving Owner
-        {
-            get => m_owner;
-            set
-            {
-                OwnerID = value.InternalID;
-                m_owner = value;
-            }
-        }
-
         public void CallAreaEffect()
         {
             enable = true;
@@ -75,55 +63,48 @@ namespace DOL.GS.Scripts
             {
                 return true;
             }
-            
-            GameNPC? npc = living as GameNPC;
-            if (npc is { Brain: IControlledBrain controlledBrain })
-            {
-                return IsImmune(controlledBrain.Owner);
-            }
 
-            if (Owner == null)
-                return OwnerID != null && string.Equals(living.InternalID, OwnerID);
+            if (living.GetLivingOwner() is GameLiving owner)
+                living = owner;
+
+            if (this.IsOwner(living))
+                return true;
             
-            if (living == Owner)
+            var myOwner = GetLivingOwner();
+
+            if (myOwner == null)
+                return false;
+
+            if (myOwner.Group?.IsInTheGroup(living) == true)
             {
                 return true;
             }
 
-            if (Owner.Group?.IsInTheGroup(living) == true)
+            if (myOwner is GamePlayer ownerPlayer)
             {
-                return true;
-            }
-
-            if (Owner is GamePlayer ownerPlayer)
-            {
-                GamePlayer? targetPlayer = living as GamePlayer;
-                if (ownerPlayer.Guild != null)
+                if (living is GamePlayer targetPlayer)
                 {
-                    if (npc != null)
+                    if (targetPlayer.Guild == ownerPlayer.Guild)
                     {
-                        if (npc.CurrentTerritory?.IsOwnedBy(ownerPlayer.Guild) == true)
-                        {
-                            return true;
-                        }
-                    
-                        if (!string.IsNullOrEmpty(npc.GuildName) && string.Equals(npc.GuildName, ownerPlayer.Guild.Name))
-                        {
-                            return true;
-                        }
+                        return true;
                     }
-                    else if (targetPlayer != null)
+
+                    if (ownerPlayer.BattleGroup != null && targetPlayer.BattleGroup == ownerPlayer.BattleGroup)
                     {
-                        if (targetPlayer.Guild == ownerPlayer.Guild)
-                        {
-                            return true;
-                        }
+                        return true;
                     }
                 }
-
-                if (ownerPlayer.BattleGroup != null && targetPlayer.BattleGroup == ownerPlayer.BattleGroup)
+                else if (living is GameNPC targetNpc)
                 {
-                    return true;
+                    if (targetNpc.CurrentTerritory?.IsOwnedBy(ownerPlayer) == true)
+                    {
+                        return true;
+                    }
+                    
+                    if (!string.IsNullOrEmpty(targetNpc.GuildName) && string.Equals(targetNpc.GuildName, ownerPlayer.Guild.Name))
+                    {
+                        return true;
+                    }
                 }
             }
             return false;

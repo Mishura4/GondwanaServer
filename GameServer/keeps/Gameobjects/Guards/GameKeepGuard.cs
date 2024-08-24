@@ -263,26 +263,15 @@ namespace DOL.GS.Keeps
                 }
             }
 
-            GamePlayer player = null;
+            GamePlayer player = guard.TargetObject as GamePlayer;
 
-            if (guard.TargetObject is GamePlayer)
+            if (player == null && guard.TargetObject is GameNPC targetNpc)
             {
-                player = guard.TargetObject as GamePlayer;
-            }
-            else if (guard.TargetObject is GameNPC)
-            {
-                GameNPC npc = (guard.TargetObject as GameNPC);
-
-                if (npc.Brain != null && ((npc is GameKeepGuard) == false) && npc.Brain is IControlledBrain)
-                {
-                    player = (npc.Brain as IControlledBrain).GetPlayerOwner();
-                }
+                if (targetNpc is not GameKeepGuard)
+                    player = targetNpc.GetPlayerOwner();
             }
 
-            if (player != null)
-            {
-                player.Out.SendCheckLOS(guard, guard.TargetObject, new CheckLOSResponse(guard.GuardStopAttackCheckLOS));
-            }
+            player?.Out.SendCheckLOS(guard, guard.TargetObject, new CheckLOSResponse(guard.GuardStopAttackCheckLOS));
         }
 
         /// <summary>
@@ -321,16 +310,8 @@ namespace DOL.GS.Keeps
                     return;
             }
 
-            GamePlayer LOSChecker = null;
-            if (attackTarget is GamePlayer)
-            {
-                LOSChecker = attackTarget as GamePlayer;
-            }
-            else if (attackTarget is GameNPC && (attackTarget as GameNPC).Brain is IControlledBrain)
-            {
-                LOSChecker = ((attackTarget as GameNPC).Brain as IControlledBrain).GetPlayerOwner();
-            }
-            else
+            GamePlayer LOSChecker = (attackTarget as GameLiving)?.GetController() as GamePlayer;
+            if (LOSChecker == null)
             {
                 // try to find another player to use for checking line of site
                 foreach (GamePlayer player in this.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))

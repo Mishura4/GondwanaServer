@@ -103,19 +103,7 @@ namespace DOL.GS.Spells
 
             if (!spellOK || CheckLOS(Caster))
             {
-                GamePlayer player = null;
-                if (target is GamePlayer)
-                    player = target as GamePlayer;
-                else
-                {
-                    if (Caster is GamePlayer)
-                        player = Caster as GamePlayer;
-                    else if (Caster is GameNPC && (Caster as GameNPC).Brain is IControlledBrain)
-                    {
-                        IControlledBrain brain = (Caster as GameNPC).Brain as IControlledBrain;
-                        player = brain.GetPlayerOwner();
-                    }
-                }
+                GamePlayer player = target.GetController() as GamePlayer ?? Caster.GetController() as GamePlayer;
                 if (player != null)
                 {
                     player.TempProperties.setProperty(LOSEFFECTIVENESS, effectiveness);

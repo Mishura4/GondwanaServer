@@ -29,14 +29,14 @@ namespace DOL.GS.PropertyCalc
             }
             else if (living is NecromancerPet petNecro)
             {
-                if (petNecro.Brain is IControlledBrain brainNecro && brainNecro.GetPlayerOwner() is GamePlayer necro
+                if (petNecro.Brain is IControlledBrain brainNecro && brainNecro.Owner is GamePlayer necro
                     && necro.GetAbility<RealmAbilities.WildPowerAbility>() is RealmAbilities.WildPowerAbility raWP)
                     chance += raWP.Amount;
             }
             else if (living is GamePet pet)
             {
                 if (ServerProperties.Properties.EXPAND_WILD_MINION
-                    && pet.Brain is IControlledBrain brainPet && brainPet.GetPlayerOwner() is GamePlayer playerOwner
+                    && pet.Brain is IControlledBrain brainPet && brainPet.Owner is GamePlayer playerOwner
                     && playerOwner.GetAbility<RealmAbilities.WildMinionAbility>() is RealmAbilities.WildMinionAbility raWM)
                     chance += raWM.Amount;
             }

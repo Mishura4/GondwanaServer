@@ -561,11 +561,7 @@ namespace DOL.AI.Brain
             // Be sure the aggrocheck is triggered by the brain on Think() method
             if (DOL.GS.ServerProperties.Properties.ALWAYS_CHECK_LOS && CheckLOS)
             {
-                GamePlayer thisLiving = null;
-                if (living is GamePlayer)
-                    thisLiving = (GamePlayer)living;
-                else if (living is GameNPC && (living as GameNPC).Brain is IControlledBrain)
-                    thisLiving = ((living as GameNPC).Brain as IControlledBrain).GetPlayerOwner();
+                GamePlayer thisLiving = living as GamePlayer ?? living.GetPlayerOwner();
 
                 if (thisLiving != null)
                 {
@@ -824,12 +820,9 @@ namespace DOL.AI.Brain
             var realAggroLevel = AggroLevel;
             if (target is GameNPC targetNPC)
             {
-                if (targetNPC.Brain is IControlledBrain controlledBrain)
-                {
-                    GameLiving owner = controlledBrain.GetLivingOwner();
-                    if (owner != null)
-                        realTarget = owner;
-                }
+                GameLiving owner = targetNPC.GetLivingOwner();
+                if (owner != null)
+                    realTarget = owner;
                 // FollowingFriendMob will have higher aggro
                 if (realTarget is FollowingFriendMob { PlayerFollow: not null } followMob)
                 {
@@ -893,12 +886,13 @@ namespace DOL.AI.Brain
                     if (args is not TakeDamageEventArgs eArgs || eArgs.DamageSource is not GameLiving living || !GameServer.ServerRules.IsAllowedToAttack(Body, living, true)) return;
 
                     int aggro = eArgs.DamageAmount + eArgs.CriticalAmount;
-                    if (eArgs.DamageSource is GameNPC)
+                    if (eArgs.DamageSource is GameNPC npc)
                     {
                         // owner gets 25% of aggro
-                        if (((GameNPC)eArgs.DamageSource).Brain is IControlledBrain brain)
+                        GameLiving owner = npc.GetLivingOwner();
+                        if (owner != null)
                         {
-                            AddToAggroList(brain.Owner, (int)Math.Max(1, aggro * 0.25));
+                            AddToAggroList(owner, (int)Math.Max(1, aggro * 0.25));
                             aggro = (int)Math.Max(1, aggro * 0.75);
                         }
                     }
@@ -951,13 +945,10 @@ namespace DOL.AI.Brain
                 if (args is EnemyKilledEventArgs eArgs)
                 {
                     // transfer all controlled target aggro to the owner
-                    if (eArgs.Target is GameNPC)
+                    if (eArgs.Target is GameNPC && eArgs.Target.GetLivingOwner() is {} owner)
                     {
-                        if (((GameNPC)eArgs.Target).Brain is IControlledBrain controlled)
-                        {
-                            long contrAggro = GetAggroAmountForLiving(controlled.Body);
-                            AddToAggroList(controlled.Owner, (int)contrAggro);
-                        }
+                        long contrAggro = GetAggroAmountForLiving(eArgs.Target);
+                        AddToAggroList(owner, (int)contrAggro);
                     }
 
                     Body.Attackers.Remove(eArgs.Target);

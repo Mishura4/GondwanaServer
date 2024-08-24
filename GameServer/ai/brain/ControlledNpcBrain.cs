@@ -53,11 +53,6 @@ namespace DOL.AI.Brain
         protected Coordinate m_temp = Coordinate.Nowhere;
 
         /// <summary>
-        /// Holds the controlling player of this brain
-        /// </summary>
-        protected readonly GameLiving m_owner;
-
-        /// <summary>
         /// Holds the walk state of the brain
         /// </summary>
         protected eWalkState m_walkState;
@@ -72,6 +67,8 @@ namespace DOL.AI.Brain
         /// </summary>
         protected bool previousIsStealthed;
 
+        private GameLiving m_owner;
+
         /// <summary>
         /// Constructs new controlled npc brain
         /// </summary>
@@ -85,12 +82,6 @@ namespace DOL.AI.Brain
             m_owner = owner;
             m_aggressionState = eAggressionState.Defensive;
             m_walkState = eWalkState.Follow;
-            if (owner is GameNPC && (owner as GameNPC).Brain is StandardMobBrain)
-            {
-                AggroLevel = ((owner as GameNPC).Brain as StandardMobBrain).AggroLevel;
-            }
-            else
-                AggroLevel = 99;
             AggroRange = 1500;
         }
 
@@ -128,44 +119,7 @@ namespace DOL.AI.Brain
         /// <summary>
         /// Gets the controlling owner of the brain
         /// </summary>
-        public GameLiving Owner
-        {
-            get { return m_owner; }
-        }
-
-        /// <summary>
-        /// Find the player owner of the pets at the top of the tree
-        /// </summary>
-        /// <returns>Player owner at the top of the tree.  If there was no player, then return null.</returns>
-        public GamePlayer GetPlayerOwner()
-        {
-            return GetLivingOwner() as GamePlayer;
-        }
-
-        public GameNPC GetNPCOwner()
-        {
-            return GetLivingOwner() as GameNPC;
-        }
-
-        public virtual GameLiving GetLivingOwner()
-        {
-            var owner = Owner;
-            int i = 0;
-            while (owner is GameNPC && owner != null)
-            {
-                i++;
-                if (i > 50)
-                    throw new Exception("GetLivingOwner() from " + Owner.Name + "caused a cyclical loop.");
-                //If this is a pet, get its owner
-                if (((GameNPC)owner).Brain is IControlledBrain)
-                    owner = ((IControlledBrain)((GameNPC)owner).Brain).Owner;
-                //This isn't a pet, that means it's at the top of the tree.  This case will only happen if
-                //owner is not a GamePlayer
-                else
-                    break;
-            }
-            return owner;
-        }
+        public GameLiving Owner => Body.Owner;
 
         /// <summary>
         /// Gets or sets the walk state of the brain
@@ -276,8 +230,7 @@ namespace DOL.AI.Brain
         /// </summary>
         public virtual void UpdatePetWindow()
         {
-            if (m_owner is GamePlayer)
-                ((GamePlayer)m_owner).Out.SendPetWindow(m_body, ePetWindowAction.Update, m_aggressionState, m_walkState);
+            (Owner as GamePlayer)?.Out.SendPetWindow(m_body, ePetWindowAction.Update, m_aggressionState, m_walkState);
         }
 
         /// <summary>
@@ -314,10 +267,25 @@ namespace DOL.AI.Brain
             if (WalkState == eWalkState.Follow)
                 FollowOwner();
             // [Ganrod] On supprime la cible du pet au moment  du contrôle.
+            SetOwner(m_owner);
             Body.TargetObject = null;
             GameEventMgr.AddHandler(Owner, GameLivingEvent.AttackedByEnemy, new DOLEventHandler(OnOwnerAttacked));
 
             return true;
+        }
+
+        protected void SetOwner(GameLiving living)
+        {
+            m_owner = living;
+            AggroLevel = 99;
+            if (Body != null)
+            {
+                Body.Owner = living;
+                if (living is GameNPC { Brain: StandardMobBrain brain })
+                {
+                    AggroLevel = brain.AggroLevel;
+                }
+            }
         }
 
         /// <summary>
@@ -338,7 +306,7 @@ namespace DOL.AI.Brain
         /// </summary>
         public override void Think()
         {
-            GamePlayer playerowner = GetPlayerOwner();
+            GamePlayer playerowner = Owner as GamePlayer;
 
             long lastUpdate = 0;
             if (playerowner != null && !playerowner.Client.GameObjectUpdateArray.TryGetValue(new Tuple<ushort, ushort>(Body.CurrentRegionID, (ushort)Body.ObjectID), out lastUpdate))
@@ -413,17 +381,17 @@ namespace DOL.AI.Brain
                         case Abilities.Intercept:
                             {
                                 //the pet should intercept even if a player is till intercepting for the owner
-                                new InterceptEffect().Start(Body, GetLivingOwner());
+                                new InterceptEffect().Start(Body, Body.GetLivingOwner());
                                 break;
                             }
                         case Abilities.Guard:
                             {
-                                new GuardEffect().Start(Body, GetLivingOwner());
+                                new GuardEffect().Start(Body, Body.GetLivingOwner());
                                 break;
                             }
                         case Abilities.Protect:
                             {
-                                new ProtectEffect().Start(GetLivingOwner());
+                                new ProtectEffect().Start(Body.GetLivingOwner());
                                 break;
                             }
                         case Abilities.ChargeAbility:
@@ -611,7 +579,7 @@ namespace DOL.AI.Brain
 
                         if (target == "realm" || target == "group")
                         {
-                            owner = (this as IControlledBrain).Owner;
+                            owner = Owner;
                             player = null;
                             //Buff owner
                             if (!LivingHasEffect(owner, spell) && GameMath.IsWithinRadius(Body, owner, spell.Range))
@@ -634,7 +602,7 @@ namespace DOL.AI.Brain
                                 }
                             }
 
-                            player = GetPlayerOwner();
+                            player = Body.GetPlayerOwner();
 
                             //Buff player
                             if (player != null)
@@ -665,7 +633,7 @@ namespace DOL.AI.Brain
                 #region Disease Cure/Poison Cure/Summon
                 case "CUREDISEASE":
                     //Cure owner
-                    owner = (this as IControlledBrain).Owner;
+                    owner = Owner;
                     if (owner.IsDiseased)
                     {
                         Body.TargetObject = owner;
@@ -681,7 +649,7 @@ namespace DOL.AI.Brain
 
                     // Cure group members
 
-                    player = GetPlayerOwner();
+                    player = Body.GetPlayerOwner();
 
                     if (player.Group != null)
                     {
@@ -697,7 +665,7 @@ namespace DOL.AI.Brain
                     break;
                 case "CUREPOISON":
                     //Cure owner
-                    owner = (this as IControlledBrain).Owner;
+                    owner = Owner;
                     if (LivingIsPoisoned(owner))
                     {
                         Body.TargetObject = owner;
@@ -713,7 +681,7 @@ namespace DOL.AI.Brain
 
                     // Cure group members
 
-                    player = GetPlayerOwner();
+                    player = Body.GetPlayerOwner();
 
                     if (player.Group != null)
                     {
@@ -732,6 +700,7 @@ namespace DOL.AI.Brain
                     break;
                 #endregion
 
+                
                 #region Heals
                 case "COMBATHEAL":
                 case "HEAL":
@@ -755,7 +724,7 @@ namespace DOL.AI.Brain
                     int emergencyThreshold = GS.ServerProperties.Properties.NPC_HEAL_THRESHOLD / 2;
 
                     //Heal owner
-                    owner = (this as IControlledBrain).Owner;
+                    owner = Owner;
                     int ownerPercent = owner.HealthPercent;
                     if (ownerPercent < emergencyThreshold && !spell.TargetHasEffect(owner) && GameMath.IsWithinRadius(Body, owner, spell.Range))
                     {
@@ -772,7 +741,7 @@ namespace DOL.AI.Brain
                     }
 
                     // Heal group
-                    player = GetPlayerOwner();
+                    player = Body.GetPlayerOwner();
                     ICollection<GamePlayer> playerGroup = null;
                     if (player.Group != null && (spellTarget == "realm" || spellTarget == "group"))
                     {
@@ -803,7 +772,7 @@ namespace DOL.AI.Brain
                     }
 
                     //Heal owner
-                    owner = (this as IControlledBrain).Owner;
+                    owner = Owner;
                     if (ownerPercent < GS.ServerProperties.Properties.NPC_HEAL_THRESHOLD
                         && !spell.TargetHasEffect(owner) && GameMath.IsWithinRadius(Body, owner, spell.Range))
                     {
@@ -902,7 +871,7 @@ namespace DOL.AI.Brain
         /// <param name="aggroamount"></param>
         public override void AddToAggroList(GameLiving living, int aggroamount, bool checkLOS)
         {
-            GameNPC npc_owner = GetNPCOwner();
+            GameNPC npc_owner = Body.GetNPCOwner();
             if (npc_owner == null || !(npc_owner.Brain is StandardMobBrain))
                 base.AddToAggroList(living, aggroamount, checkLOS);
             else
@@ -984,7 +953,7 @@ namespace DOL.AI.Brain
         {
             if (!IsActive || m_aggressionState == eAggressionState.Passive) return;
 
-            GameNPC owner_npc = GetNPCOwner();
+            GameNPC owner_npc = Body.GetNPCOwner();
             if (owner_npc != null && owner_npc.Brain is StandardMobBrain)
             {
                 if ((owner_npc.IsCasting || owner_npc.IsAttacking) &&

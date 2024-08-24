@@ -152,33 +152,26 @@ namespace DOL.GS.Spells
             #region PVP DAMAGE
 
             long healedrp = 0;
+            GamePlayer playerOrNecroPetOwner = m_caster as GamePlayer ?? (m_caster as NecromancerPet)?.GetPlayerOwner();
 
-            if (m_caster is NecromancerPet &&
-                ((m_caster as NecromancerPet).Brain as IControlledBrain).GetPlayerOwner() != null
-                || m_caster is GamePlayer)
+            if (target.DamageRvRMemory > 0 && playerOrNecroPetOwner != null)
             {
-
-                if (target is NecromancerPet && ((target as NecromancerPet).Brain as IControlledBrain).GetPlayerOwner() != null || target is GamePlayer)
+                if (target is GamePlayer || (target as NecromancerPet)?.GetPlayerOwner() is not null)
                 {
-                    if (target.DamageRvRMemory > 0)
-                    {
-                        healedrp = (long)Math.Max(heal, 0);
-                        target.DamageRvRMemory -= healedrp;
-                    }
+                    healedrp = (long)Math.Max(heal, 0);
+                    target.DamageRvRMemory -= healedrp;
                 }
             }
 
             if (healedrp > 0 && m_caster != target && m_spellLine.KeyName != GlobalSpellsLines.Item_Spells &&
                 m_caster.CurrentRegionID != 242 && m_spell.Pulse == 0) // On Exclu zone COOP
             {
-                GamePlayer joueur_a_considerer = (m_caster is NecromancerPet ? ((m_caster as NecromancerPet).Brain as IControlledBrain).GetPlayerOwner() : m_caster as GamePlayer);
-
                 int POURCENTAGE_SOIN_RP = ServerProperties.Properties.HEAL_PVP_DAMAGE_VALUE_RP; // ...% de bonus RP pour les soins effectués
                 long Bonus_RP_Soin = Convert.ToInt64((double)healedrp * POURCENTAGE_SOIN_RP / 100);
 
                 if (Bonus_RP_Soin >= 1)
                 {
-                    PlayerStatistics stats = joueur_a_considerer.Statistics as PlayerStatistics;
+                    PlayerStatistics stats = playerOrNecroPetOwner.Statistics as PlayerStatistics;
 
                     if (stats != null)
                     {
@@ -186,8 +179,8 @@ namespace DOL.GS.Spells
                         stats.HitPointsHealed += (uint)healedrp;
                     }
 
-                    joueur_a_considerer.GainRealmPoints(Bonus_RP_Soin, false);
-                    joueur_a_considerer.Out.SendMessage(LanguageMgr.GetTranslation(joueur_a_considerer.Client.Account.Language, "GameObjects.GamePlayer.GainRealmPoints.LifeTransferSpell", Bonus_RP_Soin), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                    playerOrNecroPetOwner.GainRealmPoints(Bonus_RP_Soin, false);
+                    playerOrNecroPetOwner.Out.SendMessage(LanguageMgr.GetTranslation(playerOrNecroPetOwner.Client.Account.Language, "GameObjects.GamePlayer.GainRealmPoints.LifeTransferSpell", Bonus_RP_Soin), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
 
                 }
             }

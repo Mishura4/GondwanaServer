@@ -4019,39 +4019,14 @@ namespace DOL.GS
             long lastTick = this.TempProperties.getProperty<long>(LAST_LOS_TICK_PROPERTY);
 
             if (ServerProperties.Properties.ALWAYS_CHECK_PET_LOS &&
-                Brain != null &&
                 Brain is IControlledBrain &&
-                (target is GamePlayer || (target is GameNPC && (target as GameNPC).Brain != null && (target as GameNPC).Brain is IControlledBrain)))
+                (target as GameLiving)?.GetController() is GamePlayer targetPlayer)
             {
                 GameObject lastTarget = (GameObject)this.TempProperties.getProperty<object>(LAST_LOS_TARGET_PROPERTY, null);
                 if (lastTarget != null && lastTarget == target)
                 {
                     if (lastTick != 0 && CurrentRegion.Time - lastTick < ServerProperties.Properties.LOS_PLAYER_CHECK_FREQUENCY * 1000)
                         return;
-                }
-
-                GamePlayer losChecker = null;
-                if (target is GamePlayer)
-                {
-                    losChecker = target as GamePlayer;
-                }
-                else if (target is GameNPC && (target as GameNPC).Brain is IControlledBrain)
-                {
-                    losChecker = ((target as GameNPC).Brain as IControlledBrain).GetPlayerOwner();
-                }
-                else
-                {
-                    // try to find another player to use for checking line of site
-                    foreach (GamePlayer player in this.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
-                    {
-                        losChecker = player;
-                        break;
-                    }
-                }
-
-                if (losChecker == null)
-                {
-                    return;
                 }
 
                 lock (LOS_LOCK)
@@ -4081,7 +4056,7 @@ namespace DOL.GS
 
                 }
 
-                losChecker.Out.SendCheckLOS(this, target, new CheckLOSResponse(this.NPCStartAttackCheckLOS));
+                targetPlayer.Out.SendCheckLOS(this, target, new CheckLOSResponse(this.NPCStartAttackCheckLOS));
                 return;
             }
 
@@ -4499,13 +4474,8 @@ namespace DOL.GS
                     // Get All Attackers. // TODO check if this shouldn't be set to Attackers instead of XPGainers ?
                     foreach (var de in XPGainers)
                     {
-                        var player = de.Key as GamePlayer;
-
                         // Get Pets Owner (// TODO check if they are not already treated as attackers ?)
-                        if (de.Key is GameNPC npc && npc.Brain is IControlledBrain brain)
-                            player = brain.GetPlayerOwner();
-
-                        if (player != null && player.ObjectState == eObjectState.Active && player.IsAlive && player.IsWithinRadius(this, WorldMgr.MAX_EXPFORKILL_DISTANCE))
+                        if ((de.Key as GameLiving)?.GetController() is GamePlayer { ObjectState: eObjectState.Active, IsAlive: true } player && player.IsWithinRadius(this, WorldMgr.MAX_EXPFORKILL_DISTANCE))
                         {
                             Faction.KillMember(player);
                         }
@@ -5180,18 +5150,11 @@ namespace DOL.GS
                 if (GameMoney.IsItemMoney(lootTemplate.Name))
                 {
                     long value = lootTemplate.Price;
-                    GamePlayer killerPlayer = killer as GamePlayer;
+                    GamePlayer killerPlayer = (killer as GameLiving)?.GetController() as GamePlayer;
 
                     // Zone Bonus XP Support
-                    if (Properties.ENABLE_ZONE_BONUSES)
+                    if (killerPlayer != null && Properties.ENABLE_ZONE_BONUSES)
                     {
-                        if (killer is GameNPC)
-                        {
-                            if (killer is GameNPC && ((killer as GameNPC).Brain is IControlledBrain))
-                                killerPlayer = ((killer as GameNPC).Brain as IControlledBrain).GetPlayerOwner();
-                            else return;
-                        }
-
                         int zoneBonus = (((int)value * ZoneBonus.GetCoinBonus(killerPlayer) / 100));
                         if (zoneBonus > 0)
                         {
@@ -5269,23 +5232,23 @@ namespace DOL.GS
                     }
                 }
 
-                GamePlayer playerAttacker = null;
+                bool anyPlayer = false;
                 foreach (var gainer in gainers)
                 {
                     if (gainer is GamePlayer player)
                     {
-                        playerAttacker = player;
+                        anyPlayer = true;
                         if (loot.Realm == 0)
                             loot.Realm = player.Realm;
                     }
-                    loot.AddOwner(gainer);
-                    if (gainer is GameNPC npc && npc.Brain is IControlledBrain brain)
+                    else if (gainer.GetPlayerOwner() is GamePlayer playerOwner)
                     {
-                        playerAttacker = brain.GetPlayerOwner();
-                        loot.AddOwner(brain.GetPlayerOwner());
+                        anyPlayer = true;
+                        loot.AddOwner(playerOwner);
                     }
+                    loot.AddOwner(gainer);
                 }
-                if (playerAttacker == null)
+                if (!anyPlayer)
                     return; // no loot if mob kills another mob
 
                 droplist.Add(loot.GetName(1, false));
@@ -6347,13 +6310,7 @@ namespace DOL.GS
                 ambientTextTimer.Start(chosen.TriggerTimer * 1000);
             }
 
-            string controller = string.Empty;
-            if (Brain is IControlledBrain)
-            {
-                GamePlayer playerOwner = (Brain as IControlledBrain).GetPlayerOwner();
-                if (playerOwner != null)
-                    controller = playerOwner.Name;
-            }
+            string controller = GetLivingOwner()?.Name ?? string.Empty;
 
             if (chosen.Spell > 0)
             {

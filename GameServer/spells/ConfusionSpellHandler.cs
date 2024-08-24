@@ -88,11 +88,9 @@ namespace DOL.GS.Spells
                 if (log.IsDebugEnabled)
                     log.Debug("CONFUSION: " + npc.Name + " was confused(true," + doAttackFriend.ToString() + ")");
 
-                if (npc is GamePet && npc.Brain != null && (npc.Brain as IControlledBrain) != null)
+                if (npc is GamePet && npc.GetPlayerOwner() is {} playerowner)
                 {
-                    //it's a pet.
-                    GamePlayer playerowner = (npc.Brain as IControlledBrain).GetPlayerOwner();
-                    if (playerowner != null && playerowner.CharacterClass.ID == (int)eCharacterClass.Theurgist)
+                    if (playerowner.CharacterClass.ID == (int)eCharacterClass.Theurgist)
                     {
                         //Theurgist pets die.
                         npc.Die(Caster);

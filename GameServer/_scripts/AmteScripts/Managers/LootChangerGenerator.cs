@@ -187,8 +187,9 @@ namespace DOL.GS
         public override LootList GenerateLoot(GameObject mob, GameObject killer)
         {
             LootList loots = base.GenerateLoot(mob, killer);
-            if (killer is GameNPC { Brain: IControlledBrain brain })
-                killer = brain.Owner;
+            var owner = killer.GetLivingOwner();
+            if (owner != null)
+                killer = owner;
             if (!m_MobXDB.ContainsKey(mob.Name) || !(killer is GamePlayer))
                 return loots;
             var pl = killer as GamePlayer;

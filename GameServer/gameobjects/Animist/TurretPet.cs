@@ -63,12 +63,11 @@ namespace DOL.GS
             if (attackTarget is GameLiving && GameServer.ServerRules.IsAllowedToAttack(this, (GameLiving)attackTarget, true) == false)
                 return;
 
-            if (Brain is IControlledBrain)
+            if (Brain is IControlledBrain controlledBrain)
             {
-                if ((Brain as IControlledBrain).AggressionState == eAggressionState.Passive)
+                if (controlledBrain.AggressionState == eAggressionState.Passive)
                     return;
-                GamePlayer playerowner;
-                if ((playerowner = ((IControlledBrain)Brain).GetPlayerOwner()) != null)
+                if (GetPlayerOwner() is GamePlayer playerowner)
                     playerowner.Stealth(false);
             }
 

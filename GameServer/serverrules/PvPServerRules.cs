@@ -157,18 +157,16 @@ namespace DOL.GS.ServerRules
             // if controlled NPC - do checks for owner instead
             if (attacker is GameNPC)
             {
-                IControlledBrain controlled = ((GameNPC)attacker).Brain as IControlledBrain;
-                if (controlled != null)
+                var owner = attacker.GetLivingOwner();
+                if (owner != null)
                 {
-                    attacker = controlled.GetLivingOwner();
-                    quiet = true; // silence all attacks by controlled npc
+                    attacker = owner;
+                    quiet = true;
                 }
             }
             if (defender is GameNPC)
             {
-                IControlledBrain controlled = ((GameNPC)defender).Brain as IControlledBrain;
-                if (controlled != null)
-                    defender = controlled.GetLivingOwner();
+                defender = defender.GetLivingOwner() ?? defender;
             }
 
             // can't attack self
@@ -337,22 +335,20 @@ namespace DOL.GS.ServerRules
         {
             if (source == null || target == null)
                 return false;
-
+            
             // if controlled NPC - do checks for owner instead
             if (source is GameNPC)
             {
-                IControlledBrain controlled = ((GameNPC)source).Brain as IControlledBrain;
-                if (controlled != null)
+                var owner = source.GetLivingOwner();
+                if (owner != null)
                 {
-                    source = controlled.GetLivingOwner() ?? source;
-                    quiet = true; // silence all attacks by controlled npc
+                    source = owner;
+                    quiet = true;
                 }
             }
             if (target is GameNPC)
             {
-                IControlledBrain controlled = ((GameNPC)target).Brain as IControlledBrain;
-                if (controlled != null)
-                    target = controlled.GetLivingOwner() ?? target;
+                target = target.GetLivingOwner() ?? target;
             }
 
             if (source == target)
@@ -666,12 +662,11 @@ namespace DOL.GS.ServerRules
                     realm = (eRealm)group.Leader.Realm;
                 else realm = (eRealm)killer.Realm;
             }
-            else if (killer is GameNPC && (killer as GameNPC).Brain is IControlledBrain)
+            else if (killer is GameNPC && killer.GetLivingOwner() is {} owner)
             {
-                GamePlayer player = ((killer as GameNPC).Brain as IControlledBrain).GetPlayerOwner();
                 Group group = null;
-                if (player != null)
-                    group = player.Group;
+                if (owner is GamePlayer { Group: not null })
+                    group = owner.Group;
                 if (group != null)
                     realm = (eRealm)group.Leader.Realm;
                 else realm = (eRealm)killer.Realm;

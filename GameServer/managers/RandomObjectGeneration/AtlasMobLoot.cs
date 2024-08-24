@@ -30,16 +30,8 @@ namespace DOL.GS
 
             try
             {
-                GamePlayer player = killer as GamePlayer;
-                if (killer is GameNPC && ((GameNPC)killer).Brain is IControlledBrain)
-                {
-                    player = ((ControlledNpcBrain)((GameNPC)killer).Brain).GetPlayerOwner();
-                }
-
-                if (player == null)
-                {
+                if ((killer as GameLiving)?.GetController() is not GamePlayer player)
                     return loot;
-                }
 
                 int killedcon = (int)player.GetConLevel(mob);
 

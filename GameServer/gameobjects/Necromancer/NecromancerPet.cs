@@ -125,7 +125,7 @@ namespace DOL.GS
             if (Brain == null || (Brain as IControlledBrain) == null)
                 return base.GetModified(property);
 
-            GameLiving owner = (Brain as IControlledBrain).GetLivingOwner();
+            GameLiving owner = GetLivingOwner();
 
             switch (property)
             {

@@ -7104,7 +7104,7 @@ namespace DOL.GS
                         (weapon as GameInventoryItem).OnStrikeTarget(this, target);
                     }
                     //Camouflage - Camouflage will be disabled only when attacking a GamePlayer or ControlledNPC of a GamePlayer.
-                    if (HasAbility(Abilities.Camouflage) && target is GamePlayer || (target is GameNPC && (target as GameNPC).Brain is IControlledBrain && ((target as GameNPC).Brain as IControlledBrain).GetPlayerOwner() != null))
+                    if (HasAbility(Abilities.Camouflage) && target is GamePlayer || (target.GetPlayerOwner() != null))
                     {
                         CamouflageEffect camouflage = EffectList.GetOfType<CamouflageEffect>();
 
@@ -7575,7 +7575,7 @@ namespace DOL.GS
         {
             #region PVP DAMAGE
 
-            if (source is GamePlayer || (source is GameNPC && (source as GameNPC).Brain is IControlledBrain && ((source as GameNPC).Brain as IControlledBrain).GetPlayerOwner() != null))
+            if (source is GamePlayer || (source.GetPlayerOwner() != null))
             {
                 if (Realm != source.Realm && source.Realm != 0)
                     DamageRvRMemory += (long)(damageAmount + criticalAmount);
@@ -14301,9 +14301,7 @@ namespace DOL.GS
                     if (!GameServer.ServerRules.IsAllowedToAttack(npc, player, true)) continue;
 
                     // Npc with player owner don't uncover
-                    if (npc.Brain != null
-                        && (npc.Brain as IControlledBrain) != null
-                        && (npc.Brain as IControlledBrain).GetPlayerOwner() != null) continue;
+                    if (npc.GetPlayerOwner() != null) continue;
 
                     double npcLevel = Math.Max(npc.Level, 1.0);
                     double stealthLevel = player.GetModifiedSpecLevel(Specs.Stealth);

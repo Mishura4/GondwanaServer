@@ -137,16 +137,10 @@ namespace DOL.GS
                 return;
 
             // check pets owner for my and enemy attacks
-            GameNPC npc = target as GameNPC;
-            if (npc != null)
-            {
-                IControlledBrain brain = npc.Brain as IControlledBrain;
-                if (brain != null)
-                    target = brain.GetPlayerOwner();
-            }
+            target = target.GetController();
 
             // Duel should end if players join group and trys to attack
-            if (ad.Attacker.Group != null && ad.Attacker.Group.IsInTheGroup(ad.Target))
+            if (ad.Attacker.Group != null && ad.Attacker.Group.IsInTheGroup(target))
                 Stop();
 
             if (ad.IsHit && target != Target)

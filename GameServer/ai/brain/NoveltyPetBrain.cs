@@ -27,32 +27,10 @@ namespace DOL.AI.Brain
     {
         public const string HAS_PET = "HasNoveltyPet";
 
-        private GamePlayer m_owner;
-
         public NoveltyPetBrain(GamePlayer owner)
             : base()
         {
-            m_owner = owner;
-        }
-
-        public virtual GameLiving GetLivingOwner()
-        {
-            var owner = Owner;
-            int i = 0;
-            while (owner is GameNPC && owner != null)
-            {
-                i++;
-                if (i > 50)
-                    throw new Exception("GetLivingOwner() from " + Owner.Name + "caused a cyclical loop.");
-                //If this is a pet, get its owner
-                if (((GameNPC)owner).Brain is IControlledBrain)
-                    owner = ((IControlledBrain)((GameNPC)owner).Brain).Owner;
-                //This isn't a pet, that means it's at the top of the tree.  This case will only happen if
-                //owner is not a GamePlayer
-                else
-                    break;
-            }
-            return owner;
+            Body.Owner = owner;
         }
 
         #region Think
@@ -61,18 +39,17 @@ namespace DOL.AI.Brain
 
         public override void Think()
         {
-            if (m_owner == null ||
-                m_owner.IsAlive == false ||
-                m_owner.Client.ClientState != GameClient.eClientState.Playing ||
-                Body.IsWithinRadius(m_owner, WorldMgr.VISIBILITY_DISTANCE) == false)
+            if (Owner == null ||
+                Owner.IsAlive == false ||
+                ((GamePlayer)Owner).Client.ClientState != GameClient.eClientState.Playing ||
+                Body.IsWithinRadius(Owner, WorldMgr.VISIBILITY_DISTANCE) == false)
             {
                 Body.Delete();
                 Body = null;
-                if (m_owner != null && m_owner.TempProperties.getProperty<bool>(HAS_PET, false))
+                if (Owner != null && Owner.TempProperties.getProperty<bool>(HAS_PET, false))
                 {
-                    m_owner.TempProperties.setProperty(HAS_PET, false);
+                    Owner.TempProperties.setProperty(HAS_PET, false);
                 }
-                m_owner = null;
             }
         }
 
@@ -82,7 +59,7 @@ namespace DOL.AI.Brain
         public void SetAggressionState(eAggressionState state) { }
         public eWalkState WalkState { get { return eWalkState.Follow; } }
         public eAggressionState AggressionState { get { return eAggressionState.Passive; } set { } }
-        public GameLiving Owner { get { return m_owner; } }
+        public GameLiving Owner { get { return Owner; } }
         public void Attack(GameObject target) { }
         public void Follow(GameObject target) { }
         public void FollowOwner() { }
@@ -90,8 +67,6 @@ namespace DOL.AI.Brain
         public void ComeHere() { }
         public void Goto(GameObject target) { }
         public void UpdatePetWindow() { }
-        public GamePlayer GetPlayerOwner() { return GetLivingOwner() as GamePlayer; }
-        public GameNPC GetNPCOwner() { return GetLivingOwner() as GameNPC; }
         public bool IsMainPet { get { return false; } set { } }
         #endregion
     }

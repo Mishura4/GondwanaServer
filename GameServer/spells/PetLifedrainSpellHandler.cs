@@ -39,8 +39,8 @@ namespace DOL.spells
         public override void StealLife(GameLiving target, AttackData ad)
         {
             if (ad == null) return;
-            GamePlayer player = ((IControlledBrain)((GamePet)Caster).Brain).GetPlayerOwner();
-            if (player == null || !player.IsAlive) return;
+            GamePlayer player = Caster.GetPlayerOwner();
+            if (player is not { IsAlive: true }) return;
             int heal = ((ad.Damage + ad.CriticalDamage) * m_spell.LifeDrainReturn) / 100;
             if (player.IsDiseased)
             {

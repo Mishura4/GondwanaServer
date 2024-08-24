@@ -110,13 +110,9 @@ namespace DOL.GS.Spells
 
             #region PVP DAMAGE
 
-            if (target.DamageRvRMemory > 0 &&
-                (target is NecromancerPet &&
-                ((target as NecromancerPet)?.Brain as IControlledBrain)?.GetPlayerOwner() != null
-                || target is GamePlayer))
+            if (target.DamageRvRMemory > 0 && (target is GamePlayer || (target as NecromancerPet)?.GetPlayerOwner() is not null))
             {
-                if (target.DamageRvRMemory > 0)
-                    target.DamageRvRMemory -= (long)Math.Max(heal, 0);
+                target.DamageRvRMemory -= (long)Math.Max(heal, 0);
             }
 
             #endregion PVP DAMAGE

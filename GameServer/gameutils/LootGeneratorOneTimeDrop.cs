@@ -178,12 +178,7 @@ namespace DOL.GS
                 
                 foreach (GameObject gainer in mob.GetRewardCandidates())
                 {
-                    if (gainer is not GamePlayer player)
-                    {
-                        player = gainer is GameNPC { Brain: IControlledBrain brain } ? brain.GetPlayerOwner() : null;
-                    }
-
-                    if (player == null)
+                    if ((gainer as GameLiving)?.GetController() is not GamePlayer player)
                         continue;
 
                     foreach (LootOTD drop in lootOTDs)

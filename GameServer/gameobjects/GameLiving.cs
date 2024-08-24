@@ -16,6 +16,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
+using Discord;
 using System;
 using System.Collections;
 using System.Collections.Concurrent;
@@ -1112,6 +1113,14 @@ namespace DOL.GS
         public virtual bool AttackState { get; set; }
 
         /// <summary>
+        /// Gets the living calling the shots for this GameLiving, which is the owner if there is one, or this Living
+        /// </summary>
+        public virtual GameLiving GetController()
+        {
+            return GetLivingOwner() ?? this;
+        }
+
+        /// <summary>
         /// Whether or not the living can be attacked.
         /// </summary>
         public override bool IsAttackable
@@ -1930,26 +1939,15 @@ namespace DOL.GS
 
             if (ad.AttackResult == eAttackResult.HitStyle)
             {
-                if (this is GamePlayer)
+                if (this is GamePlayer player)
                 {
-                    GamePlayer player = this as GamePlayer;
-
                     string damageAmount = (ad.StyleDamage > 0) ? " (+" + ad.StyleDamage + ")" : "";
-                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "StyleProcessor.ExecuteStyle.PerformPerfectly", ad.Style.Name, damageAmount), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
+                    player.SendTranslatedMessage("StyleProcessor.ExecuteStyle.PerformPerfectly", eChatType.CT_YouHit, eChatLoc.CL_SystemWindow, ad.Style.Name, damageAmount);
                 }
-                else if (this is GameNPC)
+                else if (GetPlayerOwner() is {} ownerPlayer)
                 {
-                    ControlledNpcBrain brain = ((GameNPC)this).Brain as ControlledNpcBrain;
-
-                    if (brain != null)
-                    {
-                        GamePlayer owner = brain.GetPlayerOwner();
-                        if (owner != null)
-                        {
-                            string damageAmount = (ad.StyleDamage > 0) ? " (+" + ad.StyleDamage + ")" : "";
-                            owner.Out.SendMessage(LanguageMgr.GetTranslation(owner.Client.Account.Language, "StyleProcessor.ExecuteStyle.PerformsPerfectly", Name, ad.Style.Name, damageAmount), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
-                        }
-                    }
+                    string damageAmount = (ad.StyleDamage > 0) ? " (+" + ad.StyleDamage + ")" : "";
+                    ownerPlayer.SendTranslatedMessage("StyleProcessor.ExecuteStyle.PerformsPerfectly", eChatType.CT_YouHit, eChatLoc.CL_SystemWindow, Name, ad.Style.Name, damageAmount);
                 }
             }
 
@@ -4167,37 +4165,28 @@ namespace DOL.GS
             base.TakeDamage(source, damageType, damageAmount, criticalAmount);
 
             double damageDealt = damageAmount + criticalAmount;
+            
+            if (source.GetLivingOwner() is { } owner)
+            {
+                source = owner;
+            }
 
             #region PVP DAMAGE
 
             // Is this a GamePlayer behind the source?
-            if (source is GamePlayer || (source is GameNPC && (source as GameNPC).Brain is IControlledBrain && ((source as GameNPC).Brain as IControlledBrain).GetPlayerOwner() != null))
+            if (source is GamePlayer player)
             {
                 // Only apply to necropet.
                 if (this is NecromancerPet)
                 {
-                    //And if a GamePlayer is behind
-                    GamePlayer this_necro_pl = null;
-
-                    if (this is GameNPC && (this as GameNPC).Brain is IControlledBrain)
-                        this_necro_pl = ((this as GameNPC).Brain as IControlledBrain).GetPlayerOwner();
-
-                    if (this_necro_pl != null && this_necro_pl.Realm != source.Realm && source.Realm != 0)
+                    if (player.Realm != source.Realm && source.Realm != 0)
                         DamageRvRMemory += (long)damageDealt + (long)criticalAmount;
                 }
             }
 
             #endregion PVP DAMAGE
 
-            if (source != null && source is GameNPC)
-            {
-                IControlledBrain brain = ((GameNPC)source).Brain as IControlledBrain;
-                if (brain != null)
-                    source = brain.GetLivingOwner();
-            }
-
-            GamePlayer attackerPlayer = source as GamePlayer;
-            if (attackerPlayer != null && attackerPlayer != this)
+            if (source is GamePlayer attackerPlayer && attackerPlayer != this)
             {
                 // Apply Mauler RA5L
                 GiftOfPerizorEffect GiftOfPerizor = EffectList.GetOfType<GiftOfPerizorEffect>();
@@ -4234,7 +4223,7 @@ namespace DOL.GS
                 }
                 //DealDamage needs to be called after addxpgainer!
             }
-            else if (source != null && source != this)
+            else if (source != this)
             {
                 AddXPGainer(source, (float)damageAmount + criticalAmount);
             }
@@ -4600,56 +4589,39 @@ namespace DOL.GS
             }
             List<GamePlayer> playerAttackers = null;
 
-            foreach (GameObject obj in clone)
+            foreach (GameLiving living in clone.OfType<GameLiving>())
             {
-                if (obj is GameLiving)
+                // This is all weird - why filter for unique players to add to a list to call enemyKilled?
+                // Why not use a list of GameLiving instead?
+
+                GamePlayer playerOwner = living.GetPlayerOwner();
+                GamePlayer player = playerOwner ?? living as GamePlayer;
+
+                if (player == null)
                 {
-                    GamePlayer player = obj as GamePlayer;
+                    living.EnemyKilled(this);
+                    continue;
+                }
+                
+                if (playerAttackers == null)
+                    playerAttackers = new List<GamePlayer>{player};
+                else if (playerAttackers.Contains(player) == false)
+                    playerAttackers.Add(player);
+                
+                if (playerOwner != null)
+                {
+                    // Pet gets the killed message as well
+                    living.EnemyKilled(this);
+                }
 
-                    if (obj as GameNPC != null && (obj as GameNPC).Brain is IControlledBrain)
+                if (player.Group != null)
+                {
+                    foreach (GamePlayer groupPlayer in player.Group.GetPlayersInTheGroup())
                     {
-                        // Ok, we're a pet - if our Player owner isn't in the attacker list, let's make them a 'virtual' attacker
-                        player = ((obj as GameNPC).Brain as IControlledBrain).GetPlayerOwner();
-                        if (player != null)
+                        if (groupPlayer.IsWithinRadius(this, WorldMgr.MAX_EXPFORKILL_DISTANCE) && playerAttackers.Contains(groupPlayer) == false)
                         {
-                            if (clone.Contains(player) == false)
-                            {
-                                if (playerAttackers == null)
-                                    playerAttackers = new List<GamePlayer>();
-
-                                if (playerAttackers.Contains(player) == false)
-                                    playerAttackers.Add(player);
-                            }
-
-                            // Pet gets the killed message as well
-                            ((GameLiving)obj).EnemyKilled(this);
+                            playerAttackers.Add(groupPlayer);
                         }
-                    }
-
-                    if (player != null)
-                    {
-                        if (playerAttackers == null)
-                            playerAttackers = new List<GamePlayer>();
-
-                        if (playerAttackers.Contains(player) == false)
-                        {
-                            playerAttackers.Add(player);
-                        }
-
-                        if (player.Group != null)
-                        {
-                            foreach (GamePlayer groupPlayer in player.Group.GetPlayersInTheGroup())
-                            {
-                                if (groupPlayer.IsWithinRadius(this, WorldMgr.MAX_EXPFORKILL_DISTANCE) && playerAttackers.Contains(groupPlayer) == false)
-                                {
-                                    playerAttackers.Add(groupPlayer);
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        ((GameLiving)obj).EnemyKilled(this);
                     }
                 }
             }
@@ -5450,11 +5422,7 @@ namespace DOL.GS
 
             if (this is NecromancerPet)
             {
-                GamePlayer this_necro_pl = null;
-
-                this_necro_pl = ((this as NecromancerPet).Brain as IControlledBrain).GetPlayerOwner();
-
-                if (DamageRvRMemory > 0 && this_necro_pl != null)
+                if (DamageRvRMemory > 0 && GetLivingOwner() != null)
                     DamageRvRMemory -= (long)Math.Max(GetModified(eProperty.HealthRegenerationRate), 0);
             }
 
@@ -5468,11 +5436,7 @@ namespace DOL.GS
 
                 if (this is NecromancerPet)
                 {
-                    GamePlayer this_necro_pl = null;
-
-                    this_necro_pl = ((this as NecromancerPet).Brain as IControlledBrain).GetPlayerOwner();
-
-                    if (DamageRvRMemory > 0 && this_necro_pl != null)
+                    if (DamageRvRMemory > 0 && GetPlayerOwner() is not null)
                         DamageRvRMemory = 0;
                 }
 
@@ -7106,7 +7070,7 @@ namespace DOL.GS
             {
                 return false;
             }
-            return brain.GetLivingOwner() == this;
+            return npc.GetLivingOwner() == this;
         }
 
         /// <summary>

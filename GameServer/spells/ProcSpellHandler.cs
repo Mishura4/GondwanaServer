@@ -420,13 +420,7 @@ namespace DOL.GS.Spells
     {
         protected override void EventHandler(DOLEvent e, object sender, EventArgs arguments)
         {
-            AttackFinishedEventArgs args = arguments as AttackFinishedEventArgs;
-            if (args == null || args.AttackData == null)
-                return;
-
-            GameNPC target = args.AttackData.Target as GameNPC;
-
-            if (target != null && !(target.Brain is IControlledBrain && ((IControlledBrain)target.Brain).GetPlayerOwner() != null))
+            if (arguments is AttackFinishedEventArgs { AttackData.Target: {} target } && target.GetController() is GameNPC)
                 base.EventHandler(e, sender, arguments);
         }
 

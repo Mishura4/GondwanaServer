@@ -1268,35 +1268,24 @@ namespace DOL.GS.Spells
 
                         if (ServerProperties.Properties.CHECK_LOS_DURING_CAST)
                         {
-                            GamePlayer playerChecker = null;
+                            // If the area forces an LoS check then we do it, otherwise we only check
+                            // if caster or target is a player
+                            // This will generate an interrupt if LOS check fails
 
-                            if (target is GamePlayer)
+                            if (Caster is GamePlayer casterPlayer)
                             {
-                                playerChecker = target as GamePlayer;
+                                casterPlayer.Out.SendCheckLOS(Caster, target, new CheckLOSResponse(CheckLOSPlayerToTarget));
                             }
-                            else if (Caster is GamePlayer)
+                            else if (target is GamePlayer targetPlayer)
                             {
-                                playerChecker = Caster as GamePlayer;
+                                targetPlayer.Out.SendCheckLOS(Caster, target, new CheckLOSResponse(CheckLOSNPCToTarget));
                             }
-                            else if (Caster is GameNPC && (Caster as GameNPC).Brain != null && (Caster as GameNPC).Brain is IControlledBrain)
+                            else if (MustCheckLOS(Caster))
                             {
-                                playerChecker = ((Caster as GameNPC).Brain as IControlledBrain).GetPlayerOwner();
-                            }
-
-                            if (playerChecker != null)
-                            {
-                                // If the area forces an LoS check then we do it, otherwise we only check
-                                // if caster or target is a player
-                                // This will generate an interrupt if LOS check fails
-
-                                if (Caster is GamePlayer)
-                                {
-                                    playerChecker.Out.SendCheckLOS(Caster, target, new CheckLOSResponse(CheckLOSPlayerToTarget));
-                                }
-                                else if (target is GamePlayer || MustCheckLOS(Caster))
-                                {
-                                    playerChecker.Out.SendCheckLOS(Caster, target, new CheckLOSResponse(CheckLOSNPCToTarget));
-                                }
+                                GamePlayer checkerPlayer = Caster.CurrentRegion.GetPlayersInRadius(Caster.Coordinate, WorldMgr.VISIBILITY_DISTANCE, false, true).Cast<GamePlayer>().FirstOrDefault(p => Caster.IsVisibleTo(p) && target.IsVisibleTo(p));
+                                
+                                if (checkerPlayer != null)
+                                    checkerPlayer.Out.SendCheckLOS(Caster, target, new CheckLOSResponse(CheckLOSNPCToTarget));
                             }
                         }
 
@@ -2367,14 +2356,10 @@ namespace DOL.GS.Spells
                                         }
                                     }
                                 }
-                            }// if (m_caster is GamePlayer)
-                            else if (m_caster is GameNPC && (m_caster as GameNPC).Brain is ControlledNpcBrain)
+                            } // if (m_caster is GamePlayer)
+                            else if (m_caster.GetLivingOwner() is {} owner)
                             {
-                                IControlledBrain casterbrain = (m_caster as GameNPC).Brain as IControlledBrain;
-
-                                GamePlayer player = casterbrain.GetPlayerOwner();
-
-                                if (player != null)
+                                if (owner is GamePlayer player)
                                 {
                                     if (player.Group == null)
                                     {
@@ -3183,17 +3168,9 @@ namespace DOL.GS.Spells
         {
             // Deliver message to the target, if the target is a pet, to its
             // owner instead.
-            if (target is GameNPC)
+            if (target.GetPlayerOwner() is GamePlayer owner)
             {
-                IControlledBrain brain = ((GameNPC)target).Brain as IControlledBrain;
-                if (brain != null)
-                {
-                    GamePlayer owner = brain.GetPlayerOwner();
-                    if (owner != null)
-                    {
-                        this.MessageToLiving(owner, eChatType.CT_SpellResisted, LanguageMgr.GetTranslation(owner.Client, "SpellHandler.PetResistsEffect", owner.GetPersonalizedName(target)));
-                    }
-                }
+                this.MessageToLiving(owner, eChatType.CT_SpellResisted, LanguageMgr.GetTranslation(owner.Client, "SpellHandler.PetResistsEffect", owner.GetPersonalizedName(target)));
             }
             else if (target is GamePlayer targetPlayer)
             {
@@ -3265,18 +3242,13 @@ namespace DOL.GS.Spells
         /// <param name="type"></param>
         public void MessageToCaster(string message, eChatType type)
         {
-            if (Caster is GamePlayer)
+            if (Caster is GamePlayer player)
             {
-                (Caster as GamePlayer).MessageToSelf(message, type);
+                player.MessageToSelf(message, type);
             }
-            else if (Caster is GameNPC && (Caster as GameNPC).Brain is IControlledBrain
-                     && (type == eChatType.CT_YouHit || type == eChatType.CT_SpellResisted))
+            else if (Caster.GetPlayerOwner() is {} owner)
             {
-                GamePlayer owner = ((Caster as GameNPC).Brain as IControlledBrain).GetPlayerOwner();
-                if (owner != null)
-                {
-                    owner.MessageFromControlled(message, type);
-                }
+                owner.MessageFromControlled(message, type);
             }
         }
 
@@ -3406,13 +3378,7 @@ namespace DOL.GS.Spells
 
         private string GetTranslation(string translationId, params object[] args)
         {
-            var caster = Caster;
-            GamePlayer player = null;
-            if (caster is GamePlayer || caster is GameNPC && (caster as GameNPC).Brain is IControlledBrain &&
-            ((caster as GameNPC).Brain as IControlledBrain).GetPlayerOwner() != null)
-            {
-                player = caster is GamePlayer ? (caster as GamePlayer) : ((caster as GameNPC).Brain as IControlledBrain).GetPlayerOwner();
-            }
+            GamePlayer player = Caster.GetController() as GamePlayer;
 
             if (player != null) return LanguageMgr.GetTranslation(player.Client, translationId, args);
             else return LanguageMgr.GetTranslation(Properties.SERV_LANGUAGE, translationId, args);
@@ -3609,7 +3575,7 @@ namespace DOL.GS.Spells
 
             if (Caster is NecromancerPet pet)
             {
-                var owner = (pet.Brain as IControlledBrain)?.GetLivingOwner();
+                var owner = pet.GetLivingOwner();
                 if (owner != null)
                 {
                     if (!string.IsNullOrWhiteSpace(SpellLine.Spec))

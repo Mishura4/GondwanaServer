@@ -50,7 +50,7 @@ namespace DOL.AI.Brain
         /// </summary>
         public override void Think()
         {
-            GamePlayer playerowner = GetPlayerOwner();
+            GamePlayer playerowner = Body.GetPlayerOwner();
             var gameObjectRegionAndId = new Tuple<ushort, ushort>(Body.CurrentRegionID, (ushort)Body.ObjectID);
             var isObjectInUpdateArray = playerowner.Client.GameObjectUpdateArray.TryGetValue(gameObjectRegionAndId, out var updateTime);
             if (playerowner != null && isObjectInUpdateArray && (GameTimer.GetTickCount() - updateTime > ThinkInterval))
@@ -204,7 +204,7 @@ namespace DOL.AI.Brain
                     continue;
                 }
 
-                if (player == GetPlayerOwner())
+                if (player == Body.GetPlayerOwner()) // TODO: optimize this out of the loop
                     return player;
 
                 ListDefensiveTarget.Add(player);
@@ -231,7 +231,7 @@ namespace DOL.AI.Brain
                     return Body;
                 }
 
-                if (npc == GetLivingOwner())
+                if (npc == Body.GetLivingOwner()) // TODO: optimize this out of the loop
                     return npc;
 
                 ListDefensiveTarget.Add(npc);

@@ -406,21 +406,12 @@ namespace DOL.GS.ServerRules
             if (!defender.IsAlive || !attacker.IsAlive)
                 return false;
 
-            GamePlayer playerAttacker = attacker as GamePlayer;
-            GamePlayer playerDefender = defender as GamePlayer;
+            GamePlayer playerAttacker = attacker as GamePlayer ?? attacker.GetPlayerOwner();
+            GamePlayer playerDefender = defender as GamePlayer ?? defender.GetPlayerOwner();
 
             if (attacker is GameNPC)
                 if (!(attacker as GameNPC).ApplyAttackRules)
                     return true;
-
-            // if Pet, let's define the controller once
-            if (defender is GameNPC)
-                if ((defender as GameNPC).Brain is IControlledBrain)
-                    playerDefender = ((defender as GameNPC).Brain as IControlledBrain).GetPlayerOwner();
-
-            if (attacker is GameNPC)
-                if ((attacker as GameNPC).Brain is IControlledBrain)
-                    playerAttacker = ((attacker as GameNPC).Brain as IControlledBrain).GetPlayerOwner();
 
             if (playerDefender != null && (playerDefender.Client.ClientState == GameClient.eClientState.WorldEnter || playerDefender.IsInvulnerableToAttack))
             {

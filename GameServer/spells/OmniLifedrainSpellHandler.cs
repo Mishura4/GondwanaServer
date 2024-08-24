@@ -84,11 +84,10 @@ namespace DOL.GS.Spells
 
 
                 #region PVP DAMAGE
-
-                if (m_caster is NecromancerPet && ((m_caster as NecromancerPet).Brain as IControlledBrain).GetPlayerOwner() != null || m_caster is GamePlayer)
+                
+                if (m_caster.DamageRvRMemory > 0 && (m_caster is GamePlayer || (m_caster as NecromancerPet)?.GetLivingOwner() is not null))
                 {
-                    if (m_caster.DamageRvRMemory > 0)
-                        m_caster.DamageRvRMemory -= (long)Math.Max(heal, 0);
+                    m_caster.DamageRvRMemory -= (long)Math.Max(heal, 0);
                 }
 
                 #endregion PVP DAMAGE
@@ -102,12 +101,12 @@ namespace DOL.GS.Spells
                 }
 
                 #region PVP DAMAGE
-
-                if (m_caster is NecromancerPet && ((m_caster as NecromancerPet).Brain as IControlledBrain).GetPlayerOwner() != null || m_caster is GamePlayer)
+                
+                if (m_caster.DamageRvRMemory > 0 && (m_caster is GamePlayer || (m_caster as NecromancerPet)?.GetLivingOwner() is not null))
                 {
-                    if (m_caster.DamageRvRMemory > 0)
-                        m_caster.DamageRvRMemory = 0; //Remise a zéro compteur dommages/heal rps
+                    m_caster.DamageRvRMemory = 0; //Remise a zéro compteur dommages/heal rps
                 }
+                
                 #endregion PVP DAMAGE
             }
         }

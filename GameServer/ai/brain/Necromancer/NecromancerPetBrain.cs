@@ -70,7 +70,7 @@ namespace DOL.AI.Brain
             // Necro pets need there own think as they may need to cast a spell in any state
             if (IsActive)
             {
-                GamePlayer playerowner = GetPlayerOwner();
+                GamePlayer playerowner = Body.GetPlayerOwner();
 
                 if (playerowner != null && (GameTimer.GetTickCount() - playerowner.Client.GameObjectUpdateArray[new Tuple<ushort, ushort>(Body.CurrentRegionID, (ushort)Body.ObjectID)]) > ThinkInterval)
                 {
@@ -136,7 +136,7 @@ namespace DOL.AI.Brain
             else if (e == GameLivingEvent.Dying)
             {
                 // At necropet Die, we check DamageRvRMemory for transfer it to owner if necessary.
-                GamePlayer playerowner = GetPlayerOwner();
+                GamePlayer playerowner = Body.GetPlayerOwner();
                 if (playerowner != null && Body.DamageRvRMemory > 0)
                 {
                     playerowner.DamageRvRMemory = Body.DamageRvRMemory;

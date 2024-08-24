@@ -223,17 +223,9 @@ namespace DOL.GS.Spells
         {
             m_lastdamage -= Convert.ToInt32(m_lastdamage * 0.25);
             SendEffectAnimation(target, 0, false, 0);
-            if (target is GameNPC)
+            if (target is GameNPC && target.GetController() is GamePlayer owner)
             {
-                IControlledBrain brain = ((GameNPC)target).Brain as IControlledBrain;
-                if (brain != null)
-                {
-                    GamePlayer owner = brain.GetPlayerOwner();
-                    if (owner != null)
-                    {
-                        MessageToLiving(owner, LanguageMgr.GetTranslation(owner.Client, "SpellHandler.PetResistsEffect", owner.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
-                    }
-                }
+                MessageToLiving(owner, LanguageMgr.GetTranslation(owner.Client, "SpellHandler.PetResistsEffect", owner.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
             }
             else if (target is GamePlayer targetPlayer)
             {

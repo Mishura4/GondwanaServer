@@ -274,26 +274,14 @@ namespace DOL.GS.ServerRules
             var playerDefender = defender as GamePlayer;
 
             // if friend, let's define the controller once
-            if (defenderNpc != null)
+            if (attackerNpc?.GetLivingOwner() is {} attackerOwner)
             {
-                if (defenderNpc.Brain is IControlledBrain controlledBrain)
-                {
-                    playerDefender = controlledBrain.GetPlayerOwner();
-                }
-
-                if (defenderNpc is FollowingFriendMob followMob)
-                {
-                    playerDefender = followMob.PlayerFollow;
-                }
+                attacker = attackerOwner;
+                quiet = true;
             }
-
-            if (attackerNpc != null)
+            if (defenderNpc?.GetLivingOwner() is {} defenderOwner)
             {
-                if (attackerNpc.Brain is IControlledBrain controlledBrain)
-                {
-                    playerAttacker = controlledBrain.GetPlayerOwner();
-                }
-                quiet = false;
+                defender = defenderOwner;
             }
 
             if (playerDefender != null && playerDefender == playerAttacker)
@@ -415,28 +403,6 @@ namespace DOL.GS.ServerRules
                 return false;
             }
 
-            // Pets
-            if (attackerNpc != null)
-            {
-                var controlled = attackerNpc.Brain as IControlledBrain;
-                if (controlled != null)
-                {
-                    var newAttacker = controlled.GetLivingOwner();
-                    if (newAttacker != null)
-                    {
-                        attacker = newAttacker;
-                    }
-                    quiet = true; // silence all attacks by controlled npc
-                }
-            }
-            if (defenderNpc != null)
-            {
-                if (((GameNPC)defender).Brain is IControlledBrain controlled)
-                    defender = controlled.GetLivingOwner() ?? defender;
-                else if (defender is FollowingFriendMob followMob)
-                    defender = followMob.PlayerFollow ?? defender;
-            }
-
             if (playerAttacker != null && JailMgr.IsPrisoner(playerAttacker))
             {
                 if (quiet == false)
@@ -542,14 +508,8 @@ namespace DOL.GS.ServerRules
             if (source == null || target == null)
                 return false;
 
-            GameLiving realSource = source;
-            GameLiving realTarget = target;
-
-            if (realSource is GameNPC { Brain: IControlledBrain sourceBrain })
-                realSource = sourceBrain.Owner;
-
-            if (realTarget is GameNPC { Brain: IControlledBrain targetBrain })
-                realTarget = targetBrain.Owner;
+            GameLiving realSource = source.GetLivingOwner() ?? source;
+            GameLiving realTarget = target.GetLivingOwner() ?? target;
             
             var targetPlayer = realTarget as GamePlayer;
             var sourcePlayer = realSource as GamePlayer;

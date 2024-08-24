@@ -35,6 +35,8 @@ using DOL.GS.Utils;
 
 using log4net;
 using Microsoft.VisualBasic;
+using DOL.AI.Brain;
+using DOL.GS.Spells;
 
 namespace DOL.GS
 {
@@ -375,6 +377,68 @@ namespace DOL.GS
             {
                 m_ownerID = value;
             }
+        }
+
+        protected GameLiving m_owner;
+
+        /// <summary>
+        /// Gets or sets the owner for this object
+        /// This will be used to determine the framework of reference for example for ServerRules.IsAllowedToAttack
+        /// </summary>
+        public virtual GameLiving Owner
+        {
+            get => m_owner;
+            set
+            {
+                m_owner = value;
+                OwnerID = value?.InternalID;
+            }
+        }
+
+        /// <summary>
+        /// Find the player owner of the pets at the top of the tree
+        /// </summary>
+        /// <returns>Player owner at the top of the tree.  If there was no player, then return null.</returns>
+        public GamePlayer GetPlayerOwner()
+        {
+            return GetLivingOwner() as GamePlayer;
+        }
+
+        public GameNPC GetNPCOwner()
+        {
+            return GetLivingOwner() as GameNPC;
+        }
+
+        public virtual GameLiving GetLivingOwner()
+        {
+            GameLiving owner = Owner;
+            GameLiving leaf = null;
+            while (owner is not null)
+            {
+                leaf = owner;
+                owner = owner.Owner;
+                if (owner == this)
+                    throw new Exception("GetLivingOwner() from " + this + " caused a cyclical loop.");
+            }
+            return leaf;
+        }
+
+        public virtual bool IsOwner(GameLiving other)
+        {
+            if (Owner == null)
+            {
+                return string.IsNullOrEmpty(OwnerID) ? false : string.Equals(OwnerID, other.InternalID);
+            }
+            var owner = Owner;
+            while (owner != null)
+            {
+                if (owner == other)
+                    return true;
+                if (owner == this)
+                    throw new Exception($"IsOwner for {this} caused a cyclic loop");
+                owner = owner.Owner;
+            }
+            return false;
         }
 
         public bool CanRespawnWithinEvent

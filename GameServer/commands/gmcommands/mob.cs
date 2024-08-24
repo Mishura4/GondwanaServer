@@ -1330,16 +1330,9 @@ namespace DOL.GS.Commands
             if (targetMob.DamageRvRMemory > 0)
                 info.Add("  - Damage RvR Memory: " + targetMob.DamageRvRMemory);
 
-            if (targetMob.Brain != null && targetMob.Brain is IControlledBrain)
+            if (targetMob.GetLivingOwner() is {} owner)
             {
-                try
-                {
-                    info.Add(" + -- Owner: " + (targetMob.Brain as IControlledBrain).GetPlayerOwner() != null ? (targetMob.Brain as IControlledBrain).GetPlayerOwner().Name : (targetMob.Brain as IControlledBrain).GetNPCOwner().Name);
-                }
-                catch
-                {
-                    info.Add(" + -- Owner: Not found!");
-                }
+                info.Add(" + -- Owner: " + owner);
             }
             if (targetMob.NPCTemplate != null)
             {

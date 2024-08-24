@@ -149,10 +149,7 @@ namespace DOL.AI.Brain
 
             foreach (GameNPC npc in Body.GetNPCsInRadius((ushort)AggroRange))
             {
-                if (npc == null || npc.Brain == null || npc is GameKeepGuard || (npc.Brain as IControlledBrain) == null)
-                    continue;
-
-                GamePlayer player = (npc.Brain as IControlledBrain).GetPlayerOwner();
+                GamePlayer player = npc?.GetPlayerOwner();
 
                 if (player == null)
                     continue;
@@ -179,11 +176,7 @@ namespace DOL.AI.Brain
 
         public override int CalculateAggroLevelToTarget(GameLiving target)
         {
-            GamePlayer checkPlayer = null;
-            if (target is GameNPC && (target as GameNPC).Brain is IControlledBrain)
-                checkPlayer = ((target as GameNPC).Brain as IControlledBrain).GetPlayerOwner();
-            if (target is GamePlayer)
-                checkPlayer = target as GamePlayer;
+            GamePlayer checkPlayer = target.GetPlayerOwner();
             if (checkPlayer == null)
                 return 0;
             if (GameServer.KeepManager.IsEnemy(Body as GameKeepGuard, checkPlayer, true))

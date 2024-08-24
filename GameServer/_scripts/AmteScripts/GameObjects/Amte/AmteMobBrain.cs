@@ -35,12 +35,9 @@ namespace DOL.AI.Brain
             float aggroMultiplier = 1.0f;
             if (target is GameNPC targetNPC)
             {
-                if (targetNPC.Brain is IControlledBrain controlledBrain)
-                {
-                    GameLiving owner = controlledBrain.GetLivingOwner();
-                    if (owner != null)
-                        realTarget = owner;
-                }
+                var owner = target.GetLivingOwner();
+                if (owner != null)
+                    realTarget = owner;
                 // FollowingFriendMob will have higher aggro
                 if (realTarget is FollowingFriendMob { PlayerFollow: not null } followMob)
                 {

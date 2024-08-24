@@ -69,20 +69,6 @@ namespace DOL.GS
         }
 
         /// <summary>
-        /// The root owner of this pet, the person at the top of the owner chain.
-        /// </summary>
-        public GameLiving RootOwner
-        {
-            get
-            {
-                if (Brain is IControlledBrain petBrain)
-                    return petBrain.GetLivingOwner();
-
-                return null;
-            }
-        }
-
-        /// <summary>
         /// Gets or sets the level of this NPC
         /// </summary>
         public override byte Level
@@ -117,7 +103,7 @@ namespace DOL.GS
                 newLevel = (byte)SummonSpellDamage;
             else if (!(Owner is GamePet))
                 newLevel = (byte)(Owner.Level * SummonSpellDamage * -0.01);
-            else if (RootOwner is GameLiving summoner)
+            else if (GetLivingOwner() is GameLiving summoner)
                 newLevel = (byte)(summoner.Level * SummonSpellDamage * -0.01);
 
             if (SummonSpellValue > 0 && newLevel > SummonSpellValue)
@@ -184,11 +170,7 @@ namespace DOL.GS
         {
             get
             {
-                GameLiving gl = (Brain as IControlledBrain).GetLivingOwner();
-                if (gl != null)
-                    return gl.Effectiveness;
-
-                return 1.0;
+                return GetLivingOwner()?.Effectiveness ?? 1.0;
             }
         }
         #endregion
@@ -617,14 +599,11 @@ namespace DOL.GS
 
         public override bool IsObjectGreyCon(GameObject obj)
         {
-            GameObject tempobj = obj;
-            if (Brain is IControlledBrain)
+            if (obj.GetLivingOwner() is { } owner)
             {
-                GameLiving player = (Brain as IControlledBrain).GetLivingOwner();
-                if (player != null)
-                    tempobj = player;
+                obj = owner;
             }
-            return base.IsObjectGreyCon(tempobj);
+            return base.IsObjectGreyCon(obj);
         }
     }
 }

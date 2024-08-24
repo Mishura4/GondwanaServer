@@ -52,13 +52,13 @@ namespace DOL.GS.PropertyCalc
 
             if (living is NecromancerPet necroPet)
             {
-                if (necroPet.Brain is IControlledBrain necroPetBrain && necroPetBrain.GetPlayerOwner() is GamePlayer necro
+                if (necroPet.Brain is IControlledBrain necroPetBrain && necroPetBrain.Owner is GamePlayer necro
                     && necro.GetAbility<RealmAbilities.MasteryOfPain>() is RealmAbilities.MasteryOfPain raMoP)
                     chance += raMoP.Amount;
             }
             else if (living is GamePet pet)
             {
-                if (pet.Brain is IControlledBrain petBrain && petBrain.GetPlayerOwner() is GamePlayer player
+                if (pet.Brain is IControlledBrain petBrain && petBrain.Owner is GamePlayer player
                     && player.GetAbility<RealmAbilities.WildMinionAbility>() is RealmAbilities.WildMinionAbility raWM)
                     chance += raWM.Amount;
             }

@@ -85,17 +85,9 @@ namespace DOL.GS.Spells
             ad.SpellHandler = this;
             ad.AttackResult = GameLiving.eAttackResult.HitUnstyled;
 
-            if (ad.Attacker is GameNPC)
+            if (ad.Attacker is GameNPC && ad.Attacker.GetController() is GamePlayer owner)
             {
-                IControlledBrain brain = ((GameNPC)ad.Attacker).Brain as IControlledBrain;
-                if (brain != null)
-                {
-                    GamePlayer owner = brain.GetPlayerOwner();
-                    if (owner != null)
-                    {
-                        MessageToLiving(owner, String.Format(LanguageMgr.GetTranslation(owner.Client, "DamageAddAndShield.EventHandlerDA.YourHitFor"), owner.GetPersonalizedName(ad.Attacker), target.GetName(0, false), ad.Damage), eChatType.CT_Spell);
-                    }
-                }
+                MessageToLiving(owner, String.Format(LanguageMgr.GetTranslation(owner.Client, "DamageAddAndShield.EventHandlerDA.YourHitFor"), owner.GetPersonalizedName(ad.Attacker), target.GetName(0, false), ad.Damage), eChatType.CT_Spell);
             }
             else
             {
@@ -172,23 +164,13 @@ namespace DOL.GS.Spells
             ad.SpellHandler = this;
             ad.AttackType = AttackData.eAttackType.Spell;
             ad.AttackResult = GameLiving.eAttackResult.HitUnstyled;
-
-            GamePlayer owner = null;
-
+            
             GameClient attackerClient = null;
             if (attacker is GamePlayer) attackerClient = ((GamePlayer)attacker).Client;
 
-            if (ad.Attacker is GameNPC)
+            if (ad.Attacker is GameNPC && ad.Attacker.GetPlayerOwner() is {} ownerPlayer)
             {
-                IControlledBrain brain = ((GameNPC)ad.Attacker).Brain as IControlledBrain;
-                if (brain != null)
-                {
-                    owner = brain.GetPlayerOwner();
-                    if (owner != null && owner.ControlledBrain != null && ad.Attacker == owner.ControlledBrain.Body)
-                    {
-                        MessageToLiving(owner, String.Format(LanguageMgr.GetTranslation(owner.Client, "DamageAddAndShield.EventHandlerDS.YourHitFor"), owner.GetPersonalizedName(ad.Attacker), target.GetName(0, false), ad.Damage), eChatType.CT_Spell);
-                    }
-                }
+                MessageToLiving(ownerPlayer, String.Format(LanguageMgr.GetTranslation(ownerPlayer.Client, "DamageAddAndShield.EventHandlerDS.YourHitFor"), ownerPlayer.GetPersonalizedName(ad.Attacker), target.GetName(0, false), ad.Damage), eChatType.CT_Spell);
             }
             else if (attackerClient != null)
             {

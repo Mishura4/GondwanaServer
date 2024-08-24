@@ -484,7 +484,7 @@ namespace DOL.GS
             else
             {
                 if (controlledBrain.Owner != Player)
-                    throw new ArgumentException("ControlledNpc with wrong owner is set (player=" + Player.Name + ", owner=" + controlledBrain.Owner.Name + ")", "controlledNpc");
+                    throw new ArgumentException("ControlledNpc with wrong owner is set (player=" + Player.Name + ", owner=" + controlledBrain.Owner?.Name + ")", "controlledNpc");
                 if (Player.ControlledBrain == null)
                     Player.InitControlledBrainArray(1);
                 Player.Out.SendPetWindow(controlledBrain.Body, ePetWindowAction.Open, controlledBrain.AggressionState, controlledBrain.WalkState);

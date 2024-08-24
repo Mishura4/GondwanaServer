@@ -29,11 +29,11 @@ namespace DOL.UnitTests.Gameserver
         {
             var player = new FakePlayer();
             var brain = new ControlledNpcBrain(player);
+            var living = new FakeNPC(brain);
 
-            var actual = brain.GetPlayerOwner();
-
-            var expected = player;
-            Assert.AreEqual(expected, actual);
+            // TODO: figure out what to do with this, this won't work anymore
+            Assert.AreEqual(player, living.GetPlayerOwner());
+            Assert.AreEqual(player, (living.Brain as IControlledBrain)!.Owner);
         }
     }
 }

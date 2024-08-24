@@ -43,11 +43,7 @@ namespace DOL.GS.Scripts
         {
             base.Die(killer);
 
-            var plKiller = killer as GamePlayer;
-            var npc = killer as GameNPC;
-            if (plKiller == null && npc != null && npc.ControlledBrain != null)
-                plKiller = npc.ControlledBrain.GetPlayerOwner();
-            if (plKiller != null && !string.IsNullOrEmpty(GuildName))
+            if ((killer as GameLiving)?.GetController() is GamePlayer plKiller && !string.IsNullOrEmpty(GuildName))
             {
                 var guild = GuildMgr.GetGuildByName(GuildName);
                 if (guild == null)

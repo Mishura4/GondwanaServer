@@ -90,7 +90,7 @@ namespace DOL.AI.Brain
             {
                 #region Heals
                 case "Heal":
-                    player = GetPlayerOwner();
+                    player = Body.GetPlayerOwner();
                     if (player != null)
                     {
 
@@ -101,7 +101,7 @@ namespace DOL.AI.Brain
                         }
                     }
                     //Heal owner
-                    owner = (this as IControlledBrain).Owner;
+                    owner = Owner;
                     if (owner.HealthPercent < DOL.GS.ServerProperties.Properties.NPC_HEAL_THRESHOLD)
                     {
                         Body.TargetObject = owner;
@@ -140,12 +140,12 @@ namespace DOL.AI.Brain
                             break;
                         }
 
-                        owner = (this as IControlledBrain).Owner;
+                        owner = Owner;
 
                         //Buff owner
                         if (owner != null)
                         {
-                            player = GetPlayerOwner();
+                            player = Body.GetPlayerOwner();
 
                             //Buff player
                             if (player != null)

@@ -264,19 +264,8 @@ namespace DOL.GS
 
             try
             {
-                if (killer is not GamePlayer player)
-                {
-                    player = null;
-                    if (killer is GameNPC { Brain: IControlledBrain brain })
-                    {
-                        player = brain.GetPlayerOwner();
-                    }
-                }
-
-                if (player is null)
-                {
+                if ((killer as GameLiving)?.GetController() is not GamePlayer player)
                     return loot;
-                }
                 
                 // allow the leader to decide the loot realm
                 if (player is { Group: not null })

@@ -134,13 +134,11 @@ namespace DOL.GS.Spells
                 Caster.Health = Caster.Health + damageConverted;
 
                 #region PVP DAMAGE
-
-                if (ad.Target is NecromancerPet &&
-                    ((ad.Target as NecromancerPet).Brain as IControlledBrain).GetPlayerOwner() != null
-                    || ad.Target is GamePlayer)
+                
+                    
+                if (ad.Target.DamageRvRMemory > 0 && (ad.Target is GamePlayer || (ad.Target as NecromancerPet)?.GetLivingOwner() is not null))
                 {
-                    if (ad.Target.DamageRvRMemory > 0)
-                        ad.Target.DamageRvRMemory -= (long)Math.Max(damageConverted, 0);
+                    ad.Target.DamageRvRMemory -= (long)Math.Max(damageConverted, 0);
                 }
 
                 #endregion PVP DAMAGE

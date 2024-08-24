@@ -57,18 +57,16 @@ namespace DOL.GS.ServerRules
             // if controlled NPC - do checks for owner instead
             if (attacker is GameNPC)
             {
-                IControlledBrain controlled = ((GameNPC)attacker).Brain as IControlledBrain;
-                if (controlled != null)
+                var owner = attacker.GetLivingOwner();
+                if (owner != null)
                 {
-                    attacker = controlled.GetLivingOwner();
-                    quiet = true; // silence all attacks by controlled npc
+                    attacker = owner;
+                    quiet = true;
                 }
             }
             if (defender is GameNPC)
             {
-                IControlledBrain controlled = ((GameNPC)defender).Brain as IControlledBrain;
-                if (controlled != null)
-                    defender = controlled.GetLivingOwner();
+                defender = defender.GetLivingOwner() ?? defender;
             }
 
             //"You can't attack yourself!"
@@ -105,18 +103,16 @@ namespace DOL.GS.ServerRules
             // if controlled NPC - do checks for owner instead
             if (source is GameNPC)
             {
-                IControlledBrain controlled = ((GameNPC)source).Brain as IControlledBrain;
-                if (controlled != null)
+                var owner = source.GetLivingOwner();
+                if (owner != null)
                 {
-                    source = controlled.GetLivingOwner();
-                    quiet = true; // silence all attacks by controlled npc
+                    source = owner;
+                    quiet = true;
                 }
             }
             if (target is GameNPC)
             {
-                IControlledBrain controlled = ((GameNPC)target).Brain as IControlledBrain;
-                if (controlled != null)
-                    target = controlled.GetLivingOwner();
+                target = target.GetLivingOwner() ?? target;
             }
 
             if (source == target)
