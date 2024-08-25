@@ -51,7 +51,8 @@ namespace DOL.GS.Spells
             int heal = (ad.Damage + ad.CriticalDamage) * m_spell.LifeDrainReturn / 100;
             if (m_caster.IsDiseased)
             {
-                MessageToCaster(LanguageMgr.GetTranslation(((GamePlayer)m_caster).Client, "Spell.LifeTransfer.TargetDiseased"), eChatType.CT_SpellResisted);
+                if (m_caster is GamePlayer casterPlayer)
+                    MessageToCaster(LanguageMgr.GetTranslation(casterPlayer.Client, "Spell.LifeTransfer.TargetDiseased"), eChatType.CT_SpellResisted);
                 heal >>= 1;
             }
             if (heal <= 0) return;
@@ -59,11 +60,13 @@ namespace DOL.GS.Spells
 
             if (heal > 0)
             {
-                MessageToCaster(LanguageMgr.GetTranslation(((GamePlayer)m_caster).Client, "SpellHandler.Lifedrain.Heal", heal, (heal == 1 ? "." : "s.")), eChatType.CT_Spell);
+                if (m_caster is GamePlayer casterPlayer)
+                    MessageToCaster(LanguageMgr.GetTranslation(casterPlayer.Client, "SpellHandler.Lifedrain.Heal", heal, (heal == 1 ? "." : "s.")), eChatType.CT_Spell);
             }
             else
             {
-                MessageToCaster(LanguageMgr.GetTranslation(((GamePlayer)m_caster).Client, "SpellHandler.Lifedrain.NoAbsorb"), eChatType.CT_SpellResisted);
+                if (m_caster is GamePlayer casterPlayer)
+                    MessageToCaster(LanguageMgr.GetTranslation(casterPlayer.Client, "SpellHandler.Lifedrain.NoAbsorb"), eChatType.CT_SpellResisted);
             }
         }
 
