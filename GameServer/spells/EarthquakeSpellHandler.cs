@@ -1,4 +1,5 @@
-﻿using DOL.GS.Effects;
+﻿using DOL.AI.Brain;
+using DOL.GS.Effects;
 using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
 using DOL.GS.PlayerClass;
@@ -36,41 +37,57 @@ namespace DOL.GS.Spells
             pak.WriteIntLowEndian((uint)Position.Z);
             pak.Write(BitConverter.GetBytes(radius), 0, sizeof(float));
             pak.Write(BitConverter.GetBytes(newIntensity), 0, sizeof(float));
-            pak.Write(BitConverter.GetBytes(Spell.Pulse), 0, sizeof(float));
+            pak.Write(BitConverter.GetBytes(duration), 0, sizeof(float));
             pak.Write(BitConverter.GetBytes(delay), 0, sizeof(float));
             player.Out.SendTCP(pak);
         }
 
-        private void SendPacketTo(GamePlayer player)
+        private void SendPacketToAll()
         {
-            int distance = (int)player.Coordinate.DistanceTo(Position.Coordinate, true);
-            float newIntensity;
-            if (player != Caster)
+            // Explicitly handle the caster
+            if (Caster is GamePlayer caster)
             {
+                SendPacketTo(caster, intensity);
+            }
+
+            foreach (PlayerDistanceEnumerator enumerator in Position.Region.GetPlayersInRadius(Position.Coordinate, (ushort)radius, true, true))
+            {
+                var entry = (PlayerDistEntry)enumerator.Current;
+                var player = entry.Player;
+                int distance = (int)entry.Distance;
+
+                if (player == Caster)
+                    continue; // Skip caster, we already sent
+                
                 if (distance > radius)
                 {
-                    return;
+                    continue;
                 }
-                newIntensity = intensity * (1 - distance / radius);
+                
+                float newIntensity = intensity * (1 - distance / radius);
+
+                SendPacketTo(player, newIntensity);
             }
-            else
-            {
-                newIntensity = distance > radius ? 0.10f : Math.Min(0.10f, intensity * (1 - distance / radius));
-            }
-            SendPacketTo(player, newIntensity);
         }
+
+        private double elapsedTime = 0;
 
         public override void OnSpellPulse(PulsingSpellEffect effect)
         {
-            if (Caster.ObjectState != GameObject.eObjectState.Active)
+            elapsedTime += Spell.Frequency; // Assuming Spell.Frequency is the time between pulses
+
+            // Check if the total duration has been exceeded
+            if (elapsedTime >= duration)
             {
                 effect.Cancel(false);
+                MessageToCaster("The earthquake effect has ended.", eChatType.CT_SpellExpires);
                 return;
             }
-            if (Caster.IsMoving && Spell.IsFocus || Caster.IsStunned || Caster.IsMezzed || !Caster.IsAlive)
+
+            if (Caster.ObjectState != GameObject.eObjectState.Active || Caster.IsMoving && Spell.IsFocus || Caster.IsStunned || Caster.IsMezzed || !Caster.IsAlive)
             {
-                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.PulsingSpellCancelled"), eChatType.CT_SpellExpires);
                 effect.Cancel(false);
+                MessageToCaster("Your spell was cancelled.", eChatType.CT_SpellExpires);
                 return;
             }
 
@@ -80,14 +97,18 @@ namespace DOL.GS.Spells
                 {
                     FocusSpellAction(null, Caster, null);
                 }
-                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.PulsingSpellNoMana"), eChatType.CT_SpellExpires);
                 effect.Cancel(false);
+                MessageToCaster("You do not have enough mana and your spell was cancelled.", eChatType.CT_SpellExpires);
                 return;
             }
 
             Caster.Mana -= Spell.PulsePower;
+            ApplyEffectOnTarget(Caster, 1.0);  // Caster experiences the effect
+            SendPacketToAll();  // Send packet to all affected players
+
             foreach (GameLiving living in SelectTargets(m_spellTarget))
             {
+                if (living == Caster) continue; // Skip the caster
                 var chances = CalculateToHitChance(living);
                 if (chances <= 0 || Util.Random(100) > chances)
                 {
@@ -97,14 +118,114 @@ namespace DOL.GS.Spells
                 float distSq = living.GetDistanceSquaredTo(Position, 1.0f);
                 if (distSq > radius * radius)
                     continue;
-                
+
                 double dist = Math.Sqrt(distSq);
                 var effectiveness = (1 - dist / radius);
                 ApplyEffectOnTarget(living, effectiveness);
             }
-            
-            if (Caster is GamePlayer playerCaster)
-                SendPacketTo(playerCaster);
+        }
+
+        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        {
+            if (elapsedTime >= duration)
+            {
+                return;  // Stop applying damage once the duration is over
+            }
+
+            if (IsImmune(target))
+            {
+                return;
+            }
+
+            int distance = (int)target.Coordinate.DistanceTo(Position.Coordinate, true);
+            if (distance > radius)
+            {
+                CancelPulsingSpell(target, Spell.SpellType);
+                return;
+            }
+
+            float newIntensity = intensity * (1 - distance / radius);
+            int damage = (int)newIntensity;
+            if (target is GamePlayer player)
+            {
+                SendPacketTo(player, newIntensity);  // Update the intensity sent to players
+            }
+
+            AttackData ad = new AttackData();
+            ad.Attacker = Caster;
+            ad.Target = target;
+            ad.AttackType = AttackData.eAttackType.Spell;
+            ad.SpellHandler = this;
+            ad.AttackResult = GameLiving.eAttackResult.HitUnstyled;
+            ad.IsSpellResisted = false;
+            ad.Damage = damage;
+
+            m_lastAttackData = ad;
+            SendDamageMessages(ad);
+            DamageTarget(ad, true);
+            target.StartInterruptTimer(target.SpellInterruptDuration, ad.AttackType, Caster);
+        }
+
+        private bool IsImmune(GameLiving living)
+        {
+            if (living == null)
+            {
+                return true;
+            }
+
+            if (living == Caster)
+            {
+                return true; // The caster is immune to their own earthquake
+            }
+
+            GameNPC npc = living as GameNPC;
+            if (npc is { Brain: IControlledBrain controlledBrain })
+            {
+                return IsImmune(controlledBrain.Owner);
+            }
+
+            GamePlayer ownerPlayer = Caster as GamePlayer;
+            if (ownerPlayer == null)
+            {
+                return false;
+            }
+
+            GamePlayer targetPlayer = living as GamePlayer;
+
+            if (ownerPlayer.Group?.IsInTheGroup(living) == true)
+            {
+                return true; // Members of the caster's group are immune
+            }
+
+            if (ownerPlayer.Guild != null)
+            {
+                if (npc != null)
+                {
+                    if (npc.CurrentTerritory?.IsOwnedBy(ownerPlayer.Guild) == true)
+                    {
+                        return true;
+                    }
+
+                    if (!string.IsNullOrEmpty(npc.GuildName) && string.Equals(npc.GuildName, ownerPlayer.Guild.Name))
+                    {
+                        return true;
+                    }
+                }
+                else if (targetPlayer != null)
+                {
+                    if (targetPlayer.Guild == ownerPlayer.Guild)
+                    {
+                        return true; // Members of the caster's guild are immune
+                    }
+                }
+            }
+
+            if (ownerPlayer.BattleGroup != null && targetPlayer?.BattleGroup == ownerPlayer.BattleGroup)
+            {
+                return true; // Members of the caster's battle group are immune
+            }
+
+            return false; // Not immune
         }
 
         /// <inheritdoc />
@@ -205,9 +326,9 @@ namespace DOL.GS.Spells
             
             if (!base.StartSpell(target, force))
                 return false;
-            
+
             if (Caster is GamePlayer caster)
-                SendPacketTo(caster);
+                SendPacketTo(caster, intensity);
 
             if (m_spell.Pulse != 0 && m_spell.Frequency > 0)
             {
@@ -250,5 +371,4 @@ namespace DOL.GS.Spells
         public override string ShortDescription
             => $"Creates an earthquake having an intensity of {Spell.Value / 50} on the Richter scale, causing from {Spell.Damage} damages near the epicenter to {Spell.AmnesiaChance} damages at the farthest points. Earthquakes have no effect on flying mobs, swimming mobs, bainshees or floating vampiirs.";
     }
-
 }
