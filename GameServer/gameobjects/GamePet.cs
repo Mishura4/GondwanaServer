@@ -55,20 +55,6 @@ namespace DOL.GS
         }
 
         /// <summary>
-        /// The owner of this pet
-        /// </summary>
-        public GameLiving Owner
-        {
-            get
-            {
-                if (Brain is IControlledBrain)
-                    return (Brain as IControlledBrain).Owner;
-
-                return null;
-            }
-        }
-
-        /// <summary>
         /// Gets or sets the level of this NPC
         /// </summary>
         public override byte Level

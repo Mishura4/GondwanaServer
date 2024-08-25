@@ -267,11 +267,17 @@ namespace DOL.AI.Brain
             if (WalkState == eWalkState.Follow)
                 FollowOwner();
             // [Ganrod] On supprime la cible du pet au moment  du contrôle.
-            SetOwner(m_owner);
             Body.TargetObject = null;
             GameEventMgr.AddHandler(Owner, GameLivingEvent.AttackedByEnemy, new DOLEventHandler(OnOwnerAttacked));
 
             return true;
+        }
+
+        /// <inheritdoc />
+        protected override void SetBody(GameNPC npc)
+        {
+            base.SetBody(npc);
+            SetOwner(m_owner);
         }
 
         protected void SetOwner(GameLiving living)

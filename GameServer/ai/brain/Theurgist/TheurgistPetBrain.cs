@@ -37,12 +37,20 @@ namespace DOL.AI.Brain
         private GameLiving m_target;
         private bool m_melee = false;
         private bool m_active = true;
+        private readonly GameLiving m_owner;
 
         public TheurgistPetBrain(GameLiving owner)
         {
-            Body.Owner = owner;
+            m_owner = owner;
             AggroLevel = 100;
             IsMainPet = false;
+        }
+
+        /// <inheritdoc />
+        protected override void SetBody(GameNPC npc)
+        {
+            base.SetBody(npc);
+            npc.Owner = m_owner;
         }
 
         public override int ThinkInterval { get { return 1500; } }

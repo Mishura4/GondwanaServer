@@ -643,7 +643,9 @@ namespace DOL.GS
         /// <returns></returns>
         public virtual GamePet CreateGamePet(INpcTemplate template)
         {
-            return new GamePet(template);
+            GamePet pet = new GamePet(template);
+            pet.Owner = this;
+            return pet;
         }
 
         /// <summary>

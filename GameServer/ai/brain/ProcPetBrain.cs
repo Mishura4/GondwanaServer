@@ -25,13 +25,21 @@ namespace DOL.AI.Brain
     public class ProcPetBrain : StandardMobBrain, IControlledBrain
     {
         private GameLiving m_target;
+        private readonly GameLiving m_owner;
 
         public ProcPetBrain(GameLiving owner)
         {
-            Body.Owner = owner;
+            m_owner = owner;
             m_target = owner.TargetObject as GameLiving;
             AggroLevel = 100;
             IsMainPet = false;
+        }
+
+        /// <inheritdoc />
+        protected override void SetBody(GameNPC npc)
+        {
+            base.SetBody(npc);
+            npc.Owner = m_owner;
         }
 
         public override int ThinkInterval { get { return 1500; } }

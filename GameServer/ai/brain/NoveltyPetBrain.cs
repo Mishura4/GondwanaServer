@@ -27,10 +27,19 @@ namespace DOL.AI.Brain
     {
         public const string HAS_PET = "HasNoveltyPet";
 
+        private readonly GameLiving m_owner;
+
         public NoveltyPetBrain(GamePlayer owner)
             : base()
         {
-            Body.Owner = owner;
+            m_owner = owner;
+        }
+
+        /// <inheritdoc />
+        protected override void SetBody(GameNPC npc)
+        {
+            base.SetBody(npc);
+            npc.Owner = m_owner;
         }
 
         #region Think
