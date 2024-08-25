@@ -899,7 +899,7 @@ namespace DOL.Territories
             return this.Areas.Any(a => a.ID == area.ID);
         }
 
-        public bool IsOwnedBy(Guild guild)
+        public bool IsOwnedBy(Guild? guild)
         {
             if (guild == null)
             {
@@ -913,10 +913,6 @@ namespace DOL.Territories
 
         public bool IsOwnedBy(GamePlayer player)
         {
-            if (player.Guild is not { GuildType: Guild.eGuildType.PlayerGuild })
-            {
-                return false;
-            }
             return IsOwnedBy(player.Guild);
         }
 

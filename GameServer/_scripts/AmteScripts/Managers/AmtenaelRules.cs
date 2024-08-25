@@ -274,7 +274,7 @@ namespace DOL.GS.ServerRules
             if (defenderNpc?.GetLivingOwner() is {} defenderOwner)
             {
                 // Peaceful pets can't be attacked
-                if (attackerNpc is { IsPeaceful: true })
+                if (defenderNpc is { IsPeaceful: true })
                     return false;
 
                 defender = defenderOwner;
@@ -282,6 +282,7 @@ namespace DOL.GS.ServerRules
             }
             
             // PEACE NPCs can't be attacked/attack
+            // Check again for NPC owners
             if (attackerNpc is { IsPeaceful: true } ||
                 defenderNpc is { IsPeaceful: true })
                 return false;
