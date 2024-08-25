@@ -257,34 +257,39 @@ namespace DOL.GS.ServerRules
             if (!defender.IsAlive || !attacker.IsAlive)
                 return false;
 
-            if (attacker == defender)
-            {
-                if (quiet == false) MessageToLiving(attacker, "Vous ne pouvez pas vous attaquer vous-même.");
-                return false;
-            }
-
-            // PEACE NPCs can't be attacked/attack
             var attackerNpc = attacker as GameNPC;
             var defenderNpc = defender as GameNPC;
-            if (attackerNpc != null && (attackerNpc.IsPeaceful) ||
-                (defenderNpc != null && (defenderNpc.IsPeaceful)))
+
+            // if friend, let's define the controller once
+            if (attackerNpc?.GetLivingOwner() is {} attackerOwner)
+            {
+                // Peaceful pets can't attack
+                if (attackerNpc is { IsPeaceful: true })
+                    return false;
+                
+                attacker = attackerOwner;
+                attackerNpc = attackerOwner as GameNPC;
+                quiet = true;
+            }
+            if (defenderNpc?.GetLivingOwner() is {} defenderOwner)
+            {
+                // Peaceful pets can't be attacked
+                if (attackerNpc is { IsPeaceful: true })
+                    return false;
+
+                defender = defenderOwner;
+                defenderNpc = defenderOwner as GameNPC;
+            }
+            
+            // PEACE NPCs can't be attacked/attack
+            if (attackerNpc is { IsPeaceful: true } ||
+                defenderNpc is { IsPeaceful: true })
                 return false;
 
             var playerAttacker = attacker as GamePlayer;
             var playerDefender = defender as GamePlayer;
 
-            // if friend, let's define the controller once
-            if (attackerNpc?.GetLivingOwner() is {} attackerOwner)
-            {
-                attacker = attackerOwner;
-                quiet = true;
-            }
-            if (defenderNpc?.GetLivingOwner() is {} defenderOwner)
-            {
-                defender = defenderOwner;
-            }
-
-            if (playerDefender != null && playerDefender == playerAttacker)
+            if (attacker == defender)
             {
                 if (quiet == false) MessageToLiving(attacker, "Vous ne pouvez pas vous attaquer vous-même.");
                 return false;
