@@ -98,6 +98,7 @@ namespace DOL.GS.Spells
         {
             var newAreaEffect = AreaEffect.CreateTemporary(Caster, areaEffect, target, position);
 
+            newAreaEffect.LoadedFromScript = true;
             newAreaEffect.AddToWorld();
             newAreaEffect.TempProperties.setProperty("AreaEffectDuration", duration);
 

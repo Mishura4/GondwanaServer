@@ -130,6 +130,13 @@ namespace DOL.UnitTests.Gameserver
         public GameLiving Owner => fakeOwner;
         public void UpdatePetWindow() { receivedUpdatePetWindow = true; }
 
+        /// <inheritdoc />
+        protected override void SetBody(GameNPC npc)
+        {
+            base.SetBody(npc);
+            npc.Owner = fakeOwner;
+        }
+
         public eWalkState WalkState { get; }
         public eAggressionState AggressionState { get; set; }
         public bool IsMainPet { get; set; }

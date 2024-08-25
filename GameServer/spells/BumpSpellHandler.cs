@@ -229,7 +229,8 @@ namespace DOL.GS.Spells
                 Name = "Bump",
                 Level = Caster.Level,
                 Flags = GameNPC.eFlags.PEACE | GameNPC.eFlags.DONTSHOWNAME | GameNPC.eFlags.CANTTARGET | GameNPC.eFlags.FLYING,
-                MaxSpeedBase = 4000
+                MaxSpeedBase = 4000,
+                LoadedFromScript = true
             };
         }
 
@@ -306,16 +307,7 @@ namespace DOL.GS.Spells
                         if (trajectory.Points.Count <= 1)
                             return;
                     }
-                    npc = new BumpNPC(this)
-                    {
-                        Realm = Caster.Realm,
-                        Model = 667,
-                        Position = target.Position.With(Caster.Orientation),
-                        Name = "Bump",
-                        Level = Caster.Level,
-                        Flags = GameNPC.eFlags.PEACE | GameNPC.eFlags.DONTSHOWNAME | GameNPC.eFlags.CANTTARGET | GameNPC.eFlags.FLYING,
-                        MaxSpeedBase = 4000
-                    };
+                    npc = CreateBumpNPC(target);
                     var victim = new Victim(this, npc, trajectory);
                     npc.AddToWorld();
                     _npcVictims.Add(victim);
