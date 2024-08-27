@@ -50,22 +50,21 @@ namespace DOL.GS.Spells
                 SendPacketTo(caster, intensity);
             }
 
-            foreach (PlayerDistanceEnumerator enumerator in Position.Region.GetPlayersInRadius(Position.Coordinate, (ushort)radius, true, true))
+            // Use the correct enumeration to iterate over players in range
+            foreach (PlayerDistEntry entry in Position.Region.GetPlayersInRadius(Position.Coordinate, (ushort)radius, true, true))
             {
-                var entry = (PlayerDistEntry)enumerator.Current;
-                var player = entry.Player;
+                GamePlayer player = entry.Player;
                 int distance = (int)entry.Distance;
 
                 if (player == Caster)
                     continue; // Skip caster, we already sent
-                
+
                 if (distance > radius)
                 {
                     continue;
                 }
-                
-                float newIntensity = intensity * (1 - distance / radius);
 
+                float newIntensity = intensity * (1 - distance / radius);
                 SendPacketTo(player, newIntensity);
             }
         }
@@ -103,9 +102,8 @@ namespace DOL.GS.Spells
             }
 
             Caster.Mana -= Spell.PulsePower;
-            ApplyEffectOnTarget(Caster, 1.0);  // Caster experiences the effect
-            SendPacketToAll();  // Send packet to all affected players
 
+            // Apply effects on all valid targets within range
             foreach (GameLiving living in SelectTargets(m_spellTarget))
             {
                 if (living == Caster) continue; // Skip the caster
@@ -121,8 +119,10 @@ namespace DOL.GS.Spells
 
                 double dist = Math.Sqrt(distSq);
                 var effectiveness = (1 - dist / radius);
-                ApplyEffectOnTarget(living, effectiveness);
+                ApplyEffectOnTarget(living, effectiveness); // Apply the effect on the target
             }
+
+            SendPacketToAll(); // Send packet to all affected players, including caster
         }
 
         public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)

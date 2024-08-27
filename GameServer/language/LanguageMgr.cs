@@ -116,7 +116,7 @@ namespace DOL.Language
         /// <summary>
         /// Defines a logger for this class.
         /// </summary>
-        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
         /// <summary>
         /// Holds all translations (object translations and system sentence translations).
@@ -1064,13 +1064,10 @@ namespace DOL.Language
                 }
                 else
                 {
-                    // If the translation is not found, return the translation key itself
-                    // or some fallback message
                     return $"(Translation not found for {messageKey})";
                 }
             }
 
-            // If the messageKey is plain text, return it as is
             return string.Format(messageKey, args);
         }
 
