@@ -1787,7 +1787,7 @@ namespace DOL.GS.Commands
 
                         if (args.Length == 2 && player != null)
                         {
-                            if (player.Client.Account.PrivLevel > 1)
+                            if (player != client?.Player && player.Client.Account.PrivLevel >= client?.Account.PrivLevel)
                             {
                                 client.Out.SendMessage("This command can not be used on Gamemasters!", eChatType.CT_Important,
                                                        eChatLoc.CL_SystemWindow);
