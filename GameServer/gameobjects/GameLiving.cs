@@ -1691,7 +1691,7 @@ namespace DOL.GS
             }
 
             //Check if target is npc and is invicible
-            if (ad.Target is GameNPC npc && npc.MobGroups?.Exists(g => g.GroupInfos.IsInvincible == true) == true)
+            if (ad.Target is GameNPC npc && npc.MobGroups?.Any(g => g.GroupInfos.IsInvincible == true) == true)
             {
                 ad.AttackResult = eAttackResult.HitUnstyled;
                 ad.Damage = 0;

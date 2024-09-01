@@ -614,7 +614,7 @@ namespace DOL.GS
                 if (addsGroupmobId != null && MobGroupManager.Instance.Groups.TryGetValue(addsGroupmobId, out MobGroup mobGroup))
                 {
                     mobGroup.ReloadMobsFromDatabase();
-                    loadedAdds = mobGroup.NPCs;
+                    loadedAdds = new List<GameNPC>(mobGroup.NPCs);
                     addsGroup = mobGroup;
                     isAddsActiveStatus = HealthPercent >= percentLifeAddsActivity;
                     Task.Run(async () =>

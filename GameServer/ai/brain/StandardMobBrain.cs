@@ -198,23 +198,24 @@ namespace DOL.AI.Brain
             }
             
             // First, if we are part of a MobGroup under attack, help them
-            Body.MobGroups?.Where(g => g.AssistRange != 0).ForEach(group =>
+            List<GameNPC> friends = new();
+            Body.ForeachMobGroup(group =>
             {
-                if (group.AssistRange < 0)
+                switch (group.AssistRange)
                 {
-                    group.NPCs.ForEach(friend =>
-                    {
-                        TryHelp(friend);
-                    });
-                }
-                else
-                {
-                    group.NPCs.Where(friend => friend.IsWithinRadius(this.Body.Coordinate, (float)group.AssistRange)).ForEach(friend =>
-                    {
-                        TryHelp(friend);
-                    });
+                    case 0:
+                        return;
+
+                    case < 0:
+                        group.ForeachMob(friends.Add);
+                        break;
+
+                    case > 0:
+                        group.ForeachMob(friends.Add, list => list.Where(friend => friend.IsWithinRadius(this.Body.Coordinate, (float)group.AssistRange)));
+                        break;
                 }
             });
+            friends.ForEach(friend => this.TryHelp(friend));
 
             //If we have an aggrolevel above 0, we check for players and npcs in the area to attack
             if (!Body.AttackState && AggroLevel > 0)

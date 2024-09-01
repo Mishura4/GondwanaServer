@@ -153,24 +153,14 @@ namespace DOL.MobGroups
 
         public bool RemoveGroupsAndMobs(string groupId, bool isLoadedFromScript = false)
         {
-            if (!this.Groups.ContainsKey(groupId))
+            if (!this.Groups.Remove(groupId, out MobGroup group))
             {
                 return false;
             }
-
-            if (!isLoadedFromScript)
-            {
-                foreach (var npc in this.Groups[groupId].NPCs.ToList())
-                {
-                    this.RemoveMobFromGroup(npc, groupId);
-                }
-            }
-
-            this.Groups[groupId].NPCs.Clear();
-            this.Groups.Remove(groupId);
+            
+            group.RemoveAllMobs(isLoadedFromScript);
+            
             var db = GameServer.Database.SelectObjects<GroupMobDb>(DB.Column("GroupId").IsEqualTo(groupId))?.FirstOrDefault();
-
-
             if (db != null)
             {
                 GameServer.Database.DeleteObject(db);
@@ -207,9 +197,9 @@ namespace DOL.MobGroups
 
                         if (mobInWorld != null && this.Groups.TryGetValue(group.GroupId, out MobGroup mobGroup))
                         {
-                            if (!mobGroup.NPCs.Exists(m => m.InternalID.Equals(mobInWorld.InternalID)))
+                            if (!mobGroup.NPCs.Any(m => m.InternalID.Equals(mobInWorld.InternalID)))
                             {
-                                mobGroup.NPCs.Add(mobInWorld);
+                                mobGroup.AddMob(mobInWorld);
                                 mobInWorld.AddToMobGroup(mobGroup);
                             }
                         }
@@ -221,9 +211,9 @@ namespace DOL.MobGroups
             //remove npc from spawner interractions
             foreach (var groupId in this.GroupsToRemoveOnServerLoad)
             {
-                if (this.Groups.ContainsKey(groupId))
+                if (this.Groups.TryGetValue(groupId, out MobGroup group))
                 {
-                    foreach (var npc in this.Groups[groupId].NPCs)
+                    foreach (var npc in group.NPCs)
                     {
                         npc.RemoveFromWorld();
                         npc.Delete();
@@ -247,7 +237,7 @@ namespace DOL.MobGroups
                 return mobGroup;
             }
 
-            mobGroup.NPCs.Add(npc);
+            mobGroup.AddMob(npc);
             npc.AddToMobGroup(mobGroup);
             
             if (!isLoadedFromScript)
@@ -287,7 +277,16 @@ namespace DOL.MobGroups
             {
                 mobGroup = new MobGroup(groupId, isLoadedFromScript);
                 this.Groups.Add(groupId, mobGroup);
-                isnew = true;
+
+                if (!isLoadedFromScript)
+                {
+                    bool exists = GameServer.Database.SelectObject<GroupMobDb>(g => g.GroupId == groupId) != null;
+                    if (!exists)
+                    {
+                        var newGroup = new GroupMobDb() { GroupId = groupId }; // TODO: add a proper SaveIntoDatabase method
+                        GameServer.Database.AddObject(newGroup);
+                    }
+                }
             }
             else if (mobGroup.NPCs.Contains(npc))
             {
@@ -295,43 +294,8 @@ namespace DOL.MobGroups
                 return mobGroup;
             }
 
-            mobGroup.NPCs.Add(npc);
+            mobGroup.AddMob(npc, isLoadedFromScript);
             npc.AddToMobGroup(mobGroup);
-
-            if (isnew && !isLoadedFromScript)
-            {
-                var newGroup = new GroupMobDb() { GroupId = groupId };
-                GameServer.Database.AddObject(newGroup);
-                mobGroup.InternalId = newGroup.ObjectId;
-
-                GameServer.Database.AddObject(new GroupMobXMobs()
-                {
-                    GroupId = groupId,
-                    MobID = npc.InternalID,
-                    RegionID = npc.CurrentRegionID
-                });
-            }
-            else if (!isLoadedFromScript)
-            {
-                var exists = GameServer.Database.SelectObjects<GroupMobXMobs>(g => g.MobID == npc.InternalID && g.GroupId == mobGroup.GroupId)?.FirstOrDefault();
-                if (exists != null)
-                {
-                    exists.RegionID = npc.CurrentRegionID;
-                    exists.GroupId = groupId;
-                    GameServer.Database.SaveObject(exists);
-                }
-                else
-                {
-                    GroupMobXMobs newgroup = new GroupMobXMobs()
-                    {
-                        MobID = npc.InternalID,
-                        GroupId = groupId,
-                        RegionID = npc.CurrentRegionID
-                    };
-
-                    GameServer.Database.AddObject(newgroup);
-                }
-            }
 
             return mobGroup;
         }
@@ -349,21 +313,13 @@ namespace DOL.MobGroups
                 log.Error($"Impossible to remove Group because inmemory Groups does not contain groupId: {groupId}");
                 return false;
             }
-
-
-            if (!group.NPCs.Remove(npc))
+            
+            npc.RemoveFromMobGroup(group);
+            if (!group.RemoveMob(npc))
             {
                 log.Error($"Impossible to remove NPC {npc.InternalID} from groupId: {groupId}");
                 return false;
             }
-
-            var grpxmob = GameServer.Database.SelectObjects<GroupMobXMobs>(g => g.MobID == npc.InternalID && g.GroupId == groupId)?.FirstOrDefault();
-
-            if (grpxmob != null)
-            {
-                GameServer.Database.DeleteObject(grpxmob);
-            }
-            npc.RemoveFromMobGroup(group);
             return true;
         }
 

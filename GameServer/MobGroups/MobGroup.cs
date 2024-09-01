@@ -3,8 +3,11 @@ using DOL.GS;
 using DOL.GS.Commands;
 using DOL.GS.Quests;
 using DOLDatabase.Tables;
+using log4net;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +18,8 @@ namespace DOL.MobGroups
 {
     public class MobGroup
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        
         private MobGroupInfo originalGroupInfo;
         private bool isLoadedFromScript;
 
@@ -24,7 +29,6 @@ namespace DOL.MobGroups
         {
             this.GroupId = id;
             this.isLoadedFromScript = isLoadedFromScript;
-            this.NPCs = new List<GameNPC>();
             this.GroupInfos = new MobGroupInfo();
             this.HasOriginalStatus = false;
             this.SwitchFamily = null;
@@ -44,7 +48,6 @@ namespace DOL.MobGroups
             this.CompletedStepQuestID = db.CompletedStepQuestID;
             this.CompletedQuestID = db.CompletedQuestID;
             this.CompletedQuestCount = db.CompletedQuestCount;
-            this.NPCs = new List<GameNPC>();
             this.GroupInfos = new MobGroupInfo()
             {
                 Effect = db.Effect != null ? int.TryParse(db.Effect, out int effect) ? effect : (int?)null : (int?)null,
@@ -71,7 +74,7 @@ namespace DOL.MobGroups
         /// <returns></returns>
         public static bool IsQuestCompleted(GameNPC npc, GamePlayer player)
         {
-            return npc.MobGroups?.TrueForAll(g => g.HasPlayerCompletedQuests(player)) == true;
+            return npc.MobGroups?.All(g => g.HasPlayerCompletedQuests(player)) == true;
         }
 
         /// <summary>
@@ -195,7 +198,10 @@ namespace DOL.MobGroups
 
         public bool IsAllDead(GameNPC exclude = null)
         {
-            return NPCs.All(m => exclude == m || !m.IsAlive);
+            lock (m_NPCs)
+            {
+                return m_NPCs.All(m => exclude == m || !m.IsAlive);
+            }
         }
 
         public bool HasPlayerCompletedQuests(GamePlayer player)
@@ -322,11 +328,100 @@ namespace DOL.MobGroups
             set;
         }
 
-        public List<GameNPC> NPCs
+        public ReadOnlyCollection<GameNPC> NPCs
         {
-            get;
-            set;
+            get
+            {
+                lock (m_NPCs)
+                {
+                    return new ReadOnlyCollection<GameNPC>(m_NPCs);
+                }
+            }
         }
+
+        public void RemoveAllMobs(bool isLoadedFromScript)
+        {
+            lock (m_NPCs)
+            {
+                foreach (var npc in m_NPCs)
+                {
+                    npc.RemoveFromMobGroup(this);
+                }
+                m_NPCs.Clear();
+                if (!isLoadedFromScript)
+                    GameServer.Database.DeleteObject(GameServer.Database.SelectObjects<GroupMobXMobs>(g => g.GroupId == GroupId) ?? new List<GroupMobXMobs>());
+            }
+        }
+
+        public bool RemoveMob(GameNPC npc)
+        {
+            lock (m_NPCs)
+            {
+                if (!m_NPCs.Remove(npc))
+                {
+                    return false;
+                }
+
+                var grpxmob = GameServer.Database.SelectObjects<GroupMobXMobs>(g => g.MobID == npc.InternalID && g.GroupId == GroupId)?.FirstOrDefault();
+                if (grpxmob != null)
+                {
+                    GameServer.Database.DeleteObject(grpxmob);
+                }
+                return true;
+            }
+        }
+
+        public void AddMob(GameNPC npc, bool isLoadedFromScript = false)
+        {
+            lock (m_NPCs)
+            {
+                if (m_NPCs.Contains(npc))
+                    return;
+                
+                m_NPCs.Add(npc);
+            }
+            
+            // TODO: move this to a SaveIntoDatabase method
+            var exists = GameServer.Database.SelectObjects<GroupMobXMobs>(g => g.MobID == npc.InternalID && g.GroupId == GroupId)?.FirstOrDefault();
+            if (exists != null)
+            {
+                exists.RegionID = npc.CurrentRegionID;
+                exists.GroupId = GroupId;
+                GameServer.Database.SaveObject(exists);
+            }
+            else
+            {
+                GroupMobXMobs newgroup = new GroupMobXMobs()
+                {
+                    MobID = npc.InternalID,
+                    GroupId = GroupId,
+                    RegionID = npc.CurrentRegionID
+                };
+
+                GameServer.Database.AddObject(newgroup);
+            }
+        }
+
+        public void ForeachMob(Action<GameNPC> func)
+        {
+            lock (m_NPCs)
+            {
+                m_NPCs.ForEach(func);
+            }
+        }
+
+        public void ForeachMob(Action<GameNPC> func, Func<IEnumerable<GameNPC>, IEnumerable<GameNPC>> filter)
+        {
+            lock (m_NPCs)
+            {
+                foreach (var npc in filter(m_NPCs))
+                {
+                    func(npc);
+                }
+            }
+        }
+
+        private List<GameNPC> m_NPCs = new List<GameNPC>();
 
         public MobGroupInfo GroupInteractions
         {

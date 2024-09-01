@@ -890,11 +890,8 @@ namespace DOL.GameEvents
                     if (MobGroupManager.Instance.Groups.TryGetValue(dbGroupMob.GroupId, out mobGroup))
                     {
                         mob.AddToMobGroup(mobGroup);
-                        if (!mobGroup.NPCs.Contains(mob))
-                        {
-                            mobGroup.NPCs.Add(mob);
-                            mobGroup.ApplyGroupInfos();
-                        }
+                        mobGroup.AddMob(mob);
+                        mobGroup.ApplyGroupInfos();
                     }
                     else
                     {
@@ -908,8 +905,8 @@ namespace DOL.GameEvents
                             GameServer.Database.SelectObjects<GroupMobStatusDb>(DB.Column("GroupStatusId").IsEqualTo(mobgroupDb.GroupMobOrigin_FK_Id))?.FirstOrDefault() : null;
                             mobGroup = new MobGroup(mobgroupDb, groupInteraction, groupOriginStatus);
                             MobGroupManager.Instance.Groups.Add(dbGroupMob.MobID, mobGroup);
-                            mobGroup.NPCs.Add(mob);
                             mob.AddToMobGroup(mobGroup);
+                            mobGroup.AddMob(mob);
                             mobGroup.ApplyGroupInfos();
                         }
                     }

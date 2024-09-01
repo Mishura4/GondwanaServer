@@ -54,6 +54,8 @@ using log4net;
 using Vector3 = System.Numerics.Vector3;
 using AmteScripts.Managers;
 using DOL.GS.Commands;
+using System.Collections.Immutable;
+using System.Collections.ObjectModel;
 using System.Reflection.Metadata;
 using static DOL.Database.ArtifactBonus;
 
@@ -259,31 +261,74 @@ namespace DOL.GS
         /// <summary>
         /// If this mob is a Member of GroupMob
         /// </summary>
-        public List<MobGroup> MobGroups
+        public ReadOnlyCollection<MobGroup> MobGroups
         {
-            get;
-            private set;
+            get
+            {
+                if (m_mobGroups == null)
+                    return null;
+                
+                lock (m_groupsLock)
+                {
+                    return new ReadOnlyCollection<MobGroup>(m_mobGroups);
+                }
+            }
+        }
+
+        private List<MobGroup> m_mobGroups;
+
+        private readonly object m_groupsLock = new();
+
+        public void ForeachMobGroup(Action<MobGroup> func)
+        {
+            if (m_mobGroups == null)
+                return;
+            
+            lock (m_groupsLock)
+            {
+                m_mobGroups.ForEach(func);
+            }
+        }
+
+        public void ForeachMobGroup(Action<MobGroup> func, Func<IEnumerable<MobGroup>, IEnumerable<MobGroup>> filter)
+        {
+            if (m_mobGroups == null)
+                return;
+            
+            lock (m_groupsLock)
+            {
+                foreach (var group in filter(m_mobGroups))
+                {
+                    func(group);
+                }
+            }
         }
 
         public void AddToMobGroup(MobGroup mobGroup)
         {
-            if (MobGroups == null)
+            lock (m_groupsLock)
             {
-                MobGroups = new List<MobGroup> { mobGroup };
-            }
-            else if (!MobGroups.Contains(mobGroup))
-            {
-                MobGroups.Add(mobGroup);
+                if (m_mobGroups == null)
+                {
+                    m_mobGroups = new List<MobGroup> { mobGroup };
+                }
+                else if (!m_mobGroups.Contains(mobGroup))
+                {
+                    m_mobGroups.Add(mobGroup);
+                }
             }
         }
 
         public void RemoveFromMobGroup(MobGroup mobGroup)
         {
-            if (MobGroups != null)
+            lock (m_groupsLock)
             {
-                MobGroups.Remove(mobGroup);
-                if (MobGroups.Count == 0)
-                    MobGroups = null;
+                if (m_mobGroups != null)
+                {
+                    m_mobGroups.Remove(mobGroup);
+                    if (m_mobGroups.Count == 0)
+                        m_mobGroups = null;
+                }
             }
         }
 
@@ -294,7 +339,7 @@ namespace DOL.GS
 
         public bool IsInvincible()
         {
-            return MobGroups?.Exists(g => g.GroupInfos.IsInvincible == true) == true;
+            return MobGroups?.Any(g => g.GroupInfos.IsInvincible == true) == true;
         }
 
         /// <summary>

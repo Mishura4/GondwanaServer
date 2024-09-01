@@ -72,14 +72,14 @@ namespace DOL.GS.Quests
         }
 
         public override bool CanInteractWith(PlayerQuest questData, PlayerGoalState state, GameObject target)
-            => state?.IsActive == true && target is GameNPC gameNPC && gameNPC.MobGroups?.Exists(g => g.GroupId == m_target) == true;
+            => state?.IsActive == true && target is GameNPC gameNPC && gameNPC.MobGroups?.Any(g => g.GroupId == m_target) == true;
 
         public override void NotifyActive(PlayerQuest quest, PlayerGoalState goal, DOLEvent e, object sender, EventArgs args)
         {
             if (e == GameLivingEvent.BringAFriend && args is BringAFriendArgs bringAFriendArgs)
             {
                 FollowingFriendMob friend = bringAFriendArgs.Friend as FollowingFriendMob;
-                if (friend == null || (friend.Name != m_target && friend.MobGroups?.Exists(g => g.GroupId == m_target) != true))
+                if (friend == null || (friend.Name != m_target && friend.MobGroups?.Any(g => g.GroupId == m_target) != true))
                     return;
                 lastFriend = friend;
 
