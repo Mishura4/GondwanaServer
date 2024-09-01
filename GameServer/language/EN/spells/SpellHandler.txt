@@ -230,4 +230,6 @@ SpellHandler.SpeedEnhancement.CombatRecent:	You've been in combat recently, the 
 SpellHandler.WaterBreathing.StartEffect:	You find yourself able to move freely and breathe water like air!
 SpellHandler.WaterBreathing.EndEffect:		With a gulp and a gasp you realize that you are unable to breathe underwater any longer!
 
+SpellHandler.GroundAreaEffect.AlreayActive: You already have a ground effect active and cannot cast another!
+
 SpellHandler.DelveInfo.Sec:			sec

@@ -1,6 +1,8 @@
 ﻿using DOL.AI;
 using DOL.Database;
+using DOL.Events;
 using DOL.GS.Geometry;
+using DOL.GS.PacketHandler;
 using Google.Protobuf.WellKnownTypes;
 using System;
 using System.Collections.Generic;
@@ -110,12 +112,31 @@ namespace DOL.GS.Spells
 
             return subSpellList.Union(m_spell.MultipleSubSpells).Select(SkillBase.GetSpellByID).Where(s => s != null);
         }
+        
+        public const string LIVING_GROUNDEFFECT_PROPERTY = "LIVING_GROUND_EFFECT";
+
+        /// <inheritdoc />
+        public override bool CheckBeginCast(GameLiving selectedTarget, bool quiet)
+        {
+            GameLiving trueCaster = Caster.GetController();
+            
+            object casterEffect = trueCaster.TempProperties.getProperty<object>(LIVING_GROUNDEFFECT_PROPERTY, null);
+            if (casterEffect != null)
+            {
+                if (!quiet && trueCaster is GamePlayer casterPlayer)
+                {
+                    casterPlayer.SendTranslatedMessage("SpellHandler.GroundAreaEffect.AlreayActive", eChatType.CT_SpellResisted);
+                }
+                return false;
+            }
+            return base.CheckBeginCast(selectedTarget, quiet);
+        }
 
         /// <inheritdoc />
         public override bool StartSpell(GameLiving target, bool force = false)
         {
             m_spellTarget = Caster;
-
+            GameLiving trueCaster = Caster.GetController();
             GameNPC turret = CreateTurret();
             turret.Position = (Caster.GroundTargetPosition == Position.Nowhere ? Caster.Position : Caster.GroundTargetPosition);
             turret.LoadedFromScript = true;
@@ -127,16 +148,32 @@ namespace DOL.GS.Spells
                     player.Out.SendSpellEffectAnimation(Caster, turret, m_spell.ClientEffect, 0, false, 1);
                 }
             }
+            trueCaster.TempProperties.setProperty(LIVING_GROUNDEFFECT_PROPERTY, turret);
             Turret = turret;
+
+            void CleanupTurret()
+            {
+                GameEventMgr.RemoveHandler(trueCaster, GameLivingEvent.RemoveFromWorld, OnRemoveFromWorld);
+                trueCaster.TempProperties.removeProperty(LIVING_GROUNDEFFECT_PROPERTY);
+                turret.RemoveFromWorld();
+                turret.Delete();
+                DurationTimer?.Stop();
+                DurationTimer = null;
+            }
+            GameEventMgr.AddHandler(trueCaster, GameLivingEvent.RemoveFromWorld, OnRemoveFromWorld);
+            void OnRemoveFromWorld(DOLEvent e, object sender, EventArgs arguments)
+            {
+                if (e != GameObjectEvent.RemoveFromWorld && sender != trueCaster)
+                    return;
+                
+                CleanupTurret();
+            }
 
             if (Spell.Duration > 0)
             {
-                DurationTimer = new RegionTimer(Turret, _ =>
+                DurationTimer = new RegionTimer(turret, _ =>
                 {
-                    Turret.RemoveFromWorld();
-                    Turret.Delete();
-                    DurationTimer.Stop();
-                    DurationTimer = null;
+                    CleanupTurret();
                     return 0;
                 }, Spell.Duration /* "Duration does not increase the duration of ground spells." https://darkageofcamelot.com/content/1122b-live-patch-notes */);
             }
