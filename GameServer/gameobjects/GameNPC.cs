@@ -55,7 +55,6 @@ using Vector3 = System.Numerics.Vector3;
 using AmteScripts.Managers;
 using DOL.GS.Commands;
 using System.Collections.Immutable;
-using System.Collections.ObjectModel;
 using System.Reflection.Metadata;
 using static DOL.Database.ArtifactBonus;
 
@@ -261,7 +260,7 @@ namespace DOL.GS
         /// <summary>
         /// If this mob is a Member of GroupMob
         /// </summary>
-        public ReadOnlyCollection<MobGroup> MobGroups
+        public ImmutableList<MobGroup> MobGroups
         {
             get
             {
@@ -270,7 +269,7 @@ namespace DOL.GS
                 
                 lock (m_groupsLock)
                 {
-                    return new ReadOnlyCollection<MobGroup>(m_mobGroups);
+                    return m_mobGroups.ToImmutableList();
                 }
             }
         }
@@ -339,7 +338,7 @@ namespace DOL.GS
 
         public bool IsInvincible()
         {
-            return MobGroups?.Any(g => g.GroupInfos.IsInvincible == true) == true;
+            return MobGroups?.Exists(g => g.GroupInfos.IsInvincible == true) == true;
         }
 
         /// <summary>

@@ -7,7 +7,6 @@ using log4net;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -74,7 +73,7 @@ namespace DOL.MobGroups
         /// <returns></returns>
         public static bool IsQuestCompleted(GameNPC npc, GamePlayer player)
         {
-            return npc.MobGroups?.All(g => g.HasPlayerCompletedQuests(player)) == true;
+            return npc.MobGroups?.TrueForAll(g => g.HasPlayerCompletedQuests(player)) == true;
         }
 
         /// <summary>
@@ -328,13 +327,13 @@ namespace DOL.MobGroups
             set;
         }
 
-        public ReadOnlyCollection<GameNPC> NPCs
+        public ImmutableList<GameNPC> NPCs
         {
             get
             {
                 lock (m_NPCs)
                 {
-                    return new ReadOnlyCollection<GameNPC>(m_NPCs);
+                    return m_NPCs.ToImmutableList();
                 }
             }
         }

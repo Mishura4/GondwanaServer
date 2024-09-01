@@ -197,7 +197,7 @@ namespace DOL.MobGroups
 
                         if (mobInWorld != null && this.Groups.TryGetValue(group.GroupId, out MobGroup mobGroup))
                         {
-                            if (!mobGroup.NPCs.Any(m => m.InternalID.Equals(mobInWorld.InternalID)))
+                            if (!mobGroup.NPCs.Exists(m => m.InternalID.Equals(mobInWorld.InternalID)))
                             {
                                 mobGroup.AddMob(mobInWorld);
                                 mobInWorld.AddToMobGroup(mobGroup);
