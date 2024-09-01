@@ -2453,7 +2453,7 @@ namespace DOL.GS.Spells
             return list;
         }
 
-        private class SubSpellTimer : GameTimer
+        protected class SubSpellTimer : GameTimer
         {
             private ISpellHandler m_subspellhandler;
             private GameLiving m_target;
