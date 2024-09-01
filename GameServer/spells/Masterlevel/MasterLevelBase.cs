@@ -1332,12 +1332,6 @@ namespace DOL.GS
             DeleteFromDatabase();
             Delete();
         }
-        private GamePlayer m_owner;
-        public GamePlayer Owner
-        {
-            get { return m_owner; }
-            set { m_owner = value; }
-        }
         public override int MaxHealth
         {
             get { return 1; }
@@ -1358,21 +1352,14 @@ namespace DOL.GS
             this.Health = this.MaxHealth;
         }
 
-        private GamePlayer m_owner;
-        public GamePlayer Owner
-        {
-            get { return m_owner; }
-            set { m_owner = value; }
-        }
         public override int MaxHealth
         {
             get { int hp = 500; if (Name.ToLower().IndexOf("speed") >= 0) hp = 100; return hp; }
         }
         public virtual int CalculateToHitChance(GameLiving target)
         {
-            int spellLevel = m_owner.Level;
-            GameLiving caster = m_owner as GameLiving;
-            int spellbonus = m_owner.GetModified(eProperty.SpellLevel);
+            int spellLevel = Owner.Level;
+            int spellbonus = Owner.GetModified(eProperty.SpellLevel);
             spellLevel += spellbonus;
             if (spellLevel > 50)
                 spellLevel = 50;
@@ -1413,17 +1400,10 @@ namespace DOL.GS
             this.MaxSpeedBase = 0;
         }
 
-        private GamePlayer m_owner;
-        public GamePlayer Owner
-        {
-            get { return m_owner; }
-            set { m_owner = value; }
-        }
         public virtual int CalculateToHitChance(GameLiving target)
         {
-            int spellLevel = m_owner.Level;
-            GameLiving caster = m_owner as GameLiving;
-            int spellbonus = m_owner.GetModified(eProperty.SpellLevel);
+            int spellLevel = Owner.Level;
+            int spellbonus = Owner.GetModified(eProperty.SpellLevel);
             spellLevel += spellbonus;
             if (spellLevel > 50)
                 spellLevel = 50;
@@ -1462,13 +1442,6 @@ namespace DOL.GS
             this.Movable = true;
         }
 
-        private GamePlayer m_owner;
-        public GamePlayer Owner
-        {
-            get { return m_owner; }
-            set { m_owner = value; }
-        }
-
         private bool m_movable;
         public bool Movable
         {
@@ -1488,9 +1461,8 @@ namespace DOL.GS
         }
         public virtual int CalculateToHitChance(GameLiving target)
         {
-            int spellLevel = m_owner.Level;
-            GameLiving caster = m_owner as GameLiving;
-            int spellbonus = m_owner.GetModified(eProperty.SpellLevel);
+            int spellLevel = Owner.Level;
+            int spellbonus = Owner.GetModified(eProperty.SpellLevel);
             spellLevel += spellbonus;
             if (spellLevel > 50)
                 spellLevel = 50;
