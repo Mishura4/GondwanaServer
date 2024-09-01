@@ -38,3 +38,163 @@ Languages.DBSpells.TargetLavaRemoved:		The lava falls from {0}'s skin.
 Languages.DBSpells.YouAcidMistDisspates:	The acidic mist around you dissipates.
 Languages.DBSpells.TargetAcidMistDisspates:	The acidic mist around {0} dissipates.
 
+Languages.DBSpells.MagmaShieldYouProtected:	Your armor becomes too hot to touch.
+Languages.DBSpells.MagmaShieldTargetProtected:	{0}'s armor becomes too hot to touch.
+Languages.DBSpells.DmgShieldFadesYou:		Your armor returns to normal.
+Languages.DBSpells.DmgShieldFadesTarget:	{0}'s armor returns to normal.
+Languages.DBSpells.BoneShieldTargetProtected:	Bone spikes protrude from {0}.
+Languages.DBSpells.BoneShieldFadesTarget:	The bone spikes fade from {0}.
+
+Languages.DBSpells.DamageAddEarthYouStart:	Your weapon begins channeling the strength of the earth.
+Languages.DBSpells.DamageAddEarthTargetStart:	{0}'s weapon begins channeling the strength of the earth.
+Languages.DBSpells.DamageAddHeavenYouStart:	Your weapon is blessed by the heavens!
+Languages.DBSpells.DamageAddEarthTargetStart:	{0}'s weapon is blessed by the heavens!
+Languages.DBSpells.DamageAddPowerYouStart:	Your weapon crackles with electricity!
+Languages.DBSpells.DamageAddPowerTargetStart:	{0}'s weapon crackles with electricity!
+Languages.DBSpells.DamageAddDarkYouStart:	Your are granted power by dark forces.
+Languages.DBSpells.DamageAddDarkTargetStart:	{0} is granted power by dark forces.
+Languages.DBSpells.DamageAddEnchantedYouStart:	Your weapon is enchanted with magical power!
+Languages.DBSpells.DamageAddEnchantedTargetStart:	{0}'s weapon is enchanted.
+Languages.DBSpells.DamageAddAccurateYouStart:	Your blade strikes more accurately!
+Languages.DBSpells.DamageAddAccurateTargetStart:	{0}'s blade strikes more accurately!
+Languages.DBSpells.DamageAddZealYouStart:	You swing your weapon with zeal!
+Languages.DBSpells.DamageAddZealTargetStart:	{0} swings his weapon with zeal!
+Languages.DBSpells.DamageAddEnergyYouStart:	Dangerous energy surrounds your weapon!
+Languages.DBSpells.DamageAddEnergyTargetStart:	{0}'s weapon is surrounded by dangerous energy!
+Languages.DBSpells.DamageAddGodsYouStart:	Your weapon is blessed by the gods!
+Languages.DBSpells.DamageAddGodsTargetStart:	{0}'s weapon glows with the power of the gods!
+Languages.DBSpells.DamageAddHurikaYouStart:	You are inspired by Hurika's Howl and deal more damage.
+Languages.DBSpells.DamageAddHurikaTargetStart:	{0} is inspired by Hurika's Howl and deals more damage.
+Languages.DBSpells.DamageAddYouNoInspired:	You are no longer inspired.
+Languages.DBSpells.DamageAddTargetNoInspired:	{0} is no longer inspired.
+Languages.DBSpells.DamageAddFeroceYouStart:	Your attacks gain a ferocious edge!
+Languages.DBSpells.DamageAddFeroceTargetStart:	{0}'s attacks gain a ferocious edge!
+Languages.DBSpells.DamageAddFeroceYouFades:	Your ferocity fades.
+Languages.DBSpells.DamageAddFeroceTargetFades:	{0}'s ferocity fades.
+Languages.DBSpells.DamageAddRuneYouStart:	Your weapon is inscribed with a rune to inflict more damage.
+Languages.DBSpells.DamageAddRuneTargetStart:	{0}'s weapon is inscribed with a rune to inflict more damage.
+Languages.DBSpells.DamageAddRuneYouFades:	Your weapon's rune fades.
+Languages.DBSpells.DamageAddRuneTargetFades:	{0}'s weapon's rune fades.
+Languages.DBSpells.DamageAddBacktoNormalYou:	Your weapon returns to normal.
+Languages.DBSpells.DamageAddBacktoNormalTarget:	{0}'s weapon returns to normal.
+
+Languages.DBSpells.BladeturnHeatYouStart:	You are enveloped by a searing heat!
+Languages.DBSpells.BladeturnHeatTargetStart:	{0} is enveloped by a searing heat!
+Languages.DBSpells.BladeturnHeatYouAbsorb:	Your heat bubble dissipates!
+Languages.DBSpells.BladeturnHeatTargetAbsorb:	{0}'s heat bubble dissipates!
+Languages.DBSpells.BladeturnRootYouStart:	You are enveloped by a gnarled root!
+Languages.DBSpells.BladeturnRootTargetStart:	{0} is enveloped by a gnarled root!
+Languages.DBSpells.BladeturnRootYouAbsorb:	The gnarled root that protected you retreats!
+Languages.DBSpells.BladeturnRootTargetAbsorb:	The gnarled root that protected you {0} retreats!
+Languages.DBSpells.BladeturnSpiritYouStart:	You are enveloped by an invisible spirit!
+Languages.DBSpells.BladeturnSpiritTargetStart:	{0} is enveloped by an invisible spirit!
+Languages.DBSpells.BladeturnSpiritYouAbsorb:	The spirit that protected you vanishes into thin air!
+Languages.DBSpells.BladeturnSpiritTargetAbsorb:	The spirit that protected {0} vanishes into thin air!
+Languages.DBSpells.BladeturnYouStart:		You are enveloped by a magical bubble!
+Languages.DBSpells.BladeturnTargetStart:	{0} is enveloped by a magical bubble!
+Languages.DBSpells.BladeturnYouAbsorb:		Your protective bubble dissipates!
+Languages.DBSpells.BladeturnTargetAbsorb:	{0}'s protective bubble dissipates!
+
+Languages.DBSpells.SlowYou:			Your movement speed has been reduced!
+Languages.DBSpells.SlowTarget:			{0}'s movement speed has been reduced!
+Languages.DBSpells.SpeedDecreaseFrozenYou:	Your feet are frozen to the ground!
+Languages.DBSpells.SpeedDecreaseFrozenTarget:	{0}'s feet are frozen to the ground!
+Languages.DBSpells.SpeedDecreaseColdYou:	You are enveloped by numbing cold!
+Languages.DBSpells.SpeedDecreaseColdTarget:	{0} is enveloped by numbing cold!
+Languages.DBSpells.SpeedDecreaseFrozen2You:	You are frozen!
+Languages.DBSpells.SpeedDecreaseFrozen2Target:	Time slows around {0}'s body!
+Languages.DBSpells.SpeedDecreaseSlowedYou:	Your attacks are being slowed by an invisible force!
+Languages.DBSpells.SpeedDecreaseSlowedTarget:	{0} can't attack as fast as normal !
+Languages.DBSpells.SpeedDecreaseSlowed2You:	You begins moving more slowly!
+Languages.DBSpells.SpeedDecreaseSlowed2Target:	{0} begins moving more slowly!
+Languages.DBSpells.SpeedDecreaseSlowed3You:	You are held to the ground by a strong, unseen force!
+Languages.DBSpells.SpeedDecreaseSlowed3Target:	{0} is held to the ground by a strong, unseen force!
+Languages.DBSpells.SpeedDecreaseSpeedYou:	Your attack speed has decreased.
+Languages.DBSpells.SpeedDecreaseSpeedTarget:	{0}'s attack speed has decreased!
+Languages.DBSpells.SpeedDecreaseSpeedUpYou:	Your attack speed is back to normal.
+Languages.DBSpells.SpeedDecreaseSpeedUpTarget:	{0}'s attack speed is back to normal.
+
+Languages.DBSpells.AblativeCrystalShieldYou:	A crystal shield covers you.
+Languages.DBSpells.AblativeCrystalShieldTarget:	A crystal shield covers {0}'s skin.
+Languages.DBSpells.AFBuffCrystalShieldYouEnd:	Your crystal shield fades.
+Languages.DBSpells.AFBuffCrystalShieldTargetend:	{0}'s crystal shield fades.
+Languages.DBSpells.AFBuffShieldYou:		A shield surrounds you.
+Languages.DBSpells.AFBuffShieldTarget:		A shield surrounds {0}.
+Languages.DBSpells.AFBuffShieldYouEnd:		Your shield fades.
+Languages.DBSpells.AFBuffShieldTargetend:	{0}'s shield fades.
+Languages.DBSpells.AFBuffDefAuraYou:		You are surrounded by a protective aura!
+Languages.DBSpells.AFBuffDefAuraTarget:		{0} is surrounded by a protective aura!
+Languages.DBSpells.AFBuffDefAuraYouEnd:		Your protective aura fades.
+Languages.DBSpells.AFBuffDefAuraTargetend:	{0}'s protective aura fades.
+Languages.DBSpells.AFBuffHolyAuraYou:		You are surrounded by a holy aura.
+Languages.DBSpells.AFBuffHolyAuraTarget:	{0} is surrounded by a holy aura.
+Languages.DBSpells.AFBuffHolyAuraYouEnd:	Your holy aura wears off.
+Languages.DBSpells.AFBuffHolyAuraTargetend:	{0}'s holy aura wears off.
+Languages.DBSpells.AFBuffExtraAuraYou:		You are blessed with extra protection.
+Languages.DBSpells.AFBuffExtraAuraTarget:	{0} is blessed with extra protection.
+Languages.DBSpells.AFBuffExtraAuraYouEnd:	Your extra protection wears off.
+Languages.DBSpells.AFBuffExtraAuraTargetend:	{0}'s extra protection wears off.
+Languages.DBSpells.AFBuffPowerShieldYou:	A power shield covers you.
+Languages.DBSpells.AFBuffPowerShieldTarget:	A power shield covers {0}'s skin.
+Languages.DBSpells.AFBuffPowerShieldYouEnd:	Your power shield fades.
+Languages.DBSpells.AFBuffPowerShieldTargetEnd:	{0}'s power shield fades.
+Languages.DBSpells.AFBuffMagicalShieldYou:	You are surrounded by a shield of magical energy.
+Languages.DBSpells.AFBuffMagicalShieldTarget:	{0} is surrounded by a shield of magical energy.
+Languages.DBSpells.AFBuffMagicalShieldYouEnd:	Your energy shield fades.
+Languages.DBSpells.AFBuffMagicalShieldTargetEnd:{0}'s energy shield fades.
+Languages.DBSpells.AFBuffHardSkinYou:		Your skin hardens.
+Languages.DBSpells.AFBuffHardSkinTarget:	{0}'s skin hardens.
+Languages.DBSpells.AFBuffHardSkinYouEnd:	Your skin loses its extra strength.
+Languages.DBSpells.AFBuffHardSkinTargetEnd:	{0}'s skin loses its extra strength.
+Languages.DBSpells.AFBuffHardSkin2TargetEnd:	Bark falls from {0}'s skin.
+Languages.DBSpells.AFDebuffResignedTarget:	{0} looks resigned to their doom.
+Languages.DBSpells.AFDebuffWholeheartTarget:	{0} is defending wholeheartedly again.
+
+Languages.DBSpells.FocusShellYouStart:		You are being protected by a near impregnable force!
+Languages.DBSpells.FocusShellTargetStart:	The near impregnable force around you fades.
+Languages.DBSpells.FocusShellYouEnd:		{0} is being protected by a near impregnable force!
+Languages.DBSpells.FocusShellTargetEnd:		The near impregnable force around {0} fades.
+Languages.DBSpells.DisarmYouStart:		You are disarmed and cannot use any weapon!
+Languages.DBSpells.DisarmTargetStart:		{0} is disarmed and cannot use any weapon!
+Languages.DBSpells.DisarmYouEnd:		You recover the ability to use your weapons!
+Languages.DBSpells.DisarmTargetEnd:		{0} recovers the ability to use its weapons!
+Languages.DBSpells.ConversionYou:		You heal your power and endurance!
+Languages.DBSpells.ConversionTarget:		{0}'s power and endurance are healed!
+Languages.DBSpells.StunYou:			You cannot move!
+Languages.DBSpells.StunTarget:			{0} cannot seem to move!
+Languages.DBSpells.StunLightYou:		You are stunned by a flash of light!
+Languages.DBSpells.StunLightTarget:		{0} is stunned by a flash of light!
+
+Languages.DBSpells.HealRegenYouStart:		You feel a calmness come over you.
+Languages.DBSpells.HealRegenTargetStart:	{0} looks calmer.
+Languages.DBSpells.HealRegenYouEnd:		Your inner peace leaves you.
+Languages.DBSpells.HealRegenTargetEnd:		{0} calmness leaves.
+Languages.DBSpells.HealOverTimeYouStart:	You feel calm and healthy.
+Languages.DBSpells.HealOverTimeTargetStart:	{0} seems calm and healthy.
+Languages.DBSpells.HealOverTimeYouEnd:		Your meditative state fades.
+Languages.DBSpells.HealOverTimeTargetEnd:	{0}'s meditative state fades.
+Languages.DBSpells.PowerRegenYouStart:		You feel more at ease.
+Languages.DBSpells.PowerRegenYouEnd:		Your serenity fades.
+Languages.DBSpells.PowerRegenTargetEnd:		{0}'s serenity fades.
+Languages.DBSpells.StrBuffYouStart:		You feel stronger!
+Languages.DBSpells.StrBuffTargetStart:		{0} feels stronger!
+Languages.DBSpells.StrBuffYouEnd:		Your strength returns to normal.
+Languages.DBSpells.StrBuffTargetEnd:		{0}'s extra strength fades.
+Languages.DBSpells.DexBuffYouStart:		You feel more dextrous!
+Languages.DBSpells.DexBuffTargetStart:		{0} looks more agile!
+Languages.DBSpells.DexBuffYouEnd:		Your agility returns to normal.
+Languages.DBSpells.DexBuffTargetEnd:		{0}'s enhanced agility fades.
+Languages.DBSpells.ConBuffYouStart:		You look more healthy!
+Languages.DBSpells.ConBuffTargetStart:		{0} looks more healthy!
+Languages.DBSpells.ConBuffYouEnd:		Your health returns to normal.
+Languages.DBSpells.ConBuffTargetEnd:		{0}'s enhanced vigor fades.
+Languages.DBSpells.CelerityBuffYouStart:	You attacks move with the speed of the wind!
+Languages.DBSpells.CelerityBuffTargetStart:	{0} attacks move with the speed of the wind!
+Languages.DBSpells.CelerityBuffYouEnd:		Your attacks return to normal.
+Languages.DBSpells.CelerityBuffTargetEnd:	{0}'s attacks return to normal.
+Languages.DBSpells.StrConBuffYouStart:		You feel stronger and healthier!
+Languages.DBSpells.StrConBuffTargetStart:	{0} looks stronger and healthier!
+Languages.DBSpells.StrConBuffYouEnd:		Your strength and health returns to normal.
+Languages.DBSpells.StrConBuffTargetEnd:		{0}'s extra strength and health fades.
+Languages.DBSpells.BodyResistDebuffYouStart:	You feel more vulnerable to physical magic!
+Languages.DBSpells.BodyResistDebuffTargetStart:	{0} seems vulnerable to physical magic!

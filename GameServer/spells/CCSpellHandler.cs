@@ -51,67 +51,42 @@ namespace DOL.GS.Spells
             base.ApplyEffectOnTarget(target, effectiveness);
         }
 
-        private string GetFormattedMessage(GamePlayer player, string messageKey, params object[] args)
-        {
-            if (messageKey.StartsWith("Languages.DBSpells."))
-            {
-                string translationKey = messageKey;
-                string translation;
-
-                if (LanguageMgr.TryGetTranslation(out translation, player.Client.Account.Language, translationKey, args))
-                {
-                    return translation;
-                }
-                else
-                {
-                    // Log an error or handle the fallback here
-                    return "(Translation not found)";
-                }
-            }
-            return string.Format(messageKey, args);
-        }
-
         public override void OnEffectStart(GameSpellEffect effect)
         {
             base.OnEffectStart(effect);
 
-            GamePlayer casterPlayer = m_caster as GamePlayer;
+            string casterLanguage = (m_caster as GamePlayer)?.Client?.Account?.Language ?? "EN";
             GamePlayer ownerPlayer = effect.Owner as GamePlayer;
 
-            // Handle translation for player targets
             if (ownerPlayer != null)
             {
-                // Use GetFormattedMessage1 for player targets
-                MessageToLiving(effect.Owner, Spell.GetFormattedMessage1(ownerPlayer), eChatType.CT_Spell);
+                string message1 = string.IsNullOrEmpty(Spell.Message1) ? string.Empty : Spell.GetFormattedMessage1(ownerPlayer);
+                MessageToLiving(effect.Owner, message1, eChatType.CT_Spell);
             }
             else
             {
-                // Handle non-player targets, such as NPCs
-                MessageToLiving(effect.Owner, LanguageMgr.GetTranslation("ServerLanguageKey", Spell.Message1), eChatType.CT_Spell);
+                string message1 = string.IsNullOrEmpty(Spell.Message1) ? string.Empty : LanguageMgr.GetTranslation(casterLanguage, Spell.Message1, effect.Owner.GetName(0, false));
+                MessageToLiving(effect.Owner, message1, eChatType.CT_Spell);
             }
 
-            // Handle caster message, checking if caster is a player
-            if (casterPlayer != null)
+            if (m_caster is GamePlayer casterPlayer)
             {
                 string messageToCaster = Spell.GetFormattedMessage2(casterPlayer, effect.Owner.GetName(0, false));
                 MessageToCaster(messageToCaster, eChatType.CT_Spell);
             }
 
-            foreach (GamePlayer player1 in effect.Owner.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
+            foreach (GamePlayer player in effect.Owner.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
             {
-                if (!(effect.Owner == player1 || m_caster == player1))
+                if (!(effect.Owner == player || m_caster == player))
                 {
-                    if (ownerPlayer != null)
-                    {
-                        player1.MessageFromArea(effect.Owner, string.Format(Spell.GetFormattedMessage2(player1, effect.Owner.GetName(0, false)), player1.GetPersonalizedName(effect.Owner)), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
-                    }
-                    else
-                    {
-                        player1.MessageFromArea(effect.Owner, LanguageMgr.GetTranslation("ServerLanguageKey", Spell.Message2), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
-                    }
+                    string personalizedTargetName = player.GetPersonalizedName(effect.Owner);
+
+                    string message2 = string.IsNullOrEmpty(Spell.Message2) ? string.Empty : Spell.GetFormattedMessage2(player, personalizedTargetName);
+                    player.MessageFromArea(effect.Owner, message2, eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
                 }
             }
 
+            // If owner is a player, update their max speed and group status
             if (ownerPlayer != null)
             {
                 ownerPlayer.Client.Out.SendUpdateMaxSpeed();
@@ -253,7 +228,7 @@ namespace DOL.GS.Spells
 
         protected override double CalculateAreaVariance(GameLiving target, float distance, int radius)
         {
-            if (target is GamePlayer || (target is GameNPC && (target as GameNPC).Brain is IControlledBrain))
+            if (target is GamePlayer || (target is GameNPC && (target as GameNPC)!.Brain is IControlledBrain))
             {
                 return ((double)distance / (double)radius) / 2.0;
             }
@@ -398,7 +373,7 @@ namespace DOL.GS.Spells
             {
                 mezblock.Cancel(false);
                 if (target is GamePlayer)
-                    (target as GamePlayer).Out.SendMessage(LanguageMgr.GetTranslation((target as GamePlayer)?.Client, "SpellHandler.MezIntercepted"), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
+                    (target as GamePlayer)?.Out.SendMessage(LanguageMgr.GetTranslation((target as GamePlayer)?.Client, "SpellHandler.MezIntercepted"), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
                 MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.CeremonialBracerInterceptMez"), eChatType.CT_SpellResisted);
                 SendEffectAnimation(target, 0, false, 0);
                 target.StartInterruptTimer(target.SpellInterruptDuration, AttackData.eAttackType.Spell, Caster);
@@ -486,7 +461,7 @@ namespace DOL.GS.Spells
 
         protected override double CalculateAreaVariance(GameLiving target, float distance, int radius)
         {
-            if (target is GamePlayer || (target is GameNPC && (target as GameNPC).Brain is IControlledBrain))
+            if (target is GamePlayer || (target is GameNPC && (target as GameNPC)!.Brain is IControlledBrain))
             {
                 return ((double)distance / (double)radius) / 2.0;
             }
@@ -533,7 +508,7 @@ namespace DOL.GS.Spells
                 {
                     stunblock.Cancel(false);
                     if (target is GamePlayer)
-                        (target as GamePlayer).Out.SendMessage(LanguageMgr.GetTranslation((target as GamePlayer)?.Client, "SpellHandler.StunIntercepted"), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
+                        (target as GamePlayer)?.Out.SendMessage(LanguageMgr.GetTranslation((target as GamePlayer)?.Client, "SpellHandler.StunIntercepted"), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
                     base.OnSpellResisted(target);
                     return;
                 }

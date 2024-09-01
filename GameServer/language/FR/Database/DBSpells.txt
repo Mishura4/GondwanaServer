@@ -37,3 +37,164 @@ Languages.DBSpells.YouLavaRemoved:		La lave glisse de votre peau.
 Languages.DBSpells.TargetLavaRemoved:		La lave glisse de la peau de {0}.
 Languages.DBSpells.YouAcidMistDisspates:	La brume acide qui vous entoure se dissipe.
 Languages.DBSpells.TargetAcidMistDisspates:	La brume acide qui entoure {0} se dissipe.
+
+Languages.DBSpells.MagmaShieldYouProtected:	Votre armure devient brûlante au toucher.
+Languages.DBSpells.MagmaShieldTargetProtected:	L'armure de {0} devient brûlante au toucher.
+Languages.DBSpells.DmgShieldFadesYou:		Votre armure retrouve son état normal.
+Languages.DBSpells.DmgShieldFadesTarget:	L'armure de {0} retrouve son état normal.
+Languages.DBSpells.BoneShieldTargetProtected:	Des piques osseuses jaillissent de {0}.
+Languages.DBSpells.BoneShieldFadesTarget:	Les piques osseuses disparaissent de {0}.
+
+Languages.DBSpells.DamageAddEarthYouStart:	Votre arme absorbe la puissance de la terre.
+Languages.DBSpells.DamageAddEarthTargetStart:	L'arme de {0} absorbe la puissance de la terre.
+Languages.DBSpells.DamageAddHeavenYouStart:	Votre arme est bénie par les cieux !
+Languages.DBSpells.DamageAddEarthTargetStart:	L'arme de {0} est bénie par les cieux !
+Languages.DBSpells.DamageAddPowerYouStart:	Votre arme est parcourue d'éclairs !
+Languages.DBSpells.DamageAddPowerTargetStart:	L'arme de {0} est parcourue d'éclairs !
+Languages.DBSpells.DamageAddDarkYouStart:	Les forces des ténèbres vous confèrent leur pouvoir.
+Languages.DBSpells.DamageAddDarkTargetStart:	Les forces des ténèbres confèrent leur pouvoir à {0}.
+Languages.DBSpells.DamageAddEnchantedYouStart:	Votre arme est enchantée avec un pouvoir magique !
+Languages.DBSpells.DamageAddEnchantedTargetStart:	L'arme de {0} est enchantée.
+Languages.DBSpells.DamageAddAccurateYouStart:	Votre lame frappe avec plus de précision !
+Languages.DBSpells.DamageAddAccurateTargetStart:	La lame de {0} frappe avec plus de précision !
+Languages.DBSpells.DamageAddZealYouStart:	Vous maniez votre arme avec ferveur !
+Languages.DBSpells.DamageAddZealTargetStart:	{0} manie son arme avec ferveur !
+Languages.DBSpells.DamageAddEnergyYouStart:	Une énergie dangereuse entoure votre arme !
+Languages.DBSpells.DamageAddEnergyTargetStart:	L'arme de {0} est entourée d'une énergie dangereuse !
+Languages.DBSpells.DamageAddGodsYouStart:	Votre arme est bénie par les dieux !
+Languages.DBSpells.DamageAddGodsTargetStart:	L'arme de {0} brille de la puissance des dieux !
+Languages.DBSpells.DamageAddHurikaYouStart:	Le Hurlement de Hurika vous inspire, augmentant vos dégâts.
+Languages.DBSpells.DamageAddHurikaTargetStart:	Le Hurlement de Hurika inspire {0}, augmentant ses dégâts.
+Languages.DBSpells.DamageAddYouNoInspired:	Vous n'êtes plus inspiré.
+Languages.DBSpells.DamageAddTargetNoInspired:	{0} n'est plus inspiré.
+Languages.DBSpells.DamageAddFeroceYouStart:	Vos coups gagnent en férocité !
+Languages.DBSpells.DamageAddFeroceTargetStart:	Les coups de {0} gagnent en férocité !
+Languages.DBSpells.DamageAddFeroceYouFades:	Votre ardeur s'estompe.
+Languages.DBSpells.DamageAddFeroceTargetFades:	L'ardeur de {0} s'estompe.
+Languages.DBSpells.DamageAddRuneYouStart:	Votre arme est gravée d'une rune qui amplifie les dégâts infligés.
+Languages.DBSpells.DamageAddRuneTargetStart:	L'arme de {0} est gravée d'une rune qui amplifie les dégâts infligés.
+Languages.DBSpells.DamageAddRuneYouFades:	La rune de votre arme s'efface.
+Languages.DBSpells.DamageAddRuneTargetFades:	La rune de l'arme de {0} s'efface.
+Languages.DBSpells.DamageAddBacktoNormalYou:	Votre arme revient à son état d'origine.
+Languages.DBSpells.DamageAddBacktoNormalTarget:	L'arme de {0} revient à son état d'origine.
+
+Languages.DBSpells.BladeturnHeatYouStart:	Une chaleur intense vous enveloppe !
+Languages.DBSpells.BladeturnHeatTargetStart:	Une chaleur intense enveloppe {0} !
+Languages.DBSpells.BladeturnHeatYouAbsorb:	Votre bulle de chaleur se dissipe !
+Languages.DBSpells.BladeturnHeatTargetAbsorb:	La bulle de chaleur de {0} se dissipe !
+Languages.DBSpells.BladeturnRootYouStart:	Vous êtes enveloppé par des racines noueuses !
+Languages.DBSpells.BladeturnRootTargetStart:	{0} est enveloppé par des racines noueuses !
+Languages.DBSpells.BladeturnRootYouAbsorb:	Les racines noueuses qui vous protégeaient se retirent !
+Languages.DBSpells.BladeturnRootTargetAbsorb:	Les racines noueuses qui protégeaient {0} se retirent !
+Languages.DBSpells.BladeturnHeatYouStart:	Vous êtes enveloppé par un esprit invisible !
+Languages.DBSpells.BladeturnHeatTargetStart:	{0} est enveloppé par un esprit invisible !
+Languages.DBSpells.BladeturnSpiritYouAbsorb:	L'esprit qui vous protégeait s'évapore dans les airs !
+Languages.DBSpells.BladeturnSpiritTargetAbsorb:	L'esprit qui vous protégeait {0} s'évapore dans les airs !
+Languages.DBSpells.BladeturnYouStart:		Vous êtes enveloppé par une bulle protectrice !
+Languages.DBSpells.BladeturnTargetStart:	{0} est enveloppé par une bulle protectrice !
+Languages.DBSpells.BladeturnYouAbsorb:		Votre bulle protectrice se dissipe !
+Languages.DBSpells.BladeturnTargetAbsorb:	La bulle protectrice de {0} se dissipe !
+
+Languages.DBSpells.SlowYou:			Vous vous déplacez plus lentement !
+Languages.DBSpells.SlowTarget:			{0} se déplace plus lentement !
+Languages.DBSpells.SpeedDecreaseFrozenYou:	Vous êtes figé au sol !
+Languages.DBSpells.SpeedDecreaseFrozenTarget:	{0} est figé au sol !
+Languages.DBSpells.SpeedDecreaseColdYou:	Un froid glacial vous entoure et vous engourdit !
+Languages.DBSpells.SpeedDecreaseColdTarget:	Un froid glacial entoure {0} et l'engourdit !
+Languages.DBSpells.SpeedDecreaseFrozen2You:	Vous êtes complètement figé par la glace !
+Languages.DBSpells.SpeedDecreaseFrozen2Target:	Le temps semble s'arrêter autour de {0} !
+Languages.DBSpells.SpeedDecreaseSlowedYou:	Vos coups sont freinés par une force invisible !
+Languages.DBSpells.SpeedDecreaseSlowedTarget:	Les attaques de {0} sont plus lentes que d'habitude !
+Languages.DBSpells.SpeedDecreaseSlowed2You:	Votre vitesse de mouvement diminue !
+Languages.DBSpells.SpeedDecreaseSlowed2Target:	Les mouvements de {0} ralentissent !
+Languages.DBSpells.SpeedDecreaseSlowed3You:	Vous êtes cloué au sol par une force invisible et puissante !
+Languages.DBSpells.SpeedDecreaseSlowed3Target:	{0} est cloué au sol par une force invisible et puissante !
+Languages.DBSpells.SpeedDecreaseSpeedYou:	Votre vitesse d'attaque a diminué.
+Languages.DBSpells.SpeedDecreaseSpeedTarget:	La vitesse d'attaque de {0} a diminué !
+Languages.DBSpells.SpeedDecreaseSpeedUpYou:	Votre vitesse d'attaque revient à la normale.
+Languages.DBSpells.SpeedDecreaseSpeedUpTarget:	La vitesse d'attaque de {0} revient à la normale.
+
+Languages.DBSpells.AblativeCrystalShieldYou:	Une barrière de cristal vous enveloppe.
+Languages.DBSpells.AblativeCrystalShieldTarget:	Une barrière de cristal enveloppe {0}.
+Languages.DBSpells.AFBuffCrystalShieldYouEnd:	Votre barrière de cristal se dissipe !
+Languages.DBSpells.AFBuffCrystalShieldTargetend:	La barrière de cristal de {0} se dissipe !
+Languages.DBSpells.AFBuffShieldYou:		Un bouclier se forme autour de vous.
+Languages.DBSpells.AFBuffShieldTarget:		Un bouclier se forme autour de {0}.
+Languages.DBSpells.AFBuffShieldYouEnd:		Votre bouclier s'évanouit.
+Languages.DBSpells.AFBuffShieldTargetend:	Le bouclier de {0} s'évanouit.
+Languages.DBSpells.AFBuffDefAuraYou:		Une aura protectrice vous enveloppe !
+Languages.DBSpells.AFBuffDefAuraTarget:		Une aura protectrice enveloppe {0} !
+Languages.DBSpells.AFBuffDefAuraYouEnd:		L'aura de protection qui vous entoure se dissipe.
+Languages.DBSpells.AFBuffDefAuraTargetend:	L'aura de protection autour de {0} se dissipe.
+Languages.DBSpells.AFBuffHolyAuraYou:		Vous êtes enveloppé d'une aura divine.
+Languages.DBSpells.AFBuffHolyAuraTarget:	{0} est enveloppé d'une aura divine.
+Languages.DBSpells.AFBuffHolyAuraYouEnd:	Votre aura sacrée s'évanouit.
+Languages.DBSpells.AFBuffHolyAuraTargetend:	L'aura sacrée de {0} s'évanouit.
+Languages.DBSpells.AFBuffExtraAuraYou:		Une protection supplémentaire vous est accordée.
+Languages.DBSpells.AFBuffExtraAuraTarget:	Une protection supplémentaire est accordée à {0}.
+Languages.DBSpells.AFBuffExtraAuraYouEnd:	Votre protection renforcée s'évanouit.
+Languages.DBSpells.AFBuffExtraAuraTargetend:	La protection renforcée de {0} s'évanouit.
+Languages.DBSpells.AFBuffPowerShieldYou:	Vous êtes enveloppé d'un champ de force.
+Languages.DBSpells.AFBuffPowerShieldTarget:	{0} est enveloppé d'un champ de force.
+Languages.DBSpells.AFBuffPowerShieldYouEnd:	Votre champ de force se dissipe.
+Languages.DBSpells.AFBuffPowerShieldTargetEnd:	Le champ de force de {0} se dissipe.
+Languages.DBSpells.AFBuffMagicalShieldYou:	Une barrière d'énergie magique vous enveloppe.
+Languages.DBSpells.AFBuffMagicalShieldTarget:	Une barrière d'énergie magique enveloppe {0}.
+Languages.DBSpells.AFBuffMagicalShieldYouEnd:	Votre bouclier d'énergie disparaît.
+Languages.DBSpells.AFBuffMagicalShieldTargetEnd:Le bouclier d'énergie de {0} disparaît.
+Languages.DBSpells.AFBuffHardSkinYou:		Votre peau se renforce.
+Languages.DBSpells.AFBuffHardSkinTarget:	La peau de {0} se renforce.
+Languages.DBSpells.AFBuffHardSkinYouEnd:	La résistance accrue de votre peau s'estompe.
+Languages.DBSpells.AFBuffHardSkinTargetEnd:	La résistance accrue de la peau de {0} s'estompe.
+Languages.DBSpells.AFBuffHardSkin2TargetEnd:	L'écorce se détache de la peau de {0}.
+Languages.DBSpells.AFDebuffResignedTarget:	{0} semble résigné à son sort.
+Languages.DBSpells.AFDebuffWholeheartTarget:	{0} se bat à nouveau avec ferveur.
+
+Languages.DBSpells.FocusShellYouStart:		Une force quasi impénétrable vous protège !
+Languages.DBSpells.FocusShellTargetStart:	La barrière quasi impénétrable qui vous entoure disparaît.
+Languages.DBSpells.FocusShellYouEnd:		{0} est sous la protection d'une force quasi impénétrable !
+Languages.DBSpells.FocusShellTargetEnd:		La barrière quasi impénétrable qui entourait {0} disparaît.
+Languages.DBSpells.DisarmYouStart:		Vous êtes désarmé et ne pouvez utiliser aucune arme !
+Languages.DBSpells.DisarmTargetStart:		{0} est désarmé et ne peut utiliser aucune arme !
+Languages.DBSpells.DisarmYouEnd:		Vous pouvez à nouveau utiliser vos armes !
+Languages.DBSpells.DisarmTargetEnd:		{0} peut à nouveau utiliser ses armes !
+Languages.DBSpells.ConversionYou:		Vous régénérez votre puissance et votre endurance !
+Languages.DBSpells.ConversionTarget:		La puissance et l'endurance de {0} sont régénérées !
+Languages.DBSpells.StunYou:			Vous êtes immobilisé !
+Languages.DBSpells.StunTarget:			{0} est immobilisé !
+Languages.DBSpells.StunLightYou:		Vous êtes étourdi par un flash aveuglant !
+Languages.DBSpells.StunLightTarget:		{0} est étourdi par un flash aveuglant !
+
+Languages.DBSpells.HealRegenYouStart:		Un sentiment de tranquillité vous envahit.
+Languages.DBSpells.HealRegenTargetStart:	{0} semble apaisé.
+Languages.DBSpells.HealRegenYouEnd:		Vous sérénité s'estompe.
+Languages.DBSpells.HealRegenTargetEnd:		La sérénité de {0} s'estompe.
+Languages.DBSpells.HealOverTimeYouStart:	Une sensation de calme et de bien-être vous envahit.
+Languages.DBSpells.HealOverTimeTargetStart:	{0} paraît apaisé et vigoureux.
+Languages.DBSpells.HealOverTimeYouEnd:		Votre tranquillité méditative disparaît.
+Languages.DBSpells.HealOverTimeTargetEnd:	La tranquillité méditative de {0} disparaît.
+Languages.DBSpells.PowerRegenYouStart:		Vous vous sentez plus à l'aise.
+Languages.DBSpells.PowerRegenYouEnd:		Votre sérénité s'estompe.
+Languages.DBSpells.PowerRegenTargetEnd:		La sérénité de {0} s'estompe.
+Languages.DBSpells.StrBuffYouStart:		Vous vous sentez plus fort !
+Languages.DBSpells.StrBuffTargetStart:		{0} se sent plus fort !
+Languages.DBSpells.StrBuffYouEnd:		Vous retrouvez votre force habituelle.
+Languages.DBSpells.StrBuffTargetEnd:		La force accrue de {0} s'estompe.
+Languages.DBSpells.DexBuffYouStart:		Vous vous sentez plus agile !
+Languages.DBSpells.DexBuffTargetStart:		{0} paraît plus agile !
+Languages.DBSpells.DexBuffYouEnd:		Vous retrouvez votre dextérité habituelle.
+Languages.DBSpells.DexBuffTargetEnd:		L'agilité accrue de {0} s'estompe.
+Languages.DBSpells.ConBuffYouStart:		Une vitalité accrue vous envahit !
+Languages.DBSpells.ConBuffTargetStart:		Une vitalité accrue envahit {0} !
+Languages.DBSpells.ConBuffYouEnd:		Votre vitalité revient à la normale.
+Languages.DBSpells.ConBuffTargetEnd:		La vitalité accrue de {0} s'estompe.
+Languages.DBSpells.CelerityBuffYouStart:	Vos attaques sont aussi rapides que le vent !
+Languages.DBSpells.CelerityBuffTargetStart:	Les attaques de {0} sont aussi rapides que le vent !
+Languages.DBSpells.CelerityBuffYouEnd:		Votre vitesse d'attaque revient à la normale.
+Languages.DBSpells.CelerityBuffTargetEnd:	La vitesse d'attaque de {0} revient à la normale.
+Languages.DBSpells.StrConBuffYouStart:		Une force et une vitalité accrues vous envahissent !
+Languages.DBSpells.StrConBuffTargetStart:	Une force et une vitalité accrues envahissent {0} !
+Languages.DBSpells.StrConBuffYouEnd:		Vous retrouvez votre vigueur et votre force habituelles.
+Languages.DBSpells.StrConBuffTargetEnd:		La force et la santé accrues de {0} s'estompent.
+Languages.DBSpells.BodyResistDebuffYouStart:	Vous vous sentez plus vulnérable à la magie physique !
+Languages.DBSpells.BodyResistDebuffTargetStart:	{0} semble vulnérable à la magie physique !

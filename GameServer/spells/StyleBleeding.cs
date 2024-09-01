@@ -64,31 +64,27 @@ namespace DOL.GS.Spells
         {
             base.OnEffectPulse(effect);
 
+            string casterLanguage = (m_caster as GamePlayer)?.Client?.Account?.Language ?? "EN";
             GamePlayer ownerPlayer = effect.Owner as GamePlayer;
 
-            // Handle translation for player targets
             if (ownerPlayer != null)
             {
-                MessageToLiving(effect.Owner, GetFormattedMessage(ownerPlayer, Spell.Message1), eChatType.CT_YouWereHit);
+                string message1 = string.IsNullOrEmpty(Spell.Message1) ? string.Empty : Spell.GetFormattedMessage1(ownerPlayer);
+                MessageToLiving(effect.Owner, message1, eChatType.CT_YouWereHit);
             }
             else
             {
-                MessageToLiving(effect.Owner, LanguageMgr.GetTranslation("ServerLanguageKey", Spell.Message1), eChatType.CT_YouWereHit);
+                string message1 = string.IsNullOrEmpty(Spell.Message1) ? string.Empty : LanguageMgr.GetTranslation(casterLanguage, Spell.Message1, effect.Owner.GetName(0, false));
+                MessageToLiving(effect.Owner, message1, eChatType.CT_YouWereHit);
             }
 
-            // Notify nearby players
             foreach (GamePlayer player in effect.Owner.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
             {
                 if (!(effect.Owner == player))
                 {
-                    if (ownerPlayer != null)
-                    {
-                        player.MessageFromArea(effect.Owner, GetFormattedMessage(player, Spell.Message2, player.GetPersonalizedName(effect.Owner)), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
-                    }
-                    else
-                    {
-                        player.MessageFromArea(effect.Owner, LanguageMgr.GetTranslation("ServerLanguageKey", Spell.Message2), eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
-                    }
+                    string personalizedTargetName = player.GetPersonalizedName(effect.Owner);
+                    string message2 = string.IsNullOrEmpty(Spell.Message2) ? string.Empty : Spell.GetFormattedMessage2(player, personalizedTargetName);
+                    player.MessageFromArea(effect.Owner, message2, eChatType.CT_YouHit, eChatLoc.CL_SystemWindow);
                 }
             }
 

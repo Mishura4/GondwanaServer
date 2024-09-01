@@ -35,26 +35,6 @@ namespace DOL.GS.Spells
     {
         public const string ABLATIVE_HP = "ablative hp";
 
-        private string GetFormattedMessage(GamePlayer player, string messageKey, params object[] args)
-        {
-            if (messageKey.StartsWith("Languages.DBSpells."))
-            {
-                string translationKey = messageKey;
-                string translation;
-
-                if (LanguageMgr.TryGetTranslation(out translation, player.Client.Account.Language, translationKey, args))
-                {
-                    return translation;
-                }
-                else
-                {
-                    // Log an error or handle the fallback here
-                    return "(Translation not found)";
-                }
-            }
-            return string.Format(messageKey, args);
-        }
-
         public override void OnEffectStart(GameSpellEffect effect)
         {
             base.OnEffectStart(effect);
@@ -64,28 +44,27 @@ namespace DOL.GS.Spells
             eChatType toLiving = (Spell.Pulse == 0) ? eChatType.CT_Spell : eChatType.CT_SpellPulse;
             eChatType toOther = (Spell.Pulse == 0) ? eChatType.CT_System : eChatType.CT_SpellPulse;
 
-            // Handle translation for the effect owner
-            if (effect.Owner is GamePlayer ownerPlayer)
+            string casterLanguage = (m_caster as GamePlayer)?.Client?.Account?.Language ?? "EN";
+            GamePlayer ownerPlayer = effect.Owner as GamePlayer;
+
+            if (ownerPlayer != null)
             {
-                MessageToLiving(effect.Owner, GetFormattedMessage(ownerPlayer, Spell.Message1), toLiving);
+                string message1 = string.IsNullOrEmpty(Spell.Message1) ? string.Empty : Spell.GetFormattedMessage1(ownerPlayer);
+                MessageToLiving(effect.Owner, message1, toLiving);
             }
             else
             {
-                MessageToLiving(effect.Owner, LanguageMgr.GetTranslation("ServerLanguageKey", Spell.Message1), toLiving);
+                string message1 = string.IsNullOrEmpty(Spell.Message1) ? string.Empty : LanguageMgr.GetTranslation(casterLanguage, Spell.Message1, effect.Owner.GetName(0, false));
+                MessageToLiving(effect.Owner, message1, toLiving);
             }
 
             foreach (GamePlayer player in effect.Owner.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
             {
-                if (!(effect.Owner == player))
+                if (effect.Owner != player)
                 {
-                    if (effect.Owner is GamePlayer targetPlayer)
-                    {
-                        player.MessageFromArea(effect.Owner, GetFormattedMessage(player, Spell.Message2, player.GetPersonalizedName(effect.Owner)), toOther, eChatLoc.CL_SystemWindow);
-                    }
-                    else
-                    {
-                        player.MessageFromArea(effect.Owner, LanguageMgr.GetTranslation("ServerLanguageKey", Spell.Message2), toOther, eChatLoc.CL_SystemWindow);
-                    }
+                    string personalizedTargetName = player.GetPersonalizedName(effect.Owner);
+                    string message2 = string.IsNullOrEmpty(Spell.Message2) ? string.Empty : Spell.GetFormattedMessage2(player, personalizedTargetName);
+                    player.MessageFromArea(effect.Owner, message2, toOther, eChatLoc.CL_SystemWindow);
                 }
             }
         }
@@ -97,28 +76,27 @@ namespace DOL.GS.Spells
 
             if (!noMessages && Spell.Pulse == 0)
             {
-                // Handle translation for the effect owner when it expires
-                if (effect.Owner is GamePlayer ownerPlayer)
+                string casterLanguage = (m_caster as GamePlayer)?.Client?.Account?.Language ?? "EN";
+                GamePlayer ownerPlayer = effect.Owner as GamePlayer;
+
+                if (ownerPlayer != null)
                 {
-                    MessageToLiving(effect.Owner, GetFormattedMessage(ownerPlayer, Spell.Message3), eChatType.CT_SpellExpires);
+                    string message3 = string.IsNullOrEmpty(Spell.Message3) ? string.Empty : Spell.GetFormattedMessage3(ownerPlayer);
+                    MessageToLiving(effect.Owner, message3, eChatType.CT_SpellExpires);
                 }
                 else
                 {
-                    MessageToLiving(effect.Owner, LanguageMgr.GetTranslation("ServerLanguageKey", Spell.Message3), eChatType.CT_SpellExpires);
+                    string message3 = string.IsNullOrEmpty(Spell.Message3) ? string.Empty : LanguageMgr.GetTranslation(casterLanguage, Spell.Message3, effect.Owner.GetName(0, false));
+                    MessageToLiving(effect.Owner, message3, eChatType.CT_SpellExpires);
                 }
 
                 foreach (GamePlayer player in effect.Owner.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
                 {
-                    if (!(effect.Owner == player))
+                    if (effect.Owner != player)
                     {
-                        if (effect.Owner is GamePlayer targetPlayer)
-                        {
-                            player.MessageFromArea(effect.Owner, GetFormattedMessage(player, Spell.Message4, player.GetPersonalizedName(effect.Owner)), eChatType.CT_SpellExpires, eChatLoc.CL_SystemWindow);
-                        }
-                        else
-                        {
-                            player.MessageFromArea(effect.Owner, LanguageMgr.GetTranslation("ServerLanguageKey", Spell.Message4), eChatType.CT_SpellExpires, eChatLoc.CL_SystemWindow);
-                        }
+                        string personalizedTargetName = player.GetPersonalizedName(effect.Owner);
+                        string message4 = string.IsNullOrEmpty(Spell.Message4) ? string.Empty : Spell.GetFormattedMessage4(player, personalizedTargetName);
+                        player.MessageFromArea(effect.Owner, message4, eChatType.CT_SpellExpires, eChatLoc.CL_SystemWindow);
                     }
                 }
             }
@@ -232,15 +210,30 @@ namespace DOL.GS.Spells
         {
             GameEventMgr.RemoveHandler(effect.Owner, GameLivingEvent.AttackedByEnemy, new DOLEventHandler(OnAttack));
             effect.Owner.TempProperties.removeProperty(ABLATIVE_HP);
+
             if (!noMessages && Spell.Pulse == 0)
             {
-                MessageToLiving(effect.Owner, Spell.Message3, eChatType.CT_SpellExpires);
+                string casterLanguage = (m_caster as GamePlayer)?.Client?.Account?.Language ?? "EN";
+                GamePlayer ownerPlayer = effect.Owner as GamePlayer;
+
+                if (ownerPlayer != null)
+                {
+                    string message3 = string.IsNullOrEmpty(Spell.Message3) ? string.Empty : Spell.GetFormattedMessage3(ownerPlayer);
+                    MessageToLiving(effect.Owner, message3, eChatType.CT_SpellExpires);
+                }
+                else
+                {
+                    string message3 = string.IsNullOrEmpty(Spell.Message3) ? string.Empty : LanguageMgr.GetTranslation(casterLanguage, Spell.Message3, effect.Owner.GetName(0, false));
+                    MessageToLiving(effect.Owner, message3, eChatType.CT_SpellExpires);
+                }
+
                 foreach (GamePlayer player in effect.Owner.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
                 {
-                    if (!(effect.Owner == player))
+                    if (effect.Owner != player)
                     {
-                        player.MessageFromArea(effect.Owner, Util.MakeSentence(Spell.Message4,
-                            player.GetPersonalizedName(effect.Owner)), eChatType.CT_SpellExpires, eChatLoc.CL_SystemWindow);
+                        string personalizedTargetName = player.GetPersonalizedName(effect.Owner);
+                        string message4 = string.IsNullOrEmpty(Spell.Message4) ? string.Empty : Spell.GetFormattedMessage4(player, personalizedTargetName);
+                        player.MessageFromArea(effect.Owner, message4, eChatType.CT_SpellExpires, eChatLoc.CL_SystemWindow);
                     }
                 }
             }
@@ -253,43 +246,43 @@ namespace DOL.GS.Spells
             {
                 var list = new List<string>();
 
-                list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "AblativeArmor.DelveInfo.Function"));
+                list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "AblativeArmor.DelveInfo.Function"));
                 list.Add("");
                 list.Add(Spell.Description);
                 list.Add("");
                 if (Spell.Damage != 0)
-                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "AblativeArmor.DelveInfo.Absorption1", Spell.Damage));
+                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "AblativeArmor.DelveInfo.Absorption1", Spell.Damage));
                 if (Spell.Damage > 100)
-                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "AblativeArmor.DelveInfo.Absorption2"));
+                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "AblativeArmor.DelveInfo.Absorption2"));
                 if (Spell.Damage == 0)
-                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "AblativeArmor.DelveInfo.Absorption3"));
+                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "AblativeArmor.DelveInfo.Absorption3"));
                 if (Spell.Value != 0)
-                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "DelveInfo.Value", Spell.Value));
-                list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "DelveInfo.Target", Spell.Target));
+                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.Value", Spell.Value));
+                list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.Target", Spell.Target));
                 if (Spell.Range != 0)
-                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "DelveInfo.Range", Spell.Range));
+                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.Range", Spell.Range));
                 if (Spell.Duration >= ushort.MaxValue * 1000)
-                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "DelveInfo.Duration") + " Permanent.");
+                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.Duration") + " Permanent.");
                 else if (Spell.Duration > 60000)
-                    list.Add(string.Format(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "DelveInfo.Duration") + Spell.Duration / 60000 + ":" + (Spell.Duration % 60000 / 1000).ToString("00") + " min"));
+                    list.Add(string.Format(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.Duration") + Spell.Duration / 60000 + ":" + (Spell.Duration % 60000 / 1000).ToString("00") + " min"));
                 else if (Spell.Duration != 0)
-                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "DelveInfo.Duration") + (Spell.Duration / 1000).ToString("0' sec';'Permanent.';'Permanent.'"));
+                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.Duration") + (Spell.Duration / 1000).ToString("0' sec';'Permanent.';'Permanent.'"));
                 if (Spell.Power != 0)
-                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "DelveInfo.PowerCost", Spell.Power.ToString("0;0'%'")));
+                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.PowerCost", Spell.Power.ToString("0;0'%'")));
                 if (Spell.CastTime < 0.1)
-                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "AblativeArmor.DelveInfo.CastingTime"));
+                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "AblativeArmor.DelveInfo.CastingTime"));
                 else if (Spell.CastTime > 0)
-                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "DelveInfo.CastingTime", (Spell.CastTime * 0.001).ToString("0.0## sec;-0.0## sec;'instant'")));
+                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.CastingTime", (Spell.CastTime * 0.001).ToString("0.0## sec;-0.0## sec;'instant'")));
 
                 if (ServerProperties.Properties.SERV_LANGUAGE != "DE")
                 {
                     list.Add(GetAblativeType());
                     if (Spell.Radius != 0)
-                        list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "DelveInfo.Radius", Spell.Radius));
+                        list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.Radius", Spell.Radius));
                     if (Spell.Frequency != 0)
-                        list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "DelveInfo.Frequency", (Spell.Frequency * 0.001).ToString("0.0")));
+                        list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.Frequency", (Spell.Frequency * 0.001).ToString("0.0")));
                     if (Spell.DamageType != 0)
-                        list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "DelveInfo.DamageType", Spell.DamageType));
+                        list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.DamageType", Spell.DamageType));
                 }
                 return list;
             }

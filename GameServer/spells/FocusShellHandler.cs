@@ -58,7 +58,7 @@ namespace DOL.GS.Spells
 
                     if (currentEffect != null && currentEffect.SpellHandler is FocusShellHandler)
                     {
-                        (currentEffect.SpellHandler as FocusShellHandler)?.FocusSpellAction(null, Caster, null);
+                        (currentEffect.SpellHandler as FocusShellHandler)!.FocusSpellAction(null, Caster, null);
                     }
 
                     FSTarget = selectedTarget as GamePlayer;
@@ -90,30 +90,29 @@ namespace DOL.GS.Spells
                 GameEventMgr.AddHandler(FSTarget, GameLivingEvent.CastStarting, new DOLEventHandler(CancelSpell));
             }
 
-            // Send the spell messages
+            string casterLanguage = (m_caster as GamePlayer)?.Client?.Account?.Language ?? "EN";
             GamePlayer fsTargetPlayer = FSTarget as GamePlayer;
 
+            // Handle translation for the effect owner
             if (fsTargetPlayer != null)
             {
-                MessageToLiving(FSTarget, GetFormattedMessage(fsTargetPlayer, Spell.Message1), eChatType.CT_Spell);
+                string message1 = string.IsNullOrEmpty(Spell.Message1) ? string.Empty : Spell.GetFormattedMessage1(fsTargetPlayer);
+                MessageToLiving(FSTarget, message1, eChatType.CT_Spell);
             }
             else
             {
-                MessageToLiving(FSTarget, LanguageMgr.GetTranslation("ServerLanguageKey", Spell.Message1), eChatType.CT_Spell);
+                string message1 = string.IsNullOrEmpty(Spell.Message1) ? string.Empty : LanguageMgr.GetTranslation(casterLanguage, Spell.Message1, FSTarget.GetName(0, false));
+                MessageToLiving(FSTarget, message1, eChatType.CT_Spell);
             }
 
             foreach (GamePlayer player in FSTarget.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
             {
                 if (player != FSTarget)
                 {
-                    if (fsTargetPlayer != null)
-                    {
-                        MessageToLiving(player, GetFormattedMessage(player, Spell.Message3, player.GetPersonalizedName(FSTarget)), eChatType.CT_Spell);
-                    }
-                    else
-                    {
-                        MessageToLiving(player, LanguageMgr.GetTranslation("ServerLanguageKey", Spell.Message3), eChatType.CT_Spell);
-                    }
+                    string personalizedTargetName = player.GetPersonalizedName(FSTarget);
+
+                    string message2 = string.IsNullOrEmpty(Spell.Message2) ? string.Empty : Spell.GetFormattedMessage2(player, personalizedTargetName);
+                    player.MessageFromArea(FSTarget, message2, eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
                 }
             }
 
@@ -136,29 +135,31 @@ namespace DOL.GS.Spells
 
             timer.Stop();
 
-            // Send the spell messages
-            GamePlayer fsTargetPlayer = FSTarget as GamePlayer;
+            if (!noMessages)
+            {
+                string casterLanguage = (m_caster as GamePlayer)?.Client?.Account?.Language ?? "EN";
+                GamePlayer fsTargetPlayer = FSTarget as GamePlayer;
 
-            if (fsTargetPlayer != null)
-            {
-                MessageToLiving(FSTarget, GetFormattedMessage(fsTargetPlayer, Spell.Message2), eChatType.CT_SpellExpires);
-            }
-            else
-            {
-                MessageToLiving(FSTarget, LanguageMgr.GetTranslation("ServerLanguageKey", Spell.Message2), eChatType.CT_SpellExpires);
-            }
-
-            foreach (GamePlayer player in FSTarget.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
-            {
-                if (player != FSTarget)
+                // Handle translation for the effect owner when it expires
+                if (fsTargetPlayer != null)
                 {
-                    if (fsTargetPlayer != null)
+                    string message3 = string.IsNullOrEmpty(Spell.Message3) ? string.Empty : Spell.GetFormattedMessage3(fsTargetPlayer);
+                    MessageToLiving(FSTarget, message3, eChatType.CT_SpellExpires);
+                }
+                else
+                {
+                    string message3 = string.IsNullOrEmpty(Spell.Message3) ? string.Empty : LanguageMgr.GetTranslation(casterLanguage, Spell.Message3, FSTarget.GetName(0, false));
+                    MessageToLiving(FSTarget, message3, eChatType.CT_SpellExpires);
+                }
+
+                foreach (GamePlayer player in FSTarget.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))
+                {
+                    if (player != FSTarget)
                     {
-                        MessageToLiving(player, GetFormattedMessage(player, Spell.Message4, player.GetPersonalizedName(FSTarget)), eChatType.CT_System);
-                    }
-                    else
-                    {
-                        MessageToLiving(player, LanguageMgr.GetTranslation("ServerLanguageKey", Spell.Message4), eChatType.CT_System);
+                        string personalizedTargetName = player.GetPersonalizedName(FSTarget);
+
+                        string message4 = string.IsNullOrEmpty(Spell.Message4) ? string.Empty : Spell.GetFormattedMessage4(player, personalizedTargetName);
+                        player.MessageFromArea(FSTarget, message4, eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     }
                 }
             }
@@ -231,25 +232,6 @@ namespace DOL.GS.Spells
                     Stop();
                 }
             }
-        }
-
-        private string GetFormattedMessage(GamePlayer player, string messageKey, params object[] args)
-        {
-            if (messageKey.StartsWith("Languages.DBSpells."))
-            {
-                string translationKey = messageKey;
-                string translation;
-
-                if (LanguageMgr.TryGetTranslation(out translation, player.Client.Account.Language, translationKey, args))
-                {
-                    return translation;
-                }
-                else
-                {
-                    return "(Translation not found)";
-                }
-            }
-            return string.Format(messageKey, args);
         }
     }
 }
