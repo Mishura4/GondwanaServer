@@ -747,62 +747,65 @@ namespace DOL.AI.Brain
         protected virtual GameLiving CalculateNextAttackTarget()
         {
             GameLiving maxAggroObject = null;
+            Dictionary<GameLiving, long> table;
             lock ((m_aggroTable as ICollection).SyncRoot)
             {
-                double maxAggro = 0;
-                Dictionary<GameLiving, long>.Enumerator aggros = m_aggroTable.GetEnumerator();
-                List<GameLiving> removable = new List<GameLiving>();
-                while (aggros.MoveNext())
+                table = new(m_aggroTable);
+            }
+            double maxAggro = 0;
+            Dictionary<GameLiving, long>.Enumerator aggros = table.GetEnumerator();
+            List<GameLiving> removable = new List<GameLiving>();
+            while (aggros.MoveNext())
+            {
+                GameLiving living = aggros.Current.Key;
+
+                // check to make sure this target is still valid
+                if (living.IsAlive == false ||
+                    living.ObjectState != GameObject.eObjectState.Active ||
+                    living.IsStealthed ||
+                    !Body.IsWithinRadius2D(living, MAX_AGGRO_LIST_DISTANCE))
                 {
-                    GameLiving living = aggros.Current.Key;
+                    removable.Add(living);
+                    continue;
+                }
 
-                    // check to make sure this target is still valid
-                    if (living.IsAlive == false ||
-                        living.ObjectState != GameObject.eObjectState.Active ||
-                        living.IsStealthed ||
-                        !Body.IsWithinRadius2D(living, MAX_AGGRO_LIST_DISTANCE) ||
-                        GameServer.ServerRules.IsAllowedToAttack(Body, living, true) == false)
+                // Don't bother about necro shade, can't attack it anyway.
+                if (living.EffectList.GetOfType<NecromancerShadeEffect>() != null)
+                    continue;
+
+                long amount = aggros.Current.Value;
+
+                if (living.IsAlive
+                    && amount > maxAggro
+                    && living.CurrentRegion == Body.CurrentRegion
+                    && living.ObjectState == GameObject.eObjectState.Active
+                    && GameServer.ServerRules.IsAllowedToAttack(Body, living, true))
+                {
+                    float distance = Body.GetDistanceTo(living.Position, 0);
+                    int maxAggroDistance = (this is IControlledBrain) ? MAX_PET_AGGRO_DISTANCE : MAX_AGGRO_DISTANCE;
+
+                    if (distance <= maxAggroDistance)
                     {
-                        removable.Add(living);
-                        continue;
-                    }
-
-                    // Don't bother about necro shade, can't attack it anyway.
-                    if (living.EffectList.GetOfType<NecromancerShadeEffect>() != null)
-                        continue;
-
-                    long amount = aggros.Current.Value;
-
-                    if (living.IsAlive
-                        && amount > maxAggro
-                        && living.CurrentRegion == Body.CurrentRegion
-                        && living.ObjectState == GameObject.eObjectState.Active)
-                    {
-                        float distance = Body.GetDistanceTo(living.Position, 0);
-                        int maxAggroDistance = (this is IControlledBrain) ? MAX_PET_AGGRO_DISTANCE : MAX_AGGRO_DISTANCE;
-
-                        if (distance <= maxAggroDistance)
+                        double aggro = amount * Math.Min(500.0 / distance, 1);
+                        if (aggro > maxAggro)
                         {
-                            double aggro = amount * Math.Min(500.0 / distance, 1);
-                            if (aggro > maxAggro)
-                            {
-                                maxAggroObject = living;
-                                maxAggro = aggro;
-                            }
+                            maxAggroObject = living;
+                            maxAggro = aggro;
                         }
                     }
                 }
+            }
 
-                foreach (GameLiving l in removable)
-                {
-                    RemoveFromAggroList(l);
-                    Body.RemoveAttacker(l);
-                }
+            foreach (GameLiving l in removable)
+            {
+                RemoveFromAggroList(l);
+                Body.RemoveAttacker(l);
             }
 
             if (maxAggroObject == null)
             {
-                m_aggroTable.Clear();
+                lock ((m_aggroTable as ICollection).SyncRoot)
+                    m_aggroTable.Clear();
             }
 
             return maxAggroObject;
@@ -883,7 +886,7 @@ namespace DOL.AI.Brain
             {
                 if (e == GameObjectEvent.TakeDamage)
                 {
-                    if (args is not TakeDamageEventArgs eArgs || eArgs.DamageSource is not GameLiving living || !GameServer.ServerRules.IsAllowedToAttack(Body, living, true)) return;
+                    if (args is not TakeDamageEventArgs { DamageSource: GameLiving living } eArgs) return;
 
                     int aggro = eArgs.DamageAmount + eArgs.CriticalAmount;
                     if (eArgs.DamageSource is GameNPC npc)
@@ -1057,16 +1060,10 @@ namespace DOL.AI.Brain
             if (!CanBAF)
                 return;
 
-            GamePlayer puller;  // player that triggered the BAF
+            GamePlayer puller = attacker.GetPlayerOwner();  // player that triggered the BAF
 
             // Only BAF on players and pets of players
-            if (attacker is GamePlayer)
-                puller = (GamePlayer)attacker;
-            else if (attacker is GamePet pet && pet.Owner is GamePlayer owner)
-                puller = owner;
-            else if (attacker is BDSubPet bdSubPet && bdSubPet.Owner is GamePet bdPet && bdPet.Owner is GamePlayer bdOwner)
-                puller = bdOwner;
-            else
+            if (puller is null)
                 return;
 
             CanBAF = false; // Mobs only BAF once per fight

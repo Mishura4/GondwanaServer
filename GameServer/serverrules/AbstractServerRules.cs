@@ -398,20 +398,25 @@ namespace DOL.GS.ServerRules
             if (attacker == null || defender == null)
                 return false;
 
-            //if spawned by an event, check visibility
-            if (attacker is GameNPC && (attacker as GameNPC).EventID != null && (attacker as GameNPC).IsVisibleTo(defender) == false)
-                return false;
+            if (attacker is GameNPC originalNPCAttacker)
+            {
+                //if spawned by an event, check visibility -- Mishura: don't we want to always check visibility?
+                if (originalNPCAttacker.EventID != null && !originalNPCAttacker.IsVisibleTo(defender))
+                    return false;
 
-            //dead things can't attack
+                if (originalNPCAttacker.Flags.HasFlag(GameNPC.eFlags.CANTTARGET))
+                    return false;
+                
+                if (!originalNPCAttacker.ApplyAttackRules)
+                    return true;
+            }
+
+            // dead things can't attack
             if (!defender.IsAlive || !attacker.IsAlive)
                 return false;
 
             GamePlayer playerAttacker = attacker as GamePlayer ?? attacker.GetPlayerOwner();
             GamePlayer playerDefender = defender as GamePlayer ?? defender.GetPlayerOwner();
-
-            if (attacker is GameNPC)
-                if (!(attacker as GameNPC).ApplyAttackRules)
-                    return true;
 
             if (playerDefender != null && (playerDefender.Client.ClientState == GameClient.eClientState.WorldEnter || playerDefender.IsInvulnerableToAttack))
             {

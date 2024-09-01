@@ -190,6 +190,11 @@ namespace DOL.GS.ServerRules
             {
                 return true;
             }
+            
+            if (target is GameNPC targetNpc && targetNpc.Flags.HasFlag(GameNPC.eFlags.CANTTARGET))
+            {
+                return false;
+            }
 
             if (!target.IsVisibleTo(source) || target is AreaEffect)
             {
@@ -250,15 +255,16 @@ namespace DOL.GS.ServerRules
             if (attacker == null || defender == null)
                 return false;
 
-            if ((defender is ShadowNPC) || (defender is AreaEffect))
-                return false;
-
             //dead things can't attack
             if (!defender.IsAlive || !attacker.IsAlive)
                 return false;
 
             var attackerNpc = attacker as GameNPC;
             var defenderNpc = defender as GameNPC;
+            
+            // if can't be targeted, can't be attacked
+            if (defenderNpc?.Flags.HasFlag(GameNPC.eFlags.CANTTARGET) == true)
+                return false;
 
             // if friend, let's define the controller once
             if (attackerNpc?.GetLivingOwner() is {} attackerOwner)
