@@ -1676,7 +1676,7 @@ namespace DOL.GS
             Region reg = GetRegion(position.RegionID);
             if (reg == null)
                 return new Region.EmptyEnumerator();
-            return reg.GetPlayersInRadius(position.Coordinate, radiusToCheck, false, withDistance);
+            return reg.GetPlayersInRadius(position.Coordinate, radiusToCheck, withDistance, false);
         }
 
         [Obsolete("Use GetNPCsCloseToSpot(Position,ushort) instead!")]
@@ -1691,7 +1691,7 @@ namespace DOL.GS
         {
             Region reg = GetRegion(position.RegionID);
             if (reg == null) return new Region.EmptyEnumerator();
-            return reg.GetNPCsInRadius(position.Coordinate, radiusToCheck, false, withDistance);
+            return reg.GetNPCsInRadius(position.Coordinate, radiusToCheck, withDistance, false);
         }
 
         [Obsolete("Use GetItemsCloseToSpot(Position,ushort) instead!")]
