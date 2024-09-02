@@ -4168,7 +4168,7 @@ namespace DOL.GS
 
             double damageDealt = damageAmount + criticalAmount;
             
-            if (source.GetLivingOwner() is { } owner)
+            if (source?.GetLivingOwner() is { } owner)
             {
                 source = owner;
             }
