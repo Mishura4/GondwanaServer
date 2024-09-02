@@ -8,8 +8,6 @@ namespace DOL.GS.Scripts
 {
     public class TeleportIndicator : GameNPC
     {
-        public TeleportNPC Owner { get; set; }
-        
         public TeleportIndicator(TeleportNPC owner)
         {
             Owner = owner;
@@ -18,7 +16,7 @@ namespace DOL.GS.Scripts
         /// <inheritdoc />
         public override ushort GetModelForPlayer(GamePlayer player)
         {
-            return (ushort)(Owner.ShouldShowInvisibleModel(player) ? 1923 : 667);
+            return (ushort)((Owner as TeleportNPC)?.ShouldShowInvisibleModel(player) == true ? 1923 : 667);
         }
     }
 }
