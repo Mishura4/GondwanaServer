@@ -4449,6 +4449,9 @@ namespace DOL.GS
                 if (GetRewardCandidates().Count == 0)
                     return false;
 
+                if (DebugMode)
+                    return true;
+
                 foreach (var obj in GetRewardCandidates())
                 {
                     // If a player to which we are gray killed up we
