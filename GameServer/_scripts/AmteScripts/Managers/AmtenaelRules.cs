@@ -848,7 +848,7 @@ namespace DOL.GS.ServerRules
             killedPlayer.LastDeathRealmPoints = 0;
             // "player has been killed recently"
             long noExpSeconds = Properties.RP_WORTH_SECONDS;
-            if (killedPlayer.DeathTime + noExpSeconds > killedPlayer.PlayedTime)
+            if (!Properties.ENABLE_DEBUG && killedPlayer.DeathTime + noExpSeconds > killedPlayer.PlayedTime)
             {
                 foreach (var de in gainers)
                 {
@@ -867,13 +867,16 @@ namespace DOL.GS.ServerRules
             foreach (var de in gainers)
             {
                 GameObject obj = (GameObject)de.Key;
-                if (obj is GamePlayer)
+                if (obj is GamePlayer gainerPlayer)
                 {
                     //If a gameplayer with privlevel > 1 attacked the
                     //mob, then the players won't gain xp ...
-                    if (((GamePlayer)obj).Client.Account.PrivLevel > 1)
+                    if (gainerPlayer.Client.Account.PrivLevel > 1)
                     {
-                        dealNoXP = true;
+                        if (Properties.ENABLE_DEBUG)
+                            gainerPlayer.SendMessage("Rewards are enabled because the server is in DEBUG mode.");
+                        else
+                            dealNoXP = true;
                         break;
                     }
                 }
@@ -936,7 +939,7 @@ namespace DOL.GS.ServerRules
                 if (!living.IsWithinRadius(killedPlayer, WorldMgr.MAX_EXPFORKILL_DISTANCE)) continue;
 
 
-                var damagePercent = de.Value / totalDamage;
+                var damagePercent = totalDamage == 0 ? 1.0f : de.Value / totalDamage;
                 if (!living.IsAlive) //Dead living gets 25% exp only
                     damagePercent *= 0.25f;
 
@@ -998,10 +1001,14 @@ namespace DOL.GS.ServerRules
                         realmPoints = rpCap;
                     if (realmPoints > 0)
                     {
-
+                        long bonus = 0;
+                        if (TerritoryManager.IsPlayerInOwnedTerritory(killerPlayer))
+                        {
+                            bonus = (long)Math.Round(realmPoints * 0.50f);
+                        }
                         killedPlayer.LastDeathRealmPoints += realmPoints;
                         playerKillers.Add(new KeyValuePair<GamePlayer, int>(killerPlayer, realmPoints));
-                        living.GainRealmPoints(realmPoints);
+                        killerPlayer.GainRealmPoints(realmPoints, true, true, true, bonus);
                     }
                 }
 

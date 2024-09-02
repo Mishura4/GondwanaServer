@@ -1661,13 +1661,16 @@ namespace DOL.GS.ServerRules
             foreach (var de in gainers)
             {
                 GameObject obj = (GameObject)de.Key;
-                if (obj is GamePlayer)
+                if (obj is GamePlayer gainerPlayer)
                 {
                     //If a gameplayer with privlevel > 1 attacked the
                     //mob, then the players won't gain xp ...
-                    if (((GamePlayer)obj).Client.Account.PrivLevel > 1)
+                    if (gainerPlayer.Client.Account.PrivLevel > 1)
                     {
-                        dealNoXP = true;
+                        if (Properties.ENABLE_DEBUG)
+                            gainerPlayer.SendMessage("Rewards are enabled because the server is in DEBUG mode.");
+                        else
+                            dealNoXP = true;
                         break;
                     }
                 }
@@ -1740,9 +1743,8 @@ namespace DOL.GS.ServerRules
                 //rp bonuses from RR and Group
                 //20% if R1L0 char kills RR10,if RR10 char kills R1L0 he will get -20% bonus
                 //100% if full group,scales down according to player count in group and their range to target
-                if (living is GamePlayer)
+                if (living is GamePlayer killerPlayer)
                 {
-                    GamePlayer killerPlayer = living as GamePlayer;
                     //only gain rps in a battleground if you are under the cap
                     Battleground bg = GameServer.KeepManager.GetBattleground(killerPlayer.CurrentRegionID);
                     if (bg == null || (killerPlayer.RealmLevel < bg.MaxRealmLevel))
@@ -1766,12 +1768,14 @@ namespace DOL.GS.ServerRules
                         realmPoints = rpCap;
                     if (realmPoints > 0)
                     {
-                        if (living is GamePlayer)
+                        long bonus = 0;
+                        if (TerritoryManager.IsPlayerInOwnedTerritory(killerPlayer))
                         {
-                            killedPlayer.LastDeathRealmPoints += realmPoints;
-                            playerKillers.Add(new KeyValuePair<GamePlayer, int>(living as GamePlayer, realmPoints));
+                            bonus = (long)Math.Round(realmPoints * 0.50f);
                         }
-                        living.GainRealmPoints(realmPoints);
+                        killedPlayer.LastDeathRealmPoints += realmPoints;
+                        playerKillers.Add(new KeyValuePair<GamePlayer, int>(killerPlayer, realmPoints));
+                        killerPlayer.GainRealmPoints(realmPoints, true, true, true, bonus);
                     }
 
                 }
