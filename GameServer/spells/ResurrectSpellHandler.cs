@@ -74,8 +74,12 @@ namespace DOL.GS.Spells
                     m_resTimersByLiving.Add(target, resurrectExpiredTimer);
                 }
 
-                //send resurrect dialog
-                targetPlayer.Out.SendCustomDialog(LanguageMgr.GetTranslation(targetPlayer.Client, "SpellHandler.ResurrectSpellHandler.ResurrectDialog", m_caster.GetName(0, true), m_spell.ResurrectHealth), new CustomDialogResponse(ResurrectResponceHandler));
+                GamePlayer casterPlayer = m_caster as GamePlayer;
+                if (casterPlayer != null)
+                {
+                    //send resurrect dialog
+                    targetPlayer.Out.SendCustomDialog(LanguageMgr.GetTranslation(targetPlayer.Client, "SpellHandler.ResurrectSpellHandler.ResurrectDialog", targetPlayer.GetPersonalizedName(casterPlayer), m_spell.ResurrectHealth), new CustomDialogResponse(ResurrectResponceHandler));
+                }
             }
         }
 

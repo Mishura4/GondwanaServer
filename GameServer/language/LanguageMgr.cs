@@ -1071,6 +1071,25 @@ namespace DOL.Language
             return string.Format(messageKey, args);
         }
 
+        public static string GetEventMessage(string language, string messageKey, params object[] args)
+        {
+            // Check if the messageKey starts with "Languages.DBEvents."
+            if (messageKey.StartsWith("Languages.DBEvents."))
+            {
+                string translation;
+                if (TryGetTranslation(out translation, language, messageKey, args))
+                {
+                    return translation;
+                }
+                else
+                {
+                    return $"(Translation not found for {messageKey})";
+                }
+            }
+
+            return string.Format(messageKey, args);
+        }
+
         #endregion Database translations
     }
 }

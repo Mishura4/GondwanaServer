@@ -1,0 +1,9 @@
+
+Languages.DBEvents.2002DebutText: 		Drizzt Do'Urden apparait !
+Languages.DBEvents.2002EndText: 		Le Camp des Elfes Noirs appartient à {2} !
+
+Languages.DBEvents.0005DebutText:		La Mort se fait entendre au fond des Bois d'Hibernia...
+Languages.DBEvents.0005RandomText1:		Un grondement sourd s'échappe des profondeurs de la forêt!
+Languages.DBEvents.0005RandomText2:		Des lamentations étranges se font entendre à travers bois...
+Languages.DBEvents.0005RemainingTimeText:	Les Aspirateurs d'âme semblent perdre de leur consistance!
+Languages.DBEvents.0005EndText:			Les Aspirateurs d'âme s'en retournent dans les limbes.

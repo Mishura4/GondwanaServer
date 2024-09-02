@@ -21,7 +21,7 @@ namespace DOL.GameEvents
 {
     public class GameEventManager
     {
-        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
         private readonly int dueTime = 5000;
         private readonly int period = 10000;
         private static GameEventManager instance;
@@ -890,8 +890,11 @@ namespace DOL.GameEvents
                     if (MobGroupManager.Instance.Groups.TryGetValue(dbGroupMob.GroupId, out mobGroup))
                     {
                         mob.AddToMobGroup(mobGroup);
-                        mobGroup.AddMob(mob);
-                        mobGroup.ApplyGroupInfos();
+                        if (!mobGroup.NPCs.Contains(mob))
+                        {
+                            mobGroup.NPCs.Add(mob);
+                            mobGroup.ApplyGroupInfos();
+                        }
                     }
                     else
                     {
@@ -905,8 +908,8 @@ namespace DOL.GameEvents
                             GameServer.Database.SelectObjects<GroupMobStatusDb>(DB.Column("GroupStatusId").IsEqualTo(mobgroupDb.GroupMobOrigin_FK_Id))?.FirstOrDefault() : null;
                             mobGroup = new MobGroup(mobgroupDb, groupInteraction, groupOriginStatus);
                             MobGroupManager.Instance.Groups.Add(dbGroupMob.MobID, mobGroup);
+                            mobGroup.NPCs.Add(mob);
                             mob.AddToMobGroup(mobGroup);
-                            mobGroup.AddMob(mob);
                             mobGroup.ApplyGroupInfos();
                         }
                     }
@@ -939,7 +942,11 @@ namespace DOL.GameEvents
 
             if (e.DebutText != null && e.EventZones?.Any() == true)
             {
-                SendEventNotification(e, e.DebutText, (e.Discord == 1 || e.Discord == 3));
+                foreach (var player in GetPlayersInEventZones(e.EventZones))
+                {
+                    string message = e.GetFormattedDebutText(player);
+                    SendEventNotification(e, message, (e.Discord == 1 || e.Discord == 3));
+                }
             }
 
             if (e.HasHandomText)
@@ -1037,7 +1044,7 @@ namespace DOL.GameEvents
 
             if (e.EndText != null && e.EventZones?.Any() == true)
             {
-                string message = e.EndText;
+                string message = e.GetFormattedEndText(e.Owner);
                 if (message.Contains("<guilde>"))
                 {
                     if (e.Owner != null && e.Owner.Guild is not { GuildType: Guild.eGuildType.ServerGuild })

@@ -30,13 +30,14 @@ namespace DOL.GS.Spells
 
             private List<Spell> m_spells;
 
-            /// <inheritdoc />
-            public override int ThinkInterval => MasterSpellHandler.Spell.Pulse;
+            public override int ThinkInterval => MasterSpellHandler.Spell.Frequency;
 
-            public GroundAreaTurretBrain(SpellHandler handler)
+            public GroundAreaTurretBrain(GroundAreaSpellHandler handler)
             {
                 MasterSpellHandler = handler;
+                m_spells = handler.GetTurretSpells().ToList();
             }
+
 
             /// <inheritdoc />
             public override bool Start()
@@ -58,23 +59,102 @@ namespace DOL.GS.Spells
             /// <inheritdoc />
             public override void Think()
             {
-                Body.GroundTargetPosition = Body.Position;
-                var caster = MasterSpellHandler.Caster;
+                Body.GroundTargetPosition = Body.Position; // Set the turret's ground position
+                CastSubSpellsOnTargets(); // Cast spells on targets within range
+            }
 
-                foreach (Spell spell in Body.Spells)
+            private void CastSubSpellsOnTargets()
+            {
+                var newTargets = new List<GameLiving>();
+                var oldTargets = new List<GameLiving>();
+
+                // Gather players in radius
+                foreach (GamePlayer player in Body.GetPlayersInRadius((ushort)MasterSpellHandler.Spell.Radius))
                 {
-                    ISpellHandler spellhandler = ScriptMgr.CreateSpellHandler(Body, spell, SkillBase.GetSpellLine(GlobalSpellsLines.Reserved_Spells));
-                    spellhandler.Parent = MasterSpellHandler;
-                    if (MasterSpellHandler.Spell.SubSpellDelay > 0)
+                    if (!GameServer.ServerRules.IsAllowedToAttack(Body, player, true) || player.IsInvulnerableToAttack)
+                        continue;
+
+                    if (player.IsAlive && !player.IsMezzed && !player.IsStealthed)
                     {
-                        new SubSpellTimer(caster, spellhandler, caster).Start(MasterSpellHandler.Spell.SubSpellDelay * 1000);
+                        if (HasEffect(player))
+                        {
+                            oldTargets.Add(player);
+                        }
+                        else
+                        {
+                            newTargets.Add(player);
+                        }
                     }
-                    else
-                        spellhandler.StartSpell(caster);
+                }
+
+                // Gather NPCs in radius
+                foreach (GameNPC npc in Body.GetNPCsInRadius((ushort)MasterSpellHandler.Spell.Radius))
+                {
+                    if (!GameServer.ServerRules.IsAllowedToAttack(Body, npc, true))
+                        continue;
+
+                    if (npc.IsAlive && !npc.IsMezzed && !npc.IsStealthed)
+                    {
+                        if (HasEffect(npc))
+                        {
+                            oldTargets.Add(npc);
+                        }
+                        else
+                        {
+                            newTargets.Add(npc);
+                        }
+                    }
+                }
+
+                GameLiving target = newTargets.Count > 0 ? newTargets[Util.Random(newTargets.Count - 1)] : oldTargets.Count > 0 ? oldTargets[Util.Random(oldTargets.Count - 1)] : null;
+
+                if (target != null)
+                {
+                    foreach (Spell spell in m_spells)
+                    {
+                        CastSpellOnTarget(spell, target);
+                    }
                 }
             }
+
+            private bool HasEffect(GameLiving target)
+            {
+                foreach (var spell in m_spells)
+                {
+                    if (SpellHandler.FindEffectOnTarget(target, spell.SpellType) != null)
+                        return true;
+                }
+                return false;
+            }
+
+            private bool CastSpellOnTarget(Spell spell, GameLiving target)
+            {
+                if (spell == null || target == null || !target.IsAlive)
+                    return false;
+
+                if (spell.Range > 0)
+                {
+                    if (Body.IsWithinRadius(target, spell.Range))
+                    {
+                        Body.TargetObject = target;
+                        if (spell.CastTime > 0)
+                        {
+                            Body.TurnTo(target);
+                        }
+                        Body.CastSpell(spell, SkillBase.GetSpellLine(GlobalSpellsLines.Reserved_Spells));
+                        return true;
+                    }
+                }
+                else // For AoE spells or non-targeted spells
+                {
+                    Body.CastSpell(spell, SkillBase.GetSpellLine(GlobalSpellsLines.Reserved_Spells));
+                    return true;
+                }
+
+                return false;
+            }
         }
-        
+
         public GroundAreaSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
         public GameNPC Turret
@@ -146,6 +226,11 @@ namespace DOL.GS.Spells
                 foreach (GamePlayer player in turret.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
                 {
                     player.Out.SendSpellEffectAnimation(Caster, turret, m_spell.ClientEffect, 0, false, 1);
+                }
+
+                foreach (GamePlayer player in Caster.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+                {
+                    player.Out.SendSpellEffectAnimation(Caster, Caster, m_spell.ClientEffect, 0, false, 1);
                 }
             }
             trueCaster.TempProperties.setProperty(LIVING_GROUNDEFFECT_PROPERTY, turret);

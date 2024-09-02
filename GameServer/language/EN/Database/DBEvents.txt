@@ -1,0 +1,9 @@
+
+Languages.DBEvents.2002DebutText: Drizzt Do'Urden appears!
+Languages.DBEvents.2002EndText: Dark Elves Camp belongs to {2}!
+
+Languages.DBEvents.0005DebutText:		The sound of Death echoes in the depths of Hibernia's Woods...
+Languages.DBEvents.0005RandomText1:		A deep rumble emerges from the depths of the forest!
+Languages.DBEvents.0005RandomText2:		Eerie lamentations sound through the woods...
+Languages.DBEvents.0005RemainingTimeText:	Soul Absorbers seem to be losing their substance!
+Languages.DBEvents.0005EndText:			The Soul Absorbers retreat back into the void.
