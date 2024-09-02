@@ -7575,7 +7575,7 @@ namespace DOL.GS
         {
             #region PVP DAMAGE
 
-            if (source is GamePlayer || (source.GetPlayerOwner() != null))
+            if (source is GamePlayer || (source?.GetPlayerOwner() != null))
             {
                 if (Realm != source.Realm && source.Realm != 0)
                     DamageRvRMemory += (long)(damageAmount + criticalAmount);
