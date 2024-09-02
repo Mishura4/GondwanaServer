@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using DOL.GS.Spells;
 using System.Reflection.Metadata.Ecma335;
 using DOL.GS.Geometry;
+using System.Numerics;
 
 namespace DOL.GS.Scripts
 {
@@ -41,6 +42,8 @@ namespace DOL.GS.Scripts
 
         protected static SpellLine m_mobSpellLine = SkillBase.GetSpellLine(GlobalSpellsLines.Mob_Spells);
 
+        private GameLiving m_implicitTarget;
+
         public bool Disable
         {
             get { return disable; }
@@ -55,6 +58,17 @@ namespace DOL.GS.Scripts
         {
             enable = true;
             Brain.Think();
+            if (_spell != null)
+            {
+                if (_spell.Target == "enemy")
+                {
+                    m_implicitTarget = GetController()?.TargetObject as GameLiving;
+                }
+                else if (_spell.Target == "realm")
+                {
+                    m_implicitTarget = _spell.Radius > 0 ? this : GetController()?.TargetObject as GameLiving;
+                }
+            }
         }
 
         public bool IsImmune(GameLiving living)
@@ -121,6 +135,63 @@ namespace DOL.GS.Scripts
         }
         #endregion
 
+        private void ApplyEffect(GameLiving living)
+        {
+            if (!living.IsAlive) return;
+            if (Util.Chance(MissChance)) return;
+
+            var health = HealHarm + (HealHarm * Util.Random(-5, 5) / 100);
+            bool affected = false;
+
+            if (health < 0)
+            {
+                if (!IsImmune(living) && GameServer.ServerRules.ShouldAOEHitTarget(null, Owner ?? this, living))
+                {
+                    AttackData ad = new AttackData
+                    {
+                        Attacker = Owner ?? this,
+                        AttackResult = eAttackResult.HitUnstyled,
+                        AttackType = AttackData.eAttackType.Spell,
+                        CausesCombat = false,
+                        Target = living,
+                        Damage = -health
+                    };
+                    living.TakeDamage(ad);
+                    affected = true;
+                }
+            }
+            if (GameServer.ServerRules.IsAllowedToHelp(this, living, true))
+            {
+                if (health > 0)
+                {
+                    living.Health += health;
+                    affected = true;
+                }
+                if (AddMana > 0)
+                {
+                    living.Mana += AddMana;
+                    affected = true;
+                }
+                if (AddEndurance > 0)
+                {
+                    affected = true;
+                    living.Endurance += AddEndurance;
+                }
+            }
+
+            if (affected)
+            {
+                if (!string.IsNullOrEmpty(Message) && living is GamePlayer player)
+                {
+                    player.SendMessage(
+                        string.Format(Message, Math.Abs(health), Math.Abs(AddMana), Math.Abs(AddEndurance)),
+                        eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                }
+                foreach (GamePlayer plr in living.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+                    plr.Out.SendSpellEffectAnimation(this, living, (ushort)SpellEffect, 0, false, 1);
+            }
+        }
+
         #region ApplyEffect
         public void ApplyEffect()
         {
@@ -128,62 +199,8 @@ namespace DOL.GS.Scripts
             if (Radius == 0 || SpellEffect == 0) return;
             if (LastApplyEffectTick > CurrentRegion.Time - Interval) return;
 
-            foreach (GamePlayer player in GetPlayersInRadius((ushort)Radius))
-            {
-                if (!player.IsAlive) continue;
-                if (Util.Chance(MissChance)) continue;
-
-                var health = HealHarm + (HealHarm * Util.Random(-5, 5) / 100);
-                bool affected = false;
-
-                if (health < 0)
-                {
-                    if (!IsImmune(player) && GameServer.ServerRules.ShouldAOEHitTarget(null, Owner ?? this, player))
-                    {
-                        AttackData ad = new AttackData
-                        {
-                            Attacker = Owner ?? this,
-                            AttackResult = eAttackResult.HitUnstyled,
-                            AttackType = AttackData.eAttackType.Spell,
-                            CausesCombat = false,
-                            Target = player,
-                            Damage = -health
-                        };
-                        player.TakeDamage(ad);
-                        affected = true;
-                    }
-                }
-                if (GameServer.ServerRules.IsAllowedToHelp(Owner ?? this, player, true))
-                {
-                    if (health > 0)
-                    {
-                        player.Health += health;
-                        affected = true;
-                    }
-                    if (AddMana > 0)
-                    {
-                        player.Mana += AddMana;
-                        affected = true;
-                    }
-                    if (AddEndurance > 0)
-                    {
-                        affected = true;
-                        player.Endurance += AddEndurance;
-                    }
-                }
-
-                if (affected)
-                {
-                    if (!string.IsNullOrEmpty(Message))
-                    {
-                        player.Out.SendMessage(
-                            string.Format(Message, Math.Abs(health), Math.Abs(AddMana), Math.Abs(AddEndurance)),
-                            eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
-                    }
-                    foreach (GamePlayer plr in player.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
-                        plr.Out.SendSpellEffectAnimation(this, player, (ushort)SpellEffect, 0, false, 1);
-                }
-            }
+            GetPlayersInRadius((ushort)Radius).Cast<GamePlayer>().ForEach(ApplyEffect);
+            GetNPCsInRadius((ushort)Radius).Cast<GameNPC>().ForEach(ApplyEffect);
 
             foreach (GamePlayer plr in GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
                 plr.Out.SendSpellEffectAnimation(this, this, (ushort)SpellEffect, 0, false, 1);
@@ -191,35 +208,96 @@ namespace DOL.GS.Scripts
             LastApplyEffectTick = CurrentRegion.Time;
             Interval = Util.Random(IntervalMin, Math.Max(IntervalMax, IntervalMin)) * 1000;
         }
+        
+        GameLiving SelectSpellEnemy()
+        {
+            if (m_implicitTarget != null && (Radius == 0 || m_implicitTarget.IsWithinRadius(this, Radius)) && GameServer.ServerRules.IsAllowedToAttack(this, m_implicitTarget, false))
+            {
+                return m_implicitTarget;
+            }
+            
+            GameLiving target = null;
+            float minDist = float.MaxValue;
+            foreach (PlayerDistEntry entry in GetPlayersInRadius(true, (ushort)Radius, true, false))
+            {
+                if (entry.Distance < minDist && GameServer.ServerRules.IsAllowedToAttack(this, entry.Player, true))
+                {
+                    target = entry.Player;
+                    minDist = entry.Distance;
+                }
+            }
+            foreach (NPCDistEntry entry in GetNPCsInRadius(true, (ushort)Radius, true, false))
+            {
+                if (entry.Distance < minDist && GameServer.ServerRules.IsAllowedToAttack(this, entry.NPC, true))
+                {
+                    target = entry.NPC;
+                    minDist = entry.Distance;
+                }
+            }
+            return target;
+        }
+        
+        GameLiving SelectSpellFriend()
+        {
+            if (m_implicitTarget != null && (Radius == 0 || m_implicitTarget.IsWithinRadius(this, Radius)) && GameServer.ServerRules.IsAllowedToHelp(this, m_implicitTarget, false))
+            {
+                return m_implicitTarget;
+            }
+            
+            GameLiving target = null;
+            float minDist = float.MaxValue;
+            foreach (PlayerDistEntry entry in GetPlayersInRadius(true, (ushort)Radius, true, false))
+            {
+                if (entry.Distance < minDist && GameServer.ServerRules.IsAllowedToHelp(this, entry.Player, true))
+                {
+                    target = entry.Player;
+                    minDist = entry.Distance;
+                }
+            }
+            foreach (NPCDistEntry entry in GetNPCsInRadius(true, (ushort)Radius, true, false))
+            {
+                if (entry.Distance < minDist && GameServer.ServerRules.IsAllowedToHelp(this, entry.NPC, true))
+                {
+                    target = entry.NPC;
+                    minDist = entry.Distance;
+                }
+            }
+            return target;
+        }
+
+        GameLiving SelectSpellTarget()
+        {
+            switch (_spell.Target)
+            {
+                case "enemy":
+                    return SelectSpellEnemy();
+                
+                case "realm":
+                    return SelectSpellFriend();
+                
+                case "group":
+                case "pet":
+                    return GetController();
+                
+                case "area":
+                case "self":
+                case "ground":
+                default:
+                    return this;
+            }
+        }
 
         public void ApplySpell()
         {
             if (!enable) return;
-            if (Radius == 0 || SpellID == 0 || _spell == null) return;
+            if (SpellID == 0 || _spell == null) return;
             if (LastApplyEffectTick > CurrentRegion.Time - Interval) return;
-            
-            foreach (GamePlayer player in GetPlayersInRadius((ushort)Radius))
-            {
-                if (_spell.IsHarmful)
-                {
-                    if (IsImmune(player) || !GameServer.ServerRules.ShouldAOEHitTarget(_spell, Owner ?? this, player))
-                        continue;
-                }
-                else
-                {
-                    if (!GameServer.ServerRules.IsAllowedToHelp(Owner ?? this, player, true))
-                        continue;
-                }
 
-                if ((_spell.Duration != 0 && player.HasEffect(_spell) && _spell.SpellType.ToUpper() != "DIRECTDAMAGEWITHDEBUFF"))
-                    continue;
-                
-                TurnTo(player);
-
-                this.CastSpellOnOwnerAndPets(player, _spell, m_mobSpellLine);
-            }
-            foreach (GamePlayer plr in GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
-                plr.Out.SendSpellEffectAnimation(this, this, _spell.ClientEffect, 0, false, 1);
+            TargetObject = SelectSpellTarget();
+            GroundTargetPosition = (TargetObject ?? this).Position;
+            if (TargetObject != this)
+                TurnTo(TargetObject);
+            this.CastSpell(_spell, m_mobSpellLine, true);
             LastApplyEffectTick = CurrentRegion.Time;
             Interval = Util.Random(IntervalMin, Math.Max(IntervalMax, IntervalMin)) * 1000;
         }
