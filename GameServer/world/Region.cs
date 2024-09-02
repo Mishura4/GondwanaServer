@@ -2097,62 +2097,30 @@ namespace DOL.GS
     /// <summary>
     /// Holds a Object and it's distance towards the center
     /// </summary>
-    public struct PlayerDistEntry
+    public record PlayerDistEntry(GamePlayer Player, float Distance)
     {
-        public PlayerDistEntry(GamePlayer o, float distance)
-        {
-            Player = o;
-            Distance = distance;
-        }
-
-        public readonly GamePlayer Player;
-        public readonly float Distance;
+        public static implicit operator LivingDistEntry(PlayerDistEntry entry) => new LivingDistEntry(entry.Player, entry.Distance);
     }
 
     /// <summary>
     /// Holds a Object and it's distance towards the center
     /// </summary>
-    public struct NPCDistEntry
+    public record NPCDistEntry(GameNPC NPC, float Distance)
     {
-        public NPCDistEntry(GameNPC o, float distance)
-        {
-            NPC = o;
-            Distance = distance;
-        }
-
-        public readonly GameNPC NPC;
-        public readonly float Distance;
+        public static implicit operator LivingDistEntry(NPCDistEntry entry) => new LivingDistEntry(entry.NPC, entry.Distance);
     }
+
+    public record LivingDistEntry(GameLiving Living, float Distance);
 
     /// <summary>
     /// Holds a Object and it's distance towards the center
     /// </summary>
-    public struct ItemDistEntry
-    {
-        public ItemDistEntry(GameStaticItem o, float distance)
-        {
-            Item = o;
-            Distance = distance;
-        }
-
-        public readonly GameStaticItem Item;
-        public readonly float Distance;
-    }
+    public record ItemDistEntry(GameStaticItem Item, float Distance);
 
     /// <summary>
     /// Holds a Object and it's distance towards the center
     /// </summary>
-    public struct DoorDistEntry
-    {
-        public DoorDistEntry(IDoor d, float distance)
-        {
-            Door = d;
-            Distance = distance;
-        }
-
-        public readonly IDoor Door;
-        public readonly float Distance;
-    }
+    public record DoorDistEntry(IDoor Door, float Distance);
 
     #endregion
 }
