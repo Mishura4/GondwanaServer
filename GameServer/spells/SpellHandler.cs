@@ -1880,6 +1880,48 @@ namespace DOL.GS.Spells
         }
 
         /// <summary>
+        /// Send the Effect Animation
+        /// </summary>
+        /// <param name="target">The target object</param>
+        /// <param name="boltDuration">The duration of a bolt</param>
+        /// <param name="noSound">sound?</param>
+        /// <param name="success">spell success?</param>
+        public virtual void SendHitAnimation(GameObject target, ushort boltDuration, bool noSound, byte success)
+        {
+            if (m_spell.ClientHitEffect == 0)
+                return;
+            
+            if (target == null)
+                target = m_caster;
+
+            foreach (GamePlayer player in target.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+            {
+                player.Out.SendSpellEffectAnimation(m_caster, target, m_spell.ClientHitEffect, boltDuration, noSound, success);
+            }
+        }
+
+        /// <summary>
+        /// Send the Effect Animation
+        /// </summary>
+        /// <param name="target">The target object</param>
+        /// <param name="boltDuration">The duration of a bolt</param>
+        /// <param name="noSound">sound?</param>
+        /// <param name="success">spell success?</param>
+        public virtual void SendLaunchAnimation(GameObject target, ushort boltDuration, bool noSound, byte success)
+        {
+            if (m_spell.ClientLaunchEffect == 0)
+                return;
+            
+            if (target == null)
+                target = m_caster;
+
+            foreach (GamePlayer player in target.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+            {
+                player.Out.SendSpellEffectAnimation(m_caster, target, m_spell.ClientLaunchEffect, boltDuration, noSound, success);
+            }
+        }
+
+        /// <summary>
         /// Send the Interrupt Cast Animation
         /// </summary>
         public virtual void SendInterruptCastAnimation()
@@ -2576,6 +2618,9 @@ namespace DOL.GS.Spells
                     Caster.TempProperties.removeProperty(UninterruptableSpellHandler.WARLOCK_UNINTERRUPTABLE_SPELL);
                 }
             }
+            
+            SendLaunchAnimation(Caster, 0, false, 1);
+
             foreach (GameLiving t in targets)
             {
                 // Aggressive NPCs will aggro on every target they hit
@@ -2760,10 +2805,15 @@ namespace DOL.GS.Spells
                     return;
                 }
             }
+            
+            
+            
             if (m_spellLine.KeyName == GlobalSpellsLines.Item_Effects || m_spellLine.KeyName == GlobalSpellsLines.Combat_Styles_Effect || m_spellLine.KeyName == GlobalSpellsLines.Potions_Effects || m_spellLine.KeyName == Specs.Savagery || m_spellLine.KeyName == GlobalSpellsLines.Character_Abilities || m_spellLine.KeyName == "OffensiveProc" || m_spellLine.KeyName == "GMCast")
                 effectiveness = 1.0; // TODO player.PlayerEffectiveness
             if (effectiveness <= 0)
                 return; // no effect
+
+            SendHitAnimation(target, 0, false, 1);
 
             // Apply effect for Duration Spell.
             if ((Spell.Duration > 0 && Spell.Target.ToLower() != "area") || Spell.Concentration > 0)

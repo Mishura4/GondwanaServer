@@ -57,6 +57,8 @@ namespace DOL.GS
         protected readonly string m_message3 = "";
         protected readonly string m_message4 = "";
         protected ushort m_effectID = 0;
+        protected ushort m_effectLaunch = 0;
+        protected ushort m_effectHit = 0;
         protected readonly int m_instrumentRequirement = 0;
         protected readonly int m_spellGroup = 0;
         protected readonly int m_effectGroup = 0;
@@ -125,6 +127,18 @@ namespace DOL.GS
         {
             get { return m_effectID; }
             set { m_effectID = value; }
+        }
+
+        public ushort ClientLaunchEffect
+        {
+            get { return m_effectLaunch; }
+            set { m_effectLaunch = value; }
+        }
+
+        public ushort ClientHitEffect
+        {
+            get { return m_effectHit; }
+            set { m_effectHit = value; }
         }
 
         public string Description
@@ -454,6 +468,8 @@ namespace DOL.GS
             m_message3 = dbspell.Message3;
             m_message4 = dbspell.Message4;
             m_effectID = (ushort)dbspell.ClientEffect;
+            m_effectHit = (ushort)dbspell.ClientHitEffect;
+            m_effectLaunch = (ushort)dbspell.ClientLaunchEffect;
             m_instrumentRequirement = dbspell.InstrumentRequirement;
             m_spellGroup = dbspell.SpellGroup;
             m_effectGroup = dbspell.EffectGroup;
@@ -506,6 +522,8 @@ namespace DOL.GS
             m_message3 = spell.Message3;
             m_message4 = spell.Message4;
             m_effectID = spell.ClientEffect;
+            m_effectLaunch = spell.ClientLaunchEffect;
+            m_effectHit = spell.ClientHitEffect;
             m_icon = spell.Icon;
             m_instrumentRequirement = spell.InstrumentRequirement;
             m_spellGroup = spell.Group;

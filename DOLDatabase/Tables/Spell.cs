@@ -29,6 +29,8 @@ namespace DOL.Database
     {
         protected int m_spellid;
         protected int m_effectid;
+        protected int m_effectLaunch;
+        protected int m_effectHit;
         protected int m_icon;
         protected string m_name;
         protected string m_description;
@@ -105,6 +107,34 @@ namespace DOL.Database
             {
                 Dirty = true;
                 m_effectid = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public int ClientLaunchEffect
+        {
+            get
+            {
+                return m_effectLaunch;
+            }
+            set
+            {
+                Dirty = true;
+                m_effectLaunch = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public int ClientHitEffect
+        {
+            get
+            {
+                return m_effectHit;
+            }
+            set
+            {
+                Dirty = true;
+                m_effectHit = value;
             }
         }
 
