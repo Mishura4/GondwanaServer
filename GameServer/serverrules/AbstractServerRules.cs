@@ -1313,7 +1313,6 @@ namespace DOL.GS.ServerRules
 
                 // bounty points
 
-                int bpCap = living.BountyPointsValue * 2;
                 int bountyPoints = 0;
                 // Keep and Tower captures reward full RP and BP value to each player
                 if (killedNPC is GuardLord)
@@ -1334,9 +1333,6 @@ namespace DOL.GS.ServerRules
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameObjects.GamePlayer.GainBountyPoints.TerritoryBonus", bonusBP), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                     }
                 }
-
-                if (bountyPoints > bpCap && !(killedNPC is Doppelganger))
-                    bountyPoints = bpCap;
 
                 if (bountyPoints > 0)
                     living.GainBountyPoints(bountyPoints);
