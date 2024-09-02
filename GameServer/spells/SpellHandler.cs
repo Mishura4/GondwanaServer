@@ -38,6 +38,7 @@ using System.Numerics;
 using static DOL.GS.GameTimer;
 using DOL.GS.Scripts;
 using DOL.Territories;
+using static Grpc.Core.Metadata;
 
 namespace DOL.GS.Spells
 {
@@ -2066,7 +2067,7 @@ namespace DOL.GS.Spells
         /// <returns></returns>
         public virtual IList<GameLiving> SelectTargets(GameObject castTarget, bool force = false)
         {
-            var list = new List<GameLiving>(8);
+            var list = new List<LivingDistEntry>(Math.Max(Spell.TargetHardCap, (ushort)8));
             GameLiving target = castTarget as GameLiving;
             bool targetchanged = false;
             string modifiedTarget = Spell.Target.ToLower();
@@ -2135,6 +2136,36 @@ namespace DOL.GS.Spells
                 }
             }
 
+            bool AddTarget(LivingDistEntry entry)
+            {
+                if (Spell.TargetHardCap == 0 || list.Count < Spell.TargetHardCap)
+                {
+                    list.Add(entry);
+                    return true;
+                }
+                else
+                {
+                    var maxDist = entry.Distance;
+                    int index = 0;
+                    int found = -1;
+
+                    while (index < list.Count)
+                    {
+                        if (list[index].Distance > maxDist)
+                        {
+                            maxDist = list[index].Distance;
+                            found = index;
+                        }
+                        ++index;
+                    }
+                    if (found == -1)
+                        return false;
+                    
+                    list[found] = entry;
+                    return true;
+                }
+            }
+
             #region Process the targets
             switch (modifiedTarget)
             {
@@ -2145,36 +2176,39 @@ namespace DOL.GS.Spells
                     //selected!
                     if (Spell.SpellType == "SummonAnimistPet" || Spell.SpellType == "SummonAnimistFnF")
                     {
-                        list.Add(Caster);
+                        AddTarget(new LivingDistEntry(Caster, -1));
                     }
-                    else
-                        if (modifiedRadius > 0)
+                    else if (modifiedRadius > 0)
                     {
-                        foreach (GamePlayer player in WorldMgr.GetPlayersCloseToSpot(Caster.GroundTargetPosition, modifiedRadius))
+                        foreach (PlayerDistEntry entry in WorldMgr.GetPlayersCloseToSpot(Caster.GroundTargetPosition, modifiedRadius, true))
                         {
-                            if (GameServer.ServerRules.IsAllowedToAttack(Caster, player, true) || force)
+                            if (GameServer.ServerRules.IsAllowedToAttack(Caster, entry.Player, true) || force)
                             {
                                 // Apply Mentalist RA5L
                                 SelectiveBlindnessEffect SelectiveBlindness = Caster.EffectList.GetOfType<SelectiveBlindnessEffect>();
                                 if (SelectiveBlindness != null)
                                 {
                                     GameLiving EffectOwner = SelectiveBlindness.EffectSource;
-                                    if (EffectOwner == player)
+                                    if (EffectOwner == entry.Player)
                                     {
-                                        if (Caster is GamePlayer) ((GamePlayer)Caster).Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameLiving.AttackData.InvisibleToYou", player.GetName(0, true)), eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
+                                        if (Caster is GamePlayer casterPlayer)
+                                            casterPlayer.SendTranslatedMessage("GameLiving.AttackData.InvisibleToYou", eChatType.CT_Missed, eChatLoc.CL_SystemWindow, casterPlayer.GetPersonalizedName(entry.Player));
                                     }
-                                    else list.Add(player);
+                                    else
+                                        AddTarget(new LivingDistEntry(entry.Player, entry.Distance));
                                 }
-                                else list.Add(player);
+                                else
+                                    AddTarget(new LivingDistEntry(entry.Player, entry.Distance));
                             }
                         }
-                        foreach (GameNPC npc in WorldMgr.GetNPCsCloseToSpot(Caster.GroundTargetPosition, modifiedRadius))
+                        foreach (NPCDistEntry entry in WorldMgr.GetNPCsCloseToSpot(Caster.GroundTargetPosition, modifiedRadius, true))
                         {
+                            GameNPC npc = entry.NPC;
                             if (npc is GameStorm)
-                                list.Add(npc);
+                                AddTarget(new LivingDistEntry(entry.NPC, entry.Distance));
                             else if (GameServer.ServerRules.IsAllowedToAttack(Caster, npc, true) || force)
                             {
-                                if (!npc.HasAbility("DamageImmunity")) list.Add(npc);
+                                if (!npc.HasAbility("DamageImmunity")) AddTarget(new LivingDistEntry(entry.NPC, entry.Distance));;
                             }
                         }
                     }
@@ -2183,7 +2217,7 @@ namespace DOL.GS.Spells
                 #region Corpse
                 case "corpse":
                     if (target != null && !target.IsAlive)
-                        list.Add(target);
+                        AddTarget(new LivingDistEntry(target, -1));
                     break;
                 #endregion
                 #region Pet
@@ -2193,14 +2227,14 @@ namespace DOL.GS.Spells
                         // awesome, Pbaoe with target pet spell ?^_^
                         if (modifiedRadius > 0 && Spell.Range == 0)
                         {
-                            foreach (GameNPC pet in Caster.GetNPCsInRadius(modifiedRadius))
+                            foreach (NPCDistEntry pet in Caster.GetNPCsInRadius(true, modifiedRadius, true, false))
                             {
-                                if (Caster.IsControlledNPC(pet))
+                                if (Caster.IsControlledNPC(pet.NPC))
                                 {
-                                    list.Add(pet);
+                                    AddTarget(new LivingDistEntry(pet.NPC, pet.Distance));
                                 }
                             }
-                            return list;
+                            break;
                         }
                         if (target == null)
                         {
@@ -2213,7 +2247,7 @@ namespace DOL.GS.Spells
                         {
                             if (Caster.IsControlledNPC(petBody))
                             {
-                                list.Add(petBody);
+                                AddTarget(new LivingDistEntry(petBody, -1));
                             }
                         }
                         //check controllednpc if target isn't pet (our pet)
@@ -2222,26 +2256,26 @@ namespace DOL.GS.Spells
                             petBody = Caster.ControlledBrain.Body;
                             if (petBody != null && Caster.IsWithinRadius(petBody, Spell.Range))
                             {
-                                list.Add(petBody);
+                                AddTarget(new LivingDistEntry(petBody, -1));
                             }
                         }
 
                         //Single spell buff/heal...
                         if (Spell.Radius == 0)
                         {
-                            return list;
+                            break;
                         }
                         //Our buff affects every pet in the area of targetted pet (our pets)
                         if (Spell.Radius > 0 && petBody != null)
                         {
-                            foreach (GameNPC pet in petBody.GetNPCsInRadius(modifiedRadius))
+                            foreach (NPCDistEntry pet in petBody.GetNPCsInRadius(true, modifiedRadius, true, false))
                             {
                                 //ignore target or our main pet already added
-                                if (pet == petBody || !Caster.IsControlledNPC(pet))
+                                if (pet.NPC == petBody || !Caster.IsControlledNPC(pet.NPC))
                                 {
                                     continue;
                                 }
-                                list.Add(pet);
+                                AddTarget(new LivingDistEntry(pet.NPC, pet.Distance));
                             }
                         }
                     }
@@ -2256,28 +2290,30 @@ namespace DOL.GS.Spells
                             target = Caster;
                         if (target == null)
                             return null;
-                        foreach (GamePlayer player in target.GetPlayersInRadius(modifiedRadius))
+                        foreach (PlayerDistEntry entry in target.GetPlayersInRadius(true, modifiedRadius, true, false))
                         {
-                            if (GameServer.ServerRules.ShouldAOEHitTarget(Spell, Caster, player) || force)
+                            if (GameServer.ServerRules.ShouldAOEHitTarget(Spell, Caster, entry.Player) || force)
                             {
                                 SelectiveBlindnessEffect SelectiveBlindness = Caster.EffectList.GetOfType<SelectiveBlindnessEffect>();
                                 if (SelectiveBlindness != null)
                                 {
                                     GameLiving EffectOwner = SelectiveBlindness.EffectSource;
-                                    if (EffectOwner == player)
+                                    if (EffectOwner == entry.Player)
                                     {
-                                        if (Caster is GamePlayer) ((GamePlayer)Caster).Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameLiving.AttackData.InvisibleToYou", player.GetName(0, true)), eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
+                                        if (Caster is GamePlayer casterPlayer)
+                                            casterPlayer.SendTranslatedMessage("GameLiving.AttackData.InvisibleToYou", eChatType.CT_Missed, eChatLoc.CL_SystemWindow, casterPlayer.GetPersonalizedName(entry.Player));
                                     }
-                                    else list.Add(player);
+                                    else AddTarget(new LivingDistEntry(entry.Player, entry.Distance));
                                 }
-                                else list.Add(player);
+                                else AddTarget(new LivingDistEntry(entry.Player, entry.Distance));
                             }
                         }
-                        foreach (GameNPC npc in target.GetNPCsInRadius(modifiedRadius))
+                        foreach (NPCDistEntry entry in target.GetNPCsInRadius(true, modifiedRadius, true, false))
                         {
-                            if (GameServer.ServerRules.ShouldAOEHitTarget(Spell, Caster, npc) || force)
+                            if (GameServer.ServerRules.ShouldAOEHitTarget(Spell, Caster, entry.NPC) || force)
                             {
-                                if (!npc.HasAbility("DamageImmunity")) list.Add(npc);
+                                if (!entry.NPC.HasAbility("DamageImmunity"))
+                                    AddTarget(new LivingDistEntry(entry.NPC, entry.Distance));
                             }
                         }
                     }
@@ -2296,11 +2332,11 @@ namespace DOL.GS.Spells
                                     {
                                         if (Caster is GamePlayer player) ((GamePlayer)Caster).Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameLiving.AttackData.InvisibleToYou", target.GetName(0, true)), eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
                                     }
-                                    else if (!target.HasAbility("DamageImmunity")) list.Add(target);
+                                    else if (!target.HasAbility("DamageImmunity")) AddTarget(new LivingDistEntry(target, -1));
                                 }
-                                else if (!target.HasAbility("DamageImmunity")) list.Add(target);
+                                else if (!target.HasAbility("DamageImmunity")) AddTarget(new LivingDistEntry(target, -1));
                             }
-                            else if (!target.HasAbility("DamageImmunity")) list.Add(target);
+                            else if (!target.HasAbility("DamageImmunity")) AddTarget(new LivingDistEntry(target, -1));
                         }
                     }
                     break;
@@ -2311,26 +2347,28 @@ namespace DOL.GS.Spells
                     {
                         if (target == null || Spell.Range == 0)
                             target = Caster;
-
-                        foreach (GamePlayer player in target.GetPlayersInRadius(modifiedRadius))
+                        
+                        foreach (PlayerDistEntry entry in target.GetPlayersInRadius(true, modifiedRadius, true, false))
                         {
+                            var player = entry.Player;
                             if (player.IsVisibleTo(Caster) && GameServer.ServerRules.IsAllowedToHelp(Caster, player, true) && player.IsAlive)
                             {
-                                list.Add(player);
+                                AddTarget(entry);
                             }
-}
-                        foreach (GameNPC npc in target.GetNPCsInRadius(modifiedRadius))
+                        }
+                        foreach (NPCDistEntry entry in target.GetNPCsInRadius(true, modifiedRadius, true, false))
                         {
+                            var npc = entry.NPC;
                             if (npc.IsVisibleTo(Caster) && (GameServer.ServerRules.IsAllowedToHelp(Caster, npc, true) && npc.IsAlive) || force)
                             {
-                                list.Add(npc);
+                                AddTarget(entry);
                             }
                         }
                     }
                     else
                     {
                         if (target != null && (!GameServer.ServerRules.IsAllowedToAttack(Caster, target, true) || force))
-                            list.Add(target);
+                            AddTarget(new LivingDistEntry(target, -1));
                     }
                     break;
                 #endregion
@@ -2341,24 +2379,26 @@ namespace DOL.GS.Spells
                         {
                             if (target == null || Spell.Range == 0)
                                 target = Caster;
-                            foreach (GamePlayer player in target.GetPlayersInRadius(modifiedRadius))
+                            foreach (PlayerDistEntry entry in target.GetPlayersInRadius(true, modifiedRadius, true, false))
                             {
+                                var player = entry.Player;
                                 if (!GameServer.ServerRules.IsAllowedToAttack(Caster, player, true) || force)
                                 {
-                                    list.Add(player);
+                                    AddTarget(entry);
                                 }
                             }
-                            foreach (GameNPC npc in target.GetNPCsInRadius(modifiedRadius))
+                            foreach (NPCDistEntry entry in target.GetNPCsInRadius(true, modifiedRadius, true, false))
                             {
+                                var npc = entry.NPC;
                                 if (!GameServer.ServerRules.IsAllowedToAttack(Caster, npc, true) || force)
                                 {
-                                    list.Add(npc);
+                                    AddTarget(entry);
                                 }
                             }
                         }
                         else
                         {
-                            list.Add(Caster);
+                            AddTarget(new LivingDistEntry(Caster, -1));
                         }
                         break;
                     }
@@ -2378,7 +2418,7 @@ namespace DOL.GS.Spells
                         {
                             if (m_caster is GamePlayer)
                             {
-                                list.Add(m_caster);
+                                AddTarget(new LivingDistEntry(Caster, -1));
 
                                 IControlledBrain npc = m_caster.ControlledBrain;
                                 if (npc != null)
@@ -2386,7 +2426,7 @@ namespace DOL.GS.Spells
                                     //Add our first pet
                                     GameNPC petBody2 = npc.Body;
                                     if (m_caster.IsWithinRadius(petBody2, spellRange))
-                                        list.Add(petBody2);
+                                        AddTarget(new LivingDistEntry(petBody2, -1));
 
                                     //Now lets add any subpets!
                                     if (petBody2 != null && petBody2.ControlledNpcList != null)
@@ -2394,59 +2434,64 @@ namespace DOL.GS.Spells
                                         foreach (IControlledBrain icb in petBody2.ControlledNpcList)
                                         {
                                             if (icb != null && m_caster.IsWithinRadius(icb.Body, spellRange))
-                                                list.Add(icb.Body);
+                                                AddTarget(new LivingDistEntry(icb.Body, -0.5f));
                                         }
                                     }
                                 }
                             } // if (m_caster is GamePlayer)
                             else if (m_caster.GetLivingOwner() is {} owner)
                             {
-                                if (owner is GamePlayer player)
+                                if (owner.Group == null)
                                 {
-                                    if (player.Group == null)
-                                    {
-                                        // No group, add both the pet and owner to the list
-                                        list.Add(player);
-                                        list.Add(m_caster);
-                                    }
-                                    else
-                                        // Assign the owner's group so they are added to the list
-                                        group = player.Group;
+                                    // No group, add both the pet and owner to the list
+                                    AddTarget(new LivingDistEntry(owner, -1));
+                                    AddTarget(new LivingDistEntry(Caster, -1));
                                 }
                                 else
-                                    list.Add(m_caster);
+                                    // Assign the owner's group so they are added to the list
+                                    group = owner.Group;
                             }// else if (m_caster is GameNPC...
                             else
-                                list.Add(m_caster);
+                                AddTarget(new LivingDistEntry(m_caster, -1)); // TODO: add owner too ?
                         }// if (group == null)
 
                         //We need to add the entire group
                         if (group != null)
                         {
+                            bool TryAdd(GameLiving living)
+                            {
+                                if (living == null)
+                                    return false;
+
+                                var distanceSq = living.GetDistanceSquaredTo(m_caster);
+                                if (distanceSq > (double)(spellRange) * spellRange)
+                                    return false;
+
+                                var distance = Math.Sqrt(distanceSq);
+                                if (distance > spellRange)
+                                    return false;
+
+                                AddTarget(new LivingDistEntry(living, (float)distance));
+                                return true;
+                            }
                             foreach (GameLiving living in group.GetMembersInTheGroup())
                             {
-                                // only players in range
-                                if (m_caster.IsWithinRadius(living, spellRange))
+                                if (!TryAdd(living))
+                                    continue;
+                                
+                                if (living.ControlledBrain is not { Body: {} petBody } pet)
+                                    continue;
+                                
+                                //Add our first pet
+                                if (!TryAdd(petBody))
+                                    continue;
+
+                                //Now lets add any subpets!
+                                if (petBody.ControlledNpcList != null)
                                 {
-                                    list.Add(living);
-
-                                    IControlledBrain npc = living.ControlledBrain;
-                                    if (npc != null)
+                                    foreach (IControlledBrain icb in petBody.ControlledNpcList)
                                     {
-                                        //Add our first pet
-                                        GameNPC petBody2 = npc.Body;
-                                        if (m_caster.IsWithinRadius(petBody2, spellRange))
-                                            list.Add(petBody2);
-
-                                        //Now lets add any subpets!
-                                        if (petBody2 != null && petBody2.ControlledNpcList != null)
-                                        {
-                                            foreach (IControlledBrain icb in petBody2.ControlledNpcList)
-                                            {
-                                                if (icb != null && m_caster.IsWithinRadius(icb.Body, spellRange))
-                                                    list.Add(icb.Body);
-                                            }
-                                        }
+                                        TryAdd(icb.Body);
                                     }
                                 }
                             }
@@ -2459,8 +2504,9 @@ namespace DOL.GS.Spells
                 case "cone":
                     {
                         target = Caster;
-                        foreach (GamePlayer player in target.GetPlayersInRadius((ushort)Spell.Range))
+                        foreach (PlayerDistEntry entry in target.GetPlayersInRadius(true, (ushort)Spell.Range, true, false))
                         {
+                            var player = entry.Player;
                             if (player == Caster)
                                 continue;
 
@@ -2470,11 +2516,12 @@ namespace DOL.GS.Spells
                             if (!GameServer.ServerRules.IsAllowedToAttack(Caster, player, true) || force)
                                 continue;
 
-                            list.Add(player);
+                            AddTarget(entry);
                         }
 
-                        foreach (GameNPC npc in target.GetNPCsInRadius((ushort)Spell.Range))
+                        foreach (NPCDistEntry entry in target.GetNPCsInRadius(true, (ushort)Spell.Range, true, false))
                         {
+                            var npc = entry.NPC;
                             if (npc == Caster)
                                 continue;
 
@@ -2484,7 +2531,8 @@ namespace DOL.GS.Spells
                             if (!GameServer.ServerRules.IsAllowedToAttack(Caster, npc, true) || force)
                                 continue;
 
-                            if (!npc.HasAbility("DamageImmunity")) list.Add(npc);
+                            if (!npc.HasAbility("DamageImmunity"))
+                                AddTarget(entry);
 
                         }
                         break;
@@ -2492,7 +2540,7 @@ namespace DOL.GS.Spells
                     #endregion
             }
             #endregion
-            return list;
+            return list.Select(entry => entry.Living).ToList();
         }
 
         protected class SubSpellTimer : GameTimer

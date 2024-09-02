@@ -68,6 +68,7 @@ namespace DOL.Database
         protected bool m_isfocus = false;
         protected int m_sharedtimergroup;
         protected string m_packageID = string.Empty;
+        protected ushort m_hardTargetCap = 0;
 
         // warlock
         protected bool m_isprimary;
@@ -346,6 +347,20 @@ namespace DOL.Database
             {
                 Dirty = true;
                 m_radius = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public ushort TargetHardCap
+        {
+            get
+            {
+                return m_hardTargetCap;
+            }
+            set
+            {
+                Dirty = true;
+                m_hardTargetCap = value;
             }
         }
 

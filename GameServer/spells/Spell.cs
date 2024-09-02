@@ -240,6 +240,11 @@ namespace DOL.GS
             get { return m_radius; }
         }
 
+        public ushort TargetHardCap
+        {
+            get;
+        }
+
         public int RecastDelay
         {
             get { return m_recastdelay; }
@@ -448,6 +453,7 @@ namespace DOL.GS
             m_spelltype = dbspell.Type;
             m_range = dbspell.Range;
             m_radius = dbspell.Radius;
+            TargetHardCap = dbspell.TargetHardCap;
             m_value = dbspell.Value;
             m_damage = dbspell.Damage;
             m_damageType = (eDamageType)dbspell.DamageType;
@@ -502,6 +508,7 @@ namespace DOL.GS
             m_spelltype = spellType; // replace SpellType
             m_range = spell.Range;
             m_radius = spell.Radius;
+            TargetHardCap = spell.TargetHardCap;
             m_value = spell.Value;
             m_damage = spell.Damage;
             m_damageType = spell.DamageType;
