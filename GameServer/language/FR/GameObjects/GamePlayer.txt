@@ -145,6 +145,7 @@ GameObjects.GamePlayer.GainRealmPoints.ReachedRank:		            Vous venez d'at
 GameObjects.GamePlayer.GainRealmPoints.ReachedRankNews:		        {0} a atteint le rang de royaume {1:#L#} dans {2}!
 GameObjects.GamePlayer.GainRealmPoints.YouGet:			            Vous gagnez {0} points de royaume !
 GameObjects.GamePlayer.GainRealmPoints.AreaBonusRP:					Vous obtenez {0} points de royaume de bonus grâce aux bonus d'area !
+GameObjects.GamePlayer.GainRealmPoints.TerritoryBonusRP:			Vous obtenez {0} points de royaume pour avoir défendu votre territoire !
 GameObjects.GamePlayer.GainRealmPoints.LifeTransferSpell:			Vous gagnez {0} points de royaume pour avoir soigné un membre de votre royaume !
 
 GameObjects.GamePlayer.GetExamineMessages.EnemyRealmMember:	        Vous observez {0}. {1} est membre d'un royaume ennemi !

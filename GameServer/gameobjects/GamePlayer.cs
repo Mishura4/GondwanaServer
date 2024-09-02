@@ -4653,22 +4653,36 @@ namespace DOL.GS
         /// <param name="modify">Should we apply the rp modifer</param>
         /// <param name="sendMessage">Wether to send a message like "You have gained N realmpoints"</param>
         /// <param name="notify"></param>
-        public virtual void GainRealmPoints(long amount, bool modify, bool sendMessage, bool notify)
+        public virtual void GainRealmPoints(long amount, bool modify, bool sendMessage, bool notify, long territoryBonus = 0)
         {
             if (!GainRP)
                 return;
+            
+            //rp rate modifier
+            double modifier = ServerProperties.Properties.RP_RATE;
+            if (territoryBonus > 0)
+            {
+                if (modify && modifier != -1)
+                    territoryBonus = (long)(territoryBonus * ServerProperties.Properties.RP_RATE);
+
+                SendTranslatedMessage("GameObjects.GamePlayer.GainRealmPoints.TerritoryBonusRP", eChatType.CT_Important, eChatLoc.CL_SystemWindow, territoryBonus);
+            }
 
             if (modify)
             {
                 //rp rate modifier
-                double modifier = ServerProperties.Properties.RP_RATE;
                 if (modifier != -1)
                     amount = (long)(amount * modifier);
+            }
 
+            amount += territoryBonus;
+            
+            if (modify)
+            {
                 //Zone Bonus Support
                 if (Properties.ENABLE_ZONE_BONUSES)
                 {
-                    int zoneBonus = (int)(amount * ZoneBonus.GetRPBonus(this) * ServerProperties.Properties.RP_RATE);
+                    int zoneBonus = (int)(amount * ZoneBonus.GetRPBonus(this));
                     if (zoneBonus > 0)
                     {
                         Out.SendMessage(ZoneBonus.GetBonusMessage(this, zoneBonus, ZoneBonus.eZoneBonusType.RP),
@@ -4687,7 +4701,7 @@ namespace DOL.GS
                         areapoints += area.RealmPoints;
                     }
 
-                    int areaBonus = (int)(amount * areapoints * ServerProperties.Properties.RP_RATE);
+                    int areaBonus = (int)(amount * areapoints);
                     if (areaBonus > 0)
                     {
                         Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.GainRealmPoints.AreaBonusRP", areaBonus), eChatType.CT_Important, eChatLoc.CL_SystemWindow);

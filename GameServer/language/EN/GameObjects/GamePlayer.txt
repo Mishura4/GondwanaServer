@@ -145,6 +145,7 @@ GameObjects.GamePlayer.GainRealmPoints.ReachedRank:			You reached realm rank {0}
 GameObjects.GamePlayer.GainRealmPoints.ReachedRankNews:		{0} reached realm rank {1:#L#} in {2}!		
 GameObjects.GamePlayer.GainRealmPoints.YouGet:				You get {0} realm points!
 GameObjects.GamePlayer.GainRealmPoints.AreaBonusRP:			You gain {0} realm points from area bonuses!
+GameObjects.GamePlayer.GainRealmPoints.TerritoryBonusRP:	You gain {0} realm points for defending your territory!
 GameObjects.GamePlayer.GainRealmPoints.LifeTransferSpell:	You gain {0} realm points for healing a member of your realm!
 
 GameObjects.GamePlayer.GetExamineMessages.EnemyRealmMember:		You examine {0}. {1} is a member of an enemy realm!
