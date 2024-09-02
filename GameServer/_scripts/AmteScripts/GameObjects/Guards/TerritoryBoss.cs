@@ -29,7 +29,12 @@ namespace DOL.GS.Scripts
             SetOwnBrain(brain);
         }
 
-
+        /// <inheritdoc />
+        public override int BountyPointsValue
+        {
+            get => 10;
+        }
+        
         public override bool AddToWorld()
         {
             bool added = base.AddToWorld();

@@ -37,6 +37,7 @@ using DOL.GS.PlayerTitles;
 using DOL.GS.Scripts;
 using DOL.GS.ServerProperties;
 using DOL.Language;
+using DOL.Territories;
 using log4net;
 
 namespace DOL.GS.ServerRules
@@ -1315,7 +1316,7 @@ namespace DOL.GS.ServerRules
 
                 int bountyPoints = 0;
                 // Keep and Tower captures reward full RP and BP value to each player
-                if (killedNPC is GuardLord)
+                if (killedNPC is GuardLord or TerritoryBoss or TerritoryLord)
                 {
                     bountyPoints = npcBPValue;
                 }

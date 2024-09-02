@@ -78,6 +78,11 @@ namespace DOL.Territories
             TerritoryOwned // 1 parameter: TerritoryID
         }
 
+        public override int BountyPointsValue // TerritoryLord cannot be killed in theory but...
+        {
+            get => 10;
+        }
+
         public eCaptureCondition CaptureCondition
         {
             get;
