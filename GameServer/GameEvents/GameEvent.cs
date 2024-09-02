@@ -9,6 +9,7 @@ using System.Linq;
 using System.Reflection;
 using System.Timers;
 using DOL.Language;
+using System.Net;
 
 namespace DOL.GameEvents
 {
@@ -565,10 +566,20 @@ namespace DOL.GameEvents
 
         public string GetFormattedEndText(GamePlayer player)
         {
-            string groupName = player.Group?.Leader.Name ?? string.Empty;
-            string guildName = player.GuildName ?? string.Empty;
-            string className = player.CharacterClass?.Name ?? string.Empty;
-            string raceName = player.RaceName ?? string.Empty;
+            string groupName = "???";
+            string guildName = "???";
+            string className = "???";
+            string raceName = "???";
+
+            if (player != null)
+            {
+                if (player.Group is { Leader: { Name: {} name }})
+                    groupName = name;
+                guildName = player.GuildName!;
+                if (!string.IsNullOrEmpty(player.CharacterClass?.Name))
+                    className = player.CharacterClass.Name;
+                className = player.RaceName!;
+            }
             return LanguageMgr.GetEventMessage(player.Client.Account.Language, EndText ?? string.Empty, player.Name, groupName, guildName, className, raceName);
         }
 
