@@ -1,6 +1,7 @@
 ﻿using DOL.Database;
 using DOL.GS;
 using DOL.GS.PacketHandler;
+using DOL.GS.ServerProperties;
 using DOLDatabase.Tables;
 using log4net;
 using System;
@@ -9,6 +10,7 @@ using System.Linq;
 using System.Reflection;
 using System.Timers;
 using DOL.Language;
+using Grpc.Core;
 using System.Net;
 
 namespace DOL.GameEvents
@@ -561,41 +563,52 @@ namespace DOL.GameEvents
 
         public string GetFormattedDebutText(GamePlayer player)
         {
-            return LanguageMgr.GetEventMessage(player.Client.Account.Language, DebutText ?? string.Empty, player.Name);
+            if (string.IsNullOrEmpty(DebutText))
+                return string.Empty;
+
+            string language = player?.Client.Account.Language ?? Properties.SERV_LANGUAGE!;
+            
+            return LanguageMgr.GetEventMessage(language, DebutText, player?.Name ?? string.Empty);
         }
 
         public string GetFormattedEndText(GamePlayer player)
         {
-            string playerName = "???";
-            string groupName = "???";
-            string guildName = "???";
-            string className = "???";
-            string raceName = "???";
+            if (string.IsNullOrEmpty(EndText))
+                return string.Empty;
 
-            if (player != null)
-            {
-                playerName = player.Name!;
-                if (player.Group is { Leader: { Name: {} name }})
-                    groupName = name;
-                guildName = player.GuildName!;
-                if (!string.IsNullOrEmpty(player.CharacterClass?.Name))
-                    className = player.CharacterClass.Name;
-                className = player.RaceName!;
-            }
+            if (player == null)
+                return LanguageMgr.GetEventMessage(Properties.SERV_LANGUAGE, EndText, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
+            
+            string playerName = player.Name;
+            string groupName = player.Group?.Leader?.Name ?? "???";
+            string guildName = player.GuildName ?? "???";
+            string className = player.CharacterClass?.Name ?? "???";
+            string raceName = player.RaceName ?? "???";
+
             return LanguageMgr.GetEventMessage(player.Client.Account.Language, EndText ?? string.Empty, playerName, groupName, guildName, className, raceName);
         }
 
         public string GetFormattedRemainingTimeText(GamePlayer player)
         {
-            string message = RemainingTimeText ?? string.Empty;
-            return LanguageMgr.GetEventMessage(player.Client.Account.Language, message, player.Name);
+            if (string.IsNullOrEmpty(RemainingTimeText))
+                return string.Empty;
+
+            if (player == null)
+                return LanguageMgr.GetEventMessage(Properties.SERV_LANGUAGE, RemainingTimeText);
+
+            return LanguageMgr.GetEventMessage(player.Client.Account.Language, RemainingTimeText, player.Name);
         }
 
         public string GetFormattedRandomText(GamePlayer player)
         {
+            if (RandomText?.Any() != true)
+                return string.Empty;
+            
+            string language = player?.Client.Account.Language ?? Properties.SERV_LANGUAGE!;
+            
             var rand = new Random(DateTime.Now.Millisecond);
-            string message = RandomText != null && RandomText.Any() ? RandomText.ElementAt(rand.Next(0, RandomText.Count())) : string.Empty;
-            return LanguageMgr.GetEventMessage(player.Client.Account.Language, message, player.Name);
+            string message = RandomText.ElementAt(rand.Next(0, RandomText.Count()));
+            return LanguageMgr.GetEventMessage(language, message, player?.Name);
         }
 
         public GamePlayer Owner { get => owner; set => owner = value; }
