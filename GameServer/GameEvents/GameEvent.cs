@@ -566,6 +566,7 @@ namespace DOL.GameEvents
 
         public string GetFormattedEndText(GamePlayer player)
         {
+            string playerName = "???";
             string groupName = "???";
             string guildName = "???";
             string className = "???";
@@ -573,6 +574,7 @@ namespace DOL.GameEvents
 
             if (player != null)
             {
+                playerName = player.Name!;
                 if (player.Group is { Leader: { Name: {} name }})
                     groupName = name;
                 guildName = player.GuildName!;
@@ -580,7 +582,7 @@ namespace DOL.GameEvents
                     className = player.CharacterClass.Name;
                 className = player.RaceName!;
             }
-            return LanguageMgr.GetEventMessage(player.Client.Account.Language, EndText ?? string.Empty, player.Name, groupName, guildName, className, raceName);
+            return LanguageMgr.GetEventMessage(player.Client.Account.Language, EndText ?? string.Empty, playerName, groupName, guildName, className, raceName);
         }
 
         public string GetFormattedRemainingTimeText(GamePlayer player)
