@@ -39,6 +39,7 @@ using DOL.GS.ServerProperties;
 using DOL.Language;
 using DOL.Territories;
 using log4net;
+using log4net.Core;
 
 namespace DOL.GS.ServerRules
 {
@@ -1254,6 +1255,15 @@ namespace DOL.GS.ServerRules
             int npcRPValue = killedNPC.RealmPointsValue;
             int npcBPValue = killedNPC.BountyPointsValue;
             double npcExceedXPCapAmount = killedNPC.ExceedXPCapAmount;
+
+            if (killedNPC.CurrentTerritory != null)
+            {
+                npcExpValue = Math.Max(1, (int)(0.40f * npcExpValue));
+                
+                int level = Math.Max(0, killedNPC.Level - 20);
+                int realmLevel = 0; // Use realm level 0 for these calculations
+                npcRPValue = Math.Max(1, level * level + (realmLevel + 10) * 5);
+            }
 
             //Need to do this before hand so we only do it once - just in case if the player levels!
             double highestConValue = 0;
