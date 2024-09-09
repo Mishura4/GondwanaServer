@@ -199,7 +199,7 @@ namespace DOL.GS.Spells
                 {
                     FocusSpellAction(null, Caster, null);
                 }
-                MessageToCaster("You do not have enough mana and your spell was cancelled.", eChatType.CT_SpellExpires);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.PulsingSpellNoMana"), eChatType.CT_SpellExpires);
                 CleanupTurret();
                 return false;
             }

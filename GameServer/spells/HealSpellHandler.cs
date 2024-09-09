@@ -61,8 +61,10 @@ namespace DOL.GS.Spells
 
                 if (healTarget.IsDiseased)
                 {
+                    int amnesiaChance = healTarget.TempProperties.getProperty<int>("AmnesiaChance", 50);
+                    int healReductionPercentage = amnesiaChance > 0 ? amnesiaChance : 50;
+                    heal -= (heal * healReductionPercentage) / 100;
                     MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "Spell.LifeTransfer.TargetDiseased"), eChatType.CT_SpellResisted);
-                    heal >>= 1;
                 }
 
                 if (SpellLine.KeyName == GlobalSpellsLines.Item_Effects)
@@ -120,13 +122,13 @@ namespace DOL.GS.Spells
                 return false;
             }
 
-            if (target is GamePlayer && (target as GamePlayer).NoHelp && Caster is GamePlayer)
+            if (target is GamePlayer && (target as GamePlayer)!.NoHelp && Caster is GamePlayer)
             {
                 //player not grouped, anyone else
                 //player grouped, different group
-                if ((target as GamePlayer).Group == null ||
-                    (Caster as GamePlayer).Group == null ||
-                    (Caster as GamePlayer).Group != (target as GamePlayer).Group)
+                if ((target as GamePlayer)!.Group == null ||
+                    (Caster as GamePlayer)!.Group == null ||
+                    (Caster as GamePlayer)!.Group != (target as GamePlayer)!.Group)
                 {
                     MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.HealSpell.NoHelp"), eChatType.CT_SpellResisted);
                     return false;
@@ -139,7 +141,7 @@ namespace DOL.GS.Spells
             if (moc != null)
             {
                 GamePlayer playerCaster = Caster as GamePlayer;
-                MasteryofConcentrationAbility ra = playerCaster.GetAbility<MasteryofConcentrationAbility>();
+                MasteryofConcentrationAbility ra = playerCaster!.GetAbility<MasteryofConcentrationAbility>();
                 if (ra != null)
                     mocFactor = (double)ra.GetAmountForLevel(ra.Level) / 100.0;
                 amount = amount * mocFactor;
@@ -148,7 +150,7 @@ namespace DOL.GS.Spells
             int criticalchance = Caster.GetModified(eProperty.CriticalHealHitChance);
             double effectiveness = 0;
             if (Caster is GamePlayer)
-                effectiveness = (Caster as GamePlayer).Effectiveness + (double)(Caster.GetModified(eProperty.HealingEffectiveness)) * 0.01;
+                effectiveness = (Caster as GamePlayer)!.Effectiveness + (double)(Caster.GetModified(eProperty.HealingEffectiveness)) * 0.01;
             if (Caster is GameNPC)
                 effectiveness = 1.0;
 

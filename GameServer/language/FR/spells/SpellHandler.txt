@@ -123,6 +123,7 @@ SpellHandler.Groupport.NotInGroup:		Vous ne faites pas partie d'un groupe !
 SpellHandler.TargetNoLongerInRange:		Votre cible n'est plus à portée.
 SpellHandler.TargetNoLongerInView:		Votre cible n'est plus en vue.
 SpellHandler.SlowSpellHandler.TooFastForEffect:	{0} se déplace trop vite pour que ce sort ait un effet !
+SpellHandler.Earthquake.Ending:			Le séisme a pris fin.
 
 SpellHandler.VampiirBolt.CannotCastInCombat:	Vous ne pouvez pas lancer ce sort en combat !
 SpellHandler.VampiirBolt.PowerTaken:		{0} vous prend {1} de Mana !

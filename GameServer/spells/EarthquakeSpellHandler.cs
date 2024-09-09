@@ -79,14 +79,14 @@ namespace DOL.GS.Spells
             if (elapsedTime >= duration)
             {
                 effect.Cancel(false);
-                MessageToCaster("The earthquake effect has ended.", eChatType.CT_SpellExpires);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.Earthquake.Ending"), eChatType.CT_SpellExpires);
                 return;
             }
 
             if (Caster.ObjectState != GameObject.eObjectState.Active || Caster.IsMoving && Spell.IsFocus || Caster.IsStunned || Caster.IsMezzed || !Caster.IsAlive)
             {
                 effect.Cancel(false);
-                MessageToCaster("Your spell was cancelled.", eChatType.CT_SpellExpires);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.PulsingSpellCancelled"), eChatType.CT_SpellExpires);
                 return;
             }
 
@@ -97,7 +97,7 @@ namespace DOL.GS.Spells
                     FocusSpellAction(null, Caster, null);
                 }
                 effect.Cancel(false);
-                MessageToCaster("You do not have enough mana and your spell was cancelled.", eChatType.CT_SpellExpires);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.PulsingSpellNoMana"), eChatType.CT_SpellExpires);
                 return;
             }
 
@@ -355,7 +355,7 @@ namespace DOL.GS.Spells
             else
             {
                 GamePlayer player = target as GamePlayer;
-                if (player.IsSwimming ||
+                if (player!.IsSwimming ||
                     (player.CharacterClass is ClassVampiir && player.IsSprinting && player.CurrentSpeed == player.MaxSpeed) ||
                     (player.CharacterClass is ClassBainshee && (player.Model == 1883 || player.Model == 1884 || player.Model == 1885)))
                 {

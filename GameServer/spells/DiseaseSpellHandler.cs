@@ -36,6 +36,14 @@ namespace DOL.GS.Spells
         public override void OnEffectStart(GameSpellEffect effect)
         {
             base.OnEffectStart(effect);
+            effect.Owner.TempProperties.setProperty("AmnesiaChance", Spell.AmnesiaChance);
+
+            int resistChance = CalculateSpellResistChance(effect.Owner);
+            if (resistChance >= Util.Random(100))
+            {
+                MessageToLiving(effect.Owner, "You resist the disease!", eChatType.CT_SpellResisted);
+                return;
+            }
 
             if (effect.Owner.Realm == 0 || Caster.Realm == 0)
             {
@@ -48,11 +56,22 @@ namespace DOL.GS.Spells
                 Caster.LastAttackTickPvP = Caster.CurrentRegion.Time;
             }
 
+            if (IsImmune(effect.Owner))
+            {
+                return;
+            }
+
             GameSpellEffect mezz = FindEffectOnTarget(effect.Owner, "Mesmerize");
             if (mezz != null) mezz.Cancel(false);
             effect.Owner.Disease(true);
-            effect.Owner.BuffBonusMultCategory1.Set((int)eProperty.MaxSpeed, this, 1.0 - 0.15);
-            effect.Owner.BuffBonusMultCategory1.Set((int)eProperty.Strength, this, 1.0 - 0.075);
+
+            // Slow effect, default to 15% if Value is 0
+            double slowPercentage = Spell.Value != 0 ? Spell.Value / 100 : 0.15;
+            effect.Owner.BuffBonusMultCategory1.Set((int)eProperty.MaxSpeed, this, 1.0 - slowPercentage);
+
+            // Strength reduction, default to 7.5% if LifeDrainReturn is 0
+            double strengthReduction = Spell.Damage != 0 ? Spell.Damage / 100 : 0.075;
+            effect.Owner.BuffBonusMultCategory1.Set((int)eProperty.Strength, this, 1.0 - strengthReduction);
 
             SendUpdates(effect);
 
@@ -89,6 +108,79 @@ namespace DOL.GS.Spells
                 if (aggroBrain != null)
                     aggroBrain.AddToAggroList(Caster, 1);
             }
+        }
+
+        public override int CalculateSpellResistChance(GameLiving target)
+        {
+            // Modify the resist chance based on factors like immunity, level difference, or custom conditions
+            int baseResistChance = base.CalculateSpellResistChance(target);
+
+            // Custom logic for specific resist cases
+            if (IsImmune(target)) return 100;
+
+            return baseResistChance;
+        }
+
+        private bool IsImmune(GameLiving living)
+        {
+            if (living == null)
+            {
+                return true;
+            }
+
+            if (living == Caster)
+            {
+                return true;
+            }
+
+            GameNPC npc = living as GameNPC;
+            if (npc is { Brain: IControlledBrain controlledBrain })
+            {
+                return IsImmune(controlledBrain.Owner);
+            }
+
+            GamePlayer ownerPlayer = Caster as GamePlayer;
+            if (ownerPlayer == null)
+            {
+                return false;
+            }
+
+            GamePlayer targetPlayer = living as GamePlayer;
+
+            if (ownerPlayer.Group?.IsInTheGroup(living) == true)
+            {
+                return true;
+            }
+
+            if (ownerPlayer.Guild != null)
+            {
+                if (npc != null)
+                {
+                    if (npc.CurrentTerritory?.IsOwnedBy(ownerPlayer.Guild) == true)
+                    {
+                        return true;
+                    }
+
+                    if (!string.IsNullOrEmpty(npc.GuildName) && string.Equals(npc.GuildName, ownerPlayer.Guild.Name))
+                    {
+                        return true;
+                    }
+                }
+                else if (targetPlayer != null)
+                {
+                    if (targetPlayer.Guild == ownerPlayer.Guild)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            if (ownerPlayer.BattleGroup != null && targetPlayer?.BattleGroup == ownerPlayer.BattleGroup)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
@@ -172,8 +264,11 @@ namespace DOL.GS.Spells
         public override void OnEffectRestored(GameSpellEffect effect, int[] vars)
         {
             effect.Owner.Disease(true);
-            effect.Owner.BuffBonusMultCategory1.Set((int)eProperty.MaxSpeed, this, 1.0 - 0.15);
-            effect.Owner.BuffBonusMultCategory1.Set((int)eProperty.Strength, this, 1.0 - 0.075);
+            double slowPercentage = Spell.Value != 0 ? Spell.Value / 100 : 0.15;
+            effect.Owner.BuffBonusMultCategory1.Set((int)eProperty.MaxSpeed, this, 1.0 - slowPercentage);
+
+            double strengthReduction = Spell.Damage != 0 ? Spell.Damage / 100 : 0.075;
+            effect.Owner.BuffBonusMultCategory1.Set((int)eProperty.Strength, this, 1.0 - strengthReduction);
         }
 
         public override int OnRestoredEffectExpires(GameSpellEffect effect, int[] vars, bool noMessages)
@@ -183,8 +278,7 @@ namespace DOL.GS.Spells
 
         public DiseaseSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine) { }
 
-        //TODO: Adjust strength reduction
         public override string ShortDescription
-            => $"Inflicts a wasting disease on the target that slows target by 15%, reduces its strength by 7.5% and inhibits healing by 50%";
+            => $"Inflicts a wasting disease on the target that slows target by {(Spell.Value != 0 ? Spell.Value : 15)}%, reduces its strength by {(Spell.Damage != 0 ? Spell.Damage : 7.5)}% and inhibits healing by {(Spell.AmnesiaChance != 0 ? Spell.AmnesiaChance : 50)}%";
     }
 }

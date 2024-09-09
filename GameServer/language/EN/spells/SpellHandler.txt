@@ -123,6 +123,7 @@ SpellHandler.Groupport.NotInGroup:		You are not a part of a group!
 SpellHandler.TargetNoLongerInRange:		Your target is no longer in range.
 SpellHandler.TargetNoLongerInView:		Your target is no longer in view.
 SpellHandler.SlowSpellHandler.TooFastForEffect:	{0} is moving too fast for this spell to have any effect!
+SpellHandler.Earthquake.Ending:			The earthquake has ended.
 
 SpellHandler.VampiirBolt.CannotCastInCombat:	You cannot cast this spell in combat!
 SpellHandler.VampiirBolt.PowerTaken:		{0} takes {1} power!

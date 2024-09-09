@@ -44,7 +44,8 @@ namespace DOL.GS.Commands
         "/player reset - Reset and re-level a player to their current level.",
         "/player realm <newRealm>",
         "/player inventory [wear|bag|vault|house|cons]",
-        "/player <rps|bps|xp|xpa|clxp|mlxp> <amount>",
+        "/player <rps|xp|xpa|clxp|mlxp> <amount>",
+        "/player bountypoints <add|sub> <value> - shows, adds or subtracts a player's bountypoints",
         "/player stat <typeofStat> <value>",
         "/player tension <add|sub> <value> - shows, adds or subtracts a player's tension",
         "/player money <copp|silv|gold|plat|mith> <amount>",
@@ -77,7 +78,7 @@ namespace DOL.GS.Commands
         )]
     public class PlayerCommandHandler : AbstractCommandHandler, ICommandHandler
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()!.DeclaringType);
 
         public void OnCommand(GameClient client, string[] args)
         {
@@ -1001,12 +1002,16 @@ namespace DOL.GS.Commands
                     }
                     break;
 
-                case "bps":
+                #endregion
+
+                #region bountypoints
+
+                case "bountypoints":
                     {
                         var player = client.Player.TargetObject as GamePlayer;
                         try
                         {
-                            if (args.Length != 3)
+                            if (args.Length != 4)
                             {
                                 DisplaySyntax(client);
                                 return;
@@ -1015,13 +1020,54 @@ namespace DOL.GS.Commands
                             if (player == null)
                                 player = client.Player;
 
-                            long amount = long.Parse(args[2]);
-                            player.GainBountyPoints(amount, false);
-                            client.Out.SendMessage("You gave " + player.Name + " " + amount + " bountypoints succesfully!",
-                                                   eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                            player.Out.SendMessage(
-                                client.Player.Name + "(PrivLevel: " + client.Account.PrivLevel + ") has given you " + amount + " bountypoints!",
-                                eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                            switch (args[2].ToLower())
+                            {
+                                case "add":
+                                    if (long.TryParse(args[3], out long addAmount) && addAmount > 0)
+                                    {
+                                        long currentBPs = player.BountyPointBalance;
+
+                                        // Check if adding the points would exceed the cap
+                                        if (currentBPs + addAmount > player.BountyPointCap)
+                                        {
+                                            addAmount = player.BountyPointCap - currentBPs;
+                                            client.Out.SendMessage($"Bounty points exceed the cap. Only adding {addAmount} bounty points to reach the cap.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                        }
+
+                                        if (addAmount > 0)
+                                        {
+                                            player.GainBountyPoints(addAmount, false);
+                                            client.Out.SendMessage($"You added {addAmount} bounty points to {player.Name} successfully!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                                            player.Out.SendMessage($"{client.Player.Name} (PrivLevel: {client.Account.PrivLevel}) has added {addAmount} bounty points to you!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                                        }
+                                        else
+                                        {
+                                            client.Out.SendMessage("Player has already reached the maximum bounty point cap.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        client.Out.SendMessage("Invalid amount specified.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                                    }
+                                    break;
+
+                                case "sub":
+                                    if (long.TryParse(args[3], out long subAmount) && subAmount > 0)
+                                    {
+                                        player.RemoveBountyPoints(subAmount);
+                                        client.Out.SendMessage($"You subtracted {subAmount} bounty points from {player.Name} successfully!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                                    }
+                                    else
+                                    {
+                                        client.Out.SendMessage("Invalid amount specified.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                                    }
+                                    break;
+
+                                default:
+                                    client.Out.SendMessage("Invalid command. Use 'add' or 'sub' to manage bounty points.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                                    break;
+                            }
+
                             player.SaveIntoDatabase();
                             player.Out.SendUpdatePlayer();
                         }
@@ -1796,14 +1842,14 @@ namespace DOL.GS.Commands
 
                             if (player.IsAlive)
                             {
-                                KillPlayer(client.Player, player);
+                                KillPlayer(client!.Player, player);
                                 client.Out.SendMessage("You killed " + player.GetPersonalizedName(player) + " successfully!", eChatType.CT_Important,
                                                        eChatLoc.CL_SystemWindow);
                                 player.Out.SendMessage(player.GetPersonalizedName(client.Player) + " has killed you!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                             }
                             else
                             {
-                                client.Out.SendMessage("Player is not alive!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                                client!.Out.SendMessage("Player is not alive!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                                 return;
                             }
                         }
@@ -2120,7 +2166,7 @@ namespace DOL.GS.Commands
                     {
                         var player = client.Player.TargetObject as GamePlayer;
 
-                        client.Out.SendMessage("\"" + player.Name + "\", " +
+                        client.Out.SendMessage("\"" + player!.Name + "\", " +
                                                player.CurrentRegionID + ", " +
                                                player.Coordinate + ", " +
                                                player.Orientation.InHeading,

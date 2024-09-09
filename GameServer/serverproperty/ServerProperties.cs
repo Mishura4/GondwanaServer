@@ -37,7 +37,7 @@ namespace DOL.GS.ServerProperties
         /// <summary>
         /// Defines a logger for this class.
         /// </summary>
-        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
         /// <summary>
         /// Init the properties
@@ -1160,6 +1160,12 @@ namespace DOL.GS.ServerProperties
         /// </summary>
         [ServerProperty("task_system", "task_pve_mobtype_rotation", "Interval for rotating PvE mob types in the task system (in minutes)", 120)]
         public static int TASK_PVE_MOBTYPE_ROTATION;
+
+        /// <summary>
+        /// The maximum bounty points a player can have.
+        /// </summary>
+        [ServerProperty("rates", "bounty_point_cap", "The maximum number of bounty points a player can have.", 500000)]
+        public static long BOUNTY_POINT_CAP;
 
         #endregion
 

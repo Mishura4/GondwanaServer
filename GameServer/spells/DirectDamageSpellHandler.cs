@@ -31,7 +31,7 @@ namespace DOL.GS.Spells
     [SpellHandlerAttribute("DirectDamage")]
     public class DirectDamageSpellHandler : SpellHandler
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()!.DeclaringType);
 
         private bool m_castFailed = false;
 
@@ -168,7 +168,7 @@ namespace DOL.GS.Spells
             if (target is GamePlayer)
             {
                 GamePlayer player = target as GamePlayer;
-                player.Out.SendCheckLOS(Caster, player, new CheckLOSResponse(ResistSpellCheckLOS));
+                player!.Out.SendCheckLOS(Caster, player, new CheckLOSResponse(ResistSpellCheckLOS));
             }
             else
             {

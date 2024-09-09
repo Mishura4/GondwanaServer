@@ -48,7 +48,7 @@ namespace DOL.GS.Spells
     /// </summary>
     public class SpellHandler : ISpellHandler
     {
-        private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()!.DeclaringType);
 
         /// <summary>
         /// Maximum number of sub-spells to get delve info for.
@@ -440,7 +440,7 @@ namespace DOL.GS.Spells
             {
                 // Pet is the target, check if the caster is the pet.
 
-                if (Caster is GameNPC && (Caster as GameNPC).Brain is IControlledBrain)
+                if (Caster is GameNPC && (Caster as GameNPC)!.Brain is IControlledBrain)
                     m_spellTarget = Caster;
 
                 if (Caster is GamePlayer && Caster.ControlledBrain != null && Caster.ControlledBrain.Body != null)
@@ -473,15 +473,15 @@ namespace DOL.GS.Spells
             {
                 if (CheckBeginCast(m_spellTarget))
                 {
-                    if (m_caster is GamePlayer && (m_caster as GamePlayer).IsOnHorse && !HasPositiveEffect)
+                    if (m_caster is GamePlayer && (m_caster as GamePlayer)!.IsOnHorse && !HasPositiveEffect)
                     {
-                        (m_caster as GamePlayer).IsOnHorse = false;
+                        (m_caster as GamePlayer)!.IsOnHorse = false;
                     }
 
-                    if (m_caster is GamePlayer && (m_caster as GamePlayer).IsSummoningMount)
+                    if (m_caster is GamePlayer && (m_caster as GamePlayer)!.IsSummoningMount)
                     {
-                        (m_caster as GamePlayer).Out.SendMessage(LanguageMgr.GetTranslation((m_caster as GamePlayer).Client.Account.Language, "GameObjects.GamePlayer.UseSlot.CantMountSpell"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                        (m_caster as GamePlayer).IsOnHorse = false;
+                        (m_caster as GamePlayer)!.Out.SendMessage(LanguageMgr.GetTranslation((m_caster as GamePlayer)!.Client.Account.Language, "GameObjects.GamePlayer.UseSlot.CantMountSpell"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        (m_caster as GamePlayer)!.IsOnHorse = false;
                     }
 
                     if (Spell.Pulse != 0 && m_caster is GamePlayer player)
@@ -493,7 +493,7 @@ namespace DOL.GS.Spells
                     {
                         StartCastTimer(m_spellTarget);
 
-                        if ((Caster is GamePlayer && (Caster as GamePlayer).IsStrafing) || Caster.IsMoving)
+                        if ((Caster is GamePlayer && (Caster as GamePlayer)!.IsStrafing) || Caster.IsMoving)
                             CasterMoves();
                     }
                     else
@@ -545,7 +545,7 @@ namespace DOL.GS.Spells
 
             if (Caster is GamePlayer && ServerProperties.Properties.ENABLE_DEBUG)
             {
-                (Caster as GamePlayer).Out.SendMessage($"[DEBUG] spell time = {time}, step1 = {step1}, step2 = {step2}, step3 = {step3}", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                (Caster as GamePlayer)!.Out.SendMessage($"[DEBUG] spell time = {time}, step1 = {step1}, step2 = {step2}, step3 = {step3}", eChatType.CT_System, eChatLoc.CL_SystemWindow);
             }
 
             m_castTimer = new DelayedCastTimer(Caster, this, target, step2, step3, step2_substeps);
@@ -598,7 +598,7 @@ namespace DOL.GS.Spells
             //[StephenxPimentel] Check if the necro has MoC effect before interrupting.
             if (Caster is NecromancerPet)
             {
-                if ((Caster as NecromancerPet).Owner.EffectList.GetOfType<MasteryofConcentrationEffect>() != null)
+                if ((Caster as NecromancerPet)!.Owner.EffectList.GetOfType<MasteryofConcentrationEffect>() != null)
                 {
                     return false;
                 }
@@ -753,7 +753,7 @@ namespace DOL.GS.Spells
                 int left = m_caster.GetSkillDisabledDuration(m_spell);
                 if (left > 0)
                 {
-                    if (m_caster is NecromancerPet && ((m_caster as NecromancerPet).Owner as GamePlayer).Client.Account.PrivLevel > (int)ePrivLevel.Player)
+                    if (m_caster is NecromancerPet && ((m_caster as NecromancerPet)!.Owner as GamePlayer)!.Client.Account.PrivLevel > (int)ePrivLevel.Player)
                     {
                         // Ignore Recast Timer
                     }
@@ -891,7 +891,7 @@ namespace DOL.GS.Spells
             }
 
             //Ryan: don't want mobs to have reductions in mana
-            if (Spell.Power != 0 && m_caster is GamePlayer && (m_caster as GamePlayer).CharacterClass.ID != (int)eCharacterClass.Savage && m_caster.Mana < PowerCost(selectedTarget) && Spell.SpellType != "Archery")
+            if (Spell.Power != 0 && m_caster is GamePlayer && (m_caster as GamePlayer)!.CharacterClass.ID != (int)eCharacterClass.Savage && m_caster.Mana < PowerCost(selectedTarget) && Spell.SpellType != "Archery")
             {
                 if (!quiet) MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.NotEnoughPower"), eChatType.CT_SpellResisted);
                 return false;
@@ -1602,7 +1602,7 @@ namespace DOL.GS.Spells
                 if (Caster is GamePlayer && ((GamePlayer)Caster).CharacterClass.ManaStat != eStat.UNDEFINED)
                 {
                     GamePlayer player = Caster as GamePlayer;
-                    basepower = player.CalculateMaxMana(player.Level, player.GetBaseStat(player.CharacterClass.ManaStat)) * basepower * -0.01;
+                    basepower = player!.CalculateMaxMana(player.Level, player.GetBaseStat(player.CharacterClass.ManaStat)) * basepower * -0.01;
                 }
                 else
                 {
@@ -1800,7 +1800,7 @@ namespace DOL.GS.Spells
 
                     if (m_caster is GamePlayer && ServerProperties.Properties.ENABLE_DEBUG && m_stage < 3)
                     {
-                        (m_caster as GamePlayer).Out.SendMessage("[DEBUG] step = " + (m_handler.Stage + 1), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        (m_caster as GamePlayer)!.Out.SendMessage("[DEBUG] step = " + (m_handler.Stage + 1), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     }
 
                     return;
@@ -1953,10 +1953,10 @@ namespace DOL.GS.Spells
                 ((GamePlayer)Caster).IsOnHorse = false;
 
 
-            if (m_caster is GamePlayer && (m_caster as GamePlayer).IsSummoningMount)
+            if (m_caster is GamePlayer && (m_caster as GamePlayer)!.IsSummoningMount)
             {
-                (m_caster as GamePlayer).Out.SendMessage(LanguageMgr.GetTranslation((m_caster as GamePlayer).Client.Account.Language, "GameObjects.GamePlayer.UseSlot.CantMountSpell"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                (m_caster as GamePlayer).IsOnHorse = false;
+                (m_caster as GamePlayer)?.Out.SendMessage(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client.Account.Language, "GameObjects.GamePlayer.UseSlot.CantMountSpell"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                (m_caster as GamePlayer)!.IsOnHorse = false;
             }
 
             //[Stryve]: Do not break stealth if spell never breaks stealth.
@@ -1967,7 +1967,7 @@ namespace DOL.GS.Spells
             {
                 if (Caster.AttackWeapon != null && Caster.AttackWeapon is GameInventoryItem)
                 {
-                    (Caster.AttackWeapon as GameInventoryItem).OnSpellCast(Caster, target, Spell);
+                    (Caster.AttackWeapon as GameInventoryItem)!.OnSpellCast(Caster, target, Spell);
                 }
             }
 
@@ -2035,7 +2035,7 @@ namespace DOL.GS.Spells
                     ICollection<Tuple<Skill, int>> toDisable = new List<Tuple<Skill, int>>();
 
                     GamePlayer gp_caster = m_caster as GamePlayer;
-                    foreach (var skills in gp_caster.GetAllUsableSkills())
+                    foreach (var skills in gp_caster!.GetAllUsableSkills())
                         if (skills.Item1 is Spell &&
                             (((Spell)skills.Item1).ID == m_spell.ID || (((Spell)skills.Item1).SharedTimerGroup != 0 && (((Spell)skills.Item1).SharedTimerGroup == m_spell.SharedTimerGroup))))
                             toDisable.Add(new Tuple<Skill, int>((Spell)skills.Item1, m_spell.RecastDelay));
@@ -2645,9 +2645,9 @@ namespace DOL.GS.Spells
             //[StephenxPimentel] Reduce Damage if necro is using MoC
             if (Caster is NecromancerPet)
             {
-                if ((Caster as NecromancerPet).Owner.EffectList.GetOfType<MasteryofConcentrationEffect>() != null)
+                if ((Caster as NecromancerPet)!.Owner.EffectList.GetOfType<MasteryofConcentrationEffect>() != null)
                 {
-                    MasteryofConcentrationAbility necroRA = (Caster as NecromancerPet).Owner.GetAbility<MasteryofConcentrationAbility>();
+                    MasteryofConcentrationAbility necroRA = (Caster as NecromancerPet)!.Owner.GetAbility<MasteryofConcentrationAbility>();
                     if (necroRA != null && necroRA.Level > 0)
                     {
                         effectiveness *= System.Math.Round((double)necroRA.GetAmountForLevel(necroRA.Level) / 100, 2);
@@ -2655,7 +2655,7 @@ namespace DOL.GS.Spells
                 }
             }
 
-            if (Caster is GamePlayer && (Caster as GamePlayer).CharacterClass.ID == (int)eCharacterClass.Warlock && m_spell.IsSecondary)
+            if (Caster is GamePlayer && (Caster as GamePlayer)!.CharacterClass.ID == (int)eCharacterClass.Warlock && m_spell.IsSecondary)
             {
                 Spell uninterruptibleSpell = Caster.TempProperties.getProperty<Spell>(UninterruptableSpellHandler.WARLOCK_UNINTERRUPTABLE_SPELL);
 
@@ -2675,8 +2675,8 @@ namespace DOL.GS.Spells
                 // with an AoE spell, whether it landed or was resisted.
 
                 if (Spell.Radius > 0 && Spell.Target.ToLower() == "enemy"
-                    && Caster is GameNPC && (Caster as GameNPC).Brain is IOldAggressiveBrain)
-                    ((Caster as GameNPC).Brain as IOldAggressiveBrain).AddToAggroList(t, 1);
+                    && Caster is GameNPC && (Caster as GameNPC)!.Brain is IOldAggressiveBrain)
+                    ((Caster as GameNPC)!.Brain as IOldAggressiveBrain)!.AddToAggroList(t, 1);
                 if (Util.Chance(CalculateSpellResistChance(t)))
                 {
                     OnSpellResisted(t);
@@ -3771,9 +3771,9 @@ namespace DOL.GS.Spells
 
             // For pets the stats of the owner have to be taken into account.
 
-            if (Caster is GameNPC && ((Caster as GameNPC).Brain) is IControlledBrain)
+            if (Caster is GameNPC && ((Caster as GameNPC)!.Brain) is IControlledBrain)
             {
-                player = (((Caster as GameNPC).Brain) as IControlledBrain).Owner as GamePlayer;
+                player = (((Caster as GameNPC)!.Brain) as IControlledBrain)!.Owner as GamePlayer;
             }
 
             if (player != null)
@@ -3848,7 +3848,7 @@ namespace DOL.GS.Spells
             int spellLevel = Spell.Level;
 
             GameLiving caster = null;
-            if (m_caster is GameNPC && (m_caster as GameNPC).Brain is ControlledNpcBrain)
+            if (m_caster is GameNPC && (m_caster as GameNPC)!.Brain is ControlledNpcBrain)
             {
                 caster = ((ControlledNpcBrain)((GameNPC)m_caster).Brain).Owner;
             }
@@ -4015,7 +4015,7 @@ namespace DOL.GS.Spells
             // apply spell effectiveness
             finalDamage = (int)(finalDamage * effectiveness);
 
-            if ((m_caster is GamePlayer || (m_caster is GameNPC && (m_caster as GameNPC).Brain is IControlledBrain && m_caster.Realm != 0)))
+            if ((m_caster is GamePlayer || (m_caster is GameNPC && (m_caster as GameNPC)!.Brain is IControlledBrain && m_caster.Realm != 0)))
             {
                 if (target is GamePlayer)
                     finalDamage = (int)((double)finalDamage * ServerProperties.Properties.PVP_SPELL_DAMAGE);
@@ -4108,8 +4108,8 @@ namespace DOL.GS.Spells
                 if (ad.Target.Endurance + enduconversion > ad.Target.MaxEndurance) enduconversion = ad.Target.MaxEndurance - ad.Target.Endurance;
                 if (manaconversion < 1) manaconversion = 0;
                 if (enduconversion < 1) enduconversion = 0;
-                if (manaconversion >= 1) (ad.Target as GamePlayer).Out.SendMessage(LanguageMgr.GetTranslation((ad.Target as GamePlayer)?.Client, "GameLiving.AttackData.GainPowerPoints", manaconversion), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
-                if (enduconversion >= 1) (ad.Target as GamePlayer).Out.SendMessage(LanguageMgr.GetTranslation((ad.Target as GamePlayer)?.Client, "GameLiving.AttackData.GainEndurancePoints", enduconversion), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                if (manaconversion >= 1) (ad.Target as GamePlayer)!.Out.SendMessage(LanguageMgr.GetTranslation((ad.Target as GamePlayer)?.Client, "GameLiving.AttackData.GainPowerPoints", manaconversion), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                if (enduconversion >= 1) (ad.Target as GamePlayer)!.Out.SendMessage(LanguageMgr.GetTranslation((ad.Target as GamePlayer)?.Client, "GameLiving.AttackData.GainEndurancePoints", enduconversion), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
                 ad.Target.Endurance += enduconversion; if (ad.Target.Endurance > ad.Target.MaxEndurance) ad.Target.Endurance = ad.Target.MaxEndurance;
                 ad.Target.Mana += manaconversion; if (ad.Target.Mana > ad.Target.MaxMana) ad.Target.Mana = ad.Target.MaxMana;
             }

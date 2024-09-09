@@ -65,7 +65,7 @@ namespace DOL.GS
     /// </summary>
     public class GamePlayer : GameLiving
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()!.DeclaringType);
 
         private static long reputationDaysDurationInSeconds = Properties.REPUTATION_DAYS_INTERVAL * 86400;
 
@@ -4810,6 +4810,8 @@ namespace DOL.GS
             return factor;
         }
 
+        public long BountyPointCap => Properties.BOUNTY_POINT_CAP;
+
         /// <summary>
         /// Player gains bounty points
         /// </summary>
@@ -4876,6 +4878,14 @@ namespace DOL.GS
                 }
             }
 
+            long currentBPs = BountyPointBalance;
+
+            if (currentBPs + amount > BountyPointCap)
+            {
+                amount = BountyPointCap - currentBPs;
+                if (amount < 0) amount = 0;
+            }
+
             if (notify)
                 base.GainBountyPoints(amount);
 
@@ -4891,6 +4901,26 @@ namespace DOL.GS
         public void AddBountyPoints(long amount)
         {
             Wallet.AddMoney(Currency.BountyPoints.Mint(amount));
+        }
+
+        /// <summary>
+        /// Removes bounty points from the player
+        /// </summary>
+        /// <param name="amount">The amount of bounty points to remove</param>
+        public void RemoveBountyPoints(long amount)
+        {
+            if (amount <= 0)
+                return;
+
+            // Ensure we don't go below zero
+            long currentBPs = this.BountyPointBalance;
+            if (amount > currentBPs)
+                amount = currentBPs;
+
+            Wallet.RemoveMoney(Currency.BountyPoints.Mint(amount));
+
+            Out.SendMessage($"You have lost {amount} bounty points.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+            SaveIntoDatabase();
         }
 
         /// <summary>
@@ -7115,7 +7145,7 @@ namespace DOL.GS
 
                     if (weapon != null && weapon is GameInventoryItem)
                     {
-                        (weapon as GameInventoryItem).OnStrikeTarget(this, target);
+                        (weapon as GameInventoryItem)!.OnStrikeTarget(this, target);
                     }
                     //Camouflage - Camouflage will be disabled only when attacking a GamePlayer or ControlledNPC of a GamePlayer.
                     if (HasAbility(Abilities.Camouflage) && target is GamePlayer || (target.GetPlayerOwner() != null))
@@ -7442,7 +7472,7 @@ namespace DOL.GS
 
                                 if (item is GameInventoryItem)
                                 {
-                                    (item as GameInventoryItem).OnStruckByEnemy(this, ad.Attacker);
+                                    (item as GameInventoryItem)!.OnStruckByEnemy(this, ad.Attacker);
                                 }
                             }
 
@@ -7464,7 +7494,7 @@ namespace DOL.GS
 
                             if (reactiveItem is GameInventoryItem)
                             {
-                                (reactiveItem as GameInventoryItem).OnStruckByEnemy(this, ad.Attacker);
+                                (reactiveItem as GameInventoryItem)!.OnStruckByEnemy(this, ad.Attacker);
                             }
                         }
                         break;
@@ -7494,7 +7524,7 @@ namespace DOL.GS
         {
             Client.Out.SendMessage($"---- Attack ({ad.AttackType}) {ad.Attacker?.Name} => {ad.Target?.Name} ----", eChatType.CT_System, eChatLoc.CL_SystemWindow);
             Client.Out.SendMessage($"DEBUG: Damage {ad.Damage} {ad.DamageType} (uncapped {ad.UncappedDamage}) - Critical {ad.CriticalDamage} ({ad.criticalChance}%)", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-            Client.Out.SendMessage($"DEBUG: Miss {(ad.MissChance ?? ad.Target?.ChanceToBeMissed ?? 0) * 100:0.}% - Parry {(ad.ParryChance ?? 0) * 100:0.}% - Evade {(ad.EvadeChance ?? 0) * 100:0.}% - Block {(ad.BlockChance ?? 0) * 100:0.}% - Fumble {(ad.FumbleChance ?? ad.Attacker.ChanceToFumble) * 100:0.}%", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            Client.Out.SendMessage($"DEBUG: Miss {(ad.MissChance ?? ad.Target?.ChanceToBeMissed ?? 0) * 100:0.}% - Parry {(ad.ParryChance ?? 0) * 100:0.}% - Evade {(ad.EvadeChance ?? 0) * 100:0.}% - Block {(ad.BlockChance ?? 0) * 100:0.}% - Fumble {(ad.FumbleChance ?? ad.Attacker!.ChanceToFumble) * 100:0.}%", eChatType.CT_System, eChatLoc.CL_SystemWindow);
             Client.Out.SendMessage($"DEBUG: Weapon damage {ad.weaponDamage} - Style damage {ad.StyleDamage}", eChatType.CT_System, eChatLoc.CL_SystemWindow);
             Client.Out.SendMessage($"DEBUG: Wep stat {ad.weaponStat} Wep skill {ad.weaponSkillFactor} AF {ad.enemyAF:0.##} ABS {ad.enemyABS:0.##} Res {ad.enemyResist:0.##} => Damage * {ad.dmgMod}", eChatType.CT_System, eChatLoc.CL_SystemWindow);
             Client.Out.SendMessage($"DEBUG: Tension rate {ad.TensionRate:0.##}", eChatType.CT_System, eChatLoc.CL_SystemWindow);
@@ -8414,7 +8444,7 @@ namespace DOL.GS
         {
             // ambiant talk
             if (killer is GameNPC)
-                (killer as GameNPC).FireAmbientSentence(GameNPC.eAmbientTrigger.killing, this);
+                (killer as GameNPC)!.FireAmbientSentence(GameNPC.eAmbientTrigger.killing, this);
 
             CharacterClass.Die(killer);
 
@@ -8435,7 +8465,7 @@ namespace DOL.GS
 
             string location = "";
             if (CurrentAreas.Count > 0 && (CurrentAreas[0] is Area.BindArea) == false)
-                location = (CurrentAreas[0] as AbstractArea).Description;
+                location = (CurrentAreas[0] as AbstractArea)!.Description;
             else
                 location = CurrentZone.Description;
 
@@ -9534,10 +9564,10 @@ namespace DOL.GS
                             source.Out.SendMessage("An error occured while trading with " + source.GetPersonalizedName(this), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             return false;
                         }
-                        if (!source.TradeWindow.AddItemToTrade(item))
+                        if (!source.TradeWindow!.AddItemToTrade(item))
                         {
                             source.Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.ReceiveTradeItem.CantTrade"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                            TradeWindow.CloseTrade();
+                            TradeWindow!.CloseTrade();
                             return false;
                         }
                         return true;
@@ -9557,7 +9587,7 @@ namespace DOL.GS
                         return false;
                     }
 
-                    if (!source.TradeWindow.AddItemToTrade(item))
+                    if (!source.TradeWindow!.AddItemToTrade(item))
                     {
                         source.Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.ReceiveTradeItem.CantTrade"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                         return false;
@@ -9745,7 +9775,7 @@ namespace DOL.GS
 
                 if (useItem is IGameInventoryItem)
                 {
-                    if ((useItem as IGameInventoryItem).Use(this))
+                    if ((useItem as IGameInventoryItem)!.Use(this))
                     {
                         return;
                     }
@@ -10576,7 +10606,7 @@ namespace DOL.GS
                 var sender = source as GamePlayer;
                 foreach (string Name in IgnoreList)
                 {
-                    if (sender.Name == Name && sender.Client.Account.PrivLevel < 2)
+                    if (sender!.Name == Name && sender.Client.Account.PrivLevel < 2)
                         return true;
                 }
             }
@@ -11156,7 +11186,7 @@ namespace DOL.GS
         {
             //if we are jumping somewhere away from our house not using house.Exit
             //we need to make the server know we have left the house
-            if ((CurrentHouse != null || InHouse) && CurrentHouse.RegionID != position.RegionID)
+            if ((CurrentHouse != null || InHouse) && CurrentHouse!.RegionID != position.RegionID)
             {
                 InHouse = false;
                 CurrentHouse = null;
@@ -11550,7 +11580,7 @@ namespace DOL.GS
             }
             else
             {
-                if (!currentIgnores.Contains(Name))
+                if (!currentIgnores!.Contains(Name))
                 {
                     currentIgnores.Add(Name);
                     IgnoreList = currentIgnores;
@@ -12359,7 +12389,7 @@ namespace DOL.GS
 
             if (item is IGameInventoryItem)
             {
-                (item as IGameInventoryItem).OnEquipped(this);
+                (item as IGameInventoryItem)!.OnEquipped(this);
             }
 
             if (item.Item_Type >= Slot.RIGHTHAND && item.Item_Type <= Slot.RANGED)
@@ -12566,7 +12596,7 @@ namespace DOL.GS
 
             if (prevSlot == Slot.MYTHICAL && item.Item_Type == (int)eInventorySlot.Mythical && item is GameMythirian)
             {
-                (item as GameMythirian).OnUnEquipped(this);
+                (item as GameMythirian)!.OnUnEquipped(this);
             }
 
             if (item.Item_Type == (int)eInventorySlot.Horse)
@@ -12674,7 +12704,7 @@ namespace DOL.GS
 
             if (item is IGameInventoryItem)
             {
-                (item as IGameInventoryItem).OnUnEquipped(this);
+                (item as IGameInventoryItem)!.OnUnEquipped(this);
             }
 
             if (item.Bonus1Type == (int)eProperty.MythicalSpellReflect ||
@@ -12989,7 +13019,7 @@ namespace DOL.GS
 
             if (item is IGameInventoryItem)
             {
-                gameItem = (item as IGameInventoryItem).Drop(this);
+                gameItem = (item as IGameInventoryItem)!.Drop(this);
             }
             else
             {
@@ -13044,7 +13074,7 @@ namespace DOL.GS
             {
                 WorldInventoryItem floorItem = floorObject as WorldInventoryItem;
 
-                lock (floorItem)
+                lock (floorItem!)
                 {
                     if (floorItem.ObjectState != eObjectState.Active)
                         return false;
@@ -13176,7 +13206,7 @@ namespace DOL.GS
             else if (floorObject is GameMoney)
             {
                 GameMoney moneyObject = floorObject as GameMoney;
-                lock (moneyObject)
+                lock (moneyObject!)
                 {
                     if (moneyObject.ObjectState != eObjectState.Active)
                         return false;
@@ -13265,7 +13295,7 @@ namespace DOL.GS
             else if (floorObject is GameHouseVault && floorObject.CurrentHouse != null)
             {
                 GameHouseVault houseVault = floorObject as GameHouseVault;
-                if (houseVault.Detach(this))
+                if (houseVault!.Detach(this))
                 {
                     ItemTemplate template = GameServer.Database.FindObjectByKey<ItemTemplate>(houseVault.TemplateID);
                     Inventory.AddItem(eInventorySlot.FirstEmptyBackpack, GameInventoryItem.Create(template));
@@ -13281,7 +13311,7 @@ namespace DOL.GS
             else if (floorObject is GameTradingTable)
             {
                 GameTradingTable tradingObject = floorObject as GameTradingTable;
-                if (ObjectId == tradingObject.consignmentMerchant.OwnerID)
+                if (ObjectId == tradingObject!.consignmentMerchant.OwnerID)
                     Out.SendDialogBox(eDialogCode.CloseMarket, 0, 0, 0, 0, eDialogType.YesNo, true,
                         LanguageMgr.GetTranslation(Client, "Commands.Players.Market.Confirm.Close"));
                 return true;
@@ -16037,7 +16067,7 @@ namespace DOL.GS
             /// <summary>
             /// Defines a logger for this class.
             /// </summary>
-            private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+            private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
             /// <summary>
             /// Holds the callback
@@ -17145,7 +17175,7 @@ namespace DOL.GS
                 newStep.MLStep = step;
                 newStep.StepCompleted = true;
                 newStep.ValidationDate = DateTime.Now;
-                m_mlSteps.Add(newStep);
+                m_mlSteps!.Add(newStep);
 
                 // Add it in DB
                 try
@@ -17342,7 +17372,7 @@ namespace DOL.GS
         {
             if (item is IGameInventoryItem)
             {
-                (item as IGameInventoryItem).Delve(delveInfo, this);
+                (item as IGameInventoryItem)!.Delve(delveInfo, this);
             }
             else if (item is InventoryItem)
             {
