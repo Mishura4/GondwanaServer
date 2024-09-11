@@ -15,7 +15,7 @@ namespace DOL.GS
 {
     public class GuildBanner
     {
-        private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()!.DeclaringType);
 
         /// <summary>
         /// Tick timer
@@ -79,6 +79,8 @@ namespace DOL.GS
         }
 
         public Guild Guild { get; set; }
+
+        public string BannerEffectType { get; set; }
 
         public GuildBannerItem BannerItem
         {

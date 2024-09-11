@@ -42,7 +42,7 @@ namespace DOL.GS
     /// </summary>
     public class Guild
     {
-        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
         public enum eRank : int
         {
@@ -1725,34 +1725,30 @@ namespace DOL.GS
         private string bannerStatus;
         public string GuildBannerStatus(GamePlayer player)
         {
-            bannerStatus = "None";
-
-            if (player.Guild != null)
+            if (player.Guild == null)
             {
-                if (player.Guild.HasGuildBanner)
-                {
-                    foreach (GamePlayer plr in player.Guild.GetListOfOnlineMembers())
-                    {
-                        if (plr.GuildBanner != null)
-                        {
-                            if (plr.GuildBanner.BannerItem.Status == GuildBannerItem.eStatus.Active)
-                            {
-                                bannerStatus = "Summoned";
-                            }
-                            else
-                            {
-                                bannerStatus = "Dropped";
-                            }
-                        }
-                    }
-                    if (bannerStatus == "None")
-                    {
-                        bannerStatus = "Not Summoned";
-                    }
-                    return bannerStatus;
-                }
+                return "None";
             }
-            return bannerStatus;
+
+            if (player.Guild.HasGuildBanner)
+            {
+                if (player.Guild.ActiveGuildBanner != null)
+                {
+                    var bannerItem = player.Guild.ActiveGuildBanner.BannerItem;
+                    if (bannerItem.Status == GuildBannerItem.eStatus.Active)
+                    {
+                        string bannerType = player.Guild.ActiveGuildBanner.BannerEffectType.Replace("Effect", "");
+                        return $"Summoned - {bannerType}";
+                    }
+                    else if (bannerItem.Status == GuildBannerItem.eStatus.Dropped)
+                    {
+                        return "Dropped";
+                    }
+                }
+                return "Not Summoned";
+            }
+
+            return "None";
         }
 
         public void UpdateMember(GamePlayer player)

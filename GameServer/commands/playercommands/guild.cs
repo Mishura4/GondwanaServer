@@ -31,6 +31,7 @@ using DOL.Territories;
 using DOL.GS.Finance;
 using DOL.GS.Scripts;
 using System.Numerics;
+using DOL.GS.Effects;
 
 namespace DOL.GS.Commands
 {
@@ -1168,27 +1169,35 @@ namespace DOL.GS.Commands
                                 }
                             }
 
-                            if (GameServer.ServerRules.IsAllowedToSummonBanner(client.Player, false))
+                            GuildBannerEffect bannerEffect = GuildBannerEffect.CreateEffectOfClass(client.Player, client.Player);
+
+                            if (bannerEffect != null)
                             {
-                                client.Player.Guild.ActiveGuildBanner = new GuildBanner(client.Player);
-                                foreach (GamePlayer player in client.Player.Guild.GetListOfOnlineMembers())
+                                if (GameServer.ServerRules.IsAllowedToSummonBanner(client.Player, false))
                                 {
-                                    if (player == client.Player)
+                                    client.Player.Guild.ActiveGuildBanner = new GuildBanner(client.Player);
+                                    client.Player.Guild.ActiveGuildBanner.BannerItem.Status = GuildBannerItem.eStatus.Active;
+                                    client.Player.Guild.ActiveGuildBanner.BannerEffectType = bannerEffect.GetType().Name;
+
+                                    foreach (GamePlayer player in client.Player.Guild.GetListOfOnlineMembers())
                                     {
-                                        player.Out.SendMessage(
-                                            LanguageMgr.GetTranslation(player.Client.Account.Language, "Commands.Players.Guild.BannerSummoned.You", client.Player.Name),
-                                            eChatType.CT_Guild, eChatLoc.CL_SystemWindow
-                                        );
+                                        if (player == client.Player)
+                                        {
+                                            player.Out.SendMessage(
+                                                LanguageMgr.GetTranslation(player.Client.Account.Language, "Commands.Players.Guild.BannerSummoned.You", client.Player.Name),
+                                                eChatType.CT_Guild, eChatLoc.CL_SystemWindow
+                                            );
+                                        }
+                                        else
+                                        {
+                                            player.Out.SendMessage(
+                                                LanguageMgr.GetTranslation(player.Client.Account.Language, "Commands.Players.Guild.BannerSummoned", client.Player.Name),
+                                                eChatType.CT_Guild, eChatLoc.CL_SystemWindow
+                                            );
+                                        }
                                     }
-                                    else
-                                    {
-                                        player.Out.SendMessage(
-                                            LanguageMgr.GetTranslation(player.Client.Account.Language, "Commands.Players.Guild.BannerSummoned", client.Player.Name),
-                                            eChatType.CT_Guild, eChatLoc.CL_SystemWindow
-                                        );
-                                    }
+                                    client.Player.Guild.UpdateGuildWindow();
                                 }
-                                client.Player.Guild.UpdateGuildWindow();
                             }
 
                             break;

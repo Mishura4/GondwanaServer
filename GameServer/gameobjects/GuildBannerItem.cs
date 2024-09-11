@@ -37,7 +37,7 @@ namespace DOL.GS
     /// </summary>
     public class GuildBannerItem : GameInventoryItem
     {
-        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
         public enum eStatus : byte
         {
@@ -71,7 +71,7 @@ namespace DOL.GS
 
         public RegionTimer GroundTimer { get; private set; }
 
-        public eStatus Status { get; private set; }
+        public eStatus Status { get; set; }
 
 
         /// <summary>
