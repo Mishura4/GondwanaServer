@@ -3,6 +3,7 @@ using DOL.Events;
 using DOL.GS.Finance;
 using DOL.GS.PacketHandler;
 using DOL.GS.SkillHandler;
+using DOL.GS.Spells;
 using DOL.Language;
 using log4net;
 using System;
@@ -18,7 +19,7 @@ namespace DOL.GS.Commands
 {
     public class StealCommandHandlerBase : AbstractCommandHandler, ICommandHandler
     {
-        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
         public const int MIN_VOL_TIME = 5; // Secondes
         public const int MAX_VOL_TIME = 15;
@@ -177,7 +178,7 @@ namespace DOL.GS.Commands
 
             Player.Out.SendCloseTimerWindow();
 
-            (Timer.Properties.getProperty<object>(TARGET_STOLE, null) as GamePlayer).TempProperties.removeProperty(PLAYER_STEALER);
+            (Timer.Properties.getProperty<object>(TARGET_STOLE, null) as GamePlayer)!.TempProperties.removeProperty(PLAYER_STEALER);
 
             Player.TempProperties.removeProperty(PLAYER_VOL_TIMER);
         }
@@ -218,6 +219,13 @@ namespace DOL.GS.Commands
             if (Player.IsStunned)
             {
                 Player.Out.SendMessage(LanguageMgr.GetTranslation(Player.Client.Account.Language, "Commands.Players.Vol.Stunned"),
+                    eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return;
+            }
+
+            if (SpellHandler.FindEffectOnTarget(Player, "Damnation") != null)
+            {
+                Player.Out.SendMessage(LanguageMgr.GetTranslation(Player.Client.Account.Language, "Commands.Players.Vol.Damned"),
                     eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
             }
@@ -273,7 +281,7 @@ namespace DOL.GS.Commands
             {
                 int VolTime = Util.Random(MIN_VOL_TIME, MAX_VOL_TIME);
 
-                string TargetRealName = Target.GetName(Target);
+                string TargetRealName = Target!.GetName(Target);
                 Player.Out.SendMessage(LanguageMgr.GetTranslation(Player.Client.Account.Language, "Commands.Players.Vol.Steal", TargetRealName),
                     eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                 Player.Out.SendTimerWindow(LanguageMgr.GetTranslation(Player.Client.Account.Language, "Commands.Players.Vol.StealWindow", TargetRealName), VolTime);

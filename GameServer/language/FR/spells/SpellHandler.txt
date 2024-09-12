@@ -110,6 +110,12 @@ SpellHandler.HealSpell.YouAreHealed:		Vous êtes soigné par {0} pour {1} points
 SpellHandler.HealSpell.CriticalHeal:		Vous réalisez un soin critique et récupérez {0} points de vie supplémentaires !
 SpellHandler.HealSpell.EfficientHealingBuff:	Votre buff de guérison efficace vous apporte {0} points de soin supplémentaires !
 SpellHandler.HealSpell.EfficientEnduranceBuff:	Votre buff d’endurance efficace vous apporte {0} points d’endurance supplémentaires lors du soin !
+SpellHandler.HealSpell.TargetDamnedDamaged:		Vous etes damné ! Le sort de guérison vous inflige {0} dommages au lieu de vous soigner !
+SpellHandler.HealSpell.TargetDamnedPartiallyHealed:	Le sort de guérison est moins efficace car vous etes damné !
+SpellHandler.HealSpell.DamnedNoHeal:		Le sort de guérison ne vous affecte pas car vous etes damné !
+SpellHandler.LifeDrain.TargetDamnedDamaged:		Vous etes damné ! Le drain vital vous inflige {0} dommages au lieu de vous soigner !
+SpellHandler.LifeDrain.TargetDamnedPartiallyHealed:	Le drain vital est moins efficace car vous etes damné !
+SpellHandler.LifeDrain.DamnedNoHeal:		Le sort de drain vital ne vous soigne pas car vous etes damné !
 SpellHandler.SpreadHeal.GroupFullyHealed:	Votre groupe est déjà complètement soigné !
 
 SpellHandler.Zephyr.NoAttackInZephyr:		Vous êtes transporté par un Zéphyr et ne pouvez pas être attaqué !
@@ -124,6 +130,8 @@ SpellHandler.TargetNoLongerInRange:		Votre cible n'est plus à portée.
 SpellHandler.TargetNoLongerInView:		Votre cible n'est plus en vue.
 SpellHandler.SlowSpellHandler.TooFastForEffect:	{0} se déplace trop vite pour que ce sort ait un effet !
 SpellHandler.Earthquake.Ending:			Le séisme a pris fin.
+SpellHandler.YouDamnedResistEffect:			Vous êtes damné et résistez à l'effet !
+SpellHandler.TargetDamnedResistsEffect:		{0} est damné et résiste à l'effet !
 
 SpellHandler.VampiirBolt.CannotCastInCombat:	Vous ne pouvez pas lancer ce sort en combat !
 SpellHandler.VampiirBolt.PowerTaken:		{0} vous prend {1} de Mana !

@@ -64,16 +64,59 @@ namespace DOL.GS.Spells
 
             foreach (GameLiving healTarget in targets)
             {
-                if (target.IsDiseased)
+                if (healTarget.IsDiseased)
                 {
+                    int amnesiaChance = healTarget.TempProperties.getProperty<int>("AmnesiaChance", 50);
+                    int healReductionPercentage = amnesiaChance > 0 ? amnesiaChance : 50;
+                    transferHeal -= (transferHeal * healReductionPercentage) / 100;
+
                     if (Caster is GamePlayer player)
                     {
                         MessageToCaster(LanguageMgr.GetTranslation(player.Client.Account.Language, "Spell.LifeTransfer.TargetDiseased"), eChatType.CT_SpellResisted);
                     }
-                    healed |= HealTarget(healTarget, (transferHeal >>= 1));
+                    healed |= HealTarget(healTarget, transferHeal);
                 }
+                else
+                {
+                    if (SpellHandler.FindEffectOnTarget(healTarget, "Damnation") != null)
+                    {
+                        int harmvalue = healTarget.TempProperties.getProperty<int>("DamnationValue", 0);
 
-                else healed |= HealTarget(healTarget, transferHeal);
+                        if (harmvalue > 0)
+                        {
+                            int damageAmount = (transferHeal * harmvalue) / 100;
+                            transferHeal = 0;
+
+                            AttackData ad = new AttackData
+                            {
+                                Attacker = Caster,
+                                Target = healTarget,
+                                DamageType = eDamageType.Natural,
+                                AttackType = AttackData.eAttackType.Spell,
+                                Damage = damageAmount,
+                                AttackResult = GameLiving.eAttackResult.HitUnstyled,
+                            };
+                            healTarget.TakeDamage(ad);
+
+                            MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "Spell.LifeTransfer.TargetDamnedDamages", damageAmount), eChatType.CT_YouDied);
+                        }
+                        else if (harmvalue < 0)
+                        {
+                            transferHeal = (transferHeal * Math.Abs(harmvalue)) / 100;
+                            MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "Spell.LifeTransfer.TargetDamnedReducedHeal"), eChatType.CT_SpellResisted);
+                            healed |= HealTarget(healTarget, transferHeal);
+                        }
+                        else
+                        {
+                            transferHeal = 0;
+                            MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "Spell.LifeTransfer.TargetDamned"), eChatType.CT_Important);
+                        }
+                    }
+                    else
+                    {
+                        healed |= HealTarget(healTarget, transferHeal);
+                    }
+                }
             }
 
             if (!healed && Spell.Target == "realm")
@@ -171,7 +214,7 @@ namespace DOL.GS.Spells
 
                 if (Bonus_RP_Soin >= 1)
                 {
-                    PlayerStatistics stats = playerOrNecroPetOwner.Statistics as PlayerStatistics;
+                    PlayerStatistics stats = playerOrNecroPetOwner!.Statistics as PlayerStatistics;
 
                     if (stats != null)
                     {

@@ -1,5 +1,8 @@
 
 Spell.LifeTransfer.TargetDiseased:	Votre cible est malade !
+Spell.LifeTransfer.TargetDamnedReducedHeal:	Votre cible est damnée ! Le transfer de points de vie est drastiquement réduit.
+Spell.LifeTransfer.TargetDamned:	Votre cible est damnée ! Le transfer de points de vie échoue.
+Spell.LifeTransfer.TargetDamnedDamages:	Votre cible est damnée ! Le transfer de points de vie échoue et lui cause {0} dommages.
 Spell.LifeTransfer.TargetDead:		{0} est mort(e) !
 Spell.LifeTransfer.SelfTransfer:	Vous ne pouvez pas transférer des points de vie à vous-même.
 Spell.LifeTransfer.InsufficientHealth:	Vous n'avez pas assez de points de vie à transférer.

@@ -8,6 +8,7 @@ Commands.Players.Vol.Area: 					Vous ne pouvez pas voler ici...
 Commands.Players.Vol.Distance: 				Vous etes trop loin de la cible pour la voler !
 Commands.Players.Vol.Hypnotized: 			Vous ne pouvez voler étant hypnotisé !
 Commands.Players.Vol.Stunned:				Vous ne pouvez voler étant assomé !
+Commands.Players.Vol.Damned:				Vous ne pouvez voler étant damné !
 Commands.Players.Vol.AFK:					Vous ne pouvez voler lorsque vous êtes afk ! Tapez /afk pour le désactiver.
 Commands.Players.Vol.Dead:					Vous ne pouvez voler étant mort !
 Commands.Players.Vol.AlreadyStealing:		Vous êtes déjà en train de voler quelqu'un !

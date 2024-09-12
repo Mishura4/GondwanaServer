@@ -18,6 +18,7 @@
  */
 using DOL.GS.PacketHandler;
 using DOL.Language;
+using System;
 
 namespace DOL.GS.Spells
 {
@@ -51,9 +52,46 @@ namespace DOL.GS.Spells
             int heal = (ad.Damage + ad.CriticalDamage) * m_spell.LifeDrainReturn / 100;
             if (m_caster.IsDiseased)
             {
+                int amnesiaChance = m_caster.TempProperties.getProperty<int>("AmnesiaChance", 50);
+                int healReductionPercentage = amnesiaChance > 0 ? amnesiaChance : 50;
+                heal -= (heal * healReductionPercentage) / 100;
+
                 if (m_caster is GamePlayer casterPlayer)
                     MessageToCaster(LanguageMgr.GetTranslation(casterPlayer.Client, "Spell.LifeTransfer.TargetDiseased"), eChatType.CT_SpellResisted);
-                heal >>= 1;
+            }
+
+            if (SpellHandler.FindEffectOnTarget(m_caster, "Damnation") != null)
+            {
+                int harmvalue = m_caster.TempProperties.getProperty<int>("DamnationValue", 0);
+
+                if (harmvalue > 0)
+                {
+                    int damageAmount = (heal * harmvalue) / 100;
+                    heal = 0;
+
+                    AttackData damageAd = new AttackData
+                    {
+                        Attacker = Caster,
+                        Target = m_caster,
+                        DamageType = eDamageType.Natural,
+                        AttackType = AttackData.eAttackType.Spell,
+                        Damage = damageAmount,
+                        AttackResult = GameLiving.eAttackResult.HitUnstyled,
+                    };
+                    target.TakeDamage(damageAd);
+
+                    MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.LifeDrain.TargetDamnedDamaged", damageAmount), eChatType.CT_YouDied);
+                }
+                else if (harmvalue < 0)
+                {
+                    heal = (heal * Math.Abs(harmvalue)) / 100;
+                    MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.LifeDrain.TargetDamnedPartiallyHealed"), eChatType.CT_SpellResisted);
+                }
+                else
+                {
+                    heal = 0;
+                    MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.LifeDrain.DamnedNoHeal"), eChatType.CT_Important);
+                }
             }
             if (heal <= 0) return;
             heal = m_caster.ChangeHealth(m_caster, GameLiving.eHealthChangeType.Spell, heal);

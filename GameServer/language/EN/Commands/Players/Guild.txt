@@ -35,6 +35,7 @@ Commands.Players.Guild.BannerNone:			    Your guild does not have a guild banner
 Commands.Players.Guild.BannerNotAfford:		    Your guild need {0} more merit points to buy a guild banner!
 Commands.Players.Guild.BannerSummoned.You:		    You have summoned your guild banner.
 Commands.Players.Guild.BannerSummoned:		    {0} has summoned the guild banner.
+Commands.Players.Guild.BannerSummonDamned:			You cannot summon a banner while beeing damned!
 Commands.Players.Guild.BannerUnsummoned.You:		You have put away your guild banner.
 Commands.Players.Guild.BannerUnsummoned:			{0} has put away the guild banner.
 Commands.Players.Guild.BannerUnsummoned.You.Forced:	{0} has removed your guild banner.

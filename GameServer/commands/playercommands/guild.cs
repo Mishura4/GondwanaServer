@@ -32,6 +32,7 @@ using DOL.GS.Finance;
 using DOL.GS.Scripts;
 using System.Numerics;
 using DOL.GS.Effects;
+using DOL.GS.Spells;
 
 namespace DOL.GS.Commands
 {
@@ -47,7 +48,7 @@ namespace DOL.GS.Commands
     public class GuildCommandHandler : AbstractCommandHandler, ICommandHandler
     {
 
-        private static log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()!.DeclaringType);
         public long GuildFormCost = Money.GetMoney(0, 0, 1, 0, 0); //Cost to form guild : live = 1g : (mith/plat/gold/silver/copper)
         /// <summary>
         /// Checks if a guildname has valid characters
@@ -259,7 +260,7 @@ namespace DOL.GS.Commands
                                     Guild newGuild = GuildMgr.CreateGuild(client.Player.Realm, guildname, client.Player);
                                     if (newGuild == null)
                                     {
-                                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.UnableToCreate", newGuild.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                        client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.UnableToCreate", newGuild!.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                     }
                                     else
                                     {
@@ -736,14 +737,14 @@ namespace DOL.GS.Commands
                             DOLCharacters ch = obj as DOLCharacters;
                             if (obj is GamePlayer)
                             {
-                                plyName = ply.Name;
+                                plyName = ply!.Name;
                                 guildId = ply.GuildID;
                                 if (ply.GuildRank != null)
                                     guildRank = ply.GuildRank.RankLevel;
                             }
                             else
                             {
-                                plyName = ch.Name;
+                                plyName = ch!.Name;
                                 guildId = ch.GuildID;
                                 guildRank = (byte)ch.GuildRank;
                             }
@@ -761,7 +762,7 @@ namespace DOL.GS.Commands
                                 client.Player.Guild.RemovePlayer(client.Player.Name, ply);
                             else
                             {
-                                ch.GuildID = "";
+                                ch!.GuildID = "";
                                 ch.GuildRank = 9;
                                 GameServer.Database.SaveObject(ch);
                             }
@@ -805,7 +806,7 @@ namespace DOL.GS.Commands
                                 foreach (DOLCharacters ch in chs)
                                 {
                                     plys += (plys != "" ? "," : "") + ch.Name;
-                                    if (isOnline && ch.Name == myclient.Player.Name)
+                                    if (isOnline && ch.Name == myclient!.Player.Name)
                                         client.Player.Guild.RemovePlayer(client.Player.Name, myclient.Player);
                                     else
                                     {
@@ -1005,7 +1006,7 @@ namespace DOL.GS.Commands
                                     case "2": //enable/disable social windows
                                         {
                                             // "P,ShowGuildWindow,ShowAllianceWindow,?,ShowLFGuildWindow(only with guild),0,0" // news and friend windows always showed
-                                            client.Out.SendMessage("P," + (client.Player.Guild == null ? "0" : "1") + (client.Player.Guild.AllianceId != string.Empty ? "0" : "1") + ",0,0,0,0", eChatType.CT_SocialInterface, eChatLoc.CL_SystemWindow);
+                                            client.Out.SendMessage("P," + (client.Player.Guild == null ? "0" : "1") + (client.Player.Guild!.AllianceId != string.Empty ? "0" : "1") + ",0,0,0,0", eChatType.CT_SocialInterface, eChatLoc.CL_SystemWindow);
                                             break;
                                         }
                                     default:
@@ -1116,6 +1117,12 @@ namespace DOL.GS.Commands
                             if (client.Player.Guild == null)
                             {
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NotMember"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                return;
+                            }
+
+                            if (SpellHandler.FindEffectOnTarget(client.Player, "Damnation") != null)
+                            {
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.BannerSummonDamned"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 return;
                             }
 
@@ -1535,7 +1542,7 @@ namespace DOL.GS.Commands
                                     }
                                 }
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.BannerUnsummoned.You"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-                                banner.Guild.UpdateGuildWindow();
+                                banner.Guild!.UpdateGuildWindow();
                             }
                             else // player is not wearing a banner, find banner in guild
                             {
@@ -2331,7 +2338,7 @@ namespace DOL.GS.Commands
                             }
                             #endregion
                             #region Enough members to form Check
-                            if (group.MemberCount < Properties.GUILD_NUM)
+                            if (group!.MemberCount < Properties.GUILD_NUM)
                             {
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.FormNoMembers" + Properties.GUILD_NUM), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 return;
@@ -2603,14 +2610,14 @@ namespace DOL.GS.Commands
                             }
                             if (obj is GamePlayer)
                             {
-                                ply.GuildRank = guild.GetRankByID(newrank);
+                                ply!.GuildRank = guild.GetRankByID(newrank);
                                 ply.SaveIntoDatabase();
                                 ply.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.PromotedSelf", newrank.ToString()), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 ply.Out.SendUpdatePlayer();
                             }
                             else
                             {
-                                ch.GuildRank = newrank;
+                                ch!.GuildRank = newrank;
                                 GameServer.Database.SaveObject(ch);
                                 GameServer.Database.FillObjectRelations(ch);
                             }
@@ -2730,7 +2737,7 @@ namespace DOL.GS.Commands
                             DOLCharacters ch = obj as DOLCharacters;
                             if (obj is GamePlayer)
                             {
-                                plyName = ply.Name;
+                                plyName = ply!.Name;
                                 guildId = ply.GuildID;
                                 guild = ply.Guild;
                                 if (ply.GuildRank != null)
@@ -2738,7 +2745,7 @@ namespace DOL.GS.Commands
                             }
                             else
                             {
-                                plyName = ch.Name;
+                                plyName = ch!.Name;
                                 guildId = ch.GuildID;
                                 guildRank = ch.GuildRank;
                                 guild = GuildMgr.GetGuildByGuildID(guildId);
@@ -2758,14 +2765,14 @@ namespace DOL.GS.Commands
                                 }
                                 if (obj is GamePlayer)
                                 {
-                                    ply.GuildRank = guild.GetRankByID(newrank);
+                                    ply!.GuildRank = guild.GetRankByID(newrank);
                                     ply.SaveIntoDatabase();
                                     ply.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Demoted.Self", newrank.ToString()), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                     ply.Out.SendUpdatePlayer();
                                 }
                                 else
                                 {
-                                    ch.GuildRank = newrank;
+                                    ch!.GuildRank = newrank;
                                     GameServer.Database.SaveObject(ch);
                                 }
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Demoted.Other", plyName, client.Player.Name, newrank.ToString()), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
@@ -3292,7 +3299,7 @@ namespace DOL.GS.Commands
                             GamePlayer inviter = client.Player.TempProperties.getProperty<object>("allianceinvite", null) as GamePlayer;
                             client.Player.TempProperties.removeProperty("allianceinvite");
                             client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Alliance.Declined"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
-                            inviter.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Alliance.DeclinedOther"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
+                            inviter!.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.Alliance.DeclinedOther"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                             return;
                         }
                     #endregion
@@ -3653,10 +3660,10 @@ namespace DOL.GS.Commands
                             }
                             else
                             {
-                                client.Player.Guild.SetGuildBank(client.Player, amount);
+                                client.Player.Guild!.SetGuildBank(client.Player, amount);
                                 client.Player.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.DepositAmount", Money.GetString(long.Parse(amount.ToString()))), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
                             }
-                            client.Player.Guild.UpdateGuildWindow();
+                            client.Player.Guild!.UpdateGuildWindow();
                         }
                         break;
                     #endregion
@@ -3667,7 +3674,7 @@ namespace DOL.GS.Commands
                             {
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NotMember"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             }
-                            if (!client.Player.Guild.HasRank(client.Player, Guild.eRank.Withdraw))
+                            if (!client.Player.Guild!.HasRank(client.Player, Guild.eRank.Withdraw))
                             {
                                 client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Guild.NoPrivileges"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 return;

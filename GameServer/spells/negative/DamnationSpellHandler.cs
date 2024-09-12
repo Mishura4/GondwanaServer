@@ -35,9 +35,17 @@ namespace DOL.GS.Spells
         {
             GameLiving living = effect.Owner;
 
-            living.CancelAllSpeedOrPulseEffects();
+            int harmvalue = (int)Spell.Value;
+            living.TempProperties.setProperty("DamnationValue", harmvalue);
+            living.DamnationCancelBuffEffects();
+
             if (living is GamePlayer player)
             {
+                if (player.GuildBanner != null)
+                {
+                    player.GuildBanner.ForceBannerDrop();
+                }
+
                 living.TempProperties.setProperty("OriginalModel", living.Model);
                 MessageToLiving(player, LanguageMgr.GetTranslation(player.Client, "Damnation.Self.Message2"), eChatType.CT_Spell);
                 switch (living.Race)
@@ -174,6 +182,28 @@ namespace DOL.GS.Spells
         }
 
         public override string ShortDescription
-            => $"The target is condemned, turned into a zombie and loses all its spell enhancements. The target will inevitably die after {Spell.Duration / 1000} seconds. No cure can reverse this effect... Undead monsters are not affected by this spell.";
+        {
+            get
+            {
+                string description = $"The target is condemned, turned into a zombie and loses all its spell enhancements. The target will inevitably die after {Spell.Duration / 1000} seconds. No cure can reverse this effect.";
+
+                if (Spell.Value < 0)
+                {
+                    description += $" Healing is severely reduced to only {Math.Abs(Spell.Value)}%.";
+                }
+                else if (Spell.Value == 0)
+                {
+                    description += " Healing will have no effect on the target.";
+                }
+                else if (Spell.Value > 0)
+                {
+                    description += $" Healing will be converted by {Spell.Value}% into damages.";
+                }
+
+                description += " Undead monsters are not affected by this spell.";
+
+                return description;
+            }
+        }
     }
 }

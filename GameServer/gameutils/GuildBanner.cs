@@ -233,6 +233,11 @@ namespace DOL.GS
             Stop();
         }
 
+        public void ForceBannerDrop()
+        {
+            PlayerPutAwayBanner(null, this.CarryingPlayer, EventArgs.Empty);
+        }
+
         protected int LeaveGroupCallback(RegionTimer timer)
         {
             timer.Stop();

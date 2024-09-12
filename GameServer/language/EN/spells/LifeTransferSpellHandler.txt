@@ -1,5 +1,8 @@
 
 Spell.LifeTransfer.TargetDiseased:	Your target is diseased!
+Spell.LifeTransfer.TargetDamnedReducedHeal:	Your target is damned! The health transfer has reduced effectiveness.
+Spell.LifeTransfer.TargetDamned:	Your target is damned! The health transfer fails and has no effect.
+Spell.LifeTransfer.TargetDamnedDamages:	Your target is damned! The health transfer inflicts {0} damage instead of restoring health!
 Spell.LifeTransfer.TargetDead:		{0} is dead!
 Spell.LifeTransfer.SelfTransfer:	You cannot transfer life to yourself.
 Spell.LifeTransfer.InsufficientHealth:	You do not have enough health to transfer.

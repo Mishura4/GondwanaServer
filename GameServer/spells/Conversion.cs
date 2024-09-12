@@ -95,7 +95,7 @@ namespace DOL.GS.Spells
             }
             int reduceddmg = living.TempProperties.getProperty<int>(ConvertDamage);
             double absorbPercent = Spell.Damage;
-            int damageConverted = (int)(0.01 * absorbPercent * (ad.Damage + ad.CriticalDamage));
+            int damageConverted = (int)(0.01 * absorbPercent * (ad!.Damage + ad.CriticalDamage));
 
             if (damageConverted > reduceddmg)
             {
@@ -194,9 +194,9 @@ namespace DOL.GS.Spells
             }
 
 
-            if (ad.Damage > 0)
+            if (ad!.Damage > 0)
             {
-                switch (attackedByEnemy.AttackData.AttackType)
+                switch (attackedByEnemy!.AttackData.AttackType)
                 {
                     case AttackData.eAttackType.Spell:
                         {

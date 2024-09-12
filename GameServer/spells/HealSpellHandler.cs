@@ -67,6 +67,40 @@ namespace DOL.GS.Spells
                     MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "Spell.LifeTransfer.TargetDiseased"), eChatType.CT_SpellResisted);
                 }
 
+                if (SpellHandler.FindEffectOnTarget(healTarget, "Damnation") != null)
+                {
+                    int harmvalue = healTarget.TempProperties.getProperty<int>("DamnationValue", 0);
+
+                    if (harmvalue > 0)
+                    {
+                        int damageAmount = (heal * harmvalue) / 100;
+                        heal = 0;
+                        AttackData ad = new AttackData
+                        {
+                            Attacker = Caster,
+                            Target = healTarget,
+                            DamageType = eDamageType.Natural,
+                            AttackType = AttackData.eAttackType.Spell,
+                            Damage = damageAmount,
+                            AttackResult = GameLiving.eAttackResult.HitUnstyled,
+                            CausesCombat = false,
+                        };
+                        healTarget.TakeDamage(ad);
+
+                        MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.HealSpell.TargetDamnedDamaged", damageAmount), eChatType.CT_YouDied);
+                    }
+                    else if (harmvalue < 0)
+                    {
+                        heal = (heal * Math.Abs(harmvalue)) / 100;
+                        MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.HealSpell.TargetDamnedPartiallyHealed"), eChatType.CT_SpellResisted);
+                    }
+                    else
+                    {
+                        heal = 0;
+                        MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.HealSpell.DamnedNoHeal"), eChatType.CT_Important);
+                    }
+                }
+
                 if (SpellLine.KeyName == GlobalSpellsLines.Item_Effects)
                 {
                     healed |= ProcHeal(healTarget, heal);
@@ -250,7 +284,7 @@ namespace DOL.GS.Spells
 
             #endregion PVP DAMAGE
 
-            if (m_caster == target)
+            if (m_caster == target && (SpellHandler.FindEffectOnTarget(m_caster, "Damnation") != null))
             {
                 MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.HealSpell.SelfHealed", heal), eChatType.CT_Spell);
                 if (heal < amount)
@@ -271,7 +305,7 @@ namespace DOL.GS.Spells
             {
                 MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.HealSpell.TargetHealed", m_caster.GetPersonalizedName(target), heal), eChatType.CT_Spell);
                 MessageToLiving(target, LanguageMgr.GetTranslation((target as GamePlayer)?.Client, "SpellHandler.HealSpell.YouAreHealed", target.GetPersonalizedName(m_caster), heal), eChatType.CT_Spell);
-                if (heal < amount)
+                if (heal < amount && (SpellHandler.FindEffectOnTarget(target, "Damnation") != null))
                 {
 
                     #region PVP DAMAGE
@@ -311,7 +345,7 @@ namespace DOL.GS.Spells
 
             int heal = target.ChangeHealth(Caster, GameLiving.eHealthChangeType.Spell, (int)Math.Round(amount));
 
-            if (m_caster == target && heal > 0)
+            if (m_caster == target && heal > 0 && (SpellHandler.FindEffectOnTarget(m_caster, "Damnation") != null))
             {
                 MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.HealSpell.SelfHealed", heal), eChatType.CT_Spell);
 
@@ -319,7 +353,7 @@ namespace DOL.GS.Spells
                 {
                     MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.HealSpell.FullyHealedSelf"), eChatType.CT_Spell);
                     #region PVP DAMAGE
-                    
+
                     if (target.DamageRvRMemory > 0 && (target is GamePlayer || (target as NecromancerPet)?.GetLivingOwner() is not null))
                     {
                         target.DamageRvRMemory = 0; //Remise a zéro compteur dommages/heal rps

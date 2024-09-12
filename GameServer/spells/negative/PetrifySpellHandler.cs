@@ -69,6 +69,11 @@ namespace DOL.GS.Spells
 
             if (living is GamePlayer player)
             {
+                if (player.GuildBanner != null)
+                {
+                    player.GuildBanner.ForceBannerDrop();
+                }
+
                 living.TempProperties.setProperty("OriginalModel", living.Model);
                 switch (living.Race)
                 {

@@ -21,6 +21,7 @@ using DOL.AI.Brain;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
 using DOL.Language;
+using System.Numerics;
 
 namespace DOL.GS.Spells
 {

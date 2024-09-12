@@ -58,7 +58,7 @@ namespace DOL.GS
     /// </summary>
     public abstract class GameLiving : GameObject
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()!.DeclaringType);
 
         #region Combat
         /// <summary>
@@ -1794,7 +1794,7 @@ namespace DOL.GS
                 }
 
                 var player = this as GamePlayer;
-                double weaponSkillFactor = player != null ? player.CharacterClass.WeaponSkillFactor((eObjectType)weapon.Object_Type) : 20;
+                double weaponSkillFactor = player != null ? player.CharacterClass.WeaponSkillFactor((eObjectType)weapon!.Object_Type) : 20;
                 double dmgStat = GetWeaponStat(weapon);
                 double myEffectiveLevel = Level;
                 if (this is GameNPC)
@@ -1882,7 +1882,7 @@ namespace DOL.GS
                 if ((ServerProperties.Properties.MOB_DAMAGE_INCREASE_STARTLEVEL == 0 || Level > ServerProperties.Properties.MOB_DAMAGE_INCREASE_STARTLEVEL) &&
                     ServerProperties.Properties.MOB_DAMAGE_INCREASE_PERLEVEL > 0 &&
                     damage > 0 &&
-                    this is GameNPC && (this as GameNPC).Brain is IControlledBrain == false)
+                    this is GameNPC && (this as GameNPC)!.Brain is IControlledBrain == false)
                 {
                     double modifiedDamage = ServerProperties.Properties.MOB_DAMAGE_INCREASE_PERLEVEL * (Level - ServerProperties.Properties.MOB_DAMAGE_INCREASE_STARTLEVEL);
                     damage += (modifiedDamage * effectiveness);
@@ -1902,8 +1902,8 @@ namespace DOL.GS
                     if (ad.Target.Endurance + enduconversion > ad.Target.MaxEndurance) enduconversion = ad.Target.MaxEndurance - ad.Target.Endurance;
                     if (manaconversion < 1) manaconversion = 0;
                     if (enduconversion < 1) enduconversion = 0;
-                    if (manaconversion >= 1) (ad.Target as GamePlayer).Out.SendMessage(string.Format(LanguageMgr.GetTranslation((ad.Target as GamePlayer).Client.Account.Language, "GameLiving.AttackData.GainPowerPoints"), manaconversion), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
-                    if (enduconversion >= 1) (ad.Target as GamePlayer).Out.SendMessage(string.Format(LanguageMgr.GetTranslation((ad.Target as GamePlayer).Client.Account.Language, "GameLiving.AttackData.GainEndurancePoints"), enduconversion), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                    if (manaconversion >= 1) (ad.Target as GamePlayer)!.Out.SendMessage(string.Format(LanguageMgr.GetTranslation((ad.Target as GamePlayer)!.Client.Account.Language, "GameLiving.AttackData.GainPowerPoints"), manaconversion), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                    if (enduconversion >= 1) (ad.Target as GamePlayer)!.Out.SendMessage(string.Format(LanguageMgr.GetTranslation((ad.Target as GamePlayer)!.Client.Account.Language, "GameLiving.AttackData.GainEndurancePoints"), enduconversion), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
                     ad.Target.Endurance += enduconversion; if (ad.Target.Endurance > ad.Target.MaxEndurance) ad.Target.Endurance = ad.Target.MaxEndurance;
                     ad.Target.Mana += manaconversion; if (ad.Target.Mana > ad.Target.MaxMana) ad.Target.Mana = ad.Target.MaxMana;
                 }
@@ -2580,18 +2580,18 @@ namespace DOL.GS
 
                 if (attackTarget != null && !owner.IsWithinRadius(attackTarget, owner.AttackRange) && owner.ActiveWeaponSlot != eActiveWeaponSlot.Distance)
                 {
-                    if (owner is GameNPC && (owner as GameNPC).Brain is StandardMobBrain && ((owner as GameNPC).Brain as StandardMobBrain).AggroTable.Count > 0 && (owner as GameNPC).Brain is IControlledBrain == false)
+                    if (owner is GameNPC && (owner as GameNPC)!.Brain is StandardMobBrain && ((owner as GameNPC)!.Brain as StandardMobBrain)!.AggroTable.Count > 0 && (owner as GameNPC)!.Brain is IControlledBrain == false)
                     {
                         #region Attack another target in range
 
                         GameNPC npc = owner as GameNPC;
-                        StandardMobBrain npc_brain = npc.Brain as StandardMobBrain;
+                        StandardMobBrain npc_brain = npc!.Brain as StandardMobBrain;
                         GameLiving Possibly_target = null;
                         long maxaggro = 0, aggro = 0;
 
                         foreach (GamePlayer player_test in owner.GetPlayersInRadius((ushort)owner.AttackRange))
                         {
-                            if (npc_brain.AggroTable.ContainsKey(player_test))
+                            if (npc_brain!.AggroTable.ContainsKey(player_test))
                             {
                                 aggro = npc_brain.GetAggroAmountForLiving(player_test);
                                 if (aggro <= 0) continue;
@@ -2604,7 +2604,7 @@ namespace DOL.GS
                         }
                         foreach (GameNPC target_possibility in owner.GetNPCsInRadius((ushort)owner.AttackRange))
                         {
-                            if (npc_brain.AggroTable.ContainsKey(target_possibility))
+                            if (npc_brain!.AggroTable.ContainsKey(target_possibility))
                             {
                                 aggro = npc_brain.GetAggroAmountForLiving(target_possibility);
                                 if (aggro <= 0) continue;
@@ -2912,7 +2912,7 @@ namespace DOL.GS
                    && mainHandAD.AttackType == AttackData.eAttackType.Ranged
                    && (mainHandAD.AttackResult == eAttackResult.HitUnstyled || mainHandAD.AttackResult == eAttackResult.HitStyle))
                 {
-                    if (mainHandAD.Target.TargetObject == null)
+                    if (mainHandAD.Target!.TargetObject == null)
                     {
                         if (mainHandAD.Target is GamePlayer)
                         {
@@ -3040,7 +3040,7 @@ namespace DOL.GS
                 //so here they update it after they swing
                 //update internal heading, do not send update to client
                 if (owner is GameNPC)
-                    (owner as GameNPC).TurnTo(mainHandAD.Target, false);
+                    (owner as GameNPC)!.TurnTo(mainHandAD.Target, false);
 
                 Stop();
                 return;
@@ -3139,7 +3139,7 @@ namespace DOL.GS
                 if (ad.Target.EffectList.GetOfType<RemedyEffect>() != null)
                 {
                     if (this is GamePlayer)
-                        (this as GamePlayer).Out.SendMessage(LanguageMgr.GetTranslation((this as GamePlayer).Client.Account.Language, "GameLiving.CheckWeaponMagicalEffect.Protected"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                        (this as GamePlayer)!.Out.SendMessage(LanguageMgr.GetTranslation((this as GamePlayer)?.Client.Account.Language, "GameLiving.CheckWeaponMagicalEffect.Protected"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                     return;
                 }
 
@@ -3150,7 +3150,7 @@ namespace DOL.GS
                 if (ad.Attacker is GamePlayer)
                 {
                     GamePlayer PlayerAttacker = ad.Attacker as GamePlayer;
-                    if (PlayerAttacker.GetSpellLine("Spymaster") != null)
+                    if (PlayerAttacker!.GetSpellLine("Spymaster") != null)
                         if (Util.ChanceDouble((double)(15 * 0.0001))) return;
                 }
                 weapon.PoisonCharges--;
@@ -3190,7 +3190,7 @@ namespace DOL.GS
                             {
                                 if (this is GamePlayer)
                                 {
-                                    (this as GamePlayer).Out.SendMessage(LanguageMgr.GetTranslation((this as GamePlayer).Client.Account.Language, "GameLiving.StartWeaponMagicalEffect.NotPowerful"), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
+                                    (this as GamePlayer)!.Out.SendMessage(LanguageMgr.GetTranslation((this as GamePlayer)?.Client.Account.Language, "GameLiving.StartWeaponMagicalEffect.NotPowerful"), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
                                 }
                                 return;
                             }
@@ -3375,8 +3375,8 @@ namespace DOL.GS
 
             if (npc != null)
             {
-                if (npc.Brain is IControlledBrain && (npc.Brain as IControlledBrain).Owner is GamePlayer)
-                    return (npc.Brain as IControlledBrain).Owner as GamePlayer;
+                if (npc.Brain is IControlledBrain && (npc.Brain as IControlledBrain)!.Owner is GamePlayer)
+                    return (npc.Brain as IControlledBrain)!.Owner as GamePlayer;
             }
 
             return null;
@@ -3453,7 +3453,7 @@ namespace DOL.GS
 
                     if (effect is GameSpellEffect)
                     {
-                        switch ((effect as GameSpellEffect).Spell.SpellType)
+                        switch ((effect as GameSpellEffect)!.Spell.SpellType)
                         {
                             case "Phaseshift":
                                 if (phaseshift == null)
@@ -3519,7 +3519,7 @@ namespace DOL.GS
                     if (attacker.ActiveWeaponSlot != eActiveWeaponSlot.Distance)
                     {
                         GamePlayer target = this as GamePlayer;
-                        GamePlayer bodyguard = target.Bodyguard;
+                        GamePlayer bodyguard = target!.Bodyguard;
                         if (bodyguard != null)
                         {
                             target.Out.SendMessage(String.Format(LanguageMgr.GetTranslation(target.Client.Account.Language, "GameLiving.CalculateEnemyAttackResult.YouWereProtected"), bodyguard.Name, attacker.Name), eChatType.CT_Missed, eChatLoc.CL_SystemWindow);
@@ -3622,7 +3622,7 @@ namespace DOL.GS
                         if (guard.GuardSource is GameNPC)
                             guardchance = guard.GuardSource.GetModified(eProperty.BlockChance) * 0.001;
                         else
-                            guardchance = guard.GuardSource.GetModified(eProperty.BlockChance) * leftHand.Quality * 0.00001;
+                            guardchance = guard.GuardSource.GetModified(eProperty.BlockChance) * leftHand!.Quality * 0.00001;
                         guardchance *= guardLevel * 0.3 + 0.05;
                         guardchance += attackerConLevel * 0.05;
                         int shieldSize = 0;
@@ -4111,14 +4111,14 @@ namespace DOL.GS
 
                     {
                         if (engage.Owner is GamePlayer)
-                            (engage.Owner as GamePlayer).Out.SendMessage(string.Format(LanguageMgr.GetTranslation((engage.Owner as GamePlayer).Client.Account.Language, "GameLiving.TryBlock.Engage"), engage.EngageTarget.GetName(0, true)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            (engage.Owner as GamePlayer)!.Out.SendMessage(string.Format(LanguageMgr.GetTranslation((engage.Owner as GamePlayer)?.Client.Account.Language, "GameLiving.TryBlock.Engage"), engage.EngageTarget.GetName(0, true)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     }
                     // Check if player has enough endurance left to engage
                     else if (engage.Owner.Endurance >= EngageAbilityHandler.ENGAGE_DURATION_LOST)
                     {
                         engage.Owner.Endurance -= EngageAbilityHandler.ENGAGE_DURATION_LOST;
                         if (engage.Owner is GamePlayer)
-                            (engage.Owner as GamePlayer).Out.SendMessage(LanguageMgr.GetTranslation((engage.Owner as GamePlayer).Client.Account.Language, "GameLiving.TryBlock.Blocking"), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
+                            (engage.Owner as GamePlayer)!.Out.SendMessage(LanguageMgr.GetTranslation((engage.Owner as GamePlayer)?.Client.Account.Language, "GameLiving.TryBlock.Blocking"), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
                         if (blockChance < 0.85)
                             blockChance = 0.85;
                     }
@@ -4411,7 +4411,7 @@ namespace DOL.GS
                         break;
                 }
 
-                foreach (GamePlayer player in ad.Target.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+                foreach (GamePlayer player in ad.Target!.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
                 {
                     if (player == null) continue;
                     int animationId;
@@ -4478,7 +4478,7 @@ namespace DOL.GS
                 {
                     if (attacker is GameLiving)
                     {
-                        (attacker as GameLiving).Notify(GameLivingEvent.EnemyHealed, attacker, args);
+                        (attacker as GameLiving)!.Notify(GameLivingEvent.EnemyHealed, attacker, args);
                         // Desactivate XPGainer, Heal Rps implentation.
                         //(attacker as GameLiving).AddXPGainer(changeSource, healthChanged);
                     }
@@ -5027,7 +5027,7 @@ namespace DOL.GS
 
         public int GetModifiedStrengthForLowLevel()
         {
-            return (m_propertyCalc[(int)eProperty.Strength] as StatCalculator).CalcStrengthValueForMobLowLevel(this);
+            return (m_propertyCalc[(int)eProperty.Strength] as StatCalculator)!.CalcStrengthValueForMobLowLevel(this);
         }
 
 
@@ -5833,9 +5833,19 @@ namespace DOL.GS
             toRemove.ForEach(e => e.Cancel(false));
         }
 
+        public void DamnationCancelBuffEffects()
+        {
+            List<GameSpellEffect> toRemove;
+            lock (EffectList)
+            {
+                toRemove = new List<GameSpellEffect>(EffectList.OfType<GameSpellEffect>().Where(e => e.SpellHandler is SpellHandler spellHandler && (spellHandler.HasPositiveEffect || spellHandler.Spell.SpellType == "Disease" || spellHandler.Spell.Pulse > 0)));
+            }
+            toRemove.ForEach(e => e.Cancel(false));
+        }
+
         #endregion
-        
-        
+
+
 
         #region Calculate Fall Damage
 
@@ -6497,7 +6507,7 @@ namespace DOL.GS
 
                 if (sendUpdates && (isNewAbility && (this is GamePlayer)))
                 {
-                    (this as GamePlayer).Out.SendMessage(LanguageMgr.GetTranslation((this as GamePlayer).Client.Account.Language, "GameObjects.GamePlayer.AddAbility.YouLearn", ability.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    (this as GamePlayer)!.Out.SendMessage(LanguageMgr.GetTranslation((this as GamePlayer)?.Client.Account.Language, "GameObjects.GamePlayer.AddAbility.YouLearn", ability.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 }
             }
         }
@@ -6522,7 +6532,7 @@ namespace DOL.GS
             }
 
             if (this is GamePlayer)
-                (this as GamePlayer).Out.SendMessage(LanguageMgr.GetTranslation((this as GamePlayer).Client.Account.Language, "GameObjects.GamePlayer.RemoveAbility.YouLose", ability.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                (this as GamePlayer)!.Out.SendMessage(LanguageMgr.GetTranslation((this as GamePlayer)?.Client.Account.Language, "GameObjects.GamePlayer.RemoveAbility.YouLose", ability.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
             return true;
         }
 
@@ -6833,7 +6843,7 @@ namespace DOL.GS
                     {
                         GameSpellEffect spellEffect = effect as GameSpellEffect;
 
-                        if (spellEffect.Spell.SpellType == spell.SpellType &&
+                        if (spellEffect!.Spell.SpellType == spell.SpellType &&
                             spellEffect.Spell.EffectGroup == spell.EffectGroup)
                             return true;
                     }
@@ -7126,7 +7136,7 @@ namespace DOL.GS
             if (e == GameLivingEvent.Interrupted && args != null)
             {
                 if (CurrentSpellHandler != null)
-                    CurrentSpellHandler.CasterIsAttacked((args as InterruptedEventArgs).Attacker);
+                    CurrentSpellHandler.CasterIsAttacked((args as InterruptedEventArgs)!.Attacker);
 
                 return;
             }

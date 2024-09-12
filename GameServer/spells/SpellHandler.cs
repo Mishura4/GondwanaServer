@@ -3217,6 +3217,11 @@ namespace DOL.GS.Spells
         /// <returns>chance that spell will be resisted for specific target</returns>
         public virtual int CalculateSpellResistChance(GameLiving target)
         {
+            if (target != null && SpellHandler.FindEffectOnTarget(target, "Damnation") != null && ((HasPositiveEffect && SpellHandler.FindEffectOnTarget(target, "Heal") == null) || Spell.SpellType == "Disease"))
+            {
+                return 100;
+            }
+
             if (m_spellLine.KeyName == GlobalSpellsLines.Combat_Styles_Effect || HasPositiveEffect)
             {
                 return 0;
@@ -3228,7 +3233,7 @@ namespace DOL.GS.Spells
                 if (playerCaster != null)
                 {
                     int itemSpellLevel = m_spellItem.Template.LevelRequirement > 0 ? m_spellItem.Template.LevelRequirement : Math.Min(playerCaster.MaxLevel, m_spellItem.Level);
-                    return 100 - (85 + ((itemSpellLevel - target.Level) / 2));
+                    return 100 - (85 + ((itemSpellLevel - target!.Level) / 2));
                 }
             }
 
@@ -3272,11 +3277,25 @@ namespace DOL.GS.Spells
             }
             else if (target is GamePlayer targetPlayer)
             {
-                MessageToLiving(targetPlayer, LanguageMgr.GetTranslation(targetPlayer.Client, "SpellHandler.YouResistEffect"), eChatType.CT_SpellResisted);
+                if (SpellHandler.FindEffectOnTarget(target, "Damnation") != null && ((HasPositiveEffect && SpellHandler.FindEffectOnTarget(target, "Heal") == null) || Spell.SpellType == "Disease"))
+                {
+                    MessageToLiving(targetPlayer, LanguageMgr.GetTranslation(targetPlayer.Client, "SpellHandler.YouDamnedResistEffect"), eChatType.CT_SpellResisted);
+                }
+                else
+                {
+                    MessageToLiving(targetPlayer, LanguageMgr.GetTranslation(targetPlayer.Client, "SpellHandler.YouResistEffect"), eChatType.CT_SpellResisted);
+                }
             }
 
             // Deliver message to the caster as well.
-            this.MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.TargetResistsEffect", m_caster.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
+            if (target != null && SpellHandler.FindEffectOnTarget((Caster as GamePlayer), "Damnation") != null && ((HasPositiveEffect && SpellHandler.FindEffectOnTarget(target, "Heal") == null) || Spell.SpellType == "Disease"))
+            {
+                this.MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.TargetDamnedResistsEffect", m_caster.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
+            }
+            else
+            {
+                this.MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.TargetResistsEffect", m_caster.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
+            }
         }
 
         /// <summary>
@@ -3878,7 +3897,7 @@ namespace DOL.GS.Spells
 
             if (playerCaster != null && (m_spellLine.KeyName == GlobalSpellsLines.Combat_Styles_Effect || m_spellLine.KeyName.StartsWith(GlobalSpellsLines.Champion_Lines_StartWith)))
             {
-                spellLevel = Math.Min(playerCaster.SpellMaxLevel, target.Level);
+                spellLevel = Math.Min(playerCaster.SpellMaxLevel, target!.Level);
             }
 
             int bonustohit = m_caster.GetModified(eProperty.ToHitBonus);
@@ -3921,7 +3940,7 @@ namespace DOL.GS.Spells
                 missrate -= AdrenalineMageSpellEffect.HIT_BONUS;
             }
 
-            int hitchance = 100 - missrate + ((spellLevel - target.Level) / 2) + bonustohit;
+            int hitchance = 100 - missrate + ((spellLevel - target!.Level) / 2) + bonustohit;
 
             if (!(caster is GamePlayer && target is GamePlayer))
             {

@@ -8,6 +8,7 @@ Commands.Players.Vol.Area: 					You cannot steal here...
 Commands.Players.Vol.Distance: 				You are too far from the target to steal it!
 Commands.Players.Vol.Hypnotized: 			You cannot steal while being mesmerized!
 Commands.Players.Vol.Stunned:				You cannot steal while being stunned!
+Commands.Players.Vol.Damned:				You cannot steal while being damned!
 Commands.Players.Vol.AFK:					You cannot steal while being afk ! Type /afk to disable it.
 Commands.Players.Vol.Dead:					You cannot steal once dead!
 Commands.Players.Vol.AlreadyStealing:		You are already stealing someone!

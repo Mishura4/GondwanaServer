@@ -35,6 +35,7 @@ Commands.Players.Guild.BannerNone:			    Votre guilde ne possède pas de banniè
 Commands.Players.Guild.BannerNotAfford:		    Votre guilde a besoin de {0} points de mérite supplémentaires pour acheter une bannière de guilde !
 Commands.Players.Guild.BannerSummoned.You:		    Vous avez invoqué votre bannière de guilde.
 Commands.Players.Guild.BannerSummoned:				{0} a invoqué la bannière de guilde.
+Commands.Players.Guild.BannerSummonDamned:			Vous êtes damné ! Impossible d'invoquer une bannière de guilde !
 Commands.Players.Guild.BannerUnsummoned.You:		Vous avez retiré votre bannière de guilde.
 Commands.Players.Guild.BannerUnsummoned:			{0} a retiré la bannière de guilde.
 Commands.Players.Guild.BannerUnsummoned.You.Forced:	{0} vous a retiré votre bannière de guilde.

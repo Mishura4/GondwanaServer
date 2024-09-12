@@ -110,6 +110,12 @@ SpellHandler.HealSpell.YouAreHealed:		You are healed by {0} for {1} hit points.
 SpellHandler.HealSpell.CriticalHeal:		Your heal criticals for an extra {0} hit points!
 SpellHandler.HealSpell.EfficientHealingBuff:	Your Efficient Healing buff grants you an additional {0} in the Heal!
 SpellHandler.HealSpell.EfficientEnduranceBuff:	Your Efficient Endurance buff grants you {0} Endurance from the Heal!
+SpellHandler.HealSpell.TargetDamnedDamaged:		You are damned! The healing spell inflicts {0} damage instead of restoring health!
+SpellHandler.HealSpell.TargetDamnedPartiallyHealed:	The healing spell has reduced effectiveness because you are damned!
+SpellHandler.HealSpell.DamnedNoHeal:		The healing spell has no effect because you are damned!
+SpellHandler.LifeDrain.TargetDamnedDamaged:		You are damned! The life drain spell inflicts {0} damage instead of restoring health!
+SpellHandler.LifeDrain.TargetDamnedPartiallyHealed:	The life drain has reduced effectiveness because you are damned!
+SpellHandler.LifeDrain.DamnedNoHeal:		The life drain spell has no effect because you are damned!
 SpellHandler.SpreadHeal.GroupFullyHealed:	Your group is already fully healed!
 
 SpellHandler.Zephyr.NoAttackInZephyr:		You're in a Zephyr and can't be attacked!
@@ -124,6 +130,8 @@ SpellHandler.TargetNoLongerInRange:		Your target is no longer in range.
 SpellHandler.TargetNoLongerInView:		Your target is no longer in view.
 SpellHandler.SlowSpellHandler.TooFastForEffect:	{0} is moving too fast for this spell to have any effect!
 SpellHandler.Earthquake.Ending:			The earthquake has ended.
+SpellHandler.YouDamnedResistEffect:			You are damned and resist the effect!
+SpellHandler.TargetDamnedResistsEffect:		{0} is damned and resists the effect!
 
 SpellHandler.VampiirBolt.CannotCastInCombat:	You cannot cast this spell in combat!
 SpellHandler.VampiirBolt.PowerTaken:		{0} takes {1} power!
