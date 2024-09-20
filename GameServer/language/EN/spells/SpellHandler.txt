@@ -113,9 +113,14 @@ SpellHandler.HealSpell.EfficientEnduranceBuff:	Your Efficient Endurance buff gra
 SpellHandler.HealSpell.TargetDamnedDamaged:		You are damned! The healing spell inflicts {0} damage instead of restoring health!
 SpellHandler.HealSpell.TargetDamnedPartiallyHealed:	The healing spell has reduced effectiveness because you are damned!
 SpellHandler.HealSpell.DamnedNoHeal:		The healing spell has no effect because you are damned!
+SpellHandler.LifeDrain.YouTargetDamnedNoHeal:	The life drain spell has no effect because you are damned as well as your target!
 SpellHandler.LifeDrain.TargetDamnedDamaged:		You are damned! The life drain spell inflicts {0} damage instead of restoring health!
-SpellHandler.LifeDrain.TargetDamnedPartiallyHealed:	The life drain has reduced effectiveness because you are damned!
+SpellHandler.LifeDrain.TargetDamnedPartiallyHealed:	The life drain has reduced effectiveness because {0} is damned!
 SpellHandler.LifeDrain.DamnedNoHeal:		The life drain spell has no effect because you are damned!
+SpellHandler.LifeDrain.DamnedTargetHealed:				{0} is healed and gains {1} health points!
+SpellHandler.LifeDrain.DamnedTargetCriticallyHealed:	{0} is critically healed and gains {1} health points!
+SpellHandler.LifeDrain.DamnedYouHealed:				You are healed and gain {0} health points!
+SpellHandler.LifeDrain.DamnedYouCriticallyHealed:	You are critically healed and gain {0} health points!
 SpellHandler.SpreadHeal.GroupFullyHealed:	Your group is already fully healed!
 
 SpellHandler.Zephyr.NoAttackInZephyr:		You're in a Zephyr and can't be attacked!

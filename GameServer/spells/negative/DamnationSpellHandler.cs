@@ -15,6 +15,17 @@ namespace DOL.GS.Spells
     [SpellHandler("Damnation")]
     public class DamnationSpellHandler : SpellHandler
     {
+        private const int HeatDebuff = -15;
+        private const int ColdDebuff = -10;
+        private const int ThrustDebuff = -10;
+        private const int SpiritDebuff = -5;
+        private const int EnergyDebuff = -5;
+
+        private const int BodyBuff = 15;
+        private const int MatterBuff = 15;
+        private const int SlashBuff = 5;
+        private const int CrushBuff = 5;
+
         public DamnationSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine)
         {
         }
@@ -38,6 +49,8 @@ namespace DOL.GS.Spells
             int harmvalue = (int)Spell.Value;
             living.TempProperties.setProperty("DamnationValue", harmvalue);
             living.DamnationCancelBuffEffects();
+            ApplyDebuffs(living);
+            ApplyBuffs(living);
 
             if (living is GamePlayer player)
             {
@@ -143,6 +156,9 @@ namespace DOL.GS.Spells
             }
             else if (living is GameNPC ncp && ncp.Brain is IOldAggressiveBrain aggroBrain)
                 aggroBrain.AddToAggroList(Caster, 1);
+
+            GameEventMgr.AddHandler(living, GameLivingEvent.AttackedByEnemy, new DOLEventHandler(DamnationEventHandler));
+
             if (Caster is GamePlayer casterPlayer)
             {
                 MessageToLiving(casterPlayer, LanguageMgr.GetTranslation(casterPlayer.Client, "Damnation.Self.Message"), eChatType.CT_Spell);
@@ -150,9 +166,102 @@ namespace DOL.GS.Spells
             SendEffectAnimation(effect.Owner, 0, false, 1);
         }
 
+        private void ApplyDebuffs(GameLiving living)
+        {
+            living.DebuffCategory[eProperty.Resist_Heat] += HeatDebuff;
+            living.DebuffCategory[eProperty.Resist_Cold] += ColdDebuff;
+            living.DebuffCategory[eProperty.Resist_Thrust] += ThrustDebuff;
+            living.DebuffCategory[eProperty.Resist_Spirit] += SpiritDebuff;
+            living.DebuffCategory[eProperty.Resist_Energy] += EnergyDebuff;
+
+            if (living is GamePlayer player)
+            {
+                player.Out.SendCharResistsUpdate();
+            }
+        }
+
+        private void ApplyBuffs(GameLiving living)
+        {
+            living.BaseBuffBonusCategory[eProperty.Resist_Body] += BodyBuff;
+            living.BaseBuffBonusCategory[eProperty.Resist_Matter] += MatterBuff;
+            living.BaseBuffBonusCategory[eProperty.Resist_Slash] += SlashBuff;
+            living.BaseBuffBonusCategory[eProperty.Resist_Crush] += CrushBuff;
+
+            if (living is GamePlayer player)
+            {
+                player.Out.SendCharResistsUpdate();
+            }
+        }
+
+        private void RemoveDebuffs(GameLiving living)
+        {
+            living.DebuffCategory[eProperty.Resist_Heat] -= HeatDebuff;
+            living.DebuffCategory[eProperty.Resist_Cold] -= ColdDebuff;
+            living.DebuffCategory[eProperty.Resist_Thrust] -= ThrustDebuff;
+            living.DebuffCategory[eProperty.Resist_Spirit] -= SpiritDebuff;
+            living.DebuffCategory[eProperty.Resist_Energy] -= EnergyDebuff;
+
+            if (living is GamePlayer player)
+            {
+                player.Out.SendCharResistsUpdate();
+            }
+        }
+
+        private void RemoveBuffs(GameLiving living)
+        {
+            living.BaseBuffBonusCategory[eProperty.Resist_Body] -= BodyBuff;
+            living.BaseBuffBonusCategory[eProperty.Resist_Matter] -= MatterBuff;
+            living.BaseBuffBonusCategory[eProperty.Resist_Slash] -= SlashBuff;
+            living.BaseBuffBonusCategory[eProperty.Resist_Crush] -= CrushBuff;
+
+            if (living is GamePlayer player)
+            {
+                player.Out.SendCharResistsUpdate();
+            }
+        }
+
+        public void DamnationEventHandler(DOLEvent e, object sender, EventArgs arguments)
+        {
+            if (!(arguments is AttackedByEnemyEventArgs args))
+            {
+                return;
+            }
+            AttackData ad = args.AttackData;
+
+            if (ad.AttackResult == GameLiving.eAttackResult.HitUnstyled || ad.AttackResult == GameLiving.eAttackResult.HitStyle)
+            {
+                int meleeabsorbPercent = Spell.AmnesiaChance;
+                int damageAbsorbed = (int)(0.01 * meleeabsorbPercent * (ad.Damage + ad.CriticalDamage));
+                ad.Damage -= damageAbsorbed;
+
+                if (damageAbsorbed != 0)
+                {
+                    if (ad.Target is GamePlayer player)
+                        MessageToLiving(player, LanguageMgr.GetTranslation(player.Client, "Damnation.Self.Absorb", damageAbsorbed), eChatType.CT_Spell);
+                    if (ad.Attacker is GamePlayer attacker)
+                        MessageToLiving(attacker, LanguageMgr.GetTranslation(attacker.Client, "Damnation.Target.Absorbs", attacker.GetPersonalizedName(ad.Target), damageAbsorbed), eChatType.CT_Spell);
+                }
+            }
+
+            if (ad.AttackType == AttackData.eAttackType.DoT)
+            {
+                ad.Damage = 0;
+
+                if (ad.Target is GamePlayer player)
+                    MessageToLiving(player, "Damnation.Self.Resist", eChatType.CT_SpellResisted);
+                if (ad.Attacker is GamePlayer attacker)
+                    MessageToLiving(attacker, LanguageMgr.GetTranslation(attacker.Client, "Damnation.Target.Resist", attacker.GetPersonalizedName(ad.Target)), eChatType.CT_SpellResisted);
+            }
+        }
+
         public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
         {
             GameLiving living = effect.Owner;
+            GameEventMgr.RemoveHandler(living, GameLivingEvent.AttackedByEnemy, new DOLEventHandler(DamnationEventHandler));
+
+            RemoveDebuffs(living);
+            RemoveBuffs(living);
+
             living.Die(Caster);
             if (living is GamePlayer player)
             {
@@ -185,7 +294,7 @@ namespace DOL.GS.Spells
         {
             get
             {
-                string description = $"The target is condemned, turned into a zombie and loses all its spell enhancements. The target will inevitably die after {Spell.Duration / 1000} seconds. No cure can reverse this effect.";
+                string description = $"The target is condemned, turned into a zombie and loses all its spell enhancements. The target will be more resilient against melee attacks by {Spell.AmnesiaChance}% but will inevitably die after {Spell.Duration / 1000} seconds. No cure can reverse this effect.";
 
                 if (Spell.Value < 0)
                 {

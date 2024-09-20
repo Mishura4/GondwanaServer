@@ -66,7 +66,7 @@ namespace DOL.GS
     /// </summary>
     public class GameNPC : GameLiving, ITranslatableObject
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()!.DeclaringType);
 
         /// <summary>
         /// Constant for determining if already at a point
@@ -1204,7 +1204,7 @@ namespace DOL.GS
                 if (EventID != null && EventID != "" && checkObject is GamePlayer player)
                 {
                     var gameEvents = GameEventManager.Instance.Events.Where(e => e.ID.Equals(EventID));
-                    switch (gameEvents.FirstOrDefault().InstancedConditionType)
+                    switch (gameEvents.FirstOrDefault()!.InstancedConditionType)
                     {
                         case InstancedConditionTypes.All:
                             return true;
@@ -1834,7 +1834,7 @@ namespace DOL.GS
                         }
                     }
                 }
-                var formationCoordinate = brain.GetFormationCoordinate(followTarget.Coordinate);
+                var formationCoordinate = brain!.GetFormationCoordinate(followTarget.Coordinate);
                 if (formationCoordinate != Coordinate.Nowhere)
                 {
                     WalkTo(formationCoordinate, MaxSpeed);
@@ -2454,7 +2454,7 @@ namespace DOL.GS
             mob.RespawnInterval = m_respawnInterval / 1000;
             mob.HouseNumber = HouseNumber;
             mob.RoamingRange = RoamingRange;
-            if (Brain.GetType().FullName != typeof(StandardMobBrain).FullName)
+            if (Brain!.GetType().FullName != typeof(StandardMobBrain).FullName)
                 mob.Brain = Brain.GetType().FullName;
             IOldAggressiveBrain aggroBrain = Brain as IOldAggressiveBrain;
             if (aggroBrain != null)
@@ -4133,7 +4133,7 @@ namespace DOL.GS
                 if (m_targetLOSObject != null && m_targetLOSObject is GameLiving && Brain != null && Brain is IOldAggressiveBrain)
                 {
                     // there will be a think delay before mob attempts to attack next target
-                    (Brain as IOldAggressiveBrain).RemoveFromAggroList(m_targetLOSObject as GameLiving);
+                    (Brain as IOldAggressiveBrain)!.RemoveFromAggroList(m_targetLOSObject as GameLiving);
                 }
             }
         }
@@ -4176,7 +4176,7 @@ namespace DOL.GS
 
             if (ServerProperties.Properties.ALWAYS_CHECK_PET_LOS &&
                 Brain is IControlledBrain &&
-                (TargetObject is GamePlayer || (TargetObject is GameNPC && (TargetObject as GameNPC).Brain != null && (TargetObject as GameNPC).Brain is IControlledBrain)))
+                (TargetObject is GamePlayer || (TargetObject is GameNPC && (TargetObject as GameNPC)!.Brain != null && (TargetObject as GameNPC)!.Brain is IControlledBrain)))
             {
                 GamePlayer player = null;
 
@@ -4184,11 +4184,11 @@ namespace DOL.GS
                 {
                     player = TargetObject as GamePlayer;
                 }
-                else if (TargetObject is GameNPC && (TargetObject as GameNPC).Brain != null && (TargetObject as GameNPC).Brain is IControlledBrain)
+                else if (TargetObject is GameNPC && (TargetObject as GameNPC)!.Brain != null && (TargetObject as GameNPC)!.Brain is IControlledBrain)
                 {
-                    if (((TargetObject as GameNPC).Brain as IControlledBrain).Owner is GamePlayer)
+                    if (((TargetObject as GameNPC)!.Brain as IControlledBrain)!.Owner is GamePlayer)
                     {
-                        player = ((TargetObject as GameNPC).Brain as IControlledBrain).Owner as GamePlayer;
+                        player = ((TargetObject as GameNPC)!.Brain as IControlledBrain)!.Owner as GamePlayer;
                     }
                 }
 
@@ -4506,6 +4506,48 @@ namespace DOL.GS
                 {
                     killerPlayer.Out.SendMessage(killerPlayer.GetPersonalizedName(this) + " dies!", eChatType.CT_PlayerDied, eChatLoc.CL_SystemWindow);
                     IncrementTaskPoints(killerPlayer);
+
+                    bool killerIsDamned = SpellHandler.FindEffectOnTarget(killerPlayer, "Damnation") != null;
+                    bool npcIsNotDamned = SpellHandler.FindEffectOnTarget(this, "Damnation") == null;
+
+                    if (killerIsDamned && npcIsNotDamned)
+                    {
+                        double conLevel = killerPlayer.GetConLevel(this);
+
+                        float healPercentage;
+                        switch (conLevel)
+                        {
+                            case <= -3:
+                                healPercentage = 0.0f;
+                                break;
+                            case <= -2:
+                                healPercentage = 0.05f;
+                                break;
+                            case <= -1:
+                                healPercentage = 0.10f;
+                                break;
+                            case 0:
+                                healPercentage = 0.20f;
+                                break;
+                            case 1:
+                                healPercentage = 0.35f;
+                                break;
+                            case 2:
+                                healPercentage = 0.50f;
+                                break;
+                            case >= 3:
+                                healPercentage = 0.75f;
+                                break;
+                            default:
+                                healPercentage = 0.0f;
+                                break;
+                        }
+
+                        int healAmount = (int)(killerPlayer.MaxHealth * healPercentage);
+                        killerPlayer.ChangeHealth(killerPlayer, GameLiving.eHealthChangeType.Spell, healAmount);
+                        killerPlayer.Out.SendMessage(LanguageMgr.GetTranslation(killerPlayer.Client.Account.Language, "Damnation.Kill.SelfHeal", healAmount), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                        killerPlayer.Out.SendSpellEffectAnimation(killerPlayer, killerPlayer, 7277, 0, false, 1);
+                    }
                 }
             }
             StopFollowing();
@@ -5266,8 +5308,8 @@ namespace DOL.GS
 
                     loot = new WorldInventoryItem(invitem);
                     loot.Position = Position;
-                    (loot as WorldInventoryItem).Item.IsCrafted = false;
-                    (loot as WorldInventoryItem).Item.Creator = Name;
+                    (loot as WorldInventoryItem)!.Item.IsCrafted = false;
+                    (loot as WorldInventoryItem)!.Item.Creator = Name;
 
                     // This may seem like an odd place for this code, but loot-generating code further up the line
                     // is dealing strictly with ItemTemplate objects, while you need the InventoryItem in order
@@ -5875,7 +5917,7 @@ namespace DOL.GS
         {
             if (SpellTimer != null)
             {
-                if (this == null || this.ObjectState != eObjectState.Active || !this.IsAlive || this.TargetObject == null || (this.TargetObject is GameLiving && this.TargetObject.ObjectState != eObjectState.Active || !(this.TargetObject as GameLiving).IsAlive))
+                if (this == null || this.ObjectState != eObjectState.Active || !this.IsAlive || this.TargetObject == null || (this.TargetObject is GameLiving && this.TargetObject.ObjectState != eObjectState.Active || !(this.TargetObject as GameLiving)!.IsAlive))
                     SpellTimer.Stop();
                 else
                 {
@@ -6097,9 +6139,9 @@ namespace DOL.GS
 
                 if (living != null && living.EffectList.GetOfType<NecromancerShadeEffect>() != null)
                 {
-                    if (living is GamePlayer && (living as GamePlayer).ControlledBrain != null)
+                    if (living is GamePlayer && (living as GamePlayer)!.ControlledBrain != null)
                     {
-                        TargetObject = (living as GamePlayer).ControlledBrain.Body;
+                        TargetObject = (living as GamePlayer)!.ControlledBrain.Body;
                     }
                 }
 
@@ -6495,14 +6537,14 @@ namespace DOL.GS
 
             // issuing text
             if (living is GamePlayer)
-                text = text.Replace("{class}", (living as GamePlayer).CharacterClass.Name).Replace("{race}", (living as GamePlayer).RaceName);
+                text = text.Replace("{class}", (living as GamePlayer)!.CharacterClass.Name).Replace("{race}", (living as GamePlayer)!.RaceName);
             if (living is GameNPC)
                 text = text.Replace("{class}", "NPC").Replace("{race}", "NPC");
 
             if (trigger == eAmbientTrigger.interact)
             {
                 // for interact text we pop up a window
-                (living as GamePlayer).Out.SendMessage(text, eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                (living as GamePlayer)!.Out.SendMessage(text, eChatType.CT_System, eChatLoc.CL_PopupWindow);
                 return;
             }
 

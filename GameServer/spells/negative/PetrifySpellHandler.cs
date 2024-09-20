@@ -205,7 +205,7 @@ namespace DOL.GS.Spells
             GameEventMgr.AddHandler(living, GameLivingEvent.AttackedByEnemy, new DOLEventHandler(EventHandler));
             if (Caster is GamePlayer casterPlayer)
             {
-                MessageToLiving(casterPlayer, LanguageMgr.GetTranslation(casterPlayer.Client, "Petrify.Self.Message"), eChatType.CT_Spell);
+                MessageToLiving(casterPlayer, LanguageMgr.GetTranslation(casterPlayer.Client, "Petrify.Self.Message", casterPlayer.GetPersonalizedName(effect.Owner)), eChatType.CT_Spell);
             }
             SendEffectAnimation(effect.Owner, 0, false, 1);
         }
@@ -231,7 +231,7 @@ namespace DOL.GS.Spells
             if (ad.Target is GamePlayer player)
                 MessageToLiving(player, LanguageMgr.GetTranslation(player.Client, "Petrify.Self.Absorb", damageAbsorbed), eChatType.CT_Spell);
             if (ad.Attacker is GamePlayer attacker)
-                MessageToLiving(attacker, LanguageMgr.GetTranslation(attacker.Client, "Petrify.Target.Absorbs", damageAbsorbed), eChatType.CT_Spell);
+                MessageToLiving(attacker, LanguageMgr.GetTranslation(attacker.Client, "Petrify.Target.Absorbs", attacker.GetPersonalizedName(ad.Target), damageAbsorbed), eChatType.CT_Spell);
         }
 
         public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)

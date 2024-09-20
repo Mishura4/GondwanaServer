@@ -118,16 +118,21 @@ AblativeArmor.Attacker:	Un bouclier absorbe {0} points de dégats de votre attaq
 Amnesia.MessageToTarget:	Votre esprit s'emmêle et vous oubliez ce que vous étiez en train de faire !
 
 # Petrify
-Petrify.Target.Absorbs:		Votre cible est pétrifiée et absorbe {0} dommages.
+Petrify.Target.Absorbs:		{0} est pétrifié(e) et absorbe {1} dommage(s).
 Petrify.Target.Resist:		{0} est pétrifiée et est insensible à ce sort.
-Petrify.Self.Message:		La cible est pétrifiée.
-Petrify.Self.Absorb:		Vous êtes pétrifié(e) et absorbez {0} dommages.
+Petrify.Self.Message:		{0} est pétrifié(e).
+Petrify.Self.Absorb:		Vous êtes pétrifié(e) et absorbez {0} dommage(s).
 Petrify.Self.Unpetrify:		Vous êtes libéré(e) de votre pétrification.
 
 # Damnation
 Damnation.Self.Message:		Votre cible est damnée.
 Damnation.Self.Message2:	Tu ne le sais pas encore, mais tu es déjà mort !
-Damnation.Target.Resist:	{0} est damné et est insensible à ce sort.
+Damnation.Target.Resist:	{0} est damné(e) et est insensible à ce sort.
+Damnation.Self.Absorb:		Vous êtes damné(e) et absorbez {0} dommage(s) !
+Damnation.Target.Absorbs:	{0} est damné(e) et absorbe {1} dommage(s) !
+Damnation.Self.Resist:		Vous êtes damné(e) et résistez au sort !
+Damnation.Target.Resist:	{0} est damné(e) et résiste au sort !
+Damnation.Kill.SelfHeal:	La dépouille de votre ennemi vous revitalise de {0} points de vie !
 
 # Adrenaline
 Adrenaline.Target.Immune:		{0} est en fièvre de bataille et résiste entièrement le sort!
