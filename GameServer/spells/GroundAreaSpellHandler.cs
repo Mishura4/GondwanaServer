@@ -73,10 +73,10 @@ namespace DOL.GS.Spells
                     spellhandler.Parent = MasterSpellHandler;
                     if (MasterSpellHandler.Spell.SubSpellDelay > 0)
                     {
-                        new SubSpellTimer(caster, spellhandler, caster).Start(MasterSpellHandler.Spell.SubSpellDelay * 1000);
+                        new SubSpellTimer(Body, spellhandler, Body).Start(MasterSpellHandler.Spell.SubSpellDelay * 1000);
                     }
                     else
-                        spellhandler.StartSpell(caster);
+                        spellhandler.StartSpell(Body);
                 }
             }
         }
@@ -166,7 +166,6 @@ namespace DOL.GS.Spells
         /// <inheritdoc />
         public override bool StartSpell(GameLiving target, bool force = false)
         {
-            m_spellTarget = Caster;
             GameLiving trueCaster = Caster.GetController();
             GameNPC turret = CreateTurret();
 
