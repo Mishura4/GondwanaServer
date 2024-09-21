@@ -244,6 +244,6 @@ SpellHandler.SpeedEnhancement.CombatRecent:	Vous avez été en combat récemment
 SpellHandler.WaterBreathing.StartEffect:	Vous vous trouvez capable de bouger librement et de respirer sous l'eau comme dans l'air !
 SpellHandler.WaterBreathing.EndEffect:		Vous buvez la tasse et réalisez soudain que vous n'êtes plus capable de respirer sous l'eau !
 
-SpellHandler.GroundAreaEffect.AlreayActive: Vous avez déjà un effet de sol actif et ne pouvez pas en lancer un autre!
+SpellHandler.GroundAreaEffect.AlreadyActive: Vous avez déjà un effet de sol actif et ne pouvez pas en lancer un autre!
 
 SpellHandler.DelveInfo.Sec:			sec

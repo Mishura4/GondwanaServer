@@ -132,7 +132,7 @@ namespace DOL.GS.Spells
             {
                 if (!quiet && trueCaster is GamePlayer casterPlayer)
                 {
-                    casterPlayer.SendTranslatedMessage("SpellHandler.GroundAreaEffect.AlreayActive", eChatType.CT_SpellResisted);
+                    casterPlayer.SendTranslatedMessage("SpellHandler.GroundAreaEffect.AlreadyActive", eChatType.CT_SpellResisted);
                 }
                 return false;
             }
