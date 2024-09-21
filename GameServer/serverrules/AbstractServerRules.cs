@@ -1282,7 +1282,7 @@ namespace DOL.GS.ServerRules
 
             if (killedNPC.CurrentTerritory != null)
             {
-                npcExpValue = Math.Max(1, (int)(0.40f * npcExpValue));
+                npcExpValue = killedNPC.CurrentRegion.IsRvR ? 0 : Math.Max(1, (int)(0.40f * npcExpValue));
                 
                 int level = Math.Max(0, killedNPC.Level - 20);
                 int realmLevel = 0; // Use realm level 0 for these calculations

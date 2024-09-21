@@ -1306,6 +1306,7 @@ namespace DOL.GS.Commands
             if (targetMob.IsBoss)
                 info.Add(" + Is Epic Boss: True");
             info.Add(" + Realm: " + GlobalConstants.RealmToName(targetMob.Realm));
+            info.Add(" + Territory: " + (targetMob.CurrentTerritory?.Name ?? "(none)"));
 
             if (targetMob.Faction != null)
                 info.Add($" + Faction: {targetMob.Faction.Name} [{targetMob.Faction.ID}]");
