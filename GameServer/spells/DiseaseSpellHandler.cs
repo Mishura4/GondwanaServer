@@ -175,12 +175,6 @@ namespace DOL.GS.Spells
                     }
                 }
             }
-
-            if (ownerPlayer.BattleGroup != null && targetPlayer?.BattleGroup == ownerPlayer.BattleGroup)
-            {
-                return true;
-            }
-
             return false;
         }
 

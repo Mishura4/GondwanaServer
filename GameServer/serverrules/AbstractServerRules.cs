@@ -522,28 +522,54 @@ namespace DOL.GS.ServerRules
 
             GameLiving realAttacker = attacker.GetController() ?? attacker;
             GameLiving realDefender = defender.GetController() ?? defender;
-
-            if (realDefender is GameNPC)
+            GameNPC attackerNPC = attacker as GameNPC;
+            GameNPC defenderNPC = defender as GameNPC;
+            GamePlayer attackerPlayer = attacker as GamePlayer;
+            GamePlayer defenderPlayer = defender as GamePlayer;
+            
+            bool ShouldEngage()
             {
-                GameNPC defenderNpc = realDefender as GameNPC;
-
-                if (defenderNpc.Brain is GuardNPCBrain defenderGuardBrain)
+                if (realDefender is GameNPC)
                 {
-                    if (realAttacker is GamePlayer)
-                    {
-                        // Player vs Guard: guard only selected if the guard is in combat with the player or if the guard would normally range aggro the player
-                        var playerAttacker = realAttacker as GamePlayer;
+                    GameNPC defenderNpc = realDefender as GameNPC;
 
-                        return defenderGuardBrain.AggroTable.ContainsKey(attacker) || defenderGuardBrain.AggroTable.ContainsKey(realAttacker) || defenderGuardBrain.CalculateAggroLevelToTarget(playerAttacker) > 0;
-                    }
-                    else
+                    if (defenderNpc.Brain is GuardNPCBrain defenderGuardBrain)
                     {
-                        // Npc (probably) vs Guard: guard only selected if the realm is different
-                        return realAttacker.Realm != defenderNpc.Realm;
+                        if (realAttacker is GamePlayer)
+                        {
+                            // Player vs Guard: guard only selected if the guard is in combat with the player or if the guard would normally range aggro the player
+                            var playerAttacker = realAttacker as GamePlayer;
+
+                            return defenderGuardBrain.AggroTable.ContainsKey(attacker) || defenderGuardBrain.AggroTable.ContainsKey(realAttacker) || defenderGuardBrain.CalculateAggroLevelToTarget(playerAttacker) > 0;
+                        }
+                        else
+                        {
+                            // Npc (probably) vs Guard: guard only selected if the realm is different
+                            return realAttacker.Realm != defenderNpc.Realm;
+                        }
                     }
                 }
+                if (attackerPlayer?.BattleGroup != null && attackerPlayer.BattleGroup == defenderPlayer?.BattleGroup)
+                {
+                    return true;
+                }
+                return true;
             }
-            return true;
+
+            if (ShouldEngage())
+                return true;
+            
+            // If combat has already been engaged, we should
+            if (defender.Attackers.Contains(attacker) || attacker.Attackers.Contains(defender))
+                return true;
+
+            if ((attackerNPC?.Brain as StandardMobBrain)?.AggroTable!.ContainsKey(realDefender) == true)
+                return true;
+
+            if ((defenderNPC?.Brain as StandardMobBrain)?.AggroTable!.ContainsKey(realAttacker) == true)
+                return true;
+            
+            return false;
         }
 
         /// <summary>
