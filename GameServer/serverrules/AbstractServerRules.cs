@@ -461,10 +461,8 @@ namespace DOL.GS.ServerRules
                 }
             }
             // Your pet can only attack stealthed players you have selected
-            if (defender.IsStealthed && attacker is GameNPC)
-                if (((attacker as GameNPC).Brain is IControlledBrain) &&
-                    defender is GamePlayer &&
-                    playerAttacker.TargetObject != defender)
+            if (defender.IsStealthed && attacker.GetController() is GamePlayer controller)
+                if (controller.TargetObject != defender) // TODO: should this really be the case for AOEs?
                     return false;
 
             // GMs can't be attacked
@@ -522,8 +520,8 @@ namespace DOL.GS.ServerRules
             if (!IsAllowedToAttack(attacker, defender, true))
                 return false;
 
-            GameLiving realAttacker = (attacker is GameNPC { Brain: IControlledBrain } petAttacker ? (petAttacker.Brain as IControlledBrain).Owner : attacker);
-            GameLiving realDefender = (defender is GameNPC { Brain: IControlledBrain } petDefender ? (petDefender.Brain as IControlledBrain).Owner : defender);
+            GameLiving realAttacker = attacker.GetController() ?? attacker;
+            GameLiving realDefender = defender.GetController() ?? defender;
 
             if (realDefender is GameNPC)
             {
