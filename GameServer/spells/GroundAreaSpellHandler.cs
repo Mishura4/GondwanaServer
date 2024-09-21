@@ -18,6 +18,7 @@ namespace DOL.GS.Spells
     [SpellHandler("GroundArea")]
     public class GroundAreaSpellHandler : SpellHandler
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()!.DeclaringType);
         internal class GroundAreaTurret : GameMovingObject
         {
             public GroundAreaTurret(ABrain brain) : base()
@@ -168,7 +169,16 @@ namespace DOL.GS.Spells
             m_spellTarget = Caster;
             GameLiving trueCaster = Caster.GetController();
             GameNPC turret = CreateTurret();
+
+            if (Spell.Radius > 0)
+            {
+                log.Warn("GroundArea spells should not have a radius, as this will select several targets to spawn the mine on. The radius for the actual effect should be on the sub spell.");
+            }
             turret.Position = (Caster.GroundTargetPosition == Position.Nowhere ? Caster.Position : Caster.GroundTargetPosition);
+            if (target != null)
+            {
+                turret.Position = target.Position;
+            }
             turret.LoadedFromScript = true;
             trueCaster.TempProperties.setProperty(LIVING_GROUNDEFFECT_PROPERTY, turret);
             Turret = turret;
