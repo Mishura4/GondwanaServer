@@ -5482,6 +5482,7 @@ namespace DOL.GS
                 m_enduRegenerationTimer = null;
             }
         }
+
         /// <summary>
         /// Timer callback for the hp regeneration
         /// </summary>
@@ -5490,22 +5491,27 @@ namespace DOL.GS
         {
             if (Health < MaxHealth)
             {
-                ChangeHealth(this, eHealthChangeType.Regenerate, GetModified(eProperty.HealthRegenerationRate));
+                int regenRate = GetModified(eProperty.HealthRegenerationRate) + GetModified(eProperty.MythicalOmniRegen);
+
+                if (IsSitting && !InCombat)
+                    regenRate = (int)Math.Round(regenRate * 1.6);
+
+                regenRate = (int)Math.Round(regenRate * Properties.HEALTH_REGEN_RATE);
+
+                ChangeHealth(this, eHealthChangeType.Regenerate, regenRate);
+
+                #region PVP DAMAGE
+
+
+                if (this is NecromancerPet)
+                {
+                    if (DamageRvRMemory > 0 && GetLivingOwner() != null)
+                        DamageRvRMemory -= (long)Math.Max(regenRate, 0);
+                }
+
+                #endregion PVP DAMAGE
             }
-
-            #region PVP DAMAGE
-
-
-            if (this is NecromancerPet)
-            {
-                if (DamageRvRMemory > 0 && GetLivingOwner() != null)
-                    DamageRvRMemory -= (long)Math.Max(GetModified(eProperty.HealthRegenerationRate), 0);
-            }
-
-            #endregion PVP DAMAGE
-
-            //If we are fully healed, we stop the timer
-            if (Health >= MaxHealth)
+            if (Health >= MaxHealth) //If we are fully healed, we stop the timer
             {
 
                 #region PVP DAMAGE
@@ -5540,9 +5546,7 @@ namespace DOL.GS
         /// <param name="selfRegenerationTimer">timer calling this function</param>
         protected virtual int PowerRegenerationTimerCallback(RegionTimer selfRegenerationTimer)
         {
-            if (this is GamePlayer &&
-                (((GamePlayer)this).CharacterClass.ID == (int)eCharacterClass.Vampiir ||
-                 (((GamePlayer)this).CharacterClass.ID > 59 && ((GamePlayer)this).CharacterClass.ID < 63))) // Maulers
+            if (this is GamePlayer {CharacterClass.ID: (int)eCharacterClass.Vampiir or (> 59 and < 63 /* maulers */) })
             {
                 double MinMana = MaxMana * 0.15;
                 double OnePercMana = Math.Ceiling(MaxMana * 0.01);
@@ -5567,7 +5571,14 @@ namespace DOL.GS
             {
                 if (Mana < MaxMana)
                 {
-                    ChangeMana(this, eManaChangeType.Regenerate, GetModified(eProperty.PowerRegenerationRate));
+                    int regenRate = GetModified(eProperty.PowerRegenerationRate) + GetModified(eProperty.MythicalOmniRegen);
+
+                    if (IsSitting && !InCombat)
+                        regenRate *= 2;
+                
+                    regenRate = (int)Math.Round(regenRate * Properties.MANA_REGEN_RATE);
+
+                    ChangeMana(this, eManaChangeType.Regenerate, regenRate);
                 }
 
                 //If we are full, we stop the timer
@@ -5594,9 +5605,15 @@ namespace DOL.GS
         {
             if (Endurance < MaxEndurance)
             {
-                int regen = GetModified(eProperty.EnduranceRegenerationRate);
+                int regen = GetModified(eProperty.EnduranceRegenerationRate) + GetModified(eProperty.MythicalOmniRegen);
+                
                 if (regen > 0)
                 {
+                    if (IsSitting && !InCombat)
+                        regen *= 3;
+
+                    regen = (int)Math.Round(regen * Properties.ENDURANCE_REGEN_RATE);
+
                     ChangeEndurance(this, eEnduranceChangeType.Regenerate, regen);
                 }
             }

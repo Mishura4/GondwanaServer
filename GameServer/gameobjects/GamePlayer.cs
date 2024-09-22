@@ -2591,18 +2591,24 @@ namespace DOL.GS
                 return HealthRegenerationPeriod;
 
             // adjust timer based on Live testing of player
-
             if (Health < MaxHealth)
             {
-                ChangeHealth(this, eHealthChangeType.Regenerate, GetModified(eProperty.HealthRegenerationRate));
+                int regenRate = GetModified(eProperty.HealthRegenerationRate) + GetModified(eProperty.MythicalOmniRegen);
+
+                if (IsSitting && !InCombat)
+                    regenRate = (int)Math.Round(regenRate * 1.6);
+
+                regenRate = (int)Math.Round(regenRate * Properties.HEALTH_REGEN_RATE);
+
+                ChangeHealth(this, eHealthChangeType.Regenerate, regenRate);
+
+                #region PVP DAMAGE
+
+                if (DamageRvRMemory > 0 && GetLivingOwner() != null)
+                    DamageRvRMemory -= (long)Math.Max(regenRate, 0);
+
+                #endregion PVP DAMAGE
             }
-
-            #region PVP DAMAGE
-
-            if (DamageRvRMemory > 0)
-                DamageRvRMemory -= (long)Math.Max(GetModified(eProperty.HealthRegenerationRate), 0);
-
-            #endregion PVP DAMAGE
 
             //If we are fully healed, we stop the timer
             if (Health >= MaxHealth)
@@ -2643,6 +2649,7 @@ namespace DOL.GS
         {
             if (Client.ClientState != GameClient.eClientState.Playing)
                 return PowerRegenerationPeriod;
+
             int interval = base.PowerRegenerationTimerCallback(selfRegenerationTimer);
             return interval;
         }
@@ -2662,7 +2669,7 @@ namespace DOL.GS
 
             if (Endurance < MaxEndurance || sprinting)
             {
-                int regen = GetModified(eProperty.EnduranceRegenerationRate);  //default is 1
+                int regen = GetModified(eProperty.EnduranceRegenerationRate) + GetModified(eProperty.MythicalOmniRegen);  //default is 1
                 int endchant = GetModified(eProperty.FatigueConsumption);      //Pull chant/buff value
 
                 int longwind = 5;
@@ -2684,6 +2691,11 @@ namespace DOL.GS
 
                 if (regen != 0)
                 {
+                    if (IsSitting && !InCombat)
+                        regen *= 3;
+
+                    regen = (int)Math.Round(regen * Properties.ENDURANCE_REGEN_RATE);
+
                     ChangeEndurance(this, eEnduranceChangeType.Regenerate, regen);
                 }
             }
