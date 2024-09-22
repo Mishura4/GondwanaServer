@@ -1414,7 +1414,7 @@ namespace DOL.GS
             /// <summary>
             /// Called on every timer tick
             /// </summary>
-            protected override void OnTick()
+            public override void OnTick()
             {
                 GameNPC npc = (GameNPC)m_actionSource;
 
@@ -1461,7 +1461,7 @@ namespace DOL.GS
             /// This time was estimated using walking speed and distance.
             /// It fires the ArriveAtTarget event
             /// </summary>
-            protected override void OnTick()
+            public override void OnTick()
             {
                 GameNPC npc = (GameNPC)m_actionSource;
                 if (m_goToNodeCallback != null)
@@ -2036,7 +2036,7 @@ namespace DOL.GS
             /// <summary>
             /// Called on every timer tick
             /// </summary>
-            protected override void OnTick()
+            public override void OnTick()
             {
                 GameNPC npc = (GameNPC)m_actionSource;
                 if (!npc.IsMovingOnPath)
@@ -2540,6 +2540,13 @@ namespace DOL.GS
                     foreach (Ability ab in template.Abilities)
                         m_abilities[ab.KeyName] = ab;
                 }
+            }
+            SetCounterAttackChance(template.CounterAttackChance);
+            CounterAttackStyle = template.CounterAttackStyle;
+
+            if (CounterAttackChance > 0 && CounterAttackStyle == null)
+            {
+                log.Warn($"NPCTemplate {template.TemplateId} has a chance to counter attack but no counter attack style");
             }
 
             if (template.AdrenalineSpellID != 0)
@@ -4349,6 +4356,19 @@ namespace DOL.GS
             base.TakeDamage(ad);
         }
 
+        protected int m_counterAttackChance = 0;
+
+        /// <inheritdoc />
+        public override int CounterAttackChance
+        {
+            get => m_counterAttackChance + GetModified(eProperty.CounterAttack);
+        }
+
+        public void SetCounterAttackChance(int chance)
+        {
+            m_counterAttackChance = chance;
+        }
+
         private void WarnTerritory(GameLiving attacker)
         {
             if (CurrentTerritory == null)
@@ -5960,7 +5980,7 @@ namespace DOL.GS
             /// <summary>
             /// Called on every timer tick
             /// </summary>
-            protected override void OnTick()
+            public override void OnTick()
             {
                 GameNPC owner = null;
                 if (m_actionSource != null && m_actionSource is GameNPC)

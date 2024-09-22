@@ -237,7 +237,7 @@ namespace DOL.GS.PacketHandler.Client.v168
             /// <summary>
             /// Called on every timer tick
             /// </summary>
-            protected override void OnTick()
+            public override void OnTick()
             {
                 var player = (GamePlayer)m_actionSource;
                 List<IDoor> doorList = DoorMgr.getDoorByID(m_doorId);

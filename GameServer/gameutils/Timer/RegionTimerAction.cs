@@ -121,7 +121,7 @@ namespace DOL.GS
         /// <summary>
         /// Call the OnTick Properties and set new Interval
         /// </summary>
-        protected override void OnTick()
+        public override void OnTick()
         {
             if (m_onTick != null)
                 Interval = m_onTick.Invoke(m_source);

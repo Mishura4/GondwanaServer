@@ -346,7 +346,7 @@ namespace DOL.GS
 
             //When the timer ticks, it means there are no players in the region.
             //This, we remove the instance.
-            protected override void OnTick()
+            public override void OnTick()
             {
                 if (m_instance == null)
                 {
@@ -387,7 +387,7 @@ namespace DOL.GS
             //The instance to remove...
             BaseInstance m_instance;
 
-            protected override void OnTick()
+            public override void OnTick()
             {
                 if (m_instance == null)
                 {

@@ -258,7 +258,7 @@ namespace DOL.GS.Spells
             /// <summary>
             /// Called on every timer tick
             /// </summary>
-            protected override void OnTick()
+            public override void OnTick()
             {
                 GameSpellEffect effect = m_effect;
 

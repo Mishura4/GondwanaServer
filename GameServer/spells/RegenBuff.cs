@@ -143,7 +143,7 @@ namespace DOL.GS.Spells
                 m_handler = handler;
             }
 
-            protected override void OnTick()
+            public override void OnTick()
             {
                 IDictionary effects = m_handler.m_concEffects;
                 GameLiving caster = (GameLiving)m_actionSource;

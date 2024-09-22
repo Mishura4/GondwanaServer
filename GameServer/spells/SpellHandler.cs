@@ -1746,7 +1746,7 @@ namespace DOL.GS.Spells
             /// <summary>
             /// Called on every timer tick
             /// </summary>
-            protected override void OnTick()
+            public override void OnTick()
             {
                 try
                 {
@@ -2554,7 +2554,7 @@ namespace DOL.GS.Spells
                 m_target = target;
             }
 
-            protected override void OnTick()
+            public override void OnTick()
             {
                 m_subspellhandler.StartSpell(m_target);
                 Stop();

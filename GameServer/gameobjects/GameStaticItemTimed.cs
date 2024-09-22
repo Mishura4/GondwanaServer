@@ -112,7 +112,7 @@ namespace DOL.GS
             /// <summary>
             /// The callback function that will remove this bag after some time
             /// </summary>
-            protected override void OnTick()
+            public override void OnTick()
             {
                 GameStaticItem item = (GameStaticItem)m_actionSource;
                 //remove this object from the world after some time

@@ -164,7 +164,7 @@ namespace DOL.GS.Spells
                 m_effect = effect;
             }
 
-            protected override void OnTick()
+            public override void OnTick()
             {
                 GameSpellEffect effect = m_effect;
 

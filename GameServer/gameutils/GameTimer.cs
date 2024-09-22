@@ -138,7 +138,7 @@ namespace DOL.GS
         /// <summary>
         /// Starts the timer with defined initial delay
         /// </summary>
-        /// <param name="initialDelay">The initial timer delay. Must be more than 0 and less than MaxInterval</param>
+        /// <param name="initialDelay">The initial timer delay. Must be less than MaxInterval</param>
         public virtual void Start(int initialDelay)
         {
             m_time.InsertTimer(this, initialDelay);
@@ -163,7 +163,7 @@ namespace DOL.GS
         /// <summary>
         /// Called on every timer tick
         /// </summary>
-        protected abstract void OnTick();
+        public abstract void OnTick();
 
         private static Stopwatch _stopwatch = Stopwatch.StartNew();
         /// <summary>

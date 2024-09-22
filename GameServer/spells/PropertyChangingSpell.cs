@@ -475,7 +475,7 @@ namespace DOL.GS.Spells
         /// <summary>
         /// Called on every timer tick
         /// </summary>
-        protected override void OnTick()
+        public override void OnTick()
         {
             if (m_caster == null ||
                 m_owner == null ||

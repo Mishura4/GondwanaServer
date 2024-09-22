@@ -132,5 +132,15 @@ namespace DOL.GS
         /// What Spell to cast when adrenaline is full
         /// </summary>
         int AdrenalineSpellID { get; }
+        
+        /// <summary>
+        /// Chance to counter attack on being attacked
+        /// </summary>
+        int CounterAttackChance { get; }
+        
+        /// <summary>
+        /// Style to use for counter attacks
+        /// </summary>
+        Style CounterAttackStyle { get; }
     }
 }

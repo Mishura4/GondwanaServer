@@ -71,7 +71,7 @@ namespace DOL.GS
         protected short m_intelligence;
         protected short m_empathy;
         protected short m_charisma;
-        private int m_maxTension;
+        protected int m_maxTension;
         protected List<Style> m_styles;
         protected IList m_spells;
         protected IList m_spelllines;
@@ -130,6 +130,30 @@ namespace DOL.GS
             WeaponSpd = data.WeaponSpd;
             ArmorFactor = data.ArmorFactor;
             ArmorAbsorb = data.ArmorAbsorb;
+            CounterAttackChance = data.CounterAttackChance;
+            if (!string.IsNullOrEmpty(data.CounterAttackStyle))
+            {
+                string[] style = data.CounterAttackStyle.Split('|');
+                int styleId = 0;
+                int classId = 0;
+                string classStr = style.Length < 2 ? string.Empty : style[0];
+                if (!int.TryParse(style[0], out styleId))
+                {
+                    log.Error($"Invalid style ID '{style[0]}' for NPCTemplate {data.ObjectId}, must be an integer");
+                }
+                else if (!int.TryParse(style[1], out classId))
+                {
+                    log.Error($"Invalid class ID '{style[1]}' for NPCTemplate {data.ObjectId}, must be an integer");
+                }
+                else
+                {
+                    CounterAttackStyle = SkillBase.GetStyleByID(styleId, classId);
+                    if (CounterAttackStyle == null)
+                    {
+                        log.Error($"Style '{data.CounterAttackStyle}' does not exist for NPCTemplate {data.ObjectId}");
+                    }
+                }
+            }
 
             //Time to add Spells/Styles and Abilties to the templates
             m_abilities = new ArrayList();
@@ -246,6 +270,8 @@ namespace DOL.GS
             m_templateId = GetNextFreeTemplateId();
             m_tetherRange = mob.TetherRange;
             m_visibleActiveWeaponSlot = mob.VisibleActiveWeaponSlots;
+            CounterAttackChance = mob.CounterAttackChance;
+            CounterAttackStyle = mob.CounterAttackStyle;
 
             if (mob.Abilities != null && mob.Abilities.Count > 0)
             {
@@ -627,6 +653,9 @@ namespace DOL.GS
         public virtual int WeaponSpd { get; set; } = 30;
         public virtual int ArmorFactor { get; set; } = 0;
         public virtual int ArmorAbsorb { get; set; } = 0;
+        
+        public int CounterAttackChance { get; set; }
+        public Style CounterAttackStyle{ get; set; }
 
         public byte AggroLevel
         {
@@ -730,6 +759,8 @@ namespace DOL.GS
             tmp.EvadeChance = EvadeChance;
             tmp.BlockChance = BlockChance;
             tmp.LeftHandSwingChance = LeftHandSwingChance;
+            tmp.CounterAttackChance = CounterAttackChance;
+            tmp.CounterAttackStyle = CounterAttackStyle == null ? string.Empty : CounterAttackStyle.ID + "|" + CounterAttackStyle.ClassID;
 
             if (m_spells is { Count: > 0 })
             {

@@ -111,7 +111,7 @@ namespace DOL.GS.Spells
                 m_handler = spellHandler;
             }
 
-            protected override void OnTick()
+            public override void OnTick()
             {
                 GameLiving target = m_boltTarget;
                 GameLiving caster = (GameLiving)m_actionSource;

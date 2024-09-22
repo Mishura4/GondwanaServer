@@ -84,6 +84,9 @@ namespace DOL.Database
         private bool m_replaceMobValues = false;
         private string m_packageID = string.Empty;
         private int m_adrenalineSpellID;
+        private string m_counterAttackStyle;
+        private int m_counterAttackChance;
+
         #endregion Variables
 
         /// <summary>
@@ -703,6 +706,28 @@ namespace DOL.Database
                 m_adrenalineSpellID = value;
             }
         }
+        
+        [DataElement(AllowDbNull = false)]
+        public int CounterAttackChance
+        {
+            get { return m_counterAttackChance; }
+            set
+            {
+                Dirty = true;
+                m_counterAttackChance = value;
+            }
+        }
+        
+        [DataElement(AllowDbNull = false)]
+        public string CounterAttackStyle
+        {
+            get { return m_counterAttackStyle; }
+            set
+            {
+                Dirty = true;
+                m_counterAttackStyle = value;
+            }
+        }
 
         [DataElement(AllowDbNull = true)]
         public string PackageID
@@ -714,6 +739,7 @@ namespace DOL.Database
                 m_packageID = value;
             }
         }
+
         #endregion Properties
     }
 }

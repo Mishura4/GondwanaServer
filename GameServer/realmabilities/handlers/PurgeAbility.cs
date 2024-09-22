@@ -170,7 +170,7 @@ namespace DOL.GS.RealmAbilities
                 m_purge = purge;
                 counter = count;
             }
-            protected override void OnTick()
+            public override void OnTick()
             {
                 if (!m_caster.IsAlive)
                 {

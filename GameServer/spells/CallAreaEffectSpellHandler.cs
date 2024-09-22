@@ -122,7 +122,7 @@ namespace DOL.GS.Spells
             {
             }
 
-            protected override void OnTick()
+            public override void OnTick()
             {
                 AreaEffect areaEffect = (AreaEffect)m_actionSource;
                 if (areaEffect is { ObjectState: GameObject.eObjectState.Active })

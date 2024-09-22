@@ -514,7 +514,7 @@ namespace DOL.AI.Brain
                 m_pet = pet;
             }
 
-            protected override void OnTick()
+            public override void OnTick()
             {
                 this.Interval = 1000;
 

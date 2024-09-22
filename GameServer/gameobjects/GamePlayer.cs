@@ -3098,6 +3098,14 @@ namespace DOL.GS
             MaxTension = DBCharacter.MaxTension;
             AdrenalineSpell = CharacterClass.AdrenalineSpell;
 
+            CounterAttackStyle = SkillBase.GetStyleList("CounterAttack", m_characterClass.ID).FirstOrDefault();
+            if (CounterAttackStyle == null)
+            {
+                var whereClause = DB.Column("SpecKeyName").IsEqualTo("CounterAttack").And(DB.Column("ClassId").IsEqualTo(m_characterClass.ID));
+                var dbStyle = GameServer.Database.SelectObject<DBStyle>(whereClause);
+                CounterAttackStyle = dbStyle == null ? null : new Style(dbStyle);
+            }
+
             if (Group != null)
             {
                 Group.UpdateMember(this, false, true);
@@ -7316,64 +7324,31 @@ namespace DOL.GS
             return 0;
         }
 
-        private void CounterAttackHandler(GameLiving attacker)
+        /// <inheritdoc />
+        protected override void CounterAttack(GameLiving attacker)
         {
-            int counterAttackChance = CalculateCounterAttackChance();
+            if (!IsAlive || IsStunned || IsMezzed || IsDisarmed || IsFrozen || IsCrafting || IsClimbing || IsStrafing || (Steed != null))
+                return;
 
-            if (Util.Chance(counterAttackChance))
+            if (CounterAttackStyle == null)
             {
-                DBStyle dbStyle = GetCounterAttackStyle(CharacterClass.ID);
-                if (dbStyle != null)
-                {
-                    Style counterStyle = new Style(dbStyle);
-                    InventoryItem weapon = AttackWeapon;
-
-                    if (StyleProcessor.CanUseStyle(this, counterStyle, weapon))
-                    {
-                        if (!AttackState)
-                        {
-                            StartAttack(attacker);
-                        }
-
-                        var attackData = new AttackData
-                        {
-                            Attacker = this,
-                            Target = attacker,
-                            Style = counterStyle,
-                            Weapon = weapon,
-                            Damage = 0,
-                            CriticalDamage = 0,
-                            AttackType = AttackData.eAttackType.MeleeOneHand
-                        };
-
-                        StyleProcessor.ExecuteStyle(this, attackData, weapon);
-                        Out.SendMessage(LanguageMgr.GetTranslation(Client, "GameObjects.GamePlayer.Attack.CounterAttackSuccess", counterStyle.Name), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
-                    }
-                    else
-                    {
-                        Out.SendMessage(LanguageMgr.GetTranslation(Client, "GameObjects.GamePlayer.Attack.CounterAttackInvalidWeapon"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                    }
-                }
-                else
-                {
-                    Out.SendMessage(LanguageMgr.GetTranslation(Client, "GameObjects.GamePlayer.Attack.CounterAttackNoStyle"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                }
+                // Do we really want to send this for every counter attack?
+                Out.SendMessage(LanguageMgr.GetTranslation(Client, "GameObjects.GamePlayer.Attack.CounterAttackNoStyle"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return;
             }
-        }
+                
+            InventoryItem weapon = AttackWeapon;
+                
+            if (!StyleProcessor.CanUseStyle(this, CounterAttackStyle, weapon))
+            {
+                Out.SendMessage(LanguageMgr.GetTranslation(Client, "GameObjects.GamePlayer.Attack.CounterAttackInvalidWeapon"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return;
+            }
 
-        private int CalculateCounterAttackChance()
-        {
-            int value = BuffBonusCategory4[(int)eProperty.CounterAttack];
-            value += Math.Min(25, ItemBonus[(int)eProperty.CounterAttack]);
-            value -= DebuffCategory[(int)eProperty.CounterAttack];
-            return Math.Max(0, value);
-        }
+            TurnTo(attacker.Coordinate);
+            new WeaponOnTargetAction(this, attacker, weapon, null, 1.0, 0, CounterAttackStyle).OnTick();
 
-        private DBStyle GetCounterAttackStyle(int characterClassId)
-        {
-            var whereClause = DB.Column("SpecKeyName").IsEqualTo("CounterAttack").And(DB.Column("ClassId").IsEqualTo(characterClassId));
-            var dbStyles = GameServer.Database.SelectObjects<DBStyle>(whereClause);
-            return dbStyles.FirstOrDefault();
+            Out.SendMessage(LanguageMgr.GetTranslation(Client, "GameObjects.GamePlayer.Attack.CounterAttackSuccess", CounterAttackStyle.Name), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
         }
 
         /// <summary>
@@ -7475,8 +7450,6 @@ namespace DOL.GS
                                     (item as GameInventoryItem)!.OnStruckByEnemy(this, ad.Attacker);
                                 }
                             }
-
-                            CounterAttackHandler(ad.Attacker);
                         }
                         else if (ad.ArmorHitLocation == eArmorSlot.NOTSET)
                         {
@@ -14366,7 +14339,7 @@ namespace DOL.GS
             /// <summary>
             /// Called on every timer tick
             /// </summary>
-            protected override void OnTick()
+            public override void OnTick()
             {
                 GamePlayer player = (GamePlayer)m_actionSource;
                 if (player.Client.Account.PrivLevel > 1) return;
@@ -16132,7 +16105,7 @@ namespace DOL.GS
             /// <summary>
             /// Called on every timer tick
             /// </summary>
-            protected override void OnTick()
+            public override void OnTick()
             {
                 try
                 {

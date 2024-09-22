@@ -155,7 +155,7 @@ namespace DOL.GS.Spells
             }
 
 
-            protected override void OnTick()
+            public override void OnTick()
             {
                 GameLiving target = m_arrowTarget;
                 GameLiving caster = (GameLiving)m_actionSource;

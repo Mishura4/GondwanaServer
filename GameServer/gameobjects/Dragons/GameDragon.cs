@@ -448,7 +448,7 @@ namespace DOL.GS
             /// <summary>
             /// Called on every timer tick.
             /// </summary>
-            protected override void OnTick()
+            public override void OnTick()
             {
                 // Remove the NPC from the world.
 

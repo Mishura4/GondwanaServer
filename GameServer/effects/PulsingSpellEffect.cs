@@ -164,7 +164,7 @@ namespace DOL.GS.Effects
             /// <summary>
             /// Callback for spell pulses
             /// </summary>
-            protected override void OnTick()
+            public override void OnTick()
             {
                 PulsingSpellEffect effect = m_effect;
                 effect.m_spellHandler.OnSpellPulse(effect);

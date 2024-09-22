@@ -216,7 +216,7 @@ namespace DOL.GS.Spells
                 Interval = handler.Spell.Frequency;
             }
 
-            protected override void OnTick()
+            public override void OnTick()
             {
                 //If the target is still in range
                 if (m_handler.Caster.Mana >= m_handler.Spell.PulsePower && m_handler.Caster.IsWithinRadius(m_handler.FSTarget, m_handler.Spell.Range))

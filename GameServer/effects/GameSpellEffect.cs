@@ -820,7 +820,7 @@ namespace DOL.GS.Effects
             /// <summary>
             /// Called on every timer tick
             /// </summary>
-            protected override void OnTick()
+            public override void OnTick()
             {
                 if (m_effect.Concentration > 0 || m_timeSinceStart < m_effect.Duration)
                 {

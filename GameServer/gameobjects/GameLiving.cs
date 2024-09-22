@@ -2175,6 +2175,35 @@ namespace DOL.GS
             return ad;
         }
 
+        protected virtual void CounterAttack(GameLiving attacker)
+        {
+            if (CounterAttackStyle == null || !IsAlive || IsStunned || IsMezzed || IsDisarmed || IsFrozen || IsStrafing)
+            {
+                return;
+            }
+                
+            InventoryItem weapon = AttackWeapon;
+                
+            if (!StyleProcessor.CanUseStyle(this, CounterAttackStyle, weapon))
+            {
+                return;
+            }
+
+            TurnTo(attacker.Coordinate);
+            new WeaponOnTargetAction(this, attacker, weapon, null, 1.0, 0, CounterAttackStyle).OnTick();
+            TurnTo(TargetObject.Coordinate);
+        }
+
+        public Style CounterAttackStyle
+        {
+            get;
+            set;
+        }
+
+        public virtual int CounterAttackChance
+        {
+            get => GetModified(eProperty.CounterAttack);
+        }
 
         private RegionAction InterruptTimer { get; set; }
 
@@ -2445,7 +2474,7 @@ namespace DOL.GS
             /// <summary>
             /// Called on every timer tick
             /// </summary>
-            protected override void OnTick()
+            public override void OnTick()
             {
                 GameLiving owner = (GameLiving)m_actionSource;
 
@@ -2833,7 +2862,7 @@ namespace DOL.GS
             /// <summary>
             /// Called on every timer tick
             /// </summary>
-            protected override void OnTick()
+            public override void OnTick()
             {
                 GameLiving owner = (GameLiving)m_actionSource;
                 Style style = m_combatStyle;
@@ -4389,6 +4418,9 @@ namespace DOL.GS
                     LastAttackedByEnemyTickPvP = CurrentRegion.Time;
                     ad.Attacker.LastAttackTickPvP = CurrentRegion.Time;
                 }
+                
+                if (ad.ArmorHitLocation != eArmorSlot.NOTSET && ad.IsMeleeAttack && CounterAttackChance > 0 && Util.Chance(CounterAttackChance))
+                    CounterAttack(ad.Attacker);
             }
 
             if (ad is { AttackResult: eAttackResult.HitStyle or eAttackResult.HitUnstyled, AttackType: not AttackData.eAttackType.DoT and not AttackData.eAttackType.Unknown })

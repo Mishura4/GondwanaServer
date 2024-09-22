@@ -111,7 +111,7 @@ namespace DOL.GS.Keeps
             m_hookpoint = hookpoint;
         }
 
-        protected override void OnTick()
+        public override void OnTick()
         {
             if (m_hookpoint.Object is GameSiegeWeapon)
                 (m_hookpoint.Object as GameSiegeWeapon).ReleaseControl();

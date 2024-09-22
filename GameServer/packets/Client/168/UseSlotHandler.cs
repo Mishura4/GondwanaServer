@@ -83,7 +83,7 @@ namespace DOL.GS.PacketHandler.Client.v168
             /// <summary>
             /// Called on every timer tick
             /// </summary>
-            protected override void OnTick()
+            public override void OnTick()
             {
                 var player = (GamePlayer)m_actionSource;
                 if ((m_flagSpeedData & 0x200) != 0)

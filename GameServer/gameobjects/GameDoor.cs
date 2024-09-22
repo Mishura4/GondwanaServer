@@ -620,7 +620,7 @@ namespace DOL.GS
             /// <summary>
             /// This function is called to close the door 10 seconds after it was opened
             /// </summary>
-            protected override void OnTick()
+            public override void OnTick()
             {
                 GameDoor door = (GameDoor)m_actionSource;
                 door.Close();

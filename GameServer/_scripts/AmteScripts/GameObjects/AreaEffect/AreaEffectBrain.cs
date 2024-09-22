@@ -38,7 +38,7 @@ namespace DOL.AI.Brain
                 nextArea = actionSource;
             }
 
-            protected override void OnTick()
+            public override void OnTick()
             {
                 nextArea.CallAreaEffect();
                 Stop();

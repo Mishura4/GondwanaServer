@@ -621,7 +621,7 @@ namespace DOL.GS
             set { m_siegeWeapon = value; }
         }
 
-        protected override void OnTick()
+        public override void OnTick()
         {
             if (SiegeWeapon.Owner != null)
                 SiegeWeapon.Owner.Out.SendMessage("Action = " + CurrentAction, eChatType.CT_Say, eChatLoc.CL_SystemWindow);

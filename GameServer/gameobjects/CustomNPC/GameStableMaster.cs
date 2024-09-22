@@ -284,7 +284,7 @@ namespace DOL.GS
             /// <summary>
             /// Called on every timer tick
             /// </summary>
-            protected override void OnTick()
+            public override void OnTick()
             {
                 GamePlayer player = (GamePlayer)m_actionSource;
                 player.MountSteed(m_horse, true);
@@ -308,7 +308,7 @@ namespace DOL.GS
             /// <summary>
             /// Called on every timer tick
             /// </summary>
-            protected override void OnTick()
+            public override void OnTick()
             {
                 GameNPC horse = (GameNPC)m_actionSource;
                 horse.MoveOnPath(horse.MaxSpeed);

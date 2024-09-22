@@ -143,7 +143,7 @@ public class CraftAction : RegionAction
     }
 
     /// <inheritdoc />
-    protected override void OnTick()
+    public override void OnTick()
     {
         GamePlayer player = m_actionSource as GamePlayer;
 

@@ -112,6 +112,9 @@ namespace DOL.GS.Commands
          "'/mob copytextnpc [name]' copies a textnpc mob exactly and places it at your location.",
          "'/mob npctemplate <NPCTemplateID>' creates a mob with npc template, or modifies target.",
          "'/mob npctemplate create <NPCTemplateID>' creates a new template from selected mob.",
+         "'/mob npctemplate save' saves the template for this mob.",
+         "'/mob counter chance [chance]' modifies or shows the mob's chance to counter attack",
+         "'/mob counter style <styleID> <classID>' sets the counter attack style of the mob",
          "'/mob class <ClassName>' replaces mob with a clone of the specified class.",
          "'/mob path <PathID>' associate the mob to the specified path.",
          "'/mob house <HouseNumber>' set NPC's house number.",
@@ -255,6 +258,7 @@ namespace DOL.GS.Commands
                     case "copy": copy(client, targetMob, args); break;
                     case "copytextnpc": copy(client, targetMob, args, true); break;
                     case "npctemplate": npctemplate(client, targetMob, args); break;
+                    case "counter": counter(client, targetMob, args); break;
                     case "class": setClass(client, targetMob, args); break;
                     case "path": path(client, targetMob, args); break;
                     case "house": house(client, targetMob, args); break;
@@ -301,6 +305,7 @@ namespace DOL.GS.Commands
                 DisplaySyntax(client);
             }
         }
+        
         private void Renaissance(GameClient client, GameNPC targetMob, string[] args)
         {
             if (args.Length < 3)
@@ -2642,6 +2647,8 @@ namespace DOL.GS.Commands
             mob.RoamingRange = targetMob.RoamingRange;
             mob.MaxDistance = targetMob.MaxDistance;
             mob.BodyType = targetMob.BodyType;
+            mob.SetCounterAttackChance(targetMob.CounterAttackChance);
+            mob.CounterAttackStyle = targetMob.CounterAttackStyle;
 
             // also copies the stats
 
@@ -2756,6 +2763,20 @@ namespace DOL.GS.Commands
                 }
             }
 
+            if (args[2].ToLower().Equals("save"))
+            {
+                if (targetMob?.NPCTemplate == null)
+                {
+                    DisplayMessage(client, "This mob does not have a template, use create");
+                    return;
+                }
+                
+                targetMob.NPCTemplate.SaveIntoDatabase();
+                targetMob.LoadTemplate(targetMob.NPCTemplate);
+                DisplayMessage(client, $"NPCTemplate {targetMob.NPCTemplate.TemplateId} ({targetMob.NPCTemplate.Name}) saved");
+                return;
+            }
+
             int id = 0;
 
             try
@@ -2793,6 +2814,77 @@ namespace DOL.GS.Commands
                 targetMob.NPCTemplate = template as NpcTemplate;
                 targetMob.SaveIntoDatabase();
                 DisplayMessage(client, $"Updated npc based on template {id}");
+            }
+        }
+        private void counter(GameClient client, GameNPC targetMob, string[] args)
+        {
+            if (args.Length < 3)
+            {
+                DisplaySyntax(client, "counter");
+                return;
+            }
+
+            switch (args[2])
+            {
+                case "chance":
+                    {
+                        if (args.Length > 3)
+                        {
+                            if (!int.TryParse(args[3], out int newChance) || newChance < 0 || newChance > 100)
+                            {
+                                DisplayMessage(client, $"Invalid chance {newChance}, must be a number between 0 and 100");
+                                return;
+                            }
+                        
+                            targetMob.SetCounterAttackChance(newChance);
+                        }
+                        
+                        DisplayMessage(client, $"{targetMob.Name}'s chance to counter attack is {targetMob.CounterAttackChance}%");
+                        break;
+                    }
+
+                case "style":
+                    {
+                        Style style = targetMob.CounterAttackStyle;
+                        if (args.Length == 5)
+                        {
+                            if (!int.TryParse(args[3], out int styleID))
+                            {
+                                DisplayMessage(client, $"Invalid style ID '{args[3]}', must be a number");
+                                return;
+                            }
+                            
+                            if (!int.TryParse(args[4], out int classID))
+                            {
+                                DisplayMessage(client, $"Invalid class ID '{args[4]}', must be a number");
+                                return;
+                            }
+
+                            style = SkillBase.GetStyleByID(styleID, classID);
+                            if (style == null)
+                            {
+                                DisplayMessage(client, $"Could not find style {styleID} with class {classID}");
+                                return;
+                            }
+
+                            targetMob.CounterAttackStyle = style;
+                        }
+                        else if (args.Length == 4)
+                        {
+                            DisplaySyntax(client, "counter");
+                            return;
+                        }
+
+                        if (style == null)
+                        {
+                            DisplayMessage(client, $"{targetMob.Name} does not have a counter attack style");
+                        }
+                        else
+                        {
+                            DisplayMessage(client, $"{targetMob.Name}'s counter attack style is '{style.Name}' ({style.ID}|{style.ClassID})");
+                        }
+                        break;
+                    }
             }
         }
 
