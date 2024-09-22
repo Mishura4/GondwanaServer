@@ -44,7 +44,8 @@ namespace DOL.GS.PropertyCalc
                                 + player.SpecBuffBonusCategory[(int)property] * 10
                                 - player.DebuffCategory[(int)property] * 10
                                 + player.BuffBonusCategory4[(int)property] * 10
-                                + player.AbilityBonus[(int)property] * 10;
+                                + player.AbilityBonus[(int)property] * 10
+                                + player.ItemBonus[(int)property] * 10;
                 return evadechance;
             }
 
