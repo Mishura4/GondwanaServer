@@ -386,7 +386,7 @@ namespace DOL.GS.Spells
         protected override int CalculateEffectDuration(GameLiving target, double effectiveness)
         {
             double duration = base.CalculateEffectDuration(target, effectiveness);
-            duration *= target.GetModified(eProperty.MesmerizeDurationReduction) * 0.01;
+            duration *= (100 - target.TotalMezzDurationReduction) * 0.01;
             if (duration < 1)
                 duration = 1;
             else if (duration > (Spell.Duration * 4))

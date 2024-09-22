@@ -2281,6 +2281,48 @@ namespace DOL.GS
         }
 
         /// <summary>
+        /// Total stun duration reduction, includes generic crowd control reduction
+        /// </summary>
+        public int TotalStunDurationReduction
+        {
+            get
+            {
+                int stunReduction = 100 - GetModified(eProperty.StunDurationReduction);
+                int crowdReduction = 100 - GetModified(eProperty.MythicalCrowdDuration);
+                int totalReduction = stunReduction + crowdReduction;
+                return totalReduction;
+            }
+        }
+        
+        /// <summary>
+        /// Total mezz duration reduction, includes generic crowd control reduction
+        /// </summary>
+        public int TotalMezzDurationReduction
+        {
+            get
+            {
+                int mezzReduction = 100 - GetModified(eProperty.MesmerizeDurationReduction);
+                int crowdReduction = 100 - GetModified(eProperty.MythicalCrowdDuration);
+                int totalReduction = mezzReduction + crowdReduction;
+                return totalReduction;
+            }
+        }
+        
+        /// <summary>
+        /// Total mezz duration reduction, includes generic crowd control reduction
+        /// </summary>
+        public int TotalSpeedDecreaseDurationReduction
+        {
+            get
+            {
+                int slowReduction = 100 - GetModified(eProperty.SpeedDecreaseDurationReduction);
+                int crowdReduction = 100 - GetModified(eProperty.MythicalCrowdDuration);
+                int totalReduction = slowReduction + crowdReduction;
+                return totalReduction;
+            }
+        }
+
+        /// <summary>
         /// Does an attacker interrupt this livings cast?
         /// </summary>
         /// <param name="attacker"></param>

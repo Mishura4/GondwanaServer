@@ -137,7 +137,8 @@ namespace DOL.GS.Spells
         protected override int CalculateEffectDuration(GameLiving target, double effectiveness)
         {
             double duration = base.CalculateEffectDuration(target, effectiveness);
-            duration *= target.GetModified(eProperty.SpeedDecreaseDurationReduction) * 0.01;
+            int modifiedSlowDuration = 100 - target.TotalSpeedDecreaseDurationReduction;
+            duration *= modifiedSlowDuration * 0.01;
 
             if (duration < 1)
                 duration = 1;

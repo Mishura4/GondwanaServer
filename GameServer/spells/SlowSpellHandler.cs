@@ -39,7 +39,7 @@ namespace DOL.GS.Spells
         public override int CalculateSpellResistChance(GameLiving target)
         {
             // If slow duration is 0, just resist the spell
-            return target.GetModified(eProperty.SpeedDecreaseDurationReduction) <= 0 ? 100 : 0;
+            return target.TotalSpeedDecreaseDurationReduction >= 100 ? 100 : 0;
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace DOL.GS.Spells
         protected override int CalculateEffectDuration(GameLiving target, double effectiveness)
         {
             int duration = Spell.Duration;
-            int modifiedSlowDuration = target.GetModified(eProperty.SpeedDecreaseDurationReduction);
+            int modifiedSlowDuration = 100 - target.TotalSpeedDecreaseDurationReduction;
             if (modifiedSlowDuration != 100)
             {
                 if (modifiedSlowDuration <= 0) // Shouldn't happen because CalculateSpellResistChance but better safe than sending a duration of 0 (infinite)
