@@ -3,6 +3,7 @@ using System.Collections;
 using DOL.GS;
 using DOL.GS.PacketHandler;
 using DOL.GS.Effects;
+using Google.Protobuf.WellKnownTypes;
 
 namespace DOL.GS.Spells
 {
@@ -37,8 +38,21 @@ namespace DOL.GS.Spells
         public override AttackData CalculateDamageToTarget(GameLiving target, double effectiveness)
         {
             AttackData ad = base.CalculateDamageToTarget(target, effectiveness);
+            int bonus = Caster.GetModified(eProperty.DotDamageBonus);
+            int critChance = Caster.GetModified(eProperty.CriticalDotHitChance);
+
+            if (bonus != 0)
+            {
+                ad.Damage += (int)Math.Ceiling(ad.Damage * 0.01 * bonus);
+            }
+            
+            if (Util.Chance(critChance) && (ad.Damage >= 1))
+            {
+                int critMax = (ad.Target is GamePlayer) ? ad.Damage / 2 : ad.Damage;
+                ad.CriticalDamage = Util.Random(ad.Damage / 10, critMax);
+            }
+            
             ad.AttackType = AttackData.eAttackType.DoT;
-            ad.CriticalDamage = 0;
             return ad;
         }
 
@@ -85,13 +99,19 @@ namespace DOL.GS.Spells
         protected override GameSpellEffect CreateSpellEffect(GameLiving target, double effectiveness)
         {
             int duration = m_spell.Duration;
+            int reduction = target.GetModified(eProperty.DotDurationDecrease);
 
             if (target is GamePlayer { Guild: not null } targetPlayer)
             {
-                int guildReduction = targetPlayer.Guild.GetDebuffDurationReduction(this);
-                if (guildReduction != 0)
-                    duration = (int)((double)duration * (100 - Math.Min(100, guildReduction))) / 100;
+                reduction += targetPlayer.Guild.GetDebuffDurationReduction(this);
             }
+
+            if (reduction != 0)
+                duration -= (int)Math.Round(0.01 * reduction * duration);
+
+            if (duration < 1)
+                duration = 1;
+            
             // damage is not reduced with distance
             //return new GameSpellEffect(this, m_spell.Duration*10-1, m_spellLine.IsBaseLine ? 3000 : 2000, 1);
             return new GameSpellEffect(this, duration, m_spellLine.IsBaseLine ? 3000 : 2000, 1);

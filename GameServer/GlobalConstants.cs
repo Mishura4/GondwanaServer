@@ -837,9 +837,12 @@ namespace DOL.GS
         StealthEffectivenessBonus = 258,
         StealthDetectionBonus = 259,
         TensionConservationBonus = 260,
+        CriticalDotHitChance = 261,
         OffhandDamageAndChanceBonus = 262,
         OffhandDamageBonus = 263,
         OffhandChanceBonus = 264,
+        DotDamageBonus = 265,
+        DotDurationDecrease = 266,
         #endregion
 
         #region New Skills
