@@ -25,17 +25,17 @@ namespace DOL.GS.PropertyCalc
     /// <summary>
     /// Calculator for Mythical Tension
     /// </summary>
-    [PropertyCalculator(eProperty.MythicalTension)]
-    public class MythicalTensionCalculator : PropertyCalculator
+    [PropertyCalculator(eProperty.MythicalCrowdDuration)]
+    public class MythicalCrowdControlDurationCalculator : PropertyCalculator
     {
         public override int CalcValue(GameLiving living, eProperty property)
         {
-            int value = living.BaseBuffBonusCategory[eProperty.MythicalTension] + living.BuffBonusCategory4[eProperty.MythicalTension];
+            int value = living.BaseBuffBonusCategory[eProperty.MythicalCrowdDuration] + living.BuffBonusCategory4[eProperty.MythicalCrowdDuration];
             if (living is GamePlayer)
             {
                 value += Math.Min(75, living.ItemBonus[(int)property]); // cap 75% from items
             }
-            value -= living.DebuffCategory[eProperty.MythicalTension];
+            value -= living.DebuffCategory[eProperty.MythicalCrowdDuration];
             return Math.Max(-100, value);
         }
     }
