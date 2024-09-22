@@ -4426,7 +4426,7 @@ namespace DOL.GS
                     ad.Attacker.LastAttackTickPvP = CurrentRegion.Time;
                 }
                 
-                if (ad.ArmorHitLocation != eArmorSlot.NOTSET && ad.IsMeleeAttack && CounterAttackChance > 0 && Util.Chance(CounterAttackChance))
+                if (ad.IsMeleeAttack && CounterAttackChance > 0 && Util.Chance(CounterAttackChance))
                     CounterAttack(ad.Attacker);
             }
 
