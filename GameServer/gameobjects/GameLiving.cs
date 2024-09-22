@@ -1836,6 +1836,12 @@ namespace DOL.GS
                 }
                 else
                     weaponDamage = WeaponDamage(weapon);
+
+                if (ad.IsOffHand)
+                {
+                    weaponDamage *= 1 + GetModified(eProperty.OffhandDamageBonus) * 0.01;
+                }
+                
                 double damage;
                 double baseDamage = damageMod * weaponDamage;
                 double unstyledCap = UnstyledDamageCap(weapon) * effectiveness;
@@ -2875,7 +2881,6 @@ namespace DOL.GS
                 double mainHandEffectiveness = m_effectiveness;
 
                 mainHandEffectiveness *= owner.CalculateMainHandEffectiveness(mainWeapon, leftWeapon);
-                leftHandEffectiveness *= owner.CalculateLeftHandEffectiveness(mainWeapon, leftWeapon);
 
                 // GameNPC can Dual Swing even with no weapon
                 if (owner is GameNPC && owner.CanUseLefthandedWeapon)
@@ -3005,6 +3010,8 @@ namespace DOL.GS
                 //now left hand damage
                 if (leftHandSwingCount > 0)
                 {
+                    leftHandEffectiveness *= owner.CalculateLeftHandEffectiveness(mainWeapon, leftWeapon);
+
                     switch (mainHandAD.AttackResult)
                     {
                         case eAttackResult.HitStyle:
@@ -3015,7 +3022,7 @@ namespace DOL.GS
                         case eAttackResult.Parried:
                             for (int i = 0; i < leftHandSwingCount; i++)
                             {
-                                if (m_target is GameLiving && (((GameLiving)m_target).IsAlive == false || ((GameLiving)m_target).ObjectState != eObjectState.Active))
+                                if (m_target is not GameLiving { IsAlive: true, ObjectState: eObjectState.Active })
                                     break;
 
                                 // Savage swings - main,left,main,left.

@@ -3882,9 +3882,11 @@ namespace DOL.GS
 
             int specLevel = Math.Max(GetModifiedSpecLevel(Specs.Celtic_Dual), GetModifiedSpecLevel(Specs.Dual_Wield));
             specLevel = Math.Max(specLevel, GetModifiedSpecLevel(Specs.Fist_Wraps));
+
+            int bonus = GetModified(eProperty.OffhandChanceBonus) + GetModified(eProperty.OffhandDamageAndChanceBonus);
             if (specLevel > 0)
             {
-                return Util.Chance(25 + (specLevel - 1) * 68 / 100) ? 1 : 0;
+                return Util.Chance(25 + bonus + (specLevel - 1) * 68 / 100) ? 1 : 0;
             }
 
             // HtH chance
@@ -3898,15 +3900,15 @@ namespace DOL.GS
                 specLevel--;
                 int randomChance = Util.Random(99);
                 int hitChance = specLevel >> 1;
-                if (randomChance < hitChance)
+                if (randomChance < hitChance + bonus)
                     return 1; // 1 hit = spec/2
 
                 hitChance += specLevel >> 2;
-                if (randomChance < hitChance)
+                if (randomChance < hitChance + bonus / 2)
                     return 2; // 2 hits = spec/4
 
                 hitChance += specLevel >> 4;
-                if (randomChance < hitChance)
+                if (randomChance < hitChance + bonus / 4)
                     return 3; // 3 hits = spec/16
 
                 return 0;
@@ -3923,14 +3925,18 @@ namespace DOL.GS
         {
             double effectiveness = 1.0;
 
-            if (CanUseLefthandedWeapon && leftWeapon != null && leftWeapon.Object_Type == (int)eObjectType.LeftAxe && mainWeapon != null &&
+            if (CanUseLefthandedWeapon && leftWeapon != null && mainWeapon != null &&
                 (mainWeapon.Item_Type == Slot.RIGHTHAND || mainWeapon.Item_Type == Slot.LEFTHAND))
             {
-                int LASpec = GetModifiedSpecLevel(Specs.Left_Axe);
-                if (LASpec > 0)
+                if (leftWeapon.Object_Type == (int)eObjectType.LeftAxe)
                 {
-                    effectiveness = 0.625 + 0.0034 * LASpec;
+                    int LASpec = GetModifiedSpecLevel(Specs.Left_Axe);
+                    if (LASpec > 0)
+                    {
+                        effectiveness = 0.625 + 0.0034 * LASpec;
+                    }
                 }
+                effectiveness += GetModified(eProperty.OffhandDamageAndChanceBonus) * 0.01;
             }
 
             return effectiveness;
