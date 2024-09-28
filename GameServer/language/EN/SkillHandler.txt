@@ -263,5 +263,12 @@ SkillBase.RegisterPropertyNames.RobberyChanceBonus:         Bonus Robbery Chance
 SkillBase.RegisterPropertyNames.RobberyDelayReduction:      Robbery Cooldown Reduction
 SkillBase.RegisterPropertyNames.StealthEffectivenessBonus:  Bonus Stealth
 SkillBase.RegisterPropertyNames.StealthDetectionBonus:      Bonus Stealth Detection
+SkillBase.RegisterPropertyNames.TensionConservationBonus:   Tension Conservation Bonus at Death
+SkillBase.RegisterPropertyNames.CriticalDotHitChance:		Critical Dot Hit Chance Bonus
+SkillBase.RegisterPropertyNames.OffhandDamageAndChanceBonus:	Offhand Damage And Chance Bonus
+SkillBase.RegisterPropertyNames.OffhandDamageBonus:			Offhand Damage Bonus
+SkillBase.RegisterPropertyNames.OffhandChanceBonus:			Offhand Chance Bonus
+SkillBase.RegisterPropertyNames.DotDamageBonus:				Dot Damage Bonus
+SkillBase.RegisterPropertyNames.DotDurationDecrease:		Dot Duration Decrease
 
 SkillBase.RegisterPropertyNames.Skill_Learning:			Magic Learning

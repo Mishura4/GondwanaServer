@@ -59,6 +59,7 @@ GameObjects.GamePlayer.Attack.YouShot:					You shot
 GameObjects.GamePlayer.Attack.CounterAttackSuccess:		You use {0} to counterattack.
 GameObjects.GamePlayer.Attack.CounterAttackInvalidWeap:	Cannot use the counterattack style with the current weapon.
 GameObjects.GamePlayer.Attack.CounterAttackNoStyle:		No counterattack style found for your class.
+GameObjects.GamePlayer.Attack.CounterAttackByEnemy:		{0} performs a counterattack!
 
 GameObjects.GamePlayer.Bind.Bound:						You are now bound to this location.
 GameObjects.GamePlayer.Bind.CantBindDead:				You can not bind while dead!	

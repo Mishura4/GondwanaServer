@@ -2195,9 +2195,23 @@ namespace DOL.GS
                 return;
             }
 
+            if (!AttackState && StyleProcessor.CanUseStyle(this, CounterAttackStyle, weapon))
+            {
+                StartAttack(attacker);
+            }
+
             TurnTo(attacker.Coordinate);
             new WeaponOnTargetAction(this, attacker, weapon, null, 1.0, 0, CounterAttackStyle).OnTick();
             TurnTo(TargetObject.Coordinate);
+
+            if (attacker is GamePlayer targetPlayer)
+            {
+                targetPlayer.Out.SendMessage(LanguageMgr.GetTranslation(targetPlayer.Client, "GameObjects.GamePlayer.Attack.CounterAttackByEnemy", GetName(0, true)), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+            }
+            if (attacker is GameNPC { Brain: IControlledBrain { Owner: GamePlayer targetOwner } })
+            {
+                targetOwner.Out.SendMessage(LanguageMgr.GetTranslation(targetOwner.Client, "GameObjects.GamePlayer.Attack.CounterAttackByEnemy", GetName(0, true)), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+            }
         }
 
         public Style CounterAttackStyle

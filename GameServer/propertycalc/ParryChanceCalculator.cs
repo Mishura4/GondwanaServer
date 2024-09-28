@@ -63,7 +63,7 @@ namespace DOL.GS.PropertyCalc
                     - pet.DebuffCategory[(int)property] * 10
                     + pet.BuffBonusCategory4[(int)property] * 10
                     + pet.AbilityBonus[(int)property] * 10
-                    + player.ItemBonus[(int)property] * 10
+                    + pet.ItemBonus[(int)property] * 10
                     + (pet.GetModified(eProperty.Dexterity) * 2 - 100) / 4
                     + pet.ParryChance * 10;
                 return buff;

@@ -260,5 +260,12 @@ SkillBase.RegisterPropertyNames.RobberyChanceBonus:         Bonus Chance de Vol
 SkillBase.RegisterPropertyNames.RobberyDelayReduction:      Réduction de temps de recharge de Vol
 SkillBase.RegisterPropertyNames.StealthEffectivenessBonus:  Bonus Furtivité
 SkillBase.RegisterPropertyNames.StealthDetectionBonus:      Bonus détection de Furtivité
+SkillBase.RegisterPropertyNames.TensionConservationBonus:   Reduction de Perte de Tension à la Mort
+SkillBase.RegisterPropertyNames.CriticalDotHitChance:		Bonus de Dommage Critique des DoT
+SkillBase.RegisterPropertyNames.OffhandDamageAndChanceBonus:	Bonus Dommage et Chance Main Gauche
+SkillBase.RegisterPropertyNames.OffhandDamageBonus:			Bonus Dommage Main Gauche
+SkillBase.RegisterPropertyNames.OffhandChanceBonus:			Bonus de Chance Main Gauche
+SkillBase.RegisterPropertyNames.DotDamageBonus:				Bonus de Dommage des DoT
+SkillBase.RegisterPropertyNames.DotDurationDecrease:		Réduction Durée des DoT
 
 SkillBase.RegisterPropertyNames.Skill_Learning:			Apprentissage

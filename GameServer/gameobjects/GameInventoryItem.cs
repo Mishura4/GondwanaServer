@@ -37,7 +37,7 @@ namespace DOL.GS
     /// </summary>
     public class GameInventoryItem : InventoryItem, IGameInventoryItem, ITranslatableObject
     {
-        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
         protected GamePlayer m_owner = null;
 
@@ -341,7 +341,7 @@ namespace DOL.GS
                 if (ConditionPercent > 70 && Util.Chance(ServerProperties.Properties.ITEM_CONDITION_LOSS_CHANCE))
                 {
                     int oldPercent = ConditionPercent;
-                    double con = GamePlayer.GetConLevel(player.Level, Level);
+                    double con = GamePlayer.GetConLevel(player!.Level, Level);
                     if (con < -3.0)
                         con = -3.0;
                     int sub = (int)(con + 4);
@@ -385,7 +385,7 @@ namespace DOL.GS
                 if (ConditionPercent > 70 && Util.Chance(ServerProperties.Properties.ITEM_CONDITION_LOSS_CHANCE))
                 {
                     int oldPercent = ConditionPercent;
-                    double con = GamePlayer.GetConLevel(player.Level, Level);
+                    double con = GamePlayer.GetConLevel(player!.Level, Level);
                     if (con < -3.0)
                         con = -3.0;
                     int sub = (int)(con + 4);
@@ -1924,7 +1924,7 @@ namespace DOL.GS
                     || (bonusCat >= 169 && bonusCat <= 186)
                     || (bonusCat >= 188 && bonusCat <= 199)
                     || (bonusCat >= 232 && bonusCat <= 233)
-                    || (bonusCat >= 245 && bonusCat <= 260))
+                    || (bonusCat >= 245 && bonusCat <= 267))
                 {
                     formattedLine += "%";
                 }

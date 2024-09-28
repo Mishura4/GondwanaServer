@@ -42,7 +42,7 @@ namespace DOL.GS
         /// <summary>
         /// Defines a logger for this class.
         /// </summary>
-        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
         /// <summary>
         /// Flag to Check if SkillBase has been pre-loaded.
@@ -2055,6 +2055,20 @@ namespace DOL.GS
                     return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.StealthEffectivenessBonus");
                 case eProperty.StealthDetectionBonus:
                     return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.StealthDetectionBonus");
+                case eProperty.TensionConservationBonus:
+                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.TensionConservationBonus");
+                case eProperty.CriticalDotHitChance:
+                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.CriticalDotHitChance");
+                case eProperty.OffhandDamageAndChanceBonus:
+                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.OffhandDamageAndChanceBonus");
+                case eProperty.OffhandDamageBonus:
+                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.OffhandDamageBonus");
+                case eProperty.OffhandChanceBonus:
+                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.OffhandChanceBonus");
+                case eProperty.DotDamageBonus:
+                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.DotDamageBonus");
+                case eProperty.DotDurationDecrease:
+                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.DotDurationDecrease");
                 case eProperty.Skill_Learning:
                     return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Learning");
                 default:
@@ -2823,7 +2837,7 @@ namespace DOL.GS
                 m_syncLockUpdates.ExitReadLock();
             }
 
-            if (spec.KeyName == keyname)
+            if (spec!.KeyName == keyname)
                 return spec;
 
             if (create)
@@ -3260,7 +3274,7 @@ namespace DOL.GS
 
             try
             {
-                handl = (ISpecActionHandler)type.Assembly.CreateInstance(type.FullName);
+                handl = (ISpecActionHandler)type.Assembly.CreateInstance(type.FullName!);
                 return handl;
             }
             catch
@@ -3276,7 +3290,7 @@ namespace DOL.GS
 
             try
             {
-                handl = (IAbilityActionHandler)type.Assembly.CreateInstance(type.FullName);
+                handl = (IAbilityActionHandler)type.Assembly.CreateInstance(type.FullName!);
                 return handl;
             }
             catch
@@ -3368,7 +3382,7 @@ namespace DOL.GS
             try
             {
                 gameSpec = (Specialization)entry.Item1.Assembly.CreateInstance(
-                        typeName: entry.Item1.FullName, // string including namespace of the type
+                        typeName: entry.Item1.FullName!, // string including namespace of the type
                         ignoreCase: true,
                         bindingAttr: BindingFlags.Default,
                         binder: null,

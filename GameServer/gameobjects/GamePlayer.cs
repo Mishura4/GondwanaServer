@@ -7350,7 +7350,6 @@ namespace DOL.GS
 
             if (CounterAttackStyle == null)
             {
-                // Do we really want to send this for every counter attack?
                 Out.SendMessage(LanguageMgr.GetTranslation(Client, "GameObjects.GamePlayer.Attack.CounterAttackNoStyle"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
             }
@@ -7359,14 +7358,24 @@ namespace DOL.GS
                 
             if (!StyleProcessor.CanUseStyle(this, CounterAttackStyle, weapon))
             {
-                Out.SendMessage(LanguageMgr.GetTranslation(Client, "GameObjects.GamePlayer.Attack.CounterAttackInvalidWeapon"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                Out.SendMessage(LanguageMgr.GetTranslation(Client, "GameObjects.GamePlayer.Attack.CounterAttackInvalidWeap"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
             }
 
+            if (!AttackState && StyleProcessor.CanUseStyle(this, CounterAttackStyle, weapon) && CounterAttackStyle != null)
+            {
+                StartAttack(attacker);
+            }
+
             TurnTo(attacker.Coordinate);
+            Out.SendPlayerPositionAndObjectID();
             new WeaponOnTargetAction(this, attacker, weapon, null, 1.0, 0, CounterAttackStyle).OnTick();
 
-            Out.SendMessage(LanguageMgr.GetTranslation(Client, "GameObjects.GamePlayer.Attack.CounterAttackSuccess", CounterAttackStyle.Name), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
+            if (attacker is GamePlayer targetPlayer)
+            {
+                targetPlayer.Out.SendMessage(LanguageMgr.GetTranslation(targetPlayer.Client, "GameObjects.GamePlayer.Attack.CounterAttackByEnemy", GetPersonalizedName(attacker)), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+            }
+            Out.SendMessage(LanguageMgr.GetTranslation(Client, "GameObjects.GamePlayer.Attack.CounterAttackSuccess", CounterAttackStyle!.Name), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
         }
 
         /// <summary>
