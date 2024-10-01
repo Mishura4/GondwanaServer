@@ -139,3 +139,7 @@ Adrenaline.Target.Immune:		{0} est en fièvre de bataille et résiste entièreme
 Adrenaline.Target.Absorbs:		Votre cible absorbe {0} points de dégât de l'attaque!
 Adrenaline.Self.Immune:			Votre fièvre de bataille vous protège de ce sort!
 Adrenaline.Self.Absorb:			Vous absorbez {0} points de dégât du sort!
+
+# DebuffImmunity
+DebuffImmunity.You.Resisted:			Vous résistez à l'effet grâce à votre immunité anti-Affaiblissement !
+DebuffImmunity.Target.Resisted:			{0} résiste à l'effet grâce son votre immunité anti-Affaiblissement !

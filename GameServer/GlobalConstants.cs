@@ -843,6 +843,7 @@ namespace DOL.GS
         OffhandChanceBonus = 264,
         DotDamageBonus = 265,
         DotDurationDecrease = 266,
+        MythicalDebuffResistChance = 267,
         #endregion
 
         #region New Skills

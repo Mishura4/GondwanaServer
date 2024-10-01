@@ -22,6 +22,7 @@ using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
 using DOL.Language;
 using System.Collections.Generic;
+using System.Numerics;
 
 namespace DOL.GS.Spells
 {
@@ -74,6 +75,34 @@ namespace DOL.GS.Spells
                     effectiveness = 1.0;
                     effectiveness *= (1.0 + m_caster.GetModified(eProperty.DebuffEffectivness) * 0.01);
                 }
+            }
+
+            int totalResistChance = 0;
+
+            // 1. DebuffImmunity
+            var immunityEffect = SpellHandler.FindEffectOnTarget(target, "DebuffImmunity") as DebuffImmunityEffect;
+            if (immunityEffect != null)
+            {
+                totalResistChance += immunityEffect.AdditionalResistChance;
+            }
+
+            // 2. MythicalDebuffResistChance
+            int mythicalResistChance = 0;
+            if (target is GamePlayer gamePlayer)
+            {
+                mythicalResistChance = gamePlayer.GetModified(eProperty.MythicalDebuffResistChance);
+                totalResistChance += mythicalResistChance;
+            }
+
+            // Apply the combined resist chance
+            if (Util.Chance(totalResistChance))
+            {
+                (m_caster as GamePlayer)?.SendTranslatedMessage("DebuffImmunity.Target.Resisted", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow, m_caster.GetPersonalizedName(target));
+                (target as GamePlayer)?.SendTranslatedMessage("DebuffImmunity.You.Resisted", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
+
+                SendSpellResistAnimation(target);
+
+                return;
             }
 
             base.ApplyEffectOnTarget(target, effectiveness);

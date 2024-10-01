@@ -139,3 +139,7 @@ Adrenaline.Target.Immune:		{0}'s battle fever renders him/her immune to this eff
 Adrenaline.Target.Absorbs:		The target absorbs {0} damage(s) from the attack!
 Adrenaline.Self.Immune:			Your battle fever makes you immune to the effect!
 Adrenaline.Self.Absorb:			You absorb {0} damage(s) from the attack!
+
+# DebuffImmunity
+DebuffImmunity.You.Resisted:			You resist the effect with your Debuff Immunity!
+DebuffImmunity.Target.Resisted:			{0} resists the effect with Debuff Immunity!

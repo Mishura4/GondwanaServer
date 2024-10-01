@@ -63,7 +63,7 @@ SkillBase.RegisterPropertyNames.DeathServant:			Death Servant
 SkillBase.RegisterPropertyNames.DeathservantFocus:		Deathservant Focus
 SkillBase.RegisterPropertyNames.Deathsight:				Deathsight
 SkillBase.RegisterPropertyNames.DeathsightFocus:		Deathsight Focus
-SkillBase.RegisterPropertyNames.DebuffEffectivness:		Debuff Effectivness
+SkillBase.RegisterPropertyNames.DebuffEffectivness:		Debuff Effectiveness
 SkillBase.RegisterPropertyNames.DefensiveBonus:			Defensive Bonus (PvE Only)
 SkillBase.RegisterPropertyNames.Dementia:				Dementia
 SkillBase.RegisterPropertyNames.Dexterity:				Dexterity
@@ -180,7 +180,7 @@ SkillBase.RegisterPropertyNames.Spirit:					Spirit Resist
 SkillBase.RegisterPropertyNames.SpiritMagic:			Spirit Magic
 SkillBase.RegisterPropertyNames.SpiritMagicFocus:		Spirit Magic Focus
 SkillBase.RegisterPropertyNames.Staff:					Staff
-SkillBase.RegisterPropertyNames.StatBuffSpells:			All Stat Buff Spells
+SkillBase.RegisterPropertyNames.StatBuffSpells:			All Buff Spells Improvement
 SkillBase.RegisterPropertyNames.Stealth:				Stealth
 SkillBase.RegisterPropertyNames.Stormcalling:			Stormcalling
 SkillBase.RegisterPropertyNames.Strength:				Strength
@@ -270,5 +270,6 @@ SkillBase.RegisterPropertyNames.OffhandDamageBonus:			Offhand Damage Bonus
 SkillBase.RegisterPropertyNames.OffhandChanceBonus:			Offhand Chance Bonus
 SkillBase.RegisterPropertyNames.DotDamageBonus:				Dot Damage Bonus
 SkillBase.RegisterPropertyNames.DotDurationDecrease:		Dot Duration Decrease
+SkillBase.RegisterPropertyNames.MythicalDebuffResistChance:	Mythical Debuff Immunity Bonus
 
 SkillBase.RegisterPropertyNames.Skill_Learning:			Magic Learning

@@ -34,6 +34,34 @@ namespace DOL.GS.Spells
 
         public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
+            int totalResistChance = 0;
+
+            // 1. DebuffImmunity
+            var immunityEffect = SpellHandler.FindEffectOnTarget(target, "DebuffImmunity") as DebuffImmunityEffect;
+            if (immunityEffect != null)
+            {
+                totalResistChance += immunityEffect.AdditionalResistChance;
+            }
+
+            // 2. MythicalDebuffResistChance
+            int mythicalResistChance = 0;
+            if (target is GamePlayer gamePlayer)
+            {
+                mythicalResistChance = gamePlayer.GetModified(eProperty.MythicalDebuffResistChance);
+                totalResistChance += mythicalResistChance;
+            }
+
+            // Apply the combined resist chance
+            if (Util.Chance(totalResistChance))
+            {
+                (m_caster as GamePlayer)?.SendTranslatedMessage("DebuffImmunity.Target.Resisted", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow, m_caster.GetPersonalizedName(target));
+                (target as GamePlayer)?.SendTranslatedMessage("DebuffImmunity.You.Resisted", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
+
+                SendSpellResistAnimation(target);
+
+                return;
+            }
+
             if (target.EffectList.GetOfType<AdrenalineSpellEffect>() != null)
             {
                 (m_caster as GamePlayer)?.SendTranslatedMessage("Adrenaline.Target.Immune", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow, m_caster.GetPersonalizedName(target));
