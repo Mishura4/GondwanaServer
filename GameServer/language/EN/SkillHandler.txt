@@ -271,5 +271,6 @@ SkillBase.RegisterPropertyNames.OffhandChanceBonus:			Offhand Chance Bonus
 SkillBase.RegisterPropertyNames.DotDamageBonus:				Dot Damage Bonus
 SkillBase.RegisterPropertyNames.DotDurationDecrease:		Dot Duration Decrease
 SkillBase.RegisterPropertyNames.MythicalDebuffResistChance:	Mythical Debuff Immunity Bonus
+SkillBase.RegisterPropertyNames.DamnationEffectEnhancement:	Damnation Effect Enhancements
 
 SkillBase.RegisterPropertyNames.Skill_Learning:			Magic Learning

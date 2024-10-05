@@ -46,7 +46,7 @@ namespace DOL.AI.Brain
         /// <summary>
         /// Defines a logger for this class.
         /// </summary>
-        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
         public const int MAX_AGGRO_DISTANCE = 3600;
         public const int MAX_AGGRO_LIST_DISTANCE = 6000;
         public const int MAX_PET_AGGRO_DISTANCE = 512; // Tolakram - Live test with caby pet - I was extremely close before auto aggro
@@ -1260,7 +1260,7 @@ namespace DOL.AI.Brain
                                 spell_rec.Add(spell);
                                 needheal = true;
                             }
-                            if (LivingHasEffect(Body.ControlledBrain.Body, spell) && (spell.Target.ToLower() != "self")) continue;
+                            if (LivingHasEffect(Body.ControlledBrain!.Body, spell) && (spell.Target.ToLower() != "self")) continue;
                         }
                         if (!needpet && !needheal)
                             spell_rec.Add(spell);
@@ -1270,7 +1270,7 @@ namespace DOL.AI.Brain
                         spellToCast = (Spell)spell_rec[Util.Random((spell_rec.Count - 1))];
                         if (!Body.IsReturningHome)
                         {
-                            if ((spellToCast.Uninterruptible || Body.canQuickCast) && CheckDefensiveSpells(spellToCast))
+                            if ((spellToCast!.Uninterruptible || Body.canQuickCast) && CheckDefensiveSpells(spellToCast))
                                 casted = true;
                             else
                                 if (!Body.IsBeingInterrupted && CheckDefensiveSpells(spellToCast))
@@ -1316,7 +1316,7 @@ namespace DOL.AI.Brain
                         spellToCast = (Spell)spell_rec[Util.Random((spell_rec.Count - 1))];
 
 
-                        if ((spellToCast.Uninterruptible || Body.canQuickCast) && CheckOffensiveSpells(spellToCast))
+                        if ((spellToCast!.Uninterruptible || Body.canQuickCast) && CheckOffensiveSpells(spellToCast))
                             casted = true;
                         else
                             if (!Body.IsBeingInterrupted && CheckOffensiveSpells(spellToCast))
@@ -1406,6 +1406,7 @@ namespace DOL.AI.Brain
                 case "TENSIONBUFF":
                 case "BATTLEFEVERDURATIONBUFF":
                 case "SPELLSHIELD":
+                case "DEBUFFIMMUNITY":
                     {
                         // Buff self, if not in melee, but not each and every mob
                         // at the same time, because it looks silly.
@@ -1730,7 +1731,7 @@ namespace DOL.AI.Brain
             if (target == null)
                 return true;
 
-            if (target is GamePlayer && (target as GamePlayer).CharacterClass.ID == (int)eCharacterClass.Vampiir)
+            if (target is GamePlayer && (target as GamePlayer)!.CharacterClass.ID == (int)eCharacterClass.Vampiir)
             {
                 switch (spell.SpellType)
                 {
@@ -1757,7 +1758,7 @@ namespace DOL.AI.Brain
                     GameSpellEffect speffect = effect as GameSpellEffect;
 
                     //if the effect effectgroup is the same as the checking spells effectgroup then these are considered the same
-                    if (speffect.Spell.SpellType == spell.SpellType || (speffect.Spell.EffectGroup != 0 && speffect.Spell.EffectGroup == spell.EffectGroup))
+                    if (speffect!.Spell.SpellType == spell.SpellType || (speffect.Spell.EffectGroup != 0 && speffect.Spell.EffectGroup == spell.EffectGroup))
                         return true;
                 }
             }
@@ -1777,7 +1778,7 @@ namespace DOL.AI.Brain
                 GameSpellEffect speffect = effect as GameSpellEffect;
 
                 // if this is a DOT then target is poisoned
-                if (speffect.Spell.SpellType == "DamageOverTime")
+                if (speffect!.Spell.SpellType == "DamageOverTime")
                     return true;
             }
 

@@ -227,11 +227,27 @@ namespace DOL.GS.Spells
                 return;
             }
             AttackData ad = args.AttackData;
+            GameLiving target = ad.Target;
+            int damnationEnhancement = target.GetModified(eProperty.DamnationEffectEnhancement);
 
-            if (ad.AttackResult == GameLiving.eAttackResult.HitUnstyled || ad.AttackResult == GameLiving.eAttackResult.HitStyle)
+            if (ad.AttackType == AttackData.eAttackType.DoT)
             {
-                int meleeabsorbPercent = Spell.AmnesiaChance;
-                int damageAbsorbed = (int)(0.01 * meleeabsorbPercent * (ad.Damage + ad.CriticalDamage));
+                ad.Damage = 0;
+
+                if (ad.Target is GamePlayer player)
+                    MessageToLiving(player, LanguageMgr.GetTranslation(player.Client, "Damnation.Self.Resist"), eChatType.CT_SpellResisted);
+                if (ad.Attacker is GamePlayer attacker)
+                    MessageToLiving(attacker, LanguageMgr.GetTranslation(attacker.Client, "Damnation.Target.Resist", attacker.GetPersonalizedName(ad.Target)), eChatType.CT_SpellResisted);
+            }
+            else if (ad.AttackType == AttackData.eAttackType.MeleeOneHand ||
+                     ad.AttackType == AttackData.eAttackType.MeleeTwoHand ||
+                     ad.AttackType == AttackData.eAttackType.MeleeDualWield ||
+                     ad.AttackType == AttackData.eAttackType.Ranged)
+            {
+                int meleeAbsorbPercent = Spell.AmnesiaChance + damnationEnhancement;
+                meleeAbsorbPercent = Math.Min(100, meleeAbsorbPercent);
+
+                int damageAbsorbed = (int)(0.01 * meleeAbsorbPercent * (ad.Damage + ad.CriticalDamage));
                 ad.Damage -= damageAbsorbed;
 
                 if (damageAbsorbed != 0)
@@ -242,15 +258,24 @@ namespace DOL.GS.Spells
                         MessageToLiving(attacker, LanguageMgr.GetTranslation(attacker.Client, "Damnation.Target.Absorbs", attacker.GetPersonalizedName(ad.Target), damageAbsorbed), eChatType.CT_Spell);
                 }
             }
-
-            if (ad.AttackType == AttackData.eAttackType.DoT)
+            else if (ad.AttackType == AttackData.eAttackType.Spell)
             {
-                ad.Damage = 0;
+                if (damnationEnhancement > 0)
+                {
+                    int spellAbsorbPercent = damnationEnhancement;
+                    spellAbsorbPercent = Math.Min(100, spellAbsorbPercent);
 
-                if (ad.Target is GamePlayer player)
-                    MessageToLiving(player, "Damnation.Self.Resist", eChatType.CT_SpellResisted);
-                if (ad.Attacker is GamePlayer attacker)
-                    MessageToLiving(attacker, LanguageMgr.GetTranslation(attacker.Client, "Damnation.Target.Resist", attacker.GetPersonalizedName(ad.Target)), eChatType.CT_SpellResisted);
+                    int damageAbsorbed = (int)(0.01 * spellAbsorbPercent * (ad.Damage + ad.CriticalDamage));
+                    ad.Damage -= damageAbsorbed;
+
+                    if (damageAbsorbed != 0)
+                    {
+                        if (ad.Target is GamePlayer player)
+                            MessageToLiving(player, LanguageMgr.GetTranslation(player.Client, "Damnation.Self.SpellAbsorb", damageAbsorbed), eChatType.CT_Spell);
+                        if (ad.Attacker is GamePlayer attacker)
+                            MessageToLiving(attacker, LanguageMgr.GetTranslation(attacker.Client, "Damnation.Target.SpellAbsorbs", attacker.GetPersonalizedName(ad.Target), damageAbsorbed), eChatType.CT_Spell);
+                    }
+                }
             }
         }
 

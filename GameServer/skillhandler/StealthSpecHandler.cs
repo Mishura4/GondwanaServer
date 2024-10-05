@@ -23,6 +23,7 @@ using DOL.GS.PacketHandler;
 using System.Collections;
 using DOL.AI.Brain;
 using DOL.Language;
+using DOL.GS.Spells;
 
 namespace DOL.GS.SkillHandler
 {
@@ -92,6 +93,12 @@ namespace DOL.GS.SkillHandler
                 if (player.IsStunned)
                 {
                     player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Skill.Ability.Stealth.CannotUseStunned"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    return;
+                }
+
+                if (SpellHandler.FindEffectOnTarget(player, "Damnation") != null)
+                {
+                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Skill.Ability.Stealth.CannotUseDamned"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     return;
                 }
 

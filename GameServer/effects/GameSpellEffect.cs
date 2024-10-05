@@ -16,16 +16,14 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
-using System;
-using System.Reflection;
-
 using DOL.Database;
-using DOL.GS.Spells;
 using DOL.GS.PacketHandler;
+using DOL.GS.Spells;
 using DOL.Language;
-
 using log4net;
 using System.Collections.Generic;
+using System.Reflection;
+using System;
 
 namespace DOL.GS.Effects
 {
@@ -44,7 +42,7 @@ namespace DOL.GS.Effects
         /// <summary>
         /// Defines a logger for this class.
         /// </summary>
-        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
         #endregion
 
@@ -159,6 +157,9 @@ namespace DOL.GS.Effects
         /// The timer for pulsing effects
         /// </summary>
         protected PulsingEffectTimer m_timer;
+
+        private long m_effectStartTick = 0;
+
         #endregion
 
         #region public Getters
@@ -441,7 +442,7 @@ namespace DOL.GS.Effects
                 if (enable)
                     EnableEffect();
 
-                SpellHandler.OnEffectAdd(this);
+                SpellHandler!.OnEffectAdd(this);
             }
             finally
             {
@@ -507,7 +508,7 @@ namespace DOL.GS.Effects
                 {
                     GamePlayer player = Owner as GamePlayer;
                     if (player != null)
-                        player.Out.SendMessage(LanguageMgr.GetTranslation((Owner as GamePlayer).Client, "Effects.GameSpellEffect.CantRemoveEffect"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        player.Out.SendMessage(LanguageMgr.GetTranslation((Owner as GamePlayer)!.Client, "Effects.GameSpellEffect.CantRemoveEffect"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 
                     return;
                 }
@@ -600,7 +601,7 @@ namespace DOL.GS.Effects
             else
                 UpdateEffect();
 
-            SpellHandler.OnEffectAdd(this);
+            SpellHandler!.OnEffectAdd(this);
 
             PulseCallback();
         }
@@ -629,6 +630,12 @@ namespace DOL.GS.Effects
         protected virtual void StartTimers()
         {
             StopTimers();
+
+            if (m_effectStartTick == 0)
+            {
+                m_effectStartTick = GameTimer.GetTickCount();
+            }
+
             // Duration => 0 = endless until explicit stop
             if (Duration > 0 || PulseFreq > 0)
             {
@@ -684,6 +691,57 @@ namespace DOL.GS.Effects
                 SpellHandler.OnEffectPulse(this);
         }
         #endregion
+
+        public int AddRemainingTime(int additionalDuration)
+        {
+            int actualAddedDuration = 0;
+
+            lock (m_LockObject)
+            {
+                int maxDuration = ServerProperties.Properties.MAX_DAMNATION_DURATION * 1000;
+
+                long currentTime = GameTimer.GetTickCount();
+
+                if (m_effectStartTick == 0)
+                {
+                    m_effectStartTick = currentTime;
+                }
+
+                int elapsedTime = (int)(currentTime - m_effectStartTick);
+                int remainingTime = m_duration - elapsedTime;
+
+                int proposedTotalDuration = m_duration + additionalDuration;
+                int cappedTotalDuration = maxDuration > 0 ? Math.Min(proposedTotalDuration, maxDuration) : proposedTotalDuration;
+                actualAddedDuration = cappedTotalDuration - m_duration;
+
+                if (actualAddedDuration <= 0)
+                {
+                    actualAddedDuration = 0;
+                }
+
+                m_duration = cappedTotalDuration;
+                remainingTime = m_duration - elapsedTime;
+
+                if (remainingTime > 0)
+                {
+                    if (m_timer != null)
+                    {
+                        m_timer.Change(remainingTime);
+                    }
+                    else
+                    {
+                        StartTimers();
+                    }
+                }
+                else
+                {
+                    ExpiredCallback();
+                }
+            }
+
+            UpdateEffect();
+            return actualAddedDuration;
+        }
 
         /// <summary>
         /// Delve information
@@ -804,6 +862,11 @@ namespace DOL.GS.Effects
                 if (effect == null)
                     throw new ArgumentNullException("effect");
                 m_effect = effect;
+            }
+
+            public void Change(int newInterval)
+            {
+                Interval = newInterval;
             }
 
             /// <summary>

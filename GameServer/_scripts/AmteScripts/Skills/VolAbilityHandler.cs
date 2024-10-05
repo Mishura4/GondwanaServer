@@ -1,9 +1,12 @@
 ﻿using DOL.GS.Commands;
 using DOL.GS.PacketHandler;
+using DOL.GS.Spells;
+using DOL.Language;
 using log4net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,7 +19,7 @@ namespace DOL.GS.SkillHandler
     [SkillHandlerAttribute(Abilities.Vol)]
     public class VolAbilityHandler : IAbilityActionHandler
     {
-        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
         // On peut voler toutes les minutes
         public static int DISABLE_DURATION = ServerProperties.Properties.VOL_DELAY * 60 * 1000;
@@ -35,27 +38,32 @@ namespace DOL.GS.SkillHandler
 
             if (player.IsMezzed)
             {
-                player.Out.SendMessage("Vous ne pouvez voler en étant hypnotisé!",
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Commands.Players.Vol.Hypnotized"),
                     eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
             }
 
             if (player.IsStunned)
             {
-                player.Out.SendMessage("Vous ne pouvez pas voler en étant assomé(e)!",
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Commands.Players.Vol.Stunned"),
                     eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
             }
             if (player.PlayerAfkMessage != null)
             {
-                player.Out.SendMessage("Vous ne pouvez pas voler lorsque vous " +
-                    "êtes afk! Tapez /afk pour le désactiver.",
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Commands.Players.Vol.AFK"),
                     eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
             }
             if (!player.IsAlive)
             {
-                player.Out.SendMessage("Vous ne pouvez voler en étant mort(e)!",
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Commands.Players.Vol.Dead"),
+                    eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return;
+            }
+            if (SpellHandler.FindEffectOnTarget(player, "Damnation") != null)
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Commands.Players.Vol.Damned"),
                     eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
             }
@@ -73,8 +81,7 @@ namespace DOL.GS.SkillHandler
             }
             else
             {
-                player.Out.SendMessage("Vous devez sélectionner un " +
-                    "personnage joueur!",
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Commands.Players.Vol.SelectHuman"),
                     eChatType.CT_System, eChatLoc.CL_SystemWindow);
             }
         }

@@ -125,14 +125,17 @@ Petrify.Self.Absorb:		You're petrified and absorb {0} damage(s)!
 Petrify.Self.Unpetrify:		Your petrification fades.
 
 # Damnation
-Damnation.Self.Message:		The target is damned
-Damnation.Self.Message2:	You may not realize it, but you're already dead!
-Damnation.Target.Resist:	{0} is damned and can't be effected by this Spell!
-Damnation.Self.Absorb:		You are damned and absorb {0} damage(s)!
-Damnation.Target.Absorbs:	{0} is damned and absorbs {1} damage(s)!
-Damnation.Self.Resist:		You are damned and resist the effect!
-Damnation.Target.Resist:	{0} is damned and resists the effect!
-Damnation.Kill.SelfHeal:	You draw vitality from your enemy's corpse, gaining {0} health!
+Damnation.Self.Message:			The target is damned
+Damnation.Self.Message2:		You may not realize it, but you're already dead!
+Damnation.Target.Resist:		{0} is damned and can't be effected by this Spell!
+Damnation.Self.Absorb:			You are damned and absorb {0} damage(s)!
+Damnation.Target.Absorbs:		{0} is damned and absorbs {1} damage(s)!
+Damnation.Self.SpellAbsorb:		You are damned and use your gear to absorb {0} spell damage(s)!
+Damnation.Target.SpellAbsorbs:	{0} is damned and use his gear to absorb {1} spell damage(s)!
+Damnation.Self.Resist:			You are damned and resist the effect!
+Damnation.Target.Resist:		{0} is damned and resists the effect!
+Damnation.Kill.SelfHeal:		You draw vitality from your enemy's corpse, gaining {0} health!
+Damnation.Kill.DurationExtended:	Your accursed existence is extended by {0} seconds as you claim another soul, but the end still awaits.
 
 # Adrenaline
 Adrenaline.Target.Immune:		{0}'s battle fever renders him/her immune to this effect!

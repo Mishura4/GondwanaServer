@@ -844,6 +844,7 @@ namespace DOL.GS
         DotDamageBonus = 265,
         DotDurationDecrease = 266,
         MythicalDebuffResistChance = 267,
+        DamnationEffectEnhancement = 268,
         #endregion
 
         #region New Skills

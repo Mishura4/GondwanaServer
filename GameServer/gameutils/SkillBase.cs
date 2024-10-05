@@ -2071,6 +2071,8 @@ namespace DOL.GS
                     return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.DotDurationDecrease");
                 case eProperty.MythicalDebuffResistChance:
                     return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MythicalDebuffResistChance");
+                case eProperty.DamnationEffectEnhancement:
+                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.DamnationEffectEnhancement");
                 case eProperty.Skill_Learning:
                     return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Learning");
                 default:

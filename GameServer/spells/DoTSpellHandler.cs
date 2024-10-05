@@ -293,8 +293,8 @@ namespace DOL.GS.Spells
             // Attacked living may modify the attack data.
             ad.Target.ModifyAttack(ad);
 
-            SendDamageMessages(ad);
             DamageTarget(ad, false);
+            SendDamageMessages(ad);
         }
 
         public DoTSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }

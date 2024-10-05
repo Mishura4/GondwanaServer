@@ -1924,7 +1924,7 @@ namespace DOL.GS
                     || (bonusCat >= 169 && bonusCat <= 186)
                     || (bonusCat >= 188 && bonusCat <= 199)
                     || (bonusCat >= 232 && bonusCat <= 233)
-                    || (bonusCat >= 245 && bonusCat <= 267))
+                    || (bonusCat >= 245 && bonusCat <= 269))
                 {
                     formattedLine += "%";
                 }

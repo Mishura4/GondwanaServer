@@ -2,6 +2,7 @@ Commands.Players.Vol.Description:			Let's steal a player!
 Commands.Players.Vol.Usage: 				'/vol [player]'
 Commands.Players.Steal.Description:			Let's steal a player!
 Commands.Players.Steal.Usage: 				'/steal [player]'
+Commands.Players.Vol.SelectHuman:			You must select a human player!
 Commands.Players.Vol.Move: 					Your attempted theft failed because you moved!
 Commands.Players.Vol.UnknownCommand: 		This command does not exist.
 Commands.Players.Vol.Area: 					You cannot steal here...

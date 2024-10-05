@@ -8526,7 +8526,7 @@ namespace DOL.GS
 
             if (killer is GamePlayer killerPlayer && killer != this)
             {
-                bool killerIsDamned = SpellHandler.FindEffectOnTarget(killerPlayer, "Damnation") != null;
+                GameSpellEffect damnationEffect = SpellHandler.FindEffectOnTarget(killerPlayer, "Damnation");
                 bool targetIsNotDamned = SpellHandler.FindEffectOnTarget(this, "Damnation") == null;
 
                 if (!IsInRvR && !IsInPvP && Reputation < 0 && !IsInPvPArea() && !killerPlayer.IsInSafeArea())
@@ -8564,43 +8564,82 @@ namespace DOL.GS
 
                 killerPlayer.Out.SendMessage(LanguageMgr.GetTranslation(killerPlayer.Client.Account.Language, "GameObjects.GamePlayer.Die.YouKilled", killerPlayer.GetPersonalizedName(this)), eChatType.CT_PlayerDied, eChatLoc.CL_SystemWindow);
 
-                if (killerIsDamned && targetIsNotDamned)
+                if (damnationEffect != null && targetIsNotDamned)
                 {
                     double conLevel = killerPlayer.GetConLevel(this);
 
                     float healPercentage;
+                    float durationPercentage;
                     switch (conLevel)
                     {
                         case <= -3:
+                            durationPercentage = 0.0f;
                             healPercentage = 0.0f;
                             break;
                         case <= -2:
+                            durationPercentage = 0.12f;
                             healPercentage = 0.05f;
                             break;
                         case <= -1:
+                            durationPercentage = 0.25f;
                             healPercentage = 0.10f;
                             break;
-                        case 0:
+                        case <= 0:
+                            durationPercentage = 0.50f;
                             healPercentage = 0.20f;
                             break;
-                        case 1:
+                        case <= 1:
+                            durationPercentage = 0.85f;
                             healPercentage = 0.35f;
                             break;
-                        case 2:
+                        case <= 2:
+                            durationPercentage = 1.25f;
                             healPercentage = 0.50f;
                             break;
-                        case >= 3:
+                        default: // ConLevel >= 3
+                            durationPercentage = 1.75f;
                             healPercentage = 0.75f;
-                            break;
-                        default:
-                            healPercentage = 0.0f;
                             break;
                     }
 
+                    int baseDuration = damnationEffect.Spell.Duration;
+                    int additionalDuration = (int)(baseDuration * durationPercentage);
+                    int damnationEnhancement = killerPlayer.GetModified(eProperty.DamnationEffectEnhancement);
+
+                    if (damnationEnhancement > 0)
+                    {
+                        int enhancementBonus = (int)(additionalDuration * damnationEnhancement / 100.0);
+                        additionalDuration += enhancementBonus;
+                    }
+
+                    int actualAddedDuration = damnationEffect.AddRemainingTime(additionalDuration);
+
+                    if (actualAddedDuration != 0)
+                    {
+                        damnationEffect.AddRemainingTime(additionalDuration);
+                        killerPlayer.Out.SendMessage(LanguageMgr.GetTranslation(killerPlayer.Client.Account.Language, "Damnation.Kill.DurationExtended", (additionalDuration / 1000)), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                    }
+
                     int healAmount = (int)(killerPlayer.MaxHealth * healPercentage);
-                    killerPlayer.ChangeHealth(killerPlayer, GameLiving.eHealthChangeType.Spell, healAmount);
-                    killerPlayer.Out.SendMessage(LanguageMgr.GetTranslation(killerPlayer.Client.Account.Language, "Damnation.Kill.SelfHeal", healAmount), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
-                    killerPlayer.Out.SendSpellEffectAnimation(killerPlayer, killerPlayer, 7277, 0, false, 1);
+
+                    if (damnationEnhancement > 0)
+                    {
+                        int healEnhancementBonus = (int)(healAmount * damnationEnhancement / 100.0);
+                        healAmount += healEnhancementBonus;
+                    }
+
+                    if (healAmount != 0)
+                    {
+                        int healthBeforeHeal = killerPlayer.Health;
+                        killerPlayer.ChangeHealth(killerPlayer, GameLiving.eHealthChangeType.Spell, healAmount);
+                        int actualHealAmount = killerPlayer.Health - healthBeforeHeal;
+
+                        if (actualHealAmount != 0)
+                        {
+                            killerPlayer.Out.SendMessage(LanguageMgr.GetTranslation(killerPlayer.Client.Account.Language, "Damnation.Kill.SelfHeal", actualHealAmount), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                        }
+                        killerPlayer.Out.SendSpellEffectAnimation(killerPlayer, killerPlayer, 7277, 0, false, 1);
+                    }
                 }
             }
 

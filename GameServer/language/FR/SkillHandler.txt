@@ -268,5 +268,6 @@ SkillBase.RegisterPropertyNames.OffhandChanceBonus:			Bonus de Chance Main Gauch
 SkillBase.RegisterPropertyNames.DotDamageBonus:				Bonus de Dommage des DoT
 SkillBase.RegisterPropertyNames.DotDurationDecrease:		Réduction Durée des DoT
 SkillBase.RegisterPropertyNames.MythicalDebuffResistChance:	Bonus Mythique Résistance aux Affaiblissements
+SkillBase.RegisterPropertyNames.DamnationEffectEnhancement:	Renforcement des Effets de Damnation
 
 SkillBase.RegisterPropertyNames.Skill_Learning:			Apprentissage

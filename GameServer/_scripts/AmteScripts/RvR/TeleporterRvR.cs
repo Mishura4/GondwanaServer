@@ -2,6 +2,7 @@ using AmteScripts.Managers;
 using DOL.AI.Brain;
 using DOL.GS.PacketHandler;
 using DOL.Language;
+using DOL.GS.Spells;
 using System;
 
 namespace DOL.GS.Scripts
@@ -34,6 +35,13 @@ namespace DOL.GS.Scripts
             }
 
             TurnTo(player);
+
+            if (SpellHandler.FindEffectOnTarget(player, "Damnation") != null)
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "TeleporterRvR.DamnationRefusal1", player.Name), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "TeleporterRvR.DamnationRefusal2"), eChatType.CT_System, eChatLoc.CL_PopupWindow);
+                return true;
+            }
 
             if (!RvrManager.Instance.IsInRvr(player) &&
                 (!RvrManager.Instance.IsOpen || player.Level < 20 || (str != "Pret" && str != "Prêt" && str != "Partir" && str != "Ready" && str != "Leave")))

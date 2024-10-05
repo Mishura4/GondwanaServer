@@ -2542,6 +2542,9 @@ namespace DOL.GS.ServerProperties
         [ServerProperty("spells", "spell_charm_named_check", "Prevents charm spell to work on Named Mobs, 0 = disable, 1 = enable", 1)]
         public static int SPELL_CHARM_NAMED_CHECK;
 
+        [ServerProperty("damnation", "max_damnation_duration", "Maximum duration (in seconds) for the Damnation effect. Set to 0 for no cap.", 600)]
+        public static int MAX_DAMNATION_DURATION;
+
         #endregion
 
         #region GUILDS / ALLIANCES

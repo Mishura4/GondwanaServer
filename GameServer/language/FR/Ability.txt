@@ -62,6 +62,7 @@ Skill.Ability.RapidFire.CannotUseDead:	Vous ne pouvez pas utiliser « Tir Rapide
 Skill.Ability.Stealth.CannotUseToCloseAnEnemy:      Vous êtes trop proche d'un ennemi pour vous dissimuler !
 Skill.Ability.Stealth.CannotUseStunned:             Vous ne pouvez pas vous dissimuler en étant étourdi·e !
 Skill.Ability.Stealth.CannotUseMezzed:              Vous ne pouvez pas vous dissimuler en étant hypnotisé·e !
+Skill.Ability.Stealth.CannotUseDamned:				Vous ne pouvez pas vous dissimuler, puisque vous êtes damné·e !
 Skill.Ability.Stealth.CannotUseActivePulsingSpell:	Vous ne pouvez pas vous dissimuler en étant sous l'effet d'un sort pulsant actif !
 Skill.Ability.Stealth.CannotUseCombatState:         Vous devez terminer votre action en cours pour vous dissimuler !
 Skill.Ability.Stealth.CannotUseDead:                Vous ne pouvez pas vous dissimuler, puisque vous êtes mort !

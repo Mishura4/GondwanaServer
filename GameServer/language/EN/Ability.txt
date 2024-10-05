@@ -59,6 +59,7 @@ Skill.Ability.RapidFire.CannotUseDead:	You can't switch to rapid fire when dead!
 Skill.Ability.Stealth.CannotUseToCloseAnEnemy:	You are too close to an enemy to hide!
 Skill.Ability.Stealth.CannotUseStunned:	You can't hide while stunned!
 Skill.Ability.Stealth.CannotUseMezzed:	You can't hide while mesmerized!
+Skill.Ability.Stealth.CannotUseDamned:	You can't hide when damned!
 Skill.Ability.Stealth.CannotUseActivePulsingSpell:	You currently have an active, pulsing spell effect and cannot hide!
 Skill.Ability.Stealth.CannotUseCombatState:	You must end your current action before hiding!
 Skill.Ability.Stealth.CannotUseDead:	You can't hide when dead!
