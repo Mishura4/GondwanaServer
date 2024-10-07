@@ -1,7 +1,7 @@
 Commands.Players.Vol.Description:			Permet de voler un joueur
 Commands.Players.Vol.Usage: 				'/vol [joueur]'
 Commands.Players.Steal.Description:			Permet de voler un joueur
-Commands.Players.Steal.Usage:				'/steal [player]''
+Commands.Players.Steal.Usage:				'/steal [player]'
 Commands.Players.Vol.SelectHuman:			Vous devez sélectionner un personnage joueur !
 Commands.Players.Vol.Move: 					Votre vol a échoué car vous avez bougé !
 Commands.Players.Vol.UnknownCommand: 		Cette commande n'existe pas.

@@ -20,6 +20,7 @@ using System;
 using DOL.GS;
 using DOL.GS.PacketHandler;
 using DOL.GS.Effects;
+using System.Numerics;
 
 namespace DOL.GS.Spells
 {
@@ -48,8 +49,15 @@ namespace DOL.GS.Spells
 
             if (m_caster.IsDiseased)
             {
+                int amnesiaChance = m_caster.TempProperties.getProperty<int>("AmnesiaChance", 50);
+                int healReductionPercentage = amnesiaChance > 0 ? amnesiaChance : 50;
+                heal -= (heal * healReductionPercentage) / 100;
                 MessageToCaster("You are diseased!", eChatType.CT_SpellResisted);
-                heal >>= 1;
+            }
+            if (SpellHandler.FindEffectOnTarget(m_caster, "Damnation") != null)
+            {
+                MessageToCaster("You are damned and cannot be healed!", eChatType.CT_SpellResisted);
+                heal = 0;
             }
             if (heal <= 0) return;
             heal = m_caster.ChangeHealth(m_caster, GameLiving.eHealthChangeType.Spell, heal);

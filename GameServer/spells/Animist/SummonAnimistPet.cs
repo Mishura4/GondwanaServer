@@ -34,21 +34,21 @@ namespace DOL.GS.Spells
             if (Caster.GroundTargetPosition == Position.Nowhere)
             {
                 if (Caster is GamePlayer)
-                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "SummonAnimistPet.CheckBeginCast.GroundTargetNull"), eChatType.CT_SpellResisted);
+                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "SummonAnimistPet.CheckBeginCast.GroundTargetNull"), eChatType.CT_SpellResisted);
                 return false;
             }
 
             if (!Caster.GroundTargetInView)
             {
                 if (Caster is GamePlayer)
-                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "SummonAnimistPet.CheckBeginCast.GroundTargetNotInView"), eChatType.CT_SpellResisted);
+                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "SummonAnimistPet.CheckBeginCast.GroundTargetNotInView"), eChatType.CT_SpellResisted);
                 return false;
             }
 
             if (!Caster.IsWithinRadius(Caster.GroundTargetPosition, CalculateSpellRange()))
             {
                 if (Caster is GamePlayer)
-                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "SummonAnimistPet.CheckBeginCast.GroundTargetNotInSpellRange"), eChatType.CT_SpellResisted);
+                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "SummonAnimistPet.CheckBeginCast.GroundTargetNotInSpellRange"), eChatType.CT_SpellResisted);
                 return false;
             }
 
@@ -59,28 +59,28 @@ namespace DOL.GS.Spells
             if (Caster.GroundTargetPosition == Position.Nowhere)
             {
                 if (Caster is GamePlayer)
-                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "SummonAnimistPet.CheckBeginCast.GroundTargetNull"), eChatType.CT_SpellResisted);
+                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "SummonAnimistPet.CheckBeginCast.GroundTargetNull"), eChatType.CT_SpellResisted);
                 return;
             }
 
             if (!Caster.GroundTargetInView)
             {
                 if (Caster is GamePlayer)
-                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "SummonAnimistPet.CheckBeginCast.GroundTargetNotInView"), eChatType.CT_SpellResisted);
+                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "SummonAnimistPet.CheckBeginCast.GroundTargetNotInView"), eChatType.CT_SpellResisted);
                 return;
             }
 
             if (!Caster.GroundTargetInView)
             {
                 if (Caster is GamePlayer)
-                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "SummonAnimistPet.CheckBeginCast.GroundTargetNotInView"), eChatType.CT_SpellResisted);
+                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "SummonAnimistPet.CheckBeginCast.GroundTargetNotInView"), eChatType.CT_SpellResisted);
                 return;
             }
 
             if (!Caster.IsWithinRadius(Caster.GroundTargetPosition, CalculateSpellRange()))
             {
                 if (Caster is GamePlayer)
-                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "SummonAnimistPet.CheckBeginCast.GroundTargetNotInSpellRange"), eChatType.CT_SpellResisted);
+                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "SummonAnimistPet.CheckBeginCast.GroundTargetNotInSpellRange"), eChatType.CT_SpellResisted);
                 return;
             }
 
@@ -98,7 +98,7 @@ namespace DOL.GS.Spells
                 //[Ganrod] Nidel: Set only one spell.
                 if (m_pet.Spells != null && m_pet.Spells.Count > 0)
                 {
-                    (m_pet as TurretPet).TurretSpell = m_pet.Spells[0] as Spell;
+                    (m_pet as TurretPet)!.TurretSpell = m_pet.Spells[0] as Spell;
                 }
             }
         }

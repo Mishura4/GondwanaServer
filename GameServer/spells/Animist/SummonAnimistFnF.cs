@@ -40,7 +40,7 @@ namespace DOL.GS.Spells
             if (rgn == null || rgn.GetZone(Caster.GroundTargetPosition.Coordinate) == null)
             {
                 if (Caster is GamePlayer)
-                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "SummonAnimistFnF.CheckBeginCast.NoGroundTarget"), eChatType.CT_SpellResisted);
+                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "SummonAnimistFnF.CheckBeginCast.NoGroundTarget"), eChatType.CT_SpellResisted);
                 return false;
             }
 
@@ -51,14 +51,14 @@ namespace DOL.GS.Spells
             if (nCount >= Properties.TURRET_AREA_CAP_COUNT)
             {
                 if (Caster is GamePlayer)
-                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "SummonAnimistFnF.CheckBeginCast.TurretAreaCap"), eChatType.CT_SpellResisted);
+                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "SummonAnimistFnF.CheckBeginCast.TurretAreaCap"), eChatType.CT_SpellResisted);
                 return false;
             }
 
             if (Caster.PetCount >= Properties.TURRET_PLAYER_CAP_COUNT)
             {
                 if (Caster is GamePlayer)
-                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "SummonAnimistFnF.CheckBeginCast.TurretPlayerCap"), eChatType.CT_SpellResisted);
+                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "SummonAnimistFnF.CheckBeginCast.TurretPlayerCap"), eChatType.CT_SpellResisted);
                 return false;
             }
 
@@ -74,12 +74,12 @@ namespace DOL.GS.Spells
                 m_pet.Spells.Add(SkillBase.GetSpellByID(Spell.SubSpellID));
             }
 
-            (m_pet.Brain as TurretBrain).IsMainPet = false;
+            (m_pet.Brain as TurretBrain)!.IsMainPet = false;
 
-            (m_pet.Brain as IOldAggressiveBrain).AddToAggroList(target, 1);
-            (m_pet.Brain as TurretBrain).Think();
+            (m_pet.Brain as IOldAggressiveBrain)!.AddToAggroList(target, 1);
+            (m_pet.Brain as TurretBrain)!.Think();
             //[Ganrod] Nidel: Set only one spell.
-            (m_pet as TurretPet).TurretSpell = m_pet.Spells[0] as Spell;
+            (m_pet as TurretPet)!.TurretSpell = m_pet.Spells[0] as Spell;
             Caster.PetCount++;
         }
 

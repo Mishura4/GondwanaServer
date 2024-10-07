@@ -48,7 +48,7 @@ namespace DOL.GS.Spells
     [SpellHandler("SummonMinion")]
     public class SummonMinionHandler : SummonSpellHandler
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()!.DeclaringType);
 
         public SummonMinionHandler(GameLiving caster, Spell spell, SpellLine line)
             : base(caster, spell, line) { }
@@ -57,13 +57,13 @@ namespace DOL.GS.Spells
         {
             if (Caster is GamePlayer && ((GamePlayer)Caster).ControlledBrain == null)
             {
-                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "SummonMinionHandler.CheckBeginCast.Text1"), eChatType.CT_SpellResisted);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "SummonMinionHandler.CheckBeginCast.Text1"), eChatType.CT_SpellResisted);
                 return false;
             }
 
             if (Caster is GamePlayer && (((GamePlayer)Caster).ControlledBrain.Body.ControlledNpcList == null || ((GamePlayer)Caster).ControlledBrain.Body.PetCount >= ((GamePlayer)Caster).ControlledBrain.Body.ControlledNpcList.Length))
             {
-                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "SummonMinionHandler.CheckBeginCast.Text2"), eChatType.CT_SpellResisted);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "SummonMinionHandler.CheckBeginCast.Text2"), eChatType.CT_SpellResisted);
 
                 return false;
             }
@@ -132,11 +132,11 @@ namespace DOL.GS.Spells
 
         public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
         {
-            if ((effect.Owner is BDPet) && ((effect.Owner as BDPet).Brain is IControlledBrain) && (((effect.Owner as BDPet).Brain as IControlledBrain).Owner is CommanderPet))
+            if ((effect.Owner is BDPet) && ((effect.Owner as BDPet)!.Brain is IControlledBrain) && (((effect.Owner as BDPet)!.Brain as IControlledBrain)!.Owner is CommanderPet))
             {
                 BDPet pet = effect.Owner as BDPet;
-                CommanderPet commander = (pet.Brain as IControlledBrain).Owner as CommanderPet;
-                commander.RemoveControlledNpc(pet.Brain as IControlledBrain);
+                CommanderPet commander = (pet!.Brain as IControlledBrain)!.Owner as CommanderPet;
+                commander!.RemoveControlledNpc(pet.Brain as IControlledBrain);
             }
             return base.OnEffectExpires(effect, noMessages);
         }
@@ -190,9 +190,9 @@ namespace DOL.GS.Spells
             get
             {
                 var delve = new List<string>();
-                delve.Add(String.Format(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "SummonMinionHandler.DelveInfo.Text1", Spell.Target)));
-                delve.Add(String.Format(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "SummonMinionHandler.DelveInfo.Text2", Math.Abs(Spell.Power))));
-                delve.Add(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "SummonMinionHandler.DelveInfo.Text3", (Spell.CastTime / 1000).ToString("0.0## " + LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "Effects.DelveInfo.Seconds"))));
+                delve.Add(String.Format(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "SummonMinionHandler.DelveInfo.Text1", Spell.Target)));
+                delve.Add(String.Format(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "SummonMinionHandler.DelveInfo.Text2", Math.Abs(Spell.Power))));
+                delve.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "SummonMinionHandler.DelveInfo.Text3", (Spell.CastTime / 1000).ToString("0.0## " + LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "Effects.DelveInfo.Seconds"))));
                 return delve;
             }
         }

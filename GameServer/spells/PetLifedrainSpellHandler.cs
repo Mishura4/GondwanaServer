@@ -44,8 +44,15 @@ namespace DOL.spells
             int heal = ((ad.Damage + ad.CriticalDamage) * m_spell.LifeDrainReturn) / 100;
             if (player.IsDiseased)
             {
+                int amnesiaChance = player.TempProperties.getProperty<int>("AmnesiaChance", 50);
+                int healReductionPercentage = amnesiaChance > 0 ? amnesiaChance : 50;
+                heal -= (heal * healReductionPercentage) / 100;
                 MessageToLiving(player, LanguageMgr.GetTranslation(player.Client, "Spell.LifeTransfer.TargetDiseased"), eChatType.CT_SpellResisted);
-                heal >>= 1;
+            }
+            if (SpellHandler.FindEffectOnTarget(player, "Damnation") != null)
+            {
+                MessageToLiving(player, "You are damned and cannot be healed!", eChatType.CT_SpellResisted);
+                heal = 0;
             }
             if (heal <= 0) return;
 

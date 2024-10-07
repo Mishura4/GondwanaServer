@@ -51,7 +51,7 @@ namespace DOL.GS.Spells
 			 */
             if (Caster.ControlledBrain == null || Caster.ControlledBrain.Body == null)
             {
-                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "PetPBAOE.CheckBeginCast.NoPet"), eChatType.CT_System);
+                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "PetPBAOE.CheckBeginCast.NoPet"), eChatType.CT_System);
                 return false;
             }
             TurretPet target = selectedTarget as TurretPet;

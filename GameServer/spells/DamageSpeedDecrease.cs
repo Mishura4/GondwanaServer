@@ -19,6 +19,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using DOL.GS;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
@@ -68,8 +69,15 @@ namespace DOL.GS.Spells
             int heal = (ad.Damage + ad.CriticalDamage) * m_spell.LifeDrainReturn / 100;
             if (m_caster.IsDiseased)
             {
+                int amnesiaChance = m_caster.TempProperties.getProperty<int>("AmnesiaChance", 50);
+                int healReductionPercentage = amnesiaChance > 0 ? amnesiaChance : 50;
+                heal -= (heal * healReductionPercentage) / 100;
                 MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "Spell.LifeTransfer.TargetDiseased"), eChatType.CT_SpellResisted);
-                heal >>= 1;
+            }
+            if (SpellHandler.FindEffectOnTarget(m_caster, "Damnation") != null)
+            {
+                MessageToCaster("You are damned and cannot be healed!", eChatType.CT_SpellResisted);
+                heal = 0;
             }
             if (heal <= 0) return;
             heal = m_caster.ChangeHealth(m_caster, GameLiving.eHealthChangeType.Spell, heal);
@@ -119,39 +127,39 @@ namespace DOL.GS.Spells
 				*/
 
                 var list = new List<string>();
-                list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DamageSpeedDecrease.DelveInfo.Function"));
+                list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DamageSpeedDecrease.DelveInfo.Function"));
                 list.Add(" "); //empty line
                 list.Add(Spell.Description);
                 list.Add(" "); //empty line
-                list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DamageSpeedDecrease.DelveInfo.Decrease", Spell.Value));
+                list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DamageSpeedDecrease.DelveInfo.Decrease", Spell.Value));
                 if (Spell.Damage != 0)
-                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DelveInfo.Damage", Spell.Damage.ToString("0.###;0.###'%'")));
+                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.Damage", Spell.Damage.ToString("0.###;0.###'%'")));
                 if (Spell.LifeDrainReturn != 0)
-                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DelveInfo.HealthReturned", Spell.LifeDrainReturn));
-                list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DelveInfo.Target", Spell.Target));
+                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.HealthReturned", Spell.LifeDrainReturn));
+                list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.Target", Spell.Target));
                 if (Spell.Range != 0)
-                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DelveInfo.Range", Spell.Range));
+                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.Range", Spell.Range));
                 if (Spell.Duration >= ushort.MaxValue * 1000)
-                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DelveInfo.Duration") + " Permanent.");
+                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.Duration") + " Permanent.");
                 else if (Spell.Duration > 60000)
-                    list.Add(string.Format(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DelveInfo.Duration") + Spell.Duration / 60000 + ":" + (Spell.Duration % 60000 / 1000).ToString("00") + " min"));
+                    list.Add(string.Format(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.Duration") + Spell.Duration / 60000 + ":" + (Spell.Duration % 60000 / 1000).ToString("00") + " min"));
                 else if (Spell.Duration != 0)
-                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DelveInfo.Duration") + (Spell.Duration / 1000).ToString("0' sec';'Permanent.';'Permanent.'"));
+                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.Duration") + (Spell.Duration / 1000).ToString("0' sec';'Permanent.';'Permanent.'"));
                 if (Spell.Frequency != 0)
-                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DelveInfo.Frequency", (Spell.Frequency * 0.001).ToString("0.0")));
+                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.Frequency", (Spell.Frequency * 0.001).ToString("0.0")));
                 if (Spell.Power != 0)
-                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DelveInfo.PowerCost", Spell.Power.ToString("0;0'%'")));
-                list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DelveInfo.CastingTime", (Spell.CastTime * 0.001).ToString("0.0## sec;-0.0## sec;'instant'")));
+                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.PowerCost", Spell.Power.ToString("0;0'%'")));
+                list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.CastingTime", (Spell.CastTime * 0.001).ToString("0.0## sec;-0.0## sec;'instant'")));
                 if (Spell.RecastDelay > 60000)
-                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DelveInfo.RecastTime") + (Spell.RecastDelay / 60000).ToString() + ":" + (Spell.RecastDelay % 60000 / 1000).ToString("00") + " min");
+                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.RecastTime") + (Spell.RecastDelay / 60000).ToString() + ":" + (Spell.RecastDelay % 60000 / 1000).ToString("00") + " min");
                 else if (Spell.RecastDelay > 0)
-                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DelveInfo.RecastTime") + (Spell.RecastDelay / 1000).ToString() + " sec");
+                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.RecastTime") + (Spell.RecastDelay / 1000).ToString() + " sec");
                 if (Spell.Concentration != 0)
-                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DelveInfo.ConcentrationCost", Spell.Concentration));
+                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.ConcentrationCost", Spell.Concentration));
                 if (Spell.Radius != 0)
-                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DelveInfo.Radius", Spell.Radius));
+                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.Radius", Spell.Radius));
                 if (Spell.DamageType != eDamageType.Natural)
-                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DelveInfo.Damage", GlobalConstants.DamageTypeToName(Spell.DamageType)));
+                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.Damage", GlobalConstants.DamageTypeToName(Spell.DamageType)));
 
                 return list;
             }

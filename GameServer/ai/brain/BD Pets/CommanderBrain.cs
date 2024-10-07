@@ -38,7 +38,7 @@ namespace DOL.AI.Brain
         /// <summary>
         /// Defines a logger for this class.
         /// </summary>
-        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
         public CommanderBrain(GameLiving owner)
             : base(owner)
