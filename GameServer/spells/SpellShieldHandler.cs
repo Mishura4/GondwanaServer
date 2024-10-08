@@ -47,9 +47,24 @@ namespace DOL.GS.Spells
                 return;
             }
 
-            int damageAbsorbed = ad.Damage + ad.CriticalDamage;
-            ad.Damage = 0;
-            ad.CriticalDamage = 0;
+            int damageAbsorbed = 0;
+            if (ad.AttackType == AttackData.eAttackType.Spell)
+            {
+                damageAbsorbed = ad.Damage + ad.CriticalDamage;
+                ad.Damage = 0;
+                ad.CriticalDamage = 0;
+            }
+            else if (ad.AttackType == AttackData.eAttackType.DoT)
+            {
+                int normalDamage = (ad.Damage + 1) / 2; // rounded
+                int critDamage = (ad.CriticalDamage + 1) / 2;
+                damageAbsorbed = normalDamage + critDamage;
+                ad.Damage -= normalDamage;
+                ad.CriticalDamage -= critDamage;
+            }
+            
+            if (damageAbsorbed == 0)
+                return;
 
             if (target is GamePlayer player)
             {
