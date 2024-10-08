@@ -72,31 +72,33 @@ namespace DOL.GS.PropertyCalc
 
             if (living.HealthPercent > 30)
                 return;
+            
+            AttackData ad = args.AttackData;
+            if (ad is not { AttackType: AttackData.eAttackType.Spell or AttackData.eAttackType.DoT })
+                return;
+
+            int chanceToShield = living.GetModified(eProperty.SpellShieldChance);
+            if (chanceToShield <= 0)
+                return;
 
             if (living.TempProperties.getProperty(CooldownPropertyName, false))
                 return;
 
-            AttackData ad = args.AttackData;
-            if (ad is { AttackType: AttackData.eAttackType.Spell or AttackData.eAttackType.DoT })
-            {
-                int chanceToShield = living.GetModified(eProperty.SpellShieldChance);
+            if (!Util.Chance(chanceToShield))
+                return;
 
-                if (!Util.Chance(chanceToShield))
-                    return;
+            // Cast the internally defined spell
+            Spell spell = SpellShieldSpell;
+            SpellLine spellLine = SkillBase.GetSpellLine(GlobalSpellsLines.Item_Spells);
 
-                // Cast the internally defined spell
-                Spell spell = SpellShieldSpell;
-                SpellLine spellLine = SkillBase.GetSpellLine(GlobalSpellsLines.Item_Spells);
+            ISpellHandler spellHandler = ScriptMgr.CreateSpellHandler(living, spell, spellLine);
+            spellHandler.StartSpell(living);
 
-                ISpellHandler spellHandler = ScriptMgr.CreateSpellHandler(living, spell, spellLine);
-                spellHandler.StartSpell(living);
-
-                // Set the cooldown using RegionTimer
-                living.TempProperties.setProperty(CooldownPropertyName, true);
-                RegionTimer cooldownTimer = new RegionTimer(living, new RegionTimerCallback(CooldownExpired));
-                cooldownTimer.Properties.setProperty("living", living);
-                cooldownTimer.Start(CooldownTime);
-            }
+            // Set the cooldown using RegionTimer
+            living.TempProperties.setProperty(CooldownPropertyName, true);
+            RegionTimer cooldownTimer = new RegionTimer(living, new RegionTimerCallback(CooldownExpired));
+            cooldownTimer.Properties.setProperty("living", living);
+            cooldownTimer.Start(CooldownTime);
         }
 
         private static int CooldownExpired(RegionTimer timer)

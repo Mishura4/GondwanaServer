@@ -35,7 +35,7 @@ namespace DOL.GS.PropertyCalc
                 + living.DebuffCategory[(int)property]
                 - Math.Min(15, living.ItemBonus[(int)property]) // cap 15% from items
                 - living.AbilityBonus[(int)property];
-            
+
             return Math.Max(1, percent);
         }
     }
