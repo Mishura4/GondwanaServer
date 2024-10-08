@@ -31,8 +31,7 @@ namespace DOL.GS.Effects
                     p.Out.SendSpellEffectAnimation(player, player, Icon, 0, false, 1);
                 }
             }
-            //target.IsDisarmed = true;
-            target.DisarmedTime = target.CurrentRegion.Time + m_duration;
+            target.DisarmedCount++;
             target.StopAttack();
 
         }
@@ -43,7 +42,7 @@ namespace DOL.GS.Effects
 
         public override void Stop()
         {
-            //owner.IsDisarmed = false;
+            owner.DisarmedCount--;
             base.Stop();
         }
 

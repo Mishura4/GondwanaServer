@@ -58,7 +58,7 @@ namespace DOL.GS.Spells
                 effect.Owner.LastAttackedByEnemyTickPvP = effect.Owner.CurrentRegion.Time;
                 Caster.LastAttackTickPvP = Caster.CurrentRegion.Time;
             }
-            effect.Owner.DisarmedTime = effect.Owner.CurrentRegion.Time + CalculateEffectDuration(effect.Owner, Caster.Effectiveness);
+            effect.Owner.DisarmedCount++;
             effect.Owner.StopAttack();
 
             string casterLanguage = (m_caster as GamePlayer)?.Client?.Account?.Language ?? "EN";
@@ -130,7 +130,8 @@ namespace DOL.GS.Spells
                     player.MessageFromArea(effect.Owner, message4, eChatType.CT_SpellExpires, eChatLoc.CL_SystemWindow);
                 }
             }
-
+            
+            effect.Owner.DisarmedCount--;
             return base.OnEffectExpires(effect, noMessages);
         }
 

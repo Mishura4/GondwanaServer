@@ -490,44 +490,42 @@ namespace DOL.GS
             set { m_mezzed = value; }
         }
 
-        protected bool m_disarmed = false;
-        protected long m_disarmedTime = 0;
+        protected long m_disarmedCount = 0;
 
         /// <summary>
         /// Is the living disarmed
         /// </summary>
         public bool IsDisarmed
         {
-            get { return (m_disarmedTime > 0 && m_disarmedTime > CurrentRegion.Time); }
+            get { return (m_disarmedCount > 0); }
         }
 
         /// <summary>
-        /// How long is this living disarmed for?
+        /// How many "stacks" of disarm do we have?
         /// </summary>
-        public long DisarmedTime
+        public long DisarmedCount
         {
-            get { return m_disarmedTime; }
-            set { m_disarmedTime = value; }
+            get { return m_disarmedCount; }
+            set { m_disarmedCount = value; }
         }
 
-        protected bool m_isSilenced = false;
-        protected long m_silencedTime = 0;
+        protected long m_silencedCount = 0;
 
         /// <summary>
         /// Has this living been silenced?
         /// </summary>
         public bool IsSilenced
         {
-            get { return (m_silencedTime > 0 && m_silencedTime > CurrentRegion.Time); }
+            get { return (m_silencedCount > 0); }
         }
 
         /// <summary>
-        /// How long is this living silenced for?
+        /// How many "stacks" of silence do we have?
         /// </summary>
-        public long SilencedTime
+        public long SilencedCount
         {
-            get { return m_silencedTime; }
-            set { m_silencedTime = value; }
+            get { return m_silencedCount; }
+            set { m_silencedCount = value; }
         }
 
         /// <summary>

@@ -20,10 +20,22 @@ namespace DOL.GS.Effects
         public override void Start(GameLiving target)
         {
             base.Start(target);
-            target.DisarmedTime = target.CurrentRegion.Time + m_duration;
-            target.SilencedTime = target.CurrentRegion.Time + m_duration;
+            ++target.DisarmedCount;
+            ++target.SilencedCount;
             target.StopAttack();
             target.StopCurrentSpellcast();
+        }
+
+        /// <inheritdoc />
+        public override void Stop()
+        {
+            base.Stop();
+
+            if (m_owner != null)
+            {
+                --m_owner.DisarmedCount;
+                --m_owner.SilencedCount;
+            }
         }
 
         public override string Name { get { return "Desperate Bowman"; } }

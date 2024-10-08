@@ -51,10 +51,17 @@ namespace DOL.GS.Spells
             base.OnEffectStart(effect);
             if (effect.Owner is GamePlayer)
             {
-                effect.Owner.SilencedTime = effect.Owner.CurrentRegion.Time + CalculateEffectDuration(effect.Owner, Caster.Effectiveness);
+                effect.Owner.SilencedCount++;
                 effect.Owner.StopCurrentSpellcast();
                 effect.Owner.StartInterruptTimer(effect.Owner.SpellInterruptDuration, AttackData.eAttackType.Spell, Caster);
             }
+        }
+
+        /// <inheritdoc />
+        public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
+        {
+            effect.Owner.SilencedCount--;
+            return base.OnEffectExpires(effect, noMessages);
         }
 
         // constructor

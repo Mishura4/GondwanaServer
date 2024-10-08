@@ -120,7 +120,7 @@ namespace DOL.GS.Spells
                 }
                 effect.Owner.StopAttack();
                 effect.Owner.StopCurrentSpellcast();
-                effect.Owner.DisarmedTime = effect.Owner.CurrentRegion.Time + Spell.Duration;
+                effect.Owner.DisarmedCount++;
             }
             base.OnEffectStart(effect);
         }
@@ -167,8 +167,8 @@ namespace DOL.GS.Spells
                 effect.Owner.BuffBonusMultCategory1.Remove((int)eProperty.MaxSpeed, effect);
                 player.Client.Out.SendUpdateMaxSpeed();
             }
-
-            //effect.Owner.IsDisarmed = false;
+            
+            effect.Owner.DisarmedCount--;
             return 0;
         }
 
