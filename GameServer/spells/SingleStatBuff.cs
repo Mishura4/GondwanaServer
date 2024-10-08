@@ -39,44 +39,55 @@ namespace DOL.GS.Spells
         {
             int specLevel = Caster.GetModifiedSpecLevel(m_spellLine.Spec);
 
-            if (Caster is GamePlayer && ((GamePlayer)Caster).CharacterClass.ClassType != eClassType.ListCaster && Spell.Level > 0 && ((GamePlayer)Caster).CharacterClass.ID != (int)eCharacterClass.Savage)
+            if (Spell.Level > 0)
             {
-                effectiveness = 0.75; // This section is for self bulfs, cleric buffs etc.
-                if (Spell.Level > 0)
+                if (Caster is GamePlayer playerCaster)
                 {
-                    effectiveness += (specLevel - 1.0) * 0.5 / Spell.Level;
-                    effectiveness = Math.Max(0.75, effectiveness);
-                    effectiveness = Math.Min(1.25, effectiveness);
-                    effectiveness *= (1.0 + m_caster.GetModified(eProperty.BuffEffectiveness) * 0.01);
-                }
-            }
-            else if (Caster is GamePlayer && Spell.Level > 0 && Spell.Target == "enemy")
-            {
-                effectiveness = 0.75; // This section is for list casters stat debuffs.
-                if (((GamePlayer)Caster).CharacterClass.ClassType == eClassType.ListCaster)
-                {
-                    effectiveness += (specLevel - 1.0) * 0.5 / Spell.Level;
-                    effectiveness = Math.Max(0.75, effectiveness);
-                    effectiveness = Math.Min(1.25, effectiveness);
-                    effectiveness *= (1.0 + m_caster.GetModified(eProperty.DebuffEffectivness) * 0.01);
+                    if (playerCaster.CharacterClass.ClassType != eClassType.ListCaster && playerCaster.CharacterClass.ID != (int)eCharacterClass.Savage)
+                    {
+                        effectiveness = 0.75; // This section is for self buffs, cleric buffs etc.
+                        effectiveness += (specLevel - 1.0) * 0.5 / Spell.Level;
+                        effectiveness = Math.Max(0.75, effectiveness);
+                        effectiveness = Math.Min(1.25, effectiveness);
+                    }
+                    else if (Spell.IsHarmful)
+                    {
+                        if (playerCaster.CharacterClass.ClassType == eClassType.ListCaster)
+                        {
+                            effectiveness = 0.75; // This section is for list casters stat debuffs.
+                            effectiveness += (specLevel - 1.0) * 0.5 / Spell.Level;
+                            effectiveness = Math.Max(0.75, effectiveness);
+                            effectiveness = Math.Min(1.25, effectiveness);
+                        }
+                        else
+                        {
+                            effectiveness = 1.0; // Non list casters debuffs. Reaver curses, Champ debuffs etc.
+                        }
+                    }
+                    else
+                    {
+                        effectiveness = 1.0;
+                    }
                 }
                 else
                 {
-                    effectiveness = 1.0; // Non list casters debuffs. Reaver curses, Champ debuffs etc.
-                    effectiveness *= (1.0 + m_caster.GetModified(eProperty.DebuffEffectivness) * 0.01);
+                    // apply the basic formula for any NPC spell
+                    effectiveness += (specLevel - 1.0) * 0.5 / Spell.Level;
+                    effectiveness = Math.Max(0.75, effectiveness);
+                    effectiveness = Math.Min(1.25, effectiveness);
                 }
-            }
-            else if (Caster is GameNPC)
-            {
-                // apply the basic formula for any NPC spell
-                effectiveness += (specLevel - 1.0) * 0.5 / Spell.Level;
-                effectiveness = Math.Max(0.75, effectiveness);
-                effectiveness = Math.Min(1.25, effectiveness);
-                effectiveness *= 1.0 + m_caster.GetModified(eProperty.BuffEffectiveness) * 0.01;
             }
             else
             {
                 effectiveness = 1.0;
+            }
+            if (Spell.IsHarmful)
+            {
+                effectiveness *= (1.0 + Caster.GetModified(eProperty.DebuffEffectivness) * 0.01);
+            }
+            else
+            {
+                effectiveness *= (1.0 + Caster.GetModified(eProperty.BuffEffectiveness) * 0.01);
             }
 
             base.ApplyEffectOnTarget(target, effectiveness);
