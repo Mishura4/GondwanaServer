@@ -104,9 +104,9 @@ namespace DOL.GS.Scripts
                 bonusType == (int)eProperty.MeleeDamage ||
                 bonusType == (int)eProperty.RangedDamage ||
                 bonusType == (int)eProperty.FumbleChance ||
-                bonusType == (int)eProperty.MesmerizeDurationReduction ||
-                bonusType == (int)eProperty.StunDurationReduction ||
-                bonusType == (int)eProperty.SpeedDecreaseDurationReduction ||
+                bonusType == (int)eProperty.MesmerizeDuration ||
+                bonusType == (int)eProperty.StunDuration ||
+                bonusType == (int)eProperty.SpeedDecreaseDuration ||
                 bonusType == (int)eProperty.BladeturnReinforcement ||
                 bonusType == (int)eProperty.DefensiveBonus ||
                 bonusType == (int)eProperty.SpellFumbleChance ||

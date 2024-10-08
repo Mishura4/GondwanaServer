@@ -13,9 +13,9 @@ namespace DOL.GS.RealmAbilities
     {
         public static eProperty[] properties = new eProperty[]
         {
-            eProperty.MesmerizeDurationReduction,
-            eProperty.StunDurationReduction,
-            eProperty.SpeedDecreaseDurationReduction,
+            eProperty.MesmerizeDuration,
+            eProperty.StunDuration,
+            eProperty.SpeedDecreaseDuration,
         };
         public DeterminationAbility(DBAbility dba, int level) : base(dba, level, properties) { }
 

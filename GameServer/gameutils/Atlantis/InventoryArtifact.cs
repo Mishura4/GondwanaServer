@@ -832,7 +832,7 @@ namespace DOL.GS
                 return true;
             }
 
-            if ((bonusType >= (int)eProperty.EvadeChance) && (bonusType <= (int)eProperty.SpeedDecreaseDurationReduction))
+            if ((bonusType >= (int)eProperty.EvadeChance) && (bonusType <= (int)eProperty.SpeedDecreaseDuration))
             {
                 return true;
             }

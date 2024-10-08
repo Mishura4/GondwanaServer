@@ -1951,11 +1951,11 @@ namespace DOL.GS
                     return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MeleeDamage");
                 case eProperty.RangedDamage:
                     return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.RangedDamage");
-                case eProperty.MesmerizeDurationReduction:
+                case eProperty.MesmerizeDuration:
                     return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MesmerizeDuration");
-                case eProperty.StunDurationReduction:
+                case eProperty.StunDuration:
                     return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.StunDuration");
-                case eProperty.SpeedDecreaseDurationReduction:
+                case eProperty.SpeedDecreaseDuration:
                     return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.SpeedDecreaseDuration");
                 case eProperty.BladeturnReinforcement:
                     return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.BladeturnReinforcement");

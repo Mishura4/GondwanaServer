@@ -30,13 +30,17 @@ namespace DOL.GS.PropertyCalc
     {
         public override int CalcValue(GameLiving living, eProperty property)
         {
-            int value = living.BaseBuffBonusCategory[eProperty.MythicalCrowdDuration] + living.BuffBonusCategory4[eProperty.MythicalCrowdDuration];
+            int percent = 100
+                - living.BaseBuffBonusCategory[(int)property] // buff reduce the duration
+                + living.DebuffCategory[(int)property]
+                - living.ItemBonus[(int)property]
+                - living.AbilityBonus[(int)property];
+            
             if (living is GamePlayer)
             {
-                value += Math.Min(75, living.ItemBonus[(int)property]); // cap 75% from items
+                percent += Math.Min(75, living.ItemBonus[(int)property]); // cap 75% from items
             }
-            value -= living.DebuffCategory[eProperty.MythicalCrowdDuration];
-            return Math.Max(-100, value);
+            return Math.Max(1, percent);
         }
     }
 }

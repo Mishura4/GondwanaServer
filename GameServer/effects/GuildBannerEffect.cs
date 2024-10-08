@@ -338,18 +338,18 @@ namespace DOL.GS.Effects
         {
             base.Start(target);
             int effValue = (int)(Value);
-            m_owner.BaseBuffBonusCategory[(int)eProperty.MesmerizeDurationReduction] += effValue;
-            m_owner.BaseBuffBonusCategory[(int)eProperty.SpeedDecreaseDurationReduction] += effValue;
-            m_owner.BaseBuffBonusCategory[(int)eProperty.StunDurationReduction] += effValue;
+            m_owner.BaseBuffBonusCategory[(int)eProperty.MesmerizeDuration] += effValue;
+            m_owner.BaseBuffBonusCategory[(int)eProperty.SpeedDecreaseDuration] += effValue;
+            m_owner.BaseBuffBonusCategory[(int)eProperty.StunDuration] += effValue;
             SendUpdates(m_owner);
         }
 
         public override void Stop()
         {
             int effValue = (int)(Value);
-            m_owner.BaseBuffBonusCategory[(int)eProperty.MesmerizeDurationReduction] -= effValue;
-            m_owner.BaseBuffBonusCategory[(int)eProperty.SpeedDecreaseDurationReduction] -= effValue;
-            m_owner.BaseBuffBonusCategory[(int)eProperty.StunDurationReduction] -= effValue;
+            m_owner.BaseBuffBonusCategory[(int)eProperty.MesmerizeDuration] -= effValue;
+            m_owner.BaseBuffBonusCategory[(int)eProperty.SpeedDecreaseDuration] -= effValue;
+            m_owner.BaseBuffBonusCategory[(int)eProperty.StunDuration] -= effValue;
             base.Stop();
             SendUpdates(m_owner);
         }

@@ -245,7 +245,7 @@ namespace DOL.GS.Spells
     [SpellHandler("MesmerizeDurationBuff")]
     public class MesmerizeDurationBuff : SingleStatBuff
     {
-        public override eProperty Property1 { get { return eProperty.MesmerizeDurationReduction; } }
+        public override eProperty Property1 { get { return eProperty.MesmerizeDuration; } }
 
         protected override void SendUpdates(GameLiving target) { }
 

@@ -2336,7 +2336,7 @@ namespace DOL.GS
         {
             get
             {
-                int stunReduction = 100 - GetModified(eProperty.StunDurationReduction);
+                int stunReduction = 100 - GetModified(eProperty.StunDuration);
                 int crowdReduction = 100 - GetModified(eProperty.MythicalCrowdDuration);
                 int totalReduction = stunReduction + crowdReduction;
                 return totalReduction;
@@ -2350,7 +2350,7 @@ namespace DOL.GS
         {
             get
             {
-                int mezzReduction = 100 - GetModified(eProperty.MesmerizeDurationReduction);
+                int mezzReduction = 100 - GetModified(eProperty.MesmerizeDuration);
                 int crowdReduction = 100 - GetModified(eProperty.MythicalCrowdDuration);
                 int totalReduction = mezzReduction + crowdReduction;
                 return totalReduction;
@@ -2358,13 +2358,13 @@ namespace DOL.GS
         }
         
         /// <summary>
-        /// Total mezz duration reduction, includes generic crowd control reduction
+        /// Total slow duration reduction, includes generic crowd control reduction
         /// </summary>
         public int TotalSpeedDecreaseDurationReduction
         {
             get
             {
-                int slowReduction = 100 - GetModified(eProperty.SpeedDecreaseDurationReduction);
+                int slowReduction = 100 - GetModified(eProperty.SpeedDecreaseDuration);
                 int crowdReduction = 100 - GetModified(eProperty.MythicalCrowdDuration);
                 int totalReduction = slowReduction + crowdReduction;
                 return totalReduction;
