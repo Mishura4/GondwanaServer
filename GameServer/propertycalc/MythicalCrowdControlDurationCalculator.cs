@@ -38,7 +38,7 @@ namespace DOL.GS.PropertyCalc
             
             if (living is GamePlayer)
             {
-                percent += Math.Min(75, living.ItemBonus[(int)property]); // cap 75% from items
+                percent += Math.Min(15, living.ItemBonus[(int)property]); // cap 15% from items
             }
             return Math.Max(1, percent);
         }
