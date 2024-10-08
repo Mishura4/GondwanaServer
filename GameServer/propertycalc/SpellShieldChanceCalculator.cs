@@ -27,32 +27,38 @@ namespace DOL.GS.PropertyCalc
     {
         private static readonly int CooldownTime = 2 * 60 * 1000;
         private static readonly string CooldownPropertyName = "SpellShieldCooldown";
+        private static readonly int SpellID = 20629;
 
         private static Spell _spellShieldSpell;
-
+        
         public static Spell SpellShieldSpell
         {
             get
             {
                 if (_spellShieldSpell == null)
                 {
-                    DBSpell spell = new DBSpell
+                    DBSpell spell = GameServer.Database.SelectObject<DBSpell>(s => s.SpellID == SpellID);
+                    if (spell == null)
                     {
-                        CastTime = 0,
-                        ClientEffect = 15217,
-                        Icon = 12031,
-                        Description = "Absorbs 100% of spell damage when the player's health is at 15% or below.",
-                        Name = "Spell Shield",
-                        Power = -5,
-                        Range = 0,
-                        Damage = 0,
-                        DamageType = (int)eDamageType.Natural,
-                        SpellID = 20629,
-                        Target = "self",
-                        Type = "SpellShield",
-                        Duration = 90,
-                        RecastDelay = 120, // 2 minutes
-                    };
+                        spell = new DBSpell
+                        {
+                            CastTime = 0,
+                            ClientEffect = 15217,
+                            Icon = 12031,
+                            Description = "Absorbs 100% of spell damage when the player's health is at 15% or below.",
+                            Name = "Spell Shield",
+                            Power = -5,
+                            Range = 0,
+                            Damage = 0,
+                            DamageType = (int)eDamageType.Natural,
+                            SpellID = SpellID,
+                            Target = "self",
+                            Type = "SpellShield",
+                            Duration = 90,
+                            RecastDelay = CooldownTime, // 2 minutes
+                            TooltipId = 6870
+                        };
+                    }
 
                     _spellShieldSpell = new Spell(spell, 70);
                     SkillBase.GetSpellList(GlobalSpellsLines.Item_Spells).Add(_spellShieldSpell);

@@ -36,7 +36,7 @@ namespace DOL.GS.Spells
             }
             AttackData ad = args.AttackData;
 
-            if (ad.AttackType != AttackData.eAttackType.Spell && ad.AttackType != AttackData.eAttackType.DoT)
+            if (ad.AttackType is not AttackData.eAttackType.Spell and not AttackData.eAttackType.DoT)
             {
                 return;
             }
