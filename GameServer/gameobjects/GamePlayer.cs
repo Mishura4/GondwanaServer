@@ -7478,8 +7478,10 @@ namespace DOL.GS
                                 }
                             }
                         }
-                        
-                        ItemSpellShieldHandler.ApplyEffect(GameLivingEvent.AttackedByEnemy, this, new AttackedByEnemyEventArgs(ad));
+                        else if (ad.ArmorHitLocation == eArmorSlot.NOTSET)
+                        {
+                            ItemSpellShieldHandler.ApplyEffect(GameLivingEvent.AttackedByEnemy, this, new AttackedByEnemyEventArgs(ad));
+                        }
 
                         break;
                     }
