@@ -33,29 +33,16 @@ namespace DOL.GS.Spells
         }
 
         /// <inheritdoc />
-        public override int CalculateSpellResistChance(GameLiving target)
-        {
-            // If stun duration is 0, just resist the spell
-            return target.TotalStunDurationReduction >= 100 ? 100 : base.CalculateSpellResistChance(target);
-        }
-
-        /// <inheritdoc />
         protected override int CalculateEffectDuration(GameLiving target, double effectiveness)
         {
-            int duration = Spell.Duration;
-            int modifiedStunDuration = 100 - target.TotalStunDurationReduction;
-            if (modifiedStunDuration != 100)
-            {
-                if (modifiedStunDuration <= 0) // Shouldn't happen because CalculateSpellResistChance but better safe than sending a duration of 0 (infinite)
-                {
-                    duration = 1;
-                }
-                else
-                {
-                    duration = (int)(duration * (modifiedStunDuration / 100d) + 0.5d);
-                }
-            }
-            return duration;
+            double duration = Spell.Duration;
+            duration *= (1.0 - target.GetModified(eProperty.NegativeReduction) * 0.01);
+            duration *= (target.GetModified(eProperty.MythicalCrowdDuration) * 0.01);
+            duration *= (target.GetModified(eProperty.StunDuration) * 0.01);
+
+            if (duration <= 0)
+                duration = 1;
+            return (int)duration;
         }
 
         public override void OnEffectStart(GameSpellEffect effect)

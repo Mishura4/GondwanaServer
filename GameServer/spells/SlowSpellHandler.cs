@@ -36,12 +36,6 @@ namespace DOL.GS.Spells
     [SpellHandler("Slow")]
     public class SlowSpellHandler : SpellHandler
     {
-        public override int CalculateSpellResistChance(GameLiving target)
-        {
-            // If slow duration is 0, just resist the spell
-            return target.TotalSpeedDecreaseDurationReduction >= 100 ? 100 : 0;
-        }
-
         /// <summary>
         /// Apply the effect.
         /// </summary>
@@ -71,20 +65,14 @@ namespace DOL.GS.Spells
         /// <inheritdoc />
         protected override int CalculateEffectDuration(GameLiving target, double effectiveness)
         {
-            int duration = Spell.Duration;
-            int modifiedSlowDuration = 100 - target.TotalSpeedDecreaseDurationReduction;
-            if (modifiedSlowDuration != 100)
-            {
-                if (modifiedSlowDuration <= 0) // Shouldn't happen because CalculateSpellResistChance but better safe than sending a duration of 0 (infinite)
-                {
-                    duration = 1;
-                }
-                else
-                {
-                    duration = (int)(duration * (modifiedSlowDuration / 100d) + 0.5d);
-                }
-            }
-            return duration;
+            double duration = Spell.Duration;
+            duration *= (1.0 - target.GetModified(eProperty.NegativeReduction) * 0.01);
+            duration *= (target.GetModified(eProperty.MythicalCrowdDuration) * 0.01);
+            duration *= (target.GetModified(eProperty.SpeedDecreaseDuration) * 0.01);
+
+            if (duration < 1)
+                duration = 1;
+            return (int)duration;
         }
 
         /// <summary>

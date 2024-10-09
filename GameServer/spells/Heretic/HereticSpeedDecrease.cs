@@ -107,14 +107,12 @@ namespace DOL.GS.Spells
         protected override int CalculateEffectDuration(GameLiving target, double effectiveness)
         {
             double duration = base.CalculateEffectDuration(target, effectiveness);
-            duration *= (100 - target.TotalMezzDurationReduction) * 0.01;
+            duration *= target.GetModified(eProperty.MythicalCrowdDuration) * 0.01;
 
             if (duration < 1)
                 duration = 1;
             else if (duration > (Spell.Duration * 4))
                 duration = (Spell.Duration * 4);
-
-
 
             return (int)duration;
         }
@@ -196,6 +194,19 @@ namespace DOL.GS.Spells
             return 60000;
         }
 
+        /// <inheritdoc />
+        protected override int CalculateEffectDuration(GameLiving target, double effectiveness)
+        {
+            double duration = base.CalculateEffectDuration(target, effectiveness);
+            duration *= target.GetModified(eProperty.SpeedDecreaseDuration) * 0.01;
+
+            if (duration < 1)
+                duration = 1;
+            else if (duration > (Spell.Duration * 4))
+                duration = (Spell.Duration * 4);
+
+            return (int)duration;
+        }
 
         protected virtual void OnAttacked(DOLEvent e, object sender, EventArgs arguments)
         {

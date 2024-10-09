@@ -145,7 +145,7 @@ namespace DOL.GS.Spells
             }
 
 
-            if (Spell.SpellType.ToLower() != "stylestun")
+            if (!Spell.SpellType.ToLower().StartsWith("style"))
             {
                 // capping duration adjustment to 100%, live cap unknown - Tolakram
                 int hitChance = Math.Min(200, CalculateToHitChance(target));
@@ -162,6 +162,7 @@ namespace DOL.GS.Spells
                 {
                     duration += (int)(duration * (hitChance - 100) * 0.01);
                 }
+                duration *= target.GetModified(eProperty.MythicalCrowdDuration) * 0.01;
             }
 
 
@@ -386,7 +387,7 @@ namespace DOL.GS.Spells
         protected override int CalculateEffectDuration(GameLiving target, double effectiveness)
         {
             double duration = base.CalculateEffectDuration(target, effectiveness);
-            duration *= (100 - target.TotalMezzDurationReduction) * 0.01;
+            duration *= target.GetModified(eProperty.MesmerizeDuration) * 0.01;
             if (duration < 1)
                 duration = 1;
             else if (duration > (Spell.Duration * 4))

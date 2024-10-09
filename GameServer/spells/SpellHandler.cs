@@ -2757,6 +2757,11 @@ namespace DOL.GS.Spells
                     duration = (duration * (100 - Math.Min(100, guildReduction))) / 100;
             }
 
+            if (Spell.IsHarmful && !Spell.SpellType.ToLower().StartsWith("style"))
+            {
+                duration *= (1.0 - target.GetModified(eProperty.NegativeReduction) * 0.01);
+            }
+
             duration *= effectiveness;
             if (duration < 1)
                 duration = 1;
