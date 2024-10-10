@@ -7417,6 +7417,7 @@ namespace DOL.GS
                         if (ad.AttackType is AttackData.eAttackType.Spell)
                         {
                             MythicalSpellReflectHandler.ApplyEffect(GameLivingEvent.AttackedByEnemy, this, new AttackedByEnemyEventArgs(ad));
+                            ItemSpellShieldHandler.ApplyEffect(GameLivingEvent.AttackedByEnemy, this, new AttackedByEnemyEventArgs(ad));
                         }
 
                         if (ad is { Damage: 0, CriticalDamage: 0, Modifier: 0 })
@@ -7487,10 +7488,6 @@ namespace DOL.GS
                                     (item as GameInventoryItem)!.OnStruckByEnemy(this, ad.Attacker);
                                 }
                             }
-                        }
-                        else if (ad.ArmorHitLocation == eArmorSlot.NOTSET)
-                        {
-                            ItemSpellShieldHandler.ApplyEffect(GameLivingEvent.AttackedByEnemy, this, new AttackedByEnemyEventArgs(ad));
                         }
 
                         break;
