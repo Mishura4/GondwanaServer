@@ -12588,18 +12588,6 @@ namespace DOL.GS
                     Out.SendMessage(string.Format(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.OnItemEquipped.Increased", ItemBonusName(item.ExtraBonusType))), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
             }
 
-            if (item.Bonus1 != 0) ItemBonus[item.Bonus1Type] += item.Bonus1;
-            if (item.Bonus2 != 0) ItemBonus[item.Bonus2Type] += item.Bonus2;
-            if (item.Bonus3 != 0) ItemBonus[item.Bonus3Type] += item.Bonus3;
-            if (item.Bonus4 != 0) ItemBonus[item.Bonus4Type] += item.Bonus4;
-            if (item.Bonus5 != 0) ItemBonus[item.Bonus5Type] += item.Bonus5;
-            if (item.Bonus6 != 0) ItemBonus[item.Bonus6Type] += item.Bonus6;
-            if (item.Bonus7 != 0) ItemBonus[item.Bonus7Type] += item.Bonus7;
-            if (item.Bonus8 != 0) ItemBonus[item.Bonus8Type] += item.Bonus8;
-            if (item.Bonus9 != 0) ItemBonus[item.Bonus9Type] += item.Bonus9;
-            if (item.Bonus10 != 0) ItemBonus[item.Bonus10Type] += item.Bonus10;
-            if (item.ExtraBonus != 0) ItemBonus[item.ExtraBonusType] += item.ExtraBonus;
-
             if (item.Bonus1Type == (int)eProperty.MythicalSpellReflect ||
                 item.Bonus2Type == (int)eProperty.MythicalSpellReflect ||
                 item.Bonus3Type == (int)eProperty.MythicalSpellReflect ||
@@ -12770,18 +12758,6 @@ namespace DOL.GS
                 if (item.ExtraBonusType < 20 || item.ExtraBonusType == 119 || (item.ExtraBonusType >= 147 && item.ExtraBonusType <= 156) || (item.ExtraBonusType >= 169 && item.ExtraBonusType <= 171) || item.ExtraBonusType == 175 || item.ExtraBonusType == 181 || item.ExtraBonusType == 197 || item.ExtraBonusType == 249)
                     Out.SendMessage(string.Format(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.OnItemUnequipped.Decreased", ItemBonusName(item.ExtraBonusType))), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
             }
-
-            if (item.Bonus1 != 0) ItemBonus[item.Bonus1Type] -= item.Bonus1;
-            if (item.Bonus2 != 0) ItemBonus[item.Bonus2Type] -= item.Bonus2;
-            if (item.Bonus3 != 0) ItemBonus[item.Bonus3Type] -= item.Bonus3;
-            if (item.Bonus4 != 0) ItemBonus[item.Bonus4Type] -= item.Bonus4;
-            if (item.Bonus5 != 0) ItemBonus[item.Bonus5Type] -= item.Bonus5;
-            if (item.Bonus6 != 0) ItemBonus[item.Bonus6Type] -= item.Bonus6;
-            if (item.Bonus7 != 0) ItemBonus[item.Bonus7Type] -= item.Bonus7;
-            if (item.Bonus8 != 0) ItemBonus[item.Bonus8Type] -= item.Bonus8;
-            if (item.Bonus9 != 0) ItemBonus[item.Bonus9Type] -= item.Bonus9;
-            if (item.Bonus10 != 0) ItemBonus[item.Bonus10Type] -= item.Bonus10;
-            if (item.ExtraBonus != 0) ItemBonus[item.ExtraBonusType] -= item.ExtraBonus;
 
             if (item is IGameInventoryItem)
             {
