@@ -7411,9 +7411,19 @@ namespace DOL.GS
                 case eAttackResult.HitStyle:
                 case eAttackResult.HitUnstyled:
                     {
-                        if (ad is { Damage: -1 } or { AttackType: AttackData.eAttackType.Spell, Damage: 0, CriticalDamage: 0, Modifier: 0 })
+                        if (ad is { Damage: -1 } )
                             break;
 
+                        if (ad.AttackType is AttackData.eAttackType.Spell)
+                        {
+                            MythicalSpellReflectHandler.ApplyEffect(GameLivingEvent.AttackedByEnemy, this, new AttackedByEnemyEventArgs(ad));
+                        }
+
+                        if (ad is { Damage: 0, CriticalDamage: 0, Modifier: 0 })
+                        {
+                            break;
+                        }
+                        
                         #region Messages
 
                         string hitLocName = null;
@@ -12588,21 +12598,6 @@ namespace DOL.GS
                     Out.SendMessage(string.Format(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.OnItemEquipped.Increased", ItemBonusName(item.ExtraBonusType))), eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
             }
 
-            if (item.Bonus1Type == (int)eProperty.MythicalSpellReflect ||
-                item.Bonus2Type == (int)eProperty.MythicalSpellReflect ||
-                item.Bonus3Type == (int)eProperty.MythicalSpellReflect ||
-                item.Bonus4Type == (int)eProperty.MythicalSpellReflect ||
-                item.Bonus5Type == (int)eProperty.MythicalSpellReflect ||
-                item.Bonus6Type == (int)eProperty.MythicalSpellReflect ||
-                item.Bonus7Type == (int)eProperty.MythicalSpellReflect ||
-                item.Bonus8Type == (int)eProperty.MythicalSpellReflect ||
-                item.Bonus9Type == (int)eProperty.MythicalSpellReflect ||
-                item.Bonus10Type == (int)eProperty.MythicalSpellReflect ||
-                item.ExtraBonusType == (int)eProperty.MythicalSpellReflect)
-            {
-                GameEventMgr.AddHandler(this, GameLivingEvent.AttackedByEnemy, new DOLEventHandler(MythicalSpellReflectHandler.ApplyEffect));
-            }
-
             //Check null on client.player bypass region change
             if (Client.Account.PrivLevel == (uint)ePrivLevel.Player && Client.Player != null && Client.Player.ObjectState == eObjectState.Active)
                 if (item.SpellID > 0 || item.SpellID1 > 0)
@@ -12762,21 +12757,6 @@ namespace DOL.GS
             if (item is IGameInventoryItem)
             {
                 (item as IGameInventoryItem)!.OnUnEquipped(this);
-            }
-
-            if (item.Bonus1Type == (int)eProperty.MythicalSpellReflect ||
-                item.Bonus2Type == (int)eProperty.MythicalSpellReflect ||
-                item.Bonus3Type == (int)eProperty.MythicalSpellReflect ||
-                item.Bonus4Type == (int)eProperty.MythicalSpellReflect ||
-                item.Bonus5Type == (int)eProperty.MythicalSpellReflect ||
-                item.Bonus6Type == (int)eProperty.MythicalSpellReflect ||
-                item.Bonus7Type == (int)eProperty.MythicalSpellReflect ||
-                item.Bonus8Type == (int)eProperty.MythicalSpellReflect ||
-                item.Bonus9Type == (int)eProperty.MythicalSpellReflect ||
-                item.Bonus10Type == (int)eProperty.MythicalSpellReflect ||
-                item.ExtraBonusType == (int)eProperty.MythicalSpellReflect)
-            {
-                GameEventMgr.RemoveHandler(this, GameLivingEvent.AttackedByEnemy, new DOLEventHandler(MythicalSpellReflectHandler.ApplyEffect));
             }
 
             if (ObjectState == eObjectState.Active)

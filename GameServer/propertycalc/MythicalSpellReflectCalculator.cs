@@ -60,7 +60,7 @@ namespace DOL.GS.PropertyCalc
             {
                 int chanceToReflect = living.GetModified(eProperty.MythicalSpellReflect);
 
-                if (!Util.Chance(chanceToReflect))
+                if (chanceToReflect <= 0 || !Util.Chance(chanceToReflect))
                     return;
 
                 Spell spellToCast = ad.SpellHandler.Spell.Copy();
