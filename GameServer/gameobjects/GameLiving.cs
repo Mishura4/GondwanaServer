@@ -550,12 +550,12 @@ namespace DOL.GS
         public virtual void Disease(bool active)
         {
             if (active) m_diseasedCount++;
-            else m_diseasedCount--;
-
-            if (m_diseasedCount < 0)
+            else
             {
-                if (log.IsErrorEnabled)
+                if (m_diseasedCount == 0 && log.IsErrorEnabled)
                     log.Error("m_diseasedCount is less than zero.\n" + Environment.StackTrace);
+                else
+                    --m_diseasedCount;
             }
         }
         /// <summary>
