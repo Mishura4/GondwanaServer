@@ -16,44 +16,46 @@ namespace DOL.GS.Spells
         {
         }
 
-        public override bool StartSpell(GameLiving target)
+        private int minEnd, maxEnd;
+        private int minMana, maxMana;
+
+        public override bool StartSpell(GameLiving target, bool force = false)
         {
-            if (!base.StartSpell(target))
+            if (!base.StartSpell(target, force))
                 return false;
-            var targets = SelectTargets(target);
-            int minEnd, maxEnd;
-            int minMana, maxMana;
+
             CalculateEnduranceVariance(out minEnd, out maxEnd);
             CalculateManaVariance(out minMana, out maxMana);
-            foreach (GameLiving healTarget in targets)
-            {
-                int amountEndu = Util.Random(minEnd, maxEnd);
-                int amountMana = Util.Random(minMana, maxMana);
-                if (SpellLine.KeyName == GlobalSpellsLines.Item_Effects)
-                {
-                    amountEndu = maxEnd;
-                    amountMana = maxMana;
-                }
-                if (healTarget.IsDiseased)
-                {
-                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "Spell.LifeTransfer.TargetDiseased"), eChatType.CT_SpellResisted);
-                    amountEndu /= 2;
-                    amountMana /= 2;
-                }
-                int endurance = healTarget.ChangeEndurance(Caster, GameLiving.eEnduranceChangeType.Spell, amountEndu);
-                int power = healTarget.ChangeMana(Caster, GameLiving.eManaChangeType.Spell, amountMana);
-                if (m_caster == healTarget)
-                {
-                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.OmniHeal.SelfHealed", endurance, power), eChatType.CT_Spell);
-                }
-                else
-                {
-                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.OmniHeal.TargetHealed", target.GetName(0, false), endurance, power), eChatType.CT_Spell);
-                    MessageToLiving(target, LanguageMgr.GetTranslation((target as GamePlayer)?.Client, "SpellHandler.OmniHeal.YouAreHealed", m_caster.GetName(0, false), endurance, power), eChatType.CT_Spell);
-                }
-            }
-
             return true;
+        }
+
+        /// <inheritdoc />
+        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        {
+            int amountEndu = Util.Random(minEnd, maxEnd);
+            int amountMana = Util.Random(minMana, maxMana);
+            if (SpellLine.KeyName == GlobalSpellsLines.Item_Effects)
+            {
+                amountEndu = maxEnd;
+                amountMana = maxMana;
+            }
+            if (target.IsDiseased)
+            {
+                MessageTranslationToCaster("Spell.LifeTransfer.TargetDiseased", eChatType.CT_SpellResisted);
+                amountEndu /= 2;
+                amountMana /= 2;
+            }
+            int endurance = target.ChangeEndurance(Caster, GameLiving.eEnduranceChangeType.Spell, amountEndu);
+            int power = target.ChangeMana(Caster, GameLiving.eManaChangeType.Spell, amountMana);
+            if (m_caster == target)
+            {
+                MessageTranslationToCaster("SpellHandler.OmniHeal.SelfHealed", eChatType.CT_Spell, endurance, power);
+            }
+            else
+            {
+                MessageTranslationToCaster("SpellHandler.OmniHeal.TargetHealed", eChatType.CT_Spell, target.GetName(0, false), endurance, power);
+                MessageTranslationToLiving(target,"SpellHandler.OmniHeal.YouAreHealed", eChatType.CT_Spell, m_caster.GetName(0, false), endurance, power);
+            }
         }
 
         /// <summary>

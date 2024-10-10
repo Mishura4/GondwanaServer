@@ -120,7 +120,7 @@ namespace DOL.GS.Spells
             base.FinishSpellCast(target);
         }
 
-        public override IList<GameLiving> SelectTargets(GameObject CasterTarget)
+        public override IList<GameLiving> SelectTargets(GameObject CasterTarget, bool force = false)
         {
 
             var list = new List<GameLiving>(8);

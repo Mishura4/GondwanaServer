@@ -52,7 +52,7 @@ namespace DOL.GS.Spells
             OnDirectEffect(target, CurrentEffectiveness);
         }
 
-        public override bool StartSpell(GameLiving target)
+        public override bool StartSpell(GameLiving target, bool force = false)
         {
             if (m_spellTarget == null)
                 m_spellTarget = target;

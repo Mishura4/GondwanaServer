@@ -203,7 +203,7 @@ namespace DOL.GS.Spells
     [SpellHandlerAttribute("MonsterDoT")]
     public class MonsterDoT : DirectDamageSpellHandler
     {
-        public override IList<GameLiving> SelectTargets(GameObject castTarget)
+        public override IList<GameLiving> SelectTargets(GameObject castTarget, bool force = false)
         {
             var list = new List<GameLiving>(8);
             GameLiving target = castTarget as GameLiving;
@@ -240,7 +240,7 @@ namespace DOL.GS.Spells
     [SpellHandlerAttribute("MonsterDisease")]
     public class MonsterDisease : DiseaseSpellHandler
     {
-        public override IList<GameLiving> SelectTargets(GameObject castTarget)
+        public override IList<GameLiving> SelectTargets(GameObject castTarget, bool force = false)
         {
             var list = new List<GameLiving>(8);
             GameLiving target = castTarget as GameLiving;

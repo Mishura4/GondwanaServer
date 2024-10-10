@@ -48,9 +48,9 @@ namespace DOL.GS.Spells
         /// </summary>
         /// <param name="castTarget"></param>
         /// <returns></returns>
-        public override IList<GameLiving> SelectTargets(GameObject castTarget)
+        public override IList<GameLiving> SelectTargets(GameObject castTarget, bool force = false)
         {
-            return base.SelectTargets(castTarget).Where(t => t is GameNPC).ToList();
+            return base.SelectTargets(castTarget, force).Where(t => t is GameNPC).ToList();
         }
 
         /// <summary>

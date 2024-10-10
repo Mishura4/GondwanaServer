@@ -466,7 +466,7 @@ namespace DOL.GS.Spells
         /// <summary>
         /// Select all targets for Blanket of Camouflage, including subpets
         /// </summary>
-        public override IList<GameLiving> SelectTargets(GameObject castTarget)
+        public override IList<GameLiving> SelectTargets(GameObject castTarget, bool force = false)
         {
             List<GameLiving> list;
 

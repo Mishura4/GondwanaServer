@@ -28,7 +28,7 @@ namespace DOL.GS.Spells
     [SpellHandlerAttribute("MetalGuard")]
     public class MetalGuardSpellHandler : ArmorAbsorptionBuff
     {
-        public override IList<GameLiving> SelectTargets(GameObject castTarget)
+        public override IList<GameLiving> SelectTargets(GameObject castTarget, bool force = false)
         {
             var list = new List<GameLiving>();
             GameLiving target = castTarget as GameLiving;

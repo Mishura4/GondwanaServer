@@ -84,13 +84,13 @@ namespace DOL.GS.Spells
             base.FinishSpellCast(target);
         }
 
-        public override bool StartSpell(GameLiving target)
+        public override bool StartSpell(GameLiving target, bool force = false)
         {
             // paladin chants seem special
             if (SpellLine.Spec == Specs.Chants)
                 SendEffectAnimation(Caster, 0, true, 1);
 
-            return base.StartSpell(target);
+            return base.StartSpell(target, force);
         }
 
         public override void OnEffectStart(GameSpellEffect effect)

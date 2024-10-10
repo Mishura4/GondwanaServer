@@ -23,7 +23,7 @@ namespace DOL.GS.Spells
     [SpellHandler("CombatHeal")]
     public class CombatHealSpellHandler : HealSpellHandler
     {
-        public override bool StartSpell(GameLiving target)
+        public override bool StartSpell(GameLiving target, bool force = false)
         {
             m_startReuseTimer = true;
             // do not start spell if not in combat
@@ -31,7 +31,7 @@ namespace DOL.GS.Spells
             if (!Caster.InCombat && (player == null || player.Group == null || !player.Group.IsGroupInCombat()))
                 return false;
 
-            return base.StartSpell(target);
+            return base.StartSpell(target, force);
         }
 
         public CombatHealSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine) { }

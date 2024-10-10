@@ -221,7 +221,7 @@ namespace DOL.GS.Spells
             return (int)duration;
         }
 
-        public override bool StartSpell(GameLiving target)
+        public override bool StartSpell(GameLiving target, bool force = false)
         {
             // set min spread based on spec
             if (Caster is GamePlayer)
@@ -242,7 +242,7 @@ namespace DOL.GS.Spells
                 }
             }
 
-            return base.StartSpell(target);
+            return base.StartSpell(target, force);
         }
 
         public override void OnEffectStart(GameSpellEffect effect)

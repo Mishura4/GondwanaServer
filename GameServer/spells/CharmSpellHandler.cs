@@ -58,9 +58,8 @@ namespace DOL.GS.Spells
             base.FinishSpellCast(target);
         }
 
-        public override bool StartSpell(GameLiving target)
+        public override bool StartSpell(GameLiving target, bool force = false)
         {
-
             if (m_charmedNpc == null)
             {
                 // save target on first start

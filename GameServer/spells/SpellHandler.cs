@@ -2055,11 +2055,6 @@ namespace DOL.GS.Spells
             GameEventMgr.Notify(GameLivingEvent.CastFinished, m_caster, new CastingEventArgs(this, target, m_lastAttackData));
         }
 
-        public virtual IList<GameLiving> SelectTargets(GameObject castTarget)
-        {
-            return SelectTargets(castTarget, false);
-        }
-
         /// <summary>
         /// Select all targets for this spell
         /// </summary>
@@ -2608,11 +2603,6 @@ namespace DOL.GS.Spells
         {
             m_spellItem = item;
             return StartSpell(target);
-        }
-
-        public virtual bool StartSpell(GameLiving target)
-        {
-            return StartSpell(target, false);
         }
 
         /// <summary>
@@ -3379,6 +3369,26 @@ namespace DOL.GS.Spells
         }
 
         /// <summary>
+        /// Sends a message to the caster, if the caster is a controlled
+        /// creature, to the player instead (only spell hit and resisted
+        /// messages).
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="type"></param>
+        /// <param name="args"></param>
+        public void MessageTranslationToCaster(string key, eChatType type, params object[] args)
+        {
+            if (Caster is GamePlayer player)
+            {
+                player.MessageToSelf(LanguageMgr.GetTranslation(player, key, args), type);
+            }
+            else if (Caster.GetPlayerOwner() is {} owner)
+            {
+                owner.MessageFromControlled(LanguageMgr.GetTranslation(owner, key, args), type);
+            }
+        }
+
+        /// <summary>
         /// sends a message to a living
         /// </summary>
         /// <param name="living"></param>
@@ -3389,6 +3399,26 @@ namespace DOL.GS.Spells
             if (message != null && message.Length > 0)
             {
                 living.MessageToSelf(message, type);
+            }
+        }
+
+        /// <summary>
+        /// Sends a message to the caster, if the caster is a controlled
+        /// creature, to the player instead (only spell hit and resisted
+        /// messages).
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="type"></param>
+        /// <param name="args"></param>
+        public void MessageTranslationToLiving(GameLiving living, string key, eChatType type, params object[] args)
+        {
+            if (living is GamePlayer player)
+            {
+                player.MessageToSelf(LanguageMgr.GetTranslation(player, key, args), type);
+            }
+            else if (living.GetPlayerOwner() is {} owner)
+            {
+                owner.MessageFromControlled(LanguageMgr.GetTranslation(owner, key, args), type);
             }
         }
 

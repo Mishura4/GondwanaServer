@@ -26,9 +26,9 @@ namespace DOL.GS.Spells
     {
         public PetConversionSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override bool StartSpell(GameLiving target)
+        public override bool StartSpell(GameLiving target, bool force = false)
         {
-            var targets = SelectTargets(target);
+            var targets = SelectTargets(target, force);
             if (targets.Count <= 0) return false;
             int mana = 0;
 

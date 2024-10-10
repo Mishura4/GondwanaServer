@@ -66,7 +66,7 @@ namespace DOL.GS.Spells
         /// </summary>
         /// <param name="castTarget"></param>
         /// <returns></returns>
-        public override IList<GameLiving> SelectTargets(GameObject castTarget)
+        public override IList<GameLiving> SelectTargets(GameObject castTarget, bool force = false)
         {
             var list = new List<GameLiving>(8);
             GameLiving target = castTarget as GameLiving;
@@ -269,7 +269,7 @@ namespace DOL.GS.Spells
         /// </summary>
         /// <param name="castTarget"></param>
         /// <returns></returns>
-        public override IList<GameLiving> SelectTargets(GameObject castTarget)
+        public override IList<GameLiving> SelectTargets(GameObject castTarget, bool force = false)
         {
             var list = new List<GameLiving>(8);
             GameLiving target = castTarget as GameLiving;
@@ -458,7 +458,7 @@ namespace DOL.GS.Spells
         /// </summary>
         /// <param name="castTarget"></param>
         /// <returns></returns>
-        public override IList<GameLiving> SelectTargets(GameObject castTarget)
+        public override IList<GameLiving> SelectTargets(GameObject castTarget, bool force = false)
         {
             var list = new List<GameLiving>(8);
             GameLiving target = castTarget as GameLiving;
@@ -642,12 +642,14 @@ namespace DOL.GS.Spells
         }
 
         #region Targets
+
         /// <summary>
         /// Select all targets for this spell
         /// </summary>
         /// <param name="castTarget"></param>
+        /// <param name="force"></param>
         /// <returns></returns>
-        public override IList<GameLiving> SelectTargets(GameObject castTarget)
+        public override IList<GameLiving> SelectTargets(GameObject castTarget, bool force = false)
         {
             var list = new List<GameLiving>(8);
             GameLiving target = castTarget as GameLiving;
@@ -859,12 +861,14 @@ namespace DOL.GS.Spells
         }
 
         #region Targets
+
         /// <summary>
         /// Select all targets for this spell
         /// </summary>
         /// <param name="castTarget"></param>
+        /// <param name="force"></param>
         /// <returns></returns>
-        public override IList<GameLiving> SelectTargets(GameObject castTarget)
+        public override IList<GameLiving> SelectTargets(GameObject castTarget, bool force = false)
         {
             var list = new List<GameLiving>(8);
             GameLiving target = castTarget as GameLiving;
