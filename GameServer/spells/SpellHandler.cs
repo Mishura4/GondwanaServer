@@ -2292,7 +2292,7 @@ namespace DOL.GS.Spells
                             return null;
                         foreach (PlayerDistEntry entry in target.GetPlayersInRadius(true, modifiedRadius, true, false))
                         {
-                            if (GameServer.ServerRules.ShouldAOEHitTarget(Spell, Caster, entry.Player) || force)
+                            if (GameServer.ServerRules.ShouldAOEHitTarget(Spell, Caster, entry.Player))
                             {
                                 SelectiveBlindnessEffect SelectiveBlindness = Caster.EffectList.GetOfType<SelectiveBlindnessEffect>();
                                 if (SelectiveBlindness != null)
@@ -2310,16 +2310,18 @@ namespace DOL.GS.Spells
                         }
                         foreach (NPCDistEntry entry in target.GetNPCsInRadius(true, modifiedRadius, true, false))
                         {
-                            if (GameServer.ServerRules.ShouldAOEHitTarget(Spell, Caster, entry.NPC) || force)
+                            if (GameServer.ServerRules.ShouldAOEHitTarget(Spell, Caster, entry.NPC))
                             {
                                 if (!entry.NPC.HasAbility("DamageImmunity"))
                                     AddTarget(new LivingDistEntry(entry.NPC, entry.Distance));
                             }
                         }
+                        if (force && !list.Select(e => e.Living).Contains(target))
+                            AddTarget(new LivingDistEntry(target, -1));
                     }
                     else
                     {
-                        if (target != null && (GameServer.ServerRules.IsAllowedToAttack(Caster, target, true) || force))
+                        if (target != null && (force || GameServer.ServerRules.IsAllowedToAttack(Caster, target, true)))
                         {
                             // Apply Mentalist RA5L
                             if (Spell.Range > 0)
@@ -2359,15 +2361,17 @@ namespace DOL.GS.Spells
                         foreach (NPCDistEntry entry in target.GetNPCsInRadius(true, modifiedRadius, true, false))
                         {
                             var npc = entry.NPC;
-                            if (npc.IsVisibleTo(Caster) && (GameServer.ServerRules.IsAllowedToHelp(Caster, npc, true) && npc.IsAlive) || force)
+                            if (npc.IsVisibleTo(Caster) && (GameServer.ServerRules.IsAllowedToHelp(Caster, npc, true) && npc.IsAlive))
                             {
                                 AddTarget(entry);
                             }
                         }
+                        if (force && !list.Select(e => e.Living).Contains(target))
+                            AddTarget(new LivingDistEntry(target, -1));
                     }
                     else
                     {
-                        if (target != null && (!GameServer.ServerRules.IsAllowedToAttack(Caster, target, true) || force))
+                        if (target != null && (GameServer.ServerRules.IsAllowedToHelp(Caster, target, true) || force))
                             AddTarget(new LivingDistEntry(target, -1));
                     }
                     break;
