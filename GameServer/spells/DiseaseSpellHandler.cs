@@ -21,6 +21,7 @@ using DOL.AI.Brain;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
 using DOL.Language;
+using System.Linq;
 using System.Numerics;
 
 namespace DOL.GS.Spells
@@ -55,11 +56,6 @@ namespace DOL.GS.Spells
             {
                 effect.Owner.LastAttackedByEnemyTickPvP = effect.Owner.CurrentRegion.Time;
                 Caster.LastAttackTickPvP = Caster.CurrentRegion.Time;
-            }
-
-            if (IsImmune(effect.Owner))
-            {
-                return;
             }
 
             GameSpellEffect mezz = FindEffectOnTarget(effect.Owner, "Mesmerize");
@@ -116,66 +112,7 @@ namespace DOL.GS.Spells
             // Modify the resist chance based on factors like immunity, level difference, or custom conditions
             int baseResistChance = base.CalculateSpellResistChance(target);
 
-            // Custom logic for specific resist cases
-            if (IsImmune(target)) return 100;
-
             return baseResistChance;
-        }
-
-        private bool IsImmune(GameLiving living)
-        {
-            if (living == null)
-            {
-                return true;
-            }
-
-            if (living == Caster)
-            {
-                return true;
-            }
-
-            GameNPC npc = living as GameNPC;
-            if (npc is { Brain: IControlledBrain controlledBrain })
-            {
-                return IsImmune(controlledBrain.Owner);
-            }
-
-            GamePlayer ownerPlayer = Caster as GamePlayer;
-            if (ownerPlayer == null)
-            {
-                return false;
-            }
-
-            GamePlayer targetPlayer = living as GamePlayer;
-
-            if (ownerPlayer.Group?.IsInTheGroup(living) == true)
-            {
-                return true;
-            }
-
-            if (ownerPlayer.Guild != null)
-            {
-                if (npc != null)
-                {
-                    if (npc.CurrentTerritory?.IsOwnedBy(ownerPlayer.Guild) == true)
-                    {
-                        return true;
-                    }
-
-                    if (!string.IsNullOrEmpty(npc.GuildName) && string.Equals(npc.GuildName, ownerPlayer.Guild.Name))
-                    {
-                        return true;
-                    }
-                }
-                else if (targetPlayer != null)
-                {
-                    if (targetPlayer.Guild == ownerPlayer.Guild)
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
         }
 
         public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
@@ -238,6 +175,7 @@ namespace DOL.GS.Spells
             {
                 player.Out.SendCharStatsUpdate();
                 player.Out.SendUpdateWeaponAndArmorStats();
+                player.Group?.UpdateMember(effect.Owner, true, true);
             }
         }
 
