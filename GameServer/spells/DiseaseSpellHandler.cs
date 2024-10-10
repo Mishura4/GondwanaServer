@@ -40,13 +40,6 @@ namespace DOL.GS.Spells
             base.OnEffectStart(effect);
             effect.Owner.TempProperties.setProperty("AmnesiaChance", Spell.AmnesiaChance);
 
-            int resistChance = CalculateSpellResistChance(effect.Owner);
-            if (resistChance >= Util.Random(100))
-            {
-                MessageToLiving(effect.Owner, "You resist the disease!", eChatType.CT_SpellResisted);
-                return;
-            }
-
             if (effect.Owner.Realm == 0 || Caster.Realm == 0)
             {
                 effect.Owner.LastAttackedByEnemyTickPvE = effect.Owner.CurrentRegion.Time;
@@ -105,14 +98,6 @@ namespace DOL.GS.Spells
                 if (aggroBrain != null)
                     aggroBrain.AddToAggroList(Caster, 1);
             }
-        }
-
-        public override int CalculateSpellResistChance(GameLiving target)
-        {
-            // Modify the resist chance based on factors like immunity, level difference, or custom conditions
-            int baseResistChance = base.CalculateSpellResistChance(target);
-
-            return baseResistChance;
         }
 
         public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
