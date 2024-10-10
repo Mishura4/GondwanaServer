@@ -542,7 +542,7 @@ namespace DOL.GS
         /// <summary>
         /// Holds disease counter
         /// </summary>
-        protected volatile byte m_diseasedCount;
+        protected byte m_diseasedCount;
         /// <summary>
         /// Sets disease state
         /// </summary>
