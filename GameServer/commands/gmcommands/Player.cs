@@ -1479,11 +1479,12 @@ namespace DOL.GS.Commands
                         var player = client.Player.TargetObject as GamePlayer;
                         bool m_hasEffect;
 
-                        if (args.Length != 2)
+                        if (args.Length < 2)
                         {
                             DisplaySyntax(client);
                             return;
                         }
+                        bool removeAll = args.Length > 2 && args[2].ToLowerInvariant().Equals("all");
 
                         if (player == null)
                             player = client.Player;
@@ -1492,7 +1493,7 @@ namespace DOL.GS.Commands
 
                         lock (player.EffectList)
                         {
-                            foreach (GameSpellEffect effect in player.EffectList.OfType<GameSpellEffect>().Where(e => !e.SpellHandler.HasPositiveEffect))
+                            foreach (GameSpellEffect effect in player.EffectList.OfType<GameSpellEffect>().Where(e => removeAll || !e.SpellHandler.HasPositiveEffect))
                             {
                                 effect.Cancel(false);
                                 m_hasEffect = true;
