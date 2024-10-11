@@ -112,7 +112,7 @@ namespace DOL.GS.PropertyCalc
                 {
                     bomberSpell.ReduceSubSpellDamage = 30;
                 }
-                spellHandler.CastSpell(ad.Attacker);
+                spellHandler.StartSpell(ad.Attacker, true);
             }
         }
     }
