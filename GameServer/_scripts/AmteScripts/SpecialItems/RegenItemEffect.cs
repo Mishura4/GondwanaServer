@@ -20,7 +20,7 @@ namespace DOL.GS.Scripts
         public override ushort Icon { get { return 14800; } }
         //public override bool IsSpellIcon { get { return true; } }
 
-        public override void Cancel(bool playerCancel)
+        public override void Cancel(bool playerCancel, bool force = false)
         {
             if (playerCancel && Owner is GamePlayer)
                 ((GamePlayer)Owner).Out.SendMessage("Ne restez pas assis près d'un feu de camp pour retirer cet effet.",

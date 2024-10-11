@@ -1495,7 +1495,7 @@ namespace DOL.GS.Commands
                         {
                             foreach (GameSpellEffect effect in player.EffectList.OfType<GameSpellEffect>().Where(e => removeAll || !e.SpellHandler.HasPositiveEffect))
                             {
-                                effect.Cancel(false);
+                                effect.Cancel(false, removeAll);
                                 m_hasEffect = true;
                             }
                         }

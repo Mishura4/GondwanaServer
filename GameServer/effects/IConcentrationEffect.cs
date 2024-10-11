@@ -49,6 +49,7 @@ namespace DOL.GS.Effects
         /// Effect must be canceled
         /// </summary>
         /// <param name="playerCanceled">true if player decided to cancel that effect by shift + rightclick</param>
-        void Cancel(bool playerCanceled);
+        /// <param name="force">force cancel even immunity effects</param>
+        void Cancel(bool playerCanceled, bool force = false);
     }
 }

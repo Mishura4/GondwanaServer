@@ -121,7 +121,7 @@ namespace DOL.GS.Effects
         /// <summary>
         /// Called when effect must be canceled
         /// </summary>
-        public override void Cancel(bool playerCancel)
+        public override void Cancel(bool playerCancel, bool force = false)
         {
             GameEventMgr.RemoveHandler(m_playerGroup, GroupEvent.MemberDisbanded, new DOLEventHandler(GroupDisbandCallback));
             // intercept handling is done by the active part             

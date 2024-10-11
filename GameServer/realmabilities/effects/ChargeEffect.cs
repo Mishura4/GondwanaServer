@@ -58,7 +58,7 @@ namespace DOL.GS.Effects
             m_living.EffectList.Add(this);
         }
 
-        public override void Cancel(bool playerCancel)
+        public override void Cancel(bool playerCancel, bool force = false)
         {
             m_living.TempProperties.removeProperty("Charging");
             m_living.EffectList.Remove(this);

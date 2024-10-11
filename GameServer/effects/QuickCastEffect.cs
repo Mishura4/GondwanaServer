@@ -43,9 +43,9 @@ namespace DOL.GS.Effects
         /// <summary>
         /// Called when effect must be canceled
         /// </summary>
-        public override void Cancel(bool playerCancel)
+        public override void Cancel(bool playerCancel, bool force = false)
         {
-            base.Cancel(playerCancel);
+            base.Cancel(playerCancel, force);
             m_owner.canQuickCast = false;
             if (m_owner is GamePlayer)
                 (m_owner as GamePlayer).Out.SendMessage(LanguageMgr.GetTranslation((m_owner as GamePlayer).Client, "Effects.QuickCastEffect.YourNextSpellNoQCed"), eChatType.CT_System, eChatLoc.CL_SystemWindow);

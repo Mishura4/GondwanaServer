@@ -499,24 +499,29 @@ namespace DOL.GS.Effects
         /// Cancels the effect
         /// </summary>
         /// <param name="playerCanceled">true if canceled by the player</param>
-        public virtual void Cancel(bool playerCanceled)
+        /// <param name="force"></param>
+        public virtual void Cancel(bool playerCanceled, bool force = false)
         {
+            bool wasImmunity = false;
             lock (m_LockObject)
             {
-                // Player can't remove negative effect or Effect in Immunity State
-                if (playerCanceled && (SpellHandler is { CanBeRightClicked: false } || ImmunityState))
+                if (!force)
                 {
-                    GamePlayer player = Owner as GamePlayer;
-                    if (player != null)
-                        player.Out.SendMessage(LanguageMgr.GetTranslation((Owner as GamePlayer)!.Client, "Effects.GameSpellEffect.CantRemoveEffect"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    // Player can't remove negative effect or Effect in Immunity State
+                    if (playerCanceled && (SpellHandler is { CanBeRightClicked: false } || ImmunityState))
+                    {
+                        GamePlayer player = Owner as GamePlayer;
+                        if (player != null)
+                            player.Out.SendMessage(LanguageMgr.GetTranslation((Owner as GamePlayer)!.Client, "Effects.GameSpellEffect.CantRemoveEffect"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                        return;
+                    }
 
-                    return;
+                    // Can't Cancel Immunity Effect from Alive Living
+                    if (ImmunityState && Owner is { IsAlive: true })
+                        return;
                 }
 
-                // Can't Cancel Immunity Effect from Alive Living
-                if (ImmunityState && Owner is { IsAlive: true })
-                    return;
-
+                wasImmunity = ImmunityState;
                 // Expire Effect
                 IsExpired = true;
             }
@@ -529,7 +534,7 @@ namespace DOL.GS.Effects
                 SpellHandler.OnEffectRemove(this, false);
                 lock (m_LockObject)
                 {
-                    if (m_immunityDuration > 0)
+                    if (!wasImmunity && m_immunityDuration > 0)
                     {
                         Duration = m_immunityDuration;
                         StartTimers();

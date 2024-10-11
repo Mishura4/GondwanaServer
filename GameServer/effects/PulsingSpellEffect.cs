@@ -82,11 +82,8 @@ namespace DOL.GS.Effects
             }
         }
 
-        /// <summary>
-        /// Effect must be canceled
-        /// </summary>
-        /// <param name="playerCanceled">true if player decided to cancel that effect by shift + rightclick</param>
-        public void Cancel(bool playerCanceled)
+        /// <inheritdoc />
+        public void Cancel(bool playerCanceled, bool force = false)
         {
             lock (m_LockObject)
             {

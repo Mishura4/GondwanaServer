@@ -124,7 +124,7 @@ namespace DOL.GS.Effects
         /// Called when effect must be canceled
         /// </summary>
 		/// <param name="playerCancel"></param>
-        public override void Cancel(bool playerCancel)
+        public override void Cancel(bool playerCancel, bool force = false)
         {
             GameEventMgr.RemoveHandler(m_playerGroup, GroupEvent.MemberDisbanded, new DOLEventHandler(GroupDisbandCallback1));
             m_guardSource.EffectList.Remove(this);
