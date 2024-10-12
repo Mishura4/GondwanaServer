@@ -136,6 +136,7 @@ Damnation.Self.Resist:			Vous êtes damné(e) et résistez au sort !
 Damnation.Target.Resist:		{0} est damné(e) et résiste au sort !
 Damnation.Kill.SelfHeal:		La dépouille de votre ennemi vous revitalise de {0} points de vie !
 Damnation.Kill.DurationExtended:	Votre existence damnée est prolongée de {0} secondes alors que vous dérobez une autre âme, mais la fin reste inéluctable.
+Damnation.Self.CannotBeHealed:	Vous êtes damné(e) et ne pouvez pas être soigné !
 
 # Adrenaline
 Adrenaline.Target.Immune:		{0} est en fièvre de bataille et résiste entièrement le sort!
@@ -146,3 +147,11 @@ Adrenaline.Self.Absorb:			Vous absorbez {0} points de dégât du sort!
 # DebuffImmunity
 DebuffImmunity.You.Resisted:			Vous résistez à l'effet grâce à votre immunité anti-Affaiblissement !
 DebuffImmunity.Target.Resisted:			{0} résiste à l'effet grâce son votre immunité anti-Affaiblissement !
+
+# HealDebuff
+HealDebuffSpellHandler.EffectStart.Target:		L'efficacité des soins reçus a été réduite en raison de {0}.
+HealDebuffSpellHandler.EffectStart.Area:		L'efficacité des soins reçus par {0} a été réduite en raison de {1}.
+HealDebuffSpellHandler.EffectExpires.Target:	L'efficacité des soins reçus redevient normale.
+HealDebuffSpellHandler.EffectExpires.Area:		L'efficacité des soins reçus par {0} retourne à la normale.
+HealSpellHandler.HealingReduced:				Le soin est réduit de {0}% à cause des effets d'inhibition de soin.
+HealSpellHandler.HealingNull:					Votre sort échoue à soigner la cible en raison des effets d'inhibition de soin.

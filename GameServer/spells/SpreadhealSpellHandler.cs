@@ -115,10 +115,10 @@ namespace DOL.GS.Spells
             while (iter.MoveNext())
             {
                 GameLiving healTarget = iter.Key as GameLiving;
-                double targetHealthPercent = (double)iter.Value;
+                double targetHealthPercent = (double)iter.Value!;
                 //targets hp percent after heal is same as mostInjuredLiving
                 double targetHealPercent = bestHealPercent + mostInjuredPercent - targetHealthPercent;
-                int targetHeal = (int)(healTarget.MaxHealth * targetHealPercent);
+                int targetHeal = (int)(healTarget!.MaxHealth * targetHealPercent);
 
                 if (targetHeal > 0)
                 {
@@ -132,7 +132,7 @@ namespace DOL.GS.Spells
             while (iter.MoveNext())
             {
                 GameLiving healTarget = iter.Key as GameLiving;
-                double uncappedHeal = (int)iter.Value;
+                double uncappedHeal = (int)iter.Value!;
                 int reducedHeal = (int)Math.Min(targetHealCap, uncappedHeal * (groupHealCap / totalHealed));
 
                 //heal target

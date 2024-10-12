@@ -67,18 +67,49 @@ namespace DOL.GS.Spells
             }
 
             int heal = (ad.Damage + ad.CriticalDamage) * m_spell.LifeDrainReturn / 100;
+            int totalHealReductionPercentage = 0;
+
             if (m_caster.IsDiseased)
             {
                 int amnesiaChance = m_caster.TempProperties.getProperty<int>("AmnesiaChance", 50);
                 int healReductionPercentage = amnesiaChance > 0 ? amnesiaChance : 50;
-                heal -= (heal * healReductionPercentage) / 100;
-                MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "Spell.LifeTransfer.TargetDiseased"), eChatType.CT_SpellResisted);
+                totalHealReductionPercentage += healReductionPercentage;
+                if (m_caster.Health < m_caster.MaxHealth && totalHealReductionPercentage < 100)
+                {
+                    MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "Spell.LifeTransfer.TargetDiseased", healReductionPercentage), eChatType.CT_SpellResisted);
+                }
             }
+
+            foreach (GameSpellEffect effect in m_caster.EffectList)
+            {
+                if (effect.SpellHandler is HealDebuffSpellHandler)
+                {
+                    int debuffValue = (int)effect.Spell.Value;
+                    totalHealReductionPercentage += debuffValue;
+                    if (m_caster.Health < m_caster.MaxHealth && totalHealReductionPercentage < 100)
+                    {
+                        MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "HealSpellHandler.HealingReduced", debuffValue), eChatType.CT_SpellResisted);
+                    }
+                }
+            }
+
+            if (totalHealReductionPercentage >= 100)
+            {
+                totalHealReductionPercentage = 100;
+                MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "HealSpellHandler.HealingNull"), eChatType.CT_SpellResisted);
+            }
+
+            if (totalHealReductionPercentage > 0)
+            {
+                heal -= (heal * totalHealReductionPercentage) / 100;
+            }
+
             if (SpellHandler.FindEffectOnTarget(m_caster, "Damnation") != null)
             {
-                MessageToCaster("You are damned and cannot be healed!", eChatType.CT_SpellResisted);
+                MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "Damnation.Self.CannotBeHealed"), eChatType.CT_SpellResisted);
                 heal = 0;
             }
+
             if (heal <= 0) return;
             heal = m_caster.ChangeHealth(m_caster, GameLiving.eHealthChangeType.Spell, heal);
 

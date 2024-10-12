@@ -53,6 +53,7 @@ namespace DOL.GS.Spells
             foreach (GameLiving healTarget in targets)
             {
                 int heal = Util.Random(minHeal, maxHeal);
+                int totalHealReductionPercentage = 0;
 
                 if (SpellLine.KeyName == GlobalSpellsLines.Item_Effects)
                 {
@@ -63,8 +64,34 @@ namespace DOL.GS.Spells
                 {
                     int amnesiaChance = healTarget.TempProperties.getProperty<int>("AmnesiaChance", 50);
                     int healReductionPercentage = amnesiaChance > 0 ? amnesiaChance : 50;
-                    heal -= (heal * healReductionPercentage) / 100;
-                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "Spell.LifeTransfer.TargetDiseased"), eChatType.CT_SpellResisted);
+                    totalHealReductionPercentage += healReductionPercentage;
+                    if (healTarget.Health < healTarget.MaxHealth && totalHealReductionPercentage < 100)
+                    {
+                        MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "Spell.LifeTransfer.TargetDiseased", healReductionPercentage), eChatType.CT_SpellResisted);
+                    }
+                }
+
+                foreach (GameSpellEffect effect in healTarget.EffectList)
+                {
+                    if (effect.SpellHandler is HealDebuffSpellHandler)
+                    {
+                        int debuffValue = (int)effect.Spell.Value;
+                        totalHealReductionPercentage += debuffValue;
+                        if (healTarget.Health < healTarget.MaxHealth && totalHealReductionPercentage < 100)
+                        {
+                            MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "HealSpellHandler.HealingReduced", debuffValue), eChatType.CT_SpellResisted);
+                        }
+                    }
+                }
+
+                if (totalHealReductionPercentage >= 100)
+                {
+                    totalHealReductionPercentage = 100;
+                }
+
+                if (totalHealReductionPercentage > 0)
+                {
+                    heal -= (heal * totalHealReductionPercentage) / 100;
                 }
 
                 if (SpellHandler.FindEffectOnTarget(healTarget, "Damnation") != null)
@@ -229,6 +256,16 @@ namespace DOL.GS.Spells
             }
 
             amount = Math.Round(amount);
+
+            if (amount <= 0 && target.Health < target.MaxHealth)
+            {
+                if (Spell.Pulse == 0)
+                {
+                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "HealSpellHandler.HealingNull"), eChatType.CT_SpellResisted);
+                }
+                return false;
+            }
+
             int heal = target.ChangeHealth(Caster, GameLiving.eHealthChangeType.Spell, (int)amount);
 
             #region PVP DAMAGE
@@ -287,7 +324,7 @@ namespace DOL.GS.Spells
             if (m_caster == target && (SpellHandler.FindEffectOnTarget(m_caster, "Damnation") != null))
             {
                 MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.HealSpell.SelfHealed", heal), eChatType.CT_Spell);
-                if (heal < amount)
+                if (heal < amount && amount > 0)
                 {
                     #region PVP DAMAGE
 
@@ -305,7 +342,7 @@ namespace DOL.GS.Spells
             {
                 MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.HealSpell.TargetHealed", m_caster.GetPersonalizedName(target), heal), eChatType.CT_Spell);
                 MessageToLiving(target, LanguageMgr.GetTranslation((target as GamePlayer)?.Client, "SpellHandler.HealSpell.YouAreHealed", target.GetPersonalizedName(m_caster), heal), eChatType.CT_Spell);
-                if (heal < amount && (SpellHandler.FindEffectOnTarget(target, "Damnation") != null))
+                if (heal < amount && (SpellHandler.FindEffectOnTarget(target, "Damnation") != null) && amount > 0)
                 {
 
                     #region PVP DAMAGE
@@ -349,7 +386,7 @@ namespace DOL.GS.Spells
             {
                 MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.HealSpell.SelfHealed", heal), eChatType.CT_Spell);
 
-                if (heal < amount)
+                if (heal < amount && amount > 0)
                 {
                     MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.HealSpell.FullyHealedSelf"), eChatType.CT_Spell);
                     #region PVP DAMAGE

@@ -16,6 +16,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
+using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
 using DOL.Language;
 using System;
@@ -117,6 +118,7 @@ namespace DOL.GS.Spells
             if (!m_caster.IsAlive) return;
 
             int heal = (ad.Damage + ad.CriticalDamage) * m_spell.LifeDrainReturn / 100;
+            int totalHealReductionPercentage = 0;
 
             int casterHarmValue = m_caster.TempProperties.getProperty<int>("DamnationValue", 0);
             int targetHarmValue = target.TempProperties.getProperty<int>("DamnationValue", 0);
@@ -131,10 +133,38 @@ namespace DOL.GS.Spells
             {
                 int amnesiaChance = m_caster.TempProperties.getProperty<int>("AmnesiaChance", 50);
                 int healReductionPercentage = amnesiaChance > 0 ? amnesiaChance : 50;
-                heal -= (heal * healReductionPercentage) / 100;
+                totalHealReductionPercentage += healReductionPercentage;
+                if (m_caster.Health < m_caster.MaxHealth && totalHealReductionPercentage < 100 && m_caster is GamePlayer casterPlayer)
+                {
+                    MessageToCaster(LanguageMgr.GetTranslation(casterPlayer.Client, "Spell.LifeTransfer.TargetDiseased", healReductionPercentage), eChatType.CT_SpellResisted);
+                }
+            }
 
+            foreach (GameSpellEffect effect in m_caster.EffectList)
+            {
+                if (effect.SpellHandler is HealDebuffSpellHandler)
+                {
+                    int debuffValue = (int)effect.Spell.Value;
+                    totalHealReductionPercentage += debuffValue;
+                    if (m_caster.Health < m_caster.MaxHealth && totalHealReductionPercentage < 100 && m_caster is GamePlayer casterPlayer)
+                    {
+                        MessageToCaster(LanguageMgr.GetTranslation(casterPlayer.Client, "HealSpellHandler.HealingReduced", debuffValue), eChatType.CT_SpellResisted);
+                    }
+                }
+            }
+
+            if (totalHealReductionPercentage >= 100)
+            {
+                totalHealReductionPercentage = 100;
                 if (m_caster is GamePlayer casterPlayer)
-                    MessageToCaster(LanguageMgr.GetTranslation(casterPlayer.Client, "Spell.LifeTransfer.TargetDiseased"), eChatType.CT_SpellResisted);
+                {
+                    MessageToCaster(LanguageMgr.GetTranslation(casterPlayer.Client, "HealSpellHandler.HealingNull"), eChatType.CT_SpellResisted);
+                }
+            }
+
+            if (totalHealReductionPercentage > 0)
+            {
+                heal -= (heal * totalHealReductionPercentage) / 100;
             }
 
             if (!casterIsDamned && targetIsDamned)

@@ -56,8 +56,8 @@ namespace DOL.GS.Spells
             }
             else if (ad.AttackType == AttackData.eAttackType.DoT)
             {
-                int normalDamage = (ad.Damage + 1) / 3; // rounded
-                int critDamage = (ad.CriticalDamage + 1) / 3;
+                int normalDamage = ((ad.Damage + 1) * 35) / 100;
+                int critDamage = ((ad.CriticalDamage + 1) * 35) / 100;
                 damageAbsorbed = normalDamage + critDamage;
                 ad.Damage -= normalDamage;
                 ad.CriticalDamage -= critDamage;
@@ -85,6 +85,6 @@ namespace DOL.GS.Spells
         }
 
         public override string ShortDescription
-            => $"{Spell.Name} absorbs 100% of spell damage when the player's health is at 15% or below.";
+            => $"{Spell.Name} absorbs 100% of spell damage and 65% of DoT effects when the player's health drops to 15% or lower.";
     }
 }

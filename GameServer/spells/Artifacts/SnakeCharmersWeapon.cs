@@ -21,6 +21,7 @@ using DOL.GS;
 using DOL.GS.PacketHandler;
 using DOL.GS.Effects;
 using System.Numerics;
+using DOL.Language;
 
 namespace DOL.GS.Spells
 {
@@ -46,50 +47,79 @@ namespace DOL.GS.Spells
             int heal = (ad.Damage + ad.CriticalDamage) * 50 / 100;
             int mana = (ad.Damage + ad.CriticalDamage) * 30 / 100;
             int endu = (ad.Damage + ad.CriticalDamage) * 20 / 100;
+            int totalHealReductionPercentage = 0;
 
             if (m_caster.IsDiseased)
             {
                 int amnesiaChance = m_caster.TempProperties.getProperty<int>("AmnesiaChance", 50);
                 int healReductionPercentage = amnesiaChance > 0 ? amnesiaChance : 50;
-                heal -= (heal * healReductionPercentage) / 100;
-                MessageToCaster("You are diseased!", eChatType.CT_SpellResisted);
+                totalHealReductionPercentage += healReductionPercentage;
+                if (m_caster.Health < m_caster.MaxHealth && totalHealReductionPercentage < 100)
+                {
+                    MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "Spell.LifeTransfer.TargetDiseased", healReductionPercentage), eChatType.CT_SpellResisted);
+                }
             }
+
+            foreach (GameSpellEffect effect in m_caster.EffectList)
+            {
+                if (effect.SpellHandler is HealDebuffSpellHandler)
+                {
+                    int debuffValue = (int)effect.Spell.Value;
+                    totalHealReductionPercentage += debuffValue;
+                    if (m_caster.Health < m_caster.MaxHealth && totalHealReductionPercentage < 100)
+                    {
+                        MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "HealSpellHandler.HealingReduced", debuffValue), eChatType.CT_SpellResisted);
+                    }
+                }
+            }
+
+            if (totalHealReductionPercentage >= 100)
+            {
+                totalHealReductionPercentage = 100;
+                MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "HealSpellHandler.HealingNull"), eChatType.CT_SpellResisted);
+            }
+
+            if (totalHealReductionPercentage > 0)
+            {
+                heal -= (heal * totalHealReductionPercentage) / 100;
+            }
+
             if (SpellHandler.FindEffectOnTarget(m_caster, "Damnation") != null)
             {
-                MessageToCaster("You are damned and cannot be healed!", eChatType.CT_SpellResisted);
+                MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "Damnation.Self.CannotBeHealed"), eChatType.CT_SpellResisted);
                 heal = 0;
             }
             if (heal <= 0) return;
             heal = m_caster.ChangeHealth(m_caster, GameLiving.eHealthChangeType.Spell, heal);
             if (heal > 0)
             {
-                MessageToCaster("You steal " + heal + " hit point" + (heal == 1 ? "." : "s."), eChatType.CT_Spell);
+                MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.DamageSpeedDecrease.LifeSteal", heal, (heal == 1 ? "." : "s.")), eChatType.CT_Spell);
             }
             else
             {
-                MessageToCaster("You cannot absorb any more life.", eChatType.CT_SpellResisted);
+                MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.DamageSpeedDecrease.NoMoreLife"), eChatType.CT_SpellResisted);
             }
 
             if (mana <= 0) return;
             mana = m_caster.ChangeMana(m_caster, GameLiving.eManaChangeType.Spell, mana);
             if (mana > 0)
             {
-                MessageToCaster("You steal " + mana + " power point" + (mana == 1 ? "." : "s."), eChatType.CT_Spell);
+                MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.DamageToPower.PowerSteal", mana, (mana == 1 ? "." : "s.")), eChatType.CT_Spell);
             }
             else
             {
-                MessageToCaster("You cannot absorb any more power.", eChatType.CT_SpellResisted);
+                MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.DamageToPower.NoMorePower"), eChatType.CT_SpellResisted);
             }
 
             if (endu <= 0) return;
             endu = m_caster.ChangeEndurance(m_caster, GameLiving.eEnduranceChangeType.Spell, endu);
-            if (heal > 0)
+            if (endu > 0)
             {
-                MessageToCaster("You steal " + endu + " endurance point" + (endu == 1 ? "." : "s."), eChatType.CT_Spell);
+                MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.EnduranceDrain.StealPoints", endu, (endu == 1 ? "." : "s.")), eChatType.CT_Spell);
             }
             else
             {
-                MessageToCaster("You cannot absorb any more endurance.", eChatType.CT_SpellResisted);
+                MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.EnduranceDrain.CannotAbsorbMore"), eChatType.CT_SpellResisted);
             }
         }
 

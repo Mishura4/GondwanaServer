@@ -1,5 +1,5 @@
 
-Spell.LifeTransfer.TargetDiseased:	Your target is diseased!
+Spell.LifeTransfer.TargetDiseased:	Your target is diseased, healing has been reduced by {0}% !
 Spell.LifeTransfer.TargetDamnedReducedHeal:	Your target is damned! The health transfer has reduced effectiveness.
 Spell.LifeTransfer.TargetDamned:	Your target is damned! The health transfer fails and has no effect.
 Spell.LifeTransfer.TargetDamnedDamages:	Your target is damned! The health transfer inflicts {0} damage instead of restoring health!

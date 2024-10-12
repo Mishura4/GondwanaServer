@@ -136,6 +136,7 @@ Damnation.Self.Resist:			You are damned and resist the effect!
 Damnation.Target.Resist:		{0} is damned and resists the effect!
 Damnation.Kill.SelfHeal:		You draw vitality from your enemy's corpse, gaining {0} health!
 Damnation.Kill.DurationExtended:	Your accursed existence is extended by {0} seconds as you claim another soul, but the end still awaits.
+Damnation.Self.CannotBeHealed:	You are damned and cannot be healed!
 
 # Adrenaline
 Adrenaline.Target.Immune:		{0}'s battle fever renders him/her immune to this effect!
@@ -146,3 +147,11 @@ Adrenaline.Self.Absorb:			You absorb {0} damage(s) from the attack!
 # DebuffImmunity
 DebuffImmunity.You.Resisted:			You resist the effect with your Debuff Immunity!
 DebuffImmunity.Target.Resisted:			{0} resists the effect with Debuff Immunity!
+
+# HealDebuff
+HealDebuffSpellHandler.EffectStart.Target:		Your ability to receive healing has been reduced due to {0}.
+HealDebuffSpellHandler.EffectStart.Area:		{0}'s ability to receive healing has been reduced due to {1}.
+HealDebuffSpellHandler.EffectExpires.Target:	Your ability to receive healing returns to normal.
+HealDebuffSpellHandler.EffectExpires.Area:		{0}'s ability to receive healing returns to normal.
+HealSpellHandler.HealingReduced:				Healing has been reduced by {0}% due to healing inhibiting effects.
+HealSpellHandler.HealingNull:					Your spell fails to heal the target due to healing inhibiting effects.
