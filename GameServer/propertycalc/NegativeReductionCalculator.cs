@@ -33,7 +33,7 @@ namespace DOL.GS.PropertyCalc
             int value = living.BaseBuffBonusCategory[eProperty.NegativeReduction] + living.BuffBonusCategory4[eProperty.NegativeReduction];
             if (living is GamePlayer)
             {
-                value += Math.Min(15, living.ItemBonus[(int)property]); // cap 15% from items
+                value += Math.Min(25, living.ItemBonus[(int)property]); // cap 25% from items
             }
             value -= living.DebuffCategory[eProperty.NegativeReduction];
             return Math.Max(-100, value);

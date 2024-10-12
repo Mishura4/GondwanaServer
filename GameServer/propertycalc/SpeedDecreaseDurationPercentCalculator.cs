@@ -38,7 +38,7 @@ namespace DOL.GS.PropertyCalc
             int percent = 100
                 - living.BaseBuffBonusCategory[(int)property] // buff reduce the duration
                 + living.DebuffCategory[(int)property]
-                - living.ItemBonus[(int)property]
+                - Math.Min(25, living.ItemBonus[(int)property]) // cap 25% from items
                 - living.AbilityBonus[(int)property];
 
             if (living.HasAbility(Abilities.Stoicism))
