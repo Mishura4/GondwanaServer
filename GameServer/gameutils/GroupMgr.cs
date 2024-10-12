@@ -44,7 +44,7 @@ namespace DOL.GS
         /// <returns>True if the function succeeded, otherwise false</returns>
         public static bool AddGroup(Group group)
         {
-            return m_groups.AddIfNotExists(group, true);
+            return m_groups.AddIfNotExists(group, true).added;
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace DOL.GS
         /// <param name="member">player to add to the list</param>
         public static void SetPlayerLooking(GamePlayer member)
         {
-            if (member.LookingForGroup == false && m_lfgPlayers.AddIfNotExists(member, true))
+            if (member.LookingForGroup == false && m_lfgPlayers.AddIfNotExists(member, true).added)
             {
                 member.LookingForGroup = true;
             }

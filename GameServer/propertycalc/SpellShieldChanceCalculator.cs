@@ -2,6 +2,7 @@
 using DOL.GS.Spells;
 using DOL.Events;
 using DOL.Database;
+using DOL.GS.Utils;
 
 namespace DOL.GS.PropertyCalc
 {
@@ -25,8 +26,9 @@ namespace DOL.GS.PropertyCalc
 
     public class ItemSpellShieldHandler
     {
-        private static readonly int CooldownTime = 2 * 60 * 1000;
-        private static readonly string CooldownPropertyName = "SpellShieldCooldown";
+        private static readonly long CooldownTime = 2 * 60 * 1000;
+        private static readonly string LastTriggerPropertyName = "SpellShieldLastTrigger";
+        private static readonly string ShuffleBagPropertyName = "SpellShieldShuffleBag";
         private static readonly int SpellID = 20629;
 
         private static Spell _spellShieldSpell;
@@ -55,7 +57,7 @@ namespace DOL.GS.PropertyCalc
                             Target = "self",
                             Type = "SpellShield",
                             Duration = 90,
-                            RecastDelay = CooldownTime, // 2 minutes
+                            RecastDelay = (int)CooldownTime, // 2 minutes
                             TooltipId = 6870
                         };
                     }
@@ -87,10 +89,11 @@ namespace DOL.GS.PropertyCalc
             if (chanceToShield <= 0)
                 return;
 
-            if (living.TempProperties.getProperty(CooldownPropertyName, false))
+            long tick = (long)GameServer.Instance.TickCount;
+            if (tick - living.TempProperties.getProperty<long>(LastTriggerPropertyName, -CooldownTime) < CooldownTime)
                 return;
-
-            if (!Util.Chance(chanceToShield))
+            
+            if (!living.DrawShuffleBag(ShuffleBagPropertyName, chanceToShield))
                 return;
 
             // Cast the internally defined spell
@@ -100,21 +103,8 @@ namespace DOL.GS.PropertyCalc
             ISpellHandler spellHandler = ScriptMgr.CreateSpellHandler(living, spell, spellLine);
             spellHandler.StartSpell(living);
 
-            // Set the cooldown using RegionTimer
-            living.TempProperties.setProperty(CooldownPropertyName, true);
-            RegionTimer cooldownTimer = new RegionTimer(living, new RegionTimerCallback(CooldownExpired));
-            cooldownTimer.Properties.setProperty("living", living);
-            cooldownTimer.Start(CooldownTime);
-        }
-
-        private static int CooldownExpired(RegionTimer timer)
-        {
-            GameLiving living = timer.Properties.getProperty<GameLiving>("living");
-            if (living != null)
-            {
-                living.TempProperties.removeProperty(CooldownPropertyName);
-            }
-            return 0;
+            // Set the cooldown
+            living.TempProperties.setProperty(LastTriggerPropertyName, tick);
         }
     }
 }

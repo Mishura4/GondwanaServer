@@ -24,6 +24,7 @@ using DOL.GS.Effects;
 using DOL.GS.Spells;
 using DOL.AI.Brain;
 using DOL.Events;
+using DOL.GS.Utils;
 using DOL.Language;
 
 namespace DOL.GS.PropertyCalc
@@ -56,64 +57,63 @@ namespace DOL.GS.PropertyCalc
                 return;
 
             AttackData ad = args.AttackData;
-            if (ad is { AttackType: AttackData.eAttackType.Spell or AttackData.eAttackType.DoT, AttackResult: GameLiving.eAttackResult.HitUnstyled or GameLiving.eAttackResult.HitStyle })
+            if (ad is not { AttackType: AttackData.eAttackType.Spell or AttackData.eAttackType.DoT, AttackResult: GameLiving.eAttackResult.HitUnstyled or GameLiving.eAttackResult.HitStyle })
+                return;
+
+            int chanceToReflect = living.GetModified(eProperty.MythicalSpellReflect);
+            if (chanceToReflect <= 0 || !Util.Chance(chanceToReflect))
+                return;
+
+            Spell spellToCast = ad.SpellHandler.Spell.Copy();
+            SpellLine line = ad.SpellHandler.SpellLine;
+
+            if (ad.SpellHandler.Parent is BomberSpellHandler bomber)
             {
-                int chanceToReflect = living.GetModified(eProperty.MythicalSpellReflect);
-
-                if (chanceToReflect <= 0 || !Util.Chance(chanceToReflect))
-                    return;
-
-                Spell spellToCast = ad.SpellHandler.Spell.Copy();
-                SpellLine line = ad.SpellHandler.SpellLine;
-
-                if (ad.SpellHandler.Parent is BomberSpellHandler bomber)
-                {
-                    spellToCast = bomber.Spell.Copy();
-                    line = bomber.SpellLine;
-                }
-
-                spellToCast.Power = spellToCast.Power * 20 / 100;
-                spellToCast.Damage = spellToCast.Damage * 30 / 100;
-                spellToCast.Value = spellToCast.Value * 30 / 100;
-                spellToCast.Duration = spellToCast.Duration * 30 / 100;
-                spellToCast.CastTime = 0;
-
-                double absorbPercent = 30; // Fixed value for Mythical Spell Reflect
-                int damageAbsorbed = (int)(0.01 * absorbPercent * (ad.Damage + ad.CriticalDamage));
-
-                ad.Damage -= damageAbsorbed;
-                if (living is GamePlayer player)
-                {
-                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "MythicalSpellReflect.Self.Absorb", damageAbsorbed), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
-                }
-                if (ad.Attacker is GamePlayer attacker)
-                {
-                    attacker.Out.SendMessage(LanguageMgr.GetTranslation(attacker.Client, "MythicalSpellReflect.Target.Absorbs", damageAbsorbed), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
-                }
-
-                ushort clientEffect = ad.DamageType switch
-                {
-                    eDamageType.Body => 6172,
-                    eDamageType.Cold => 6057,
-                    eDamageType.Energy => 6173,
-                    eDamageType.Heat => 6171,
-                    eDamageType.Matter => 6174,
-                    eDamageType.Spirit => 6175,
-                    _ => 6173,
-                };
-
-                foreach (GamePlayer pl in living.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
-                {
-                    pl.Out.SendSpellEffectAnimation(living, living, clientEffect, 0, false, 1);
-                }
-
-                ISpellHandler spellHandler = ScriptMgr.CreateSpellHandler(living, spellToCast, line);
-                if (spellHandler is BomberSpellHandler bomberSpell)
-                {
-                    bomberSpell.ReduceSubSpellDamage = 30;
-                }
-                spellHandler.StartSpell(ad.Attacker, false);
+                spellToCast = bomber.Spell.Copy();
+                line = bomber.SpellLine;
             }
+
+            spellToCast.Power = spellToCast.Power * 20 / 100;
+            spellToCast.Damage = spellToCast.Damage * 30 / 100;
+            spellToCast.Value = spellToCast.Value * 30 / 100;
+            spellToCast.Duration = spellToCast.Duration * 30 / 100;
+            spellToCast.CastTime = 0;
+
+            double absorbPercent = 30; // Fixed value for Mythical Spell Reflect
+            int damageAbsorbed = (int)(0.01 * absorbPercent * (ad.Damage + ad.CriticalDamage));
+
+            ad.Damage -= damageAbsorbed;
+            if (living is GamePlayer player)
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "MythicalSpellReflect.Self.Absorb", damageAbsorbed), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+            }
+            if (ad.Attacker is GamePlayer attacker)
+            {
+                attacker.Out.SendMessage(LanguageMgr.GetTranslation(attacker.Client, "MythicalSpellReflect.Target.Absorbs", damageAbsorbed), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+            }
+
+            ushort clientEffect = ad.DamageType switch
+            {
+                eDamageType.Body => 6172,
+                eDamageType.Cold => 6057,
+                eDamageType.Energy => 6173,
+                eDamageType.Heat => 6171,
+                eDamageType.Matter => 6174,
+                eDamageType.Spirit => 6175,
+                _ => 6173,
+            };
+
+            foreach (GamePlayer pl in living.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+            {
+                pl.Out.SendSpellEffectAnimation(living, living, clientEffect, 0, false, 1);
+            }
+
+            ISpellHandler spellHandler = ScriptMgr.CreateSpellHandler(living, spellToCast, line);
+            if (spellHandler is BomberSpellHandler bomberSpell)
+            {
+                bomberSpell.ReduceSubSpellDamage = 30;
+            }
+            spellHandler.StartSpell(ad.Attacker, false);
         }
     }
 }

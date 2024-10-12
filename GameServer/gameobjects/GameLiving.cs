@@ -49,6 +49,7 @@ using DOL.GS.Geometry;
 using System.Collections.Immutable;
 using Vector3 = System.Numerics.Vector3;
 using DOL.GS.PacketHandler.Client.v168;
+using System.Threading;
 
 namespace DOL.GS
 {
@@ -3382,6 +3383,40 @@ namespace DOL.GS
         protected virtual float MinMeleeCriticalDamage
         {
             get { return 0.1f; }
+        }
+
+        private readonly Dictionary<object, ShuffleBag> _shuffleBags = new();
+        
+        public bool DrawShuffleBag(object key, int chance)
+        {
+            var (numHits, numDraws) = ShuffleBag.CalculateDimensions(chance, Math.Max(1, (int)Math.Round(4.0f / 50.0f * chance)));
+            return DrawShuffleBag(key, numHits, numDraws);
+        }
+        
+        public bool DrawShuffleBag(object key, int numHits, int numDraws)
+        {
+            lock (_shuffleBags!)
+            {
+                ShuffleBag bag;
+
+                if (!_shuffleBags.TryGetValue(key, out bag) || bag!.NumHits != numHits || bag.Size != numDraws)
+                {
+                    bag = new ShuffleBag(numHits, numDraws, Random.Shared);
+                    _shuffleBags[key] = bag;
+                }
+                return bag.Next();
+            }
+        }
+
+        public ImmutableDictionary<object, ShuffleBag> ShuffleBags
+        {
+            get
+            {
+                lock (_shuffleBags!)
+                {
+                    return _shuffleBags.ToImmutableDictionary();
+                }
+            }
         }
 
         /// <summary>

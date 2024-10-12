@@ -2762,6 +2762,15 @@ namespace DOL.GS.Commands
             text.Add("  - Coin bonus : " + player.GetModified(eProperty.MythicalCoin));
             text.Add("  - Realm bonus : " + player.GetModified(eProperty.RealmPoints));
             text.Add("  - Xp bonus : " + player.GetModified(eProperty.XpPoints));
+
+            if (player.ShuffleBags is { IsEmpty: false } bags)
+            {
+                text.Add("  - Shuffle Bags:");
+                bags.ForEach(g => text.Add("   - " + g.Key + " => " + g.Value));
+            }
+            else
+                text.Add("  - Shuffle Bags: None");
+            
             text.Add(" ");
             text.Add("SPECCING INFORMATIONS ");
             text.Add("  - Respecs availables : " + player.RespecAmountDOL + " dol, " + player.RespecAmountSingleSkill +

@@ -1,6 +1,7 @@
 using System;
 using DOL.GS;
 using DOL.GS.Geometry;
+using System.Linq;
 using System.Numerics;
 
 namespace DOL
@@ -78,6 +79,16 @@ namespace DOL
                 headingDifference += 4096.0f;
 
             return (headingDifference * 360.0f / 4096.0f);
+        }
+        
+        public static int GCD(int[] numbers)
+        {
+            return numbers.Aggregate(GCD);
+        }
+
+        public static int GCD(int a, int b)
+        {
+            return b == 0 ? a : GCD(b, a % b);
         }
 
         public static Coordinate GetPointFromHeading(GameObject origin, float distance)

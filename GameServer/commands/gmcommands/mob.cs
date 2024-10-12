@@ -1480,6 +1480,16 @@ namespace DOL.GS.Commands
 
             info.Add(" ");
 
+            if (targetMob.ShuffleBags is { IsEmpty: false } bags)
+            {
+                info.Add(" + Shuffle Bags:");
+                bags.ForEach(g => info.Add("  - " + g.Key + " => " + g.Value));
+            }
+            else
+                info.Add(" + Shuffle Bags: None");
+
+            info.Add(" ");
+
             info.Add(" + Position (X, Y, Z, H): " + targetMob.Position);
 
             if (targetMob.GuildName != null && targetMob.GuildName.Length > 0)

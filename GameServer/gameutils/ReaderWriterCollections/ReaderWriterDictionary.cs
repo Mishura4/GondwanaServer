@@ -350,32 +350,30 @@ namespace DOL.GS
         /// <param name="key">Entry's Key.</param>
         /// <param name="val">Entry's Value.</param>
         /// <returns>True if Entry was inserted.</returns>
-        public bool AddIfNotExists(TKey key, TValue val)
+        public (bool added, TValue value) AddIfNotExists(TKey key, TValue val)
         {
             m_rwLock.EnterUpgradeableReadLock();
             bool added = false;
             try
             {
-                if (!m_dictionary.ContainsKey(key))
+                if (m_dictionary.TryGetValue(key, out TValue present))
+                    return (false, present);
+
+                m_rwLock.EnterWriteLock();
+                try
                 {
-                    m_rwLock.EnterWriteLock();
-                    try
-                    {
-                        m_dictionary.Add(key, val);
-                        added = true;
-                    }
-                    finally
-                    {
-                        m_rwLock.ExitWriteLock();
-                    }
+                    m_dictionary.Add(key, val);
+                    return (true, val);
+                }
+                finally
+                {
+                    m_rwLock.ExitWriteLock();
                 }
             }
             finally
             {
                 m_rwLock.ExitUpgradeableReadLock();
             }
-
-            return added;
         }
 
         /// <summary>

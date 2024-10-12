@@ -93,7 +93,7 @@ namespace DOL.GS.Friends
 
             var friends = Player.SerializedFriendsList;
 
-            if (!PlayersFriendsListsCache.AddIfNotExists(Player, friends))
+            if (!PlayersFriendsListsCache.AddIfNotExists(Player, friends).added)
             {
                 if (log.IsWarnEnabled)
                     log.WarnFormat("Gameplayer ({0}) is already registered in Friends Manager Cache while adding!", Player);
@@ -106,7 +106,7 @@ namespace DOL.GS.Friends
                     .Select(chr => new FriendStatus(chr.Name, chr.Level, chr.Class, chr.LastPlayed)).ToArray();
             }
 
-            if (!PlayersFriendsStatusCache.AddIfNotExists(Player, offlineFriends))
+            if (!PlayersFriendsStatusCache.AddIfNotExists(Player, offlineFriends).added)
             {
                 if (log.IsWarnEnabled)
                     log.WarnFormat("Gameplayer ({0}) is already registered in Friends Manager Status Cache while adding!", Player);

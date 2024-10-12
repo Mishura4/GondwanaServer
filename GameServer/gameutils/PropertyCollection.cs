@@ -22,6 +22,9 @@ using System.Reflection;
 using System.Linq;
 
 using log4net;
+using Newtonsoft.Json.Converters;
+using Google.Protobuf.WellKnownTypes;
+using System.ComponentModel;
 
 namespace DOL.GS
 {
@@ -75,6 +78,11 @@ namespace DOL.GS
             if (val is T)
                 return (T)val;
 
+            var typeConverter = val == null ? null : TypeDescriptor.GetConverter(val);
+            if (typeConverter?.CanConvertFrom(typeof(T)) == true)
+            {
+                return (T) typeConverter.ConvertFrom(def);
+            }
             return def;
         }
 
@@ -94,6 +102,13 @@ namespace DOL.GS
             {
                 _props[key] = val;
             }
+        }
+
+        public (bool added, TValue value) addOrGet<TValue>(object key, TValue value)
+        {
+            var result = _props.AddIfNotExists(key, value);
+            
+            return (result.added, value);
         }
 
         /// <summary>
