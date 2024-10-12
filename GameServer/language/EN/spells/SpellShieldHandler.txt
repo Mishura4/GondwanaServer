@@ -1,3 +1,3 @@
 SpellShield.Self.Message:		You cast a Spell Shield.
-SpellShield.Self.Absorb:		You absorb {0} damages with your Spell Shield.
-SpellShield.Target.Absorbs:		The target absorbs {0} damages with its Spell Shield.
+SpellShield.Self.Absorb:		You absorb {0} damage(s) with your Spell Shield.
+SpellShield.Target.Absorbs:		{0} absorbs {1} damage(s) with its Spell Shield.

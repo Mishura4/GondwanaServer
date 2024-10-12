@@ -29,15 +29,52 @@ namespace DOL.GS.Spells
     {
         public HealDebuffSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine) { }
 
-        public override void OnEffectStart(GameSpellEffect effect)
+        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
-            GameLiving target = effect.Owner;
+            int totalResistChance = 0;
+
+            // 1. DebuffImmunity
+            var immunityEffect = SpellHandler.FindEffectOnTarget(target, "DebuffImmunity") as DebuffImmunityEffect;
+            if (immunityEffect != null)
+            {
+                totalResistChance += immunityEffect.AdditionalResistChance;
+            }
+
+            // 2. MythicalDebuffResistChance
+            int mythicalResistChance = 0;
+            if (target is GamePlayer gamePlayer)
+            {
+                mythicalResistChance = gamePlayer.GetModified(eProperty.MythicalDebuffResistChance);
+                totalResistChance += mythicalResistChance;
+            }
+
+            // Apply the combined resist chance
+            if (Util.Chance(totalResistChance))
+            {
+                (Caster as GamePlayer)?.SendTranslatedMessage("DebuffImmunity.Target.Resisted", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow, Caster.GetPersonalizedName(target));
+                (target as GamePlayer)?.SendTranslatedMessage("DebuffImmunity.You.Resisted", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
+
+                SendSpellResistAnimation(target);
+                return;
+            }
+
             if (SpellHandler.FindEffectOnTarget(target, "Damnation") != null)
             {
                 if (Caster is GamePlayer player)
                     MessageToCaster(LanguageMgr.GetTranslation(player.Client, "Damnation.Target.Resist", player.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
 
                 SendSpellResistAnimation(target);
+                return;
+            }
+            base.ApplyEffectOnTarget(target, effectiveness);
+        }
+
+        public override void OnEffectStart(GameSpellEffect effect)
+        {
+            GameLiving target = effect.Owner;
+
+            if (SpellHandler.FindEffectOnTarget(target, "Damnation") != null)
+            {
                 return;
             }
 

@@ -72,7 +72,7 @@ namespace DOL.GS.Spells
             }
             if (ad.Attacker is GamePlayer attacker)
             {
-                MessageToLiving(attacker, LanguageMgr.GetTranslation(attacker.Client, "SpellShield.Target.Absorbs", damageAbsorbed), eChatType.CT_Spell);
+                MessageToLiving(attacker, LanguageMgr.GetTranslation(attacker.Client, "SpellShield.Target.Absorbs", attacker.GetPersonalizedName(target), damageAbsorbed), eChatType.CT_Spell);
             }
         }
 
