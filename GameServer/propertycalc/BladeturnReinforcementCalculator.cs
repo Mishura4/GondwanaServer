@@ -23,20 +23,21 @@ using System;
 namespace DOL.GS.PropertyCalc
 {
     /// <summary>
-    /// Calculator for reduction of negative effects
+    /// Calculator for chance to not break bladeturn
+    /// https://archive.org/stream/Dark_Age_of_Camelot_Catacombs_Prima_Official_eGuide/Dark_Age_of_Camelot_Catacombs_Prima_Official_eGuide_djvu.txt
     /// </summary>
-    [PropertyCalculator(eProperty.NegativeReduction)]
-    public class NegativeReductionCalculator : PropertyCalculator
+    [PropertyCalculator(eProperty.BladeturnReinforcement)]
+    public class BladeturnReinforcementCalculator : PropertyCalculator
     {
         public override int CalcValue(GameLiving living, eProperty property)
         {
-            int value = living.BaseBuffBonusCategory[eProperty.NegativeReduction] + living.BuffBonusCategory4[eProperty.NegativeReduction];
+            int value = living.BaseBuffBonusCategory[eProperty.BladeturnReinforcement] + living.BuffBonusCategory4[eProperty.BladeturnReinforcement];
             if (living is GamePlayer)
             {
-                value += Math.Min(25, living.ItemBonus[(int)property]); // cap 25% from items
+                value += Math.Min(10, living.ItemBonus[(int)property]); // cap 10% from items? https://crowsofwinter.gamerlaunch.com/forums/viewtopic.php?t=11152031
             }
-            value -= living.DebuffCategory[eProperty.NegativeReduction];
-            return Math.Max(-100, value);
+            value -= living.DebuffCategory[eProperty.BladeturnReinforcement];
+            return Math.Max(0, value);
         }
     }
 }

@@ -21,6 +21,7 @@ GameLiving.AttackData.YouStepInFront:		You step in front of {0} and take the blo
 GameLiving.CalculateEnemyAttackResult.BlowAbsorbed:		The blow was absorbed by a magical barrier!
 GameLiving.CalculateEnemyAttackResult.BlowIntercepted:		The blow was intercepted by Brittle Guard!
 GameLiving.CalculateEnemyAttackResult.BlowPenetrated:		The blow penetrated the magical barrier!
+GameLiving.CalculateEnemyAttackResult.BladeturnKept:		Your magical barrier endures the blow!
 GameLiving.CalculateEnemyAttackResult.StrikeAbsorbed:		Your strike was absorbed by a magical barrier!
 GameLiving.CalculateEnemyAttackResult.StrikeIntercepted:	Your strike was intercepted by a Brittle Guard!
 GameLiving.CalculateEnemyAttackResult.YouAttempt:		You attempt to attack {0}, {1} is bodyguarded by {2}!

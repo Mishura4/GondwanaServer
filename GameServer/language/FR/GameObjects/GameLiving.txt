@@ -29,8 +29,9 @@ GameLiving.AttackData.YourHits:			 {1} de {0} touche {2} pour {3}{4} dommages!
 GameLiving.AttackData.YouStepInFront:		Vous vous placez en face de {0} et prenez les dommages!
 
 GameLiving.CalculateEnemyAttackResult.BlowAbsorbed:		    L'attaque a été absorbée par une barrière magique!
-GameLiving.CalculateEnemyAttackResult.BlowIntercepted:		L'attaque a été intercepté par Brittle Guard!
-GameLiving.CalculateEnemyAttackResult.BlowPenetrated:		L'attaque a penetrée une barriere magique!
+GameLiving.CalculateEnemyAttackResult.BlowIntercepted:		L'attaque a été interceptée par Brittle Guard!
+GameLiving.CalculateEnemyAttackResult.BlowPenetrated:		L'attaque a penetré une barrière magique!
+GameLiving.CalculateEnemyAttackResult.BladeturnKept:		Votre barrière magique endure l'attaque!
 GameLiving.CalculateEnemyAttackResult.StrikeAbsorbed:		Votre attaque a été absorbée par une barrère magique!
 GameLiving.CalculateEnemyAttackResult.StrikeIntercepted:	Votre attaque a été interceptée par Brittle Guard!
 GameLiving.CalculateEnemyAttackResult.YouAttempt:		    Vous essayez d'attaquer {0}, mais {1} a un bodyguard {2}!

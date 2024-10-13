@@ -3105,6 +3105,15 @@ namespace DOL.GS
             //None for GameLiving - could be a GameNPC DO NOT ADD ANYTHING HERE
         }
 
+        public virtual void SendSystemMessage(string message)
+            => Owner?.SendSystemMessage(message);
+
+        public virtual void SendMessage(string message, eChatType chatType = eChatType.CT_System, eChatLoc chatLocation = eChatLoc.CL_SystemWindow)
+            => Owner?.SendMessage(message, chatType, chatLocation);
+
+        public virtual void SendTranslatedMessage(string key, eChatType chatType = eChatType.CT_System, eChatLoc chatLocation = eChatLoc.CL_SystemWindow, params object[] args)
+            => Owner?.SendTranslatedMessage(key, chatType, chatLocation);
+
         /// <summary>
         /// Does this living allow procs to be cast on it?
         /// </summary>
@@ -3936,19 +3945,35 @@ namespace DOL.GS
                     || (ad.AttackType == AttackData.eAttackType.Ranged && ad.Target != bladeturn.SpellHandler.Caster && ad.Attacker is GamePlayer && ((GamePlayer)ad.Attacker).HasAbility(Abilities.PenetratingArrow)))  // penetrating arrow attack pierce bladeturn
                     penetrate = true;
 
-                var missChance = (double)bladeturn.SpellHandler.Caster.Level / (double)ad.Attacker.Level;
+                var missChance = (double)bladeturn.SpellHandler.Caster.EffectiveLevel / (double)ad.Attacker.EffectiveLevel;
                 if (ad.IsMeleeAttack && !Util.ChanceDouble(missChance))
                     penetrate = true;
+
+                var chanceToKeep = GetModified(eProperty.BladeturnReinforcement);
                 if (penetrate)
                 {
-                    if (ad.Target is GamePlayer) ((GamePlayer)ad.Target).Out.SendMessage(LanguageMgr.GetTranslation(((GamePlayer)ad.Target).Client.Account.Language, "GameLiving.CalculateEnemyAttackResult.BlowPenetrated"), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
-                    bladeturn.Cancel(false);
+                    ad.Target.SendTranslatedMessage("GameLiving.CalculateEnemyAttackResult.BlowPenetrated", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
+                    if (ad.IsPVE && chanceToKeep > 0 && Util.Chance(chanceToKeep))
+                    {
+                        ad.Target.SendTranslatedMessage("GameLiving.CalculateEnemyAttackResult.BladeturnKept", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
+                    }
+                    else
+                    {
+                        bladeturn.Cancel(false);
+                    }
                 }
                 else
                 {
-                    if (this is GamePlayer) ((GamePlayer)this).Out.SendMessage(LanguageMgr.GetTranslation(((GamePlayer)this).Client.Account.Language, "GameLiving.CalculateEnemyAttackResult.BlowAbsorbed"), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
-                    if (ad.Attacker is GamePlayer) ((GamePlayer)ad.Attacker).Out.SendMessage(LanguageMgr.GetTranslation(((GamePlayer)ad.Attacker).Client.Account.Language, "GameLiving.CalculateEnemyAttackResult.StrikeAbsorbed"), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
-                    bladeturn.Cancel(false);
+                    SendTranslatedMessage("GameLiving.CalculateEnemyAttackResult.BlowAbsorbed", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
+                    ad.Attacker.SendTranslatedMessage("GameLiving.CalculateEnemyAttackResult.StrikeAbsorbed", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
+                    if (ad.IsPVE && chanceToKeep > 0 && Util.Chance(chanceToKeep))
+                    {
+                        ad.Target.SendTranslatedMessage("GameLiving.CalculateEnemyAttackResult.BladeturnKept", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
+                    }
+                    else
+                    {
+                        bladeturn.Cancel(false);
+                    }
                     Stealth(false);
                     ad.MissChance = missChance;
                     return eAttackResult.Missed;
