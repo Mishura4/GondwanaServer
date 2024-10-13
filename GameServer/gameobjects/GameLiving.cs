@@ -3830,7 +3830,8 @@ namespace DOL.GS
             {
                 int missrate = (ad.Attacker is GamePlayer) ? 20 : 25; //player vs player tests show 20% miss on any level
                 missrate -= ad.Attacker.GetModified(eProperty.ToHitBonus);
-                if (this is GamePlayer && ad.Attacker is GamePlayer)
+                missrate += ad.Target.GetModified(eProperty.DefensiveBonus);
+                if (ad.IsPVP)
                 {
                     missrate = (int)(missrate * ServerProperties.Properties.PVP_BASE_MISS_MULTIPLIER);
                 }
@@ -3839,12 +3840,11 @@ namespace DOL.GS
                     missrate = (int)(missrate * ServerProperties.Properties.PVE_BASE_MISS_MULTIPLIER);
                 }
                 // PVE group missrate
-                if (this is GameNPC && ad.Attacker is GamePlayer &&
-                    ((GamePlayer)ad.Attacker).Group != null &&
-                    (int)(0.90 * ((GamePlayer)ad.Attacker).Group.Leader.Level) >= ad.Attacker.Level &&
-                    ad.Attacker.IsWithinRadius(((GamePlayer)ad.Attacker).Group.Leader, 3000))
+                if (this is GameNPC && ad.Attacker is GamePlayer { Group: {} group } attackerPlayer &&
+                    (int)(0.90 * group.Leader.Level) >= attackerPlayer.Level &&
+                    attackerPlayer.IsWithinRadius(attackerPlayer.Group.Leader, 3000))
                 {
-                    missrate -= (int)(5 * ((GamePlayer)ad.Attacker).Group.Leader.GetConLevel(this));
+                    missrate -= (int)(5 * attackerPlayer.Group.Leader.GetConLevel(this));
                 }
                 else if (this is GameNPC || ad.Attacker is GameNPC) // if target is not player use level mod
                 {

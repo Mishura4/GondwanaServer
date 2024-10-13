@@ -3964,7 +3964,7 @@ namespace DOL.GS.Spells
             - Tolakram
              */
 
-            int missrate = 15;
+            int missrate = 15 + target.GetModified(eProperty.DefensiveBonus);
             if (caster is GamePlayer && target is GamePlayer)
             {
                 missrate = (int)(missrate * ServerProperties.Properties.PVP_BASE_MISS_MULTIPLIER);

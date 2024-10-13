@@ -165,7 +165,7 @@ namespace DOL.GS.Spells
             int bonustohit = Caster.GetModified(eProperty.ToHitBonus);
 
             // miss rate is 0 on same level opponent
-            int hitchance = 100 + bonustohit;
+            int hitchance = 100 + bonustohit - target.GetModified(eProperty.DefensiveBonus);
 
             if ((Caster is GamePlayer && target is GamePlayer) == false)
             {
