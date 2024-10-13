@@ -1,6 +1,7 @@
 using System;
 using DOL.AI.Brain;
 using DOL.GS.Effects;
+using DOL.GS.Spells;
 
 namespace DOL.GS.PropertyCalc
 {
@@ -74,7 +75,26 @@ namespace DOL.GS.PropertyCalc
                     chance += raWM.Amount;
             }
 
-            return Math.Min(chance, 50);
+            // Base cap
+            int cap = 50;
+
+            // Check for CriticalMagicalBuff
+            var criticalMagicalBuff = SpellHandler.FindEffectOnTarget(living, "CriticalMagicalBuff") as GameSpellEffect;
+            if (criticalMagicalBuff != null)
+            {
+                cap += (int)criticalMagicalBuff.Spell.Value;
+            }
+
+            // Check for Critical effect from Warlord script
+            var criticalEffect = SpellHandler.FindEffectOnTarget(living, "Critical") as GameSpellEffect;
+            if (criticalEffect != null)
+            {
+                cap += (int)criticalEffect.Spell.Value;
+            }
+
+            // Enforce ultimate cap of 75%
+            cap = Math.Min(cap, 75);
+            return Math.Min(chance, cap);
         }
     }
     
@@ -121,8 +141,26 @@ namespace DOL.GS.PropertyCalc
             else // not a pet
                 chance += 10;
 
-            //50% hardcap
-            return Math.Min(chance, 50);
+            // Base cap
+            int cap = 50;
+
+            // Check for CriticalMeleeBuff
+            var criticalMeleeBuff = SpellHandler.FindEffectOnTarget(living, "CriticalMeleeBuff") as GameSpellEffect;
+            if (criticalMeleeBuff != null)
+            {
+                cap += (int)criticalMeleeBuff.Spell.Value;
+            }
+
+            // Check for Critical effect from Warlord script
+            var criticalEffect = SpellHandler.FindEffectOnTarget(living, "Critical") as GameSpellEffect;
+            if (criticalEffect != null)
+            {
+                cap += (int)criticalEffect.Spell.Value;
+            }
+
+            // Enforce ultimate cap of 75%
+            cap = Math.Min(cap, 75);
+            return Math.Min(chance, cap);
         }
     }
     

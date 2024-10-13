@@ -385,4 +385,24 @@ namespace DOL.GS.Spells
 
         public override string ShortDescription => $"Grants you {Spell.Value}% chance to penetrate magical resistances.";
     }
+
+    [SpellHandler("CriticalMagicalBuff")]
+    public class CriticalMagicalBuff : SingleStatBuff
+    {
+        public override eProperty Property1 { get { return eProperty.CriticalSpellHitChance; } }
+
+        public CriticalMagicalBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+
+        public override string ShortDescription => $"Increases the target's chance for a critical spell hit by {Spell.Value}%.";
+    }
+
+    [SpellHandler("CriticalMeleeBuff")]
+    public class CriticalMeleeBuff : SingleStatBuff
+    {
+        public override eProperty Property1 { get { return eProperty.CriticalMeleeHitChance; } }
+
+        public CriticalMeleeBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+
+        public override string ShortDescription => $"Increases the target's chance for a critical melee hit by {Spell.Value}%.";
+    }
 }
