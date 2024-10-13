@@ -46,13 +46,13 @@ namespace DOL.GS.Spells
 
                 for (int i = (int)eProperty.Skill_First; i <= (int)eProperty.Skill_Last; i++)
                 {
-                    if (player.GetModifiedSpecLevel(SkillBase.GetPropertyName(player.Client, (eProperty)(i))) != 0)
+                    if (player!.GetModifiedSpecLevel(SkillBase.GetPropertyName(player.Client, (eProperty)(i))) != 0)
                     {
                         player.BaseBuffBonusCategory[i] = -player.GetModifiedSpecLevel(SkillBase.GetPropertyName(player.Client, (eProperty)(i)));
                     }
                     //					DOLConsole.WriteWarning("Spec " + SkillBase.GetPropertyName((eProperty)(i)) + " " + player.GetModifiedSpecLevel(SkillBase.GetPropertyName((eProperty)(i))));
                 }
-                player.PropertiesChanged();
+                player!.PropertiesChanged();
                 player.Out.SendCharStatsUpdate();
                 player.UpdatePlayerStatus();
                 MessageToLiving(effect.Owner, Spell.Message1, eChatType.CT_Spell);
@@ -89,9 +89,9 @@ namespace DOL.GS.Spells
                 GamePlayer player = effect.Owner as GamePlayer;
                 for (int i = (int)eProperty.Skill_First; i <= (int)eProperty.Skill_Last; i++)
                 {
-                    player.BaseBuffBonusCategory[i] = 0;
+                    player!.BaseBuffBonusCategory[i] = 0;
                 }
-                player.PropertiesChanged();
+                player!.PropertiesChanged();
                 player.Out.SendCharStatsUpdate();
                 player.UpdatePlayerStatus();
                 MessageToLiving(effect.Owner, Spell.Message3, eChatType.CT_Spell);

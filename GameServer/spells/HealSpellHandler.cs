@@ -76,10 +76,18 @@ namespace DOL.GS.Spells
                     if (effect.SpellHandler is HealDebuffSpellHandler)
                     {
                         int debuffValue = (int)effect.Spell.Value;
-                        totalHealReductionPercentage += debuffValue;
+                        int debuffEffectivenessBonus = 0;
+
+                        if (Caster is GamePlayer gamePlayer)
+                        {
+                            debuffEffectivenessBonus = gamePlayer.GetModified(eProperty.DebuffEffectivness);
+                        }
+
+                        int adjustedDebuffValue = debuffValue + (debuffValue * debuffEffectivenessBonus) / 100;
+                        totalHealReductionPercentage += adjustedDebuffValue;
                         if (healTarget.Health < healTarget.MaxHealth && totalHealReductionPercentage < 100)
                         {
-                            MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "HealSpellHandler.HealingReduced", debuffValue), eChatType.CT_SpellResisted);
+                            MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "HealSpellHandler.HealingReduced", adjustedDebuffValue), eChatType.CT_SpellResisted);
                         }
                     }
                 }

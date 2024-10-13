@@ -22,6 +22,7 @@ using DOL.GS.PacketHandler;
 using DOL.AI.Brain;
 using DOL.GS.Scripts;
 using DOL.Language;
+using DOL.GS.Effects;
 
 namespace DOL.GS.Spells
 {
@@ -45,77 +46,124 @@ namespace DOL.GS.Spells
             if (targets.Count <= 0) return false;
 
             bool healed = false;
-            int transferHeal;
             double spellValue = m_spell.Value;
 
-            transferHeal = (int)(Caster.MaxHealth / 100 * Math.Abs(spellValue));
+            int baseTransferHeal = (int)(Caster.MaxHealth / 100 * Math.Abs(spellValue));
 
-            //Needed to prevent divide by zero error
-            if (transferHeal <= 0)
-                transferHeal = 0;
+            // Needed to prevent divide by zero error and ensure caster's health doesn't drop below 1
+            if (baseTransferHeal <= 0)
+                baseTransferHeal = 0;
             else
             {
-                //Remaining health is used if caster does not have enough health, leaving caster at 1 hitpoint
-                if ((transferHeal >> 1) >= Caster.Health)
-                    transferHeal = ((Caster.Health - 1) << 1);
+                // Ensure caster doesn't die from health loss
+                if ((baseTransferHeal >> 1) >= Caster.Health)
+                    baseTransferHeal = ((Caster.Health - 1) << 1);
             }
 
-
+            int totalHealedAmount = 0;
 
             foreach (GameLiving healTarget in targets)
             {
+                int transferHeal = baseTransferHeal;
+
+                int totalHealReductionPercentage = 0;
+
                 if (healTarget.IsDiseased)
                 {
                     int amnesiaChance = healTarget.TempProperties.getProperty<int>("AmnesiaChance", 50);
                     int healReductionPercentage = amnesiaChance > 0 ? amnesiaChance : 50;
-                    transferHeal -= (transferHeal * healReductionPercentage) / 100;
+                    totalHealReductionPercentage += healReductionPercentage;
 
                     if (Caster is GamePlayer player)
                     {
-                        MessageToCaster(LanguageMgr.GetTranslation(player.Client.Account.Language, "Spell.LifeTransfer.TargetDiseased"), eChatType.CT_SpellResisted);
+                        MessageToCaster(LanguageMgr.GetTranslation(player.Client.Account.Language, "Spell.LifeTransfer.TargetDiseased", healReductionPercentage), eChatType.CT_SpellResisted);
                     }
-                    healed |= HealTarget(healTarget, transferHeal);
                 }
-                else
+
+                foreach (GameSpellEffect effect in healTarget.EffectList)
                 {
-                    if (SpellHandler.FindEffectOnTarget(healTarget, "Damnation") != null)
+                    if (effect.SpellHandler is HealDebuffSpellHandler)
                     {
-                        int harmvalue = healTarget.TempProperties.getProperty<int>("DamnationValue", 0);
+                        int debuffValue = (int)effect.Spell.Value;
+                        int debuffEffectivenessBonus = 0;
 
-                        if (harmvalue > 0)
-                        {
-                            int damageAmount = (transferHeal * harmvalue) / 100;
-                            transferHeal = 0;
+                        GameLiving debuffer = effect.SpellHandler.Caster;
 
-                            AttackData ad = new AttackData
-                            {
-                                Attacker = Caster,
-                                Target = healTarget,
-                                DamageType = eDamageType.Natural,
-                                AttackType = AttackData.eAttackType.Spell,
-                                Damage = damageAmount,
-                                AttackResult = GameLiving.eAttackResult.HitUnstyled,
-                            };
-                            healTarget.TakeDamage(ad);
+                        if (debuffer is GamePlayer debufferPlayer)
+                        {
+                            debuffEffectivenessBonus = debufferPlayer.GetModified(eProperty.DebuffEffectivness);
+                        }
 
-                            MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "Spell.LifeTransfer.TargetDamnedDamages", damageAmount), eChatType.CT_YouDied);
-                        }
-                        else if (harmvalue < 0)
+                        int itemDebuffBonus = (debuffValue * debuffEffectivenessBonus) / 100;
+                        int adjustedDebuffValue = debuffValue + itemDebuffBonus;
+                        totalHealReductionPercentage += adjustedDebuffValue;
+
+                        if (healTarget.Health < healTarget.MaxHealth && totalHealReductionPercentage < 100)
                         {
-                            transferHeal = (transferHeal * Math.Abs(harmvalue)) / 100;
-                            MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "Spell.LifeTransfer.TargetDamnedReducedHeal"), eChatType.CT_SpellResisted);
-                            healed |= HealTarget(healTarget, transferHeal);
+                            MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "HealSpellHandler.HealingReduced", adjustedDebuffValue), eChatType.CT_SpellResisted);
                         }
-                        else
+                    }
+                }
+
+                if (totalHealReductionPercentage >= 100)
+                {
+                    totalHealReductionPercentage = 100;
+                }
+
+                if (totalHealReductionPercentage > 0)
+                {
+                    transferHeal -= (transferHeal * totalHealReductionPercentage) / 100;
+                }
+
+                if (transferHeal <= 0)
+                {
+                    if (Caster is GamePlayer player)
+                    {
+                        MessageToCaster(LanguageMgr.GetTranslation(player.Client.Account.Language, "HealSpellHandler.HealingNull"), eChatType.CT_SpellResisted);
+                    }
+                    continue;
+                }
+
+                // Handle Damnation effect
+                if (SpellHandler.FindEffectOnTarget(healTarget, "Damnation") != null)
+                {
+                    int harmvalue = healTarget.TempProperties.getProperty<int>("DamnationValue", 0);
+
+                    if (harmvalue > 0)
+                    {
+                        int damageAmount = (transferHeal * harmvalue) / 100;
+                        transferHeal = 0;
+
+                        AttackData ad = new AttackData
                         {
-                            transferHeal = 0;
-                            MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "Spell.LifeTransfer.TargetDamned"), eChatType.CT_Important);
-                        }
+                            Attacker = Caster,
+                            Target = healTarget,
+                            DamageType = eDamageType.Natural,
+                            AttackType = AttackData.eAttackType.Spell,
+                            Damage = damageAmount,
+                            AttackResult = GameLiving.eAttackResult.HitUnstyled,
+                        };
+                        healTarget.TakeDamage(ad);
+
+                        MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "Spell.LifeTransfer.TargetDamnedDamages", damageAmount), eChatType.CT_YouDied);
+                    }
+                    else if (harmvalue < 0)
+                    {
+                        transferHeal = (transferHeal * Math.Abs(harmvalue)) / 100;
+                        MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "Spell.LifeTransfer.TargetDamnedReducedHeal"), eChatType.CT_SpellResisted);
+                        healed |= HealTarget(healTarget, transferHeal);
+                        totalHealedAmount += transferHeal;
                     }
                     else
                     {
-                        healed |= HealTarget(healTarget, transferHeal);
+                        transferHeal = 0;
+                        MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "Spell.LifeTransfer.TargetDamned"), eChatType.CT_Important);
                     }
+                }
+                else
+                {
+                    healed |= HealTarget(healTarget, transferHeal);
+                    totalHealedAmount += transferHeal;
                 }
             }
 
@@ -126,21 +174,27 @@ namespace DOL.GS.Spells
             else
             {
                 m_caster.Mana -= PowerCost(target);
-                m_caster.Health -= transferHeal >> 1;
+
+                if ((totalHealedAmount >> 1) >= Caster.Health)
+                {
+                    totalHealedAmount = ((Caster.Health - 1) << 1);
+                }
+
+                m_caster.Health -= totalHealedAmount >> 1;
             }
 
-            // send animation for non pulsing spells only
+            // Send animation for non pulsing spells only
             if (Spell.Pulse == 0)
             {
                 if (healed)
                 {
-                    // send animation on all targets if healed
+                    // Send animation on all targets if healed
                     foreach (GameLiving healTarget in targets)
                         SendEffectAnimation(healTarget, 0, false, 1);
                 }
                 else
                 {
-                    // show resisted effect if not healed
+                    // Show resisted effect if not healed
                     SendEffectAnimation(Caster, 0, false, 0);
                 }
             }

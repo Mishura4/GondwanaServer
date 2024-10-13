@@ -45,7 +45,7 @@ namespace DOL.GS.Spells
             {
                 base.OnEffectStart(effect);
                 GamePlayer player = effect.Owner as GamePlayer;
-                player.TempProperties.setProperty("PreEffectivenessDebuff", player.Effectiveness);
+                player!.TempProperties.setProperty("PreEffectivenessDebuff", player.Effectiveness);
 
 
                 double effectiveness = player.Effectiveness;
@@ -97,7 +97,7 @@ namespace DOL.GS.Spells
             if (effect.Owner is GamePlayer)
             {
                 GamePlayer player = effect.Owner as GamePlayer;
-                player.Effectiveness = player.TempProperties.getProperty<double>("PreEffectivenessDebuff");
+                player!.Effectiveness = player.TempProperties.getProperty<double>("PreEffectivenessDebuff");
                 player.TempProperties.removeProperty("PreEffectivenessDebuff");
                 MessageToLiving(effect.Owner, Spell.Message3, eChatType.CT_Spell);
                 foreach (GamePlayer player1 in effect.Owner.GetPlayersInRadius(WorldMgr.INFO_DISTANCE))

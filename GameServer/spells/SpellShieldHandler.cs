@@ -56,8 +56,8 @@ namespace DOL.GS.Spells
             }
             else if (ad.AttackType == AttackData.eAttackType.DoT)
             {
-                int normalDamage = ((ad.Damage + 1) * 35) / 100;
-                int critDamage = ((ad.CriticalDamage + 1) * 35) / 100;
+                int normalDamage = ((ad.Damage + 1) * 30) / 100;
+                int critDamage = ((ad.CriticalDamage + 1) * 30) / 100;
                 damageAbsorbed = normalDamage + critDamage;
                 ad.Damage -= normalDamage;
                 ad.CriticalDamage -= critDamage;
