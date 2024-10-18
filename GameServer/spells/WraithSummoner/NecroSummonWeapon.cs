@@ -114,6 +114,8 @@ namespace DOL.GS.Spells
                         nearbyPlayer.Out.SendMessage(LanguageMgr.GetTranslation(nearbyPlayer.Client, "Spells.NecroSumonWeap.Nethersbane.Target", nearbyPlayer.GetPersonalizedName(player)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     }
                 }
+
+                player.TempProperties.setProperty("SummonNethersbaneHandler", this);
             }
         }
 
@@ -147,6 +149,7 @@ namespace DOL.GS.Spells
             GameEventMgr.RemoveHandler(player, GamePlayerEvent.Quit, OnPlayerLeft);
             GameEventMgr.RemoveHandler(player, GamePlayerEvent.Linkdeath, OnPlayerLeft);
             GameEventMgr.RemoveHandler(player, GamePlayerEvent.RegionChanged, OnPlayerLeft);
+            player.TempProperties.removeProperty("SummonNethersbaneHandler");
         }
     }
 
@@ -235,6 +238,8 @@ namespace DOL.GS.Spells
                         nearbyPlayer.Out.SendMessage(LanguageMgr.GetTranslation(nearbyPlayer.Client, "Spells.NecroSumonWeap.Icebrand.Target", nearbyPlayer.GetPersonalizedName(player)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     }
                 }
+
+                player.TempProperties.setProperty("SummonIcebrandHandler", this);
             }
         }
 
@@ -268,6 +273,7 @@ namespace DOL.GS.Spells
             GameEventMgr.RemoveHandler(player, GamePlayerEvent.Quit, OnPlayerLeft);
             GameEventMgr.RemoveHandler(player, GamePlayerEvent.Linkdeath, OnPlayerLeft);
             GameEventMgr.RemoveHandler(player, GamePlayerEvent.RegionChanged, OnPlayerLeft);
+            player.TempProperties.removeProperty("SummonIcebrandHandler");
         }
     }
 }

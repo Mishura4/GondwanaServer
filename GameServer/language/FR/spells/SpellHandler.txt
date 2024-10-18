@@ -227,6 +227,7 @@ SpellHandler.HealthToEndurance.TransferLife:	Vous transférez {0} point(s) de vi
 
 SpellHandler.FocusShell.NoPets:			Ce sort ne peut pas être lancé sur les familiers !
 SpellHandler.FocusShell.SameRealm:		Ce sort ne fonctionne que sur les membres de votre royaume !
+SpellHandler.FocusShell.MustBeRvR:		Ce sort peut être utilisé uniquement en RvR ou en PvP.
 SpellHandler.SummonSpell.PetControl:		Le {0} est maintenant sous votre contrôle.
 SpellHandler.SummonNoveltyPet.CannotCastHere:	Vous ne pouvez pas lancer ce sort ici !
 

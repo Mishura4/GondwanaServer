@@ -42,6 +42,15 @@ namespace DOL.GS.Spells
 
         public override bool CheckBeginCast(GameLiving selectedTarget)
         {
+            if (!ServerProperties.Properties.ALLOW_FOCUS_SHELL_OUTSIDE_PVP)
+            {
+                GamePlayer casterPlayer = Caster as GamePlayer;
+                if (casterPlayer != null && !casterPlayer.isInBG && !casterPlayer.IsInRvR && !casterPlayer.IsInPvP)
+                {
+                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.FocusShell.MustBeRvR"), eChatType.CT_System);
+                    return false;
+                }
+            }
             //Only works on members of the same realm
             if (GameServer.ServerRules.IsAllowedToAttack(selectedTarget, Caster, true) == false)
             {
@@ -231,6 +240,21 @@ namespace DOL.GS.Spells
                     m_handler.CancelSpell(null, m_handler.Caster, null);
                     Stop();
                 }
+            }
+        }
+
+        public override string ShortDescription
+        {
+            get
+            {
+                string description = $"All Melee and Spell Damage done to the target is reduced by {Spell.Value}%.";
+
+                if (!ServerProperties.Properties.ALLOW_FOCUS_SHELL_OUTSIDE_PVP)
+                {
+                    description += "This spell can only be used in RvR or PvP zones.";
+                }
+
+                return description;
             }
         }
     }

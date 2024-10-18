@@ -2545,6 +2545,9 @@ namespace DOL.GS.ServerProperties
         [ServerProperty("damnation", "max_damnation_duration", "Maximum duration (in seconds) for the Damnation effect. Set to 0 for no cap.", 600)]
         public static int MAX_DAMNATION_DURATION;
 
+        [ServerProperty("spells", "allow_focus_shell_outside_pvp", "Allow the Focus Shell spell to be used outside of BG, PvP, or RvR zones. Set to true to allow, false to restrict.", false)]
+        public static bool ALLOW_FOCUS_SHELL_OUTSIDE_PVP;
+
         #endregion
 
         #region GUILDS / ALLIANCES

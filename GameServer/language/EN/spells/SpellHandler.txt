@@ -227,6 +227,7 @@ SpellHandler.HealthToEndurance.TransferLife:	You transfer {0} life to Endurance!
 
 SpellHandler.FocusShell.NoPets:			This spell may not be cast on pets!
 SpellHandler.FocusShell.SameRealm:		This spell only works on members of your realm!
+SpellHandler.FocusShell.MustBeRvR:		You can only cast this spell in RvR or PvP zones.
 SpellHandler.SummonSpell.PetControl:		The {0} is now under your control.
 SpellHandler.SummonNoveltyPet.CannotCastHere:	You cannot cast this spell here!
 

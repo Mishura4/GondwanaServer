@@ -84,6 +84,7 @@ namespace DOL.GS.Spells
                     log.Debug($"Event handlers added for player {player.Name}");
 
                 SendEffectAnimation(player);
+                player.TempProperties.setProperty("GoldenSpearJavelinHandler", this);
             }
         }
 
@@ -117,6 +118,7 @@ namespace DOL.GS.Spells
             GameEventMgr.RemoveHandler(player, GamePlayerEvent.Quit, OnPlayerLeft);
             GameEventMgr.RemoveHandler(player, GamePlayerEvent.Linkdeath, OnPlayerLeft);
             GameEventMgr.RemoveHandler(player, GamePlayerEvent.RegionChanged, OnPlayerLeft);
+            player.TempProperties.removeProperty("GoldenSpearJavelinHandler");
         }
     }
 }

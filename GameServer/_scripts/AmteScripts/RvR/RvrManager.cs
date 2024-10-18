@@ -62,7 +62,7 @@ namespace AmteScripts.Managers
         private DateTime RvRBonusDate = DateTime.Now.Date;
 
         #region Static part
-        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
         private static RvrManager _instance;
         private static RegionTimer _timer;
@@ -254,7 +254,7 @@ namespace AmteScripts.Managers
                 {
                     name = RvRDebutantMID;
                 }
-                _maps.Add(name, map);
+                _maps.Add(name!, map);
             });
 
 
@@ -277,7 +277,7 @@ namespace AmteScripts.Managers
                 {
                     name = RvRStandardMID;
                 }
-                _maps.Add(name, map);
+                _maps.Add(name!, map);
             });
 
 
@@ -300,7 +300,7 @@ namespace AmteScripts.Managers
                 {
                     name = RvRExpertMID;
                 }
-                _maps.Add(name, map);
+                _maps.Add(name!, map);
             });
 
 
@@ -323,7 +323,7 @@ namespace AmteScripts.Managers
                 {
                     name = RvRMasterMID;
                 }
-                _maps.Add(name, map);
+                _maps.Add(name!, map);
             });
 
             //RvRDivines.Foreach(divine =>
@@ -820,7 +820,7 @@ namespace AmteScripts.Managers
                 //    }                 
                 //}
 
-                player.MoveTo(_maps[key].Position);
+                player.MoveTo(_maps[key!].Position);
                 player.Bind(true);
                 return true;
             }
@@ -1019,7 +1019,7 @@ namespace AmteScripts.Managers
             if (attacker.Realm == defender.Realm)
             {
                 if (!quiet)
-                    _MessageToLiving(attacker, "RvRManager.CannotAttackRealmMember");
+                    _MessageToLiving(attacker, LanguageMgr.GetTranslation((attacker as GamePlayer)?.Client, "RvRManager.CannotAttackRealmMember"), eChatType.CT_System);
                 return false;
             }
             return true;
@@ -1030,7 +1030,7 @@ namespace AmteScripts.Managers
             return _maps.Values.Any(v => v.Position.RegionID.Equals(id));
         }
 
-        private static void _MessageToLiving(GameLiving living, string message)
+        private static void _MessageToLiving(GameLiving living, string message, eChatType chatType)
         {
             if (living is GamePlayer)
                 ((GamePlayer)living).Out.SendMessage(message, eChatType.CT_System, eChatLoc.CL_SystemWindow);
