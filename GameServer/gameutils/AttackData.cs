@@ -382,5 +382,8 @@ namespace DOL.GS
             get { return m_causesCombat; }
             set { m_causesCombat = value; }
         }
+
+        public bool AblativeEffectApplied { get; set; } = false;
+        public int AblativeDamageAbsorbed { get; set; } = 0;
     }
 }

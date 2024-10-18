@@ -12,6 +12,9 @@ GameObjects.GamePlayer.ApplyPoison.PoisonsAppliedWeapons:   Les poisons ne peuve
 GameObjects.GamePlayer.ApplyPoison.CantReapplyPoison:		Vous ne pouvez pas réappliquer du poison sur cette arme.
 GameObjects.GamePlayer.ApplyPoison.CannotPoison:			Vous ne pouvez pas empoisonner votre {0} !
 
+GameObjects.GamePlayer.AblativeArmor.Target:		Votre armure absorbe {0} dommage(s) additionnels grâce à votre bonus ablatif !
+GameObjects.GamePlayer.AblativeArmor.Attacker:		L'armure de {0} absorbe {1} dommage(s) additionnels grâce à son bonus ablatif !
+
 GameObjects.GamePlayer.Attack.AlreadyDead:	    {0} est déjà mort·e.
 GameObjects.GamePlayer.Attack.Blocked:		    {0} bloque votre attaque.
 GameObjects.GamePlayer.Attack.CantBeAttacked:   Ceci ne peut pas être attaqué.

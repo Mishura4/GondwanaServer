@@ -7490,6 +7490,18 @@ namespace DOL.GS
                             }
                         }
 
+                        if (ad.AblativeEffectApplied)
+                        {
+                            if (!this.isInBG && !this.IsInPvP && !this.IsInRvR)
+                            {
+                                Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.AblativeArmor.Target", ad.AblativeDamageAbsorbed), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                                if (ad.Attacker is GamePlayer attackerPlayer)
+                                {
+                                    attackerPlayer.Out.SendMessage(LanguageMgr.GetTranslation(attackerPlayer.Client, "GameObjects.GamePlayer.AblativeArmor.Attacker", GetPersonalizedName(ad.Target), ad.AblativeDamageAbsorbed), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                                }
+                            }
+                        }
+
                         break;
                     }
                 case eAttackResult.Blocked:
@@ -7688,6 +7700,73 @@ namespace DOL.GS
                         }
                         break;
                 }
+
+                eArmorSlot hitLocation = attackData.ArmorHitLocation;
+                if (hitLocation != eArmorSlot.TORSO &&
+                    hitLocation != eArmorSlot.LEGS &&
+                    hitLocation != eArmorSlot.ARMS &&
+                    hitLocation != eArmorSlot.HEAD &&
+                    hitLocation != eArmorSlot.HAND &&
+                    hitLocation != eArmorSlot.FEET)
+                    return;
+
+                InventoryItem item = Inventory.GetItem((eInventorySlot)hitLocation);
+                if (item == null)
+                    return;
+
+                if (this.isInBG || this.IsInPvP || this.IsInRvR)
+                    return;
+
+                int chanceToAblate = GetModified(eProperty.PieceAblative);
+                if (chanceToAblate <= 0 || !Util.Chance(chanceToAblate))
+                    return;
+
+                double absorbPercent;
+                switch ((eObjectType)item.Object_Type)
+                {
+                    case eObjectType.Cloth:
+                        absorbPercent = 30;
+                        break;
+                    case eObjectType.Leather:
+                        absorbPercent = 45;
+                        break;
+                    case eObjectType.Reinforced:
+                        absorbPercent = 55;
+                        break;
+                    case eObjectType.Studded:
+                        absorbPercent = 65;
+                        break;
+                    case eObjectType.Scale:
+                        absorbPercent = 70;
+                        break;
+                    case eObjectType.Chain:
+                        absorbPercent = 80;
+                        break;
+                    case eObjectType.Plate:
+                        absorbPercent = 100;
+                        break;
+                    default:
+                        absorbPercent = 0;
+                        break;
+                }
+
+                double conditionLossPercent = 100.0 - item.ConditionPercent;
+                double qualityLossPercent = 100.0 - item.Quality;
+                double totalLossPercent = conditionLossPercent + qualityLossPercent;
+                double absorbPercentAdjusted = absorbPercent - (absorbPercent * totalLossPercent / 100.0);
+
+                if (absorbPercentAdjusted < 0)
+                    absorbPercentAdjusted = 0;
+
+                int ablativeHp = item.Level * 10;
+
+                int damageAbsorbed = (int)(0.01 * absorbPercentAdjusted * (attackData.Damage + attackData.CriticalDamage));
+                if (damageAbsorbed > ablativeHp)
+                    damageAbsorbed = ablativeHp;
+
+                attackData.Damage -= damageAbsorbed;
+                attackData.AblativeEffectApplied = true;
+                attackData.AblativeDamageAbsorbed = damageAbsorbed;
             }
         }
 

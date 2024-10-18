@@ -92,8 +92,8 @@ namespace DOL.GS.PropertyCalc
                 cap += (int)criticalEffect.Spell.Value;
             }
 
-            // Enforce ultimate cap of 75%
-            cap = Math.Min(cap, 75);
+            // ultimate cap of 100%
+            cap = Math.Min(cap, 100);
             return Math.Min(chance, cap);
         }
     }
@@ -158,8 +158,8 @@ namespace DOL.GS.PropertyCalc
                 cap += (int)criticalEffect.Spell.Value;
             }
 
-            // Enforce ultimate cap of 75%
-            cap = Math.Min(cap, 75);
+            // ultimate cap of 100%
+            cap = Math.Min(cap, 100);
             return Math.Min(chance, cap);
         }
     }

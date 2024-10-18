@@ -208,7 +208,7 @@ SkillBase.RegisterPropertyNames.Witchcraft:            Artifices
 SkillBase.RegisterPropertyNames.WitchcraftFocus:      Focus : Artifices
 
 SkillBase.RegisterPropertyNames.KeepDamage:				Bonus Dommages contre les Forts
-SkillBase.RegisterPropertyNames.DPS:					Augmentation du DPS
+SkillBase.RegisterPropertyNames.DPS:					Bonus Mythique DPS
 SkillBase.RegisterPropertyNames.MagicAbsorption:		Absorption Magique
 SkillBase.RegisterPropertyNames.MaxHealth:				Points de Vie Max
 SkillBase.RegisterPropertyNames.MaxMana:				Points de Mana Max

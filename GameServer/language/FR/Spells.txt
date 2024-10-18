@@ -155,3 +155,9 @@ HealDebuffSpellHandler.EffectExpires.Target:	L'efficacité des soins reçus rede
 HealDebuffSpellHandler.EffectExpires.Area:		L'efficacité des soins reçus par {0} retourne à la normale.
 HealSpellHandler.HealingReduced:				Le soin est réduit de {0}% à cause des effets d'inhibition de soin.
 HealSpellHandler.HealingNull:					Votre sort échoue à soigner la cible en raison des effets d'inhibition de soin.
+
+# NecroSummonWeapon
+Spells.NecroSumonWeap.Icebrand.You:				Vous invoquez l'épée Icebrand.
+Spells.NecroSumonWeap.Icebrand.Target:			{0} invoque l'épée Icebrand.
+Spells.NecroSumonWeap.Nethersbane.You:			Vous invoquez l'épée Nethersbane.
+Spells.NecroSumonWeap.Nethersbane.Target:		{0} invoque l'épée Nethersbane.

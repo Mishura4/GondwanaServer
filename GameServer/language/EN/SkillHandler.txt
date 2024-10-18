@@ -211,7 +211,7 @@ SkillBase.RegisterPropertyNames.Witchcraft:				Witchcraft
 SkillBase.RegisterPropertyNames.WitchcraftFocus:		Witchcraft Focus
 
 SkillBase.RegisterPropertyNames.KeepDamage:				Keep Damage
-SkillBase.RegisterPropertyNames.DPS:					DPS Increase
+SkillBase.RegisterPropertyNames.DPS:					Mythical DPS
 SkillBase.RegisterPropertyNames.MagicAbsorption:		Magic Absorption
 SkillBase.RegisterPropertyNames.MaxHealth:      		Max Health
 SkillBase.RegisterPropertyNames.MaxMana:      			Max Mana

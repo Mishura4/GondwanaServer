@@ -16,84 +16,107 @@
 * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 *
 */
+
+using System;
+using System.Linq;
+using DOL.Database;
+using DOL.Events;
+using log4net;
+
 namespace DOL.GS.Spells
 {
-    using System;
-    using System.Collections;
-    using Database;
-    using Events;
-
     /// <summary>
-    /// NOTE: PLEASE CHECK YOUR SPELL ID FOR JAVELIN OR CREATE YOUR OWN ITEM
+    /// Spell handler for the Golden Spear Javelin spell.
     /// </summary>
     [SpellHandler("GoldenSpearJavelin")]
     public class GoldenSpearJavelin : SummonItemSpellHandler
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()!.DeclaringType);
 
         private ItemTemplate _artefJavelin;
 
         public GoldenSpearJavelin(GameLiving caster, Spell spell, SpellLine line)
             : base(caster, spell, line)
         {
-            _artefJavelin = GameServer.Database.FindObjectByKey<ItemTemplate>("Artef_Javelin") ?? Javelin;
+            _artefJavelin = GameServer.Database.FindObjectByKey<ItemTemplate>("Artef_Javelin") ?? CreateJavelinTemplate();
             items.Add(GameInventoryItem.Create(_artefJavelin));
         }
 
-        private ItemTemplate Javelin
+        private ItemTemplate CreateJavelinTemplate()
         {
-            get
+            if (_artefJavelin == null)
             {
-                _artefJavelin = (ItemTemplate)GameServer.Database.FindObjectByKey<ItemTemplate>("Artef_Javelin");
-                if (_artefJavelin == null)
-                {
-                    if (log.IsWarnEnabled) log.Warn("Could not find Artef_Javelin, loading it ...");
-                    _artefJavelin = new ItemTemplate();
-                    _artefJavelin.Id_nb = "Artef_Javelin";
-                    _artefJavelin.Name = "Golden Javelin";
-                    _artefJavelin.Level = 50;
-                    _artefJavelin.MaxDurability = 50000;
-                    _artefJavelin.MaxCondition = 50000;
-                    _artefJavelin.Quality = 100;
-                    _artefJavelin.Object_Type = (int)eObjectType.Magical;
-                    _artefJavelin.Item_Type = 41;
-                    _artefJavelin.Model = 23;
-                    _artefJavelin.IsPickable = false;
-                    _artefJavelin.IsDropable = false;
-                    _artefJavelin.CanDropAsLoot = false;
-                    _artefJavelin.IsTradable = false;
-                    _artefJavelin.MaxCount = 1;
-                    _artefJavelin.PackSize = 1;
-                    _artefJavelin.Charges = 5;
-                    _artefJavelin.MaxCharges = 5;
-                    _artefJavelin.SpellID = 38076;
-                }
-                return _artefJavelin;
+                if (log.IsWarnEnabled) log.Warn("Could not find Artef_Javelin, loading it ...");
+                _artefJavelin = new ItemTemplate();
+                _artefJavelin.Id_nb = "Artef_Javelin";
+                _artefJavelin.Name = "Golden Javelin";
+                _artefJavelin.Level = 50;
+                _artefJavelin.MaxDurability = 50000;
+                _artefJavelin.MaxCondition = 50000;
+                _artefJavelin.Quality = 100;
+                _artefJavelin.Object_Type = (int)eObjectType.Magical;
+                _artefJavelin.Item_Type = 41;
+                _artefJavelin.Model = 23;
+                _artefJavelin.IsPickable = false;
+                _artefJavelin.IsDropable = false;
+                _artefJavelin.CanDropAsLoot = false;
+                _artefJavelin.IsTradable = false;
+                _artefJavelin.MaxCount = 1;
+                _artefJavelin.PackSize = 1;
+                _artefJavelin.Charges = 5;
+                _artefJavelin.MaxCharges = 5;
+                _artefJavelin.SpellID = 38076;
             }
+            return _artefJavelin;
         }
 
         public override void OnDirectEffect(GameLiving target, double effectiveness)
         {
             base.OnDirectEffect(target, effectiveness);
-            GameEventMgr.AddHandler(Caster, GamePlayerEvent.Quit, OnPlayerLeft);
+
+            if (Caster is GamePlayer player)
+            {
+                GameEventMgr.AddHandler(player, GamePlayerEvent.Quit, OnPlayerLeft);
+                GameEventMgr.AddHandler(player, GamePlayerEvent.Linkdeath, OnPlayerLeft);
+                GameEventMgr.AddHandler(player, GamePlayerEvent.RegionChanged, OnPlayerLeft);
+
+                if (log.IsDebugEnabled)
+                    log.Debug($"Event handlers added for player {player.Name}");
+
+                SendEffectAnimation(player);
+            }
         }
 
-        private static void OnPlayerLeft(DOLEvent e, object sender, EventArgs arguments)
+        private void SendEffectAnimation(GamePlayer player)
         {
-            if (!(sender is GamePlayer)) return;
-            GamePlayer player = sender as GamePlayer;
-            lock (player.Inventory)
+            foreach (GamePlayer nearbyPlayer in player.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
             {
-                var items = player.Inventory.GetItemRange(eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack);
-                foreach (InventoryItem invItem in items)
+                nearbyPlayer.Out.SendSpellEffectAnimation(player, player, Spell.ClientEffect, 0, false, 1);
+            }
+        }
+
+        private void OnPlayerLeft(DOLEvent e, object sender, EventArgs arguments)
+        {
+            if (!(sender is GamePlayer player))
+                return;
+
+            if (log.IsDebugEnabled)
+                log.Debug($"OnPlayerLeft called for player {player.Name}");
+
+            var items = player.Inventory.AllItems;
+            foreach (InventoryItem invItem in items.ToList())
+            {
+                if (invItem.Id_nb.Equals("Artef_Javelin", StringComparison.OrdinalIgnoreCase))
                 {
-                    if (invItem.Id_nb.Equals("Artef_Javelin"))
-                    {
-                        player.Inventory.RemoveItem(invItem);
-                    }
+                    player.Inventory.RemoveItem(invItem);
+                    if (log.IsDebugEnabled)
+                        log.Debug($"Removed Artef_Javelin from {player.Name}'s inventory.");
                 }
             }
-            GameEventMgr.RemoveHandler(sender, GamePlayerEvent.Quit, OnPlayerLeft);
+
+            GameEventMgr.RemoveHandler(player, GamePlayerEvent.Quit, OnPlayerLeft);
+            GameEventMgr.RemoveHandler(player, GamePlayerEvent.Linkdeath, OnPlayerLeft);
+            GameEventMgr.RemoveHandler(player, GamePlayerEvent.RegionChanged, OnPlayerLeft);
         }
     }
 }
