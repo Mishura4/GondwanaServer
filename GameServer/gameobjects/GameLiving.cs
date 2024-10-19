@@ -3859,12 +3859,12 @@ namespace DOL.GS
 
                 // weapon/armor bonus
                 int armorBonus = 0;
-                if (ad.Target is GamePlayer)
+                if (ad.Target is GamePlayer targetPlayer)
                 {
-                    ad.ArmorHitLocation = ((GamePlayer)ad.Target).CalculateArmorHitLocation(ad);
+                    ad.ArmorHitLocation = targetPlayer.CalculateArmorHitLocation(ad);
                     InventoryItem armor = null;
-                    if (ad.Target.Inventory != null)
-                        armor = ad.Target.Inventory.GetItem((eInventorySlot)ad.ArmorHitLocation);
+                    if (targetPlayer.Inventory != null)
+                        armor = targetPlayer.Inventory.GetItem((eInventorySlot)ad.ArmorHitLocation);
                     if (armor != null)
                         armorBonus = armor.Bonus;
                 }

@@ -413,6 +413,10 @@ namespace DOL.GS.Styles
                     if (weapon.DPS_AF >= 15) absorbRatio = attackData.Damage / living.UnstyledDamageCap(weapon);
                     double effectiveWeaponSpeed = living.AttackSpeed(weapon) * 0.001;
                     double styleDamageBonus = living.GetModified(eProperty.StyleDamage) * 0.01 - 1;
+                    if (attackData.Style.OpeningRequirementType == Style.eOpening.Defensive)
+                    {
+                        styleDamageBonus += living.GetModified(eProperty.ReactionaryStyleDamage) * 0.01 - 1;
+                    }
 
                     double offset = attackData.Style.GrowthRate > 0 && attackData.Style.GrowthOffset == 0 ? 1.0 : attackData.Style.GrowthOffset;
                     double styleGrowth = Math.Max(0, offset + attackData.Style.GrowthRate * living.GetModifiedSpecLevel(attackData.Style.Spec));
