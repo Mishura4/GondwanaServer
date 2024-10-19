@@ -113,6 +113,10 @@ SpellHandler.HealSpell.EfficientEnduranceBuff:	Your Efficient Endurance buff gra
 SpellHandler.HealSpell.TargetDamnedDamaged:		You are damned! The healing spell inflicts {0} damage instead of restoring health!
 SpellHandler.HealSpell.TargetDamnedPartiallyHealed:	The healing spell has reduced effectiveness because you are damned!
 SpellHandler.HealSpell.DamnedNoHeal:		The healing spell has no effect because you are damned!
+SpellHandler.HealSpell.YouDiseased:			You are diseased, healing has been reduced by {0}% !
+SpellHandler.HealSpell.HealingReduced:				Healing has been reduced by {0}% due to healing inhibiting effects.
+SpellHandler.HealSpell.HealingNull:					Your spell fails to heal the target due to healing inhibiting effects.
+SpellHandler.HealSpell.HealingNullYou:				Your fail to heal yourself due to healing inhibiting effects.
 SpellHandler.LifeDrain.YouTargetDamnedNoHeal:	The life drain spell has no effect because you are damned as well as your target!
 SpellHandler.LifeDrain.TargetDamnedDamaged:		You are damned! The life drain spell inflicts {0} damage instead of restoring health!
 SpellHandler.LifeDrain.TargetDamnedPartiallyHealed:	The life drain has reduced effectiveness because {0} is damned!
@@ -245,6 +249,7 @@ SpellHandler.SpeedEnhancement.CombatRecent:	You've been in combat recently, the 
 SpellHandler.WaterBreathing.StartEffect:	You find yourself able to move freely and breathe water like air!
 SpellHandler.WaterBreathing.EndEffect:		With a gulp and a gasp you realize that you are unable to breathe underwater any longer!
 
-SpellHandler.GroundAreaEffect.AlreadyActive: You already have a ground effect active and cannot cast another!
+SpellHandler.GroundAreaEffect.AlreadyActive:	You already have a ground effect active and cannot cast another!
+SpellHandler.PowerShield.EffectStart:			An ancient magic enhances your vital essence.
 
 SpellHandler.DelveInfo.Sec:			sec

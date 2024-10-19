@@ -153,8 +153,6 @@ HealDebuffSpellHandler.EffectStart.Target:		Your ability to receive healing has 
 HealDebuffSpellHandler.EffectStart.Area:		{0}'s ability to receive healing has been reduced due to {1}.
 HealDebuffSpellHandler.EffectExpires.Target:	Your ability to receive healing returns to normal.
 HealDebuffSpellHandler.EffectExpires.Area:		{0}'s ability to receive healing returns to normal.
-HealSpellHandler.HealingReduced:				Healing has been reduced by {0}% due to healing inhibiting effects.
-HealSpellHandler.HealingNull:					Your spell fails to heal the target due to healing inhibiting effects.
 
 # NecroSummonWeapon
 Spells.NecroSumonWeap.Icebrand.You:				You summon the Icebrand.

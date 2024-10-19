@@ -69,7 +69,7 @@ namespace DOL.spells
                     totalHealReductionPercentage += adjustedDebuffValue;
                     if (player.Health < player.MaxHealth && totalHealReductionPercentage < 100)
                     {
-                        MessageToLiving(player, LanguageMgr.GetTranslation(player.Client, "HealSpellHandler.HealingReduced", adjustedDebuffValue), eChatType.CT_SpellResisted);
+                        MessageToLiving(player, LanguageMgr.GetTranslation(player.Client, "SpellHandler.HealSpell.HealingReduced", adjustedDebuffValue), eChatType.CT_SpellResisted);
                     }
                 }
             }
@@ -77,7 +77,7 @@ namespace DOL.spells
             if (totalHealReductionPercentage >= 100)
             {
                 totalHealReductionPercentage = 100;
-                MessageToLiving(player, LanguageMgr.GetTranslation(player.Client, "HealSpellHandler.HealingNull"), eChatType.CT_SpellResisted);
+                MessageToLiving(player, LanguageMgr.GetTranslation(player.Client, "SpellHandler.HealSpell.HealingNull"), eChatType.CT_SpellResisted);
             }
 
             if (totalHealReductionPercentage > 0)

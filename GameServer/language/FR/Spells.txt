@@ -153,8 +153,6 @@ HealDebuffSpellHandler.EffectStart.Target:		L'efficacité des soins reçus a ét
 HealDebuffSpellHandler.EffectStart.Area:		L'efficacité des soins reçus par {0} a été réduite en raison de {1}.
 HealDebuffSpellHandler.EffectExpires.Target:	L'efficacité des soins reçus redevient normale.
 HealDebuffSpellHandler.EffectExpires.Area:		L'efficacité des soins reçus par {0} retourne à la normale.
-HealSpellHandler.HealingReduced:				Le soin est réduit de {0}% à cause des effets d'inhibition de soin.
-HealSpellHandler.HealingNull:					Votre sort échoue à soigner la cible en raison des effets d'inhibition de soin.
 
 # NecroSummonWeapon
 Spells.NecroSumonWeap.Icebrand.You:				Vous invoquez l'épée Icebrand.

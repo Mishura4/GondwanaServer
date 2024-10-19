@@ -96,7 +96,7 @@ namespace DOL.GS.Spells
                     totalHealReductionPercentage += adjustedDebuffValue;
                     if (m_caster.Health < m_caster.MaxHealth && totalHealReductionPercentage < 100)
                     {
-                        MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "HealSpellHandler.HealingReduced", adjustedDebuffValue), eChatType.CT_SpellResisted);
+                        MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.HealSpell.HealingReduced", adjustedDebuffValue), eChatType.CT_SpellResisted);
                     }
                 }
             }
@@ -104,7 +104,7 @@ namespace DOL.GS.Spells
             if (totalHealReductionPercentage >= 100)
             {
                 totalHealReductionPercentage = 100;
-                MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "HealSpellHandler.HealingNull"), eChatType.CT_SpellResisted);
+                MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.HealSpell.HealingNull"), eChatType.CT_SpellResisted);
             }
 
             if (totalHealReductionPercentage > 0)

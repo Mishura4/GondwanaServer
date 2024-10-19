@@ -1407,6 +1407,10 @@ namespace DOL.AI.Brain
                 case "BATTLEFEVERDURATIONBUFF":
                 case "SPELLSHIELD":
                 case "DEBUFFIMMUNITY":
+                case "CRITICALMAGICALBUFF":
+                case "CRITICALMELEEBUFF":
+                case "POWERSHIELD":
+                case "MAGICHEALABSORB":
                     {
                         // Buff self, if not in melee, but not each and every mob
                         // at the same time, because it looks silly.

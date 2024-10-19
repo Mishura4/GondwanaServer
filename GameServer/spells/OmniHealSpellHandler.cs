@@ -41,7 +41,7 @@ namespace DOL.GS.Spells
             }
             if (target.IsDiseased)
             {
-                MessageTranslationToCaster("Spell.LifeTransfer.TargetDiseased", eChatType.CT_SpellResisted);
+                MessageTranslationToCaster("Spell.LifeTransfer.TargetDiseased2", eChatType.CT_SpellResisted);
                 amountEndu /= 2;
                 amountMana /= 2;
             }
