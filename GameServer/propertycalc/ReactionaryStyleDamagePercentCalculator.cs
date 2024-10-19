@@ -34,8 +34,9 @@ namespace DOL.GS.PropertyCalc
     {
         public override int CalcValue(GameLiving living, eProperty property)
         {
-            return Math.Max(0, 100
-                + Math.Min(10, living.ItemBonus[(int)property]));
+            int value = 100;
+            value += Math.Min(10, living.ItemBonus[(int)property]);
+            return Math.Max(0, value);
             //				-living.BuffBonusCategory3[(int)property]);
         }
     }

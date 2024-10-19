@@ -1635,6 +1635,9 @@ namespace DOL.GS.Spells
                     specBonus = 0;
                 power -= basepower * specBonus;
             }
+
+            power *= Caster.GetModified(eProperty.SpellPowerCost) * 0.01;
+            
             // doubled power usage if quickcasting
             if (Caster.EffectList.GetOfType<QuickCastEffect>() != null && Spell.CastTime > 0)
                 power *= 2;
