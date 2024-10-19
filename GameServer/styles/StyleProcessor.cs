@@ -553,7 +553,9 @@ namespace DOL.GS.Styles
             if (weaponSpd < 40)
                 fatCost++;
 
-            fatCost = (int)Math.Ceiling(fatCost * living.GetModified(eProperty.FatigueConsumption) * 0.01);
+            double factor = living.GetModified(eProperty.FatigueConsumption) * 0.01;
+            factor -= living.GetModified(eProperty.StyleCostReduction) * 0.01;
+            fatCost = (int)Math.Ceiling(fatCost * factor);
             return Math.Max(1, fatCost);
         }
 
