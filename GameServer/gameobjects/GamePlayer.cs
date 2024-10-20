@@ -6428,8 +6428,12 @@ namespace DOL.GS
                 case eAttackResult.HitStyle:
                 case eAttackResult.Fumbled:
                     // remove an arrow and endurance
-                    InventoryItem ammo = RangeAttackAmmo;
-                    Inventory.RemoveCountFromStack(ammo, 1);
+                    var recoveryChance = args.AttackData.Attacker.GetModified(eProperty.ArrowRecovery);
+                    if (recoveryChance <= 0 || !Util.Chance(recoveryChance))
+                    {
+                        InventoryItem ammo = RangeAttackAmmo;
+                        Inventory.RemoveCountFromStack(ammo, 1);
+                    }
 
                     if (RangedAttackType == eRangedAttackType.Critical)
                         Endurance -= CRITICAL_SHOT_ENDURANCE;

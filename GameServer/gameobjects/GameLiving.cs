@@ -3938,7 +3938,7 @@ namespace DOL.GS
             // "The blow penetrated the magical barrier!"
             if (bladeturn != null)
             {
-                if (BladeturnSpellHandler.ConsumeAttack(bladeturn, ad))
+                if (BladeturnSpellHandler.BlockAttack(bladeturn, ad))
                     return eAttackResult.Missed;
             }
 
