@@ -37,6 +37,9 @@ namespace DOL.GS.Quests
         public byte MaxLevel;
         public int Reputation;
         public bool IsRenaissance;
+        public bool? IsChampion;
+        public bool? IsDamned;
+        public ushort ModelID;
         public int[] QuestDependencyIDs = Array.Empty<int>();
         public eCharacterClass[] AllowedClasses = Array.Empty<eCharacterClass>();
         public eRace[] AllowedRaces = Array.Empty<eRace>();
@@ -97,15 +100,21 @@ namespace DOL.GS.Quests
                 return false;
             if (IsRenaissance && !player.IsRenaissance)
                 return false;
+            if (IsChampion != null && IsChampion.Value != player.Champion)
+                return false;
+            if (IsDamned != null && IsDamned.Value != player.IsDamned)
+                return false;
+            if (ModelID > 0 && player.Model != ModelID)
+                return false;
             if (player.Reputation > Reputation)
                 return false;
 
-                // the player is doing this quest
-                if (player.QuestList.Any(q => q.Quest == this && q.Status == eQuestStatus.InProgress))
-                    return false;
-                var count = player.QuestListFinished.Count(q => q.Quest == this);
-                if (count >= MaxCount)
-                    return false;
+            // the player is doing this quest
+            if (player.QuestList.Any(q => q.Quest == this && q.Status == eQuestStatus.InProgress))
+                return false;
+            var count = player.QuestListFinished.Count(q => q.Quest == this);
+            if (count >= MaxCount)
+                return false;
             return true;
         }
 
@@ -192,6 +201,9 @@ namespace DOL.GS.Quests
             _db.MaxLevel = MaxLevel;
             _db.Reputation = Reputation.ToString();
             _db.IsRenaissance = IsRenaissance;
+            _db.IsDamned = IsDamned;
+            _db.IsChampion = IsChampion;
+            _db.ModelId = ModelID;
             _db.RewardMoney = RewardMoney;
             _db.RewardXP = RewardXP;
             _db.RewardCLXP = RewardCLXP;
@@ -250,6 +262,9 @@ namespace DOL.GS.Quests
             MaxLevel = db.MaxLevel;
             Reputation = int.Parse(db.Reputation == null || db.Reputation == "" ? "0" : db.Reputation);
             IsRenaissance = db.IsRenaissance;
+            IsChampion = db.IsChampion;
+            IsDamned = db.IsDamned;
+            ModelID = db.ModelId;
             QuestDependencyIDs = (db.QuestDependency ?? "").Split('|').Where(id => !string.IsNullOrWhiteSpace(id)).Select(id => int.Parse(id)).ToArray();
             AllowedClasses = (db.AllowedClasses ?? "").Split('|').Where(id => !string.IsNullOrWhiteSpace(id)).Select(id => (eCharacterClass)int.Parse(id)).ToArray();
             AllowedRaces = (db.AllowedRaces ?? "").Split('|').Where(id => !string.IsNullOrWhiteSpace(id)).Select(id => (eRace)int.Parse(id)).ToArray();

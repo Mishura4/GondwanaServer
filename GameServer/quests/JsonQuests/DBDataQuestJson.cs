@@ -44,6 +44,9 @@ namespace DOL.Database
         private string m_allowedClasses;
         private string m_allowedRaces;
         private bool m_isRenaissance;
+        private bool? m_isDamned;
+        private bool? m_isChampion;
+        private ushort m_modelId;
         private string m_reputation;
         private int m_rewardReputation;
 
@@ -270,6 +273,27 @@ namespace DOL.Database
         {
             get { return m_isRenaissance; }
             set { m_isRenaissance = value; Dirty = true; }
+        }
+
+        [DataElement(AllowDbNull = true)]
+        public bool? IsDamned
+        {
+            get { return m_isDamned; }
+            set { m_isDamned = value; Dirty = true; }
+        }
+
+        [DataElement(AllowDbNull = true)]
+        public bool? IsChampion
+        {
+            get { return m_isChampion; }
+            set { m_isChampion = value; Dirty = true; }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public ushort ModelId
+        {
+            get { return m_modelId; }
+            set { m_modelId = value; Dirty = true; }
         }
         /// <summary>
         /// Player Races that can do this quest.  Null for all.
