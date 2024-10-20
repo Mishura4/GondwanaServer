@@ -20,6 +20,7 @@ using System;
 using DOL.GS.PacketHandler;
 using DOL.GS.Spells;
 using DOL.Language;
+using System.Threading;
 
 namespace DOL.GS.Effects
 {
@@ -31,7 +32,7 @@ namespace DOL.GS.Effects
         /// <summary>
         /// The amount of times this effect started
         /// </summary>
-        protected volatile int m_startedCount;
+        protected int m_startedCount;
 
         /// <summary>
         /// Creates a new game spell effect
@@ -58,21 +59,30 @@ namespace DOL.GS.Effects
         /// <summary>
         /// Starts the timers for this effect
         /// </summary>
-        protected override void StartTimers()
+        protected override void StartDurationTimer()
         {
+            // Duration => 0 = endless until explicit stop
+            if (Duration == 0)
+                return;
+            
+            int duration = Duration;
             if (!IsExpired)
             {
-                int duration = Duration;
-                int startcount = m_startedCount;
+                int startcount = Interlocked.Add(ref m_startedCount, 1) - 1;
                 if (startcount > 0)
                 {
                     duration /= Math.Min(20, startcount * 2);
                     if (duration < 1) duration = 1;
                 }
-                Duration = duration;
-                m_startedCount++;
             }
-            base.StartTimers();
+            var now = GameTimer.GetTickCount();
+            var endTick = m_startedTick + duration;
+            var timeLeft = endTick - now;
+            if (m_startedTick != 0 && timeLeft > 0)
+            {
+                m_effectTimer = new RegionTimer(m_owner, ExpiredCallback);
+                m_effectTimer.Start((int)timeLeft);
+            }
         }
 
         /// <summary>

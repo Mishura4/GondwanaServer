@@ -91,13 +91,38 @@ namespace DOL.GS.Effects
         /// The effect duration in milliseconds
         /// </summary>
         protected int m_duration;
+
+
+        protected long m_startedTick = 0;
+        
         /// <summary>
         /// Duration of the spell effect in milliseconds
         /// </summary>
         public int Duration
         {
             get { return m_duration; }
-            protected set { m_duration = value; }
+            protected set
+            {
+                lock (m_LockObject)
+                {
+                    SetDurationUnlocked(value);
+                }
+            }
+        }
+
+        private void SetDurationUnlocked(int value)
+        {
+            if (m_effectTimer != null)
+            {
+                m_effectTimer.Stop();
+                m_effectTimer = null;
+            }
+            if (m_duration != value)
+            {
+                m_duration = value;
+                StartDurationTimer();
+                UpdateEffect();
+            }
         }
 
         /// <summary>
@@ -156,9 +181,9 @@ namespace DOL.GS.Effects
         /// <summary>
         /// The timer for pulsing effects
         /// </summary>
-        protected PulsingEffectTimer m_timer;
+        protected PulsingEffectTimer m_pulseTimer;
 
-        private long m_effectStartTick = 0;
+        protected GameTimer m_effectTimer;
 
         #endregion
 
@@ -230,13 +255,12 @@ namespace DOL.GS.Effects
                 if (Duration == 0)
                     return 0;
 
-                if (m_timer == null || !m_timer.IsAlive)
-                    return 0;
-
                 // We send this as an ushort, so make sure it doesn't overflow
-                return Math.Min(ushort.MaxValue * 1000, Duration - m_timer.TimeSinceStart);
+                return (int)Math.Min(ushort.MaxValue * 1000, m_effectTimer?.TimeUntilElapsed ?? 0);
             }
         }
+
+        public bool IsPermanent => Duration == 0;
 
         /// <summary>
         /// Spell thats used
@@ -257,7 +281,7 @@ namespace DOL.GS.Effects
         /// </summary>
         public bool ImmunityState
         {
-            get { return IsExpired && m_timer != null && m_timer.IsAlive; }
+            get { return IsExpired && m_startedTick > 0; }
         }
 
         #endregion
@@ -484,6 +508,7 @@ namespace DOL.GS.Effects
         /// <param name="target">the target</param>
         public virtual void Start(GameLiving target)
         {
+            m_startedTick = GameTimer.GetTickCount();
             AddEffect(target, true);
         }
 
@@ -537,9 +562,8 @@ namespace DOL.GS.Effects
                 {
                     if (!wasImmunity && m_immunityDuration > 0)
                     {
-                        Duration = m_immunityDuration;
-                        StartTimers();
-                        UpdateEffect();
+                        m_startedTick = GameTimer.GetTickCount();
+                        SetDurationUnlocked(m_immunityDuration);
                         return;
                     }
                 }
@@ -588,7 +612,6 @@ namespace DOL.GS.Effects
                 }
 
                 SpellHandler = effect.SpellHandler;
-                Duration = effect.Duration;
                 PulseFreq = effect.PulseFreq;
                 Effectiveness = effect.Effectiveness;
 
@@ -598,7 +621,7 @@ namespace DOL.GS.Effects
 
                 // Restart Effect
                 IsExpired = false;
-                StartTimers();
+                SetDurationUnlocked(effect.Duration);
             }
 
             // Try Enabling Effect
@@ -633,40 +656,56 @@ namespace DOL.GS.Effects
         /// <summary>
         /// Starts the timers for this effect
         /// </summary>
-        protected virtual void StartTimers()
+        protected void StartTimers()
         {
             StopTimers();
+            StartDurationTimer();
+            StartPulseTimer();
+        }
 
-            if (m_effectStartTick == 0)
-            {
-                m_effectStartTick = GameTimer.GetTickCount();
-            }
-
+        protected virtual void StartDurationTimer()
+        {
             // Duration => 0 = endless until explicit stop
-            if (Duration > 0 || PulseFreq > 0)
+            if (Duration == 0)
+                return;
+            
+            var now = GameTimer.GetTickCount();
+            var endTick = m_startedTick + Duration;
+            var timeLeft = endTick - now;
+            if (m_startedTick != 0 && timeLeft > 0)
             {
-                m_timer = new PulsingEffectTimer(this);
-                m_timer.Interval = PulseFreq;
-                m_timer.Start(PulseFreq == 0 ? Duration : PulseFreq);
+                m_effectTimer = new RegionTimer(m_owner, ExpiredCallback);
+                m_effectTimer.Start((int)timeLeft);
             }
         }
+
+        protected virtual void StartPulseTimer()
+        {
+            if (PulseFreq > 0)
+            {
+                m_pulseTimer = new PulsingEffectTimer(this);
+                m_pulseTimer.Interval = PulseFreq;
+                m_pulseTimer.Start(PulseFreq);
+            }
+        }
+        
 
         /// <summary>
         /// Stops the timers for this effect
         /// </summary>
         protected virtual void StopTimers()
         {
-            if (m_timer != null)
+            if (m_pulseTimer != null)
             {
-                m_timer.Stop();
-                m_timer = null;
+                m_pulseTimer.Stop();
+                m_pulseTimer = null;
             }
         }
 
         /// <summary>
         /// The callback method when the effect expires
         /// </summary>
-        protected virtual void ExpiredCallback()
+        protected virtual int ExpiredCallback(RegionTimer timer)
         {
             bool removeEffect = false;
             lock (m_LockObject)
@@ -679,6 +718,7 @@ namespace DOL.GS.Effects
                 RemoveEffect(false);
             else
                 Cancel(false);
+            return 0;
         }
 
         /// <summary>
@@ -708,27 +748,21 @@ namespace DOL.GS.Effects
 
                 long currentTime = GameTimer.GetTickCount();
 
-                if (m_effectStartTick == 0)
-                {
-                    m_effectStartTick = currentTime;
-                }
+                int elapsedTime = (int)(currentTime - m_startedTick);
+                int remainingTime = Duration - elapsedTime;
 
-                int elapsedTime = (int)(currentTime - m_effectStartTick);
-                int remainingTime = m_duration - elapsedTime;
-
-                int proposedTotalDuration = m_duration + additionalDuration;
+                int proposedTotalDuration = Duration + additionalDuration;
                 int cappedTotalDuration = maxDuration > 0 ? Math.Min(proposedTotalDuration, maxDuration) : proposedTotalDuration;
-                actualAddedDuration = cappedTotalDuration - m_duration;
+                actualAddedDuration = cappedTotalDuration - Duration;
 
                 if (actualAddedDuration <= 0)
                 {
                     actualAddedDuration = 0;
                 }
 
-                m_duration = cappedTotalDuration;
+                SetDurationUnlocked(cappedTotalDuration);
             }
 
-            UpdateEffect();
             return actualAddedDuration;
         }
 
@@ -799,11 +833,7 @@ namespace DOL.GS.Effects
         {
             lock (m_LockObject)
             {
-                if (m_timer != null)
-                {
-                    Duration = (int)Math.Max(1, Duration - (GameTimer.GetTickCount() - m_timer.LastStartedTick));
-                    StartTimers();
-                }
+                StartTimers();
             }
 
             UpdateEffect();
@@ -819,19 +849,6 @@ namespace DOL.GS.Effects
             /// The pulsing effect
             /// </summary>
             private readonly GameSpellEffect m_effect;
-
-            /// <summary>
-            /// The time in milliseconds since timer start
-            /// </summary>
-            private int m_timeSinceStart;
-
-            /// <summary>
-            /// Gets the effect remaining time, decreased every interval
-            /// </summary>
-            public int TimeSinceStart
-            {
-                get { return IsAlive ? m_timeSinceStart - TimeUntilElapsed : 0; }
-            }
 
             /// <summary>
             /// Get tick when effect Last Started.
@@ -865,7 +882,6 @@ namespace DOL.GS.Effects
             public override void Start(int initialDelay)
             {
                 base.Start(initialDelay);
-                m_timeSinceStart = initialDelay;
                 LastStartedTick = GameTimer.GetTickCount();
             }
 
@@ -874,17 +890,13 @@ namespace DOL.GS.Effects
             /// </summary>
             public override void OnTick()
             {
-                if (m_effect.Concentration > 0 || m_timeSinceStart < m_effect.Duration)
+                if (!m_effect.IsExpired)
                 {
-                    m_timeSinceStart += Interval;
-                    if (m_timeSinceStart > m_effect.Duration)
-                        Interval = m_timeSinceStart - m_effect.Duration;
                     m_effect.PulseCallback();
                 }
                 else
                 {
                     Stop();
-                    m_effect.ExpiredCallback();
                 }
             }
 
