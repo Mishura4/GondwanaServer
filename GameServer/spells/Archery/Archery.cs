@@ -199,48 +199,11 @@ namespace DOL.GS.Spells
         public override AttackData CalculateDamageToTarget(GameLiving target, double effectiveness)
         {
             AttackData ad = base.CalculateDamageToTarget(target, effectiveness);
-            var player = target as GamePlayer;
             GameSpellEffect bladeturn = FindEffectOnTarget(target, "Bladeturn");
             if (bladeturn != null)
             {
-                switch (Spell.LifeDrainReturn)
-                {
-                    case (int)eShotType.Critical:
-                        {
-                            if (player != null)
-                            {
-                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "SpellHandler.Archery.PenetrateBarrier"), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
-                            }
-                            ad.AttackResult = GameLiving.eAttackResult.HitUnstyled;
-                        }
-                        break;
-
-                    case (int)eShotType.Power:
-                        {
-                            if (player != null)
-                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "SpellHandler.Archery.PenetrateBarrier"), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
-                            ad.AttackResult = GameLiving.eAttackResult.HitUnstyled;
-                            bladeturn.Cancel(false);
-                        }
-                        break;
-
-                    case (int)eShotType.Other:
-                    default:
-                        {
-                            if (Caster is GamePlayer pl)
-                            {
-                                pl.Out.SendMessage(LanguageMgr.GetTranslation(pl.Client, "SpellHandler.Archery.StrikeAbsorbed"), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
-                            }
-                            if (target != null)
-                            {
-                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "SpellHandler.Archery.BlowAbsorbed"), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
-                            }
-                            ad.MissChance = 100;
-                            ad.AttackResult = GameLiving.eAttackResult.Missed;
-                            bladeturn.Cancel(false);
-                        }
-                        break;
-                }
+                if (BladeturnSpellHandler.BlockAttack(bladeturn, ad))
+                    return ad;
             }
 
             if (ad.AttackResult != GameLiving.eAttackResult.Missed)

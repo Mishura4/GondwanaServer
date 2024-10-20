@@ -3938,54 +3938,8 @@ namespace DOL.GS
             // "The blow penetrated the magical barrier!"
             if (bladeturn != null)
             {
-                bool penetrate = false;
-
-                if (stealthStyle)
-                    penetrate = true;
-
-                if (ad.Attacker.RangedAttackType == eRangedAttackType.Long // stealth styles pierce bladeturn
-                    || (ad.AttackType == AttackData.eAttackType.Ranged && ad.Target != bladeturn.SpellHandler.Caster && ad.Attacker is GamePlayer && ((GamePlayer)ad.Attacker).HasAbility(Abilities.PenetratingArrow)))  // penetrating arrow attack pierce bladeturn
-                    penetrate = true;
-
-                var missChance = (double)bladeturn.SpellHandler.Caster.EffectiveLevel / (double)ad.Attacker.EffectiveLevel;
-                if (ad.IsMeleeAttack && !Util.ChanceDouble(missChance))
-                    penetrate = true;
-
-                int chanceToKeep;
-
-
-                if (GameServer.ServerRules.IsPveOnlyBonus(eProperty.SpellPowerCost) && GameServer.ServerRules.IsPvPAction(ad.Attacker, this, false))
-                    chanceToKeep = 0;
-                else
-                    chanceToKeep = GetModified(eProperty.BladeturnReinforcement);
-                if (penetrate)
-                {
-                    ad.Target.SendTranslatedMessage("GameLiving.CalculateEnemyAttackResult.BlowPenetrated", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
-                    if (chanceToKeep > 0 && Util.Chance(chanceToKeep))
-                    {
-                        ad.Target.SendTranslatedMessage("GameLiving.CalculateEnemyAttackResult.BladeturnKept", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
-                    }
-                    else
-                    {
-                        bladeturn.Cancel(false);
-                    }
-                }
-                else
-                {
-                    SendTranslatedMessage("GameLiving.CalculateEnemyAttackResult.BlowAbsorbed", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
-                    ad.Attacker.SendTranslatedMessage("GameLiving.CalculateEnemyAttackResult.StrikeAbsorbed", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
-                    if (chanceToKeep > 0 && Util.Chance(chanceToKeep))
-                    {
-                        ad.Target.SendTranslatedMessage("GameLiving.CalculateEnemyAttackResult.BladeturnKept", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
-                    }
-                    else
-                    {
-                        bladeturn.Cancel(false);
-                    }
-                    Stealth(false);
-                    ad.MissChance = missChance;
+                if (BladeturnSpellHandler.ConsumeAttack(bladeturn, ad))
                     return eAttackResult.Missed;
-                }
             }
 
             if (this is GamePlayer && ((GamePlayer)this).IsOnHorse)

@@ -22,6 +22,7 @@ using DOL.GS.PacketHandler;
 using DOL.GS.Effects;
 using DOL.Language;
 using System.Numerics;
+using DOL.GS.Styles;
 
 namespace DOL.GS.Spells
 {
@@ -96,6 +97,85 @@ namespace DOL.GS.Spells
                 }
             }
             return 0;
+        }
+
+        public static bool BlockAttack(GameSpellEffect bladeturnEffect, AttackData ad)
+        {
+            if (bladeturnEffect.SpellHandler is not BladeturnSpellHandler)
+                return false;
+            
+            GamePlayer playerAttacker = ad.Attacker as GamePlayer;
+            bool penetrate = false;
+            bool consume = true;
+            double missChance = (double)bladeturnEffect.SpellHandler.Caster.EffectiveLevel / (double)ad.Attacker.EffectiveLevel;
+            if (ad is { Style.StealthRequirement: true, Attacker: GamePlayer } && StyleProcessor.CanUseStyle((GamePlayer)ad.Attacker, ad.Target, ad.Style, ad.Weapon)) // stealth styles pierce bladeturn
+            {
+                penetrate = true;
+            }
+            else
+            {
+                bool penetratingArrow = ad is { AttackType: AttackData.eAttackType.Ranged } && ad.Target != bladeturnEffect.SpellHandler.Caster && playerAttacker?.HasAbility(Abilities.PenetratingArrow) == true;
+                if (ad.Attacker.RangedAttackType == GameLiving.eRangedAttackType.Long
+                    || penetratingArrow ) // penetrating arrow attack pierce bladeturn
+                {
+                    penetrate = true;
+                }
+                else if (ad.IsMeleeAttack && !Util.ChanceDouble(missChance))
+                {
+                    penetrate = true;
+                }
+                else if (ad.SpellHandler is Archery)
+                {
+                    switch (ad.SpellHandler.Spell.LifeDrainReturn)
+                    {
+                        case (int)Archery.eShotType.Critical:
+                            // Crits penetrate but do not consume the effect (https://github.com/DOL-Avalonia/GondwanaServer/blob/6302afd11387bedcb06c1e296296258c2b6e8767/GameServer/spells/Archery/Archery.cs#L214)
+                            penetrate = true;
+                            consume = false;
+                            break;
+                        
+                        case (int)Archery.eShotType.Power:
+                            penetrate = true;
+                            consume = true;
+                            break;
+                        
+                        default:
+                            penetrate = false;
+                            consume = true;
+                            break;
+                    }
+                }
+            }
+
+            GamePlayer playerOwner = bladeturnEffect.Owner as GamePlayer;
+            if (penetrate)
+            {
+                playerAttacker?.SendTranslatedMessage("SpellHandler.Archery.PenetrateBarrier", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
+            }
+            else
+            {
+                playerAttacker?.SendTranslatedMessage("SpellHandler.Archery.StrikeAbsorbed", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
+                playerOwner?.SendTranslatedMessage("SpellHandler.Archery.BlowAbsorbed", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
+                ad.AttackResult = GameLiving.eAttackResult.Missed;
+                ad.MissChance = missChance;
+            }
+
+            if (consume && !GameServer.ServerRules.IsPveOnlyBonus(eProperty.BladeturnReinforcement) || !GameServer.ServerRules.IsPvPAction(ad.Attacker, ad.Target, false))
+            {
+                int chanceToKeep = bladeturnEffect.Owner.GetModified(eProperty.BladeturnReinforcement);
+                if (chanceToKeep > 0 && Util.Chance(chanceToKeep))
+                {
+                    playerOwner?.SendTranslatedMessage("GameLiving.CalculateEnemyAttackResult.BladeturnKept", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
+                    consume = false;
+                }
+            }
+
+            if (consume)
+            {
+                bladeturnEffect.Cancel(false);
+                bladeturnEffect.Owner.Stealth(false);
+            }
+            return !penetrate;
         }
 
         public override PlayerXEffect GetSavedEffect(GameSpellEffect e)
