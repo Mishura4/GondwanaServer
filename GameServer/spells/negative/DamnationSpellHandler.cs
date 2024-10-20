@@ -180,19 +180,6 @@ namespace DOL.GS.Spells
             }
         }
 
-        private void ApplyBuffs(GameLiving living)
-        {
-            living.BaseBuffBonusCategory[eProperty.Resist_Body] += BodyBuff;
-            living.BaseBuffBonusCategory[eProperty.Resist_Matter] += MatterBuff;
-            living.BaseBuffBonusCategory[eProperty.Resist_Slash] += SlashBuff;
-            living.BaseBuffBonusCategory[eProperty.Resist_Crush] += CrushBuff;
-
-            if (living is GamePlayer player)
-            {
-                player.Out.SendCharResistsUpdate();
-            }
-        }
-
         private void RemoveDebuffs(GameLiving living)
         {
             living.DebuffCategory[eProperty.Resist_Heat] -= HeatDebuff;
@@ -200,6 +187,19 @@ namespace DOL.GS.Spells
             living.DebuffCategory[eProperty.Resist_Thrust] -= ThrustDebuff;
             living.DebuffCategory[eProperty.Resist_Spirit] -= SpiritDebuff;
             living.DebuffCategory[eProperty.Resist_Energy] -= EnergyDebuff;
+
+            if (living is GamePlayer player)
+            {
+                player.Out.SendCharResistsUpdate();
+            }
+        }
+
+        private void ApplyBuffs(GameLiving living)
+        {
+            living.BaseBuffBonusCategory[eProperty.Resist_Body] += BodyBuff;
+            living.BaseBuffBonusCategory[eProperty.Resist_Matter] += MatterBuff;
+            living.BaseBuffBonusCategory[eProperty.Resist_Slash] += SlashBuff;
+            living.BaseBuffBonusCategory[eProperty.Resist_Crush] += CrushBuff;
 
             if (living is GamePlayer player)
             {

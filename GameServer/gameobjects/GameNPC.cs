@@ -4582,7 +4582,6 @@ namespace DOL.GS
 
                         if (actualAddedDuration != 0)
                         {
-                            damnationEffect.AddRemainingTime(additionalDuration);
                             killerPlayer.Out.SendMessage(LanguageMgr.GetTranslation(killerPlayer.Client.Account.Language, "Damnation.Kill.DurationExtended", (additionalDuration / 1000)), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
                         }
 
