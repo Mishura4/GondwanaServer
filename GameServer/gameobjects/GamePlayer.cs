@@ -6192,7 +6192,7 @@ namespace DOL.GS
         /// Decides which style living will use in this moment
         /// </summary>
         /// <returns>Style to use or null if none</returns>
-        protected override Style GetStyleToUse()
+        protected override Style GetStyleToUse(GameObject target)
         {
             InventoryItem weapon;
             if (NextCombatStyle == null) return null;
@@ -6200,7 +6200,7 @@ namespace DOL.GS
                 weapon = Inventory.GetItem(eInventorySlot.LeftHandWeapon);
             else weapon = AttackWeapon;
 
-            if (StyleProcessor.CanUseStyle(this, NextCombatStyle, weapon))
+            if (StyleProcessor.CanUseStyle(this, target, NextCombatStyle, weapon))
                 return NextCombatStyle;
 
             if (NextCombatBackupStyle == null) return NextCombatStyle;
@@ -7292,7 +7292,7 @@ namespace DOL.GS
         /// <param name="style"></param>
         public virtual void ExecuteWeaponStyle(Style style)
         {
-            StyleProcessor.TryToUseStyle(this, style);
+            StyleProcessor.TryToUseStyle(this, TargetObject, style);
         }
 
         /// <summary>
@@ -7356,13 +7356,13 @@ namespace DOL.GS
                 
             InventoryItem weapon = AttackWeapon;
                 
-            if (!StyleProcessor.CanUseStyle(this, CounterAttackStyle, weapon))
+            if (!StyleProcessor.CanUseStyle(this, attacker, CounterAttackStyle, weapon))
             {
                 Out.SendMessage(LanguageMgr.GetTranslation(Client, "GameObjects.GamePlayer.Attack.CounterAttackInvalidWeap"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;
             }
 
-            if (!AttackState && StyleProcessor.CanUseStyle(this, CounterAttackStyle, weapon) && CounterAttackStyle != null)
+            if (!AttackState && StyleProcessor.CanUseStyle(this, attacker, CounterAttackStyle, weapon) && CounterAttackStyle != null)
             {
                 StartAttack(attacker);
             }
@@ -7714,7 +7714,7 @@ namespace DOL.GS
                 if (item == null)
                     return;
 
-                if (this.isInBG || this.IsInPvP || this.IsInRvR)
+                if (!(GameServer.ServerRules.IsPveOnlyBonus(eProperty.PieceAblative) && GameServer.ServerRules.IsPvPAction(attackData.Attacker, attackData.Target)))
                     return;
 
                 int chanceToAblate = GetModified(eProperty.PieceAblative);
@@ -9275,7 +9275,7 @@ namespace DOL.GS
                 if (style == null) style = SkillBase.GetStyleByID((int)spell.Value, 0);
                 if (style != null)
                 {
-                    StyleProcessor.TryToUseStyle(this, style);
+                    StyleProcessor.TryToUseStyle(this, TargetObject, style);
                 }
                 else { Out.SendMessage("That style is not implemented!", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow); }
             }

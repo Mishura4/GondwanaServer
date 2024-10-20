@@ -437,6 +437,25 @@ namespace DOL.GS.ServerRules
         bool IsInPvPArea(GamePlayer player);
 
         /// <summary>
+        /// Is this PvP? Used for ToA bonuses
+        /// </summary>
+        /// <param name="attacker"></param>
+        /// <param name="defender"></param>
+        /// <param name="friendly"></param>
+        /// <returns></returns>
+        bool IsPvPAction(GameLiving attacker, GameObject defender, bool friendly = false);
+
+        /// <summary>
+        /// Is this property enabled in this context?
+        /// </summary>
+        /// <param name="property"></param>
+        /// <param name="attacker"></param>
+        /// <param name="defender"></param>
+        /// <param name="friendlyAction"></param>
+        /// <returns></returns>
+        bool IsPveOnlyBonus(eProperty property);
+
+        /// <summary>
         /// Is this GameObject able to put players in jail 
         /// </summary>
         /// <param name="obj">The object to check</param>

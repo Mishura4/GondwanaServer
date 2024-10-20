@@ -2339,6 +2339,49 @@ namespace DOL.GS.ServerRules
                    player.CurrentZone.AllowReputation;
         }
 
+        public virtual bool IsPvPAction(GameLiving attacker, GameObject defender, bool friendly)
+        {
+            if (defender is not GameLiving livingDefender)
+            {
+                return attacker is GamePlayer playerAttacker && IsInPvPArea(playerAttacker);
+            }
+            else if (attacker is null)
+            {
+                return defender is GamePlayer playerDefender && IsInPvPArea(playerDefender);
+            }
+            else
+            {
+                if (attacker.GetController() is GamePlayer playerAttacker)
+                {
+                    if (livingDefender.GetController() is GamePlayer playerDefender)
+                    {
+                        return !friendly || playerDefender.InCombatPvP || playerDefender.InCombatPvP || IsInPvPArea(playerDefender);
+                    }
+                    return IsInPvPArea(playerAttacker);
+                }
+                else if (livingDefender.GetController() is GamePlayer playerDefender)
+                {
+                    return IsInPvPArea(playerDefender);
+                }
+            }
+            return false;
+        }
+
+        public virtual bool IsPveOnlyBonus(eProperty property)
+        {
+            switch (property)
+            {
+                case eProperty.BladeturnReinforcement:
+                case eProperty.DefensiveBonus:
+                case eProperty.StyleCostReduction:
+                case eProperty.SpellPowerCost:
+                case eProperty.NegativeReduction:
+                case eProperty.PieceAblative:
+                    return ServerProperties.Properties.ENABLE_LIVE_PVEONLY_BONUSES_PVP;
+            }
+            return true;
+        }
+
         /// <summary>
         /// Is this GameObject able to put players in jail
         /// </summary>

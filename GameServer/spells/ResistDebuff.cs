@@ -40,7 +40,8 @@ namespace DOL.GS.Spells
             double duration = Spell.Duration;
 
             duration *= (1.0 + m_caster.GetModified(eProperty.SpellDuration) * 0.01);
-            duration *= (1.0 - target.GetModified(eProperty.NegativeReduction) * 0.01);
+            if (!(GameServer.ServerRules.IsPveOnlyBonus(eProperty.NegativeReduction) && GameServer.ServerRules.IsPvPAction(Caster, target)))
+                duration *= (1.0 - target.GetModified(eProperty.NegativeReduction) * 0.01);
             duration -= duration * target.GetResist(m_spell.DamageType) * 0.01;
 
             if (target is GamePlayer { Guild: not null } targetPlayer)

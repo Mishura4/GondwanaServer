@@ -782,7 +782,7 @@ namespace DOL.GS
         /// Decides which style living will use in this moment
         /// </summary>
         /// <returns>Style to use or null if none</returns>
-        protected virtual Style GetStyleToUse()
+        protected virtual Style GetStyleToUse(GameObject target)
         {
             InventoryItem weapon;
             if (NextCombatStyle == null) return null;
@@ -790,7 +790,7 @@ namespace DOL.GS
                 weapon = Inventory.GetItem(eInventorySlot.LeftHandWeapon);
             else weapon = AttackWeapon;
 
-            if (StyleProcessor.CanUseStyle(this, NextCombatStyle, weapon))
+            if (StyleProcessor.CanUseStyle(this, target, NextCombatStyle, weapon))
                 return NextCombatStyle;
 
             if (NextCombatBackupStyle == null) return NextCombatStyle;
@@ -2189,12 +2189,12 @@ namespace DOL.GS
                 
             InventoryItem weapon = AttackWeapon;
                 
-            if (!StyleProcessor.CanUseStyle(this, CounterAttackStyle, weapon))
+            if (!StyleProcessor.CanUseStyle(this, attacker, CounterAttackStyle, weapon))
             {
                 return;
             }
 
-            if (!AttackState && StyleProcessor.CanUseStyle(this, CounterAttackStyle, weapon))
+            if (!AttackState && StyleProcessor.CanUseStyle(this, attacker, CounterAttackStyle, weapon))
             {
                 StartAttack(attacker);
             }
@@ -2609,7 +2609,7 @@ namespace DOL.GS
                         return; //Don't start the attack if the last one fumbled
                     }
 
-                    combatStyle = owner.GetStyleToUse();
+                    combatStyle = owner.GetStyleToUse(attackTarget);
                     if (combatStyle != null && combatStyle.WeaponTypeRequirement == (int)eObjectType.Shield)
                     {
                         attackWeapon = leftWeapon;
@@ -3585,7 +3585,7 @@ namespace DOL.GS
             this.Notify(GameLivingEvent.IncomingAttack, this, new IncomingAttackEventArgs(ad));
 
             bool stealthStyle = false;
-            if (ad.Style != null && ad.Style.StealthRequirement && ad.Attacker is GamePlayer && StyleProcessor.CanUseStyle((GamePlayer)ad.Attacker, ad.Style, weapon))
+            if (ad.Style != null && ad.Style.StealthRequirement && ad.Attacker is GamePlayer && StyleProcessor.CanUseStyle((GamePlayer)ad.Attacker, ad.Target, ad.Style, weapon))
             {
                 stealthStyle = true;
                 defenseDisabled = true;
@@ -3829,8 +3829,10 @@ namespace DOL.GS
             if (ad.MissChance == null)
             {
                 int missrate = (ad.Attacker is GamePlayer) ? 20 : 25; //player vs player tests show 20% miss on any level
-                missrate -= ad.Attacker.GetModified(eProperty.ToHitBonus);
-                missrate += ad.Target.GetModified(eProperty.DefensiveBonus);
+                if (!(GameServer.ServerRules.IsPveOnlyBonus(eProperty.ToHitBonus) && GameServer.ServerRules.IsPvPAction(ad.Attacker, this)))
+                    missrate -= ad.Attacker.GetModified(eProperty.ToHitBonus);
+                if (!(GameServer.ServerRules.IsPveOnlyBonus(eProperty.DefensiveBonus) && GameServer.ServerRules.IsPvPAction(ad.Attacker, this)))
+                    missrate += ad.Target.GetModified(eProperty.DefensiveBonus);
                 if (ad.IsPVP)
                 {
                     missrate = (int)(missrate * ServerProperties.Properties.PVP_BASE_MISS_MULTIPLIER);
@@ -3949,11 +3951,17 @@ namespace DOL.GS
                 if (ad.IsMeleeAttack && !Util.ChanceDouble(missChance))
                     penetrate = true;
 
-                var chanceToKeep = GetModified(eProperty.BladeturnReinforcement);
+                int chanceToKeep;
+
+
+                if (GameServer.ServerRules.IsPveOnlyBonus(eProperty.SpellPowerCost) && GameServer.ServerRules.IsPvPAction(ad.Attacker, this, false))
+                    chanceToKeep = 0;
+                else
+                    chanceToKeep = GetModified(eProperty.BladeturnReinforcement);
                 if (penetrate)
                 {
                     ad.Target.SendTranslatedMessage("GameLiving.CalculateEnemyAttackResult.BlowPenetrated", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
-                    if (ad.IsPVE && chanceToKeep > 0 && Util.Chance(chanceToKeep))
+                    if (chanceToKeep > 0 && Util.Chance(chanceToKeep))
                     {
                         ad.Target.SendTranslatedMessage("GameLiving.CalculateEnemyAttackResult.BladeturnKept", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
                     }
@@ -3966,7 +3974,7 @@ namespace DOL.GS
                 {
                     SendTranslatedMessage("GameLiving.CalculateEnemyAttackResult.BlowAbsorbed", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
                     ad.Attacker.SendTranslatedMessage("GameLiving.CalculateEnemyAttackResult.StrikeAbsorbed", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
-                    if (ad.IsPVE && chanceToKeep > 0 && Util.Chance(chanceToKeep))
+                    if (chanceToKeep > 0 && Util.Chance(chanceToKeep))
                     {
                         ad.Target.SendTranslatedMessage("GameLiving.CalculateEnemyAttackResult.BladeturnKept", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
                     }

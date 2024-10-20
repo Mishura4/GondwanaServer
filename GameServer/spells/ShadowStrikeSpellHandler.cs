@@ -33,7 +33,7 @@ namespace DOL.GS.Spells
             // use style
 
             Style style = new Style(GameServer.Database.SelectObjects<DBStyle>(DB.Column("StyleID").IsEqualTo(968))[0]);
-            StyleProcessor.TryToUseStyle(Caster, style);
+            StyleProcessor.TryToUseStyle(Caster, target, style);
         }
 
         public override bool CastSpell(GameLiving target)

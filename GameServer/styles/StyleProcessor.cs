@@ -28,7 +28,7 @@ using DOL.GS.Keeps;
 using DOL.GS.PacketHandler;
 using DOL.GS.Spells;
 using DOL.GS.Effects;
-
+using DOL.GS.ServerProperties;
 using log4net;
 
 namespace DOL.GS.Styles
@@ -52,7 +52,7 @@ namespace DOL.GS.Styles
         /// <param name="style">The style to execute</param>
         /// <param name="weapon">The weapon used to execute the style</param>
         /// <returns>true if the player can execute the style right now, false if not</returns>
-        public static bool CanUseStyle(GameLiving living, Style style, InventoryItem weapon)
+        public static bool CanUseStyle(GameLiving living, GameObject target, Style style, InventoryItem weapon)
         {
             //First thing in processors, lock the objects you modify
             //This way it makes sure the objects are not modified by
@@ -64,8 +64,7 @@ namespace DOL.GS.Styles
                     return true;
                 }
 
-                GameLiving target = living.TargetObject as GameLiving;
-                if (target == null) return false;
+                if (target is not GameLiving livingTarget) return false;
 
                 //Required attack result
                 GameLiving.eAttackResult requiredAttackResult = GameLiving.eAttackResult.Any;
@@ -110,7 +109,7 @@ namespace DOL.GS.Styles
                         break;
 
                     case Style.eOpening.Defensive:
-                        AttackData targetsLastAD = (AttackData)target.TempProperties.getProperty<object>(GameLiving.LAST_ATTACK_DATA, null);
+                        AttackData targetsLastAD = (AttackData)livingTarget.TempProperties.getProperty<object>(GameLiving.LAST_ATTACK_DATA, null);
 
                         //Last attack result
                         if (requiredAttackResult != GameLiving.eAttackResult.Any)
@@ -188,7 +187,7 @@ namespace DOL.GS.Styles
         /// </summary>
         /// <param name="living">The living to execute the style</param>
         /// <param name="style">The style to execute</param>
-        public static void TryToUseStyle(GameLiving living, Style style)
+        public static void TryToUseStyle(GameLiving living, GameObject target, Style style)
         {
             //First thing in processors, lock the objects you modify
             //This way it makes sure the objects are not modified by
@@ -217,18 +216,18 @@ namespace DOL.GS.Styles
                     return;
                 }
 
-                //Put player into attack state before setting the styles
-                //Changing the attack state clears out the styles...
-                if (living.AttackState == false)
-                {
-                    living.StartAttack(player.TargetObject);
-                }
-
-                if (living.TargetObject == null)
+                if (target == null)
                 {
                     if (player != null)
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "StyleProcessor.TryToUseStyle.MustHaveTarget"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     return;
+                }
+
+                //Put player into attack state before setting the styles
+                //Changing the attack state clears out the styles...
+                if (living.AttackState == false)
+                {
+                    living.StartAttack(target);
                 }
 
                 InventoryItem weapon = (style.WeaponTypeRequirement == (int)eObjectType.Shield) ? living.Inventory.GetItem(eInventorySlot.LeftHandWeapon) : living.AttackWeapon;
@@ -245,7 +244,7 @@ namespace DOL.GS.Styles
                     return;
                 }
 
-                int fatCost = CalculateEnduranceCost(living, style, weapon != null ? weapon.SPD_ABS : 40);
+                int fatCost = CalculateEnduranceCost(living, target, style, weapon != null ? weapon.SPD_ABS : 40);
                 if (living.Endurance < fatCost)
                 {
                     if (player != null)
@@ -369,7 +368,7 @@ namespace DOL.GS.Styles
                 {
                     attackData.AnimationId = (weapon.Hand != 1) ? attackData.Style.Icon : attackData.Style.TwoHandAnimation; // 2h shield?
                 }
-                int fatCost = CalculateEnduranceCost(living, attackData.Style, weapon?.SPD_ABS ?? 40);
+                int fatCost = CalculateEnduranceCost(living, attackData.Target, attackData.Style, weapon?.SPD_ABS ?? 40);
 
                 //Reduce endurance if styled attack missed
                 switch (attackData.AttackResult)
@@ -388,7 +387,7 @@ namespace DOL.GS.Styles
                     return false;
 
                 //Did primary and backup style fail?
-                if (!CanUseStyle(living, attackData.Style, weapon))
+                if (!CanUseStyle(living, attackData.Target, attackData.Style, weapon))
                 {
                     if (player != null)
                     {
@@ -532,10 +531,11 @@ namespace DOL.GS.Styles
         /// Calculates endurance needed to use style
         /// </summary>
         /// <param name="living">The living doing the style</param>
+        /// <param name="target">The target to do the style against</param>
         /// <param name="style">The style to be used</param>
         /// <param name="weaponSpd">The weapon speed</param>
         /// <returns>Endurance needed to use style</returns>
-        public static int CalculateEnduranceCost(GameLiving living, Style style, int weaponSpd)
+        public static int CalculateEnduranceCost(GameLiving living, GameObject target, Style style, int weaponSpd)
         {
 
             //[StephenxPimentel]
@@ -554,7 +554,11 @@ namespace DOL.GS.Styles
                 fatCost++;
 
             double factor = living.GetModified(eProperty.FatigueConsumption) * 0.01;
-            factor -= living.GetModified(eProperty.StyleCostReduction) * 0.01;
+            
+            if (!(GameServer.ServerRules.IsPveOnlyBonus(eProperty.StyleCostReduction) && GameServer.ServerRules.IsPvPAction(living, target, false)))
+            {
+                factor -= living.GetModified(eProperty.StyleCostReduction) * 0.01;
+            }
             fatCost = (int)Math.Ceiling(fatCost * factor);
             return Math.Max(1, fatCost);
         }

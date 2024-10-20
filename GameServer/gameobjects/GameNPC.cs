@@ -5695,14 +5695,14 @@ namespace DOL.GS
         /// Picks a style, prioritizing reactives an	d chains over positionals and anytimes
         /// </summary>
         /// <returns>Selected style</returns>
-        protected override Style GetStyleToUse()
+        protected override Style GetStyleToUse(GameObject target)
         {
             if (m_styles == null || m_styles.Count < 1 || TargetObject == null)
                 return null;
 
             if (StylesStealth != null && StylesStealth.Count > 0 && IsStealthed)
                 foreach (Style s in StylesStealth)
-                    if (StyleProcessor.CanUseStyle(this, s, AttackWeapon))
+                    if (StyleProcessor.CanUseStyle(this, target, s, AttackWeapon))
                         return s;
 
             // Chain and defensive styles skip the GAMENPC_CHANCES_TO_STYLE,
@@ -5711,12 +5711,12 @@ namespace DOL.GS
             //	2% of the time, and a chain from it only happens 0.4% of the time.
             if (StylesChain != null && StylesChain.Count > 0)
                 foreach (Style s in StylesChain)
-                    if (StyleProcessor.CanUseStyle(this, s, AttackWeapon))
+                    if (StyleProcessor.CanUseStyle(this, target, s, AttackWeapon))
                         return s;
 
             if (StylesDefensive != null && StylesDefensive.Count > 0)
                 foreach (Style s in StylesDefensive)
-                    if (StyleProcessor.CanUseStyle(this, s, AttackWeapon)
+                    if (StyleProcessor.CanUseStyle(this, target, s, AttackWeapon)
                         && CheckStyleStun(s)) // Make sure we don't spam stun styles like Brutalize
                         return s;
 
@@ -5728,21 +5728,21 @@ namespace DOL.GS
                 if (StylesBack != null && StylesBack.Count > 0)
                 {
                     Style s = StylesBack[Util.Random(0, StylesBack.Count - 1)];
-                    if (StyleProcessor.CanUseStyle(this, s, AttackWeapon))
+                    if (StyleProcessor.CanUseStyle(this, target, s, AttackWeapon))
                         return s;
                 }
 
                 if (StylesSide != null && StylesSide.Count > 0)
                 {
                     Style s = StylesSide[Util.Random(0, StylesSide.Count - 1)];
-                    if (StyleProcessor.CanUseStyle(this, s, AttackWeapon))
+                    if (StyleProcessor.CanUseStyle(this, target, s, AttackWeapon))
                         return s;
                 }
 
                 if (StylesFront != null && StylesFront.Count > 0)
                 {
                     Style s = StylesFront[Util.Random(0, StylesFront.Count - 1)];
-                    if (StyleProcessor.CanUseStyle(this, s, AttackWeapon))
+                    if (StyleProcessor.CanUseStyle(this, target, s, AttackWeapon))
                         return s;
                 }
 

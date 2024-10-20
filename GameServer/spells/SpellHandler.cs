@@ -37,6 +37,7 @@ using DOL.gameobjects.CustomNPC;
 using System.Numerics;
 using static DOL.GS.GameTimer;
 using DOL.GS.Scripts;
+using DOL.GS.ServerRules;
 using DOL.Territories;
 using static Grpc.Core.Metadata;
 
@@ -1636,7 +1637,10 @@ namespace DOL.GS.Spells
                 power -= basepower * specBonus;
             }
 
-            power *= Caster.GetModified(eProperty.SpellPowerCost) * 0.01;
+            if (!(GameServer.ServerRules.IsPveOnlyBonus(eProperty.SpellPowerCost) && GameServer.ServerRules.IsPvPAction(Caster, target, !Spell.IsHarmful)))
+            {
+                power *= Caster.GetModified(eProperty.SpellPowerCost) * 0.01;
+            }
             
             // doubled power usage if quickcasting
             if (Caster.EffectList.GetOfType<QuickCastEffect>() != null && Spell.CastTime > 0)
@@ -2756,7 +2760,8 @@ namespace DOL.GS.Spells
 
             if (Spell.IsHarmful && !Spell.SpellType.ToLower().StartsWith("style"))
             {
-                duration *= (1.0 - target.GetModified(eProperty.NegativeReduction) * 0.01);
+                if (!(GameServer.ServerRules.IsPveOnlyBonus(eProperty.NegativeReduction) && GameServer.ServerRules.IsPvPAction(Caster, target)))
+                    duration *= (1.0 - target.GetModified(eProperty.NegativeReduction) * 0.01);
             }
 
             duration *= effectiveness;
@@ -3967,7 +3972,9 @@ namespace DOL.GS.Spells
             - Tolakram
              */
 
-            int missrate = 15 + target.GetModified(eProperty.DefensiveBonus);
+            int missrate = 15;
+            if (!(GameServer.ServerRules.IsPveOnlyBonus(eProperty.DefensiveBonus) && GameServer.ServerRules.IsPvPAction(Caster, target)))
+                missrate += target.GetModified(eProperty.DefensiveBonus);
             if (caster is GamePlayer && target is GamePlayer)
             {
                 missrate = (int)(missrate * ServerProperties.Properties.PVP_BASE_MISS_MULTIPLIER);

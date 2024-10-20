@@ -1692,6 +1692,12 @@ namespace DOL.GS.ServerProperties
         /// </summary>
         [ServerProperty("system", "player_head_cooldown_seconds", "The time in seconds before a player can drop another head after dropping one", 300)]
         public static int PLAYER_HEAD_DROP_COOLDOWN_SECONDS;
+
+        /// <summary>
+        /// The time in seconds before a player can drop another head after dropping one
+        /// </summary>
+        [ServerProperty("pvp", "enable_live_pveonly_bonuses_pvp", "Whether to allow normally PVE only bonuses in PVP", false)]
+        public static bool ENABLE_LIVE_PVEONLY_BONUSES_PVP;
         #endregion
 
         #region KEEPS
@@ -2297,7 +2303,6 @@ namespace DOL.GS.ServerProperties
         /// </summary>
         [ServerProperty("pve", "pve_con_loss_level", "Which level should players killed in PvE start losing constitution?", (byte)6)]
         public static byte PVE_CON_LOSS_LEVEL;
-
         #endregion
 
         #region HOUSING

@@ -66,7 +66,8 @@ namespace DOL.GS.Spells
         protected override int CalculateEffectDuration(GameLiving target, double effectiveness)
         {
             double duration = Spell.Duration;
-            duration *= (1.0 - target.GetModified(eProperty.NegativeReduction) * 0.01);
+            if (!(GameServer.ServerRules.IsPveOnlyBonus(eProperty.NegativeReduction) && GameServer.ServerRules.IsPvPAction(Caster, target)))
+                duration *= (1.0 - target.GetModified(eProperty.NegativeReduction) * 0.01);
             duration *= (target.GetModified(eProperty.MythicalCrowdDuration) * 0.01);
             duration *= (target.GetModified(eProperty.SpeedDecreaseDuration) * 0.01);
 
