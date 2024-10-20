@@ -46,9 +46,16 @@ namespace DOL.GS.GameEvents
                         // Ignore kills on Outlaws
                         return;
                     }
+                    
                     if (playerKiller.Client.Account.PrivLevel > 1)
                     {
                         // If killer is GM, let go
+                        return;
+                    }
+
+                    if (playerKiller.IsDamned)
+                    {
+                        // Damned players are allowed to kill players
                         return;
                     }
 
