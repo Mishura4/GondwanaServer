@@ -233,7 +233,8 @@ namespace DOL.GS.Effects
                 if (m_timer == null || !m_timer.IsAlive)
                     return 0;
 
-                return Duration - m_timer.TimeSinceStart;
+                // We send this as an ushort, so make sure it doesn't overflow
+                return Math.Min(ushort.MaxValue * 1000, Duration - m_timer.TimeSinceStart);
             }
         }
 
@@ -725,23 +726,6 @@ namespace DOL.GS.Effects
                 }
 
                 m_duration = cappedTotalDuration;
-                remainingTime = m_duration - elapsedTime;
-
-                if (remainingTime > 0)
-                {
-                    if (m_timer != null)
-                    {
-                        m_timer.Change(remainingTime);
-                    }
-                    else
-                    {
-                        StartTimers();
-                    }
-                }
-                else
-                {
-                    ExpiredCallback();
-                }
             }
 
             UpdateEffect();
