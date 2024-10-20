@@ -55,11 +55,6 @@ namespace DOL.GS.Scripts
         private Timer activationTimer;
         public int ActivatedDuration { get; set; }
 
-        public static void Init(DOLEvent e, object sender, EventArgs args)
-        {
-            GameEventMgr.AddHandler(SwitchEvent.SwitchActivated, new DOLEventHandler(new SwitchEventHandler().Notify));
-        }
-
         private void ShowSecondaryModel()
         {
             if (SecondaryModel > 0 && IsSwitch)
@@ -95,8 +90,9 @@ namespace DOL.GS.Scripts
         {
             get { return m_Items; }
         }
-
-        public static List<GameCoffre> Coffres;
+        
+        public static readonly Dictionary<string, List<GameCoffre>> ChestsByFamily = new();
+        public static readonly Dictionary<string, List<GameCoffre>> ChestsByName = new(); // Do we really need this? That's a lot of maintenance for one command... (/chest respawn)
 
         private int m_ItemChance;
         /// <summary>
@@ -270,16 +266,57 @@ namespace DOL.GS.Scripts
         }
         #endregion
 
+
+        private class ChestComparer : IComparer<GameCoffre>
+        {
+            public int Compare(GameCoffre x, GameCoffre y)
+            {
+                if (ReferenceEquals(x, y))
+                    return 0;
+                if (y is null)
+                    return 1;
+                if (x is null)
+                    return -1;
+                return x.SwitchOrder.CompareTo(y.SwitchOrder);
+            }
+        }
+
         public override bool AddToWorld()
         {
             base.AddToWorld();
 
-            if (Coffres == null)
+            lock (ChestsByName)
             {
-                Coffres = new List<GameCoffre>();
+                if (!ChestsByName.TryGetValue(Name, out List<GameCoffre> list))
+                {
+                    list = new List<GameCoffre>(){ this };
+                    ChestsByName[Name] = list;
+                }
+                else
+                {
+                    list.Add(this);
+                }
             }
 
-            Coffres.Add(this);
+            if (!string.IsNullOrEmpty(SwitchFamily))
+            {
+                lock (ChestsByFamily)
+                {
+                    if (!ChestsByFamily.TryGetValue(SwitchFamily, out List<GameCoffre> list))
+                    {
+                        list = new List<GameCoffre>(){ this };
+                        ChestsByFamily[SwitchFamily] = list;
+                    }
+                    else
+                    {
+                        int where = int.Abs(list.BinarySearch(this, new ChestComparer()));
+                        if (where <= list.Count)
+                            list.Insert(where, this);
+                        else
+                            list.Add(this);
+                    }
+                }
+            }
 
             if (PickOnTouch)
             {
@@ -300,7 +337,21 @@ namespace DOL.GS.Scripts
                 proximityTimer = null;
             }
 
-            Coffres.Remove(this);
+            lock (ChestsByFamily)
+            {
+                if (ChestsByFamily.TryGetValue(SwitchFamily, out List<GameCoffre> list))
+                {
+                    list.Remove(this);
+                }
+            }
+
+            lock (ChestsByName)
+            {
+                if (ChestsByName.TryGetValue(Name, out List<GameCoffre> list))
+                {
+                    list.Remove(this);
+                }
+            }
             return base.RemoveFromWorld();
         }
 
@@ -387,9 +438,28 @@ namespace DOL.GS.Scripts
         {
             if (!IsSwitch || isActivated) return;
 
-            var switchesInFamily = Coffres.Where(c => c.SwitchFamily == SwitchFamily).OrderBy(c => c.SwitchOrder).ToList();
-            int currentIndex = switchesInFamily.IndexOf(this);
+            List<GameCoffre> switchesInFamily;
 
+            if (string.IsNullOrEmpty(SwitchFamily))
+            {
+                switchesInFamily = new List<GameCoffre>(){ this };
+            }
+            else
+            {
+                lock (ChestsByFamily)
+                {
+                    if (ChestsByFamily.TryGetValue(SwitchFamily, out List<GameCoffre> list))
+                    {
+                        switchesInFamily = list;
+                    }
+                    else
+                    {
+                        switchesInFamily = new List<GameCoffre>() { this };
+                    }
+                }
+            }
+
+            int currentIndex = switchesInFamily.IndexOf(this);
             if (currentIndex == -1 || (currentIndex > 0 && !switchesInFamily[currentIndex - 1].isActivated))
             {
                 if (WrongOrderResetFamily)
@@ -415,12 +485,12 @@ namespace DOL.GS.Scripts
             player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.SwitchActivated"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
             player.Out.SendSoundEffect((ushort)SwitchOnSound, Position, 0);
 
-            GameEventMgr.Notify(SwitchEvent.SwitchActivated, this, new SwitchEventArgs(this, player));
-
             if (switchesInFamily.All(c => c.isActivated))
             {
                 ActivateSwitchFamily(player);
             }
+
+            player.Notify(GameObjectEvent.SwitchActivated, this, new SwitchEventArgs(this, player));
         }
 
         private void ActivateSwitchFamily(GamePlayer player)
@@ -430,8 +500,6 @@ namespace DOL.GS.Scripts
 
             player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "GameChest.SwitchAllActivated"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
             player.Out.SendSoundEffect((ushort)ActivatedFamilySound, Position, 0);
-
-            GameEventMgr.Notify(SwitchEvent.SwitchActivated, this);
 
             if (!string.IsNullOrEmpty(ActivatedBySwitchOn))
             {
@@ -471,14 +539,26 @@ namespace DOL.GS.Scripts
             }
         }
 
+        private void Deactivate()
+        {
+            isActivated = false;
+            RevertToPrimaryModel();
+        }
+
         private void DeactivateSwitchFamily()
         {
             activationTimer.Stop();
 
-            foreach (var switchCoffre in Coffres.Where(c => c.SwitchFamily == SwitchFamily))
+            lock (ChestsByFamily)
             {
-                switchCoffre.isActivated = false;
-                switchCoffre.RevertToPrimaryModel();
+                if (ChestsByFamily.TryGetValue(SwitchFamily, out List<GameCoffre> list))
+                {
+                    list.ForEach(c => c.Deactivate());
+                }
+                else
+                {
+                    Deactivate();
+                }
             }
 
             RevertDoors();

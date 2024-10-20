@@ -16,6 +16,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
+using DOL.Database.Attributes;
 using DOL.GS;
 
 namespace DOL.Events
@@ -96,6 +97,11 @@ namespace DOL.Events
         /// The FinishedLosCheck event is fired whenever a LoS Check is finished.
         /// </summary>
         public static readonly GameObjectEvent FinishedLosCheck = new GameObjectEvent("GameObject.FinishLosCheck");
+        
+        /// <summary>
+        /// The SwitchActivated event is fired when a switch is activated.
+        /// </summary>
+        public static readonly GameObjectEvent SwitchActivated = new GameObjectEvent("SwitchEvent.SwitchActivated");
 
     }
 }

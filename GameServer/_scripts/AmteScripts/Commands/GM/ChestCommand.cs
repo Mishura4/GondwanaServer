@@ -490,29 +490,19 @@ namespace DOL.GS.Scripts
                         DisplaySyntax(client);
                         break;
                     }
-                    GameCoffre selectedCoffre = null;
                     try
                     {
                         string name = args[2];
 
-                        if (name != null)
+                        if (!string.IsNullOrEmpty(name) && GameCoffre.ChestsByName.TryGetValue(name, out List<GameCoffre> coffres) && coffres?.Count == 1)
                         {
-                            var coffres = GameCoffre.Coffres.Where(c => c.Name.Equals(name));
-
-                            if (coffres != null && coffres.Count() == 1)
-                            {
-                                selectedCoffre = coffres.First();
-                            }
-                        }
-
-                        if (selectedCoffre == null)
-                        {
-                            ChatUtil.SendSystemMessage(client, "Le coffre \"" + name + "\" n'a pas été trouvé ou plusieurs coffres avec le meme nom existent.");
-                            break;
+                            var chest = coffres.First();
+                            chest.RespawnCoffre();
+                            ChatUtil.SendSystemMessage(client, "Le coffre \"" + chest.Name + "\" apparait devant vous.");
                         }
                         else
                         {
-                            selectedCoffre.RespawnCoffre();
+                            ChatUtil.SendSystemMessage(client, "Le coffre \"" + name + "\" n'a pas été trouvé ou plusieurs coffres avec le meme nom existent.");
                         }
                     }
                     catch
@@ -520,7 +510,6 @@ namespace DOL.GS.Scripts
                         DisplaySyntax(client);
                         break;
                     }
-                    ChatUtil.SendSystemMessage(client, "Le coffre \"" + selectedCoffre.Name + "\" apparait devant vous.");
                     break;
 
                 case "teleporter":

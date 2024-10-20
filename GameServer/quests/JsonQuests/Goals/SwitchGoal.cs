@@ -57,12 +57,11 @@ namespace DOL.GS.Quests
 
         public override void NotifyActive(PlayerQuest quest, PlayerGoalState goal, DOLEvent e, object sender, EventArgs args)
         {
-            if (e == SwitchEvent.SwitchActivated && args is SwitchEventArgs switchArgs)
+            if (e == GameObjectEvent.SwitchActivated && args is SwitchEventArgs switchArgs)
             {
-                if (switchArgs.Coffre.SwitchFamily == switchFamily && switchArgs.Coffre.isActivated)
+                if (switchArgs.Coffre.SwitchFamily == switchFamily && switchArgs.Coffre.isActivated && GameCoffre.ChestsByFamily.TryGetValue(switchFamily, out List<GameCoffre> list))
                 {
-                    var switchesInFamily = GameCoffre.Coffres.Where(c => c.SwitchFamily == switchFamily);
-                    if (switchesInFamily.Count(c => c.isActivated) >= m_switchCount)
+                    if (list.Count(c => c.isActivated) >= m_switchCount)
                     {
                         quest.Owner.Out.SendMessage(switchActivatedMessage, eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                         AdvanceGoal(quest, goal);
