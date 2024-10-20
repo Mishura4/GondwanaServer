@@ -8898,7 +8898,7 @@ namespace DOL.GS
                 if (xpLossPercent > 0)
                 {
                     int modifier = GetModified(eProperty.DeathExpLoss);
-                    xpLossPercent = (int)Math.Round(xpLossPercent * modifier / 100.0)
+                    xpLossPercent = (int)Math.Round(xpLossPercent * modifier / 100.0);
                     long xpLoss = (ExperienceForNextLevel - ExperienceForCurrentLevel) * xpLossPercent / 1000;
                     GainExperience(eXPSource.Other, -xpLoss, 0, 0, 0, false, true, 1);
                     TempProperties.setProperty(DEATH_EXP_LOSS_PROPERTY, xpLoss);
