@@ -8883,9 +8883,6 @@ namespace DOL.GS
 
                         DeathCount++;
                         m_deathtype = eDeathType.PvE;
-                        long xpLoss = (ExperienceForNextLevel - ExperienceForCurrentLevel) * xpLossPercent / 1000;
-                        GainExperience(eXPSource.Other, -xpLoss, 0, 0, 0, false, true, 1);
-                        TempProperties.setProperty(DEATH_EXP_LOSS_PROPERTY, xpLoss);
                     }
 
                     if (Level >= ServerProperties.Properties.PVE_CON_LOSS_LEVEL && CheckIfLostConstitution(killer))
@@ -8897,6 +8894,14 @@ namespace DOL.GS
                             conLoss = 1;
                         TempProperties.setProperty(DEATH_CONSTITUTION_LOSS_PROPERTY, conLoss);
                     }
+                }
+                if (xpLossPercent > 0)
+                {
+                    int modifier = GetModified(eProperty.DeathExpLoss);
+                    xpLossPercent = (int)Math.Round(xpLossPercent * modifier / 100.0)
+                    long xpLoss = (ExperienceForNextLevel - ExperienceForCurrentLevel) * xpLossPercent / 1000;
+                    GainExperience(eXPSource.Other, -xpLoss, 0, 0, 0, false, true, 1);
+                    TempProperties.setProperty(DEATH_EXP_LOSS_PROPERTY, xpLoss);
                 }
                 GameEventMgr.AddHandler(this, GamePlayerEvent.Revive, new DOLEventHandler(OnRevive));
             }
