@@ -19,6 +19,36 @@ DelveInfo.Target:               Cible : {0}
 DelveInfo.Value:                Valeur : {0}
 DelveInfo.ValueNegative:        Valeur : -{0}
 
+# Spell ShortDescriptions
+SpellDescription.DirectDamage.MainDescription:		Inflige {0} dégâts de type {1} à la cible.
+SpellDescription.DoT.MainDescription:				La cible subit {0} dégâts de {1} toutes les {2} secondes.
+SpellDescription.LifeDrain.MainDescription:			Le sort inflige {0} dégâts de {1} à la cible, soignant l'attaquant de {2}% des dégâts causés.
+SpellDescription.Nearsight.MainDescription1:		La portée effective des attaques à distance de la cible est réduite de {0}%.
+SpellDescription.Nearsight.MainDescription2:		Les sorts de vision réduite affectant le groupe du lanceur voient leur efficacité réduite de {0}%, ou sont totalement résistés.
+SpellDescription.SpreadHeal.MainDescription:		Soin de zone pour {0}.
+SpellDescription.RegenHeal.MainDescription:			La cible récupère {0} points de vie supplémentaires.
+SpellDescription.RegenPower.MainDescription:		La cible récupère {0} points de mana supplémentaires.
+SpellDescription.RegenEndu.MainDescription:			La cible récupère {0} points d'endurance supplémentaires.
+SpellDescription.SpeedDecrease.MainDescription:		La cible est ralentie de {0}%.
+SpellDescription.SpeedDecrease.Rooted:				La cible est immobilisée sur place.
+SpellDescription.Slow.MainDescription:				La cible est ralentie de {0}%. Il n'y a aucune immunité contre ce sort et il ne peut pas être interrompu par des coups.
+SpellDescription.Chamber.MainDescription:			Vous permet de précharger une chambre contenant un sort principal et un sort secondaire qui peuvent être déchargés instantanément sur votre cible.
+SpellDescription.Chamber.CanContainBolts:			Peut contenir des projectiles.
+SpellDescription.Chamber.CannotContainBolts:		Ne peut pas contenir de projectiles.
+SpellDescription.FocusShell.MainDescription:		Tous les dégâts de mêlée et de sorts infligés à la cible sont réduits de {0}%.
+SpellDescription.FocusShell.OnlyInPvPORvR:			Ce sort ne peut être utilisé que dans les zones RvR ou PvP.
+SpellDescription.Powerless.MainDescription:			Vous permet de lancer un sort secondaire sans dépenser de mana.
+SpellDescription.Range.MainDescription:				Vous permet de lancer un sort secondaire à {0}% de portée.
+SpellDescription.Uninterruptable.MainDescription:	Vous permet de lancer un sort secondaire sans être interrompu mais réduit son efficacité de {0}%.
+SpellDescription.BuffShear.Str:						Supprime les effets de sort bénéfiques augmentant la Force de la cible.
+SpellDescription.BuffShear.Dex:						Supprime les effets de sort bénéfiques augmentant la Dextérité de la cible.
+SpellDescription.BuffShear.Con:						Supprime les effets de sort bénéfiques augmentant la Constitution de la cible.
+SpellDescription.BuffShear.Acuity:					Supprime les effets de sort bénéfiques augmentant la Clairvoyance de la cible.
+SpellDescription.BuffShear.StrCon:					Supprime les effets de sort bénéfiques augmentant la Force/Constitution de la cible.
+SpellDescription.BuffShear.DexQui:					Supprime les effets de sort bénéfiques augmentant la Dextérité/Vivacité de la cible.
+SpellDescription.BuffShear.Random:					Supprime aléatoirement un effet de sort bénéfique de la cible.
+SpellDescription.Warlock.SecondarySpell:			Ceci est un sort secondaire.
+
 # AblativeArmor
 AblativeArmor.DelveInfo.Function:			Fonction: tampon de points de mélée
 AblativeArmor.DelveInfo.Absorption1:			Absorption: {0}%

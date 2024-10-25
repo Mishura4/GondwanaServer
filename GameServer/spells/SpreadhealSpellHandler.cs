@@ -142,6 +142,20 @@ namespace DOL.GS.Spells
             return true;
         }
 
-        public override string ShortDescription => $"Spreadheal for {Spell.Value}";
+        public override string ShortDescription
+        {
+            get
+            {
+                string description = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.SpreadHeal.MainDescription", Spell.Value);
+
+                if (Spell.IsSecondary)
+                {
+                    string secondaryMessage = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.Warlock.SecondarySpell");
+                    description += "\n\n" + secondaryMessage;
+                }
+
+                return description;
+            }
+        }
     }
 }

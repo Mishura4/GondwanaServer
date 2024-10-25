@@ -115,6 +115,7 @@ SpellHandler.HealSpell.TargetDamnedPartiallyHealed:	The healing spell has reduce
 SpellHandler.HealSpell.DamnedNoHeal:		The healing spell has no effect because you are damned!
 SpellHandler.HealSpell.YouDiseased:			You are diseased, healing has been reduced by {0}% !
 SpellHandler.HealSpell.HealingReduced:				Healing has been reduced by {0}% due to healing inhibiting effects.
+SpellHandler.HealSpell.HealingReducedShield:				Healing has been reduced by {0}% due to {1}'s spell damage shield.
 SpellHandler.HealSpell.HealingNull:					Your spell fails to heal the target due to healing inhibiting effects.
 SpellHandler.HealSpell.HealingNullYou:				Your fail to heal yourself due to healing inhibiting effects.
 SpellHandler.LifeDrain.YouTargetDamnedNoHeal:	The life drain spell has no effect because you are damned as well as your target!
@@ -251,5 +252,6 @@ SpellHandler.WaterBreathing.EndEffect:		With a gulp and a gasp you realize that 
 
 SpellHandler.GroundAreaEffect.AlreadyActive:	You already have a ground effect active and cannot cast another!
 SpellHandler.PowerShield.EffectStart:			An ancient magic enhances your vital essence.
+SpellHandler.PowerShield.InsufficientMana:		Your mana is too low to activate your Powershield's healing effect.
 
 SpellHandler.DelveInfo.Sec:			sec

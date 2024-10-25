@@ -164,6 +164,8 @@ Languages.DBSpells.StunYou:			You cannot move!
 Languages.DBSpells.StunTarget:			{0} cannot seem to move!
 Languages.DBSpells.StunLightYou:		You are stunned by a flash of light!
 Languages.DBSpells.StunLightTarget:		{0} is stunned by a flash of light!
+Languages.DBSpells.StyleBleedingYou:	You are bleeding!
+Languages.DBSpells.StyleBleedingTarget:	{0} is bleeding!
 
 Languages.DBSpells.HealRegenYouStart:		You feel a calmness come over you.
 Languages.DBSpells.HealRegenTargetStart:	{0} looks calmer.

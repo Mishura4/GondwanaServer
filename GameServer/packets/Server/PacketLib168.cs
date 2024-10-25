@@ -51,7 +51,7 @@ namespace DOL.GS.PacketHandler
     {
         private const int MaxPacketLength = 2048;
 
-        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
         protected virtual byte ServerTypeID
         {
@@ -509,7 +509,7 @@ namespace DOL.GS.PacketHandler
                             //Try to fix the region ip so UDP is enabled!
                             string ip = entries[index].ip;
                             if (ip == "any" || ip == "0.0.0.0" || ip == "127.0.0.1" || ip.StartsWith("10.13.") || ip.StartsWith("192.168."))
-                                ip = ((IPEndPoint)m_gameClient.Socket.LocalEndPoint).Address.ToString();
+                                ip = ((IPEndPoint)m_gameClient.Socket.LocalEndPoint)!.Address.ToString();
                             pak.FillString(ip, 20);
                             //						DOLConsole.WriteLine(string.Format(" ip={3}; fromPort={1}; toPort={2}; num={4}; id={0}; region name={5}", (byte)entries[index].id, entries[index].fromPort, entries[index].toPort, entries[index].ip, num, entries[index].name));
                             index++;
@@ -601,7 +601,7 @@ namespace DOL.GS.PacketHandler
                     //Try to fix the region ip so UDP is enabled!
                     string ip = playerRegion.ServerIP;
                     if (ip == "any" || ip == "0.0.0.0" || ip == "127.0.0.1" || ip.StartsWith("10.13.") || ip.StartsWith("192.168."))
-                        ip = ((IPEndPoint)m_gameClient.Socket.LocalEndPoint).Address.ToString();
+                        ip = ((IPEndPoint)m_gameClient.Socket.LocalEndPoint)!.Address.ToString();
                     pak.FillString(ip, 22);
                     pak.WriteShort(playerRegion.ServerPort);
                 }
@@ -780,7 +780,7 @@ namespace DOL.GS.PacketHandler
                 flags = (byte)(GameServer.ServerRules.GetLivingRealm(m_gameClient.Player, npc) << 6);
                 GameNPC.eFlags npcFlags;
 
-                var mobGroupsWithFlags = npc.MobGroups?.Where(g => g.CompletedQuestNPCFlags != null).ToList();
+                var mobGroupsWithFlags = npc!.MobGroups?.Where(g => g.CompletedQuestNPCFlags != null).ToList();
                 if (mobGroupsWithFlags is { Count: > 0 })
                 {
                     npcFlags = 0;
@@ -862,7 +862,7 @@ namespace DOL.GS.PacketHandler
                 //health
                 if (obj is GameLiving)
                 {
-                    pak.WriteByte((obj as GameLiving).HealthPercent);
+                    pak.WriteByte((obj as GameLiving)!.HealthPercent);
                 }
                 else
                 {
@@ -882,7 +882,7 @@ namespace DOL.GS.PacketHandler
 
             if (obj is GameNPC)
             {
-                (obj as GameNPC).NPCUpdatedCallback();
+                (obj as GameNPC)!.NPCUpdatedCallback();
             }
         }
 
@@ -935,7 +935,7 @@ namespace DOL.GS.PacketHandler
             {
                 pak.WriteShort((ushort)obj.ObjectID);
                 if (obj is GameStaticItem)
-                    pak.WriteShort((ushort) (obj as GameStaticItem).Emblem);
+                    pak.WriteShort((ushort) (obj as GameStaticItem)!.Emblem);
                 else pak.WriteShort(0);
                 pak.WriteShort(obj.Orientation.InHeading);
                 pak.WriteShort((ushort) obj.Position.Z);
@@ -954,7 +954,7 @@ namespace DOL.GS.PacketHandler
                 if (obj is GameKeepBanner)
                     flag |= 0x08;
                 if (obj is GameStaticItemTimed && m_gameClient.Player != null &&
-                    (obj as GameStaticItemTimed).IsOwner(m_gameClient.Player))
+                    (obj as GameStaticItemTimed)!.IsOwner(m_gameClient.Player))
                     flag |= 0x04;
                 pak.WriteShort((ushort)flag);
 
@@ -982,7 +982,7 @@ namespace DOL.GS.PacketHandler
                 if (obj is IDoor)
                 {
                     pak.WriteByte(4);
-                    pak.WriteInt((uint)(obj as IDoor).DoorID);
+                    pak.WriteInt((uint)(obj as IDoor)!.DoorID);
                 }
                 else pak.WriteByte(0x00);
                 SendTCP(pak);
@@ -1014,7 +1014,7 @@ namespace DOL.GS.PacketHandler
             if (obj is GameNPC)
             {
                 var gameNPC = obj as GameNPC;
-                SendModelAndSizeChange(obj, newModel, gameNPC.Size);
+                SendModelAndSizeChange(obj, newModel, gameNPC!.Size);
             }
             else
                 SendModelAndSizeChange(obj, newModel, 0);
@@ -1316,7 +1316,7 @@ namespace DOL.GS.PacketHandler
                 // If Health Percent is invalid get the living Health.
                 if (defender is GameLiving && targetHealthPercent > 100)
                 {
-                    targetHealthPercent = (defender as GameLiving).HealthPercent;
+                    targetHealthPercent = (defender as GameLiving)!.HealthPercent;
                 }
 
                 pak.WriteByte(targetHealthPercent);
@@ -1719,7 +1719,7 @@ namespace DOL.GS.PacketHandler
                             if (SpellHelper.FindEffectOnTarget(updateLiving, "DamageOverTime") != null)
                                 playerStatus |= 0x08;
                             if (updateLiving is GamePlayer &&
-                                (updateLiving as GamePlayer).Client.ClientState == GameClient.eClientState.Linkdead)
+                                (updateLiving as GamePlayer)!.Client.ClientState == GameClient.eClientState.Linkdead)
                                 playerStatus |= 0x10;
                             if (updateLiving.CurrentRegion != m_gameClient.Player.CurrentRegion)
                                 playerStatus |= 0x20;
@@ -2787,7 +2787,7 @@ namespace DOL.GS.PacketHandler
                                 pak.WritePascalString(sk.Name);
 
                                 // Skill Status
-                                pak.WriteByte(clspec.GetSkillStatus(tree, skillIndex, itemIndex).Item1); // 0 = disable, 1 = trained, 2 = can train
+                                pak.WriteByte(clspec!.GetSkillStatus(tree, skillIndex, itemIndex).Item1); // 0 = disable, 1 = trained, 2 = can train
 
                                 // Attached Skill
                                 if (tree[skillIndex].Item2[itemIndex].Item2 == 2)
@@ -3725,7 +3725,7 @@ namespace DOL.GS.PacketHandler
             else if (living is GameNPC)
             {
                 SendNPCCreate(living as GameNPC);
-                if ((living as GameNPC).Inventory != null)
+                if ((living as GameNPC)!.Inventory != null)
                     SendLivingEquipmentUpdate(living as GameNPC);
             }
         }
@@ -4022,7 +4022,7 @@ namespace DOL.GS.PacketHandler
 
         #endregion
 
-        private byte WarlockChamberEffectId(GameSpellEffect effect)
+        public byte WarlockChamberEffectId(GameSpellEffect effect)
         {
             return 0; // ??
         }

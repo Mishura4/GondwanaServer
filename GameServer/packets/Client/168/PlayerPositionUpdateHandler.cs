@@ -39,7 +39,7 @@ namespace DOL.GS.PacketHandler.Client.v168
         /// <summary>
         /// Defines a logger for this class.
         /// </summary>
-        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
         public const string LASTMOVEMENTTICK = "PLAYERPOSITION_LASTMOVEMENTTICK";
         public const string LASTCPSTICK = "PLAYERPOSITION_LASTCPSTICK";
@@ -723,6 +723,12 @@ namespace DOL.GS.PacketHandler.Client.v168
                 }
                 else
                     player.Out.SendObjectDelete(client.Player); //remove the stealthed player from view
+            }
+
+            if (client.Player.CharacterClass.ID == (int)eCharacterClass.Warlock)
+            {
+                //Send Chamber effect
+                client.Player.Out.SendWarlockChamberEffect(client.Player);
             }
 
             //handle closing of windows

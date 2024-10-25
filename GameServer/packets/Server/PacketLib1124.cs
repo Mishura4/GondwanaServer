@@ -46,7 +46,7 @@ namespace DOL.GS.PacketHandler
     [PacketLib(1124, GameClient.eClientVersion.Version1124)]
     public class PacketLib1124 : PacketLib1123
     {
-        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
         private const ushort MAX_STORY_LENGTH = 1000;   // Via trial and error, 1.108 client.
 
         public PacketLib1124(GameClient client) : base(client)
@@ -157,7 +157,7 @@ namespace DOL.GS.PacketHandler
             //Added by Suncheck - Mines are not shown to enemy players
             if (npc is GameMine)
             {
-                if (GameServer.ServerRules.IsAllowedToAttack((npc as GameMine).Owner, m_gameClient.Player, true))
+                if (GameServer.ServerRules.IsAllowedToAttack((npc as GameMine)!.Owner, m_gameClient.Player, true))
                 {
                     return;
                 }
@@ -413,8 +413,6 @@ namespace DOL.GS.PacketHandler
             {
                 SendRvRGuildBanner(playerToCreate, true);
             }
-
-            SendWarlockChamberEffect(playerToCreate);
         }
 
         public override void SendPlayerForgedPosition(GamePlayer player)
@@ -689,7 +687,7 @@ namespace DOL.GS.PacketHandler
                     pak.FillString(region.ServerPort.ToString(), 5);
                     string ip = region.ServerIP;
                     if (ip == "any" || ip == "0.0.0.0" || ip == "127.0.0.1" || ip.StartsWith("10.") || ip.StartsWith("192.168."))
-                        ip = ((IPEndPoint)m_gameClient.Socket.LocalEndPoint).Address.ToString();
+                        ip = ((IPEndPoint)m_gameClient.Socket.LocalEndPoint)!.Address.ToString();
                     pak.FillString(ip, 20);
                     SendTCP(pak);
                 }

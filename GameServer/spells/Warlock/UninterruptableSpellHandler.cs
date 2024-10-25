@@ -74,7 +74,7 @@ namespace DOL.GS.Spells
                 if (Caster is GamePlayer && ((GamePlayer)Caster).CharacterClass.ManaStat != eStat.UNDEFINED)
                 {
                     GamePlayer player = Caster as GamePlayer;
-                    basepower = player.CalculateMaxMana(player.Level, player.GetBaseStat(player.CharacterClass.ManaStat)) * basepower * -0.01;
+                    basepower = player!.CalculateMaxMana(player.Level, player.GetBaseStat(player.CharacterClass.ManaStat)) * basepower * -0.01;
                 }
                 else
                 {
@@ -126,12 +126,21 @@ namespace DOL.GS.Spells
                     list.Add("Power cost: " + Spell.Power.ToString("0;0'%'"));
 
                 //Cast
-                list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DelveInfo.CastingTime", (Spell.CastTime * 0.001).ToString("0.0## sec;-0.0## sec;'instant'")));
+                list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.CastingTime", (Spell.CastTime * 0.001).ToString("0.0## sec;-0.0## sec;'instant'")));
                 return list;
             }
             #endregion
         }
         // constructor
         public UninterruptableSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+
+        public override string ShortDescription
+        {
+            get
+            {
+                string description = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.Uninterruptable.MainDescription", Spell.Value);
+                return description;
+            }
+        }
     }
 }

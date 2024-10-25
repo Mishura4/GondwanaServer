@@ -164,6 +164,8 @@ Languages.DBSpells.StunYou:			Vous êtes immobilisé !
 Languages.DBSpells.StunTarget:			{0} est immobilisé !
 Languages.DBSpells.StunLightYou:		Vous êtes étourdi par un flash aveuglant !
 Languages.DBSpells.StunLightTarget:		{0} est étourdi par un flash aveuglant !
+Languages.DBSpells.StyleBleedingYou:	Vous saignez !
+Languages.DBSpells.StyleBleedingTarget:	{0} saigne !
 
 Languages.DBSpells.HealRegenYouStart:		Un sentiment de tranquillité vous envahit.
 Languages.DBSpells.HealRegenTargetStart:	{0} semble apaisé.

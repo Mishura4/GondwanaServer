@@ -115,6 +115,7 @@ SpellHandler.HealSpell.TargetDamnedPartiallyHealed:	Le sort de guérison est moi
 SpellHandler.HealSpell.DamnedNoHeal:		Le sort de guérison ne vous affecte pas car vous etes damné !
 SpellHandler.HealSpell.YouDiseased:			Vous êtes malade, le soin est réduit de {0}% !
 SpellHandler.HealSpell.HealingReduced:			Le soin est réduit de {0}% à cause des effets d'inhibition de soin.
+SpellHandler.HealSpell.HealingReducedShield:				Le soin est réduit de {0}% en raison de la barrière protectrice de {1}.
 SpellHandler.HealSpell.HealingNull:				Votre sort échoue à soigner la cible en raison des effets d'inhibition de soin.
 SpellHandler.HealSpell.HealingNullYou:			Le soin échoue en raison de vos effets d'inhibition.
 SpellHandler.LifeDrain.YouTargetDamnedNoHeal:	Le sort de drain vital n'a aucun effet car vous, ainsi que votre cible êtes damnés !
@@ -251,5 +252,6 @@ SpellHandler.WaterBreathing.EndEffect:		Vous buvez la tasse et réalisez soudain
 
 SpellHandler.GroundAreaEffect.AlreadyActive:	Vous avez déjà un effet de sol actif et ne pouvez pas en lancer un autre !
 SpellHandler.PowerShield.EffectStart:			Une magie ancienne accroît votre essence vitale.
+SpellHandler.PowerShield.InsufficientMana:		Votre réserve de mana est insuffisante pour activer l’effet de soin de votre bouclier.
 
 SpellHandler.DelveInfo.Sec:			sec
