@@ -30,7 +30,7 @@ namespace DOL.GS.Quests
         public override bool CanInteractWith(PlayerQuest questData, PlayerGoalState state, GameObject target)
             => state?.IsActive == true && target.Name == m_target.Name && target.CurrentRegion == m_target.CurrentRegion;
 
-        public override void NotifyActive(PlayerQuest quest, PlayerGoalState goal, DOLEvent e, object sender, EventArgs args)
+        protected override void NotifyActive(PlayerQuest quest, PlayerGoalState goal, DOLEvent e, object sender, EventArgs args)
         {
             // The player is dying, check quests and steps
             if (e == GameLivingEvent.Dying && args is DyingEventArgs dyingEventArgs && sender == quest.Owner)

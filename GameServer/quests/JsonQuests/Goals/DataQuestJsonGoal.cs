@@ -7,6 +7,8 @@ using DOL.GS.Behaviour;
 using DOL.GameEvents;
 using System.Threading.Tasks;
 using DOL.MobGroups;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace DOL.GS.Quests
 {
@@ -40,6 +42,22 @@ namespace DOL.GS.Quests
         public bool ResetEvent { get; set; } = false;
         public string EventId { get; set; } = "";
 
+        public record GoalConditions(bool? IsDamned = null, ushort ModelId = 0)
+        {
+            public bool Validate(PlayerQuest quest, DataQuestJsonGoal goal)
+            {
+                if (IsDamned != null && IsDamned.Value != quest.Owner.IsDamned)
+                    return false;
+
+                if (ModelId != 0 && quest.Owner.Model != ModelId)
+                    return false;
+
+                return true;
+            }
+        }
+
+        public GoalConditions Conditions { get; protected set; } = new();
+
         public DataQuestJsonGoal(DataQuestJson quest, int goalId, dynamic db)
         {
             QuestId = quest.Id;
@@ -70,9 +88,14 @@ namespace DOL.GS.Quests
                 ResetEvent = (bool)db.ResetEvent;
             if (db.EventId != null && db.EventId != "")
                 EventId = db.EventId;
+            if (db.Conditions != null)
+            {
+                // var condObj = JsonConvert.DeserializeObject<GoalConditions>(db.Conditions);
+                Conditions = db.Conditions.ToObject<GoalConditions>();
+            }
         }
 
-        public bool IsActive(PlayerQuest questData) => questData.GoalStates.Any(gs => gs.GoalId == GoalId && gs.IsActive);
+        public bool IsActive(PlayerQuest questData) => questData.GoalStates.Any(gs => gs.GoalId == GoalId && gs.IsActive) && Conditions?.Validate(questData, this) != false;
         public bool IsDone(PlayerQuest questData) => questData.GoalStates.Any(gs => gs.GoalId == GoalId && gs.IsDone);
         public bool IsFinished(PlayerQuest questData) => questData.GoalStates.Any(gs => gs.GoalId == GoalId && gs.IsFinished);
 
@@ -81,7 +104,7 @@ namespace DOL.GS.Quests
             var goalData = quest.GoalStates.Find(gs => gs.GoalId == GoalId);
             NotifyActive(quest, goalData, e, sender, args);
         }
-        public abstract void NotifyActive(PlayerQuest quest, PlayerGoalState goal, DOLEvent e, object sender, EventArgs args);
+        protected abstract void NotifyActive(PlayerQuest quest, PlayerGoalState goal, DOLEvent e, object sender, EventArgs args);
 
         // this one is always called, useful if you want to start a goal with some hidden task
         public void Notify(PlayerQuest questData, DOLEvent e, object sender, EventArgs args)
@@ -102,7 +125,7 @@ namespace DOL.GS.Quests
         public virtual bool CanComplete(PlayerQuest questData)
         {
             var gs = questData.GoalStates.Find(s => s.GoalId == GoalId);
-            return gs?.State == eQuestGoalStatus.DoneAndActive && EndWhenGoalsDone.All(id => questData.GoalStates.Any(s => s.GoalId == id && s.IsDone));
+            return gs?.State == eQuestGoalStatus.DoneAndActive && Conditions?.Validate(questData, this) != false && EndWhenGoalsDone.All(id => questData.GoalStates.Any(s => s.GoalId == id && s.IsDone));
         }
 
         public virtual bool CanInteractWith(PlayerQuest questData, PlayerGoalState state, GameObject target) => false;
@@ -137,13 +160,15 @@ namespace DOL.GS.Quests
             return goalData;
         }
 
-        public virtual void AdvanceGoal(PlayerQuest questData, PlayerGoalState goalData)
+        public virtual bool AdvanceGoal(PlayerQuest questData, PlayerGoalState goalData, bool force = false)
         {
+            if (!force && Conditions?.Validate(questData, this) == false)
+                return false;
+            
             goalData.Progress += 1;
             if (goalData.Progress >= ProgressTotal)
             {
-                EndGoal(questData, goalData);
-                return;
+                return EndGoal(questData, goalData);
             }
             questData.SaveIntoDatabase();
             if (Visible)
@@ -154,6 +179,7 @@ namespace DOL.GS.Quests
                 else
                     ChatUtil.SendScreenCenter(questData.Owner, $"{Description} - {goalData.Progress}/{ProgressTotal}");
             }
+            return false;
         }
         public virtual void DecreaseGoal(PlayerQuest questData, PlayerGoalState goalData)
         {
@@ -190,16 +216,23 @@ namespace DOL.GS.Quests
                 ChatUtil.SendImportant(player, $"[Quest {Quest.Name}] " + BehaviourUtils.GetPersonalizedMessage(MessageAborted, player));
         }
 
-        public virtual void EndGoal(PlayerQuest questData, PlayerGoalState goalData)
+        public virtual bool EndGoal(PlayerQuest questData, PlayerGoalState goalData, bool force = false)
         {
-            EndGoal(questData, goalData, null);
-            questData.SaveIntoDatabase();
-            questData.Owner.Out.SendQuestUpdate(questData);
+            if (EndGoal(questData, goalData, null, force))
+            {
+                questData.SaveIntoDatabase();
+                questData.Owner.Out.SendQuestUpdate(questData);
+                return true;
+            }
+            return false;
         }
 
         /// <summary>Recursive call</summary>
-        private void EndGoal(PlayerQuest questData, PlayerGoalState goalData, List<DataQuestJsonGoal> except)
+        private bool EndGoal(PlayerQuest questData, PlayerGoalState goalData, List<DataQuestJsonGoal> except, bool force = false)
         {
+            if (!force && Conditions?.Validate(questData, this) == false)
+                return false;
+
             goalData.Progress = ProgressTotal;
             goalData.State = eQuestGoalStatus.DoneAndActive;
 
@@ -214,6 +247,7 @@ namespace DOL.GS.Quests
             EndOtherGoals(questData, except ?? new List<DataQuestJsonGoal>());
 
             CompleteGoal(questData, goalData);
+            return true;
         }
 
         private void EndOtherGoals(PlayerQuest questData, List<DataQuestJsonGoal> except)
@@ -305,6 +339,7 @@ namespace DOL.GS.Quests
                 { "StartEvent", StartEvent ? "1" : "0" },
                 { "ResetEvent", ResetEvent ? "1" : "0"  },
                 { "EventId", EventId },
+                { "Conditions", Conditions }
             };
         }
 

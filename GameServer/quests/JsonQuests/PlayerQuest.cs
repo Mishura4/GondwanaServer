@@ -120,7 +120,7 @@ namespace DOL.GS.Quests
         /// </summary>
         public bool CanFinish()
         {
-            foreach (var goal in Quest.Goals.Values.Where(g => g is EndGoal))
+            foreach (var goal in Quest.Goals.Values.Where(g => g is EndGoal && g.Conditions?.Validate(this, g) != false))
                 if (GoalStates.Find(gs => gs.GoalId == goal.GoalId)?.IsActive ?? false)
                     return true;
             return false;

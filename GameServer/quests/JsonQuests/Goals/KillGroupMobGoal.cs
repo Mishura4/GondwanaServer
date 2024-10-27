@@ -64,7 +64,7 @@ namespace DOL.GS.Quests
             && (target is GameNPC npc && MobGroupManager.Instance.GetGroupIdFromMobId(npc.InternalID) == m_targetName)
             && (m_region == null || target.CurrentRegion == m_region);
 
-        public override void NotifyActive(PlayerQuest quest, PlayerGoalState goal, DOLEvent e, object sender, EventArgs args)
+        protected override void NotifyActive(PlayerQuest quest, PlayerGoalState goal, DOLEvent e, object sender, EventArgs args)
         {
             // Enemy of player with quest was killed, check quests and steps
             if (e == GameLivingEvent.EnemyKilled && args is EnemyKilledEventArgs killedArgs)

@@ -29,7 +29,7 @@ namespace DOL.GS.Quests
             return dict;
         }
 
-        public override void NotifyActive(PlayerQuest quest, PlayerGoalState goal, DOLEvent e, object sender, EventArgs args)
+        protected override void NotifyActive(PlayerQuest quest, PlayerGoalState goal, DOLEvent e, object sender, EventArgs args)
         {
         }
 
@@ -41,7 +41,7 @@ namespace DOL.GS.Quests
                 foreach (var stopId in m_stopGoals)
                     if (Quest.Goals.TryGetValue(stopId, out var stopGoal))
                         stopGoal.AbortGoal(questData);
-                EndGoal(questData, state);
+                EndGoal(questData, state, true);
                 return 0;
             }).Start(1);
             return state;

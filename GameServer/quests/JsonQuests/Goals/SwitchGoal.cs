@@ -55,7 +55,7 @@ namespace DOL.GS.Quests
             return dict;
         }
 
-        public override void NotifyActive(PlayerQuest quest, PlayerGoalState goal, DOLEvent e, object sender, EventArgs args)
+        protected override void NotifyActive(PlayerQuest quest, PlayerGoalState goal, DOLEvent e, object sender, EventArgs args)
         {
             if (e == GameObjectEvent.SwitchActivated && args is SwitchEventArgs switchArgs)
             {
@@ -63,8 +63,8 @@ namespace DOL.GS.Quests
                 {
                     if (list.Count(c => c.isActivated) >= m_switchCount)
                     {
-                        quest.Owner.Out.SendMessage(switchActivatedMessage, eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-                        AdvanceGoal(quest, goal);
+                        if (AdvanceGoal(quest, goal))
+                            quest.Owner.Out.SendMessage(switchActivatedMessage, eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                     }
                 }
             }

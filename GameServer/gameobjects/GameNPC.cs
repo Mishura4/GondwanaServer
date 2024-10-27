@@ -2200,7 +2200,7 @@ namespace DOL.GS
 
         public virtual void RefreshEffects(GamePlayer player)
         {
-            if (QuestIdListToGive.Any() || player.QuestList.SelectMany(q => q.Goals).OfType<DataQuestJsonGoal>().Any(g => g.hasInteraction && g.Target == this))
+            if (QuestIdListToGive.Any() || player.QuestList.Any(q => IsRelatedToQuest(q.Quest)))
             {
                 player.Out.SendNPCsQuestEffect(this, this.GetQuestIndicator(player));
             }

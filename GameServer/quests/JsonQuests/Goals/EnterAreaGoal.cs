@@ -44,6 +44,7 @@ namespace DOL.GS.Quests
         {
             AdvanceGoal(quest, goal);
         }
+        
         private void OnPlayerLeaveArea(PlayerQuest quest, PlayerGoalState goal)
         {
             goal.Progress = 0;
@@ -52,7 +53,7 @@ namespace DOL.GS.Quests
             quest.Owner.Out.SendQuestUpdate(quest);
         }
 
-        public override void NotifyActive(PlayerQuest quest, PlayerGoalState goal, DOLEvent e, object sender, EventArgs args)
+        protected override void NotifyActive(PlayerQuest quest, PlayerGoalState goal, DOLEvent e, object sender, EventArgs args)
         {
             if ((sender as AbstractArea)?.ID != m_area.ID || args is not AreaEventArgs arguments || arguments.GameObject != quest.Owner)
                 return;

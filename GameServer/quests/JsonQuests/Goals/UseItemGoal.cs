@@ -66,7 +66,7 @@ namespace DOL.GS.Quests
             return dict;
         }
 
-        public override void NotifyActive(PlayerQuest quest, PlayerGoalState goal, DOLEvent e, object sender, EventArgs args)
+        protected override void NotifyActive(PlayerQuest quest, PlayerGoalState goal, DOLEvent e, object sender, EventArgs args)
         {
             var player = quest.Owner;
             if ((!hasArea || (hasArea && m_area.IsContaining(player.Coordinate, false))) && e == GamePlayerEvent.UseSlot && args is UseSlotEventArgs useSlot)
@@ -74,12 +74,15 @@ namespace DOL.GS.Quests
                 var usedItem = player.Inventory.GetItem((eInventorySlot)useSlot.Slot);
                 if (usedItem.Id_nb == QuestItem.Id_nb && (Target == null || player.TargetObject == Target))
                 {
-                    if (destroyItem)
+                    if (AdvanceGoal(quest, goal))
                     {
-                        player.Inventory.RemoveCountFromStack(usedItem, 1);
+                        if (destroyItem)
+                        {
+                            player.Inventory.RemoveCountFromStack(usedItem, 1);
+                        }
+                        player.Client.Out.SendDialogBox(eDialogCode.CustomDialog, 0, 0, 0, 0, eDialogType.Ok, true, BehaviourUtils.GetPersonalizedMessage(m_text, player));
                     }
-                    player.Client.Out.SendDialogBox(eDialogCode.CustomDialog, 0, 0, 0, 0, eDialogType.Ok, true, BehaviourUtils.GetPersonalizedMessage(m_text, player));
-                    AdvanceGoal(quest, goal);
+                    
                 }
             }
         }

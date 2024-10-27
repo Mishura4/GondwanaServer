@@ -1193,7 +1193,7 @@ namespace DOL.GS
                     return false;
                 }
 
-                if (SpellHandler.FindEffectOnTarget(this, "Damnation") != null)
+                if (IsDamned)
                 {
                     Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.Quit.CanTQuitDamned"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     return false;
@@ -2271,7 +2271,7 @@ namespace DOL.GS
                         if (player == null) continue;
                         player.Out.SendModelChange(this, Model);
                     }
-                        
+
                     RefreshQuestNPCs();
                 }
             }

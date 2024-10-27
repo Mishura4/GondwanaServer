@@ -64,17 +64,21 @@ namespace DOL.GS.Quests
             base.AbortGoal(questData);
         }
 
-        public override void EndGoal(PlayerQuest questData, PlayerGoalState goalData)
+        public override bool EndGoal(PlayerQuest questData, PlayerGoalState goalData, bool force = false)
         {
-            if (lastFriend != null)
-                lastFriend.ResetTimer.Start();
-            base.EndGoal(questData, goalData);
+            if (base.EndGoal(questData, goalData, force))
+            {
+                if (lastFriend != null)
+                    lastFriend.ResetTimer.Start();
+                return true;
+            }
+            return false;
         }
 
         public override bool CanInteractWith(PlayerQuest questData, PlayerGoalState state, GameObject target)
             => state?.IsActive == true && target is GameNPC gameNPC && gameNPC.MobGroups?.Any(g => g.GroupId == m_target) == true;
 
-        public override void NotifyActive(PlayerQuest quest, PlayerGoalState goal, DOLEvent e, object sender, EventArgs args)
+        protected override void NotifyActive(PlayerQuest quest, PlayerGoalState goal, DOLEvent e, object sender, EventArgs args)
         {
             if (e == GameLivingEvent.BringAFriend && args is BringAFriendArgs bringAFriendArgs)
             {

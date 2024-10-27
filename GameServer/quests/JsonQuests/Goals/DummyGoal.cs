@@ -14,17 +14,17 @@ namespace DOL.GS.Quests
         {
         }
 
-        public override void NotifyActive(PlayerQuest quest, PlayerGoalState goal, DOLEvent e, object sender, EventArgs args)
+        protected override void NotifyActive(PlayerQuest quest, PlayerGoalState goal, DOLEvent e, object sender, EventArgs args)
         {
         }
 
         public override PlayerGoalState ForceStartGoal(PlayerQuest questData)
         {
             var state = base.ForceStartGoal(questData);
-            EndGoal(questData, state);
+            EndGoal(questData, state, true);
             new RegionTimer(questData.Owner, _timer =>
             {
-                EndGoal(questData, state);
+                EndGoal(questData, state, true);
                 return 0;
             }).Start(1);
             return state;

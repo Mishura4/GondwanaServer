@@ -38,7 +38,7 @@ namespace DOL.GS.Quests
         public override bool CanInteractWith(PlayerQuest questData, PlayerGoalState state, GameObject target)
             => state?.IsActive == true && target.Name == Target.Name && target.CurrentRegion == Target.CurrentRegion;
 
-        public override void NotifyActive(PlayerQuest quest, PlayerGoalState goal, DOLEvent e, object sender, EventArgs args)
+        protected override void NotifyActive(PlayerQuest quest, PlayerGoalState goal, DOLEvent e, object sender, EventArgs args)
         {
             var player = quest.Owner;
 
@@ -49,9 +49,11 @@ namespace DOL.GS.Quests
 
                 if (e == GameLivingEvent.Whisper && interact.Target.Name == Target.Name && interact.Target.CurrentRegion == Target.CurrentRegion && interact.Text == m_whisperText)
                 {
-                    if (!string.IsNullOrWhiteSpace(m_text))
-                        ChatUtil.SendPopup(player, BehaviourUtils.GetPersonalizedMessage(m_text, player));
-                    AdvanceGoal(quest, goal);
+                    if (AdvanceGoal(quest, goal));
+                    {
+                        if (!string.IsNullOrWhiteSpace(m_text))
+                            ChatUtil.SendPopup(player, BehaviourUtils.GetPersonalizedMessage(m_text, player));
+                    }
                 }
             }
 
