@@ -379,6 +379,9 @@ namespace DOL.MobGroups
                 
                 m_NPCs.Add(npc);
             }
+
+            if (isLoadedFromScript)
+                return;
             
             // TODO: move this to a SaveIntoDatabase method
             var exists = GameServer.Database.SelectObjects<GroupMobXMobs>(g => g.MobID == npc.InternalID && g.GroupId == GroupId)?.FirstOrDefault();
