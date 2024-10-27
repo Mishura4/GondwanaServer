@@ -398,18 +398,18 @@ namespace DOL.GS.Scripts
             if (!CanInteractWith(player))
                 return false;
 
-            if (!EchangeurDB.TryGetValue(item.Id_nb, out var EchItem))
-            {
-                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameLiving.ReceiveItem", _body.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                return false;
-            }
-
             TurnTo(player);
 
             if (!WillTalkTo(player))
                 return false;
             
             _body.Notify(GameObjectEvent.ReceiveItem, _body, new ReceiveItemEventArgs(source, _body, item));
+
+            if (!EchangeurDB.TryGetValue(item.Id_nb, out var EchItem))
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameLiving.ReceiveItem", _body.Name), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return false;
+            }
 
             if (EchItem.ItemRecvCount > item.Count)
             {
