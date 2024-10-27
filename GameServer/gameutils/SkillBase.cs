@@ -2883,7 +2883,7 @@ namespace DOL.GS
         /// </summary>
         /// <param name="classID">Character Class ID</param>
         /// <returns>Dictionary of Specialization with their Level Requirement (including ClassId 0 for game wide specs)</returns>
-        public static IDictionary<Specialization, int> GetSpecializationCareer(int classID)
+        public static IDictionary<Specialization, int> GetSpecializationCareer(int classID, bool includeGeneral = true)
         {
             Dictionary<Specialization, int> dictRes = new Dictionary<Specialization, int>();
             m_syncLockUpdates.EnterReadLock();
@@ -2912,6 +2912,9 @@ namespace DOL.GS
                 {
                 }
             }
+
+            if (!includeGeneral)
+                return dictRes;
 
             m_syncLockUpdates.EnterReadLock();
             entries = new Dictionary<string, int>();

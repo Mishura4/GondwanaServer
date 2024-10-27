@@ -11,6 +11,7 @@ using DOL.Database;
 using DOL.AI.Brain;
 using DOL.GS.Commands;
 using System.Linq;
+using System.Numerics;
 
 namespace DOL.GS.Scripts
 {
@@ -48,53 +49,27 @@ namespace DOL.GS.Scripts
         /// Clones a player's appearance and melee abilities to a GameNPC
         /// </summary>
         /// <param name="playerName">Name of the character - case-sensitive</param>
-        /// <returns>A clone of the player (null if the player is not found)</returns>
-        public static GameNPC ClonePlayer(string playerName)
-        {
-            return ClonePlayer(playerName, false);
-        }
-
-
-        public static GameNPC ClonePlayer(string playerName, bool loadStyles)
-        {
-            GameNPC clone = new AmteMob();
-
-            if (ClonePlayer(playerName, clone, loadStyles, 0))
-            {
-                return clone;
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-
-        public static bool ClonePlayer(string playerName, GameNPC clone)
-        {
-            return ClonePlayer(playerName, clone, false, 0);
-        }
-
-
-        /// <summary>
-        /// Clones a player's appearance and melee abilities to a GameNPC
-        /// </summary>
-        /// <param name="playerName">Name of the character - case-sensitive</param>
         /// <param name="clone">The target GameNPC to clone the player to</param>
         /// <param name="loadStyles">True to load styles</param>
         /// <param name="cloneLevel">Level to set the clone to (affects stat bonuses); 0 to copy player's level</param>
-        /// <returns>True if the player was found and cloned, false if not clone supplied or character not found</returns>
+        /// <returns>The cloned NPC if the player was found and cloned, null if character not found</returns>
         // Players cloned by name, from the database, tend to be a bit tougher than players cloned from a GamePlayer
-        public static bool ClonePlayer(string playerName, GameNPC clone, bool loadStyles, byte cloneLevel)
+        public static GameNPC ClonePlayerFromDB(string playerName, GameNPC clone, bool loadStyles = false, bool loadSpells = false, byte cloneLevel = 0)
         {
-            if (clone == null)
-                return false;
-
             DOLCharacters dbchar = DOLDB<DOLCharacters>.SelectObject(DB.Column("Name").IsEqualTo(playerName));
 
             if (dbchar == null)
-                return false;
+                return null;
 
+            if (clone == null)
+            {
+                clone = CreateNPCForClass((eCharacterClass)dbchar.Class);
+            }
+            else
+            {
+                clone.SetOwnBrain(new AmteMobBrain());
+            }
+            
             SetNPCModel(clone, (ushort)dbchar.CurrentModel);
             clone.Level = cloneLevel > 0 ? cloneLevel : (byte)dbchar.Level;
             string lastName = dbchar.LastName ?? string.Empty;
@@ -259,44 +234,56 @@ namespace DOL.GS.Scripts
                 clone.Styles = GetCharacterStyles(dbchar);
             }
 
-            clone.SetOwnBrain(new AmteMobBrain());
+            if (loadSpells)
+            {
+                var allSpells = GetCharacterSpells(dbchar);
+                
+                var bestSpellsWithoutGroup = allSpells.Where(s => s.Group == 0).GroupBy(s => new { s.SpellType, s.Target, s.IsAoE, s.IsInstantCast, s.HasSubSpell }).Select(g => g.MaxBy(spell => spell.Level));
+                var bestSpellsWithGroup = allSpells.Where(s => s.Group != 0).GroupBy(s => s.Group).Select(g => g.MaxBy(spell => spell.Level));
+                clone.Spells = bestSpellsWithoutGroup.Concat(bestSpellsWithGroup).ToList();
+            }
+
             //josh
-            return true;
-        }
-
-        /// <summary>
-        /// Clones a player's appearance to a GameNPC
-        /// </summary>
-        /// <param name="player">The player to clone</param>
-        /// <returns>A clone of the player (null if the player is null)</returns>
-        public static GameNPC ClonePlayer(GamePlayer player)
-        {
-            return ClonePlayer(player, false);
-        }
-
-
-        /// <summary>
-        /// Clones a player's appearance and melee abilities to a GameNPC
-        /// </summary>
-        /// <param name="player">The player to clone</param>
-        /// <param name="loadStyles">True to load styles</param>
-        /// <returns>A clone of the player (null if the player is null)</returns>
-        public static GameNPC ClonePlayer(GamePlayer player, bool loadStyles)
-        {
-            GameNPC clone = new AmteMob();
-            ClonePlayer(player, clone, loadStyles);
             return clone;
         }
-
-
-        /// <summary>
-        /// Clones a player's appearance to a GameNPC
-        /// </summary>
-        /// <param name="player">The player to clone</param>
-        /// <param name="clone">The target GameNPC to clone the player to</param>
-        public static void ClonePlayer(GamePlayer player, GameNPC clone)
+        
+        private static GameNPC CreateNPCForClass(eCharacterClass charClass)
         {
-            ClonePlayer(player, clone, false);
+            switch (charClass)
+            {
+                // switch on class type instead? aren't all those listcasters
+                case eCharacterClass.Acolyte:
+                case eCharacterClass.Disciple:
+                case eCharacterClass.Elementalist:
+                case eCharacterClass.Mage:
+                case eCharacterClass.Magician:
+                case eCharacterClass.Naturalist:
+                case eCharacterClass.Mystic:
+                case eCharacterClass.Cabalist:
+                case eCharacterClass.Heretic:
+                case eCharacterClass.Necromancer:
+                case eCharacterClass.Sorcerer:
+                case eCharacterClass.Theurgist:
+                case eCharacterClass.Wizard:
+                case eCharacterClass.Bonedancer:
+                case eCharacterClass.Runemaster:
+                case eCharacterClass.Spiritmaster:
+                case eCharacterClass.Warlock:
+                case eCharacterClass.Animist:
+                case eCharacterClass.Bainshee:
+                case eCharacterClass.Eldritch:
+                case eCharacterClass.Enchanter:
+                case eCharacterClass.Mentalist:
+                case eCharacterClass.Valewalker:
+                case eCharacterClass.Cleric:
+                case eCharacterClass.Healer:
+                case eCharacterClass.Shaman:
+                case eCharacterClass.Druid:
+                    return new MageMob();
+                    
+                default:
+                    return new AmteMob();
+            }
         }
 
         /// <summary>
@@ -306,10 +293,19 @@ namespace DOL.GS.Scripts
         /// <param name="clone">The target GameNPC to clone the player to</param>
         /// <param name="loadStyles">True to load styles</param>
         // Players cloned by name, from the database, tend to be a bit tougher than players cloned from a GamePlayer
-        public static void ClonePlayer(GamePlayer player, GameNPC clone, bool loadStyles)
+        public static GameNPC ClonePlayer(GamePlayer player, GameNPC clone, bool loadStyles, bool loadSpells)
         {
-            if (player == null || clone == null)
-                return;
+            if (player == null)
+                return null;
+
+            if (clone == null)
+            {
+                clone = CreateNPCForClass((eCharacterClass)player.CharacterClass.ID);
+            }
+            else
+            {
+                clone.SetOwnBrain(new AmteMobBrain());
+            }
 
             //clone.Model = GetPlayerModel( (eRace)player.Race, player.PlayerCharacter.Gender );
             SetNPCModel(clone, player.Model);
@@ -387,10 +383,19 @@ namespace DOL.GS.Scripts
                 clone.Styles = player.GetStyleList().Cast<Styles.Style>().ToList();
             }
 
-            clone.SetOwnBrain(new AmteMobBrain());
+            if (loadSpells)
+            {
+                var usableSpells = player.GetAllUsableListSpells().SelectMany(t => t.Item2).OfType<Spell>();
+                // Inspired from LiveSpellHybridSpecialization.GetLinesSpellsForLiving
+                var bestSpellsWithoutGroup = usableSpells.Where(s => s.Group == 0).GroupBy(s => new { s.SpellType, s.Target, s.IsAoE, s.IsInstantCast, s.HasSubSpell }).Select(g => g.MaxBy(spell => spell.Level));
+                var bestSpellsWithGroup = usableSpells.Where(s => s.Group != 0).GroupBy(s => s.Group).Select(g => g.MaxBy(spell => spell.Level));
+                clone.Spells = bestSpellsWithoutGroup.Concat(bestSpellsWithGroup).ToList();
+            }
+
             #endregion Behavior
 
             //josh
+            return clone;
         }
 
 
@@ -453,39 +458,46 @@ namespace DOL.GS.Scripts
 
         public static List<Spell> GetCharacterSpells(DOLCharacters playerChar)
         {
+            Dictionary<string, int> classSpecs = SkillBase.GetSpecializationCareer(playerChar.Class, false)
+                .Where(v => v.Key.Trainable && v.Value <= playerChar.Level)
+                .ToDictionary(v => v.Key.KeyName, _ => playerChar.Level);
             string[] playerspecs = playerChar.SerializedSpecs.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+            
             //ist<Styles.Style> charStyles = new List<DOL.GS.Styles.Style>(30);
-            List<Spell> charStyles = new List<Spell>(150);
-            List<Spell> specStyles;
-            string specName;
-            byte specLevel;
+            
+            List<Spell> charSpells = new List<Spell>(150);
 
             foreach (string specInfo in playerspecs)
             {
+                string specName;
+                int specLevel;
                 if (specInfo.Contains("|"))
                 {
                     specName = specInfo.Split(new char[] { '|' })[0];
-                    if (!byte.TryParse(specInfo.Split(new char[] { '|' })[1], out specLevel))
-                        specLevel = 50;
+                    if (!int.TryParse(specInfo.Split(new char[] { '|' })[1], out specLevel))
+                        specLevel = playerChar.Level;
                 }
                 else
                 {
                     specName = specInfo;
-                    specLevel = 50;
+                    specLevel = playerChar.Level;
                 }
-
-                specStyles = SkillBase.GetSpellList(specName);
-
-
-                for (int i = specStyles.Count - 1; i >= 0; i--)
-                {
-                    specStyles.RemoveAt(i);
-                }
-
-                charStyles.AddRange(specStyles);
+                classSpecs[specName] = specLevel;
             }
 
-            return charStyles;
+            foreach (var (spec, level) in classSpecs)
+            {
+                var spellLines = SkillBase.GetSpecsSpellLines(spec).Select(spellLine => (spellLine.Item1, spellLine.Item1.IsBaseLine ? playerChar.Level : level));
+
+                foreach (var (line, lineLevel) in spellLines)
+                {
+                    var lineSpells = SkillBase.GetSpellList(line.KeyName).Where(s => s.Level <= lineLevel);
+                    
+                    charSpells.AddRange(lineSpells);
+                }
+            }
+
+            return charSpells;
         }
 
         /// <summary>
@@ -609,13 +621,14 @@ namespace DOL.GS.Scripts
                 return;
 
             bool loadStyles = args[args.Length - 1].ToLower().Equals("loadstyles");
+            bool loadSpells = args[args.Length - 1].ToLower().Equals("loadspells");
 
             GameNPC clone = null;
             clone = player.TargetObject as GameNPC;
             bool cloneIsNewMob = clone == null;
             GamePlayer cloneSource = player.TargetObject as GamePlayer;
             string playerName = string.Empty;
-
+            
             if (args.Length > 1 && args[1].Equals("live"))
             {
                 if (cloneSource == null)
@@ -638,28 +651,23 @@ namespace DOL.GS.Scripts
                     cloneSource = cloneClient.Player;
                 }
 
-                if (clone == null)
-                    clone = PlayerCloner.ClonePlayer(cloneSource, loadStyles);
-                else
-                    PlayerCloner.ClonePlayer(cloneSource, clone, loadStyles);
+                clone = PlayerCloner.ClonePlayer(cloneSource, clone, loadStyles, loadSpells);
             }
             else
             {
-                if (cloneSource == null && args.Length < 2)
-                {
-                    DisplaySyntax(client);
-                    return;
-                }
-
                 if (cloneSource == null)
+                {
+                    if (args.Length < 2)
+                    {
+                        DisplaySyntax(client);
+                        return;
+                    }
                     playerName = args[1];
+                }
                 else
                     playerName = cloneSource.Name;
 
-                if (clone == null)
-                    clone = PlayerCloner.ClonePlayer(playerName, loadStyles);
-                else
-                    PlayerCloner.ClonePlayer(playerName, clone, loadStyles, 0);
+                clone = PlayerCloner.ClonePlayerFromDB(playerName, clone, loadStyles, loadSpells, 0);
             }
 
             if (clone == null)
@@ -668,14 +676,13 @@ namespace DOL.GS.Scripts
             }
             else
             {
-                if (loadStyles)
-                    clone.SetOwnBrain(new AmteMobBrain());
-
                 if (cloneIsNewMob)
                 {
                     clone.Position = player.Position;
                     clone.AddToWorld();
+                    clone.LoadedFromScript = false;
                 }
+                clone.SaveIntoDatabase();
             }
         }
     }
