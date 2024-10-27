@@ -6391,7 +6391,11 @@ namespace DOL.GS
 
             if (target is GameLiving)
             {
-                return ((GameLiving)target).WhisperReceive(this, str);
+                if (!((GameLiving)target).WhisperReceive(this, str))
+                    return false;
+
+                Notify(GameLivingEvent.Whisper, this, new WhisperEventArgs(target, str));
+                return true;
             }
             
             Notify(GameLivingEvent.Whisper, this, new WhisperEventArgs(target, str));
@@ -7213,7 +7217,17 @@ namespace DOL.GS
         }
         #endregion
 
-        public bool IsDamned { get => isDamned; set => isDamned = value; }
+        public bool IsDamned
+        {
+            get => isDamned;
+            set
+            {
+                isDamned = value;
+                
+                if (this is GamePlayer player)
+                    player.RefreshQuestNPCs();
+            }
+        }
 
         /// <summary>
         /// Handle event notifications.
