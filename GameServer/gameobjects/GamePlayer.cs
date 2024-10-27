@@ -16915,7 +16915,14 @@ namespace DOL.GS
         public virtual bool Champion
         {
             get { return DBCharacter != null ? DBCharacter.Champion : false; }
-            set { if (DBCharacter != null) DBCharacter.Champion = value; }
+            set
+            {
+                if (DBCharacter == null) return;
+                
+                DBCharacter.Champion = value;
+                
+                RefreshQuestNPCs();
+            }
         }
 
         /// <summary>
