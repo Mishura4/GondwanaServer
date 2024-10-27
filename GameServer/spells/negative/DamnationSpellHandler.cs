@@ -51,7 +51,8 @@ namespace DOL.GS.Spells
             living.DamnationCancelBuffEffects();
             ApplyDebuffs(living);
             ApplyBuffs(living);
-
+            
+            living.IsDamned = true;
             if (living is GamePlayer player)
             {
                 if (player.GuildBanner != null)
@@ -148,7 +149,6 @@ namespace DOL.GS.Spells
                         break;
                 }
                 player.Out.SendUpdatePlayer();
-                player.IsDamned = true;
                 if (player.Group != null)
                 {
                     player.Group.UpdateMember(player, false, false);
@@ -288,9 +288,9 @@ namespace DOL.GS.Spells
             RemoveBuffs(living);
 
             living.Die(Caster);
+            living.IsDamned = false;
             if (living is GamePlayer player)
             {
-                player.IsDamned = false;
                 living.Model = living.TempProperties.getProperty<ushort>("OriginalModel");
                 player.Out.SendUpdatePlayer();
                 if (player.Group != null)
