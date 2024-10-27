@@ -147,7 +147,7 @@ public class AmteMob : GameNPC, IAmteNPC
             var quest = player.QuestList.FirstOrDefault(pq => pq.QuestId == qid);
             if (quest == null)
                 continue;
-            if (quest.VisibleGoals.OfType<DataQuestJsonGoal.GenericDataQuestGoal>().Any(g => g.Goal is EndGoal end && end.Target == this))
+            if (quest.VisibleGoals.OfType<DataQuestJsonGoal.GenericDataQuestGoal>().Any(g => g.Goal is EndGoal end && end.Target == this && end.IsActive(quest)))
                 return eQuestIndicator.Finish;
         }
 
