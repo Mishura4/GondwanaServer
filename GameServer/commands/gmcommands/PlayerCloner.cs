@@ -603,11 +603,11 @@ namespace DOL.GS.Scripts
         ePrivLevel.GM,
         "Clone a player with live or calculated stats, optionally loading styles",
         "If a player is targeted, that player is cloned to a new mob using:",
-        "/cloneplayer [live] [LoadStyles]",
+        "/cloneplayer [live] [LoadStyles or LoadSpells]",
         "If a mob is targeted, a player is cloned to the targeted mob using:",
-        "/cloneplayer [live] Playername [LoadStyles]",
+        "/cloneplayer [live] Playername [LoadStyles or LoadSpells]",
         "If the user has no target, a player is cloned to a new mob using:",
-        "/cloneplayer [live] Playername [LoadStyles]")]
+        "/cloneplayer [live] Playername [LoadStyles or LoadSpells]")]
     public class ClonePlayerCommandHandler : AbstractCommandHandler, ICommandHandler
     {
         public void OnCommand(GameClient client, string[] args)
