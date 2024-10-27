@@ -148,9 +148,9 @@ namespace DOL.GS.Spells
                         break;
                 }
                 player.Out.SendUpdatePlayer();
+                player.IsDamned = true;
                 if (player.Group != null)
                 {
-                    player.IsDamned = true;
                     player.Group.UpdateMember(player, false, false);
                 }
             }
