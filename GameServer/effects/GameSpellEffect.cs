@@ -105,23 +105,13 @@ namespace DOL.GS.Effects
             {
                 lock (m_LockObject)
                 {
-                    SetDurationUnlocked(value);
+                    if (m_duration != value)
+                    {
+                        m_duration = value;
+                        StartDurationTimer();
+                        UpdateEffect();
+                    }
                 }
-            }
-        }
-
-        private void SetDurationUnlocked(int value)
-        {
-            if (m_effectTimer != null)
-            {
-                m_effectTimer.Stop();
-                m_effectTimer = null;
-            }
-            if (m_duration != value)
-            {
-                m_duration = value;
-                StartDurationTimer();
-                UpdateEffect();
             }
         }
 
@@ -563,7 +553,9 @@ namespace DOL.GS.Effects
                     if (!wasImmunity && m_immunityDuration > 0)
                     {
                         m_startedTick = GameTimer.GetTickCount();
-                        SetDurationUnlocked(m_immunityDuration);
+                        m_duration = m_immunityDuration;
+                        StartDurationTimer();
+                        UpdateEffect();
                         return;
                     }
                 }
@@ -621,7 +613,10 @@ namespace DOL.GS.Effects
 
                 // Restart Effect
                 IsExpired = false;
-                SetDurationUnlocked(effect.Duration);
+                m_startedTick = GameTimer.GetTickCount();
+                m_duration = effect.Duration;
+                StartDurationTimer();
+                UpdateEffect();
             }
 
             // Try Enabling Effect
@@ -668,6 +663,12 @@ namespace DOL.GS.Effects
             // Duration => 0 = endless until explicit stop
             if (Duration == 0)
                 return;
+            
+            if (m_effectTimer != null)
+            {
+                m_effectTimer.Stop();
+                m_effectTimer = null;
+            }
             
             var now = GameTimer.GetTickCount();
             var endTick = m_startedTick + Duration;
@@ -759,8 +760,10 @@ namespace DOL.GS.Effects
                 {
                     actualAddedDuration = 0;
                 }
-
-                SetDurationUnlocked(cappedTotalDuration);
+                
+                m_duration = cappedTotalDuration;
+                StartDurationTimer();
+                UpdateEffect();
             }
 
             return actualAddedDuration;
