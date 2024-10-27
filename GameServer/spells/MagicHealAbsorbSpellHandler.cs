@@ -25,7 +25,7 @@ namespace DOL.GS.Spells
 
             if (Caster is GamePlayer casterPlayer)
             {
-                MessageToLiving(casterPlayer, LanguageMgr.GetTranslation(casterPlayer.Client, "SpellHandler.MagicHealAbsorbSpellHandler.EffectStart"), eChatType.CT_Spell);
+                MessageToLiving(casterPlayer, LanguageMgr.GetTranslation(casterPlayer.Client, "Languages.DBSpells.AFBuffDefAuraYou"), eChatType.CT_Spell);
             }
 
             SendEffectAnimation(effect.Owner, 0, false, 1);
@@ -57,7 +57,7 @@ namespace DOL.GS.Spells
                 if (ad.SpellHandler != null && ad.SpellHandler.Spell != null)
                 {
                     string spellType = ad.SpellHandler.Spell.SpellType;
-                    if (spellType == "DirectDamage" || spellType == "DamageOverTime" || spellType == "Bolt" || spellType == "Bomber" || spellType == "HereticDamageSpeedDecreaseLOP" || spellType == "HereticDoTLostOnPulse")
+                    if (spellType == "DirectDamage" || spellType == "DamageOverTime" || spellType == "Bolt" || spellType == "Bomber" || spellType == "HereticDamageSpeedDecreaseLOP" || spellType == "HereticDoTLostOnPulse" || spellType == "DirectDamageWithDebuff" || spellType == "Lifedrain" || spellType == "OmniLifedrain")
                     {
                         isApplicableSpell = true;
                     }

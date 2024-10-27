@@ -159,6 +159,7 @@ namespace DOL.GS.Spells
             dbs.LifeDrainReturn = spell.LifeDrainReturn;
             dbs.Power = 0;
             dbs.CastTime = 0;
+            dbs.Value = 0.2;
             dbs.Range = WorldMgr.VISIBILITY_DISTANCE;
             sRadius = 350;
             s = new Spell(dbs, 1);
@@ -311,7 +312,7 @@ namespace DOL.GS.Spells
             if ((effect.Owner is GamePlayer))
             {
                 GamePlayer casterPlayer = effect.Owner as GamePlayer;
-                if (casterPlayer.GroundTargetPosition != Position.Nowhere && casterPlayer.GroundTargetInView)
+                if (casterPlayer!.GroundTargetPosition != Position.Nowhere && casterPlayer.GroundTargetInView)
                 {
                     GameEventMgr.AddHandler(casterPlayer, GamePlayerEvent.Moving, new DOLEventHandler(PlayerMoves));
                     GameEventMgr.AddHandler(warder, GameLivingEvent.Dying, new DOLEventHandler(BattleWarderDie));
@@ -457,7 +458,7 @@ namespace DOL.GS.Spells
     [SpellHandler("BrittleGuard")]
     public class BrittleGuardSpellHandler : MasterlevelHandling
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()!.DeclaringType);
 
         GameNPC summoned = null;
         GameSpellEffect beffect = null;
@@ -617,7 +618,7 @@ namespace DOL.GS.Spells
     [SpellHandler("SummonTitan")]
     public class Convoker10SpellHandler : MasterlevelHandling
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()!.DeclaringType);
 
         private Position position = Position.Nowhere;
         GameNPC summoned = null;
@@ -694,7 +695,7 @@ namespace DOL.GS.Spells
             }
             else
             {
-                summoned.Flags = 0;
+                summoned!.Flags = 0;
                 m_growTimer.Stop();
                 m_growTimer = null;
             }

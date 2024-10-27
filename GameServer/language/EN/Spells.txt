@@ -19,6 +19,36 @@ DelveInfo.Target:					Target: {0}
 DelveInfo.Value:					Value: {0}
 DelveInfo.ValueNegative:				Value: -{0}
 
+# Spell ShortDescriptions
+SpellDescription.DirectDamage.MainDescription:		Does {0} {1} damage to the target.
+SpellDescription.DoT.MainDescription:				Target takes {0} {1} damage every {2} seconds.
+SpellDescription.LifeDrain.MainDescription:			The target takes {0} {1} damage and the attacker is healed for {2}% of the damage dealt.
+SpellDescription.Nearsight.MainDescription1:		Target's effective range is reduced by {0}% for ranged attacks.
+SpellDescription.Nearsight.MainDescription2:		Nearsight spells cast upon the caster's group are reduced in effectiveness by {0}%, or outright resisted.
+SpellDescription.SpreadHeal.MainDescription:		Spreadheal for {0}.
+SpellDescription.RegenHeal.MainDescription:			Target regenerates {0} extra health.
+SpellDescription.RegenPower.MainDescription:		Target regenerates {0} extra power.
+SpellDescription.RegenEndu.MainDescription:			Target regenerates {0} extra fatigue.
+SpellDescription.SpeedDecrease.MainDescription:		The target is slowed by {0}%.
+SpellDescription.SpeedDecrease.Rooted:				Target is rooted in place.
+SpellDescription.Slow.MainDescription:				The target is slowed by {0}%. There's no immunity against this spell and it cannot be interrupted by hits.
+SpellDescription.Chamber.MainDescription:			Allows you to preload a chamber containing a primary spell and a secondary spell which can be instantly unloaded upon your target.
+SpellDescription.Chamber.CanContainBolts:			Can contain bolts.
+SpellDescription.Chamber.CannotContainBolts:		Cannot contain bolts.
+SpellDescription.FocusShell.MainDescription:		All Melee and Spell Damage done to the target is reduced by {0}%.
+SpellDescription.FocusShell.OnlyInPvPORvR:			This spell can only be used in RvR or PvP zones.
+SpellDescription.Powerless.MainDescription:			Allows you to cast a secondary spell without expending power.
+SpellDescription.Range.MainDescription:				Allows you to cast a secondary spell at {0}% range.
+SpellDescription.Uninterruptable.MainDescription:	Allows you to cast a secondary spell without being interrupted but reduces its effectiveness by {0}%.
+SpellDescription.BuffShear.Str:						Strips the target of any beneficial Strength spell effects.
+SpellDescription.BuffShear.Dex:						Strips the target of any beneficial Dexterity spell effects.
+SpellDescription.BuffShear.Con:						Strips the target of any beneficial Constitution spell effects.
+SpellDescription.BuffShear.Acuity:					Strips the target of any beneficial Acuity spell effects.
+SpellDescription.BuffShear.StrCon:					Strips the target of any beneficial Strength/Constitution dual spell effects.
+SpellDescription.BuffShear.DexQui:					Strips the target of any beneficial Dexterity/Quickness dual spell effects.
+SpellDescription.BuffShear.Random:					Randomly strips one beneficial spell effect from the target.
+SpellDescription.Warlock.SecondarySpell:			This is a secondary spell.
+
 # AblativeArmor
 AblativeArmor.DelveInfo.Function:			Function: melee hitpoint buffer (?)
 AblativeArmor.DelveInfo.Absorption1:			Absorption: {0}%

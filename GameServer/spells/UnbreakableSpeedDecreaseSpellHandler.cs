@@ -192,6 +192,28 @@ namespace DOL.GS.Spells
             : base(caster, spell, line) { }
 
         public override string ShortDescription
-            => Spell.Value >= 99 ? "Target is rooted in place" : $"The target is slowed by {Spell.Value}%.";
+        {
+            get
+            {
+                string description;
+
+                if (Spell.Value >= 99)
+                {
+                    description = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.SpeedDecrease.Rooted");
+                }
+                else
+                {
+                    description = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.SpeedDecrease.MainDescription", Spell.Value);
+                }
+
+                if (Spell.IsSecondary)
+                {
+                    string secondaryMessage = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.Warlock.SecondarySpell");
+                    description += "\n\n" + secondaryMessage;
+                }
+
+                return description;
+            }
+        }
     }
 }

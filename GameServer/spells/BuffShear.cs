@@ -33,7 +33,7 @@ namespace DOL.GS.Spells
     /// <summary>
     /// Shears strength buff 
     /// </summary>
-    [SpellHandlerAttribute("StrengthShear")]
+    [SpellHandler("StrengthShear")]
     public class StrengthShear : AbstractBuffShear
     {
         public override string ShearSpellType { get { return "StrengthBuff"; } }
@@ -53,66 +53,120 @@ namespace DOL.GS.Spells
 
         // constructor
         public StrengthShear(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+
+        public override string ShortDescription
+        {
+            get
+            {
+                string description = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.BuffShear.Str");
+                return description;
+            }
+        }
     }
 
     /// <summary>
     /// Shears dexterity buff
     /// </summary>
-    [SpellHandlerAttribute("DexterityShear")]
+    [SpellHandler("DexterityShear")]
     public class DexterityShear : AbstractBuffShear
     {
         public override string ShearSpellType { get { return "DexterityBuff"; } }
         public override string DelveSpellType { get { return "Dexterity"; } }
         // constructor
         public DexterityShear(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+
+        public override string ShortDescription
+        {
+            get
+            {
+                string description = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.BuffShear.Dex");
+                return description;
+            }
+        }
     }
 
     /// <summary>
     /// Shears constitution buff
     /// </summary>
-    [SpellHandlerAttribute("ConstitutionShear")]
+    [SpellHandler("ConstitutionShear")]
     public class ConstitutionShear : AbstractBuffShear
     {
         public override string ShearSpellType { get { return "ConstitutionBuff"; } }
         public override string DelveSpellType { get { return "Constitution"; } }
         // constructor
         public ConstitutionShear(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+
+        public override string ShortDescription
+        {
+            get
+            {
+                string description = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.BuffShear.Con");
+                return description;
+            }
+        }
     }
 
     /// <summary>
     /// Shears acuity buff
     /// </summary>
-    [SpellHandlerAttribute("AcuityShear")]
+    [SpellHandler("AcuityShear")]
     public class AcuityShear : AbstractBuffShear
     {
         public override string ShearSpellType { get { return "AcuityBuff"; } }
         public override string DelveSpellType { get { return "Acuity"; } }
         // constructor
         public AcuityShear(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+
+        public override string ShortDescription
+        {
+            get
+            {
+                string description = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.BuffShear.Acuity");
+                return description;
+            }
+        }
     }
 
     /// <summary>
     /// Shears str/con buff
     /// </summary>
-    [SpellHandlerAttribute("StrengthConstitutionShear")]
+    [SpellHandler("StrengthConstitutionShear")]
     public class StrengthConstitutionShear : AbstractBuffShear
     {
         public override string ShearSpellType { get { return "StrengthConstitutionBuff"; } }
         public override string DelveSpellType { get { return "Str/Con"; } }
         // constructor
         public StrengthConstitutionShear(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+
+        public override string ShortDescription
+        {
+            get
+            {
+                string description = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.BuffShear.StrCon");
+                return description;
+            }
+        }
     }
 
     /// <summary>
     /// Shears dex/qui buff
     /// </summary>
-    [SpellHandlerAttribute("DexterityQuicknessShear")]
+    [SpellHandler("DexterityQuicknessShear")]
     public class DexterityQuicknessShear : AbstractBuffShear
     {
         public override string ShearSpellType { get { return "DexterityQuicknessBuff"; } }
         public override string DelveSpellType { get { return "Dex/Qui"; } }
         // constructor
         public DexterityQuicknessShear(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+
+        public override string ShortDescription
+        {
+            get
+            {
+                string description = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.BuffShear.DexQui");
+                return description;
+            }
+        }
     }
 
     /// <summary>
@@ -258,7 +312,7 @@ namespace DOL.GS.Spells
         public AbstractBuffShear(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
     }
 
-    [SpellHandlerAttribute("RandomBuffShear")]
+    [SpellHandler("RandomBuffShear")]
     public class RandomBuffShear : SpellHandler
     {
 
@@ -327,6 +381,12 @@ namespace DOL.GS.Spells
         public RandomBuffShear(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
         public override string ShortDescription
-            => "Randomly strips one beneficial spell effect from the target.";
+        {
+            get
+            {
+                string description = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.BuffShear.Random");
+                return description;
+            }
+        }
     }
 }

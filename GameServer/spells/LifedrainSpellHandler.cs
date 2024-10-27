@@ -129,6 +129,20 @@ namespace DOL.GS.Spells
             bool casterIsDamned = SpellHandler.FindEffectOnTarget(m_caster, "Damnation") != null;
             bool targetIsDamned = SpellHandler.FindEffectOnTarget(target, "Damnation") != null;
 
+            GameSpellEffect healAbsorbEffect = SpellHandler.FindEffectOnTarget(target, "MagicHealAbsorb");
+            if (healAbsorbEffect != null)
+            {
+                int absorbValue = (int)healAbsorbEffect.Spell.Value / 2;
+                totalHealReductionPercentage += absorbValue;
+                if (totalHealReductionPercentage > 100)
+                    totalHealReductionPercentage = 100;
+
+                if (m_caster is GamePlayer casterPlayer)
+                {
+                    MessageToCaster(LanguageMgr.GetTranslation(casterPlayer.Client, "SpellHandler.HealSpell.HealingReducedShield", absorbValue, m_caster.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
+                }
+            }
+
             if (m_caster.IsDiseased)
             {
                 int amnesiaChance = m_caster.TempProperties.getProperty<int>("AmnesiaChance", 50);
@@ -231,6 +245,19 @@ namespace DOL.GS.Spells
         public LifedrainSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
         public override string ShortDescription
-            => $"The target takes {Spell.Damage} Body damage and the attacker is healed for {Spell.LifeDrainReturn}% of the damage dealt.";
+        {
+            get
+            {
+                string description = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.LifeDrain.MainDescription", Spell.Damage, Spell.DamageType, Spell.LifeDrainReturn);
+
+                if (Spell.IsSecondary)
+                {
+                    string secondaryMessage = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.Warlock.SecondarySpell");
+                    description += "\n\n" + secondaryMessage;
+                }
+
+                return description;
+            }
+        }
     }
 }

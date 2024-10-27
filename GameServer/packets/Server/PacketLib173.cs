@@ -38,7 +38,7 @@ namespace DOL.GS.PacketHandler
     [PacketLib(173, GameClient.eClientVersion.Version173)]
     public class PacketLib173 : PacketLib172
     {
-        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
         public PacketLib173(GameClient client)
             : base(client)
@@ -52,7 +52,6 @@ namespace DOL.GS.PacketHandler
                 pak.WriteShort((ushort)player.ObjectID);
                 pak.WriteByte((byte)3);
 
-
                 lock (player.EffectList)
                 {
                     foreach (IGameEffect fx in player.EffectList)
@@ -62,7 +61,7 @@ namespace DOL.GS.PacketHandler
                             && effect.SpellHandler.Spell != null && (effect.SpellHandler is ChamberSpellHandler);
                         if (isActiveChamberSpell)
                         {
-                            var chamber = (ChamberSpellHandler)effect.SpellHandler;
+                            var chamber = (ChamberSpellHandler)effect!.SpellHandler;
                             pak.WriteByte(GetChamberModelID(chamber));
                         }
                     }
@@ -183,7 +182,7 @@ namespace DOL.GS.PacketHandler
                     pak.FillString(region.ServerPort.ToString(), 5);
                     string ip = region.ServerIP;
                     if (ip == "any" || ip == "0.0.0.0" || ip == "127.0.0.1" || ip.StartsWith("10.13.") || ip.StartsWith("192.168."))
-                        ip = ((IPEndPoint)m_gameClient.Socket.LocalEndPoint).Address.ToString();
+                        ip = ((IPEndPoint)m_gameClient.Socket.LocalEndPoint)!.Address.ToString();
                     pak.FillString(ip, 20);
                     SendTCP(pak);
                 }
@@ -221,7 +220,7 @@ namespace DOL.GS.PacketHandler
                                 //Try to fix the region ip so UDP is enabled!
                                 string ip = entries[index].ip;
                                 if (ip == "any" || ip == "0.0.0.0" || ip == "127.0.0.1" || ip.StartsWith("10.13.") || ip.StartsWith("192.168."))
-                                    ip = ((IPEndPoint)m_gameClient.Socket.LocalEndPoint).Address.ToString();
+                                    ip = ((IPEndPoint)m_gameClient.Socket.LocalEndPoint)!.Address.ToString();
                                 pak.FillString(ip, 20);
 
                                 //							DOLConsole.WriteLine(string.Format(" ip={3}; fromPort={1}; toPort={2}; num={4}; id={0}; region name={5}", entries[index].id, entries[index].fromPort, entries[index].toPort, entries[index].ip, num, entries[index].name));

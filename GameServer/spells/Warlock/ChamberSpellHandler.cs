@@ -171,7 +171,7 @@ namespace DOL.GS.Spells
                 }
                 if (m_spellTarget is GamePlayer)
                 {
-                    if ((m_spellTarget as GamePlayer).IsInvulnerableToAttack)
+                    if ((m_spellTarget as GamePlayer)!.IsInvulnerableToAttack)
                     {
                         MessageToCaster(LanguageMgr.GetTranslation(caster.Client, "SpellHandler.ChamberSpell.TargetInvulnerable"), eChatType.CT_System);
                         return false;
@@ -228,7 +228,7 @@ namespace DOL.GS.Spells
                 if (m_caster is GamePlayer)
                 {
                     GamePlayer player_Caster = Caster as GamePlayer;
-                    foreach (SpellLine spellline in player_Caster.GetSpellLines())
+                    foreach (SpellLine spellline in player_Caster!.GetSpellLines())
                         foreach (Spell sp in SkillBase.GetSpellList(spellline.KeyName))
                             if (sp.SpellType == m_spell.SpellType)
                                 m_caster.DisableSkill(sp, sp.RecastDelay);
@@ -321,6 +321,8 @@ namespace DOL.GS.Spells
                     return 4;
                 case "Chamber of Greater Fate":
                     return 5;
+                case "Chamber of Creation":
+                    return 6;
             }
 
             return 0;
@@ -347,17 +349,38 @@ namespace DOL.GS.Spells
                     list.Add("Type: Any");
 
                 //Cast
-                list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DelveInfo.CastingTime", (Spell.CastTime * 0.001).ToString("0.0## sec;-0.0## sec;'instant'")));
+                list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.CastingTime", (Spell.CastTime * 0.001).ToString("0.0## sec;-0.0## sec;'instant'")));
                 //Recast
                 if (Spell.RecastDelay > 60000)
-                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DelveInfo.RecastTime") + (Spell.RecastDelay / 60000).ToString() + ":" + (Spell.RecastDelay % 60000 / 1000).ToString("00") + " min");
+                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.RecastTime") + (Spell.RecastDelay / 60000).ToString() + ":" + (Spell.RecastDelay % 60000 / 1000).ToString("00") + " min");
                 else if (Spell.RecastDelay > 0)
-                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "DelveInfo.RecastTime") + (Spell.RecastDelay / 1000).ToString() + " sec");
+                    list.Add(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "DelveInfo.RecastTime") + (Spell.RecastDelay / 1000).ToString() + " sec");
                 return list;
             }
         }
         #endregion
         // constructor
         public ChamberSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+
+        public override string ShortDescription
+        {
+            get
+            {
+                string description = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.Chamber.MainDescription");
+
+                if (!Spell.AllowBolt)
+                {
+                    string cannotContainBolts = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.Chamber.CannotContainBolts");
+                    description += "\n\n" + cannotContainBolts;
+                }
+                else
+                {
+                    string canContainBolts = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.Chamber.CanContainBolts");
+                    description += "\n\n" + canContainBolts;
+                }
+
+                return description;
+            }
+        }
     }
 }

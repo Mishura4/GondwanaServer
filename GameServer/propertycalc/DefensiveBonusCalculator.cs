@@ -32,7 +32,7 @@ namespace DOL.GS.PropertyCalc
             int itemBonus = living.ItemBonus[(int)property];
             int buffBonus = living.BuffBonusCategory4[eProperty.DefensiveBonus];
             int debuff = living.DebuffCategory[eProperty.DefensiveBonus];
-            int value = buffBonus + Math.Min(20, itemBonus) - debuff;
+            int value = buffBonus + Math.Min(15, itemBonus) - debuff;
             return Math.Max(0, value);
         }
     }

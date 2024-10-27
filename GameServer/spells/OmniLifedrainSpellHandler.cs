@@ -144,6 +144,20 @@ namespace DOL.GS.Spells
             bool casterIsDamned = SpellHandler.FindEffectOnTarget(m_caster, "Damnation") != null;
             bool targetIsDamned = SpellHandler.FindEffectOnTarget(target, "Damnation") != null;
 
+            GameSpellEffect healAbsorbEffect = SpellHandler.FindEffectOnTarget(target, "MagicHealAbsorb");
+            if (healAbsorbEffect != null)
+            {
+                int absorbValue = (int)healAbsorbEffect.Spell.Value / 2;
+                totalHealReductionPercentage += absorbValue;
+                if (totalHealReductionPercentage > 100)
+                    totalHealReductionPercentage = 100;
+
+                if (m_caster is GamePlayer casterPlayer)
+                {
+                    MessageToCaster(LanguageMgr.GetTranslation(casterPlayer.Client, "SpellHandler.HealSpell.HealingReducedShield", absorbValue, m_caster.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
+                }
+            }
+
             if (m_caster.IsDiseased)
             {
                 int amnesiaChance = m_caster.TempProperties.getProperty<int>("AmnesiaChance", 50);

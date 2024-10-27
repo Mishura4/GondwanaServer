@@ -174,7 +174,21 @@ namespace DOL.GS.Spells
 
         public NearsightSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine) { }
 
-        public override string ShortDescription => $"Target's effective range is reduced by {Spell.Value}% for ranged attacks.";
+        public override string ShortDescription
+        {
+            get
+            {
+                string description = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client.Account.Language, "SpellDescription.Nearsight.MainDescription1", Spell.Value);
+
+                if (Spell.IsSecondary)
+                {
+                    string secondaryMessage = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client.Account.Language, "SpellDescription.Warlock.SecondarySpell");
+                    description += "\n\n" + secondaryMessage;
+                }
+
+                return description;
+            }
+        }
     }
 
     [SpellHandler("NearsightReduction")]
@@ -189,6 +203,19 @@ namespace DOL.GS.Spells
         public NearsightReductionSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine) { }
 
         public override string ShortDescription
-            => $"Nearsight spells cast upon the caster's group are reduced in effectiveness by {Spell.Value}%, or outright resisted.";
+        {
+            get
+            {
+                string description = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.Nearsight.MainDescription2", Spell.Value);
+
+                if (Spell.IsSecondary)
+                {
+                    string secondaryMessage = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.Warlock.SecondarySpell");
+                    description += "\n\n" + secondaryMessage;
+                }
+
+                return description;
+            }
+        }
     }
 }

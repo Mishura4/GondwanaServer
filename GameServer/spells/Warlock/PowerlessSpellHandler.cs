@@ -26,6 +26,7 @@ using DOL.Events;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
 using DOL.GS.SkillHandler;
+using DOL.Language;
 using log4net;
 
 namespace DOL.GS.Spells
@@ -50,5 +51,14 @@ namespace DOL.GS.Spells
 
         // constructor
         public PowerlessSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+
+        public override string ShortDescription
+        {
+            get
+            {
+                string description = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.Powerless.MainDescription");
+                return description;
+            }
+        }
     }
 }

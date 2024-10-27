@@ -26,6 +26,7 @@ using DOL.GS.PacketHandler;
 using DOL.Events;
 using DOL.GS.Effects;
 using DOL.Language;
+using DOL.GS.ServerProperties;
 
 namespace DOL.GS.Spells
 {
@@ -247,11 +248,12 @@ namespace DOL.GS.Spells
         {
             get
             {
-                string description = $"All Melee and Spell Damage done to the target is reduced by {Spell.Value}%.";
+                string description = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.FocusShell.MainDescription", Spell.Value);
 
-                if (!ServerProperties.Properties.ALLOW_FOCUS_SHELL_OUTSIDE_PVP)
+                if (!Properties.ALLOW_FOCUS_SHELL_OUTSIDE_PVP)
                 {
-                    description += "This spell can only be used in RvR or PvP zones.";
+                    string onlyInPvPORvR = LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellDescription.FocusShell.OnlyInPvPORvR");
+                    description += "\n\n" + onlyInPvPORvR;
                 }
 
                 return description;

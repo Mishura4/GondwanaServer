@@ -56,7 +56,7 @@ namespace DOL.GS.Spells
             {
                 if (ad.SpellHandler != null && ad.SpellHandler.Spell != null)
                 {
-                    if (ad.SpellHandler.Spell.SpellType == "DirectDamage" || ad.SpellHandler.Spell.SpellType == "DamageOverTime" || ad.SpellHandler.Spell.SpellType == "Bolt" || ad.SpellHandler.Spell.SpellType == "Bomber" || ad.SpellHandler.Spell.SpellType == "Archery" || ad.SpellHandler.Spell.SpellType == "ArcheryDOT" || ad.SpellHandler.Spell.SpellType == "SiegeArrow" || ad.SpellHandler.Spell.SpellType == "HereticDamageSpeedDecreaseLOP" || ad.SpellHandler.Spell.SpellType == "HereticDoTLostOnPulse")
+                    if (ad.SpellHandler.Spell.SpellType == "DirectDamage" || ad.SpellHandler.Spell.SpellType == "DamageOverTime" || ad.SpellHandler.Spell.SpellType == "Bolt" || ad.SpellHandler.Spell.SpellType == "Bomber" || ad.SpellHandler.Spell.SpellType == "Archery" || ad.SpellHandler.Spell.SpellType == "ArcheryDOT" || ad.SpellHandler.Spell.SpellType == "SiegeArrow" || ad.SpellHandler.Spell.SpellType == "HereticDamageSpeedDecreaseLOP" || ad.SpellHandler.Spell.SpellType == "HereticDoTLostOnPulse" || ad.SpellHandler.Spell.SpellType == "DirectDamageWithDebuff" || ad.SpellHandler.Spell.SpellType == "Lifedrain" || ad.SpellHandler.Spell.SpellType == "OmniLifedrain")
                     {
                         isDDandDoTSpell = true;
                     }
@@ -101,6 +101,15 @@ namespace DOL.GS.Spells
             int maxMana = target.MaxMana;
             int currentMana = target.Mana;
             int manaPercent = (maxMana > 0) ? (currentMana * 100) / maxMana : 0;
+
+            if (manaPercent < 25)
+            {
+                if (target is GamePlayer player)
+                {
+                    MessageToLiving(player, LanguageMgr.GetTranslation(player.Client, "SpellHandler.PowerShield.InsufficientMana"), eChatType.CT_SpellResisted);
+                }
+                return;
+            }
 
             int adjustedHealthToRestorePercent = (healthToRestorePercent * manaPercent) / 100;
 
@@ -215,6 +224,14 @@ namespace DOL.GS.Spells
                 {
                     MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.HealSpell.TargetHealed", m_caster.GetPersonalizedName(player), healedAmount), eChatType.CT_Spell);
                     MessageToLiving(player, LanguageMgr.GetTranslation(player.Client, "SpellHandler.HealSpell.YouAreHealed", player.GetPersonalizedName(m_caster), healedAmount), eChatType.CT_Spell);
+                }
+            }
+
+            if (Spell.AmnesiaChance > 0)
+            {
+                if (target is GamePlayer player)
+                {
+                    player.Out.SendSpellEffectAnimation(player, player, (ushort)Spell.AmnesiaChance, 0, false, 1);
                 }
             }
 
