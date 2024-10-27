@@ -171,6 +171,7 @@ namespace DOL.GS
             if (amountToBuy <= 0) return;
 
             long cost = amountToBuy * articleToBuy.GetCurrencyFor(player);
+            GameInventoryItem item;
 
             lock (player.Inventory)
             {
@@ -182,8 +183,9 @@ namespace DOL.GS
                     player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameMerchant.OnPlayerBuy.YouNeedGeneric", costToText), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     return;
                 }
-
-                if (!player.Inventory.AddTemplate(GameInventoryItem.Create(itemToBuy), amountToBuy, eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack))
+                
+                item = GameInventoryItem.Create(itemToBuy);
+                if (!player.Inventory.AddTemplate(item, amountToBuy, eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack))
                 {
                     player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameMerchant.OnPlayerBuy.NotInventorySpace"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     return;
@@ -198,6 +200,8 @@ namespace DOL.GS
                 if (!player.RemoveMoney(price)) throw new Exception("Money amount changed while adding items.");
                 player.Out.SendMessage(message, eChatType.CT_Merchant, eChatLoc.CL_SystemWindow);
             }
+                
+            player.Notify(GamePlayerEvent.ReceiveItem, player, new ReceiveItemEventArgs(this, player, item));
         }
 
         public static void OnPlayerBuy(GamePlayer player, int item_slot, int page, int number, MerchantTradeItems TradeItems)
@@ -213,6 +217,7 @@ namespace DOL.GS
 
             var totalCost = Currency.Copper.Mint(number * MerchantCatalogEntry.GetCurrencyFor(player, template.Price));
 
+            GameInventoryItem item;
             lock (player.Inventory)
             {
 
@@ -221,8 +226,9 @@ namespace DOL.GS
                     player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameMerchant.OnPlayerBuy.YouNeed", totalCost.ToText()), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     return;
                 }
-
-                if (!player.Inventory.AddTemplate(GameInventoryItem.Create(template), amountToBuy, eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack))
+                
+                item = GameInventoryItem.Create(template);
+                if (!player.Inventory.AddTemplate(item, amountToBuy, eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack))
                 {
                     player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GameMerchant.OnPlayerBuy.NotInventorySpace"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     return;
@@ -244,6 +250,8 @@ namespace DOL.GS
                 player.SendMessage(message, eChatType.CT_Merchant, eChatLoc.CL_SystemWindow);
                 InventoryLogging.LogInventoryAction(player, TradeItems.ItemsListID, $"(TRADEITEMS;{TradeItems.ItemsListID})", eInventoryActionType.Merchant, totalCost.Amount);
             }
+            
+            player.Notify(GamePlayerEvent.ReceiveItem, player, new ReceiveItemEventArgs(null, player, item));
         }
 
         public static void OnPlayerBuy(GamePlayer player, int item_slot, int number, MerchantTradeItems TradeItems)
