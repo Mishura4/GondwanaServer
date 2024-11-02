@@ -148,6 +148,28 @@ namespace DOL.GS.Spells
         public override string ShortDescription => $"Increases the target's resistance to all magic damage by {Spell.Value}%.";
     }
 
+    [SpellHandler("SecondaryMagicResistsBuff")]
+    public class SecondaryMagicResistsBuff : AbstractResistBuff
+    {
+        public override eBuffBonusCategory BonusCategory1 { get { return eBuffBonusCategory.SpecBuff; } }
+        public override eBuffBonusCategory BonusCategory2 { get { return eBuffBonusCategory.SpecBuff; } }
+        public override eBuffBonusCategory BonusCategory3 { get { return eBuffBonusCategory.SpecBuff; } }
+        public override eBuffBonusCategory BonusCategory4 { get { return eBuffBonusCategory.SpecBuff; } }
+        public override eBuffBonusCategory BonusCategory5 { get { return eBuffBonusCategory.SpecBuff; } }
+        public override eBuffBonusCategory BonusCategory6 { get { return eBuffBonusCategory.SpecBuff; } }
+
+        public override eProperty Property1 { get { return eProperty.Resist_Heat; } }
+        public override eProperty Property2 { get { return eProperty.Resist_Cold; } }
+        public override eProperty Property3 { get { return eProperty.Resist_Matter; } }
+        public override eProperty Property4 { get { return eProperty.Resist_Body; } }
+        public override eProperty Property5 { get { return eProperty.Resist_Spirit; } }
+        public override eProperty Property6 { get { return eProperty.Resist_Energy; } }
+
+        public SecondaryMagicResistsBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+
+        public override string ShortDescription => $"Increases the target's secondary magic resistances by {Spell.Value}%.";
+    }
+
     [SpellHandler("CrushSlashThrustBuff")]
     [SpellHandler("AllMeleeResistsBuff")]
     public class CrushSlashThrustBuff : AbstractResistBuff

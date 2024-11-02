@@ -22,6 +22,7 @@ using System.Reflection;
 using DOL.GS.PlayerTitles;
 using log4net;
 using DOL.GS.Housing;
+using DOL.GS.PropertyCalc;
 
 namespace DOL.GS.PacketHandler
 {
@@ -395,29 +396,26 @@ namespace DOL.GS.PacketHandler
             int[] racial = new int[updateResists.Length];
             int[] caps = new int[updateResists.Length];
 
-            int cap = (m_gameClient.Player.Level >> 1) + 1;
             for (int i = 0; i < updateResists.Length; i++)
             {
-                caps[i] = cap;
+                caps[i] = ResistCalculator.GetItemBonusCap(m_gameClient.Player, (eProperty)updateResists[i]);
             }
 
 
             using (GSTCPPacketOut pak = new GSTCPPacketOut(GetPacketCode(eServerPackets.StatsUpdate)))
             {
 
-                // racial resists
+                // base resists
                 for (int i = 0; i < updateResists.Length; i++)
                 {
                     racial[i] = SkillBase.GetRaceResist(m_gameClient.Player.Race, updateResists[i], m_gameClient.Player);
-                    pak.WriteShort((ushort)racial[i]);
+                    pak.WriteShort((ushort)(racial[i]));
                 }
 
-                // buffs/debuffs only; remove base, item bonus, RA bonus, race bonus
+                // buffs/debuffs only
                 for (int i = 0; i < updateResists.Length; i++)
                 {
-                    int mod = m_gameClient.Player.GetModified((eProperty)updateResists[i]);
-                    int buff = mod - racial[i] - m_gameClient.Player.AbilityBonus[(int)updateResists[i]] - Math.Min(caps[i], m_gameClient.Player.ItemBonus[(int)updateResists[i]]);
-                    pak.WriteShort((ushort)buff);
+                    pak.WriteShort((ushort)m_gameClient.Player.GetModifiedFromBuffs((eProperty)updateResists[i]));
                 }
 
                 // item bonuses
@@ -429,13 +427,13 @@ namespace DOL.GS.PacketHandler
                 // item caps
                 for (int i = 0; i < updateResists.Length; i++)
                 {
-                    pak.WriteByte((byte)caps[i]);
+                    pak.WriteByte((byte)(caps[i]));
                 }
 
-                // RA bonuses
+                // Secondary resists
                 for (int i = 0; i < updateResists.Length; i++)
                 {
-                    pak.WriteByte((byte)(m_gameClient.Player.AbilityBonus[(int)updateResists[i]]));
+                    pak.WriteByte((byte)(m_gameClient.Player.SpecBuffBonusCategory[(int)updateResists[i]] + m_gameClient.Player.AbilityBonus[(int)updateResists[i]]));
                 }
 
                 pak.WriteByte(0xFF); // FF if resists packet

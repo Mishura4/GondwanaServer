@@ -38,7 +38,10 @@ namespace DOL.GS.PropertyCalc
 
             // Items and buffs.
             int itemBonus = CalcValueFromItems(living, property);
-            int buffBonus = CalcValueFromBuffs(living, property);
+            int buffBonus = living.BaseBuffBonusCategory[(int)property]
+                + living.BuffBonusCategory4[(int)property];
+            if (living is not GameNPC)
+                buffBonus = Math.Min(buffBonus, BuffBonusCap);
 
             switch (property)
             {
@@ -83,7 +86,7 @@ namespace DOL.GS.PropertyCalc
 
             // Add up and apply hardcap.
 
-            return Math.Min(Math.Min(itemBonus + buffBonus + abilityBonus + racialBonus, HardCap) + territoryBonus, 100);
+            return Math.Min(Math.Min(itemBonus + buffBonus + abilityBonus + racialBonus, HardCap) + territoryBonus + living.BuffBonusUncapped[(int)property], 100);
         }
 
         public override int CalcValueBase(GameLiving living, eProperty property)
@@ -92,7 +95,10 @@ namespace DOL.GS.PropertyCalc
             int debuff = Math.Abs(living.DebuffCategory[propertyIndex]);
             int racialBonus = 0;
             int itemBonus = CalcValueFromItems(living, property);
-            int buffBonus = CalcValueFromBuffs(living, property);
+            int buffBonus = living.BaseBuffBonusCategory[(int)property]
+                + living.BuffBonusCategory4[(int)property];
+            if (living is not GameNPC)
+                buffBonus = Math.Min(buffBonus, BuffBonusCap);
             switch (property)
             {
                 case eProperty.Resist_Body:
@@ -149,7 +155,7 @@ namespace DOL.GS.PropertyCalc
 
                 // Note: do not apply guild territory bonuses here because this function is used for CC duration
             }
-            return Math.Min(itemBonus + buffBonus + racialBonus, HardCap);
+            return Math.Min(100, Math.Min(itemBonus + buffBonus + racialBonus, HardCap));
         }
 
         /// <summary>
@@ -162,9 +168,9 @@ namespace DOL.GS.PropertyCalc
         {
             int buffBonus = living.BaseBuffBonusCategory[(int)property]
                 + living.BuffBonusCategory4[(int)property];
-            if (living is GameNPC)
-                return buffBonus;
-            return Math.Min(buffBonus, BuffBonusCap);
+            if (living is not GameNPC)
+                buffBonus = Math.Min(buffBonus, BuffBonusCap);
+            return buffBonus + living.BuffBonusUncapped[(int)property];
         }
 
         /// <summary>
@@ -182,9 +188,7 @@ namespace DOL.GS.PropertyCalc
 
             // Item bonus cap and cap increase from Mythirians.
 
-            int itemBonusCap = living.Level / 2 + 1;
-            int itemBonusCapIncrease = GetItemBonusCapIncrease(living, property);
-            return Math.Min(itemBonus, itemBonusCap + itemBonusCapIncrease);
+            return Math.Min(itemBonus, GetItemBonusCap(living, property));
         }
 
         /// <summary>
@@ -198,6 +202,11 @@ namespace DOL.GS.PropertyCalc
         {
             if (living == null) return 0;
             return Math.Min(living.ItemBonus[(int)(eProperty.ResCapBonus_First - eProperty.Resist_First + property)], 5);
+        }
+
+        public static int GetItemBonusCap(GameLiving living, eProperty property)
+        {
+            return living.Level / 2 + 1 + GetItemBonusCapIncrease(living, property);
         }
 
         /// <summary>
