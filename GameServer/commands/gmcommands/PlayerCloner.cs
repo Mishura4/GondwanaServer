@@ -603,11 +603,11 @@ namespace DOL.GS.Scripts
         ePrivLevel.GM,
         "Clone a player with live or calculated stats, optionally loading styles",
         "If a player is targeted, that player is cloned to a new mob using:",
-        "/cloneplayer [live] [LoadStyles or LoadSpells]",
+        "/cloneplayer [live] [LoadStyles] [LoadSpells]",
         "If a mob is targeted, a player is cloned to the targeted mob using:",
-        "/cloneplayer [live] Playername [LoadStyles or LoadSpells]",
+        "/cloneplayer [live] Playername [LoadStyles] [LoadSpells]",
         "If the user has no target, a player is cloned to a new mob using:",
-        "/cloneplayer [live] Playername [LoadStyles or LoadSpells]")]
+        "/cloneplayer [live] Playername [LoadStyles] [LoadSpells]")]
     public class ClonePlayerCommandHandler : AbstractCommandHandler, ICommandHandler
     {
         public void OnCommand(GameClient client, string[] args)
@@ -628,62 +628,90 @@ namespace DOL.GS.Scripts
             bool cloneIsNewMob = clone == null;
             GamePlayer cloneSource = player.TargetObject as GamePlayer;
             string playerName = string.Empty;
-            
-            if (args.Length > 1 && args[1].Equals("live"))
+            bool cloneLive = false;
+
+            int curArg = 1;
+            while (curArg < args.Length)
+            {
+                switch (args[curArg].ToLowerInvariant())
+                {
+                    case "live":
+                        cloneLive = true;
+                        break;
+
+                    case "loadstyles":
+                        loadStyles = true;
+                        break;
+
+                    case "loadspells":
+                        loadSpells = true;
+                        break;
+
+                    default:
+                        if (!string.IsNullOrEmpty(playerName))
+                        {
+                            DisplaySyntax(client);
+                            return;
+                        }
+                        playerName = player.Name;
+                        break;
+                }
+                ++curArg;
+            }
+            if (string.IsNullOrEmpty(playerName) && cloneSource != null)
+            {
+                playerName = cloneSource.Name;
+            }
+            if (cloneLive)
             {
                 if (cloneSource == null)
                 {
-                    if (args.Length < 3)
+                    if (!string.IsNullOrEmpty(playerName))
                     {
-                        DisplaySyntax(client);
+                        GameClient cloneClient = WorldMgr.GetClientByPlayerName(playerName, true, true);
+
+                        if (cloneClient?.Player == null)
+                        {
+                            DisplayMessage(client, "Unable to find live player:  " + playerName);
+                            return;
+                        }
+                        cloneSource = cloneClient.Player;
+                    }
+                    else
+                    {
+                        DisplayMessage(client, "You must either target a player or specify a valid player name");
                         return;
                     }
-
-                    playerName = args[2];
-                    GameClient cloneClient = WorldMgr.GetClientByPlayerName(playerName, true, true);
-
-                    if (cloneClient == null || cloneClient.Player == null)
-                    {
-                        DisplayMessage(client, "Unable to create live copy of:  " + playerName);
-                        return;
-                    }
-
-                    cloneSource = cloneClient.Player;
                 }
-
                 clone = PlayerCloner.ClonePlayer(cloneSource, clone, loadStyles, loadSpells);
+                if (clone == null)
+                {
+                    DisplayMessage(client, "Unable to create live copy of:  " + cloneSource.Name);
+                    return;
+                }
             }
             else
             {
-                if (cloneSource == null)
+                if (string.IsNullOrEmpty(playerName))
                 {
-                    if (args.Length < 2)
-                    {
-                        DisplaySyntax(client);
-                        return;
-                    }
-                    playerName = args[1];
+                    DisplayMessage(client, "You must either target a player or specify a valid player name");
+                    return;
                 }
-                else
-                    playerName = cloneSource.Name;
-
                 clone = PlayerCloner.ClonePlayerFromDB(playerName, clone, loadStyles, loadSpells, 0);
-            }
-
-            if (clone == null)
-            {
-                DisplaySyntax(client);
-            }
-            else
-            {
-                if (cloneIsNewMob)
+                if (clone == null)
                 {
-                    clone.Position = player.Position;
-                    clone.AddToWorld();
-                    clone.LoadedFromScript = false;
+                    DisplayMessage(client, "Unable to create DB copy of:  " + playerName);
+                    return;
                 }
-                clone.SaveIntoDatabase();
             }
+            
+            if (cloneIsNewMob)
+            {
+                clone.Position = player.Position;
+                clone.AddToWorld();
+                clone.LoadedFromScript = false;
+            }
+            clone.SaveIntoDatabase();
         }
     }
 }
