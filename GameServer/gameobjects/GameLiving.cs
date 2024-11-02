@@ -1938,6 +1938,7 @@ namespace DOL.GS
 
             if ((ad.AttackResult == eAttackResult.HitUnstyled || ad.AttackResult == eAttackResult.HitStyle))
             {
+                ad.criticalChance += AttackCriticalChance(weapon);
                 ad.CriticalDamage = GetMeleeCriticalDamage(ad, weapon);
             }
 
@@ -3436,7 +3437,7 @@ namespace DOL.GS
         /// <returns>The amount of critical damage.</returns>
         public virtual int GetMeleeCriticalDamage(AttackData attackData, InventoryItem weapon)
         {
-            if (Util.Chance(AttackCriticalChance(weapon) + attackData.criticalChance))
+            if (Util.Chance(attackData.criticalChance))
             {
                 int maxCriticalDamage = (attackData.Target is GamePlayer)
                     ? attackData.Damage / 2
@@ -5045,6 +5046,19 @@ namespace DOL.GS
         public IPropertyIndexer BuffBonusCategory4
         {
             get { return m_buff4Bonus; }
+        }
+
+        /// <summary>
+        /// Array for uncapped boni
+        /// </summary>
+        protected IPropertyIndexer m_buffBonusUncapped = new PropertyIndexer();
+        /// <summary>
+        /// Property Buff bonus category
+        /// what it means depends from the PropertyCalculator for a property element
+        /// </summary>
+        public IPropertyIndexer BuffBonusUncapped
+        {
+            get { return m_buffBonusUncapped; }
         }
 
         /// <summary>

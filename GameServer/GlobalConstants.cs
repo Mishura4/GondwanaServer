@@ -935,6 +935,7 @@ namespace DOL.GS
         Other = 4,
         SpecDebuff = 5,
         AbilityBuff = 6,
+        UncappedBuff = 7
     }
 
     /// <summary>

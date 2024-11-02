@@ -166,6 +166,9 @@ namespace DOL.GS.Spells
         public override eProperty Property1 { get { return eProperty.CriticalSpellHitChance; } }
         public override eProperty Property2 { get { return eProperty.CriticalMeleeHitChance; } }
 
+        public override eBuffBonusCategory BonusCategory1 { get => eBuffBonusCategory.UncappedBuff; }
+        public override eBuffBonusCategory BonusCategory2 { get => eBuffBonusCategory.UncappedBuff; }
+
         public CriticalDamageBuff(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
         public override string ShortDescription

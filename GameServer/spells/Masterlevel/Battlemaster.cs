@@ -641,6 +641,7 @@ namespace DOL.GS.Spells
                     ad.MissChance = 100;
                     ad.AttackResult = DOL.GS.GameLiving.eAttackResult.Missed;
                 }
+                ad.criticalChance += player.AttackCriticalChance(weapon);
                 ad.CriticalDamage = player.GetMeleeCriticalDamage(ad, weapon);
             }
             else

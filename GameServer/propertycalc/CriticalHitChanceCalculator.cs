@@ -33,7 +33,12 @@ namespace DOL.GS.PropertyCalc
             else // not a pet
                 chance += 10;
 
-            return chance;
+            // Base cap
+            chance = Math.Min(chance, 50);
+            chance += living.BuffBonusUncapped[(int)property];
+
+            // ultimate cap of 100%
+            return Math.Min(chance, 100);
         }
     }
     
@@ -76,25 +81,11 @@ namespace DOL.GS.PropertyCalc
             }
 
             // Base cap
-            int cap = 50;
-
-            // Check for CriticalMagicalBuff
-            var criticalMagicalBuff = SpellHandler.FindEffectOnTarget(living, "CriticalMagicalBuff") as GameSpellEffect;
-            if (criticalMagicalBuff != null)
-            {
-                cap += (int)criticalMagicalBuff.Spell.Value;
-            }
-
-            // Check for Critical effect from Warlord script
-            var criticalEffect = SpellHandler.FindEffectOnTarget(living, "Critical") as GameSpellEffect;
-            if (criticalEffect != null)
-            {
-                cap += (int)criticalEffect.Spell.Value;
-            }
+            chance = Math.Min(chance, 50);
+            chance += living.BuffBonusUncapped[(int)property];
 
             // ultimate cap of 100%
-            cap = Math.Min(cap, 100);
-            return Math.Min(chance, cap);
+            return Math.Min(chance, 100);
         }
     }
     
@@ -142,25 +133,11 @@ namespace DOL.GS.PropertyCalc
                 chance += 10;
 
             // Base cap
-            int cap = 50;
-
-            // Check for CriticalMeleeBuff
-            var criticalMeleeBuff = SpellHandler.FindEffectOnTarget(living, "CriticalMeleeBuff") as GameSpellEffect;
-            if (criticalMeleeBuff != null)
-            {
-                cap += (int)criticalMeleeBuff.Spell.Value;
-            }
-
-            // Check for Critical effect from Warlord script
-            var criticalEffect = SpellHandler.FindEffectOnTarget(living, "Critical") as GameSpellEffect;
-            if (criticalEffect != null)
-            {
-                cap += (int)criticalEffect.Spell.Value;
-            }
+            chance = Math.Min(chance, 50);
+            chance += living.BuffBonusUncapped[(int)property];
 
             // ultimate cap of 100%
-            cap = Math.Min(cap, 100);
-            return Math.Min(chance, cap);
+            return Math.Min(chance, 100);
         }
     }
     
@@ -203,7 +180,12 @@ namespace DOL.GS.PropertyCalc
                     chance += raWM.Amount;
             }
 
-            return Math.Min(chance, 50);
+            // Base cap
+            chance = Math.Min(chance, 50);
+            chance += living.BuffBonusUncapped[(int)property];
+
+            // ultimate cap of 100%
+            return Math.Min(chance, 100);
         }
     }
 }

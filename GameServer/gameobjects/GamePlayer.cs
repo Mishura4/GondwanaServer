@@ -7307,7 +7307,7 @@ namespace DOL.GS
         /// <returns>The amount of critical damage</returns>
         public override int GetMeleeCriticalDamage(AttackData ad, InventoryItem weapon)
         {
-            if (Util.Chance(AttackCriticalChance(weapon) + ad.criticalChance))
+            if (Util.Chance(ad.criticalChance))
             {
                 // triple wield prevents critical hits
                 if (ad.Target.EffectList.GetOfType<TripleWieldEffect>() != null) return 0;

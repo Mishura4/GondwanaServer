@@ -297,6 +297,9 @@ namespace DOL.GS.Spells
                 case eBuffBonusCategory.AbilityBuff:
                     bonuscat = target.AbilityBonus;
                     break;
+                case eBuffBonusCategory.UncappedBuff:
+                    bonuscat = target.BuffBonusUncapped;
+                    break;
                 default:
                     if (log.IsErrorEnabled)
                         log.Error("BonusCategory not found " + categoryid + "!");
