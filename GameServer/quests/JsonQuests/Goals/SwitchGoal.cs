@@ -65,9 +65,12 @@ namespace DOL.GS.Quests
                     {
                         ++goal.Progress;
                     }
-                    else if (AdvanceGoal(quest, goal))
+                    if (goal.Progress >= m_switchCount)
                     {
-                        quest.Owner.Out.SendMessage(switchActivatedMessage, eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                        if (AdvanceGoal(quest, goal))
+                        {
+                            quest.Owner.Out.SendMessage(switchActivatedMessage, eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                        }
                     }
                 }
             }
