@@ -190,6 +190,9 @@ SpellHandler.Lifedrain.Heal:			You steal {0} hit point{1}.
 SpellHandler.Lifedrain.NoAbsorb:		You cannot absorb any more life.
 SpellHandler.PowerDrain.PowerGain:		Your summon channels {0} power to you!
 SpellHandler.PowerDrain.NoAbsorb:		You cannot absorb any more power.
+SpellHandler.PowerDrain.SpellHit:		{0} siphons {1} power from you.
+SpellHandler.PowerDrain.StealSuccess:	You siphon {1} power from {0}!
+SpellHandler.PowerDrain.StealOverflow:	You siphon {1} power from {0}! ({2} overflow)
 
 SpellHandler.PrimerSpell.EffectExpired:		Your modification spell effect has expired.
 SpellHandler.PrimerSpell.MovementBreaksEffect:	You move and break your modification spell.

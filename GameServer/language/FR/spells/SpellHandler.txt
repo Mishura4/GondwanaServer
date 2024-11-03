@@ -190,6 +190,9 @@ SpellHandler.Lifedrain.Heal:			Vous volez {0} point{1} de vie.
 SpellHandler.Lifedrain.NoAbsorb:		Vous ne pouvez plus absorber davantage de points de Vie.
 SpellHandler.PowerDrain.PowerGain:		Votre invocation canalise {0} Mana vers vous !
 SpellHandler.PowerDrain.NoAbsorb:		Vous ne pouvez pas absorber davantage de Mana.
+SpellHandler.PowerDrain.SpellHit:		{0} vous siphonne {1} Mana.
+SpellHandler.PowerDrain.StealSuccess:	Vous siphonnez {1} Mana de {0}!
+SpellHandler.PowerDrain.StealOverflow:	Vous siphonnez {1} Mana de {0}! ({2} surplus)
 
 SpellHandler.PrimerSpell.EffectExpired:		Votre effet de sort de modification a expiré.
 SpellHandler.PrimerSpell.MovementBreaksEffect:	Vous bougez et rompez votre sort de modification.

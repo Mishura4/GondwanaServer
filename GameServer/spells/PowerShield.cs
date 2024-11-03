@@ -100,7 +100,7 @@ namespace DOL.GS.Spells
 
             int maxMana = target.MaxMana;
             int currentMana = target.Mana;
-            int manaPercent = (maxMana > 0) ? (currentMana * 100) / maxMana : 0;
+            int manaPercent = target.ManaPercent;
 
             if (manaPercent < 25)
             {

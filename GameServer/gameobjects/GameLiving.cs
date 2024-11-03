@@ -3552,6 +3552,7 @@ namespace DOL.GS
                                 if (phaseshift == null)
                                     phaseshift = (GameSpellEffect)effect;
                                 continue;
+                            case "PowerLock":
                             case "Grapple":
                                 if (grapple == null)
                                     grapple = (GameSpellEffect)effect;
