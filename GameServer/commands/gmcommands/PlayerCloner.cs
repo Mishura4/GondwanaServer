@@ -561,6 +561,7 @@ namespace DOL.GS.Scripts
                     break;
             }
 
+            npc.ModelDb = model;
             npc.Model = model;
         }
 
@@ -709,6 +710,12 @@ namespace DOL.GS.Scripts
                 clone.AddToWorld();
                 clone.LoadedFromScript = false;
             }
+            String tn;
+            do
+            {
+                tn = Guid.NewGuid().ToString();
+            } while (!clone.Inventory.SaveIntoDatabase(tn));
+            clone.EquipmentTemplateID = tn;
             clone.SaveIntoDatabase();
         }
     }
