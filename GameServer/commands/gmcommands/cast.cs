@@ -123,9 +123,13 @@ namespace DOL.GS.Commands
                             else if ((target == client.Player) || (spell.Target.ToLower() == "self"))
                                 DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.GM.Cast.Spell.CastOnSelf", spell.Name));
 
-                            ISpellHandler spellHandler = ScriptMgr.CreateSpellHandler(client.Player, spell, line);
+                            SpellHandler spellHandler = (SpellHandler)ScriptMgr.CreateSpellHandler(client.Player, spell, line);
                             if (spellHandler != null)
+                            {
                                 spellHandler.StartSpell(target, true);
+                                if (spellHandler.Spell.Pulse != 0)
+                                    client.Player.PulseSpell = spellHandler;
+                            }
                         }
                         else
                         {

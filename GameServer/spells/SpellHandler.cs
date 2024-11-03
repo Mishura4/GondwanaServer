@@ -1991,18 +1991,7 @@ namespace DOL.GS.Spells
                     }
                 }
             }
-
-            if (m_spell.Pulse != 0 && m_spell.Frequency > 0)
-            {
-                CancelAllPulsingSpells(Caster);
-                PulsingSpellEffect pulseeffect = new PulsingSpellEffect(this);
-                pulseeffect.Start();
-                // show animation on caster for positive spells, negative shows on every StartSpell
-                if (m_spell.Target == "self" || m_spell.Target == "group")
-                    SendEffectAnimation(Caster, 0, false, 1);
-                if (m_spell.Target == "pet")
-                    SendEffectAnimation(target, 0, false, 1);
-            }
+            
             StartSpell(target); // and action
 
             //Dinberg: This is where I moved the warlock part (previously found in gameplayer) to prevent
@@ -2619,6 +2608,18 @@ namespace DOL.GS.Spells
         /// <param name="target">The current target object</param>
         public virtual bool StartSpell(GameLiving target, bool force = false)
         {
+            if (m_spell.Pulse != 0 && m_spell.Frequency > 0)
+            {
+                CancelAllPulsingSpells(Caster);
+                PulsingSpellEffect pulseeffect = new PulsingSpellEffect(this);
+                pulseeffect.Start();
+                // show animation on caster for positive spells, negative shows on every StartSpell
+                if (m_spell.Target == "self" || m_spell.Target == "group")
+                    SendEffectAnimation(Caster, 0, false, 1);
+                if (m_spell.Target == "pet")
+                    SendEffectAnimation(target, 0, false, 1);
+            }
+            
             // For PBAOE spells always set the target to the caster
             if (Spell.SpellType.ToLower() != "TurretPBAoE".ToLower() && (target == null || (Spell.Radius > 0 && Spell.Range == 0)))
             {
