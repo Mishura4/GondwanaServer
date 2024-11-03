@@ -385,7 +385,7 @@ namespace DOL.GS.Scripts
 
             if (loadSpells)
             {
-                var usableSpells = player.GetAllUsableListSpells().SelectMany(t => t.Item2).OfType<Spell>();
+                var usableSpells = player.GetAllUsableListSpells().SelectMany(t => t.Item2).OfType<Spell>().Concat(player.GetAllUsableSkills().Select(p => p.Item1).OfType<Spell>());
                 // Inspired from LiveSpellHybridSpecialization.GetLinesSpellsForLiving
                 var bestSpellsWithoutGroup = usableSpells.Where(s => s.Group == 0).GroupBy(s => new { s.SpellType, s.Target, s.IsAoE, s.IsInstantCast, s.HasSubSpell }).Select(g => g.MaxBy(spell => spell.Level));
                 var bestSpellsWithGroup = usableSpells.Where(s => s.Group != 0).GroupBy(s => s.Group).Select(g => g.MaxBy(spell => spell.Level));
@@ -620,8 +620,8 @@ namespace DOL.GS.Scripts
             if (player == null)
                 return;
 
-            bool loadStyles = args[args.Length - 1].ToLower().Equals("loadstyles");
-            bool loadSpells = args[args.Length - 1].ToLower().Equals("loadspells");
+            bool loadStyles = false;
+            bool loadSpells = false;
 
             GameNPC clone = null;
             clone = player.TargetObject as GameNPC;
@@ -658,9 +658,17 @@ namespace DOL.GS.Scripts
                 }
                 ++curArg;
             }
-            if (string.IsNullOrEmpty(playerName) && cloneSource != null)
+            if (string.IsNullOrEmpty(playerName))
             {
-                playerName = cloneSource.Name;
+                if (cloneSource != null)
+                {
+                    playerName = cloneSource.Name;
+                }
+                else
+                {
+                    DisplayMessage(client, "You must either target a player or specify a valid player name");
+                    return;
+                }
             }
             if (cloneLive)
             {
@@ -677,11 +685,6 @@ namespace DOL.GS.Scripts
                         }
                         cloneSource = cloneClient.Player;
                     }
-                    else
-                    {
-                        DisplayMessage(client, "You must either target a player or specify a valid player name");
-                        return;
-                    }
                 }
                 clone = PlayerCloner.ClonePlayer(cloneSource, clone, loadStyles, loadSpells);
                 if (clone == null)
@@ -692,11 +695,6 @@ namespace DOL.GS.Scripts
             }
             else
             {
-                if (string.IsNullOrEmpty(playerName))
-                {
-                    DisplayMessage(client, "You must either target a player or specify a valid player name");
-                    return;
-                }
                 clone = PlayerCloner.ClonePlayerFromDB(playerName, clone, loadStyles, loadSpells, 0);
                 if (clone == null)
                 {
