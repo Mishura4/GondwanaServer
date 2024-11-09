@@ -319,6 +319,7 @@ namespace DOL.GS.Spells
                     GameEventMgr.AddHandler(casterPlayer, GamePlayerEvent.CastStarting, new DOLEventHandler(PlayerMoves));
                     GameEventMgr.AddHandler(casterPlayer, GamePlayerEvent.AttackFinished, new DOLEventHandler(PlayerMoves));
                     warder.Position = casterPlayer.GroundTargetPosition;
+                    warder.Owner = effect.Owner;
                     warder.AddBrain(new MLBrain());
                     warder.AddToWorld();
                 }
@@ -899,9 +900,6 @@ public class MLBrain : GuardBrain
             if (!GameServer.ServerRules.IsAllowedToAttack(Body, npc, true))
                 continue;
             if (!npc.IsWithinRadius(Body, AggroRange))
-                continue;
-
-            if (!(npc.Brain is IControlledBrain || npc is GameGuard))
                 continue;
 
             AddToAggroList(npc, 1);
