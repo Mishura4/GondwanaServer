@@ -59,6 +59,7 @@ SpellHandler.YouMiss:				You miss!
 SpellHandler.TargetMissed:			{0} missed!
 SpellHandler.EngageCannotBeUsed:		{0} has been attacked recently and you are unable to engage.
 SpellHandler.NotEnoughEndurance:		You concentrate on blocking the blow!
+SpellHandler.PvPOnly:                   Can only be used against players or player-controlled pets.
 
 SpellHandler.CheckLOSYouToPet.NotInView:	Your pet is not in view.
 SpellHandler.CheckLOSPlayerToTarget.LoSInterrupt:	LoS Interrupt in CheckLOSPlayerToTarget
@@ -193,6 +194,7 @@ SpellHandler.PowerDrain.NoAbsorb:		You cannot absorb any more power.
 SpellHandler.PowerDrain.SpellHit:		{0} siphons {1} power from you.
 SpellHandler.PowerDrain.StealSuccess:	You siphon {1} power from {0}!
 SpellHandler.PowerDrain.StealOverflow:	You siphon {1} power from {0}! ({2} overflow)
+SpellHandler.PowerDrain.Description:    Locks you and your target in place, siphoning {0}% base power from them every {1}s for {2} seconds. While grappled, neither you nor your target can be damaged by melee attacks.
 
 SpellHandler.PrimerSpell.EffectExpired:		Your modification spell effect has expired.
 SpellHandler.PrimerSpell.MovementBreaksEffect:	You move and break your modification spell.

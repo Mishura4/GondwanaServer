@@ -22,9 +22,11 @@ using System.Collections;
 using DOL.GS.PacketHandler;
 using DOL.AI.Brain;
 using DOL.GS.Effects;
+using DOL.GS.ServerProperties;
 using DOL.Language;
 using System.Numerics;
 using Google.Protobuf.WellKnownTypes;
+using Grpc.Core;
 
 namespace DOL.GS.Spells
 {
@@ -224,7 +226,17 @@ namespace DOL.GS.Spells
         /// <inheritdoc />
         public override string ShortDescription
         {
-            get => $"Locks you and your target in place, siphoning ${Spell.LifeDrainReturn}% base power from them every ${Spell.Frequency / 10.0}s for ${Spell.Duration} seconds. While grappled, neither you nor your target can be damaged by melee attacks.";
+            get
+            {
+                string language = Properties.SERV_LANGUAGE;
+                string description = LanguageMgr.GetTranslation(language, "SpellHandler.PowerDrain.Description", Spell.LifeDrainReturn, Spell.Frequency / 1000.0, Spell.Duration / 1000);
+
+                if (!Spell.AllowBolt)
+                {
+                    description += " " + LanguageMgr.GetTranslation(language, "SpellHandler.PvPOnly");
+                }
+                return description;
+            }
         }
     }
 }
