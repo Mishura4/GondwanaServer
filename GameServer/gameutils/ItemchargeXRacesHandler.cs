@@ -29,7 +29,7 @@ namespace DOL.GS
         }
 
         // Method to get the race multiplicator
-        public double GetRaceMultiplier(GamePlayer player, string itemTemplate)
+        public (double multiplier, bool useStyleInsteadOfSpell) GetRaceMultiplier(GamePlayer player, string itemTemplate)
         {
             var parameters = new[]
             {
@@ -40,7 +40,7 @@ namespace DOL.GS
 
             if (itemChargeRace == null)
             {
-                return 1.0;
+                return (1.0, false);
             }
 
             double raceMultiplier;
@@ -75,7 +75,7 @@ namespace DOL.GS
                 raceMultiplier = -100;
             }
 
-            return raceMultiplier;
+            return (raceMultiplier, itemChargeRace.UseStyleInsteadOfSpell);
         }
 
         public bool IsDurationMultiplied(string itemTemplate)

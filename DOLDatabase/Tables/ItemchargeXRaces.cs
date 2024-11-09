@@ -34,6 +34,7 @@ namespace DOL.Database
         private double m_midgardMinotaurRace;
         private double m_hiberniaMinotaurRace;
         private bool m_isDurationMultiplied;
+        private bool m_useStyleInsteadOfSpell;
 
         [DataElement(AllowDbNull = false)]
         public string ItemTemplate
@@ -296,6 +297,17 @@ namespace DOL.Database
             {
                 Dirty = true;
                 m_isDurationMultiplied = value;
+            }
+        }
+
+        [DataElement(AllowDbNull = false)]
+        public bool UseStyleInsteadOfSpell
+        {
+            get { return m_useStyleInsteadOfSpell; }
+            set
+            {
+                Dirty = true;
+                m_useStyleInsteadOfSpell = value;
             }
         }
     }
