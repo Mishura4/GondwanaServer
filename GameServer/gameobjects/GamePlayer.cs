@@ -9277,18 +9277,7 @@ namespace DOL.GS
                 StopCrafting();
             }
 
-            if (spell.SpellType == "StyleHandler" || spell.SpellType == "MLStyleHandler")
-            {
-                Style style = SkillBase.GetStyleByID((int)spell.Value, CharacterClass.ID);
-                //Andraste - Vico : try to use classID=0 (easy way to implement CL Styles)
-                if (style == null) style = SkillBase.GetStyleByID((int)spell.Value, 0);
-                if (style != null)
-                {
-                    StyleProcessor.TryToUseStyle(this, TargetObject, style);
-                }
-                else { Out.SendMessage("That style is not implemented!", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow); }
-            }
-            else if (spell.SpellType == "BodyguardHandler")
+            if (spell.SpellType == "BodyguardHandler")
             {
                 Ability ab = SkillBase.GetAbility("Bodyguard");
                 IAbilityActionHandler handler = SkillBase.GetAbilityActionHandler(ab.KeyName);
@@ -9300,31 +9289,34 @@ namespace DOL.GS
             }
             else
             {
-                if (IsStunned)
+                if (spell.SpellType != "StyleHandler" && spell.SpellType != "MLStyleHandler")
                 {
-                    Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.CastSpell.CantCastStunned"), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
-                    return false;
-                }
-                if (IsMezzed)
-                {
-                    Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.CastSpell.CantCastMezzed"), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
-                    return false;
-                }
+                    if (IsStunned)
+                    {
+                        Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.CastSpell.CantCastStunned"), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
+                        return false;
+                    }
+                    if (IsMezzed)
+                    {
+                        Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.CastSpell.CantCastMezzed"), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
+                        return false;
+                    }
 
-                if (IsSilenced)
-                {
-                    Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.CastSpell.CantCastFumblingWords"), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
-                    return false;
-                }
-
-                double fumbleChance = GetModified(eProperty.SpellFumbleChance);
-                fumbleChance *= 0.01;
-                if (fumbleChance > 0)
-                {
-                    if (Util.ChanceDouble(fumbleChance))
+                    if (IsSilenced)
                     {
                         Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.CastSpell.CantCastFumblingWords"), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
                         return false;
+                    }
+
+                    double fumbleChance = GetModified(eProperty.SpellFumbleChance);
+                    fumbleChance *= 0.01;
+                    if (fumbleChance > 0)
+                    {
+                        if (Util.ChanceDouble(fumbleChance))
+                        {
+                            Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.CastSpell.CantCastFumblingWords"), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                            return false;
+                        }
                     }
                 }
 

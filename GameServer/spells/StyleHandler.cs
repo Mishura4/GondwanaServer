@@ -31,6 +31,37 @@ namespace DOL.GS.Spells
     {
         public StyleHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
+        /// <inheritdoc />
+        public override bool StartSpell(GameLiving target, bool force = false)
+        {
+            int classID = Spell.AmnesiaChance == 0 ? (Caster as GamePlayer)?.CharacterClass.ID ?? 0 : Spell.AmnesiaChance;
+            Style style = SkillBase.GetStyleByID((int)Spell.Value, classID);
+            //Andraste - Vico : try to use classID=0 (easy way to implement CL Styles)
+            if (style == null) style = SkillBase.GetStyleByID((int)Spell.Value, 0);
+            if (style != null)
+            {
+                StyleProcessor.TryToUseStyle(Caster, target, style);
+                return true;
+            }
+            else
+            {
+                (Caster as GamePlayer)?.Out.SendMessage("That style is not implemented!", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
+                return false;
+            }
+        }
+
+        /// <inheritdoc />
+        public override bool CastSpell(GameLiving targetObject)
+        {
+            bool success = StartSpell(targetObject, false);
+            
+            // This is critical to restore the casters state and allow them to cast another spell
+            if (!IsCasting)
+                OnAfterSpellCastSequence();
+            
+            return success;
+        }
+
         public override IList<string> DelveInfo
         {
             get
