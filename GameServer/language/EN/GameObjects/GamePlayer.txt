@@ -443,7 +443,7 @@ GameObjects.GamePlayer.UseSlot.OutOfCharges:				The {0} is out of charges.
 GameObjects.GamePlayer.UseSlot.StopCallingMount:			You stop calling your mount.
 GameObjects.GamePlayer.UseSlot.SummonHorseLevel:			You must have {0} level for summon this horse.
 GameObjects.GamePlayer.UseSlot.WhistleMount:				You whistle for your mount.
-GameObjects.GamePlayer.UseSlot.MustWaitBeforeUse:			You must wait {0} more second before use potion!
+GameObjects.GamePlayer.UseSlot.MustWaitBeforeUse:			You must wait {0} more second before using this item.
 GameObjects.GamePlayer.UseSlot.CantUseState:			    You can't use {0} in your state.	
 GameObjects.GamePlayer.UseSlot.Used:			            {0} has been used.
 GameObjects.GamePlayer.UseSlot.CantUseCast:		    		You need to finish your current action for use your {0}!
