@@ -10555,7 +10555,7 @@ namespace DOL.GS
 
             Spell spell = SkillBase.FindSpell(useItem.SpellID, potionEffectLine);
 
-            if (spell == null || IsInvulnerableToAttack)
+            if (spell == null)
             {
                 Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.UseSlot.PotionSpellNotFound", useItem.SpellID), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return false;
@@ -10580,7 +10580,8 @@ namespace DOL.GS
             // For potions most can be used by any player level except a few higher level ones.
             // So for the case of potions we will only restrict the level of usage if LevelRequirement is >0 for the item
             bool isParchment = useItem.Id_nb.Contains("PARCH", StringComparison.InvariantCultureIgnoreCase);
-            long nextPotionAvailTime = !isParchment ? TempProperties.getProperty<long>(NEXT_POTION_AVAIL_TIME + "_Type" + (spell.SharedTimerGroup)) : TempProperties.getProperty<long>(NEXT_PARCH_AVAIL_TIME + "_Type" + (spell.SharedTimerGroup));
+            bool isPotion = !isParchment;
+            long nextPotionAvailTime = isPotion ? TempProperties.getProperty<long>(NEXT_POTION_AVAIL_TIME + "_Type" + (spell.SharedTimerGroup)) : TempProperties.getProperty<long>(NEXT_PARCH_AVAIL_TIME + "_Type" + (spell.SharedTimerGroup));
             if (Client.Account.PrivLevel == 1 && nextPotionAvailTime > CurrentRegion.Time)
             {
                 Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.UseSlot.MustWaitBeforeUse", (nextPotionAvailTime - CurrentRegion.Time) / 1000), eChatType.CT_System, eChatLoc.CL_SystemWindow);
@@ -10626,27 +10627,24 @@ namespace DOL.GS
             }
 
             GameLiving target = TargetObject as GameLiving;
-            // Tobz: make sure we have the appropriate target for our charge spell,
-            // otherwise don't waste a charge.
-            if (spell.Target.ToLower() == "enemy")
+            if (useItem.Item_Type == (int)eInventorySlot.FirstBackpack && isPotion)
             {
-                // we need an enemy target.
-                if (!GameServer.ServerRules.IsAllowedToAttack(this, target, true))
-                {
-                    // not allowed to attack, so they are not an enemy.
-                    Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.UseSlot.WrongTarget"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                    return false;
-                }
-            }
-
-            Stealth(false);
-
-            if (useItem.Item_Type == (int)eInventorySlot.FirstBackpack && !isParchment)
-            {
+                Stealth(false);
                 Emote(eEmote.Drink);
 
                 if (spell.CastTime > 0)
                     TempProperties.setProperty(NEXT_SPELL_AVAIL_TIME_BECAUSE_USE_POTION, 6 * 1000 + CurrentRegion.Time);
+            }
+            // Tobz: make sure we have the appropriate target for our charge spell,
+            // otherwise don't waste a charge.
+            // Mishura: this is important for e.g. StyleHandler which will succeed at CastSpell and then fail.
+            if (spell.Target.ToLower() == "enemy")
+            {
+                // we need an enemy target.
+                if (!GameServer.ServerRules.IsAllowedToAttack(this, target, false))
+                {
+                    return false;
+                }
             }
 
             bool test = false;
