@@ -32,6 +32,15 @@ using System.Linq;
 
 namespace DOL.GS
 {
+    public static class InventoryItemExpansions
+    {
+        public static bool IsMagicalItem(this InventoryItem self) => self is { Object_Type: (int)eObjectType.Magical, Item_Type: (int)eInventorySlot.FirstBackpack or 41 };
+
+        public static bool IsParchment(this InventoryItem self) => IsMagicalItem(self) && self.Id_nb.Contains("parch", StringComparison.InvariantCultureIgnoreCase);
+
+        public static bool IsPotion(this InventoryItem self) => IsMagicalItem(self) && !self.Id_nb.Contains("parch", StringComparison.InvariantCultureIgnoreCase);
+    }
+    
     /// <summary>
     /// This class represents an inventory item
     /// </summary>

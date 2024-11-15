@@ -9223,6 +9223,30 @@ namespace DOL.GS
                 TempProperties.removeProperty(LAST_USED_ITEM_SPELL);
             }
 
+            if (handler is SpellHandler { Item: { } useItem, Status: SpellHandler.eStatus.Success })
+            {
+                if (useItem.Count > 1)
+                {
+                    Inventory.RemoveCountFromStack(useItem, 1);
+                    InventoryLogging.LogInventoryAction(this, "", "(potion)", eInventoryActionType.Other, useItem, 1);
+                }
+                else
+                {
+                    useItem.Charges--;
+                    if (useItem.Charges < 1)
+                    {
+                        Inventory.RemoveCountFromStack(useItem, 1);
+                        InventoryLogging.LogInventoryAction(this, "", "(potion)", eInventoryActionType.Other, useItem, 1);
+                    }
+                }
+                Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.UseSlot.Used", useItem.GetName(0, false)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+
+                if (useItem.IsPotion())
+                    TempProperties.setProperty(NEXT_POTION_AVAIL_TIME + "_Type" + (handler.Spell.SharedTimerGroup), useItem.CanUseEvery * 1000 + CurrentRegion.Time);
+                else if (useItem.IsParchment())
+                    TempProperties.setProperty(NEXT_PARCH_AVAIL_TIME + "_Type" + (handler.Spell.SharedTimerGroup), useItem.CanUseEvery * 1000 + CurrentRegion.Time);
+            }
+
             lock (m_spellQueueAccessMonitor)
             {
                 Spell nextSpell = m_nextSpell;
@@ -9555,9 +9579,14 @@ namespace DOL.GS
                             effect.Cancel(false);
                         }
                     }
-                    return casted;
                 }
-                return spellhandler.CastSpell(useItem);
+                else
+                    casted = spellhandler.CastSpell(useItem);
+                if (casted)
+                {
+                    // Instant spells: call OnAfterSpellCastSequence immediately
+                    OnAfterSpellCastSequence(spellhandler);
+                }
             }
             return casted;
         }
@@ -10660,32 +10689,7 @@ namespace DOL.GS
                 test = CastSpell(spell, potionEffectLine, useItem);
             else
                 test = spellHandler.StartSpell(target, useItem);
-            if (!test)
-            {
-                // StartItemSpell is responsible for sending failure message to player
-                return false;
-            }
-            if (useItem.Count > 1)
-            {
-                Inventory.RemoveCountFromStack(useItem, 1);
-                InventoryLogging.LogInventoryAction(this, "", "(potion)", eInventoryActionType.Other, useItem, 1);
-            }
-            else
-            {
-                useItem.Charges--;
-                if (useItem.Charges < 1)
-                {
-                    Inventory.RemoveCountFromStack(useItem, 1);
-                    InventoryLogging.LogInventoryAction(this, "", "(potion)", eInventoryActionType.Other, useItem, 1);
-                }
-            }
-            Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.UseSlot.Used", useItem.GetName(0, false)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-
-            if (!isParchment)
-                TempProperties.setProperty(NEXT_POTION_AVAIL_TIME + "_Type" + (spell.SharedTimerGroup), useItem.CanUseEvery * 1000 + CurrentRegion.Time);
-            else
-                TempProperties.setProperty(NEXT_PARCH_AVAIL_TIME + "_Type" + (spell.SharedTimerGroup), useItem.CanUseEvery * 1000 + CurrentRegion.Time);
-            return true;
+            return test;
         }
 
         /// <summary>

@@ -73,10 +73,23 @@ namespace DOL.GS.Spells
         /// The target for this spell
         /// </summary>
         protected GameLiving m_spellTarget = null;
+        
+        public enum eStatus
+        {
+            Ready,
+            Interrupted,
+            Casting,
+            Failure,
+            Success
+        }
+        
+        public eStatus Status { get; private set; }
+        
         /// <summary>
         /// Has the spell been interrupted
         /// </summary>
-        protected bool m_interrupted = false;
+        public bool Interrupted => Status == eStatus.Interrupted;
+
         /// <summary>
         /// Delayedcast Stage
         /// </summary>
@@ -125,6 +138,11 @@ namespace DOL.GS.Spells
         }
 
         protected InventoryItem m_spellItem = null;
+
+        public InventoryItem Item
+        {
+            get => m_spellItem;
+        }
 
         /// <summary>
         /// Ability that casts a spell
@@ -217,7 +235,7 @@ namespace DOL.GS.Spells
             return new StringBuilder(128)
                 .Append("Caster=").Append(Caster == null ? "(null)" : Caster.Name)
                 .Append(", IsCasting=").Append(IsCasting)
-                .Append(", m_interrupted=").Append(m_interrupted)
+                .Append(", Interrupted=").Append(Interrupted)
                 .Append("\nSpell: ").Append(Spell == null ? "(null)" : Spell.ToString())
                 .Append("\nSpellLine: ").Append(SpellLine == null ? "(null)" : SpellLine.ToString())
                 .ToString();
@@ -435,7 +453,7 @@ namespace DOL.GS.Spells
                     effect.Cancel(false);
             }
 
-            m_interrupted = false;
+            Status = eStatus.Ready;
 
             if (Spell.Target.ToLower() == "pet")
             {
@@ -509,6 +527,7 @@ namespace DOL.GS.Spells
                 }
                 else
                 {
+                    Status = eStatus.Failure;
                     success = false;
                 }
             }
@@ -523,7 +542,7 @@ namespace DOL.GS.Spells
 
         public virtual void StartCastTimer(GameLiving target)
         {
-            m_interrupted = false;
+            Status = eStatus.Casting;
             SendSpellMessages();
 
             int time = CalculateCastingTime();
@@ -1183,7 +1202,7 @@ namespace DOL.GS.Spells
 
         public virtual bool CheckDuringCast(GameLiving target, bool quiet)
         {
-            if (m_interrupted)
+            if (Interrupted)
             {
                 return false;
             }
@@ -1383,7 +1402,7 @@ namespace DOL.GS.Spells
 
         public virtual bool CheckAfterCast(GameLiving target, bool quiet)
         {
-            if (m_interrupted)
+            if (Interrupted)
             {
                 return false;
             }
@@ -1674,10 +1693,10 @@ namespace DOL.GS.Spells
         /// </summary>
         public virtual void InterruptCasting()
         {
-            if (m_interrupted || !IsCasting)
+            if (Interrupted || !IsCasting)
                 return;
 
-            m_interrupted = true;
+            Status = eStatus.Interrupted;
 
             if (IsCasting)
             {
@@ -1959,7 +1978,6 @@ namespace DOL.GS.Spells
             if (Caster is GamePlayer && ((GamePlayer)Caster).IsOnHorse && !HasPositiveEffect)
                 ((GamePlayer)Caster).IsOnHorse = false;
 
-
             if (m_caster is GamePlayer && (m_caster as GamePlayer)!.IsSummoningMount)
             {
                 (m_caster as GamePlayer)?.Out.SendMessage(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client.Account.Language, "GameObjects.GamePlayer.UseSlot.CantMountSpell"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
@@ -1991,9 +2009,44 @@ namespace DOL.GS.Spells
                     }
                 }
             }
-            
-            StartSpell(target); // and action
 
+            if (StartSpell(target)) // and action
+            {
+                if (m_ability != null)
+                    m_caster.DisableSkill(m_ability.Ability, (m_spell.RecastDelay == 0 ? 3000 : m_spell.RecastDelay));
+
+                // disable spells with recasttimer (Disables group of same type with same delay)
+                if (m_spell.RecastDelay > 0 && m_startReuseTimer)
+                {
+                    if (m_caster is GamePlayer)
+                    {
+                        ICollection<Tuple<Skill, int>> toDisable = new List<Tuple<Skill, int>>();
+
+                        GamePlayer gp_caster = m_caster as GamePlayer;
+                        foreach (var skills in gp_caster!.GetAllUsableSkills())
+                            if (skills.Item1 is Spell &&
+                                (((Spell)skills.Item1).ID == m_spell.ID || (((Spell)skills.Item1).SharedTimerGroup != 0 && (((Spell)skills.Item1).SharedTimerGroup == m_spell.SharedTimerGroup))))
+                                toDisable.Add(new Tuple<Skill, int>((Spell)skills.Item1, m_spell.RecastDelay));
+
+                        foreach (var sl in gp_caster.GetAllUsableListSpells())
+                        foreach (var sp in sl.Item2)
+                            if (sp is Spell &&
+                                (((Spell)sp).ID == m_spell.ID || (((Spell)sp).SharedTimerGroup != 0 && (((Spell)sp).SharedTimerGroup == m_spell.SharedTimerGroup))))
+                                toDisable.Add(new Tuple<Skill, int>((Spell)sp, m_spell.RecastDelay));
+
+                        m_caster.DisableSkill(toDisable);
+                    }
+                    else if (m_caster is GameNPC)
+                        m_caster.DisableSkill(m_spell, m_spell.RecastDelay);
+                }
+
+                Status = eStatus.Success;
+            }
+            else
+            {
+                Status = eStatus.Failure;
+            }
+            
             //Dinberg: This is where I moved the warlock part (previously found in gameplayer) to prevent
             //cancelling before the spell was fired.
             if (m_spell.SpellType != "Powerless" && m_spell.SpellType != "Range" && m_spell.SpellType != "Uninterruptable")
@@ -2017,35 +2070,6 @@ namespace DOL.GS.Spells
                 m_caster.TempProperties.setProperty(GamePlayer.QUICK_CAST_CHANGE_TICK, m_caster.CurrentRegion.Time);
                 m_caster.DisableSkill(SkillBase.GetAbility(Abilities.Quickcast), QuickCastAbilityHandler.DISABLE_DURATION);
                 quickcast.Cancel(false);
-            }
-
-
-            if (m_ability != null)
-                m_caster.DisableSkill(m_ability.Ability, (m_spell.RecastDelay == 0 ? 3000 : m_spell.RecastDelay));
-
-            // disable spells with recasttimer (Disables group of same type with same delay)
-            if (m_spell.RecastDelay > 0 && m_startReuseTimer)
-            {
-                if (m_caster is GamePlayer)
-                {
-                    ICollection<Tuple<Skill, int>> toDisable = new List<Tuple<Skill, int>>();
-
-                    GamePlayer gp_caster = m_caster as GamePlayer;
-                    foreach (var skills in gp_caster!.GetAllUsableSkills())
-                        if (skills.Item1 is Spell &&
-                            (((Spell)skills.Item1).ID == m_spell.ID || (((Spell)skills.Item1).SharedTimerGroup != 0 && (((Spell)skills.Item1).SharedTimerGroup == m_spell.SharedTimerGroup))))
-                            toDisable.Add(new Tuple<Skill, int>((Spell)skills.Item1, m_spell.RecastDelay));
-
-                    foreach (var sl in gp_caster.GetAllUsableListSpells())
-                        foreach (var sp in sl.Item2)
-                            if (sp is Spell &&
-                                (((Spell)sp).ID == m_spell.ID || (((Spell)sp).SharedTimerGroup != 0 && (((Spell)sp).SharedTimerGroup == m_spell.SharedTimerGroup))))
-                                toDisable.Add(new Tuple<Skill, int>((Spell)sp, m_spell.RecastDelay));
-
-                    m_caster.DisableSkill(toDisable);
-                }
-                else if (m_caster is GameNPC)
-                    m_caster.DisableSkill(m_spell, m_spell.RecastDelay);
             }
 
             GameEventMgr.Notify(GameLivingEvent.CastFinished, m_caster, new CastingEventArgs(this, target, m_lastAttackData));
