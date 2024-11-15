@@ -449,9 +449,9 @@ GameObjects.GamePlayer.UseSlot.Used:			        Vous utilisez {0}.
 GameObjects.GamePlayer.UseSlot.CantUseCast:			Vous devez finir votre action en cours pour utiliser votre {0}.
 GameObjects.GamePlayer.UseSlot.WrongTarget:		    	Il vous faut une cible pour utiliser cette capacité !
 GameObjects.GamePlayer.UseSlot.QuiverSlotEmpty:			L'emplacement du carquois {0} est vide !
-GameObjects.GamePlayer.UseSlot.PotionNotImplemented:		L'effet de la potion ID {0} n'est pas encore implémenté.
-GameObjects.GamePlayer.UseSlot.PotionLineNotFound:		Ligne d'effet de la potion introuvable.
-GameObjects.GamePlayer.UseSlot.PotionSpellNotFound:		Le sort de la potion ID {0} est introuvable.
+GameObjects.GamePlayer.UseSlot.PotionNotImplemented:		L'effet de sort d'objet ID {0} n'est pas encore implémenté.
+GameObjects.GamePlayer.UseSlot.PotionLineNotFound:		Ligne d'effet d'objet introuvable.
+GameObjects.GamePlayer.UseSlot.PotionSpellNotFound:		Le sort de l'objet ID {0} est introuvable.
 GameObjects.GamePlayer.UseSlot.CantDischargeInState:		Dans votre état actuel, vous ne pouvez décharger aucun objet.
 GameObjects.GamePlayer.UseSlot.WaitBeforeDischarge:		Vous devez attendre encore {0} seconde(s) avant de décharger {1} !
 GameObjects.GamePlayer.UseSlot.Cooldown:					Vous devez attendre {0} pour utiliser cet objet !

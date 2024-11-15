@@ -456,7 +456,32 @@ namespace DOL.GS
 
             return removed;
         }
+        
+        public (TValue previous, bool inserted) Swap(TKey key, TValue val)
+        {
+            m_rwLock.EnterUpgradeableReadLock();
+            TValue prev = default(TValue);
+            bool removed = false;
+            try
+            {
+                removed = m_dictionary.TryGetValue(key, out prev);
+                m_rwLock.EnterWriteLock();
+                try
+                {
+                    m_dictionary[key] = val;
+                }
+                finally
+                {
+                    m_rwLock.ExitWriteLock();
+                }
+            }
+            finally
+            {
+                m_rwLock.ExitUpgradeableReadLock();
+            }
 
+            return (prev, !removed);
+        }
 
         public void FreezeWhile(Action<IDictionary<TKey, TValue>> method)
         {

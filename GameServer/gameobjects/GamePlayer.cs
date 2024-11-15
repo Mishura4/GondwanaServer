@@ -9212,19 +9212,18 @@ namespace DOL.GS
         /// <param name="handler"></param>
         public override void OnAfterSpellCastSequence(ISpellHandler handler)
         {
-            InventoryItem lastUsedItem = TempProperties.getProperty<InventoryItem>(LAST_USED_ITEM_SPELL, null);
-            if (lastUsedItem != null)
-            {
-                if (handler.StartReuseTimer)
-                {
-                    lastUsedItem.CanUseAgainIn = lastUsedItem.CanUseEvery;
-                }
-
-                TempProperties.removeProperty(LAST_USED_ITEM_SPELL);
-            }
-
+            InventoryItem lastUsedItem = null;
+            TempProperties.removeAndGetProperty(LAST_USED_ITEM_SPELL, out lastUsedItem);
             if (handler is SpellHandler { Item: { } useItem, Status: SpellHandler.eStatus.Success })
             {
+                if (lastUsedItem != null)
+                {
+                    if (handler.StartReuseTimer)
+                    {
+                        lastUsedItem.CanUseAgainIn = lastUsedItem.CanUseEvery;
+                    }
+                }
+
                 if (useItem.Count > 1)
                 {
                     Inventory.RemoveCountFromStack(useItem, 1);
@@ -10584,19 +10583,18 @@ namespace DOL.GS
         public bool UseChargeMagicalItem(InventoryItem useItem, int type)
         {
             SpellLine potionEffectLine = SkillBase.GetSpellLine(GlobalSpellsLines.Potions_Effects);
-
             if (useItem.Item_Type == 41)
             {
                 potionEffectLine = SkillBase.GetSpellLine(GlobalSpellsLines.Item_Effects);
             }
 
             Spell spell = SkillBase.FindSpell(useItem.SpellID, potionEffectLine);
-
             if (spell == null)
             {
                 Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.UseSlot.PotionSpellNotFound", useItem.SpellID), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return false;
             }
+            
             var handler = new ItemchargeXRacesHandler();
             double raceMultiplier = handler.GetRaceMultiplier(this, useItem.Id_nb);
 
@@ -10606,6 +10604,7 @@ namespace DOL.GS
                 spell = SkillBase.FindSpell(alternativeSpellID, potionEffectLine);
             }
 
+            spell = (Spell)spell.Clone();
             spell.Value *= effectiveMultiplier;
             spell.Damage *= effectiveMultiplier;
 
@@ -10635,12 +10634,6 @@ namespace DOL.GS
             if (requiredLevel > Level)
             {
                 Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.UseSlot.NotEnouthPower"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                return false;
-            }
-
-            if (spell.CastTime > 0 && AttackState)
-            {
-                Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.UseSlot.CantUseInCombat"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return false;
             }
 

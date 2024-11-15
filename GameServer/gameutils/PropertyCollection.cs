@@ -85,6 +85,20 @@ namespace DOL.GS
             }
             return def;
         }
+        public (T prev, bool inserted) swapProperty<T>(object key, T newValue, T def = default(T))
+        {
+            (object val, bool isnew) = _props.Swap(key, newValue);
+                
+            if (val is T)
+                return ((T)val, isnew);
+
+            var typeConverter = val == null ? null : TypeDescriptor.GetConverter(val);
+            if (typeConverter?.CanConvertFrom(typeof(T)) == true)
+            {
+                return ((T)typeConverter.ConvertFrom(val), isnew);
+            }
+            return (def, isnew);
+        }
 
         /// <summary>
         /// Set a property
@@ -123,6 +137,31 @@ namespace DOL.GS
         public bool removeAndGetProperty(string key, out object value)
         {
             return _props.TryRemove(key, out value);
+        }
+
+        public bool removeAndGetProperty<T>(string key, out T value)
+        {
+            if (!_props.TryRemove(key, out object val))
+            {
+                value = default(T);
+                return false;
+            }
+
+            if (val is T)
+            {
+                value = (T)val;
+            }
+            else if (val != null)
+            {
+                var typeConverter = val == null ? null : TypeDescriptor.GetConverter(val);
+                if (typeConverter?.CanConvertFrom(typeof(T)) == true)
+                {
+                    value = (T)typeConverter.ConvertFrom(val);
+                    return true;
+                }
+            }
+            value = default;
+            return true;
         }
 
         /// <summary>

@@ -449,9 +449,9 @@ GameObjects.GamePlayer.UseSlot.Used:			            {0} has been used.
 GameObjects.GamePlayer.UseSlot.CantUseCast:		    		You need to finish your current action for use your {0}!
 GameObjects.GamePlayer.UseSlot.WrongTarget:		    		You need a target for this ability!
 GameObjects.GamePlayer.UseSlot.QuiverSlotEmpty:		    		The quiver slot {0} is empty!
-GameObjects.GamePlayer.UseSlot.PotionNotImplemented:			Potion effect ID {0} is not implemented yet.
-GameObjects.GamePlayer.UseSlot.PotionLineNotFound:			Potion effect line not found.
-GameObjects.GamePlayer.UseSlot.PotionSpellNotFound:			Potion effect spell ID {0} not found.
+GameObjects.GamePlayer.UseSlot.PotionNotImplemented:			Item spell ID {0} is not implemented yet.
+GameObjects.GamePlayer.UseSlot.PotionLineNotFound:			Item spell line not found.
+GameObjects.GamePlayer.UseSlot.PotionSpellNotFound:			Item spell ID {0} not found.
 GameObjects.GamePlayer.UseSlot.CantDischargeInState:			In your state you can't discharge any object.
 GameObjects.GamePlayer.UseSlot.WaitBeforeDischarge:			You must wait {0} more second before discharge {1}!
 GameObjects.GamePlayer.UseSlot.Cooldown:					You must wait {0} to use this item!
