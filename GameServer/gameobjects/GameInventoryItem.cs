@@ -600,8 +600,13 @@ namespace DOL.GS
         {
             int oldCount = output.Count;
 
-            output.Add("Total utility: " + String.Format("{0:0.00}", GetTotalUtility()));
-            output.Add(" ");
+            
+            var utility = GetTotalUtility();
+            if (Math.Abs(utility) >= 0.01)
+            {
+                output.Add("Total utility: " + String.Format("{0:0.00}", GetTotalUtility()));
+                output.Add(" ");
+            }
 
             WriteBonusLine(output, client, Bonus1Type, Bonus1);
             WriteBonusLine(output, client, Bonus2Type, Bonus2);
