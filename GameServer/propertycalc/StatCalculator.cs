@@ -221,9 +221,7 @@ namespace DOL.GS.PropertyCalc
                 }
             }
 
-            int itemBonusCapIncrease = GetItemBonusCapIncrease(living, property);
-            int mythicalitemBonusCapIncrease = GetMythicalItemBonusCapIncrease(living, property);
-            return Math.Min(itemBonus, itemBonusCap + itemBonusCapIncrease + mythicalitemBonusCapIncrease);
+            return Math.Min(itemBonus, itemBonusCap);
         }
 
         /// <summary>
@@ -235,7 +233,12 @@ namespace DOL.GS.PropertyCalc
         public static int GetItemBonusCap(GameLiving living, eProperty property)
         {
             if (living == null) return 0;
-            return (int)(living.Level * 1.5);
+            // https://darkageofcamelot.com/content/1118-live-patch-notes
+            int itemBonusCapIncrease = GetItemBonusCapIncrease(living, property);
+            int mythicalitemBonusCapIncrease = GetMythicalItemBonusCapIncrease(living, property);
+            int baseCap = (int)(living.Level * 1.5);
+            int bonusCapCap = (int)living.Level + 2;
+            return baseCap + Math.Min(bonusCapCap, (itemBonusCapIncrease + mythicalitemBonusCapIncrease));
         }
 
         /// <summary>
