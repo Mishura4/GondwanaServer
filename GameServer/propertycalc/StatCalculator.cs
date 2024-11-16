@@ -275,7 +275,6 @@ namespace DOL.GS.PropertyCalc
             if (living == null) return 0;
             int MythicalitemBonusCapIncreaseCap = GetMythicalItemBonusCapIncreaseCap(living);
             int MythicalitemBonusCapIncrease = living.ItemBonus[(int)(eProperty.MythicalStatCapBonus_First - eProperty.Stat_First + property)];
-            int itemBonusCapIncrease = GetItemBonusCapIncrease(living, property);
             if (living is GamePlayer)
             {
                 GamePlayer player = living as GamePlayer;
@@ -287,10 +286,6 @@ namespace DOL.GS.PropertyCalc
                         MythicalitemBonusCapIncrease += living.ItemBonus[(int)eProperty.MythicalAcuCapBonus];
                     }
                 }
-            }
-            if (MythicalitemBonusCapIncrease + itemBonusCapIncrease > 52)
-            {
-                MythicalitemBonusCapIncrease = 52 - itemBonusCapIncrease;
             }
 
             return Math.Min(MythicalitemBonusCapIncrease, MythicalitemBonusCapIncreaseCap);
@@ -312,7 +307,7 @@ namespace DOL.GS.PropertyCalc
         public static int GetMythicalItemBonusCapIncreaseCap(GameLiving living)
         {
             if (living == null) return 0;
-            return 52;
+            return living.Level + 2;
         }
     }
 }

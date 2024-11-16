@@ -280,6 +280,7 @@ namespace DOL.GS.PropertyCalc
                 return buffBonus;
             return Math.Min(buffBonus, BuffBonusCap);
         }
+
         public override int CalcValueFromItems(GameLiving living, eProperty property)
         {
             int itemBonus = living.ItemBonus[(int)property];
