@@ -46,6 +46,8 @@ Language.Gold.Amount:                                      {0} Or
 Language.Silver.Amount:                                    {0} Argent
 Language.Copper.Amount:                                    {0} Cuivre
 
+Language.Systems.Spell:							Sort
+
 # Stats
 Language.Resists:								Résistances
 Language.DamageType.Natural.Noun:				Naturel

@@ -45,6 +45,8 @@ Language.Gold.Amount:                                      {0} Gold
 Language.Silver.Amount:                                    {0} Silver
 Language.Copper.Amount:                                    {0} Copper
 
+Language.Systems.Spell:							Spell
+
 # Stats
 Language.Resists:								Resists
 Language.DamageType.Natural.Noun:				Natural
