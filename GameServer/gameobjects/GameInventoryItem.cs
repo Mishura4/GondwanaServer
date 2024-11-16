@@ -38,7 +38,7 @@ namespace DOL.GS
 
         public static bool IsParchment(this InventoryItem self) => IsMagicalItem(self) && self.Id_nb.Contains("parch", StringComparison.InvariantCultureIgnoreCase);
 
-        public static bool IsPotion(this InventoryItem self) => IsMagicalItem(self) && !self.Id_nb.Contains("parch", StringComparison.InvariantCultureIgnoreCase);
+        public static bool IsPotion(this InventoryItem self) => IsMagicalItem(self) && self.Item_Type == 40 && !self.Id_nb.Contains("parch", StringComparison.InvariantCultureIgnoreCase);
     }
     
     /// <summary>
@@ -2016,55 +2016,53 @@ namespace DOL.GS
 
         protected virtual void WritePotionInfo(IList<string> list, GameClient client)
         {
-            if (SpellID != 0)
+            if (SpellID == 0)
+                return;
+            
+            SpellLine potionLine = SkillBase.GetSpellLine(this.IsPotion() ? GlobalSpellsLines.Potions_Effects : GlobalSpellsLines.Item_Effects);
+            if (potionLine == null)
+                return;
+
+            void WriteSpellInfo(Spell spl)
             {
-                SpellLine potionLine = SkillBase.GetSpellLine(GlobalSpellsLines.Potions_Effects);
-                if (potionLine != null)
+                list.Add(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.WritePotionInfo.ChargedMagic"));
+                list.Add(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.WritePotionInfo.Charges", Charges));
+                list.Add(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.WritePotionInfo.MaxCharges", MaxCharges));
+                list.Add(" ");
+                WritePotionSpellsInfos(list, client, spl, potionLine);
+                list.Add(" ");
+                long nextPotionAvailTime = client.Player.TempProperties.getProperty<long>("LastPotionItemUsedTick_Type" + spl.SharedTimerGroup);
+                // Satyr Update: Individual Reuse-Timers for Pots need a Time looking forward
+                // into Future, set with value of "itemtemplate.CanUseEvery" and no longer back into past
+                if (nextPotionAvailTime > client.Player.CurrentRegion.Time)
                 {
-                    List<Spell> spells = SkillBase.GetSpellList(potionLine.KeyName);
+                    list.Add(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.WritePotionInfo.UseItem3", Util.FormatTime((nextPotionAvailTime - client.Player.CurrentRegion.Time) / 1000)));
+                }
+                else
+                {
+                    int minutes = CanUseEvery / 60;
+                    int seconds = CanUseEvery % 60;
 
-                    foreach (Spell spl in spells)
+                    if (minutes == 0)
                     {
-                        if (spl.ID == SpellID)
-                        {
-                            list.Add(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.WritePotionInfo.ChargedMagic"));
-                            list.Add(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.WritePotionInfo.Charges", Charges));
-                            list.Add(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.WritePotionInfo.MaxCharges", MaxCharges));
-                            list.Add(" ");
-                            WritePotionSpellsInfos(list, client, spl, potionLine);
-                            list.Add(" ");
-                            long nextPotionAvailTime = client.Player.TempProperties.getProperty<long>("LastPotionItemUsedTick_Type" + spl.SharedTimerGroup);
-                            // Satyr Update: Individual Reuse-Timers for Pots need a Time looking forward
-                            // into Future, set with value of "itemtemplate.CanUseEvery" and no longer back into past
-                            if (nextPotionAvailTime > client.Player.CurrentRegion.Time)
-                            {
-                                list.Add(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.WritePotionInfo.UseItem3", Util.FormatTime((nextPotionAvailTime - client.Player.CurrentRegion.Time) / 1000)));
-                            }
-                            else
-                            {
-                                int minutes = CanUseEvery / 60;
-                                int seconds = CanUseEvery % 60;
-
-                                if (minutes == 0)
-                                {
-                                    list.Add(String.Format("Can use item every: {0} sec", seconds));
-                                }
-                                else
-                                {
-                                    list.Add(String.Format("Can use item every: {0}:{1:00} min", minutes, seconds));
-                                }
-                            }
-
-                            if (spl.CastTime > 0)
-                            {
-                                list.Add(" ");
-                                list.Add(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.WritePotionInfo.NoUseInCombat"));
-                            }
-                            break;
-                        }
+                        list.Add(String.Format("Can use item every: {0} sec", seconds));
+                    }
+                    else
+                    {
+                        list.Add(String.Format("Can use item every: {0}:{1:00} min", minutes, seconds));
                     }
                 }
+
+                if (spl.CastTime > 0)
+                {
+                    list.Add(" ");
+                    list.Add(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.WritePotionInfo.NoUseInCombat"));
+                }
             }
+
+            Spell spell = SkillBase.GetSpellByID(SpellID);
+            if (spell != null)
+                WriteSpellInfo(spell);
         }
 
 
