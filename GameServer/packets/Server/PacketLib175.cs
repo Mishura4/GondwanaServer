@@ -218,60 +218,6 @@ namespace DOL.GS.PacketHandler
             };
 
             int[] baseStats = new int[updateStats.Length];
-            int[] modStats = new int[updateStats.Length];
-            int[] itemCaps = new int[updateStats.Length];
-
-            int itemCap = (int)(player.Level * 1.5);
-            int bonusCap = (int)(player.Level / 2 + 1);
-            for (int i = 0; i < updateStats.Length; i++)
-            {
-                int cap = itemCap;
-                switch ((eProperty)updateStats[i])
-                {
-                    case eProperty.Strength:
-                        cap += player.ItemBonus[(int)eProperty.StrCapBonus];
-                        cap += player.ItemBonus[(int)eProperty.MythicalStrCapBonus];
-                        break;
-                    case eProperty.Dexterity:
-                        cap += player.ItemBonus[(int)eProperty.DexCapBonus];
-                        cap += player.ItemBonus[(int)eProperty.MythicalDexCapBonus];
-                        break;
-                    case eProperty.Constitution:
-                        cap += player.ItemBonus[(int)eProperty.ConCapBonus];
-                        cap += player.ItemBonus[(int)eProperty.MythicalConCapBonus];
-                        break;
-                    case eProperty.Quickness:
-                        cap += player.ItemBonus[(int)eProperty.QuiCapBonus];
-                        cap += player.ItemBonus[(int)eProperty.MythicalQuiCapBonus];
-                        break;
-                    case eProperty.Intelligence:
-                        cap += player.ItemBonus[(int)eProperty.IntCapBonus];
-                        cap += player.ItemBonus[(int)eProperty.MythicalIntCapBonus];
-                        break;
-                    case eProperty.Piety:
-                        cap += player.ItemBonus[(int)eProperty.PieCapBonus];
-                        cap += player.ItemBonus[(int)eProperty.MythicalPieCapBonus];
-                        break;
-                    case eProperty.Charisma:
-                        cap += player.ItemBonus[(int)eProperty.ChaCapBonus];
-                        cap += player.ItemBonus[(int)eProperty.MythicalChaCapBonus];
-                        break;
-                    case eProperty.Empathy:
-                        cap += player.ItemBonus[(int)eProperty.EmpCapBonus];
-                        cap += player.ItemBonus[(int)eProperty.MythicalEmpCapBonus];
-                        break;
-                    default: break;
-                }
-
-                if (updateStats[i] == player.CharacterClass.ManaStat)
-                {
-                    cap += player.ItemBonus[(int)eProperty.AcuCapBonus];
-                    cap += player.ItemBonus[(int)eProperty.MythicalAcuCapBonus];
-                }
-
-                itemCaps[i] = Math.Min(cap, itemCap + bonusCap);
-            }
-
 
             using (GSTCPPacketOut pak = new GSTCPPacketOut(GetPacketCode(eServerPackets.StatsUpdate)))
             {
@@ -292,27 +238,8 @@ namespace DOL.GS.PacketHandler
                 // buffs/debuffs only; remove base, item bonus, RA bonus, class bonus
                 for (int i = 0; i < updateStats.Length; i++)
                 {
-                    modStats[i] = player.GetModified((eProperty)updateStats[i]);
-
-                    int abilityBonus = player.AbilityBonus[(int)updateStats[i]];
-
-                    int acuityItemBonus = 0;
-                    if (updateStats[i] == player.CharacterClass.ManaStat)
-                    {
-                        if (player.CharacterClass.ID != (int)eCharacterClass.Scout && player.CharacterClass.ID != (int)eCharacterClass.Hunter && player.CharacterClass.ID != (int)eCharacterClass.Ranger)
-                        {
-                            abilityBonus += player.AbilityBonus[(int)eProperty.Acuity];
-
-                            if (player.CharacterClass.ClassType != eClassType.PureTank)
-                                acuityItemBonus = player.ItemBonus[(int)eProperty.Acuity];
-                        }
-                    }
-
-                    int buff = modStats[i] - baseStats[i];
-                    buff -= abilityBonus;
-                    buff -= Math.Min(itemCaps[i], player.ItemBonus[(int)updateStats[i]] + acuityItemBonus);
-
-                    pak.WriteShort((ushort)buff);
+                    var value = (ushort)player.GetModifiedFromBuffs((eProperty)updateStats[i]);
+                    pak.WriteShort(value);
                 }
 
                 pak.WriteShort(0);
@@ -320,19 +247,7 @@ namespace DOL.GS.PacketHandler
                 // item bonuses
                 for (int i = 0; i < updateStats.Length; i++)
                 {
-                    int acuityItemBonus = 0;
-
-                    if (updateStats[i] == player.CharacterClass.ManaStat)
-                    {
-                        if (player.CharacterClass.ID != (int)eCharacterClass.Scout && player.CharacterClass.ID != (int)eCharacterClass.Hunter && player.CharacterClass.ID != (int)eCharacterClass.Ranger)
-                        {
-
-                            if (player.CharacterClass.ClassType != eClassType.PureTank)
-                                acuityItemBonus = player.ItemBonus[(int)eProperty.Acuity];
-                        }
-                    }
-
-                    pak.WriteShort((ushort)(player.ItemBonus[(int)updateStats[i]] + acuityItemBonus));
+                    pak.WriteShort((ushort)(player.GetModifiedFromItems((eProperty)updateStats[i])));
                 }
 
                 pak.WriteShort(0);
@@ -340,7 +255,7 @@ namespace DOL.GS.PacketHandler
                 // item caps
                 for (int i = 0; i < updateStats.Length; i++)
                 {
-                    pak.WriteByte((byte)itemCaps[i]);
+                    pak.WriteByte((byte)StatCalculator.GetItemBonusCap(player, (eProperty)updateStats[i]));
                 }
 
                 pak.WriteByte(0);
@@ -369,7 +284,7 @@ namespace DOL.GS.PacketHandler
                 pak.WriteByte(0x00); // FF if resists packet
                 pak.WriteByte((byte)player.TotalConstitutionLostAtDeath);
                 pak.WriteShort((ushort)player.MaxHealth);
-                pak.WriteShort(0);
+                pak.WriteShort((ushort)player.GetModified(eProperty.MaxHealthCapBonus));
 
                 SendTCP(pak);
             }
