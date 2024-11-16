@@ -29,18 +29,22 @@ namespace DOL.GS.Spells
     [SpellHandlerAttribute("StyleHandler")]
     public class StyleHandler : SpellHandler
     {
-        public StyleHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+        public Style Style { get; protected set; }
+        
+        public StyleHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line)
+        {
+            int classID = Spell.AmnesiaChance == 0 ? (Caster as GamePlayer)?.CharacterClass.ID ?? 0 : Spell.AmnesiaChance;
+            Style = SkillBase.GetStyleByID((int)Spell.Value, classID);
+            //Andraste - Vico : try to use classID=0 (easy way to implement CL Styles)
+            if (Style == null) Style = SkillBase.GetStyleByID((int)Spell.Value, 0);
+        }
 
         /// <inheritdoc />
         public override bool StartSpell(GameLiving target, bool force = false)
         {
-            int classID = Spell.AmnesiaChance == 0 ? (Caster as GamePlayer)?.CharacterClass.ID ?? 0 : Spell.AmnesiaChance;
-            Style style = SkillBase.GetStyleByID((int)Spell.Value, classID);
-            //Andraste - Vico : try to use classID=0 (easy way to implement CL Styles)
-            if (style == null) style = SkillBase.GetStyleByID((int)Spell.Value, 0);
-            if (style != null)
+            if (Style != null)
             {
-                StyleProcessor.TryToUseStyle(Caster, target, style);
+                StyleProcessor.TryToUseStyle(Caster, target, Style);
                 return true;
             }
             else
@@ -51,15 +55,27 @@ namespace DOL.GS.Spells
         }
 
         /// <inheritdoc />
-        public override bool CastSpell(GameLiving targetObject)
+        public override bool CheckBeginCast(GameLiving selectedTarget, bool quiet)
         {
-            bool success = StartSpell(targetObject, false);
-            
-            // This is critical to restore the casters state and allow them to cast another spell
-            if (!IsCasting)
-                OnAfterSpellCastSequence();
-            
-            return success;
+            return StyleProcessor.CanUseStyle(Caster, selectedTarget, Style, Caster.AttackWeapon);
+        }
+
+        /// <inheritdoc />
+        public override bool CheckAfterCast(GameLiving target, bool quiet)
+        {
+            return StyleProcessor.CanUseStyle(Caster, target, Style, Caster.AttackWeapon);
+        }
+
+        /// <inheritdoc />
+        public override bool CheckDuringCast(GameLiving target, bool quiet)
+        {
+            return StyleProcessor.CanUseStyle(Caster, target, Style, Caster.AttackWeapon);
+        }
+
+        /// <inheritdoc />
+        public override bool CheckEndCast(GameLiving selectedTarget)
+        {
+            return StyleProcessor.CanUseStyle(Caster, selectedTarget, Style, Caster.AttackWeapon);
         }
 
         public override IList<string> DelveInfo

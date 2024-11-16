@@ -6622,7 +6622,7 @@ namespace DOL.GS
             }
             base.StartAttack(attackTarget);
 
-            if (IsCasting && !m_runningSpellHandler.Spell.Uninterruptible)
+            if (IsCasting && !m_runningSpellHandler.Spell.Uninterruptible && m_runningSpellHandler is not StyleHandler)
             {
                 StopCurrentSpellcast();
                 Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, "GameObjects.GamePlayer.StartAttack.SpellCancelled"), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
