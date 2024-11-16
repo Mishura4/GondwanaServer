@@ -62,9 +62,9 @@ namespace DOL.GS.Spells
             return ticks;
         }
 
-        public override bool CheckBeginCast(GameLiving selectedTarget)
+        public override bool CheckBeginCast(GameLiving selectedTarget, bool quiet)
         {
-            if (!base.CheckBeginCast(selectedTarget))
+            if (!base.CheckBeginCast(selectedTarget, quiet))
                 return false;
 
             if (Caster.ControlledBrain == null)

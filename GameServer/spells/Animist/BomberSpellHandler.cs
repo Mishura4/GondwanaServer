@@ -36,7 +36,7 @@ namespace DOL.GS.Spells
 
         public BomberSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { m_isSilent = true; }
 
-        public override bool CheckBeginCast(GameLiving selectedTarget)
+        public override bool CheckBeginCast(GameLiving selectedTarget, bool quiet)
         {
             if (Spell.SubSpellID == 0)
             {
@@ -44,7 +44,7 @@ namespace DOL.GS.Spells
                 return false;
             }
 
-            return base.CheckBeginCast(selectedTarget);
+            return base.CheckBeginCast(selectedTarget, quiet);
         }
 
         public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)

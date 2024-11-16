@@ -25,7 +25,7 @@ namespace DOL.GS.Spells
     [SpellHandler("PowerTransfer")]
     class PowerTransfer : SpellHandler
     {
-        public override bool CheckBeginCast(GameLiving selectedTarget)
+        public override bool CheckBeginCast(GameLiving selectedTarget, bool quiet)
         {
             GamePlayer owner = Owner();
             if (owner == null || selectedTarget == null)
@@ -37,7 +37,7 @@ namespace DOL.GS.Spells
                 return false;
             }
 
-            return base.CheckBeginCast(selectedTarget);
+            return base.CheckBeginCast(selectedTarget, quiet);
         }
 
         public override void OnDirectEffect(GameLiving target, double effectiveness)

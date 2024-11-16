@@ -121,14 +121,14 @@ namespace DOL.GS.Spells
             return true;
         }
 
-        public override bool CheckBeginCast(GameLiving selectedTarget)
+        public override bool CheckBeginCast(GameLiving selectedTarget, bool quiet)
         {
             if (selectedTarget != null && selectedTarget.EndurancePercent >= 90)
             {
                 MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.EnduranceHeal.TargetTooHigh"), eChatType.CT_SpellResisted);
                 return false;
             }
-            return base.CheckBeginCast(selectedTarget);
+            return base.CheckBeginCast(selectedTarget, quiet);
         }
 
         public override string ShortDescription

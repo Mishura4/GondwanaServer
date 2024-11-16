@@ -91,7 +91,7 @@ namespace DOL.GS.Spells
             return 0;
         }
 
-        public override bool CheckBeginCast(GameLiving selectedTarget)
+        public override bool CheckBeginCast(GameLiving selectedTarget, bool quiet)
         {
             // check cast target
             if (selectedTarget == null || (selectedTarget != null && !selectedTarget.IsAlive))
@@ -115,7 +115,7 @@ namespace DOL.GS.Spells
                 ((GamePlayer)Caster).CommandNpcRelease();
             }
 
-            if (!base.CheckBeginCast(selectedTarget))
+            if (!base.CheckBeginCast(selectedTarget, quiet))
                 return false;
 
             if (Caster is GamePlayer player && ((GamePlayer)Caster).ControlledBrain != null)

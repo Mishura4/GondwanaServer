@@ -37,9 +37,9 @@ namespace DOL.GS.Spells
     [SpellHandlerAttribute("Range")]
     public class RangeSpellHandler : PrimerSpellHandler
     {
-        public override bool CheckBeginCast(GameLiving selectedTarget)
+        public override bool CheckBeginCast(GameLiving selectedTarget, bool quiet)
         {
-            if (!base.CheckBeginCast(selectedTarget)) return false;
+            if (!base.CheckBeginCast(selectedTarget, quiet)) return false;
             GameSpellEffect UninterruptableSpell = SpellHandler.FindEffectOnTarget(Caster, "Uninterruptable");
             if (UninterruptableSpell != null) { MessageToCaster("You already preparing a Uninterruptable spell", eChatType.CT_System); return false; }
             GameSpellEffect PowerlessSpell = SpellHandler.FindEffectOnTarget(Caster, "Powerless");

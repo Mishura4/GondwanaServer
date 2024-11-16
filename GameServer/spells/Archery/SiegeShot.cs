@@ -22,7 +22,7 @@ namespace DOL.GS.Spells
             get { return false; }
         }
 
-        public override bool CheckBeginCast(GameLiving selectedTarget)
+        public override bool CheckBeginCast(GameLiving selectedTarget, bool quiet)
         {
             if (Caster != null && Caster is GamePlayer player && Caster.AttackWeapon != null && (Caster.AttackWeapon.Object_Type == 15 || Caster.AttackWeapon.Object_Type == 18 || Caster.AttackWeapon.Object_Type == 9))
             {
@@ -31,7 +31,7 @@ namespace DOL.GS.Spells
                     MessageToCaster(LanguageMgr.GetTranslation(player.Client, "SpellHandler.SiegeArrow.InvalidTarget"), eChatType.CT_Spell);
                     return false;
                 }
-                return base.CheckBeginCast(selectedTarget);
+                return base.CheckBeginCast(selectedTarget, quiet);
                 /*if (!Caster.IsWithinRadius(selectedTarget, Spell.Range))
                 {
                     MessageToCaster(LanguageMgr.GetTranslation(player.Client, "SpellHandler.TargetTooFar"), eChatType.CT_Spell);

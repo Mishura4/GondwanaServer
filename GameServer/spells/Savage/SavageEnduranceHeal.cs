@@ -43,7 +43,7 @@ namespace DOL.GS.Spells
             return cost;
         }
 
-        public override bool CheckBeginCast(GameLiving selectedTarget)
+        public override bool CheckBeginCast(GameLiving selectedTarget, bool quiet)
         {
             int cost = PowerCost(Caster);
             if (Caster.Health < cost)

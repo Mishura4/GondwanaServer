@@ -249,9 +249,9 @@ namespace DOL.GS.Spells
         /// </summary>
         /// <param name="target"></param>
         /// <returns></returns>
-        public override bool CheckBeginCast(GameLiving target)
+        public override bool CheckBeginCast(GameLiving target, bool quiet)
         {
-            if (!base.CheckBeginCast(target))
+            if (!base.CheckBeginCast(target, quiet))
                 return false;
 
             //Lifeflight, the base call to Checkbegincast uses its own power check, which is bad for rez spells

@@ -48,7 +48,7 @@ namespace DOL.GS.Spells
         /// </summary>
         /// <param name="selectedTarget"></param>
         /// <returns></returns>
-        public override bool CheckBeginCast(GameLiving selectedTarget)
+        public override bool CheckBeginCast(GameLiving selectedTarget, bool quiet)
         {
             GamePlayer player = Caster as GamePlayer;
             if (player == null)

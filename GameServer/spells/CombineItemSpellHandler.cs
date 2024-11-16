@@ -119,9 +119,9 @@ namespace DOL.spells
         /// </summary>
         /// <param name="selectedTarget"></param>
         /// <returns></returns>
-        public override bool CheckBeginCast(GameLiving selectedTarget)
+        public override bool CheckBeginCast(GameLiving selectedTarget, bool quiet)
         {
-            if (!base.CheckBeginCast(selectedTarget))
+            if (!base.CheckBeginCast(selectedTarget, quiet))
             {
                 return false;
             }

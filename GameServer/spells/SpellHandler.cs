@@ -38,6 +38,7 @@ using System.Numerics;
 using static DOL.GS.GameTimer;
 using DOL.GS.Scripts;
 using DOL.GS.ServerRules;
+using DOL.GS.Styles;
 using DOL.Territories;
 using static Grpc.Core.Metadata;
 
@@ -643,7 +644,7 @@ namespace DOL.GS.Spells
 
         #region begin & end cast check
 
-        public virtual bool CheckBeginCast(GameLiving selectedTarget)
+        public bool CheckBeginCast(GameLiving selectedTarget)
         {
             return CheckBeginCast(selectedTarget, false);
         }

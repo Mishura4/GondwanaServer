@@ -34,11 +34,6 @@ namespace DOL.GS.Spells
     [SpellHandlerAttribute("StarsProc")]
     public class StarsProc : SpellHandler
     {
-        public override bool CheckBeginCast(GameLiving selectedTarget)
-        {
-            return base.CheckBeginCast(selectedTarget);
-        }
-        
         public override bool StartSpell(GameLiving target, bool force = false)
         {
             foreach (GameLiving targ in SelectTargets(target, force))

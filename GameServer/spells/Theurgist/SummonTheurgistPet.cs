@@ -29,7 +29,7 @@ namespace DOL.GS.Spells
         public SummonTheurgistPet(GameLiving caster, Spell spell, SpellLine line)
             : base(caster, spell, line) { }
 
-        public override bool CheckBeginCast(GameLiving selectedTarget)
+        public override bool CheckBeginCast(GameLiving selectedTarget, bool quiet)
         {
             if (Caster.PetCount >= ServerProperties.Properties.THEURGIST_PET_CAP)
             {
@@ -37,7 +37,7 @@ namespace DOL.GS.Spells
                 return false;
             }
 
-            return base.CheckBeginCast(selectedTarget);
+            return base.CheckBeginCast(selectedTarget, quiet);
         }
 
         public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)

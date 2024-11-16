@@ -33,7 +33,7 @@ namespace DOL.GS.Spells
     public class HealthToEndurance : SpellHandler
     {
 
-        public override bool CheckBeginCast(GameLiving selectedTarget)
+        public override bool CheckBeginCast(GameLiving selectedTarget, bool quiet)
         {
             if (m_caster.Endurance == m_caster.MaxEndurance)
             {
@@ -41,7 +41,7 @@ namespace DOL.GS.Spells
                 return false;
             }
 
-            return base.CheckBeginCast(selectedTarget);
+            return base.CheckBeginCast(selectedTarget, quiet);
         }
 
         /// <summary>

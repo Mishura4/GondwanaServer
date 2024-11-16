@@ -31,7 +31,7 @@ namespace DOL.GS.Spells
     {
         public SummonAnimistFnF(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override bool CheckBeginCast(GameLiving selectedTarget)
+        public override bool CheckBeginCast(GameLiving selectedTarget, bool quiet)
         {
             int nCount = 0;
 
@@ -62,7 +62,7 @@ namespace DOL.GS.Spells
                 return false;
             }
 
-            return base.CheckBeginCast(selectedTarget);
+            return base.CheckBeginCast(selectedTarget, quiet);
         }
 
         public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)

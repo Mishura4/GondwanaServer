@@ -26,14 +26,14 @@ namespace DOL.GS.Spells
     {
         public SummonUnderhill(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override bool CheckBeginCast(GameLiving selectedTarget)
+        public override bool CheckBeginCast(GameLiving selectedTarget, bool quiet)
         {
             if (Caster is GamePlayer && ((GamePlayer)Caster).ControlledBrain != null)
             {
                 MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "Summon.CheckBeginCast.AlreadyHaveaPet"), eChatType.CT_SpellResisted);
                 return false;
             }
-            return base.CheckBeginCast(selectedTarget);
+            return base.CheckBeginCast(selectedTarget, quiet);
         }
     }
 }

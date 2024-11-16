@@ -41,7 +41,7 @@ namespace DOL.GS.Spells
 
         public FocusShellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override bool CheckBeginCast(GameLiving selectedTarget)
+        public override bool CheckBeginCast(GameLiving selectedTarget, bool quiet)
         {
             if (!ServerProperties.Properties.ALLOW_FOCUS_SHELL_OUTSIDE_PVP)
             {
@@ -84,7 +84,7 @@ namespace DOL.GS.Spells
                 return false;
             }
 
-            return base.CheckBeginCast(selectedTarget);
+            return base.CheckBeginCast(selectedTarget, quiet);
         }
 
         public override void OnEffectStart(GameSpellEffect effect)

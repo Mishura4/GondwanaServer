@@ -25,14 +25,14 @@ namespace DOL.GS.Spells
     [SpellHandlerAttribute("VampiirBolt")]
     public class VampiirBoltSpellHandler : SpellHandler
     {
-        public override bool CheckBeginCast(GameLiving selectedTarget)
+        public override bool CheckBeginCast(GameLiving selectedTarget, bool quiet)
         {
             if (Caster.InCombat == true)
             {
                 MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.VampiirBolt.CannotCastInCombat"), eChatType.CT_SpellResisted);
                 return false;
             }
-            return base.CheckBeginCast(selectedTarget);
+            return base.CheckBeginCast(selectedTarget, quiet);
         }
         public override bool StartSpell(GameLiving target, bool force)
         {

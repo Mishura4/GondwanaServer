@@ -38,14 +38,14 @@ namespace DOL.GS.Spells
         {
         }
 
-        public override bool CheckBeginCast(GameLiving selectedTarget)
+        public override bool CheckBeginCast(GameLiving selectedTarget, bool quiet)
         {
             if (Caster is GamePlayer && Caster.ControlledBrain != null)
             {
                 MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "SummonAnimistPet.CheckBeginCast.AlreadyHaveaPet"), eChatType.CT_SpellResisted);
                 return false;
             }
-            return base.CheckBeginCast(selectedTarget);
+            return base.CheckBeginCast(selectedTarget, quiet);
         }
 
         protected override IControlledBrain GetPetBrain(GameLiving owner)

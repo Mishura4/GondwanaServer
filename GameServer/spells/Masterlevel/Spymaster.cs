@@ -284,11 +284,11 @@ namespace DOL.GS.Spells
     {
         private GameLiving m_target;
 
-        public override bool CheckBeginCast(GameLiving selectedTarget)
+        public override bool CheckBeginCast(GameLiving selectedTarget, bool quiet)
         {
             if (!(selectedTarget is GamePlayer)) return false;
             if (!selectedTarget.IsSitting) { MessageToCaster("Target must be sitting!", eChatType.CT_System); return false; }
-            return base.CheckBeginCast(selectedTarget);
+            return base.CheckBeginCast(selectedTarget, quiet);
         }
 
         public override void OnEffectStart(GameSpellEffect effect)

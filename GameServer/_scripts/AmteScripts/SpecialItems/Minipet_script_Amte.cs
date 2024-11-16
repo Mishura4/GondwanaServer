@@ -37,7 +37,7 @@ namespace DOL.GS.Scripts
 
         }
 
-        public override bool CheckBeginCast(GameLiving selectedTarget)
+        public override bool CheckBeginCast(GameLiving selectedTarget, bool quiet)
         {
             if (Caster.CurrentRegion.IsRvR) //Edit des régions interdite - Edit Norec
             {
@@ -51,7 +51,7 @@ namespace DOL.GS.Scripts
                 return false;
             }
 
-            return base.CheckBeginCast(selectedTarget);
+            return base.CheckBeginCast(selectedTarget, quiet);
         }
 
         /// <summary>

@@ -37,7 +37,7 @@ namespace DOL.GS.Spells
             get { return false; }
         }
 
-        public override bool CheckBeginCast(GameLiving selectedTarget)
+        public override bool CheckBeginCast(GameLiving selectedTarget, bool quiet)
         {
             if (!(Caster is GamePlayer))
             {
@@ -60,7 +60,7 @@ namespace DOL.GS.Spells
             {
                 target = Caster.ControlledBrain.Body as TurretPet;
             }
-            return base.CheckBeginCast(target);
+            return base.CheckBeginCast(target, quiet);
         }
 
         public override void DamageTarget(AttackData ad, bool showEffectAnimation)

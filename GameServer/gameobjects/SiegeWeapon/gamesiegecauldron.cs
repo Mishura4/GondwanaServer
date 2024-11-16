@@ -190,7 +190,7 @@ namespace DOL.GS.Spells
             base.DamageTarget(ad, showEffectAnimation, attackResult);
         }
 
-        public override bool CheckBeginCast(GameLiving selectedTarget)
+        public override bool CheckBeginCast(GameLiving selectedTarget, bool quiet)
         {
             return true;
         }

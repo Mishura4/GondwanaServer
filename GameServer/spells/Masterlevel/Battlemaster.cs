@@ -97,14 +97,14 @@ namespace DOL.GS.Spells
     public class Grapple : MasterlevelHandling
     {
         private int check = 0;
-        public override bool CheckBeginCast(GameLiving selectedTarget)
+        public override bool CheckBeginCast(GameLiving selectedTarget, bool quiet)
         {
             if (selectedTarget is GameNPC == true)
             {
                 MessageToCaster("This spell works only on realm enemys.", eChatType.CT_SpellResisted);
                 return false;
             }
-            return base.CheckBeginCast(selectedTarget);
+            return base.CheckBeginCast(selectedTarget, quiet);
         }
 
         public override void OnEffectStart(GameSpellEffect effect)
@@ -311,7 +311,7 @@ namespace DOL.GS.Spells
         }
         #endregion
         public const string DISABLE = "ThrowWeapon.Shortened.Disable.Timer";
-        public override bool CheckBeginCast(GameLiving selectedTarget)
+        public override bool CheckBeginCast(GameLiving selectedTarget, bool quiet)
         {
             GamePlayer player = Caster as GamePlayer;
             if (player == null)
@@ -338,7 +338,7 @@ namespace DOL.GS.Spells
                 return false;
             }
 
-            return base.CheckBeginCast(selectedTarget);
+            return base.CheckBeginCast(selectedTarget, quiet);
         }
 
         //Throw Weapon does not "resist"
@@ -729,14 +729,14 @@ namespace DOL.GS.Spells
     [SpellHandlerAttribute("BodyguardHandler")]
     public class BodyguardHandler : SpellHandler
     {
-        public override bool CheckBeginCast(GameLiving selectedTarget)
+        public override bool CheckBeginCast(GameLiving selectedTarget, bool quiet)
         {
             //    if (Caster.Group.MemberCount <= 2)
             //    {
             //        MessageToCaster("Your group is to small to use this spell.", eChatType.CT_Important);
             //        return false;
             //    }
-            return base.CheckBeginCast(selectedTarget);
+            return base.CheckBeginCast(selectedTarget, quiet);
 
         }
         public override IList<string> DelveInfo

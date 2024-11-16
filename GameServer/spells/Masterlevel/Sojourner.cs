@@ -203,7 +203,7 @@ namespace DOL.GS.Spells
             }
         }
 
-        public override bool CheckBeginCast(GameLiving target)
+        public override bool CheckBeginCast(GameLiving target, bool quiet)
         {
             if (target == null)
             {
@@ -217,7 +217,7 @@ namespace DOL.GS.Spells
             if (!GameServer.ServerRules.IsAllowedToAttack(Caster, target, true))
                 return false;
 
-            return base.CheckBeginCast(target);
+            return base.CheckBeginCast(target, quiet);
         }
 
         private void Zephyr(GamePlayer target)
@@ -368,7 +368,7 @@ namespace DOL.GS.Spells
     {
         private int endurance;
 
-        public override bool CheckBeginCast(GameLiving selectedTarget)
+        public override bool CheckBeginCast(GameLiving selectedTarget, bool quiet)
         {
             endurance = (Caster.MaxEndurance * 50) / 100;
 
@@ -378,7 +378,7 @@ namespace DOL.GS.Spells
                 return false;
             }
 
-            return base.CheckBeginCast(selectedTarget);
+            return base.CheckBeginCast(selectedTarget, quiet);
         }
 
         public override void OnEffectStart(GameSpellEffect effect)
@@ -440,7 +440,7 @@ namespace DOL.GS.Spells
     {
         public Groupport(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override bool CheckBeginCast(GameLiving selectedTarget)
+        public override bool CheckBeginCast(GameLiving selectedTarget, bool quiet)
         {
             if (Caster is GamePlayer && Caster.CurrentRegionID == 51 && ((GamePlayer)Caster).BindRegion == 51)
             {
@@ -455,7 +455,7 @@ namespace DOL.GS.Spells
                     return false;
                 }
             }
-            return base.CheckBeginCast(selectedTarget);
+            return base.CheckBeginCast(selectedTarget, quiet);
         }
 
         public override void FinishSpellCast(GameLiving target)

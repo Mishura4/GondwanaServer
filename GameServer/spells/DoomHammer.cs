@@ -16,14 +16,14 @@ namespace DOL.GS.Spells
     [SpellHandlerAttribute("DoomHammer")]
     public class DoomHammerSpellHandler : DirectDamageSpellHandler
     {
-        public override bool CheckBeginCast(GameLiving selectedTarget)
+        public override bool CheckBeginCast(GameLiving selectedTarget, bool quiet)
         {
             if (Caster.IsDisarmed)
             {
                 MessageToCaster("You are disarmed and can't use this spell!", eChatType.CT_SpellResisted);
                 return false;
             }
-            return base.CheckBeginCast(selectedTarget);
+            return base.CheckBeginCast(selectedTarget, quiet);
         }
         public override double CalculateDamageBase(GameLiving target) { return Spell.Damage; }
         public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)

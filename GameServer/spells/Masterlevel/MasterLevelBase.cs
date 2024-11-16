@@ -1311,7 +1311,7 @@ namespace DOL.GS.Spells
     [SpellHandlerAttribute("PassiveSpell")]
     public class PassiveSpellHandler : MasterlevelHandling
     {
-        public override bool CheckBeginCast(GameLiving selectedTarget)
+        public override bool CheckBeginCast(GameLiving selectedTarget, bool quiet)
         {
             return false;
         }

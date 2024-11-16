@@ -29,7 +29,7 @@ namespace DOL.GS.Spells
         {
         }
 
-        public override bool CheckBeginCast(GameLiving selectedTarget)
+        public override bool CheckBeginCast(GameLiving selectedTarget, bool quiet)
         {
             if (!(Caster is GamePlayer))
             {
@@ -61,7 +61,7 @@ namespace DOL.GS.Spells
                     MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)!.Client, "TurretsRelease.CheckBeginCast.TargetTooFarAway"), eChatType.CT_SpellResisted);
                 return false;
             }
-            return base.CheckBeginCast(selectedTarget);
+            return base.CheckBeginCast(selectedTarget, quiet);
         }
 
         public override void FinishSpellCast(GameLiving target)

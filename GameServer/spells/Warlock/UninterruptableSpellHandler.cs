@@ -40,9 +40,9 @@ namespace DOL.GS.Spells
     {
         public static string WARLOCK_UNINTERRUPTABLE_SPELL = "WARLOCK_UNINTERRUPTABLE_SPELL";
 
-        public override bool CheckBeginCast(GameLiving selectedTarget)
+        public override bool CheckBeginCast(GameLiving selectedTarget, bool quiet)
         {
-            if (!base.CheckBeginCast(selectedTarget)) return false;
+            if (!base.CheckBeginCast(selectedTarget, quiet)) return false;
             GameSpellEffect RangeSpell = SpellHandler.FindEffectOnTarget(Caster, "Range");
             if (RangeSpell != null) { MessageToCaster("You already preparing a Range spell", eChatType.CT_System); return false; }
             GameSpellEffect PowerlessSpell = SpellHandler.FindEffectOnTarget(Caster, "Powerless");

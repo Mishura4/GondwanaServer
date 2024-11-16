@@ -45,7 +45,7 @@ namespace DOL.GS.Spells
             get { return false; }
         }
 
-        public override bool CheckBeginCast(GameLiving selectedTarget)
+        public override bool CheckBeginCast(GameLiving selectedTarget, bool quiet)
         {
             if (m_caster.ObjectState != GameLiving.eObjectState.Active) return false;
             if (!m_caster.IsAlive)

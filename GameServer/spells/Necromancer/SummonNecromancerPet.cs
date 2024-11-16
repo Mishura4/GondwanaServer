@@ -53,7 +53,7 @@ namespace DOL.GS.Spells
             return base.CastSpell();
         }
 
-        public override bool CheckBeginCast(GameLiving selectedTarget)
+        public override bool CheckBeginCast(GameLiving selectedTarget, bool quiet)
         {
             if (FindStaticEffectOnTarget(Caster, typeof(ShadeEffect)) != null)
             {
@@ -65,7 +65,7 @@ namespace DOL.GS.Spells
                 MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer).Client, "Summon.CheckBeginCast.AlreadyHaveaPet"), eChatType.CT_SpellResisted);
                 return false;
             }
-            return base.CheckBeginCast(selectedTarget);
+            return base.CheckBeginCast(selectedTarget, quiet);
         }
 
         public override int CalculateCastingTime()

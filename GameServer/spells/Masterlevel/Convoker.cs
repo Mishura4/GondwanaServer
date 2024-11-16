@@ -375,9 +375,9 @@ namespace DOL.GS.Spells
                 return;
             }
         }
-        public override bool CheckBeginCast(GameLiving selectedTarget)
+        public override bool CheckBeginCast(GameLiving selectedTarget, bool quiet)
         {
-            if (!base.CheckBeginCast(selectedTarget)) return false;
+            if (!base.CheckBeginCast(selectedTarget, quiet)) return false;
             if (!(m_caster.GroundTargetPosition != Position.Nowhere && m_caster.GroundTargetInView))
             {
                 MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.Convoker.AreaTargetOutOfRange"), eChatType.CT_SpellResisted);
@@ -628,11 +628,11 @@ namespace DOL.GS.Spells
 
         public Convoker10SpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override bool CheckBeginCast(GameLiving selectedTarget)
+        public override bool CheckBeginCast(GameLiving selectedTarget, bool quiet)
         {
             if (!CheckCastCoordinate())
                 return false;
-            return base.CheckBeginCast(selectedTarget);
+            return base.CheckBeginCast(selectedTarget, quiet);
         }
 
         /// <summary>

@@ -29,7 +29,7 @@ namespace DOL.GS.Spells
         protected SummonAnimistPet(GameLiving caster, Spell spell, SpellLine line)
             : base(caster, spell, line) { }
 
-        public override bool CheckBeginCast(GameLiving selectedTarget)
+        public override bool CheckBeginCast(GameLiving selectedTarget, bool quiet)
         {
             if (Caster.GroundTargetPosition == Position.Nowhere)
             {
@@ -52,7 +52,7 @@ namespace DOL.GS.Spells
                 return false;
             }
 
-            return base.CheckBeginCast(selectedTarget);
+            return base.CheckBeginCast(selectedTarget, quiet);
         }
         public override void FinishSpellCast(GameLiving target)
         {
