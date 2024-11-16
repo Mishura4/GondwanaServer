@@ -1196,7 +1196,7 @@ namespace DOL.GS.Spells
             return true;
         }
 
-        public virtual bool CheckDuringCast(GameLiving target)
+        public bool CheckDuringCast(GameLiving target)
         {
             return CheckDuringCast(target, false);
         }
@@ -1395,7 +1395,7 @@ namespace DOL.GS.Spells
             return true;
         }
 
-        public virtual bool CheckAfterCast(GameLiving target)
+        public bool CheckAfterCast(GameLiving target)
         {
             return CheckAfterCast(target, false);
         }
@@ -2912,6 +2912,10 @@ namespace DOL.GS.Spells
         /// </summary>
         public virtual void OnAfterSpellCastSequence()
         {
+            if (Status == eStatus.Ready && log.IsWarnEnabled)
+            {
+                log.Warn($"SpellHandler {this} ended with status Ready, this is likely a mistake & will cause certain events to not be handled, for example item charges won't be consumed");
+            }
             if (CastingCompleteEvent != null)
             {
                 CastingCompleteEvent(this);
