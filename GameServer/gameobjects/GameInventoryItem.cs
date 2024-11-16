@@ -598,8 +598,6 @@ namespace DOL.GS
 
         protected virtual void WriteMagicalBonuses(IList<string> output, GameClient client, bool shortInfo)
         {
-            int oldCount = output.Count;
-
             
             var utility = GetTotalUtility();
             if (Math.Abs(utility) >= 0.01)
@@ -607,6 +605,8 @@ namespace DOL.GS
                 output.Add("Total utility: " + String.Format("{0:0.00}", GetTotalUtility()));
                 output.Add(" ");
             }
+            
+            int oldCount = output.Count;
 
             WriteBonusLine(output, client, Bonus1Type, Bonus1);
             WriteBonusLine(output, client, Bonus2Type, Bonus2);
@@ -620,8 +620,10 @@ namespace DOL.GS
             WriteBonusLine(output, client, Bonus10Type, Bonus10);
             WriteBonusLine(output, client, ExtraBonusType, ExtraBonus);
 
-
-            output.Add(" ");
+            if (output.Count > oldCount)
+            {
+                output.Add(" ");
+            }
 
             /* BONUS REQUIREMENTS */
             if (this.BonusConditions?.Any(b => b.ChampionLevel > 0 || b.MlLevel > 0 || b.IsRenaissanceRequired) == true)
@@ -629,14 +631,21 @@ namespace DOL.GS
                 output.Add(" CONDITIONS DE BONUS: ");
                 foreach (var condition in this.BonusConditions.Where(b => b.BonusName != nameof(this.ProcSpellID) || b.BonusName != nameof(this.ProcSpellID1)).OrderBy(b => b.BonusName))
                 {
-                    if (condition.ChampionLevel > 0 || condition.MlLevel > 0 || condition.IsRenaissanceRequired)
-                        output.Add(condition.BonusName + "( " + this.GetBonusTypeFromBonusName(client, condition.BonusName) + " ): Level Champion: " + condition.ChampionLevel + " | ML Level: " + condition.MlLevel + " | Renaissance: " + (condition.IsRenaissanceRequired ? "Oui" : "Non"));
+                    List<string> conditions = new();
+                    if (condition.ChampionLevel > 0)
+                        conditions.Add("Level Champion: " + condition.ChampionLevel);
+                    if (condition.MlLevel > 0)
+                        conditions.Add("ML Level: " + condition.MlLevel);
+                    if (condition.IsRenaissanceRequired)
+                        conditions.Add("Renaissance: Oui");
+                    if (conditions.Count > 0)
+                        output.Add(" - " + this.GetBonusTypeFromBonusName(client, condition.BonusName) + ": " + String.Join(" | ", conditions));
                 }
+                output.Add(" ");
             }
 
             if (output.Count > oldCount)
             {
-                output.Add(" ");
                 output.Insert(oldCount, LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.WriteMagicalBonuses.MagicBonus"));
                 output.Insert(oldCount, " ");
             }
@@ -733,9 +742,19 @@ namespace DOL.GS
 
                         if (procCondition != null)
                         {
-                            output.Add(" ProcSpellID proc Conditions: ");
-                            output.Add(procCondition.BonusName + "( " + this.GetBonusTypeFromBonusName(client, procCondition.BonusName) + " ) : Level Champion: " + procCondition.ChampionLevel + " | ML Level: " + procCondition.MlLevel + " | Renaissance: " + (procCondition.IsRenaissanceRequired ? "Oui" : "Non"));
-                            output.Add(" ");
+                            List<string> conditions = new();
+                            if (procCondition.ChampionLevel > 0)
+                                conditions.Add("Level Champion: " + procCondition.ChampionLevel);
+                            if (procCondition.MlLevel > 0)
+                                conditions.Add("ML Level: " + procCondition.MlLevel);
+                            if (procCondition.IsRenaissanceRequired)
+                                conditions.Add("Renaissance: Oui");
+                            if (conditions.Count > 0)
+                            {
+                                output.Add("Spell Proc Conditions: ");
+                                output.Add(" - " + this.GetBonusTypeFromBonusName(client, procCondition.BonusName) + ": " + String.Join(" | ", conditions));
+                                output.Add(" ");
+                            }
                         }
                     }
                 }
@@ -792,9 +811,19 @@ namespace DOL.GS
 
                         if (procCondition != null)
                         {
-                            output.Add(" ProcSpellID1 2 proc Conditions: ");
-                            output.Add(procCondition.BonusName + "( " + this.GetBonusTypeFromBonusName(client, procCondition.BonusName) + " ) : Level Champion: " + procCondition.ChampionLevel + " | ML Level: " + procCondition.MlLevel + " | Renaissance: " + (procCondition.IsRenaissanceRequired ? "Oui" : "Non"));
-                            output.Add(" ");
+                            List<string> conditions = new();
+                            if (procCondition.ChampionLevel > 0)
+                                conditions.Add("Level Champion: " + procCondition.ChampionLevel);
+                            if (procCondition.MlLevel > 0)
+                                conditions.Add("ML Level: " + procCondition.MlLevel);
+                            if (procCondition.IsRenaissanceRequired)
+                                conditions.Add("Renaissance: Oui");
+                            if (conditions.Count > 0)
+                            {
+                                output.Add("Spell Proc 2 Conditions: ");
+                                output.Add(" - " + this.GetBonusTypeFromBonusName(client, procCondition.BonusName) + ": " + String.Join(" | ", conditions));
+                                output.Add(" ");
+                            }
                         }
                     }
                 }
