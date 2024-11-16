@@ -661,7 +661,7 @@ namespace DOL.GS.Effects
         protected virtual void StartDurationTimer()
         {
             // Duration => 0 = endless until explicit stop
-            if (Duration == 0)
+            if (Duration == 0 || Spell.Concentration > 0)
                 return;
             
             if (m_effectTimer != null)
