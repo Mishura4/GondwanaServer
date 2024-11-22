@@ -1615,15 +1615,28 @@ namespace DOL.GS.PacketHandler.Client.v168
                                 }
                                 output.Add(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.WriteMagicalBonuses.UsedItem"));
                                 output.Add(" ");
+
+                                long recastDelay = (spl.RecastDelay > 0) ? spl.RecastDelay : 60000 * 3;
+
                                 if (spl.RecastDelay > 0)
+                                {
                                     output.Add(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.WriteMagicalBonuses.UseItem1", Util.FormatTime(spl.RecastDelay / 1000)));
+                                }
                                 else
-                                    output.Add(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.WriteMagicalBonuses.UseItem2"));
+                                {
+                                    int totalSeconds = (int)(recastDelay / 1000);
+                                    int minutes = totalSeconds / 60;
+                                    int seconds = totalSeconds % 60;
+                                    output.Add(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.WriteMagicalBonuses.UseItem2", minutes, seconds.ToString("00")));
+                                }
+
                                 long lastChargedItemUseTick = client.Player.TempProperties.getProperty<long>(GamePlayer.LAST_CHARGED_ITEM_USE_TICK);
                                 long changeTime = client.Player.CurrentRegion.Time - lastChargedItemUseTick;
-                                long recastDelay = (spl.RecastDelay > 0) ? spl.RecastDelay : 60000 * 3;
-                                if (changeTime < recastDelay) //3 minutes reuse timer
+
+                                if (changeTime < recastDelay) // Reuse timer
+                                {
                                     output.Add(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.WriteMagicalBonuses.UseItem3", Util.FormatTime((recastDelay - changeTime) / 1000)));
+                                }
                                 return;
                             }
                         }

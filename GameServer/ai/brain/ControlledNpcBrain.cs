@@ -41,7 +41,7 @@ namespace DOL.AI.Brain
         /// <summary>
         /// Defines a logger for this class.
         /// </summary>
-        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
         // note that a minimum distance is inforced in GameNPC
         public static readonly short MIN_OWNER_FOLLOW_DIST = 50;
@@ -172,7 +172,7 @@ namespace DOL.AI.Brain
             m_orderAttackTarget = target as GameLiving;
             previousIsStealthed = false;
             if (target is GamePlayer)
-                previousIsStealthed = (target as GamePlayer).IsStealthed;
+                previousIsStealthed = (target as GamePlayer)!.IsStealthed;
             AttackMostWanted();
         }
 
@@ -330,7 +330,7 @@ namespace DOL.AI.Brain
 
             //See if the pet is too far away, if so release it!
             if (Owner is GamePlayer && IsMainPet && !GameMath.IsWithinRadius(Body, Owner, MAX_OWNER_FOLLOW_DIST))
-                (Owner as GamePlayer).CommandNpcRelease();
+                (Owner as GamePlayer)!.CommandNpcRelease();
 
             // if pet is in agressive mode then check aggressive spells and attacks first
             if (!Body.AttackState && AggressionState == eAggressionState.Aggressive)
@@ -350,7 +350,7 @@ namespace DOL.AI.Brain
             if (Body.TargetObject != null && Body.TargetObject is GamePlayer)
             {
                 GamePlayer player = Body.TargetObject as GamePlayer;
-                if (Body.IsAttacking && player.IsStealthed && !previousIsStealthed)
+                if (Body.IsAttacking && player!.IsStealthed && !previousIsStealthed)
                 {
                     Body.StopAttack();
                     Body.StopCurrentSpellcast();
@@ -358,7 +358,7 @@ namespace DOL.AI.Brain
                     Body.TargetObject = null;
                     FollowOwner();
                 }
-                previousIsStealthed = player.IsStealthed;
+                previousIsStealthed = player!.IsStealthed;
             }
 
             // Always check offensive spells, or pets in melee will keep blindly melee attacking,
@@ -397,7 +397,7 @@ namespace DOL.AI.Brain
                             }
                         case Abilities.Protect:
                             {
-                                new ProtectEffect().Start(Body.GetLivingOwner());
+                                new ProtectEffect().Start(Body, Body.GetLivingOwner());
                                 break;
                             }
                         case Abilities.ChargeAbility:
@@ -882,7 +882,7 @@ namespace DOL.AI.Brain
                 base.AddToAggroList(living, aggroamount, checkLOS);
             else
             {
-                (npc_owner.Brain as StandardMobBrain).AddToAggroList(living, aggroamount);
+                (npc_owner.Brain as StandardMobBrain)!.AddToAggroList(living, aggroamount);
             }
         }
 
@@ -1001,7 +1001,7 @@ namespace DOL.AI.Brain
                     {
                         foreach (IGameEffect effect in Body.EffectList)
                         {
-                            if (effect is GameSpellEffect && (effect as GameSpellEffect).SpellHandler is SpeedEnhancementSpellHandler)
+                            if (effect is GameSpellEffect && (effect as GameSpellEffect)!.SpellHandler is SpeedEnhancementSpellHandler)
                             {
                                 effects.Add(effect as GameSpellEffect);
                             }
@@ -1012,7 +1012,7 @@ namespace DOL.AI.Brain
                     {
                         foreach (IGameEffect effect in Owner.EffectList)
                         {
-                            if (effect is GameSpellEffect && (effect as GameSpellEffect).SpellHandler is SpeedEnhancementSpellHandler)
+                            if (effect is GameSpellEffect && (effect as GameSpellEffect)!.SpellHandler is SpeedEnhancementSpellHandler)
                             {
                                 effects.Add(effect as GameSpellEffect);
                             }
@@ -1066,7 +1066,7 @@ namespace DOL.AI.Brain
 
             AttackedByEnemyEventArgs args = arguments as AttackedByEnemyEventArgs;
             if (args == null) return;
-            if (args.AttackData.Target is GamePlayer && (args.AttackData.Target as GamePlayer).ControlledBrain != this)
+            if (args.AttackData.Target is GamePlayer && (args.AttackData.Target as GamePlayer)!.ControlledBrain != this)
                 return;
             // react only on these attack results
             switch (args.AttackData.AttackResult)

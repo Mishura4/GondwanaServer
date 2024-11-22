@@ -59,7 +59,7 @@ SpellHandler.YouMiss:				Vous ratez votre cible !
 SpellHandler.TargetMissed:			{0} a raté sa cible !
 SpellHandler.EngageCannotBeUsed:		{0} a été attaqué récemment et vous ne pouvez pas engager.
 SpellHandler.NotEnoughEndurance:		Vous vous concentrez pour bloquer le coup !
-SpellHandler.PvPOnly:                   Ne peut seulement être utilisé contre des joueurs ou des familiers contrôlés par des joueurs.
+SpellHandler.PvPOnly:                   Utilisable uniquement contre des joueurs ou des familiers contrôlés par des joueurs.
 
 SpellHandler.CheckLOSYouToPet.NotInView:	Votre familier n'est pas en vue.
 SpellHandler.CheckLOSPlayerToTarget.LoSInterrupt:	Interruption de la ligne de vue dans CheckLOSPlayerToTarget
@@ -194,7 +194,7 @@ SpellHandler.PowerDrain.NoAbsorb:		Vous ne pouvez pas absorber davantage de Mana
 SpellHandler.PowerDrain.SpellHit:		{0} vous siphonne {1} Mana.
 SpellHandler.PowerDrain.StealSuccess:	Vous siphonnez {1} Mana de {0}!
 SpellHandler.PowerDrain.StealOverflow:	Vous siphonnez {1} Mana de {0}! ({2} surplus)
-SpellHandler.PowerDrain.Description:    Verouille votre cible et vous-même en place et lui siphonne {0}% base Mana toutes les {1}s pour {2} secondes. Pendant la duration du grappin, ni vous ni votre cible ne pouvez être touché par des attaques en mélée.
+SpellHandler.PowerDrain.Description:    Verouille sur place votre cible et vous-même, aspirant {0}% de sa Mana de base toutes les {1}s pour {2} secondes. Pendant la durée de cet effet, ni vous ni votre cible ne pouvez subir de dégâts de mêlée.
 
 SpellHandler.PrimerSpell.EffectExpired:		Votre effet de sort de modification a expiré.
 SpellHandler.PrimerSpell.MovementBreaksEffect:	Vous bougez et rompez votre sort de modification.
