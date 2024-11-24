@@ -1931,10 +1931,10 @@ namespace DOL.GS
                     return SkillBase.GetPropertyName(client, (eProperty)Bonus10Type);
 
                 case nameof(ProcSpellID):
-                    return SkillBase.GetSpellByID(ProcSpellID)?.Name ?? "unknown";
+                    return SkillBase.GetSpellByID(ProcSpellID)?.Name ?? "(Invalid Spell)";
 
                 case nameof(ProcSpellID1):
-                    return SkillBase.GetSpellByID(ProcSpellID1)?.Name ?? "unknown";
+                    return SkillBase.GetSpellByID(ProcSpellID1)?.Name ?? "(Invalid Spell)";
 
                 default:
                     return string.Empty;

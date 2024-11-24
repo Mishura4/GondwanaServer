@@ -284,7 +284,7 @@ namespace DOL.GS.PacketHandler
                 pak.WriteByte(0x00); // FF if resists packet
                 pak.WriteByte((byte)player.TotalConstitutionLostAtDeath);
                 pak.WriteShort((ushort)player.MaxHealth);
-                pak.WriteShort((ushort)player.GetModified(eProperty.MaxHealthCapBonus));
+                pak.WriteShort((ushort)0);
 
                 SendTCP(pak);
             }
