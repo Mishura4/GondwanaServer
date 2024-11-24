@@ -1977,26 +1977,26 @@ namespace DOL.GS.Spells
         /// </summary>
         public virtual void FinishSpellCast(GameLiving target)
         {
-            if (Caster is GamePlayer && ((GamePlayer)Caster).IsOnHorse && !HasPositiveEffect)
-                ((GamePlayer)Caster).IsOnHorse = false;
-
-            if (m_caster is GamePlayer && (m_caster as GamePlayer)!.IsSummoningMount)
+            if (Caster is GamePlayer playerCaster)
             {
-                (m_caster as GamePlayer)?.Out.SendMessage(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client.Account.Language, "GameObjects.GamePlayer.UseSlot.CantMountSpell"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                (m_caster as GamePlayer)!.IsOnHorse = false;
+                if (playerCaster.IsSummoningMount)
+                {
+                    playerCaster.SendTranslatedMessage( "GameObjects.GamePlayer.UseSlot.CantMountSpell", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                    playerCaster.IsOnHorse = false;
+                }
+                if (!HasPositiveEffect)
+                {
+                    playerCaster.IsOnHorse = false;
+                    if (playerCaster.AttackWeapon is GameInventoryItem weapon)
+                    {
+                        weapon.OnSpellCast(playerCaster, target, Spell);
+                    }
+                }
             }
-
+            
             //[Stryve]: Do not break stealth if spell never breaks stealth.
             if (UnstealthCasterOnFinish)
                 Caster.Stealth(false);
-
-            if (Caster is GamePlayer && !HasPositiveEffect)
-            {
-                if (Caster.AttackWeapon != null && Caster.AttackWeapon is GameInventoryItem)
-                {
-                    (Caster.AttackWeapon as GameInventoryItem)!.OnSpellCast(Caster, target, Spell);
-                }
-            }
 
             // messages
             if (Spell.InstrumentRequirement == 0 && Spell.ClientEffect != 0 && Spell.CastTime > 0)

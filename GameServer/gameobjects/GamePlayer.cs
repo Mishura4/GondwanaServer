@@ -16597,6 +16597,8 @@ namespace DOL.GS
             {
                 if (m_whistleMountTimer != null)
                     StopWhistleTimers();
+                if (value == m_isOnHorse)
+                    return;
                 m_isOnHorse = value;
                 Out.SendControlledHorse(this, value); // fix very rare bug when this player not in GetPlayersInRadius;
                 foreach (GamePlayer plr in GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
