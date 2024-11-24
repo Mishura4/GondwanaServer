@@ -651,24 +651,22 @@ namespace DOL.GS.PacketHandler.Client.v168
                         break;
                     }
                 #endregion
-                #region Group
-                case 12: // Item info to Group Chat
+                #region Chat Item
+                case 14: // Item info to Group Chat
                     {
-                        invItem = client.Player.Inventory.GetItem((eInventorySlot)objectId);
-                        if (invItem == null)
-                            return;
-                        string str = LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.HandlePacket.Item", client.Player.Name, GetShortItemInfo(invItem, client));
                         if (client.Player.Group == null)
                         {
                             client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.HandlePacket.NoGroup"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             return;
                         }
+                        invItem = client.Player.Inventory.GetItem((eInventorySlot)objectId);
+                        if (invItem == null)
+                            return;
+                        string str = LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.HandlePacket.Item", client.Player.Name, GetShortItemInfo(invItem, client));
                         client.Player.Group.SendMessageToGroupMembers(str, eChatType.CT_Group, eChatLoc.CL_ChatWindow);
                         return;
                     }
-                #endregion
-                #region Guild
-                case 13: // Item info to Guild Chat
+                case 12: // Item info to Guild Chat
                     {
                         invItem = client.Player.Inventory.GetItem((eInventorySlot)objectId);
                         if (invItem == null)
