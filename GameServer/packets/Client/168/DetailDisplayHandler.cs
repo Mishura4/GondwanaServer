@@ -656,7 +656,7 @@ namespace DOL.GS.PacketHandler.Client.v168
                     {
                         if (client.Player.Group == null)
                         {
-                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.HandlePacket.NoGroup"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.HandlePacket.NoGroup"), eChatType.CT_Help, eChatLoc.CL_ChatWindow);
                             return;
                         }
                         invItem = client.Player.Inventory.GetItem((eInventorySlot)objectId);
@@ -668,29 +668,35 @@ namespace DOL.GS.PacketHandler.Client.v168
                     }
                 case 17: // Item info to BattleGroup Chat
                     {
-                        bool? memberStatus = (bool?)client.Player.BattleGroup?.Members[client.Player];
-                        if (memberStatus == null)
+                        var mybattlegroup = client.Player.BattleGroup;
+                        if (mybattlegroup == null)
                         {
-                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.HandlePacket.MustBeInBattleGroup"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            client.Player.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.HandlePacket.MustBeInBattleGroup"), eChatType.CT_Help, eChatLoc.CL_ChatWindow);
+                            return;
+                        }
+                        bool? isModerator = (bool?)mybattlegroup.Members[client.Player];
+                        if (mybattlegroup.Listen == true && isModerator != true)
+                        {
+                            client.Player.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.HandlePacket.OnlyModerator"), eChatType.CT_Help, eChatLoc.CL_ChatWindow);
                             return;
                         }
                         invItem = client.Player.Inventory.GetItem((eInventorySlot)objectId);
                         if (invItem == null)
                             return;
                         string str = LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.HandlePacket.Item", client.Player.Name, GetShortItemInfo(invItem, client));
-                        client.Player.BattleGroup.SendMessageToBattleGroupMembers(str, memberStatus.Value ? eChatType.CT_BattleGroupLeader : eChatType.CT_BattleGroup, eChatLoc.CL_ChatWindow);
+                        client.Player.BattleGroup.SendMessageToBattleGroupMembers(str, isModerator == true ? eChatType.CT_BattleGroupLeader : eChatType.CT_BattleGroup, eChatLoc.CL_ChatWindow);
                         return;
                     }
                 case 12: // Item info to Guild Chat
                     {
                         if (client.Player.Guild == null)
                         {
-                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.HandlePacket.DontBelongGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.HandlePacket.DontBelongGuild"), eChatType.CT_Help, eChatLoc.CL_ChatWindow);
                             return;
                         }
                         if (!client.Player.Guild.HasRank(client.Player, Guild.eRank.GcSpeak))
                         {
-                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.HandlePacket.NoPermissionToSpeak"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.HandlePacket.NoPermissionToSpeak"), eChatType.CT_Help, eChatLoc.CL_ChatWindow);
                             return;
                         }
                         invItem = client.Player.Inventory.GetItem((eInventorySlot)objectId);
@@ -705,25 +711,25 @@ namespace DOL.GS.PacketHandler.Client.v168
                         }
                         return;
                     }
-                #endregion
-                #region ChatGroup
                 case 15: // Item info to Chat group
                     {
-                        invItem = client.Player.Inventory.GetItem((eInventorySlot)objectId);
-                        if (invItem == null)
-                            return;
-
                         ChatGroup mychatgroup = (ChatGroup)client.Player.TempProperties.getProperty<object>(ChatGroup.CHATGROUP_PROPERTY, null);
                         if (mychatgroup == null)
                         {
-                            client.Player.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.HandlePacket.MustBeInChatGroup"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            client.Player.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.HandlePacket.MustBeInChatGroup"), eChatType.CT_Help, eChatLoc.CL_ChatWindow);
                             return;
                         }
-                        if (mychatgroup.Listen == true && (((bool)mychatgroup.Members[client.Player]) == false))
+                        bool? memberStatus = (bool?)mychatgroup.Members[client.Player];
+                        if (mychatgroup.Listen == true && memberStatus != true)
                         {
-                            client.Player.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.HandlePacket.OnlyModerator"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            client.Player.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.HandlePacket.OnlyModerator"), eChatType.CT_Help, eChatLoc.CL_ChatWindow);
                             return;
                         }
+
+                        invItem = client.Player.Inventory.GetItem((eInventorySlot)objectId);
+                        if (invItem == null)
+                            return;
+                        
                         string str = LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.HandlePacket.ChatItem", client.Player.Name, GetShortItemInfo(invItem, client));
                         foreach (GamePlayer ply in mychatgroup.Members.Keys)
                         {
@@ -809,31 +815,6 @@ namespace DOL.GS.PacketHandler.Client.v168
                             client.Player.SalvageItem(invItem);
                         else
                             client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.HandlePacket.VeryStrange"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                        return;
-                    }
-                #endregion
-                #region BattleGroup
-                case 103: // Item info to battle group
-                    {
-                        invItem = client.Player.Inventory.GetItem((eInventorySlot)objectId);
-                        if (invItem == null) return;
-
-                        BattleGroup mybattlegroup = (BattleGroup)client.Player.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null);
-                        if (mybattlegroup == null)
-                        {
-                            client.Player.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.HandlePacket.MustBeInBattleGroup"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                            return;
-                        }
-                        if (mybattlegroup.Listen == true && (((bool)mybattlegroup.Members[client.Player]) == false))
-                        {
-                            client.Player.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.HandlePacket.OnlyModerator"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                            return;
-                        }
-                        string str = LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.HandlePacket.ChatItem", client.Player.Name, GetShortItemInfo(invItem, client));
-                        foreach (GamePlayer ply in mybattlegroup.Members.Keys)
-                        {
-                            ply.Out.SendMessage(str, eChatType.CT_Chat, eChatLoc.CL_ChatWindow);
-                        }
                         return;
                     }
                 #endregion
