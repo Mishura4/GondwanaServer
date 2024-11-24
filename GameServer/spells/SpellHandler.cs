@@ -2697,7 +2697,7 @@ namespace DOL.GS.Spells
                 }
             }
 
-            if (Caster is GamePlayer && (Caster as GamePlayer)!.CharacterClass.ID == (int)eCharacterClass.Warlock && m_spell.IsSecondary)
+            if (Caster is GamePlayer casterPlayer && casterPlayer.CharacterClass.ID == (int)eCharacterClass.Warlock && m_spell.IsSecondary)
             {
                 Spell uninterruptibleSpell = Caster.TempProperties.getProperty<Spell>(UninterruptableSpellHandler.WARLOCK_UNINTERRUPTABLE_SPELL);
 

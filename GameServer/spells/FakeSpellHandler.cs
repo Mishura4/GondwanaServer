@@ -27,8 +27,7 @@ namespace DOL.GS.Spells
 
         protected override bool ExecuteSpell(GameLiving target, bool force = false)
         {
-            CastSubSpells(target);
-            return true;
+            return CastSubSpells(target);;
         }
 
         public override string ShortDescription
