@@ -31,7 +31,7 @@ namespace DOL.GS.Spells
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             //Template of the Illusionblade NPC
             INpcTemplate template = NpcTemplateMgr.GetTemplate(Spell.LifeDrainReturn);
@@ -41,7 +41,7 @@ namespace DOL.GS.Spells
                 if (log.IsWarnEnabled)
                     log.WarnFormat("NPC template {0} not found! Spell: {1}", Spell.LifeDrainReturn, Spell.ToString());
                 MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.Convoker.TemplateNotFound", (ushort)Spell.LifeDrainReturn), eChatType.CT_System);
-                return;
+                return false;
             }
 
             GameSpellEffect effect = CreateSpellEffect(target, effectiveness);
@@ -63,6 +63,7 @@ namespace DOL.GS.Spells
 
             effect.Start(m_pet);
             //Set pet infos & Brain
+            return true;
         }
 
         protected override GamePet GetGamePet(INpcTemplate template) { return new IllusionBladePet(template); }

@@ -42,9 +42,10 @@ namespace DOL.GS.Spells
 		public SummonNoveltyPet(GameLiving caster, Spell spell, SpellLine line)
             : base(caster, spell, line) { }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
-            base.ApplyEffectOnTarget(target, effectiveness);
+            if (!base.ApplyEffectOnTarget(target, effectiveness))
+                return false;
 
             if (m_pet != null)
             {
@@ -54,7 +55,9 @@ namespace DOL.GS.Spells
                 m_pet.Follow(Caster, 100, WorldMgr.VISIBILITY_DISTANCE);
 
                 Caster.TempProperties.setProperty(NoveltyPetBrain.HAS_PET, true);
+                return true;
             }
+            return false;
 
         }
 

@@ -105,12 +105,12 @@ namespace DOL.GS.Spells
         /// </summary>
         /// <param name="target">target that gets the effect</param>
         /// <param name="effectiveness">factor from 0..1 (0%-100%)</param>
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             GamePlayer player = Caster as GamePlayer;
             if (player == null)
             {
-                return;
+                return false;
             }
 
             INpcTemplate template = NpcTemplateMgr.GetTemplate(Spell.LifeDrainReturn);
@@ -119,7 +119,7 @@ namespace DOL.GS.Spells
                 if (log.IsWarnEnabled)
                     log.WarnFormat("NPC template {0} not found! Spell: {1}", Spell.LifeDrainReturn, Spell.ToString());
                 MessageToCaster("NPC template " + Spell.LifeDrainReturn + " not found!", eChatType.CT_System);
-                return;
+                return false;
             }
 
             beffect = CreateSpellEffect(target, effectiveness);
@@ -136,6 +136,7 @@ namespace DOL.GS.Spells
             summoned.AddToWorld();
             controlledBrain.AggressionState = eAggressionState.Passive;
             beffect.Start(Caster);
+            return true;
         }
 
         /// <summary>
@@ -164,15 +165,18 @@ namespace DOL.GS.Spells
     {
         private ISpellHandler _trap;
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             //Set pet infos & Brain
-            base.ApplyEffectOnTarget(target, effectiveness);
+            if (!base.ApplyEffectOnTarget(target, effectiveness))
+                return false;
+
             ProcPetBrain petBrain = (ProcPetBrain)m_pet.Brain;
             m_pet.Level = Caster.Level;
             m_pet.Strength = 0;
             petBrain.AddToAggroList(target, 1);
             petBrain.Think();
+            return true;
         }
 
         protected override GamePet GetGamePet(INpcTemplate template) { return new SummonElementalPet(template); }

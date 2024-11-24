@@ -29,26 +29,26 @@ namespace DOL.GS.Spells
         /// <inheritdoc />
         public override bool HasPositiveEffect => false;
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             if (target.HasAbility(Abilities.CCImmunity) || target.HasAbility(Abilities.RootImmunity))
             {
                 MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.DamageImmunity", m_caster.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
-                return;
+                return true;
             }
             if (target.EffectList.GetOfType<AdrenalineSpellEffect>() != null)
             {
                 (m_caster as GamePlayer)?.SendTranslatedMessage("Adrenaline.Target.Immune", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow, m_caster.GetPersonalizedName(target));
                 (target as GamePlayer)?.SendTranslatedMessage("Adrenaline.Self.Immune", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
-                return;
+                return true;
             }
             if (target.EffectList.GetOfType<ChargeEffect>() != null)
             {
                 MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.Target.TooFast", m_caster.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
-                return;
+                return true;
             }
 
-            base.ApplyEffectOnTarget(target, effectiveness);
+            return base.ApplyEffectOnTarget(target, effectiveness);
         }
 
         public override void OnEffectStart(GameSpellEffect effect)

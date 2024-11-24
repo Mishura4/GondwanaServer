@@ -156,16 +156,19 @@ namespace DOL.GS.Spells
                 MessageToCaster(string.Format(LanguageMgr.GetTranslation(PlayerReceivingMessages.Client, "DoTSpellHandler.SendDamageMessages.YourCriticallyHits", Spell.Name, targetName, ad.CriticalDamage)), eChatType.CT_YouHit);
         }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             if (target.EffectList.GetOfType<AdrenalineSpellEffect>() != null)
             {
                 (m_caster as GamePlayer)?.SendTranslatedMessage("Adrenaline.Target.Immune", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow, m_caster.GetPersonalizedName(target));
                 (target as GamePlayer)?.SendTranslatedMessage("Adrenaline.Self.Immune", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
-                return;
+                return true;
             }
-            base.ApplyEffectOnTarget(target, effectiveness);
+            if (!base.ApplyEffectOnTarget(Caster, effectiveness))
+                return false;
+           
             target.StartInterruptTimer(target.SpellInterruptDuration, AttackData.eAttackType.Spell, Caster);
+            return true;
         }
 
 
@@ -281,10 +284,10 @@ namespace DOL.GS.Spells
             return 0;
         }
 
-        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        public override bool OnDirectEffect(GameLiving target, double effectiveness)
         {
-            if (target == null) return;
-            if (!target.IsAlive || target.ObjectState != GameLiving.eObjectState.Active) return;
+            if (target == null) return false;
+            if (!target.IsAlive || target.ObjectState != GameLiving.eObjectState.Active) return false;
 
             // no interrupts on DoT direct effect
             // calc damage
@@ -295,6 +298,7 @@ namespace DOL.GS.Spells
 
             DamageTarget(ad, false);
             SendDamageMessages(ad);
+            return true;
         }
 
         public DoTSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }

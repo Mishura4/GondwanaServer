@@ -57,7 +57,7 @@ namespace DOL.GS.Spells
             return (int)duration;
         }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             //TODO: correct effectiveness formula
             // invoke direct effect if not resisted for DD w/ debuff spells
@@ -104,10 +104,11 @@ namespace DOL.GS.Spells
 
                 SendSpellResistAnimation(target);
 
-                return;
+                return true;
             }
 
-            base.ApplyEffectOnTarget(target, effectiveness);
+            if (!base.ApplyEffectOnTarget(target, effectiveness))
+                return false;
 
             if (target.Realm == 0 || Caster.Realm == 0)
             {
@@ -126,6 +127,7 @@ namespace DOL.GS.Spells
                     aggroBrain.AddToAggroList(Caster, 1);
             }
             if (Spell.CastTime > 0) target.StartInterruptTimer(target.SpellInterruptDuration, AttackData.eAttackType.Spell, Caster);
+            return true;
         }
 
         public override int CalculateSpellResistChance(GameLiving target)

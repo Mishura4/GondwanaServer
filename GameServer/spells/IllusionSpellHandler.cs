@@ -131,10 +131,11 @@ namespace DOL.GS.Spells
             pet.SetOwnBrain(new IllusionPetBrain(Caster));
         }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             GameSpellEffect effect = new GameSpellEffect(this, Spell.Duration * 1000, 0, 1.0);
             effect.Start(target);
+            return true;
         }
     }
 }

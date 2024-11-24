@@ -40,7 +40,7 @@ namespace DOL.GS.Spells
         }
 
         /// <inheritdoc />
-        public override bool StartSpell(GameLiving target, bool force = false)
+        protected override bool ExecuteSpell(GameLiving target, bool force = false)
         {
             if (Style != null)
             {

@@ -30,20 +30,26 @@ namespace DOL.GS.Spells
     [SpellHandler("DamageSpeedDecrease")]
     public class DamageSpeedDecreaseSpellHandler : SpeedDecreaseSpellHandler
     {
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             // do damage even if immune to duration effect
-            OnDirectEffect(target, effectiveness);
-
-            if ((target is Keeps.GameKeepDoor) == false && (target is Keeps.GameKeepComponent == false))
+            if (!OnDirectEffect(target, effectiveness))
             {
-                base.ApplyEffectOnTarget(target, effectiveness);
+                return false;
             }
+
+            if (target is Keeps.GameKeepDoor or Keeps.GameKeepComponent)
+            {
+                return true;
+            }
+            return base.ApplyEffectOnTarget(target, effectiveness);
         }
 
-        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        public override bool OnDirectEffect(GameLiving target, double effectiveness)
         {
-            base.OnDirectEffect(target, effectiveness);
+            if (!base.OnDirectEffect(target, effectiveness))
+                return false;
+            
             // calc damage
             AttackData ad = CalculateDamageToTarget(target, effectiveness);
 
@@ -54,16 +60,17 @@ namespace DOL.GS.Spells
             DamageTarget(ad, true);
             if (Spell.LifeDrainReturn != 0)
                 StealLife(ad);
+            return true;
         }
 
-        public virtual void StealLife(AttackData ad)
+        public virtual bool StealLife(AttackData ad)
         {
-            if (ad == null) return;
-            if (!m_caster.IsAlive) return;
+            if (ad == null) return false;
+            if (!m_caster.IsAlive) return false;
 
             if (ad.Target is Keeps.GameKeepDoor || ad.Target is Keeps.GameKeepComponent)
             {
-                return;
+                return false;
             }
 
             int heal = (ad.Damage + ad.CriticalDamage) * m_spell.LifeDrainReturn / 100;
@@ -118,7 +125,7 @@ namespace DOL.GS.Spells
                 heal = 0;
             }
 
-            if (heal <= 0) return;
+            if (heal <= 0) return true;
             heal = m_caster.ChangeHealth(m_caster, GameLiving.eHealthChangeType.Spell, heal);
 
             if (heal > 0)
@@ -129,6 +136,7 @@ namespace DOL.GS.Spells
             {
                 MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.DamageSpeedDecrease.NoMoreLife"), eChatType.CT_SpellResisted);
             }
+            return true;
         }
 
         public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)

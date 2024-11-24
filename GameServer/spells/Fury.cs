@@ -28,9 +28,9 @@ namespace DOL.GS.Spells
     [SpellHandlerAttribute("Fury")]
     public class FuryHandler : SpellHandler
     {
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
-            base.ApplyEffectOnTarget(target, 1);
+            return base.ApplyEffectOnTarget(target, 1);
         }
 
         public override void OnEffectStart(GameSpellEffect effect)

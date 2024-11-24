@@ -40,11 +40,6 @@ namespace DOL.GS.Spells
             base.FinishSpellCast(target);
         }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
-        {
-            base.ApplyEffectOnTarget(target, effectiveness);
-        }
-
         protected override GameSpellEffect CreateSpellEffect(GameLiving target, double effectiveness)
         {
             return new GameSpellEffect(this, Spell.Duration, Spell.Frequency, effectiveness);
@@ -70,10 +65,10 @@ namespace DOL.GS.Spells
             OnDirectEffect(effect.Owner, effect.Effectiveness);
         }
 
-        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        public override bool OnDirectEffect(GameLiving target, double effectiveness)
         {
-            if (target.ObjectState != GameObject.eObjectState.Active) return;
-            if (target.IsAlive == false) return;
+            if (target.ObjectState != GameObject.eObjectState.Active) return false;
+            if (target.IsAlive == false) return false;
 
             int healthtick = (int)(target.MaxHealth * 0.05);
             int manatick = (int)(target.MaxMana * 0.05);
@@ -91,6 +86,7 @@ namespace DOL.GS.Spells
             if (modmana > manatick)
                 modmana = manatick;
             target.Mana += modmana;
+            return true;
         }
 
         /// <summary>

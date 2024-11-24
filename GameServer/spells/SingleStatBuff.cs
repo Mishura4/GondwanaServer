@@ -35,7 +35,7 @@ namespace DOL.GS.Spells
             target.UpdateHealthManaEndu();
         }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             int specLevel = Caster.GetModifiedSpecLevel(m_spellLine.Spec);
 
@@ -90,7 +90,7 @@ namespace DOL.GS.Spells
                 effectiveness *= (1.0 + Caster.GetModified(eProperty.BuffEffectiveness) * 0.01);
             }
 
-            base.ApplyEffectOnTarget(target, effectiveness);
+            return base.ApplyEffectOnTarget(target, effectiveness);
         }
 
         public override bool IsOverwritable(GameSpellEffect compare)
@@ -112,14 +112,14 @@ namespace DOL.GS.Spells
     [SpellHandler("StrengthBuff")]
     public class StrengthBuff : SingleStatBuff
     {
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             if (target.HasAbility(Abilities.VampiirStrength))
             {
                 MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.Silence.AlreadyAffected"), eChatType.CT_Spell);
-                return;
+                return false;
             }
-            base.ApplyEffectOnTarget(target, effectiveness);
+            return base.ApplyEffectOnTarget(target, effectiveness);
         }
         public override eProperty Property1 { get { return eProperty.Strength; } }
 
@@ -129,14 +129,14 @@ namespace DOL.GS.Spells
     [SpellHandler("DexterityBuff")]
     public class DexterityBuff : SingleStatBuff
     {
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             if (target.HasAbility(Abilities.VampiirDexterity))
             {
                 MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.Silence.AlreadyAffected"), eChatType.CT_Spell);
-                return;
+                return false;
             }
-            base.ApplyEffectOnTarget(target, effectiveness);
+            return base.ApplyEffectOnTarget(target, effectiveness);
         }
         public override eProperty Property1 { get { return eProperty.Dexterity; } }
 
@@ -146,14 +146,14 @@ namespace DOL.GS.Spells
     [SpellHandler("ConstitutionBuff")]
     public class ConstitutionBuff : SingleStatBuff
     {
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             if (target.HasAbility(Abilities.VampiirConstitution))
             {
                 MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.Silence.AlreadyAffected"), eChatType.CT_Spell);
-                return;
+                return false;
             }
-            base.ApplyEffectOnTarget(target, effectiveness);
+            return base.ApplyEffectOnTarget(target, effectiveness);
         }
         public override eProperty Property1 { get { return eProperty.Constitution; } }
 

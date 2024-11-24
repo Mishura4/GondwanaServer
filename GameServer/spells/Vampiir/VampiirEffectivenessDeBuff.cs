@@ -80,16 +80,16 @@ namespace DOL.GS.Spells
         }
 
         /// <inheritdoc />
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             if (target.EffectList.GetOfType<AdrenalineSpellEffect>() != null)
             {
                 (m_caster as GamePlayer)?.SendTranslatedMessage("Adrenaline.Target.Immune", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow, m_caster.GetPersonalizedName(target));
                 (target as GamePlayer)?.SendTranslatedMessage("Adrenaline.Self.Immune", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
-                return;
+                return true;
             }
 
-            base.ApplyEffectOnTarget(target, effectiveness);
+            return base.ApplyEffectOnTarget(target, effectiveness);
         }
 
         public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)

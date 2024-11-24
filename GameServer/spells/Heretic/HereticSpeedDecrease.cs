@@ -37,7 +37,7 @@ namespace DOL.GS.Spells
         /// </summary>
         /// <param name="target">target that gets the effect</param>
         /// <param name="effectiveness">factor from 0..1 (0%-100%)</param>
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             if (target.Realm == 0 || Caster.Realm == 0)
             {
@@ -52,20 +52,21 @@ namespace DOL.GS.Spells
             if (target.HasAbility(Abilities.CCImmunity))
             {
                 MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.DamageImmunity", target.Name), eChatType.CT_SpellResisted);
-                return;
+                return true;
             }
             if (target.TempProperties.getProperty("Charging", false))
             {
                 MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.Target.TooFast", target.Name), eChatType.CT_SpellResisted);
-                return;
+                return true;
             }
             if (target.EffectList.GetOfType<AdrenalineSpellEffect>() != null)
             {
                 (m_caster as GamePlayer)?.SendTranslatedMessage("Adrenaline.Target.Immune", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow, m_caster.GetPersonalizedName(target));
                 (target as GamePlayer)?.SendTranslatedMessage("Adrenaline.Self.Immune", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
-                return;
+                return true;
             }
-            base.ApplyEffectOnTarget(target, effectiveness);
+            if (!base.ApplyEffectOnTarget(target, effectiveness))
+                return false;
 
             if (Spell.CastTime > 0)
             {
@@ -78,6 +79,7 @@ namespace DOL.GS.Spells
                 if (aggroBrain != null)
                     aggroBrain.AddToAggroList(Caster, 1);
             }
+            return true;
         }
 
         //		/// <summary>

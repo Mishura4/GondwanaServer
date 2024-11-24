@@ -14258,13 +14258,13 @@ namespace DOL.GS
             return list;
         }
 
-        public virtual void SendSystemMessage(string message)
+        public override void SendSystemMessage(string message)
             => Out.SendMessage(message, eChatType.CT_System, eChatLoc.CL_SystemWindow);
 
-        public virtual void SendMessage(string message, eChatType chatType = eChatType.CT_System, eChatLoc chatLocation = eChatLoc.CL_SystemWindow)
+        public override void SendMessage(string message, eChatType chatType = eChatType.CT_System, eChatLoc chatLocation = eChatLoc.CL_SystemWindow)
             => Out.SendMessage(message, chatType, chatLocation);
 
-        public virtual void SendTranslatedMessage(string key, eChatType chatType = eChatType.CT_System, eChatLoc chatLocation = eChatLoc.CL_SystemWindow, params object[] args)
+        public override void SendTranslatedMessage(string key, eChatType chatType = eChatType.CT_System, eChatLoc chatLocation = eChatLoc.CL_SystemWindow, params object[] args)
             => Out.SendMessage(LanguageMgr.GetTranslation(Client.Account.Language, key, args), chatType, chatLocation);
         #endregion
 

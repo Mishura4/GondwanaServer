@@ -57,64 +57,62 @@ namespace DOL.GS.Spells
             base.FinishSpellCast(target);
         }
 
-        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        public override bool OnDirectEffect(GameLiving target, double effectiveness)
         {
-            if (target == null) return;
-            if (!target.IsAlive || target.ObjectState != GameLiving.eObjectState.Active) return;
-
-            GamePlayer player = target as GamePlayer;
-
-            if (target is GamePlayer)
+            if (target is not GamePlayer { ObjectState: GameObject.eObjectState.Active, IsAlive: false } player)
             {
-                switch (Spell.DamageType)
-                {
-                    //Warlord ML 2
-                    case (eDamageType)((byte)0):
-                        {
-                            int mana;
-                            int health;
-                            int end;
-                            int value = (int)Spell.Value;
-                            mana = (target.MaxMana * value) / 100;
-                            end = (target.MaxEndurance * value) / 100;
-                            health = (target.MaxHealth * value) / 100;
-
-                            if (target.Health + health > target.MaxHealth)
-                                target.Health = target.MaxHealth;
-                            else
-                                target.Health += health;
-
-                            if (target.Mana + mana > target.MaxMana)
-                                target.Mana = target.MaxMana;
-                            else
-                                target.Mana += mana;
-
-                            if (target.Endurance + end > target.MaxEndurance)
-                                target.Endurance = target.MaxEndurance;
-                            else
-                                target.Endurance += end;
-
-                            SendEffectAnimation(target, 0, false, 1);
-                        }
-                        break;
-                    //warlord ML8
-                    case (eDamageType)((byte)1):
-                        {
-                            int healvalue = (int)m_spell.Value;
-                            int heal;
-                            if (target.IsAlive && !GameServer.ServerRules.IsAllowedToAttack(Caster, player, true))
-                            {
-                                heal = target.ChangeHealth(target, GameLiving.eHealthChangeType.Spell, healvalue);
-                                if (heal != 0) player.Out.SendMessage(player.GetPersonalizedName(m_caster) + " heal you for " + heal + " hit point!", eChatType.CT_YouWereHit, eChatLoc.CL_SystemWindow);
-                            }
-                            heal = m_caster.ChangeHealth(Caster, GameLiving.eHealthChangeType.Spell, (int)(-m_caster.Health * 90 / 100));
-                            if (heal != 0) MessageToCaster("You lose " + heal + " hit point" + (heal == 1 ? "." : "s."), eChatType.CT_Spell);
-
-                            SendEffectAnimation(target, 0, false, 1);
-                        }
-                        break;
-                }
+                return false;
             }
+
+            switch (Spell.DamageType)
+            {
+                //Warlord ML 2
+                case (eDamageType)((byte)0):
+                    {
+                        int mana;
+                        int health;
+                        int end;
+                        int value = (int)Spell.Value;
+                        mana = (target.MaxMana * value) / 100;
+                        end = (target.MaxEndurance * value) / 100;
+                        health = (target.MaxHealth * value) / 100;
+
+                        if (target.Health + health > target.MaxHealth)
+                            target.Health = target.MaxHealth;
+                        else
+                            target.Health += health;
+
+                        if (target.Mana + mana > target.MaxMana)
+                            target.Mana = target.MaxMana;
+                        else
+                            target.Mana += mana;
+
+                        if (target.Endurance + end > target.MaxEndurance)
+                            target.Endurance = target.MaxEndurance;
+                        else
+                            target.Endurance += end;
+
+                        SendEffectAnimation(target, 0, false, 1);
+                    }
+                    return true;
+                //warlord ML8
+                case (eDamageType)((byte)1):
+                    {
+                        int healvalue = (int)m_spell.Value;
+                        int heal;
+                        if (target.IsAlive && !GameServer.ServerRules.IsAllowedToAttack(Caster, player, true))
+                        {
+                            heal = target.ChangeHealth(target, GameLiving.eHealthChangeType.Spell, healvalue);
+                            if (heal != 0) player.Out.SendMessage(player.GetPersonalizedName(m_caster) + " heal you for " + heal + " hit point!", eChatType.CT_YouWereHit, eChatLoc.CL_SystemWindow);
+                        }
+                        heal = m_caster.ChangeHealth(Caster, GameLiving.eHealthChangeType.Spell, (int)(-m_caster.Health * 90 / 100));
+                        if (heal != 0) MessageToCaster("You lose " + heal + " hit point" + (heal == 1 ? "." : "s."), eChatType.CT_Spell);
+
+                        SendEffectAnimation(target, 0, false, 1);
+                    }
+                    return true;
+            }
+            return false;
         }
 
         // constructor

@@ -1046,7 +1046,7 @@ namespace DOL.GS.Spells
             return false;
         }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             GameSpellEffect neweffect = CreateSpellEffect(target, effectiveness);
             if (font != null)
@@ -1054,6 +1054,7 @@ namespace DOL.GS.Spells
                 font.AddToWorld();
                 neweffect.Start(font);
             }
+            return true;
         }
 
         public override void OnEffectPulse(GameSpellEffect effect)
@@ -1145,11 +1146,12 @@ namespace DOL.GS.Spells
             }
         }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             GameSpellEffect neweffect = CreateSpellEffect(target, effectiveness);
             mine.AddToWorld();
             neweffect.Start(mine);
+            return true;
         }
 
         public override void OnEffectStart(GameSpellEffect effect)
@@ -1211,11 +1213,12 @@ namespace DOL.GS.Spells
             }
         }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             GameSpellEffect neweffect = CreateSpellEffect(target, effectiveness);
             storm.AddToWorld();
             neweffect.Start(storm.Owner);
+            return true;
         }
 
         public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
@@ -1261,12 +1264,12 @@ namespace DOL.GS.Spells
         /// </summary>
         /// <param name="target"></param>
         /// <param name="effectiveness"></param>
-        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        public override bool OnDirectEffect(GameLiving target, double effectiveness)
         {
-            base.OnDirectEffect(target, effectiveness);
-            if (target == null || !target.IsAlive)
-                return;
+            if (!base.OnDirectEffect(target, effectiveness) || target == null || !target.IsAlive)
+                return false;
 
+            bool any = false;
             if (target is GamePlayer && items != null)
             {
                 GamePlayer targetPlayer = target as GamePlayer;
@@ -1275,13 +1278,13 @@ namespace DOL.GS.Spells
                 {
                     if (targetPlayer.Inventory.AddItem(eInventorySlot.FirstEmptyBackpack, item))
                     {
-
+                        any = true;
                         InventoryLogging.LogInventoryAction(Caster, targetPlayer, eInventoryActionType.Other, item, item.Count);
                         targetPlayer.Out.SendMessage("Item created: " + item.GetName(0, false), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                     }
                 }
             }
-
+            return any;
         }
 
         public SummonItemSpellHandler(GameLiving caster, Spell spell, SpellLine line)

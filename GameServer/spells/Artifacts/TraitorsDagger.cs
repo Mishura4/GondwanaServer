@@ -69,10 +69,13 @@ namespace DOL.GS.Spells
     {
         public DdtProcDd(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        public override bool OnDirectEffect(GameLiving target, double effectiveness)
         {
-            base.OnDirectEffect(target, effectiveness);
+            if (!base.OnDirectEffect(target, effectiveness))
+                return false;
+            
             Caster.ChangeHealth(Caster, GameLiving.eHealthChangeType.Spell, -Spell.ResurrectHealth);
+            return true;
         }
     }
 
@@ -81,13 +84,16 @@ namespace DOL.GS.Spells
     {
         private ISpellHandler _trap;
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             //Set pet infos & Brain
-            base.ApplyEffectOnTarget(target, effectiveness);
+            if (!base.ApplyEffectOnTarget(target, effectiveness))
+                return false;
+
             ProcPetBrain petBrain = (ProcPetBrain)m_pet.Brain;
             petBrain.AddToAggroList(target, 1);
             petBrain.Think();
+            return true;
         }
 
         protected override GamePet GetGamePet(INpcTemplate template) { return new TraitorDaggerPet(template); }

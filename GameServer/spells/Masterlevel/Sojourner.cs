@@ -44,11 +44,13 @@ namespace DOL.GS.Spells
         /// </summary>
         /// <param name="target"></param>
         /// <param name="effectiveness"></param>
-        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        public override bool OnDirectEffect(GameLiving target, double effectiveness)
         {
-            base.OnDirectEffect(target, effectiveness);
+            if (!base.OnDirectEffect(target, effectiveness))
+                return false;
+            
             if (target == null || !target.IsAlive)
-                return;
+                return false;
 
             foreach (GameNPC item in target.GetNPCsInRadius((ushort)m_spell.Radius))
             {
@@ -57,6 +59,7 @@ namespace DOL.GS.Spells
                     (item as GameMine).Delete();
                 }
             }
+            return true;
         }
 
         public UnmakeCrystalseedSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
@@ -134,21 +137,17 @@ namespace DOL.GS.Spells
             base.FinishSpellCast(target);
         }
 
-        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        public override bool OnDirectEffect(GameLiving target, double effectiveness)
         {
-            if (target == null) return;
-            if (!target.IsAlive || target.ObjectState != GameLiving.eObjectState.Active) return;
+            if (target is not GamePlayer { IsAlive: true, ObjectState: GameObject.eObjectState.Active, InCombat: false, IsInRvR: false } player)
+                return false;
 
-            GamePlayer player = Caster as GamePlayer;
+            if (GameRelic.IsPlayerCarryingRelic(player))
+                return false;
 
-            if (player != null)
-            {
-                if (!player.InCombat && !GameRelic.IsPlayerCarryingRelic(player))
-                {
-                    SendEffectAnimation(player, 0, false, 1);
-                    player.MoveToBind();
-                }
-            }
+            SendEffectAnimation(player, 0, false, 1);
+            player.MoveToBind();
+            return true;
         }
 
         public override string ShortDescription
@@ -193,14 +192,13 @@ namespace DOL.GS.Spells
         protected GamePlayer m_target;
         protected Coordinate m_loc;
 
-        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        public override bool OnDirectEffect(GameLiving target, double effectiveness)
         {
-            if (target == null) return;
-            GamePlayer player = target as GamePlayer;
-            if (player != null && player.IsAlive)
-            {
-                Zephyr(player);
-            }
+            if (target is not GamePlayer { IsAlive: true, ObjectState: GameObject.eObjectState.Active } player)
+                return false;
+            
+            Zephyr(player);
+            return true;
         }
 
         public override bool CheckBeginCast(GameLiving target, bool quiet)
@@ -463,35 +461,29 @@ namespace DOL.GS.Spells
             base.FinishSpellCast(target);
         }
 
-        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        public override bool OnDirectEffect(GameLiving target, double effectiveness)
         {
-            if (target == null) return;
-            if (!target.IsAlive || target.ObjectState != GameLiving.eObjectState.Active) return;
+            if (target is not GamePlayer { IsAlive: true, ObjectState: GameObject.eObjectState.Active } player) return false;
 
-            GamePlayer player = Caster as GamePlayer;
-            if ((player != null) && (player.Group != null))
-            {
-                if (player.Group.IsGroupInCombat())
-                {
-                    player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "SpellHandler.Groupport.GroupInCombat"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                    return;
-                }
-                else
-                {
-                    foreach (GamePlayer pl in player.Group.GetPlayersInTheGroup())
-                    {
-                        if (pl != null)
-                        {
-                            SendEffectAnimation(pl, 0, false, 1);
-                            pl.MoveTo((ushort)player.BindRegion, player.BindXpos, player.BindYpos, player.BindZpos, (ushort)player.BindHeading);
-                        }
-                    }
-                }
-            }
-            else
+            if (player.Group == null)
             {
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "SpellHandler.Groupport.NotInGroup"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return false;
             }
+            if (player.Group.IsGroupInCombat())
+            {
+                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "SpellHandler.Groupport.GroupInCombat"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                return false;
+            }
+            foreach (GamePlayer pl in player.Group.GetPlayersInTheGroup())
+            {
+                if (pl != null)
+                {
+                    SendEffectAnimation(pl, 0, false, 1);
+                    pl.MoveTo(player.BindPosition);
+                }
+            }
+            return true;
         }
 
         public override string ShortDescription

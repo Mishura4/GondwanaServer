@@ -35,10 +35,10 @@ namespace DOL.GS.spells
         public PowerRendSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
 
-        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        public override bool OnDirectEffect(GameLiving target, double effectiveness)
         {
             if (!target.IsAlive || target.ObjectState != GameLiving.eObjectState.Active)
-                return;
+                return false;
 
             SendEffectAnimation(target, m_spell.ClientEffect, boltDuration: 0, noSound: false, success: 1);
 
@@ -78,13 +78,17 @@ namespace DOL.GS.spells
 
                 MessageToCaster(string.Format(m_spell.Message1, powerRendValue), eChatType.CT_Spell);
             }
+            return true;
         }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             if (target == null || target.CurrentRegion == null)
-                return;
+                return false;
 
+            if (!base.ApplyEffectOnTarget(target, effectiveness))
+                return false;
+            
             if (target.Realm == 0 || Caster.Realm == 0)
             {
                 target.LastAttackedByEnemyTickPvE = target.CurrentRegion.Time;
@@ -96,8 +100,6 @@ namespace DOL.GS.spells
                 Caster.LastAttackTickPvP = Caster.CurrentRegion.Time;
             }
 
-            base.ApplyEffectOnTarget(target, effectiveness);
-
             target.StartInterruptTimer(target.SpellInterruptDuration, AttackData.eAttackType.Spell, Caster);
 
             if (target is GameNPC)
@@ -106,6 +108,7 @@ namespace DOL.GS.spells
                 if (aggroBrain != null)
                     aggroBrain.AddToAggroList(Caster, 1);
             }
+            return true;
         }
 
         public override int CalculateSpellResistChance(GameLiving target) => 100 - CalculateToHitChance(target);

@@ -92,10 +92,13 @@ namespace DOL.GS.Spells
         public override eProperty Property1 { get { return eProperty.FumbleChance; } }
         public override eProperty Property2 { get { return eProperty.SpellFumbleChance; } }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
-            base.ApplyEffectOnTarget(target, effectiveness);
+            if (!base.ApplyEffectOnTarget(target, effectiveness))
+                return false;
+
             target.StartInterruptTimer(target.SpellInterruptDuration, AttackData.eAttackType.Spell, Caster);
+            return true;
         }
 
         public ZoDebuffSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }

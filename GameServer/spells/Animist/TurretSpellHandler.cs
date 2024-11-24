@@ -70,8 +70,9 @@ namespace DOL.GS.Spells
             base.FinishSpellCast(target);
         }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
+            bool any = false;
             if (target != null && target.CurrentRegion != null)
             {
                 foreach (GameNPC npc in target.CurrentRegion.GetNPCsInRadius(target.Coordinate, (ushort)Spell.Radius, false, true))
@@ -86,11 +87,13 @@ namespace DOL.GS.Spells
                     }
                     if (Caster.IsControlledNPC(npc))
                     {
+                        any = true;
                         //PetCounter is decremented when pet die.
                         npc.Die(Caster);
                     }
                 }
             }
+            return any;
         }
     }
 }

@@ -30,11 +30,12 @@ namespace DOL.GS.Spells
     [SpellHandlerAttribute("PowerTransferPet")]
     class PowerTransferPet : PowerTransfer
     {
-        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        public override bool OnDirectEffect(GameLiving target, double effectiveness)
         {
-            if (!(Caster is NecromancerPet))
-                return;
-            base.OnDirectEffect(target, effectiveness);
+            if (Caster is not NecromancerPet)
+                return false;
+
+            return base.OnDirectEffect(target, effectiveness);
         }
 
         /// <summary>

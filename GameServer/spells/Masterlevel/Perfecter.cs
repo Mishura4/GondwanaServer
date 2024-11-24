@@ -267,7 +267,7 @@ namespace DOL.GS.Spells
             base.FinishSpellCast(target);
         }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             // TODO: correct formula
             double eff = 1.25;
@@ -284,7 +284,7 @@ namespace DOL.GS.Spells
                         eff = 1.25;
                 }
             }
-            base.ApplyEffectOnTarget(target, eff);
+            return base.ApplyEffectOnTarget(target, eff);
         }
 
         protected override GameSpellEffect CreateSpellEffect(GameLiving target, double effectiveness)
@@ -312,27 +312,25 @@ namespace DOL.GS.Spells
             OnDirectEffect(effect.Owner, effect.Effectiveness);
         }
 
-        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        public override bool OnDirectEffect(GameLiving target, double effectiveness)
         {
-            if (target.InCombat) return;
-            if (target.ObjectState != GameObject.eObjectState.Active) return;
-            if (target.IsAlive == false) return;
-            if (target is GamePlayer)
+            if (target is not { InCombat: false, ObjectState: GameObject.eObjectState.Active, IsAlive: false })
             {
-                GamePlayer player = target as GamePlayer;
-                if (player.CharacterClass.ID == (int)eCharacterClass.Vampiir
-                    || player.CharacterClass.ID == (int)eCharacterClass.MaulerHib
-                    || player.CharacterClass.ID == (int)eCharacterClass.MaulerMid
-                    || player.CharacterClass.ID == (int)eCharacterClass.MaulerAlb)
-                    return;
+                return false;
+            }
+            
+            if (target is GamePlayer { CharacterClass.ID: (int)eCharacterClass.Vampiir or (int)eCharacterClass.MaulerHib or (int)eCharacterClass.MaulerMid or (int)eCharacterClass.MaulerAlb } player)
+            {
+                return false;
             }
 
-            base.OnDirectEffect(target, effectiveness);
+            if (!base.OnDirectEffect(target, effectiveness)) return false;
             double heal = Spell.Value * effectiveness;
             if (heal < 0) target.Mana += (int)(-heal * target.MaxMana / 100);
             else target.Mana += (int)heal;
             //"You feel calm and healthy."
             MessageToLiving(target, Spell.Message1, eChatType.CT_Spell);
+            return true;
         }
 
         /// <summary>

@@ -40,7 +40,7 @@ namespace DOL.GS.Spells
         /// <summary>
         /// Execute lifetransfer spell
         /// </summary>
-        public override bool StartSpell(GameLiving target, bool force = false)
+        protected override bool ExecuteSpell(GameLiving target, bool force = false)
         {
             var targets = SelectTargets(target, force);
             if (targets.Count <= 0) return false;

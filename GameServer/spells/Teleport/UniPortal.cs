@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Text;
 using DOL.GS.Effects;
 using DOL.Database;
+using DOL.GS.Geometry;
 using DOL.Language;
 using DOL.GS.PacketHandler;
 
@@ -58,16 +59,15 @@ namespace DOL.GS.Spells
         /// </summary>
         /// <param name="target"></param>
         /// <param name="effectiveness"></param>
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
-            GamePlayer player = target as GamePlayer;
-            if (player == null)
-                return;
+            if (target is not GamePlayer player)
+                return false;
 
             if (player.InCombat || GameRelic.IsPlayerCarryingRelic(player))
             {
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GamePlayer.UseSlot.CantUseInCombat"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                return;
+                return false;
             }
 
             SendEffectAnimation(player, 0, false, 1);
@@ -76,7 +76,8 @@ namespace DOL.GS.Spells
             effect.Start(player);
 
             player.LeaveHouse();
-            player.MoveTo((ushort)m_destination.RegionID, m_destination.X, m_destination.Y, m_destination.Z, (ushort)m_destination.Heading);
+            player.MoveTo(m_destination.GetPosition());
+            return true;
         }
     }
 }

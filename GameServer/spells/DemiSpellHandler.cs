@@ -10,7 +10,7 @@ namespace DOL.GS.Spells
         {
         }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             AttackData ad = new AttackData();
             ad.Attacker = Caster;
@@ -36,6 +36,7 @@ namespace DOL.GS.Spells
                     aggroBrain.AddToAggroList(Caster, 1);
             }
             DamageTarget(ad, true);
+            return true;
         }
 
         public override int CalculateSpellResistChance(GameLiving target)

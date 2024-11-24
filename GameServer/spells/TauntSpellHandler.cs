@@ -31,15 +31,12 @@ namespace DOL.GS.Spells
             base.FinishSpellCast(target);
         }
 
-        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        public override bool OnDirectEffect(GameLiving target, double effectiveness)
         {
-            if (target == null) return;
-            if (!target.IsAlive || target.ObjectState != GameLiving.eObjectState.Active) return;
+            if (target is not { IsAlive: true, ObjectState: GameObject.eObjectState.Active }) return false;
 
             // no animation on stealthed players
-            if (target is GamePlayer)
-                if (target.IsStealthed)
-                    return;
+            if (target is GamePlayer { IsStealthed: true }) return false;
 
             SendEffectAnimation(target, 0, false, 1);
 
@@ -54,6 +51,7 @@ namespace DOL.GS.Spells
             // Interrupt only if target is actually casting
             if (target.IsCasting && Spell.Target.ToLower() != "cone")
                 target.StartInterruptTimer(target.SpellInterruptDuration, ad.AttackType, Caster);
+            return true;
         }
 
         protected override void OnSpellResisted(GameLiving target)

@@ -70,9 +70,10 @@ namespace DOL.GS.Spells
             return _artefJavelin;
         }
 
-        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        public override bool OnDirectEffect(GameLiving target, double effectiveness)
         {
-            base.OnDirectEffect(target, effectiveness);
+            if (!base.OnDirectEffect(target, effectiveness))
+                return false;
 
             if (Caster is GamePlayer player)
             {
@@ -86,6 +87,7 @@ namespace DOL.GS.Spells
                 SendEffectAnimation(player);
                 player.TempProperties.setProperty("GoldenSpearJavelinHandler", this);
             }
+            return true;
         }
 
         private void SendEffectAnimation(GamePlayer player)

@@ -46,9 +46,9 @@ namespace DOL.GS.Spells
         /// </summary>
         /// <param name="target">target that gets the damage</param>
         /// <param name="effectiveness">factor from 0..1 (0%-100%)</param>
-        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        public override bool OnDirectEffect(GameLiving target, double effectiveness)
         {
-            if (target == null) return;
+            if (target == null) return false;
 
             bool spellOK = true;
             //cone spells
@@ -85,6 +85,7 @@ namespace DOL.GS.Spells
                     DealDamage(target, effectiveness);
             }
             else DealDamage(target, effectiveness);
+            return true;
         }
 
         private bool CheckLOS(GameLiving living)
@@ -123,18 +124,20 @@ namespace DOL.GS.Spells
             }
         }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             // do not apply debuff to keep components or doors
             if ((target is Keeps.GameKeepComponent) == false && (target is Keeps.GameKeepDoor) == false)
             {
-                base.ApplyEffectOnTarget(target, effectiveness);
+                if (!base.ApplyEffectOnTarget(target, effectiveness))
+                    return false;
             }
 
             if ((Spell.Duration > 0 && Spell.Target != "area") || Spell.Concentration > 0)
             {
                 OnDirectEffect(target, effectiveness);
             }
+            return true;
         }
 
         private void DealDamage(GameLiving target, double effectiveness)

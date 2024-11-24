@@ -29,9 +29,10 @@ namespace DOL.GS.Spells
     {
         public HealDebuffSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine) { }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        /// <inheritdoc />
+        public override int CalculateSpellResistChance(GameLiving target)
         {
-            int totalResistChance = 0;
+            int totalResistChance = base.CalculateSpellResistChance(target);
 
             // 1. DebuffImmunity
             var immunityEffect = SpellHandler.FindEffectOnTarget(target, "DebuffImmunity") as DebuffImmunityEffect;
@@ -47,26 +48,20 @@ namespace DOL.GS.Spells
                 mythicalResistChance = gamePlayer.GetModified(eProperty.MythicalDebuffResistChance);
                 totalResistChance += mythicalResistChance;
             }
+            return totalResistChance;
+        }
 
-            // Apply the combined resist chance
-            if (Util.Chance(totalResistChance))
-            {
-                (Caster as GamePlayer)?.SendTranslatedMessage("DebuffImmunity.Target.Resisted", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow, Caster.GetPersonalizedName(target));
-                (target as GamePlayer)?.SendTranslatedMessage("DebuffImmunity.You.Resisted", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
-
-                SendSpellResistAnimation(target);
-                return;
-            }
-
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        {
             if (SpellHandler.FindEffectOnTarget(target, "Damnation") != null)
             {
                 if (Caster is GamePlayer player)
                     MessageToCaster(LanguageMgr.GetTranslation(player.Client, "Damnation.Target.Resist", player.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
 
                 SendSpellResistAnimation(target);
-                return;
+                return true;
             }
-            base.ApplyEffectOnTarget(target, effectiveness);
+            return base.ApplyEffectOnTarget(target, effectiveness);
         }
 
         public override void OnEffectStart(GameSpellEffect effect)

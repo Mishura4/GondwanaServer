@@ -83,16 +83,18 @@ namespace DOL.GS.Spells
             if (min < 0) min = 0;
         }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             if (target.EffectList.GetOfType<AdrenalineSpellEffect>() != null)
             {
                 (m_caster as GamePlayer)?.SendTranslatedMessage("Adrenaline.Target.Immune", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow, m_caster.GetPersonalizedName(target));
                 (target as GamePlayer)?.SendTranslatedMessage("Adrenaline.Self.Immune", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
-                return;
+                return true;
             }
-            base.ApplyEffectOnTarget(target, effectiveness);
+            if (!base.ApplyEffectOnTarget(target, effectiveness))
+                return false;
             target.StartInterruptTimer(target.SpellInterruptDuration, AttackData.eAttackType.Spell, Caster);
+            return true;
         }
 
 
@@ -169,10 +171,10 @@ namespace DOL.GS.Spells
         }
 
 
-        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        public override bool OnDirectEffect(GameLiving target, double effectiveness)
         {
-            if (target == null) return;
-            if (!target.IsAlive || target.ObjectState != GameLiving.eObjectState.Active) return;
+            if (target == null) return false;
+            if (!target.IsAlive || target.ObjectState != GameLiving.eObjectState.Active) return false;
 
             // no interrupts on DoT direct effect
             // calc damage
@@ -183,6 +185,7 @@ namespace DOL.GS.Spells
 
             SendDamageMessages(ad);
             DamageTarget(ad);
+            return true;
         }
 
 

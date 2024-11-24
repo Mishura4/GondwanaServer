@@ -20,16 +20,16 @@ namespace DOL.GS.Spells
         {
         }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             GameSpellEffect damnationEffect = SpellHandler.FindEffectOnTarget(target, "Damnation");
             if (damnationEffect != null)
             {
                 if (Caster is GamePlayer player)
                     MessageToCaster(LanguageMgr.GetTranslation(player.Client, "Damnation.Target.Resist", player.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
-                return;
+                return false;
             }
-            base.ApplyEffectOnTarget(target, effectiveness);
+            return base.ApplyEffectOnTarget(target, effectiveness);
         }
 
         /// <inheritdoc />

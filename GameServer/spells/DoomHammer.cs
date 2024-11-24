@@ -26,17 +26,21 @@ namespace DOL.GS.Spells
             return base.CheckBeginCast(selectedTarget, quiet);
         }
         public override double CalculateDamageBase(GameLiving target) { return Spell.Damage; }
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             GamePlayer player = target as GamePlayer;
-            base.ApplyEffectOnTarget(Caster, effectiveness);
+            if (!base.ApplyEffectOnTarget(Caster, effectiveness))
+                return false;
+
             Caster.StopAttack();
             foreach (GamePlayer visPlayer in Caster.GetPlayersInRadius((ushort)WorldMgr.VISIBILITY_DISTANCE))
                 visPlayer.Out.SendCombatAnimation(Caster, target, 0x0000, 0x0000, (ushort)408, 0, 0x00, target.HealthPercent);
             if (Spell.ResurrectMana > 0) foreach (GamePlayer visPlayer in target.GetPlayersInRadius((ushort)WorldMgr.VISIBILITY_DISTANCE))
                     visPlayer.Out.SendSpellEffectAnimation(Caster, target, (ushort)Spell.ResurrectMana, 0, false, 0x01);
 
-            if ((Spell.Duration > 0 && Spell.Target != "Area") || Spell.Concentration > 0) OnDirectEffect(target, effectiveness);
+            if ((Spell.Duration > 0 && Spell.Target != "Area") || Spell.Concentration > 0)
+                return OnDirectEffect(target, effectiveness);
+            return false;
         }
         /// <inheritdoc />
         public override void OnEffectStart(GameSpellEffect effect)

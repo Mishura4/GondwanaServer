@@ -30,10 +30,10 @@ namespace DOL.GS.Spells
             target.UpdateHealthManaEndu();
         }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             // Ability Bonus are not modified by any effectiveness modifier
-            base.ApplyEffectOnTarget(target, 1.0);
+            return base.ApplyEffectOnTarget(target, 1.0);
         }
 
         protected SingleStatAbilityBuffHandler(GameLiving caster, Spell spell, SpellLine line)

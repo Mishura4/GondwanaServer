@@ -34,14 +34,16 @@ namespace DOL.GS.Spells
             base.FinishSpellCast(target);
         }
 
-        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        public override bool OnDirectEffect(GameLiving target, double effectiveness)
         {
-            base.OnDirectEffect(target, effectiveness);
+            if (!base.OnDirectEffect(target, effectiveness))
+                return false;
+            
             if (target == null || !target.IsAlive)
-                return;
+                return false;
 
             if (Caster.EffectList.GetOfType<MasteryofConcentrationEffect>() != null)
-                return;
+                return false;
 
             //have to do it here because OnAttackedByEnemy is not called to not get aggro
             if (target.Realm == 0 || Caster.Realm == 0)
@@ -64,7 +66,7 @@ namespace DOL.GS.Spells
             if (effect != null)
             {
                 effect.Cancel(false);
-                return;
+                return true;
             }
 
             if (target is GameNPC)
@@ -77,6 +79,7 @@ namespace DOL.GS.Spells
                         aggroBrain.ClearAggroList();
                 }
             }
+            return true;
         }
 
         protected override void OnSpellResisted(GameLiving target)

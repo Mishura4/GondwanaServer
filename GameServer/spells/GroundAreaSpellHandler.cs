@@ -164,7 +164,7 @@ namespace DOL.GS.Spells
         }
 
         /// <inheritdoc />
-        public override bool StartSpell(GameLiving target, bool force = false)
+        protected override bool ExecuteSpell(GameLiving target, bool force = false)
         {
             GameLiving trueCaster = Caster.GetController();
             GameNPC turret = CreateTurret();
@@ -218,8 +218,9 @@ namespace DOL.GS.Spells
         }
 
         /// <inheritdoc />
-        public override void CastSubSpells(GameLiving target)
+        public override bool CastSubSpells(GameLiving target)
         {
+            return false;
         }
     }
 }

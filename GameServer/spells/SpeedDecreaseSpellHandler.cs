@@ -27,16 +27,16 @@ namespace DOL.GS.Spells
     [SpellHandler("SpeedDecrease")]
     public class SpeedDecreaseSpellHandler : UnbreakableSpeedDecreaseSpellHandler
     {
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             // Check for root immunity.
             if (Spell.Value == 99 &&
                 FindStaticEffectOnTarget(target, typeof(MezzRootImmunityEffect)) != null)
             {
                 MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.TargetImmune"), eChatType.CT_System);
-                return;
+                return true;
             }
-            base.ApplyEffectOnTarget(target, effectiveness);
+            return base.ApplyEffectOnTarget(target, effectiveness);
         }
 
         public override void OnEffectStart(GameSpellEffect effect)

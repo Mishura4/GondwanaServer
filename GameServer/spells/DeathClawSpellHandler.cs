@@ -10,7 +10,7 @@ namespace DOL.GS.Spells
         {
         }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             AttackData ad = new AttackData();
             ad.Attacker = Caster;
@@ -69,6 +69,7 @@ namespace DOL.GS.Spells
             SendDamageMessages(ad);
             target.StartInterruptTimer(target.SpellInterruptDuration, ad.AttackType, Caster);
             DamageTarget(ad, true);
+            return true;
         }
 
         public override int CalculateSpellResistChance(GameLiving target)

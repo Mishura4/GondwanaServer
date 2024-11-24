@@ -1752,11 +1752,13 @@ namespace DOL.GS.Spells
         #endregion Hib Weapons
 
 
-        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        public override bool OnDirectEffect(GameLiving target, double effectiveness)
         {
-            base.OnDirectEffect(target, effectiveness);
+            if (!base.OnDirectEffect(target, effectiveness))
+                return false;
             GameEventMgr.AddHandler(Caster, GamePlayerEvent.Released, OnPlayerReleased);
             GameEventMgr.AddHandler(Caster, GamePlayerEvent.Quit, OnPlayerLeft);
+            return true;
         }
 
 

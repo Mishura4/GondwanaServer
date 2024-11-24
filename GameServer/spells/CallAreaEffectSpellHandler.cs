@@ -45,25 +45,25 @@ namespace DOL.GS.Spells
             base.FinishSpellCast(target);
         }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             if (target is not { ObjectState: GameObject.eObjectState.Active, CurrentRegion: not null })
-                return;
+                return false;
             
             int areaEffectFamily = Spell.LifeDrainReturn;
             if (areaEffectFamily <= 0)
-                return;
+                return false;
 
             List<DBAreaEffect> areaEffects = GameServer.Database.SelectObjects<DBAreaEffect>(
                 DB.Column("AreaEffectFamily").IsEqualTo(areaEffectFamily)).OrderBy(ae => ae.OrderInFamily).ToList();
 
             if (areaEffects.Count <= 0)
-                return;
+                return false;
 
             Position initialPosition = target.Position;
             Mob initialMob = GameServer.Database.SelectObjects<Mob>(DB.Column("Mob_ID").IsEqualTo(areaEffects.First().MobID)).FirstOrDefault();
             if (initialMob == null)
-                return;
+                return false;
 
             SpawnAreaEffect(areaEffects.First(), target, initialPosition, Spell.Duration);
 
@@ -73,6 +73,7 @@ namespace DOL.GS.Spells
                 Position calculatedPosition = CalculateRelativePosition(initialPosition, areaEffects.First().MobID, areaEffect.MobID);
                 SpawnAreaEffect(areaEffect, target, calculatedPosition, Spell.Duration);
             }
+            return true;
         }
 
         private Position CalculateRelativePosition(Position basePosition, string firstMobID, string currentMobID)

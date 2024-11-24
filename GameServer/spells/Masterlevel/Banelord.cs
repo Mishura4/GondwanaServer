@@ -18,10 +18,13 @@ namespace DOL.GS.Spells
     {
         public override eProperty Property1 { get { return eProperty.CastingSpeed; } }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
-            base.ApplyEffectOnTarget(target, effectiveness);
+            if (!base.ApplyEffectOnTarget(target, effectiveness))
+                return false;
+
             target.StartInterruptTimer(target.SpellInterruptDuration, AttackData.eAttackType.Spell, Caster);
+            return true;
         }
 
         // constructor
@@ -54,9 +57,9 @@ namespace DOL.GS.Spells
             base.FinishSpellCast(target);
         }
 
-        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        public override bool OnDirectEffect(GameLiving target, double effectiveness)
         {
-            if (!target.IsAlive || target.ObjectState != GameLiving.eObjectState.Active) return;
+            if (!target.IsAlive || target.ObjectState != GameLiving.eObjectState.Active) return false;
 
             GamePlayer player = target as GamePlayer;
             if (target is GamePlayer)
@@ -90,14 +93,12 @@ namespace DOL.GS.Spells
                 if (effect2 != null)
                 {
                     effect2.Cancel(true);
-                    return;
+                    return true;
                 }
-                foreach (GamePlayer ply in player.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
-                {
-                    SendEffectAnimation(player, 0, false, 1);
-                }
+                SendEffectAnimation(player, 0, false, 1);
                 player.StartInterruptTimer(target.SpellInterruptDuration, AttackData.eAttackType.Spell, Caster);
             }
+            return true;
         }
 
         public override int CalculateSpellResistChance(GameLiving target)
@@ -139,12 +140,12 @@ namespace DOL.GS.Spells
             effect.Owner.StartInterruptTimer(effect.Owner.SpellInterruptDuration, AttackData.eAttackType.Spell, Caster);
         }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             GameSpellEffect mezz = SpellHandler.FindEffectOnTarget(target, "Mesmerize");
             if (mezz != null)
                 mezz.Cancel(false);
-            base.ApplyEffectOnTarget(target, effectiveness);
+            return base.ApplyEffectOnTarget(target, effectiveness);
         }
 
         public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
@@ -167,15 +168,15 @@ namespace DOL.GS.Spells
     {
         public override eProperty Property1 { get { return eProperty.FatigueConsumption; } }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             GameSpellEffect effect2 = SpellHandler.FindEffectOnTarget(target, "Mesmerize");
             if (effect2 != null)
             {
                 effect2.Cancel(false);
-                return;
+                return true;
             }
-            base.ApplyEffectOnTarget(target, effectiveness);
+            return base.ApplyEffectOnTarget(target, effectiveness);
         }
 
         public override void OnEffectStart(GameSpellEffect effect)
@@ -243,15 +244,15 @@ namespace DOL.GS.Spells
             base.FinishSpellCast(target);
         }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             if (target.HasAbility(Abilities.CCImmunity) || target.HasAbility(Abilities.StunImmunity))
             {
                 MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.DamageImmunity", target.Name), eChatType.CT_SpellResisted);
-                return;
+                return true;
             }
 
-            base.ApplyEffectOnTarget(target, effectiveness);
+            return base.ApplyEffectOnTarget(target, effectiveness);
         }
 
         public override void OnEffectStart(GameSpellEffect effect)

@@ -53,11 +53,12 @@ namespace DOL.GS.Spells
             return false;
         }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             GameSpellEffect neweffect = CreateSpellEffect(target, effectiveness);
             decoy.AddToWorld();
             neweffect.Start(decoy);
+            return true;
         }
 
         public override void OnEffectStart(GameSpellEffect effect)
@@ -141,15 +142,17 @@ namespace DOL.GS.Spells
     [SpellHandlerAttribute("Sabotage")]
     public class SabotageSpellHandler : SpellHandler
     {
-        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        public override bool OnDirectEffect(GameLiving target, double effectiveness)
         {
-            base.OnDirectEffect(target, effectiveness);
-            if (target is GameFont)
+            if (!base.OnDirectEffect(target, effectiveness)) return false;
+            
+            if (target is GameFont targetFont)
             {
-                GameFont targetFont = target as GameFont;
                 targetFont.Delete();
                 MessageToCaster("Selected ward has been saboted!", eChatType.CT_SpellResisted);
+                return true;
             }
+            return false;
         }
 
         public SabotageSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
@@ -440,19 +443,24 @@ namespace DOL.GS.Spells
         /// </summary>
         /// <param name="target">target that gets the effect</param>
         /// <param name="effectiveness">factor from 0..1 (0%-100%)</param>
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             if (!target.IsAlive || target.InCombat || (target.IsCasting && target != Caster))
-                return;
+                return false;
 
             // Patch Notes 1.70: Players can no longer be stealthed by the Blanket of Camouflage master level ability if they are holding a relic.
             if (target is GamePlayer playerTarget && GameRelic.IsPlayerCarryingRelic(playerTarget))
-                return;
+                return false;
 
-            if (target.CanStealth)
-                target.Stealth(true);
+            if (!target.CanStealth)
+            {
+                return base.ApplyEffectOnTarget(target, effectiveness);
+            }
             else
-                base.ApplyEffectOnTarget(target, effectiveness);
+            {
+                target.Stealth(true);
+                return true;
+            }
         }
 
         /// <summary>

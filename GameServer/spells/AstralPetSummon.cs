@@ -48,14 +48,15 @@ namespace DOL.GS.Spells
         /// </summary>
         /// <param name="target"></param>
         /// <param name="effectiveness"></param>
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
-            base.ApplyEffectOnTarget(target, effectiveness);
+            if (!base.ApplyEffectOnTarget(target, effectiveness))
+                return false;
 
             m_pet.TempProperties.setProperty("target", target);
             (m_pet.Brain as IOldAggressiveBrain).AddToAggroList(target, 1);
             (m_pet.Brain as ProcPetBrain).Think();
-
+            return true;
         }
 
         protected override GamePet GetGamePet(INpcTemplate template) { return new AstralPet(template); }

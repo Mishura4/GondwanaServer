@@ -25,10 +25,10 @@ namespace DOL.GS.Spells
         }
 
 
-        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        public override bool OnDirectEffect(GameLiving target, double effectiveness)
         {
-            if (target == null) return;
-            if (!target.IsAlive || target.ObjectState != GameLiving.eObjectState.Active) return;
+            if (target == null) return false;
+            if (!target.IsAlive || target.ObjectState != GameLiving.eObjectState.Active) return false;
             //spell damage should 25;
             int end = (int)(Spell.Damage);
             target.ChangeEndurance(target, GameLiving.eEnduranceChangeType.Spell, (-end));
@@ -43,6 +43,7 @@ namespace DOL.GS.Spells
             }
 
             target.StartInterruptTimer(target.SpellInterruptDuration, AttackData.eAttackType.Spell, Caster);
+            return true;
         }
 
         public override string ShortDescription
@@ -75,16 +76,17 @@ namespace DOL.GS.Spells
             base.FinishSpellCast(target);
         }
 
-        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        public override bool OnDirectEffect(GameLiving target, double effectiveness)
         {
-            if (target == null) return;
-            if (!target.IsAlive || target.ObjectState != GameLiving.eObjectState.Active) return;
+            if (target == null) return false;
+            if (!target.IsAlive || target.ObjectState != GameLiving.eObjectState.Active) return false;
 
             //spell damage shood be 50-100 (thats the amount power tapped on use) i recommend 90 i think thats it but cood be wrong
             int mana = (int)(Spell.Damage);
             target.ChangeMana(target, GameLiving.eManaChangeType.Spell, (-mana));
 
             target.StartInterruptTimer(target.SpellInterruptDuration, AttackData.eAttackType.Spell, Caster);
+            return true;
         }
 
         public override string ShortDescription
@@ -176,10 +178,9 @@ namespace DOL.GS.Spells
         /// Do not trigger SubSpells
         /// </summary>
         /// <param name="target"></param>
-        public override void CastSubSpells(GameLiving target)
+        public override bool CastSubSpells(GameLiving target)
         {
-            if (ServerProperties.Properties.ENABLE_SUB_SPELL_ALL_CLASS)
-                base.CastSubSpells(target);
+            return ServerProperties.Properties.ENABLE_SUB_SPELL_ALL_CLASS ? base.CastSubSpells(target) : false;
         }
 
         public Grapple(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
@@ -353,11 +354,11 @@ namespace DOL.GS.Spells
         }
 
 
-        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        public override bool OnDirectEffect(GameLiving target, double effectiveness)
         {
-            if (target == null) return;
+            if (target == null) return false;
 
-            if (!target.IsAlive || target.ObjectState != GameLiving.eObjectState.Active) return;
+            if (!target.IsAlive || target.ObjectState != GameLiving.eObjectState.Active) return false;
 
             // calc damage
             AttackData ad = CalculateDamageToTarget(target, effectiveness);
@@ -368,6 +369,7 @@ namespace DOL.GS.Spells
             DamageTarget(ad, true);
             SendDamageMessages(ad);
             target.StartInterruptTimer(target.SpellInterruptDuration, ad.AttackType, Caster);
+            return true;
         }
 
 
@@ -537,7 +539,7 @@ namespace DOL.GS.Spells
             }
         }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             GamePlayer player = target as GamePlayer;
 
@@ -546,8 +548,7 @@ namespace DOL.GS.Spells
                 visPlayer.Out.SendCombatAnimation(Caster, target, 0x0000, 0x0000, (ushort)408, 0, 0x00, target.HealthPercent);
             }
 
-            OnDirectEffect(target, effectiveness);
-
+            return OnDirectEffect(target, effectiveness);
         }
 
         public override AttackData CalculateDamageToTarget(GameLiving target, double effectiveness)
@@ -698,9 +699,11 @@ namespace DOL.GS.Spells
             return base.OnEffectExpires(effect, noMessages);
         }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
-            base.ApplyEffectOnTarget(target, effectiveness);
+            if (!base.ApplyEffectOnTarget(target, effectiveness))
+                return false;
+            
             if (target.Realm == 0 || Caster.Realm == 0)
             {
                 target.LastAttackedByEnemyTickPvE = target.CurrentRegion.Time;
@@ -717,7 +720,9 @@ namespace DOL.GS.Spells
                 if (aggroBrain != null)
                     aggroBrain.AddToAggroList(Caster, (int)Spell.Value);
             }
+            return true;
         }
+        
         public EssenceSearHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
         public override string ShortDescription
@@ -798,9 +803,13 @@ namespace DOL.GS.Spells
             return base.OnEffectExpires(effect, noMessages);
         }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
-            base.ApplyEffectOnTarget(target, effectiveness);
+            if (!base.ApplyEffectOnTarget(target, effectiveness))
+            {
+                return false;
+            }
+            
             if (target.Realm == 0 || Caster.Realm == 0)
             {
                 target.LastAttackedByEnemyTickPvE = target.CurrentRegion.Time;
@@ -817,6 +826,7 @@ namespace DOL.GS.Spells
                 if (aggroBrain != null)
                     aggroBrain.AddToAggroList(Caster, (int)Spell.Value);
             }
+            return true;
         }
         public EssenceDampenHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 

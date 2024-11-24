@@ -34,16 +34,16 @@ namespace DOL.GS.Spells
         /// </summary>
         /// <param name="target">target that gets the effect</param>
         /// <param name="effectiveness">factor from 0..1 (0%-100%)</param>
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             GameSpellEffect effect;
             effect = SpellHandler.FindEffectOnTarget(target, "Silence");
             if (effect != null)
             {
                 MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.Silence.AlreadyAffected"), eChatType.CT_SpellResisted);
-                return;
+                return false;
             }
-            base.ApplyEffectOnTarget(target, effectiveness);
+            return base.ApplyEffectOnTarget(target, effectiveness);
         }
 
         public override void OnEffectStart(GameSpellEffect effect)

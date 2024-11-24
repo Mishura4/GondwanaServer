@@ -14,17 +14,17 @@ namespace DOL.GS.Spells
         /// <summary>
         /// Applies the Debuff Immunity effect to the target.
         /// </summary>
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             if (target == null)
-                return;
+                return false;
 
             var existingImmunity = FindEffectOnTarget(target, "DebuffImmunity") as DebuffImmunityEffect;
             if (existingImmunity != null)
             {
                 existingImmunity.Refresh(CalculateEffectDuration(target, effectiveness));
                 MessageToLiving(target, "Your Debuff Immunity has been refreshed.", eChatType.CT_Spell);
-                return;
+                return true;
             }
 
             var immunityEffect = new DebuffImmunityEffect(this, (int)Spell.Value, CalculateEffectDuration(target, effectiveness));
@@ -32,6 +32,7 @@ namespace DOL.GS.Spells
 
             MessageToLiving(target, "You are now immune to all debuffs for the duration of the spell!", eChatType.CT_Spell);
             SendEffectAnimation(target, 0, false, 1);
+            return true;
         }
 
         /// <summary>

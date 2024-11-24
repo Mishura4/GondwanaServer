@@ -33,10 +33,13 @@ namespace DOL.GS.Spells
             return 0;
         }
 
-        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        public override bool OnDirectEffect(GameLiving target, double effectiveness)
         {
-            base.OnDirectEffect(target, effectiveness);
+            if (!base.OnDirectEffect(target, effectiveness))
+                return false;
+            
             SendEffectAnimation(target, 0, false, 1);
+            return true;
         }
 
         // constructor

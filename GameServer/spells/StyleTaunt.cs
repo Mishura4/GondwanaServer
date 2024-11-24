@@ -32,23 +32,25 @@ namespace DOL.GS.Spells
         public override bool IsOverwritable(GameSpellEffect compare)
             => false;
 
-        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        public override bool OnDirectEffect(GameLiving target, double effectiveness)
         {
-            if (target is GameNPC)
+            if (target is not GameNPC npc)
             {
-                AttackData ad = Caster.TempProperties.getProperty<object>(GameLiving.LAST_ATTACK_DATA, null) as AttackData;
-                if (ad != null)
+                return false;
+            }
+            AttackData ad = Caster.TempProperties.getProperty<object>(GameLiving.LAST_ATTACK_DATA, null) as AttackData;
+            if (ad != null)
+            {
+                IOldAggressiveBrain aggroBrain = npc.Brain as IOldAggressiveBrain;
+                if (aggroBrain != null)
                 {
-                    IOldAggressiveBrain aggroBrain = ((GameNPC)target).Brain as IOldAggressiveBrain;
-                    if (aggroBrain != null)
-                    {
-                        int aggro = Convert.ToInt32(ad.Damage * Spell.Value);
-                        aggroBrain.AddToAggroList(Caster, aggro);
+                    int aggro = Convert.ToInt32(ad.Damage * Spell.Value);
+                    aggroBrain.AddToAggroList(Caster, aggro);
 
-                        //log.DebugFormat("Damage: {0}, Taunt Value: {1}, (de)Taunt Amount {2}", ad.Damage, Spell.Value, aggro.ToString());
-                    }
+                    //log.DebugFormat("Damage: {0}, Taunt Value: {1}, (de)Taunt Amount {2}", ad.Damage, Spell.Value, aggro.ToString());
                 }
             }
+            return false;
         }
 
         public StyleTaunt(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }

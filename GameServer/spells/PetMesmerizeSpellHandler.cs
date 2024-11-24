@@ -24,11 +24,11 @@ namespace DOL.GS.Spells
     public class PetMesmerizeSpellHandler : MesmerizeSpellHandler
     {
         public PetMesmerizeSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine) { }
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
-            if (!(target is IControlledBrain))
-                return;
-            base.ApplyEffectOnTarget(target, effectiveness);
+            if (target is not GameNPC { Brain: IControlledBrain } )
+                return false;
+            return base.ApplyEffectOnTarget(target, effectiveness);
         }
     }
 }

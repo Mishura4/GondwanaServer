@@ -35,15 +35,15 @@ namespace DOL.GS.Spells
     [SpellHandler("StrengthConstitutionBuff")]
     public class StrengthConBuff : DualStatBuff
     {
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             if (target.HasAbility(Abilities.VampiirStrength)
                || target.HasAbility(Abilities.VampiirConstitution))
             {
                 MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.DualStatBuff.AlreadyHasEffect"), eChatType.CT_Spell);
-                return;
+                return false;
             }
-            base.ApplyEffectOnTarget(target, effectiveness);
+            return base.ApplyEffectOnTarget(target, effectiveness);
         }
         public override eProperty Property1 { get { return eProperty.Strength; } }
         public override eProperty Property2 { get { return eProperty.Constitution; } }
@@ -54,15 +54,15 @@ namespace DOL.GS.Spells
     [SpellHandler("DexterityQuicknessBuff")]
     public class DexterityQuiBuff : DualStatBuff
     {
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             if (target.HasAbility(Abilities.VampiirDexterity)
                || target.HasAbility(Abilities.VampiirQuickness))
             {
                 MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.DualStatBuff.AlreadyHasEffect"), eChatType.CT_Spell);
-                return;
+                return true;
             }
-            base.ApplyEffectOnTarget(target, effectiveness);
+            return base.ApplyEffectOnTarget(target, effectiveness);
         }
         public override eProperty Property1 { get { return eProperty.Dexterity; } }
         public override eProperty Property2 { get { return eProperty.Quickness; } }

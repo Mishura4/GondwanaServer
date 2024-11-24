@@ -70,10 +70,10 @@ namespace DOL.GS.Spells
             return base.CheckBeginCast(selectedTarget, quiet);
         }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             if (Caster == null || Caster.ControlledBrain == null)
-                return;
+                return false;
 
             GameNPC temppet = Caster.ControlledBrain.Body;
             //Lets let NPC's able to cast minions.  Here we make sure that the Caster is a GameNPC
@@ -88,10 +88,11 @@ namespace DOL.GS.Spells
                         temppet.InitControlledBrainArray(2);
                 }
                 else
-                    return;
+                    return false;
             }
-
-            base.ApplyEffectOnTarget(target, effectiveness);
+            
+            if (!base.ApplyEffectOnTarget(target, effectiveness))
+                return false;
 
             if (m_pet.Brain is BDPetBrain brain && !brain.MinionsAssisting)
                 brain.SetAggressionState(eAggressionState.Passive);
@@ -115,6 +116,7 @@ namespace DOL.GS.Spells
                         subPet.MinionGetWeapon((CommanderPet.eWeaponType)Util.Random((int)CommanderPet.eWeaponType.TwoHandAxe, (int)CommanderPet.eWeaponType.TwoHandSword));
                         break;
                 }
+            return true;
         }
 
         protected override void OnNpcReleaseCommand(DOLEvent e, object sender, EventArgs arguments)

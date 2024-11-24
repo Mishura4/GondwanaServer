@@ -34,7 +34,7 @@ namespace DOL.GS.Spells
             }
             return base.CheckBeginCast(selectedTarget, quiet);
         }
-        public override bool StartSpell(GameLiving target, bool force)
+        protected override bool ExecuteSpell(GameLiving target, bool force)
         {
             foreach (GameLiving targ in SelectTargets(target, force))
             {

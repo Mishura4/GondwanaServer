@@ -40,23 +40,23 @@ namespace DOL.GS.Spells
             return base.CheckBeginCast(selectedTarget, quiet);
         }
 
-        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        public override bool OnDirectEffect(GameLiving target, double effectiveness)
         {
-            if (target == null) return;
-            if (!target.IsAlive || target.ObjectState != GameLiving.eObjectState.Active) return;
+            if (target == null) return false;
+            if (!target.IsAlive || target.ObjectState != GameLiving.eObjectState.Active) return false;
 
             // Calculate the amount of power to transfer from the owner.
             // TODO: Effectiveness plays a part here.
 
             GamePlayer owner = Owner();
             if (owner == null)
-                return;
+                return false;
 
             int powerTransfer = (int)Math.Min(Spell.Value, owner.Mana);
             int powerDrained = -owner.ChangeMana(owner, GameLiving.eManaChangeType.Spell, -powerTransfer);
 
             if (powerDrained <= 0)
-                return;
+                return true;
 
             int powerHealed = target.ChangeMana(owner, GameLiving.eManaChangeType.Spell, powerDrained);
 
@@ -73,6 +73,7 @@ namespace DOL.GS.Spells
                 if (target is GamePlayer playerTarget)
                     playerTarget.Out.SendMessage(LanguageMgr.GetTranslation(playerTarget.Client, "SpellHandler.PowerTransfer.PowerReceived", playerTarget.GetPersonalizedName(owner), powerHealed), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
             }
+            return true;
         }
 
         protected virtual GamePlayer Owner()

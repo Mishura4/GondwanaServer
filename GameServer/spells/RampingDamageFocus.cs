@@ -52,7 +52,7 @@ namespace DOL.GS.Spells
             OnDirectEffect(target, CurrentEffectiveness);
         }
 
-        public override bool StartSpell(GameLiving target, bool force = false)
+        protected override bool ExecuteSpell(GameLiving target, bool force = false)
         {
             if (m_spellTarget == null)
                 m_spellTarget = target;
@@ -172,11 +172,11 @@ namespace DOL.GS.Spells
             MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.LostFocusOnSpell", currentEffect.Spell.Name), eChatType.CT_SpellExpires);
         }
 
-        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        public override bool OnDirectEffect(GameLiving target, double effectiveness)
         {
-            if (target == null) return;
+            if (target == null) return false;
 
-            var targets = SelectTargets(target);
+            var targets = SelectTargets(target); // TODO: Why is this here? This is already used in ExecuteSpell
 
             foreach (GameLiving t in targets)
             {
@@ -193,6 +193,7 @@ namespace DOL.GS.Spells
                     snareSubSpell.StartSpell(t);
                 }
             }
+            return true;
         }
 
         protected virtual void DealDamage(GameLiving target, double effectiveness)

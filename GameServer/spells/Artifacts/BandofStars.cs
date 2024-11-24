@@ -34,7 +34,7 @@ namespace DOL.GS.Spells
     [SpellHandlerAttribute("StarsProc")]
     public class StarsProc : SpellHandler
     {
-        public override bool StartSpell(GameLiving target, bool force = false)
+        protected override bool ExecuteSpell(GameLiving target, bool force = false)
         {
             foreach (GameLiving targ in SelectTargets(target, force))
             {
@@ -173,9 +173,11 @@ namespace DOL.GS.Spells
             return base.OnEffectExpires(effect, noMessages);
         }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
-            base.ApplyEffectOnTarget(target, effectiveness);
+            if (!base.ApplyEffectOnTarget(target, effectiveness))
+                return false;
+            
             if (target.Realm == 0 || Caster.Realm == 0)
             {
                 target.LastAttackedByEnemyTickPvE = target.CurrentRegion.Time;
@@ -192,6 +194,7 @@ namespace DOL.GS.Spells
                 if (aggroBrain != null)
                     aggroBrain.AddToAggroList(Caster, (int)Spell.Value);
             }
+            return true;
         }
         public StarsProc2(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
     }

@@ -125,23 +125,23 @@ namespace DOL.GS.Spells
             SendPacketToAll(); // Send packet to all affected players, including caster
         }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             if (elapsedTime >= duration)
             {
-                return;  // Stop applying damage once the duration is over
+                return false;  // Stop applying damage once the duration is over
             }
 
             if (IsImmune(target))
             {
-                return;
+                return false;
             }
 
             int distance = (int)target.Coordinate.DistanceTo(Position.Coordinate, true);
             if (distance > radius)
             {
                 CancelPulsingSpell(target, Spell.SpellType);
-                return;
+                return true;
             }
 
             float newIntensity = intensity * (1 - distance / radius);
@@ -164,6 +164,7 @@ namespace DOL.GS.Spells
             SendDamageMessages(ad);
             DamageTarget(ad, true);
             target.StartInterruptTimer(target.SpellInterruptDuration, ad.AttackType, Caster);
+            return true;
         }
 
         private bool IsImmune(GameLiving living)
@@ -229,7 +230,7 @@ namespace DOL.GS.Spells
         }
 
         /// <inheritdoc />
-        public override void OnDurationEffectApply(GameLiving target, double effectiveness)
+        public override bool OnDurationEffectApply(GameLiving target, double effectiveness)
         {
             var hitIntensity = intensity * effectiveness;
             int damage = Math.Max(0, (int)(hitIntensity));
@@ -251,11 +252,11 @@ namespace DOL.GS.Spells
                 p.Out.SendSpellEffectAnimation(m_caster, target, m_spell.ClientEffect, 0, false, 1);
             }
 
-            base.OnDirectEffect(target, effectiveness);
+            return base.OnDirectEffect(target, effectiveness);
         }
 
         /// <inheritdoc />
-        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        public override bool OnDirectEffect(GameLiving target, double effectiveness)
         {
             var hitIntensity = intensity * effectiveness;
             int damage = Math.Max(0, (int)(hitIntensity));
@@ -277,10 +278,10 @@ namespace DOL.GS.Spells
                 p.Out.SendSpellEffectAnimation(m_caster, target, m_spell.ClientEffect, 0, false, 1);
             }
 
-            base.OnDirectEffect(target, effectiveness);
+            return base.OnDirectEffect(target, effectiveness);
         }
 
-        public override bool StartSpell(GameLiving target, bool force)
+        protected override bool ExecuteSpell(GameLiving target, bool force)
         {
             if (Spell.Pulse != 0 && !Spell.IsFocus && CancelPulsingSpell(Caster, Spell.SpellType))
             {
@@ -324,7 +325,7 @@ namespace DOL.GS.Spells
                 delay = Spell.CastTime;
             }
             
-            if (!base.StartSpell(target, force))
+            if (!base.ExecuteSpell(target, force))
                 return false;
 
             if (Caster is GamePlayer caster)

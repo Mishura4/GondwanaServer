@@ -37,92 +37,94 @@ namespace DOL.GS.Spells
         /// </summary>
         /// <param>target that gets the damage</param>
         /// <param>factor from 0..1 (0%-100%)</param>
-        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        public override bool OnDirectEffect(GameLiving target, double effectiveness)
         {
-            if (target == null || !target.IsAlive || target.ObjectState != GameLiving.eObjectState.Active) return;
+            if (target is not { IsAlive: true } || target.ObjectState != GameLiving.eObjectState.Active) return false;
 
-            if (target is GamePlayer || target is GameNPC)
+            if (target is not (GamePlayer or GameNPC))
             {
-                // Get Damnation values
-                int casterHarmValue = m_caster.TempProperties.getProperty<int>("DamnationValue", 0);
-                int targetHarmValue = target.TempProperties.getProperty<int>("DamnationValue", 0);
+                return false;
+            }
+            int casterHarmValue = m_caster.TempProperties.getProperty<int>("DamnationValue", 0);
+            int targetHarmValue = target.TempProperties.getProperty<int>("DamnationValue", 0);
 
-                bool casterIsDamned = SpellHandler.FindEffectOnTarget(m_caster, "Damnation") != null;
-                bool targetIsDamned = SpellHandler.FindEffectOnTarget(target, "Damnation") != null;
+            bool casterIsDamned = SpellHandler.FindEffectOnTarget(m_caster, "Damnation") != null;
+            bool targetIsDamned = SpellHandler.FindEffectOnTarget(target, "Damnation") != null;
 
-                // Calculate the original damage
-                AttackData ad = CalculateDamageToTarget(target, effectiveness);
+            // Calculate the original damage
+            AttackData ad = CalculateDamageToTarget(target, effectiveness);
 
-                // Backup original damage and critical damage for healing later
-                int originalDamage = ad.Damage;
-                int originalCriticalDamage = ad.CriticalDamage;
+            // Backup original damage and critical damage for healing later
+            int originalDamage = ad.Damage;
+            int originalCriticalDamage = ad.CriticalDamage;
 
-                // Apply Damnation logic
-                if (!casterIsDamned && targetIsDamned)
+            // Apply Damnation logic
+            if (!casterIsDamned && targetIsDamned)
+            {
+                if (targetHarmValue < 0)
                 {
-                    if (targetHarmValue < 0)
-                    {
-                        ad.Damage = (ad.Damage * Math.Abs(targetHarmValue)) / 100;
-                        ad.CriticalDamage = (ad.CriticalDamage * Math.Abs(targetHarmValue)) / 100;
-                    }
-                    else if (targetHarmValue == 0)
-                    {
-                        ad.Damage = 0;
-                        ad.CriticalDamage = 0;
-                    }
-                    else if (targetHarmValue > 0)
-                    {
-                        // Target gets healed instead of taking damage
-                        int heal = (originalDamage * targetHarmValue) / 100;
-                        int criticalHeal = (originalCriticalDamage * targetHarmValue) / 100;
-
-                        if (heal > 0)
-                        {
-                            target.ChangeHealth(m_caster, GameLiving.eHealthChangeType.Spell, heal);
-                            MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.LifeDrain.DamnedTargetHealed", m_caster.GetPersonalizedName(target), heal), eChatType.CT_Spell);
-                            MessageToLiving(target, LanguageMgr.GetTranslation((target as GamePlayer)?.Client, "SpellHandler.LifeDrain.DamnedYouHealed", heal), eChatType.CT_Spell);
-                        }
-
-                        if (criticalHeal > 0)
-                        {
-                            target.ChangeHealth(m_caster, GameLiving.eHealthChangeType.Spell, criticalHeal);
-                            MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.LifeDrain.DamnedTargetCriticallyHealed", m_caster.GetPersonalizedName(target), criticalHeal), eChatType.CT_Spell);
-                            MessageToLiving(target, LanguageMgr.GetTranslation((target as GamePlayer)?.Client, "SpellHandler.LifeDrain.DamnedYouCriticallyHealed", criticalHeal), eChatType.CT_Spell);
-                        }
-
-                        // Save the damage values to be used in StealLife before nullifying ad.Damage and ad.CriticalDamage
-                        target.TempProperties.setProperty("OriginalDamage", originalDamage);
-                        target.TempProperties.setProperty("OriginalCriticalDamage", originalCriticalDamage);
-
-                        // Nullify the damage for the target but keep it for the caster in StealLife
-                        ad.Damage = 0;
-                        ad.CriticalDamage = 0;
-                    }
+                    ad.Damage = (ad.Damage * Math.Abs(targetHarmValue)) / 100;
+                    ad.CriticalDamage = (ad.CriticalDamage * Math.Abs(targetHarmValue)) / 100;
                 }
-                else if (casterIsDamned && !targetIsDamned)
-                {
-                    if (casterHarmValue > 0)
-                    {
-                        ad.Damage += (originalDamage * casterHarmValue) / 100;
-                        ad.CriticalDamage += (originalCriticalDamage * casterHarmValue) / 100;
-                    }
-                }
-                else if (casterIsDamned && targetIsDamned)
+                else if (targetHarmValue == 0)
                 {
                     ad.Damage = 0;
                     ad.CriticalDamage = 0;
                 }
+                else if (targetHarmValue > 0)
+                {
+                    // Target gets healed instead of taking damage
+                    int heal = (originalDamage * targetHarmValue) / 100;
+                    int criticalHeal = (originalCriticalDamage * targetHarmValue) / 100;
 
-                // Attacked living may modify the attack data.
-                ad.Target.ModifyAttack(ad);
+                    if (heal > 0)
+                    {
+                        target.ChangeHealth(m_caster, GameLiving.eHealthChangeType.Spell, heal);
+                        MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.LifeDrain.DamnedTargetHealed", m_caster.GetPersonalizedName(target), heal), eChatType.CT_Spell);
+                        MessageToLiving(target, LanguageMgr.GetTranslation((target as GamePlayer)?.Client, "SpellHandler.LifeDrain.DamnedYouHealed", heal), eChatType.CT_Spell);
+                    }
 
-                SendDamageMessages(ad);
-                DamageTarget(ad, true);
-                StealLife(target, ad);
-                StealEndo(ad);
-                StealPower(ad);
-                target.StartInterruptTimer(target.SpellInterruptDuration, ad.AttackType, Caster);
+                    if (criticalHeal > 0)
+                    {
+                        target.ChangeHealth(m_caster, GameLiving.eHealthChangeType.Spell, criticalHeal);
+                        MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.LifeDrain.DamnedTargetCriticallyHealed", m_caster.GetPersonalizedName(target), criticalHeal), eChatType.CT_Spell);
+                        MessageToLiving(target, LanguageMgr.GetTranslation((target as GamePlayer)?.Client, "SpellHandler.LifeDrain.DamnedYouCriticallyHealed", criticalHeal), eChatType.CT_Spell);
+                    }
+
+                    // Save the damage values to be used in StealLife before nullifying ad.Damage and ad.CriticalDamage
+                    target.TempProperties.setProperty("OriginalDamage", originalDamage);
+                    target.TempProperties.setProperty("OriginalCriticalDamage", originalCriticalDamage);
+
+                    // Nullify the damage for the target but keep it for the caster in StealLife
+                    ad.Damage = 0;
+                    ad.CriticalDamage = 0;
+                }
             }
+            else if (casterIsDamned && !targetIsDamned)
+            {
+                if (casterHarmValue > 0)
+                {
+                    ad.Damage += (originalDamage * casterHarmValue) / 100;
+                    ad.CriticalDamage += (originalCriticalDamage * casterHarmValue) / 100;
+                }
+            }
+            else if (casterIsDamned && targetIsDamned)
+            {
+                ad.Damage = 0;
+                ad.CriticalDamage = 0;
+            }
+
+            // Attacked living may modify the attack data.
+            ad.Target.ModifyAttack(ad);
+
+            SendDamageMessages(ad);
+            DamageTarget(ad, true);
+            StealLife(target, ad);
+            StealEndo(ad);
+            StealPower(ad);
+            target.StartInterruptTimer(target.SpellInterruptDuration, ad.AttackType, Caster);
+            return true;
+            // Get Damnation values
         }
 
         /// <summary>

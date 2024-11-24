@@ -86,7 +86,7 @@ namespace DOL.GS.Spells
             return 0;
         }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             int specLevel = 0;
             if (Caster is GamePlayer)
@@ -94,7 +94,7 @@ namespace DOL.GS.Spells
             effectiveness = 0.75 + (specLevel - 1) * 0.5 / Spell.Level;
             effectiveness = Math.Max(0.75, effectiveness);
             effectiveness = Math.Min(1.25, effectiveness);
-            base.ApplyEffectOnTarget(target, effectiveness);
+            return base.ApplyEffectOnTarget(target, effectiveness);
         }
 
         public override IList<string> DelveInfo
@@ -201,7 +201,7 @@ namespace DOL.GS.Spells
             return 0;
         }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             int specLevel = 0;
             if (Caster is GamePlayer)
@@ -209,7 +209,7 @@ namespace DOL.GS.Spells
             effectiveness = 0.75 + (specLevel - 1) * 0.5 / Spell.Level;
             effectiveness = Math.Max(0.75, effectiveness);
             effectiveness = Math.Min(1.25, effectiveness);
-            base.ApplyEffectOnTarget(target, effectiveness);
+            return base.ApplyEffectOnTarget(target, effectiveness);
         }
 
         public override IList<string> DelveInfo

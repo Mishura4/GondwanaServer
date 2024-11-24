@@ -79,23 +79,23 @@ namespace DOL.GS.Spells
         /// </summary>
         /// <param name="target"></param>
         /// <param name="effectiveness"></param>
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             if (!(Caster is GamePlayer player))
             {
-                return;
+                return false;
             }
 
             InventoryItem useItem = player.UseItem;
             if (useItem == null || !ArtifactMgr.IsArtifactScroll(useItem))
             {
-                return;
+                return false;
             }
 
             WorldInventoryItem combinedScroll = WorldInventoryItem.CreateFromTemplate("artifact_scroll");
             if (combinedScroll == null)
             {
-                return;
+                return false;
             }
 
             combinedScroll.AddOwner(player);
@@ -151,6 +151,7 @@ namespace DOL.GS.Spells
                     InventoryLogging.LogInventoryAction(player, null, eInventoryActionType.Quest, item.Template, item.Count);
                 }
             }
+            return true;
         }
     }
 }

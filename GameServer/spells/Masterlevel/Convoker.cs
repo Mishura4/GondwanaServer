@@ -483,12 +483,12 @@ namespace DOL.GS.Spells
         /// </summary>
         /// <param name="target">target that gets the effect</param>
         /// <param name="effectiveness">factor from 0..1 (0%-100%)</param>
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             GamePlayer player = Caster as GamePlayer;
             if (player == null)
             {
-                return;
+                return false;
             }
 
             INpcTemplate template = NpcTemplateMgr.GetTemplate(Spell.LifeDrainReturn);
@@ -497,7 +497,7 @@ namespace DOL.GS.Spells
                 if (log.IsWarnEnabled)
                     log.WarnFormat("NPC template {0} not found! Spell: {1}", Spell.LifeDrainReturn, Spell.ToString());
                 MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.Convoker.TemplateNotFound", Spell.LifeDrainReturn), eChatType.CT_System);
-                return;
+                return false;
             }
 
             beffect = CreateSpellEffect(target, effectiveness);
@@ -516,6 +516,7 @@ namespace DOL.GS.Spells
             controlledBrain.AggressionState = eAggressionState.Passive;
             GameEventMgr.AddHandler(summoned, GameLivingEvent.Dying, new DOLEventHandler(GuardDie));
             beffect.Start(Caster);
+            return true;
         }
         private void GuardDie(DOLEvent e, object sender, EventArgs args)
         {
@@ -559,14 +560,14 @@ namespace DOL.GS.Spells
 
         //public override eProperty Property1 { get { return eProperty.MeleeDamage; } }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             foreach (JuggernautEffect jg in target.EffectList.GetAllOfType<JuggernautEffect>())
             {
                 if (jg != null)
                 {
                     MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.Convoker9.PetAlreadyHasAbility"), eChatType.CT_SpellResisted);
-                    return;
+                    return false;
                 }
             }
 
@@ -578,10 +579,10 @@ namespace DOL.GS.Spells
                 if (necroPet == null || necroPet.Owner == m_player)
                 { // Caster is a Nekro and his Target is his Own Pet
                     MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.Convoker9.NecroCannotUseOnOwnPet"), eChatType.CT_SpellResisted);
-                    return;
+                    return false;
                 }
             }
-            base.ApplyEffectOnTarget(target, effectiveness);
+            return base.ApplyEffectOnTarget(target, effectiveness);
         }
 
         public override void OnEffectStart(GameSpellEffect effect)
@@ -649,12 +650,12 @@ namespace DOL.GS.Spells
         /// </summary>
         /// <param name="target">target that gets the effect</param>
         /// <param name="effectiveness">factor from 0..1 (0%-100%)</param>
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             GamePlayer player = Caster as GamePlayer;
             if (player == null)
             {
-                return;
+                return false;
             }
 
             INpcTemplate template = NpcTemplateMgr.GetTemplate(Spell.LifeDrainReturn);
@@ -663,7 +664,7 @@ namespace DOL.GS.Spells
                 if (log.IsWarnEnabled)
                     log.WarnFormat("NPC template {0} not found! Spell: {1}", Spell.LifeDrainReturn, Spell.ToString());
                 MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.Convoker.TemplateNotFound", Spell.LifeDrainReturn), eChatType.CT_System);
-                return;
+                return false;
             }
             GameSpellEffect effect = CreateSpellEffect(target, effectiveness);
             TitanBrain controlledBrain = new TitanBrain(player);
@@ -684,6 +685,7 @@ namespace DOL.GS.Spells
             controlledBrain.AggressionState = eAggressionState.Aggressive;
             effect.Start(summoned);
             m_growTimer = new RegionTimer((GameObject)m_caster, new RegionTimerCallback(TitanGrows), C_GROWTIMER);
+            return false;
         }
 
         // Make titan growing, and activate it on completition

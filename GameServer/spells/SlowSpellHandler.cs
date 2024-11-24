@@ -41,7 +41,7 @@ namespace DOL.GS.Spells
         /// </summary>
         /// <param name="target"></param>
         /// <param name="effectiveness"></param>
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             if (target.HasAbility(Abilities.CCImmunity) || target.HasAbility(Abilities.RootImmunity))
             {
@@ -49,7 +49,7 @@ namespace DOL.GS.Spells
                     MessageToCaster(LanguageMgr.GetTranslation(player.Client, "SpellHandler.DamageImmunity", player.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
                 else
                     MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.DamageImmunity", target.Name), eChatType.CT_SpellResisted);
-                return;
+                return true;
             }
             if (target.EffectList.GetOfType<ChargeEffect>() != null)
             {
@@ -57,9 +57,9 @@ namespace DOL.GS.Spells
                     MessageToCaster(LanguageMgr.GetTranslation(player.Client, "SpellHandler.Target.TooFast", player.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
                 else
                     MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.Target.TooFast", target.Name), eChatType.CT_SpellResisted);
-                return;
+                return true;
             }
-            base.ApplyEffectOnTarget(target, effectiveness);
+            return base.ApplyEffectOnTarget(target, effectiveness);
         }
 
         /// <inheritdoc />

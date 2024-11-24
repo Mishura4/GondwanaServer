@@ -93,21 +93,18 @@ namespace DOL.GS.Spells
         /// </summary>
         /// <param name="target"></param>
         /// <param name="effectiveness"></param>
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
-            GamePlayer player = Caster as GamePlayer;
-            if (player == null)
-                return;
-
-            if (player.InCombat || GameRelic.IsPlayerCarryingRelic(player) || player.IsMoving)
-                return;
+            if (Caster is not GamePlayer { InCombat: false, IsMoving: false } player || GameRelic.IsPlayerCarryingRelic(player))
+                return false;
 
             SendEffectAnimation(player, 0, false, 1);
 
             UniPortalEffect effect = new UniPortalEffect(this, 1000);
             effect.Start(player);
 
-            player.MoveTo((ushort)player.BindRegion, player.BindXpos, player.BindYpos, player.BindZpos, (ushort)player.BindHeading);
+            player.MoveTo(player.Position);
+            return true;
         }
 
 

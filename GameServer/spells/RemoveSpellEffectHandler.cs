@@ -62,11 +62,10 @@ namespace DOL.GS.Spells
         /// </summary>
         /// <param name="target"></param>
         /// <param name="effectiveness"></param>
-        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        public override bool OnDirectEffect(GameLiving target, double effectiveness)
         {
-            base.OnDirectEffect(target, effectiveness);
-            if (target == null || !target.IsAlive)
-                return;
+            if (target is not { IsAlive: true, ObjectState: GameObject.eObjectState.Active }) return false;
+            if (!base.OnDirectEffect(target, effectiveness)) return false;
 
             // RR4: we remove all the effects
             foreach (string toRemove in SpellTypesToRemove)
@@ -76,6 +75,7 @@ namespace DOL.GS.Spells
                     effect.Cancel(false);
             }
             SendEffectAnimation(target, 0, false, 1);
+            return true;
         }
 
         // constructor

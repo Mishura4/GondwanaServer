@@ -187,15 +187,10 @@ namespace DOL.GS.Spells
             return 0;
         }
 
-        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        public override bool OnDirectEffect(GameLiving target, double effectiveness)
         {
-            if (target == null) return;
-            if (!target.IsAlive || target.ObjectState != GameLiving.eObjectState.Active) return;
-            if (Util.Chance(CalculateSpellResistChance(target)))
-            {
-                OnSpellResist(target);
-                return;
-            }
+            if (target == null) return false;
+            if (!target.IsAlive || target.ObjectState != GameLiving.eObjectState.Active) return false;
             AttackData ad = CalculateDamageToTarget(target, effectiveness);
 
             if (m_lastdamage <= 0)
@@ -217,6 +212,7 @@ namespace DOL.GS.Spells
             SendEffectAnimation(target, 0, false, 1);
             SendDamageMessages(ad);
             DamageTarget(ad);
+            return true;
         }
 
         protected virtual void OnSpellResist(GameLiving target)

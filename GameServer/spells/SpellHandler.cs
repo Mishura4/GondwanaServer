@@ -16,6 +16,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
+using Discord;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -2585,12 +2586,13 @@ namespace DOL.GS.Spells
         /// Cast all subspell recursively
         /// </summary>
         /// <param name="target"></param>
-        public virtual void CastSubSpells(GameLiving target)
+        public virtual bool CastSubSpells(GameLiving target)
         {
             List<int> subSpellList = new List<int>();
             if (m_spell.SubSpellID > 0)
                 subSpellList.Add(m_spell.SubSpellID);
 
+            bool success = false;
             foreach (int spellID in subSpellList.Union(m_spell.MultipleSubSpells))
             {
                 Spell spell = SkillBase.GetSpellByID(spellID);
@@ -2605,12 +2607,16 @@ namespace DOL.GS.Spells
                     spellhandler.Parent = this;
                     if (m_spell.SubSpellDelay > 0)
                     {
+                        success = true;
                         new SubSpellTimer(Caster, spellhandler, target).Start(m_spell.SubSpellDelay * 1000);
                     }
                     else
-                        spellhandler.StartSpell(target);
+                    {
+                        success = success || spellhandler.StartSpell(target);
+                    }
                 }
             }
+            return success;
         }
 
 
@@ -2620,7 +2626,7 @@ namespace DOL.GS.Spells
         /// </summary>
         /// <param name="target"></param>
         /// <param name="item"></param>
-        public virtual bool StartSpell(GameLiving target, InventoryItem item)
+        public bool StartSpell(GameLiving target, InventoryItem item)
         {
             m_spellItem = item;
             return StartSpell(target);
@@ -2631,7 +2637,16 @@ namespace DOL.GS.Spells
         /// This is typically called after calling CheckBeginCast
         /// </summary>
         /// <param name="target">The current target object</param>
-        public virtual bool StartSpell(GameLiving target, bool force = false)
+        public bool StartSpell(GameLiving target, bool force = false)
+        {
+            Status = eStatus.Ready;
+            bool result = ExecuteSpell(target, force);
+            if (Status == eStatus.Ready)
+                Status = result ? eStatus.Success : eStatus.Failure;
+            return result;
+        }
+        
+        protected virtual bool ExecuteSpell(GameLiving target, bool force = false)
         {
             if (m_spell.Pulse != 0 && m_spell.Frequency > 0)
             {
@@ -2696,6 +2711,7 @@ namespace DOL.GS.Spells
             
             SendLaunchAnimation(Caster, 0, false, 1);
 
+            bool success = false;
             foreach (GameLiving t in targets)
             {
                 // Aggressive NPCs will aggro on every target they hit
@@ -2707,31 +2723,32 @@ namespace DOL.GS.Spells
                 if (Util.Chance(CalculateSpellResistChance(t)))
                 {
                     OnSpellResisted(t);
+                    success = true; // Resist is a success, it should consume item charges. TODO: Maybe we should check effect overwrites before?
                     continue;
                 }
 
                 if (Spell.Radius == 0 || HasPositiveEffect)
                 {
-                    ApplyEffectOnTarget(t, effectiveness);
+                    success = success || ApplyEffectOnTarget(t, effectiveness);
                 }
                 else if (Spell.Target.ToLower() == "area")
                 {
                     int dist = (int)t.Coordinate.DistanceTo(Caster.GroundTargetPosition);
                     if (dist >= 0)
-                        ApplyEffectOnTarget(t, (effectiveness - CalculateAreaVariance(t, dist, Spell.Radius)));
+                        success = success || ApplyEffectOnTarget(t, (effectiveness - CalculateAreaVariance(t, dist, Spell.Radius)));
                 }
                 else if (Spell.Target.ToLower() == "cone")
                 {
                     var dist = (int)t.Coordinate.DistanceTo(Caster.Position);
                     //Cone spells use the range for their variance!
                     if (dist >= 0)
-                        ApplyEffectOnTarget(t, (effectiveness - CalculateAreaVariance(t, dist, Spell.Range)));
+                        success = success || ApplyEffectOnTarget(t, (effectiveness - CalculateAreaVariance(t, dist, Spell.Range)));
                 }
                 else
                 {
                     var dist = (int)t.Coordinate.DistanceTo(target.Position);
                     if (dist >= 0)
-                        ApplyEffectOnTarget(t, (effectiveness - CalculateAreaVariance(t, dist, Spell.Radius)));
+                        success = success || ApplyEffectOnTarget(t, (effectiveness - CalculateAreaVariance(t, dist, Spell.Radius)));
                 }
 
                 if (Caster is GamePet pet && Spell.IsBuff)
@@ -2740,12 +2757,13 @@ namespace DOL.GS.Spells
 
             if (Spell.Target.ToLower() == "ground")
             {
-                ApplyEffectOnTarget(null, 1);
+                success = success || ApplyEffectOnTarget(null, 1);
             }
 
-            CastSubSpells(target);
-            return true;
+            success = success || CastSubSpells(target);
+            return success;
         }
+        
         /// <summary>
         /// Calculate the variance due to the radius of the spell
         /// </summary>
@@ -2820,10 +2838,11 @@ namespace DOL.GS.Spells
         /// </summary>
         /// <param name="target">target that gets the effect</param>
         /// <param name="effectiveness">factor from 0..1 (0%-100%)</param>
-        public virtual void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        /// <returns>Whether the spell succeeded or not, i.e. take a charge away from items or not</returns>
+        public virtual bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             if (target is ShadowNPC)
-                return;
+                return false;
 
             if (target is GamePlayer)
             {
@@ -2831,8 +2850,8 @@ namespace DOL.GS.Spells
                 effect1 = SpellHandler.FindEffectOnTarget(target, "Phaseshift");
                 if ((effect1 != null && (Spell.SpellType != "SpreadHeal" || Spell.SpellType != "Heal" || Spell.SpellType != "SpeedEnhancement")))
                 {
-                    MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.PhaseshiftedCantBeAffected", m_caster.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
-                    return;
+                    MessageTranslationToCaster("SpellHandler.PhaseshiftedCantBeAffected", eChatType.CT_SpellResisted, m_caster.GetPersonalizedName(target));
+                    return false;
                 }
             }
 
@@ -2841,7 +2860,7 @@ namespace DOL.GS.Spells
             {
                 if (Caster is GamePlayer player)
                     MessageToCaster(LanguageMgr.GetTranslation(player.Client, "Petrify.Target.Resist", m_caster.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
-                return;
+                return false;
             }
 
             if ((target is Keeps.GameKeepDoor || target is Keeps.GameKeepComponent))
@@ -2880,10 +2899,10 @@ namespace DOL.GS.Spells
                 {
                     if (!isSilent)
                     {
-                        MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.NoEffectOnTarget", m_caster.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
+                        MessageTranslationToCaster("SpellHandler.NoEffectOnTarget", eChatType.CT_SpellResisted, m_caster.GetPersonalizedName(target));
                     }
 
-                    return;
+                    return false;
                 }
             }
             
@@ -2892,18 +2911,18 @@ namespace DOL.GS.Spells
             if (m_spellLine.KeyName == GlobalSpellsLines.Item_Effects || m_spellLine.KeyName == GlobalSpellsLines.Combat_Styles_Effect || m_spellLine.KeyName == GlobalSpellsLines.Potions_Effects || m_spellLine.KeyName == Specs.Savagery || m_spellLine.KeyName == GlobalSpellsLines.Character_Abilities || m_spellLine.KeyName == "OffensiveProc")
                 effectiveness = 1.0; // TODO player.PlayerEffectiveness
             if (effectiveness <= 0)
-                return; // no effect
+                return true; // no effect
 
             SendHitAnimation(target, 0, false, 1);
 
             // Apply effect for Duration Spell.
             if ((Spell.Duration > 0 && Spell.Target.ToLower() != "area") || Spell.Concentration > 0)
             {
-                OnDurationEffectApply(target, effectiveness);
+                return OnDurationEffectApply(target, effectiveness);
             }
             else
             {
-                OnDirectEffect(target, effectiveness);
+                return OnDirectEffect(target, effectiveness);
             }
         }
 
@@ -3006,10 +3025,10 @@ namespace DOL.GS.Spells
         /// </summary>
         /// <param name="target"></param>
         /// <param name="effectiveness"></param>
-        public virtual void OnDurationEffectApply(GameLiving target, double effectiveness)
+        public virtual bool OnDurationEffectApply(GameLiving target, double effectiveness)
         {
             if (!target.IsAlive || target.EffectList == null)
-                return;
+                return false;
 
             eChatType noOverwrite = (Spell.Pulse == 0) ? eChatType.CT_SpellResisted : eChatType.CT_SpellPulse;
             GameSpellEffect neweffect = CreateSpellEffect(target, effectiveness);
@@ -3069,7 +3088,7 @@ namespace DOL.GS.Spells
                             }
                         }
                         // Prevent Adding.
-                        return;
+                        return false;
                     }
                 }
             }
@@ -3116,6 +3135,7 @@ namespace DOL.GS.Spells
             {
                 target.EffectList.CommitChanges();
             }
+            return true;
         }
 
         /// <summary>
@@ -3192,8 +3212,10 @@ namespace DOL.GS.Spells
         /// </summary>
         /// <param name="target"></param>
         /// <param name="effectiveness"></param>
-        public virtual void OnDirectEffect(GameLiving target, double effectiveness)
-        { }
+        public virtual bool OnDirectEffect(GameLiving target, double effectiveness)
+        {
+            return false;
+        }
 
         /// <summary>
         /// When an applied effect starts
@@ -3416,6 +3438,9 @@ namespace DOL.GS.Spells
         /// <param name="args"></param>
         public void MessageTranslationToCaster(string key, eChatType type, params object[] args)
         {
+            if (Caster == null)
+                return;
+            
             if (Caster is GamePlayer player)
             {
                 player.MessageToSelf(LanguageMgr.GetTranslation(player, key, args), type);

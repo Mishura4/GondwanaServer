@@ -32,17 +32,16 @@ namespace DOL.GS.Spells
     public class AlvarusMorph : Morph
     {
         GameSpellEffect m_effect = null;
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             GamePlayer targetPlayer = target as GamePlayer;
-
             if (targetPlayer == null)
-                return;
-
+                return false;
+            
             if (!targetPlayer.IsUnderwater)
             {
                 MessageToCaster("You must be under water to use this ability.", eChatType.CT_SpellResisted);
-                return;
+                return false;
             }
             foreach (GameSpellEffect Effect in targetPlayer.EffectList.GetAllOfType<GameSpellEffect>())
             {
@@ -55,10 +54,10 @@ namespace DOL.GS.Spells
                     Effect.SpellHandler.Spell.SpellType.Equals("AtlantisTabletMorph"))
                 {
                     targetPlayer.Out.SendMessage("You already have an active morph!", DOL.GS.PacketHandler.eChatType.CT_SpellResisted, DOL.GS.PacketHandler.eChatLoc.CL_ChatWindow);
-                    return;
+                    return false;
                 }
             }
-            base.ApplyEffectOnTarget(target, effectiveness);
+            return base.ApplyEffectOnTarget(target, effectiveness);
         }
         public override void OnEffectStart(GameSpellEffect effect)
         {

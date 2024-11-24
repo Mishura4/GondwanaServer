@@ -32,7 +32,7 @@ namespace DOL.GS.Spells
         /// <inheritdoc />
         public override bool HasPositiveEffect => false;
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             int totalResistChance = 0;
 
@@ -59,14 +59,14 @@ namespace DOL.GS.Spells
 
                 SendSpellResistAnimation(target);
 
-                return;
+                return true;
             }
 
             if (target.EffectList.GetOfType<AdrenalineSpellEffect>() != null)
             {
                 (m_caster as GamePlayer)?.SendTranslatedMessage("Adrenaline.Target.Immune", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow, m_caster.GetPersonalizedName(target));
                 (target as GamePlayer)?.SendTranslatedMessage("Adrenaline.Self.Immune", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
-                return;
+                return true;
             }
 
             base.ApplyEffectOnTarget(target, effectiveness);
@@ -87,6 +87,7 @@ namespace DOL.GS.Spells
                 if (aggroBrain != null)
                     aggroBrain.AddToAggroList(Caster, (int)Spell.Value);
             }
+            return true;
         }
 
         /// <inheritdoc />

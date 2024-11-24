@@ -76,16 +76,15 @@ namespace DOL.GS.Spells
     {
         public override eProperty Property1 { get { return eProperty.MissHit; } }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             GameSpellEffect neweffect = CreateSpellEffect(target, effectiveness);
-            if (target == null) return;
-            if (!target.IsAlive || target.ObjectState != GameLiving.eObjectState.Active) return;
+            if (target is not { IsAlive: true, ObjectState: GameObject.eObjectState.Active }) return false;
             neweffect.Start(target);
 
             if (target is GamePlayer)
                 ((GamePlayer)target).Out.SendMessage("You're harder to hit!", eChatType.CT_YouWereHit, eChatLoc.CL_SystemWindow);
-
+            return true;
         }
 
         public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
@@ -122,7 +121,6 @@ namespace DOL.GS.Spells
 
         public override IList<GameLiving> SelectTargets(GameObject CasterTarget, bool force = false)
         {
-
             var list = new List<GameLiving>(8);
             foreach (GameNPC storms in Caster.GetNPCsInRadius(350))
             {
@@ -139,12 +137,12 @@ namespace DOL.GS.Spells
         /// </summary>
         /// <param name="target"></param>
         /// <param name="effectiveness"></param>
-        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        public override bool OnDirectEffect(GameLiving target, double effectiveness)
         {
             //base.OnDirectEffect(target, effectiveness);
-            var targets = SelectTargets(Caster);
+            var targets = SelectTargets(Caster); // TODO: Why is this here? This should be in ExecuteSpell
 
-            if (targets == null) return;
+            if (targets == null || targets.Count == 0) return false;
 
             foreach (GameStorm targetStorm in targets)
             {
@@ -157,6 +155,7 @@ namespace DOL.GS.Spells
                     targetNPC.WalkTo(targetNPC.Coordinate + offset, targetNPC.MaxSpeed);
                 }
             }
+            return true;
         }
 
         public VacuumVortexSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
@@ -215,14 +214,13 @@ namespace DOL.GS.Spells
 
         public StormEndudrain(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             GameSpellEffect neweffect = CreateSpellEffect(target, effectiveness);
 
             neweffect.Start(target);
 
-            if (target == null) return;
-            if (!target.IsAlive || target.ObjectState != GameLiving.eObjectState.Active) return;
+            if (target is not { IsAlive: true, ObjectState: GameObject.eObjectState.Active }) return false;
             //spell damage should 25;
             int end = (int)(Spell.Damage);
             target.ChangeEndurance(target, GameLiving.eEnduranceChangeType.Spell, (-end));
@@ -230,6 +228,7 @@ namespace DOL.GS.Spells
             if (target is GamePlayer)
                 ((GamePlayer)target).Out.SendMessage(" You lose " + end + " endurance!", eChatType.CT_YouWereHit, eChatLoc.CL_SystemWindow);
             (m_caster as GamePlayer).Out.SendMessage("" + (m_caster as GamePlayer).GetPersonalizedName(target) + " loses " + end + " endurance!", eChatType.CT_YouWereHit, eChatLoc.CL_SystemWindow);
+            return true;
         }
 
         public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
@@ -299,16 +298,15 @@ namespace DOL.GS.Spells
         public override eProperty Property1 { get { return eProperty.Dexterity; } }
         public override eProperty Property2 { get { return eProperty.Quickness; } }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             GameSpellEffect neweffect = CreateSpellEffect(target, effectiveness);
-            if (target == null) return;
-            if (!target.IsAlive || target.ObjectState != GameLiving.eObjectState.Active) return;
+            if (target is not { IsAlive: true, ObjectState: GameObject.eObjectState.Active }) return false;
             neweffect.Start(target);
 
             if (target is GamePlayer)
                 ((GamePlayer)target).Out.SendMessage("Your dexterity and quickness decreased!", eChatType.CT_YouWereHit, eChatLoc.CL_SystemWindow);
-
+            return true;
         }
 
         public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
@@ -380,11 +378,10 @@ namespace DOL.GS.Spells
             return 0;
         }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             GameSpellEffect neweffect = CreateSpellEffect(target, effectiveness);
-            if (target == null) return;
-            if (!target.IsAlive || target.ObjectState != GameLiving.eObjectState.Active) return;
+            if (target is not { IsAlive: true, ObjectState: GameObject.eObjectState.Active }) return false;
             neweffect.Start(target);
             int mana = (int)(Spell.Damage);
             target.ChangeMana(target, GameLiving.eManaChangeType.Spell, (-mana));
@@ -396,6 +393,7 @@ namespace DOL.GS.Spells
 
             StealMana(target, mana);
             // target.StartInterruptTimer(SPELL_INTERRUPT_DURATION, AttackData.eAttackType.Spell, Caster);
+            return true;
         }
 
 
@@ -534,16 +532,15 @@ namespace DOL.GS.Spells
         public override eProperty Property1 { get { return eProperty.Strength; } }
         public override eProperty Property2 { get { return eProperty.Constitution; } }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             GameSpellEffect neweffect = CreateSpellEffect(target, effectiveness);
-            if (target == null) return;
-            if (!target.IsAlive || target.ObjectState != GameLiving.eObjectState.Active) return;
+            if (target is not { IsAlive: true, ObjectState: GameObject.eObjectState.Active }) return false;
             neweffect.Start(target);
 
             if (target is GamePlayer)
                 ((GamePlayer)target).Out.SendMessage("Your strenght and constitution decreased!", eChatType.CT_YouWereHit, eChatLoc.CL_SystemWindow);
-
+            return true;
         }
 
         public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
@@ -612,16 +609,15 @@ namespace DOL.GS.Spells
     {
         public override eProperty Property1 => eProperty.Acuity;
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             GameSpellEffect neweffect = CreateSpellEffect(target, effectiveness);
-            if (target == null) return;
-            if (!target.IsAlive || target.ObjectState != GameLiving.eObjectState.Active) return;
+            if (target is not { IsAlive: true, ObjectState: GameObject.eObjectState.Active }) return false;
             neweffect.Start(target);
 
             if (target is GamePlayer)
                 ((GamePlayer)target).Out.SendMessage("Your acuity decreased!", eChatType.CT_YouWereHit, eChatLoc.CL_SystemWindow);
-
+            return true;
         }
 
         public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
@@ -718,11 +714,12 @@ namespace DOL.GS.Spells
 
             return base.DamageCap(effectiveness);
         }
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        
+        public override bool OnDurationEffectApply(GameLiving target, double effectiveness)
         {
             GameSpellEffect neweffect = CreateSpellEffect(target, effectiveness);
-            if (target == null) return;
-            if (!target.IsAlive || target.ObjectState != GameLiving.eObjectState.Active) return;
+            if (target == null) return false;
+            if (!target.IsAlive || target.ObjectState != GameLiving.eObjectState.Active) return false;
             neweffect.Start(target);
 
 
@@ -735,6 +732,7 @@ namespace DOL.GS.Spells
 
             DamageTarget(ad, true);
             target.StartInterruptTimer(target.SpellInterruptDuration, ad.AttackType, Caster);
+            return true;
         }
 
         public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)

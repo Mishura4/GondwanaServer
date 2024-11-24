@@ -90,16 +90,14 @@ namespace DOL.GS.Spells
         /// </summary>
         /// <param name="target">target that gets the damage</param>
         /// <param name="effectiveness">factor from 0..1 (0%-100%)</param>
-        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        public override bool OnDirectEffect(GameLiving target, double effectiveness)
         {
-            if (target == null) return;
+            if (target == null) return false;
 
-            bool spellOK = true;
-            //cone spells
-            if (Spell.Target == "Frontal" ||
+            bool spellOK = !(Spell.Target == "Frontal" ||
                 //pbaoe
-                (Spell.Target == "enemy" && Spell.Radius > 0 && Spell.Range == 0))
-                spellOK = false;
+                Spell is { Target: "enemy", Radius: > 0, Range: 0 });
+            //cone spells
 
             if (!spellOK || CheckLOS(Caster))
             {
@@ -113,6 +111,7 @@ namespace DOL.GS.Spells
                     DealDamage(target, effectiveness);
             }
             else DealDamage(target, effectiveness);
+            return true;
         }
 
         private bool CheckLOS(GameLiving living)

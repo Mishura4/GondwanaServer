@@ -53,17 +53,14 @@ namespace DOL.GS.Spells
     [SpellHandler("PowerRegenBuff")]
     public class PowerRegenSpellHandler : PropertyChangingSpell
     {
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
-            if (target is GamePlayer && (((GamePlayer)target).CharacterClass.ID == (int)eCharacterClass.Vampiir
-                || ((GamePlayer)target).CharacterClass.ID == (int)eCharacterClass.MaulerAlb
-                || ((GamePlayer)target).CharacterClass.ID == (int)eCharacterClass.MaulerMid
-                || ((GamePlayer)target).CharacterClass.ID == (int)eCharacterClass.MaulerHib))
+            if (target is GamePlayer { CharacterClass.ID: (int)eCharacterClass.Vampiir or (int)eCharacterClass.MaulerAlb or (int)eCharacterClass.MaulerMid or (int)eCharacterClass.MaulerHib } )
             {
                 MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.PowerRegenBuff.NoEffect"), eChatType.CT_Spell);
-                return;
+                return false;
             }
-            base.ApplyEffectOnTarget(target, effectiveness);
+            return base.ApplyEffectOnTarget(target, effectiveness);
         }
         public override eBuffBonusCategory BonusCategory1 { get { return eBuffBonusCategory.BaseBuff; } }
         public override eProperty Property1 { get { return eProperty.PowerRegenerationRate; } }
@@ -112,13 +109,13 @@ namespace DOL.GS.Spells
             base.FinishSpellCast(target);
         }
 
-        public override bool StartSpell(GameLiving target, bool force = false)
+        protected override bool ExecuteSpell(GameLiving target, bool force = false)
         {
             // paladin chants seem special
             if (SpellLine.Spec == Specs.Chants)
                 SendEffectAnimation(Caster, 0, true, 1);
 
-            return base.StartSpell(target, force);
+            return base.ExecuteSpell(target, force);
         }
 
         public override void OnEffectStart(GameSpellEffect effect)

@@ -34,10 +34,10 @@ namespace DOL.GS.Spells
         }
 
 
-        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        public override bool OnDirectEffect(GameLiving target, double effectiveness)
         {
-            if (target == null) return;
-            if (!target.IsAlive || target.ObjectState != GameLiving.eObjectState.Active) return;
+            if (target == null) return false;
+            if (!target.IsAlive || target.ObjectState != GameLiving.eObjectState.Active) return false;
 
             int end = (int)(Spell.Damage);
             target.ChangeEndurance(target, GameLiving.eEnduranceChangeType.Spell, (-end));
@@ -49,6 +49,7 @@ namespace DOL.GS.Spells
 
             StealEndurance(target, end);
             target.StartInterruptTimer(target.SpellInterruptDuration, AttackData.eAttackType.Spell, Caster);
+            return true;
         }
 
 

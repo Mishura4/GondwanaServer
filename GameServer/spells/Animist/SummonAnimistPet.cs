@@ -87,9 +87,10 @@ namespace DOL.GS.Spells
             base.FinishSpellCast(target);
         }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
-            base.ApplyEffectOnTarget(target, effectiveness);
+            if (!base.ApplyEffectOnTarget(target, effectiveness))
+                return false;
 
             m_pet.Name = Spell.Name;
 
@@ -101,6 +102,7 @@ namespace DOL.GS.Spells
                     (m_pet as TurretPet)!.TurretSpell = m_pet.Spells[0] as Spell;
                 }
             }
+            return true;
         }
 
         protected override GamePet GetGamePet(INpcTemplate template)
@@ -120,10 +122,11 @@ namespace DOL.GS.Spells
         /// Do not trigger SubSpells
         /// </summary>
         /// <param name="target"></param>
-        public override void CastSubSpells(GameLiving target)
+        public override bool CastSubSpells(GameLiving target)
         {
             if (ServerProperties.Properties.ENABLE_SUB_SPELL_ALL_CLASS)
-                base.CastSubSpells(target);
+                return base.CastSubSpells(target);
+            return false;
         }
     }
 }

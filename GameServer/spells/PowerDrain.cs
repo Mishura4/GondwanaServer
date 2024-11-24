@@ -25,10 +25,9 @@ namespace DOL.GS.Spells
     [SpellHandlerAttribute("PowerDrain")]
     public class PowerDrain : DirectDamageSpellHandler
     {
-        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        public override bool OnDirectEffect(GameLiving target, double effectiveness)
         {
-            if (target == null) return;
-            if (!target.IsAlive || target.ObjectState != GameLiving.eObjectState.Active) return;
+            if (target is not { IsAlive: true, ObjectState: GameObject.eObjectState.Active }) return false;
 
             AttackData ad = CalculateDamageToTarget(target, effectiveness);
 
@@ -39,6 +38,7 @@ namespace DOL.GS.Spells
             DamageTarget(ad, true);
             DrainPower(target, ad);
             target.StartInterruptTimer(target.SpellInterruptDuration, ad.AttackType, Caster);
+            return true;
         }
 
         public virtual void DrainPower(GameLiving target, AttackData ad)

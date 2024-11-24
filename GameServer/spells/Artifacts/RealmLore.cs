@@ -41,11 +41,11 @@ namespace DOL.GS.Spells
 
             return true;
         }
-        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        public override bool OnDirectEffect(GameLiving target, double effectiveness)
         {
             GamePlayer player = target as GamePlayer;
             if (player == null)
-                return;
+                return false;
 
             var text = new List<string>();
             text.Add("Class: " + player.CharacterClass.Name);
@@ -67,6 +67,7 @@ namespace DOL.GS.Spells
 
             (m_caster as GamePlayer).Out.SendCustomTextWindow("Realm Lore [ " + player.Name + " ]", text);
             (m_caster as GamePlayer).Out.SendMessage("Realm Lore [ " + player.Name + " ]\n" + text, eChatType.CT_System, eChatLoc.CL_SystemWindow);
+            return true;
         }
         public RealmLore(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
     }

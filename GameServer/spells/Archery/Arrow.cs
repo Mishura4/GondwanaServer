@@ -62,7 +62,7 @@ namespace DOL.GS.Spells
         /// <summary>
         /// called when spell effect has to be started and applied to targets
         /// </summary>
-        public override bool StartSpell(GameLiving target, bool force = false)
+        protected override bool ExecuteSpell(GameLiving target, bool force = false)
         {
             int targetCount = 0;
 

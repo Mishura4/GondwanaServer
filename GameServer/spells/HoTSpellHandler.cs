@@ -35,7 +35,7 @@ namespace DOL.GS.Spells
             base.FinishSpellCast(target);
         }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             // TODO: correct formula
             double eff = 1.25;
@@ -52,7 +52,7 @@ namespace DOL.GS.Spells
                         eff = 1.25;
                 }
             }
-            base.ApplyEffectOnTarget(target, eff);
+            return base.ApplyEffectOnTarget(target, eff);
         }
 
         protected override GameSpellEffect CreateSpellEffect(GameLiving target, double effectiveness)
@@ -98,12 +98,14 @@ namespace DOL.GS.Spells
             OnDirectEffect(effect.Owner, effect.Effectiveness);
         }
 
-        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        public override bool OnDirectEffect(GameLiving target, double effectiveness)
         {
-            if (target.ObjectState != GameObject.eObjectState.Active) return;
-            if (target.IsAlive == false) return;
+            if (target.ObjectState != GameObject.eObjectState.Active) return false;
+            if (target.IsAlive == false) return false;
 
-            base.OnDirectEffect(target, effectiveness);
+            if (!base.OnDirectEffect(target, effectiveness))
+                return false;
+            
             double heal = Spell.Value * effectiveness;
 
             target.Health += (int)heal;
@@ -131,6 +133,7 @@ namespace DOL.GS.Spells
                     : LanguageMgr.GetTranslation(casterLanguage, message1, target.GetName(0, false));
             }
             MessageToLiving(target, message1, eChatType.CT_Spell);
+            return true;
         }
 
         public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)

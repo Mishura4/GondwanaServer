@@ -128,7 +128,7 @@ namespace DOL.GS.Spells
         /// </summary>
         /// <param name="target">target that gets the effect</param>
         /// <param name="effectiveness">factor from 0..1 (0%-100%)</param>
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             INpcTemplate template = NpcTemplateMgr.GetTemplate(Spell.LifeDrainReturn);
             if (template == null)
@@ -136,7 +136,7 @@ namespace DOL.GS.Spells
                 if (log.IsWarnEnabled)
                     log.WarnFormat("NPC template {0} not found! Spell: {1}", Spell.LifeDrainReturn, Spell.ToString());
                 MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.Convoker.TemplateNotFound", Spell.LifeDrainReturn), eChatType.CT_System);
-                return;
+                return false;
             }
 
             GameSpellEffect effect = CreateSpellEffect(target, effectiveness);
@@ -189,6 +189,7 @@ namespace DOL.GS.Spells
             effect.Start(m_pet);
 
             Caster.OnPetSummoned(m_pet);
+            return true;
         }
 
         public override int CalculateSpellResistChance(GameLiving target)

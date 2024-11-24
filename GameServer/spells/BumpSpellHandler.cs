@@ -352,40 +352,41 @@ namespace DOL.GS.Spells
             }
         }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             if (target == Caster || !target.IsAlive || target is ShadowNPC || target.EffectList.GetOfType<NecromancerShadeEffect>() != null)
-                return;
+                return false;
 
             if (IsSwimming(target) || IsPeaceful(target))
-                return;
+                return false;
 
             if (target.HasAbility(Abilities.StunImmunity) || target.HasAbility(Abilities.CCImmunity))
             {
                 (m_caster as GamePlayer)?.SendTranslatedMessage("SpellHandler.DamageImmunity", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow, m_caster.GetPersonalizedName(target));
-                return;
+                return true;
             }
             if (target.EffectList.GetOfType<AdrenalineSpellEffect>() != null)
             {
                 (m_caster as GamePlayer)?.SendTranslatedMessage("Adrenaline.Target.Immune", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow, m_caster.GetPersonalizedName(target));
                 (target as GamePlayer)?.SendTranslatedMessage("Adrenaline.Self.Immune", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
-                return;
+                return true;
             }
             if (target.EffectList.GetOfType<ChargeEffect>() != null || target.TempProperties.getProperty("Charging", false))
             {
                 (m_caster as GamePlayer)?.SendTranslatedMessage("SpellHandler.Target.TooFast", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow, m_caster.GetPersonalizedName(target));
-                return;
+                return true;
             }
 
             if (!LosCheckMgr.HasDataFor(target.CurrentRegion))
             {
-                log.Warn($"BumpSpellHandler: LOSCheckManager has no data for region {target.CurrentRegion}, using simple technique of teleporting the target");
+                log.Warn($"BumpSpellHandler: LOSCheckManager has no data for region {target.CurrentRegion}, falling back to simple technique of teleporting the target");
                 DoBumpWithoutServerLos(target, effectiveness);
             }
             else
             {
                 DoBumpWithServerLos(target, effectiveness);
             }
+            return true;
         }
 
         private void DoFinalEffects(GameLiving living, double speed)

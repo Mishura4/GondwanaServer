@@ -65,9 +65,10 @@ namespace DOL.GS.Spells
             return base.CheckBeginCast(selectedTarget, quiet);
         }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
-            base.ApplyEffectOnTarget(target, effectiveness);
+            if (!base.ApplyEffectOnTarget(target, effectiveness))
+                return false;
 
             if (Spell.SubSpellID > 0 && SkillBase.GetSpellByID(Spell.SubSpellID) != null)
             {
@@ -81,6 +82,7 @@ namespace DOL.GS.Spells
             //[Ganrod] Nidel: Set only one spell.
             (m_pet as TurretPet)!.TurretSpell = m_pet.Spells[0] as Spell;
             Caster.PetCount++;
+            return true;
         }
 
         protected override void SetBrainToOwner(IControlledBrain brain)
@@ -120,8 +122,9 @@ namespace DOL.GS.Spells
             return new TurretFNFBrain(owner);
         }
 
-        public override void CastSubSpells(GameLiving target)
+        public override bool CastSubSpells(GameLiving target)
         {
+            return false;
         }
 
         public override string ShortDescription => "Summons an elemental spirit to attack the target.";

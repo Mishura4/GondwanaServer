@@ -80,33 +80,33 @@ namespace DOL.GS.Spells
             base.OnEffectRemove(effect, overwrite);
         }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             if (target.EffectList.GetOfType<ChargeEffect>() != null)
-                return;
+                return false;
 
             if (target.TempProperties.getProperty("Charging", false))
-                return;
+                return false;
 
             if (target.EffectList.GetOfType<ArmsLengthEffect>() != null)
-                return;
+                return false;
 
             if (target.EffectList.GetOfType<SpeedOfSoundEffect>() != null)
-                return;
+                return false;
 
-            if (target is GamePlayer && (target as GamePlayer).IsRiding)
-                return;
+            if (target is GamePlayer { IsRiding: true })
+                return false;
 
             if (target is Keeps.GameKeepGuard)
-                return;
+                return false;
 
             // Graveen: archery speed shot
             if ((Spell.Pulse != 0 || Spell.CastTime != 0) && target.InCombat)
             {
                 MessageToLiving(target, LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.SpeedEnhancement.CombatRecent"), eChatType.CT_SpellResisted);
-                return;
+                return false;
             }
-            base.ApplyEffectOnTarget(target, effectiveness);
+            return base.ApplyEffectOnTarget(target, effectiveness);
         }
 
         public override void OnEffectStart(GameSpellEffect effect)

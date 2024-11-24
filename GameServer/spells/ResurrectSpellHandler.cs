@@ -50,11 +50,18 @@ namespace DOL.GS.Spells
         /// </summary>
         /// <param name="target"></param>
         /// <param name="effectiveness"></param>
-        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        public override bool OnDirectEffect(GameLiving target, double effectiveness)
         {
-            base.OnDirectEffect(target, effectiveness);
-            if (target == null || target.IsAlive) return;
+            if (!base.OnDirectEffect(target, effectiveness))
+            {
+                return false;
+            }
 
+            if (target is not { ObjectState: GameObject.eObjectState.Active, IsAlive: false })
+            {
+                return false;
+            }
+            
             SendEffectAnimation(target, 0, false, 1);
             GamePlayer targetPlayer = target as GamePlayer;
             if (targetPlayer == null)
@@ -81,6 +88,7 @@ namespace DOL.GS.Spells
                     targetPlayer.Out.SendCustomDialog(LanguageMgr.GetTranslation(targetPlayer.Client, "SpellHandler.ResurrectSpellHandler.ResurrectDialog", targetPlayer.GetPersonalizedName(casterPlayer), m_spell.ResurrectHealth), new CustomDialogResponse(ResurrectResponceHandler));
                 }
             }
+            return true;
         }
 
         /// <summary>

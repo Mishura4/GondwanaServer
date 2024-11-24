@@ -20,9 +20,9 @@ namespace DOL.GS.Spells
 {
     public abstract class AbstractResistBuff : PropertyChangingSpell
     {
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
-            base.ApplyEffectOnTarget(target, 1);
+            return base.ApplyEffectOnTarget(target, 1);
         }
 
         protected override void SendUpdates(GameLiving target)

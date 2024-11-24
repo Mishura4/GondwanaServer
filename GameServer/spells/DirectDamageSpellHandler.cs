@@ -77,9 +77,9 @@ namespace DOL.GS.Spells
             return base.DamageCap(effectiveness);
         }
 
-        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        public override bool OnDirectEffect(GameLiving target, double effectiveness)
         {
-            if (target == null) return;
+            if (target == null) return false;
 
             bool spellOK = true;
 
@@ -105,6 +105,7 @@ namespace DOL.GS.Spells
             {
                 DealDamage(target, effectiveness);
             }
+            return true;
         }
 
         protected virtual void DealDamageCheckLOS(GamePlayer player, ushort response, ushort targetOID)

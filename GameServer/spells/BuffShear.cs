@@ -39,18 +39,6 @@ namespace DOL.GS.Spells
         public override string ShearSpellType { get { return "StrengthBuff"; } }
         public override string DelveSpellType { get { return "Strength"; } }
 
-        public override void OnDirectEffect(GameLiving target, double effectiveness)
-        {
-            base.OnDirectEffect(target, effectiveness);
-            GameSpellEffect effect;
-            effect = SpellHandler.FindEffectOnTarget(target, "Mesmerize");
-            if (effect != null)
-            {
-                effect.Cancel(false);
-                return;
-            }
-        }
-
         // constructor
         public StrengthShear(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
@@ -198,18 +186,20 @@ namespace DOL.GS.Spells
         /// </summary>
         /// <param name="target"></param>
         /// <param name="effectiveness"></param>
-        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        public override bool OnDirectEffect(GameLiving target, double effectiveness)
         {
-            base.OnDirectEffect(target, effectiveness);
-            if (target == null) return;
-            if (!target.IsAlive || target.ObjectState != GameLiving.eObjectState.Active) return;
+            if (!base.OnDirectEffect(target, effectiveness))
+                return false;
+            
+            if (target == null) return false;
+            if (!target.IsAlive || target.ObjectState != GameLiving.eObjectState.Active) return false;
 
             target.StartInterruptTimer(target.SpellInterruptDuration, AttackData.eAttackType.Spell, Caster);
             GameSpellEffect mez = SpellHandler.FindEffectOnTarget(target, "Mesmerize");
             if (mez != null)
             {
                 mez.Cancel(false);
-                return;
+                return true;
             }
             if (target is GameNPC)
             {
@@ -237,7 +227,7 @@ namespace DOL.GS.Spells
                         MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.BuffShear.ConnectionTooStrong"), eChatType.CT_SpellResisted);
                     }
 
-                    return;
+                    return true;
                 }
             }
 
@@ -251,6 +241,7 @@ namespace DOL.GS.Spells
 				Message.SystemToArea(effect.Owner, Util.MakeSentence(effect.Spell.Message4, effect.Owner.GetName(0, false)), eChatType.CT_SpellExpires, effect.Owner);
 			}
 			*/
+            return false;
         }
 
         /// <summary>
@@ -330,11 +321,11 @@ namespace DOL.GS.Spells
         /// </summary>
         /// <param name="target"></param>
         /// <param name="effectiveness"></param>
-        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        public override bool OnDirectEffect(GameLiving target, double effectiveness)
         {
-            base.OnDirectEffect(target, effectiveness);
-            if (target == null) return;
-            if (!target.IsAlive || target.ObjectState != GameLiving.eObjectState.Active) return;
+            if (!base.OnDirectEffect(target, effectiveness)) return false;
+            if (target == null) return false;
+            if (!target.IsAlive || target.ObjectState != GameLiving.eObjectState.Active) return false;
 
             target.StartInterruptTimer(target.SpellInterruptDuration, AttackData.eAttackType.Spell, Caster);
             if (target is GameNPC)
@@ -356,7 +347,7 @@ namespace DOL.GS.Spells
                         effect.Cancel(false);
                         MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.BuffShear.ShearSuccess"), eChatType.CT_Spell);
                         MessageToLiving(target, LanguageMgr.GetTranslation((target as GamePlayer)?.Client, "SpellHandler.BuffShear.EnhancingMagicRipped"), eChatType.CT_Spell);
-                        return;
+                        return true;
                     }
                 }
             }
@@ -371,6 +362,7 @@ namespace DOL.GS.Spells
 				Message.SystemToArea(effect.Owner, Util.MakeSentence(effect.Spell.Message4, effect.Owner.GetName(0, false)), eChatType.CT_SpellExpires, effect.Owner);
 			}
 			*/
+            return false;
         }
 
         private static Type[] buffs = new Type[] { typeof(AcuityBuff), typeof(StrengthBuff), typeof(DexterityBuff), typeof(ConstitutionBuff), typeof(StrengthConBuff), typeof(DexterityQuiBuff),

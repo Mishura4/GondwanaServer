@@ -70,7 +70,7 @@ namespace DOL.GS.Spells
             return (int)duration;
         }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             // vampiir, they cannot be buffed except with resists/armor factor/ haste / power regen
             GamePlayer player = target as GamePlayer;
@@ -80,7 +80,7 @@ namespace DOL.GS.Spells
                 {
                     (m_caster as GamePlayer)?.SendTranslatedMessage("Adrenaline.Target.Immune", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow, m_caster.GetPersonalizedName(target));
                     (target as GamePlayer)?.SendTranslatedMessage("Adrenaline.Self.Immune", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
-                    return;
+                    return true;
                 }
             }
             if (player != null)
@@ -95,14 +95,14 @@ namespace DOL.GS.Spells
                             caster.Out.SendMessage("Your buff has no effect on the Vampiir!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                         }
                         player.Out.SendMessage("This buff has no effect on you!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                        return;
+                        return true;
                     }
                     if (this is ArmorFactorBuff)
                     {
                         if (SpellHandler.FindEffectOnTarget(target, "ArmorFactorBuff") != null && m_spellLine.IsBaseLine != true)
                         {
                             MessageToLiving(target, "You already have this effect!", eChatType.CT_SpellResisted);
-                            return;
+                            return false;
                         }
                     }
                 }
@@ -117,7 +117,7 @@ namespace DOL.GS.Spells
                         if (Matter != null || Cold != null || Heat != null)
                         {
                             MessageToCaster(player.GetPersonalizedName(target) + " already has this effect", eChatType.CT_SpellResisted);
-                            return;
+                            return false;
                         }
                     }
                 }
@@ -132,13 +132,13 @@ namespace DOL.GS.Spells
                         if (Body != null || Spirit != null || Energy != null)
                         {
                             MessageToCaster(player.GetPersonalizedName(target) + " already has this effect", eChatType.CT_SpellResisted);
-                            return;
+                            return false;
                         }
                     }
                 }
             }
 
-            base.ApplyEffectOnTarget(target, effectiveness);
+            return base.ApplyEffectOnTarget(target, effectiveness);
         }
 
         public override void OnEffectStart(GameSpellEffect effect)

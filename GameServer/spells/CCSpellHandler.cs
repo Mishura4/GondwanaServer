@@ -29,26 +29,26 @@ namespace DOL.GS.Spells
 {
     public abstract class AbstractCCSpellHandler : ImmunityEffectSpellHandler
     {
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             if (target.HasAbility(Abilities.CCImmunity))
             {
                 MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.DamageImmunity", m_caster.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
-                return;
+                return true;
             }
             if (target.EffectList.GetOfType<AdrenalineSpellEffect>() != null)
             {
                 (m_caster as GamePlayer)?.SendTranslatedMessage("Adrenaline.Target.Immune", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow, m_caster.GetPersonalizedName(target));
                 (target as GamePlayer)?.SendTranslatedMessage("Adrenaline.Self.Immune", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
-                return;
+                return true;
             }
             if (target.EffectList.GetOfType<ChargeEffect>() != null || target.TempProperties.getProperty("Charging", false))
             {
                 MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.Target.TooFast", m_caster.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
-                return;
+                return true;
             }
 
-            base.ApplyEffectOnTarget(target, effectiveness);
+            return base.ApplyEffectOnTarget(target, effectiveness);
         }
 
         public override void OnEffectStart(GameSpellEffect effect)
@@ -303,7 +303,7 @@ namespace DOL.GS.Spells
             return base.OnEffectExpires(effect, noMessages);
         }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             if (Spell.Pulse > 0)
             {
@@ -311,7 +311,7 @@ namespace DOL.GS.Spells
                 {
                     CancelPulsingSpell(Caster, this.Spell.SpellType);
                     MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.TooFarStopPlayingSong"), eChatType.CT_Spell);
-                    return;
+                    return false;
                 }
 
                 if (target != null && (!target.IsAlive))
@@ -323,16 +323,16 @@ namespace DOL.GS.Spells
                         CancelPulsingSpell(Caster, this.Spell.SpellType);
                         MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.StopPlayingSong"), eChatType.CT_Spell);
                     }
-                    return;
+                    return false;
                 }
 
                 if (target != Caster.TargetObject)
-                    return;
+                    return false;
 
                 if (this.Spell.Range != 0)
                 {
                     if (!Caster.IsWithinRadius(target, this.Spell.Range))
-                        return;
+                        return false;
                 }
 
             }
@@ -342,14 +342,15 @@ namespace DOL.GS.Spells
                 MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.DamageImmunity", m_caster.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
                 SendEffectAnimation(target, 0, false, 0);
                 target.StartInterruptTimer(target.SpellInterruptDuration, AttackData.eAttackType.Spell, Caster);
-                return;
+                return true;
             }
+            
             if (FindStaticEffectOnTarget(target, typeof(MezzRootImmunityEffect)) != null)
             {
                 MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.TargetImmune"), eChatType.CT_System);
                 SendEffectAnimation(target, 0, false, 0);
                 target.StartInterruptTimer(target.SpellInterruptDuration, AttackData.eAttackType.Spell, Caster);
-                return;
+                return true;
             }
             //Do nothing when already mez, but inform caster
             GameSpellEffect mezz = SpellHandler.FindEffectOnTarget(target, "Mesmerize");
@@ -357,7 +358,7 @@ namespace DOL.GS.Spells
             {
                 MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.TargetAlreadyMezz"), eChatType.CT_SpellResisted);
                 //				SendEffectAnimation(target, 0, false, 0);
-                return;
+                return true;
             }
 
             var targetPlayer = target as GamePlayer;
@@ -378,10 +379,10 @@ namespace DOL.GS.Spells
                 MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.CeremonialBracerInterceptMez"), eChatType.CT_SpellResisted);
                 SendEffectAnimation(target, 0, false, 0);
                 target.StartInterruptTimer(target.SpellInterruptDuration, AttackData.eAttackType.Spell, Caster);
-                return;
+                return true;
             }
 
-            base.ApplyEffectOnTarget(target, effectiveness);
+            return base.ApplyEffectOnTarget(target, effectiveness);
         }
 
         protected override int CalculateEffectDuration(GameLiving target, double effectiveness)
@@ -493,13 +494,13 @@ namespace DOL.GS.Spells
             return base.OnEffectExpires(effect, noMessages);
         }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             if (target.HasAbility(Abilities.StunImmunity))
             {
                 MessageToCaster(LanguageMgr.GetTranslation((m_caster as GamePlayer)?.Client, "SpellHandler.DamageImmunity", m_caster.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
                 base.OnSpellResisted(target);
-                return;
+                return true;
             }
             //Ceremonial bracer dont intercept physical stun
             if (Spell.SpellType.ToLower() != "stylestun")
@@ -511,10 +512,10 @@ namespace DOL.GS.Spells
                     if (target is GamePlayer)
                         (target as GamePlayer)?.Out.SendMessage(LanguageMgr.GetTranslation((target as GamePlayer)?.Client, "SpellHandler.StunIntercepted"), eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow);
                     base.OnSpellResisted(target);
-                    return;
+                    return true;
                 }
             }
-            base.ApplyEffectOnTarget(target, effectiveness);
+            return base.ApplyEffectOnTarget(target, effectiveness);
         }
 
         protected override int CalculateEffectDuration(GameLiving target, double effectiveness)

@@ -40,15 +40,17 @@ namespace DOL.GS.Spells
             return base.CheckBeginCast(selectedTarget, quiet);
         }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
-            base.ApplyEffectOnTarget(target, effectiveness);
+            if (!base.ApplyEffectOnTarget(target, effectiveness))
+                return false;
 
             m_pet.TempProperties.setProperty("target", target);
             (m_pet.Brain as IOldAggressiveBrain).AddToAggroList(target, 1);
             (m_pet.Brain as TheurgistPetBrain).Think();
 
             Caster.PetCount++;
+            return true;
         }
 
         public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)

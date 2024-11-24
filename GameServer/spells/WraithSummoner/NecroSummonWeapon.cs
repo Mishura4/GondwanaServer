@@ -91,32 +91,36 @@ namespace DOL.GS.Spells
             return template;
         }
 
-        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        public override bool OnDirectEffect(GameLiving target, double effectiveness)
         {
-            base.OnDirectEffect(target, effectiveness);
+            if (!base.OnDirectEffect(target, effectiveness))
+                return false;
 
-            if (Caster is GamePlayer player)
+            if (Caster is not GamePlayer player)
             {
-                GameEventMgr.AddHandler(player, GamePlayerEvent.Quit, OnPlayerLeft);
-                GameEventMgr.AddHandler(player, GamePlayerEvent.Linkdeath, OnPlayerLeft);
-                GameEventMgr.AddHandler(player, GamePlayerEvent.RegionChanged, OnPlayerLeft);
-
-                if (log.IsDebugEnabled)
-                    log.Debug($"Event handlers added for player {player.Name}");
-
-                MessageToCaster(LanguageMgr.GetTranslation(player.Client, "Spells.NecroSumonWeap.Nethersbane.You"), eChatType.CT_Spell);
-                SendEffectAnimation(player);
-
-                foreach (GamePlayer nearbyPlayer in player.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
-                {
-                    if (nearbyPlayer != player)
-                    {
-                        nearbyPlayer.Out.SendMessage(LanguageMgr.GetTranslation(nearbyPlayer.Client, "Spells.NecroSumonWeap.Nethersbane.Target", nearbyPlayer.GetPersonalizedName(player)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                    }
-                }
-
-                player.TempProperties.setProperty("SummonNethersbaneHandler", this);
+                return false;
             }
+            
+            GameEventMgr.AddHandler(player, GamePlayerEvent.Quit, OnPlayerLeft);
+            GameEventMgr.AddHandler(player, GamePlayerEvent.Linkdeath, OnPlayerLeft);
+            GameEventMgr.AddHandler(player, GamePlayerEvent.RegionChanged, OnPlayerLeft);
+
+            if (log.IsDebugEnabled)
+                log.Debug($"Event handlers added for player {player.Name}");
+
+            MessageToCaster(LanguageMgr.GetTranslation(player.Client, "Spells.NecroSumonWeap.Nethersbane.You"), eChatType.CT_Spell);
+            SendEffectAnimation(player);
+
+            foreach (GamePlayer nearbyPlayer in player.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+            {
+                if (nearbyPlayer != player)
+                {
+                    nearbyPlayer.Out.SendMessage(LanguageMgr.GetTranslation(nearbyPlayer.Client, "Spells.NecroSumonWeap.Nethersbane.Target", nearbyPlayer.GetPersonalizedName(player)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                }
+            }
+
+            player.TempProperties.setProperty("SummonNethersbaneHandler", this);
+            return true;
         }
 
         private void SendEffectAnimation(GamePlayer player)
@@ -215,32 +219,35 @@ namespace DOL.GS.Spells
             return template;
         }
 
-        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        public override bool OnDirectEffect(GameLiving target, double effectiveness)
         {
-            base.OnDirectEffect(target, effectiveness);
+            if (!base.OnDirectEffect(target, effectiveness)) return false;
 
-            if (Caster is GamePlayer player)
+            if (Caster is not GamePlayer player)
             {
-                GameEventMgr.AddHandler(player, GamePlayerEvent.Quit, OnPlayerLeft);
-                GameEventMgr.AddHandler(player, GamePlayerEvent.Linkdeath, OnPlayerLeft);
-                GameEventMgr.AddHandler(player, GamePlayerEvent.RegionChanged, OnPlayerLeft);
-
-                if (log.IsDebugEnabled)
-                    log.Debug($"Event handlers added for player {player.Name}");
-
-                MessageToCaster(LanguageMgr.GetTranslation(player.Client, "Spells.NecroSumonWeap.Icebrand.You"), eChatType.CT_Spell);
-                SendEffectAnimation(player);
-
-                foreach (GamePlayer nearbyPlayer in player.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
-                {
-                    if (nearbyPlayer != player)
-                    {
-                        nearbyPlayer.Out.SendMessage(LanguageMgr.GetTranslation(nearbyPlayer.Client, "Spells.NecroSumonWeap.Icebrand.Target", nearbyPlayer.GetPersonalizedName(player)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
-                    }
-                }
-
-                player.TempProperties.setProperty("SummonIcebrandHandler", this);
+                return false;
             }
+            
+            GameEventMgr.AddHandler(player, GamePlayerEvent.Quit, OnPlayerLeft);
+            GameEventMgr.AddHandler(player, GamePlayerEvent.Linkdeath, OnPlayerLeft);
+            GameEventMgr.AddHandler(player, GamePlayerEvent.RegionChanged, OnPlayerLeft);
+
+            if (log.IsDebugEnabled)
+                log.Debug($"Event handlers added for player {player.Name}");
+
+            MessageToCaster(LanguageMgr.GetTranslation(player.Client, "Spells.NecroSumonWeap.Icebrand.You"), eChatType.CT_Spell);
+            SendEffectAnimation(player);
+
+            foreach (GamePlayer nearbyPlayer in player.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+            {
+                if (nearbyPlayer != player)
+                {
+                    nearbyPlayer.Out.SendMessage(LanguageMgr.GetTranslation(nearbyPlayer.Client, "Spells.NecroSumonWeap.Icebrand.Target", nearbyPlayer.GetPersonalizedName(player)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                }
+            }
+
+            player.TempProperties.setProperty("SummonIcebrandHandler", this);
+            return true;
         }
 
         private void SendEffectAnimation(GamePlayer player)

@@ -30,11 +30,11 @@ namespace DOL.spells
     {
         public PetLifedrainSpellHandler(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
 
-        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        public override bool OnDirectEffect(GameLiving target, double effectiveness)
         {
-            if (Caster == null || !(Caster is GamePet) || !(((GamePet)Caster).Brain is IControlledBrain))
-                return;
-            base.OnDirectEffect(target, effectiveness);
+            if (Caster is not GamePet { Brain:  IControlledBrain })
+                return false;
+            return base.OnDirectEffect(target, effectiveness);
         }
 
         public override void StealLife(GameLiving target, AttackData ad)

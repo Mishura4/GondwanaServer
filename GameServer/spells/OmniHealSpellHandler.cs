@@ -19,9 +19,9 @@ namespace DOL.GS.Spells
         private int minEnd, maxEnd;
         private int minMana, maxMana;
 
-        public override bool StartSpell(GameLiving target, bool force = false)
+        protected override bool ExecuteSpell(GameLiving target, bool force = false)
         {
-            if (!base.StartSpell(target, force))
+            if (!base.ExecuteSpell(target, force))
                 return false;
 
             CalculateEnduranceVariance(out minEnd, out maxEnd);
@@ -30,7 +30,7 @@ namespace DOL.GS.Spells
         }
 
         /// <inheritdoc />
-        public override void OnDirectEffect(GameLiving target, double effectiveness)
+        public override bool OnDirectEffect(GameLiving target, double effectiveness)
         {
             int amountEndu = Util.Random(minEnd, maxEnd);
             int amountMana = Util.Random(minMana, maxMana);
@@ -56,6 +56,7 @@ namespace DOL.GS.Spells
                 MessageTranslationToCaster("SpellHandler.OmniHeal.TargetHealed", eChatType.CT_Spell, target.GetName(0, false), endurance, power);
                 MessageTranslationToLiving(target,"SpellHandler.OmniHeal.YouAreHealed", eChatType.CT_Spell, m_caster.GetName(0, false), endurance, power);
             }
+            return true;
         }
 
         /// <summary>

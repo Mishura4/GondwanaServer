@@ -76,9 +76,10 @@ namespace DOL.GS.Spells
             return base.CalculateCastingTime();
         }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
-            base.ApplyEffectOnTarget(target, effectiveness);
+            if (!base.ApplyEffectOnTarget(target, effectiveness))
+                return false;
 
             if (Caster is GamePlayer)
                 (Caster as GamePlayer).Shade(true);
@@ -88,6 +89,7 @@ namespace DOL.GS.Spells
             IGameEffect callOfDarkness = FindStaticEffectOnTarget(Caster, typeof(CallOfDarknessEffect));
             if (callOfDarkness != null)
                 callOfDarkness.Cancel(false);
+            return true;
         }
 
         public override IList<string> DelveInfo

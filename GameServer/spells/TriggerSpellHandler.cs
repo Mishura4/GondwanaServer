@@ -22,7 +22,7 @@ namespace DOL.spells
         {
             return 100;
         }
-        public override void CastSubSpells(GameLiving target)
+        public override bool CastSubSpells(GameLiving target)
         {
             List<int> subSpellList = new List<int>();
             if (m_spell.SubSpellID > 0)
@@ -35,9 +35,11 @@ namespace DOL.spells
                 if (target != null && spell != null)
                 {
                     ISpellHandler spellhandler = ScriptMgr.CreateSpellHandler(m_caster, spell, SkillBase.GetSpellLine(GlobalSpellsLines.Reserved_Spells));
+                    // TODO: And then?
                     spellhandler.Parent = this;
                 }
             }
+            return true;
         }
 
         public override bool IsOverwritable(GameSpellEffect compare)

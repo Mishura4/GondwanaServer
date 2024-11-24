@@ -57,27 +57,27 @@ namespace DOL.GS.Spells
         /// <summary>
         /// called when spell effect has to be started and applied to targets
         /// </summary>
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             var npcTarget = target as GameNPC;
-            if (npcTarget == null) return;
+            if (npcTarget == null) return false;
 
             if (npcTarget.Level > Spell.Value)
             {
                 // Resisted
                 SendSpellResistAnimation(target);
                 this.MessageToCaster(eChatType.CT_SpellResisted, "{0} is too strong for you to charm!", target.GetName(0, true));
-                return;
+                return false;
             }
 
             if (npcTarget.Brain is IControlledBrain)
             {
                 SendSpellResistAnimation(target);
                 this.MessageToCaster(eChatType.CT_SpellResisted, "{0} is already under control.", target.GetName(0, true));
-                return;
+                return false;
             }
 
-            base.ApplyEffectOnTarget(target, effectiveness);
+            return base.ApplyEffectOnTarget(target, effectiveness);
         }
 
         /// <summary>

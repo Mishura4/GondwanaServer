@@ -468,7 +468,7 @@ namespace DOL.spells
         /// </summary>
         /// <param name="target"></param>
         /// <param name="effectiveness"></param>
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             GamePlayer player = Caster as GamePlayer;
             GameEventMgr.RemoveHandler(Caster, GameLivingEvent.Moving, new DOLEventHandler(EventManager));
@@ -507,7 +507,7 @@ namespace DOL.spells
                         player.TakeDamage(player, eDamageType.Energy, (int)punishSpell.Damage, 0);
                     }
                 }
-                return;
+                return true;
             }
             
             if (!RemoveItems(player))
@@ -693,7 +693,9 @@ namespace DOL.spells
                         player.Out.SendDialogBox(eDialogCode.SimpleWarning, 0, 0, 0, 0, eDialogType.Ok, true, LanguageMgr.GetTranslation(player.Client.Account.Language, "AbstractCraftingSkill.BuildCraftedItem.BackpackFull", worldItem.Name));
                     }
                 }
+                return false;
             }
+            return true;
         }
 
         private int CalculateRewardCraftingSkill(GamePlayer player, eCraftingSkill craftingSkill, int craftValue, int baseReward)

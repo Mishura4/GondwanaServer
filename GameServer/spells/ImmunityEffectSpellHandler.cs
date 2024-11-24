@@ -55,10 +55,10 @@ namespace DOL.GS.Spells
         /// </summary>
         /// <param name="target">target that gets the effect</param>
         /// <param name="effectiveness">factor from 0..1 (0%-100%)</param>
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
             if (target == null || target.CurrentRegion == null)
-                return;
+                return false;
 
             if (target.Realm == 0 || Caster.Realm == 0)
             {
@@ -70,8 +70,9 @@ namespace DOL.GS.Spells
                 target.LastAttackedByEnemyTickPvP = target.CurrentRegion.Time;
                 Caster.LastAttackTickPvP = Caster.CurrentRegion.Time;
             }
-
-            base.ApplyEffectOnTarget(target, effectiveness);
+            
+            if (!base.ApplyEffectOnTarget(Caster, effectiveness))
+                return false;
 
             if (Spell.CastTime > 0)
             {
@@ -83,6 +84,7 @@ namespace DOL.GS.Spells
                 if (aggroBrain != null)
                     aggroBrain.AddToAggroList(Caster, 1);
             }
+            return true;
         }
 
         /// <summary>

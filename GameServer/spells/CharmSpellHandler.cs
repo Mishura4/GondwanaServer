@@ -24,6 +24,7 @@ using DOL.AI.Brain;
 using DOL.Events;
 using DOL.GS.PacketHandler;
 using DOL.GS.Effects;
+using DOL.GS.PropertyCalc;
 using DOL.Language;
 
 namespace DOL.GS.Spells
@@ -58,7 +59,7 @@ namespace DOL.GS.Spells
             base.FinishSpellCast(target);
         }
 
-        public override bool StartSpell(GameLiving target, bool force = false)
+        protected override bool ExecuteSpell(GameLiving target, bool force = false)
         {
             if (m_charmedNpc == null)
             {
@@ -77,13 +78,12 @@ namespace DOL.GS.Spells
             if (Util.Chance(CalculateSpellResistChance(target)))
             {
                 OnSpellResisted(target);
+                return true;
             }
             else
             {
-                ApplyEffectOnTarget(target, 1);
+                return ApplyEffectOnTarget(target, 1);
             }
-
-            return true;
         }
 
         public override int CalculateSpellResistChance(GameLiving target)
@@ -127,15 +127,14 @@ namespace DOL.GS.Spells
             return true;
         }
 
-        public override void ApplyEffectOnTarget(GameLiving target, double effectiveness)
+        public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
-
             // This prevent most of type casting errors
             if (target is GameNPC == false)
             {
                 if (Caster is GamePlayer playerCaster)
                     MessageToCaster(LanguageMgr.GetTranslation(playerCaster.Client.Account.Language, "Spell.CharmSpell.CannotCharm"), eChatType.CT_SpellResisted);
-                return;
+                return false;
             }
 
             // check only if brain wasn't changed at least once
@@ -147,7 +146,7 @@ namespace DOL.GS.Spells
                     // TODO: proper message
                     if (Caster is GamePlayer playerCaster)
                         MessageToCaster(LanguageMgr.GetTranslation(playerCaster.Client.Account.Language, "Spell.CharmSpell.InvalidTarget"), eChatType.CT_SpellResisted);
-                    return;
+                    return false;
                 }
 
                 // Already have a pet...
@@ -155,7 +154,7 @@ namespace DOL.GS.Spells
                 {
                     if (Caster is GamePlayer playerCaster)
                         MessageToCaster(LanguageMgr.GetTranslation(playerCaster.Client.Account.Language, "Spell.CharmSpell.AlreadyCharmed"), eChatType.CT_SpellResisted);
-                    return;
+                    return false;
                 }
 
                 // Body Type None (0) is used to make mobs un-charmable , Realm Guards or NPC cannot be charmed.
@@ -163,7 +162,7 @@ namespace DOL.GS.Spells
                 {
                     if (Caster is GamePlayer playerCaster)
                         MessageToCaster(LanguageMgr.GetTranslation(playerCaster.Client.Account.Language, "Spell.CharmSpell.CannotCharm"), eChatType.CT_SpellResisted);
-                    return;
+                    return false;
                 }
 
                 // If server properties prevent Named charm.
@@ -171,9 +170,8 @@ namespace DOL.GS.Spells
                 {
                     if (Caster is GamePlayer playerCaster)
                         MessageToCaster(LanguageMgr.GetTranslation(playerCaster.Client.Account.Language, "Spell.CharmSpell.CannotCharm"), eChatType.CT_SpellResisted);
-                    return;
+                    return false;
                 }
-
 
                 // Check if Body type applies
                 if (m_spell.AmnesiaChance != (int)eCharmType.All)
@@ -222,7 +220,7 @@ namespace DOL.GS.Spells
                     {
                         if (Caster is GamePlayer playerCaster)
                             MessageToCaster(LanguageMgr.GetTranslation(playerCaster.Client.Account.Language, "Spell.CharmSpell.WrongType"), eChatType.CT_SpellResisted);
-                        return;
+                        return false;
                     }
 
                 }
@@ -234,7 +232,7 @@ namespace DOL.GS.Spells
             {
                 if (Caster is GamePlayer playerCaster)
                     MessageToCaster(LanguageMgr.GetTranslation(playerCaster.Client.Account.Language, "Spell.CharmSpell.TooStrong", target.GetName(0, true)), eChatType.CT_SpellResisted);
-                return;
+                return false;
             }
 
             if (Caster is GamePlayer)
@@ -276,11 +274,11 @@ namespace DOL.GS.Spells
                 {
                     if (Caster is GamePlayer playerCaster)
                         MessageToCaster(LanguageMgr.GetTranslation(playerCaster.Client.Account.Language, "Spell.CharmSpell.ResistCharm", target.GetName(0, true)), eChatType.CT_SpellResisted);
-                    return;
+                    return true;
                 }
             }
 
-            base.ApplyEffectOnTarget(target, effectiveness);
+            return base.ApplyEffectOnTarget(target, effectiveness);
         }
 
         public override void OnEffectStart(GameSpellEffect effect)
