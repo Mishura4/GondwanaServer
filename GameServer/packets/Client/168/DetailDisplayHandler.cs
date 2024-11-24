@@ -666,12 +666,23 @@ namespace DOL.GS.PacketHandler.Client.v168
                         client.Player.Group.SendMessageToGroupMembers(str, eChatType.CT_Group, eChatLoc.CL_ChatWindow);
                         return;
                     }
-                case 12: // Item info to Guild Chat
+                case 17: // Item info to BattleGroup Chat
                     {
+                        bool? memberStatus = (bool?)client.Player.BattleGroup?.Members[client.Player];
+                        if (memberStatus == null)
+                        {
+                            client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.HandlePacket.MustBeInBattleGroup"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            return;
+                        }
                         invItem = client.Player.Inventory.GetItem((eInventorySlot)objectId);
                         if (invItem == null)
                             return;
-                        string str = LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.HandlePacket.GuildItem", client.Player.Name, GetShortItemInfo(invItem, client));
+                        string str = LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.HandlePacket.Item", client.Player.Name, GetShortItemInfo(invItem, client));
+                        client.Player.BattleGroup.SendMessageToBattleGroupMembers(str, memberStatus.Value ? eChatType.CT_BattleGroupLeader : eChatType.CT_BattleGroup, eChatLoc.CL_ChatWindow);
+                        return;
+                    }
+                case 12: // Item info to Guild Chat
+                    {
                         if (client.Player.Guild == null)
                         {
                             client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.HandlePacket.DontBelongGuild"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
@@ -682,6 +693,10 @@ namespace DOL.GS.PacketHandler.Client.v168
                             client.Out.SendMessage(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.HandlePacket.NoPermissionToSpeak"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             return;
                         }
+                        invItem = client.Player.Inventory.GetItem((eInventorySlot)objectId);
+                        if (invItem == null)
+                            return;
+                        string str = LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.HandlePacket.GuildItem", client.Player.Name, GetShortItemInfo(invItem, client));
                         foreach (GamePlayer ply in client.Player.Guild.GetListOfOnlineMembers())
                         {
                             if (!client.Player.Guild.HasRank(ply, Guild.eRank.GcHear))
