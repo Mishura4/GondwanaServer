@@ -60,6 +60,7 @@ SpellHandler.TargetMissed:			{0} missed!
 SpellHandler.EngageCannotBeUsed:		{0} has been attacked recently and you are unable to engage.
 SpellHandler.NotEnoughEndurance:		You concentrate on blocking the blow!
 SpellHandler.PvPOnly:                   Can only be used against players or player-controlled pets.
+SpellHandler.MustTargetPlayer:          You must target a player.
 
 SpellHandler.CheckLOSYouToPet.NotInView:	Your pet is not in view.
 SpellHandler.CheckLOSPlayerToTarget.LoSInterrupt:	LoS Interrupt in CheckLOSPlayerToTarget

@@ -60,6 +60,7 @@ SpellHandler.TargetMissed:			{0} a raté sa cible !
 SpellHandler.EngageCannotBeUsed:		{0} a été attaqué récemment et vous ne pouvez pas engager.
 SpellHandler.NotEnoughEndurance:		Vous vous concentrez pour bloquer le coup !
 SpellHandler.PvPOnly:                   Utilisable uniquement contre des joueurs ou des familiers contrôlés par des joueurs.
+SpellHandler.MustTargetPlayer:          Vous devez cibler un joueur.
 
 SpellHandler.CheckLOSYouToPet.NotInView:	Votre familier n'est pas en vue.
 SpellHandler.CheckLOSPlayerToTarget.LoSInterrupt:	Interruption de la ligne de vue dans CheckLOSPlayerToTarget

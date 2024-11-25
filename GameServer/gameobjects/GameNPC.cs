@@ -5169,7 +5169,7 @@ namespace DOL.GS
             if (IsAlive)
                 return;
 
-            if (this.Brain is IControlledBrain)
+            if (this.Brain is IControlledBrain || this is GamePet)
                 return;
 
             if (this.EventID != null && !CanRespawnWithinEvent)

@@ -20,9 +20,11 @@ using DOL.GS.PacketHandler;
 using DOL.Language;
 using System.Collections.Generic;
 using DOL.AI.Brain;
+using DOL.Database;
 using DOL.GS.Effects;
 using DOL.GS;
 using DOL.GS.Geometry;
+using DOL.GS.Scripts;
 using System;
 using log4net;
 
@@ -38,7 +40,7 @@ namespace DOL.GS.Spells
         public override void OnEffectStart(GameSpellEffect effect)
         {
             base.OnEffectStart(effect);
-            CreateIllusionPets();
+            CreateIllusionPets(effect.Owner as GamePlayer);
         }
 
         public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
@@ -59,29 +61,59 @@ namespace DOL.GS.Spells
             return base.OnEffectExpires(effect, noMessages);
         }
 
-        private void CreateIllusionPets()
+        private void CreateIllusionPets(GamePlayer target)
         {
             int numPets = (int)Spell.Value;
             if (numPets < 1) numPets = 1;
 
             double angleIncrement = 360.0 / numPets;
             double currentAngle = 0;
+            
+            GameNpcInventoryTemplate npcInventory = new GameNpcInventoryTemplate();
+            InventoryItem item;
+            foreach (eInventorySlot slot in PlayerCloner.itemsToCopy)
+            {
+                item = target.Inventory.GetItem(slot);
+                if (item != null)
+                {
+                    int itemModel = item.Model;
+
+                    // keep clothing manager uses model IDs of 3800-3802 for guild cloaks... doesn't seem to work here :(
+                    //if ( item.SlotPosition == (int)eInventorySlot.Cloak && item.Emblem > 0 )
+                    //	itemModel = 3799 + (int)player.Realm;
+
+                    npcInventory.AddNPCEquipment(slot, item.Model, item.Color, item.Effect, item.Extension);
+                }
+            }
+            npcInventory.CloseTemplate();
+
+            var styles = PlayerCloner.GetStyles(target);
+            var spells = PlayerCloner.GetSpells(target);
 
             for (int i = 0; i < numPets; i++)
             {
-                IllusionPet pet = CreatePet();
+                IllusionPet pet = CreatePet(target);
                 if (pet == null)
                 {
                     continue;
                 }
 
-                SetupPet(pet);
-
                 int distance = 150;
                 double radians = currentAngle * (Math.PI / 180.0);
 
-                int x = (int)(Caster.Position.X + distance * Math.Cos(radians));
-                int y = (int)(Caster.Position.Y + distance * Math.Sin(radians));
+                pet.Inventory = npcInventory;
+                pet.Styles = styles;
+                pet.Spells = spells;
+                pet.LoadedFromScript = true;
+                pet.AutoRespawn = false;
+                pet.GuildName = target.GuildName;
+                pet.Realm = target.Realm;
+
+                double xOffset = distance * Math.Cos(radians);
+                double yOffset = distance * Math.Sin(radians);
+                (pet.Brain as IllusionPetBrain).SetOffset(xOffset, yOffset);
+                int x = (int)(Caster.Position.X + xOffset);
+                int y = (int)(Caster.Position.Y + yOffset);
                 int z = (int)Caster.Position.Z;
 
                 // Set the position using Position.Create
@@ -99,40 +131,21 @@ namespace DOL.GS.Spells
             }
         }
 
-        protected virtual IllusionPet CreatePet()
+        protected virtual IllusionPet CreatePet(GamePlayer target)
         {
-            return new IllusionPet(Caster as GamePlayer, Spell.Duration);
-        }
-
-        protected void SetupPet(IllusionPet pet)
-        {
-            if (pet == null)
-                return;
-
-            pet.Level = Caster.Level;
-
-            double damageMultiplier = Spell.Damage / 100.0;
-            pet.Effectiveness = damageMultiplier;
-
-            double hpMultiplier = Spell.AmnesiaChance / 100.0;
-            if (hpMultiplier <= 0) hpMultiplier = 0.01;
-            pet.MaxHealth = (int)(Caster.MaxHealth * hpMultiplier);
-            pet.Health = pet.MaxHealth;
-
-            pet.Model = Spell.LifeDrainReturn == 0 ? Caster.Model : (ushort)Spell.LifeDrainReturn;
-
-            pet.Name = Caster.Name;
-
-            pet.Realm = Caster.Realm;
-            pet.CurrentRegion = Caster.CurrentRegion;
-            pet.Heading = Caster.Heading;
-
-            // Use SetOwnBrain to assign the pet's brain
-            pet.SetOwnBrain(new IllusionPetBrain(Caster));
+            var pet = new IllusionPet(target, Spell.Duration);
+            pet.Owner = Caster;
+            pet.Level = target.Level;
+            return pet;
         }
 
         public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
+            if (target is not GamePlayer)
+            {
+                return false;
+            }
+            
             GameSpellEffect effect = new GameSpellEffect(this, Spell.Duration * 1000, 0, 1.0);
             effect.Start(target);
             return true;

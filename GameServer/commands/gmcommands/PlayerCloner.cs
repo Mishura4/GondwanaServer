@@ -10,6 +10,8 @@ using DOL.GS.PacketHandler;
 using DOL.Database;
 using DOL.AI.Brain;
 using DOL.GS.Commands;
+using DOL.GS.Styles;
+using System.Collections;
 using System.Linq;
 using System.Numerics;
 
@@ -29,7 +31,7 @@ namespace DOL.GS.Scripts
         private static short[] m_augStatBonus = { 0, 4, 12, 22, 34, 48 };
         private static short[] m_masteryDefenseBonus = { 0, 2, 5, 10, 16, 23 };
 
-        private static readonly List<eInventorySlot> itemsToCopy = new List<eInventorySlot>(10);
+        public static readonly List<eInventorySlot> itemsToCopy = new List<eInventorySlot>(10);
 
         static PlayerCloner()
         {
@@ -293,7 +295,7 @@ namespace DOL.GS.Scripts
         /// <param name="clone">The target GameNPC to clone the player to</param>
         /// <param name="loadStyles">True to load styles</param>
         // Players cloned by name, from the database, tend to be a bit tougher than players cloned from a GamePlayer
-        public static GameNPC ClonePlayer(GamePlayer player, GameNPC clone, bool loadStyles, bool loadSpells)
+        public static GameNPC ClonePlayer(GamePlayer player, GameNPC clone, bool loadStyles, bool loadSpells, bool loadInventory = true)
         {
             if (player == null)
                 return null;
@@ -302,7 +304,7 @@ namespace DOL.GS.Scripts
             {
                 clone = CreateNPCForClass((eCharacterClass)player.CharacterClass.ID);
             }
-            else
+            else if (clone.Brain == null)
             {
                 clone.SetOwnBrain(new AmteMobBrain());
             }
@@ -327,29 +329,31 @@ namespace DOL.GS.Scripts
             clone.MaxSpeedBase = player.MaxSpeedBase;
 
             #region Inventory
-
-            GameNpcInventoryTemplate npcInventory = new GameNpcInventoryTemplate();
-            InventoryItem item;
-
-            foreach (eInventorySlot slot in itemsToCopy)
+            if (loadInventory)
             {
-                item = player.Inventory.GetItem(slot);
+                GameNpcInventoryTemplate npcInventory = new GameNpcInventoryTemplate();
+                InventoryItem item;
 
-                if (item != null)
+                foreach (eInventorySlot slot in itemsToCopy)
                 {
-                    int itemModel = item.Model;
+                    item = player.Inventory.GetItem(slot);
 
-                    // keep clothing manager uses model IDs of 3800-3802 for guild cloaks... doesn't seem to work here :(
-                    //if ( item.SlotPosition == (int)eInventorySlot.Cloak && item.Emblem > 0 )
-                    //	itemModel = 3799 + (int)player.Realm;
+                    if (item != null)
+                    {
+                        int itemModel = item.Model;
 
-                    npcInventory.AddNPCEquipment(slot, item.Model, item.Color, item.Effect, item.Extension);
+                        // keep clothing manager uses model IDs of 3800-3802 for guild cloaks... doesn't seem to work here :(
+                        //if ( item.SlotPosition == (int)eInventorySlot.Cloak && item.Emblem > 0 )
+                        //	itemModel = 3799 + (int)player.Realm;
+
+                        npcInventory.AddNPCEquipment(slot, item.Model, item.Color, item.Effect, item.Extension);
+                    }
                 }
-            }
 
-            npcInventory.CloseTemplate();
-            clone.Inventory = npcInventory;
-            clone.BroadcastLivingEquipmentUpdate();
+                npcInventory.CloseTemplate();
+                clone.Inventory = npcInventory;
+                clone.BroadcastLivingEquipmentUpdate();
+            }
             #endregion Inventory
 
             #region Behavior
@@ -380,16 +384,12 @@ namespace DOL.GS.Scripts
 
             if (loadStyles)
             {
-                clone.Styles = player.GetStyleList().Cast<Styles.Style>().ToList();
+                clone.Styles = GetStyles(player);
             }
 
             if (loadSpells)
             {
-                var usableSpells = player.GetAllUsableListSpells().SelectMany(t => t.Item2).OfType<Spell>().Concat(player.GetAllUsableSkills().Select(p => p.Item1).OfType<Spell>());
-                // Inspired from LiveSpellHybridSpecialization.GetLinesSpellsForLiving
-                var bestSpellsWithoutGroup = usableSpells.Where(s => s.Group == 0).GroupBy(s => new { s.SpellType, s.Target, s.IsAoE, s.IsInstantCast, s.HasSubSpell }).Select(g => g.MaxBy(spell => spell.Level));
-                var bestSpellsWithGroup = usableSpells.Where(s => s.Group != 0).GroupBy(s => s.Group).Select(g => g.MaxBy(spell => spell.Level));
-                clone.Spells = bestSpellsWithoutGroup.Concat(bestSpellsWithGroup).ToList();
+                clone.Spells = GetSpells(player);
             }
 
             #endregion Behavior
@@ -398,6 +398,19 @@ namespace DOL.GS.Scripts
             return clone;
         }
 
+        public static List<Style> GetStyles(GamePlayer player)
+        {
+            return player.GetStyleList().Cast<Styles.Style>().ToList();
+        }
+
+        public static IList GetSpells(GamePlayer player)
+        {
+            var usableSpells = player.GetAllUsableListSpells().SelectMany(t => t.Item2).OfType<Spell>().Concat(player.GetAllUsableSkills().Select(p => p.Item1).OfType<Spell>());
+            // Inspired from LiveSpellHybridSpecialization.GetLinesSpellsForLiving
+            var bestSpellsWithoutGroup = usableSpells.Where(s => s.Group == 0).GroupBy(s => new { s.SpellType, s.Target, s.IsAoE, s.IsInstantCast, s.HasSubSpell }).Select(g => g.MaxBy(spell => spell.Level));
+            var bestSpellsWithGroup = usableSpells.Where(s => s.Group != 0).GroupBy(s => s.Group).Select(g => g.MaxBy(spell => spell.Level));
+            return bestSpellsWithoutGroup.Concat(bestSpellsWithGroup).ToList();
+        }
 
         /// <summary>
         /// Gets the level of the specified ability

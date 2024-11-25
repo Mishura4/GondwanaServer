@@ -243,7 +243,7 @@ namespace DOL.AI.Brain
                 var target = GetRandomWalkTarget();
                 if (Util.IsNearDistance(target, Body.Coordinate, GameNPC.CONST_WALKTOTOLERANCE))
                 {
-                    Body.TurnTo(target.X, target.Y);
+                    Body.TurnTo(target);
                 }
                 else
                 {

@@ -17,46 +17,90 @@
  *
  */
 using DOL.AI.Brain;
+using DOL.Events;
 using DOL.GS;
+using DOL.GS.Geometry;
+using DOL.GS.ServerRules;
+using System;
+using System.Numerics;
+using System.Runtime.InteropServices.ComTypes;
+using Vector = DOL.GS.Geometry.Vector;
 
 namespace DOL.AI.Brain
 {
     public class IllusionPetBrain : StandardMobBrain
     {
-        private GameLiving m_owner;
+        public GameLiving Owner => Body.Owner;
 
+        private Vector m_followOffset = new Vector();
+        private long m_lastFollowTick = 0;
+        private Angle m_lastAngle = new();
+        
         public IllusionPetBrain(GameLiving owner)
         {
-            m_owner = owner;
             AggroLevel = 100;
             AggroRange = 500;
+            
+            GameEventMgr.AddHandler(owner, GameLivingEvent.Moving, OnOwnerMove);
+        }
+        
+        private void OnOwnerMove(DOLEvent e, object sender, EventArgs arguments)
+        {
+            if (sender is not GameLiving { IsAlive: true, ObjectState: GameObject.eObjectState.Active } || Body.IsIncapacitated || Body.IsCasting)
+                return;
+
+            long thisTick = GameServer.Instance.TickCount;
+            if (thisTick - m_lastFollowTick < 500)
+                return;
+            
+            m_lastFollowTick = GameServer.Instance.TickCount;
+            Follow();
+        }
+
+        private void Follow()
+        {
+            var offset = Vector.Create(m_followOffset.X + Util.Random(-30, 30), m_followOffset.Y + Util.Random(-30, 30), 0);
+            var targetPosition = Owner.Coordinate + offset;
+            Body.MaxSpeedBase = Owner.MaxSpeed;
+            var speed = Owner.CurrentSpeed;
+            speed = Math.Max(speed, (short)(Owner.MaxSpeedBase / 4));
+            speed = Math.Min(speed, Owner.MaxSpeed);
+            Body.WalkTo(targetPosition, speed);
+            m_lastAngle = Owner.Position.Orientation;
         }
 
         public override void Think()
         {
-            if (Body == null || !Body.IsAlive)
+            if (Body is not { IsIncapacitated: false })
                 return;
 
-            if (m_owner == null || !m_owner.IsAlive)
+            if (Owner is not { IsAlive: true, ObjectState: GameObject.eObjectState.Active })
                 return;
 
-            // Follow the owner
-            if (!Body.IsMoving && !Body.InCombat)
+            if (!Body.AttackState && !Body.IsMoving)
             {
-                if (!Body.IsWithinRadius(m_owner, 150))
+                if (m_lastAngle != Owner.Orientation)
                 {
-                    Body.WalkTo(m_owner.Position.X, m_owner.Position.Y, m_owner.Position.Z, m_owner.MaxSpeedBase);
+                    Body.TurnTo(Owner.Orientation + Angle.Radians(Util.RandomDouble() * Math.PI / 2 - Math.PI / 4));
+                    m_lastAngle = Owner.Orientation;
                 }
             }
+            if (Body.AttackState && (!Body.InCombat || Body.TargetObject?.IsAttackable != true))
+                Body.StopAttack();
 
             // Attack the owner's target if the owner is in combat
-            if (m_owner.InCombat && m_owner.TargetObject is GameLiving target && target.IsAlive)
+            if (Owner.InCombat && Owner.TargetObject is GameLiving target && target.IsAlive)
             {
-                if (!Body.IsAttacking || Body.TargetObject != target)
+                if (!Body.AttackState || (Body.TargetObject != target && GameServer.ServerRules.IsAllowedToAttack(Body, target, true)))
                 {
                     Body.StartAttack(target);
                 }
             }
+        }
+        
+        public void SetOffset(double xOffset, double yOffset)
+        {
+            m_followOffset = Vector.Create((int)(Math.Round(xOffset)), (int)(Math.Round(yOffset)), 0);
         }
     }
 }
