@@ -107,7 +107,9 @@ SpellHandler.HealSpell.FullyHealedSelf:		You are fully healed.
 SpellHandler.HealSpell.FullyHealedTarget:	{0} is fully healed.
 SpellHandler.HealSpell.RealmPointsGained:	You gain {0} realm points for healing a realm mate.
 SpellHandler.HealSpell.SelfHealed:		You heal yourself for {0} hit points.
+SpellHandler.HealSpell.TargetSelfHealed:	{0} heals himself for {1} hit points.
 SpellHandler.HealSpell.TargetHealed:		You heal {0} for {1} hit points!
+SpellHandler.HealSpell.TargetDamageToHeal:		You heal {0} for {1} hit points instead of doing damages due to his magical shield!
 SpellHandler.HealSpell.YouAreHealed:		You are healed by {0} for {1} hit points.
 SpellHandler.HealSpell.CriticalHeal:		Your heal criticals for an extra {0} hit points!
 SpellHandler.HealSpell.EfficientHealingBuff:	Your Efficient Healing buff grants you an additional {0} in the Heal!
@@ -258,6 +260,22 @@ SpellHandler.WaterBreathing.EndEffect:		With a gulp and a gasp you realize that 
 
 SpellHandler.GroundAreaEffect.AlreadyActive:	You already have a ground effect active and cannot cast another!
 SpellHandler.PowerShield.EffectStart:			An ancient magic enhances your vital essence.
+SpellHandler.PowerShield.EffectStartOthers:		An ancient magic enhances {0}'s vital essence.
+SpellHandler.PowerShield.EffectExpires:			Your magical power shield wears off!
+SpellHandler.PowerShield.EffectExpiresOthers:	{0}'s magical power shield wears off!
 SpellHandler.PowerShield.InsufficientMana:		Your mana is too low to activate your Powershield's healing effect.
+SpellHandler.DebuffImmunity.Refreshed:			Your Debuff Immunity has been refreshed.
+SpellHandler.DebuffImmunity.Start:				You are now immune to all debuffs for the duration of the spell!
+SpellHandler.DebuffImmunity.GainImmunity:		You gain immunity to all debuffs, increasing your resist chance by {0}%.
+SpellHandler.DebuffImmunity.WornOff:			Your Debuff Immunity has worn off.
+SpellHandler.DebuffImmunity.TargetGainImmunity:	{0}'s chance to resist debuff spells has increased.
+SpellHandler.DebuffImmunity.TargetWornOff:		{0}'s Debuff Immunity has worn off.
+
+SpellHandler.Warlock.AlreadyPreparingRangeSpell:			You are already preparing a Range spell.
+SpellHandler.Warlock.AlreadyPreparingUninterruptableSpell:	You are already preparing an Uninterruptable spell.
+SpellHandler.Warlock.AlreadyPreparingPowerlessSpell:		You are already preparing a Powerless spell.
+SpellHandler.Warlock.MustFinishCastingRange:				You must finish casting Range before you can cast it again.
+SpellHandler.Warlock.MustFinishCastingUninterruptable:		You must finish casting Uninterruptable before you can cast it again.
+SpellHandler.Warlock.MustFinishCastingPowerless:			You must finish casting Powerless before you can cast it again.
 
 SpellHandler.DelveInfo.Sec:			sec

@@ -628,16 +628,16 @@ namespace DOL.GS
             /* BONUS REQUIREMENTS */
             if (this.BonusConditions?.Any(b => b.ChampionLevel > 0 || b.MlLevel > 0 || b.IsRenaissanceRequired) == true)
             {
-                output.Add(" CONDITIONS DE BONUS: ");
+                output.Add(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.WriteBonusConditions.Title"));
                 foreach (var condition in this.BonusConditions.Where(b => b.BonusName != nameof(this.ProcSpellID) || b.BonusName != nameof(this.ProcSpellID1)).OrderBy(b => b.BonusName))
                 {
                     List<string> conditions = new();
                     if (condition.ChampionLevel > 0)
-                        conditions.Add("Level Champion: " + condition.ChampionLevel);
+                        conditions.Add("Champion Level: " + condition.ChampionLevel);
                     if (condition.MlLevel > 0)
                         conditions.Add("ML Level: " + condition.MlLevel);
                     if (condition.IsRenaissanceRequired)
-                        conditions.Add("Renaissance: Oui");
+                        conditions.Add(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.WriteBonusConditions.Renaissance"));
                     if (conditions.Count > 0)
                         output.Add(" - " + this.GetBonusTypeFromBonusName(client, condition.BonusName) + ": " + String.Join(" | ", conditions));
                 }
@@ -744,11 +744,11 @@ namespace DOL.GS
                         {
                             List<string> conditions = new();
                             if (procCondition.ChampionLevel > 0)
-                                conditions.Add("Level Champion: " + procCondition.ChampionLevel);
+                                conditions.Add("Champion Level: " + procCondition.ChampionLevel);
                             if (procCondition.MlLevel > 0)
                                 conditions.Add("ML Level: " + procCondition.MlLevel);
                             if (procCondition.IsRenaissanceRequired)
-                                conditions.Add("Renaissance: Oui");
+                                conditions.Add(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.WriteBonusConditions.Renaissance"));
                             if (conditions.Count > 0)
                             {
                                 output.Add("Spell Proc Conditions: ");
@@ -813,11 +813,11 @@ namespace DOL.GS
                         {
                             List<string> conditions = new();
                             if (procCondition.ChampionLevel > 0)
-                                conditions.Add("Level Champion: " + procCondition.ChampionLevel);
+                                conditions.Add("Champion Level: " + procCondition.ChampionLevel);
                             if (procCondition.MlLevel > 0)
                                 conditions.Add("ML Level: " + procCondition.MlLevel);
                             if (procCondition.IsRenaissanceRequired)
-                                conditions.Add("Renaissance: Oui");
+                                conditions.Add(LanguageMgr.GetTranslation(client.Account.Language, "DetailDisplayHandler.WriteBonusConditions.Renaissance"));
                             if (conditions.Count > 0)
                             {
                                 output.Add("Spell Proc 2 Conditions: ");

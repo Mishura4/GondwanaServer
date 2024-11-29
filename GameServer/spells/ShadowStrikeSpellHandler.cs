@@ -1,5 +1,6 @@
 ﻿using DOL.Database;
 using DOL.Events;
+using DOL.GS.Geometry;
 using DOL.GS.PacketHandler;
 using DOL.GS.Styles;
 using DOL.Language;
@@ -25,10 +26,19 @@ namespace DOL.GS.Spells
             ((GamePlayer)Caster).Stealth(!Caster.IsStealthed);
 
             // teleport the player
-            int xrange = 0;
-            int yrange = 0;
-            double angle = 0.00153248422;
-            m_caster.MoveTo(target.CurrentRegionID, (int)(target.Position.X - ((xrange + 10) * Math.Sin(angle * target.Heading))), (int)(target.Position.Y + ((yrange + 10) * Math.Cos(angle * target.Heading))), target.Position.Z, m_caster.Heading);
+            double angleFactor = (2 * Math.PI) / 4096.0;
+            double headingInRadians = angleFactor * target.Heading;
+            int offset = 10;
+
+            int x = (int)(target.Position.X - (offset * Math.Sin(headingInRadians)));
+            int y = (int)(target.Position.Y + (offset * Math.Cos(headingInRadians)));
+            int z = target.Position.Z;
+            ushort heading = m_caster.Heading;
+            ushort regionID = target.CurrentRegionID;
+
+            Position newPos = Position.Create(regionID, x, y, z, heading);
+
+            m_caster.MoveTo(newPos);
 
             // use style
 

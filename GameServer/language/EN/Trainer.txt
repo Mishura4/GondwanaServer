@@ -363,6 +363,16 @@ WizardTrainer.ReceiveArmor.Text2:				{0} says, "So, you reached the title of Ade
 WizardTrainer.ReceiveArmor.Text3:				{0} says, "So, you reached the title of Elementalist, here is the Elementalist's Robe, it will help you greatly in your quest. Come back to me when you have reached the title of Spellbinder. We shall then see if you require another."
 WizardTrainer.ReceiveArmor.Text4:				{0} says, "So, you have come a long way in your training and achieved the title of Spellbinder, here is the Spellbinder's Robe, it will help you greatly in your quest. You are now ready to fight for our Realm by following the teachings of our Academy."
 
+# /WraithSummonerTrainer
+WraithSummonerTrainer.Interact.Text1:				{0} says, "Hail, young Disciple. Have you come seeking to imbue yourself with the power of Arawn? Do you wish to dedicate yourself to Lord of the Underworld and join the [Temple of Shadows] to serve as one of his wraith summoner?"
+WraithSummonerTrainer.Interact.Text2:				Would you like to do some training?
+WraithSummonerTrainer.Interact.Text3:				{0} says, "Our way is a hard one, {1}. I can only train you in skills. You must gain knowledge and wisdom on your own."
+WraithSummonerTrainer.Interact.Text4:					{0} says, "Lord Arawn has accepted you into his Temple. Here is his gift to you. Use it well, Disciple."
+WraithSummonerTrainer.ReceiveArmor.Text1:				{0} says, "We will now issue your Robe of the Apprentice, it will help you greatly in your quest. When you have reached the title of Servant of Arawn, return it to me. We shall then see if you require another."
+WraithSummonerTrainer.ReceiveArmor.Text2:				{0} says, "So, you reached the title of Servant of Arawn, here is the Servant's Robe, it will help you greatly in your quest. Come back to me when you have reached the title of Summoner. We shall then see if you require another."
+WraithSummonerTrainer.ReceiveArmor.Text3:				{0} says, "So, you reached the title of Summoner, here is the Robe of the Summoner, it will help you greatly in your quest. Come back to me when you have reached the title of Adept of Arawn. We shall then see if you require another."
+WraithSummonerTrainer.ReceiveArmor.Text4:				{0} says, "So, you have come a long way in your training and achieved the title of Adept of Arawn, here is the Adept's Robe, it will help you greatly in your quest. You are now ready to fight for our Realm by following the teachings of the Temple of Arawn."
+
 
 ## Midgard
 # /MaulerMidTrainer
@@ -658,10 +668,12 @@ AcolyteTrainer.Friar.Explain:		{0} says, "Members of a brotherhood, you will fin
 AcolyteTrainer.Friar.Refuse:		{0} says, "The path of the Friar is not available to your race. Please choose another."
 
 # /DiscipleTrainer
-DiscipleTrainer.Interact.Text1:			{0} says, "You must now seek your training elsewhere. Which path would you like to follow? [Necromancer]?"
+DiscipleTrainer.Interact.Text1:			{0} says, "You must now seek your training elsewhere. Which path would you like to follow? [Necromancer] or [WraithSummoner]?"
 DiscipleTrainer.Interact.Text2:			{0} says, "Do you require a [practice staff]?"
 DiscipleTrainer.Necromancer.Explain:		{0} says, "So you want to become a Necromancer? As a Necromancer you can summon undeath creatures. Without one of these, you are completely powerless and cannot cast any spells. However, once a familiar is summoned, it is capable of casting powerful damage spells of different types, whether area, over time, or direct."
 DiscipleTrainer.Necromancer.Refuse:		{0} says, "The path of the Necromancer is not available to your race. Please choose another."
+DiscipleTrainer.WraithSummoner.Explain:		{0} says, "Do you wish to become a WraithSummoner? This path allows you to summon creatures and cast spells even without shapeshifting, but your true strength lies in mastering three forms: Decrepit Form for potent Disease and Dark magic spells, with increased power pool; Chthonic Form, a fighter with dark blades, greater health, and high resistance; and Spirit Form, enabling invocations, area spells, and enhanced mana recovery. Will you embrace the shadows?"
+DiscipleTrainer.WraithSummoner.Refuse:		{0} says, "The path of the WraithSummoner is not available to your race. Please choose another."
 
 # /ElementalistTrainer
 ElementalistTrainer.Interact.Text1:			{0} says, "You must now seek your training elsewhere. Which path would you like to follow? [Theurgist] or [Wizard]?"

@@ -364,6 +364,16 @@ WizardTrainer.ReceiveArmor.Text2:				{0} dit, "So, you reached the title of Adep
 WizardTrainer.ReceiveArmor.Text3:				{0} dit, "So, you reached the title of Elementalist, here is the Elementalist's Robe, it will help you greatly in your quest. Come back to me when you have reached the title of Spellbinder. We shall then see if you require another."
 WizardTrainer.ReceiveArmor.Text4:				{0} dit, "So, you have come a long way in your training and achieved the title of Spellbinder, here is the Spellbinder's Robe, it will help you greatly in your quest. You are now ready to fight for our Realm by following the teachings of our Academy."
 
+# /WraithSummonerTrainer
+WraithSummonerTrainer.Interact.Text1:				{0} dit, "Hail, young Disciple. Have you come seeking to imbue yourself with the power of Arawn? Do you wish to dedicate yourself to Lord of the Underworld and join the [Temple des Ombres] to serve as one of his conjurateur des Ombres?"
+WraithSummonerTrainer.Interact.Text2:				Souhaitez-vous vous entraîner?
+WraithSummonerTrainer.Interact.Text3:				{0} dit, "Notre voie n'est pas des plus simples, {1}. Je peux seulement vous entraîner dans les compétences de notre Ordre. Vous devrez acquérir la connaissance et la sagesse par vous-même."
+WraithSummonerTrainer.Interact.Text4:					{0} dit, "Lord Arawn has accepted you into his Temple. Here is his gift to you. Use it well, Disciple."
+WraithSummonerTrainer.ReceiveArmor.Text1:				{0} dit, "We will now issue your Robe of the Apprentice, it will help you greatly in your quest. When you have reached the title of Servant of Arawn, return it to me. We shall then see if you require another."
+WraithSummonerTrainer.ReceiveArmor.Text2:				{0} dit, "So, you reached the title of Servant of Arawn, here is the Servant's Robe, it will help you greatly in your quest. Come back to me when you have reached the title of Summoner. We shall then see if you require another."
+WraithSummonerTrainer.ReceiveArmor.Text3:				{0} dit, "So, you reached the title of Summoner, here is the Robe of the Summoner, it will help you greatly in your quest. Come back to me when you have reached the title of Adept of Arawn. We shall then see if you require another."
+WraithSummonerTrainer.ReceiveArmor.Text4:				{0} dit, "So, you have come a long way in your training and achieved the title of Adept of Arawn, here is the Adept's Robe, it will help you greatly in your quest. You are now ready to fight for our Realm by following the teachings of the Temple of Arawn."
+
 
 ## Midgard
 # /MaulerMidTrainer
@@ -659,10 +669,12 @@ AcolyteTrainer.Friar.Explain:		{0} dit, "Membres d'une confrérie, vous trouvere
 AcolyteTrainer.Friar.Refuse:		{0} dit, "La voie du Moine n'est pas disponible pour votre race. Choisissez un autre entraînement..."
 
 # /DiscipleTrainer (Novice)
-DiscipleTrainer.Interact.Text1:			{0} dit, "Vous devrez désormais poursuivre votre entraînement ailleurs. Quelle voie aimeriez-vous suivre ? [Prêtre d'Arawn]?"
+DiscipleTrainer.Interact.Text1:			{0} dit, "Vous devrez désormais poursuivre votre entraînement ailleurs. Quelle voie aimeriez-vous suivre ? [Prêtre d'Arawn] ou [Conjurateur des Ombres]?"
 DiscipleTrainer.Interact.Text2:			{0} dit, "Avez-vous besoin d'un [bâton d'entraînement]?"
 DiscipleTrainer.Necromancer.Explain:		{0} dit, "Alors tu veux devenir Prêtre d'Arawn ? En tant que Prêtre d'Arawn, vous pouvez invoquer des créatures d'Outretombe. Sans l’une de ces invocations, vous êtes complètement impuissant et ne pouvez lancer aucun sort. Cependant, une fois qu'une créature est invoquée, elle sera capable de lancer de puissants sorts de dégâts de différents types, qu'ils soient de zone, sur la durée ou directs."
 DiscipleTrainer.Necromancer.Refuse:		{0} dit, "La voie du Prêtre d'Arawn n'est pas disponible pour votre race. Choisissez un autre entraînement..."
+DiscipleTrainer.WraithSummoner.Explain:		{0} dit, "Devenez Conjurateur des Ombres ! Vous pourrez invoquer des créatures et utiliser des sorts même sans transformation, mais votre plein potentiel repose sur la maîtrise de trois formes : la Forme Décrépite, pour des sorts de Maladie et de Magie Noire avec une réserve d’énergie accrue ; la Forme Chthonienne, un combattant robuste doté de lames sombres, d’une santé supérieure et d’une forte résistance ; et la Forme Spirituelle, qui excelle dans les invocations, les sorts de zone et la régénération de mana. Oserez-vous commander les ténèbres ?"
+DiscipleTrainer.WraithSummoner.Refuse:		{0} dit, "La voie du Conjurateur des Ombres n'est pas disponible pour votre race. Choisissez un autre entraînement..."
 
 # /ElementalistTrainer (Apprenti)
 ElementalistTrainer.Interact.Text1:			{0} dit, "Vous devrez désormais poursuivre votre entraînement ailleurs. Quelle voie aimeriez-vous suivre ? [Théurgiste] ou [Thaumaturge]?"

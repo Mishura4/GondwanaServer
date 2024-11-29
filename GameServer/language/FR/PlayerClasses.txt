@@ -20,6 +20,7 @@ PlayerClass.Profession.PathofEssence:		Voie de l'Essence
 PlayerClass.Profession.PathofFocus:         Voie des Anciens
 PlayerClass.Profession.PathofHarmony:		Voie de l'Harmonie
 PlayerClass.Profession.TempleofArawn:		Temple d'Arawn
+PlayerClass.Profession.TempleofShadows:		Temple des Ombres
 PlayerClass.Profession.TempleofIronFist:	Temple du Poing de Fer
 
 PlayerClass.Name.Acolyte:			Acolyte
@@ -84,6 +85,9 @@ PlayerClass.Name.Warden:			Sentinelle
 PlayerClass.Name.Warlock:			Helhaxa
 PlayerClass.Name.Warrior:			Guerrier
 PlayerClass.Name.Wizard:			Thaumaturge
+PlayerClass.Name.WraithSummonerAlb:		Conjurateur des Ombres
+PlayerClass.Name.WraithSummonerHib:		Conjurateur des Ombres
+PlayerClass.Name.WraithSummonerMid:		Conjurateur des Ombres
 
 PlayerClass.OnLevelUp.Autotrain:	Vous pouvez vous spécialiser gratuitement en {0} jusqu'au niveau {1}.
 

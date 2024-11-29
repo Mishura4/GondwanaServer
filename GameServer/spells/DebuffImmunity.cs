@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 using DOL.GS.Effects;
 using DOL.GS.PacketHandler;
 using DOL.Language;
@@ -23,14 +24,20 @@ namespace DOL.GS.Spells
             if (existingImmunity != null)
             {
                 existingImmunity.Refresh(CalculateEffectDuration(target, effectiveness));
-                MessageToLiving(target, "Your Debuff Immunity has been refreshed.", eChatType.CT_Spell);
+                if (target is GamePlayer player)
+                {
+                    MessageToLiving(player, LanguageMgr.GetTranslation(player.Client, "SpellHandler.DebuffImmunity.Refreshed"), eChatType.CT_Spell);
+                }
                 return true;
             }
 
             var immunityEffect = new DebuffImmunityEffect(this, (int)Spell.Value, CalculateEffectDuration(target, effectiveness));
             immunityEffect.Start(target);
 
-            MessageToLiving(target, "You are now immune to all debuffs for the duration of the spell!", eChatType.CT_Spell);
+            if (target is GamePlayer targetPlayer)
+            {
+                MessageToLiving(targetPlayer, LanguageMgr.GetTranslation(targetPlayer.Client, "SpellHandler.DebuffImmunity.Start"), eChatType.CT_Spell);
+            }
             SendEffectAnimation(target, 0, false, 1);
             return true;
         }
@@ -44,7 +51,20 @@ namespace DOL.GS.Spells
             var immunityEffect = effect as DebuffImmunityEffect;
             if (immunityEffect != null)
             {
-                MessageToLiving(effect.Owner, $"You gain immunity to all debuffs, increasing your resist chance by {immunityEffect.AdditionalResistChance}%.", eChatType.CT_Spell);
+                if (effect.Owner is GamePlayer player)
+                {
+                    // Message to the target
+                    MessageToLiving(player, LanguageMgr.GetTranslation(player.Client, "SpellHandler.DebuffImmunity.GainImmunity", immunityEffect.AdditionalResistChance), eChatType.CT_Spell);
+
+                    // Message to surrounding players
+                    foreach (GamePlayer nearbyPlayer in player.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+                    {
+                        if (nearbyPlayer != player)
+                        {
+                            nearbyPlayer.Out.SendMessage(LanguageMgr.GetTranslation(nearbyPlayer.Client, "SpellHandler.DebuffImmunity.TargetGainImmunity", player.GetPersonalizedName(player)), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                        }
+                    }
+                }
             }
         }
 
@@ -58,7 +78,18 @@ namespace DOL.GS.Spells
                 var immunityEffect = effect as DebuffImmunityEffect;
                 if (immunityEffect != null)
                 {
-                    MessageToLiving(effect.Owner, "Your Debuff Immunity has worn off.", eChatType.CT_Spell);
+                    if (effect.Owner is GamePlayer player)
+                    {
+                        MessageToLiving(player, LanguageMgr.GetTranslation(player.Client, "SpellHandler.DebuffImmunity.WornOff"), eChatType.CT_SpellExpires);
+
+                        foreach (GamePlayer nearbyPlayer in player.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+                        {
+                            if (nearbyPlayer != player)
+                            {
+                                nearbyPlayer.Out.SendMessage(LanguageMgr.GetTranslation(nearbyPlayer.Client, "SpellHandler.DebuffImmunity.TargetWornOff", player.GetPersonalizedName(player)), eChatType.CT_SpellExpires, eChatLoc.CL_SystemWindow);
+                            }
+                        }
+                    }
                 }
             }
             return base.OnEffectExpires(effect, noMessages);

@@ -26,6 +26,14 @@ namespace DOL.GS.Spells
             if (Caster is GamePlayer casterPlayer)
             {
                 MessageToLiving(casterPlayer, LanguageMgr.GetTranslation(casterPlayer.Client, "SpellHandler.PowerShield.EffectStart"), eChatType.CT_Spell);
+
+                foreach (GamePlayer player in casterPlayer.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+                {
+                    if (player != casterPlayer)
+                    {
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "SpellHandler.PowerShield.EffectStartOthers", casterPlayer.GetPersonalizedName(casterPlayer)), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                    }
+                }
             }
 
             SendEffectAnimation(effect.Owner, 0, false, 1);
@@ -35,6 +43,19 @@ namespace DOL.GS.Spells
         {
             GameLiving living = effect.Owner;
             GameEventMgr.RemoveHandler(living, GameLivingEvent.AttackedByEnemy, new DOLEventHandler(EventHandler));
+
+            if (Caster is GamePlayer casterPlayer)
+            {
+                MessageToLiving(casterPlayer, LanguageMgr.GetTranslation(casterPlayer.Client, "SpellHandler.PowerShield.EffectExpires"), eChatType.CT_SpellExpires);
+
+                foreach (GamePlayer player in casterPlayer.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+                {
+                    if (player != casterPlayer)
+                    {
+                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "SpellHandler.PowerShield.EffectExpiresOthers", casterPlayer.GetPersonalizedName(casterPlayer)), eChatType.CT_SpellExpires, eChatLoc.CL_SystemWindow);
+                    }
+                }
+            }
 
             return base.OnEffectExpires(effect, noMessages);
         }
@@ -222,8 +243,15 @@ namespace DOL.GS.Spells
             {
                 if (target is GamePlayer player)
                 {
-                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.HealSpell.TargetHealed", m_caster.GetPersonalizedName(player), healedAmount), eChatType.CT_Spell);
-                    MessageToLiving(player, LanguageMgr.GetTranslation(player.Client, "SpellHandler.HealSpell.YouAreHealed", player.GetPersonalizedName(m_caster), healedAmount), eChatType.CT_Spell);
+                    MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.HealSpell.SelfHealed", healedAmount), eChatType.CT_Spell);
+
+                    foreach (GamePlayer nearbyPlayer in player.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+                    {
+                        if (nearbyPlayer != player && nearbyPlayer != Caster)
+                        {
+                            nearbyPlayer.Out.SendMessage(LanguageMgr.GetTranslation(nearbyPlayer.Client, "SpellHandler.HealSpell.TargetSelfHealed", player.GetPersonalizedName(player), healedAmount), eChatType.CT_Spell, eChatLoc.CL_SystemWindow);
+                        }
+                    }
                 }
             }
 
@@ -231,7 +259,10 @@ namespace DOL.GS.Spells
             {
                 if (target is GamePlayer player)
                 {
-                    player.Out.SendSpellEffectAnimation(player, player, (ushort)Spell.AmnesiaChance, 0, false, 1);
+                    foreach (GamePlayer p in target.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
+                    {
+                        p.Out.SendSpellEffectAnimation(player, player, (ushort)Spell.AmnesiaChance, 0, false, 1);
+                    }
                 }
             }
 

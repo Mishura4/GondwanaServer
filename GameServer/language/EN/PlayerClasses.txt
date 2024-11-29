@@ -19,6 +19,7 @@ PlayerClass.Profession.PathofEssence:		Path of Essence
 PlayerClass.Profession.PathofFocus:		Path of Focus
 PlayerClass.Profession.PathofHarmony:		Path of Harmony
 PlayerClass.Profession.TempleofArawn:		Temple of Arawn
+PlayerClass.Profession.TempleofShadows:		Temple of Shadows
 PlayerClass.Profession.TempleofIronFist:	Temple of the Iron Fist
 
 PlayerClass.Name.Acolyte:			Acolyte
@@ -83,6 +84,9 @@ PlayerClass.Name.Warden:			Warden
 PlayerClass.Name.Warlock:			Warlock
 PlayerClass.Name.Warrior:			Warrior
 PlayerClass.Name.Wizard:			Wizard
+PlayerClass.Name.WraithSummonerAlb:		WraithSummoner
+PlayerClass.Name.WraithSummonerHib:		WraithSummoner
+PlayerClass.Name.WraithSummonerMid:		WraithSummoner
 
 PlayerClass.OnLevelUp.Autotrain:		You can now train {0} to level {1} for free.
 

@@ -86,7 +86,7 @@ namespace DOL.GameEvents
                 }
                 else
                 {
-                    if (DateTimeOffset.UtcNow - ev.ChanceLastTimeChecked.Value >= ev.EventChanceInterval.Value)
+                    if (DateTimeOffset.UtcNow - ev.ChanceLastTimeChecked.Value >= ev.EventChanceInterval!.Value)
                     {
                         ev.ChanceLastTimeChecked = DateTimeOffset.UtcNow;
                         if (rand.Next(0, 101) <= ev.EventChance)
@@ -629,20 +629,20 @@ namespace DOL.GameEvents
                     if (startedEvent != null)
                         ev = startedEvent;
                 }
-                while (Instance.Events.Where(e => e.ID.Equals(ev.ID) && e.StartedTime.HasValue).Count() > 1)
+                while (Instance.Events.Where(e => e.ID.Equals(ev!.ID) && e.StartedTime.HasValue).Count() > 1)
                 {
                     CleanEvent(ev);
                     Instance.Events.Remove(ev);
-                    ev = Instance.Events.FirstOrDefault(e => e.ID.Equals(ev.ID) && e.StartedTime.HasValue);
+                    ev = Instance.Events.FirstOrDefault(e => e.ID.Equals(ev!.ID) && e.StartedTime.HasValue);
                 }
                 if (ev != null && Instance.Events.Where(e => e.ID.Equals(ev.ID)).Count() > 1)
                 {
                     CleanEvent(ev);
                     Instance.Events.Remove(ev);
                 }
-                ev = Instance.Events.FirstOrDefault(e => e.ID.Equals(ev.ID));
+                ev = Instance.Events.FirstOrDefault(e => e.ID.Equals(ev!.ID));
             }
-            ev.StartedTime = (DateTimeOffset?)null;
+            ev!.StartedTime = (DateTimeOffset?)null;
             ev.EndTime = (DateTimeOffset?)null;
             ev.Status = EventStatus.NotOver;
             ev.WantedMobsCount = 0;
@@ -652,7 +652,7 @@ namespace DOL.GameEvents
                 Instance.Events.Remove(ev);
             }
 
-            if (ev.StartConditionType == StartingConditionType.Money)
+            if (ev!.StartConditionType == StartingConditionType.Money)
             {
                 //Reset related NPC Money
                 var moneyNpcDb = GameServer.Database.SelectObjects<MoneyNpcDb>(DB.Column("EventID").IsEqualTo(ev.ID))?.FirstOrDefault();
@@ -721,7 +721,7 @@ namespace DOL.GameEvents
                     {
                         var npcInRegion = mobInRegion as GameNPC;
                         //copy npc
-                        ev.RemovedMobs[npcInRegion.InternalID] = npcInRegion;
+                        ev.RemovedMobs[npcInRegion!.InternalID] = npcInRegion;
                         npcInRegion.RemoveFromWorld();
                         npcInRegion.Delete();
                     }

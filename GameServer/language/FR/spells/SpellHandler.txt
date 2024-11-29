@@ -107,7 +107,9 @@ SpellHandler.HealSpell.FullyHealedSelf:		Vous êtes complètement soigné.
 SpellHandler.HealSpell.FullyHealedTarget:	{0} est complètement soigné.
 SpellHandler.HealSpell.RealmPointsGained:	Vous gagnez {0} points de royaume pour avoir soigné un membre de votre royaume.
 SpellHandler.HealSpell.SelfHealed:		Vous vous soignez de {0} points de vie.
+SpellHandler.HealSpell.TargetSelfHealed:	{0} se soigne pour {1} points de vie.
 SpellHandler.HealSpell.TargetHealed:		Vous soignez {0} de {1} points de vie !
+SpellHandler.HealSpell.TargetDamageToHeal:		Vous soignez {0} de {1} points de vie au lieu de lui causer des dommages en raison de son bouclier magique !
 SpellHandler.HealSpell.YouAreHealed:		Vous êtes soigné par {0} pour {1} points de vie.
 SpellHandler.HealSpell.CriticalHeal:		Vous réalisez un soin critique et récupérez {0} points de vie supplémentaires !
 SpellHandler.HealSpell.EfficientHealingBuff:	Votre buff de guérison efficace vous apporte {0} points de soin supplémentaires !
@@ -258,6 +260,22 @@ SpellHandler.WaterBreathing.EndEffect:		Vous buvez la tasse et réalisez soudain
 
 SpellHandler.GroundAreaEffect.AlreadyActive:	Vous avez déjà un effet de sol actif et ne pouvez pas en lancer un autre !
 SpellHandler.PowerShield.EffectStart:			Une magie ancienne accroît votre essence vitale.
+SpellHandler.PowerShield.EffectStartOthers:		Une magie ancienne accroît l'essence vitale de {0}.
+SpellHandler.PowerShield.EffectExpires:			Votre bouclier magique s'est dissipé !
+SpellHandler.PowerShield.EffectExpiresOthers:	Le bouclier magique de {0} s'est dissipé !
 SpellHandler.PowerShield.InsufficientMana:		Votre réserve de mana est insuffisante pour activer l’effet de soin de votre bouclier.
+SpellHandler.DebuffImmunity.Refreshed:			Votre protection contre les sorts d'affaiblissement a été renouvelée.
+SpellHandler.DebuffImmunity.Start:				Votre protection contre les sorts d'affaiblissements est accrue pour la durée du sort !
+SpellHandler.DebuffImmunity.GainImmunity:		Vous bénéficiez d'une immunité contre les sorts d'affaiblissements, augmentant vos chances de résistance de {0}%.
+SpellHandler.DebuffImmunity.WornOff:			Votre Immunité aux sorts d'affaiblissements se dissipe.
+SpellHandler.DebuffImmunity.TargetGainImmunity:	Les chances de {0} de résister aux sorts d'affaiblissements ont augmenté.
+SpellHandler.DebuffImmunity.TargetWornOff:		L'Immunité aux sorts d'affaiblissements de {0} s'est dissipée.
+
+SpellHandler.Warlock.AlreadyPreparingRangeSpell:			Vous êtes déjà en train de préparer un sort à distance.
+SpellHandler.Warlock.AlreadyPreparingUninterruptableSpell:	Vous êtes déjà en train de préparer un sort non-interruptible.
+SpellHandler.Warlock.AlreadyPreparingPowerlessSpell:		Vous êtes déjà en train de préparer un sort sans consommation de mana.
+SpellHandler.Warlock.MustFinishCastingRange:				Vous devez finir d'incanter votre sort à distance avant de le relancer.
+SpellHandler.Warlock.MustFinishCastingUninterruptable:		Vous devez finir d'incanter votre sort non-interruptible avant de le relancer.
+SpellHandler.Warlock.MustFinishCastingPowerless:			Vous devez finir d'incanter votre sort sans consommation de mana avant de le relancer.
 
 SpellHandler.DelveInfo.Sec:			sec

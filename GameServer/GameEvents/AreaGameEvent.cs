@@ -111,7 +111,7 @@ namespace DOL.GameEvents
             {
                 foreach (var mob in Mobs)
                 {
-                    var mobCount = WorldMgr.GetNPCsByName(mob.Key, eRealm.None).Where(c => Area.IsContaining(c.Position.X, c.Position.Y, c.Position.Z)).ToList().Count();
+                    var mobCount = WorldMgr.GetNPCsByName(mob.Key, eRealm.None).Where(c => Area.IsContaining(c.Position.Coordinate)).ToList().Count();
 
                     if (mobCount < mob.Value)
                     {
@@ -194,26 +194,28 @@ namespace DOL.GameEvents
                 switch (LaunchedInstancedConditionType)
                 {
                     case InstancedConditionTypes.Player:
-                        return WorldMgr.GetAllPlayingClients().Where(c => Area.IsContaining(c.Player.Position.X, c.Player.Position.Y, c.Player.Position.Z)
+                        return WorldMgr.GetAllPlayingClients().Where(c => Area.IsContaining(c.Player.Position.Coordinate)
                             && c.Player == LaunchedEvent.Owner).ToList();
                     case InstancedConditionTypes.Group:
-                        return WorldMgr.GetAllPlayingClients().Where(c => Area.IsContaining(c.Player.Position.X, c.Player.Position.Y, c.Player.Position.Z)
-                            && c.Player.Group != null && c.Player.Group == LaunchedEvent.Owner.Group).ToList();
+                        return WorldMgr.GetAllPlayingClients().Where(c => Area.IsContaining(c.Player.Position.Coordinate)
+                            && c.Player.Group != null && LaunchedEvent.Owner?.Group != null && c.Player.Group == LaunchedEvent.Owner.Group).ToList();
                     case InstancedConditionTypes.Guild:
-                        return WorldMgr.GetAllPlayingClients().Where(c => Area.IsContaining(c.Player.Position.X, c.Player.Position.Y, c.Player.Position.Z)
-                            && c.Player.Guild != null && c.Player.Guild == LaunchedEvent.Owner.Guild).ToList();
+                        return WorldMgr.GetAllPlayingClients().Where(c => Area.IsContaining(c.Player.Position.Coordinate)
+                            && c.Player.Guild != null && LaunchedEvent.Owner?.Guild != null && c.Player.Guild == LaunchedEvent.Owner.Guild).ToList();
                     case InstancedConditionTypes.Battlegroup:
-                        return WorldMgr.GetAllPlayingClients().Where(c => Area.IsContaining(c.Player.Position.X, c.Player.Position.Y, c.Player.Position.Z)
+                        return WorldMgr.GetAllPlayingClients().Where(c => Area.IsContaining(c.Player.Position.Coordinate)
                             && c.Player.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null) != null
-                            && c.Player.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null) ==
+                            && LaunchedEvent.Owner?.TempProperties != null &&
+                            LaunchedEvent.Owner.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null) != null &&
+                            c.Player.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null) ==
                             LaunchedEvent.Owner.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null)).ToList();
                 }
-                return WorldMgr.GetAllPlayingClients().Where(c => Area.IsContaining(c.Player.Position.X, c.Player.Position.Y, c.Player.Position.Z)).ToList();
+                return WorldMgr.GetAllPlayingClients().Where(c => Area.IsContaining(c.Player.Position.Coordinate)).ToList();
             }
             else
             {
                 List<GameClient> outClients = new List<GameClient>();
-                List<GameClient> clients = WorldMgr.GetAllPlayingClients().Where(c => Area.IsContaining(c.Player.Position.X, c.Player.Position.Y, c.Player.Position.Z)).ToList();
+                List<GameClient> clients = WorldMgr.GetAllPlayingClients().Where(c => Area.IsContaining(c.Player.Position.Coordinate)).ToList();
                 foreach (var c in clients)
                 {
                     GameEvent startedEvent = GameEventManager.Instance.Events.FirstOrDefault(e =>
@@ -221,9 +223,20 @@ namespace DOL.GameEvents
                         e.StartedTime.HasValue &&
                         e.Status == EventStatus.NotOver &&
                         e.StartConditionType == StartingConditionType.Areaxevent &&
-                        c.Player == e.Owner || c.Player.Group != null && c.Player.Group == e.Owner.Group || c.Player.Guild != null && c.Player.Guild == e.Owner.Guild ||
-                        c.Player.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null) != null
-                        && c.Player.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null) == e.Owner.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null));
+                        e.Owner != null &&
+                        (
+                            c.Player == e.Owner ||
+                            (c.Player.Group != null && e.Owner.Group != null && c.Player.Group == e.Owner.Group) ||
+                            (c.Player.Guild != null && e.Owner.Guild != null && c.Player.Guild == e.Owner.Guild) ||
+                            (
+                                c.Player.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null) != null &&
+                                e.Owner.TempProperties != null &&
+                                e.Owner.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null) != null &&
+                                c.Player.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null) ==
+                                e.Owner.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null)
+                            )
+                        )
+                    );
                     if (startedEvent == null)
                         outClients.Add(c);
                 }
