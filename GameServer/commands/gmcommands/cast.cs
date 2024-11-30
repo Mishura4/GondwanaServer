@@ -126,9 +126,21 @@ namespace DOL.GS.Commands
                             SpellHandler spellHandler = (SpellHandler)ScriptMgr.CreateSpellHandler(client.Player, spell, line);
                             if (spellHandler != null)
                             {
-                                spellHandler.StartSpell(target, true);
-                                if (spellHandler.Spell.Pulse != 0)
-                                    client.Player.PulseSpell = spellHandler;
+                                if (spell.Pulse > 0 && spell.Frequency > 0)
+                                {
+                                    PulsingSpellEffect pulseeffect = new PulsingSpellEffect(spellHandler);
+                                    pulseeffect.Start();
+                                    // show animation on caster for positive spells, negative shows on every StartSpell
+                                    if (spell.Target == "self" || spell.Target == "group")
+                                        spellHandler.SendEffectAnimation(client.Player, 0, false, 1);
+                                    if (spell.Target == "pet")
+                                        spellHandler.SendEffectAnimation(target, 0, false, 1);
+                                }
+                                if (spellHandler.StartSpell(target, true))
+                                {
+                                    if (spell.Pulse != 0)
+                                        client.Player.PulseSpell = spellHandler;
+                                }
                             }
                         }
                         else
