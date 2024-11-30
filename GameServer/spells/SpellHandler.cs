@@ -2722,26 +2722,26 @@ namespace DOL.GS.Spells
 
                 if (Spell.Radius == 0 || HasPositiveEffect)
                 {
-                    success = success || ApplyEffectOnTarget(t, effectiveness);
+                    success = ApplyEffectOnTarget(t, effectiveness) || success;
                 }
                 else if (Spell.Target.ToLower() == "area")
                 {
                     int dist = (int)t.Coordinate.DistanceTo(Caster.GroundTargetPosition);
                     if (dist >= 0)
-                        success = success || ApplyEffectOnTarget(t, (effectiveness - CalculateAreaVariance(t, dist, Spell.Radius)));
+                        success = ApplyEffectOnTarget(t, (effectiveness - CalculateAreaVariance(t, dist, Spell.Radius))) || success;
                 }
                 else if (Spell.Target.ToLower() == "cone")
                 {
                     var dist = (int)t.Coordinate.DistanceTo(Caster.Position);
                     //Cone spells use the range for their variance!
                     if (dist >= 0)
-                        success = success || ApplyEffectOnTarget(t, (effectiveness - CalculateAreaVariance(t, dist, Spell.Range)));
+                        success = ApplyEffectOnTarget(t, (effectiveness - CalculateAreaVariance(t, dist, Spell.Range))) || success;
                 }
                 else
                 {
                     var dist = (int)t.Coordinate.DistanceTo(target.Position);
                     if (dist >= 0)
-                        success = success || ApplyEffectOnTarget(t, (effectiveness - CalculateAreaVariance(t, dist, Spell.Radius)));
+                        success = ApplyEffectOnTarget(t, (effectiveness - CalculateAreaVariance(t, dist, Spell.Radius))) || success;
                 }
 
                 if (Caster is GamePet pet && Spell.IsBuff)
@@ -2750,10 +2750,10 @@ namespace DOL.GS.Spells
 
             if (Spell.Target.ToLower() == "ground")
             {
-                success = success || ApplyEffectOnTarget(null, 1);
+                success = ApplyEffectOnTarget(null, 1) || success;
             }
 
-            success = success || CastSubSpells(target);
+            success = CastSubSpells(target) || success;
             return success;
         }
         
