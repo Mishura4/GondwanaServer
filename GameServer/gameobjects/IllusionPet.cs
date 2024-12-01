@@ -29,7 +29,14 @@ namespace DOL.GS
 {
     public class IllusionPet : GamePet
     {
-        public IllusionPet(GamePlayer owner, int durationSeconds) : base(new IllusionPetBrain(owner))
+        [Flags]
+        public enum eIllusionFlags
+        {
+            None = 0,
+            RandomizePositions = 1 << 0,
+        }
+        
+        public IllusionPet(GamePlayer owner, eIllusionFlags mode) : base(new IllusionPetBrain(owner, mode))
         {
             PlayerCloner.ClonePlayer(owner, this, false, false, false);
         }

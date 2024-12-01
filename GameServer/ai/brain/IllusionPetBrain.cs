@@ -35,11 +35,18 @@ namespace DOL.AI.Brain
         private Vector m_followOffset = new Vector();
         private long m_lastFollowTick = 0;
         private Angle m_lastAngle = new();
+
+        public IllusionPet.eIllusionFlags Mode
+        {
+            get;
+            set;
+        }
         
-        public IllusionPetBrain(GameLiving owner)
+        public IllusionPetBrain(GameLiving owner, IllusionPet.eIllusionFlags mode)
         {
             AggroLevel = 100;
             AggroRange = 500;
+            Mode = mode;
             
             GameEventMgr.AddHandler(owner, GameLivingEvent.Moving, OnOwnerMove);
         }
@@ -59,13 +66,13 @@ namespace DOL.AI.Brain
 
         private void Follow()
         {
-            var offset = Vector.Create(m_followOffset.X + Util.Random(-30, 30), m_followOffset.Y + Util.Random(-30, 30), 0);
+            var offset = Mode.HasFlag(IllusionPet.eIllusionFlags.RandomizePositions) ? Vector.Create(m_followOffset.X + Util.Random(-30, 30), m_followOffset.Y + Util.Random(-30, 30), 0) : m_followOffset;
             var targetPosition = Owner.Coordinate + offset;
             Body.MaxSpeedBase = Owner.MaxSpeed;
             var speed = Owner.CurrentSpeed;
-            speed = Math.Max(speed, (short)(Owner.MaxSpeedBase / 4));
+            speed = Math.Max(speed, (short)(Owner.MaxSpeedBase / 3));
             speed = Math.Min(speed, Owner.MaxSpeed);
-            Body.WalkTo(targetPosition, speed);
+            Body.PathTo(targetPosition, speed);
             m_lastAngle = Owner.Position.Orientation;
         }
 
@@ -81,7 +88,7 @@ namespace DOL.AI.Brain
             {
                 if (m_lastAngle != Owner.Orientation)
                 {
-                    Body.TurnTo(Owner.Orientation + Angle.Radians(Util.RandomDouble() * Math.PI / 2 - Math.PI / 4));
+                    Body.TurnTo(Mode.HasFlag(IllusionPet.eIllusionFlags.RandomizePositions) ? Owner.Orientation + Angle.Radians(Util.RandomDouble() * Math.PI / 2 - Math.PI / 4) : Owner.Orientation);
                     m_lastAngle = Owner.Orientation;
                 }
             }

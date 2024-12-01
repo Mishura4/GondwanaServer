@@ -101,7 +101,7 @@ namespace DOL.GS
                 return float.PositiveInfinity;
             var diff = target - origin;
             var distance = diff.Length() + 1e-6f;
-            if (distance < 32 || distance > WorldMgr.VISIBILITY_DISTANCE)
+            if (distance < 16 || distance > WorldMgr.VISIBILITY_DISTANCE)
                 return float.PositiveInfinity;
 
             stats.nbTests += 1;
