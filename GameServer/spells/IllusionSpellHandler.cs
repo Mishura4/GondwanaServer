@@ -159,6 +159,7 @@ namespace DOL.GS.Spells
             }
             bool hasLOS = LosCheckMgr.HasDataFor(target.CurrentRegion);
             Util.Shuffle(offsets);
+            Coordinate masterCoord = target.Coordinate + offsets[numPets];
             for (int i = 0; i < numPets; i++)
             {
                 IllusionPet pet = CreatePet(target, mode, styles, spells, npcInventory);
@@ -167,46 +168,44 @@ namespace DOL.GS.Spells
                     continue;
                 }
 
-                var normalOffset = offsets[i];
+                var offset = offsets[i];
+                Coordinate coord = target.Coordinate + offset;
+                var walkOffset = coord - masterCoord;
+                (pet.Brain as IllusionPetBrain).SetOffset(walkOffset.X, walkOffset.Y);
                 if (hasLOS) // Check LOS for initial placements & teleport, but then walk to the planned offset
                 {
-                    var v = offsets[i];
-                    Coordinate coord = target.Coordinate + v;
                     RaycastStats stats = new();
                     var point = PathingMgr.LocalPathingMgr.GetClosestPointAsync(target.CurrentZone, coord, maxDistance, maxDistance, maxDistance);
                     if (point != null)
                     {
                         coord = Coordinate.Create(point.Value);
-                        v = coord - target.Coordinate;
+                        offset = coord - target.Coordinate;
                     }
                     float dist = LosCheckMgr.GetCollisionDistance(target.CurrentRegion, target.Coordinate, coord, ref stats);
                     if (dist < float.MaxValue)
                     {
-                        var normalDistance = v.Length;
+                        var normalDistance = offset.Length;
                         var ratio = (dist / normalDistance);
-                        offsets[i] = Vector.Create((int)Math.Round(v.X * ratio), (int)Math.Round(v.Y * ratio), (int)Math.Round(v.Z * ratio));
+                        offset = Vector.Create((int)Math.Round(offset.X * ratio), (int)Math.Round(offset.Y * ratio), (int)Math.Round(offset.Z * ratio));
                     }
-                    pet.Position = target.Position + offsets[i];
+                    pet.Position = target.Position + offset;
                 }
                 else // Walk to destination
                 {
-                    offsets[i] -= offsets[numPets];
-                    normalOffset = offsets[i];
                     pet.Position = target.Position;
                 }
-                (pet.Brain as IllusionPetBrain).SetOffset(normalOffset.X, normalOffset.Y);
 
                 illusionPets.Add(pet);
-            }
-            if (hasLOS)
-            {
-                target.MoveTo(target.Position + offsets[numPets]);
             }
             for (int i = 0; i < numPets; ++i)
             {
                 var living = illusionPets[i];
                 living.AddToWorld();
                 living.PathTo(target.Coordinate + offsets[i], target.MaxSpeed);
+            }
+            if (hasLOS)
+            {
+                target.MoveTo(target.Position + offsets[numPets]);
             }
             foreach (GamePlayer player in target.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
             {
