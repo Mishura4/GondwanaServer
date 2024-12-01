@@ -241,7 +241,7 @@ namespace DOL.GS.Spells
                 return false;
             }
             
-            GameSpellEffect effect = new GameSpellEffect(this, Spell.Duration * 1000, 0, 1.0);
+            GameSpellEffect effect = new GameSpellEffect(this, Spell.Duration, 0, 1.0);
             effect.Start(target);
             return true;
         }
