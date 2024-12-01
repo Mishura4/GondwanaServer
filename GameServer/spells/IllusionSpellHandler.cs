@@ -101,7 +101,7 @@ namespace DOL.GS.Spells
             Vector[] offsets = new Vector[numPets + 1];
             IllusionPet.eIllusionFlags mode = 0;
 
-            switch ((eSpawnType)this.Spell.LifeDrainReturn)
+            switch ((eSpawnType)this.Spell.DamageType)
             {
                 case eSpawnType.Random:
                     {
