@@ -47,10 +47,18 @@ namespace DOL.AI.Brain
             AggroLevel = 100;
             AggroRange = 500;
             Mode = mode;
-            
-            GameEventMgr.AddHandler(owner, GameLivingEvent.Moving, OnOwnerMove);
         }
-        
+
+        /// <inheritdoc />
+        public override bool Start()
+        {
+            if (!base.Start())
+                return false;
+            
+            GameEventMgr.AddHandler(Owner, GameLivingEvent.Moving, OnOwnerMove);
+            return true;
+        }
+
         private void OnOwnerMove(DOLEvent e, object sender, EventArgs arguments)
         {
             if (sender is not GameLiving { IsAlive: true, ObjectState: GameObject.eObjectState.Active } || Body.IsIncapacitated || Body.IsCasting)
@@ -72,7 +80,7 @@ namespace DOL.AI.Brain
             var speed = Owner.CurrentSpeed;
             speed = Math.Max(speed, (short)(Owner.MaxSpeedBase / 3));
             speed = Math.Min(speed, Owner.MaxSpeed);
-            Body.PathTo(targetPosition, speed);
+            Body.WalkTo(targetPosition, speed);
             m_lastAngle = Owner.Position.Orientation;
         }
 

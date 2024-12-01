@@ -175,12 +175,6 @@ namespace DOL.GS.Spells
                 if (hasLOS) // Check LOS for initial placements & teleport, but then walk to the planned offset
                 {
                     RaycastStats stats = new();
-                    var point = PathingMgr.LocalPathingMgr.GetClosestPointAsync(target.CurrentZone, coord, maxDistance, maxDistance, maxDistance);
-                    if (point != null)
-                    {
-                        coord = Coordinate.Create(point.Value);
-                        offset = coord - target.Coordinate;
-                    }
                     float dist = LosCheckMgr.GetCollisionDistance(target.CurrentRegion, target.Coordinate, coord, ref stats);
                     if (dist < float.MaxValue)
                     {
@@ -194,18 +188,23 @@ namespace DOL.GS.Spells
                 {
                     pet.Position = target.Position;
                 }
+                offsets[i] = walkOffset;
 
                 illusionPets.Add(pet);
+            }
+            if (hasLOS)
+            {
+                target.MoveTo(target.Position + offsets[numPets]);
+            }
+            else
+            {
+                masterCoord = target.Coordinate;
             }
             for (int i = 0; i < numPets; ++i)
             {
                 var living = illusionPets[i];
                 living.AddToWorld();
-                living.PathTo(target.Coordinate + offsets[i], target.MaxSpeed);
-            }
-            if (hasLOS)
-            {
-                target.MoveTo(target.Position + offsets[numPets]);
+                living.PathTo(masterCoord + offsets[i], target.MaxSpeed);
             }
             foreach (GamePlayer player in target.GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))
             {
