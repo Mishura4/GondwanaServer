@@ -90,7 +90,7 @@ namespace DOL.GS.Trainer
             {
                 case "Runemaster":
                 case "Prêtre d'Odin":
-                    if (player.Race == (int)eRace.Frostalf || player.Race == (int)eRace.Kobold || player.Race == (int)eRace.Norseman || player.Race == (int)eRace.Dwarf)
+                    if (player!.Race == (int)eRace.Frostalf || player.Race == (int)eRace.Kobold || player.Race == (int)eRace.Norseman || player.Race == (int)eRace.Dwarf)
                     {
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MysticTrainer.Runemaster.Explain", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
@@ -101,7 +101,7 @@ namespace DOL.GS.Trainer
                     return true;
                 case "Spiritmaster":
                 case "Prêtre de Hel":
-                    if (player.Race == (int)eRace.Kobold || player.Race == (int)eRace.Frostalf || player.Race == (int)eRace.Norseman)
+                    if (player!.Race == (int)eRace.Kobold || player.Race == (int)eRace.Frostalf || player.Race == (int)eRace.Norseman)
                     {
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MysticTrainer.Spiritmaster.Explain", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
@@ -112,7 +112,7 @@ namespace DOL.GS.Trainer
                     return true;
                 case "Bonedancer":
                 case "Prêtre de Bogdar":
-                    if (player.Race == (int)eRace.Kobold || player.Race == (int)eRace.Frostalf || player.Race == (int)eRace.Troll || player.Race == (int)eRace.Valkyn)
+                    if (player!.Race == (int)eRace.Kobold || player.Race == (int)eRace.Frostalf || player.Race == (int)eRace.Troll || player.Race == (int)eRace.Valkyn)
                     {
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MysticTrainer.Bonedancer.Explain", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
@@ -123,7 +123,7 @@ namespace DOL.GS.Trainer
                     return true;
                 case "Warlock":
                 case "Helhaxa":
-                    if (player.Race == (int)eRace.Kobold || player.Race == (int)eRace.Frostalf || player.Race == (int)eRace.Norseman || player.Race == (int)eRace.Troll)
+                    if (player!.Race == (int)eRace.Kobold || player.Race == (int)eRace.Frostalf || player.Race == (int)eRace.Norseman || player.Race == (int)eRace.Troll)
                     {
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MysticTrainer.Warlock.Explain", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
@@ -134,7 +134,7 @@ namespace DOL.GS.Trainer
                     return true;
                 case "practice staff":
                 case "bâton d'entraînement":
-                    if (player.Inventory.CountItemTemplate(PRACTICE_WEAPON_ID, eInventorySlot.Min_Inv, eInventorySlot.Max_Inv) == 0)
+                    if (player!.Inventory.CountItemTemplate(PRACTICE_WEAPON_ID, eInventorySlot.Min_Inv, eInventorySlot.Max_Inv) == 0)
                     {
                         player.ReceiveItem(this, PRACTICE_WEAPON_ID, eInventoryActionType.Other);
                     }

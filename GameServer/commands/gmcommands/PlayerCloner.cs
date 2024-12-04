@@ -264,6 +264,7 @@ namespace DOL.GS.Scripts
                 case eCharacterClass.Cabalist:
                 case eCharacterClass.Heretic:
                 case eCharacterClass.Necromancer:
+                case eCharacterClass.WraithSummonerAlb:
                 case eCharacterClass.Sorcerer:
                 case eCharacterClass.Theurgist:
                 case eCharacterClass.Wizard:

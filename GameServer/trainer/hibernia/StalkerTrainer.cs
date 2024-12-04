@@ -90,7 +90,7 @@ namespace DOL.GS.Trainer
             switch (text)
             {
                 case "Ranger":
-                    if (player.Race == (int)eRace.Celt || player.Race == (int)eRace.Elf || player.Race == (int)eRace.Lurikeen || player.Race == (int)eRace.Shar || player.Race == (int)eRace.Sylvan)
+                    if (player!.Race == (int)eRace.Celt || player.Race == (int)eRace.Elf || player.Race == (int)eRace.Lurikeen || player.Race == (int)eRace.Shar || player.Race == (int)eRace.Sylvan)
                     {
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "StalkerTrainer.Ranger.Explain", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
@@ -101,7 +101,7 @@ namespace DOL.GS.Trainer
                     return true;
                 case "Nightshade":
                 case "Ombre":
-                    if (player.Race == (int)eRace.Elf || player.Race == (int)eRace.Lurikeen || player.Race == (int)eRace.Celt)
+                    if (player!.Race == (int)eRace.Elf || player.Race == (int)eRace.Lurikeen || player.Race == (int)eRace.Celt)
                     {
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "StalkerTrainer.Nightshade.Explain", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
@@ -112,7 +112,7 @@ namespace DOL.GS.Trainer
                     return true;
                 case "Vampiir":
                 case "Séide de Leanansidhe":
-                    if (player.Race == (int)eRace.Celt || player.Race == (int)eRace.Lurikeen || player.Race == (int)eRace.Shar)
+                    if (player!.Race == (int)eRace.Celt || player.Race == (int)eRace.Lurikeen || player.Race == (int)eRace.Shar)
                     {
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "StalkerTrainer.Vampiir.Explain", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
@@ -123,7 +123,7 @@ namespace DOL.GS.Trainer
                     return true;
                 case "practice weapon":
                 case "arme d'entraînement":
-                    if (player.Inventory.CountItemTemplate(PRACTICE_WEAPON_ID, eInventorySlot.Min_Inv, eInventorySlot.Max_Inv) == 0)
+                    if (player!.Inventory.CountItemTemplate(PRACTICE_WEAPON_ID, eInventorySlot.Min_Inv, eInventorySlot.Max_Inv) == 0)
                     {
                         player.ReceiveItem(this, PRACTICE_WEAPON_ID, eInventoryActionType.Other);
                     }

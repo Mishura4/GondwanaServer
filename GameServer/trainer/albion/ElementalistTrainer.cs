@@ -91,7 +91,7 @@ namespace DOL.GS.Trainer
             {
                 case "Theurgist":
                 case "Théurgiste":
-                    if (player.Race == (int)eRace.Briton || player.Race == (int)eRace.Avalonian || player.Race == (int)eRace.HalfOgre)
+                    if (player!.Race == (int)eRace.Briton || player.Race == (int)eRace.Avalonian || player.Race == (int)eRace.HalfOgre)
                     {
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ElementalistTrainer.Theurgist.Explain", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
@@ -102,7 +102,7 @@ namespace DOL.GS.Trainer
                     return true;
                 case "Wizard":
                 case "Thaumaturge":
-                    if (player.Race == (int)eRace.Briton || player.Race == (int)eRace.Avalonian || player.Race == (int)eRace.HalfOgre || player.Race == (int)eRace.Inconnu)
+                    if (player!.Race == (int)eRace.Briton || player.Race == (int)eRace.Avalonian || player.Race == (int)eRace.HalfOgre || player.Race == (int)eRace.Inconnu)
                     {
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "ElementalistTrainer.Wizard.Explain", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
@@ -113,7 +113,7 @@ namespace DOL.GS.Trainer
                     return true;
                 case "practice staff":
                 case "bâton d'entraînement":
-                    if (player.Inventory.CountItemTemplate(PRACTICE_WEAPON_ID, eInventorySlot.Min_Inv, eInventorySlot.Max_Inv) == 0)
+                    if (player!.Inventory.CountItemTemplate(PRACTICE_WEAPON_ID, eInventorySlot.Min_Inv, eInventorySlot.Max_Inv) == 0)
                     {
                         player.ReceiveItem(this, PRACTICE_WEAPON_ID, eInventoryActionType.Other);
                     }

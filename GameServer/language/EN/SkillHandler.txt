@@ -274,3 +274,9 @@ SkillBase.RegisterPropertyNames.MythicalDebuffResistChance:	Mythical Debuff Immu
 SkillBase.RegisterPropertyNames.DamnationEffectEnhancement:	Damnation Effect Enhancements
 
 SkillBase.RegisterPropertyNames.Skill_Learning:			Magic Learning
+SkillBase.RegisterPropertyNames.Tormentshaper:			Tormentshaper
+SkillBase.RegisterPropertyNames.TormentshaperFocus:		Tormentshaper Focus
+SkillBase.RegisterPropertyNames.Wraithsight:			Wraithsight
+SkillBase.RegisterPropertyNames.WraithsightFocus:		Wraithsight Focus
+SkillBase.RegisterPropertyNames.VoidAcolyte:			Void Acolyte
+SkillBase.RegisterPropertyNames.VoidAcolyteFocus:		Void Acolyte Focus

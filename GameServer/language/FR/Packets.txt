@@ -193,5 +193,19 @@ PlayerPositionUpdateHandler.CloudsongFall:	Votre poids plume a fortement atténu
 PlayerPositionUpdateHandler.MythSafeFall:	Les dommages ont été réduits grâce à votre equipment!
 PlayerPositionUpdateHandler.UnknownZone:	Zone inconnue ! Vous êtes ramené à la pierre d'âme.
 
+# /PlayerTrainRequestHandler
+PlayerTrainRequestHandler.MustSelectValidTrainer:			Vous devez sélectionner un entraîneur valide pour votre classe.
+PlayerTrainRequestHandler.AlreadyHaveAbility:				Vous avez déjà cette compétence !
+PlayerTrainRequestHandler.DoNotMeetRequirements:			Vous ne remplissez pas les conditions pour cette compétence !
+PlayerTrainRequestHandler.NotEnoughChampionPoints:			Vous n'avez pas assez de points de spécialité de champion pour cette compétence !
+PlayerTrainRequestHandler.CouldNotFindChampionSpec:			Impossible de trouver la spécialisation de champion !
+PlayerTrainRequestHandler.CantTrainSpecAgainThisLevel:		Vous ne pouvez plus vous entraîner dans cette spécialisation à ce niveau !
+PlayerTrainRequestHandler.SpecializationCostsPoints:		Cette spécialisation coûte {0} points de spécialisation !
+PlayerTrainRequestHandler.NotEnoughSpecPoints:				Vous n'avez pas autant de points de spécialisation restant pour ce niveau.
+PlayerTrainRequestHandler.RealmAbilityCostsPoints:			{0} coûte {1} points de compétence de royaume !
+PlayerTrainRequestHandler.NotEnoughRealmAbilityPoints:		Vous n'avez pas assez de points de compétence de royaume pour obtenir ceci.
+PlayerTrainRequestHandler.NotExperiencedEnoughForAbility:	Vous n'avez pas assez d'expérience pour obtenir {0} maintenant. Revenez plus tard.
+PlayerTrainRequestHandler.TrainingFailed:					Malheureusement, votre entraînement a échoué. Veuillez le signaler aux administrateurs ou au maître de jeu. Merci.
+
 # /PlayerTargetHandler
 PlayerTargetHandler.Gravestone:			Vous avez cessé de cibler votre tombe. Vos prières échouent.

@@ -29,7 +29,10 @@ namespace DOL.GS.PropertyCalc
     /// BuffBonusCategory4 unused
     /// BuffBonusMultCategory1 unused
     /// </summary>
-    [PropertyCalculator(eProperty.Skill_First, eProperty.Skill_Last)]
+    [PropertyCalculator(eProperty.Skill_First, eProperty.Skill_Augmentation)]
+    [PropertyCalculator(eProperty.Skill_Darkness, eProperty.Skill_Enchantments)]
+    [PropertyCalculator(eProperty.Skill_Blades, eProperty.Skill_Last)]
+    [PropertyCalculator(eProperty.Skill_Learning, eProperty.Skill_ElementalKnight3)]
     public class SkillLevelCalculator : PropertyCalculator
     {
         public SkillLevelCalculator() { }

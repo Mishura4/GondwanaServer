@@ -1,0 +1,12 @@
+Commands.Players.SwitchCommand.Usage:			Équipez des armes de votre sac. ("/switch 1main 1" remplacera votre arme principale par celle du premier emplacement de votre sac à dos)
+Commands.Players.SwitchCommand.1h:			/switch 1main <emplacement>
+Commands.Players.SwitchCommand.Offhand:			/switch maingauche <emplacement>
+Commands.Players.SwitchCommand.2h:			/switch 2mains <emplacement>
+Commands.Players.SwitchCommand.Range:			/switch distance <emplacement>
+Commands.Players.SwitchCommand.SelectSlot:		Vous devez sélectionner un emplacement dans votre sac à dos pour changer votre arme.
+Commands.Players.SwitchCommand.InvalidType:		Un problème est survenu. Veuillez réessayer.
+Commands.Players.SwitchCommand.InvalidSlot:		Numéro d'emplacement invalide. Veuillez sélectionner un emplacement entre 1 et 40.
+Commands.Players.SwitchCommand.InvalidSlotNumber:	Type d'arme spécifié invalide.
+Commands.Players.SwitchCommand.NotAWeapon:		Ceci n'est pas une arme !
+Commands.Players.SwitchCommand.SwitchSuccess:		Vous avez équipé avec succès {0}.
+Commands.Players.SwitchCommand.NoItemInSlot:		Il n'y a pas d'objet dans l'emplacement spécifié.

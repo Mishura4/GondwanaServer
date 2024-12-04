@@ -86,13 +86,14 @@ namespace DOL.GS.Trainer
             if (!base.WhisperReceive(source, text)) return false;
             GamePlayer player = source as GamePlayer;
 
-            switch (text.ToLower())
+
+            switch (text)
             {
                 case "Temple of Arawn":
                 case "Temple d'Arawn":
                     if (CanPromotePlayer(player))
                     {
-                        PromotePlayer(player, (int)eCharacterClass.Necromancer, LanguageMgr.GetTranslation(player.Client.Account.Language, "NecromancerTrainer.Interact.Text4", player.GetName(0, false)), null);
+                        PromotePlayer(player, (int)eCharacterClass.Necromancer, LanguageMgr.GetTranslation(player!.Client.Account.Language, "NecromancerTrainer.Interact.Text4", player.GetName(0, false)), null);
                         player.ReceiveItem(this, WEAPON_ID, eInventoryActionType.Other);
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "NecromancerTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                         player.ReceiveItem(this, ARMOR_ID1, eInventoryActionType.Other);
@@ -114,7 +115,7 @@ namespace DOL.GS.Trainer
 
             GamePlayer player = source as GamePlayer;
 
-            if (player.Level >= 10 && player.Level < 15 && item.Id_nb == ARMOR_ID1)
+            if (player!.Level >= 10 && player.Level < 15 && item.Id_nb == ARMOR_ID1)
             {
                 player.Inventory.RemoveCountFromStack(item, 1);
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "NecromancerTrainer.ReceiveArmor.Text2", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);

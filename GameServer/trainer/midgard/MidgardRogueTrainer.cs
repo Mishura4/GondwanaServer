@@ -91,7 +91,7 @@ namespace DOL.GS.Trainer
             {
                 case "Hunter":
                 case "Chasseur":
-                    if (player.Race == (int)eRace.Dwarf || player.Race == (int)eRace.Kobold || player.Race == (int)eRace.Frostalf || player.Race == (int)eRace.Norseman || player.Race == (int)eRace.Valkyn)
+                    if (player!.Race == (int)eRace.Dwarf || player.Race == (int)eRace.Kobold || player.Race == (int)eRace.Frostalf || player.Race == (int)eRace.Norseman || player.Race == (int)eRace.Valkyn)
                     {
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MidgardRogueTrainer.Hunter.Explain", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
@@ -102,7 +102,7 @@ namespace DOL.GS.Trainer
                     return true;
                 case "Shadowblade":
                 case "Assassin":
-                    if (player.Race == (int)eRace.Kobold || player.Race == (int)eRace.Norseman || player.Race == (int)eRace.Valkyn || player.Race == (int)eRace.Dwarf || player.Race == (int)eRace.Frostalf)
+                    if (player!.Race == (int)eRace.Kobold || player.Race == (int)eRace.Norseman || player.Race == (int)eRace.Valkyn || player.Race == (int)eRace.Dwarf || player.Race == (int)eRace.Frostalf)
                     {
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MidgardRogueTrainer.Shadowblade.Explain", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
@@ -113,7 +113,7 @@ namespace DOL.GS.Trainer
                     return true;
                 case "practice weapon":
                 case "arme d'entraînement":
-                    if (player.Inventory.CountItemTemplate(PRACTICE_WEAPON_ID, eInventorySlot.Min_Inv, eInventorySlot.Max_Inv) == 0)
+                    if (player!.Inventory.CountItemTemplate(PRACTICE_WEAPON_ID, eInventorySlot.Min_Inv, eInventorySlot.Max_Inv) == 0)
                     {
                         player.ReceiveItem(this, PRACTICE_WEAPON_ID, eInventoryActionType.Other);
                     }

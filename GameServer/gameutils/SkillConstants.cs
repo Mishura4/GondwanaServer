@@ -847,6 +847,12 @@ namespace DOL.GS
 
         public const string Archery = "Archery";
 
+        public const string Tormentshaper = "Tormentshaper"; //Wraithsummoner
+
+        public const string Wraithsight = "Wraithsight"; //Wraithsummoner
+
+        public const string Void_Acolyte = "Void Acolyte"; //Wraithsummoner
+
         ///<summary>
         /// The new Beastcraft line for Hunters
         ///</summary>

@@ -271,3 +271,9 @@ SkillBase.RegisterPropertyNames.MythicalDebuffResistChance:	Bonus Mythique Rési
 SkillBase.RegisterPropertyNames.DamnationEffectEnhancement:	Renforcement des Effets de Damnation
 
 SkillBase.RegisterPropertyNames.Skill_Learning:			Apprentissage
+SkillBase.RegisterPropertyNames.Tormentshaper:			Maître des Tourments
+SkillBase.RegisterPropertyNames.TormentshaperFocus:		Focus : Maître des Tourments
+SkillBase.RegisterPropertyNames.Wraithsight:			Clairvoyance Spectrale
+SkillBase.RegisterPropertyNames.WraithsightFocus:		Focus : Clairvoyance Spectrale
+SkillBase.RegisterPropertyNames.VoidAcolyte:			Acolyte du Néant
+SkillBase.RegisterPropertyNames.VoidAcolyteFocus:		Focus : Acolyte du Néant

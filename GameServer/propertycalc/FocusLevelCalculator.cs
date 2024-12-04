@@ -32,6 +32,7 @@ namespace DOL.GS.PropertyCalc
     [PropertyCalculator(eProperty.Focus_Darkness, eProperty.Focus_Matter)]
     [PropertyCalculator(eProperty.Focus_Mind, eProperty.Focus_Arboreal)]
     [PropertyCalculator(eProperty.Focus_EtherealShriek, eProperty.Focus_Witchcraft)]
+    [PropertyCalculator(eProperty.Focus_Tormentshaper, eProperty.Focus_Void_Acolyte)]
     public class FocusLevelCalculator : PropertyCalculator
     {
         public FocusLevelCalculator() { }

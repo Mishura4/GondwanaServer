@@ -96,7 +96,7 @@ namespace DOL.GS.Trainer
             {
                 case "Cleric":
                 case "Clerc":
-                    if (player.Race == (int)eRace.Avalonian || player.Race == (int)eRace.Briton || player.Race == (int)eRace.Highlander)
+                    if (player!.Race == (int)eRace.Avalonian || player.Race == (int)eRace.Briton || player.Race == (int)eRace.Highlander)
                     {
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AcolyteTrainer.Cleric.Explain", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
@@ -107,7 +107,7 @@ namespace DOL.GS.Trainer
                     return true;
                 case "Friar":
                 case "Moine":
-                    if (player.Race == (int)eRace.Avalonian || player.Race == (int)eRace.Briton || player.Race == (int)eRace.Highlander)
+                    if (player!.Race == (int)eRace.Avalonian || player.Race == (int)eRace.Briton || player.Race == (int)eRace.Highlander)
                     {
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AcolyteTrainer.Friar.Explain", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
@@ -118,7 +118,7 @@ namespace DOL.GS.Trainer
                     return true;
                 case "Heretic":
                 case "Hérétique":
-                    if (player.Race == (int)eRace.Briton || player.Race == (int)eRace.Avalonian || player.Race == (int)eRace.Inconnu || player.Race == (int)eRace.AlbionMinotaur || player.Race == (int)eRace.Saracen || player.Race == (int)eRace.Highlander)
+                    if (player!.Race == (int)eRace.Briton || player.Race == (int)eRace.Avalonian || player.Race == (int)eRace.Inconnu || player.Race == (int)eRace.AlbionMinotaur || player.Race == (int)eRace.Saracen || player.Race == (int)eRace.Highlander)
                     {
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AcolyteTrainer.Heretic.Explain", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
@@ -129,14 +129,14 @@ namespace DOL.GS.Trainer
                     return true;
                 case "practice weapon":
                 case "arme d'entraînement":
-                    if (player.Inventory.CountItemTemplate(PRACTICE_WEAPON_ID, eInventorySlot.Min_Inv, eInventorySlot.Max_Inv) == 0)
+                    if (player!.Inventory.CountItemTemplate(PRACTICE_WEAPON_ID, eInventorySlot.Min_Inv, eInventorySlot.Max_Inv) == 0)
                     {
                         player.ReceiveItem(this, PRACTICE_WEAPON_ID, eInventoryActionType.Other);
                     }
                     return true;
                 case "training shield":
                 case "bouclier d'entraînement":
-                    if (player.Inventory.CountItemTemplate(PRACTICE_SHIELD_ID, eInventorySlot.Min_Inv, eInventorySlot.Max_Inv) == 0)
+                    if (player!.Inventory.CountItemTemplate(PRACTICE_SHIELD_ID, eInventorySlot.Min_Inv, eInventorySlot.Max_Inv) == 0)
                     {
                         player.ReceiveItem(this, PRACTICE_SHIELD_ID, eInventoryActionType.Other);
                     }

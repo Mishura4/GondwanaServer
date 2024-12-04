@@ -109,6 +109,7 @@ namespace DOL.GS.Effects
                 case eCharacterClass.Vampiir:
                     return new BannerOfShieldingEffect(effectiveness);
                 case eCharacterClass.Necromancer:
+                case eCharacterClass.WraithSummonerAlb:
                 case eCharacterClass.Friar:
                 case eCharacterClass.Infiltrator:
                 case eCharacterClass.Scout:

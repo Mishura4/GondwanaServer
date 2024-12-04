@@ -112,6 +112,17 @@ PlayerClass.Necromancer.GetTitle.15:    Sombre Adepte
 PlayerClass.Necromancer.GetTitle.10:    Serviteur d'Arawn
 PlayerClass.Necromancer.GetTitle.5:     Invocateur Macabre
 
+PlayerClass.WraithSummonerAlb.GetTitle.50:	Seigneur des Ombres
+PlayerClass.WraithSummonerAlb.GetTitle.45:	Élu des Ténèbres
+PlayerClass.WraithSummonerAlb.GetTitle.40:	Gardien des Spectres
+PlayerClass.WraithSummonerAlb.GetTitle.35:	Maître des Esprits
+PlayerClass.WraithSummonerAlb.GetTitle.30:	Maître des Illusions
+PlayerClass.WraithSummonerAlb.GetTitle.25:	Moissonneur du Néant
+PlayerClass.WraithSummonerAlb.GetTitle.20:	Initié des Esprits
+PlayerClass.WraithSummonerAlb.GetTitle.15:	Invocateur d’Ombres
+PlayerClass.WraithSummonerAlb.GetTitle.10:	Apprenti Spectral
+PlayerClass.WraithSummonerAlb.GetTitle.5:	Initié des Ombres
+
 PlayerClass.Paladin.GetTitle.50:    Templier
 PlayerClass.Paladin.GetTitle.45:    Justicier
 PlayerClass.Paladin.GetTitle.40:    Champion

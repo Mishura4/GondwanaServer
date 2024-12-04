@@ -95,7 +95,7 @@ namespace DOL.GS.Trainer
             {
                 case "Warrior":
                 case "Guerrier":
-                    if (player.Race == (int)eRace.Dwarf || player.Race == (int)eRace.Kobold || player.Race == (int)eRace.Norseman || player.Race == (int)eRace.Troll || player.Race == (int)eRace.Valkyn || player.Race == (int)eRace.MidgardMinotaur)
+                    if (player!.Race == (int)eRace.Dwarf || player.Race == (int)eRace.Kobold || player.Race == (int)eRace.Norseman || player.Race == (int)eRace.Troll || player.Race == (int)eRace.Valkyn || player.Race == (int)eRace.MidgardMinotaur)
                     {
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "VikingTrainer.Warrior.Explain", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
@@ -105,7 +105,7 @@ namespace DOL.GS.Trainer
                     }
                     return true;
                 case "Berserker":
-                    if (player.Race == (int)eRace.Dwarf || player.Race == (int)eRace.Troll || player.Race == (int)eRace.Norseman || player.Race == (int)eRace.Valkyn || player.Race == (int)eRace.MidgardMinotaur)
+                    if (player!.Race == (int)eRace.Dwarf || player.Race == (int)eRace.Troll || player.Race == (int)eRace.Norseman || player.Race == (int)eRace.Valkyn || player.Race == (int)eRace.MidgardMinotaur)
                     {
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "VikingTrainer.Berserker.Explain", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
@@ -115,7 +115,7 @@ namespace DOL.GS.Trainer
                     }
                     return true;
                 case "Skald":
-                    if (player.Race == (int)eRace.Dwarf || player.Race == (int)eRace.Kobold || player.Race == (int)eRace.Norseman || player.Race == (int)eRace.Troll || player.Race == (int)eRace.MidgardMinotaur)
+                    if (player!.Race == (int)eRace.Dwarf || player.Race == (int)eRace.Kobold || player.Race == (int)eRace.Norseman || player.Race == (int)eRace.Troll || player.Race == (int)eRace.MidgardMinotaur)
                     {
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "VikingTrainer.Skald.Explain", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
@@ -125,7 +125,7 @@ namespace DOL.GS.Trainer
                     }
                     return true;
                 case "Thane":
-                    if (player.Race == (int)eRace.Dwarf || player.Race == (int)eRace.Frostalf || player.Race == (int)eRace.Norseman || player.Race == (int)eRace.Troll || player.Race == (int)eRace.MidgardMinotaur || player.Race == (int)eRace.Valkyn)
+                    if (player!.Race == (int)eRace.Dwarf || player.Race == (int)eRace.Frostalf || player.Race == (int)eRace.Norseman || player.Race == (int)eRace.Troll || player.Race == (int)eRace.MidgardMinotaur || player.Race == (int)eRace.Valkyn)
                     {
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "VikingTrainer.Thane.Explain", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
@@ -136,7 +136,7 @@ namespace DOL.GS.Trainer
                     return true;
                 case "Savage":
                 case "Sauvage":
-                    if (player.Race == (int)eRace.Dwarf || player.Race == (int)eRace.Kobold || player.Race == (int)eRace.Norseman || player.Race == (int)eRace.Troll || player.Race == (int)eRace.Valkyn)
+                    if (player!.Race == (int)eRace.Dwarf || player.Race == (int)eRace.Kobold || player.Race == (int)eRace.Norseman || player.Race == (int)eRace.Troll || player.Race == (int)eRace.Valkyn)
                     {
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "VikingTrainer.Savage.Explain", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
@@ -146,7 +146,7 @@ namespace DOL.GS.Trainer
                     }
                     return true;
                 case "Valkyrie":
-                    if ((player.Race == (int)eRace.Dwarf || player.Race == (int)eRace.Valkyn || player.Race == (int)eRace.Norseman || player.Race == (int)eRace.Frostalf) && player.Gender == eGender.Female)
+                    if ((player!.Race == (int)eRace.Dwarf || player.Race == (int)eRace.Valkyn || player.Race == (int)eRace.Norseman || player.Race == (int)eRace.Frostalf) && player.Gender == eGender.Female)
                     {
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "VikingTrainer.Valkyrie.Explain", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
@@ -157,7 +157,7 @@ namespace DOL.GS.Trainer
                     return true;
                 case "Mauler":
                 case "Kan-Laresh":
-                    if (player.Race == (int)eRace.Kobold || player.Race == (int)eRace.Norseman || player.Race == (int)eRace.Troll || player.Race == (int)eRace.MidgardMinotaur)
+                    if (player!.Race == (int)eRace.Kobold || player.Race == (int)eRace.Norseman || player.Race == (int)eRace.Troll || player.Race == (int)eRace.MidgardMinotaur)
                     {
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Baseclass.Mauler.Explain", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
@@ -168,14 +168,14 @@ namespace DOL.GS.Trainer
                     return true;
                 case "practice weapon":
                 case "arme d'entraînement":
-                    if (player.Inventory.CountItemTemplate(PRACTICE_WEAPON_ID, eInventorySlot.Min_Inv, eInventorySlot.Max_Inv) == 0)
+                    if (player!.Inventory.CountItemTemplate(PRACTICE_WEAPON_ID, eInventorySlot.Min_Inv, eInventorySlot.Max_Inv) == 0)
                     {
                         player.ReceiveItem(this, PRACTICE_WEAPON_ID, eInventoryActionType.Other);
                     }
                     return true;
                 case "training shield":
                 case "bouclier d'entraînement":
-                    if (player.Inventory.CountItemTemplate(PRACTICE_SHIELD_ID, eInventorySlot.Min_Inv, eInventorySlot.Max_Inv) == 0)
+                    if (player!.Inventory.CountItemTemplate(PRACTICE_SHIELD_ID, eInventorySlot.Min_Inv, eInventorySlot.Max_Inv) == 0)
                     {
                         player.ReceiveItem(this, PRACTICE_SHIELD_ID, eInventoryActionType.Other);
                     }

@@ -98,12 +98,12 @@ namespace DOL.GS.Trainer
                 {
                     case "House of Modi":
                     case "Panthéon de Modi":
-                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "BerserkerTrainer.Interact.Text4", this.Name, player.GetName(0, false), player.CharacterClass.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player!.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "BerserkerTrainer.Interact.Text4", this.Name, player.GetName(0, false), player.CharacterClass.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                         break;
 
                     case "sword":
                     case "épée":
-                        PromotePlayer(player, (int)eCharacterClass.Berserker, LanguageMgr.GetTranslation(player.Client.Account.Language, "BerserkerTrainer.WhisperReceive.Text1", player.GetName(0, false)), null);
+                        PromotePlayer(player, (int)eCharacterClass.Berserker, LanguageMgr.GetTranslation(player!.Client.Account.Language, "BerserkerTrainer.WhisperReceive.Text1", player.GetName(0, false)), null);
                         player.ReceiveItem(this, WEAPON_ID1, eInventoryActionType.Other);
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "BerserkerTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                         player.ReceiveItem(this, ARMOR_ID1, eInventoryActionType.Other);
@@ -111,7 +111,7 @@ namespace DOL.GS.Trainer
 
                     case "hammer":
                     case "marteau":
-                        PromotePlayer(player, (int)eCharacterClass.Berserker, LanguageMgr.GetTranslation(player.Client.Account.Language, "BerserkerTrainer.WhisperReceive.Text2", player.GetName(0, false)), null);
+                        PromotePlayer(player, (int)eCharacterClass.Berserker, LanguageMgr.GetTranslation(player!.Client.Account.Language, "BerserkerTrainer.WhisperReceive.Text2", player.GetName(0, false)), null);
                         player.ReceiveItem(this, WEAPON_ID2, eInventoryActionType.Other);
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "BerserkerTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                         player.ReceiveItem(this, ARMOR_ID1, eInventoryActionType.Other);
@@ -119,7 +119,7 @@ namespace DOL.GS.Trainer
 
                     case "axe":
                     case "hache":
-                        PromotePlayer(player, (int)eCharacterClass.Berserker, LanguageMgr.GetTranslation(player.Client.Account.Language, "BerserkerTrainer.WhisperReceive.Text3", player.GetName(0, false)), null);
+                        PromotePlayer(player, (int)eCharacterClass.Berserker, LanguageMgr.GetTranslation(player!.Client.Account.Language, "BerserkerTrainer.WhisperReceive.Text3", player.GetName(0, false)), null);
                         player.ReceiveItem(this, WEAPON_ID3, eInventoryActionType.Other);
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "BerserkerTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                         player.ReceiveItem(this, ARMOR_ID1, eInventoryActionType.Other);
@@ -127,7 +127,7 @@ namespace DOL.GS.Trainer
 
                     case "left axe":
                     case "hache main gauche":
-                        PromotePlayer(player, (int)eCharacterClass.Berserker, LanguageMgr.GetTranslation(player.Client.Account.Language, "BerserkerTrainer.WhisperReceive.Text4", player.GetName(0, false)), null);
+                        PromotePlayer(player, (int)eCharacterClass.Berserker, LanguageMgr.GetTranslation(player!.Client.Account.Language, "BerserkerTrainer.WhisperReceive.Text4", player.GetName(0, false)), null);
                         player.ReceiveItem(this, WEAPON_ID4, eInventoryActionType.Other);
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "BerserkerTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                         player.ReceiveItem(this, ARMOR_ID1, eInventoryActionType.Other);
@@ -149,7 +149,7 @@ namespace DOL.GS.Trainer
 
             GamePlayer player = source as GamePlayer;
 
-            if (player.Level >= 10 && player.Level < 15 && item.Id_nb == ARMOR_ID1)
+            if (player!.Level >= 10 && player.Level < 15 && item.Id_nb == ARMOR_ID1)
             {
                 player.Inventory.RemoveCountFromStack(item, 1);
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "BerserkerTrainer.ReceiveArmor.Text2", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);

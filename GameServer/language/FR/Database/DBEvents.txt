@@ -7,3 +7,10 @@ Languages.DBEvents.0005RandomText1:		Un grondement sourd s'échappe des profonde
 Languages.DBEvents.0005RandomText2:		Des lamentations étranges se font entendre à travers bois...
 Languages.DBEvents.0005RemainingTimeText:	Les Aspirateurs d'âme semblent perdre de leur consistance!
 Languages.DBEvents.0005EndText:			Les Aspirateurs d'âme s'en retournent dans les limbes.
+
+Languages.DBEvents.0054DebutText:		Apparition des Funestes
+Languages.DBEvents.0054RemainingTimeText:	Les Funestes semblent perdre de leur consistance!
+Languages.DBEvents.0054EndText:			Les Funestes s'en sont allés dans les limbes
+Languages.DBEvents.0055DebutText:		Apparition du General Arkos
+Languages.DBEvents.0055RemainingTimeText:	General Arkos semble perdre de sa consistance!
+Languages.DBEvents.0055EndText:			General Arkos s'en est allé dans les limbes

@@ -1085,6 +1085,12 @@ namespace DOL.GS
                 skillsToCheck.Add(eProperty.Skill_Death_Servant);
                 skillsToCheck.Add(eProperty.Skill_Pain_working);
             }
+            if (prop == eProperty.Skill_Wraithsight || prop == eProperty.Skill_Void_Acolyte || prop == eProperty.Skill_Tormentshaper)
+            {
+                skillsToCheck.Add(eProperty.Skill_Wraithsight);
+                skillsToCheck.Add(eProperty.Skill_Void_Acolyte);
+                skillsToCheck.Add(eProperty.Skill_Tormentshaper);
+            }
             if (prop == eProperty.Skill_Light || prop == eProperty.Skill_Mana || prop == eProperty.Skill_Void || prop == eProperty.Skill_Enchantments || prop == eProperty.Skill_Mentalism)
             {
                 skillsToCheck.Add(eProperty.Skill_Light);
@@ -1174,6 +1180,7 @@ namespace DOL.GS
                 case eCharacterClass.Theurgist:
                 case eCharacterClass.Wizard:
                 case eCharacterClass.Necromancer:
+                case eCharacterClass.WraithSummonerAlb:
                 case eCharacterClass.Eldritch:
                 case eCharacterClass.Enchanter:
                 case eCharacterClass.Mentalist:
@@ -1498,6 +1505,19 @@ namespace DOL.GS
                     if (property == eProperty.Skill_DeathSight ||
                         property == eProperty.Skill_Death_Servant ||
                         property == eProperty.Skill_Pain_working ||
+                        property == eProperty.Focus_Earth ||
+                        property == eProperty.Focus_Cold ||
+                        property == eProperty.Focus_Air ||
+                        property == eProperty.AllFocusLevels ||
+                        property == eProperty.AllMagicSkills ||
+                        property == eProperty.AllSkills
+                        )
+                        return true;
+                    return false;
+                case eCharacterClass.WraithSummonerAlb:
+                    if (property == eProperty.Skill_Tormentshaper ||
+                        property == eProperty.Skill_Wraithsight ||
+                        property == eProperty.Skill_Void_Acolyte ||
                         property == eProperty.Focus_Earth ||
                         property == eProperty.Focus_Cold ||
                         property == eProperty.Focus_Air ||
@@ -2107,6 +2127,11 @@ namespace DOL.GS
                 case eProperty.Skill_Pain_working:
                     if (charClass != eCharacterClass.Necromancer) { return false; }
                     goto case eProperty.Skill_Witchcraft;
+                case eProperty.Skill_Void_Acolyte:
+                case eProperty.Skill_Wraithsight:
+                case eProperty.Skill_Tormentshaper:
+                    if (charClass != eCharacterClass.WraithSummonerAlb) { return false; }
+                    goto case eProperty.Skill_Witchcraft;
 
                 case eProperty.Skill_Summoning:
                     if (charClass != eCharacterClass.Spiritmaster) { return false; }
@@ -2528,6 +2553,7 @@ namespace DOL.GS
                         if (charClass != eCharacterClass.Cabalist && //albion
                             charClass != eCharacterClass.Cleric &&
                             charClass != eCharacterClass.Necromancer &&
+                            charClass != eCharacterClass.WraithSummonerAlb &&
                             charClass != eCharacterClass.Sorcerer &&
                             charClass != eCharacterClass.Theurgist &&
                             charClass != eCharacterClass.Wizard &&
@@ -2795,6 +2821,11 @@ namespace DOL.GS
                 case eProperty.Skill_DeathSight:
                 case eProperty.Skill_Pain_working:
                     if (charClass != eCharacterClass.Necromancer) { return false; }
+                    goto case eProperty.Skill_Witchcraft;
+                case eProperty.Skill_Void_Acolyte:
+                case eProperty.Skill_Wraithsight:
+                case eProperty.Skill_Tormentshaper:
+                    if (charClass != eCharacterClass.WraithSummonerAlb) { return false; }
                     goto case eProperty.Skill_Witchcraft;
 
                 case eProperty.Skill_Summoning:
@@ -3546,6 +3577,7 @@ namespace DOL.GS
                         if (charClass != eCharacterClass.Cabalist && //albion
                             charClass != eCharacterClass.Cleric &&
                             charClass != eCharacterClass.Necromancer &&
+                            charClass != eCharacterClass.WraithSummonerAlb &&
                             charClass != eCharacterClass.Sorcerer &&
                             charClass != eCharacterClass.Theurgist &&
                             charClass != eCharacterClass.Wizard &&
@@ -3715,6 +3747,11 @@ namespace DOL.GS
                 case eProperty.Skill_DeathSight:
                 case eProperty.Skill_Pain_working:
                     if (charClass != eCharacterClass.Necromancer) { return false; }
+                    goto case eProperty.Skill_Witchcraft;
+                case eProperty.Skill_Void_Acolyte:
+                case eProperty.Skill_Wraithsight:
+                case eProperty.Skill_Tormentshaper:
+                    if (charClass != eCharacterClass.WraithSummonerAlb) { return false; }
                     goto case eProperty.Skill_Witchcraft;
 
                 case eProperty.Skill_Summoning:
@@ -4298,6 +4335,7 @@ namespace DOL.GS
                         if (charClass != eCharacterClass.Cabalist && //albion
                             charClass != eCharacterClass.Cleric &&
                             charClass != eCharacterClass.Necromancer &&
+                            charClass != eCharacterClass.WraithSummonerAlb &&
                             charClass != eCharacterClass.Sorcerer &&
                             charClass != eCharacterClass.Theurgist &&
                             charClass != eCharacterClass.Wizard &&
@@ -5717,6 +5755,7 @@ namespace DOL.GS
                 //staff classes
                 case eCharacterClass.Cabalist:
                 case eCharacterClass.Necromancer:
+                case eCharacterClass.WraithSummonerAlb:
                 case eCharacterClass.Sorcerer:
                 case eCharacterClass.Theurgist:
                 case eCharacterClass.Wizard:
@@ -5837,6 +5876,7 @@ namespace DOL.GS
                 //staff classes
                 case eCharacterClass.Cabalist:
                 case eCharacterClass.Necromancer:
+                case eCharacterClass.WraithSummonerAlb:
                 case eCharacterClass.Sorcerer:
                 case eCharacterClass.Theurgist:
                 case eCharacterClass.Wizard:
@@ -11220,6 +11260,9 @@ namespace DOL.GS
             eProperty.Skill_Stealth,
             eProperty.Skill_Thrusting,
             eProperty.Skill_Wind,
+            eProperty.Skill_Tormentshaper,
+            eProperty.Skill_Wraithsight,
+            eProperty.Skill_Void_Acolyte,
             //eProperty.Skill_Aura_Manipulation, //Maulers
             //eProperty.Skill_FistWraps, //Maulers
             //eProperty.Skill_MaulerStaff, //Maulers
@@ -11494,6 +11537,9 @@ namespace DOL.GS
             hPropertyToMagicPrefix.Add(eProperty.Skill_Stealth, "Shadowwalker");
             hPropertyToMagicPrefix.Add(eProperty.Skill_Thrusting, "Perforator");
             hPropertyToMagicPrefix.Add(eProperty.Skill_Wind, "Airy");
+            hPropertyToMagicPrefix.Add(eProperty.Skill_Tormentshaper, "Tormentbound");
+            hPropertyToMagicPrefix.Add(eProperty.Skill_Wraithsight, "Wraithbound");
+            hPropertyToMagicPrefix.Add(eProperty.Skill_Void_Acolyte, "Void Binder");
 
 
             hPropertyToMagicPrefix.Add(eProperty.AllMagicSkills, "Mystical");

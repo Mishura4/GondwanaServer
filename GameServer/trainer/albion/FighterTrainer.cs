@@ -95,7 +95,7 @@ namespace DOL.GS.Trainer
             {
                 case "Armsman":
                 case "Maître d'armes":
-                    if (player.Race == (int)eRace.Avalonian || player.Race == (int)eRace.Briton || player.Race == (int)eRace.HalfOgre || player.Race == (int)eRace.Highlander || player.Race == (int)eRace.Inconnu || player.Race == (int)eRace.Saracen || player.Race == (int)eRace.AlbionMinotaur)
+                    if (player!.Race == (int)eRace.Avalonian || player.Race == (int)eRace.Briton || player.Race == (int)eRace.HalfOgre || player.Race == (int)eRace.Highlander || player.Race == (int)eRace.Inconnu || player.Race == (int)eRace.Saracen || player.Race == (int)eRace.AlbionMinotaur)
                     {
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "FighterTrainer.Armsman.Explain", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
@@ -106,7 +106,7 @@ namespace DOL.GS.Trainer
                     return true;
                 case "Mercenary":
                 case "Mercenaire":
-                    if (player.Race == (int)eRace.Avalonian || player.Race == (int)eRace.Briton || player.Race == (int)eRace.HalfOgre || player.Race == (int)eRace.Highlander || player.Race == (int)eRace.Inconnu || player.Race == (int)eRace.Saracen || player.Race == (int)eRace.AlbionMinotaur)
+                    if (player!.Race == (int)eRace.Avalonian || player.Race == (int)eRace.Briton || player.Race == (int)eRace.HalfOgre || player.Race == (int)eRace.Highlander || player.Race == (int)eRace.Inconnu || player.Race == (int)eRace.Saracen || player.Race == (int)eRace.AlbionMinotaur)
                     {
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "FighterTrainer.Mercenary.Explain", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
@@ -116,7 +116,7 @@ namespace DOL.GS.Trainer
                     }
                     return true;
                 case "Paladin":
-                    if (player.Race == (int)eRace.Avalonian || player.Race == (int)eRace.Briton || player.Race == (int)eRace.Highlander || player.Race == (int)eRace.Saracen)
+                    if (player!.Race == (int)eRace.Avalonian || player.Race == (int)eRace.Briton || player.Race == (int)eRace.Highlander || player.Race == (int)eRace.Saracen)
                     {
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "FighterTrainer.Paladin.Explain", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
@@ -127,7 +127,7 @@ namespace DOL.GS.Trainer
                     return true;
                 case "Reaver":
                 case "Fléau d'Arawn":
-                    if (player.Race == (int)eRace.Inconnu || player.Race == (int)eRace.Briton || player.Race == (int)eRace.AlbionMinotaur || player.Race == (int)eRace.Saracen)
+                    if (player!.Race == (int)eRace.Inconnu || player.Race == (int)eRace.Briton || player.Race == (int)eRace.AlbionMinotaur || player.Race == (int)eRace.Saracen)
                     {
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "FighterTrainer.Reaver.Explain", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
@@ -138,7 +138,7 @@ namespace DOL.GS.Trainer
                     return true;
                 case "Mauler":
                 case "Kan-Laresh":
-                    if (player.Race == (int)eRace.Inconnu || player.Race == (int)eRace.Briton || player.Race == (int)eRace.AlbionMinotaur || player.Race == (int)eRace.HalfOgre)
+                    if (player!.Race == (int)eRace.Inconnu || player.Race == (int)eRace.Briton || player.Race == (int)eRace.AlbionMinotaur || player.Race == (int)eRace.HalfOgre)
                     {
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "Baseclass.Mauler.Explain", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
@@ -149,14 +149,14 @@ namespace DOL.GS.Trainer
                     return true;                    
                 case "practice weapon":
                 case "arme d'entraînement":
-                    if (player.Inventory.CountItemTemplate(PRACTICE_WEAPON_ID, eInventorySlot.Min_Inv, eInventorySlot.Max_Inv) == 0)
+                    if (player!.Inventory.CountItemTemplate(PRACTICE_WEAPON_ID, eInventorySlot.Min_Inv, eInventorySlot.Max_Inv) == 0)
                     {
                         player.ReceiveItem(this, PRACTICE_WEAPON_ID, eInventoryActionType.Other);
                     }
                     return true;
                 case "training shield":
                 case "bouclier d'entraînement":
-                    if (player.Inventory.CountItemTemplate(PRACTICE_SHIELD_ID, eInventorySlot.Min_Inv, eInventorySlot.Max_Inv) == 0)
+                    if (player!.Inventory.CountItemTemplate(PRACTICE_SHIELD_ID, eInventorySlot.Min_Inv, eInventorySlot.Max_Inv) == 0)
                     {
                         player.ReceiveItem(this, PRACTICE_SHIELD_ID, eInventoryActionType.Other);
                     }

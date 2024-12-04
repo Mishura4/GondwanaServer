@@ -23,7 +23,7 @@ using System.Collections.Generic;
 namespace DOL.GS.PlayerClass
 {
     [CharacterClass((int)eCharacterClass.WraithSummonerAlb, "WraithSummoner", "Disciple")]
-    public class ClassWraithSummonerAlb : CharacterClassNecromancer
+    public class ClassWraithSummonerAlb : CharacterClassWraithSummoner
     {
         private static readonly List<PlayerRace> DefaultEligibleRaces = new()
         {

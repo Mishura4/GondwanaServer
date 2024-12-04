@@ -86,7 +86,7 @@ namespace DOL.GS.Trainer
             if (!base.WhisperReceive(source, text)) return false;
             GamePlayer player = source as GamePlayer;
 
-            switch (text.ToLower())
+            switch (text)
             {
                 case "Temple of Shadows":
                 case "Temple des Ombres":

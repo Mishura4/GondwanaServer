@@ -847,7 +847,7 @@ namespace DOL.GS
         DamnationEffectEnhancement = 268,
         #endregion
 
-        #region New Skills
+        #region New Skills & Focus
         Skill_Learning = 270,
         Skill_BlueMage1 = 271,
         Skill_BlueMage2 = 272,
@@ -855,15 +855,15 @@ namespace DOL.GS
         Skill_RedMage1 = 274,
         Skill_RedMage2 = 275,
         Skill_RedMage3 = 276,
-        Skill_Geomancer1 = 277,
-        Skill_Geomancer2 = 278,
-        Skill_Geomancer3 = 279,
-        Skill_Reaper1 = 280,
-        Skill_Reaper2 = 281,
-        Skill_Reaper3 = 282,
-        Skill_WraithSummoner1 = 283,
-        Skill_WraithSummoner2 = 284,
-        Skill_WraithSummoner3 = 285,
+        Skill_Tormentshaper = 277,
+        Skill_Wraithsight = 278,
+        Skill_Void_Acolyte = 279,
+        Skill_Geomancer1 = 280,
+        Skill_Geomancer2 = 281,
+        Skill_Geomancer3 = 282,
+        Skill_Reaper1 = 283,
+        Skill_Reaper2 = 284,
+        Skill_Reaper3 = 285,
         Skill_Corsair1 = 286,
         Skill_Corsair2 = 287,
         Skill_Corsair3 = 288,
@@ -888,7 +888,11 @@ namespace DOL.GS
         Skill_ElementalKnight1 = 307,
         Skill_ElementalKnight2 = 308,
         Skill_ElementalKnight3 = 309,
-        MaxProperty = 310
+
+        Focus_Tormentshaper = 310,
+        Focus_Wraithsight = 311,
+        Focus_Void_Acolyte = 312,
+        MaxProperty = 313
         #endregion
     }
 
@@ -2058,6 +2062,9 @@ namespace DOL.GS
                 case Specs.Mauler_Staff: return 0x94;
                 case Specs.SpectralGuard: return 0x95;
                 case Specs.Archery: return 0x9B;
+                case Specs.Tormentshaper: return 0x9C;
+                case Specs.Wraithsight: return 0x9D;
+                case Specs.Void_Acolyte: return 0x9E;
                 default: return 0;
             }
         }

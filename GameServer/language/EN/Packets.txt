@@ -209,5 +209,19 @@ PlayerPositionUpdateHandler.MythSafeFall:		The damage was lessened by your equip
 PlayerPositionUpdateHandler.CloudsongFall:		Your weight, as light as a feather, greatly diminished the impact!
 PlayerPositionUpdateHandler.UnknownZone:		Unknown zone, moving to bind point.
 
+# /PlayerTrainRequestHandler
+PlayerTrainRequestHandler.MustSelectValidTrainer:			You must select a valid trainer for your class.
+PlayerTrainRequestHandler.AlreadyHaveAbility:				You already have that ability!
+PlayerTrainRequestHandler.DoNotMeetRequirements:			You do not meet the requirements for that ability!
+PlayerTrainRequestHandler.NotEnoughChampionPoints:			You do not have enough champion specialty points for that ability!
+PlayerTrainRequestHandler.CouldNotFindChampionSpec:			Could not find Champion Spec!
+PlayerTrainRequestHandler.CantTrainSpecAgainThisLevel:		You can't train in this specialization again this level!
+PlayerTrainRequestHandler.SpecializationCostsPoints:		That specialization costs {0} specialization points!
+PlayerTrainRequestHandler.NotEnoughSpecPoints:				You don't have that many specialization points left for this level.
+PlayerTrainRequestHandler.RealmAbilityCostsPoints:			{0} costs {1} realm ability points!
+PlayerTrainRequestHandler.NotEnoughRealmAbilityPoints:		You don't have that many realm ability points left to get this.
+PlayerTrainRequestHandler.NotExperiencedEnoughForAbility:	You are not experienced enough to get {0} now. Come back later.
+PlayerTrainRequestHandler.TrainingFailed:					Unfortunately your training failed. Please report that to admins or game master. Thank you.
+
 # /PlayerTargetHandler
 PlayerTargetHandler.Gravestone:				You are no longer targetting your grave. Your prayers fail.

@@ -713,7 +713,7 @@ Baseclass.Mauler.Refuse:		{0} dit, "La voie du Kan-Laresh n'est pas disponible p
 ## MasterTrainer
 MasterTrainer.Interact.Acolyte1:		{0} dit, "Voici les voies d'entraînement qu'il vous est possible de poursuivre : [Clerc], [Hérétique], ou [Moine]."
 MasterTrainer.Interact.AlbionRogue1:	{0} dit, "Voici les voies d'entraînement qu'il vous est possible de poursuivre : [Sicaire], [Ménestrel], ou [Éclaireur]."
-MasterTrainer.Interact.Disciple1:		{0} dit, "Voici les voies d'entraînement qu'il vous est possible de poursuivre : [Prêtre d'Arawn]."
+MasterTrainer.Interact.Disciple1:		{0} dit, "Voici les voies d'entraînement qu'il vous est possible de poursuivre : [Prêtre d'Arawn] ou [Conjurateur des Ombres]."
 MasterTrainer.Interact.Elementalist1:	{0} dit, "Voici les voies d'entraînement qu'il vous est possible de poursuivre : [Théurgiste] ou [Thaumaturge]."
 MasterTrainer.Interact.Fighter1:		{0} dit, "Voici les voies d'entraînement qu'il vous est possible de poursuivre : [Maître d'armes], [Paladin], [Mercenaire], [Fléau d'Arawn] ou [Kan-Laresh]."
 MasterTrainer.Interact.Mage1:			{0} dit, "Voici les voies d'entraînement qu'il vous est possible de poursuivre : [Cabaliste] ou [Sorcier]."

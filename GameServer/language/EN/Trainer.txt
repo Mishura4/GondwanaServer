@@ -712,7 +712,7 @@ Baseclass.Mauler.Refuse:		{0} says, "The path of the Mauler is not available to 
 ## MasterTrainer
 MasterTrainer.Interact.Acolyte1:		{0} says, "Here are the training paths you can follow: [Cleric], [Heretic], or [Friar]."
 MasterTrainer.Interact.AlbionRogue1:	{0} says, "Here are the training paths you can follow: [Infiltrator], [Minstrel], or [Scout]."
-MasterTrainer.Interact.Disciple1:		{0} says, "Here are the training paths you can follow: [Necromancer]."
+MasterTrainer.Interact.Disciple1:		{0} says, "Here are the training paths you can follow: [Necromancer] or [WraithSummoner]."
 MasterTrainer.Interact.Elementalist1:	{0} says, "Here are the training paths you can follow: [Theurgist] or [Wizard]."
 MasterTrainer.Interact.Fighter1:		{0} says, "Here are the training paths you can follow: [Armsman], [Paladin], [Mercenary], [Reaver] or [Mauler]"
 MasterTrainer.Interact.Mage1:			{0} says, "Here are the training paths you can follow: [Cabalist] or [Sorcerer]."

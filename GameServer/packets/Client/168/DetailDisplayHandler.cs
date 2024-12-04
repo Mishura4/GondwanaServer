@@ -41,7 +41,7 @@ namespace DOL.GS.PacketHandler.Client.v168
         /// <summary>
         /// Defines a logger for this class.
         /// </summary>
-        protected static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        protected static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
         public void HandlePacket(GameClient client, GSPacketIn packet)
         {
@@ -137,7 +137,7 @@ namespace DOL.GS.PacketHandler.Client.v168
                         // Delve() and you're done, spells, charges and everything else.
 
                         // Let the player class create the appropriate item to delve
-                        caption = invItem.Name;
+                        caption = invItem!.Name;
 
                         if (client.Player.DelveItem(invItem, objectInfo))
                             break;
@@ -765,7 +765,7 @@ namespace DOL.GS.PacketHandler.Client.v168
                         if (client.TrainerSkillCache != null)
                         {
                             // Search Id
-                            sk = client.TrainerSkillCache.SelectMany(el => el.Item2).Where(e => ((objectType == 23 && e.Item2 == objectId && e.Item1 == 5) || (e.Item2 == objectId && e.Item1 != 5))).OrderBy(e => e.Item1).FirstOrDefault().Item3;
+                            sk = client.TrainerSkillCache.SelectMany(el => el.Item2).Where(e => ((objectType == 23 && e.Item2 == objectId && e.Item1 == 5) || (e.Item2 == objectId && e.Item1 != 5))).OrderBy(e => e.Item1).FirstOrDefault()!.Item3;
                         }
 
                         if (sk == null) return;
@@ -880,7 +880,7 @@ namespace DOL.GS.PacketHandler.Client.v168
                                 {
                                     if (skill is Spell spell)
                                     {
-                                        SpellLine spellLine = clspec.GetSpellLinesForLiving(client.Player).FirstOrDefault();
+                                        SpellLine spellLine = clspec!.GetSpellLinesForLiving(client.Player).FirstOrDefault();
                                         if (spellLine != null)
                                         {
                                             caption = skill.Name;

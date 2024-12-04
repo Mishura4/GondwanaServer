@@ -124,7 +124,7 @@ namespace DOL.GS.Trainer
 
             GamePlayer player = source as GamePlayer;
 
-            if (player.Level >= 10 && player.Level < 15 && item.Id_nb == ARMOR_ID1)
+            if (player!.Level >= 10 && player.Level < 15 && item.Id_nb == ARMOR_ID1)
             {
                 player.Inventory.RemoveCountFromStack(item, 1);
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "VampiirTrainer.ReceiveArmor.Text2", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);

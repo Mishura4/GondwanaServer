@@ -2,28 +2,25 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Collections;
-using System.Reflection;
-using System.Threading;
-using DOL.Events;
-using DOL.GS.PacketHandler;
-using log4net;
+using DOL.Language;
 using DOL.Database;
 
 namespace DOL.GS.Commands
 {
-    [Cmd("&switch", ePrivLevel.Player,
-        "Equip Weapons from bag. (/switch 1h 1, will replace ur mainhand weapon with the first slot in ur backpack)",
-        "/switch 1h <slot>",
-        "/switch offhand <slot>",
-        "/switch 2h <slot>",
-        "/switch range <slot>")]
+    [Cmd("&switch",
+        ePrivLevel.Player,
+        "Commands.Players.SwitchCommand.Usage",
+        "Commands.Players.SwitchCommand.1h",
+        "Commands.Players.SwitchCommand.Offhand",
+        "Commands.Players.SwitchCommand.2h",
+        "Commands.Players.SwitchCommand.Range")]
     public class SwitchCommandHandler : AbstractCommandHandler, ICommandHandler
     {
         public void OnCommand(GameClient client, string[] args)
         {
-            if (args.Length < 2)
+            if (args.Length < 3)
             {
+                DisplayMessage(client, LanguageMgr.GetTranslation(client, "Commands.Players.SwitchCommand.SelectSlot"));
                 DisplaySyntax(client);
                 return;
             }
@@ -33,54 +30,70 @@ namespace DOL.GS.Commands
             switch (args[1])
             {
                 case "1h":
+                case "1main":
                     ToSlot = eInventorySlot.RightHandWeapon;
                     break;
                 case "2h":
+                case "2mains":
                     ToSlot = eInventorySlot.TwoHandWeapon;
                     break;
                 case "offhand":
+                case "maingauche":
                     ToSlot = eInventorySlot.LeftHandWeapon;
                     break;
                 case "range":
+                case "distance":
                     ToSlot = eInventorySlot.DistanceWeapon;
                     break;
             }
 
-            //The first backpack.
-            int FromSlot = 40;
+            int fromSlot;
 
-            if (int.TryParse(args[2], out FromSlot))
+            if (int.TryParse(args[2], out fromSlot))
             {
-                FromSlot = int.Parse(args[2]);
-                SwitchItem(client.Player, ToSlot, (eInventorySlot)FromSlot + 39);
+                if (fromSlot < 1 || fromSlot > 40)
+                {
+                    DisplayMessage(client, LanguageMgr.GetTranslation(client, "Commands.Players.SwitchCommand.InvalidSlot"));
+                    DisplaySyntax(client);
+                    return;
+                }
+
+                SwitchItem(client.Player, ToSlot, (eInventorySlot)(fromSlot + (int)eInventorySlot.FirstBackpack - 1));
             }
             else
             {
-                DisplayMessage(client, "There seems to have been a problem. Please try again.");
+                DisplayMessage(client, LanguageMgr.GetTranslation(client, "Commands.Players.SwitchCommand.InvalidSlotNumber"));
                 DisplaySyntax(client);
                 return;
             }
-
         }
+
         public void SwitchItem(GamePlayer player, eInventorySlot ToSlot, eInventorySlot FromSlot)
         {
-            if (player.Inventory.GetItem(FromSlot) != null)
-            {
-                InventoryItem item = player.Inventory.GetItem(FromSlot);
+            InventoryItem item = player.Inventory.GetItem(FromSlot);
 
+            if (item != null)
+            {
                 if (!GlobalConstants.IsWeapon(item.Object_Type))
                 {
-                    DisplayMessage(player.Client, "That is not a weapon!");
+                    DisplayMessage(player.Client, LanguageMgr.GetTranslation(player.Client, "Commands.Players.SwitchCommand.NotAWeapon"));
                     DisplaySyntax(player.Client);
                     return;
                 }
 
                 if (!player.Inventory.MoveItem(FromSlot, ToSlot, 1))
                 {
-                    DisplayMessage(player.Client, "There seems to have been a problem. Please try again.");
+                    DisplayMessage(player.Client, LanguageMgr.GetTranslation(player.Client, "Commands.Players.SwitchCommand.InvalidType"));
                     DisplaySyntax(player.Client);
                     return;
                 }
+
+                DisplayMessage(player.Client, LanguageMgr.GetTranslation(player.Client, "Commands.Players.SwitchCommand.SwitchSuccess", item.Name));
+            }
+            else
+            {
+                DisplayMessage(player.Client, LanguageMgr.GetTranslation(player.Client, "Commands.Players.SwitchCommand.NoItemInSlot"));
+                DisplaySyntax(player.Client);
             }
         }
     }

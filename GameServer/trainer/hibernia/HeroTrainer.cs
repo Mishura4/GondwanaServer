@@ -100,12 +100,12 @@ namespace DOL.GS.Trainer
                 {
                     case "Path of Focus":
                     case "Voie des Anciens":
-                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "HeroTrainer.Interact.Text4", this.Name, player.GetName(0, false), player.CharacterClass.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player!.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "HeroTrainer.Interact.Text4", this.Name, player.GetName(0, false), player.CharacterClass.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                         break;
 
                     case "blades":
                     case "épées":
-                        PromotePlayer(player, (int)eCharacterClass.Hero, LanguageMgr.GetTranslation(player.Client.Account.Language, "HeroTrainer.WhisperReceive.Text1", player.GetName(0, false)), null);
+                        PromotePlayer(player, (int)eCharacterClass.Hero, LanguageMgr.GetTranslation(player!.Client.Account.Language, "HeroTrainer.WhisperReceive.Text1", player.GetName(0, false)), null);
                         player.ReceiveItem(this, WEAPON_ID1, eInventoryActionType.Other);
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "HeroTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                         player.ReceiveItem(this, ARMOR_ID1, eInventoryActionType.Other);
@@ -113,7 +113,7 @@ namespace DOL.GS.Trainer
 
                     case "blunt":
                     case "contondante":
-                        PromotePlayer(player, (int)eCharacterClass.Hero, LanguageMgr.GetTranslation(player.Client.Account.Language, "HeroTrainer.WhisperReceive.Text2", player.GetName(0, false)), null);
+                        PromotePlayer(player, (int)eCharacterClass.Hero, LanguageMgr.GetTranslation(player!.Client.Account.Language, "HeroTrainer.WhisperReceive.Text2", player.GetName(0, false)), null);
                         player.ReceiveItem(this, WEAPON_ID2, eInventoryActionType.Other);
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "HeroTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                         player.ReceiveItem(this, ARMOR_ID1, eInventoryActionType.Other);
@@ -121,7 +121,7 @@ namespace DOL.GS.Trainer
 
                     case "piercing":
                     case "perforante":
-                        PromotePlayer(player, (int)eCharacterClass.Hero, LanguageMgr.GetTranslation(player.Client.Account.Language, "HeroTrainer.WhisperReceive.Text3", player.GetName(0, false)), null);
+                        PromotePlayer(player, (int)eCharacterClass.Hero, LanguageMgr.GetTranslation(player!.Client.Account.Language, "HeroTrainer.WhisperReceive.Text3", player.GetName(0, false)), null);
                         player.ReceiveItem(this, WEAPON_ID3, eInventoryActionType.Other);
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "HeroTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                         player.ReceiveItem(this, ARMOR_ID1, eInventoryActionType.Other);
@@ -129,7 +129,7 @@ namespace DOL.GS.Trainer
 
                     case "large weapons":
                     case "grandes armes":
-                        PromotePlayer(player, (int)eCharacterClass.Hero, LanguageMgr.GetTranslation(player.Client.Account.Language, "HeroTrainer.WhisperReceive.Text4", player.GetName(0, false)), null);
+                        PromotePlayer(player, (int)eCharacterClass.Hero, LanguageMgr.GetTranslation(player!.Client.Account.Language, "HeroTrainer.WhisperReceive.Text4", player.GetName(0, false)), null);
                         player.ReceiveItem(this, WEAPON_ID4, eInventoryActionType.Other);
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "HeroTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                         player.ReceiveItem(this, ARMOR_ID1, eInventoryActionType.Other);
@@ -137,7 +137,7 @@ namespace DOL.GS.Trainer
 
                     case "celtic spear":
                     case "lance celtique":
-                        PromotePlayer(player, (int)eCharacterClass.Hero, LanguageMgr.GetTranslation(player.Client.Account.Language, "HeroTrainer.WhisperReceive.Text5", player.GetName(0, false)), null);
+                        PromotePlayer(player, (int)eCharacterClass.Hero, LanguageMgr.GetTranslation(player!.Client.Account.Language, "HeroTrainer.WhisperReceive.Text5", player.GetName(0, false)), null);
                         player.ReceiveItem(this, WEAPON_ID5, eInventoryActionType.Other);
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "HeroTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                         player.ReceiveItem(this, ARMOR_ID1, eInventoryActionType.Other);
@@ -159,7 +159,7 @@ namespace DOL.GS.Trainer
 
             GamePlayer player = source as GamePlayer;
 
-            if (player.Level >= 10 && player.Level < 15 && item.Id_nb == ARMOR_ID1)
+            if (player!.Level >= 10 && player.Level < 15 && item.Id_nb == ARMOR_ID1)
             {
                 player.Inventory.RemoveCountFromStack(item, 1);
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "HeroTrainer.ReceiveArmor.Text2", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);

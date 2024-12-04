@@ -1035,6 +1035,7 @@ namespace DOL.spells
                 case eCharacterClass.Sorcerer:
                 case eCharacterClass.Theurgist:
                 case eCharacterClass.Necromancer:
+                case eCharacterClass.WraithSummonerAlb:
                 case eCharacterClass.Cabalist:
                 case eCharacterClass.Acolyte:
                 case eCharacterClass.Spiritmaster:

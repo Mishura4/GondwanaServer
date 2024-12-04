@@ -90,7 +90,7 @@ namespace DOL.GS.Trainer
             {
                 case "Infiltrator":
                 case "Sicaire":
-                    if (player.Race == (int)eRace.Briton || player.Race == (int)eRace.Highlander || player.Race == (int)eRace.Saracen || player.Race == (int)eRace.Inconnu)
+                    if (player!.Race == (int)eRace.Briton || player.Race == (int)eRace.Highlander || player.Race == (int)eRace.Saracen || player.Race == (int)eRace.Inconnu)
                     {
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AlbionRogueTrainer.Infiltrator.Explain", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
@@ -101,7 +101,7 @@ namespace DOL.GS.Trainer
                     return true;
                 case "Minstrel":
                 case "Ménestrel":
-                    if (player.Race == (int)eRace.Briton || player.Race == (int)eRace.Saracen || player.Race == (int)eRace.Highlander || player.Race == (int)eRace.Inconnu)
+                    if (player!.Race == (int)eRace.Briton || player.Race == (int)eRace.Saracen || player.Race == (int)eRace.Highlander || player.Race == (int)eRace.Inconnu)
                     {
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AlbionRogueTrainer.Minstrel.Explain", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
@@ -112,7 +112,7 @@ namespace DOL.GS.Trainer
                     return true;
                 case "Scout":
                 case "Éclaireur":
-                    if (player.Race == (int)eRace.Briton || player.Race == (int)eRace.Saracen || player.Race == (int)eRace.Highlander || player.Race == (int)eRace.Inconnu)
+                    if (player!.Race == (int)eRace.Briton || player.Race == (int)eRace.Saracen || player.Race == (int)eRace.Highlander || player.Race == (int)eRace.Inconnu)
                     {
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "AlbionRogueTrainer.Scout.Explain", this.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                     }
@@ -123,7 +123,7 @@ namespace DOL.GS.Trainer
                     return true;
                 case "practice weapon":
                 case "arme d'entraînement":
-                    if (player.Inventory.CountItemTemplate(PRACTICE_WEAPON_ID, eInventorySlot.Min_Inv, eInventorySlot.Max_Inv) == 0)
+                    if (player!.Inventory.CountItemTemplate(PRACTICE_WEAPON_ID, eInventorySlot.Min_Inv, eInventorySlot.Max_Inv) == 0)
                     {
                         player.ReceiveItem(this, PRACTICE_WEAPON_ID, eInventoryActionType.Other);
                     }

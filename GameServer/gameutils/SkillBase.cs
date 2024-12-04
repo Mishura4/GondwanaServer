@@ -1211,6 +1211,9 @@ namespace DOL.GS
             m_specToSkill.Add(Specs.Aura_Manipulation, eProperty.Skill_Aura_Manipulation);
             m_specToSkill.Add(Specs.Magnetism, eProperty.Skill_Magnetism);
             m_specToSkill.Add(Specs.Power_Strikes, eProperty.Skill_Power_Strikes);
+            m_specToSkill.Add(Specs.Tormentshaper, eProperty.Skill_Tormentshaper);
+            m_specToSkill.Add(Specs.Wraithsight, eProperty.Skill_Wraithsight);
+            m_specToSkill.Add(Specs.Void_Acolyte, eProperty.Skill_Void_Acolyte);
 
             m_specToSkill.Add(Specs.Archery, eProperty.Skill_Archery);
 
@@ -1254,6 +1257,10 @@ namespace DOL.GS
             m_specToFocus.Add(Specs.Cursing, eProperty.Focus_Cursing);
             m_specToFocus.Add(Specs.Hexing, eProperty.Focus_Hexing);
             m_specToFocus.Add(Specs.Witchcraft, eProperty.Focus_Witchcraft);
+            // New
+            m_specToFocus.Add(Specs.Tormentshaper, eProperty.Focus_Tormentshaper);
+            m_specToFocus.Add(Specs.Wraithsight, eProperty.Focus_Wraithsight);
+            m_specToFocus.Add(Specs.Void_Acolyte, eProperty.Focus_Void_Acolyte);
         }
 
         /// <summary>
@@ -1310,6 +1317,9 @@ namespace DOL.GS
             m_propertyTypes[(int)eProperty.Focus_Cursing] = ePropertyType.Focus;
             m_propertyTypes[(int)eProperty.Focus_Hexing] = ePropertyType.Focus;
             m_propertyTypes[(int)eProperty.Focus_Witchcraft] = ePropertyType.Focus;
+            m_propertyTypes[(int)eProperty.Focus_Tormentshaper] = ePropertyType.Focus;
+            m_propertyTypes[(int)eProperty.Focus_Wraithsight] = ePropertyType.Focus;
+            m_propertyTypes[(int)eProperty.Focus_Void_Acolyte] = ePropertyType.Focus;
             m_propertyTypes[(int)eProperty.AllFocusLevels] = ePropertyType.Focus;
 
             #endregion
@@ -1361,6 +1371,9 @@ namespace DOL.GS
 
             #region Magical Skills
 
+            m_propertyTypes[(int)eProperty.Skill_Tormentshaper] = ePropertyType.Skill | ePropertyType.SkillMagical;
+            m_propertyTypes[(int)eProperty.Skill_Wraithsight] = ePropertyType.Skill | ePropertyType.SkillMagical;
+            m_propertyTypes[(int)eProperty.Skill_Void_Acolyte] = ePropertyType.Skill | ePropertyType.SkillMagical;
             m_propertyTypes[(int)eProperty.Skill_Power_Strikes] = ePropertyType.Skill | ePropertyType.SkillMagical;
             m_propertyTypes[(int)eProperty.Skill_Magnetism] = ePropertyType.Skill | ePropertyType.SkillMagical;
             m_propertyTypes[(int)eProperty.Skill_Aura_Manipulation] = ePropertyType.Skill | ePropertyType.SkillMagical;
@@ -1830,6 +1843,15 @@ namespace DOL.GS
                 case eProperty.Skill_Witchcraft:
                     return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Witchcraft");
 
+                //New skills
+                case eProperty.Skill_Learning:
+                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Learning");
+                case eProperty.Skill_Tormentshaper:
+                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Tormentshaper");
+                case eProperty.Skill_Wraithsight:
+                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Wraithsight");
+                case eProperty.Skill_Void_Acolyte:
+                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.VoidAcolyte");
 
                 // Classic Focus
                 case eProperty.Focus_Darkness:
@@ -1884,7 +1906,7 @@ namespace DOL.GS
                     return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.CreepingPathFocus");
                 case eProperty.Focus_Arboreal:
                     return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.ArborealFocus");
-                // Catacombs Focii
+                // Catacombs Focus
                 case eProperty.Focus_EtherealShriek:
                     return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.EtherealShriekFocus");
                 case eProperty.Focus_PhantasmalWail:
@@ -1897,6 +1919,13 @@ namespace DOL.GS
                     return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.HexingFocus");
                 case eProperty.Focus_Witchcraft:
                     return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.WitchcraftFocus");
+                // New Focus
+                case eProperty.Focus_Tormentshaper:
+                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.TormentshaperFocus");
+                case eProperty.Focus_Wraithsight:
+                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.WraithsightFocus");
+                case eProperty.Focus_Void_Acolyte:
+                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.VoidAcolyteFocus");
 
                 case eProperty.MaxSpeed:
                     return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MaximumSpeed");
@@ -2073,8 +2102,6 @@ namespace DOL.GS
                     return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.MythicalDebuffResistChance");
                 case eProperty.DamnationEffectEnhancement:
                     return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.DamnationEffectEnhancement");
-                case eProperty.Skill_Learning:
-                    return LanguageMgr.GetTranslation(client, "SkillBase.RegisterPropertyNames.Learning");
                 default:
                     throw new ArgumentOutOfRangeException(nameof(prop), prop, null);
             }

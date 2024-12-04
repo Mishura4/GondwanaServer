@@ -1,0 +1,12 @@
+Commands.Players.SwitchCommand.Usage:			Equip weapons from your bag. ("/switch 1h 1" will replace your mainhand weapon with the first slot in your backpack)
+Commands.Players.SwitchCommand.1h:			/switch 1h <slot>
+Commands.Players.SwitchCommand.Offhand:			/switch offhand <slot>
+Commands.Players.SwitchCommand.2h:			/switch 2h <slot>
+Commands.Players.SwitchCommand.Range:			/switch range <slot>
+Commands.Players.SwitchCommand.SelectSlot:		You must select a slot in your backpack to switch your weapon.
+Commands.Players.SwitchCommand.InvalidType:		There seems to have been a problem. Please try again.
+Commands.Players.SwitchCommand.InvalidSlot:		Invalid slot number. Please select a slot between 1 and 40.
+Commands.Players.SwitchCommand.InvalidSlotNumber:	Invalid weapon type specified.
+Commands.Players.SwitchCommand.NotAWeapon:		That is not a weapon!
+Commands.Players.SwitchCommand.SwitchSuccess:		You have successfully equipped {0}.
+Commands.Players.SwitchCommand.NoItemInSlot:		There is no item in the specified slot.

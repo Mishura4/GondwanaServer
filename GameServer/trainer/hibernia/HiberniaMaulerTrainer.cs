@@ -93,12 +93,12 @@ namespace DOL.GS.Trainer
                     // Mauler_Hib = 62
                     case "Temple of the Iron Fist":
                     case "Temple de la Main de Fer":
-                        player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MaulerHibTrainer.Interact.Text4", this.Name, player.CharacterClass.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
+                        player!.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MaulerHibTrainer.Interact.Text4", this.Name, player.CharacterClass.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                         break;
 
                     case "staff":
                     case "bâton":
-                        PromotePlayer(player, (int)eCharacterClass.MaulerHib, LanguageMgr.GetTranslation(player.Client.Account.Language, "MaulerHibTrainer.WhisperReceive.Text1", player.GetName(0, false)), null);
+                        PromotePlayer(player, (int)eCharacterClass.MaulerHib, LanguageMgr.GetTranslation(player!.Client.Account.Language, "MaulerHibTrainer.WhisperReceive.Text1", player.GetName(0, false)), null);
                         player.ReceiveItem(this, WEAPON_ID1, eInventoryActionType.Other);
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MaulerHibTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
                         player.ReceiveItem(this, ARMOR_ID1, eInventoryActionType.Other);
@@ -106,7 +106,7 @@ namespace DOL.GS.Trainer
 
                     case "fists":
                     case "poings":
-                        PromotePlayer(player, (int)eCharacterClass.MaulerHib, LanguageMgr.GetTranslation(player.Client.Account.Language, "MaulerHibTrainer.WhisperReceive.Text2", player.GetName(0, false)), null);
+                        PromotePlayer(player, (int)eCharacterClass.MaulerHib, LanguageMgr.GetTranslation(player!.Client.Account.Language, "MaulerHibTrainer.WhisperReceive.Text2", player.GetName(0, false)), null);
                         player.ReceiveItem(this, WEAPON_ID2, eInventoryActionType.Other);
                         player.ReceiveItem(this, WEAPON_ID2, eInventoryActionType.Other);
                         player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MaulerHibTrainer.ReceiveArmor.Text1", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);
@@ -129,7 +129,7 @@ namespace DOL.GS.Trainer
 
             GamePlayer player = source as GamePlayer;
 
-            if (player.Level >= 10 && player.Level < 15 && item.Id_nb == ARMOR_ID1)
+            if (player!.Level >= 10 && player.Level < 15 && item.Id_nb == ARMOR_ID1)
             {
                 player.Inventory.RemoveCountFromStack(item, 1);
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "MaulerHibTrainer.ReceiveArmor.Text2", this.Name, player.Name), eChatType.CT_Say, eChatLoc.CL_PopupWindow);

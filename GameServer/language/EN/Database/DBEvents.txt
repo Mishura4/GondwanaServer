@@ -7,3 +7,10 @@ Languages.DBEvents.0005RandomText1:		A deep rumble emerges from the depths of th
 Languages.DBEvents.0005RandomText2:		Eerie lamentations sound through the woods...
 Languages.DBEvents.0005RemainingTimeText:	Soul Absorbers seem to be losing their substance!
 Languages.DBEvents.0005EndText:			The Soul Absorbers retreat back into the void.
+
+Languages.DBEvents.0054DebutText:		Funestes are appearing!
+Languages.DBEvents.0054RemainingTimeText:	Funestes seems to be fading!
+Languages.DBEvents.0054EndText:			Funestes have vanished into the shadows
+Languages.DBEvents.0055DebutText:		General Arkos has appeared!
+Languages.DBEvents.0055RemainingTimeText:	General Arkos seems to be fading!
+Languages.DBEvents.0055EndText:			General Arkos retreats back into the void.

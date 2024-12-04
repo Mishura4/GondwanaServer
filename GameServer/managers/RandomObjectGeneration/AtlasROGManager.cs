@@ -37,7 +37,7 @@ namespace DOL.GS
             if (living != null && living is GamePlayer)
             {
                 GamePlayer player = living as GamePlayer;
-                eRealm realm = player.Realm;
+                eRealm realm = player!.Realm;
                 eCharacterClass charclass = (eCharacterClass)player.CharacterClass.ID;
 
                 GeneratedUniqueItem item = null;
@@ -78,7 +78,7 @@ namespace DOL.GS
             if (living != null && living is GamePlayer)
             {
                 GamePlayer player = living as GamePlayer;
-                eRealm realm = player.Realm;
+                eRealm realm = player!.Realm;
                 eCharacterClass charclass = (eCharacterClass)player.CharacterClass.ID;
 
                 GeneratedUniqueItem item = null;
@@ -100,7 +100,7 @@ namespace DOL.GS
             if (living != null && living is GamePlayer)
             {
                 GamePlayer player = living as GamePlayer;
-                eRealm realm = player.Realm;
+                eRealm realm = player!.Realm;
                 eCharacterClass charclass = (eCharacterClass)player.CharacterClass.ID;
 
                 GeneratedUniqueItem item = null;
@@ -153,7 +153,7 @@ namespace DOL.GS
 
                 var loyaltyBonus = 0;//((amount * .2) * (numCurrentLoyalDays / 30));
 
-                double relicBonus = (amount * (0.025 * RelicMgr.GetRelicCount(player.Realm)));
+                double relicBonus = (amount * (0.025 * RelicMgr.GetRelicCount(player!.Realm)));
 
                 var totBPs = amount + Convert.ToInt32(loyaltyBonus) + Convert.ToInt32(relicBonus);
 
@@ -237,7 +237,7 @@ namespace DOL.GS
                 if (token == null) return;
 
                 InventoryItem item = GameInventoryItem.Create(token);
-                item.OwnerID = player.InternalID;
+                item.OwnerID = player!.InternalID;
 
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GamePlayer.PickupObject.YouGetAmount", amount, item.Name), eChatType.CT_Loot, eChatLoc.CL_SystemWindow);
 
@@ -264,7 +264,7 @@ namespace DOL.GS
 
                 InventoryItem item = GameInventoryItem.Create(itemTP);
 
-                item.OwnerID = player.InternalID;
+                item.OwnerID = player!.InternalID;
 
                 player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "GamePlayer.PickupObject.YouGetAmount", amount, item.Name), eChatType.CT_Loot, eChatLoc.CL_SystemWindow);
 
