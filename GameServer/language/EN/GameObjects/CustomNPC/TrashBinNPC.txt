@@ -1,0 +1,7 @@
+TrashBinNPC.Interact:			Feel free to hand over all your unwanted items, it will prevent littering on the public roads!
+TrashBinNPC.CannotDestroyObject:	I cannot destroy this item.
+TrashBinNPC.ConfirmDestroy:		Do you really want to destroy {0}?
+TrashBinNPC.WillNotDestroy:		Very well, I will not destroy this item.
+TrashBinNPC.ItemNotFound:		The item cannot be found.
+TrashBinNPC.ItemDestroyed:		The item {0} has been destroyed.
+TrashBinNPC.UnableToDestroy:		Unable to destroy the item.

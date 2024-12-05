@@ -50,6 +50,21 @@ namespace DOL.GS.Spells
         {
             GameLiving living = effect.Owner;
             living.CancelAllSpeedOrPulseEffects();
+
+            // Cancel "IllusionSpell"
+            List<GameSpellEffect> illusionEffects = new List<GameSpellEffect>();
+            lock (living.EffectList)
+            {
+                illusionEffects = new List<GameSpellEffect>(
+                    living.EffectList.OfType<GameSpellEffect>().Where(e => e.Spell.SpellType == "IllusionSpell")
+                );
+            }
+
+            foreach (var illusionEffect in illusionEffects)
+            {
+                illusionEffect.Cancel(false);
+            }
+
             living.IsStunned = true;
             living.StopAttack();
             living.StopCurrentSpellcast();

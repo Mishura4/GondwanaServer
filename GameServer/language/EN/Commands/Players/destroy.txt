@@ -1,0 +1,13 @@
+Commands.Players.Destroy.Description:		Destroys an item in your inventory.
+Commands.Players.Destroy.Syntax:		/destroy [slot number|item name]
+Commands.Players.Destroy.SlotNumberRange:	Slot number must be between 1 and 40.
+Commands.Players.Destroy.NoItemInSlot:		No item found in that slot.
+Commands.Players.Destroy.NoItemByName:		No item found with that name in your backpack.
+Commands.Players.Destroy.UsageMessage:		Usage: /destroy [slot number|item name]
+Commands.Players.Destroy.OnlyBackpackItems:	You can only destroy items in your backpack (slots 1-40).
+Commands.Players.Destroy.CannotDestroyItem:	You cannot destroy this item.
+Commands.Players.Destroy.ConfirmDestroy:	Do you really want to destroy {0}?
+Commands.Players.Destroy.NoItemSelected:	No item selected to destroy.
+Commands.Players.Destroy.ItemNotFound:		The item cannot be found.
+Commands.Players.Destroy.ItemDestroyed:		You destroy the {0}.
+Commands.Players.Destroy.FailedToDestroy:	Failed to destroy the item.

@@ -23,8 +23,8 @@ using System.Collections.Generic;
 
 namespace DOL.GS.Commands
 {
-    [CmdAttribute("&cmdhelp", //command to handle
-        ePrivLevel.Player, //minimum privelege level
+    [CmdAttribute("&cmdhelp",
+        ePrivLevel.Player,
         "Commands.Players.Cmdhelp.Description",
         "Commands.Players.Cmdhelp.Usage",
         "Commands.Players.Cmdhelp.Usage.Plvl",
@@ -37,61 +37,64 @@ namespace DOL.GS.Commands
                 return;
 
             ePrivLevel privilegeLevel = (ePrivLevel)client.Account.PrivLevel;
-            bool isCommand = true;
 
             if (args.Length > 1)
             {
-                try
+                if (uint.TryParse(args[1], out uint requestedLevel))
                 {
-                    privilegeLevel = (ePrivLevel)Convert.ToUInt32(args[1]);
-                }
-                catch (Exception)
-                {
-                    isCommand = false;
+                    privilegeLevel = (ePrivLevel)requestedLevel;
                 }
             }
 
-            if (isCommand)
+            if (privilegeLevel >= ePrivLevel.Admin)
             {
-                String[] commandList = GetCommandList(privilegeLevel);
-                DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Cmdhelp.PlvlCommands", privilegeLevel.ToString()));
-
-                foreach (String command in commandList)
-                    DisplayMessage(client, command);
+                DisplayCategory(client, ePrivLevel.Admin, "----- ADMIN Commands ----", ePrivLevel.Admin);
+                DisplaySeparator(client);
+                DisplayCategory(client, ePrivLevel.GM, "----- GM Commands ----", ePrivLevel.GM);
+                DisplaySeparator(client);
+                DisplayCategory(client, ePrivLevel.Player, "----- Player Commands ----", ePrivLevel.Player);
             }
-            else
+            else if (privilegeLevel == ePrivLevel.GM)
             {
-                string command = args[1];
-
-                if (command[0] != '&')
-                    command = "&" + command;
-
-                ScriptMgr.GameCommand gameCommand = ScriptMgr.GetCommand(command);
-
-                if (gameCommand == null)
-                    DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Cmdhelp.NoCommand", command));
-                else
-                {
-                    DisplayMessage(client, LanguageMgr.GetTranslation(client.Account.Language, "Commands.Players.Cmdhelp.Usage", command));
-
-                    foreach (String usage in gameCommand.Usage)
-                        DisplayMessage(client, usage);
-                }
+                DisplayCategory(client, ePrivLevel.GM, "----- GM Commands ----", ePrivLevel.GM);
+                DisplaySeparator(client);
+                DisplayCategory(client, ePrivLevel.Player, "----- Player Commands ----", ePrivLevel.Player);
             }
+            else if (privilegeLevel == ePrivLevel.Player)
+            {
+                DisplayCategory(client, ePrivLevel.Player, "----- Player Commands ----", ePrivLevel.Player);
+            }
+        }
+
+        private void DisplayCategory(GameClient client, ePrivLevel categoryLevel, string categoryTitle, ePrivLevel exactLevel)
+        {
+            String[] commandList = GetCommandListForExactLevel(exactLevel);
+            if (commandList.Length == 0) return;
+
+            DisplayMessage(client, categoryTitle);
+            foreach (String command in commandList)
+            {
+                DisplayMessage(client, command);
+            }
+        }
+
+        private void DisplaySeparator(GameClient client)
+        {
+            DisplayMessage(client, " ");
         }
 
         private static IDictionary<ePrivLevel, String[]> m_commandLists = new Dictionary<ePrivLevel, String[]>();
         private static object m_syncObject = new object();
 
-        private String[] GetCommandList(ePrivLevel privilegeLevel)
+        private String[] GetCommandListForExactLevel(ePrivLevel privilegeLevel)
         {
             lock (m_syncObject)
             {
-                if (!m_commandLists.Keys.Contains(privilegeLevel))
+                if (!m_commandLists.ContainsKey(privilegeLevel))
                 {
-                    String[] commandList = ScriptMgr.GetCommandList(privilegeLevel, true);
+                    String[] commandList = ScriptMgr.GetCommandListForExactLevel(privilegeLevel, true);
                     Array.Sort(commandList);
-                    m_commandLists.Add(privilegeLevel, commandList);
+                    m_commandLists[privilegeLevel] = commandList;
                 }
 
                 return m_commandLists[privilegeLevel];

@@ -209,3 +209,9 @@ PlayerTrainRequestHandler.TrainingFailed:					Malheureusement, votre entraîneme
 
 # /PlayerTargetHandler
 PlayerTargetHandler.Gravestone:			Vous avez cessé de cibler votre tombe. Vos prières échouent.
+
+# /DestroyItemRequestHandler
+DestroyItemRequestHandler.CantDestroyItem:		Vous ne pouvez pas détruire {0} !
+DestroyItemRequestHandler.CantDestroyRelic:		Vous ne pouvez pas détruire une relique !
+DestroyItemRequestHandler.CantDestroyEquippedItem:		Vous ne pouvez pas détruire un objet équipé !
+DestroyItemRequestHandler.ItemDestroyed:		Vous détruisez {0}.

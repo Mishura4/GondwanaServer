@@ -40,7 +40,7 @@ namespace DOL.GS
         /// <summary>
         /// Defines a logger for this class.
         /// </summary>
-        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
         private static Dictionary<string, Assembly> m_compiledScripts = new Dictionary<string, Assembly>();
         private static Dictionary<string, ConstructorInfo> m_spellhandlerConstructorCache = new Dictionary<string, ConstructorInfo>();
@@ -147,9 +147,10 @@ namespace DOL.GS
         /// <param name="plvl">plvl of the commands to get</param>
         /// <param name="addDesc"></param>
         /// <returns></returns>
-        public static string[] GetCommandList(ePrivLevel plvl, bool addDesc)
+        public static string[] GetCommandListForExactLevel(ePrivLevel exactLevel, bool addDesc)
         {
-            return m_gameCommands.Where(kv => kv.Value != null && kv.Key != null && (uint)plvl > kv.Value.m_lvl)
+            return m_gameCommands
+                .Where(kv => kv.Value != null && kv.Key != null && kv.Value.m_lvl == (uint)exactLevel) // Exact level match
                 .Select(kv => string.Format("/{0}{2}{1}", kv.Key.Remove(0, 1), addDesc ? kv.Value.m_desc : string.Empty, addDesc ? " - " : string.Empty))
                 .ToArray();
         }
@@ -634,7 +635,7 @@ namespace DOL.GS
                         if (objs[i] is SkillHandlerAttribute)
                         {
                             SkillHandlerAttribute attr = objs[i] as SkillHandlerAttribute;
-                            abHandler.Add(new KeyValuePair<string, Type>(attr.KeyName, type));
+                            abHandler.Add(new KeyValuePair<string, Type>(attr!.KeyName, type));
                             //DOLConsole.LogLine("Found ability action handler "+attr.KeyName+": "+type);
                             //									break;
                         }
@@ -669,7 +670,7 @@ namespace DOL.GS
                         if (objs[i] is SkillHandlerAttribute)
                         {
                             SkillHandlerAttribute attr = objs[0] as SkillHandlerAttribute;
-                            specHandler.Add(new KeyValuePair<string, Type>(attr.KeyName, type));
+                            specHandler.Add(new KeyValuePair<string, Type>(attr!.KeyName, type));
                             //DOLConsole.LogLine("Found spec action handler "+attr.KeyName+": "+type);
                             break;
                         }
@@ -704,7 +705,7 @@ namespace DOL.GS
                             if (attrib.ID == id)
                             {
                                 var charClass = (ICharacterClass)Activator.CreateInstance(type);
-                                charClass.LoadClassOverride((eCharacterClass)id);
+                                charClass!.LoadClassOverride((eCharacterClass)id);
                                 return charClass;
                             }
                         }
@@ -736,7 +737,7 @@ namespace DOL.GS
 
             try
             {
-                object[] objs = charClass.GetType().BaseType.GetCustomAttributes(typeof(CharacterClassAttribute), true);
+                object[] objs = charClass.GetType().BaseType!.GetCustomAttributes(typeof(CharacterClassAttribute), true);
                 foreach (CharacterClassAttribute attrib in objs)
                 {
                     if (attrib.Name.Equals(charClass.BaseName, StringComparison.OrdinalIgnoreCase))
@@ -871,7 +872,7 @@ namespace DOL.GS
         {
             Type[] constructorParams = new Type[] { typeof(GamePlayer) };
             ConstructorInfo handlerConstructor = m_defaultControlledBrainType.GetConstructor(constructorParams);
-            return (IControlledBrain)handlerConstructor.Invoke(new object[] { owner });
+            return (IControlledBrain)handlerConstructor!.Invoke(new object[] { owner });
         }
 
 
@@ -1011,7 +1012,7 @@ namespace DOL.GS
             if (rules == null)
             {
                 // second search in gameserver
-                foreach (Type type in Assembly.GetAssembly(typeof(GameServer)).GetTypes())
+                foreach (Type type in Assembly.GetAssembly(typeof(GameServer))!.GetTypes())
                 {
                     if (type.IsClass == false) continue;
                     if (type.GetInterface("DOL.GS.ServerRules.IServerRules") == null) continue;
@@ -1047,7 +1048,7 @@ namespace DOL.GS
                 {
                     IServerRules rls = (IServerRules)Activator.CreateInstance(rules, null);
                     if (log.IsInfoEnabled)
-                        log.Info("Found server rules for " + serverType + " server type (" + rls.RulesDescription() + ").");
+                        log.Info("Found server rules for " + serverType + " server type (" + rls!.RulesDescription() + ").");
                     return rls;
                 }
                 catch (Exception e)

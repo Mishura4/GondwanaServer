@@ -1,0 +1,13 @@
+Commands.Players.Destroy.Description:		Détruit un objet dans votre inventaire.
+Commands.Players.Destroy.Syntax:		/destroy [emplacement|nom de l'objet]
+Commands.Players.Destroy.SlotNumberRange:	Le numéro d'emplacement doit être compris entre 1 et 40.
+Commands.Players.Destroy.NoItemInSlot:		Aucun objet trouvé à cet emplacement.
+Commands.Players.Destroy.NoItemByName:		Aucun objet trouvé avec ce nom dans inventaire.
+Commands.Players.Destroy.UsageMessage:		Utilisation : /destroy [numéro d'emplacement|nom de l'objet]
+Commands.Players.Destroy.OnlyBackpackItems:	Vous ne pouvez détruire que les objets dans l'inventaire. (emplacements 1-40).
+Commands.Players.Destroy.CannotDestroyItem:	Vous ne pouvez pas détruire cet objet.
+Commands.Players.Destroy.ConfirmDestroy:	Voulez-vous vraiment détruire {0} ?
+Commands.Players.Destroy.NoItemSelected:	Aucun objet sélectionné à détruire.
+Commands.Players.Destroy.ItemNotFound:		L'objet est introuvable.
+Commands.Players.Destroy.ItemDestroyed:		Vous détruisez {0}.
+Commands.Players.Destroy.FailedToDestroy:	Impossible de détruire l'objet.

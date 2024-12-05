@@ -225,3 +225,9 @@ PlayerTrainRequestHandler.TrainingFailed:					Unfortunately your training failed
 
 # /PlayerTargetHandler
 PlayerTargetHandler.Gravestone:				You are no longer targetting your grave. Your prayers fail.
+
+# /DestroyItemRequestHandler
+DestroyItemRequestHandler.CantDestroyItem:		You can't destroy {0}!
+DestroyItemRequestHandler.CantDestroyRelic:		You cannot destroy a relic!
+DestroyItemRequestHandler.CantDestroyEquippedItem:		You cannot destroy an equipped item!
+DestroyItemRequestHandler.ItemDestroyed:		You destroy the {0}.

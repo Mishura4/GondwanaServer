@@ -5943,7 +5943,7 @@ namespace DOL.GS
             List<GameSpellEffect> toRemove;
             lock (EffectList)
             {
-                toRemove = new List<GameSpellEffect>(EffectList.OfType<GameSpellEffect>().Where(e => e.SpellHandler is SpellHandler spellHandler && (spellHandler.HasPositiveEffect || spellHandler.Spell.SpellType == "Disease" || spellHandler.Spell.SpellType == "HealDebuff" || spellHandler.Spell.Pulse > 0)));
+                toRemove = new List<GameSpellEffect>(EffectList.OfType<GameSpellEffect>().Where(e => e.SpellHandler is SpellHandler spellHandler && (spellHandler.HasPositiveEffect || spellHandler.Spell.SpellType == "Disease" || spellHandler.Spell.SpellType == "HealDebuff" || spellHandler.Spell.SpellType == "IllusionSpell" || spellHandler.Spell.Pulse > 0)));
             }
             toRemove.ForEach(e => e.Cancel(false));
         }
