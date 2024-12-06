@@ -86,7 +86,7 @@ namespace DOL.GS.Commands
                 return;
             }
 
-            if (client.Player.CurrentRegion.IsInstance)
+            if (client.Player!.CurrentRegion.IsInstance)
             {
                 client.Out.SendMessage("You can't add doors inside an instance.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
                 return;

@@ -225,7 +225,7 @@ namespace DOL.GS.Commands
                                     if (!HasTarget(client, (client.Player.TargetObject as GameLiving)))
                                         return;
 
-                                    YouAssist(client, client.Player.TargetObject.Name, (client.Player.TargetObject as GameLiving).TargetObject);
+                                    YouAssist(client, client.Player.TargetObject.Name, (client.Player.TargetObject as GameLiving)!.TargetObject);
                                     return;
                                 }
 
@@ -239,7 +239,7 @@ namespace DOL.GS.Commands
                                         if (!HasTarget(client, (client.Player.TargetObject as GameNPC)))
                                             return;
 
-                                        YouAssist(client, client.Player.TargetObject.GetName(0, true), (client.Player.TargetObject as GameLiving).TargetObject);
+                                        YouAssist(client, client.Player.TargetObject.GetName(0, true), (client.Player.TargetObject as GameLiving)!.TargetObject);
                                         return;
                                     }
                                 }
@@ -257,7 +257,7 @@ namespace DOL.GS.Commands
                                     GamePlayer targetPlayer = client.Player.TargetObject as GamePlayer;
 
                                     //Lets check if the client and it's targeted player are in the same alliance.
-                                    if (client.Player.Guild != null && client.Player.Guild.alliance != null && client.Player.Guild.alliance.Contains(targetPlayer.Guild))
+                                    if (client.Player.Guild != null && client.Player.Guild.alliance != null && client.Player.Guild.alliance.Contains(targetPlayer!.Guild))
                                     {
                                         //We cannot assist our target when it has no target
                                         if (!HasTarget(client, targetPlayer))
@@ -268,7 +268,7 @@ namespace DOL.GS.Commands
                                     }
 
                                     //They are no alliance members, maybe guild members?
-                                    if (client.Player.Guild != null && client.Player.Guild.GetOnlineMemberByID(targetPlayer.InternalID) != null)
+                                    if (client.Player.Guild != null && client.Player.Guild.GetOnlineMemberByID(targetPlayer!.InternalID) != null)
                                     {
                                         //We cannot assist our target when it has no target
                                         if (!HasTarget(client, targetPlayer))
@@ -285,7 +285,7 @@ namespace DOL.GS.Commands
                                         if (!HasTarget(client, targetPlayer))
                                             return;
 
-                                        YouAssist(client, client.Player.GetPersonalizedName(targetPlayer), targetPlayer.TargetObject);
+                                        YouAssist(client, client.Player.GetPersonalizedName(targetPlayer), targetPlayer!.TargetObject);
                                         return;
                                     }
 
@@ -293,13 +293,13 @@ namespace DOL.GS.Commands
                                     BattleGroup clientBattleGroup = (BattleGroup)client.Player.TempProperties.getProperty<object>(BattleGroup.BATTLEGROUP_PROPERTY, null);
                                     if (clientBattleGroup != null)
                                     {
-                                        if (clientBattleGroup.Members.Contains(targetPlayer))
+                                        if (clientBattleGroup.Members.Contains(targetPlayer!))
                                         {
                                             //We cannot assist our target when it has no target
                                             if (!HasTarget(client, targetPlayer))
                                                 return;
 
-                                            YouAssist(client, client.Player.GetPersonalizedName(targetPlayer), targetPlayer.TargetObject);
+                                            YouAssist(client, client.Player.GetPersonalizedName(targetPlayer), targetPlayer!.TargetObject);
                                             return;
                                         }
                                     }
@@ -308,13 +308,13 @@ namespace DOL.GS.Commands
                                     ChatGroup clientChatGroup = client.Player.TempProperties.getProperty<ChatGroup>(ChatGroup.CHATGROUP_PROPERTY, null);
                                     if (clientChatGroup != null)
                                     {
-                                        if (clientChatGroup.Members.Contains(targetPlayer))
+                                        if (clientChatGroup.Members.Contains(targetPlayer!))
                                         {
                                             //We cannot assist our target when it has no target
                                             if (!HasTarget(client, targetPlayer))
                                                 return;
 
-                                            YouAssist(client, client.Player.GetPersonalizedName(targetPlayer), targetPlayer.TargetObject);
+                                            YouAssist(client, client.Player.GetPersonalizedName(targetPlayer), targetPlayer!.TargetObject);
                                             return;
                                         }
                                     }
@@ -330,12 +330,12 @@ namespace DOL.GS.Commands
                                     {
                                         GamePet targetPet = client.Player.TargetObject as GamePet;
 
-                                        if (targetPet.Owner is GamePlayer)
+                                        if (targetPet!.Owner is GamePlayer)
                                         {
                                             GamePlayer targetPlayer = targetPet.Owner as GamePlayer;
 
                                             //Lets check if the client and it's targeted pets owner are in the same alliance.
-                                            if (client.Player.Guild != null && client.Player.Guild.alliance != null && client.Player.Guild.alliance.Contains(targetPlayer.Guild))
+                                            if (client.Player.Guild != null && client.Player.Guild.alliance != null && client.Player.Guild.alliance.Contains(targetPlayer!.Guild))
                                             {
                                                 //We cannot assist our target when it has no target
                                                 if (!HasTarget(client, targetPet))
@@ -346,7 +346,7 @@ namespace DOL.GS.Commands
                                             }
 
                                             //They are no alliance members, maybe guild members?
-                                            if (client.Player.Guild != null && client.Player.Guild.GetOnlineMemberByID(targetPlayer.InternalID) != null)
+                                            if (client.Player.Guild != null && client.Player.Guild.GetOnlineMemberByID(targetPlayer!.InternalID) != null)
                                             {
                                                 //We cannot assist our target when it has no target
                                                 if (!HasTarget(client, targetPet))
@@ -371,7 +371,7 @@ namespace DOL.GS.Commands
                                             BattleGroup clientBattleGroup = client.Player.TempProperties.getProperty<BattleGroup>(BattleGroup.BATTLEGROUP_PROPERTY, null);
                                             if (clientBattleGroup != null)
                                             {
-                                                if (clientBattleGroup.Members.Contains(targetPlayer))
+                                                if (clientBattleGroup.Members.Contains(targetPlayer!))
                                                 {
                                                     //We cannot assist our target when it has no target
                                                     if (!HasTarget(client, targetPet))
@@ -386,7 +386,7 @@ namespace DOL.GS.Commands
                                             ChatGroup clientChatGroup = client.Player.TempProperties.getProperty<ChatGroup>(ChatGroup.CHATGROUP_PROPERTY, null);
                                             if (clientChatGroup != null)
                                             {
-                                                if (clientChatGroup.Members.Contains(targetPlayer))
+                                                if (clientChatGroup.Members.Contains(targetPlayer!))
                                                 {
                                                     //We cannot assist our target when it has no target
                                                     if (!HasTarget(client, targetPet))
@@ -424,7 +424,7 @@ namespace DOL.GS.Commands
                                         //We do not check if the targeted guard is attacking us, because this can be a bug!
 
                                         GameKeepGuard targetGuard = client.Player.TargetObject as GameKeepGuard;
-                                        Guild targetedGuardGuild = GuildMgr.GetGuildByName(targetGuard.GuildName);
+                                        Guild targetedGuardGuild = GuildMgr.GetGuildByName(targetGuard!.GuildName);
 
                                         //We can assist guards of an unclaimed keep!
                                         if (targetedGuardGuild == null)
@@ -472,7 +472,7 @@ namespace DOL.GS.Commands
                                     if (!HasTarget(client, (client.Player.TargetObject as GameNPC)))
                                         return;
 
-                                    YouAssist(client, (client.Player.TargetObject as GameNPC).GetName(0, false), (client.Player.TargetObject as GameNPC).TargetObject);
+                                    YouAssist(client, (client.Player.TargetObject as GameNPC)!.GetName(0, false), (client.Player.TargetObject as GameNPC)!.TargetObject);
                                     return;
                                 }
                             }

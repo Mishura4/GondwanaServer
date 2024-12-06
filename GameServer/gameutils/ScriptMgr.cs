@@ -32,6 +32,7 @@ using DOL.GS.Commands;
 using DOL.Events;
 using log4net;
 using System.Runtime.InteropServices;
+using DOL.Language;
 
 namespace DOL.GS
 {
@@ -147,11 +148,15 @@ namespace DOL.GS
         /// <param name="plvl">plvl of the commands to get</param>
         /// <param name="addDesc"></param>
         /// <returns></returns>
-        public static string[] GetCommandListForExactLevel(ePrivLevel exactLevel, bool addDesc)
+        public static string[] GetCommandList(ePrivLevel plvl, bool addDesc, string language = "EN")
         {
             return m_gameCommands
-                .Where(kv => kv.Value != null && kv.Key != null && kv.Value.m_lvl == (uint)exactLevel) // Exact level match
-                .Select(kv => string.Format("/{0}{2}{1}", kv.Key.Remove(0, 1), addDesc ? kv.Value.m_desc : string.Empty, addDesc ? " - " : string.Empty))
+                .Where(kv => kv.Value != null && kv.Key != null && kv.Value.m_lvl == (uint)plvl)
+                .Select(kv => {
+                    string desc = addDesc ? LanguageMgr.GetTranslation(language, kv.Value.m_desc) : string.Empty;
+                    string sep = addDesc ? " - " : string.Empty;
+                    return string.Format("/{0}{2}{1}", kv.Key.Remove(0, 1), desc, sep);
+                })
                 .ToArray();
         }
 
