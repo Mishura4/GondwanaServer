@@ -5937,13 +5937,22 @@ namespace DOL.GS
             }
             toRemove.ForEach(e => e.Cancel(false));
         }
+        public void CancelMorphSpellEffects()
+        {
+            List<GameSpellEffect> toRemove;
+            lock (EffectList)
+            {
+                toRemove = new List<GameSpellEffect>(EffectList.OfType<GameSpellEffect>().Where(e => e.SpellHandler is SpellHandler spellHandler && (spellHandler.Spell.SpellType == "IllusionSpell" || spellHandler.Spell.SpellType == "ShadesOfMist" || spellHandler.Spell.SpellType == "Morph" || spellHandler.Spell.SpellType == "DreamMorph" || spellHandler.Spell.SpellType == "DreamGroupMorph" || spellHandler.Spell.SpellType == "MaddeningScalars" || spellHandler.Spell.SpellType == "AtlantisTabletMorph" || spellHandler.Spell.SpellType == "AlvarusMorph" || spellHandler.Spell.SpellType == "TraitorsDaggerProc")));
+            }
+            toRemove.ForEach(e => e.Cancel(false));
+        }
 
         public void DamnationCancelBuffEffects()
         {
             List<GameSpellEffect> toRemove;
             lock (EffectList)
             {
-                toRemove = new List<GameSpellEffect>(EffectList.OfType<GameSpellEffect>().Where(e => e.SpellHandler is SpellHandler spellHandler && (spellHandler.HasPositiveEffect || spellHandler.Spell.SpellType == "Disease" || spellHandler.Spell.SpellType == "HealDebuff" || spellHandler.Spell.SpellType == "IllusionSpell" || spellHandler.Spell.Pulse > 0)));
+                toRemove = new List<GameSpellEffect>(EffectList.OfType<GameSpellEffect>().Where(e => e.SpellHandler is SpellHandler spellHandler && (spellHandler.HasPositiveEffect || spellHandler.Spell.SpellType == "Disease" || spellHandler.Spell.SpellType == "HealDebuff" || spellHandler.Spell.Pulse > 0)));
             }
             toRemove.ForEach(e => e.Cancel(false));
         }

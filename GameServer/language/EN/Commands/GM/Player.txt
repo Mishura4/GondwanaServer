@@ -1,2 +1,23 @@
 Commands.GM.Player.Tension.Show:			{0}'s tension is currently at {1} / {2}.
 Commands.GM.Player.Tension.Modified:		{0}'s tension is now at {1} / {2}.
+
+Commands.GM.Player.KickNeedValidTarget:	You need a valid target!
+Commands.GM.Player.KickUseNameForGMs:	Please use /kick <name> to kick Gamemasters. This is used to prevent accidental kicks.
+Commands.GM.Player.KickAllPlayers:		{0} (PrivLevel: {1}) has kicked all players!
+
+Commands.GM.Player.RezNeedValidTarget:	You need a valid target!
+Commands.GM.Player.RezSuccess:			You resurrected {0} successfully!
+Commands.GM.Player.RezHealedBy:			You have been resurrected by {0}!
+Commands.GM.Player.RezPlayerNotDead:	Player is not dead!
+Commands.GM.Player.RezSelf:				You revive yourself.
+Commands.GM.Player.RezYouNotDead:		You are not dead!
+Commands.GM.Player.RezSyntax:			SYNTAX: /player rez <albs|mids|hibs|all>
+
+Commands.GM.Player.KillNeedValidTarget:	You need a valid target!
+Commands.GM.Player.KillNotOnGMs:		This command can not be used on Gamemasters!
+Commands.GM.Player.KillSuccess:			You killed {0} successfully!
+Commands.GM.Player.KilledBy:			{0} has killed you!
+Commands.GM.Player.PlayerNotAlive:		Player is not alive!
+Commands.GM.Player.AlreadyDeadUseRezSelf:	You are already dead. Use /player rez <self> to resurrect yourself.
+Commands.GM.Player.GoodbyeCruelWorld:	Good bye cruel world!
+Commands.GM.Player.InvalidArgument:		'{0}' is not a valid argument.

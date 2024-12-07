@@ -75,7 +75,7 @@ namespace DOL.GS.Spells
         /// The target for this spell
         /// </summary>
         protected GameLiving m_spellTarget = null;
-        
+
         public enum eStatus
         {
             Ready,
@@ -84,9 +84,9 @@ namespace DOL.GS.Spells
             Failure,
             Success
         }
-        
+
         public eStatus Status { get; private set; }
-        
+
         /// <summary>
         /// Has the spell been interrupted
         /// </summary>
@@ -2849,10 +2849,59 @@ namespace DOL.GS.Spells
             }
 
             GameSpellEffect pertrifyEffect = SpellHandler.FindEffectOnTarget(target, "Petrify");
-            if (pertrifyEffect != null && (HasPositiveOrSpeedEffect() || Spell.Pulse > 0 || Spell.SpellType == "Petrify" || Spell.SpellType == "Damnation"))
+            GameSpellEffect summonmonstereffect = SpellHandler.FindEffectOnTarget(target, "SummonMonster");
+            GameSpellEffect damnationeffect = SpellHandler.FindEffectOnTarget(target, "Damnation");
+            GameSpellEffect illusionspelleffect = SpellHandler.FindEffectOnTarget(target, "IllusionSpell");
+
+            bool isPetrifyDamnation = Spell.SpellType.Equals("Petrify", StringComparison.OrdinalIgnoreCase) || Spell.SpellType.Equals("Damnation", StringComparison.OrdinalIgnoreCase);
+            bool isSummonMonster = Spell.SpellType.Equals("SummonMonster", StringComparison.OrdinalIgnoreCase);
+            bool isIlusionSpell = Spell.SpellType.Equals("IllusionSpell", StringComparison.OrdinalIgnoreCase);
+            bool isMorphSpell = Spell.SpellType.Equals("ShadesOfMist", StringComparison.OrdinalIgnoreCase)
+                || Spell.SpellType.Equals("Morph", StringComparison.OrdinalIgnoreCase)
+                || Spell.SpellType.Equals("DreamMorph", StringComparison.OrdinalIgnoreCase)
+                || Spell.SpellType.Equals("DreamGroupMorph", StringComparison.OrdinalIgnoreCase)
+                || Spell.SpellType.Equals("MaddeningScalars", StringComparison.OrdinalIgnoreCase)
+                || Spell.SpellType.Equals("AtlantisTabletMorph", StringComparison.OrdinalIgnoreCase)
+                || Spell.SpellType.Equals("AlvarusMorph", StringComparison.OrdinalIgnoreCase)
+                || Spell.SpellType.Equals("TraitorsDaggerProc", StringComparison.OrdinalIgnoreCase);
+
+            if (pertrifyEffect != null && (isMorphSpell || HasPositiveOrSpeedEffect() || Spell.Pulse > 0 || isPetrifyDamnation || Spell.SpellType == "SummonMonster" || Spell.SpellType == "IllusionSpell"))
             {
                 if (Caster is GamePlayer player)
                     MessageToCaster(LanguageMgr.GetTranslation(player.Client, "Petrify.Target.Resist", m_caster.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
+                SendSpellResistAnimation(target);
+                return false;
+            }
+
+            if (damnationeffect != null && (isMorphSpell || isPetrifyDamnation || Spell.SpellType == "SummonMonster" || Spell.SpellType == "IllusionSpell"))
+            {
+                if (Caster is GamePlayer player)
+                    MessageToCaster(LanguageMgr.GetTranslation(player.Client, "Damnation.Target.Resist", m_caster.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
+                SendSpellResistAnimation(target);
+                return false;
+            }
+
+            if (summonmonstereffect != null && (isMorphSpell || isPetrifyDamnation || Spell.SpellType == "IllusionSpell"))
+            {
+                if (Caster is GamePlayer player)
+                    MessageToCaster(LanguageMgr.GetTranslation(player.Client, "SummonMonster.Target.Resist", m_caster.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
+                SendSpellResistAnimation(target);
+                return false;
+            }
+
+            if (illusionspelleffect != null && isMorphSpell)
+            {
+                if (Caster is GamePlayer player)
+                    MessageToCaster(LanguageMgr.GetTranslation(player.Client, "IllusionSpell.Target.Resist", m_caster.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
+                SendSpellResistAnimation(target);
+                return false;
+            }
+
+            if (isMorphSpell && isIlusionSpell)
+            {
+                if (Caster is GamePlayer player)
+                    MessageToCaster(LanguageMgr.GetTranslation(player.Client, "Morphed.Target.Resist", m_caster.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
+                SendSpellResistAnimation(target);
                 return false;
             }
 
@@ -2898,9 +2947,7 @@ namespace DOL.GS.Spells
                     return false;
                 }
             }
-            
-            
-            
+
             if (m_spellLine.KeyName == GlobalSpellsLines.Item_Effects || m_spellLine.KeyName == GlobalSpellsLines.Combat_Styles_Effect || m_spellLine.KeyName == GlobalSpellsLines.Potions_Effects || m_spellLine.KeyName == Specs.Savagery || m_spellLine.KeyName == GlobalSpellsLines.Character_Abilities || m_spellLine.KeyName == "OffensiveProc")
                 effectiveness = 1.0; // TODO player.PlayerEffectiveness
             if (effectiveness <= 0)

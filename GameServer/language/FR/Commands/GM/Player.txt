@@ -1,2 +1,23 @@
 Commands.GM.Player.Tension.Show:			La tension de {0} est à {1} / {2}.
 Commands.GM.Player.Tension.Modified:		La tension de {0} est maintenant à {1} / {2}.
+
+Commands.GM.Player.KickNeedValidTarget:	Vous avez besoin d'une cible valide !
+Commands.GM.Player.KickUseNameForGMs:	Veuillez utiliser /kick <nom> pour expulser un Maître de Jeu. Ceci permet d'éviter les expulsions accidentelles.
+Commands.GM.Player.KickAllPlayers:		{0} (Niveau de privilège : {1}) a expulsé tous les joueurs !
+
+Commands.GM.Player.RezNeedValidTarget:	Vous avez besoin d'une cible valide !
+Commands.GM.Player.RezSuccess:			Vous avez ressuscité {0} avec succès !
+Commands.GM.Player.RezHealedBy:			Vous avez été ressuscité par {0} !
+Commands.GM.Player.RezPlayerNotDead:	Le joueur n'est pas mort !
+Commands.GM.Player.RezSelf:				Vous vous ressuscitez vous-même.
+Commands.GM.Player.RezYouNotDead:		Vous n'êtes pas mort !
+Commands.GM.Player.RezSyntax:			SYNTAXE :	/player rez <albs|mids|hibs|all>
+
+Commands.GM.Player.KillNeedValidTarget:	Vous avez besoin d'une cible valide !
+Commands.GM.Player.KillNotOnGMs:		Cette commande ne peut pas être utilisée sur les Maîtres de Jeu !
+Commands.GM.Player.KillSuccess:			Vous avez tué {0} avec succès !
+Commands.GM.Player.KilledBy:			{0} vous a tué !
+Commands.GM.Player.PlayerNotAlive:		Le joueur n'est pas vivant !
+Commands.GM.Player.AlreadyDeadUseRezSelf:	Vous êtes déjà mort. Utilisez /player rez <self> pour vous ressusciter.
+Commands.GM.Player.GoodbyeCruelWorld:	Adieu monde cruel !
+Commands.GM.Player.InvalidArgument:		'{0}' n'est pas un argument valide.

@@ -30,6 +30,7 @@ using DOL.GS.Quests;
 using DOL.GS.Friends;
 using DOL.GS.Finance;
 using GameServerScripts.Amtescripts.Managers;
+using DOL.Language;
 
 namespace DOL.GS.Commands
 {
@@ -1577,7 +1578,7 @@ namespace DOL.GS.Commands
 
                         if (player == null && args.Length == 2)
                         {
-                            client.Out.SendMessage("You need a valid target!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.GM.Player.KickNeedValidTarget"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             return;
                         }
 
@@ -1585,9 +1586,7 @@ namespace DOL.GS.Commands
                         {
                             if (player.Client.Account.PrivLevel > 1)
                             {
-                                client.Out.SendMessage(
-                                    "Please use /kick <name> to kick Gamemasters. This is used to prevent accidental kicks.",
-                                    eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.GM.Player.KickUseNameForGMs"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                                 return;
                             }
                             player.Client.Out.SendPlayerQuit(true);
@@ -1606,9 +1605,7 @@ namespace DOL.GS.Commands
                                         {
                                             if (allplayer.Account.PrivLevel == 1)
                                             {
-                                                allplayer.Out.SendMessage(
-                                                    client.Player.Name + "(PrivLevel: " + client.Account.PrivLevel + ") has kicked all players!",
-                                                    eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                                                allplayer.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.GM.Player.KickAllPlayers", client.Player.Name, client.Account.PrivLevel), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                                                 allplayer.Out.SendPlayerQuit(true);
                                                 allplayer.Player.SaveIntoDatabase();
                                                 allplayer.Player.Quit(true);
@@ -1648,7 +1645,7 @@ namespace DOL.GS.Commands
                                 player = client.Player;
                             else
                             {
-                                client.Out.SendMessage("You need a valid target!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.GM.Player.RezNeedValidTarget"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 return;
                             }
                         }
@@ -1659,15 +1656,13 @@ namespace DOL.GS.Commands
                             {
                                 player.MoveTo(client.Player.Position);
 
-                                client.Out.SendMessage("You resurrected " + player.Name + " successfully!", eChatType.CT_Important,
-                                                       eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.GM.Player.RezSuccess", player.Name), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                                 //player.Out.SendMessage(client.Player.Name +" has resurrected you!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
 
                                 player.StopReleaseTimer();
                                 player.Out.SendPlayerRevive(player);
                                 player.Out.SendStatusUpdate();
-                                player.Out.SendMessage("You have been resurrected by " + client.Player.GetName(0, false) + "!",
-                                                       eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Commands.GM.Player.RezHealedBy", client.Player.GetName(0, false)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                 player.Notify(GamePlayerEvent.Revive, player);
                                 player.Notify(GamePlayerEvent.Released, player);
                                 player.Health = player.MaxHealth;
@@ -1677,7 +1672,7 @@ namespace DOL.GS.Commands
                             }
                             else
                             {
-                                client.Out.SendMessage("Player is not dead!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.GM.Player.RezPlayerNotDead"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                                 return;
                             }
                         }
@@ -1700,8 +1695,7 @@ namespace DOL.GS.Commands
                                                 aplayer.Player.StopReleaseTimer();
                                                 aplayer.Player.Out.SendPlayerRevive(aplayer.Player);
                                                 aplayer.Player.Out.SendStatusUpdate();
-                                                aplayer.Player.Out.SendMessage("You have been resurrected by " + client.Player.GetName(0, false) + "!",
-                                                                               eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                                aplayer.Player.Out.SendMessage(LanguageMgr.GetTranslation(aplayer, "Commands.GM.Player.RezHealedBy", client.Player.GetName(0, false)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                                 aplayer.Player.Notify(GamePlayerEvent.Revive, aplayer.Player);
                                                 aplayer.Player.Notify(GamePlayerEvent.Released, aplayer.Player);
                                             }
@@ -1723,8 +1717,7 @@ namespace DOL.GS.Commands
                                                 hplayer.Player.StopReleaseTimer();
                                                 hplayer.Player.Out.SendPlayerRevive(hplayer.Player);
                                                 hplayer.Player.Out.SendStatusUpdate();
-                                                hplayer.Player.Out.SendMessage("You have been resurrected by " + client.Player.GetName(0, false) + "!",
-                                                                               eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                                hplayer.Player.Out.SendMessage(LanguageMgr.GetTranslation(hplayer, "Commands.GM.Player.RezHealedBy", client.Player.GetName(0, false)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                                 hplayer.Player.Notify(GamePlayerEvent.Revive, hplayer.Player);
                                                 hplayer.Player.Notify(GamePlayerEvent.Released, hplayer.Player);
                                             }
@@ -1746,8 +1739,7 @@ namespace DOL.GS.Commands
                                                 mplayer.Player.StopReleaseTimer();
                                                 mplayer.Player.Out.SendPlayerRevive(mplayer.Player);
                                                 mplayer.Player.Out.SendStatusUpdate();
-                                                mplayer.Player.Out.SendMessage("You have been resurrected by " + client.Player.GetName(0, false) + "!",
-                                                                               eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                                mplayer.Player.Out.SendMessage(LanguageMgr.GetTranslation(mplayer, "Commands.GM.Player.RezHealedBy", client.Player.GetName(0, false)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                                 mplayer.Player.Notify(GamePlayerEvent.Revive, mplayer.Player);
                                                 mplayer.Player.Notify(GamePlayerEvent.Released, mplayer.Player);
                                             }
@@ -1765,9 +1757,7 @@ namespace DOL.GS.Commands
                                             selfplayer.Mana = selfplayer.MaxMana;
                                             selfplayer.Endurance = selfplayer.MaxEndurance;
                                             selfplayer.MoveTo(client.Player.Position);
-
-                                            selfplayer.Out.SendMessage("You revive yourself.", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
-
+                                            selfplayer.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.GM.Player.RezSelf"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                                             selfplayer.StopReleaseTimer();
                                             selfplayer.Out.SendPlayerRevive(selfplayer);
                                             selfplayer.Out.SendStatusUpdate();
@@ -1776,7 +1766,7 @@ namespace DOL.GS.Commands
                                         }
                                         else
                                         {
-                                            client.Out.SendMessage("You are not dead!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                                            client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.GM.Player.RezYouNotDead"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                                             return;
                                         }
                                     }
@@ -1796,8 +1786,7 @@ namespace DOL.GS.Commands
                                                 allplayer.Player.StopReleaseTimer();
                                                 allplayer.Player.Out.SendPlayerRevive(allplayer.Player);
                                                 allplayer.Player.Out.SendStatusUpdate();
-                                                allplayer.Player.Out.SendMessage("You have been resurrected by " + client.Player.GetName(0, false) + "!",
-                                                                                 eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                                                allplayer.Player.Out.SendMessage(LanguageMgr.GetTranslation(allplayer, "Commands.GM.Player.RezHealedBy", client.Player.GetName(0, false)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                                 allplayer.Player.Notify(GamePlayerEvent.Revive, allplayer.Player);
                                                 allplayer.Player.Notify(GamePlayerEvent.Released, allplayer.Player);
                                             }
@@ -1807,8 +1796,7 @@ namespace DOL.GS.Commands
 
                                 default:
                                     {
-                                        client.Out.SendMessage("SYNTAX: /player rez <albs|mids|hibs|all>", eChatType.CT_System,
-                                                               eChatLoc.CL_SystemWindow);
+                                        client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.GM.Player.RezSyntax"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                                     }
                                     break;
                             }
@@ -1828,7 +1816,7 @@ namespace DOL.GS.Commands
 
                         if (player == null && args.Length == 2)
                         {
-                            client.Out.SendMessage("You need a valid target!", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.GM.Player.KillNeedValidTarget"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
                             return;
                         }
 
@@ -1836,21 +1824,19 @@ namespace DOL.GS.Commands
                         {
                             if (player != client?.Player && player.Client.Account.PrivLevel >= client?.Account.PrivLevel)
                             {
-                                client.Out.SendMessage("This command can not be used on Gamemasters!", eChatType.CT_Important,
-                                                       eChatLoc.CL_SystemWindow);
+                                client!.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.GM.Player.KillNotOnGMs"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                                 return;
                             }
 
                             if (player.IsAlive)
                             {
                                 KillPlayer(client!.Player, player);
-                                client.Out.SendMessage("You killed " + player.GetPersonalizedName(player) + " successfully!", eChatType.CT_Important,
-                                                       eChatLoc.CL_SystemWindow);
-                                player.Out.SendMessage(player.GetPersonalizedName(client.Player) + " has killed you!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                                client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.GM.Player.KillSuccess", player.GetPersonalizedName(player)), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                                player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client, "Commands.GM.Player.KilledBy", client.Player.GetPersonalizedName(player)), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                             }
                             else
                             {
-                                client!.Out.SendMessage("Player is not alive!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                                client!.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.GM.Player.PlayerNotAlive"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                                 return;
                             }
                         }
@@ -1899,14 +1885,13 @@ namespace DOL.GS.Commands
 
                                     if (!(selfplayer.IsAlive))
                                     {
-                                        client.Out.SendMessage("You are already dead. Use /player rez <self> to resurrect yourself.",
-                                                               eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                                        client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.GM.Player.AlreadyDeadUseRezSelf"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                                         return;
                                     }
                                     else
                                     {
                                         KillPlayer(client.Player, client.Player);
-                                        client.Out.SendMessage("Good bye cruel world!", eChatType.CT_Important, eChatLoc.CL_SystemWindow);
+                                        client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.GM.Player.GoodbyeCruelWorld"), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                                     }
                                 }
                                 break;
@@ -1925,8 +1910,7 @@ namespace DOL.GS.Commands
 
                             default:
                                 {
-                                    client.Out.SendMessage("'" + args[2] + "' is not a valid arguement.", eChatType.CT_Important,
-                                                           eChatLoc.CL_SystemWindow);
+                                    client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Commands.GM.Player.InvalidArgument", args[2]), eChatType.CT_Important, eChatLoc.CL_SystemWindow);
                                 }
                                 break;
                         }

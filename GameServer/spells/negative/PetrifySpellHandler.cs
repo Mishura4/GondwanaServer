@@ -22,13 +22,6 @@ namespace DOL.GS.Spells
 
         public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
-            GameSpellEffect damnationEffect = SpellHandler.FindEffectOnTarget(target, "Damnation");
-            if (damnationEffect != null)
-            {
-                if (Caster is GamePlayer player)
-                    MessageToCaster(LanguageMgr.GetTranslation(player.Client, "Damnation.Target.Resist", player.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
-                return false;
-            }
             return base.ApplyEffectOnTarget(target, effectiveness);
         }
 
@@ -50,21 +43,7 @@ namespace DOL.GS.Spells
         {
             GameLiving living = effect.Owner;
             living.CancelAllSpeedOrPulseEffects();
-
-            // Cancel "IllusionSpell"
-            List<GameSpellEffect> illusionEffects = new List<GameSpellEffect>();
-            lock (living.EffectList)
-            {
-                illusionEffects = new List<GameSpellEffect>(
-                    living.EffectList.OfType<GameSpellEffect>().Where(e => e.Spell.SpellType == "IllusionSpell")
-                );
-            }
-
-            foreach (var illusionEffect in illusionEffects)
-            {
-                illusionEffect.Cancel(false);
-            }
-
+            living.CancelMorphSpellEffects();
             living.IsStunned = true;
             living.StopAttack();
             living.StopCurrentSpellcast();

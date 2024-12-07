@@ -32,13 +32,6 @@ namespace DOL.GS.Spells
 
         public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
-            GameSpellEffect damnationEffect = SpellHandler.FindEffectOnTarget(target, "Damnation");
-            if (damnationEffect != null)
-            {
-                if (Caster is GamePlayer player)
-                    MessageToCaster(LanguageMgr.GetTranslation(player.Client, "Damnation.Target.Resist", player.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
-                return false;
-            }
             return base.ApplyEffectOnTarget(target, effectiveness);
         }
 
@@ -49,6 +42,7 @@ namespace DOL.GS.Spells
             int harmvalue = (int)Spell.Value;
             living.TempProperties.setProperty("DamnationValue", harmvalue);
             living.DamnationCancelBuffEffects();
+            living.CancelMorphSpellEffects();
             ApplyDebuffs(living);
             ApplyBuffs(living);
             
