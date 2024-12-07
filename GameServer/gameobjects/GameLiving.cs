@@ -1652,7 +1652,7 @@ namespace DOL.GS
             ad.ArmorHitLocation = eArmorSlot.NOTSET;
             ad.Weapon = weapon;
             ad.IsOffHand = weapon == null ? false : weapon.Hand == 2;
-
+            effectiveness *= Effectiveness;
 
             if (dualWield)
                 ad.AttackType = AttackData.eAttackType.MeleeDualWield;
@@ -6932,14 +6932,15 @@ namespace DOL.GS
 
         #endregion
         #region Spell Cast
+
         /// <summary>
         /// Multiplier for melee and magic.
         /// </summary>
         public virtual double Effectiveness
         {
-            get { return 1.0; }
-            set { }
-        }
+            get;
+            set;
+        } = 1.0;
 
         public virtual bool IsCasting
         {
