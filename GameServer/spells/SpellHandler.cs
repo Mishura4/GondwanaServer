@@ -3254,7 +3254,7 @@ namespace DOL.GS.Spells
         /// <param name="effectiveness"></param>
         public virtual bool OnDirectEffect(GameLiving target, double effectiveness)
         {
-            return false;
+            return true;
         }
 
         /// <summary>
