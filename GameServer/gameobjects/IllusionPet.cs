@@ -73,5 +73,85 @@ namespace DOL.GS
 
             base.Die(killer);
         }
+
+        /// <inheritdoc />
+        public override int AttackSpeed(params InventoryItem[] weapons)
+        {
+            double speed = weapons == null || weapons.Length < 10 ? 30 : WeaponSpd;
+            bool bowWeapon = true;
+
+            if (weapons != null)
+            {
+                for (int i = 0; i < weapons.Length; i++)
+                {
+                    if (weapons[i] != null)
+                    {
+                        switch (weapons[i].Object_Type)
+                        {
+                            case (int)eObjectType.Fired:
+                            case (int)eObjectType.Longbow:
+                            case (int)eObjectType.Crossbow:
+                            case (int)eObjectType.RecurvedBow:
+                            case (int)eObjectType.CompositeBow:
+                                break;
+                            default:
+                                bowWeapon = false;
+                                break;
+                        }
+                    }
+                }
+            }
+
+            int qui = Math.Min(250, (int)Quickness); //250 soft cap on quickness
+
+            if (bowWeapon)
+            {
+                if (ServerProperties.Properties.ALLOW_OLD_ARCHERY)
+                {
+                    //Draw Time formulas, there are very many ...
+                    //Formula 2: y = iBowDelay * ((100 - ((iQuickness - 50) / 5 + iMasteryofArcheryLevel * 3)) / 100)
+                    //Formula 1: x = (1 - ((iQuickness - 60) / 500 + (iMasteryofArcheryLevel * 3) / 100)) * iBowDelay
+                    //Table a: Formula used: drawspeed = bowspeed * (1-(quickness - 50)*0.002) * ((1-MoA*0.03) - (archeryspeedbonus/100))
+                    //Table b: Formula used: drawspeed = bowspeed * (1-(quickness - 50)*0.002) * (1-MoA*0.03) - ((archeryspeedbonus/100 * basebowspeed))
+
+                    //For now use the standard weapon formula, later add ranger haste etc.
+                    speed *= (1.0 - (qui - 60) * 0.002);
+                    double percent = 0;
+                    // Calcul ArcherySpeed bonus to substract
+                    percent = speed * 0.01 * GetModified(eProperty.ArcherySpeed);
+                    // Apply RA difference
+                    speed -= percent;
+                    //log.Debug("speed = " + speed + " percent = " + percent + " eProperty.archeryspeed = " + GetModified(eProperty.ArcherySpeed));
+                    if (RangedAttackType == eRangedAttackType.Critical)
+                        speed = speed * 2 - (GetPlayerOwner()?.GetAbilityLevel(DOL.GS.Abilities.Critical_Shot) ?? 1 - 1) * speed / 10;
+                }
+                else
+                {
+                    // no archery bonus
+                    speed *= (1.0 - (qui - 60) * 0.002);
+                }
+            }
+            else
+            {
+                // TODO use haste
+                //Weapon Speed*(1-(Quickness-60)/500]*(1-Haste)
+                speed *= (1.0 - (qui - 60) * 0.002) * 0.01 * GetModified(eProperty.MeleeSpeed);
+            }
+
+
+            // apply speed cap
+            if (GetPlayerOwner()?.IsInRvR == true)
+            {
+                if (speed < 15)
+                {
+                    speed = 15;
+                }
+            }
+            else if (speed < 9)
+            {
+                speed = 9;
+            }
+            return (int)(speed * 100);
+        }
     }
 }

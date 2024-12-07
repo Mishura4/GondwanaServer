@@ -200,6 +200,8 @@ namespace DOL.GS.Scripts
                          (item.SlotPosition == (int)eInventorySlot.TwoHandWeapon && dbchar.ActiveWeaponSlot == 1))
                     {
                         clone.MeleeDamageType = (eDamageType)item.Type_Damage;
+                        clone.WeaponDps = item.DPS_AF;
+                        clone.WeaponSpd = item.SPD_ABS;
                     }
                     else if (item.SlotPosition == (int)eInventorySlot.LeftHandWeapon)
                     {
@@ -353,6 +355,8 @@ namespace DOL.GS.Scripts
 
                 npcInventory.CloseTemplate();
                 clone.Inventory = npcInventory;
+                clone.WeaponDps = (int)player.WeaponDamage(player.AttackWeapon);
+                clone.WeaponSpd = (int)player.AttackWeapon.SPD_ABS;
                 clone.BroadcastLivingEquipmentUpdate();
             }
             #endregion Inventory

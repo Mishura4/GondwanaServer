@@ -232,6 +232,10 @@ namespace DOL.GS.Spells
             pet.Effectiveness = this.Spell.Damage / 100.0;
             pet.CloneMaxHealth = Math.Max(1, (int)Math.Round(target.GetModified(eProperty.MaxHealth) * this.Spell.AmnesiaChance / 100.0));
             pet.Health = pet.CloneMaxHealth;
+            pet.WeaponDps = (int)target.WeaponDamage(target.AttackWeapon);
+            pet.WeaponSpd = (int)target.AttackWeapon.SPD_ABS;
+            
+            pet.SwitchWeapon(target.ActiveWeaponSlot);
             return pet;
         }
 
