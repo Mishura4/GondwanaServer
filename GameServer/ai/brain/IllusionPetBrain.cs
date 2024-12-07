@@ -61,7 +61,7 @@ namespace DOL.AI.Brain
 
         private void OnOwnerMove(DOLEvent e, object sender, EventArgs arguments)
         {
-            if (sender is not GameLiving { IsAlive: true, ObjectState: GameObject.eObjectState.Active } || Body.IsIncapacitated || Body.IsCasting)
+            if (sender is not GameLiving { IsAlive: true, ObjectState: GameObject.eObjectState.Active } living || Body.IsIncapacitated || Body.IsCasting)
                 return;
 
             long thisTick = GameServer.Instance.TickCount;
@@ -76,11 +76,25 @@ namespace DOL.AI.Brain
         {
             var offset = Mode.HasFlag(IllusionPet.eIllusionFlags.RandomizePositions) ? Vector.Create(m_followOffset.X + Util.Random(-30, 30), m_followOffset.Y + Util.Random(-30, 30), 0) : m_followOffset;
             var targetPosition = Owner.Coordinate + offset;
+
+            if (Body.AttackState)
+            {
+                if (!Owner.AttackState || Owner.TargetObject == null || !GameMath.IsWithinRadius2D(Owner.Coordinate, Owner.TargetObject.Coordinate, Owner.AttackRange + GameNPC.CONST_WALKTOTOLERANCE))
+                {
+                    Body.StopFollowing();
+                    Body.TargetObject = null;
+                    Body.AttackState = Owner.AttackState;
+                }
+                else
+                {
+                    return;
+                }
+            }
             Body.MaxSpeedBase = Owner.MaxSpeed;
             var speed = Owner.CurrentSpeed;
             speed = Math.Max(speed, (short)(Owner.MaxSpeedBase / 3));
             speed = Math.Min(speed, Owner.MaxSpeed);
-            Body.WalkTo(targetPosition, speed);
+            Body.PathTo(targetPosition, speed);
             m_lastAngle = Owner.Position.Orientation;
         }
 
@@ -104,7 +118,7 @@ namespace DOL.AI.Brain
                 Body.StopAttack();
 
             // Attack the owner's target if the owner is in combat
-            if (Owner.InCombat && Owner.TargetObject is GameLiving target && target.IsAlive)
+            if (Owner.InCombat && Owner.AttackState && Owner.TargetObject is GameLiving target && target.IsAlive)
             {
                 if (!Body.AttackState || (Body.TargetObject != target && GameServer.ServerRules.IsAllowedToAttack(Body, target, true)))
                 {
