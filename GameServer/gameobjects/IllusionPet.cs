@@ -53,6 +53,17 @@ namespace DOL.GS
             get => 0;
         }
 
+        public int CloneMaxHealth
+        {
+            get;
+            set;
+        }
+
+        public override int MaxHealth
+        {
+            get => CloneMaxHealth;
+        }
+
         public override void Die(GameObject killer)
         {
             foreach (GamePlayer player in GetPlayersInRadius(WorldMgr.VISIBILITY_DISTANCE))

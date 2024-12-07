@@ -2950,10 +2950,11 @@ namespace DOL.GS.Spells
 
             if (m_spellLine.KeyName == GlobalSpellsLines.Item_Effects || m_spellLine.KeyName == GlobalSpellsLines.Combat_Styles_Effect || m_spellLine.KeyName == GlobalSpellsLines.Potions_Effects || m_spellLine.KeyName == Specs.Savagery || m_spellLine.KeyName == GlobalSpellsLines.Character_Abilities || m_spellLine.KeyName == "OffensiveProc")
                 effectiveness = 1.0; // TODO player.PlayerEffectiveness
-            if (effectiveness <= 0)
-                return true; // no effect
 
             SendHitAnimation(target, 0, false, 1);
+            
+            if (effectiveness <= 0)
+                return true; // no effect
 
             // Apply effect for Duration Spell.
             if ((Spell.Duration > 0 && Spell.Target.ToLower() != "area") || Spell.Concentration > 0)
