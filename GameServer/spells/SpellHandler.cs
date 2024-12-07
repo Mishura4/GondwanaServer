@@ -76,6 +76,8 @@ namespace DOL.GS.Spells
         /// </summary>
         protected GameLiving m_spellTarget = null;
 
+        public GameLiving Target { get => m_spellTarget;  }
+
         public enum eStatus
         {
             Ready,

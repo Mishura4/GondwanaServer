@@ -56,12 +56,37 @@ namespace DOL.AI.Brain
                 return false;
             
             GameEventMgr.AddHandler(Owner, GameLivingEvent.Moving, OnOwnerMove);
+            GameEventMgr.AddHandler(Owner, GameLivingEvent.CastStarting, OnOwnerCast);
+            GameEventMgr.AddHandler(Body, GameLivingEvent.CastFailed, OnActionEnd);
+            GameEventMgr.AddHandler(Body, GameLivingEvent.CastFinished, OnActionEnd);
+            GameEventMgr.AddHandler(Body, GameLivingEvent.CrowdControlExpired, OnActionEnd);
             return true;
+        }
+        private void OnActionEnd(DOLEvent e, object sender, EventArgs arguments)
+        {
+            if (sender != Body)
+                return;
+            
+            Follow();
+        }
+
+        private void OnOwnerCast(DOLEvent e, object sender, EventArgs arguments)
+        {
+            if (sender is not GameLiving { IsAlive: true, ObjectState: GameObject.eObjectState.Active } living || Body.IsIncapacitated || Body.IsCasting)
+                return;
+
+            CastingEventArgs args = (CastingEventArgs)arguments;
+            var spellTarget = (args.SpellHandler.Target == Owner ? Body : args.SpellHandler.Target);
+            var previousTarget = Body.TargetObject;
+            Body.StopMoving();
+            Body.TargetObject = spellTarget;
+            Body.CastSpell(args.SpellHandler.Spell, args.SpellHandler.SpellLine, true);
+            Body.TargetObject = previousTarget;
         }
 
         private void OnOwnerMove(DOLEvent e, object sender, EventArgs arguments)
         {
-            if (sender is not GameLiving { IsAlive: true, ObjectState: GameObject.eObjectState.Active } living || Body.IsIncapacitated || Body.IsCasting)
+            if (sender is not GameLiving { IsAlive: true, ObjectState: GameObject.eObjectState.Active } living || Body.IsIncapacitated)
                 return;
 
             long thisTick = GameServer.Instance.TickCount;
@@ -77,6 +102,9 @@ namespace DOL.AI.Brain
             var offset = Mode.HasFlag(IllusionPet.eIllusionFlags.RandomizePositions) ? Vector.Create(m_followOffset.X + Util.Random(-30, 30), m_followOffset.Y + Util.Random(-30, 30), 0) : m_followOffset;
             var targetPosition = Owner.Coordinate + offset;
 
+            if (GameMath.IsWithinRadius2D(Body.Coordinate, targetPosition, GameNPC.CONST_WALKTOTOLERANCE))
+                return;
+            
             if (Body.AttackState)
             {
                 if (!Owner.AttackState || Owner.TargetObject == null || !GameMath.IsWithinRadius2D(Owner.Coordinate, Owner.TargetObject.Coordinate, Owner.AttackRange + GameNPC.CONST_WALKTOTOLERANCE))
@@ -90,6 +118,8 @@ namespace DOL.AI.Brain
                     return;
                 }
             }
+            if (Body.IsCasting)
+                Body.StopCurrentSpellcast(); // NPCs don't automatically interrupt on moving, so do it manually
             Body.MaxSpeedBase = Owner.MaxSpeed;
             var speed = Owner.CurrentSpeed;
             speed = Math.Max(speed, (short)(Owner.MaxSpeedBase / 3));

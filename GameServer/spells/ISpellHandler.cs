@@ -214,6 +214,8 @@ namespace DOL.GS.Spells
         /// </summary>
         GameLiving Caster { get; }
 
+        public GameLiving Target { get; }
+
         /// <summary>
         /// The power cost for this spell.
         /// </summary>
