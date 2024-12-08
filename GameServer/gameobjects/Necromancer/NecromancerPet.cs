@@ -402,7 +402,7 @@ namespace DOL.GS
         /// <summary>
         /// Called when the necro pet attacks, which interrupts current spells being cast
         /// </summary>
-        protected override AttackData MakeAttack(GameObject target, InventoryItem weapon, Style style, double effectiveness, int interruptDuration, bool dualWield, bool ignoreLOS)
+        protected override AttackData MakeAttack(GameObject target, InventoryItem weapon, Style style, double effectiveness, int interruptDuration, bool dualWield, bool ignoreLOS, bool isCounterAttack)
         {
             if (!HasEffect(typeof(FacilitatePainworkingEffect)))
             {
@@ -416,7 +416,7 @@ namespace DOL.GS
                 }
             }
 
-            return base.MakeAttack(target, weapon, style, effectiveness, interruptDuration, dualWield, ignoreLOS);
+            return base.MakeAttack(target, weapon, style, effectiveness, interruptDuration, dualWield, ignoreLOS, isCounterAttack);
         }
 
         /// <summary>

@@ -143,6 +143,10 @@ namespace DOL.Events
         /// </summary>
         public static readonly GameLivingEvent CastSucceeded = new GameLivingEvent("GameLiving.CastSucceeded");
         /// <summary>
+        /// The StyleExecute event is fired whenever the GameLiving's style succeeded
+        /// </summary>
+        public static readonly GameLivingEvent StyleExecute = new GameLivingEvent("GameLiving.StyleExecute");
+        /// <summary>
         /// The HealthChanged event is fired whenever the GameLiving's health is changed
         /// </summary>
         public static readonly GameLivingEvent HealthChanged = new GameLivingEvent("GameLiving.HealthChanged");

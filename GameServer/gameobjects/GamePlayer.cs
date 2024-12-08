@@ -7098,7 +7098,7 @@ namespace DOL.GS
         /// <param name="interruptDuration"></param>
         /// <param name="dualWield"></param>
         /// <returns></returns>
-        protected override AttackData MakeAttack(GameObject target, InventoryItem weapon, Style style, double effectiveness, int interruptDuration, bool dualWield, bool ignoreLOS)
+        protected override AttackData MakeAttack(GameObject target, InventoryItem weapon, Style style, double effectiveness, int interruptDuration, bool dualWield, bool ignoreLOS, bool isCounterAttack)
         {
             if (IsCrafting)
             {
@@ -7106,7 +7106,7 @@ namespace DOL.GS
                 StopCrafting();
             }
 
-            AttackData ad = base.MakeAttack(target, weapon, style, effectiveness, interruptDuration, dualWield, ignoreLOS);
+            AttackData ad = base.MakeAttack(target, weapon, style, effectiveness, interruptDuration, dualWield, ignoreLOS, isCounterAttack);
 
             if (CombatInfo)
                 Out.SendMessage($"CombatInfo: result:{ad.AttackResult} dmg={ad.Damage} crits={ad.CriticalDamage} style dmg={ad.StyleDamage} uncap dmg={ad.UncappedDamage} weapon dmg={ad.weaponDamage:F1} mod={ad.dmgMod:F1}", eChatType.CT_System, eChatLoc.CL_SystemWindow);

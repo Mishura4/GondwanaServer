@@ -102,6 +102,8 @@ namespace DOL.GS
         public bool IsPVP => (Target.GetController() is GamePlayer) && (Attacker.GetController() is GamePlayer);
 
         public bool IsEVE => (Target.GetController() is not GamePlayer) && (Attacker.GetController() is not GamePlayer);
+        
+        public bool IsCounterAttack { get; set; }
 
         /// <summary>
         /// Constructs new AttackData

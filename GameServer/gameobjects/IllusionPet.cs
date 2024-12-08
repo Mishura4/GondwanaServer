@@ -24,6 +24,7 @@ using DOL.GS;
 using DOL.Database;
 using DOL.GS.Scripts;
 using System.Collections.Generic;
+using DOL.GS.Styles;
 
 namespace DOL.GS
 {
@@ -72,6 +73,31 @@ namespace DOL.GS
             }
 
             base.Die(killer);
+        }
+        
+        protected override Style GetStyleToUse(GameObject target)
+        {
+            InventoryItem weapon;
+            if (NextCombatStyle == null) return null;
+            if (NextCombatStyle.WeaponTypeRequirement == (int)eObjectType.Shield)
+                weapon = Inventory.GetItem(eInventorySlot.LeftHandWeapon);
+            else weapon = AttackWeapon;
+
+            if (StyleProcessor.CanUseStyle(this, target, NextCombatStyle, weapon))
+                return NextCombatStyle;
+
+            if (NextCombatBackupStyle == null) return NextCombatStyle;
+
+            return NextCombatBackupStyle;
+        }
+
+        /// <inheritdoc />
+        protected override AttackData MakeAttack(GameObject target, InventoryItem weapon, Style style, double effectiveness, int interruptDuration, bool dualWield, bool ignoreLOS, bool isCounterAttack)
+        {
+            AttackData ad = base.MakeAttack(target, weapon, style, effectiveness, interruptDuration, dualWield, ignoreLOS, isCounterAttack);
+
+            NextCombatStyle = null;
+            return ad;
         }
 
         /// <inheritdoc />

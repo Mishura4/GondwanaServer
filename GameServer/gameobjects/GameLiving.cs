@@ -1633,13 +1633,13 @@ namespace DOL.GS
         /// <param name="interruptDuration">the interrupt duration</param>
         /// <param name="dualWield">indicates if both weapons are used for attack</param>
         /// <returns>the object where we collect and modifiy all parameters about the attack</returns>
-        protected AttackData MakeAttack(GameObject target, InventoryItem weapon, Style style, double effectiveness, int interruptDuration, bool dualWield)
+        protected AttackData MakeAttack(GameObject target, InventoryItem weapon, Style style, double effectiveness, int interruptDuration, bool dualWield, bool isCounterAttack = false)
         {
-            return MakeAttack(target, weapon, style, effectiveness, interruptDuration, dualWield, false);
+            return MakeAttack(target, weapon, style, effectiveness, interruptDuration, dualWield, false, isCounterAttack);
         }
 
 
-        protected virtual AttackData MakeAttack(GameObject target, InventoryItem weapon, Style style, double effectiveness, int interruptDuration, bool dualWield, bool ignoreLOS)
+        protected virtual AttackData MakeAttack(GameObject target, InventoryItem weapon, Style style, double effectiveness, int interruptDuration, bool dualWield, bool ignoreLOS, bool isCounterAttack)
         {
             AttackData ad = new AttackData();
             ad.Attacker = this;
@@ -1652,6 +1652,7 @@ namespace DOL.GS
             ad.ArmorHitLocation = eArmorSlot.NOTSET;
             ad.Weapon = weapon;
             ad.IsOffHand = weapon == null ? false : weapon.Hand == 2;
+            ad.IsCounterAttack = isCounterAttack;
             effectiveness *= Effectiveness;
 
             if (dualWield)
@@ -1947,6 +1948,7 @@ namespace DOL.GS
 
             if (ad.AttackResult == eAttackResult.HitStyle)
             {
+                this.Notify(GameLivingEvent.StyleExecute, this, new StyleEventArgs(ad.Style, ad.Target, ad));
                 if (this is GamePlayer player)
                 {
                     string damageAmount = (ad.StyleDamage > 0) ? " (+" + ad.StyleDamage + ")" : "";
@@ -2201,7 +2203,7 @@ namespace DOL.GS
             }
 
             TurnTo(attacker.Coordinate);
-            new WeaponOnTargetAction(this, attacker, weapon, null, 1.0, 0, CounterAttackStyle).OnTick();
+            new WeaponOnTargetAction(this, attacker, weapon, null, 1.0, 0, CounterAttackStyle, true).OnTick();
             TurnTo(TargetObject.Coordinate);
 
             if (attacker is GamePlayer targetPlayer)
@@ -2814,6 +2816,8 @@ namespace DOL.GS
             /// The combat style of the attack
             /// </summary>
             protected readonly Style m_combatStyle;
+            
+            protected readonly bool m_isCounterAttack;
 
             /// <summary>
             /// Constructs a new attack action
@@ -2826,7 +2830,7 @@ namespace DOL.GS
             /// <param name="leftHandSwingCount">the left hand swing count</param>
             /// <param name="leftWeapon">the left hand weapon used to attack</param>
             /// <param name="target">the target of the attack</param>
-            public WeaponOnTargetAction(GameLiving owner, GameObject target, InventoryItem attackWeapon, InventoryItem leftWeapon, double effectiveness, int interruptDuration, Style combatStyle)
+            public WeaponOnTargetAction(GameLiving owner, GameObject target, InventoryItem attackWeapon, InventoryItem leftWeapon, double effectiveness, int interruptDuration, Style combatStyle, bool isCounterAttack = false)
                 : base(owner)
             {
                 m_target = target;
@@ -2835,6 +2839,7 @@ namespace DOL.GS
                 m_effectiveness = effectiveness;
                 m_interruptDuration = interruptDuration;
                 m_combatStyle = combatStyle;
+                m_isCounterAttack = isCounterAttack;
             }
 
             /// <summary>

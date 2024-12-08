@@ -57,11 +57,24 @@ namespace DOL.AI.Brain
             
             GameEventMgr.AddHandler(Owner, GameLivingEvent.Moving, OnOwnerMove);
             GameEventMgr.AddHandler(Owner, GameLivingEvent.CastStarting, OnOwnerCast);
+            GameEventMgr.AddHandler(Owner, GameLivingEvent.StyleExecute, OnOwnerStyle);
             GameEventMgr.AddHandler(Body, GameLivingEvent.CastFailed, OnActionEnd);
             GameEventMgr.AddHandler(Body, GameLivingEvent.CastFinished, OnActionEnd);
             GameEventMgr.AddHandler(Body, GameLivingEvent.CrowdControlExpired, OnActionEnd);
             return true;
         }
+        
+        private void OnOwnerStyle(DOLEvent e, object sender, EventArgs arguments)
+        {
+            if (sender is not GameLiving { IsAlive: true, ObjectState: GameObject.eObjectState.Active } || Body.IsIncapacitated)
+                return;
+
+            StyleEventArgs args = (StyleEventArgs)arguments;
+            if (args.LastAttackData.IsCounterAttack)
+                return;
+            Body.NextCombatStyle = args.Style;
+        }
+
         private void OnActionEnd(DOLEvent e, object sender, EventArgs arguments)
         {
             if (sender != Body)
@@ -72,7 +85,7 @@ namespace DOL.AI.Brain
 
         private void OnOwnerCast(DOLEvent e, object sender, EventArgs arguments)
         {
-            if (sender is not GameLiving { IsAlive: true, ObjectState: GameObject.eObjectState.Active } living || Body.IsIncapacitated || Body.IsCasting)
+            if (sender is not GameLiving { IsAlive: true, ObjectState: GameObject.eObjectState.Active } || Body.IsIncapacitated || Body.IsCasting)
                 return;
 
             CastingEventArgs args = (CastingEventArgs)arguments;
@@ -86,7 +99,7 @@ namespace DOL.AI.Brain
 
         private void OnOwnerMove(DOLEvent e, object sender, EventArgs arguments)
         {
-            if (sender is not GameLiving { IsAlive: true, ObjectState: GameObject.eObjectState.Active } living || Body.IsIncapacitated)
+            if (sender is not GameLiving { IsAlive: true, ObjectState: GameObject.eObjectState.Active } || Body.IsIncapacitated)
                 return;
 
             long thisTick = GameServer.Instance.TickCount;
