@@ -2850,62 +2850,6 @@ namespace DOL.GS.Spells
                 }
             }
 
-            GameSpellEffect pertrifyEffect = SpellHandler.FindEffectOnTarget(target, "Petrify");
-            GameSpellEffect summonmonstereffect = SpellHandler.FindEffectOnTarget(target, "SummonMonster");
-            GameSpellEffect damnationeffect = SpellHandler.FindEffectOnTarget(target, "Damnation");
-            GameSpellEffect illusionspelleffect = SpellHandler.FindEffectOnTarget(target, "IllusionSpell");
-
-            bool isPetrifyDamnation = Spell.SpellType.Equals("Petrify", StringComparison.OrdinalIgnoreCase) || Spell.SpellType.Equals("Damnation", StringComparison.OrdinalIgnoreCase);
-            bool isSummonMonster = Spell.SpellType.Equals("SummonMonster", StringComparison.OrdinalIgnoreCase);
-            bool isIlusionSpell = Spell.SpellType.Equals("IllusionSpell", StringComparison.OrdinalIgnoreCase);
-            bool isMorphSpell = Spell.SpellType.Equals("ShadesOfMist", StringComparison.OrdinalIgnoreCase)
-                || Spell.SpellType.Equals("Morph", StringComparison.OrdinalIgnoreCase)
-                || Spell.SpellType.Equals("DreamMorph", StringComparison.OrdinalIgnoreCase)
-                || Spell.SpellType.Equals("DreamGroupMorph", StringComparison.OrdinalIgnoreCase)
-                || Spell.SpellType.Equals("MaddeningScalars", StringComparison.OrdinalIgnoreCase)
-                || Spell.SpellType.Equals("AtlantisTabletMorph", StringComparison.OrdinalIgnoreCase)
-                || Spell.SpellType.Equals("AlvarusMorph", StringComparison.OrdinalIgnoreCase)
-                || Spell.SpellType.Equals("TraitorsDaggerProc", StringComparison.OrdinalIgnoreCase);
-
-            if (pertrifyEffect != null && (isMorphSpell || HasPositiveOrSpeedEffect() || Spell.Pulse > 0 || isPetrifyDamnation || Spell.SpellType == "SummonMonster" || Spell.SpellType == "IllusionSpell"))
-            {
-                if (Caster is GamePlayer player)
-                    MessageToCaster(LanguageMgr.GetTranslation(player.Client, "Petrify.Target.Resist", m_caster.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
-                SendSpellResistAnimation(target);
-                return false;
-            }
-
-            if (damnationeffect != null && (isMorphSpell || isPetrifyDamnation || Spell.SpellType == "SummonMonster" || Spell.SpellType == "IllusionSpell"))
-            {
-                if (Caster is GamePlayer player)
-                    MessageToCaster(LanguageMgr.GetTranslation(player.Client, "Damnation.Target.Resist", m_caster.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
-                SendSpellResistAnimation(target);
-                return false;
-            }
-
-            if (summonmonstereffect != null && (isMorphSpell || isPetrifyDamnation || Spell.SpellType == "IllusionSpell"))
-            {
-                if (Caster is GamePlayer player)
-                    MessageToCaster(LanguageMgr.GetTranslation(player.Client, "SummonMonster.Target.Resist", m_caster.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
-                SendSpellResistAnimation(target);
-                return false;
-            }
-
-            if (illusionspelleffect != null && isMorphSpell)
-            {
-                if (Caster is GamePlayer player)
-                    MessageToCaster(LanguageMgr.GetTranslation(player.Client, "IllusionSpell.Target.Resist", m_caster.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
-                SendSpellResistAnimation(target);
-                return false;
-            }
-
-            if (isMorphSpell && isIlusionSpell)
-            {
-                if (Caster is GamePlayer player)
-                    MessageToCaster(LanguageMgr.GetTranslation(player.Client, "Morphed.Target.Resist", m_caster.GetPersonalizedName(target)), eChatType.CT_SpellResisted);
-                SendSpellResistAnimation(target);
-                return false;
-            }
 
             if ((target is Keeps.GameKeepDoor || target is Keeps.GameKeepComponent))
             {
@@ -3063,6 +3007,38 @@ namespace DOL.GS.Spells
             return false;
         }
 
+        public virtual void OnBetterThan(GameLiving target, GameSpellEffect oldEffect, GameSpellEffect newEffect)
+        {
+            SpellHandler otherHandler = (SpellHandler)newEffect.SpellHandler;
+            otherHandler.SendSpellResistAnimation(target);
+            if (otherHandler.Caster.GetController() is GamePlayer playerCaster)
+            {
+                eChatType noOverwrite = (newEffect.Spell.Pulse == 0) ? eChatType.CT_SpellResisted : eChatType.CT_SpellPulse;
+                if (target == playerCaster)
+                {
+                    if (oldEffect.ImmunityState)
+                    {
+                        playerCaster.SendTranslatedMessage("SpellHandler.CantHaveEffectAgainYet", noOverwrite);
+                    }
+                    else
+                    {
+                        playerCaster.SendTranslatedMessage("SpellHandler.AlreadyHaveEffectWait", noOverwrite);
+                    }
+                }
+                else
+                {
+                    if (oldEffect.ImmunityState)
+                    {
+                        playerCaster.SendTranslatedMessage("SpellHandler.TargetCantHaveEffectAgainYet", noOverwrite, eChatLoc.CL_SystemWindow, playerCaster.GetPersonalizedName(target));
+                    }
+                    else
+                    {
+                        playerCaster.SendTranslatedMessage("SpellHandler.WaitUntilExpires", noOverwrite, eChatLoc.CL_SystemWindow, playerCaster.GetPersonalizedName(target));
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// Execute Duration Spell Effect on Target
         /// </summary>
@@ -3073,7 +3049,6 @@ namespace DOL.GS.Spells
             if (!target.IsAlive || target.EffectList == null)
                 return false;
 
-            eChatType noOverwrite = (Spell.Pulse == 0) ? eChatType.CT_SpellResisted : eChatType.CT_SpellPulse;
             GameSpellEffect neweffect = CreateSpellEffect(target, effectiveness);
 
             // Iterate through Overwritable Effect
@@ -3106,30 +3081,7 @@ namespace DOL.GS.Spells
                     else
                     {
                         // Old Spell is Better than new one
-                        SendSpellResistAnimation(target);
-                        if (target == Caster)
-                        {
-                            if (ovEffect.ImmunityState)
-                            {
-                                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.CantHaveEffectAgainYet"), noOverwrite);
-                            }
-                            else
-                            {
-                                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.AlreadyHaveEffectWait"), noOverwrite);
-                            }
-                        }
-                        else
-                        {
-                            if (ovEffect.ImmunityState)
-                            {
-                                this.MessageToCaster(noOverwrite, LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.TargetCantHaveEffectAgainYet", m_caster.GetPersonalizedName(target)));
-                            }
-                            else
-                            {
-                                this.MessageToCaster(noOverwrite, LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.TargetAlreadyHasEffect", m_caster.GetPersonalizedName(target)));
-                                MessageToCaster(LanguageMgr.GetTranslation((Caster as GamePlayer)?.Client, "SpellHandler.WaitUntilExpires"), noOverwrite);
-                            }
-                        }
+                        ((SpellHandler)ovEffect.SpellHandler).OnBetterThan(target, ovEffect, neweffect);
                         // Prevent Adding.
                         return false;
                     }
@@ -3346,7 +3298,7 @@ namespace DOL.GS.Spells
         /// When spell was resisted
         /// </summary>
         /// <param name="target">the target that resisted the spell</param>
-        protected virtual void OnSpellResisted(GameLiving target)
+        public virtual void OnSpellResisted(GameLiving target)
         {
             SendSpellResistAnimation(target);
             SendSpellResistMessages(target);

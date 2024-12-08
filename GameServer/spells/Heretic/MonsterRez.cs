@@ -24,6 +24,9 @@ using System.Collections.Generic;
 using DOL.GS.Effects;
 using DOL.GS;
 using DOL.Events;
+using DOL.GS.PacketHandler;
+using DOL.Language;
+using System.Numerics;
 
 namespace DOL.GS.Spells
 {
@@ -82,9 +85,8 @@ namespace DOL.GS.Spells
     /// Summary description for ReanimateCorpe.
     /// </summary>
     [SpellHandlerAttribute("SummonMonster")]
-    public class SummonMonster : SpellHandler
+    public class SummonMonster : AbstractMorphSpellHandler
     {
-        private ushort m_model = 0;
         private SpellLine m_monsterspellline = null;
         private GamePlayer m_owner = null;
 
@@ -120,6 +122,12 @@ namespace DOL.GS.Spells
             return new GameSpellEffect(this, Spell.Duration, Spell.Frequency, effectiveness);
         }
 
+        /// <inheritdoc />
+        public override ushort GetModelFor(GameLiving living)
+        {
+            return (ushort)Spell.Value;
+        }
+
         public override void OnEffectStart(GameSpellEffect effect)
         {
             if (!(effect.Owner is GamePlayer))
@@ -127,8 +135,6 @@ namespace DOL.GS.Spells
 
             GamePlayer player = effect.Owner as GamePlayer;
             m_owner = player;
-            m_model = player.Model;
-            player.Model = (ushort)Spell.Value;
 
             player.BaseBuffBonusCategory[(int)eProperty.MagicAbsorption] += (int)Spell.LifeDrainReturn;
             player.BaseBuffBonusCategory[(int)eProperty.ArmorAbsorption] += (int)Spell.LifeDrainReturn;
@@ -162,8 +168,6 @@ namespace DOL.GS.Spells
 
             GamePlayer player = effect.Owner as GamePlayer;
 
-            player.Model = m_model;
-
             player.BaseBuffBonusCategory[(int)eProperty.MagicAbsorption] -= (int)Spell.LifeDrainReturn;
             player.BaseBuffBonusCategory[(int)eProperty.ArmorAbsorption] -= (int)Spell.LifeDrainReturn;
             player.Out.SendCharStatsUpdate();
@@ -183,14 +187,24 @@ namespace DOL.GS.Spells
         {
             GamePlayer player = sender as GamePlayer; //attacker
             if (player == null) return;
-            player.Model = m_model;
             GameSpellEffect effect = SpellHandler.FindEffectOnTarget(player, "SummonMonster");
             if (effect != null)
                 effect.Cancel(false);
         }
 
         // Constructor
-        public SummonMonster(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+        public SummonMonster(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line)
+        {
+            Priority = 1000;
+        }
+        
+        public override void OnBetterThan(GameLiving target, GameSpellEffect oldEffect, GameSpellEffect newEffect)
+        {
+            SpellHandler attempt = (SpellHandler)newEffect.SpellHandler;
+            if (attempt.Caster.GetController() is GamePlayer player)
+                player.SendTranslatedMessage("SummonMonster.Target.Resist", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow, player.GetPersonalizedName(target));
+            attempt.SendSpellResistAnimation(target);
+        }
 
         public override string ShortDescription
             => $"Summons a monster.";

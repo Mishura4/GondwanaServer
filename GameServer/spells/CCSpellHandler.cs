@@ -237,7 +237,7 @@ namespace DOL.GS.Spells
             return 0;
         }
 
-        protected override void OnSpellResisted(GameLiving target)
+        public override void OnSpellResisted(GameLiving target)
         {
             if (this.Spell.Pulse > 0)
             {

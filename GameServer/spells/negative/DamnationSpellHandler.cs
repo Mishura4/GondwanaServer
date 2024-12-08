@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace DOL.GS.Spells
 {
     [SpellHandler("Damnation")]
-    public class DamnationSpellHandler : SpellHandler
+    public class DamnationSpellHandler : AbstractMorphSpellHandler
     {
         private const int HeatDebuff = -15;
         private const int ColdDebuff = -10;
@@ -28,11 +28,123 @@ namespace DOL.GS.Spells
 
         public DamnationSpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine)
         {
+            Priority = 666;
+            OverwritesMorphs = true;
         }
 
+        /// <inheritdoc />
+        public override ushort GetModelFor(GameLiving living)
+        {
+            if (living is not GamePlayer)
+                return 0;
+            
+            switch (living.Race)
+            {
+                case 1:
+                case 3:
+                case 9:
+                case 16:
+                    if (living.Gender == eGender.Female)
+                        return 443;
+                    else
+                        return 442;
+                    break;
+                case 2:
+                case 11:
+                    if (living.Gender == eGender.Female)
+                        return 451;
+                    else
+                        return 452;
+                    break;
+                case 4:
+                case 7:
+                    if (living.Gender == eGender.Female)
+                        return 468;
+                    else
+                        return 467;
+                    break;
+                case 5:
+                case 17:
+                    if (living.Gender == eGender.Female)
+                        return 445;
+                    else
+                        return 446;
+                    break;
+                case 6:
+                    return 444;
+                    break;
+                case 8:
+                    if (living.Gender == eGender.Female)
+                        return 682;
+                    else
+                        return 683;
+                    break;
+                case 10:
+                    if (living.Gender == eGender.Female)
+                        return 681;
+                    else
+                        return 680;
+                    break;
+                case 12:
+                    if (living.Gender == eGender.Female)
+                        return 1380;
+                    else
+                        return 1379;
+                    break;
+                case 13:
+                    if (living.Gender == eGender.Female)
+                        return 1352;
+                    else
+                        return 1351;
+                    break;
+                case 14:
+                    return 1210;
+                    break;
+                case 15:
+                    if (living.Gender == eGender.Female)
+                        return 890;
+                    else
+                        return 889;
+                    break;
+                case 18:
+                    if (living.Gender == eGender.Female)
+                        return 1386;
+                    else
+                        return 1385;
+                    break;
+                case 19:
+                    return 1576;
+                    break;
+                case 20:
+                    return 1579;
+                    break;
+                case 21:
+                    return 1582;
+                    break;
+                default:
+                    break;
+            }
+            return 0;
+        }
+
+        /// <inheritdoc />
         public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
+            if (target is IllusionPet)
+            {
+                target.Die(Caster);
+                SendHitAnimation(target, 0, false, 1);
+                return true;
+            }
             return base.ApplyEffectOnTarget(target, effectiveness);
+        }
+
+        public override void OnBetterThan(GameLiving target, GameSpellEffect oldEffect, GameSpellEffect newEffect)
+        {
+            SpellHandler attempt = (SpellHandler)newEffect.SpellHandler;
+            if (attempt.Caster.GetController() is GamePlayer player)
+                player.SendTranslatedMessage("Damnation.Target.Resist", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow, player.GetPersonalizedName(target));
+            attempt.SendSpellResistAnimation(target);
         }
 
         public override void OnEffectStart(GameSpellEffect effect)
@@ -41,8 +153,14 @@ namespace DOL.GS.Spells
 
             int harmvalue = (int)Spell.Value;
             living.TempProperties.setProperty("DamnationValue", harmvalue);
-            living.DamnationCancelBuffEffects();
-            living.CancelMorphSpellEffects();
+
+
+            List<GameSpellEffect> toRemove;
+            lock (effect.Owner.EffectList)
+            {
+                toRemove = new List<GameSpellEffect>(effect.Owner.EffectList.OfType<GameSpellEffect>().Where(e => e.SpellHandler is SpellHandler spellHandler && (spellHandler.HasPositiveEffect || spellHandler.Spell.SpellType == "Disease" || spellHandler.Spell.SpellType == "HealDebuff" || spellHandler.Spell.Pulse > 0)));
+            }
+            toRemove.ForEach(e => e.Cancel(false));
             ApplyDebuffs(living);
             ApplyBuffs(living);
             
@@ -56,100 +174,11 @@ namespace DOL.GS.Spells
 
                 living.TempProperties.setProperty("OriginalModel", living.Model);
                 MessageToLiving(player, LanguageMgr.GetTranslation(player.Client, "Damnation.Self.Message2"), eChatType.CT_Spell);
-                switch (living.Race)
-                {
-                    case 1:
-                    case 3:
-                    case 9:
-                    case 16:
-                        if (living.Gender == eGender.Female)
-                            living.Model = 443;
-                        else
-                            living.Model = 442;
-                        break;
-                    case 2:
-                    case 11:
-                        if (living.Gender == eGender.Female)
-                            living.Model = 451;
-                        else
-                            living.Model = 452;
-                        break;
-                    case 4:
-                    case 7:
-                        if (living.Gender == eGender.Female)
-                            living.Model = 468;
-                        else
-                            living.Model = 467;
-                        break;
-                    case 5:
-                    case 17:
-                        if (living.Gender == eGender.Female)
-                            living.Model = 445;
-                        else
-                            living.Model = 446;
-                        break;
-                    case 6:
-                        living.Model = 444;
-                        break;
-                    case 8:
-                        if (living.Gender == eGender.Female)
-                            living.Model = 682;
-                        else
-                            living.Model = 683;
-                        break;
-                    case 10:
-                        if (living.Gender == eGender.Female)
-                            living.Model = 681;
-                        else
-                            living.Model = 680;
-                        break;
-                    case 12:
-                        if (living.Gender == eGender.Female)
-                            living.Model = 1380;
-                        else
-                            living.Model = 1379;
-                        break;
-                    case 13:
-                        if (living.Gender == eGender.Female)
-                            living.Model = 1352;
-                        else
-                            living.Model = 1351;
-                        break;
-                    case 14:
-                        living.Model = 1210;
-                        break;
-                    case 15:
-                        if (living.Gender == eGender.Female)
-                            living.Model = 890;
-                        else
-                            living.Model = 889;
-                        break;
-                    case 18:
-                        if (living.Gender == eGender.Female)
-                            living.Model = 1386;
-                        else
-                            living.Model = 1385;
-                        break;
-                    case 19:
-                        living.Model = 1576;
-                        break;
-                    case 20:
-                        living.Model = 1579;
-                        break;
-                    case 21:
-                        living.Model = 1582;
-                        break;
-                    default:
-                        break;
-                }
-                player.Out.SendUpdatePlayer();
-                if (player.Group != null)
-                {
-                    player.Group.UpdateMember(player, false, false);
-                }
             }
             else if (living is GameNPC ncp && ncp.Brain is IOldAggressiveBrain aggroBrain)
                 aggroBrain.AddToAggroList(Caster, 1);
+            
+            base.OnEffectStart(effect);
 
             GameEventMgr.AddHandler(living, GameLivingEvent.AttackedByEnemy, new DOLEventHandler(DamnationEventHandler));
 
@@ -283,15 +312,6 @@ namespace DOL.GS.Spells
 
             living.Die(Caster);
             living.IsDamned = false;
-            if (living is GamePlayer player)
-            {
-                living.Model = living.TempProperties.getProperty<ushort>("OriginalModel");
-                player.Out.SendUpdatePlayer();
-                if (player.Group != null)
-                {
-                    player.Group.UpdateMember(player, false, false);
-                }
-            }
 
             return base.OnEffectExpires(effect, noMessages);
         }

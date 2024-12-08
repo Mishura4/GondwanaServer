@@ -54,7 +54,7 @@ namespace DOL.GS.Spells
             return true;
         }
 
-        protected override void OnSpellResisted(GameLiving target)
+        public override void OnSpellResisted(GameLiving target)
         {
             base.OnSpellResisted(target);
 

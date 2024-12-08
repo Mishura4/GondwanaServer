@@ -37,6 +37,7 @@ using log4net;
 using Microsoft.VisualBasic;
 using DOL.AI.Brain;
 using DOL.GS.Spells;
+using System.Collections.Specialized;
 
 namespace DOL.GS
 {

@@ -128,7 +128,7 @@ namespace DOL.GS.Spells
         /// Spell Resists don't trigger notification or interrupt
         /// </summary>
         /// <param name="target"></param>
-        protected override void OnSpellResisted(GameLiving target)
+        public override void OnSpellResisted(GameLiving target)
         {
             SendSpellResistAnimation(target);
             SendSpellResistMessages(target);

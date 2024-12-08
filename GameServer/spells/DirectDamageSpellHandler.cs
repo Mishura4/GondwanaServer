@@ -164,7 +164,7 @@ namespace DOL.GS.Spells
 		 * We need to send resist spell los check packets because spell resist is calculated first, and
 		 * so you could be inside keep and resist the spell and be interupted when not in view
 		 */
-        protected override void OnSpellResisted(GameLiving target)
+        public override void OnSpellResisted(GameLiving target)
         {
             if (target is GamePlayer)
             {

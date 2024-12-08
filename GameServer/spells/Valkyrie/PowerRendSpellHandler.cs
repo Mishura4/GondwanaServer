@@ -113,7 +113,7 @@ namespace DOL.GS.spells
 
         public override int CalculateSpellResistChance(GameLiving target) => 100 - CalculateToHitChance(target);
 
-        protected override void OnSpellResisted(GameLiving target) => base.OnSpellResisted(target);
+        public override void OnSpellResisted(GameLiving target) => base.OnSpellResisted(target);
 
         private double GetVariance()
         {

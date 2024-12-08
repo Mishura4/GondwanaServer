@@ -14,14 +14,48 @@ using System.Threading.Tasks;
 namespace DOL.GS.Spells
 {
     [SpellHandler("Petrify")]
-    public class PetrifySpellHandler : SpellHandler
+    public class PetrifySpellHandler : AbstractMorphSpellHandler
     {
         public PetrifySpellHandler(GameLiving caster, Spell spell, SpellLine spellLine) : base(caster, spell, spellLine)
         {
+            Priority = 100;
         }
 
+        /// <inheritdoc />
+        public override bool IsOverwritable(GameSpellEffect compare)
+        {
+            if (((SpellHandler)compare.SpellHandler).HasPositiveOrSpeedEffect() || compare.SpellHandler.Spell.Pulse > 0)
+                return true;
+            
+            return base.IsOverwritable(compare);
+        }
+
+        /// <inheritdoc />
+        public override bool IsNewEffectBetter(GameSpellEffect oldeffect, GameSpellEffect neweffect)
+        {
+            if (((SpellHandler)oldeffect.SpellHandler).HasPositiveOrSpeedEffect() || oldeffect.SpellHandler.Spell.Pulse > 0)
+                return true;
+            
+            return base.IsNewEffectBetter(oldeffect, neweffect);
+        }
+        
+        public override void OnBetterThan(GameLiving target, GameSpellEffect oldEffect, GameSpellEffect newEffect)
+        {
+            SpellHandler attempt = (SpellHandler)newEffect.SpellHandler;
+            if (attempt.Caster.GetController() is GamePlayer player)
+                player.SendTranslatedMessage("Petrify.Target.Resist", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow, player.GetPersonalizedName(target));
+            attempt.SendSpellResistAnimation(target);
+        }
+
+        /// <inheritdoc />
         public override bool ApplyEffectOnTarget(GameLiving target, double effectiveness)
         {
+            if (target is IllusionPet)
+            {
+                target.Die(Caster);
+                SendHitAnimation(target, 0, false, 1);
+                return true;
+            }
             return base.ApplyEffectOnTarget(target, effectiveness);
         }
 
@@ -39,11 +73,141 @@ namespace DOL.GS.Spells
             return (int)duration;
         }
 
+        /// <inheritdoc />
+        public override ushort GetModelFor(GameLiving living)
+        {
+            if (living is not GamePlayer)
+                return 0;
+            
+            switch (living.Race)
+            {
+                case 1:
+                    if (living.Gender == eGender.Female)
+                        return 1316;
+                    else
+                        return 1315;
+                    break;
+                case 2:
+                    if (living.Gender == eGender.Female)
+                        return 1322;
+                    else
+                        return 1321;
+                    break;
+                case 3:
+                    if (living.Gender == eGender.Female)
+                        return 1318;
+                    else
+                        return 1317;
+                    break;
+                case 4:
+                    if (living.Gender == eGender.Female)
+                        return 1320;
+                    else
+                        return 1319;
+                    break;
+                case 5:
+                    if (living.Gender == eGender.Female)
+                        return 1328;
+                    else
+                        return 1327;
+                    break;
+                case 6:
+                    if (living.Gender == eGender.Female)
+                        return 1326;
+                    else
+                        return 1325;
+                    break;
+                case 7:
+                    if (living.Gender == eGender.Female)
+                        return 1332;
+                    else
+                        return 1331;
+                    break;
+                case 8:
+                    if (living.Gender == eGender.Female)
+                        return 1330;
+                    else
+                        return 1329;
+                    break;
+                case 9:
+                    if (living.Gender == eGender.Female)
+                        return 1340;
+                    else
+                        return 1339;
+                    break;
+                case 10:
+                    if (living.Gender == eGender.Female)
+                        return 1338;
+                    else
+                        return 1337;
+                    break;
+                case 11:
+                    if (living.Gender == eGender.Female)
+                        return 1344;
+                    else
+                        return 1343;
+                    break;
+                case 12:
+                    if (living.Gender == eGender.Female)
+                        return 1342;
+                    else
+                        return 1341;
+                    break;
+                case 13:
+                    if (living.Gender == eGender.Female)
+                        return 1314;
+                    else
+                        return 1313;
+                    break;
+                case 14:
+                    if (living.Gender == eGender.Female)
+                        return 1334;
+                    else
+                        return 1333;
+                    break;
+                case 15:
+                    if (living.Gender == eGender.Female)
+                        return 1346;
+                    else
+                        return 1345;
+                    break;
+                case 16:
+                    if (living.Gender == eGender.Female)
+                        return 1324;
+                    else
+                        return 1323;
+                    break;
+                case 17:
+                    if (living.Gender == eGender.Female)
+                        return 1336;
+                    else
+                        return 1335;
+                    break;
+                case 18:
+                    if (living.Gender == eGender.Female)
+                        return 1348;
+                    else
+                        return 1347;
+                    break;
+                case 19:
+                    return 1574;
+                    break;
+                case 20:
+                    return 1577;
+                    break;
+                case 21:
+                    return 1580;
+                    break;
+                default:
+                    break;
+            }
+            return base.GetModelFor(living);
+        }
+
         public override void OnEffectStart(GameSpellEffect effect)
         {
+            base.OnEffectStart(effect);
             GameLiving living = effect.Owner;
-            living.CancelAllSpeedOrPulseEffects();
-            living.CancelMorphSpellEffects();
             living.IsStunned = true;
             living.StopAttack();
             living.StopCurrentSpellcast();
@@ -55,134 +219,7 @@ namespace DOL.GS.Spells
                 {
                     player.GuildBanner.ForceBannerDrop();
                 }
-
-                living.TempProperties.setProperty("OriginalModel", living.Model);
-                switch (living.Race)
-                {
-                    case 1:
-                        if (living.Gender == eGender.Female)
-                            living.Model = 1316;
-                        else
-                            living.Model = 1315;
-                        break;
-                    case 2:
-                        if (living.Gender == eGender.Female)
-                            living.Model = 1322;
-                        else
-                            living.Model = 1321;
-                        break;
-                    case 3:
-                        if (living.Gender == eGender.Female)
-                            living.Model = 1318;
-                        else
-                            living.Model = 1317;
-                        break;
-                    case 4:
-                        if (living.Gender == eGender.Female)
-                            living.Model = 1320;
-                        else
-                            living.Model = 1319;
-                        break;
-                    case 5:
-                        if (living.Gender == eGender.Female)
-                            living.Model = 1328;
-                        else
-                            living.Model = 1327;
-                        break;
-                    case 6:
-                        if (living.Gender == eGender.Female)
-                            living.Model = 1326;
-                        else
-                            living.Model = 1325;
-                        break;
-                    case 7:
-                        if (living.Gender == eGender.Female)
-                            living.Model = 1332;
-                        else
-                            living.Model = 1331;
-                        break;
-                    case 8:
-                        if (living.Gender == eGender.Female)
-                            living.Model = 1330;
-                        else
-                            living.Model = 1329;
-                        break;
-                    case 9:
-                        if (living.Gender == eGender.Female)
-                            living.Model = 1340;
-                        else
-                            living.Model = 1339;
-                        break;
-                    case 10:
-                        if (living.Gender == eGender.Female)
-                            living.Model = 1338;
-                        else
-                            living.Model = 1337;
-                        break;
-                    case 11:
-                        if (living.Gender == eGender.Female)
-                            living.Model = 1344;
-                        else
-                            living.Model = 1343;
-                        break;
-                    case 12:
-                        if (living.Gender == eGender.Female)
-                            living.Model = 1342;
-                        else
-                            living.Model = 1341;
-                        break;
-                    case 13:
-                        if (living.Gender == eGender.Female)
-                            living.Model = 1314;
-                        else
-                            living.Model = 1313;
-                        break;
-                    case 14:
-                        if (living.Gender == eGender.Female)
-                            living.Model = 1334;
-                        else
-                            living.Model = 1333;
-                        break;
-                    case 15:
-                        if (living.Gender == eGender.Female)
-                            living.Model = 1346;
-                        else
-                            living.Model = 1345;
-                        break;
-                    case 16:
-                        if (living.Gender == eGender.Female)
-                            living.Model = 1324;
-                        else
-                            living.Model = 1323;
-                        break;
-                    case 17:
-                        if (living.Gender == eGender.Female)
-                            living.Model = 1336;
-                        else
-                            living.Model = 1335;
-                        break;
-                    case 18:
-                        if (living.Gender == eGender.Female)
-                            living.Model = 1348;
-                        else
-                            living.Model = 1347;
-                        break;
-                    case 19:
-                        living.Model = 1574;
-                        break;
-                    case 20:
-                        living.Model = 1577;
-                        break;
-                    case 21:
-                        living.Model = 1580;
-                        break;
-                    default:
-                        break;
-                }
-                player.Out.SendUpdatePlayer();
                 player.Out.SendUpdateMaxSpeed();
-                if (player.Group != null)
-                    player.Group.UpdateMember(player, false, false);
             }
             GameEventMgr.AddHandler(living, GameLivingEvent.AttackedByEnemy, new DOLEventHandler(EventHandler));
             if (Caster is GamePlayer casterPlayer)
@@ -225,12 +262,8 @@ namespace DOL.GS.Spells
 
             if (living is GamePlayer player)
             {
-                living.Model = living.TempProperties.getProperty<ushort>("OriginalModel");
                 MessageToLiving(player, LanguageMgr.GetTranslation(player.Client, "Petrify.Self.Unpetrify"), eChatType.CT_Spell);
-                player.Out.SendUpdatePlayer();
                 player.Client.Out.SendUpdateMaxSpeed();
-                if (player.Group != null)
-                    player.Group.UpdateMember(player, false, false);
             }
             else if (living is GameNPC ncp && ncp.Brain is IOldAggressiveBrain aggroBrain)
                 aggroBrain.AddToAggroList(Caster, 1);

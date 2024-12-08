@@ -16,6 +16,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
+using Discord;
 using DOL.GS.PacketHandler;
 using DOL.Language;
 using System.Collections.Generic;
@@ -32,15 +33,18 @@ using log4net;
 using System.Collections;
 using System.Numerics;
 using Vector = DOL.GS.Geometry.Vector;
+using System.Drawing;
 
 namespace DOL.GS.Spells
 {
     [SpellHandler("IllusionSpell")]
-    public class IllusionSpell : SpellHandler
+    public class IllusionSpell : AbstractMorphSpellHandler
     {
         private List<IllusionPet> illusionPets = new List<IllusionPet>();
 
-        public IllusionSpell(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
+        public IllusionSpell(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line)
+        {
+        }
 
         public override void OnEffectStart(GameSpellEffect effect)
         {
@@ -62,10 +66,33 @@ namespace DOL.GS.Spells
                 }
             }
             illusionPets.Clear();
-
             return base.OnEffectExpires(effect, noMessages);
         }
         
+        public override void OnBetterThan(GameLiving target, GameSpellEffect oldEffect, GameSpellEffect newEffect)
+        {
+            SpellHandler attempt = (SpellHandler)newEffect.SpellHandler;
+            if (attempt.Caster.GetController() is GamePlayer player)
+                player.SendTranslatedMessage("IllusionSpell.Target.Resist", eChatType.CT_SpellResisted, eChatLoc.CL_SystemWindow, player.GetPersonalizedName(target));
+            attempt.SendSpellResistAnimation(target);
+        }
+
+        /// <inheritdoc />
+        public override bool IsNewEffectBetter(GameSpellEffect oldeffect, GameSpellEffect neweffect)
+        {
+            if (oldeffect.SpellHandler is IllusionSpell oldIllusion && neweffect.SpellHandler is IllusionSpell newIllusion)
+            {
+                if (oldIllusion.Spell.LifeDrainReturn != 0 && newIllusion.Spell.LifeDrainReturn == 0) // unmorph
+                    return false;
+                if (newIllusion.Spell.Value < oldIllusion.Spell.Value) // less clones
+                    return false;
+                if (newIllusion.Spell.Damage < oldIllusion.Spell.Damage) // less damage
+                    return false;
+                return neweffect.Duration > oldeffect.RemainingTime;
+            }
+            return base.IsNewEffectBetter(oldeffect, neweffect);
+        }
+
         public enum eSpawnType
         {
             Random = 0,
@@ -234,6 +261,10 @@ namespace DOL.GS.Spells
             pet.Health = pet.CloneMaxHealth;
             pet.WeaponDps = (int)target.WeaponDamage(target.AttackWeapon);
             pet.WeaponSpd = (int)target.AttackWeapon.SPD_ABS;
+
+            var model = GetModelFor(target);
+            if (model != 0)
+                pet.Model = model;
             
             pet.SwitchWeapon(target.ActiveWeaponSlot);
             return pet;
@@ -246,9 +277,7 @@ namespace DOL.GS.Spells
                 return false;
             }
             
-            GameSpellEffect effect = new GameSpellEffect(this, Spell.Duration, 0, 1.0);
-            effect.Start(target);
-            return true;
+            return base.ApplyEffectOnTarget(target, 1.0);
         }
     }
 }

@@ -248,7 +248,7 @@ namespace DOL.GS.Spells
         /// When spell was resisted
         /// </summary>
         /// <param name="target">the target that resisted the spell</param>
-        protected override void OnSpellResisted(GameLiving target)
+        public override void OnSpellResisted(GameLiving target)
         {
             base.OnSpellResisted(target);
             if (Spell.Damage == 0 && Spell.CastTime == 0)

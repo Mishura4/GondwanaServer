@@ -259,30 +259,8 @@ namespace DOL.GS.Spells
     /// Morph spell handler
     /// </summary>
     [SpellHandlerAttribute("Morph")]
-    public class Morph : SpellHandler
+    public class Morph : AbstractMorphSpellHandler
     {
-        public override void OnEffectStart(GameSpellEffect effect)
-        {
-            if (effect.Owner is GamePlayer)
-            {
-                GamePlayer player = effect.Owner as GamePlayer;
-                player.Model = (ushort)Spell.LifeDrainReturn;
-                player.Out.SendUpdatePlayer();
-            }
-            base.OnEffectStart(effect);
-        }
-
-        public override int OnEffectExpires(GameSpellEffect effect, bool noMessages)
-        {
-            if (effect.Owner is GamePlayer)
-            {
-                GamePlayer player = effect.Owner as GamePlayer;
-                GameClient client = player.Client;
-                player.Model = (ushort)client.Account.Characters[client.ActiveCharIndex].CreationModel;
-                player.Out.SendUpdatePlayer();
-            }
-            return base.OnEffectExpires(effect, noMessages);
-        }
         public Morph(GameLiving caster, Spell spell, SpellLine line) : base(caster, spell, line) { }
         public override string ShortDescription
         {

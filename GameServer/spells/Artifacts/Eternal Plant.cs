@@ -17,15 +17,9 @@ namespace DOL.GS.Spells
                 return false;
             
             AttackData ad = CalculateDamageToTarget(target, effectiveness);
-            foreach (GameSpellEffect effect in target.EffectList.GetAllOfType(typeof(GameSpellEffect)))
+            foreach (GameSpellEffect effect in target.EffectList.GetAllOfType(typeof(AbstractMorphSpellHandler)))
             {
-                if (effect.SpellHandler.Spell.SpellType.Equals("ShadesOfMist") ||
-                    effect.SpellHandler.Spell.SpellType.Equals("TraitorsDaggerProc") ||
-                    effect.SpellHandler.Spell.SpellType.Equals("DreamMorph") ||
-                    effect.SpellHandler.Spell.SpellType.Equals("DreamGroupMorph") ||
-                    effect.SpellHandler.Spell.SpellType.Equals("MaddeningScalars") ||
-                    effect.SpellHandler.Spell.SpellType.Equals("AtlantisTabletMorph") ||
-                    effect.SpellHandler.Spell.SpellType.Equals("AlvarusMorph"))
+                if (effect.SpellHandler is not PetrifySpellHandler or DamnationSpellHandler)
                 {
                     ad.Damage = (int)Spell.Damage;
                     effect.Cancel(false);
