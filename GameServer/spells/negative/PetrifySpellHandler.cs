@@ -22,12 +22,13 @@ namespace DOL.GS.Spells
         }
 
         /// <inheritdoc />
-        public override bool IsOverwritable(GameSpellEffect compare)
+        public override bool PreventsApplication(GameSpellEffect self, GameSpellEffect other)
         {
-            if (((SpellHandler)compare.SpellHandler).HasPositiveOrSpeedEffect() || compare.SpellHandler.Spell.Pulse > 0)
+            var spellHandler = other.SpellHandler as SpellHandler;
+            if (spellHandler.HasPositiveOrSpeedEffect() || spellHandler.Spell.Pulse > 0)
                 return true;
             
-            return base.IsOverwritable(compare);
+            return base.PreventsApplication(self, other);
         }
 
         /// <inheritdoc />

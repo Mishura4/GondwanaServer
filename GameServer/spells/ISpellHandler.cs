@@ -136,6 +136,8 @@ namespace DOL.GS.Spells
         /// <returns></returns>
         bool IsOverwritable(GameSpellEffect compare);
 
+        bool PreventsApplication(GameSpellEffect self, GameSpellEffect other);
+
         /// <summary>
         /// Determines wether new spell is better than old spell and should disable it
         /// </summary>

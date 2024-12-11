@@ -147,20 +147,44 @@ namespace DOL.GS.Spells
             attempt.SendSpellResistAnimation(target);
         }
 
+        /// <inheritdoc />
+        public override bool PreventsApplication(GameSpellEffect self, GameSpellEffect other)
+        {
+            var spellHandler = other.SpellHandler as SpellHandler;
+
+            if (spellHandler != null)
+            {
+                if (spellHandler.HasPositiveEffect || spellHandler.Spell.SpellType == "Disease" || spellHandler.Spell.SpellType == "HealDebuff" || spellHandler.Spell.Pulse > 0)
+                    return true;
+            }
+            
+            if (spellHandler.HasPositiveOrSpeedEffect() || spellHandler.Spell.Pulse > 0)
+                return true;
+            
+            return base.PreventsApplication(self, other);
+        }
+
+        /// <inheritdoc />
+        public override bool IsNewEffectBetter(GameSpellEffect oldeffect, GameSpellEffect neweffect)
+        {
+            if (neweffect.SpellHandler is DamnationSpellHandler)
+            {
+                if (oldeffect.SpellHandler is not DamnationSpellHandler)
+                    return true;
+
+                if (oldeffect.Duration > neweffect.Duration)
+                    return true;
+            }
+            return false;
+        }
+
         public override void OnEffectStart(GameSpellEffect effect)
         {
             GameLiving living = effect.Owner;
 
             int harmvalue = (int)Spell.Value;
             living.TempProperties.setProperty("DamnationValue", harmvalue);
-
-
-            List<GameSpellEffect> toRemove;
-            lock (effect.Owner.EffectList)
-            {
-                toRemove = new List<GameSpellEffect>(effect.Owner.EffectList.OfType<GameSpellEffect>().Where(e => e.SpellHandler is SpellHandler spellHandler && (spellHandler.HasPositiveEffect || spellHandler.Spell.SpellType == "Disease" || spellHandler.Spell.SpellType == "HealDebuff" || spellHandler.Spell.Pulse > 0)));
-            }
-            toRemove.ForEach(e => e.Cancel(false));
+            
             ApplyDebuffs(living);
             ApplyBuffs(living);
             

@@ -3039,6 +3039,11 @@ namespace DOL.GS.Spells
             }
         }
 
+        public virtual bool PreventsApplication(GameSpellEffect self, GameSpellEffect other)
+        {
+            return false;
+        }
+
         /// <summary>
         /// Execute Duration Spell Effect on Target
         /// </summary>
@@ -3051,40 +3056,52 @@ namespace DOL.GS.Spells
 
             GameSpellEffect neweffect = CreateSpellEffect(target, effectiveness);
 
-            // Iterate through Overwritable Effect
-            var overwritenEffects = target.EffectList.OfType<GameSpellEffect>().Where(effect => effect.SpellHandler != null && effect.SpellHandler.IsOverwritable(neweffect));
-
             // Store Overwritable or Cancellable
             var enable = true;
             var cancellableEffects = new List<GameSpellEffect>(1);
             GameSpellEffect overwriteEffect = null;
+            List<GameSpellEffect> removingEffects = new List<GameSpellEffect>(1);
 
-            foreach (var ovEffect in overwritenEffects)
+            foreach (var effect in target.EffectList.OfType<GameSpellEffect>().Where(effect => effect.SpellHandler != null))
             {
-                // If we can cancel spell effect we don't need to overwrite it
-                if (ovEffect.SpellHandler.IsCancellable(neweffect))
+                if (effect.SpellHandler.PreventsApplication(effect, neweffect))
                 {
-                    // Spell is better than existing "Cancellable" or it should start disabled
-                    if (IsCancellableEffectBetter(ovEffect, neweffect))
-                        cancellableEffects.Add(ovEffect);
-                    else
-                        enable = false;
+                    // Old Spell is Better than new one
+                    ((SpellHandler)effect.SpellHandler).OnBetterThan(target, effect, neweffect);
+                    // Prevent Adding.
+                    return false;
                 }
-                else
+                if (effect.SpellHandler.IsOverwritable(neweffect))
                 {
-                    // Check for Overwriting.
-                    if (IsNewEffectBetter(ovEffect, neweffect))
+                    // If we can cancel spell effect we don't need to overwrite it
+                    if (effect.SpellHandler.IsCancellable(neweffect))
                     {
-                        // New Spell is overwriting this one.
-                        overwriteEffect = ovEffect;
+                        // Spell is better than existing "Cancellable" or it should start disabled
+                        if (IsCancellableEffectBetter(effect, neweffect))
+                            cancellableEffects.Add(effect);
+                        else
+                            enable = false;
                     }
                     else
                     {
-                        // Old Spell is Better than new one
-                        ((SpellHandler)ovEffect.SpellHandler).OnBetterThan(target, ovEffect, neweffect);
-                        // Prevent Adding.
-                        return false;
+                        // Check for Overwriting.
+                        if (IsNewEffectBetter(effect, neweffect))
+                        {
+                            // New Spell is overwriting this one.
+                            overwriteEffect = effect;
+                        }
+                        else
+                        {
+                            // Old Spell is Better than new one
+                            ((SpellHandler)effect.SpellHandler).OnBetterThan(target, effect, neweffect);
+                            // Prevent Adding.
+                            return false;
+                        }
                     }
+                }
+                else if (!effect.ImmunityState && PreventsApplication(effect, effect))
+                {
+                    removingEffects.Add(effect);
                 }
             }
 
@@ -3110,6 +3127,9 @@ namespace DOL.GS.Spells
                 // Check for disabled effect
                 foreach (var disableEffect in cancellableEffects)
                     disableEffect.DisableEffect(false);
+
+                foreach (var removedEffect in removingEffects)
+                    removedEffect.Cancel(false);
 
                 if (overwriteEffect != null)
                 {
